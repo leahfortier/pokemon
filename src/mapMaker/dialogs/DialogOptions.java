@@ -6,6 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,19 +20,21 @@ public class DialogOptions extends JDialog implements ActionListener {
 
     private boolean saved;
 
-    public DialogOptions(String name, JComponent parent) {
+    DialogOptions(String name, JComponent parent) {
         super((Frame)null, true);
 
         panel = new JPanel();
+        GUIUtils.setStyle(panel);
 
         this.saveButton = GUIUtils.createButton("Save or Whatever", this);
         JButton cancelButton = GUIUtils.createButton("Cancel", this);
 
-        this.buttonsComponent = GUIUtils.getHorizontalLayoutComponents(saveButton, cancelButton);
+        this.buttonsComponent = GUIUtils.createHorizontalLayoutComponent(saveButton, cancelButton);
 
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(parent);
         this.setTitle(name);
+        this.setBackground(Color.WHITE);
     }
 
     public void render(JPanel dialogPanel) {

@@ -5,16 +5,19 @@ import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import pattern.action.NPCInteractionMatcher;
 import pattern.map.NPCMatcher;
+import util.GUIUtils;
+import util.StringUtils;
 
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,79 +25,76 @@ import java.util.List;
 public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 	private static final long serialVersionUID = -8061888140387296525L;
 
-	private JLabel label;
-	
-	private JTextField nameTextField;
-	
-	private JComboBox<ImageIcon> spriteComboBox;
-	private JComboBox<Direction> directionComboBox;
+	private final JPanel topComponent;
 
-    private JTextField pathTextField;
-	private JTextField conditionTextField;
+	private final JLabel trainerIcon;
 
-	private List<NPCInteractionMatcher> interactions;
-	private JButton addInteractionButton;
+	private final JTextField nameTextField;
+
+	private final JComboBox<ImageIcon> spriteComboBox;
+	private final JComboBox<Direction> directionComboBox;
+
+    private final JTextField pathTextField;
+	private final JTextArea conditionTextField;
+
+	private final List<NPCInteractionMatcher> interactions;
+	private final JButton addInteractionButton;
 	
-	private MapMaker mapMaker;
-	
+	private final MapMaker mapMaker;
+
 	public NPCEntityDialog(NPCMatcher npcMatcher, MapMaker givenMapMaker) {
 		super("NPC Editor");
 
-		this.mapMaker = givenMapMaker;
-		interactions = new ArrayList<>();
-		addInteractionButton = new JButton("Add Interaction");
-		addInteractionButton.addActionListener(event -> {
-			interactions.add(null);
-            render();
-        });
+		ActionListener spriteActionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				int index = Integer.parseInt(((ImageIcon) spriteComboBox.getSelectedItem()).getDescription());
+				int direction = directionComboBox.getSelectedIndex();
 
-		label = new JLabel();
-		label.setBackground(Color.WHITE);
+				BufferedImage image = mapMaker.getTileFromSet(TileType.TRAINER, 12 * index + 1 + direction);
+				image = image.getSubimage(0, 0, Math.min(image.getWidth(), 50), Math.min(image.getHeight(), 50));
 
-		final ImageIcon[] trainerSprites = getTrainerSprites();
+				ImageIcon icon = new ImageIcon(image);
+				trainerIcon.setIcon(icon);
+			}
+		};
 
-		spriteComboBox = new JComboBox<>();
-		spriteComboBox.setModel(new DefaultComboBoxModel<>(trainerSprites));
-		spriteComboBox.setSelectedIndex(1);
+		mapMaker = givenMapMaker;
 
-		// TODO: 12 + 4?
-		label.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.TRAINER, 12 + 4)));
-
-		directionComboBox = new JComboBox<>();
-		directionComboBox.setModel(new DefaultComboBoxModel<>(Direction.values()));
-		directionComboBox.setSelectedItem(Direction.DOWN);
-
-		spriteComboBox.addActionListener(event -> {
-			int index = Integer.parseInt(((ImageIcon) spriteComboBox.getSelectedItem()).getDescription());
-			int direction = directionComboBox.getSelectedIndex();
-
-			BufferedImage img = mapMaker.getTileFromSet(TileType.TRAINER, 12*index + 1 + direction);
-			img = img.getSubimage(0, 0, Math.min(img.getWidth(), 50), Math.min(img.getHeight(), 50));
-
-			ImageIcon icon = new ImageIcon(img);
-			label.setIcon(icon);
-		});
-
-		// TODO: UMMM IS THIS EXACTLY THE SAME AS THE ONE ABOVE?? IF SO SRSLY WHAT THE FUCK
-		directionComboBox.addActionListener(event -> {
-			int index = Integer.parseInt(((ImageIcon) spriteComboBox.getSelectedItem()).getDescription());
-			int direction = directionComboBox.getSelectedIndex();
-
-			BufferedImage img = mapMaker.getTileFromSet(TileType.TRAINER, 12*index + 1 + direction);
-			img = img.getSubimage(0, 0, Math.min(img.getWidth(), 50), Math.min(img.getHeight(), 50));
-
-			ImageIcon icon = new ImageIcon(img);
-			label.setIcon(icon);
-		});
+		trainerIcon = GUIUtils.createLabel(StringUtils.empty());
+		spriteComboBox = GUIUtils.createComboBox(getTrainerSprites(), spriteActionListener);
+		directionComboBox = GUIUtils.createComboBox(Direction.values(), spriteActionListener);
 
 		nameTextField = new JTextField();
-		nameTextField.setColumns(10);
-
 		pathTextField = new JTextField("w");
-		pathTextField.setColumns(10);
+		conditionTextField = new JTextArea();
 
-		conditionTextField = new JTextField();
-		conditionTextField.setColumns(10);
+		interactions = new ArrayList<>();
+		addInteractionButton = GUIUtils.createButton(
+				"Add Interaction",
+				event -> {
+					interactions.add(null);
+					render();
+				}
+		);
+
+		spriteComboBox.setSelectedIndex(1);
+		directionComboBox.setSelectedItem(Direction.DOWN);
+
+		JPanel tippityTopComponent =
+				GUIUtils.createHorizontalLayoutComponent(
+						trainerIcon,
+						spriteComboBox,
+						directionComboBox
+				);
+
+		this.topComponent =
+				GUIUtils.createVerticalLayoutComponent(
+						tippityTopComponent,
+						GUIUtils.createTextFieldComponent("Name", nameTextField),
+						GUIUtils.createTextFieldComponent("Path", pathTextField),
+						GUIUtils.createTextAreaComponent("Condition", conditionTextField)
+				);
 
 		this.load(npcMatcher);
 	}
@@ -102,102 +102,26 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 	@Override
 	protected void renderDialog() {
 		removeAll();
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		panel.add(label);
-		panel.add(spriteComboBox);
-		panel.add(directionComboBox);
-		panel.add(nameTextField);
-		panel.add(conditionTextField);
-		panel.add(pathTextField);
 
+		List<JComponent> interactionComponents = new ArrayList<>();
 		for (int i = 0; i < interactions.size(); i++) {
 			final int index = i;
-			JButton interactionButton = new JButton("Interaction");
-			interactionButton.addActionListener(event -> {
-				NPCInteractionMatcher matcher = new NPCInteractionDialog(interactions.get(index)).getMatcher();
-				if (matcher != null) {
-					interactions.set(index, matcher);
-				}
-            });
-			panel.add(interactionButton);
+			JButton interactionButton =
+					GUIUtils.createButton(
+							"Interaction",
+							event -> {
+								NPCInteractionMatcher matcher = new NPCInteractionDialog(interactions.get(index)).getMatcher(mapMaker);
+								if (matcher != null) {
+									interactions.set(index, matcher);
+								}
+							}
+					);
+
+			interactionComponents.add(interactionButton);
 		}
 
-		panel.add(addInteractionButton);
-		add(panel);
-
-		revalidate();
-/*
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-								.addGap(6)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addGroup(groupLayout.createSequentialGroup()
-												.addComponent(label, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-												.addGap(12)
-												.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-														.addComponent(lblSprite, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
-														.addComponent(lblDirection, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE))
-												.addGap(1)
-												.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-														.addComponent(spriteComboBox, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
-														.addComponent(directionComboBox, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE))
-												.addGap(12)
-												.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-														.addComponent(pathLabel, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
-														.addGroup(groupLayout.createSequentialGroup()
-																.addComponent(pathTextField, GroupLayout.PREFERRED_SIZE, 154, GroupLayout.PREFERRED_SIZE))))
-										.addGroup(groupLayout.createSequentialGroup()
-												.addComponent(nameLabel, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
-												.addGap(1)
-												.addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, 161, GroupLayout.PREFERRED_SIZE)
-												.addGap(12)
-												.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-														.addGroup(groupLayout.createSequentialGroup()
-																.addGap(69)
-																.addComponent(conditionTextField, GroupLayout.PREFERRED_SIZE, 154, GroupLayout.PREFERRED_SIZE))
-														.addComponent(conditionLabel, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)))
-										.addGroup(groupLayout.createSequentialGroup()
-												.addComponent(addInteractionButton, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE))
-								)));
-
-		groupLayout.setVerticalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-								.addGap(6)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(label, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-										.addGroup(groupLayout.createSequentialGroup()
-												.addComponent(lblSprite)
-												.addGap(12)
-												.addComponent(lblDirection))
-										.addGroup(groupLayout.createSequentialGroup()
-												.addComponent(spriteComboBox, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-												.addComponent(directionComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addGroup(groupLayout.createSequentialGroup()
-												.addComponent(pathLabel))
-										.addGroup(groupLayout.createSequentialGroup()
-												.addGap(22)
-												.addComponent(pathTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-								.addGap(3)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addGroup(groupLayout.createSequentialGroup()
-												.addGap(6)
-												.addComponent(nameLabel))
-										.addGroup(groupLayout.createSequentialGroup()
-												.addGap(1)
-												.addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addComponent(conditionTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGroup(groupLayout.createSequentialGroup()
-												.addGap(6)
-												.addComponent(conditionLabel))))
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(addInteractionButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-		);*/
-
-		//setLayout(groupLayout);
+		JPanel interactionComponent = GUIUtils.createHorizontalLayoutComponent(interactionComponents.toArray(new JComponent[0]));
+		GUIUtils.setVerticalLayout(this, topComponent, interactionComponent, addInteractionButton);
 	}
 	
 	private ImageIcon[] getTrainerSprites() {
@@ -206,9 +130,8 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 		for (int curr = 0; mapMaker.getTileFromSet(TileType.TRAINER, 12*curr + 4) != null; curr++) {
 			icons.add(new ImageIcon(mapMaker.getTileFromSet(TileType.TRAINER, 12*curr + 4), "" + curr));
 		}
-		
-		ImageIcon[] imageIcons = new ImageIcon[icons.size()];
-		return icons.toArray(imageIcons);
+
+		return icons.toArray(new ImageIcon[0]);
 	}
 
 	@Override

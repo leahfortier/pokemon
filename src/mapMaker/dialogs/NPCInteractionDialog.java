@@ -3,23 +3,31 @@ package mapMaker.dialogs;
 import mapMaker.dialogs.action.ActionListPanel;
 import pattern.action.ActionMatcher;
 import pattern.action.NPCInteractionMatcher;
+import util.GUIUtils;
 
-import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
-    private JTextField interactionNameTextField;
-    private JCheckBox walkToPlayerCheckBox;
-    private ActionListPanel actionListPanel;
+    private final JPanel topComponent;
+
+    private final JTextField interactionNameTextField;
+    private final JCheckBox walkToPlayerCheckBox;
+    private final ActionListPanel actionListPanel;
 
     public NPCInteractionDialog(NPCInteractionMatcher npcInteractionMatcher) {
         super("New NPC Interaction Dialog");
 
         interactionNameTextField = new JTextField();
         walkToPlayerCheckBox = new JCheckBox("Walk to playa");
+        GUIUtils.setStyle(walkToPlayerCheckBox);
         this.actionListPanel = new ActionListPanel(this);
+
+        this.topComponent = GUIUtils.createHorizontalLayoutComponent(
+                GUIUtils.createTextFieldComponent("Interaction Name", interactionNameTextField),
+                walkToPlayerCheckBox
+        );
 
         this.load(npcInteractionMatcher);
     }
@@ -45,14 +53,7 @@ public class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
 
     @Override
     protected void renderDialog() {
-        actionListPanel.render();
         removeAll();
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-        panel.add(interactionNameTextField);
-        panel.add(walkToPlayerCheckBox);
-        panel.add(actionListPanel);
-        add(panel);
+        GUIUtils.setVerticalLayout(this, topComponent, actionListPanel);
     }
 }

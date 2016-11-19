@@ -34,6 +34,7 @@ public class ActionListPanel extends JPanel {
 
     public void load(List<ActionMatcher> actions) {
         actionList.addAll(actions);
+        render();
     }
 
     public void render() {

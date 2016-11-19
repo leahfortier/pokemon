@@ -1,9 +1,11 @@
 package util;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -62,6 +64,16 @@ public class GUIUtils {
         return label;
     }
 
+    public static <T> JComboBox<T> createComboBox(T[] values, ActionListener actionListener) {
+        JComboBox<T> comboBox = new JComboBox<>();
+        comboBox.setModel(new DefaultComboBoxModel<>(values));
+        comboBox.addActionListener(actionListener);
+
+        setStyle(comboBox);
+
+        return comboBox;
+    }
+
     public static JButton createButton(String text, ActionListener actionListener) {
         JButton button = new JButton(text);
         button.addActionListener(actionListener);
@@ -101,9 +113,15 @@ public class GUIUtils {
         return component;
     }
 
-    public static JPanel getHorizontalLayoutComponents(JComponent... components) {
+    public static JPanel createHorizontalLayoutComponent(JComponent... components) {
         JPanel panel = new JPanel();
         setHorizontalLayout(panel, components);
+        return panel;
+    }
+
+    public static JPanel createVerticalLayoutComponent(JComponent... components) {
+        JPanel panel = new JPanel();
+        setVerticalLayout(panel, components);
         return panel;
     }
 
@@ -116,6 +134,7 @@ public class GUIUtils {
     }
 
     private static void setLayout(boolean horizontal, JComponent panel, JComponent... components) {
+        setStyle(panel);
 
         GroupLayout groupLayout = new GroupLayout(panel);
         ParallelGroup parallelGroup = groupLayout.createParallelGroup();
@@ -124,6 +143,8 @@ public class GUIUtils {
             if (component == null) {
                 continue;
             }
+
+            setStyle(component);
 
             parallelGroup.addGap(6).addComponent(component).addGap(6);
             sequentialGroup.addGap(6).addComponent(component).addGap(6);
