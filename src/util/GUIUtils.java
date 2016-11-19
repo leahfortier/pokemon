@@ -96,7 +96,7 @@ public class GUIUtils {
         JLabel label = createLabel(text);
 
         setStyle(textField);
-        textField.setColumns(10);
+        textField.setColumns(20);
 
         setHorizontalLayout(component, label, textField);
 

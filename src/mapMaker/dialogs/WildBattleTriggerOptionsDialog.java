@@ -6,7 +6,6 @@ import util.GUIUtils;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JPanel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,52 +14,46 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<WildBattl
 	
 	private JComboBox<String> comboBox;
 
+	private JButton createButton;
 	private JButton editButton;
 	private List<WildBattleMatcher> wildBattleTriggers;
 	
 	public WildBattleTriggerOptionsDialog(List<WildBattleMatcher> wildBattleMatchers) {
 		super("Wild Battle Trigger Options");
 
-		JButton createButton =
-				GUIUtils.createButton(
-						"Create New",
-						event -> {
-							WildBattleMatcher matcher = editWildBattleTrigger(null);
-							if (matcher == null) {
-								return;
-							}
-
-							this.addWildBattleTrigger(matcher);
-						}
-						);
+		this.wildBattleTriggers = new ArrayList<>();
 
 		comboBox = GUIUtils.createComboBox(new String[0], null);
 
-		this.wildBattleTriggers = new ArrayList<>();
+		createButton = GUIUtils.createButton(
+				"Create New",
+				event -> {
+					WildBattleMatcher matcher = editWildBattleTrigger(null);
+					if (matcher == null) {
+						return;
+					}
 
-		editButton = new JButton("Edit");
-		editButton.setEnabled(false);
-		editButton.addActionListener(event -> {
-			WildBattleMatcher oldMatcher = this.getSelectedTriggerMatcher();
-			WildBattleMatcher newMatcher = editWildBattleTrigger(oldMatcher);
-            if (newMatcher == null) {
-				return;
-			}
-
-			if (oldMatcher != null) {
-				wildBattleTriggers.remove(oldMatcher);
-			}
-
-			addWildBattleTrigger(newMatcher);
-        });
-
-		JPanel buttonsComponent = GUIUtils.createHorizontalLayoutComponent(createButton, editButton);
-
-		GUIUtils.setVerticalLayout(
-				this,
-				comboBox,
-				buttonsComponent
+					this.addWildBattleTrigger(matcher);
+				}
 		);
+
+		editButton = GUIUtils.createButton(
+				"Edit",
+				event -> {
+					WildBattleMatcher oldMatcher = this.getSelectedTriggerMatcher();
+					WildBattleMatcher newMatcher = editWildBattleTrigger(oldMatcher);
+					if (newMatcher == null) {
+						return;
+					}
+
+					if (oldMatcher != null) {
+						wildBattleTriggers.remove(oldMatcher);
+					}
+
+					addWildBattleTrigger(newMatcher);
+				}
+		);
+		editButton.setEnabled(false);
 
 		this.load(wildBattleMatchers);
 	}
@@ -84,11 +77,15 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<WildBattl
 	@Override
 	protected void renderDialog() {
 		comboBox.removeAllItems();
-		this.wildBattleTriggers
-				.forEach(matcher ->
-						comboBox.addItem(matcher.getBasicName()));
+		this.wildBattleTriggers.forEach(matcher -> comboBox.addItem(matcher.getBasicName()));
 
 		editButton.setEnabled(!wildBattleTriggers.isEmpty());
+
+		GUIUtils.setVerticalLayout(
+				this,
+				comboBox,
+				GUIUtils.createHorizontalLayoutComponent(createButton, editButton)
+		);
 	}
 
 

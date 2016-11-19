@@ -5,10 +5,13 @@ import pattern.action.ActionMatcher;
 import util.GUIUtils;
 
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import java.util.EnumMap;
 import java.util.Map;
 
 class ActionDialog extends TriggerDialog<ActionMatcher> {
+    private final JPanel topComponent;
+
     private final Map<ActionType, ActionPanel> map;
 
     private final JComboBox<ActionType> actionComboBox;
@@ -21,13 +24,10 @@ class ActionDialog extends TriggerDialog<ActionMatcher> {
             this.map.put(action, action.createActionData());
         }
 
-        actionComboBox = new JComboBox<>(ActionType.values());
-        actionComboBox.addActionListener(event -> {
-            render();
-        });
-
+        this.actionComboBox = GUIUtils.createComboBox(ActionType.values(), event -> render());
         this.actionComboBox.setSelectedIndex(0);
 
+        this.topComponent = GUIUtils.createHorizontalLayoutComponent(GUIUtils.createComboBoxComponent("Action Name", actionComboBox));
         this.load(actionMatcher);
     }
 
@@ -52,6 +52,6 @@ class ActionDialog extends TriggerDialog<ActionMatcher> {
         removeAll();
 
         ActionType selectedAction = (ActionType) actionComboBox.getSelectedItem();
-        GUIUtils.setVerticalLayout(this, actionComboBox, map.get(selectedAction));
+        GUIUtils.setVerticalLayout(this, topComponent, map.get(selectedAction));
     }
 }

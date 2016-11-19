@@ -44,14 +44,17 @@ public class ActionListPanel extends JPanel {
 
         for (int i = 0; i < actionList.size(); i++) {
             final int index = i;
+            final ActionMatcher actionMatcher = actionList.get(index);
+
 
             JButton actionButton = GUIUtils.createButton(
-                    "Action",
+                    actionMatcher == null ? "EMPTY" : actionMatcher.getActionType().name(),
                     event -> {
-                        ActionMatcher actionMatcher = actionList.get(index);
+
                         ActionMatcher newActionMatcher = new ActionDialog(actionMatcher).getMatcher(parent);
                         if (newActionMatcher != null) {
                             actionList.set(index, newActionMatcher);
+                            render();
                         }
                     }
             );

@@ -294,8 +294,7 @@ public class MapMakerTriggerData {
 	}
 
 	private WildBattleMatcher wildBattleTriggerOptions() {
-		WildBattleTriggerOptionsDialog wildBattleTriggerOptions = new WildBattleTriggerOptionsDialog(this.getWildBattleTriggers());
-		List<WildBattleMatcher> matcher = wildBattleTriggerOptions.getMatcher(mapMaker);
+		List<WildBattleMatcher> matcher = new WildBattleTriggerOptionsDialog(this.getWildBattleTriggers()).getMatcher(mapMaker);
 		if (matcher == null || matcher.isEmpty()) {
 			return null;
 		}

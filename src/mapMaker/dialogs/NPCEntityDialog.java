@@ -106,13 +106,16 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 		List<JComponent> interactionComponents = new ArrayList<>();
 		for (int i = 0; i < interactions.size(); i++) {
 			final int index = i;
+			NPCInteractionMatcher matcher = interactions.get(index);
+
 			JButton interactionButton =
 					GUIUtils.createButton(
-							"Interaction",
+							matcher == null ? "Empty" : matcher.getName(),
 							event -> {
-								NPCInteractionMatcher matcher = new NPCInteractionDialog(interactions.get(index)).getMatcher(mapMaker);
-								if (matcher != null) {
-									interactions.set(index, matcher);
+								NPCInteractionMatcher newMatcher = new NPCInteractionDialog(matcher, index).getMatcher(mapMaker);
+								if (newMatcher != null) {
+									interactions.set(index, newMatcher);
+									render();
 								}
 							}
 					);
