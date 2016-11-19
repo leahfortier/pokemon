@@ -4,16 +4,11 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 public abstract class TriggerDialog<T> extends JPanel {
+    private final String dialogTitle;
     private DialogOptions dialogOptions;
 
-    public abstract T getMatcher();
-    protected abstract void load(T matcher);
-
-    public void loadMatcher(T matcher) {
-        if (matcher != null) {
-            this.load(matcher);
-            this.render();
-        }
+    protected TriggerDialog(final String dialogTitle) {
+        this.dialogTitle = dialogTitle;
     }
 
     protected void renderDialog() {}
@@ -27,14 +22,16 @@ public abstract class TriggerDialog<T> extends JPanel {
         }
     }
 
-    public boolean giveOption(String name, JComponent parent) {
-        this.dialogOptions = new DialogOptions(name, parent);
+    public T getMatcher(JComponent parent) {
+        this.dialogOptions = new DialogOptions(this.dialogTitle, parent);
         this.render();
         this.dialogOptions.setVisible(true);
 
         boolean isSaved = this.dialogOptions.isSaved();
         this.dialogOptions = null;
 
-        return isSaved;
+        return isSaved ? this.getMatcher() : null;
     }
+
+    protected abstract T getMatcher();
 }

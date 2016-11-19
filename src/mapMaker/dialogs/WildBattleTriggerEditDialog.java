@@ -34,7 +34,9 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 	private List<WildPokemonDataPanel> wildPokemonPanels;
 	private Set<Integer> selected;
 	
-	public WildBattleTriggerEditDialog() {
+	public WildBattleTriggerEditDialog(WildBattleMatcher wildBattleMatcher) {
+		super("Wild Battle Trigger Editor");
+
 		wildPokemonPanels = new ArrayList<>();
 		selected = new HashSet<>();
 		
@@ -149,6 +151,8 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 		);
 
 		setLayout(groupLayout);
+
+		this.load(wildBattleMatcher);
 	}
 
 	private WildPokemonDataPanel addPokemonPanel() {
@@ -177,7 +181,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 	}
 
 	@Override
-	public WildBattleMatcher getMatcher() {
+	protected WildBattleMatcher getMatcher() {
 		String name = nameTextField.getText();
 		EncounterRate encounterRate = (EncounterRate)rateComboBox.getSelectedItem();
 
@@ -201,8 +205,11 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 		return new WildBattleMatcher(name, encounterRate, wildEncounters);
 	}
 
-	@Override
-	public void load(WildBattleMatcher matcher) {
+	private void load(WildBattleMatcher matcher) {
+		if (matcher == null) {
+			return;
+		}
+
 		nameTextField.setText(matcher.getBasicName());
 		rateComboBox.setSelectedItem(matcher.getEncounterRate());
 

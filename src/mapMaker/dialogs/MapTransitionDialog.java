@@ -50,7 +50,9 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 				.collect(Collectors.toSet());
 	}
 
-	public MapTransitionDialog(MapMaker givenMapMaker) {
+	public MapTransitionDialog(MapTransitionMatcher mapTransitionMatcher, MapMaker givenMapMaker) {
+		super("Map Transition Editor");
+
 		JLabel destinationLabel = new JLabel("Destination");
 		JLabel entranceLabel = new JLabel("Destination Entrance");
 		JLabel directionLabel = new JLabel("Direction");
@@ -145,7 +147,10 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 					.addGroup(groupLayout.createSequentialGroup())
 						.addComponent(deathPortalCheckBox))
 		);
+
 		setLayout(groupLayout);
+
+		this.load(mapTransitionMatcher);
 	}
 
 	private String getDestination() {
@@ -157,7 +162,7 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 	}
 
 	@Override
-	public MapTransitionMatcher getMatcher() {
+	protected MapTransitionMatcher getMatcher() {
 		String destination = getDestination();
 		String entrance = getMapEntrance();
 
@@ -174,8 +179,11 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 		);
 	}
 
-	@Override
-	protected void load(MapTransitionMatcher matcher) {
+	private void load(MapTransitionMatcher matcher) {
+		if (matcher == null) {
+			return;
+		}
+
 		entranceNameTextField.setText(matcher.getExitName());
 		destinationComboBox.setSelectedItem(matcher.getNextMap());
 		entranceComboBox.setSelectedItem(matcher.getNextEntranceName());

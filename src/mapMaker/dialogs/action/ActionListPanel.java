@@ -47,12 +47,9 @@ public class ActionListPanel extends JPanel {
             JButton actionButton = GUIUtils.createButton(
                     "Action",
                     event -> {
-                        ActionDialog actionDialog = new ActionDialog();
                         ActionMatcher actionMatcher = actionList.get(index);
-                        actionDialog.loadMatcher(actionMatcher);
-
-                        if (actionDialog.giveOption("New Action Dialog", this)) {
-                            ActionMatcher newActionMatcher = actionDialog.getMatcher();
+                        ActionMatcher newActionMatcher = new ActionDialog(actionMatcher).getMatcher();
+                        if (newActionMatcher != null) {
                             actionList.set(index, newActionMatcher);
                         }
                     }

@@ -1,12 +1,10 @@
 package mapMaker;
 
-import item.ItemNamesies;
 import main.Global;
 import mapMaker.dialogs.EventTriggerDialog;
 import mapMaker.dialogs.ItemEntityDialog;
 import mapMaker.dialogs.MapTransitionDialog;
 import mapMaker.dialogs.NPCEntityDialog;
-import mapMaker.dialogs.TriggerDialog;
 import mapMaker.dialogs.WildBattleTriggerEditDialog;
 import mapMaker.dialogs.WildBattleTriggerOptionsDialog;
 import mapMaker.model.TileModel.TileType;
@@ -269,10 +267,6 @@ public class MapMakerTriggerData {
 		mapMaker.setPlaceableTrigger(trigger);
 	}
 
-	private boolean dialogOption(String name, TriggerDialog dialog) {
-		return dialog.giveOption(name, mapMaker);
-	}
-
 	private String getEntityNameFormat(String baseName) {
 		if (StringUtils.isNullOrEmpty(baseName)) {
 			baseName = "Nameless";
@@ -284,30 +278,11 @@ public class MapMakerTriggerData {
 	}
 
 	private ItemMatcher editItem(ItemMatcher item) {
-		ItemEntityDialog itemDialog = new ItemEntityDialog(mapMaker);
-		itemDialog.loadMatcher(item);
-
-		if (!dialogOption("Item Editor", itemDialog)) {
-			return null;
-		}
-
-		ItemNamesies itemType = itemDialog.getItemName();
-		if (itemType == null) {
-			return null;
-		}
-
-		return itemDialog.getMatcher();
+		return new ItemEntityDialog(item, mapMaker).getMatcher(mapMaker);
 	}
 
 	private NPCMatcher editNPC(NPCMatcher npcData) {
-		NPCEntityDialog npcDialog = new NPCEntityDialog(mapMaker);
-		npcDialog.loadMatcher(npcData);
-
-		if (!dialogOption("NPC Editor", npcDialog)) {
-			return null;
-		}
-
-		return npcDialog.getMatcher();
+		return new NPCEntityDialog(npcData, mapMaker).getMatcher(mapMaker);
 	}
 
 	private List<WildBattleMatcher> getWildBattleTriggers() {
@@ -319,14 +294,8 @@ public class MapMakerTriggerData {
 	}
 
 	private WildBattleMatcher wildBattleTriggerOptions() {
-		WildBattleTriggerOptionsDialog wildBattleTriggerOptions = new WildBattleTriggerOptionsDialog();
-		wildBattleTriggerOptions.loadMatcher(this.getWildBattleTriggers());
-
-		if (!dialogOption("Wild Battle Trigger Options", wildBattleTriggerOptions)) {
-			return null;
-		}
-
-		List<WildBattleMatcher> matcher = wildBattleTriggerOptions.getMatcher();
+		WildBattleTriggerOptionsDialog wildBattleTriggerOptions = new WildBattleTriggerOptionsDialog(this.getWildBattleTriggers());
+		List<WildBattleMatcher> matcher = wildBattleTriggerOptions.getMatcher(mapMaker);
 		if (matcher == null || matcher.isEmpty()) {
 			return null;
 		}
@@ -336,37 +305,14 @@ public class MapMakerTriggerData {
 	}
 
 	private WildBattleMatcher editWildBattleTrigger(WildBattleMatcher wildBattleTrigger) {
-		WildBattleTriggerEditDialog dialog = new WildBattleTriggerEditDialog();
-		dialog.loadMatcher(wildBattleTrigger);
-
-		if (!dialogOption("Wild Battle Trigger Editor", dialog)) {
-			return null;
-		}
-
-		return dialog.getMatcher();
+		return new WildBattleTriggerEditDialog(wildBattleTrigger).getMatcher(mapMaker);
 	}
 
 	private MapTransitionMatcher editMapTransition(MapTransitionMatcher transitionMatcher) {
-		MapTransitionDialog mapTransitionDialog = new MapTransitionDialog(mapMaker);
-		mapTransitionDialog.loadMatcher(transitionMatcher);
-
-		if (!dialogOption("Map Transition Editor", mapTransitionDialog)) {
-			return null;
-		}
-
-		return mapTransitionDialog.getMatcher();
+		return new MapTransitionDialog(transitionMatcher, mapMaker).getMatcher(mapMaker);
 	}
 
 	private EventMatcher editEventTrigger(EventMatcher eventMatcher) {
-		EventTriggerDialog eventTriggerDialog = new EventTriggerDialog();
-		eventTriggerDialog.loadMatcher(eventMatcher);
-
-		if (!dialogOption("Event Trigger Editor", eventTriggerDialog)) {
-			return null;
-		}
-
-		// TODO: confirm at least one action first
-
-		return eventTriggerDialog.getMatcher();
+		return new EventTriggerDialog(eventMatcher).getMatcher(mapMaker);
 	}
 }

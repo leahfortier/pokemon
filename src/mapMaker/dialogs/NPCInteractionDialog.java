@@ -14,23 +14,28 @@ public class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
     private JCheckBox walkToPlayerCheckBox;
     private ActionListPanel actionListPanel;
 
-    public NPCInteractionDialog() {
+    public NPCInteractionDialog(NPCInteractionMatcher npcInteractionMatcher) {
+        super("New NPC Interaction Dialog");
+
         interactionNameTextField = new JTextField();
         walkToPlayerCheckBox = new JCheckBox("Walk to playa");
         this.actionListPanel = new ActionListPanel(this);
 
-        render();
+        this.load(npcInteractionMatcher);
     }
 
-    @Override
-    public void load(NPCInteractionMatcher matcher) {
+    private void load(NPCInteractionMatcher matcher) {
+        if (matcher == null) {
+            return;
+        }
+
         interactionNameTextField.setText(matcher.getName());
         walkToPlayerCheckBox.setSelected(matcher.shouldWalkToPlayer());
         actionListPanel.load(matcher.getActionMatcherList());
     }
 
     @Override
-    public NPCInteractionMatcher getMatcher() {
+    protected NPCInteractionMatcher getMatcher() {
         String interactionName = interactionNameTextField.getText();
         boolean walkToPlayer = walkToPlayerCheckBox.isSelected();
         ActionMatcher[] actions = actionListPanel.getActions();

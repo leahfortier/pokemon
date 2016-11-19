@@ -51,7 +51,7 @@ public class DialogOptions extends JDialog implements ActionListener {
         this.dispose();
     }
 
-    public boolean isSaved() {
+    boolean isSaved() {
         return this.saved;
     }
 }

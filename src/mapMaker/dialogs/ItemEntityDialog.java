@@ -27,7 +27,9 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
 	private MapMaker mapMaker;
 	private JTextArea conditionTextArea;
 	
-	public ItemEntityDialog (MapMaker givenMapMaker) {
+	public ItemEntityDialog (ItemMatcher itemMatcher, MapMaker givenMapMaker) {
+		super("Item Editor");
+
 		mapMaker = givenMapMaker;
 		
 		JLabel itemLabel = new JLabel("Item");
@@ -112,19 +114,29 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
 		);
 		
 		setLayout(groupLayout);
+
+		this.load(itemMatcher);
 	}
 
-	public ItemNamesies getItemName() {
+	private ItemNamesies getItemName() {
 		return ItemNamesies.tryValueOf(itemTextField.getText());
 	}
 
 	@Override
-	public ItemMatcher getMatcher() {
-		return new ItemMatcher(this.getItemName());
+	protected ItemMatcher getMatcher() {
+		final ItemNamesies itemNamesies = this.getItemName();
+		if (itemNamesies == null) {
+			return null;
+		}
+
+		return new ItemMatcher(itemNamesies);
 	}
 
-	@Override
-	public void load(ItemMatcher matcher) {
+	private void load(ItemMatcher matcher) {
+		if (matcher == null) {
+			return;
+		}
+
 		ItemNamesies itemName = matcher.getItem();
 		itemTextField.setText(itemName.getName());
 

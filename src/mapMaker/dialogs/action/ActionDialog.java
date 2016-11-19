@@ -17,7 +17,9 @@ class ActionDialog extends TriggerDialog<ActionMatcher> {
     private JComboBox<ActionType> actionComboBox;
     private JPanel actionPanel;
 
-    ActionDialog() {
+    ActionDialog(ActionMatcher actionMatcher) {
+        super("New Action Dialog");
+
         this.map = new EnumMap<>(ActionType.class);
         for (ActionType action : ActionType.values()) {
             this.map.put(action, action.createActionData());
@@ -36,7 +38,8 @@ class ActionDialog extends TriggerDialog<ActionMatcher> {
         add(panel);
 
         setActionPanelToSelectedAction();
-        render();
+
+        this.load(actionMatcher);
     }
 
     private void setActionPanelToSelectedAction() {
@@ -49,13 +52,16 @@ class ActionDialog extends TriggerDialog<ActionMatcher> {
     }
 
     @Override
-    public ActionMatcher getMatcher() {
+    protected ActionMatcher getMatcher() {
         ActionType actionType = (ActionType) actionComboBox.getSelectedItem();
         return this.map.get(actionType).getActionMatcher(actionType);
     }
 
-    @Override
-    public void load(ActionMatcher matcher) {
+    private void load(ActionMatcher matcher) {
+        if (matcher == null) {
+            return;
+        }
+
         ActionType actionType = matcher.getActionType();
         actionComboBox.setSelectedItem(actionType);
         map.get(actionType).load(matcher);

@@ -37,7 +37,9 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 	
 	private MapMaker mapMaker;
 	
-	public NPCEntityDialog(MapMaker givenMapMaker) {
+	public NPCEntityDialog(NPCMatcher npcMatcher, MapMaker givenMapMaker) {
+		super("NPC Editor");
+
 		this.mapMaker = givenMapMaker;
 		interactions = new ArrayList<>();
 		addInteractionButton = new JButton("Add Interaction");
@@ -94,7 +96,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 		conditionTextField = new JTextField();
 		conditionTextField.setColumns(10);
 
-		render();
+		this.load(npcMatcher);
 	}
 
 	@Override
@@ -113,12 +115,9 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 			final int index = i;
 			JButton interactionButton = new JButton("Interaction");
 			interactionButton.addActionListener(event -> {
-				NPCInteractionDialog dialog = new NPCInteractionDialog();
-				NPCInteractionMatcher interaction = interactions.get(index);
-				dialog.loadMatcher(interaction);
-
-				if (dialog.giveOption("New NPC Interaction Dialog", this)) {
-					interactions.set(index, dialog.getMatcher());
+				NPCInteractionMatcher matcher = new NPCInteractionDialog(interactions.get(index)).getMatcher();
+				if (matcher != null) {
+					interactions.set(index, matcher);
 				}
             });
 			panel.add(interactionButton);
@@ -213,7 +212,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 	}
 
 	@Override
-	public NPCMatcher getMatcher() {
+	protected NPCMatcher getMatcher() {
 		return new NPCMatcher(
 				nameTextField.getText(),
 				conditionTextField.getText(),
@@ -224,8 +223,11 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 		);
 	}
 
-	@Override
-	public void load(NPCMatcher matcher) {
+	private void load(NPCMatcher matcher) {
+		if (matcher == null) {
+			return;
+		}
+
 		nameTextField.setText(matcher.getBasicName());
 		conditionTextField.setText(matcher.getCondition());
 		pathTextField.setText(matcher.getPath());
