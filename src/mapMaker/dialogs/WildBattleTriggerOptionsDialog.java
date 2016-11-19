@@ -72,7 +72,7 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<WildBattleMatc
 	}
 
 	private WildBattleMatcher editWildBattleTrigger(WildBattleMatcher wildBattleMatcher) {
-		return new WildBattleTriggerEditDialog(wildBattleMatcher).getMatcher(this);
+		return new WildBattleTriggerEditDialog(wildBattleMatcher, wildBattleTriggers.size()).getMatcher(this);
 	}
 
 	@Override

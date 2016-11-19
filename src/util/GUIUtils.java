@@ -7,6 +7,7 @@ import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -16,9 +17,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+import javax.swing.text.NumberFormatter;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 
 public class GUIUtils {
 
@@ -91,12 +95,26 @@ public class GUIUtils {
         return button;
     }
 
+    public static JFormattedTextField createIntegerTextField(int start, int min, int max) {
+        NumberFormat format = NumberFormat.getNumberInstance();
+        NumberFormatter formatter = new NumberFormatter(format);
+        formatter.setValueClass(Integer.class);
+        formatter.setMinimum(min);
+        formatter.setMaximum(max);
+
+        JFormattedTextField integerTextField = new JFormattedTextField(formatter);
+        integerTextField.setHorizontalAlignment(SwingConstants.RIGHT);
+        integerTextField.setValue(start);
+
+        return integerTextField;
+    }
+
     public static JPanel createTextFieldComponent(String text, JTextField textField) {
         JPanel component = new JPanel();
         JLabel label = createLabel(text);
 
         setStyle(textField);
-        textField.setColumns(20);
+        textField.setColumns(30);
 
         setHorizontalLayout(component, label, textField);
 

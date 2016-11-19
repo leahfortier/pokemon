@@ -298,7 +298,7 @@ public class MapMakerTriggerData {
 	}
 
 	private WildBattleMatcher editWildBattleTrigger(WildBattleMatcher wildBattleTrigger) {
-		return new WildBattleTriggerEditDialog(wildBattleTrigger).getMatcher(mapMaker);
+		return new WildBattleTriggerEditDialog(wildBattleTrigger, -1).getMatcher(mapMaker);
 	}
 
 	private MapTransitionMatcher editMapTransition(MapTransitionMatcher transitionMatcher) {
