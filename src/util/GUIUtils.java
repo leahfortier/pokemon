@@ -101,22 +101,32 @@ public class GUIUtils {
         return component;
     }
 
-    public static void setHorizontalLayout(JPanel panel, JComponent... components) {
+    public static JPanel getHorizontalLayoutComponents(JComponent... components) {
+        JPanel panel = new JPanel();
+        setHorizontalLayout(panel, components);
+        return panel;
+    }
+
+    public static void setHorizontalLayout(JComponent panel, JComponent... components) {
         setLayout(true, panel, components);
     }
 
-    public static void setVerticalLayout(JPanel panel, JComponent... components) {
+    public static void setVerticalLayout(JComponent panel, JComponent... components) {
         setLayout(false, panel, components);
     }
 
-    private static void setLayout(boolean horizontal, JPanel panel, JComponent... components) {
+    private static void setLayout(boolean horizontal, JComponent panel, JComponent... components) {
 
         GroupLayout groupLayout = new GroupLayout(panel);
         ParallelGroup parallelGroup = groupLayout.createParallelGroup();
         SequentialGroup sequentialGroup = groupLayout.createSequentialGroup();
         for (JComponent component : components) {
-            parallelGroup.addComponent(component).addGap(12);
-            sequentialGroup.addComponent(component).addGap(12);
+            if (component == null) {
+                continue;
+            }
+
+            parallelGroup.addGap(6).addComponent(component).addGap(6);
+            sequentialGroup.addGap(6).addComponent(component).addGap(6);
         }
 
         if (horizontal) {

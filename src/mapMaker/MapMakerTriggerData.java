@@ -1,5 +1,6 @@
 package mapMaker;
 
+import item.ItemNamesies;
 import main.Global;
 import mapMaker.dialogs.EventTriggerDialog;
 import mapMaker.dialogs.ItemEntityDialog;
@@ -11,16 +12,15 @@ import mapMaker.dialogs.WildBattleTriggerOptionsDialog;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import item.ItemNamesies;
+import pattern.generic.LocationTriggerMatcher;
+import pattern.generic.MultiPointTriggerMatcher;
+import pattern.generic.SinglePointTriggerMatcher;
 import pattern.map.AreaMatcher;
 import pattern.map.EventMatcher;
 import pattern.map.ItemMatcher;
 import pattern.map.MapDataMatcher;
-import pattern.generic.LocationTriggerMatcher;
 import pattern.map.MapTransitionMatcher;
-import pattern.generic.MultiPointTriggerMatcher;
 import pattern.map.NPCMatcher;
-import pattern.generic.SinglePointTriggerMatcher;
 import pattern.map.WildBattleMatcher;
 import util.DrawUtils;
 import util.FileIO;

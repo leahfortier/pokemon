@@ -10,19 +10,26 @@ import javax.swing.JTextField;
 
 public class EventTriggerDialog extends TriggerDialog<EventMatcher> {
 	private static final long serialVersionUID = -1493772382824925408L;
-	
-	private JTextField nameTextField;
-	private JTextArea conditionTextArea;
-	private ActionListPanel actionListPanel;
+
+	private final JPanel nameComponent;
+	private final JPanel conditionComponent;
+
+	private final JTextField nameTextField;
+	private final JTextArea conditionTextArea;
+	private final ActionListPanel actionListPanel;
 
 	public EventTriggerDialog() {
 		this.nameTextField = new JTextField();
 		this.conditionTextArea = new JTextArea();
-		this.actionListPanel = new ActionListPanel();
+		this.actionListPanel = new ActionListPanel(this);
 
-		JPanel nameComponent = GUIUtils.createTextFieldComponent("Name", nameTextField);
-		JPanel conditionComponent = GUIUtils.createTextAreaComponent("Condition", conditionTextArea);
+		nameComponent = GUIUtils.createTextFieldComponent("Name", nameTextField);
+		conditionComponent = GUIUtils.createTextAreaComponent("Condition", conditionTextArea);
+	}
 
+	@Override
+	public void renderDialog() {
+		removeAll();
 		GUIUtils.setVerticalLayout(this, nameComponent, conditionComponent, actionListPanel);
 	}
 

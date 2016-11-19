@@ -1,13 +1,11 @@
 package mapMaker.dialogs;
 
-import main.Global;
-
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import java.awt.Dimension;
 
 public abstract class TriggerDialog<T> extends JPanel {
+    private DialogOptions dialogOptions;
+
     public abstract T getMatcher();
     protected abstract void load(T matcher);
 
@@ -20,33 +18,23 @@ public abstract class TriggerDialog<T> extends JPanel {
 
     protected void renderDialog() {}
 
-    protected final void render() {
+    public final void render() {
+        this.removeAll();
         this.renderDialog();
 
-        this.setPanelSize();
-        this.revalidate();
+        if (dialogOptions != null) {
+            dialogOptions.render(this);
+        }
     }
 
     public boolean giveOption(String name, JComponent parent) {
-        Object[] options = { "Save or Whatever", "Cancel" };
-        int results = JOptionPane.showOptionDialog(
-                parent,
-                this,
-                name,
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                options,
-                options[0]
-        );
+        this.dialogOptions = new DialogOptions(name, parent);
+        this.render();
+        this.dialogOptions.setVisible(true);
 
-        return results == JOptionPane.YES_OPTION;
-    }
+        boolean isSaved = this.dialogOptions.isSaved();
+        this.dialogOptions = null;
 
-    protected void setPanelSize() {
-        Dimension dimension = Global.GAME_SIZE;
-        this.setMinimumSize(dimension);
-        this.setPreferredSize(dimension);
-        this.setMaximumSize(dimension);
+        return isSaved;
     }
 }

@@ -127,8 +127,6 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 		panel.add(addInteractionButton);
 		add(panel);
 
-		this.setPanelSize();
-
 		revalidate();
 /*
 		GroupLayout groupLayout = new GroupLayout(this);
