@@ -9,7 +9,7 @@ import javax.swing.JComboBox;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<WildBattleMatcher>> {
+public class WildBattleTriggerOptionsDialog extends TriggerDialog<WildBattleMatcher> {
 	private static final long serialVersionUID = -7378035463487486331L;
 	
 	private JComboBox<String> comboBox;
@@ -34,6 +34,7 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<WildBattl
 					}
 
 					this.addWildBattleTrigger(matcher);
+					comboBox.setSelectedItem(matcher.getBasicName());
 				}
 		);
 
@@ -95,8 +96,12 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<WildBattl
 	}
 
 	@Override
-	protected List<WildBattleMatcher> getMatcher() {
-		return this.wildBattleTriggers;
+	protected WildBattleMatcher getMatcher() {
+		if (this.wildBattleTriggers.isEmpty()) {
+			return null;
+		}
+
+		return wildBattleTriggers.get(this.comboBox.getSelectedIndex());
 	}
 
 	private void load(List<WildBattleMatcher> matchers) {

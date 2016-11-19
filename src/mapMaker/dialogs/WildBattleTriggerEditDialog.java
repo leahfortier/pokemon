@@ -220,8 +220,6 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 			panel.probabilityFormattedTextField.setValue(wildEncounter.getProbability());
 			panel.lowLevelFormattedTextField.setValue(wildEncounter.getMinLevel());
 			panel.highLevelFormattedTextField.setValue(wildEncounter.getMaxLevel());
-
-			System.out.println(wildEncounter.getPokemonName() + " " + wildEncounter.getMinLevel() + " " + wildEncounter.getMaxLevel() + " " + wildEncounter.getProbability());
 		}
 	}
 }
