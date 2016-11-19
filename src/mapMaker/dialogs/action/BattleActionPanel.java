@@ -3,6 +3,7 @@ package mapMaker.dialogs.action;
 import pattern.action.ActionMatcher;
 import pattern.action.BattleMatcher;
 import trainer.Trainer;
+import util.GUIUtils;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -24,15 +25,15 @@ import java.util.Set;
 class BattleActionPanel extends ActionPanel {
 	private static final long serialVersionUID = 4995985841899035558L;
 
-	private JTextField nameTextField;
-	private JFormattedTextField cashFormattedTextField;
-	private JTextField updateTriggerTextField;
-	private JButton addPokemonButton;
+	private final JTextField nameTextField;
+	private final JFormattedTextField cashFormattedTextField;
+	private final JTextField updateTriggerTextField;
+	private final JButton addPokemonButton;
 
-	private List<PokemonDataPanel> pokemonPanels;
-	private Set<Integer> selected;
-	private JPanel pokemonPanel;
-	private JButton removeSelectedButton;
+	private final List<PokemonDataPanel> pokemonPanels;
+	private final Set<Integer> selected;
+	private final JPanel pokemonPanel;
+	private final JButton removeSelectedButton;
 	private JButton moveDownButton;
 	private JButton moveUpButton;
 	
@@ -40,9 +41,11 @@ class BattleActionPanel extends ActionPanel {
 		pokemonPanels = new ArrayList<>();
 		selected = new HashSet<>();
 
-		JLabel trainerNameLabel = new JLabel("Trainer Name");
-		
 		nameTextField = new JTextField();
+		pokemonPanel = new JPanel();
+
+		JPanel trainerNameComponent = GUIUtils.createTextFieldComponent("Trainer Name", nameTextField);
+		JLabel trainerNameLabel = new JLabel("Trainer Name");
 		nameTextField.setColumns(10);
 
 		JLabel cashMoney = new JLabel("Cash Money");
@@ -99,7 +102,7 @@ class BattleActionPanel extends ActionPanel {
         });
 		
 		removeSelectedButton.setEnabled(false);
-		
+
 		moveUpButton = new JButton("Move Up");
 		moveUpButton.addActionListener(event -> {
             if (selected.contains(0)) {
@@ -130,7 +133,7 @@ class BattleActionPanel extends ActionPanel {
         });
 		
 		moveUpButton.setEnabled(false);
-		
+
 		moveDownButton = new JButton("Move Down");
 		moveDownButton.addActionListener(event -> {
             if (selected.contains(pokemonPanels.size() - 1)) {
@@ -160,8 +163,7 @@ class BattleActionPanel extends ActionPanel {
         });
 		
 		moveDownButton.setEnabled(false);
-		
-		pokemonPanel = new JPanel();
+
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)

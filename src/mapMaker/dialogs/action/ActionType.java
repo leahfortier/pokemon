@@ -4,9 +4,9 @@ public enum ActionType {
     TRIGGER(TriggerActionPanel::new),
     BATTLE(BattleActionPanel::new),
     CHOICE(ChoiceActionPanel::new),
-    UPDATE(BasicActionPanel::new),
-    GROUP_TRIGGER(BasicActionPanel::new),
-    GLOBAL(BasicActionPanel::new);
+    UPDATE(() -> new BasicActionPanel("Update Name")),
+    GROUP_TRIGGER(() -> new BasicActionPanel("Trigger Name")),
+    GLOBAL(() -> new BasicActionPanel("Global Name"));
 
     private final ActionDataCreator actionDataCreator;
 

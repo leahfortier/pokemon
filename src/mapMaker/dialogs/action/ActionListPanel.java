@@ -49,7 +49,7 @@ public class ActionListPanel extends JPanel {
                     "Action",
                     event -> {
                         ActionMatcher actionMatcher = actionList.get(index);
-                        ActionMatcher newActionMatcher = new ActionDialog(actionMatcher).getMatcher();
+                        ActionMatcher newActionMatcher = new ActionDialog(actionMatcher).getMatcher(parent);
                         if (newActionMatcher != null) {
                             actionList.set(index, newActionMatcher);
                         }

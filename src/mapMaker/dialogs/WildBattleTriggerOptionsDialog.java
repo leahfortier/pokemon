@@ -2,11 +2,11 @@ package mapMaker.dialogs;
 
 import main.Global;
 import pattern.map.WildBattleMatcher;
+import util.GUIUtils;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,17 +21,20 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<WildBattl
 	public WildBattleTriggerOptionsDialog(List<WildBattleMatcher> wildBattleMatchers) {
 		super("Wild Battle Trigger Options");
 
-		JButton createButton = new JButton("Create New");
-		createButton.addActionListener(event -> {
-			WildBattleMatcher matcher = editWildBattleTrigger(null);
-            if (matcher == null) {
-				return;
-			}
+		JButton createButton =
+				GUIUtils.createButton(
+						"Create New",
+						event -> {
+							WildBattleMatcher matcher = editWildBattleTrigger(null);
+							if (matcher == null) {
+								return;
+							}
 
-			this.addWildBattleTrigger(matcher);
-        });
+							this.addWildBattleTrigger(matcher);
+						}
+						);
 
-		comboBox = new JComboBox<>();
+		comboBox = GUIUtils.createComboBox(new String[0], null);
 
 		this.wildBattleTriggers = new ArrayList<>();
 
@@ -50,30 +53,14 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<WildBattl
 
 			addWildBattleTrigger(newMatcher);
         });
-		
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(6)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 246, GroupLayout.PREFERRED_SIZE)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(createButton, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-							.addGap(12)
-							.addComponent(editButton, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE))))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(7)
-					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(createButton)
-						.addComponent(editButton)))
-		);
 
-		setLayout(groupLayout);
+		JPanel buttonsComponent = GUIUtils.createHorizontalLayoutComponent(createButton, editButton);
+
+		GUIUtils.setVerticalLayout(
+				this,
+				comboBox,
+				buttonsComponent
+		);
 
 		this.load(wildBattleMatchers);
 	}
@@ -91,7 +78,7 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<List<WildBattl
 	}
 
 	private WildBattleMatcher editWildBattleTrigger(WildBattleMatcher wildBattleMatcher) {
-		return new WildBattleTriggerEditDialog(wildBattleMatcher).getMatcher();
+		return new WildBattleTriggerEditDialog(wildBattleMatcher).getMatcher(this);
 	}
 
 	@Override

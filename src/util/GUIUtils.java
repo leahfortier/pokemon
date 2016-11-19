@@ -64,6 +64,15 @@ public class GUIUtils {
         return label;
     }
 
+    public static JPanel createComboBoxComponent(String text, JComboBox comboBox) {
+        JPanel component = new JPanel();
+        JLabel label = createLabel(text);
+
+        setHorizontalLayout(component, label, comboBox);
+
+        return component;
+    }
+
     public static <T> JComboBox<T> createComboBox(T[] values, ActionListener actionListener) {
         JComboBox<T> comboBox = new JComboBox<>();
         comboBox.setModel(new DefaultComboBoxModel<>(values));

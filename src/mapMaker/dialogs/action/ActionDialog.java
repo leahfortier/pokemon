@@ -2,20 +2,16 @@ package mapMaker.dialogs.action;
 
 import mapMaker.dialogs.TriggerDialog;
 import pattern.action.ActionMatcher;
+import util.GUIUtils;
 
-import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
-import javax.swing.JPanel;
 import java.util.EnumMap;
 import java.util.Map;
 
 class ActionDialog extends TriggerDialog<ActionMatcher> {
-    private Map<ActionType, ActionPanel> map;
+    private final Map<ActionType, ActionPanel> map;
 
-    private JPanel panel;
-
-    private JComboBox<ActionType> actionComboBox;
-    private JPanel actionPanel;
+    private final JComboBox<ActionType> actionComboBox;
 
     ActionDialog(ActionMatcher actionMatcher) {
         super("New Action Dialog");
@@ -27,28 +23,12 @@ class ActionDialog extends TriggerDialog<ActionMatcher> {
 
         actionComboBox = new JComboBox<>(ActionType.values());
         actionComboBox.addActionListener(event -> {
-            setActionPanelToSelectedAction();
             render();
         });
 
-        panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-        panel.add(actionComboBox);
-
-        add(panel);
-
-        setActionPanelToSelectedAction();
+        this.actionComboBox.setSelectedIndex(0);
 
         this.load(actionMatcher);
-    }
-
-    private void setActionPanelToSelectedAction() {
-        if (actionPanel != null) {
-            panel.remove(actionPanel);
-        }
-
-        ActionType selectedAction = (ActionType) actionComboBox.getSelectedItem();
-        actionPanel = map.get(selectedAction);
     }
 
     @Override
@@ -69,8 +49,9 @@ class ActionDialog extends TriggerDialog<ActionMatcher> {
 
     @Override
     protected void renderDialog() {
-        if (actionPanel != null) {
-            panel.add(actionPanel);
-        }
+        removeAll();
+
+        ActionType selectedAction = (ActionType) actionComboBox.getSelectedItem();
+        GUIUtils.setVerticalLayout(this, actionComboBox, map.get(selectedAction));
     }
 }

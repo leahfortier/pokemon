@@ -1,17 +1,21 @@
 package mapMaker.dialogs.action;
 
 import pattern.action.ActionMatcher;
+import util.GUIUtils;
 
 import javax.swing.JTextField;
 
 // For actions which only have a string field
 class BasicActionPanel extends ActionPanel {
-    private JTextField textField;
+    private final JTextField textField;
 
-    BasicActionPanel() {
+    BasicActionPanel(String actionName) {
         textField = new JTextField();
-        textField.setColumns(10);
-        this.add(textField);
+
+        GUIUtils.setHorizontalLayout(
+                this,
+                GUIUtils.createTextFieldComponent(actionName, textField)
+        );
     }
 
     @Override

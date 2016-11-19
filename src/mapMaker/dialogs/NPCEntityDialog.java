@@ -126,7 +126,6 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 	
 	private ImageIcon[] getTrainerSprites() {
 		List<ImageIcon> icons = new ArrayList<>();
-
 		for (int curr = 0; mapMaker.getTileFromSet(TileType.TRAINER, 12*curr + 4) != null; curr++) {
 			icons.add(new ImageIcon(mapMaker.getTileFromSet(TileType.TRAINER, 12*curr + 4), "" + curr));
 		}
