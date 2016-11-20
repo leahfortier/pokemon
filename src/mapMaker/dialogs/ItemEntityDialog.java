@@ -5,17 +5,17 @@ import main.Global;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import pattern.map.ItemMatcher;
+import util.ColorDocumentListener;
 import util.GUIUtils;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -33,30 +33,26 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
 		mapMaker = givenMapMaker;
 		
 		itemTextField = new JTextField();
-		itemTextField.getDocument().addDocumentListener(new DocumentListener() { // TODO: Generalize this in a separate interface that takes in a single method
-			  public void changedUpdate(DocumentEvent e) {
-				  checkItem();
-			  }
+		itemTextField.getDocument().addDocumentListener(new ColorDocumentListener() {
+			@Override
+			protected boolean greenCondition() {
+				return getItemName() != null;
+			}
 
-			  public void removeUpdate(DocumentEvent e) {
-				  checkItem();
-			  }
+			@Override
+			protected JComponent colorComponent() {
+				return itemTextField;
+			}
 
-			  public void insertUpdate(DocumentEvent e) {
-				  checkItem();
-			  }
-
-			  private void checkItem() {
-				  ItemNamesies itemName = getItemName();
-				  if (itemName == null) {
-					  itemImageLabel.setIcon(null);
-					  itemTextField.setBackground(new Color(0xFF9494));
-				  } else {
-					  int index = itemName.getItem().getImageIndex();
-					  itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
-					  itemTextField.setBackground(new Color(0x90EE90));
-				  }
-			  }
+			@Override
+			protected void additionalValueChanged() {
+				if (greenCondition()) {
+					int index = getItemName().getItem().getImageIndex();
+					itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
+				} else {
+					itemImageLabel.setIcon(null);
+				}
+			}
 		});
 		
 		itemImageLabel = new JLabel();

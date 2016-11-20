@@ -3,16 +3,15 @@ package mapMaker.dialogs;
 import map.WildEncounter;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
+import util.ColorDocumentListener;
 import util.GUIUtils;
 import util.StringUtils;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.Color;
 
 class WildPokemonDataPanel extends JPanel {
 	
@@ -29,19 +28,15 @@ class WildPokemonDataPanel extends JPanel {
 		selectedCheckBox = new JCheckBox();
 		pokemonTextField = new JTextField();
 
-		pokemonTextField.getDocument().addDocumentListener(new DocumentListener() {
-			public void removeUpdate(DocumentEvent event) { valueChanged(); }
-			public void insertUpdate(DocumentEvent event) { valueChanged(); }
-			public void changedUpdate(DocumentEvent event) {}
-			private void valueChanged() {
-				// TODO: Combine with the item one
-				PokemonNamesies namesies = PokemonNamesies.tryValueOf(pokemonTextField.getText().trim());
-				if (namesies == null) {
-					pokemonTextField.setBackground(new Color(0xFF9494));
-				}
-				else {
-					pokemonTextField.setBackground(new Color(0x90EE90));
-				}
+		pokemonTextField.getDocument().addDocumentListener(new ColorDocumentListener() {
+			@Override
+			protected boolean greenCondition() {
+				return PokemonNamesies.tryValueOf(pokemonTextField.getText().trim()) != null;
+			}
+
+			@Override
+			protected JComponent colorComponent() {
+				return pokemonTextField;
 			}
 		});
 

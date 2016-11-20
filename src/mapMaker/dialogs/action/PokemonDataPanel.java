@@ -6,17 +6,17 @@ import main.Global;
 import pattern.PokemonMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
+import util.ColorDocumentListener;
 import util.GUIUtils;
 import util.StringUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.Color;
 import java.util.List;
 
 class PokemonDataPanel extends JPanel {
@@ -46,50 +46,32 @@ class PokemonDataPanel extends JPanel {
 		moveCheckBox = new JCheckBox();
 		moveTextField = new JTextField();
 
-		nameTextField.getDocument().addDocumentListener(new DocumentListener() {
-			public void removeUpdate(DocumentEvent event) {
-				valueChanged();
+		nameTextField.getDocument().addDocumentListener(new ColorDocumentListener() {
+			@Override
+			protected boolean greenCondition() {
+				return PokemonNamesies.tryValueOf(nameTextField.getText().trim()) != null;
 			}
 
-			public void insertUpdate(DocumentEvent event) {
-				valueChanged();
-			}
-
-			public void changedUpdate(DocumentEvent event) {}
-
-			private void valueChanged() {
-				String pokemonName = nameTextField.getText().trim();
-				if (pokemonName.length() < 2) {
-					nameTextField.setBackground(new Color(0xFF9494)); // TODO: What is this color -- it should be a constant if it's being used in multiple locations
-					return;
-				}
-
-				// TODO: use util method
-				pokemonName = Character.toUpperCase(pokemonName.charAt(0)) + pokemonName.substring(1).toLowerCase();
-
-				if (!PokemonInfo.isPokemonName(pokemonName)) {
-					nameTextField.setBackground(new Color(0xFF9494));
-				}
-				else {
-					nameTextField.setBackground(new Color(0x90EE90));
-				}
+			@Override
+			protected JComponent colorComponent() {
+				return nameTextField;
 			}
 		});
 
+		moveTextField.getDocument().addDocumentListener(new ColorDocumentListener() {
+			@Override
+			public boolean greenCondition() {
+				return Attack.isAttack(customMoves[moveComboBox.getSelectedIndex()]);
+			}
 
-		// TODO: try to combine this inner shit with that similar one above and if that doesn't work at least fix its ugly ass formatting that I don't feel like handling right now
-		moveTextField.getDocument().addDocumentListener(new DocumentListener() {
-			public void removeUpdate(DocumentEvent e) {valueChanged();}
-			public void insertUpdate(DocumentEvent e) {valueChanged();}
-			public void changedUpdate(DocumentEvent e) {}
-			private void valueChanged() {
+			@Override
+			public JComponent colorComponent() {
+				return moveTextField;
+			}
+
+			@Override
+			public void additionalValueChanged() {
 				customMoves[moveComboBox.getSelectedIndex()] = moveTextField.getText().trim();
-				if (!Attack.isAttack(customMoves[moveComboBox.getSelectedIndex()])) {
-					moveTextField.setBackground(new Color(0xFF9494));
-				}
-				else {
-					moveTextField.setBackground(new Color(0x90EE90));
-				}
 			}
 		});
 		moveTextField.setEnabled(false);
