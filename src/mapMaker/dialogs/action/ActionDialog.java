@@ -19,15 +19,15 @@ class ActionDialog extends TriggerDialog<ActionMatcher> {
     ActionDialog(ActionMatcher actionMatcher) {
         super("New Action Dialog");
 
+        this.actionComboBox = GUIUtils.createComboBox(ActionType.values(), event -> render());
+        this.topComponent = GUIUtils.createHorizontalLayoutComponent(GUIUtils.createComboBoxComponent("Action Name", actionComboBox));
+
         this.map = new EnumMap<>(ActionType.class);
         for (ActionType action : ActionType.values()) {
-            this.map.put(action, action.createActionData());
+            this.map.put(action, action.createActionData(this));
         }
-
-        this.actionComboBox = GUIUtils.createComboBox(ActionType.values(), event -> render());
         this.actionComboBox.setSelectedIndex(0);
 
-        this.topComponent = GUIUtils.createHorizontalLayoutComponent(GUIUtils.createComboBoxComponent("Action Name", actionComboBox));
         this.load(actionMatcher);
     }
 

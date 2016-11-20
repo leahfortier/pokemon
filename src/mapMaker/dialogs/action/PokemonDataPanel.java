@@ -4,12 +4,11 @@ import battle.attack.Attack;
 import battle.attack.Move;
 import main.Global;
 import pattern.PokemonMatcher;
+import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
+import util.GUIUtils;
 import util.StringUtils;
 
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -17,37 +16,36 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.NumberFormatter;
 import java.awt.Color;
-import java.text.NumberFormat;
-import java.util.Arrays;
 import java.util.List;
 
 class PokemonDataPanel extends JPanel {
 	private static final long serialVersionUID = 2679616277402077123L;
-	
-	private JTextField nameTextField;
-	private JTextField moveTextField;
-	private JCheckBox shinyCheckBox;
+
+	private final JTextField nameTextField;
+	private final JTextField moveTextField;
+	private final JCheckBox shinyCheckBox;
 	private JComboBox<String> moveComboBox;
-	private JCheckBox moveCheckBox;
-	private JFormattedTextField levelFormattedTextField;
+	private final JCheckBox moveCheckBox;
+	private final JFormattedTextField levelFormattedTextField;
 
-	private String[] customMoves = new String[Move.MAX_MOVES]; // TODO: I think this should just be a list
+	private final JCheckBox selectedCheckBox;
 
-	private BattleActionPanel trainerDialog;
-	public int index;
+	private final String[] customMoves = new String[Move.MAX_MOVES]; // TODO: I think this should just be a list
 	
-	PokemonDataPanel(BattleActionPanel givenTrainerDialog, int givenIndex) {
+	PokemonDataPanel(String pokemonDescription) {
 		
-		trainerDialog = givenTrainerDialog;
-		index = givenIndex;
-
 		for (int currMove = 0; currMove < customMoves.length; ++currMove) {
-			customMoves[currMove] = "";
+			customMoves[currMove] = StringUtils.empty();
 		}
-		
+
+		selectedCheckBox = new JCheckBox();
 		nameTextField = new JTextField();
+		levelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, ActivePokemon.MAX_LEVEL);
+		shinyCheckBox = new JCheckBox();
+		moveCheckBox = new JCheckBox();
+		moveTextField = new JTextField();
+
 		nameTextField.getDocument().addDocumentListener(new DocumentListener() {
 			public void removeUpdate(DocumentEvent event) {
 				valueChanged();
@@ -58,7 +56,7 @@ class PokemonDataPanel extends JPanel {
 			}
 
 			public void changedUpdate(DocumentEvent event) {}
-			
+
 			private void valueChanged() {
 				String pokemonName = nameTextField.getText().trim();
 				if (pokemonName.length() < 2) {
@@ -68,7 +66,7 @@ class PokemonDataPanel extends JPanel {
 
 				// TODO: use util method
 				pokemonName = Character.toUpperCase(pokemonName.charAt(0)) + pokemonName.substring(1).toLowerCase();
-				
+
 				if (!PokemonInfo.isPokemonName(pokemonName)) {
 					nameTextField.setBackground(new Color(0xFF9494));
 				}
@@ -77,29 +75,14 @@ class PokemonDataPanel extends JPanel {
 				}
 			}
 		});
-		
-		nameTextField.setColumns(10);
-		
-		shinyCheckBox = new JCheckBox("");
-		
-		moveComboBox = new JComboBox<>();
-		moveComboBox.setModel(new DefaultComboBoxModel<>(new String[] {"Move 1", "Move 2", "Move 3", "Move 4"}));
-		moveComboBox.addActionListener(event -> moveTextField.setText(customMoves[moveComboBox.getSelectedIndex()]));
-		moveComboBox.setEnabled(false);
-		
-		moveCheckBox = new JCheckBox(StringUtils.empty());
-		moveCheckBox.addActionListener(event -> {
-            moveComboBox.setEnabled(moveCheckBox.isSelected());
-            moveTextField.setEnabled(moveCheckBox.isSelected());
-        });
+
 
 		// TODO: try to combine this inner shit with that similar one above and if that doesn't work at least fix its ugly ass formatting that I don't feel like handling right now
-		moveTextField = new JTextField();
 		moveTextField.getDocument().addDocumentListener(new DocumentListener() {
 			public void removeUpdate(DocumentEvent e) {valueChanged();}
 			public void insertUpdate(DocumentEvent e) {valueChanged();}
 			public void changedUpdate(DocumentEvent e) {}
-			public void valueChanged() {
+			private void valueChanged() {
 				customMoves[moveComboBox.getSelectedIndex()] = moveTextField.getText().trim();
 				if (!Attack.isAttack(customMoves[moveComboBox.getSelectedIndex()])) {
 					moveTextField.setBackground(new Color(0xFF9494));
@@ -109,73 +92,31 @@ class PokemonDataPanel extends JPanel {
 				}
 			}
 		});
-
-		moveTextField.setColumns(10);
 		moveTextField.setEnabled(false);
-		
-		NumberFormat format = NumberFormat.getNumberInstance();
-		NumberFormatter formatter = new NumberFormatter(format);
-	    formatter.setValueClass(Integer.class);
-	    formatter.setMinimum(1);
-	    formatter.setMaximum(100);
 
-		levelFormattedTextField = new JFormattedTextField(formatter);
-		levelFormattedTextField.setText("1");
+		moveComboBox = GUIUtils.createComboBox(
+				new String[] { "Move 1", "Move 2", "Move 3", "Move 4" }, // TODO: Fuck this shit
+				event -> moveTextField.setText(customMoves[moveComboBox.getSelectedIndex()])
+		);
+		moveComboBox.setEnabled(false);
 
-		JCheckBox selectedCheckBox = new JCheckBox(StringUtils.empty());
-		selectedCheckBox.addActionListener(event -> trainerDialog.setSelected(index));
-		
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(6)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(selectedCheckBox)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(26)
-							.addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addGap(12)
-					.addComponent(levelFormattedTextField, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-					.addGap(12)
-					.addComponent(shinyCheckBox)
-					.addGap(12)
-					.addComponent(moveCheckBox)
-					.addComponent(moveComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addComponent(moveTextField, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
+		moveCheckBox.addActionListener(event -> {
+            moveComboBox.setEnabled(moveCheckBox.isSelected());
+            moveTextField.setEnabled(moveCheckBox.isSelected());
+        });
+
+		GUIUtils.setHorizontalLayout(
+				this,
+				selectedCheckBox,
+				nameTextField,
+				levelFormattedTextField,
+				shinyCheckBox,
+				moveCheckBox,
+				moveComboBox,
+				moveTextField
 		);
 
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(7)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(2)
-							.addComponent(selectedCheckBox))
-						.addComponent(nameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(7)
-					.addComponent(levelFormattedTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(9)
-					.addComponent(shinyCheckBox))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(9)
-					.addComponent(moveCheckBox))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(8)
-					.addComponent(moveComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(6)
-					.addComponent(moveTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-		);
-		
-		setLayout(groupLayout);
-	}
-	
-	public void setPokemon() {
-		// TODO: What is this?
+		load(pokemonDescription);
 	}
 
 	String getPokemonData() {
@@ -199,10 +140,14 @@ class PokemonDataPanel extends JPanel {
 			boolean allValidMoves = true;
 			String moves = "";
 			
-			for (int currMove = 0; currMove < customMoves.length && allValidMoves; ++currMove) {
+			for (int currMove = 0; currMove < customMoves.length; ++currMove) {
 				String move = customMoves[currMove].isEmpty() ? "None" : customMoves[currMove];
-				allValidMoves |= Attack.isAttack(move);
-				moves+= move +(currMove + 1 == customMoves.length?"":", ");
+				if (Attack.isAttack(move)) {
+					allValidMoves = false;
+					break;
+				}
+
+				moves += move + (currMove + 1 == customMoves.length ? "" : ", ");
 			}
 			
 			if (allValidMoves) {
@@ -213,24 +158,7 @@ class PokemonDataPanel extends JPanel {
 		return data;
 	}
 
-	public void setName(final String name) {
-		this.nameTextField.setText(name);
-	}
-
-	public void setLevel(String levelString) {
-		final int level = Integer.parseInt(levelString);
-		this.levelFormattedTextField.setValue(level);
-	}
-
-	public void setShiny() {
-		this.shinyCheckBox.setSelected(true);
-	}
-
-	public void setMoves(final String... moves) {
-		setMoves(Arrays.asList(moves));
-	}
-
-	public void setMoves(final List<String> moves) {
+	private void setMoves(final List<String> moves) {
 		if (moves.size() > Move.MAX_MOVES) {
 			Global.error("Cannot set more than " + Move.MAX_MOVES + " moves.");
 		}
@@ -245,17 +173,25 @@ class PokemonDataPanel extends JPanel {
 		this.moveTextField.setText(this.customMoves[0]);
 	}
 
-	public void load(String pokemonDescription) {
+	private void load(String pokemonDescription) {
+		if (StringUtils.isNullOrEmpty(pokemonDescription)) {
+			return;
+		}
+
 		PokemonMatcher pokemonMatcher = PokemonMatcher.matchPokemonDescription(pokemonDescription);
-		this.setName(pokemonMatcher.getNamesies().getName());
-		this.setLevel(pokemonMatcher.getLevel() + "");
+		this.nameTextField.setText(pokemonMatcher.getNamesies().getName());
+		this.levelFormattedTextField.setValue(Integer.parseInt(pokemonMatcher.getLevel() + ""));
 
 		if (pokemonMatcher.isShiny()) {
-			this.setShiny();
+			this.shinyCheckBox.setSelected(true);
 		}
 
 		if (pokemonMatcher.hasMoves()) {
 			this.setMoves(pokemonMatcher.getMoveNames());
 		}
+	}
+
+	public boolean isSelected() {
+		return this.selectedCheckBox.isSelected();
 	}
 }

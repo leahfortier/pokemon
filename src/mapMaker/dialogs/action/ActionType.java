@@ -1,12 +1,12 @@
 package mapMaker.dialogs.action;
 
 public enum ActionType {
-    TRIGGER(TriggerActionPanel::new),
+    TRIGGER(dialog -> new TriggerActionPanel()),
     BATTLE(BattleActionPanel::new),
-    CHOICE(ChoiceActionPanel::new),
-    UPDATE(() -> new BasicActionPanel("Update Name")),
-    GROUP_TRIGGER(() -> new BasicActionPanel("Trigger Name")),
-    GLOBAL(() -> new BasicActionPanel("Global Name"));
+    CHOICE(dialog -> new ChoiceActionPanel()),
+    UPDATE(dialog -> new BasicActionPanel("Update Name")),
+    GROUP_TRIGGER(dialog -> new BasicActionPanel("Trigger Name")),
+    GLOBAL(dialog -> new BasicActionPanel("Global Name"));
 
     private final ActionDataCreator actionDataCreator;
 
@@ -15,10 +15,10 @@ public enum ActionType {
     }
 
     private interface ActionDataCreator {
-        ActionPanel createData();
+        ActionPanel createData(ActionDialog actionDialog);
     }
 
-    public ActionPanel createActionData() {
-        return this.actionDataCreator.createData();
+    public ActionPanel createActionData(ActionDialog actionDialog) {
+        return this.actionDataCreator.createData(actionDialog);
     }
 }
