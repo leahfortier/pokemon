@@ -9,16 +9,6 @@ import pokemon.ActivePokemon;
 import trainer.EnemyTrainer;
 import util.JsonUtils;
 
-import java.util.regex.Pattern;
-
-/*
- * Format: Name Level Parameters
- * Possible parameters:
- * 		Moves: Move1, Move2, Move3, Move4*
- * 		Shiny
- * 		Egg
- * 		Item: item name*
- */
 public class TrainerBattleTrigger extends Trigger {
 	private final EnemyTrainer trainer;
 	private final UpdateMatcher npcUpdateInteraction;

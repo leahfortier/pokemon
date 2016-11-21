@@ -19,11 +19,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 public class AreaModel extends MapMakerModel {
-    private static final Pattern mapAreaPattern = Pattern.compile("\"([^\"]*)\"\\s*(\\p{XDigit}+)");
-
     private static final int VOID_INDEX = 0;
 
     private final DefaultListModel<ImageIcon> areaListModel;
