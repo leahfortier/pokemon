@@ -26,7 +26,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	public static final int NUM_POKEMON = 719;
 	public static final int EGG_IMAGE = 0x10000;
 
-	private static Map<String, PokemonInfo> map;
+	private static Map<String, PokemonInfo> map; // TODO: Switch to namesies map
 	private static PokemonInfo[] info;
 	private static List<PokemonNamesies> baseEvolution;
 	private static Set<PokemonNamesies> incenseBabies = new HashSet<>(); // TODO: lalala

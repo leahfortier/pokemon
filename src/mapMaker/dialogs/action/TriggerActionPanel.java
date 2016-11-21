@@ -3,37 +3,37 @@ package mapMaker.dialogs.action;
 import map.triggers.TriggerType;
 import pattern.action.ActionMatcher;
 import pattern.action.TriggerActionMatcher;
+import util.GUIUtils;
 
-import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
-import javax.swing.JTextField;
+import javax.swing.JTextArea;
 
 class TriggerActionPanel extends ActionPanel {
     private JComboBox<TriggerType> triggerTypeCombobBox; // Not a typo
-    private JTextField triggerContentsTextField;
+    private JTextArea triggerContentsTextArea;
 
     TriggerActionPanel() {
-        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        triggerTypeCombobBox = GUIUtils.createComboBox(TriggerType.values(), null);
+        triggerContentsTextArea = new JTextArea();
 
-        triggerTypeCombobBox = new JComboBox<>(TriggerType.values());
-        this.add(triggerTypeCombobBox);
-
-        triggerContentsTextField = new JTextField();
-        triggerContentsTextField.setColumns(10);
-        this.add(triggerContentsTextField);
+        GUIUtils.setVerticalLayout(
+                this,
+                GUIUtils.createComboBoxComponent("Trigger Type", triggerTypeCombobBox),
+                GUIUtils.createTextAreaComponent("Trigger Contents", triggerContentsTextArea)
+        );
     }
 
     @Override
     protected void load(ActionMatcher matcher) {
         TriggerActionMatcher actionMatcher = matcher.getTrigger();
         triggerTypeCombobBox.setSelectedItem(actionMatcher.getTriggerType());
-        triggerContentsTextField.setText(actionMatcher.triggerContents);
+        triggerContentsTextArea.setText(actionMatcher.triggerContents);
     }
 
     @Override
     public ActionMatcher getActionMatcher(ActionType actionType) {
         TriggerType triggerType = (TriggerType) triggerTypeCombobBox.getSelectedItem();
-        String triggerContents = triggerContentsTextField.getText();
+        String triggerContents = triggerContentsTextArea.getText();
         TriggerActionMatcher triggerActionMatcher = new TriggerActionMatcher(triggerType, triggerContents);
 
         ActionMatcher actionMatcher = new ActionMatcher();

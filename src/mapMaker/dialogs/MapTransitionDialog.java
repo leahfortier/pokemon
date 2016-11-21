@@ -5,12 +5,10 @@ import mapMaker.MapMaker;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import util.FileIO;
+import util.GUIUtils;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,10 +17,10 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 	private static final long serialVersionUID = 6937677302812347311L;
 
 	private JComboBox<String> destinationComboBox;
-	private JComboBox<String> entranceComboBox;
-	private JComboBox<DirectionType> directionComboBox;
-	private JCheckBox deathPortalCheckBox;
-	private JTextField entranceNameTextField;
+	private final JComboBox<String> entranceComboBox;
+	private final JComboBox<DirectionType> directionComboBox;
+	private final JCheckBox deathPortalCheckBox;
+	private final JTextField entranceNameTextField;
 
 	// TODO: Combine this with the direction one when I can add the auto thingy -- just don't want to deal with that right now
 	private enum DirectionType {
@@ -50,102 +48,52 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 				.collect(Collectors.toSet());
 	}
 
-	public MapTransitionDialog(MapMaker givenMapMaker) {
-		JLabel destinationLabel = new JLabel("Destination");
-		JLabel entranceLabel = new JLabel("Destination Entrance");
-		JLabel directionLabel = new JLabel("Direction");
-		JLabel entranceNameLabel = new JLabel("Entrance Name");
+	public MapTransitionDialog(MapTransitionMatcher mapTransitionMatcher, MapMaker givenMapMaker) {
+		super("Map Transition Editor");
 
-		deathPortalCheckBox = new JCheckBox("Death Portal");
+		deathPortalCheckBox = GUIUtils.createCheckBox("Death Portal");
 		entranceNameTextField = new JTextField();
-		entranceNameTextField.setColumns(10);
-		
+
 		// Fill combo boxes with available maps.
 		String[] mapList = givenMapMaker.getAvailableMaps();
 		String[] updatedMapList = new String[mapList.length + 1];
 		updatedMapList[0] = "";
 		System.arraycopy(mapList, 0, updatedMapList, 1, mapList.length);
-		
-		destinationComboBox = new JComboBox<>(updatedMapList);
-		
-		destinationComboBox.addActionListener(actionEvent -> {
-            // Fill entranceComboBox with available entrances.
-            if (destinationComboBox.getSelectedIndex() == 0) {
-                entranceComboBox.setEnabled(false);
-                entranceComboBox.removeAllItems();
-            }
-            else {
-                entranceComboBox.setEnabled(true);
-                entranceComboBox.removeAllItems();
 
-				String destinationMap = (String)destinationComboBox.getSelectedItem();
-				getMapEntrancesForMap(givenMapMaker, destinationMap)
-						.forEach(entranceComboBox::addItem);
-            }
-        });
-		
-		entranceComboBox = new JComboBox<>();
+		entranceComboBox = GUIUtils.createComboBox(new String[0], null);
 		entranceComboBox.setEnabled(false);
+
+		destinationComboBox = GUIUtils.createComboBox(
+				updatedMapList,
+				actionEvent -> {
+					// Fill entranceComboBox with available entrances.
+					if (destinationComboBox.getSelectedIndex() == 0) {
+						entranceComboBox.setEnabled(false);
+						entranceComboBox.removeAllItems();
+					}
+					else {
+						entranceComboBox.setEnabled(true);
+						entranceComboBox.removeAllItems();
+
+						String destinationMap = (String)destinationComboBox.getSelectedItem();
+						getMapEntrancesForMap(givenMapMaker, destinationMap)
+								.forEach(entranceComboBox::addItem);
+					}
+				}
+		);
 		
-		directionComboBox = new JComboBox<>(DirectionType.values());
-		
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(6)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(entranceNameLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-							.addGap(12)
-							.addComponent(entranceNameTextField, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(destinationLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-							.addGap(12)
-							.addComponent(destinationComboBox, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(entranceLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-							.addGap(12)
-							.addComponent(entranceComboBox, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(directionLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-							.addGap(12)
-							.addComponent(directionComboBox, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(deathPortalCheckBox, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))))
+		directionComboBox = GUIUtils.createComboBox(DirectionType.values(), null);
+
+		GUIUtils.setVerticalLayout(
+				this,
+				GUIUtils.createTextFieldComponent("Entrance Name", entranceNameTextField),
+				GUIUtils.createComboBoxComponent("Destination", destinationComboBox),
+				GUIUtils.createComboBoxComponent("Destination Entrance", entranceComboBox),
+				GUIUtils.createComboBoxComponent("Direction", directionComboBox),
+				deathPortalCheckBox
 		);
 
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(2)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup())
-							.addGap(4)
-							.addComponent(entranceNameLabel)
-						.addComponent(entranceNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(4)
-							.addComponent(destinationLabel))
-						.addComponent(destinationComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(1)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(4)
-							.addComponent(entranceLabel))
-						.addComponent(entranceComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(1)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(4)
-							.addComponent(directionLabel))
-						.addComponent(directionComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGroup(groupLayout.createSequentialGroup())
-						.addComponent(deathPortalCheckBox))
-		);
-		setLayout(groupLayout);
+		this.load(mapTransitionMatcher);
 	}
 
 	private String getDestination() {
@@ -157,7 +105,7 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 	}
 
 	@Override
-	public MapTransitionMatcher getMatcher() {
+	protected MapTransitionMatcher getMatcher() {
 		String destination = getDestination();
 		String entrance = getMapEntrance();
 
@@ -174,8 +122,11 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 		);
 	}
 
-	@Override
-	protected void load(MapTransitionMatcher matcher) {
+	private void load(MapTransitionMatcher matcher) {
+		if (matcher == null) {
+			return;
+		}
+
 		entranceNameTextField.setText(matcher.getExitName());
 		destinationComboBox.setSelectedItem(matcher.getNextMap());
 		entranceComboBox.setSelectedItem(matcher.getNextEntranceName());
