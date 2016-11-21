@@ -1,105 +1,73 @@
 package mapMaker.dialogs;
 
+import map.WildEncounter;
+import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
+import util.ColorDocumentListener.ColorCondition;
+import util.GUIUtils;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.NumberFormatter;
-import java.awt.Color;
-import java.text.NumberFormat;
 
-public class WildPokemonDataPanel extends JPanel {
+class WildPokemonDataPanel extends JPanel {
 	
 	private static final long serialVersionUID = -7408589859784929623L;
 
-	public JTextField pokemonTextField;
-	public JFormattedTextField probabilityFormattedTextField;
-	public JFormattedTextField lowLevelFormattedTextField;
-	public JFormattedTextField highLevelFormattedTextField;
+	private final JTextField pokemonTextField;
+	private final JFormattedTextField probabilityFormattedTextField;
+	private final JFormattedTextField lowLevelFormattedTextField;
+	private final JFormattedTextField highLevelFormattedTextField;
+	private final JCheckBox selectedCheckBox;
 	
-	private WildBattleTriggerEditDialog wildBattleEditDialog;
-	int index;
-	
-	WildPokemonDataPanel(WildBattleTriggerEditDialog givenWildBattleEditDialog, int givenIndex) {
+	WildPokemonDataPanel(WildEncounter wildEncounter) {
 		
-		wildBattleEditDialog = givenWildBattleEditDialog;
-		index = givenIndex;
-
-		JCheckBox selectedCheckBox = new JCheckBox();
-		selectedCheckBox.addActionListener(event -> wildBattleEditDialog.setSelected(index));
-		
-		pokemonTextField = new JTextField();
-		pokemonTextField.setColumns(10);
-		pokemonTextField.getDocument().addDocumentListener(new DocumentListener() {
-			public void removeUpdate(DocumentEvent event) { valueChanged(); }
-			public void insertUpdate(DocumentEvent event) { valueChanged(); }
-			public void changedUpdate(DocumentEvent event) {}
-			public void valueChanged() {
-				PokemonNamesies namesies = PokemonNamesies.tryValueOf(pokemonTextField.getText().trim());
-				if (namesies == null) {
-					pokemonTextField.setBackground(new Color(0xFF9494));
-				}
-				else {
-					pokemonTextField.setBackground(new Color(0x90EE90));
-				}
+		selectedCheckBox = GUIUtils.createCheckBox();
+		pokemonTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
+			@Override
+			public boolean greenCondition() {
+				return PokemonNamesies.tryValueOf(pokemonTextField.getText().trim()) != null;
 			}
 		});
 		
-		NumberFormat format = NumberFormat.getNumberInstance();
-		NumberFormatter formatter = new NumberFormatter(format);
-	    formatter.setValueClass(Integer.class);
-	    formatter.setMinimum(1);
-	    formatter.setMaximum(100);
-		probabilityFormattedTextField = new JFormattedTextField(formatter);
-		probabilityFormattedTextField.setHorizontalAlignment(SwingConstants.RIGHT);
-		probabilityFormattedTextField.setValue(100);
+		probabilityFormattedTextField = GUIUtils.createIntegerTextField(100, 1, 100);
+		lowLevelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, ActivePokemon.MAX_LEVEL);
+		highLevelFormattedTextField = GUIUtils.createIntegerTextField(ActivePokemon.MAX_LEVEL, 1, ActivePokemon.MAX_LEVEL);
 
-		lowLevelFormattedTextField = new JFormattedTextField(formatter);
-		lowLevelFormattedTextField.setValue(1);
-		lowLevelFormattedTextField.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		highLevelFormattedTextField = new JFormattedTextField(formatter);
-		highLevelFormattedTextField.setValue(100);
-		highLevelFormattedTextField.setHorizontalAlignment(SwingConstants.RIGHT);
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(6)
-					.addComponent(selectedCheckBox)
-					.addComponent(pokemonTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(12)
-					.addComponent(probabilityFormattedTextField, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addGap(12)
-					.addComponent(lowLevelFormattedTextField, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addGap(12)
-					.addComponent(highLevelFormattedTextField, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))
+		GUIUtils.setHorizontalLayout(
+				this,
+				selectedCheckBox,
+				pokemonTextField,
+				probabilityFormattedTextField,
+				lowLevelFormattedTextField,
+				highLevelFormattedTextField
 		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(9)
-					.addComponent(selectedCheckBox))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(6)
-					.addComponent(pokemonTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(6)
-					.addComponent(probabilityFormattedTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(6)
-					.addComponent(lowLevelFormattedTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(6)
-					.addComponent(highLevelFormattedTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-		);
-		setLayout(groupLayout);
+
+		this.load(wildEncounter);
+	}
+
+	public boolean isSelected() {
+		return this.selectedCheckBox.isSelected();
+	}
+
+	WildEncounter getWildEncounter() {
+		String pokemon = pokemonTextField.getText();
+		String minLevel = lowLevelFormattedTextField.getText();
+		String maxLevel = highLevelFormattedTextField.getText();
+		String probability = probabilityFormattedTextField.getText();
+
+		return new WildEncounter(pokemon, minLevel, maxLevel, probability);
+	}
+
+	private void load(WildEncounter wildEncounter) {
+		if (wildEncounter == null) {
+			return;
+		}
+
+		pokemonTextField.setText(wildEncounter.getPokemonName());
+		probabilityFormattedTextField.setValue(wildEncounter.getProbability());
+		lowLevelFormattedTextField.setValue(wildEncounter.getMinLevel());
+		highLevelFormattedTextField.setValue(wildEncounter.getMaxLevel());
 	}
 }
