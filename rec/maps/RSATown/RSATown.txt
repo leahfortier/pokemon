@@ -139,7 +139,10 @@
                 "name": "Blue",
                 "cashMoney": 230,
                 "pokemon": [
-                  "Riolu 5"
+                  {
+                    "namesies": "RIOLU",
+                    "level": 5
+                  }
                 ],
                 "update": "won"
               }

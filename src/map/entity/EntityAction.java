@@ -2,6 +2,7 @@ package map.entity;
 
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
+import pattern.PokemonMatcher;
 import pattern.action.BattleMatcher;
 import pattern.action.ChoiceActionMatcher;
 import pattern.GroupTriggerMatcher;
@@ -74,7 +75,7 @@ public abstract class EntityAction {
     public static class BattleAction extends EntityAction {
         public String name;
         public int cashMoney;
-        public String[] pokemon;
+        public PokemonMatcher[] pokemon;
         public String updateInteraction;
         public String entityName;
 

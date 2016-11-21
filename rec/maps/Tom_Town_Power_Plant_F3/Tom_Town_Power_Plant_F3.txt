@@ -57,8 +57,14 @@
                 "name": "Team Deadlock Grunt",
                 "cashMoney": 100,
                 "pokemon": [
-                  "Butterfree 14",
-                  "Beedrill 15"
+                  {
+                    "namesies": "BUTTERFREE",
+                    "level": 14
+                  },
+                  {
+                    "namesies": "BEEDRILL",
+                    "level": 15
+                  }
                 ],
                 "update": "deadlock_defeat"
               }
@@ -117,7 +123,10 @@
                 "name": "Team Deadlock Grunt",
                 "cashMoney": 100,
                 "pokemon": [
-                  "Venipede 14"
+                  {
+                    "namesies": "VENIPEDE",
+                    "level": 14
+                  }
                 ],
                 "update": "won"
               }
@@ -171,7 +180,10 @@
                 "name": "Team Deadlock Grunt",
                 "cashMoney": 100,
                 "pokemon": [
-                  "Venonat 12"
+                  {
+                    "namesies": "VENONAT",
+                    "level": 12
+                  }
                 ],
                 "update": "won"
               }

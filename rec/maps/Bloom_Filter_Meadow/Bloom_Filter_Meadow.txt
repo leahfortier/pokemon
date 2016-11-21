@@ -103,8 +103,14 @@
                 "name": "Bug Catcher",
                 "cashMoney": 100,
                 "pokemon": [
-                  "Caterpie 6",
-                  "Kricketot 6"
+                  {
+                    "namesies": "CATERPIE",
+                    "level": 6
+                  },
+                  {
+                    "namesies": "KRICKETOT",
+                    "level": 6
+                  }
                 ],
                 "update": "won"
               }
@@ -151,8 +157,14 @@
                 "name": "Meadow Lady",
                 "cashMoney": 100,
                 "pokemon": [
-                  "Budew 6",
-                  "Oddish 6"
+                  {
+                    "namesies": "BUDEW",
+                    "level": 6
+                  },
+                  {
+                    "namesies": "ODDISH",
+                    "level": 6
+                  }
                 ],
                 "update": "won"
               }
@@ -202,19 +214,79 @@
   "wildBattles": [
     {
       "encounterRate": "VERY_COMMON",
-      "pokemon": [
-        "Caterpie 4-6 20%",
-        "Jigglypuff 4-6 15%",
-        "Paras 4-6 7%",
-        "Yanma 4-6 6%",
-        "Budew 4-6 5%",
-        "Ralts 4-6 4%",
-        "Solosis 4-6 4%",
-        "Elgyem 4-6 4%",
-        "Ledyba 4-6 15%",
-        "Hoppip 4-6 5%",
-        "Oddish 4-6 5%",
-        "Flabebe 4-6 10%"
+      "wildPokemon": [
+        {
+          "pokemon": "CATERPIE",
+          "minLevel": 4,
+          "maxLevel": 6,
+          "probability": 20
+        },
+        {
+          "pokemon": "JIGGLYPUFF",
+          "minLevel": 4,
+          "maxLevel": 6,
+          "probability": 15
+        },
+        {
+          "pokemon": "PARAS",
+          "minLevel": 4,
+          "maxLevel": 6,
+          "probability": 7
+        },
+        {
+          "pokemon": "YANMA",
+          "minLevel": 4,
+          "maxLevel": 6,
+          "probability": 6
+        },
+        {
+          "pokemon": "BUDEW",
+          "minLevel": 4,
+          "maxLevel": 6,
+          "probability": 5
+        },
+        {
+          "pokemon": "RALTS",
+          "minLevel": 4,
+          "maxLevel": 6,
+          "probability": 4
+        },
+        {
+          "pokemon": "SOLOSIS",
+          "minLevel": 4,
+          "maxLevel": 6,
+          "probability": 4
+        },
+        {
+          "pokemon": "ELGYEM",
+          "minLevel": 4,
+          "maxLevel": 6,
+          "probability": 4
+        },
+        {
+          "pokemon": "LEDYBA",
+          "minLevel": 4,
+          "maxLevel": 6,
+          "probability": 15
+        },
+        {
+          "pokemon": "HOPPIP",
+          "minLevel": 4,
+          "maxLevel": 6,
+          "probability": 5
+        },
+        {
+          "pokemon": "ODDISH",
+          "minLevel": 4,
+          "maxLevel": 6,
+          "probability": 5
+        },
+        {
+          "pokemon": "FLABEBE",
+          "minLevel": 4,
+          "maxLevel": 6,
+          "probability": 10
+        }
       ],
       "location": [
         {

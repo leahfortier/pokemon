@@ -1,5 +1,6 @@
 package mapMaker.dialogs.action;
 
+import pattern.PokemonMatcher;
 import pattern.action.ActionMatcher;
 import pattern.action.BattleMatcher;
 import trainer.Trainer;
@@ -113,8 +114,8 @@ class BattleActionPanel extends ActionPanel {
 		parentDialog.render();
 	}
 
-	private void addPokemonPanel(String pokemonDescription) {
-		pokemonPanels.add(new PokemonDataPanel(pokemonDescription));
+	private void addPokemonPanel(PokemonMatcher pokemonMatcher) {
+		pokemonPanels.add(new PokemonDataPanel(pokemonMatcher));
 		render();
 	}
 
@@ -131,8 +132,8 @@ class BattleActionPanel extends ActionPanel {
 		updateInteractionTextField.setText(battleMatcher.update);
 
 		pokemonPanels.clear();
-		for (String pokemonString : battleMatcher.pokemon) {
-			addPokemonPanel(pokemonString);
+		for (PokemonMatcher pokemonMatcher : battleMatcher.pokemon) {
+			addPokemonPanel(pokemonMatcher);
 		}
 	}
 
@@ -140,9 +141,9 @@ class BattleActionPanel extends ActionPanel {
 	public ActionMatcher getActionMatcher(ActionType actionType) {
 		String name = nameTextField.getText().trim();
 		int cashMoney = Integer.parseInt(cashFormattedTextField.getValue().toString());
-		String[] pokemon = new String[pokemonPanels.size()];
+		PokemonMatcher[] pokemon = new PokemonMatcher[pokemonPanels.size()];
 		for (int i = 0; i < pokemon.length; i++) {
-			String pokemonData = pokemonPanels.get(i).getPokemonData();
+			PokemonMatcher pokemonData = pokemonPanels.get(i).getMatcher();
 			if (pokemonData != null) {
 				pokemon[i] = pokemonData;
 			}

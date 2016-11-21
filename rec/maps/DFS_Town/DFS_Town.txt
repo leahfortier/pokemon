@@ -264,7 +264,10 @@
                 "name": "Youngster Joey",
                 "cashMoney": 100,
                 "pokemon": [
-                  "Pidgey 4"
+                  {
+                    "namesies": "PIDGEY",
+                    "level": 4
+                  }
                 ],
                 "update": "won"
               }
@@ -311,7 +314,10 @@
                 "name": "Youngster Joey",
                 "cashMoney": 100,
                 "pokemon": [
-                  "Sentret 4"
+                  {
+                    "namesies": "SENTRET",
+                    "level": 4
+                  }
                 ],
                 "update": "won"
               }
@@ -358,7 +364,10 @@
                 "name": "Youngster Joey",
                 "cashMoney": 100,
                 "pokemon": [
-                  "Bidoof 4"
+                  {
+                    "namesies": "BIDOOF",
+                    "level": 4
+                  }
                 ],
                 "update": "won"
               }
@@ -400,12 +409,37 @@
   "wildBattles": [
     {
       "encounterRate": "VERY_COMMON",
-      "pokemon": [
-        "Pidgey 2-4 30%",
-        "Bidoof 2-4 25%",
-        "Sentret 2-4 20%",
-        "Fletchling 2-4 15%",
-        "Lillipup 2-4 10%"
+      "wildPokemon": [
+        {
+          "pokemon": "PIDGEY",
+          "minLevel": 2,
+          "maxLevel": 4,
+          "probability": 30
+        },
+        {
+          "pokemon": "BIDOOF",
+          "minLevel": 2,
+          "maxLevel": 4,
+          "probability": 25
+        },
+        {
+          "pokemon": "SENTRET",
+          "minLevel": 2,
+          "maxLevel": 4,
+          "probability": 20
+        },
+        {
+          "pokemon": "FLETCHLING",
+          "minLevel": 2,
+          "maxLevel": 4,
+          "probability": 15
+        },
+        {
+          "pokemon": "LILLIPUP",
+          "minLevel": 2,
+          "maxLevel": 4,
+          "probability": 10
+        }
       ],
       "location": [
         {
