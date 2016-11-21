@@ -127,12 +127,12 @@ class BattleActionPanel extends ActionPanel {
 
 		BattleMatcher battleMatcher = matcher.getBattle();
 
-		nameTextField.setText(battleMatcher.name);
-		cashFormattedTextField.setValue(battleMatcher.cashMoney);
-		updateInteractionTextField.setText(battleMatcher.update);
+		nameTextField.setText(battleMatcher.getName());
+		cashFormattedTextField.setValue(battleMatcher.getDatCashMoney());
+		updateInteractionTextField.setText(battleMatcher.getUpdateInteraction());
 
 		pokemonPanels.clear();
-		for (PokemonMatcher pokemonMatcher : battleMatcher.pokemon) {
+		for (PokemonMatcher pokemonMatcher : battleMatcher.getPokemon()) {
 			addPokemonPanel(pokemonMatcher);
 		}
 	}
