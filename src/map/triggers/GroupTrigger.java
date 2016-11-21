@@ -11,7 +11,7 @@ import util.StringUtils;
 
 import java.util.List;
 
-public class GroupTrigger extends Trigger {
+class GroupTrigger extends Trigger {
 	public final List<String> triggers;
 
 	static String getTriggerSuffix(String contents) {

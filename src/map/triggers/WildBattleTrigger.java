@@ -15,10 +15,10 @@ import trainer.Pokedex.PokedexStatus;
 import trainer.WildPokemon;
 import util.JsonUtils;
 
-public class WildBattleTrigger extends Trigger {
-	// TODO: Ideally would like to make a separate class for holding these
-	private WildEncounter[] wildEncounters;
-	private EncounterRate encounterRate;
+class WildBattleTrigger extends Trigger {
+
+	private final WildEncounter[] wildEncounters;
+	private final EncounterRate encounterRate;
 
 	WildBattleTrigger(String matcherJson, String condition) {
 		super(TriggerType.WILD_BATTLE, matcherJson, condition);
@@ -66,14 +66,6 @@ public class WildBattleTrigger extends Trigger {
 			Battle battle = new Battle(wildPokemon);
 			Game.setBattleViews(battle, seenWildPokemon);
 		}
-	}
-
-	public WildEncounter[] getWildEncounters() {
-		return this.wildEncounters;
-	}
-
-	public EncounterRate getEncounterRate() {
-		return this.encounterRate;
 	}
 
 	private WildPokemon getWildPokemon() {

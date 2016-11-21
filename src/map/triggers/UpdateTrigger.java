@@ -4,7 +4,7 @@ import main.Game;
 import pattern.action.UpdateMatcher;
 import util.JsonUtils;
 
-public class UpdateTrigger extends Trigger {
+class UpdateTrigger extends Trigger {
 
     private final String npcEntityName;
     private final String newInteractionName;

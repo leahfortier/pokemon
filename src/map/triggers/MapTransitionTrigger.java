@@ -6,14 +6,11 @@ import pattern.map.MapTransitionMatcher;
 import trainer.CharacterData;
 import util.JsonUtils;
 
-public class MapTransitionTrigger extends Trigger {
-	private String nextMap;
-	private String mapEntranceName;
-	private Direction direction;
-	private boolean deathPortal;
-
-	private int newX;
-	private int newY;
+class MapTransitionTrigger extends Trigger {
+	private final String nextMap;
+	private final String mapEntranceName;
+	private final Direction direction;
+	private final boolean deathPortal;
 
 	static String getTriggerSuffix(String contents) {
 		MapTransitionMatcher matcher = JsonUtils.deserialize(contents, MapTransitionMatcher.class);
@@ -33,11 +30,6 @@ public class MapTransitionTrigger extends Trigger {
 	protected void executeTrigger() {
 		CharacterData player = Game.getPlayer();
 		player.setMap(nextMap, mapEntranceName);
-
-		// TODO: When is newx/newy specified? why would they not just specify an actual entrance?
-		if (mapEntranceName == null || !Game.getData().getMap(nextMap).setCharacterToEntrance(mapEntranceName)) {
-			player.setLocation(newX, newY);
-		}
 		
 		if (direction != null) {
 			player.setDirection(direction);
@@ -48,17 +40,5 @@ public class MapTransitionTrigger extends Trigger {
 		}
 		
 		player.mapReset = true;
-	}
-
-	public String getNextMap() {
-		return this.nextMap;
-	}
-
-	public String getMapEntranceName() {
-		return this.mapEntranceName;
-	}
-
-	public Direction getDirection() {
-		return this.direction;
 	}
 }

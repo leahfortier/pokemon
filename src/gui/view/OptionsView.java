@@ -2,6 +2,7 @@ package gui.view;
 
 import main.Game;
 import main.Global;
+import sound.SoundPlayer;
 import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
@@ -15,7 +16,7 @@ public class OptionsView extends View {
 	private Color color;
 	
 	public OptionsView() {
-		musicOn = Global.soundPlayer.isMuted();
+		musicOn = SoundPlayer.soundPlayer.isMuted();
 		color = new Color(0, 0, 0);
 	}
 
@@ -24,7 +25,7 @@ public class OptionsView extends View {
 			input.consumeMousePress();
 			
 			musicOn = !musicOn;
-			Global.soundPlayer.toggleMusic();
+			SoundPlayer.soundPlayer.toggleMusic();
 		}
 		
 		if (input.isDown(Control.ESC)) {

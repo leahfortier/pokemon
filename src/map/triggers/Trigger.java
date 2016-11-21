@@ -37,14 +37,6 @@ public abstract class Trigger {
 		return this.name;
 	}
 
-	public Condition getCondition() {
-		return condition;
-	}
-	
-	public List<String> getGlobals() {
-		return globals;
-	}
-
 	public final void execute() {
 		for (String global: globals) {
 			if (global.startsWith("!")) {

@@ -9,7 +9,7 @@ import pokemon.ActivePokemon;
 import trainer.EnemyTrainer;
 import util.JsonUtils;
 
-public class TrainerBattleTrigger extends Trigger {
+class TrainerBattleTrigger extends Trigger {
 	private final EnemyTrainer trainer;
 	private final UpdateMatcher npcUpdateInteraction;
 

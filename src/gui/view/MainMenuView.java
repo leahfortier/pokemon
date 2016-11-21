@@ -9,6 +9,7 @@ import java.awt.Graphics;
 
 import main.Game;
 import main.Global;
+import sound.SoundPlayer;
 import sound.SoundTitle;
 import util.DrawUtils;
 import util.InputControl;
@@ -201,13 +202,13 @@ public class MainMenuView extends View {
 			b.setForceHover(false);
 		}
 		
-		Global.soundPlayer.playMusic(state.tunes);
+		SoundPlayer.soundPlayer.playMusic(state.tunes);
 	}
 
 	public void update(int dt, InputControl input) {
 		if (!musicStarted) {
 			musicStarted = true;
-			Global.soundPlayer.playMusic(state.tunes);
+			SoundPlayer.soundPlayer.playMusic(state.tunes);
 		}
 		
 		int pressed = -1;
@@ -286,7 +287,7 @@ public class MainMenuView extends View {
 						Save.saveSettings(theme);
 						break;
 					case 1: // mute
-						Global.soundPlayer.toggleMusic();
+						SoundPlayer.soundPlayer.toggleMusic();
 						Save.saveSettings(theme);
 						break;
 					case 2: // credits

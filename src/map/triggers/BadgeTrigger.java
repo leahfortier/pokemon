@@ -7,7 +7,7 @@ import trainer.CharacterData;
 
 import java.util.Collections;
 
-public class BadgeTrigger extends Trigger {
+class BadgeTrigger extends Trigger {
 	private final int badgeIndex;
 
 	BadgeTrigger(String badgeIndex, String condition) {

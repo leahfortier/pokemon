@@ -1,7 +1,5 @@
 package main;
 
-import sound.SoundPlayer;
-
 import javax.swing.JOptionPane;
 import java.awt.Dimension;
 import java.util.Arrays;
@@ -29,8 +27,6 @@ public class Global {
 	public static final int TIME_BETWEEN_TILES = 128;
 
 	public static final String MONEY_SYMBOL = "\u00A5";
-
-	public static final SoundPlayer soundPlayer = new SoundPlayer();
 
 	// TODO: Need to make a RandomUtils class
 	private static final Random RANDOM = new Random();
