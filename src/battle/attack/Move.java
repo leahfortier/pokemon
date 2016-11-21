@@ -28,6 +28,10 @@ public class Move implements Serializable {
 	
 	private Type type;
 	private int power;
+
+	public Move(AttackNamesies attackNamesies) {
+		this(attackNamesies.getAttack());
+	}
 	
 	public Move(Attack attack) {
 		this.attack = attack;

@@ -1,6 +1,6 @@
 package mapMaker.dialogs.action;
 
-import battle.attack.Attack;
+import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import main.Global;
 import pattern.PokemonMatcher;
@@ -29,19 +29,14 @@ class PokemonDataPanel extends JPanel {
 
 	private final JCheckBox selectedCheckBox;
 
-	private final String[] customMoves = new String[Move.MAX_MOVES]; // TODO: I think this should just be a list
+	private final AttackNamesies[] customMoves = new AttackNamesies[Move.MAX_MOVES];
 	
-	PokemonDataPanel(String pokemonDescription) {
+	PokemonDataPanel(PokemonMatcher pokemonMatcher) {
 		
-		for (int currMove = 0; currMove < customMoves.length; ++currMove) {
-			customMoves[currMove] = StringUtils.empty();
-		}
-
 		selectedCheckBox = GUIUtils.createCheckBox();
 		nameTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
 			@Override
 			public boolean greenCondition() {
-				System.out.println(nameTextField.getText().trim());
 				return PokemonNamesies.tryValueOf(nameTextField.getText().trim()) != null;
 			}
 		});
@@ -51,12 +46,12 @@ class PokemonDataPanel extends JPanel {
 		moveTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
 			@Override
 			public boolean greenCondition() {
-				return Attack.isAttack(customMoves[moveComboBox.getSelectedIndex()]);
+				return customMoves[moveComboBox.getSelectedIndex()] != null;
 			}
 
 			@Override
 			public void additionalValueChanged() {
-				customMoves[moveComboBox.getSelectedIndex()] = moveTextField.getText().trim();
+				customMoves[moveComboBox.getSelectedIndex()] = AttackNamesies.tryValueOf(moveTextField.getText().trim());
 			}
 		});
 
@@ -64,7 +59,11 @@ class PokemonDataPanel extends JPanel {
 
 		moveComboBox = GUIUtils.createComboBox(
 				new String[] { "Move 1", "Move 2", "Move 3", "Move 4" }, // TODO: Fuck this shit
-				event -> moveTextField.setText(customMoves[moveComboBox.getSelectedIndex()])
+				event -> {
+					AttackNamesies selectedMove = customMoves[moveComboBox.getSelectedIndex()];
+					String moveText = selectedMove == null ? StringUtils.empty() : selectedMove.getName();
+					moveTextField.setText(moveText);
+				}
 		);
 		moveComboBox.setEnabled(false);
 
@@ -84,50 +83,24 @@ class PokemonDataPanel extends JPanel {
 				moveTextField
 		);
 
-		load(pokemonDescription);
+		load(pokemonMatcher);
 	}
 
-	String getPokemonData() {
-		String pokemonName = nameTextField.getText().trim();
-		if (pokemonName.length() < 2) { // TODO: ??????? what
-			return null;
-		}
-		
-		// TODO: I don't think this will work always -- try with something like Mr. Mime
-		pokemonName = Character.toUpperCase(pokemonName.charAt(0)) + pokemonName.substring(1).toLowerCase();
-		PokemonNamesies namesies = PokemonNamesies.tryValueOf(pokemonName);
+	PokemonMatcher getMatcher() {
+		PokemonNamesies namesies = PokemonNamesies.tryValueOf(nameTextField.getText().trim());
 		if (namesies == null) {
 			return null;
 		}
-		
-		String data = "pokemon: " + pokemonName + " " +
-				levelFormattedTextField.getText() + " " +
-				(shinyCheckBox.isSelected() ? "Shiny" : StringUtils.empty());
-		
-		if (moveCheckBox.isSelected()) {
-			// TODO: Figure out what this is supposed to be doing because right now this variable does absolutely nothing
-			boolean allValidMoves = true;
-			String moves = "";
-			
-			for (int currMove = 0; currMove < customMoves.length; ++currMove) {
-				String move = customMoves[currMove].isEmpty() ? "None" : customMoves[currMove];
-				if (Attack.isAttack(move)) {
-					allValidMoves = false;
-					break;
-				}
 
-				moves += move + (currMove + 1 == customMoves.length ? "" : ", ");
-			}
-			
-			if (allValidMoves) {
-				data += " Moves: " + moves;
-			}
-		}
-		
-		return data;
+		return new PokemonMatcher(
+				namesies,
+				Integer.parseInt(levelFormattedTextField.getText().trim()),
+				shinyCheckBox.isSelected(),
+				customMoves
+		);
 	}
 
-	private void setMoves(final List<String> moves) {
+	private void setMoves(final List<AttackNamesies> moves) {
 		if (moves.size() > Move.MAX_MOVES) {
 			Global.error("Cannot set more than " + Move.MAX_MOVES + " moves.");
 		}
@@ -139,24 +112,23 @@ class PokemonDataPanel extends JPanel {
 			this.customMoves[i] = moves.get(i);
 		}
 
-		this.moveTextField.setText(this.customMoves[0]);
+		this.moveTextField.setText(this.customMoves[0].getName());
 	}
 
-	private void load(String pokemonDescription) {
-		if (StringUtils.isNullOrEmpty(pokemonDescription)) {
+	private void load(PokemonMatcher matcher) {
+		if (matcher == null) {
 			return;
 		}
 
-		PokemonMatcher pokemonMatcher = PokemonMatcher.matchPokemonDescription(pokemonDescription);
-		this.nameTextField.setText(pokemonMatcher.getNamesies().getName());
-		this.levelFormattedTextField.setValue(Integer.parseInt(pokemonMatcher.getLevel() + ""));
+		this.nameTextField.setText(matcher.getNamesies().getName());
+		this.levelFormattedTextField.setValue(Integer.parseInt(matcher.getLevel() + ""));
 
-		if (pokemonMatcher.isShiny()) {
+		if (matcher.isShiny()) {
 			this.shinyCheckBox.setSelected(true);
 		}
 
-		if (pokemonMatcher.hasMoves()) {
-			this.setMoves(pokemonMatcher.getMoveNames());
+		if (matcher.hasMoves()) {
+			this.setMoves(matcher.getMoveNames());
 		}
 	}
 

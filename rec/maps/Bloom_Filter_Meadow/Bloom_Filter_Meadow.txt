@@ -103,8 +103,14 @@
                 "name": "Bug Catcher",
                 "cashMoney": 100,
                 "pokemon": [
-                  "Caterpie 6",
-                  "Kricketot 6"
+                  {
+                    "namesies": "CATERPIE",
+                    "level": 6
+                  },
+                  {
+                    "namesies": "KRICKETOT",
+                    "level": 6
+                  }
                 ],
                 "update": "won"
               }
@@ -151,8 +157,14 @@
                 "name": "Meadow Lady",
                 "cashMoney": 100,
                 "pokemon": [
-                  "Budew 6",
-                  "Oddish 6"
+                  {
+                    "namesies": "BUDEW",
+                    "level": 6
+                  },
+                  {
+                    "namesies": "ODDISH",
+                    "level": 6
+                  }
                 ],
                 "update": "won"
               }
