@@ -115,6 +115,16 @@ public class MapMakerTriggerData {
 		return uniqueEntityName;
 	}
 
+	private String getEntityNameFormat(String baseName) {
+		if (StringUtils.isNullOrEmpty(baseName)) {
+			baseName = "Nameless";
+		}
+
+		baseName = baseName.replaceAll("\\s", "");
+		baseName = PokeString.removeSpecialSymbols(baseName);
+		return baseName;
+	}
+
 	void moveTriggerData(Point delta) {
 		for (LocationTriggerMatcher matcher : this.entities) {
 			matcher.addDelta(delta);
@@ -177,35 +187,7 @@ public class MapMakerTriggerData {
 	boolean createTrigger(TriggerModelType type) {
 		mapMaker.clearPlaceableTrigger();
 
-		LocationTriggerMatcher trigger = null;
-
-		// TODO: Show popup asking user about specific trigger being placed.
-		switch (type) {
-			case ITEM:
-				System.out.println("Item");
-				trigger = editItem(null);
-				break;
-			case NPC:
-				System.out.println("NPC");
-				trigger = editNPC(null);
-				break;
-			case TRIGGER_ENTITY:
-				System.out.println("Trigger Entity");
-				trigger = editEventTrigger(null);
-				break;
-			case WILD_BATTLE:
-				System.out.println("Wild Battle");
-				trigger = wildBattleTriggerOptions();
-				break;
-			case MAP_TRANSITION:
-				System.out.println("Map Transition");
-				trigger = editMapTransition(null);
-				break;
-			case EVENT:
-				System.out.println("Event");
-				trigger = editEventTrigger(null);
-				break;
-		}
+		LocationTriggerMatcher trigger = getTriggerFromDialog(type, null);
 
 		mapMaker.setPlaceableTrigger(trigger);
 
@@ -213,30 +195,7 @@ public class MapMakerTriggerData {
 	}
 
 	public void editTrigger(LocationTriggerMatcher trigger) {
-		LocationTriggerMatcher newTrigger = null;
-		TriggerModelType triggerModelType = trigger.getTriggerModelType();
-
-		switch (triggerModelType) {
-			case ITEM:
-				newTrigger = editItem((ItemMatcher)trigger);
-				break;
-			case NPC:
-				newTrigger = editNPC((NPCMatcher)trigger);
-				break;
-			case TRIGGER_ENTITY:
-				// TODO: Need a new edit and dialog
-				newTrigger = editEventTrigger((EventMatcher)trigger);
-				break;
-			case MAP_TRANSITION:
-				newTrigger = editMapTransition((MapTransitionMatcher)trigger);
-				break;
-			case WILD_BATTLE:
-				newTrigger = editWildBattleTrigger((WildBattleMatcher)trigger);
-				break;
-			case EVENT:
-				newTrigger = editEventTrigger((EventMatcher)trigger);
-				break;
-		}
+		LocationTriggerMatcher newTrigger = getTriggerFromDialog(trigger.getTriggerModelType(), trigger);
 
 		// Update entity list
 		if (newTrigger != null) {
@@ -247,6 +206,39 @@ public class MapMakerTriggerData {
 
 			triggersSaved = false;
 		}
+	}
+
+	private LocationTriggerMatcher getTriggerFromDialog(TriggerModelType triggerModelType, LocationTriggerMatcher oldTrigger) {
+		switch (triggerModelType) {
+			case ITEM:
+				return new ItemEntityDialog((ItemMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
+			case NPC:
+				return new NPCEntityDialog((NPCMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
+			case TRIGGER_ENTITY:
+				// TODO: Need a new edit and dialog
+				return new EventTriggerDialog((EventMatcher)oldTrigger).getMatcher(mapMaker);
+			case MAP_TRANSITION:
+				return new MapTransitionDialog((MapTransitionMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
+			case WILD_BATTLE:
+				if (oldTrigger == null) {
+					return new WildBattleTriggerOptionsDialog(this.getWildBattleTriggers()).getMatcher(mapMaker);
+				} else {
+					return new WildBattleTriggerEditDialog((WildBattleMatcher)oldTrigger, -1).getMatcher(mapMaker);
+				}
+			case EVENT:
+				return new EventTriggerDialog((EventMatcher)oldTrigger).getMatcher(mapMaker);
+			default:
+				Global.error("Unknown trigger model type " + triggerModelType);
+				return null;
+		}
+	}
+
+	private List<WildBattleMatcher> getWildBattleTriggers() {
+		return this.entities
+				.stream()
+				.filter(entity -> entity instanceof WildBattleMatcher)
+				.map(entity -> (WildBattleMatcher)entity)
+				.collect(Collectors.toList());
 	}
 
 	public List<LocationTriggerMatcher> getEntitiesAtLocation(Point location) {
@@ -265,47 +257,5 @@ public class MapMakerTriggerData {
 	public void moveTrigger(LocationTriggerMatcher trigger) {
 		removeTrigger(trigger);
 		mapMaker.setPlaceableTrigger(trigger);
-	}
-
-	private String getEntityNameFormat(String baseName) {
-		if (StringUtils.isNullOrEmpty(baseName)) {
-			baseName = "Nameless";
-		}
-
-		baseName = baseName.replaceAll("\\s", "");
-		baseName = PokeString.removeSpecialSymbols(baseName);
-		return baseName;
-	}
-
-	private ItemMatcher editItem(ItemMatcher item) {
-		return new ItemEntityDialog(item, mapMaker).getMatcher(mapMaker);
-	}
-
-	private NPCMatcher editNPC(NPCMatcher npcData) {
-		return new NPCEntityDialog(npcData, mapMaker).getMatcher(mapMaker);
-	}
-
-	private List<WildBattleMatcher> getWildBattleTriggers() {
-		return this.entities
-				.stream()
-				.filter(entity -> entity instanceof WildBattleMatcher)
-				.map(entity -> (WildBattleMatcher)entity)
-				.collect(Collectors.toList());
-	}
-
-	private WildBattleMatcher wildBattleTriggerOptions() {
-		return new WildBattleTriggerOptionsDialog(this.getWildBattleTriggers()).getMatcher(mapMaker);
-	}
-
-	private WildBattleMatcher editWildBattleTrigger(WildBattleMatcher wildBattleTrigger) {
-		return new WildBattleTriggerEditDialog(wildBattleTrigger, -1).getMatcher(mapMaker);
-	}
-
-	private MapTransitionMatcher editMapTransition(MapTransitionMatcher transitionMatcher) {
-		return new MapTransitionDialog(transitionMatcher, mapMaker).getMatcher(mapMaker);
-	}
-
-	private EventMatcher editEventTrigger(EventMatcher eventMatcher) {
-		return new EventTriggerDialog(eventMatcher).getMatcher(mapMaker);
 	}
 }

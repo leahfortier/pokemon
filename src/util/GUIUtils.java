@@ -1,10 +1,13 @@
 package util;
 
+import util.ColorDocumentListener.ColorCondition;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
@@ -68,6 +71,17 @@ public class GUIUtils {
         return label;
     }
 
+    public static JCheckBox createCheckBox() {
+        return createCheckBox(StringUtils.empty());
+    }
+
+    public static JCheckBox createCheckBox(String text) {
+        JCheckBox checkBox = new JCheckBox(text);
+        setStyle(checkBox);
+
+        return checkBox;
+    }
+
     public static JPanel createComboBoxComponent(String text, JComboBox comboBox) {
         JPanel component = new JPanel();
         JLabel label = createLabel(text);
@@ -109,27 +123,50 @@ public class GUIUtils {
         return integerTextField;
     }
 
+    public static JTextField createColorConditionTextField(ColorCondition colorCondition) {
+        JTextField textField = createTextField();
+        textField.getDocument().addDocumentListener(new ColorDocumentListener(colorCondition) {
+            @Override
+            protected JComponent colorComponent() {
+                return textField;
+            }
+        });
+
+        return textField;
+    }
+
+    public static JTextField createTextField() {
+        JTextField textField = new JTextField();
+        setStyle(textField);
+        textField.setColumns(30);
+
+        return textField;
+    }
+
     public static JPanel createTextFieldComponent(String text, JTextField textField) {
         JPanel component = new JPanel();
         JLabel label = createLabel(text);
-
-        setStyle(textField);
-        textField.setColumns(30);
 
         setHorizontalLayout(component, label, textField);
 
         return component;
     }
 
-    public static JPanel createTextAreaComponent(String text, JTextArea textArea) {
-        JPanel component = new JPanel();
-
-        JLabel label = createLabel(text);
+    public static JTextArea createTextArea() {
+        JTextArea textArea = new JTextArea();
 
         textArea.setRows(3);
         textArea.setColumns(20);
         textArea.setLineWrap(true);
         setStyle(textArea);
+
+        return textArea;
+    }
+
+    public static JPanel createTextAreaComponent(String text, JTextArea textArea) {
+        JPanel component = new JPanel();
+
+        JLabel label = createLabel(text);
 
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
