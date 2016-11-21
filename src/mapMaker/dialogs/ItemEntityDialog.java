@@ -5,12 +5,11 @@ import main.Global;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import pattern.map.ItemMatcher;
-import util.ColorDocumentListener;
+import util.ColorDocumentListener.ColorCondition;
 import util.GUIUtils;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -31,21 +30,15 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
 		super("Item Editor");
 
 		mapMaker = givenMapMaker;
-		
-		itemTextField = new JTextField();
-		itemTextField.getDocument().addDocumentListener(new ColorDocumentListener() {
+
+		itemTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
 			@Override
-			protected boolean greenCondition() {
+			public boolean greenCondition() {
 				return getItemName() != null;
 			}
 
 			@Override
-			protected JComponent colorComponent() {
-				return itemTextField;
-			}
-
-			@Override
-			protected void additionalValueChanged() {
+			public void additionalValueChanged() {
 				if (greenCondition()) {
 					int index = getItemName().getItem().getImageIndex();
 					itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));

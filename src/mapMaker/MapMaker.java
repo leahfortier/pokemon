@@ -18,7 +18,6 @@ import util.Point;
 import util.StringUtils;
 
 import javax.swing.Box;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -175,25 +174,25 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
     private JComboBox<EditType> createEditTypeComboBox() {
-        editTypeComboBox = new JComboBox<>();
+		editTypeComboBox = GUIUtils.createComboBox(
+				EditType.values(),
+				event -> {
+					this.editType = (EditType) editTypeComboBox.getSelectedItem();
+
+					MapMakerModel model = this.getModel();
+					tileList.setModel(model.getListModel());
+					newTileButton.setEnabled(model.newTileButtonEnabled());
+
+					if (pasteMenuItem != null && selectTool != null) {
+						pasteMenuItem.setEnabled(selectTool.canPaste());
+					}
+
+					draw();
+				}
+		);
+
 		editTypeComboBox.setLightWeightPopupEnabled(false);
-        editTypeComboBox.addActionListener(event -> {
-            this.editType = (EditType) editTypeComboBox.getSelectedItem();
-
-            MapMakerModel model = this.getModel();
-            tileList.setModel(model.getListModel());
-            newTileButton.setEnabled(model.newTileButtonEnabled());
-
-            if (pasteMenuItem != null && selectTool != null) {
-                pasteMenuItem.setEnabled(selectTool.canPaste());
-            }
-
-            draw();
-        });
-
-        editTypeComboBox.setModel(new DefaultComboBoxModel<>(EditType.values()));
         this.setEditType(EditType.BACKGROUND);
-		GUIUtils.setStyle(editTypeComboBox);
 
         return editTypeComboBox;
     }

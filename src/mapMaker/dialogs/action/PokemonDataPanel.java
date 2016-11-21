@@ -7,13 +7,12 @@ import pattern.PokemonMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
-import util.ColorDocumentListener;
+import util.ColorDocumentListener.ColorCondition;
 import util.GUIUtils;
 import util.StringUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -39,34 +38,21 @@ class PokemonDataPanel extends JPanel {
 			customMoves[currMove] = StringUtils.empty();
 		}
 
-		selectedCheckBox = new JCheckBox();
-		nameTextField = new JTextField();
-		levelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, ActivePokemon.MAX_LEVEL);
-		shinyCheckBox = new JCheckBox();
-		moveCheckBox = new JCheckBox();
-		moveTextField = new JTextField();
-
-		nameTextField.getDocument().addDocumentListener(new ColorDocumentListener() {
+		selectedCheckBox = GUIUtils.createCheckBox();
+		nameTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
 			@Override
-			protected boolean greenCondition() {
+			public boolean greenCondition() {
+				System.out.println(nameTextField.getText().trim());
 				return PokemonNamesies.tryValueOf(nameTextField.getText().trim()) != null;
 			}
-
-			@Override
-			protected JComponent colorComponent() {
-				return nameTextField;
-			}
 		});
-
-		moveTextField.getDocument().addDocumentListener(new ColorDocumentListener() {
+		levelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, ActivePokemon.MAX_LEVEL);
+		shinyCheckBox = GUIUtils.createCheckBox();
+		moveCheckBox = GUIUtils.createCheckBox();
+		moveTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
 			@Override
 			public boolean greenCondition() {
 				return Attack.isAttack(customMoves[moveComboBox.getSelectedIndex()]);
-			}
-
-			@Override
-			public JComponent colorComponent() {
-				return moveTextField;
 			}
 
 			@Override
@@ -74,6 +60,7 @@ class PokemonDataPanel extends JPanel {
 				customMoves[moveComboBox.getSelectedIndex()] = moveTextField.getText().trim();
 			}
 		});
+
 		moveTextField.setEnabled(false);
 
 		moveComboBox = GUIUtils.createComboBox(

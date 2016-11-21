@@ -25,8 +25,7 @@ public class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
         this.interactionIndex = index;
 
         interactionNameTextField = new JTextField(this.getDefaultName());
-        walkToPlayerCheckBox = new JCheckBox("Walk to playa");
-        GUIUtils.setStyle(walkToPlayerCheckBox);
+        walkToPlayerCheckBox = GUIUtils.createCheckBox("Walk to playa");
         this.actionListPanel = new ActionListPanel(this);
 
         this.topComponent = GUIUtils.createHorizontalLayoutComponent(

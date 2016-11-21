@@ -17,10 +17,10 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 	private static final long serialVersionUID = 6937677302812347311L;
 
 	private JComboBox<String> destinationComboBox;
-	private JComboBox<String> entranceComboBox;
-	private JComboBox<DirectionType> directionComboBox;
-	private JCheckBox deathPortalCheckBox;
-	private JTextField entranceNameTextField;
+	private final JComboBox<String> entranceComboBox;
+	private final JComboBox<DirectionType> directionComboBox;
+	private final JCheckBox deathPortalCheckBox;
+	private final JTextField entranceNameTextField;
 
 	// TODO: Combine this with the direction one when I can add the auto thingy -- just don't want to deal with that right now
 	private enum DirectionType {
@@ -51,7 +51,7 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 	public MapTransitionDialog(MapTransitionMatcher mapTransitionMatcher, MapMaker givenMapMaker) {
 		super("Map Transition Editor");
 
-		deathPortalCheckBox = new JCheckBox("Death Portal");
+		deathPortalCheckBox = GUIUtils.createCheckBox("Death Portal");
 		entranceNameTextField = new JTextField();
 
 		// Fill combo boxes with available maps.
@@ -59,7 +59,10 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 		String[] updatedMapList = new String[mapList.length + 1];
 		updatedMapList[0] = "";
 		System.arraycopy(mapList, 0, updatedMapList, 1, mapList.length);
-		
+
+		entranceComboBox = GUIUtils.createComboBox(new String[0], null);
+		entranceComboBox.setEnabled(false);
+
 		destinationComboBox = GUIUtils.createComboBox(
 				updatedMapList,
 				actionEvent -> {
@@ -78,9 +81,6 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 					}
 				}
 		);
-		
-		entranceComboBox = GUIUtils.createComboBox(new String[0], null);
-		entranceComboBox.setEnabled(false);
 		
 		directionComboBox = GUIUtils.createComboBox(DirectionType.values(), null);
 

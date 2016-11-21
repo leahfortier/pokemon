@@ -6,6 +6,12 @@ import javax.swing.event.DocumentListener;
 import java.awt.Color;
 
 public abstract class ColorDocumentListener implements DocumentListener {
+    private ColorCondition colorCondition;
+
+    ColorDocumentListener(ColorCondition colorCondition) {
+        this.colorCondition = colorCondition;
+    }
+
     @Override
     public final void insertUpdate(DocumentEvent event) {
         valueChanged();
@@ -21,19 +27,21 @@ public abstract class ColorDocumentListener implements DocumentListener {
         valueChanged();
     }
 
-    protected abstract boolean greenCondition();
     protected abstract JComponent colorComponent();
 
-    protected void additionalValueChanged() {}
-
     private void valueChanged() {
-        additionalValueChanged();
+        colorCondition.additionalValueChanged();
 
-        if (greenCondition()) {
+        if (colorCondition.greenCondition()) {
             colorComponent().setBackground(new Color(0x90EE90));
         }
         else {
             colorComponent().setBackground(new Color(0xFF9494));
         }
+    }
+
+    public interface ColorCondition {
+        boolean greenCondition();
+        default void additionalValueChanged() {}
     }
 }

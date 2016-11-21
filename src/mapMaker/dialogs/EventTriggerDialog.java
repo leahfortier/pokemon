@@ -21,8 +21,8 @@ public class EventTriggerDialog extends TriggerDialog<EventMatcher> {
 	public EventTriggerDialog(EventMatcher eventMatcher) {
 		super("Event Trigger Editor");
 
-		this.nameTextField = new JTextField();
-		this.conditionTextArea = new JTextArea();
+		this.nameTextField = GUIUtils.createTextField();
+		this.conditionTextArea = GUIUtils.createTextArea();
 		this.actionListPanel = new ActionListPanel(this);
 
 		JPanel nameComponent = GUIUtils.createTextFieldComponent("Name", nameTextField);
