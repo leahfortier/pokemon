@@ -5,7 +5,6 @@ import battle.attack.Move;
 import main.Global;
 import pattern.PokemonMatcher;
 import pokemon.ActivePokemon;
-import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GUIUtils;
@@ -96,7 +95,8 @@ class PokemonDataPanel extends JPanel {
 		
 		// TODO: I don't think this will work always -- try with something like Mr. Mime
 		pokemonName = Character.toUpperCase(pokemonName.charAt(0)) + pokemonName.substring(1).toLowerCase();
-		if (!PokemonInfo.isPokemonName(pokemonName)) {
+		PokemonNamesies namesies = PokemonNamesies.tryValueOf(pokemonName);
+		if (namesies == null) {
 			return null;
 		}
 		
