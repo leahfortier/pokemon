@@ -13,8 +13,8 @@ class UpdateTrigger extends Trigger {
         super(TriggerType.UPDATE, matcherJson, condition);
 
         UpdateMatcher matcher = JsonUtils.deserialize(matcherJson, UpdateMatcher.class);
-        this.npcEntityName = matcher.npcEntityName;
-        this.newInteractionName = matcher.interactionName;
+        this.npcEntityName = matcher.getNpcEntityName();
+        this.newInteractionName = matcher.getInteractionName();
     }
 
     protected void executeTrigger() {

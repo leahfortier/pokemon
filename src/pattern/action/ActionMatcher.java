@@ -51,7 +51,7 @@ public class ActionMatcher {
         ActionType actionType = this.getActionType();
         switch (actionType) {
             case TRIGGER:
-                return new TriggerAction(trigger.getTriggerType(), trigger.triggerContents, condition);
+                return new TriggerAction(trigger.getTriggerType(), trigger.getTriggerContents(), condition);
             case BATTLE:
                 return new BattleAction(battle);
             case UPDATE:

@@ -14,8 +14,8 @@ class ChoiceTrigger extends Trigger {
         super(TriggerType.CHOICE, choices, condition);
 
         ChoiceActionMatcher matcher = JsonUtils.deserialize(choices, ChoiceActionMatcher.class);
-        this.question = matcher.question;
-        this.choices = matcher.choices;
+        this.question = matcher.getQuestion();
+        this.choices = matcher.getChoices();
     }
 
     protected void executeTrigger() {

@@ -212,7 +212,7 @@ public class CharacterData extends Trainer implements Serializable {
 
 	public void setNpcInteraction(final UpdateMatcher npcUpdateInteraction) {
 		if (npcUpdateInteraction != null) {
-			this.setNpcInteraction(npcUpdateInteraction.npcEntityName, npcUpdateInteraction.interactionName);
+			this.setNpcInteraction(npcUpdateInteraction.getNpcEntityName(), npcUpdateInteraction.getInteractionName());
 		}
 	}
 

@@ -21,14 +21,14 @@ public class AreaData {
 		SNOW
 	}
 
-	private String name;
-	private int color;
+	private final String name;
+	private final int color;
 
-	private TerrainType terrainType;
-	private WeatherState weather;
+	private final TerrainType terrainType;
+	private final WeatherState weather;
 
-	private SoundTitle music;
-	private MusicCondition[] musicConditions;
+	private final SoundTitle music;
+	private final MusicCondition[] musicConditions;
 
 	public AreaData(String name,
 					int color,
