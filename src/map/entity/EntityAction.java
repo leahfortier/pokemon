@@ -21,8 +21,7 @@ public abstract class EntityAction {
             actionTriggerNames[i] = actionTrigger.getName();
         }
 
-        GroupTriggerMatcher matcher = new GroupTriggerMatcher(actionTriggerNames);
-        matcher.suffix = triggerSuffix;
+        GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerSuffix, actionTriggerNames);
         final String groupContents = JsonUtils.getJson(matcher);
 
         // Condition is really in the interaction name and the npc condition, so
