@@ -8,8 +8,6 @@ import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import main.Global;
 
-import java.util.List;
-
 public enum Stat {
 	HP(0, "HP", "HP", -1, InBattle.NEVER, true), 
 	ATTACK(1, "Attack", "Attack", 2, InBattle.BOTH, true),
@@ -20,12 +18,12 @@ public enum Stat {
 	ACCURACY(0, "Accuracy", "Accuracy", 3, InBattle.ONLY, true), 
 	EVASION(6, "Evasion", "Evasion", 3, InBattle.ONLY, false);
 	
-	private int index;
-	private String name;
-	private String shortName;
-	private double modifier;
-	private InBattle onlyBattle;
-	private boolean user;
+	private final int index;
+	private final String name;
+	private final String shortName;
+	private final double modifier;
+	private final InBattle onlyBattle;
+	private final boolean user;
 	
 	// Never -- The stat is not used in battle (HP)
 	// Both -- used in and out of battle
@@ -36,14 +34,13 @@ public enum Stat {
 		ONLY,
 	}
 
-	// TODO: FUCK THESE VARIABLE NAMES SRSLY WTF THESE ARE THE FUCKING WORST I BLAME ECLIPSE
-	Stat(int i, String n, String s, int m, InBattle b, boolean u) {
-		index = i;
-		name = n;
-		shortName = s;
-		modifier = m;
-		onlyBattle = b;
-		user = u;
+	Stat(int index, String name, String shortName, int modifier, InBattle onlyBattle, boolean user) {
+		this.index = index;
+		this.name = name;
+		this.shortName = shortName;
+		this.modifier = modifier;
+		this.onlyBattle = onlyBattle;
+		this.user = user;
 	}
 	
 	public int index() {
@@ -74,12 +71,12 @@ public enum Stat {
 		STATS = new Stat[NUM_STATS];
 		int i = 0;
 		
-		for (Stat s : Stat.values()) {
-			if (s.onlyBattle == InBattle.ONLY) {
+		for (Stat stat : Stat.values()) {
+			if (stat.onlyBattle == InBattle.ONLY) {
 				continue;
 			}
 			
-			STATS[i++] = s;
+			STATS[i++] = stat;
 		}
 	}
 	

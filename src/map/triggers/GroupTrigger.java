@@ -9,17 +9,15 @@ import pattern.GroupTriggerMatcher;
 import util.JsonUtils;
 import util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class GroupTrigger extends Trigger {
+class GroupTrigger extends Trigger {
 	public final List<String> triggers;
 
 	static String getTriggerSuffix(String contents) {
 		GroupTriggerMatcher matcher = JsonUtils.deserialize(contents, GroupTriggerMatcher.class);
-		if (!StringUtils.isNullOrEmpty(matcher.suffix)) {
-			return matcher.suffix;
+		if (!StringUtils.isNullOrEmpty(matcher.getSuffix())) {
+			return matcher.getSuffix();
 		}
 
 		return contents;
@@ -30,8 +28,8 @@ public class GroupTrigger extends Trigger {
 	}
 
 	private GroupTrigger(String contents, String condition, GroupTriggerMatcher matcher) {
-		super(TriggerType.GROUP, contents, Condition.and(condition, matcher.getCondition()), matcher.globals);
-		this.triggers = new ArrayList<>(Arrays.asList(matcher.triggers));
+		super(TriggerType.GROUP, contents, Condition.and(condition, matcher.getCondition()), matcher.getGlobals());
+		this.triggers = matcher.getTriggers();
 	}
 
 	@Override

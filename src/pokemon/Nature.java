@@ -8,16 +8,18 @@ import java.io.Serializable;
 public class Nature implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private static final String[][] natures = {{"", "", "", "", "", ""},
-		{"", "Hardy",  "Lonely", "Adamant", "Naughty", "Brave"},
-		{"", "Bold",   "Docile", "Impish",  "Lax",     "Relaxed"},
-		{"", "Modest", "Mild",   "Bashful", "Rash",    "Quiet"},
-		{"", "Calm",   "Gentle", "Careful", "Quirky",  "Sassy"},
-		{"", "Timid",  "Hasty",  "Jolly",   "Naive",   "Serious"}};
+	private static final String[][] natures = {
+			{ "", "",       "",       "",        "",        ""        },
+			{ "", "Hardy",  "Lonely", "Adamant", "Naughty", "Brave"   },
+			{ "", "Bold",   "Docile", "Impish",  "Lax",     "Relaxed" },
+			{ "", "Modest", "Mild",   "Bashful", "Rash",    "Quiet"   },
+			{ "", "Calm",   "Gentle", "Careful", "Quirky",  "Sassy"   },
+			{ "", "Timid",  "Hasty",  "Jolly",   "Naive",   "Serious" }
+	};
 	
-	private int beneficial;
-	private int hindering;
-	private String name;
+	private final int beneficial;
+	private final int hindering;
+	private final String name;
 	
 	private static int getRandomNatureStatIndex() {
 		return Global.getRandomInt(1, Stat.NUM_STATS - 1);

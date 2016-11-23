@@ -727,7 +727,7 @@ public enum PokemonNamesies {
 
     // EVERYTHING ABOVE IS GENERATED ###
 
-    private String name;
+    private final String name;
 
     PokemonNamesies(String name) {
         this.name = name;

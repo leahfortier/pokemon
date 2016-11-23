@@ -18,6 +18,7 @@ import java.util.List;
 public abstract class Trainer implements Team, Serializable {
 	private static final long serialVersionUID = -7797121866082399148L;
 
+	// TODO: Rename to trainer action and move to a new file
 	public enum Action implements Serializable {
 		FIGHT(0),
 		SWITCH(6),

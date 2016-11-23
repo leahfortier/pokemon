@@ -7,7 +7,6 @@ import gui.view.BattleView;
 import gui.view.BattleView.VisualState;
 import main.Game;
 import gui.view.ViewMode;
-import main.Global;
 import main.Type;
 import map.entity.PlayerEntity;
 import message.Messages.MessageState;
@@ -16,6 +15,7 @@ import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
+import sound.SoundPlayer;
 import sound.SoundTitle;
 import util.StringUtils;
 
@@ -67,11 +67,11 @@ public class MessageUpdate {
         }),
 		WIN_BATTLE(battleView -> {
             if (battleView.getCurrentBattle().isWildBattle()) {
-                Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_DEFEATED);
+                SoundPlayer.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_DEFEATED);
             }
             else {
                 // TODO: Get trainer win music
-                Global.soundPlayer.playMusic(SoundTitle.TRAINER_DEFEATED);
+                SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_DEFEATED);
             }
         });
 		

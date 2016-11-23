@@ -3,8 +3,8 @@ package sound;
 import map.Condition;
 
 public class MusicCondition {
-    private SoundTitle music;
-    private Condition condition;
+    private final SoundTitle music;
+    private final Condition condition;
 
     public MusicCondition(SoundTitle music, String conditionString) {
         this.music = music;

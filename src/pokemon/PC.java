@@ -1,29 +1,32 @@
 package pokemon;
 
-import java.awt.Color;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import main.Game;
 import main.Global;
 import trainer.CharacterData;
 import trainer.Trainer;
+
+import java.awt.Color;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PC implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static final int BOX_WIDTH = 6;
 	public static final int BOX_HEIGHT = 6;
-	
+	private static final int DEFAULT_BOXES = 10;
+
+	private final List<Box> boxes;
 	private int currBox;
 	private int numPokemon;
-	private final List<Box> boxes;
-	
+
 	public PC() {
-		currBox = numPokemon = 0;
-		boxes = new ArrayList<>(10);
-		addBoxes(10); // TODO: constant
+		boxes = new ArrayList<>(DEFAULT_BOXES);
+		addBoxes(DEFAULT_BOXES);
+
+		currBox = 0;
+		numPokemon = 0;
 	}
 	
 	private void addBox() {
@@ -38,7 +41,7 @@ public class PC implements Serializable {
 	
 	private boolean expandBoxes() {
 		if (numPokemon >= (BOX_HEIGHT*BOX_WIDTH*boxes.size())/2) {
-			addBoxes(10);
+			addBoxes(DEFAULT_BOXES);
 			return true;
 		}
 		
@@ -48,10 +51,6 @@ public class PC implements Serializable {
 	// Returns the box you're currently on
 	public int getBoxNum() {
 		return currBox;
-	}
-	
-	public void changeBox(int box) {
-		currBox = box;
 	}
 	
 	// Returns the list of Pokemon for the current box

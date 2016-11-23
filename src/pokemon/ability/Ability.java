@@ -80,12 +80,12 @@ import java.util.List;
 public abstract class Ability implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected AbilityNamesies namesies;
-	private String description;
+	protected final AbilityNamesies namesies;
+	private final String description;
 	
-	public Ability(AbilityNamesies s, String desc) {
-		namesies = s;
-		description = desc;
+	public Ability(AbilityNamesies namesies, String description) {
+		this.namesies = namesies;
+		this.description = description;
 	}
 	
 	public AbilityNamesies namesies() {
@@ -99,7 +99,7 @@ public abstract class Ability implements Serializable {
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public boolean isActive() {
 		return true;
 	}

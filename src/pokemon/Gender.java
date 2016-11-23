@@ -10,12 +10,12 @@ public enum Gender implements Serializable {
 	FEMALE("\u2640", new Color(220, 50, 70)), 
 	GENDERLESS(" ", Color.WHITE);
 
-	private String character;
-	private Color color;
+	private final String character;
+	private final Color color;
 
-	Gender(String s, Color c) {
-		character = s;
-		color = c;
+	Gender(String character, Color color) {
+		this.character = character;
+		this.color = color;
 	}
 
 	public String getCharacter() {

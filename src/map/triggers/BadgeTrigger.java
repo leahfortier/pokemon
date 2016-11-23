@@ -5,7 +5,9 @@ import main.Global;
 import map.Condition;
 import trainer.CharacterData;
 
-public class BadgeTrigger extends Trigger {
+import java.util.Collections;
+
+class BadgeTrigger extends Trigger {
 	private final int badgeIndex;
 
 	BadgeTrigger(String badgeIndex, String condition) {
@@ -13,7 +15,7 @@ public class BadgeTrigger extends Trigger {
 	}
 
 	private BadgeTrigger(String badgeIndex, String condition, String triggerName) {
-		super(TriggerType.BADGE, badgeIndex, Condition.and(condition, "!" + triggerName), triggerName);
+		super(TriggerType.BADGE, badgeIndex, Condition.and(condition, "!" + triggerName), Collections.singletonList(triggerName));
 
 		this.badgeIndex = Integer.parseInt(badgeIndex);
 		if (this.badgeIndex < 0 || this.badgeIndex >= CharacterData.NUM_BADGES) {

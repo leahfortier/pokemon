@@ -6,16 +6,16 @@ import pattern.action.ChoiceActionMatcher;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import util.JsonUtils;
 
-public class ChoiceTrigger extends Trigger {
-    private String question;
-    private ChoiceMatcher[] choices;
+class ChoiceTrigger extends Trigger {
+    private final String question;
+    private final ChoiceMatcher[] choices;
 
     ChoiceTrigger(String choices, String condition) {
         super(TriggerType.CHOICE, choices, condition);
 
         ChoiceActionMatcher matcher = JsonUtils.deserialize(choices, ChoiceActionMatcher.class);
-        this.question = matcher.question;
-        this.choices = matcher.choices;
+        this.question = matcher.getQuestion();
+        this.choices = matcher.getChoices();
     }
 
     protected void executeTrigger() {

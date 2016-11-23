@@ -2,10 +2,9 @@ package map.entity;
 
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
-import pattern.PokemonMatcher;
+import pattern.GroupTriggerMatcher;
 import pattern.action.BattleMatcher;
 import pattern.action.ChoiceActionMatcher;
-import pattern.GroupTriggerMatcher;
 import pattern.action.UpdateMatcher;
 import util.JsonUtils;
 import util.StringUtils;
@@ -21,8 +20,7 @@ public abstract class EntityAction {
             actionTriggerNames[i] = actionTrigger.getName();
         }
 
-        GroupTriggerMatcher matcher = new GroupTriggerMatcher(actionTriggerNames);
-        matcher.suffix = triggerSuffix;
+        GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerSuffix, actionTriggerNames);
         final String groupContents = JsonUtils.getJson(matcher);
 
         // Condition is really in the interaction name and the npc condition, so
@@ -41,9 +39,7 @@ public abstract class EntityAction {
 
     protected abstract TriggerType getTriggerType();
     protected abstract String getTriggerContents(String entityName);
-    protected String getCondition() {
-        return null;
-    }
+    protected String getCondition() { return null; }
 
     public static class TriggerAction extends EntityAction {
         private final TriggerType type;
@@ -73,17 +69,11 @@ public abstract class EntityAction {
     }
 
     public static class BattleAction extends EntityAction {
-        public String name;
-        public int cashMoney;
-        public PokemonMatcher[] pokemon;
-        public String updateInteraction;
-        public String entityName;
+        private BattleMatcher battleMatcher;
+        private String entityName;
 
         public BattleAction(BattleMatcher matcher) {
-            this.name = matcher.name;
-            this.cashMoney = matcher.cashMoney;
-            this.pokemon = matcher.pokemon;
-            this.updateInteraction = matcher.update;
+            this.battleMatcher = matcher;
         }
 
         @Override
@@ -95,6 +85,14 @@ public abstract class EntityAction {
         protected String getTriggerContents(String entityName) {
             this.entityName = entityName;
             return JsonUtils.getJson(this);
+        }
+
+        public BattleMatcher getBattleMatcher() {
+            return this.battleMatcher;
+        }
+
+        public String getEntityName() {
+            return this.entityName;
         }
     }
 
@@ -155,7 +153,7 @@ public abstract class EntityAction {
     }
 
     public static class ChoiceAction extends EntityAction {
-        final ChoiceActionMatcher matcher;
+        private final ChoiceActionMatcher matcher;
         public ChoiceAction(final ChoiceActionMatcher matcher) {
             this.matcher = matcher;
         }

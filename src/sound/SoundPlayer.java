@@ -1,7 +1,9 @@
 package sound;
 
 public class SoundPlayer {
-	private boolean muted;	
+	public static final SoundPlayer soundPlayer = new SoundPlayer();
+
+	private boolean muted;
 	private SoundTitle music;
 	private	MP3Player musicPlayer;
 	private MP3Player soundEffectPlayer;
@@ -18,6 +20,14 @@ public class SoundPlayer {
 	
 	public void setMuted(boolean muted) {
 		this.muted = muted;
+	}
+
+	public void playSound(SoundTitle sound) {
+		if (sound.isMusic()) {
+			this.playMusic(sound);
+		} else {
+			this.playSoundEffect(sound);
+		}
 	}
 	
 	public void playMusic(SoundTitle newMusic) {
