@@ -31,33 +31,55 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private static List<PokemonNamesies> baseEvolution;
 	private static Set<PokemonNamesies> incenseBabies = new HashSet<>(); // TODO: lalala
 
-	private int number;
-	private String name;
-	private PokemonNamesies namesies;
-	private int[] baseStats;
-	private int baseExp;
-	private GrowthRate growthRate;
-	private Type[] type;
-	private Map<Integer, Set<AttackNamesies>> levelUpMoves;
-	private Set<AttackNamesies> learnableMoves;
-	private int catchRate;
-	private int[] givenEVs;
-	private Evolution evolution;
-	private List<WildHoldItem> wildHoldItems;
-	private AbilityNamesies[] abilities;
-	private int maleRatio;
-	private String classification;
-	private int height;
-	private double weight;
-	private String flavorText;
-	private int eggSteps;
-	private String[] eggGroups;
+	private final int number;
+	private final String name;
+	private final PokemonNamesies namesies;
+	private final int[] baseStats;
+	private final int baseExp;
+	private final GrowthRate growthRate;
+	private final Type[] type;
+	private final Map<Integer, Set<AttackNamesies>> levelUpMoves;
+	private final Set<AttackNamesies> learnableMoves;
+	private final int catchRate;
+	private final int[] givenEVs;
+	private final Evolution evolution;
+	private final List<WildHoldItem> wildHoldItems;
+	private final AbilityNamesies[] abilities;
+	private final int maleRatio;
+	private final String classification;
+	private final int height;
+	private final double weight;
+	private final String flavorText;
+	private final int eggSteps;
+	private final String[] eggGroups;
 
-	public PokemonInfo(int number, String name, int[] baseStats, int baseExp, String growthRate,
-			String type1, String type2, Map<Integer, Set<AttackNamesies>> levelUpMoves, Set<AttackNamesies> tmMoves,
-			Set<AttackNamesies> eggMoves, Set<AttackNamesies> tutorMoves, int catchRate, int[] givenEVs, Evolution evolution,
-			List<WildHoldItem> wildHoldItems, int genderRatio, String ability1, String ability2, String classification,
-			int height, double weight, String flavorText, int eggSteps, String eggGroup1, String eggGroup2) {
+	public PokemonInfo(
+			int number,
+			String name,
+			int[] baseStats,
+			int baseExp,
+			String growthRate,
+			String type1,
+			String type2,
+			Map<Integer, Set<AttackNamesies>> levelUpMoves,
+			Set<AttackNamesies> tmMoves,
+			Set<AttackNamesies> eggMoves,
+			Set<AttackNamesies> tutorMoves,
+			int catchRate,
+			int[] givenEVs,
+			Evolution evolution,
+			List<WildHoldItem> wildHoldItems,
+			int genderRatio,
+			String ability1,
+			String ability2,
+			String classification,
+			int height,
+			double weight,
+			String flavorText,
+			int eggSteps,
+			String eggGroup1,
+			String eggGroup2
+	) {
 		this.number = number;
 		this.name = name;
 		this.namesies = PokemonNamesies.getValueOf(this.name);
@@ -178,6 +200,10 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	}
 
 	public static PokemonInfo getPokemonInfo(PokemonNamesies pokemon) {
+		if (map == null) {
+			loadPokemonInfo();
+		}
+
 		return map.get(pokemon);
 	}
 
