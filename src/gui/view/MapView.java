@@ -591,49 +591,53 @@ public class MapView extends View {
 		
 		// Check for any NPCs facing the player
 		if (!playerEntity.isStalled() && state == VisualState.MAP) {
-			// TODO: Need to make sure every space is passable between the npc and player
-			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; ++dist) {
-				// TODO: Move to movable entity
+
+            // TODO: Need to make sure every space is passable between the npc and player
+			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
+
+                // TODO: Move to movable entity
 				for (Direction direction : Direction.values()) {
-					int x = playerEntity.getX() - direction.dx*dist;
-					int y = playerEntity.getY() - direction.dy*dist;
-				
-					if (!currentMap.inBounds(x, y)) {
+
+                    Point newLocation = Point.subtract(playerEntity.getLocation(), Point.scale(direction.getDeltaPoint(), dist));
+					if (!newLocation.inBounds(currentMap.getDimension())) {
 						continue;
 					}
-					
-					if (entities[x][y] != null
-							&& entities[x][y] instanceof NPCEntity
-							&& ((NPCEntity)entities[x][y]).isFacing(playerEntity.getX(), playerEntity.getY())
-							&& ((NPCEntity)entities[x][y]).shouldWalkToPlayer()) {
 
-						NPCEntity npc = (NPCEntity)entities[x][y];
-						if (!npc.getWalkingToPlayer() && data.getTrigger(npc.getWalkTrigger()).isTriggered()) {
-							playerEntity.stall();
-							npc.setDirection(direction);
-							npc.walkTowards(dist - 1, direction);
-							
-							if (npc.isTrainer()) {
-								SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);
-							}
-						}
-					}
+					Entity newEntity = entities[newLocation.x][newLocation.y];
+                    if (newEntity instanceof NPCEntity) {
+                        NPCEntity npc = (NPCEntity) newEntity;
+                        if (npc.isFacing(playerEntity.getLocation())
+                                && npc.shouldWalkToPlayer()
+                                && !npc.getWalkingToPlayer()
+                                && data.getTrigger(npc.getWalkTrigger()).isTriggered()) {
+
+                            playerEntity.stall();
+                            npc.setDirection(direction);
+                            npc.walkTowards(dist - 1, direction);
+
+                            if (npc.isTrainer()) {
+                                SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);
+                            }
+                        }
+                    }
 				}
 			}
 		}
 
-		entityList.stream()
-				.filter(entity -> entity != null && (state == VisualState.MAP || entity != playerEntity))
-				.forEach(entity -> entity.update(dt, entities, currentMap, input, this));
-		
 		if (state == VisualState.MAP) {
-			playerEntity.triggerCheck(currentMap);
-		}
+
+            // Update each non-player entity on the map
+            entityList.stream()
+                    .filter(entity -> entity != null && entity != playerEntity)
+                    .forEach(entity -> entity.update(dt, entities, currentMap, input, this));
+
+            playerEntity.triggerCheck(currentMap);
+        }
 		
 		while (!removeQueue.isEmpty()) {
-			Entity e = removeQueue.poll();
-			entityList.remove(e);
-			entities[e.getX()][e.getY()] = null;
+			Entity entity = removeQueue.poll();
+			entityList.remove(entity);
+			entities[entity.getX()][entity.getY()] = null;
 		}
 
 		if (showMessage && (this.currentMessage == null || StringUtils.isNullOrEmpty(this.currentMessage.getMessage())) && Messages.hasMessages()) {

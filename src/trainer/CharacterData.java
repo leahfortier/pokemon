@@ -140,6 +140,10 @@ public class CharacterData extends Trainer implements Serializable {
 		fileNum = n;
 	}
 
+	public Point getLocation() {
+		return this.location;
+	}
+
 	public int getX() {
 		return this.location.x;
 	}

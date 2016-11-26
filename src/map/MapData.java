@@ -14,11 +14,11 @@ import pattern.map.MapTransitionMatcher;
 import pattern.map.MiscEntityMatcher;
 import pattern.map.NPCMatcher;
 import pattern.map.WildBattleMatcher;
-import trainer.CharacterData;
 import util.FileIO;
 import util.JsonUtils;
 import util.Point;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -41,8 +41,7 @@ public class MapData {
 	private final Map<Integer, String> triggers;
 	private final Map<String, Integer> mapEntrances;
 
-	private final int width;
-	private final int height;
+	private final Dimension dimension;
 	
 	private final List<Entity> entities;
 	
@@ -52,8 +51,9 @@ public class MapData {
 		String beginFilePath = FileIO.makeFolderPath(file.getPath()) + name;
 		
 		BufferedImage bgMap = FileIO.readImage(beginFilePath + "_bg.png");
-		width = bgMap.getWidth();
-		height = bgMap.getHeight();
+		int width = bgMap.getWidth();
+		int height = bgMap.getHeight();
+		dimension = new Dimension(width, height);
 		bgTile = bgMap.getRGB(0, 0, width, height, null, 0, width);
 		
 		BufferedImage fgMap = FileIO.readImage(beginFilePath + "_fg.png");
@@ -145,17 +145,17 @@ public class MapData {
 		}
 	}
 
-	private int getPlayerMapIndex() {
-		CharacterData player = Game.getPlayer();
-		return getMapIndex(player.getX(), player.getY());
+	private int getMapIndex(int x, int y) {
+		return Point.getIndex(x, y, dimension.width);
 	}
 
-	public int getMapIndex(int x, int y) {
-		return Point.getIndex(x, y, width);
+	public Dimension getDimension() {
+		return this.dimension;
 	}
 
+	// TODO: This should pass in a point
 	public boolean inBounds(int x, int y) {
-		return x >= 0 && x < width && y >= 0 && y < height;
+		return new Point(x, y).inBounds(dimension);
 	}
 	
 	public int getBgTile(int x, int y) {
@@ -209,9 +209,10 @@ public class MapData {
 		Global.error("No area found with color " + areaColor + " for map " + this.name);
 		return AreaData.VOID;
 	}
-	
+
+	// TODO: Rename
 	public String trigger() {
-		int val = getPlayerMapIndex();
+		int val = Game.getPlayer().getLocation().getIndex(dimension.width);
 		if (triggers.containsKey(val)) {
 			return triggers.get(val);
 		}
@@ -222,7 +223,7 @@ public class MapData {
 	public boolean setCharacterToEntrance(String entranceName) {
         if (mapEntrances.containsKey(entranceName)) {
 			int entrance = mapEntrances.get(entranceName);
-			Point entranceLocation = Point.getPointAtIndex(entrance, width);
+			Point entranceLocation = Point.getPointAtIndex(entrance, dimension.width);
 			Game.getPlayer().setLocation(entranceLocation);
 
 			return true;
@@ -231,8 +232,9 @@ public class MapData {
 		return false;
 	}
 
+	// TODO: Look at how this is being used, does a new array need to be created each time? does it need to be an array at all
 	public Entity[][] populateEntities() {
-		Entity[][] res = new Entity[width][height];
+		Entity[][] res = new Entity[dimension.width][dimension.height];
 		entities.stream()
 				.filter(Entity::isPresent)
 				.forEach(entity -> {

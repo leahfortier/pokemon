@@ -18,6 +18,7 @@ public abstract class Entity {
 	private String entityName;
 	private Condition condition;
 
+	// TODO: make private
 	protected Point location;
 
 	protected Entity(Point location, String entityName, String condition) {
@@ -26,7 +27,11 @@ public abstract class Entity {
 		this.entityName = entityName;
 		this.condition = new Condition(condition);
 	}
-	
+
+	public Point getLocation() {
+		return this.location;
+	}
+
 	public int getX() {
 		return this.location.x;
 	}

@@ -58,23 +58,17 @@ public class NPCEntity extends MovableEntity {
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
 		super.update(dt, entity, map, input, view);
 
-		if (waitTime != 0) {
-			waitTime -= dt;
-		}
+		// Decrease wait time
+		waitTime = Math.max(0, waitTime - dt);
 
-		if (waitTime < 0) {
-			waitTime = 0;
-		}
-
-		if (transitionTime == 0 && waitTime == 0 && !hasAttention) {
+		// Not transitioning, not waiting, and does not have attention
+		if (!this.isTransitioning() && waitTime == 0 && !hasAttention) {
 			String path = this.path;
 			if (tempPath != null) {
 				path = tempPath;
-				// System.out.println(path);
 			}
 			
 			char pathChar = path.charAt(pathIndex);
-			
 			if (pathChar == Direction.WAIT_CHARACTER) {
 				waitTime = getTransitionTime();
 				pathIndex++;	
@@ -99,7 +93,7 @@ public class NPCEntity extends MovableEntity {
 						entity[getX()][getY()] = this;
 						
 						transitionTime = 1;
-						waitTime = 5*Global.TIME_BETWEEN_TILES/4;
+						waitTime = 5*Global.TIME_BETWEEN_TILES/4; // TODO: Why 5/4
 						pathIndex++;
 					}
 					
@@ -158,6 +152,7 @@ public class NPCEntity extends MovableEntity {
 		return this.interactions.get(interaction).shouldWalkToPlayer();
 	}
 
+	// TODO: rename
 	public boolean getWalkingToPlayer() {
 		return walkingToPlayer;
 	}

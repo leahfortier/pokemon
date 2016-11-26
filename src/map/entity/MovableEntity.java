@@ -66,16 +66,18 @@ public abstract class MovableEntity extends Entity {
 		transitionDirection = direction;
 	}
 
-	public boolean isFacing(int x, int y) {
-		if (x != getX() && y != getY()) {
+	public boolean isFacing(Point otherLocation) {
+
+		// Not in the same row or the same column
+		if (!this.location.partiallyEquals(otherLocation)) {
 			return false;
 		}
 
-		// TODO: Make point method for this
-		int dx = (int) Math.signum(x - getX());
-		int dy = (int) Math.signum(y - getY());
+		// Get the direction that would be facing the other location
+		Point deltaDirection = Point.getDeltaDirection(otherLocation, this.location);
 
-		return transitionDirection.dx == dx && transitionDirection.dy == dy;
+		// Check if these are the same direction
+		return transitionDirection.getDeltaPoint().equals(deltaDirection);
 	}
 
 	@Override
