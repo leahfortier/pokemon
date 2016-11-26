@@ -46,7 +46,7 @@ public class CharacterData extends Trainer implements Serializable {
 	// TODO: Look into most of these to check if they really do need to be public
 	public Point location;
 	public Direction direction;
-	
+
 	public boolean mapReset;
 	public String mapName;
 	public String areaName;
@@ -55,16 +55,16 @@ public class CharacterData extends Trainer implements Serializable {
 	private Map<String, String> npcInteractions;
 
 	public String mapEntranceName;
-	
+
 	private int fileNum;
 	private long seconds;
 	private int numBadges;
 
 	private transient long timeSinceUpdate;
-	
+
 	private String lastPCMap;
 	private String lastPCMapEntrance;
-	
+
 	private Pokedex pokedex;
 	private PC pc;
 	private boolean[] badges;
@@ -73,7 +73,7 @@ public class CharacterData extends Trainer implements Serializable {
 	// TODO: Make private
 	public ActivePokemon evolvingPokemon;
 	public BaseEvolution evolution;
-	
+
 	private List<String> logMessages;
 
 	public CharacterData() {
@@ -82,27 +82,27 @@ public class CharacterData extends Trainer implements Serializable {
 
 		definedGlobals = new HashSet<>();
 		npcInteractions = new HashMap<>();
-		
+
 		pokedex = new Pokedex();
 		pc = new PC();
-		
+
 		badges = new boolean[NUM_BADGES];
 		Arrays.fill(badges, false);
-		
+
 		repelSteps = 0;
 		seconds = 0;
-		
+
 		direction = Direction.DOWN;
 		areaName = "";
 		mapReset = false;
 	}
-	
+
 	// Initializes the character with the current game -- used when recovering a save file as well as the generic constructor
 	public void initialize() {
 		this.logMessages = new ArrayList<>();
 		this.timeSinceUpdate = System.currentTimeMillis();
 	}
-	
+
 	public void setName(String playerName) {
 		this.name = playerName;
 	}
@@ -114,28 +114,28 @@ public class CharacterData extends Trainer implements Serializable {
 			badges[n] = true;
 		}
 	}
-	
+
 	public int getNumBadges() {
 		return numBadges;
 	}
-	
+
 	public void updateTimePlayed() {
 		seconds += (System.currentTimeMillis() - timeSinceUpdate)/1000;
 		timeSinceUpdate = System.currentTimeMillis();
 	}
-	
+
 	public long getTimePlayed() {
 		return seconds + (System.currentTimeMillis() - timeSinceUpdate)/1000;
 	}
-	
+
 	public long getSeconds() {
 		return this.seconds;
 	}
-	
+
 	public int getFileNum() {
 		return fileNum;
 	}
-	
+
 	public void setFileNum(int n) {
 		fileNum = n;
 	}
@@ -151,10 +151,6 @@ public class CharacterData extends Trainer implements Serializable {
 	public void setLocation(Point newLocation) {
 		this.location = newLocation;
 	}
-
-	public void setLocation(int x, int y) {
-		this.location = new Point(x, y);
-	}
 	
 	public void setMap(String name, String mapEntrance) {
 		mapName = name;
@@ -163,6 +159,7 @@ public class CharacterData extends Trainer implements Serializable {
 	
 	// Called when a character steps once in any given direction
 	public void step() {
+
 		// Decrease repel steps
 		if (repelSteps > 0) {
 			repelSteps--;

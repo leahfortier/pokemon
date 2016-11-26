@@ -151,14 +151,9 @@ public class MapData {
 	}
 
 	public int getMapIndex(int x, int y) {
-		return getMapIndex(x, y, width);
+		return Point.getIndex(x, y, width);
 	}
 
-	// TODO Point
-	public static Integer getMapIndex(int x, int y, int width) {
-		return x + y*width;
-	}
-	
 	public boolean inBounds(int x, int y) {
 		return x >= 0 && x < width && y >= 0 && y < height;
 	}
@@ -183,7 +178,8 @@ public class MapData {
 		if (!inBounds(x, y)) {
 			return WalkType.NOT_WALKABLE;
 		}
-		
+
+		// TODO: SRSLY WHAT IS GOING ON
 		int val = walkMap[getMapIndex(x, y)]&((1<<24) - 1);
 		for (WalkType t: WalkType.values()) {
 			if (t.value == val) {
@@ -226,9 +222,8 @@ public class MapData {
 	public boolean setCharacterToEntrance(String entranceName) {
         if (mapEntrances.containsKey(entranceName)) {
 			int entrance = mapEntrances.get(entranceName);
-			int newY = entrance / width;
-			int newX = entrance - newY * width;
-			Game.getPlayer().setLocation(newX, newY);
+			Point entranceLocation = Point.getPointAtIndex(entrance, width);
+			Game.getPlayer().setLocation(entranceLocation);
 
 			return true;
 		}
