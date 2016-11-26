@@ -2,10 +2,12 @@ package trainer;
 
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
+import battle.effect.generic.EffectNamesies;
+import gui.view.ViewMode;
 import item.Item;
+import item.ItemNamesies;
 import item.use.BallItem;
 import main.Game;
-import gui.view.ViewMode;
 import main.Global;
 import map.Direction;
 import map.triggers.Trigger;
@@ -13,15 +15,14 @@ import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
-import battle.effect.generic.EffectNamesies;
-import item.ItemNamesies;
-import pattern.action.UpdateMatcher;
 import pattern.GroupTriggerMatcher;
+import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PC;
 import trainer.Pokedex.PokedexStatus;
 import util.JsonUtils;
+import util.Point;
 import util.StringUtils;
 
 import java.io.Serializable;
@@ -43,9 +44,9 @@ public class CharacterData extends Trainer implements Serializable {
 	private static final int START_MONEY = 3000;
 
 	// TODO: Look into most of these to check if they really do need to be public
-	public int locationX, locationY;
+	private Point location;
 	public Direction direction;
-	
+
 	public boolean mapReset;
 	public String mapName;
 	public String areaName;
@@ -54,16 +55,16 @@ public class CharacterData extends Trainer implements Serializable {
 	private Map<String, String> npcInteractions;
 
 	public String mapEntranceName;
-	
+
 	private int fileNum;
 	private long seconds;
 	private int numBadges;
 
 	private transient long timeSinceUpdate;
-	
+
 	private String lastPCMap;
 	private String lastPCMapEntrance;
-	
+
 	private Pokedex pokedex;
 	private PC pc;
 	private boolean[] badges;
@@ -72,7 +73,7 @@ public class CharacterData extends Trainer implements Serializable {
 	// TODO: Make private
 	public ActivePokemon evolvingPokemon;
 	public BaseEvolution evolution;
-	
+
 	private List<String> logMessages;
 
 	public CharacterData() {
@@ -81,27 +82,27 @@ public class CharacterData extends Trainer implements Serializable {
 
 		definedGlobals = new HashSet<>();
 		npcInteractions = new HashMap<>();
-		
+
 		pokedex = new Pokedex();
 		pc = new PC();
-		
+
 		badges = new boolean[NUM_BADGES];
 		Arrays.fill(badges, false);
-		
+
 		repelSteps = 0;
 		seconds = 0;
-		
+
 		direction = Direction.DOWN;
 		areaName = "";
 		mapReset = false;
 	}
-	
+
 	// Initializes the character with the current game -- used when recovering a save file as well as the generic constructor
 	public void initialize() {
 		this.logMessages = new ArrayList<>();
 		this.timeSinceUpdate = System.currentTimeMillis();
 	}
-	
+
 	public void setName(String playerName) {
 		this.name = playerName;
 	}
@@ -113,35 +114,46 @@ public class CharacterData extends Trainer implements Serializable {
 			badges[n] = true;
 		}
 	}
-	
+
 	public int getNumBadges() {
 		return numBadges;
 	}
-	
+
 	public void updateTimePlayed() {
 		seconds += (System.currentTimeMillis() - timeSinceUpdate)/1000;
 		timeSinceUpdate = System.currentTimeMillis();
 	}
-	
+
 	public long getTimePlayed() {
 		return seconds + (System.currentTimeMillis() - timeSinceUpdate)/1000;
 	}
-	
+
 	public long getSeconds() {
 		return this.seconds;
 	}
-	
+
 	public int getFileNum() {
 		return fileNum;
 	}
-	
+
 	public void setFileNum(int n) {
 		fileNum = n;
 	}
-	
-	public void setLocation(int x, int y) {
-		locationX = x;
-		locationY = y;
+
+	public Point getLocation() {
+		return this.location;
+	}
+
+	public int getX() {
+		return this.location.x;
+	}
+
+	public int getY() {
+		return this.location.y;
+	}
+
+	public void setLocation(Point newLocation) {
+		this.location = newLocation;
 	}
 	
 	public void setMap(String name, String mapEntrance) {
@@ -151,6 +163,7 @@ public class CharacterData extends Trainer implements Serializable {
 	
 	// Called when a character steps once in any given direction
 	public void step() {
+
 		// Decrease repel steps
 		if (repelSteps > 0) {
 			repelSteps--;

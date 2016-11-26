@@ -258,25 +258,44 @@ public class DrawUtils {
 		);
 	}
 
-	public static Point getDrawLocation(Point location, Point mapLocation) {
+	public static Point getDrawLocation(int x, int y, Point mapLocation) {
 		return new Point(
-				location.x*Global.TILE_SIZE + mapLocation.x,
-				location.y*Global.TILE_SIZE + mapLocation.y
+				x*Global.TILE_SIZE + mapLocation.x,
+				y*Global.TILE_SIZE + mapLocation.y
 		);
 	}
 
-	public static Point getImageDrawLocation(BufferedImage image, Point location, Point mapLocation) {
-		Point drawLocation = getDrawLocation(location, mapLocation);
-		drawLocation.x += Global.TILE_SIZE - image.getWidth();
-		drawLocation.y += Global.TILE_SIZE -  image.getHeight();
+	// Takes in the draw coordinates and returns the location of the entity where to draw it relative to the canvas
+	public static Point getDrawLocation(Point location, Point mapLocation) {
+		return getDrawLocation(location.x, location.y, mapLocation);
+	}
 
-		return drawLocation;
+	public static void drawEntityTileImage(Graphics g, BufferedImage image, Point drawLocation) {
+		Point imageDrawLocation = Point.add(
+				drawLocation,
+				Global.TILE_SIZE/2 - image.getWidth()/2,
+				Global.TILE_SIZE/2 - image.getHeight()
+		);
+
+		g.drawImage(image, imageDrawLocation.x, imageDrawLocation.y, null);
+	}
+
+	public static void drawTileImage(Graphics g, BufferedImage image, Point drawLocation) {
+		Point imageDrawLocation = Point.add(
+				drawLocation,
+				Global.TILE_SIZE - image.getWidth(),
+				Global.TILE_SIZE - image.getHeight()
+		);
+
+		g.drawImage(image, imageDrawLocation.x, imageDrawLocation.y, null);
+	}
+
+	public static void drawTileImage(Graphics g, BufferedImage image, int x, int y, Point mapLocation) {
+		drawTileImage(g, image, getDrawLocation(x, y, mapLocation));
 	}
 
 	public static void drawTileImage(Graphics g, BufferedImage image, Point location, Point mapLocation) {
-		Point drawLocation = getImageDrawLocation(image, location, mapLocation);
-
-		g.drawImage(image, drawLocation.x, drawLocation.y, null);
+		drawTileImage(g, image, location.x, location.y, mapLocation);
 	}
 
 	public static void outlineTileRed(Graphics g, Point location, Point mapLocation) {

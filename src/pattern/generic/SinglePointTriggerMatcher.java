@@ -7,11 +7,11 @@ public abstract class SinglePointTriggerMatcher extends LocationTriggerMatcher {
     protected Point location;
 
     private void setLocation(Point location) {
-        this.location = Point.copy(location);
+        this.location = location;
     }
 
     public Point getLocation() {
-        return Point.copy(location);
+        return location;
     }
 
     @Override
@@ -26,7 +26,7 @@ public abstract class SinglePointTriggerMatcher extends LocationTriggerMatcher {
 
     @Override
     public void addDelta(Point delta) {
-        this.location.add(delta);
+        this.location = Point.add(this.location, delta);
     }
 
     @Override

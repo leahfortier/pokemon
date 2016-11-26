@@ -13,8 +13,8 @@ import map.MapData;
 import map.entity.Entity;
 import map.entity.EntityAction;
 import map.entity.MovableEntity;
-import map.entity.PlayerEntity;
 import map.entity.NPCEntity;
+import map.entity.PlayerEntity;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -27,12 +27,12 @@ import trainer.CharacterData;
 import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
+import util.Point;
 import util.PokeString;
 import util.Save;
 import util.StringUtils;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Queue;
 
 public class MapView extends View {
+
 	// TODO: Create enum to hold these and handle operations
 	private static final String[] MENU_TEXT = {
 			PokeString.POKEDEX,
@@ -55,9 +56,13 @@ public class MapView extends View {
 	
 	private static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
 	private static final int BATTLE_INTRO_ANIMATION_LIFESPAN = 1000;
-	
-	private static final int[] ddx = { 0, -1, 0 };
-	private static final int[] ddy = { 0, 0, -1 };
+
+    // TODO: Eventually want to add a no movement direction to the directions class, when that happens this can be a directions array instead
+    private static final Point[] deltaDirections = {
+            new Point(),  // No movement
+            Direction.LEFT.getDeltaPoint(),
+            Direction.UP.getDeltaPoint()
+    };
 	
 	private String currentMapName;
 	private AreaData currentArea;
@@ -72,8 +77,9 @@ public class MapView extends View {
 	private MessageUpdate currentMessage;
 	private int dialogueSelection;
 
-	private int startX, startY, endX, endY;
-	private float drawX, drawY;
+	private Point start;
+	private Point end;
+	private Point draw;
 	
 	private int areaDisplayTime;
 	
@@ -120,6 +126,10 @@ public class MapView extends View {
 								Button.basicDown(i, menuButtons.length) // Down
 							});
 		}
+
+		start = new Point();
+		end = new Point();
+		draw = new Point();
 	}
 
 	// TODO: This method should be split up further
@@ -129,55 +139,59 @@ public class MapView extends View {
 
 		GameData data = Game.getData();
 		TileSet mapTiles = data.getMapTiles();
-		
-		for (int y = startY; y < endY; y++) {
-			for (int x = startX; x < endX; x++) {
+
+		// Background
+		for (int y = start.y; y < end.y; y++) {
+			for (int x = start.x; x < end.x; x++) {
 				int bgTile = currentMap.getBgTile(x,y);
-				int dx = (int)drawX + x*Global.TILE_SIZE;
-				int dy = (int)drawY + y*Global.TILE_SIZE;
-				
-				if ((bgTile>>24) != 0) {
+
+				// TODO: What does this mean?
+				if ((bgTile >> 24) != 0) {
 					BufferedImage img = mapTiles.getTile(bgTile);
-					g.drawImage(img, dx + (Global.TILE_SIZE - img.getWidth()), dy + (Global.TILE_SIZE - img.getHeight()), null);
+					DrawUtils.drawTileImage(g, img, x, y, draw);
 				}
 			}
 		}
-		
-		for (int y = startY; y < endY; y++) {
-			for (int x = startX; x < endX; x++) {
-				int dx = (int) (drawX) + x*Global.TILE_SIZE;
-				int dy = (int) (drawY) + y*Global.TILE_SIZE;
+
+		// Foreground
+		for (int y = start.y; y < end.y; y++) {
+			for (int x = start.x; x < end.x; x++) {
+
+				// Draw foreground tiles
 				int fgTile = currentMap.getFgTile(x, y);
-				
-				if ((fgTile>>24) != 0) {
+				if ((fgTile >> 24) != 0) {
 					BufferedImage img = mapTiles.getTile(fgTile);
-					g.drawImage(img, dx + (Global.TILE_SIZE - img.getWidth()), dy + (Global.TILE_SIZE - img.getHeight()), null);
+					DrawUtils.drawTileImage(g, img, x, y, draw);
 				}
 				
-				//draw entities, and check for entities above and to the left of this location to see if they just moved out and draw them again.
-				for (int d = 0; d < ddx.length; d++) {
-					int nx, ny;
-					nx = ddx[d] + x;
-					ny = ddy[d] + y;
-					
-					if (nx < 0 || ny < 0 || nx >= entities.length || ny >= entities[0].length) {
-						continue;
-					}
+				// Draw entities
+				// Check for entities above and to the left of this location to see if they just moved out and draw them again.
+				for (Point delta : deltaDirections) {
+                    Point newPoint = Point.add(delta, x, y);
+                    if (!newPoint.inBounds(entities.length, entities[0].length)) {
+                        continue;
+                    }
 
-					if (entities[nx][ny] != null) {
-						// If entity is a movable entity and they are moving right or down, do not draw them again.
-						if (entities[nx][ny] instanceof MovableEntity) {
-							Direction td = ((MovableEntity)entities[nx][ny]).getDirection();
-							if (d != 0 && ((td == Direction.RIGHT) || (td == Direction.DOWN)))
-								continue;
-						}
-						// Not a movable entity, only draw once.
-						else if (d != 0) {
-							continue;
-						}
-						
-						entities[nx][ny].draw(g, drawX, drawY, d > 0);
-					}
+                    Entity newPointEntity = entities[newPoint.x][newPoint.y];
+                    if (newPointEntity == null) {
+                        continue;
+                    }
+
+                    // TODO: I'm getting really confused about this whole check up and left only thing what is happening
+                    // If entity is a movable entity and they are moving right or down, do not draw them again.
+                    if (newPointEntity instanceof MovableEntity) {
+                        Direction transitionDirection = ((MovableEntity)newPointEntity).getDirection();
+                        if (!delta.isZero() && (transitionDirection == Direction.RIGHT || transitionDirection == Direction.DOWN)) {
+                            continue;
+                        }
+                    }
+                    // Not a movable entity, only draw once.
+                    else if (!delta.isZero()) {
+                        continue;
+                    }
+
+                    // TODO: Checking zero logic seems like it can be simplified
+                    newPointEntity.draw(g, draw, !delta.isZero());
 				}
 			}
 		}
@@ -393,25 +407,25 @@ public class MapView extends View {
 		boolean showMessage = true;
 
 		GameData data = Game.getData();
-		CharacterData character = Game.getPlayer();
-		MENU_TEXT[3] = character.getName();
+		CharacterData player = Game.getPlayer();
+		MENU_TEXT[3] = player.getName();
 
-		if (!currentMapName.equals(character.mapName) || character.mapReset) {
-			currentMapName = character.mapName;
+		if (!currentMapName.equals(player.mapName) || player.mapReset) {
+			currentMapName = player.mapName;
 			currentMap = data.getMap(currentMapName);
 			
-			if (character.mapReset) {
-				character.mapReset = false;
-				currentMap.setCharacterToEntrance(character.mapEntranceName);
+			if (player.mapReset) {
+				player.mapReset = false;
+				currentMap.setCharacterToEntrance(player.mapEntranceName);
 			}
 
 			entities = currentMap.populateEntities();
 
-			Direction prevDir = character.direction;
+			Direction prevDir = player.direction;
 
-			playerEntity = new PlayerEntity(character);
+			playerEntity = new PlayerEntity();
 			playerEntity.setDirection(prevDir);
-			entities[character.locationX][character.locationY] = playerEntity;
+			entities[player.getX()][player.getY()] = playerEntity;
 			
 			entityList = new ArrayList<>();
 			for (Entity[] er: entities) {
@@ -431,10 +445,10 @@ public class MapView extends View {
 		}
 		
 		// New area
-		AreaData area = currentMap.getArea(character.locationX, character.locationY);
+		AreaData area = currentMap.getArea(player.getX(), player.getY());
 		String areaName = area.getAreaName();
 
-		character.areaName = areaName;
+		player.areaName = areaName;
 		currentArea = area;
 
 		// If new area has a new name, display the area name animation
@@ -569,67 +583,62 @@ public class MapView extends View {
 				}
 				break;
 		}
-		
-		Dimension d = Global.GAME_SIZE;
-		float[] drawLoc = playerEntity.getDrawLocation(d);
 
-		drawX = drawLoc[0];
-		drawY = drawLoc[1];
-		
-		int tilesX = d.width/Global.TILE_SIZE;
-		int tilesY = d.height/Global.TILE_SIZE;
-		
-		startX = (int) (-drawX/Global.TILE_SIZE);
-		startY = (int) (-drawY/Global.TILE_SIZE);
-		
-		endX = startX + tilesX + 6;
-		endY = startY + tilesY + 6;
+		Point tilesLocation = Point.scaleDown(Global.GAME_SIZE, Global.TILE_SIZE);
+
+		this.draw = playerEntity.getDrawLocation();
+		this.start = Point.scaleDown(Point.negate(this.draw), Global.TILE_SIZE);
+		this.end = Point.add(this.start, tilesLocation, new Point(6, 6)); // TODO: What is the 6, 6 all about?
 		
 		// Check for any NPCs facing the player
 		if (!playerEntity.isStalled() && state == VisualState.MAP) {
-			// TODO: Need to make sure every space is passable between the npc and player
-			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; ++dist) {
-				// TODO: Move to movable entity
+
+            // TODO: Need to make sure every space is passable between the npc and player
+			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
+
+                // TODO: Move to movable entity
 				for (Direction direction : Direction.values()) {
-					int x = playerEntity.getX() - direction.dx*dist;
-					int y = playerEntity.getY() - direction.dy*dist;
-				
-					if (!currentMap.inBounds(x, y)) {
+
+                    Point newLocation = Point.subtract(playerEntity.getLocation(), Point.scale(direction.getDeltaPoint(), dist));
+					if (!newLocation.inBounds(currentMap.getDimension())) {
 						continue;
 					}
-					
-					if (entities[x][y] != null
-							&& entities[x][y] instanceof NPCEntity
-							&& ((NPCEntity)entities[x][y]).isFacing(playerEntity.getX(), playerEntity.getY())
-							&& ((NPCEntity)entities[x][y]).shouldWalkToPlayer()) {
 
-						NPCEntity npc = (NPCEntity)entities[x][y];
-						if (!npc.getWalkingToPlayer() && data.getTrigger(npc.getWalkTrigger()).isTriggered()) {
-							playerEntity.stall();
-							npc.setDirection(direction);
-							npc.walkTowards(dist - 1, direction);
-							
-							if (npc.isTrainer()) {
-								SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);
-							}
-						}
-					}
+					Entity newEntity = entities[newLocation.x][newLocation.y];
+                    if (newEntity instanceof NPCEntity) {
+                        NPCEntity npc = (NPCEntity) newEntity;
+                        if (npc.isFacing(playerEntity.getLocation())
+                                && npc.shouldWalkToPlayer()
+                                && !npc.getWalkingToPlayer()
+                                && data.getTrigger(npc.getWalkTrigger()).isTriggered()) {
+
+                            playerEntity.stall();
+                            npc.setDirection(direction);
+                            npc.walkTowards(dist - 1, direction);
+
+                            if (npc.isTrainer()) {
+                                SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);
+                            }
+                        }
+                    }
 				}
 			}
 		}
 
-		entityList.stream()
-				.filter(entity -> entity != null && (state == VisualState.MAP || entity != playerEntity))
-				.forEach(entity -> entity.update(dt, entities, currentMap, input, this));
-		
 		if (state == VisualState.MAP) {
-			playerEntity.triggerCheck(currentMap);
-		}
+
+            // Update each non-player entity on the map
+            entityList.stream()
+                    .filter(entity -> entity != null && entity != playerEntity)
+                    .forEach(entity -> entity.update(dt, entities, currentMap, input, this));
+
+            playerEntity.triggerCheck(currentMap);
+        }
 		
 		while (!removeQueue.isEmpty()) {
-			Entity e = removeQueue.poll();
-			entityList.remove(e);
-			entities[e.getX()][e.getY()] = null;
+			Entity entity = removeQueue.poll();
+			entityList.remove(entity);
+			entities[entity.getX()][entity.getY()] = null;
 		}
 
 		if (showMessage && (this.currentMessage == null || StringUtils.isNullOrEmpty(this.currentMessage.getMessage())) && Messages.hasMessages()) {

@@ -1,12 +1,12 @@
 package map.entity;
 
 import gui.view.MapView;
-import main.Global;
 import map.Condition;
 import map.Direction;
 import map.MapData;
 import map.MapData.WalkType;
 import map.triggers.TriggerType;
+import util.DrawUtils;
 import util.InputControl;
 import util.Point;
 
@@ -15,58 +15,51 @@ import java.awt.image.BufferedImage;
 
 public abstract class Entity {
 
-	private String entityName;
-	private Condition condition;
+	private final String entityName;
+	private final Condition condition;
 
-	protected int charX;
-	protected int charY;
+	private Point location;
 
-	public Entity(Point location, String triggerName, String condition) {
-		this(location.x, location.y, triggerName, condition);
-	}
-
-	public Entity(int x, int y, String entityName, String condition) {
-		charX = x;
-		charY = y;
+	protected Entity(Point location, String entityName, String condition) {
+		this.location = location;
 
 		this.entityName = entityName;
 		this.condition = new Condition(condition);
 	}
-	
+
+	public Point getLocation() {
+		return this.location;
+	}
+
+	protected void setLocation(Point newLocation) {
+		this.location = newLocation;
+	}
+
 	public int getX() {
-		return this.charX;
+		return this.location.x;
 	}
 	
 	public int getY() {
-		return this.charY;
+		return this.location.y;
 	}
 
 	public boolean isPresent() {
 		return this.condition.isTrue();
 	}
 
-	// TODO: DrawUtils
-	// Takes in the draw coordinates and returns the location of the entity where to draw it relative to the canvas
-	public Point getCanvasCoordinates(float drawX, float drawY) {
-		int cx = (int) drawX + Global.TILE_SIZE * charX;
-		int cy = (int) drawY + Global.TILE_SIZE * charY;
-		
-		return new Point(cx, cy);
+	public final void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {
+		if (drawOnlyInTransition && !this.isTransitioning()) {
+			return;
+		}
+
+		DrawUtils.drawEntityTileImage(g, this.getFrame(), this.getCanvasCoordinates(drawLocation));
 	}
 
-	public void draw(Graphics g, float drawX, float drawY, boolean drawOnlyInTransition) {
-		draw(g, getCanvasCoordinates(drawX, drawY));
-	}
-	
-	public void draw(Graphics g, Point canvasCoordinates) {
-		int cx = canvasCoordinates.x;
-		int cy = canvasCoordinates.y;
-		
-		BufferedImage img = getFrame();
-		//TODO: metrics class?
-		g.drawImage(img, cx - img.getWidth() / 2 + Global.TILE_SIZE / 2, cy + (Global.TILE_SIZE - img.getHeight()) - (Global.TILE_SIZE / 2), null);
+	protected Point getCanvasCoordinates(Point drawLocation) {
+		return DrawUtils.getDrawLocation(this.location, drawLocation);
 	}
 
+	// TODO: Don't pass the entity array around goddamnit
 	public abstract void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view);
 
 	protected boolean isPassable(WalkType type) {
@@ -98,6 +91,7 @@ public abstract class Entity {
 	}
 
 	protected abstract BufferedImage getFrame();
+	protected abstract boolean isTransitioning();
 
 	public abstract void getAttention(Direction direction);
 	public abstract void addData();

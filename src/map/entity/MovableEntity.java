@@ -9,7 +9,6 @@ import map.MapData;
 import util.InputControl;
 import util.Point;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public abstract class MovableEntity extends Entity {
@@ -29,26 +28,25 @@ public abstract class MovableEntity extends Entity {
 		
 		this.spriteIndex = spriteIndex;
 	}
-	
-	public void draw(Graphics g, float drawX, float drawY, boolean drawOnlyInTransition) {
-		if (drawOnlyInTransition && transitionTime == 0) {
-			return;
+
+	@Override
+	protected Point getCanvasCoordinates(Point drawLocation) {
+		Point canvasCoordinates = super.getCanvasCoordinates(drawLocation);
+
+		if (this.isTransitioning()) {
+			// TODO: Should this be a method?
+			int length = Global.TILE_SIZE*(getTransitionTime() - transitionTime)/getTransitionTime();
+
+			canvasCoordinates = Point.subtract(
+					canvasCoordinates,
+					Point.scale(transitionDirection.getDeltaPoint(), length)
+			);
 		}
-		
-		Point canvasCoordinates = getCanvasCoordinates(drawX, drawY);
-		
-		if (transitionTime != 0) {
-			int len = Global.TILE_SIZE*(getTransitionTime() - transitionTime)/getTransitionTime();
-			
-			canvasCoordinates.x -= transitionDirection.dx * len;
-			canvasCoordinates.y -= transitionDirection.dy * len;
-			
-			// System.out.println(transitionTime + " " +len + " " +cx + " " + cy);
-		}
-		
-		super.draw(g, canvasCoordinates);
+
+		return canvasCoordinates;
 	}
-	
+
+	@Override
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
 		if (transitionTime != 0) {
 			transitionTime += dt;	
@@ -68,20 +66,25 @@ public abstract class MovableEntity extends Entity {
 		transitionDirection = direction;
 	}
 
-	public boolean isFacing(int x, int y) {
-		if (x != charX && y != charY) {
+	public boolean isFacing(Point otherLocation) {
+
+		// Not in the same row or the same column
+		if (!this.getLocation().partiallyEquals(otherLocation)) {
 			return false;
 		}
-		
-		int dx = (int) Math.signum(x - charX);
-		int dy = (int) Math.signum(y - charY);
 
-		return transitionDirection.dx == dx && transitionDirection.dy == dy;
+		// Get the direction that would be facing the other location
+		Point deltaDirection = Point.getDeltaDirection(otherLocation, this.getLocation());
+
+		// Check if these are the same direction
+		return transitionDirection.getDeltaPoint().equals(deltaDirection);
 	}
-	
+
+	@Override
 	protected BufferedImage getFrame() {
 		TileSet trainerTiles = Game.getData().getTrainerTiles();
 		if (transitionTime > 0) {
+			// TODO: method
 			return trainerTiles.getTile(12 * spriteIndex + 1 + transitionDirection.ordinal() + 4 * (1 + runFrame));
 		}
 
@@ -90,4 +93,9 @@ public abstract class MovableEntity extends Entity {
 	}
 	
 	public abstract int getTransitionTime();
+
+	@Override
+	protected boolean isTransitioning() {
+		return this.transitionTime > 0;
+	}
 }

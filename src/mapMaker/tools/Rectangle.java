@@ -25,8 +25,8 @@ public class Rectangle {
         Point lowerRightRectangleCoordinate = Point.max(startLocation, endLocation);
 
         if (this.inBoundsRequired) {
-            this.upperLeftRectangleCoordinate.lowerBound();
-            lowerRightRectangleCoordinate.upperBound(dimension);
+            this.upperLeftRectangleCoordinate = Point.lowerBound(this.upperLeftRectangleCoordinate);
+            lowerRightRectangleCoordinate = Point.upperBound(lowerRightRectangleCoordinate, dimension);
         }
 
         this.dimension = new Dimension(
@@ -55,8 +55,8 @@ public class Rectangle {
     void drawTiles(MapMaker mapMaker, int val) {
         for (int x = 0; x < this.dimension.width; x++) {
             for (int y = 0; y < this.dimension.height; y++) {
-                Point delta = mapMaker.setTile(new Point(x, y).add(this.upperLeftRectangleCoordinate), val);
-                this.upperLeftRectangleCoordinate.add(delta);
+                Point delta = mapMaker.setTile(Point.add(this.upperLeftRectangleCoordinate, x, y), val);
+                this.upperLeftRectangleCoordinate = Point.add(this.upperLeftRectangleCoordinate, delta);
             }
         }
     }

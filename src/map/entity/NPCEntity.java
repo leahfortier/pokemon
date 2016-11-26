@@ -54,26 +54,21 @@ public class NPCEntity extends MovableEntity {
 		this.startKey = startKey;
 	}
 
+	@Override
 	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
 		super.update(dt, entity, map, input, view);
 
-		if (waitTime != 0) {
-			waitTime -= dt;
-		}
+		// Decrease wait time
+		waitTime = Math.max(0, waitTime - dt);
 
-		if (waitTime < 0) {
-			waitTime = 0;
-		}
-
-		if (transitionTime == 0 && waitTime == 0 && !hasAttention) {
+		// Not transitioning, not waiting, and does not have attention
+		if (!this.isTransitioning() && waitTime == 0 && !hasAttention) {
 			String path = this.path;
 			if (tempPath != null) {
 				path = tempPath;
-				// System.out.println(path);
 			}
 			
 			char pathChar = path.charAt(pathIndex);
-			
 			if (pathChar == Direction.WAIT_CHARACTER) {
 				waitTime = getTransitionTime();
 				pathIndex++;	
@@ -84,21 +79,19 @@ public class NPCEntity extends MovableEntity {
 					if (pathChar != direction.character) {
 						continue;
 					}
-					
-					int x = charX + direction.dx;
-					int y = charY + direction.dy;
+
+					Point newPoint = Point.add(this.getLocation(), direction.getDeltaPoint());
+					int x = newPoint.x; // TODO
+					int y = newPoint.y;
 					
 					// TODO: Shouldn't the isPassable method check if an entity doesn't exist in it as well? 
 					if (isPassable(map.getPassValue(x, y)) && entity[x][y] == null) {
-						entity[charX][charY] = null;
-						
-						charX = x;
-						charY = y;
-						
-						entity[charX][charY] = this;
+						entity[getX()][getY()] = null;
+						super.setLocation(newPoint);
+						entity[getX()][getY()] = this;
 						
 						transitionTime = 1;
-						waitTime = 5*Global.TIME_BETWEEN_TILES/4;
+						waitTime = 5*Global.TIME_BETWEEN_TILES/4; // TODO: Why 5/4
 						pathIndex++;
 					}
 					
@@ -132,6 +125,7 @@ public class NPCEntity extends MovableEntity {
 		return this.startKey;
 	}
 
+	@Override
 	public String getTriggerSuffix() {
 		return this.getTriggerSuffix(this.getCurrentInteractionKey());
 	}
@@ -140,10 +134,12 @@ public class NPCEntity extends MovableEntity {
 		return super.getTriggerSuffix() + "_" + interactionName;
 	}
 
+	@Override
 	public int getTransitionTime() {
 		return Global.TIME_BETWEEN_TILES * 2;
 	}
 
+	@Override
 	public void getAttention(Direction direction) {
 		transitionDirection = direction;
 		hasAttention = true;
@@ -154,6 +150,7 @@ public class NPCEntity extends MovableEntity {
 		return this.interactions.get(interaction).shouldWalkToPlayer();
 	}
 
+	// TODO: rename
 	public boolean getWalkingToPlayer() {
 		return walkingToPlayer;
 	}
@@ -174,9 +171,10 @@ public class NPCEntity extends MovableEntity {
 		return false;
 	}
 
+	@Override
 	public void reset() {
-		charX = defaultLocation.x;
-		charY = defaultLocation.y;
+		super.setLocation(defaultLocation);
+
 		waitTime = 0;
 		pathIndex = 0;
 		hasAttention = false;
@@ -185,6 +183,7 @@ public class NPCEntity extends MovableEntity {
 		tempPath = null;
 	}
 
+	@Override
 	public void addData() {
 		if (dataCreated) {
 			return;
