@@ -80,16 +80,14 @@ public class NPCEntity extends MovableEntity {
 						continue;
 					}
 
-					Point newPoint = Point.add(this.location, direction.getDeltaPoint());
+					Point newPoint = Point.add(this.getLocation(), direction.getDeltaPoint());
 					int x = newPoint.x; // TODO
 					int y = newPoint.y;
 					
 					// TODO: Shouldn't the isPassable method check if an entity doesn't exist in it as well? 
 					if (isPassable(map.getPassValue(x, y)) && entity[x][y] == null) {
 						entity[getX()][getY()] = null;
-						
-						this.location = newPoint;
-						
+						super.setLocation(newPoint);
 						entity[getX()][getY()] = this;
 						
 						transitionTime = 1;
@@ -175,7 +173,8 @@ public class NPCEntity extends MovableEntity {
 
 	@Override
 	public void reset() {
-		location = defaultLocation;
+		super.setLocation(defaultLocation);
+
 		waitTime = 0;
 		pathIndex = 0;
 		hasAttention = false;

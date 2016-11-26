@@ -42,7 +42,7 @@ public class PlayerEntity extends MovableEntity {
 
 		CharacterData player = Game.getPlayer();
 
-		if (!this.location.equals(player.location)) {
+		if (!this.getLocation().equals(player.location)) {
 			entity[getX()][getY()] = null;
 			entity[player.getX()][player.getY()] = this;
 			transitionTime = 0;
@@ -91,11 +91,11 @@ public class PlayerEntity extends MovableEntity {
 				}
 			}
 
-			this.location = player.location;
+			super.setLocation(player.location);
 			player.direction = transitionDirection;
 
 			if (spacePressed) {
-				Point newPoint = Point.add(this.location, transitionDirection.getDeltaPoint());
+				Point newPoint = Point.add(this.getLocation(), transitionDirection.getDeltaPoint());
 				int x = newPoint.x; // TODO
 				int y = newPoint.y;
 				
@@ -108,7 +108,7 @@ public class PlayerEntity extends MovableEntity {
 			
 			if (stalled) {
 				for (Direction direction : Direction.values()) {
-					Point newLocation = Point.add(this.location, Point.negate(direction.getDeltaPoint()));
+					Point newLocation = Point.add(this.getLocation(), Point.negate(direction.getDeltaPoint()));
 					int x = newLocation.x; // TODO
 					int y = newLocation.y;
 

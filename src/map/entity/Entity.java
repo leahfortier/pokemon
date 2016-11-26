@@ -15,11 +15,10 @@ import java.awt.image.BufferedImage;
 
 public abstract class Entity {
 
-	private String entityName;
-	private Condition condition;
+	private final String entityName;
+	private final Condition condition;
 
-	// TODO: make private
-	protected Point location;
+	private Point location;
 
 	protected Entity(Point location, String entityName, String condition) {
 		this.location = location;
@@ -30,6 +29,10 @@ public abstract class Entity {
 
 	public Point getLocation() {
 		return this.location;
+	}
+
+	protected void setLocation(Point newLocation) {
+		this.location = newLocation;
 	}
 
 	public int getX() {

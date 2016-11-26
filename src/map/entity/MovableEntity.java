@@ -69,12 +69,12 @@ public abstract class MovableEntity extends Entity {
 	public boolean isFacing(Point otherLocation) {
 
 		// Not in the same row or the same column
-		if (!this.location.partiallyEquals(otherLocation)) {
+		if (!this.getLocation().partiallyEquals(otherLocation)) {
 			return false;
 		}
 
 		// Get the direction that would be facing the other location
-		Point deltaDirection = Point.getDeltaDirection(otherLocation, this.location);
+		Point deltaDirection = Point.getDeltaDirection(otherLocation, this.getLocation());
 
 		// Check if these are the same direction
 		return transitionDirection.getDeltaPoint().equals(deltaDirection);
