@@ -50,7 +50,10 @@
                 "name": "Mom",
                 "cashMoney": 500,
                 "pokemon": [
-                  "Charmander 5"
+                  {
+                    "namesies": "CHARMANDER",
+                    "level": 5
+                  }
                 ],
                 "update": "won"
               }

@@ -4,7 +4,7 @@ import main.Game;
 import main.Global;
 import util.StringUtils;
 
-public class HealPartyTrigger extends Trigger {
+class HealPartyTrigger extends Trigger {
 
 	HealPartyTrigger(String contents, String condition)	{
 		super(TriggerType.HEAL_PARTY, contents, condition);

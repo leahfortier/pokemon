@@ -43,8 +43,8 @@ public enum SoundTitle {
 	POKE_CENTER_HEAL("dundundundundun", false),
 	LEVEL_UP("Pokemon-Level-Up-Notification", false);
 	
-	private String soundTitle;
-	private boolean isMusic;
+	private final String soundTitle;
+	private final boolean isMusic;
 	
 	SoundTitle(String soundTitle, boolean isMusic) {
 		this.soundTitle = soundTitle;

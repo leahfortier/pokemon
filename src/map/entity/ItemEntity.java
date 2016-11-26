@@ -75,16 +75,13 @@ public class ItemEntity extends Entity {
 			Trigger dialogue = TriggerType.DIALOGUE.createTrigger(itemDialogue, null);
 			Trigger giveItem = TriggerType.GIVE_ITEM.createTrigger(this.itemName.getName(), null);
 
-			GroupTriggerMatcher groupTriggerMatcher = new GroupTriggerMatcher(dialogue.getName(), giveItem.getName());
-			groupTriggerMatcher.suffix = itemTriggerSuffix;
-
+			GroupTriggerMatcher groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue.getName(), giveItem.getName());
 			TriggerType.GROUP.createTrigger(JsonUtils.getJson(groupTriggerMatcher), null);
 		}
 
 		// This trigger will only call the item trigger when the conditions apply
-		GroupTriggerMatcher matcher = new GroupTriggerMatcher(itemTriggerName);
-		matcher.suffix = this.getTriggerSuffix();
-		matcher.globals = new String[] { "has" + this.getEntityName() };
+		GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), itemTriggerName);
+		matcher.addGlobals("has" + this.getEntityName());
 
 		TriggerType.GROUP.createTrigger(JsonUtils.getJson(matcher), null);
 

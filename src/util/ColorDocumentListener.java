@@ -6,7 +6,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.Color;
 
 public abstract class ColorDocumentListener implements DocumentListener {
-    private ColorCondition colorCondition;
+    private final ColorCondition colorCondition;
 
     ColorDocumentListener(ColorCondition colorCondition) {
         this.colorCondition = colorCondition;

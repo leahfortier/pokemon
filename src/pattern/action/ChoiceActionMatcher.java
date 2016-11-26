@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChoiceActionMatcher {
-    public String question;
-    public ChoiceMatcher[] choices;
+    private String question;
+    private ChoiceMatcher[] choices;
 
     public static class ChoiceMatcher {
         public String text;
@@ -21,5 +21,13 @@ public class ChoiceActionMatcher {
 
             return actions;
         }
+    }
+
+    public String getQuestion() {
+        return this.question;
+    }
+
+    public ChoiceMatcher[] getChoices() {
+        return this.choices;
     }
 }

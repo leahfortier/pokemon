@@ -3,25 +3,14 @@ package map.triggers;
 import battle.Battle;
 import main.Game;
 import map.entity.EntityAction.BattleAction;
-import pattern.action.UpdateMatcher;
 import pattern.PokemonMatcher;
+import pattern.action.BattleMatcher;
+import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import trainer.EnemyTrainer;
 import util.JsonUtils;
 
-import java.util.regex.Pattern;
-
-/*
- * Format: Name Level Parameters
- * Possible parameters:
- * 		Moves: Move1, Move2, Move3, Move4*
- * 		Shiny
- * 		Egg
- * 		Item: item name*
- */
-public class TrainerBattleTrigger extends Trigger {
-	public static final Pattern trainerBattleTriggerPattern = Pattern.compile("(pokemon:)\\s*([A-Za-z \\t0-9,:.\\-'*]*)|(name:)\\s*([A-Za-z0-9 ]+)|(winGlobal:)\\s*([A-Za-z0-9_]+)|(cash:)\\s*(\\d+)");
-
+class TrainerBattleTrigger extends Trigger {
 	private final EnemyTrainer trainer;
 	private final UpdateMatcher npcUpdateInteraction;
 
@@ -29,18 +18,18 @@ public class TrainerBattleTrigger extends Trigger {
 		super(TriggerType.TRAINER_BATTLE, contents, condition);
 
 		BattleAction battleAction = JsonUtils.deserialize(contents, BattleAction.class);
+		BattleMatcher battleMatcher = battleAction.getBattleMatcher();
 
-		String trainerName = battleAction.name;
-		int cash = battleAction.cashMoney;
+		String trainerName = battleMatcher.getName();
+		int cash = battleMatcher.getDatCashMoney();
 
 		this.trainer = new EnemyTrainer(trainerName, cash);
 
-		for (String pokemonString : battleAction.pokemon) {
-			PokemonMatcher matcher = PokemonMatcher.matchPokemonDescription(pokemonString);
+		for (PokemonMatcher matcher : battleMatcher.getPokemon()) {
 			trainer.addPokemon(null, ActivePokemon.createActivePokemon(matcher, false));
 		}
 
-		this.npcUpdateInteraction = new UpdateMatcher(battleAction.entityName, battleAction.updateInteraction);
+		this.npcUpdateInteraction = new UpdateMatcher(battleAction.getEntityName(), battleMatcher.getUpdateInteraction());
 	}
 
 	protected void executeTrigger() {

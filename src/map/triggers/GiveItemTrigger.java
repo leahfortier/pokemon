@@ -3,8 +3,7 @@ package map.triggers;
 import item.ItemNamesies;
 import main.Game;
 
-public class GiveItemTrigger extends Trigger {
-
+class GiveItemTrigger extends Trigger {
     private final ItemNamesies item;
     private final int quantity; // TODO: Quantity
 

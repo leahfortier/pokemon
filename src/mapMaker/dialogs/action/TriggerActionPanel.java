@@ -27,7 +27,7 @@ class TriggerActionPanel extends ActionPanel {
     protected void load(ActionMatcher matcher) {
         TriggerActionMatcher actionMatcher = matcher.getTrigger();
         triggerTypeCombobBox.setSelectedItem(actionMatcher.getTriggerType());
-        triggerContentsTextArea.setText(actionMatcher.triggerContents);
+        triggerContentsTextArea.setText(actionMatcher.getTriggerContents());
     }
 
     @Override

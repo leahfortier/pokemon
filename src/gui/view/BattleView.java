@@ -21,6 +21,7 @@ import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
+import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
 import trainer.Trainer;
@@ -1670,7 +1671,7 @@ public class BattleView extends View {
 				}
 
 				if (newMessage.levelUpdate()) {
-					Global.soundPlayer.playSoundEffect(SoundTitle.LEVEL_UP);
+					SoundPlayer.soundPlayer.playSoundEffect(SoundTitle.LEVEL_UP);
 					state.setLevel(newMessage.getLevel());
 				}
 

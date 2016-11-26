@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 
 public class MapData {
-	public final String name;
+	private final String name;
 
 	private final int[] bgTile;
 	private final int[] fgTile;

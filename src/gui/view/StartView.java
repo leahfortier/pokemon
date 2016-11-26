@@ -3,11 +3,11 @@ package gui.view;
 import gui.GameData;
 import gui.TileSet;
 import main.Game;
-import main.Global;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import pokemon.PokemonNamesies;
 import pokemon.PokemonInfo;
+import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
 import util.DrawUtils;
@@ -167,6 +167,6 @@ public class StartView extends View {
 		name = StringUtils.empty();
 		ditto = false;
 		
-		Global.soundPlayer.playMusic(SoundTitle.NEW_GAME);
+		SoundPlayer.soundPlayer.playMusic(SoundTitle.NEW_GAME);
 	}
 }

@@ -4,7 +4,7 @@ import map.triggers.TriggerType;
 
 public class TriggerActionMatcher {
     private String triggerType;
-    public String triggerContents;
+    private String triggerContents;
 
     public TriggerActionMatcher(TriggerType triggerType, String triggerContents) {
         this.triggerType = triggerType.name();
@@ -13,5 +13,9 @@ public class TriggerActionMatcher {
 
     public TriggerType getTriggerType() {
         return TriggerType.getTriggerType(this.triggerType);
+    }
+
+    public String getTriggerContents() {
+        return this.triggerContents;
     }
 }

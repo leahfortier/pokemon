@@ -9,16 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WildPokemon implements Opponent {
-	private ActivePokemon p;
+	private final ActivePokemon wildPokemon;
 	private List<TeamEffect> effects;
 	
-	public WildPokemon(ActivePokemon p) {
-		this.p = p;
-		effects = new ArrayList<>();
+	public WildPokemon(ActivePokemon wildPokemon) {
+		this.wildPokemon = wildPokemon;
+		this.effects = new ArrayList<>();
 	}
 	
 	public ActivePokemon front() {
-		return p;
+		return wildPokemon;
 	}
 	
 	public List<TeamEffect> getEffects() {
@@ -30,7 +30,7 @@ public class WildPokemon implements Opponent {
 	}
 	
 	public void resetUsed() {
-		p.getAttributes().setUsed(true);
+		wildPokemon.getAttributes().setUsed(true);
 	}
 	
 	public boolean hasEffect(EffectNamesies effect) {
@@ -43,11 +43,11 @@ public class WildPokemon implements Opponent {
 	
 	public List<ActivePokemon> getTeam() {
 		List<ActivePokemon> list = new ArrayList<>();
-		list.add(p);
+		list.add(wildPokemon);
 		return list;
 	}
 	
 	public boolean blackout() {
-		return !p.canFight();
+		return !wildPokemon.canFight();
 	}
 }

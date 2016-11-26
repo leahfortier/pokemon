@@ -43,8 +43,4 @@ public class WildEncounter {
         int level = Global.getRandomInt(this.minLevel, this.maxLevel);
         return new WildPokemon(new ActivePokemon(this.pokemon, level, true, false));
     }
-
-    public String toString() {
-        return String.format("\tpokemon: %s %d-%d %d%%n", this.pokemon.getName(), this.minLevel, this.maxLevel, this.probability);
-    }
 }

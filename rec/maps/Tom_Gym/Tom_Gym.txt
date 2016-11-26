@@ -42,9 +42,18 @@
                 "name": "Leader Moore",
                 "cashMoney": 1000,
                 "pokemon": [
-                  "Magnemite 11",
-                  "Elekid 11",
-                  "Pikachu 14"
+                  {
+                    "namesies": "MAGNEMITE",
+                    "level": 11
+                  },
+                  {
+                    "namesies": "ELEKID",
+                    "level": 11
+                  },
+                  {
+                    "namesies": "PIKACHU",
+                    "level": 14
+                  }
                 ],
                 "update": "badge"
               }
@@ -109,7 +118,10 @@
                 "name": "Gym Trainer",
                 "cashMoney": 100,
                 "pokemon": [
-                  "Blitzle 9"
+                  {
+                    "namesies": "BLITZLE",
+                    "level": 9
+                  }
                 ],
                 "update": "won"
               }
@@ -156,7 +168,10 @@
                 "name": "Gym Trainer",
                 "cashMoney": 100,
                 "pokemon": [
-                  "Joltik 9"
+                  {
+                    "namesies": "JOLTIK",
+                    "level": 9
+                  }
                 ],
                 "update": "won"
               }

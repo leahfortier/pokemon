@@ -4,7 +4,7 @@ import main.Game;
 import pattern.action.UpdateMatcher;
 import util.JsonUtils;
 
-public class UpdateTrigger extends Trigger {
+class UpdateTrigger extends Trigger {
 
     private final String npcEntityName;
     private final String newInteractionName;
@@ -13,8 +13,8 @@ public class UpdateTrigger extends Trigger {
         super(TriggerType.UPDATE, matcherJson, condition);
 
         UpdateMatcher matcher = JsonUtils.deserialize(matcherJson, UpdateMatcher.class);
-        this.npcEntityName = matcher.npcEntityName;
-        this.newInteractionName = matcher.interactionName;
+        this.npcEntityName = matcher.getNpcEntityName();
+        this.newInteractionName = matcher.getInteractionName();
     }
 
     protected void executeTrigger() {

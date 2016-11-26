@@ -36,9 +36,9 @@ enum GrowthRate implements Serializable {
     });
 	
 	private final String name;
-	private final GetExperience expGetter;
+	private final ExperienceGetter expGetter;
 	
-	GrowthRate(String name, GetExperience expGetter) {
+	GrowthRate(String name, ExperienceGetter expGetter) {
 		this.name = name;
 		this.expGetter = expGetter;
 	}
@@ -47,7 +47,7 @@ enum GrowthRate implements Serializable {
 		return this.expGetter.getEXP(level);
 	}
 	
-	private interface GetExperience {
+	private interface ExperienceGetter {
 		int getEXP(int level);
 	}
 	

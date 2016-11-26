@@ -50,16 +50,61 @@
   "wildBattles": [
     {
       "encounterRate": "COMMON",
-      "pokemon": [
-        "Sandshrew 7-11 20%",
-        "Spearow 7-11 15%",
-        "Doduo 7-11 15%",
-        "Dwebble 7-11 12%",
-        "Bonsly 7-11 12%",
-        "Drifloon 7-11 10%",
-        "Cubone 7-11 10%",
-        "Larvitar 7-11 1%",
-        "Rufflet 7-11 5%"
+      "wildPokemon": [
+        {
+          "pokemon": "SANDSHREW",
+          "minLevel": 7,
+          "maxLevel": 11,
+          "probability": 20
+        },
+        {
+          "pokemon": "SPEAROW",
+          "minLevel": 7,
+          "maxLevel": 11,
+          "probability": 15
+        },
+        {
+          "pokemon": "DODUO",
+          "minLevel": 7,
+          "maxLevel": 11,
+          "probability": 15
+        },
+        {
+          "pokemon": "DWEBBLE",
+          "minLevel": 7,
+          "maxLevel": 11,
+          "probability": 12
+        },
+        {
+          "pokemon": "BONSLY",
+          "minLevel": 7,
+          "maxLevel": 11,
+          "probability": 12
+        },
+        {
+          "pokemon": "DRIFLOON",
+          "minLevel": 7,
+          "maxLevel": 11,
+          "probability": 10
+        },
+        {
+          "pokemon": "CUBONE",
+          "minLevel": 7,
+          "maxLevel": 11,
+          "probability": 10
+        },
+        {
+          "pokemon": "LARVITAR",
+          "minLevel": 7,
+          "maxLevel": 11,
+          "probability": 1
+        },
+        {
+          "pokemon": "RUFFLET",
+          "minLevel": 7,
+          "maxLevel": 11,
+          "probability": 5
+        }
       ],
       "location": [
         {
@@ -1695,17 +1740,67 @@
     },
     {
       "encounterRate": "VERY_COMMON",
-      "pokemon": [
-        "Mareep 6-10 10%",
-        "Cottonee 6-10 10%",
-        "Budew 6-10 10%",
-        "Hoppip 6-10 10%",
-        "Skiddo 6-10 10%",
-        "Sunkern 6-10 10%",
-        "Drifloon 6-10 10%",
-        "Sewaddle 6-10 10%",
-        "Petilil 6-10 10%",
-        "Cherubi 6-10 10%"
+      "wildPokemon": [
+        {
+          "pokemon": "MAREEP",
+          "minLevel": 6,
+          "maxLevel": 10,
+          "probability": 10
+        },
+        {
+          "pokemon": "COTTONEE",
+          "minLevel": 6,
+          "maxLevel": 10,
+          "probability": 10
+        },
+        {
+          "pokemon": "BUDEW",
+          "minLevel": 6,
+          "maxLevel": 10,
+          "probability": 10
+        },
+        {
+          "pokemon": "HOPPIP",
+          "minLevel": 6,
+          "maxLevel": 10,
+          "probability": 10
+        },
+        {
+          "pokemon": "SKIDDO",
+          "minLevel": 6,
+          "maxLevel": 10,
+          "probability": 10
+        },
+        {
+          "pokemon": "SUNKERN",
+          "minLevel": 6,
+          "maxLevel": 10,
+          "probability": 10
+        },
+        {
+          "pokemon": "DRIFLOON",
+          "minLevel": 6,
+          "maxLevel": 10,
+          "probability": 10
+        },
+        {
+          "pokemon": "SEWADDLE",
+          "minLevel": 6,
+          "maxLevel": 10,
+          "probability": 10
+        },
+        {
+          "pokemon": "PETILIL",
+          "minLevel": 6,
+          "maxLevel": 10,
+          "probability": 10
+        },
+        {
+          "pokemon": "CHERUBI",
+          "minLevel": 6,
+          "maxLevel": 10,
+          "probability": 10
+        }
       ],
       "location": [
         {

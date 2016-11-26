@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import main.Game;
 import main.Global;
+import sound.SoundPlayer;
 import trainer.CharacterData;
 
 public final class Save {
@@ -143,7 +143,7 @@ public final class Save {
 	public static void saveSettings(Theme theme) {
 		try {
 			PrintStream settingsOut = new PrintStream(FileName.SAVE_SETTINGS);
-			settingsOut.print(theme.ordinal() + " " + (Global.soundPlayer.isMuted() ? 1 : 0));
+			settingsOut.print(theme.ordinal() + " " + (SoundPlayer.soundPlayer.isMuted() ? 1 : 0));
 			settingsOut.close();
 		}
 		catch (IOException e) {
@@ -166,7 +166,7 @@ public final class Save {
 			
 			// Is muted
 			if (in.nextInt() == 1) {
-				Global.soundPlayer.toggleMusic();
+				SoundPlayer.soundPlayer.toggleMusic();
 			}
 		}
 		else {

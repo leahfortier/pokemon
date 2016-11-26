@@ -21,6 +21,7 @@ import message.MessageUpdate.Update;
 import message.Messages;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
+import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
 import util.DrawUtils;
@@ -502,7 +503,7 @@ public class MapView extends View {
 					dialogueSelection %= currentMessage.getChoices().length;
 				}
 
-				if (input.isDown(Control.SPACE) && !Global.soundPlayer.soundEffectIsPlaying()) {
+				if (input.isDown(Control.SPACE) && !SoundPlayer.soundPlayer.soundEffectIsPlaying()) {
 					input.consumeKey(Control.SPACE);
 
 					if (currentMessage.isChoice()) {
@@ -612,7 +613,7 @@ public class MapView extends View {
 							npc.walkTowards(dist - 1, direction);
 							
 							if (npc.isTrainer()) {
-								Global.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);
+								SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);
 							}
 						}
 					}
@@ -660,11 +661,11 @@ public class MapView extends View {
 
 	private void playAreaMusic() {
 		if (currentMusicTitle != null) {
-			Global.soundPlayer.playMusic(currentMusicTitle);
+			SoundPlayer.soundPlayer.playMusic(currentMusicTitle);
 		}
 		else if(currentArea != null) {
 			System.err.println("No music specified for current area " + currentArea.getAreaName() + ".");
-			Global.soundPlayer.playMusic(SoundTitle.DEFAULT_TUNE);
+			SoundPlayer.soundPlayer.playMusic(SoundTitle.DEFAULT_TUNE);
 		}
 	}
 
@@ -683,10 +684,10 @@ public class MapView extends View {
 		this.battle.setTerrainType(currentArea.getTerrain(), true);
 		
 		if (battle.isWildBattle()) {
-			Global.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_BATTLE);
+			SoundPlayer.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_BATTLE);
 		}
 		else {
-			Global.soundPlayer.playMusic(SoundTitle.TRAINER_BATTLE);
+			SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_BATTLE);
 		}
 	}
 
