@@ -66,7 +66,6 @@ import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.Evolution;
 import pokemon.Evolution.EvolutionCheck;
-import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.Ability;
@@ -150,20 +149,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 	public int hashCode() {
 		return name.hashCode();
-	}
-
-	private static void processIncenseItems() {
-		for (ItemNamesies itemNamesies : ItemNamesies.values()) {
-			Item item = itemNamesies.getItem();
-			if (item instanceof IncenseItem) {
-				PokemonInfo.addIncenseBaby(((IncenseItem)item).getBaby());
-			}
-		}
-	}
-
-	// TODO
-	public static void loadItems() {
-		processIncenseItems();
 	}
 
 	// EVERYTHING BELOW IS GENERATED ###

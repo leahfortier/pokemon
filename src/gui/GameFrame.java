@@ -1,6 +1,5 @@
 package gui;
 
-import item.Item;
 import main.Game;
 import main.Global;
 import pokemon.PokemonInfo;
@@ -43,7 +42,6 @@ public class GameFrame {
 	
 	private static void loadAllTheThings() {
 		PokemonInfo.loadPokemonInfo();
-		Item.loadItems();
 		DrawUtils.loadFontMetricsMap();
 	}
 

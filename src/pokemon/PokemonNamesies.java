@@ -4,6 +4,7 @@ import main.Global;
 import util.PokeString;
 
 public enum PokemonNamesies {
+	NONE(""), // Mostly so the index matches up
     // EVERYTHING BELOW IS GENERATED ###
 	BULBASAUR("Bulbasaur"),
 	IVYSAUR("Ivysaur"),

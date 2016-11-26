@@ -1,8 +1,10 @@
 package pokemon;
 
 import battle.attack.AttackNamesies;
+import item.Item;
 import item.ItemNamesies;
 import item.hold.HoldItem;
+import item.hold.IncenseItem;
 import main.Global;
 import main.Type;
 import pokemon.ability.AbilityNamesies;
@@ -27,9 +29,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	public static final int EGG_IMAGE = 0x10000;
 
 	private static Map<PokemonNamesies, PokemonInfo> map;
-	private static PokemonInfo[] info;
 	private static List<PokemonNamesies> baseEvolution;
-	private static Set<PokemonNamesies> incenseBabies = new HashSet<>(); // TODO: lalala
+	private static Set<PokemonNamesies> incenseBabies;
 
 	private final int number;
 	private final String name;
@@ -208,15 +209,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	}
 
 	public static PokemonInfo getPokemonInfo(int index) {
-		if (info == null) {
-			loadPokemonInfo();
-		}
-
-		if (index <= 0 || index > NUM_POKEMON) {
-			Global.error("No such Pokemon Number " + index);
-		}
-
-		return info[index];
+		return getPokemonInfo(PokemonNamesies.values()[index]);
 	}
 
 	public static PokemonNamesies getRandomBaseEvolution() {
@@ -245,16 +238,12 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		}
 
 		map = new HashMap<>();
-		info = new PokemonInfo[NUM_POKEMON + 1];
 
 		Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.POKEMON_INFO, false));
 		while (in.hasNext()) {
-			int num = in.nextInt();
-			in.nextLine();
-
-			info[num] = new PokemonInfo(
-					num,
-					in.nextLine().trim(),
+			PokemonInfo pokemonInfo = new PokemonInfo(
+					in.nextInt(),
+					in.nextLine().trim() + in.nextLine().trim(),
 					sixIntArray(in),
 					in.nextInt(),
 					in.nextLine().trim() + in.nextLine().trim(),
@@ -279,8 +268,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 					in.nextLine().trim()
 			);
 
-			PokemonNamesies pokemonNamesies = PokemonNamesies.getValueOf(info[num].getName());
-			map.put(pokemonNamesies, info[num]);
+			map.put(pokemonInfo.namesies, pokemonInfo);
 		}
 
 		in.close();
@@ -417,13 +405,23 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	public String[] getEggGroups() {
 		return eggGroups;
 	}
-	
-	public boolean isIncenseBaby() {
-		return incenseBabies.contains(namesies);
+
+	private static void loadIncenseBabies() {
+		incenseBabies = new HashSet<>();
+		for (ItemNamesies itemNamesies : ItemNamesies.values()) {
+			Item item = itemNamesies.getItem();
+			if (item instanceof IncenseItem) {
+				incenseBabies.add(((IncenseItem)item).getBaby());
+			}
+		}
 	}
 	
-	public static void addIncenseBaby(PokemonNamesies incenseBaby) {
-		incenseBabies.add(incenseBaby);
+	public boolean isIncenseBaby() {
+		if (incenseBabies == null) {
+			loadIncenseBabies();
+		}
+
+		return incenseBabies.contains(namesies);
 	}
 	
 	// Returns what level the Pokemon will learn the given attack, returns -1 if they cannot learn it by level up
