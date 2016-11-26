@@ -22,8 +22,12 @@ public class PlayerEntity extends MovableEntity {
 
 	private boolean justCreated;
 
-	public PlayerEntity(CharacterData data) {
-		super(data.location, null, null, 0, data.direction);
+	public PlayerEntity() {
+		this(Game.getPlayer());
+	}
+
+	private PlayerEntity(CharacterData player) {
+		super(player.getLocation(), null, null, 0, player.direction);
 
 		justMoved = true;
 		stalled = false;
@@ -42,7 +46,7 @@ public class PlayerEntity extends MovableEntity {
 
 		CharacterData player = Game.getPlayer();
 
-		if (!this.getLocation().equals(player.location)) {
+		if (!this.getLocation().equals(player.getLocation())) {
 			entity[getX()][getY()] = null;
 			entity[player.getX()][player.getY()] = this;
 			transitionTime = 0;
@@ -67,7 +71,7 @@ public class PlayerEntity extends MovableEntity {
 							continue;
 						}
 
-						Point delta = Point.add(player.location, direction.getDeltaPoint());
+						Point delta = Point.add(player.getLocation(), direction.getDeltaPoint());
 						
 						WalkType curPassValue = map.getPassValue(player.getX(), player.getY());
 						WalkType passValue = map.getPassValue(delta.x, delta.y);
@@ -91,7 +95,7 @@ public class PlayerEntity extends MovableEntity {
 				}
 			}
 
-			super.setLocation(player.location);
+			super.setLocation(player.getLocation());
 			player.direction = transitionDirection;
 
 			if (spacePressed) {
@@ -183,7 +187,7 @@ public class PlayerEntity extends MovableEntity {
 		FloatPoint transitionDelta = FloatPoint.scale(transitionDirection.getDeltaPoint(), transitionLength);
 
 		// Get the location relative to the player
-		FloatPoint transitionLocationUnscaled = FloatPoint.subtract(Game.getPlayer().location, transitionDelta);
+		FloatPoint transitionLocationUnscaled = FloatPoint.subtract(Game.getPlayer().getLocation(), transitionDelta);
 
 		// Scale by the tile size
 		Point transitionLocation = FloatPoint.scale(transitionLocationUnscaled, Global.TILE_SIZE).getPoint();

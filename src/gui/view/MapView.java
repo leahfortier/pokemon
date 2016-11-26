@@ -407,25 +407,25 @@ public class MapView extends View {
 		boolean showMessage = true;
 
 		GameData data = Game.getData();
-		CharacterData character = Game.getPlayer();
-		MENU_TEXT[3] = character.getName();
+		CharacterData player = Game.getPlayer();
+		MENU_TEXT[3] = player.getName();
 
-		if (!currentMapName.equals(character.mapName) || character.mapReset) {
-			currentMapName = character.mapName;
+		if (!currentMapName.equals(player.mapName) || player.mapReset) {
+			currentMapName = player.mapName;
 			currentMap = data.getMap(currentMapName);
 			
-			if (character.mapReset) {
-				character.mapReset = false;
-				currentMap.setCharacterToEntrance(character.mapEntranceName);
+			if (player.mapReset) {
+				player.mapReset = false;
+				currentMap.setCharacterToEntrance(player.mapEntranceName);
 			}
 
 			entities = currentMap.populateEntities();
 
-			Direction prevDir = character.direction;
+			Direction prevDir = player.direction;
 
-			playerEntity = new PlayerEntity(character);
+			playerEntity = new PlayerEntity();
 			playerEntity.setDirection(prevDir);
-			entities[character.getX()][character.getY()] = playerEntity;
+			entities[player.getX()][player.getY()] = playerEntity;
 			
 			entityList = new ArrayList<>();
 			for (Entity[] er: entities) {
@@ -445,10 +445,10 @@ public class MapView extends View {
 		}
 		
 		// New area
-		AreaData area = currentMap.getArea(character.getX(), character.getY());
+		AreaData area = currentMap.getArea(player.getX(), player.getY());
 		String areaName = area.getAreaName();
 
-		character.areaName = areaName;
+		player.areaName = areaName;
 		currentArea = area;
 
 		// If new area has a new name, display the area name animation

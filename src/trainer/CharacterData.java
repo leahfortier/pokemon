@@ -44,7 +44,7 @@ public class CharacterData extends Trainer implements Serializable {
 	private static final int START_MONEY = 3000;
 
 	// TODO: Look into most of these to check if they really do need to be public
-	public Point location;
+	private Point location;
 	public Direction direction;
 
 	public boolean mapReset;
