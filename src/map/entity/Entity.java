@@ -40,7 +40,7 @@ public abstract class Entity {
 	}
 
 	public final void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {
-		if (drawOnlyInTransition && this.isTransitioning()) {
+		if (drawOnlyInTransition && !this.isTransitioning()) {
 			return;
 		}
 
