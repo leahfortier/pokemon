@@ -13,8 +13,8 @@ import map.MapData;
 import map.entity.Entity;
 import map.entity.EntityAction;
 import map.entity.MovableEntity;
-import map.entity.PlayerEntity;
 import map.entity.NPCEntity;
+import map.entity.PlayerEntity;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -33,7 +33,6 @@ import util.Save;
 import util.StringUtils;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -583,11 +582,10 @@ public class MapView extends View {
 				}
 				break;
 		}
-		
-		Dimension gameSize = Global.GAME_SIZE;
-		Point tilesLocation = Point.scaleDown(gameSize, Global.TILE_SIZE);
 
-		this.draw = playerEntity.getDrawLocation(gameSize);
+		Point tilesLocation = Point.scaleDown(Global.GAME_SIZE, Global.TILE_SIZE);
+
+		this.draw = playerEntity.getDrawLocation();
 		this.start = Point.scaleDown(Point.negate(this.draw), Global.TILE_SIZE);
 		this.end = Point.add(this.start, tilesLocation, new Point(6, 6)); // TODO: What is the 6, 6 all about?
 		

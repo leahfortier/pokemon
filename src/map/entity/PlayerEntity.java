@@ -9,13 +9,10 @@ import map.MapData.WalkType;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import trainer.CharacterData;
+import util.FloatPoint;
 import util.InputControl;
 import util.InputControl.Control;
 import util.Point;
-
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 public class PlayerEntity extends MovableEntity {
 
@@ -176,26 +173,24 @@ public class PlayerEntity extends MovableEntity {
 		}
 	}
 
-	public Point getDrawLocation(Dimension dimension) {
-
-		Point playerLocation = Game.getPlayer().location;
-
-		float[] res = new float[2];
+	public Point getDrawLocation() {
+		float transitionLength = 0;
 		if (transitionTime > 0) {
-			float len = Math.max(0f, (Global.TIME_BETWEEN_TILES - (float) transitionTime/*-dt*/) / Global.TIME_BETWEEN_TILES);
-			res[0] = dimension.width/2 - (playerLocation.x - transitionDirection.dx*len)*Global.TILE_SIZE;
-			res[1] = dimension.height/2 - (playerLocation.y - transitionDirection.dy*len)*Global.TILE_SIZE;
-		}
-		else {
-			res[0] = dimension.width/2 - playerLocation.x*Global.TILE_SIZE;
-			res[1] = dimension.height/2 - playerLocation.y*Global.TILE_SIZE;
+			transitionLength = Math.max(0f, (Global.TIME_BETWEEN_TILES - (float) transitionTime/*-dt*/) / Global.TIME_BETWEEN_TILES);
 		}
 
-		// TODO
-		return new Point(
-				(int)res[0],
-				(int)res[1]
-		);
+		// Scale by the length of the transition in the current direction
+		FloatPoint transitionDelta = FloatPoint.scale(transitionDirection.getDeltaPoint(), transitionLength);
+
+		// Get the location relative to the player
+		FloatPoint transitionLocationUnscaled = FloatPoint.subtract(Game.getPlayer().location, transitionDelta);
+
+		// Scale by the tile size
+		Point transitionLocation = FloatPoint.scale(transitionLocationUnscaled, Global.TILE_SIZE).getPoint();
+
+		// The location to draw should be the center of the window scaled in the direction of the transition by the delta amount
+		Point windowCenter = Point.scaleDown(Global.GAME_SIZE, 2);
+		return Point.subtract(windowCenter, transitionLocation);
 	}
 
 	@Override
