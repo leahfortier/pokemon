@@ -20,17 +20,25 @@ public class Point implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Point)) {
+    public boolean equals(Object other) {
+        if (!(other instanceof Point)) {
             return false;
         }
 
-        Point p = (Point) o;
+        Point p = (Point) other;
         return p.x == x && p.y == y;
     }
 
+    public boolean isZero() {
+        return this.x == 0 && this.y == 0;
+    }
+
+    public boolean inBounds(int width, int height) {
+        return x >= 0 && x < width && y >= 0 && y < height;
+    }
+
     public boolean inBounds(Dimension dimension) {
-        return x >= 0 && x < dimension.width && y >= 0 && y < dimension.height;
+        return this.inBounds(dimension.width, dimension.height);
     }
 
     public static Point add(Point point, int dx, int dy) {

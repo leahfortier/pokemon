@@ -56,9 +56,13 @@ public class MapView extends View {
 	
 	private static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
 	private static final int BATTLE_INTRO_ANIMATION_LIFESPAN = 1000;
-	
-	private static final int[] ddx = { 0, -1, 0 };
-	private static final int[] ddy = { 0, 0, -1 };
+
+    // TODO: Eventually want to add a no movement direction to the directions class, when that happens this can be a directions array instead
+    private static final Point[] deltaDirections = {
+            new Point(),  // No movement
+            Direction.LEFT.getDeltaPoint(),
+            Direction.UP.getDeltaPoint()
+    };
 	
 	private String currentMapName;
 	private AreaData currentArea;
@@ -142,7 +146,7 @@ public class MapView extends View {
 				int bgTile = currentMap.getBgTile(x,y);
 
 				// TODO: What does this mean?
-				if ((bgTile>>24) != 0) {
+				if ((bgTile >> 24) != 0) {
 					BufferedImage img = mapTiles.getTile(bgTile);
 					DrawUtils.drawTileImage(g, img, x, y, draw);
 				}
@@ -155,40 +159,39 @@ public class MapView extends View {
 
 				// Draw foreground tiles
 				int fgTile = currentMap.getFgTile(x, y);
-				if ((fgTile>>24) != 0) {
+				if ((fgTile >> 24) != 0) {
 					BufferedImage img = mapTiles.getTile(fgTile);
 					DrawUtils.drawTileImage(g, img, x, y, draw);
 				}
 				
 				// Draw entities
 				// Check for entities above and to the left of this location to see if they just moved out and draw them again.
-				for (int d = 0; d < ddx.length; d++) {
-					int nx, ny;
-					nx = ddx[d] + x;
-					ny = ddy[d] + y;
+				for (Point delta : deltaDirections) {
+                    Point newPoint = Point.add(delta, x, y);
+                    if (!newPoint.inBounds(entities.length, entities[0].length)) {
+                        continue;
+                    }
 
-					// TODO: in bounds method
-					if (nx < 0 || ny < 0 || nx >= entities.length || ny >= entities[0].length) {
-						continue;
-					}
+                    Entity newPointEntity = entities[newPoint.x][newPoint.y];
+                    if (newPointEntity == null) {
+                        continue;
+                    }
 
-					if (entities[nx][ny] != null) {
+                    // TODO: I'm getting really confused about this whole check up and left only thing what is happening
+                    // If entity is a movable entity and they are moving right or down, do not draw them again.
+                    if (newPointEntity instanceof MovableEntity) {
+                        Direction transitionDirection = ((MovableEntity)newPointEntity).getDirection();
+                        if (!delta.isZero() && (transitionDirection == Direction.RIGHT || transitionDirection == Direction.DOWN)) {
+                            continue;
+                        }
+                    }
+                    // Not a movable entity, only draw once.
+                    else if (!delta.isZero()) {
+                        continue;
+                    }
 
-						// TODO: I'm getting really confused about this whole check up and left only thing what is happening
-						// If entity is a movable entity and they are moving right or down, do not draw them again.
-						if (entities[nx][ny] instanceof MovableEntity) {
-							Direction td = ((MovableEntity)entities[nx][ny]).getDirection();
-							if (d != 0 && ((td == Direction.RIGHT) || (td == Direction.DOWN))) {
-								continue;
-							}
-						}
-						// Not a movable entity, only draw once.
-						else if (d != 0) {
-							continue;
-						}
-						
-						entities[nx][ny].draw(g, draw, d > 0);
-					}
+                    // TODO: Checking zero logic seems like it can be simplified
+                    newPointEntity.draw(g, draw, !delta.isZero());
 				}
 			}
 		}
