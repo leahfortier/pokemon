@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Queue;
 
 public class MapView extends View {
+
 	// TODO: Create enum to hold these and handle operations
 	private static final String[] MENU_TEXT = {
 			PokeString.POKEDEX,

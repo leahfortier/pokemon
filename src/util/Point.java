@@ -25,8 +25,12 @@ public class Point implements Serializable {
             return false;
         }
 
-        Point p = (Point) other;
-        return p.x == x && p.y == y;
+        Point point = (Point) other;
+        return this.x == point.x && this.y == point.y;
+    }
+
+    public boolean partiallyEquals(Point other) {
+        return this.x == other.x || this.y == other.y;
     }
 
     public boolean isZero() {
@@ -109,6 +113,14 @@ public class Point implements Serializable {
         );
     }
 
+    public static Point getDeltaDirection(Point first, Point second) {
+        Point difference = subtract(first, second);
+        return new Point(
+                (int)Math.signum(difference.x),
+                (int)Math.signum(difference.y)
+        );
+    }
+
     public static Point min(Point start, Point end) {
         return new Point(
                 Math.min(start.x, end.x),
@@ -132,8 +144,8 @@ public class Point implements Serializable {
     }
 
     public static Point getPointAtIndex(int locationIndex, int mapWidth) {
-        int y = locationIndex / mapWidth;
-        int x = locationIndex - y * mapWidth;
+        int y = locationIndex/mapWidth;
+        int x = locationIndex - y*mapWidth;
 
         return new Point(x, y);
     }
