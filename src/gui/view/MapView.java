@@ -625,14 +625,13 @@ public class MapView extends View {
 			}
 		}
 
+		// Update each non-player entity on the map
+		entityList.stream()
+				.filter(entity -> entity != null && (state == VisualState.MAP || entity != playerEntity))
+				.forEach(entity -> entity.update(dt, entities, currentMap, input, this));
+
 		if (state == VisualState.MAP) {
-
-            // Update each non-player entity on the map
-            entityList.stream()
-                    .filter(entity -> entity != null && entity != playerEntity)
-                    .forEach(entity -> entity.update(dt, entities, currentMap, input, this));
-
-            playerEntity.triggerCheck(currentMap);
+			playerEntity.triggerCheck(currentMap);
         }
 		
 		while (!removeQueue.isEmpty()) {
