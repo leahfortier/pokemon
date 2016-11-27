@@ -10,8 +10,8 @@ import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import trainer.Pokedex.PokedexStatus;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 import util.StringUtils;
 
 import java.awt.Color;
@@ -51,7 +51,7 @@ public class EvolutionView extends View {
 						message = null;
 					}
 
-					if (input.consumeIfDown(Control.SPACE)) {
+					if (input.consumeIfDown(ControlKey.SPACE)) {
 						message = null;
 					}
 				}
@@ -72,7 +72,7 @@ public class EvolutionView extends View {
 						message = null;
 					}
 
-					if (input.consumeIfDown(Control.SPACE)) {
+					if (input.consumeIfDown(ControlKey.SPACE)) {
 						message = null;
 					}
 				}

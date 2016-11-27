@@ -22,8 +22,8 @@ import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Trainer;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -217,7 +217,7 @@ class BagView extends View {
 				message = null;
 			}
 
-			if (input.consumeIfDown(Control.SPACE)) {
+			if (input.consumeIfDown(ControlKey.SPACE)) {
 				message = null;
 			}
 
@@ -330,7 +330,7 @@ class BagView extends View {
 			returnToMap();
 		}
 
-		if (input.consumeIfDown(Control.ESC)) {
+		if (input.consumeIfDown(ControlKey.ESC)) {
 			returnToMap();
 		}
 

@@ -9,8 +9,8 @@ import main.Global;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -54,11 +54,11 @@ class DevConsole {
 			currText = input.getCapturedText();
 		}
 
-		if (input.consumeIfDown(Control.ENTER, key)) {
+		if (input.consumeIfDown(ControlKey.ENTER, key)) {
 			execute(input.stopTextCapture());
 		}
 
-		if (input.consumeIfDown(Control.ESC, key)) {
+		if (input.consumeIfDown(ControlKey.ESC, key)) {
 			tearDown(input);
 		}
 	}

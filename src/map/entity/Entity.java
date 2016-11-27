@@ -7,7 +7,7 @@ import map.MapData;
 import map.MapData.WalkType;
 import map.triggers.TriggerType;
 import util.DrawUtils;
-import util.InputControl;
+import input.InputControl;
 import util.Point;
 
 import java.awt.Graphics;

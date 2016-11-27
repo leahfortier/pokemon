@@ -7,7 +7,7 @@ import map.Direction;
 import map.MapData;
 import map.entity.EntityAction.BattleAction;
 import trainer.CharacterData;
-import util.InputControl;
+import input.InputControl;
 import util.Point;
 import util.StringUtils;
 

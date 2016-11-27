@@ -10,8 +10,8 @@ import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import trainer.CharacterData;
 import util.FloatPoint;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 import util.Point;
 
 public class PlayerEntity extends MovableEntity {
@@ -59,13 +59,12 @@ public class PlayerEntity extends MovableEntity {
 		npcTriggerSuffix = null;
 		boolean spacePressed = false;
 		if (transitionTime == 0 && !justMoved) {
-			if (input.consumeIfDown(Control.SPACE)) {
+			if (input.consumeIfDown(ControlKey.SPACE)) {
 				spacePressed = true;
 			}
 			else {
 				for (Direction direction : Direction.values()) {
-					// TODO: Check if this should be consumed
-					if (input.isDown(direction.getKey()) && transitionTime == 0 && !stalled) {
+					if (input.consumeIfDown(direction.getKey()) && transitionTime == 0 && !stalled) {
 						if (transitionDirection != direction) {
 							transitionDirection = direction;
 							continue;

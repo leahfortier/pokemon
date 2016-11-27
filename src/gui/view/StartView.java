@@ -11,8 +11,8 @@ import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 import util.StringUtils;
 
 import java.awt.Color;
@@ -52,7 +52,7 @@ class StartView extends View {
 						message = null;
 					}
 
-					if (input.consumeIfDown(Control.SPACE)) {
+					if (input.consumeIfDown(ControlKey.SPACE)) {
 						message = null;
 					}
 				}
@@ -95,7 +95,7 @@ class StartView extends View {
 					}
 				}
 
-				if (input.consumeIfDown(Control.ENTER)) {
+				if (input.consumeIfDown(ControlKey.ENTER)) {
 					input.stopTextCapture();
 					player.setName(name.isEmpty() ? CharacterData.DEFAULT_NAME : name);
 					state = State.DEFAULT;

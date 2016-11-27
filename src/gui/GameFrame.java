@@ -4,8 +4,8 @@ import main.Game;
 import main.Global;
 import pokemon.PokemonInfo;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -117,7 +117,7 @@ public class GameFrame {
 			Game.draw(g);
 
 			// This will fail if it can't acquire the lock on control (just won't display or anything)
-			if (control.consumeIfDown(Control.CONSOLE)) {
+			if (control.consumeIfDown(ControlKey.CONSOLE)) {
 				console.init(control);
 			}
 

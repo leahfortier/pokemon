@@ -25,8 +25,8 @@ import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 import util.Point;
 import util.PokeString;
 import util.Save;
@@ -481,15 +481,15 @@ public class MapView extends View {
 				showMessage = false;
 				break;
 			case MAP:
-				if (input.consumeIfDown(Control.ESC)) {
+				if (input.consumeIfDown(ControlKey.ESC)) {
 					state = VisualState.MENU;
 				}
 				break;
 			case MESSAGE:
 				if (currentMessage.isChoice()) {
-					if (input.consumeIfDown(Control.DOWN)) {
+					if (input.consumeIfDown(ControlKey.DOWN)) {
 						dialogueSelection++;
-					} else if (input.consumeIfDown(Control.UP)) {
+					} else if (input.consumeIfDown(ControlKey.UP)) {
 						dialogueSelection--;
 					}
 
@@ -497,7 +497,7 @@ public class MapView extends View {
 					dialogueSelection %= currentMessage.getChoices().length;
 				}
 
-				if (!SoundPlayer.soundPlayer.soundEffectIsPlaying() && input.consumeIfDown(Control.SPACE)) {
+				if (!SoundPlayer.soundPlayer.soundEffectIsPlaying() && input.consumeIfDown(ControlKey.SPACE)) {
 					if (currentMessage.isChoice()) {
 						ChoiceMatcher choice = currentMessage.getChoices()[dialogueSelection];
 						Trigger trigger = EntityAction.addActionGroupTrigger(null, null, choice.getActions());
@@ -566,7 +566,7 @@ public class MapView extends View {
 						break;
 				}
 				
-				if (input.consumeIfDown(Control.ESC)) {
+				if (input.consumeIfDown(ControlKey.ESC)) {
 					state = VisualState.MAP;
 				}
 				break;

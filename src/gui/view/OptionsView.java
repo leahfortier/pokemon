@@ -4,8 +4,8 @@ import main.Game;
 import main.Global;
 import sound.SoundPlayer;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -26,7 +26,7 @@ class OptionsView extends View {
 			SoundPlayer.soundPlayer.toggleMusic();
 		}
 		
-		if (input.consumeIfDown(Control.ESC)) {
+		if (input.consumeIfDown(ControlKey.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}

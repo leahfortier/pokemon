@@ -1,8 +1,8 @@
 package gui;
 
 import map.Direction;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -155,7 +155,7 @@ public class Button {
 		return next;
 	}
 
-	public void update(InputControl input, boolean isSelected, Control... optionalKeys) {
+	public void update(InputControl input, boolean isSelected, ControlKey... optionalKeys) {
 		if (!active) {
 			return;
 		}
@@ -175,11 +175,11 @@ public class Button {
 			}
 		}
 
-		if (isSelected && input.consumeIfDown(Control.SPACE)) {
+		if (isSelected && input.consumeIfDown(ControlKey.SPACE)) {
 			press = true;
 		}
 
-		for (Control c : optionalKeys) {
+		for (ControlKey c : optionalKeys) {
 			if (input.consumeIfDown(c)) {
 				press = true;
 			}

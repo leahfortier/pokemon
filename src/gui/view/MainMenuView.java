@@ -7,8 +7,8 @@ import main.Global;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 import util.Save;
 
 import java.awt.Color;
@@ -317,7 +317,7 @@ public class MainMenuView extends View {
 			bgIndex = nextIndex;
 		}
 		
-		if (input.consumeIfDown(Control.BACK)) {
+		if (input.consumeIfDown(ControlKey.BACK)) {
 			setVisualState(VisualState.MAIN);
 		}
 	}

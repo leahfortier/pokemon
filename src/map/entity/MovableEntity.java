@@ -6,7 +6,7 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
-import util.InputControl;
+import input.InputControl;
 import util.Point;
 
 import java.awt.image.BufferedImage;

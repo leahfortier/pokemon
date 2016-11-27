@@ -9,7 +9,7 @@ import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import item.ItemNamesies;
 import pattern.GroupTriggerMatcher;
-import util.InputControl;
+import input.InputControl;
 import util.JsonUtils;
 import util.Point;
 import util.StringUtils;

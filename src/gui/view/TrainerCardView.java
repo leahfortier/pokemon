@@ -4,8 +4,8 @@ import main.Game;
 import main.Global;
 import trainer.CharacterData;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,7 +14,7 @@ import java.awt.Graphics;
 public class TrainerCardView extends View {
 
 	public void update(int dt, InputControl input) {
-		if (input.consumeIfDown(Control.ESC)) {
+		if (input.consumeIfDown(ControlKey.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}

@@ -27,8 +27,8 @@ import trainer.CharacterData;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -720,7 +720,7 @@ public class BattleView extends View {
 					view.cycleMessage(false);
 				}
 			}
-			else if (input.consumeIfDown(Control.L)) {
+			else if (input.consumeIfDown(ControlKey.L)) {
 				view.logPage = 0;
 				view.logMessages = view.currentBattle.getPlayer().getLogMessages();
 				
@@ -804,7 +804,7 @@ public class BattleView extends View {
 		public void update(BattleView view, InputControl input) {
 			// Update move buttons and the back button
 			view.selectedButton = Button.update(view.moveButtons, view.selectedButton, input);
-			view.backButton.update(input, false, Control.BACK);
+			view.backButton.update(input, false, ControlKey.BACK);
 			
 			// Get the Pokemon that is attacking and their corresponsing move list
 			ActivePokemon front = view.currentBattle.getPlayer().front();
@@ -868,7 +868,7 @@ public class BattleView extends View {
 				pressed = true;
 			}
 
-			if (input.consumeIfDown(Control.SPACE)) {
+			if (input.consumeIfDown(ControlKey.SPACE)) {
 				pressed = true;
 			}
 			
@@ -984,7 +984,7 @@ public class BattleView extends View {
 		public void update(BattleView view, InputControl input) {
 			// Update all bag buttons and the back button
 			view.selectedButton = Button.update(view.bagButtons, view.selectedButton, input);
-			view.backButton.update(input, false, Control.BACK);
+			view.backButton.update(input, false, ControlKey.BACK);
 			
 			// Check tabs
 			for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
@@ -1293,7 +1293,7 @@ public class BattleView extends View {
 		public void update(BattleView view, InputControl input) {
 			// Update the buttons
 			view.selectedButton = Button.update(view.pokemonButtons, view.selectedButton, input);
-			view.backButton.update(input, false, Control.BACK);
+			view.backButton.update(input, false, ControlKey.BACK);
 			
 			CharacterData player = view.currentBattle.getPlayer();
 			List<ActivePokemon> list = player.getTeam();
@@ -1554,7 +1554,7 @@ public class BattleView extends View {
 		
 		public void update(BattleView view, InputControl input) {
 			view.selectedButton = Button.update(view.logButtons, view.selectedButton, input);
-			view.backButton.update(input, false, Control.BACK);
+			view.backButton.update(input, false, ControlKey.BACK);
 			
 			int maxLogPage = view.logMessages.size()/LOGS_PER_PAGE;
 			

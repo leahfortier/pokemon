@@ -1,7 +1,7 @@
 package gui.view;
 
 import gui.Button;
-import util.InputControl;
+import input.InputControl;
 
 import java.awt.Graphics;
 

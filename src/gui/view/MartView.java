@@ -10,8 +10,8 @@ import main.Global;
 import main.Type;
 import trainer.CharacterData;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -185,7 +185,7 @@ class MartView extends View {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 
-		if (input.consumeIfDown(Control.ESC)) {
+		if (input.consumeIfDown(ControlKey.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
