@@ -1,11 +1,11 @@
 package gui;
 
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
 import main.Global;
 import pokemon.PokemonInfo;
 import util.DrawUtils;
-import input.InputControl;
-import input.ControlKey;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -20,16 +20,14 @@ import java.awt.image.BufferStrategy;
 public class GameFrame {
 	private static final boolean DEV_MODE = true;
 
-	private static JFrame frame;
+	private static final JFrame frame = new JFrame();
 
 	public static void main(String[] args) {
-		frame = new JFrame();
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
 		Canvas gui = new Canvas();
 		gui.setSize(Global.GAME_SIZE);
-		frame.setResizable(false);
 
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 		frame.getContentPane().add(gui);
 		frame.pack();
 		frame.setVisible(true);
@@ -60,7 +58,7 @@ public class GameFrame {
 			canvas.addMouseListener(control);
 			canvas.addMouseMotionListener(control);
 
-			console = DEV_MODE ? new DevConsole() : null;
+			console = new DevConsole();
 		}
 
 		public void run() {
@@ -117,13 +115,15 @@ public class GameFrame {
 			Game.draw(g);
 
 			// This will fail if it can't acquire the lock on control (just won't display or anything)
-			if (control.consumeIfDown(ControlKey.CONSOLE)) {
-				console.init(control);
-			}
+			if (DEV_MODE) {
+				if (control.consumeIfDown(ControlKey.CONSOLE)) {
+					console.init(control);
+				}
 
-			if (DEV_MODE && console.isShown()) {
-				console.update(dt, control);
-				console.draw(g);
+				if (console.isShown()) {
+					console.update(control);
+					console.draw(g);
+				}
 			}
 
 			g.dispose();

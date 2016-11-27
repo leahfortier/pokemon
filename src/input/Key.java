@@ -2,22 +2,23 @@ package input;
 
 class Key {
     private boolean isDown;
-    private boolean isTyped;
-    private int[] id;
+    private int[] id; // TODO: Change to set
 
     public Key(int... keyId) {
-        isDown = isTyped = false;
+        isDown = false;
         id = keyId;
     }
 
     void consume() {
-        isTyped = false;
         isDown = false;
     }
 
     public void reset() {
         isDown = false;
-        isTyped = false;
+    }
+
+    boolean isKey(char keyChar) {
+        return isKey((int)keyChar);
     }
 
     boolean isKey(int keyCode) {
@@ -36,13 +37,5 @@ class Key {
 
     void setDown(boolean isDown) {
         this.isDown = isDown;
-    }
-
-    boolean isTyped() {
-        return isTyped;
-    }
-
-    void setTyped(boolean isTyped) {
-        this.isTyped = isTyped;
     }
 }

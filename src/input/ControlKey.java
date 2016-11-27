@@ -1,8 +1,9 @@
 package input;
 
 import java.awt.event.KeyEvent;
-import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public enum ControlKey {
@@ -17,6 +18,8 @@ public enum ControlKey {
     ENTER(KeyEvent.VK_ENTER),
     L(KeyEvent.VK_L); // TODO: Is L for the log view in battle? should this be renamed appropriately?
 
+    private static final Set<ControlKey> CONTROL_KEYS = EnumSet.allOf(ControlKey.class);
+
     private final Key key;
 
     ControlKey(int... keyIds) {
@@ -28,7 +31,11 @@ public enum ControlKey {
     }
 
     static List<Key> getKeys(KeyEvent keyEvent) {
-        return Arrays.stream(values())
+        return getKeys(CONTROL_KEYS, keyEvent);
+    }
+
+    static List<Key> getKeys(Set<ControlKey> controlKeys, KeyEvent keyEvent) {
+        return controlKeys.stream()
                 .map(ControlKey::getKey)
                 .filter(key -> key.isKey(keyEvent.getKeyCode()))
                 .collect(Collectors.toList());

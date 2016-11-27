@@ -10,7 +10,7 @@ import item.ItemNamesies;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import trainer.CharacterData;
-import util.InputControl;
+import input.InputControl;
 import util.Save;
 
 import java.awt.Graphics;

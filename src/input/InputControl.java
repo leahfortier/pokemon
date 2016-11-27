@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /*
@@ -19,12 +20,14 @@ import java.util.Set;
  */
 public class InputControl implements MouseListener, KeyListener, MouseMotionListener {
 
+	public static final int INVALID_LOCK = -1;
+
 	// Ignored during text capture (not added to captureText)
-	private static final Set<Character> IGNORED_INPUT_CHARACTERS = new HashSet<>(Arrays.asList(new Character[] {
-					KeyEvent.VK_BACK_SPACE,
-					KeyEvent.VK_ENTER,
-					KeyEvent.VK_ESCAPE
-			}));
+	private static final Set<ControlKey> IGNORED_INPUT_KEYS = new HashSet<>(Arrays.asList(new ControlKey[] {
+			ControlKey.BACK,
+			ControlKey.ENTER,
+			ControlKey.ESC
+	}));
 
 	private Point mouseLocation;
 	private boolean mouseDown;
@@ -33,7 +36,6 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	private StringBuilder capturedText;
 	private boolean isCaptureText;
 
-	public static final int INVALID_LOCK = -1;
 	private int lock;
 
 	public InputControl() {
@@ -46,11 +48,6 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 
 	// Gives you the lock. Careful you don't lose that. -1 means unable to acquire lock
 	public int getLock() {
-		// TODO: Where is this being used? This looks like a typo -- shouldn't it be returning the lock? If so, just remove this whole statement
-		if (lock != INVALID_LOCK) {
-			return INVALID_LOCK;
-		}
-
 		while (lock == INVALID_LOCK) {
 			lock = Global.getRandomInt(Integer.MAX_VALUE);
 		}
@@ -85,8 +82,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		return isDown(controlKey, INVALID_LOCK);
 	}
 	
-	// If there actually isn't a lock, or we have the lock, return the correct value, else
-	// return false
+	// If there actually isn't a lock, or we have the lock, return the correct value, otherwise return false
 	private boolean isDown(ControlKey controlKey, int key) {
 		if (key == INVALID_LOCK || lock == key) {
 			return controlKey.getKey().isDown();
@@ -151,41 +147,50 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		mouseDown = false;
 	}
 
+	private List<Key> getKeys(KeyEvent keyEvent) {
+		if (isCaptureText) {
+			return ControlKey.getKeys(IGNORED_INPUT_KEYS, keyEvent);
+		} else {
+			return ControlKey.getKeys(keyEvent);
+		}
+	}
+
 	@Override
 	public void keyPressed(KeyEvent keyEvent) {
 		isMouseInput = false;
-		for (Key key : ControlKey.getKeys(keyEvent)) {
+		for (Key key : this.getKeys(keyEvent)) {
 			key.setDown(true);
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent keyEvent) {
-		for (Key key : ControlKey.getKeys(keyEvent)) {
+		for (Key key : this.getKeys(keyEvent)) {
 			key.setDown(false);
 		}
 	}
 
 	@Override
 	public void keyTyped(KeyEvent keyEvent) {
-		for (Key key : ControlKey.getKeys(keyEvent)) {
-			key.setTyped(true);
-		}
+		if (isCaptureText) {
 
-		// Append the character if it's not ignored
-		if (isCaptureText && Character.isDefined(keyEvent.getKeyChar()) && !isIgnored(keyEvent.getKeyChar())) {
-			capturedText.append(keyEvent.getKeyChar());
-		}
+			// Append the character if it's not ignored
+			if (Character.isDefined(keyEvent.getKeyChar()) && !isIgnored(keyEvent)) {
+				capturedText.append(keyEvent.getKeyChar());
+			}
 
-		// Delete the last character if backspace was typed
-		if (isCaptureText && keyEvent.getKeyChar() == KeyEvent.VK_BACK_SPACE && capturedText.length() > 0) {
-			capturedText.setLength(capturedText.length() - 1);
+			// Delete the last character if backspace was typed
+			if (keyEvent.getKeyChar() == KeyEvent.VK_BACK_SPACE && capturedText.length() > 0) {
+				capturedText.setLength(capturedText.length() - 1);
+			}
 		}
 	}
 
-	// TODO: Okay these are some god awful variable names
-	private boolean isIgnored(char c) {
-		return IGNORED_INPUT_CHARACTERS.contains(c);
+	private boolean isIgnored(KeyEvent keyEvent) {
+		return IGNORED_INPUT_KEYS.stream()
+				.map(ControlKey::getKey)
+				.filter(key -> key.isKey(keyEvent.getKeyChar()))
+				.count() > 0;
 	}
 
 	@Override

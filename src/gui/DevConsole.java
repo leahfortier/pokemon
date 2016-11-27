@@ -41,7 +41,7 @@ class DevConsole {
 		return true;
 	}
 
-	public void update(int dt, InputControl input) {
+	public void update(InputControl input) {
 		if (key == InputControl.INVALID_LOCK) {
 			return; // Shouldn't even ever be here!
 		}
@@ -73,7 +73,6 @@ class DevConsole {
 		}
 
 		String curr = in.next();
-
 		switch (curr.toLowerCase()) {
 			case "give":
 				give(in);
@@ -108,7 +107,7 @@ class DevConsole {
 			mapEntrance = in.next();
 		}
 		
-		System.out.println("Teleporting Player to map " + mapName +" and to " +(mapEntrance == null? "location (0,0)": "map entrance "+mapEntrance) +".");
+		System.out.println("Teleporting Player to map " + mapName +" and to " + (mapEntrance == null? "location (0,0)": "map entrance "+mapEntrance) +".");
 		Game.getPlayer().setMap(mapName, mapEntrance);
 		
 		if (mapEntrance != null) {
@@ -142,13 +141,12 @@ class DevConsole {
 		String curr = in.next();
 		switch (curr.toLowerCase()) {
 			case "pokemon":
-				String pokemonName = "";
+				PokemonNamesies namesies = PokemonNamesies.getValueOf(in.next());
+
+				// Default values
 				int level = ActivePokemon.MAX_LEVEL;
 				List<Move> moves = null;
 				boolean shiny = false;
-				
-				pokemonName = in.next();
-				PokemonNamesies namesies = PokemonNamesies.getValueOf(pokemonName);
 
 				boolean valid = true;
 				while (in.hasNext() && valid) {
@@ -185,7 +183,7 @@ class DevConsole {
 					}
 				}
 
-				System.out.println("adding " + pokemonName + " " + (shiny ? " shiny " : "") + (moves == null ? " " : moves.toString()));
+				System.out.println("adding " + namesies.getName() + " " + (shiny ? " shiny " : "") + (moves == null ? " " : moves.toString()));
 
 				ActivePokemon pokemon = new ActivePokemon(namesies, level, false, true);
 				if (moves != null) {
