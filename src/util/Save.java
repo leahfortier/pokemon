@@ -1,6 +1,10 @@
 package util;
 
 import gui.view.MainMenuView.Theme;
+import main.Game;
+import main.Global;
+import sound.SoundPlayer;
+import trainer.CharacterData;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,11 +15,6 @@ import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-import main.Game;
-import main.Global;
-import sound.SoundPlayer;
-import trainer.CharacterData;
-
 public final class Save {
 	public static final int NUM_SAVES = 3;
 	
@@ -25,7 +24,7 @@ public final class Save {
 	}
 	
 	public static String formatTime(long l) {
-		return (l/(3600) + ":" + String.format("%02d", ((l%3600)/60)));
+		return String.format("%d:%02d", l/3600, (l%3600)/60);
 	}
 	
 	private static String getSavePath(int fileNum) {
@@ -65,9 +64,6 @@ public final class Save {
 	
 	public static CharacterData load(int fileNum) {
 		CharacterData loadChar = null;
-		
-		//updateSerVariables();
-		
 		try {
 			FileInputStream fin = new FileInputStream(getSavePath(fileNum));
 			ObjectInputStream in = new ObjectInputStream(fin);
@@ -84,8 +80,6 @@ public final class Save {
 		catch (NullPointerException n) {
 			Global.error("Someone's been trying to cheat and edit this save file! Commence deletion!");
 		}
-		
-		//loadChar.updateGlobals(false);
 		
 		return loadChar;
 	}

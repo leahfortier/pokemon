@@ -34,17 +34,11 @@ public class Pokedex implements Serializable {
 	
 	private final Map<PokemonNamesies, PokedexInfo> pokedex;
 
-	private int numSeen;
-	private int numCaught;
-
 	Pokedex() {
 		pokedex = new EnumMap<>(PokemonNamesies.class);
 		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
 			pokedex.put(PokemonInfo.getPokemonInfo(i).namesies(), new PokedexInfo());
 		}
-		
-		numSeen = 0;
-		numCaught = 0;
 	}
 
 	public boolean isNotSeen(PokemonNamesies namesies) {
@@ -83,27 +77,21 @@ public class Pokedex implements Serializable {
 					" " + pokemon + " " + status.getWeight() + " " + info.status.getWeight());
 		}
 		
-		if (status == PokedexStatus.SEEN) {
-			numSeen++;
-		}
-		else { // Caught
-			numCaught++;
-			
-			if (info.status == PokedexStatus.NOT_SEEN) {
-				numSeen++;
-			}
-		}
-		
 		info.status = status;
 		pokedex.put(pokemon, info);
 	}
-	
+
+	// Num seen includes both caught and seen
 	public int numSeen() {
-		return numSeen;
+		return (int)pokedex.entrySet().stream()
+				.filter(pair -> pair.getValue().status != PokedexStatus.NOT_SEEN)
+				.count();
 	}
 	
 	public int numCaught() {
-		return numCaught;
+		return (int)pokedex.entrySet().stream()
+				.filter(pair -> pair.getValue().status == PokedexStatus.CAUGHT)
+				.count();
 	}
 	
 	public List<String> getLocations(PokemonNamesies pokemon) {

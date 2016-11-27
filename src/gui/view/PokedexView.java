@@ -27,10 +27,14 @@ class PokedexView extends View {
 	private static final int RIGHT_ARROW = NUM_BUTTONS - 2;
 	private static final int LEFT_ARROW = NUM_BUTTONS - 3;
 
-	private Pokedex pokedex;
+	private final Pokedex pokedex;
+
 	private PokemonInfo selected;
 	private int selectedButton;
 	private int pageNum;
+
+	private int numSeen;
+	private int numCaught;
 	
 	private Button[] buttons;
 	private Button[][] boxButtons;
@@ -169,8 +173,8 @@ class PokedexView extends View {
 		
 		g.setColor(Color.BLACK);
 		DrawUtils.setFont(g, 20);
-		g.drawString("Seen: " + pokedex.numSeen(), 70, 524);
-		g.drawString("Caught: " + pokedex.numCaught(), 70 + 54*3, 524);
+		g.drawString("Seen: " + numSeen, 70, 524);
+		g.drawString("Caught: " + numCaught, 70 + 54*3, 524);
 		
 		// Description
 		Type[] type = selected.getType();
@@ -233,7 +237,7 @@ class PokedexView extends View {
 		// Buttons
 		DrawUtils.setFont(g, 20);
 		
-		if (notSeen) {
+		if (!notSeen) {
 			BufferedImage pkmImg = partyTiles.getTile(selected.getNumber());
 			for (int i = 0; i < 3; i++) {
 				DrawUtils.drawCenteredImage(g, pkmImg, 464 + 120*i, 478);
@@ -260,5 +264,7 @@ class PokedexView extends View {
 	@Override
 	public void movedToFront() {
 		selected = PokemonInfo.getPokemonInfo(1);
+		numSeen = pokedex.numSeen();
+		numCaught = pokedex.numCaught();
 	}
 }
