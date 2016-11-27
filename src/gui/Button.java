@@ -1,8 +1,9 @@
 package gui;
 
-import map.Direction;
-import input.InputControl;
 import input.ControlKey;
+import input.InputControl;
+import map.Direction;
+import util.Point;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -164,8 +165,10 @@ public class Button {
 		press = false;
 
 		if (input.isMouseInput()) {
-			int mx = input.mouseX;
-			int my = input.mouseY;
+			Point mouseLocation = input.getMouseLocation();
+
+			int mx = mouseLocation.x;
+			int my = mouseLocation.y;
 			
 			if (mx >= x && my >= y && mx <= x + width && my <= y + height) {
 				hover = true;

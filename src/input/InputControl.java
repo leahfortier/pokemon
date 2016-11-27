@@ -1,6 +1,7 @@
 package input;
 
 import main.Global;
+import util.Point;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -25,9 +26,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 					KeyEvent.VK_ESCAPE
 			}));
 
-	// TODO: Point and private
-	public int mouseX;
-	public int mouseY;
+	private Point mouseLocation;
 	private boolean mouseDown;
 	private boolean isMouseInput;
 
@@ -38,8 +37,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	private int lock;
 
 	public InputControl() {
-		mouseX = 0;
-		mouseY = 0;
+		mouseLocation = new Point();
 		mouseDown = false;
 		isCaptureText = false;
 		
@@ -193,8 +191,14 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 
 	@Override
 	public void mouseMoved(MouseEvent mouseEvent) {
-		mouseX = mouseEvent.getX();
-		mouseY = mouseEvent.getY();
+		mouseLocation = new Point(
+				mouseEvent.getX(),
+				mouseEvent.getY()
+		);
+	}
+
+	public Point getMouseLocation() {
+		return this.mouseLocation;
 	}
 
 	public boolean isMouseInput() {
