@@ -20,6 +20,7 @@ import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PC;
+import trainer.pokedex.Pokedex;
 import util.JsonUtils;
 import util.Point;
 import util.StringUtils;

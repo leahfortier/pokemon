@@ -9,7 +9,7 @@ import main.Game;
 import main.Type;
 import pokemon.PC;
 import pokemon.PokemonInfo;
-import trainer.Pokedex;
+import trainer.pokedex.Pokedex;
 import util.DrawUtils;
 import util.PokeString;
 
