@@ -10,8 +10,8 @@ import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import trainer.Pokedex.PokedexStatus;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 import util.StringUtils;
 
 import java.awt.Color;
@@ -19,7 +19,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-public class EvolutionView extends View {
+class EvolutionView extends View {
 	private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
 	
 	private static final float[] prevEvolutionScales = { 1f, 1f, 1f, 1f };
@@ -42,18 +42,18 @@ public class EvolutionView extends View {
 		EVOLVE,
 		END,
 	}
-	
-	public void update(int dt, InputControl input) {
+
+	@Override
+	public void update(int dt) {
+		InputControl input = InputControl.instance();
 		switch (state) {
 			case START:
 				if (message != null) {
-					if (input.mouseDown) {
-						input.consumeMousePress();
+					if (input.consumeIfMouseDown()) {
 						message = null;
 					}
 
-					if (input.isDown(Control.SPACE)) {
-						input.consumeKey(Control.SPACE);
+					if (input.consumeIfDown(ControlKey.SPACE)) {
 						message = null;
 					}
 				}
@@ -70,13 +70,11 @@ public class EvolutionView extends View {
 				break;
 			case END:
 				if (message != null) {
-					if (input.mouseDown) {
-						input.consumeMousePress();
+					if (input.consumeIfMouseDown()) {
 						message = null;
 					}
 
-					if (input.isDown(Control.SPACE)) {
-						input.consumeKey(Control.SPACE);
+					if (input.consumeIfDown(ControlKey.SPACE)) {
 						message = null;
 					}
 				}
@@ -94,6 +92,7 @@ public class EvolutionView extends View {
 		
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		final GameData data = Game.getData();
 
@@ -163,6 +162,7 @@ public class EvolutionView extends View {
 		g2d.drawImage(DrawUtils.colorImage(currEvolution, prevEvolutionScales, prevEvolutionOffsets), px-currEvolution.getWidth()/2, py-currEvolution.getHeight()/2, null);
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.EVOLUTION_VIEW;
 	}
@@ -201,7 +201,8 @@ public class EvolutionView extends View {
 			message = "Your " + preEvolution.getName() + " evolved into " + StringUtils.articleString(postEvolution.getName()) + "!";
 		}
 	}
-	
+
+	@Override
 	public void movedToFront() {
 		state = State.START;
 

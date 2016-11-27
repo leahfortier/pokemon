@@ -25,8 +25,8 @@ import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 import util.Point;
 import util.PokeString;
 import util.Save;
@@ -133,6 +133,7 @@ public class MapView extends View {
 	}
 
 	// TODO: This method should be split up further
+	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
@@ -401,11 +402,12 @@ public class MapView extends View {
 			}
 		}
 	}
-	
 
-	public void update(int dt, InputControl input) {
+	@Override
+	public void update(int dt) {
 		boolean showMessage = true;
 
+		InputControl input = InputControl.instance();
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
 		MENU_TEXT[3] = player.getName();
@@ -481,24 +483,15 @@ public class MapView extends View {
 				showMessage = false;
 				break;
 			case MAP:
-				if (input.isDown(Control.ESC)) {
-					input.consumeKey(Control.ESC);
+				if (input.consumeIfDown(ControlKey.ESC)) {
 					state = VisualState.MENU;
 				}
-
-//				if (input.isDown(Control.SPACE)){
-//					input.consumeKey(Control.SPACE);
-//					//game.setViewMode(Game.ViewMode.BATTLE_VIEW);
-//					game.setViewMode(Game.ViewMode.EVOLUTION_VIEW);
-//				}
 				break;
 			case MESSAGE:
 				if (currentMessage.isChoice()) {
-					if (input.isDown(Control.DOWN)) {
-						input.consumeKey(Control.DOWN);
+					if (input.consumeIfDown(ControlKey.DOWN)) {
 						dialogueSelection++;
-					} else if (input.isDown(Control.UP)) {
-						input.consumeKey(Control.UP);
+					} else if (input.consumeIfDown(ControlKey.UP)) {
 						dialogueSelection--;
 					}
 
@@ -506,9 +499,7 @@ public class MapView extends View {
 					dialogueSelection %= currentMessage.getChoices().length;
 				}
 
-				if (input.isDown(Control.SPACE) && !SoundPlayer.soundPlayer.soundEffectIsPlaying()) {
-					input.consumeKey(Control.SPACE);
-
+				if (!SoundPlayer.soundPlayer.soundEffectIsPlaying() && input.consumeIfDown(ControlKey.SPACE)) {
 					if (currentMessage.isChoice()) {
 						ChoiceMatcher choice = currentMessage.getChoices()[dialogueSelection];
 						Trigger trigger = EntityAction.addActionGroupTrigger(null, null, choice.getActions());
@@ -535,7 +526,7 @@ public class MapView extends View {
 				}
 				break;
 			case MENU:
-				selectedButton = Button.update(menuButtons, selectedButton, input);
+				selectedButton = Button.update(menuButtons, selectedButton);
 				int clicked = -1;
 				for (int i = 0; i < menuButtons.length; i++) {
 					if (menuButtons[i].checkConsumePress()) {
@@ -577,8 +568,7 @@ public class MapView extends View {
 						break;
 				}
 				
-				if (input.isDown(Control.ESC)) {
-					input.consumeKey(Control.ESC);
+				if (input.consumeIfDown(ControlKey.ESC)) {
 					state = VisualState.MAP;
 				}
 				break;
@@ -628,7 +618,7 @@ public class MapView extends View {
 		// Update each non-player entity on the map
 		entityList.stream()
 				.filter(entity -> entity != null && (state == VisualState.MAP || entity != playerEntity))
-				.forEach(entity -> entity.update(dt, entities, currentMap, input, this));
+				.forEach(entity -> entity.update(dt, entities, currentMap, this));
 
 		if (state == VisualState.MAP) {
 			playerEntity.triggerCheck(currentMap);
@@ -674,6 +664,7 @@ public class MapView extends View {
 		}
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.MAP_VIEW;
 	}
@@ -719,6 +710,7 @@ public class MapView extends View {
 		removeQueue.add(e);
 	}
 
+	@Override
 	public void movedToFront() {
 		playAreaMusic();
 	}

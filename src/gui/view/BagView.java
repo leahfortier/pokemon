@@ -22,8 +22,8 @@ import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Trainer;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -209,17 +209,17 @@ class BagView extends View {
 		movedToFront();
 	}
 
-	public void update(int dt, InputControl input) {
+	@Override
+	public void update(int dt) {
 		CharacterData player = Game.getPlayer();
+		InputControl input = InputControl.instance();
 
 		if (message != null) {
-			if (input.mouseDown) {
-				input.consumeMousePress();
+			if (input.consumeIfMouseDown()) {
 				message = null;
 			}
 
-			if (input.isDown(Control.SPACE)) {
-				input.consumeKey(Control.SPACE);
+			if (input.consumeIfDown(ControlKey.SPACE)) {
 				message = null;
 			}
 
@@ -232,7 +232,7 @@ class BagView extends View {
             }
         }
 
-		selectedButton = Button.update(buttons, selectedButton, input);
+		selectedButton = Button.update(buttons, selectedButton);
 
 		for (int i = 0; i < CATEGORIES.length; i++) {
 			if (tabButtons[i].checkConsumePress()) {
@@ -332,8 +332,7 @@ class BagView extends View {
 			returnToMap();
 		}
 
-		if (input.isDown(Control.ESC)) {
-			input.consumeKey(Control.ESC);
+		if (input.consumeIfDown(ControlKey.ESC)) {
 			returnToMap();
 		}
 
@@ -346,6 +345,7 @@ class BagView extends View {
         Game.setViewMode(ViewMode.MAP_VIEW);
     }
 
+    @Override
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
@@ -573,6 +573,7 @@ class BagView extends View {
 		}
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.BAG_VIEW;
 	}
@@ -591,6 +592,7 @@ class BagView extends View {
 		updateActiveButtons();
 	}
 
+	@Override
 	public void movedToFront() {
 		changeCategory(0);
         Messages.clearMessages(MessageState.BAGGIN_IT_UP);

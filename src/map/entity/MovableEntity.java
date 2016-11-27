@@ -6,7 +6,6 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
-import util.InputControl;
 import util.Point;
 
 import java.awt.image.BufferedImage;
@@ -47,7 +46,7 @@ public abstract class MovableEntity extends Entity {
 	}
 
 	@Override
-	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
+	public void update(int dt, Entity[][] entity, MapData map, MapView view) {
 		if (transitionTime != 0) {
 			transitionTime += dt;	
 		}

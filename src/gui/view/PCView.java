@@ -1,14 +1,9 @@
 package gui.view;
 
+import battle.attack.Move;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.List;
-
 import main.Game;
 import main.Type;
 import pokemon.ActivePokemon;
@@ -17,11 +12,15 @@ import pokemon.Stat;
 import trainer.CharacterData;
 import trainer.Trainer;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
-import battle.attack.Move;
+import input.InputControl;
+import input.ControlKey;
 
-public class PCView extends View {
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.List;
+
+class PCView extends View {
 	private static final int NUM_BUTTONS = PC.BOX_HEIGHT*PC.BOX_WIDTH + Trainer.MAX_POKEMON + 6;
 	private static final int RETURN = NUM_BUTTONS - 1;
 	private static final int RELEASE = NUM_BUTTONS - 2;
@@ -49,7 +48,7 @@ public class PCView extends View {
 	private Button releaseButton;
 	private Button returnButton;
 	
-	public PCView() {
+	PCView() {
 		pc = Game.getPlayer().getPC();
 		
 		selectedButton = PARTY;
@@ -87,9 +86,10 @@ public class PCView extends View {
 		party = true;
 		selected = Game.getPlayer().front();
 	}
-	
-	public void update(int dt, InputControl input) {
-		selectedButton = Button.update(buttons, selectedButton, input);
+
+	@Override
+	public void update(int dt) {
+		selectedButton = Button.update(buttons, selectedButton);
 
 		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
 			for (int j = 0; j < PC.BOX_WIDTH; j++) {
@@ -128,20 +128,17 @@ public class PCView extends View {
 			}
 		}
 		
-		if (leftButton.checkConsumePress())
-		{
+		if (leftButton.checkConsumePress()) {
 			pc.prevBox();
 			movedToFront();
 		}
 		
-		if (rightButton.checkConsumePress())
-		{
+		if (rightButton.checkConsumePress()) {
 			pc.nextBox();
 			movedToFront();
 		}
 		
-		if (switchButton.checkConsumePress())
-		{
+		if (switchButton.checkConsumePress()) {
 			switchClicked = !switchClicked;
 			updateActiveButtons();
 		}
@@ -161,24 +158,21 @@ public class PCView extends View {
 			updateActiveButtons();
 		}
 		
-		if (releaseButton.checkConsumePress())
-		{
+		if (releaseButton.checkConsumePress()) {
 			pc.releasePokemon(selected);
 			movedToFront();
 		}
 		
-		if (returnButton.checkConsumePress())
-		{
+		if (returnButton.checkConsumePress()) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 		
-		if (input.isDown(Control.ESC))
-		{
-			input.consumeKey(Control.ESC);
+		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
 
@@ -200,17 +194,16 @@ public class PCView extends View {
 		DrawUtils.setFont(g, 20);
 		DrawUtils.drawCenteredWidthString(g, "Box " + (pc.getBoxNum() + 1), 214, 65);
 		
-		for (int i = 0; i < PC.BOX_HEIGHT; i++)
-		{
-			for (int j = 0; j < PC.BOX_WIDTH; j++)
-			{
+		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
+			for (int j = 0; j < PC.BOX_WIDTH; j++) {
 				ActivePokemon p = box[j][i];
-				if (p == null) continue;
+				if (p == null) {
+					continue;
+				}
 				
 				g.translate(boxButtons[j][i].x, boxButtons[j][i].y);
 				
-				if (p == selected)
-				{
+				if (p == selected) {
 					g.drawImage(tiles.getTile(0x32), 0, 0, null);
 				}
 				
@@ -232,13 +225,11 @@ public class PCView extends View {
 		g.drawImage(tiles.getTile(0x33), 40, 478, null);
 
 		List<ActivePokemon> team = Game.getPlayer().getTeam();
-		for (int i = 0; i < team.size(); i++)
-		{
+		for (int i = 0; i < team.size(); i++) {
 			g.translate(partyButtons[i].x, partyButtons[i].y);
 			
 			ActivePokemon p = team.get(i);
-			if (p == selected)
-			{
+			if (p == selected) {
 				g.drawImage(tiles.getTile(0x32), 0, 0, null);
 			}
 			
@@ -374,10 +365,12 @@ public class PCView extends View {
 		}
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.PC_VIEW;
 	}
 
+	@Override
 	public void movedToFront() {
 		party = true;
 		selected = Game.getPlayer().front();

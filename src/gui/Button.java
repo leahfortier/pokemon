@@ -1,8 +1,9 @@
 package gui;
 
+import input.ControlKey;
+import input.InputControl;
 import map.Direction;
-import util.InputControl;
-import util.InputControl.Control;
+import util.Point;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -113,20 +114,20 @@ public class Button {
 		}
 	}
 
-	public static int update(Button[] buttons, int selected, InputControl input) {
+	public static int update(Button[] buttons, int selected) {
 		if (!buttons[selected].forceHover) {
 			buttons[selected].setForceHover(true);
 		}
-		
+
+		InputControl input = InputControl.instance();
 		for (Direction direction : Direction.values()) {
-			if (input.isDown(direction.key)) {
-				input.consumeKey(direction.key);
+			if (input.consumeIfDown(direction.getKey())) {
 				selected = Button.transition(buttons, selected, direction);
 			}
 		}
 
 		for (int i = 0; i < buttons.length; i++) {
-			buttons[i].update(input, i == selected);
+			buttons[i].update(i == selected);
 			
 			if (buttons[i].isHover()) {
 				buttons[selected].setForceHover(false);
@@ -139,7 +140,7 @@ public class Button {
 		return selected;
 	}
 
-	public static int transition(Button[] buttons, int index, Direction direction) {
+	private static int transition(Button[] buttons, int index, Direction direction) {
 		int next = buttons[index].transition[direction.ordinal()];
 		
 		while (next != NO_TRANSITION && !buttons[next].isActive()) {
@@ -156,7 +157,7 @@ public class Button {
 		return next;
 	}
 
-	public void update(InputControl input, boolean isSelected, Control... optionalKeys) {
+	public void update(boolean isSelected, ControlKey... optionalKeys) {
 		if (!active) {
 			return;
 		}
@@ -164,34 +165,34 @@ public class Button {
 		hover = false;
 		press = false;
 
+		InputControl input = InputControl.instance();
 		if (input.isMouseInput()) {
-			int mx = input.mouseX;
-			int my = input.mouseY;
+			Point mouseLocation = input.getMouseLocation();
+
+			int mx = mouseLocation.x;
+			int my = mouseLocation.y;
 			
 			if (mx >= x && my >= y && mx <= x + width && my <= y + height) {
 				hover = true;
-				if (input.mouseDown) {
-					input.consumeMousePress();
+				if (input.consumeIfMouseDown()) {
 					press = true;
 				}
 			}
 		}
 
-		if (isSelected && input.isDown(Control.SPACE)) {
-			input.consumeKey(Control.SPACE);
+		if (isSelected && input.consumeIfDown(ControlKey.SPACE)) {
 			press = true;
 		}
 
-		for (Control c : optionalKeys) {
-			if (input.isDown(c)) {
-				input.consumeKey(c);
+		for (ControlKey c : optionalKeys) {
+			if (input.consumeIfDown(c)) {
 				press = true;
 			}
 		}
 	}
 
-	public void update(InputControl input) {
-		update(input, false);
+	public void update() {
+		update(false);
 	}
 
 	public boolean isHover() {

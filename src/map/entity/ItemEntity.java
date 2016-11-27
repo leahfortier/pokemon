@@ -9,7 +9,7 @@ import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import item.ItemNamesies;
 import pattern.GroupTriggerMatcher;
-import util.InputControl;
+import input.InputControl;
 import util.JsonUtils;
 import util.Point;
 import util.StringUtils;
@@ -31,7 +31,7 @@ public class ItemEntity extends Entity {
 	}
 
 	@Override
-	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
+	public void update(int dt, Entity[][] entity, MapData map, MapView view) {
 		if (hasTriggered) {
 			view.removeEntity(this);
 		}

@@ -27,8 +27,8 @@ import trainer.CharacterData;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -178,7 +178,7 @@ public class BattleView extends View {
 				724 - 628,
 				513 - 473,
 				Button.HoverAction.ARROW,
-				new int[] {SWITCH_BUTTON, RUN_BUTTON, FIGHT_BUTTON, RUN_BUTTON}
+				new int[] { SWITCH_BUTTON, RUN_BUTTON, FIGHT_BUTTON, RUN_BUTTON }
 		);
 		menuButtons[SWITCH_BUTTON] = pokemonBtn = new Button(
 				452,
@@ -186,7 +186,7 @@ public class BattleView extends View {
 				609 - 452,
 				571 - 525,
 				Button.HoverAction.ARROW,
-				new int[] {RUN_BUTTON, FIGHT_BUTTON, BAG_BUTTON, FIGHT_BUTTON}
+				new int[] { RUN_BUTTON, FIGHT_BUTTON, BAG_BUTTON, FIGHT_BUTTON }
 		);
 		menuButtons[RUN_BUTTON] = runBtn = new Button(
 				628,
@@ -194,7 +194,7 @@ public class BattleView extends View {
 				724 - 628,
 				571 - 525,
 				Button.HoverAction.ARROW,
-				new int[] {FIGHT_BUTTON, BAG_BUTTON, SWITCH_BUTTON, BAG_BUTTON}
+				new int[] { FIGHT_BUTTON, BAG_BUTTON, SWITCH_BUTTON, BAG_BUTTON }
 		);
 		
 		// Move Buttons
@@ -301,7 +301,7 @@ public class BattleView extends View {
 		}
 		
 		public interface UpdateVisualState {
-			void update(BattleView view, InputControl input);
+			void update(BattleView view);
 			void set(BattleView view);
 			void draw(BattleView view, Graphics g, TileSet tiles);
 		}
@@ -669,12 +669,14 @@ public class BattleView extends View {
 	// Updates when in the menu state
 	private static VisualState.UpdateVisualState updateMenu = new VisualState.UpdateVisualState() {
 
+		@Override
 		public void set(BattleView view) {
 			for (Button b: view.menuButtons) {
 				b.setForceHover(false);
 			}
 		}
-		
+
+		@Override
 		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
 			g.drawImage(tiles.getTile(0x2), 0, 0, null);
@@ -690,10 +692,11 @@ public class BattleView extends View {
 				b.draw(g);
 			}
 		}
-		
-		public void update(BattleView view, InputControl input) {
+
+		@Override
+		public void update(BattleView view) {
 			// Update menu buttons
-			view.selectedButton = Button.update(view.menuButtons, view.selectedButton, input);
+			view.selectedButton = Button.update(view.menuButtons, view.selectedButton);
 			
 			// Show Bag View
 			if (view.bagBtn.checkConsumePress()) {
@@ -720,15 +723,14 @@ public class BattleView extends View {
 					view.cycleMessage(false);
 				}
 			}
-			else if (input.isDown(Control.L)) {
-				input.consumeKey(Control.L);
+			else if (InputControl.instance().consumeIfDown(ControlKey.L)) {
 				view.logPage = 0;
 				view.logMessages = view.currentBattle.getPlayer().getLogMessages();
 				
 				if (view.logMessages.size() / LOGS_PER_PAGE > 0) {
 					view.selectedButton = LOG_RIGHT_BUTTON;
 					view.logRightButton.setActive(true);
-					view.selectedButton = Button.update(view.logButtons, view.selectedButton, input);
+					view.selectedButton = Button.update(view.logButtons, view.selectedButton);
 				}
 				else {
 					view.logRightButton.setActive(false);
@@ -742,7 +744,8 @@ public class BattleView extends View {
 	
 	// Updates when in fight mode (selecting a move menu)
 	private static VisualState.UpdateVisualState updateFight = new VisualState.UpdateVisualState() {
-		
+
+		@Override
 		public void set(BattleView view) {
 			view.selectedButton = view.lastMoveUsed;
 			view.selectedMoveList = view.currentBattle.getPlayer().front().getMoves(view.currentBattle);
@@ -754,7 +757,8 @@ public class BattleView extends View {
 				b.setForceHover(false);
 			}
 		}
-		
+
+		@Override
 		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x20), 415, 440, null);
 			g.drawImage(tiles.getTile(0x21), 0, 440, null);
@@ -801,11 +805,12 @@ public class BattleView extends View {
 			
 			view.backButton.draw(g);
 		}
-		
-		public void update(BattleView view, InputControl input) {
+
+		@Override
+		public void update(BattleView view) {
 			// Update move buttons and the back button
-			view.selectedButton = Button.update(view.moveButtons, view.selectedButton, input);
-			view.backButton.update(input, false, Control.BACK);
+			view.selectedButton = Button.update(view.moveButtons, view.selectedButton);
+			view.backButton.update(false, ControlKey.BACK);
 			
 			// Get the Pokemon that is attacking and their corresponsing move list
 			ActivePokemon front = view.currentBattle.getPlayer().front();
@@ -837,8 +842,10 @@ public class BattleView extends View {
 	
 	private static VisualState.UpdateVisualState updateMessage = new VisualState.UpdateVisualState() {
 
+		@Override
 		public void set(BattleView view) {}
 
+		@Override
 		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
 			
@@ -860,19 +867,19 @@ public class BattleView extends View {
 				}
 			}
 		}
-		
-		public void update(BattleView view, InputControl input) {
+
+		@Override
+		public void update(BattleView view) {
 			boolean pressed = false;
+			InputControl input = InputControl.instance();
 			
 			// Consume input for mouse clicks and spacebars
-			if (input.mouseDown) {
+			if (input.consumeIfMouseDown()) {
 				pressed = true;
-				input.consumeMousePress();
 			}
 
-			if (input.isDown(Control.SPACE)) {
+			if (input.consumeIfDown(ControlKey.SPACE)) {
 				pressed = true;
-				input.consumeKey(Control.SPACE);
 			}
 			
 			// Don't go to the next message if an animation is playing 
@@ -886,6 +893,7 @@ public class BattleView extends View {
 	// Handles updates for the bag view
 	private static VisualState.UpdateVisualState updateBag = new VisualState.UpdateVisualState() {
 
+		@Override
 		public void set(BattleView view) {
 			int pageSize = view.currentBattle.getPlayer().getBag().getCategory(BATTLE_BAG_CATEGORIES[view.selectedBagTab]).size();
 			
@@ -902,6 +910,7 @@ public class BattleView extends View {
 			
 		}
 
+		@Override
 		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x10), 0, 160, null);
 			g.drawImage(tiles.getTile(BATTLE_BAG_CATEGORIES[view.selectedBagTab].getImageNumber()), 30, 190, null);
@@ -983,11 +992,12 @@ public class BattleView extends View {
 			
 			view.backButton.draw(g);
 		}
-		
-		public void update(BattleView view, InputControl input) {
+
+		@Override
+		public void update(BattleView view) {
 			// Update all bag buttons and the back button
-			view.selectedButton = Button.update(view.bagButtons, view.selectedButton, input);
-			view.backButton.update(input, false, Control.BACK);
+			view.selectedButton = Button.update(view.bagButtons, view.selectedButton);
+			view.backButton.update(false, ControlKey.BACK);
 			
 			// Check tabs
 			for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
@@ -1081,6 +1091,7 @@ public class BattleView extends View {
 	
 	private static VisualState.UpdateVisualState updatePokemon = new VisualState.UpdateVisualState() {
 
+		@Override
 		public void set(BattleView view) {
 			List<ActivePokemon> list = view.currentBattle.getPlayer().getTeam();
 			for (int i = 0; i < view.pokemonTabButtons.length; i++) {
@@ -1096,6 +1107,7 @@ public class BattleView extends View {
 			}
 		}
 
+		@Override
 		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			// Draw Background
 			g.drawImage(tiles.getTile(0x10), 0, 160, null);
@@ -1292,11 +1304,12 @@ public class BattleView extends View {
 			
 			view.backButton.draw(g);
 		}
-		
-		public void update(BattleView view, InputControl input) {
+
+		@Override
+		public void update(BattleView view) {
 			// Update the buttons
-			view.selectedButton = Button.update(view.pokemonButtons, view.selectedButton, input);
-			view.backButton.update(input, false, Control.BACK);
+			view.selectedButton = Button.update(view.pokemonButtons, view.selectedButton);
+			view.backButton.update(false, ControlKey.BACK);
 			
 			CharacterData player = view.currentBattle.getPlayer();
 			List<ActivePokemon> list = player.getTeam();
@@ -1357,8 +1370,10 @@ public class BattleView extends View {
 		
 	private static VisualState.UpdateVisualState updateLearnMoveQuestion = new VisualState.UpdateVisualState() {
 
+		@Override
 		public void set(BattleView view) {}
 
+		@Override
 		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
 			g.setColor(Color.BLACK);
@@ -1392,10 +1407,11 @@ public class BattleView extends View {
 			view.yesButton.draw(g);
 			view.noButton.draw(g);
 		}
-		
-		public void update(BattleView view, InputControl input) {
-			view.yesButton.update(input);
-			view.noButton.update(input);
+
+		@Override
+		public void update(BattleView view) {
+			view.yesButton.update();
+			view.noButton.update();
 			
 			if (view.noButton.checkConsumePress()) {
 				// This is all done really silly, so we need to do this
@@ -1418,8 +1434,10 @@ public class BattleView extends View {
 	
 	private static VisualState.UpdateVisualState updateLearnMoveDelete = new VisualState.UpdateVisualState() {
 
+		@Override
 		public void set(BattleView view) {}
 
+		@Override
 		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x3), 0, 439, null);
 			
@@ -1479,10 +1497,11 @@ public class BattleView extends View {
 			
 			view.newMoveButton.draw(g);
 		}
-		
-		public void update(BattleView view, InputControl input) {
-			view.selectedButton = Button.update(view.moveButtons, view.selectedButton, input);
-			view.newMoveButton.update(input);
+
+		@Override
+		public void update(BattleView view) {
+			view.selectedButton = Button.update(view.moveButtons, view.selectedButton);
+			view.newMoveButton.update();
 			
 			for (int i = 0; i < view.moveButtons.length; i++) {
 				if (view.moveButtons[i].checkConsumePress()) {
@@ -1523,8 +1542,10 @@ public class BattleView extends View {
 	
 	private static VisualState.UpdateVisualState updateLog = new VisualState.UpdateVisualState() {
 
+		@Override
 		public void set(BattleView view) {}
 
+		@Override
 		public void draw(BattleView view, Graphics g, TileSet tiles) {
 			g.drawImage(tiles.getTile(0x10), 0, 160, null);
 
@@ -1554,10 +1575,11 @@ public class BattleView extends View {
 			View.drawArrows(g, null, view.backButton);
 			view.backButton.draw(g);
 		}
-		
-		public void update(BattleView view, InputControl input) {
-			view.selectedButton = Button.update(view.logButtons, view.selectedButton, input);
-			view.backButton.update(input, false, Control.BACK);
+
+		@Override
+		public void update(BattleView view) {
+			view.selectedButton = Button.update(view.logButtons, view.selectedButton);
+			view.backButton.update(false, ControlKey.BACK);
 			
 			int maxLogPage = view.logMessages.size()/LOGS_PER_PAGE;
 			
@@ -1588,9 +1610,10 @@ public class BattleView extends View {
 			}
 		}
 	};
-	
-	public void update(int dt, InputControl input) {
-		state.updateVisualState.update(this, input);
+
+	@Override
+	public void update(int dt) {
+		state.updateVisualState.update(this);
 		update.performUpdate(this);
 	}
 	
@@ -1707,7 +1730,8 @@ public class BattleView extends View {
 			message = null;
 		}
 	}
-	
+
+	@Override
 	public void draw(Graphics g) {
 		Dimension d = Global.GAME_SIZE;
 		
@@ -1768,10 +1792,12 @@ public class BattleView extends View {
 		state.updateVisualState.draw(this, g, tiles);
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.BATTLE_VIEW;
 	}
 
+	@Override
 	public void movedToFront() {
 		cycleMessage(false);
 	}
