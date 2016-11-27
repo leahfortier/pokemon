@@ -209,8 +209,10 @@ class BagView extends View {
 		movedToFront();
 	}
 
-	public void update(int dt, InputControl input) {
+	@Override
+	public void update(int dt) {
 		CharacterData player = Game.getPlayer();
+		InputControl input = InputControl.instance();
 
 		if (message != null) {
 			if (input.consumeIfMouseDown()) {
@@ -230,7 +232,7 @@ class BagView extends View {
             }
         }
 
-		selectedButton = Button.update(buttons, selectedButton, input);
+		selectedButton = Button.update(buttons, selectedButton);
 
 		for (int i = 0; i < CATEGORIES.length; i++) {
 			if (tabButtons[i].checkConsumePress()) {
@@ -343,6 +345,7 @@ class BagView extends View {
         Game.setViewMode(ViewMode.MAP_VIEW);
     }
 
+    @Override
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
@@ -570,6 +573,7 @@ class BagView extends View {
 		}
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.BAG_VIEW;
 	}
@@ -588,6 +592,7 @@ class BagView extends View {
 		updateActiveButtons();
 	}
 
+	@Override
 	public void movedToFront() {
 		changeCategory(0);
         Messages.clearMessages(MessageState.BAGGIN_IT_UP);

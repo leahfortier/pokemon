@@ -12,13 +12,14 @@ import trainer.Pokedex.PokedexStatus;
 import util.DrawUtils;
 import input.InputControl;
 import input.ControlKey;
+import util.PokeString;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class PokedexView extends View {
+class PokedexView extends View {
 	private static final int PER_PAGE = PC.BOX_HEIGHT*PC.BOX_WIDTH;
 	private static final int NUM_PAGES = PokemonInfo.NUM_POKEMON/PER_PAGE;
 	
@@ -38,7 +39,7 @@ public class PokedexView extends View {
 	private Button rightButton;
 	private Button returnButton;
 	
-	public PokedexView() {
+	PokedexView() {
 		this.pokedex = Game.getPlayer().getPokedex();
 		selectedButton = 0;
 		pageNum = 0;
@@ -69,9 +70,10 @@ public class PokedexView extends View {
 		
 		selected = PokemonInfo.getPokemonInfo(1);
 	}
-	
-	public void update(int dt, InputControl input) {
-		selectedButton = Button.update(buttons, selectedButton, input);
+
+	@Override
+	public void update(int dt) {
+		selectedButton = Button.update(buttons, selectedButton);
 
 		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
 			for (int j = 0; j < PC.BOX_WIDTH; j++) {
@@ -103,11 +105,12 @@ public class PokedexView extends View {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 		
-		if (input.consumeIfDown(ControlKey.ESC)) {
+		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
 
@@ -124,7 +127,7 @@ public class PokedexView extends View {
 		
 		g.setColor(Color.BLACK);
 		DrawUtils.setFont(g, 20);
-		DrawUtils.drawCenteredWidthString(g, "Pok\u00e9dex", 214, 65); // TODO: Use constant
+		DrawUtils.drawCenteredWidthString(g, PokeString.POKEDEX, 214, 65);
 		
 		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
 			for (int j = 0; j < PC.BOX_WIDTH; j++) {
@@ -212,7 +215,7 @@ public class PokedexView extends View {
 				g.drawImage(typeTiles.getTile(type[1].getImageIndex()), 596 + 707 - 669, 98, null);
 			}
 			
-			g.drawString((status == PokedexStatus.SEEN ? "???" : selected.getClassification()) + " Pok\u00e9mon", 427, 179);
+			g.drawString((status == PokedexStatus.SEEN ? "???" : selected.getClassification()) + " " + PokeString.POKEMON, 427, 179);
 			g.drawString("Height: " + (status == PokedexStatus.SEEN ? "???'??\"" : String.format("%d'%02d\"", selected.getHeight()/12, selected.getHeight()%12)), 427, 198);
 			g.drawString("Weight: " + (status == PokedexStatus.SEEN ? "???.?" : selected.getWeight()) + " lbs", 427, 217);
 			
@@ -249,10 +252,12 @@ public class PokedexView extends View {
 		return PER_PAGE*pageNum + j*PC.BOX_WIDTH + i;
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.POKEDEX_VIEW;
 	}
 
+	@Override
 	public void movedToFront() {
 		selected = PokemonInfo.getPokemonInfo(1);
 	}

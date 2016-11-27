@@ -19,6 +19,11 @@ import java.util.Set;
  * Then release the lock. Easy peasy.
  */
 public class InputControl implements MouseListener, KeyListener, MouseMotionListener {
+	private static final InputControl instance = new InputControl();
+	public static InputControl instance() {
+		return instance;
+	}
+
 
 	public static final int INVALID_LOCK = -1;
 
@@ -38,7 +43,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 
 	private int lock;
 
-	public InputControl() {
+	private InputControl() {
 		mouseLocation = new Point();
 		mouseDown = false;
 		isCaptureText = false;
@@ -118,11 +123,11 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 
 	public String stopTextCapture() {
 		isCaptureText = false;
-		return capturedText.toString();
+		return getCapturedText();
 	}
 
 	public String getCapturedText() {
-		return getCapturedText();
+		return capturedText.toString();
 	}
 
 	public boolean isCapturingText() {

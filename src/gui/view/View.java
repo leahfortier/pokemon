@@ -1,13 +1,12 @@
 package gui.view;
 
 import gui.Button;
-import input.InputControl;
 
 import java.awt.Graphics;
 
 public abstract class View {
 
-	public abstract void update(int dt, InputControl input);
+	public abstract void update(int dt);
 	public abstract void draw(Graphics g);
 	public abstract ViewMode getViewModel();
 	public abstract void movedToFront();

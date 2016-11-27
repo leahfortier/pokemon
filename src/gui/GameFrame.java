@@ -45,14 +45,13 @@ public class GameFrame {
 
 	private static class GameLoop implements Runnable {
 		private final Canvas gui;
-		private final InputControl control;
 		private final DevConsole console;
 
 		private BufferStrategy strategy;
 
 		private GameLoop(Canvas canvas) {
 			gui = canvas;
-			control = new InputControl();
+			InputControl control = InputControl.instance();
 			
 			canvas.addKeyListener(control);
 			canvas.addMouseListener(control);
@@ -109,19 +108,19 @@ public class GameFrame {
 		}
 
 		private void drawFrame(int dt) {
-			Game.update(dt, control);
+			Game.update(dt);
 
 			Graphics g = strategy.getDrawGraphics();
 			Game.draw(g);
 
 			// This will fail if it can't acquire the lock on control (just won't display or anything)
 			if (DEV_MODE) {
-				if (control.consumeIfDown(ControlKey.CONSOLE)) {
-					console.init(control);
+				if (InputControl.instance().consumeIfDown(ControlKey.CONSOLE)) {
+					console.init();
 				}
 
 				if (console.isShown()) {
-					console.update(control);
+					console.update();
 					console.draw(g);
 				}
 			}

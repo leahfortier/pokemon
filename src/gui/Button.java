@@ -114,11 +114,12 @@ public class Button {
 		}
 	}
 
-	public static int update(Button[] buttons, int selected, InputControl input) {
+	public static int update(Button[] buttons, int selected) {
 		if (!buttons[selected].forceHover) {
 			buttons[selected].setForceHover(true);
 		}
-		
+
+		InputControl input = InputControl.instance();
 		for (Direction direction : Direction.values()) {
 			if (input.consumeIfDown(direction.getKey())) {
 				selected = Button.transition(buttons, selected, direction);
@@ -126,7 +127,7 @@ public class Button {
 		}
 
 		for (int i = 0; i < buttons.length; i++) {
-			buttons[i].update(input, i == selected);
+			buttons[i].update(i == selected);
 			
 			if (buttons[i].isHover()) {
 				buttons[selected].setForceHover(false);
@@ -139,7 +140,7 @@ public class Button {
 		return selected;
 	}
 
-	public static int transition(Button[] buttons, int index, Direction direction) {
+	private static int transition(Button[] buttons, int index, Direction direction) {
 		int next = buttons[index].transition[direction.ordinal()];
 		
 		while (next != NO_TRANSITION && !buttons[next].isActive()) {
@@ -156,7 +157,7 @@ public class Button {
 		return next;
 	}
 
-	public void update(InputControl input, boolean isSelected, ControlKey... optionalKeys) {
+	public void update(boolean isSelected, ControlKey... optionalKeys) {
 		if (!active) {
 			return;
 		}
@@ -164,6 +165,7 @@ public class Button {
 		hover = false;
 		press = false;
 
+		InputControl input = InputControl.instance();
 		if (input.isMouseInput()) {
 			Point mouseLocation = input.getMouseLocation();
 
@@ -189,8 +191,8 @@ public class Button {
 		}
 	}
 
-	public void update(InputControl input) {
-		update(input, false);
+	public void update() {
+		update(false);
 	}
 
 	public boolean isHover() {

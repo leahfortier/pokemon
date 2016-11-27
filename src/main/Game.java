@@ -53,18 +53,18 @@ public class Game {
 		characterData.front().giveItem(ItemNamesies.ORAN_BERRY);
 	}
 	
-	private void checkViewSwitch(InputControl input) {
+	private void checkViewSwitch() {
 		if (!currentView.getViewModel().equals(currentViewMode)) {
-			input.resetKeys();
+			InputControl.instance().resetKeys();
 			currentView = viewMap.get(currentViewMode);
 			currentView.movedToFront();
 		}
 	}
 
-	public static void update(int dt, InputControl input) {
-		game.checkViewSwitch(input);
-		game.currentView.update(dt, input);
-		game.checkViewSwitch(input);
+	public static void update(int dt) {
+		game.checkViewSwitch();
+		game.currentView.update(dt);
+		game.checkViewSwitch();
 	}
 
 	public static void setBattleViews(final Battle battle, final boolean seenWildPokemon) {

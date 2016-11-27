@@ -7,7 +7,6 @@ import map.Direction;
 import map.MapData;
 import map.entity.EntityAction.BattleAction;
 import trainer.CharacterData;
-import input.InputControl;
 import util.Point;
 import util.StringUtils;
 
@@ -55,8 +54,8 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	@Override
-	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
-		super.update(dt, entity, map, input, view);
+	public void update(int dt, Entity[][] entity, MapData map, MapView view) {
+		super.update(dt, entity, map, view);
 
 		// Decrease wait time
 		waitTime = Math.max(0, waitTime - dt);

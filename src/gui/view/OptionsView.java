@@ -20,7 +20,9 @@ class OptionsView extends View {
 		color = new Color(0, 0, 0);
 	}
 
-	public void update(int dt, InputControl input) {
+	@Override
+	public void update(int dt) {
+		InputControl input = InputControl.instance();
 		if (input.consumeIfMouseDown()) {
 			musicOn = !musicOn;
 			SoundPlayer.soundPlayer.toggleMusic();
@@ -47,6 +49,7 @@ class OptionsView extends View {
 		this.color = new Color(r, g, b);
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		Dimension d = Global.GAME_SIZE;
 		
@@ -86,9 +89,11 @@ class OptionsView extends View {
 
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.OPTIONS_VIEW;
 	}
 
+	@Override
 	public void movedToFront() {}
 }

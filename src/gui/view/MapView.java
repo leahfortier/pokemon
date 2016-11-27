@@ -133,6 +133,7 @@ public class MapView extends View {
 	}
 
 	// TODO: This method should be split up further
+	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
@@ -401,11 +402,12 @@ public class MapView extends View {
 			}
 		}
 	}
-	
 
-	public void update(int dt, InputControl input) {
+	@Override
+	public void update(int dt) {
 		boolean showMessage = true;
 
+		InputControl input = InputControl.instance();
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
 		MENU_TEXT[3] = player.getName();
@@ -524,7 +526,7 @@ public class MapView extends View {
 				}
 				break;
 			case MENU:
-				selectedButton = Button.update(menuButtons, selectedButton, input);
+				selectedButton = Button.update(menuButtons, selectedButton);
 				int clicked = -1;
 				for (int i = 0; i < menuButtons.length; i++) {
 					if (menuButtons[i].checkConsumePress()) {
@@ -616,7 +618,7 @@ public class MapView extends View {
 		// Update each non-player entity on the map
 		entityList.stream()
 				.filter(entity -> entity != null && (state == VisualState.MAP || entity != playerEntity))
-				.forEach(entity -> entity.update(dt, entities, currentMap, input, this));
+				.forEach(entity -> entity.update(dt, entities, currentMap, this));
 
 		if (state == VisualState.MAP) {
 			playerEntity.triggerCheck(currentMap);
@@ -662,6 +664,7 @@ public class MapView extends View {
 		}
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.MAP_VIEW;
 	}
@@ -707,6 +710,7 @@ public class MapView extends View {
 		removeQueue.add(e);
 	}
 
+	@Override
 	public void movedToFront() {
 		playAreaMusic();
 	}

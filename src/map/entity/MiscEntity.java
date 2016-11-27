@@ -5,7 +5,6 @@ import gui.view.MapView;
 import main.Game;
 import map.Direction;
 import map.MapData;
-import input.InputControl;
 import util.Point;
 
 import java.awt.image.BufferedImage;
@@ -23,7 +22,7 @@ public class MiscEntity extends Entity {
 	}
 
 	@Override
-	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {}
+	public void update(int dt, Entity[][] entity, MapData map, MapView view) {}
 
 	@Override
 	protected BufferedImage getFrame() {

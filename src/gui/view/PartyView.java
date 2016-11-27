@@ -18,7 +18,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class PartyView extends View {
+class PartyView extends View {
 	private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + Move.MAX_MOVES + 2;
 	private static final int MOVES = Trainer.MAX_POKEMON;
 	private static final int RETURN = NUM_BUTTONS - 1;
@@ -82,8 +82,8 @@ public class PartyView extends View {
 	}
 
 	@Override
-	public void update(int dt, InputControl input) {
-		selectedButton = Button.update(buttons, selectedButton, input);
+	public void update(int dt) {
+		selectedButton = Button.update(buttons, selectedButton);
 		
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
 			if (tabButtons[i].checkConsumePress()) {
@@ -109,11 +109,12 @@ public class PartyView extends View {
 			updateActiveButtons();
 		}
 		
-		if (input.consumeIfDown(ControlKey.ESC)) {
+		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
 
@@ -383,10 +384,12 @@ public class PartyView extends View {
 		switchButton.setActive(team.size() > 1);
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.PARTY_VIEW;
 	}
 
+	@Override
 	public void movedToFront() {
 		selectedTab = 0;
 		selectedButton = 0;

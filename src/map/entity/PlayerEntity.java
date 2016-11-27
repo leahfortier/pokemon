@@ -41,10 +41,11 @@ public class PlayerEntity extends MovableEntity {
 	}
 
 	@Override
-	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
-		super.update(dt, entity, map, input, view);
+	public void update(int dt, Entity[][] entity, MapData map, MapView view) {
+		super.update(dt, entity, map, view);
 
 		CharacterData player = Game.getPlayer();
+		InputControl input = InputControl.instance();
 
 		if (!this.getLocation().equals(player.getLocation())) {
 			entity[getX()][getY()] = null;

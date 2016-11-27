@@ -20,7 +20,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class PCView extends View {
+class PCView extends View {
 	private static final int NUM_BUTTONS = PC.BOX_HEIGHT*PC.BOX_WIDTH + Trainer.MAX_POKEMON + 6;
 	private static final int RETURN = NUM_BUTTONS - 1;
 	private static final int RELEASE = NUM_BUTTONS - 2;
@@ -48,7 +48,7 @@ public class PCView extends View {
 	private Button releaseButton;
 	private Button returnButton;
 	
-	public PCView() {
+	PCView() {
 		pc = Game.getPlayer().getPC();
 		
 		selectedButton = PARTY;
@@ -86,9 +86,10 @@ public class PCView extends View {
 		party = true;
 		selected = Game.getPlayer().front();
 	}
-	
-	public void update(int dt, InputControl input) {
-		selectedButton = Button.update(buttons, selectedButton, input);
+
+	@Override
+	public void update(int dt) {
+		selectedButton = Button.update(buttons, selectedButton);
 
 		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
 			for (int j = 0; j < PC.BOX_WIDTH; j++) {
@@ -166,11 +167,12 @@ public class PCView extends View {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 		
-		if (input.consumeIfDown(ControlKey.ESC)) {
+		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
 
@@ -363,10 +365,12 @@ public class PCView extends View {
 		}
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.PC_VIEW;
 	}
 
+	@Override
 	public void movedToFront() {
 		party = true;
 		selected = Game.getPlayer().front();

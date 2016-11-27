@@ -31,7 +31,7 @@ public class ItemEntity extends Entity {
 	}
 
 	@Override
-	public void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view) {
+	public void update(int dt, Entity[][] entity, MapData map, MapView view) {
 		if (hasTriggered) {
 			view.removeEntity(this);
 		}

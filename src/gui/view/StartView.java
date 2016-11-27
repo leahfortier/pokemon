@@ -41,9 +41,11 @@ class StartView extends View {
 		DEFAULT,
 		NAME
 	}
-	
-	public void update(int dt, InputControl input) {
+
+	@Override
+	public void update(int dt) {
 		CharacterData player = Game.getPlayer();
+		InputControl input = InputControl.instance();
 
 		switch (state) {
 			case DEFAULT:
@@ -105,6 +107,7 @@ class StartView extends View {
 		
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
 
@@ -151,10 +154,12 @@ class StartView extends View {
 		}
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.START_VIEW;
 	}
 
+	@Override
 	public void movedToFront() {
 		state = State.DEFAULT;
 		

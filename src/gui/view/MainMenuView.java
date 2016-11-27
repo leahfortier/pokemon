@@ -45,7 +45,7 @@ public class MainMenuView extends View {
 	private int creditsTime1;
 	private int creditsTime2;
 
-	public MainMenuView() {
+	MainMenuView() {
 		selectedButton = 0;
 		
 		creditsTime1 = 0;
@@ -204,7 +204,8 @@ public class MainMenuView extends View {
 		SoundPlayer.soundPlayer.playMusic(state.tunes);
 	}
 
-	public void update(int dt, InputControl input) {
+	@Override
+	public void update(int dt) {
 		if (!musicStarted) {
 			musicStarted = true;
 			SoundPlayer.soundPlayer.playMusic(state.tunes);
@@ -213,7 +214,7 @@ public class MainMenuView extends View {
 		int pressed = -1;
 		
 		if (state.buttons.length > 0) {
-			selectedButton = Button.update(state.buttons, selectedButton, input);
+			selectedButton = Button.update(state.buttons, selectedButton);
 			if (state.buttons[selectedButton].checkConsumePress()) {
 				pressed = selectedButton;
 			}	
@@ -317,7 +318,7 @@ public class MainMenuView extends View {
 			bgIndex = nextIndex;
 		}
 		
-		if (input.consumeIfDown(ControlKey.BACK)) {
+		if (InputControl.instance().consumeIfDown(ControlKey.BACK)) {
 			setVisualState(VisualState.MAIN);
 		}
 	}
@@ -339,7 +340,8 @@ public class MainMenuView extends View {
 		// Should not be inside the translate or everything is fucked hxc
 		b.draw(g);
 	}
-	
+
+	@Override
 	public void draw(Graphics g) {
 		TileSet tiles = Game.getData().getMainMenuTiles();
 
@@ -444,10 +446,12 @@ public class MainMenuView extends View {
 		}
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.MAIN_MENU_VIEW;
 	}
 
+	@Override
 	public void movedToFront() {
 		setVisualState(VisualState.MAIN);
 		saveInfo = Save.updateSaveData();

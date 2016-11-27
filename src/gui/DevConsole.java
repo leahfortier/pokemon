@@ -30,8 +30,8 @@ class DevConsole {
 	}
 
 	// Try to initialize the console, but if you can't just don't do anything
-	boolean init(InputControl input) {
-		key = input.getLock();
+	boolean init() {
+		key = InputControl.instance().getLock();
 		if (key == InputControl.INVALID_LOCK) {
 			return false;
 		}
@@ -41,11 +41,12 @@ class DevConsole {
 		return true;
 	}
 
-	public void update(InputControl input) {
+	public void update() {
 		if (key == InputControl.INVALID_LOCK) {
 			return; // Shouldn't even ever be here!
 		}
 
+		InputControl input = InputControl.instance();
 		if (!input.isCapturingText()) {
 			input.startTextCapture();
 		}
@@ -59,7 +60,7 @@ class DevConsole {
 		}
 
 		if (input.consumeIfDown(ControlKey.ESC, key)) {
-			tearDown(input);
+			tearDown();
 		}
 	}
 
@@ -234,7 +235,9 @@ class DevConsole {
 
 	// Tear down, release locks, etc... This needs to be the only way to get out
 	// of here, or bad things can happen!
-	private void tearDown(InputControl input) {
+	private void tearDown() {
+		InputControl input = InputControl.instance();
+
 		show = false;
 		input.stopTextCapture();
 		input.releaseLock(key);
