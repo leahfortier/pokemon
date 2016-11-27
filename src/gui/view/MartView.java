@@ -10,8 +10,8 @@ import main.Global;
 import main.Type;
 import trainer.CharacterData;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -120,9 +120,10 @@ class MartView extends View {
 		updateActiveButtons();
 	}
 
-	public void update(int dt, InputControl input) {
+	@Override
+	public void update(int dt) {
 		CharacterData player = Game.getPlayer();
-		selectedButton = Button.update(buttons, selectedButton, input);
+		selectedButton = Button.update(buttons, selectedButton);
 
 		Iterator<ItemNamesies> iter = forSaleItems.iterator();
 		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
@@ -185,12 +186,12 @@ class MartView extends View {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 
-		if (input.isDown(Control.ESC)) {
-			input.consumeKey(Control.ESC);
+		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
@@ -360,10 +361,12 @@ class MartView extends View {
 		}
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.MART_VIEW;
 	}
 
+	@Override
 	public void movedToFront() {}
 
 	// TODO: Create util method for this

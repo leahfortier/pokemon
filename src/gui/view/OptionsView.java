@@ -4,32 +4,31 @@ import main.Game;
 import main.Global;
 import sound.SoundPlayer;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
-public class OptionsView extends View {
+class OptionsView extends View {
 	private boolean musicOn;
 	private Color color;
 	
-	public OptionsView() {
+	OptionsView() {
 		musicOn = SoundPlayer.soundPlayer.isMuted();
 		color = new Color(0, 0, 0);
 	}
 
-	public void update(int dt, InputControl input) {
-		if (input.mouseDown) {
-			input.consumeMousePress();
-			
+	@Override
+	public void update(int dt) {
+		InputControl input = InputControl.instance();
+		if (input.consumeIfMouseDown()) {
 			musicOn = !musicOn;
 			SoundPlayer.soundPlayer.toggleMusic();
 		}
 		
-		if (input.isDown(Control.ESC)) {
-			input.consumeKey(Control.ESC);
+		if (input.consumeIfDown(ControlKey.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
@@ -50,6 +49,7 @@ public class OptionsView extends View {
 		this.color = new Color(r, g, b);
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		Dimension d = Global.GAME_SIZE;
 		
@@ -89,9 +89,11 @@ public class OptionsView extends View {
 
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.OPTIONS_VIEW;
 	}
 
+	@Override
 	public void movedToFront() {}
 }

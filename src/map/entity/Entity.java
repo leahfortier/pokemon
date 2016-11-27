@@ -7,7 +7,6 @@ import map.MapData;
 import map.MapData.WalkType;
 import map.triggers.TriggerType;
 import util.DrawUtils;
-import util.InputControl;
 import util.Point;
 
 import java.awt.Graphics;
@@ -60,7 +59,7 @@ public abstract class Entity {
 	}
 
 	// TODO: Don't pass the entity array around goddamnit
-	public abstract void update(int dt, Entity[][] entity, MapData map, InputControl input, MapView view);
+	public abstract void update(int dt, Entity[][] entity, MapData map, MapView view);
 
 	protected boolean isPassable(WalkType type) {
 		return type == WalkType.WALKABLE;

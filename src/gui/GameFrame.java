@@ -1,11 +1,11 @@
 package gui;
 
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
 import main.Global;
 import pokemon.PokemonInfo;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -20,16 +20,14 @@ import java.awt.image.BufferStrategy;
 public class GameFrame {
 	private static final boolean DEV_MODE = true;
 
-	private static JFrame frame;
+	private static final JFrame frame = new JFrame();
 
 	public static void main(String[] args) {
-		frame = new JFrame();
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
 		Canvas gui = new Canvas();
 		gui.setSize(Global.GAME_SIZE);
-		frame.setResizable(false);
 
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 		frame.getContentPane().add(gui);
 		frame.pack();
 		frame.setVisible(true);
@@ -47,20 +45,19 @@ public class GameFrame {
 
 	private static class GameLoop implements Runnable {
 		private final Canvas gui;
-		private final InputControl control;
 		private final DevConsole console;
 
 		private BufferStrategy strategy;
 
 		private GameLoop(Canvas canvas) {
 			gui = canvas;
-			control = new InputControl();
+			InputControl control = InputControl.instance();
 			
 			canvas.addKeyListener(control);
 			canvas.addMouseListener(control);
 			canvas.addMouseMotionListener(control);
 
-			console = DEV_MODE ? new DevConsole() : null;
+			console = new DevConsole();
 		}
 
 		public void run() {
@@ -111,20 +108,21 @@ public class GameFrame {
 		}
 
 		private void drawFrame(int dt) {
-			Game.update(dt, control);
+			Game.update(dt);
 
 			Graphics g = strategy.getDrawGraphics();
 			Game.draw(g);
 
 			// This will fail if it can't acquire the lock on control (just won't display or anything)
-			if (control.isDown(Control.CONSOLE)) {
-				control.consumeKey(Control.CONSOLE);
-				console.init(control);
-			}
+			if (DEV_MODE) {
+				if (InputControl.instance().consumeIfDown(ControlKey.CONSOLE)) {
+					console.init();
+				}
 
-			if (DEV_MODE && console.isShown()) {
-				console.update(dt, control);
-				console.draw(g);
+				if (console.isShown()) {
+					console.update();
+					console.draw(g);
+				}
 			}
 
 			g.dispose();

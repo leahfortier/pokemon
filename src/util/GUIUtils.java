@@ -46,7 +46,7 @@ public class GUIUtils {
     public static JMenuItem createMenuItem(String text, int keyEvent, ActionListener actionListener) {
         JMenuItem menuItem = createMenuItem(text, actionListener);
 
-        // System shortcut key. Control for windows, command for mac.
+        // System shortcut key. ControlKey for windows, command for mac.
         int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
         menuItem.setAccelerator(KeyStroke.getKeyStroke(keyEvent, shortcut));
 

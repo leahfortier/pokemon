@@ -11,14 +11,14 @@ import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 import util.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class StartView extends View {
+class StartView extends View {
 	
 	private static final MessageUpdate[] dialogue = new MessageUpdate[] {
 				new MessageUpdate("Welcome to the world of Pok\u00e9mon!"), // TODO: Constants blah blah blah
@@ -41,20 +41,20 @@ public class StartView extends View {
 		DEFAULT,
 		NAME
 	}
-	
-	public void update(int dt, InputControl input) {
+
+	@Override
+	public void update(int dt) {
 		CharacterData player = Game.getPlayer();
+		InputControl input = InputControl.instance();
 
 		switch (state) {
 			case DEFAULT:
 				if (message != null) {
-					if (input.mouseDown) {
-						input.consumeMousePress();
+					if (input.consumeIfMouseDown()) {
 						message = null;
 					}
 
-					if (input.isDown(Control.SPACE)) {
-						input.consumeKey(Control.SPACE);
+					if (input.consumeIfDown(ControlKey.SPACE)) {
 						message = null;
 					}
 				}
@@ -97,9 +97,8 @@ public class StartView extends View {
 					}
 				}
 
-				if (input.isDown(Control.ENTER)) {
+				if (input.consumeIfDown(ControlKey.ENTER)) {
 					input.stopTextCapture();
-					input.consumeKey(Control.ENTER);
 					player.setName(name.isEmpty() ? CharacterData.DEFAULT_NAME : name);
 					state = State.DEFAULT;
 				}
@@ -108,6 +107,7 @@ public class StartView extends View {
 		
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
 
@@ -154,10 +154,12 @@ public class StartView extends View {
 		}
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.START_VIEW;
 	}
 
+	@Override
 	public void movedToFront() {
 		state = State.DEFAULT;
 		

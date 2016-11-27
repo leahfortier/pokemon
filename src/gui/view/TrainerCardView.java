@@ -4,22 +4,23 @@ import main.Game;
 import main.Global;
 import trainer.CharacterData;
 import util.DrawUtils;
-import util.InputControl;
-import util.InputControl.Control;
+import input.InputControl;
+import input.ControlKey;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
-public class TrainerCardView extends View {
+class TrainerCardView extends View {
 
-	public void update(int dt, InputControl input) {
-		if (input.isDown(Control.ESC)) {
-			input.consumeKey(Control.ESC);
+	@Override
+	public void update(int dt) {
+		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		CharacterData player = Game.getPlayer();
 		Dimension dimension = Global.GAME_SIZE;
@@ -46,9 +47,11 @@ public class TrainerCardView extends View {
 		return (l/(3600) + " hours " + ((l%3600)/60) + " minutes");
 	}
 
+	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.TRAINER_CARD_VIEW;
 	}
 
+	@Override
 	public void movedToFront() {}
 }
