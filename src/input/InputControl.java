@@ -89,6 +89,10 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	
 	// If there actually isn't a lock, or we have the lock, return the correct value, otherwise return false
 	private boolean isDown(ControlKey controlKey, int key) {
+		if (controlKey == null) {
+			return false;
+		}
+
 		if (key == INVALID_LOCK || lock == key) {
 			return controlKey.getKey().isDown();
 		}

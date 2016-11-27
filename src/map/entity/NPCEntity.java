@@ -68,13 +68,14 @@ public class NPCEntity extends MovableEntity {
 			}
 			
 			char pathChar = path.charAt(pathIndex);
+			// TODO: Combine this if and else into a single statement
 			if (pathChar == Direction.WAIT.character) {
 				waitTime = getTransitionTime();
 				pathIndex++;	
 			}
 			else {
 				// Find the direction that corresponds to the character
-				for (Direction direction: Direction.values()) {
+				for (Direction direction: Direction.getBasicDirections()) {
 					if (pathChar != direction.character) {
 						continue;
 					}

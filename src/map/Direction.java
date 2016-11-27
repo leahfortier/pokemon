@@ -3,6 +3,10 @@ package map;
 import input.ControlKey;
 import util.Point;
 
+import java.util.EnumSet;
+import java.util.Set;
+
+// PLEASE DO NOT USE DIRECTION.VALUES() USE ONE OF THE TWO SUPPLIED METHODS BELOW
 public enum Direction {
     RIGHT('r', 1, 0, ControlKey.RIGHT),
     UP('u', 0, -1, ControlKey.UP),
@@ -37,8 +41,16 @@ public enum Direction {
     public Point getDeltaPoint() {
         return new Point(dx, dy);
     }
-    
+
     public ControlKey getKey() {
         return this.key;
+    }
+
+    public static Set<Direction> getWalkDirections() {
+        return EnumSet.allOf(Direction.class);
+    }
+
+    public static Set<Direction> getBasicDirections() {
+        return EnumSet.complementOf(EnumSet.of(WAIT));
     }
 }

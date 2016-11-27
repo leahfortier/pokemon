@@ -57,11 +57,10 @@ public class MapView extends View {
 	private static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
 	private static final int BATTLE_INTRO_ANIMATION_LIFESPAN = 1000;
 
-    // TODO: Eventually want to add a no movement direction to the directions class, when that happens this can be a directions array instead
-    private static final Point[] deltaDirections = {
-            new Point(),  // No movement
-            Direction.LEFT.getDeltaPoint(),
-            Direction.UP.getDeltaPoint()
+    private static final Direction[] deltaDirections = {
+            Direction.WAIT,
+            Direction.LEFT,
+            Direction.UP
     };
 	
 	private String currentMapName;
@@ -167,7 +166,8 @@ public class MapView extends View {
 				
 				// Draw entities
 				// Check for entities above and to the left of this location to see if they just moved out and draw them again.
-				for (Point delta : deltaDirections) {
+				for (Direction deltaDirection : deltaDirections) {
+					Point delta = deltaDirection.getDeltaPoint();
                     Point newPoint = Point.add(delta, x, y);
                     if (!newPoint.inBounds(entities.length, entities[0].length)) {
                         continue;
@@ -403,6 +403,7 @@ public class MapView extends View {
 		}
 	}
 
+	// TODO: omg split this up
 	@Override
 	public void update(int dt) {
 		boolean showMessage = true;
@@ -587,7 +588,7 @@ public class MapView extends View {
 			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
 
                 // TODO: Move to movable entity
-				for (Direction direction : Direction.values()) {
+				for (Direction direction : Direction.getBasicDirections()) {
 
                     Point newLocation = Point.subtract(playerEntity.getLocation(), Point.scale(direction.getDeltaPoint(), dist));
 					if (!newLocation.inBounds(currentMap.getDimension())) {
