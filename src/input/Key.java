@@ -1,12 +1,17 @@
 package input;
 
-class Key {
-    private boolean isDown;
-    private int[] id; // TODO: Change to set
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-    public Key(int... keyId) {
+class Key {
+    private final Set<Integer> ids;
+
+    private boolean isDown;
+
+    public Key(int... keyIds) {
+        ids = IntStream.of(keyIds).boxed().collect(Collectors.toSet());
         isDown = false;
-        id = keyId;
     }
 
     void consume() {
@@ -22,13 +27,7 @@ class Key {
     }
 
     boolean isKey(int keyCode) {
-        for (int i : id) {
-            if (i == keyCode) {
-                return true;
-            }
-        }
-
-        return false;
+        return ids.contains(keyCode);
     }
 
     public boolean isDown() {

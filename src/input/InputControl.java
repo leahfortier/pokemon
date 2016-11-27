@@ -98,10 +98,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	}
 
 	public void resetKeys() {
-		for (ControlKey controlKey : ControlKey.values()) {
-			controlKey.getKey().reset();
-		}
-
+		ControlKey.resetAll();
 		mouseDown = false;
 	}
 
@@ -125,25 +122,25 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	}
 
 	public String getCapturedText() {
-		return capturedText.toString();
+		return getCapturedText();
 	}
 
 	public boolean isCapturingText() {
 		return isCaptureText;
 	}
 
-	@Override public void mouseClicked(MouseEvent e) {}
-	@Override public void mouseEntered(MouseEvent e) {}
-	@Override public void mouseExited(MouseEvent e) {}
+	@Override public void mouseClicked(MouseEvent mouseEvent) {}
+	@Override public void mouseEntered(MouseEvent mouseEvent) {}
+	@Override public void mouseExited(MouseEvent mouseEvent) {}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent mouseEvent) {
 		isMouseInput = true;
 		mouseDown = true;
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(MouseEvent mouseEvent) {
 		mouseDown = false;
 	}
 

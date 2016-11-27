@@ -40,4 +40,8 @@ public enum ControlKey {
                 .filter(key -> key.isKey(keyEvent.getKeyCode()))
                 .collect(Collectors.toList());
     }
+
+    static void resetAll() {
+        CONTROL_KEYS.forEach(controlKey -> controlKey.getKey().reset());
+    }
 }
