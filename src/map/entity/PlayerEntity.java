@@ -64,7 +64,7 @@ public class PlayerEntity extends MovableEntity {
 			}
 			else {
 				for (Direction direction : Direction.values()) {
-					if (input.consumeIfDown(direction.getKey()) && transitionTime == 0 && !stalled) {
+					if (input.isDown(direction.getKey()) && transitionTime == 0 && !stalled) {
 						if (transitionDirection != direction) {
 							transitionDirection = direction;
 							continue;
