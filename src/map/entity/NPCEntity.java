@@ -5,6 +5,7 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
+import map.PathDirection;
 import map.entity.EntityAction.BattleAction;
 import trainer.CharacterData;
 import util.Point;
@@ -66,36 +67,30 @@ public class NPCEntity extends MovableEntity {
 			if (tempPath != null) {
 				path = tempPath;
 			}
-			
-			char pathChar = path.charAt(pathIndex);
-			if (pathChar == Direction.WAIT_CHARACTER) {
+
+			// Find the direction that corresponds to the character
+			PathDirection direction = PathDirection.getDirection(path.charAt(pathIndex));
+			if (direction == PathDirection.WAIT) {
 				waitTime = getTransitionTime();
-				pathIndex++;	
+				pathIndex++;
 			}
 			else {
-				// Find the direction that corresponds to the character
-				for (Direction direction: Direction.values()) {
-					if (pathChar != direction.character) {
-						continue;
-					}
+				Point newPoint = Point.add(this.getLocation(), direction.getDeltaPoint());
+				int x = newPoint.x; // TODO
+				int y = newPoint.y;
 
-					Point newPoint = Point.add(this.getLocation(), direction.getDeltaPoint());
-					int x = newPoint.x; // TODO
-					int y = newPoint.y;
-					
-					// TODO: Shouldn't the isPassable method check if an entity doesn't exist in it as well? 
-					if (isPassable(map.getPassValue(x, y)) && entity[x][y] == null) {
-						entity[getX()][getY()] = null;
-						super.setLocation(newPoint);
-						entity[getX()][getY()] = this;
-						
-						transitionTime = 1;
-						waitTime = 5*Global.TIME_BETWEEN_TILES/4; // TODO: Why 5/4
-						pathIndex++;
-					}
-					
-					transitionDirection = direction;
+				// TODO: Shouldn't the isPassable method check if an entity doesn't exist in it as well?
+				if (isPassable(map.getPassValue(x, y)) && entity[x][y] == null) {
+					entity[getX()][getY()] = null;
+					super.setLocation(newPoint);
+					entity[getX()][getY()] = this;
+
+					transitionTime = 1;
+					waitTime = 5*Global.TIME_BETWEEN_TILES/4; // TODO: Why 5/4
+					pathIndex++;
 				}
+
+				transitionDirection = direction.getDirection();
 			}
 
 			pathIndex %= path.length();
@@ -105,11 +100,8 @@ public class NPCEntity extends MovableEntity {
 		}
 	}
 
-	public void walkTowards(int steps, Direction direction) {
-		tempPath = Direction.WAIT_CHARACTER + "";
-		for (int i = 0; i < steps; ++i) {
-			tempPath += direction.character;
-		}
+	public void walkTowards(int steps, PathDirection direction) {
+		tempPath = direction.getTempPath(steps);
 
 		pathIndex = 0;
 		walkingToPlayer = true;
@@ -135,7 +127,7 @@ public class NPCEntity extends MovableEntity {
 
 	@Override
 	public int getTransitionTime() {
-		return Global.TIME_BETWEEN_TILES * 2;
+		return Global.TIME_BETWEEN_TILES*2;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package mapMaker.dialogs;
 
 import map.Direction;
+import map.PathDirection;
 import mapMaker.MapMaker;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
@@ -18,24 +19,9 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 
 	private JComboBox<String> destinationComboBox;
 	private final JComboBox<String> entranceComboBox;
-	private final JComboBox<DirectionType> directionComboBox;
+	private final JComboBox<PathDirection> directionComboBox;
 	private final JCheckBox deathPortalCheckBox;
 	private final JTextField entranceNameTextField;
-
-	// TODO: Combine this with the direction one when I can add the auto thingy -- just don't want to deal with that right now
-	private enum DirectionType {
-		AUTO(null),
-		RIGHT(Direction.RIGHT),
-		UP(Direction.UP),
-		LEFT(Direction.LEFT),
-		DOWN(Direction.DOWN);
-
-		private final Direction direction;
-
-		DirectionType(Direction direction) {
-			this.direction = direction;
-		}
-	}
 
 	private static Set<String> getMapEntrancesForMap(MapMaker mapMaker, String mapName) {
 		String mapFileName = mapMaker.getMapTextFileName(mapName);
@@ -81,8 +67,8 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 					}
 				}
 		);
-		
-		directionComboBox = GUIUtils.createComboBox(DirectionType.values(), null);
+
+		directionComboBox = GUIUtils.createComboBox(PathDirection.values(), null);
 
 		GUIUtils.setVerticalLayout(
 				this,
@@ -117,7 +103,7 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 				this.entranceNameTextField.getText(),
 				destination,
 				entrance,
-				((DirectionType)directionComboBox.getSelectedItem()).direction,
+				(PathDirection)directionComboBox.getSelectedItem(),
 				this.deathPortalCheckBox.isSelected()
 		);
 	}
