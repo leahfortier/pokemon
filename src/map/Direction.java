@@ -3,38 +3,28 @@ package map;
 import input.ControlKey;
 import util.Point;
 
-import java.util.EnumSet;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
-import java.util.Set;
 
-// PLEASE DO NOT USE DIRECTION.VALUES() USE ONE OF THE TWO SUPPLIED METHODS BELOW
 public enum Direction {
-    RIGHT('r', 1, 0, ControlKey.RIGHT),
-    UP('u', 0, -1, ControlKey.UP),
-    LEFT('l', -1, 0, ControlKey.LEFT),
-    DOWN('d', 0, 1, ControlKey.DOWN),
-    WAIT('w', 0, 0, null);
+    RIGHT(ControlKey.RIGHT, PathDirection.RIGHT),
+    UP(ControlKey.UP, PathDirection.UP),
+    LEFT(ControlKey.LEFT, PathDirection.LEFT),
+    DOWN(ControlKey.DOWN, PathDirection.DOWN);
 
-    private static final Map<Character, Direction> characterDirectionMap = new HashMap<Character, Direction>() {{
+    private static final Map<PathDirection, Direction> pathDirectionMap = new EnumMap<PathDirection, Direction>(PathDirection.class) {{
         for (Direction direction : Direction.values()) {
-            this.put(direction.character, direction);
+            this.put(direction.getPathDirection(), direction);
         }
     }};
 
-    public final char character;
-    public final int dx;
-    public final int dy; // TODO: Change to just a delta point
     private final ControlKey key;
+    private final PathDirection pathDirection;
     public Direction opposite; // Really this should be final but it won't let me include this in the constructor
 
-    Direction(char character, int dx, int dy, ControlKey key) {
-        this.character = character;
-
-        this.dx = dx;
-        this.dy = dy;
-
+    Direction(ControlKey key, PathDirection pathDirection) {
         this.key = key;
+        this.pathDirection = pathDirection;
     }
 
     // This is dumb fuck Java
@@ -43,26 +33,21 @@ public enum Direction {
         UP.opposite = DOWN;
         LEFT.opposite = RIGHT;
         DOWN.opposite = UP;
-        WAIT.opposite = WAIT;
     }
 
     public Point getDeltaPoint() {
-        return new Point(dx, dy);
+        return this.getPathDirection().getDeltaPoint();
     }
 
     public ControlKey getKey() {
         return this.key;
     }
 
-    public static Set<Direction> getWalkDirections() {
-        return EnumSet.allOf(Direction.class);
+    public PathDirection getPathDirection() {
+        return this.pathDirection;
     }
 
-    public static Set<Direction> getBasicDirections() {
-        return EnumSet.complementOf(EnumSet.of(WAIT));
-    }
-
-    public static Direction getDirection(char directionCharacter) {
-        return characterDirectionMap.get(directionCharacter);
+    public static Direction getDirection(PathDirection pathDirection) {
+        return pathDirectionMap.get(pathDirection);
     }
 }

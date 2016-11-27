@@ -1,6 +1,6 @@
 package pattern.map;
 
-import map.Direction;
+import map.PathDirection;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.SinglePointTriggerMatcher;
 import util.Point;
@@ -9,12 +9,12 @@ public class MapTransitionMatcher extends SinglePointTriggerMatcher {
     private String exitName;
     private String nextMap;
     private String nextEntrance;
-    private Direction direction;
+    private PathDirection direction;
     private boolean deathPortal;
 
     private String previousMap;
 
-    public MapTransitionMatcher(String exitName, String nextMap, String nextEntrance, Direction direction, boolean deathPortal) {
+    public MapTransitionMatcher(String exitName, String nextMap, String nextEntrance, PathDirection direction, boolean deathPortal) {
         this.exitName = exitName;
         this.nextMap = nextMap;
         this.nextEntrance = nextEntrance;
@@ -38,7 +38,7 @@ public class MapTransitionMatcher extends SinglePointTriggerMatcher {
         return this.nextEntrance;
     }
 
-    public Direction getDirection() {
+    public PathDirection getDirection() {
         return this.direction;
     }
 

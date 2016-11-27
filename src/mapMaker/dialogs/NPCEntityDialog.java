@@ -63,7 +63,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 
 		trainerIcon = GUIUtils.createLabel(StringUtils.empty());
 		spriteComboBox = GUIUtils.createComboBox(getTrainerSprites(), spriteActionListener);
-		directionComboBox = GUIUtils.createComboBox(Direction.getBasicDirections().toArray(new Direction[0]), spriteActionListener);
+		directionComboBox = GUIUtils.createComboBox(Direction.values(), spriteActionListener);
 
 		nameTextField = new JTextField();
 		pathTextField = new JTextField("w");

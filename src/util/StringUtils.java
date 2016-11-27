@@ -48,6 +48,15 @@ public class StringUtils {
         return "a" + (vowelStart ? "n" : "") + " " + s;
     }
 
+    public static String repeat(String repeat, int numTimes) {
+        StringBuilder builder = new StringBuilder();
+        while (numTimes --> 0) {
+            builder.append(repeat);
+        }
+
+        return builder.toString();
+    }
+
     // TODO: Look at this again and rewrite it
     public static String properCase(String string) {
         if (isNullOrEmpty(string)) {

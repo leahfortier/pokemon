@@ -120,7 +120,7 @@ public class Button {
 		}
 
 		InputControl input = InputControl.instance();
-		for (Direction direction : Direction.getBasicDirections()) {
+		for (Direction direction : Direction.values()) {
 			if (input.consumeIfDown(direction.getKey())) {
 				selected = Button.transition(buttons, selected, direction);
 			}

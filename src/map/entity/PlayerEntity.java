@@ -64,7 +64,7 @@ public class PlayerEntity extends MovableEntity {
 				spacePressed = true;
 			}
 			else {
-				for (Direction direction : Direction.getBasicDirections()) {
+				for (Direction direction : Direction.values()) {
 					if (input.isDown(direction.getKey()) && transitionTime == 0 && !stalled) {
 						if (transitionDirection != direction) {
 							transitionDirection = direction;
@@ -111,7 +111,7 @@ public class PlayerEntity extends MovableEntity {
 			}
 			
 			if (stalled) {
-				for (Direction direction : Direction.getBasicDirections()) {
+				for (Direction direction : Direction.values()) {
 					Point newLocation = Point.add(this.getLocation(), Point.negate(direction.getDeltaPoint()));
 					int x = newLocation.x; // TODO
 					int y = newLocation.y;

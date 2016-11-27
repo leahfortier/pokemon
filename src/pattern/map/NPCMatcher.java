@@ -1,6 +1,7 @@
 package pattern.map;
 
 import map.Direction;
+import map.PathDirection;
 import map.entity.Entity;
 import map.entity.NPCEntity;
 import map.entity.NPCInteraction;
@@ -69,7 +70,7 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
 
     public String getPath() {
         if (StringUtils.isNullOrEmpty(this.path)) {
-            this.path = Direction.WAIT.character + "";
+            this.path = PathDirection.defaultPath();
         }
 
         return this.path;

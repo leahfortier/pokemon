@@ -4,12 +4,15 @@ import battle.Battle;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
 import main.Global;
 import map.AreaData;
 import map.AreaData.WeatherState;
 import map.Direction;
 import map.MapData;
+import map.PathDirection;
 import map.entity.Entity;
 import map.entity.EntityAction;
 import map.entity.MovableEntity;
@@ -25,8 +28,6 @@ import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
 import util.DrawUtils;
-import input.InputControl;
-import input.ControlKey;
 import util.Point;
 import util.PokeString;
 import util.Save;
@@ -57,10 +58,10 @@ public class MapView extends View {
 	private static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
 	private static final int BATTLE_INTRO_ANIMATION_LIFESPAN = 1000;
 
-    private static final Direction[] deltaDirections = {
-            Direction.WAIT,
-            Direction.LEFT,
-            Direction.UP
+    private static final PathDirection[] deltaDirections = {
+			PathDirection.WAIT,
+			PathDirection.LEFT,
+			PathDirection.UP
     };
 	
 	private String currentMapName;
@@ -166,8 +167,8 @@ public class MapView extends View {
 				
 				// Draw entities
 				// Check for entities above and to the left of this location to see if they just moved out and draw them again.
-				for (Direction deltaDirection : deltaDirections) {
-					Point delta = deltaDirection.getDeltaPoint();
+				for (PathDirection pathDirection : deltaDirections) {
+					Point delta = pathDirection.getDeltaPoint();
                     Point newPoint = Point.add(delta, x, y);
                     if (!newPoint.inBounds(entities.length, entities[0].length)) {
                         continue;
@@ -588,7 +589,7 @@ public class MapView extends View {
 			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
 
                 // TODO: Move to movable entity
-				for (Direction direction : Direction.getBasicDirections()) {
+				for (Direction direction : Direction.values()) {
 
                     Point newLocation = Point.subtract(playerEntity.getLocation(), Point.scale(direction.getDeltaPoint(), dist));
 					if (!newLocation.inBounds(currentMap.getDimension())) {
@@ -605,7 +606,7 @@ public class MapView extends View {
 
                             playerEntity.stall();
                             npc.setDirection(direction);
-                            npc.walkTowards(dist - 1, direction);
+                            npc.walkTowards(dist - 1, direction.getPathDirection());
 
                             if (npc.isTrainer()) {
                                 SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);

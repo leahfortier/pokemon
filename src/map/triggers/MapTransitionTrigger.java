@@ -1,7 +1,7 @@
 package map.triggers;
 
 import main.Game;
-import map.Direction;
+import map.PathDirection;
 import pattern.map.MapTransitionMatcher;
 import trainer.CharacterData;
 import util.JsonUtils;
@@ -9,7 +9,7 @@ import util.JsonUtils;
 class MapTransitionTrigger extends Trigger {
 	private final String nextMap;
 	private final String mapEntranceName;
-	private final Direction direction;
+	private final PathDirection direction;
 	private final boolean deathPortal;
 
 	static String getTriggerSuffix(String contents) {
@@ -31,8 +31,8 @@ class MapTransitionTrigger extends Trigger {
 		CharacterData player = Game.getPlayer();
 		player.setMap(nextMap, mapEntranceName);
 		
-		if (direction != null) {
-			player.setDirection(direction);
+		if (direction != PathDirection.WAIT) {
+			player.setDirection(direction.getDirection());
 		}
 
 		if (deathPortal) {

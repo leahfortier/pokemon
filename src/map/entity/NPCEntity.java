@@ -5,6 +5,7 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
+import map.PathDirection;
 import map.entity.EntityAction.BattleAction;
 import trainer.CharacterData;
 import util.Point;
@@ -68,8 +69,8 @@ public class NPCEntity extends MovableEntity {
 			}
 
 			// Find the direction that corresponds to the character
-			Direction direction = Direction.getDirection(path.charAt(pathIndex));
-			if (direction == Direction.WAIT) {
+			PathDirection direction = PathDirection.getDirection(path.charAt(pathIndex));
+			if (direction == PathDirection.WAIT) {
 				waitTime = getTransitionTime();
 				pathIndex++;
 			}
@@ -89,7 +90,7 @@ public class NPCEntity extends MovableEntity {
 					pathIndex++;
 				}
 
-				transitionDirection = direction;
+				transitionDirection = direction.getDirection();
 			}
 
 			pathIndex %= path.length();
@@ -99,11 +100,8 @@ public class NPCEntity extends MovableEntity {
 		}
 	}
 
-	public void walkTowards(int steps, Direction direction) {
-		tempPath = "" + Direction.WAIT.character;
-		for (int i = 0; i < steps; ++i) {
-			tempPath += direction.character;
-		}
+	public void walkTowards(int steps, PathDirection direction) {
+		tempPath = direction.getTempPath(steps);
 
 		pathIndex = 0;
 		walkingToPlayer = true;
