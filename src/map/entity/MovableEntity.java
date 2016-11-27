@@ -1,6 +1,5 @@
 package map.entity;
 
-import gui.TileSet;
 import gui.view.MapView;
 import main.Game;
 import main.Global;
@@ -81,14 +80,12 @@ public abstract class MovableEntity extends Entity {
 
 	@Override
 	protected BufferedImage getFrame() {
-		TileSet trainerTiles = Game.getData().getTrainerTiles();
+		int trainerSpriteIndex = getTrainerSpriteIndex(spriteIndex, transitionDirection);
 		if (transitionTime > 0) {
-			// TODO: method
-			return trainerTiles.getTile(12 * spriteIndex + 1 + transitionDirection.ordinal() + 4 * (1 + runFrame));
+			trainerSpriteIndex += 4*(1 + runFrame);
 		}
 
-		// TODO: These two should be combined
-		return trainerTiles.getTile(12 * spriteIndex + 1 + transitionDirection.ordinal());
+		return Game.getData().getTrainerTiles().getTile(trainerSpriteIndex);
 	}
 	
 	public abstract int getTransitionTime();
@@ -96,5 +93,9 @@ public abstract class MovableEntity extends Entity {
 	@Override
 	protected boolean isTransitioning() {
 		return this.transitionTime > 0;
+	}
+
+	public static int getTrainerSpriteIndex(int spriteIndex, Direction direction) {
+		return 12*spriteIndex + 1 + direction.ordinal();
 	}
 }

@@ -1,5 +1,6 @@
 package mapMaker.tools;
 
+import map.entity.MovableEntity;
 import mapMaker.MapMaker;
 import mapMaker.EditType;
 import mapMaker.model.TileModel.TileType;
@@ -58,9 +59,8 @@ class SingleClickTool extends Tool {
 
             BufferedImage image;
             if (type == TriggerModelType.NPC) {
-                // TODO
                 NPCMatcher npc = (NPCMatcher) mapMaker.getPlaceableTrigger();
-                image = mapMaker.getTileFromSet(TileType.TRAINER, 12*npc.getSpriteIndex() + 1 + npc.getDirection().ordinal());
+                image = mapMaker.getTileFromSet(TileType.TRAINER, MovableEntity.getTrainerSpriteIndex(npc.getSpriteIndex(), npc.getDirection()));
             }
             else {
                 image = type.getImage(mapMaker);

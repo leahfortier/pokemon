@@ -1,6 +1,7 @@
 package mapMaker;
 
 import main.Global;
+import map.entity.MovableEntity;
 import mapMaker.dialogs.EventTriggerDialog;
 import mapMaker.dialogs.ItemEntityDialog;
 import mapMaker.dialogs.MapTransitionDialog;
@@ -152,7 +153,7 @@ public class MapMakerTriggerData {
 					case NPC:
 						NPCMatcher npc = (NPCMatcher) entity;
 						// TODO: This should be in a method
-						image = mapMaker.getTileFromSet(TileType.TRAINER, 12 * npc.getSpriteIndex() + 1 + npc.getDirection().ordinal());
+						image = mapMaker.getTileFromSet(TileType.TRAINER, MovableEntity.getTrainerSpriteIndex(npc.getSpriteIndex(), npc.getDirection()));
 						break;
 				}
 
