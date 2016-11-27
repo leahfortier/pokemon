@@ -1,20 +1,22 @@
 package trainer;
 
+import main.Game;
+import main.Global;
+import pokemon.ActivePokemon;
+import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
+import util.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
-import pokemon.PokemonNamesies;
-import pokemon.PokemonInfo;
-import util.StringUtils;
 
 public class Pokedex implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	// TODO: Move to separate file or actually make this private
-	public enum PokedexStatus implements Serializable {
+	private enum PokedexStatus implements Serializable {
 		NOT_SEEN(0),
 		SEEN(1),
 		CAUGHT(2);
@@ -30,12 +32,13 @@ public class Pokedex implements Serializable {
 		}
 	}
 	
-	private Map<PokemonNamesies, PokedexInfo> pokedex;
+	private final Map<PokemonNamesies, PokedexInfo> pokedex;
+
 	private int numSeen;
 	private int numCaught;
 
 	Pokedex() {
-		pokedex = new HashMap<>();
+		pokedex = new EnumMap<>(PokemonNamesies.class);
 		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
 			pokedex.put(PokemonInfo.getPokemonInfo(i).namesies(), new PokedexInfo());
 		}
@@ -43,22 +46,41 @@ public class Pokedex implements Serializable {
 		numSeen = 0;
 		numCaught = 0;
 	}
+
+	public boolean isNotSeen(PokemonNamesies namesies) {
+		return getStatus(namesies) == PokedexStatus.NOT_SEEN;
+	}
+
+	public boolean isCaught(PokemonNamesies namesies) {
+		return getStatus(namesies) == PokedexStatus.CAUGHT;
+	}
 	
-	public PokedexStatus getStatus(PokemonNamesies name) {
+	private PokedexStatus getStatus(PokemonNamesies name) {
 		return pokedex.get(name).status;
 	}
-	
-	public boolean setStatus(PokemonInfo p, PokedexStatus status) {
-		return setStatus(p, status, null);
+
+	public void setCaught(PokemonInfo pokemonInfo) {
+		setStatus(pokemonInfo, PokedexStatus.CAUGHT, null);
 	}
-	
-	public boolean setStatus(PokemonInfo p, PokedexStatus status, String wildLocation) {
+
+	public void setSeen(ActivePokemon pokemon, boolean isWildBattle) {
+		this.setStatus(
+				pokemon.getPokemonInfo(),
+				PokedexStatus.SEEN,
+				isWildBattle
+						? Game.getPlayer().getAreaName()
+						: StringUtils.empty()
+		);
+	}
+
+	private void setStatus(PokemonInfo p, PokedexStatus status, String wildLocation) {
 		PokemonNamesies pokemon = p.namesies();
 		PokedexInfo info = pokedex.get(pokemon); 
 		info.addLocation(wildLocation);
 		
 		if (info.status.getWeight() >= status.getWeight()) {
-			return false;
+			Global.error("Cannnot decrease pokedex status weight." +
+					" " + pokemon + " " + status.getWeight() + " " + info.status.getWeight());
 		}
 		
 		if (status == PokedexStatus.SEEN) {
@@ -73,17 +95,7 @@ public class Pokedex implements Serializable {
 		}
 		
 		info.status = status;
-	
 		pokedex.put(pokemon, info);
-		return true;
-	}
-	
-	public boolean seen(PokemonNamesies name) {
-		return pokedex.containsKey(name) && pokedex.get(name).status == PokedexStatus.SEEN;
-	}
-	
-	public boolean caught(PokemonNamesies name) {
-		return pokedex.containsKey(name) && pokedex.get(name).status == PokedexStatus.CAUGHT;
 	}
 	
 	public int numSeen() {
@@ -101,7 +113,7 @@ public class Pokedex implements Serializable {
 	private static class PokedexInfo implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
-		private List<String> locations;
+		private final List<String> locations;
 		private PokedexStatus status;
 		
 		PokedexInfo() {
@@ -117,7 +129,7 @@ public class Pokedex implements Serializable {
 			locations.add(location);
 		}
 		
-		public List<String> getLocations() {
+		List<String> getLocations() {
 			if (!locations.isEmpty()) {
 				return locations;
 			}

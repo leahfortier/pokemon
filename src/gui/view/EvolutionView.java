@@ -8,7 +8,6 @@ import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
-import trainer.Pokedex.PokedexStatus;
 import util.DrawUtils;
 import input.InputControl;
 import input.ControlKey;
@@ -190,7 +189,7 @@ class EvolutionView extends View {
 	}
 	
 	private void addToPokedex() {
-		Game.getPlayer().getPokedex().setStatus(isEgg ? preEvolution : postEvolution, PokedexStatus.CAUGHT);
+		Game.getPlayer().getPokedex().setCaught(isEgg ? preEvolution : postEvolution);
 	}
 	
 	private void setFinalMessage() {

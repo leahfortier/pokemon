@@ -6133,10 +6133,10 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			// TODO: Generalize this
 			if (b.getTurn() == 1) {
-				return new double[] {3, 0};
+				return new double[] { 3, 0 };
 			}
 			
-			return new double[] {1, 0};
+			return new double[] { 1, 0 };
 		}
 
 		public void afterCaught(ActivePokemon p) {
@@ -6153,11 +6153,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getPlayer().getPokedex().caught(o.getPokemonInfo().namesies())) {
-				return new double[] {3, 0};
+			if (b.getPlayer().getPokedex().isCaught(o.getPokemonInfo().namesies())) {
+				return new double[] { 3, 0 };
 			}
 			
-			return new double[] {1, 0};
+			return new double[] { 1, 0 };
 		}
 
 		public void afterCaught(ActivePokemon p) {
