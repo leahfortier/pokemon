@@ -69,7 +69,7 @@ public class NPCEntity extends MovableEntity {
 			}
 			
 			char pathChar = path.charAt(pathIndex);
-			if (pathChar == Direction.WAIT_CHARACTER) {
+			if (pathChar == Direction.WAIT.character) {
 				waitTime = getTransitionTime();
 				pathIndex++;	
 			}
@@ -107,7 +107,7 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	public void walkTowards(int steps, Direction direction) {
-		tempPath = Direction.WAIT_CHARACTER + "";
+		tempPath = "" + Direction.WAIT.character;
 		for (int i = 0; i < steps; ++i) {
 			tempPath += direction.character;
 		}
@@ -136,7 +136,7 @@ public class NPCEntity extends MovableEntity {
 
 	@Override
 	public int getTransitionTime() {
-		return Global.TIME_BETWEEN_TILES * 2;
+		return Global.TIME_BETWEEN_TILES*2;
 	}
 
 	@Override

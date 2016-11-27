@@ -69,7 +69,7 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
 
     public String getPath() {
         if (StringUtils.isNullOrEmpty(this.path)) {
-            this.path = Direction.WAIT_CHARACTER + "";
+            this.path = Direction.WAIT.character + "";
         }
 
         return this.path;
