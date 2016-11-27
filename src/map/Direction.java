@@ -4,6 +4,8 @@ import input.ControlKey;
 import util.Point;
 
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 // PLEASE DO NOT USE DIRECTION.VALUES() USE ONE OF THE TWO SUPPLIED METHODS BELOW
@@ -13,6 +15,12 @@ public enum Direction {
     LEFT('l', -1, 0, ControlKey.LEFT),
     DOWN('d', 0, 1, ControlKey.DOWN),
     WAIT('w', 0, 0, null);
+
+    private static final Map<Character, Direction> characterDirectionMap = new HashMap<Character, Direction>() {{
+        for (Direction direction : Direction.values()) {
+            this.put(direction.character, direction);
+        }
+    }};
 
     public final char character;
     public final int dx;
@@ -52,5 +60,9 @@ public enum Direction {
 
     public static Set<Direction> getBasicDirections() {
         return EnumSet.complementOf(EnumSet.of(WAIT));
+    }
+
+    public static Direction getDirection(char directionCharacter) {
+        return characterDirectionMap.get(directionCharacter);
     }
 }

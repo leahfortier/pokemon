@@ -66,37 +66,30 @@ public class NPCEntity extends MovableEntity {
 			if (tempPath != null) {
 				path = tempPath;
 			}
-			
-			char pathChar = path.charAt(pathIndex);
-			// TODO: Combine this if and else into a single statement
-			if (pathChar == Direction.WAIT.character) {
+
+			// Find the direction that corresponds to the character
+			Direction direction = Direction.getDirection(path.charAt(pathIndex));
+			if (direction == Direction.WAIT) {
 				waitTime = getTransitionTime();
-				pathIndex++;	
+				pathIndex++;
 			}
 			else {
-				// Find the direction that corresponds to the character
-				for (Direction direction: Direction.getBasicDirections()) {
-					if (pathChar != direction.character) {
-						continue;
-					}
+				Point newPoint = Point.add(this.getLocation(), direction.getDeltaPoint());
+				int x = newPoint.x; // TODO
+				int y = newPoint.y;
 
-					Point newPoint = Point.add(this.getLocation(), direction.getDeltaPoint());
-					int x = newPoint.x; // TODO
-					int y = newPoint.y;
-					
-					// TODO: Shouldn't the isPassable method check if an entity doesn't exist in it as well? 
-					if (isPassable(map.getPassValue(x, y)) && entity[x][y] == null) {
-						entity[getX()][getY()] = null;
-						super.setLocation(newPoint);
-						entity[getX()][getY()] = this;
-						
-						transitionTime = 1;
-						waitTime = 5*Global.TIME_BETWEEN_TILES/4; // TODO: Why 5/4
-						pathIndex++;
-					}
-					
-					transitionDirection = direction;
+				// TODO: Shouldn't the isPassable method check if an entity doesn't exist in it as well?
+				if (isPassable(map.getPassValue(x, y)) && entity[x][y] == null) {
+					entity[getX()][getY()] = null;
+					super.setLocation(newPoint);
+					entity[getX()][getY()] = this;
+
+					transitionTime = 1;
+					waitTime = 5*Global.TIME_BETWEEN_TILES/4; // TODO: Why 5/4
+					pathIndex++;
 				}
+
+				transitionDirection = direction;
 			}
 
 			pathIndex %= path.length();
