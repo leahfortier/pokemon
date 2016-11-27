@@ -20,7 +20,7 @@ import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.BaseEvolution;
 import pokemon.PC;
-import trainer.Pokedex.PokedexStatus;
+import trainer.pokedex.Pokedex;
 import util.JsonUtils;
 import util.Point;
 import util.StringUtils;
@@ -335,13 +335,13 @@ public class CharacterData extends Trainer implements Serializable {
 	
 	public void addPokemon(Battle b, ActivePokemon p) {
 		p.setCaught();
-		if (!pokedex.caught(p.getPokemonInfo().namesies())) {
+		if (!pokedex.isCaught(p.getPokemonInfo().namesies())) {
 			if (b != null) {
 				Messages.addMessage(p.getPokemonInfo().getName() + " was registered in the Pok\u00e9dex!");
 			}
 
 			if (!p.isEgg()) {
-				pokedex.setStatus(p.getPokemonInfo(), PokedexStatus.CAUGHT);
+				pokedex.setCaught(p.getPokemonInfo());
 			}
 		}
 		

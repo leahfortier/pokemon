@@ -1929,10 +1929,10 @@ Quick Ball:
 	CatchRate:
 		// TODO: Generalize this
 		if (b.getTurn() == 1) {
-			return new double[] {3, 0};
+			return new double[] { 3, 0 };
 		}
 		
-		return new double[] {1, 0};
+		return new double[] { 1, 0 };
 		###
 *
 Repeat Ball:
@@ -1940,11 +1940,11 @@ Repeat Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon species that were previously caught.
 	Price: 1000
 	CatchRate:
-		if (b.getPlayer().getPokedex().caught(o.getPokemonInfo().namesies())) {
-			return new double[] {3, 0};
+		if (b.getPlayer().getPokedex().isCaught(o.getPokemonInfo().namesies())) {
+			return new double[] { 3, 0 };
 		}
 		
-		return new double[] {1, 0};
+		return new double[] { 1, 0 };
 		###
 *
 Safari Ball:

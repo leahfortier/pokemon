@@ -20,9 +20,11 @@ import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
+import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
+import item.ItemNamesies;
 import main.Game;
 import main.Global;
 import main.Type;
@@ -31,16 +33,13 @@ import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import message.Messages.MessageState;
-import pokemon.ability.AbilityNamesies;
-import battle.effect.generic.EffectNamesies;
-import item.ItemNamesies;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
+import pokemon.ability.AbilityNamesies;
 import trainer.CharacterData;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
-import trainer.Pokedex.PokedexStatus;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
@@ -342,8 +341,7 @@ public class Battle {
 
 		// Document sighting in the Pokedex
 		if (!enterer.user()) {
-			// TODO: This should be a method
-			player.getPokedex().setStatus(enterer.getPokemonInfo(), PokedexStatus.SEEN, isWildBattle() ? player.getAreaName() : "");
+			player.getPokedex().setSeen(enterer, isWildBattle());
 		}
 
 		if (reset) {

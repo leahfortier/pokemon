@@ -11,7 +11,6 @@ import pokemon.PokemonNamesies;
 import pattern.map.WildBattleMatcher;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
-import trainer.Pokedex.PokedexStatus;
 import trainer.WildPokemon;
 import util.JsonUtils;
 
@@ -59,8 +58,7 @@ class WildBattleTrigger extends Trigger {
 				}
 			}
 
-			// TODO: Should probably make a method for this
-			boolean seenWildPokemon = player.getPokedex().getStatus(wildPokemon.front().getPokemonInfo().namesies()) == PokedexStatus.NOT_SEEN;
+			boolean seenWildPokemon = player.getPokedex().isNotSeen(wildPokemon.front().getPokemonInfo().namesies());
 			
 			// Let the battle begin!!
 			Battle battle = new Battle(wildPokemon);
@@ -79,7 +77,7 @@ class WildBattleTrigger extends Trigger {
 	
 	// Returns a legendary encounter if applicable and null otherwise
 	private WildPokemon getLegendaryEncounter() {
-		if (Global.chanceTest(1, 1024) && !Game.getPlayer().getPokedex().caught(PokemonNamesies.MEW)) {
+		if (Global.chanceTest(1, 1024) && !Game.getPlayer().getPokedex().isCaught(PokemonNamesies.MEW)) {
 			return new WildPokemon(new ActivePokemon(PokemonNamesies.MEW, 5, true, false));
 		}
 		

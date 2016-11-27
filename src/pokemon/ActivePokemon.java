@@ -42,7 +42,6 @@ import pokemon.Evolution.EvolutionCheck;
 import pokemon.PokemonInfo.WildHoldItem;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
-import trainer.Pokedex.PokedexStatus;
 import util.DrawUtils;
 
 import java.awt.Color;
@@ -515,7 +514,7 @@ public class ActivePokemon implements Serializable {
 		
 		pokemon = ev.getEvolution();
 		if (print) {
-			b.getPlayer().getPokedex().setStatus(this.getPokemonInfo(), PokedexStatus.CAUGHT);
+			b.getPlayer().getPokedex().setCaught(this.getPokemonInfo());
 		}
 		
 		// Set name if it was not given a nickname

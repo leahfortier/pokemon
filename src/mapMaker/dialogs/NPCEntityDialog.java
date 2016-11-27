@@ -1,6 +1,7 @@
 package mapMaker.dialogs;
 
 import map.Direction;
+import map.entity.MovableEntity;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import pattern.action.NPCInteractionMatcher;
@@ -49,9 +50,9 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				int index = Integer.parseInt(((ImageIcon) spriteComboBox.getSelectedItem()).getDescription());
-				int direction = directionComboBox.getSelectedIndex();
+				Direction direction = (Direction)directionComboBox.getSelectedItem();
 
-				BufferedImage image = mapMaker.getTileFromSet(TileType.TRAINER, 12 * index + 1 + direction);
+				BufferedImage image = mapMaker.getTileFromSet(TileType.TRAINER, MovableEntity.getTrainerSpriteIndex(index, direction));
 				image = image.getSubimage(0, 0, Math.min(image.getWidth(), 50), Math.min(image.getHeight(), 50));
 
 				ImageIcon icon = new ImageIcon(image);
@@ -129,8 +130,16 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 	
 	private ImageIcon[] getTrainerSprites() {
 		List<ImageIcon> icons = new ArrayList<>();
-		for (int curr = 0; mapMaker.getTileFromSet(TileType.TRAINER, 12*curr + 4) != null; curr++) {
-			icons.add(new ImageIcon(mapMaker.getTileFromSet(TileType.TRAINER, 12*curr + 4), "" + curr));
+
+		int spriteIndex = 0;
+		while (true) {
+			BufferedImage image = mapMaker.getTileFromSet(TileType.TRAINER, MovableEntity.getTrainerSpriteIndex(spriteIndex, Direction.DOWN));
+			if (image == null) {
+				break;
+			}
+
+			icons.add(new ImageIcon(image, spriteIndex +""));
+			spriteIndex++;
 		}
 
 		return icons.toArray(new ImageIcon[0]);
