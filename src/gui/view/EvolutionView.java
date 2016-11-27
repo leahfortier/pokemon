@@ -47,13 +47,11 @@ public class EvolutionView extends View {
 		switch (state) {
 			case START:
 				if (message != null) {
-					if (input.mouseDown) {
-						input.consumeMousePress();
+					if (input.consumeIfMouseDown()) {
 						message = null;
 					}
 
-					if (input.isDown(Control.SPACE)) {
-						input.consumeKey(Control.SPACE);
+					if (input.consumeIfDown(Control.SPACE)) {
 						message = null;
 					}
 				}
@@ -70,13 +68,11 @@ public class EvolutionView extends View {
 				break;
 			case END:
 				if (message != null) {
-					if (input.mouseDown) {
-						input.consumeMousePress();
+					if (input.consumeIfMouseDown()) {
 						message = null;
 					}
 
-					if (input.isDown(Control.SPACE)) {
-						input.consumeKey(Control.SPACE);
+					if (input.consumeIfDown(Control.SPACE)) {
 						message = null;
 					}
 				}

@@ -109,8 +109,7 @@ public class PartyView extends View {
 			updateActiveButtons();
 		}
 		
-		if (input.isDown(Control.ESC)){
-			input.consumeKey(Control.ESC);
+		if (input.consumeIfDown(Control.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}

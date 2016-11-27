@@ -59,13 +59,13 @@ public class PlayerEntity extends MovableEntity {
 		npcTriggerSuffix = null;
 		boolean spacePressed = false;
 		if (transitionTime == 0 && !justMoved) {
-			if (input.isDown(Control.SPACE)) {
-				input.consumeKey(Control.SPACE);
+			if (input.consumeIfDown(Control.SPACE)) {
 				spacePressed = true;
 			}
 			else {
 				for (Direction direction : Direction.values()) {
-					if (input.isDown(direction.key) && transitionTime == 0 && !stalled) {
+					// TODO: Check if this should be consumed
+					if (input.isDown(direction.getKey()) && transitionTime == 0 && !stalled) {
 						if (transitionDirection != direction) {
 							transitionDirection = direction;
 							continue;

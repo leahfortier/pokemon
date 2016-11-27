@@ -117,8 +117,7 @@ public class GameFrame {
 			Game.draw(g);
 
 			// This will fail if it can't acquire the lock on control (just won't display or anything)
-			if (control.isDown(Control.CONSOLE)) {
-				control.consumeKey(Control.CONSOLE);
+			if (control.consumeIfDown(Control.CONSOLE)) {
 				console.init(control);
 			}
 

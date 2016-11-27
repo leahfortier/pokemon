@@ -18,7 +18,7 @@ import util.StringUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class StartView extends View {
+class StartView extends View {
 	
 	private static final MessageUpdate[] dialogue = new MessageUpdate[] {
 				new MessageUpdate("Welcome to the world of Pok\u00e9mon!"), // TODO: Constants blah blah blah
@@ -48,13 +48,11 @@ public class StartView extends View {
 		switch (state) {
 			case DEFAULT:
 				if (message != null) {
-					if (input.mouseDown) {
-						input.consumeMousePress();
+					if (input.consumeIfMouseDown()) {
 						message = null;
 					}
 
-					if (input.isDown(Control.SPACE)) {
-						input.consumeKey(Control.SPACE);
+					if (input.consumeIfDown(Control.SPACE)) {
 						message = null;
 					}
 				}
@@ -97,9 +95,8 @@ public class StartView extends View {
 					}
 				}
 
-				if (input.isDown(Control.ENTER)) {
+				if (input.consumeIfDown(Control.ENTER)) {
 					input.stopTextCapture();
-					input.consumeKey(Control.ENTER);
 					player.setName(name.isEmpty() ? CharacterData.DEFAULT_NAME : name);
 					state = State.DEFAULT;
 				}

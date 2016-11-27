@@ -14,8 +14,7 @@ import java.awt.Graphics;
 public class TrainerCardView extends View {
 
 	public void update(int dt, InputControl input) {
-		if (input.isDown(Control.ESC)) {
-			input.consumeKey(Control.ESC);
+		if (input.consumeIfDown(Control.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}

@@ -1,14 +1,9 @@
 package gui.view;
 
+import battle.attack.Move;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.List;
-
 import main.Game;
 import main.Type;
 import pokemon.ActivePokemon;
@@ -19,7 +14,11 @@ import trainer.Trainer;
 import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
-import battle.attack.Move;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class PCView extends View {
 	private static final int NUM_BUTTONS = PC.BOX_HEIGHT*PC.BOX_WIDTH + Trainer.MAX_POKEMON + 6;
@@ -128,20 +127,17 @@ public class PCView extends View {
 			}
 		}
 		
-		if (leftButton.checkConsumePress())
-		{
+		if (leftButton.checkConsumePress()) {
 			pc.prevBox();
 			movedToFront();
 		}
 		
-		if (rightButton.checkConsumePress())
-		{
+		if (rightButton.checkConsumePress()) {
 			pc.nextBox();
 			movedToFront();
 		}
 		
-		if (switchButton.checkConsumePress())
-		{
+		if (switchButton.checkConsumePress()) {
 			switchClicked = !switchClicked;
 			updateActiveButtons();
 		}
@@ -161,20 +157,16 @@ public class PCView extends View {
 			updateActiveButtons();
 		}
 		
-		if (releaseButton.checkConsumePress())
-		{
+		if (releaseButton.checkConsumePress()) {
 			pc.releasePokemon(selected);
 			movedToFront();
 		}
 		
-		if (returnButton.checkConsumePress())
-		{
+		if (returnButton.checkConsumePress()) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 		
-		if (input.isDown(Control.ESC))
-		{
-			input.consumeKey(Control.ESC);
+		if (input.consumeIfDown(Control.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
@@ -200,17 +192,16 @@ public class PCView extends View {
 		DrawUtils.setFont(g, 20);
 		DrawUtils.drawCenteredWidthString(g, "Box " + (pc.getBoxNum() + 1), 214, 65);
 		
-		for (int i = 0; i < PC.BOX_HEIGHT; i++)
-		{
-			for (int j = 0; j < PC.BOX_WIDTH; j++)
-			{
+		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
+			for (int j = 0; j < PC.BOX_WIDTH; j++) {
 				ActivePokemon p = box[j][i];
-				if (p == null) continue;
+				if (p == null) {
+					continue;
+				}
 				
 				g.translate(boxButtons[j][i].x, boxButtons[j][i].y);
 				
-				if (p == selected)
-				{
+				if (p == selected) {
 					g.drawImage(tiles.getTile(0x32), 0, 0, null);
 				}
 				
@@ -232,13 +223,11 @@ public class PCView extends View {
 		g.drawImage(tiles.getTile(0x33), 40, 478, null);
 
 		List<ActivePokemon> team = Game.getPlayer().getTeam();
-		for (int i = 0; i < team.size(); i++)
-		{
+		for (int i = 0; i < team.size(); i++) {
 			g.translate(partyButtons[i].x, partyButtons[i].y);
 			
 			ActivePokemon p = team.get(i);
-			if (p == selected)
-			{
+			if (p == selected) {
 				g.drawImage(tiles.getTile(0x32), 0, 0, null);
 			}
 			

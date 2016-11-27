@@ -119,8 +119,7 @@ public class Button {
 		}
 		
 		for (Direction direction : Direction.values()) {
-			if (input.isDown(direction.key)) {
-				input.consumeKey(direction.key);
+			if (input.consumeIfDown(direction.getKey())) {
 				selected = Button.transition(buttons, selected, direction);
 			}
 		}
@@ -170,21 +169,18 @@ public class Button {
 			
 			if (mx >= x && my >= y && mx <= x + width && my <= y + height) {
 				hover = true;
-				if (input.mouseDown) {
-					input.consumeMousePress();
+				if (input.consumeIfMouseDown()) {
 					press = true;
 				}
 			}
 		}
 
-		if (isSelected && input.isDown(Control.SPACE)) {
-			input.consumeKey(Control.SPACE);
+		if (isSelected && input.consumeIfDown(Control.SPACE)) {
 			press = true;
 		}
 
 		for (Control c : optionalKeys) {
-			if (input.isDown(c)) {
-				input.consumeKey(c);
+			if (input.consumeIfDown(c)) {
 				press = true;
 			}
 		}

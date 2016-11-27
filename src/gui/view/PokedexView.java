@@ -3,12 +3,6 @@ package gui.view;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.List;
-
 import main.Game;
 import main.Type;
 import pokemon.PC;
@@ -18,6 +12,11 @@ import trainer.Pokedex.PokedexStatus;
 import util.DrawUtils;
 import util.InputControl;
 import util.InputControl.Control;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class PokedexView extends View {
 	private static final int PER_PAGE = PC.BOX_HEIGHT*PC.BOX_WIDTH;
@@ -104,8 +103,7 @@ public class PokedexView extends View {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 		
-		if (input.isDown(Control.ESC)) {
-			input.consumeKey(Control.ESC);
+		if (input.consumeIfDown(Control.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}

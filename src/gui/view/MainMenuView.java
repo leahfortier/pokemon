@@ -2,19 +2,18 @@ package gui.view;
 
 import gui.Button;
 import gui.TileSet;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-
 import main.Game;
 import main.Global;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import util.DrawUtils;
 import util.InputControl;
-import util.Save;
 import util.InputControl.Control;
+import util.Save;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 
 public class MainMenuView extends View {
 	private static final int NUM_MAIN_BUTTONS = 4;
@@ -318,8 +317,7 @@ public class MainMenuView extends View {
 			bgIndex = nextIndex;
 		}
 		
-		if (input.isDown(Control.BACK)) {
-			input.consumeKey(Control.BACK);
+		if (input.consumeIfDown(Control.BACK)) {
 			setVisualState(VisualState.MAIN);
 		}
 	}

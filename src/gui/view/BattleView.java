@@ -720,8 +720,7 @@ public class BattleView extends View {
 					view.cycleMessage(false);
 				}
 			}
-			else if (input.isDown(Control.L)) {
-				input.consumeKey(Control.L);
+			else if (input.consumeIfDown(Control.L)) {
 				view.logPage = 0;
 				view.logMessages = view.currentBattle.getPlayer().getLogMessages();
 				
@@ -865,14 +864,12 @@ public class BattleView extends View {
 			boolean pressed = false;
 			
 			// Consume input for mouse clicks and spacebars
-			if (input.mouseDown) {
+			if (input.consumeIfMouseDown()) {
 				pressed = true;
-				input.consumeMousePress();
 			}
 
-			if (input.isDown(Control.SPACE)) {
+			if (input.consumeIfDown(Control.SPACE)) {
 				pressed = true;
-				input.consumeKey(Control.SPACE);
 			}
 			
 			// Don't go to the next message if an animation is playing 

@@ -481,24 +481,15 @@ public class MapView extends View {
 				showMessage = false;
 				break;
 			case MAP:
-				if (input.isDown(Control.ESC)) {
-					input.consumeKey(Control.ESC);
+				if (input.consumeIfDown(Control.ESC)) {
 					state = VisualState.MENU;
 				}
-
-//				if (input.isDown(Control.SPACE)){
-//					input.consumeKey(Control.SPACE);
-//					//game.setViewMode(Game.ViewMode.BATTLE_VIEW);
-//					game.setViewMode(Game.ViewMode.EVOLUTION_VIEW);
-//				}
 				break;
 			case MESSAGE:
 				if (currentMessage.isChoice()) {
-					if (input.isDown(Control.DOWN)) {
-						input.consumeKey(Control.DOWN);
+					if (input.consumeIfDown(Control.DOWN)) {
 						dialogueSelection++;
-					} else if (input.isDown(Control.UP)) {
-						input.consumeKey(Control.UP);
+					} else if (input.consumeIfDown(Control.UP)) {
 						dialogueSelection--;
 					}
 
@@ -506,9 +497,7 @@ public class MapView extends View {
 					dialogueSelection %= currentMessage.getChoices().length;
 				}
 
-				if (input.isDown(Control.SPACE) && !SoundPlayer.soundPlayer.soundEffectIsPlaying()) {
-					input.consumeKey(Control.SPACE);
-
+				if (!SoundPlayer.soundPlayer.soundEffectIsPlaying() && input.consumeIfDown(Control.SPACE)) {
 					if (currentMessage.isChoice()) {
 						ChoiceMatcher choice = currentMessage.getChoices()[dialogueSelection];
 						Trigger trigger = EntityAction.addActionGroupTrigger(null, null, choice.getActions());
@@ -577,8 +566,7 @@ public class MapView extends View {
 						break;
 				}
 				
-				if (input.isDown(Control.ESC)) {
-					input.consumeKey(Control.ESC);
+				if (input.consumeIfDown(Control.ESC)) {
 					state = VisualState.MAP;
 				}
 				break;

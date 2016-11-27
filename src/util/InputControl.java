@@ -71,7 +71,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	}
 
 	public int mouseX, mouseY;
-	public boolean mouseDown;
+	private boolean mouseDown;
 	private Key[] keyList;
 	private StringBuilder capturedText;
 	private boolean isCaptureText;
@@ -89,7 +89,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		Key leftKey = new Key(KeyEvent.VK_A, KeyEvent.VK_LEFT);
 		Key rightKey = new Key(KeyEvent.VK_D, KeyEvent.VK_RIGHT);
 		Key escKey = new Key(KeyEvent.VK_ESCAPE);
-		Key spaceKey = new Key(KeyEvent.VK_SPACE, KeyEvent.VK_ENTER); // Change name to something like nextKey
+		Key spaceKey = new Key(KeyEvent.VK_SPACE, KeyEvent.VK_ENTER); // TODO: Change name to something like nextKey
 		Key backKey = new Key(KeyEvent.VK_BACK_SPACE);
 		Key consoleKey = new Key(KeyEvent.VK_BACK_QUOTE);
 		Key enterKey = new Key(KeyEvent.VK_ENTER);
@@ -142,19 +142,41 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		lock = INVALID_LOCK;
 		return true;
 	}
+
+	public boolean consumeIfDown(Control control) {
+		if (this.isDown(control)) {
+			this.consumeKey(control);
+			return true;
+		}
+
+		return false;
+	}
 	
 	// If there is no lock currently, return the correct value, else return false
-	public boolean isDown(Control c) {
+	private boolean isDown(Control c) {
+		if (c == null) {
+			return false;
+		}
+
 		if (lock != INVALID_LOCK) {
 			return false;
 		}
 
 		return keyMap.get(c).isDown();
 	}
+
+	public boolean consumeIfDown(Control control, int key) {
+		if (this.isDown(control, key)) {
+			this.consumeKey(control, key);
+			return true;
+		}
+
+		return false;
+	}
 	
 	// If there actually isn't a lock, or we have the lock, return the correct value, else
 	// return false
-	public boolean isDown(Control c, int key) {
+	private boolean isDown(Control c, int key) {
 		if (key == INVALID_LOCK || lock == key) {
 			return keyMap.get(c).isDown;
 		}
@@ -162,13 +184,11 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		return false;
 	}
 	
-	public void consumeKey(Control c) {
-		if (lock == INVALID_LOCK) {
-			keyMap.get(c).consume();
-		}
+	private void consumeKey(Control c) {
+		consumeKey(c, INVALID_LOCK);
 	}
 	
-	public void consumeKey(Control c, int key) {
+	private void consumeKey(Control c, int key) {
 		if (lock == key) {
 			keyMap.get(c).consume();
 		}
@@ -182,8 +202,13 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		mouseDown = false;
 	}
 
-	public void consumeMousePress() {
-		mouseDown = false;
+	public boolean consumeIfMouseDown() {
+		if (mouseDown) {
+			mouseDown = false;
+			return true;
+		}
+
+		return false;
 	}
 
 	public void startTextCapture() {

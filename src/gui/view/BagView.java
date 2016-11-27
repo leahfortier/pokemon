@@ -213,13 +213,11 @@ class BagView extends View {
 		CharacterData player = Game.getPlayer();
 
 		if (message != null) {
-			if (input.mouseDown) {
-				input.consumeMousePress();
+			if (input.consumeIfMouseDown()) {
 				message = null;
 			}
 
-			if (input.isDown(Control.SPACE)) {
-				input.consumeKey(Control.SPACE);
+			if (input.consumeIfDown(Control.SPACE)) {
 				message = null;
 			}
 
@@ -332,8 +330,7 @@ class BagView extends View {
 			returnToMap();
 		}
 
-		if (input.isDown(Control.ESC)) {
-			input.consumeKey(Control.ESC);
+		if (input.consumeIfDown(Control.ESC)) {
 			returnToMap();
 		}
 

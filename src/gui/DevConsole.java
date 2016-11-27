@@ -54,13 +54,11 @@ class DevConsole {
 			currText = input.getCapturedText();
 		}
 
-		if (input.isDown(Control.ENTER, key)) {
-			input.consumeKey(Control.ENTER, key);
+		if (input.consumeIfDown(Control.ENTER, key)) {
 			execute(input.stopTextCapture());
 		}
 
-		if (input.isDown(Control.ESC, key)) {
-			input.consumeKey(Control.ESC, key);
+		if (input.consumeIfDown(Control.ESC, key)) {
 			tearDown(input);
 		}
 	}

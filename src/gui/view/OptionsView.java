@@ -11,25 +11,22 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
-public class OptionsView extends View {
+class OptionsView extends View {
 	private boolean musicOn;
 	private Color color;
 	
-	public OptionsView() {
+	OptionsView() {
 		musicOn = SoundPlayer.soundPlayer.isMuted();
 		color = new Color(0, 0, 0);
 	}
 
 	public void update(int dt, InputControl input) {
-		if (input.mouseDown) {
-			input.consumeMousePress();
-			
+		if (input.consumeIfMouseDown()) {
 			musicOn = !musicOn;
 			SoundPlayer.soundPlayer.toggleMusic();
 		}
 		
-		if (input.isDown(Control.ESC)) {
-			input.consumeKey(Control.ESC);
+		if (input.consumeIfDown(Control.ESC)) {
 			Game.setViewMode(ViewMode.MAP_VIEW);
 		}
 	}

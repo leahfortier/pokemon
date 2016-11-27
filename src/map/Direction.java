@@ -11,8 +11,8 @@ public enum Direction {
 
     public final char character;
     public final int dx;
-    public final int dy;
-    public final Control key;
+    public final int dy; // TODO: Change to just a delta point
+    private final Control key;
     public Direction opposite; // Really this should be final but it won't let me include this in the constructor
 
     Direction(char character, int dx, int dy, Control key) {
@@ -36,5 +36,9 @@ public enum Direction {
 
     public Point getDeltaPoint() {
         return new Point(dx, dy);
+    }
+
+    public Control getKey() {
+        return this.key;
     }
 }
