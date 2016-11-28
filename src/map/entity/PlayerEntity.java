@@ -16,11 +16,11 @@ import util.Point;
 
 public class PlayerEntity extends MovableEntity {
 
+	private boolean justCreated;
 	private boolean justMoved;
-	private String npcTriggerSuffix;
 	private boolean stalled;
 
-	private boolean justCreated;
+	private String entityTriggerSuffix;
 
 	public PlayerEntity() {
 		this(Game.getPlayer());
@@ -57,39 +57,40 @@ public class PlayerEntity extends MovableEntity {
 			transitionDirection = player.direction;
 		}
 		
-		npcTriggerSuffix = null;
+		entityTriggerSuffix = null;
 		boolean spacePressed = false;
-		if (transitionTime == 0 && !justMoved) {
+
+		if (!this.isTransitioning() && !justMoved) {
 			if (input.consumeIfDown(ControlKey.SPACE)) {
 				spacePressed = true;
 			}
 			else {
-				for (Direction direction : Direction.values()) {
-					if (input.isDown(direction.getKey()) && transitionTime == 0 && !stalled) {
-						if (transitionDirection != direction) {
-							transitionDirection = direction;
-							continue;
-						}
+				// TODO: Add support for multiple pressed keys. Weird things happen when you hold one key and press another.
+				Direction inputDirection = Direction.checkInputDirection();
+				if (inputDirection != null && !isTransitioning() && !stalled) {
 
-						Point delta = Point.add(player.getLocation(), direction.getDeltaPoint());
-						
+					// If not facing the input direction, transition this way
+					if (transitionDirection != inputDirection) {
+						transitionDirection = inputDirection;
+					}
+					// Otherwise, advance in the input direction
+					else {
+						Point newLocation = Point.add(player.getLocation(), inputDirection.getDeltaPoint());
+
 						WalkType curPassValue = map.getPassValue(player.getX(), player.getY());
-						WalkType passValue = map.getPassValue(delta.x, delta.y);
-						
-						if (isPassable(passValue, direction) && entities[delta.x][delta.y] == null) {
-							delta = Point.add(delta, getWalkTypeAdditionalMove(curPassValue, passValue, direction));
+						WalkType passValue = map.getPassValue(newLocation.x, newLocation.y);
 
-							entities[delta.x][delta.y] = this;
+						if (isPassable(passValue, inputDirection) && entities[newLocation.x][newLocation.y] == null) {
+							newLocation = Point.add(newLocation, getWalkTypeAdditionalMove(curPassValue, passValue, inputDirection));
+
+							entities[newLocation.x][newLocation.y] = this;
 							entities[player.getX()][player.getY()] = null;
 
-							player.setLocation(delta);
+							player.setLocation(newLocation);
 							player.step();
 
+							// TODO: This seems to be a common default value -- should be in a method or something
 							transitionTime = 1;
-							break;
-							// TODO: Add support for multiple pressed keys.
-							// Weird things happen when you hold one key and
-							// press another.
 						}
 					}
 				}
@@ -103,7 +104,7 @@ public class PlayerEntity extends MovableEntity {
 				Entity entity = entities[newLocation.x][newLocation.y];
 				
 				if (map.inBounds(newLocation) && entity != null && entity != currentInteractionEntity) {
-					npcTriggerSuffix = entity.getTriggerSuffix();
+					entityTriggerSuffix = entity.getTriggerSuffix();
 					entity.getAttention(transitionDirection.getOpposite());
 					currentInteractionEntity = entity;
 				}
@@ -116,7 +117,7 @@ public class PlayerEntity extends MovableEntity {
 
 					// TODO: Should have a method for this
 					if (map.inBounds(newLocation) && entity != null && entity != currentInteractionEntity) {
-						npcTriggerSuffix = entity.getTriggerSuffix();
+						entityTriggerSuffix = entity.getTriggerSuffix();
 						currentInteractionEntity = entity;
 
 						entity.getAttention(direction);
@@ -158,9 +159,9 @@ public class PlayerEntity extends MovableEntity {
 	public void triggerCheck(MapData map) {
 		String triggerName = null;
 
-		if (npcTriggerSuffix != null) {
-			triggerName = TriggerType.GROUP.getTriggerNameFromSuffix(npcTriggerSuffix);
-			npcTriggerSuffix = null;
+		if (entityTriggerSuffix != null) {
+			triggerName = TriggerType.GROUP.getTriggerNameFromSuffix(entityTriggerSuffix);
+			entityTriggerSuffix = null;
 		}
 		else if (justMoved) {
 			triggerName = map.getCurrentTrigger();

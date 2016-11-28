@@ -83,8 +83,12 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		return false;
 	}
 
-	public boolean isDown(ControlKey controlKey) {
-		return isDown(controlKey, INVALID_LOCK);
+	public boolean isDown(ControlKey controlKey, boolean consume) {
+		if (consume) {
+			return consumeIfDown(controlKey);
+		} else {
+			return isDown(controlKey, INVALID_LOCK);
+		}
 	}
 	
 	// If there actually isn't a lock, or we have the lock, return the correct value, otherwise return false
