@@ -45,12 +45,8 @@ public class MapData {
 	public MapData(File file) {
 		name = file.getName();
 
-		String beginFilePath = FileIO.makeFolderPath(file.getPath()) + name;
-		final Map<MapDataType, BufferedImage> imageMap = new EnumMap<>(MapDataType.class);
-		for (MapDataType dataType : MapDataType.values()) {
-			File imageFile = new File(dataType.getImageName(beginFilePath));
-			imageMap.put(dataType, FileIO.readImage(imageFile));
-		}
+		String beginFilePath = FileIO.makeFolderPath(file.getPath());
+		final Map<MapDataType, BufferedImage> imageMap = MapDataType.getImageMap(beginFilePath, name);
 
 		BufferedImage backgroundMap = imageMap.get(MapDataType.BACKGROUND);
 		dimension = new Dimension(backgroundMap.getWidth(), backgroundMap.getHeight());
@@ -65,7 +61,7 @@ public class MapData {
 		triggers = new HashMap<>();
 		mapEntrances = new HashMap<>();
 
-		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(beginFilePath + ".txt");
+		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(beginFilePath + name + ".txt");
 		this.areaData = mapDataMatcher.getAreaData();
 
 		entities.addAll(mapDataMatcher.getNPCs()
