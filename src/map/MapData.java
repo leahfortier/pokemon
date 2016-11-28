@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 public class MapData {
 	private final String name;
 
@@ -121,25 +120,6 @@ public class MapData {
 		}
 	}
 
-	// TODO: move this to its own file
-	public enum WalkType {
-		WATER(0x0000FF), 
-		WALKABLE(0xFFFFFF), 
-		NOT_WALKABLE(0x000000), 
-		HOP_DOWN(0x00FF00), 
-		HOP_UP(0xFF0000), 
-		HOP_LEFT(0xFFFF00), 
-		HOP_RIGHT(0x00FFFF),
-		STAIRS_UP_RIGHT(0xFF00FF),
-		STAIRS_UP_LEFT(0xFFC800);
-		
-		private final int value;
-		
-		WalkType(int v) {
-			value = v;
-		}
-	}
-
 	private int getMapIndex(int x, int y) {
 		return Point.getIndex(x, y, getDimension().width);
 	}
@@ -177,7 +157,7 @@ public class MapData {
 		// TODO: SRSLY WHAT IS GOING ON
 		int val = rgb&((1<<24) - 1);
 		for (WalkType walkType: WalkType.values()) {
-			if (walkType.value == val) {
+			if (walkType.getValue() == val) {
 				return walkType;
 			}
 		}

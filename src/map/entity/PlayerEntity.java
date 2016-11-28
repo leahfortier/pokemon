@@ -5,7 +5,7 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
-import map.MapData.WalkType;
+import map.WalkType;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import trainer.CharacterData;

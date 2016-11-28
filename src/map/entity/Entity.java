@@ -4,7 +4,7 @@ import gui.view.MapView;
 import map.Condition;
 import map.Direction;
 import map.MapData;
-import map.MapData.WalkType;
+import map.WalkType;
 import map.triggers.TriggerType;
 import util.DrawUtils;
 import util.Point;
