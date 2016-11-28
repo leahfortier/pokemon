@@ -20,19 +20,10 @@ public enum Direction {
 
     private final ControlKey key;
     private final PathDirection pathDirection;
-    public Direction opposite; // Really this should be final but it won't let me include this in the constructor
 
     Direction(ControlKey key, PathDirection pathDirection) {
         this.key = key;
         this.pathDirection = pathDirection;
-    }
-
-    // This is dumb fuck Java
-    static {
-        RIGHT.opposite = LEFT;
-        UP.opposite = DOWN;
-        LEFT.opposite = RIGHT;
-        DOWN.opposite = UP;
     }
 
     public Point getDeltaPoint() {
@@ -45,6 +36,11 @@ public enum Direction {
 
     public PathDirection getPathDirection() {
         return this.pathDirection;
+    }
+
+    public Direction getOpposite() {
+        // TODO: util method for something like this
+        return Direction.values()[(this.ordinal() + 2)%Direction.values().length];
     }
 
     public static Direction getDirection(PathDirection pathDirection) {

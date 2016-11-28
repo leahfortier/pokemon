@@ -181,8 +181,7 @@ public class MapData {
 		return AreaData.VOID;
 	}
 
-	// TODO: Rename
-	public String trigger() {
+	public String getCurrentTrigger() {
 		int val = Game.getPlayer().getLocation().getIndex(dimension.width);
 		if (triggers.containsKey(val)) {
 			return triggers.get(val);

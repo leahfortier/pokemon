@@ -41,15 +41,15 @@ public class PlayerEntity extends MovableEntity {
 	}
 
 	@Override
-	public void update(int dt, Entity[][] entity, MapData map, MapView view) {
-		super.update(dt, entity, map, view);
+	public void update(int dt, Entity[][] entities, MapData map, MapView view) {
+		super.update(dt, entities, map, view);
 
 		CharacterData player = Game.getPlayer();
 		InputControl input = InputControl.instance();
 
 		if (!this.getLocation().equals(player.getLocation())) {
-			entity[getX()][getY()] = null;
-			entity[player.getX()][player.getY()] = this;
+			entities[getX()][getY()] = null;
+			entities[player.getX()][player.getY()] = this;
 			transitionTime = 0;
 		}
 
@@ -76,11 +76,11 @@ public class PlayerEntity extends MovableEntity {
 						WalkType curPassValue = map.getPassValue(player.getX(), player.getY());
 						WalkType passValue = map.getPassValue(delta.x, delta.y);
 						
-						if (isPassable(passValue, direction) && entity[delta.x][delta.y] == null) {
+						if (isPassable(passValue, direction) && entities[delta.x][delta.y] == null) {
 							delta = Point.add(delta, getWalkTypeAdditionalMove(curPassValue, passValue, direction));
 
-							entity[delta.x][delta.y] = this;
-							entity[player.getX()][player.getY()] = null;
+							entities[delta.x][delta.y] = this;
+							entities[player.getX()][player.getY()] = null;
 
 							player.setLocation(delta);
 							player.step();
@@ -99,32 +99,28 @@ public class PlayerEntity extends MovableEntity {
 			player.direction = transitionDirection;
 
 			if (spacePressed) {
-				Point newPoint = Point.add(this.getLocation(), transitionDirection.getDeltaPoint());
-				int x = newPoint.x; // TODO
-				int y = newPoint.y;
-
-
+				Point newLocation = Point.add(this.getLocation(), transitionDirection.getDeltaPoint());
+				Entity entity = entities[newLocation.x][newLocation.y];
 				
-				if (map.inBounds(newPoint) && entity[x][y] != null && entity[x][y] != currentInteractionEntity) {
-					npcTriggerSuffix = entity[x][y].getTriggerSuffix();
-					entity[x][y].getAttention(transitionDirection.opposite);
-					currentInteractionEntity = entity[x][y];
+				if (map.inBounds(newLocation) && entity != null && entity != currentInteractionEntity) {
+					npcTriggerSuffix = entity.getTriggerSuffix();
+					entity.getAttention(transitionDirection.getOpposite());
+					currentInteractionEntity = entity;
 				}
 			}
 			
 			if (stalled) {
 				for (Direction direction : Direction.values()) {
 					Point newLocation = Point.add(this.getLocation(), Point.negate(direction.getDeltaPoint()));
-					int x = newLocation.x; // TODO
-					int y = newLocation.y;
+					Entity entity = entities[newLocation.x][newLocation.y];
 
 					// TODO: Should have a method for this
-					if (map.inBounds(newLocation) && entity[x][y] != null && entity[x][y] != currentInteractionEntity) {
-						npcTriggerSuffix = entity[x][y].getTriggerSuffix();
-						currentInteractionEntity = entity[x][y];
+					if (map.inBounds(newLocation) && entity != null && entity != currentInteractionEntity) {
+						npcTriggerSuffix = entity.getTriggerSuffix();
+						currentInteractionEntity = entity;
 
-						entity[x][y].getAttention(direction);
-						player.direction = transitionDirection = direction.opposite;
+						entity.getAttention(direction);
+						player.direction = transitionDirection = direction.getOpposite();
 						stalled = false;
 					}
 				}
@@ -167,7 +163,7 @@ public class PlayerEntity extends MovableEntity {
 			npcTriggerSuffix = null;
 		}
 		else if (justMoved) {
-			triggerName = map.trigger();
+			triggerName = map.getCurrentTrigger();
 			justMoved = false;
 		}
 
