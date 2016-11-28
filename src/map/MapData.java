@@ -49,10 +49,6 @@ public class MapData {
 		final Map<MapDataType, BufferedImage> imageMap = new EnumMap<>(MapDataType.class);
 		for (MapDataType dataType : MapDataType.values()) {
 			File imageFile = new File(dataType.getImageName(beginFilePath));
-			if (dataType == MapDataType.AREA && !imageFile.exists()) {
-				Global.error("NO AREA DATA FOR " + beginFilePath);
-			}
-
 			imageMap.put(dataType, FileIO.readImage(imageFile));
 		}
 
@@ -94,12 +90,12 @@ public class MapData {
             matcher.setMapName(this.name);
 
 			Point entrance = matcher.getLocation();
-			mapEntrances.put(matcher.getExitName(), getMapIndex(entrance.x, entrance.y));
+			mapEntrances.put(matcher.getExitName(), getMapIndex(entrance));
 
             Point exit = matcher.getExitLocation();
 			if (exit != null) {
 				Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(JsonUtils.getJson(matcher), null);
-				triggers.put(getMapIndex(exit.x, exit.y), trigger.getName());
+				triggers.put(getMapIndex(exit), trigger.getName());
 			}
         }
 
@@ -108,20 +104,20 @@ public class MapData {
 			Trigger trigger = EntityAction.addActionGroupTrigger(triggerData.name, triggerData.name, matcher.getActions());
 
 			for (Point point : matcher.getLocation()) {
-				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
+				triggers.put(getMapIndex(point), trigger.getName());
 			}
 		}
 
 		for (WildBattleMatcher matcher : mapDataMatcher.getWildBattles()) {
 			Trigger trigger = TriggerType.WILD_BATTLE.createTrigger(JsonUtils.getJson(matcher), null);
 			for (Point point : matcher.getLocation()) {
-				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
+				triggers.put(getMapIndex(point), trigger.getName());
 			}
 		}
 	}
 
-	private int getMapIndex(int x, int y) {
-		return Point.getIndex(x, y, getDimension().width);
+	private int getMapIndex(Point point) {
+		return point.getIndex(getDimension().width);
 	}
 
 	public Dimension getDimension() {
