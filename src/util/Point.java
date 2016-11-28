@@ -38,11 +38,19 @@ public class Point implements Serializable {
     }
 
     public boolean inBounds(int width, int height) {
-        return x >= 0 && x < width && y >= 0 && y < height;
+        return inBounds(x, y, width, height);
     }
 
     public boolean inBounds(Dimension dimension) {
         return this.inBounds(dimension.width, dimension.height);
+    }
+
+    public static boolean inBounds(int x, int y, Dimension dimension) {
+        return inBounds(x, y, dimension.width, dimension.height);
+    }
+
+    public static boolean inBounds(int x, int y, int width, int height) {
+        return x >= 0 && x < width && y >= 0 && y < height;
     }
 
     public static Point add(Point point, int dx, int dy) {

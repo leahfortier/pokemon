@@ -1,6 +1,6 @@
 package mapMaker;
 
-import map.MapMetaData.MapDataType;
+import map.MapDataType;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.MapMakerModel.TileModelType;
 

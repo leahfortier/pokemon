@@ -102,8 +102,10 @@ public class PlayerEntity extends MovableEntity {
 				Point newPoint = Point.add(this.getLocation(), transitionDirection.getDeltaPoint());
 				int x = newPoint.x; // TODO
 				int y = newPoint.y;
+
+
 				
-				if (map.inBounds(x, y) && entity[x][y] != null && entity[x][y] != currentInteractionEntity) {
+				if (map.inBounds(newPoint) && entity[x][y] != null && entity[x][y] != currentInteractionEntity) {
 					npcTriggerSuffix = entity[x][y].getTriggerSuffix();
 					entity[x][y].getAttention(transitionDirection.opposite);
 					currentInteractionEntity = entity[x][y];
@@ -117,7 +119,7 @@ public class PlayerEntity extends MovableEntity {
 					int y = newLocation.y;
 
 					// TODO: Should have a method for this
-					if (map.inBounds(x, y) && entity[x][y] != null && entity[x][y] != currentInteractionEntity) {
+					if (map.inBounds(newLocation) && entity[x][y] != null && entity[x][y] != currentInteractionEntity) {
 						npcTriggerSuffix = entity[x][y].getTriggerSuffix();
 						currentInteractionEntity = entity[x][y];
 

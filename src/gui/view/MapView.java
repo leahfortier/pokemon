@@ -145,9 +145,7 @@ public class MapView extends View {
 		for (int y = start.y; y < end.y; y++) {
 			for (int x = start.x; x < end.x; x++) {
 				int bgTile = currentMap.getBgTile(x,y);
-
-				// TODO: What does this mean?
-				if ((bgTile >> 24) != 0) {
+				if (TileSet.isValidMapTile(bgTile)) {
 					BufferedImage img = mapTiles.getTile(bgTile);
 					DrawUtils.drawTileImage(g, img, x, y, draw);
 				}
@@ -160,7 +158,7 @@ public class MapView extends View {
 
 				// Draw foreground tiles
 				int fgTile = currentMap.getFgTile(x, y);
-				if ((fgTile >> 24) != 0) {
+				if (TileSet.isValidMapTile(fgTile)) {
 					BufferedImage img = mapTiles.getTile(fgTile);
 					DrawUtils.drawTileImage(g, img, x, y, draw);
 				}

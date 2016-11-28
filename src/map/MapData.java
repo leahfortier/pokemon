@@ -1,5 +1,6 @@
 package map;
 
+import gui.TileSet;
 import main.Game;
 import main.Global;
 import map.entity.Entity;
@@ -22,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,44 +33,37 @@ import java.util.stream.Collectors;
 public class MapData {
 	private final String name;
 
-	private final int[] bgTile;
-	private final int[] fgTile;
-	private final int[] walkMap;
-	private final int[] areaMap;
+	private final Dimension dimension;
 
+	private final Map<MapDataType, int[]> dataMap;
 	private final AreaData[] areaData;
 	
 	private final Map<Integer, String> triggers;
 	private final Map<String, Integer> mapEntrances;
-
-	private final Dimension dimension;
 	
 	private final List<Entity> entities;
 	
 	public MapData(File file) {
 		name = file.getName();
-		
+
 		String beginFilePath = FileIO.makeFolderPath(file.getPath()) + name;
-		
-		BufferedImage bgMap = FileIO.readImage(beginFilePath + "_bg.png");
-		int width = bgMap.getWidth();
-		int height = bgMap.getHeight();
-		dimension = new Dimension(width, height);
-		bgTile = bgMap.getRGB(0, 0, width, height, null, 0, width);
-		
-		BufferedImage fgMap = FileIO.readImage(beginFilePath + "_fg.png");
-		fgTile = fgMap.getRGB(0, 0, width, height, null, 0, width);
-		
-		BufferedImage moveMap = FileIO.readImage(beginFilePath + "_move.png");
-		walkMap = moveMap.getRGB(0, 0, width, height, null, 0, width);
-		
-		BufferedImage areaM;
-		File areaMapFile = new File(beginFilePath + "_area.png");
-		if (areaMapFile.exists()) {
-			areaM = FileIO.readImage(areaMapFile);
-			areaMap = areaM.getRGB(0, 0, width, height, null, 0, width);
-		} else {
-			areaMap = new int[0];
+		final Map<MapDataType, BufferedImage> imageMap = new EnumMap<>(MapDataType.class);
+		for (MapDataType dataType : MapDataType.values()) {
+			File imageFile = new File(dataType.getImageName(beginFilePath));
+			if (dataType == MapDataType.AREA && !imageFile.exists()) {
+				Global.error("NO AREA DATA FOR " + beginFilePath);
+			}
+
+			imageMap.put(dataType, FileIO.readImage(imageFile));
+		}
+
+		BufferedImage backgroundMap = imageMap.get(MapDataType.BACKGROUND);
+		dimension = new Dimension(backgroundMap.getWidth(), backgroundMap.getHeight());
+
+		dataMap = new EnumMap<>(MapDataType.class);
+		for (MapDataType dataType : MapDataType.values()) {
+			BufferedImage image = imageMap.get(dataType);
+			dataMap.put(dataType, image.getRGB(0, 0, dimension.width, dimension.height, null, 0, dimension.width));
 		}
 
 		entities = new ArrayList<>();
@@ -146,60 +141,60 @@ public class MapData {
 	}
 
 	private int getMapIndex(int x, int y) {
-		return Point.getIndex(x, y, dimension.width);
+		return Point.getIndex(x, y, getDimension().width);
 	}
 
 	public Dimension getDimension() {
 		return this.dimension;
 	}
 
-	// TODO: This should pass in a point
-	public boolean inBounds(int x, int y) {
-		return new Point(x, y).inBounds(dimension);
+	public boolean inBounds(Point location) {
+		return location.inBounds(dimension);
 	}
-	
+
+	private int getRGB(int x, int y, MapDataType dataType) {
+		if (!Point.inBounds(x, y, this.dimension)) {
+			return TileSet.INVALID_RGB;
+		}
+
+		return this.dataMap.get(dataType)[Point.getIndex(x, y, dimension.width)];
+	}
+
 	public int getBgTile(int x, int y) {
-		if (!inBounds(x, y)) {
-			return 0;
-		}
-		
-		return bgTile[getMapIndex(x, y)];
+		return getRGB(x, y, MapDataType.BACKGROUND);
 	}
-	
+
 	public int getFgTile(int x, int y) {
-		if (!inBounds(x, y)) {
-			return 0;
-		}
-		
-		return fgTile[getMapIndex(x, y)];
+		return getRGB(x, y, MapDataType.FOREGROUND);
 	}
-	
+
 	public WalkType getPassValue(int x, int y) {
-		if (!inBounds(x, y)) {
+		int rgb = getRGB(x, y, MapDataType.MOVE);
+		if (rgb == TileSet.INVALID_RGB) {
 			return WalkType.NOT_WALKABLE;
 		}
 
 		// TODO: SRSLY WHAT IS GOING ON
-		int val = walkMap[getMapIndex(x, y)]&((1<<24) - 1);
-		for (WalkType t: WalkType.values()) {
-			if (t.value == val) {
-				return t;
+		int val = rgb&((1<<24) - 1);
+		for (WalkType walkType: WalkType.values()) {
+			if (walkType.value == val) {
+				return walkType;
 			}
 		}
-		
+
 		return WalkType.NOT_WALKABLE;
 	}
-	
+
 	public AreaData getArea(int x, int y) {
 		if (areaData.length == 1) {
 			return areaData[0];
 		}
 
-		if (!inBounds(x, y) || areaMap == null) {
+		int areaColor = getRGB(x, y, MapDataType.AREA);
+		if (areaColor == TileSet.INVALID_RGB) {
 			return AreaData.VOID;
 		}
 
-		int areaColor = areaMap[getMapIndex(x, y)];
 		for (AreaData data : areaData) {
 			if (data.isColor(areaColor)) {
 				return data;

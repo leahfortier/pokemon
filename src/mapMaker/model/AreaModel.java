@@ -1,7 +1,7 @@
 package mapMaker.model;
 
 import map.AreaData.WeatherState;
-import map.MapMetaData.MapDataType;
+import map.MapDataType;
 import map.TerrainType;
 import mapMaker.MapMaker;
 import util.DrawUtils;

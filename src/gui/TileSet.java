@@ -12,6 +12,8 @@ import java.util.Scanner;
 
 public class TileSet {
 	public static final int EMPTY_IMAGE = -1;
+	public static final int INVALID_RGB = -1000;
+
 	private static final String IMAGE_NOT_FOUND_LOCATION = Folder.REC + "imageNotFound.png";
 
 	private static BufferedImage IMAGE_NOT_FOUND = null;
@@ -49,7 +51,7 @@ public class TileSet {
 		}
 		
 		Image tmp = img.getScaledInstance((int) (img.getWidth()*s), (int) (img.getHeight()*s), /* BufferedImage.SCALE_FAST*/ BufferedImage.SCALE_SMOOTH);
-		BufferedImage buffer = new BufferedImage((int) (img.getWidth() * s), (int) (img.getHeight() * s), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage buffer = new BufferedImage((int) (img.getWidth()*s), (int) (img.getHeight()*s), BufferedImage.TYPE_INT_ARGB);
 		
 		buffer.getGraphics().drawImage(tmp, 0, 0, null);
 		
@@ -64,6 +66,11 @@ public class TileSet {
 		
 		image = scaleImage(image, scale);
 		map.put(val, image);
+	}
+
+	// TODO: I still have no idea what the >> 24 shit means
+	public static boolean isValidMapTile(int val) {
+		return val != INVALID_RGB && (val >> 24) != 0;
 	}
 
 	public BufferedImage getTile(int val) {
