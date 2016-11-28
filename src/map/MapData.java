@@ -8,12 +8,10 @@ import map.entity.EntityAction;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
 import map.triggers.TriggerType;
+import pattern.generic.EntityMatcher;
 import pattern.map.EventMatcher;
-import pattern.map.ItemMatcher;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
-import pattern.map.MiscEntityMatcher;
-import pattern.map.NPCMatcher;
 import pattern.map.WildBattleMatcher;
 import util.FileIO;
 import util.JsonUtils;
@@ -64,20 +62,9 @@ public class MapData {
 		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(beginFilePath + name + ".txt");
 		this.areaData = mapDataMatcher.getAreaData();
 
-		entities.addAll(mapDataMatcher.getNPCs()
-				.stream()
-				.map(NPCMatcher::createEntity)
-				.collect(Collectors.toList()));
-
-		entities.addAll(mapDataMatcher.getItems()
-				.stream()
-				.map(ItemMatcher::createEntity)
-				.collect(Collectors.toList()));
-
-		entities.addAll(mapDataMatcher.getMiscEntities()
-				.stream()
-				.map(MiscEntityMatcher::createEntity)
-				.collect(Collectors.toList()));
+		addEntities(mapDataMatcher.getNPCs());
+		addEntities(mapDataMatcher.getItems());
+		addEntities(mapDataMatcher.getMiscEntities());
 
 		for (MapTransitionMatcher matcher : mapDataMatcher.getMapTransitions()) {
             matcher.setMapName(this.name);
@@ -107,6 +94,13 @@ public class MapData {
 				triggers.put(getMapIndex(point), trigger.getName());
 			}
 		}
+	}
+
+	private void addEntities(List<? extends EntityMatcher> entityMatchers) {
+		entities.addAll(entityMatchers
+				.stream()
+				.map(EntityMatcher::createEntity)
+				.collect(Collectors.toList()));
 	}
 
 	private int getMapIndex(Point point) {
