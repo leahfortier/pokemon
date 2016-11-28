@@ -65,10 +65,7 @@ public class MapData {
 		triggers = new HashMap<>();
 		mapEntrances = new HashMap<>();
 
-		File f = new File(beginFilePath + ".txt");
-		String fileText = FileIO.readEntireFileWithReplacements(f, false);
-
-		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(beginFilePath + ".txt", fileText);
+		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(beginFilePath + ".txt");
 		this.areaData = mapDataMatcher.getAreaData();
 
 		entities.addAll(mapDataMatcher.getNPCs()

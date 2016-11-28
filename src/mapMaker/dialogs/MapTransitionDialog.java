@@ -1,11 +1,9 @@
 package mapMaker.dialogs;
 
-import map.Direction;
 import map.PathDirection;
 import mapMaker.MapMaker;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
-import util.FileIO;
 import util.GUIUtils;
 
 import javax.swing.JCheckBox;
@@ -25,8 +23,7 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 
 	private static Set<String> getMapEntrancesForMap(MapMaker mapMaker, String mapName) {
 		String mapFileName = mapMaker.getMapTextFileName(mapName);
-		String fileText = FileIO.readEntireFileWithReplacements(mapFileName, false);
-		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapFileName, fileText);
+		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapFileName);
 
 		return mapDataMatcher.getMapTransitions()
 				.stream()
