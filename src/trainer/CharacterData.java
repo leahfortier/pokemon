@@ -44,10 +44,10 @@ public class CharacterData extends Trainer implements Serializable {
 	public static final String DEFAULT_NAME = "Red";
 	private static final int START_MONEY = 3000;
 
-	// TODO: Look into most of these to check if they really do need to be public
 	private Point location;
-	public Direction direction;
+	private Direction direction;
 
+	// TODO: privacy please
 	public boolean mapReset;
 	public String mapName;
 	public String areaName;
@@ -155,6 +155,14 @@ public class CharacterData extends Trainer implements Serializable {
 	public void setLocation(Point newLocation) {
 		this.location = newLocation;
 	}
+
+	public Direction getDirection() {
+		return this.direction;
+	}
+
+	public void setDirection(Direction direction) {
+		this.direction = direction;
+	}
 	
 	public void setMap(String name, String mapEntrance) {
 		mapName = name;
@@ -205,10 +213,6 @@ public class CharacterData extends Trainer implements Serializable {
 	
 	public String getAreaName() {
 		return areaName;
-	}
-
-	public void setDirection(Direction direction) {
-		this.direction = direction;
 	}
 	
 	public void setPokeCenter() {

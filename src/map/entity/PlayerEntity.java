@@ -39,6 +39,16 @@ public class PlayerEntity extends MovableEntity {
 		return Game.getPlayer().getLocation();
 	}
 
+	@Override
+	public Direction getDirection() {
+		return Game.getPlayer().getDirection();
+	}
+
+	@Override
+	protected void setDirection(Direction direction) {
+		Game.getPlayer().setDirection(direction);
+	}
+
 	// Player is drawn in the center of the canvas
 	@Override
 	public Point getCanvasCoordinates(Point drawLocation) {
@@ -51,10 +61,6 @@ public class PlayerEntity extends MovableEntity {
 
 		CharacterData player = Game.getPlayer();
 		InputControl input = InputControl.instance();
-
-		if (player.direction != transitionDirection) {
-			transitionDirection = player.direction;
-		}
 		
 		entityTriggerSuffix = null;
 		boolean spacePressed = false;
@@ -69,8 +75,8 @@ public class PlayerEntity extends MovableEntity {
 				if (inputDirection != null && !isTransitioning() && !stalled) {
 
 					// If not facing the input direction, transition this way
-					if (transitionDirection != inputDirection) {
-						transitionDirection = inputDirection;
+					if (this.getDirection() != inputDirection) {
+						this.setDirection(inputDirection);
 					}
 					// Otherwise, advance in the input direction
 					else {
@@ -92,16 +98,13 @@ public class PlayerEntity extends MovableEntity {
 				}
 			}
 
-			super.setLocation(player.getLocation());
-			player.direction = transitionDirection;
-
 			if (spacePressed) {
-				Point newLocation = Point.add(this.getLocation(), transitionDirection.getDeltaPoint());
+				Point newLocation = Point.add(this.getLocation(), this.getDirection().getDeltaPoint());
 				Entity entity = map.getEntity(newLocation);
 				
 				if (map.inBounds(newLocation) && entity != null && entity != currentInteractionEntity) {
 					entityTriggerSuffix = entity.getTriggerSuffix();
-					entity.getAttention(transitionDirection.getOpposite());
+					entity.getAttention(this.getDirection().getOpposite());
 					currentInteractionEntity = entity;
 				}
 			}
@@ -117,7 +120,7 @@ public class PlayerEntity extends MovableEntity {
 						currentInteractionEntity = entity;
 
 						entity.getAttention(direction.getOpposite());
-						player.direction = transitionDirection = direction;
+						this.setDirection(direction);
 					}
 				}
 			}
@@ -182,7 +185,7 @@ public class PlayerEntity extends MovableEntity {
 		}
 
 		// Scale by the length of the transition in the current direction
-		FloatPoint transitionDelta = FloatPoint.scale(transitionDirection.getDeltaPoint(), transitionLength);
+		FloatPoint transitionDelta = FloatPoint.scale(this.getDirection().getDeltaPoint(), transitionLength);
 
 		// Get the location relative to the player
 		FloatPoint transitionLocationUnscaled = FloatPoint.subtract(Game.getPlayer().getLocation(), transitionDelta);
@@ -207,7 +210,7 @@ public class PlayerEntity extends MovableEntity {
 
 	@Override
 	public void getAttention(Direction direction) {
-		transitionDirection = direction;
+		this.setDirection(direction);
 		stalled = true;
 	}
 

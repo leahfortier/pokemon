@@ -414,9 +414,6 @@ public class MapView extends View {
 			}
 
 			currentMap.populateEntities();
-
-			Direction prevDir = player.direction;
-			playerEntity.setDirection(prevDir);
 			state = VisualState.MAP;
 		}
 		
@@ -581,7 +578,6 @@ public class MapView extends View {
                                 && data.getTrigger(npc.getWalkTrigger()).isTriggered()) {
 
                             playerEntity.stall();
-                            npc.setDirection(direction);
                             npc.walkTowards(dist - 1, direction.getPathDirection());
 
                             if (npc.isTrainer()) {

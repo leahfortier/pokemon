@@ -10,22 +10,24 @@ import util.Point;
 import java.awt.image.BufferedImage;
 
 public abstract class MovableEntity extends Entity {
-	protected Direction transitionDirection;
 	protected int transitionTime;
-	protected int runFrame;
+	private int runFrame;
 	
 	protected int spriteIndex;
 	
-	public MovableEntity(Point location, String triggerName, String condition, int spriteIndex, Direction startDirection) {
+	MovableEntity(Point location, String triggerName, String condition, int spriteIndex, Direction startDirection) {
 		super(location, triggerName, condition);
-		
-		this.transitionDirection = startDirection;
+		this.setDirection(startDirection);
 		
 		this.transitionTime = 0;
 		this.runFrame = 0;
 		
 		this.spriteIndex = spriteIndex;
 	}
+
+	public abstract int getTransitionTime();
+	public abstract Direction getDirection();
+	protected abstract void setDirection(Direction direction);
 
 	@Override
 	protected Point getCanvasCoordinates(Point drawLocation) {
@@ -37,7 +39,7 @@ public abstract class MovableEntity extends Entity {
 
 			canvasCoordinates = Point.subtract(
 					canvasCoordinates,
-					Point.scale(transitionDirection.getDeltaPoint(), length)
+					Point.scale(getDirection().getDeltaPoint(), length)
 			);
 		}
 
@@ -55,14 +57,6 @@ public abstract class MovableEntity extends Entity {
 			runFrame = (runFrame + 1)%2;
 		}
 	}
-	
-	public Direction getDirection() {
-		return transitionDirection;
-	}
-
-	public void setDirection(Direction direction) {
-		transitionDirection = direction;
-	}
 
 	public boolean isFacing(Point otherLocation) {
 
@@ -75,20 +69,18 @@ public abstract class MovableEntity extends Entity {
 		Point deltaDirection = Point.getDeltaDirection(otherLocation, this.getLocation());
 
 		// Check if these are the same direction
-		return transitionDirection.getDeltaPoint().equals(deltaDirection);
+		return this.getDirection().getDeltaPoint().equals(deltaDirection);
 	}
 
 	@Override
 	protected BufferedImage getFrame() {
-		int trainerSpriteIndex = getTrainerSpriteIndex(spriteIndex, transitionDirection);
+		int trainerSpriteIndex = getTrainerSpriteIndex(spriteIndex, this.getDirection());
 		if (transitionTime > 0) {
 			trainerSpriteIndex += 4*(1 + runFrame);
 		}
 
 		return Game.getData().getTrainerTiles().getTile(trainerSpriteIndex);
 	}
-	
-	public abstract int getTransitionTime();
 
 	@Override
 	protected boolean isTransitioning() {

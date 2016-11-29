@@ -25,6 +25,7 @@ public class NPCEntity extends MovableEntity {
 	private final Map<String, NPCInteraction> interactions;
 	private final String startKey;
 
+	private Direction transitionDirection;
 	private String tempPath;
 	private int pathIndex;
 	private int waitTime;
@@ -85,7 +86,7 @@ public class NPCEntity extends MovableEntity {
 					pathIndex++;
 				}
 
-				transitionDirection = direction.getDirection();
+				this.setDirection(direction.getDirection());
 			}
 
 			pathIndex %= path.length();
@@ -126,8 +127,18 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	@Override
+	public Direction getDirection() {
+		return this.transitionDirection;
+	}
+
+	@Override
+	protected void setDirection(Direction direction) {
+		this.transitionDirection = direction;
+	}
+
+	@Override
 	public void getAttention(Direction direction) {
-		transitionDirection = direction;
+		this.setDirection(direction);
 		hasAttention = true;
 	}
 
@@ -159,12 +170,12 @@ public class NPCEntity extends MovableEntity {
 
 	@Override
 	public void reset() {
-		super.setLocation(defaultLocation);
+		this.setLocation(defaultLocation);
+		this.setDirection(defaultDirection);
 
 		waitTime = 0;
 		pathIndex = 0;
 		hasAttention = false;
-		transitionDirection = defaultDirection;
 		walkingToPlayer = false;
 		tempPath = null;
 	}
