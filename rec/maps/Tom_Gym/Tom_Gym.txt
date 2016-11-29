@@ -25,56 +25,6 @@
       "name": "Gym_Trainer",
       "path": "w",
       "spriteIndex": 5,
-      "direction": "LEFT",
-      "interactions": [
-        {
-          "name": "battle",
-          "walkToPlayer": true,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "My Pokemon and I communicate over PCI express!"
-              }
-            },
-            {
-              "battle": {
-                "name": "Gym Trainer",
-                "cashMoney": 100,
-                "pokemon": [
-                  {
-                    "namesies": "JOLTIK",
-                    "level": 9
-                  }
-                ],
-                "update": "won"
-              }
-            }
-          ]
-        },
-        {
-          "name": "won",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I need more bandwidth!"
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 11,
-        "y": 9
-      },
-      "triggerName": "Tom_Gym_NPC_Gym_Trainer_01"
-    },
-    {
-      "name": "Gym_Trainer",
-      "path": "w",
-      "spriteIndex": 5,
       "direction": "RIGHT",
       "interactions": [
         {
@@ -118,6 +68,56 @@
       "location": {
         "x": 7,
         "y": 11
+      },
+      "triggerName": "Tom_Gym_NPC_Gym_Trainer_01"
+    },
+    {
+      "name": "Gym_Trainer",
+      "path": "w",
+      "spriteIndex": 5,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "My Pokemon and I communicate over PCI express!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Gym Trainer",
+                "cashMoney": 100,
+                "pokemon": [
+                  {
+                    "namesies": "JOLTIK",
+                    "level": 9
+                  }
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I need more bandwidth!"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 11,
+        "y": 9
       },
       "triggerName": "Tom_Gym_NPC_Gym_Trainer_02"
     },

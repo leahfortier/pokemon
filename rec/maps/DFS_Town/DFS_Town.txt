@@ -250,56 +250,6 @@
       "name": "Edge1_Trainer",
       "path": "w",
       "spriteIndex": 6,
-      "direction": "RIGHT",
-      "interactions": [
-        {
-          "name": "battle",
-          "walkToPlayer": true,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "My Rattata is in the top percentage of Rattata!"
-              }
-            },
-            {
-              "battle": {
-                "name": "Youngster Joey",
-                "cashMoney": 100,
-                "pokemon": [
-                  {
-                    "namesies": "PIDGEY",
-                    "level": 4
-                  }
-                ],
-                "update": "won"
-              }
-            }
-          ]
-        },
-        {
-          "name": "won",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I thought Rattata was the very best..."
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 32,
-        "y": 18
-      },
-      "triggerName": "DFS_Town_NPC_Edge1_Trainer_02"
-    },
-    {
-      "name": "Edge1_Trainer",
-      "path": "w",
-      "spriteIndex": 6,
       "direction": "UP",
       "interactions": [
         {
@@ -343,6 +293,56 @@
       "location": {
         "x": 30,
         "y": 28
+      },
+      "triggerName": "DFS_Town_NPC_Edge1_Trainer_02"
+    },
+    {
+      "name": "Edge1_Trainer",
+      "path": "w",
+      "spriteIndex": 6,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "My Rattata is in the top percentage of Rattata!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Youngster Joey",
+                "cashMoney": 100,
+                "pokemon": [
+                  {
+                    "namesies": "PIDGEY",
+                    "level": 4
+                  }
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I thought Rattata was the very best..."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 32,
+        "y": 18
       },
       "triggerName": "DFS_Town_NPC_Edge1_Trainer_03"
     },
