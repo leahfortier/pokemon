@@ -49,6 +49,7 @@
   "events": [],
   "wildBattles": [
     {
+      "name": "Valley Grass",
       "encounterRate": "VERY_COMMON",
       "wildPokemon": [
         {
@@ -2418,9 +2419,10 @@
           "y": 73
         }
       ],
-      "triggerName": "WindValley_WildBattle_Nameless_01"
+      "triggerName": "WindValley_WildBattle_ValleyGrass_01"
     },
     {
+      "name": "Valley Sand",
       "encounterRate": "COMMON",
       "wildPokemon": [
         {
@@ -4108,7 +4110,7 @@
           "y": 74
         }
       ],
-      "triggerName": "WindValley_WildBattle_Nameless_02"
+      "triggerName": "WindValley_WildBattle_ValleySand_01"
     }
   ]
 }

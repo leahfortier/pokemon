@@ -46,7 +46,7 @@
   ],
   "NPCs": [
     {
-      "name": "Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01",
+      "name": "Officer",
       "path": "w",
       "spriteIndex": 18,
       "direction": "DOWN",
@@ -68,11 +68,11 @@
         "x": 7,
         "y": 9
       },
-      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01_01",
+      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Officer_01",
       "condition": "!VisitedTomTownPowerPlant"
     },
     {
-      "name": "Tom_Town_Power_Plant_NPC_Scientist_01",
+      "name": "Scientist",
       "path": "w",
       "spriteIndex": 19,
       "direction": "DOWN",
@@ -94,7 +94,7 @@
         "x": 12,
         "y": 6
       },
-      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Tom_Town_Power_Plant_NPC_Scientist_01_01",
+      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Scientist_01",
       "condition": "VisitedTomTownPowerPlant"
     }
   ],

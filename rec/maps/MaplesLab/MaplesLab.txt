@@ -22,57 +22,7 @@
   ],
   "NPCs": [
     {
-      "name": "MaplesLab_NPC_MapleAssistant_01",
-      "path": "w",
-      "spriteIndex": 12,
-      "direction": "LEFT",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Don't disturb me! I'm doing syrup science!"
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 6,
-        "y": 10
-      },
-      "triggerName": "MaplesLab_NPC_MaplesLab_NPC_MapleAssistant_01_01"
-    },
-    {
-      "name": "MaplesLab_NPC_MapleAssistant_02",
-      "path": "w",
-      "spriteIndex": 19,
-      "direction": "RIGHT",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "This syrup soda is amazing!"
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 17,
-        "y": 7
-      },
-      "triggerName": "MaplesLab_NPC_MaplesLab_NPC_MapleAssistant_02_01"
-    },
-    {
-      "name": "MaplesLab_NPC_Prof_Maple_01",
+      "name": "Prof_Mapes",
       "path": "w",
       "spriteIndex": 7,
       "direction": "DOWN",
@@ -189,7 +139,57 @@
         "x": 10,
         "y": 1
       },
-      "triggerName": "MaplesLab_NPC_MaplesLab_NPC_Prof_Maple_01_01"
+      "triggerName": "MaplesLab_NPC_Prof_Mapes_01"
+    },
+    {
+      "name": "Syrup_Scientist",
+      "path": "w",
+      "spriteIndex": 12,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Don't disturb me! I'm doing syrup science!"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 6,
+        "y": 10
+      },
+      "triggerName": "MaplesLab_NPC_Syrup_Scientist_01"
+    },
+    {
+      "name": "Syrup_Scientist",
+      "path": "w",
+      "spriteIndex": 19,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "This syrup soda is amazing!"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 17,
+        "y": 7
+      },
+      "triggerName": "MaplesLab_NPC_Syrup_Scientist_02"
     }
   ],
   "items": [],

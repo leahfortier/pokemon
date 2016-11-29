@@ -83,61 +83,7 @@
   ],
   "NPCs": [
     {
-      "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_01",
-      "path": "w",
-      "spriteIndex": 16,
-      "direction": "UP",
-      "interactions": [
-        {
-          "name": "battle",
-          "walkToPlayer": true,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I'm a meadow lady in a meadow!!!"
-              }
-            },
-            {
-              "battle": {
-                "name": "Meadow Lady",
-                "cashMoney": 100,
-                "pokemon": [
-                  {
-                    "namesies": "BUDEW",
-                    "level": 6
-                  },
-                  {
-                    "namesies": "ODDISH",
-                    "level": 6
-                  }
-                ],
-                "update": "won"
-              }
-            }
-          ]
-        },
-        {
-          "name": "won",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Yayyy I'm in a meadow and I'm a lady lalalala!"
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 48,
-        "y": 23
-      },
-      "triggerName": "Bloom_Filter_Meadow_NPC_Bloom_Filter_Meadow_NPC_Meadow_Trainer_01_01"
-    },
-    {
-      "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_02",
+      "name": "Meadow_Trainer",
       "path": "w",
       "spriteIndex": 1,
       "direction": "DOWN",
@@ -188,7 +134,61 @@
         "x": 22,
         "y": 16
       },
-      "triggerName": "Bloom_Filter_Meadow_NPC_Bloom_Filter_Meadow_NPC_Meadow_Trainer_02_01"
+      "triggerName": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_01"
+    },
+    {
+      "name": "Meadow_Trainer",
+      "path": "w",
+      "spriteIndex": 16,
+      "direction": "UP",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I'm a meadow lady in a meadow!!!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Meadow Lady",
+                "cashMoney": 100,
+                "pokemon": [
+                  {
+                    "namesies": "BUDEW",
+                    "level": 6
+                  },
+                  {
+                    "namesies": "ODDISH",
+                    "level": 6
+                  }
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Yayyy I'm in a meadow and I'm a lady lalalala!"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 48,
+        "y": 23
+      },
+      "triggerName": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_02"
     }
   ],
   "items": [
@@ -213,6 +213,7 @@
   "events": [],
   "wildBattles": [
     {
+      "name": "Meadow Grass",
       "encounterRate": "VERY_COMMON",
       "wildPokemon": [
         {
@@ -902,7 +903,7 @@
           "y": 19
         }
       ],
-      "triggerName": "Bloom_Filter_Meadow_WildBattle_Nameless_01"
+      "triggerName": "Bloom_Filter_Meadow_WildBattle_MeadowGrass_01"
     }
   ]
 }

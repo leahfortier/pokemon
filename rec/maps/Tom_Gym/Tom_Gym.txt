@@ -22,7 +22,107 @@
   ],
   "NPCs": [
     {
-      "name": "Tom_Gym_NPC_Leader_Moore_01",
+      "name": "Gym_Trainer",
+      "path": "w",
+      "spriteIndex": 5,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "My Pokemon and I communicate over PCI express!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Gym Trainer",
+                "cashMoney": 100,
+                "pokemon": [
+                  {
+                    "namesies": "JOLTIK",
+                    "level": 9
+                  }
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I need more bandwidth!"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 11,
+        "y": 9
+      },
+      "triggerName": "Tom_Gym_NPC_Gym_Trainer_01"
+    },
+    {
+      "name": "Gym_Trainer",
+      "path": "w",
+      "spriteIndex": 5,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Watch out, I'm gonna fry your motherboard!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Gym Trainer",
+                "cashMoney": 100,
+                "pokemon": [
+                  {
+                    "namesies": "BLITZLE",
+                    "level": 9
+                  }
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Hey! You fried my motherboard!"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 7,
+        "y": 11
+      },
+      "triggerName": "Tom_Gym_NPC_Gym_Trainer_02"
+    },
+    {
+      "name": "Leader_Moore",
       "path": "w",
       "spriteIndex": 15,
       "direction": "DOWN",
@@ -95,107 +195,7 @@
         "x": 9,
         "y": 5
       },
-      "triggerName": "Tom_Gym_NPC_Tom_Gym_NPC_Leader_Moore_01_01"
-    },
-    {
-      "name": "Tom_Gym_NPC_Tom_Trainer_01",
-      "path": "w",
-      "spriteIndex": 5,
-      "direction": "RIGHT",
-      "interactions": [
-        {
-          "name": "battle",
-          "walkToPlayer": true,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Watch out, I'm gonna fry your motherboard!"
-              }
-            },
-            {
-              "battle": {
-                "name": "Gym Trainer",
-                "cashMoney": 100,
-                "pokemon": [
-                  {
-                    "namesies": "BLITZLE",
-                    "level": 9
-                  }
-                ],
-                "update": "won"
-              }
-            }
-          ]
-        },
-        {
-          "name": "won",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Hey! You fried my motherboard!"
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 7,
-        "y": 11
-      },
-      "triggerName": "Tom_Gym_NPC_Tom_Gym_NPC_Tom_Trainer_01_01"
-    },
-    {
-      "name": "Tom_Gym_NPC_Tom_Trainer_02",
-      "path": "w",
-      "spriteIndex": 5,
-      "direction": "LEFT",
-      "interactions": [
-        {
-          "name": "battle",
-          "walkToPlayer": true,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "My Pokemon and I communicate over PCI express!"
-              }
-            },
-            {
-              "battle": {
-                "name": "Gym Trainer",
-                "cashMoney": 100,
-                "pokemon": [
-                  {
-                    "namesies": "JOLTIK",
-                    "level": 9
-                  }
-                ],
-                "update": "won"
-              }
-            }
-          ]
-        },
-        {
-          "name": "won",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I need more bandwidth!"
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 11,
-        "y": 9
-      },
-      "triggerName": "Tom_Gym_NPC_Tom_Gym_NPC_Tom_Trainer_02_01"
+      "triggerName": "Tom_Gym_NPC_Leader_Moore_01"
     }
   ],
   "items": [],

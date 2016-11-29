@@ -22,7 +22,7 @@
   ],
   "NPCs": [
     {
-      "name": "Neighbor_House_NPC_Green_01",
+      "name": "Wizard",
       "path": "w",
       "spriteIndex": 17,
       "direction": "DOWN",
@@ -44,7 +44,7 @@
         "x": 4,
         "y": 4
       },
-      "triggerName": "Neighbor_House_NPC_Neighbor_House_NPC_Green_01_01"
+      "triggerName": "Neighbor_House_NPC_Wizard_01"
     }
   ],
   "items": [],

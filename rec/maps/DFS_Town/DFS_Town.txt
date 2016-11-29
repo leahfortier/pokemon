@@ -102,6 +102,31 @@
   ],
   "NPCs": [
     {
+      "name": "Bitchface",
+      "path": "w",
+      "spriteIndex": 16,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Hey, you should go talk to Professor Maple first before leaving town."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 62,
+        "y": 18
+      },
+      "triggerName": "DFS_Town_NPC_Bitchface_01"
+    },
+    {
       "name": "DFS_Town_NPC_Ball_Giver_01",
       "path": "w",
       "spriteIndex": 3,
@@ -172,107 +197,7 @@
       "triggerName": "DFS_Town_NPC_DFS_Town_NPC_Ball_Giver_01_01"
     },
     {
-      "name": "DFS_Town_NPC_Edge1_Trainer_01",
-      "path": "w",
-      "spriteIndex": 6,
-      "direction": "RIGHT",
-      "interactions": [
-        {
-          "name": "battle",
-          "walkToPlayer": true,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "My Rattata is in the top percentage of Rattata!"
-              }
-            },
-            {
-              "battle": {
-                "name": "Youngster Joey",
-                "cashMoney": 100,
-                "pokemon": [
-                  {
-                    "namesies": "PIDGEY",
-                    "level": 4
-                  }
-                ],
-                "update": "won"
-              }
-            }
-          ]
-        },
-        {
-          "name": "won",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I thought Rattata was the very best..."
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 32,
-        "y": 18
-      },
-      "triggerName": "DFS_Town_NPC_DFS_Town_NPC_Edge1_Trainer_01_01"
-    },
-    {
-      "name": "DFS_Town_NPC_Edge1_Trainer_02",
-      "path": "w",
-      "spriteIndex": 6,
-      "direction": "UP",
-      "interactions": [
-        {
-          "name": "battle",
-          "walkToPlayer": true,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Someone freed the pointer to my Rattata! Was it you?"
-              }
-            },
-            {
-              "battle": {
-                "name": "Youngster Joey",
-                "cashMoney": 100,
-                "pokemon": [
-                  {
-                    "namesies": "BIDOOF",
-                    "level": 4
-                  }
-                ],
-                "update": "won"
-              }
-            }
-          ]
-        },
-        {
-          "name": "won",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I would have won with my Rattata!"
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 30,
-        "y": 28
-      },
-      "triggerName": "DFS_Town_NPC_DFS_Town_NPC_Edge1_Trainer_02_01"
-    },
-    {
-      "name": "DFS_Town_NPC_Edge1_Trainer_03",
+      "name": "Edge1_Trainer",
       "path": "uuddddduuu",
       "spriteIndex": 6,
       "direction": "UP",
@@ -319,36 +244,110 @@
         "x": 19,
         "y": 20
       },
-      "triggerName": "DFS_Town_NPC_DFS_Town_NPC_Edge1_Trainer_03_01"
+      "triggerName": "DFS_Town_NPC_Edge1_Trainer_01"
     },
     {
-      "name": "DFS_Town_NPC_Green_01",
+      "name": "Edge1_Trainer",
       "path": "w",
-      "spriteIndex": 16,
-      "direction": "DOWN",
+      "spriteIndex": 6,
+      "direction": "RIGHT",
       "interactions": [
         {
-          "name": "dialogue",
+          "name": "battle",
           "walkToPlayer": true,
           "npcActions": [
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "Hey, you should go talk to Professor Maple first before leaving town."
+                "triggerContents": "My Rattata is in the top percentage of Rattata!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Youngster Joey",
+                "cashMoney": 100,
+                "pokemon": [
+                  {
+                    "namesies": "PIDGEY",
+                    "level": 4
+                  }
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I thought Rattata was the very best..."
               }
             }
           ]
         }
       ],
       "location": {
-        "x": 62,
+        "x": 32,
         "y": 18
       },
-      "triggerName": "DFS_Town_NPC_DFS_Town_NPC_Green_01_01",
-      "condition": "!triggered_MaplesLab_NPC_Prof_Maple_01"
+      "triggerName": "DFS_Town_NPC_Edge1_Trainer_02"
     },
     {
-      "name": "DFS_Town_NPC_Potion_Giver_01",
+      "name": "Edge1_Trainer",
+      "path": "w",
+      "spriteIndex": 6,
+      "direction": "UP",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Someone freed the pointer to my Rattata! Was it you?"
+              }
+            },
+            {
+              "battle": {
+                "name": "Youngster Joey",
+                "cashMoney": 100,
+                "pokemon": [
+                  {
+                    "namesies": "BIDOOF",
+                    "level": 4
+                  }
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I would have won with my Rattata!"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 30,
+        "y": 28
+      },
+      "triggerName": "DFS_Town_NPC_Edge1_Trainer_03"
+    },
+    {
+      "name": "Potion_Giver",
       "path": "w",
       "spriteIndex": 2,
       "direction": "DOWN",
@@ -391,7 +390,7 @@
         "x": 52,
         "y": 16
       },
-      "triggerName": "DFS_Town_NPC_DFS_Town_NPC_Potion_Giver_01_01"
+      "triggerName": "DFS_Town_NPC_Potion_Giver_01"
     }
   ],
   "items": [
@@ -408,6 +407,7 @@
   "events": [],
   "wildBattles": [
     {
+      "name": "Edge 1 Grass",
       "encounterRate": "VERY_COMMON",
       "wildPokemon": [
         {
@@ -1295,7 +1295,7 @@
           "y": 28
         }
       ],
-      "triggerName": "DFS_Town_WildBattle_Nameless_01"
+      "triggerName": "DFS_Town_WildBattle_Edge1Grass_01"
     }
   ]
 }

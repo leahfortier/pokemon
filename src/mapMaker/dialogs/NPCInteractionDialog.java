@@ -10,7 +10,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
+class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
     private final JPanel topComponent;
 
     private final JTextField interactionNameTextField;
@@ -19,12 +19,12 @@ public class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
 
     private final int interactionIndex;
 
-    public NPCInteractionDialog(NPCInteractionMatcher npcInteractionMatcher, int index) {
+    NPCInteractionDialog(NPCInteractionMatcher npcInteractionMatcher, int index) {
         super("New NPC Interaction Dialog");
 
         this.interactionIndex = index;
 
-        interactionNameTextField = new JTextField(this.getDefaultName());
+        interactionNameTextField = GUIUtils.createTextField(this.getDefaultName());
         walkToPlayerCheckBox = GUIUtils.createCheckBox("Walk to playa");
         this.actionListPanel = new ActionListPanel(this);
 

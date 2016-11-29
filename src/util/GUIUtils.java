@@ -136,7 +136,11 @@ public class GUIUtils {
     }
 
     public static JTextField createTextField() {
-        JTextField textField = new JTextField();
+        return createTextField(StringUtils.empty());
+    }
+
+    public static JTextField createTextField(String text) {
+        JTextField textField = new JTextField(text);
         setStyle(textField);
         textField.setColumns(30);
 

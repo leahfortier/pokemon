@@ -34,7 +34,7 @@
   ],
   "NPCs": [
     {
-      "name": "PlayersHouseDown_NPC_Mom_01",
+      "name": "Madre",
       "path": "w",
       "spriteIndex": 13,
       "direction": "DOWN",
@@ -56,7 +56,7 @@
         "x": 4,
         "y": 4
       },
-      "triggerName": "PlayersHouseDown_NPC_PlayersHouseDown_NPC_Mom_01_01"
+      "triggerName": "PlayersHouseDown_NPC_Madre_01"
     }
   ],
   "items": [],

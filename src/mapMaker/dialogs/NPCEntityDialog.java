@@ -66,9 +66,9 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 		spriteComboBox = GUIUtils.createComboBox(getTrainerSprites(), spriteActionListener);
 		directionComboBox = GUIUtils.createComboBox(Direction.values(), spriteActionListener);
 
-		nameTextField = new JTextField();
-		pathTextField = new JTextField("w");
-		conditionTextField = new JTextArea();
+		nameTextField = GUIUtils.createTextField();
+		pathTextField = GUIUtils.createTextField("w");
+		conditionTextField = GUIUtils.createTextArea();
 
 		interactions = new ArrayList<>();
 		addInteractionButton = GUIUtils.createButton(
@@ -148,7 +148,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 	@Override
 	protected NPCMatcher getMatcher() {
 		return new NPCMatcher(
-				nameTextField.getText(),
+				getNameField(nameTextField),
 				conditionTextField.getText(),
 				pathTextField.getText(),
 				spriteComboBox.getSelectedIndex(),

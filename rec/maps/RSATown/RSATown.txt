@@ -94,7 +94,7 @@
   ],
   "NPCs": [
     {
-      "name": "RSATown_NPC_Guy_01",
+      "name": "Guy",
       "path": "w",
       "spriteIndex": 5,
       "direction": "DOWN",
@@ -116,10 +116,10 @@
         "x": 20,
         "y": 15
       },
-      "triggerName": "RSATown_NPC_RSATown_NPC_Guy_01_01"
+      "triggerName": "RSATown_NPC_Guy_01"
     },
     {
-      "name": "RSATown_NPC_Rival_01",
+      "name": "Rival",
       "path": "llldddrrrrrruuulll",
       "spriteIndex": 14,
       "direction": "LEFT",
@@ -166,7 +166,7 @@
         "x": 29,
         "y": 21
       },
-      "triggerName": "RSATown_NPC_RSATown_NPC_Rival_01_01"
+      "triggerName": "RSATown_NPC_Rival_01"
     }
   ],
   "items": [],
