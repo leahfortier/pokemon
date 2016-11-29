@@ -7,18 +7,6 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "WestDoorBottom",
-      "nextMap": "Bloom_Filter_Meadow",
-      "nextEntrance": "EastTransitionBuildingBottom",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 1,
-        "y": 6
-      },
-      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorBottom_01"
-    },
-    {
       "exitName": "EastDoorBottom",
       "nextMap": "RSATown",
       "nextEntrance": "WestTransitionBuildingBottom",
@@ -55,16 +43,16 @@
       "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoorTop_01"
     },
     {
-      "exitName": "WestDoorTop",
+      "exitName": "WestDoorBottom",
       "nextMap": "Bloom_Filter_Meadow",
-      "nextEntrance": "EastTransitionBuildingTop",
+      "nextEntrance": "EastTransitionBuildingBottom",
       "direction": "LEFT",
       "deathPortal": false,
       "location": {
         "x": 1,
-        "y": 4
+        "y": 6
       },
-      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorTop_01"
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorBottom_01"
     },
     {
       "exitName": "WestDoorMiddle",
@@ -77,21 +65,21 @@
         "y": 5
       },
       "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorMiddle_01"
+    },
+    {
+      "exitName": "WestDoorTop",
+      "nextMap": "Bloom_Filter_Meadow",
+      "nextEntrance": "EastTransitionBuildingTop",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 1,
+        "y": 4
+      },
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorTop_01"
     }
   ],
   "NPCs": [
-    {
-      "name": "Info_Guy",
-      "path": "w",
-      "spriteIndex": 10,
-      "direction": "DOWN",
-      "interactions": [],
-      "location": {
-        "x": 6,
-        "y": 3
-      },
-      "triggerName": "RSATown_BFM_TransitionBuilding_NPC_Info_Guy_01"
-    },
     {
       "name": "BFM_Guy",
       "path": "w",
@@ -116,6 +104,18 @@
         "y": 4
       },
       "triggerName": "RSATown_BFM_TransitionBuilding_NPC_BFM_Guy_01"
+    },
+    {
+      "name": "Info_Guy",
+      "path": "w",
+      "spriteIndex": 10,
+      "direction": "DOWN",
+      "interactions": [],
+      "location": {
+        "x": 6,
+        "y": 3
+      },
+      "triggerName": "RSATown_BFM_TransitionBuilding_NPC_Info_Guy_01"
     }
   ],
   "items": [],

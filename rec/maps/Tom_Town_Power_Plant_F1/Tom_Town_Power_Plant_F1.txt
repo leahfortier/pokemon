@@ -20,18 +20,6 @@
       "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromBasement1_01"
     },
     {
-      "exitName": "FromTomTown",
-      "nextMap": "Tom_Town",
-      "nextEntrance": "TomTownPowerPlant",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "location": {
-        "x": 8,
-        "y": 12
-      },
-      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromTomTown_01"
-    },
-    {
       "exitName": "FromFloor2",
       "nextMap": "Tom_Town_Power_Plant_F2",
       "nextEntrance": "FromFloor1",
@@ -42,35 +30,21 @@
         "y": 11
       },
       "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromFloor2_01"
+    },
+    {
+      "exitName": "FromTomTown",
+      "nextMap": "Tom_Town",
+      "nextEntrance": "TomTownPowerPlant",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 8,
+        "y": 12
+      },
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromTomTown_01"
     }
   ],
   "NPCs": [
-    {
-      "name": "Tom_Town_Power_Plant_NPC_Scientist_01",
-      "path": "w",
-      "spriteIndex": 19,
-      "direction": "DOWN",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Time to get back to my research."
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 12,
-        "y": 6
-      },
-      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Tom_Town_Power_Plant_NPC_Scientist_01_01",
-      "condition": "VisitedTomTownPowerPlant"
-    },
     {
       "name": "Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01",
       "path": "w",
@@ -96,6 +70,32 @@
       },
       "triggerName": "Tom_Town_Power_Plant_F1_NPC_Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01_01",
       "condition": "!VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "Tom_Town_Power_Plant_NPC_Scientist_01",
+      "path": "w",
+      "spriteIndex": 19,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Time to get back to my research."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 12,
+        "y": 6
+      },
+      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Tom_Town_Power_Plant_NPC_Scientist_01_01",
+      "condition": "VisitedTomTownPowerPlant"
     }
   ],
   "items": [],

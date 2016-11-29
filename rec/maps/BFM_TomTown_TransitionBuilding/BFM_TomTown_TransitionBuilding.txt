@@ -19,16 +19,16 @@
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorBottom_01"
     },
     {
-      "exitName": "WestDoorMiddle",
-      "nextMap": "Tom_Town",
-      "nextEntrance": "EastTransitionBuildingMiddle",
-      "direction": "LEFT",
+      "exitName": "EastDoorMiddle",
+      "nextMap": "Bloom_Filter_Meadow",
+      "nextEntrance": "WestTransitionBuildingMiddle",
+      "direction": "RIGHT",
       "deathPortal": false,
       "location": {
-        "x": 1,
+        "x": 11,
         "y": 3
       },
-      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorMiddle_01"
+      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorMiddle_01"
     },
     {
       "exitName": "EastDoorTop",
@@ -43,16 +43,28 @@
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorTop_01"
     },
     {
-      "exitName": "EastDoorMiddle",
-      "nextMap": "Bloom_Filter_Meadow",
-      "nextEntrance": "WestTransitionBuildingMiddle",
-      "direction": "RIGHT",
+      "exitName": "WestDoorBottom",
+      "nextMap": "Tom_Town",
+      "nextEntrance": "EastTransitionBuildingBottom",
+      "direction": "LEFT",
       "deathPortal": false,
       "location": {
-        "x": 11,
+        "x": 1,
+        "y": 4
+      },
+      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorBottom_01"
+    },
+    {
+      "exitName": "WestDoorMiddle",
+      "nextMap": "Tom_Town",
+      "nextEntrance": "EastTransitionBuildingMiddle",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 1,
         "y": 3
       },
-      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorMiddle_01"
+      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorMiddle_01"
     },
     {
       "exitName": "WestDoorTop",
@@ -65,18 +77,6 @@
         "y": 2
       },
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorTop_01"
-    },
-    {
-      "exitName": "WestDoorBottom",
-      "nextMap": "Tom_Town",
-      "nextEntrance": "EastTransitionBuildingBottom",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 1,
-        "y": 4
-      },
-      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorBottom_01"
     }
   ],
   "NPCs": [

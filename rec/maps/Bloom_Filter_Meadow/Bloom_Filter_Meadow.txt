@@ -9,18 +9,6 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "EastTransitionBuildingTop",
-      "nextMap": "RSATown_BFM_TransitionBuilding",
-      "nextEntrance": "WestDoorTop",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 55,
-        "y": 20
-      },
-      "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingTop_01"
-    },
-    {
       "exitName": "EastTransitionBuildingBottom",
       "nextMap": "RSATown_BFM_TransitionBuilding",
       "nextEntrance": "WestDoorBottom",
@@ -45,16 +33,28 @@
       "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingMiddle_01"
     },
     {
-      "exitName": "WestTransitionBuildingTop",
+      "exitName": "EastTransitionBuildingTop",
+      "nextMap": "RSATown_BFM_TransitionBuilding",
+      "nextEntrance": "WestDoorTop",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 55,
+        "y": 20
+      },
+      "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingTop_01"
+    },
+    {
+      "exitName": "WestTransitionBuildingBottom",
       "nextMap": "BFM_TomTown_TransitionBuilding",
-      "nextEntrance": "EastDoorTop",
+      "nextEntrance": "EastDoorBottom",
       "direction": "LEFT",
       "deathPortal": false,
       "location": {
         "x": 13,
-        "y": 20
+        "y": 22
       },
-      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingTop_01"
+      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingBottom_01"
     },
     {
       "exitName": "WestTransitionBuildingMiddle",
@@ -69,73 +69,19 @@
       "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingMiddle_01"
     },
     {
-      "exitName": "WestTransitionBuildingBottom",
+      "exitName": "WestTransitionBuildingTop",
       "nextMap": "BFM_TomTown_TransitionBuilding",
-      "nextEntrance": "EastDoorBottom",
+      "nextEntrance": "EastDoorTop",
       "direction": "LEFT",
       "deathPortal": false,
       "location": {
         "x": 13,
-        "y": 22
+        "y": 20
       },
-      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingBottom_01"
+      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingTop_01"
     }
   ],
   "NPCs": [
-    {
-      "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_02",
-      "path": "w",
-      "spriteIndex": 1,
-      "direction": "DOWN",
-      "interactions": [
-        {
-          "name": "battle",
-          "walkToPlayer": true,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I like shorts!!!!"
-              }
-            },
-            {
-              "battle": {
-                "name": "Bug Catcher",
-                "cashMoney": 100,
-                "pokemon": [
-                  {
-                    "namesies": "CATERPIE",
-                    "level": 6
-                  },
-                  {
-                    "namesies": "KRICKETOT",
-                    "level": 6
-                  }
-                ],
-                "update": "won"
-              }
-            }
-          ]
-        },
-        {
-          "name": "won",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "SHORRRRTTTTTSSSSSS"
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 22,
-        "y": 16
-      },
-      "triggerName": "Bloom_Filter_Meadow_NPC_Bloom_Filter_Meadow_NPC_Meadow_Trainer_02_01"
-    },
     {
       "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_01",
       "path": "w",
@@ -189,6 +135,60 @@
         "y": 23
       },
       "triggerName": "Bloom_Filter_Meadow_NPC_Bloom_Filter_Meadow_NPC_Meadow_Trainer_01_01"
+    },
+    {
+      "name": "Bloom_Filter_Meadow_NPC_Meadow_Trainer_02",
+      "path": "w",
+      "spriteIndex": 1,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I like shorts!!!!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Bug Catcher",
+                "cashMoney": 100,
+                "pokemon": [
+                  {
+                    "namesies": "CATERPIE",
+                    "level": 6
+                  },
+                  {
+                    "namesies": "KRICKETOT",
+                    "level": 6
+                  }
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "SHORRRRTTTTTSSSSSS"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 22,
+        "y": 16
+      },
+      "triggerName": "Bloom_Filter_Meadow_NPC_Bloom_Filter_Meadow_NPC_Meadow_Trainer_02_01"
     }
   ],
   "items": [
