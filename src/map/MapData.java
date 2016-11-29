@@ -112,10 +112,6 @@ public class MapData {
 		return this.dimension;
 	}
 
-	public boolean inBounds(Point location) {
-		return location.inBounds(dimension);
-	}
-
 	private int getRGB(Point location, MapDataType dataType) {
 		return getRGB(location.x, location.y, dataType);
 	}

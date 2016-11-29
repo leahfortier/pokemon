@@ -56,8 +56,8 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	@Override
-	public void update(int dt, MapData map, MapView view) {
-		super.update(dt, map, view);
+	public void update(int dt, MapData currentMap, MapView view) {
+		super.update(dt, currentMap, view);
 
 		// Decrease wait time
 		waitTime = Math.max(0, waitTime - dt);
@@ -78,7 +78,7 @@ public class NPCEntity extends MovableEntity {
 			}
 			else {
 				Point newLocation = Point.add(this.getLocation(), direction.getDeltaPoint());
-				if (isPassable(map.getPassValue(newLocation)) && !map.hasEntity(newLocation)) {
+				if (isPassable(currentMap.getPassValue(newLocation)) && !currentMap.hasEntity(newLocation)) {
 					super.setLocation(newLocation);
 
 					transitionTime = 1;
@@ -147,8 +147,7 @@ public class NPCEntity extends MovableEntity {
 		return this.interactions.get(interaction).shouldWalkToPlayer();
 	}
 
-	// TODO: rename
-	public boolean getWalkingToPlayer() {
+	public boolean isWalkingToPlayer() {
 		return walkingToPlayer;
 	}
 
