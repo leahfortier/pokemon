@@ -1,34 +1,48 @@
 package map;
 
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
+
 public enum WalkType {
-    WATER(0x0000FF, false), // TODO
-    WALKABLE(0xFFFFFF, true),
     NOT_WALKABLE(0x000000, false),
-    HOP_DOWN(0x00FF00, Direction.DOWN),
-    HOP_UP(0xFF0000, Direction.UP),
-    HOP_LEFT(0xFFFF00, Direction.LEFT),
-    HOP_RIGHT(0x00FFFF, Direction.RIGHT),
+    WALKABLE(0xFFFFFF, true),
+    WATER(0x0000FF, false), // TODO
+    DOWN_LEDGE(0x00FF00, Direction.DOWN),
+    UP_LEDGE(0xFF0000, Direction.UP),
+    LEFT_LEDGE(0xFFFF00, Direction.LEFT),
+    RIGHT_LEDGE(0x00FFFF, Direction.RIGHT),
     STAIRS_UP_RIGHT(0xFF00FF, true),
     STAIRS_UP_LEFT(0xFFC800, true);
 
-    private final int value;
+    private static final Map<Integer, WalkType> valueMap = new HashMap<Integer, WalkType>() {{
+        for (WalkType walkType : WalkType.values()) {
+            this.put(walkType.getRGB(), walkType);
+        }
+    }};
+
+    private final int rgb;
     private final PassableChecker passableChecker;
 
-    WalkType(int value, boolean passable) {
-        this(value, direction -> passable);
+    WalkType(int rgb, boolean passable) {
+        this(rgb, direction -> passable);
     }
 
-    WalkType(int value, Direction passDirection) {
-        this(value, direction -> direction == passDirection);
+    WalkType(int rgb, Direction passDirection) {
+        this(rgb, direction -> direction == passDirection);
     }
 
-    WalkType(int value, PassableChecker passableChecker) {
-        this.value = value;
+    WalkType(int rgb, PassableChecker passableChecker) {
+        this.rgb = rgb;
         this.passableChecker = passableChecker;
     }
 
-    int getValue() {
-        return value;
+    public int getRGB() {
+        return rgb;
+    }
+
+    public Color getColor() {
+        return new Color(rgb);
     }
 
     public boolean isPassable(Direction direction) {
@@ -60,5 +74,13 @@ public enum WalkType {
         }
 
         return PathDirection.WAIT;
+    }
+
+    public static WalkType getWalkType(int value) {
+        if (valueMap.containsKey(value)) {
+            return valueMap.get(value);
+        }
+
+        return NOT_WALKABLE;
     }
 }
