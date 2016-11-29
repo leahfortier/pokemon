@@ -148,7 +148,7 @@ public class PlayerEntity extends MovableEntity {
 				WalkType passValue = currentMap.getPassValue(newLocation);
 
 				if (passValue.isPassable(inputDirection) && !currentMap.hasEntity(newLocation)) {
-					newLocation = Point.add(newLocation, getWalkTypeAdditionalMove(curPassValue, passValue, inputDirection));
+					newLocation = Point.add(newLocation, WalkType.getAdditionalMove(curPassValue, passValue, inputDirection).getDeltaPoint());
 
 					player.setLocation(newLocation);
 					player.step();
@@ -174,28 +174,6 @@ public class PlayerEntity extends MovableEntity {
 		}
 
 		return false;
-	}
-
-	private Point getWalkTypeAdditionalMove(WalkType prev, WalkType next, Direction direction) {
-		if (direction == Direction.LEFT) {
-			if (next == WalkType.STAIRS_UP_LEFT) {
-				return Direction.UP.getDeltaPoint();
-			}
-			else if (next == WalkType.STAIRS_UP_RIGHT) {
-				return Direction.DOWN.getDeltaPoint();
-			}
-		}
-		
-		if (direction == Direction.RIGHT) {
-			if (prev == WalkType.STAIRS_UP_LEFT) {
-				return Direction.DOWN.getDeltaPoint();
-			}
-			else if (prev == WalkType.STAIRS_UP_RIGHT) {
-				return Direction.UP.getDeltaPoint();
-			}
-		}
-		
-		return new Point();
 	}
 
 	private void triggerCheck(MapData map) {

@@ -38,4 +38,27 @@ public enum WalkType {
     private interface PassableChecker {
         boolean isPassable(Direction direction);
     }
+
+    // TODO: I don't think the stairs are even being used in the move map -- figure out how to do this better
+    public static PathDirection getAdditionalMove(WalkType prev, WalkType next, Direction direction) {
+        if (direction == Direction.LEFT) {
+            if (next == WalkType.STAIRS_UP_LEFT) {
+                return PathDirection.UP;
+            }
+            else if (next == WalkType.STAIRS_UP_RIGHT) {
+                return PathDirection.DOWN;
+            }
+        }
+
+        if (direction == Direction.RIGHT) {
+            if (prev == WalkType.STAIRS_UP_LEFT) {
+                return PathDirection.DOWN;
+            }
+            else if (prev == WalkType.STAIRS_UP_RIGHT) {
+                return PathDirection.UP;
+            }
+        }
+
+        return PathDirection.WAIT;
+    }
 }
