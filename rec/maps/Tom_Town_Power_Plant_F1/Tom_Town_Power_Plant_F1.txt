@@ -8,18 +8,6 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "FromTomTown",
-      "nextMap": "Tom_Town",
-      "nextEntrance": "TomTownPowerPlant",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "location": {
-        "x": 8,
-        "y": 12
-      },
-      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromTomTown_01"
-    },
-    {
       "exitName": "FromBasement1",
       "nextMap": "Tom_Town_Power_Plant_B1",
       "nextEntrance": "FromFloor1",
@@ -30,6 +18,18 @@
         "y": 9
       },
       "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromBasement1_01"
+    },
+    {
+      "exitName": "FromTomTown",
+      "nextMap": "Tom_Town",
+      "nextEntrance": "TomTownPowerPlant",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 8,
+        "y": 12
+      },
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromTomTown_01"
     },
     {
       "exitName": "FromFloor2",
@@ -45,32 +45,6 @@
     }
   ],
   "NPCs": [
-    {
-      "name": "Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01",
-      "path": "w",
-      "spriteIndex": 18,
-      "direction": "DOWN",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "It's not safe here."
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 7,
-        "y": 9
-      },
-      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01_01",
-      "condition": "!VisitedTomTownPowerPlant"
-    },
     {
       "name": "Tom_Town_Power_Plant_NPC_Scientist_01",
       "path": "w",
@@ -96,6 +70,32 @@
       },
       "triggerName": "Tom_Town_Power_Plant_F1_NPC_Tom_Town_Power_Plant_NPC_Scientist_01_01",
       "condition": "VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01",
+      "path": "w",
+      "spriteIndex": 18,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "It's not safe here."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 7,
+        "y": 9
+      },
+      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Tom_Town_Power_Plant_NPC_PowerPlantPoliceOfficer_01_01",
+      "condition": "!VisitedTomTownPowerPlant"
     }
   ],
   "items": [],
