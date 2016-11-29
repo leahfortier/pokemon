@@ -43,7 +43,7 @@ public class NPCEntity extends MovableEntity {
 			int spriteIndex,
 			Map<String, NPCInteraction> interactions,
 			String startKey) {
-		super(location, name, condition, spriteIndex, direction);
+		super(location, name, condition, spriteIndex);
 
 		this.path = path;
 		this.spriteIndex = spriteIndex;

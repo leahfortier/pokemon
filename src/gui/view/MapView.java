@@ -594,7 +594,6 @@ public class MapView extends View {
 
 		if (state == VisualState.MAP) {
 			playerEntity.update(dt, currentMap, this);
-			playerEntity.triggerCheck(currentMap);
         }
 
 		if (showMessage && (this.currentMessage == null || StringUtils.isNullOrEmpty(this.currentMessage.getMessage())) && Messages.hasMessages()) {

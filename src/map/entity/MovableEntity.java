@@ -15,9 +15,8 @@ public abstract class MovableEntity extends Entity {
 	
 	protected int spriteIndex;
 	
-	MovableEntity(Point location, String triggerName, String condition, int spriteIndex, Direction startDirection) {
+	MovableEntity(Point location, String triggerName, String condition, int spriteIndex) {
 		super(location, triggerName, condition);
-		this.setDirection(startDirection);
 		
 		this.transitionTime = 0;
 		this.runFrame = 0;

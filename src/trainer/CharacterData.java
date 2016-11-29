@@ -104,7 +104,7 @@ public class CharacterData extends Trainer implements Serializable {
 	public void initialize() {
 		this.logMessages = new ArrayList<>();
 		this.timeSinceUpdate = System.currentTimeMillis();
-		this.entity = new PlayerEntity(this.location, this.direction);
+		this.entity = new PlayerEntity(this.location);
 	}
 
 	public void setName(String playerName) {

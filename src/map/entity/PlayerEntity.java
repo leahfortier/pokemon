@@ -26,8 +26,8 @@ public class PlayerEntity extends MovableEntity {
 	private String entityTriggerSuffix;
 	private Entity currentInteractionEntity;
 
-	public PlayerEntity(Point location, Direction startDirection) {
-		super(location, null, null, 0, startDirection);
+	public PlayerEntity(Point location) {
+		super(location, null, null, 0);
 
 		justMoved = true;
 		stalled = false;
@@ -128,6 +128,8 @@ public class PlayerEntity extends MovableEntity {
 
 		justMoved = transitionTime == 1 || justCreated;
 		justCreated = false;
+
+		triggerCheck(map);
 	}
 
 	private Point getWalkTypeAdditionalMove(WalkType prev, WalkType next, Direction direction) {
@@ -152,8 +154,7 @@ public class PlayerEntity extends MovableEntity {
 		return new Point();
 	}
 
-	// TODO: See if this can be private and added to the end of the update method
-	public void triggerCheck(MapData map) {
+	private void triggerCheck(MapData map) {
 		List<String> triggerNames = new ArrayList<>();
 
 		if (entityTriggerSuffix != null) {
