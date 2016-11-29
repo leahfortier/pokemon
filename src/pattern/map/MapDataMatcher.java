@@ -29,7 +29,11 @@ public class MapDataMatcher {
 
     public MapDataMatcher(Set<AreaMatcher> areaData,
                           Set<LocationTriggerMatcher> entities) {
-        this.areas = areaData.toArray(new AreaMatcher[0]);
+
+        this.areas = areaData.stream()
+                .sorted((first, second) -> first.getAreaData().getAreaName().compareTo(second.getAreaData().getAreaName()))
+                .collect(Collectors.toList())
+                .toArray(new AreaMatcher[0]);
 
         Map<TriggerModelType, List<LocationTriggerMatcher>> triggerMap = new EnumMap<>(TriggerModelType.class);
         for (TriggerModelType triggerModelType : TriggerModelType.values()) {

@@ -1,17 +1,17 @@
 {
   "areas": [
     {
+      "color": "ffff220b",
+      "displayName": "Depth First Search Town",
+      "terrain": "GRASS",
+      "music": "DFS_TOWN"
+    },
+    {
       "color": "ff1a8524",
       "displayName": "Edge 1",
       "terrain": "GRASS",
       "weather": "RAIN",
       "music": "EDGE_1"
-    },
-    {
-      "color": "ffff220b",
-      "displayName": "Depth First Search Town",
-      "terrain": "GRASS",
-      "music": "DFS_TOWN"
     }
   ],
   "mapTransitions": [
