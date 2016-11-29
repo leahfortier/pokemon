@@ -105,7 +105,7 @@ public class PlayerEntity extends MovableEntity {
 		for (Direction direction : Direction.values()) {
 			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
 				Point newLocation = Point.add(this.getLocation(), Point.scale(direction.getDeltaPoint(), dist));
-				if (!isPassable(currentMap.getPassValue(newLocation), direction)) {
+				if (!currentMap.getPassValue(newLocation).isPassable(direction)) {
 					break;
 				}
 
@@ -147,7 +147,7 @@ public class PlayerEntity extends MovableEntity {
 				WalkType curPassValue = currentMap.getPassValue(player.getLocation());
 				WalkType passValue = currentMap.getPassValue(newLocation);
 
-				if (isPassable(passValue, inputDirection) && !currentMap.hasEntity(newLocation)) {
+				if (passValue.isPassable(inputDirection) && !currentMap.hasEntity(newLocation)) {
 					newLocation = Point.add(newLocation, getWalkTypeAdditionalMove(curPassValue, passValue, inputDirection));
 
 					player.setLocation(newLocation);

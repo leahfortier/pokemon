@@ -78,7 +78,7 @@ public class NPCEntity extends MovableEntity {
 			}
 			else {
 				Point newLocation = Point.add(this.getLocation(), direction.getDeltaPoint());
-				if (isPassable(currentMap.getPassValue(newLocation), direction.getDirection()) && !currentMap.hasEntity(newLocation)) {
+				if (currentMap.getPassValue(newLocation).isPassable(direction.getDirection()) && !currentMap.hasEntity(newLocation)) {
 					super.setLocation(newLocation);
 
 					transitionTime = 1;
