@@ -47,28 +47,6 @@
   "items": [],
   "miscEntities": [
     {
-      "name": "Mart",
-      "actions": [
-        {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Welcome to the PokéMart!"
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "ChangeView",
-            "triggerContents": "MART_VIEW"
-          }
-        }
-      ],
-      "location": {
-        "x": 3,
-        "y": 7
-      },
-      "triggerName": "RSATown_PokeCenter_TriggerEntity_Mart_01"
-    },
-    {
       "name": "Heal",
       "actions": [
         {
@@ -118,6 +96,28 @@
         "y": 3
       },
       "triggerName": "RSATown_PokeCenter_TriggerEntity_Heal_01"
+    },
+    {
+      "name": "Mart",
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Welcome to the PokéMart!"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "ChangeView",
+            "triggerContents": "MART_VIEW"
+          }
+        }
+      ],
+      "location": {
+        "x": 3,
+        "y": 7
+      },
+      "triggerName": "RSATown_PokeCenter_TriggerEntity_Mart_01"
     },
     {
       "name": "PC_View",

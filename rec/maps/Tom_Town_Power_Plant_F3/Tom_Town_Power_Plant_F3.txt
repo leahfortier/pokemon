@@ -14,15 +14,6 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "ReloadLocation",
-      "deathPortal": false,
-      "location": {
-        "x": 10,
-        "y": 10
-      },
-      "triggerName": "Tom_Town_Power_Plant_F3_MapExit_ReloadLocation_01"
-    },
-    {
       "exitName": "FromFloor2",
       "nextMap": "Tom_Town_Power_Plant_F2",
       "nextEntrance": "FromFloor3",
@@ -33,127 +24,18 @@
         "y": 8
       },
       "triggerName": "Tom_Town_Power_Plant_F3_MapExit_FromFloor2_01"
+    },
+    {
+      "exitName": "ReloadLocation",
+      "deathPortal": false,
+      "location": {
+        "x": 10,
+        "y": 10
+      },
+      "triggerName": "Tom_Town_Power_Plant_F3_MapExit_ReloadLocation_01"
     }
   ],
   "NPCs": [
-    {
-      "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03",
-      "path": "w",
-      "spriteIndex": 20,
-      "direction": "RIGHT",
-      "interactions": [
-        {
-          "name": "battle",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "You can't stop us. This town's main thread will be terminated!"
-              }
-            },
-            {
-              "battle": {
-                "name": "Team Deadlock Grunt",
-                "cashMoney": 100,
-                "pokemon": [
-                  {
-                    "namesies": "BUTTERFREE",
-                    "level": 14
-                  },
-                  {
-                    "namesies": "BEEDRILL",
-                    "level": 15
-                  }
-                ],
-                "update": "deadlock_defeat"
-              }
-            },
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "You may have halted us now, but our loop is infinite!"
-              }
-            },
-            {
-              "global": "VisitedTomTownPowerPlant"
-            },
-            {
-              "trigger": {
-                "triggerType": "MapTransition",
-                "triggerContents": "{
-                        nextMap: Tom_Town_Power_Plant_F3,
-                        nextEntrance: ReloadLocation
-                    }"
-              }
-            }
-          ]
-        },
-        {
-          "name": "deadlock_defeat",
-          "walkToPlayer": false,
-          "npcActions": []
-        }
-      ],
-      "location": {
-        "x": 9,
-        "y": 10
-      },
-      "triggerName": "Tom_Town_Power_Plant_F3_NPC_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03_01",
-      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03"
-    },
-    {
-      "name": "Tom_Town_Power_Plant_F3_NPC_Scientist_01",
-      "path": "w",
-      "spriteIndex": 12,
-      "direction": "RIGHT",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I'll be here for days trying to get the plant fully operational again."
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 14,
-        "y": 10
-      },
-      "triggerName": "Tom_Town_Power_Plant_F3_NPC_Tom_Town_Power_Plant_F3_NPC_Scientist_01_01",
-      "condition": "VisitedTomTownPowerPlant&!!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01"
-    },
-    {
-      "name": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
-      "path": "w",
-      "spriteIndex": 18,
-      "direction": "LEFT",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": true,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Wow, you did it! You saved the power plant!"
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 12,
-        "y": 10
-      },
-      "triggerName": "Tom_Town_Power_Plant_F3_NPC_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01_01",
-      "condition": "VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01"
-    },
     {
       "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01",
       "path": "w",
@@ -267,6 +149,124 @@
       },
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02_01",
       "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02"
+    },
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03",
+      "path": "w",
+      "spriteIndex": 20,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "battle",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "You can't stop us. This town's main thread will be terminated!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Team Deadlock Grunt",
+                "cashMoney": 100,
+                "pokemon": [
+                  {
+                    "namesies": "BUTTERFREE",
+                    "level": 14
+                  },
+                  {
+                    "namesies": "BEEDRILL",
+                    "level": 15
+                  }
+                ],
+                "update": "deadlock_defeat"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "You may have halted us now, but our loop is infinite!"
+              }
+            },
+            {
+              "global": "VisitedTomTownPowerPlant"
+            },
+            {
+              "trigger": {
+                "triggerType": "MapTransition",
+                "triggerContents": "{
+                        nextMap: Tom_Town_Power_Plant_F3,
+                        nextEntrance: ReloadLocation
+                    }"
+              }
+            }
+          ]
+        },
+        {
+          "name": "deadlock_defeat",
+          "walkToPlayer": false,
+          "npcActions": []
+        }
+      ],
+      "location": {
+        "x": 9,
+        "y": 10
+      },
+      "triggerName": "Tom_Town_Power_Plant_F3_NPC_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03_01",
+      "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03"
+    },
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+      "path": "w",
+      "spriteIndex": 18,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Wow, you did it! You saved the power plant!"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 12,
+        "y": 10
+      },
+      "triggerName": "Tom_Town_Power_Plant_F3_NPC_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01_01",
+      "condition": "VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01"
+    },
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_Scientist_01",
+      "path": "w",
+      "spriteIndex": 12,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I'll be here for days trying to get the plant fully operational again."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 14,
+        "y": 10
+      },
+      "triggerName": "Tom_Town_Power_Plant_F3_NPC_Tom_Town_Power_Plant_F3_NPC_Scientist_01_01",
+      "condition": "VisitedTomTownPowerPlant&!!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01"
     }
   ],
   "items": [],

@@ -7,6 +7,54 @@
   ],
   "mapTransitions": [
     {
+      "exitName": "EastDoorBottom",
+      "nextMap": "Bloom_Filter_Meadow",
+      "nextEntrance": "WestTransitionBuildingBottom",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 11,
+        "y": 4
+      },
+      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorBottom_01"
+    },
+    {
+      "exitName": "EastDoorMiddle",
+      "nextMap": "Bloom_Filter_Meadow",
+      "nextEntrance": "WestTransitionBuildingMiddle",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 11,
+        "y": 3
+      },
+      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorMiddle_01"
+    },
+    {
+      "exitName": "EastDoorTop",
+      "nextMap": "Bloom_Filter_Meadow",
+      "nextEntrance": "WestTransitionBuildingTop",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 11,
+        "y": 2
+      },
+      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorTop_01"
+    },
+    {
+      "exitName": "WestDoorBottom",
+      "nextMap": "Tom_Town",
+      "nextEntrance": "EastTransitionBuildingBottom",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 1,
+        "y": 4
+      },
+      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorBottom_01"
+    },
+    {
       "exitName": "WestDoorMiddle",
       "nextMap": "Tom_Town",
       "nextEntrance": "EastTransitionBuildingMiddle",
@@ -29,54 +77,6 @@
         "y": 2
       },
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorTop_01"
-    },
-    {
-      "exitName": "EastDoorTop",
-      "nextMap": "Bloom_Filter_Meadow",
-      "nextEntrance": "WestTransitionBuildingTop",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 11,
-        "y": 2
-      },
-      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorTop_01"
-    },
-    {
-      "exitName": "EastDoorMiddle",
-      "nextMap": "Bloom_Filter_Meadow",
-      "nextEntrance": "WestTransitionBuildingMiddle",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 11,
-        "y": 3
-      },
-      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorMiddle_01"
-    },
-    {
-      "exitName": "WestDoorBottom",
-      "nextMap": "Tom_Town",
-      "nextEntrance": "EastTransitionBuildingBottom",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 1,
-        "y": 4
-      },
-      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorBottom_01"
-    },
-    {
-      "exitName": "EastDoorBottom",
-      "nextMap": "Bloom_Filter_Meadow",
-      "nextEntrance": "WestTransitionBuildingBottom",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 11,
-        "y": 4
-      },
-      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorBottom_01"
     }
   ],
   "NPCs": [

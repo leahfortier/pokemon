@@ -7,18 +7,6 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "WestDoorTop",
-      "nextMap": "RSATown",
-      "nextEntrance": "EastTransitionBuildingTop",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 1,
-        "y": 2
-      },
-      "triggerName": "Edge1_RSATown_TransitionBuilding_MapExit_WestDoorTop_01"
-    },
-    {
       "exitName": "EastDoorBottom",
       "nextMap": "DFS_Town",
       "nextEntrance": "WestTransitionBuildingBottom",
@@ -29,6 +17,18 @@
         "y": 4
       },
       "triggerName": "Edge1_RSATown_TransitionBuilding_MapExit_EastDoorBottom_01"
+    },
+    {
+      "exitName": "EastDoorMiddle",
+      "nextMap": "DFS_Town",
+      "nextEntrance": "WestTransitionBuildingMiddle",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 11,
+        "y": 3
+      },
+      "triggerName": "Edge1_RSATown_TransitionBuilding_MapExit_EastDoorMiddle_01"
     },
     {
       "exitName": "EastDoorTop",
@@ -55,18 +55,6 @@
       "triggerName": "Edge1_RSATown_TransitionBuilding_MapExit_WestDoorBottom_01"
     },
     {
-      "exitName": "EastDoorMiddle",
-      "nextMap": "DFS_Town",
-      "nextEntrance": "WestTransitionBuildingMiddle",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 11,
-        "y": 3
-      },
-      "triggerName": "Edge1_RSATown_TransitionBuilding_MapExit_EastDoorMiddle_01"
-    },
-    {
       "exitName": "WestDoorMiddle",
       "nextMap": "RSATown",
       "nextEntrance": "EastTransitionBuildingMiddle",
@@ -77,6 +65,18 @@
         "y": 3
       },
       "triggerName": "Edge1_RSATown_TransitionBuilding_MapExit_WestDoorMiddle_01"
+    },
+    {
+      "exitName": "WestDoorTop",
+      "nextMap": "RSATown",
+      "nextEntrance": "EastTransitionBuildingTop",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 1,
+        "y": 2
+      },
+      "triggerName": "Edge1_RSATown_TransitionBuilding_MapExit_WestDoorTop_01"
     }
   ],
   "NPCs": [
