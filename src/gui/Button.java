@@ -119,11 +119,9 @@ public class Button {
 			buttons[selected].setForceHover(true);
 		}
 
-		InputControl input = InputControl.instance();
-		for (Direction direction : Direction.values()) {
-			if (input.consumeIfDown(direction.getKey())) {
-				selected = Button.transition(buttons, selected, direction);
-			}
+		Direction inputDirection = Direction.consumeInputDirection();
+		if (inputDirection != null) {
+			selected = Button.transition(buttons, selected, inputDirection);
 		}
 
 		for (int i = 0; i < buttons.length; i++) {

@@ -2,14 +2,13 @@ package map.entity;
 
 import gui.GameData;
 import gui.view.MapView;
+import item.ItemNamesies;
 import main.Game;
 import map.Direction;
 import map.MapData;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
-import item.ItemNamesies;
 import pattern.GroupTriggerMatcher;
-import input.InputControl;
 import util.JsonUtils;
 import util.Point;
 import util.StringUtils;
@@ -31,10 +30,11 @@ public class ItemEntity extends Entity {
 	}
 
 	@Override
-	public void update(int dt, Entity[][] entity, MapData map, MapView view) {
-		if (hasTriggered) {
-			view.removeEntity(this);
-		}
+	public void update(int dt, MapData currentMap, MapView view) {}
+
+	@Override
+	public boolean isPresent() {
+		return super.isPresent() && !hasTriggered;
 	}
 
 	@Override

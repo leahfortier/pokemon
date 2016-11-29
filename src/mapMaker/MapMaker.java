@@ -1,7 +1,7 @@
 package mapMaker;
 
 import main.Global;
-import map.MapMetaData.MapDataType;
+import map.MapDataType;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;

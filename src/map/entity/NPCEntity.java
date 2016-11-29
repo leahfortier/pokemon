@@ -25,6 +25,7 @@ public class NPCEntity extends MovableEntity {
 	private final Map<String, NPCInteraction> interactions;
 	private final String startKey;
 
+	private Direction transitionDirection;
 	private String tempPath;
 	private int pathIndex;
 	private int waitTime;
@@ -42,7 +43,7 @@ public class NPCEntity extends MovableEntity {
 			int spriteIndex,
 			Map<String, NPCInteraction> interactions,
 			String startKey) {
-		super(location, name, condition, spriteIndex, direction);
+		super(location, name, condition, spriteIndex);
 
 		this.path = path;
 		this.spriteIndex = spriteIndex;
@@ -55,14 +56,15 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	@Override
-	public void update(int dt, Entity[][] entity, MapData map, MapView view) {
-		super.update(dt, entity, map, view);
+	public void update(int dt, MapData currentMap, MapView view) {
+		super.update(dt, currentMap, view);
 
 		// Decrease wait time
 		waitTime = Math.max(0, waitTime - dt);
 
 		// Not transitioning, not waiting, and does not have attention
 		if (!this.isTransitioning() && waitTime == 0 && !hasAttention) {
+
 			String path = this.path;
 			if (tempPath != null) {
 				path = tempPath;
@@ -75,22 +77,16 @@ public class NPCEntity extends MovableEntity {
 				pathIndex++;
 			}
 			else {
-				Point newPoint = Point.add(this.getLocation(), direction.getDeltaPoint());
-				int x = newPoint.x; // TODO
-				int y = newPoint.y;
-
-				// TODO: Shouldn't the isPassable method check if an entity doesn't exist in it as well?
-				if (isPassable(map.getPassValue(x, y)) && entity[x][y] == null) {
-					entity[getX()][getY()] = null;
-					super.setLocation(newPoint);
-					entity[getX()][getY()] = this;
+				Point newLocation = Point.add(this.getLocation(), direction.getDeltaPoint());
+				if (isPassable(currentMap.getPassValue(newLocation)) && !currentMap.hasEntity(newLocation)) {
+					super.setLocation(newLocation);
 
 					transitionTime = 1;
 					waitTime = 5*Global.TIME_BETWEEN_TILES/4; // TODO: Why 5/4
 					pathIndex++;
 				}
 
-				transitionDirection = direction.getDirection();
+				this.setDirection(direction.getDirection());
 			}
 
 			pathIndex %= path.length();
@@ -131,8 +127,18 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	@Override
+	public Direction getDirection() {
+		return this.transitionDirection;
+	}
+
+	@Override
+	protected void setDirection(Direction direction) {
+		this.transitionDirection = direction;
+	}
+
+	@Override
 	public void getAttention(Direction direction) {
-		transitionDirection = direction;
+		this.setDirection(direction);
 		hasAttention = true;
 	}
 
@@ -141,8 +147,7 @@ public class NPCEntity extends MovableEntity {
 		return this.interactions.get(interaction).shouldWalkToPlayer();
 	}
 
-	// TODO: rename
-	public boolean getWalkingToPlayer() {
+	public boolean isWalkingToPlayer() {
 		return walkingToPlayer;
 	}
 
@@ -164,12 +169,12 @@ public class NPCEntity extends MovableEntity {
 
 	@Override
 	public void reset() {
-		super.setLocation(defaultLocation);
+		this.setLocation(defaultLocation);
+		this.setDirection(defaultDirection);
 
 		waitTime = 0;
 		pathIndex = 0;
 		hasAttention = false;
-		transitionDirection = defaultDirection;
 		walkingToPlayer = false;
 		tempPath = null;
 	}

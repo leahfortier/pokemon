@@ -127,7 +127,8 @@ public class MapDataMatcher {
                 .count() == 1;
     }
 
-    public static MapDataMatcher matchArea(String fileName, String areaDescription) {
+    public static MapDataMatcher matchArea(String areaDescriptionFileName) {
+        String areaDescription = FileIO.readEntireFileWithReplacements(areaDescriptionFileName, false);
 
         MapDataMatcher areaData = JsonUtils.deserialize(areaDescription, MapDataMatcher.class);
         JsonObject mappity = JsonUtils.deserialize(areaDescription, JsonObject.class);
@@ -144,7 +145,7 @@ public class MapDataMatcher {
 
         areaDataJson = JsonUtils.getJson(areaData);
 
-        FileIO.overwriteFile(fileName, new StringBuilder(areaDataJson));
+        FileIO.overwriteFile(areaDescriptionFileName, new StringBuilder(areaDataJson));
 
         return areaData;
     }

@@ -55,8 +55,7 @@ public class MapMakerTriggerData {
 	MapMakerTriggerData(MapMaker mapMaker, String mapTriggerFileName) {
 		initialize(mapMaker);
 
-		String fileText = FileIO.readEntireFileWithoutReplacements(mapTriggerFileName, false);
-		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapTriggerFileName, fileText);
+		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapTriggerFileName);
 		this.areaData = new HashSet<>(mapDataMatcher.getAreas());
 		this.entities = new HashSet<>(mapDataMatcher.getAllEntities());
 

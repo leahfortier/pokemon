@@ -10,6 +10,7 @@ import item.use.BallItem;
 import main.Game;
 import main.Global;
 import map.Direction;
+import map.entity.PlayerEntity;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import message.MessageUpdate;
@@ -43,13 +44,15 @@ public class CharacterData extends Trainer implements Serializable {
 	public static final String DEFAULT_NAME = "Red";
 	private static final int START_MONEY = 3000;
 
-	// TODO: Look into most of these to check if they really do need to be public
 	private Point location;
-	public Direction direction;
+	private Direction direction;
 
+	// TODO: privacy please
 	public boolean mapReset;
 	public String mapName;
 	public String areaName;
+
+	private transient PlayerEntity entity;
 
 	private Set<String> definedGlobals;
 	private Map<String, String> npcInteractions;
@@ -101,6 +104,7 @@ public class CharacterData extends Trainer implements Serializable {
 	public void initialize() {
 		this.logMessages = new ArrayList<>();
 		this.timeSinceUpdate = System.currentTimeMillis();
+		this.entity = new PlayerEntity(this.location);
 	}
 
 	public void setName(String playerName) {
@@ -113,6 +117,10 @@ public class CharacterData extends Trainer implements Serializable {
 			numBadges++;
 			badges[n] = true;
 		}
+	}
+
+	public PlayerEntity getEntity() {
+		return this.entity;
 	}
 
 	public int getNumBadges() {
@@ -144,16 +152,16 @@ public class CharacterData extends Trainer implements Serializable {
 		return this.location;
 	}
 
-	public int getX() {
-		return this.location.x;
-	}
-
-	public int getY() {
-		return this.location.y;
-	}
-
 	public void setLocation(Point newLocation) {
 		this.location = newLocation;
+	}
+
+	public Direction getDirection() {
+		return this.direction;
+	}
+
+	public void setDirection(Direction direction) {
+		this.direction = direction;
 	}
 	
 	public void setMap(String name, String mapEntrance) {
@@ -205,10 +213,6 @@ public class CharacterData extends Trainer implements Serializable {
 	
 	public String getAreaName() {
 		return areaName;
-	}
-
-	public void setDirection(Direction direction) {
-		this.direction = direction;
 	}
 	
 	public void setPokeCenter() {

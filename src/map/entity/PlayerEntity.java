@@ -1,37 +1,55 @@
 package map.entity;
 
+import gui.GameData;
 import gui.view.MapView;
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
-import map.MapData.WalkType;
+import map.WalkType;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
+import sound.SoundPlayer;
+import sound.SoundTitle;
 import trainer.CharacterData;
 import util.FloatPoint;
-import input.InputControl;
-import input.ControlKey;
 import util.Point;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerEntity extends MovableEntity {
 
+	private boolean justCreated;
 	private boolean justMoved;
-	private String npcTriggerSuffix;
 	private boolean stalled;
 
-	private boolean justCreated;
+	private String entityTriggerSuffix;
+	private Entity currentInteractionEntity;
 
-	public PlayerEntity() {
-		this(Game.getPlayer());
-	}
-
-	private PlayerEntity(CharacterData player) {
-		super(player.getLocation(), null, null, 0, player.direction);
+	public PlayerEntity(Point location) {
+		super(location, null, null, 0);
 
 		justMoved = true;
 		stalled = false;
 		justCreated = true;
+	}
+
+	@Override
+	public Point getLocation() {
+		return Game.getPlayer().getLocation();
+	}
+
+	@Override
+	public Direction getDirection() {
+		return Game.getPlayer().getDirection();
+	}
+
+	@Override
+	protected void setDirection(Direction direction) {
+		Game.getPlayer().setDirection(direction);
 	}
 
 	// Player is drawn in the center of the canvas
@@ -41,89 +59,34 @@ public class PlayerEntity extends MovableEntity {
 	}
 
 	@Override
-	public void update(int dt, Entity[][] entity, MapData map, MapView view) {
-		super.update(dt, entity, map, view);
+	public void update(int dt, MapData currentMap, MapView view) {
+		super.update(dt, currentMap, view);
 
-		CharacterData player = Game.getPlayer();
 		InputControl input = InputControl.instance();
 
-		if (!this.getLocation().equals(player.getLocation())) {
-			entity[getX()][getY()] = null;
-			entity[player.getX()][player.getY()] = this;
-			transitionTime = 0;
+		entityTriggerSuffix = null;
+		boolean spacePressed = false;
+
+		if (!stalled) {
+			checkNPCs(currentMap);
 		}
 
-		if (player.direction != transitionDirection) {
-			transitionDirection = player.direction;
-		}
-		
-		npcTriggerSuffix = null;
-		boolean spacePressed = false;
-		if (transitionTime == 0 && !justMoved) {
+		if (!this.isTransitioning() && !justMoved) {
 			if (input.consumeIfDown(ControlKey.SPACE)) {
 				spacePressed = true;
 			}
 			else {
-				for (Direction direction : Direction.values()) {
-					if (input.isDown(direction.getKey()) && transitionTime == 0 && !stalled) {
-						if (transitionDirection != direction) {
-							transitionDirection = direction;
-							continue;
-						}
-
-						Point delta = Point.add(player.getLocation(), direction.getDeltaPoint());
-						
-						WalkType curPassValue = map.getPassValue(player.getX(), player.getY());
-						WalkType passValue = map.getPassValue(delta.x, delta.y);
-						
-						if (isPassable(passValue, direction) && entity[delta.x][delta.y] == null) {
-							delta = Point.add(delta, getWalkTypeAdditionalMove(curPassValue, passValue, direction));
-
-							entity[delta.x][delta.y] = this;
-							entity[player.getX()][player.getY()] = null;
-
-							player.setLocation(delta);
-							player.step();
-
-							transitionTime = 1;
-							break;
-							// TODO: Add support for multiple pressed keys.
-							// Weird things happen when you hold one key and
-							// press another.
-						}
-					}
-				}
+				checkMovement(currentMap);
 			}
 
-			super.setLocation(player.getLocation());
-			player.direction = transitionDirection;
-
 			if (spacePressed) {
-				Point newPoint = Point.add(this.getLocation(), transitionDirection.getDeltaPoint());
-				int x = newPoint.x; // TODO
-				int y = newPoint.y;
-				
-				if (map.inBounds(x, y) && entity[x][y] != null && entity[x][y] != currentInteractionEntity) {
-					npcTriggerSuffix = entity[x][y].getTriggerSuffix();
-					entity[x][y].getAttention(transitionDirection.opposite);
-					currentInteractionEntity = entity[x][y];
-				}
+				entityInteraction(this.getDirection(), currentMap);
 			}
 			
 			if (stalled) {
 				for (Direction direction : Direction.values()) {
-					Point newLocation = Point.add(this.getLocation(), Point.negate(direction.getDeltaPoint()));
-					int x = newLocation.x; // TODO
-					int y = newLocation.y;
-
-					// TODO: Should have a method for this
-					if (map.inBounds(x, y) && entity[x][y] != null && entity[x][y] != currentInteractionEntity) {
-						npcTriggerSuffix = entity[x][y].getTriggerSuffix();
-						currentInteractionEntity = entity[x][y];
-
-						entity[x][y].getAttention(direction);
-						player.direction = transitionDirection = direction.opposite;
-						stalled = false;
+					if (entityInteraction(direction, currentMap)) {
+						this.setDirection(direction);
 					}
 				}
 			}
@@ -131,9 +94,85 @@ public class PlayerEntity extends MovableEntity {
 
 		justMoved = transitionTime == 1 || justCreated;
 		justCreated = false;
+
+		triggerCheck(currentMap);
 	}
 
-	public static Entity currentInteractionEntity;
+	// Check for any NPCs facing the player
+	private void checkNPCs(MapData currentMap) {
+		GameData data = Game.getData();
+
+		// TODO: Need to make sure every space is passable between the npc and player
+		for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
+			for (Direction direction : Direction.values()) {
+				Point newLocation = Point.add(this.getLocation(), Point.scale(direction.getDeltaPoint(), dist));
+				Entity newEntity = currentMap.getEntity(newLocation);
+
+				if (newEntity instanceof NPCEntity) {
+					NPCEntity npc = (NPCEntity) newEntity;
+					if (npc.isFacing(this.getLocation())
+							&& npc.shouldWalkToPlayer()
+							&& !npc.isWalkingToPlayer()
+							&& data.getTrigger(npc.getWalkTrigger()).isTriggered()) {
+
+						stalled = true;
+						npc.walkTowards(dist - 1, direction.getOpposite().getPathDirection());
+
+						if (npc.isTrainer()) {
+							SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void checkMovement(MapData currentMap) {
+		CharacterData player = Game.getPlayer();
+
+		// TODO: Add support for multiple pressed keys. Weird things happen when you hold one key and press another.
+		Direction inputDirection = Direction.checkInputDirection();
+		if (inputDirection != null && !isTransitioning() && !stalled) {
+
+			// If not facing the input direction, transition this way
+			if (this.getDirection() != inputDirection) {
+				this.setDirection(inputDirection);
+			}
+			// Otherwise, advance in the input direction
+			else {
+				Point newLocation = Point.add(player.getLocation(), inputDirection.getDeltaPoint());
+
+				WalkType curPassValue = currentMap.getPassValue(player.getLocation());
+				WalkType passValue = currentMap.getPassValue(newLocation);
+
+				if (isPassable(passValue, inputDirection) && !currentMap.hasEntity(newLocation)) {
+					newLocation = Point.add(newLocation, getWalkTypeAdditionalMove(curPassValue, passValue, inputDirection));
+
+					player.setLocation(newLocation);
+					player.step();
+
+					// TODO: This seems to be a common default value -- should be in a method or something
+					transitionTime = 1;
+				}
+			}
+		}
+	}
+
+	// Check if there is an entity next to the player in the specified direction
+	// If so, set this entity as the current interaction entity
+	private boolean entityInteraction(Direction direction, MapData currentMap) {
+		Point newLocation = Point.add(this.getLocation(), direction.getDeltaPoint());
+		Entity entity = currentMap.getEntity(newLocation);
+
+		if (entity != null && entity != currentInteractionEntity) {
+			entityTriggerSuffix = entity.getTriggerSuffix();
+			entity.getAttention(direction.getOpposite());
+			currentInteractionEntity = entity;
+			return true;
+		}
+
+		return false;
+	}
 
 	private Point getWalkTypeAdditionalMove(WalkType prev, WalkType next, Direction direction) {
 		if (direction == Direction.LEFT) {
@@ -157,19 +196,24 @@ public class PlayerEntity extends MovableEntity {
 		return new Point();
 	}
 
-	public void triggerCheck(MapData map) {
-		String triggerName = null;
+	private void triggerCheck(MapData map) {
+		List<String> triggerNames = new ArrayList<>();
 
-		if (npcTriggerSuffix != null) {
-			triggerName = TriggerType.GROUP.getTriggerNameFromSuffix(npcTriggerSuffix);
-			npcTriggerSuffix = null;
+		if (entityTriggerSuffix != null) {
+			triggerNames.add(TriggerType.GROUP.getTriggerNameFromSuffix(entityTriggerSuffix));
+			entityTriggerSuffix = null;
 		}
 		else if (justMoved) {
-			triggerName = map.trigger();
+			List<String> currentTriggerNames = map.getCurrentTriggers();
+			if (currentTriggerNames != null) {
+				triggerNames.addAll(currentTriggerNames);
+			}
+
 			justMoved = false;
 		}
 
-		if (triggerName != null) {
+		// Execute all valid triggers
+		for (String triggerName : triggerNames) {
 			Trigger trigger = Game.getData().getTrigger(triggerName);
 			if (trigger != null && trigger.isTriggered()) {
 				trigger.execute();
@@ -184,7 +228,7 @@ public class PlayerEntity extends MovableEntity {
 		}
 
 		// Scale by the length of the transition in the current direction
-		FloatPoint transitionDelta = FloatPoint.scale(transitionDirection.getDeltaPoint(), transitionLength);
+		FloatPoint transitionDelta = FloatPoint.scale(this.getDirection().getDeltaPoint(), transitionLength);
 
 		// Get the location relative to the player
 		FloatPoint transitionLocationUnscaled = FloatPoint.subtract(Game.getPlayer().getLocation(), transitionDelta);
@@ -209,16 +253,13 @@ public class PlayerEntity extends MovableEntity {
 
 	@Override
 	public void getAttention(Direction direction) {
-		transitionDirection = direction;
+		this.setDirection(direction);
 		stalled = true;
 	}
 
-	public void stall() {
-		stalled = true;
-	}
-
-	public boolean isStalled() {
-		return stalled;
+	public void resetCurrentInteractionEntity() {
+		this.currentInteractionEntity = null;
+		stalled = false;
 	}
 
 	@Override

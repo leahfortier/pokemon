@@ -4,7 +4,7 @@ import gui.view.MapView;
 import map.Condition;
 import map.Direction;
 import map.MapData;
-import map.MapData.WalkType;
+import map.WalkType;
 import map.triggers.TriggerType;
 import util.DrawUtils;
 import util.Point;
@@ -34,14 +34,6 @@ public abstract class Entity {
 		this.location = newLocation;
 	}
 
-	public int getX() {
-		return this.location.x;
-	}
-	
-	public int getY() {
-		return this.location.y;
-	}
-
 	public boolean isPresent() {
 		return this.condition.isTrue();
 	}
@@ -58,8 +50,7 @@ public abstract class Entity {
 		return DrawUtils.getDrawLocation(this.location, drawLocation);
 	}
 
-	// TODO: Don't pass the entity array around goddamnit
-	public abstract void update(int dt, Entity[][] entity, MapData map, MapView view);
+	public abstract void update(int dt, MapData currentMap, MapView view);
 
 	protected boolean isPassable(WalkType type) {
 		return type == WalkType.WALKABLE;

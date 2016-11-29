@@ -16,7 +16,6 @@ import map.PathDirection;
 import map.entity.Entity;
 import map.entity.EntityAction;
 import map.entity.MovableEntity;
-import map.entity.NPCEntity;
 import map.entity.PlayerEntity;
 import map.triggers.Trigger;
 import message.MessageUpdate;
@@ -36,10 +35,6 @@ import util.StringUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 public class MapView extends View {
 
@@ -68,11 +63,6 @@ public class MapView extends View {
 	private AreaData currentArea;
 	private MapData currentMap;
 	private SoundTitle currentMusicTitle;
-	
-	private Entity[][] entities;
-	private List<Entity> entityList;
-	private Queue<Entity> removeQueue;
-	private PlayerEntity playerEntity;
 
 	private MessageUpdate currentMessage;
 	private int dialogueSelection;
@@ -145,9 +135,7 @@ public class MapView extends View {
 		for (int y = start.y; y < end.y; y++) {
 			for (int x = start.x; x < end.x; x++) {
 				int bgTile = currentMap.getBgTile(x,y);
-
-				// TODO: What does this mean?
-				if ((bgTile >> 24) != 0) {
+				if (TileSet.isValidMapTile(bgTile)) {
 					BufferedImage img = mapTiles.getTile(bgTile);
 					DrawUtils.drawTileImage(g, img, x, y, draw);
 				}
@@ -160,7 +148,7 @@ public class MapView extends View {
 
 				// Draw foreground tiles
 				int fgTile = currentMap.getFgTile(x, y);
-				if ((fgTile >> 24) != 0) {
+				if (TileSet.isValidMapTile(fgTile)) {
 					BufferedImage img = mapTiles.getTile(fgTile);
 					DrawUtils.drawTileImage(g, img, x, y, draw);
 				}
@@ -170,11 +158,8 @@ public class MapView extends View {
 				for (PathDirection pathDirection : deltaDirections) {
 					Point delta = pathDirection.getDeltaPoint();
                     Point newPoint = Point.add(delta, x, y);
-                    if (!newPoint.inBounds(entities.length, entities[0].length)) {
-                        continue;
-                    }
 
-                    Entity newPointEntity = entities[newPoint.x][newPoint.y];
+                    Entity newPointEntity = currentMap.getEntity(newPoint);
                     if (newPointEntity == null) {
                         continue;
                     }
@@ -412,6 +397,7 @@ public class MapView extends View {
 		InputControl input = InputControl.instance();
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
+		PlayerEntity playerEntity = player.getEntity();
 		MENU_TEXT[3] = player.getName();
 
 		if (!currentMapName.equals(player.mapName) || player.mapReset) {
@@ -423,24 +409,7 @@ public class MapView extends View {
 				currentMap.setCharacterToEntrance(player.mapEntranceName);
 			}
 
-			entities = currentMap.populateEntities();
-
-			Direction prevDir = player.direction;
-
-			playerEntity = new PlayerEntity();
-			playerEntity.setDirection(prevDir);
-			entities[player.getX()][player.getY()] = playerEntity;
-			
-			entityList = new ArrayList<>();
-			for (Entity[] er: entities) {
-				for (Entity e: er) {
-					if (e != null) {
-						entityList.add(e);
-					}
-				}
-			}
-			
-			removeQueue = new LinkedList<>();
+			currentMap.populateEntities();
 			state = VisualState.MAP;
 		}
 		
@@ -449,7 +418,7 @@ public class MapView extends View {
 		}
 		
 		// New area
-		AreaData area = currentMap.getArea(player.getX(), player.getY());
+		AreaData area = currentMap.getArea(player.getLocation());
 		String areaName = area.getAreaName();
 
 		player.areaName = areaName;
@@ -519,7 +488,7 @@ public class MapView extends View {
 					}
 
 					if (!newMessage && !Messages.hasMessages()) {
-						PlayerEntity.currentInteractionEntity = null; // TODO: Make this not static
+						playerEntity.resetCurrentInteractionEntity();
 						currentMessage = null;
 						if (battle == null) {
 							state = VisualState.MAP;
@@ -581,56 +550,13 @@ public class MapView extends View {
 		this.draw = playerEntity.getDrawLocation();
 		this.start = Point.scaleDown(Point.negate(this.draw), Global.TILE_SIZE);
 		this.end = Point.add(this.start, tilesLocation, new Point(6, 6)); // TODO: What is the 6, 6 all about?
-		
-		// Check for any NPCs facing the player
-		if (!playerEntity.isStalled() && state == VisualState.MAP) {
-
-            // TODO: Need to make sure every space is passable between the npc and player
-			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
-
-                // TODO: Move to movable entity
-				for (Direction direction : Direction.values()) {
-
-                    Point newLocation = Point.subtract(playerEntity.getLocation(), Point.scale(direction.getDeltaPoint(), dist));
-					if (!newLocation.inBounds(currentMap.getDimension())) {
-						continue;
-					}
-
-					Entity newEntity = entities[newLocation.x][newLocation.y];
-                    if (newEntity instanceof NPCEntity) {
-                        NPCEntity npc = (NPCEntity) newEntity;
-                        if (npc.isFacing(playerEntity.getLocation())
-                                && npc.shouldWalkToPlayer()
-                                && !npc.getWalkingToPlayer()
-                                && data.getTrigger(npc.getWalkTrigger()).isTriggered()) {
-
-                            playerEntity.stall();
-                            npc.setDirection(direction);
-                            npc.walkTowards(dist - 1, direction.getPathDirection());
-
-                            if (npc.isTrainer()) {
-                                SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);
-                            }
-                        }
-                    }
-				}
-			}
-		}
 
 		// Update each non-player entity on the map
-		entityList.stream()
-				.filter(entity -> entity != null && (state == VisualState.MAP || entity != playerEntity))
-				.forEach(entity -> entity.update(dt, entities, currentMap, this));
+		currentMap.updateEntities(dt, this);
 
 		if (state == VisualState.MAP) {
-			playerEntity.triggerCheck(currentMap);
+			playerEntity.update(dt, currentMap, this);
         }
-		
-		while (!removeQueue.isEmpty()) {
-			Entity entity = removeQueue.poll();
-			entityList.remove(entity);
-			entities[entity.getX()][entity.getY()] = null;
-		}
 
 		if (showMessage && (this.currentMessage == null || StringUtils.isNullOrEmpty(this.currentMessage.getMessage())) && Messages.hasMessages()) {
 			cycleMessage();
@@ -706,10 +632,6 @@ public class MapView extends View {
 			battleImageSlideRight = data.getBattleTiles().getTile(0x00100001);
 			battleImageSlideLeft = data.getBattleTiles().getTile(0x00100000);
 		}
-	}
-	
-	public void removeEntity(Entity e) {
-		removeQueue.add(e);
 	}
 
 	@Override

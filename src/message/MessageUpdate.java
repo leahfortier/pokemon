@@ -5,10 +5,9 @@ import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import gui.view.BattleView;
 import gui.view.BattleView.VisualState;
-import main.Game;
 import gui.view.ViewMode;
+import main.Game;
 import main.Type;
-import map.entity.PlayerEntity;
 import message.Messages.MessageState;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
@@ -58,7 +57,7 @@ public class MessageUpdate {
             battleView.clearUpdate();
 			Messages.clearMessages(MessageState.FIGHTY_FIGHT);
 			Messages.setMessageState(MessageState.MAPPITY_MAP);
-			PlayerEntity.currentInteractionEntity = null;
+			Game.getPlayer().getEntity().resetCurrentInteractionEntity();
         }),
 		FORCE_SWITCH(battleView -> {
             battleView.setVisualState(VisualState.POKEMON);

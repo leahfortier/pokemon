@@ -1,5 +1,7 @@
 package map;
 
+import gui.TileSet;
+import gui.view.MapView;
 import main.Game;
 import main.Global;
 import map.entity.Entity;
@@ -7,105 +9,75 @@ import map.entity.EntityAction;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
 import map.triggers.TriggerType;
+import pattern.generic.EntityMatcher;
 import pattern.map.EventMatcher;
-import pattern.map.ItemMatcher;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
-import pattern.map.MiscEntityMatcher;
-import pattern.map.NPCMatcher;
 import pattern.map.WildBattleMatcher;
+import trainer.CharacterData;
 import util.FileIO;
 import util.JsonUtils;
+import util.MultiMap;
 import util.Point;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 public class MapData {
 	private final String name;
 
-	private final int[] bgTile;
-	private final int[] fgTile;
-	private final int[] walkMap;
-	private final int[] areaMap;
+	private final Dimension dimension;
 
+	private final Map<MapDataType, int[]> dataMap;
 	private final AreaData[] areaData;
-	
-	private final Map<Integer, String> triggers;
+
+	private final List<Entity> entities;
+	private final MultiMap<Integer, String> triggers;
 	private final Map<String, Integer> mapEntrances;
 
-	private final Dimension dimension;
-	
-	private final List<Entity> entities;
-	
 	public MapData(File file) {
 		name = file.getName();
-		
-		String beginFilePath = FileIO.makeFolderPath(file.getPath()) + name;
-		
-		BufferedImage bgMap = FileIO.readImage(beginFilePath + "_bg.png");
-		int width = bgMap.getWidth();
-		int height = bgMap.getHeight();
-		dimension = new Dimension(width, height);
-		bgTile = bgMap.getRGB(0, 0, width, height, null, 0, width);
-		
-		BufferedImage fgMap = FileIO.readImage(beginFilePath + "_fg.png");
-		fgTile = fgMap.getRGB(0, 0, width, height, null, 0, width);
-		
-		BufferedImage moveMap = FileIO.readImage(beginFilePath + "_move.png");
-		walkMap = moveMap.getRGB(0, 0, width, height, null, 0, width);
-		
-		BufferedImage areaM;
-		File areaMapFile = new File(beginFilePath + "_area.png");
-		if (areaMapFile.exists()) {
-			areaM = FileIO.readImage(areaMapFile);
-			areaMap = areaM.getRGB(0, 0, width, height, null, 0, width);
-		} else {
-			areaMap = new int[0];
+
+		String beginFilePath = FileIO.makeFolderPath(file.getPath());
+		final Map<MapDataType, BufferedImage> imageMap = MapDataType.getImageMap(beginFilePath, name);
+
+		BufferedImage backgroundMap = imageMap.get(MapDataType.BACKGROUND);
+		dimension = new Dimension(backgroundMap.getWidth(), backgroundMap.getHeight());
+
+		dataMap = new EnumMap<>(MapDataType.class);
+		for (MapDataType dataType : MapDataType.values()) {
+			BufferedImage image = imageMap.get(dataType);
+			dataMap.put(dataType, image.getRGB(0, 0, dimension.width, dimension.height, null, 0, dimension.width));
 		}
 
 		entities = new ArrayList<>();
-		triggers = new HashMap<>();
+		triggers = new MultiMap<>();
 		mapEntrances = new HashMap<>();
 
-		File f = new File(beginFilePath + ".txt");
-		String fileText = FileIO.readEntireFileWithReplacements(f, false);
-
-		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(beginFilePath + ".txt", fileText);
+		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(beginFilePath + name + ".txt");
 		this.areaData = mapDataMatcher.getAreaData();
 
-		entities.addAll(mapDataMatcher.getNPCs()
-				.stream()
-				.map(NPCMatcher::createEntity)
-				.collect(Collectors.toList()));
-
-		entities.addAll(mapDataMatcher.getItems()
-				.stream()
-				.map(ItemMatcher::createEntity)
-				.collect(Collectors.toList()));
-
-		entities.addAll(mapDataMatcher.getMiscEntities()
-				.stream()
-				.map(MiscEntityMatcher::createEntity)
-				.collect(Collectors.toList()));
+		addEntities(mapDataMatcher.getNPCs());
+		addEntities(mapDataMatcher.getItems());
+		addEntities(mapDataMatcher.getMiscEntities());
 
 		for (MapTransitionMatcher matcher : mapDataMatcher.getMapTransitions()) {
             matcher.setMapName(this.name);
 
 			Point entrance = matcher.getLocation();
-			mapEntrances.put(matcher.getExitName(), getMapIndex(entrance.x, entrance.y));
+			mapEntrances.put(matcher.getExitName(), getMapIndex(entrance));
 
             Point exit = matcher.getExitLocation();
 			if (exit != null) {
 				Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(JsonUtils.getJson(matcher), null);
-				triggers.put(getMapIndex(exit.x, exit.y), trigger.getName());
+				triggers.put(getMapIndex(exit), trigger.getName());
 			}
         }
 
@@ -114,92 +86,79 @@ public class MapData {
 			Trigger trigger = EntityAction.addActionGroupTrigger(triggerData.name, triggerData.name, matcher.getActions());
 
 			for (Point point : matcher.getLocation()) {
-				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
+				triggers.put(getMapIndex(point), trigger.getName());
 			}
 		}
 
 		for (WildBattleMatcher matcher : mapDataMatcher.getWildBattles()) {
 			Trigger trigger = TriggerType.WILD_BATTLE.createTrigger(JsonUtils.getJson(matcher), null);
 			for (Point point : matcher.getLocation()) {
-				triggers.put(getMapIndex(point.x, point.y), trigger.getName());
+				triggers.put(getMapIndex(point), trigger.getName());
 			}
 		}
 	}
 
-	// TODO: move this to its own file
-	public enum WalkType {
-		WATER(0x0000FF), 
-		WALKABLE(0xFFFFFF), 
-		NOT_WALKABLE(0x000000), 
-		HOP_DOWN(0x00FF00), 
-		HOP_UP(0xFF0000), 
-		HOP_LEFT(0xFFFF00), 
-		HOP_RIGHT(0x00FFFF),
-		STAIRS_UP_RIGHT(0xFF00FF),
-		STAIRS_UP_LEFT(0xFFC800);
-		
-		private final int value;
-		
-		WalkType(int v) {
-			value = v;
-		}
+	private void addEntities(List<? extends EntityMatcher> entityMatchers) {
+		this.entities.addAll(entityMatchers.stream()
+				.map(EntityMatcher::createEntity)
+				.collect(Collectors.toList()));
 	}
 
-	private int getMapIndex(int x, int y) {
-		return Point.getIndex(x, y, dimension.width);
+	private int getMapIndex(Point point) {
+		return point.getIndex(getDimension().width);
 	}
 
 	public Dimension getDimension() {
 		return this.dimension;
 	}
 
-	// TODO: This should pass in a point
-	public boolean inBounds(int x, int y) {
-		return new Point(x, y).inBounds(dimension);
+	private int getRGB(Point location, MapDataType dataType) {
+		return getRGB(location.x, location.y, dataType);
 	}
-	
+
+	private int getRGB(int x, int y, MapDataType dataType) {
+		if (!Point.inBounds(x, y, this.dimension)) {
+			return TileSet.INVALID_RGB;
+		}
+
+		return this.dataMap.get(dataType)[Point.getIndex(x, y, dimension.width)];
+	}
+
 	public int getBgTile(int x, int y) {
-		if (!inBounds(x, y)) {
-			return 0;
-		}
-		
-		return bgTile[getMapIndex(x, y)];
+		return getRGB(x, y, MapDataType.BACKGROUND);
 	}
-	
+
 	public int getFgTile(int x, int y) {
-		if (!inBounds(x, y)) {
-			return 0;
-		}
-		
-		return fgTile[getMapIndex(x, y)];
+		return getRGB(x, y, MapDataType.FOREGROUND);
 	}
-	
-	public WalkType getPassValue(int x, int y) {
-		if (!inBounds(x, y)) {
+
+	public WalkType getPassValue(Point location) {
+		int rgb = getRGB(location, MapDataType.MOVE);
+		if (rgb == TileSet.INVALID_RGB) {
 			return WalkType.NOT_WALKABLE;
 		}
 
 		// TODO: SRSLY WHAT IS GOING ON
-		int val = walkMap[getMapIndex(x, y)]&((1<<24) - 1);
-		for (WalkType t: WalkType.values()) {
-			if (t.value == val) {
-				return t;
+		int val = rgb&((1<<24) - 1);
+		for (WalkType walkType: WalkType.values()) {
+			if (walkType.getValue() == val) {
+				return walkType;
 			}
 		}
-		
+
 		return WalkType.NOT_WALKABLE;
 	}
-	
-	public AreaData getArea(int x, int y) {
+
+	public AreaData getArea(Point location) {
 		if (areaData.length == 1) {
 			return areaData[0];
 		}
 
-		if (!inBounds(x, y) || areaMap == null) {
+		int areaColor = getRGB(location, MapDataType.AREA);
+		if (areaColor == TileSet.INVALID_RGB) {
 			return AreaData.VOID;
 		}
 
-		int areaColor = areaMap[getMapIndex(x, y)];
 		for (AreaData data : areaData) {
 			if (data.isColor(areaColor)) {
 				return data;
@@ -210,8 +169,7 @@ public class MapData {
 		return AreaData.VOID;
 	}
 
-	// TODO: Rename
-	public String trigger() {
+	public List<String> getCurrentTriggers() {
 		int val = Game.getPlayer().getLocation().getIndex(dimension.width);
 		if (triggers.containsKey(val)) {
 			return triggers.get(val);
@@ -232,17 +190,41 @@ public class MapData {
 		return false;
 	}
 
-	// TODO: Look at how this is being used, does a new array need to be created each time? does it need to be an array at all
-	public Entity[][] populateEntities() {
-		Entity[][] res = new Entity[dimension.width][dimension.height];
+	public Entity getEntity(Point location) {
+		CharacterData player = Game.getPlayer();
+		if (location.equals(player.getLocation())) {
+			return player.getEntity();
+		}
+
+		List<Entity> presentEntities = entities.stream()
+				.filter(entity -> entity.isPresent() && entity.getLocation().equals(location))
+				.collect(Collectors.toList());
+
+		if (presentEntities.isEmpty()) {
+			return null;
+		}
+
+		if (presentEntities.size() != 1) {
+			Global.error("Multiple entities present at location " + location);
+		}
+
+		return presentEntities.get(0);
+	}
+
+	public boolean hasEntity(Point location) {
+		return getEntity(location) != null;
+	}
+
+	public void updateEntities(int dt, MapView mapView) {
+		entities.forEach(entity -> entity.update(dt, this, mapView));
+	}
+
+	public void populateEntities() {
 		entities.stream()
 				.filter(Entity::isPresent)
 				.forEach(entity -> {
 					entity.reset();
 					entity.addData();
-					res[entity.getX()][entity.getY()] = entity;
 				});
-		
-		return res;
 	}
 }

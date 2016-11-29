@@ -1,6 +1,7 @@
 package map;
 
 import input.ControlKey;
+import input.InputControl;
 import util.Point;
 
 import java.util.EnumMap;
@@ -20,34 +21,49 @@ public enum Direction {
 
     private final ControlKey key;
     private final PathDirection pathDirection;
-    public Direction opposite; // Really this should be final but it won't let me include this in the constructor
 
     Direction(ControlKey key, PathDirection pathDirection) {
         this.key = key;
         this.pathDirection = pathDirection;
     }
 
-    // This is dumb fuck Java
-    static {
-        RIGHT.opposite = LEFT;
-        UP.opposite = DOWN;
-        LEFT.opposite = RIGHT;
-        DOWN.opposite = UP;
-    }
-
     public Point getDeltaPoint() {
         return this.getPathDirection().getDeltaPoint();
-    }
-
-    public ControlKey getKey() {
-        return this.key;
     }
 
     public PathDirection getPathDirection() {
         return this.pathDirection;
     }
 
+    public Direction getOpposite() {
+        // TODO: util method for something like this
+        return Direction.values()[(this.ordinal() + 2)%Direction.values().length];
+    }
+
     public static Direction getDirection(PathDirection pathDirection) {
         return pathDirectionMap.get(pathDirection);
+    }
+
+    // If any of the direction input keys are being pressed, willl return the corresponding direction
+    // This method does NOT consume the press
+    public static Direction checkInputDirection() {
+        return getInputDirection(false);
+    }
+
+    // If any of the direction input keys are being pressed, willl return the corresponding direction
+    // This method will consume the press if found
+    public static Direction consumeInputDirection() {
+        return getInputDirection(true);
+    }
+
+    private static Direction getInputDirection(boolean consume) {
+        InputControl input = InputControl.instance();
+        for (Direction direction : Direction.values()) {
+            if (input.isDown(direction.key, consume)) {
+                return direction;
+            }
+        }
+
+        return null;
     }
 }

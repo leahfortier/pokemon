@@ -1,6 +1,6 @@
 package mapMaker;
 
-import map.MapMetaData.MapDataType;
+import map.MapDataType;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.MoveModel.MoveModelType;
 import mapMaker.model.TileModel;
@@ -102,14 +102,9 @@ public class EditMapMetaData {
 
     public void loadPreviousMap(MapMaker mapMaker, String mapName) {
         this.currentMapName = mapName;
-        this.currentMap.clear();
 
         final String mapFolderPath = mapMaker.getMapFolderPath(currentMapName);
-
-        for (MapDataType dataType : MapDataType.values()) {
-            String mapFileName = mapFolderPath + dataType.getImageName(this.currentMapName);
-            this.currentMap.put(dataType, FileIO.readImage(mapFileName));
-        }
+        this.currentMap = MapDataType.getImageMap(mapFolderPath, currentMapName);
 
         MapMakerModel.getAreaModel().resetMap();
 
