@@ -48,7 +48,7 @@ public class EventTriggerDialog extends TriggerDialog<EventMatcher> {
 		}
 
 		return new EventMatcher(
-				nameTextField.getText(),
+				this.getNameField(nameTextField),
 				conditionTextArea.getText(),
 				actions
 		);

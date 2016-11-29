@@ -28,7 +28,7 @@ public class MapDataMatcher {
     private WildBattleMatcher[] wildBattles = new WildBattleMatcher[0];
 
     public MapDataMatcher(Set<AreaMatcher> areaData,
-                          Set<LocationTriggerMatcher> entities) {
+                          List<LocationTriggerMatcher> entities) {
 
         this.areas = areaData.stream()
                 .sorted((first, second) -> first.getAreaData().getAreaName().compareTo(second.getAreaData().getAreaName()))
@@ -56,8 +56,6 @@ public class MapDataMatcher {
             T[] array,
             List<LocationTriggerMatcher> triggerList,
             Function<LocationTriggerMatcher, T> mapper) {
-        triggerList.sort((first, second) -> first.getTriggerName().compareTo(second.getTriggerName()));
-
         return triggerList.stream()
                 .map(mapper)
                 .collect(Collectors.toList())

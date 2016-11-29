@@ -1,9 +1,14 @@
 package mapMaker.dialogs;
 
+import util.StringUtils;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public abstract class TriggerDialog<T> extends JPanel {
+    private static final String DEFAULT_NAME = "Nameless";
+
     private final String dialogTitle;
     private DialogOptions dialogOptions;
 
@@ -34,4 +39,17 @@ public abstract class TriggerDialog<T> extends JPanel {
     }
 
     protected abstract T getMatcher();
+
+    protected String getNameField(JTextField nameField) {
+        return getNameField(nameField, DEFAULT_NAME);
+    }
+
+    protected String getNameField(JTextField nameField, String defaultName) {
+        String name = nameField.getText();
+        if (StringUtils.isNullOrWhiteSpace(name)) {
+            return defaultName;
+        }
+
+        return name;
+    }
 }

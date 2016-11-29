@@ -37,4 +37,9 @@ public abstract class SinglePointTriggerMatcher extends LocationTriggerMatcher {
             Global.error("Cannot convert multi point matcher to single point matcher.");
         }
     }
+
+    @Override
+    protected Point getFirstLocationPoint() {
+        return this.getLocation();
+    }
 }
