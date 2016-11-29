@@ -22,7 +22,7 @@ public class MiscEntity extends Entity {
 	}
 
 	@Override
-	public void update(int dt, MapData map, MapView view) {}
+	public void update(int dt, MapData currentMap, MapView view) {}
 
 	@Override
 	protected BufferedImage getFrame() {

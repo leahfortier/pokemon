@@ -30,7 +30,7 @@ public class ItemEntity extends Entity {
 	}
 
 	@Override
-	public void update(int dt, MapData map, MapView view) {}
+	public void update(int dt, MapData currentMap, MapView view) {}
 
 	@Override
 	public boolean isPresent() {

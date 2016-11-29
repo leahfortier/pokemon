@@ -50,7 +50,7 @@ public abstract class Entity {
 		return DrawUtils.getDrawLocation(this.location, drawLocation);
 	}
 
-	public abstract void update(int dt, MapData map, MapView view);
+	public abstract void update(int dt, MapData currentMap, MapView view);
 
 	protected boolean isPassable(WalkType type) {
 		return type == WalkType.WALKABLE;

@@ -16,7 +16,6 @@ import map.PathDirection;
 import map.entity.Entity;
 import map.entity.EntityAction;
 import map.entity.MovableEntity;
-import map.entity.NPCEntity;
 import map.entity.PlayerEntity;
 import map.triggers.Trigger;
 import message.MessageUpdate;
@@ -159,9 +158,6 @@ public class MapView extends View {
 				for (PathDirection pathDirection : deltaDirections) {
 					Point delta = pathDirection.getDeltaPoint();
                     Point newPoint = Point.add(delta, x, y);
-					if (!currentMap.inBounds(newPoint)) {
-                        continue;
-                    }
 
                     Entity newPointEntity = currentMap.getEntity(newPoint);
                     if (newPointEntity == null) {
@@ -554,40 +550,6 @@ public class MapView extends View {
 		this.draw = playerEntity.getDrawLocation();
 		this.start = Point.scaleDown(Point.negate(this.draw), Global.TILE_SIZE);
 		this.end = Point.add(this.start, tilesLocation, new Point(6, 6)); // TODO: What is the 6, 6 all about?
-		
-		// Check for any NPCs facing the player
-		if (!playerEntity.isStalled() && state == VisualState.MAP) {
-
-            // TODO: Need to make sure every space is passable between the npc and player
-			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
-
-                // TODO: Move to movable entity
-				for (Direction direction : Direction.values()) {
-
-                    Point newLocation = Point.subtract(playerEntity.getLocation(), Point.scale(direction.getDeltaPoint(), dist));
-					if (!newLocation.inBounds(currentMap.getDimension())) {
-						continue;
-					}
-
-					Entity newEntity = currentMap.getEntity(newLocation);
-                    if (newEntity instanceof NPCEntity) {
-                        NPCEntity npc = (NPCEntity) newEntity;
-                        if (npc.isFacing(playerEntity.getLocation())
-                                && npc.shouldWalkToPlayer()
-                                && !npc.getWalkingToPlayer()
-                                && data.getTrigger(npc.getWalkTrigger()).isTriggered()) {
-
-                            playerEntity.stall();
-                            npc.walkTowards(dist - 1, direction.getPathDirection());
-
-                            if (npc.isTrainer()) {
-                                SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);
-                            }
-                        }
-                    }
-				}
-			}
-		}
 
 		// Update each non-player entity on the map
 		currentMap.updateEntities(dt, this);
