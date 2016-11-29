@@ -495,7 +495,7 @@ public class MapView extends View {
 					}
 
 					if (!newMessage && !Messages.hasMessages()) {
-						PlayerEntity.currentInteractionEntity = null; // TODO: Make this not static
+						playerEntity.resetCurrentInteractionEntity();
 						currentMessage = null;
 						if (battle == null) {
 							state = VisualState.MAP;

@@ -24,6 +24,7 @@ public class PlayerEntity extends MovableEntity {
 	private boolean stalled;
 
 	private String entityTriggerSuffix;
+	private Entity currentInteractionEntity;
 
 	public PlayerEntity(Point location, Direction startDirection) {
 		super(location, null, null, 0, startDirection);
@@ -117,7 +118,6 @@ public class PlayerEntity extends MovableEntity {
 
 						entity.getAttention(direction.getOpposite());
 						player.direction = transitionDirection = direction;
-						stalled = false;
 					}
 				}
 			}
@@ -126,8 +126,6 @@ public class PlayerEntity extends MovableEntity {
 		justMoved = transitionTime == 1 || justCreated;
 		justCreated = false;
 	}
-
-	public static Entity currentInteractionEntity;
 
 	private Point getWalkTypeAdditionalMove(WalkType prev, WalkType next, Direction direction) {
 		if (direction == Direction.LEFT) {
@@ -219,6 +217,11 @@ public class PlayerEntity extends MovableEntity {
 
 	public boolean isStalled() {
 		return stalled;
+	}
+
+	public void resetCurrentInteractionEntity() {
+		this.currentInteractionEntity = null;
+		stalled = false;
 	}
 
 	@Override
