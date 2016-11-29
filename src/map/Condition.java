@@ -1,6 +1,7 @@
 package map;
 
 import main.Game;
+import trainer.CharacterData;
 import util.StringUtils;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Condition {
-	private static final Pattern functionPattern = Pattern.compile("(\\w+)|([()&|!])");
+	private static final Pattern functionPattern = Pattern.compile("([\\w$]+)|([()&|!])");
 	
 	/*
 	 * postfixed boolean function
@@ -71,6 +72,8 @@ public class Condition {
 	}
 	
 	public boolean isTrue() {
+		CharacterData player = Game.getPlayer();
+
 		Stack<Boolean> stack = new Stack<>();
 		for (String s: condition) {
 			switch (s) {
@@ -98,7 +101,14 @@ public class Condition {
 					stack.push(false);
 					break;
 				default:
-					stack.push(Game.getPlayer().globalsContain(s));
+					if (s.contains("$")) {
+						int index = s.indexOf('$');
+						String npcEntityName = s.substring(0, index);
+						String interactionName = s.substring(index + 1);
+						stack.push(player.isNpcInteraction(npcEntityName, interactionName));
+					} else {
+						stack.push(player.globalsContain(s));
+					}
 					break;
 			}
 		}
@@ -157,9 +167,5 @@ public class Condition {
 	
 	public String toString() {
 		return condition.toString();
-	}
-	
-	public String getOriginalConditionString() {
-		return originalConditionString;
 	}
 }
