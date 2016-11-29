@@ -4,7 +4,6 @@ import gui.view.MapView;
 import map.Condition;
 import map.Direction;
 import map.MapData;
-import map.WalkType;
 import map.triggers.TriggerType;
 import util.DrawUtils;
 import util.Point;
@@ -51,34 +50,6 @@ public abstract class Entity {
 	}
 
 	public abstract void update(int dt, MapData currentMap, MapView view);
-
-	protected boolean isPassable(WalkType type) {
-		return type == WalkType.WALKABLE;
-	}
-
-	protected boolean isPassable(WalkType type, Direction direction) {
-		// TODO: I'm probobbly gonna want to generalize this at some point...
-		switch (type) {
-			case HOP_RIGHT:
-				return direction == Direction.RIGHT;
-			case HOP_UP:
-				return direction == Direction.UP;
-			case HOP_LEFT:
-				return direction == Direction.LEFT;
-			case HOP_DOWN:
-				return direction == Direction.DOWN;
-			case NOT_WALKABLE:
-				return false;
-			case STAIRS_UP_RIGHT:
-			case STAIRS_UP_LEFT:
-			case WALKABLE:
-				return true;
-			case WATER:
-				return false;// TODO
-		}
-		
-		return false;
-	}
 
 	protected abstract BufferedImage getFrame();
 	protected abstract boolean isTransitioning();

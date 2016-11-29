@@ -533,7 +533,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
 	public int getSelectedTile() {
-        return Integer.parseInt(this.tileList.getSelectedValue().getDescription());
+		return Integer.parseInt(this.tileList.getSelectedValue().getDescription());
     }
 
     public int getSelectedTileIndex() {

@@ -140,13 +140,7 @@ public class MapData {
 
 		// TODO: SRSLY WHAT IS GOING ON
 		int val = rgb&((1<<24) - 1);
-		for (WalkType walkType: WalkType.values()) {
-			if (walkType.getValue() == val) {
-				return walkType;
-			}
-		}
-
-		return WalkType.NOT_WALKABLE;
+		return WalkType.getWalkType(val);
 	}
 
 	public AreaData getArea(Point location) {

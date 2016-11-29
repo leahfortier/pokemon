@@ -1,8 +1,8 @@
 package mapMaker;
 
 import map.MapDataType;
+import map.WalkType;
 import mapMaker.model.MapMakerModel;
-import mapMaker.model.MoveModel.MoveModelType;
 import mapMaker.model.TileModel;
 import mapMaker.model.TileModel.TileType;
 import util.DrawUtils;
@@ -64,7 +64,7 @@ public class EditMapMetaData {
         }
 
         Graphics g = this.getMapImage(MapDataType.MOVE).getGraphics();
-        g.setColor(MoveModelType.IMMOVABLE.getColor());
+        g.setColor(WalkType.NOT_WALKABLE.getColor());
         g.fillRect(0, 0, currentMapSize.width, currentMapSize.height);
         g.dispose();
     }
@@ -164,7 +164,8 @@ public class EditMapMetaData {
             this.triggerData.placeTrigger(location);
             return true;
         } else {
-            this.getMapImage(editType.getDataType()).setRGB(location.x, location.y, val);
+            // Not sure why I have to do new Color(val).getRGB() instead of just val, but it doesn't work like that so yeah
+            this.getMapImage(editType.getDataType()).setRGB(location.x, location.y, new Color(val).getRGB());
             this.saved = false;
             return false;
         }

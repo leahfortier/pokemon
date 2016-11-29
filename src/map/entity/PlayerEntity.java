@@ -102,12 +102,14 @@ public class PlayerEntity extends MovableEntity {
 	private void checkNPCs(MapData currentMap) {
 		GameData data = Game.getData();
 
-		// TODO: Need to make sure every space is passable between the npc and player
-		for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
-			for (Direction direction : Direction.values()) {
+		for (Direction direction : Direction.values()) {
+			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
 				Point newLocation = Point.add(this.getLocation(), Point.scale(direction.getDeltaPoint(), dist));
-				Entity newEntity = currentMap.getEntity(newLocation);
+				if (!currentMap.getPassValue(newLocation).isPassable(direction)) {
+					break;
+				}
 
+				Entity newEntity = currentMap.getEntity(newLocation);
 				if (newEntity instanceof NPCEntity) {
 					NPCEntity npc = (NPCEntity) newEntity;
 					if (npc.isFacing(this.getLocation())
@@ -145,8 +147,8 @@ public class PlayerEntity extends MovableEntity {
 				WalkType curPassValue = currentMap.getPassValue(player.getLocation());
 				WalkType passValue = currentMap.getPassValue(newLocation);
 
-				if (isPassable(passValue, inputDirection) && !currentMap.hasEntity(newLocation)) {
-					newLocation = Point.add(newLocation, getWalkTypeAdditionalMove(curPassValue, passValue, inputDirection));
+				if (passValue.isPassable(inputDirection) && !currentMap.hasEntity(newLocation)) {
+					newLocation = Point.add(newLocation, WalkType.getAdditionalMove(curPassValue, passValue, inputDirection).getDeltaPoint());
 
 					player.setLocation(newLocation);
 					player.step();
@@ -172,28 +174,6 @@ public class PlayerEntity extends MovableEntity {
 		}
 
 		return false;
-	}
-
-	private Point getWalkTypeAdditionalMove(WalkType prev, WalkType next, Direction direction) {
-		if (direction == Direction.LEFT) {
-			if (next == WalkType.STAIRS_UP_LEFT) {
-				return Direction.UP.getDeltaPoint();
-			}
-			else if (next == WalkType.STAIRS_UP_RIGHT) {
-				return Direction.DOWN.getDeltaPoint();
-			}
-		}
-		
-		if (direction == Direction.RIGHT) {
-			if (prev == WalkType.STAIRS_UP_LEFT) {
-				return Direction.DOWN.getDeltaPoint();
-			}
-			else if (prev == WalkType.STAIRS_UP_RIGHT) {
-				return Direction.UP.getDeltaPoint();
-			}
-		}
-		
-		return new Point();
 	}
 
 	private void triggerCheck(MapData map) {
