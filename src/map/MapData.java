@@ -116,6 +116,10 @@ public class MapData {
 		return location.inBounds(dimension);
 	}
 
+	private int getRGB(Point location, MapDataType dataType) {
+		return getRGB(location.x, location.y, dataType);
+	}
+
 	private int getRGB(int x, int y, MapDataType dataType) {
 		if (!Point.inBounds(x, y, this.dimension)) {
 			return TileSet.INVALID_RGB;
@@ -132,8 +136,8 @@ public class MapData {
 		return getRGB(x, y, MapDataType.FOREGROUND);
 	}
 
-	public WalkType getPassValue(int x, int y) {
-		int rgb = getRGB(x, y, MapDataType.MOVE);
+	public WalkType getPassValue(Point location) {
+		int rgb = getRGB(location, MapDataType.MOVE);
 		if (rgb == TileSet.INVALID_RGB) {
 			return WalkType.NOT_WALKABLE;
 		}
@@ -149,12 +153,12 @@ public class MapData {
 		return WalkType.NOT_WALKABLE;
 	}
 
-	public AreaData getArea(int x, int y) {
+	public AreaData getArea(Point location) {
 		if (areaData.length == 1) {
 			return areaData[0];
 		}
 
-		int areaColor = getRGB(x, y, MapDataType.AREA);
+		int areaColor = getRGB(location, MapDataType.AREA);
 		if (areaColor == TileSet.INVALID_RGB) {
 			return AreaData.VOID;
 		}

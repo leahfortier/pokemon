@@ -152,14 +152,6 @@ public class CharacterData extends Trainer implements Serializable {
 		return this.location;
 	}
 
-	public int getX() {
-		return this.location.x;
-	}
-
-	public int getY() {
-		return this.location.y;
-	}
-
 	public void setLocation(Point newLocation) {
 		this.location = newLocation;
 	}

@@ -76,8 +76,8 @@ public class PlayerEntity extends MovableEntity {
 					else {
 						Point newLocation = Point.add(player.getLocation(), inputDirection.getDeltaPoint());
 
-						WalkType curPassValue = map.getPassValue(player.getX(), player.getY());
-						WalkType passValue = map.getPassValue(newLocation.x, newLocation.y);
+						WalkType curPassValue = map.getPassValue(player.getLocation());
+						WalkType passValue = map.getPassValue(newLocation);
 
 						if (isPassable(passValue, inputDirection) && !map.hasEntity(newLocation)) {
 							newLocation = Point.add(newLocation, getWalkTypeAdditionalMove(curPassValue, passValue, inputDirection));

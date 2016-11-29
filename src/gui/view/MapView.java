@@ -425,7 +425,7 @@ public class MapView extends View {
 		}
 		
 		// New area
-		AreaData area = currentMap.getArea(player.getX(), player.getY());
+		AreaData area = currentMap.getArea(player.getLocation());
 		String areaName = area.getAreaName();
 
 		player.areaName = areaName;
