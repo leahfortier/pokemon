@@ -8,16 +8,28 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "WestTransitionBuildingBottom",
+      "exitName": "EastTransitionBuildingMiddle",
+      "nextMap": "Edge1_RSATown_TransitionBuilding",
+      "nextEntrance": "WestDoorMiddle",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 43,
+        "y": 20
+      },
+      "triggerName": "RSATown_MapExit_EastTransitionBuildingMiddle_01"
+    },
+    {
+      "exitName": "WestTransitionBuildingTop",
       "nextMap": "RSATown_BFM_TransitionBuilding",
-      "nextEntrance": "EastDoorBottom",
+      "nextEntrance": "EastDoorTop",
       "direction": "LEFT",
       "deathPortal": false,
       "location": {
         "x": 16,
-        "y": 21
+        "y": 19
       },
-      "triggerName": "RSATown_MapExit_WestTransitionBuildingBottom_01"
+      "triggerName": "RSATown_MapExit_WestTransitionBuildingTop_01"
     },
     {
       "exitName": "WestTransitionBuildingMiddle",
@@ -56,16 +68,16 @@
       "triggerName": "RSATown_MapExit_EastTransitionBuildingBottom_01"
     },
     {
-      "exitName": "EastTransitionBuildingMiddle",
-      "nextMap": "Edge1_RSATown_TransitionBuilding",
-      "nextEntrance": "WestDoorMiddle",
-      "direction": "RIGHT",
+      "exitName": "WestTransitionBuildingBottom",
+      "nextMap": "RSATown_BFM_TransitionBuilding",
+      "nextEntrance": "EastDoorBottom",
+      "direction": "LEFT",
       "deathPortal": false,
       "location": {
-        "x": 43,
-        "y": 20
+        "x": 16,
+        "y": 21
       },
-      "triggerName": "RSATown_MapExit_EastTransitionBuildingMiddle_01"
+      "triggerName": "RSATown_MapExit_WestTransitionBuildingBottom_01"
     },
     {
       "exitName": "PokeCenter",
@@ -78,18 +90,6 @@
         "y": 17
       },
       "triggerName": "RSATown_MapExit_PokeCenter_01"
-    },
-    {
-      "exitName": "WestTransitionBuildingTop",
-      "nextMap": "RSATown_BFM_TransitionBuilding",
-      "nextEntrance": "EastDoorTop",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 16,
-        "y": 19
-      },
-      "triggerName": "RSATown_MapExit_WestTransitionBuildingTop_01"
     }
   ],
   "NPCs": [

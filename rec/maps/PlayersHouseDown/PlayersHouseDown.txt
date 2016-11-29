@@ -8,18 +8,6 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "DFS_Town",
-      "nextMap": "DFS_Town",
-      "nextEntrance": "PlayersHouse",
-      "direction": "DOWN",
-      "deathPortal": true,
-      "location": {
-        "x": 6,
-        "y": 8
-      },
-      "triggerName": "PlayersHouseDown_MapExit_DFS_Town_01"
-    },
-    {
       "exitName": "stairs",
       "nextMap": "PlayersHouseUp",
       "nextEntrance": "stairs",
@@ -30,6 +18,18 @@
         "y": 1
       },
       "triggerName": "PlayersHouseDown_MapExit_stairs_01"
+    },
+    {
+      "exitName": "DFS_Town",
+      "nextMap": "DFS_Town",
+      "nextEntrance": "PlayersHouse",
+      "direction": "DOWN",
+      "deathPortal": true,
+      "location": {
+        "x": 6,
+        "y": 8
+      },
+      "triggerName": "PlayersHouseDown_MapExit_DFS_Town_01"
     }
   ],
   "NPCs": [

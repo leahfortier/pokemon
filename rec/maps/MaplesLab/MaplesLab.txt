@@ -22,31 +22,6 @@
   ],
   "NPCs": [
     {
-      "name": "MaplesLab_NPC_MapleAssistant_02",
-      "path": "w",
-      "spriteIndex": 19,
-      "direction": "RIGHT",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "This syrup soda is amazing!"
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 17,
-        "y": 7
-      },
-      "triggerName": "MaplesLab_NPC_MaplesLab_NPC_MapleAssistant_02_01"
-    },
-    {
       "name": "MaplesLab_NPC_Prof_Maple_01",
       "path": "w",
       "spriteIndex": 7,
@@ -190,6 +165,31 @@
         "y": 10
       },
       "triggerName": "MaplesLab_NPC_MaplesLab_NPC_MapleAssistant_01_01"
+    },
+    {
+      "name": "MaplesLab_NPC_MapleAssistant_02",
+      "path": "w",
+      "spriteIndex": 19,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "This syrup soda is amazing!"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 17,
+        "y": 7
+      },
+      "triggerName": "MaplesLab_NPC_MaplesLab_NPC_MapleAssistant_02_01"
     }
   ],
   "items": [],

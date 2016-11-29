@@ -8,18 +8,6 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "FromFloor1",
-      "nextMap": "Tom_Town_Power_Plant_F1",
-      "nextEntrance": "FromFloor2",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 6,
-        "y": 11
-      },
-      "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor1_01"
-    },
-    {
       "exitName": "FromFloor3",
       "nextMap": "Tom_Town_Power_Plant_F3",
       "nextEntrance": "FromFloor2",
@@ -30,35 +18,21 @@
         "y": 9
       },
       "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor3_01"
+    },
+    {
+      "exitName": "FromFloor1",
+      "nextMap": "Tom_Town_Power_Plant_F1",
+      "nextEntrance": "FromFloor2",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 6,
+        "y": 11
+      },
+      "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor1_01"
     }
   ],
   "NPCs": [
-    {
-      "name": "Tom_Town_Power_Plant_F2_NPC_Scientist_01",
-      "path": "w",
-      "spriteIndex": 19,
-      "direction": "DOWN",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Thank you for your help! Things are back to normal now."
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 6,
-        "y": 4
-      },
-      "triggerName": "Tom_Town_Power_Plant_F2_NPC_Tom_Town_Power_Plant_F2_NPC_Scientist_01_01",
-      "condition": "VisitedTomTownPowerPlant"
-    },
     {
       "name": "Tom_Town_Power_Plant_F2_NPC_Scientist_02",
       "path": "w",
@@ -83,6 +57,32 @@
         "y": 9
       },
       "triggerName": "Tom_Town_Power_Plant_F2_NPC_Tom_Town_Power_Plant_F2_NPC_Scientist_02_01",
+      "condition": "VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "Tom_Town_Power_Plant_F2_NPC_Scientist_01",
+      "path": "w",
+      "spriteIndex": 19,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Thank you for your help! Things are back to normal now."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 6,
+        "y": 4
+      },
+      "triggerName": "Tom_Town_Power_Plant_F2_NPC_Tom_Town_Power_Plant_F2_NPC_Scientist_01_01",
       "condition": "VisitedTomTownPowerPlant"
     }
   ],

@@ -9,18 +9,6 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "EastTransitionBuildingTop",
-      "nextMap": "RSATown_BFM_TransitionBuilding",
-      "nextEntrance": "WestDoorTop",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 55,
-        "y": 20
-      },
-      "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingTop_01"
-    },
-    {
       "exitName": "EastTransitionBuildingBottom",
       "nextMap": "RSATown_BFM_TransitionBuilding",
       "nextEntrance": "WestDoorBottom",
@@ -31,6 +19,18 @@
         "y": 22
       },
       "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingBottom_01"
+    },
+    {
+      "exitName": "WestTransitionBuildingMiddle",
+      "nextMap": "BFM_TomTown_TransitionBuilding",
+      "nextEntrance": "EastDoorMiddle",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 13,
+        "y": 21
+      },
+      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingMiddle_01"
     },
     {
       "exitName": "EastTransitionBuildingMiddle",
@@ -45,6 +45,18 @@
       "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingMiddle_01"
     },
     {
+      "exitName": "EastTransitionBuildingTop",
+      "nextMap": "RSATown_BFM_TransitionBuilding",
+      "nextEntrance": "WestDoorTop",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 55,
+        "y": 20
+      },
+      "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingTop_01"
+    },
+    {
       "exitName": "WestTransitionBuildingTop",
       "nextMap": "BFM_TomTown_TransitionBuilding",
       "nextEntrance": "EastDoorTop",
@@ -55,18 +67,6 @@
         "y": 20
       },
       "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingTop_01"
-    },
-    {
-      "exitName": "WestTransitionBuildingMiddle",
-      "nextMap": "BFM_TomTown_TransitionBuilding",
-      "nextEntrance": "EastDoorMiddle",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 13,
-        "y": 21
-      },
-      "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingMiddle_01"
     },
     {
       "exitName": "WestTransitionBuildingBottom",
@@ -193,20 +193,20 @@
   ],
   "items": [
     {
-      "item": "Meadow_Plate",
-      "location": {
-        "x": 44,
-        "y": 14
-      },
-      "triggerName": "Bloom_Filter_Meadow_Item_Meadow_Plate_01"
-    },
-    {
       "item": "Pecha_Berry",
       "location": {
         "x": 21,
         "y": 26
       },
       "triggerName": "Bloom_Filter_Meadow_Item_Pecha_Berry_01"
+    },
+    {
+      "item": "Meadow_Plate",
+      "location": {
+        "x": 44,
+        "y": 14
+      },
+      "triggerName": "Bloom_Filter_Meadow_Item_Meadow_Plate_01"
     }
   ],
   "miscEntities": [],

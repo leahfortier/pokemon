@@ -7,18 +7,6 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "EastDoorBottom",
-      "nextMap": "Bloom_Filter_Meadow",
-      "nextEntrance": "WestTransitionBuildingBottom",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 11,
-        "y": 4
-      },
-      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorBottom_01"
-    },
-    {
       "exitName": "WestDoorMiddle",
       "nextMap": "Tom_Town",
       "nextEntrance": "EastTransitionBuildingMiddle",
@@ -29,6 +17,18 @@
         "y": 3
       },
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorMiddle_01"
+    },
+    {
+      "exitName": "WestDoorTop",
+      "nextMap": "Tom_Town",
+      "nextEntrance": "EastTransitionBuildingTop",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 1,
+        "y": 2
+      },
+      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorTop_01"
     },
     {
       "exitName": "EastDoorTop",
@@ -55,18 +55,6 @@
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorMiddle_01"
     },
     {
-      "exitName": "WestDoorTop",
-      "nextMap": "Tom_Town",
-      "nextEntrance": "EastTransitionBuildingTop",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 1,
-        "y": 2
-      },
-      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorTop_01"
-    },
-    {
       "exitName": "WestDoorBottom",
       "nextMap": "Tom_Town",
       "nextEntrance": "EastTransitionBuildingBottom",
@@ -77,6 +65,18 @@
         "y": 4
       },
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorBottom_01"
+    },
+    {
+      "exitName": "EastDoorBottom",
+      "nextMap": "Bloom_Filter_Meadow",
+      "nextEntrance": "WestTransitionBuildingBottom",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 11,
+        "y": 4
+      },
+      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorBottom_01"
     }
   ],
   "NPCs": [

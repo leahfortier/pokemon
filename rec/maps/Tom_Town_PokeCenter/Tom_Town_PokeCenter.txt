@@ -22,6 +22,17 @@
   ],
   "NPCs": [
     {
+      "name": "Mart_Guy",
+      "spriteIndex": 9,
+      "direction": "RIGHT",
+      "interactions": [],
+      "location": {
+        "x": 2,
+        "y": 7
+      },
+      "triggerName": "Tom_Town_PokeCenter_NPC_Mart_Guy_01"
+    },
+    {
       "name": "Tom",
       "spriteIndex": 5,
       "direction": "DOWN",
@@ -55,17 +66,6 @@
         "y": 2
       },
       "triggerName": "Tom_Town_PokeCenter_NPC_Nurse_Joy_01"
-    },
-    {
-      "name": "Mart_Guy",
-      "spriteIndex": 9,
-      "direction": "RIGHT",
-      "interactions": [],
-      "location": {
-        "x": 2,
-        "y": 7
-      },
-      "triggerName": "Tom_Town_PokeCenter_NPC_Mart_Guy_01"
     }
   ],
   "items": [],
@@ -91,28 +91,6 @@
         "y": 7
       },
       "triggerName": "Tom_Town_PokeCenter_TriggerEntity_Mart_01"
-    },
-    {
-      "name": "PC_View",
-      "actions": [
-        {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Starting up PC..."
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "ChangeView",
-            "triggerContents": "PC_VIEW"
-          }
-        }
-      ],
-      "location": {
-        "x": 11,
-        "y": 1
-      },
-      "triggerName": "Tom_Town_PokeCenter_TriggerEntity_PC_View_01"
     },
     {
       "name": "Heal",
@@ -164,6 +142,28 @@
         "y": 3
       },
       "triggerName": "Tom_Town_PokeCenter_TriggerEntity_Heal_01"
+    },
+    {
+      "name": "PC_View",
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "Dialogue",
+            "triggerContents": "Starting up PC..."
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "ChangeView",
+            "triggerContents": "PC_VIEW"
+          }
+        }
+      ],
+      "location": {
+        "x": 11,
+        "y": 1
+      },
+      "triggerName": "Tom_Town_PokeCenter_TriggerEntity_PC_View_01"
     }
   ],
   "events": [],

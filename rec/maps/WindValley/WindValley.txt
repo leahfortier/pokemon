@@ -7,6 +7,18 @@
   ],
   "mapTransitions": [
     {
+      "exitName": "NorthTransitionBuildingRight",
+      "nextMap": "TomTown_WindValley_TransitionBuilding",
+      "nextEntrance": "SouthDoorRight",
+      "direction": "UP",
+      "deathPortal": false,
+      "location": {
+        "x": 32,
+        "y": 11
+      },
+      "triggerName": "WindValley_MapExit_NorthTransitionBuildingRight_01"
+    },
+    {
       "exitName": "NorthTransitionBuildingLeft",
       "nextMap": "TomTown_WindValley_TransitionBuilding",
       "nextEntrance": "SouthDoorLeft",
@@ -29,18 +41,6 @@
         "y": 11
       },
       "triggerName": "WindValley_MapExit_NorthTransitionBuildingMiddle_01"
-    },
-    {
-      "exitName": "NorthTransitionBuildingRight",
-      "nextMap": "TomTown_WindValley_TransitionBuilding",
-      "nextEntrance": "SouthDoorRight",
-      "direction": "UP",
-      "deathPortal": false,
-      "location": {
-        "x": 32,
-        "y": 11
-      },
-      "triggerName": "WindValley_MapExit_NorthTransitionBuildingRight_01"
     }
   ],
   "NPCs": [],
