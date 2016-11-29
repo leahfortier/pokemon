@@ -80,12 +80,17 @@ public class MapMakerTriggerData {
 
 		triggersSaved = true;
 
+		// Collect and sort all the entities in a list
+		List<LocationTriggerMatcher> entityList = entities.stream()
+				.sorted(LocationTriggerMatcher.COMPARATOR)
+				.collect(Collectors.toList());
+
 		Set<String> entityNames = new HashSet<>();
-		entities.forEach(matcher -> getUniqueEntityName(matcher, entityNames));
+		entityList.forEach(matcher -> getUniqueEntityName(matcher, entityNames));
 
 		MapDataMatcher mapDataMatcher = new MapDataMatcher(
 				areaData,
-				entities
+				entityList
 		);
 
 		FileIO.createFile(mapFileName);

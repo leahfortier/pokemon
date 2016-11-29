@@ -4,7 +4,6 @@ import map.EncounterRate;
 import map.WildEncounter;
 import pattern.map.WildBattleMatcher;
 import util.GUIUtils;
-import util.StringUtils;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -35,7 +34,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 
 		wildPokemonPanels = new ArrayList<>();
 		
-		nameTextField = new JTextField(this.getDefaultName());
+		nameTextField = GUIUtils.createTextField(this.getDefaultName());
 		rateComboBox = GUIUtils.createComboBox(EncounterRate.values(), null);
 
 		JButton addPokemonButton = GUIUtils.createButton("Add Pokemon", event -> addPokemonPanel(null));
@@ -84,22 +83,13 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 		return "Wild Battle " + index;
 	}
 
-	private String getTriggerName() {
-		String name = nameTextField.getText().trim();
-		if (StringUtils.isNullOrEmpty(name)) {
-			name = this.getDefaultName();
-		}
-
-		return name;
-	}
-
 	@Override
 	protected WildBattleMatcher getMatcher() {
 		if (wildPokemonPanels.isEmpty()) {
 			return null;
 		}
 
-		String name = this.getTriggerName();
+		String name = this.getNameField(nameTextField, this.getDefaultName());
 		EncounterRate encounterRate = (EncounterRate)rateComboBox.getSelectedItem();
 		List<WildEncounter> wildEncounters = wildPokemonPanels
 				.stream()

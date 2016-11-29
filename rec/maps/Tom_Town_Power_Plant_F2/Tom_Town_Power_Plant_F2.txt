@@ -34,7 +34,7 @@
   ],
   "NPCs": [
     {
-      "name": "Tom_Town_Power_Plant_F2_NPC_Scientist_01",
+      "name": "Scientist",
       "path": "w",
       "spriteIndex": 19,
       "direction": "DOWN",
@@ -56,7 +56,7 @@
         "x": 6,
         "y": 4
       },
-      "triggerName": "Tom_Town_Power_Plant_F2_NPC_Tom_Town_Power_Plant_F2_NPC_Scientist_01_01",
+      "triggerName": "Tom_Town_Power_Plant_F2_NPC_Scientist_01",
       "condition": "VisitedTomTownPowerPlant"
     },
     {

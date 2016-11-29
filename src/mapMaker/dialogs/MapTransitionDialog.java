@@ -5,6 +5,7 @@ import mapMaker.MapMaker;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import util.GUIUtils;
+import util.StringUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -35,7 +36,7 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 		super("Map Transition Editor");
 
 		deathPortalCheckBox = GUIUtils.createCheckBox("Death Portal");
-		entranceNameTextField = new JTextField();
+		entranceNameTextField = GUIUtils.createTextField();
 
 		// Fill combo boxes with available maps.
 		String[] mapList = givenMapMaker.getAvailableMaps();
@@ -89,17 +90,16 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 
 	@Override
 	protected MapTransitionMatcher getMatcher() {
-		String destination = getDestination();
-		String entrance = getMapEntrance();
-
-		if (destination.isEmpty() || entrance.isEmpty()) {
+		String destinationMap = getDestination();
+		String destinationEntrance = getMapEntrance();
+		if (StringUtils.isNullOrEmpty(destinationMap) || StringUtils.isNullOrEmpty(destinationEntrance)) {
 			return null;
 		}
 
 		return new MapTransitionMatcher(
-				this.entranceNameTextField.getText(),
-				destination,
-				entrance,
+				this.getNameField(entranceNameTextField),
+				destinationMap,
+				destinationEntrance,
 				(PathDirection)directionComboBox.getSelectedItem(),
 				this.deathPortalCheckBox.isSelected()
 		);
