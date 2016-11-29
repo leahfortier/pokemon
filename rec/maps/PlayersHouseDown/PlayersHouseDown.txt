@@ -8,18 +8,6 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "stairs",
-      "nextMap": "PlayersHouseUp",
-      "nextEntrance": "stairs",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 10,
-        "y": 1
-      },
-      "triggerName": "PlayersHouseDown_MapExit_stairs_01"
-    },
-    {
       "exitName": "DFS_Town",
       "nextMap": "DFS_Town",
       "nextEntrance": "PlayersHouse",
@@ -30,6 +18,18 @@
         "y": 8
       },
       "triggerName": "PlayersHouseDown_MapExit_DFS_Town_01"
+    },
+    {
+      "exitName": "stairs",
+      "nextMap": "PlayersHouseUp",
+      "nextEntrance": "stairs",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "location": {
+        "x": 10,
+        "y": 1
+      },
+      "triggerName": "PlayersHouseDown_MapExit_stairs_01"
     }
   ],
   "NPCs": [
@@ -75,7 +75,7 @@
         "x": 5,
         "y": 1
       },
-      "triggerName": "PlayersHouseDown_Event_fridge_01"
+      "triggerName": "PlayersHouseDown_TriggerEntity_fridge_01"
     }
   ],
   "events": [],

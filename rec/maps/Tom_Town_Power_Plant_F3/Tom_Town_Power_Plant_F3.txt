@@ -103,6 +103,32 @@
       "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03"
     },
     {
+      "name": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+      "path": "w",
+      "spriteIndex": 18,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Wow, you did it! You saved the power plant!"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 12,
+        "y": 10
+      },
+      "triggerName": "Tom_Town_Power_Plant_F3_NPC_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01_01",
+      "condition": "VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01"
+    },
+    {
       "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02",
       "path": "w",
       "spriteIndex": 20,
@@ -152,6 +178,32 @@
       },
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02_01",
       "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02"
+    },
+    {
+      "name": "Tom_Town_Power_Plant_F3_NPC_Scientist_01",
+      "path": "w",
+      "spriteIndex": 12,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I'll be here for days trying to get the plant fully operational again."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 14,
+        "y": 10
+      },
+      "triggerName": "Tom_Town_Power_Plant_F3_NPC_Tom_Town_Power_Plant_F3_NPC_Scientist_01_01",
+      "condition": "VisitedTomTownPowerPlant&!!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01"
     },
     {
       "name": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01",
@@ -215,58 +267,6 @@
       },
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01_01",
       "condition": "!VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01"
-    },
-    {
-      "name": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
-      "path": "w",
-      "spriteIndex": 18,
-      "direction": "LEFT",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": true,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Wow, you did it! You saved the power plant!"
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 12,
-        "y": 10
-      },
-      "triggerName": "Tom_Town_Power_Plant_F3_NPC_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01_01",
-      "condition": "VisitedTomTownPowerPlant&!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01"
-    },
-    {
-      "name": "Tom_Town_Power_Plant_F3_NPC_Scientist_01",
-      "path": "w",
-      "spriteIndex": 12,
-      "direction": "RIGHT",
-      "interactions": [
-        {
-          "name": "dialogue",
-          "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I'll be here for days trying to get the plant fully operational again."
-              }
-            }
-          ]
-        }
-      ],
-      "location": {
-        "x": 14,
-        "y": 10
-      },
-      "triggerName": "Tom_Town_Power_Plant_F3_NPC_Tom_Town_Power_Plant_F3_NPC_Scientist_01_01",
-      "condition": "VisitedTomTownPowerPlant&!!triggered_Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01"
     }
   ],
   "items": [],

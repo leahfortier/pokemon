@@ -43,16 +43,16 @@
       "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoorMiddle_01"
     },
     {
-      "exitName": "WestDoorMiddle",
-      "nextMap": "Bloom_Filter_Meadow",
-      "nextEntrance": "EastTransitionBuildingMiddle",
-      "direction": "LEFT",
+      "exitName": "EastDoorTop",
+      "nextMap": "RSATown",
+      "nextEntrance": "WestTransitionBuildingTop",
+      "direction": "RIGHT",
       "deathPortal": false,
       "location": {
-        "x": 1,
-        "y": 5
+        "x": 11,
+        "y": 4
       },
-      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorMiddle_01"
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoorTop_01"
     },
     {
       "exitName": "WestDoorTop",
@@ -67,16 +67,16 @@
       "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorTop_01"
     },
     {
-      "exitName": "EastDoorTop",
-      "nextMap": "RSATown",
-      "nextEntrance": "WestTransitionBuildingTop",
-      "direction": "RIGHT",
+      "exitName": "WestDoorMiddle",
+      "nextMap": "Bloom_Filter_Meadow",
+      "nextEntrance": "EastTransitionBuildingMiddle",
+      "direction": "LEFT",
       "deathPortal": false,
       "location": {
-        "x": 11,
-        "y": 4
+        "x": 1,
+        "y": 5
       },
-      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoorTop_01"
+      "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorMiddle_01"
     }
   ],
   "NPCs": [
