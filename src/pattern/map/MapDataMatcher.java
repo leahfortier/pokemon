@@ -3,14 +3,19 @@ package pattern.map;
 import com.google.gson.JsonObject;
 import main.Global;
 import map.AreaData;
+import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.LocationTriggerMatcher;
 import util.FileIO;
 import util.JsonUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class MapDataMatcher {
 
@@ -24,47 +29,35 @@ public class MapDataMatcher {
 
     public MapDataMatcher(Set<AreaMatcher> areaData,
                           Set<LocationTriggerMatcher> entities) {
-        List<MapTransitionMatcher> mapTransitions = new ArrayList<>();
-        List<NPCMatcher> npcs = new ArrayList<>();
-        List<ItemMatcher> items = new ArrayList<>();
-        List<MiscEntityMatcher> misc = new ArrayList<>();
-        List<EventMatcher> events = new ArrayList<>();
-        List<WildBattleMatcher> wildBattles = new ArrayList<>();
+        this.areas = areaData.toArray(new AreaMatcher[0]);
 
-        for (LocationTriggerMatcher entity : entities) {
-            switch (entity.getTriggerModelType()) {
-                case MAP_TRANSITION:
-                    mapTransitions.add((MapTransitionMatcher) entity);
-                    break;
-                case NPC:
-                    npcs.add((NPCMatcher)entity);
-                    break;
-                case ITEM:
-                    items.add((ItemMatcher) entity);
-                    break;
-                case TRIGGER_ENTITY:
-                    misc.add((MiscEntityMatcher)entity);
-                    break;
-                case EVENT:
-                    events.add((EventMatcher)entity);
-                    break;
-                case WILD_BATTLE:
-                    wildBattles.add((WildBattleMatcher)entity);
-                    break;
-                default:
-                    Global.error("Unknown trigger model type " + entity.getTriggerModelType() + "," +
-                            "entity class: " + entity.getClass().getSimpleName());
-                    break;
-            }
+        Map<TriggerModelType, List<LocationTriggerMatcher>> triggerMap = new EnumMap<>(TriggerModelType.class);
+        for (TriggerModelType triggerModelType : TriggerModelType.values()) {
+            triggerMap.put(triggerModelType, new ArrayList<>());
         }
 
-        this.areas = areaData.toArray(new AreaMatcher[0]);
-        this.mapTransitions = mapTransitions.toArray(new MapTransitionMatcher[0]);
-        this.NPCs = npcs.toArray(new NPCMatcher[0]);
-        this.items = items.toArray(new ItemMatcher[0]);
-        this.miscEntities = misc.toArray(new MiscEntityMatcher[0]);
-        this.events = events.toArray(new EventMatcher[0]);
-        this.wildBattles = wildBattles.toArray(new WildBattleMatcher[0]);
+        for (LocationTriggerMatcher entity : entities) {
+            triggerMap.get(entity.getTriggerModelType()).add(entity);
+        }
+
+        this.mapTransitions = fillTriggerArray(this.mapTransitions, triggerMap.get(TriggerModelType.MAP_TRANSITION), trigger -> (MapTransitionMatcher)trigger);
+        this.NPCs = fillTriggerArray(this.NPCs, triggerMap.get(TriggerModelType.NPC), trigger -> (NPCMatcher)trigger);
+        this.items = fillTriggerArray(this.items, triggerMap.get(TriggerModelType.ITEM), trigger -> (ItemMatcher)trigger);
+        this.miscEntities = fillTriggerArray(this.miscEntities, triggerMap.get(TriggerModelType.TRIGGER_ENTITY), trigger -> (MiscEntityMatcher)trigger);
+        this.events = fillTriggerArray(this.events, triggerMap.get(TriggerModelType.EVENT), trigger -> (EventMatcher)trigger);
+        this.wildBattles = fillTriggerArray(this.wildBattles, triggerMap.get(TriggerModelType.WILD_BATTLE), trigger -> (WildBattleMatcher)trigger);
+    }
+
+    private <T extends LocationTriggerMatcher> T[] fillTriggerArray(
+            T[] array,
+            List<LocationTriggerMatcher> triggerList,
+            Function<LocationTriggerMatcher, T> mapper) {
+        triggerList.sort((first, second) -> first.getTriggerName().compareTo(second.getTriggerName()));
+
+        return triggerList.stream()
+                .map(mapper)
+                .collect(Collectors.toList())
+                .toArray(array);
     }
 
     public List<AreaMatcher> getAreas() {
