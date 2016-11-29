@@ -67,12 +67,6 @@ public class GameData {
 		}
 	}
 
-	public void testMaps() {
-		for (String map : maps.keySet()) {
-			maps.get(map).populateEntities();
-		}
-	}
-
 	public MapData getMap(String name) {
 		if (!maps.containsKey(name)) {
 			Global.error("Cannot find map with name " + name);

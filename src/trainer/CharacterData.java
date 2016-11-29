@@ -10,6 +10,7 @@ import item.use.BallItem;
 import main.Game;
 import main.Global;
 import map.Direction;
+import map.entity.PlayerEntity;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import message.MessageUpdate;
@@ -50,6 +51,8 @@ public class CharacterData extends Trainer implements Serializable {
 	public boolean mapReset;
 	public String mapName;
 	public String areaName;
+
+	private transient PlayerEntity entity;
 
 	private Set<String> definedGlobals;
 	private Map<String, String> npcInteractions;
@@ -101,6 +104,7 @@ public class CharacterData extends Trainer implements Serializable {
 	public void initialize() {
 		this.logMessages = new ArrayList<>();
 		this.timeSinceUpdate = System.currentTimeMillis();
+		this.entity = new PlayerEntity(this.location, this.direction);
 	}
 
 	public void setName(String playerName) {
@@ -113,6 +117,10 @@ public class CharacterData extends Trainer implements Serializable {
 			numBadges++;
 			badges[n] = true;
 		}
+	}
+
+	public PlayerEntity getEntity() {
+		return this.entity;
 	}
 
 	public int getNumBadges() {

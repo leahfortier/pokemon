@@ -36,10 +36,6 @@ import util.StringUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 public class MapView extends View {
 
@@ -68,11 +64,6 @@ public class MapView extends View {
 	private AreaData currentArea;
 	private MapData currentMap;
 	private SoundTitle currentMusicTitle;
-	
-	private Entity[][] entities;
-	private List<Entity> entityList;
-	private Queue<Entity> removeQueue;
-	private PlayerEntity playerEntity;
 
 	private MessageUpdate currentMessage;
 	private int dialogueSelection;
@@ -168,11 +159,11 @@ public class MapView extends View {
 				for (PathDirection pathDirection : deltaDirections) {
 					Point delta = pathDirection.getDeltaPoint();
                     Point newPoint = Point.add(delta, x, y);
-                    if (!newPoint.inBounds(entities.length, entities[0].length)) {
+					if (!currentMap.inBounds(newPoint)) {
                         continue;
                     }
 
-                    Entity newPointEntity = entities[newPoint.x][newPoint.y];
+                    Entity newPointEntity = currentMap.getEntity(newPoint);
                     if (newPointEntity == null) {
                         continue;
                     }
@@ -410,6 +401,7 @@ public class MapView extends View {
 		InputControl input = InputControl.instance();
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
+		PlayerEntity playerEntity = player.getEntity();
 		MENU_TEXT[3] = player.getName();
 
 		if (!currentMapName.equals(player.mapName) || player.mapReset) {
@@ -421,24 +413,10 @@ public class MapView extends View {
 				currentMap.setCharacterToEntrance(player.mapEntranceName);
 			}
 
-			entities = currentMap.populateEntities();
+			currentMap.populateEntities();
 
 			Direction prevDir = player.direction;
-
-			playerEntity = new PlayerEntity();
 			playerEntity.setDirection(prevDir);
-			entities[player.getX()][player.getY()] = playerEntity;
-			
-			entityList = new ArrayList<>();
-			for (Entity[] er: entities) {
-				for (Entity e: er) {
-					if (e != null) {
-						entityList.add(e);
-					}
-				}
-			}
-			
-			removeQueue = new LinkedList<>();
 			state = VisualState.MAP;
 		}
 		
@@ -594,7 +572,7 @@ public class MapView extends View {
 						continue;
 					}
 
-					Entity newEntity = entities[newLocation.x][newLocation.y];
+					Entity newEntity = currentMap.getEntity(newLocation);
                     if (newEntity instanceof NPCEntity) {
                         NPCEntity npc = (NPCEntity) newEntity;
                         if (npc.isFacing(playerEntity.getLocation())
@@ -616,19 +594,12 @@ public class MapView extends View {
 		}
 
 		// Update each non-player entity on the map
-		entityList.stream()
-				.filter(entity -> entity != null && (state == VisualState.MAP || entity != playerEntity))
-				.forEach(entity -> entity.update(dt, entities, currentMap, this));
+		currentMap.updateEntities(dt, this);
 
 		if (state == VisualState.MAP) {
+			playerEntity.update(dt, currentMap, this);
 			playerEntity.triggerCheck(currentMap);
         }
-		
-		while (!removeQueue.isEmpty()) {
-			Entity entity = removeQueue.poll();
-			entityList.remove(entity);
-			entities[entity.getX()][entity.getY()] = null;
-		}
 
 		if (showMessage && (this.currentMessage == null || StringUtils.isNullOrEmpty(this.currentMessage.getMessage())) && Messages.hasMessages()) {
 			cycleMessage();
@@ -704,10 +675,6 @@ public class MapView extends View {
 			battleImageSlideRight = data.getBattleTiles().getTile(0x00100001);
 			battleImageSlideLeft = data.getBattleTiles().getTile(0x00100000);
 		}
-	}
-	
-	public void removeEntity(Entity e) {
-		removeQueue.add(e);
 	}
 
 	@Override

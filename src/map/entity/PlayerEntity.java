@@ -1,6 +1,8 @@
 package map.entity;
 
 import gui.view.MapView;
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
 import main.Global;
 import map.Direction;
@@ -10,9 +12,10 @@ import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import trainer.CharacterData;
 import util.FloatPoint;
-import input.InputControl;
-import input.ControlKey;
 import util.Point;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerEntity extends MovableEntity {
 
@@ -22,16 +25,17 @@ public class PlayerEntity extends MovableEntity {
 
 	private String entityTriggerSuffix;
 
-	public PlayerEntity() {
-		this(Game.getPlayer());
-	}
-
-	private PlayerEntity(CharacterData player) {
-		super(player.getLocation(), null, null, 0, player.direction);
+	public PlayerEntity(Point location, Direction startDirection) {
+		super(location, null, null, 0, startDirection);
 
 		justMoved = true;
 		stalled = false;
 		justCreated = true;
+	}
+
+	@Override
+	public Point getLocation() {
+		return Game.getPlayer().getLocation();
 	}
 
 	// Player is drawn in the center of the canvas
@@ -41,17 +45,11 @@ public class PlayerEntity extends MovableEntity {
 	}
 
 	@Override
-	public void update(int dt, Entity[][] entities, MapData map, MapView view) {
-		super.update(dt, entities, map, view);
+	public void update(int dt, MapData map, MapView view) {
+		super.update(dt, map, view);
 
 		CharacterData player = Game.getPlayer();
 		InputControl input = InputControl.instance();
-
-		if (!this.getLocation().equals(player.getLocation())) {
-			entities[getX()][getY()] = null;
-			entities[player.getX()][player.getY()] = this;
-			transitionTime = 0;
-		}
 
 		if (player.direction != transitionDirection) {
 			transitionDirection = player.direction;
@@ -80,11 +78,8 @@ public class PlayerEntity extends MovableEntity {
 						WalkType curPassValue = map.getPassValue(player.getX(), player.getY());
 						WalkType passValue = map.getPassValue(newLocation.x, newLocation.y);
 
-						if (isPassable(passValue, inputDirection) && entities[newLocation.x][newLocation.y] == null) {
+						if (isPassable(passValue, inputDirection) && !map.hasEntity(newLocation)) {
 							newLocation = Point.add(newLocation, getWalkTypeAdditionalMove(curPassValue, passValue, inputDirection));
-
-							entities[newLocation.x][newLocation.y] = this;
-							entities[player.getX()][player.getY()] = null;
 
 							player.setLocation(newLocation);
 							player.step();
@@ -101,7 +96,7 @@ public class PlayerEntity extends MovableEntity {
 
 			if (spacePressed) {
 				Point newLocation = Point.add(this.getLocation(), transitionDirection.getDeltaPoint());
-				Entity entity = entities[newLocation.x][newLocation.y];
+				Entity entity = map.getEntity(newLocation);
 				
 				if (map.inBounds(newLocation) && entity != null && entity != currentInteractionEntity) {
 					entityTriggerSuffix = entity.getTriggerSuffix();
@@ -112,16 +107,16 @@ public class PlayerEntity extends MovableEntity {
 			
 			if (stalled) {
 				for (Direction direction : Direction.values()) {
-					Point newLocation = Point.add(this.getLocation(), Point.negate(direction.getDeltaPoint()));
-					Entity entity = entities[newLocation.x][newLocation.y];
+					Point newLocation = Point.add(this.getLocation(), direction.getDeltaPoint());
+					Entity entity = map.getEntity(newLocation);
 
 					// TODO: Should have a method for this
 					if (map.inBounds(newLocation) && entity != null && entity != currentInteractionEntity) {
 						entityTriggerSuffix = entity.getTriggerSuffix();
 						currentInteractionEntity = entity;
 
-						entity.getAttention(direction);
-						player.direction = transitionDirection = direction.getOpposite();
+						entity.getAttention(direction.getOpposite());
+						player.direction = transitionDirection = direction;
 						stalled = false;
 					}
 				}
@@ -156,19 +151,25 @@ public class PlayerEntity extends MovableEntity {
 		return new Point();
 	}
 
+	// TODO: See if this can be private and added to the end of the update method
 	public void triggerCheck(MapData map) {
-		String triggerName = null;
+		List<String> triggerNames = new ArrayList<>();
 
 		if (entityTriggerSuffix != null) {
-			triggerName = TriggerType.GROUP.getTriggerNameFromSuffix(entityTriggerSuffix);
+			triggerNames.add(TriggerType.GROUP.getTriggerNameFromSuffix(entityTriggerSuffix));
 			entityTriggerSuffix = null;
 		}
 		else if (justMoved) {
-			triggerName = map.getCurrentTrigger();
+			List<String> currentTriggerNames = map.getCurrentTriggers();
+			if (currentTriggerNames != null) {
+				triggerNames.addAll(currentTriggerNames);
+			}
+
 			justMoved = false;
 		}
 
-		if (triggerName != null) {
+		// Execute all valid triggers
+		for (String triggerName : triggerNames) {
 			Trigger trigger = Game.getData().getTrigger(triggerName);
 			if (trigger != null && trigger.isTriggered()) {
 				trigger.execute();

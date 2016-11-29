@@ -45,7 +45,7 @@ public abstract class MovableEntity extends Entity {
 	}
 
 	@Override
-	public void update(int dt, Entity[][] entity, MapData map, MapView view) {
+	public void update(int dt, MapData map, MapView view) {
 		if (transitionTime != 0) {
 			transitionTime += dt;	
 		}

@@ -55,14 +55,15 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	@Override
-	public void update(int dt, Entity[][] entity, MapData map, MapView view) {
-		super.update(dt, entity, map, view);
+	public void update(int dt, MapData map, MapView view) {
+		super.update(dt, map, view);
 
 		// Decrease wait time
 		waitTime = Math.max(0, waitTime - dt);
 
 		// Not transitioning, not waiting, and does not have attention
 		if (!this.isTransitioning() && waitTime == 0 && !hasAttention) {
+
 			String path = this.path;
 			if (tempPath != null) {
 				path = tempPath;
@@ -75,15 +76,12 @@ public class NPCEntity extends MovableEntity {
 				pathIndex++;
 			}
 			else {
-				Point newPoint = Point.add(this.getLocation(), direction.getDeltaPoint());
-				int x = newPoint.x; // TODO
-				int y = newPoint.y;
+				Point newLocation = Point.add(this.getLocation(), direction.getDeltaPoint());
+				int x = newLocation.x; // TODO
+				int y = newLocation.y;
 
-				// TODO: Shouldn't the isPassable method check if an entity doesn't exist in it as well?
-				if (isPassable(map.getPassValue(x, y)) && entity[x][y] == null) {
-					entity[getX()][getY()] = null;
-					super.setLocation(newPoint);
-					entity[getX()][getY()] = this;
+				if (isPassable(map.getPassValue(x, y)) && !map.hasEntity(newLocation)) {
+					super.setLocation(newLocation);
 
 					transitionTime = 1;
 					waitTime = 5*Global.TIME_BETWEEN_TILES/4; // TODO: Why 5/4

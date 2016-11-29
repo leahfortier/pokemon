@@ -1,6 +1,7 @@
 package map;
 
 import gui.TileSet;
+import gui.view.MapView;
 import main.Game;
 import main.Global;
 import map.entity.Entity;
@@ -13,8 +14,10 @@ import pattern.map.EventMatcher;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import pattern.map.WildBattleMatcher;
+import trainer.CharacterData;
 import util.FileIO;
 import util.JsonUtils;
+import util.MultiMap;
 import util.Point;
 
 import java.awt.Dimension;
@@ -34,12 +37,11 @@ public class MapData {
 
 	private final Map<MapDataType, int[]> dataMap;
 	private final AreaData[] areaData;
-	
-	private final Map<Integer, String> triggers;
-	private final Map<String, Integer> mapEntrances;
-	
+
 	private final List<Entity> entities;
-	
+	private final MultiMap<Integer, String> triggers;
+	private final Map<String, Integer> mapEntrances;
+
 	public MapData(File file) {
 		name = file.getName();
 
@@ -56,7 +58,7 @@ public class MapData {
 		}
 
 		entities = new ArrayList<>();
-		triggers = new HashMap<>();
+		triggers = new MultiMap<>();
 		mapEntrances = new HashMap<>();
 
 		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(beginFilePath + name + ".txt");
@@ -97,8 +99,7 @@ public class MapData {
 	}
 
 	private void addEntities(List<? extends EntityMatcher> entityMatchers) {
-		entities.addAll(entityMatchers
-				.stream()
+		this.entities.addAll(entityMatchers.stream()
 				.map(EntityMatcher::createEntity)
 				.collect(Collectors.toList()));
 	}
@@ -168,7 +169,7 @@ public class MapData {
 		return AreaData.VOID;
 	}
 
-	public String getCurrentTrigger() {
+	public List<String> getCurrentTriggers() {
 		int val = Game.getPlayer().getLocation().getIndex(dimension.width);
 		if (triggers.containsKey(val)) {
 			return triggers.get(val);
@@ -189,17 +190,41 @@ public class MapData {
 		return false;
 	}
 
-	// TODO: Look at how this is being used, does a new array need to be created each time? does it need to be an array at all
-	public Entity[][] populateEntities() {
-		Entity[][] res = new Entity[dimension.width][dimension.height];
+	public Entity getEntity(Point location) {
+		CharacterData player = Game.getPlayer();
+		if (location.equals(player.getLocation())) {
+			return player.getEntity();
+		}
+
+		List<Entity> presentEntities = entities.stream()
+				.filter(entity -> entity.isPresent() && entity.getLocation().equals(location))
+				.collect(Collectors.toList());
+
+		if (presentEntities.isEmpty()) {
+			return null;
+		}
+
+		if (presentEntities.size() != 1) {
+			Global.error("Multiple entities present at location " + location);
+		}
+
+		return presentEntities.get(0);
+	}
+
+	public boolean hasEntity(Point location) {
+		return getEntity(location) != null;
+	}
+
+	public void updateEntities(int dt, MapView mapView) {
+		entities.forEach(entity -> entity.update(dt, this, mapView));
+	}
+
+	public void populateEntities() {
 		entities.stream()
 				.filter(Entity::isPresent)
 				.forEach(entity -> {
 					entity.reset();
 					entity.addData();
-					res[entity.getX()][entity.getY()] = entity;
 				});
-		
-		return res;
 	}
 }
