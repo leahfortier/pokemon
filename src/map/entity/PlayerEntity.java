@@ -102,12 +102,14 @@ public class PlayerEntity extends MovableEntity {
 	private void checkNPCs(MapData currentMap) {
 		GameData data = Game.getData();
 
-		// TODO: Need to make sure every space is passable between the npc and player
-		for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
-			for (Direction direction : Direction.values()) {
+		for (Direction direction : Direction.values()) {
+			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
 				Point newLocation = Point.add(this.getLocation(), Point.scale(direction.getDeltaPoint(), dist));
-				Entity newEntity = currentMap.getEntity(newLocation);
+				if (!isPassable(currentMap.getPassValue(newLocation), direction)) {
+					break;
+				}
 
+				Entity newEntity = currentMap.getEntity(newLocation);
 				if (newEntity instanceof NPCEntity) {
 					NPCEntity npc = (NPCEntity) newEntity;
 					if (npc.isFacing(this.getLocation())

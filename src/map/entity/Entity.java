@@ -52,10 +52,6 @@ public abstract class Entity {
 
 	public abstract void update(int dt, MapData currentMap, MapView view);
 
-	protected boolean isPassable(WalkType type) {
-		return type == WalkType.WALKABLE;
-	}
-
 	protected boolean isPassable(WalkType type, Direction direction) {
 		// TODO: I'm probobbly gonna want to generalize this at some point...
 		switch (type) {
