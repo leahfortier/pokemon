@@ -191,7 +191,7 @@ public class MapData {
 		}
 
 		List<Entity> presentEntities = entities.stream()
-				.filter(entity -> entity.isPresent() && entity.getLocation().equals(location))
+				.filter(entity -> entity.isVisible() && entity.getLocation().equals(location))
 				.collect(Collectors.toList());
 
 		if (presentEntities.isEmpty()) {
@@ -215,7 +215,7 @@ public class MapData {
 
 	public void populateEntities() {
 		entities.stream()
-				.filter(Entity::isPresent)
+				.filter(Entity::setVisible)
 				.forEach(entity -> {
 					entity.reset();
 					entity.addData();
