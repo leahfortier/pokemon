@@ -37,6 +37,10 @@ public abstract class Entity {
 		return this.condition.isTrue();
 	}
 
+	protected String getConditionString() {
+		return this.condition.getOriginalConditionString();
+	}
+
 	public final void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {
 		if (drawOnlyInTransition && !this.isTransitioning()) {
 			return;

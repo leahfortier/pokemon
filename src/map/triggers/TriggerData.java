@@ -7,6 +7,7 @@ import pattern.map.EventMatcher;
 import java.util.List;
 
 public class TriggerData {
+	// TODO: private
 	public String name;
 	public String condition;
 	private List<EntityAction> actions;

@@ -13,7 +13,7 @@ import java.util.List;
 
 public abstract class EntityAction {
 
-    public static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, List<EntityAction> actions) {
+    public static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, String condition, List<EntityAction> actions) {
         final String[] actionTriggerNames = new String[actions.size()];
         for (int i = 0; i < actions.size(); i++) {
             Trigger actionTrigger = actions.get(i).getTrigger(entityName);
@@ -23,10 +23,7 @@ public abstract class EntityAction {
         GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerSuffix, actionTriggerNames);
         final String groupContents = JsonUtils.getJson(matcher);
 
-        // Condition is really in the interaction name and the npc condition, so
-        // once these are both valid then the interaction can proceed as usual
-        // TODO: Condition is inside group trigger, but now that this exists, should it be removed?
-        return TriggerType.GROUP.createTrigger(groupContents, null);
+        return TriggerType.GROUP.createTrigger(groupContents, condition);
     }
 
     private Trigger getTrigger(String entityName) {

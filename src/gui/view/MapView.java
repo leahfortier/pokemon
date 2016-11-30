@@ -473,7 +473,7 @@ public class MapView extends View {
 				if (!SoundPlayer.soundPlayer.soundEffectIsPlaying() && input.consumeIfDown(ControlKey.SPACE)) {
 					if (currentMessage.isChoice()) {
 						ChoiceMatcher choice = currentMessage.getChoices()[dialogueSelection];
-						Trigger trigger = EntityAction.addActionGroupTrigger(null, null, choice.getActions());
+						Trigger trigger = EntityAction.addActionGroupTrigger(null, null, null, choice.getActions());
 						Messages.addMessageToFront(new MessageUpdate("", trigger.getName(), Update.TRIGGER));
 					}
 

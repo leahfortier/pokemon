@@ -70,7 +70,7 @@ public class Condition {
 			}
 		}
 	}
-	
+
 	public boolean isTrue() {
 		CharacterData player = Game.getPlayer();
 
@@ -112,7 +112,7 @@ public class Condition {
 					break;
 			}
 		}
-		
+
 		return stack.pop();
 	}
 
@@ -167,5 +167,9 @@ public class Condition {
 	
 	public String toString() {
 		return condition.toString();
+	}
+
+	public String getOriginalConditionString() {
+		return this.originalConditionString;
 	}
 }

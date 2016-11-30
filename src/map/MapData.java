@@ -83,7 +83,7 @@ public class MapData {
 
 		for (EventMatcher matcher : mapDataMatcher.getEvents()) {
 			TriggerData triggerData = new TriggerData(matcher);
-			Trigger trigger = EntityAction.addActionGroupTrigger(triggerData.name, triggerData.name, matcher.getActions());
+			Trigger trigger = EntityAction.addActionGroupTrigger(triggerData.name, triggerData.name, triggerData.condition, matcher.getActions());
 
 			for (Point point : matcher.getLocation()) {
 				triggers.put(getMapIndex(point), trigger.getName());

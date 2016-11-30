@@ -43,7 +43,7 @@ public class MiscEntity extends Entity {
 			return;
 		}
 
-		EntityAction.addActionGroupTrigger(this.getEntityName(), this.getTriggerSuffix(), this.actions);
+		EntityAction.addActionGroupTrigger(this.getEntityName(), this.getTriggerSuffix(), this.getConditionString(), this.actions);
 		dataCreated = true;
 	}
 
