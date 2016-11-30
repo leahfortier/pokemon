@@ -1,6 +1,5 @@
 package trainer.pokedex;
 
-import main.Global;
 import util.StringUtils;
 
 import java.io.Serializable;
@@ -38,11 +37,9 @@ class PokedexInfo implements Serializable {
     }
 
     void setStatus(PokedexStatus status) {
-        if (this.status.getWeight() >= status.getWeight()) {
-            Global.error("Cannnot decrease pokedex status weight.");
+        if (this.status.getWeight() < status.getWeight()) {
+            this.status = status;
         }
-
-        this.status = status;
     }
 
     boolean isStatus(PokedexStatus status) {
