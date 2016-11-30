@@ -87,6 +87,8 @@ public class NPCEntity extends MovableEntity {
 		return this.path;
 	}
 
+	@Override protected void endPath() {}
+
 	@Override
 	public boolean hasAttention() {
 		return this.hasAttention;

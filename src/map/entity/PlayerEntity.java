@@ -42,6 +42,11 @@ public class PlayerEntity extends MovableEntity {
 	}
 
 	@Override
+	public void setLocation(Point newLocation) {
+		Game.getPlayer().setLocation(newLocation);
+	}
+
+	@Override
 	public Direction getDirection() {
 		return Game.getPlayer().getDirection();
 	}
@@ -237,6 +242,16 @@ public class PlayerEntity extends MovableEntity {
 	@Override
 	public String getPath() {
 		return null;
+	}
+
+	public void setPath(String path) {
+		super.tempPath = path;
+		stalled = true;
+	}
+
+	@Override
+	protected void endPath() {
+		stalled = false;
 	}
 
 	@Override

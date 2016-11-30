@@ -30,8 +30,10 @@ public abstract class MovableEntity extends Entity {
 	}
 
 	public abstract int getTransitionTime();
-	public abstract String getPath();
-	public abstract boolean hasAttention();
+
+	protected abstract boolean hasAttention();
+	protected abstract String getPath();
+	protected abstract void endPath();
 
 	public abstract Direction getDirection();
 	protected abstract void setDirection(Direction direction);
@@ -86,7 +88,7 @@ public abstract class MovableEntity extends Entity {
 				else {
 					Point newLocation = Point.add(this.getLocation(), direction.getDeltaPoint());
 					if (currentMap.getPassValue(newLocation).isPassable(direction.getDirection()) && !currentMap.hasEntity(newLocation)) {
-						super.setLocation(newLocation);
+						setLocation(newLocation);
 
 						transitionTime = 1;
 						waitTime = 5*Global.TIME_BETWEEN_TILES/4; // TODO: Why 5/4
@@ -99,6 +101,7 @@ public abstract class MovableEntity extends Entity {
 				pathIndex %= path.length();
 				if (pathIndex == 0 && tempPath != null) {
 					tempPath = null;
+					endPath();
 				}
 			}
 		}

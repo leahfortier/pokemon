@@ -116,6 +116,12 @@
                 "triggerType": "Dialogue",
                 "triggerContents": "Hey, you should go talk to Professor Maple first before leaving town."
               }
+            },
+            {
+              "trigger": {
+                "triggerType": "MOVE_PLAYER",
+                "triggerContents": "rrr"
+              }
             }
           ]
         }
