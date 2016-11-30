@@ -39,17 +39,53 @@ import java.awt.image.BufferedImage;
 
 public class MapView extends View {
 
-	// TODO: Create enum to hold these and handle operations
-	private static final String[] MENU_TEXT = {
-			PokeString.POKEDEX,
-			PokeString.POKEMON,
-			"Bag",
-			"Player___",
-			"Options",
-			"Save",
-			"Exit",
-			"Return"
-	};
+	private enum MenuState {
+		POKEDEX(() -> PokeString.POKEDEX, ViewMode.POKEDEX_VIEW),
+		POKEMON(() -> PokeString.POKEMON, ViewMode.PARTY_VIEW),
+		BAG(() -> "Bag", mapView -> {
+			Game.setViewMode(ViewMode.BAG_VIEW);
+			Messages.clearMessages(MessageState.BAGGIN_IT_UP);
+			Messages.setMessageState(MessageState.BAGGIN_IT_UP);
+		}),
+		TRAINER_CARD(() -> Game.getPlayer().getName(), ViewMode.TRAINER_CARD_VIEW),
+		OPTIONS(() -> "Options", ViewMode.OPTIONS_VIEW),
+		SAVE(() -> "Save", mapView -> {
+            // TODO: Question user if they would like to save first.
+            Save.save();
+            Messages.addMessage("Your game has now been saved!");
+            mapView.state = VisualState.MESSAGE;
+        }),
+		EXIT(() -> "Exit", ViewMode.MAIN_MENU_VIEW), // TODO: Confirmation
+		RETURN(() -> "Return", mapView -> mapView.state = VisualState.MAP);
+
+		private final DisplayNameGetter displayNameGetter;
+		private final StateChanger stateChanger;
+
+		MenuState(DisplayNameGetter displayNameGetter, ViewMode viewMode) {
+			this(displayNameGetter, mapView -> Game.setViewMode(viewMode));
+		}
+
+		MenuState(DisplayNameGetter displayNameGetter, StateChanger stateChanger) {
+			this.displayNameGetter = displayNameGetter;
+			this.stateChanger = stateChanger;
+		}
+
+		private interface DisplayNameGetter {
+			String getDisplayName();
+		}
+
+		private interface StateChanger {
+			void execute(MapView mapView);
+		}
+
+		public String getDisplayName() {
+			return this.displayNameGetter.getDisplayName();
+		}
+
+		public void execute(MapView mapView) {
+			this.stateChanger.execute(mapView);
+		}
+	}
 	
 	private static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
 	private static final int BATTLE_INTRO_ANIMATION_LIFESPAN = 1000;
@@ -107,7 +143,7 @@ public class MapView extends View {
 		
 		weatherState = WeatherState.NORMAL;
 		
-		menuButtons = new Button[MENU_TEXT.length];
+		menuButtons = new Button[MenuState.values().length];
 		
 		for (int i = 0; i < menuButtons.length; i++) {
 			menuButtons[i] = new Button(558, 72*i + 10, 240, 70, Button.HoverAction.ARROW, 
@@ -218,9 +254,9 @@ public class MapView extends View {
 				g.drawImage(menuTiles.getTile(1), 527, 0, null);
 				DrawUtils.setFont(g, 40);
 				g.setColor(Color.BLACK);
-				
-				for (int i = 0; i < MENU_TEXT.length; i++) {
-					g.drawString(MENU_TEXT[i], 558, 59 + 72*i);
+
+				for (MenuState menuState : MenuState.values()) {
+					g.drawString(menuState.getDisplayName(), 558, 59 + 72*menuState.ordinal());
 				}
 				
 				for (Button b: menuButtons) {
@@ -399,7 +435,6 @@ public class MapView extends View {
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
 		PlayerEntity playerEntity = player.getEntity();
-		MENU_TEXT[3] = player.getName();
 
 		if (!currentMapName.equals(player.mapName) || player.mapReset) {
 			currentMapName = player.mapName;
@@ -506,40 +541,9 @@ public class MapView extends View {
 					}
 				}
 
-				// TODO: Handle this better
-				switch (clicked) {
-					case -1: // no click
-						break;
-					case 0: // pokedex
-						Game.setViewMode(ViewMode.POKEDEX_VIEW);
-						break;
-					case 1: // pokemon
-						Game.setViewMode(ViewMode.PARTY_VIEW);
-						break;
-					case 2: // bag
-						Game.setViewMode(ViewMode.BAG_VIEW);
-						Messages.clearMessages(MessageState.BAGGIN_IT_UP);
-						Messages.setMessageState(MessageState.BAGGIN_IT_UP);
-						break;
-					case 3: // player
-						Game.setViewMode(ViewMode.TRAINER_CARD_VIEW);
-						break;
-					case 4: // options
-						Game.setViewMode(ViewMode.OPTIONS_VIEW);
-						break;
-					case 5: // save
-						// TODO: Question user if they would like to save first.
-						Save.save();
-						Messages.addMessage("Your game has now been saved!");
-						state = VisualState.MESSAGE;
-						break;
-					case 6: // exit
-						// TODO: Confirmation
-						Game.setViewMode(ViewMode.MAIN_MENU_VIEW);
-						break;
-					case 7: // return
-						state = VisualState.MAP;
-						break;
+				if (clicked != -1) {
+					MenuState menuState = MenuState.values()[clicked];
+					menuState.execute(this);
 				}
 				
 				if (input.consumeIfDown(ControlKey.ESC)) {
