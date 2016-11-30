@@ -3,7 +3,7 @@ package main;
 import battle.Battle;
 import gui.GameData;
 import gui.view.BattleView;
-import gui.view.MapView;
+import gui.view.map.MapView;
 import gui.view.View;
 import gui.view.ViewMode;
 import item.ItemNamesies;

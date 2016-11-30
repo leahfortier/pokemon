@@ -1,9 +1,11 @@
-package gui.view;
+package gui.view.map;
 
 import battle.Battle;
 import gui.Button;
 import gui.GameData;
 import gui.TileSet;
+import gui.view.View;
+import gui.view.ViewMode;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -21,7 +23,6 @@ import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
-import message.Messages.MessageState;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
 import sound.SoundPlayer;
@@ -29,8 +30,6 @@ import sound.SoundTitle;
 import trainer.CharacterData;
 import util.DrawUtils;
 import util.Point;
-import util.PokeString;
-import util.Save;
 import util.StringUtils;
 
 import java.awt.Color;
@@ -39,54 +38,6 @@ import java.awt.image.BufferedImage;
 
 public class MapView extends View {
 
-	private enum MenuState {
-		POKEDEX(() -> PokeString.POKEDEX, ViewMode.POKEDEX_VIEW),
-		POKEMON(() -> PokeString.POKEMON, ViewMode.PARTY_VIEW),
-		BAG(() -> "Bag", mapView -> {
-			Game.setViewMode(ViewMode.BAG_VIEW);
-			Messages.clearMessages(MessageState.BAGGIN_IT_UP);
-			Messages.setMessageState(MessageState.BAGGIN_IT_UP);
-		}),
-		TRAINER_CARD(() -> Game.getPlayer().getName(), ViewMode.TRAINER_CARD_VIEW),
-		OPTIONS(() -> "Options", ViewMode.OPTIONS_VIEW),
-		SAVE(() -> "Save", mapView -> {
-            // TODO: Question user if they would like to save first.
-            Save.save();
-            Messages.addMessage("Your game has now been saved!");
-            mapView.state = VisualState.MESSAGE;
-        }),
-		EXIT(() -> "Exit", ViewMode.MAIN_MENU_VIEW), // TODO: Confirmation
-		RETURN(() -> "Return", mapView -> mapView.state = VisualState.MAP);
-
-		private final DisplayNameGetter displayNameGetter;
-		private final StateChanger stateChanger;
-
-		MenuState(DisplayNameGetter displayNameGetter, ViewMode viewMode) {
-			this(displayNameGetter, mapView -> Game.setViewMode(viewMode));
-		}
-
-		MenuState(DisplayNameGetter displayNameGetter, StateChanger stateChanger) {
-			this.displayNameGetter = displayNameGetter;
-			this.stateChanger = stateChanger;
-		}
-
-		private interface DisplayNameGetter {
-			String getDisplayName();
-		}
-
-		private interface StateChanger {
-			void execute(MapView mapView);
-		}
-
-		public String getDisplayName() {
-			return this.displayNameGetter.getDisplayName();
-		}
-
-		public void execute(MapView mapView) {
-			this.stateChanger.execute(mapView);
-		}
-	}
-	
 	private static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
 	private static final int BATTLE_INTRO_ANIMATION_LIFESPAN = 1000;
 
@@ -116,14 +67,7 @@ public class MapView extends View {
 	
 	private BufferedImage battleImageSlideRight;
 	private BufferedImage battleImageSlideLeft;
-	
-	private enum VisualState {
-		BATTLE_ANIMATION,
-		MAP,
-		MENU,
-		MESSAGE
-	}
-	
+
 	private VisualState state;
 	private WeatherState weatherState;
 	
@@ -133,7 +77,7 @@ public class MapView extends View {
 	private int[] rainHeight;
 	private int lightningFrame;
 	
-	MapView() {
+	public MapView() {
 		currentMapName = StringUtils.empty();
 		rainHeight = new int[Global.GAME_SIZE.width/2];
 		state = VisualState.MAP;
@@ -157,6 +101,10 @@ public class MapView extends View {
 		start = new Point();
 		end = new Point();
 		draw = new Point();
+	}
+
+	void setState(VisualState newState) {
+		this.state = newState;
 	}
 
 	// TODO: This method should be split up further

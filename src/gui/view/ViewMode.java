@@ -1,5 +1,7 @@
 package gui.view;
 
+import gui.view.map.MapView;
+
 public enum ViewMode {
     BAG_VIEW(BagView::new),
     BATTLE_VIEW(BattleView::new),

@@ -1,7 +1,7 @@
 package map;
 
 import gui.TileSet;
-import gui.view.MapView;
+import gui.view.map.MapView;
 import main.Game;
 import main.Global;
 import map.entity.Entity;

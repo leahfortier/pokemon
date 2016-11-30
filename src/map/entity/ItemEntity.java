@@ -1,7 +1,7 @@
 package map.entity;
 
 import gui.GameData;
-import gui.view.MapView;
+import gui.view.map.MapView;
 import item.ItemNamesies;
 import main.Game;
 import map.Direction;
