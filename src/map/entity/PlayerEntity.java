@@ -235,6 +235,16 @@ public class PlayerEntity extends MovableEntity {
 	}
 
 	@Override
+	public String getPath() {
+		return null;
+	}
+
+	@Override
+	public boolean hasAttention() {
+		return false;
+	}
+
+	@Override
 	public void getAttention(Direction direction) {
 		this.setDirection(direction);
 		stalled = true;
