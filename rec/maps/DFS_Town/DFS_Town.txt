@@ -124,7 +124,8 @@
         "x": 62,
         "y": 18
       },
-      "triggerName": "DFS_Town_NPC_Bitchface_01"
+      "triggerName": "DFS_Town_NPC_Bitchface_01",
+      "condition": "MaplesLab_NPC_Prof_Mapes_01$"
     },
     {
       "name": "DFS_Town_NPC_Ball_Giver_01",

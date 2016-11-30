@@ -17,7 +17,6 @@ import trainer.CharacterData;
 import util.FloatPoint;
 import util.Point;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerEntity extends MovableEntity {
@@ -177,27 +176,31 @@ public class PlayerEntity extends MovableEntity {
 	}
 
 	private void triggerCheck(MapData map) {
-		List<String> triggerNames = new ArrayList<>();
 
+		// Entity
 		if (entityTriggerSuffix != null) {
-			triggerNames.add(TriggerType.GROUP.getTriggerNameFromSuffix(entityTriggerSuffix));
+			if (currentInteractionEntity.isVisible()) {
+				Trigger trigger = Game.getData().getTrigger(TriggerType.GROUP.getTriggerNameFromSuffix(entityTriggerSuffix));
+				if (trigger != null) {
+					trigger.execute();
+				}
+			}
 			entityTriggerSuffix = null;
 		}
+		// Trigger
 		else if (justMoved) {
 			List<String> currentTriggerNames = map.getCurrentTriggers();
 			if (currentTriggerNames != null) {
-				triggerNames.addAll(currentTriggerNames);
+				// Execute all valid triggers
+				for (String triggerName : currentTriggerNames) {
+					Trigger trigger = Game.getData().getTrigger(triggerName);
+					if (trigger != null && trigger.isTriggered()) {
+						trigger.execute();
+					}
+				}
 			}
 
 			justMoved = false;
-		}
-
-		// Execute all valid triggers
-		for (String triggerName : triggerNames) {
-			Trigger trigger = Game.getData().getTrigger(triggerName);
-			if (trigger != null && trigger.isTriggered()) {
-				trigger.execute();
-			}
 		}
 	}
 

@@ -83,7 +83,12 @@ public class MapData {
 
 		for (EventMatcher matcher : mapDataMatcher.getEvents()) {
 			TriggerData triggerData = new TriggerData(matcher);
-			Trigger trigger = EntityAction.addActionGroupTrigger(triggerData.name, triggerData.name, matcher.getActions());
+			Trigger trigger = EntityAction.addActionGroupTrigger(
+					triggerData.getName(),
+					triggerData.getName(),
+					triggerData.getCondition(),
+					triggerData.getActions()
+			);
 
 			for (Point point : matcher.getLocation()) {
 				triggers.put(getMapIndex(point), trigger.getName());
@@ -191,7 +196,7 @@ public class MapData {
 		}
 
 		List<Entity> presentEntities = entities.stream()
-				.filter(entity -> entity.isPresent() && entity.getLocation().equals(location))
+				.filter(entity -> entity.isVisible() && entity.getLocation().equals(location))
 				.collect(Collectors.toList());
 
 		if (presentEntities.isEmpty()) {
@@ -215,7 +220,7 @@ public class MapData {
 
 	public void populateEntities() {
 		entities.stream()
-				.filter(Entity::isPresent)
+				.filter(Entity::setVisible)
 				.forEach(entity -> {
 					entity.reset();
 					entity.addData();

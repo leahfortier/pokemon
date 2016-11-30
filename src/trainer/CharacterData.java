@@ -248,18 +248,23 @@ public class CharacterData extends Trainer implements Serializable {
 		return this.npcInteractions.get(npcEntityName);
 	}
 
+	public boolean isNpcInteraction(final String npcEntityName, final String interactionName) {
+		if (StringUtils.isNullOrEmpty(interactionName)) {
+			return !this.hasNpcInteraction(npcEntityName);
+		} else {
+			return interactionName.equals(getNpcInteractionName(npcEntityName));
+		}
+	}
+
 	public boolean globalsContain(String s) {
 		return definedGlobals.contains(s);
 	}
 	
 	public void addGlobal(String s) {
-		if (s == null) {
-			return;
+		if (!StringUtils.isNullOrEmpty(s)) {
+			System.out.println("ADD GLOBAL: " + s);
+			definedGlobals.add(s);
 		}
-
-		System.out.println("ADD GLOBAL: " + s);
-
-		definedGlobals.add(s);
 	}
 	
 	public void removeGlobal(String s) {

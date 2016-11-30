@@ -31,7 +31,7 @@ class MapTransitionTrigger extends Trigger {
 		CharacterData player = Game.getPlayer();
 		player.setMap(nextMap, mapEntranceName);
 		
-		if (direction != PathDirection.WAIT) {
+		if (direction != null && direction != PathDirection.WAIT) {
 			player.setDirection(direction.getDirection());
 		}
 

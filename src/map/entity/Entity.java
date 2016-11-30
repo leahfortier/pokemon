@@ -17,6 +17,7 @@ public abstract class Entity {
 	private final Condition condition;
 
 	private Point location;
+	private boolean visible;
 
 	protected Entity(Point location, String entityName, String condition) {
 		this.location = location;
@@ -33,8 +34,21 @@ public abstract class Entity {
 		this.location = newLocation;
 	}
 
-	public boolean isPresent() {
+	protected boolean isPresent() {
 		return this.condition.isTrue();
+	}
+
+	public boolean isVisible() {
+		return this.visible;
+	}
+
+	public boolean setVisible() {
+		this.visible = this.isPresent();
+		return this.visible;
+	}
+
+	protected String getConditionString() {
+		return this.condition.getOriginalConditionString();
 	}
 
 	public final void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {

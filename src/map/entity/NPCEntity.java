@@ -53,6 +53,9 @@ public class NPCEntity extends MovableEntity {
 
 		this.interactions = interactions;
 		this.startKey = startKey;
+
+		this.reset();
+		this.addData();
 	}
 
 	@Override
@@ -189,7 +192,7 @@ public class NPCEntity extends MovableEntity {
 			final String interactionName = interaction.getKey();
 			final List<EntityAction> actions = interaction.getValue().getActions();
 
-			EntityAction.addActionGroupTrigger(this.getEntityName(), this.getTriggerSuffix(interactionName), actions);
+			EntityAction.addActionGroupTrigger(this.getEntityName(), this.getTriggerSuffix(interactionName), this.getConditionString(), actions);
 		}
 		
 		dataCreated = true;
