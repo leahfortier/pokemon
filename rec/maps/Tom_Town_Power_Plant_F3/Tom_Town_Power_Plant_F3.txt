@@ -27,6 +27,7 @@
     },
     {
       "exitName": "ReloadLocation",
+      "direction": "WAIT",
       "deathPortal": false,
       "location": {
         "x": 10,

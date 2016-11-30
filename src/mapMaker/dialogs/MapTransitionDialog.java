@@ -110,10 +110,15 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 			return;
 		}
 
+		String destination = matcher.getNextMap();
+		if (StringUtils.isNullOrEmpty(destination)) {
+			destination = StringUtils.empty();
+		}
+
 		entranceNameTextField.setText(matcher.getExitName());
-		destinationComboBox.setSelectedItem(matcher.getNextMap());
+		destinationComboBox.setSelectedItem(destination);
 		entranceComboBox.setSelectedItem(matcher.getNextEntranceName());
-		directionComboBox.setSelectedIndex(matcher.getDirection().ordinal() + 1); // TODO: Not sure what's going on here but it should probably be in a direction method instead of using the ordinal
+		directionComboBox.setSelectedIndex(matcher.getDirection().ordinal());
 		deathPortalCheckBox.setSelected(matcher.isDeathPortal());
 	}
 }
