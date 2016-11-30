@@ -4,6 +4,7 @@ import map.Direction;
 import map.PathDirection;
 import map.entity.Entity;
 import map.entity.NPCEntity;
+import map.entity.NPCEntity.MoveAxis;
 import map.entity.NPCInteraction;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.NPCInteractionMatcher;
@@ -24,6 +25,7 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
     private String path;
     private int spriteIndex;
     private Direction direction;
+    private MoveAxis moveAxis;
     private NPCInteractionMatcher[] interactions;
 
     public NPCMatcher(String name,
@@ -84,6 +86,14 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
         return this.direction;
     }
 
+    public MoveAxis getMoveAxis() {
+        if (this.moveAxis != null) {
+            return this.moveAxis;
+        }
+
+        return MoveAxis.FACING;
+    }
+
     @Override
     public TriggerModelType getTriggerModelType() {
         return TriggerModelType.NPC;
@@ -102,6 +112,7 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
                 this.getCondition(),
                 this.getPath(),
                 this.getDirection(),
+                this.getMoveAxis(),
                 this.getSpriteIndex(),
                 this.getInteractionMap(),
                 this.getStartKey()

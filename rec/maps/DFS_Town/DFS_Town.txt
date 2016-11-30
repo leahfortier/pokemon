@@ -106,6 +106,7 @@
       "path": "w",
       "spriteIndex": 16,
       "direction": "DOWN",
+      "moveAxis": "X_ONLY",
       "interactions": [
         {
           "name": "dialogue",

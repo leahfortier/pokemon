@@ -7,6 +7,6 @@ class GlobalTrigger extends Trigger {
         super(TriggerType.GLOBAL, global, condition, Collections.singletonList(global));
     }
 
-    // Only purpose is to add a global, which is pass in the constructor and handled by the superclass
+    // Only purpose is to add a global, which is passed into the constructor and handled by the superclass
     protected void executeTrigger() {}
 }

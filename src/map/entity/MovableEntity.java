@@ -17,8 +17,8 @@ public abstract class MovableEntity extends Entity {
 	private int runFrame;
 	protected int transitionTime;
 	private int waitTime;
-	protected String tempPath;
-	protected int pathIndex;
+	private String tempPath;
+	private int pathIndex;
 
 	MovableEntity(Point location, String triggerName, String condition, int spriteIndex) {
 		super(location, triggerName, condition);
@@ -37,6 +37,11 @@ public abstract class MovableEntity extends Entity {
 
 	public abstract Direction getDirection();
 	protected abstract void setDirection(Direction direction);
+
+	protected void setTempPath(String path) {
+		this.tempPath = path;
+		this.pathIndex = 0;
+	}
 
 	@Override
 	protected Point getCanvasCoordinates(Point drawLocation) {
@@ -105,20 +110,6 @@ public abstract class MovableEntity extends Entity {
 				}
 			}
 		}
-	}
-
-	public boolean isFacing(Point otherLocation) {
-
-		// Not in the same row or the same column
-		if (!this.getLocation().partiallyEquals(otherLocation)) {
-			return false;
-		}
-
-		// Get the direction that would be facing the other location
-		Point deltaDirection = Point.getDeltaDirection(otherLocation, this.getLocation());
-
-		// Check if these are the same direction
-		return this.getDirection().getDeltaPoint().equals(deltaDirection);
 	}
 
 	@Override

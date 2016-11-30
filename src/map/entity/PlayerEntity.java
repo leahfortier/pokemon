@@ -1,6 +1,5 @@
 package map.entity;
 
-import gui.GameData;
 import gui.view.MapView;
 import input.ControlKey;
 import input.InputControl;
@@ -104,8 +103,6 @@ public class PlayerEntity extends MovableEntity {
 
 	// Check for any NPCs facing the player
 	private void checkNPCs(MapData currentMap) {
-		GameData data = Game.getData();
-
 		for (Direction direction : Direction.values()) {
 			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
 				Point newLocation = Point.add(this.getLocation(), Point.scale(direction.getDeltaPoint(), dist));
@@ -116,11 +113,7 @@ public class PlayerEntity extends MovableEntity {
 				Entity newEntity = currentMap.getEntity(newLocation);
 				if (newEntity instanceof NPCEntity) {
 					NPCEntity npc = (NPCEntity) newEntity;
-					if (npc.isFacing(this.getLocation())
-							&& npc.shouldWalkToPlayer()
-							&& !npc.isWalkingToPlayer()
-							&& data.getTrigger(npc.getWalkTrigger()).isTriggered()) {
-
+					if (npc.canWalkToPlayer(this.getLocation())) {
 						stalled = true;
 						npc.walkTowards(dist - 1, direction.getOpposite().getPathDirection());
 
@@ -245,7 +238,7 @@ public class PlayerEntity extends MovableEntity {
 	}
 
 	public void setPath(String path) {
-		super.tempPath = path;
+		super.setTempPath(path);
 		stalled = true;
 	}
 
@@ -266,7 +259,7 @@ public class PlayerEntity extends MovableEntity {
 	}
 
 	public void resetCurrentInteractionEntity() {
-		this.currentInteractionEntity = null;
+		currentInteractionEntity = null;
 		stalled = false;
 	}
 

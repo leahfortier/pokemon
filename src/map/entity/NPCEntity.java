@@ -14,11 +14,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class NPCEntity extends MovableEntity {
-	public static final int NPC_SIGHT_DISTANCE = 5;
+	static final int NPC_SIGHT_DISTANCE = 5;
 
 	private final String path;
 	private final Point defaultLocation;
 	private final Direction defaultDirection;
+	private final MoveAxis moveAxis;
 
 	private final Map<String, NPCInteraction> interactions;
 	private final String startKey;
@@ -35,6 +36,7 @@ public class NPCEntity extends MovableEntity {
 			String condition,
 			String path,
 			Direction direction,
+			MoveAxis moveAxis,
 			int spriteIndex,
 			Map<String, NPCInteraction> interactions,
 			String startKey) {
@@ -44,6 +46,7 @@ public class NPCEntity extends MovableEntity {
 
 		this.defaultLocation =  location;
 		this.defaultDirection = direction;
+		this.moveAxis = moveAxis;
 
 		this.interactions = interactions;
 		this.startKey = startKey;
@@ -52,10 +55,8 @@ public class NPCEntity extends MovableEntity {
 		this.addData();
 	}
 
-	public void walkTowards(int steps, PathDirection direction) {
-		tempPath = direction.getTempPath(steps);
-
-		pathIndex = 0;
+	void walkTowards(int steps, PathDirection direction) {
+		super.setTempPath(direction.getTempPath(steps));
 		walkingToPlayer = true;
 	}
 
@@ -87,7 +88,10 @@ public class NPCEntity extends MovableEntity {
 		return this.path;
 	}
 
-	@Override protected void endPath() {}
+	@Override
+	protected void endPath() {
+		this.walkingToPlayer = false;
+	}
 
 	@Override
 	public boolean hasAttention() {
@@ -107,20 +111,25 @@ public class NPCEntity extends MovableEntity {
 	@Override
 	public void getAttention(Direction direction) {
 		this.setDirection(direction);
-		hasAttention = true;
+		if (this.moveAxis == MoveAxis.FACING) {
+			hasAttention = true;
+		}
 	}
 
-	public boolean shouldWalkToPlayer() {
+	boolean canWalkToPlayer(Point location) {
+		return this.isWalkToPlayer()
+				&& !this.walkingToPlayer
+				&& this.moveAxis.checker.canMove(this.getLocation(), this.getDirection(), location)
+				&& Game.getData().getTrigger(this.getWalkTrigger()).isTriggered();
+	}
+
+	public boolean isWalkToPlayer() {
 		final String interaction = this.getCurrentInteractionKey();
 		return this.interactions.get(interaction).shouldWalkToPlayer();
 	}
 
-	public boolean isWalkingToPlayer() {
-		return walkingToPlayer;
-	}
-
-	public String getWalkTrigger() {
-		return shouldWalkToPlayer() ? this.getTriggerName() : StringUtils.empty();
+	private String getWalkTrigger() {
+		return isWalkToPlayer() ? this.getTriggerName() : StringUtils.empty();
 	}
 
 	public boolean isTrainer() {
@@ -160,5 +169,36 @@ public class NPCEntity extends MovableEntity {
 		}
 		
 		dataCreated = true;
+	}
+
+	public enum MoveAxis {
+		X_ONLY((thisLocation, thisDirection, otherLocation) -> thisLocation.x == otherLocation.x),
+		Y_ONLY((thisLocation, thisDirection, otherLocation) -> thisLocation.y == otherLocation.y),
+		BOTH((thisLocation, thisDirection, otherLocation) ->
+				X_ONLY.checker.canMove(thisLocation, thisDirection, otherLocation)
+						|| Y_ONLY.checker.canMove(thisLocation, thisDirection, otherLocation)
+		),
+		FACING((thisLocation, thisDirection, otherLocation) -> {
+			// Not in the same row or the same column
+			if (!BOTH.checker.canMove(thisLocation, thisDirection, otherLocation)) {
+				return false;
+			}
+
+			// Get the direction that would be facing the other location
+			Point deltaDirection = Point.getDeltaDirection(otherLocation, thisLocation);
+
+			// Check if these are the same direction
+			return thisDirection.getDeltaPoint().equals(deltaDirection);
+		});
+
+		private final MovableChecker checker;
+
+		MoveAxis(MovableChecker checker) {
+			this.checker = checker;
+		}
+
+		private interface MovableChecker {
+			boolean canMove(Point thisLocation, Direction thisDirection, Point otherLocation);
+		}
 	}
 }
