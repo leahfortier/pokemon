@@ -53,6 +53,9 @@ public class NPCEntity extends MovableEntity {
 
 		this.interactions = interactions;
 		this.startKey = startKey;
+
+		this.reset();
+		this.addData();
 	}
 
 	@Override
