@@ -595,8 +595,6 @@ class BagView extends View {
 	@Override
 	public void movedToFront() {
 		changeCategory(0);
-        Messages.clearMessages(MessageState.BAGGIN_IT_UP);
-        Messages.setMessageState(MessageState.BAGGIN_IT_UP);
 	}
 	
 	private int totalPages(int size) {

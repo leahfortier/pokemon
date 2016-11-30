@@ -21,6 +21,7 @@ import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
+import message.Messages.MessageState;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
 import sound.SoundPlayer;
@@ -517,6 +518,8 @@ public class MapView extends View {
 						break;
 					case 2: // bag
 						Game.setViewMode(ViewMode.BAG_VIEW);
+						Messages.clearMessages(MessageState.BAGGIN_IT_UP);
+						Messages.setMessageState(MessageState.BAGGIN_IT_UP);
 						break;
 					case 3: // player
 						Game.setViewMode(ViewMode.TRAINER_CARD_VIEW);
