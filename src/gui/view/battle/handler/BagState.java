@@ -201,7 +201,7 @@ public class BagState implements VisualStateHandler {
             if (bagTabButtons[i].checkConsumePress()) {
                 bagPage = 0;
                 selectedBagTab = i;
-                view.setVisualState(view.state); // To update active buttons
+                view.setVisualState(); // To update active buttons
             }
         }
 
@@ -265,7 +265,7 @@ public class BagState implements VisualStateHandler {
                 bagPage++;
             }
 
-            view.setVisualState(view.state); // To update active buttons
+            view.setVisualState(); // To update active buttons
         }
 
         // Previous Page
@@ -277,7 +277,7 @@ public class BagState implements VisualStateHandler {
                 bagPage--;
             }
 
-            view.setVisualState(view.state); // To update active buttons
+            view.setVisualState(); // To update active buttons
         }
 
         // Return to main battle menu

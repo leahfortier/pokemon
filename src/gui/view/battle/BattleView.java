@@ -28,7 +28,7 @@ public class BattleView extends View {
 	private int selectedButton;
 	
 	// The current state that the battle is in and current update type
-	public VisualState state;
+	private VisualState state;
 	private Update update;
 	
 	// Holds the animation for the player and the opponent
@@ -134,6 +134,11 @@ public class BattleView extends View {
 
 	public void clearUpdate() {
 		this.update = Update.NO_UPDATE;
+	}
+
+	// Just for updates and whatnot
+	public void setVisualState() {
+		setVisualState(this.state);
 	}
 	
 	public void setVisualState(VisualState newState) {

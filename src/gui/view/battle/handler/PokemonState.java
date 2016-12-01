@@ -69,7 +69,7 @@ public class PokemonState implements VisualStateHandler {
             pokemonTabButtons[i].setActive(i < list.size());
         }
 
-        if (view.state != VisualState.USE_ITEM) {
+        if (view.isState(VisualState.USE_ITEM)) {
             pokemonSwitchButton.setActive(list.get(selectedPokemonTab).canFight());
         }
 
@@ -215,7 +215,7 @@ public class PokemonState implements VisualStateHandler {
 
         // Draw Switch/Use text
         DrawUtils.setFont(g, 20);
-        if (view.state == VisualState.USE_ITEM) {
+        if (view.isState(VisualState.USE_ITEM)) {
             g.drawString("Use!", 103, 533);
         }
         else {
@@ -267,7 +267,7 @@ public class PokemonState implements VisualStateHandler {
             pokemonTabButtons[i].draw(g);
         }
 
-        if (view.state == VisualState.USE_ITEM || selectedPkm.canFight()) {
+        if (view.isState(VisualState.USE_ITEM) || selectedPkm.canFight()) {
             pokemonSwitchButton.draw(g);
         }
     }
@@ -283,7 +283,7 @@ public class PokemonState implements VisualStateHandler {
         for (int i = 0; i < list.size(); i++) {
             if (pokemonTabButtons[i].checkConsumePress()) {
                 selectedPokemonTab = i;
-                view.setVisualState(view.state); //to update active buttons
+                view.setVisualState(); //to update active buttons
             }
         }
 
@@ -292,7 +292,7 @@ public class PokemonState implements VisualStateHandler {
             ActivePokemon selectedPkm = list.get(selectedPokemonTab);
 
             // Use an item on this Pokemon instead of switching
-            if (view.state == VisualState.USE_ITEM) {
+            if (view.isState(VisualState.USE_ITEM)) {
                 // Valid item
                 if (player.getBag().battleUseItem(VisualState.getSelectedItem(), selectedPkm, currentBattle)) {
                     player.performAction(currentBattle, Action.ITEM);

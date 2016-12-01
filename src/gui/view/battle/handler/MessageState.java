@@ -30,7 +30,7 @@ public class MessageState implements VisualStateHandler {
 
         DrawUtils.drawWrappedText(g, view.getMessage(), 30, 490, 720);
 
-        if (view.state == VisualState.STAT_GAIN) {
+        if (view.isState(VisualState.STAT_GAIN)) {
             g.drawImage(tiles.getTile(0x5), 0, 280, null);
             g.setColor(Color.BLACK);
             for (int i = 0; i < Stat.NUM_STATS; i++)
@@ -60,7 +60,7 @@ public class MessageState implements VisualStateHandler {
 
         // Don't go to the next message if an animation is playing
         if (pressed && view.hasMessage() && !view.isPlayingAnimation()) {
-            if (view.state == VisualState.STAT_GAIN) view.setVisualState(VisualState.MESSAGE);
+            if (view.isState(VisualState.STAT_GAIN)) view.setVisualState(VisualState.MESSAGE);
             view.cycleMessage(false);
         }
     }
