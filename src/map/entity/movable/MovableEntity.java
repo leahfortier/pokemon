@@ -1,20 +1,26 @@
-package map.entity;
+package map.entity.movable;
 
 import gui.view.map.MapView;
 import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
+import map.PathDirection;
+import map.entity.Entity;
 import util.Point;
+import util.StringUtils;
 
 import java.awt.image.BufferedImage;
 
 public abstract class MovableEntity extends Entity {
-	protected int transitionTime;
+	protected final int spriteIndex;
+
 	private int runFrame;
-	
-	protected int spriteIndex;
-	
+	protected int transitionTime;
+	private int waitTime;
+	private String tempPath;
+	private int pathIndex;
+
 	MovableEntity(Point location, String triggerName, String condition, int spriteIndex) {
 		super(location, triggerName, condition);
 		
@@ -25,8 +31,22 @@ public abstract class MovableEntity extends Entity {
 	}
 
 	public abstract int getTransitionTime();
+
+	protected abstract boolean hasAttention();
+	protected abstract String getPath();
+	protected abstract void endPath();
+
 	public abstract Direction getDirection();
 	protected abstract void setDirection(Direction direction);
+
+	protected void setTempPath(String path) {
+		this.tempPath = path;
+		this.pathIndex = 0;
+	}
+
+	protected boolean hasTempPath() {
+		return !StringUtils.isNullOrEmpty(this.tempPath);
+	}
 
 	@Override
 	protected Point getCanvasCoordinates(Point drawLocation) {
@@ -55,20 +75,46 @@ public abstract class MovableEntity extends Entity {
 			transitionTime = 0;
 			runFrame = (runFrame + 1)%2;
 		}
-	}
 
-	public boolean isFacing(Point otherLocation) {
+		// Decrease wait time
+		waitTime = Math.max(0, waitTime - dt);
 
-		// Not in the same row or the same column
-		if (!this.getLocation().partiallyEquals(otherLocation)) {
-			return false;
+		// Not transitioning, not waiting, and does not have attention
+		if (!this.isTransitioning() && waitTime == 0 && !hasAttention()) {
+
+			String path = this.tempPath;
+			if (tempPath == null) {
+				path = this.getPath();
+			}
+
+			if (!StringUtils.isNullOrEmpty(path)) {
+
+				// Find the direction that corresponds to the character
+				PathDirection direction = PathDirection.getDirection(path.charAt(pathIndex));
+				if (direction == PathDirection.WAIT) {
+					waitTime = getTransitionTime();
+					pathIndex++;
+				}
+				else {
+					Point newLocation = Point.add(this.getLocation(), direction.getDeltaPoint());
+					if (currentMap.getPassValue(newLocation).isPassable(direction.getDirection()) && !currentMap.hasEntity(newLocation)) {
+						setLocation(newLocation);
+
+						transitionTime = 1;
+						waitTime = 5*Global.TIME_BETWEEN_TILES/4; // TODO: Why 5/4
+						pathIndex++;
+					}
+
+					this.setDirection(direction.getDirection());
+				}
+
+				pathIndex %= path.length();
+				if (pathIndex == 0 && tempPath != null) {
+					tempPath = null;
+					endPath();
+				}
+			}
 		}
-
-		// Get the direction that would be facing the other location
-		Point deltaDirection = Point.getDeltaDirection(otherLocation, this.getLocation());
-
-		// Check if these are the same direction
-		return this.getDirection().getDeltaPoint().equals(deltaDirection);
 	}
 
 	@Override
@@ -84,6 +130,13 @@ public abstract class MovableEntity extends Entity {
 	@Override
 	protected boolean isTransitioning() {
 		return this.transitionTime > 0;
+	}
+
+	@Override
+	public void reset() {
+		waitTime = 0;
+		pathIndex = 0;
+		tempPath = null;
 	}
 
 	public static int getTrainerSpriteIndex(int spriteIndex, Direction direction) {

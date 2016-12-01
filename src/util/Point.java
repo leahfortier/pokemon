@@ -31,10 +31,6 @@ public class Point implements Serializable {
         return this.x == point.x && this.y == point.y;
     }
 
-    public boolean partiallyEquals(Point other) {
-        return this.x == other.x || this.y == other.y;
-    }
-
     public boolean isZero() {
         return this.x == 0 && this.y == 0;
     }

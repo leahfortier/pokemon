@@ -1,4 +1,6 @@
-package map.entity;
+package map.entity.movable;
+
+import map.entity.EntityAction;
 
 import java.util.List;
 

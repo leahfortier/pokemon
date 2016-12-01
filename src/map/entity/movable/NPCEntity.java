@@ -1,11 +1,10 @@
-package map.entity;
+package map.entity.movable;
 
-import gui.view.map.MapView;
 import main.Game;
 import main.Global;
 import map.Direction;
-import map.MapData;
 import map.PathDirection;
+import map.entity.EntityAction;
 import map.entity.EntityAction.BattleAction;
 import trainer.CharacterData;
 import util.Point;
@@ -16,19 +15,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class NPCEntity extends MovableEntity {
-	public static final int NPC_SIGHT_DISTANCE = 5;
+	static final int NPC_SIGHT_DISTANCE = 5;
 
 	private final String path;
 	private final Point defaultLocation;
 	private final Direction defaultDirection;
+	private final MoveAxis moveAxis;
 
 	private final Map<String, NPCInteraction> interactions;
 	private final String startKey;
 
 	private Direction transitionDirection;
-	private String tempPath;
-	private int pathIndex;
-	private int waitTime;
 	private boolean hasAttention;
 	private boolean walkingToPlayer;
 
@@ -40,16 +37,17 @@ public class NPCEntity extends MovableEntity {
 			String condition,
 			String path,
 			Direction direction,
+			MoveAxis moveAxis,
 			int spriteIndex,
 			Map<String, NPCInteraction> interactions,
 			String startKey) {
 		super(location, name, condition, spriteIndex);
 
 		this.path = path;
-		this.spriteIndex = spriteIndex;
 
 		this.defaultLocation =  location;
 		this.defaultDirection = direction;
+		this.moveAxis = moveAxis;
 
 		this.interactions = interactions;
 		this.startKey = startKey;
@@ -58,51 +56,8 @@ public class NPCEntity extends MovableEntity {
 		this.addData();
 	}
 
-	@Override
-	public void update(int dt, MapData currentMap, MapView view) {
-		super.update(dt, currentMap, view);
-
-		// Decrease wait time
-		waitTime = Math.max(0, waitTime - dt);
-
-		// Not transitioning, not waiting, and does not have attention
-		if (!this.isTransitioning() && waitTime == 0 && !hasAttention) {
-
-			String path = this.path;
-			if (tempPath != null) {
-				path = tempPath;
-			}
-
-			// Find the direction that corresponds to the character
-			PathDirection direction = PathDirection.getDirection(path.charAt(pathIndex));
-			if (direction == PathDirection.WAIT) {
-				waitTime = getTransitionTime();
-				pathIndex++;
-			}
-			else {
-				Point newLocation = Point.add(this.getLocation(), direction.getDeltaPoint());
-				if (currentMap.getPassValue(newLocation).isPassable(direction.getDirection()) && !currentMap.hasEntity(newLocation)) {
-					super.setLocation(newLocation);
-
-					transitionTime = 1;
-					waitTime = 5*Global.TIME_BETWEEN_TILES/4; // TODO: Why 5/4
-					pathIndex++;
-				}
-
-				this.setDirection(direction.getDirection());
-			}
-
-			pathIndex %= path.length();
-			if (pathIndex == 0 && tempPath != null) {
-				tempPath = null;
-			}
-		}
-	}
-
-	public void walkTowards(int steps, PathDirection direction) {
-		tempPath = direction.getTempPath(steps);
-
-		pathIndex = 0;
+	void walkTowards(int steps, PathDirection direction) {
+		super.setTempPath(direction.getTempPath(steps));
 		walkingToPlayer = true;
 	}
 
@@ -130,6 +85,21 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	@Override
+	public String getPath() {
+		return this.path;
+	}
+
+	@Override
+	protected void endPath() {
+		this.walkingToPlayer = false;
+	}
+
+	@Override
+	public boolean hasAttention() {
+		return this.hasAttention;
+	}
+
+	@Override
 	public Direction getDirection() {
 		return this.transitionDirection;
 	}
@@ -142,20 +112,25 @@ public class NPCEntity extends MovableEntity {
 	@Override
 	public void getAttention(Direction direction) {
 		this.setDirection(direction);
-		hasAttention = true;
+		if (this.moveAxis == MoveAxis.FACING) {
+			hasAttention = true;
+		}
 	}
 
-	public boolean shouldWalkToPlayer() {
+	boolean canWalkToPlayer(Point location) {
+		return this.isWalkToPlayer()
+				&& !this.walkingToPlayer
+				&& this.moveAxis.canMove(this.getLocation(), this.getDirection(), location)
+				&& Game.getData().getTrigger(this.getWalkTrigger()).isTriggered();
+	}
+
+	public boolean isWalkToPlayer() {
 		final String interaction = this.getCurrentInteractionKey();
 		return this.interactions.get(interaction).shouldWalkToPlayer();
 	}
 
-	public boolean isWalkingToPlayer() {
-		return walkingToPlayer;
-	}
-
-	public String getWalkTrigger() {
-		return shouldWalkToPlayer() ? this.getTriggerName() : StringUtils.empty();
+	private String getWalkTrigger() {
+		return isWalkToPlayer() ? this.getTriggerName() : StringUtils.empty();
 	}
 
 	public boolean isTrainer() {
@@ -172,14 +147,13 @@ public class NPCEntity extends MovableEntity {
 
 	@Override
 	public void reset() {
+		super.reset();
+
 		this.setLocation(defaultLocation);
 		this.setDirection(defaultDirection);
 
-		waitTime = 0;
-		pathIndex = 0;
 		hasAttention = false;
 		walkingToPlayer = false;
-		tempPath = null;
 	}
 
 	@Override
@@ -197,4 +171,5 @@ public class NPCEntity extends MovableEntity {
 		
 		dataCreated = true;
 	}
+
 }

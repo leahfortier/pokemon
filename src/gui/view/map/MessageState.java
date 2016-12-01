@@ -6,7 +6,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import map.entity.EntityAction;
-import map.entity.PlayerEntity;
+import map.entity.movable.PlayerEntity;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;

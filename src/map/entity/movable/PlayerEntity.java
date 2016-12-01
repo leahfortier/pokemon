@@ -1,6 +1,5 @@
-package map.entity;
+package map.entity.movable;
 
-import gui.GameData;
 import gui.view.map.MapView;
 import input.ControlKey;
 import input.InputControl;
@@ -9,6 +8,7 @@ import main.Global;
 import map.Direction;
 import map.MapData;
 import map.WalkType;
+import map.entity.Entity;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import sound.SoundPlayer;
@@ -42,6 +42,11 @@ public class PlayerEntity extends MovableEntity {
 	}
 
 	@Override
+	public void setLocation(Point newLocation) {
+		Game.getPlayer().setLocation(newLocation);
+	}
+
+	@Override
 	public Direction getDirection() {
 		return Game.getPlayer().getDirection();
 	}
@@ -60,6 +65,10 @@ public class PlayerEntity extends MovableEntity {
 	@Override
 	public void update(int dt, MapData currentMap, MapView view) {
 		super.update(dt, currentMap, view);
+
+		if (this.hasTempPath()) {
+			return;
+		}
 
 		InputControl input = InputControl.instance();
 
@@ -100,8 +109,6 @@ public class PlayerEntity extends MovableEntity {
 
 	// Check for any NPCs facing the player
 	private void checkNPCs(MapData currentMap) {
-		GameData data = Game.getData();
-
 		for (Direction direction : Direction.values()) {
 			for (int dist = 1; dist <= NPCEntity.NPC_SIGHT_DISTANCE; dist++) {
 				Point newLocation = Point.add(this.getLocation(), Point.scale(direction.getDeltaPoint(), dist));
@@ -112,11 +119,7 @@ public class PlayerEntity extends MovableEntity {
 				Entity newEntity = currentMap.getEntity(newLocation);
 				if (newEntity instanceof NPCEntity) {
 					NPCEntity npc = (NPCEntity) newEntity;
-					if (npc.isFacing(this.getLocation())
-							&& npc.shouldWalkToPlayer()
-							&& !npc.isWalkingToPlayer()
-							&& data.getTrigger(npc.getWalkTrigger()).isTriggered()) {
-
+					if (npc.canWalkToPlayer(this.getLocation())) {
 						stalled = true;
 						npc.walkTowards(dist - 1, direction.getOpposite().getPathDirection());
 
@@ -237,13 +240,33 @@ public class PlayerEntity extends MovableEntity {
 	}
 
 	@Override
+	public String getPath() {
+		return null;
+	}
+
+	public void setPath(String path) {
+		super.setTempPath(path);
+		stalled = true;
+	}
+
+	@Override
+	protected void endPath() {
+		stalled = false;
+	}
+
+	@Override
+	public boolean hasAttention() {
+		return false;
+	}
+
+	@Override
 	public void getAttention(Direction direction) {
 		this.setDirection(direction);
 		stalled = true;
 	}
 
 	public void resetCurrentInteractionEntity() {
-		this.currentInteractionEntity = null;
+		currentInteractionEntity = null;
 		stalled = false;
 	}
 

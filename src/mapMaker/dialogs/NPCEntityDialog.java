@@ -1,7 +1,7 @@
 package mapMaker.dialogs;
 
 import map.Direction;
-import map.entity.MovableEntity;
+import map.entity.movable.MovableEntity;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import pattern.action.NPCInteractionMatcher;

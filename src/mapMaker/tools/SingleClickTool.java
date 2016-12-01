@@ -1,6 +1,6 @@
 package mapMaker.tools;
 
-import map.entity.MovableEntity;
+import map.entity.movable.MovableEntity;
 import mapMaker.MapMaker;
 import mapMaker.EditType;
 import mapMaker.model.TileModel.TileType;

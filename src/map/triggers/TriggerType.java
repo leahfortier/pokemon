@@ -16,6 +16,7 @@ public enum TriggerType {
     GROUP(GroupTrigger.class, GroupTrigger::new, GroupTrigger::getTriggerSuffix),
     HEAL_PARTY(HealPartyTrigger.class, HealPartyTrigger::new),
     MAP_TRANSITION(MapTransitionTrigger.class, MapTransitionTrigger::new, MapTransitionTrigger::getTriggerSuffix),
+    MOVE_PLAYER(MovePlayerTrigger.class, MovePlayerTrigger::new),
     SOUND(SoundTrigger.class, SoundTrigger::new),
     TRAINER_BATTLE(TrainerBattleTrigger.class, TrainerBattleTrigger::new),
     UPDATE(UpdateTrigger.class, UpdateTrigger::new),

@@ -1,7 +1,7 @@
 package mapMaker;
 
 import main.Global;
-import map.entity.MovableEntity;
+import map.entity.movable.MovableEntity;
 import mapMaker.dialogs.EventTriggerDialog;
 import mapMaker.dialogs.ItemEntityDialog;
 import mapMaker.dialogs.MapTransitionDialog;

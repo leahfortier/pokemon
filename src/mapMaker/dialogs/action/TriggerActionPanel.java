@@ -14,7 +14,7 @@ class TriggerActionPanel extends ActionPanel {
 
     TriggerActionPanel() {
         triggerTypeCombobBox = GUIUtils.createComboBox(TriggerType.values(), null);
-        triggerContentsTextArea = new JTextArea();
+        triggerContentsTextArea = GUIUtils.createTextArea();
 
         GUIUtils.setVerticalLayout(
                 this,
