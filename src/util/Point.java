@@ -1,5 +1,7 @@
 package util;
 
+import map.Direction;
+
 import java.awt.Dimension;
 import java.io.Serializable;
 
@@ -45,6 +47,14 @@ public class Point implements Serializable {
         return x >= 0 && x < dimension.width && y >= 0 && y < dimension.height;
     }
 
+    public static Point modInBounds(Point location, int numRows, int numCols) {
+        Point addDimension = add(location, new Point(numCols, numRows));
+        return new Point(
+                addDimension.x%numCols,
+                addDimension.y%numRows
+        );
+    }
+
     public static Point add(Point point, int dx, int dy) {
         return new Point(
                 point.x + dx,
@@ -61,6 +71,10 @@ public class Point implements Serializable {
         }
 
         return point;
+    }
+
+    public static Point move(Point location, Direction direction) {
+        return Point.add(location, direction.getDeltaPoint());
     }
 
     public static Point subtract(Point first, Point second) {
@@ -140,7 +154,7 @@ public class Point implements Serializable {
     }
 
     public static int getIndex(int x, int y, int width) {
-        return x + y * width;
+        return x + y*width;
     }
 
     public static Point getPointAtIndex(int locationIndex, int mapWidth) {

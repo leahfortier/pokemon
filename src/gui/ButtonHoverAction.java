@@ -27,8 +27,7 @@ public enum ButtonHoverAction {
         private final int[] ty = { 0, 12, 23 };
         private int time = 0;
 
-        public void draw(Graphics g, Button button)
-        {
+        public void draw(Graphics g, Button button) {
             time = (time + 1) % 80;
 
             int x = button.x - 10;
@@ -36,7 +35,7 @@ public enum ButtonHoverAction {
 
             g.translate(x, y);
 
-            g.setColor(new Color(0, 0, 0, 55 + 200 * (Math.abs(time - 40)) / 40));
+            g.setColor(new Color(0, 0, 0, 55 + 200*(Math.abs(time - 40))/40));
             g.fillPolygon(tx, ty, 3);
 
             g.translate(-x, -y);

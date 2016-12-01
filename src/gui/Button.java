@@ -25,7 +25,7 @@ public class Button {
 	private boolean active;
 
 	public Button(int x, int y, int w, int h, ButtonHoverAction hoverAction) {
-		this(x, y, w, h, hoverAction, new int[] { NO_TRANSITION, NO_TRANSITION, NO_TRANSITION, NO_TRANSITION });
+		this(x, y, w, h, hoverAction, null);
 	}
 
 	public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition) {
@@ -35,9 +35,13 @@ public class Button {
 		this.height = height;
 		
 		this.hoverAction = hoverAction;
-		
-		this.transition = transition;
-		
+
+		if (transition == null) {
+			this.transition = new int[] { NO_TRANSITION, NO_TRANSITION, NO_TRANSITION, NO_TRANSITION };
+		} else {
+			this.transition = transition;
+		}
+
 		this.hover = false;
 		this.press = false;
 		this.forceHover = false;
@@ -49,21 +53,29 @@ public class Button {
 			hoverAction.draw(g, this);
 		}
 	}
-	
-	public static int basicLeft(int currentIndex, int numCols) {
-		return currentIndex == 0 ? numCols - 1 : currentIndex - 1;
+
+	// Works for all grid buttons
+	public static int[] getBasicTransitions(int currentIndex, int numRows, int numCols) {
+		return new int[] {
+				basicTransition(currentIndex, numRows, numCols, Direction.RIGHT),
+				basicTransition(currentIndex, numRows, numCols, Direction.UP),
+				basicTransition(currentIndex, numRows, numCols, Direction.LEFT),
+				basicTransition(currentIndex, numRows, numCols, Direction.DOWN)
+		};
 	}
-	
-	public static int basicRight(int currentIndex, int numCols) {
-		return currentIndex == numCols - 1 ? 0 : currentIndex + 1;
-	}
-	
-	public static int basicUp(int currentIndex, int numRows) {
-		return currentIndex == 0 ? numRows - 1 : currentIndex - 1;
-	}
-	
-	public static int basicDown(int currentIndex, int numRows) {
-		return currentIndex == numRows - 1 ? 0 : currentIndex + 1;
+
+	public static int basicTransition(int currentIndex, int numRows, int numCols, Direction direction) {
+		// Get the corresponding grid index
+		Point location = Point.getPointAtIndex(currentIndex, numCols);
+
+		// Move in the given direction
+		location = Point.move(location, direction);
+
+		// Keep in bounds of the grid
+		location = Point.modInBounds(location, numRows, numCols);
+
+		// Convert back to single dimension index
+		return location.getIndex(numCols);
 	}
 
 	public static int update(Button[] buttons, int selected) {
