@@ -2,6 +2,7 @@ package gui.view;
 
 import battle.attack.Move;
 import gui.Button;
+import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
 import main.Game;
@@ -57,7 +58,7 @@ class PCView extends View {
 		boxButtons = new Button[PC.BOX_HEIGHT][PC.BOX_WIDTH];
 		for (int i = 0, k = 0; i < PC.BOX_HEIGHT; i++) {
 			for (int j = 0; j < PC.BOX_WIDTH; j++, k++) {
-				buttons[k] = boxButtons[i][j] = new Button(60 + 54*j, 96 + 54*i, 40, 40, Button.HoverAction.BOX, 
+				buttons[k] = boxButtons[i][j] = new Button(60 + 54*j, 96 + 54*i, 40, 40, ButtonHoverAction.BOX,
 						new int[] {j == PC.BOX_WIDTH - 1 ? SWITCH : k + 1, // Right 
 								i == 0 ? PARTY + j : k - PC.BOX_WIDTH, // Up
 								j == 0 ? RELEASE : k - 1, // Left
@@ -67,21 +68,21 @@ class PCView extends View {
 		
 		partyButtons = new Button[Trainer.MAX_POKEMON];
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-			buttons[PARTY + i] = partyButtons[i] = new Button(60 + 54*i, 499, 40, 40, Button.HoverAction.BOX,
+			buttons[PARTY + i] = partyButtons[i] = new Button(60 + 54*i, 499, 40, 40, ButtonHoverAction.BOX,
 					new int[] {i == Trainer.MAX_POKEMON - 1 ? RETURN : PARTY + i + 1, // Right
 							i < PC.BOX_WIDTH/2 ? LEFT_ARROW : RIGHT_ARROW, // Up
 							i == 0 ? RETURN : PARTY + i - 1, // Left
 							i}); // Down
 		}
 		
-		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20, Button.HoverAction.BOX, new int[] {RIGHT_ARROW, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2 - 1, -1, PARTY});
-		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20, Button.HoverAction.BOX, new int[] {SWITCH, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2, LEFT_ARROW, PARTY});
+		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20, ButtonHoverAction.BOX, new int[] {RIGHT_ARROW, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2 - 1, -1, PARTY});
+		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20, ButtonHoverAction.BOX, new int[] {SWITCH, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2, LEFT_ARROW, PARTY});
 		
-		buttons[SWITCH] = switchButton = new Button(410, 464, 118, 38, Button.HoverAction.BOX, new int[] {DEPOSIT_WITHDRAW, -1, RIGHT_ARROW, RETURN});
-		buttons[DEPOSIT_WITHDRAW] = depositWithdrawButton = new Button(526, 464, 118, 38, Button.HoverAction.BOX, new int[] {RELEASE, -1, SWITCH, RETURN});
-		buttons[RELEASE] = releaseButton = new Button(642, 464, 118, 38, Button.HoverAction.BOX, new int[] {0, -1, DEPOSIT_WITHDRAW, RETURN});
+		buttons[SWITCH] = switchButton = new Button(410, 464, 118, 38, ButtonHoverAction.BOX, new int[] {DEPOSIT_WITHDRAW, -1, RIGHT_ARROW, RETURN});
+		buttons[DEPOSIT_WITHDRAW] = depositWithdrawButton = new Button(526, 464, 118, 38, ButtonHoverAction.BOX, new int[] {RELEASE, -1, SWITCH, RETURN});
+		buttons[RELEASE] = releaseButton = new Button(642, 464, 118, 38, ButtonHoverAction.BOX, new int[] {0, -1, DEPOSIT_WITHDRAW, RETURN});
 		
-		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, Button.HoverAction.BOX, new int[] {0, SWITCH, PARTY + Trainer.MAX_POKEMON - 1, -1});
+		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, ButtonHoverAction.BOX, new int[] {0, SWITCH, PARTY + Trainer.MAX_POKEMON - 1, -1});
 		
 		party = true;
 		selected = Game.getPlayer().front();

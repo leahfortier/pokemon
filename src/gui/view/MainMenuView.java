@@ -1,9 +1,11 @@
 package gui.view;
 
 import gui.Button;
+import gui.ButtonHoverAction;
 import gui.TileSet;
 import main.Game;
 import main.Global;
+import map.Direction;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import util.DrawUtils;
@@ -65,14 +67,10 @@ public class MainMenuView extends View {
 					240 + i*85,
 					400,
 					75,
-					Button.HoverAction.BOX,
-					new int[] { 
-						Button.NO_TRANSITION, // Right
-						Button.basicUp(i, VisualState.MAIN.buttons.length), // Up 
-						Button.NO_TRANSITION, // Left
-						Button.basicDown(i, VisualState.MAIN.buttons.length) // Down 
-					});
-		}	
+					ButtonHoverAction.BOX,
+					Button.getBasicTransitions(i, VisualState.MAIN.buttons.length, 1));
+		}
+
 
 		for (int i = 0; i < Save.NUM_SAVES; i++) {
 			VisualState.LOAD.buttons[i] = new Button(
@@ -80,10 +78,10 @@ public class MainMenuView extends View {
 					VisualState.MAIN.buttons[i].y,
 					VisualState.MAIN.buttons[i].width,
 					VisualState.MAIN.buttons[i].height,
-					Button.HoverAction.BOX,
+					ButtonHoverAction.BOX,
 					new int[] {
 							Button.NO_TRANSITION, // Right
-							Button.basicUp(i, VisualState.LOAD.buttons.length), // Up
+							Button.basicTransition(i, VisualState.LOAD.buttons.length, 1, Direction.UP), // Up
 							Button.NO_TRANSITION, // Left
 							i + 1 // Down
 					});
@@ -94,7 +92,7 @@ public class MainMenuView extends View {
 				VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].y,
 				VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].width/2 - 5,
 				VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].height,
-				Button.HoverAction.BOX,
+				ButtonHoverAction.BOX,
 				new int[] {
 						Save.NUM_SAVES + 1, // Right -- to the delete button
 						Save.NUM_SAVES - 1, // Up -- to the last save file
@@ -107,7 +105,7 @@ public class MainMenuView extends View {
 				VisualState.LOAD.buttons[Save.NUM_SAVES].y,
 				VisualState.LOAD.buttons[Save.NUM_SAVES].width,
 				VisualState.LOAD.buttons[Save.NUM_SAVES].height,
-				Button.HoverAction.BOX,
+				ButtonHoverAction.BOX,
 				new int[] {
 						Save.NUM_SAVES, // Right -- to the return button
 						Save.NUM_SAVES - 1, // Up -- to the last save file
@@ -121,13 +119,8 @@ public class MainMenuView extends View {
 					VisualState.MAIN.buttons[i].y,
 					VisualState.MAIN.buttons[i].width,
 					VisualState.MAIN.buttons[i].height,
-					Button.HoverAction.BOX, 
-					new int[] { 
-						Button.NO_TRANSITION, // Right
-						Button.basicUp(i, VisualState.NEW.buttons.length), // Up
-						Button.NO_TRANSITION, // Left
-						Button.basicDown(i, VisualState.NEW.buttons.length) // Down
-					});
+					ButtonHoverAction.BOX,
+					Button.getBasicTransitions(i, VisualState.NEW.buttons.length, 1));
 		}
 
 		for (int i = 0; i < VisualState.OPTIONS.buttons.length; i++) {
@@ -136,13 +129,8 @@ public class MainMenuView extends View {
 					VisualState.MAIN.buttons[i].y,
 					VisualState.MAIN.buttons[i].width,
 					VisualState.MAIN.buttons[i].height,
-					Button.HoverAction.BOX,
-					new int[] {
-							Button.NO_TRANSITION, // Right
-							Button.basicUp(i, VisualState.OPTIONS.buttons.length), // Up
-							Button.NO_TRANSITION, // Left
-							Button.basicDown(i, VisualState.OPTIONS.buttons.length) // Down
-					});
+					ButtonHoverAction.BOX,
+					Button.getBasicTransitions(i, VisualState.OPTIONS.buttons.length, 1));
 		}
 		
 		state = VisualState.MAIN;
