@@ -1,17 +1,20 @@
-package gui.view;
+package gui.view.mainmenu;
 
 import gui.Button;
 import gui.ButtonHoverAction;
 import gui.TileSet;
+import gui.view.View;
+import gui.view.ViewMode;
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
 import main.Global;
 import map.Direction;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import util.DrawUtils;
-import input.InputControl;
-import input.ControlKey;
 import util.Save;
+import util.Save.SavePreviewInfo;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -35,7 +38,7 @@ public class MainMenuView extends View {
 	private VisualState state;
 	private Theme theme;
 	
-	private Save.SavePreviewInfo[] saveInfo;
+	private SavePreviewInfo[] saveInfo;
 	
 	private int selectedButton;
 	private boolean deletePressed;
@@ -136,23 +139,23 @@ public class MainMenuView extends View {
 		state = VisualState.MAIN;
 		selectedButton = creditsTime1 = creditsTime2 = 0;
 	}
-	
+
 	private enum VisualState {
-		MAIN(NUM_MAIN_BUTTONS, SoundTitle.MAIN_MENU_TUNE), 
-		LOAD(Save.NUM_SAVES + 2, SoundTitle.MAIN_MENU_TUNE), 
-		NEW(Save.NUM_SAVES + 1, SoundTitle.MAIN_MENU_TUNE), 
-		OPTIONS(NUM_MAIN_BUTTONS, SoundTitle.MAIN_MENU_TUNE), 
+		MAIN(NUM_MAIN_BUTTONS, SoundTitle.MAIN_MENU_TUNE),
+		LOAD(Save.NUM_SAVES + 2, SoundTitle.MAIN_MENU_TUNE),
+		NEW(Save.NUM_SAVES + 1, SoundTitle.MAIN_MENU_TUNE),
+		OPTIONS(NUM_MAIN_BUTTONS, SoundTitle.MAIN_MENU_TUNE),
 		CREDITS(0, SoundTitle.CREDITS_TUNE);
-		
+
 		private final Button[] buttons;
 		private final SoundTitle tunes;
-		
+
 		VisualState(int numButtons, SoundTitle tunes) {
 			this.buttons = new Button[numButtons];
 			this.tunes = tunes;
-		} 
+		}
 	}
-	
+
 	public enum Theme {
 		BASIC(new Color(255, 210, 86), (g, tiles, bgTime, bgIndex) -> {
                     g.setColor(new Color(68, 123, 184));
