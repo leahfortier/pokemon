@@ -1,6 +1,6 @@
 package map.entity;
 
-import gui.view.MapView;
+import gui.view.map.MapView;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -24,7 +24,7 @@ public class PlayerEntity extends MovableEntity {
 	private boolean justMoved;
 	private boolean stalled;
 
-	private String entityTriggerSuffix;
+	private Direction entityDirection;
 	private Entity currentInteractionEntity;
 
 	public PlayerEntity(Point location) {
@@ -67,7 +67,8 @@ public class PlayerEntity extends MovableEntity {
 
 		InputControl input = InputControl.instance();
 
-		entityTriggerSuffix = null;
+		entityDirection = null;
+
 		boolean spacePressed = false;
 
 		if (!stalled) {
@@ -164,8 +165,7 @@ public class PlayerEntity extends MovableEntity {
 		Entity entity = currentMap.getEntity(newLocation);
 
 		if (entity != null && entity != currentInteractionEntity) {
-			entityTriggerSuffix = entity.getTriggerSuffix();
-			entity.getAttention(direction.getOpposite());
+			entityDirection = direction;
 			currentInteractionEntity = entity;
 			return true;
 		}
@@ -176,14 +176,16 @@ public class PlayerEntity extends MovableEntity {
 	private void triggerCheck(MapData map) {
 
 		// Entity
-		if (entityTriggerSuffix != null) {
+		if (entityDirection != null) {
 			if (currentInteractionEntity.isVisible()) {
-				Trigger trigger = Game.getData().getTrigger(TriggerType.GROUP.getTriggerNameFromSuffix(entityTriggerSuffix));
+				currentInteractionEntity.getAttention(entityDirection.getOpposite());
+
+				Trigger trigger = Game.getData().getTrigger(TriggerType.GROUP.getTriggerNameFromSuffix(currentInteractionEntity.getTriggerSuffix()));
 				if (trigger != null) {
 					trigger.execute();
 				}
 			}
-			entityTriggerSuffix = null;
+			entityDirection = null;
 		}
 		// Trigger
 		else if (justMoved) {

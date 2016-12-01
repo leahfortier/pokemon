@@ -1,5 +1,6 @@
 package map;
 
+import map.weather.WeatherState;
 import sound.MusicCondition;
 import sound.SoundTitle;
 
@@ -12,14 +13,6 @@ public class AreaData {
 			SoundTitle.DEFAULT_TUNE,
 			new MusicCondition[0]
 	);
-
-	public enum WeatherState {
-		NORMAL,
-		SUN,
-		RAIN,
-		FOG,
-		SNOW
-	}
 
 	private final String name;
 	private final int color;
