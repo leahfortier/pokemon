@@ -16,7 +16,7 @@ public enum ControlKey {
     BACK(KeyEvent.VK_BACK_SPACE),
     CONSOLE(KeyEvent.VK_BACK_QUOTE),
     ENTER(KeyEvent.VK_ENTER),
-    L(KeyEvent.VK_L); // TODO: Is L for the log view in battle? should this be renamed appropriately?
+    LOG(KeyEvent.VK_L);
 
     private static final Set<ControlKey> CONTROL_KEYS = EnumSet.allOf(ControlKey.class);
 

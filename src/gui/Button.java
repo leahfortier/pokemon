@@ -5,11 +5,8 @@ import input.InputControl;
 import map.Direction;
 import util.Point;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
 
 public class Button {
 	public static final int NO_TRANSITION = -1;
@@ -27,20 +24,24 @@ public class Button {
 	private boolean forceHover;
 	private boolean active;
 
-	public Button(int x, int y, int w, int h, HoverAction hoverAction) {
-		this(x, y, w, h, hoverAction, new int[] { NO_TRANSITION, NO_TRANSITION, NO_TRANSITION, NO_TRANSITION });
+	public Button(int x, int y, int w, int h, ButtonHoverAction hoverAction) {
+		this(x, y, w, h, hoverAction, null);
 	}
 
-	public Button(int x, int y, int width, int height, HoverAction hoverAction, int[] transition) {
+	public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		
-		this.hoverAction = hoverAction == null ? null : hoverAction.hoverAction;
-		
-		this.transition = transition;
-		
+		this.hoverAction = hoverAction;
+
+		if (transition == null) {
+			this.transition = new int[] { NO_TRANSITION, NO_TRANSITION, NO_TRANSITION, NO_TRANSITION };
+		} else {
+			this.transition = transition;
+		}
+
 		this.hover = false;
 		this.press = false;
 		this.forceHover = false;
@@ -52,66 +53,29 @@ public class Button {
 			hoverAction.draw(g, this);
 		}
 	}
-	
-	public static int basicLeft(int currentIndex, int numCols) {
-		return currentIndex == 0 ? numCols - 1 : currentIndex - 1;
-	}
-	
-	public static int basicRight(int currentIndex, int numCols) {
-		return currentIndex == numCols - 1 ? 0 : currentIndex + 1;
-	}
-	
-	public static int basicUp(int currentIndex, int numRows) {
-		return currentIndex == 0 ? numRows - 1 : currentIndex - 1;
-	}
-	
-	public static int basicDown(int currentIndex, int numRows) {
-		return currentIndex == numRows - 1 ? 0 : currentIndex + 1;
+
+	// Works for all grid buttons
+	public static int[] getBasicTransitions(int currentIndex, int numRows, int numCols) {
+		return new int[] {
+				basicTransition(currentIndex, numRows, numCols, Direction.RIGHT),
+				basicTransition(currentIndex, numRows, numCols, Direction.UP),
+				basicTransition(currentIndex, numRows, numCols, Direction.LEFT),
+				basicTransition(currentIndex, numRows, numCols, Direction.DOWN)
+		};
 	}
 
-	// TODO: Move this to its own file
-	public enum HoverAction {
-		BOX(new ButtonHoverAction() {
-			private int time = 0;
-			private Stroke lineStroke = new BasicStroke(5f);
+	public static int basicTransition(int currentIndex, int numRows, int numCols, Direction direction) {
+		// Get the corresponding grid index
+		Point location = Point.getPointAtIndex(currentIndex, numCols);
 
-			public void draw(Graphics g, Button button) {
-				time = (time + 1) % 80;
+		// Move in the given direction
+		location = Point.move(location, direction);
 
-				g.setColor(new Color(0, 0, 0, 55 + 150 * (Math.abs(time - 40)) / 40));
-				Graphics2D g2d = (Graphics2D) g;
-				Stroke oldStroke = g2d.getStroke();
-				g2d.setStroke(lineStroke);
-				g.drawRect(button.x - 2, button.y - 2, button.width + 3, button.height + 4);
-				g2d.setStroke(oldStroke);
-			}
-		}), 
-		ARROW(new ButtonHoverAction() {
-			private final int[] tx = { 0, 11, 0 };
-			private final int[] ty = { 0, 12, 23 };
-			private int time = 0;
+		// Keep in bounds of the grid
+		location = Point.modInBounds(location, numRows, numCols);
 
-			public void draw(Graphics g, Button button)
-			{
-				time = (time + 1) % 80;
-
-				int x = button.x - 10;
-				int y = button.y + button.height / 2 - 12;
-
-				g.translate(x, y);
-
-				g.setColor(new Color(0, 0, 0, 55 + 200 * (Math.abs(time - 40)) / 40));
-				g.fillPolygon(tx, ty, 3);
-
-				g.translate(-x, -y);
-			}
-		});
-
-		private ButtonHoverAction hoverAction;
-
-		HoverAction(ButtonHoverAction hoverAction) {
-			this.hoverAction = hoverAction;
-		}
+		// Convert back to single dimension index
+		return location.getIndex(numCols);
 	}
 
 	public static int update(Button[] buttons, int selected) {

@@ -15,8 +15,8 @@ public abstract class View {
 	private static final int[] rightArrowy = { 5, 5, 0, 10, 20, 15, 15 };
 	private static final int[] leftArrowx = { 35, 19, 19, 3, 19, 19, 35 };
 	private static final int[] leftArrowy = { 5, 5, 0, 10, 20, 15, 15 };
-	
-	protected static void drawArrows(Graphics g, Button leftButton, Button rightButton) {
+
+	public static void drawArrows(Graphics g, Button leftButton, Button rightButton) {
 		View.drawArrows(g, leftButton, rightButton, 0, 0);
 	}
 	

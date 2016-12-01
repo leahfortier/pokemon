@@ -1,6 +1,7 @@
 package gui.view;
 
 import gui.Button;
+import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
 import input.ControlKey;
@@ -56,7 +57,7 @@ class PokedexView extends View {
 						96 + 54*i,
 						40,
 						40,
-						Button.HoverAction.BOX,
+						ButtonHoverAction.BOX,
 						new int[] {
 								j == PC.BOX_WIDTH - 1 ? RETURN : k + 1, // Right
 								i == 0 ? PER_PAGE + j : k - PC.BOX_WIDTH, // Up
@@ -66,10 +67,10 @@ class PokedexView extends View {
 			}
 		}
 		
-		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20, Button.HoverAction.BOX, new int[] { RIGHT_ARROW, PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2 - 1, -1, 0 });
-		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20, Button.HoverAction.BOX, new int[] { RETURN, PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2, LEFT_ARROW, 0 });
+		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20, ButtonHoverAction.BOX, new int[] { RIGHT_ARROW, PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2 - 1, -1, 0 });
+		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20, ButtonHoverAction.BOX, new int[] { RETURN, PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2, LEFT_ARROW, 0 });
 		
-		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, Button.HoverAction.BOX, new int[] { 0, -1, RIGHT_ARROW, -1 });
+		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, ButtonHoverAction.BOX, new int[] { 0, -1, RIGHT_ARROW, -1 });
 		
 		selected = PokemonInfo.getPokemonInfo(1);
 	}
