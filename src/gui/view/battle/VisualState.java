@@ -69,4 +69,8 @@ public enum VisualState {
     public static Move getLearnedMove() {
         return ((LearnMoveDeleteState)LEARN_MOVE_DELETE.visualStateHandler).getLearnedMove();
     }
+
+    public static void resetLastMoveUsed() {
+        ((FightState)FIGHT.visualStateHandler).resetLastMoveUsed();
+    }
 }

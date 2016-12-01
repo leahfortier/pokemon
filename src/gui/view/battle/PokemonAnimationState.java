@@ -2,6 +2,7 @@ package gui.view.battle;
 
 import battle.effect.status.StatusCondition;
 import gui.TileSet;
+import main.Game;
 import main.Global;
 import main.Type;
 import pokemon.ActivePokemon;
@@ -50,7 +51,7 @@ public class PokemonAnimationState {
         resetVals(
                 p.getHP(),
                 p.getStatus().getType(),
-                p.getDisplayType(battleView.currentBattle),
+                p.getDisplayType(battleView.getCurrentBattle()),
                 p.isShiny(),
                 p.getPokemonInfo(),
                 p.getName(),
@@ -84,7 +85,7 @@ public class PokemonAnimationState {
         state.type = type;
         state.shiny = shiny;
         state.imageNumber = pokemon.getImageNumber(state.shiny);
-        state.caught = battleView.currentBattle.isWildBattle() && battleView.currentBattle.getPlayer().getPokedex().isCaught(pokemon.namesies());
+        state.caught = battleView.getCurrentBattle().isWildBattle() && Game.getPlayer().getPokedex().isCaught(pokemon.namesies());
         state.name = name;
         state.maxHp = oldState.maxHp = maxHP;
         state.level = level;

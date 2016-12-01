@@ -1,5 +1,6 @@
 package gui.view.battle.handler;
 
+import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
 import gui.TileSet;
@@ -7,7 +8,9 @@ import gui.view.View;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
+import main.Game;
 import pokemon.ActivePokemon;
+import trainer.CharacterData;
 import trainer.Trainer.Action;
 import util.DrawUtils;
 
@@ -47,13 +50,13 @@ public class FightState implements VisualStateHandler {
 
     @Override
     public void reset() {
-        lastMoveUsed = 0;
+        this.resetLastMoveUsed();
     }
 
     @Override
     public void set(BattleView view) {
         view.selectedButton = lastMoveUsed;
-        selectedMoveList = view.currentBattle.getPlayer().front().getMoves(view.currentBattle);
+        selectedMoveList = Game.getPlayer().front().getMoves(view.getCurrentBattle());
         for (int i = 0; i < Move.MAX_MOVES; i++) {
             moveButtons[i].setActive(i < selectedMoveList.size());
         }
@@ -68,9 +71,9 @@ public class FightState implements VisualStateHandler {
         g.drawImage(tiles.getTile(0x20), 415, 440, null);
         g.drawImage(tiles.getTile(0x21), 0, 440, null);
 
-        ActivePokemon playerPokemon = view.currentBattle.getPlayer().front();
+        ActivePokemon playerPokemon = Game.getPlayer().front();
 
-        List<Move> moves = playerPokemon.getMoves(view.currentBattle);
+        List<Move> moves = playerPokemon.getMoves(view.getCurrentBattle());
         for (int y = 0, i = 0; y < 2; y++) {
             for (int x = 0; x < Move.MAX_MOVES/2 && i < moves.size(); x++, i++) {
                 int dx = 22 + x*190, dy = 440 + 21 + y*62;
@@ -117,16 +120,19 @@ public class FightState implements VisualStateHandler {
         view.selectedButton = Button.update(moveButtons, view.selectedButton);
         view.backButton.update(false, ControlKey.BACK);
 
+        CharacterData player = Game.getPlayer();
+        Battle currentBattle = view.getCurrentBattle();
+
         // Get the Pokemon that is attacking and their corresponding move list
-        ActivePokemon front = view.currentBattle.getPlayer().front();
+        ActivePokemon front = player.front();
 
         for (int i = 0; i < selectedMoveList.size(); i++) {
             if (moveButtons[i].checkConsumePress()) {
                 lastMoveUsed = i;
 
                 // Execute the move if valid
-                if (Move.validMove(view.currentBattle, front, selectedMoveList.get(i), true)) {
-                    view.currentBattle.getPlayer().performAction(view.currentBattle, Action.FIGHT);
+                if (Move.validMove(currentBattle, front, selectedMoveList.get(i), true)) {
+                    player.performAction(currentBattle, Action.FIGHT);
                     view.setVisualState(VisualState.MESSAGE);
                     view.cycleMessage(false);
                 }
@@ -142,5 +148,9 @@ public class FightState implements VisualStateHandler {
         if (view.backButton.checkConsumePress()) {
             view.setVisualState(VisualState.MENU);
         }
+    }
+
+    public void resetLastMoveUsed() {
+        this.lastMoveUsed = 0;
     }
 }

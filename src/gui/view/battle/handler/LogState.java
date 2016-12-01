@@ -6,6 +6,7 @@ import gui.view.View;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
+import main.Game;
 import util.DrawUtils;
 
 import java.awt.Color;
@@ -35,7 +36,7 @@ public class LogState implements VisualStateHandler {
     @Override
     public void set(BattleView view) {
         logPage = 0;
-        logMessages = view.currentBattle.getPlayer().getLogMessages();
+        logMessages = Game.getPlayer().getLogMessages();
 
         if (logMessages.size()/LOGS_PER_PAGE > 0) {
             view.selectedButton = LOG_RIGHT_BUTTON;

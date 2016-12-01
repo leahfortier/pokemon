@@ -131,7 +131,7 @@ public class LearnMoveDeleteState implements VisualStateHandler {
 
         for (int i = 0; i < moveButtons.length; i++) {
             if (moveButtons[i].checkConsumePress()) {
-                learnedPokemon.addMove(view.currentBattle, learnedMove, i);
+                learnedPokemon.addMove(view.getCurrentBattle(), learnedMove, i);
 
                 // This is all done really silly, so we need to do this
                 MessageUpdate message = Messages.getNextMessage();

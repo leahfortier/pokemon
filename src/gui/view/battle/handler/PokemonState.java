@@ -1,5 +1,6 @@
 package gui.view.battle.handler;
 
+import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
 import gui.TileSet;
@@ -64,7 +65,7 @@ public class PokemonState implements VisualStateHandler {
 
     @Override
     public void set(BattleView view) {
-        List<ActivePokemon> list = view.currentBattle.getPlayer().getTeam();
+        List<ActivePokemon> list = Game.getPlayer().getTeam();
         for (int i = 0; i < pokemonTabButtons.length; i++) {
             pokemonTabButtons[i].setActive(i < list.size());
         }
@@ -84,7 +85,7 @@ public class PokemonState implements VisualStateHandler {
         g.drawImage(tiles.getTile(0x10), 0, 160, null);
 
         // Get current Pokemon
-        List<ActivePokemon> list = view.currentBattle.getPlayer().getTeam();
+        List<ActivePokemon> list = Game.getPlayer().getTeam();
         ActivePokemon selectedPkm = list.get(selectedPokemonTab);
 
         // Draw type color polygons
@@ -282,7 +283,8 @@ public class PokemonState implements VisualStateHandler {
         view.selectedButton = Button.update(pokemonButtons, view.selectedButton);
         view.backButton.update(false, ControlKey.BACK);
 
-        CharacterData player = view.currentBattle.getPlayer();
+        Battle currentBattle = view.getCurrentBattle();
+        CharacterData player = Game.getPlayer();
         List<ActivePokemon> list = player.getTeam();
         for (int i = 0; i < list.size(); i++) {
             if (pokemonTabButtons[i].checkConsumePress()) {
@@ -298,8 +300,8 @@ public class PokemonState implements VisualStateHandler {
             // Use an item on this Pokemon instead of switching
             if (view.state == VisualState.USE_ITEM) {
                 // Valid item
-                if (player.getBag().battleUseItem(VisualState.getSelectedItem(), selectedPkm, view.currentBattle)) {
-                    player.performAction(view.currentBattle, Action.ITEM);
+                if (player.getBag().battleUseItem(VisualState.getSelectedItem(), selectedPkm, currentBattle)) {
+                    player.performAction(currentBattle, Action.ITEM);
                     view.setVisualState(VisualState.MENU);
                     view.cycleMessage(false);
                 }
@@ -311,17 +313,17 @@ public class PokemonState implements VisualStateHandler {
             }
             // Actual switcheroo
             else {
-                if (player.canSwitch(view.currentBattle, selectedPokemonTab)) {
+                if (player.canSwitch(currentBattle, selectedPokemonTab)) {
                     player.setFront(selectedPokemonTab);
-                    view.currentBattle.enterBattle(player.front());
+                    currentBattle.enterBattle(player.front());
 
                     if (switchForced) {
-                        player.performAction(view.currentBattle, Action.SWITCH);
+                        player.performAction(currentBattle, Action.SWITCH);
                     }
 
                     view.cycleMessage(false);
                     switchForced = false;
-                    view.lastMoveUsed = 0;
+                    VisualState.resetLastMoveUsed();
                 }
                 else {
                     view.cycleMessage(false);

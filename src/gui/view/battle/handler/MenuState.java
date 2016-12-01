@@ -1,5 +1,6 @@
 package gui.view.battle.handler;
 
+import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
 import gui.TileSet;
@@ -7,7 +8,9 @@ import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
 import input.InputControl;
+import main.Game;
 import pokemon.ActivePokemon;
+import trainer.CharacterData;
 import trainer.Trainer.Action;
 import util.DrawUtils;
 
@@ -80,7 +83,7 @@ public class MenuState implements VisualStateHandler {
 
         g.setColor(Color.BLACK);
 
-        ActivePokemon playerPokemon = view.currentBattle.getPlayer().front();
+        ActivePokemon playerPokemon = Game.getPlayer().front();
 
         DrawUtils.setFont(g, 30);
         DrawUtils.drawWrappedText(g, "What will " + playerPokemon.getActualName() + " do?", 20, 485, 400);
@@ -92,6 +95,9 @@ public class MenuState implements VisualStateHandler {
 
     @Override
     public void update(BattleView view) {
+        Battle currentBattle = view.getCurrentBattle();
+        CharacterData player = Game.getPlayer();
+
         // Update menu buttons
         view.selectedButton = Button.update(menuButtons, view.selectedButton);
 
@@ -106,16 +112,16 @@ public class MenuState implements VisualStateHandler {
         // Attempt escape
         else if (runBtn.checkConsumePress()) {
             view.setVisualState(VisualState.MESSAGE);
-            view.currentBattle.runAway();
+            currentBattle.runAway();
             view.cycleMessage(false);
         }
         // Show Fight View TODO: Semi-invulnerable moves look awful and weird
-        else if (fightBtn.checkConsumePress() || view.currentBattle.getPlayer().front().isSemiInvulnerable()) {
+        else if (fightBtn.checkConsumePress() || player.front().isSemiInvulnerable()) {
             view.setVisualState(VisualState.FIGHT);
 
             // Move is forced -- don't show menu, but execute the move
-            if (Move.forceMove(view.currentBattle, view.currentBattle.getPlayer().front())) {
-                view.currentBattle.getPlayer().performAction(view.currentBattle, Action.FIGHT);
+            if (Move.forceMove(currentBattle, player.front())) {
+                player.performAction(currentBattle, Action.FIGHT);
                 view.setVisualState(VisualState.MESSAGE);
                 view.cycleMessage(false);
             }

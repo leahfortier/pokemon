@@ -1,5 +1,6 @@
 package gui.view.battle.handler;
 
+import battle.Battle;
 import gui.Button;
 import gui.TileSet;
 import gui.view.View;
@@ -94,17 +95,18 @@ public class BagState implements VisualStateHandler {
 
     @Override
     public void set(BattleView view) {
-        int pageSize = view.currentBattle.getPlayer().getBag().getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]).size();
+        Bag playerBag = Game.getPlayer().getBag();
+        int pageSize = playerBag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]).size();
 
         for (int i = 0; i < ITEMS_PER_PAGE; i++) {
             bagButtons[ITEMS + i].setActive(i < pageSize - bagPage*ITEMS_PER_PAGE);
         }
 
         // TODO: Make a method for this
-        bagLastUsedBtn.setActive(view.currentBattle.getPlayer().getBag().getLastUsedItem() != ItemNamesies.NO_ITEM);
+        bagLastUsedBtn.setActive(playerBag.getLastUsedItem() != ItemNamesies.NO_ITEM);
 
-        for (Button b: bagButtons) {
-            b.setForceHover(false);
+        for (Button button: bagButtons) {
+            button.setForceHover(false);
         }
 
     }
@@ -116,7 +118,7 @@ public class BagState implements VisualStateHandler {
         g.drawImage(tiles.getTile(BATTLE_BAG_CATEGORIES[selectedBagTab].getImageNumber() - 4), 30, 492, null);
         g.drawImage(tiles.getTile(0x20), 415, 440, null);
 
-        Bag bag = view.currentBattle.getPlayer().getBag();
+        Bag bag = Game.getPlayer().getBag();
 
         Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
         TileSet itemTiles = Game.getData().getItemTiles();
@@ -145,7 +147,7 @@ public class BagState implements VisualStateHandler {
                 g.drawString(item.getName(), 28, 19);
 
                 // Item quantity
-                DrawUtils.drawRightAlignedString(g, "x" + view.currentBattle.getPlayer().getBag().getQuantity(item), 140, 19);
+                DrawUtils.drawRightAlignedString(g, "x" + bag.getQuantity(item), 140, 19);
 
                 g.translate(-dx, -dy);
             }
@@ -207,7 +209,8 @@ public class BagState implements VisualStateHandler {
             }
         }
 
-        CharacterData player = view.currentBattle.getPlayer();
+        Battle currentBattle = view.getCurrentBattle();
+        CharacterData player = Game.getPlayer();
         Bag bag = player.getBag();
         Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
         Iterator<ItemNamesies> iter = toDraw.iterator();
@@ -228,8 +231,8 @@ public class BagState implements VisualStateHandler {
                     break;
                 }
                 // Otherwise, just use it on the battle if successful
-                else if (bag.battleUseItem(item, view.currentBattle.getPlayer().front(), view.currentBattle)) {
-                    view.currentBattle.getPlayer().performAction(view.currentBattle, Action.ITEM);
+                else if (bag.battleUseItem(item, player.front(), currentBattle)) {
+                    player.performAction(currentBattle, Action.ITEM);
                     view.setVisualState(VisualState.MENU);
                     view.cycleMessage(false);
                     break;
@@ -245,8 +248,8 @@ public class BagState implements VisualStateHandler {
         // Selecting the Last Item Used Button
         if (bagLastUsedBtn.checkConsumePress()) {
             ItemNamesies lastItemUsed = bag.getLastUsedItem();
-            if (lastItemUsed != ItemNamesies.NO_ITEM && bag.battleUseItem(lastItemUsed, player.front(), view.currentBattle)) {
-                player.performAction(view.currentBattle, Action.ITEM);
+            if (lastItemUsed != ItemNamesies.NO_ITEM && bag.battleUseItem(lastItemUsed, player.front(), currentBattle)) {
+                player.performAction(currentBattle, Action.ITEM);
                 view.setVisualState(VisualState.MENU);
                 view.cycleMessage(false);
             }

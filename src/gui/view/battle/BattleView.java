@@ -23,7 +23,7 @@ import java.awt.Graphics;
 public class BattleView extends View {
 	
 	// The current battle in view, the current message being displayed, and the current selected button
-	public Battle currentBattle;
+	private Battle currentBattle;
 	public String message;
 	public int selectedButton;
 	
@@ -107,9 +107,17 @@ public class BattleView extends View {
 			
 			PokemonAnimationState state = newMessage.target() ? playerAnimation : enemyAnimation;
 			if (newMessage.switchUpdate()) {
-				state.resetVals(newMessage.getHP(), newMessage.getStatus(), newMessage.getType(), newMessage.getShiny(), 
-						newMessage.getPokemon(), newMessage.getName(), newMessage.getMaxHP(), newMessage.getLevel(), 
-						newMessage.getGender(), newMessage.getEXPRatio());
+				state.resetVals(
+						newMessage.getHP(),
+						newMessage.getStatus(),
+						newMessage.getType(),
+						newMessage.getShiny(),
+						newMessage.getPokemon(),
+						newMessage.getName(),
+						newMessage.getMaxHP(),
+						newMessage.getLevel(),
+						newMessage.getGender(),
+						newMessage.getEXPRatio());
 			}
 			else {
 				// TODO: Fuck this I hate this
