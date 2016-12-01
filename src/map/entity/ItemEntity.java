@@ -1,7 +1,7 @@
 package map.entity;
 
 import gui.GameData;
-import gui.view.MapView;
+import gui.view.map.MapView;
 import item.ItemNamesies;
 import main.Game;
 import map.Direction;
@@ -33,8 +33,8 @@ public class ItemEntity extends Entity {
 	public void update(int dt, MapData currentMap, MapView view) {}
 
 	@Override
-	public boolean isPresent() {
-		return super.isPresent() && !hasTriggered;
+	public boolean isVisible() {
+		return super.isVisible() && !hasTriggered;
 	}
 
 	@Override

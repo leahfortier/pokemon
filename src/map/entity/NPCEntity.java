@@ -1,6 +1,6 @@
 package map.entity;
 
-import gui.view.MapView;
+import gui.view.map.MapView;
 import main.Game;
 import main.Global;
 import map.Direction;
