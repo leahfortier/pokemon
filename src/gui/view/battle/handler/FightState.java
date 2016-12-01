@@ -98,8 +98,7 @@ public class FightState implements VisualStateHandler {
             }
         }
 
-        // TODO: See if I can use isNullOrEmpty
-        String msgLine = view.state == VisualState.INVALID_FIGHT && view.message != null ? view.message : "Select a move!";
+        String msgLine = view.getMessage(VisualState.INVALID_FIGHT, "Select a move!");
 
         g.setColor(Color.BLACK);
         DrawUtils.setFont(g, 30);

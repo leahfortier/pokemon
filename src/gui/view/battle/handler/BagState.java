@@ -179,7 +179,7 @@ public class BagState implements VisualStateHandler {
         }
 
         // Messages text
-        String msgLine = view.state == VisualState.INVALID_BAG && view.message != null ? view.message : "Choose an item!";
+        String msgLine = view.getMessage(VisualState.INVALID_BAG, "Choose an item!");
         g.setColor(Color.BLACK);
         DrawUtils.setFont(g, 30);
         DrawUtils.drawWrappedText(g, msgLine, 440, 495, 350);

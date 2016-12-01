@@ -16,6 +16,7 @@ import trainer.CharacterData;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import util.DrawUtils;
+import util.PokeString;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -258,7 +259,7 @@ public class PokemonState implements VisualStateHandler {
         // Draw Messages
         g.setColor(Color.BLACK);
         DrawUtils.setFont(g, 30);
-        String msgLine = view.state == VisualState.INVALID_POKEMON && view.message != null ? view.message : "Select a Pok\u00e9mon!";
+        String msgLine = view.getMessage(VisualState.INVALID_POKEMON, "Select a " + PokeString.POKEMON + "!");
         DrawUtils.drawWrappedText(g, msgLine, 440, 485, 350);
 
         // Draw back arrow when applicable

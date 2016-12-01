@@ -15,6 +15,7 @@ import message.Messages;
 import pokemon.ActivePokemon;
 import sound.SoundPlayer;
 import sound.SoundTitle;
+import util.StringUtils;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,7 +25,7 @@ public class BattleView extends View {
 	
 	// The current battle in view, the current message being displayed, and the current selected button
 	private Battle currentBattle;
-	public String message;
+	private String message;
 	private int selectedButton;
 	
 	// The current state that the battle is in and current update type
@@ -84,6 +85,26 @@ public class BattleView extends View {
 
 	public void setSelectedButton(int buttonIndex) {
 		this.selectedButton = buttonIndex;
+	}
+
+	public boolean hasMessage() {
+		return !StringUtils.isNullOrEmpty(message);
+	}
+
+	public String getMessage() {
+		return this.message;
+	}
+
+	public String getMessage(VisualState messageState, String defaultMessage) {
+		if (this.isState(messageState) && hasMessage()) {
+			return message;
+		}
+
+		return defaultMessage;
+	}
+
+	public boolean isState(VisualState state) {
+		return this.state == state;
 	}
 	
 	public void clearUpdate() {
