@@ -2,7 +2,6 @@ package gui.view.battle.handler;
 
 import battle.attack.Move;
 import gui.Button;
-import gui.ButtonHoverAction;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -19,22 +18,16 @@ public class LearnMoveQuestionState implements VisualStateHandler {
     private final Button noButton;
 
     public LearnMoveQuestionState() {
-        // Learn Move Buttons
-//        yesButton = new Button(moveButtons[2].x, moveButtons[2].y, moveButtons[2].width, moveButtons[2].height, Button.ButtonHoverAction.BOX);
-//        noButton = new Button(moveButtons[3].x, moveButtons[3].y, moveButtons[3].width, moveButtons[3].height, Button.ButtonHoverAction.BOX);
-        yesButton = new Button(0, 0, 0, 0, ButtonHoverAction.BOX); // TODO
-        noButton = new Button(0, 0, 0, 0, ButtonHoverAction.BOX); // TODO
+        yesButton = BattleView.createSubMenuButton(0, 1, null);
+        noButton = BattleView.createSubMenuButton(1, 1, null);
     }
-
-    @Override
-    public void set(BattleView view) {}
 
     @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
         g.drawImage(tiles.getTile(0x3), 0, 439, null);
         g.setColor(Color.BLACK);
         DrawUtils.setFont(g, 25);
-        g.drawString("Delete a move in order to learn " + VisualState.getLearnedMove().getAttack().getName() + "?", 30, 490);
+        g.drawString("Delete a move in order to learn " + view.getLearnedMove().getAttack().getName() + "?", 30, 490);
 
         g.translate(yesButton.x, yesButton.y);
 
@@ -70,6 +63,7 @@ public class LearnMoveQuestionState implements VisualStateHandler {
         noButton.update();
 
         if (noButton.checkConsumePress()) {
+
             // This is all done really silly, so we need to do this
             MessageUpdate message = Messages.getNextMessage();
             for (int i = 0; i < Move.MAX_MOVES + 1; i++) {

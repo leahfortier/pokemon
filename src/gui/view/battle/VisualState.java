@@ -1,6 +1,5 @@
 package gui.view.battle;
 
-import battle.attack.Move;
 import gui.TileSet;
 import gui.view.battle.handler.BagState;
 import gui.view.battle.handler.FightState;
@@ -64,10 +63,6 @@ public enum VisualState {
 
     public static void setSwitchForced() {
         ((PokemonState)POKEMON.visualStateHandler).setSwitchForced();
-    }
-
-    public static Move getLearnedMove() {
-        return ((LearnMoveDeleteState)LEARN_MOVE_DELETE.visualStateHandler).getLearnedMove();
     }
 
     public static void resetLastMoveUsed() {

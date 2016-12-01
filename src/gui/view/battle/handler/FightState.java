@@ -3,7 +3,6 @@ package gui.view.battle.handler;
 import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
-import gui.ButtonHoverAction;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -31,22 +30,8 @@ public class FightState implements VisualStateHandler {
 
         // Move Buttons
         moveButtons = new Button[Move.MAX_MOVES];
-        for (int y = 0, i = 0; y < 2; y++) {
-            for (int x = 0; x < Move.MAX_MOVES/2; x++, i++) {
-                moveButtons[i] = new Button(
-                        22 + x*190,
-                        440 + 21 + y*62,
-                        183,
-                        55,
-                        ButtonHoverAction.BOX,
-                        new int[] {
-                                (i + 1)%Move.MAX_MOVES, // Right
-                                ((i - Move.MAX_MOVES/2) + Move.MAX_MOVES)%Move.MAX_MOVES, // Up
-                                ((i - 1) + Move.MAX_MOVES)%Move.MAX_MOVES, // Left
-                                (i + Move.MAX_MOVES/2)%Move.MAX_MOVES // Down
-                        }
-                );
-            }
+        for (int i = 0; i < Move.MAX_MOVES; i++) {
+            moveButtons[i] = BattleView.createMoveButton(i);
         }
     }
 

@@ -1,7 +1,9 @@
 package gui.view.battle;
 
 import battle.Battle;
+import battle.attack.Move;
 import gui.Button;
+import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
 import gui.view.View;
@@ -37,6 +39,10 @@ public class BattleView extends View {
 
 	// All the different buttons!!
 	private final Button backButton;
+
+	// Which Pokemon is trying to learn a new move, and which move
+	private ActivePokemon learnedPokemon;
+	private Move learnedMove;
 	
 	public BattleView() {
 		playerAnimation = new PokemonAnimationState(this);
@@ -52,6 +58,9 @@ public class BattleView extends View {
 		
 		playerAnimation.resetBattle(b.getPlayer().front());
 		enemyAnimation.resetBattle(b.getOpponent().front());
+
+		learnedMove = null;
+		learnedPokemon = null;
 		
 		setVisualState(VisualState.MESSAGE);
 		update = Update.NO_UPDATE;
@@ -69,7 +78,7 @@ public class BattleView extends View {
 	public Battle getCurrentBattle() {
 		return this.currentBattle;
 	}
-	
+
 	public void setSwitchForced() {
 		VisualState.setSwitchForced();
 	}
@@ -99,6 +108,14 @@ public class BattleView extends View {
 		return defaultMessage;
 	}
 
+	public Move getLearnedMove() {
+		return this.learnedMove;
+	}
+
+	public ActivePokemon getLearnedPokemon() {
+		return this.learnedPokemon;
+	}
+
 	public boolean isState(VisualState state) {
 		return this.state == state;
 	}
@@ -126,6 +143,29 @@ public class BattleView extends View {
 		if (backButton.checkConsumePress() && setToMainMenu) {
 			setVisualState(VisualState.MENU);
 		}
+	}
+
+	public static Button createMoveButton(int index) {
+		int totalButtons = Move.MAX_MOVES;
+		int numRows = 2;
+		int numColumns = totalButtons/numRows;
+
+		return createSubMenuButton(
+				index%numColumns,
+				index/numColumns,
+				Button.getBasicTransitions(index, numRows, numColumns)
+		);
+	}
+
+	public static Button createSubMenuButton(int x, int y, int[] transitions) {
+		return new Button(
+				22 + x*190,
+				440 + 21 + y*62,
+				183,
+				55,
+				ButtonHoverAction.BOX,
+				transitions
+		);
 	}
 
 	public boolean isPlayingAnimation() {
@@ -170,6 +210,11 @@ public class BattleView extends View {
 			if (!newMessage.switchUpdate()) {
 				if (newMessage.hasUpdateType()) {
 					update = newMessage.getUpdateType();
+				}
+
+				if (newMessage.learnMove()) {
+					learnedMove = newMessage.getMove();
+					learnedPokemon = newMessage.getActivePokemon();
 				}
 
 				this.state.checkMessage(newMessage);
