@@ -2,6 +2,7 @@ package gui.view;
 
 import gui.Button;
 import gui.GameData;
+import gui.ButtonHoverAction;
 import gui.TileSet;
 import item.Item;
 import item.ItemNamesies;
@@ -91,7 +92,7 @@ class MartView extends View {
 						261 + 38*i,
 						148,
 						28,
-						Button.HoverAction.BOX,
+						ButtonHoverAction.BOX,
 						new int[] {
 								j == 0 ? k + 1 : k - 1, // Right
 								i == 0 ? (j == 0 ? AMOUNT_LEFT_ARROW : AMOUNT_RIGHT_ARROW) : k - 2, // Up
@@ -101,15 +102,15 @@ class MartView extends View {
 			}
 		}
 		
-		buttons[SHOP_LEFT_ARROW] = shopLeftButton = new Button(498, 451, 35, 20, Button.HoverAction.BOX, new int[] { SHOP_RIGHT_ARROW, ITEMS_PER_PAGE - 2, SHOP_RIGHT_ARROW, RETURN });
-		buttons[SHOP_RIGHT_ARROW] = shopRightButton = new Button(613, 451, 35, 20, Button.HoverAction.BOX, new int[] { SHOP_LEFT_ARROW, ITEMS_PER_PAGE - 1, SHOP_LEFT_ARROW, RETURN });
+		buttons[SHOP_LEFT_ARROW] = shopLeftButton = new Button(498, 451, 35, 20, ButtonHoverAction.BOX, new int[] { SHOP_RIGHT_ARROW, ITEMS_PER_PAGE - 2, SHOP_RIGHT_ARROW, RETURN });
+		buttons[SHOP_RIGHT_ARROW] = shopRightButton = new Button(613, 451, 35, 20, ButtonHoverAction.BOX, new int[] { SHOP_LEFT_ARROW, ITEMS_PER_PAGE - 1, SHOP_LEFT_ARROW, RETURN });
 		
-		buttons[AMOUNT_LEFT_ARROW] = amountLeftButton = new Button(410, 193, 110, 38, Button.HoverAction.BOX, new int[] { AMOUNT_RIGHT_ARROW, RETURN, BUY, 0 });
-		buttons[AMOUNT_RIGHT_ARROW] = amountRightButton = new Button(628, 193, 110, 38, Button.HoverAction.BOX, new int[] { AMOUNT_LEFT_ARROW, RETURN, AMOUNT_LEFT_ARROW, 1 });
+		buttons[AMOUNT_LEFT_ARROW] = amountLeftButton = new Button(410, 193, 110, 38, ButtonHoverAction.BOX, new int[] { AMOUNT_RIGHT_ARROW, RETURN, BUY, 0 });
+		buttons[AMOUNT_RIGHT_ARROW] = amountRightButton = new Button(628, 193, 110, 38, ButtonHoverAction.BOX, new int[] { AMOUNT_LEFT_ARROW, RETURN, AMOUNT_LEFT_ARROW, 1 });
 
-		buttons[BUY] = buyButton = new Button(SIDE_BOX_X, MONEY_BOX_Y + SIDE_BOX_GAP*5, 308, 61, Button.HoverAction.BOX, new int[] { RETURN, BUY, RETURN, BUY });
+		buttons[BUY] = buyButton = new Button(SIDE_BOX_X, MONEY_BOX_Y + SIDE_BOX_GAP*5, 308, 61, ButtonHoverAction.BOX, new int[] { RETURN, BUY, RETURN, BUY });
 		
-		buttons[RETURN] = returnButton = new Button(410, 500, 328, 38, Button.HoverAction.BOX, new int[] { BUY, SHOP_LEFT_ARROW, BUY, AMOUNT_LEFT_ARROW });
+		buttons[RETURN] = returnButton = new Button(410, 500, 328, 38, ButtonHoverAction.BOX, new int[] { BUY, SHOP_LEFT_ARROW, BUY, AMOUNT_LEFT_ARROW });
 
 		if (forSaleItems == null) {
 			forSaleItems = new ArrayList<>();

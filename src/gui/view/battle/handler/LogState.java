@@ -1,6 +1,7 @@
 package gui.view.battle.handler;
 
 import gui.Button;
+import gui.ButtonHoverAction;
 import gui.TileSet;
 import gui.view.View;
 import gui.view.battle.BattleView;
@@ -25,8 +26,8 @@ public class LogState implements VisualStateHandler {
     private List<String> logMessages;
 
     public LogState() {
-        logLeftButton = new Button(150, 550, 35, 20, Button.HoverAction.BOX, new int[] { LOG_RIGHT_BUTTON, -1, -1, -1 });
-        logRightButton = new Button(200, 550, 35, 20, Button.HoverAction.BOX, new int[] { -1, -1, LOG_LEFT_BUTTON, -1 });
+        logLeftButton = new Button(150, 550, 35, 20, ButtonHoverAction.BOX, new int[] { LOG_RIGHT_BUTTON, -1, -1, -1 });
+        logRightButton = new Button(200, 550, 35, 20, ButtonHoverAction.BOX, new int[] { -1, -1, LOG_LEFT_BUTTON, -1 });
 
         logButtons = new Button[] { logLeftButton, logRightButton };
     }

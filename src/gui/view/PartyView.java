@@ -3,6 +3,7 @@ package gui.view;
 import battle.attack.Move;
 import gui.Button;
 import gui.GameData;
+import gui.ButtonHoverAction;
 import gui.TileSet;
 import main.Game;
 import main.Type;
@@ -52,7 +53,7 @@ class PartyView extends View {
 					39,
 					122,
 					55,
-					Button.HoverAction.BOX,
+					ButtonHoverAction.BOX,
 					new int[] {
 							i == Trainer.MAX_POKEMON - 1 ? 0 : i + 1, // Right
 							i < Trainer.MAX_POKEMON ? SWITCH: RETURN, // Up
@@ -67,7 +68,7 @@ class PartyView extends View {
 					266 + i*49,
 					293,
 					40,
-					Button.HoverAction.BOX,
+					ButtonHoverAction.BOX,
 					new int[] {
 							-1, // Right
 							i == 0 ? 0 : MOVES + i - 1, // Up 
@@ -76,8 +77,8 @@ class PartyView extends View {
 					});
 		}
 		
-		buttons[10] = switchButton = new Button(69, 493, 317, 38, Button.HoverAction.BOX, new int[] { RETURN, MOVES + Move.MAX_MOVES - 1, RETURN, 0 });
-		buttons[11] = returnButton = new Button(414, 493, 317, 38, Button.HoverAction.BOX, new int[] { SWITCH, MOVES + Move.MAX_MOVES - 1, SWITCH, 0 });
+		buttons[10] = switchButton = new Button(69, 493, 317, 38, ButtonHoverAction.BOX, new int[] { RETURN, MOVES + Move.MAX_MOVES - 1, RETURN, 0 });
+		buttons[11] = returnButton = new Button(414, 493, 317, 38, ButtonHoverAction.BOX, new int[] { SWITCH, MOVES + Move.MAX_MOVES - 1, SWITCH, 0 });
 		updateActiveButtons();
 	}
 

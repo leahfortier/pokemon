@@ -3,6 +3,7 @@ package gui.view.battle.handler;
 import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
+import gui.ButtonHoverAction;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -37,7 +38,7 @@ public class FightState implements VisualStateHandler {
                         440 + 21 + y*62,
                         183,
                         55,
-                        Button.HoverAction.BOX,
+                        ButtonHoverAction.BOX,
                         new int[] {
                                 (i + 1)%Move.MAX_MOVES, // Right
                                 ((i - Move.MAX_MOVES/2) + Move.MAX_MOVES)%Move.MAX_MOVES, // Up

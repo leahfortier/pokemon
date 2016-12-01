@@ -2,6 +2,7 @@ package gui.view.map;
 
 import gui.Button;
 import gui.GameData;
+import gui.ButtonHoverAction;
 import gui.TileSet;
 import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
@@ -22,7 +23,7 @@ class MenuState implements VisualStateHandler {
         menuButtons = new Button[MenuChoice.values().length];
 
         for (int i = 0; i < menuButtons.length; i++) {
-            menuButtons[i] = new Button(558, 72*i + 10, 240, 70, Button.HoverAction.ARROW,
+            menuButtons[i] = new Button(558, 72*i + 10, 240, 70, ButtonHoverAction.ARROW,
                     new int[] {	Button.NO_TRANSITION, // Right
                             Button.basicUp(i, menuButtons.length), // Up
                             Button.NO_TRANSITION, // Left

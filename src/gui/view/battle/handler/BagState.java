@@ -2,6 +2,7 @@ package gui.view.battle.handler;
 
 import battle.Battle;
 import gui.Button;
+import gui.ButtonHoverAction;
 import gui.TileSet;
 import gui.view.View;
 import gui.view.battle.BattleView;
@@ -57,7 +58,7 @@ public class BagState implements VisualStateHandler {
                     190,
                     89,
                     28,
-                    Button.HoverAction.BOX,
+                    ButtonHoverAction.BOX,
                     new int[] { (i + 1)% BATTLE_BAG_CATEGORIES.length, // Right
                             LAST_ITEM_BUTTON, // Up
                             (i - 1 + BATTLE_BAG_CATEGORIES.length)% BATTLE_BAG_CATEGORIES.length, // Left
@@ -65,9 +66,9 @@ public class BagState implements VisualStateHandler {
             );
         }
 
-        bagButtons[BAG_LEFT_BUTTON] = bagLeftButton = new Button(135, 435, 35, 20, Button.HoverAction.BOX, new int[] {BAG_RIGHT_BUTTON, ITEMS + ITEMS_PER_PAGE - 2, -1, LAST_ITEM_BUTTON});
-        bagButtons[BAG_RIGHT_BUTTON] = bagRightButton = new Button(250,435,35,20, Button.HoverAction.BOX, new int[] {-1, ITEMS + ITEMS_PER_PAGE - 1, BAG_LEFT_BUTTON, LAST_ITEM_BUTTON});
-        bagButtons[LAST_ITEM_BUTTON] = bagLastUsedBtn = new Button(214, 517, 148, 28, Button.HoverAction.BOX, new int[] {-1, BAG_LEFT_BUTTON, -1, selectedBagTab});
+        bagButtons[BAG_LEFT_BUTTON] = bagLeftButton = new Button(135, 435, 35, 20, ButtonHoverAction.BOX, new int[] {BAG_RIGHT_BUTTON, ITEMS + ITEMS_PER_PAGE - 2, -1, LAST_ITEM_BUTTON});
+        bagButtons[BAG_RIGHT_BUTTON] = bagRightButton = new Button(250,435,35,20, ButtonHoverAction.BOX, new int[] {-1, ITEMS + ITEMS_PER_PAGE - 1, BAG_LEFT_BUTTON, LAST_ITEM_BUTTON});
+        bagButtons[LAST_ITEM_BUTTON] = bagLastUsedBtn = new Button(214, 517, 148, 28, ButtonHoverAction.BOX, new int[] {-1, BAG_LEFT_BUTTON, -1, selectedBagTab});
 
         for (int y = 0, i = ITEMS; y < ITEMS_PER_PAGE/2; y++) {
             for (int x = 0; x < 2; x++, i++) {
@@ -76,7 +77,7 @@ public class BagState implements VisualStateHandler {
                         243 + y*38,
                         148,
                         28,
-                        Button.HoverAction.BOX,
+                        ButtonHoverAction.BOX,
                         new int[] { (i + 1 - ITEMS)%ITEMS_PER_PAGE + ITEMS, // Right
                                 y == 0 ? selectedBagTab : i - 2, // Up
                                 (i - 1 - ITEMS + ITEMS_PER_PAGE)%ITEMS_PER_PAGE + ITEMS, // Left

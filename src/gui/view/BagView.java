@@ -3,6 +3,7 @@ package gui.view;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import gui.Button;
+import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
 import item.Item;
@@ -137,7 +138,7 @@ class BagView extends View {
 					42,
 					104,
 					52,
-					Button.HoverAction.BOX,
+					ButtonHoverAction.BOX,
 					new int[] {
 							i == CATEGORIES.length - 1 ? 0 : i + 1, // Right
 						 	RETURN, // Up
@@ -153,7 +154,7 @@ class BagView extends View {
 					122 + 69*i,
 					308,
 					61,
-					Button.HoverAction.BOX,
+					ButtonHoverAction.BOX,
 					new int[] {
 							i < Trainer.MAX_POKEMON/3 ? GIVE : (i < 2*Trainer.MAX_POKEMON/3 ? ITEMS : RETURN), // Right
 							i == 0 ? 0 : PARTY + i - 1, // Up
@@ -169,7 +170,7 @@ class BagView extends View {
 					122 + 69*i,
 					308,
 					61,
-					Button.HoverAction.BOX,
+					ButtonHoverAction.BOX,
 					new int[] {
 							PARTY + i, // Right
 							i == 0 ? 0 : MOVES + i - 1, // Up
@@ -187,7 +188,7 @@ class BagView extends View {
 						261 + 38*i,
 						148,
 						28,
-						Button.HoverAction.BOX,
+						ButtonHoverAction.BOX,
 						new int[] {
 								j == 0 ? ITEMS + k + 1 : PARTY, // Right
 								i == 0 ? USE : ITEMS + k - 2, // Up
@@ -197,14 +198,14 @@ class BagView extends View {
 			}
 		}
 		
-		buttons[LEFT_ARROW] = new Button(498, 451, 35, 20, Button.HoverAction.BOX, new int[] { RIGHT_ARROW, ITEMS_PER_PAGE - 2, PARTY, RETURN });
-		buttons[RIGHT_ARROW] = new Button(613, 451, 35, 20, Button.HoverAction.BOX, new int[] { PARTY, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN });
+		buttons[LEFT_ARROW] = new Button(498, 451, 35, 20, ButtonHoverAction.BOX, new int[] { RIGHT_ARROW, ITEMS_PER_PAGE - 2, PARTY, RETURN });
+		buttons[RIGHT_ARROW] = new Button(613, 451, 35, 20, ButtonHoverAction.BOX, new int[] { PARTY, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN });
 		
-		buttons[GIVE] = new Button(410, 193, 110, 38, Button.HoverAction.BOX, new int[] { USE, selectedTab, PARTY, ITEMS });
-		buttons[USE] = new Button(518, 193, 110, 38, Button.HoverAction.BOX, new int[] { TAKE, selectedTab, GIVE, ITEMS });
-		buttons[TAKE] = new Button(628, 193, 110, 38, Button.HoverAction.BOX, new int[] { PARTY, selectedTab, USE, ITEMS + 1 });
+		buttons[GIVE] = new Button(410, 193, 110, 38, ButtonHoverAction.BOX, new int[] { USE, selectedTab, PARTY, ITEMS });
+		buttons[USE] = new Button(518, 193, 110, 38, ButtonHoverAction.BOX, new int[] { TAKE, selectedTab, GIVE, ITEMS });
+		buttons[TAKE] = new Button(628, 193, 110, 38, ButtonHoverAction.BOX, new int[] { PARTY, selectedTab, USE, ITEMS + 1 });
 		
-		buttons[RETURN] = new Button(410, 500, 328, 38, Button.HoverAction.BOX, new int[] { PARTY, LEFT_ARROW, PARTY, selectedTab });
+		buttons[RETURN] = new Button(410, 500, 328, 38, ButtonHoverAction.BOX, new int[] { PARTY, LEFT_ARROW, PARTY, selectedTab });
 		
 		movedToFront();
 	}

@@ -2,6 +2,7 @@ package gui.view.battle.handler;
 
 import battle.attack.Move;
 import gui.Button;
+import gui.ButtonHoverAction;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -25,8 +26,8 @@ public class LearnMoveDeleteState implements VisualStateHandler {
     private Move learnedMove;
 
     public LearnMoveDeleteState() {
-//        newMoveButton = new Button(moveButtons[3].x + moveButtons[3].width + moveButtons[2].x, moveButtons[3].y, moveButtons[3].width, moveButtons[3].height, Button.HoverAction.BOX);
-        newMoveButton = new Button(0, 0, 0, 0, Button.HoverAction.BOX); // TODO
+//        newMoveButton = new Button(moveButtons[3].x + moveButtons[3].width + moveButtons[2].x, moveButtons[3].y, moveButtons[3].width, moveButtons[3].height, Button.ButtonHoverAction.BOX);
+        newMoveButton = new Button(0, 0, 0, 0, ButtonHoverAction.BOX); // TODO
 
         // Move Buttons
         moveButtons = new Button[Move.MAX_MOVES];
@@ -37,7 +38,7 @@ public class LearnMoveDeleteState implements VisualStateHandler {
                         440 + 21 + y*62,
                         183,
                         55,
-                        Button.HoverAction.BOX,
+                        ButtonHoverAction.BOX,
                         new int[] {
                                 (i + 1)%Move.MAX_MOVES, // Right
                                 ((i - Move.MAX_MOVES/2) + Move.MAX_MOVES)%Move.MAX_MOVES, // Up

@@ -2,6 +2,7 @@ package gui.view.battle.handler;
 
 import battle.attack.Move;
 import gui.Button;
+import gui.ButtonHoverAction;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -19,10 +20,10 @@ public class LearnMoveQuestionState implements VisualStateHandler {
 
     public LearnMoveQuestionState() {
         // Learn Move Buttons
-//        yesButton = new Button(moveButtons[2].x, moveButtons[2].y, moveButtons[2].width, moveButtons[2].height, Button.HoverAction.BOX);
-//        noButton = new Button(moveButtons[3].x, moveButtons[3].y, moveButtons[3].width, moveButtons[3].height, Button.HoverAction.BOX);
-        yesButton = new Button(0, 0, 0, 0, Button.HoverAction.BOX); // TODO
-        noButton = new Button(0, 0, 0, 0, Button.HoverAction.BOX); // TODO
+//        yesButton = new Button(moveButtons[2].x, moveButtons[2].y, moveButtons[2].width, moveButtons[2].height, Button.ButtonHoverAction.BOX);
+//        noButton = new Button(moveButtons[3].x, moveButtons[3].y, moveButtons[3].width, moveButtons[3].height, Button.ButtonHoverAction.BOX);
+        yesButton = new Button(0, 0, 0, 0, ButtonHoverAction.BOX); // TODO
+        noButton = new Button(0, 0, 0, 0, ButtonHoverAction.BOX); // TODO
     }
 
     @Override

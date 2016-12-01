@@ -3,6 +3,7 @@ package gui.view.battle.handler;
 import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
+import gui.ButtonHoverAction;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -40,7 +41,7 @@ public class MenuState implements VisualStateHandler {
                 473,
                 609 - 452,
                 515 - 473,
-                Button.HoverAction.ARROW,
+                ButtonHoverAction.ARROW,
                 new int[] {	BAG_BUTTON, SWITCH_BUTTON, RUN_BUTTON, SWITCH_BUTTON }
         );
         menuButtons[BAG_BUTTON] = bagBtn = new Button(
@@ -48,7 +49,7 @@ public class MenuState implements VisualStateHandler {
                 473,
                 724 - 628,
                 513 - 473,
-                Button.HoverAction.ARROW,
+                ButtonHoverAction.ARROW,
                 new int[] { SWITCH_BUTTON, RUN_BUTTON, FIGHT_BUTTON, RUN_BUTTON }
         );
         menuButtons[SWITCH_BUTTON] = pokemonBtn = new Button(
@@ -56,7 +57,7 @@ public class MenuState implements VisualStateHandler {
                 525,
                 609 - 452,
                 571 - 525,
-                Button.HoverAction.ARROW,
+                ButtonHoverAction.ARROW,
                 new int[] { RUN_BUTTON, FIGHT_BUTTON, BAG_BUTTON, FIGHT_BUTTON }
         );
         menuButtons[RUN_BUTTON] = runBtn = new Button(
@@ -64,7 +65,7 @@ public class MenuState implements VisualStateHandler {
                 525,
                 724 - 628,
                 571 - 525,
-                Button.HoverAction.ARROW,
+                ButtonHoverAction.ARROW,
                 new int[] { FIGHT_BUTTON, BAG_BUTTON, SWITCH_BUTTON, BAG_BUTTON }
         );
     }

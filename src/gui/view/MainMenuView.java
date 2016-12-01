@@ -1,6 +1,7 @@
 package gui.view;
 
 import gui.Button;
+import gui.ButtonHoverAction;
 import gui.TileSet;
 import main.Game;
 import main.Global;
@@ -65,7 +66,7 @@ public class MainMenuView extends View {
 					240 + i*85,
 					400,
 					75,
-					Button.HoverAction.BOX,
+					ButtonHoverAction.BOX,
 					new int[] { 
 						Button.NO_TRANSITION, // Right
 						Button.basicUp(i, VisualState.MAIN.buttons.length), // Up 
@@ -80,7 +81,7 @@ public class MainMenuView extends View {
 					VisualState.MAIN.buttons[i].y,
 					VisualState.MAIN.buttons[i].width,
 					VisualState.MAIN.buttons[i].height,
-					Button.HoverAction.BOX,
+					ButtonHoverAction.BOX,
 					new int[] {
 							Button.NO_TRANSITION, // Right
 							Button.basicUp(i, VisualState.LOAD.buttons.length), // Up
@@ -94,7 +95,7 @@ public class MainMenuView extends View {
 				VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].y,
 				VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].width/2 - 5,
 				VisualState.MAIN.buttons[NUM_MAIN_BUTTONS - 1].height,
-				Button.HoverAction.BOX,
+				ButtonHoverAction.BOX,
 				new int[] {
 						Save.NUM_SAVES + 1, // Right -- to the delete button
 						Save.NUM_SAVES - 1, // Up -- to the last save file
@@ -107,7 +108,7 @@ public class MainMenuView extends View {
 				VisualState.LOAD.buttons[Save.NUM_SAVES].y,
 				VisualState.LOAD.buttons[Save.NUM_SAVES].width,
 				VisualState.LOAD.buttons[Save.NUM_SAVES].height,
-				Button.HoverAction.BOX,
+				ButtonHoverAction.BOX,
 				new int[] {
 						Save.NUM_SAVES, // Right -- to the return button
 						Save.NUM_SAVES - 1, // Up -- to the last save file
@@ -121,7 +122,7 @@ public class MainMenuView extends View {
 					VisualState.MAIN.buttons[i].y,
 					VisualState.MAIN.buttons[i].width,
 					VisualState.MAIN.buttons[i].height,
-					Button.HoverAction.BOX, 
+					ButtonHoverAction.BOX,
 					new int[] { 
 						Button.NO_TRANSITION, // Right
 						Button.basicUp(i, VisualState.NEW.buttons.length), // Up
@@ -136,7 +137,7 @@ public class MainMenuView extends View {
 					VisualState.MAIN.buttons[i].y,
 					VisualState.MAIN.buttons[i].width,
 					VisualState.MAIN.buttons[i].height,
-					Button.HoverAction.BOX,
+					ButtonHoverAction.BOX,
 					new int[] {
 							Button.NO_TRANSITION, // Right
 							Button.basicUp(i, VisualState.OPTIONS.buttons.length), // Up

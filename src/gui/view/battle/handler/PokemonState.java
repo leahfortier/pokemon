@@ -3,6 +3,7 @@ package gui.view.battle.handler;
 import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
+import gui.ButtonHoverAction;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -46,7 +47,7 @@ public class PokemonState implements VisualStateHandler {
 
         pokemonTabButtons = new Button[Trainer.MAX_POKEMON];
         for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-            pokemonButtons[i] = pokemonTabButtons[i] = new Button(32 + i*59, 192, 59, 34, Button.HoverAction.BOX,
+            pokemonButtons[i] = pokemonTabButtons[i] = new Button(32 + i*59, 192, 59, 34, ButtonHoverAction.BOX,
                     new int[] {
                             (i + 1)%Trainer.MAX_POKEMON, // Right
                             POKEMON_SWITCH_BUTTON, // Up
@@ -56,7 +57,7 @@ public class PokemonState implements VisualStateHandler {
             );
         }
 
-        pokemonButtons[POKEMON_SWITCH_BUTTON] = pokemonSwitchButton = new Button(55, 509, 141, 36, Button.HoverAction.BOX, new int[] { -1, 0, -1, -1 });
+        pokemonButtons[POKEMON_SWITCH_BUTTON] = pokemonSwitchButton = new Button(55, 509, 141, 36, ButtonHoverAction.BOX, new int[] { -1, 0, -1, -1 });
     }
 
     @Override
