@@ -1,5 +1,6 @@
 package gui.view;
 
+import gui.view.battle.BattleView;
 import gui.view.map.MapView;
 
 public enum ViewMode {

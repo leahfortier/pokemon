@@ -1,0 +1,300 @@
+package gui.view.battle.handler;
+
+import battle.attack.Move;
+import gui.Button;
+import gui.TileSet;
+import gui.view.View;
+import gui.view.battle.BattleView;
+import gui.view.battle.VisualState;
+import input.ControlKey;
+import main.Game;
+import main.Type;
+import pokemon.ActivePokemon;
+import pokemon.Stat;
+import trainer.CharacterData;
+import trainer.Trainer.Action;
+import util.DrawUtils;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.List;
+
+public class PokemonState implements VisualStateHandler {
+
+    @Override
+    public void set(BattleView view) {
+        List<ActivePokemon> list = view.currentBattle.getPlayer().getTeam();
+        for (int i = 0; i < view.pokemonTabButtons.length; i++) {
+            view.pokemonTabButtons[i].setActive(i < list.size());
+        }
+
+        if (view.state != VisualState.USE_ITEM) {
+            view.pokemonSwitchButton.setActive(list.get(view.selectedPokemonTab).canFight());
+        }
+
+        for (Button b: view.pokemonButtons) {
+            b.setForceHover(false);
+        }
+    }
+
+    @Override
+    public void draw(BattleView view, Graphics g, TileSet tiles) {
+        // Draw Background
+        g.drawImage(tiles.getTile(0x10), 0, 160, null);
+
+        // Get current Pokemon
+        List<ActivePokemon> list = view.currentBattle.getPlayer().getTeam();
+        ActivePokemon selectedPkm = list.get(view.selectedPokemonTab);
+
+        // Draw type color polygons
+        Type[] type = selectedPkm.getActualType();
+        Color[] typeColors = Type.getColors(selectedPkm);
+
+        g.translate(31, 224);
+        g.setColor(typeColors[0]);
+        g.fillPolygon(BattleView.pkmnPrimaryColorx, BattleView.pkmnPrimaryColory, 4);
+        g.translate(-31, -224);
+
+        g.translate(36, 224);
+        g.setColor(typeColors[1]);
+        g.fillPolygon(BattleView.pkmnSecondaryColorx, BattleView.pkmnSecondaryColory, 4);
+        g.translate(-36, -224);
+
+        // Draw Messages Box
+        g.drawImage(tiles.getTile(0x20), 415, 440, null);
+
+        // Draw Box Outlines for Pokemon Info
+        if (!selectedPkm.canFight()) { // Fainted Pokemon and Eggs
+            g.drawImage(tiles.getTile(0x35), 30, 224, null);
+            g.drawImage(tiles.getTile(0x31), 55, 249, null);
+        }
+        else {
+            g.drawImage(tiles.getTile(0x34), 30, 224, null);
+            g.drawImage(tiles.getTile(0x30), 55, 249, null);
+        }
+
+        if (selectedPkm.isEgg()) {
+            // Name
+            DrawUtils.setFont(g, 16);
+            g.setColor(Color.BLACK);
+            String nameStr = selectedPkm.getActualName();
+            g.drawString(nameStr, 62, 269);
+
+            // Description
+            DrawUtils.setFont(g, 14);
+            DrawUtils.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
+        }
+        else {
+            // Name and Gender
+            DrawUtils.setFont(g, 16);
+            g.setColor(Color.BLACK);
+            String nameStr = selectedPkm.getActualName() + " " + selectedPkm.getGender().getCharacter();
+            g.drawString(nameStr, 62, 269);
+
+            // Status Condition
+            String statusStr = selectedPkm.getStatus().getType().getName();
+            g.drawString(statusStr, 179, 269);
+
+            // Level
+            String levelStr = "Lv" + selectedPkm.getLevel();
+            g.drawString(levelStr, 220, 269);
+
+            // Draw type tiles
+            if (type[1] == Type.NO_TYPE) {
+                g.drawImage(tiles.getTile(type[0].getImageIndex()), 322, 255, null);
+            }
+            else {
+                g.drawImage(tiles.getTile(type[0].getImageIndex()), 285, 255, null);
+                g.drawImage(tiles.getTile(type[1].getImageIndex()), 322, 255, null);
+            }
+
+            // Ability
+            DrawUtils.setFont(g, 14);
+            g.drawString(selectedPkm.getActualAbility().getName(), 62, 288);
+
+            // Experience
+            g.drawString("EXP", 220, 288);
+            DrawUtils.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), 352, 288);
+
+            g.drawString(selectedPkm.getActualHeldItem().getName(), 62, 307);
+
+            g.drawString("To Next Lv", 220, 307);
+            DrawUtils.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), 352, 307);
+
+            // Experience Bar
+            float expRatio = selectedPkm.expRatio();
+            g.setColor(DrawUtils.EXP_BAR_COLOR);
+            g.fillRect(222, 315, (int)(137*expRatio), 10);
+
+            // HP Bar
+            g.setColor(selectedPkm.getHPColor());
+            g.fillRect(57, 341, (int)(137*selectedPkm.getHPRatio()), 10);
+
+            // Write stat names
+            DrawUtils.setFont(g, 16);
+            for (int i = 0; i < Stat.NUM_STATS; i++) {
+                g.setColor(selectedPkm.getNature().getColor(i));
+                g.drawString(Stat.getStat(i, false).getShortName(), 62, 21*i + 372);
+            }
+
+            // Write stat values
+            g.setColor(Color.BLACK);
+
+            int[] statsVal = selectedPkm.getStats();
+            for (int i = 0; i < Stat.NUM_STATS; i++) {
+                String valStr = i == Stat.HP.index() ? selectedPkm.getHP() + "/" + statsVal[i] : "" + statsVal[i];
+                DrawUtils.drawRightAlignedString(g, valStr, 188, 21*i + 372);
+            }
+
+            // Draw Move List
+            List<Move> movesList = selectedPkm.getActualMoves();
+            for (int i = 0; i < movesList.size(); i++) {
+                int dx = 228, dy = 359 + i*46;
+                g.translate(dx, dy);
+
+                // Draw Color background
+                Move move = movesList.get(i);
+                g.setColor(move.getAttack().getActualType().getColor());
+                g.fillRect(0, 0, 125, 40);
+                g.drawImage(tiles.getTile(0x32), 0, 0, null);
+
+                // Draw attack name
+                g.setColor(Color.BLACK);
+                g.drawString(move.getAttack().getName(), 7, 17);
+
+                // Draw PP amount
+                DrawUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 118, 33);
+
+                BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
+                g.drawImage(categoryImage, 7, 21, null);
+
+                g.translate(-dx, -dy);
+            }
+        }
+
+        // Draw Switch/Use text
+        DrawUtils.setFont(g, 20);
+        if (view.state == VisualState.USE_ITEM) {
+            g.drawString("Use!", 103, 533);
+        }
+        else {
+            g.drawString("Switch!", 93, 533);
+        }
+
+        // Draw tabs
+        TileSet partyTiles = Game.getData().getPartyTiles();
+        for (int i = 0; i < list.size(); i++) {
+            ActivePokemon pkm = list.get(i);
+
+            // Draw tab
+            if(pkm.isEgg()) {
+                g.setColor(Type.getColors(selectedPkm)[0]);
+            }
+            else {
+                g.setColor(pkm.getActualType()[0].getColor());
+            }
+
+            g.fillRect(32 + i*59, 192, 59, 34);
+            if (i == view.selectedPokemonTab) {
+                g.drawImage(tiles.getTile(0x36), 30 + i*59, 190, null);
+            }
+            else {
+                g.drawImage(tiles.getTile(0x33), 30 + i*59, 190, null);
+            }
+
+            // Draw Pokemon Image
+            BufferedImage img = partyTiles.getTile(pkm.getTinyImageIndex());
+            DrawUtils.drawCenteredImage(g, img, 60 + i*59, 205);
+
+            // Fade out fainted Pokemon
+            if (!pkm.canFight()) {
+                g.setColor(new Color(0, 0, 0, 128));
+                g.fillRect(32 + i*59, 192, 59, 34);
+            }
+        }
+
+        // Draw Messages
+        g.setColor(Color.BLACK);
+        DrawUtils.setFont(g, 30);
+        String msgLine = view.state == VisualState.INVALID_POKEMON && view.message != null ? view.message : "Select a Pok\u00e9mon!";
+        DrawUtils.drawWrappedText(g, msgLine, 440, 485, 350);
+
+        // Draw back arrow when applicable
+        if (!view.switchForced) {
+            View.drawArrows(g, null, view.backButton);
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            view.pokemonTabButtons[i].draw(g);
+        }
+
+        if (view.state == VisualState.USE_ITEM || selectedPkm.canFight()) {
+            view.pokemonSwitchButton.draw(g);
+        }
+
+        view.backButton.draw(g);
+    }
+
+    @Override
+    public void update(BattleView view) {
+        // Update the buttons
+        view.selectedButton = Button.update(view.pokemonButtons, view.selectedButton);
+        view.backButton.update(false, ControlKey.BACK);
+
+        CharacterData player = view.currentBattle.getPlayer();
+        List<ActivePokemon> list = player.getTeam();
+        for (int i = 0; i < list.size(); i++) {
+            if (view.pokemonTabButtons[i].checkConsumePress()) {
+                view.selectedPokemonTab = i;
+                view.setVisualState(view.state); //to update active buttons
+            }
+        }
+
+        // Switch Switch Switcheroo
+        if (view.pokemonSwitchButton.checkConsumePress()) {
+            ActivePokemon selectedPkm = list.get(view.selectedPokemonTab);
+
+            // Use an item on this Pokemon instead of switching
+            if (view.state == VisualState.USE_ITEM) {
+                // Valid item
+                if (player.getBag().battleUseItem(view.selectedItem, selectedPkm, view.currentBattle)) {
+                    player.performAction(view.currentBattle, Action.ITEM);
+                    view.setVisualState(VisualState.MENU);
+                    view.cycleMessage(false);
+                }
+                // Invalid item
+                else {
+                    view.cycleMessage(false);
+                    view.setVisualState(VisualState.INVALID_BAG);
+                }
+            }
+            // Actual switcheroo
+            else {
+                if (player.canSwitch(view.currentBattle, view.selectedPokemonTab)) {
+                    player.setFront(view.selectedPokemonTab);
+                    view.currentBattle.enterBattle(player.front());
+
+                    if (!view.switchForced) {
+                        player.performAction(view.currentBattle, Action.SWITCH);
+                    }
+
+                    view.cycleMessage(false);
+                    view.switchForced = false;
+                    view.lastMoveUsed = 0;
+                }
+                else {
+                    view.cycleMessage(false);
+                    view.setVisualState(VisualState.INVALID_POKEMON);
+                }
+            }
+        }
+
+        // Return to main menu if applicable
+        if (view.backButton.checkConsumePress()) {
+            if (!view.switchForced) {
+                view.setVisualState(VisualState.MENU);
+            }
+        }
+    }
+}

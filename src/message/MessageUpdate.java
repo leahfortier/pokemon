@@ -3,8 +3,8 @@ package message;
 import battle.Battle;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
-import gui.view.BattleView;
-import gui.view.BattleView.VisualState;
+import gui.view.battle.BattleView;
+import gui.view.battle.VisualState;
 import gui.view.ViewMode;
 import main.Game;
 import main.Type;
@@ -80,7 +80,7 @@ public class MessageUpdate {
 			this(battleView -> {});
 		}
 		
-		Update(final BattleView.VisualState visualState) {
+		Update(final VisualState visualState) {
 			this(battleView -> {
                 battleView.setVisualState(visualState);
                 battleView.clearUpdate();
