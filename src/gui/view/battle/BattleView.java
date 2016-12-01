@@ -25,7 +25,7 @@ public class BattleView extends View {
 	// The current battle in view, the current message being displayed, and the current selected button
 	private Battle currentBattle;
 	public String message;
-	public int selectedButton;
+	private int selectedButton;
 	
 	// The current state that the battle is in and current update type
 	public VisualState state;
@@ -75,6 +75,15 @@ public class BattleView extends View {
 	
 	public void setSwitchForced() {
 		VisualState.setSwitchForced();
+	}
+
+	public void setSelectedButton(Button[] buttons) {
+		int buttonIndex = Button.update(buttons, this.selectedButton);
+		this.setSelectedButton(buttonIndex);
+	}
+
+	public void setSelectedButton(int buttonIndex) {
+		this.selectedButton = buttonIndex;
 	}
 	
 	public void clearUpdate() {

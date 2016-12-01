@@ -197,7 +197,7 @@ public class BagState implements VisualStateHandler {
     @Override
     public void update(BattleView view) {
         // Update all bag buttons and the back button
-        view.selectedButton = Button.update(bagButtons, view.selectedButton);
+        view.setSelectedButton(bagButtons);
         view.backButton.update(false, ControlKey.BACK);
 
         // Check tabs

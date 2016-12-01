@@ -126,7 +126,7 @@ public class LearnMoveDeleteState implements VisualStateHandler {
 
     @Override
     public void update(BattleView view) {
-        view.selectedButton = Button.update(moveButtons, view.selectedButton);
+        view.setSelectedButton(moveButtons);
         newMoveButton.update();
 
         for (int i = 0; i < moveButtons.length; i++) {

@@ -99,7 +99,7 @@ public class MenuState implements VisualStateHandler {
         CharacterData player = Game.getPlayer();
 
         // Update menu buttons
-        view.selectedButton = Button.update(menuButtons, view.selectedButton);
+        view.setSelectedButton(menuButtons);
 
         // Show Bag View
         if (bagBtn.checkConsumePress()) {

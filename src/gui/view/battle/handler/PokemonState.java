@@ -280,7 +280,7 @@ public class PokemonState implements VisualStateHandler {
     @Override
     public void update(BattleView view) {
         // Update the buttons
-        view.selectedButton = Button.update(pokemonButtons, view.selectedButton);
+        view.setSelectedButton(pokemonButtons);
         view.backButton.update(false, ControlKey.BACK);
 
         Battle currentBattle = view.getCurrentBattle();

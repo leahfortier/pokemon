@@ -55,7 +55,7 @@ public class FightState implements VisualStateHandler {
 
     @Override
     public void set(BattleView view) {
-        view.selectedButton = lastMoveUsed;
+        view.setSelectedButton(lastMoveUsed);
         selectedMoveList = Game.getPlayer().front().getMoves(view.getCurrentBattle());
         for (int i = 0; i < Move.MAX_MOVES; i++) {
             moveButtons[i].setActive(i < selectedMoveList.size());
@@ -117,7 +117,7 @@ public class FightState implements VisualStateHandler {
     @Override
     public void update(BattleView view) {
         // Update move buttons and the back button
-        view.selectedButton = Button.update(moveButtons, view.selectedButton);
+        view.setSelectedButton(moveButtons);
         view.backButton.update(false, ControlKey.BACK);
 
         CharacterData player = Game.getPlayer();

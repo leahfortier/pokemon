@@ -39,9 +39,9 @@ public class LogState implements VisualStateHandler {
         logMessages = Game.getPlayer().getLogMessages();
 
         if (logMessages.size()/LOGS_PER_PAGE > 0) {
-            view.selectedButton = LOG_RIGHT_BUTTON;
+            view.setSelectedButton(LOG_RIGHT_BUTTON);
             logRightButton.setActive(true);
-            view.selectedButton = Button.update(logButtons, view.selectedButton);
+            view.setSelectedButton(logButtons);
         }
         else {
             logRightButton.setActive(false);
@@ -83,19 +83,19 @@ public class LogState implements VisualStateHandler {
 
     @Override
     public void update(BattleView view) {
-        view.selectedButton = Button.update(logButtons, view.selectedButton);
+        view.setSelectedButton(logButtons);
         view.backButton.update(false, ControlKey.BACK);
 
         int maxLogPage = logMessages.size()/LOGS_PER_PAGE;
 
         if (logLeftButton.checkConsumePress()) {
-            view.selectedButton = LOG_LEFT_BUTTON;
+            view.setSelectedButton(LOG_LEFT_BUTTON);
             logRightButton.setForceHover(false);
             logPage = Math.max(0, logPage - 1);
         }
 
         if (logRightButton.checkConsumePress()) {
-            view.selectedButton = LOG_RIGHT_BUTTON;
+            view.setSelectedButton(LOG_RIGHT_BUTTON);
             logLeftButton.setForceHover(false);
             logPage = Math.min(maxLogPage, logPage + 1);
         }
@@ -104,10 +104,10 @@ public class LogState implements VisualStateHandler {
         logRightButton.setActive(logPage < maxLogPage);
 
         if (logPage == 0 && maxLogPage > 0) {
-            view.selectedButton = LOG_RIGHT_BUTTON;
+            view.setSelectedButton(LOG_RIGHT_BUTTON);
         }
         else if (logPage == maxLogPage) {
-            view.selectedButton = LOG_LEFT_BUTTON;
+            view.setSelectedButton(LOG_LEFT_BUTTON);
         }
 
         if (view.backButton.checkConsumePress()) {
