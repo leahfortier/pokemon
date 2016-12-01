@@ -127,8 +127,7 @@ class PokemonAnimationState {
         state.status = newStatus;
     }
 
-    public void setType(Type[] newType)
-    {
+    public void setType(Type[] newType) {
         state.type = newType;
     }
 
