@@ -56,7 +56,7 @@ public class MapView extends View {
 	
 	public MapView() {
 		currentMapName = StringUtils.empty();
-		state = VisualState.MAP;
+		setState(VisualState.MAP);
 
 		areaDisplayTime = 0;
 
@@ -203,24 +203,12 @@ public class MapView extends View {
 
 	@Override
 	public void update(int dt) {
-		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
 		PlayerEntity playerEntity = player.getEntity();
 
-		boolean showMessage = state != VisualState.BATTLE;
+		boolean showMessage = !this.isState(VisualState.BATTLE);
 
-		if (!currentMapName.equals(player.mapName) || player.mapReset) {
-			currentMapName = player.mapName;
-			currentMap = data.getMap(currentMapName);
-			
-			if (player.mapReset) {
-				player.mapReset = false;
-				currentMap.setCharacterToEntrance(player.mapEntranceName);
-			}
-
-			currentMap.populateEntities();
-			state = VisualState.MAP;
-		}
+		checkMapReset();
 		
 		if (areaDisplayTime > 0) {
 			areaDisplayTime -= dt;
@@ -256,27 +244,46 @@ public class MapView extends View {
 		// Update each non-player entity on the map
 		currentMap.updateEntities(dt, this);
 
-		if (state == VisualState.MAP) {
+		if (this.isState(VisualState.MAP)) {
 			playerEntity.update(dt, currentMap, this);
         }
 
-		if (showMessage && (this.currentMessage == null || StringUtils.isNullOrEmpty(this.currentMessage.getMessage())) && Messages.hasMessages()) {
+        boolean emptyMessage = this.currentMessage == null || StringUtils.isNullOrEmpty(this.currentMessage.getMessage());
+		if (showMessage && emptyMessage && Messages.hasMessages()) {
 			cycleMessage();
 			if (this.currentMessage != null && this.currentMessage.getUpdateType() != Update.ENTER_BATTLE) {
-				state = VisualState.MESSAGE;
+				setState(VisualState.MESSAGE);
 			}
+		}
+	}
+
+	private void checkMapReset() {
+		GameData data = Game.getData();
+		CharacterData player = Game.getPlayer();
+
+		if (!currentMapName.equals(player.mapName) || player.mapReset) {
+			currentMapName = player.mapName;
+			currentMap = data.getMap(currentMapName);
+
+			if (player.mapReset) {
+				player.mapReset = false;
+				currentMap.setCharacterToEntrance(player.mapEntranceName);
+			}
+
+			currentMap.populateEntities();
+			setState(VisualState.MAP);
 		}
 	}
 
 	void cycleMessage() {
 		currentMessage = Messages.getNextMessage();
 
+		// Check if the next message is a trigger and execute if it is
 		if (currentMessage.trigger()) {
 			Trigger trigger = Game.getData().getTrigger(currentMessage.getTriggerName());
-
 			if (trigger.isTriggered()) {
 				trigger.execute();
-				if (state != VisualState.MESSAGE) {
+				if (!this.isState(VisualState.MESSAGE)) {
 					currentMessage = null;
 				}
 
@@ -285,23 +292,28 @@ public class MapView extends View {
 	}
 
 	private void playAreaMusic() {
+		final SoundTitle music;
 		if (currentMusicTitle != null) {
-			SoundPlayer.soundPlayer.playMusic(currentMusicTitle);
+			music = currentMusicTitle;
 		}
-		else if(currentArea != null) {
-			System.err.println("No music specified for current area " + currentArea.getAreaName() + ".");
-			SoundPlayer.soundPlayer.playMusic(SoundTitle.DEFAULT_TUNE);
+		else {
+			if(currentArea != null) {
+				System.err.println("No music specified for current area " + currentArea.getAreaName() + ".");
+			}
+			music = SoundTitle.DEFAULT_TUNE;
 		}
+
+		SoundPlayer.soundPlayer.playMusic(music);
+	}
+
+	public void setBattle(Battle battle, boolean seenWild) {
+		this.setState(VisualState.BATTLE);
+		VisualState.setBattle(battle, seenWild, this.getTerrain());
 	}
 
 	@Override
 	public ViewMode getViewModel() {
 		return ViewMode.MAP_VIEW;
-	}
-	
-	public void setBattle(Battle battle, boolean seenWild) {
-		this.setState(VisualState.BATTLE);
-		VisualState.setBattle(battle, seenWild, this.getTerrain());
 	}
 
 	@Override
