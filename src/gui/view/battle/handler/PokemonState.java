@@ -47,10 +47,13 @@ public class PokemonState implements VisualStateHandler {
         pokemonTabButtons = new Button[Trainer.MAX_POKEMON];
         for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
             pokemonButtons[i] = pokemonTabButtons[i] = new Button(32 + i*59, 192, 59, 34, Button.HoverAction.BOX,
-                    new int[] { (i + 1)%Trainer.MAX_POKEMON, // Right
+                    new int[] {
+                            (i + 1)%Trainer.MAX_POKEMON, // Right
                             POKEMON_SWITCH_BUTTON, // Up
                             (i - 1 + Trainer.MAX_POKEMON)%Trainer.MAX_POKEMON, // Left
-                            POKEMON_SWITCH_BUTTON }); // Down
+                            POKEMON_SWITCH_BUTTON // Down
+                    }
+            );
         }
 
         pokemonButtons[POKEMON_SWITCH_BUTTON] = pokemonSwitchButton = new Button(55, 509, 141, 36, Button.HoverAction.BOX, new int[] { -1, 0, -1, -1 });
@@ -73,8 +76,8 @@ public class PokemonState implements VisualStateHandler {
             pokemonSwitchButton.setActive(list.get(selectedPokemonTab).canFight());
         }
 
-        for (Button b: pokemonButtons) {
-            b.setForceHover(false);
+        for (Button button: pokemonButtons) {
+            button.setForceHover(false);
         }
     }
 

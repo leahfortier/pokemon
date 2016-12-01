@@ -41,7 +41,7 @@ public class MenuState implements VisualStateHandler {
                 609 - 452,
                 515 - 473,
                 Button.HoverAction.ARROW,
-                new int[] {	BAG_BUTTON, SWITCH_BUTTON, RUN_BUTTON, SWITCH_BUTTON}
+                new int[] {	BAG_BUTTON, SWITCH_BUTTON, RUN_BUTTON, SWITCH_BUTTON }
         );
         menuButtons[BAG_BUTTON] = bagBtn = new Button(
                 628,
@@ -71,8 +71,8 @@ public class MenuState implements VisualStateHandler {
 
     @Override
     public void set(BattleView view) {
-        for (Button b: menuButtons) {
-            b.setForceHover(false);
+        for (Button button: menuButtons) {
+            button.setForceHover(false);
         }
     }
 
@@ -88,8 +88,8 @@ public class MenuState implements VisualStateHandler {
         DrawUtils.setFont(g, 30);
         DrawUtils.drawWrappedText(g, "What will " + playerPokemon.getActualName() + " do?", 20, 485, 400);
 
-        for (Button b: menuButtons) {
-            b.draw(g);
+        for (Button button: menuButtons) {
+            button.draw(g);
         }
     }
 
@@ -126,7 +126,7 @@ public class MenuState implements VisualStateHandler {
                 view.cycleMessage(false);
             }
         }
-        else if (InputControl.instance().consumeIfDown(ControlKey.L)) {
+        else if (InputControl.instance().consumeIfDown(ControlKey.LOG)) {
             view.setVisualState(VisualState.LOG_VIEW);
         }
     }

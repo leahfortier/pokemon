@@ -19,9 +19,6 @@ public class MessageState implements VisualStateHandler {
     private int[] newStats;
 
     @Override
-    public void set(BattleView view) {}
-
-    @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
         g.drawImage(tiles.getTile(0x3), 0, 439, null);
 
@@ -33,8 +30,7 @@ public class MessageState implements VisualStateHandler {
         if (view.isState(VisualState.STAT_GAIN)) {
             g.drawImage(tiles.getTile(0x5), 0, 280, null);
             g.setColor(Color.BLACK);
-            for (int i = 0; i < Stat.NUM_STATS; i++)
-            {
+            for (int i = 0; i < Stat.NUM_STATS; i++) {
                 DrawUtils.setFont(g, 16);
                 g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
 

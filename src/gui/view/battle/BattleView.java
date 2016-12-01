@@ -57,7 +57,7 @@ public class BattleView extends View {
 		update = Update.NO_UPDATE;
 		state.reset();
 
-		currentBattle.getPlayer().clearLogMessages();
+		Game.getPlayer().clearLogMessages();
 	}
 
 	@Override

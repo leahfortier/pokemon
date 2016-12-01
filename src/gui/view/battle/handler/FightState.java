@@ -38,10 +38,13 @@ public class FightState implements VisualStateHandler {
                         183,
                         55,
                         Button.HoverAction.BOX,
-                        new int[] { (i + 1)%Move.MAX_MOVES, // Right
+                        new int[] {
+                                (i + 1)%Move.MAX_MOVES, // Right
                                 ((i - Move.MAX_MOVES/2) + Move.MAX_MOVES)%Move.MAX_MOVES, // Up
                                 ((i - 1) + Move.MAX_MOVES)%Move.MAX_MOVES, // Left
-                                (i + Move.MAX_MOVES/2)%Move.MAX_MOVES }); // Down
+                                (i + Move.MAX_MOVES/2)%Move.MAX_MOVES // Down
+                        }
+                );
             }
         }
     }
@@ -59,8 +62,8 @@ public class FightState implements VisualStateHandler {
             moveButtons[i].setActive(i < selectedMoveList.size());
         }
 
-        for (Button b: moveButtons) {
-            b.setForceHover(false);
+        for (Button button : moveButtons) {
+            button.setForceHover(false);
         }
     }
 
