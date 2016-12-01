@@ -1,5 +1,6 @@
 package pattern.map;
 
+import map.Condition;
 import map.entity.Entity;
 import map.entity.ItemEntity;
 import mapMaker.model.TriggerModel.TriggerModelType;
@@ -24,6 +25,11 @@ public class ItemMatcher extends SinglePointTriggerMatcher implements EntityMatc
         return item;
     }
 
+    @Override
+    public String getCondition() {
+        return Condition.and(super.getCondition(), "!has" + this.getTriggerName());
+    }
+
     public ItemNamesies getItem() {
         return ItemNamesies.getValueOf(this.item);
     }
@@ -37,6 +43,4 @@ public class ItemMatcher extends SinglePointTriggerMatcher implements EntityMatc
                 this.getItem()
         );
     }
-
-//    super(matcher, "!has" + matcher.getTriggerName());
 }

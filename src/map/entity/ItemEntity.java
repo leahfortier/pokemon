@@ -33,8 +33,8 @@ public class ItemEntity extends Entity {
 	public void update(int dt, MapData currentMap, MapView view) {}
 
 	@Override
-	public boolean isPresent() {
-		return super.isPresent() && !hasTriggered;
+	public boolean isVisible() {
+		return super.isVisible() && !hasTriggered;
 	}
 
 	@Override
