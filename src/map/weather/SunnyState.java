@@ -1,11 +1,12 @@
 package map.weather;
 
 import main.Global;
+import map.weather.WeatherState.WeatherDrawer;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-class SunnyState extends WeatherDrawer {
+class SunnyState implements WeatherDrawer {
     @Override
     public void draw(Graphics g) {
         g.setColor(new Color(255, 255, 255, 64));

@@ -1,11 +1,12 @@
 package map.weather;
 
 import main.Global;
+import map.weather.WeatherState.WeatherDrawer;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-class RainyState extends WeatherDrawer {
+class RainyState implements WeatherDrawer {
 
     private int[] rainHeight;
     private int lightningFrame;

@@ -1,29 +1,24 @@
 package gui.view.map;
 
 import battle.Battle;
-import gui.Button;
 import gui.GameData;
 import gui.TileSet;
 import gui.view.View;
 import gui.view.ViewMode;
-import input.ControlKey;
-import input.InputControl;
 import main.Game;
 import main.Global;
 import map.AreaData;
 import map.Direction;
 import map.MapData;
 import map.PathDirection;
+import map.TerrainType;
 import map.entity.Entity;
-import map.entity.EntityAction;
 import map.entity.MovableEntity;
 import map.entity.PlayerEntity;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
-import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
-import pokemon.ActivePokemon;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
@@ -38,7 +33,6 @@ import java.awt.image.BufferedImage;
 public class MapView extends View {
 
 	private static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
-	private static final int BATTLE_INTRO_ANIMATION_LIFESPAN = 1000;
 
     private static final PathDirection[] deltaDirections = {
 			PathDirection.WAIT,
@@ -51,60 +45,66 @@ public class MapView extends View {
 	private MapData currentMap;
 	private SoundTitle currentMusicTitle;
 
-	private MessageUpdate currentMessage;
-	private int dialogueSelection;
-
 	private Point start;
 	private Point end;
 	private Point draw;
 	
 	private int areaDisplayTime;
-	
-	private Battle battle;
-	private boolean seenWild;
-	private int battleAnimationTime;
-	
-	private BufferedImage battleImageSlideRight;
-	private BufferedImage battleImageSlideLeft;
 
 	private VisualState state;
-	
-	private int selectedButton;
-	private final Button[] menuButtons;
+	private MessageUpdate currentMessage;
 	
 	public MapView() {
 		currentMapName = StringUtils.empty();
 		state = VisualState.MAP;
-		selectedButton = 0;
-		
+
 		areaDisplayTime = 0;
-		
-		menuButtons = new Button[MenuState.values().length];
-		
-		for (int i = 0; i < menuButtons.length; i++) {
-			menuButtons[i] = new Button(558, 72*i + 10, 240, 70, Button.HoverAction.ARROW, 
-					new int[] {	Button.NO_TRANSITION, // Right
-								Button.basicUp(i, menuButtons.length), // Up
-								Button.NO_TRANSITION, // Left
-								Button.basicDown(i, menuButtons.length) // Down
-							});
-		}
 
 		start = new Point();
 		end = new Point();
 		draw = new Point();
 	}
 
+	boolean isState(VisualState state) {
+		return this.state == state;
+	}
+
 	void setState(VisualState newState) {
 		this.state = newState;
 	}
 
-	// TODO: This method should be split up further
+	MessageUpdate getCurrentMessage() {
+		return this.currentMessage;
+	}
+
+	void resetCurrentMessage() {
+		this.currentMessage = null;
+	}
+
+	TerrainType getTerrain() {
+		return this.currentArea.getTerrain();
+	}
+
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 
+		drawTiles(g);
+
+		if (currentArea != null) {
+			currentArea.getWeather().draw(g);
+		}
+
+		// Area Transition
+		if (areaDisplayTime > 0) {
+			drawAreaTransitionAnimation(g);
+		}
+
+		state.draw(g, this);
+	}
+
+	private void drawTiles(Graphics g) {
 		GameData data = Game.getData();
 		TileSet mapTiles = data.getMapTiles();
 
@@ -129,91 +129,35 @@ public class MapView extends View {
 					BufferedImage img = mapTiles.getTile(fgTile);
 					DrawUtils.drawTileImage(g, img, x, y, draw);
 				}
-				
+
 				// Draw entities
 				// Check for entities above and to the left of this location to see if they just moved out and draw them again.
 				for (PathDirection pathDirection : deltaDirections) {
 					Point delta = pathDirection.getDeltaPoint();
-                    Point newPoint = Point.add(delta, x, y);
+					Point newPoint = Point.add(delta, x, y);
 
-                    Entity newPointEntity = currentMap.getEntity(newPoint);
-                    if (newPointEntity == null) {
-                        continue;
-                    }
+					Entity newPointEntity = currentMap.getEntity(newPoint);
+					if (newPointEntity == null) {
+						continue;
+					}
 
-                    // TODO: I'm getting really confused about this whole check up and left only thing what is happening
-                    // If entity is a movable entity and they are moving right or down, do not draw them again.
-                    if (newPointEntity instanceof MovableEntity) {
-                        Direction transitionDirection = ((MovableEntity)newPointEntity).getDirection();
-                        if (!delta.isZero() && (transitionDirection == Direction.RIGHT || transitionDirection == Direction.DOWN)) {
-                            continue;
-                        }
-                    }
-                    // Not a movable entity, only draw once.
-                    else if (!delta.isZero()) {
-                        continue;
-                    }
+					// TODO: I'm getting really confused about this whole check up and left only thing what is happening
+					// If entity is a movable entity and they are moving right or down, do not draw them again.
+					if (newPointEntity instanceof MovableEntity) {
+						Direction transitionDirection = ((MovableEntity)newPointEntity).getDirection();
+						if (!delta.isZero() && (transitionDirection == Direction.RIGHT || transitionDirection == Direction.DOWN)) {
+							continue;
+						}
+					}
+					// Not a movable entity, only draw once.
+					else if (!delta.isZero()) {
+						continue;
+					}
 
-                    // TODO: Checking zero logic seems like it can be simplified
-                    newPointEntity.draw(g, draw, !delta.isZero());
+					// TODO: Checking zero logic seems like it can be simplified
+					newPointEntity.draw(g, draw, !delta.isZero());
 				}
 			}
-		}
-
-		if (currentArea != null) {
-			currentArea.getWeather().draw(g);
-		}
-
-		// Area Transition
-		if (areaDisplayTime > 0) {
-			drawAreaTransitionAnimation(g);
-		}
-		
-		switch (state) {
-			case MESSAGE:
-				BufferedImage bg = data.getBattleTiles().getTile(3);
-				g.drawImage(bg, 0, 439, null);
-				
-				DrawUtils.setFont(g, 30);
-				g.setColor(Color.BLACK);
-
-				int height = DrawUtils.drawWrappedText(g, currentMessage.getMessage(), 30, 490, 720);
-				if (currentMessage.isChoice()) {
-					ChoiceMatcher[] choices = currentMessage.getChoices();
-					for (int i = 0; i < choices.length; i++) {
-						int y = height + i*DrawUtils.getDistanceBetweenRows(g);
-						if (i == dialogueSelection) {
-							g.fillOval(50, y - DrawUtils.getTextHeight(g)/2 - 5, 10, 10);
-						}
-
-						g.drawString(choices[i].text, 80, y);
-					}
-				}
-				break;
-			case MENU:
-				TileSet menuTiles = data.getMenuTiles();
-				
-				g.drawImage(menuTiles.getTile(1), 527, 0, null);
-				DrawUtils.setFont(g, 40);
-				g.setColor(Color.BLACK);
-
-				for (MenuState menuState : MenuState.values()) {
-					g.drawString(menuState.getDisplayName(), 558, 59 + 72*menuState.ordinal());
-				}
-				
-				for (Button b: menuButtons) {
-					b.draw(g);
-				}
-				break;
-			case BATTLE_ANIMATION:
-				if (battleImageSlideRight != null && battleImageSlideLeft != null) {
-					drawBattleIntroAnimation(g);
-				}
-				break;
-			case MAP:
-				break;
-			default:
-				break;
 		}
 	}
 
@@ -256,70 +200,14 @@ public class MapView extends View {
 		DrawUtils.setFont(g, fontSize);
 		DrawUtils.drawCenteredString(g, currentArea.getAreaName(), 0, yValue, totalWidth, totalHeight);
 	}
-	
-	// Display battle intro animation.
-	private void drawBattleIntroAnimation(Graphics g) {
-		int drawWidth = Global.GAME_SIZE.width/2;
-		int drawHeightLeft;
-		int drawHeightRight;
-		float moveInAnimationPercentage;
-		float fadeOutPercentage = 0.2f;
-		
-		if (battle.isWildBattle()) {
-			drawHeightRight = drawHeightLeft = Global.GAME_SIZE.height * 5 / 8;
-			drawHeightLeft -= battleImageSlideLeft.getHeight()/2;
-			drawHeightRight -= battleImageSlideRight.getHeight();
-			
-			moveInAnimationPercentage = 0.5f;
-		}
-		else {
-			drawHeightRight = drawHeightLeft = Global.GAME_SIZE.height/2;
-			drawHeightLeft -= battleImageSlideLeft.getHeight();
-			//drawHeightRight -= battleImageSlideRight.getHeight();
-			
-			moveInAnimationPercentage = 0.4f;
-		}
-		
-		
-		// Images slide in from sides
-		if (battleAnimationTime > BATTLE_INTRO_ANIMATION_LIFESPAN*(1-moveInAnimationPercentage)) {
-			float normalizedTime = (battleAnimationTime - BATTLE_INTRO_ANIMATION_LIFESPAN*(1-moveInAnimationPercentage))/ (BATTLE_INTRO_ANIMATION_LIFESPAN*moveInAnimationPercentage);
 
-			int dist = -battleImageSlideRight.getWidth()/2 -drawWidth;
-			dist = (int)(dist * normalizedTime);
-			
-			g.drawImage(battleImageSlideLeft, drawWidth - battleImageSlideLeft.getWidth()/2 + dist, drawHeightLeft, null);
-			
-			dist = Global.GAME_SIZE.width;
-			dist = (int)(dist * normalizedTime);
-			
-			g.drawImage(battleImageSlideRight, drawWidth - battleImageSlideRight.getWidth()/2 + dist, drawHeightRight, null);
-		}
-		// Hold images
-		else {
-			g.drawImage(battleImageSlideLeft, drawWidth - battleImageSlideLeft.getWidth()/2, drawHeightLeft, null);
-			g.drawImage(battleImageSlideRight, drawWidth - battleImageSlideRight.getWidth()/2, drawHeightRight, null);
-			
-			//Fade to black before battle appears.
-			if (battleAnimationTime < BATTLE_INTRO_ANIMATION_LIFESPAN*fadeOutPercentage)
-			{
-				int f = Math.min(255, (int)((BATTLE_INTRO_ANIMATION_LIFESPAN*fadeOutPercentage - battleAnimationTime)/ (BATTLE_INTRO_ANIMATION_LIFESPAN*fadeOutPercentage) *255));
-				
-				g.setColor(new Color(0, 0, 0, f));
-				g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
-			}
-		}
-	}
-
-	// TODO: omg split this up
 	@Override
 	public void update(int dt) {
-		boolean showMessage = true;
-
-		InputControl input = InputControl.instance();
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
 		PlayerEntity playerEntity = player.getEntity();
+
+		boolean showMessage = state != VisualState.BATTLE;
 
 		if (!currentMapName.equals(player.mapName) || player.mapReset) {
 			currentMapName = player.mapName;
@@ -356,84 +244,8 @@ public class MapView extends View {
 			currentMusicTitle = areaMusic;
 			playAreaMusic();
 		}
-		
-		switch (state) {
-			case BATTLE_ANIMATION:
-				if (battleImageSlideLeft == null || battleImageSlideRight == null) {
-					loadBattleImages();
-				}
 
-				if (battleAnimationTime < 0) {
-					battle = null;
-					Game.setViewMode(ViewMode.BATTLE_VIEW);
-					state = VisualState.MAP;
-				}
-				
-				battleAnimationTime -= dt;
-				showMessage = false;
-				break;
-			case MAP:
-				if (input.consumeIfDown(ControlKey.ESC)) {
-					state = VisualState.MENU;
-				}
-				break;
-			case MESSAGE:
-				if (currentMessage.isChoice()) {
-					if (input.consumeIfDown(ControlKey.DOWN)) {
-						dialogueSelection++;
-					} else if (input.consumeIfDown(ControlKey.UP)) {
-						dialogueSelection--;
-					}
-
-					dialogueSelection += currentMessage.getChoices().length;
-					dialogueSelection %= currentMessage.getChoices().length;
-				}
-
-				if (!SoundPlayer.soundPlayer.soundEffectIsPlaying() && input.consumeIfDown(ControlKey.SPACE)) {
-					if (currentMessage.isChoice()) {
-						ChoiceMatcher choice = currentMessage.getChoices()[dialogueSelection];
-						Trigger trigger = EntityAction.addActionGroupTrigger(null, null, null, choice.getActions());
-						Messages.addMessageToFront(new MessageUpdate("", trigger.getName(), Update.TRIGGER));
-					}
-
-					boolean newMessage = false;
-					while (Messages.hasMessages()) {
-						cycleMessage();
-
-						if (state != VisualState.MESSAGE || !StringUtils.isNullOrEmpty(currentMessage.getMessage())) {
-							newMessage = true;
-							break;
-						}
-					}
-
-					if (!newMessage && !Messages.hasMessages()) {
-						playerEntity.resetCurrentInteractionEntity();
-						currentMessage = null;
-						if (battle == null) {
-							state = VisualState.MAP;
-						}
-					}
-				}
-				break;
-			case MENU:
-				selectedButton = Button.update(menuButtons, selectedButton);
-				int clicked = -1;
-				for (int i = 0; i < menuButtons.length; i++) {
-					if (menuButtons[i].checkConsumePress()) {
-						clicked = i;
-					}
-				}
-
-				if (clicked != -1) {
-					MenuState menuState = MenuState.values()[clicked];
-					menuState.execute(this);
-				}
-				
-				if (input.consumeIfDown(ControlKey.ESC)) {
-					state = VisualState.MAP;
-				}
-				break;
-		}
+		this.state.update(dt, this);
 
 		Point tilesLocation = Point.scaleDown(Global.GAME_SIZE, Global.TILE_SIZE);
 
@@ -456,7 +268,7 @@ public class MapView extends View {
 		}
 	}
 
-	private void cycleMessage() {
+	void cycleMessage() {
 		currentMessage = Messages.getNextMessage();
 
 		if (currentMessage.trigger()) {
@@ -488,40 +300,8 @@ public class MapView extends View {
 	}
 	
 	public void setBattle(Battle battle, boolean seenWild) {
-		this.battle = battle;
-		battleAnimationTime = BATTLE_INTRO_ANIMATION_LIFESPAN;
-		state = VisualState.BATTLE_ANIMATION;
-		battleImageSlideLeft = null;
-		battleImageSlideRight = null;
-		this.seenWild = seenWild;
-		
-		this.battle.setTerrainType(currentArea.getTerrain(), true);
-		
-		if (battle.isWildBattle()) {
-			SoundPlayer.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_BATTLE);
-		}
-		else {
-			SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_BATTLE);
-		}
-	}
-
-	private void loadBattleImages() {
-		GameData data = Game.getData();
-
-		if (battle.isWildBattle()) {
-			battleImageSlideLeft = data.getBattleTiles().getTile(0x300 + currentArea.getTerrain().ordinal());
-			
-			ActivePokemon p = battle.getOpponent().front();
-			battleImageSlideRight = data.getPokemonTilesLarge().getTile(p.getImageIndex());
-			
-			if (seenWild) {
-				battleImageSlideRight = DrawUtils.colorImage(battleImageSlideRight, new float[] { 0, 0, 0, 1 }, new float[] { 0, 0, 0, 0 });
-			}
-		}
-		else {
-			battleImageSlideRight = data.getBattleTiles().getTile(0x00100001);
-			battleImageSlideLeft = data.getBattleTiles().getTile(0x00100000);
-		}
+		this.setState(VisualState.BATTLE);
+		VisualState.setBattle(battle, seenWild, this.getTerrain());
 	}
 
 	@Override

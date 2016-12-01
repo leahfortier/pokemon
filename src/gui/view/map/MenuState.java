@@ -1,56 +1,73 @@
 package gui.view.map;
 
-import gui.view.ViewMode;
+import gui.Button;
+import gui.GameData;
+import gui.TileSet;
+import gui.view.map.VisualState.VisualStateHandler;
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
-import message.Messages;
-import message.Messages.MessageState;
-import util.PokeString;
-import util.Save;
+import util.DrawUtils;
 
-enum MenuState {
-    POKEDEX(() -> PokeString.POKEDEX, ViewMode.POKEDEX_VIEW),
-    POKEMON(() -> PokeString.POKEMON, ViewMode.PARTY_VIEW),
-    BAG(() -> "Bag", mapView -> {
-        Game.setViewMode(ViewMode.BAG_VIEW);
-        Messages.clearMessages(MessageState.BAGGIN_IT_UP);
-        Messages.setMessageState(MessageState.BAGGIN_IT_UP);
-    }),
-    TRAINER_CARD(() -> Game.getPlayer().getName(), ViewMode.TRAINER_CARD_VIEW),
-    OPTIONS(() -> "Options", ViewMode.OPTIONS_VIEW),
-    SAVE(() -> "Save", mapView -> {
-        // TODO: Question user if they would like to save first.
-        Save.save();
-        Messages.addMessage("Your game has now been saved!");
-        mapView.setState(VisualState.MESSAGE);
-    }),
-    EXIT(() -> "Exit", ViewMode.MAIN_MENU_VIEW), // TODO: Confirmation
-    RETURN(() -> "Return", mapView -> mapView.setState(VisualState.MAP));
+import java.awt.Color;
+import java.awt.Graphics;
 
-    private final DisplayNameGetter displayNameGetter;
-    private final StateChanger stateChanger;
+class MenuState implements VisualStateHandler {
+    private final Button[] menuButtons;
 
-    MenuState(DisplayNameGetter displayNameGetter, ViewMode viewMode) {
-        this(displayNameGetter, mapView -> Game.setViewMode(viewMode));
+    private int selectedButton;
+
+    MenuState() {
+        selectedButton = 0;
+        menuButtons = new Button[MenuChoice.values().length];
+
+        for (int i = 0; i < menuButtons.length; i++) {
+            menuButtons[i] = new Button(558, 72*i + 10, 240, 70, Button.HoverAction.ARROW,
+                    new int[] {	Button.NO_TRANSITION, // Right
+                            Button.basicUp(i, menuButtons.length), // Up
+                            Button.NO_TRANSITION, // Left
+                            Button.basicDown(i, menuButtons.length) // Down
+                    });
+        }
     }
 
-    MenuState(DisplayNameGetter displayNameGetter, StateChanger stateChanger) {
-        this.displayNameGetter = displayNameGetter;
-        this.stateChanger = stateChanger;
+    @Override
+    public void draw(Graphics g, MapView mapView) {
+        GameData data = Game.getData();
+        TileSet menuTiles = data.getMenuTiles();
+
+        g.drawImage(menuTiles.getTile(1), 527, 0, null);
+        DrawUtils.setFont(g, 40);
+        g.setColor(Color.BLACK);
+
+        for (MenuChoice menuChoice : MenuChoice.values()) {
+            g.drawString(menuChoice.getDisplayName(), 558, 59 + 72*menuChoice.ordinal());
+        }
+
+        for (Button button: menuButtons) {
+            button.draw(g);
+        }
     }
 
-    private interface DisplayNameGetter {
-        String getDisplayName();
-    }
+    @Override
+    public void update(int dt, MapView mapView) {
+        InputControl input = InputControl.instance();
+        selectedButton = Button.update(menuButtons, selectedButton);
 
-    private interface StateChanger {
-        void execute(MapView mapView);
-    }
+        int clicked = -1;
+        for (int i = 0; i < menuButtons.length; i++) {
+            if (menuButtons[i].checkConsumePress()) {
+                clicked = i;
+            }
+        }
 
-    public String getDisplayName() {
-        return this.displayNameGetter.getDisplayName();
-    }
+        if (clicked != -1) {
+            MenuChoice menuChoice = MenuChoice.values()[clicked];
+            menuChoice.execute(mapView);
+        }
 
-    public void execute(MapView mapView) {
-        this.stateChanger.execute(mapView);
+        if (input.consumeIfDown(ControlKey.ESC)) {
+            mapView.setState(VisualState.MAP);
+        }
     }
 }
