@@ -14,8 +14,6 @@ import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import pokemon.ActivePokemon;
-import sound.SoundPlayer;
-import sound.SoundTitle;
 import util.StringUtils;
 
 import java.awt.Color;
@@ -34,8 +32,8 @@ public class BattleView extends View {
 	private Update update;
 	
 	// Holds the animation for the player and the opponent
-	public final PokemonAnimationState playerAnimation;
-	public final PokemonAnimationState enemyAnimation;
+	private final PokemonAnimationState playerAnimation;
+	private final PokemonAnimationState enemyAnimation;
 
 	// All the different buttons!!
 	private final Button backButton;
@@ -52,11 +50,8 @@ public class BattleView extends View {
 		currentBattle = b;
 		selectedButton = 0;
 		
-		playerAnimation.resetVals(b.getPlayer().front());
-		enemyAnimation.resetVals(b.getOpponent().front());
-		
-		playerAnimation.state.imageNumber = 0;
-		enemyAnimation.state.imageNumber = 0;
+		playerAnimation.resetBattle(b.getPlayer().front());
+		enemyAnimation.resetBattle(b.getOpponent().front());
 		
 		setVisualState(VisualState.MESSAGE);
 		update = Update.NO_UPDATE;
@@ -132,7 +127,11 @@ public class BattleView extends View {
 			setVisualState(VisualState.MENU);
 		}
 	}
-	
+
+	public boolean isPlayingAnimation() {
+		return playerAnimation.isAnimationPlaying() || enemyAnimation.isAnimationPlaying();
+	}
+
 	public void clearUpdate() {
 		this.update = Update.NO_UPDATE;
 	}
@@ -162,64 +161,10 @@ public class BattleView extends View {
 			currentBattle.getPlayer().addLogMessage(newMessage);
 			
 			PokemonAnimationState state = newMessage.target() ? playerAnimation : enemyAnimation;
-			if (newMessage.switchUpdate()) {
-				state.resetVals(
-						newMessage.getHP(),
-						newMessage.getStatus(),
-						newMessage.getType(),
-						newMessage.getShiny(),
-						newMessage.getPokemon(),
-						newMessage.getName(),
-						newMessage.getMaxHP(),
-						newMessage.getLevel(),
-						newMessage.getGender(),
-						newMessage.getEXPRatio());
-			}
-			else {
-				// TODO: Fuck this I hate this
-				if (newMessage.healthUpdate()) {
-					state.startHpAnimation(newMessage.getHP());
-				}
-
-				if (newMessage.maxHealthUpdate()) {
-					state.setMaxHP(newMessage.getMaxHP());
-				}
-
-				if (newMessage.statusUpdate()) {
-					state.setStatus(newMessage.getStatus());
-				}
-
-				if (newMessage.typeUpdate()) {
-					state.setType(newMessage.getType());
-				}
-
-				if (newMessage.catchUpdate()) {
-					state.startCatchAnimation(newMessage.getDuration() == -1? -1 : newMessage.getDuration());
-				}
-
-				if (newMessage.pokemonUpdate()) {
-					state.startPokemonUpdateAnimation(newMessage.getPokemon(), newMessage.getShiny(), newMessage.isAnimate());
-				}
-
+			state.checkMessage(newMessage);
+			if (!newMessage.switchUpdate()) {
 				if (newMessage.hasUpdateType()) {
 					update = newMessage.getUpdateType();
-				}
-
-				if (newMessage.expUpdate()) {
-					state.startExpAnimation(newMessage.getEXPRatio(), newMessage.levelUpdate());
-				}
-
-				if (newMessage.levelUpdate()) {
-					SoundPlayer.soundPlayer.playSoundEffect(SoundTitle.LEVEL_UP);
-					state.setLevel(newMessage.getLevel());
-				}
-
-				if (newMessage.nameUpdate()) {
-					state.setName(newMessage.getName());
-				}
-
-				if (newMessage.genderUpdate()) {
-					state.setGender(newMessage.getGender());
 				}
 
 				this.state.checkMessage(newMessage);
@@ -288,11 +233,11 @@ public class BattleView extends View {
 		
 		// Draw Status Box Text
 		g.translate(463,  304);
-		playerAnimation.drawStatusBoxText(g, 0, tiles, player);
+		playerAnimation.drawStatusBoxText(g, 0, tiles);
 		g.translate(-463, -304);
 		
 		g.translate(42,  52);
-		enemyAnimation.drawStatusBoxText(g, 1, tiles, opponent);
+		enemyAnimation.drawStatusBoxText(g, 1, tiles);
 		g.translate(-42, -52);
 		
 		g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);

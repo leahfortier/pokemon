@@ -5,9 +5,12 @@ import gui.TileSet;
 import main.Game;
 import main.Global;
 import main.Type;
+import message.MessageUpdate;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
+import sound.SoundPlayer;
+import sound.SoundTitle;
 import trainer.CharacterData;
 import util.DrawUtils;
 
@@ -17,7 +20,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 // Handles animation and keeps track of the current state
-public class PokemonAnimationState {
+class PokemonAnimationState {
 
     // Loss Constants <-- Super Meaningful Comment
     private static final int FRAMES_PER_HP_LOSS = 20;
@@ -36,9 +39,17 @@ public class PokemonAnimationState {
     private static final int[][] secondaryColorx = { { 294, 199, 94, 294 }, { 191, 294, 294, 104 } };
     private static final int[][] secondaryColory = { { 0, 0, 105, 105 }, { 0, 0, 88, 88 } };
 
-    private BattleView battleView; // todo
-    public PokemonState oldState, state;
-    private int animationHP, animationEvolve, animationExp, animationCatch;
+    private BattleView battleView;
+
+    // Previous and current state
+    private PokemonState oldState;
+    private PokemonState state;
+
+    // Animation values
+    private int animationHP;
+    private int animationEvolve;
+    private int animationExp;
+    private int animationCatch;
     private int animationCatchDuration;
 
     PokemonAnimationState(BattleView battleView) {
@@ -47,7 +58,12 @@ public class PokemonAnimationState {
         state = new PokemonState();
     }
 
-    public void resetVals(ActivePokemon p) {
+    void resetBattle(ActivePokemon p) {
+        resetVals(p);
+        state.imageNumber = 0;
+    }
+
+    private void resetVals(ActivePokemon p) {
         resetVals(
                 p.getHP(),
                 p.getStatus().getType(),
@@ -62,9 +78,8 @@ public class PokemonAnimationState {
         );
     }
 
-    // todo
     // Resets all the values in a state
-    public void resetVals(
+    private void resetVals(
             int hp,
             StatusCondition status,
             Type[] type,
@@ -93,7 +108,7 @@ public class PokemonAnimationState {
         state.expRatio = oldState.expRatio = expRatio;
     }
 
-    public void startHpAnimation(int newHp) {
+    private void startHpAnimation(int newHp) {
         if (newHp == state.hp) {
             return;
         }
@@ -103,7 +118,7 @@ public class PokemonAnimationState {
         animationHP = Math.abs(oldState.hp - state.hp)*FRAMES_PER_HP_LOSS;
     }
 
-    public void setMaxHP(int newMax) {
+    private void setMaxHP(int newMax) {
         state.maxHp = newMax;
     }
 
@@ -117,7 +132,7 @@ public class PokemonAnimationState {
         state.type = newType;
     }
 
-    public void startPokemonUpdateAnimation(PokemonInfo newPokemon, boolean newShiny, boolean animate) {
+    private void startPokemonUpdateAnimation(PokemonInfo newPokemon, boolean newShiny, boolean animate) {
         state.shiny = newShiny;
         if (state.imageNumber != 0) {
             oldState.imageNumber = state.imageNumber;
@@ -130,18 +145,18 @@ public class PokemonAnimationState {
         animationCatchDuration = 0;
     }
 
-    public void startCatchAnimation(int duration) {
+    private void startCatchAnimation(int duration) {
         if (duration == -1) { // TODO: There should be a constant for this
             animationCatch = CATCH_ANIMATION_LIFESPAN;
             animationCatchDuration = -1;
         }
         else {
-            // TODO: uggy
-            animationCatch = animationCatchDuration = duration* CATCH_SHAKE_ANIMATION_LIFESPAN + 2* CATCH_TRANSFORM_ANIMATION_LIFESPAN;
+            animationCatch = duration*CATCH_SHAKE_ANIMATION_LIFESPAN + 2*CATCH_TRANSFORM_ANIMATION_LIFESPAN;
+            animationCatchDuration = animationCatch;
         }
     }
 
-    public void startExpAnimation(float newExpRatio, boolean levelUp) {
+    private void startExpAnimation(float newExpRatio, boolean levelUp) {
         oldState.expRatio = levelUp ? 0 : state.expRatio;
         state.expRatio = newExpRatio;
         animationExp = (int)(100*Math.abs(oldState.expRatio - state.expRatio)*FRAMES_PER_HP_LOSS);
@@ -163,12 +178,13 @@ public class PokemonAnimationState {
         return state.imageNumber == 0;
     }
 
-    public boolean isAnimationPlaying() {
+    boolean isAnimationPlaying() {
         return animationHP != 0 || animationEvolve != 0 || animationCatch != 0 || animationExp != 0;
     }
 
     // Draws all of the text inside the status box
-    public void drawStatusBoxText(Graphics g, int isEnemy, TileSet tiles, ActivePokemon pokemon) {
+    void drawStatusBoxText(Graphics g, int isEnemy, TileSet tiles) {
+
         // Name, Gender, Level, Status Condition
         DrawUtils.setFont(g, 27);
         DrawUtils.drawShadowText(g, state.name + " " + state.gender.getCharacter(), 20, 40, false);
@@ -197,7 +213,7 @@ public class PokemonAnimationState {
 
     // TODO: Is this code duplicated in other places? Like the evolution view by any chance
     // Might want to include a helper class that contains a generic method for different types of animations
-    private void catchAnimation(Graphics g, BufferedImage plyrImg, int isEnemy, TileSet pkmTiles, int px, int py) {
+    private void catchAnimation(Graphics g, BufferedImage plyrImg, TileSet pkmTiles, int px, int py) {
         Graphics2D g2d = (Graphics2D)g;
         float[] pokeyScales = { 1f, 1f, 1f, 1f };
         float[] pokeyOffsets = { 255f, 255f, 255f, 0f };
@@ -340,7 +356,7 @@ public class PokemonAnimationState {
     }
 
     // Draws the status box, not including the text
-    public void drawStatusBox(Graphics g, int isEnemy, ActivePokemon pokemon, TileSet pkmTiles, int px, int py) { //-42 -52
+    void drawStatusBox(Graphics g, int isEnemy, ActivePokemon pokemon, TileSet pkmTiles, int px, int py) { //-42 -52
         // Draw the colored type polygons
         Color[] typeColors = Type.getColors(state.type);
         g.setColor(typeColors[0]);
@@ -362,7 +378,7 @@ public class PokemonAnimationState {
                     evolveAnimation(g, plyrImg, isEnemy, pkmTiles, px, py);
                 }
                 else if (animationCatch > 0) {
-                    catchAnimation(g, plyrImg, isEnemy, pkmTiles, px, py);
+                    catchAnimation(g, plyrImg, pkmTiles, px, py);
                 }
                 else {
                     if (animationCatchDuration == -1) {
@@ -375,6 +391,84 @@ public class PokemonAnimationState {
                     animationCatch = 0;
                 }
             }
+        }
+    }
+
+    void checkMessage(MessageUpdate newMessage) {
+        if (newMessage.switchUpdate()) {
+            resetVals(
+                    newMessage.getHP(),
+                    newMessage.getStatus(),
+                    newMessage.getType(),
+                    newMessage.getShiny(),
+                    newMessage.getPokemon(),
+                    newMessage.getName(),
+                    newMessage.getMaxHP(),
+                    newMessage.getLevel(),
+                    newMessage.getGender(),
+                    newMessage.getEXPRatio());
+        }
+        else {
+            // TODO: Fuck this I hate this
+            if (newMessage.healthUpdate()) {
+                startHpAnimation(newMessage.getHP());
+            }
+
+            if (newMessage.maxHealthUpdate()) {
+                setMaxHP(newMessage.getMaxHP());
+            }
+
+            if (newMessage.statusUpdate()) {
+                setStatus(newMessage.getStatus());
+            }
+
+            if (newMessage.typeUpdate()) {
+                setType(newMessage.getType());
+            }
+
+            if (newMessage.catchUpdate()) {
+                startCatchAnimation(newMessage.getDuration() == -1? -1 : newMessage.getDuration());
+            }
+
+            if (newMessage.pokemonUpdate()) {
+                startPokemonUpdateAnimation(newMessage.getPokemon(), newMessage.getShiny(), newMessage.isAnimate());
+            }
+
+            if (newMessage.expUpdate()) {
+                startExpAnimation(newMessage.getEXPRatio(), newMessage.levelUpdate());
+            }
+
+            if (newMessage.levelUpdate()) {
+                SoundPlayer.soundPlayer.playSoundEffect(SoundTitle.LEVEL_UP);
+                setLevel(newMessage.getLevel());
+            }
+
+            if (newMessage.nameUpdate()) {
+                setName(newMessage.getName());
+            }
+
+            if (newMessage.genderUpdate()) {
+                setGender(newMessage.getGender());
+            }
+        }
+    }
+
+    // A class to hold the state of a Pokemon
+    private static class PokemonState {
+        private int maxHp;
+        private int hp;
+        private int imageNumber;
+        private int level;
+        private String name;
+        private StatusCondition status;
+        private Type[] type;
+        private float expRatio;
+        private boolean shiny;
+        private boolean caught;
+        private Gender gender;
+
+        PokemonState() {
+            type = new Type[2];
         }
     }
 }

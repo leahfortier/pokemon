@@ -59,7 +59,7 @@ public class MessageState implements VisualStateHandler {
         }
 
         // Don't go to the next message if an animation is playing
-        if (pressed && view.hasMessage() && !view.playerAnimation.isAnimationPlaying() && !view.enemyAnimation.isAnimationPlaying()) {
+        if (pressed && view.hasMessage() && !view.isPlayingAnimation()) {
             if (view.state == VisualState.STAT_GAIN) view.setVisualState(VisualState.MESSAGE);
             view.cycleMessage(false);
         }
