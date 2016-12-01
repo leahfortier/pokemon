@@ -4,8 +4,6 @@ import gui.Button;
 import gui.TileSet;
 import gui.view.View;
 import gui.view.battle.BattleView;
-import gui.view.battle.VisualState;
-import input.ControlKey;
 import main.Game;
 import util.DrawUtils;
 
@@ -77,14 +75,12 @@ public class LogState implements VisualStateHandler {
         g.drawString("Log Blog", 440, 550);
 
         // Draw back arrow when applicable
-        View.drawArrows(g, null, view.backButton);
-        view.backButton.draw(g);
+        view.drawBackButton(g);
     }
 
     @Override
     public void update(BattleView view) {
         view.setSelectedButton(logButtons);
-        view.backButton.update(false, ControlKey.BACK);
 
         int maxLogPage = logMessages.size()/LOGS_PER_PAGE;
 
@@ -110,8 +106,6 @@ public class LogState implements VisualStateHandler {
             view.setSelectedButton(LOG_LEFT_BUTTON);
         }
 
-        if (view.backButton.checkConsumePress()) {
-            view.setVisualState(VisualState.MENU);
-        }
+        view.updateBackButton();
     }
 }

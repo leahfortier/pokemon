@@ -6,7 +6,6 @@ import gui.TileSet;
 import gui.view.View;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
-import input.ControlKey;
 import item.ItemNamesies;
 import item.bag.Bag;
 import item.bag.BattleBagCategory;
@@ -185,20 +184,17 @@ public class BagState implements VisualStateHandler {
         DrawUtils.drawWrappedText(g, msgLine, 440, 495, 350);
 
         // Back Arrow
-        View.drawArrows(g, null, view.backButton);
+        view.drawBackButton(g);
 
         for (Button b: bagButtons) {
             b.draw(g);
         }
-
-        view.backButton.draw(g);
     }
 
     @Override
     public void update(BattleView view) {
         // Update all bag buttons and the back button
         view.setSelectedButton(bagButtons);
-        view.backButton.update(false, ControlKey.BACK);
 
         // Check tabs
         for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
@@ -285,9 +281,7 @@ public class BagState implements VisualStateHandler {
         }
 
         // Return to main battle menu
-        if (view.backButton.checkConsumePress()) {
-            view.setVisualState(VisualState.MENU);
-        }
+        view.updateBackButton();
     }
 
     public ItemNamesies getSelectedItem() {

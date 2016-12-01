@@ -4,10 +4,8 @@ import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
 import gui.TileSet;
-import gui.view.View;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
-import input.ControlKey;
 import main.Game;
 import main.Type;
 import pokemon.ActivePokemon;
@@ -263,9 +261,7 @@ public class PokemonState implements VisualStateHandler {
         DrawUtils.drawWrappedText(g, msgLine, 440, 485, 350);
 
         // Draw back arrow when applicable
-        if (!switchForced) {
-            View.drawArrows(g, null, view.backButton);
-        }
+        view.drawBackButton(g, !switchForced);
 
         for (int i = 0; i < list.size(); i++) {
             pokemonTabButtons[i].draw(g);
@@ -274,15 +270,12 @@ public class PokemonState implements VisualStateHandler {
         if (view.state == VisualState.USE_ITEM || selectedPkm.canFight()) {
             pokemonSwitchButton.draw(g);
         }
-
-        view.backButton.draw(g);
     }
 
     @Override
     public void update(BattleView view) {
         // Update the buttons
         view.setSelectedButton(pokemonButtons);
-        view.backButton.update(false, ControlKey.BACK);
 
         Battle currentBattle = view.getCurrentBattle();
         CharacterData player = Game.getPlayer();
@@ -334,11 +327,7 @@ public class PokemonState implements VisualStateHandler {
         }
 
         // Return to main menu if applicable
-        if (view.backButton.checkConsumePress()) {
-            if (!switchForced) {
-                view.setVisualState(VisualState.MENU);
-            }
-        }
+        view.updateBackButton(!switchForced);
     }
 
     public void setSwitchForced() {

@@ -4,10 +4,8 @@ import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
 import gui.TileSet;
-import gui.view.View;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
-import input.ControlKey;
 import main.Game;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
@@ -104,20 +102,17 @@ public class FightState implements VisualStateHandler {
         DrawUtils.setFont(g, 30);
         DrawUtils.drawWrappedText(g, msgLine, 440, 485, 350); // TODO: Is this duplicated code?
 
-        View.drawArrows(g, null, view.backButton);
+        view.drawBackButton(g);
 
         for (int i = 0; i < Move.MAX_MOVES && i < moves.size(); i++) {
             moveButtons[i].draw(g);
         }
-
-        view.backButton.draw(g);
     }
 
     @Override
     public void update(BattleView view) {
         // Update move buttons and the back button
         view.setSelectedButton(moveButtons);
-        view.backButton.update(false, ControlKey.BACK);
 
         CharacterData player = Game.getPlayer();
         Battle currentBattle = view.getCurrentBattle();
@@ -144,9 +139,7 @@ public class FightState implements VisualStateHandler {
         }
 
         // Return to main battle menu
-        if (view.backButton.checkConsumePress()) {
-            view.setVisualState(VisualState.MENU);
-        }
+        view.updateBackButton();
     }
 
     public void resetLastMoveUsed() {

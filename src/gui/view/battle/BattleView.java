@@ -6,6 +6,7 @@ import gui.GameData;
 import gui.TileSet;
 import gui.view.View;
 import gui.view.ViewMode;
+import input.ControlKey;
 import main.Game;
 import main.Global;
 import map.TerrainType;
@@ -37,7 +38,7 @@ public class BattleView extends View {
 	public final PokemonAnimationState enemyAnimation;
 
 	// All the different buttons!!
-	public final Button backButton;
+	private final Button backButton;
 	
 	public BattleView() {
 		playerAnimation = new PokemonAnimationState(this);
@@ -105,6 +106,31 @@ public class BattleView extends View {
 
 	public boolean isState(VisualState state) {
 		return this.state == state;
+	}
+
+	public void drawBackButton(Graphics g) {
+		drawBackButton(g, true);
+	}
+
+	public void drawBackButton(Graphics g, boolean drawArrows) {
+		if (drawArrows) {
+			View.drawArrows(g, null, backButton);
+		}
+
+		backButton.draw(g);
+	}
+
+	public void updateBackButton() {
+		updateBackButton(true);
+	}
+
+	public void updateBackButton(boolean setToMainMenu) {
+		backButton.update(false, ControlKey.BACK);
+
+		// Return to main battle menu
+		if (backButton.checkConsumePress() && setToMainMenu) {
+			setVisualState(VisualState.MENU);
+		}
 	}
 	
 	public void clearUpdate() {
