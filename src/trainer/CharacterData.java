@@ -10,7 +10,7 @@ import item.use.BallItem;
 import main.Game;
 import main.Global;
 import map.Direction;
-import map.entity.PlayerEntity;
+import map.entity.movable.PlayerEntity;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import message.MessageUpdate;

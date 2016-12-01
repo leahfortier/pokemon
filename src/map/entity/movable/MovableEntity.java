@@ -1,4 +1,4 @@
-package map.entity;
+package map.entity.movable;
 
 import gui.view.map.MapView;
 import main.Game;
@@ -6,6 +6,7 @@ import main.Global;
 import map.Direction;
 import map.MapData;
 import map.PathDirection;
+import map.entity.Entity;
 import util.Point;
 import util.StringUtils;
 

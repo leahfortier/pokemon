@@ -1,4 +1,4 @@
-package map.entity;
+package map.entity.movable;
 
 import gui.view.map.MapView;
 import input.ControlKey;
@@ -8,6 +8,7 @@ import main.Global;
 import map.Direction;
 import map.MapData;
 import map.WalkType;
+import map.entity.Entity;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import sound.SoundPlayer;
