@@ -18,15 +18,47 @@ import java.util.List;
 
 public class FightState implements VisualStateHandler {
 
+    private final Button[] moveButtons;
+
+    private List<Move> selectedMoveList;
+
+    // The last move that a Pokemon used
+    private int lastMoveUsed;
+
+    public FightState() {
+
+        // Move Buttons
+        moveButtons = new Button[Move.MAX_MOVES];
+        for (int y = 0, i = 0; y < 2; y++) {
+            for (int x = 0; x < Move.MAX_MOVES/2; x++, i++) {
+                moveButtons[i] = new Button(
+                        22 + x*190,
+                        440 + 21 + y*62,
+                        183,
+                        55,
+                        Button.HoverAction.BOX,
+                        new int[] { (i + 1)%Move.MAX_MOVES, // Right
+                                ((i - Move.MAX_MOVES/2) + Move.MAX_MOVES)%Move.MAX_MOVES, // Up
+                                ((i - 1) + Move.MAX_MOVES)%Move.MAX_MOVES, // Left
+                                (i + Move.MAX_MOVES/2)%Move.MAX_MOVES }); // Down
+            }
+        }
+    }
+
+    @Override
+    public void reset() {
+        lastMoveUsed = 0;
+    }
+
     @Override
     public void set(BattleView view) {
-        view.selectedButton = view.lastMoveUsed;
-        view.selectedMoveList = view.currentBattle.getPlayer().front().getMoves(view.currentBattle);
+        view.selectedButton = lastMoveUsed;
+        selectedMoveList = view.currentBattle.getPlayer().front().getMoves(view.currentBattle);
         for (int i = 0; i < Move.MAX_MOVES; i++) {
-            view.moveButtons[i].setActive(i < view.selectedMoveList.size());
+            moveButtons[i].setActive(i < selectedMoveList.size());
         }
 
-        for (Button b: view.moveButtons) {
+        for (Button b: moveButtons) {
             b.setForceHover(false);
         }
     }
@@ -73,7 +105,7 @@ public class FightState implements VisualStateHandler {
         View.drawArrows(g, null, view.backButton);
 
         for (int i = 0; i < Move.MAX_MOVES && i < moves.size(); i++) {
-            view.moveButtons[i].draw(g);
+            moveButtons[i].draw(g);
         }
 
         view.backButton.draw(g);
@@ -82,18 +114,18 @@ public class FightState implements VisualStateHandler {
     @Override
     public void update(BattleView view) {
         // Update move buttons and the back button
-        view.selectedButton = Button.update(view.moveButtons, view.selectedButton);
+        view.selectedButton = Button.update(moveButtons, view.selectedButton);
         view.backButton.update(false, ControlKey.BACK);
 
-        // Get the Pokemon that is attacking and their corresponsing move list
+        // Get the Pokemon that is attacking and their corresponding move list
         ActivePokemon front = view.currentBattle.getPlayer().front();
 
-        for (int i = 0; i < view.selectedMoveList.size(); i++) {
-            if (view.moveButtons[i].checkConsumePress()) {
-                view.lastMoveUsed = i;
+        for (int i = 0; i < selectedMoveList.size(); i++) {
+            if (moveButtons[i].checkConsumePress()) {
+                lastMoveUsed = i;
 
                 // Execute the move if valid
-                if (Move.validMove(view.currentBattle, front, view.selectedMoveList.get(i), true)) {
+                if (Move.validMove(view.currentBattle, front, selectedMoveList.get(i), true)) {
                     view.currentBattle.getPlayer().performAction(view.currentBattle, Action.FIGHT);
                     view.setVisualState(VisualState.MESSAGE);
                     view.cycleMessage(false);

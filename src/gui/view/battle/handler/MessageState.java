@@ -5,6 +5,7 @@ import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
 import input.InputControl;
+import message.MessageUpdate;
 import pokemon.Stat;
 import util.DrawUtils;
 
@@ -12,6 +13,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class MessageState implements VisualStateHandler {
+
+    // Stat gains and corresponding new stat upgrades for leveling up/evolving
+    private int[] statGains;
+    private int[] newStats;
 
     @Override
     public void set(BattleView view) {}
@@ -33,8 +38,8 @@ public class MessageState implements VisualStateHandler {
                 DrawUtils.setFont(g, 16);
                 g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
 
-                DrawUtils.drawRightAlignedString(g, (view.statGains[i] < 0 ? "" : " + ") + view.statGains[i], 206, 314 + i*21);
-                DrawUtils.drawRightAlignedString(g, view.newStats[i] + "", 247, 314 + i*21);
+                DrawUtils.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
+                DrawUtils.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
             }
         }
     }
@@ -57,6 +62,14 @@ public class MessageState implements VisualStateHandler {
         if (pressed && view.message != null && !view.playerAnimation.isAnimationPlaying() && !view.enemyAnimation.isAnimationPlaying()) {
             if (view.state == VisualState.STAT_GAIN) view.setVisualState(VisualState.MESSAGE);
             view.cycleMessage(false);
+        }
+    }
+
+    @Override
+    public void checkMessage(MessageUpdate newMessage) {
+        if (newMessage.gainUpdate()) {
+            newStats = newMessage.getNewStats();
+            statGains = newMessage.getGain();
         }
     }
 }

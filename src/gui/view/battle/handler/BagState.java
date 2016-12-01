@@ -8,6 +8,7 @@ import gui.view.battle.VisualState;
 import input.ControlKey;
 import item.ItemNamesies;
 import item.bag.Bag;
+import item.bag.BattleBagCategory;
 import item.use.PokemonUseItem;
 import main.Game;
 import trainer.CharacterData;
@@ -22,18 +23,87 @@ import java.util.Set;
 
 public class BagState implements VisualStateHandler {
 
+    // Battle Bag Categories
+    private static final BattleBagCategory[] BATTLE_BAG_CATEGORIES = BattleBagCategory.values();
+
+    // Bag Button Indexes
+    private static final int ITEMS = BATTLE_BAG_CATEGORIES.length;
+    private static final int ITEMS_PER_PAGE = 10;
+    private static final int NUM_BAG_BUTTONS = BATTLE_BAG_CATEGORIES.length + ITEMS_PER_PAGE + 3;
+    private static final int LAST_ITEM_BUTTON = NUM_BAG_BUTTONS - 1;
+    private static final int BAG_RIGHT_BUTTON = NUM_BAG_BUTTONS - 2;
+    private static final int BAG_LEFT_BUTTON = NUM_BAG_BUTTONS - 3;
+
+    private final Button bagRightButton;
+    private final Button bagLeftButton;
+    private final Button bagLastUsedBtn;
+
+    private final Button[] bagButtons;
+    private final Button[] bagTabButtons;
+
+    // Current bag page, bag category, and selected item
+    private int bagPage;
+    private int selectedBagTab;
+    private ItemNamesies selectedItem;
+
+    public BagState() {
+        // Bag View Buttons
+        bagButtons = new Button[NUM_BAG_BUTTONS];
+
+        bagTabButtons = new Button[BATTLE_BAG_CATEGORIES.length];
+        for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
+            bagButtons[i] = bagTabButtons[i] = new Button(
+                    i*89 + 30,
+                    190,
+                    89,
+                    28,
+                    Button.HoverAction.BOX,
+                    new int[] { (i + 1)% BATTLE_BAG_CATEGORIES.length, // Right
+                            LAST_ITEM_BUTTON, // Up
+                            (i - 1 + BATTLE_BAG_CATEGORIES.length)% BATTLE_BAG_CATEGORIES.length, // Left
+                            ITEMS }  // Down
+            );
+        }
+
+        bagButtons[BAG_LEFT_BUTTON] = bagLeftButton = new Button(135, 435, 35, 20, Button.HoverAction.BOX, new int[] {BAG_RIGHT_BUTTON, ITEMS + ITEMS_PER_PAGE - 2, -1, LAST_ITEM_BUTTON});
+        bagButtons[BAG_RIGHT_BUTTON] = bagRightButton = new Button(250,435,35,20, Button.HoverAction.BOX, new int[] {-1, ITEMS + ITEMS_PER_PAGE - 1, BAG_LEFT_BUTTON, LAST_ITEM_BUTTON});
+        bagButtons[LAST_ITEM_BUTTON] = bagLastUsedBtn = new Button(214, 517, 148, 28, Button.HoverAction.BOX, new int[] {-1, BAG_LEFT_BUTTON, -1, selectedBagTab});
+
+        for (int y = 0, i = ITEMS; y < ITEMS_PER_PAGE/2; y++) {
+            for (int x = 0; x < 2; x++, i++) {
+                bagButtons[i] = new Button(
+                        55 + x*162,
+                        243 + y*38,
+                        148,
+                        28,
+                        Button.HoverAction.BOX,
+                        new int[] { (i + 1 - ITEMS)%ITEMS_PER_PAGE + ITEMS, // Right
+                                y == 0 ? selectedBagTab : i - 2, // Up
+                                (i - 1 - ITEMS + ITEMS_PER_PAGE)%ITEMS_PER_PAGE + ITEMS, // Left
+                                y == ITEMS_PER_PAGE/2 - 1 ? (x == 0 ? BAG_LEFT_BUTTON : BAG_RIGHT_BUTTON) : i + 2 }
+                ); // Down
+            }
+        }
+    }
+
+    @Override
+    public void reset() {
+        selectedBagTab = 0;
+        bagPage = 0;
+    }
+
     @Override
     public void set(BattleView view) {
-        int pageSize = view.currentBattle.getPlayer().getBag().getCategory(BattleView.BATTLE_BAG_CATEGORIES[view.selectedBagTab]).size();
+        int pageSize = view.currentBattle.getPlayer().getBag().getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]).size();
 
-        for (int i = 0; i < BattleView.ITEMS_PER_PAGE; i++) {
-            view.bagButtons[BattleView.ITEMS + i].setActive(i < pageSize - view.bagPage*BattleView.ITEMS_PER_PAGE);
+        for (int i = 0; i < ITEMS_PER_PAGE; i++) {
+            bagButtons[ITEMS + i].setActive(i < pageSize - bagPage*ITEMS_PER_PAGE);
         }
 
         // TODO: Make a method for this
-        view.bagLastUsedBtn.setActive(view.currentBattle.getPlayer().getBag().getLastUsedItem() != ItemNamesies.NO_ITEM);
+        bagLastUsedBtn.setActive(view.currentBattle.getPlayer().getBag().getLastUsedItem() != ItemNamesies.NO_ITEM);
 
-        for (Button b: view.bagButtons) {
+        for (Button b: bagButtons) {
             b.setForceHover(false);
         }
 
@@ -42,22 +112,22 @@ public class BagState implements VisualStateHandler {
     @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
         g.drawImage(tiles.getTile(0x10), 0, 160, null);
-        g.drawImage(tiles.getTile(BattleView.BATTLE_BAG_CATEGORIES[view.selectedBagTab].getImageNumber()), 30, 190, null);
-        g.drawImage(tiles.getTile(BattleView.BATTLE_BAG_CATEGORIES[view.selectedBagTab].getImageNumber() - 4), 30, 492, null);
+        g.drawImage(tiles.getTile(BATTLE_BAG_CATEGORIES[selectedBagTab].getImageNumber()), 30, 190, null);
+        g.drawImage(tiles.getTile(BATTLE_BAG_CATEGORIES[selectedBagTab].getImageNumber() - 4), 30, 492, null);
         g.drawImage(tiles.getTile(0x20), 415, 440, null);
 
         Bag bag = view.currentBattle.getPlayer().getBag();
 
-        Set<ItemNamesies> toDraw = bag.getCategory(BattleView.BATTLE_BAG_CATEGORIES[view.selectedBagTab]);
+        Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
         TileSet itemTiles = Game.getData().getItemTiles();
 
         DrawUtils.setFont(g, 12);
         Iterator<ItemNamesies> iter = toDraw.iterator();
-        for (int i = 0; i < view.bagPage*BattleView.ITEMS_PER_PAGE; i++) {
+        for (int i = 0; i < bagPage*ITEMS_PER_PAGE; i++) {
             iter.next();
         }
 
-        for (int y = 0; y < BattleView.ITEMS_PER_PAGE/2; y++) {
+        for (int y = 0; y < ITEMS_PER_PAGE/2; y++) {
             for (int x = 0; x < 2 && iter.hasNext(); x++) {
                 int dx = 55 + x*162, dy = 243 + y*38;
 
@@ -83,10 +153,10 @@ public class BagState implements VisualStateHandler {
 
         // Bag page number
         DrawUtils.setFont(g, 20);
-        DrawUtils.drawCenteredWidthString(g, (view.bagPage + 1) + "/" + Math.max(1, (int)Math.ceil(toDraw.size()/10.0)), 210, 450);
+        DrawUtils.drawCenteredWidthString(g, (bagPage + 1) + "/" + Math.max(1, (int)Math.ceil(toDraw.size()/10.0)), 210, 450);
 
         // Left/Right Arrows
-        View.drawArrows(g, view.bagLeftButton, view.bagRightButton);
+        View.drawArrows(g, bagLeftButton, bagRightButton);
 
         // Last Item Used
         ItemNamesies lastUsedItem = bag.getLastUsedItem();
@@ -115,7 +185,7 @@ public class BagState implements VisualStateHandler {
         // Back Arrow
         View.drawArrows(g, null, view.backButton);
 
-        for (Button b: view.bagButtons) {
+        for (Button b: bagButtons) {
             b.draw(g);
         }
 
@@ -125,35 +195,35 @@ public class BagState implements VisualStateHandler {
     @Override
     public void update(BattleView view) {
         // Update all bag buttons and the back button
-        view.selectedButton = Button.update(view.bagButtons, view.selectedButton);
+        view.selectedButton = Button.update(bagButtons, view.selectedButton);
         view.backButton.update(false, ControlKey.BACK);
 
         // Check tabs
-        for (int i = 0; i < BattleView.BATTLE_BAG_CATEGORIES.length; i++) {
-            if (view.bagTabButtons[i].checkConsumePress()) {
-                view.bagPage = 0;
-                view.selectedBagTab = i;
+        for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
+            if (bagTabButtons[i].checkConsumePress()) {
+                bagPage = 0;
+                selectedBagTab = i;
                 view.setVisualState(view.state); // To update active buttons
             }
         }
 
         CharacterData player = view.currentBattle.getPlayer();
         Bag bag = player.getBag();
-        Set<ItemNamesies> toDraw = bag.getCategory(BattleView.BATTLE_BAG_CATEGORIES[view.selectedBagTab]);
+        Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
         Iterator<ItemNamesies> iter = toDraw.iterator();
 
         // Skip ahead to the current page
-        for (int i = 0; i < view.bagPage*BattleView.ITEMS_PER_PAGE; i++) {
+        for (int i = 0; i < bagPage*ITEMS_PER_PAGE; i++) {
             iter.next();
         }
 
         // Go through each item on the page
-        for (int i = BattleView.ITEMS; i < BattleView.ITEMS + BattleView.ITEMS_PER_PAGE && iter.hasNext(); i++) {
+        for (int i = ITEMS; i < ITEMS + ITEMS_PER_PAGE && iter.hasNext(); i++) {
             ItemNamesies item = iter.next();
-            if (view.bagButtons[i].checkConsumePress()) {
+            if (bagButtons[i].checkConsumePress()) {
                 // Pokemon Use Item -- Set item to be selected an change to Pokemon View
                 if (item.getItem() instanceof PokemonUseItem) {
-                    view.selectedItem = item;
+                    selectedItem = item;
                     view.setVisualState(VisualState.USE_ITEM);
                     break;
                 }
@@ -173,7 +243,7 @@ public class BagState implements VisualStateHandler {
         }
 
         // Selecting the Last Item Used Button
-        if (view.bagLastUsedBtn.checkConsumePress()) {
+        if (bagLastUsedBtn.checkConsumePress()) {
             ItemNamesies lastItemUsed = bag.getLastUsedItem();
             if (lastItemUsed != ItemNamesies.NO_ITEM && bag.battleUseItem(lastItemUsed, player.front(), view.currentBattle)) {
                 player.performAction(view.currentBattle, Action.ITEM);
@@ -187,25 +257,25 @@ public class BagState implements VisualStateHandler {
         }
 
         // Next page
-        if (view.bagRightButton.checkConsumePress()) {
+        if (bagRightButton.checkConsumePress()) {
             // TODO: Should have a method to get the max pages also this should just use mod right?
-            if (view.bagPage == ((int)Math.ceil(toDraw.size()/(double)BattleView.ITEMS_PER_PAGE) - 1)) {
-                view.bagPage = 0;
+            if (bagPage == ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1)) {
+                bagPage = 0;
             }
             else {
-                view.bagPage++;
+                bagPage++;
             }
 
             view.setVisualState(view.state); // To update active buttons
         }
 
         // Previous Page
-        if (view.bagLeftButton.checkConsumePress()) {
-            if (view.bagPage == 0) {
-                view.bagPage = ((int)Math.ceil(toDraw.size()/(double)BattleView.ITEMS_PER_PAGE) - 1);
+        if (bagLeftButton.checkConsumePress()) {
+            if (bagPage == 0) {
+                bagPage = ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1);
             }
             else {
-                view.bagPage--;
+                bagPage--;
             }
 
             view.setVisualState(view.state); // To update active buttons
@@ -215,5 +285,9 @@ public class BagState implements VisualStateHandler {
         if (view.backButton.checkConsumePress()) {
             view.setVisualState(VisualState.MENU);
         }
+    }
+
+    public ItemNamesies getSelectedItem() {
+        return this.selectedItem;
     }
 }

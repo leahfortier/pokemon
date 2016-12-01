@@ -7,6 +7,7 @@ import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
+import trainer.CharacterData;
 import util.DrawUtils;
 
 import java.awt.Color;
@@ -16,6 +17,24 @@ import java.awt.image.BufferedImage;
 
 // Handles animation and keeps track of the current state
 public class PokemonAnimationState {
+
+    // Loss Constants <-- Super Meaningful Comment
+    private static final int FRAMES_PER_HP_LOSS = 20;
+    private static final float HP_LOSS_RATIO = 0.1f;
+    private static final float EXP_LOSS_RATIO = 15f;
+
+    // Evolution and Catch Lifespans
+    private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
+    private static final int CATCH_SHAKE_ANIMATION_LIFESPAN = 1000;
+    private static final int CATCH_TRANSFORM_ANIMATION_LIFESPAN = 2000;
+    private static final int CATCH_ANIMATION_LIFESPAN = CATCH_SHAKE_ANIMATION_LIFESPAN* CharacterData.CATCH_SHAKES + CATCH_TRANSFORM_ANIMATION_LIFESPAN;
+
+    // Polygons for Type Colors in Status Box -- First array is for player, Second array is for the opponent
+    private static final int[][] primaryColorx = { { 0, 199, 94, 0 }, { 0, 191, 104, 0 } };
+    private static final int[][] primaryColory = { { 0, 0, 105, 105 }, { 0, 0, 88, 88 } };
+    private static final int[][] secondaryColorx = { { 294, 199, 94, 294 }, { 191, 294, 294, 104 } };
+    private static final int[][] secondaryColory = { { 0, 0, 105, 105 }, { 0, 0, 88, 88 } };
+
     private BattleView battleView; // todo
     public PokemonState oldState, state;
     private int animationHP, animationEvolve, animationExp, animationCatch;
@@ -27,7 +46,6 @@ public class PokemonAnimationState {
         state = new PokemonState();
     }
 
-    // todo
     public void resetVals(ActivePokemon p) {
         resetVals(
                 p.getHP(),
@@ -81,7 +99,7 @@ public class PokemonAnimationState {
 
         oldState.hp = state.hp;
         state.hp = newHp;
-        animationHP = Math.abs(oldState.hp - state.hp)* BattleView.FRAMES_PER_HP_LOSS;
+        animationHP = Math.abs(oldState.hp - state.hp)*FRAMES_PER_HP_LOSS;
     }
 
     public void setMaxHP(int newMax) {
@@ -103,7 +121,7 @@ public class PokemonAnimationState {
         if (state.imageNumber != 0) {
             oldState.imageNumber = state.imageNumber;
             if (animate) {
-                animationEvolve = BattleView.EVOLVE_ANIMATION_LIFESPAN;
+                animationEvolve = EVOLVE_ANIMATION_LIFESPAN;
             }
         }
 
@@ -113,19 +131,19 @@ public class PokemonAnimationState {
 
     public void startCatchAnimation(int duration) {
         if (duration == -1) { // TODO: There should be a constant for this
-            animationCatch = BattleView.CATCH_ANIMATION_LIFESPAN;
+            animationCatch = CATCH_ANIMATION_LIFESPAN;
             animationCatchDuration = -1;
         }
         else {
             // TODO: uggy
-            animationCatch = animationCatchDuration = duration* BattleView.CATCH_SHAKE_ANIMATION_LIFESPAN + 2* BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN;
+            animationCatch = animationCatchDuration = duration* CATCH_SHAKE_ANIMATION_LIFESPAN + 2* CATCH_TRANSFORM_ANIMATION_LIFESPAN;
         }
     }
 
     public void startExpAnimation(float newExpRatio, boolean levelUp) {
         oldState.expRatio = levelUp ? 0 : state.expRatio;
         state.expRatio = newExpRatio;
-        animationExp = (int)(100*Math.abs(oldState.expRatio - state.expRatio)* BattleView.FRAMES_PER_HP_LOSS);
+        animationExp = (int)(100*Math.abs(oldState.expRatio - state.expRatio)*FRAMES_PER_HP_LOSS);
     }
 
     public void setLevel(int newLevel) {
@@ -161,7 +179,7 @@ public class PokemonAnimationState {
         // Only the player shows the HP Text
         if (isEnemy == 0) {
             // HP Text Animation
-            int originalTime = Math.abs(state.hp - oldState.hp)* BattleView.FRAMES_PER_HP_LOSS;
+            int originalTime = Math.abs(state.hp - oldState.hp)*FRAMES_PER_HP_LOSS;
             String hpStr = state.hp + "/" + state.maxHp;
             if (animationHP > 0) {
                 hpStr = (int)(state.hp + (oldState.hp - state.hp)*(animationHP/(float)originalTime)) + "/" + state.maxHp;
@@ -187,47 +205,47 @@ public class PokemonAnimationState {
 
         int xOffset = 0;
 
-        int lifespan = animationCatchDuration == -1 ? BattleView.CATCH_ANIMATION_LIFESPAN : animationCatchDuration;
+        int lifespan = animationCatchDuration == -1 ? CATCH_ANIMATION_LIFESPAN : animationCatchDuration;
 
         // Turn white
-        if (animationCatch > lifespan - BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3) {
-            pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255*(1 - (animationCatch - (lifespan - BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3f))/(BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - .7f)));
+        if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3) {
+            pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255*(1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - .7f)));
             ballScales[3] = 0;
         }
         // Transform into Pokeball
-        else if (animationCatch > lifespan - BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7) {
+        else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7) {
            pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255;
-           pokeyScales[3] = ((animationCatch - (lifespan - BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
+           pokeyScales[3] = ((animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255;
-           ballScales[3] = (1 - (animationCatch - (lifespan - BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
+           ballScales[3] = (1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
         }
         // Restore color
-        else if (animationCatch > lifespan - BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN) {
+        else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN) {
             pokeyScales[3] = 0;
-            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255*(animationCatch - (lifespan - BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN))/(BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.3f));
+            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255*(animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.3f));
         }
         // Shake
-        else if (animationCatchDuration == -1 || animationCatch > BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN) {
+        else if (animationCatchDuration == -1 || animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN) {
             pokeyScales[3] = 0;
             ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 0;
             xOffset = (int)(10*Math.sin(animationCatch/200.0));
         }
         // Turn white -- didn't catch
-        else if (animationCatch > BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7) {
-            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255*(1f - (animationCatch - BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7f)/(BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - 0.7f)));
+        else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7) {
+            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255*(1f - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - 0.7f)));
             pokeyScales[3] = 0;
         }
         // Transform into Pokemon
-        else if (animationCatch > BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3) {
+        else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3) {
             pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255;
-            pokeyScales[3] = (1 - (animationCatch - BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
+            pokeyScales[3] = (1 - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
             ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255;
-            ballScales[3] = ((animationCatch - BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
+            ballScales[3] = ((animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
         }
         // Restore color
         else {
             ballScales[3] = 0;
-            pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255*(animationCatch)/(BattleView.CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1.0f - .7f));
+            pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255*(animationCatch)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1.0f - .7f));
         }
 
         animationCatch -= Global.MS_BETWEEN_FRAMES;
@@ -249,21 +267,21 @@ public class PokemonAnimationState {
         float[] evolutionOffsets = { 255f, 255f, 255f, 0f };
 
         // Turn white
-        if (animationEvolve > BattleView.EVOLVE_ANIMATION_LIFESPAN*0.7) {
-            prevEvolutionOffsets[0] = prevEvolutionOffsets[1] = prevEvolutionOffsets[2] = 255*(1 - (animationEvolve - BattleView.EVOLVE_ANIMATION_LIFESPAN*0.7f)/(BattleView.EVOLVE_ANIMATION_LIFESPAN*(1 - 0.7f)));
+        if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.7) {
+            prevEvolutionOffsets[0] = prevEvolutionOffsets[1] = prevEvolutionOffsets[2] = 255*(1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.7f)/(EVOLVE_ANIMATION_LIFESPAN*(1 - 0.7f)));
             evolutionScales[3] = 0;
         }
         // Change form
-        else if (animationEvolve > BattleView.EVOLVE_ANIMATION_LIFESPAN*0.3) {
+        else if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.3) {
             prevEvolutionOffsets[0] = prevEvolutionOffsets[1] = prevEvolutionOffsets[2] = 255;
-            prevEvolutionScales[3] = ((animationEvolve - BattleView.EVOLVE_ANIMATION_LIFESPAN*0.3f)/(BattleView.EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
+            prevEvolutionScales[3] = ((animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
             evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255;
-            evolutionScales[3] = (1 - (animationEvolve - BattleView.EVOLVE_ANIMATION_LIFESPAN*0.3f)/(BattleView.EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
+            evolutionScales[3] = (1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
         }
         // Restore color
         else {
             prevEvolutionScales[3] = 0;
-            evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255*(animationEvolve)/(BattleView.EVOLVE_ANIMATION_LIFESPAN*(1-0.7f));
+            evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255*(animationEvolve)/(EVOLVE_ANIMATION_LIFESPAN*(1-0.7f));
         }
 
         animationEvolve -= Global.MS_BETWEEN_FRAMES;
@@ -282,8 +300,8 @@ public class PokemonAnimationState {
         // Get the ratio based off of the possible animation
         float ratio = state.hp/(float)state.maxHp;
         if (animationHP > 0) {
-            animationHP -= BattleView.HP_LOSS_RATIO*state.maxHp + 1;
-            int originalTime = Math.abs(state.hp - oldState.hp)* BattleView.FRAMES_PER_HP_LOSS;
+            animationHP -= HP_LOSS_RATIO*state.maxHp + 1;
+            int originalTime = Math.abs(state.hp - oldState.hp)*FRAMES_PER_HP_LOSS;
             ratio = (state.hp + (oldState.hp - state.hp)*(animationHP/(float)originalTime))/(float)state.maxHp;
         }
         else {
@@ -303,8 +321,8 @@ public class PokemonAnimationState {
         // Show the animation
         float expRatio = state.expRatio;
         if (animationExp > 0) {
-            animationExp -= BattleView.EXP_LOSS_RATIO;
-            int originalTime = (int)(100*Math.abs(state.expRatio - oldState.expRatio)* BattleView.FRAMES_PER_HP_LOSS);
+            animationExp -= EXP_LOSS_RATIO;
+            int originalTime = (int)(100*Math.abs(state.expRatio - oldState.expRatio)*FRAMES_PER_HP_LOSS);
             expRatio = (state.expRatio + (oldState.expRatio - state.expRatio)*(animationExp/(float)originalTime));
         }
         else {
@@ -325,9 +343,9 @@ public class PokemonAnimationState {
         // Draw the colored type polygons
         Color[] typeColors = Type.getColors(state.type);
         g.setColor(typeColors[0]);
-        g.fillPolygon(BattleView.primaryColorx[isEnemy], BattleView.primaryColory[isEnemy], 4);
+        g.fillPolygon(primaryColorx[isEnemy], primaryColory[isEnemy], 4);
         g.setColor(typeColors[1]);
-        g.fillPolygon(BattleView.secondaryColorx[isEnemy], BattleView.secondaryColory[isEnemy], 4);
+        g.fillPolygon(secondaryColorx[isEnemy], secondaryColory[isEnemy], 4);
 
         // Draw health bar and player's EXP Bar
         drawHealthBar(g);

@@ -16,9 +16,59 @@ import java.awt.Graphics;
 
 public class MenuState implements VisualStateHandler {
 
+    // Menu Button Indexes
+    private static final int FIGHT_BUTTON = 0;
+    private static final int BAG_BUTTON = 1;
+    private static final int SWITCH_BUTTON = 2;
+    private static final int RUN_BUTTON = 3;
+
+    private final Button fightBtn;
+    private final Button bagBtn;
+    private final Button pokemonBtn;
+    private final Button runBtn;
+
+    private final Button[] menuButtons;
+
+    public MenuState() {
+        // Menu Buttons
+        menuButtons = new Button[4]; // TODO: ugly equals
+        menuButtons[FIGHT_BUTTON] = fightBtn = new Button(
+                452,
+                473,
+                609 - 452,
+                515 - 473,
+                Button.HoverAction.ARROW,
+                new int[] {	BAG_BUTTON, SWITCH_BUTTON, RUN_BUTTON, SWITCH_BUTTON}
+        );
+        menuButtons[BAG_BUTTON] = bagBtn = new Button(
+                628,
+                473,
+                724 - 628,
+                513 - 473,
+                Button.HoverAction.ARROW,
+                new int[] { SWITCH_BUTTON, RUN_BUTTON, FIGHT_BUTTON, RUN_BUTTON }
+        );
+        menuButtons[SWITCH_BUTTON] = pokemonBtn = new Button(
+                452,
+                525,
+                609 - 452,
+                571 - 525,
+                Button.HoverAction.ARROW,
+                new int[] { RUN_BUTTON, FIGHT_BUTTON, BAG_BUTTON, FIGHT_BUTTON }
+        );
+        menuButtons[RUN_BUTTON] = runBtn = new Button(
+                628,
+                525,
+                724 - 628,
+                571 - 525,
+                Button.HoverAction.ARROW,
+                new int[] { FIGHT_BUTTON, BAG_BUTTON, SWITCH_BUTTON, BAG_BUTTON }
+        );
+    }
+
     @Override
     public void set(BattleView view) {
-        for (Button b: view.menuButtons) {
+        for (Button b: menuButtons) {
             b.setForceHover(false);
         }
     }
@@ -35,7 +85,7 @@ public class MenuState implements VisualStateHandler {
         DrawUtils.setFont(g, 30);
         DrawUtils.drawWrappedText(g, "What will " + playerPokemon.getActualName() + " do?", 20, 485, 400);
 
-        for (Button b: view.menuButtons) {
+        for (Button b: menuButtons) {
             b.draw(g);
         }
     }
@@ -43,24 +93,24 @@ public class MenuState implements VisualStateHandler {
     @Override
     public void update(BattleView view) {
         // Update menu buttons
-        view.selectedButton = Button.update(view.menuButtons, view.selectedButton);
+        view.selectedButton = Button.update(menuButtons, view.selectedButton);
 
         // Show Bag View
-        if (view.bagBtn.checkConsumePress()) {
+        if (bagBtn.checkConsumePress()) {
             view.setVisualState(VisualState.BAG);
         }
         // Show Pokemon View
-        else if (view.pokemonBtn.checkConsumePress()) {
+        else if (pokemonBtn.checkConsumePress()) {
             view.setVisualState(VisualState.POKEMON);
         }
         // Attempt escape
-        else if (view.runBtn.checkConsumePress()) {
+        else if (runBtn.checkConsumePress()) {
             view.setVisualState(VisualState.MESSAGE);
             view.currentBattle.runAway();
             view.cycleMessage(false);
         }
         // Show Fight View TODO: Semi-invulnerable moves look awful and weird
-        else if (view.fightBtn.checkConsumePress() || view.currentBattle.getPlayer().front().isSemiInvulnerable()) {
+        else if (fightBtn.checkConsumePress() || view.currentBattle.getPlayer().front().isSemiInvulnerable()) {
             view.setVisualState(VisualState.FIGHT);
 
             // Move is forced -- don't show menu, but execute the move
@@ -71,19 +121,6 @@ public class MenuState implements VisualStateHandler {
             }
         }
         else if (InputControl.instance().consumeIfDown(ControlKey.L)) {
-            view.logPage = 0;
-            view.logMessages = view.currentBattle.getPlayer().getLogMessages();
-
-            if (view.logMessages.size() / BattleView.LOGS_PER_PAGE > 0) {
-                view.selectedButton = BattleView.LOG_RIGHT_BUTTON;
-                view.logRightButton.setActive(true);
-                view.selectedButton = Button.update(view.logButtons, view.selectedButton);
-            }
-            else {
-                view.logRightButton.setActive(false);
-            }
-
-            view.logLeftButton.setActive(false);
             view.setVisualState(VisualState.LOG_VIEW);
         }
     }

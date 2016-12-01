@@ -10,29 +10,62 @@ import util.DrawUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.List;
 
 public class LogState implements VisualStateHandler {
+    private static final int LOG_LEFT_BUTTON = 0;
+    private static final int LOG_RIGHT_BUTTON = 1;
+    private static final int LOGS_PER_PAGE = 23;
+
+    private final Button logLeftButton;
+    private final Button logRightButton;
+
+    private final Button[] logButtons;
+
+    private int logPage;
+    private List<String> logMessages;
+
+    public LogState() {
+        logLeftButton = new Button(150, 550, 35, 20, Button.HoverAction.BOX, new int[] { LOG_RIGHT_BUTTON, -1, -1, -1 });
+        logRightButton = new Button(200, 550, 35, 20, Button.HoverAction.BOX, new int[] { -1, -1, LOG_LEFT_BUTTON, -1 });
+
+        logButtons = new Button[] { logLeftButton, logRightButton };
+    }
 
     @Override
-    public void set(BattleView view) {}
+    public void set(BattleView view) {
+        logPage = 0;
+        logMessages = view.currentBattle.getPlayer().getLogMessages();
+
+        if (logMessages.size()/LOGS_PER_PAGE > 0) {
+            view.selectedButton = LOG_RIGHT_BUTTON;
+            logRightButton.setActive(true);
+            view.selectedButton = Button.update(logButtons, view.selectedButton);
+        }
+        else {
+            logRightButton.setActive(false);
+        }
+
+        logLeftButton.setActive(false);
+    }
 
     @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
         g.drawImage(tiles.getTile(0x10), 0, 160, null);
 
-        int start = view.logMessages.size() - 1 - view.logPage * BattleView.LOGS_PER_PAGE;
+        int start = logMessages.size() - 1 - logPage*LOGS_PER_PAGE;
         start = Math.max(0, start);
 
         int y = 200;
         g.setColor(Color.BLACK);
         DrawUtils.setFont(g, 12);
-        for (int i = start; i >= 0 && start - i < BattleView.LOGS_PER_PAGE; i--, y += 15) {
-            g.drawString(view.logMessages.get(i), 25, y);
+        for (int i = start; i >= 0 && start - i < LOGS_PER_PAGE; i--, y += 15) {
+            g.drawString(logMessages.get(i), 25, y);
         }
 
-        View.drawArrows(g, view.logLeftButton, view.logRightButton);
-        view.logLeftButton.draw(g);
-        view.logRightButton.draw(g);
+        View.drawArrows(g, logLeftButton, logRightButton);
+        logLeftButton.draw(g);
+        logRightButton.draw(g);
 
         // Draw Messages Box
         g.drawImage(tiles.getTile(0x20), 415, 440, null);
@@ -49,31 +82,31 @@ public class LogState implements VisualStateHandler {
 
     @Override
     public void update(BattleView view) {
-        view.selectedButton = Button.update(view.logButtons, view.selectedButton);
+        view.selectedButton = Button.update(logButtons, view.selectedButton);
         view.backButton.update(false, ControlKey.BACK);
 
-        int maxLogPage = view.logMessages.size()/BattleView.LOGS_PER_PAGE;
+        int maxLogPage = logMessages.size()/LOGS_PER_PAGE;
 
-        if (view.logLeftButton.checkConsumePress()) {
-            view.selectedButton = BattleView.LOG_LEFT_BUTTON;
-            view.logRightButton.setForceHover(false);
-            view.logPage = Math.max(0, view.logPage - 1);
+        if (logLeftButton.checkConsumePress()) {
+            view.selectedButton = LOG_LEFT_BUTTON;
+            logRightButton.setForceHover(false);
+            logPage = Math.max(0, logPage - 1);
         }
 
-        if (view.logRightButton.checkConsumePress()) {
-            view.selectedButton = BattleView.LOG_RIGHT_BUTTON;
-            view.logLeftButton.setForceHover(false);
-            view.logPage = Math.min(maxLogPage, view.logPage + 1);
+        if (logRightButton.checkConsumePress()) {
+            view.selectedButton = LOG_RIGHT_BUTTON;
+            logLeftButton.setForceHover(false);
+            logPage = Math.min(maxLogPage, logPage + 1);
         }
 
-        view.logLeftButton.setActive(view.logPage > 0);
-        view.logRightButton.setActive(view.logPage < maxLogPage);
+        logLeftButton.setActive(logPage > 0);
+        logRightButton.setActive(logPage < maxLogPage);
 
-        if (view.logPage == 0 && maxLogPage > 0) {
-            view.selectedButton = BattleView.LOG_RIGHT_BUTTON;
+        if (logPage == 0 && maxLogPage > 0) {
+            view.selectedButton = LOG_RIGHT_BUTTON;
         }
-        else if (view.logPage == maxLogPage) {
-            view.selectedButton = BattleView.LOG_LEFT_BUTTON;
+        else if (logPage == maxLogPage) {
+            view.selectedButton = LOG_LEFT_BUTTON;
         }
 
         if (view.backButton.checkConsumePress()) {
