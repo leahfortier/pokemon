@@ -1,6 +1,6 @@
 package mapMaker.model;
 
-import map.AreaData.WeatherState;
+import map.weather.WeatherState;
 import map.MapDataType;
 import map.TerrainType;
 import mapMaker.MapMaker;

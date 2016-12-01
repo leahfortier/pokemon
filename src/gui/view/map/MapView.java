@@ -11,7 +11,6 @@ import input.InputControl;
 import main.Game;
 import main.Global;
 import map.AreaData;
-import map.AreaData.WeatherState;
 import map.Direction;
 import map.MapData;
 import map.PathDirection;
@@ -69,23 +68,16 @@ public class MapView extends View {
 	private BufferedImage battleImageSlideLeft;
 
 	private VisualState state;
-	private WeatherState weatherState;
 	
 	private int selectedButton;
 	private final Button[] menuButtons;
 	
-	private int[] rainHeight;
-	private int lightningFrame;
-	
 	public MapView() {
 		currentMapName = StringUtils.empty();
-		rainHeight = new int[Global.GAME_SIZE.width/2];
 		state = VisualState.MAP;
 		selectedButton = 0;
 		
 		areaDisplayTime = 0;
-		
-		weatherState = WeatherState.NORMAL;
 		
 		menuButtons = new Button[MenuState.values().length];
 		
@@ -168,8 +160,10 @@ public class MapView extends View {
 			}
 		}
 
-		drawWeatherEffects(g);
-		
+		if (currentArea != null) {
+			currentArea.getWeather().draw(g);
+		}
+
 		// Area Transition
 		if (areaDisplayTime > 0) {
 			drawAreaTransitionAnimation(g);
@@ -223,63 +217,6 @@ public class MapView extends View {
 		}
 	}
 
-	// TODO: Weather should likely have its own class
-	private void drawWeatherEffects(Graphics g) {
-		switch(weatherState) {
-			case SUN:
-				drawSun(g);
-				break;
-			case RAIN:
-				drawRain(g);
-				break;
-			case NORMAL:
-			default:
-				break;
-		}
-	}
-	
-	private void drawSun(Graphics g) {
-		g.setColor(new Color(255, 255, 255, 64));
-		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
-	}
-
-	// TODO: Make a fuckton of constants and whatever this is awful
-	private void drawRain(Graphics g) {
-		g.setColor(new Color(0,0,0, 64));
-		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
-		g.setColor(new Color(50,50,255, 128));
-
-		for (int i = 0; i < rainHeight.length; i++) {
-			if (rainHeight[i] != 0) {
-				g.drawRect(i*2, rainHeight[i] - 40, 1, 40);
-				rainHeight[i] += 50;
-
-				if (rainHeight[i] > Global.GAME_SIZE.height + 40) {
-					rainHeight[i] = 0;
-				}
-			}
-		}
-
-		for (int i = 0; i < 50; i++) {
-			int x = Global.getRandomInt(rainHeight.length);
-			if (rainHeight[x] == 0){
-				rainHeight[x] = 1 + Global.getRandomInt(40);
-			}
-		}
-		
-		if (Global.getRandomInt(80) == 0 || (lightningFrame > 80 && Global.getRandomInt(4) == 0)) {
-			lightningFrame = 128;
-		}
-
-		if (lightningFrame > 0) {
-			g.setColor(new Color(255,255,255, lightningFrame));
-			g.fillRect(0,0,Global.GAME_SIZE.width, Global.GAME_SIZE.height);
-			lightningFrame = 7*lightningFrame/8 - 1;
-		} else {
-			lightningFrame = 0;
-		}
-	}
-	
 	private void drawAreaTransitionAnimation(Graphics g) {
 		int fontSize = 30;
 		
@@ -412,8 +349,6 @@ public class MapView extends View {
 		if (!StringUtils.isNullOrEmpty(areaName) && !areaName.equals(currentArea.getAreaName())) {
 			areaDisplayTime = AREA_NAME_ANIMATION_LIFESPAN;
 		}
-
-		weatherState = area.getWeather();
 
 		// Queue to play new area's music.
 		SoundTitle areaMusic = area.getMusic();
