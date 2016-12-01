@@ -39,7 +39,7 @@ public class MapView extends View {
 			PathDirection.LEFT,
 			PathDirection.UP
     };
-	
+
 	private String currentMapName;
 	private AreaData currentArea;
 	private MapData currentMap;
@@ -230,13 +230,13 @@ public class MapView extends View {
 		AreaData area = currentMap.getArea(player.getLocation());
 		String areaName = area.getAreaName();
 
-		player.areaName = areaName;
-		currentArea = area;
-
 		// If new area has a new name, display the area name animation
-		if (!StringUtils.isNullOrEmpty(areaName) && !areaName.equals(currentArea.getAreaName())) {
+		if (currentArea != null && !StringUtils.isNullOrEmpty(areaName) && !areaName.equals(currentArea.getAreaName())) {
 			areaDisplayTime = AREA_NAME_ANIMATION_LIFESPAN;
 		}
+
+		player.areaName = areaName;
+		currentArea = area;
 
 		// Queue to play new area's music.
 		SoundTitle areaMusic = area.getMusic();
