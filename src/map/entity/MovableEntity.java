@@ -43,6 +43,10 @@ public abstract class MovableEntity extends Entity {
 		this.pathIndex = 0;
 	}
 
+	protected boolean hasTempPath() {
+		return !StringUtils.isNullOrEmpty(this.tempPath);
+	}
+
 	@Override
 	protected Point getCanvasCoordinates(Point drawLocation) {
 		Point canvasCoordinates = super.getCanvasCoordinates(drawLocation);

@@ -65,6 +65,10 @@ public class PlayerEntity extends MovableEntity {
 	public void update(int dt, MapData currentMap, MapView view) {
 		super.update(dt, currentMap, view);
 
+		if (this.hasTempPath()) {
+			return;
+		}
+
 		InputControl input = InputControl.instance();
 
 		entityDirection = null;
