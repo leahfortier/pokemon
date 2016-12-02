@@ -276,7 +276,7 @@ class PCView extends View {
 			g.drawString(selected.getActualName(), 541, 82);
 			
 			FontMetrics.setFont(g, 16);
-			FontMetrics.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
+			DrawUtils.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
 		}
 		else {
 			g.setColor(Color.BLACK);

@@ -3,6 +3,7 @@ package gui.view.battle.handler;
 import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
+import gui.MessagePanel;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -56,7 +57,9 @@ public class FightState implements VisualStateHandler {
 
     @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
-        g.drawImage(tiles.getTile(0x20), 415, 440, null);
+        MessagePanel messagePanel = new MessagePanel(415, 440, 385, 161, new Color(53, 53, 129));
+        messagePanel.drawBackground(g);
+
         g.drawImage(tiles.getTile(0x21), 0, 440, null);
 
         ActivePokemon playerPokemon = Game.getPlayer().front();
@@ -87,10 +90,7 @@ public class FightState implements VisualStateHandler {
         }
 
         String msgLine = view.getMessage(VisualState.INVALID_FIGHT, "Select a move!");
-
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 30);
-        FontMetrics.drawWrappedText(g, msgLine, 440, 485, 350); // TODO: Is this duplicated code?
+        messagePanel.drawText(g, 30, msgLine);
 
         view.drawBackButton(g);
 

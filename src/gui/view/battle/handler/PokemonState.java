@@ -128,7 +128,7 @@ public class PokemonState implements VisualStateHandler {
 
             // Description
             FontMetrics.setFont(g, 14);
-            FontMetrics.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
+            DrawUtils.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
         }
         else {
             // Name and Gender
@@ -263,7 +263,7 @@ public class PokemonState implements VisualStateHandler {
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 30);
         String msgLine = view.getMessage(VisualState.INVALID_POKEMON, "Select a " + PokeString.POKEMON + "!");
-        FontMetrics.drawWrappedText(g, msgLine, 440, 485, 350);
+        DrawUtils.drawWrappedText(g, msgLine, 440, 485, 350);
 
         // Draw back arrow when applicable
         view.drawBackButton(g, !switchForced);

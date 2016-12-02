@@ -26,7 +26,7 @@ public class MessageState implements VisualStateHandler {
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 30);
 
-        FontMetrics.drawWrappedText(g, view.getMessage(), 30, 490, 720);
+        DrawUtils.drawWrappedText(g, view.getMessage(), 30, 490, 720);
 
         if (view.isState(VisualState.STAT_GAIN)) {
             g.drawImage(tiles.getTile(0x5), 0, 280, null);

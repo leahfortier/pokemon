@@ -165,7 +165,7 @@ class PartyView extends View {
 			FontMetrics.setFont(g, 16);
 			
 			// Description
-			FontMetrics.drawWrappedText(g, selectedPkm.getEggMessage(), 213, 170, 718 - 213);
+			DrawUtils.drawWrappedText(g, selectedPkm.getEggMessage(), 213, 170, 718 - 213);
 		}
 		else {
 			FontMetrics.setFont(g, 20);
@@ -287,7 +287,7 @@ class PartyView extends View {
 				g.setColor(Color.BLACK);
 				if (selectedButton == MOVES + i) {
 					FontMetrics.setFont(g, 10);
-					FontMetrics.drawWrappedText(g, move.getAttack().getName() + " - " + move.getAttack().getDescription(), 6, 11, 280);
+					DrawUtils.drawWrappedText(g, move.getAttack().getName() + " - " + move.getAttack().getDescription(), 6, 11, 280);
 				}
 				else {
 					// Attack name

@@ -410,7 +410,7 @@ class BagView extends View {
 			}
 			
 			FontMetrics.setFont(g, 14);
-			FontMetrics.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - buttons[GIVE].x);
+			DrawUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - buttons[GIVE].x);
 		}
 		
 		FontMetrics.setFont(g, 12);
@@ -565,7 +565,7 @@ class BagView extends View {
 			g.setColor(Color.BLACK);
 			
 			FontMetrics.setFont(g, 30);
-			FontMetrics.drawWrappedText(g, message.getMessage(), 30, 490, 750);
+			DrawUtils.drawWrappedText(g, message.getMessage(), 30, 490, 750);
 		}
 		else {
 			for (Button b : buttons) {

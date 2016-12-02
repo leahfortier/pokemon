@@ -183,7 +183,7 @@ public class BagState implements VisualStateHandler {
         String msgLine = view.getMessage(VisualState.INVALID_BAG, "Choose an item!");
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 30);
-        FontMetrics.drawWrappedText(g, msgLine, 440, 495, 350);
+        DrawUtils.drawWrappedText(g, msgLine, 440, 495, 350);
 
         // Back Arrow
         view.drawBackButton(g);

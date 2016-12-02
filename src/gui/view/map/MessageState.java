@@ -13,6 +13,7 @@ import message.MessageUpdate.Update;
 import message.Messages;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import sound.SoundPlayer;
+import util.DrawUtils;
 import util.FontMetrics;
 import util.StringUtils;
 
@@ -34,7 +35,7 @@ class MessageState implements VisualStateHandler {
         FontMetrics.setFont(g, 30);
         g.setColor(Color.BLACK);
 
-        int height = FontMetrics.drawWrappedText(g, currentMessage.getMessage(), 30, 490, 720);
+        int height = DrawUtils.drawWrappedText(g, currentMessage.getMessage(), 30, 490, 720);
         if (currentMessage.isChoice()) {
             ChoiceMatcher[] choices = currentMessage.getChoices();
             for (int i = 0; i < choices.length; i++) {

@@ -312,4 +312,31 @@ public class DrawUtils {
 		return bufferedImage;
 	}
 
+	public static int drawWrappedText(Graphics g, String str, int x, int y, int width) {
+        int fontSize = g.getFont().getSize();
+        FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
+
+        String[] words = str.split("[ ]+");
+        StringBuilder build = new StringBuilder();
+
+        int height = y;
+        int distanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
+
+        for (String word : words) {
+            if ((word.length() + build.length() + 1) * fontMetrics.getHorizontalSpacing() > width) {
+                g.drawString(build.toString(), x, height);
+
+                height += distanceBetweenRows;
+                build = new StringBuilder();
+            }
+
+            // TODO: StringUtil method
+            build.append(build.length() == 0 ? "" : " ")
+                    .append(word);
+        }
+
+        g.drawString(build.toString(), x, height);
+
+        return height + distanceBetweenRows;
+    }
 }

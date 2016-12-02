@@ -64,4 +64,15 @@ public final class GeneralUtils {
     public static boolean getBooleanValue(Boolean value) {
         return value == null ? false : value;
     }
+
+    public static int max(double... values) {
+        double max = values[0];
+        for (double value : values) {
+            if (value > max) {
+                max = value;
+            }
+        }
+
+        return (int)max;
+    }
 }

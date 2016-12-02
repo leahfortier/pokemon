@@ -226,7 +226,7 @@ class PokedexView extends View {
 			g.drawString("Weight: " + (!caught ? "???.?" : selected.getWeight()) + " lbs", 427, 217);
 			
 			if (caught) {
-				FontMetrics.drawWrappedText(g, selected.getFlavorText(), 427, 247, 350 - 17);
+				DrawUtils.drawWrappedText(g, selected.getFlavorText(), 427, 247, 350 - 17);
 			}
 			
 			g.drawString("Locations:", 427, 340);
