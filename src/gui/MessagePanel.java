@@ -12,7 +12,7 @@ public class MessagePanel {
     private final int width;
     private final int height;
 
-    private final int borderSize;
+    private int borderPercentage;
 
     private Color bgColor;
     private Color borderColor;
@@ -23,25 +23,36 @@ public class MessagePanel {
         this.width = width;
         this.height = height;
 
-        this.borderSize = (int)(.1*Math.min(width, height));
+        this.borderPercentage = 10;
 
         this.bgColor = Color.WHITE;
-        this.borderColor = Color.GRAY;
+        this.borderColor = Color.LIGHT_GRAY;
     }
 
-    public MessagePanel(int x, int y, int width, int height, Color borderColor) {
-        this(x, y, width, height);
+    public MessagePanel withBorderColor(Color borderColor) {
         this.borderColor = borderColor;
+        return this;
     }
 
-    public MessagePanel(int x, int y, int width, int height, Color bgColor, Color borderColor) {
-        this(x, y, width, height, borderColor);
+    public MessagePanel withBackgroundColor(Color bgColor) {
         this.bgColor = bgColor;
+        return this;
+    }
+
+    public MessagePanel withBorderPercentage(int borderPercentage) {
+        this.borderPercentage = borderPercentage;
+        return this;
+    }
+
+    private int getBorderSize() {
+        return (int)(borderPercentage/100.0*Math.min(width, height));
     }
 
     public void drawBackground(Graphics g) {
         g.setColor(bgColor);
         g.fillRect(x, y, width, height);
+
+        int borderSize = this.getBorderSize();
 
         g.setColor(borderColor);
         g.fillRect(x, y, width, borderSize);
@@ -54,7 +65,7 @@ public class MessagePanel {
         g.setColor(Color.BLACK);
 
         FontMetrics.setFont(g, fontSize);
-        int textSpace = borderSize + FontMetrics.getDistanceBetweenRows(g)/2;
+        int textSpace = this.getBorderSize() + FontMetrics.getDistanceBetweenRows(g)/2;
 
         int startX = x + textSpace;
         int startY = y + textSpace + FontMetrics.getTextHeight(g);

@@ -57,10 +57,11 @@ public class FightState implements VisualStateHandler {
 
     @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
-        MessagePanel messagePanel = new MessagePanel(415, 440, 385, 161, new Color(53, 53, 129));
+        MessagePanel messagePanel = new MessagePanel(415, 440, 385, 161).withBorderColor(new Color(53, 53, 129));
         messagePanel.drawBackground(g);
 
-        g.drawImage(tiles.getTile(0x21), 0, 440, null);
+        MessagePanel movePanel = new MessagePanel(0, 440, 417, 161);
+        movePanel.drawBackground(g);
 
         ActivePokemon playerPokemon = Game.getPlayer().front();
 
