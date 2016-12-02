@@ -4,6 +4,7 @@ import main.Game;
 import main.Global;
 import trainer.CharacterData;
 import trainer.Trainer;
+import util.GeneralUtils;
 import util.RandomUtils;
 
 import java.awt.Color;
@@ -264,15 +265,8 @@ public class PC implements Serializable {
 		return i >= 0 && i < BOX_HEIGHT && j >= 0 && j < BOX_WIDTH;
 	}
 	
-	public void nextBox() {
-		currBox += 1;
-		currBox %= boxes.size();
-	}
-
-	// TODO: Should have a generic method for incrementing pages that takes in the max size
-	public void prevBox() {
-		currBox += boxes.size() - 1;
-		currBox %= boxes.size();
+	public void incrementBox(int delta) {
+		this.currBox = GeneralUtils.wrapIncrement(this.currBox, delta, boxes.size());
 	}
 	
 	private static class Box implements Serializable {

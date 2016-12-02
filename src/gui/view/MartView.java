@@ -13,6 +13,7 @@ import trainer.CharacterData;
 import util.DrawUtils;
 import input.InputControl;
 import input.ControlKey;
+import util.GeneralUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -370,15 +371,8 @@ class MartView extends View {
 	@Override
 	public void movedToFront() {}
 
-	// TODO: Create util method for this
 	private void updateItemAmount(int delta) {
-		int maxPurchaseAmount = this.maxPurchaseAmount();
-
-		this.itemAmount -= 1;					// Set to be zero indexed
-		this.itemAmount += delta;				// Change the amount
-		this.itemAmount += maxPurchaseAmount;	// Confirm positive (BECAUSE CS IS STUPID AND MOD DOESN'T WORK RIGHT)
-		this.itemAmount %= maxPurchaseAmount;	// Apply wrap around
-		this.itemAmount += 1;					// Set back to be one indexed
+		this.itemAmount = GeneralUtils.wrapIncrement(this.itemAmount, delta, 1, this.maxPurchaseAmount());
 	}
 
 	private int maxPurchaseAmount() {

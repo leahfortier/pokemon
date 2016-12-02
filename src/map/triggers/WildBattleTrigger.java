@@ -7,13 +7,16 @@ import main.Game;
 import main.Global;
 import map.EncounterRate;
 import map.WildEncounter;
-import pokemon.PokemonNamesies;
 import pattern.map.WildBattleMatcher;
 import pokemon.ActivePokemon;
+import pokemon.PokemonNamesies;
 import trainer.CharacterData;
 import trainer.WildPokemon;
+import util.GeneralUtils;
 import util.JsonUtils;
 import util.RandomUtils;
+
+import java.util.Arrays;
 
 class WildBattleTrigger extends Trigger {
 
@@ -85,18 +88,12 @@ class WildBattleTrigger extends Trigger {
 		return null;
 	}
 
-	// TODO: I think there might be a method in Global that does something like this already if not try and make one and include the wild hold items also
 	private int getRandomEncounterIndex() {
-		int sum = 0, random = RandomUtils.getRandomInt(100);
-		for (int i = 0; i < wildEncounters.length; i++) {
-			sum += wildEncounters[i].getProbability();
-
-			if (random < sum) {
-				return i;
-			}
-		}
-
-		Global.error("Probabilities don't add to 100 for wild battle trigger.");
-		return -1;
+		return GeneralUtils.getPercentageIndex(
+				Arrays.stream(wildEncounters)
+						.map(WildEncounter::getProbability)
+						.mapToInt(Integer::intValue)
+						.toArray()
+		);
 	}
 }

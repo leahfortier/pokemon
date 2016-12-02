@@ -156,8 +156,8 @@ public class MapMakerTriggerData {
 						break;
 					case NPC:
 						NPCMatcher npc = (NPCMatcher) entity;
-						// TODO: This should be in a method
-						image = mapMaker.getTileFromSet(TileType.TRAINER, MovableEntity.getTrainerSpriteIndex(npc.getSpriteIndex(), npc.getDirection()));
+						int imageIndex = MovableEntity.getTrainerSpriteIndex(npc.getSpriteIndex(), npc.getDirection());
+						image = mapMaker.getTileFromSet(TileType.TRAINER, imageIndex);
 						break;
 				}
 

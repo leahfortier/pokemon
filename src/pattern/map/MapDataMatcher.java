@@ -115,13 +115,6 @@ public class MapDataMatcher {
         return areaData;
     }
 
-    // TODO: Move this to some sort of util location
-    public static boolean hasOnlyOneNonEmpty(Object... objects) {
-        return Arrays.stream(objects)
-                .filter(object -> object != null)
-                .count() == 1;
-    }
-
     public static MapDataMatcher matchArea(String areaDescriptionFileName) {
         String areaDescription = FileIO.readEntireFileWithReplacements(areaDescriptionFileName, false);
 

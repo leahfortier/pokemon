@@ -13,6 +13,7 @@ import trainer.CharacterData;
 import util.DrawUtils;
 import input.InputControl;
 import input.ControlKey;
+import util.PokeString;
 import util.StringUtils;
 
 import java.awt.Color;
@@ -21,9 +22,9 @@ import java.awt.Graphics;
 class StartView extends View {
 	
 	private static final MessageUpdate[] dialogue = new MessageUpdate[] {
-				new MessageUpdate("Welcome to the world of Pok\u00e9mon!"), // TODO: Constants blah blah blah
+				new MessageUpdate("Welcome to the world of " + PokeString.POKEMON + "!"),
 				new MessageUpdate("It's filled with many unique creatures, such as this Ditto.", Update.SHOW_POKEMON),
-				new MessageUpdate("The people of the Hash Map region befriend, travel, and battle with their Pok\u00e9mon."),
+				new MessageUpdate("The people of the Hash Map region befriend, travel, and battle with their " + PokeString.POKEMON + "."),
 				new MessageUpdate("Oh, have you seen any syrup aboot? Well, never mind..."),
 				new MessageUpdate("I can see quite clearly that you're a boy, so what's your name, eh?", Update.ENTER_NAME),
 				new MessageUpdate(", are you ready to start your epic adventure? Well, off you go! I'll be seeing you soon!", Update.APPEND_TO_NAME)

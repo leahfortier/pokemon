@@ -25,13 +25,6 @@ public enum SoundTitle {
 	DEADLOCK_THEME("55-rocket-hideout", true),
 	
 	// Battley things
-	//Old
-//	WILD_POKEMON_BATTLE("09-wild-pokemon-battle-theme", true),
-//	WILD_POKEMON_DEFEATED("10-wild-pokemon-defeated", true),
-//	TRAINER_SPOTTED("21-trainer-challenge-theme-1", true),
-//	TRAINER_BATTLE("22-trainer-battle-theme-1", true),
-//	TRAINER_DEFEATED("23-trainer-defeated", true),
-	
 	WILD_POKEMON_BATTLE("107 Battle VS Wild Pokemon", true),
 	WILD_POKEMON_DEFEATED("108 Victory VS Wild Pokemon", true),
 	TRAINER_SPOTTED("127 Trainer Appears Boy Chapter", true),

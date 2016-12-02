@@ -54,6 +54,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
+import util.GeneralUtils;
 import util.RandomUtils;
 
 import java.io.Serializable;
@@ -3566,7 +3567,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			int power = POWERS[index = Global.getPercentageIndex(CHANCES)];
+			int power = POWERS[index = GeneralUtils.getPercentageIndex(CHANCES)];
 			
 			// Power is halved during Grassy Terrain
 			if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {

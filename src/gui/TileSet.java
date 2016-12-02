@@ -14,9 +14,7 @@ public class TileSet {
 	public static final int EMPTY_IMAGE = -1;
 	public static final int INVALID_RGB = -1000;
 
-	private static final String IMAGE_NOT_FOUND_LOCATION = Folder.REC + "imageNotFound.png";
-
-	private static BufferedImage IMAGE_NOT_FOUND = null;
+	private static final BufferedImage IMAGE_NOT_FOUND = FileIO.readImage(Folder.REC + "imageNotFound.png");
 	
 	public String name;
 	private Map<Integer, BufferedImage> map;
@@ -81,15 +79,6 @@ public class TileSet {
 		
 		if (map.containsKey(val)) {
 			return map.get(val);
-		}
-		
-		return imageNotFound();
-	}
-
-	// TODO: Can we just set this in line?
-	private static BufferedImage imageNotFound() {
-		if (IMAGE_NOT_FOUND == null) {
-			IMAGE_NOT_FOUND = FileIO.readImage(IMAGE_NOT_FOUND_LOCATION);
 		}
 		
 		return IMAGE_NOT_FOUND;

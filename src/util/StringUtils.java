@@ -39,6 +39,22 @@ public class StringUtils {
         return "";
     }
 
+    public static boolean isSpecial(char c) {
+        return !isLower(c) && !isUpper(c) && !isNumber(c) && c != '_';
+    }
+
+    public static boolean isUpper(char c) {
+        return c >= 'A' && c <= 'Z';
+    }
+
+    public static boolean isLower(char c) {
+        return c >= 'a' && c <= 'z';
+    }
+
+    public static boolean isNumber(char c) {
+        return c >= '0' && c <= '9';
+    }
+
     public static String articleString(final String s) {
         if (isNullOrEmpty(s)) {
             return empty();

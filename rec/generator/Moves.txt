@@ -2023,7 +2023,7 @@ Magnitude:
 	private int index;
 	###
 	PhysicalContact: False
-	HitDig: POWERS[index = Global.getPercentageIndex(CHANCES)]
+	HitDig: POWERS[index = GeneralUtils.getPercentageIndex(CHANCES)]
 	Apply: 
 	Messages.addMessage("Magnitude " + (index + 4) + "!");
 	super.apply(me, o, b);

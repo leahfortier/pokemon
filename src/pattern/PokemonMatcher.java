@@ -6,6 +6,7 @@ import item.ItemNamesies;
 import main.Global;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
+import util.GeneralUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,16 +49,15 @@ public class PokemonMatcher {
     }
 
     public int getLevel() {
-        return this.level == null ? 0 : this.level;
+        return GeneralUtils.getIntegerValue(this.level);
     }
 
     public boolean isRandomEgg() {
-        // TODO: Should make a util method for this
-        return this.isRandomEgg == null ? false : this.isRandomEgg;
+        return GeneralUtils.getBooleanValue(this.isRandomEgg);
     }
 
     public boolean isShiny() {
-        return this.isShiny == null ? false : this.isShiny;
+        return GeneralUtils.getBooleanValue(this.isShiny);
     }
 
     public boolean hasMoves() {
@@ -78,7 +78,7 @@ public class PokemonMatcher {
     }
 
     public boolean isEgg() {
-        return this.isEgg == null ? false : this.isEgg;
+        return GeneralUtils.getBooleanValue(this.isEgg);
     }
 
     public boolean hasHoldItem() {

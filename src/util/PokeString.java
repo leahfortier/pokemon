@@ -46,7 +46,7 @@ public class PokeString {
 		String className = "";
 		for (int i = 0; i < name.length(); i++) {
 			if (name.charAt(i) == '-') {
-				if (isLower(name.charAt(i + 1))) {
+				if (StringUtils.isLower(name.charAt(i + 1))) {
 					char c = (char)(name.charAt(i + 1) - 'a' + 'A');
 					className += c;
 					i++;
@@ -56,7 +56,7 @@ public class PokeString {
 				continue;
 			}
 			
-			if (isSpecial(name.charAt(i))) {
+			if (StringUtils.isSpecial(name.charAt(i))) {
 				continue;
 			}
 			
@@ -78,14 +78,14 @@ public class PokeString {
 		String enumName = nameChar[0] + "";
 		
 		for (int i = 1; i < nameChar.length; i++) {
-			if (((isUpper(nameChar[i]) &&
-					!isUpper(nameChar[i - 1])) || nameChar[i] == '-') &&
+			if (((StringUtils.isUpper(nameChar[i]) &&
+					!StringUtils.isUpper(nameChar[i - 1])) || nameChar[i] == '-') &&
 					nameChar[i - 1] != '_' &&
 					enumName.charAt(enumName.length() - 1) != '_') {
 				enumName += "_";
 			}
 			
-			if (isSpecial(nameChar[i])) {
+			if (StringUtils.isSpecial(nameChar[i])) {
 				continue;
 			}
 			
@@ -95,23 +95,7 @@ public class PokeString {
 		return enumName.toUpperCase();
 	}
 
-	// TODO: These should all move to String util or something
-	public static boolean isSpecial(char c) {
-		return !isLower(c) && !isUpper(c) && !isNumber(c) && c != '_';
-	}
-	
-	public static boolean isUpper(char c) {
-		return c >= 'A' && c <= 'Z';
-	}
-	
-	public static boolean isLower(char c) {
-		return c >= 'a' && c <= 'z';
-	}
-	
-	public static boolean isNumber(char c) {
-		return c >= '0' && c <= '9';
-	}
-	
+	// TODO: New file
 	// TODO: Before the special chars were O for the genders, wtf is that about
 	public enum SpecialCharacter {
 		POKE_E("\\\\u00e9", "\u00e9", "e"),

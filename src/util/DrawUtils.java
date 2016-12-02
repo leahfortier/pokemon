@@ -158,7 +158,7 @@ public class DrawUtils {
 				build = new StringBuilder();
 			}
 
-			// TODO: Should there be something for this first part here?
+			// TODO: StringUtil method
 			build.append(build.length() == 0 ? "" : " ")
 					.append(word);
 		}

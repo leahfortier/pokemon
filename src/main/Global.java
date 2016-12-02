@@ -2,14 +2,13 @@ package main;
 
 import util.FileIO;
 import util.Folder;
-import util.RandomUtils;
 
 import javax.swing.JOptionPane;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
-// Loads and maintains game data.
-public class Global {
+public final class Global {
+
 	// Title of the window
 	public static final String TITLE = "Pok\u00e9mon++";
 
@@ -33,12 +32,6 @@ public class Global {
 
 	public static final String MONEY_SYMBOL = "\u00A5";
 
-	public static <T> void swap(T[] arr) {
-		T temp = arr[0];
-		arr[0] = arr[1];
-		arr[1] = temp;
-	}
-
 	public static void error(String errorMessage) {
 		JOptionPane.showMessageDialog(null, "Eggs aren't supposed to be green.", "ERROR", JOptionPane.ERROR_MESSAGE);
 		Thread.dumpStack();
@@ -46,18 +39,6 @@ public class Global {
 		System.exit(1);
 	}
 
-	public static int getPercentageIndex(int[] chances) {
-		int sum = 0;
-		int random = RandomUtils.getRandomInt(100);
-
-		for (int i = 0; i < chances.length; i++) {
-			sum += chances[i];
-			if (random < sum) {
-				return i;
-			}
-		}
-		
-		Global.error("Chances array is improperly formatted.");
-		return -1;
-	}
+	// Cannot be instantiated
+	private Global() {}
 }

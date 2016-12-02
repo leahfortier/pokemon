@@ -9,7 +9,7 @@ import map.entity.EntityAction.GroupTriggerAction;
 import map.entity.EntityAction.TriggerAction;
 import map.entity.EntityAction.UpdateAction;
 import mapMaker.dialogs.action.ActionType;
-import pattern.map.MapDataMatcher;
+import util.GeneralUtils;
 import util.StringUtils;
 
 public class ActionMatcher {
@@ -21,7 +21,7 @@ public class ActionMatcher {
     private String global;
 
     private void confirmFormat() {
-        if (!MapDataMatcher.hasOnlyOneNonEmpty(trigger, battle, choice, update, groupTrigger, global)) {
+        if (!GeneralUtils.hasOnlyOneNonEmpty(trigger, battle, choice, update, groupTrigger, global)) {
             Global.error("Can only have one nonempty field for ActionMatcher");
         }
     }

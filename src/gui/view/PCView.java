@@ -130,12 +130,12 @@ class PCView extends View {
 		}
 		
 		if (leftButton.checkConsumePress()) {
-			pc.prevBox();
+			pc.incrementBox(-1);
 			movedToFront();
 		}
 		
 		if (rightButton.checkConsumePress()) {
-			pc.nextBox();
+			pc.incrementBox(1);
 			movedToFront();
 		}
 		

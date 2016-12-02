@@ -2,6 +2,7 @@ package map;
 
 import input.ControlKey;
 import input.InputControl;
+import util.GeneralUtils;
 import util.Point;
 
 import java.util.EnumMap;
@@ -36,21 +37,20 @@ public enum Direction {
     }
 
     public Direction getOpposite() {
-        // TODO: util method for something like this
-        return Direction.values()[(this.ordinal() + 2)%Direction.values().length];
+        return GeneralUtils.wrapIncrementValue(Direction.values(), this.ordinal(), 2);
     }
 
     public static Direction getDirection(PathDirection pathDirection) {
         return pathDirectionMap.get(pathDirection);
     }
 
-    // If any of the direction input keys are being pressed, willl return the corresponding direction
+    // If any of the direction input keys are being pressed, will return the corresponding direction
     // This method does NOT consume the press
     public static Direction checkInputDirection() {
         return getInputDirection(false);
     }
 
-    // If any of the direction input keys are being pressed, willl return the corresponding direction
+    // If any of the direction input keys are being pressed, will return the corresponding direction
     // This method will consume the press if found
     public static Direction consumeInputDirection() {
         return getInputDirection(true);

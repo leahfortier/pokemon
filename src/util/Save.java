@@ -38,11 +38,8 @@ public final class Save {
 	public static void save() {
 		CharacterData player = Game.getPlayer();
 		player.updateTimePlayed();
-		
-		File saveDir = new File(Folder.SAVES);
-		if (!saveDir.exists()) {
-			saveDir.mkdirs(); // TODO: file io
-		}
+
+		FileIO.createFolder(Folder.SAVES);
 		
 		try {
 			FileOutputStream fout = new FileOutputStream(getSavePath(player.getFileNum()));
@@ -147,11 +144,8 @@ public final class Save {
 	
 	public static Theme loadSettings() {
 		Theme theme;
-		
-		File saveDir = new File(Folder.SAVES);
-		if (!saveDir.exists()) {
-			saveDir.mkdirs();
-		}
+
+		FileIO.createFolder(Folder.SAVES);
 		
 		File file = new File(FileName.SAVE_SETTINGS);
 		if (file.exists()) {

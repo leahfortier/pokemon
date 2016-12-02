@@ -18,12 +18,11 @@ class MP3Player extends Thread {
 		this.mp3FileName = mp3FileName;
 		loop = false;
 		
-		try 
-		{
+		try {
 			player = new Player(loadMP3File(mp3FileName));
 		}
-		catch (JavaLayerException e) {
-			// TODO: error
+		catch (JavaLayerException exception) {
+			Global.error("OMG MP3 FAIIILLLUURRREEEEE");
 		}
 	}
 		
