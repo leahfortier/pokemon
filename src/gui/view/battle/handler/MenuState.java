@@ -13,7 +13,7 @@ import main.Game;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Trainer.Action;
-import util.DrawUtils;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -86,8 +86,8 @@ public class MenuState implements VisualStateHandler {
 
         ActivePokemon playerPokemon = Game.getPlayer().front();
 
-        DrawUtils.setFont(g, 30);
-        DrawUtils.drawWrappedText(g, "What will " + playerPokemon.getActualName() + " do?", 20, 485, 400);
+        FontMetrics.setFont(g, 30);
+        FontMetrics.drawWrappedText(g, "What will " + playerPokemon.getActualName() + " do?", 20, 485, 400);
 
         for (Button button: menuButtons) {
             button.draw(g);

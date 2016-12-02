@@ -13,6 +13,7 @@ import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
 import util.DrawUtils;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -185,11 +186,11 @@ class PokemonAnimationState {
     void drawStatusBoxText(Graphics g, int isEnemy, TileSet tiles) {
 
         // Name, Gender, Level, Status Condition
-        DrawUtils.setFont(g, 27);
+        FontMetrics.setFont(g, 27);
         DrawUtils.drawShadowText(g, state.name + " " + state.gender.getCharacter(), 20, 40, false);
         DrawUtils.drawShadowText(g, "Lv" + state.level, 272, 40, true);
 
-        DrawUtils.setFont(g, 24);
+        FontMetrics.setFont(g, 24);
         DrawUtils.drawShadowText(g, state.status.getName(), 20, 71, false);
 
         // Only the player shows the HP Text
@@ -201,7 +202,7 @@ class PokemonAnimationState {
                 hpStr = (int)(state.hp + (oldState.hp - state.hp)*(animationHP/(float)originalTime)) + "/" + state.maxHp;
             }
 
-            DrawUtils.setFont(g, 24);
+            FontMetrics.setFont(g, 24);
             DrawUtils.drawShadowText(g, hpStr, 273, 95, true);
         }
         // Show whether or not the wild Pokemon has already been caught

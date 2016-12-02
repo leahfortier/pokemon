@@ -15,6 +15,7 @@ import main.Game;
 import trainer.CharacterData;
 import trainer.Trainer.Action;
 import util.DrawUtils;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -123,7 +124,7 @@ public class BagState implements VisualStateHandler {
         Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
         TileSet itemTiles = Game.getData().getItemTiles();
 
-        DrawUtils.setFont(g, 12);
+        FontMetrics.setFont(g, 12);
         Iterator<ItemNamesies> iter = toDraw.iterator();
         for (int i = 0; i < bagPage*ITEMS_PER_PAGE; i++) {
             iter.next();
@@ -154,7 +155,7 @@ public class BagState implements VisualStateHandler {
         }
 
         // Bag page number
-        DrawUtils.setFont(g, 20);
+        FontMetrics.setFont(g, 20);
         DrawUtils.drawCenteredWidthString(g, (bagPage + 1) + "/" + Math.max(1, (int)Math.ceil(toDraw.size()/10.0)), 210, 450);
 
         // Left/Right Arrows
@@ -166,7 +167,7 @@ public class BagState implements VisualStateHandler {
         // TODO: Should have a method to check if it is the empty item
         if (lastUsedItem != ItemNamesies.NO_ITEM) {
             g.translate(214, 517);
-            DrawUtils.setFont(g, 12);
+            FontMetrics.setFont(g, 12);
             g.drawImage(tiles.getTile(0x11), 0, 0, null);
 
             BufferedImage img = itemTiles.getTile(lastUsedItem.getItem().getImageIndex());
@@ -181,8 +182,8 @@ public class BagState implements VisualStateHandler {
         // Messages text
         String msgLine = view.getMessage(VisualState.INVALID_BAG, "Choose an item!");
         g.setColor(Color.BLACK);
-        DrawUtils.setFont(g, 30);
-        DrawUtils.drawWrappedText(g, msgLine, 440, 495, 350);
+        FontMetrics.setFont(g, 30);
+        FontMetrics.drawWrappedText(g, msgLine, 440, 495, 350);
 
         // Back Arrow
         view.drawBackButton(g);

@@ -26,7 +26,6 @@ public class StuffGen {
 
 //		pokemonInfoStuff();
 //		compareMoves();
-//		DrawMetrics.FindMetrics.writeFontMetrics();
 
 		System.out.println("GEN GEN GEN");
 	}
@@ -37,6 +36,8 @@ public class StuffGen {
 		baseEvolutionGenerator();
 		
 		new InterfaceGen();
+
+		FontMetricsGen.writeFontMetrics();
 	}
 
 	// Opens the original file and appends the beginning until the key to generate

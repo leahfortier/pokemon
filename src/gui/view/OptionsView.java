@@ -6,6 +6,7 @@ import sound.SoundPlayer;
 import util.DrawUtils;
 import input.InputControl;
 import input.ControlKey;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -60,7 +61,7 @@ class OptionsView extends View {
 		g.fillRect(0, 0, d.width, d.height);
 		
 		g.setColor(Color.WHITE);
-		DrawUtils.setFont(g, 150);
+		FontMetrics.setFont(g, 150);
 		DrawUtils.drawCenteredWidthString(g, "VOLUME", d.width/2, d.height/4);
 		
 		if (musicOn) {
@@ -71,7 +72,7 @@ class OptionsView extends View {
 			g.fillRect(d.width/2 - 200, d.height/2 - 50, 200, 100);
 			
 			g.setColor(Color.BLACK);
-			DrawUtils.setFont(g, 100);
+			FontMetrics.setFont(g, 100);
 			g.drawString("OFF", d.width/2 - 180, d.height/2 + 32);
 		}
 		else {
@@ -82,7 +83,7 @@ class OptionsView extends View {
 			g.fillRect(d.width/2 - 200, d.height/2 - 50, 200, 100);
 			
 			g.setColor(Color.BLACK);
-			DrawUtils.setFont(g, 100);
+			FontMetrics.setFont(g, 100);
 			g.drawString("ON", d.width/2 + 40, d.height/2 + 32);
 		}
 		

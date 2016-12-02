@@ -23,6 +23,7 @@ import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
 import util.DrawUtils;
+import util.FontMetrics;
 import util.Point;
 import util.StringUtils;
 
@@ -163,8 +164,8 @@ public class MapView extends View {
 	private void drawAreaTransitionAnimation(Graphics g) {
 		int fontSize = 30;
 		
-		int insideWidth = DrawUtils.getSuggestedWidth(currentArea.getAreaName(), fontSize);
-		int insideHeight = DrawUtils.getSuggestedHeight(fontSize);
+		int insideWidth = FontMetrics.getSuggestedWidth(currentArea.getAreaName(), fontSize);
+		int insideHeight = FontMetrics.getSuggestedHeight(fontSize);
 		
 		int borderSize = 2;
 		int graySize = 10;
@@ -196,7 +197,7 @@ public class MapView extends View {
 		g.fillRect(borderSize + graySize, yValue + graySize + borderSize, insideWidth, insideHeight);
 
 		g.setColor(Color.BLACK);
-		DrawUtils.setFont(g, fontSize);
+		FontMetrics.setFont(g, fontSize);
 		DrawUtils.drawCenteredString(g, currentArea.getAreaName(), 0, yValue, totalWidth, totalHeight);
 	}
 

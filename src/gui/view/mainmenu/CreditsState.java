@@ -5,6 +5,7 @@ import gui.view.mainmenu.VisualState.VisualStateHandler;
 import main.Global;
 import sound.SoundTitle;
 import util.DrawUtils;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -33,18 +34,18 @@ class CreditsState implements VisualStateHandler {
         g.setClip(0, 220, d.width, d.height - 240);
 
         g.setColor(new Color(0, 0, 0, 64));
-        DrawUtils.setFont(g, 512);
+        FontMetrics.setFont(g, 512);
         g.drawString(creditsHoz, d.width - creditsTime2, d.height - 30);
 
         g.setColor(Color.BLACK);
 
         for (int i = 1; i < creditsText.length; i++) {
             if (creditsText[i - 1].isEmpty()) {
-                DrawUtils.setFont(g, 40);
+                FontMetrics.setFont(g, 40);
                 DrawUtils.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
             }
             else {
-                DrawUtils.setFont(g, 30);
+                FontMetrics.setFont(g, 30);
                 DrawUtils.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
             }
         }

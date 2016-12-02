@@ -6,7 +6,7 @@ import gui.TileSet;
 import gui.view.View;
 import gui.view.battle.BattleView;
 import main.Game;
-import util.DrawUtils;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -63,7 +63,7 @@ public class LogState implements VisualStateHandler {
 
         int y = 200;
         g.setColor(Color.BLACK);
-        DrawUtils.setFont(g, 12);
+        FontMetrics.setFont(g, 12);
         for (int i = start; i >= 0 && start - i < LOGS_PER_PAGE; i--, y += 15) {
             g.drawString(logMessages.get(i), 25, y);
         }
@@ -76,7 +76,7 @@ public class LogState implements VisualStateHandler {
         g.drawImage(tiles.getTile(0x20), 415, 440, null);
 
         g.setColor(Color.BLACK);
-        DrawUtils.setFont(g, 40);
+        FontMetrics.setFont(g, 40);
         g.drawString("Bob Loblaw's", 440, 500);
         g.drawString("Log Blog", 440, 550);
 

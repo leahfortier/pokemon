@@ -10,9 +10,9 @@ import pokemon.PokemonInfo;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
-import util.DrawUtils;
 import input.InputControl;
 import input.ControlKey;
+import util.FontMetrics;
 import util.PokeString;
 import util.StringUtils;
 
@@ -119,7 +119,7 @@ class StartView extends View {
 		
 		g.drawImage(tiles.getTile(0x2), 0, 0, null);
 		
-		DrawUtils.setFont(g, 30);
+		FontMetrics.setFont(g, 30);
 		g.setColor(Color.BLACK);
 		
 		switch (state) {
@@ -150,8 +150,8 @@ class StartView extends View {
 		
 		if (message != null) {
 			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
-			DrawUtils.setFont(g, 30);
-			DrawUtils.drawWrappedText(g, message, 30, 490, 750);
+			FontMetrics.setFont(g, 30);
+			FontMetrics.drawWrappedText(g, message, 30, 490, 750);
 		}
 	}
 

@@ -13,6 +13,7 @@ import trainer.CharacterData;
 import util.DrawUtils;
 import input.InputControl;
 import input.ControlKey;
+import util.FontMetrics;
 import util.GeneralUtils;
 
 import java.awt.Color;
@@ -225,20 +226,20 @@ class MartView extends View {
 			DrawUtils.drawCenteredImage(g, img, 430, 132);
 			
 			g.setColor(Color.BLACK);
-			DrawUtils.setFont(g, 20);
+			FontMetrics.setFont(g, 20);
 			g.drawString(selectedItem.getName(), 448, 138);
 			
-			DrawUtils.setFont(g, 14);
-			DrawUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - amountLeftButton.x);
+			FontMetrics.setFont(g, 14);
+			FontMetrics.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - amountLeftButton.x);
 			
-			DrawUtils.setFont(g, 20);
+			FontMetrics.setFont(g, 20);
 			g.drawImage(tiles.getTile(0x28), 410, 193, null);
 			
 			g.drawString(itemAmount + "", 568, 218);
 			View.drawArrows(g, amountLeftButton, amountRightButton, 35, 10);
 		}
 		
-		DrawUtils.setFont(g, 12);
+		FontMetrics.setFont(g, 12);
 		g.setColor(Color.BLACK);
 		
 		// Draw each items in category
@@ -264,7 +265,7 @@ class MartView extends View {
 		}
 		
 		// Draw page numbers
-		DrawUtils.setFont(g, 16);
+		FontMetrics.setFont(g, 16);
 		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(), 573, 466);
 		
 		// Left and Right arrows
@@ -282,7 +283,7 @@ class MartView extends View {
 		g.drawImage(tiles.getTile(0x25), 0, 0, null);
 		
 		g.setColor(Color.BLACK);
-		DrawUtils.setFont(g, 18);
+		FontMetrics.setFont(g, 18);
 		g.drawString("Money: " + Global.MONEY_SYMBOL + player.getDatCashMoney(), BOX_TEXT_X, BOX_TEXT_Y);
 		
 		g.translate(-SIDE_BOX_X, -MONEY_BOX_Y);
@@ -324,7 +325,7 @@ class MartView extends View {
 		
 		g.drawImage(tiles.getTile(0x25), 0, 0, null);
 		
-		DrawUtils.setFont(g, 24);
+		FontMetrics.setFont(g, 24);
 		g.setColor(Color.BLACK);
 		g.drawString("BUY", 120, 39);
 
@@ -338,7 +339,7 @@ class MartView extends View {
 		
 		// Return button
 		g.setColor(Color.BLACK);
-		DrawUtils.setFont(g, 20);
+		FontMetrics.setFont(g, 20);
 		g.drawImage(tiles.getTile(0x27), 410, 500, null);
 		DrawUtils.drawCenteredWidthString(g, "Return", 573, 525);
 		
@@ -347,7 +348,7 @@ class MartView extends View {
 		int tabY = 42;
 		g.translate(tabX, tabY);
 		
-		DrawUtils.setFont(g, 16);
+		FontMetrics.setFont(g, 16);
 		g.setColor(BACKGROUND_COLOR);
 		g.fillRect(0, 0, 104, 52);
 		

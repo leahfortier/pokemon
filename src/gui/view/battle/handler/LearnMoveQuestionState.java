@@ -7,7 +7,7 @@ import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import message.MessageUpdate;
 import message.Messages;
-import util.DrawUtils;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -26,7 +26,7 @@ public class LearnMoveQuestionState implements VisualStateHandler {
     public void draw(BattleView view, Graphics g, TileSet tiles) {
         g.drawImage(tiles.getTile(0x3), 0, 439, null);
         g.setColor(Color.BLACK);
-        DrawUtils.setFont(g, 25);
+        FontMetrics.setFont(g, 25);
         g.drawString("Delete a move in order to learn " + view.getLearnedMove().getAttack().getName() + "?", 30, 490);
 
         g.translate(yesButton.x, yesButton.y);
@@ -36,7 +36,7 @@ public class LearnMoveQuestionState implements VisualStateHandler {
         g.drawImage(tiles.getTile(0x22), 0, 0, null);
 
         g.setColor(Color.BLACK);
-        DrawUtils.setFont(g, 22);
+        FontMetrics.setFont(g, 22);
         g.drawString("Yes", 10, 26);
 
         g.translate(-yesButton.x, -yesButton.y);
@@ -48,7 +48,7 @@ public class LearnMoveQuestionState implements VisualStateHandler {
         g.drawImage(tiles.getTile(0x22), 0, 0, null);
 
         g.setColor(Color.BLACK);
-        DrawUtils.setFont(g, 22);
+        FontMetrics.setFont(g, 22);
         g.drawString("No", 10, 26);
 
         g.translate(-noButton.x, -noButton.y);

@@ -15,6 +15,7 @@ import trainer.Trainer;
 import util.DrawUtils;
 import input.InputControl;
 import input.ControlKey;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -192,7 +193,7 @@ class PCView extends View {
 		
 		// Draw Box number
 		g.setColor(Color.BLACK);
-		DrawUtils.setFont(g, 20);
+		FontMetrics.setFont(g, 20);
 		DrawUtils.drawCenteredWidthString(g, "Box " + (pc.getBoxNum() + 1), 214, 65);
 		
 		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
@@ -215,7 +216,7 @@ class PCView extends View {
 			}
 		}
 		
-		DrawUtils.setFont(g, 16);
+		FontMetrics.setFont(g, 16);
 		DrawUtils.drawCenteredWidthString(g, (pc.getBoxNum() + 1) + "/" + pc.getNumBoxes(), 215, 433);
 		
 		View.drawArrows(g, leftButton, rightButton);
@@ -270,16 +271,16 @@ class PCView extends View {
 		
 		if (selected.isEgg()) {
 			g.setColor(Color.BLACK);
-			DrawUtils.setFont(g, 20);
+			FontMetrics.setFont(g, 20);
 			
 			g.drawString(selected.getActualName(), 541, 82);
 			
-			DrawUtils.setFont(g, 16);
-			DrawUtils.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
+			FontMetrics.setFont(g, 16);
+			FontMetrics.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
 		}
 		else {
 			g.setColor(Color.BLACK);
-			DrawUtils.setFont(g, 20);
+			FontMetrics.setFont(g, 20);
 			
 			g.drawString(selected.getActualName() + " " + selected.getGender().getCharacter(), 541, 82);
 			DrawUtils.drawRightAlignedString(g, "Lv" + selected.getLevel(), 740, 82);
@@ -293,7 +294,7 @@ class PCView extends View {
 			
 			g.drawImage(typeTiles.getTile(type[index].getImageIndex()), 707, 97, null);
 			
-			DrawUtils.setFont(g, 16);
+			FontMetrics.setFont(g, 16);
 			
 			// Total EXP
 			g.drawString("EXP:", 540, 135);
@@ -337,12 +338,12 @@ class PCView extends View {
 			int[] evs = selected.getEVs();
 			
 			for (int i = 0; i < Stat.NUM_STATS; i++) {
-				DrawUtils.setFont(g, 16);
+				FontMetrics.setFont(g, 16);
 				g.setColor(selected.getNature().getColor(i));
 				g.drawString(Stat.getStat(i, false).getName(), 427, 360 + i*18 + i/2); // TODO: srsly what's with the i/2
 				
 				g.setColor(Color.BLACK);
-				DrawUtils.setFont(g, 14);
+				FontMetrics.setFont(g, 14);
 				
 				// TODO: What's up with the + i/2 in the y????
 				DrawUtils.drawRightAlignedString(g, stats[i] + "", 635, 360 + i*18 + i/2);
@@ -355,7 +356,7 @@ class PCView extends View {
 		g.drawImage(tiles.getTile(0x36), 410, 522, null);
 		
 		// Buttons
-		DrawUtils.setFont(g, 20);
+		FontMetrics.setFont(g, 20);
 		DrawUtils.drawCenteredWidthString(g, "Switch", 464, 489);
 		DrawUtils.drawCenteredWidthString(g, party ? "Deposit" : "Withdraw", 584, 489);
 		DrawUtils.drawCenteredWidthString(g, "Release", 699, 489);

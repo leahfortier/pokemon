@@ -31,7 +31,7 @@ public class GUIUtils {
 
     // I can't help it I like a nice white background
     public static void setStyle(JComponent component) {
-        component.setFont(DrawUtils.getFont(16));
+        component.setFont(FontMetrics.getFont(16));
         component.setBackground(Color.WHITE);
     }
 

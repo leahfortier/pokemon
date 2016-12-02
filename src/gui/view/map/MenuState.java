@@ -8,7 +8,7 @@ import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
-import util.DrawUtils;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -37,7 +37,7 @@ class MenuState implements VisualStateHandler {
         TileSet menuTiles = data.getMenuTiles();
 
         g.drawImage(menuTiles.getTile(1), 527, 0, null);
-        DrawUtils.setFont(g, 40);
+        FontMetrics.setFont(g, 40);
         g.setColor(Color.BLACK);
 
         for (MenuChoice menuChoice : MenuChoice.values()) {

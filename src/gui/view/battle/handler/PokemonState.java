@@ -15,6 +15,7 @@ import trainer.CharacterData;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import util.DrawUtils;
+import util.FontMetrics;
 import util.PokeString;
 
 import java.awt.Color;
@@ -120,18 +121,18 @@ public class PokemonState implements VisualStateHandler {
 
         if (selectedPkm.isEgg()) {
             // Name
-            DrawUtils.setFont(g, 16);
+            FontMetrics.setFont(g, 16);
             g.setColor(Color.BLACK);
             String nameStr = selectedPkm.getActualName();
             g.drawString(nameStr, 62, 269);
 
             // Description
-            DrawUtils.setFont(g, 14);
-            DrawUtils.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
+            FontMetrics.setFont(g, 14);
+            FontMetrics.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
         }
         else {
             // Name and Gender
-            DrawUtils.setFont(g, 16);
+            FontMetrics.setFont(g, 16);
             g.setColor(Color.BLACK);
             String nameStr = selectedPkm.getActualName() + " " + selectedPkm.getGender().getCharacter();
             g.drawString(nameStr, 62, 269);
@@ -154,7 +155,7 @@ public class PokemonState implements VisualStateHandler {
             }
 
             // Ability
-            DrawUtils.setFont(g, 14);
+            FontMetrics.setFont(g, 14);
             g.drawString(selectedPkm.getActualAbility().getName(), 62, 288);
 
             // Experience
@@ -176,7 +177,7 @@ public class PokemonState implements VisualStateHandler {
             g.fillRect(57, 341, (int)(137*selectedPkm.getHPRatio()), 10);
 
             // Write stat names
-            DrawUtils.setFont(g, 16);
+            FontMetrics.setFont(g, 16);
             for (int i = 0; i < Stat.NUM_STATS; i++) {
                 g.setColor(selectedPkm.getNature().getColor(i));
                 g.drawString(Stat.getStat(i, false).getShortName(), 62, 21*i + 372);
@@ -218,7 +219,7 @@ public class PokemonState implements VisualStateHandler {
         }
 
         // Draw Switch/Use text
-        DrawUtils.setFont(g, 20);
+        FontMetrics.setFont(g, 20);
         if (view.isState(VisualState.USE_ITEM)) {
             g.drawString("Use!", 103, 533);
         }
@@ -260,9 +261,9 @@ public class PokemonState implements VisualStateHandler {
 
         // Draw Messages
         g.setColor(Color.BLACK);
-        DrawUtils.setFont(g, 30);
+        FontMetrics.setFont(g, 30);
         String msgLine = view.getMessage(VisualState.INVALID_POKEMON, "Select a " + PokeString.POKEMON + "!");
-        DrawUtils.drawWrappedText(g, msgLine, 440, 485, 350);
+        FontMetrics.drawWrappedText(g, msgLine, 440, 485, 350);
 
         // Draw back arrow when applicable
         view.drawBackButton(g, !switchForced);

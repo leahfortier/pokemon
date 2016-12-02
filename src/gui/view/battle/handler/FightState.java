@@ -11,6 +11,7 @@ import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Trainer.Action;
 import util.DrawUtils;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -72,10 +73,10 @@ public class FightState implements VisualStateHandler {
                 g.drawImage(tiles.getTile(0x22), 0, 0, null);
 
                 g.setColor(Color.BLACK);
-                DrawUtils.setFont(g, 22);
+                FontMetrics.setFont(g, 22);
                 g.drawString(move.getAttack().getName(), 10, 26);
 
-                DrawUtils.setFont(g, 18);
+                FontMetrics.setFont(g, 18);
                 DrawUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
 
                 BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
@@ -88,8 +89,8 @@ public class FightState implements VisualStateHandler {
         String msgLine = view.getMessage(VisualState.INVALID_FIGHT, "Select a move!");
 
         g.setColor(Color.BLACK);
-        DrawUtils.setFont(g, 30);
-        DrawUtils.drawWrappedText(g, msgLine, 440, 485, 350); // TODO: Is this duplicated code?
+        FontMetrics.setFont(g, 30);
+        FontMetrics.drawWrappedText(g, msgLine, 440, 485, 350); // TODO: Is this duplicated code?
 
         view.drawBackButton(g);
 

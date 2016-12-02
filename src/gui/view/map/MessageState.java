@@ -13,7 +13,7 @@ import message.MessageUpdate.Update;
 import message.Messages;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import sound.SoundPlayer;
-import util.DrawUtils;
+import util.FontMetrics;
 import util.StringUtils;
 
 import java.awt.Color;
@@ -31,16 +31,16 @@ class MessageState implements VisualStateHandler {
         BufferedImage bg = data.getBattleTiles().getTile(3);
         g.drawImage(bg, 0, 439, null);
 
-        DrawUtils.setFont(g, 30);
+        FontMetrics.setFont(g, 30);
         g.setColor(Color.BLACK);
 
-        int height = DrawUtils.drawWrappedText(g, currentMessage.getMessage(), 30, 490, 720);
+        int height = FontMetrics.drawWrappedText(g, currentMessage.getMessage(), 30, 490, 720);
         if (currentMessage.isChoice()) {
             ChoiceMatcher[] choices = currentMessage.getChoices();
             for (int i = 0; i < choices.length; i++) {
-                int y = height + i*DrawUtils.getDistanceBetweenRows(g);
+                int y = height + i* FontMetrics.getDistanceBetweenRows(g);
                 if (i == dialogueSelection) {
-                    g.fillOval(50, y - DrawUtils.getTextHeight(g)/2 - 5, 10, 10);
+                    g.fillOval(50, y - FontMetrics.getTextHeight(g)/2 - 5, 10, 10);
                 }
 
                 g.drawString(choices[i].text, 80, y);

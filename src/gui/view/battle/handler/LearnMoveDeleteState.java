@@ -8,6 +8,7 @@ import gui.view.battle.VisualState;
 import message.MessageUpdate;
 import message.Messages;
 import util.DrawUtils;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -48,10 +49,10 @@ public class LearnMoveDeleteState implements VisualStateHandler {
                 g.drawImage(tiles.getTile(0x22), 0, 0, null);
 
                 g.setColor(Color.BLACK);
-                DrawUtils.setFont(g, 22);
+                FontMetrics.setFont(g, 22);
                 g.drawString(move.getAttack().getName(), 10, 26);
 
-                DrawUtils.setFont(g, 18);
+                FontMetrics.setFont(g, 18);
                 DrawUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
 
                 BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
@@ -69,10 +70,10 @@ public class LearnMoveDeleteState implements VisualStateHandler {
         g.drawImage(tiles.getTile(0x22), 0, 0, null);
 
         g.setColor(Color.BLACK);
-        DrawUtils.setFont(g, 22);
+        FontMetrics.setFont(g, 22);
         g.drawString(move.getAttack().getName(), 10, 26);
 
-        DrawUtils.setFont(g, 18);
+        FontMetrics.setFont(g, 18);
         DrawUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
 
         BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
@@ -83,7 +84,7 @@ public class LearnMoveDeleteState implements VisualStateHandler {
         String msgLine = "Select a move to delete!";
 
         g.setColor(Color.BLACK);
-        DrawUtils.setFont(g, 25);
+        FontMetrics.setFont(g, 25);
         g.drawString(msgLine, newMoveButton.x, 485);
 
         for (int i = 0; i < moves.size(); i++) {

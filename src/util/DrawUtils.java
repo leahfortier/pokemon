@@ -5,14 +5,11 @@ import main.Global;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class DrawUtils {
 	public static final Color EXP_BAR_COLOR = new Color(51, 102, 204);
@@ -20,69 +17,6 @@ public class DrawUtils {
 	// Dimension of a single tile
 	private static final Dimension SINGLE_TILE_DIMENSION = new Dimension(1, 1);
 
-	// For wrapped text, the amount in between each letter
-	private static final float VERTICAL_WRAP_FACTOR = 2f;
-	
-	// The font the game interface uses
-	private static Map<Integer, Font> fontMap;
-	private static Map<Integer, FontMetrics> fontMetricsMap;
-	
-	public static void loadFontMetricsMap() {
-		if (fontMetricsMap != null) {
-			return;
-		}
-		
-		fontMetricsMap = new HashMap<>();
-		
-		Scanner in = FileIO.openFile(FileName.FONT_METRICS);
-		while (in.hasNext()) {
-			int fontSize = in.nextInt();
-			int horizontal = in.nextInt();
-			int height = in.nextInt();
-			
-			FontMetrics fontMetrics = new FontMetrics(fontSize, horizontal, height);
-			fontMetricsMap.put(fontSize, fontMetrics);
-		}
-	}
-	
-	public static void setFont(Graphics g, int fontSize) {
-		g.setFont(getFont(fontSize));
-	}
-	
-	public static Font getFont(int size) {
-		if (fontMap == null) {
-			fontMap = new HashMap<>();
-		}
-			
-		if (!fontMap.containsKey(size)) {
-			fontMap.put(size, new Font("Consolas", Font.BOLD, size));
-		}
-		
-		return fontMap.get(size);
-	}
-	
-	private static FontMetrics getFontMetrics(int fontSize) {
-		if (fontMetricsMap == null) {
-			loadFontMetricsMap();
-		}
-		
-		if (!fontMetricsMap.containsKey(fontSize)) {
-			Global.error("No metrics for the font size " + fontSize);
-		}
-		
-		return fontMetricsMap.get(fontSize);
-	}
-
-	public static int getSuggestedWidth(String text, int fontSize) {
-		FontMetrics fontMetrics = getFontMetrics(fontSize);
-		return (text.length() + 2)*fontMetrics.horizontalSpacing; 
-	}
-	
-	public static int getSuggestedHeight(int fontSize) {
-		FontMetrics fontMetrics = getFontMetrics(fontSize);
-		return (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR*1.5);
-	}
-	
 	public static Color getHPColor(double ratio) {
 		if (ratio < 0.25) {
 			return Color.RED;
@@ -128,46 +62,6 @@ public class DrawUtils {
         return image;
     }
 
-    public static int getTextHeight(Graphics g) {
-		int fontSize = g.getFont().getSize();
-		FontMetrics fontMetrics = getFontMetrics(fontSize);
-		return fontMetrics.letterHeight;
-	}
-
-    public static int getDistanceBetweenRows(Graphics g) {
-		int fontSize = g.getFont().getSize();
-		FontMetrics fontMetrics = getFontMetrics(fontSize);
-		return (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR);
-	}
-
-	public static int drawWrappedText(Graphics g, String str, int x, int y, int width) {
-		int fontSize = g.getFont().getSize();
-		FontMetrics fontMetrics = getFontMetrics(fontSize);
-		
-		String[] words = str.split("[ ]+");
-		StringBuilder build = new StringBuilder();
-		
-		int height = y;
-		int distanceBetweenRows = getDistanceBetweenRows(g);
-
-		for (String word : words) {
-			if ((word.length() + build.length() + 1) * fontMetrics.horizontalSpacing > width) {
-				g.drawString(build.toString(), x, height);
-
-				height += distanceBetweenRows;
-				build = new StringBuilder();
-			}
-
-			// TODO: StringUtil method
-			build.append(build.length() == 0 ? "" : " ")
-					.append(word);
-		}
-		
-		g.drawString(build.toString(), x, height);
-		
-		return height + distanceBetweenRows;
-	}
-	
 	public static void drawCenteredString(Graphics g, String s, Button b) {
 		drawCenteredString(g, s, b.x, b.y, b.width, b.height);
 	}
@@ -181,7 +75,7 @@ public class DrawUtils {
 	
 	public static void drawCenteredString(Graphics g, String s, int centerX, int centerY) {
 		int fontSize = g.getFont().getSize();
-		FontMetrics fontMetrics = getFontMetrics(fontSize);
+		FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
 		
 		int leftX = centerX(centerX, s, fontMetrics);
 		int bottomY = centerY(centerY, fontMetrics);
@@ -191,27 +85,27 @@ public class DrawUtils {
 	
 	public static void drawCenteredWidthString(Graphics g, String s, int centerX, int y) {
 		int fontSize = g.getFont().getSize();
-		FontMetrics fontMetrics = getFontMetrics(fontSize);
+		FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
 		
 		int leftX = centerX(centerX, s, fontMetrics);
 		g.drawString(s, leftX, y);
 	}
 	
 	private static int centerY(int centerY, FontMetrics fontMetrics) {
-		return centerY + fontMetrics.letterHeight/2;
+		return centerY + fontMetrics.getLetterHeight()/2;
 	}
 	
 	private static int centerX(int centerX, String s, FontMetrics fontMetrics) {
-		return centerX - s.length()*fontMetrics.horizontalSpacing/2;
+		return centerX - fontMetrics.getLength(s)/2;
 	}
 	
 	private static int rightX(int rightX, String s, FontMetrics fontMetrics) {
-		return rightX - s.length()*fontMetrics.horizontalSpacing;
+		return rightX - fontMetrics.getLength(s);
 	}
 	
 	public static void drawCenteredHeightString(Graphics g, String s, int x, int centerY) {
 		int fontSize = g.getFont().getSize();
-		FontMetrics fontMetrics = getFontMetrics(fontSize);
+		FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
 		
 		int bottomY = centerY(centerY, fontMetrics);
 		g.drawString(s, x, bottomY);
@@ -219,7 +113,7 @@ public class DrawUtils {
 
 	public static void drawRightAlignedString(Graphics g, String s, int rightX, int y) {
 		int fontSize = g.getFont().getSize();
-		FontMetrics fontMetrics = getFontMetrics(fontSize);
+		FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
 		
 		int leftX = rightX(rightX, s, fontMetrics);
 		
@@ -248,7 +142,7 @@ public class DrawUtils {
 	}
 
 	private static int getTextWidth(final String text, final int fontSize) {
-		return text.length()*getFontMetrics(fontSize).getHorizontalSpacing();
+		return text.length()* FontMetrics.getFontMetrics(fontSize).getHorizontalSpacing();
 	}
 
 	public static void fillCanvas(Graphics g, Color color) {
@@ -388,7 +282,7 @@ public class DrawUtils {
 		BufferedImage image = new BufferedImage(Global.TILE_SIZE + extra, Global.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
 		g.setColor(Color.BLACK);
-		setFont(g, 14);
+		FontMetrics.setFont(g, 14);
 
 		// TODO: If we're starting the string 3 pixels after the image, then shouldn't we add three to the extra?
 		// TODO: I think the y value here is a guess - can maybe use draw metrics to figure out where to start
@@ -418,24 +312,4 @@ public class DrawUtils {
 		return bufferedImage;
 	}
 
-	// TODO: new file
-	static class FontMetrics {
-        private final int fontSize;
-        private final int horizontalSpacing;
-        private final int letterHeight;
-
-        FontMetrics(int fontSize, int horizontalSpacing, int letterHeight) {
-            this.fontSize = fontSize;
-            this.horizontalSpacing = horizontalSpacing;
-            this.letterHeight = letterHeight;
-        }
-
-        int getHorizontalSpacing() {
-            return this.horizontalSpacing;
-        }
-
-        public String toString() {
-            return fontSize + " " + horizontalSpacing + " " + letterHeight;
-        }
-    }
 }

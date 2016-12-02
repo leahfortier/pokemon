@@ -10,6 +10,7 @@ import input.InputControl;
 import main.Game;
 import sound.SoundPlayer;
 import util.DrawUtils;
+import util.FontMetrics;
 import util.Save;
 import util.Save.SavePreviewInfo;
 
@@ -159,7 +160,7 @@ public class MainMenuView extends View {
 		if (info != null) {
 			g.translate(b.x, b.y);
 
-			DrawUtils.setFont(g, 20);
+			FontMetrics.setFont(g, 20);
 
 			g.drawString("Name:", 16, 28);
 			DrawUtils.drawRightAlignedString(g, info.getName(), 189, 28);
@@ -176,7 +177,7 @@ public class MainMenuView extends View {
 			g.translate(-b.x, -b.y);
 		}
 		else {
-			DrawUtils.setFont(g, 30);
+			FontMetrics.setFont(g, 30);
 			DrawUtils.drawCenteredString(g, emptyText, b);
 		}
 	}

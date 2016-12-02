@@ -13,6 +13,7 @@ import pattern.generic.LocationTriggerMatcher;
 import util.DrawUtils;
 import util.FileIO;
 import util.Folder;
+import util.FontMetrics;
 import util.GUIUtils;
 import util.Point;
 import util.StringUtils;
@@ -57,9 +58,11 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	private static final long serialVersionUID = -1323397946555510794L;
 
 	public static void main(String[] args) {
+		MapMaker mapMaker = new MapMaker();
+
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.getContentPane().add(new MapMaker());
+		frame.getContentPane().add(mapMaker);
 		frame.setSize(Global.GAME_SIZE);
 		frame.setVisible(true);
 	}
@@ -119,7 +122,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         toolList.setModel(Tool.getToolListModel(this));
         toolList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         toolList.setCellRenderer(new ToolRenderer());
-        toolList.setFont(DrawUtils.getFont(18));
+        toolList.setFont(FontMetrics.getFont(18));
         toolList.addListSelectionListener(this);
 
         this.setTool(ToolType.MOVE);

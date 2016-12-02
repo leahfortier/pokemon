@@ -1,6 +1,10 @@
-package util;
+package generator;
 
 import main.Global;
+import util.FileIO;
+import util.FileName;
+import util.FontMetrics;
+import util.StringUtils;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,7 +15,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-class FindMetrics extends JPanel {
+class FontMetricsGen extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private static final String s = "WWWWWWWWWWWWWWWWWWWWWW";
@@ -25,7 +29,7 @@ class FindMetrics extends JPanel {
     private final Graphics2D g;
     private final int[][] colors;
 
-    private FindMetrics(int width, int height) {
+    private FontMetricsGen(int width, int height) {
         canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         colors = new int[canvas.getWidth()][canvas.getHeight()];
 
@@ -39,7 +43,7 @@ class FindMetrics extends JPanel {
         for (int fontSize = SMALLEST_FONT_SIZE; fontSize <= LARGEST_FONT_SIZE; fontSize++) {
             reset(fontSize);
 
-            DrawUtils.FontMetrics fontMetrics = getMetrics(fontSize);
+            FontMetrics fontMetrics = getMetrics(fontSize);
             checkMatch(fontSize, fontMetrics.getHorizontalSpacing());
             StringUtils.appendLine(sb, fontMetrics.toString());
         }
@@ -54,7 +58,7 @@ class FindMetrics extends JPanel {
         setColors();
     }
 
-    private DrawUtils.FontMetrics getMetrics(int fontSize) {
+    private FontMetrics getMetrics(int fontSize) {
         int leftMost = canvas.getWidth() + 1;
         int rightMost = -1;
         int highest = canvas.getHeight() + 1;
@@ -76,7 +80,7 @@ class FindMetrics extends JPanel {
 
         int letterHeight = lowest - highest;
 
-        return new DrawUtils.FontMetrics(fontSize, horizontalGuess, letterHeight);
+        return new FontMetrics(fontSize, horizontalGuess, letterHeight);
     }
 
     private void setColors() {
@@ -109,7 +113,7 @@ class FindMetrics extends JPanel {
     }
 
     private void drawString(int fontSize, int x, int y) {
-        DrawUtils.setFont(g, fontSize);
+        FontMetrics.setFont(g, fontSize);
         g.setColor(Color.BLACK);
 
         g.drawString(s, x, y);
@@ -142,9 +146,8 @@ class FindMetrics extends JPanel {
         int width = 1850;
         int height = 480;
 
-        JFrame frame = new JFrame("Direct draw demo");
-
-        FindMetrics panel = new FindMetrics(width, height);
+        JFrame frame = new JFrame();
+        FontMetricsGen panel = new FontMetricsGen(width, height);
 
         frame.add(panel);
         frame.pack();

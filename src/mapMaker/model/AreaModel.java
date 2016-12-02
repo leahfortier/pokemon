@@ -5,6 +5,7 @@ import map.MapDataType;
 import map.TerrainType;
 import mapMaker.MapMaker;
 import util.DrawUtils;
+import util.FontMetrics;
 import util.Point;
 import util.StringUtils;
 
@@ -162,7 +163,7 @@ public class AreaModel extends MapMakerModel {
         }
 
         g2d.setColor(Color.BLACK);
-        DrawUtils.setFont(g2d, 16);
+        FontMetrics.setFont(g2d, 16);
         g2d.drawString(areaName, mouseHoverLocation.x, mouseHoverLocation.y);
     }
 }

@@ -8,6 +8,7 @@ import input.InputControl;
 import message.MessageUpdate;
 import pokemon.Stat;
 import util.DrawUtils;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -23,15 +24,15 @@ public class MessageState implements VisualStateHandler {
         g.drawImage(tiles.getTile(0x3), 0, 439, null);
 
         g.setColor(Color.BLACK);
-        DrawUtils.setFont(g, 30);
+        FontMetrics.setFont(g, 30);
 
-        DrawUtils.drawWrappedText(g, view.getMessage(), 30, 490, 720);
+        FontMetrics.drawWrappedText(g, view.getMessage(), 30, 490, 720);
 
         if (view.isState(VisualState.STAT_GAIN)) {
             g.drawImage(tiles.getTile(0x5), 0, 280, null);
             g.setColor(Color.BLACK);
             for (int i = 0; i < Stat.NUM_STATS; i++) {
-                DrawUtils.setFont(g, 16);
+                FontMetrics.setFont(g, 16);
                 g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
 
                 DrawUtils.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);

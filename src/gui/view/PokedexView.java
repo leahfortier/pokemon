@@ -12,6 +12,7 @@ import pokemon.PC;
 import pokemon.PokemonInfo;
 import trainer.pokedex.Pokedex;
 import util.DrawUtils;
+import util.FontMetrics;
 import util.PokeString;
 
 import java.awt.Color;
@@ -130,7 +131,7 @@ class PokedexView extends View {
 		g.drawImage(tiles.getTile(0x31), 40, 40, null);
 		
 		g.setColor(Color.BLACK);
-		DrawUtils.setFont(g, 20);
+		FontMetrics.setFont(g, 20);
 		DrawUtils.drawCenteredWidthString(g, PokeString.POKEDEX, 214, 65);
 		
 		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
@@ -163,7 +164,7 @@ class PokedexView extends View {
 		
 		// Draw page numbers and arrows
 		g.setColor(Color.BLACK);
-		DrawUtils.setFont(g, 16);
+		FontMetrics.setFont(g, 16);
 		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, 215, 433);
 		View.drawArrows(g, leftButton, rightButton);
 		
@@ -173,7 +174,7 @@ class PokedexView extends View {
 		g.drawImage(tiles.getTile(0x33), 40, 478, null);
 		
 		g.setColor(Color.BLACK);
-		DrawUtils.setFont(g, 20);
+		FontMetrics.setFont(g, 20);
 		g.drawString("Seen: " + numSeen, 70, 524);
 		g.drawString("Caught: " + numCaught, 70 + 54*3, 524);
 		
@@ -197,7 +198,7 @@ class PokedexView extends View {
 		g.drawImage(tiles.getTile(0x34), 410, 40, null);
 		if (notSeen) {
 			g.setColor(Color.BLACK);
-			DrawUtils.setFont(g, 80);
+			FontMetrics.setFont(g, 80);
 			g.drawString("?", 455, 137);
 		}
 		else {
@@ -207,12 +208,12 @@ class PokedexView extends View {
 		}
 		
 		g.setColor(Color.BLACK);
-		DrawUtils.setFont(g, 20);
+		FontMetrics.setFont(g, 20);
 		g.drawString(notSeen ? "?????" : selected.getName(), 541, 82);
 		DrawUtils.drawRightAlignedString(g, "#" + String.format("%03d", selected.getNumber()), 740, 82);
 		
 		if (!notSeen) {
-			DrawUtils.setFont(g, 16);
+			FontMetrics.setFont(g, 16);
 			g.drawString("Type:", 541, 110);
 			
 			g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 596, 98, null);
@@ -225,7 +226,7 @@ class PokedexView extends View {
 			g.drawString("Weight: " + (!caught ? "???.?" : selected.getWeight()) + " lbs", 427, 217);
 			
 			if (caught) {
-				DrawUtils.drawWrappedText(g, selected.getFlavorText(), 427, 247, 350 - 17);
+				FontMetrics.drawWrappedText(g, selected.getFlavorText(), 427, 247, 350 - 17);
 			}
 			
 			g.drawString("Locations:", 427, 340);
@@ -236,7 +237,7 @@ class PokedexView extends View {
 		}
 		
 		// Buttons
-		DrawUtils.setFont(g, 20);
+		FontMetrics.setFont(g, 20);
 		
 		if (!notSeen) {
 			BufferedImage pkmImg = partyTiles.getTile(selected.getNumber());

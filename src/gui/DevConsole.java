@@ -8,9 +8,9 @@ import main.Game;
 import main.Global;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
-import util.DrawUtils;
 import input.InputControl;
 import input.ControlKey;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -223,7 +223,7 @@ class DevConsole {
 		g.drawLine(0, 0, Global.GAME_SIZE.width, 0);
 
 		g.setColor(Color.WHITE);
-		DrawUtils.setFont(g, 14);
+		FontMetrics.setFont(g, 14);
 		g.drawString(currText, 2, 16);
 
 		g.translate(0, -Global.GAME_SIZE.height + 20);

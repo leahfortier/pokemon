@@ -13,6 +13,7 @@ import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.Trainer;
 import util.DrawUtils;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -155,19 +156,19 @@ class PartyView extends View {
 		DrawUtils.drawCenteredImage(g, pkmImg, 121, 174);
 		
 		if (selectedPkm.isEgg()) {
-			DrawUtils.setFont(g, 20);
+			FontMetrics.setFont(g, 20);
 			g.setColor(Color.BLACK);
 			
 			// Name
 			g.drawString(selectedPkm.getActualName(), 213, 147);
 			
-			DrawUtils.setFont(g, 16);
+			FontMetrics.setFont(g, 16);
 			
 			// Description
-			DrawUtils.drawWrappedText(g, selectedPkm.getEggMessage(), 213, 170, 718 - 213);
+			FontMetrics.drawWrappedText(g, selectedPkm.getEggMessage(), 213, 170, 718 - 213);
 		}
 		else {
-			DrawUtils.setFont(g, 20);
+			FontMetrics.setFont(g, 20);
 			g.setColor(Color.BLACK);
 			
 			// Name and Gender
@@ -191,7 +192,7 @@ class PartyView extends View {
 				g.drawImage(typeTiles.getTile(type[1].getImageIndex()), 687, 133, null);
 			}
 			
-			DrawUtils.setFont(g, 16);
+			FontMetrics.setFont(g, 16);
 			
 			// Nature
 			g.drawString(selectedPkm.getNature().getName() +" Nature", 213, 170);
@@ -215,7 +216,7 @@ class PartyView extends View {
 			g.drawString(abilityStr, 81, 272);
 			
 			// TODO: I hate this 
-			DrawUtils.setFont(g, 12);
+			FontMetrics.setFont(g, 12);
 			int dWidth = 81 + abilityStr.length()*9, dIndex = 0;
 			StringBuilder dStr = new StringBuilder();
 			String[] descriptionSplit = selectedPkm.getActualAbility().getDescription().split(" ");
@@ -240,7 +241,7 @@ class PartyView extends View {
 			g.setColor(selectedPkm.getHPColor());
 			g.fillRect(71, 329, (int)(155*selectedPkm.getHPRatio()), 10);
 			
-			DrawUtils.setFont(g, 16);
+			FontMetrics.setFont(g, 16);
 			g.setColor(Color.BLACK);
 			
 			// Stats Box
@@ -258,7 +259,7 @@ class PartyView extends View {
 			int[] evs = selectedPkm.getEVs();
 			
 			g.setColor(Color.BLACK);
-			DrawUtils.setFont(g, 14);
+			FontMetrics.setFont(g, 14);
 			for (int i = 0; i < Stat.NUM_STATS; i++) {
 				final String statString;
 				if (i == Stat.HP.index()) {
@@ -285,12 +286,12 @@ class PartyView extends View {
 				
 				g.setColor(Color.BLACK);
 				if (selectedButton == MOVES + i) {
-					DrawUtils.setFont(g, 10);
-					DrawUtils.drawWrappedText(g, move.getAttack().getName() + " - " + move.getAttack().getDescription(), 6, 11, 280);
+					FontMetrics.setFont(g, 10);
+					FontMetrics.drawWrappedText(g, move.getAttack().getName() + " - " + move.getAttack().getDescription(), 6, 11, 280);
 				}
 				else {
 					// Attack name
-					DrawUtils.setFont(g, 14);
+					FontMetrics.setFont(g, 14);
 					g.drawString(move.getAttack().getName(), 7, 16);
 					
 					// PP
@@ -298,7 +299,7 @@ class PartyView extends View {
 					DrawUtils.drawRightAlignedString(g, move.getPP() + "/" + move.getMaxPP(), 205, 16);
 					
 					// Accuracy
-					DrawUtils.setFont(g, 12);
+					FontMetrics.setFont(g, 12);
 					g.drawString("Accuracy:", 7, 32);
 					DrawUtils.drawRightAlignedString(g, "" + move.getAttack().getAccuracyString(), 100, 32);
 					
@@ -328,7 +329,7 @@ class PartyView extends View {
 		}
 		
 		g.setColor(Color.BLACK);
-		DrawUtils.setFont(g, 20);
+		FontMetrics.setFont(g, 20);
 		g.drawString("Switch!", 190, 518);
 		
 		// Return Box
@@ -336,7 +337,7 @@ class PartyView extends View {
 		g.drawString("Return", 547, 518);
 		
 		TileSet partyTiles = data.getPartyTiles();
-		DrawUtils.setFont(g, 14);
+		FontMetrics.setFont(g, 14);
 		
 		// Tabs
 		for (int i = 0; i < list.size(); i++) {
