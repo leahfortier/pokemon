@@ -7,6 +7,7 @@ import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import main.Global;
+import util.RandomUtils;
 
 public enum Stat {
 	HP(0, "HP", "HP", -1, InBattle.NEVER, true), 
@@ -164,6 +165,6 @@ public enum Stat {
 	}
 
 	public static int getRandomIv() {
-		return Global.getRandomInt(MAX_IV + 1);
+		return RandomUtils.getRandomInt(MAX_IV + 1);
 	}
 }

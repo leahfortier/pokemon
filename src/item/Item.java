@@ -75,6 +75,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
+import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -739,7 +740,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth) {
-			return Global.chanceTest(10);
+			return RandomUtils.chanceTest(10);
 		}
 
 		public String braceMessage(ActivePokemon bracer) {
@@ -3821,7 +3822,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-			if (Global.chanceTest(10)) {
+			if (RandomUtils.chanceTest(10)) {
 				PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
@@ -4080,7 +4081,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-			if (Global.chanceTest(10)) {
+			if (RandomUtils.chanceTest(10)) {
 				PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
@@ -8608,7 +8609,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			holdMessage = "";
 			useMessage = "";
 			
-			int rand = Global.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
+			int rand = RandomUtils.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
 			
 			// Raise crit
 			if (rand == Stat.NUM_BATTLE_STATS) {

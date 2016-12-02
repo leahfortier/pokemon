@@ -43,6 +43,7 @@ import pokemon.PokemonInfo.WildHoldItem;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import util.DrawUtils;
+import util.RandomUtils;
 
 import java.awt.Color;
 import java.io.Serializable;
@@ -107,9 +108,9 @@ public class ActivePokemon implements Serializable {
 		removeStatus();
 		
 		this.totalEXP = pokemon.getGrowthRate().getEXP(this.level);
-		this.totalEXP += Global.getRandomInt(expToNextLevel());
+		this.totalEXP += RandomUtils.getRandomInt(expToNextLevel());
 		this.gender = Gender.getGender(pokemon.getMaleRatio());
-		this.shiny = (user || isWild) && Global.chanceTest(1, 8192);
+		this.shiny = (user || isWild) && RandomUtils.chanceTest(1, 8192);
 		
 		setMoves();
 		

@@ -4,11 +4,11 @@ import battle.Battle;
 import battle.attack.MoveType;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
-import main.Global;
 import message.Messages;
 import pokemon.ability.AbilityNamesies;
 import battle.effect.generic.EffectNamesies;
 import pokemon.ActivePokemon;
+import util.RandomUtils;
 
 class Asleep extends Status implements BeforeTurnEffect {
     private static final long serialVersionUID = 1L;
@@ -16,7 +16,7 @@ class Asleep extends Status implements BeforeTurnEffect {
 
     public Asleep() {
         super(StatusCondition.ASLEEP);
-        this.numTurns = Global.getRandomInt(1, 3);
+        this.numTurns = RandomUtils.getRandomInt(1, 3);
     }
 
     protected void postCreateEffect(ActivePokemon victim) {

@@ -36,7 +36,7 @@ Override:
 		AddMapField: MoveType: Biting
 		AddMapField: ApplyEffects:
 		// If the effect is being applied, 50/50 chance to give a status condition vs. flinching
-		if (Global.chanceTest(50)) {
+		if (RandomUtils.chanceTest(50)) {
 			Status.giveStatus(b, user, victim, StatusCondition.{00});
 			return;
 		}
@@ -632,7 +632,7 @@ Override:
 Override: 
 	SuccessiveDecay:
 		AddMapField: Cast:
-		if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
+		if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 			Messages.addMessage(this.getFailMessage(b, caster, victim));
 			return;
 		}
@@ -1223,7 +1223,7 @@ Override:
 Override:
 	StatusContact:
 		AddMapField: Contact: 
-		if (Global.chanceTest(30)) {
+		if (RandomUtils.chanceTest(30)) {
 			Status.giveStatus(b, victim, user, StatusCondition.{00}, true);
 		}
 		###
@@ -2371,7 +2371,7 @@ Override:
 		}
 		###
 		AddMapField: OnApplyDamage:
-		if (Global.chanceTest(10)) {
+		if (RandomUtils.chanceTest(10)) {
 			PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 			if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
 				flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);

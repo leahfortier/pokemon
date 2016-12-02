@@ -1,6 +1,6 @@
 package pokemon;
 
-import main.Global;
+import util.RandomUtils;
 
 import java.awt.Color;
 import java.io.Serializable;
@@ -22,7 +22,7 @@ public class Nature implements Serializable {
 	private final String name;
 	
 	private static int getRandomNatureStatIndex() {
-		return Global.getRandomInt(1, Stat.NUM_STATS - 1);
+		return RandomUtils.getRandomInt(1, Stat.NUM_STATS - 1);
 	}
 	
 	public Nature() {

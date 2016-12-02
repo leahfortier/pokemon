@@ -1,9 +1,9 @@
 package map;
 
-import main.Global;
 import pokemon.PokemonNamesies;
 import pokemon.ActivePokemon;
 import trainer.WildPokemon;
+import util.RandomUtils;
 
 // TODO: Not exactly sure if this is the best location for this class
 public class WildEncounter {
@@ -40,7 +40,7 @@ public class WildEncounter {
     }
 
     public WildPokemon getWildPokemon() {
-        int level = Global.getRandomInt(this.minLevel, this.maxLevel);
+        int level = RandomUtils.getRandomInt(this.minLevel, this.maxLevel);
         return new WildPokemon(new ActivePokemon(this.pokemon, level, true, false));
     }
 }

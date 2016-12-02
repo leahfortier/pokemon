@@ -5,11 +5,11 @@ import battle.attack.MoveType;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
-import main.Global;
 import main.Type;
 import message.Messages;
 import battle.effect.generic.EffectNamesies;
 import pokemon.ActivePokemon;
+import util.RandomUtils;
 
 class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
     private static final long serialVersionUID = 1L;
@@ -25,7 +25,7 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
 
     public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
         // 20% chance to thaw out each turn
-        if (Global.chanceTest(20) || p.getAttack().isMoveType(MoveType.DEFROST)) {
+        if (RandomUtils.chanceTest(20) || p.getAttack().isMoveType(MoveType.DEFROST)) {
             Status.removeStatus(b, p, CastSource.EFFECT);
 
             return true;

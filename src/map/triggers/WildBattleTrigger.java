@@ -13,6 +13,7 @@ import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.WildPokemon;
 import util.JsonUtils;
+import util.RandomUtils;
 
 class WildBattleTrigger extends Trigger {
 
@@ -53,7 +54,7 @@ class WildBattleTrigger extends Trigger {
 
 				// TODO: Make the chance method return an int instead of a double
 				Item item = player.front().getActualHeldItem();
-				if (item instanceof RepellingEffect && Global.chanceTest((int)(100*((RepellingEffect)item).chance()))) {
+				if (item instanceof RepellingEffect && RandomUtils.chanceTest((int)(100*((RepellingEffect)item).chance()))) {
 					return;
 				}
 			}
@@ -77,7 +78,7 @@ class WildBattleTrigger extends Trigger {
 	
 	// Returns a legendary encounter if applicable and null otherwise
 	private WildPokemon getLegendaryEncounter() {
-		if (Global.chanceTest(1, 1024) && !Game.getPlayer().getPokedex().isCaught(PokemonNamesies.MEW)) {
+		if (RandomUtils.chanceTest(1, 1024) && !Game.getPlayer().getPokedex().isCaught(PokemonNamesies.MEW)) {
 			return new WildPokemon(new ActivePokemon(PokemonNamesies.MEW, 5, true, false));
 		}
 		
@@ -86,7 +87,7 @@ class WildBattleTrigger extends Trigger {
 
 	// TODO: I think there might be a method in Global that does something like this already if not try and make one and include the wild hold items also
 	private int getRandomEncounterIndex() {
-		int sum = 0, random = Global.getRandomInt(100);
+		int sum = 0, random = RandomUtils.getRandomInt(100);
 		for (int i = 0; i < wildEncounters.length; i++) {
 			sum += wildEncounters[i].getProbability();
 

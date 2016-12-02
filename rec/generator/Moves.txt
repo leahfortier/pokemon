@@ -1663,7 +1663,7 @@ Metronome:
 	Attack metronomeMove;
 
 	do {
-		index = Global.getRandomIndex(attackNames);
+		index = RandomUtils.getRandomIndex(attackNames);
 		metronomeMove = attackNames[index].getAttack();
 	} while (metronomeMove.isMoveType(MoveType.METRONOMELESS));
 	
@@ -2091,7 +2091,7 @@ Tri Attack:
 	Cat: Special
 	EffChance: 20
 	ApplyEffects: 
-	super.status = Global.getRandomValue(statusConditions);
+	super.status = RandomUtils.getRandomValue(statusConditions);
 	super.applyEffects(b, user, victim);
 	###
 	Type: Normal
@@ -2854,7 +2854,7 @@ Acupressure:
 	ApplyEffects:
 	// TODO: Test to make sure this works when both parties use during the same turn -- will it always be the same stat?
 	super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-	super.statChanges[Global.getRandomInt(super.statChanges.length)] = 2;
+	super.statChanges[RandomUtils.getRandomInt(super.statChanges.length)] = 2;
 	
 	super.applyEffects(b, user, victim);
 	###
@@ -3964,7 +3964,7 @@ Conversion:
 		}
 	}
 	
-	return new Type[] { Global.getRandomValue(types), Type.NO_TYPE };
+	return new Type[] { RandomUtils.getRandomValue(types), Type.NO_TYPE };
 	###
 	Effect: ChangeType
 *
@@ -3989,7 +3989,7 @@ Conversion 2:
 	ChangeType: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
 	List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getType(), b);
-	return new Type[] { Global.getRandomValue(types), Type.NO_TYPE };
+	return new Type[] { RandomUtils.getRandomValue(types), Type.NO_TYPE };
 	###
 	Field: 
 	private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b) {
@@ -4089,7 +4089,7 @@ Sleep Talk:
 		return;
 	}
 	
-	me.callNewMove(b, o, Global.getRandomValue(moves));
+	me.callNewMove(b, o, RandomUtils.getRandomValue(moves));
 	###
 *
 Block:
@@ -4278,7 +4278,7 @@ Psywave:
 	Type: Psychic
 	Cat: Special
 	Acc: 100
-	FixedDamage: (int)Math.max(1, (Global.getRandomInt(11) + 5)*me.getLevel()/10.0)
+	FixedDamage: (int)Math.max(1, (RandomUtils.getRandomInt(11) + 5)*me.getLevel()/10.0)
 *
 Pain Split:
 	Desc: The user adds its HP to the target's HP, then equally shares the combined HP with the target.
@@ -4407,7 +4407,7 @@ Present:
 	Acc: 90
 	PhysicalContact: False
 	GetPow: 
-	double random = Global.getRandomInt(80);
+	double random = RandomUtils.getRandomInt(80);
 	if (random < 40) {
 		return 40;
 	}
@@ -4423,7 +4423,7 @@ Present:
 		return;
 	}
 	
-	if (Global.chanceTest(80)) {
+	if (RandomUtils.chanceTest(80)) {
 		super.applyDamage(me, o, b);
 		return;
 	}
@@ -4631,7 +4631,7 @@ Assist:
 		return;
 	}
 	
-	me.callNewMove(b, o, new Move(Global.getRandomValue(attacks)));
+	me.callNewMove(b, o, new Move(RandomUtils.getRandomValue(attacks)));
 	###
 *
 Metal Burst:

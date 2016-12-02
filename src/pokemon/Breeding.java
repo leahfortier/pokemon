@@ -6,7 +6,7 @@ import item.Item;
 import item.ItemNamesies;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
-import main.Global;
+import util.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +53,7 @@ public class Breeding {
 			
 			if (!incenseItemHeld) {
 				PokemonNamesies[] evolutions = babyInfo.getEvolution().getEvolutions();
-				babyInfo = PokemonInfo.getPokemonInfo(Global.getRandomValue(evolutions));
+				babyInfo = PokemonInfo.getPokemonInfo(RandomUtils.getRandomValue(evolutions));
 			}
 		}
 		
@@ -90,7 +90,7 @@ public class Breeding {
 		}
 		
 		while (remainingIVsToInherit --> 0) {
-			Stat stat = Global.getRandomValue(remainingStats);
+			Stat stat = RandomUtils.getRandomValue(remainingStats);
 			remainingStats.remove(stat);
 
 			IVs[stat.index()] = getRandomParent(daddy, mommy).getIV(stat.index());
@@ -152,7 +152,7 @@ public class Breeding {
 	}
 
 	private static ActivePokemon getRandomParent(final ActivePokemon daddy, final ActivePokemon mommy) {
-		return Global.getRandomValue(new ActivePokemon[] { daddy, mommy });
+		return RandomUtils.getRandomValue(new ActivePokemon[] { daddy, mommy });
 	}
 
 	static Nature getBabyNature(ActivePokemon daddy, ActivePokemon mommy) {

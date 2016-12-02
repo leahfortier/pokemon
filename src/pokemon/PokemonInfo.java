@@ -10,6 +10,7 @@ import main.Type;
 import pokemon.ability.AbilityNamesies;
 import util.FileIO;
 import util.FileName;
+import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -224,7 +225,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			in.close();
 		}
 
-		return Global.getRandomValue(baseEvolution);
+		return RandomUtils.getRandomValue(baseEvolution);
 	}
 
 	public int compareTo(PokemonInfo p) {
@@ -353,7 +354,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		}
 		
 		public static HoldItem getWildHoldItem(List<WildHoldItem> list) {
-			int random = Global.getRandomInt(100);
+			int random = RandomUtils.getRandomInt(100);
 			int sum = 0;
 
 			for (WildHoldItem i : list) {

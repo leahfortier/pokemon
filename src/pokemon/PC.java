@@ -4,6 +4,7 @@ import main.Game;
 import main.Global;
 import trainer.CharacterData;
 import trainer.Trainer;
+import util.RandomUtils;
 
 import java.awt.Color;
 import java.io.Serializable;
@@ -282,7 +283,7 @@ public class PC implements Serializable {
 		
 		public Box() {
 			pokemon = new ActivePokemon[BOX_HEIGHT][BOX_WIDTH];
-			color = new Color(Global.getRandomInt(255), Global.getRandomInt(255), Global.getRandomInt(255));
+			color = new Color(RandomUtils.getRandomInt(255), RandomUtils.getRandomInt(255), RandomUtils.getRandomInt(255));
 		}
 	}
 }

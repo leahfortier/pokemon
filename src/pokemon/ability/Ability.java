@@ -72,6 +72,7 @@ import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import trainer.Trainer;
 import trainer.WildPokemon;
+import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -138,7 +139,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		// Has two abilties -- return a random one
-		return Global.getRandomValue(abilities).getNewAbility();
+		return RandomUtils.getRandomValue(abilities).getNewAbility();
 	}
 	
 	public static Ability evolutionAssign(ActivePokemon p, PokemonInfo ev) {
@@ -157,7 +158,7 @@ public abstract class Ability implements Serializable {
 			return abilities[0].getNewAbility();
 		}
 		
-		return Global.getRandomValue(abilities).getNewAbility();
+		return RandomUtils.getRandomValue(abilities).getNewAbility();
 	}
 	
 	public static Ability getOtherAbility(ActivePokemon p) {
@@ -294,7 +295,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (victim.hasStatus() && Global.chanceTest(1, 3)) {
+			if (victim.hasStatus() && RandomUtils.chanceTest(1, 3)) {
 				Status.removeStatus(b, victim, CastSource.ABILITY);
 			}
 		}
@@ -425,7 +426,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (Global.chanceTest(30)) {
+			if (RandomUtils.chanceTest(30)) {
 				Status.giveStatus(b, victim, user, StatusCondition.PARALYZED, true);
 			}
 		}
@@ -492,7 +493,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (Global.chanceTest(30)) {
+			if (RandomUtils.chanceTest(30)) {
 				Status.giveStatus(b, victim, user, StatusCondition.POISONED, true);
 			}
 		}
@@ -521,7 +522,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (Global.chanceTest(30)) {
+			if (RandomUtils.chanceTest(30)) {
 				PokemonEffect infatuated = (PokemonEffect)EffectNamesies.INFATUATED.getEffect();
 				if (infatuated.applies(b, victim, user, CastSource.ABILITY)) {
 					user.addEffect(infatuated);
@@ -620,7 +621,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-			if (Global.chanceTest(10)) {
+			if (RandomUtils.chanceTest(10)) {
 				PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 				if (flinch.applies(b, user, victim, CastSource.ABILITY)) {
 					flinch.cast(b, user, victim, CastSource.ABILITY, false);
@@ -649,8 +650,8 @@ public abstract class Ability implements Serializable {
 			}
 			
 			// 30% chance to Paralyze, Poison, or induce Sleep
-			if (Global.chanceTest(30)) {
-				Status.giveStatus(b, victim, user, Global.getRandomValue(statuses), true);
+			if (RandomUtils.chanceTest(30)) {
+				Status.giveStatus(b, victim, user, RandomUtils.getRandomValue(statuses), true);
 			}
 		}
 	}
@@ -1060,10 +1061,10 @@ public abstract class Ability implements Serializable {
 			
 			AttackNamesies warn;
 			if (highestPower == -1) {
-				warn = Global.getRandomValue(otherMoves).getAttack().namesies();
+				warn = RandomUtils.getRandomValue(otherMoves).getAttack().namesies();
 			}
 			else {
-				warn = Global.getRandomValue(besties);
+				warn = RandomUtils.getRandomValue(besties);
 			}
 			
 			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn.getName() + "!");
@@ -1246,7 +1247,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (Global.chanceTest(30)) {
+			if (RandomUtils.chanceTest(30)) {
 				Status.giveStatus(b, victim, user, StatusCondition.BURNED, true);
 			}
 		}
@@ -2114,7 +2115,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (Global.chanceTest(30)) {
+			if (RandomUtils.chanceTest(30)) {
 				user.getAttributes().setLastMoveUsed();
 				PokemonEffect disable = (PokemonEffect)EffectNamesies.DISABLE.getEffect();
 				if (disable.applies(b, victim, user, CastSource.ABILITY)) {
@@ -2227,7 +2228,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-			if (Global.chanceTest(30)) {
+			if (RandomUtils.chanceTest(30)) {
 				Status.giveStatus(b, user, victim, StatusCondition.POISONED, true);
 			}
 		}
@@ -2611,7 +2612,7 @@ public abstract class Ability implements Serializable {
 			}
 			
 			Item restored = ((ItemHolder)consumed).getItem();
-			if (restored instanceof Berry && (b.getWeather().namesies() == EffectNamesies.SUNNY || Global.chanceTest(50))) {
+			if (restored instanceof Berry && (b.getWeather().namesies() == EffectNamesies.SUNNY || RandomUtils.chanceTest(50))) {
 				victim.giveItem((HoldItem)restored);
 				Messages.addMessage(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!");
 			}
@@ -2626,7 +2627,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
-			if (!p.isHoldingItem(b) && Global.chanceTest(10)) {
+			if (!p.isHoldingItem(b) && RandomUtils.chanceTest(10)) {
 				// TODO: THIS SHOULDN'T JUST BE LEFTOVERS IT SHOULD BE MORE FUN STUFF
 				p.giveItem(ItemNamesies.LEFTOVERS);
 			}
@@ -2653,7 +2654,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
-			if (!p.isHoldingItem(b) && Global.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
+			if (!p.isHoldingItem(b) && RandomUtils.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
 				// TODO: Should give the item Honey, but this item has no purpose in our game so we'll see what this ability should actually do also something about Syrup Gather
 				p.giveItem(ItemNamesies.LEFTOVERS);
 			}
@@ -2882,7 +2883,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (victim.hasStatus() && Global.chanceTest(1, 3)) {
+			if (victim.hasStatus() && RandomUtils.chanceTest(1, 3)) {
 				Status.removeStatus(b, victim, CastSource.ABILITY);
 			}
 		}

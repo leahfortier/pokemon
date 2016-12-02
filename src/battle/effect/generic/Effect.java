@@ -4,6 +4,7 @@ import battle.Battle;
 import main.Global;
 import message.Messages;
 import pokemon.ActivePokemon;
+import util.RandomUtils;
 import util.StringUtils;
 
 import java.io.Serializable;
@@ -30,7 +31,7 @@ public abstract class Effect implements Serializable {
 		this.namesies = name;
 		this.nextTurnSubside = nextTurnSubside;
 
-        this.numTurns = minTurns == -1 ? -1 : Global.getRandomInt(minTurns, maxTurns);
+        this.numTurns = minTurns == -1 ? -1 : RandomUtils.getRandomInt(minTurns, maxTurns);
         this.active = true;
 	}
 	

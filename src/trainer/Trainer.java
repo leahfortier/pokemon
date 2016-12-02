@@ -10,6 +10,7 @@ import item.ItemNamesies;
 import item.bag.Bag;
 import main.Global;
 import pokemon.ActivePokemon;
+import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -190,7 +191,7 @@ public abstract class Trainer implements Team, Serializable {
 			Global.error("You shouldn't be switching when you have nothing to switch to!");
 		}
 
-		setFront(Global.getRandomValue(valid));
+		setFront(RandomUtils.getRandomValue(valid));
 	}
 	
 	public boolean canSwitch(Battle b, int switchIndex) {

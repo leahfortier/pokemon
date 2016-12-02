@@ -8,7 +8,6 @@ import item.Item;
 import item.ItemNamesies;
 import item.use.BallItem;
 import main.Game;
-import main.Global;
 import map.Direction;
 import map.entity.movable.PlayerEntity;
 import map.triggers.Trigger;
@@ -24,6 +23,7 @@ import pokemon.PC;
 import trainer.pokedex.Pokedex;
 import util.JsonUtils;
 import util.Point;
+import util.RandomUtils;
 import util.StringUtils;
 
 import java.io.Serializable;
@@ -413,7 +413,7 @@ public class CharacterData extends Trainer implements Serializable {
 		int shakeVal = (int)Math.ceil(65536/Math.pow(255/catchVal, .25));
 				
 		for (int i = 0; i < CATCH_SHAKES + 1; i++) {
-			if (!Global.chanceTest(shakeVal, 65536)) {
+			if (!RandomUtils.chanceTest(shakeVal, 65536)) {
 				Messages.addMessage("", i);
 				Messages.addMessage("Oh no! " + catchPokemon.getName() + " broke free!");
 				return true;

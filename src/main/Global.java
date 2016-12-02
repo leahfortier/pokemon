@@ -2,13 +2,11 @@ package main;
 
 import util.FileIO;
 import util.Folder;
+import util.RandomUtils;
 
 import javax.swing.JOptionPane;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 // Loads and maintains game data.
 public class Global {
@@ -35,52 +33,6 @@ public class Global {
 
 	public static final String MONEY_SYMBOL = "\u00A5";
 
-	// TODO: Need to make a RandomUtils class
-	private static final Random RANDOM = new Random();
-
-	public static boolean chanceTest(final int chance) {
-		return chanceTest(chance, 100);
-	}
-
-	public static boolean chanceTest(final int numerator, final int denominator) {
-		return getRandomInt(denominator) < numerator;
-	}
-
-	// Returns a random int with exclusive upper bound from range [0, upperBound)
-	public static int getRandomInt(final int upperBound) {
-		if (upperBound == 0) {
-			return 0;
-		}
-
-		return RANDOM.nextInt(upperBound);
-	}
-
-	// Returns a random int from the inclusive range [lowerBound, upperBound]
-	public static int getRandomInt(final int lowerBound, final int upperBound) {
-		if (upperBound < lowerBound) {
-			Global.error("Upper bound should never be lower than the lower bound. " +
-					"(Lower: " + lowerBound + ", Upper: " + upperBound + ")");
-		}
-
-		return getRandomInt((upperBound - lowerBound + 1)) + lowerBound;
-	}
-
-	public static <T> T getRandomValue(T[] array) {
-		return getRandomValue(Arrays.asList(array));
-	}
-
-	public static <T> T getRandomValue(List<T> list) {
-		return list.get(getRandomIndex(list));
-	}
-
-	public static <T> int getRandomIndex(T[] array) {
-		return getRandomIndex(Arrays.asList(array));
-	}
-
-	public static <T> int getRandomIndex(List<T> list) {
-		return RANDOM.nextInt(list.size());
-	}
-
 	public static <T> void swap(T[] arr) {
 		T temp = arr[0];
 		arr[0] = arr[1];
@@ -96,7 +48,7 @@ public class Global {
 
 	public static int getPercentageIndex(int[] chances) {
 		int sum = 0;
-		int random = getRandomInt(100);
+		int random = RandomUtils.getRandomInt(100);
 
 		for (int i = 0; i < chances.length; i++) {
 			sum += chances[i];

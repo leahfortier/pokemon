@@ -4,6 +4,7 @@ import battle.attack.Move;
 import main.Global;
 import battle.attack.AttackNamesies;
 import item.ItemNamesies;
+import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -94,7 +95,7 @@ public abstract class Evolution implements Serializable {
 
 			if (!list.isEmpty()) {
 				// This is pretty much for Wurmple even though he's not even going in the game
-				return Global.getRandomValue(list);
+				return RandomUtils.getRandomValue(list);
 			}
 			
 			return null;

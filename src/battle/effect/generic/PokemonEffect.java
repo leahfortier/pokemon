@@ -55,6 +55,7 @@ import pokemon.Gender;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -627,7 +628,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
+			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
@@ -681,7 +682,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
+			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
@@ -731,7 +732,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
+			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
@@ -781,7 +782,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
+			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
@@ -831,7 +832,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
+			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
@@ -919,7 +920,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			if (!Global.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
+			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.addMessage(this.getFailMessage(b, caster, victim));
 				return;
 			}
@@ -946,7 +947,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		Confusion() {
 			super(EffectNamesies.CONFUSION, -1, -1, false);
-			this.turns = Global.getRandomInt(1, 4); // Between 1 and 4 turns
+			this.turns = RandomUtils.getRandomInt(1, 4); // Between 1 and 4 turns
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
@@ -989,7 +990,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			Messages.addMessage(p.getName() + " is confused!");
 			
 			// 50% chance to hurt yourself in confusion while confused
-			if (Global.chanceTest(50)) {
+			if (RandomUtils.chanceTest(50)) {
 				Messages.addMessage("It hurt itself in confusion!");
 				
 				// Perform confusion damage
@@ -1165,7 +1166,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		Disable() {
 			super(EffectNamesies.DISABLE, -1, -1, false);
-			this.turns = Global.getRandomInt(4, 7); // Between 4 and 7 turns
+			this.turns = RandomUtils.getRandomInt(4, 7); // Between 4 and 7 turns
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
@@ -2532,7 +2533,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			Messages.addMessage(p.getName() + " is in love with " + opp.getName() + "!");
-			if (Global.chanceTest(50)) {
+			if (RandomUtils.chanceTest(50)) {
 				return true;
 			}
 			

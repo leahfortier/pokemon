@@ -1,6 +1,6 @@
 package pokemon;
 
-import main.Global;
+import util.RandomUtils;
 
 import java.awt.Color;
 import java.io.Serializable;
@@ -31,7 +31,7 @@ public enum Gender implements Serializable {
 			return GENDERLESS;
 		}
 
-		return Global.chanceTest(ratio) ? MALE : FEMALE;
+		return RandomUtils.chanceTest(ratio) ? MALE : FEMALE;
 	}
 	
 	public static boolean oppositeGenders(ActivePokemon me, ActivePokemon o) {

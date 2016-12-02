@@ -1,7 +1,7 @@
 package input;
 
-import main.Global;
 import util.Point;
+import util.RandomUtils;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -54,7 +54,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	// Gives you the lock. Careful you don't lose that. -1 means unable to acquire lock
 	public int getLock() {
 		while (lock == INVALID_LOCK) {
-			lock = Global.getRandomInt(Integer.MAX_VALUE);
+			lock = RandomUtils.getRandomInt(Integer.MAX_VALUE);
 		}
 
 		return lock;

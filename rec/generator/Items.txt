@@ -303,7 +303,7 @@ Focus Band:
 	Desc: An item to be held by a Pok\u00e9mon. The holder may endure a potential KO attack, leaving it with just 1 HP.
 	Price: 200
 	Fling: 10
-	Bracing: return Global.chanceTest(10);
+	Bracing: return RandomUtils.chanceTest(10);
 	BraceMessage: bracer.getName() + " held on with its " + this.name + "!"
 *
 Focus Sash:
@@ -2311,7 +2311,7 @@ Starf Berry:
 		holdMessage = "";
 		useMessage = "";
 	
-		int rand = Global.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
+		int rand = RandomUtils.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
 		
 		// Raise crit
 		if (rand == Stat.NUM_BATTLE_STATS) {

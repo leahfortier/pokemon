@@ -2,6 +2,7 @@ package map.weather;
 
 import main.Global;
 import map.weather.WeatherState.WeatherDrawer;
+import util.RandomUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -34,13 +35,13 @@ class RainyState implements WeatherDrawer {
         }
 
         for (int i = 0; i < 50; i++) {
-            int x = Global.getRandomInt(rainHeight.length);
+            int x = RandomUtils.getRandomInt(rainHeight.length);
             if (rainHeight[x] == 0){
-                rainHeight[x] = 1 + Global.getRandomInt(40);
+                rainHeight[x] = 1 + RandomUtils.getRandomInt(40);
             }
         }
 
-        if (Global.getRandomInt(80) == 0 || (lightningFrame > 80 && Global.chanceTest(1, 4))) {
+        if (RandomUtils.getRandomInt(80) == 0 || (lightningFrame > 80 && RandomUtils.chanceTest(1, 4))) {
             lightningFrame = 128;
         }
 

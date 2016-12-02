@@ -5,10 +5,10 @@ import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
-import main.Global;
 import main.Type;
 import message.Messages;
 import pokemon.ActivePokemon;
+import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -225,6 +225,6 @@ public class Move implements Serializable {
 
 	// TODO: AI Stuffffff
 	private static Move chooseMove(List<Move> usable) {
-		return Global.getRandomValue(usable);
+		return RandomUtils.getRandomValue(usable);
 	}
 }
