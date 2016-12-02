@@ -2,6 +2,7 @@ package map.weather;
 
 import main.Global;
 import map.weather.WeatherState.WeatherDrawer;
+import util.DrawUtils;
 import util.RandomUtils;
 
 import java.awt.Color;
@@ -19,8 +20,8 @@ class RainyState implements WeatherDrawer {
     // TODO: Make a fuckton of constants and whatever this is awful
     @Override
     public void draw(Graphics g) {
-        g.setColor(new Color(0,0,0, 64));
-        g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+        DrawUtils.fillCanvas(g, new Color(0, 0, 0, 64));
+
         g.setColor(new Color(50,50,255, 128));
 
         for (int i = 0; i < rainHeight.length; i++) {
@@ -46,8 +47,7 @@ class RainyState implements WeatherDrawer {
         }
 
         if (lightningFrame > 0) {
-            g.setColor(new Color(255, 255, 255, lightningFrame));
-            g.fillRect(0 ,0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+            DrawUtils.fillCanvas(g, new Color(255, 255, 255, lightningFrame));
             lightningFrame = 7*lightningFrame/8 - 1;
         } else {
             lightningFrame = 0;

@@ -1,6 +1,7 @@
 package gui.view.mainmenu;
 
 import gui.TileSet;
+import util.DrawUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -33,8 +34,7 @@ public enum Theme {
     }
 
     private static void drawBasicTheme(Graphics g, TileSet tiles) {
-        g.setColor(new Color(68, 123, 184));
-        g.fillRect(0, 0, 800, 600);
+        DrawUtils.fillCanvas(g, new Color(68, 123, 184));
         g.drawImage(tiles.getTile(0x01), 0, 0, null);
     }
 

@@ -1,10 +1,13 @@
 package map.weather;
 
+import util.DrawUtils;
+
+import java.awt.Color;
 import java.awt.Graphics;
 
 public enum WeatherState {
     NORMAL,
-    SUN(new SunnyState()),
+    SUN(g -> DrawUtils.fillCanvas(g, new Color(255, 255, 255, 64))),
     RAIN(new RainyState()),
     FOG,    // TODO: These
     SNOW;

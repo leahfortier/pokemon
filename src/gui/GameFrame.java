@@ -66,7 +66,6 @@ public class GameFrame {
 			gui.createBufferStrategy(2);
 			strategy = gui.getBufferStrategy();
 
-			// Load font thingy
 			Graphics g = strategy.getDrawGraphics();
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);

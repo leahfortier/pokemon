@@ -16,10 +16,10 @@ import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import pokemon.ActivePokemon;
+import util.DrawUtils;
 import util.StringUtils;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 
 public class BattleView extends View {
@@ -236,10 +236,7 @@ public class BattleView extends View {
 
 	@Override
 	public void draw(Graphics g) {
-		Dimension d = Global.GAME_SIZE;
-		
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, d.width, d.height);
+		DrawUtils.fillCanvas(g, Color.BLACK);
 		
 		ActivePokemon player = currentBattle.getPlayer().front();
 		ActivePokemon opponent = currentBattle.getOpponent().front();

@@ -457,9 +457,8 @@ class BagView extends View {
 				g.translate(moveButtons[i].x, moveButtons[i].y);
 				
 				Move m = moveList.get(i);
-				
-				g.setColor(m.getAttack().getActualType().getColor());
-				g.fillRect(0, 0, moveButtons[i].width, moveButtons[i].height);
+
+				moveButtons[i].fillTranslated(g, m.getAttack().getActualType().getColor());
 				
 				g.drawImage(tiles.getTile(0x25), 0, 0, null);
 				
@@ -523,8 +522,8 @@ class BagView extends View {
 					DrawUtils.drawRightAlignedString(g, p.getHP() + "/" + p.getMaxHP(), 293, 47);
 					
 					if (p.hasStatus(StatusCondition.FAINTED)) {
-						g.setColor(new Color(0, 0, 0, 128)); // TODO: Look if this color appears in multiple place and see if it should be a constant
-						g.fillRect(0, 0, partyButtons[i].width, partyButtons[i].height);
+						// TODO: Look if this color appears in multiple place and see if it should be a constant
+						partyButtons[i].fillTranslated(g, new Color(0, 0, 0, 128));
 					}	
 				}
 				
@@ -542,8 +541,7 @@ class BagView extends View {
 			g.translate(tabButtons[i].x, tabButtons[i].y);
 			
 			DrawUtils.setFont(g, 14);
-			g.setColor(CATEGORIES[i].getColor());
-			g.fillRect(0, 0, tabButtons[i].width, tabButtons[i].height);
+			tabButtons[i].fillTranslated(g, CATEGORIES[i].getColor());
 			
 			if (selectedTab == i) {
 				g.drawImage(tiles.getTile(0x23), 0, 0, null);

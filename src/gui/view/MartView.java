@@ -331,8 +331,7 @@ class MartView extends View {
 		buyButton.greyOut(g, true);
 		
 		if (!buyButton.isActive()) {
-			g.setColor(new Color(0, 0, 0, 128));
-			g.fillRect(0, 0, buyButton.width, buyButton.height);
+			buyButton.fillTranslated(g, new Color(0, 0, 0, 128));
 		}
 		
 		g.translate(-buyButton.x, -buyButton.y);
@@ -344,7 +343,8 @@ class MartView extends View {
 		DrawUtils.drawCenteredWidthString(g, "Return", 573, 525);
 		
 		// Tab
-		int tabX = 42 + 102, tabY = 42;
+		int tabX = 42 + 102;
+		int tabY = 42;
 		g.translate(tabX, tabY);
 		
 		DrawUtils.setFont(g, 16);

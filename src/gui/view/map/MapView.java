@@ -87,8 +87,7 @@ public class MapView extends View {
 
 	@Override
 	public void draw(Graphics g) {
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+		DrawUtils.fillCanvas(g, Color.BLACK);
 
 		drawTiles(g);
 

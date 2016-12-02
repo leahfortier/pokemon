@@ -1,14 +1,12 @@
 package gui.view;
 
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
-import main.Global;
 import trainer.CharacterData;
 import util.DrawUtils;
-import input.InputControl;
-import input.ControlKey;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 
 class TrainerCardView extends View {
@@ -23,10 +21,8 @@ class TrainerCardView extends View {
 	@Override
 	public void draw(Graphics g) {
 		CharacterData player = Game.getPlayer();
-		Dimension dimension = Global.GAME_SIZE;
 
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, dimension.width, dimension.height);
+		DrawUtils.fillCanvas(g, Color.BLACK);
 
 		g.setColor(Color.WHITE);
 		

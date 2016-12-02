@@ -180,8 +180,20 @@ public class Button {
 	
 	public void greyOut(Graphics g, boolean totesBlacks) {
 		Color temp = g.getColor();
-		g.setColor(totesBlacks ? Color.BLACK : temp.darker());
-		g.fillRect(x, y, width, height);
+		fill(g, totesBlacks ? Color.BLACK : temp.darker());
 		g.setColor(temp);
+	}
+
+	public void fill(Graphics g, Color color) {
+		fill(g, color, x, y);
+	}
+
+	public void fillTranslated(Graphics g, Color color) {
+		fill(g, color, 0, 0);
+	}
+
+	private void fill(Graphics g, Color color, int x, int y) {
+		g.setColor(color);
+		g.fillRect(x, y, width, height);
 	}
 }

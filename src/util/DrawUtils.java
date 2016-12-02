@@ -25,7 +25,7 @@ public class DrawUtils {
 	
 	// The font the game interface uses
 	private static Map<Integer, Font> fontMap;
-	private static Map<Integer, Metrics> fontMetricsMap;
+	private static Map<Integer, FontMetrics> fontMetricsMap;
 	
 	public static void loadFontMetricsMap() {
 		if (fontMetricsMap != null) {
@@ -40,7 +40,7 @@ public class DrawUtils {
 			int horizontal = in.nextInt();
 			int height = in.nextInt();
 			
-			Metrics fontMetrics = new Metrics(fontSize, horizontal, height);
+			FontMetrics fontMetrics = new FontMetrics(fontSize, horizontal, height);
 			fontMetricsMap.put(fontSize, fontMetrics);
 		}
 	}
@@ -61,7 +61,7 @@ public class DrawUtils {
 		return fontMap.get(size);
 	}
 	
-	private static Metrics getFontMetrics(int fontSize) {
+	private static FontMetrics getFontMetrics(int fontSize) {
 		if (fontMetricsMap == null) {
 			loadFontMetricsMap();
 		}
@@ -74,12 +74,12 @@ public class DrawUtils {
 	}
 
 	public static int getSuggestedWidth(String text, int fontSize) {
-		Metrics fontMetrics = getFontMetrics(fontSize);
+		FontMetrics fontMetrics = getFontMetrics(fontSize);
 		return (text.length() + 2)*fontMetrics.horizontalSpacing; 
 	}
 	
 	public static int getSuggestedHeight(int fontSize) {
-		Metrics fontMetrics = getFontMetrics(fontSize);
+		FontMetrics fontMetrics = getFontMetrics(fontSize);
 		return (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR*1.5);
 	}
 	
@@ -130,19 +130,19 @@ public class DrawUtils {
 
     public static int getTextHeight(Graphics g) {
 		int fontSize = g.getFont().getSize();
-		Metrics fontMetrics = getFontMetrics(fontSize);
+		FontMetrics fontMetrics = getFontMetrics(fontSize);
 		return fontMetrics.letterHeight;
 	}
 
     public static int getDistanceBetweenRows(Graphics g) {
 		int fontSize = g.getFont().getSize();
-		Metrics fontMetrics = getFontMetrics(fontSize);
+		FontMetrics fontMetrics = getFontMetrics(fontSize);
 		return (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR);
 	}
 
 	public static int drawWrappedText(Graphics g, String str, int x, int y, int width) {
 		int fontSize = g.getFont().getSize();
-		Metrics fontMetrics = getFontMetrics(fontSize);
+		FontMetrics fontMetrics = getFontMetrics(fontSize);
 		
 		String[] words = str.split("[ ]+");
 		StringBuilder build = new StringBuilder();
@@ -181,7 +181,7 @@ public class DrawUtils {
 	
 	public static void drawCenteredString(Graphics g, String s, int centerX, int centerY) {
 		int fontSize = g.getFont().getSize();
-		Metrics fontMetrics = getFontMetrics(fontSize);
+		FontMetrics fontMetrics = getFontMetrics(fontSize);
 		
 		int leftX = centerX(centerX, s, fontMetrics);
 		int bottomY = centerY(centerY, fontMetrics);
@@ -191,27 +191,27 @@ public class DrawUtils {
 	
 	public static void drawCenteredWidthString(Graphics g, String s, int centerX, int y) {
 		int fontSize = g.getFont().getSize();
-		Metrics fontMetrics = getFontMetrics(fontSize);
+		FontMetrics fontMetrics = getFontMetrics(fontSize);
 		
 		int leftX = centerX(centerX, s, fontMetrics);
 		g.drawString(s, leftX, y);
 	}
 	
-	private static int centerY(int centerY, Metrics fontMetrics) {
+	private static int centerY(int centerY, FontMetrics fontMetrics) {
 		return centerY + fontMetrics.letterHeight/2;
 	}
 	
-	private static int centerX(int centerX, String s, Metrics fontMetrics) {
+	private static int centerX(int centerX, String s, FontMetrics fontMetrics) {
 		return centerX - s.length()*fontMetrics.horizontalSpacing/2;
 	}
 	
-	private static int rightX(int rightX, String s, Metrics fontMetrics) {
+	private static int rightX(int rightX, String s, FontMetrics fontMetrics) {
 		return rightX - s.length()*fontMetrics.horizontalSpacing;
 	}
 	
 	public static void drawCenteredHeightString(Graphics g, String s, int x, int centerY) {
 		int fontSize = g.getFont().getSize();
-		Metrics fontMetrics = getFontMetrics(fontSize);
+		FontMetrics fontMetrics = getFontMetrics(fontSize);
 		
 		int bottomY = centerY(centerY, fontMetrics);
 		g.drawString(s, x, bottomY);
@@ -219,7 +219,7 @@ public class DrawUtils {
 
 	public static void drawRightAlignedString(Graphics g, String s, int rightX, int y) {
 		int fontSize = g.getFont().getSize();
-		Metrics fontMetrics = getFontMetrics(fontSize);
+		FontMetrics fontMetrics = getFontMetrics(fontSize);
 		
 		int leftX = rightX(rightX, s, fontMetrics);
 		
@@ -249,6 +249,11 @@ public class DrawUtils {
 
 	private static int getTextWidth(final String text, final int fontSize) {
 		return text.length()*getFontMetrics(fontSize).getHorizontalSpacing();
+	}
+
+	public static void fillCanvas(Graphics g, Color color) {
+		g.setColor(color);
+		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 	}
 
 	public static Point getLocation(Point drawLocation, Point mapLocation) {
@@ -409,26 +414,28 @@ public class DrawUtils {
 		Graphics g = bufferedImage.getGraphics();
 		g.drawImage(image, 0, 0, null);
 		g.dispose();
+
 		return bufferedImage;
 	}
-	
-	static class Metrics {
-    	private final int fontSize;
-    	private final int horizontalSpacing;
-    	private final int letterHeight;
-    	
-    	Metrics(int fontSize, int horizontalSpacing, int letterHeight) {
-    		this.fontSize = fontSize;
-    		this.horizontalSpacing = horizontalSpacing;
-    		this.letterHeight = letterHeight;
-    	}
 
-    	int getHorizontalSpacing() {
-			return this.horizontalSpacing;
-		}
+	// TODO: new file
+	static class FontMetrics {
+        private final int fontSize;
+        private final int horizontalSpacing;
+        private final int letterHeight;
 
-    	public String toString() {
-    		return fontSize + " " + horizontalSpacing + " " + letterHeight;
-    	}
+        FontMetrics(int fontSize, int horizontalSpacing, int letterHeight) {
+            this.fontSize = fontSize;
+            this.horizontalSpacing = horizontalSpacing;
+            this.letterHeight = letterHeight;
+        }
+
+        int getHorizontalSpacing() {
+            return this.horizontalSpacing;
+        }
+
+        public String toString() {
+            return fontSize + " " + horizontalSpacing + " " + letterHeight;
+        }
     }
 }

@@ -121,22 +121,20 @@ public class MainMenuView extends View {
 		}
 	}
 
-	// TODO: I think there might be a method in the draw thingy that does thing
-	private void drawButton(Graphics g, TileSet tiles, Button b) {
-		g.translate(b.x, b.y);
-		
-		g.setColor(theme.getThemeColor());
-		g.fillRect(0, 0, b.width, b.height);
+	private void drawButton(Graphics g, TileSet tiles, Button button) {
+		g.translate(button.x, button.y);
+
+		button.fillTranslated(g, theme.getThemeColor());
 		
 		// Full size buttons are 0x04 and the half-size ones are 0x05
-		int tileIndex = b.width == BUTTON_WIDTH ? 0x04 : 0x05;
+		int tileIndex = button.width == BUTTON_WIDTH ? 0x04 : 0x05;
 		
 		g.drawImage(tiles.getTile(tileIndex), 0, 0, null);
 		
-		g.translate(-b.x, -b.y);
+		g.translate(-button.x, -button.y);
 		
 		// Should not be inside the translate or everything is fucked hxc
-		b.draw(g);
+		button.draw(g);
 	}
 
 	@Override

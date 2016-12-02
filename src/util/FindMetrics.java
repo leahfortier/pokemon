@@ -39,7 +39,7 @@ class FindMetrics extends JPanel {
         for (int fontSize = SMALLEST_FONT_SIZE; fontSize <= LARGEST_FONT_SIZE; fontSize++) {
             reset(fontSize);
 
-            DrawUtils.Metrics fontMetrics = getMetrics(fontSize);
+            DrawUtils.FontMetrics fontMetrics = getMetrics(fontSize);
             checkMatch(fontSize, fontMetrics.getHorizontalSpacing());
             StringUtils.appendLine(sb, fontMetrics.toString());
         }
@@ -54,7 +54,7 @@ class FindMetrics extends JPanel {
         setColors();
     }
 
-    private DrawUtils.Metrics getMetrics(int fontSize) {
+    private DrawUtils.FontMetrics getMetrics(int fontSize) {
         int leftMost = canvas.getWidth() + 1;
         int rightMost = -1;
         int highest = canvas.getHeight() + 1;
@@ -76,7 +76,7 @@ class FindMetrics extends JPanel {
 
         int letterHeight = lowest - highest;
 
-        return new DrawUtils.Metrics(fontSize, horizontalGuess, letterHeight);
+        return new DrawUtils.FontMetrics(fontSize, horizontalGuess, letterHeight);
     }
 
     private void setColors() {

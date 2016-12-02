@@ -278,9 +278,9 @@ class PartyView extends View {
 				g.translate(moveButtons[i].x, moveButtons[i].y);
 				
 				Move move = moves.get(i);
-				g.setColor(move.getAttack().getActualType().getColor());
-				
-				g.fillRect(0, 0, moveButtons[i].width, moveButtons[i].height);
+
+				moveButtons[i].fillTranslated(g, move.getAttack().getActualType().getColor());
+
 				g.drawImage(tiles.getTile(0x18), 0, 0, null);
 				
 				g.setColor(Color.BLACK);
