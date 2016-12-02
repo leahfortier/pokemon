@@ -1,6 +1,6 @@
 package util;
 
-import gui.view.mainmenu.MainMenuView.Theme;
+import gui.view.mainmenu.Theme;
 import main.Game;
 import main.Global;
 import sound.SoundPlayer;
