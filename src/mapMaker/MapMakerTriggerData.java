@@ -39,8 +39,8 @@ import java.util.stream.Collectors;
 
 public class MapMakerTriggerData {
 
-	private Set<AreaMatcher> areaData;
-	private Set<LocationTriggerMatcher> entities;
+	private final Set<AreaMatcher> areaData;
+	private final Set<LocationTriggerMatcher> entities;
 
 	// Have the triggers been saved or have they been edited?
 	private boolean triggersSaved;
@@ -48,27 +48,23 @@ public class MapMakerTriggerData {
 	private MapMaker mapMaker;
 
 	MapMakerTriggerData(MapMaker mapMaker) {
-		initialize(mapMaker);
+		this.mapMaker = mapMaker;
+
+		this.areaData = new HashSet<>();
+		this.entities = new HashSet<>();
 
 		// Force creation of mapName.txt file
 		triggersSaved = false;
 	}
 
 	MapMakerTriggerData(MapMaker mapMaker, String mapTriggerFileName) {
-		initialize(mapMaker);
+		this(mapMaker);
 
 		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapTriggerFileName);
-		this.areaData = new HashSet<>(mapDataMatcher.getAreas());
-		this.entities = new HashSet<>(mapDataMatcher.getAllEntities());
+		this.areaData.addAll(mapDataMatcher.getAreas());
+		this.entities.addAll(mapDataMatcher.getAllEntities());
 
 		triggersSaved = true;
-	}
-
-	private void initialize(MapMaker mapMaker) {
-		this.mapMaker = mapMaker;
-
-		this.areaData = new HashSet<>();
-		this.entities = new HashSet<>();
 	}
 
 	boolean isSaved() {
@@ -221,7 +217,7 @@ public class MapMakerTriggerData {
 				return new ItemEntityDialog((ItemMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
 			case NPC:
 				return new NPCEntityDialog((NPCMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
-			case TRIGGER_ENTITY:
+			case MISC_ENTITY:
 				return new MiscEntityDialog((MiscEntityMatcher)oldTrigger).getMatcher(mapMaker);
 			case MAP_TRANSITION:
 				return new MapTransitionDialog((MapTransitionMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);

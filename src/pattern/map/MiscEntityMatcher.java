@@ -25,7 +25,7 @@ public class MiscEntityMatcher extends SinglePointTriggerMatcher implements Enti
 
     @Override
     public TriggerModelType getTriggerModelType() {
-        return TriggerModelType.TRIGGER_ENTITY;
+        return TriggerModelType.MISC_ENTITY;
     }
 
     @Override

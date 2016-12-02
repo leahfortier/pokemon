@@ -20,7 +20,7 @@ public class TriggerModel extends MapMakerModel {
     public enum TriggerModelType {
         ITEM("Item", TileType.TRAINER, 0x0),
         NPC("NPC", TileType.TRAINER, 0x00000040),
-        TRIGGER_ENTITY("Trigger Entity", TileType.MAP_MAKER, 0x4),
+        MISC_ENTITY("Misc Entity", TileType.MAP_MAKER, 0x4),
         WILD_BATTLE("Wild Battle", TileType.MAP_MAKER, 0x3),
         MAP_TRANSITION("Map Exit", TileType.MAP_MAKER, 0x1),
         EVENT("Event", TileType.MAP_MAKER, 0xc);
