@@ -16,6 +16,7 @@ import item.use.TrainerUseItem;
 import item.use.UseItem;
 import main.Game;
 import main.Type;
+import map.Direction;
 import message.MessageUpdate;
 import message.Messages;
 import message.Messages.MessageState;
@@ -140,9 +141,9 @@ class BagView extends View {
 					52,
 					ButtonHoverAction.BOX,
 					new int[] {
-							i == CATEGORIES.length - 1 ? 0 : i + 1, // Right
+							Button.basicTransition(i, 1, CATEGORIES.length, Direction.RIGHT),
 						 	RETURN, // Up
-						 	i == 0 ? CATEGORIES.length - 1 : i - 1, // Left
+							Button.basicTransition(i, 1, CATEGORIES.length, Direction.LEFT),
 						 	USE // Down
 					});
 		}
@@ -599,7 +600,6 @@ class BagView extends View {
 	}
 	
 	private int totalPages(int size) {
-		// TODO: isn't 0%n always 0?
 		return size/ITEMS_PER_PAGE + (size == 0 || size%ITEMS_PER_PAGE != 0 ? 1 : 0);
 	}
 	

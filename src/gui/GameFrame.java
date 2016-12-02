@@ -26,6 +26,8 @@ public class GameFrame {
 		Canvas gui = new Canvas();
 		gui.setSize(Global.GAME_SIZE);
 
+		frame.setTitle(Global.TITLE);
+		frame.setIconImage(Global.FRAME_ICON);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.getContentPane().add(gui);

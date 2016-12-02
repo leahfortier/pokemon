@@ -2,17 +2,17 @@ package gui.view;
 
 import battle.attack.Move;
 import gui.Button;
-import gui.GameData;
 import gui.ButtonHoverAction;
+import gui.GameData;
 import gui.TileSet;
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
 import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.Trainer;
 import util.DrawUtils;
-import input.InputControl;
-import input.ControlKey;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -37,7 +37,7 @@ class PartyView extends View {
 	private int selectedButton;
 	private int switchTabIndex;
 	
-	public PartyView() {
+	PartyView() {
 		selectedTab = 0;
 		selectedButton = 0;
 		switchTabIndex = -1;
@@ -77,8 +77,8 @@ class PartyView extends View {
 					});
 		}
 		
-		buttons[10] = switchButton = new Button(69, 493, 317, 38, ButtonHoverAction.BOX, new int[] { RETURN, MOVES + Move.MAX_MOVES - 1, RETURN, 0 });
-		buttons[11] = returnButton = new Button(414, 493, 317, 38, ButtonHoverAction.BOX, new int[] { SWITCH, MOVES + Move.MAX_MOVES - 1, SWITCH, 0 });
+		buttons[SWITCH] = switchButton = new Button(69, 493, 317, 38, ButtonHoverAction.BOX, new int[] { RETURN, MOVES + Move.MAX_MOVES - 1, RETURN, 0 });
+		buttons[RETURN] = returnButton = new Button(414, 493, 317, 38, ButtonHoverAction.BOX, new int[] { SWITCH, MOVES + Move.MAX_MOVES - 1, SWITCH, 0 });
 		updateActiveButtons();
 	}
 

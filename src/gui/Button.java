@@ -9,8 +9,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Button {
-	public static final int NO_TRANSITION = -1;
-	
+	private static final int NO_TRANSITION = -1;
+
 	public final int x;
 	public final int y;
 	public final int width;
@@ -24,8 +24,8 @@ public class Button {
 	private boolean forceHover;
 	private boolean active;
 
-	public Button(int x, int y, int w, int h, ButtonHoverAction hoverAction) {
-		this(x, y, w, h, hoverAction, null);
+	public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction) {
+		this(x, y, width, height, hoverAction, null);
 	}
 
 	public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition) {
@@ -91,7 +91,7 @@ public class Button {
 		for (int i = 0; i < buttons.length; i++) {
 			buttons[i].update(i == selected);
 			
-			if (buttons[i].isHover()) {
+			if (buttons[i].hover) {
 				buttons[selected].setForceHover(false);
 				
 				selected = i;
@@ -157,16 +157,8 @@ public class Button {
 		update(false);
 	}
 
-	public boolean isHover() {
-		return hover;
-	}
-
-	public boolean isPress() {
-		return press;
-	}
-
 	public boolean checkConsumePress() {
-		if (isPress()) {
+		if (press) {
 			press = false;
 			return true;
 		}
