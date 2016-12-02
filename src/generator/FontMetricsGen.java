@@ -8,7 +8,6 @@ import util.StringUtils;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.WindowConstants;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -142,7 +141,7 @@ class FontMetricsGen extends JPanel {
         super.repaint();
     }
 
-    public static void writeFontMetrics() {
+    static void writeFontMetrics() {
         int width = 1850;
         int height = 480;
 
@@ -151,10 +150,6 @@ class FontMetricsGen extends JPanel {
 
         frame.add(panel);
         frame.pack();
-
-//        frame.setVisible(true);
-        frame.setResizable(false);
-
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.dispose();
     }
 }

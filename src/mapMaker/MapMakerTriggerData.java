@@ -5,6 +5,7 @@ import map.entity.movable.MovableEntity;
 import mapMaker.dialogs.EventTriggerDialog;
 import mapMaker.dialogs.ItemEntityDialog;
 import mapMaker.dialogs.MapTransitionDialog;
+import mapMaker.dialogs.MiscEntityDialog;
 import mapMaker.dialogs.NPCEntityDialog;
 import mapMaker.dialogs.WildBattleTriggerEditDialog;
 import mapMaker.dialogs.WildBattleTriggerOptionsDialog;
@@ -19,6 +20,7 @@ import pattern.map.EventMatcher;
 import pattern.map.ItemMatcher;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
+import pattern.map.MiscEntityMatcher;
 import pattern.map.NPCMatcher;
 import pattern.map.WildBattleMatcher;
 import util.DrawUtils;
@@ -220,8 +222,7 @@ public class MapMakerTriggerData {
 			case NPC:
 				return new NPCEntityDialog((NPCMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
 			case TRIGGER_ENTITY:
-				// TODO: Need a new edit and dialog
-				return new EventTriggerDialog((EventMatcher)oldTrigger).getMatcher(mapMaker);
+				return new MiscEntityDialog((MiscEntityMatcher)oldTrigger).getMatcher(mapMaker);
 			case MAP_TRANSITION:
 				return new MapTransitionDialog((MapTransitionMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
 			case WILD_BATTLE:
