@@ -23,7 +23,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class BattleView extends View {
-	
+
+	public static final int SUB_MENU_BUTTON_WIDTH = 183;
+	public static final int SUB_MENU_BUTTON_HEIGHT = 55;
+
 	// The current battle in view, the current message being displayed, and the current selected button
 	private Battle currentBattle;
 	private String message;
@@ -161,8 +164,8 @@ public class BattleView extends View {
 		return new Button(
 				22 + x*190,
 				440 + 21 + y*62,
-				183,
-				55,
+				SUB_MENU_BUTTON_WIDTH,
+				SUB_MENU_BUTTON_HEIGHT,
 				ButtonHoverAction.BOX,
 				transitions
 		);

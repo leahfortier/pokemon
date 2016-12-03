@@ -568,8 +568,8 @@ class BagView extends View {
 			DrawUtils.drawWrappedText(g, message.getMessage(), 30, 490, 750);
 		}
 		else {
-			for (Button b : buttons) {
-				b.draw(g);
+			for (Button button : buttons) {
+				button.draw(g);
 			}
 		}
 	}
