@@ -49,7 +49,7 @@ public class MenuState implements VisualStateHandler {
     @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
         ActivePokemon playerPokemon = Game.getPlayer().front();
-        view.drawMessagePanel(g, "What will " + playerPokemon.getActualName() + " do?");
+        view.drawMenuMessagePanel(g, "What will " + playerPokemon.getActualName() + " do?");
         view.drawButtonsPanel(g);
 
         for (int i = 0; i < menuButtons.length; i++) {

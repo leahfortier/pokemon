@@ -217,4 +217,12 @@ public class Button {
 		FontMetrics.setFont(g, fontSize);
 		DrawUtils.drawCenteredString(g, text, x, y, width, height);
 	}
+
+	public int centerX() {
+		return x + width/2;
+	}
+
+	public int centerY() {
+		return y + height/2;
+	}
 }

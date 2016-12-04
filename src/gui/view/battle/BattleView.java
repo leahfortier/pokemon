@@ -18,10 +18,12 @@ import message.MessageUpdate.Update;
 import message.Messages;
 import pokemon.ActivePokemon;
 import util.DrawUtils;
+import util.FontMetrics;
 import util.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 public class BattleView extends View {
 
@@ -41,7 +43,8 @@ public class BattleView extends View {
 	private final PokemonAnimationState playerAnimation;
 	private final PokemonAnimationState enemyAnimation;
 
-	private final DrawPanel messagePanel;
+	private final DrawPanel fullMessagePanel;
+	private final DrawPanel menuMessagePanel;
 	private final DrawPanel buttonsPanel;
 
 	// All the different buttons!!
@@ -55,14 +58,23 @@ public class BattleView extends View {
 		playerAnimation = new PokemonAnimationState(this);
 		enemyAnimation = new PokemonAnimationState(this);
 
-		messagePanel = new DrawPanel(415, 440, 385, 161).withBorderColor(new Color(53, 53, 129));
+		fullMessagePanel = new DrawPanel(0, 440, 800, 161);
+		menuMessagePanel = new DrawPanel(415, 440, 385, 161).withBorderColor(new Color(53, 53, 129));
 		buttonsPanel = new DrawPanel(0, 440, 417, 161).withBorderColor(Color.GRAY).withBorderPercentage(5);
 
 		// Back Button
 		backButton = new Button(750, 560, 35, 20, null);
 	}
 
-	public void drawMessagePanel(Graphics g, String text) {
+	public void drawFullMessagePanel(Graphics g, String text) {
+		drawMessagePanel(g, text, fullMessagePanel);
+	}
+
+	public void drawMenuMessagePanel(Graphics g, String text) {
+		drawMessagePanel(g, text, menuMessagePanel);
+	}
+
+	private void drawMessagePanel(Graphics g, String text, DrawPanel messagePanel) {
 		messagePanel.drawBackground(g);
 		messagePanel.drawMessage(g, 30, text);
 	}
@@ -72,11 +84,19 @@ public class BattleView extends View {
 	}
 
 	public Button[] createPanelButtons() {
+		return createPanelButtons(buttonsPanel, 2, 2);
+	}
+
+	public Button[] createMessagePanelButtons(int numRows, int numCols) {
+		return createPanelButtons(fullMessagePanel, numRows, numCols);
+	}
+
+	private Button[] createPanelButtons(DrawPanel buttonsPanel, int numRows, int numCols) {
 		return buttonsPanel.getButtons(
 				BattleView.SUB_MENU_BUTTON_WIDTH,
 				BattleView.SUB_MENU_BUTTON_HEIGHT,
-				2,
-				2);
+				numRows,
+				numCols);
 	}
 	
 	public void setBattle(Battle b) {
@@ -317,6 +337,34 @@ public class BattleView extends View {
 		g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		
 		state.draw(this, g, tiles);
+	}
+
+	public void drawMoveButton(Graphics g, Button moveButton, Move move) {
+		int dx = moveButton.x;
+		int dy = moveButton.y;
+
+		g.translate(dx, dy);
+
+		DrawPanel movePanel = new DrawPanel(0, 0, 183, 55)
+				.withTransparentBackground(move.getAttack().getActualType().getColor())
+				.withBorderPercentage(15)
+				.withBlackOutline();
+		movePanel.drawBackground(g);
+
+		g.setColor(Color.BLACK);
+		FontMetrics.setFont(g, 22);
+		g.drawString(move.getAttack().getName(), 10, 26);
+
+		FontMetrics.setFont(g, 18);
+		DrawUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
+
+		// TODO: Make a separate tile folder just for types -- they shouldn't be in the battle folder anyhow
+		BufferedImage categoryImage = Game.getData().getBattleTiles().getTile(move.getAttack().getCategory().getImageNumber());
+		g.drawImage(categoryImage, 12, 32, null);
+
+		g.translate(-dx, -dy);
+
+		moveButton.draw(g);
 	}
 
 	@Override

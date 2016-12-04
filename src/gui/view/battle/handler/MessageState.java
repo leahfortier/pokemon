@@ -20,6 +20,11 @@ public class MessageState implements VisualStateHandler {
     private int[] newStats;
 
     @Override
+    public void set(BattleView view) {
+
+    }
+
+    @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
         g.drawImage(tiles.getTile(0x3), 0, 439, null);
 

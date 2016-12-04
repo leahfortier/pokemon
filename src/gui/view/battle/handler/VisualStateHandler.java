@@ -7,10 +7,10 @@ import message.MessageUpdate;
 import java.awt.Graphics;
 
 public interface VisualStateHandler {
+    void set(BattleView view);
     void update(BattleView view);
     void draw(BattleView view, Graphics g, TileSet tiles);
 
     default void reset() {}
-    default void set(BattleView view) {}
     default void checkMessage(MessageUpdate newMessage) {}
 }

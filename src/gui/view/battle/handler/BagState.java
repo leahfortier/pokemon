@@ -171,7 +171,7 @@ public class BagState implements VisualStateHandler {
 
         // Messages text
         String message = view.getMessage(VisualState.INVALID_BAG, "Choose an item!");
-        view.drawMessagePanel(g, message);
+        view.drawMenuMessagePanel(g, message);
 
         Bag bag = Game.getPlayer().getBag();
 
