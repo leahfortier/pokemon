@@ -6,6 +6,7 @@ import gui.Button;
 import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
+import gui.panel.DrawPanel;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
@@ -40,6 +41,9 @@ public class BattleView extends View {
 	private final PokemonAnimationState playerAnimation;
 	private final PokemonAnimationState enemyAnimation;
 
+	private final DrawPanel messagePanel;
+	private final DrawPanel buttonsPanel;
+
 	// All the different buttons!!
 	private final Button backButton;
 
@@ -51,8 +55,28 @@ public class BattleView extends View {
 		playerAnimation = new PokemonAnimationState(this);
 		enemyAnimation = new PokemonAnimationState(this);
 
+		messagePanel = new DrawPanel(415, 440, 385, 161).withBorderColor(new Color(53, 53, 129));
+		buttonsPanel = new DrawPanel(0, 440, 417, 161).withBorderColor(Color.GRAY).withBorderPercentage(5);
+
 		// Back Button
 		backButton = new Button(750, 560, 35, 20, null);
+	}
+
+	public void drawMessagePanel(Graphics g, String text) {
+		messagePanel.drawBackground(g);
+		messagePanel.drawMessage(g, 30, text);
+	}
+
+	public void drawButtonsPanel(Graphics g) {
+		buttonsPanel.drawBackground(g);
+	}
+
+	public Button[] createPanelButtons() {
+		return buttonsPanel.getButtons(
+				BattleView.SUB_MENU_BUTTON_WIDTH,
+				BattleView.SUB_MENU_BUTTON_HEIGHT,
+				2,
+				2);
 	}
 	
 	public void setBattle(Battle b) {

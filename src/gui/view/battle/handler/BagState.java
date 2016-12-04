@@ -4,6 +4,7 @@ import battle.Battle;
 import gui.Button;
 import gui.ButtonHoverAction;
 import gui.TileSet;
+import gui.panel.DrawPanel;
 import gui.view.View;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -12,6 +13,7 @@ import item.bag.Bag;
 import item.bag.BattleBagCategory;
 import item.use.PokemonUseItem;
 import main.Game;
+import map.Direction;
 import trainer.CharacterData;
 import trainer.Trainer.Action;
 import util.DrawUtils;
@@ -36,6 +38,10 @@ public class BagState implements VisualStateHandler {
     private static final int BAG_RIGHT_BUTTON = NUM_BAG_BUTTONS - 2;
     private static final int BAG_LEFT_BUTTON = NUM_BAG_BUTTONS - 3;
 
+    private final DrawPanel bagPanel;
+    private final DrawPanel bagCategoryPanel;
+    private final DrawPanel lastItemPanel;
+
     private final Button bagRightButton;
     private final Button bagLeftButton;
     private final Button bagLastUsedBtn;
@@ -49,6 +55,17 @@ public class BagState implements VisualStateHandler {
     private ItemNamesies selectedItem;
 
     public BagState() {
+        bagPanel = new DrawPanel(0, 160, 417, 440)
+                .withBorderPercentage(3)
+                .withBlackOutline();
+
+        bagCategoryPanel = new DrawPanel(30, 190 + 28, 357, 287 - 28)
+                .withBorderPercentage(6);
+
+        lastItemPanel = new DrawPanel(30, 492, 357, 78)
+                .withBorderPercentage(17)
+                .withBlackOutline();
+
         // Bag View Buttons
         bagButtons = new Button[NUM_BAG_BUTTONS];
 
@@ -60,10 +77,12 @@ public class BagState implements VisualStateHandler {
                     89,
                     28,
                     ButtonHoverAction.BOX,
-                    new int[] { (i + 1)% BATTLE_BAG_CATEGORIES.length, // Right
+                    new int[] {
+                            Button.basicTransition(i, 1, BATTLE_BAG_CATEGORIES.length, Direction.RIGHT), // Right
                             LAST_ITEM_BUTTON, // Up
-                            (i - 1 + BATTLE_BAG_CATEGORIES.length)% BATTLE_BAG_CATEGORIES.length, // Left
-                            ITEMS }  // Down
+                            Button.basicTransition(i, 1, BATTLE_BAG_CATEGORIES.length, Direction.LEFT), // Left
+                            ITEMS  // Down
+                    }
             );
         }
 
@@ -79,11 +98,13 @@ public class BagState implements VisualStateHandler {
                         148,
                         28,
                         ButtonHoverAction.BOX,
-                        new int[] { (i + 1 - ITEMS)%ITEMS_PER_PAGE + ITEMS, // Right
+                        new int[] {
+                                (i + 1 - ITEMS)%ITEMS_PER_PAGE + ITEMS, // Right
                                 y == 0 ? selectedBagTab : i - 2, // Up
                                 (i - 1 - ITEMS + ITEMS_PER_PAGE)%ITEMS_PER_PAGE + ITEMS, // Left
-                                y == ITEMS_PER_PAGE/2 - 1 ? (x == 0 ? BAG_LEFT_BUTTON : BAG_RIGHT_BUTTON) : i + 2 }
-                ); // Down
+                                y == ITEMS_PER_PAGE/2 - 1 ? (x == 0 ? BAG_LEFT_BUTTON : BAG_RIGHT_BUTTON) : i + 2 // Down
+                        }
+                );
             }
         }
     }
@@ -109,49 +130,65 @@ public class BagState implements VisualStateHandler {
         for (Button button: bagButtons) {
             button.setForceHover(false);
         }
-
     }
 
     @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
-        g.drawImage(tiles.getTile(0x10), 0, 160, null);
-        g.drawImage(tiles.getTile(BATTLE_BAG_CATEGORIES[selectedBagTab].getImageNumber()), 30, 190, null);
-        g.drawImage(tiles.getTile(BATTLE_BAG_CATEGORIES[selectedBagTab].getImageNumber() - 4), 30, 492, null);
-        g.drawImage(tiles.getTile(0x20), 415, 440, null);
+        bagPanel.drawBackground(g);
+
+        BattleBagCategory selectedCategory = BATTLE_BAG_CATEGORIES[selectedBagTab];
+        bagCategoryPanel
+               .withBackgroundColor(selectedCategory.getBackgroundColor())
+               .withBorderColor(selectedCategory.getBorderColor())
+               .drawBackground(g);
+
+        lastItemPanel
+                .withBackgroundColor(selectedCategory.getBackgroundColor())
+                .withBorderColor(selectedCategory.getBorderColor())
+                .drawBackground(g);
+
+        // Tabs
+        for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
+            Button tabButton = bagTabButtons[i];
+            BattleBagCategory category = BATTLE_BAG_CATEGORIES[i];
+            tabButton.fill(g, category.getBorderColor());
+
+            int lineSize = DrawUtils.OUTLINE_WIDTH;
+            if (i > 0) {
+                g.setColor(Color.BLACK);
+                g.fillRect(tabButton.x, tabButton.y, lineSize, tabButton.height + lineSize);
+            }
+
+            if (i != selectedBagTab) {
+                g.setColor(Color.BLACK);
+                g.fillRect(tabButton.x, tabButton.y + tabButton.height, tabButton.width, lineSize);
+            }
+
+            g.setColor(Color.BLACK);
+            FontMetrics.setFont(g, 18);
+            DrawUtils.drawCenteredString(g, category.getName(), tabButton);
+        }
+
+        DrawUtils.blackOutline(g, 30, 190, 357, 287);
+
+        // Messages text
+        String message = view.getMessage(VisualState.INVALID_BAG, "Choose an item!");
+        view.drawMessagePanel(g, message);
 
         Bag bag = Game.getPlayer().getBag();
 
         Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
         TileSet itemTiles = Game.getData().getItemTiles();
 
+        g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 12);
         Iterator<ItemNamesies> iter = toDraw.iterator();
         for (int i = 0; i < bagPage*ITEMS_PER_PAGE; i++) {
             iter.next();
         }
 
-        for (int y = 0; y < ITEMS_PER_PAGE/2; y++) {
-            for (int x = 0; x < 2 && iter.hasNext(); x++) {
-                int dx = 55 + x*162, dy = 243 + y*38;
-
-                g.translate(dx, dy);
-
-                // Draw box
-                g.drawImage(tiles.getTile(0x11), 0, 0, null);
-
-                // Draw item image
-                ItemNamesies item = iter.next();
-                BufferedImage img = itemTiles.getTile(item.getItem().getImageIndex());
-                DrawUtils.drawCenteredImage(g, img, 14, 14);
-
-                // Item name
-                g.drawString(item.getName(), 28, 19);
-
-                // Item quantity
-                DrawUtils.drawRightAlignedString(g, "x" + bag.getQuantity(item), 140, 19);
-
-                g.translate(-dx, -dy);
-            }
+        for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
+            drawItemButton(g, itemTiles, bagButtons[ITEMS + i], iter.next());
         }
 
         // Bag page number
@@ -163,34 +200,42 @@ public class BagState implements VisualStateHandler {
 
         // Last Item Used
         ItemNamesies lastUsedItem = bag.getLastUsedItem();
+        lastItemPanel.drawLeftLabel(g, 16, "Last item used:");
 
         // TODO: Should have a method to check if it is the empty item
         if (lastUsedItem != ItemNamesies.NO_ITEM) {
-            g.translate(214, 517);
-            FontMetrics.setFont(g, 12);
-            g.drawImage(tiles.getTile(0x11), 0, 0, null);
-
-            BufferedImage img = itemTiles.getTile(lastUsedItem.getItem().getImageIndex());
-            DrawUtils.drawCenteredImage(g, img, 14, 14);
-
-            g.drawString(lastUsedItem.getName(), 28, 19);
-            DrawUtils.drawRightAlignedString(g, "x" + bag.getQuantity(lastUsedItem), 140, 19);
-
-            g.translate(-214, -517);
+            drawItemButton(g, itemTiles, bagLastUsedBtn, lastUsedItem);
         }
-
-        // Messages text
-        String msgLine = view.getMessage(VisualState.INVALID_BAG, "Choose an item!");
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 30);
-        DrawUtils.drawWrappedText(g, msgLine, 440, 495, 350);
 
         // Back Arrow
         view.drawBackButton(g);
 
-        for (Button b: bagButtons) {
-            b.draw(g);
+        for (Button button: bagButtons) {
+            button.draw(g);
         }
+    }
+
+    private void drawItemButton(Graphics g, TileSet itemTiles, Button button, ItemNamesies itemNamesies) {
+
+        // Draw box
+        button.fill(g, Color.WHITE);
+        button.blackOutline(g);
+
+        int dx = button.x;
+        int dy = button.y;
+
+        g.translate(dx, dy);
+
+        BufferedImage img = itemTiles.getTile(itemNamesies.getItem().getImageIndex());
+        DrawUtils.drawCenteredImage(g, img, 14, 14);
+
+        g.setColor(Color.BLACK);
+        FontMetrics.setFont(g, 12);
+
+        g.drawString(itemNamesies.getName(), 28, 19);
+        DrawUtils.drawRightAlignedString(g, "x" + Game.getPlayer().getBag().getQuantity(itemNamesies), 140, 19);
+
+        g.translate(-dx, -dy);
     }
 
     @Override

@@ -3,9 +3,7 @@ package gui.view.battle.handler;
 import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
-import gui.panel.ButtonPanel;
 import gui.panel.DrawPanel;
-import gui.panel.MessagePanel;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -23,27 +21,12 @@ import java.util.List;
 
 public class FightState implements VisualStateHandler {
 
-    private final MessagePanel messagePanel;
-    private final ButtonPanel movesPanel;
-    private final Button[] moveButtons;
+    private Button[] moveButtons;
 
     private List<Move> selectedMoveList;
 
     // The last move that a Pokemon used
     private int lastMoveUsed;
-
-    public FightState() {
-        messagePanel = new MessagePanel(415, 440, 385, 161).withBorderColor(new Color(53, 53, 129));
-        movesPanel = new ButtonPanel(0, 440, 417, 161).withBorderColor(Color.GRAY).withBorderPercentage(5);
-
-        // Move Buttons
-        moveButtons = movesPanel.getButtons(
-                BattleView.SUB_MENU_BUTTON_WIDTH,
-                BattleView.SUB_MENU_BUTTON_HEIGHT,
-                2,
-                Move.MAX_MOVES/2
-        );
-    }
 
     @Override
     public void reset() {
@@ -52,6 +35,8 @@ public class FightState implements VisualStateHandler {
 
     @Override
     public void set(BattleView view) {
+        moveButtons = view.createPanelButtons();
+
         view.setSelectedButton(lastMoveUsed);
         selectedMoveList = Game.getPlayer().front().getMoves(view.getCurrentBattle());
         for (int i = 0; i < Move.MAX_MOVES; i++) {
@@ -65,8 +50,9 @@ public class FightState implements VisualStateHandler {
 
     @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
-        messagePanel.drawBackground(g);
-        movesPanel.drawBackground(g);
+        String message = view.getMessage(VisualState.INVALID_FIGHT, "Select a move!");
+        view.drawMessagePanel(g, message);
+        view.drawButtonsPanel(g);
 
         ActivePokemon playerPokemon = Game.getPlayer().front();
 
@@ -80,7 +66,8 @@ public class FightState implements VisualStateHandler {
             Move move = moves.get(i);
             DrawPanel movePanel = new DrawPanel(0, 0, 183, 55)
                     .withBackgroundColor(move.getAttack().getActualType().getColor())
-                    .withDarkBorder();
+                    .withDarkBorder()
+                    .withBlackOutline();
             movePanel.drawBackground(g);
 
             g.setColor(Color.BLACK);
@@ -97,9 +84,6 @@ public class FightState implements VisualStateHandler {
 
             moveButtons[i].draw(g);
         }
-
-        String msgLine = view.getMessage(VisualState.INVALID_FIGHT, "Select a move!");
-        messagePanel.drawText(g, 30, msgLine);
 
         view.drawBackButton(g);
     }

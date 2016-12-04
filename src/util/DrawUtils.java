@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class DrawUtils {
 	public static final Color EXP_BAR_COLOR = new Color(51, 102, 204);
+	public static final int OUTLINE_WIDTH = 2;
 
 	// Dimension of a single tile
 	private static final Dimension SINGLE_TILE_DIMENSION = new Dimension(1, 1);
@@ -62,6 +63,7 @@ public class DrawUtils {
         return image;
     }
 
+    // TODO: move this to be an instance method of the button class
 	public static void drawCenteredString(Graphics g, String s, Button b) {
 		drawCenteredString(g, s, b.x, b.y, b.width, b.height);
 	}
@@ -142,12 +144,24 @@ public class DrawUtils {
 	}
 
 	private static int getTextWidth(final String text, final int fontSize) {
-		return text.length()* FontMetrics.getFontMetrics(fontSize).getHorizontalSpacing();
+		return text.length()*FontMetrics.getFontMetrics(fontSize).getHorizontalSpacing();
 	}
 
 	public static void fillCanvas(Graphics g, Color color) {
 		g.setColor(color);
 		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+	}
+
+	public static void blackOutline(Graphics g, int x, int y, int width, int height) {
+		drawBorder(g, Color.BLACK, x, y, width, height, OUTLINE_WIDTH);
+	}
+
+	public static void drawBorder(Graphics g, Color color, int x, int y, int width, int height, int borderSize) {
+		g.setColor(color);
+		g.fillRect(x, y, width, borderSize);
+		g.fillRect(x, y, borderSize, height);
+		g.fillRect(x, y + height - borderSize, width, borderSize);
+		g.fillRect(x + width - borderSize, y, borderSize, height);
 	}
 
 	public static Point getLocation(Point drawLocation, Point mapLocation) {

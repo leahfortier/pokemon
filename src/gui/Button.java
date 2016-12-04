@@ -3,6 +3,7 @@ package gui;
 import input.ControlKey;
 import input.InputControl;
 import map.Direction;
+import util.DrawUtils;
 import util.Point;
 
 import java.awt.Color;
@@ -184,16 +185,20 @@ public class Button {
 		g.setColor(temp);
 	}
 
-	public void fill(Graphics g, Color color) {
-		fill(g, color, x, y);
-	}
-
 	public void fillTranslated(Graphics g, Color color) {
 		fill(g, color, 0, 0);
+	}
+
+	public void fill(Graphics g, Color color) {
+		fill(g, color, x, y);
 	}
 
 	private void fill(Graphics g, Color color, int x, int y) {
 		g.setColor(color);
 		g.fillRect(x, y, width, height);
+	}
+
+	public void blackOutline(Graphics g) {
+		DrawUtils.blackOutline(g, x, y, width, height);
 	}
 }
