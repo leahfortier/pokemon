@@ -1,6 +1,7 @@
 package gui.view.battle.handler;
 
 import gui.TileSet;
+import gui.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
@@ -15,26 +16,25 @@ import java.awt.Graphics;
 
 public class MessageState implements VisualStateHandler {
 
+    private final DrawPanel statsPanel;
+
+    public MessageState() {
+        this.statsPanel = new DrawPanel(0, 280, 273, 161).withBlackOutline();
+    }
+
     // Stat gains and corresponding new stat upgrades for leveling up/evolving
     private int[] statGains;
     private int[] newStats;
 
     @Override
-    public void set(BattleView view) {
-
-    }
+    public void set(BattleView view) {}
 
     @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
-        g.drawImage(tiles.getTile(0x3), 0, 439, null);
-
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 30);
-
-        DrawUtils.drawWrappedText(g, view.getMessage(), 30, 490, 720);
+        view.drawFullMessagePanel(g);
 
         if (view.isState(VisualState.STAT_GAIN)) {
-            g.drawImage(tiles.getTile(0x5), 0, 280, null);
+            statsPanel.drawBackground(g);
             g.setColor(Color.BLACK);
             for (int i = 0; i < Stat.NUM_STATS; i++) {
                 FontMetrics.setFont(g, 16);

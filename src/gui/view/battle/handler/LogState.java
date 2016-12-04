@@ -3,6 +3,7 @@ package gui.view.battle.handler;
 import gui.Button;
 import gui.ButtonHoverAction;
 import gui.TileSet;
+import gui.panel.DrawPanel;
 import gui.view.View;
 import gui.view.battle.BattleView;
 import main.Game;
@@ -18,12 +19,17 @@ public class LogState implements VisualStateHandler {
     
     private static final int LOGS_PER_PAGE = 23;
 
+    private final DrawPanel logPanel;
     private final Button[] logButtons;
 
     private int logPage;
     private List<String> logMessages;
 
     public LogState() {
+        logPanel = new DrawPanel(0, 160, 417, 440)
+                .withBorderPercentage(3)
+                .withBlackOutline();
+
         logButtons = new Button[2];
         for (int i = 0; i < logButtons.length; i++) {
             logButtons[i] = new Button(
@@ -56,7 +62,7 @@ public class LogState implements VisualStateHandler {
 
     @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
-        g.drawImage(tiles.getTile(0x10), 0, 160, null);
+        logPanel.drawBackground(g);
 
         int start = logMessages.size() - 1 - logPage*LOGS_PER_PAGE;
         start = Math.max(0, start);
@@ -73,12 +79,7 @@ public class LogState implements VisualStateHandler {
         logButtons[LOG_RIGHT_BUTTON].draw(g);
 
         // Draw Messages Box
-        g.drawImage(tiles.getTile(0x20), 415, 440, null);
-
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 40);
-        g.drawString("Bob Loblaw's", 440, 500);
-        g.drawString("Log Blog", 440, 550);
+        view.drawMenuMessagePanel(g, "Bob Loblaw's Log Blog");
 
         // Draw back arrow when applicable
         view.drawBackButton(g);

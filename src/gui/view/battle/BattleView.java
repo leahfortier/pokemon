@@ -58,12 +58,16 @@ public class BattleView extends View {
 		playerAnimation = new PokemonAnimationState(this);
 		enemyAnimation = new PokemonAnimationState(this);
 
-		fullMessagePanel = new DrawPanel(0, 440, 800, 161);
+		fullMessagePanel = new DrawPanel(0, 440, 800, 161).withBlackOutline();
 		menuMessagePanel = new DrawPanel(415, 440, 385, 161).withBorderColor(new Color(53, 53, 129));
 		buttonsPanel = new DrawPanel(0, 440, 417, 161).withBorderColor(Color.GRAY).withBorderPercentage(5);
 
 		// Back Button
 		backButton = new Button(750, 560, 35, 20, null);
+	}
+
+	public void drawFullMessagePanel(Graphics g) {
+		drawFullMessagePanel(g, message);
 	}
 
 	public void drawFullMessagePanel(Graphics g, String text) {
@@ -141,10 +145,6 @@ public class BattleView extends View {
 
 	public boolean hasMessage() {
 		return !StringUtils.isNullOrEmpty(message);
-	}
-
-	public String getMessage() {
-		return this.message;
 	}
 
 	public String getMessage(VisualState messageState, String defaultMessage) {
