@@ -1,6 +1,5 @@
 package util;
 
-import gui.Button;
 import main.Global;
 
 import java.awt.Color;
@@ -62,11 +61,6 @@ public class DrawUtils {
         }
         return image;
     }
-
-    // TODO: move this to be an instance method of the button class
-	public static void drawCenteredString(Graphics g, String s, Button b) {
-		drawCenteredString(g, s, b.x, b.y, b.width, b.height);
-	}
 	
 	public static void drawCenteredString(Graphics g, String s, int x, int y, int width, int height) {
 		int centerX = x + width/2;

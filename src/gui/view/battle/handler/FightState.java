@@ -50,6 +50,8 @@ public class FightState implements VisualStateHandler {
 
     @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
+
+        // TODO: I think it would be cool to have the selected move's information on the panel when there isn't a message instead of select a move -- same with bag items
         String message = view.getMessage(VisualState.INVALID_FIGHT, "Select a move!");
         view.drawMessagePanel(g, message);
         view.drawButtonsPanel(g);
@@ -65,8 +67,8 @@ public class FightState implements VisualStateHandler {
 
             Move move = moves.get(i);
             DrawPanel movePanel = new DrawPanel(0, 0, 183, 55)
-                    .withBackgroundColor(move.getAttack().getActualType().getColor())
-                    .withDarkBorder()
+                    .withTransparentBackground(move.getAttack().getActualType().getColor())
+                    .withBorderPercentage(15)
                     .withBlackOutline();
             movePanel.drawBackground(g);
 

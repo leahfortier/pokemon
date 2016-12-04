@@ -2,8 +2,6 @@ package gui.view.mainmenu;
 
 import gui.Button;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
-import util.DrawUtils;
-import util.FontMetrics;
 
 import java.awt.Graphics;
 
@@ -21,9 +19,8 @@ class MainState implements VisualStateHandler {
 
     @Override
     public void draw(Graphics g, MainMenuView view) {
-        FontMetrics.setFont(g, 40);
         for (int i = 0; i < this.buttons.length; i++) {
-            DrawUtils.drawCenteredString(g, MAIN_HEADERS[i], this.buttons[i]);
+            this.buttons[i].label(g, 40, MAIN_HEADERS[i]);
         }
     }
 

@@ -1,22 +1,22 @@
 package main;
 
-import java.awt.Color;
-import java.io.Serializable;
-
+import battle.Battle;
 import battle.attack.MoveType;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import message.Messages;
-import pokemon.ability.AbilityNamesies;
 import pokemon.ActivePokemon;
-import battle.Battle;
+import pokemon.ability.AbilityNamesies;
+
+import java.awt.Color;
+import java.io.Serializable;
 
 public enum Type implements Serializable {
 	NORMAL(0, "Normal", new Color(230, 230, 250), -1, 0x4b), 
 	FIRE(1, "Fire", new Color(220, 20, 20), 8, 0x45), 
-	WATER(2, "Water", new Color(65, 105, 225), 9, 0x50), // new Color(35, 120, 220)
+	WATER(2, "Water", new Color(35, 120, 220), 9, 0x50),
 	ELECTRIC(3, "Electric", new Color(255, 215, 0), 11, 0x43), 
-	GRASS(4, "Grass", new Color(0, 200, 0), 10, 0x48), 
+	GRASS(4, "Grass", new Color(120, 200, 80), 10, 0x48),
 	ICE(5, "Ice", new Color(5, 235, 235), 13, 0x4a), 
 	FIGHTING(6, "Fighting", new Color(165, 82, 57), 0, 0x44), 
 	POISON(7, "Poison", new Color(150, 30, 160), 2, 0x4c), 
@@ -30,7 +30,7 @@ public enum Type implements Serializable {
 	DARK(15, "Dark", new Color(49, 79, 79), 15, 0x41), 
 	STEEL(16, "Steel", new Color(200, 200, 210), 7, 0x4f),
 	FAIRY(17, "Fairy", new Color(221, 160, 221), -1, 0x52),
-	NO_TYPE(18, "NoType", Color.WHITE, -1, 0x51);
+	NO_TYPE(18, "NoType", Color.WHITE, -1, 0x51); // TODO: TYPE: NULL MUTHAFUCKA
 
 	// TODO: This is ass do that other thingy
 	private static final double typeAdvantage[][] = {

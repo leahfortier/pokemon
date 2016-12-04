@@ -3,8 +3,6 @@ package gui.view.mainmenu;
 import gui.Button;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 import sound.SoundPlayer;
-import util.DrawUtils;
-import util.FontMetrics;
 
 import java.awt.Graphics;
 
@@ -22,9 +20,8 @@ class OptionsState implements VisualStateHandler {
 
     @Override
     public void draw(Graphics g, MainMenuView view) {
-        FontMetrics.setFont(g, 40);
         for (int i = 0; i < this.buttons.length; i++) {
-            DrawUtils.drawCenteredString(g, OPTIONS_HEADERS[i], this.buttons[i]);
+            this.buttons[i].label(g, 40, OPTIONS_HEADERS[i]);
         }
     }
 

@@ -1,9 +1,11 @@
 package gui;
 
+import gui.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import map.Direction;
 import util.DrawUtils;
+import util.FontMetrics;
 import util.Point;
 
 import java.awt.Color;
@@ -198,7 +200,21 @@ public class Button {
 		g.fillRect(x, y, width, height);
 	}
 
+	public void fillBordered(Graphics g, Color color) {
+		new DrawPanel(x, y, width, height)
+				.withTransparentBackground(color)
+				.withBorderPercentage(15)
+				.withBlackOutline()
+				.drawBackground(g);
+	}
+
 	public void blackOutline(Graphics g) {
 		DrawUtils.blackOutline(g, x, y, width, height);
+	}
+
+	public void label(Graphics g, int fontSize, String text) {
+		g.setColor(Color.BLACK);
+		FontMetrics.setFont(g, fontSize);
+		DrawUtils.drawCenteredString(g, text, x, y, width, height);
 	}
 }

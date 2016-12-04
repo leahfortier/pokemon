@@ -6,8 +6,6 @@ import gui.view.ViewMode;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 import main.Game;
 import map.Direction;
-import util.DrawUtils;
-import util.FontMetrics;
 import util.Save;
 
 import java.awt.Graphics;
@@ -76,9 +74,8 @@ class LoadSaveState implements VisualStateHandler {
         }
 
         // Return and Delete
-        FontMetrics.setFont(g, 30);
-        DrawUtils.drawCenteredString(g, "Return", buttons[RETURN]);
-        DrawUtils.drawCenteredString(g, "Delete", buttons[DELETE]);
+        buttons[RETURN].label(g, 30, "Return");
+        buttons[DELETE].label(g, 30, "Delete");
     }
 
     @Override

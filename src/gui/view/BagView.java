@@ -387,10 +387,8 @@ class BagView extends View {
 
 		// Draw Use State buttons
 		g.drawImage(tiles.getTile(0x28), 410, 193, null);
-		g.setColor(Color.BLACK);
-		FontMetrics.setFont(g, 20);
 		for (UseState useState : UseState.values()) {
-			DrawUtils.drawCenteredString(g, useState.displayName, buttons[useState.buttonIndex]);
+			buttons[useState.buttonIndex].label(g, 20, useState.displayName);
 		}
 
 		// Item Display

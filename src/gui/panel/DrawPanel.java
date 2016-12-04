@@ -16,10 +16,11 @@ public class DrawPanel {
 
     private int borderPercentage;
 
-    private Color bgColor;
+    private Color backgroundColor;
     private Color borderColor;
 
     private boolean blackOutline;
+    private boolean transparentBackground;
 
     public DrawPanel(int x, int y, int width, int height) {
         this.x = x;
@@ -29,7 +30,7 @@ public class DrawPanel {
 
         this.borderPercentage = 10;
 
-        this.bgColor = Color.WHITE;
+        this.backgroundColor = Color.WHITE;
         this.borderColor = Color.LIGHT_GRAY;
 
         this.blackOutline = false;
@@ -40,13 +41,14 @@ public class DrawPanel {
         return this;
     }
 
-    public DrawPanel withDarkBorder() {
-        return this.withBorderColor(this.bgColor.darker());
+    public DrawPanel withBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        return this;
     }
 
-    public DrawPanel withBackgroundColor(Color bgColor) {
-        this.bgColor = bgColor;
-        return this;
+    public DrawPanel withTransparentBackground(Color backgroundColor) {
+        this.transparentBackground = true;
+        return this.withBackgroundColor(backgroundColor);
     }
 
     public DrawPanel withBorderPercentage(int borderPercentage) {
@@ -64,10 +66,17 @@ public class DrawPanel {
     }
 
     public void drawBackground(Graphics g) {
-        g.setColor(bgColor);
+        g.setColor(backgroundColor);
         g.fillRect(x, y, width, height);
 
-        DrawUtils.drawBorder(g, borderColor, x, y, width, height, this.getBorderSize());
+        int borderSize = this.getBorderSize();
+
+        if (transparentBackground) {
+            g.setColor(new Color(255, 255, 255, 150));
+            g.fillRect(x + borderSize, y + borderSize, width - 2*borderSize, height - 2*borderSize);
+        } else {
+            DrawUtils.drawBorder(g, borderColor, x, y, width, height, borderSize);
+        }
 
         if (blackOutline) {
             DrawUtils.blackOutline(g, x, y, width, height);

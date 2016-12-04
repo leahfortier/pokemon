@@ -177,8 +177,7 @@ public class MainMenuView extends View {
 			g.translate(-b.x, -b.y);
 		}
 		else {
-			FontMetrics.setFont(g, 30);
-			DrawUtils.drawCenteredString(g, emptyText, b);
+			b.label(g, 30, emptyText);
 		}
 	}
 

@@ -164,9 +164,7 @@ public class BagState implements VisualStateHandler {
                 g.fillRect(tabButton.x, tabButton.y + tabButton.height, tabButton.width, lineSize);
             }
 
-            g.setColor(Color.BLACK);
-            FontMetrics.setFont(g, 18);
-            DrawUtils.drawCenteredString(g, category.getName(), tabButton);
+            tabButton.label(g, 18, category.getName());
         }
 
         DrawUtils.blackOutline(g, 30, 190, 357, 287);
