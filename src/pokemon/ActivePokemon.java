@@ -44,6 +44,7 @@ import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import util.DrawUtils;
 import util.RandomUtils;
+import util.StringUtils;
 
 import java.awt.Color;
 import java.io.Serializable;
@@ -694,9 +695,9 @@ public class ActivePokemon implements Serializable {
 		return false;
 	}
 
-	public String getGenderCharacter() {
+	public String getGenderString() {
 		if (this.isEgg()) {
-			return Gender.GENDERLESS.getCharacter();
+			return StringUtils.empty();
 		}
 
 		return this.getGender().getCharacter();

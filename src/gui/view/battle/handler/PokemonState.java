@@ -199,7 +199,7 @@ public class PokemonState implements VisualStateHandler {
         // Name and Gender
         FontMetrics.setFont(g, 16);
         g.setColor(Color.BLACK);
-        String nameStr = selectedPkm.getActualName() + " " + selectedPkm.getGender().getCharacter();
+        String nameStr = selectedPkm.getActualName() + " " + selectedPkm.getGenderString();
         g.drawString(nameStr, 62, 269);
 
         if (selectedPkm.isEgg()) {

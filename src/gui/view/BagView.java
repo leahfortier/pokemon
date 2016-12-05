@@ -495,13 +495,12 @@ class BagView extends View {
 				
 				g.setColor(Color.BLACK);
 				FontMetrics.setFont(g, 14);
-				
-				if (p.isEgg()) {
-					g.drawString(p.getActualName(), 50, 22);	
-				}
-				else {
-					// Name, Gender, and Level
-					g.drawString(p.getActualName() + " " + p.getGender().getCharacter(), 50, 22);
+
+				// Name and Gender
+				g.drawString(p.getActualName() + " " + p.getGenderString(), 50, 22);
+
+				if (!p.isEgg()) {
+					// Level
 					g.drawString("Lv" + p.getLevel(), 153, 22);
 					
 					// Status condition
