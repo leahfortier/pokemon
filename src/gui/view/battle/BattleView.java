@@ -11,7 +11,6 @@ import gui.view.ViewMode;
 import input.ControlKey;
 import main.Game;
 import main.Global;
-import map.Direction;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -24,13 +23,8 @@ import util.StringUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BattleView extends View {
-
-	public static final int SUB_MENU_BUTTON_WIDTH = 183;
-	public static final int SUB_MENU_BUTTON_HEIGHT = 55;
 
 	// The current battle in view, the current message being displayed, and the current selected button
 	private Battle currentBattle;
@@ -104,11 +98,7 @@ public class BattleView extends View {
 	}
 
 	private Button[] createPanelButtons(DrawPanel buttonsPanel, int numRows, int numCols) {
-		return buttonsPanel.getButtons(
-				BattleView.SUB_MENU_BUTTON_WIDTH,
-				BattleView.SUB_MENU_BUTTON_HEIGHT,
-				numRows,
-				numCols);
+		return buttonsPanel.getButtons(183, 55, numRows, numCols);
 	}
 	
 	public void setBattle(Battle b) {
@@ -322,23 +312,7 @@ public class BattleView extends View {
 		
 		g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		
-		state.draw(this, g, tiles);
-	}
-
-	public void outlineTabButton(Graphics g, Button tabButton, int index, int selectedIndex) {
-		List<Direction> toOutline = new ArrayList<>();
-		toOutline.add(Direction.UP);
-		toOutline.add(Direction.RIGHT);
-
-		if (index == 0) {
-			toOutline.add(Direction.LEFT);
-		}
-
-		if (index != selectedIndex) {
-			toOutline.add(Direction.DOWN);
-		}
-
-		tabButton.blackOutline(g, toOutline);
+		state.draw(this, g);
 	}
 
 	public void drawMoveButton(Graphics g, Button moveButton, Move move) {

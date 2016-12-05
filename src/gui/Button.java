@@ -11,6 +11,7 @@ import util.Point;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Button {
@@ -52,7 +53,21 @@ public class Button {
 		this.forceHover = false;
 		this.active = true;
 	}
-	
+
+	public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, int[] transitions) {
+		int tabWidth = panelWidth/numButtons;
+		int remainder = panelWidth%numButtons;
+
+		return new Button(
+				panelX + tabIndex*tabWidth + Math.min(tabIndex, remainder),
+				panelY - tabHeight + DrawUtils.OUTLINE_SIZE,
+				tabWidth + (tabIndex < remainder ? 1 : 0),
+				tabHeight,
+				ButtonHoverAction.BOX,
+				transitions
+		);
+	}
+
 	public void draw(Graphics g) {
 		if ((hover || forceHover) && active && hoverAction != null) {
 			hoverAction.draw(g, this);
@@ -189,6 +204,10 @@ public class Button {
 		g.setColor(temp);
 	}
 
+	public void greyOut(Graphics g) {
+		DrawUtils.greyOut(g, x, y, width, height);
+	}
+
 	public void fillTranslated(Graphics g, Color color) {
 		fill(g, color, 0, 0);
 	}
@@ -223,8 +242,20 @@ public class Button {
 		DrawUtils.blackOutline(g, x, y, width, height);
 	}
 
-	public void blackOutline(Graphics g, List<Direction> directions) {
-		DrawUtils.blackOutline(g, x, y, width, height, directions.toArray(new Direction[0]));
+	public void outlineTab(Graphics g, int index, int selectedIndex) {
+		List<Direction> toOutline = new ArrayList<>();
+		toOutline.add(Direction.UP);
+		toOutline.add(Direction.RIGHT);
+
+		if (index == 0) {
+			toOutline.add(Direction.LEFT);
+		}
+
+		if (index != selectedIndex) {
+			toOutline.add(Direction.DOWN);
+		}
+
+		DrawUtils.blackOutline(g, x, y, width, height, toOutline.toArray(new Direction[0]));
 	}
 
 	public void label(Graphics g, int fontSize, String text) {

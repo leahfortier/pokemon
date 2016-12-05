@@ -3,7 +3,6 @@ package gui.view.battle.handler;
 import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
-import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
@@ -47,7 +46,7 @@ public class MenuState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(BattleView view, Graphics g, TileSet tiles) {
+    public void draw(BattleView view, Graphics g) {
         ActivePokemon playerPokemon = Game.getPlayer().front();
         view.drawMenuMessagePanel(g, "What will " + playerPokemon.getActualName() + " do?");
         view.drawButtonsPanel(g);

@@ -2,7 +2,6 @@ package gui.view.battle.handler;
 
 import battle.attack.Move;
 import gui.Button;
-import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import message.MessageUpdate;
@@ -38,7 +37,7 @@ public class LearnMoveDeleteState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(BattleView view, Graphics g, TileSet tiles) {
+    public void draw(BattleView view, Graphics g) {
         view.drawFullMessagePanel(g, StringUtils.empty());
 
         List<Move> moves = view.getLearnedPokemon().getActualMoves();

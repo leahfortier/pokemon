@@ -2,7 +2,6 @@ package gui.view.battle.handler;
 
 import gui.Button;
 import gui.ButtonHoverAction;
-import gui.TileSet;
 import gui.view.View;
 import gui.view.battle.BattleView;
 import main.Game;
@@ -55,7 +54,7 @@ public class LogState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(BattleView view, Graphics g, TileSet tiles) {
+    public void draw(BattleView view, Graphics g) {
         view.drawLargeMenuPanel(g);
 
         int start = logMessages.size() - 1 - logPage*LOGS_PER_PAGE;

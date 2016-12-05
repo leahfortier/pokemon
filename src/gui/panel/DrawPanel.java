@@ -11,10 +11,10 @@ import java.awt.Graphics;
 import java.util.Collection;
 
 public class DrawPanel {
-    protected final int x;
-    protected final int y;
-    protected final int width;
-    protected final int height;
+    public final int x;
+    public final int y;
+    public final int width;
+    public final int height;
 
     private int borderPercentage;
 
@@ -73,16 +73,58 @@ public class DrawPanel {
         return this;
     }
 
-    protected int getBorderSize() {
+    private int getBorderSize() {
+        if (transparentBackground && backgroundColor == null) {
+            return 0;
+        }
+
         return (int)(borderPercentage/100.0*Math.min(width, height));
     }
 
-    public void drawBackground(Graphics g) {
-        g.setColor(backgroundColor);
+    // NOTE: This only works for panels where the width is greater than the height
+    public void drawTypeColors(Graphics g, Color[] typeColors) {
+        int smallWidth = (width - height)/2;
+        int largeWidth = width - smallWidth;
 
+        g.translate(x, y);
+
+        // (0, 0) -> (largeWidth, 0) -> (smallWidth, height) -> (0, height) -> (0, 0)
+        g.setColor(typeColors[0]);
+        g.fillPolygon(new int[] { 0, largeWidth, smallWidth, 0 }, new int[] { 0, 0, height, height }, 4);
+
+        // (largeWidth, 0) -> (smallWidth, height) -> (width, height) -> (width, 0) -> (largeWidth, 0)
+        g.setColor(typeColors[1]);
+        g.fillPolygon(new int[] { largeWidth, smallWidth, width, width }, new int[] { 0, height, height, 0 }, 4);
+
+        g.translate(-x, -y);
+    }
+
+    public void fillBar(Graphics g, Color color, double ratio) {
+        fillTransparent(g);
+
+        g.setColor(color);
+        g.fillRect(x, y, (int)(ratio*width), height);
+
+        blackOutline(g);
+    }
+
+    public void fillTransparent(Graphics g) {
+        DrawUtils.fillTransparent(g, x, y, width, height);
+    }
+
+    public void blackOutline(Graphics g) {
+        DrawUtils.blackOutline(g, x, y, width, height, outlineDirections);
+    }
+
+    public void greyOut(Graphics g) {
+        DrawUtils.greyOut(g, x, y, width, height);
+    }
+
+    public void drawBackground(Graphics g) {
         if (transparentBackground && backgroundColor == null) {
-            DrawUtils.fillTransparent(g, x, y, width, height);
+            fillTransparent(g);
         } else {
+            g.setColor(backgroundColor);
             g.fillRect(x, y, width, height);
 
             int borderSize = this.getBorderSize();
@@ -94,7 +136,7 @@ public class DrawPanel {
             }
         }
 
-        DrawUtils.blackOutline(g, x, y, width, height, outlineDirections);
+        blackOutline(g);
     }
 
     public Button[] getButtons(int buttonWidth, int buttonHeight, int numRows, int numCols) {

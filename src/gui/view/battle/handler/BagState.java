@@ -129,7 +129,7 @@ public class BagState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(BattleView view, Graphics g, TileSet tiles) {
+    public void draw(BattleView view, Graphics g) {
         view.drawLargeMenuPanel(g);
 
         BattleBagCategory selectedCategory = BATTLE_BAG_CATEGORIES[selectedBagTab];
@@ -149,8 +149,7 @@ public class BagState implements VisualStateHandler {
 
             tabButton.fill(g, category.getColor());
             tabButton.label(g, 18, category.getName());
-
-            view.outlineTabButton(g, tabButton, i, selectedBagTab);
+            tabButton.outlineTab(g, i, selectedBagTab);
         }
 
         DrawUtils.blackOutline(g, 30, 190, 357, 287);

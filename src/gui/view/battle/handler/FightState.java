@@ -3,7 +3,6 @@ package gui.view.battle.handler;
 import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
-import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
@@ -44,7 +43,7 @@ public class FightState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(BattleView view, Graphics g, TileSet tiles) {
+    public void draw(BattleView view, Graphics g) {
 
         // TODO: I think it would be cool to have the selected move's information on the panel when there isn't a message instead of select a move -- same with bag items
         String message = view.getMessage(VisualState.INVALID_FIGHT, "Select a move!");

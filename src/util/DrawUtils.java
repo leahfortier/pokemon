@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class DrawUtils {
 	public static final Color EXP_BAR_COLOR = new Color(51, 102, 204);
-	private static final int OUTLINE_WIDTH = 2;
+	public static final int OUTLINE_SIZE = 2;
 
 	// Dimension of a single tile
 	private static final Dimension SINGLE_TILE_DIMENSION = new Dimension(1, 1);
@@ -152,7 +152,7 @@ public class DrawUtils {
 	}
 
 	public static void blackOutline(Graphics g, int x, int y, int width, int height, Direction... directions) {
-		drawBorder(g, Color.BLACK, x, y, width, height, OUTLINE_WIDTH, directions);
+		drawBorder(g, Color.BLACK, x, y, width, height, OUTLINE_SIZE, directions);
 	}
 
 	public static void drawBorder(Graphics g, Color color, int x, int y, int width, int height, int borderSize) {
@@ -178,6 +178,11 @@ public class DrawUtils {
 					break;
 			}
 		}
+	}
+
+	public static void greyOut(Graphics g, int x, int y, int width, int height) {
+		g.setColor(new Color(0, 0, 0, 128));
+		g.fillRect(x, y, width, height);
 	}
 
 	public static void fillTransparent(Graphics g, int x, int y, int width, int height) {

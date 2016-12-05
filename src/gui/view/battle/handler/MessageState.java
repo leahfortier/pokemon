@@ -1,6 +1,5 @@
 package gui.view.battle.handler;
 
-import gui.TileSet;
 import gui.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -30,7 +29,7 @@ public class MessageState implements VisualStateHandler {
     public void set(BattleView view) {}
 
     @Override
-    public void draw(BattleView view, Graphics g, TileSet tiles) {
+    public void draw(BattleView view, Graphics g) {
         view.drawFullMessagePanel(g);
 
         if (view.isState(VisualState.STAT_GAIN)) {

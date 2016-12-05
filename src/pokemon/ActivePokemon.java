@@ -693,6 +693,14 @@ public class ActivePokemon implements Serializable {
 
 		return false;
 	}
+
+	public String getGenderCharacter() {
+		if (this.isEgg()) {
+			return Gender.GENDERLESS.getCharacter();
+		}
+
+		return this.getGender().getCharacter();
+	}
 	
 	public Gender getGender() {
 		return gender;
