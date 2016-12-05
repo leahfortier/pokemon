@@ -160,7 +160,7 @@ public enum Type implements Serializable {
 	}
 	
 	public static Color[] getColors(ActivePokemon p) {
-		return getColors(p.isEgg() ? new Type[] { Type.NORMAL, Type.NO_TYPE} : p.getActualType());
+		return getColors(p.isEgg() ? new Type[] { Type.NORMAL, Type.NO_TYPE } : p.getActualType());
 	}
 	
 	public static Type getHiddenType(int hiddenIndex) {

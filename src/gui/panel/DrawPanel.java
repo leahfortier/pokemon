@@ -2,11 +2,13 @@ package gui.panel;
 
 import gui.Button;
 import gui.ButtonHoverAction;
+import map.Direction;
 import util.DrawUtils;
 import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Collection;
 
 public class DrawPanel {
     protected final int x;
@@ -19,7 +21,8 @@ public class DrawPanel {
     private Color backgroundColor;
     private Color borderColor;
 
-    private boolean blackOutline;
+    private Direction[] outlineDirections;
+
     private boolean transparentBackground;
 
     public DrawPanel(int x, int y, int width, int height) {
@@ -33,7 +36,7 @@ public class DrawPanel {
         this.backgroundColor = Color.WHITE;
         this.borderColor = Color.LIGHT_GRAY;
 
-        this.blackOutline = false;
+        this.outlineDirections = new Direction[0];
     }
 
     public DrawPanel withBorderColor(Color borderColor) {
@@ -44,6 +47,10 @@ public class DrawPanel {
     public DrawPanel withBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
         return this;
+    }
+
+    public DrawPanel withTransparentBackground() {
+        return this.withTransparentBackground(null);
     }
 
     public DrawPanel withTransparentBackground(Color backgroundColor) {
@@ -57,7 +64,12 @@ public class DrawPanel {
     }
 
     public DrawPanel withBlackOutline() {
-        this.blackOutline = true;
+        this.outlineDirections = Direction.values();
+        return this;
+    }
+
+    public DrawPanel withBlackOutline(Collection<Direction> directions) {
+        this.outlineDirections = directions.toArray(new Direction[0]);
         return this;
     }
 
@@ -67,20 +79,22 @@ public class DrawPanel {
 
     public void drawBackground(Graphics g) {
         g.setColor(backgroundColor);
-        g.fillRect(x, y, width, height);
 
-        int borderSize = this.getBorderSize();
-
-        if (transparentBackground) {
-            g.setColor(new Color(255, 255, 255, 150));
-            g.fillRect(x + borderSize, y + borderSize, width - 2*borderSize, height - 2*borderSize);
+        if (transparentBackground && backgroundColor == null) {
+            DrawUtils.fillTransparent(g, x, y, width, height);
         } else {
-            DrawUtils.drawBorder(g, borderColor, x, y, width, height, borderSize);
+            g.fillRect(x, y, width, height);
+
+            int borderSize = this.getBorderSize();
+
+            if (transparentBackground) {
+                DrawUtils.fillTransparent(g, x + borderSize, y + borderSize, width - 2*borderSize, height - 2*borderSize);
+            } else {
+                DrawUtils.drawBorder(g, borderColor, x, y, width, height, borderSize);
+            }
         }
 
-        if (blackOutline) {
-            DrawUtils.blackOutline(g, x, y, width, height);
-        }
+        DrawUtils.blackOutline(g, x, y, width, height, outlineDirections);
     }
 
     public Button[] getButtons(int buttonWidth, int buttonHeight, int numRows, int numCols) {

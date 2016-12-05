@@ -5,10 +5,12 @@ import battle.attack.Move;
 import gui.Button;
 import gui.ButtonHoverAction;
 import gui.TileSet;
+import gui.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
 import main.Type;
+import map.Direction;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.CharacterData;
@@ -21,6 +23,7 @@ import util.PokeString;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.EnumSet;
 import java.util.List;
 
 public class PokemonState implements VisualStateHandler {
@@ -48,7 +51,7 @@ public class PokemonState implements VisualStateHandler {
 
         pokemonTabButtons = new Button[Trainer.MAX_POKEMON];
         for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-            pokemonButtons[i] = pokemonTabButtons[i] = new Button(32 + i*59, 192, 59, 34, ButtonHoverAction.BOX,
+            pokemonButtons[i] = pokemonTabButtons[i] = new Button(30 + i*59, 192, 59, 34, ButtonHoverAction.BOX,
                     new int[] {
                             (i + 1)%Trainer.MAX_POKEMON, // Right
                             POKEMON_SWITCH_BUTTON, // Up
@@ -86,7 +89,7 @@ public class PokemonState implements VisualStateHandler {
     @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
         // Draw Background
-        g.drawImage(tiles.getTile(0x10), 0, 160, null);
+        view.drawLargeMenuPanel(g);
 
         // Get current Pokemon
         List<ActivePokemon> list = Game.getPlayer().getTeam();
@@ -96,6 +99,7 @@ public class PokemonState implements VisualStateHandler {
         Type[] type = selectedPkm.getActualType();
         Color[] typeColors = Type.getColors(selectedPkm);
 
+        // TODO: Math in draw panel lalala
         g.translate(31, 224);
         g.setColor(typeColors[0]);
         g.fillPolygon(pkmnPrimaryColorx, pkmnPrimaryColory, 4);
@@ -106,18 +110,43 @@ public class PokemonState implements VisualStateHandler {
         g.fillPolygon(pkmnSecondaryColorx, pkmnSecondaryColory, 4);
         g.translate(-36, -224);
 
-        // Draw Messages Box
-        g.drawImage(tiles.getTile(0x20), 415, 440, null);
+        new DrawPanel(30, 224, 357, 346)
+                .withTransparentBackground()
+                .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP)))
+                .drawBackground(g);
 
-        // Draw Box Outlines for Pokemon Info
-        if (!selectedPkm.canFight()) { // Fainted Pokemon and Eggs
-            g.drawImage(tiles.getTile(0x35), 30, 224, null);
-            g.drawImage(tiles.getTile(0x31), 55, 249, null);
-        }
-        else {
-            g.drawImage(tiles.getTile(0x34), 30, 224, null);
-            g.drawImage(tiles.getTile(0x30), 55, 249, null);
-        }
+        // Draw Messages Box
+        String message = view.getMessage(VisualState.INVALID_POKEMON, "Select a " + PokeString.POKEMON + "!");
+        view.drawMenuMessagePanel(g, message);
+
+        // Top Box with basic information
+        new DrawPanel(55, 249, 305, 64)
+                .withTransparentBackground()
+                .withBlackOutline()
+                .drawBackground(g);
+
+        // EXP bar
+        new DrawPanel(55 + 305 - 141, 249 + 62, 141, 15)
+                .withTransparentBackground()
+                .withBlackOutline()
+                .drawBackground(g);
+
+        // Stats panel
+        new DrawPanel(55, 249 + 92, 141, 149)
+                .withTransparentBackground()
+                .withBlackOutline()
+                .drawBackground(g);
+
+        DrawUtils.blackOutline(g, 55, 249 + 92, 141, 12, Direction.DOWN);
+
+        // Moves panel
+         new DrawPanel(55 + 305 - 141, pokemonSwitchButton.y + pokemonSwitchButton.height - 193, 141, 193)
+                .withTransparentBackground()
+                .withBlackOutline()
+                .drawBackground(g);
+
+        pokemonSwitchButton.fillTransparent(g);
+        pokemonSwitchButton.blackOutline(g);
 
         if (selectedPkm.isEgg()) {
             // Name
@@ -167,14 +196,16 @@ public class PokemonState implements VisualStateHandler {
             g.drawString("To Next Lv", 220, 307);
             DrawUtils.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), 352, 307);
 
+            new DrawPanel(55 + 305 - 141, 249 + 62, 141, 15);
+
             // Experience Bar
             float expRatio = selectedPkm.expRatio();
             g.setColor(DrawUtils.EXP_BAR_COLOR);
-            g.fillRect(222, 315, (int)(137*expRatio), 10);
+            g.fillRect(57 + 305 - 141, 249 + 64, (int)(137*expRatio), 11);
 
             // HP Bar
             g.setColor(selectedPkm.getHPColor());
-            g.fillRect(57, 341, (int)(137*selectedPkm.getHPRatio()), 10);
+            g.fillRect(57, 343, (int)(137*selectedPkm.getHPRatio()), 8);
 
             // Write stat names
             FontMetrics.setFont(g, 16);
@@ -231,39 +262,23 @@ public class PokemonState implements VisualStateHandler {
         TileSet partyTiles = Game.getData().getPartyTiles();
         for (int i = 0; i < list.size(); i++) {
             ActivePokemon pkm = list.get(i);
+            Button tabButton = pokemonTabButtons[i];
 
-            // Draw tab
-            if(pkm.isEgg()) {
-                g.setColor(Type.getColors(selectedPkm)[0]);
-            }
-            else {
-                g.setColor(pkm.getActualType()[0].getColor());
-            }
-
-            g.fillRect(32 + i*59, 192, 59, 34);
-            if (i == selectedPokemonTab) {
-                g.drawImage(tiles.getTile(0x36), 30 + i*59, 190, null);
-            }
-            else {
-                g.drawImage(tiles.getTile(0x33), 30 + i*59, 190, null);
-            }
-
-            // Draw Pokemon Image
-            BufferedImage img = partyTiles.getTile(pkm.getTinyImageIndex());
-            DrawUtils.drawCenteredImage(g, img, 60 + i*59, 205);
+            // Color tab
+            tabButton.fillTransparent(g, Type.getColors(pkm)[0]);
 
             // Fade out fainted Pokemon
             if (!pkm.canFight()) {
-                g.setColor(new Color(0, 0, 0, 128));
-                g.fillRect(32 + i*59, 192, 59, 34);
+                tabButton.greyOut(g, false);
             }
-        }
 
-        // Draw Messages
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 30);
-        String msgLine = view.getMessage(VisualState.INVALID_POKEMON, "Select a " + PokeString.POKEMON + "!");
-        DrawUtils.drawWrappedText(g, msgLine, 440, 485, 350);
+            // Outline in black
+            view.outlineTabButton(g, tabButton, i, selectedPokemonTab);
+
+            // Draw Pokemon Image
+            BufferedImage img = partyTiles.getTile(pkm.getTinyImageIndex());
+            tabButton.imageLabel(g, img);
+        }
 
         // Draw back arrow when applicable
         view.drawBackButton(g, !switchForced);

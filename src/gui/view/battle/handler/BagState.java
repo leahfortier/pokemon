@@ -22,6 +22,7 @@ import util.FontMetrics;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -38,7 +39,6 @@ public class BagState implements VisualStateHandler {
     private static final int BAG_RIGHT_BUTTON = NUM_BAG_BUTTONS - 2;
     private static final int BAG_LEFT_BUTTON = NUM_BAG_BUTTONS - 3;
 
-    private final DrawPanel bagPanel;
     private final DrawPanel bagCategoryPanel;
     private final DrawPanel lastItemPanel;
 
@@ -55,10 +55,6 @@ public class BagState implements VisualStateHandler {
     private ItemNamesies selectedItem;
 
     public BagState() {
-        bagPanel = new DrawPanel(0, 160, 417, 440)
-                .withBorderPercentage(3)
-                .withBlackOutline();
-
         bagCategoryPanel = new DrawPanel(30, 190 + 28, 357, 287 - 28)
                 .withBorderPercentage(6);
 
@@ -134,37 +130,27 @@ public class BagState implements VisualStateHandler {
 
     @Override
     public void draw(BattleView view, Graphics g, TileSet tiles) {
-        bagPanel.drawBackground(g);
+        view.drawLargeMenuPanel(g);
 
         BattleBagCategory selectedCategory = BATTLE_BAG_CATEGORIES[selectedBagTab];
         bagCategoryPanel
-               .withBackgroundColor(selectedCategory.getBackgroundColor())
-               .withBorderColor(selectedCategory.getBorderColor())
-               .drawBackground(g);
+                .withTransparentBackground(selectedCategory.getColor())
+                .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP)))
+                .drawBackground(g);
 
         lastItemPanel
-                .withBackgroundColor(selectedCategory.getBackgroundColor())
-                .withBorderColor(selectedCategory.getBorderColor())
+                .withTransparentBackground(selectedCategory.getColor())
                 .drawBackground(g);
 
         // Tabs
         for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
             Button tabButton = bagTabButtons[i];
             BattleBagCategory category = BATTLE_BAG_CATEGORIES[i];
-            tabButton.fill(g, category.getBorderColor());
 
-            int lineSize = DrawUtils.OUTLINE_WIDTH;
-            if (i > 0) {
-                g.setColor(Color.BLACK);
-                g.fillRect(tabButton.x, tabButton.y, lineSize, tabButton.height + lineSize);
-            }
-
-            if (i != selectedBagTab) {
-                g.setColor(Color.BLACK);
-                g.fillRect(tabButton.x, tabButton.y + tabButton.height, tabButton.width, lineSize);
-            }
-
+            tabButton.fill(g, category.getColor());
             tabButton.label(g, 18, category.getName());
+
+            view.outlineTabButton(g, tabButton, i, selectedBagTab);
         }
 
         DrawUtils.blackOutline(g, 30, 190, 357, 287);

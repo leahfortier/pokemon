@@ -3,7 +3,6 @@ package gui.view.battle;
 import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
-import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
 import gui.panel.DrawPanel;
@@ -12,6 +11,7 @@ import gui.view.ViewMode;
 import input.ControlKey;
 import main.Game;
 import main.Global;
+import map.Direction;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -24,6 +24,8 @@ import util.StringUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BattleView extends View {
 
@@ -46,6 +48,7 @@ public class BattleView extends View {
 	private final DrawPanel fullMessagePanel;
 	private final DrawPanel menuMessagePanel;
 	private final DrawPanel buttonsPanel;
+	private final DrawPanel largeMenuPanel;
 
 	// All the different buttons!!
 	private final Button backButton;
@@ -61,9 +64,14 @@ public class BattleView extends View {
 		fullMessagePanel = new DrawPanel(0, 440, 800, 161).withBlackOutline();
 		menuMessagePanel = new DrawPanel(415, 440, 385, 161).withBorderColor(new Color(53, 53, 129));
 		buttonsPanel = new DrawPanel(0, 440, 417, 161).withBorderColor(Color.GRAY).withBorderPercentage(5);
+		largeMenuPanel = new DrawPanel(0, 160, 417, 440).withBorderPercentage(3).withBlackOutline();
 
 		// Back Button
 		backButton = new Button(750, 560, 35, 20, null);
+	}
+
+	public void drawLargeMenuPanel(Graphics g) {
+		largeMenuPanel.drawBackground(g);
 	}
 
 	public void drawFullMessagePanel(Graphics g) {
@@ -172,6 +180,7 @@ public class BattleView extends View {
 	}
 
 	public void drawBackButton(Graphics g, boolean drawArrows) {
+		g.setColor(Color.BLACK);
 		if (drawArrows) {
 			View.drawArrows(g, null, backButton);
 		}
@@ -190,29 +199,6 @@ public class BattleView extends View {
 		if (backButton.checkConsumePress() && setToMainMenu) {
 			setVisualState(VisualState.MENU);
 		}
-	}
-
-	public static Button createMoveButton(int index) {
-		int totalButtons = Move.MAX_MOVES;
-		int numRows = 2;
-		int numColumns = totalButtons/numRows;
-
-		return createSubMenuButton(
-				index%numColumns,
-				index/numColumns,
-				Button.getBasicTransitions(index, numRows, numColumns)
-		);
-	}
-
-	public static Button createSubMenuButton(int x, int y, int[] transitions) {
-		return new Button(
-				22 + x*190,
-				440 + 21 + y*62,
-				SUB_MENU_BUTTON_WIDTH,
-				SUB_MENU_BUTTON_HEIGHT,
-				ButtonHoverAction.BOX,
-				transitions
-		);
 	}
 
 	public boolean isPlayingAnimation() {
@@ -337,6 +323,22 @@ public class BattleView extends View {
 		g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		
 		state.draw(this, g, tiles);
+	}
+
+	public void outlineTabButton(Graphics g, Button tabButton, int index, int selectedIndex) {
+		List<Direction> toOutline = new ArrayList<>();
+		toOutline.add(Direction.UP);
+		toOutline.add(Direction.RIGHT);
+
+		if (index == 0) {
+			toOutline.add(Direction.LEFT);
+		}
+
+		if (index != selectedIndex) {
+			toOutline.add(Direction.DOWN);
+		}
+
+		tabButton.blackOutline(g, toOutline);
 	}
 
 	public void drawMoveButton(Graphics g, Button moveButton, Move move) {

@@ -10,6 +10,8 @@ import util.Point;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class Button {
 	private static final int NO_TRANSITION = -1;
@@ -208,14 +210,31 @@ public class Button {
 				.drawBackground(g);
 	}
 
+	public void fillTransparent(Graphics g, Color color) {
+		fill(g, color);
+		fillTransparent(g);
+	}
+
+	public void fillTransparent(Graphics g) {
+		DrawUtils.fillTransparent(g, x, y, width, height);
+	}
+
 	public void blackOutline(Graphics g) {
 		DrawUtils.blackOutline(g, x, y, width, height);
+	}
+
+	public void blackOutline(Graphics g, List<Direction> directions) {
+		DrawUtils.blackOutline(g, x, y, width, height, directions.toArray(new Direction[0]));
 	}
 
 	public void label(Graphics g, int fontSize, String text) {
 		g.setColor(Color.BLACK);
 		FontMetrics.setFont(g, fontSize);
 		DrawUtils.drawCenteredString(g, text, x, y, width, height);
+	}
+
+	public void imageLabel(Graphics g, BufferedImage image) {
+		DrawUtils.drawCenteredImage(g, image, centerX(), centerY());
 	}
 
 	public int centerX() {
