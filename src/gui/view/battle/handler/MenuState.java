@@ -51,12 +51,11 @@ public class MenuState implements VisualStateHandler {
         view.drawMenuMessagePanel(g, "What will " + playerPokemon.getActualName() + " do?");
         view.drawButtonsPanel(g);
 
-        for (int i = 0; i < menuButtons.length; i++) {
-            MenuChoice menuChoice = MenuChoice.values()[i];
-            Color buttonColor = menuChoice.buttonColor;
+        for (MenuChoice menuChoice : MenuChoice.values()) {
+            Button menuButton = getButton(menuChoice);
 
-            menuButtons[i].fillBordered(g, buttonColor);
-            menuButtons[i].label(g, 30, menuChoice.getButtonLabel());
+            menuButton.fillBordered(g, menuChoice.buttonColor);
+            menuButton.label(g, 30, menuChoice.getButtonLabel());
         }
 
         for (Button button: menuButtons) {
