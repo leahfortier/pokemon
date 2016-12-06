@@ -27,7 +27,7 @@ public abstract class Evolution implements Serializable {
 		return true;
 	}
 
-	public static Evolution readEvolution(Scanner in) {
+	static Evolution readEvolution(Scanner in) {
 		String type = in.next();
 		
 		// TODO: Enum
@@ -80,7 +80,7 @@ public abstract class Evolution implements Serializable {
 		
 		private Evolution[] evolutions;
 		
-		public MultipleEvolution(Evolution[] list) {
+		MultipleEvolution(Evolution[] list) {
 			evolutions = list;
 		}
 		
@@ -117,7 +117,7 @@ public abstract class Evolution implements Serializable {
 		private Evolution evolution;
 		private Gender gender;
 		
-		public GenderEvolution(String gender, Evolution evolution) {
+		GenderEvolution(String gender, Evolution evolution) {
 			if (!(evolution instanceof BaseEvolution)) {
 				Global.error("Gender evolution does not make any sense!");
 			}
@@ -151,7 +151,7 @@ public abstract class Evolution implements Serializable {
 		private Stat higher;
 		private Stat lower;
 		
-		public StatEvolution(String equals, String higher, String lower, Evolution evolution) {
+		StatEvolution(String equals, String higher, String lower, Evolution evolution) {
 			if (!(evolution instanceof LevelUpEvolution)) {
 				Global.error("Stat evolutions must be level up");
 				return;
@@ -194,7 +194,7 @@ public abstract class Evolution implements Serializable {
 		private int evolutionNumber;
 		private int level;
 		
-		public LevelUpEvolution(int num, int level) {
+		LevelUpEvolution(int num, int level) {
 			this.evolutionNumber = num;
 			this.level = level;
 		}
@@ -226,7 +226,7 @@ public abstract class Evolution implements Serializable {
 		private int evolutionNumber;
 		private ItemNamesies item;
 		 
-		public ItemEvolution(int num, String item) {
+		ItemEvolution(int num, String item) {
 			this.evolutionNumber = num;
 			
 			this.item = ItemNamesies.getValueOf(item);

@@ -5,7 +5,6 @@ import gui.GameData;
 import gui.TileSet;
 import gui.panel.DrawPanel;
 import main.Game;
-import main.Global;
 import main.Type;
 import message.MessageUpdate;
 import pokemon.ActivePokemon;
@@ -20,7 +19,6 @@ import util.FontMetrics;
 import util.Point;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 // Handles animation and keeps track of the current state
@@ -31,7 +29,7 @@ class PokemonAnimationState {
     // Loss Constants <-- Super Meaningful Comment
     private static final int FRAMES_PER_HP_LOSS = 20;
     private static final float HP_LOSS_RATIO = 0.1f;
-    private static final float EXP_LOSS_RATIO = 15f;
+    private static final float EXP_LOSS_RATIO = 30f;
 
     // Evolution and Catch Lifespans
     private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
@@ -218,107 +216,26 @@ class PokemonAnimationState {
         return animationHP != 0 || animationEvolve != 0 || animationCatch != 0 || animationExp != 0;
     }
 
-    // TODO: Is this code duplicated in other places? Like the evolution view by any chance
     // Might want to include a helper class that contains a generic method for different types of animations
     private void catchAnimation(Graphics g, BufferedImage plyrImg, TileSet pkmTiles) {
-        Graphics2D g2d = (Graphics2D)g;
-        float[] pokeyScales = { 1f, 1f, 1f, 1f };
-        float[] pokeyOffsets = { 255f, 255f, 255f, 0f };
-        float[] ballScales = { 1f, 1f, 1f, 1f };
-        float[] ballOffsets = { 255f, 255f, 255f, 0f };
-
-        int xOffset = 0;
-        int lifespan = animationCatchDuration == -1 ? CATCH_ANIMATION_LIFESPAN : animationCatchDuration;
-
-        // Turn white
-        if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3) {
-            pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255*(1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - .7f)));
-            ballScales[3] = 0;
-        }
-        // Transform into Pokeball
-        else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7) {
-           pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255;
-           pokeyScales[3] = ((animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
-           ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255;
-           ballScales[3] = (1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
-        }
-        // Restore color
-        else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN) {
-            pokeyScales[3] = 0;
-            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255*(animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.3f));
-        }
-        // Shake
-        else if (animationCatchDuration == -1 || animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN) {
-            pokeyScales[3] = 0;
-            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 0;
-            xOffset = (int)(10*Math.sin(animationCatch/200.0));
-        }
-        // Turn white -- didn't catch
-        else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7) {
-            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255*(1f - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - 0.7f)));
-            pokeyScales[3] = 0;
-        }
-        // Transform into Pokemon
-        else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3) {
-            pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255;
-            pokeyScales[3] = (1 - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
-            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255;
-            ballScales[3] = ((animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
-        }
-        // Restore color
-        else {
-            ballScales[3] = 0;
-            pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255*(animationCatch)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1.0f - .7f));
-        }
-
-        animationCatch -= Global.MS_BETWEEN_FRAMES;
-
-        BufferedImage pkBall = pkmTiles.getTile(0x11111);
-
-        int px = pokemonDrawLocation.x;
-        int py = pokemonDrawLocation.y;
-
-        g2d.drawImage(DrawUtils.colorImage(pkBall, ballScales, ballOffsets), px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight(), null);
-        g2d.drawImage(DrawUtils.colorImage(plyrImg, pokeyScales, pokeyOffsets), px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null);
+        animationCatchDuration = DrawUtils.transformAnimation(
+                g,
+                animationCatchDuration, CATCH_ANIMATION_LIFESPAN,
+                plyrImg,
+                pkmTiles.getTile(0x11111), // Pokeball image
+                pokemonDrawLocation
+        );
     }
 
     // hi :)
-    // TODO: is there any way to combine these?
     private void evolveAnimation(Graphics g, BufferedImage plyrImg, TileSet pkmTiles) {
-        Graphics2D g2d = (Graphics2D)g;
-
-        float[] prevEvolutionScales = { 1f, 1f, 1f, 1f };
-        float[] prevEvolutionOffsets = { 255f, 255f, 255f, 0f };
-        float[] evolutionScales = { 1f, 1f, 1f, 1f };
-        float[] evolutionOffsets = { 255f, 255f, 255f, 0f };
-
-        // Turn white
-        if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.7) {
-            prevEvolutionOffsets[0] = prevEvolutionOffsets[1] = prevEvolutionOffsets[2] = 255*(1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.7f)/(EVOLVE_ANIMATION_LIFESPAN*(1 - 0.7f)));
-            evolutionScales[3] = 0;
-        }
-        // Change form
-        else if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.3) {
-            prevEvolutionOffsets[0] = prevEvolutionOffsets[1] = prevEvolutionOffsets[2] = 255;
-            prevEvolutionScales[3] = ((animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
-            evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255;
-            evolutionScales[3] = (1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
-        }
-        // Restore color
-        else {
-            prevEvolutionScales[3] = 0;
-            evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255*(animationEvolve)/(EVOLVE_ANIMATION_LIFESPAN*(1-0.7f));
-        }
-
-        animationEvolve -= Global.MS_BETWEEN_FRAMES;
-
-        BufferedImage prevEvo = pkmTiles.getTile(oldState.imageNumber);
-
-        int px = pokemonDrawLocation.x;
-        int py = pokemonDrawLocation.y;
-
-        g2d.drawImage(DrawUtils.colorImage(plyrImg, evolutionScales, evolutionOffsets), px-plyrImg.getWidth()/2, py-plyrImg.getHeight(), null);
-        g2d.drawImage(DrawUtils.colorImage(prevEvo, prevEvolutionScales, prevEvolutionOffsets), px-prevEvo.getWidth()/2, py-prevEvo.getHeight(), null);
+        animationEvolve = DrawUtils.transformAnimation(
+                g,
+                animationEvolve,
+                EVOLVE_ANIMATION_LIFESPAN,
+                plyrImg,
+                pkmTiles.getTile(oldState.imageNumber),
+                pokemonDrawLocation);
     }
 
     private void drawHealthBar(Graphics g) {

@@ -74,6 +74,45 @@ public class DrawUtils {
         }
         return image;
     }
+
+    public static int transformAnimation(
+    		Graphics g,
+			int animationValue,
+			int animationLifespan,
+			BufferedImage first,
+			BufferedImage second,
+			Point drawLocation) {
+
+		float[] firstScales = { 1f, 1f, 1f, 1f };
+		float[] firstOffsets = { 255f, 255f, 255f, 0f };
+		float[] secondScales = { 1f, 1f, 1f, 1f };
+		float[] secondOffsets = { 255f, 255f, 255f, 0f };
+
+		// Turn white
+		if (animationValue > animationLifespan*0.7) {
+			firstOffsets[0] = firstOffsets[1] = firstOffsets[2] = 255*(1 - (animationValue - animationLifespan*0.7f)/(animationLifespan*(1 - 0.7f)));
+			secondScales[3] = 0;
+		}
+		// Change form
+		else if (animationValue > animationLifespan*0.3) {
+			firstOffsets[0] = firstOffsets[1] = firstOffsets[2] = 255;
+			firstScales[3] = ((animationValue - animationLifespan*0.3f)/(animationLifespan*(0.7f - 0.3f)));
+			secondOffsets[0] = secondOffsets[1] = secondOffsets[2] = 255;
+			secondScales[3] = (1 - (animationValue - animationLifespan*0.3f)/(animationLifespan*(0.7f - 0.3f)));
+		}
+		// Restore color
+		else {
+			firstScales[3] = 0;
+			secondOffsets[0] = secondOffsets[1] = secondOffsets[2] = 255*(animationValue)/(animationLifespan*(1-0.7f));
+		}
+
+		animationValue -= Global.MS_BETWEEN_FRAMES;
+
+		DrawUtils.drawBottomCenteredImage(g, DrawUtils.colorImage(first, secondScales, secondOffsets), drawLocation);
+		DrawUtils.drawBottomCenteredImage(g, DrawUtils.colorImage(second, firstScales, firstOffsets), drawLocation);
+
+		return animationValue;
+	}
 	
 	public static void drawCenteredString(Graphics g, String s, int x, int y, int width, int height) {
 		int centerX = x + width/2;
