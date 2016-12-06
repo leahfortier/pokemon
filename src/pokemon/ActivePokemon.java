@@ -201,10 +201,14 @@ public class ActivePokemon implements Serializable {
 	public int getTinyImageIndex() {
 		return this.isEgg ? PokemonInfo.EGG_IMAGE : pokemon.getNumber();
 	}
-	
-	// Larger image index
+
 	public int getImageIndex() {
-		return this.isEgg() ? PokemonInfo.EGG_IMAGE : this.pokemon.getImageNumber(this.isShiny());
+		return this.getImageIndex(true);
+	}
+
+	// Larger image index
+	public int getImageIndex(boolean front) {
+		return this.isEgg() ? PokemonInfo.EGG_IMAGE : this.pokemon.getImageNumber(this.isShiny(), front);
 	}
 	
 	public boolean isEgg() {

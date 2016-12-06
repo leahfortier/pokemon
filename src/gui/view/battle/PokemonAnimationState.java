@@ -1,6 +1,7 @@
 package gui.view.battle;
 
 import battle.effect.status.StatusCondition;
+import gui.GameData;
 import gui.TileSet;
 import gui.panel.DrawPanel;
 import main.Game;
@@ -135,7 +136,7 @@ class PokemonAnimationState {
         state.status = oldState.status = status;
         state.type = type;
         state.shiny = shiny;
-        state.imageNumber = pokemon.getImageNumber(state.shiny);
+        state.imageNumber = pokemon.getImageNumber(state.shiny, !isPlayer);
         state.caught = battleView.getCurrentBattle().isWildBattle() && Game.getPlayer().getPokedex().isCaught(pokemon.namesies());
         state.name = name;
         state.maxHp = oldState.maxHp = maxHP;
@@ -176,7 +177,7 @@ class PokemonAnimationState {
             }
         }
 
-        state.imageNumber = newPokemon.getImageNumber(state.shiny);
+        state.imageNumber = newPokemon.getImageNumber(state.shiny, !isPlayer);
         animationCatchDuration = 0;
     }
 
@@ -311,8 +312,7 @@ class PokemonAnimationState {
 
         animationEvolve -= Global.MS_BETWEEN_FRAMES;
 
-        int isEnemy = isPlayer ? 0 : 1;
-        BufferedImage prevEvo = pkmTiles.getTile(oldState.imageNumber + (isEnemy^1));
+        BufferedImage prevEvo = pkmTiles.getTile(oldState.imageNumber);
 
         int px = pokemonDrawLocation.x;
         int py = pokemonDrawLocation.y;
@@ -370,27 +370,16 @@ class PokemonAnimationState {
             animationExp = 0;
         }
 
-        if (isPlayer) {
-            expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, expRatio);
-        }
+        expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, expRatio);
     }
 
-    // Draws the status box, not including the text
-    void drawStatusBox(Graphics g, ActivePokemon pokemon, TileSet pkmTiles) {
-
-        // Draw the colored type polygons
-        this.statusBox.withBackgroundColors(Type.getColors(state.type)).drawBackground(g);
-
-        // Draw health bar and player's EXP Bar
-        drawHealthBar(g);
-        if (isPlayer) {
-            drawExpBar(g);
-        }
-
+    private void drawPokemon(Graphics g, ActivePokemon pokemon) {
         // Draw the Pokemon image if applicable
         if (!isEmpty() && !pokemon.isSemiInvulnerable()) {
-            int isEnemy = isPlayer ? 0 : 1;
-            BufferedImage plyrImg = pkmTiles.getTile(state.imageNumber + (isEnemy^1));
+            GameData data = Game.getData();
+            TileSet pkmTiles = isPlayer ? data.getPokemonTilesLarge() : data.getPokemonTilesMedium();
+
+            BufferedImage plyrImg = pkmTiles.getTile(state.imageNumber);
             if (plyrImg != null) {
                 if (animationEvolve > 0) {
                     evolveAnimation(g, plyrImg, pkmTiles);
@@ -409,6 +398,21 @@ class PokemonAnimationState {
                     animationCatch = 0;
                 }
             }
+        }
+    }
+
+    // Draws the status box, not including the text
+    void drawStatusBox(Graphics g, ActivePokemon pokemon) {
+
+        drawPokemon(g, pokemon);
+
+        // Draw the colored type polygons
+        this.statusBox.withBackgroundColors(Type.getColors(state.type)).drawBackground(g);
+
+        // Draw health bar and player's EXP Bar
+        drawHealthBar(g);
+        if (isPlayer) {
+            drawExpBar(g);
         }
 
         // Name and gender in top left
@@ -439,12 +443,10 @@ class PokemonAnimationState {
 
         // Show whether or not the wild Pokemon has already been caught
         if (!isPlayer && state.caught) {
-            int hpLeft = hpBar.x + hpBar.width;
-
             DrawUtils.drawCenteredImage(
                     g,
                     Game.getData().getBattleTiles().getTile(0x4),
-                    hpLeft + (STATUS_BOX_SPACING - statusBox.getBorderSize())/2,
+                    hpBar.x + hpBar.width + (STATUS_BOX_SPACING - statusBox.getBorderSize())/2,
                     hpBar.y + hpBar.height/2
             );
         }

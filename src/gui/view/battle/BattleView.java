@@ -290,8 +290,8 @@ public class BattleView extends View {
 		}
 		
 		// Draw Status Box Backgrounds
-		playerAnimation.drawStatusBox(g, player, data.getPokemonTilesLarge());
-		enemyAnimation.drawStatusBox(g, opponent, data.getPokemonTilesMedium());
+		playerAnimation.drawStatusBox(g, player);
+		enemyAnimation.drawStatusBox(g, opponent);
 		
 		g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		

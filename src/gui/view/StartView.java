@@ -127,7 +127,7 @@ class StartView extends View {
 			case DEFAULT:
 				g.drawImage(trainerTiles.getTile(0x58), 200, 200, null);
 				if (ditto) {
-					g.drawImage(pokemonTiles.getTile(PokemonInfo.getPokemonInfo(PokemonNamesies.DITTO).getImageNumber(false)), 270, 255, null);
+					g.drawImage(pokemonTiles.getTile(PokemonInfo.getPokemonInfo(PokemonNamesies.DITTO).getImageNumber()), 270, 255, null);
 				}
 				break;
 			case NAME:
