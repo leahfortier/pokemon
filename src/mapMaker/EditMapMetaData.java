@@ -90,8 +90,8 @@ public class EditMapMetaData {
         FileIO.createFolder(mapFolderPath);
 
         for (MapDataType dataType : MapDataType.values()) {
-            File mapFile = new File(mapFolderPath + dataType.getImageName(this.currentMapName));
-            FileIO.writeImage(this.getMapImage(dataType), mapFile);
+            String mapFileName = mapFolderPath + dataType.getImageName(this.currentMapName);
+            FileIO.writeImage(this.getMapImage(dataType), mapFileName);
         }
 
         // Save all triggers

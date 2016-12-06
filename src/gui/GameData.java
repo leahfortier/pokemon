@@ -31,17 +31,17 @@ public class GameData {
 	}
 
 	private void loadTiles() {
-		mapTiles = new TileSet("mapTiles", 1.0f);
-		battleTiles = new TileSet("battleViewTiles", 1.0f);
+		mapTiles = new TileSet("mapTiles");
+		battleTiles = new TileSet("battleViewTiles");
 		pokemonTilesLarge = new TileSet("pokemonTiles", 2.9f);
 		pokemonTilesMedium = new TileSet("pokemonTiles", 2.3f);
-		pokemonTilesSmall = new TileSet("pokemonTiles", 1.0f);
-		pauseMenuTiles = new TileSet("pauseViewTiles", 1.0f);
-		itemTiles = new TileSet("itemTiles", 1.0f);
-		trainerTiles = new TileSet("trainerTiles", 1.0f);
-		partyTiles = new TileSet("partyTiles", 1.0f);
-		mainMenuTiles = new TileSet("mainMenuTiles", 1.0f);
-		bagTiles = new TileSet("bagTiles", 1.0f);
+		pokemonTilesSmall = new TileSet("pokemonTiles");
+		pauseMenuTiles = new TileSet("pauseViewTiles");
+		itemTiles = new TileSet("itemTiles");
+		trainerTiles = new TileSet("trainerTiles");
+		partyTiles = new TileSet("partyTiles");
+		mainMenuTiles = new TileSet("mainMenuTiles");
+		bagTiles = new TileSet("bagTiles");
 	}
 
 	private void loadMaps() {

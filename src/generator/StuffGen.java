@@ -1,8 +1,8 @@
 package generator;
 
 import main.Global;
-import pokemon.PokemonNamesies;
 import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import util.FileIO;
 import util.FileName;
 import util.Folder;

@@ -51,6 +51,10 @@ public class FileIO {
 		}
 	}
 
+	public static void writeImage(BufferedImage image, String fileName) {
+		writeImage(image, new File(fileName));
+	}
+
 	public static void writeImage(BufferedImage image, File file) {
 		try {
 			ImageIO.write(image, "png", file);

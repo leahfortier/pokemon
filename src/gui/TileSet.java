@@ -15,21 +15,23 @@ public class TileSet {
 	public static final int INVALID_RGB = -1000;
 
 	private static final BufferedImage IMAGE_NOT_FOUND = FileIO.readImage(Folder.REC + "imageNotFound.png");
-	
-	public String name;
+
 	private Map<Integer, BufferedImage> map;
 	private Map<Integer, String> indexMap;
 	private float scale;
 	private String folderPath;
 
-	public TileSet(String name, float scale) {
-		this.name = name;
+	public TileSet(String folderName) {
+		this(folderName, 1.0f);
+	}
+
+	public TileSet(String folderName, float scale) {
 		this.scale = scale;
 		
 		this.map = new HashMap<>();
 		this.indexMap = new HashMap<>();
 		
-		this.folderPath = FileIO.makeFolderPath(Folder.TILES, this.name);
+		this.folderPath = FileIO.makeFolderPath(Folder.TILES, folderName);
 		
 		String indexFileName = FileName.getIndexFileName(this.folderPath);
 		Scanner in = FileIO.openFile(indexFileName);
@@ -43,13 +45,13 @@ public class TileSet {
 		in.close();
 	}
 
-	private BufferedImage scaleImage(BufferedImage img, float s) {
-		if (s == 1.0f) {
+	private BufferedImage scaleImage(BufferedImage img, float scale) {
+		if (scale == 1.0f) {
 			return img;	
 		}
 		
-		Image tmp = img.getScaledInstance((int) (img.getWidth()*s), (int) (img.getHeight()*s), /* BufferedImage.SCALE_FAST*/ BufferedImage.SCALE_SMOOTH);
-		BufferedImage buffer = new BufferedImage((int) (img.getWidth()*s), (int) (img.getHeight()*s), BufferedImage.TYPE_INT_ARGB);
+		Image tmp = img.getScaledInstance((int) (img.getWidth()*scale), (int) (img.getHeight()*scale), BufferedImage.SCALE_SMOOTH);
+		BufferedImage buffer = new BufferedImage((int) (img.getWidth()*scale), (int) (img.getHeight()*scale), BufferedImage.TYPE_INT_ARGB);
 		
 		buffer.getGraphics().drawImage(tmp, 0, 0, null);
 		
@@ -58,8 +60,6 @@ public class TileSet {
 
 	private void loadImage(int val) {
 		String fileName = indexMap.get(val);
-		// System.out.println(fileName + " -> " + val);
-		
 		BufferedImage image = FileIO.readImage(this.folderPath + fileName);
 		
 		image = scaleImage(image, scale);
@@ -76,11 +76,11 @@ public class TileSet {
 			loadImage(val);
 			indexMap.remove(val); // so it doesn't try to reload it
 		}
-		
+
 		if (map.containsKey(val)) {
 			return map.get(val);
 		}
-		
+
 		return IMAGE_NOT_FOUND;
 	}
 }
