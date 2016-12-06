@@ -53,13 +53,14 @@ public class PokemonState implements VisualStateHandler {
     public PokemonState() {
         pokemonPanel = new DrawPanel(30, 224, 357, 346)
                 .withTransparentBackground()
+                .withBorderPercentage(0)
                 .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP)));
 
         int sidePanelWidth = 141;
         int spacing = (pokemonPanel.width - 2*sidePanelWidth)/3;
 
         basicInformationPanel = new DrawPanel(pokemonPanel.x + spacing, pokemonPanel.y + spacing, pokemonPanel.width - 2*spacing, 64)
-                .withTransparentBackground()
+                .withFullTransparency()
                 .withBlackOutline();
 
         int movesPanelHeight = 193;
@@ -68,7 +69,7 @@ public class PokemonState implements VisualStateHandler {
                 pokemonPanel.y + pokemonPanel.height - spacing - movesPanelHeight,
                 sidePanelWidth,
                 movesPanelHeight)
-                .withTransparentBackground()
+                .withFullTransparency()
                 .withBlackOutline();
 
         fakeMoveButtons = movesPanel.getButtons(125, 40, Move.MAX_MOVES, 1);
@@ -91,7 +92,7 @@ public class PokemonState implements VisualStateHandler {
                 basicInformationPanel.y + basicInformationPanel.height + statsPanelSpacing + barHeight,
                 sidePanelWidth,
                 statsPanelHeight)
-                .withTransparentBackground()
+                .withFullTransparency()
                 .withBlackOutline();
 
         expBar = new DrawPanel(
@@ -160,10 +161,10 @@ public class PokemonState implements VisualStateHandler {
         ActivePokemon selectedPkm = list.get(selectedPokemonTab);
 
         // Draw type color polygons
-        pokemonPanel.drawTypeColors(g, Type.getColors(selectedPkm));
+        pokemonPanel.withBackgroundColors(Type.getColors(selectedPkm));
 
         if (!selectedPkm.canFight()) {
-            pokemonPanel.greyOut(g);
+            pokemonPanel.greyOut();
         }
 
         pokemonPanel.drawBackground(g);

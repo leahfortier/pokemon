@@ -29,9 +29,21 @@ public class DrawUtils {
 			return new Color(35, 238, 91);
 		}
 	}
+
+	public static void drawBottomCenteredImage(Graphics g, BufferedImage image, Point center) {
+		g.drawImage(
+				image,
+				center.x - image.getWidth()/2,
+				center.y - image.getHeight(),
+				null);
+	}
 	
 	public static void drawCenteredImage(Graphics g, BufferedImage image, int x, int y) {
-		g.drawImage(image, x - image.getWidth()/2, y - image.getHeight()/2, null);
+		g.drawImage(
+				image,
+				x - image.getWidth()/2,
+				y - image.getHeight()/2,
+				null);
 	}
 
 	public static BufferedImage colorImage(BufferedImage image, float[] scale, float[] offset) {
@@ -116,26 +128,14 @@ public class DrawUtils {
 		
 		g.drawString(s, leftX, y);
 	}
-	
+
 	// Draws a string with a shadow behind it the specified location
-	public static void drawShadowText(Graphics g, String text, int x, int y, boolean rightAligned) {
+	public static void drawShadowText(Graphics g, String text, int x, int y, Alignment alignment) {
 		g.setColor(new Color(128, 128, 128, 128));
-		
-		if (rightAligned) {
-			DrawUtils.drawRightAlignedString(g, text, x, y);
-		}
-		else {
-			g.drawString(text, x, y);
-		}
-		
-		g.setColor(Color.DARK_GRAY);
-		
-		if (rightAligned) {
-			DrawUtils.drawRightAlignedString(g, text, x - 2, y - 2);
-		}
-		else {
-			g.drawString(text, x - 2, y - 2);
-		}
+		alignment.drawString(g, text, x + 2, y + 2);
+
+		g.setColor(Color.BLACK);
+		alignment.drawString(g, text, x, y);
 	}
 
 	private static int getTextWidth(final String text, final int fontSize) {

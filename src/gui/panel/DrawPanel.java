@@ -20,10 +20,15 @@ public class DrawPanel {
 
     private Color backgroundColor;
     private Color borderColor;
+    private Color secondBackgroundColor;
 
     private Direction[] outlineDirections;
 
     private boolean transparentBackground;
+    private boolean greyOut;
+
+    private boolean onlyTransparency;
+    private int transparentCount;
 
     public DrawPanel(int x, int y, int width, int height) {
         this.x = x;
@@ -37,6 +42,8 @@ public class DrawPanel {
         this.borderColor = Color.LIGHT_GRAY;
 
         this.outlineDirections = new Direction[0];
+
+        this.transparentCount = 1;
     }
 
     public DrawPanel withBorderColor(Color borderColor) {
@@ -49,13 +56,29 @@ public class DrawPanel {
         return this;
     }
 
+    public DrawPanel withBackgroundColors(Color[] backgroundColors) {
+        this.backgroundColor = backgroundColors[0];
+        this.secondBackgroundColor = backgroundColors[1];
+        return this;
+    }
+
+    public DrawPanel withTransparentCount(int transparentCount) {
+        this.transparentCount = transparentCount;
+        return this.withTransparentBackground();
+    }
+
+    public DrawPanel withFullTransparency() {
+        this.onlyTransparency = true;
+        return this.withTransparentBackground().withBorderPercentage(0);
+    }
+
     public DrawPanel withTransparentBackground() {
-        return this.withTransparentBackground(null);
+        this.transparentBackground = true;
+        return this;
     }
 
     public DrawPanel withTransparentBackground(Color backgroundColor) {
-        this.transparentBackground = true;
-        return this.withBackgroundColor(backgroundColor);
+        return this.withTransparentBackground().withBackgroundColor(backgroundColor);
     }
 
     public DrawPanel withBorderPercentage(int borderPercentage) {
@@ -68,12 +91,17 @@ public class DrawPanel {
         return this;
     }
 
+    public DrawPanel greyOut() {
+        this.greyOut = true;
+        return this;
+    }
+
     public DrawPanel withBlackOutline(Collection<Direction> directions) {
         this.outlineDirections = directions.toArray(new Direction[0]);
         return this;
     }
 
-    private int getBorderSize() {
+    public int getBorderSize() {
         if (transparentBackground && backgroundColor == null) {
             return 0;
         }
@@ -82,24 +110,26 @@ public class DrawPanel {
     }
 
     // NOTE: This only works for panels where the width is greater than the height
-    public void drawTypeColors(Graphics g, Color[] typeColors) {
+    private void drawDualColoredBackground(Graphics g) {
         int smallWidth = (width - height)/2;
         int largeWidth = width - smallWidth;
 
         g.translate(x, y);
 
         // (0, 0) -> (largeWidth, 0) -> (smallWidth, height) -> (0, height) -> (0, 0)
-        g.setColor(typeColors[0]);
+        g.setColor(backgroundColor);
         g.fillPolygon(new int[] { 0, largeWidth, smallWidth, 0 }, new int[] { 0, 0, height, height }, 4);
 
         // (largeWidth, 0) -> (smallWidth, height) -> (width, height) -> (width, 0) -> (largeWidth, 0)
-        g.setColor(typeColors[1]);
+        g.setColor(secondBackgroundColor);
         g.fillPolygon(new int[] { largeWidth, smallWidth, width, width }, new int[] { 0, height, height, 0 }, 4);
 
         g.translate(-x, -y);
     }
 
     public void fillBar(Graphics g, Color color, double ratio) {
+        ratio = Math.min(1, ratio);
+
         fillTransparent(g);
 
         g.setColor(color);
@@ -116,24 +146,30 @@ public class DrawPanel {
         DrawUtils.blackOutline(g, x, y, width, height, outlineDirections);
     }
 
-    public void greyOut(Graphics g) {
-        DrawUtils.greyOut(g, x, y, width, height);
-    }
-
     public void drawBackground(Graphics g) {
-        if (transparentBackground && backgroundColor == null) {
-            fillTransparent(g);
-        } else {
-            g.setColor(backgroundColor);
-            g.fillRect(x, y, width, height);
-
-            int borderSize = this.getBorderSize();
-
-            if (transparentBackground) {
-                DrawUtils.fillTransparent(g, x + borderSize, y + borderSize, width - 2*borderSize, height - 2*borderSize);
+        // If not full transparency, draw the background colors
+        if (!onlyTransparency) {
+            if (secondBackgroundColor == null) {
+                g.setColor(backgroundColor);
+                g.fillRect(x, y, width, height);
             } else {
-                DrawUtils.drawBorder(g, borderColor, x, y, width, height, borderSize);
+                drawDualColoredBackground(g);
             }
+        }
+
+        if (greyOut) {
+            DrawUtils.greyOut(g, x, y, width, height);
+            greyOut = false;
+        }
+
+        int borderSize = this.getBorderSize();
+        if (transparentBackground) {
+
+            for (int i = 0; i < transparentCount; i++) {
+                DrawUtils.fillTransparent(g, x + borderSize, y + borderSize, width - 2*borderSize, height - 2*borderSize);
+            }
+        } else {
+            DrawUtils.drawBorder(g, borderColor, x, y, width, height, borderSize);
         }
 
         blackOutline(g);

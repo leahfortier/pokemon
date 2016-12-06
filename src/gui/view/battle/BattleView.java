@@ -52,8 +52,8 @@ public class BattleView extends View {
 	private Move learnedMove;
 	
 	public BattleView() {
-		playerAnimation = new PokemonAnimationState(this);
-		enemyAnimation = new PokemonAnimationState(this);
+		playerAnimation = new PokemonAnimationState(this, true);
+		enemyAnimation = new PokemonAnimationState(this, false);
 
 		fullMessagePanel = new DrawPanel(0, 440, 800, 161).withBlackOutline();
 		menuMessagePanel = new DrawPanel(415, 440, 385, 161).withBorderColor(new Color(53, 53, 129));
@@ -290,25 +290,8 @@ public class BattleView extends View {
 		}
 		
 		// Draw Status Box Backgrounds
-		g.translate(463,  304);
-		playerAnimation.drawStatusBox(g, 0, player, data.getPokemonTilesLarge(), 190 - 463, 412 - 304);
-		g.translate(-463, -304);
-
-		g.translate(42, 52);
-		enemyAnimation.drawStatusBox(g, 1, opponent, data.getPokemonTilesMedium(), 565, 185);
-		g.translate(-42, -52);
-
-		// Draw Status Box Foregrounds
-		g.drawImage(tiles.getTile(1), 0, 0, null);
-		
-		// Draw Status Box Text
-		g.translate(463,  304);
-		playerAnimation.drawStatusBoxText(g, 0, tiles);
-		g.translate(-463, -304);
-		
-		g.translate(42,  52);
-		enemyAnimation.drawStatusBoxText(g, 1, tiles);
-		g.translate(-42, -52);
+		playerAnimation.drawStatusBox(g, player, data.getPokemonTilesLarge());
+		enemyAnimation.drawStatusBox(g, opponent, data.getPokemonTilesMedium());
 		
 		g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		

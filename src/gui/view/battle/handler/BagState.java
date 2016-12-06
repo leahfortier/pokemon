@@ -55,10 +55,10 @@ public class BagState implements VisualStateHandler {
     private ItemNamesies selectedItem;
 
     public BagState() {
-        bagCategoryPanel = new DrawPanel(30, 190 + 28, 357, 287 - 28)
+        bagCategoryPanel = new DrawPanel(30, 218, 357, 259)
                 .withBorderPercentage(6);
 
-        lastItemPanel = new DrawPanel(30, 492, 357, 78)
+        lastItemPanel = new DrawPanel(bagCategoryPanel.x, 492, bagCategoryPanel.width, 78)
                 .withBorderPercentage(17)
                 .withBlackOutline();
 
@@ -67,19 +67,19 @@ public class BagState implements VisualStateHandler {
 
         bagTabButtons = new Button[BATTLE_BAG_CATEGORIES.length];
         for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
-            bagButtons[i] = bagTabButtons[i] = new Button(
-                    i*89 + 30,
-                    190,
-                    89,
+            bagButtons[i] = bagTabButtons[i] = Button.createTabButton(
+                    i,
+                    bagCategoryPanel.x,
+                    bagCategoryPanel.y,
+                    bagCategoryPanel.width,
                     28,
-                    ButtonHoverAction.BOX,
+                    bagTabButtons.length,
                     new int[] {
                             Button.basicTransition(i, 1, BATTLE_BAG_CATEGORIES.length, Direction.RIGHT), // Right
                             LAST_ITEM_BUTTON, // Up
                             Button.basicTransition(i, 1, BATTLE_BAG_CATEGORIES.length, Direction.LEFT), // Left
                             ITEMS  // Down
-                    }
-            );
+                    });
         }
 
         bagButtons[BAG_LEFT_BUTTON] = bagLeftButton = new Button(135, 435, 35, 20, ButtonHoverAction.BOX, new int[] {BAG_RIGHT_BUTTON, ITEMS + ITEMS_PER_PAGE - 2, -1, LAST_ITEM_BUTTON});

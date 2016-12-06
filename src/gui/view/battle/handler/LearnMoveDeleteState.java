@@ -65,17 +65,17 @@ public class LearnMoveDeleteState implements VisualStateHandler {
     public void update(BattleView view) {
         view.setSelectedButton(buttons);
 
-        for (int y = 0; y < 2; y++) {
-            for (int x = 0; x < Move.MAX_MOVES/2; x++) {
+        for (int y = 0, moveIndex = 0; y < 2; y++) {
+            for (int x = 0; x < Move.MAX_MOVES/2; x++, moveIndex++) {
                 int index = Point.getIndex(x, y, NUM_COLS);
                 if (buttons[index].checkConsumePress()) {
-                    // TODO: To fix that awful shitty shit see if we can utilize to new add to front method here
-                    view.getLearnedPokemon().addMove(view.getCurrentBattle(), view.getLearnedMove(), index);
+                    // TODO: To fix that awful shitty shit see if we can utilize to new add to front method
+                    view.getLearnedPokemon().addMove(view.getCurrentBattle(), view.getLearnedMove(), moveIndex);
 
                     // This is all done really silly, so we need to do this
                     MessageUpdate message = Messages.getNextMessage();
                     for (int j = 0; j < Move.MAX_MOVES; j++) {
-                        if (j == index) {
+                        if (j == moveIndex) {
                             message = Messages.getNextMessage();
                         }
                         else {
