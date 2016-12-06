@@ -11,6 +11,8 @@ import java.awt.Graphics;
 import java.util.Collection;
 
 public class DrawPanel {
+    private static final DrawPanel fullMessagePanel = new DrawPanel(0, 440, 800, 161).withBlackOutline();
+
     public final int x;
     public final int y;
     public final int width;
@@ -205,7 +207,7 @@ public class DrawPanel {
         return this.getBorderSize() + FontMetrics.getDistanceBetweenRows(g)/2;
     }
 
-    public void drawMessage(Graphics g, int fontSize, String text) {
+    public int drawMessage(Graphics g, int fontSize, String text) {
         g.setColor(Color.BLACK);
 
         FontMetrics.setFont(g, fontSize);
@@ -216,7 +218,7 @@ public class DrawPanel {
 
         int textWidth = width - 2*textSpace;
 
-        DrawUtils.drawWrappedText(g, text, startX, startY, textWidth);
+        return DrawUtils.drawWrappedText(g, text, startX, startY, textWidth);
     }
 
     public void drawLeftLabel(Graphics g, int fontSize, String label) {
@@ -225,5 +227,14 @@ public class DrawPanel {
 
         FontMetrics.setFont(g, fontSize);
         DrawUtils.drawCenteredHeightString(g, label, startX, centerY);
+    }
+
+    public static int drawFullMessagePanel(Graphics g, String text) {
+        fullMessagePanel.drawBackground(g);
+        return fullMessagePanel.drawMessage(g, 30, text);
+    }
+
+    public static Button[] getFullPanelButtons(int buttonWidth, int buttonHeight, int numRows, int numCols) {
+        return fullMessagePanel.getButtons(buttonWidth, buttonHeight, numRows, numCols);
     }
 }

@@ -65,6 +65,10 @@ public class FileIO {
 	}
 
 	public static BufferedImage readImage(String fileName) {
+		if (!fileName.endsWith(".png")) {
+			fileName += ".png";
+		}
+
 		File file = new File(fileName);
 		return readImage(file);
 	}

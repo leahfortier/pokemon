@@ -3,6 +3,7 @@ package gui;
 import main.Global;
 import map.MapData;
 import map.triggers.Trigger;
+import util.FileIO;
 import util.Folder;
 
 import java.io.File;
@@ -23,7 +24,6 @@ public class GameData {
 	private TileSet pauseMenuTiles;
 	private TileSet partyTiles;
 	private TileSet mainMenuTiles;
-	private TileSet bagTiles;
 
 	public void loadData() {
 		loadTiles();
@@ -31,17 +31,16 @@ public class GameData {
 	}
 
 	private void loadTiles() {
-		mapTiles = new TileSet("mapTiles");
-		battleTiles = new TileSet("battleViewTiles");
-		pokemonTilesLarge = new TileSet("pokemonTiles", 2.9f);
-		pokemonTilesMedium = new TileSet("pokemonTiles", 2.3f);
-		pokemonTilesSmall = new TileSet("pokemonTiles");
-		pauseMenuTiles = new TileSet("pauseViewTiles");
-		itemTiles = new TileSet("itemTiles");
-		trainerTiles = new TileSet("trainerTiles");
-		partyTiles = new TileSet("partyTiles");
-		mainMenuTiles = new TileSet("mainMenuTiles");
-		bagTiles = new TileSet("bagTiles");
+		mapTiles = new TileSet(Folder.MAP_TILES);
+		battleTiles = new TileSet(Folder.BATTLE_TILES);
+		pokemonTilesLarge = new TileSet(Folder.POKEMON_TILES, 2.9f);
+		pokemonTilesMedium = new TileSet(Folder.POKEMON_TILES, 2.3f);
+		pokemonTilesSmall = new TileSet(Folder.POKEMON_TILES);
+		pauseMenuTiles = new TileSet(FileIO.makeFolderPath(Folder.TILES, "pauseViewTiles"));
+		itemTiles = new TileSet(Folder.ITEM_TILES);
+		trainerTiles = new TileSet(Folder.TRAINER_TILES);
+		partyTiles = new TileSet(Folder.PARTY_TILES);
+		mainMenuTiles = new TileSet(FileIO.makeFolderPath(Folder.TILES, "mainMenuTiles"));
 	}
 
 	private void loadMaps() {
@@ -125,9 +124,5 @@ public class GameData {
 
 	public TileSet getMainMenuTiles() {
 		return mainMenuTiles;
-	}
-
-	public TileSet getBagTiles() {
-		return bagTiles;
 	}
 }

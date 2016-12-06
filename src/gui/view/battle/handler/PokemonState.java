@@ -218,14 +218,13 @@ public class PokemonState implements VisualStateHandler {
             g.drawString(levelStr, 220, 269);
 
             // Draw type tiles
-            TileSet tiles = Game.getData().getBattleTiles();
             Type[] type = selectedPkm.getActualType();
             if (type[1] == Type.NO_TYPE) {
-                g.drawImage(tiles.getTile(type[0].getImageIndex()), 322, 255, null);
+                g.drawImage(type[0].getImage(), 322, 255, null);
             }
             else {
-                g.drawImage(tiles.getTile(type[0].getImageIndex()), 285, 255, null);
-                g.drawImage(tiles.getTile(type[1].getImageIndex()), 322, 255, null);
+                g.drawImage(type[0].getImage(), 285, 255, null);
+                g.drawImage(type[1].getImage(), 322, 255, null);
             }
 
             // Ability
@@ -284,7 +283,7 @@ public class PokemonState implements VisualStateHandler {
                 // Draw PP amount
                 DrawUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 118, 33);
 
-                BufferedImage categoryImage = tiles.getTile(move.getAttack().getCategory().getImageNumber());
+                BufferedImage categoryImage = move.getAttack().getCategory().getImage();
                 g.drawImage(categoryImage, 7, 21, null);
 
                 g.translate(-dx, -dy);

@@ -2,6 +2,7 @@ package gui.view;
 
 import gui.GameData;
 import gui.TileSet;
+import gui.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -92,7 +93,6 @@ class EvolutionView extends View {
 		final GameData data = Game.getData();
 
 		TileSet tiles = data.getMenuTiles();
-		TileSet battleTiles = data.getBattleTiles();
 		TileSet pokemonTiles = data.getPokemonTilesMedium();
 		
 		g.drawImage(tiles.getTile(0x2), 0, 0, null);
@@ -119,9 +119,7 @@ class EvolutionView extends View {
 		}
 		
 		if (message != null) {
-			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
-			FontMetrics.setFont(g, 30);
-			DrawUtils.drawWrappedText(g, message, 30, 490, 750);
+			DrawPanel.drawFullMessagePanel(g, message);
 		}
 	}
 	

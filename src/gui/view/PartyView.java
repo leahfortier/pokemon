@@ -121,7 +121,6 @@ class PartyView extends View {
 		GameData data = Game.getData();
 
 		TileSet tiles = data.getMenuTiles();
-		TileSet typeTiles = data.getBattleTiles();
 		
 		// Background
 		g.drawImage(tiles.getTile(0x2), 0, 0, null);
@@ -179,11 +178,11 @@ class PartyView extends View {
 			
 			// Type Tiles
 			if (type[1] == Type.NO_TYPE) {
-				g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 687, 133, null);
+				g.drawImage(type[0].getImage(), 687, 133, null);
 			}
 			else {
-				g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 647, 133, null);
-				g.drawImage(typeTiles.getTile(type[1].getImageIndex()), 687, 133, null);
+				g.drawImage(type[0].getImage(), 647, 133, null);
+				g.drawImage(type[1].getImage(), 687, 133, null);
 			}
 			
 			FontMetrics.setFont(g, 16);
@@ -301,10 +300,10 @@ class PartyView extends View {
 					g.drawString("Power:", 133, 32);
 					DrawUtils.drawRightAlignedString(g, move.getAttack().getPowerString(), 205, 32);
 					
-					BufferedImage typeImage = typeTiles.getTile(move.getAttack().getActualType().getImageIndex());
+					BufferedImage typeImage = move.getAttack().getActualType().getImage();
 					g.drawImage(typeImage, 241, 4, null);
-					
-					BufferedImage categoryImage = typeTiles.getTile(move.getAttack().getCategory().getImageNumber());
+
+					BufferedImage categoryImage = move.getAttack().getCategory().getImage();
 					g.drawImage(categoryImage, 241, 20, null);
 				}
 				

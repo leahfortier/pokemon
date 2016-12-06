@@ -120,7 +120,6 @@ class PokedexView extends View {
 		GameData data = Game.getData();
 
 		TileSet tiles = data.getMenuTiles();
-		TileSet typeTiles = data.getBattleTiles();
 		TileSet partyTiles = data.getPartyTiles();
 		TileSet pokemonTiles = data.getPokemonTilesSmall();
 		
@@ -154,7 +153,7 @@ class PokedexView extends View {
 					DrawUtils.drawCenteredImage(g, pkmImg, 20, 20);
 					
 					if (pokedex.isCaught(p.namesies())) {
-						g.drawImage(typeTiles.getTile(0x4), 28, 28, null);
+						g.drawImage(TileSet.TINY_POKEBALL, 28, 28, null);
 					}
 				}
 				
@@ -215,10 +214,10 @@ class PokedexView extends View {
 		if (!notSeen) {
 			FontMetrics.setFont(g, 16);
 			g.drawString("Type:", 541, 110);
-			
-			g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 596, 98, null);
+
+			g.drawImage(type[0].getImage(), 596, 98, null);
 			if (type[1] != Type.NO_TYPE) {
-				g.drawImage(typeTiles.getTile(type[1].getImageIndex()), 596 + 707 - 669, 98, null);
+				g.drawImage(type[1].getImage(), 596 + 707 - 669, 98, null);
 			}
 			
 			g.drawString((!caught ? "???" : selected.getClassification()) + " " + PokeString.POKEMON, 427, 179);

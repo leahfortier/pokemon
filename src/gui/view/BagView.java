@@ -6,6 +6,7 @@ import gui.Button;
 import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
+import gui.panel.DrawPanel;
 import item.Item;
 import item.ItemNamesies;
 import item.bag.Bag;
@@ -356,8 +357,6 @@ class BagView extends View {
 		TileSet tiles = data.getMenuTiles();
 		TileSet itemTiles = data.getItemTiles();
 		TileSet partyTiles = data.getPartyTiles();
-		TileSet bagTiles = data.getBagTiles();
-		TileSet battleTiles = data.getBattleTiles();
 		
 		Bag bag = player.getBag();
 		List<ActivePokemon> team = player.getTeam();
@@ -461,8 +460,8 @@ class BagView extends View {
 				
 				g.drawImage(tiles.getTile(0x25), 0, 0, null);
 				
-				g.drawImage(battleTiles.getTile(m.getAttack().getActualType().getImageIndex()), 254, 14, null);
-				g.drawImage(battleTiles.getTile(m.getAttack().getCategory().getImageNumber()), 254, 33, null);
+				g.drawImage(m.getAttack().getActualType().getImage(), 254, 14, null);
+				g.drawImage(m.getAttack().getCategory().getImage(), 254, 33, null);
 				
 				g.setColor(Color.BLACK);
 				FontMetrics.setFont(g, 14);
@@ -549,20 +548,15 @@ class BagView extends View {
 			}
 			
 			g.setColor(Color.BLACK);
-			
-			BufferedImage img = bagTiles.getTile(CATEGORIES[i].getImageNumber());
-			DrawUtils.drawCenteredImage(g, img, 16, 26);
-			g.drawString(CATEGORIES[i].getName(), 30, 30);
+
+			DrawUtils.drawCenteredImage(g, CATEGORIES[i].getIcon(), 16, 26);
+			g.drawString(CATEGORIES[i].getDisplayName(), 30, 30);
 			
 			g.translate(-tabButtons[i].x, -tabButtons[i].y);
 		}
 		
 		if (message != null) {
-			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
-			g.setColor(Color.BLACK);
-			
-			FontMetrics.setFont(g, 30);
-			DrawUtils.drawWrappedText(g, message.getMessage(), 30, 490, 750);
+			DrawPanel.drawFullMessagePanel(g, message.getMessage());
 		}
 		else {
 			for (Button button : buttons) {

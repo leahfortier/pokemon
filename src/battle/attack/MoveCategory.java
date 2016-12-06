@@ -1,26 +1,25 @@
 package battle.attack;
 
+import util.FileIO;
+import util.Folder;
+import util.StringUtils;
+
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
 public enum MoveCategory implements Serializable {
-    PHYSICAL(0x23),
-    SPECIAL(0x24),
-    STATUS(0x25);
+    PHYSICAL,
+    SPECIAL,
+    STATUS;
 
-    private String name;
-    private int imageNumber;
+    private BufferedImage image;
 
-    MoveCategory(int imgNum) {
-        imageNumber = imgNum;
-        // TODO: I think there's a method that does this already and if there isn't then there should be
-        name = name().charAt(0) + name().substring(1).toLowerCase();
+    MoveCategory() {
+        String imageName = "MoveCategory" + StringUtils.properCase(this.name().toLowerCase());
+        this.image = FileIO.readImage(Folder.ATTACK_TILES + imageName);
     }
 
-    public String toString() {
-        return name;
-    }
-
-    public int getImageNumber() {
-        return imageNumber;
+    public BufferedImage getImage() {
+        return this.image;
     }
 }

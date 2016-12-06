@@ -25,6 +25,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class BattleView extends View {
+	private static final int BUTTON_WIDTH = 183;
+	private static final int BUTTON_HEIGHT = 55;
 
 	// The current battle in view, the current message being displayed, and the current selected button
 	private Battle currentBattle;
@@ -39,7 +41,6 @@ public class BattleView extends View {
 	private final PokemonAnimationState playerAnimation;
 	private final PokemonAnimationState enemyAnimation;
 
-	private final DrawPanel fullMessagePanel;
 	private final DrawPanel menuMessagePanel;
 	private final DrawPanel buttonsPanel;
 	private final DrawPanel largeMenuPanel;
@@ -55,7 +56,6 @@ public class BattleView extends View {
 		playerAnimation = new PokemonAnimationState(this, true);
 		enemyAnimation = new PokemonAnimationState(this, false);
 
-		fullMessagePanel = new DrawPanel(0, 440, 800, 161).withBlackOutline();
 		menuMessagePanel = new DrawPanel(415, 440, 385, 161).withBorderColor(new Color(53, 53, 129));
 		buttonsPanel = new DrawPanel(0, 440, 417, 161).withBorderColor(Color.GRAY).withBorderPercentage(5);
 		largeMenuPanel = new DrawPanel(0, 160, 417, 440).withBorderPercentage(3).withBlackOutline();
@@ -73,16 +73,12 @@ public class BattleView extends View {
 	}
 
 	public void drawFullMessagePanel(Graphics g, String text) {
-		drawMessagePanel(g, text, fullMessagePanel);
+		DrawPanel.drawFullMessagePanel(g, text);
 	}
 
 	public void drawMenuMessagePanel(Graphics g, String text) {
-		drawMessagePanel(g, text, menuMessagePanel);
-	}
-
-	private void drawMessagePanel(Graphics g, String text, DrawPanel messagePanel) {
-		messagePanel.drawBackground(g);
-		messagePanel.drawMessage(g, 30, text);
+		menuMessagePanel.drawBackground(g);
+		menuMessagePanel.drawMessage(g, 30, text);
 	}
 
 	public void drawButtonsPanel(Graphics g) {
@@ -94,11 +90,11 @@ public class BattleView extends View {
 	}
 
 	public Button[] createMessagePanelButtons(int numRows, int numCols) {
-		return createPanelButtons(fullMessagePanel, numRows, numCols);
+		return DrawPanel.getFullPanelButtons(BUTTON_WIDTH, BUTTON_HEIGHT, numRows, numCols);
 	}
 
 	private Button[] createPanelButtons(DrawPanel buttonsPanel, int numRows, int numCols) {
-		return buttonsPanel.getButtons(183, 55, numRows, numCols);
+		return buttonsPanel.getButtons(BUTTON_WIDTH, BUTTON_HEIGHT, numRows, numCols);
 	}
 	
 	public void setBattle(Battle b) {
@@ -317,8 +313,7 @@ public class BattleView extends View {
 		FontMetrics.setFont(g, 18);
 		DrawUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
 
-		// TODO: Make a separate tile folder just for types -- they shouldn't be in the battle folder anyhow
-		BufferedImage categoryImage = Game.getData().getBattleTiles().getTile(move.getAttack().getCategory().getImageNumber());
+		BufferedImage categoryImage = move.getAttack().getCategory().getImage();
 		g.drawImage(categoryImage, 12, 32, null);
 
 		g.translate(-dx, -dy);

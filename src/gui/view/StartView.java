@@ -2,17 +2,17 @@ package gui.view;
 
 import gui.GameData;
 import gui.TileSet;
+import gui.panel.DrawPanel;
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
-import pokemon.PokemonNamesies;
 import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
-import input.InputControl;
-import input.ControlKey;
-import util.DrawUtils;
 import util.FontMetrics;
 import util.PokeString;
 import util.StringUtils;
@@ -114,7 +114,6 @@ class StartView extends View {
 		GameData data = Game.getData();
 
 		TileSet tiles = data.getMenuTiles();
-		TileSet battleTiles = data.getBattleTiles();
 		TileSet trainerTiles = data.getTrainerTiles();
 		TileSet pokemonTiles = data.getPokemonTilesSmall();
 		
@@ -150,9 +149,7 @@ class StartView extends View {
 		}
 		
 		if (message != null) {
-			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
-			FontMetrics.setFont(g, 30);
-			DrawUtils.drawWrappedText(g, message, 30, 490, 750);
+			DrawPanel.drawFullMessagePanel(g, message);
 		}
 	}
 

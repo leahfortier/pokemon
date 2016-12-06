@@ -179,7 +179,6 @@ class PCView extends View {
 		GameData data = Game.getData();
 
 		TileSet tiles = data.getMenuTiles();
-		TileSet typeTiles = data.getBattleTiles();
 		TileSet partyTiles = data.getPartyTiles();
 		TileSet pokemonTiles = data.getPokemonTilesSmall();
 
@@ -284,11 +283,11 @@ class PCView extends View {
 			
 			int index = 0;
 			if (type[1] != Type.NO_TYPE) {
-				g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 669, 97, null);
+				g.drawImage(type[0].getImage(), 669, 97, null);
 				index = 1;
 			}
 			
-			g.drawImage(typeTiles.getTile(type[index].getImageIndex()), 707, 97, null);
+			g.drawImage(type[index].getImage(), 707, 97, null);
 			
 			FontMetrics.setFont(g, 16);
 			

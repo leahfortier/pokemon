@@ -2,6 +2,7 @@ package gui.view.map;
 
 import battle.Battle;
 import gui.GameData;
+import gui.TileSet;
 import gui.view.ViewMode;
 import gui.view.map.VisualState.VisualStateHandler;
 import main.Game;
@@ -123,9 +124,10 @@ class BattleState implements VisualStateHandler {
 
     private void loadBattleImages(MapView mapView) {
         GameData data = Game.getData();
+        TileSet battleTiles = data.getBattleTiles();
 
         if (battle.isWildBattle()) {
-            battleImageSlideLeft = data.getBattleTiles().getTile(mapView.getTerrain().getOpponentCircleIndex());
+            battleImageSlideLeft = battleTiles.getTile(mapView.getTerrain().getOpponentCircleIndex());
 
             ActivePokemon p = battle.getOpponent().front();
             battleImageSlideRight = data.getPokemonTilesLarge().getTile(p.getImageIndex());
@@ -135,8 +137,8 @@ class BattleState implements VisualStateHandler {
             }
         }
         else {
-            battleImageSlideRight = data.getBattleTiles().getTile(0x00100001);
-            battleImageSlideLeft = data.getBattleTiles().getTile(0x00100000);
+            battleImageSlideRight = battleTiles.getTile(0x00100001);
+            battleImageSlideLeft = battleTiles.getTile(0x00100000);
         }
     }
 }
