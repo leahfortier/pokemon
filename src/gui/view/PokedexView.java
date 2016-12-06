@@ -202,7 +202,7 @@ class PokedexView extends View {
 			g.drawString("?", 455, 137);
 		}
 		else {
-			BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageNumber(false));
+			BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageNumber());
 			pkmImg.setRGB(0, 0, 0);
 			DrawUtils.drawCenteredImage(g, pkmImg, 479, 109);
 		}
@@ -226,7 +226,7 @@ class PokedexView extends View {
 			g.drawString("Weight: " + (!caught ? "???.?" : selected.getWeight()) + " lbs", 427, 217);
 			
 			if (caught) {
-				FontMetrics.drawWrappedText(g, selected.getFlavorText(), 427, 247, 350 - 17);
+				DrawUtils.drawWrappedText(g, selected.getFlavorText(), 427, 247, 350 - 17);
 			}
 			
 			g.drawString("Locations:", 427, 340);

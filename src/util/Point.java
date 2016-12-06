@@ -162,20 +162,9 @@ public class Point implements Serializable {
 
     public Dimension maximizeDimension(Dimension previousDimension) {
         return new Dimension(
-                max(previousDimension.width, x + 1, previousDimension.width - x),
-                max(previousDimension.height, y + 1, previousDimension.height - y)
+                GeneralUtils.max(previousDimension.width, x + 1, previousDimension.width - x),
+                GeneralUtils.max(previousDimension.height, y + 1, previousDimension.height - y)
         );
-    }
-
-    public static int max(double... values) {
-        double max = values[0];
-        for (double value : values) {
-            if (value > max) {
-                max = value;
-            }
-        }
-
-        return (int)max;
     }
 
     public String toString() {

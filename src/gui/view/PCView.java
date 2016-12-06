@@ -268,21 +268,17 @@ class PCView extends View {
 		g.drawImage(tiles.getTile(0x34), 410, 40, null);
 		BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageIndex());
 		DrawUtils.drawCenteredImage(g, pkmImg, 479, 109);
-		
+
+		g.setColor(Color.BLACK);
+		FontMetrics.setFont(g, 20);
+
+		g.drawString(selected.getActualName() + " " + selected.getGenderString(), 541, 82);
+
 		if (selected.isEgg()) {
-			g.setColor(Color.BLACK);
-			FontMetrics.setFont(g, 20);
-			
-			g.drawString(selected.getActualName(), 541, 82);
-			
 			FontMetrics.setFont(g, 16);
-			FontMetrics.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
+			DrawUtils.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
 		}
 		else {
-			g.setColor(Color.BLACK);
-			FontMetrics.setFont(g, 20);
-			
-			g.drawString(selected.getActualName() + " " + selected.getGender().getCharacter(), 541, 82);
 			DrawUtils.drawRightAlignedString(g, "Lv" + selected.getLevel(), 740, 82);
 			g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 541, 110);
 			

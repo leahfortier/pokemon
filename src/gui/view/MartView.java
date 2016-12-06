@@ -230,7 +230,7 @@ class MartView extends View {
 			g.drawString(selectedItem.getName(), 448, 138);
 			
 			FontMetrics.setFont(g, 14);
-			FontMetrics.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - amountLeftButton.x);
+			DrawUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - amountLeftButton.x);
 			
 			FontMetrics.setFont(g, 20);
 			g.drawImage(tiles.getTile(0x28), 410, 193, null);

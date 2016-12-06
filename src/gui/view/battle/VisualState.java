@@ -1,6 +1,5 @@
 package gui.view.battle;
 
-import gui.TileSet;
 import gui.view.battle.handler.BagState;
 import gui.view.battle.handler.FightState;
 import gui.view.battle.handler.LearnMoveDeleteState;
@@ -45,8 +44,8 @@ public enum VisualState {
         this.visualStateHandler.set(battleView);
     }
 
-    public void draw(BattleView battleView, Graphics g, TileSet tiles) {
-        this.visualStateHandler.draw(battleView, g, tiles);
+    public void draw(BattleView battleView, Graphics g) {
+        this.visualStateHandler.draw(battleView, g);
     }
 
     public void reset() {

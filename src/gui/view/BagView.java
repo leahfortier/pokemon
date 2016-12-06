@@ -387,10 +387,8 @@ class BagView extends View {
 
 		// Draw Use State buttons
 		g.drawImage(tiles.getTile(0x28), 410, 193, null);
-		g.setColor(Color.BLACK);
-		FontMetrics.setFont(g, 20);
 		for (UseState useState : UseState.values()) {
-			DrawUtils.drawCenteredString(g, useState.displayName, buttons[useState.buttonIndex]);
+			buttons[useState.buttonIndex].label(g, 20, useState.displayName);
 		}
 
 		// Item Display
@@ -410,7 +408,7 @@ class BagView extends View {
 			}
 			
 			FontMetrics.setFont(g, 14);
-			FontMetrics.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - buttons[GIVE].x);
+			DrawUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - buttons[GIVE].x);
 		}
 		
 		FontMetrics.setFont(g, 12);
@@ -497,13 +495,12 @@ class BagView extends View {
 				
 				g.setColor(Color.BLACK);
 				FontMetrics.setFont(g, 14);
-				
-				if (p.isEgg()) {
-					g.drawString(p.getActualName(), 50, 22);	
-				}
-				else {
-					// Name, Gender, and Level
-					g.drawString(p.getActualName() + " " + p.getGender().getCharacter(), 50, 22);
+
+				// Name and Gender
+				g.drawString(p.getActualName() + " " + p.getGenderString(), 50, 22);
+
+				if (!p.isEgg()) {
+					// Level
 					g.drawString("Lv" + p.getLevel(), 153, 22);
 					
 					// Status condition
@@ -565,11 +562,11 @@ class BagView extends View {
 			g.setColor(Color.BLACK);
 			
 			FontMetrics.setFont(g, 30);
-			FontMetrics.drawWrappedText(g, message.getMessage(), 30, 490, 750);
+			DrawUtils.drawWrappedText(g, message.getMessage(), 30, 490, 750);
 		}
 		else {
-			for (Button b : buttons) {
-				b.draw(g);
+			for (Button button : buttons) {
+				button.draw(g);
 			}
 		}
 	}

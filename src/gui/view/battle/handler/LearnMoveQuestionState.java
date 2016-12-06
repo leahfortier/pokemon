@@ -2,67 +2,68 @@ package gui.view.battle.handler;
 
 import battle.attack.Move;
 import gui.Button;
-import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import message.MessageUpdate;
 import message.Messages;
-import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 public class LearnMoveQuestionState implements VisualStateHandler {
 
-    private final Button yesButton;
-    private final Button noButton;
+    private static final int NUM_COLS = 4;
 
-    public LearnMoveQuestionState() {
-        yesButton = BattleView.createSubMenuButton(0, 1, null);
-        noButton = BattleView.createSubMenuButton(1, 1, null);
+    private Button[] buttons;
+
+    @Override
+    public void set(BattleView view) {
+        buttons = view.createMessagePanelButtons(2, NUM_COLS);
+
+        for (int i = 0; i < buttons.length; i++) {
+            Button button = buttons[i];
+
+            button.setActive(button == yesButton() || button == noButton());
+
+            if (button == yesButton()) {
+                view.setSelectedButton(i);
+            }
+        }
+    }
+
+    // Bottom center left
+    private Button yesButton() {
+        return buttons[NUM_COLS + 1];
+    }
+
+    // Bottom center right
+    private Button noButton() {
+        return buttons[NUM_COLS + 2];
+    }
+
+    private void drawButton(Graphics g, Button button, Color color, String label) {
+        button.fillBordered(g, color);
+        button.blackOutline(g);
+        button.label(g, 30, label);
     }
 
     @Override
-    public void draw(BattleView view, Graphics g, TileSet tiles) {
-        g.drawImage(tiles.getTile(0x3), 0, 439, null);
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 25);
-        g.drawString("Delete a move in order to learn " + view.getLearnedMove().getAttack().getName() + "?", 30, 490);
+    public void draw(BattleView view, Graphics g) {
+        view.drawFullMessagePanel(g, "Delete a move in order to learn " + view.getLearnedMove().getAttack().getName() + "?");
 
-        g.translate(yesButton.x, yesButton.y);
+        drawButton(g, yesButton(), new Color(120, 200, 80), "Yes");
+        drawButton(g, noButton(), new Color(220, 20, 20), "No");
 
-        g.setColor(Color.GREEN);
-        g.fillRect(0, 0, 183, 55);
-        g.drawImage(tiles.getTile(0x22), 0, 0, null);
-
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 22);
-        g.drawString("Yes", 10, 26);
-
-        g.translate(-yesButton.x, -yesButton.y);
-
-        g.translate(noButton.x, noButton.y);
-
-        g.setColor(Color.RED);
-        g.fillRect(0, 0, 183, 55);
-        g.drawImage(tiles.getTile(0x22), 0, 0, null);
-
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 22);
-        g.drawString("No", 10, 26);
-
-        g.translate(-noButton.x, -noButton.y);
-
-        yesButton.draw(g);
-        noButton.draw(g);
+        for (Button button : buttons) {
+            button.draw(g);
+        }
     }
 
     @Override
     public void update(BattleView view) {
-        yesButton.update();
-        noButton.update();
+        view.setSelectedButton(buttons);
 
-        if (noButton.checkConsumePress()) {
+        if (noButton().checkConsumePress()) {
 
             // This is all done really silly, so we need to do this
             MessageUpdate message = Messages.getNextMessage();
@@ -76,7 +77,7 @@ public class LearnMoveQuestionState implements VisualStateHandler {
             view.cycleMessage(false);
         }
 
-        if (yesButton.checkConsumePress()) {
+        if (yesButton().checkConsumePress()) {
             view.setVisualState(VisualState.LEARN_MOVE_DELETE);
         }
     }

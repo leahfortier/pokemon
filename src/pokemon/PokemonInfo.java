@@ -188,12 +188,20 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return wildHoldItems;
 	}
 
-	public int getImageNumber(boolean shiny) {
-		return getImageNumber(this, shiny);
+	public int getImageNumber() {
+		return this.getImageNumber(false, true);
 	}
 
-	public static int getImageNumber(PokemonInfo pokemonInfo, boolean shiny) {
-		int imageNumber = 4*pokemonInfo.getNumber();
+	public int getImageNumber(boolean shiny) {
+		return this.getImageNumber(shiny, true);
+	}
+
+	public int getImageNumber(boolean shiny, boolean front) {
+		return getImageNumber(this, shiny, front);
+	}
+
+	public static int getImageNumber(PokemonInfo pokemonInfo, boolean shiny, boolean front) {
+		int imageNumber = 4*pokemonInfo.getNumber() + (front ? 0 : 1);
 		if (shiny) {
 			imageNumber += 2;
 		}

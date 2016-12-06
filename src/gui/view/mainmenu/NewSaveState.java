@@ -4,8 +4,6 @@ import gui.Button;
 import gui.view.ViewMode;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 import main.Game;
-import util.DrawUtils;
-import util.FontMetrics;
 import util.Save;
 
 import java.awt.Graphics;
@@ -27,8 +25,7 @@ class NewSaveState implements VisualStateHandler {
             view.drawSaveInformation(g, this.buttons[i], i, "New Save");
         }
 
-        FontMetrics.setFont(g, 40);
-        DrawUtils.drawCenteredString(g, "Return", this.buttons[Save.NUM_SAVES]);
+        this.buttons[Save.NUM_SAVES].label(g, 40, "Return");
     }
 
     @Override

@@ -12,6 +12,7 @@ import sound.SoundTitle;
 import trainer.CharacterData;
 import input.InputControl;
 import input.ControlKey;
+import util.DrawUtils;
 import util.FontMetrics;
 import util.PokeString;
 import util.StringUtils;
@@ -126,7 +127,7 @@ class StartView extends View {
 			case DEFAULT:
 				g.drawImage(trainerTiles.getTile(0x58), 200, 200, null);
 				if (ditto) {
-					g.drawImage(pokemonTiles.getTile(PokemonInfo.getPokemonInfo(PokemonNamesies.DITTO).getImageNumber(false)), 270, 255, null);
+					g.drawImage(pokemonTiles.getTile(PokemonInfo.getPokemonInfo(PokemonNamesies.DITTO).getImageNumber()), 270, 255, null);
 				}
 				break;
 			case NAME:
@@ -151,7 +152,7 @@ class StartView extends View {
 		if (message != null) {
 			g.drawImage(battleTiles.getTile(0x3), 0, 440, null);
 			FontMetrics.setFont(g, 30);
-			FontMetrics.drawWrappedText(g, message, 30, 490, 750);
+			DrawUtils.drawWrappedText(g, message, 30, 490, 750);
 		}
 	}
 

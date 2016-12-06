@@ -1,9 +1,10 @@
 package gui.view.battle;
 
 import battle.effect.status.StatusCondition;
+import gui.GameData;
 import gui.TileSet;
+import gui.panel.DrawPanel;
 import main.Game;
-import main.Global;
 import main.Type;
 import message.MessageUpdate;
 import pokemon.ActivePokemon;
@@ -12,21 +13,23 @@ import pokemon.PokemonInfo;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
+import util.Alignment;
 import util.DrawUtils;
 import util.FontMetrics;
+import util.Point;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 // Handles animation and keeps track of the current state
 class PokemonAnimationState {
 
+    private static final int STATUS_BOX_SPACING = 25;
+
     // Loss Constants <-- Super Meaningful Comment
     private static final int FRAMES_PER_HP_LOSS = 20;
     private static final float HP_LOSS_RATIO = 0.1f;
-    private static final float EXP_LOSS_RATIO = 15f;
+    private static final float EXP_LOSS_RATIO = 30f;
 
     // Evolution and Catch Lifespans
     private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
@@ -34,13 +37,14 @@ class PokemonAnimationState {
     private static final int CATCH_TRANSFORM_ANIMATION_LIFESPAN = 2000;
     private static final int CATCH_ANIMATION_LIFESPAN = CATCH_SHAKE_ANIMATION_LIFESPAN* CharacterData.CATCH_SHAKES + CATCH_TRANSFORM_ANIMATION_LIFESPAN;
 
-    // Polygons for Type Colors in Status Box -- First array is for player, Second array is for the opponent
-    private static final int[][] primaryColorx = { { 0, 199, 94, 0 }, { 0, 191, 104, 0 } };
-    private static final int[][] primaryColory = { { 0, 0, 105, 105 }, { 0, 0, 88, 88 } };
-    private static final int[][] secondaryColorx = { { 294, 199, 94, 294 }, { 191, 294, 294, 104 } };
-    private static final int[][] secondaryColory = { { 0, 0, 105, 105 }, { 0, 0, 88, 88 } };
+    private final BattleView battleView;
+    private final boolean isPlayer;
 
-    private BattleView battleView;
+    private final Point pokemonDrawLocation;
+
+    private final DrawPanel statusBox;
+    private final DrawPanel hpBar;
+    private final DrawPanel expBar;
 
     // Previous and current state
     private PokemonState oldState;
@@ -53,10 +57,40 @@ class PokemonAnimationState {
     private int animationCatch;
     private int animationCatchDuration;
 
-    PokemonAnimationState(BattleView battleView) {
+    PokemonAnimationState(BattleView battleView, boolean isPlayer) {
         this.battleView = battleView;
-        oldState = new PokemonState();
-        state = new PokemonState();
+        this.isPlayer = isPlayer;
+
+        if (isPlayer) {
+            this.statusBox = new DrawPanel(463, 304, 295, 103);
+            this.pokemonDrawLocation = new Point(190, 412);
+        } else {
+            this.statusBox = new DrawPanel(42, 52, 295, 90);
+            this.pokemonDrawLocation = new Point(607, 237);
+        }
+
+        this.statusBox
+                .withBorderPercentage(13)
+                .withTransparentCount(2)
+                .withBlackOutline();
+
+        int hpBarWidth = 200;
+        this.hpBar = new DrawPanel(
+                statusBox.x + statusBox.width - STATUS_BOX_SPACING - hpBarWidth,
+                statusBox.y + 48,
+                hpBarWidth,
+                19)
+                .withBlackOutline();
+
+        this.expBar = new DrawPanel(
+                statusBox.x,
+                statusBox.y + statusBox.height - DrawUtils.OUTLINE_SIZE,
+                statusBox.width,
+                12)
+                .withBlackOutline();
+
+        this.oldState = new PokemonState();
+        this.state = new PokemonState();
     }
 
     void resetBattle(ActivePokemon p) {
@@ -100,7 +134,7 @@ class PokemonAnimationState {
         state.status = oldState.status = status;
         state.type = type;
         state.shiny = shiny;
-        state.imageNumber = pokemon.getImageNumber(state.shiny);
+        state.imageNumber = pokemon.getImageNumber(state.shiny, !isPlayer);
         state.caught = battleView.getCurrentBattle().isWildBattle() && Game.getPlayer().getPokedex().isCaught(pokemon.namesies());
         state.name = name;
         state.maxHp = oldState.maxHp = maxHP;
@@ -141,7 +175,7 @@ class PokemonAnimationState {
             }
         }
 
-        state.imageNumber = newPokemon.getImageNumber(state.shiny);
+        state.imageNumber = newPokemon.getImageNumber(state.shiny, !isPlayer);
         animationCatchDuration = 0;
     }
 
@@ -182,144 +216,41 @@ class PokemonAnimationState {
         return animationHP != 0 || animationEvolve != 0 || animationCatch != 0 || animationExp != 0;
     }
 
-    // Draws all of the text inside the status box
-    void drawStatusBoxText(Graphics g, int isEnemy, TileSet tiles) {
-
-        // Name, Gender, Level, Status Condition
-        FontMetrics.setFont(g, 27);
-        DrawUtils.drawShadowText(g, state.name + " " + state.gender.getCharacter(), 20, 40, false);
-        DrawUtils.drawShadowText(g, "Lv" + state.level, 272, 40, true);
-
-        FontMetrics.setFont(g, 24);
-        DrawUtils.drawShadowText(g, state.status.getName(), 20, 71, false);
-
-        // Only the player shows the HP Text
-        if (isEnemy == 0) {
-            // HP Text Animation
-            int originalTime = Math.abs(state.hp - oldState.hp)*FRAMES_PER_HP_LOSS;
-            String hpStr = state.hp + "/" + state.maxHp;
-            if (animationHP > 0) {
-                hpStr = (int)(state.hp + (oldState.hp - state.hp)*(animationHP/(float)originalTime)) + "/" + state.maxHp;
-            }
-
-            FontMetrics.setFont(g, 24);
-            DrawUtils.drawShadowText(g, hpStr, 273, 95, true);
-        }
-        // Show whether or not the wild Pokemon has already been caught
-        else if (state.caught) {
-            g.drawImage(tiles.getTile(0x4), 296, 40, null);
-        }
-    }
-
-    // TODO: Is this code duplicated in other places? Like the evolution view by any chance
     // Might want to include a helper class that contains a generic method for different types of animations
-    private void catchAnimation(Graphics g, BufferedImage plyrImg, TileSet pkmTiles, int px, int py) {
-        Graphics2D g2d = (Graphics2D)g;
-        float[] pokeyScales = { 1f, 1f, 1f, 1f };
-        float[] pokeyOffsets = { 255f, 255f, 255f, 0f };
-        float[] ballScales = { 1f, 1f, 1f, 1f };
-        float[] ballOffsets = { 255f, 255f, 255f, 0f };
-
-        int xOffset = 0;
-
-        int lifespan = animationCatchDuration == -1 ? CATCH_ANIMATION_LIFESPAN : animationCatchDuration;
-
-        // Turn white
-        if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3) {
-            pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255*(1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - .7f)));
-            ballScales[3] = 0;
-        }
-        // Transform into Pokeball
-        else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7) {
-           pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255;
-           pokeyScales[3] = ((animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
-           ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255;
-           ballScales[3] = (1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
-        }
-        // Restore color
-        else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN) {
-            pokeyScales[3] = 0;
-            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255*(animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.3f));
-        }
-        // Shake
-        else if (animationCatchDuration == -1 || animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN) {
-            pokeyScales[3] = 0;
-            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 0;
-            xOffset = (int)(10*Math.sin(animationCatch/200.0));
-        }
-        // Turn white -- didn't catch
-        else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7) {
-            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255*(1f - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1 - 0.7f)));
-            pokeyScales[3] = 0;
-        }
-        // Transform into Pokemon
-        else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3) {
-            pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255;
-            pokeyScales[3] = (1 - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
-            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255;
-            ballScales[3] = ((animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
-        }
-        // Restore color
-        else {
-            ballScales[3] = 0;
-            pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255*(animationCatch)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(1.0f - .7f));
-        }
-
-        animationCatch -= Global.MS_BETWEEN_FRAMES;
-
-        BufferedImage pkBall = pkmTiles.getTile(0x11111);
-
-        g2d.drawImage(DrawUtils.colorImage(pkBall, ballScales, ballOffsets), px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight(), null);
-        g2d.drawImage(DrawUtils.colorImage(plyrImg, pokeyScales, pokeyOffsets), px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null);
+    private void catchAnimation(Graphics g, BufferedImage plyrImg, TileSet pkmTiles) {
+        animationCatchDuration = DrawUtils.transformAnimation(
+                g,
+                animationCatchDuration, CATCH_ANIMATION_LIFESPAN,
+                plyrImg,
+                pkmTiles.getTile(0x11111), // Pokeball image
+                pokemonDrawLocation
+        );
     }
 
     // hi :)
-    // TODO: is there any way to combine these?
-    private void evolveAnimation(Graphics g, BufferedImage plyrImg, int isEnemy, TileSet pkmTiles, int px, int py) {
-        Graphics2D g2d = (Graphics2D)g;
-
-        float[] prevEvolutionScales = { 1f, 1f, 1f, 1f };
-        float[] prevEvolutionOffsets = { 255f, 255f, 255f, 0f };
-        float[] evolutionScales = { 1f, 1f, 1f, 1f };
-        float[] evolutionOffsets = { 255f, 255f, 255f, 0f };
-
-        // Turn white
-        if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.7) {
-            prevEvolutionOffsets[0] = prevEvolutionOffsets[1] = prevEvolutionOffsets[2] = 255*(1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.7f)/(EVOLVE_ANIMATION_LIFESPAN*(1 - 0.7f)));
-            evolutionScales[3] = 0;
-        }
-        // Change form
-        else if (animationEvolve > EVOLVE_ANIMATION_LIFESPAN*0.3) {
-            prevEvolutionOffsets[0] = prevEvolutionOffsets[1] = prevEvolutionOffsets[2] = 255;
-            prevEvolutionScales[3] = ((animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
-            evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255;
-            evolutionScales[3] = (1 - (animationEvolve - EVOLVE_ANIMATION_LIFESPAN*0.3f)/(EVOLVE_ANIMATION_LIFESPAN*(0.7f - 0.3f)));
-        }
-        // Restore color
-        else {
-            prevEvolutionScales[3] = 0;
-            evolutionOffsets[0] = evolutionOffsets[1] = evolutionOffsets[2] = 255*(animationEvolve)/(EVOLVE_ANIMATION_LIFESPAN*(1-0.7f));
-        }
-
-        animationEvolve -= Global.MS_BETWEEN_FRAMES;
-
-        BufferedImage prevEvo = pkmTiles.getTile(oldState.imageNumber + (isEnemy^1));
-
-        g2d.drawImage(DrawUtils.colorImage(plyrImg, evolutionScales, evolutionOffsets), px-plyrImg.getWidth()/2, py-plyrImg.getHeight(), null);
-        g2d.drawImage(DrawUtils.colorImage(prevEvo, prevEvolutionScales, prevEvolutionOffsets), px-prevEvo.getWidth()/2, py-prevEvo.getHeight(), null);
+    private void evolveAnimation(Graphics g, BufferedImage plyrImg, TileSet pkmTiles) {
+        animationEvolve = DrawUtils.transformAnimation(
+                g,
+                animationEvolve,
+                EVOLVE_ANIMATION_LIFESPAN,
+                plyrImg,
+                pkmTiles.getTile(oldState.imageNumber),
+                pokemonDrawLocation);
     }
 
     private void drawHealthBar(Graphics g) {
-        // Draw the white background of the health bar
-        g.setColor(Color.WHITE);
-        g.fillRect(108, 53, 315 - 150, 124 - 105);
 
         // Get the ratio based off of the possible animation
         float ratio = state.hp/(float)state.maxHp;
+        String hpStr = state.hp + "/" + state.maxHp;
+
         if (animationHP > 0) {
             animationHP -= HP_LOSS_RATIO*state.maxHp + 1;
-            int originalTime = Math.abs(state.hp - oldState.hp)*FRAMES_PER_HP_LOSS;
-            ratio = (state.hp + (oldState.hp - state.hp)*(animationHP/(float)originalTime))/(float)state.maxHp;
+            float originalTime = Math.abs(state.hp - oldState.hp)*FRAMES_PER_HP_LOSS;
+            float numerator = (state.hp + (oldState.hp - state.hp)*(animationHP/originalTime));
+
+            ratio = numerator/state.maxHp;
+            hpStr = (int)numerator + "/" + state.maxHp;
         }
         else {
             animationHP = 0;
@@ -331,7 +262,17 @@ class PokemonAnimationState {
             g.setColor(g.getColor().darker());
         }
 
-        g.fillRoundRect(113, 57, (int)((312 - 155)*ratio), 119 - 109, 5, 5);
+        hpBar.fillBar(g, g.getColor(), ratio);
+
+        if (isPlayer) {
+            FontMetrics.setFont(g, 24);
+            DrawUtils.drawShadowText(
+                    g,
+                    hpStr,
+                    statusBox.x + statusBox.width - STATUS_BOX_SPACING,
+                    hpBar.y + hpBar.height + FontMetrics.getTextHeight(g) + 5,
+                    Alignment.RIGHT);
+        }
     }
 
     private void drawExpBar(Graphics g) {
@@ -346,51 +287,85 @@ class PokemonAnimationState {
             animationExp = 0;
         }
 
-        // Experience bar background
-        g.setColor(new Color(153, 153, 153));
-        g.fillRect(36, 107, 294 - 36, 115 - 107); //463,  304
-
-        // Experience bar foreground
-        g.setColor(DrawUtils.EXP_BAR_COLOR);
-        g.fillRect(36, 107, (int)((294 - 36)*expRatio), 115 - 107);
+        expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, expRatio);
     }
 
-    // Draws the status box, not including the text
-    void drawStatusBox(Graphics g, int isEnemy, ActivePokemon pokemon, TileSet pkmTiles, int px, int py) { //-42 -52
-        // Draw the colored type polygons
-        Color[] typeColors = Type.getColors(state.type);
-        g.setColor(typeColors[0]);
-        g.fillPolygon(primaryColorx[isEnemy], primaryColory[isEnemy], 4);
-        g.setColor(typeColors[1]);
-        g.fillPolygon(secondaryColorx[isEnemy], secondaryColory[isEnemy], 4);
-
-        // Draw health bar and player's EXP Bar
-        drawHealthBar(g);
-        if (isEnemy == 0) {
-            drawExpBar(g);
-        }
-
+    private void drawPokemon(Graphics g, ActivePokemon pokemon) {
         // Draw the Pokemon image if applicable
         if (!isEmpty() && !pokemon.isSemiInvulnerable()) {
-            BufferedImage plyrImg = pkmTiles.getTile(state.imageNumber + (isEnemy^1));
+            GameData data = Game.getData();
+            TileSet pkmTiles = isPlayer ? data.getPokemonTilesLarge() : data.getPokemonTilesMedium();
+
+            BufferedImage plyrImg = pkmTiles.getTile(state.imageNumber);
             if (plyrImg != null) {
                 if (animationEvolve > 0) {
-                    evolveAnimation(g, plyrImg, isEnemy, pkmTiles, px, py);
+                    evolveAnimation(g, plyrImg, pkmTiles);
                 }
                 else if (animationCatch > 0) {
-                    catchAnimation(g, plyrImg, pkmTiles, px, py);
+                    catchAnimation(g, plyrImg, pkmTiles);
                 }
                 else {
                     if (animationCatchDuration == -1) {
                         plyrImg = pkmTiles.getTile(0x11111);
                     }
 
-                    g.drawImage(plyrImg, px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null); // TODO: Why is height not /2 -- can this use the centered image function?
+                    DrawUtils.drawBottomCenteredImage(g, plyrImg, pokemonDrawLocation);
 
                     animationEvolve = 0;
                     animationCatch = 0;
                 }
             }
+        }
+    }
+
+    // Draws the status box, not including the text
+    void drawStatusBox(Graphics g, ActivePokemon pokemon) {
+
+        drawPokemon(g, pokemon);
+
+        // Draw the colored type polygons
+        this.statusBox.withBackgroundColors(Type.getColors(state.type)).drawBackground(g);
+
+        // Draw health bar and player's EXP Bar
+        drawHealthBar(g);
+        if (isPlayer) {
+            drawExpBar(g);
+        }
+
+        // Name and gender in top left
+        FontMetrics.setFont(g, 27);
+        DrawUtils.drawShadowText(
+                g,
+                state.name + " " + state.gender.getCharacter(),
+                statusBox.x + STATUS_BOX_SPACING,
+                statusBox.y + STATUS_BOX_SPACING + FontMetrics.getTextHeight(g),
+                Alignment.LEFT);
+
+        // Level in top right
+        DrawUtils.drawShadowText(
+                g,
+                "Lv" + state.level,
+                statusBox.x + statusBox.width - STATUS_BOX_SPACING,
+                statusBox.y + STATUS_BOX_SPACING + FontMetrics.getTextHeight(g),
+                Alignment.RIGHT);
+
+        // Status to the left of the hp bar
+        FontMetrics.setFont(g, 24);
+        DrawUtils.drawShadowText(
+                g,
+                state.status.getName(),
+                statusBox.x + STATUS_BOX_SPACING,
+                hpBar.y + hpBar.height/2,
+                Alignment.CENTER_Y);
+
+        // Show whether or not the wild Pokemon has already been caught
+        if (!isPlayer && state.caught) {
+            DrawUtils.drawCenteredImage(
+                    g,
+                    Game.getData().getBattleTiles().getTile(0x4),
+                    hpBar.x + hpBar.width + (STATUS_BOX_SPACING - statusBox.getBorderSize())/2,
+                    hpBar.y + hpBar.height/2
+            );
         }
     }
 

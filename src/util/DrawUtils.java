@@ -1,7 +1,7 @@
 package util;
 
-import gui.Button;
 import main.Global;
+import map.Direction;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,24 +13,37 @@ import java.util.Map;
 
 public class DrawUtils {
 	public static final Color EXP_BAR_COLOR = new Color(51, 102, 204);
+	public static final int OUTLINE_SIZE = 2;
 
 	// Dimension of a single tile
 	private static final Dimension SINGLE_TILE_DIMENSION = new Dimension(1, 1);
 
 	public static Color getHPColor(double ratio) {
 		if (ratio < 0.25) {
-			return Color.RED;
+			return new Color(220, 20, 20);
 		}
 		else if (ratio < 0.5) {
-			return Color.YELLOW;
+			return new Color(255, 227, 85);
 		}
 		else {
-			return Color.GREEN;
+			return new Color(35, 238, 91);
 		}
+	}
+
+	public static void drawBottomCenteredImage(Graphics g, BufferedImage image, Point center) {
+		g.drawImage(
+				image,
+				center.x - image.getWidth()/2,
+				center.y - image.getHeight(),
+				null);
 	}
 	
 	public static void drawCenteredImage(Graphics g, BufferedImage image, int x, int y) {
-		g.drawImage(image, x - image.getWidth()/2, y - image.getHeight()/2, null);
+		g.drawImage(
+				image,
+				x - image.getWidth()/2,
+				y - image.getHeight()/2,
+				null);
 	}
 
 	public static BufferedImage colorImage(BufferedImage image, float[] scale, float[] offset) {
@@ -62,8 +75,43 @@ public class DrawUtils {
         return image;
     }
 
-	public static void drawCenteredString(Graphics g, String s, Button b) {
-		drawCenteredString(g, s, b.x, b.y, b.width, b.height);
+    public static int transformAnimation(
+    		Graphics g,
+			int animationValue,
+			int animationLifespan,
+			BufferedImage first,
+			BufferedImage second,
+			Point drawLocation) {
+
+		float[] firstScales = { 1f, 1f, 1f, 1f };
+		float[] firstOffsets = { 255f, 255f, 255f, 0f };
+		float[] secondScales = { 1f, 1f, 1f, 1f };
+		float[] secondOffsets = { 255f, 255f, 255f, 0f };
+
+		// Turn white
+		if (animationValue > animationLifespan*0.7) {
+			firstOffsets[0] = firstOffsets[1] = firstOffsets[2] = 255*(1 - (animationValue - animationLifespan*0.7f)/(animationLifespan*(1 - 0.7f)));
+			secondScales[3] = 0;
+		}
+		// Change form
+		else if (animationValue > animationLifespan*0.3) {
+			firstOffsets[0] = firstOffsets[1] = firstOffsets[2] = 255;
+			firstScales[3] = ((animationValue - animationLifespan*0.3f)/(animationLifespan*(0.7f - 0.3f)));
+			secondOffsets[0] = secondOffsets[1] = secondOffsets[2] = 255;
+			secondScales[3] = (1 - (animationValue - animationLifespan*0.3f)/(animationLifespan*(0.7f - 0.3f)));
+		}
+		// Restore color
+		else {
+			firstScales[3] = 0;
+			secondOffsets[0] = secondOffsets[1] = secondOffsets[2] = 255*(animationValue)/(animationLifespan*(1-0.7f));
+		}
+
+		animationValue -= Global.MS_BETWEEN_FRAMES;
+
+		DrawUtils.drawBottomCenteredImage(g, DrawUtils.colorImage(first, secondScales, secondOffsets), drawLocation);
+		DrawUtils.drawBottomCenteredImage(g, DrawUtils.colorImage(second, firstScales, firstOffsets), drawLocation);
+
+		return animationValue;
 	}
 	
 	public static void drawCenteredString(Graphics g, String s, int x, int y, int width, int height) {
@@ -119,35 +167,66 @@ public class DrawUtils {
 		
 		g.drawString(s, leftX, y);
 	}
-	
+
 	// Draws a string with a shadow behind it the specified location
-	public static void drawShadowText(Graphics g, String text, int x, int y, boolean rightAligned) {
+	public static void drawShadowText(Graphics g, String text, int x, int y, Alignment alignment) {
 		g.setColor(new Color(128, 128, 128, 128));
-		
-		if (rightAligned) {
-			DrawUtils.drawRightAlignedString(g, text, x, y);
-		}
-		else {
-			g.drawString(text, x, y);
-		}
-		
-		g.setColor(Color.DARK_GRAY);
-		
-		if (rightAligned) {
-			DrawUtils.drawRightAlignedString(g, text, x - 2, y - 2);
-		}
-		else {
-			g.drawString(text, x - 2, y - 2);
-		}
+		alignment.drawString(g, text, x + 2, y + 2);
+
+		g.setColor(Color.BLACK);
+		alignment.drawString(g, text, x, y);
 	}
 
 	private static int getTextWidth(final String text, final int fontSize) {
-		return text.length()* FontMetrics.getFontMetrics(fontSize).getHorizontalSpacing();
+		return text.length()*FontMetrics.getFontMetrics(fontSize).getHorizontalSpacing();
 	}
 
 	public static void fillCanvas(Graphics g, Color color) {
 		g.setColor(color);
 		g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+	}
+
+	public static void blackOutline(Graphics g, int x, int y, int width, int height) {
+		blackOutline(g, x, y, width, height, Direction.values());
+	}
+
+	public static void blackOutline(Graphics g, int x, int y, int width, int height, Direction... directions) {
+		drawBorder(g, Color.BLACK, x, y, width, height, OUTLINE_SIZE, directions);
+	}
+
+	public static void drawBorder(Graphics g, Color color, int x, int y, int width, int height, int borderSize) {
+		drawBorder(g, color, x, y, width, height, borderSize, Direction.values());
+	}
+
+	public static void drawBorder(Graphics g, Color color, int x, int y, int width, int height, int borderSize, Direction[] directions) {
+		g.setColor(color);
+
+		for (Direction direction : directions) {
+			switch (direction) {
+				case UP:
+					g.fillRect(x, y, width, borderSize);
+					break;
+				case LEFT:
+					g.fillRect(x, y, borderSize, height);
+					break;
+				case DOWN:
+					g.fillRect(x, y + height - borderSize, width, borderSize);
+					break;
+				case RIGHT:
+					g.fillRect(x + width - borderSize, y, borderSize, height);
+					break;
+			}
+		}
+	}
+
+	public static void greyOut(Graphics g, int x, int y, int width, int height) {
+		g.setColor(new Color(0, 0, 0, 128));
+		g.fillRect(x, y, width, height);
+	}
+
+	public static void fillTransparent(Graphics g, int x, int y, int width, int height) {
+		g.setColor(new Color(255, 255, 255, 128));
+		g.fillRect(x, y, width, height);
 	}
 
 	public static Point getLocation(Point drawLocation, Point mapLocation) {
@@ -312,4 +391,31 @@ public class DrawUtils {
 		return bufferedImage;
 	}
 
+	public static int drawWrappedText(Graphics g, String str, int x, int y, int width) {
+        int fontSize = g.getFont().getSize();
+        FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
+
+        String[] words = str.split("[ ]+");
+        StringBuilder build = new StringBuilder();
+
+        int height = y;
+        int distanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
+
+        for (String word : words) {
+            if ((word.length() + build.length() + 1) * fontMetrics.getHorizontalSpacing() > width) {
+                g.drawString(build.toString(), x, height);
+
+                height += distanceBetweenRows;
+                build = new StringBuilder();
+            }
+
+            // TODO: StringUtil method
+            build.append(build.length() == 0 ? "" : " ")
+                    .append(word);
+        }
+
+        g.drawString(build.toString(), x, height);
+
+        return height + distanceBetweenRows;
+    }
 }

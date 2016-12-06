@@ -44,6 +44,7 @@ import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import util.DrawUtils;
 import util.RandomUtils;
+import util.StringUtils;
 
 import java.awt.Color;
 import java.io.Serializable;
@@ -200,10 +201,14 @@ public class ActivePokemon implements Serializable {
 	public int getTinyImageIndex() {
 		return this.isEgg ? PokemonInfo.EGG_IMAGE : pokemon.getNumber();
 	}
-	
-	// Larger image index
+
 	public int getImageIndex() {
-		return this.isEgg() ? PokemonInfo.EGG_IMAGE : this.pokemon.getImageNumber(this.isShiny());
+		return this.getImageIndex(true);
+	}
+
+	// Larger image index
+	public int getImageIndex(boolean front) {
+		return this.isEgg() ? PokemonInfo.EGG_IMAGE : this.pokemon.getImageNumber(this.isShiny(), front);
 	}
 	
 	public boolean isEgg() {
@@ -692,6 +697,14 @@ public class ActivePokemon implements Serializable {
 		}
 
 		return false;
+	}
+
+	public String getGenderString() {
+		if (this.isEgg()) {
+			return StringUtils.empty();
+		}
+
+		return this.getGender().getCharacter();
 	}
 	
 	public Gender getGender() {

@@ -1,12 +1,18 @@
 package gui;
 
+import gui.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import map.Direction;
+import util.DrawUtils;
+import util.FontMetrics;
 import util.Point;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Button {
 	private static final int NO_TRANSITION = -1;
@@ -47,7 +53,21 @@ public class Button {
 		this.forceHover = false;
 		this.active = true;
 	}
-	
+
+	public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, int[] transitions) {
+		int tabWidth = panelWidth/numButtons;
+		int remainder = panelWidth%numButtons;
+
+		return new Button(
+				panelX + tabIndex*tabWidth + Math.min(tabIndex, remainder),
+				panelY - tabHeight + DrawUtils.OUTLINE_SIZE,
+				tabWidth + (tabIndex < remainder ? 1 : 0),
+				tabHeight,
+				ButtonHoverAction.BOX,
+				transitions
+		);
+	}
+
 	public void draw(Graphics g) {
 		if ((hover || forceHover) && active && hoverAction != null) {
 			hoverAction.draw(g, this);
@@ -184,16 +204,75 @@ public class Button {
 		g.setColor(temp);
 	}
 
-	public void fill(Graphics g, Color color) {
-		fill(g, color, x, y);
+	public void greyOut(Graphics g) {
+		DrawUtils.greyOut(g, x, y, width, height);
 	}
 
 	public void fillTranslated(Graphics g, Color color) {
 		fill(g, color, 0, 0);
 	}
 
+	public void fill(Graphics g, Color color) {
+		fill(g, color, x, y);
+	}
+
 	private void fill(Graphics g, Color color, int x, int y) {
 		g.setColor(color);
 		g.fillRect(x, y, width, height);
+	}
+
+	public void fillBordered(Graphics g, Color color) {
+		new DrawPanel(x, y, width, height)
+				.withTransparentBackground(color)
+				.withBorderPercentage(15)
+				.withBlackOutline()
+				.drawBackground(g);
+	}
+
+	public void fillTransparent(Graphics g, Color color) {
+		fill(g, color);
+		fillTransparent(g);
+	}
+
+	public void fillTransparent(Graphics g) {
+		DrawUtils.fillTransparent(g, x, y, width, height);
+	}
+
+	public void blackOutline(Graphics g) {
+		DrawUtils.blackOutline(g, x, y, width, height);
+	}
+
+	public void outlineTab(Graphics g, int index, int selectedIndex) {
+		List<Direction> toOutline = new ArrayList<>();
+		toOutline.add(Direction.UP);
+		toOutline.add(Direction.RIGHT);
+
+		if (index == 0) {
+			toOutline.add(Direction.LEFT);
+		}
+
+		if (index != selectedIndex) {
+			toOutline.add(Direction.DOWN);
+		}
+
+		DrawUtils.blackOutline(g, x, y, width, height, toOutline.toArray(new Direction[0]));
+	}
+
+	public void label(Graphics g, int fontSize, String text) {
+		g.setColor(Color.BLACK);
+		FontMetrics.setFont(g, fontSize);
+		DrawUtils.drawCenteredString(g, text, x, y, width, height);
+	}
+
+	public void imageLabel(Graphics g, BufferedImage image) {
+		DrawUtils.drawCenteredImage(g, image, centerX(), centerY());
+	}
+
+	public int centerX() {
+		return x + width/2;
+	}
+
+	public int centerY() {
+		return y + height/2;
 	}
 }

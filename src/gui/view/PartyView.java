@@ -154,26 +154,20 @@ class PartyView extends View {
 		TileSet pkmTiles = data.getPokemonTilesSmall();
 		BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageIndex());
 		DrawUtils.drawCenteredImage(g, pkmImg, 121, 174);
-		
+
+		FontMetrics.setFont(g, 20);
+		g.setColor(Color.BLACK);
+
+		// Name and Gender
+		g.drawString(selectedPkm.getActualName() + " " + selectedPkm.getGenderString(), 213, 147);
+
 		if (selectedPkm.isEgg()) {
-			FontMetrics.setFont(g, 20);
-			g.setColor(Color.BLACK);
-			
-			// Name
-			g.drawString(selectedPkm.getActualName(), 213, 147);
-			
 			FontMetrics.setFont(g, 16);
 			
 			// Description
-			FontMetrics.drawWrappedText(g, selectedPkm.getEggMessage(), 213, 170, 718 - 213);
+			DrawUtils.drawWrappedText(g, selectedPkm.getEggMessage(), 213, 170, 718 - 213);
 		}
 		else {
-			FontMetrics.setFont(g, 20);
-			g.setColor(Color.BLACK);
-			
-			// Name and Gender
-			g.drawString(selectedPkm.getActualName() + " " + selectedPkm.getGender().getCharacter(), 213, 147);
-			
 			// Number
 			g.drawString("#" + String.format("%03d", selectedPkm.getPokemonInfo().getNumber()), 378, 147);
 			
@@ -287,7 +281,7 @@ class PartyView extends View {
 				g.setColor(Color.BLACK);
 				if (selectedButton == MOVES + i) {
 					FontMetrics.setFont(g, 10);
-					FontMetrics.drawWrappedText(g, move.getAttack().getName() + " - " + move.getAttack().getDescription(), 6, 11, 280);
+					DrawUtils.drawWrappedText(g, move.getAttack().getName() + " - " + move.getAttack().getDescription(), 6, 11, 280);
 				}
 				else {
 					// Attack name

@@ -1,27 +1,28 @@
 package item.bag;
 
+import java.awt.Color;
 import java.io.Serializable;
 
 public enum BattleBagCategory implements Serializable {
-    HP_PP("HP/PP", 0x16),
-    STATUS("Status", 0x17),
-    BALL("Balls", 0x18),
-    BATTLE("Battle", 0x19);
+    HP_PP("HP/PP", new Color(245, 144, 146)),
+    STATUS("Status", new Color(246, 238, 146)),
+    BALL("Balls", new Color(134, 212, 141)),
+    BATTLE("Battle", new Color(197, 145, 246));
 
     // Name to display in BagView
     private final String name;
-    private final int imageNumber;
+    private final Color color;
 
-    private BattleBagCategory(String name, int imgNum) {
+    BattleBagCategory(String name, Color color) {
         this.name = name;
-        this.imageNumber = imgNum;
+        this.color = color;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public int getImageNumber() {
-        return imageNumber;
+    public Color getColor() {
+        return this.color;
     }
 }
