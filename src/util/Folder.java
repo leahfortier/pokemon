@@ -32,7 +32,7 @@ public abstract class Folder {
     public static final String BAG_TILES = FileIO.makeFolderPath(IMAGES, "bagTiles");
 
     // Tile set folders
-    public static final String BATTLE_TILES = FileIO.makeFolderPath(TILES, "battleTiles");
+    public static final String TERRAIN_TILES = FileIO.makeFolderPath(TILES, "terrainTiles");
     public static final String POKEMON_TILES = FileIO.makeFolderPath(TILES, "pokemonTiles");
     public static final String PARTY_TILES = FileIO.makeFolderPath(TILES, "partyTiles");
     public static final String ITEM_TILES = FileIO.makeFolderPath(TILES, "itemTiles");

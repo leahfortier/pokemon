@@ -3,8 +3,6 @@ package gui.view.battle;
 import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
-import gui.GameData;
-import gui.TileSet;
 import gui.panel.DrawPanel;
 import gui.view.View;
 import gui.view.ViewMode;
@@ -41,6 +39,7 @@ public class BattleView extends View {
 	private final PokemonAnimationState playerAnimation;
 	private final PokemonAnimationState enemyAnimation;
 
+	// Different panels to draw
 	private final DrawPanel menuMessagePanel;
 	private final DrawPanel buttonsPanel;
 	private final DrawPanel largeMenuPanel;
@@ -259,19 +258,16 @@ public class BattleView extends View {
 		
 		ActivePokemon player = currentBattle.getPlayer().front();
 		ActivePokemon opponent = currentBattle.getOpponent().front();
-
-		GameData data = Game.getData();
-		TileSet tiles = data.getBattleTiles();
 		 
 		// Get background based on terrain type
 		TerrainType terrainType = currentBattle.getTerrainType();
-		g.drawImage(tiles.getTile(terrainType.getBackgroundIndex()), 0, 0, null);
+		g.drawImage(terrainType.getBackgroundImage(), 0, 0, null);
 
 		// Player's battle circle
-		g.drawImage(tiles.getTile(terrainType.getPlayerCircleIndex()), 0, 331, null);
+		g.drawImage(terrainType.getPlayerCircleImage(), 0, 331, null);
 		
 		// Opponent battle circle
-		g.drawImage(tiles.getTile(terrainType.getOpponentCircleIndex()), 450, 192, null);
+		g.drawImage(terrainType.getOpponentCircleImage(), 450, 192, null);
 		
 		if (playerAnimation.isEmpty()) {
 			if (enemyAnimation.isEmpty()) {

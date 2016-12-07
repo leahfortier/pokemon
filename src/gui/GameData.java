@@ -15,7 +15,7 @@ public class GameData {
 	private Map<String, Trigger> triggers;
 
 	private TileSet mapTiles;
-	private TileSet battleTiles;
+	private TileSet terrainTiles;
 	private TileSet pokemonTilesLarge;
 	private TileSet pokemonTilesMedium;
 	private TileSet pokemonTilesSmall;
@@ -32,7 +32,7 @@ public class GameData {
 
 	private void loadTiles() {
 		mapTiles = new TileSet(Folder.MAP_TILES);
-		battleTiles = new TileSet(Folder.BATTLE_TILES);
+		terrainTiles = new TileSet(Folder.TERRAIN_TILES);
 		pokemonTilesLarge = new TileSet(Folder.POKEMON_TILES, 2.9f);
 		pokemonTilesMedium = new TileSet(Folder.POKEMON_TILES, 2.3f);
 		pokemonTilesSmall = new TileSet(Folder.POKEMON_TILES);
@@ -90,8 +90,8 @@ public class GameData {
 		return mapTiles;
 	}
 
-	public TileSet getBattleTiles() {
-		return battleTiles;
+	public TileSet getTerrainTiles() {
+		return terrainTiles;
 	}
 
 	public TileSet getItemTiles() {
