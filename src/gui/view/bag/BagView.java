@@ -1,5 +1,6 @@
 package gui.view.bag;
 
+import battle.attack.Attack;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import gui.Button;
@@ -55,17 +56,15 @@ public class BagView extends View {
 	static final int GIVE = NUM_BUTTONS - 4;
 	private static final int RIGHT_ARROW = NUM_BUTTONS - 5;
 	private static final int LEFT_ARROW = NUM_BUTTONS - 6;
-	
-	private final int[] primaryColorX = { 0, 184, 124, 0 };
-	private final int[] primaryColorY = { 0, 0, 61, 61 };
-	private final int[] secondaryColorX = { 184, 308, 308, 124 };
-	private final int[] secondaryColorY = { 0, 0, 61, 61 };
 
 	private final DrawPanel bagPanel;
+	private final DrawPanel pokemonPanel;
+	private final DrawPanel itemsPanel;
+	private final DrawPanel selectedPanel;
 
 	private int pageNum;
-	int selectedTab;
-	int selectedButton;
+	private int selectedTab;
+	private int selectedButton;
 	private MessageUpdate message;
 
 	BagState state;
@@ -88,26 +87,60 @@ public class BagView extends View {
 				spacing + tabHeight,
 				Point.subtract(Global.GAME_SIZE,
 						2*spacing,
-						2*spacing + tabHeight)
-		)
+						2*spacing + tabHeight))
 				.withTransparentBackground()
 				.withBorderPercentage(0)
-				.withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP))
-				);
+				.withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP)));
+
+		int buttonHeight = 38;
+		int selectedHeight = 82;
+		int halfPanelWidth = (bagPanel.width - 3*spacing)/2;
+
+		pokemonPanel = new DrawPanel(
+				bagPanel.x + spacing,
+				bagPanel.y + spacing,
+				halfPanelWidth,
+				bagPanel.height - 2*spacing)
+				.withFullTransparency()
+				.withBlackOutline();
+
+		selectedPanel = new DrawPanel(
+				pokemonPanel.x + pokemonPanel.width + spacing,
+				bagPanel.y + spacing,
+				halfPanelWidth,
+				selectedHeight)
+				.withFullTransparency()
+				.withBlackOutline();;
+
+		Button returnButton = new Button(
+				selectedPanel.x,
+				bagPanel.y + bagPanel.height - spacing - buttonHeight,
+				halfPanelWidth,
+				buttonHeight,
+				ButtonHoverAction.BOX,
+				new int[] { PARTY, RIGHT_ARROW, PARTY, 0 });
+
+		itemsPanel = new DrawPanel(
+				selectedPanel.x,
+				selectedPanel.y + selectedPanel.height + buttonHeight + spacing,
+				halfPanelWidth,
+				pokemonPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing)
+				.withFullTransparency()
+				.withBlackOutline();
 
 		selectedTab = 0;
 		selectedButton = 0;
 		selectedItem = ItemNamesies.NO_ITEM;
 		
-		buttons = new Button[NUM_BUTTONS];
 		tabButtons = new Button[CATEGORIES.length];
 		for (int i = 0; i < CATEGORIES.length; i++) {
-			buttons[i] = tabButtons[i] = new Button(
-					42 + 102*i,
-					42,
-					104,
-					52,
-					ButtonHoverAction.BOX,
+			tabButtons[i] = Button.createTabButton(
+					i,
+					bagPanel.x,
+					bagPanel.y,
+					bagPanel.width,
+					tabHeight,
+					tabButtons.length,
 					new int[] {
 							Button.basicTransition(i, 1, CATEGORIES.length, Direction.RIGHT),
 						 	RETURN, // Up
@@ -115,66 +148,43 @@ public class BagView extends View {
 						 	USE // Down
 					});
 		}
-		
-		partyButtons = new Button[Trainer.MAX_POKEMON];
-		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-			buttons[PARTY + i] = partyButtons[i] = new Button(
-					72,
-					122 + 69*i,
-					308,
-					61,
-					ButtonHoverAction.BOX,
+
+		partyButtons = pokemonPanel.getButtons(10, Trainer.MAX_POKEMON, 1, PARTY, new int[] { GIVE, 0, MOVES, 0 });
+		moveButtons = pokemonPanel.getButtons(10, Trainer.MAX_POKEMON, 1, MOVES, new int[] { PARTY, 0, GIVE, 0 });
+		itemButtons = itemsPanel.getButtons(5, ITEMS_PER_PAGE/2 + 1, 2, ITEMS_PER_PAGE/2, 2, ITEMS, new int[] { -1, USE, -1, RIGHT_ARROW });
+
+		buttons = new Button[NUM_BUTTONS];
+		System.arraycopy(tabButtons, 0, buttons, 0, CATEGORIES.length);
+		System.arraycopy(partyButtons, 0, buttons, PARTY, Trainer.MAX_POKEMON);
+		System.arraycopy(moveButtons, 0, buttons, MOVES, Move.MAX_MOVES);
+		System.arraycopy(itemButtons, 0, buttons, ITEMS, ITEMS_PER_PAGE);
+
+		UseState[] useStates = UseState.values();
+		int lastIndex = useStates.length - 1;
+		for (UseState useState : useStates) {
+			int tabIndex = useState.ordinal();
+			buttons[useState.buttonIndex] = Button.createTabButton(
+					tabIndex,
+					selectedPanel.x,
+					selectedPanel.y + selectedPanel.height + buttonHeight - 2*DrawUtils.OUTLINE_SIZE,
+					selectedPanel.width,
+					buttonHeight,
+					useStates.length,
 					new int[] {
-							i < Trainer.MAX_POKEMON/3 ? GIVE : (i < 2*Trainer.MAX_POKEMON/3 ? ITEMS : RETURN), // Right
-							i == 0 ? 0 : PARTY + i - 1, // Up
-							i < Move.MAX_MOVES ? MOVES + i : (i < Trainer.MAX_POKEMON/3 ? TAKE : (i < 2*Trainer.MAX_POKEMON/3 ? ITEMS : RETURN)), // Left
-							i == Trainer.MAX_POKEMON -1 ? selectedTab : PARTY + i + 1 // Down
-					});
+							tabIndex == lastIndex ? PARTY : useStates[tabIndex + 1].buttonIndex, // Right
+							selectedTab, // Up
+							tabIndex == 0 ? PARTY : useStates[tabIndex - 1].buttonIndex, // Left
+							tabIndex <= useStates.length/2 ? ITEMS : ITEMS + 1 // Down
+					}
+			);
 		}
+
+
+
+		buttons[LEFT_ARROW] = new Button(498, 451, 35, 20, ButtonHoverAction.BOX, new int[] { RIGHT_ARROW, ITEMS + ITEMS_PER_PAGE - 2, RIGHT_ARROW, RETURN });
+		buttons[RIGHT_ARROW] = new Button(613, 451, 35, 20, ButtonHoverAction.BOX, new int[] { LEFT_ARROW, ITEMS + ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN });
 		
-		moveButtons = new Button[Move.MAX_MOVES];
-		for (int i = 0; i < Move.MAX_MOVES; i++) {
-			buttons[MOVES + i] = moveButtons[i] = new Button(
-					72,
-					122 + 69*i,
-					308,
-					61,
-					ButtonHoverAction.BOX,
-					new int[] {
-							PARTY + i, // Right
-							i == 0 ? 0 : MOVES + i - 1, // Up
-							i < Trainer.MAX_POKEMON/3 ? TAKE : (i < 2*Trainer.MAX_POKEMON/3 ? ITEMS : RETURN), // Left, needs to behave like party buttons
-							i == 3 ? selectedTab : MOVES + i + 1 // Down
-					});
-		}
-		
-		itemButtons = new Button[ITEMS_PER_PAGE];
-		for (int i = 0, k = 0; i < ITEMS_PER_PAGE/2; i++) {
-			for (int j = 0; j < 2; j++, k++) {
-				// TODO: uggy assignments
-				buttons[ITEMS + k] = itemButtons[k] = new Button(
-						421 + 160*j,
-						261 + 38*i,
-						148,
-						28,
-						ButtonHoverAction.BOX,
-						new int[] {
-								j == 0 ? ITEMS + k + 1 : PARTY, // Right
-								i == 0 ? USE : ITEMS + k - 2, // Up
-								j == 1 ? ITEMS + k - 1 : PARTY, // Left
-								i == ITEMS_PER_PAGE/2 - 1 ? (j == 0 ? LEFT_ARROW : RIGHT_ARROW) : ITEMS + k + 2 // Down
-						});
-			}
-		}
-		
-		buttons[LEFT_ARROW] = new Button(498, 451, 35, 20, ButtonHoverAction.BOX, new int[] { RIGHT_ARROW, ITEMS_PER_PAGE - 2, PARTY, RETURN });
-		buttons[RIGHT_ARROW] = new Button(613, 451, 35, 20, ButtonHoverAction.BOX, new int[] { PARTY, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN });
-		
-		buttons[GIVE] = new Button(410, 193, 110, 38, ButtonHoverAction.BOX, new int[] { USE, selectedTab, PARTY, ITEMS });
-		buttons[USE] = new Button(518, 193, 110, 38, ButtonHoverAction.BOX, new int[] { TAKE, selectedTab, GIVE, ITEMS });
-		buttons[TAKE] = new Button(628, 193, 110, 38, ButtonHoverAction.BOX, new int[] { PARTY, selectedTab, USE, ITEMS + 1 });
-		
-		buttons[RETURN] = new Button(410, 500, 328, 38, ButtonHoverAction.BOX, new int[] { PARTY, LEFT_ARROW, PARTY, selectedTab });
+		buttons[RETURN] = returnButton;
 		
 		movedToFront();
 	}
@@ -233,14 +243,11 @@ public class BagView extends View {
 			iter.next();
 		}
 
-		// TODO: Why does this loop need to be like this?
-		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
-			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
-				ItemNamesies item = iter.next();
-				if (itemButtons[k].checkConsumePress()) {
-					selectedItem = item;
-					updateActiveButtons();
-				}
+		for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
+			ItemNamesies item = iter.next();
+			if (itemButtons[i].checkConsumePress()) {
+				selectedItem = item;
+				updateActiveButtons();
 			}
 		}
 		
@@ -283,7 +290,6 @@ public class BagView extends View {
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
 
-		TileSet tiles = data.getMenuTiles();
 		TileSet itemTiles = data.getItemTiles();
 		TileSet partyTiles = data.getPartyTiles();
 		
@@ -291,49 +297,55 @@ public class BagView extends View {
 		List<ActivePokemon> team = player.getTeam();
 		
 		// Background
-		g.drawImage(tiles.getTile(0x2), 0,0, null);
+		BasicPanels.drawCanvasPanel(g);
 		
 		// Info Boxes
-		g.setColor(CATEGORIES[selectedTab].getColor());
-		g.fillRect(42, 92, 716, 466);
-		
-		g.drawImage(tiles.getTile(0x21), 42, 92, null);
-		g.drawImage(tiles.getTile(0x22), 62, 112, null);
+		bagPanel.withBackgroundColor(CATEGORIES[selectedTab].getColor())
+				.drawBackground(g);
 
+		// Draw Use State buttons
 		for (UseState useState : UseState.values()) {
 			useState.draw(g, buttons[useState.buttonIndex]);
 		}
 
-		// Draw Use State buttons
-		g.drawImage(tiles.getTile(0x28), 410, 193, null);
-		for (UseState useState : UseState.values()) {
-			buttons[useState.buttonIndex].label(g, 20, useState.displayName);
-		}
-
-		// Item Display
+		// Selected item Display
+		selectedPanel.drawBackground(g);
 		if (selectedItem != ItemNamesies.NO_ITEM) {
+			int spacing = 8;
+
 			Item selectedItemValue = selectedItem.getItem();
 
 			// Draw item image
 			BufferedImage img = itemTiles.getTile(selectedItemValue.getImageIndex());
-			DrawUtils.drawCenteredImage(g, img, 430, 132);
+			g.drawImage(img, selectedPanel.x + 5, selectedPanel.y, null);
 			
 			g.setColor(Color.BLACK);
 			FontMetrics.setFont(g, 20);
-			g.drawString(selectedItem.getName(), 448, 138);
+
+			int startY = selectedPanel.y + FontMetrics.getDistanceBetweenRows(g);
+
+			g.drawString(selectedItem.getName(), selectedPanel.x + 2*spacing + Global.TILE_SIZE, startY);
 			
 			if (selectedItemValue.hasQuantity()) {
-				DrawUtils.drawRightAlignedString(g, "x" + bag.getQuantity(selectedItem), 726, 138);
+				String quantityString = "x" + bag.getQuantity(selectedItem);
+				DrawUtils.drawRightAlignedString(g, quantityString, selectedPanel.x + selectedPanel.width - 2*spacing, startY);
 			}
 			
 			FontMetrics.setFont(g, 14);
-			DrawUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - buttons[GIVE].x);
+			DrawUtils.drawWrappedText(
+					g,
+					selectedItemValue.getDescription(),
+					selectedPanel.x + spacing,
+					startY + FontMetrics.getDistanceBetweenRows(g),
+					selectedPanel.width - 2*spacing
+			);
 		}
 		
 		FontMetrics.setFont(g, 12);
 		g.setColor(Color.BLACK);
 		
 		// Draw each items in category
+		itemsPanel.drawBackground(g);
 		Set<ItemNamesies> list = bag.getCategory(CATEGORIES[selectedTab]);
 		Iterator<ItemNamesies> iter = list.iterator();
 		
@@ -343,11 +355,15 @@ public class BagView extends View {
 		
 		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
 			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
-				g.translate(itemButtons[k].x, itemButtons[k].y);
 				ItemNamesies item = iter.next();
 				Item itemValue = item.getItem();
-				
-				g.drawImage(tiles.getTile(0x26), 0, 0, null);
+				Button itemButton = itemButtons[k];
+
+				itemButton.fill(g, Color.WHITE);
+				itemButton.blackOutline(g);
+
+				g.translate(itemButton.x, itemButton.y);
+
 				DrawUtils.drawCenteredImage(g, itemTiles.getTile(itemValue.getImageIndex()), 14, 14);
 				
 				g.drawString(item.getName(), 29, 18);
@@ -356,59 +372,67 @@ public class BagView extends View {
 					DrawUtils.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
 				}
 				
-				g.translate(-itemButtons[k].x, -itemButtons[k].y);
+				g.translate(-itemButton.x, -itemButton.y);
 			}
 		}
 		
 		// Draw page numbers
 		FontMetrics.setFont(g, 16);
-		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(list.size()), 573, 466);
+		DrawUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(list.size()), itemsPanel.centerX(), buttons[RIGHT_ARROW].centerY());
 		
 		// Left and Right arrows
 		View.drawArrows(g, buttons[LEFT_ARROW], buttons[RIGHT_ARROW]);
 		
 		// Draw moves
+		pokemonPanel.drawBackground(g);
 		if (state == BagState.MOVE_SELECT) {
 			List<Move> moveList = selectedPokemon.getActualMoves();
 			
 			for (int i = 0; i < moveList.size(); i++) {
-				g.translate(moveButtons[i].x, moveButtons[i].y);
-				
-				Move m = moveList.get(i);
+				Move move = moveList.get(i);
+				Attack attack = move.getAttack();
+				Button moveButton = moveButtons[i];
 
-				moveButtons[i].fillTranslated(g, m.getAttack().getActualType().getColor());
-				
-				g.drawImage(tiles.getTile(0x25), 0, 0, null);
-				
-				g.drawImage(m.getAttack().getActualType().getImage(), 254, 14, null);
-				g.drawImage(m.getAttack().getCategory().getImage(), 254, 33, null);
+				g.translate(moveButton.x, moveButton.y);
+
+				DrawPanel movePanel = new DrawPanel(0, 0, moveButton.width, moveButton.height)
+						.withTransparentBackground(attack.getActualType().getColor())
+						.withTransparentCount(2)
+						.withBorderPercentage(15)
+						.withBlackOutline();
+				movePanel.drawBackground(g);
+
+
+				g.drawImage(attack.getActualType().getImage(), 254, 14, null);
+				g.drawImage(attack.getCategory().getImage(), 254, 33, null);
 				
 				g.setColor(Color.BLACK);
 				FontMetrics.setFont(g, 14);
-				g.drawString("PP: " + m.getPP() + "/" + m.getMaxPP(), 166, moveButtons[i].height/2 + 5); // TODO: Center the height properly
+				DrawUtils.drawCenteredHeightString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 166, movePanel.centerY());
 
 				g.setColor(Color.BLACK);
 				FontMetrics.setFont(g, 20);
-				g.drawString(m.getAttack().getName(), 20, 38);
+				g.drawString(attack.getName(), 20, 38);
 				
-				g.translate(-moveButtons[i].x, -moveButtons[i].y);
+				g.translate(-moveButton.x, -moveButton.y);
 			}
 		}
 		// Draw Pokemon Info
 		else {
 			for (int i = 0; i < team.size(); i++) {
-				g.translate(partyButtons[i].x, partyButtons[i].y);
-				
 				ActivePokemon p = team.get(i);
-				Color[] typeColors = Type.getColors(p);
-				
-				g.setColor(typeColors[0]);
-				g.fillPolygon(primaryColorX, primaryColorY, 4);
-				g.setColor(typeColors[1]);
-				g.fillPolygon(secondaryColorX, secondaryColorY, 4);
-				
-				g.drawImage(tiles.getTile(0x25), 0, 0, null);
-				
+				Button pokemonButton = partyButtons[i];
+
+				g.translate(pokemonButton.x, pokemonButton.y);
+
+				DrawPanel pokemonPanel = new DrawPanel(0, 0, pokemonButton.width, pokemonButton.height)
+						.withBackgroundColors(Type.getColors(p))
+						.withTransparentCount(2)
+						.withBorderPercentage(15)
+						.withBlackOutline();
+				pokemonPanel.drawBackground(g);
+
+
 				BufferedImage img = partyTiles.getTile(p.getTinyImageIndex());
 				DrawUtils.drawCenteredImage(g, img, 30, 30); // TODO: This looks slightly off
 				
@@ -440,39 +464,33 @@ public class BagView extends View {
 					
 					if (p.hasStatus(StatusCondition.FAINTED)) {
 						// TODO: Look if this color appears in multiple place and see if it should be a constant
-						partyButtons[i].fillTranslated(g, new Color(0, 0, 0, 128));
+						pokemonButton.fillTranslated(g, new Color(0, 0, 0, 128));
 					}	
 				}
 				
-				g.translate(-partyButtons[i].x, -partyButtons[i].y);
+				g.translate(-pokemonButton.x, -pokemonButton.y);
 			}
 		}
 		
-		g.setColor(Color.BLACK);
-		FontMetrics.setFont(g, 20);
-		
-		g.drawImage(tiles.getTile(0x27), 410, 500, null);
-		DrawUtils.drawCenteredWidthString(g, "Return", 573, 525);
+		Button returnButton = buttons[RETURN];
+		returnButton.fillTransparent(g);
+		returnButton.blackOutline(g);
+		returnButton.label(g, 20, "Return");
 		
 		for (int i = 0; i < CATEGORIES.length; i++) {
-			g.translate(tabButtons[i].x, tabButtons[i].y);
-			
-			FontMetrics.setFont(g, 14);
-			tabButtons[i].fillTranslated(g, CATEGORIES[i].getColor());
-			
-			if (selectedTab == i) {
-				g.drawImage(tiles.getTile(0x23), 0, 0, null);
-			}
-			else {
-				g.drawImage(tiles.getTile(0x24), 0, 0, null);
-			}
-			
+			Button tabButton = tabButtons[i];
+			tabButton.fillTransparent(g, CATEGORIES[i].getColor());
+			tabButton.outlineTab(g, i, selectedTab);
+
+			g.translate(tabButton.x, tabButton.y);
+
 			g.setColor(Color.BLACK);
+			FontMetrics.setFont(g, 14);
 
 			DrawUtils.drawCenteredImage(g, CATEGORIES[i].getIcon(), 16, 26);
 			g.drawString(CATEGORIES[i].getDisplayName(), 30, 30);
 			
-			g.translate(-tabButtons[i].x, -tabButtons[i].y);
+			g.translate(-tabButton.x, -tabButton.y);
 		}
 		
 		if (message != null) {
@@ -490,7 +508,15 @@ public class BagView extends View {
 		return ViewMode.BAG_VIEW;
 	}
 
-	void changeCategory(int index) {
+	void setSelectedButton(UseState useState) {
+		selectedButton = useState.buttonIndex;
+	}
+
+	void updateCategory() {
+		changeCategory(this.selectedTab);
+	}
+
+	private void changeCategory(int index) {
 		if (selectedTab != index) {
 			pageNum = 0;
 		}
@@ -529,6 +555,9 @@ public class BagView extends View {
 		for (int i = 0; i < Move.MAX_MOVES; i++) {
 			moveButtons[i].setActive(state == BagState.MOVE_SELECT && i < selectedPokemon.getActualMoves().size());
 		}
+
+		buttons[LEFT_ARROW].setActive(state == BagState.ITEM_SELECT);
+		buttons[RIGHT_ARROW].setActive(state == BagState.ITEM_SELECT);
 
 		if (selectedItem == ItemNamesies.NO_ITEM || !player.getBag().hasItem(selectedItem)) {
 			selectedItem = ItemNamesies.NO_ITEM;

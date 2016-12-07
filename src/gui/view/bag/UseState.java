@@ -30,7 +30,7 @@ enum UseState {
         state.deactivate(bagView);
     });
 
-    final String displayName;
+    private final String displayName;
     final int buttonIndex;
     private final UseButton useButton;
 
@@ -44,11 +44,11 @@ enum UseState {
 
     private void deactivate(BagView bagView) {
         this.clicked = false;
-        bagView.selectedButton = this.buttonIndex;
+        bagView.setSelectedButton(this);
         bagView.state = BagState.ITEM_SELECT;
 
         if (!Game.getPlayer().getBag().hasItem(bagView.selectedItem)) {
-            bagView.changeCategory(bagView.selectedTab);
+            bagView.updateCategory();
         }
 
         bagView.updateActiveButtons();
@@ -68,6 +68,10 @@ enum UseState {
         if (!button.isActive()) {
             button.greyOut(g, true);
         }
+
+        button.fillTransparent(g);
+        button.outlineTab(g, this.ordinal(), -1);
+        button.label(g, 20, displayName);
     }
 
     void use(BagView bagView, ActivePokemon p) {

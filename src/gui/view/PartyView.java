@@ -362,7 +362,7 @@ class PartyView extends View {
 				g.translate(moveButton.x, moveButton.y);
 
 				DrawPanel movePanel = new DrawPanel(0, 0, moveButton.width, moveButton.height)
-						.withTransparentBackground(move.getAttack().getActualType().getColor())
+						.withTransparentBackground(attack.getActualType().getColor())
 						.withTransparentCount(2)
 						.withBorderPercentage(15)
 						.withBlackOutline();

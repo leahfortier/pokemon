@@ -76,12 +76,38 @@ public class Button {
 
 	// Works for all grid buttons
 	public static int[] getBasicTransitions(int currentIndex, int numRows, int numCols) {
-		return new int[] {
-				basicTransition(currentIndex, numRows, numCols, Direction.RIGHT),
-				basicTransition(currentIndex, numRows, numCols, Direction.UP),
-				basicTransition(currentIndex, numRows, numCols, Direction.LEFT),
-				basicTransition(currentIndex, numRows, numCols, Direction.DOWN)
-		};
+		int[] transitions = new int[Direction.values().length];
+		for (int i = 0; i < transitions.length; i++) {
+			Direction direction = Direction.values()[i];
+			transitions[i] = basicTransition(currentIndex, numRows, numCols, direction);
+		}
+
+		return transitions;
+	}
+
+	// Works for all grid buttons
+	public static int[] getBasicTransitions(int currentIndex, int numRows, int numCols, int startValue, int[] defaultTransitions) {
+		// Get the corresponding grid index
+		Point location = Point.getPointAtIndex(currentIndex, numCols);
+
+		int[] transitions = new int[Direction.values().length];
+		for (int i = 0; i < transitions.length; i++) {
+			Direction direction = Direction.values()[i];
+			Point newLocation = Point.add(location, direction.getDeltaPoint());
+			boolean inBounds = newLocation.inBounds(numCols, numRows);
+
+			// Default value specified and out of bounds -- use default value instead of wrapping
+			if (defaultTransitions != null
+					&& i < defaultTransitions.length
+					&& defaultTransitions[i] != -1
+					&& !inBounds) {
+				transitions[i] = defaultTransitions[i];
+			} else {
+				transitions[i] = basicTransition(currentIndex, numRows, numCols, direction) + startValue;
+			}
+		}
+
+		return transitions;
 	}
 
 	public static int basicTransition(int currentIndex, int numRows, int numCols, Direction direction) {
@@ -123,12 +149,11 @@ public class Button {
 	}
 
 	private static int transition(Button[] buttons, int index, Direction direction) {
-		int next = buttons[index].transition[direction.ordinal()];
-		
-		while (next != NO_TRANSITION && !buttons[next].isActive()) {
+		int next = index;
+		do {
 			next = buttons[next].transition[direction.ordinal()];
-		}
-		
+		} while (next != NO_TRANSITION && !buttons[next].isActive());
+
 		if (next == NO_TRANSITION) {
 			return index;
 		}

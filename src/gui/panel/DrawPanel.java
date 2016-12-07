@@ -192,31 +192,47 @@ public class DrawPanel {
     }
 
     public Button[] getButtons(int spacing, int numRows, int numCols) {
-        int buttonWidth = (this.width - (numCols + 1)*spacing)/numCols;
-        int buttonHeight = (this.height - (numRows + 1)*spacing)/numRows;
+        return this.getButtons(spacing, numRows, numCols, 0, null);
+    }
 
-        return this.getButtons(buttonWidth, buttonHeight, numRows, numCols);
+    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, int[] defaultTransitions) {
+        return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions);
+    }
+
+    public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex, int[] defaultTransitions) {
+        int buttonWidth = (this.width - (numSpaceCols + 1)*spacing)/numSpaceCols;
+        int buttonHeight = (this.height - (numSpaceRows + 1)*spacing)/numSpaceRows;
+
+        return this.getButtons(buttonWidth, buttonHeight, numSpaceRows, numSpaceCols, numButtonRows, numButtonCols, startIndex, defaultTransitions);
     }
 
     public Button[] getButtons(int buttonWidth, int buttonHeight, int numRows, int numCols) {
+        return this.getButtons(buttonWidth, buttonHeight, numRows, numCols, numRows, numCols, 0, null);
+    }
+
+    public Button[] getButtons(
+            int buttonWidth, int buttonHeight,
+            int numSpaceRows, int numSpaceCols,
+            int numButtonRows, int numButtonCols,
+            int startValue, int[] defaultTransitions) {
         int borderSize = this.getBorderSize();
 
-        int horizontalSpacing = this.width - 2*borderSize - numCols*buttonWidth;
-        int verticalSpacing = this.height - 2*borderSize - numRows*buttonHeight;
+        int horizontalSpacing = this.width - 2*borderSize - numSpaceCols*buttonWidth;
+        int verticalSpacing = this.height - 2*borderSize - numSpaceRows*buttonHeight;
 
-        int xSpacing = horizontalSpacing/(numCols + 1);
-        int ySpacing = verticalSpacing/(numRows + 1);
+        int xSpacing = horizontalSpacing/(numSpaceCols + 1);
+        int ySpacing = verticalSpacing/(numSpaceRows + 1);
 
-        Button[] buttons = new Button[numRows*numCols];
-        for (int row = 0, index = 0; row < numRows; row++) {
-            for (int col = 0; col < numCols; col++, index++) {
+        Button[] buttons = new Button[numButtonRows*numButtonCols];
+        for (int row = 0, index = 0; row < numButtonRows; row++) {
+            for (int col = 0; col < numButtonCols; col++, index++) {
                 buttons[index] = new Button(
                         this.x + borderSize + xSpacing*(col + 1) + buttonWidth*col,
                         this.y + borderSize + ySpacing*(row + 1) + buttonHeight*row,
                         buttonWidth,
                         buttonHeight,
                         ButtonHoverAction.BOX,
-                        Button.getBasicTransitions(index, numRows, numCols)
+                        Button.getBasicTransitions(index, numButtonRows, numButtonCols, startValue, defaultTransitions)
                 );
             }
         }
@@ -244,7 +260,7 @@ public class DrawPanel {
 
     public void drawLeftLabel(Graphics g, int fontSize, String label) {
         int startX = x + this.getTextSpace(g);
-        int centerY = y + height/2;
+        int centerY = centerY();
 
         FontMetrics.setFont(g, fontSize);
         DrawUtils.drawCenteredHeightString(g, label, startX, centerY);
@@ -252,5 +268,13 @@ public class DrawPanel {
 
     public void imageLabel(Graphics g, BufferedImage image) {
         DrawUtils.drawCenteredImage(g, image, x + width/2, y + height/2);
+    }
+
+    public int centerX() {
+        return x + width/2;
+    }
+
+    public int centerY() {
+        return y + height/2;
     }
 }
