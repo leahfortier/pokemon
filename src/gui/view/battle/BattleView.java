@@ -2,7 +2,7 @@ package gui.view.battle;
 
 import battle.Battle;
 import battle.attack.Move;
-import gui.Button;
+import gui.button.Button;
 import gui.panel.BasicPanels;
 import gui.panel.DrawPanel;
 import gui.view.View;

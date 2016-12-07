@@ -1,6 +1,6 @@
 package gui.view;
 
-import gui.Button;
+import gui.button.Button;
 
 import java.awt.Graphics;
 

@@ -1,8 +1,8 @@
 package gui.view;
 
 import battle.attack.Move;
-import gui.Button;
-import gui.ButtonHoverAction;
+import gui.button.Button;
+import gui.button.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
 import main.Game;

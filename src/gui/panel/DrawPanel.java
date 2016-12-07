@@ -1,7 +1,7 @@
 package gui.panel;
 
-import gui.Button;
-import gui.ButtonHoverAction;
+import gui.button.Button;
+import gui.button.ButtonHoverAction;
 import map.Direction;
 import util.DrawUtils;
 import util.FontMetrics;

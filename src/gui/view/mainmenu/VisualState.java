@@ -1,6 +1,6 @@
 package gui.view.mainmenu;
 
-import gui.Button;
+import gui.button.Button;
 import sound.SoundTitle;
 
 import java.awt.Graphics;

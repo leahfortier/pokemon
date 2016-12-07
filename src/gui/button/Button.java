@@ -1,4 +1,4 @@
-package gui;
+package gui.button;
 
 import gui.panel.DrawPanel;
 import input.ControlKey;

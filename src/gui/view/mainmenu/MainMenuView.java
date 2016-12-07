@@ -1,7 +1,7 @@
 package gui.view.mainmenu;
 
-import gui.Button;
-import gui.ButtonHoverAction;
+import gui.button.Button;
+import gui.button.ButtonHoverAction;
 import gui.TileSet;
 import gui.view.View;
 import gui.view.ViewMode;

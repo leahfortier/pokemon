@@ -1,8 +1,8 @@
 package gui.view.map;
 
-import gui.Button;
+import gui.button.Button;
 import gui.GameData;
-import gui.ButtonHoverAction;
+import gui.button.ButtonHoverAction;
 import gui.TileSet;
 import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;

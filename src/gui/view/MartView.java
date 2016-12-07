@@ -1,8 +1,8 @@
 package gui.view;
 
-import gui.Button;
+import gui.button.Button;
 import gui.GameData;
-import gui.ButtonHoverAction;
+import gui.button.ButtonHoverAction;
 import gui.TileSet;
 import item.Item;
 import item.ItemNamesies;
@@ -236,7 +236,8 @@ class MartView extends View {
 			g.drawImage(tiles.getTile(0x28), 410, 193, null);
 			
 			g.drawString(itemAmount + "", 568, 218);
-			View.drawArrows(g, amountLeftButton, amountRightButton, 35, 10);
+			// TODO: Used to have offset 35, 10
+			View.drawArrows(g, amountLeftButton, amountRightButton);
 		}
 		
 		FontMetrics.setFont(g, 12);

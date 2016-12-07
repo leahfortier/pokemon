@@ -1,6 +1,6 @@
 package gui.panel;
 
-import gui.Button;
+import gui.button.Button;
 import main.Global;
 
 import java.awt.Graphics;
