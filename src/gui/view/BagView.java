@@ -6,7 +6,7 @@ import gui.Button;
 import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
-import gui.panel.DrawPanel;
+import gui.panel.BasicPanels;
 import item.Item;
 import item.ItemNamesies;
 import item.bag.Bag;
@@ -556,7 +556,7 @@ class BagView extends View {
 		}
 		
 		if (message != null) {
-			DrawPanel.drawFullMessagePanel(g, message.getMessage());
+			BasicPanels.drawFullMessagePanel(g, message.getMessage());
 		}
 		else {
 			for (Button button : buttons) {

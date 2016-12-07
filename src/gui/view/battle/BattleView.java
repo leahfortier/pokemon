@@ -3,6 +3,7 @@ package gui.view.battle;
 import battle.Battle;
 import battle.attack.Move;
 import gui.Button;
+import gui.panel.BasicPanels;
 import gui.panel.DrawPanel;
 import gui.view.View;
 import gui.view.ViewMode;
@@ -72,7 +73,7 @@ public class BattleView extends View {
 	}
 
 	public void drawFullMessagePanel(Graphics g, String text) {
-		DrawPanel.drawFullMessagePanel(g, text);
+		BasicPanels.drawFullMessagePanel(g, text);
 	}
 
 	public void drawMenuMessagePanel(Graphics g, String text) {
@@ -89,7 +90,7 @@ public class BattleView extends View {
 	}
 
 	public Button[] createMessagePanelButtons(int numRows, int numCols) {
-		return DrawPanel.getFullPanelButtons(BUTTON_WIDTH, BUTTON_HEIGHT, numRows, numCols);
+		return BasicPanels.getFullMessagePanelButtons(BUTTON_WIDTH, BUTTON_HEIGHT, numRows, numCols);
 	}
 
 	private Button[] createPanelButtons(DrawPanel buttonsPanel, int numRows, int numCols) {
@@ -296,11 +297,11 @@ public class BattleView extends View {
 
 		g.translate(dx, dy);
 
-		DrawPanel movePanel = new DrawPanel(0, 0, 183, 55)
+		new DrawPanel(0, 0, moveButton.width, moveButton.height)
 				.withTransparentBackground(move.getAttack().getActualType().getColor())
 				.withBorderPercentage(15)
-				.withBlackOutline();
-		movePanel.drawBackground(g);
+				.withBlackOutline()
+				.drawBackground(g);
 
 		g.setColor(Color.BLACK);
 		FontMetrics.setFont(g, 22);

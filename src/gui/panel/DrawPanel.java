@@ -5,13 +5,15 @@ import gui.ButtonHoverAction;
 import map.Direction;
 import util.DrawUtils;
 import util.FontMetrics;
+import util.Point;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 
 public class DrawPanel {
-    private static final DrawPanel fullMessagePanel = new DrawPanel(0, 440, 800, 161).withBlackOutline();
 
     public final int x;
     public final int y;
@@ -31,6 +33,14 @@ public class DrawPanel {
 
     private boolean onlyTransparency;
     private int transparentCount;
+
+    public DrawPanel(int x, int y, Dimension dimension) {
+        this(x, y, dimension.width, dimension.height);
+    }
+
+    public DrawPanel(int x, int y, Point dimension) {
+        this(x, y, dimension.x, dimension.y);
+    }
 
     public DrawPanel(int x, int y, int width, int height) {
         this.x = x;
@@ -104,11 +114,15 @@ public class DrawPanel {
     }
 
     public int getBorderSize() {
-        if (transparentBackground && backgroundColor == null) {
+        if (onlyTransparency) {
             return 0;
         }
 
-        return (int)(borderPercentage/100.0*Math.min(width, height));
+        return getInsetSize(borderPercentage);
+    }
+
+    public int getInsetSize(int insetPercentage) {
+        return (int)(insetPercentage/100.0*Math.min(width, height));
     }
 
     // NOTE: This only works for panels where the width is greater than the height
@@ -177,6 +191,13 @@ public class DrawPanel {
         blackOutline(g);
     }
 
+    public Button[] getButtons(int spacing, int numRows, int numCols) {
+        int buttonWidth = (this.width - (numCols + 1)*spacing)/numCols;
+        int buttonHeight = (this.height - (numRows + 1)*spacing)/numRows;
+
+        return this.getButtons(buttonWidth, buttonHeight, numRows, numCols);
+    }
+
     public Button[] getButtons(int buttonWidth, int buttonHeight, int numRows, int numCols) {
         int borderSize = this.getBorderSize();
 
@@ -229,12 +250,7 @@ public class DrawPanel {
         DrawUtils.drawCenteredHeightString(g, label, startX, centerY);
     }
 
-    public static int drawFullMessagePanel(Graphics g, String text) {
-        fullMessagePanel.drawBackground(g);
-        return fullMessagePanel.drawMessage(g, 30, text);
-    }
-
-    public static Button[] getFullPanelButtons(int buttonWidth, int buttonHeight, int numRows, int numCols) {
-        return fullMessagePanel.getButtons(buttonWidth, buttonHeight, numRows, numCols);
+    public void imageLabel(Graphics g, BufferedImage image) {
+        DrawUtils.drawCenteredImage(g, image, x + width/2, y + height/2);
     }
 }

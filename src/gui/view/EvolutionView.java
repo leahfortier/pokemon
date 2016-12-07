@@ -2,7 +2,7 @@ package gui.view;
 
 import gui.GameData;
 import gui.TileSet;
-import gui.panel.DrawPanel;
+import gui.panel.BasicPanels;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -119,7 +119,7 @@ class EvolutionView extends View {
 		}
 		
 		if (message != null) {
-			DrawPanel.drawFullMessagePanel(g, message);
+			BasicPanels.drawFullMessagePanel(g, message);
 		}
 	}
 	

@@ -1,7 +1,7 @@
 package gui.view.map;
 
 import gui.GameData;
-import gui.panel.DrawPanel;
+import gui.panel.BasicPanels;
 import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
@@ -27,7 +27,7 @@ class MessageState implements VisualStateHandler {
         GameData data = Game.getData();
         MessageUpdate currentMessage = mapView.getCurrentMessage();
 
-        int height = DrawPanel.drawFullMessagePanel(g, currentMessage.getMessage());
+        int height = BasicPanels.drawFullMessagePanel(g, currentMessage.getMessage());
         if (currentMessage.isChoice()) {
             ChoiceMatcher[] choices = currentMessage.getChoices();
             for (int i = 0; i < choices.length; i++) {

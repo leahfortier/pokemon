@@ -765,6 +765,10 @@ public class ActivePokemon implements Serializable {
 		setStats();
 		return added;
 	}
+
+	public boolean isDualTyped() {
+		return this.getActualType()[1] != Type.NO_TYPE;
+	}
 	
 	public Type[] getActualType() {
 		return pokemon.getType();

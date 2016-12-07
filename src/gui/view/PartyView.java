@@ -1,23 +1,31 @@
 package gui.view;
 
+import battle.attack.Attack;
 import battle.attack.Move;
 import gui.Button;
 import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
+import gui.panel.BasicPanels;
+import gui.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
+import main.Global;
 import main.Type;
+import map.Direction;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
+import pokemon.ability.Ability;
 import trainer.Trainer;
 import util.DrawUtils;
 import util.FontMetrics;
+import util.Point;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.EnumSet;
 import java.util.List;
 
 class PartyView extends View {
@@ -25,14 +33,23 @@ class PartyView extends View {
 	private static final int MOVES = Trainer.MAX_POKEMON;
 	private static final int RETURN = NUM_BUTTONS - 1;
 	private static final int SWITCH = NUM_BUTTONS - 2;
-	
-	private static final int[] primaryColorx = { 41, 633, 167,  41 };
-	private static final int[] primaryColory = { 93,  93, 559, 559 };
-	private static final int[] secondaryColorx = { 633, 759, 759, 167 };
-	private static final int[] secondaryColory = { 93,  93, 559, 559 };
 
-	private final Button[] buttons, tabButtons, moveButtons;
-	private final Button switchButton, returnButton;
+	private final DrawPanel pokemonPanel;
+	private final DrawPanel imagePanel;
+	private final DrawPanel basicInformationPanel;
+	private final DrawPanel abilityPanel;
+	private final DrawPanel statsPanel;
+	private final DrawPanel movesPanel;
+
+	private final DrawPanel hpBar;
+	private final DrawPanel expBar;
+
+	private final Button[] buttons;
+	private final Button[] tabButtons;
+	private final Button[] moveButtons;
+
+	private final Button switchButton;
+	private final Button returnButton;
 	
 	private int selectedTab;
 	private int selectedButton;
@@ -43,43 +60,126 @@ class PartyView extends View {
 		selectedButton = 0;
 		switchTabIndex = -1;
 
-		// TODO: uggy buggy
-		buttons = new Button[NUM_BUTTONS];
+		int tabHeight = 55;
+		int spacing = 28;
+
+		pokemonPanel = new DrawPanel(
+				spacing,
+				spacing + tabHeight,
+				Point.subtract(Global.GAME_SIZE,
+						2*spacing,
+						2*spacing + tabHeight)
+				)
+				.withTransparentBackground()
+				.withBorderPercentage(0)
+				.withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP))
+		);
+
+		imagePanel = new DrawPanel(
+				pokemonPanel.x + spacing,
+				pokemonPanel.y + spacing,
+				104,
+				104)
+				.withFullTransparency()
+				.withBlackOutline();
+
+		basicInformationPanel = new DrawPanel(
+				imagePanel.x + imagePanel.width + spacing,
+				imagePanel.y,
+				pokemonPanel.width - 3*spacing - imagePanel.width,
+				imagePanel.height)
+				.withFullTransparency()
+				.withBlackOutline();
+
+		int barHeight = 15;
+		int expBarWidth = basicInformationPanel.width/3;
+		expBar = new DrawPanel(
+				basicInformationPanel.x + basicInformationPanel.width - expBarWidth,
+				basicInformationPanel.y + basicInformationPanel.height - DrawUtils.OUTLINE_SIZE,
+				expBarWidth,
+				barHeight)
+				.withBlackOutline();
+
+		int buttonHeight = 38;
+		int halfPanelWidth =(pokemonPanel.width - 3*spacing)/2;
+		int statsPanelHeight = 138;
+
+		abilityPanel = new DrawPanel(
+				imagePanel.x,
+				imagePanel.y + imagePanel.height + spacing,
+				halfPanelWidth,
+				pokemonPanel.height - 5*spacing - imagePanel.height - buttonHeight - statsPanelHeight)
+				.withFullTransparency()
+				.withBlackOutline();
+
+		statsPanel = new DrawPanel(
+				abilityPanel.x,
+				abilityPanel.y + abilityPanel.height + spacing,
+				halfPanelWidth,
+				statsPanelHeight)
+				.withFullTransparency()
+				.withBlackOutline();
+
+		hpBar = new DrawPanel(
+				statsPanel.x,
+				statsPanel.y,
+				statsPanel.width/2,
+				barHeight)
+				.withBlackOutline();
+
+		movesPanel = new DrawPanel(
+				abilityPanel.x + abilityPanel.width + spacing,
+				abilityPanel.y,
+				halfPanelWidth,
+				statsPanel.y + statsPanel.height - abilityPanel.y)
+				.withFullTransparency()
+				.withBlackOutline();
+
+		switchButton = new Button(
+				statsPanel.x,
+				statsPanel.y + statsPanel.height + spacing,
+				halfPanelWidth,
+				buttonHeight,
+				ButtonHoverAction.BOX,
+				new int[] { RETURN, 0, RETURN, 0 }
+		);
+
+		returnButton = new Button(
+				movesPanel.x,
+				switchButton.y,
+				halfPanelWidth,
+				buttonHeight,
+				ButtonHoverAction.BOX,
+				new int[] { SWITCH, 0, SWITCH, 0 }
+		);
+
 		tabButtons = new Button[Trainer.MAX_POKEMON];
-		moveButtons = new Button[Move.MAX_MOVES];
-		
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-			buttons[i] = tabButtons[i] = new Button(
-					39 + i*120,
-					39,
-					122,
-					55,
-					ButtonHoverAction.BOX,
+			tabButtons[i] = Button.createTabButton(
+					i,
+					pokemonPanel.x,
+					pokemonPanel.y,
+					pokemonPanel.width,
+					tabHeight,
+					tabButtons.length,
 					new int[] {
 							i == Trainer.MAX_POKEMON - 1 ? 0 : i + 1, // Right
-							i < Trainer.MAX_POKEMON ? SWITCH: RETURN, // Up
+							i < Trainer.MAX_POKEMON ? SWITCH : RETURN, // Up
 							i == 0 ? Trainer.MAX_POKEMON - 1 : i - 1, // Left
 							MOVES // Down
 					});
 		}
-		
-		for (int i = 0; i < Move.MAX_MOVES; i++) {
-			buttons[MOVES + i] = moveButtons[i] = new Button(
-					426,
-					266 + i*49,
-					293,
-					40,
-					ButtonHoverAction.BOX,
-					new int[] {
-							-1, // Right
-							i == 0 ? 0 : MOVES + i - 1, // Up 
-							SWITCH, // Left
-							i == Move.MAX_MOVES - 1 ? RETURN : MOVES + i + 1 // Down
-					});
-		}
-		
-		buttons[SWITCH] = switchButton = new Button(69, 493, 317, 38, ButtonHoverAction.BOX, new int[] { RETURN, MOVES + Move.MAX_MOVES - 1, RETURN, 0 });
-		buttons[RETURN] = returnButton = new Button(414, 493, 317, 38, ButtonHoverAction.BOX, new int[] { SWITCH, MOVES + Move.MAX_MOVES - 1, SWITCH, 0 });
+
+		moveButtons = movesPanel.getButtons(10, Move.MAX_MOVES, 1);
+
+		buttons = new Button[NUM_BUTTONS];
+
+		System.arraycopy(tabButtons, 0, buttons, 0, tabButtons.length);
+		System.arraycopy(moveButtons, 0, buttons, MOVES, moveButtons.length);
+
+		buttons[SWITCH] = switchButton;
+		buttons[RETURN] = returnButton;
+
 		updateActiveButtons();
 	}
 
@@ -120,139 +220,120 @@ class PartyView extends View {
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
 
-		TileSet tiles = data.getMenuTiles();
-		
 		// Background
-		g.drawImage(tiles.getTile(0x2), 0, 0, null);
+		BasicPanels.drawCanvasPanel(g);
 		
 		List<ActivePokemon> list = Game.getPlayer().getTeam();
 		ActivePokemon selectedPkm = list.get(selectedTab);
 		
 		Type[] type = selectedPkm.getActualType();
-		Color[] typeColors = Type.getColors(selectedPkm);
-		
-		// Type Polygons
-		g.setColor(selectedTab == Trainer.MAX_POKEMON - 1 ? typeColors[1] : typeColors[0]);
-		g.fillPolygon(primaryColorx, primaryColory, 4);
-		
-		g.setColor(selectedTab == Trainer.MAX_POKEMON - 1 ? typeColors[0] : typeColors[1]);
-		g.fillPolygon(secondaryColorx, secondaryColory, 4);
-		
-		// Tabs
+
+		// Draw type color polygons
+		pokemonPanel.withBackgroundColors(Type.getColors(selectedPkm));
 		if (!selectedPkm.canFight()) {
-			g.drawImage(tiles.getTile(0x12), 39, 92, null);
+			pokemonPanel.greyOut();
 		}
-		else {
-			g.drawImage(tiles.getTile(0x11), 39, 92, null);
-		}
-		
-		// Info Boxes
-		g.drawImage(tiles.getTile(0x13), 69, 122, null);
+
+		pokemonPanel.drawBackground(g);
 		
 		// Draw Pokemon Image
+		imagePanel.drawBackground(g);
 		TileSet pkmTiles = data.getPokemonTilesSmall();
 		BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageIndex());
-		DrawUtils.drawCenteredImage(g, pkmImg, 121, 174);
+		imagePanel.imageLabel(g, pkmImg);
+
+		// Draw basic information panel
+		basicInformationPanel.drawBackground(g);
 
 		FontMetrics.setFont(g, 20);
 		g.setColor(Color.BLACK);
 
+		int inset = FontMetrics.getDistanceBetweenRows(g)/2;
+		int nameX = basicInformationPanel.x + inset;
+		int topLineY = basicInformationPanel.y + inset + FontMetrics.getTextHeight(g);
+
 		// Name and Gender
-		g.drawString(selectedPkm.getActualName() + " " + selectedPkm.getGenderString(), 213, 147);
+		g.drawString(selectedPkm.getActualName() + " " + selectedPkm.getGenderString(), nameX, topLineY);
 
 		if (selectedPkm.isEgg()) {
 			FontMetrics.setFont(g, 16);
 			
 			// Description
-			DrawUtils.drawWrappedText(g, selectedPkm.getEggMessage(), 213, 170, 718 - 213);
+			DrawUtils.drawWrappedText(g, selectedPkm.getEggMessage(),
+					basicInformationPanel.x + inset,
+					topLineY + inset + FontMetrics.getTextHeight(g),
+					basicInformationPanel.width - 2*inset);
 		}
 		else {
 			// Number
-			g.drawString("#" + String.format("%03d", selectedPkm.getPokemonInfo().getNumber()), 378, 147);
+			g.drawString("#" + String.format("%03d", selectedPkm.getPokemonInfo().getNumber()), 378, topLineY);
 			
 			// Status Condition
-			g.drawString(selectedPkm.getStatus().getType().getName(), 459, 147);
+			g.drawString(selectedPkm.getStatus().getType().getName(), 459, topLineY);
 			
 			// Level
-			g.drawString("Lv" + selectedPkm.getLevel(), 525, 147);
-			
-			// Type Tiles
-			if (type[1] == Type.NO_TYPE) {
-				g.drawImage(type[0].getImage(), 687, 133, null);
-			}
-			else {
-				g.drawImage(type[0].getImage(), 647, 133, null);
-				g.drawImage(type[1].getImage(), 687, 133, null);
-			}
+			int levelX = 525;
+			g.drawString("Lv" + selectedPkm.getLevel(), levelX, topLineY);
 			
 			FontMetrics.setFont(g, 16);
+			int secondLineY = topLineY + inset + FontMetrics.getTextHeight(g);
+			int thirdLineY = secondLineY + inset + FontMetrics.getTextHeight(g);
+			int fourthLineY = thirdLineY + inset + FontMetrics.getTextHeight(g);
+			int rightAlignedX = basicInformationPanel.x + basicInformationPanel.width - inset;
+
+			// Type Tiles
+			DrawUtils.drawTypeTiles(g, type, rightAlignedX, topLineY);
 			
 			// Nature
-			g.drawString(selectedPkm.getNature().getName() +" Nature", 213, 170);
+			g.drawString(selectedPkm.getNature().getName() +" Nature", nameX, secondLineY);
 			
 			// Total EXP
-			g.drawString("EXP:", 525, 170);
-			DrawUtils.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), 718, 170);
+			g.drawString("EXP:", levelX, secondLineY);
+			DrawUtils.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), rightAlignedX, secondLineY);
 			
 			// Characteristic
-			g.drawString(selectedPkm.getCharacteristic(), 213, 190);
+			g.drawString(selectedPkm.getCharacteristic(), nameX, thirdLineY);
 			
 			// EXP To Next Level
-			g.drawString("To Next Lv:", 525, 190);
-			DrawUtils.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), 718, 190);
+			g.drawString("To Next Lv:", levelX, thirdLineY);
+			DrawUtils.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), rightAlignedX, thirdLineY);
 			
 			// Held Item
-			g.drawString(selectedPkm.getActualHeldItem().getName(), 213, 211);
+			g.drawString(selectedPkm.getActualHeldItem().getName(), nameX, fourthLineY);
 			
 			// Ability with description
-			String abilityStr = selectedPkm.getActualAbility().getName() + " - ";
-			g.drawString(abilityStr, 81, 272);
-			
-			// TODO: I hate this 
-			FontMetrics.setFont(g, 12);
-			int dWidth = 81 + abilityStr.length()*9, dIndex = 0;
-			StringBuilder dStr = new StringBuilder();
-			String[] descriptionSplit = selectedPkm.getActualAbility().getDescription().split(" ");
-
-			while (dIndex < descriptionSplit.length && dWidth + (dStr.length() + descriptionSplit[dIndex].length() + 1)*4 < 300) {
-				dStr.append(" " + descriptionSplit[dIndex]);
-				dIndex++;
-			}
-			
-			g.drawString(dStr.toString(), dWidth, 272);
-			dStr = new StringBuilder();
-			while (dIndex < descriptionSplit.length) {
-				dStr.append(descriptionSplit[dIndex++] + " ");
-			}
-			g.drawString(dStr.toString(), 81, 290);
+			Ability ability = selectedPkm.getActualAbility();
+			abilityPanel.drawBackground(g);
+			abilityPanel.drawMessage(g, 16, ability.getName() + " - " + ability.getDescription());
 			
 			// EXP Bar
-			g.setColor(DrawUtils.EXP_BAR_COLOR);
-			g.fillRect(527, 214, (int)(202*selectedPkm.expRatio()), 10);
-			
-			// HP Bar
-			g.setColor(selectedPkm.getHPColor());
-			g.fillRect(71, 329, (int)(155*selectedPkm.getHPRatio()), 10);
+			expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, selectedPkm.expRatio());
 			
 			FontMetrics.setFont(g, 16);
 			g.setColor(Color.BLACK);
 			
 			// Stats Box
-			g.drawString("Stat", 250, 340);
-			g.drawString("IV", 310, 340);
-			g.drawString("EV", 355, 340);
+			statsPanel.drawBackground(g);
+
+			int spacing = statsPanel.height/(Stat.NUM_STATS + 1);
+			int firstRowY = statsPanel.y + spacing - 2;
+
+			g.drawString("Stat", 250, firstRowY);
+			g.drawString("IV", 310, firstRowY);
+			g.drawString("EV", 355, firstRowY);
 			
 			for (int i = 0; i < Stat.NUM_STATS; i++) {
 				g.setColor(selectedPkm.getNature().getColor(i));
-				g.drawString(Stat.getStat(i, false).getName(), 80, 19*i + 358);
+				g.drawString(Stat.getStat(i, false).getName(), statsPanel.x + 10, firstRowY + (i + 1)*spacing);
 			}
 			
 			int[] stats = selectedPkm.getStats();
 			int[] ivs = selectedPkm.getIVs();
 			int[] evs = selectedPkm.getEVs();
-			
-			g.setColor(Color.BLACK);
+
 			FontMetrics.setFont(g, 14);
+			g.setColor(Color.BLACK);
+
 			for (int i = 0; i < Stat.NUM_STATS; i++) {
 				final String statString;
 				if (i == Stat.HP.index()) {
@@ -260,90 +341,117 @@ class PartyView extends View {
 				} else {
 					statString = "" + stats[i];
 				}
-				
-				DrawUtils.drawRightAlignedString(g, statString, 285, 19*i + 358);
-				DrawUtils.drawRightAlignedString(g, "" + ivs[i], 327, 19*i + 358);
-				DrawUtils.drawRightAlignedString(g, "" + evs[i], 371, 19*i + 358);
+
+				int drawY = firstRowY + (i + 1)*spacing;
+				DrawUtils.drawRightAlignedString(g, statString, 285, drawY);
+				DrawUtils.drawRightAlignedString(g, "" + ivs[i], 327, drawY);
+				DrawUtils.drawRightAlignedString(g, "" + evs[i], 371, drawY);
 			}
+
+			// HP Bar
+			hpBar.fillBar(g, selectedPkm.getHPColor(), selectedPkm.getHPRatio());
 			
 			// Move Box
+			movesPanel.drawBackground(g);
 			List<Move> moves = selectedPkm.getActualMoves();
 			for (int i = 0; i < moves.size(); i++) {
-				g.translate(moveButtons[i].x, moveButtons[i].y);
-				
 				Move move = moves.get(i);
+				Attack attack = move.getAttack();
+				Button moveButton = moveButtons[i];
 
-				moveButtons[i].fillTranslated(g, move.getAttack().getActualType().getColor());
+				g.translate(moveButton.x, moveButton.y);
 
-				g.drawImage(tiles.getTile(0x18), 0, 0, null);
-				
+				DrawPanel movePanel = new DrawPanel(0, 0, moveButton.width, moveButton.height)
+						.withTransparentBackground(move.getAttack().getActualType().getColor())
+						.withTransparentCount(2)
+						.withBorderPercentage(15)
+						.withBlackOutline();
+				movePanel.drawBackground(g);
+
 				g.setColor(Color.BLACK);
 				if (selectedButton == MOVES + i) {
-					FontMetrics.setFont(g, 10);
-					DrawUtils.drawWrappedText(g, move.getAttack().getName() + " - " + move.getAttack().getDescription(), 6, 11, 280);
+					movePanel.drawMessage(g, 10, attack.getDescription());
 				}
 				else {
-					// Attack name
 					FontMetrics.setFont(g, 14);
-					g.drawString(move.getAttack().getName(), 7, 16);
+
+					int moveInset = movePanel.getBorderSize() + 4;
+					int firstY = moveInset + FontMetrics.getTextHeight(g);
+					int secondY = movePanel.height - moveInset;
+
+					int middleX = movePanel.width/2;
+					int rightAlignedMiddleX = middleX + 72;
+
+					// Attack name
+					g.drawString(attack.getName(), moveInset, firstY);
 					
 					// PP
-					g.drawString("PP:", 133, 16);
-					DrawUtils.drawRightAlignedString(g, move.getPP() + "/" + move.getMaxPP(), 205, 16);
+					g.drawString("PP:", middleX, firstY);
+					DrawUtils.drawRightAlignedString(g, move.getPP() + "/" + move.getMaxPP(), rightAlignedMiddleX, firstY);
 					
 					// Accuracy
 					FontMetrics.setFont(g, 12);
-					g.drawString("Accuracy:", 7, 32);
-					DrawUtils.drawRightAlignedString(g, "" + move.getAttack().getAccuracyString(), 100, 32);
+					g.drawString("Accuracy:", moveInset, secondY);
+					DrawUtils.drawRightAlignedString(g, attack.getAccuracyString(), moveInset + 93, secondY);
 					
 					// Power
-					g.drawString("Power:", 133, 32);
-					DrawUtils.drawRightAlignedString(g, move.getAttack().getPowerString(), 205, 32);
-					
+					g.drawString("Power:", middleX, secondY);
+					DrawUtils.drawRightAlignedString(g, attack.getPowerString(), rightAlignedMiddleX, secondY);
+
 					BufferedImage typeImage = move.getAttack().getActualType().getImage();
-					g.drawImage(typeImage, 241, 4, null);
+					int imageX = movePanel.width - moveInset - typeImage.getWidth();
+					g.drawImage(typeImage, imageX, firstY - typeImage.getHeight() + 2, null);
 
 					BufferedImage categoryImage = move.getAttack().getCategory().getImage();
-					g.drawImage(categoryImage, 241, 20, null);
+					g.drawImage(categoryImage, imageX, secondY - categoryImage.getHeight() + 2, null);
 				}
-				
-				g.translate(-moveButtons[i].x, -moveButtons[i].y);
+
+				g.translate(-moveButton.x, -moveButton.y);
 			}
 		}
 		
 		// Switch Box
 		if (switchTabIndex != -1 || list.size() == 1) {
-			g.drawImage(tiles.getTile(0x17), 69, 493, null);
-			g.setColor(new Color(0, 0, 0, 128));
-			g.fillRect(69, 493, 317, 38);
+			switchButton.greyOut(g);
 		}
-		else {
-			g.drawImage(tiles.getTile(0x16), 69, 493, null);
-		}
-		
-		g.setColor(Color.BLACK);
-		FontMetrics.setFont(g, 20);
-		g.drawString("Switch!", 190, 518);
+
+		switchButton.fillTransparent(g);
+		switchButton.blackOutline(g);
+		switchButton.label(g, 20, "Switch!");
 		
 		// Return Box
-		g.drawImage(tiles.getTile(0x16), 414, 493, null);
-		g.drawString("Return", 547, 518);
+		returnButton.fillTransparent(g);
+		returnButton.blackOutline(g);
+		returnButton.label(g, 20, "Return");
 		
 		TileSet partyTiles = data.getPartyTiles();
 		FontMetrics.setFont(g, 14);
 		
 		// Tabs
 		for (int i = 0; i < list.size(); i++) {
-			g.translate(tabButtons[i].x, tabButtons[i].y);
-			
 			ActivePokemon pkm = list.get(i);
-			
-			typeColors = Type.getColors(pkm);
-			g.setColor(typeColors[0]);
-			g.fillRect(0, 0, 122, 55);
-			
-			int tileIndex = selectedTab == i ? 0x14 : 0x15;
-			g.drawImage(tiles.getTile(tileIndex), 0, 0, null);
+			Button tabButton = tabButtons[i];
+
+			// Color tab
+			int colorIndex = 0;
+			if (i == tabButtons.length - 1 && pkm.isDualTyped()) {
+				colorIndex = 1;
+			}
+
+			tabButton.fill(g, Type.getColors(pkm)[colorIndex]);
+
+			// Fade out fainted Pokemon
+			if (!pkm.canFight()) {
+				tabButton.greyOut(g);
+			}
+
+			// Transparenty
+			tabButton.fillTransparent(g);
+
+			// Outline in black
+			tabButton.outlineTab(g, i, selectedTab);
+
+			g.translate(tabButton.x, tabButton.y);
 			
 			g.setColor(Color.BLACK);
 			g.drawString(pkm.getActualName(), 40, 34);
@@ -351,16 +459,11 @@ class PartyView extends View {
 			pkmImg = partyTiles.getTile(pkm.getTinyImageIndex());
 			DrawUtils.drawCenteredImage(g, pkmImg, 19, 26);
 			
-			if (!pkm.canFight()) {
-				g.setColor(new Color(0, 0, 0, 128));
-				g.fillRect(0, 0, 122, 55);
-			}
-			
-			g.translate(-tabButtons[i].x, -tabButtons[i].y);
+			g.translate(-tabButton.x, -tabButton.y);
 		}
 		
-		for (Button b: buttons) {
-			b.draw(g);
+		for (Button button: buttons) {
+			button.draw(g);
 		}
 	}
 	

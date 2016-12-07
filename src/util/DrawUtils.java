@@ -1,6 +1,7 @@
 package util;
 
 import main.Global;
+import main.Type;
 import map.Direction;
 
 import java.awt.Color;
@@ -27,6 +28,24 @@ public class DrawUtils {
 		}
 		else {
 			return new Color(35, 238, 91);
+		}
+	}
+
+	public static void drawTypeTiles(Graphics g, Type[] type, int rightX, int textY) {
+		BufferedImage firstType = type[0].getImage();
+
+		int drawX = rightX - firstType.getWidth();
+		int drawY = textY - firstType.getHeight();
+
+		if (type[1] == Type.NO_TYPE) {
+			g.drawImage(firstType, drawX, drawY, null);
+		}
+		else {
+			BufferedImage secondType = type[1].getImage();
+			int leftDrawX = drawX - firstType.getWidth() - 8;
+
+			g.drawImage(firstType, leftDrawX, drawY, null);
+			g.drawImage(secondType, drawX, drawY, null);
 		}
 	}
 

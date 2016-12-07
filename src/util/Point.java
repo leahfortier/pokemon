@@ -73,6 +73,13 @@ public class Point implements Serializable {
         return Point.add(location, direction.getDeltaPoint());
     }
 
+    public static Point subtract(Dimension dimension, int x, int y) {
+        return new Point(
+                dimension.width - x,
+                dimension.height - y
+        );
+    }
+
     public static Point subtract(Point first, Point second) {
         return new Point(
                 first.x - second.x,
