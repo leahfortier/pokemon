@@ -1,5 +1,6 @@
 package gui.view;
 
+import gui.view.bag.BagView;
 import gui.view.battle.BattleView;
 import gui.view.mainmenu.MainMenuView;
 import gui.view.map.MapView;

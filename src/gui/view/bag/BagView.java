@@ -1,4 +1,4 @@
-package gui.view;
+package gui.view.bag;
 
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
@@ -7,6 +7,9 @@ import gui.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
 import gui.panel.BasicPanels;
+import gui.panel.DrawPanel;
+import gui.view.View;
+import gui.view.ViewMode;
 import item.Item;
 import item.ItemNamesies;
 import item.bag.Bag;
@@ -16,6 +19,7 @@ import item.use.MoveUseItem;
 import item.use.TrainerUseItem;
 import item.use.UseItem;
 import main.Game;
+import main.Global;
 import main.Type;
 import map.Direction;
 import message.MessageUpdate;
@@ -28,15 +32,17 @@ import util.DrawUtils;
 import input.InputControl;
 import input.ControlKey;
 import util.FontMetrics;
+import util.Point;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-class BagView extends View {
+public class BagView extends View {
 	private static final BagCategory[] CATEGORIES = BagCategory.values();
 	private static final int ITEMS_PER_PAGE = 10;
 	
@@ -55,7 +61,9 @@ class BagView extends View {
 	private final int[] primaryColorY = { 0, 0, 61, 61 };
 	private final int[] secondaryColorX = { 184, 308, 308, 124 };
 	private final int[] secondaryColorY = { 0, 0, 61, 61 };
-	
+
+	private final DrawPanel bagPanel;
+
 	private int pageNum;
 	private int selectedTab;
 	private int selectedButton;
@@ -128,7 +136,22 @@ class BagView extends View {
 		}
 	}
 
-	BagView() {
+	public BagView() {
+		int tabHeight = 55;
+		int spacing = 28;
+
+		bagPanel = new DrawPanel(
+				spacing,
+				spacing + tabHeight,
+				Point.subtract(Global.GAME_SIZE,
+						2*spacing,
+						2*spacing + tabHeight)
+		)
+				.withTransparentBackground()
+				.withBorderPercentage(0)
+				.withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP))
+				);
+
 		selectedTab = 0;
 		selectedButton = 0;
 		selectedItem = ItemNamesies.NO_ITEM;
