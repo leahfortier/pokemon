@@ -5,6 +5,7 @@ import gui.button.ButtonHoverAction;
 import map.Direction;
 import util.DrawUtils;
 import util.FontMetrics;
+import util.GeneralUtils;
 import util.Point;
 
 import java.awt.Color;
@@ -118,27 +119,36 @@ public class DrawPanel {
             return 0;
         }
 
-        return getInsetSize(borderPercentage);
+        return (int)(borderPercentage/100.0*Math.min(width, height));
     }
 
-    public int getInsetSize(int insetPercentage) {
-        return (int)(insetPercentage/100.0*Math.min(width, height));
-    }
-
-    // NOTE: This only works for panels where the width is greater than the height
     private void drawDualColoredBackground(Graphics g) {
-        int smallWidth = (width - height)/2;
-        int largeWidth = width - smallWidth;
+        g.setColor(backgroundColor);
+        g.fillRect(x, y, width, height);
+
+        // Don't need to draw a polygon that is the same color
+        if (secondBackgroundColor == backgroundColor) {
+            return;
+        }
+
+        int smallDimension = Math.min(width, height);
+        int largeDimension = Math.max(width, height);
+
+        int smallLength = smallDimension/2;
+        int largeLength = largeDimension - smallLength;
+
+        // (width, 0) -> (large, 0) -> (small, height) -> (width, height)
+        int[] rightXValues = new int[] { largeDimension, largeLength, smallLength, largeDimension };
+        int[] rightYValues = new int[] { 0, 0, smallDimension, smallDimension};
+
+        if (width < height) {
+            GeneralUtils.swapArrays(rightXValues, rightYValues);
+        }
 
         g.translate(x, y);
 
-        // (0, 0) -> (largeWidth, 0) -> (smallWidth, height) -> (0, height) -> (0, 0)
-        g.setColor(backgroundColor);
-        g.fillPolygon(new int[] { 0, largeWidth, smallWidth, 0 }, new int[] { 0, 0, height, height }, 4);
-
-        // (largeWidth, 0) -> (smallWidth, height) -> (width, height) -> (width, 0) -> (largeWidth, 0)
         g.setColor(secondBackgroundColor);
-        g.fillPolygon(new int[] { largeWidth, smallWidth, width, width }, new int[] { 0, height, height, 0 }, 4);
+        g.fillPolygon(rightXValues, rightYValues, rightXValues.length);
 
         g.translate(-x, -y);
     }
@@ -164,7 +174,7 @@ public class DrawPanel {
 
     public void drawBackground(Graphics g) {
         // If not full transparency, draw the background colors
-        if (!onlyTransparency) {
+        if (!onlyTransparency && backgroundColor != null) {
             if (secondBackgroundColor == null) {
                 g.setColor(backgroundColor);
                 g.fillRect(x, y, width, height);
@@ -276,5 +286,11 @@ public class DrawPanel {
 
     public int centerY() {
         return y + height/2;
+    }
+
+    public void label(Graphics g, int fontSize, String text) {
+        g.setColor(Color.BLACK);
+        FontMetrics.setFont(g, fontSize);
+        DrawUtils.drawCenteredString(g, text, x, y, width, height);
     }
 }

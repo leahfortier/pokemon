@@ -6,6 +6,7 @@ import input.InputControl;
 import map.Direction;
 import util.DrawUtils;
 import util.FontMetrics;
+import util.GeneralUtils;
 import util.Point;
 
 import java.awt.Color;
@@ -322,9 +323,7 @@ public class Button {
 		int[] yValues = new int[] { yMax/2, 0, arrowLineTop, arrowLineTop, arrowLineBottom, arrowLineBottom, yMax};
 
 		if (yAxis) {
-			int[] temp = xValues.clone();
-			xValues = yValues;
-			yValues = temp;
+			GeneralUtils.swapArrays(xValues, yValues);
 		}
 
 		if (direction == Direction.RIGHT) {
