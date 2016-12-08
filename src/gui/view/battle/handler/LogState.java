@@ -2,9 +2,9 @@ package gui.view.battle.handler;
 
 import gui.button.Button;
 import gui.button.ButtonHoverAction;
-import gui.view.View;
 import gui.view.battle.BattleView;
 import main.Game;
+import map.Direction;
 import util.FontMetrics;
 
 import java.awt.Color;
@@ -67,7 +67,9 @@ public class LogState implements VisualStateHandler {
             g.drawString(logMessages.get(i), 25, y);
         }
 
-        View.drawArrows(g, logButtons[LOG_LEFT_BUTTON], logButtons[LOG_RIGHT_BUTTON]);
+        logButtons[LOG_LEFT_BUTTON].drawArrow(g, Direction.LEFT);
+        logButtons[LOG_RIGHT_BUTTON].drawArrow(g, Direction.RIGHT);
+
         logButtons[LOG_LEFT_BUTTON].draw(g);
         logButtons[LOG_RIGHT_BUTTON].draw(g);
 

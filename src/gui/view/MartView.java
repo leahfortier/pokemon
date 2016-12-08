@@ -9,6 +9,7 @@ import item.ItemNamesies;
 import main.Game;
 import main.Global;
 import main.Type;
+import map.Direction;
 import trainer.CharacterData;
 import util.DrawUtils;
 import input.InputControl;
@@ -237,7 +238,8 @@ class MartView extends View {
 			
 			g.drawString(itemAmount + "", 568, 218);
 			// TODO: Used to have offset 35, 10
-			View.drawArrows(g, amountLeftButton, amountRightButton);
+			amountLeftButton.drawArrow(g, Direction.LEFT);
+			amountRightButton.drawArrow(g, Direction.RIGHT);
 		}
 		
 		FontMetrics.setFont(g, 12);
@@ -270,9 +272,10 @@ class MartView extends View {
 		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(), 573, 466);
 		
 		// Left and Right arrows
-		View.drawArrows(g, shopLeftButton, shopRightButton);
+		shopLeftButton.drawArrow(g, Direction.LEFT);
+		shopRightButton.drawArrow(g, Direction.RIGHT);
 
-		// TODO: Honeslty I want to completely destroy the practice of doing the translate shit everywhere -- maybe can have an interface or something that takes in what to translate and requires a draw method and then takes care of the translation
+		// TODO: Honestly I want to completely destroy the practice of doing the translate shit everywhere -- maybe can have an interface or something that takes in what to translate and requires a draw method and then takes care of the translation
 		// Player Money
 		g.translate(SIDE_BOX_X, MONEY_BOX_Y);
 		

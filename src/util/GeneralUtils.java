@@ -24,12 +24,6 @@ public final class GeneralUtils {
         return -1;
     }
 
-    public static <T> void swap(T[] arr) {
-        T temp = arr[0];
-        arr[0] = arr[1];
-        arr[1] = temp;
-    }
-
     public static boolean hasOnlyOneNonEmpty(Object... objects) {
         return Arrays.stream(objects)
                 .filter(object -> object != null)

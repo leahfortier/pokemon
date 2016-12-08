@@ -7,6 +7,7 @@ import gui.GameData;
 import gui.TileSet;
 import main.Game;
 import main.Type;
+import map.Direction;
 import pokemon.ActivePokemon;
 import pokemon.PC;
 import pokemon.Stat;
@@ -217,8 +218,9 @@ class PCView extends View {
 		
 		FontMetrics.setFont(g, 16);
 		DrawUtils.drawCenteredWidthString(g, (pc.getBoxNum() + 1) + "/" + pc.getNumBoxes(), 215, 433);
-		
-		View.drawArrows(g, leftButton, rightButton);
+
+		leftButton.drawArrow(g, Direction.LEFT);
+		rightButton.drawArrow(g, Direction.RIGHT);
 		
 		// Party
 		g.setColor(Color.RED);

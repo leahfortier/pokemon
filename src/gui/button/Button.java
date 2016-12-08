@@ -300,4 +300,46 @@ public class Button {
 	public int centerY() {
 		return y + height/2;
 	}
+
+	public void drawArrow(Graphics g, Direction direction) {
+		int yMax = this.height;
+		int xMax = this.width;
+
+		boolean yAxis = direction.getDeltaPoint().x == 0;
+		if (yAxis) {
+			yMax = this.width;
+			xMax = this.height;
+		}
+
+		int arrowLineTop = yMax/4;
+		int arrowLineBottom = yMax - arrowLineTop;
+
+		int arrowMidpoint = xMax/2;
+
+		g.translate(x, y);
+
+		int[] xValues = new int[] { 0, arrowMidpoint, arrowMidpoint, xMax, xMax, arrowMidpoint, arrowMidpoint };
+		int[] yValues = new int[] { yMax/2, 0, arrowLineTop, arrowLineTop, arrowLineBottom, arrowLineBottom, yMax};
+
+		if (yAxis) {
+			int[] temp = xValues.clone();
+			xValues = yValues;
+			yValues = temp;
+		}
+
+		if (direction == Direction.RIGHT) {
+			for (int i = 0; i < xValues.length; i++) {
+				xValues[i] = xMax - xValues[i];
+			}
+		} else if (direction == Direction.DOWN) {
+			for (int i = 0; i < yValues.length; i++) {
+				yValues[i] = yMax - yValues[i];
+			}
+		}
+
+		g.setColor(Color.BLACK);
+		g.fillPolygon(xValues, yValues, xValues.length);
+
+		g.translate(-x, -y);
+	}
 }

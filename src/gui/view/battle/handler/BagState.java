@@ -1,11 +1,10 @@
 package gui.view.battle.handler;
 
 import battle.Battle;
+import gui.TileSet;
 import gui.button.Button;
 import gui.button.ButtonHoverAction;
-import gui.TileSet;
 import gui.panel.DrawPanel;
-import gui.view.View;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import item.ItemNamesies;
@@ -179,7 +178,8 @@ public class BagState implements VisualStateHandler {
         DrawUtils.drawCenteredWidthString(g, (bagPage + 1) + "/" + Math.max(1, (int)Math.ceil(toDraw.size()/10.0)), 210, 450);
 
         // Left/Right Arrows
-        View.drawArrows(g, bagLeftButton, bagRightButton);
+        bagLeftButton.drawArrow(g, Direction.LEFT);
+        bagRightButton.drawArrow(g, Direction.RIGHT);
 
         // Last Item Used
         ItemNamesies lastUsedItem = bag.getLastUsedItem();

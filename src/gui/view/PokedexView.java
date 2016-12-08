@@ -8,6 +8,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Type;
+import map.Direction;
 import pokemon.PC;
 import pokemon.PokemonInfo;
 import trainer.pokedex.Pokedex;
@@ -165,7 +166,9 @@ class PokedexView extends View {
 		g.setColor(Color.BLACK);
 		FontMetrics.setFont(g, 16);
 		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, 215, 433);
-		View.drawArrows(g, leftButton, rightButton);
+
+		leftButton.drawArrow(g, Direction.LEFT);
+		rightButton.drawArrow(g, Direction.RIGHT);
 		
 		// Seen/Caught
 		g.setColor(Color.RED);

@@ -110,7 +110,7 @@ public class BagView extends View {
 				halfPanelWidth,
 				selectedHeight)
 				.withFullTransparency()
-				.withBlackOutline();;
+				.withBlackOutline();
 
 		Button returnButton = new Button(
 				selectedPanel.x,
@@ -381,7 +381,8 @@ public class BagView extends View {
 		DrawUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(list.size()), itemsPanel.centerX(), buttons[RIGHT_ARROW].centerY());
 		
 		// Left and Right arrows
-		View.drawArrows(g, buttons[LEFT_ARROW], buttons[RIGHT_ARROW]);
+		buttons[LEFT_ARROW].drawArrow(g, Direction.LEFT);
+		buttons[RIGHT_ARROW].drawArrow(g, Direction.RIGHT); 
 		
 		// Draw moves
 		pokemonPanel.drawBackground(g);

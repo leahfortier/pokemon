@@ -10,6 +10,7 @@ import gui.view.ViewMode;
 import input.ControlKey;
 import main.Game;
 import main.Global;
+import map.Direction;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -168,7 +169,7 @@ public class BattleView extends View {
 	public void drawBackButton(Graphics g, boolean drawArrows) {
 		g.setColor(Color.BLACK);
 		if (drawArrows) {
-			View.drawArrows(g, null, backButton);
+			backButton.drawArrow(g, Direction.RIGHT);
 		}
 
 		backButton.draw(g);
