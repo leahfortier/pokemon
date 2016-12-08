@@ -285,7 +285,11 @@ public class Button {
 	}
 
 	public void label(Graphics g, int fontSize, String text) {
-		g.setColor(Color.BLACK);
+		label(g, fontSize, Color.BLACK, text);
+	}
+
+	public void label(Graphics g, int fontSize, Color color, String text) {
+		g.setColor(color);
 		FontMetrics.setFont(g, fontSize);
 		DrawUtils.drawCenteredString(g, text, x, y, width, height);
 	}

@@ -250,8 +250,8 @@ public class DrawPanel {
         return buttons;
     }
 
-    private int getTextSpace(Graphics g) {
-        return this.getBorderSize() + FontMetrics.getDistanceBetweenRows(g)/2;
+    public int getTextSpace(Graphics g) {
+        return this.getBorderSize() + FontMetrics.getDistanceBetweenRows(g) - FontMetrics.getTextHeight(g);
     }
 
     public int drawMessage(Graphics g, int fontSize, String text) {
