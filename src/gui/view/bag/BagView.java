@@ -179,11 +179,28 @@ public class BagView extends View {
 			);
 		}
 
+		int arrowHeight = 20;
+		Button leftArrow  = new Button(
+				itemsPanel.x + itemsPanel.width/4,
+				itemButtons[itemButtons.length - 1].centerY() + (itemButtons[2].y - itemButtons[0].y) - arrowHeight/2,
+				35,
+				arrowHeight,
+				ButtonHoverAction.BOX,
+				new int[] { RIGHT_ARROW, ITEMS + ITEMS_PER_PAGE - 2, RIGHT_ARROW, RETURN }
+		);
 
+		Button rightArrow = new Button(
+				itemsPanel.x + itemsPanel.width - (leftArrow.x - itemsPanel.x) - leftArrow.width,
+				leftArrow.y,
+				leftArrow.width,
+				leftArrow.height,
+				ButtonHoverAction.BOX,
+				new int[] { LEFT_ARROW, ITEMS + ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN }
+		);
 
-		buttons[LEFT_ARROW] = new Button(498, 451, 35, 20, ButtonHoverAction.BOX, new int[] { RIGHT_ARROW, ITEMS + ITEMS_PER_PAGE - 2, RIGHT_ARROW, RETURN });
-		buttons[RIGHT_ARROW] = new Button(613, 451, 35, 20, ButtonHoverAction.BOX, new int[] { LEFT_ARROW, ITEMS + ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN });
-		
+		buttons[LEFT_ARROW] = leftArrow;
+		buttons[RIGHT_ARROW] = rightArrow;
+
 		buttons[RETURN] = returnButton;
 		
 		movedToFront();
@@ -382,7 +399,7 @@ public class BagView extends View {
 		
 		// Left and Right arrows
 		buttons[LEFT_ARROW].drawArrow(g, Direction.LEFT);
-		buttons[RIGHT_ARROW].drawArrow(g, Direction.RIGHT); 
+		buttons[RIGHT_ARROW].drawArrow(g, Direction.RIGHT);
 		
 		// Draw moves
 		pokemonPanel.drawBackground(g);
