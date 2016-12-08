@@ -1,24 +1,29 @@
 package gui.view.map;
 
 import gui.button.Button;
-import gui.GameData;
 import gui.button.ButtonHoverAction;
-import gui.TileSet;
+import gui.panel.DrawPanel;
 import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
-import main.Game;
+import main.Global;
 import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 class MenuState implements VisualStateHandler {
+    private final DrawPanel menuPanel;
+
     private final Button[] menuButtons;
 
     private int selectedButton;
 
     MenuState() {
+        int width = 273;
+        menuPanel = new DrawPanel(Global.GAME_SIZE.width - width, 0, width, Global.GAME_SIZE.height)
+                .withBorderColor(new Color(53, 53, 129)).withBorderPercentage(5);
+
         selectedButton = 0;
         menuButtons = new Button[MenuChoice.values().length];
 
@@ -33,10 +38,8 @@ class MenuState implements VisualStateHandler {
 
     @Override
     public void draw(Graphics g, MapView mapView) {
-        GameData data = Game.getData();
-        TileSet menuTiles = data.getMenuTiles();
+        menuPanel.drawBackground(g);
 
-        g.drawImage(menuTiles.getTile(1), 527, 0, null);
         FontMetrics.setFont(g, 40);
         g.setColor(Color.BLACK);
 

@@ -113,11 +113,10 @@ class StartView extends View {
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
 
-		TileSet tiles = data.getMenuTiles();
 		TileSet trainerTiles = data.getTrainerTiles();
 		TileSet pokemonTiles = data.getPokemonTilesSmall();
-		
-		g.drawImage(tiles.getTile(0x2), 0, 0, null);
+
+		BasicPanels.drawCanvasPanel(g);
 		
 		FontMetrics.setFont(g, 30);
 		g.setColor(Color.BLACK);

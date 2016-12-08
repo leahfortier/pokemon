@@ -21,7 +21,6 @@ public class GameData {
 	private TileSet pokemonTilesSmall;
 	private TileSet itemTiles;
 	private TileSet trainerTiles;
-	private TileSet pauseMenuTiles;
 	private TileSet partyTiles;
 	private TileSet mainMenuTiles;
 
@@ -36,7 +35,6 @@ public class GameData {
 		pokemonTilesLarge = new TileSet(Folder.POKEMON_TILES, 2.9f);
 		pokemonTilesMedium = new TileSet(Folder.POKEMON_TILES, 2.3f);
 		pokemonTilesSmall = new TileSet(Folder.POKEMON_TILES);
-		pauseMenuTiles = new TileSet(FileIO.makeFolderPath(Folder.TILES, "pauseViewTiles"));
 		itemTiles = new TileSet(Folder.ITEM_TILES);
 		trainerTiles = new TileSet(Folder.TRAINER_TILES);
 		partyTiles = new TileSet(Folder.PARTY_TILES);
@@ -112,10 +110,6 @@ public class GameData {
 
 	public TileSet getTrainerTiles() {
 		return trainerTiles;
-	}
-
-	public TileSet getMenuTiles() {
-		return pauseMenuTiles;
 	}
 
 	public TileSet getPartyTiles() {
