@@ -1,27 +1,31 @@
 package gui.view;
 
-import gui.button.Button;
 import gui.GameData;
-import gui.button.ButtonHoverAction;
 import gui.TileSet;
+import gui.button.Button;
+import gui.button.ButtonHoverAction;
+import gui.panel.BasicPanels;
+import gui.panel.DrawPanel;
+import input.ControlKey;
+import input.InputControl;
 import item.Item;
 import item.ItemNamesies;
 import main.Game;
 import main.Global;
-import main.Type;
 import map.Direction;
 import trainer.CharacterData;
 import util.DrawUtils;
-import input.InputControl;
-import input.ControlKey;
 import util.FontMetrics;
 import util.GeneralUtils;
+import util.Point;
+import util.PokeString;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -49,71 +53,140 @@ class MartView extends View {
 	private static final int AMOUNT_RIGHT_ARROW = NUM_BUTTONS - 4;
 	private static final int SHOP_RIGHT_ARROW = NUM_BUTTONS - 5;
 	private static final int SHOP_LEFT_ARROW = NUM_BUTTONS - 6;
+
+	private final DrawPanel shopPanel;
+	private final DrawPanel tabPanel;
+	private final DrawPanel moneyPanel;
+	private final DrawPanel itemsPanel;
+	private final DrawPanel selectedPanel;
+	private final DrawPanel amountPanel;
+	private final DrawPanel playerMoneyPanel;
+	private final DrawPanel inBagPanel;
+	private final DrawPanel itemAmountPanel;
 	
-	private static final Color SIDE_BOX_COLOR = Type.NORMAL.getColor();
-	private static final int SIDE_BOX_X = 72;
-	private static final int SIDE_BOX_GAP = 69;
-	private static final int BOX_TEXT_X = 50;
-	private static final int BOX_TEXT_Y = 35;
-	
-	private static final int MONEY_BOX_Y = 122;
-	private static final int IN_BAG_BOX_Y = MONEY_BOX_Y + SIDE_BOX_GAP;
-	private static final int TOTAL_BOX_Y = MONEY_BOX_Y + SIDE_BOX_GAP*4;
-	
-	private static final int[] primaryColorx = { 0, 184, 124, 0 };
-	private static final int[] primaryColory = { 0, 0, 61, 61 };
-	private static final int[] secondaryColorx = { 184, 308, 308, 124 };
-	private static final int[] secondaryColory = { 0, 0, 61, 61 };
-		
+	private final Button[] buttons;
+	private final Button[] itemButtons;
+	private final Button amountLeftButton;
+	private final Button amountRightButton;
+	private final Button buyButton;
+	private final Button shopLeftButton;
+	private final Button shopRightButton;
+	private final Button returnButton;
+
 	private int pageNum;
 	private int selectedButton;
 	private int itemAmount;
-	
+
 	private ItemNamesies selectedItem;
 	
-	private Button[] buttons;
-	private Button[] itemButtons;
-	private Button amountLeftButton;
-	private Button amountRightButton;
-	private Button buyButton;
-	private Button shopLeftButton;
-	private Button shopRightButton;
-	private Button returnButton;
-	
 	MartView() {
+		int tabHeight = 55;
+		int spacing = 28;
+
+		shopPanel = new DrawPanel(
+				spacing,
+				spacing + tabHeight,
+				Point.subtract(Global.GAME_SIZE,
+						2*spacing,
+						2*spacing + tabHeight))
+				.withBackgroundColor(BACKGROUND_COLOR)
+				.withTransparentBackground()
+				.withBorderPercentage(0)
+				.withBlackOutline();
+
+		tabPanel = new DrawPanel(
+				shopPanel.x + shopPanel.width/6,
+				shopPanel.y - tabHeight + DrawUtils.OUTLINE_SIZE,
+				shopPanel.width/6,
+				tabHeight)
+				.withBackgroundColor(BACKGROUND_COLOR)
+				.withTransparentBackground()
+				.withBorderPercentage(0)
+				.withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.DOWN)));
+
+		int buttonHeight = 38;
+		int selectedHeight = 82;
+		int halfPanelWidth = (shopPanel.width - 3*spacing)/2;
+
+		moneyPanel = new DrawPanel(
+				shopPanel.x + spacing,
+				shopPanel.y + spacing,
+				halfPanelWidth,
+				shopPanel.height - 2*spacing)
+				.withFullTransparency()
+				.withBlackOutline();
+
+		selectedPanel = new DrawPanel(
+				moneyPanel.x + moneyPanel.width + spacing,
+				shopPanel.y + spacing,
+				halfPanelWidth,
+				selectedHeight)
+				.withFullTransparency()
+				.withBlackOutline();
+
+		Button[] fakeButtons = moneyPanel.getButtons(10, 6, 1);
+		playerMoneyPanel = new DrawPanel(fakeButtons[0]).withBlackOutline();
+		inBagPanel = new DrawPanel(fakeButtons[1]).withBlackOutline();
+		itemAmountPanel = new DrawPanel(fakeButtons[4]).withBlackOutline();
+		buyButton = new Button(fakeButtons[5].x, fakeButtons[5].y, fakeButtons[5].width, fakeButtons[5].height,
+				ButtonHoverAction.BOX, new int[] { RETURN, BUY, RETURN, BUY });
+
+		amountLeftButton = new Button(
+				selectedPanel.x,
+				selectedPanel.y + selectedPanel.height - DrawUtils.OUTLINE_SIZE,
+				selectedPanel.width/3,
+				buttonHeight,
+				ButtonHoverAction.BOX,
+				new int[] { AMOUNT_RIGHT_ARROW, RETURN, BUY, 0 });
+
+		amountRightButton = new Button(
+				selectedPanel.x + selectedPanel.width - amountLeftButton.width,
+				amountLeftButton.y,
+				amountLeftButton.width,
+				amountLeftButton.height,
+				ButtonHoverAction.BOX,
+				new int[] { AMOUNT_LEFT_ARROW, RETURN, AMOUNT_LEFT_ARROW, 1 });
+
+		amountPanel = new DrawPanel(
+				amountLeftButton.x + amountLeftButton.width - DrawUtils.OUTLINE_SIZE,
+				amountLeftButton.y,
+				selectedPanel.width - amountLeftButton.width - amountRightButton.width + 2*DrawUtils.OUTLINE_SIZE,
+				amountLeftButton.height)
+				.withFullTransparency()
+				.withBlackOutline();
+
+		returnButton = new Button(
+				selectedPanel.x,
+				shopPanel.y + shopPanel.height - spacing - buttonHeight,
+				halfPanelWidth,
+				buttonHeight,
+				ButtonHoverAction.BOX,
+				new int[] { BUY, SHOP_LEFT_ARROW, BUY, AMOUNT_LEFT_ARROW });
+
+		itemsPanel = new DrawPanel(
+				selectedPanel.x,
+				selectedPanel.y + selectedPanel.height + buttonHeight + spacing,
+				halfPanelWidth,
+				moneyPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing)
+				.withFullTransparency()
+				.withBlackOutline();
+
 		selectedButton = 0;
 		itemAmount = 1;
 
-		// TODO: uggy
 		buttons = new Button[NUM_BUTTONS];
-		
-		itemButtons = new Button[ITEMS_PER_PAGE];
-		for (int i = 0, k = 0; i < ITEMS_PER_PAGE/2; i++) {
-			for (int j = 0; j < 2; j++, k++) {
-				buttons[k] = itemButtons[k] = new Button(
-						421 + 160*j,
-						261 + 38*i,
-						148,
-						28,
-						ButtonHoverAction.BOX,
-						new int[] {
-								j == 0 ? k + 1 : k - 1, // Right
-								i == 0 ? (j == 0 ? AMOUNT_LEFT_ARROW : AMOUNT_RIGHT_ARROW) : k - 2, // Up
-								j == 1 ? k - 1 : k + 1, // Left
-								i == ITEMS_PER_PAGE/2 - 1 ? (j == 0 ? SHOP_LEFT_ARROW : SHOP_RIGHT_ARROW) : k + 2 // Down
-						});
-			}
-		}
+
+		itemButtons = itemsPanel.getButtons(5, ITEMS_PER_PAGE/2 + 1, 2, ITEMS_PER_PAGE/2, 2, 0, new int[] { -1, AMOUNT_RIGHT_ARROW, -1, SHOP_RIGHT_ARROW });
+		System.arraycopy(itemButtons, 0, buttons, 0, ITEMS_PER_PAGE);
 		
 		buttons[SHOP_LEFT_ARROW] = shopLeftButton = new Button(498, 451, 35, 20, ButtonHoverAction.BOX, new int[] { SHOP_RIGHT_ARROW, ITEMS_PER_PAGE - 2, SHOP_RIGHT_ARROW, RETURN });
 		buttons[SHOP_RIGHT_ARROW] = shopRightButton = new Button(613, 451, 35, 20, ButtonHoverAction.BOX, new int[] { SHOP_LEFT_ARROW, ITEMS_PER_PAGE - 1, SHOP_LEFT_ARROW, RETURN });
-		
-		buttons[AMOUNT_LEFT_ARROW] = amountLeftButton = new Button(410, 193, 110, 38, ButtonHoverAction.BOX, new int[] { AMOUNT_RIGHT_ARROW, RETURN, BUY, 0 });
-		buttons[AMOUNT_RIGHT_ARROW] = amountRightButton = new Button(628, 193, 110, 38, ButtonHoverAction.BOX, new int[] { AMOUNT_LEFT_ARROW, RETURN, AMOUNT_LEFT_ARROW, 1 });
 
-		buttons[BUY] = buyButton = new Button(SIDE_BOX_X, MONEY_BOX_Y + SIDE_BOX_GAP*5, 308, 61, ButtonHoverAction.BOX, new int[] { RETURN, BUY, RETURN, BUY });
-		
-		buttons[RETURN] = returnButton = new Button(410, 500, 328, 38, ButtonHoverAction.BOX, new int[] { BUY, SHOP_LEFT_ARROW, BUY, AMOUNT_LEFT_ARROW });
+		buttons[BUY] = buyButton;
+
+		buttons[AMOUNT_LEFT_ARROW] = amountLeftButton;
+		buttons[AMOUNT_RIGHT_ARROW] = amountRightButton;
+		buttons[RETURN] = returnButton;
 
 		if (forSaleItems == null) {
 			forSaleItems = new ArrayList<>();
@@ -134,13 +207,10 @@ class MartView extends View {
 			iter.next();
 		}
 
-		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
-			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
-				ItemNamesies item = iter.next();
-				if (itemButtons[k].checkConsumePress()) {
-					setSelectedItem(item);
-					updateActiveButtons();
-				}
+		for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
+			if (itemButtons[i].checkConsumePress()) {
+				setSelectedItem(iter.next());
+				updateActiveButtons();
 			}
 		}
 
@@ -200,25 +270,21 @@ class MartView extends View {
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
 
-		TileSet tiles = data.getMenuTiles();
 		TileSet itemTiles = data.getItemTiles();
 		
 		// Background
-		g.drawImage(tiles.getTile(0x2), 0,0, null);
+		BasicPanels.drawCanvasPanel(g);
 		
 		// Info Boxes
-		g.setColor(BACKGROUND_COLOR);
-		g.fillRect(42, 92, 716, 466);
-		
-		g.drawImage(tiles.getTile(0x21), 42, 92, null);
-		g.drawImage(tiles.getTile(0x22), 62, 112, null);
+		shopPanel.drawBackground(g);
 		
 		if (!amountLeftButton.isActive()) {
-			amountLeftButton.greyOut(g, false);
-			amountRightButton.greyOut(g, false);
+			amountLeftButton.greyOut(g);
+			amountRightButton.greyOut(g);
 		}
 		
 		// Item Display
+		selectedPanel.drawBackground(g);
 		if (selectedItem != null) {
 			Item selectedItemValue = selectedItem.getItem();
 
@@ -232,20 +298,24 @@ class MartView extends View {
 			
 			FontMetrics.setFont(g, 14);
 			DrawUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - amountLeftButton.x);
-			
-			FontMetrics.setFont(g, 20);
-			g.drawImage(tiles.getTile(0x28), 410, 193, null);
-			
-			g.drawString(itemAmount + "", 568, 218);
-			// TODO: Used to have offset 35, 10
-			amountLeftButton.drawArrow(g, Direction.LEFT);
-			amountRightButton.drawArrow(g, Direction.RIGHT);
+
+			amountPanel.drawBackground(g);
+			amountPanel.label(g, 20, itemAmount + "");
+
+			amountLeftButton.fillTransparent(g);
+			amountLeftButton.blackOutline(g);
+			DrawUtils.drawCenteredArrow(g, amountLeftButton.centerX(), amountLeftButton.centerY(), 35, 20, Direction.LEFT);
+
+			amountRightButton.fillTransparent(g);
+			amountRightButton.blackOutline(g);
+			DrawUtils.drawCenteredArrow(g, amountRightButton.centerX(), amountRightButton.centerY(), 35, 20, Direction.RIGHT);
 		}
 		
 		FontMetrics.setFont(g, 12);
 		g.setColor(Color.BLACK);
 		
 		// Draw each items in category
+		itemsPanel.drawBackground(g);
 		Iterator<ItemNamesies> iter = forSaleItems.iterator();
 		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
 			iter.next();
@@ -253,17 +323,19 @@ class MartView extends View {
 
 		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
 			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
-				g.translate(itemButtons[k].x, itemButtons[k].y);
 				ItemNamesies item = iter.next();
-				
-				g.drawImage(tiles.getTile(0x26), 0,0, null);
-				
 				BufferedImage img = itemTiles.getTile(item.getItem().getImageIndex());
+
+				Button itemButton = itemButtons[k];
+				itemButton.fill(g, Color.WHITE);
+				itemButton.blackOutline(g);
+
+				g.translate(itemButton.x, itemButton.y);
+
 				DrawUtils.drawCenteredImage(g, img, 14, 14);
-				
 				g.drawString(item.getName(), 29, 18);
 				
-				g.translate(-itemButtons[k].x, -itemButtons[k].y);
+				g.translate(-itemButton.x, -itemButton.y);
 			}
 		}
 		
@@ -275,96 +347,40 @@ class MartView extends View {
 		shopLeftButton.drawArrow(g, Direction.LEFT);
 		shopRightButton.drawArrow(g, Direction.RIGHT);
 
-		// TODO: Honestly I want to completely destroy the practice of doing the translate shit everywhere -- maybe can have an interface or something that takes in what to translate and requires a draw method and then takes care of the translation
+		moneyPanel.drawBackground(g);
+
 		// Player Money
-		g.translate(SIDE_BOX_X, MONEY_BOX_Y);
-		
-		g.setColor(SIDE_BOX_COLOR);
-		g.fillPolygon(primaryColorx, primaryColory, 4);
-		g.setColor(SIDE_BOX_COLOR);
-		g.fillPolygon(secondaryColorx, secondaryColory, 4);
-		
-		g.drawImage(tiles.getTile(0x25), 0, 0, null);
-		
-		g.setColor(Color.BLACK);
-		FontMetrics.setFont(g, 18);
-		g.drawString("Money: " + Global.MONEY_SYMBOL + player.getDatCashMoney(), BOX_TEXT_X, BOX_TEXT_Y);
-		
-		g.translate(-SIDE_BOX_X, -MONEY_BOX_Y);
+		playerMoneyPanel.drawBackground(g);
+		playerMoneyPanel.label(g, 18, "Money: " + Global.MONEY_SYMBOL + player.getDatCashMoney());
 		
 		// In bag display
-		g.translate(SIDE_BOX_X, IN_BAG_BOX_Y);
-		
-		g.setColor(SIDE_BOX_COLOR);
-		g.fillPolygon(primaryColorx, primaryColory, 4);
-		g.fillPolygon(secondaryColorx, secondaryColory, 4);
-		
-		g.drawImage(tiles.getTile(0x25), 0, 0, null);
-		
-		g.setColor(Color.BLACK);
-		g.drawString("In Bag: " + player.getBag().getQuantity(selectedItem), BOX_TEXT_X, BOX_TEXT_Y);
-		
-		g.translate(-SIDE_BOX_X, -IN_BAG_BOX_Y);
+		inBagPanel.drawBackground(g);
+		inBagPanel.label(g, 18, "In Bag: " + player.getBag().getQuantity(selectedItem));
 		
 		// Total display
-		g.translate(SIDE_BOX_X, TOTAL_BOX_Y);
-						
-		g.setColor(SIDE_BOX_COLOR);
-		g.fillPolygon(primaryColorx, primaryColory, 4);
-		g.fillPolygon(secondaryColorx, secondaryColory, 4);
-		
-		g.drawImage(tiles.getTile(0x25), 0, 0, null);
-		
-		g.setColor(Color.BLACK);
-		g.drawString("Total: " + Global.MONEY_SYMBOL + selectedItem.getItem().getPrice()*itemAmount, BOX_TEXT_X, BOX_TEXT_Y);
-		
-		g.translate(-SIDE_BOX_X, -TOTAL_BOX_Y);
-		
-		// Buy button
-		g.translate(buyButton.x, buyButton.y);
-						
-		g.setColor(SIDE_BOX_COLOR);
-		g.fillPolygon(primaryColorx, primaryColory, 4);
-		g.fillPolygon(secondaryColorx, secondaryColory, 4);
-		
-		g.drawImage(tiles.getTile(0x25), 0, 0, null);
-		
-		FontMetrics.setFont(g, 24);
-		g.setColor(Color.BLACK);
-		g.drawString("BUY", 120, 39);
+		itemAmountPanel.drawBackground(g);
+		itemAmountPanel.label(g, 18, "Total: " + Global.MONEY_SYMBOL + selectedItem.getItem().getPrice()*itemAmount);
 
-		buyButton.greyOut(g, true);
-		
+		// Buy button
+		buyButton.fillTransparent(g);
 		if (!buyButton.isActive()) {
-			buyButton.fillTranslated(g, new Color(0, 0, 0, 128));
+			buyButton.greyOut(g);
 		}
-		
-		g.translate(-buyButton.x, -buyButton.y);
-		
+
+		buyButton.label(g, 24, "BUY");
+		buyButton.blackOutline(g);
+
 		// Return button
-		g.setColor(Color.BLACK);
-		FontMetrics.setFont(g, 20);
-		g.drawImage(tiles.getTile(0x27), 410, 500, null);
-		DrawUtils.drawCenteredWidthString(g, "Return", 573, 525);
+		returnButton.fillTransparent(g);
+		returnButton.blackOutline(g);
+		returnButton.label(g, 20, "Return");
 		
 		// Tab
-		int tabX = 42 + 102;
-		int tabY = 42;
-		g.translate(tabX, tabY);
+		tabPanel.drawBackground(g);
+		tabPanel.label(g, 16, PokeString.POKE + " Mart");
 		
-		FontMetrics.setFont(g, 16);
-		g.setColor(BACKGROUND_COLOR);
-		g.fillRect(0, 0, 104, 52);
-		
-		g.drawImage(tiles.getTile(0x23), 0, 0, null);
-		
-		g.setColor(Color.BLACK);
-		g.drawString("Pok\u00e9 Mart", 13, 30);
-		
-		g.translate(-tabX, -tabY);
-		
-		for (Button b : buttons) {
-			b.draw(g);
+		for (Button button : buttons) {
+			button.draw(g);
 		}
 	}
 

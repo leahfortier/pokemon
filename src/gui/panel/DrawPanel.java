@@ -35,6 +35,10 @@ public class DrawPanel {
     private boolean onlyTransparency;
     private int transparentCount;
 
+    public DrawPanel(Button button) {
+        this(button.x, button.y, button.width, button.height);
+    }
+
     public DrawPanel(int x, int y, Dimension dimension) {
         this(x, y, dimension.width, dimension.height);
     }

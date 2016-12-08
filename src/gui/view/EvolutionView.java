@@ -92,10 +92,9 @@ class EvolutionView extends View {
 	public void draw(Graphics g) {
 		final GameData data = Game.getData();
 
-		TileSet tiles = data.getMenuTiles();
 		TileSet pokemonTiles = data.getPokemonTilesMedium();
-		
-		g.drawImage(tiles.getTile(0x2), 0, 0, null);
+
+		BasicPanels.drawCanvasPanel(g);
 		
 		FontMetrics.setFont(g, 30);
 		g.setColor(Color.BLACK);
