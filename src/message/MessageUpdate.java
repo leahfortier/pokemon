@@ -100,7 +100,6 @@ public class MessageUpdate {
 		}
 	}
 
-	// TODO: Yeah pretty much all of these constructors should be rewritten to be more obvious what's going on and not just guessing based off on parameters
 	public MessageUpdate(String message) {
 		this.message = message;
 		this.updateType = Update.NO_UPDATE;

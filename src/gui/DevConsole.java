@@ -112,7 +112,7 @@ class DevConsole {
 		Game.getPlayer().setMap(mapName, mapEntrance);
 		
 		if (mapEntrance != null) {
-			Game.getData().getMap(mapName).setCharacterToEntrance(mapEntrance);
+			Game.getData().getMap(mapName).setCharacterToEntrance();
 		}
 	}
 	

@@ -48,17 +48,15 @@ public class CharacterData extends Trainer implements Serializable {
 	private Point location;
 	private Direction direction;
 
-	// TODO: privacy please
-	public boolean mapReset;
-	public String mapName;
-	public String areaName;
+	private boolean mapReset;
+	private String mapName;
+	private String mapEntranceName;
+	private String areaName;
 
 	private transient PlayerEntity entity;
 
 	private Set<String> definedGlobals;
 	private Map<String, String> npcInteractions;
-
-	public String mapEntranceName;
 
 	private int fileNum;
 	private long seconds;
@@ -74,9 +72,8 @@ public class CharacterData extends Trainer implements Serializable {
 	private boolean[] badges;
 	private int repelSteps;
 
-	// TODO: Make private
-	public ActivePokemon evolvingPokemon;
-	public BaseEvolution evolution;
+	private ActivePokemon evolvingPokemon;
+	private BaseEvolution evolution;
 
 	private List<String> logMessages;
 
@@ -97,7 +94,7 @@ public class CharacterData extends Trainer implements Serializable {
 		seconds = 0;
 
 		direction = Direction.DOWN;
-		areaName = "";
+		areaName = StringUtils.empty();
 		mapReset = false;
 	}
 
@@ -112,11 +109,10 @@ public class CharacterData extends Trainer implements Serializable {
 		this.name = playerName;
 	}
 
-	// TODO: n??? srsly??? did I fucking write this??????
-	public void giveBadge(int n) {
-		if (!badges[n]) {
+	public void giveBadge(int badgeIndex) {
+		if (!badges[badgeIndex]) {
 			numBadges++;
-			badges[n] = true;
+			badges[badgeIndex] = true;
 		}
 	}
 
@@ -169,6 +165,18 @@ public class CharacterData extends Trainer implements Serializable {
 		mapName = name;
 		mapEntranceName = mapEntrance;
 	}
+
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
+	}
+
+	public ActivePokemon getEvolvingPokemon() {
+		return evolvingPokemon;
+	}
+
+	public BaseEvolution getEvolution() {
+		return evolution;
+	}
 	
 	// Called when a character steps once in any given direction
 	public void step() {
@@ -211,14 +219,30 @@ public class CharacterData extends Trainer implements Serializable {
 	public void addRepelSteps(int steps) {
 		repelSteps += steps;
 	}
-	
+
+	public String getMapName() {
+		return this.mapName;
+	}
+
+	public boolean mapReset() {
+		return mapReset;
+	}
+
+	public void setMapReset(boolean mapReset) {
+		this.mapReset = mapReset;
+	}
+
+	public String getMapEntranceName() {
+		return mapEntranceName;
+	}
+
 	public String getAreaName() {
 		return areaName;
 	}
 	
-	public void setPokeCenter() {
+	public void setPokeCenter(String mapName, String entranceName) {
 		lastPCMap = mapName;
-		lastPCMapEntrance = mapEntranceName;
+		lastPCMapEntrance = entranceName;
 	}
 	
 	public void teleportToPokeCenter() {

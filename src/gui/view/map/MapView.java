@@ -223,7 +223,7 @@ public class MapView extends View {
 			areaDisplayTime = AREA_NAME_ANIMATION_LIFESPAN;
 		}
 
-		player.areaName = areaName;
+		player.setAreaName(areaName);
 		currentArea = area;
 
 		// Queue to play new area's music.
@@ -261,13 +261,13 @@ public class MapView extends View {
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
 
-		if (!currentMapName.equals(player.mapName) || player.mapReset) {
-			currentMapName = player.mapName;
+		if (!currentMapName.equals(player.getMapName()) || player.mapReset()) {
+			currentMapName = player.getMapName();
 			currentMap = data.getMap(currentMapName);
 
-			if (player.mapReset) {
-				player.mapReset = false;
-				currentMap.setCharacterToEntrance(player.mapEntranceName);
+			if (player.mapReset()) {
+				player.setMapReset(false);
+				currentMap.setCharacterToEntrance();
 			}
 
 			currentMap.populateEntities();

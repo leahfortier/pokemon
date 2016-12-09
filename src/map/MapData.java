@@ -177,11 +177,13 @@ public class MapData {
 		return null;
 	}
 	
-	public boolean setCharacterToEntrance(String entranceName) {
+	public boolean setCharacterToEntrance() {
+		CharacterData player = Game.getPlayer();
+		String entranceName = player.getMapEntranceName();
         if (mapEntrances.containsKey(entranceName)) {
-			int entrance = mapEntrances.get(entranceName);
-			Point entranceLocation = Point.getPointAtIndex(entrance, dimension.width);
-			Game.getPlayer().setLocation(entranceLocation);
+			int entranceIndex = mapEntrances.get(entranceName);
+			Point entranceLocation = Point.getPointAtIndex(entranceIndex, dimension.width);
+			player.setLocation(entranceLocation);
 
 			return true;
 		}

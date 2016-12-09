@@ -36,9 +36,9 @@ class MapTransitionTrigger extends Trigger {
 		}
 
 		if (deathPortal) {
-			Game.getPlayer().setPokeCenter();
+			Game.getPlayer().setPokeCenter(nextMap, mapEntranceName);
 		}
-		
-		player.mapReset = true;
+
+		player.setMapReset(true);
 	}
 }

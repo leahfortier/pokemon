@@ -77,7 +77,7 @@ class EvolutionView extends View {
 				}
 				else {
 					if (!isEgg) {
-						evolvingPokemon.evolve(null, Game.getPlayer().evolution);
+						evolvingPokemon.evolve(null, Game.getPlayer().getEvolution());
 						Game.setViewMode(ViewMode.BAG_VIEW);
 					}
 					else {
@@ -179,7 +179,7 @@ class EvolutionView extends View {
 
 		CharacterData player = Game.getPlayer();
 
-		setPokemon(player.evolvingPokemon, player.evolution);
+		setPokemon(player.getEvolvingPokemon(), player.getEvolution());
 		setInitialMessage();
 		
 		animationEvolve = EVOLVE_ANIMATION_LIFESPAN;
