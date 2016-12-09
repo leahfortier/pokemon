@@ -9,6 +9,7 @@ import main.Global;
 import main.Type;
 import pokemon.ability.AbilityNamesies;
 import pokemon.evolution.Evolution;
+import pokemon.evolution.EvolutionType;
 import util.FileIO;
 import util.FileName;
 import util.RandomUtils;
@@ -265,7 +266,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 					createMovesSet(in),
 					in.nextInt(),
 					sixIntArray(in),
-					Evolution.readEvolution(in),
+					EvolutionType.getEvolution(in),
 					WildHoldItem.createList(in),
 					in.nextInt(),
 					in.nextLine().trim() + in.nextLine().trim(),
@@ -307,7 +308,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			AttackNamesies namesies = AttackNamesies.getValueOf(attackName);
 
 			if (level < 0 || level > ActivePokemon.MAX_LEVEL) {
-				Global.error("Cannot learn moves at level " + level + " (Move: " + attackName + ")");
+				Global.error("Invalid level " + level + " (Move: " + attackName + ")");
 			}
 
 			levelUpMoves.get(level).add(namesies);
