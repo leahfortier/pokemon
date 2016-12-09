@@ -87,7 +87,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		this.namesies = PokemonNamesies.getValueOf(this.name);
 		this.baseStats = baseStats;
 		this.baseExp = baseExp;
-		this.growthRate = GrowthRate.getRate(growthRate);
+		this.growthRate = GrowthRate.valueOf(growthRate);
 		this.type = new Type[] { Type.valueOf(type1.toUpperCase()), Type.valueOf(type2.toUpperCase()) };
 		this.levelUpMoves = levelUpMoves;
 		this.learnableMoves = new HashSet<>();

@@ -50,15 +50,4 @@ enum GrowthRate implements Serializable {
 	private interface ExperienceGetter {
 		int getEXP(int level);
 	}
-	
-	public static GrowthRate getRate(String rate) {
-		for (GrowthRate growthRate : GrowthRate.values()) {
-			if (growthRate.name.equals(rate)) {
-				return growthRate;
-			}
-		}
-		
-		Global.error("Invalid Growth Rate " + rate);
-		return null;
-	}
 }

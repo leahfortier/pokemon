@@ -2,7 +2,7 @@
 Bulbasaur
 45 49 49 65 65 45 
 64
-Medium Slow
+MEDIUM_SLOW
 Grass Poison
 15
 0 Tackle
@@ -91,7 +91,7 @@ Grass
 Ivysaur
 60 62 63 80 80 60 
 142
-Medium Slow
+MEDIUM_SLOW
 Grass Poison
 16
 0 Tackle
@@ -181,7 +181,7 @@ Grass
 Venusaur
 80 82 83 100 100 80 
 236
-Medium Slow
+MEDIUM_SLOW
 Grass Poison
 19
 0 Tackle
@@ -281,7 +281,7 @@ Grass
 Charmander
 39 52 43 60 50 65 
 62
-Medium Slow
+MEDIUM_SLOW
 Fire No_Type
 12
 0 Scratch
@@ -373,7 +373,7 @@ Dragon
 Charmeleon
 58 64 58 80 65 80 
 142
-Medium Slow
+MEDIUM_SLOW
 Fire No_Type
 13
 0 Scratch
@@ -466,7 +466,7 @@ Dragon
 Charizard
 78 84 78 109 85 100 
 240
-Medium Slow
+MEDIUM_SLOW
 Fire Flying
 22
 0 Flare Blitz
@@ -582,7 +582,7 @@ Dragon
 Squirtle
 44 48 65 50 64 43 
 63
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 14
 0 Tackle
@@ -676,7 +676,7 @@ Water 1
 Wartortle
 59 63 80 65 80 58 
 142
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 16
 0 Tackle
@@ -771,7 +771,7 @@ Water 1
 Blastoise
 79 83 100 85 105 78 
 239
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 18
 0 Flash Cannon
@@ -881,7 +881,7 @@ Water 1
 Caterpie
 45 30 35 20 20 45 
 39
-Medium Fast
+MEDIUM_FAST
 Bug No_Type
 3
 0 Tackle
@@ -910,7 +910,7 @@ None
 Metapod
 50 20 55 25 25 30 
 72
-Medium Fast
+MEDIUM_FAST
 Bug No_Type
 2
 0 Harden
@@ -938,7 +938,7 @@ None
 Butterfree
 60 45 50 90 80 70 
 173
-Medium Fast
+MEDIUM_FAST
 Bug Flying
 16
 0 Confusion
@@ -1018,7 +1018,7 @@ None
 Weedle
 40 35 30 20 20 50 
 39
-Medium Fast
+MEDIUM_FAST
 Bug Poison
 3
 0 Poison Sting
@@ -1046,7 +1046,7 @@ None
 Kakuna
 45 25 50 25 25 35 
 72
-Medium Fast
+MEDIUM_FAST
 Bug Poison
 2
 0 Harden
@@ -1074,7 +1074,7 @@ None
 Beedrill
 65 90 40 45 80 75 
 173
-Medium Fast
+MEDIUM_FAST
 Bug Poison
 13
 0 Fury Attack
@@ -1154,7 +1154,7 @@ None
 Pidgey
 40 45 40 35 35 56 
 50
-Medium Slow
+MEDIUM_SLOW
 Normal Flying
 14
 0 Tackle
@@ -1226,7 +1226,7 @@ None
 Pidgeotto
 63 60 55 50 50 71 
 122
-Medium Slow
+MEDIUM_SLOW
 Normal Flying
 16
 0 Tackle
@@ -1300,7 +1300,7 @@ None
 Pidgeot
 83 80 75 70 70 101 
 211
-Medium Slow
+MEDIUM_SLOW
 Normal Flying
 18
 0 Hurricane
@@ -1378,7 +1378,7 @@ None
 Rattata
 30 56 35 25 35 72 
 51
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 13
 0 Tackle
@@ -1467,7 +1467,7 @@ None
 Raticate
 55 81 60 50 70 97 
 145
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 17
 0 Swords Dance
@@ -1567,7 +1567,7 @@ None
 Spearow
 40 60 30 31 31 70 
 52
-Medium Fast
+MEDIUM_FAST
 Normal Flying
 11
 0 Peck
@@ -1641,7 +1641,7 @@ None
 Fearow
 65 90 65 61 61 100 
 155
-Medium Fast
+MEDIUM_FAST
 Normal Flying
 16
 0 Drill Run
@@ -1723,7 +1723,7 @@ None
 Ekans
 35 60 44 40 54 55 
 58
-Medium Fast
+MEDIUM_FAST
 Poison No_Type
 17
 0 Wrap
@@ -1816,7 +1816,7 @@ Dragon
 Arbok
 60 85 69 65 79 80 
 153
-Medium Fast
+MEDIUM_FAST
 Poison No_Type
 23
 0 Ice Fang
@@ -1919,7 +1919,7 @@ Dragon
 Pikachu
 35 55 40 50 50 90 
 105
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 18
 0 Tail Whip
@@ -2017,7 +2017,7 @@ Fairy
 Raichu
 60 90 55 90 80 110 
 214
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 4
 0 Thunder Shock
@@ -2104,7 +2104,7 @@ Fairy
 Sandshrew
 50 75 85 20 30 40 
 60
-Medium Fast
+MEDIUM_FAST
 Ground No_Type
 17
 0 Scratch
@@ -2199,7 +2199,7 @@ None
 Sandslash
 75 100 110 45 55 65 
 158
-Medium Fast
+MEDIUM_FAST
 Ground No_Type
 20
 0 Scratch
@@ -2302,7 +2302,7 @@ None
 Nidoran F
 55 47 52 40 40 41 
 55
-Medium Slow
+MEDIUM_SLOW
 Poison No_Type
 13
 0 Growl
@@ -2388,7 +2388,7 @@ Field
 Nidorina
 70 62 67 55 55 56 
 128
-Medium Slow
+MEDIUM_SLOW
 Poison No_Type
 13
 0 Growl
@@ -2474,7 +2474,7 @@ None
 Nidoqueen
 90 92 87 75 85 76 
 223
-Medium Slow
+MEDIUM_SLOW
 Poison Ground
 9
 0 Superpower
@@ -2592,7 +2592,7 @@ None
 Nidoran M
 46 57 40 40 40 50 
 55
-Medium Slow
+MEDIUM_SLOW
 Poison No_Type
 13
 0 Leer
@@ -2680,7 +2680,7 @@ Field
 Nidorino
 61 72 57 55 55 65 
 128
-Medium Slow
+MEDIUM_SLOW
 Poison No_Type
 13
 0 Leer
@@ -2766,7 +2766,7 @@ Field
 Nidoking
 81 102 77 85 75 85 
 223
-Medium Slow
+MEDIUM_SLOW
 Poison Ground
 9
 0 Megahorn
@@ -2883,7 +2883,7 @@ Field
 Clefairy
 70 45 48 60 65 35 
 113
-Fast
+FAST
 Fairy No_Type
 24
 0 Mimic
@@ -3019,7 +3019,7 @@ None
 Clefable
 95 70 73 95 90 60 
 213
-Fast
+FAST
 Fairy No_Type
 5
 0 Disarming Voice
@@ -3139,7 +3139,7 @@ None
 Vulpix
 38 41 40 50 65 65 
 60
-Medium Fast
+MEDIUM_FAST
 Fire No_Type
 20
 0 Ember
@@ -3234,7 +3234,7 @@ None
 Ninetales
 73 76 75 81 100 100 
 177
-Medium Fast
+MEDIUM_FAST
 Fire No_Type
 6
 0 Imprison
@@ -3321,7 +3321,7 @@ None
 Jigglypuff
 115 45 20 45 25 20 
 95
-Fast
+FAST
 Normal Fairy
 16
 0 Sing
@@ -3441,7 +3441,7 @@ None
 Wigglytuff
 140 70 45 85 50 45 
 191
-Fast
+FAST
 Normal Fairy
 6
 0 Double-Edge
@@ -3555,7 +3555,7 @@ None
 Zubat
 40 45 35 30 40 55 
 49
-Medium Fast
+MEDIUM_FAST
 Poison Flying
 15
 0 Leech Life
@@ -3643,7 +3643,7 @@ None
 Golbat
 75 80 70 65 75 90 
 159
-Medium Fast
+MEDIUM_FAST
 Poison Flying
 19
 0 Screech
@@ -3737,7 +3737,7 @@ None
 Oddish
 45 50 55 75 65 30 
 64
-Medium Slow
+MEDIUM_SLOW
 Grass Poison
 15
 0 Absorb
@@ -3816,7 +3816,7 @@ None
 Gloom
 60 65 70 85 75 40 
 138
-Medium Slow
+MEDIUM_SLOW
 Grass Poison
 17
 0 Absorb
@@ -3901,7 +3901,7 @@ None
 Vileplume
 75 80 85 110 90 50 
 216
-Medium Slow
+MEDIUM_SLOW
 Grass Poison
 7
 0 Mega Drain
@@ -3977,7 +3977,7 @@ None
 Paras
 35 70 55 45 55 25 
 57
-Medium Fast
+MEDIUM_FAST
 Bug Grass
 12
 0 Scratch
@@ -4070,7 +4070,7 @@ Grass
 Parasect
 60 95 80 60 80 30 
 142
-Medium Fast
+MEDIUM_FAST
 Bug Grass
 16
 0 Cross Poison
@@ -4169,7 +4169,7 @@ Grass
 Venonat
 60 55 50 40 55 45 
 61
-Medium Fast
+MEDIUM_FAST
 Bug Poison
 14
 0 Tackle
@@ -4244,7 +4244,7 @@ None
 Venomoth
 70 65 60 90 75 90 
 158
-Medium Fast
+MEDIUM_FAST
 Bug Poison
 21
 0 Quiver Dance
@@ -4336,7 +4336,7 @@ None
 Diglett
 10 55 25 35 45 95 
 53
-Medium Fast
+MEDIUM_FAST
 Ground No_Type
 14
 0 Scratch
@@ -4418,7 +4418,7 @@ None
 Dugtrio
 35 80 50 50 70 120 
 142
-Medium Fast
+MEDIUM_FAST
 Ground No_Type
 19
 0 Rototiller
@@ -4509,7 +4509,7 @@ None
 Meowth
 40 45 35 40 40 90 
 58
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 15
 0 Scratch
@@ -4612,7 +4612,7 @@ None
 Persian
 65 70 60 65 65 115 
 154
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 20
 0 Play Rough
@@ -4723,7 +4723,7 @@ None
 Psyduck
 50 52 48 65 50 55 
 64
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 16
 0 Water Sport
@@ -4825,7 +4825,7 @@ Field
 Golduck
 80 82 78 95 80 85 
 175
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 19
 0 Aqua Jet
@@ -4935,7 +4935,7 @@ Field
 Mankey
 40 80 35 35 45 70 
 61
-Medium Fast
+MEDIUM_FAST
 Fighting No_Type
 16
 0 Covet
@@ -5044,7 +5044,7 @@ None
 Primeape
 65 105 60 60 70 95 
 159
-Medium Fast
+MEDIUM_FAST
 Fighting No_Type
 18
 0 Final Gambit
@@ -5158,7 +5158,7 @@ None
 Growlithe
 55 70 45 70 50 60 
 70
-Slow
+SLOW
 Fire No_Type
 18
 0 Bite
@@ -5248,7 +5248,7 @@ None
 Arcanine
 90 110 80 100 80 95 
 194
-Slow
+SLOW
 Fire No_Type
 6
 0 Thunder Fang
@@ -5332,7 +5332,7 @@ None
 Poliwag
 40 50 40 40 40 90 
 60
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 13
 0 Water Sport
@@ -5409,7 +5409,7 @@ None
 Poliwhirl
 65 65 65 50 50 90 
 135
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 15
 0 Water Sport
@@ -5500,7 +5500,7 @@ None
 Poliwrath
 90 95 95 70 90 70 
 225
-Medium Slow
+MEDIUM_SLOW
 Water Fighting
 8
 0 Circle Throw
@@ -5591,7 +5591,7 @@ None
 Abra
 25 20 15 105 55 90 
 62
-Medium Slow
+MEDIUM_SLOW
 Psychic No_Type
 1
 0 Teleport
@@ -5684,7 +5684,7 @@ None
 Kadabra
 40 35 30 120 70 105 
 140
-Medium Slow
+MEDIUM_SLOW
 Psychic No_Type
 16
 0 Teleport
@@ -5792,7 +5792,7 @@ None
 Alakazam
 55 50 45 135 95 120 
 221
-Medium Slow
+MEDIUM_SLOW
 Psychic No_Type
 16
 0 Teleport
@@ -5903,7 +5903,7 @@ None
 Machop
 70 80 50 35 35 35 
 61
-Medium Slow
+MEDIUM_SLOW
 Fighting No_Type
 17
 0 Low Kick
@@ -6006,7 +6006,7 @@ None
 Machoke
 80 100 70 50 60 45 
 142
-Medium Slow
+MEDIUM_SLOW
 Fighting No_Type
 19
 0 Low Kick
@@ -6111,7 +6111,7 @@ None
 Machamp
 90 130 80 65 85 55 
 227
-Medium Slow
+MEDIUM_SLOW
 Fighting No_Type
 20
 0 Superpower
@@ -6220,7 +6220,7 @@ None
 Bellsprout
 50 75 35 70 30 40 
 60
-Medium Slow
+MEDIUM_SLOW
 Grass Poison
 13
 0 Vine Whip
@@ -6305,7 +6305,7 @@ None
 Weepinbell
 65 90 50 85 45 55 
 137
-Medium Slow
+MEDIUM_SLOW
 Grass Poison
 15
 0 Vine Whip
@@ -6392,7 +6392,7 @@ None
 Victreebel
 80 105 65 100 70 70 
 216
-Medium Slow
+MEDIUM_SLOW
 Grass Poison
 10
 0 Stockpile
@@ -6476,7 +6476,7 @@ None
 Tentacool
 40 40 35 50 100 70 
 67
-Slow
+SLOW
 Water Poison
 17
 0 Poison Sting
@@ -6568,7 +6568,7 @@ None
 Tentacruel
 80 70 65 80 120 100 
 180
-Slow
+SLOW
 Water Poison
 22
 0 Reflect Type
@@ -6667,7 +6667,7 @@ None
 Geodude
 40 80 100 30 30 20 
 60
-Medium Slow
+MEDIUM_SLOW
 Rock Ground
 16
 0 Tackle
@@ -6760,7 +6760,7 @@ None
 Graveler
 55 95 115 45 45 35 
 137
-Medium Slow
+MEDIUM_SLOW
 Rock Ground
 18
 0 Tackle
@@ -6855,7 +6855,7 @@ None
 Golem
 80 120 130 55 65 45 
 218
-Medium Slow
+MEDIUM_SLOW
 Rock Ground
 20
 0 Heavy Slam
@@ -6957,7 +6957,7 @@ None
 Ponyta
 50 85 55 65 65 90 
 82
-Medium Fast
+MEDIUM_FAST
 Fire No_Type
 14
 0 Growl
@@ -7034,7 +7034,7 @@ None
 Rapidash
 65 100 70 80 80 105 
 175
-Medium Fast
+MEDIUM_FAST
 Fire No_Type
 20
 0 Blaze Kick
@@ -7121,7 +7121,7 @@ None
 Slowpoke
 90 65 65 40 40 15 
 63
-Medium Fast
+MEDIUM_FAST
 Water Psychic
 16
 0 Curse
@@ -7229,7 +7229,7 @@ Water 1
 Slowbro
 95 75 110 100 80 30 
 172
-Medium Fast
+MEDIUM_FAST
 Water Psychic
 19
 0 Heal Pulse
@@ -7349,7 +7349,7 @@ Water 1
 Magnemite
 25 35 70 95 55 45 
 65
-Medium Fast
+MEDIUM_FAST
 Electric Steel
 17
 0 Tackle
@@ -7427,7 +7427,7 @@ None
 Magneton
 50 60 95 120 70 70 
 163
-Medium Fast
+MEDIUM_FAST
 Electric Steel
 23
 0 Zap Cannon
@@ -7513,7 +7513,7 @@ None
 Farfetch'd
 52 65 55 58 62 60 
 123
-Medium Fast
+MEDIUM_FAST
 Normal Flying
 19
 0 Brave Bird
@@ -7608,7 +7608,7 @@ Field
 Doduo
 35 85 45 35 35 75 
 62
-Medium Fast
+MEDIUM_FAST
 Normal Flying
 14
 0 Peck
@@ -7680,7 +7680,7 @@ None
 Dodrio
 60 110 70 60 60 100 
 161
-Medium Fast
+MEDIUM_FAST
 Normal Flying
 16
 0 Peck
@@ -7760,7 +7760,7 @@ None
 Seel
 65 45 55 45 70 45 
 65
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 17
 0 Headbutt
@@ -7849,7 +7849,7 @@ Field
 Dewgong
 90 70 80 70 95 70 
 166
-Medium Fast
+MEDIUM_FAST
 Water Ice
 21
 0 Headbutt
@@ -7946,7 +7946,7 @@ Field
 Grimer
 80 80 50 40 50 25 
 65
-Medium Fast
+MEDIUM_FAST
 Poison No_Type
 16
 0 Pound
@@ -8044,7 +8044,7 @@ None
 Muk
 105 105 75 65 100 50 
 175
-Medium Fast
+MEDIUM_FAST
 Poison No_Type
 19
 0 Pound
@@ -8154,7 +8154,7 @@ None
 Shellder
 30 65 100 45 25 40 
 61
-Slow
+SLOW
 Water No_Type
 16
 0 Tackle
@@ -8232,7 +8232,7 @@ None
 Cloyster
 50 95 180 85 45 70 
 184
-Slow
+SLOW
 Water Ice
 10
 0 Hydro Pump
@@ -8310,7 +8310,7 @@ None
 Gastly
 30 35 30 100 35 80 
 62
-Medium Slow
+MEDIUM_SLOW
 Ghost Poison
 15
 0 Hypnosis
@@ -8411,7 +8411,7 @@ None
 Haunter
 45 50 45 115 55 95 
 142
-Medium Slow
+MEDIUM_SLOW
 Ghost Poison
 17
 0 Hypnosis
@@ -8517,7 +8517,7 @@ None
 Gengar
 60 65 60 130 75 110 
 225
-Medium Slow
+MEDIUM_SLOW
 Ghost Poison
 17
 0 Hypnosis
@@ -8634,7 +8634,7 @@ None
 Onix
 35 45 160 30 45 70 
 77
-Medium Fast
+MEDIUM_FAST
 Rock Ground
 22
 0 Mud Sport
@@ -8732,7 +8732,7 @@ None
 Drowzee
 60 48 45 43 90 42 
 66
-Medium Fast
+MEDIUM_FAST
 Psychic No_Type
 17
 0 Pound
@@ -8837,7 +8837,7 @@ None
 Hypno
 85 73 70 73 115 67 
 169
-Medium Fast
+MEDIUM_FAST
 Psychic No_Type
 23
 0 Future Sight
@@ -8951,7 +8951,7 @@ None
 Krabby
 30 105 90 25 25 50 
 65
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 15
 0 Mud Sport
@@ -9039,7 +9039,7 @@ None
 Kingler
 55 130 115 50 50 75 
 166
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 18
 0 Fury Cutter
@@ -9132,7 +9132,7 @@ None
 Voltorb
 40 30 50 55 55 100 
 66
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 17
 0 Charge
@@ -9204,7 +9204,7 @@ None
 Electrode
 60 50 70 80 80 140 
 168
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 20
 0 Magnetic Flux
@@ -9281,7 +9281,7 @@ None
 Exeggcute
 60 40 80 60 45 40 
 65
-Slow
+SLOW
 Grass Psychic
 15
 0 Barrage
@@ -9373,7 +9373,7 @@ None
 Exeggutor
 95 95 85 125 65 55 
 182
-Slow
+SLOW
 Grass Psychic
 9
 0 Seed Bomb
@@ -9463,7 +9463,7 @@ None
 Cubone
 50 50 95 40 50 35 
 64
-Medium Fast
+MEDIUM_FAST
 Ground No_Type
 15
 0 Growl
@@ -9563,7 +9563,7 @@ None
 Marowak
 60 80 110 50 80 45 
 149
-Medium Fast
+MEDIUM_FAST
 Ground No_Type
 18
 0 Growl
@@ -9671,7 +9671,7 @@ None
 Hitmonlee
 50 120 53 35 110 87 
 159
-Medium Fast
+MEDIUM_FAST
 Fighting No_Type
 20
 0 Reversal
@@ -9763,7 +9763,7 @@ None
 Hitmonchan
 50 105 79 35 110 76 
 159
-Medium Fast
+MEDIUM_FAST
 Fighting No_Type
 21
 0 Close Combat
@@ -9856,7 +9856,7 @@ None
 Lickitung
 90 55 75 60 75 30 
 77
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 15
 0 Lick
@@ -9965,7 +9965,7 @@ None
 Koffing
 40 65 95 60 45 35 
 68
-Medium Fast
+MEDIUM_FAST
 Poison No_Type
 15
 0 Poison Gas
@@ -10054,7 +10054,7 @@ None
 Weezing
 65 90 120 85 70 60 
 172
-Medium Fast
+MEDIUM_FAST
 Poison No_Type
 17
 0 Poison Gas
@@ -10147,7 +10147,7 @@ None
 Rhyhorn
 80 85 95 30 30 25 
 69
-Slow
+SLOW
 Ground Rock
 15
 0 Horn Attack
@@ -10253,7 +10253,7 @@ Field
 Rhydon
 105 130 120 45 45 40 
 170
-Slow
+SLOW
 Ground Rock
 19
 0 Horn Drill
@@ -10379,7 +10379,7 @@ Field
 Chansey
 250 5 5 35 105 50 
 395
-Fast
+FAST
 Normal No_Type
 18
 0 Double-Edge
@@ -10504,7 +10504,7 @@ None
 Tangela
 65 55 115 100 40 60 
 87
-Medium Fast
+MEDIUM_FAST
 Grass No_Type
 19
 0 Ingrain
@@ -10595,7 +10595,7 @@ None
 Kangaskhan
 105 95 80 40 80 90 
 172
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 15
 0 Comet Punch
@@ -10710,7 +10710,7 @@ None
 Horsea
 30 40 70 70 25 60 
 59
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 12
 0 Bubble
@@ -10788,7 +10788,7 @@ Dragon
 Seadra
 55 65 95 95 45 85 
 154
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 16
 0 Hydro Pump
@@ -10872,7 +10872,7 @@ Dragon
 Goldeen
 45 67 60 35 50 63 
 64
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 14
 0 Peck
@@ -10951,7 +10951,7 @@ None
 Seaking
 80 92 65 65 80 68 
 158
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 17
 0 Megahorn
@@ -11035,7 +11035,7 @@ None
 Staryu
 30 45 55 70 55 85 
 68
-Slow
+SLOW
 Water No_Type
 19
 0 Tackle
@@ -11118,7 +11118,7 @@ None
 Starmie
 60 75 85 100 85 115 
 182
-Slow
+SLOW
 Water Psychic
 6
 0 Hydro Pump
@@ -11197,7 +11197,7 @@ None
 Mr. Mime
 40 45 65 100 120 90 
 161
-Medium Fast
+MEDIUM_FAST
 Psychic Fairy
 24
 0 Misty Terrain
@@ -11324,7 +11324,7 @@ None
 Scyther
 70 110 80 55 80 105 
 100
-Medium Fast
+MEDIUM_FAST
 Bug Flying
 18
 0 Vacuum Wave
@@ -11412,7 +11412,7 @@ None
 Jynx
 65 50 35 115 95 95 
 159
-Medium Fast
+MEDIUM_FAST
 Ice Psychic
 20
 0 Draining Kiss
@@ -11522,7 +11522,7 @@ None
 Electabuzz
 65 83 57 95 85 105 
 172
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 15
 0 Quick Attack
@@ -11619,7 +11619,7 @@ None
 Magmar
 65 95 57 100 85 93 
 173
-Medium Fast
+MEDIUM_FAST
 Fire No_Type
 15
 0 Smog
@@ -11713,7 +11713,7 @@ None
 Pinsir
 65 125 100 55 70 85 
 175
-Slow
+SLOW
 Bug No_Type
 16
 0 Vice Grip
@@ -11805,7 +11805,7 @@ None
 Tauros
 75 100 95 40 70 110 
 211
-Slow
+SLOW
 Normal No_Type
 14
 0 Tackle
@@ -11891,7 +11891,7 @@ None
 Magikarp
 20 10 55 15 20 80 
 40
-Slow
+SLOW
 Water No_Type
 3
 0 Splash
@@ -11918,7 +11918,7 @@ Dragon
 Gyarados
 95 125 79 60 100 81 
 189
-Slow
+SLOW
 Water Dragon
 12
 0 Thrash
@@ -12005,7 +12005,7 @@ Dragon
 Lapras
 130 85 80 85 95 60 
 187
-Slow
+SLOW
 Water Ice
 15
 0 Sing
@@ -12105,7 +12105,7 @@ Water 1
 Ditto
 48 48 48 48 48 48 
 101
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 1
 0 Transform
@@ -12131,7 +12131,7 @@ None
 Eevee
 55 55 50 45 65 55 
 65
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 16
 0 Growl
@@ -12218,7 +12218,7 @@ None
 Vaporeon
 130 65 60 110 95 65 
 184
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 13
 0 Tackle
@@ -12309,7 +12309,7 @@ None
 Jolteon
 65 65 60 110 95 130 
 184
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 13
 0 Tackle
@@ -12400,7 +12400,7 @@ None
 Flareon
 65 130 60 95 110 65 
 184
-Medium Fast
+MEDIUM_FAST
 Fire No_Type
 13
 0 Tackle
@@ -12488,7 +12488,7 @@ None
 Porygon
 65 60 70 85 75 40 
 79
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 15
 0 Conversion 2
@@ -12575,7 +12575,7 @@ None
 Omanyte
 35 40 100 90 55 35 
 71
-Medium Fast
+MEDIUM_FAST
 Rock Water
 14
 0 Constrict
@@ -12663,7 +12663,7 @@ Water 3
 Omastar
 70 60 125 115 70 55 
 173
-Medium Fast
+MEDIUM_FAST
 Rock Water
 17
 0 Hydro Pump
@@ -12757,7 +12757,7 @@ Water 3
 Kabuto
 30 80 90 55 45 55 
 71
-Medium Fast
+MEDIUM_FAST
 Rock Water
 12
 0 Scratch
@@ -12841,7 +12841,7 @@ Water 3
 Kabutops
 60 115 105 65 70 80 
 173
-Medium Fast
+MEDIUM_FAST
 Rock Water
 18
 0 Night Slash
@@ -12944,7 +12944,7 @@ Water 3
 Aerodactyl
 80 105 65 60 75 130 
 180
-Slow
+SLOW
 Rock Flying
 18
 0 Iron Head
@@ -13046,7 +13046,7 @@ None
 Snorlax
 160 110 65 65 110 30 
 189
-Slow
+SLOW
 Normal No_Type
 16
 0 Tackle
@@ -13157,7 +13157,7 @@ None
 Articuno
 90 85 100 95 125 85 
 261
-Slow
+SLOW
 Ice Flying
 20
 0 Roost
@@ -13236,7 +13236,7 @@ None
 Zapdos
 90 90 85 125 90 100 
 261
-Slow
+SLOW
 Electric Flying
 18
 0 Roost
@@ -13316,7 +13316,7 @@ None
 Moltres
 90 100 90 125 85 90 
 261
-Slow
+SLOW
 Fire Flying
 19
 0 Roost
@@ -13395,7 +13395,7 @@ None
 Dratini
 41 64 45 50 50 50 
 60
-Slow
+SLOW
 Dragon No_Type
 14
 0 Wrap
@@ -13483,7 +13483,7 @@ Dragon
 Dragonair
 61 84 65 70 70 70 
 147
-Slow
+SLOW
 Dragon No_Type
 16
 0 Wrap
@@ -13575,7 +13575,7 @@ Dragon
 Dragonite
 91 134 95 100 100 80 
 270
-Slow
+SLOW
 Dragon Flying
 22
 0 Hurricane
@@ -13703,7 +13703,7 @@ Dragon
 Mewtwo
 106 110 90 154 90 130 
 306
-Slow
+SLOW
 Psychic No_Type
 18
 0 Confusion
@@ -13828,7 +13828,7 @@ None
 Mew
 100 100 100 100 100 100 
 270
-Medium Slow
+MEDIUM_SLOW
 Psychic No_Type
 13
 0 Pound
@@ -14027,7 +14027,7 @@ None
 Chikorita
 45 49 65 49 65 45 
 64
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 14
 0 Tackle
@@ -14112,7 +14112,7 @@ Grass
 Bayleef
 60 62 80 63 80 60 
 142
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 16
 0 Tackle
@@ -14201,7 +14201,7 @@ Grass
 Meganium
 80 82 100 83 100 80 
 236
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 19
 0 Petal Blizzard
@@ -14299,7 +14299,7 @@ Grass
 Cyndaquil
 39 52 43 60 50 65 
 62
-Medium Slow
+MEDIUM_SLOW
 Fire No_Type
 15
 0 Tackle
@@ -14380,7 +14380,7 @@ None
 Quilava
 58 64 58 80 65 80 
 142
-Medium Slow
+MEDIUM_SLOW
 Fire No_Type
 16
 0 Tackle
@@ -14467,7 +14467,7 @@ None
 Typhlosion
 78 84 78 109 85 100 
 240
-Medium Slow
+MEDIUM_SLOW
 Fire No_Type
 20
 0 Eruption
@@ -14573,7 +14573,7 @@ None
 Totodile
 50 65 64 44 48 43 
 63
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 16
 0 Scratch
@@ -14672,7 +14672,7 @@ Water 1
 Croconaw
 65 80 80 59 63 58 
 142
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 17
 0 Scratch
@@ -14775,7 +14775,7 @@ Water 1
 Feraligatr
 85 105 100 79 83 78 
 239
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 19
 0 Scratch
@@ -14888,7 +14888,7 @@ Water 1
 Sentret
 35 46 34 35 45 20 
 43
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 14
 0 Scratch
@@ -14989,7 +14989,7 @@ None
 Furret
 85 76 64 45 55 90 
 145
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 16
 0 Scratch
@@ -15100,7 +15100,7 @@ None
 Hoothoot
 60 30 30 36 56 50 
 52
-Medium Fast
+MEDIUM_FAST
 Normal Flying
 17
 0 Tackle
@@ -15185,7 +15185,7 @@ None
 Noctowl
 100 50 50 76 96 70 
 155
-Medium Fast
+MEDIUM_FAST
 Normal Flying
 20
 0 Dream Eater
@@ -15275,7 +15275,7 @@ None
 Ledyba
 40 20 30 40 80 55 
 53
-Fast
+FAST
 Bug Flying
 13
 0 Tackle
@@ -15364,7 +15364,7 @@ None
 Ledian
 55 35 50 55 110 85 
 137
-Fast
+FAST
 Bug Flying
 15
 0 Tackle
@@ -15460,7 +15460,7 @@ None
 Spinarak
 40 60 40 40 40 30 
 50
-Fast
+FAST
 Bug Poison
 16
 0 Poison Sting
@@ -15543,7 +15543,7 @@ None
 Ariados
 70 90 70 60 60 40 
 137
-Fast
+FAST
 Bug Poison
 21
 0 Venom Drench
@@ -15633,7 +15633,7 @@ None
 Crobat
 85 90 80 70 80 130 
 241
-Medium Fast
+MEDIUM_FAST
 Poison Flying
 20
 0 Cross Poison
@@ -15731,7 +15731,7 @@ None
 Chinchou
 75 38 38 56 56 67 
 66
-Slow
+SLOW
 Water Electric
 16
 0 Bubble
@@ -15819,7 +15819,7 @@ None
 Lanturn
 125 58 58 76 76 67 
 161
-Slow
+SLOW
 Water Electric
 22
 0 Eerie Impulse
@@ -15916,7 +15916,7 @@ None
 Pichu
 20 40 15 35 35 60 
 41
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 6
 0 Thunder Shock
@@ -15996,7 +15996,7 @@ None
 Cleffa
 50 25 28 45 55 15 
 44
-Fast
+FAST
 Fairy No_Type
 7
 0 Pound
@@ -16094,7 +16094,7 @@ None
 Igglybuff
 90 30 15 40 20 15 
 42
-Fast
+FAST
 Normal Fairy
 6
 0 Sing
@@ -16186,7 +16186,7 @@ None
 Togepi
 35 20 65 40 65 20 
 49
-Fast
+FAST
 Fairy No_Type
 15
 0 Growl
@@ -16283,7 +16283,7 @@ None
 Togetic
 55 40 85 80 105 40 
 142
-Fast
+FAST
 Fairy Flying
 19
 0 Magical Leaf
@@ -16395,7 +16395,7 @@ Fairy
 Natu
 40 50 45 70 45 70 
 64
-Medium Fast
+MEDIUM_FAST
 Psychic Flying
 16
 0 Peck
@@ -16493,7 +16493,7 @@ None
 Xatu
 65 75 70 95 70 95 
 165
-Medium Fast
+MEDIUM_FAST
 Psychic Flying
 20
 0 Tailwind
@@ -16599,7 +16599,7 @@ None
 Mareep
 55 40 40 65 45 35 
 56
-Medium Slow
+MEDIUM_SLOW
 Electric No_Type
 15
 0 Tackle
@@ -16678,7 +16678,7 @@ Field
 Flaaffy
 70 55 55 80 60 45 
 128
-Medium Slow
+MEDIUM_SLOW
 Electric No_Type
 17
 0 Tackle
@@ -16768,7 +16768,7 @@ Field
 Ampharos
 90 75 85 115 90 55 
 225
-Medium Slow
+MEDIUM_SLOW
 Electric No_Type
 24
 0 Zap Cannon
@@ -16871,7 +16871,7 @@ Field
 Bellossom
 75 80 95 90 100 50 
 216
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 9
 0 Leaf Storm
@@ -16950,7 +16950,7 @@ None
 Marill
 70 20 50 20 50 40 
 88
-Fast
+FAST
 Water Fairy
 16
 0 Tackle
@@ -17043,7 +17043,7 @@ Fairy
 Azumarill
 100 50 80 60 80 50 
 185
-Fast
+FAST
 Water Fairy
 18
 0 Tackle
@@ -17142,7 +17142,7 @@ Fairy
 Sudowoodo
 70 100 115 30 65 30 
 144
-Medium Fast
+MEDIUM_FAST
 Rock No_Type
 19
 0 Wood Hammer
@@ -17240,7 +17240,7 @@ None
 Politoed
 90 75 75 90 100 70 
 225
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 7
 0 Bubble Beam
@@ -17328,7 +17328,7 @@ None
 Hoppip
 35 35 40 35 55 50 
 50
-Medium Slow
+MEDIUM_SLOW
 Grass Flying
 19
 0 Splash
@@ -17412,7 +17412,7 @@ Grass
 Skiploom
 55 45 50 45 65 80 
 119
-Medium Slow
+MEDIUM_SLOW
 Grass Flying
 22
 0 Splash
@@ -17499,7 +17499,7 @@ Grass
 Jumpluff
 75 55 70 55 95 110 
 203
-Medium Slow
+MEDIUM_SLOW
 Grass Flying
 22
 0 Splash
@@ -17588,7 +17588,7 @@ Grass
 Aipom
 55 70 55 40 55 85 
 72
-Fast
+FAST
 Normal No_Type
 14
 0 Scratch
@@ -17698,7 +17698,7 @@ None
 Sunkern
 30 30 30 30 30 30 
 36
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 16
 0 Absorb
@@ -17782,7 +17782,7 @@ None
 Sunflora
 75 75 55 105 85 30 
 149
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 19
 0 Flower Shield
@@ -17870,7 +17870,7 @@ None
 Yanma
 65 65 45 75 45 95 
 78
-Medium Fast
+MEDIUM_FAST
 Bug Flying
 16
 0 Tackle
@@ -17950,7 +17950,7 @@ None
 Wooper
 55 45 45 25 25 15 
 42
-Medium Fast
+MEDIUM_FAST
 Water Ground
 13
 0 Water Gun
@@ -18039,7 +18039,7 @@ Field
 Quagsire
 95 85 85 65 65 35 
 151
-Medium Fast
+MEDIUM_FAST
 Water Ground
 14
 0 Water Gun
@@ -18141,7 +18141,7 @@ Field
 Espeon
 65 65 60 130 95 110 
 184
-Medium Fast
+MEDIUM_FAST
 Psychic No_Type
 13
 0 Tackle
@@ -18236,7 +18236,7 @@ None
 Umbreon
 95 65 110 60 130 65 
 184
-Medium Fast
+MEDIUM_FAST
 Dark No_Type
 13
 0 Tackle
@@ -18327,7 +18327,7 @@ None
 Murkrow
 60 85 42 85 42 91 
 81
-Medium Slow
+MEDIUM_SLOW
 Dark Flying
 15
 0 Peck
@@ -18422,7 +18422,7 @@ None
 Slowking
 95 75 80 100 110 30 
 172
-Medium Fast
+MEDIUM_FAST
 Water Psychic
 19
 0 Heal Pulse
@@ -18543,7 +18543,7 @@ Water 1
 Misdreavus
 60 60 60 85 85 85 
 87
-Fast
+FAST
 Ghost No_Type
 14
 0 Growl
@@ -18644,7 +18644,7 @@ None
 Unown
 48 72 48 72 48 48 
 118
-Medium Fast
+MEDIUM_FAST
 Psychic No_Type
 1
 0 Hidden Power
@@ -18668,7 +18668,7 @@ None
 Wobbuffet
 190 33 58 33 58 33 
 142
-Medium Fast
+MEDIUM_FAST
 Psychic No_Type
 4
 0 Counter
@@ -18696,7 +18696,7 @@ None
 Girafarig
 70 80 65 90 65 85 
 159
-Medium Fast
+MEDIUM_FAST
 Normal Psychic
 17
 0 Power Swap
@@ -18802,7 +18802,7 @@ None
 Pineco
 50 65 90 35 35 15 
 58
-Medium Fast
+MEDIUM_FAST
 Bug No_Type
 14
 0 Tackle
@@ -18888,7 +18888,7 @@ None
 Forretress
 75 90 140 60 60 40 
 163
-Medium Fast
+MEDIUM_FAST
 Bug Steel
 23
 0 Heavy Slam
@@ -18991,7 +18991,7 @@ None
 Dunsparce
 100 70 70 65 65 45 
 145
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 18
 0 Rage
@@ -19101,7 +19101,7 @@ None
 Gligar
 65 75 105 35 65 85 
 86
-Medium Slow
+MEDIUM_SLOW
 Ground Flying
 15
 0 Poison Sting
@@ -19209,7 +19209,7 @@ None
 Steelix
 75 85 200 55 65 30 
 179
-Medium Fast
+MEDIUM_FAST
 Steel Ground
 25
 0 Thunder Fang
@@ -19316,7 +19316,7 @@ None
 Snubbull
 60 80 50 40 40 30 
 60
-Fast
+FAST
 Fairy No_Type
 15
 0 Ice Fang
@@ -19427,7 +19427,7 @@ Fairy
 Granbull
 90 120 75 60 60 45 
 158
-Fast
+FAST
 Fairy No_Type
 17
 0 Outrage
@@ -19548,7 +19548,7 @@ Fairy
 Qwilfish
 65 95 75 55 55 85 
 86
-Medium Fast
+MEDIUM_FAST
 Water Poison
 23
 0 Fell Stinger
@@ -19644,7 +19644,7 @@ None
 Scizor
 70 130 100 55 80 65 
 175
-Medium Fast
+MEDIUM_FAST
 Bug Steel
 19
 0 Feint
@@ -19741,7 +19741,7 @@ None
 Shuckle
 20 10 230 10 230 5 
 177
-Medium Slow
+MEDIUM_SLOW
 Bug Rock
 20
 0 Sticky Web
@@ -19833,7 +19833,7 @@ None
 Heracross
 80 125 75 40 95 85 
 175
-Slow
+SLOW
 Bug Fighting
 18
 0 Arm Thrust
@@ -19929,7 +19929,7 @@ None
 Sneasel
 55 95 55 35 75 115 
 86
-Medium Slow
+MEDIUM_SLOW
 Dark Ice
 16
 0 Scratch
@@ -20043,7 +20043,7 @@ None
 Teddiursa
 60 80 50 50 50 40 
 66
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 16
 0 Fling
@@ -20148,7 +20148,7 @@ None
 Ursaring
 90 130 75 75 75 55 
 175
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 16
 0 Hammer Arm
@@ -20258,7 +20258,7 @@ None
 Slugma
 40 40 40 70 40 20 
 50
-Medium Fast
+MEDIUM_FAST
 Fire No_Type
 16
 0 Yawn
@@ -20342,7 +20342,7 @@ None
 Magcargo
 50 50 120 80 80 30 
 144
-Medium Fast
+MEDIUM_FAST
 Fire Rock
 20
 0 Earth Power
@@ -20443,7 +20443,7 @@ None
 Swinub
 50 50 40 30 30 50 
 50
-Slow
+SLOW
 Ice Ground
 15
 0 Tackle
@@ -20529,7 +20529,7 @@ None
 Piloswine
 100 100 80 60 60 50 
 158
-Slow
+SLOW
 Ice Ground
 19
 0 Ancient Power
@@ -20623,7 +20623,7 @@ None
 Corsola
 55 55 85 65 85 35 
 133
-Fast
+FAST
 Water Rock
 18
 0 Tackle
@@ -20726,7 +20726,7 @@ Water 3
 Remoraid
 35 65 35 65 35 65 
 60
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 13
 0 Water Gun
@@ -20813,7 +20813,7 @@ Water 2
 Octillery
 75 105 75 105 75 45 
 168
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 19
 0 Gunk Shot
@@ -20913,7 +20913,7 @@ Water 2
 Delibird
 45 55 45 65 45 75 
 116
-Fast
+FAST
 Ice Flying
 1
 0 Present
@@ -20986,7 +20986,7 @@ Field
 Mantine
 65 40 70 80 140 70 
 163
-Slow
+SLOW
 Water Flying
 20
 0 Psybeam
@@ -21077,7 +21077,7 @@ None
 Skarmory
 65 80 140 40 70 70 
 163
-Slow
+SLOW
 Steel Flying
 16
 0 Leer
@@ -21169,7 +21169,7 @@ None
 Houndour
 45 60 30 80 50 65 
 66
-Slow
+SLOW
 Dark Fire
 16
 0 Leer
@@ -21266,7 +21266,7 @@ None
 Houndoom
 75 90 50 110 80 95 
 175
-Slow
+SLOW
 Dark Fire
 21
 0 Inferno
@@ -21371,7 +21371,7 @@ None
 Kingdra
 75 95 95 95 95 85 
 243
-Medium Fast
+MEDIUM_FAST
 Water Dragon
 17
 0 Hydro Pump
@@ -21457,7 +21457,7 @@ Dragon
 Phanpy
 90 60 60 40 40 40 
 66
-Medium Fast
+MEDIUM_FAST
 Ground No_Type
 13
 0 Odor Sleuth
@@ -21540,7 +21540,7 @@ None
 Donphan
 90 120 120 60 60 50 
 175
-Medium Fast
+MEDIUM_FAST
 Ground No_Type
 16
 0 Fire Fang
@@ -21635,7 +21635,7 @@ None
 Porygon2
 85 80 90 105 95 60 
 180
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 18
 0 Zap Cannon
@@ -21725,7 +21725,7 @@ None
 Stantler
 73 95 62 85 65 85 
 163
-Slow
+SLOW
 Normal No_Type
 16
 0 Me First
@@ -21826,7 +21826,7 @@ None
 Smeargle
 55 20 35 20 45 75 
 88
-Fast
+FAST
 Normal No_Type
 10
 0 Sketch
@@ -21859,7 +21859,7 @@ None
 Tyrogue
 35 35 35 35 35 35 
 42
-Medium Fast
+MEDIUM_FAST
 Fighting No_Type
 4
 0 Tackle
@@ -21929,7 +21929,7 @@ None
 Hitmontop
 50 95 95 35 110 70 
 159
-Medium Fast
+MEDIUM_FAST
 Fighting No_Type
 18
 0 Endeavor
@@ -22015,7 +22015,7 @@ None
 Smoochum
 45 30 15 85 65 65 
 61
-Medium Fast
+MEDIUM_FAST
 Ice Psychic
 15
 0 Pound
@@ -22110,7 +22110,7 @@ None
 Elekid
 45 63 37 65 55 95 
 72
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 14
 0 Quick Attack
@@ -22201,7 +22201,7 @@ None
 Magby
 45 75 37 70 55 83 
 73
-Medium Fast
+MEDIUM_FAST
 Fire No_Type
 14
 0 Smog
@@ -22289,7 +22289,7 @@ None
 Miltank
 95 80 105 40 70 100 
 172
-Slow
+SLOW
 Normal No_Type
 13
 0 Tackle
@@ -22393,7 +22393,7 @@ None
 Blissey
 255 10 10 75 135 55 
 608
-Fast
+FAST
 Normal No_Type
 18
 0 Double-Edge
@@ -22520,7 +22520,7 @@ None
 Raikou
 90 85 75 115 100 115 
 261
-Slow
+SLOW
 Electric No_Type
 16
 0 Extrasensory
@@ -22601,7 +22601,7 @@ None
 Entei
 115 115 85 90 75 100 
 261
-Slow
+SLOW
 Fire No_Type
 18
 0 Sacred Fire
@@ -22683,7 +22683,7 @@ None
 Suicune
 100 75 115 90 115 85 
 261
-Slow
+SLOW
 Water No_Type
 17
 0 Hydro Pump
@@ -22764,7 +22764,7 @@ None
 Larvitar
 50 64 50 45 50 41 
 60
-Slow
+SLOW
 Rock Ground
 14
 0 Bite
@@ -22858,7 +22858,7 @@ None
 Pupitar
 70 84 70 65 70 51 
 144
-Slow
+SLOW
 Rock Ground
 16
 0 Bite
@@ -22954,7 +22954,7 @@ None
 Tyranitar
 100 134 110 95 100 61 
 270
-Slow
+SLOW
 Rock Dark
 20
 0 Thunder Fang
@@ -23085,7 +23085,7 @@ None
 Lugia
 106 90 130 90 154 110 
 306
-Slow
+SLOW
 Psychic Flying
 16
 0 Whirlwind
@@ -23191,7 +23191,7 @@ None
 Ho-Oh
 106 130 90 110 154 90 
 306
-Slow
+SLOW
 Fire Flying
 16
 0 Whirlwind
@@ -23290,7 +23290,7 @@ None
 Celebi
 100 100 100 100 100 100 
 270
-Medium Slow
+MEDIUM_SLOW
 Psychic Grass
 14
 0 Leech Seed
@@ -23387,7 +23387,7 @@ None
 Treecko
 40 45 35 65 55 70 
 62
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 14
 0 Pound
@@ -23484,7 +23484,7 @@ Dragon
 Grovyle
 50 65 45 85 65 95 
 142
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 18
 0 Pound
@@ -23588,7 +23588,7 @@ Dragon
 Sceptile
 70 85 65 105 85 120 
 239
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 21
 0 Leaf Storm
@@ -23706,7 +23706,7 @@ Dragon
 Torchic
 45 60 40 70 50 45 
 62
-Medium Slow
+MEDIUM_SLOW
 Fire No_Type
 12
 0 Scratch
@@ -23792,7 +23792,7 @@ None
 Combusken
 60 85 60 85 60 55 
 142
-Medium Slow
+MEDIUM_SLOW
 Fire Fighting
 16
 0 Scratch
@@ -23893,7 +23893,7 @@ None
 Blaziken
 80 120 70 110 70 80 
 239
-Medium Slow
+MEDIUM_SLOW
 Fire Fighting
 20
 0 Flare Blitz
@@ -24009,7 +24009,7 @@ None
 Mudkip
 50 70 50 50 50 40 
 62
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 13
 0 Tackle
@@ -24100,7 +24100,7 @@ Water 1
 Marshtomp
 70 85 70 60 70 50 
 142
-Medium Slow
+MEDIUM_SLOW
 Water Ground
 16
 0 Tackle
@@ -24201,7 +24201,7 @@ Water 1
 Swampert
 100 110 90 85 90 60 
 241
-Medium Slow
+MEDIUM_SLOW
 Water Ground
 18
 0 Hammer Arm
@@ -24311,7 +24311,7 @@ Water 1
 Poochyena
 35 55 35 30 30 35 
 44
-Medium Fast
+MEDIUM_FAST
 Dark No_Type
 14
 0 Tackle
@@ -24399,7 +24399,7 @@ None
 Mightyena
 70 90 70 60 60 70 
 147
-Medium Fast
+MEDIUM_FAST
 Dark No_Type
 20
 0 Crunch
@@ -24496,7 +24496,7 @@ None
 Zigzagoon
 38 30 41 30 41 60 
 48
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 16
 0 Tackle
@@ -24590,7 +24590,7 @@ None
 Linoone
 78 70 61 50 61 100 
 147
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 20
 0 Play Rough
@@ -24694,7 +24694,7 @@ None
 Wurmple
 45 45 35 20 30 20 
 39
-Medium Fast
+MEDIUM_FAST
 Bug No_Type
 4
 0 Tackle
@@ -24728,7 +24728,7 @@ None
 Silcoon
 50 35 55 25 25 15 
 72
-Medium Fast
+MEDIUM_FAST
 Bug No_Type
 2
 0 Harden
@@ -24756,7 +24756,7 @@ None
 Beautifly
 60 70 50 100 50 65 
 173
-Medium Fast
+MEDIUM_FAST
 Bug Flying
 14
 0 Gust
@@ -24831,7 +24831,7 @@ None
 Cascoon
 50 35 55 25 25 15 
 41
-Medium Fast
+MEDIUM_FAST
 Bug No_Type
 2
 0 Harden
@@ -24859,7 +24859,7 @@ None
 Dustox
 60 50 70 50 90 65 
 135
-Medium Fast
+MEDIUM_FAST
 Bug Poison
 14
 0 Gust
@@ -24935,7 +24935,7 @@ None
 Lotad
 40 30 30 40 50 30 
 44
-Medium Slow
+MEDIUM_SLOW
 Water Grass
 13
 0 Astonish
@@ -25019,7 +25019,7 @@ Grass
 Lombre
 60 50 50 60 70 50 
 119
-Medium Slow
+MEDIUM_SLOW
 Water Grass
 13
 0 Astonish
@@ -25116,7 +25116,7 @@ Grass
 Ludicolo
 80 70 70 90 100 70 
 216
-Medium Slow
+MEDIUM_SLOW
 Water Grass
 4
 0 Astonish
@@ -25208,7 +25208,7 @@ Grass
 Seedot
 40 40 50 30 30 30 
 44
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 7
 0 Bide
@@ -25285,7 +25285,7 @@ Grass
 Nuzleaf
 70 70 40 60 40 60 
 119
-Medium Slow
+MEDIUM_SLOW
 Grass Dark
 12
 0 Pound
@@ -25384,7 +25384,7 @@ Grass
 Shiftry
 90 100 60 90 60 80 
 216
-Medium Slow
+MEDIUM_SLOW
 Grass Dark
 7
 0 Razor Leaf
@@ -25486,7 +25486,7 @@ Grass
 Taillow
 40 55 30 30 30 85 
 54
-Medium Slow
+MEDIUM_SLOW
 Normal Flying
 12
 0 Peck
@@ -25561,7 +25561,7 @@ None
 Swellow
 60 85 60 50 50 125 
 151
-Medium Slow
+MEDIUM_SLOW
 Normal Flying
 17
 0 Brave Bird
@@ -25643,7 +25643,7 @@ None
 Wingull
 40 30 30 55 30 85 
 54
-Medium Fast
+MEDIUM_FAST
 Water Flying
 14
 0 Growl
@@ -25729,7 +25729,7 @@ Flying
 Pelipper
 60 50 100 85 70 65 
 151
-Medium Fast
+MEDIUM_FAST
 Water Flying
 23
 0 Hurricane
@@ -25833,7 +25833,7 @@ Flying
 Ralts
 28 25 25 45 35 40 
 40
-Slow
+SLOW
 Psychic Fairy
 17
 0 Growl
@@ -25938,7 +25938,7 @@ None
 Kirlia
 38 35 35 65 55 50 
 97
-Slow
+SLOW
 Psychic Fairy
 20
 0 Growl
@@ -26048,7 +26048,7 @@ None
 Gardevoir
 68 65 65 125 115 80 
 233
-Slow
+SLOW
 Psychic Fairy
 25
 0 Moonblast
@@ -26166,7 +26166,7 @@ None
 Surskit
 40 30 32 50 52 65 
 54
-Medium Fast
+MEDIUM_FAST
 Bug Water
 11
 0 Bubble
@@ -26243,7 +26243,7 @@ Bug
 Masquerain
 70 60 62 80 82 60 
 145
-Medium Fast
+MEDIUM_FAST
 Bug Flying
 20
 0 Quiver Dance
@@ -26336,7 +26336,7 @@ Bug
 Shroomish
 60 40 60 40 60 35 
 59
-Fluctuating
+FLUCTUATING
 Grass No_Type
 13
 0 Absorb
@@ -26415,7 +26415,7 @@ Grass
 Breloom
 60 130 80 60 60 70 
 161
-Fluctuating
+FLUCTUATING
 Grass Fighting
 16
 0 Absorb
@@ -26515,7 +26515,7 @@ Grass
 Slakoth
 60 60 60 35 35 30 
 56
-Slow
+SLOW
 Normal No_Type
 11
 0 Scratch
@@ -26606,7 +26606,7 @@ None
 Vigoroth
 80 80 80 55 55 90 
 154
-Slow
+SLOW
 Normal No_Type
 14
 0 Reversal
@@ -26708,7 +26708,7 @@ None
 Slaking
 150 160 100 95 65 100 
 252
-Slow
+SLOW
 Normal No_Type
 19
 0 Hammer Arm
@@ -26818,7 +26818,7 @@ None
 Nincada
 31 45 90 30 30 40 
 53
-Erratic
+ERRATIC
 Bug Ground
 11
 0 Scratch
@@ -26889,7 +26889,7 @@ None
 Ninjask
 61 90 45 50 50 160 
 160
-Erratic
+ERRATIC
 Bug Flying
 17
 0 Bug Bite
@@ -26973,7 +26973,7 @@ None
 Shedinja
 1 90 45 30 30 40 
 83
-Erratic
+ERRATIC
 Bug Ghost
 13
 0 Scratch
@@ -27052,7 +27052,7 @@ None
 Whismur
 64 51 23 51 23 28 
 48
-Medium Slow
+MEDIUM_SLOW
 Normal No_Type
 13
 0 Pound
@@ -27136,7 +27136,7 @@ Field
 Loudred
 84 71 43 71 43 48 
 126
-Medium Slow
+MEDIUM_SLOW
 Normal No_Type
 17
 0 Pound
@@ -27237,7 +27237,7 @@ Field
 Exploud
 104 91 63 91 73 68 
 216
-Medium Slow
+MEDIUM_SLOW
 Normal No_Type
 24
 0 Boomburst
@@ -27350,7 +27350,7 @@ Field
 Makuhita
 72 60 30 20 30 25 
 47
-Fluctuating
+FLUCTUATING
 Fighting No_Type
 17
 0 Tackle
@@ -27444,7 +27444,7 @@ None
 Hariyama
 144 120 60 40 60 50 
 166
-Fluctuating
+FLUCTUATING
 Fighting No_Type
 20
 0 Brine
@@ -27547,7 +27547,7 @@ None
 Azurill
 50 20 40 20 40 20 
 38
-Fast
+FAST
 Normal Fairy
 10
 0 Splash
@@ -27622,7 +27622,7 @@ None
 Nosepass
 30 45 135 45 90 30 
 75
-Medium Fast
+MEDIUM_FAST
 Rock No_Type
 16
 0 Tackle
@@ -27713,7 +27713,7 @@ None
 Skitty
 50 45 45 35 35 50 
 52
-Fast
+FAST
 Normal No_Type
 19
 0 Fake Out
@@ -27815,7 +27815,7 @@ Fairy
 Delcatty
 70 65 65 55 55 70 
 133
-Fast
+FAST
 Normal No_Type
 4
 0 Fake Out
@@ -27906,7 +27906,7 @@ Fairy
 Sableye
 50 75 75 65 65 50 
 133
-Medium Slow
+MEDIUM_SLOW
 Dark Ghost
 20
 0 Leer
@@ -28026,7 +28026,7 @@ None
 Mawile
 50 85 85 55 55 50 
 133
-Fast
+FAST
 Steel Fairy
 20
 0 Play Rough
@@ -28145,7 +28145,7 @@ Fairy
 Aron
 50 70 100 40 40 30 
 66
-Slow
+SLOW
 Steel Rock
 18
 0 Tackle
@@ -28241,7 +28241,7 @@ None
 Lairon
 60 90 140 50 50 40 
 151
-Slow
+SLOW
 Steel Rock
 20
 0 Tackle
@@ -28340,7 +28340,7 @@ None
 Aggron
 70 110 180 60 60 50 
 239
-Slow
+SLOW
 Steel Rock
 20
 0 Tackle
@@ -28472,7 +28472,7 @@ None
 Meditite
 30 40 55 40 55 60 
 56
-Medium Fast
+MEDIUM_FAST
 Fighting Psychic
 17
 0 Bide
@@ -28578,7 +28578,7 @@ None
 Medicham
 60 60 75 60 75 80 
 144
-Medium Fast
+MEDIUM_FAST
 Fighting Psychic
 24
 0 Zen Headbutt
@@ -28694,7 +28694,7 @@ None
 Electrike
 40 45 40 65 40 65 
 59
-Slow
+SLOW
 Electric No_Type
 14
 0 Tackle
@@ -28778,7 +28778,7 @@ None
 Manectric
 70 75 60 105 60 105 
 166
-Slow
+SLOW
 Electric No_Type
 19
 0 Electric Terrain
@@ -28870,7 +28870,7 @@ None
 Plusle
 60 50 40 85 75 95 
 142
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 21
 0 Nuzzle
@@ -28956,7 +28956,7 @@ None
 Minun
 60 40 50 75 85 95 
 142
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 21
 0 Nuzzle
@@ -29042,7 +29042,7 @@ None
 Volbeat
 65 73 55 47 75 85 
 140
-Erratic
+ERRATIC
 Bug No_Type
 15
 0 Flash
@@ -29134,7 +29134,7 @@ Human-like
 Illumise
 65 47 55 73 75 85 
 140
-Fluctuating
+FLUCTUATING
 Bug No_Type
 15
 0 Play Nice
@@ -29226,7 +29226,7 @@ Human-like
 Roselia
 50 60 45 100 80 65 
 140
-Medium Slow
+MEDIUM_SLOW
 Grass Poison
 17
 0 Absorb
@@ -29315,7 +29315,7 @@ Grass
 Gulpin
 70 43 53 43 53 40 
 60
-Fluctuating
+FLUCTUATING
 Poison No_Type
 16
 0 Pound
@@ -29402,7 +29402,7 @@ None
 Swalot
 100 73 83 73 83 55 
 163
-Fluctuating
+FLUCTUATING
 Poison No_Type
 22
 0 Gunk Shot
@@ -29500,7 +29500,7 @@ None
 Carvanha
 45 90 20 65 20 65 
 61
-Slow
+SLOW
 Water Dark
 14
 0 Leer
@@ -29581,7 +29581,7 @@ None
 Sharpedo
 70 120 40 95 40 95 
 161
-Slow
+SLOW
 Water Dark
 21
 0 Night Slash
@@ -29678,7 +29678,7 @@ None
 Wailmer
 130 70 35 70 35 60 
 80
-Fluctuating
+FLUCTUATING
 Water No_Type
 16
 0 Splash
@@ -29764,7 +29764,7 @@ Water 2
 Wailord
 170 90 45 90 45 60 
 175
-Fluctuating
+FLUCTUATING
 Water No_Type
 20
 0 Heavy Slam
@@ -29858,7 +29858,7 @@ Water 2
 Numel
 60 60 40 65 45 35 
 61
-Medium Fast
+MEDIUM_FAST
 Fire Ground
 15
 0 Growl
@@ -29948,7 +29948,7 @@ None
 Camerupt
 70 100 70 105 75 40 
 161
-Medium Fast
+MEDIUM_FAST
 Fire Ground
 20
 0 Fissure
@@ -30051,7 +30051,7 @@ None
 Torkoal
 70 85 140 85 70 20 
 165
-Medium Fast
+MEDIUM_FAST
 Fire No_Type
 18
 0 Ember
@@ -30143,7 +30143,7 @@ None
 Spoink
 60 25 35 70 80 60 
 66
-Fast
+FAST
 Psychic No_Type
 15
 0 Splash
@@ -30241,7 +30241,7 @@ None
 Grumpig
 80 45 65 90 110 80 
 165
-Fast
+FAST
 Psychic No_Type
 19
 0 Splash
@@ -30356,7 +30356,7 @@ None
 Spinda
 60 60 60 60 60 60 
 126
-Fast
+FAST
 Normal No_Type
 13
 0 Tackle
@@ -30463,7 +30463,7 @@ Human-like
 Trapinch
 45 100 45 45 45 10 
 58
-Medium Slow
+MEDIUM_SLOW
 Ground No_Type
 17
 0 Sand Attack
@@ -30545,7 +30545,7 @@ None
 Vibrava
 50 70 50 50 50 70 
 119
-Medium Slow
+MEDIUM_SLOW
 Ground Dragon
 18
 0 Sand Attack
@@ -30636,7 +30636,7 @@ None
 Flygon
 80 100 80 80 80 100 
 234
-Medium Slow
+MEDIUM_SLOW
 Ground Dragon
 19
 0 Sand Attack
@@ -30741,7 +30741,7 @@ None
 Cacnea
 50 85 40 85 40 35 
 67
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 17
 0 Poison Sting
@@ -30841,7 +30841,7 @@ Human-like
 Cacturne
 70 115 60 115 60 55 
 166
-Medium Slow
+MEDIUM_SLOW
 Grass Dark
 22
 0 Destiny Bond
@@ -30954,7 +30954,7 @@ Human-like
 Swablu
 45 40 60 40 75 50 
 62
-Erratic
+ERRATIC
 Normal Flying
 17
 0 Peck
@@ -31040,7 +31040,7 @@ Dragon
 Altaria
 75 70 90 70 105 80 
 172
-Erratic
+ERRATIC
 Dragon Flying
 23
 0 Sky Attack
@@ -31145,7 +31145,7 @@ Dragon
 Zangoose
 73 115 60 60 60 90 
 160
-Erratic
+ERRATIC
 Normal No_Type
 16
 0 Scratch
@@ -31259,7 +31259,7 @@ None
 Seviper
 73 100 60 100 60 65 
 160
-Fluctuating
+FLUCTUATING
 Poison No_Type
 18
 0 Wrap
@@ -31355,7 +31355,7 @@ Dragon
 Lunatone
 70 55 65 95 85 70 
 154
-Fast
+FAST
 Rock Psychic
 17
 0 Moonblast
@@ -31453,7 +31453,7 @@ None
 Solrock
 70 95 85 55 65 70 
 154
-Fast
+FAST
 Rock Psychic
 16
 0 Tackle
@@ -31555,7 +31555,7 @@ None
 Barboach
 50 48 43 46 41 60 
 58
-Medium Fast
+MEDIUM_FAST
 Water Ground
 15
 0 Mud-Slap
@@ -31634,7 +31634,7 @@ None
 Whiscash
 110 78 73 76 71 60 
 164
-Medium Fast
+MEDIUM_FAST
 Water Ground
 20
 0 Tickle
@@ -31725,7 +31725,7 @@ None
 Corphish
 43 80 65 50 35 35 
 62
-Fluctuating
+FLUCTUATING
 Water No_Type
 15
 0 Bubble
@@ -31820,7 +31820,7 @@ Water 3
 Crawdaunt
 63 120 85 90 55 55 
 164
-Fluctuating
+FLUCTUATING
 Water Dark
 19
 0 Bubble
@@ -31927,7 +31927,7 @@ Water 3
 Baltoy
 40 40 55 40 70 55 
 60
-Medium Fast
+MEDIUM_FAST
 Ground Psychic
 18
 0 Harden
@@ -32021,7 +32021,7 @@ None
 Claydol
 60 70 105 70 120 75 
 175
-Medium Fast
+MEDIUM_FAST
 Ground Psychic
 21
 0 Teleport
@@ -32123,7 +32123,7 @@ None
 Lileep
 66 41 77 61 87 23 
 71
-Erratic
+ERRATIC
 Rock Grass
 15
 0 Astonish
@@ -32207,7 +32207,7 @@ None
 Cradily
 86 81 97 81 107 43 
 173
-Erratic
+ERRATIC
 Rock Grass
 18
 0 Wring Out
@@ -32303,7 +32303,7 @@ None
 Anorith
 45 95 50 40 50 75 
 71
-Erratic
+ERRATIC
 Rock Bug
 15
 0 Scratch
@@ -32386,7 +32386,7 @@ None
 Armaldo
 75 125 100 70 80 45 
 173
-Erratic
+ERRATIC
 Rock Bug
 17
 0 Scratch
@@ -32483,7 +32483,7 @@ None
 Feebas
 20 15 20 10 55 80 
 40
-Erratic
+ERRATIC
 Water No_Type
 3
 0 Splash
@@ -32548,7 +32548,7 @@ Dragon
 Milotic
 95 60 79 100 125 81 
 189
-Erratic
+ERRATIC
 Water No_Type
 17
 0 Wrap
@@ -32637,7 +32637,7 @@ Dragon
 Castform
 70 70 70 70 70 70 
 147
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 13
 0 Tackle
@@ -32723,7 +32723,7 @@ Amorphous
 Kecleon
 60 90 70 60 120 40 
 154
-Medium Slow
+MEDIUM_SLOW
 Normal No_Type
 19
 0 Thief
@@ -32845,7 +32845,7 @@ None
 Shuppet
 44 75 35 63 33 45 
 59
-Fast
+FAST
 Ghost No_Type
 16
 0 Knock Off
@@ -32943,7 +32943,7 @@ None
 Banette
 64 115 65 83 63 65 
 159
-Fast
+FAST
 Ghost No_Type
 20
 0 Phantom Force
@@ -33050,7 +33050,7 @@ None
 Duskull
 20 40 90 30 90 25 
 59
-Fast
+FAST
 Ghost No_Type
 15
 0 Leer
@@ -33144,7 +33144,7 @@ None
 Dusclops
 40 70 130 60 130 25 
 159
-Fast
+FAST
 Ghost No_Type
 25
 0 Phantom Force
@@ -33263,7 +33263,7 @@ None
 Tropius
 99 68 83 72 87 51 
 161
-Slow
+SLOW
 Grass Flying
 17
 0 Leaf Storm
@@ -33356,7 +33356,7 @@ Grass
 Chimecho
 65 50 70 95 80 65 
 149
-Fast
+FAST
 Psychic No_Type
 20
 0 Healing Wish
@@ -33461,7 +33461,7 @@ None
 Absol
 65 130 60 75 60 75 
 163
-Medium Slow
+MEDIUM_SLOW
 Dark No_Type
 22
 0 Perish Song
@@ -33590,7 +33590,7 @@ None
 Wynaut
 95 23 48 23 48 23 
 52
-Medium Fast
+MEDIUM_FAST
 Psychic No_Type
 7
 0 Splash
@@ -33621,7 +33621,7 @@ None
 Snorunt
 50 50 50 50 50 50 
 60
-Medium Fast
+MEDIUM_FAST
 Ice No_Type
 13
 0 Powder Snow
@@ -33698,7 +33698,7 @@ Mineral
 Glalie
 80 80 80 80 80 80 
 168
-Medium Fast
+MEDIUM_FAST
 Ice No_Type
 18
 0 Sheer Cold
@@ -33792,7 +33792,7 @@ Mineral
 Spheal
 70 40 50 55 50 25 
 58
-Medium Slow
+MEDIUM_SLOW
 Ice Water
 15
 0 Defense Curl
@@ -33878,7 +33878,7 @@ Field
 Sealeo
 90 60 70 75 70 45 
 144
-Medium Slow
+MEDIUM_SLOW
 Ice Water
 16
 0 Defense Curl
@@ -33966,7 +33966,7 @@ Field
 Walrein
 110 80 90 95 90 65 
 239
-Medium Slow
+MEDIUM_SLOW
 Ice Water
 18
 0 Crunch
@@ -34060,7 +34060,7 @@ Field
 Clamperl
 35 64 85 74 55 32 
 69
-Erratic
+ERRATIC
 Water No_Type
 5
 0 Clamp
@@ -34128,7 +34128,7 @@ None
 Huntail
 55 104 105 94 75 52 
 170
-Erratic
+ERRATIC
 Water No_Type
 15
 0 Whirlpool
@@ -34211,7 +34211,7 @@ None
 Gorebyss
 55 84 105 114 75 52 
 170
-Erratic
+ERRATIC
 Water No_Type
 15
 0 Whirlpool
@@ -34296,7 +34296,7 @@ None
 Relicanth
 100 90 130 45 65 55 
 170
-Slow
+SLOW
 Water Rock
 16
 0 Head Smash
@@ -34391,7 +34391,7 @@ Water 2
 Luvdisc
 43 30 55 40 65 97 
 116
-Fast
+FAST
 Water No_Type
 15
 0 Tackle
@@ -34467,7 +34467,7 @@ None
 Bagon
 45 75 60 40 30 50 
 60
-Slow
+SLOW
 Dragon No_Type
 13
 0 Rage
@@ -34549,7 +34549,7 @@ None
 Shelgon
 65 95 100 60 50 50 
 147
-Slow
+SLOW
 Dragon No_Type
 17
 0 Rage
@@ -34636,7 +34636,7 @@ None
 Salamence
 95 135 80 110 80 100 
 270
-Slow
+SLOW
 Dragon Flying
 21
 0 Dragon Tail
@@ -34739,7 +34739,7 @@ None
 Beldum
 40 55 80 35 60 30 
 60
-Slow
+SLOW
 Steel Psychic
 1
 0 Take Down
@@ -34767,7 +34767,7 @@ None
 Metang
 60 75 100 55 80 50 
 147
-Slow
+SLOW
 Steel Psychic
 16
 0 Magnet Rise
@@ -34859,7 +34859,7 @@ None
 Metagross
 80 135 130 95 90 70 
 270
-Slow
+SLOW
 Steel Psychic
 17
 0 Magnet Rise
@@ -34954,7 +34954,7 @@ None
 Regirock
 80 100 200 50 100 50 
 261
-Slow
+SLOW
 Rock No_Type
 17
 0 Explosion
@@ -35045,7 +35045,7 @@ None
 Regice
 80 50 100 100 200 50 
 261
-Slow
+SLOW
 Ice No_Type
 17
 0 Explosion
@@ -35134,7 +35134,7 @@ None
 Registeel
 80 75 150 75 150 50 
 261
-Slow
+SLOW
 Steel No_Type
 19
 0 Explosion
@@ -35227,7 +35227,7 @@ None
 Latias
 80 80 90 110 130 110 
 270
-Slow
+SLOW
 Dragon Psychic
 20
 0 Healing Wish
@@ -35335,7 +35335,7 @@ None
 Latios
 80 90 80 130 110 110 
 270
-Slow
+SLOW
 Dragon Psychic
 20
 0 Memento
@@ -35441,7 +35441,7 @@ None
 Kyogre
 100 100 90 150 140 90 
 302
-Slow
+SLOW
 Water No_Type
 14
 0 Ancient Power
@@ -35523,7 +35523,7 @@ None
 Groudon
 100 150 140 100 90 90 
 302
-Slow
+SLOW
 Ground No_Type
 14
 0 Ancient Power
@@ -35620,7 +35620,7 @@ None
 Rayquaza
 105 150 90 150 90 95 
 306
-Slow
+SLOW
 Dragon Flying
 13
 0 Twister
@@ -35725,7 +35725,7 @@ None
 Jirachi
 100 100 100 100 100 100 
 270
-Slow
+SLOW
 Steel Psychic
 16
 0 Wish
@@ -35826,7 +35826,7 @@ None
 Deoxys
 50 150 50 150 50 150
 270
-Slow
+SLOW
 Psychic No_Type
 14
 0 Leer
@@ -35939,7 +35939,7 @@ None
 Turtwig
 55 68 64 45 55 31 
 64
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 12
 0 Tackle
@@ -36025,7 +36025,7 @@ Grass
 Grotle
 75 89 85 55 65 36 
 142
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 13
 0 Tackle
@@ -36112,7 +36112,7 @@ Grass
 Torterra
 95 109 105 75 85 56 
 236
-Medium Slow
+MEDIUM_SLOW
 Grass Ground
 17
 0 Wood Hammer
@@ -36216,7 +36216,7 @@ Grass
 Chimchar
 44 58 44 58 44 61 
 62
-Medium Slow
+MEDIUM_SLOW
 Fire No_Type
 13
 0 Scratch
@@ -36317,7 +36317,7 @@ Human-like
 Monferno
 64 78 52 78 52 81 
 142
-Medium Slow
+MEDIUM_SLOW
 Fire Fighting
 15
 0 Scratch
@@ -36425,7 +36425,7 @@ Human-like
 Infernape
 76 104 71 104 71 108 
 240
-Medium Slow
+MEDIUM_SLOW
 Fire Fighting
 17
 0 Flare Blitz
@@ -36543,7 +36543,7 @@ Human-like
 Piplup
 53 51 53 61 56 40 
 63
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 13
 0 Pound
@@ -36628,7 +36628,7 @@ Field
 Prinplup
 64 66 68 81 76 50 
 142
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 15
 0 Tackle
@@ -36719,7 +36719,7 @@ Field
 Empoleon
 84 86 88 111 101 60 
 239
-Medium Slow
+MEDIUM_SLOW
 Water Steel
 17
 0 Tackle
@@ -36823,7 +36823,7 @@ Field
 Starly
 40 55 30 30 30 60 
 49
-Medium Slow
+MEDIUM_SLOW
 Normal Flying
 12
 0 Tackle
@@ -36899,7 +36899,7 @@ None
 Staravia
 55 75 50 40 40 80 
 119
-Medium Slow
+MEDIUM_SLOW
 Normal Flying
 13
 0 Tackle
@@ -36977,7 +36977,7 @@ None
 Staraptor
 85 120 70 50 60 100 
 214
-Medium Slow
+MEDIUM_SLOW
 Normal Flying
 15
 0 Tackle
@@ -37060,7 +37060,7 @@ None
 Bidoof
 59 45 40 35 40 31 
 50
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 12
 0 Tackle
@@ -37147,7 +37147,7 @@ Field
 Bibarel
 79 85 60 55 60 71 
 144
-Medium Fast
+MEDIUM_FAST
 Normal Water
 15
 0 Rototiller
@@ -37250,7 +37250,7 @@ Field
 Kricketot
 37 25 41 25 41 25 
 39
-Medium Slow
+MEDIUM_SLOW
 Bug No_Type
 4
 0 Growl
@@ -37283,7 +37283,7 @@ None
 Kricketune
 77 85 51 55 51 65 
 134
-Medium Slow
+MEDIUM_SLOW
 Bug No_Type
 15
 0 Growl
@@ -37361,7 +37361,7 @@ None
 Shinx
 45 65 34 40 34 45 
 53
-Medium Slow
+MEDIUM_SLOW
 Electric No_Type
 13
 0 Tackle
@@ -37441,7 +37441,7 @@ None
 Luxio
 60 85 49 60 49 60 
 127
-Medium Slow
+MEDIUM_SLOW
 Electric No_Type
 13
 0 Tackle
@@ -37521,7 +37521,7 @@ None
 Luxray
 80 120 79 95 79 70 
 235
-Medium Slow
+MEDIUM_SLOW
 Electric No_Type
 16
 0 Electric Terrain
@@ -37607,7 +37607,7 @@ None
 Budew
 40 30 35 50 70 55 
 56
-Medium Slow
+MEDIUM_SLOW
 Grass Poison
 6
 0 Absorb
@@ -37684,7 +37684,7 @@ None
 Roserade
 60 70 65 125 105 90 
 227
-Medium Slow
+MEDIUM_SLOW
 Grass Poison
 7
 0 Venom Drench
@@ -37765,7 +37765,7 @@ Grass
 Cranidos
 67 125 40 30 30 58 
 70
-Erratic
+ERRATIC
 Rock No_Type
 12
 0 Headbutt
@@ -37864,7 +37864,7 @@ None
 Rampardos
 97 165 60 65 50 58 
 173
-Erratic
+ERRATIC
 Rock No_Type
 13
 0 Headbutt
@@ -37974,7 +37974,7 @@ None
 Shieldon
 30 42 118 42 88 30 
 70
-Erratic
+ERRATIC
 Rock Steel
 12
 0 Tackle
@@ -38066,7 +38066,7 @@ None
 Bastiodon
 60 52 168 47 138 30 
 173
-Erratic
+ERRATIC
 Rock Steel
 15
 0 Tackle
@@ -38166,7 +38166,7 @@ None
 Burmy
 40 29 45 29 45 36 
 45
-Medium Fast
+MEDIUM_FAST
 Bug No_Type
 4
 0 Protect
@@ -38200,7 +38200,7 @@ None
 Wormadam
 60 59 85 79 105 36
 148
-Medium Fast
+MEDIUM_FAST
 Bug Grass
 13
 0 Tackle
@@ -38291,7 +38291,7 @@ None
 Mothim
 70 94 50 94 50 66 
 148
-Medium Fast
+MEDIUM_FAST
 Bug Flying
 14
 0 Tackle
@@ -38369,7 +38369,7 @@ None
 Combee
 30 30 42 30 42 70 
 49
-Medium Slow
+MEDIUM_SLOW
 Bug Flying
 4
 0 Sweet Scent
@@ -38401,7 +38401,7 @@ None
 Vespiquen
 70 80 102 80 102 40 
 166
-Medium Slow
+MEDIUM_SLOW
 Bug Flying
 20
 0 Fell Stinger
@@ -38481,7 +38481,7 @@ None
 Pachirisu
 60 45 70 45 90 95 
 142
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 15
 0 Growl
@@ -38570,7 +38570,7 @@ Fairy
 Buizel
 55 65 35 60 30 85 
 66
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 14
 0 Sonic Boom
@@ -38658,7 +38658,7 @@ Field
 Floatzel
 85 105 55 85 50 115 
 173
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 19
 0 Ice Fang
@@ -38759,7 +38759,7 @@ Field
 Cherubi
 45 35 45 62 53 35 
 55
-Medium Fast
+MEDIUM_FAST
 Grass No_Type
 12
 0 Morning Sun
@@ -38836,7 +38836,7 @@ Grass
 Cherrim
 70 60 70 87 78 85 
 158
-Medium Fast
+MEDIUM_FAST
 Grass No_Type
 14
 0 Morning Sun
@@ -38917,7 +38917,7 @@ Grass
 Shellos
 76 48 48 57 62 34 
 65
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 10
 0 Mud-Slap
@@ -38992,7 +38992,7 @@ Amorphous
 Gastrodon
 111 83 68 92 82 39 
 166
-Medium Fast
+MEDIUM_FAST
 Water Ground
 13
 0 Mud-Slap
@@ -39086,7 +39086,7 @@ Amorphous
 Ambipom
 75 100 66 60 66 115 
 169
-Fast
+FAST
 Normal No_Type
 16
 0 Scratch
@@ -39200,7 +39200,7 @@ None
 Drifloon
 90 50 34 60 44 70 
 70
-Fluctuating
+FLUCTUATING
 Ghost Flying
 15
 0 Constrict
@@ -39294,7 +39294,7 @@ None
 Drifblim
 150 80 44 90 54 80 
 174
-Fluctuating
+FLUCTUATING
 Ghost Flying
 19
 0 Phantom Force
@@ -39395,7 +39395,7 @@ None
 Buneary
 55 66 44 44 56 85 
 70
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 17
 0 Defense Curl
@@ -39501,7 +39501,7 @@ Human-like
 Lopunny
 65 76 84 54 96 105 
 168
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 22
 0 Healing Wish
@@ -39619,7 +39619,7 @@ Human-like
 Mismagius
 60 60 60 105 105 105 
 173
-Fast
+FAST
 Ghost No_Type
 9
 0 Mystical Fire
@@ -39718,7 +39718,7 @@ None
 Honchkrow
 100 125 52 105 52 71 
 177
-Medium Slow
+MEDIUM_SLOW
 Dark Flying
 12
 0 Night Slash
@@ -39814,7 +39814,7 @@ None
 Glameow
 49 55 42 42 37 85 
 62
-Fast
+FAST
 Normal No_Type
 14
 0 Fake Out
@@ -39906,7 +39906,7 @@ None
 Purugly
 71 82 64 64 59 112 
 158
-Fast
+FAST
 Normal No_Type
 16
 0 Fake Out
@@ -40004,7 +40004,7 @@ None
 Chingling
 45 30 50 65 50 45 
 57
-Fast
+FAST
 Psychic No_Type
 8
 0 Wrap
@@ -40095,7 +40095,7 @@ None
 Stunky
 63 63 47 41 41 74 
 66
-Medium Fast
+MEDIUM_FAST
 Poison Dark
 14
 0 Scratch
@@ -40184,7 +40184,7 @@ None
 Skuntank
 103 93 67 71 61 84 
 168
-Medium Fast
+MEDIUM_FAST
 Poison Dark
 16
 0 Scratch
@@ -40279,7 +40279,7 @@ None
 Bronzor
 57 24 86 24 86 23 
 60
-Medium Fast
+MEDIUM_FAST
 Steel Psychic
 16
 0 Tackle
@@ -40365,7 +40365,7 @@ None
 Bronzong
 67 89 116 79 116 33 
 175
-Medium Fast
+MEDIUM_FAST
 Steel Psychic
 21
 0 Sunny Day
@@ -40464,7 +40464,7 @@ None
 Bonsly
 50 80 95 10 45 10 
 58
-Medium Fast
+MEDIUM_FAST
 Rock No_Type
 13
 0 Fake Tears
@@ -40544,7 +40544,7 @@ None
 Mime Jr.
 20 25 45 70 90 60 
 62
-Medium Fast
+MEDIUM_FAST
 Psychic Fairy
 18
 0 Tickle
@@ -40654,7 +40654,7 @@ None
 Happiny
 100 5 5 15 65 30 
 110
-Fast
+FAST
 Normal No_Type
 5
 0 Pound
@@ -40740,7 +40740,7 @@ None
 Chatot
 76 65 45 92 42 91 
 144
-Medium Slow
+MEDIUM_SLOW
 Normal Flying
 19
 0 Hyper Voice
@@ -40824,7 +40824,7 @@ None
 Spiritomb
 50 92 108 92 108 35 
 170
-Medium Fast
+MEDIUM_FAST
 Ghost Dark
 13
 0 Curse
@@ -40913,7 +40913,7 @@ None
 Gible
 58 70 45 40 45 42 
 60
-Slow
+SLOW
 Dragon Ground
 10
 0 Tackle
@@ -41000,7 +41000,7 @@ Dragon
 Gabite
 68 90 65 50 55 82 
 144
-Slow
+SLOW
 Dragon Ground
 12
 0 Tackle
@@ -41090,7 +41090,7 @@ Dragon
 Garchomp
 108 130 95 80 85 102 
 270
-Slow
+SLOW
 Dragon Ground
 16
 0 Fire Fang
@@ -41194,7 +41194,7 @@ Dragon
 Munchlax
 135 85 40 40 85 5 
 78
-Slow
+SLOW
 Normal No_Type
 20
 0 Last Resort
@@ -41304,7 +41304,7 @@ None
 Riolu
 40 70 40 35 40 60 
 57
-Medium Slow
+MEDIUM_SLOW
 Fighting No_Type
 11
 0 Foresight
@@ -41398,7 +41398,7 @@ None
 Lucario
 70 110 70 115 70 90 
 184
-Medium Slow
+MEDIUM_SLOW
 Fighting Steel
 22
 0 Extreme Speed
@@ -41514,7 +41514,7 @@ Human-like
 Hippopotas
 68 72 78 38 42 32 
 66
-Slow
+SLOW
 Ground No_Type
 11
 0 Tackle
@@ -41587,7 +41587,7 @@ None
 Hippowdon
 108 112 118 68 72 47 
 184
-Slow
+SLOW
 Ground No_Type
 16
 0 Ice Fang
@@ -41669,7 +41669,7 @@ None
 Skorupi
 40 50 90 30 55 65 
 66
-Slow
+SLOW
 Poison Bug
 17
 0 Bite
@@ -41766,7 +41766,7 @@ Water 3
 Drapion
 70 90 110 60 75 95 
 175
-Slow
+SLOW
 Poison Dark
 21
 0 Thunder Fang
@@ -41875,7 +41875,7 @@ Water 3
 Croagunk
 48 61 40 61 40 50 
 60
-Medium Fast
+MEDIUM_FAST
 Poison Fighting
 16
 0 Astonish
@@ -41987,7 +41987,7 @@ None
 Toxicroak
 83 106 65 86 65 85 
 172
-Medium Fast
+MEDIUM_FAST
 Poison Fighting
 18
 0 Astonish
@@ -42106,7 +42106,7 @@ None
 Carnivine
 74 100 72 90 72 46 
 159
-Slow
+SLOW
 Grass No_Type
 14
 0 Bind
@@ -42190,7 +42190,7 @@ None
 Finneon
 49 49 56 49 61 66 
 66
-Erratic
+ERRATIC
 Water No_Type
 14
 0 Pound
@@ -42273,7 +42273,7 @@ None
 Lumineon
 69 69 76 69 86 91 
 161
-Erratic
+ERRATIC
 Water No_Type
 18
 0 Soak
@@ -42361,7 +42361,7 @@ None
 Mantyke
 45 20 50 60 120 50 
 69
-Slow
+SLOW
 Water Flying
 15
 0 Tackle
@@ -42441,7 +42441,7 @@ None
 Snover
 60 62 50 62 60 40 
 67
-Slow
+SLOW
 Grass Ice
 12
 0 Powder Snow
@@ -42524,7 +42524,7 @@ Grass
 Abomasnow
 90 92 75 92 85 60 
 173
-Slow
+SLOW
 Grass Ice
 15
 0 Ice Punch
@@ -42624,7 +42624,7 @@ Grass
 Weavile
 70 120 65 45 85 125 
 179
-Medium Slow
+MEDIUM_SLOW
 Dark Ice
 20
 0 Embargo
@@ -42745,7 +42745,7 @@ None
 Magnezone
 70 70 115 130 90 60 
 241
-Medium Fast
+MEDIUM_FAST
 Electric Steel
 25
 0 Zap Cannon
@@ -42834,7 +42834,7 @@ None
 Lickilicky
 110 85 95 80 95 50 
 180
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 18
 0 Wring Out
@@ -42950,7 +42950,7 @@ None
 Rhyperior
 115 140 130 55 55 40 
 241
-Slow
+SLOW
 Ground Rock
 22
 0 Rock Wrecker
@@ -43081,7 +43081,7 @@ Field
 Tangrowth
 100 100 125 110 50 50 
 187
-Medium Fast
+MEDIUM_FAST
 Grass No_Type
 21
 0 Block
@@ -43187,7 +43187,7 @@ None
 Electivire
 75 123 67 95 85 95 
 243
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 21
 0 Electric Terrain
@@ -43298,7 +43298,7 @@ None
 Magmortar
 75 95 67 125 95 83 
 243
-Medium Fast
+MEDIUM_FAST
 Fire No_Type
 18
 0 Thunder Punch
@@ -43403,7 +43403,7 @@ None
 Togekiss
 85 50 95 120 115 80 
 245
-Fast
+FAST
 Fairy Flying
 5
 0 Moonblast
@@ -43502,7 +43502,7 @@ Fairy
 Yanmega
 86 76 86 116 56 95 
 180
-Medium Fast
+MEDIUM_FAST
 Bug Flying
 22
 0 Bug Buzz
@@ -43592,7 +43592,7 @@ None
 Leafeon
 65 110 130 60 65 95 
 196
-Medium Fast
+MEDIUM_FAST
 Grass No_Type
 13
 0 Tail Whip
@@ -43685,7 +43685,7 @@ None
 Glaceon
 65 60 110 130 95 65 
 196
-Medium Fast
+MEDIUM_FAST
 Ice No_Type
 13
 0 Tackle
@@ -43773,7 +43773,7 @@ None
 Gliscor
 75 95 125 45 75 95 
 179
-Medium Slow
+MEDIUM_SLOW
 Ground Flying
 22
 0 Guillotine
@@ -43891,7 +43891,7 @@ None
 Mamoswine
 110 130 80 70 60 80 
 207
-Slow
+SLOW
 Ice Ground
 20
 0 Scary Face
@@ -43987,7 +43987,7 @@ None
 Porygon-Z
 85 80 70 135 75 90 
 241
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 19
 0 Trick Room
@@ -44079,7 +44079,7 @@ None
 Gallade
 68 125 65 65 115 80 
 233
-Slow
+SLOW
 Psychic Fighting
 24
 0 Stored Power
@@ -44216,7 +44216,7 @@ None
 Probopass
 60 55 145 75 150 40 
 184
-Medium Fast
+MEDIUM_FAST
 Rock Steel
 22
 0 Magnet Rise
@@ -44317,7 +44317,7 @@ None
 Dusknoir
 45 100 135 65 135 45 
 236
-Fast
+FAST
 Ghost No_Type
 25
 0 Phantom Force
@@ -44437,7 +44437,7 @@ None
 Froslass
 70 80 70 80 70 110 
 168
-Medium Fast
+MEDIUM_FAST
 Ice Ghost
 18
 0 Destiny Bond
@@ -44536,7 +44536,7 @@ Mineral
 Rotom
 50 65 107 105 107 86 
 154
-Medium Fast
+MEDIUM_FAST
 Electric Ghost
 16
 0 Discharge
@@ -44613,7 +44613,7 @@ None
 Uxie
 75 75 130 75 130 95 
 261
-Slow
+SLOW
 Psychic No_Type
 15
 0 Memento
@@ -44712,7 +44712,7 @@ None
 Mesprit
 80 105 105 105 105 80 
 261
-Slow
+SLOW
 Psychic No_Type
 15
 0 Healing Wish
@@ -44809,7 +44809,7 @@ None
 Azelf
 75 125 70 125 70 115 
 261
-Slow
+SLOW
 Psychic No_Type
 14
 0 Natural Gift
@@ -44912,7 +44912,7 @@ None
 Dialga
 100 120 120 150 100 90 
 306
-Slow
+SLOW
 Steel Dragon
 13
 0 Dragon Breath
@@ -45008,7 +45008,7 @@ None
 Palkia
 90 120 100 150 120 100 
 306
-Slow
+SLOW
 Water Dragon
 13
 0 Dragon Breath
@@ -45104,7 +45104,7 @@ None
 Heatran
 91 90 106 130 106 77 
 270
-Slow
+SLOW
 Fire Steel
 18
 0 Magma Storm
@@ -45193,7 +45193,7 @@ None
 Regigigas
 110 160 110 80 110 100 
 302
-Slow
+SLOW
 Normal No_Type
 16
 0 Heavy Slam
@@ -45283,7 +45283,7 @@ None
 Giratina
 150 120 100 120 100 90 
 306
-Slow
+SLOW
 Ghost Dragon
 13
 0 Dragon Breath
@@ -45379,7 +45379,7 @@ None
 Cresselia
 120 70 120 75 130 85 
 270
-Slow
+SLOW
 Psychic No_Type
 17
 0 Lunar Dance
@@ -45463,7 +45463,7 @@ None
 Phione
 80 80 80 80 80 80 
 216
-Slow
+SLOW
 Water No_Type
 11
 0 Bubble
@@ -45533,7 +45533,7 @@ Fairy
 Manaphy
 100 100 100 100 100 100 
 270
-Slow
+SLOW
 Water No_Type
 13
 0 Tail Glow
@@ -45615,7 +45615,7 @@ Fairy
 Darkrai
 70 90 90 135 90 125 
 270
-Slow
+SLOW
 Dark No_Type
 12
 0 Ominous Wind
@@ -45715,7 +45715,7 @@ None
 Shaymin
 100 100 100 100 100 100
 270
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 12
 0 Growth
@@ -45787,7 +45787,7 @@ None
 Arceus
 120 120 120 120 120 120 
 324
-Slow
+SLOW
 Normal No_Type
 14
 0 Seismic Toss
@@ -45919,7 +45919,7 @@ None
 Victini
 100 100 100 100 100 100 
 270
-Slow
+SLOW
 Psychic Fire
 17
 0 Searing Shot
@@ -46019,7 +46019,7 @@ None
 Snivy
 45 45 55 45 55 63 
 28
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 15
 0 Tackle
@@ -46108,7 +46108,7 @@ Grass
 Servine
 60 60 75 60 75 83 
 145
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 18
 0 Tackle
@@ -46200,7 +46200,7 @@ Grass
 Serperior
 75 75 95 75 95 113 
 238
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 18
 0 Tackle
@@ -46299,7 +46299,7 @@ Grass
 Tepig
 65 63 45 45 45 45 
 28
-Medium Slow
+MEDIUM_SLOW
 Fire No_Type
 15
 0 Tackle
@@ -46386,7 +46386,7 @@ None
 Pignite
 90 93 55 70 55 55 
 146
-Medium Slow
+MEDIUM_SLOW
 Fire Fighting
 19
 0 Tackle
@@ -46490,7 +46490,7 @@ None
 Emboar
 110 123 65 100 65 65 
 238
-Medium Slow
+MEDIUM_SLOW
 Fire Fighting
 20
 0 Hammer Arm
@@ -46603,7 +46603,7 @@ None
 Oshawott
 55 55 45 63 45 45 
 28
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 15
 0 Tackle
@@ -46688,7 +46688,7 @@ None
 Dewott
 75 75 60 83 60 60 
 145
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 18
 0 Tackle
@@ -46776,7 +46776,7 @@ None
 Samurott
 95 100 85 108 70 70 
 238
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 20
 0 Megahorn
@@ -46873,7 +46873,7 @@ None
 Patrat
 45 55 39 35 39 42 
 51
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 15
 0 Tackle
@@ -46953,7 +46953,7 @@ None
 Watchog
 60 85 69 60 69 77 
 147
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 20
 0 Rototiller
@@ -47057,7 +47057,7 @@ None
 Lillipup
 45 60 45 25 45 55 
 55
-Medium Slow
+MEDIUM_SLOW
 Normal No_Type
 15
 0 Leer
@@ -47139,7 +47139,7 @@ None
 Herdier
 65 80 65 35 65 60 
 130
-Medium Slow
+MEDIUM_SLOW
 Normal No_Type
 16
 0 Leer
@@ -47225,7 +47225,7 @@ None
 Stoutland
 85 110 90 45 90 80 
 221
-Medium Slow
+MEDIUM_SLOW
 Normal No_Type
 19
 0 Ice Fang
@@ -47318,7 +47318,7 @@ None
 Purrloin
 41 50 37 50 37 66 
 56
-Medium Fast
+MEDIUM_FAST
 Dark No_Type
 17
 0 Scratch
@@ -47412,7 +47412,7 @@ None
 Liepard
 64 88 50 88 50 106 
 156
-Medium Fast
+MEDIUM_FAST
 Dark No_Type
 20
 0 Scratch
@@ -47512,7 +47512,7 @@ None
 Pansage
 50 53 48 53 48 64 
 63
-Medium Fast
+MEDIUM_FAST
 Grass No_Type
 16
 0 Scratch
@@ -47612,7 +47612,7 @@ None
 Simisage
 75 98 63 98 63 101 
 174
-Medium Fast
+MEDIUM_FAST
 Grass No_Type
 4
 0 Leer
@@ -47707,7 +47707,7 @@ None
 Pansear
 50 53 48 53 48 64 
 63
-Medium Fast
+MEDIUM_FAST
 Fire No_Type
 16
 0 Scratch
@@ -47808,7 +47808,7 @@ None
 Simisear
 75 98 63 98 63 101 
 174
-Medium Fast
+MEDIUM_FAST
 Fire No_Type
 4
 0 Leer
@@ -47904,7 +47904,7 @@ None
 Panpour
 50 53 48 53 48 64 
 63
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 16
 0 Scratch
@@ -48007,7 +48007,7 @@ None
 Simipour
 75 98 63 98 63 101 
 174
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 4
 0 Leer
@@ -48105,7 +48105,7 @@ None
 Munna
 76 25 45 67 55 24 
 58
-Fast
+FAST
 Psychic No_Type
 17
 0 Psywave
@@ -48199,7 +48199,7 @@ None
 Musharna
 116 55 85 107 95 29 
 170
-Fast
+FAST
 Psychic No_Type
 4
 0 Defense Curl
@@ -48282,7 +48282,7 @@ None
 Pidove
 50 55 50 36 30 43 
 53
-Medium Slow
+MEDIUM_SLOW
 Normal Flying
 15
 0 Gust
@@ -48355,7 +48355,7 @@ None
 Tranquill
 62 77 62 50 42 65 
 125
-Medium Slow
+MEDIUM_SLOW
 Normal Flying
 18
 0 Gust
@@ -48431,7 +48431,7 @@ None
 Unfezant
 80 115 80 65 55 93 
 215
-Medium Slow
+MEDIUM_SLOW
 Normal Flying
 18
 0 Gust
@@ -48510,7 +48510,7 @@ None
 Blitzle
 45 60 32 50 32 76 
 59
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 13
 0 Quick Attack
@@ -48586,7 +48586,7 @@ None
 Zebstrika
 75 100 63 80 63 116 
 174
-Medium Fast
+MEDIUM_FAST
 Electric No_Type
 18
 0 Electrify
@@ -48671,7 +48671,7 @@ None
 Roggenrola
 55 75 85 25 25 15 
 56
-Medium Slow
+MEDIUM_SLOW
 Rock No_Type
 13
 0 Tackle
@@ -48749,7 +48749,7 @@ None
 Boldore
 70 105 105 50 40 20 
 137
-Medium Slow
+MEDIUM_SLOW
 Rock No_Type
 17
 0 Tackle
@@ -48831,7 +48831,7 @@ None
 Gigalith
 85 135 130 60 80 25 
 227
-Medium Slow
+MEDIUM_SLOW
 Rock No_Type
 17
 0 Tackle
@@ -48918,7 +48918,7 @@ None
 Woobat
 55 45 43 55 43 72 
 63
-Medium Fast
+MEDIUM_FAST
 Psychic Flying
 14
 0 Confusion
@@ -49019,7 +49019,7 @@ Flying
 Swoobat
 67 57 55 77 55 114 
 149
-Medium Fast
+MEDIUM_FAST
 Psychic Flying
 17
 0 Confusion
@@ -49126,7 +49126,7 @@ Flying
 Drilbur
 60 85 40 30 45 68 
 66
-Medium Fast
+MEDIUM_FAST
 Ground No_Type
 15
 0 Scratch
@@ -49208,7 +49208,7 @@ None
 Excadrill
 110 135 60 50 65 88 
 178
-Medium Fast
+MEDIUM_FAST
 Ground Steel
 19
 0 Rototiller
@@ -49299,7 +49299,7 @@ None
 Audino
 103 60 86 60 86 50 
 390
-Fast
+FAST
 Normal No_Type
 19
 0 Last Resort
@@ -49423,7 +49423,7 @@ None
 Timburr
 75 80 55 25 35 35 
 61
-Medium Slow
+MEDIUM_SLOW
 Fighting No_Type
 16
 0 Pound
@@ -49515,7 +49515,7 @@ None
 Gurdurr
 85 105 85 40 50 40 
 142
-Medium Slow
+MEDIUM_SLOW
 Fighting No_Type
 18
 0 Pound
@@ -49609,7 +49609,7 @@ None
 Conkeldurr
 105 140 95 55 65 45 
 227
-Medium Slow
+MEDIUM_SLOW
 Fighting No_Type
 18
 0 Pound
@@ -49707,7 +49707,7 @@ None
 Tympole
 50 50 40 50 40 64 
 59
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 14
 0 Bubble
@@ -49783,7 +49783,7 @@ None
 Palpitoad
 75 65 55 65 55 69 
 134
-Medium Slow
+MEDIUM_SLOW
 Water Ground
 16
 0 Bubble
@@ -49866,7 +49866,7 @@ None
 Seismitoad
 105 95 75 85 75 74 
 225
-Medium Slow
+MEDIUM_SLOW
 Water Ground
 18
 0 Bubble
@@ -49970,7 +49970,7 @@ None
 Throh
 120 100 85 30 85 45 
 163
-Medium Fast
+MEDIUM_FAST
 Fighting No_Type
 15
 0 Bind
@@ -50057,7 +50057,7 @@ None
 Sawk
 75 125 75 30 75 85 
 163
-Medium Fast
+MEDIUM_FAST
 Fighting No_Type
 15
 0 Rock Smash
@@ -50144,7 +50144,7 @@ None
 Sewaddle
 45 53 70 40 60 42 
 62
-Medium Slow
+MEDIUM_SLOW
 Bug Grass
 9
 0 Tackle
@@ -50222,7 +50222,7 @@ None
 Swadloon
 55 63 90 50 80 42 
 133
-Medium Slow
+MEDIUM_SLOW
 Bug Grass
 6
 0 Grass Whistle
@@ -50297,7 +50297,7 @@ None
 Leavanny
 75 103 80 70 80 92 
 221
-Medium Slow
+MEDIUM_SLOW
 Bug Grass
 16
 0 False Swipe
@@ -50396,7 +50396,7 @@ None
 Venipede
 30 45 59 30 39 57 
 52
-Medium Slow
+MEDIUM_SLOW
 Bug Poison
 15
 0 Defense Curl
@@ -50470,7 +50470,7 @@ None
 Whirlipede
 40 55 99 40 79 47 
 126
-Medium Slow
+MEDIUM_SLOW
 Bug Poison
 18
 0 Defense Curl
@@ -50547,7 +50547,7 @@ None
 Scolipede
 60 100 89 55 69 112 
 214
-Medium Slow
+MEDIUM_SLOW
 Bug Poison
 20
 0 Megahorn
@@ -50641,7 +50641,7 @@ None
 Cottonee
 40 27 60 37 50 66 
 56
-Medium Fast
+MEDIUM_FAST
 Grass Fairy
 17
 0 Absorb
@@ -50722,7 +50722,7 @@ Fairy
 Whimsicott
 60 67 85 77 75 116 
 168
-Medium Fast
+MEDIUM_FAST
 Grass Fairy
 8
 0 Growth
@@ -50803,7 +50803,7 @@ Fairy
 Petilil
 45 35 50 70 50 30 
 56
-Medium Fast
+MEDIUM_FAST
 Grass No_Type
 16
 0 Absorb
@@ -50880,7 +50880,7 @@ None
 Lilligant
 70 60 75 110 75 90 
 168
-Medium Fast
+MEDIUM_FAST
 Grass No_Type
 8
 0 Growth
@@ -50954,7 +50954,7 @@ None
 Basculin
 70 92 65 80 55 98 
 161
-Medium Fast
+MEDIUM_FAST
 Water No_Type
 19
 0 Thrash
@@ -51037,7 +51037,7 @@ None
 Sandile
 50 72 35 35 35 65 
 58
-Medium Slow
+MEDIUM_SLOW
 Ground Dark
 17
 0 Leer
@@ -51130,7 +51130,7 @@ None
 Krokorok
 60 82 45 45 45 74 
 123
-Medium Slow
+MEDIUM_SLOW
 Ground Dark
 19
 0 Leer
@@ -51236,7 +51236,7 @@ None
 Krookodile
 95 117 80 65 70 92 
 229
-Medium Slow
+MEDIUM_SLOW
 Ground Dark
 20
 0 Outrage
@@ -51355,7 +51355,7 @@ None
 Darumaka
 70 90 45 15 45 50 
 63
-Medium Slow
+MEDIUM_SLOW
 Fire No_Type
 16
 0 Tackle
@@ -51449,7 +51449,7 @@ None
 Darmanitan
 105 140 55 30 55 95
 168
-Medium Slow
+MEDIUM_SLOW
 Fire No_Type
 20
 0 Tackle
@@ -51558,7 +51558,7 @@ None
 Maractus
 75 86 67 106 67 60 
 161
-Medium Fast
+MEDIUM_FAST
 Grass No_Type
 22
 0 Spiky Shield
@@ -51645,7 +51645,7 @@ None
 Dwebble
 50 65 85 35 35 55 
 65
-Medium Fast
+MEDIUM_FAST
 Bug Rock
 15
 0 Fury Cutter
@@ -51734,7 +51734,7 @@ Mineral
 Crustle
 70 95 125 65 75 45 
 166
-Medium Fast
+MEDIUM_FAST
 Bug Rock
 18
 0 Shell Smash
@@ -51828,7 +51828,7 @@ Mineral
 Scraggy
 50 75 70 35 70 48 
 70
-Medium Fast
+MEDIUM_FAST
 Dark Fighting
 16
 0 Leer
@@ -51939,7 +51939,7 @@ Dragon
 Scrafty
 65 90 115 45 115 58 
 171
-Medium Fast
+MEDIUM_FAST
 Dark Fighting
 18
 0 Leer
@@ -52056,7 +52056,7 @@ Dragon
 Sigilyph
 72 58 80 103 80 97 
 172
-Medium Fast
+MEDIUM_FAST
 Psychic Flying
 17
 0 Gust
@@ -52156,7 +52156,7 @@ None
 Yamask
 38 30 85 55 65 30 
 61
-Medium Fast
+MEDIUM_FAST
 Ghost No_Type
 15
 0 Astonish
@@ -52247,7 +52247,7 @@ Amorphous
 Cofagrigus
 58 50 145 95 105 30 
 169
-Medium Fast
+MEDIUM_FAST
 Ghost No_Type
 18
 0 Astonish
@@ -52344,7 +52344,7 @@ Amorphous
 Tirtouga
 54 78 103 53 45 22 
 71
-Medium Fast
+MEDIUM_FAST
 Water Rock
 18
 0 Bide
@@ -52437,7 +52437,7 @@ Water 3
 Carracosta
 74 108 133 83 65 32 
 173
-Medium Fast
+MEDIUM_FAST
 Water Rock
 19
 0 Bide
@@ -52537,7 +52537,7 @@ Water 3
 Archen
 55 112 45 74 45 70 
 71
-Medium Fast
+MEDIUM_FAST
 Rock Flying
 18
 0 Quick Attack
@@ -52635,7 +52635,7 @@ Water 3
 Archeops
 75 140 65 112 65 110 
 177
-Medium Fast
+MEDIUM_FAST
 Rock Flying
 19
 0 Quick Attack
@@ -52741,7 +52741,7 @@ Water 3
 Trubbish
 50 50 62 40 62 65 
 66
-Medium Fast
+MEDIUM_FAST
 Poison No_Type
 17
 0 Pound
@@ -52822,7 +52822,7 @@ None
 Garbodor
 80 95 82 60 82 75 
 166
-Medium Fast
+MEDIUM_FAST
 Poison No_Type
 19
 0 Pound
@@ -52915,7 +52915,7 @@ None
 Zorua
 40 65 40 80 40 65 
 66
-Medium Slow
+MEDIUM_SLOW
 Dark No_Type
 16
 0 Scratch
@@ -53009,7 +53009,7 @@ None
 Zoroark
 60 105 60 120 60 105 
 179
-Medium Slow
+MEDIUM_SLOW
 Dark No_Type
 22
 0 Night Daze
@@ -53117,7 +53117,7 @@ None
 Minccino
 55 50 40 40 40 75 
 60
-Fast
+FAST
 Normal No_Type
 17
 0 Pound
@@ -53205,7 +53205,7 @@ None
 Cinccino
 75 95 60 65 60 115 
 165
-Fast
+FAST
 Normal No_Type
 6
 0 Bullet Seed
@@ -53287,7 +53287,7 @@ None
 Gothita
 45 30 50 55 65 45 
 58
-Medium Slow
+MEDIUM_SLOW
 Psychic No_Type
 17
 0 Pound
@@ -53390,7 +53390,7 @@ None
 Gothorita
 60 45 70 75 85 55 
 137
-Medium Slow
+MEDIUM_SLOW
 Psychic No_Type
 19
 0 Pound
@@ -53495,7 +53495,7 @@ None
 Gothitelle
 70 55 95 95 110 65 
 221
-Medium Slow
+MEDIUM_SLOW
 Psychic No_Type
 19
 0 Pound
@@ -53605,7 +53605,7 @@ None
 Solosis
 45 30 40 105 50 20 
 58
-Medium Slow
+MEDIUM_SLOW
 Psychic No_Type
 16
 0 Psywave
@@ -53701,7 +53701,7 @@ None
 Duosion
 65 40 50 125 60 30 
 130
-Medium Slow
+MEDIUM_SLOW
 Psychic No_Type
 19
 0 Psywave
@@ -53800,7 +53800,7 @@ None
 Reuniclus
 110 65 75 125 85 30 
 221
-Medium Slow
+MEDIUM_SLOW
 Psychic No_Type
 20
 0 Psywave
@@ -53915,7 +53915,7 @@ None
 Ducklett
 62 44 50 44 50 55 
 61
-Medium Fast
+MEDIUM_FAST
 Water Flying
 15
 0 Water Gun
@@ -53990,7 +53990,7 @@ Flying
 Swanna
 75 87 63 87 63 98 
 166
-Medium Fast
+MEDIUM_FAST
 Water Flying
 18
 0 Water Gun
@@ -54071,7 +54071,7 @@ Flying
 Vanillite
 36 50 50 65 60 44 
 61
-Slow
+SLOW
 Ice No_Type
 15
 0 Icicle Spear
@@ -54147,7 +54147,7 @@ None
 Vanillish
 51 65 65 80 75 59 
 138
-Slow
+SLOW
 Ice No_Type
 18
 0 Icicle Spear
@@ -54226,7 +54226,7 @@ None
 Vanilluxe
 71 95 85 110 95 79 
 241
-Slow
+SLOW
 Ice No_Type
 21
 0 Sheer Cold
@@ -54310,7 +54310,7 @@ None
 Deerling
 60 60 50 40 50 75 
 67
-Medium Fast
+MEDIUM_FAST
 Normal Grass
 15
 0 Tackle
@@ -54391,7 +54391,7 @@ None
 Sawsbuck
 80 100 70 60 70 95 
 166
-Medium Fast
+MEDIUM_FAST
 Normal Grass
 19
 0 Megahorn
@@ -54481,7 +54481,7 @@ None
 Emolga
 55 75 60 75 60 103 
 150
-Medium Fast
+MEDIUM_FAST
 Electric Flying
 16
 0 Thunder Shock
@@ -54569,7 +54569,7 @@ None
 Karrablast
 50 75 45 40 45 60 
 63
-Medium Fast
+MEDIUM_FAST
 Bug No_Type
 15
 0 Peck
@@ -54646,7 +54646,7 @@ None
 Escavalier
 70 135 105 60 105 20 
 173
-Medium Fast
+MEDIUM_FAST
 Bug Steel
 21
 0 Double-Edge
@@ -54734,7 +54734,7 @@ None
 Foongus
 69 55 45 55 55 15 
 59
-Medium Fast
+MEDIUM_FAST
 Grass Poison
 15
 0 Absorb
@@ -54813,7 +54813,7 @@ None
 Amoonguss
 114 85 70 85 80 30 
 162
-Medium Fast
+MEDIUM_FAST
 Grass Poison
 18
 0 Absorb
@@ -54897,7 +54897,7 @@ None
 Frillish
 55 40 50 65 85 40 
 67
-Medium Fast
+MEDIUM_FAST
 Water Ghost
 14
 0 Bubble
@@ -54985,7 +54985,7 @@ None
 Jellicent
 100 60 70 85 105 60 
 168
-Medium Fast
+MEDIUM_FAST
 Water Ghost
 18
 0 Water Spout
@@ -55079,7 +55079,7 @@ None
 Alomomola
 165 75 80 40 45 65 
 165
-Fast
+FAST
 Water No_Type
 20
 0 Hydro Pump
@@ -55162,7 +55162,7 @@ Water 2
 Joltik
 50 47 50 57 50 65 
 64
-Medium Fast
+MEDIUM_FAST
 Bug Electric
 16
 0 String Shot
@@ -55246,7 +55246,7 @@ None
 Galvantula
 70 77 60 97 60 108 
 165
-Medium Fast
+MEDIUM_FAST
 Bug Electric
 19
 0 Sticky Web
@@ -55336,7 +55336,7 @@ None
 Ferroseed
 44 50 91 24 86 10 
 61
-Medium Fast
+MEDIUM_FAST
 Grass Steel
 15
 0 Tackle
@@ -55422,7 +55422,7 @@ Mineral
 Ferrothorn
 74 94 131 54 116 20 
 171
-Medium Fast
+MEDIUM_FAST
 Grass Steel
 19
 0 Rock Climb
@@ -55524,7 +55524,7 @@ Mineral
 Klink
 40 55 70 45 60 30 
 60
-Medium Slow
+MEDIUM_SLOW
 Steel No_Type
 15
 0 Vice Grip
@@ -55594,7 +55594,7 @@ None
 Klang
 60 80 95 70 85 50 
 154
-Medium Slow
+MEDIUM_SLOW
 Steel No_Type
 18
 0 Vice Grip
@@ -55667,7 +55667,7 @@ None
 Klinklang
 60 100 115 70 85 90 
 234
-Medium Slow
+MEDIUM_SLOW
 Steel No_Type
 21
 0 Magnetic Flux
@@ -55746,7 +55746,7 @@ None
 Tynamo
 35 55 40 45 40 60 
 55
-Slow
+SLOW
 Electric No_Type
 4
 0 Tackle
@@ -55776,7 +55776,7 @@ None
 Eelektrik
 65 85 70 75 70 40 
 142
-Slow
+SLOW
 Electric No_Type
 15
 0 Headbutt
@@ -55851,7 +55851,7 @@ None
 Eelektross
 85 115 80 105 80 50 
 232
-Slow
+SLOW
 Electric No_Type
 10
 0 Thrash
@@ -55943,7 +55943,7 @@ None
 Elgyem
 55 55 55 85 55 30 
 67
-Medium Fast
+MEDIUM_FAST
 Psychic No_Type
 18
 0 Confusion
@@ -56043,7 +56043,7 @@ None
 Beheeyem
 75 75 75 125 95 40 
 170
-Medium Fast
+MEDIUM_FAST
 Psychic No_Type
 23
 0 Wonder Room
@@ -56150,7 +56150,7 @@ None
 Litwick
 50 30 55 65 55 20 
 55
-Medium Slow
+MEDIUM_SLOW
 Ghost Fire
 17
 0 Ember
@@ -56239,7 +56239,7 @@ None
 Lampent
 60 40 60 95 60 55 
 130
-Medium Slow
+MEDIUM_SLOW
 Ghost Fire
 19
 0 Ember
@@ -56330,7 +56330,7 @@ None
 Chandelure
 60 55 90 145 90 80 
 234
-Medium Slow
+MEDIUM_SLOW
 Ghost Fire
 5
 0 Pain Split
@@ -56409,7 +56409,7 @@ None
 Axew
 46 87 60 30 40 57 
 64
-Slow
+SLOW
 Dragon No_Type
 16
 0 Scratch
@@ -56500,7 +56500,7 @@ Dragon
 Fraxure
 66 117 70 40 50 67 
 144
-Slow
+SLOW
 Dragon No_Type
 19
 0 Scratch
@@ -56597,7 +56597,7 @@ Dragon
 Haxorus
 76 147 90 60 70 97 
 243
-Slow
+SLOW
 Dragon No_Type
 20
 0 Outrage
@@ -56703,7 +56703,7 @@ Dragon
 Cubchoo
 55 70 40 60 40 40 
 61
-Medium Fast
+MEDIUM_FAST
 Ice No_Type
 16
 0 Growl
@@ -56791,7 +56791,7 @@ None
 Beartic
 95 110 80 70 80 50 
 170
-Medium Fast
+MEDIUM_FAST
 Ice No_Type
 22
 0 Sheer Cold
@@ -56897,7 +56897,7 @@ None
 Cryogonal
 70 50 30 95 135 105 
 170
-Medium Fast
+MEDIUM_FAST
 Ice No_Type
 24
 0 Sheer Cold
@@ -56979,7 +56979,7 @@ None
 Shelmet
 50 40 85 40 65 25 
 61
-Medium Fast
+MEDIUM_FAST
 Bug No_Type
 15
 0 Leech Life
@@ -57051,7 +57051,7 @@ None
 Accelgor
 80 70 40 100 60 145 
 173
-Medium Fast
+MEDIUM_FAST
 Bug No_Type
 21
 0 Water Shuriken
@@ -57135,7 +57135,7 @@ None
 Stunfisk
 109 66 84 81 99 32 
 165
-Medium Fast
+MEDIUM_FAST
 Ground Electric
 19
 0 Fissure
@@ -57235,7 +57235,7 @@ Amorphous
 Mienfoo
 45 85 50 55 50 65 
 70
-Medium Slow
+MEDIUM_SLOW
 Fighting No_Type
 16
 0 Pound
@@ -57329,7 +57329,7 @@ Human-like
 Mienshao
 65 125 60 95 60 105 
 179
-Medium Slow
+MEDIUM_SLOW
 Fighting No_Type
 21
 0 Aura Sphere
@@ -57430,7 +57430,7 @@ Human-like
 Druddigon
 77 120 90 60 90 48 
 173
-Medium Fast
+MEDIUM_FAST
 Dragon No_Type
 16
 0 Leer
@@ -57542,7 +57542,7 @@ Monster
 Golett
 59 74 50 35 50 35 
 61
-Medium Fast
+MEDIUM_FAST
 Ground Ghost
 15
 0 Pound
@@ -57631,7 +57631,7 @@ None
 Golurk
 89 124 80 55 80 55 
 169
-Medium Fast
+MEDIUM_FAST
 Ground Ghost
 20
 0 Phantom Force
@@ -57734,7 +57734,7 @@ None
 Pawniard
 45 85 70 40 40 60 
 68
-Medium Fast
+MEDIUM_FAST
 Dark Steel
 16
 0 Scratch
@@ -57834,7 +57834,7 @@ None
 Bisharp
 65 125 100 60 70 70 
 172
-Medium Fast
+MEDIUM_FAST
 Dark Steel
 22
 0 Guillotine
@@ -57944,7 +57944,7 @@ None
 Bouffalant
 95 110 95 40 95 55 
 172
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 14
 0 Pursuit
@@ -58029,7 +58029,7 @@ None
 Rufflet
 70 83 50 37 50 60 
 70
-Slow
+SLOW
 Normal Flying
 16
 0 Peck
@@ -58102,7 +58102,7 @@ None
 Braviary
 100 123 75 57 75 80 
 179
-Slow
+SLOW
 Normal Flying
 23
 0 Thrash
@@ -58186,7 +58186,7 @@ None
 Vullaby
 70 55 75 45 65 60 
 74
-Slow
+SLOW
 Dark Flying
 16
 0 Gust
@@ -58273,7 +58273,7 @@ None
 Mandibuzz
 110 65 105 55 95 80 
 179
-Slow
+SLOW
 Dark Flying
 23
 0 Mirror Move
@@ -58370,7 +58370,7 @@ None
 Heatmor
 85 97 66 105 66 65 
 169
-Medium Fast
+MEDIUM_FAST
 Fire No_Type
 19
 0 Inferno
@@ -58471,7 +58471,7 @@ None
 Durant
 58 109 112 48 48 109 
 169
-Medium Fast
+MEDIUM_FAST
 Bug Steel
 18
 0 Guillotine
@@ -58556,7 +58556,7 @@ None
 Deino
 52 65 50 45 50 38 
 60
-Slow
+SLOW
 Dark Dragon
 16
 0 Tackle
@@ -58642,7 +58642,7 @@ None
 Zweilous
 72 85 70 65 70 58 
 147
-Slow
+SLOW
 Dark Dragon
 18
 0 Double Hit
@@ -58730,7 +58730,7 @@ None
 Hydreigon
 92 105 90 125 90 98 
 270
-Slow
+SLOW
 Dark Dragon
 20
 0 Outrage
@@ -58845,7 +58845,7 @@ None
 Larvesta
 55 85 55 50 55 60 
 72
-Slow
+SLOW
 Bug Fire
 12
 0 Ember
@@ -58922,7 +58922,7 @@ None
 Volcarona
 85 60 65 135 105 100 
 248
-Slow
+SLOW
 Bug Fire
 25
 0 Fiery Dance
@@ -59020,7 +59020,7 @@ None
 Cobalion
 91 90 129 90 72 108 
 261
-Slow
+SLOW
 Steel Fighting
 18
 0 Close Combat
@@ -59107,7 +59107,7 @@ None
 Terrakion
 91 129 90 72 90 108 
 261
-Slow
+SLOW
 Rock Fighting
 17
 0 Close Combat
@@ -59192,7 +59192,7 @@ None
 Virizion
 91 90 72 90 129 108 
 261
-Slow
+SLOW
 Grass Fighting
 18
 0 Close Combat
@@ -59279,7 +59279,7 @@ None
 Tornadus
 79 115 70 125 80 111 
 261
-Slow
+SLOW
 Flying No_Type
 21
 0 Thrash
@@ -59372,7 +59372,7 @@ None
 Thundurus
 79 115 70 125 80 111 
 261
-Slow
+SLOW
 Electric Flying
 21
 0 Thrash
@@ -59470,7 +59470,7 @@ None
 Reshiram
 100 120 100 150 120 90 
 306
-Slow
+SLOW
 Dragon Fire
 16
 0 Fire Fang
@@ -59561,7 +59561,7 @@ None
 Zekrom
 100 150 120 120 100 90 
 306
-Slow
+SLOW
 Dragon Electric
 16
 0 Thunder Fang
@@ -59656,7 +59656,7 @@ None
 Landorus
 89 125 90 115 80 101 
 270
-Slow
+SLOW
 Ground Flying
 20
 0 Outrage
@@ -59749,7 +59749,7 @@ None
 Kyurem
 125 130 90 130 90 95
 297
-Slow
+SLOW
 Dragon Ice
 15
 0 Icy Wind
@@ -59839,7 +59839,7 @@ None
 Keldeo
 91 72 90 129 90 108 
 261
-Slow
+SLOW
 Water Fighting
 14
 0 Aqua Jet
@@ -59920,7 +59920,7 @@ None
 Meloetta
 100 77 77 128 128 90
 270
-Slow
+SLOW
 Normal Psychic
 15
 0 Round
@@ -60034,7 +60034,7 @@ None
 Genesect
 71 120 95 120 95 99 
 270
-Slow
+SLOW
 Bug Steel
 20
 0 Fell Stinger
@@ -60132,7 +60132,7 @@ None
 Chespin
 56 61 65 48 45 38 
 63
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 14
 0 Tackle
@@ -60238,7 +60238,7 @@ None
 Quilladin
 61 78 95 56 58 57 
 142
-Medium Slow
+MEDIUM_SLOW
 Grass No_Type
 15
 0 Tackle
@@ -60346,7 +60346,7 @@ None
 Chesnaught
 88 107 122 74 75 64 
 239
-Medium Slow
+MEDIUM_SLOW
 Grass Fighting
 22
 0 Feint
@@ -60467,7 +60467,7 @@ None
 Fennekin
 40 45 40 62 60 60 
 61
-Medium Slow
+MEDIUM_SLOW
 Fire No_Type
 16
 0 Scratch
@@ -60551,7 +60551,7 @@ None
 Braixen
 59 59 58 90 70 73 
 143
-Medium Slow
+MEDIUM_SLOW
 Fire No_Type
 16
 0 Scratch
@@ -60645,7 +60645,7 @@ None
 Delphox
 75 69 72 114 100 104 
 240
-Medium Slow
+MEDIUM_SLOW
 Fire Psychic
 23
 0 Future Sight
@@ -60754,7 +60754,7 @@ None
 Froakie
 41 56 40 62 44 71 
 63
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 14
 0 Pound
@@ -60840,7 +60840,7 @@ None
 Frogadier
 54 63 52 83 56 97 
 142
-Medium Slow
+MEDIUM_SLOW
 Water No_Type
 14
 0 Pound
@@ -60930,7 +60930,7 @@ None
 Greninja
 72 95 67 103 71 122 
 239
-Medium Slow
+MEDIUM_SLOW
 Water Dark
 21
 0 Night Slash
@@ -61029,7 +61029,7 @@ None
 Bunnelby
 38 36 38 32 36 57 
 47
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 16
 0 Tackle
@@ -61116,7 +61116,7 @@ None
 Diggersby
 85 56 77 50 77 78 
 148
-Medium Fast
+MEDIUM_FAST
 Normal Ground
 20
 0 Hammer Arm
@@ -61223,7 +61223,7 @@ None
 Fletchling
 45 50 43 40 38 62 
 56
-Medium Slow
+MEDIUM_SLOW
 Normal Flying
 14
 0 Tackle
@@ -61292,7 +61292,7 @@ None
 Fletchinder
 62 73 55 56 52 84 
 134
-Medium Slow
+MEDIUM_SLOW
 Fire Flying
 15
 0 Tackle
@@ -61366,7 +61366,7 @@ None
 Talonflame
 78 81 71 74 69 126 
 175
-Medium Slow
+MEDIUM_SLOW
 Fire Flying
 18
 0 Brave Bird
@@ -61448,7 +61448,7 @@ None
 Scatterbug
 38 35 40 27 25 35 
 40
-Medium Fast
+MEDIUM_FAST
 Bug No_Type
 4
 0 Tackle
@@ -61478,7 +61478,7 @@ None
 Spewpa
 45 22 60 27 30 29 
 75
-Medium Fast
+MEDIUM_FAST
 Bug No_Type
 2
 0 Harden
@@ -61509,7 +61509,7 @@ None
 Vivillon
 80 52 50 90 50 89 
 185
-Medium Fast
+MEDIUM_FAST
 Bug Flying
 16
 0 Powder
@@ -61590,7 +61590,7 @@ None
 Litleo
 62 50 58 73 54 72 
 74
-Medium Slow
+MEDIUM_SLOW
 Fire Normal
 15
 0 Tackle
@@ -61673,7 +61673,7 @@ None
 Pyroar
 86 68 72 109 66 106 
 177
-Medium Slow
+MEDIUM_SLOW
 Fire Normal
 16
 0 Hyper Beam
@@ -61760,7 +61760,7 @@ None
 Flabebe
 44 38 39 61 79 42 
 61
-Medium Fast
+MEDIUM_FAST
 Fairy Grass
 14
 0 Tackle
@@ -61834,7 +61834,7 @@ None
 Floette
 54 45 47 75 98 52 
 130
-Medium Fast
+MEDIUM_FAST
 Fairy Grass
 14
 0 Tackle
@@ -61908,7 +61908,7 @@ None
 Florges
 78 65 68 112 154 75 
 248
-Medium Fast
+MEDIUM_FAST
 Fairy Grass
 12
 0 Disarming Voice
@@ -61983,7 +61983,7 @@ None
 Skiddo
 66 65 48 62 57 52 
 70
-Medium Fast
+MEDIUM_FAST
 Grass No_Type
 16
 0 Tackle
@@ -62063,7 +62063,7 @@ None
 Gogoat
 123 100 62 97 81 68 
 186
-Medium Fast
+MEDIUM_FAST
 Grass No_Type
 19
 0 Aerial Ace
@@ -62152,7 +62152,7 @@ None
 Pancham
 67 82 62 46 48 43 
 70
-Medium Fast
+MEDIUM_FAST
 Fighting No_Type
 14
 0 Tackle
@@ -62255,7 +62255,7 @@ Human-like
 Pangoro
 95 124 78 69 71 58 
 173
-Medium Fast
+MEDIUM_FAST
 Fighting Dark
 19
 0 Entrainment
@@ -62377,7 +62377,7 @@ Human-like
 Furfrou
 75 80 60 65 90 102 
 165
-Medium Fast
+MEDIUM_FAST
 Normal No_Type
 13
 0 Tackle
@@ -62456,7 +62456,7 @@ None
 Espurr
 62 48 54 63 60 68 
 71
-Medium Fast
+MEDIUM_FAST
 Psychic No_Type
 9
 0 Scratch
@@ -62541,7 +62541,7 @@ None
 Meowstic
 74 48 76 83 81 104 
 163
-Medium Fast
+MEDIUM_FAST
 Psychic No_Type
 21
 0 Quick Guard
@@ -62643,7 +62643,7 @@ None
 Honedge
 45 80 100 35 37 28 
 65
-Medium Fast
+MEDIUM_FAST
 Steel Ghost
 15
 0 Tackle
@@ -62715,7 +62715,7 @@ None
 Doublade
 59 110 150 45 49 35 
 157
-Medium Fast
+MEDIUM_FAST
 Steel Ghost
 15
 0 Tackle
@@ -62787,7 +62787,7 @@ None
 Aegislash
 60 50 150 50 150 60 
 234
-Medium Fast
+MEDIUM_FAST
 Steel Ghost
 14
 0 Fury Cutter
@@ -62864,7 +62864,7 @@ None
 Spritzee
 78 52 60 63 65 23 
 68
-Medium Fast
+MEDIUM_FAST
 Fairy No_Type
 16
 0 Sweet Scent
@@ -62945,7 +62945,7 @@ None
 Aromatisse
 101 72 72 99 89 29 
 162
-Medium Fast
+MEDIUM_FAST
 Fairy No_Type
 20
 0 Aromatic Mist
@@ -63035,7 +63035,7 @@ None
 Swirlix
 62 48 66 59 57 49 
 68
-Medium Fast
+MEDIUM_FAST
 Fairy No_Type
 16
 0 Sweet Scent
@@ -63112,7 +63112,7 @@ None
 Slurpuff
 82 80 86 85 75 72 
 168
-Medium Fast
+MEDIUM_FAST
 Fairy No_Type
 16
 0 Sweet Scent
@@ -63192,7 +63192,7 @@ None
 Inkay
 53 54 53 37 46 45 
 58
-Medium Fast
+MEDIUM_FAST
 Dark Psychic
 18
 0 Tackle
@@ -63281,7 +63281,7 @@ Water 2
 Malamar
 86 92 88 68 75 73 
 169
-Medium Fast
+MEDIUM_FAST
 Dark Psychic
 20
 0 Superpower
@@ -63377,7 +63377,7 @@ Water 2
 Binacle
 42 52 67 39 56 50 
 61
-Medium Fast
+MEDIUM_FAST
 Rock Water
 16
 0 Shell Smash
@@ -63477,7 +63477,7 @@ None
 Barbaracle
 72 105 115 54 86 68 
 175
-Medium Fast
+MEDIUM_FAST
 Rock Water
 20
 0 Stone Edge
@@ -63589,7 +63589,7 @@ None
 Skrelp
 50 60 60 60 60 30 
 64
-Medium Fast
+MEDIUM_FAST
 Poison Water
 16
 0 Tackle
@@ -63667,7 +63667,7 @@ Dragon
 Dragalge
 65 75 90 97 123 44 
 173
-Medium Fast
+MEDIUM_FAST
 Poison Dragon
 20
 0 Dragon Tail
@@ -63754,7 +63754,7 @@ Dragon
 Clauncher
 50 53 62 58 63 44 
 66
-Slow
+SLOW
 Water No_Type
 13
 0 Splash
@@ -63829,7 +63829,7 @@ Water 3
 Clawitzer
 71 73 88 120 89 59 
 100
-Slow
+SLOW
 Water No_Type
 20
 0 Heal Pulse
@@ -63916,7 +63916,7 @@ Water 3
 Helioptile
 44 38 33 61 43 70 
 58
-Medium Fast
+MEDIUM_FAST
 Electric Normal
 13
 0 Pound
@@ -63997,7 +63997,7 @@ Dragon
 Heliolisk
 62 55 52 109 94 109 
 168
-Medium Fast
+MEDIUM_FAST
 Electric Normal
 7
 0 Eerie Impulse
@@ -64080,7 +64080,7 @@ Dragon
 Tyrunt
 58 89 77 45 45 48 
 72
-Medium Fast
+MEDIUM_FAST
 Rock Dragon
 15
 0 Tail Whip
@@ -64168,7 +64168,7 @@ Dragon
 Tyrantrum
 82 121 119 69 59 71 
 182
-Medium Fast
+MEDIUM_FAST
 Rock Dragon
 19
 0 Head Smash
@@ -64262,7 +64262,7 @@ Dragon
 Amaura
 77 59 50 67 63 46 
 72
-Medium Fast
+MEDIUM_FAST
 Rock Ice
 18
 0 Growl
@@ -64363,7 +64363,7 @@ None
 Aurorus
 123 77 72 99 92 58 
 104
-Medium Fast
+MEDIUM_FAST
 Rock Ice
 20
 0 Freeze-Dry
@@ -64470,7 +64470,7 @@ None
 Sylveon
 95 65 65 110 130 60 
 184
-Medium Fast
+MEDIUM_FAST
 Fairy No_Type
 14
 0 Disarming Voice
@@ -64559,7 +64559,7 @@ None
 Hawlucha
 78 92 75 74 63 118 
 175
-Medium Fast
+MEDIUM_FAST
 Fighting Flying
 17
 0 Detect
@@ -64667,7 +64667,7 @@ None
 Dedenne
 67 58 57 81 67 101 
 151
-Medium Fast
+MEDIUM_FAST
 Electric Fairy
 16
 0 Tackle
@@ -64751,7 +64751,7 @@ Fairy
 Carbink
 50 50 150 50 150 50 
 100
-Slow
+SLOW
 Rock Fairy
 16
 0 Tackle
@@ -64850,7 +64850,7 @@ Mineral
 Goomy
 45 50 35 55 75 40 
 60
-Slow
+SLOW
 Dragon Water
 11
 0 Tackle
@@ -64916,7 +64916,7 @@ None
 Sliggoo
 68 75 53 83 113 60 
 158
-Slow
+SLOW
 Dragon Water
 11
 0 Tackle
@@ -64984,7 +64984,7 @@ None
 Goodra
 90 100 70 110 150 80 
 270
-Slow
+SLOW
 Dragon Water
 16
 0 Outrage
@@ -65075,7 +65075,7 @@ None
 Klefki
 57 80 91 80 87 75 
 165
-Fast
+FAST
 Steel Fairy
 16
 0 Fairy Lock
@@ -65156,7 +65156,7 @@ None
 Phantump
 43 70 48 50 60 38 
 62
-Medium Fast
+MEDIUM_FAST
 Ghost Grass
 14
 0 Tackle
@@ -65244,7 +65244,7 @@ Amorphous
 Trevenant
 85 110 76 65 82 56 
 166
-Medium Fast
+MEDIUM_FAST
 Ghost Grass
 16
 0 Horn Leech
@@ -65344,7 +65344,7 @@ Amorphous
 Pumpkaboo
 49 66 70 44 55 51 
 67
-Medium Fast
+MEDIUM_FAST
 Ghost Grass
 15
 0 Trick
@@ -65435,7 +65435,7 @@ None
 Gourgeist
 65 90 122 58 75 84 
 173
-Medium Fast
+MEDIUM_FAST
 Ghost Grass
 21
 0 Explosion
@@ -65535,7 +65535,7 @@ None
 Bergmite
 55 69 85 32 35 28 
 61
-Medium Fast
+MEDIUM_FAST
 Ice No_Type
 15
 0 Tackle
@@ -65612,7 +65612,7 @@ None
 Avalugg
 95 117 184 44 46 28 
 180
-Medium Fast
+MEDIUM_FAST
 Ice No_Type
 20
 0 Iron Defense
@@ -65702,7 +65702,7 @@ None
 Noibat
 40 30 35 45 40 55 
 49
-Medium Fast
+MEDIUM_FAST
 Flying Dragon
 16
 0 Screech
@@ -65791,7 +65791,7 @@ None
 Noivern
 85 70 80 97 80 123 
 187
-Medium Fast
+MEDIUM_FAST
 Flying Dragon
 22
 0 Moonlight
@@ -65892,7 +65892,7 @@ None
 Xerneas
 126 131 95 131 98 99 
 306
-Slow
+SLOW
 Fairy No_Type
 18
 0 Heal Pulse
@@ -65977,7 +65977,7 @@ None
 Yveltal
 126 131 95 131 98 99 
 306
-Slow
+SLOW
 Dark Flying
 18
 0 Hurricane
@@ -66065,7 +66065,7 @@ None
 Zygarde
 108 100 121 81 95 95 
 270
-Slow
+SLOW
 Dragon Ground
 18
 0 Glare
@@ -66148,7 +66148,7 @@ None
 Diancie
 50 100 150 100 150 50 
 270
-Slow
+SLOW
 Rock Fairy
 17
 0 Tackle
