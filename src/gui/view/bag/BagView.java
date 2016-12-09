@@ -33,6 +33,7 @@ import util.DrawUtils;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.Point;
+import util.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -219,14 +220,11 @@ public class BagView extends View {
 			if (input.consumeIfDown(ControlKey.SPACE)) {
 				message = null;
 			}
-
-			// TODO: There was a return here before, make sure it's okay to remove it
 		}
 
-		if (message == null) {
-            if (Messages.hasMessages()) {
-                message = Messages.getNextMessage();
-            }
+		while ((message == null || StringUtils.isNullOrWhiteSpace(message.getMessage()))
+				&& Messages.hasMessages()) {
+			message = Messages.getNextMessage();
         }
 
 		selectedButton = Button.update(buttons, selectedButton);
@@ -511,7 +509,7 @@ public class BagView extends View {
 			g.translate(-tabButton.x, -tabButton.y);
 		}
 		
-		if (message != null) {
+		if (message != null && !StringUtils.isNullOrWhiteSpace(message.getMessage())) {
 			BasicPanels.drawFullMessagePanel(g, message.getMessage());
 		}
 		else {
