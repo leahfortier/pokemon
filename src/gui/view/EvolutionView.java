@@ -78,10 +78,10 @@ class EvolutionView extends View {
 				else {
 					if (!isEgg) {
 						evolvingPokemon.evolve(null, Game.getPlayer().getEvolution());
-						Game.setViewMode(ViewMode.BAG_VIEW);
+						Game.instance().setViewMode(ViewMode.BAG_VIEW);
 					}
 					else {
-						Game.setViewMode(ViewMode.MAP_VIEW);
+						Game.instance().setViewMode(ViewMode.MAP_VIEW);
 					}
 				}
 				break;

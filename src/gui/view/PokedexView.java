@@ -170,11 +170,11 @@ class PokedexView extends View {
 		}
 				
 		if (returnButton.checkConsumePress()) {
-			Game.setViewMode(ViewMode.MAP_VIEW);
+			Game.instance().setViewMode(ViewMode.MAP_VIEW);
 		}
 		
 		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
-			Game.setViewMode(ViewMode.MAP_VIEW);
+			Game.instance().setViewMode(ViewMode.MAP_VIEW);
 		}
 	}
 

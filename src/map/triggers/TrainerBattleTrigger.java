@@ -36,6 +36,6 @@ class TrainerBattleTrigger extends Trigger {
 		trainer.healAll();
 
 		Battle b = new Battle(trainer, this.npcUpdateInteraction);
-		Game.setBattleViews(b, true);
+		Game.instance().setBattleViews(b, true);
 	}
 }

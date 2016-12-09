@@ -53,7 +53,7 @@ public class MessageUpdate {
 		LEARN_MOVE(VisualState.LEARN_MOVE_QUESTION),
 		STAT_GAIN(VisualState.STAT_GAIN),
 		EXIT_BATTLE(battleView -> {
-            Game.setViewMode(ViewMode.MAP_VIEW);
+            Game.instance().setViewMode(ViewMode.MAP_VIEW);
             battleView.clearUpdate();
 			Messages.clearMessages(MessageState.FIGHTY_FIGHT);
 			Messages.setMessageState(MessageState.MAPPITY_MAP);

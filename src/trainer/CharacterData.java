@@ -459,7 +459,7 @@ public class CharacterData extends Trainer implements Serializable {
 		this.evolvingPokemon = pokemon;
 		this.evolution = evolution;
 		
-		Game.setViewMode(ViewMode.EVOLUTION_VIEW);
+		Game.instance().setViewMode(ViewMode.EVOLUTION_VIEW);
 	}
 	
 	public void addLogMessage(MessageUpdate messageUpdate) {

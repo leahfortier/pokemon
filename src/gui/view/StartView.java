@@ -63,7 +63,7 @@ class StartView extends View {
 				
 				if (message == null) {
 					if (dialogueIndex == dialogue.length - 1) {
-						Game.setViewMode(ViewMode.MAP_VIEW);
+						Game.instance().setViewMode(ViewMode.MAP_VIEW);
 					}
 					else {
 						dialogueIndex++;

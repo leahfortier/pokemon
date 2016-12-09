@@ -119,7 +119,7 @@ class BattleState implements VisualStateHandler {
 
         if (battleAnimationTime < 0) {
             this.battle = null;
-            Game.setViewMode(ViewMode.BATTLE_VIEW);
+            Game.instance().setViewMode(ViewMode.BATTLE_VIEW);
             mapView.setState(VisualState.MAP);
         }
 

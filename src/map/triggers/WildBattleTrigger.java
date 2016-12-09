@@ -66,7 +66,7 @@ class WildBattleTrigger extends Trigger {
 			
 			// Let the battle begin!!
 			Battle battle = new Battle(wildPokemon);
-			Game.setBattleViews(battle, seenWildPokemon);
+			Game.instance().setBattleViews(battle, seenWildPokemon);
 		}
 	}
 

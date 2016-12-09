@@ -35,8 +35,8 @@ class NewSaveState implements VisualStateHandler {
         // Load Save File
         if (pressed >= 0 && pressed < Save.NUM_SAVES) {
             // TODO: Ask to delete
-            Game.newSave(pressed);
-            Game.setViewMode(ViewMode.START_VIEW);
+            Game.instance().newSave(pressed);
+            Game.instance().setViewMode(ViewMode.START_VIEW);
         }
         // Return
         else if (pressed == Save.NUM_SAVES) {

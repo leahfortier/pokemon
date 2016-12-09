@@ -299,7 +299,7 @@ public class BagView extends View {
 	private void returnToMap() {
         Messages.clearMessages(MessageState.BAGGIN_IT_UP);
         Messages.setMessageState(MessageState.MAPPITY_MAP);
-        Game.setViewMode(ViewMode.MAP_VIEW);
+        Game.instance().setViewMode(ViewMode.MAP_VIEW);
     }
 
     @Override

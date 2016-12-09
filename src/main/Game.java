@@ -18,19 +18,23 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class Game {
-	private static Game game;
-	public static void create() {
-		game = new Game();
-		game.data = new GameData();
-		game.data.loadData();
+	private static Game instance;
+	public static Game instance() {
+		if (instance == null) {
+			instance = new Game();
+			instance.data = new GameData();
+			instance.data.loadData();
+		}
+
+		return instance;
 	}
 
 	public static GameData getData() {
-		return game.data;
+		return instance().data;
 	}
 
 	public static CharacterData getPlayer() {
-		return game.characterData;
+		return instance().characterData;
 	}
 
 	private GameData data;
@@ -61,41 +65,41 @@ public class Game {
 		}
 	}
 
-	public static void update(int dt) {
-		game.checkViewSwitch();
-		game.currentView.update(dt);
-		game.checkViewSwitch();
+	public void update(int dt) {
+		checkViewSwitch();
+		currentView.update(dt);
+		checkViewSwitch();
 	}
 
-	public static void setBattleViews(final Battle battle, final boolean seenWildPokemon) {
-		((BattleView)game.viewMap.get((ViewMode.BATTLE_VIEW))).setBattle(battle);
-		((MapView)game.viewMap.get(ViewMode.MAP_VIEW)).setBattle(battle, seenWildPokemon);
+	public void setBattleViews(final Battle battle, final boolean seenWildPokemon) {
+		((BattleView)viewMap.get((ViewMode.BATTLE_VIEW))).setBattle(battle);
+		((MapView)viewMap.get(ViewMode.MAP_VIEW)).setBattle(battle, seenWildPokemon);
 	}
 
-	public static void draw(Graphics g) {
-		game.currentView.draw(g);
+	public void draw(Graphics g) {
+		currentView.draw(g);
 	}
 	
-	public static void setViewMode(ViewMode mode) {
-		game.currentViewMode = mode;
+	public void setViewMode(ViewMode mode) {
+		currentViewMode = mode;
 	}
 
-	public static void loadSave(int index) {
-		game.characterData = Save.load(index);
-		game.setViews();
+	public void loadSave(int index) {
+		characterData = Save.load(index);
+		setViews();
 	}
 	
-	public static void newSave(int index) {
-		game.characterData = new CharacterData();
+	public void newSave(int index) {
+		characterData = new CharacterData();
 		
 		String startingMap = "PlayersHouseUp";
 		String startingMapEntrance = "GameStartLocation";
-		game.characterData.setMap(startingMap, startingMapEntrance);
-		game.data.getMap(startingMap).setCharacterToEntrance(startingMapEntrance);
+		characterData.setMap(startingMap, startingMapEntrance);
+		data.getMap(startingMap).setCharacterToEntrance();
 
-		game.characterData.setFileNum(index);
-		game.setupCharacter();
-		game.setViews();
+		characterData.setFileNum(index);
+		setupCharacter();
+		setViews();
 	}
 
 	private void addView(ViewMode viewMode) {

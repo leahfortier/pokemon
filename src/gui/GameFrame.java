@@ -76,7 +76,7 @@ public class GameFrame {
 			g.dispose();
 			strategy.show();
 
-			Game.create();
+			Game.instance();
 			loadAllTheThings();
 
 			Timer fpsTimer = new Timer((int) Global.MS_BETWEEN_FRAMES, new ActionListener() {
@@ -109,10 +109,10 @@ public class GameFrame {
 		}
 
 		private void drawFrame(int dt) {
-			Game.update(dt);
+			Game.instance().update(dt);
 
 			Graphics g = strategy.getDrawGraphics();
-			Game.draw(g);
+			Game.instance().draw(g);
 
 			// This will fail if it can't acquire the lock on control (just won't display or anything)
 			if (DEV_MODE) {

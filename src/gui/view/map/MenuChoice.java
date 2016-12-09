@@ -12,7 +12,7 @@ enum MenuChoice {
     POKEDEX(() -> PokeString.POKEDEX, ViewMode.POKEDEX_VIEW),
     POKEMON(() -> PokeString.POKEMON, ViewMode.PARTY_VIEW),
     BAG(() -> "Bag", mapView -> {
-        Game.setViewMode(ViewMode.BAG_VIEW);
+        Game.instance().setViewMode(ViewMode.BAG_VIEW);
         Messages.clearMessages(MessageState.BAGGIN_IT_UP);
         Messages.setMessageState(MessageState.BAGGIN_IT_UP);
     }),
@@ -31,7 +31,7 @@ enum MenuChoice {
     private final StateChanger stateChanger;
 
     MenuChoice(DisplayNameGetter displayNameGetter, ViewMode viewMode) {
-        this(displayNameGetter, mapView -> Game.setViewMode(viewMode));
+        this(displayNameGetter, mapView -> Game.instance().setViewMode(viewMode));
     }
 
     MenuChoice(DisplayNameGetter displayNameGetter, StateChanger stateChanger) {

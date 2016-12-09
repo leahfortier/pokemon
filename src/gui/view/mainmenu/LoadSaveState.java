@@ -90,8 +90,8 @@ class LoadSaveState implements VisualStateHandler {
                     Save.deleteSave(pressed); // TODO: ask to delete first
                     view.reloadSaveInfo();
                 } else {
-                    Game.loadSave(pressed);
-                    Game.setViewMode(ViewMode.MAP_VIEW);
+                    Game.instance().loadSave(pressed);
+                    Game.instance().setViewMode(ViewMode.MAP_VIEW);
                 }
             }
         }
