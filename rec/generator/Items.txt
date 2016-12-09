@@ -1880,7 +1880,7 @@ Moon Ball:
 	Price: 200
 	CatchRate:
 		Evolution ev = o.getPokemonInfo().getEvolution();
-		if (ev.getEvolution(EvolutionCheck.ITEM, o, ItemNamesies.MOON_STONE) != null) {
+		if (ev.getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null) {
 			return new double[] {4, 0};
 		}
 		

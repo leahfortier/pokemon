@@ -40,7 +40,7 @@ import main.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.PokemonMatcher;
-import pokemon.evolution.Evolution.EvolutionCheck;
+import pokemon.evolution.EvolutionMethod;
 import pokemon.PokemonInfo.WildHoldItem;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
@@ -497,7 +497,7 @@ public class ActivePokemon implements Serializable {
 		}
 		
 		// Maybe you'll evolve?!
-		BaseEvolution ev = (BaseEvolution)pokemon.getEvolution().getEvolution(EvolutionCheck.LEVEL, this, null);
+		BaseEvolution ev = (BaseEvolution)pokemon.getEvolution().getEvolution(EvolutionMethod.LEVEL, this, null);
 		if (ev != null) {
 			evolve(b, ev);
 		}
@@ -572,7 +572,7 @@ public class ActivePokemon implements Serializable {
 			moves.set(index, m);
 		}
 		
-		BaseEvolution ev = (BaseEvolution)pokemon.getEvolution().getEvolution(EvolutionCheck.MOVE, this, null);
+		BaseEvolution ev = (BaseEvolution)pokemon.getEvolution().getEvolution(EvolutionMethod.MOVE, this, null);
 		if (ev != null) {
 			evolve(b, ev);
 		}

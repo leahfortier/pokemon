@@ -10,14 +10,8 @@ import java.util.Scanner;
 
 public abstract class Evolution implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	public enum EvolutionCheck {
-		LEVEL,
-		ITEM,
-		MOVE,
-	}
-	
-	public abstract Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use);
+
+	public abstract Evolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use);
 	public abstract PokemonNamesies[] getEvolutions();
 	
 	public boolean canEvolve() {

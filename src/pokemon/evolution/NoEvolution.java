@@ -8,7 +8,7 @@ class NoEvolution extends Evolution {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use) {
+    public Evolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
         return null;
     }
 

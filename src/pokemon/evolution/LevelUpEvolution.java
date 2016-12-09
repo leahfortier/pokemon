@@ -22,8 +22,8 @@ class LevelUpEvolution extends Evolution implements BaseEvolution {
     }
 
     @Override
-    public Evolution getEvolution(EvolutionCheck type, ActivePokemon p, ItemNamesies use) {
-        if (type != EvolutionCheck.LEVEL) {
+    public Evolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
+        if (type != EvolutionMethod.LEVEL) {
             return null;
         }
 

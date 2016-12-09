@@ -1686,7 +1686,7 @@ Override:
 		AddMapField: SuccessMessage: ""
 		AddMapField: PokemonUse:
 		Evolution ev = p.getPokemonInfo().getEvolution();
-		BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+		BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 		if (base == null) {
 			return false;
 		}

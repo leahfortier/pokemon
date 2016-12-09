@@ -66,7 +66,7 @@ import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.evolution.BaseEvolution;
 import pokemon.evolution.Evolution;
-import pokemon.evolution.Evolution.EvolutionCheck;
+import pokemon.evolution.EvolutionMethod;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.Ability;
@@ -3327,7 +3327,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3569,7 +3569,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3609,7 +3609,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3649,7 +3649,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3677,7 +3677,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3705,7 +3705,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3733,7 +3733,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3761,7 +3761,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3789,7 +3789,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3813,7 +3813,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3863,7 +3863,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3891,7 +3891,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3919,7 +3919,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3947,7 +3947,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -3988,7 +3988,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -4016,7 +4016,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -4048,7 +4048,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -4072,7 +4072,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -4122,7 +4122,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -4150,7 +4150,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -4178,7 +4178,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -4206,7 +4206,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -4234,7 +4234,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -4262,7 +4262,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -4290,7 +4290,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -4318,7 +4318,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public boolean use(ActivePokemon p) {
 			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionCheck.ITEM, p, this.namesies);
+			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
 			if (base == null) {
 				return false;
 			}
@@ -6037,7 +6037,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			Evolution ev = o.getPokemonInfo().getEvolution();
-			if (ev.getEvolution(EvolutionCheck.ITEM, o, ItemNamesies.MOON_STONE) != null) {
+			if (ev.getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null) {
 				return new double[] {4, 0};
 			}
 			
