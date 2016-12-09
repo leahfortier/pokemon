@@ -14,6 +14,7 @@ import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.status.StatusCondition;
 import main.Type;
 import map.TerrainType;
+import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
@@ -26,13 +27,13 @@ public abstract class BattleEffect extends Effect {
 
 	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 		if (printCast) {
-			Messages.addMessage(getCastMessage(b, caster, victim));
+			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
 		}
 
 		b.addEffect(this);
 
-		Messages.addMessage("", b, caster);
-		Messages.addMessage("", b, victim);
+		Messages.add(new MessageUpdate().updatePokemon(b, caster));
+		Messages.add(new MessageUpdate().updatePokemon(b, victim));
 	}
 
 	// EVERYTHING BELOW IS GENERATED ###
@@ -66,7 +67,7 @@ public abstract class BattleEffect extends Effect {
 		private void removeLevitation(Battle b, ActivePokemon p) {
 			if (p.isSemiInvulnerableFlying()) {
 				p.getMove().switchReady(b, p);
-				Messages.addMessage(p.getName() + " fell to the ground!");
+				Messages.add(new MessageUpdate(p.getName() + " fell to the ground!"));
 			}
 			
 			LevitationEffect.falllllllll(b, p);
@@ -79,7 +80,7 @@ public abstract class BattleEffect extends Effect {
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			if (p.getAttack().isMoveType(MoveType.AIRBORNE)) {
 				b.printAttacking(p);
-				Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 				return false;
 			}
 			
@@ -157,7 +158,7 @@ public abstract class BattleEffect extends Effect {
 			}
 			
 			// Remove the effect if it's already in play
-			Messages.addMessage(roomsies.getSubsideMessage(caster));
+			Messages.add(new MessageUpdate(roomsies.getSubsideMessage(caster)));
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
@@ -185,7 +186,7 @@ public abstract class BattleEffect extends Effect {
 			}
 			
 			// Remove the effect if it's already in play
-			Messages.addMessage(roomsies.getSubsideMessage(caster));
+			Messages.add(new MessageUpdate(roomsies.getSubsideMessage(caster)));
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
@@ -213,7 +214,7 @@ public abstract class BattleEffect extends Effect {
 			}
 			
 			// Remove the effect if it's already in play
-			Messages.addMessage(roomsies.getSubsideMessage(caster));
+			Messages.add(new MessageUpdate(roomsies.getSubsideMessage(caster)));
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
@@ -301,7 +302,7 @@ public abstract class BattleEffect extends Effect {
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (!victim.fullHealth() && !victim.isLevitating(b)) {
 				victim.healHealthFraction(1/16.0);
-				Messages.addMessage(victim.getName() + " restored some HP due to the Grassy Terrain!", b, victim);
+				Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to the Grassy Terrain!").updatePokemon(b, victim));
 			}
 		}
 

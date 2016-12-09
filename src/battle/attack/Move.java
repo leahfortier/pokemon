@@ -6,6 +6,7 @@ import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import main.Type;
+import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import util.RandomUtils;
@@ -198,7 +199,7 @@ public class Move implements Serializable {
 		// Invalid if PP is zero
 		if (m.getPP() == 0) {
 			if (selecting) {
-				Messages.addMessage(p.getName() + " is out of PP for " + m.attack.getName() + "!");
+				Messages.add(new MessageUpdate(p.getName() + " is out of PP for " + m.attack.getName() + "!"));
 			}
 			
 			return false;
@@ -208,7 +209,7 @@ public class Move implements Serializable {
 		AttackSelectionEffect unusable = AttackSelectionEffect.getUnusableEffect(b, p, m);
 		if (unusable != null) {
 			if (selecting) {
-				Messages.addMessage(unusable.getUnusableMessage(p));
+				Messages.add(new MessageUpdate(unusable.getUnusableMessage(p)));
 			}
 			
 			// THAT'S WHAT

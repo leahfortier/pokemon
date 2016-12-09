@@ -44,6 +44,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
+import util.PokeString;
 import util.RandomUtils;
 
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class Battle {
 	public Battle(Opponent o) {
         Messages.clearMessages(MessageState.FIGHTY_FIGHT);
         Messages.setMessageState(MessageState.FIGHTY_FIGHT);
-		Messages.addMessage(new MessageUpdate("", Update.ENTER_BATTLE));
+		Messages.add(new MessageUpdate().withUpdate(Update.ENTER_BATTLE));
 
 		player = Game.getPlayer();
 		opponent = o;
@@ -83,9 +84,10 @@ public class Battle {
 		weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
 		player.enterBattle();
 
+		// TODO: Cast
 		if (opponent instanceof Trainer) {
 			((Trainer) opponent).enterBattle();
-			Messages.addMessage(((Trainer)opponent).getName() + " wants to fight!");
+			Messages.add(new MessageUpdate(((Trainer)opponent).getName() + " wants to fight!"));
 			((Trainer)opponent).setAction(Action.FIGHT);
 			enterBattle(opponent.front());
 		}
@@ -268,24 +270,24 @@ public class Battle {
 
 		// Dead Front Pokemon, but you still have others to spare -- force a switch
 		if (!player.blackout()) {
-			Messages.addMessage("What Pokemon would you like to switch to?", Update.FORCE_SWITCH);
+			Messages.add(new MessageUpdate("What Pokemon would you like to switch to?").withUpdate(Update.FORCE_SWITCH));
 			return;
 		}
 
 		// Blackout -- you're fucked
-		Messages.addMessage(player.getName() + " is out of usable Pok\u00e9mon! " + player.getName() + " blacked out!");
+		Messages.add(new MessageUpdate(player.getName() + " is out of usable " + PokeString.POKEMON + "! " + player.getName() + " blacked out!"));
 
 		// Sucks to suck
 		if (opponent instanceof Trainer) {
 			Trainer opp = (Trainer)opponent;
 			int cashMoney = player.sucksToSuck(opp.getDatCashMoney());
-			Messages.addMessage(opp.getName() + " rummaged through the pockets of your passed out body and stole " + cashMoney + " pokedollars!!!");
+			Messages.add(new MessageUpdate(opp.getName() + " rummaged through the pockets of your passed out body and stole " + cashMoney + " pokedollars!!!"));
 		}
 
 		player.healAll();
 		player.teleportToPokeCenter();
 		Messages.clearMessages(MessageState.MAPPITY_MAP);
-		Messages.addMessage(" ", Update.EXIT_BATTLE);
+		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
 	}
 
 	private void deadOpponent() {
@@ -304,7 +306,7 @@ public class Battle {
 			player.winBattle(this, opponent);
 
 			// WE'RE DONE HERE
-			Messages.addMessage(" ", Update.EXIT_BATTLE);
+			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
 			return;
 		}
 
@@ -349,7 +351,7 @@ public class Battle {
 			enterer.resetAttributes();
 		}
 
-		Messages.addMessage(enterMessage, this, enterer, true);
+		Messages.add(new MessageUpdate(enterMessage).withSwitch(this, enterer));
 
 		enterer.getAttributes().setUsed(true);
 		EntryEffect.invokeEntryEffect(this, enterer);
@@ -361,7 +363,7 @@ public class Battle {
 		escapeAttempts++;
 
 		if (opponent instanceof Trainer) {
-			Messages.addMessage("There's no running from a trainer battle!");
+			Messages.add(new MessageUpdate("There's no running from a trainer battle!"));
 			return false;
 		}
 
@@ -379,12 +381,12 @@ public class Battle {
 		if (RandomUtils.chanceTest(val, 256) ||
 				plyr.getAbility() instanceof DefiniteEscape || // TODO: This is wrong and should be able to escape even with mean look and such
 				plyr.getHeldItem(this) instanceof DefiniteEscape) {
-			Messages.addMessage("Got away safely!");
-			Messages.addMessage(" ", Update.EXIT_BATTLE);
+			Messages.add(new MessageUpdate("Got away safely!"));
+			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
 			return true;
 		}
 
-		Messages.addMessage("Can't escape!");
+		Messages.add(new MessageUpdate("Can't escape!"));
 		player.performAction(this, Action.RUN);
 		return false;
 	}
@@ -413,7 +415,7 @@ public class Battle {
 
 	private void decrementWeather() {
 		if (!weather.isActive()) {
-			Messages.addMessage(weather.getSubsideMessage(player.front()));
+			Messages.add(new MessageUpdate(weather.getSubsideMessage(player.front())));
 			weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
 			return;
 		}
@@ -453,7 +455,7 @@ public class Battle {
 				success = true;
 			}
 			else {
-				Messages.addMessage(me.getName() + "'s attack missed!");
+				Messages.add(new MessageUpdate(me.getName() + "'s attack missed!"));
 				CrashDamageMove.invokeCrashDamageMove(this, me);
 			}			
 		}
@@ -462,7 +464,7 @@ public class Battle {
 	}
 	
 	public void printAttacking(ActivePokemon p) {
-		Messages.addMessage((p.user() ? "" : "Enemy ") + p.getName() + " used " + p.getAttack().getName() + "!");
+		Messages.add(new MessageUpdate((p.user() ? "" : "Enemy ") + p.getName() + " used " + p.getAttack().getName() + "!"));
 		reduce = true;
 	}
 	
@@ -581,9 +583,9 @@ public class Battle {
 		
 		// Crit yo pants
 		if (crit) {
-			Messages.addMessage("It's a critical hit!!");
+			Messages.add(new MessageUpdate("It's a critical hit!!"));
 			if (o.hasAbility(AbilityNamesies.ANGER_POINT)) {
-				Messages.addMessage(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!");
+				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!"));
 				o.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
 			}
 			
@@ -685,11 +687,11 @@ public class Battle {
 		boolean pQuick = plyr.isHoldingItem(this, ItemNamesies.QUICK_CLAW);
 		boolean oQuick = opp.isHoldingItem(this, ItemNamesies.QUICK_CLAW);
 		if (pQuick && !oQuick && RandomUtils.chanceTest(20)) {
-			Messages.addMessage(plyr.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!");
+			Messages.add(new MessageUpdate(plyr.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!"));
 			return true;
 		}
 		if (oQuick && !pQuick && RandomUtils.chanceTest(20)) {
-			Messages.addMessage(opp.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!");
+			Messages.add(new MessageUpdate(opp.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!"));
 			return false;
 		}		
 		

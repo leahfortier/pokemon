@@ -51,7 +51,7 @@ StealthRock:
 		return;
 	}
 	
-	Messages.addMessage(enterer.getName() + " was hurt by stealth rock!");
+	Messages.add(new MessageUpdate(enterer.getName() + " was hurt by stealth rock!"));
 	enterer.reduceHealthFraction(b, Type.getBasicAdvantage(Type.ROCK, enterer, b)/8.0);
 	###
 	CastMessage: "Floating rocks were scattered all around!"
@@ -72,7 +72,7 @@ ToxicSpikes:
 	}
 	
 	if (enterer.isType(b, Type.POISON)) {
-		Messages.addMessage(enterer.getName() + " absorbed the Toxic Spikes!");
+		Messages.add(new MessageUpdate(enterer.getName() + " absorbed the Toxic Spikes!"));
 		super.active = false;
 		return;
 	}
@@ -97,7 +97,7 @@ ToxicSpikes:
 	}
 	
 	((ToxicSpikes)spikesies).layers++;
-	Messages.addMessage(getCastMessage(b, caster, victim));
+	Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
 	###
 	RapidSpin: "The toxic spikes dispersed!"
 	Defog: "The toxic spikes dispersed!"
@@ -115,7 +115,7 @@ Spikes:
 		return;
 	}
 	
-	Messages.addMessage(enterer.getName() + " was hurt by spikes!");
+	Messages.add(new MessageUpdate(enterer.getName() + " was hurt by spikes!"));
 	
 	// TODO: Generalize this type of statement
 	if (layers == 1) enterer.reduceHealthFraction(b, 1/8.0);
@@ -132,7 +132,7 @@ Spikes:
 	}
 	
 	((Spikes)spikesies).layers++;
-	Messages.addMessage(getCastMessage(b, caster, victim));
+	Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
 	###
 	RapidSpin: "The spikes dispersed!"
 	Defog: "The spikes dispersed!"
@@ -149,7 +149,7 @@ Wish:
 	}
 	
 	p.healHealthFraction(1/2.0);
-	Messages.addMessage(casterName + "'s wish came true!", b, p);
+	Messages.add(new MessageUpdate(casterName + "'s wish came true!").updatePokemon(b, p));
 	###
 	Cast: 
 	casterName = caster.getName();
@@ -177,7 +177,7 @@ HealSwitch:
 	enterer.healHealthFraction(1);
 	enterer.removeStatus();
 	
-	Messages.addMessage(enterer.getName() + " health was restored due to the " + wish + "!", b, enterer);
+	Messages.add(new MessageUpdate(enterer.getName() + " health was restored due to the " + wish + "!").updatePokemon(b, enterer));
 	super.active = false;
 	###
 	Cast: 
@@ -196,7 +196,7 @@ PayDay:
 	###
 	Cast: 
 	PayDay payday = (PayDay)Effect.getEffect(b.getEffects(true), this.namesies);
-	Messages.addMessage(getCastMessage(b, caster, victim));
+	Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
 	coins = 5*caster.getLevel();
 	if (payday == null) {
 		b.getPlayer().addEffect(this);
@@ -208,7 +208,7 @@ PayDay:
 	CastMessage: "Coins scattered everywhere!"
 	CanHave: True
 	EndBattle: 
-	Messages.addMessage(player.getName() + " picked up " + coins + " pokedollars!");
+	Messages.add(new MessageUpdate(player.getName() + " picked up " + coins + " pokedollars!"));
 	player.getDatCashMoney(coins);
 	###
 *

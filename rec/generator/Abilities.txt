@@ -31,7 +31,7 @@ Solar Power:
 	###
 	ApplyEndTurn: 
 	if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
-		Messages.addMessage(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
+		Messages.add(new MessageUpdate(victim.getName() + " lost some of its HP due to its " + this.getName() + "!"));
 		victim.reduceHealthFraction(b, 1/8.0);
 	}
 	###
@@ -46,7 +46,7 @@ Rain Dish:
 	ApplyEndTurn: 
 	if (b.getWeather().namesies() == EffectNamesies.RAINING) {
 		victim.healHealthFraction(1/16.0);
-		Messages.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", b, victim);
+		Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
 	}
 	###
 *
@@ -149,7 +149,7 @@ Cute Charm:
 		PokemonEffect infatuated = (PokemonEffect)EffectNamesies.INFATUATED.getEffect();
 		if (infatuated.applies(b, victim, user, CastSource.ABILITY)) {
 			user.addEffect(infatuated);
-			Messages.addMessage(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
+			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!"));
 		}
 	}
 	###
@@ -177,7 +177,7 @@ Flash Fire:
 	return attacking == Type.FIRE;
 	###
 	AlternateEffect: 
-	Messages.addMessage(victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!");
+	Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!"));
 	activated = true;
 	###
 	GetMultiplier: 
@@ -193,7 +193,7 @@ Frisk:
 	Int: EntryEffect
 	Enter: 
 	ActivePokemon other = b.getOtherPokemon(enterer.user());
-	if (other.isHoldingItem(b)) Messages.addMessage(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!");
+	if (other.isHoldingItem(b)) Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!"));
 	###
 *
 Inner Focus:
@@ -210,7 +210,7 @@ Stench:
 		PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
 		if (flinch.applies(b, user, victim, CastSource.ABILITY)) {
 			flinch.cast(b, user, victim, CastSource.ABILITY, false);
-			Messages.addMessage(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
+			Messages.add(new MessageUpdate(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!"));
 		}
 	}
 	###
@@ -242,12 +242,12 @@ Dry Skin:
 	Int: EndTurnEffect, OpponentPowerChangeEffect
 	ApplyEndTurn: 
 	if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
-		Messages.addMessage(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
+		Messages.add(new MessageUpdate(victim.getName() + " lost some of its HP due to its " + this.getName() + "!"));
 		victim.reduceHealthFraction(b, 1/8.0);
 	}
 	else if (b.getWeather().namesies() == EffectNamesies.RAINING && !victim.fullHealth()) {
 		victim.healHealthFraction(1/8.0);
-		Messages.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", b, victim);
+		Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
 	}
 	###
 	AbsorbType: Water
@@ -280,7 +280,7 @@ Damp:
 	private boolean checkeroo(Battle b, ActivePokemon attacking, ActivePokemon abilify) {
 		if (attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION) {
 			b.printAttacking(attacking);
-			Messages.addMessage(abilify.getName() + "'s " + this.getName() + " prevents " + attacking.getAttack().getName() + " from being used!");
+			Messages.add(new MessageUpdate(abilify.getName() + "'s " + this.getName() + " prevents " + attacking.getAttack().getName() + " from being used!"));
 			return false;
 		}
 		
@@ -436,7 +436,7 @@ Forewarn:
 		warn = RandomUtils.getRandomValue(besties);
 	}
 	
-	Messages.addMessage(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn.getName() + "!");
+	Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn.getName() + "!"));
 	###
 *
 Hyper Cutter:
@@ -465,7 +465,7 @@ Iron Fist:
 	Int: PowerChangeEffect, EntryEffect
 	Enter:
 	if (enterer.getPokemonInfo().namesies() == PokemonNamesies.PANGORO) {
-		Messages.addMessage(enterer.getName() + " does not break the mold!!!!!!!");
+		Messages.add(new MessageUpdate(enterer.getName() + " does not break the mold!!!!!!!"));
 	}
 	###
 *
@@ -592,7 +592,7 @@ Pressure:
 	Desc: The Pok\u00e9mon raises the foe's PP usage.
 	Int: EntryEffect
 	Enter: 
-	Messages.addMessage(enterer.getName() + " is exerting pressure!");
+	Messages.add(new MessageUpdate(enterer.getName() + " is exerting pressure!"));
 	###
 *
 Immunity:
@@ -716,7 +716,7 @@ Truant:
 	###
 	CanAttack: 
 	if (lazyface) {
-		Messages.addMessage(p.getName() + " is loafing around!");
+		Messages.add(new MessageUpdate(p.getName() + " is loafing around!"));
 		return false;
 	}
 	
@@ -744,7 +744,7 @@ Wonder Guard:
 	
 	// Immunity Solunity
 	b.printAttacking(p);
-	Messages.addMessage(opp.getName() + "'s " + this.getName() + " makes it immune to " + p.getAttack().getName() + "!");
+	Messages.add(new MessageUpdate(opp.getName() + "'s " + this.getName() + " makes it immune to " + p.getAttack().getName() + "!"));
 	return false;
 	###
 *
@@ -768,7 +768,7 @@ Rough Skin:
 	Desc: Inflicts damage to the foe on contact.
 	Int: PhysicalContactEffect
 	Contact: 
-	Messages.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
+	Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
 	user.reduceHealthFraction(b, 1/8.0);
 	###
 *
@@ -800,7 +800,7 @@ Anticipation:
 		Attack attack = m.getAttack();
 		if (Type.getBasicAdvantage(attack.getActualType(), enterer, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
 			// TODO: Shouldn't this be for a random move?
-			Messages.addMessage(enterer.getName() + "'s " + this.getName() + " made it shudder!");
+			Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made it shudder!"));
 			break;
 		}
 	}
@@ -834,7 +834,7 @@ Ice Body:
 	ApplyEndTurn: 
 	if (b.getWeather().namesies() == EffectNamesies.HAILING) {
 		victim.healHealthFraction(1/16.0);
-		Messages.addMessage(victim.getName() + "'s HP was restored due to its " + this.getName() + "!", b, victim);
+		Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
 	}
 	###
 	WeatherBlock: 
@@ -875,7 +875,7 @@ Aftermath:
 	Contact: 
 	// TODO: Pretty sure this doesn't work anymore
 	if (victim.isFainted(b)) {
-		Messages.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
+		Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
 		user.reduceHealthFraction(b, 1/4.0);
 	}
 	###
@@ -925,7 +925,7 @@ Cursed Body:
 		PokemonEffect disable = (PokemonEffect)EffectNamesies.DISABLE.getEffect();
 		if (disable.applies(b, victim, user, CastSource.ABILITY)) {
 			disable.cast(b, victim, user, CastSource.ABILITY, false);
-			Messages.addMessage(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
+			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName()));
 		}
 	}
 	###
@@ -954,7 +954,7 @@ Bad Dreams:
 	ApplyEndTurn: 
 	ActivePokemon other = b.getOtherPokemon(victim.user());
 	if (other.hasStatus(StatusCondition.ASLEEP)) {
-		Messages.addMessage(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
+		Messages.add(new MessageUpdate(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
 		other.reduceHealthFraction(b, 1/8.0);
 	}
 	###
@@ -1047,10 +1047,10 @@ Illusion:
 		}
 		
 		activated = false;
-		Messages.addMessage(victim.getName() + "'s Illusion was broken!");
+		Messages.add(new MessageUpdate(victim.getName() + "'s Illusion was broken!"));
 		
-		Messages.addMessage("", victim.getPokemonInfo(), victim.isShiny(), true, victim.user());
-		Messages.addMessage("", b, victim);
+		Messages.add(new MessageUpdate().withNewPokemon(victim.getPokemonInfo(), victim.isShiny(), true, victim.user()));
+		Messages.add(new MessageUpdate().updatePokemon(b, victim));
 	}
 	###
 	Activate: 
@@ -1067,8 +1067,8 @@ Illusion:
 	}
 	
 	// Display the Illusion changes
-	Messages.addMessage("", illusionSpecies, illusionShiny, false, enterer.user());
-	Messages.addMessage("", b, enterer);
+	Messages.add(new MessageUpdate().withNewPokemon(illusionSpecies, illusionShiny, false, enterer.user()));
+	Messages.add(new MessageUpdate().updatePokemon(b, enterer));
 	###
 	GetNameChange:
 	return activated ? illusionName : null;
@@ -1143,7 +1143,7 @@ Iron Barbs:
 	Desc: Inflicts damage to the Pok\u00e9mon on contact.
 	Int: PhysicalContactEffect
 	Contact: 
-	Messages.addMessage(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
+	Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
 	user.reduceHealthFraction(b, 1/8.0);
 	###
 *
@@ -1151,21 +1151,21 @@ Mold Breaker:
 	Desc: Moves can be used regardless of Abilities.
 	Int: EntryEffect
 	Enter: 
-	Messages.addMessage(enterer.getName() + " breaks the mold!");
+	Messages.add(new MessageUpdate(enterer.getName() + " breaks the mold!"));
 	###
 *
 Teravolt:
 	Desc: Moves can be used regardless of Abilities.
 	Int: EntryEffect
 	Enter: 
-	Messages.addMessage(enterer.getName() + " is radiating a bursting aura!");
+	Messages.add(new MessageUpdate(enterer.getName() + " is radiating a bursting aura!"));
 	###
 *
 Turboblaze:
 	Desc: Moves can be used regardless of Abilities.
 	Int: EntryEffect
 	Enter: 
-	Messages.addMessage(enterer.getName() + " is radiating a blazing aura!");
+	Messages.add(new MessageUpdate(enterer.getName() + " is radiating a blazing aura!"));
 	###
 *
 Run Away:
@@ -1204,7 +1204,7 @@ Harvest:
 	Item restored = ((ItemHolder)consumed).getItem();
 	if (restored instanceof Berry && (b.getWeather().namesies() == EffectNamesies.SUNNY || RandomUtils.chanceTest(50))) {
 		victim.giveItem((HoldItem)restored);
-		Messages.addMessage(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!");
+		Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!"));
 	}
 	###
 *
@@ -1222,7 +1222,7 @@ Unnerve:
 	Desc: Makes the foe nervous and unable to eat Berries.
 	Int: EntryEffect
 	Enter: 
-	Messages.addMessage(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer.user()).getName() + " too nervous to eat berries!");
+	Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer.user()).getName() + " too nervous to eat berries!"));
 	###
 *
 Honey Gather:
@@ -1339,17 +1339,17 @@ Stance Change:
 	CanAttack:
 	if (shieldForm && p.getAttack().getCategory() != MoveCategory.STATUS) {
 		shieldForm = false;
-		Messages.addMessage(p.getName() + " changed into Blade Forme!");
+		Messages.add(new MessageUpdate(p.getName() + " changed into Blade Forme!"));
 	}
 	else if (!shieldForm && p.getAttack().namesies() == AttackNamesies.KINGS_SHIELD) {
 		shieldForm = true;
-		Messages.addMessage(p.getName() + " changed into Shield Forme!");
+		Messages.add(new MessageUpdate(p.getName() + " changed into Shield Forme!"));
 	}
 	
 	return true;
 	###
 	Enter:
-	Messages.addMessage(enterer.getName() + " is in Shield Forme!");
+	Messages.add(new MessageUpdate(enterer.getName() + " is in Shield Forme!"));
 	shieldForm = true;
 	###
 	GetStat:

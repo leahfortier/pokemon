@@ -75,7 +75,7 @@ GrassyTerrain:
 	ApplyEndTurn:
 	if (!victim.fullHealth() && !victim.isLevitating(b)) {
 		victim.healHealthFraction(1/16.0);
-		Messages.addMessage(victim.getName() + " restored some HP due to the Grassy Terrain!", b, victim);
+		Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to the Grassy Terrain!").updatePokemon(b, victim));
 	}
 	###
 	GetMultiplier:

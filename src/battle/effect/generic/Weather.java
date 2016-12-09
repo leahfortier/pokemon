@@ -7,6 +7,7 @@ import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import item.Item;
 import main.Type;
+import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
@@ -29,8 +30,8 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		super.cast(b, caster, victim, source, printCast);
 		b.getWeather().setTurns(getTurns(b, caster));
 		
-		Messages.addMessage("", b, caster);
-		Messages.addMessage("", b, victim);
+		Messages.add(new MessageUpdate().updatePokemon(b, caster));
+		Messages.add(new MessageUpdate().updatePokemon(b, victim));
 	}
 	
 	private int getTurns(Battle b, ActivePokemon caster) {
@@ -76,7 +77,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			Messages.addMessage("The rain continues to pour.");
+			Messages.add(new MessageUpdate("The rain continues to pour."));
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
@@ -115,7 +116,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			Messages.addMessage("The sunlight is strong.");
+			Messages.add(new MessageUpdate("The sunlight is strong."));
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
@@ -151,7 +152,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			}
 			
 			// Buffety buffety buffet
-			Messages.addMessage(p.getName() + " is buffeted by the sandstorm!");
+			Messages.add(new MessageUpdate(p.getName() + " is buffeted by the sandstorm!"));
 			p.reduceHealthFraction(b, 1/16.0);
 		}
 
@@ -184,7 +185,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			Messages.addMessage("The sandstorm rages");
+			Messages.add(new MessageUpdate("The sandstorm rages"));
 			
 			ActivePokemon other = b.getOtherPokemon(victim.user());
 			buffet(b, victim);
@@ -209,7 +210,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			}
 			
 			// Buffety buffety buffet
-			Messages.addMessage(p.getName() + " is buffeted by the hail!");
+			Messages.add(new MessageUpdate(p.getName() + " is buffeted by the hail!"));
 			p.reduceHealthFraction(b, 1/16.0);
 		}
 
@@ -230,7 +231,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			Messages.addMessage("The hail continues to fall.");
+			Messages.add(new MessageUpdate("The hail continues to fall."));
 			
 			ActivePokemon other = b.getOtherPokemon(victim.user());
 			buffet(b, victim);

@@ -4,10 +4,11 @@ import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import main.Type;
+import message.MessageUpdate;
 import message.Messages;
-import pokemon.ability.AbilityNamesies;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
+import pokemon.ability.AbilityNamesies;
 
 class Burned extends Status implements EndTurnEffect, StatChangingEffect {
     private static final long serialVersionUID = 1L;
@@ -21,7 +22,7 @@ class Burned extends Status implements EndTurnEffect, StatChangingEffect {
             return;
         }
 
-        Messages.addMessage(victim.getName() + " was hurt by its burn!");
+        Messages.add(new MessageUpdate(victim.getName() + " was hurt by its burn!"));
         victim.reduceHealthFraction(b, victim.hasAbility(AbilityNamesies.HEATPROOF) ? 1/16.0 : 1/8.0);
     }
 

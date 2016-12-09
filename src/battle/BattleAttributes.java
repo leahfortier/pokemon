@@ -1,24 +1,25 @@
 package battle;
 
+import battle.attack.Move;
+import battle.attack.MoveType;
+import battle.effect.ModifyStageValueEffect;
+import battle.effect.generic.CastSource;
+import battle.effect.generic.Effect;
+import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
+import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
+import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.PokemonEffect;
+import main.Global;
+import message.MessageUpdate;
+import message.Messages;
+import pokemon.ActivePokemon;
+import pokemon.Stat;
+import pokemon.ability.Ability;
+import util.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import battle.attack.Move;
-import battle.attack.MoveType;
-import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
-import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
-import main.Global;
-import message.Messages;
-import battle.effect.generic.EffectNamesies;
-import pokemon.ability.Ability;
-import pokemon.ActivePokemon;
-import pokemon.Stat;
-import battle.effect.generic.Effect;
-import battle.effect.generic.CastSource;
-import battle.effect.ModifyStageValueEffect;
-import battle.effect.generic.PokemonEffect;
-import util.StringUtils;
 
 public class BattleAttributes implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -220,7 +221,7 @@ public class BattleAttributes implements Serializable {
 			StatProtectingEffect prevent = StatProtectingEffect.getPreventEffect(b, caster, victim, stat);
 			if (prevent != null) {
 				if (print) {
-					Messages.addMessage(prevent.preventionMessage(victim, stat));
+					Messages.add(new MessageUpdate(prevent.preventionMessage(victim, stat)));
 				}
 
 				return false;
@@ -230,7 +231,7 @@ public class BattleAttributes implements Serializable {
 		// Too High
 		if (stages[index] == Stat.MAX_STAT_CHANGES && val > 0) {
 			if (print) {
-				Messages.addMessage(victim.getName() + "'s " + statName + " cannot be raised any higher!");
+				Messages.add(new MessageUpdate(victim.getName() + "'s " + statName + " cannot be raised any higher!"));
 			}
 
 			return false;
@@ -240,7 +241,7 @@ public class BattleAttributes implements Serializable {
 		if (stages[index] == -1*Stat.MAX_STAT_CHANGES && val < 0) {
 			// THIS LOW
 			if (print) {
-				Messages.addMessage(victim.getName() + "'s " + statName + " cannot be lowered any further!");
+				Messages.add(new MessageUpdate(victim.getName() + "'s " + statName + " cannot be lowered any further!"));
 			}
 
 			return false;
@@ -269,7 +270,7 @@ public class BattleAttributes implements Serializable {
 		message = message.replace("{statName}", statName)
 				.replace("{change}", change)
 				.replace("{victimName}", victimName);
-		Messages.addMessage(message);
+		Messages.add(new MessageUpdate(message));
 		
 		stages[index] += val;
 		

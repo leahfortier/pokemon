@@ -36,7 +36,7 @@ LeechSeed:
 		return;
 	}
 	
-	Messages.addMessage(victim.getName() + "'s health was sapped!");
+	Messages.add(new MessageUpdate(victim.getName() + "'s health was sapped!"));
 	b.getOtherPokemon(victim.user()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false, false);
 	###
 	RapidSpin: releaser.getName() + " was released from leech seed!"
@@ -113,7 +113,7 @@ SpikyShield:
 	OnProtectingSuccess:
 	// Pokemon that make contact with the spiky shield have their health reduced
 	if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
-		Messages.addMessage(p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!");
+		Messages.add(new MessageUpdate(p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!"));
 		p.reduceHealthFraction(b, 1/8.0);
 	}
 	###
@@ -164,17 +164,17 @@ Confusion:
 	CanAttack: 
 	// Snap it out!
 	if (turns == 0) {
-		Messages.addMessage(p.getName() + " snapped out of its confusion!");
+		Messages.add(new MessageUpdate(p.getName() + " snapped out of its confusion!"));
 		super.active = false;
 		return true;
 	}
 	
 	turns--;
-	Messages.addMessage(p.getName() + " is confused!");
+	Messages.add(new MessageUpdate(p.getName() + " is confused!"));
 	
 	// 50% chance to hurt yourself in confusion while confused
 	if (RandomUtils.chanceTest(50)) {
-		Messages.addMessage("It hurt itself in confusion!");
+		Messages.add(new MessageUpdate("It hurt itself in confusion!"));
 		
 		// Perform confusion damage
 		Move temp = p.getMove();
@@ -194,7 +194,7 @@ Confusion:
 	Cast: 
 	super.cast(b, caster, victim, source, printCast);
 	if (victim.isHoldingItem(b, ItemNamesies.PERSIM_BERRY)) {
-		Messages.addMessage(victim.getName() + "'s " + ItemNamesies.PERSIM_BERRY.getName() + " snapped it out of confusion!");
+		Messages.add(new MessageUpdate(victim.getName() + "'s " + ItemNamesies.PERSIM_BERRY.getName() + " snapped it out of confusion!"));
 		victim.getAttributes().removeEffect(this.namesies);
 		victim.consumeItem(b);
 	}
@@ -210,7 +210,7 @@ SelfConfusion:
 	Subside: 
 	Confusion c = new Confusion();
 	if (c.applies(b, p, p, CastSource.EFFECT)) {
-		Messages.addMessage(p.getName() + " became confused due to fatigue!");
+		Messages.add(new MessageUpdate(p.getName() + " became confused due to fatigue!"));
 		p.addEffect(c);
 	}
 	###
@@ -259,7 +259,7 @@ Encore:
 	CanAttack: 
 	if (p.getAttack().namesies() != move.getAttack().namesies()) {
 		b.printAttacking(p);
-		Messages.addMessage(this.getFailMessage(b, p, opp));
+		Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
 		return false;
 	}
 	return true;
@@ -287,7 +287,7 @@ Disable:
 	turns--;
 	if (p.getAttack().namesies() == disabled.getAttack().namesies()) {
 		b.printAttacking(p);
-		Messages.addMessage(p.getAttack().getName() + " is disabled!");
+		Messages.add(new MessageUpdate(p.getAttack().getName() + " is disabled!"));
 		return false;
 	}
 	return true;
@@ -353,7 +353,7 @@ RaiseCrits:
 	}
 	// Doesn't 'fail' if they already have the effect -- just display the message again
 	else if (printCast) {
-		Messages.addMessage(getCastMessage(b, caster, victim));
+		Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
 	}
 	
 	RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
@@ -427,7 +427,7 @@ ChangeType:
 	CastMessage: castMessage(victim)
 	CanHave: True
 	Subside: 
-	Messages.addMessage("", b, p);
+	Messages.add(new MessageUpdate().updatePokemon(b, p));
 	###
 *
 ChangeAbility:
@@ -473,19 +473,19 @@ Stockpile:
 	
 	Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies);
 	if (stockpile.turns < 3) {
-		Messages.addMessage(victim.getName() + " Defense and Special Defense were raised!");
+		Messages.add(new MessageUpdate(victim.getName() + " Defense and Special Defense were raised!"));
 		stockpile.turns++;
 		return;
 	}
 	
-	Messages.addMessage(this.getFailMessage(b, caster, victim));
+	Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
 	###
 	StageChange: 
 	return s == Stat.DEFENSE || s == Stat.SP_DEFENSE ? stage + turns : stage;
 	###
 	Subside: 
-	Messages.addMessage("The effects of " + p.getName() + "'s Stockpile ended!");
-	Messages.addMessage(p.getName() + "'s Defense and Special Defense decreased!");
+	Messages.add(new MessageUpdate("The effects of " + p.getName() + "'s Stockpile ended!"));
+	Messages.add(new MessageUpdate(p.getName() + "'s Defense and Special Defense decreased!"));
 	###
 *
 UsedDefenseCurl:
@@ -518,7 +518,7 @@ Mimic:
 	Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
 	
 	if (lastAttack == null || victim.hasMove(b, lastAttack.namesies()) || lastAttack.isMoveType(MoveType.MIMICLESS)) {
-		Messages.addMessage(this.getFailMessage(b, caster, victim));
+		Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
 		return;
 	}
 	
@@ -548,7 +548,7 @@ Imprison:
 	CanAttack: 
 	if (unableMoves.contains(p.getAttack().namesies())) {
 		b.printAttacking(p);
-		Messages.addMessage(this.getFailMessage(b, p, opp));
+		Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
 		return false;
 	}
 	
@@ -581,7 +581,7 @@ Torment:
 	CanAttack: 
 	if (!usable(p, p.getMove())) {
 		b.printAttacking(p);
-		Messages.addMessage(this.getFailMessage(b, p, opp));
+		Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
 		return false;
 	}
 	return true;
@@ -604,7 +604,7 @@ Taunt:
 	CanAttack:
 	if (!usable(p, p.getMove())) {
 		b.printAttacking(p);
-		Messages.addMessage(this.getFailMessage(b, p, opp));
+		Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
 		return false;
 	}
 	return true;
@@ -648,7 +648,7 @@ Ingrain:
 		victim.heal((int)(healAmount*.3));
 	}
 	
-	Messages.addMessage(victim.getName() + " restored some HP due to ingrain!", b, victim);
+	Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to ingrain!").updatePokemon(b, victim));
 	###
 	CastMessage: victim.getName() + " planted its roots!"
 	Cast: 
@@ -670,7 +670,7 @@ Curse:
 		return;
 	}
 	
-	Messages.addMessage(victim.getName() + " was hurt by the curse!");
+	Messages.add(new MessageUpdate(victim.getName() + " was hurt by the curse!"));
 	victim.reduceHealthFraction(b, 1/4.0);
 	###
 	CastMessage: user.getName() + " cut its own HP and put a curse on " + victim.getName() + "!"
@@ -711,7 +711,7 @@ Uproar:
 	private static void wakeUp(Battle b, ActivePokemon wakey) {
 		if (wakey.hasStatus(StatusCondition.ASLEEP)) {
 			wakey.removeStatus();
-			Messages.addMessage("The uproar woke up " + wakey.getName() + "!", b, wakey);
+			Messages.add(new MessageUpdate("The uproar woke up " + wakey.getName() + "!").updatePokemon(b, wakey));
 		}	
 	}
 	###
@@ -740,7 +740,7 @@ AquaRing:
 		victim.heal((int)(healAmount*.3));
 	}
 	
-	Messages.addMessage(victim.getName() + " restored some HP due to aqua ring!", b, victim);
+	Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to aqua ring!").updatePokemon(b, victim));
 	###
 	CastMessage: user.getName() + " surrounded itself with a veil of water!"
 *
@@ -752,7 +752,7 @@ Nightmare:
 		return;
 	}
 	
-	Messages.addMessage(victim.getName() + " was hurt by its nightmare!");
+	Messages.add(new MessageUpdate(victim.getName() + " was hurt by its nightmare!"));
 	victim.reduceHealthFraction(b, 1/4.0);
 	###
 	ShouldSubside: 
@@ -813,8 +813,8 @@ Transformed:
 	
 	// Castaway
 	super.cast(b, caster, victim, source, printCast);
-	Messages.addMessage("", transformee.getPokemonInfo(), transformee.isShiny(), true, victim.user());
-	Messages.addMessage("", b, victim);
+	Messages.add(new MessageUpdate().withNewPokemon(transformee.getPokemonInfo(), transformee.isShiny(), true, victim.user()));
+	Messages.add(new MessageUpdate().updatePokemon(b, victim));
 	###
 	FailCondition: b.getOtherPokemon(victim.user()).hasEffect(this.namesies) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive()))
 	Int: ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect
@@ -838,7 +838,7 @@ Substitute:
 	Cast: 
 	hp = victim.reduceHealthFraction(b, .25) + 1;
 	super.cast(b, caster, victim, source, printCast);
-	Messages.addMessage("", b, victim);
+	Messages.add(new MessageUpdate().updatePokemon(b, victim));
 	###
 	FailCondition: victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3
 	ValidMove: 
@@ -854,7 +854,7 @@ Substitute:
 	
 	// Print the failure for status moves
 	if (user.getAttack().getCategory() == MoveCategory.STATUS) {
-		Messages.addMessage(this.getFailMessage(b, user, victim));
+		Messages.add(new MessageUpdate(this.getFailMessage(b, user, victim)));
 	}
 	
 	return false;
@@ -910,15 +910,15 @@ Bide:
 	// Already has the effect, but not ready for it to end yet -- store dat energy 
 	if (bidesies.turns > 0) {
 		bidesies.turns--;
-		Messages.addMessage(getCastMessage(b, caster, victim));
+		Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
 		return;
 	}
 	
 	// TIME'S UP -- RELEASE DAT STORED ENERGY
-	Messages.addMessage(victim.getName() + " released energy!");
+	Messages.add(new MessageUpdate(victim.getName() + " released energy!"));
 	if (bidesies.damage == 0) {
 		// Sucks to suck
-		Messages.addMessage(this.getFailMessage(b, caster, victim));
+		Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
 	}
 	else {
 		// RETALIATION STATION
@@ -965,7 +965,7 @@ PowerTrick:
 		return;
 	}
 	
-	Messages.addMessage(getCastMessage(b, caster, victim));
+	Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
 	victim.getAttributes().removeEffect(this.namesies);
 	###
 *
@@ -991,7 +991,7 @@ HealBlock:
 	CanAttack:
 	if (p.getAttack().isMoveType(MoveType.SAP_HEALTH)) {
 		b.printAttacking(p);
-		Messages.addMessage(Effect.DEFAULT_FAIL_MESSAGE);
+		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 		return false;
 	}
 	
@@ -1008,12 +1008,12 @@ Infatuated:
 	}
 	###
 	CanAttack: 
-	Messages.addMessage(p.getName() + " is in love with " + opp.getName() + "!");
+	Messages.add(new MessageUpdate(p.getName() + " is in love with " + opp.getName() + "!"));
 	if (RandomUtils.chanceTest(50)) {
 		return true;
 	}
 	
-	Messages.addMessage(p.getName() + "'s infatuation kept it from attacking!");
+	Messages.add(new MessageUpdate(p.getName() + "'s infatuation kept it from attacking!"));
 	return false;
 	###
 	CastMessage: victim.getName() + " fell in love!"
@@ -1021,7 +1021,7 @@ Infatuated:
 	super.cast(b, caster, victim, source, printCast);
 	if (victim.isHoldingItem(b, ItemNamesies.DESTINY_KNOT) && this.applies(b, victim, caster, CastSource.HELD_ITEM)) {
 		super.cast(b, victim, caster, CastSource.HELD_ITEM, false);
-		Messages.addMessage(victim.getName() + "'s " + ItemNamesies.DESTINY_KNOT.getName() + " caused " + caster.getName() + " to fall in love!");
+		Messages.add(new MessageUpdate(victim.getName() + "'s " + ItemNamesies.DESTINY_KNOT.getName() + " caused " + caster.getName() + " to fall in love!"));
 	}	
 	###
 *
@@ -1031,7 +1031,7 @@ Snatch:
 	TargetSwap:
 	Attack attack = user.getAttack();
 	if (attack.isSelfTarget() && attack.getCategory() == MoveCategory.STATUS && !attack.isMoveType(MoveType.NON_SNATCHABLE)) {
-		Messages.addMessage(opponent.getName() + " snatched " + user.getName() + "'s move!");
+		Messages.add(new MessageUpdate(opponent.getName() + " snatched " + user.getName() + "'s move!"));
 		return true;
 	}
 	
@@ -1043,7 +1043,7 @@ Grudge:
 	Int: FaintEffect
 	DeathWish: 
 	if (murderer.getAttributes().isAttacking()) {
-		Messages.addMessage(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to its grudge!");
+		Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to its grudge!"));
 		murderer.getMove().reducePP(murderer.getMove().getPP());
 	}
 	###
@@ -1057,7 +1057,7 @@ DestinyBond:
 	###
 	DeathWish: 
 	if (murderer.getAttributes().isAttacking()) {
-		Messages.addMessage(dead.getName() + " took " + murderer.getName() + " down with it!");
+		Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
 		murderer.reduceHealthFraction(b, 1);
 	}
 	###
@@ -1072,7 +1072,7 @@ PerishSong:
 	}
 	###
 	ApplyEndTurn: 
-	Messages.addMessage(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!");
+	Messages.add(new MessageUpdate(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!"));
 	if (super.numTurns == 1) {
 		victim.reduceHealthFraction(b, 1);
 	}
@@ -1113,7 +1113,7 @@ Powder:
 	CanAttack:
 	// Fire-type moves makes the user explode
 	if (p.getAttackType() == Type.FIRE) {
-		Messages.addMessage("The powder exploded!");
+		Messages.add(new MessageUpdate("The powder exploded!"));
 		p.reduceHealthFraction(b, 1/4.0);
 		return false;
 	}

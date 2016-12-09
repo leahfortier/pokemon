@@ -12,6 +12,7 @@ import item.use.TrainerUseItem;
 import item.use.UseItem;
 import main.Game;
 import main.Global;
+import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
@@ -50,7 +51,7 @@ public class Bag implements Serializable {
 	
 	public boolean giveItem(ActivePokemon p, ItemNamesies hold) {
 		if (p.isEgg()) {
-			Messages.addMessage("You can't give an item to an egg!");
+			Messages.add(new MessageUpdate("You can't give an item to an egg!"));
 			return false;
 		}
 		
@@ -59,32 +60,32 @@ public class Bag implements Serializable {
 		if (item != ItemNamesies.NO_ITEM) {
 			addItem(item);
 			p.removeItem();
-			Messages.addMessage("Took the " + item.getName() + " from " + p.getActualName() + ".");
+			Messages.add(new MessageUpdate("Took the " + item.getName() + " from " + p.getActualName() + "."));
 		}
 		
 		p.giveItem(hold);
 		removeItem(hold);
-		Messages.addMessage(p.getActualName() + " is now holding " + hold.getName() + ".");
+		Messages.add(new MessageUpdate(p.getActualName() + " is now holding " + hold.getName() + "."));
 		
 		return true;
 	}
 	
 	public boolean takeItem(ActivePokemon p) {
 		if (p.isEgg()) {
-			Messages.addMessage("Eggs can't hold anything. They're eggs.");
+			Messages.add(new MessageUpdate("Eggs can't hold anything. They're eggs."));
 			return false;
 		}
 		
 		ItemNamesies item = p.getActualHeldItem().namesies();
 		if (item == ItemNamesies.NO_ITEM) {
-			Messages.addMessage(p.getActualName() + " is not holding anything.");
+			Messages.add(new MessageUpdate(p.getActualName() + " is not holding anything."));
 			return false;
 		}
 
 		// Remove the item from the pokemon and add it to the bag
 		p.removeItem();
 		addItem(item);
-		Messages.addMessage("Took the " + item.getName() + " from " + p.getActualName() + ".");
+		Messages.add(new MessageUpdate("Took the " + item.getName() + " from " + p.getActualName() + "."));
 		return true;
 	}
 	
@@ -162,7 +163,7 @@ public class Bag implements Serializable {
 
 		// Eggs can't do shit
 		if (p.isEgg()) {
-			Messages.addMessage(DEFAULT_FAIL_MESSAGE);
+			Messages.add(new MessageUpdate(DEFAULT_FAIL_MESSAGE));
 			return false;
 		}
 
@@ -170,7 +171,7 @@ public class Bag implements Serializable {
 		Class<? extends UseItem> useClass = move == null ? PokemonUseItem.class : MoveUseItem.class;
 		Item itemValue = item.getItem();
 		if (!useClass.isInstance(itemValue)) {
-			Messages.addMessage(DEFAULT_FAIL_MESSAGE);
+			Messages.add(new MessageUpdate(DEFAULT_FAIL_MESSAGE));
 			return false;
 		}
 
@@ -185,13 +186,13 @@ public class Bag implements Serializable {
 
 		// :(
 		if (!success) {
-			Messages.addMessage(DEFAULT_FAIL_MESSAGE);
+			Messages.add(new MessageUpdate(DEFAULT_FAIL_MESSAGE));
 			return false;
 		}
 
 		// Item successfully used -- display success messages to the user and remove this item from the bag
-		Messages.addMessage(Game.getPlayer().getName() + " used the " + item.getName() + "!");
-		Messages.addMessage(useItem.getSuccessMessage(p));
+		Messages.add(new MessageUpdate(Game.getPlayer().getName() + " used the " + item.getName() + "!"));
+		Messages.add(new MessageUpdate(useItem.getSuccessMessage(p)));
 		removeItem(item);
 		return true;
 	}
@@ -223,11 +224,11 @@ public class Bag implements Serializable {
 			if (useItem instanceof UseItem) {
 				boolean front = player.front() == activePokemon;
 
-				Messages.addMessage(player.getName() + " used " + useItem.getName() + "!");
-				Messages.addMessage(((UseItem)useItem).getSuccessMessage(activePokemon));
+				Messages.add(new MessageUpdate(player.getName() + " used " + useItem.getName() + "!"));
+				Messages.add(new MessageUpdate(((UseItem)useItem).getSuccessMessage(activePokemon)));
 				
 				if (front) {
-					Messages.addMessage("", battle, activePokemon);
+					Messages.add(new MessageUpdate().updatePokemon(battle, activePokemon));
 				}
 			}
 			
@@ -241,7 +242,7 @@ public class Bag implements Serializable {
 			removeItem(item);
 		}
 		else if (useItem instanceof UseItem) {
-			Messages.addMessage(DEFAULT_FAIL_MESSAGE);
+			Messages.add(new MessageUpdate(DEFAULT_FAIL_MESSAGE));
 		}
 
 		return used;

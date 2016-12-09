@@ -1,6 +1,5 @@
 package gui.view.map;
 
-import gui.GameData;
 import gui.panel.BasicPanels;
 import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
@@ -10,7 +9,6 @@ import map.entity.EntityAction;
 import map.entity.movable.PlayerEntity;
 import map.triggers.Trigger;
 import message.MessageUpdate;
-import message.MessageUpdate.Update;
 import message.Messages;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import sound.SoundPlayer;
@@ -24,7 +22,6 @@ class MessageState implements VisualStateHandler {
 
     @Override
     public void draw(Graphics g, MapView mapView) {
-        GameData data = Game.getData();
         MessageUpdate currentMessage = mapView.getCurrentMessage();
 
         int height = BasicPanels.drawFullMessagePanel(g, currentMessage.getMessage());
@@ -62,7 +59,7 @@ class MessageState implements VisualStateHandler {
             if (currentMessage.isChoice()) {
                 ChoiceMatcher choice = currentMessage.getChoices()[dialogueSelection];
                 Trigger trigger = EntityAction.addActionGroupTrigger(null, null, null, choice.getActions());
-                Messages.addMessageToFront(new MessageUpdate("", trigger.getName(), Update.TRIGGER));
+                Messages.addMessageToFront(new MessageUpdate().withTrigger(trigger.getName()));
             }
 
             boolean newMessage = false;

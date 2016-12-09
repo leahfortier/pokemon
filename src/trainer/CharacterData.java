@@ -23,6 +23,7 @@ import pokemon.PC;
 import trainer.pokedex.Pokedex;
 import util.JsonUtils;
 import util.Point;
+import util.PokeString;
 import util.RandomUtils;
 import util.StringUtils;
 
@@ -178,7 +179,7 @@ public class CharacterData extends Trainer implements Serializable {
 			if (repelSteps == 0) {
 				// TODO: Give choice if you want to use another. 
 				// Game variable needed
-				Messages.addMessage("The effects of repel have worn off.");
+				Messages.add(new MessageUpdate("The effects of repel have worn off."));
 			}
 		}
 		else {
@@ -195,7 +196,7 @@ public class CharacterData extends Trainer implements Serializable {
 
 				GroupTriggerMatcher matcher = new GroupTriggerMatcher(dialogue.getName(), evolutionView.getName());
 				Trigger group = TriggerType.GROUP.createTrigger(JsonUtils.getJson(matcher), null);
-				Messages.addMessage(new MessageUpdate("", group.getName(), Update.TRIGGER));
+				Messages.add(new MessageUpdate().withTrigger(group.getName()));
 				
 				// Only one hatch per step
 				break;
@@ -318,16 +319,16 @@ public class CharacterData extends Trainer implements Serializable {
 		// Trainers pay up!
 		if (opponent instanceof Trainer) {
 			Trainer opp = (Trainer)opponent;
-			Messages.addMessage(getName() + " defeated " + opp.getName() + "!", Update.WIN_BATTLE);
+			Messages.add(new MessageUpdate(getName() + " defeated " + opp.getName() + "!").withUpdate(Update.WIN_BATTLE));
 			this.setNpcInteraction(b.getNpcUpdateInteraction());
 			
 			// I've decided that the next line of code is the best line in this entire codebase
 			int datCash = opp.getDatCashMoney()*(hasEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE) ? 2 : 1);
-			Messages.addMessage(getName() + " received " + datCash + " pokedollars for winning! Woo!");
+			Messages.add(new MessageUpdate(getName() + " received " + datCash + " pokedollars for winning! Woo!"));
 			getDatCashMoney(datCash);
 		}
 		else {
-			Messages.addMessage("", Update.WIN_BATTLE);
+			Messages.add(new MessageUpdate().withUpdate(Update.WIN_BATTLE));
 		}
 
 		EndBattleEffect.invokeEndBattleEffect(this.getEffects(), this, b, front());
@@ -341,12 +342,13 @@ public class CharacterData extends Trainer implements Serializable {
 	public Pokedex getPokedex() {
 		return pokedex;
 	}
-	
+
+	// TODO: Remove battle parameter
 	public void addPokemon(Battle b, ActivePokemon p) {
 		p.setCaught();
 		if (!pokedex.isCaught(p.getPokemonInfo().namesies())) {
 			if (b != null) {
-				Messages.addMessage(p.getPokemonInfo().getName() + " was registered in the Pok\u00e9dex!");
+				Messages.add(new MessageUpdate(p.getPokemonInfo().getName() + " was registered in the " + PokeString.POKEDEX + "!"));
 			}
 
 			if (!p.isEgg()) {
@@ -359,7 +361,7 @@ public class CharacterData extends Trainer implements Serializable {
 		}
 		else {
 			if (b != null) {
-				Messages.addMessage(p.getActualName() + " was sent to Box " + (pc.getBoxNum() + 1) + " of your PC!");
+				Messages.add(new MessageUpdate(p.getActualName() + " was sent to Box " + (pc.getBoxNum() + 1) + " of your PC!"));
 			}
 
 			pc.depositPokemon(p);
@@ -392,11 +394,11 @@ public class CharacterData extends Trainer implements Serializable {
 	// OH MY GOD CATCH A POKEMON OH MY GOD
 	public boolean catchPokemon(Battle b, BallItem ball) {
 		if (!b.isWildBattle()) {
-			Messages.addMessage("You can't try and catch a trainer's Pokemon! That's just rude!!!");
+			Messages.add(new MessageUpdate("You can't try and catch a trainer's Pokemon! That's just rude!!!"));
 			return false;
 		}
-		
-		Messages.addMessage(name + " threw the " + ((Item)ball).getName() + "!");
+
+		Messages.add(new MessageUpdate(name + " threw the " + ((Item)ball).getName() + "!"));
 		
 		ActivePokemon catchPokemon = b.getOtherPokemon(true);
 		int maxHP = catchPokemon.getMaxHP();
@@ -414,18 +416,18 @@ public class CharacterData extends Trainer implements Serializable {
 				
 		for (int i = 0; i < CATCH_SHAKES + 1; i++) {
 			if (!RandomUtils.chanceTest(shakeVal, 65536)) {
-				Messages.addMessage("", i);
-				Messages.addMessage("Oh no! " + catchPokemon.getName() + " broke free!");
+				Messages.add(new MessageUpdate().withCatchPokemon(i));
+				Messages.add(new MessageUpdate("Oh no! " + catchPokemon.getName() + " broke free!"));
 				return true;
 			}
 		}
-		
-		Messages.addMessage("", -1);
-		Messages.addMessage("Gotcha! " + catchPokemon.getName() + " was caught!");
+
+		Messages.add(new MessageUpdate().withCatchPokemon(-1));
+		Messages.add(new MessageUpdate("Gotcha! " + catchPokemon.getName() + " was caught!"));
 		gainEXP(catchPokemon, b);
 		addPokemon(b, catchPokemon);
-		
-		Messages.addMessage(" ", Update.EXIT_BATTLE);
+
+		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
 		return true;
 	}
 	

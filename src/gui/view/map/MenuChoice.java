@@ -2,6 +2,7 @@ package gui.view.map;
 
 import gui.view.ViewMode;
 import main.Game;
+import message.MessageUpdate;
 import message.Messages;
 import message.Messages.MessageState;
 import util.PokeString;
@@ -20,7 +21,7 @@ enum MenuChoice {
     SAVE(() -> "Save", mapView -> {
         // TODO: Question user if they would like to save first.
         Save.save();
-        Messages.addMessage("Your game has now been saved!");
+        Messages.add(new MessageUpdate("Your game has now been saved!"));
         mapView.setState(VisualState.MESSAGE);
     }),
     EXIT(() -> "Exit", ViewMode.MAIN_MENU_VIEW), // TODO: Confirmation

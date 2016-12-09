@@ -29,7 +29,7 @@ public class MessageUpdate {
 	private boolean shiny;
 	private boolean animation;
 	private Type[] type;
-	private boolean playerTarget; // SO YOU KNOW WHO TO GIVE THE HP/STATUS UPDATE TO
+	private boolean isPlayer; // SO YOU KNOW WHO TO GIVE THE HP/STATUS UPDATE TO
 	private boolean switchPokemon;
 	private Float expRatio;
 	private Update updateType;
@@ -111,55 +111,66 @@ public class MessageUpdate {
 	}
 
 	// YEAH THAT'S RIGHT HEALTH UPDATE
-	public MessageUpdate(int hp, boolean target) {
-		this();
+	public MessageUpdate withHp(int hp, boolean isPlayer) {
 		this.hp = hp;
-		this.playerTarget = target; // TODO: This shouldn't be stored as a boolean but as an enum
+		this.isPlayer = isPlayer;
+		return this;
 	}
 
 	// Update to maximum HP
-	public MessageUpdate(int hp, int maxHp, boolean target) {
-		this(hp, target);
+	public MessageUpdate withMaxHp(int hp, int maxHp, boolean isPlayer) {
 		this.maxHP = maxHp;
+		return this.withHp(hp, isPlayer);
 	}
 	
 	// Show stat gains
-	public MessageUpdate(int[] gains, int[] stats) {
-		this();
+	public MessageUpdate withStatGains(Battle battle, ActivePokemon gainer, int[] gains, int[] stats) {
+		updatePokemon(battle, gainer);
 		maxHP = stats[Stat.HP.index()];
 		statGains = gains;
 		newStats = stats;
 		updateType = Update.STAT_GAIN;
-		playerTarget = true;
+		isPlayer = true;
+		return this;
 	}
 	
 	// OOOOHH SOMEONE'S GOT DAT STATUS CONDITION
-	public MessageUpdate(StatusCondition status, boolean target) {
-		this();
+	public MessageUpdate withStatusCondition(StatusCondition status, boolean isPlayer) {
 		this.status = status;
-		this.playerTarget = target;
+		this.isPlayer = isPlayer;
+		return this;
+	}
+
+	// Updates all current display information of the given pokemon
+	// Hp, status condition, type, name, and gender
+	public MessageUpdate updatePokemon(Battle b, ActivePokemon pokemon) {
+		boolean isPlayer = pokemon.user();
+		return this.withMaxHp(pokemon.getHP(), pokemon.getMaxHP(), isPlayer)
+				.withStatusCondition(pokemon.getStatus().getType(), isPlayer)
+				.withType(pokemon.getDisplayType(b), isPlayer)
+				.withNameChange(pokemon.getName(), isPlayer)
+				.withGender(pokemon.getGender(), isPlayer);
 	}
 	
-	// Pokemon Update!
-	public MessageUpdate(String message, PokemonInfo pokemon, boolean shiny, boolean animation, boolean target) {
-		this(message);
+	// Pokemon image Update!
+	public MessageUpdate withNewPokemon(PokemonInfo pokemon, boolean shiny, boolean animation, boolean isPlayer) {
 		this.pokemon = pokemon;
-		this.playerTarget = target;
+		this.isPlayer = isPlayer;
 		this.shiny = shiny;
 		this.animation = animation;
+		return this;
 	}
 	
 	// Type Update!
-	public MessageUpdate(Type[] typesies, boolean target) {
-		this();
+	public MessageUpdate withType(Type[] typesies, boolean isPlayer) {
 		this.type = typesies;
-		this.playerTarget = target;
+		this.isPlayer = isPlayer;
+		return this;
 	}
 	
 	// Switch update!
-	public MessageUpdate(String message, ActivePokemon active, Battle battle) {
-		this(message);
-		this.playerTarget = active.user();
+	public MessageUpdate withSwitch(Battle battle, ActivePokemon active) {
+		this.isPlayer = active.user();
 		this.switchPokemon = true;
 		this.hp = active.getHP();
 		this.status = active.getStatus().getType();
@@ -172,74 +183,78 @@ public class MessageUpdate {
 		this.gender = active.getGender();
 		this.expRatio = active.expRatio();
 		this.animation = false;
+		return this;
 	}
 	
 	// Special type of update
-	public MessageUpdate(String m, Update update) {
-		this(m);
+	public MessageUpdate withUpdate(Update update) {
 		this.updateType = update;
+		return this;
 	}
 
-	public MessageUpdate(String m, String triggerName, Update update) {
-		this(m);
-		this.updateType = update;
+	public MessageUpdate withTrigger(String triggerName) {
+		this.triggerName = triggerName;
+		this.updateType = Update.TRIGGER;
 
-		if (update == Update.TRIGGER) {
-			this.triggerName = triggerName;
-		}
+		return this;
 	}
 
-	public MessageUpdate(String m, ChoiceMatcher[] choices) {
-		this(m);
+	public MessageUpdate withChoices(ChoiceMatcher[] choices) {
 		this.choices = choices;
+		return this;
 	}
 	
 	// EXP Gain update
-	public MessageUpdate(int lvl, float ratio, boolean levelUp) {
-		this();
-		
-		this.playerTarget = true;
+	public MessageUpdate withExpGain(Battle battle, ActivePokemon gainer, float ratio, boolean levelUp) {
+		this.updatePokemon(battle, gainer);
+
+		this.isPlayer = true;
 		this.expRatio = ratio;
 		
 		if (levelUp) {
-			level = lvl;
+			level = gainer.getLevel();
 		}
+
+		return this;
 	}
 	
 	// Name change update
-	public MessageUpdate(String name, boolean target) {
-		this();
+	public MessageUpdate withNameChange(String name, boolean isPlayer) {
 		this.name = name;
-		this.playerTarget = target;
+		this.isPlayer = isPlayer;
+
+		return this;
 	}
 	
 	// Gender change update
-	public MessageUpdate(Gender gender, boolean target) {
-		this();
+	public MessageUpdate withGender(Gender gender, boolean isPlayer) {
 		this.gender = gender;
-		this.playerTarget = target;
+		this.isPlayer = isPlayer;
+
+		return this;
 	}
 	
 	// Learn new move update
-	public MessageUpdate(String message, ActivePokemon active, Move newMove) {
-		this(message);
+	public MessageUpdate withLearnMove(ActivePokemon active, Move newMove) {
 		this.active = active;
 		this.move = newMove;
 		this.updateType = Update.LEARN_MOVE;
+
+		return this;
 	}
 	
 	// Catching a Pokemon
-	public MessageUpdate(String message, int duration) {
-		this(message);
+	public MessageUpdate withCatchPokemon(int duration) {
 		this.duration = duration;
+		return this;
 	}	
 	
 	public String getMessage() {
 		return message;
 	}
 	
-	public boolean target() {
-		return playerTarget;
+	public boolean isPlayer() {
+		return isPlayer;
 	}
 	
 	public boolean healthUpdate() {

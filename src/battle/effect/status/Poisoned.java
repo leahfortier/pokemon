@@ -2,12 +2,13 @@ package battle.effect.status;
 
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import main.Type;
+import message.MessageUpdate;
 import message.Messages;
-import pokemon.ability.AbilityNamesies;
-import battle.effect.generic.EffectNamesies;
 import pokemon.ActivePokemon;
+import pokemon.ability.AbilityNamesies;
 
 class Poisoned extends Status implements EndTurnEffect {
     private static final long serialVersionUID = 1L;
@@ -27,12 +28,12 @@ class Poisoned extends Status implements EndTurnEffect {
             }
 
             victim.healHealthFraction(1/8.0);
-            Messages.addMessage(victim.getName() + "'s " + AbilityNamesies.POISON_HEAL + " restored its health!", b, victim);
+            Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.POISON_HEAL + " restored its health!").updatePokemon(b, victim));
             return;
         }
 
         PokemonEffect badPoison = victim.getEffect(EffectNamesies.BAD_POISON);
-        Messages.addMessage(victim.getName() + " was hurt by its poison!");
+        Messages.add(new MessageUpdate(victim.getName() + " was hurt by its poison!"));
         victim.reduceHealthFraction(b, badPoison == null ? 1/8.0 : badPoison.getTurns()/16.0);
     }
 

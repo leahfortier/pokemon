@@ -3,7 +3,6 @@ package map.triggers;
 import main.Game;
 import map.Condition;
 import message.MessageUpdate;
-import message.MessageUpdate.Update;
 import message.Messages;
 import pattern.GroupTriggerMatcher;
 import util.JsonUtils;
@@ -39,7 +38,7 @@ class GroupTrigger extends Trigger {
 			String triggerName = triggers.get(i);
 			Trigger trigger = Game.getData().getTrigger(triggerName);
 			if (trigger != null && trigger.isTriggered()) {
-				Messages.addMessageToFront(new MessageUpdate(StringUtils.empty(), triggerName, Update.TRIGGER));
+				Messages.addMessageToFront(new MessageUpdate().withTrigger(triggerName));
 			}
 		}
 	}

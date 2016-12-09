@@ -71,7 +71,7 @@ public class LearnMoveQuestionState implements VisualStateHandler {
                 Messages.getNextMessage();
             }
 
-            Messages.addMessage(message);
+            Messages.add(message);
 
             view.setVisualState(VisualState.MESSAGE);
             view.cycleMessage(false);

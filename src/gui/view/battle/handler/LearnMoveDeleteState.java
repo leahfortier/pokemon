@@ -83,7 +83,7 @@ public class LearnMoveDeleteState implements VisualStateHandler {
                         }
                     }
 
-                    Messages.addMessage(message);
+                    Messages.add(message);
 
                     view.setVisualState(VisualState.MESSAGE);
                     view.cycleMessage(false);
@@ -98,7 +98,7 @@ public class LearnMoveDeleteState implements VisualStateHandler {
                 Messages.getNextMessage();
             }
 
-            Messages.addMessage(message);
+            Messages.add(message);
 
             view.setVisualState(VisualState.MESSAGE);
             view.cycleMessage(false);
