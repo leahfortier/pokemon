@@ -2,41 +2,24 @@ package pokemon.evolution;
 
 import item.ItemNamesies;
 import pokemon.ActivePokemon;
-import pokemon.PokemonInfo;
-import pokemon.PokemonNamesies;
 
-class ItemEvolution extends Evolution implements BaseEvolution {
+class ItemEvolution extends BaseEvolution {
     private static final long serialVersionUID = 1L;
 
-    private int evolutionNumber;
-    private ItemNamesies item;
+    private final ItemNamesies item;
 
     ItemEvolution(int num, String item) {
-        this.evolutionNumber = num;
+        super(EvolutionMethod.ITEM, num);
 
         this.item = ItemNamesies.getValueOf(item);
     }
 
     @Override
-    public PokemonInfo getEvolution() {
-        return PokemonInfo.getPokemonInfo(evolutionNumber);
-    }
-
-    @Override
-    public Evolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
-        if (type != EvolutionMethod.ITEM) {
-            return null;
-        }
-
-        if (use == item) {
+    public Evolution getEvolution(ActivePokemon toEvolve, ItemNamesies useItem) {
+        if (useItem == item) {
             return this;
         }
 
         return null;
-    }
-
-    @Override
-    public PokemonNamesies[] getEvolutions() {
-        return new PokemonNamesies[] { PokemonInfo.getPokemonInfo(evolutionNumber).namesies() };
     }
 }

@@ -4,43 +4,26 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import item.ItemNamesies;
 import pokemon.ActivePokemon;
-import pokemon.PokemonInfo;
-import pokemon.PokemonNamesies;
 
-class MoveEvolution extends Evolution implements BaseEvolution {
+class MoveEvolution extends BaseEvolution {
     private static final long serialVersionUID = 1L;
 
-    private int evolutionNumber;
-    private AttackNamesies move;
+    private final AttackNamesies move;
 
     MoveEvolution(int num, String m) {
-        evolutionNumber = num;
+        super(EvolutionMethod.MOVE, num);
 
         move = AttackNamesies.getValueOf(m);
     }
 
     @Override
-    public PokemonInfo getEvolution() {
-        return PokemonInfo.getPokemonInfo(evolutionNumber);
-    }
-
-    @Override
-    public Evolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
-        if (type != EvolutionMethod.MOVE) {
-            return null;
-        }
-
-        for (Move m : p.getActualMoves()) {
-            if (m.getAttack().namesies() == move) {
+    public Evolution getEvolution(ActivePokemon toEvolve, ItemNamesies useItem) {
+        for (Move move : toEvolve.getActualMoves()) {
+            if (move.getAttack().namesies() == this.move) {
                 return this;
             }
         }
 
         return null;
-    }
-
-    @Override
-    public PokemonNamesies[] getEvolutions() {
-        return new PokemonNamesies[] { PokemonInfo.getPokemonInfo(evolutionNumber).namesies() };
     }
 }

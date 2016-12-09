@@ -16,5 +16,4 @@ public abstract class Evolution implements Serializable {
 	public boolean canEvolve() {
 		return true;
 	}
-
 }

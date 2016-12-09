@@ -2,40 +2,24 @@ package pokemon.evolution;
 
 import item.ItemNamesies;
 import pokemon.ActivePokemon;
-import pokemon.PokemonInfo;
-import pokemon.PokemonNamesies;
 
-class LevelUpEvolution extends Evolution implements BaseEvolution {
+class LevelUpEvolution extends BaseEvolution {
     private static final long serialVersionUID = 1L;
 
-    private int evolutionNumber;
-    private int level;
+    private final int level;
 
     LevelUpEvolution(int num, int level) {
-        this.evolutionNumber = num;
+        super(EvolutionMethod.LEVEL, num);
+
         this.level = level;
     }
 
     @Override
-    public PokemonInfo getEvolution() {
-        return PokemonInfo.getPokemonInfo(evolutionNumber);
-    }
-
-    @Override
-    public Evolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
-        if (type != EvolutionMethod.LEVEL) {
-            return null;
-        }
-
-        if (p.getLevel() >= level) {
+    public Evolution getEvolution(ActivePokemon toEvolve, ItemNamesies useItem) {
+        if (toEvolve.getLevel() >= level) {
             return this;
         }
 
         return null;
-    }
-
-    @Override
-    public PokemonNamesies[] getEvolutions() {
-        return new PokemonNamesies[] { PokemonInfo.getPokemonInfo(evolutionNumber).namesies() };
     }
 }
