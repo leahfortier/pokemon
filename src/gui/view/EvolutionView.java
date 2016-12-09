@@ -8,7 +8,7 @@ import input.InputControl;
 import main.Game;
 import main.Global;
 import pokemon.ActivePokemon;
-import pokemon.BaseEvolution;
+import pokemon.evolution.BaseEvolution;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import util.DrawUtils;

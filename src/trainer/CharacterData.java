@@ -18,7 +18,7 @@ import message.Messages;
 import pattern.GroupTriggerMatcher;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
-import pokemon.BaseEvolution;
+import pokemon.evolution.BaseEvolution;
 import pokemon.PC;
 import trainer.pokedex.Pokedex;
 import util.JsonUtils;

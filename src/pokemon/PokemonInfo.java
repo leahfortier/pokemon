@@ -8,6 +8,7 @@ import item.hold.IncenseItem;
 import main.Global;
 import main.Type;
 import pokemon.ability.AbilityNamesies;
+import pokemon.evolution.Evolution;
 import util.FileIO;
 import util.FileName;
 import util.RandomUtils;
