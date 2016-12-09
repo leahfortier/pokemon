@@ -1,16 +1,21 @@
 package gui.panel;
 
-import gui.Button;
-import gui.ButtonHoverAction;
+import gui.button.Button;
+import gui.button.ButtonHoverAction;
 import map.Direction;
 import util.DrawUtils;
 import util.FontMetrics;
+import util.GeneralUtils;
+import util.Point;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 
 public class DrawPanel {
+
     public final int x;
     public final int y;
     public final int width;
@@ -29,6 +34,18 @@ public class DrawPanel {
 
     private boolean onlyTransparency;
     private int transparentCount;
+
+    public DrawPanel(Button button) {
+        this(button.x, button.y, button.width, button.height);
+    }
+
+    public DrawPanel(int x, int y, Dimension dimension) {
+        this(x, y, dimension.width, dimension.height);
+    }
+
+    public DrawPanel(int x, int y, Point dimension) {
+        this(x, y, dimension.x, dimension.y);
+    }
 
     public DrawPanel(int x, int y, int width, int height) {
         this.x = x;
@@ -102,27 +119,40 @@ public class DrawPanel {
     }
 
     public int getBorderSize() {
-        if (transparentBackground && backgroundColor == null) {
+        if (onlyTransparency) {
             return 0;
         }
 
         return (int)(borderPercentage/100.0*Math.min(width, height));
     }
 
-    // NOTE: This only works for panels where the width is greater than the height
     private void drawDualColoredBackground(Graphics g) {
-        int smallWidth = (width - height)/2;
-        int largeWidth = width - smallWidth;
+        g.setColor(backgroundColor);
+        g.fillRect(x, y, width, height);
+
+        // Don't need to draw a polygon that is the same color
+        if (secondBackgroundColor == backgroundColor) {
+            return;
+        }
+
+        int smallDimension = Math.min(width, height);
+        int largeDimension = Math.max(width, height);
+
+        int smallLength = smallDimension/2;
+        int largeLength = largeDimension - smallLength;
+
+        // (width, 0) -> (large, 0) -> (small, height) -> (width, height)
+        int[] rightXValues = new int[] { largeDimension, largeLength, smallLength, largeDimension };
+        int[] rightYValues = new int[] { 0, 0, smallDimension, smallDimension};
+
+        if (width < height) {
+            GeneralUtils.swapArrays(rightXValues, rightYValues);
+        }
 
         g.translate(x, y);
 
-        // (0, 0) -> (largeWidth, 0) -> (smallWidth, height) -> (0, height) -> (0, 0)
-        g.setColor(backgroundColor);
-        g.fillPolygon(new int[] { 0, largeWidth, smallWidth, 0 }, new int[] { 0, 0, height, height }, 4);
-
-        // (largeWidth, 0) -> (smallWidth, height) -> (width, height) -> (width, 0) -> (largeWidth, 0)
         g.setColor(secondBackgroundColor);
-        g.fillPolygon(new int[] { largeWidth, smallWidth, width, width }, new int[] { 0, height, height, 0 }, 4);
+        g.fillPolygon(rightXValues, rightYValues, rightXValues.length);
 
         g.translate(-x, -y);
     }
@@ -148,7 +178,7 @@ public class DrawPanel {
 
     public void drawBackground(Graphics g) {
         // If not full transparency, draw the background colors
-        if (!onlyTransparency) {
+        if (!onlyTransparency && backgroundColor != null) {
             if (secondBackgroundColor == null) {
                 g.setColor(backgroundColor);
                 g.fillRect(x, y, width, height);
@@ -175,25 +205,48 @@ public class DrawPanel {
         blackOutline(g);
     }
 
+    public Button[] getButtons(int spacing, int numRows, int numCols) {
+        return this.getButtons(spacing, numRows, numCols, 0, null);
+    }
+
+    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, int[] defaultTransitions) {
+        return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions);
+    }
+
+    public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex, int[] defaultTransitions) {
+        int buttonWidth = (this.width - (numSpaceCols + 1)*spacing)/numSpaceCols;
+        int buttonHeight = (this.height - (numSpaceRows + 1)*spacing)/numSpaceRows;
+
+        return this.getButtons(buttonWidth, buttonHeight, numSpaceRows, numSpaceCols, numButtonRows, numButtonCols, startIndex, defaultTransitions);
+    }
+
     public Button[] getButtons(int buttonWidth, int buttonHeight, int numRows, int numCols) {
+        return this.getButtons(buttonWidth, buttonHeight, numRows, numCols, numRows, numCols, 0, null);
+    }
+
+    public Button[] getButtons(
+            int buttonWidth, int buttonHeight,
+            int numSpaceRows, int numSpaceCols,
+            int numButtonRows, int numButtonCols,
+            int startValue, int[] defaultTransitions) {
         int borderSize = this.getBorderSize();
 
-        int horizontalSpacing = this.width - 2*borderSize - numCols*buttonWidth;
-        int verticalSpacing = this.height - 2*borderSize - numRows*buttonHeight;
+        int horizontalSpacing = this.width - 2*borderSize - numSpaceCols*buttonWidth;
+        int verticalSpacing = this.height - 2*borderSize - numSpaceRows*buttonHeight;
 
-        int xSpacing = horizontalSpacing/(numCols + 1);
-        int ySpacing = verticalSpacing/(numRows + 1);
+        int xSpacing = horizontalSpacing/(numSpaceCols + 1);
+        int ySpacing = verticalSpacing/(numSpaceRows + 1);
 
-        Button[] buttons = new Button[numRows*numCols];
-        for (int row = 0, index = 0; row < numRows; row++) {
-            for (int col = 0; col < numCols; col++, index++) {
+        Button[] buttons = new Button[numButtonRows*numButtonCols];
+        for (int row = 0, index = 0; row < numButtonRows; row++) {
+            for (int col = 0; col < numButtonCols; col++, index++) {
                 buttons[index] = new Button(
                         this.x + borderSize + xSpacing*(col + 1) + buttonWidth*col,
                         this.y + borderSize + ySpacing*(row + 1) + buttonHeight*row,
                         buttonWidth,
                         buttonHeight,
                         ButtonHoverAction.BOX,
-                        Button.getBasicTransitions(index, numRows, numCols)
+                        Button.getBasicTransitions(index, numButtonRows, numButtonCols, startValue, defaultTransitions)
                 );
             }
         }
@@ -201,11 +254,11 @@ public class DrawPanel {
         return buttons;
     }
 
-    private int getTextSpace(Graphics g) {
-        return this.getBorderSize() + FontMetrics.getDistanceBetweenRows(g)/2;
+    public int getTextSpace(Graphics g) {
+        return this.getBorderSize() + FontMetrics.getDistanceBetweenRows(g) - FontMetrics.getTextHeight(g);
     }
 
-    public void drawMessage(Graphics g, int fontSize, String text) {
+    public int drawMessage(Graphics g, int fontSize, String text) {
         g.setColor(Color.BLACK);
 
         FontMetrics.setFont(g, fontSize);
@@ -216,14 +269,32 @@ public class DrawPanel {
 
         int textWidth = width - 2*textSpace;
 
-        DrawUtils.drawWrappedText(g, text, startX, startY, textWidth);
+        return DrawUtils.drawWrappedText(g, text, startX, startY, textWidth);
     }
 
     public void drawLeftLabel(Graphics g, int fontSize, String label) {
         int startX = x + this.getTextSpace(g);
-        int centerY = y + height/2;
+        int centerY = centerY();
 
         FontMetrics.setFont(g, fontSize);
         DrawUtils.drawCenteredHeightString(g, label, startX, centerY);
+    }
+
+    public void imageLabel(Graphics g, BufferedImage image) {
+        DrawUtils.drawCenteredImage(g, image, x + width/2, y + height/2);
+    }
+
+    public int centerX() {
+        return x + width/2;
+    }
+
+    public int centerY() {
+        return y + height/2;
+    }
+
+    public void label(Graphics g, int fontSize, String text) {
+        g.setColor(Color.BLACK);
+        FontMetrics.setFont(g, fontSize);
+        DrawUtils.drawCenteredString(g, text, x, y, width, height);
     }
 }

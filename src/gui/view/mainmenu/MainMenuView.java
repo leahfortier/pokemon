@@ -1,23 +1,26 @@
 package gui.view.mainmenu;
 
-import gui.Button;
-import gui.ButtonHoverAction;
-import gui.TileSet;
+import gui.button.Button;
+import gui.button.ButtonHoverAction;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
 import input.InputControl;
-import main.Game;
 import sound.SoundPlayer;
 import util.DrawUtils;
+import util.FileIO;
+import util.Folder;
 import util.FontMetrics;
 import util.Save;
 import util.Save.SavePreviewInfo;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 public class MainMenuView extends View {
+	private static final BufferedImage MAIN_LOGO = FileIO.readImage(Folder.IMAGES + "MainLogo.png");
+
 	private static final int BUTTON_WIDTH = 400;
 	static final int NUM_MAIN_BUTTONS = 4;
 
@@ -122,34 +125,16 @@ public class MainMenuView extends View {
 		}
 	}
 
-	private void drawButton(Graphics g, TileSet tiles, Button button) {
-		g.translate(button.x, button.y);
-
-		button.fillTranslated(g, theme.getThemeColor());
-		
-		// Full size buttons are 0x04 and the half-size ones are 0x05
-		int tileIndex = button.width == BUTTON_WIDTH ? 0x04 : 0x05;
-		
-		g.drawImage(tiles.getTile(tileIndex), 0, 0, null);
-		
-		g.translate(-button.x, -button.y);
-		
-		// Should not be inside the translate or everything is fucked hxc
-		button.draw(g);
-	}
-
 	@Override
 	public void draw(Graphics g) {
-		TileSet tiles = Game.getData().getMainMenuTiles();
-
-		theme.draw(g, tiles, bgTime, bgIndex);
+		theme.draw(g, bgTime, bgIndex);
 		
-		g.drawImage(tiles.getTile(0x03), 95, 54, null);
-		for (Button b : state.getButtons()) {
-			drawButton(g, tiles, b);
+		g.drawImage(MAIN_LOGO, 95, 54, null);
+		for (Button button : state.getButtons()) {
+			button.fillBordered(g, theme.getButtonColor());
+			button.draw(g);
 		}
-		
-		g.setColor(Color.BLACK);
+
 		this.state.draw(g, this);
 	}
 	

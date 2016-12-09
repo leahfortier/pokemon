@@ -1,0 +1,29 @@
+BackgroundGrass.png			00000100
+BackgroundBuilding.png		00000101
+BackgroundCave.png			00000102
+BackgroundSand.png			00000103
+BackgroundWater.png			00000104
+BackgroundSnow.png			00000105
+BackgroundSnow.png			00000106
+BackgroundLayer-6.png		00000107
+BackgroundGrassNight.png	00000108
+
+PlayerCircleGrass.png		00000200
+PlayerCircleBuilding.png	00000201
+PlayerCircleCave.png		00000202
+PlayerCircleSand.png		00000203
+PlayerCircleWater.png		00000204
+PlayerCircleSnow.png		00000205
+PlayerCircleSnow.png		00000206
+PlayerCircleLayer-1.png		00000207
+PlayerCircleGrassNight.png	00000208
+
+OpponentCircleGrass.png		00000300
+OpponentCircleBuilding.png	00000301
+OpponentCircleCave.png		00000302
+OpponentCircleSand.png		00000303
+OpponentCircleWater.png		00000304
+OpponentCircleSnow.png		00000305
+OpponentCircleSnow.png		00000306
+OpponentCircleLayer-1.png	00000307
+OpponentCircleGrassNight.png	00000308

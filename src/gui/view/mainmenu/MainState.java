@@ -1,6 +1,6 @@
 package gui.view.mainmenu;
 
-import gui.Button;
+import gui.button.Button;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 
 import java.awt.Graphics;

@@ -1,4 +1,4 @@
-package gui;
+package gui.button;
 
 import gui.panel.DrawPanel;
 import input.ControlKey;
@@ -76,12 +76,38 @@ public class Button {
 
 	// Works for all grid buttons
 	public static int[] getBasicTransitions(int currentIndex, int numRows, int numCols) {
-		return new int[] {
-				basicTransition(currentIndex, numRows, numCols, Direction.RIGHT),
-				basicTransition(currentIndex, numRows, numCols, Direction.UP),
-				basicTransition(currentIndex, numRows, numCols, Direction.LEFT),
-				basicTransition(currentIndex, numRows, numCols, Direction.DOWN)
-		};
+		int[] transitions = new int[Direction.values().length];
+		for (int i = 0; i < transitions.length; i++) {
+			Direction direction = Direction.values()[i];
+			transitions[i] = basicTransition(currentIndex, numRows, numCols, direction);
+		}
+
+		return transitions;
+	}
+
+	// Works for all grid buttons
+	public static int[] getBasicTransitions(int currentIndex, int numRows, int numCols, int startValue, int[] defaultTransitions) {
+		// Get the corresponding grid index
+		Point location = Point.getPointAtIndex(currentIndex, numCols);
+
+		int[] transitions = new int[Direction.values().length];
+		for (int i = 0; i < transitions.length; i++) {
+			Direction direction = Direction.values()[i];
+			Point newLocation = Point.add(location, direction.getDeltaPoint());
+			boolean inBounds = newLocation.inBounds(numCols, numRows);
+
+			// Default value specified and out of bounds -- use default value instead of wrapping
+			if (defaultTransitions != null
+					&& i < defaultTransitions.length
+					&& defaultTransitions[i] != -1
+					&& !inBounds) {
+				transitions[i] = defaultTransitions[i];
+			} else {
+				transitions[i] = basicTransition(currentIndex, numRows, numCols, direction) + startValue;
+			}
+		}
+
+		return transitions;
 	}
 
 	public static int basicTransition(int currentIndex, int numRows, int numCols, Direction direction) {
@@ -123,12 +149,11 @@ public class Button {
 	}
 
 	private static int transition(Button[] buttons, int index, Direction direction) {
-		int next = buttons[index].transition[direction.ordinal()];
-		
-		while (next != NO_TRANSITION && !buttons[next].isActive()) {
+		int next = index;
+		do {
 			next = buttons[next].transition[direction.ordinal()];
-		}
-		
+		} while (next != NO_TRANSITION && !buttons[next].isActive());
+
 		if (next == NO_TRANSITION) {
 			return index;
 		}
@@ -224,6 +249,7 @@ public class Button {
 	public void fillBordered(Graphics g, Color color) {
 		new DrawPanel(x, y, width, height)
 				.withTransparentBackground(color)
+				.withTransparentCount(2)
 				.withBorderPercentage(15)
 				.withBlackOutline()
 				.drawBackground(g);
@@ -259,7 +285,11 @@ public class Button {
 	}
 
 	public void label(Graphics g, int fontSize, String text) {
-		g.setColor(Color.BLACK);
+		label(g, fontSize, Color.BLACK, text);
+	}
+
+	public void label(Graphics g, int fontSize, Color color, String text) {
+		g.setColor(color);
 		FontMetrics.setFont(g, fontSize);
 		DrawUtils.drawCenteredString(g, text, x, y, width, height);
 	}
@@ -274,5 +304,9 @@ public class Button {
 
 	public int centerY() {
 		return y + height/2;
+	}
+
+	public void drawArrow(Graphics g, Direction direction) {
+		DrawUtils.drawArrow(g, x, y, width, height, direction);
 	}
 }

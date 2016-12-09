@@ -14,25 +14,26 @@ public class TileSet {
 	public static final int EMPTY_IMAGE = -1;
 	public static final int INVALID_RGB = -1000;
 
-	private static final BufferedImage IMAGE_NOT_FOUND = FileIO.readImage(Folder.REC + "imageNotFound.png");
+	public static final BufferedImage TINY_POKEBALL = FileIO.readImage(Folder.IMAGES + "Pokeball.png");
+
+	private static final BufferedImage IMAGE_NOT_FOUND = FileIO.readImage(Folder.IMAGES + "imageNotFound.png");
 
 	private Map<Integer, BufferedImage> map;
 	private Map<Integer, String> indexMap;
 	private float scale;
 	private String folderPath;
 
-	public TileSet(String folderName) {
-		this(folderName, 1.0f);
+	public TileSet(String folderPath) {
+		this(folderPath, 1.0f);
 	}
 
-	public TileSet(String folderName, float scale) {
+	public TileSet(String folderPath, float scale) {
+		this.folderPath = folderPath;
 		this.scale = scale;
-		
+
 		this.map = new HashMap<>();
 		this.indexMap = new HashMap<>();
-		
-		this.folderPath = FileIO.makeFolderPath(Folder.TILES, folderName);
-		
+
 		String indexFileName = FileName.getIndexFileName(this.folderPath);
 		Scanner in = FileIO.openFile(indexFileName);
 		

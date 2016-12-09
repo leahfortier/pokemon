@@ -1,6 +1,7 @@
 package gui.view.map;
 
 import gui.GameData;
+import gui.panel.BasicPanels;
 import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
@@ -13,13 +14,10 @@ import message.MessageUpdate.Update;
 import message.Messages;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import sound.SoundPlayer;
-import util.DrawUtils;
 import util.FontMetrics;
 import util.StringUtils;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 class MessageState implements VisualStateHandler {
     private int dialogueSelection;
@@ -29,13 +27,7 @@ class MessageState implements VisualStateHandler {
         GameData data = Game.getData();
         MessageUpdate currentMessage = mapView.getCurrentMessage();
 
-        BufferedImage bg = data.getBattleTiles().getTile(3);
-        g.drawImage(bg, 0, 439, null);
-
-        FontMetrics.setFont(g, 30);
-        g.setColor(Color.BLACK);
-
-        int height = DrawUtils.drawWrappedText(g, currentMessage.getMessage(), 30, 490, 720);
+        int height = BasicPanels.drawFullMessagePanel(g, currentMessage.getMessage());
         if (currentMessage.isChoice()) {
             ChoiceMatcher[] choices = currentMessage.getChoices();
             for (int i = 0; i < choices.length; i++) {

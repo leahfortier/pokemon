@@ -14,16 +14,13 @@ public class GameData {
 	private Map<String, Trigger> triggers;
 
 	private TileSet mapTiles;
-	private TileSet battleTiles;
+	private TileSet terrainTiles;
 	private TileSet pokemonTilesLarge;
 	private TileSet pokemonTilesMedium;
 	private TileSet pokemonTilesSmall;
 	private TileSet itemTiles;
 	private TileSet trainerTiles;
-	private TileSet pauseMenuTiles;
 	private TileSet partyTiles;
-	private TileSet mainMenuTiles;
-	private TileSet bagTiles;
 
 	public void loadData() {
 		loadTiles();
@@ -31,17 +28,14 @@ public class GameData {
 	}
 
 	private void loadTiles() {
-		mapTiles = new TileSet("mapTiles");
-		battleTiles = new TileSet("battleViewTiles");
-		pokemonTilesLarge = new TileSet("pokemonTiles", 2.9f);
-		pokemonTilesMedium = new TileSet("pokemonTiles", 2.3f);
-		pokemonTilesSmall = new TileSet("pokemonTiles");
-		pauseMenuTiles = new TileSet("pauseViewTiles");
-		itemTiles = new TileSet("itemTiles");
-		trainerTiles = new TileSet("trainerTiles");
-		partyTiles = new TileSet("partyTiles");
-		mainMenuTiles = new TileSet("mainMenuTiles");
-		bagTiles = new TileSet("bagTiles");
+		mapTiles = new TileSet(Folder.MAP_TILES);
+		terrainTiles = new TileSet(Folder.TERRAIN_TILES);
+		pokemonTilesLarge = new TileSet(Folder.POKEMON_TILES, 2.9f);
+		pokemonTilesMedium = new TileSet(Folder.POKEMON_TILES, 2.3f);
+		pokemonTilesSmall = new TileSet(Folder.POKEMON_TILES);
+		itemTiles = new TileSet(Folder.ITEM_TILES);
+		trainerTiles = new TileSet(Folder.TRAINER_TILES);
+		partyTiles = new TileSet(Folder.PARTY_TILES);
 	}
 
 	private void loadMaps() {
@@ -91,8 +85,8 @@ public class GameData {
 		return mapTiles;
 	}
 
-	public TileSet getBattleTiles() {
-		return battleTiles;
+	public TileSet getTerrainTiles() {
+		return terrainTiles;
 	}
 
 	public TileSet getItemTiles() {
@@ -115,19 +109,7 @@ public class GameData {
 		return trainerTiles;
 	}
 
-	public TileSet getMenuTiles() {
-		return pauseMenuTiles;
-	}
-
 	public TileSet getPartyTiles() {
 		return partyTiles;
-	}
-
-	public TileSet getMainMenuTiles() {
-		return mainMenuTiles;
-	}
-
-	public TileSet getBagTiles() {
-		return bagTiles;
 	}
 }

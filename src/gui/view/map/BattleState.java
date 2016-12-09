@@ -11,12 +11,17 @@ import pokemon.ActivePokemon;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import util.DrawUtils;
+import util.FileIO;
+import util.Folder;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 class BattleState implements VisualStateHandler {
+    private static final BufferedImage UPPER_POKEBALL_IMAGE = FileIO.readImage(Folder.IMAGES + "PokeBallBattleIntroTop.png");
+    private static final BufferedImage LOWER_POKEBALL_IMAGE = FileIO.readImage(Folder.IMAGES + "PokeBallBattleIntroBottom.png");
+
     private static final int BATTLE_INTRO_ANIMATION_LIFESPAN = 1000;
 
     private Battle battle;
@@ -125,7 +130,7 @@ class BattleState implements VisualStateHandler {
         GameData data = Game.getData();
 
         if (battle.isWildBattle()) {
-            battleImageSlideLeft = data.getBattleTiles().getTile(mapView.getTerrain().getOpponentCircleIndex());
+            battleImageSlideLeft = mapView.getTerrain().getOpponentCircleImage();
 
             ActivePokemon p = battle.getOpponent().front();
             battleImageSlideRight = data.getPokemonTilesLarge().getTile(p.getImageIndex());
@@ -135,8 +140,8 @@ class BattleState implements VisualStateHandler {
             }
         }
         else {
-            battleImageSlideRight = data.getBattleTiles().getTile(0x00100001);
-            battleImageSlideLeft = data.getBattleTiles().getTile(0x00100000);
+            battleImageSlideRight = LOWER_POKEBALL_IMAGE;
+            battleImageSlideLeft = UPPER_POKEBALL_IMAGE;
         }
     }
 }

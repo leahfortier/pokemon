@@ -4,10 +4,12 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.status.StatusCondition;
+import main.Game;
 import main.Global;
 import main.Type;
 import pokemon.Stat;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +30,6 @@ public enum TerrainType {
     private final StatusCondition status;
     private final int[] statChanges;
     private final List<EffectNamesies> effects;
-
-    private int backgroundIndex;
-    private int playerCircleIndex;
-    private int opponentCircleIndex;
 
     TerrainType(Type type, AttackNamesies attack, Object effect) {
         this.type = type;
@@ -56,23 +54,6 @@ public enum TerrainType {
                 Global.error("Invalid effect for terrain type " + this.name());
             }
         }
-
-        this.backgroundIndex = 0x100 + this.ordinal();
-        this.playerCircleIndex = 0x200 + this.ordinal();
-        this.opponentCircleIndex = 0x300 + this.ordinal();
-    }
-
-    static {
-        // TODO: Need Terrain images for misty and electric terrain -- use snow and sand for now (for no particular reason)
-        // TODO: Once that's finished need to include final tags on all these variables
-        MISTY.backgroundIndex = SNOW.backgroundIndex;
-        ELECTRIC.backgroundIndex = SAND.backgroundIndex;
-
-        MISTY.playerCircleIndex = SNOW.playerCircleIndex;
-        ELECTRIC.playerCircleIndex = SAND.playerCircleIndex;
-
-        MISTY.opponentCircleIndex = SNOW.opponentCircleIndex;
-        ELECTRIC.opponentCircleIndex = SAND.opponentCircleIndex;
     }
 
     public Type getType() {
@@ -95,15 +76,19 @@ public enum TerrainType {
         return effects;
     }
 
-    public int getBackgroundIndex() {
-        return backgroundIndex;
+    private BufferedImage getImage(int baseIndex) {
+        return Game.getData().getTerrainTiles().getTile(baseIndex + this.ordinal());
     }
 
-    public int getPlayerCircleIndex() {
-        return playerCircleIndex;
+    public BufferedImage getBackgroundImage() {
+        return this.getImage(0x100);
     }
 
-    public int getOpponentCircleIndex() {
-        return opponentCircleIndex;
+    public BufferedImage getPlayerCircleImage() {
+        return this.getImage(0x200);
+    }
+
+    public BufferedImage getOpponentCircleImage() {
+        return this.getImage(0x300);
     }
 }

@@ -1,13 +1,16 @@
 package gui.view;
 
-import gui.Button;
-import gui.ButtonHoverAction;
+import gui.button.Button;
+import gui.button.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
+import gui.panel.BasicPanels;
+import gui.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Type;
+import map.Direction;
 import pokemon.PC;
 import pokemon.PokemonInfo;
 import trainer.pokedex.Pokedex;
@@ -29,6 +32,15 @@ class PokedexView extends View {
 	private static final int RIGHT_ARROW = NUM_BUTTONS - 2;
 	private static final int LEFT_ARROW = NUM_BUTTONS - 3;
 
+	private final DrawPanel pokedexPanel;
+	private final DrawPanel titlePanel;
+	private final DrawPanel countPanel;
+	private final DrawPanel infoPanel;
+	private final DrawPanel imagePanel;
+	private final DrawPanel basicInfoPanel;
+	private final DrawPanel descriptionPanel;
+	private final DrawPanel locationPanel;
+
 	private final Pokedex pokedex;
 
 	private PokemonInfo selected;
@@ -39,21 +51,72 @@ class PokedexView extends View {
 	private int numCaught;
 	
 	private Button[] buttons;
-	private Button[][] boxButtons;
+	private Button[][] pokemonButtons;
 	private Button leftButton;
 	private Button rightButton;
 	private Button returnButton;
 	
 	PokedexView() {
+		pokedexPanel = new DrawPanel(40, 40, 350, 418)
+				.withBackgroundColor(Color.BLUE)
+				.withTransparentCount(2)
+				.withBorderPercentage(0)
+				.withBlackOutline();
+
+		titlePanel = new DrawPanel(pokedexPanel.x, pokedexPanel.y, pokedexPanel.width, 37)
+				.withBackgroundColor(null)
+				.withBlackOutline();
+
+		countPanel = new DrawPanel(pokedexPanel.x, 478, pokedexPanel.width, 82)
+				.withBackgroundColor(Color.RED)
+				.withTransparentCount(2)
+				.withBorderPercentage(0)
+				.withBlackOutline();
+
+		infoPanel = new DrawPanel(410, pokedexPanel.y, pokedexPanel.width, 462)
+				.withTransparentBackground()
+				.withBorderPercentage(0)
+				.withBlackOutline();
+
+		basicInfoPanel = new DrawPanel(infoPanel.x, infoPanel.y, infoPanel.width, 190)
+				.withFullTransparency()
+				.withBlackOutline();
+
+		int locationPanelHeight = 148;
+		locationPanel = new DrawPanel(
+				infoPanel.x,
+				infoPanel.y + infoPanel.height - locationPanelHeight - DrawUtils.OUTLINE_SIZE,
+				infoPanel.width,
+				locationPanelHeight + DrawUtils.OUTLINE_SIZE)
+				.withFullTransparency()
+				.withBlackOutline();
+
+		descriptionPanel = new DrawPanel(
+				infoPanel.x,
+				basicInfoPanel.y + basicInfoPanel.height - DrawUtils.OUTLINE_SIZE,
+				infoPanel.width,
+				infoPanel.height - basicInfoPanel.height - locationPanel.height + 2
+						*DrawUtils.OUTLINE_SIZE)
+				.withFullTransparency()
+				.withBlackOutline();
+
+		imagePanel = new DrawPanel(
+				infoPanel.x + 18,
+				infoPanel.y + 18,
+				104,
+				104)
+				.withFullTransparency()
+				.withBlackOutline();
+
 		this.pokedex = Game.getPlayer().getPokedex();
 		selectedButton = 0;
 		pageNum = 0;
 		
 		buttons = new Button[NUM_BUTTONS];
-		boxButtons = new Button[PC.BOX_HEIGHT][PC.BOX_WIDTH];
+		pokemonButtons = new Button[PC.BOX_HEIGHT][PC.BOX_WIDTH];
 		for (int i = 0, k = 0; i < PC.BOX_HEIGHT; i++) {
 			for (int j = 0; j < PC.BOX_WIDTH; j++, k++) {
-				buttons[k] = boxButtons[i][j] = new Button(
+				buttons[k] = pokemonButtons[i][j] = new Button(
 						60 + 54*j,
 						96 + 54*i,
 						40,
@@ -82,7 +145,7 @@ class PokedexView extends View {
 
 		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
 			for (int j = 0; j < PC.BOX_WIDTH; j++) {
-				if (boxButtons[i][j].checkConsumePress()) {
+				if (pokemonButtons[i][j].checkConsumePress()) {
 					selected = PokemonInfo.getPokemonInfo(getIndex(j, i) + 1);
 				}
 			}
@@ -119,64 +182,55 @@ class PokedexView extends View {
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
 
-		TileSet tiles = data.getMenuTiles();
-		TileSet typeTiles = data.getBattleTiles();
 		TileSet partyTiles = data.getPartyTiles();
 		TileSet pokemonTiles = data.getPokemonTilesSmall();
-		
-		// Box
-		g.drawImage(tiles.getTile(0x2), 0, 0, null);
-		g.setColor(Color.BLUE);
-		g.fillRect(40, 40, 350, 418);
-		g.drawImage(tiles.getTile(0x31), 40, 40, null);
-		
-		g.setColor(Color.BLACK);
-		FontMetrics.setFont(g, 20);
-		DrawUtils.drawCenteredWidthString(g, PokeString.POKEDEX, 214, 65);
+
+		BasicPanels.drawCanvasPanel(g);
+
+		pokedexPanel.drawBackground(g);
+		titlePanel.drawBackground(g);
+		titlePanel.label(g, 20, PokeString.POKEDEX);
 		
 		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
 			for (int j = 0; j < PC.BOX_WIDTH; j++) {
 				int number = getIndex(i, j) + 1;
 				PokemonInfo p = PokemonInfo.getPokemonInfo(number);
-				
-				g.translate(boxButtons[j][i].x, boxButtons[j][i].y);
+				Button pokemonButton = pokemonButtons[j][i];
 
 				if (pokedex.isNotSeen(p.namesies())) {
-					g.setColor(new Color(0, 0, 0, 64));
-					DrawUtils.drawCenteredWidthString(g, String.format("%03d", number), 18, 27);
+					pokemonButton.label(g, 20, new Color(0, 0, 0, 64), String.format("%03d", number));
 				}
 				else {
 					if (p == selected) {
-						g.drawImage(tiles.getTile(0x32), 0, 0, null);
+						pokemonButton.blackOutline(g);
 					}
-					
-					BufferedImage pkmImg = partyTiles.getTile(number);
-					DrawUtils.drawCenteredImage(g, pkmImg, 20, 20);
-					
+
+					pokemonButton.imageLabel(g, partyTiles.getTile(number));
+
 					if (pokedex.isCaught(p.namesies())) {
-						g.drawImage(typeTiles.getTile(0x4), 28, 28, null);
+						BufferedImage pokeball = TileSet.TINY_POKEBALL;
+						g.drawImage(
+								pokeball,
+								pokemonButton.x + pokemonButton.width - 3*pokeball.getWidth()/2,
+								pokemonButton.y + pokemonButton.height - 3*pokeball.getHeight()/2,
+								null
+						);
 					}
 				}
-				
-				g.translate(-boxButtons[j][i].x, -boxButtons[j][i].y);
 			}
 		}
 		
 		// Draw page numbers and arrows
 		g.setColor(Color.BLACK);
 		FontMetrics.setFont(g, 16);
-		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, 215, 433);
-		View.drawArrows(g, leftButton, rightButton);
+		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, pokedexPanel.centerX(), 433);
+
+		leftButton.drawArrow(g, Direction.LEFT);
+		rightButton.drawArrow(g, Direction.RIGHT);
 		
 		// Seen/Caught
-		g.setColor(Color.RED);
-		g.fillRect(40, 478, 350, 82);
-		g.drawImage(tiles.getTile(0x33), 40, 478, null);
-		
-		g.setColor(Color.BLACK);
-		FontMetrics.setFont(g, 20);
-		g.drawString("Seen: " + numSeen, 70, 524);
-		g.drawString("Caught: " + numCaught, 70 + 54*3, 524);
+		countPanel.drawBackground(g);
+		countPanel.label(g, 20, "Seen: " + numSeen + "     Caught: " + numCaught);
 		
 		// Description
 		Type[] type = selected.getType();
@@ -189,22 +243,22 @@ class PokedexView extends View {
 			typeColors = new Color[] { Color.BLACK, Color.BLACK };	
 		}
 
-		// TODO: make these polygons constants
-		g.setColor(typeColors[0]);
-		g.fillPolygon(new int[] { 410, 759, 759, 410 }, new int[] { 40, 40, 96, 445 }, 4);
-		g.setColor(typeColors[1]);
-		g.fillPolygon(new int[] { 410, 759, 759, 410 }, new int[] { 445, 96, 501, 501 }, 4);
-		
-		g.drawImage(tiles.getTile(0x34), 410, 40, null);
+		infoPanel.withBackgroundColors(typeColors)
+				.drawBackground(g);
+
+		basicInfoPanel.drawBackground(g);
+		descriptionPanel.drawBackground(g);
+		locationPanel.drawBackground(g);
+
+		imagePanel.drawBackground(g);
 		if (notSeen) {
-			g.setColor(Color.BLACK);
-			FontMetrics.setFont(g, 80);
-			g.drawString("?", 455, 137);
+			imagePanel.label(g, 80, "?");
 		}
 		else {
 			BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageNumber());
 			pkmImg.setRGB(0, 0, 0);
-			DrawUtils.drawCenteredImage(g, pkmImg, 479, 109);
+
+			imagePanel.imageLabel(g, pkmImg);
 		}
 		
 		g.setColor(Color.BLACK);
@@ -215,10 +269,10 @@ class PokedexView extends View {
 		if (!notSeen) {
 			FontMetrics.setFont(g, 16);
 			g.drawString("Type:", 541, 110);
-			
-			g.drawImage(typeTiles.getTile(type[0].getImageIndex()), 596, 98, null);
+
+			g.drawImage(type[0].getImage(), 596, 98, null);
 			if (type[1] != Type.NO_TYPE) {
-				g.drawImage(typeTiles.getTile(type[1].getImageIndex()), 596 + 707 - 669, 98, null);
+				g.drawImage(type[1].getImage(), 596 + 707 - 669, 98, null);
 			}
 			
 			g.drawString((!caught ? "???" : selected.getClassification()) + " " + PokeString.POKEMON, 427, 179);
@@ -226,31 +280,25 @@ class PokedexView extends View {
 			g.drawString("Weight: " + (!caught ? "???.?" : selected.getWeight()) + " lbs", 427, 217);
 			
 			if (caught) {
-				DrawUtils.drawWrappedText(g, selected.getFlavorText(), 427, 247, 350 - 17);
+				descriptionPanel.drawMessage(g, 16, selected.getFlavorText());
 			}
-			
-			g.drawString("Locations:", 427, 340);
+
+			int locationX = locationPanel.x + locationPanel.getTextSpace(g);
+			g.drawString("Locations:", locationX, locationPanel.y + FontMetrics.getDistanceBetweenRows(g));
 			List<String> locations = pokedex.getLocations(selected.namesies());
 			for (int i = 0; i < locations.size(); i++) {
-				g.drawString(locations.get(i), 457, 360 + i*18 + i/2);
+				g.drawString(locations.get(i), locationX, locationPanel.y + (i + 2)*FontMetrics.getDistanceBetweenRows(g));
 			}	
 		}
 		
-		// Buttons
-		FontMetrics.setFont(g, 20);
+		// Return button
+		returnButton.fillTransparent(g, Color.YELLOW);
+		returnButton.fillTransparent(g);
+		returnButton.blackOutline(g);
+		returnButton.label(g, 20, "Return");
 		
-		if (!notSeen) {
-			BufferedImage pkmImg = partyTiles.getTile(selected.getNumber());
-			for (int i = 0; i < 3; i++) {
-				DrawUtils.drawCenteredImage(g, pkmImg, 464 + 120*i, 478);
-			}
-		}
-		
-		g.drawImage(tiles.getTile(0x36), 410, 522, null);
-		DrawUtils.drawCenteredWidthString(g, "Return", 584, 546);
-		
-		for (Button b : buttons) {
-			b.draw(g);
+		for (Button button : buttons) {
+			button.draw(g);
 		}
 	}
 	

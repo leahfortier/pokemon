@@ -24,10 +24,17 @@ public final class GeneralUtils {
         return -1;
     }
 
-    public static <T> void swap(T[] arr) {
-        T temp = arr[0];
-        arr[0] = arr[1];
-        arr[1] = temp;
+    public static void shiftArray(int[] array, int shift) {
+        int[] temp = array.clone();
+        for (int i = 0; i < array.length; i++) {
+            array[i] = temp[(i + shift)%array.length];
+        }
+    }
+
+    public static void swapArrays(int[] first, int[] second) {
+        int[] temp = first.clone();
+        System.arraycopy(second, 0, first, 0, first.length);
+        System.arraycopy(temp, 0, second, 0, first.length);
     }
 
     public static boolean hasOnlyOneNonEmpty(Object... objects) {

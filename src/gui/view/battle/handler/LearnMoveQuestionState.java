@@ -1,7 +1,7 @@
 package gui.view.battle.handler;
 
 import battle.attack.Move;
-import gui.Button;
+import gui.button.Button;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import message.MessageUpdate;

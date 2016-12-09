@@ -1,6 +1,7 @@
 package util;
 
 import main.Global;
+import main.Type;
 import map.Direction;
 
 import java.awt.Color;
@@ -27,6 +28,68 @@ public class DrawUtils {
 		}
 		else {
 			return new Color(35, 238, 91);
+		}
+	}
+
+	public static void drawCenteredArrow(Graphics g, int centerX, int centerY, int width, int height, Direction direction) {
+		drawArrow(g, centerX - width/2, centerY - height/2, width, height, direction);
+	}
+
+	public static void drawArrow(Graphics g, int x, int y, int width, int height, Direction direction) {
+		int yMax = height;
+		int xMax = width;
+
+		boolean yAxis = direction.getDeltaPoint().x == 0;
+		if (yAxis) {
+			yMax = width;
+			xMax = height;
+		}
+
+		int arrowLineTop = yMax/4;
+		int arrowLineBottom = yMax - arrowLineTop;
+
+		int arrowMidpoint = xMax/2;
+
+		g.translate(x, y);
+
+		int[] xValues = new int[] { 0, arrowMidpoint, arrowMidpoint, xMax, xMax, arrowMidpoint, arrowMidpoint };
+		int[] yValues = new int[] { yMax/2, 0, arrowLineTop, arrowLineTop, arrowLineBottom, arrowLineBottom, yMax};
+
+		if (yAxis) {
+			GeneralUtils.swapArrays(xValues, yValues);
+		}
+
+		if (direction == Direction.RIGHT) {
+			for (int i = 0; i < xValues.length; i++) {
+				xValues[i] = xMax - xValues[i];
+			}
+		} else if (direction == Direction.DOWN) {
+			for (int i = 0; i < yValues.length; i++) {
+				yValues[i] = yMax - yValues[i];
+			}
+		}
+
+		g.setColor(Color.BLACK);
+		g.fillPolygon(xValues, yValues, xValues.length);
+
+		g.translate(-x, -y);
+	}
+
+	public static void drawTypeTiles(Graphics g, Type[] type, int rightX, int textY) {
+		BufferedImage firstType = type[0].getImage();
+
+		int drawX = rightX - firstType.getWidth();
+		int drawY = textY - firstType.getHeight();
+
+		if (type[1] == Type.NO_TYPE) {
+			g.drawImage(firstType, drawX, drawY, null);
+		}
+		else {
+			BufferedImage secondType = type[1].getImage();
+			int leftDrawX = drawX - firstType.getWidth() - 8;
+
+			g.drawImage(firstType, leftDrawX, drawY, null);
+			g.drawImage(secondType, drawX, drawY, null);
 		}
 	}
 
@@ -194,8 +257,14 @@ public class DrawUtils {
 		drawBorder(g, Color.BLACK, x, y, width, height, OUTLINE_SIZE, directions);
 	}
 
+	// Doesn't draw over corners so works for transparent backgrounds
 	public static void drawBorder(Graphics g, Color color, int x, int y, int width, int height, int borderSize) {
-		drawBorder(g, color, x, y, width, height, borderSize, Direction.values());
+		g.setColor(color);
+
+		g.fillRect(x, y, width - borderSize, borderSize);
+		g.fillRect(x, y + borderSize, borderSize, height - borderSize);
+		g.fillRect(x + borderSize, y + height - borderSize, width - borderSize, borderSize);
+		g.fillRect(x + width - borderSize, y, borderSize, height - borderSize);
 	}
 
 	public static void drawBorder(Graphics g, Color color, int x, int y, int width, int height, int borderSize, Direction[] directions) {

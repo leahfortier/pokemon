@@ -362,7 +362,7 @@ class PokemonAnimationState {
         if (!isPlayer && state.caught) {
             DrawUtils.drawCenteredImage(
                     g,
-                    Game.getData().getBattleTiles().getTile(0x4),
+                    TileSet.TINY_POKEBALL,
                     hpBar.x + hpBar.width + (STATUS_BOX_SPACING - statusBox.getBorderSize())/2,
                     hpBar.y + hpBar.height/2
             );
