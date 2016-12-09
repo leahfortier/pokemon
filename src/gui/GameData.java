@@ -3,7 +3,6 @@ package gui;
 import main.Global;
 import map.MapData;
 import map.triggers.Trigger;
-import util.FileIO;
 import util.Folder;
 
 import java.io.File;
@@ -22,7 +21,6 @@ public class GameData {
 	private TileSet itemTiles;
 	private TileSet trainerTiles;
 	private TileSet partyTiles;
-	private TileSet mainMenuTiles;
 
 	public void loadData() {
 		loadTiles();
@@ -38,7 +36,6 @@ public class GameData {
 		itemTiles = new TileSet(Folder.ITEM_TILES);
 		trainerTiles = new TileSet(Folder.TRAINER_TILES);
 		partyTiles = new TileSet(Folder.PARTY_TILES);
-		mainMenuTiles = new TileSet(FileIO.makeFolderPath(Folder.TILES, "mainMenuTiles"));
 	}
 
 	private void loadMaps() {
@@ -114,9 +111,5 @@ public class GameData {
 
 	public TileSet getPartyTiles() {
 		return partyTiles;
-	}
-
-	public TileSet getMainMenuTiles() {
-		return mainMenuTiles;
 	}
 }

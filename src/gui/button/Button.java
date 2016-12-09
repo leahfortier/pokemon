@@ -249,6 +249,7 @@ public class Button {
 	public void fillBordered(Graphics g, Color color) {
 		new DrawPanel(x, y, width, height)
 				.withTransparentBackground(color)
+				.withTransparentCount(2)
 				.withBorderPercentage(15)
 				.withBlackOutline()
 				.drawBackground(g);

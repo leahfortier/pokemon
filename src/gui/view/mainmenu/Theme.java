@@ -1,49 +1,62 @@
 package gui.view.mainmenu;
 
-import gui.TileSet;
-import util.DrawUtils;
+import gui.panel.DrawPanel;
+import main.Global;
+import util.FileIO;
+import util.Folder;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 public enum Theme {
-    BASIC(new Color(255, 210, 86), (g, tiles, bgTime, bgIndex) -> drawBasicTheme(g, tiles)),
+    BASIC(new Color(255, 210, 86), (g, bgTime, bgIndex) -> drawBasicTheme(g)),
     SCENIC(new Color(68, 123, 184), Theme::drawScenicTheme);
+
+    private static final BufferedImage DFS_TOWN_BG = FileIO.readImage(Folder.IMAGES + "DFSTownSampleBackground.png");
 
     private static final int[] bgx = new int[] { -300, -400, -800, -800, -200 };
     private static final int[] bgy = new int[] { -300, -130, -130, -500, -500 };
 
-    private final Color themeColor;
+    private final Color buttonColor;
     private final ThemeDrawer draw;
 
-    Theme(Color themeColor, ThemeDrawer draw) {
-        this.themeColor = themeColor;
+    Theme(Color buttonColor, ThemeDrawer draw) {
+        this.buttonColor = buttonColor;
         this.draw = draw;
     }
 
     private interface ThemeDrawer {
-        void draw(Graphics g, TileSet tiles, int bgTime, int bgIndex);
+        void draw(Graphics g, int bgTime, int bgIndex);
     }
 
-    public Color getThemeColor() {
-        return this.themeColor;
+    public Color getButtonColor() {
+        return this.buttonColor;
     }
 
-    public void draw(Graphics g, TileSet tiles, int bgTime, int bgIndex) {
-        this.draw.draw(g, tiles, bgTime, bgIndex);
+    public void draw(Graphics g, int bgTime, int bgIndex) {
+        this.draw.draw(g, bgTime, bgIndex);
     }
 
-    private static void drawBasicTheme(Graphics g, TileSet tiles) {
-        DrawUtils.fillCanvas(g, new Color(68, 123, 184));
-        g.drawImage(tiles.getTile(0x01), 0, 0, null);
+    private static void drawBasicTheme(Graphics g) {
+        new DrawPanel(0, 0, Global.GAME_SIZE)
+                .withTransparentBackground(new Color(68, 123, 184))
+                .withTransparentCount(2)
+                .withBorderPercentage(3)
+                .drawBackground(g);
     }
 
-    private static void drawScenicTheme(Graphics g, TileSet tiles, int bgTime, int bgIndex) {
-        float locRatio = 1.0f - (float) bgTime / (float) MainMenuView.bgt[(bgIndex + 1) % MainMenuView.bgt.length];
-        int xLoc = (int) (Theme.bgx[bgIndex]*locRatio + (1.0f - locRatio)*Theme.bgx[(bgIndex + 1)%MainMenuView.bgt.length]);
-        int yLoc = (int) (Theme.bgy[bgIndex]*locRatio + (1.0f - locRatio)*Theme.bgy[(bgIndex + 1)%MainMenuView.bgt.length]);
+    private static void drawScenicTheme(Graphics g, int bgTime, int bgIndex) {
+        float locRatio = 1.0f - (float) bgTime / (float) MainMenuView.bgt[(bgIndex + 1)%MainMenuView.bgt.length];
+        int xLoc = (int) (bgx[bgIndex]*locRatio + (1.0f - locRatio)*bgx[(bgIndex + 1)%MainMenuView.bgt.length]);
+        int yLoc = (int) (bgy[bgIndex]*locRatio + (1.0f - locRatio)*bgy[(bgIndex + 1)%MainMenuView.bgt.length]);
 
-        g.drawImage(tiles.getTile(0x06), xLoc, yLoc, null);
-        g.drawImage(tiles.getTile(0x02), 0, 0, null);
+        g.drawImage(DFS_TOWN_BG, xLoc, yLoc, null);
+
+        new DrawPanel(0, 0, Global.GAME_SIZE)
+                .withBackgroundColor(null)
+                .withBorderColor(new Color(255, 255, 255, 200))
+                .withBorderPercentage(3)
+                .drawBackground(g);
     }
 }

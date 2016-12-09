@@ -257,8 +257,14 @@ public class DrawUtils {
 		drawBorder(g, Color.BLACK, x, y, width, height, OUTLINE_SIZE, directions);
 	}
 
+	// Doesn't draw over corners so works for transparent backgrounds
 	public static void drawBorder(Graphics g, Color color, int x, int y, int width, int height, int borderSize) {
-		drawBorder(g, color, x, y, width, height, borderSize, Direction.values());
+		g.setColor(color);
+
+		g.fillRect(x, y, width - borderSize, borderSize);
+		g.fillRect(x, y + borderSize, borderSize, height - borderSize);
+		g.fillRect(x + borderSize, y + height - borderSize, width - borderSize, borderSize);
+		g.fillRect(x + width - borderSize, y, borderSize, height - borderSize);
 	}
 
 	public static void drawBorder(Graphics g, Color color, int x, int y, int width, int height, int borderSize, Direction[] directions) {
