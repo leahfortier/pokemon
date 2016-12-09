@@ -615,7 +615,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// TODO: Try to generalize with self-switching moves
-			Team t = b.getTrainer(victim.user());
+			Team t = b.getTrainer(victim.isPlayer());
 			if (t instanceof WildPokemon) {
 				return;
 			}
@@ -1459,7 +1459,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// TODO: Generalize this code with that of moves like U-Turn
-			Team t = b.getTrainer(user.user());
+			Team t = b.getTrainer(user.isPlayer());
 			if (t instanceof WildPokemon) {
 				return;
 			}
@@ -5110,7 +5110,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return use((Trainer)b.getTrainer(p.user()));
+			return use((Trainer)b.getTrainer(p.isPlayer()));
 		}
 
 		public int flingDamage() {

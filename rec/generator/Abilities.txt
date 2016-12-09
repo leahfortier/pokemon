@@ -106,7 +106,7 @@ Intimidate:
 	Desc: Lowers the foe's Attack stat.
 	Int: EntryEffect
 	Enter: 
-	ActivePokemon other = b.getOtherPokemon(enterer.user());
+	ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 	other.getAttributes().modifyStage(enterer, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
 	###
 *
@@ -192,7 +192,7 @@ Frisk:
 	Desc: The Pok\u00e9mon can check the foe's held item.
 	Int: EntryEffect
 	Enter: 
-	ActivePokemon other = b.getOtherPokemon(enterer.user());
+	ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 	if (other.isHoldingItem(b)) Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!"));
 	###
 *
@@ -406,7 +406,7 @@ Forewarn:
 	Desc: Determines what moves the foe has.
 	Int: EntryEffect
 	Enter: 
-	ActivePokemon other = b.getOtherPokemon(enterer.user());
+	ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 	List<Move> otherMoves = other.getMoves(b);
 	
 	List<AttackNamesies> besties = new ArrayList<>();
@@ -557,7 +557,7 @@ Trace:
 	Desc: The Pok\u00e9mon copies the foe's ability.
 	Int: EntryEffect, ChangeAbilityMove
 	Enter: 
-	ActivePokemon other = b.getOtherPokemon(enterer.user());
+	ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 	if (other.hasAbility(AbilityNamesies.MULTITYPE) || other.hasAbility(AbilityNamesies.ILLUSION) || other.hasAbility(AbilityNamesies.STANCE_CHANGE) || other.hasAbility(AbilityNamesies.IMPOSTER) || other.hasAbility(this.namesies)) {
 		return;
 	}
@@ -565,11 +565,11 @@ Trace:
 	EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, true);
 	###
 	AbilityChange: 
-	Ability otherAbility = b.getOtherPokemon(victim.user()).getAbility();
+	Ability otherAbility = b.getOtherPokemon(victim.isPlayer()).getAbility();
 	return otherAbility.namesies().getNewAbility();
 	###
 	AbilityMessage: 
-	ActivePokemon other = b.getOtherPokemon(victim.user());
+	ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 	return victim.getName() + " traced " + other.getName() + "'s " + other.getAbility().getName() + "!";
 	###
 *
@@ -577,7 +577,7 @@ Download:
 	Desc: Adjusts power according to a foe's defenses.
 	Int: EntryEffect
 	Enter: 
-	ActivePokemon other = b.getOtherPokemon(enterer.user());
+	ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 	PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getPokemonInfo().namesies());
 	
 	int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
@@ -795,7 +795,7 @@ Anticipation:
 	Desc: Senses a foe's dangerous moves.
 	Int: EntryEffect
 	Enter: 
-	ActivePokemon other = b.getOtherPokemon(enterer.user());
+	ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 	for (Move m : other.getMoves(b)) {
 		Attack attack = m.getAttack();
 		if (Type.getBasicAdvantage(attack.getActualType(), enterer, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
@@ -952,7 +952,7 @@ Bad Dreams:
 	Desc: Reduces a sleeping foe's HP.
 	Int: EndTurnEffect
 	ApplyEndTurn: 
-	ActivePokemon other = b.getOtherPokemon(victim.user());
+	ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 	if (other.hasStatus(StatusCondition.ASLEEP)) {
 		Messages.add(new MessageUpdate(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
 		other.reduceHealthFraction(b, 1/8.0);
@@ -1049,7 +1049,7 @@ Illusion:
 		activated = false;
 		Messages.add(new MessageUpdate(victim.getName() + "'s Illusion was broken!"));
 		
-		Messages.add(new MessageUpdate().withNewPokemon(victim.getPokemonInfo(), victim.isShiny(), true, victim.user()));
+		Messages.add(new MessageUpdate().withNewPokemon(victim.getPokemonInfo(), victim.isShiny(), true, victim.isPlayer()));
 		Messages.add(new MessageUpdate().updatePokemon(b, victim));
 	}
 	###
@@ -1067,14 +1067,14 @@ Illusion:
 	}
 	
 	// Display the Illusion changes
-	Messages.add(new MessageUpdate().withNewPokemon(illusionSpecies, illusionShiny, false, enterer.user()));
+	Messages.add(new MessageUpdate().withNewPokemon(illusionSpecies, illusionShiny, false, enterer.isPlayer()));
 	Messages.add(new MessageUpdate().updatePokemon(b, enterer));
 	###
 	GetNameChange:
 	return activated ? illusionName : null;
 	###
 	SetNameChange:
-	List<ActivePokemon> team = b.getTrainer(victim.user()).getTeam();
+	List<ActivePokemon> team = b.getTrainer(victim.isPlayer()).getTeam();
 	ActivePokemon illusion = null;
 	
 	// Starting from the back of the party, locate the first conscious Pokemon that is of a different species to be the illusion
@@ -1222,7 +1222,7 @@ Unnerve:
 	Desc: Makes the foe nervous and unable to eat Berries.
 	Int: EntryEffect
 	Enter: 
-	Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer.user()).getName() + " too nervous to eat berries!"));
+	Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer.isPlayer()).getName() + " too nervous to eat berries!"));
 	###
 *
 Honey Gather:

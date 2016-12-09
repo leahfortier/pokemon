@@ -70,7 +70,7 @@ CrashDamageMove:
 BarrierEffect:
 	Method:
 		Header: void breakBarrier(Battle b, ActivePokemon breaker)
-		EffectList: b.getOtherPokemon(breaker.user())
+		EffectList: b.getOtherPokemon(breaker.isPlayer())
 		Invoke: Void
 		InvokeName: breakBarriers
 	*
@@ -313,7 +313,7 @@ BracingEffect:
 		Invoke: CheckGet true
 		InvokeName: getBracingEffect
 		EffectList: bracer
-		MoldBreaker: b.getOtherPokemon(bracer.user())
+		MoldBreaker: b.getOtherPokemon(bracer.isPlayer())
 	*
 	Method:
 		Header: String braceMessage(ActivePokemon bracer)
@@ -439,7 +439,7 @@ HalfWeightEffect:
 		Update: halfAmount
 		InvokeName: updateHalfAmount
 		InvokeParameters: Battle b, ActivePokemon anorexic
-		MoldBreaker: b.getOtherPokemon(anorexic.user())
+		MoldBreaker: b.getOtherPokemon(anorexic.isPlayer())
 		EffectList: anorexic
 	*
 ***

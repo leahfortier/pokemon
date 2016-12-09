@@ -414,7 +414,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.user());
+			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 			other.getAttributes().modifyStage(enterer, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
 		}
 	}
@@ -593,7 +593,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.user());
+			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 			if (other.isHoldingItem(b)) Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!"));
 		}
 	}
@@ -1038,7 +1038,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.user());
+			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 			List<Move> otherMoves = other.getMoves(b);
 			
 			List<AttackNamesies> besties = new ArrayList<>();
@@ -1377,7 +1377,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.user());
+			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 			if (other.hasAbility(AbilityNamesies.MULTITYPE) || other.hasAbility(AbilityNamesies.ILLUSION) || other.hasAbility(AbilityNamesies.STANCE_CHANGE) || other.hasAbility(AbilityNamesies.IMPOSTER) || other.hasAbility(this.namesies)) {
 				return;
 			}
@@ -1386,12 +1386,12 @@ public abstract class Ability implements Serializable {
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			Ability otherAbility = b.getOtherPokemon(victim.user()).getAbility();
+			Ability otherAbility = b.getOtherPokemon(victim.isPlayer()).getAbility();
 			return otherAbility.namesies().getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim.user());
+			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 			return victim.getName() + " traced " + other.getName() + "'s " + other.getAbility().getName() + "!";
 		}
 	}
@@ -1404,7 +1404,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.user());
+			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 			PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getPokemonInfo().namesies());
 			
 			int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
@@ -1859,7 +1859,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.user());
+			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 			for (Move m : other.getMoves(b)) {
 				Attack attack = m.getAttack();
 				if (Type.getBasicAdvantage(attack.getActualType(), enterer, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
@@ -2165,7 +2165,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			ActivePokemon other = b.getOtherPokemon(victim.user());
+			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 			if (other.hasStatus(StatusCondition.ASLEEP)) {
 				Messages.add(new MessageUpdate(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
 				other.reduceHealthFraction(b, 1/8.0);
@@ -2344,7 +2344,7 @@ public abstract class Ability implements Serializable {
 			activated = false;
 			Messages.add(new MessageUpdate(victim.getName() + "'s Illusion was broken!"));
 			
-			Messages.add(new MessageUpdate().withNewPokemon(victim.getPokemonInfo(), victim.isShiny(), true, victim.user()));
+			Messages.add(new MessageUpdate().withNewPokemon(victim.getPokemonInfo(), victim.isShiny(), true, victim.isPlayer()));
 			Messages.add(new MessageUpdate().updatePokemon(b, victim));
 		}
 
@@ -2368,7 +2368,7 @@ public abstract class Ability implements Serializable {
 			}
 			
 			// Display the Illusion changes
-			Messages.add(new MessageUpdate().withNewPokemon(illusionSpecies, illusionShiny, false, enterer.user()));
+			Messages.add(new MessageUpdate().withNewPokemon(illusionSpecies, illusionShiny, false, enterer.isPlayer()));
 			Messages.add(new MessageUpdate().updatePokemon(b, enterer));
 		}
 
@@ -2393,7 +2393,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void setNameChange(Battle b, ActivePokemon victim) {
-			List<ActivePokemon> team = b.getTrainer(victim.user()).getTeam();
+			List<ActivePokemon> team = b.getTrainer(victim.isPlayer()).getTeam();
 			ActivePokemon illusion = null;
 			
 			// Starting from the back of the party, locate the first conscious Pokemon that is of a different species to be the illusion
@@ -2568,7 +2568,7 @@ public abstract class Ability implements Serializable {
 			// Dead Pokemon and wild Pokemon cannot steal;
 			// Cannot steal if victim is not holding an item or thief is already holding an item;
 			// Cannot steal from a Pokemon with the Sticky Hold ability
-			if (thief.isFainted(b) || !victim.isHoldingItem(b) || thief.isHoldingItem(b) || b.getTrainer(thief.user()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
+			if (thief.isFainted(b) || !victim.isHoldingItem(b) || thief.isHoldingItem(b) || b.getTrainer(thief.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
 				return;
 			}
 			
@@ -2643,7 +2643,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer.user()).getName() + " too nervous to eat berries!"));
+			Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer.isPlayer()).getName() + " too nervous to eat berries!"));
 		}
 	}
 
@@ -2777,7 +2777,7 @@ public abstract class Ability implements Serializable {
 			// Dead Pokemon and wild Pokemon cannot steal;
 			// Cannot steal if victim is not holding an item or thief is already holding an item;
 			// Cannot steal from a Pokemon with the Sticky Hold ability
-			if (thief.isFainted(b) || !victim.isHoldingItem(b) || thief.isHoldingItem(b) || b.getTrainer(thief.user()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
+			if (thief.isFainted(b) || !victim.isHoldingItem(b) || thief.isHoldingItem(b) || b.getTrainer(thief.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
 				return;
 			}
 			

@@ -11,7 +11,7 @@ Constructor:
 *
 Failure:
 	Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-	CanHave Not Default True Boolean Effect.hasEffect(b.getEffects(victim.user()), this.namesies)
+	CanHave Not Default True Boolean Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies)
 *
 
 ***
@@ -38,7 +38,7 @@ StickyWeb:
 		return;
 	}
 	
-	enterer.getAttributes().modifyStage(b.getOtherPokemon(enterer.user()), enterer, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + enterer.getName() + "'s {statName}!");
+	enterer.getAttributes().modifyStage(b.getOtherPokemon(enterer.isPlayer()), enterer, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + enterer.getName() + "'s {statName}!");
 	###
 	CastMessage: "Sticky web covers everything!"
 	RapidSpin: "The sticky web spun away!"
@@ -77,7 +77,7 @@ ToxicSpikes:
 		return;
 	}
 	
-	ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer.user());
+	ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer.isPlayer());
 	if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, enterer)) {
 		if (layers >= 2) {
 			EffectNamesies.BAD_POISON.getEffect().cast(b, theOtherPokemon, enterer, CastSource.EFFECT, false);
@@ -90,7 +90,7 @@ ToxicSpikes:
 	CastMessage: "Toxic spikes were scattered all around!"
 	CanHave: True
 	Cast: 
-	Effect spikesies = Effect.getEffect(b.getEffects(victim.user()), this.namesies);
+	Effect spikesies = Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies);
 	if (spikesies == null) {
 		super.cast(b, caster, victim, source, printCast);
 		return;
@@ -125,7 +125,7 @@ Spikes:
 	CastMessage: "Spikes were scattered all around!"
 	CanHave: True
 	Cast: 
-	Effect spikesies = Effect.getEffect(b.getEffects(victim.user()), this.namesies);
+	Effect spikesies = Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies);
 	if (spikesies == null) {
 		super.cast(b, caster, victim, source, printCast);
 		return;

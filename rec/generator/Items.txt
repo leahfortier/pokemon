@@ -225,7 +225,7 @@ Eject Button:
 	Fling: 30
 	OnTakeDamage:
 		// TODO: Try to generalize with self-switching moves
-		Team t = b.getTrainer(victim.user());
+		Team t = b.getTrainer(victim.isPlayer());
 		if (t instanceof WildPokemon) {
 			return;
 		}
@@ -564,7 +564,7 @@ Red Card:
 	Fling: 10
 	OnTakeDamage:
 		// TODO: Generalize this code with that of moves like U-Turn
-		Team t = b.getTrainer(user.user());
+		Team t = b.getTrainer(user.isPlayer());
 		if (t instanceof WildPokemon) {
 			return;
 		}
@@ -1603,7 +1603,7 @@ Sacred Ash:
 		}
 		return changed;
 		###
-	BattleUse: return use((Trainer)b.getTrainer(p.user()));
+	BattleUse: return use((Trainer)b.getTrainer(p.isPlayer()));
 	SuccessMessage: "All fainted Pok\u00e9mon were fully revived!"
 *
 Dire Hit:

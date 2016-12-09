@@ -323,7 +323,7 @@ public class Battle {
 		NameChanger.setNameChanges(this, enterer);
 
 		String enterMessage = "";
-		if (enterer.user()) {
+		if (enterer.isPlayer()) {
 			enterMessage = "Go! " + enterer.getName() + "!";
 		}
 		else if (opponent instanceof Trainer) {
@@ -344,7 +344,7 @@ public class Battle {
 		}
 
 		// Document sighting in the Pokedex
-		if (!enterer.user()) {
+		if (!enterer.isPlayer()) {
 			player.getPokedex().setSeen(enterer, isWildBattle());
 		}
 
@@ -357,7 +357,7 @@ public class Battle {
 		enterer.getAttributes().setUsed(true);
 		EntryEffect.invokeEntryEffect(this, enterer);
 
-		getTrainer(!enterer.user()).resetUsed();
+		getTrainer(!enterer.isPlayer()).resetUsed();
 	}
 
 	public boolean runAway() {
@@ -436,7 +436,7 @@ public class Battle {
 	
 	private void executionSolution(ActivePokemon me, ActivePokemon o) {
 		// Don't do anything if they're not actually attacking
-		if (!isFighting(me.user())) {
+		if (!isFighting(me.isPlayer())) {
 			return;
 		}
 
@@ -465,7 +465,7 @@ public class Battle {
 	}
 	
 	public void printAttacking(ActivePokemon p) {
-		Messages.add(new MessageUpdate((p.user() ? "" : "Enemy ") + p.getName() + " used " + p.getAttack().getName() + "!"));
+		Messages.add(new MessageUpdate((p.isPlayer() ? "" : "Enemy ") + p.getName() + " used " + p.getAttack().getName() + "!"));
 		reduce = true;
 	}
 	
@@ -489,8 +489,8 @@ public class Battle {
 		return effects;
 	}	
 	
-	public List<TeamEffect> getEffects(boolean team) {
-		return team ? player.getEffects() : opponent.getEffects();
+	public List<TeamEffect> getEffects(boolean isPlayer) {
+		return isPlayer ? player.getEffects() : opponent.getEffects();
 	}
 	
 	public List<Object> getEffectsList(ActivePokemon p, Object... additionalItems) {
@@ -498,20 +498,20 @@ public class Battle {
 		Collections.addAll(list, additionalItems);
 		
 		list.addAll(p.getAllEffects(this));
-		list.addAll(getEffects(p.user()));
+		list.addAll(getEffects(p.isPlayer()));
 		list.addAll(getEffects());
 		list.add(weather);
 		
 		return list;
 	}
 	
-	public Team getTrainer(boolean team) {
-		return team ? player : opponent;
+	public Team getTrainer(boolean isPlayer) {
+		return isPlayer ? player : opponent;
 	}
 	
 	// Returns the current Pokemon that is out on the team opposite to the one passed in
-	public ActivePokemon getOtherPokemon(boolean team) {
-		return team ? opponent.front() : player.front();
+	public ActivePokemon getOtherPokemon(boolean isPlayer) {
+		return isPlayer ? opponent.front() : player.front();
 	}
 	
 	public boolean isWildBattle() {
@@ -660,7 +660,7 @@ public class Battle {
 	// Returns the priority of the current action the player is performing
 	private int getPriority(ActivePokemon p) {
 		// They are attacking -- return the priority of the attack
-		if (isFighting(p.user())) {
+		if (isFighting(p.isPlayer())) {
 			int priority = p.getAttack().getPriority(this, p);
 			priority = PriorityChangeEffect.updatePriority(this, p, priority);
 			
@@ -669,7 +669,7 @@ public class Battle {
 			return priority;
 		}
 		
-		return ((Trainer)getTrainer(p.user())).getAction().getPriority();
+		return ((Trainer)getTrainer(p.isPlayer())).getAction().getPriority();
 	}
 	
 	// Returns true if the player will be attacking first, and false if the opponent will be 

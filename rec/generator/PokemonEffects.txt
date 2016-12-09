@@ -37,7 +37,7 @@ LeechSeed:
 	}
 	
 	Messages.add(new MessageUpdate(victim.getName() + "'s health was sapped!"));
-	b.getOtherPokemon(victim.user()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false, false);
+	b.getOtherPokemon(victim.isPlayer()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false, false);
 	###
 	RapidSpin: releaser.getName() + " was released from leech seed!"
 *
@@ -513,7 +513,7 @@ Mimic:
 	return list;
 	###
 	Cast: 
-	ActivePokemon other = b.getOtherPokemon(victim.user());
+	ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 	final Move lastMoveUsed = other.getAttributes().getLastMoveUsed();
 	Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
 	
@@ -683,7 +683,7 @@ Yawn:
 	NumTurns: 2
 	FailCondition: !Status.applies(StatusCondition.ASLEEP, b, caster, victim)
 	Subside: 
-	Status.giveStatus(b, b.getOtherPokemon(p.user()), p, StatusCondition.ASLEEP);
+	Status.giveStatus(b, b.getOtherPokemon(p.isPlayer()), p, StatusCondition.ASLEEP);
 	###
 	CastMessage: victim.getName() + " grew drowsy!"
 *
@@ -703,7 +703,7 @@ Uproar:
 	super.cast(b, caster, victim, source, printCast);
 	
 	wakeUp(b, victim);
-	wakeUp(b, b.getOtherPokemon(victim.user()));
+	wakeUp(b, b.getOtherPokemon(victim.isPlayer()));
 	###
 	Field: 
 	private Move uproar;
@@ -784,10 +784,10 @@ Transformed:
 	private int[] stats;
 	private Type[] type;
 	###
-	CastMessage: victim.getName() + " transformed into " + b.getOtherPokemon(victim.user()).getPokemonInfo().getName() + "!"
+	CastMessage: victim.getName() + " transformed into " + b.getOtherPokemon(victim.isPlayer()).getPokemonInfo().getName() + "!"
 	Cast: 
 	// Pokemon to transform into
-	ActivePokemon transformee = b.getOtherPokemon(victim.user());
+	ActivePokemon transformee = b.getOtherPokemon(victim.isPlayer());
 	
 	// Set the new stats
 	stats = new int[Stat.NUM_STATS];
@@ -813,10 +813,10 @@ Transformed:
 	
 	// Castaway
 	super.cast(b, caster, victim, source, printCast);
-	Messages.add(new MessageUpdate().withNewPokemon(transformee.getPokemonInfo(), transformee.isShiny(), true, victim.user()));
+	Messages.add(new MessageUpdate().withNewPokemon(transformee.getPokemonInfo(), transformee.isShiny(), true, victim.isPlayer()));
 	Messages.add(new MessageUpdate().updatePokemon(b, victim));
 	###
-	FailCondition: b.getOtherPokemon(victim.user()).hasEffect(this.namesies) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive()))
+	FailCondition: b.getOtherPokemon(victim.isPlayer()).hasEffect(this.namesies) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive()))
 	Int: ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect
 	GetMoveList:
 	return Arrays.asList(moveList);
@@ -922,7 +922,7 @@ Bide:
 	}
 	else {
 		// RETALIATION STATION
-		b.getOtherPokemon(victim.user()).reduceHealth(b, 2*bidesies.damage);
+		b.getOtherPokemon(victim.isPlayer()).reduceHealth(b, 2*bidesies.damage);
 	}
 	
 	// Bye Bye Bidesies
@@ -1039,7 +1039,7 @@ Snatch:
 	###
 *
 Grudge:
-	CastMessage: victim.getName() + " wants " + b.getOtherPokemon(victim.user()).getName() + " to bear a grudge!"
+	CastMessage: victim.getName() + " wants " + b.getOtherPokemon(victim.isPlayer()).getName() + " to bear a grudge!"
 	Int: FaintEffect
 	DeathWish: 
 	if (murderer.getAttributes().isAttacking()) {
@@ -1049,7 +1049,7 @@ Grudge:
 	###
 *
 DestinyBond:
-	CastMessage: victim.getName() + " is trying to take " + b.getOtherPokemon(victim.user()).getName() + " down with it!"
+	CastMessage: victim.getName() + " is trying to take " + b.getOtherPokemon(victim.isPlayer()).getName() + " down with it!"
 	Int: FaintEffect, BeforeTurnEffect
 	CanAttack:
 	super.active = false;

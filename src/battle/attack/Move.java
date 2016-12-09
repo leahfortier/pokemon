@@ -178,7 +178,7 @@ public class Move implements Serializable {
 			}
 		}
 
-		if (p.user() && getUsableMoves(b, p).size() == 0) {
+		if (p.isPlayer() && getUsableMoves(b, p).size() == 0) {
 			p.setMove(new Move(AttackNamesies.STRUGGLE.getAttack()));
 			return true;
 		}

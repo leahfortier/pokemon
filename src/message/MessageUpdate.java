@@ -147,7 +147,7 @@ public class MessageUpdate {
 			return this;
 		}
 
-		boolean isPlayer = pokemon.user();
+		boolean isPlayer = pokemon.isPlayer();
 		return this.withMaxHp(pokemon.getHP(), pokemon.getMaxHP(), isPlayer)
 				.withStatusCondition(pokemon.getStatus().getType(), isPlayer)
 				.withType(pokemon.getDisplayType(b), isPlayer)
@@ -173,7 +173,7 @@ public class MessageUpdate {
 	
 	// Switch update!
 	public MessageUpdate withSwitch(Battle battle, ActivePokemon active) {
-		this.isPlayer = active.user();
+		this.isPlayer = active.isPlayer();
 		this.switchPokemon = true;
 		this.hp = active.getHP();
 		this.status = active.getStatus().getType();

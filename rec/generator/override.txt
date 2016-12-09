@@ -393,7 +393,7 @@ BarrierEffect:
 		AddMapField: Cast: 
 		super.cast(b, caster, victim, source, printCast);
 		if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-			Effect.getEffect(b.getEffects(victim.user()), this.namesies).setTurns(8);
+			Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies).setTurns(8);
 		}
 		###
 		AddMapField: BreakBarrier: {2-}
@@ -402,7 +402,7 @@ BarrierEffect:
 		Header: void breakBarrier(Battle b, ActivePokemon breaker)
 		Body:
 		Messages.add(new MessageUpdate(breaker.getName() + " broke the {0} barrier!"));
-		b.getEffects(!breaker.user()).remove(this);
+		b.getEffects(!breaker.isPlayer()).remove(this);
 		###
 	*
 ***
@@ -511,7 +511,7 @@ Override:
 			return;
 		}
 		
-		Team opponent = b.getTrainer(victim.user());
+		Team opponent = b.getTrainer(victim.isPlayer());
 		if (opponent instanceof WildPokemon) {
 			// Fails against wild Pokemon of higher levels
 			if (victim.getLevel() > user.getLevel()) {
@@ -549,7 +549,7 @@ Override:
 		// First execute the move as normal
 		super.apply(me, o, b);
 		
-		Team t = b.getTrainer(me.user());
+		Team t = b.getTrainer(me.isPlayer());
 		if (t instanceof WildPokemon) {
 			// End the battle against a wild Pokemon
 			Messages.add(new MessageUpdate(me.getName() + " left the battle!"));
@@ -693,7 +693,7 @@ Override:
 		Messages.add(new MessageUpdate(victim.getName() + " is hurt by {1_}!"));
 		
 		// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-		victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+		victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		###
 	*
 ***
@@ -800,7 +800,7 @@ RapidSpinRelease:
 		
 		// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 		releaser.getEffects().remove(this);
-		b.getEffects(releaser.user()).remove(this);
+		b.getEffects(releaser.isPlayer()).remove(this);
 		###
 	*
 ***
@@ -1041,7 +1041,7 @@ DefogRelease:
 		
 		// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 		victim.getEffects().remove(this);
-		b.getEffects(victim.user()).remove(this);
+		b.getEffects(victim.isPlayer()).remove(this);
 		###
 	*
 ***
@@ -1442,7 +1442,7 @@ Override:
 		AddMapField: ApplyEndTurn:
 		Messages.add(new MessageUpdate({0}));
 				
-		ActivePokemon other = b.getOtherPokemon(victim.user());
+		ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 		buffet(b, victim);
 		buffet(b, other);
 		###
@@ -1926,7 +1926,7 @@ Override:
 Override:
 	HealPartyStatus:
 		AddMapField: ApplyEffects:
-		for (ActivePokemon p : b.getTrainer(user.user()).getTeam()) {
+		for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
 			if (!p.hasStatus(StatusCondition.FAINTED)) {
 				p.removeStatus();
 			}
@@ -2252,7 +2252,7 @@ Override:
 		// Dead Pokemon and wild Pokemon cannot steal; 
 		// Cannot steal if victim is not holding an item or thief is already holding an item;
 		// Cannot steal from a Pokemon with the Sticky Hold ability 
-		if (thief.isFainted(b) || !victim.isHoldingItem(b) || thief.isHoldingItem(b) || b.getTrainer(thief.user()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
+		if (thief.isFainted(b) || !victim.isHoldingItem(b) || thief.isHoldingItem(b) || b.getTrainer(thief.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
 			return;
 		}
 		

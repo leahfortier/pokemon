@@ -1755,14 +1755,14 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int getPriority(Battle b, ActivePokemon me) {
-			Team trainer = b.getTrainer(!me.user()); // TODO: Make switching occur at its priority
+			Team trainer = b.getTrainer(!me.isPlayer()); // TODO: Make switching occur at its priority
 			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) return 7;
 			return super.priority;
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			// TODO: Once the Begin- shit is resolved, then this should be combined there
-			Team trainer = b.getTrainer(o.user());
+			Team trainer = b.getTrainer(o.isPlayer());
 			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) {
 				return super.power*2;
 			}
@@ -3402,7 +3402,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			for (ActivePokemon p : b.getTrainer(user.user()).getTeam()) {
+			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
 				if (!p.hasStatus(StatusCondition.FAINTED)) {
 					p.removeStatus();
 				}
@@ -3930,7 +3930,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
+			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
 				if (super.category == MoveCategory.STATUS) {
 					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 				}
@@ -6324,7 +6324,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return b.getOtherPokemon(caster.user()).getType(b).clone();
+			return b.getOtherPokemon(caster.isPlayer()).getType(b).clone();
 		}
 	}
 
@@ -6755,7 +6755,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim.user());
+			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 			List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getType(), b);
 			return new Type[] { RandomUtils.getRandomValue(types), Type.NO_TYPE };
 		}
@@ -7264,7 +7264,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			for (ActivePokemon p : b.getTrainer(me.user()).getTeam()) {
+			for (ActivePokemon p : b.getTrainer(me.isPlayer()).getTeam()) {
 				// Only healthy Pokemon get to attack
 				if (!p.canFight() || p.hasStatus()) {
 					continue;
@@ -7452,7 +7452,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			for (ActivePokemon p : b.getTrainer(user.user()).getTeam()) {
+			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
 				if (!p.hasStatus(StatusCondition.FAINTED)) {
 					p.removeStatus();
 				}
@@ -7562,7 +7562,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
+			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
 				if (super.category == MoveCategory.STATUS) {
 					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 				}
@@ -7686,7 +7686,7 @@ public abstract class Attack implements Serializable {
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
 			List<Attack> attacks = new ArrayList<>();
-			for (ActivePokemon p : b.getTrainer(me.user()).getTeam()) {
+			for (ActivePokemon p : b.getTrainer(me.isPlayer()).getTeam()) {
 				if (p == me) {
 					continue;
 				}
@@ -8867,7 +8867,7 @@ public abstract class Attack implements Serializable {
 				return;
 			}
 			
-			Team opponent = b.getTrainer(victim.user());
+			Team opponent = b.getTrainer(victim.isPlayer());
 			if (opponent instanceof WildPokemon) {
 				// Fails against wild Pokemon of higher levels
 				if (victim.getLevel() > user.getLevel()) {
@@ -8922,7 +8922,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(Effect.hasEffect(b.getEffects(me.user()), EffectNamesies.DEAD_ALLY) ? 2 : 1);
+			return super.power*(Effect.hasEffect(b.getEffects(me.isPlayer()), EffectNamesies.DEAD_ALLY) ? 2 : 1);
 		}
 	}
 
@@ -8954,7 +8954,7 @@ public abstract class Attack implements Serializable {
 				return;
 			}
 			
-			Team opponent = b.getTrainer(victim.user());
+			Team opponent = b.getTrainer(victim.isPlayer());
 			if (opponent instanceof WildPokemon) {
 				// Fails against wild Pokemon of higher levels
 				if (victim.getLevel() > user.getLevel()) {
@@ -9034,12 +9034,12 @@ public abstract class Attack implements Serializable {
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			// TODO: Combine with Trace
-			Ability otherAbility = b.getOtherPokemon(victim.user()).getAbility();
+			Ability otherAbility = b.getOtherPokemon(victim.isPlayer()).getAbility();
 			return otherAbility.namesies().getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim.user());
+			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 			return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
 		}
 	}
@@ -9100,7 +9100,7 @@ public abstract class Attack implements Serializable {
 				return;
 			}
 			
-			Team opponent = b.getTrainer(victim.user());
+			Team opponent = b.getTrainer(victim.isPlayer());
 			if (opponent instanceof WildPokemon) {
 				// Fails against wild Pokemon of higher levels
 				if (victim.getLevel() > user.getLevel()) {
@@ -9348,7 +9348,7 @@ public abstract class Attack implements Serializable {
 			// First execute the move as normal
 			super.apply(me, o, b);
 			
-			Team t = b.getTrainer(me.user());
+			Team t = b.getTrainer(me.isPlayer());
 			if (t instanceof WildPokemon) {
 				// End the battle against a wild Pokemon
 				Messages.add(new MessageUpdate(me.getName() + " left the battle!"));
@@ -9390,7 +9390,7 @@ public abstract class Attack implements Serializable {
 			// First execute the move as normal
 			super.apply(me, o, b);
 			
-			Team t = b.getTrainer(me.user());
+			Team t = b.getTrainer(me.isPlayer());
 			if (t instanceof WildPokemon) {
 				// End the battle against a wild Pokemon
 				Messages.add(new MessageUpdate(me.getName() + " left the battle!"));
@@ -9423,7 +9423,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Team t = b.getTrainer(user.user());
+			Team t = b.getTrainer(user.isPlayer());
 			if (t instanceof WildPokemon) {
 				Messages.add(new MessageUpdate(user.getName() + " left the battle!"));
 				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
@@ -9509,7 +9509,7 @@ public abstract class Attack implements Serializable {
 				return;
 			}
 			
-			Team opponent = b.getTrainer(victim.user());
+			Team opponent = b.getTrainer(victim.isPlayer());
 			if (opponent instanceof WildPokemon) {
 				// Fails against wild Pokemon of higher levels
 				if (victim.getLevel() > user.getLevel()) {
@@ -9751,7 +9751,7 @@ public abstract class Attack implements Serializable {
 			// First execute the move as normal
 			super.apply(me, o, b);
 			
-			Team t = b.getTrainer(me.user());
+			Team t = b.getTrainer(me.isPlayer());
 			if (t instanceof WildPokemon) {
 				// End the battle against a wild Pokemon
 				Messages.add(new MessageUpdate(me.getName() + " left the battle!"));

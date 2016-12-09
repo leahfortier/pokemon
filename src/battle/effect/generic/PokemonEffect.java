@@ -117,7 +117,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			}
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was sapped!"));
-			b.getOtherPokemon(victim.user()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false, false);
+			b.getOtherPokemon(victim.isPlayer()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false, false);
 		}
 
 		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
@@ -125,7 +125,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.user()).remove(this);
+			b.getEffects(releaser.isPlayer()).remove(this);
 		}
 	}
 
@@ -214,7 +214,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			Messages.add(new MessageUpdate(victim.getName() + " is hurt by fire spin!"));
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
 		public boolean isTrapped(Battle b, ActivePokemon escaper) {
@@ -231,7 +231,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.user()).remove(this);
+			b.getEffects(releaser.isPlayer()).remove(this);
 		}
 	}
 
@@ -267,7 +267,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			Messages.add(new MessageUpdate(victim.getName() + " is hurt by infestation!"));
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
 		public boolean isTrapped(Battle b, ActivePokemon escaper) {
@@ -284,7 +284,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.user()).remove(this);
+			b.getEffects(releaser.isPlayer()).remove(this);
 		}
 	}
 
@@ -320,7 +320,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			Messages.add(new MessageUpdate(victim.getName() + " is hurt by magma storm!"));
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
 		public boolean isTrapped(Battle b, ActivePokemon escaper) {
@@ -337,7 +337,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.user()).remove(this);
+			b.getEffects(releaser.isPlayer()).remove(this);
 		}
 	}
 
@@ -373,7 +373,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			Messages.add(new MessageUpdate(victim.getName() + " is hurt by clamp!"));
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
 		public boolean isTrapped(Battle b, ActivePokemon escaper) {
@@ -390,7 +390,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.user()).remove(this);
+			b.getEffects(releaser.isPlayer()).remove(this);
 		}
 	}
 
@@ -426,7 +426,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			Messages.add(new MessageUpdate(victim.getName() + " is hurt by whirlpool!"));
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
 		public boolean isTrapped(Battle b, ActivePokemon escaper) {
@@ -443,7 +443,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.user()).remove(this);
+			b.getEffects(releaser.isPlayer()).remove(this);
 		}
 	}
 
@@ -479,7 +479,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			Messages.add(new MessageUpdate(victim.getName() + " is hurt by wrap!"));
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
 		public boolean isTrapped(Battle b, ActivePokemon escaper) {
@@ -496,7 +496,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.user()).remove(this);
+			b.getEffects(releaser.isPlayer()).remove(this);
 		}
 	}
 
@@ -532,7 +532,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			Messages.add(new MessageUpdate(victim.getName() + " is hurt by bind!"));
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
 		public boolean isTrapped(Battle b, ActivePokemon escaper) {
@@ -549,7 +549,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.user()).remove(this);
+			b.getEffects(releaser.isPlayer()).remove(this);
 		}
 	}
 
@@ -585,7 +585,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			Messages.add(new MessageUpdate(victim.getName() + " is hurt by sand tomb!"));
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.user()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
 		public boolean isTrapped(Battle b, ActivePokemon escaper) {
@@ -602,7 +602,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.user()).remove(this);
+			b.getEffects(releaser.isPlayer()).remove(this);
 		}
 	}
 
@@ -1061,7 +1061,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.user()).remove(this);
+			b.getEffects(victim.isPlayer()).remove(this);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -1477,7 +1477,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			ActivePokemon other = b.getOtherPokemon(victim.user());
+			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 			final Move lastMoveUsed = other.getAttributes().getLastMoveUsed();
 			Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
 			
@@ -1921,7 +1921,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void subside(Battle b, ActivePokemon p) {
-			Status.giveStatus(b, b.getOtherPokemon(p.user()), p, StatusCondition.ASLEEP);
+			Status.giveStatus(b, b.getOtherPokemon(p.isPlayer()), p, StatusCondition.ASLEEP);
 		}
 	}
 
@@ -1976,7 +1976,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			super.cast(b, caster, victim, source, printCast);
 			
 			wakeUp(b, victim);
-			wakeUp(b, b.getOtherPokemon(victim.user()));
+			wakeUp(b, b.getOtherPokemon(victim.isPlayer()));
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -2121,12 +2121,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(b.getOtherPokemon(victim.user()).hasEffect(this.namesies) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive())) || victim.hasEffect(this.namesies));
+			return !(b.getOtherPokemon(victim.isPlayer()).hasEffect(this.namesies) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive())) || victim.hasEffect(this.namesies));
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			// Pokemon to transform into
-			ActivePokemon transformee = b.getOtherPokemon(victim.user());
+			ActivePokemon transformee = b.getOtherPokemon(victim.isPlayer());
 			
 			// Set the new stats
 			stats = new int[Stat.NUM_STATS];
@@ -2152,12 +2152,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// Castaway
 			super.cast(b, caster, victim, source, printCast);
-			Messages.add(new MessageUpdate().withNewPokemon(transformee.getPokemonInfo(), transformee.isShiny(), true, victim.user()));
+			Messages.add(new MessageUpdate().withNewPokemon(transformee.getPokemonInfo(), transformee.isShiny(), true, victim.isPlayer()));
 			Messages.add(new MessageUpdate().updatePokemon(b, victim));
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return victim.getName() + " transformed into " + b.getOtherPokemon(victim.user()).getPokemonInfo().getName() + "!";
+			return victim.getName() + " transformed into " + b.getOtherPokemon(victim.isPlayer()).getPokemonInfo().getName() + "!";
 		}
 
 		public List<Move> getMoveList(List<Move> actualMoves) {
@@ -2259,7 +2259,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.user()).remove(this);
+			b.getEffects(victim.isPlayer()).remove(this);
 		}
 	}
 
@@ -2326,7 +2326,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			}
 			else {
 				// RETALIATION STATION
-				b.getOtherPokemon(victim.user()).reduceHealth(b, 2*bidesies.damage);
+				b.getOtherPokemon(victim.isPlayer()).reduceHealth(b, 2*bidesies.damage);
 			}
 			
 			// Bye Bye Bidesies
@@ -2577,7 +2577,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return victim.getName() + " wants " + b.getOtherPokemon(victim.user()).getName() + " to bear a grudge!";
+			return victim.getName() + " wants " + b.getOtherPokemon(victim.isPlayer()).getName() + " to bear a grudge!";
 		}
 
 		public void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
@@ -2600,7 +2600,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return victim.getName() + " is trying to take " + b.getOtherPokemon(victim.user()).getName() + " down with it!";
+			return victim.getName() + " is trying to take " + b.getOtherPokemon(victim.isPlayer()).getName() + " down with it!";
 		}
 
 		public void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {

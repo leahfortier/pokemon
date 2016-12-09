@@ -37,7 +37,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
 		}
 
-		b.getTrainer(victim.user()).addEffect(this);
+		b.getTrainer(victim.isPlayer()).addEffect(this);
 		
 		Messages.add(new MessageUpdate().updatePokemon(b, caster));
 		Messages.add(new MessageUpdate().updatePokemon(b, victim));
@@ -54,18 +54,18 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(Effect.hasEffect(b.getEffects(victim.user()), this.namesies));
+			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
 		public void breakBarrier(Battle b, ActivePokemon breaker) {
 			Messages.add(new MessageUpdate(breaker.getName() + " broke the reflect barrier!"));
-			b.getEffects(!breaker.user()).remove(this);
+			b.getEffects(!breaker.isPlayer()).remove(this);
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
 			if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-				Effect.getEffect(b.getEffects(victim.user()), this.namesies).setTurns(8);
+				Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies).setTurns(8);
 			}
 		}
 
@@ -86,7 +86,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.user()).remove(this);
+			b.getEffects(victim.isPlayer()).remove(this);
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
@@ -106,18 +106,18 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(Effect.hasEffect(b.getEffects(victim.user()), this.namesies));
+			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
 		public void breakBarrier(Battle b, ActivePokemon breaker) {
 			Messages.add(new MessageUpdate(breaker.getName() + " broke the light screen barrier!"));
-			b.getEffects(!breaker.user()).remove(this);
+			b.getEffects(!breaker.isPlayer()).remove(this);
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
 			if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-				Effect.getEffect(b.getEffects(victim.user()), this.namesies).setTurns(8);
+				Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies).setTurns(8);
 			}
 		}
 
@@ -138,7 +138,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.user()).remove(this);
+			b.getEffects(victim.isPlayer()).remove(this);
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
@@ -158,7 +158,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(Effect.hasEffect(b.getEffects(victim.user()), this.namesies));
+			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -190,7 +190,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(Effect.hasEffect(b.getEffects(victim.user()), this.namesies));
+			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -202,7 +202,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 				return;
 			}
 			
-			enterer.getAttributes().modifyStage(b.getOtherPokemon(enterer.user()), enterer, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + enterer.getName() + "'s {statName}!");
+			enterer.getAttributes().modifyStage(b.getOtherPokemon(enterer.isPlayer()), enterer, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + enterer.getName() + "'s {statName}!");
 		}
 
 		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
@@ -210,7 +210,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.user()).remove(this);
+			b.getEffects(releaser.isPlayer()).remove(this);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
@@ -218,7 +218,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.user()).remove(this);
+			b.getEffects(victim.isPlayer()).remove(this);
 		}
 	}
 
@@ -230,7 +230,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(Effect.hasEffect(b.getEffects(victim.user()), this.namesies));
+			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -251,7 +251,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.user()).remove(this);
+			b.getEffects(releaser.isPlayer()).remove(this);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
@@ -259,7 +259,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.user()).remove(this);
+			b.getEffects(victim.isPlayer()).remove(this);
 		}
 	}
 
@@ -273,7 +273,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			Effect spikesies = Effect.getEffect(b.getEffects(victim.user()), this.namesies);
+			Effect spikesies = Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies);
 			if (spikesies == null) {
 				super.cast(b, caster, victim, source, printCast);
 				return;
@@ -298,7 +298,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 				return;
 			}
 			
-			ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer.user());
+			ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer.isPlayer());
 			if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, enterer)) {
 				if (layers >= 2) {
 					EffectNamesies.BAD_POISON.getEffect().cast(b, theOtherPokemon, enterer, CastSource.EFFECT, false);
@@ -314,7 +314,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.user()).remove(this);
+			b.getEffects(releaser.isPlayer()).remove(this);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
@@ -322,7 +322,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.user()).remove(this);
+			b.getEffects(victim.isPlayer()).remove(this);
 		}
 	}
 
@@ -336,7 +336,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			Effect spikesies = Effect.getEffect(b.getEffects(victim.user()), this.namesies);
+			Effect spikesies = Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies);
 			if (spikesies == null) {
 				super.cast(b, caster, victim, source, printCast);
 				return;
@@ -368,7 +368,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.user()).remove(this);
+			b.getEffects(releaser.isPlayer()).remove(this);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
@@ -376,7 +376,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.user()).remove(this);
+			b.getEffects(victim.isPlayer()).remove(this);
 		}
 	}
 
@@ -389,7 +389,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(Effect.hasEffect(b.getEffects(victim.user()), this.namesies));
+			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
@@ -415,7 +415,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(Effect.hasEffect(b.getEffects(victim.user()), this.namesies));
+			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -440,7 +440,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(Effect.hasEffect(b.getEffects(victim.user()), this.namesies));
+			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
@@ -476,7 +476,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(Effect.hasEffect(b.getEffects(victim.user()), this.namesies));
+			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
@@ -512,7 +512,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(Effect.hasEffect(b.getEffects(victim.user()), this.namesies));
+			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
@@ -538,7 +538,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(Effect.hasEffect(b.getEffects(victim.user()), this.namesies));
+			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 	}
 
@@ -580,7 +580,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(Effect.hasEffect(b.getEffects(victim.user()), this.namesies));
+			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 	}
 }

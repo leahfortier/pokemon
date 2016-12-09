@@ -74,7 +74,7 @@ public class ActivePokemon implements Serializable {
 	private List<Move> moves;
 	private int hp;
 	private int level;
-	private boolean playerPokemon;
+	private boolean isPlayer;
 	private Status status;
 	private int totalEXP;
 	private int[] EVs;
@@ -89,8 +89,8 @@ public class ActivePokemon implements Serializable {
 	private boolean isEgg;
 	private int eggSteps;
 
-	// General constructor for an active Pokemon (user is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
-	public ActivePokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean user) {
+	// General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
+	public ActivePokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer) {
 		this.pokemon = PokemonInfo.getPokemonInfo(pokemonNamesies);
 		this.nickname = this.pokemon.getName();
 		this.level = level;
@@ -105,7 +105,7 @@ public class ActivePokemon implements Serializable {
 		setStats();
 		
 		this.hp = stats[Stat.HP.index()];
-		this.playerPokemon = user;
+		this.isPlayer = isPlayer;
 		this.attributes = new BattleAttributes();
 		
 		removeStatus();
@@ -113,7 +113,7 @@ public class ActivePokemon implements Serializable {
 		this.totalEXP = pokemon.getGrowthRate().getEXP(this.level);
 		this.totalEXP += RandomUtils.getRandomInt(expToNextLevel());
 		this.gender = Gender.getGender(pokemon.getMaleRatio());
-		this.shiny = (user || isWild) && RandomUtils.chanceTest(1, 8192);
+		this.shiny = (isPlayer || isWild) && RandomUtils.chanceTest(1, 8192);
 		
 		setMoves();
 		
@@ -535,7 +535,7 @@ public class ActivePokemon implements Serializable {
 		}
 		
 		if (front) {
-			Messages.add(new MessageUpdate().withNewPokemon(pokemon, shiny, true, playerPokemon));
+			Messages.add(new MessageUpdate().withNewPokemon(pokemon, shiny, true, isPlayer));
 		}
 
 		Messages.add(new MessageUpdate(name + " evolved into " + pokemon.getName() + "!"));
@@ -806,19 +806,17 @@ public class ActivePokemon implements Serializable {
 		return attributes;
 	}
 	
-	public boolean user() {
-		return playerPokemon;
+	public boolean isPlayer() {
+		return isPlayer;
 	}
 	
 	public void resetAttributes() {
 		attributes = new BattleAttributes();
-		for (Move m : moves) {
-			m.resetReady();
-		}
+		moves.forEach(Move::resetReady);
 	}
 	
 	public void setCaught() {
-		playerPokemon = true;
+		isPlayer = true;
 	}
 	
 	public boolean isFainted(Battle b)
@@ -839,7 +837,7 @@ public class ActivePokemon implements Serializable {
 			Status.die(this);
 			Messages.add(new MessageUpdate(getName() + " fainted!").updatePokemon(b, this));
 			
-			ActivePokemon murderer = b.getOtherPokemon(user());
+			ActivePokemon murderer = b.getOtherPokemon(isPlayer());
 
 			// Apply effects which occur when the user faints
 			FaintEffect.grantDeathWish(b, this, murderer);
@@ -849,7 +847,7 @@ public class ActivePokemon implements Serializable {
 				MurderEffect.killKillKillMurderMurderMurder(b, this, murderer);
 			}
 			
-			b.getEffects(playerPokemon).add((TeamEffect)EffectNamesies.DEAD_ALLY.getEffect());
+			b.getEffects(isPlayer).add((TeamEffect)EffectNamesies.DEAD_ALLY.getEffect());
 			
 			return true;	
 		}
@@ -873,7 +871,7 @@ public class ActivePokemon implements Serializable {
 		}
 		
 		// The opponent has an effect that prevents escape
-		ActivePokemon other = b.getOtherPokemon(user());
+		ActivePokemon other = b.getOtherPokemon(isPlayer());
 		OpponentTrappingEffect trappedByOpponent = OpponentTrappingEffect.getTrapped(b, this, other);
 		if (trappedByOpponent != null) {
 			Messages.add(new MessageUpdate(trappedByOpponent.opponentTrappingMessage(this, other)));
@@ -1104,7 +1102,7 @@ public class ActivePokemon implements Serializable {
 		Item consumed = getHeldItem(b);
 		EffectNamesies.CONSUMED_ITEM.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
 		
-		ActivePokemon other = b.getOtherPokemon(playerPokemon); 
+		ActivePokemon other = b.getOtherPokemon(isPlayer);
 		if (other.hasAbility(AbilityNamesies.PICKUP) && !other.isHoldingItem(b)) {
 			other.giveItem((HoldItem)consumed);
 			Messages.add(new MessageUpdate(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!"));
@@ -1129,7 +1127,7 @@ public class ActivePokemon implements Serializable {
 		PokemonEffect changeItem = getEffect(EffectNamesies.CHANGE_ITEM);
 		Item item = changeItem == null ? getActualHeldItem() : ((ItemHolder)changeItem).getItem();
 		
-		if (item instanceof Berry && b.getOtherPokemon(user()).hasAbility(AbilityNamesies.UNNERVE)) {
+		if (item instanceof Berry && b.getOtherPokemon(isPlayer()).hasAbility(AbilityNamesies.UNNERVE)) {
 			return ItemNamesies.NO_ITEM.getItem();
 		}
 		

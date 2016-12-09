@@ -158,7 +158,7 @@ public final class EffectInterfaces {
 		void breakBarrier(Battle b, ActivePokemon breaker);
 
 		static void breakBarriers(Battle b, ActivePokemon breaker) {
-			List<Object> invokees = b.getEffectsList(b.getOtherPokemon(breaker.user()));
+			List<Object> invokees = b.getEffectsList(b.getOtherPokemon(breaker.isPlayer()));
 			for (Object invokee : invokees) {
 				if (invokee instanceof BarrierEffect && !Effect.isInactiveEffect(invokee)) {
 					
@@ -685,7 +685,7 @@ public final class EffectInterfaces {
 				if (invokee instanceof BracingEffect && !Effect.isInactiveEffect(invokee)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && b.getOtherPokemon(bracer.user()).breaksTheMold()) {
+					if (invokee instanceof Ability && b.getOtherPokemon(bracer.isPlayer()).breaksTheMold()) {
 						continue;
 					}
 					
@@ -921,7 +921,7 @@ public final class EffectInterfaces {
 				if (invokee instanceof HalfWeightEffect && !Effect.isInactiveEffect(invokee)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && b.getOtherPokemon(anorexic.user()).breaksTheMold()) {
+					if (invokee instanceof Ability && b.getOtherPokemon(anorexic.isPlayer()).breaksTheMold()) {
 						continue;
 					}
 					

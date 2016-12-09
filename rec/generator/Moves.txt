@@ -877,7 +877,7 @@ Pursuit:
 	Cat: Physical
 	GetPow:
 	// TODO: Once the Begin- shit is resolved, then this should be combined there
-	Team trainer = b.getTrainer(o.user());
+	Team trainer = b.getTrainer(o.isPlayer());
 	if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) {
 		return super.power*2;
 	}
@@ -885,7 +885,7 @@ Pursuit:
 	return super.power;
 	###
 	GetPriority: 
-	Team trainer = b.getTrainer(!me.user()); // TODO: Make switching occur at its priority
+	Team trainer = b.getTrainer(!me.isPlayer()); // TODO: Make switching occur at its priority
 	if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) return 7;
 	return super.priority;
 	###
@@ -2230,7 +2230,7 @@ Covet:
 	Type: Normal
 	Cat: Physical
 	Desc: The user endearingly approaches the target, then steals the target's held item.
-	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)
+	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)
 	SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 *
 Low Kick:
@@ -3705,7 +3705,7 @@ Reflect Type:
 	Effect: ChangeType
 	Int: ChangeTypeMove
 	ChangeType: 
-	return b.getOtherPokemon(caster.user()).getType(b).clone();
+	return b.getOtherPokemon(caster.isPlayer()).getType(b).clone();
 	###
 	MoveType: Non_Snatchable
 *
@@ -3987,7 +3987,7 @@ Conversion 2:
 	###
 	Effect: ChangeType
 	ChangeType: 
-	ActivePokemon other = b.getOtherPokemon(victim.user());
+	ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 	List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getType(), b);
 	return new Type[] { RandomUtils.getRandomValue(types), Type.NO_TYPE };
 	###
@@ -4367,7 +4367,7 @@ Beat Up:
 	Cat: Physical
 	Type: Dark
 	ApplyDamage: 
-	for (ActivePokemon p : b.getTrainer(me.user()).getTeam()) {
+	for (ActivePokemon p : b.getTrainer(me.isPlayer()).getTeam()) {
 		// Only healthy Pokemon get to attack
 		if (!p.canFight() || p.hasStatus()) {
 			continue;
@@ -4566,7 +4566,7 @@ Thief:
 	Pow: 60
 	Cat: Physical
 	Acc: 100
-	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.user()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)
+	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)
 	SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 *
 Attract:
@@ -4614,7 +4614,7 @@ Assist:
 	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Metronomeless, Assistless
 	Apply: 
 	List<Attack> attacks = new ArrayList<>();
-	for (ActivePokemon p : b.getTrainer(me.user()).getTeam()) {
+	for (ActivePokemon p : b.getTrainer(me.isPlayer()).getTeam()) {
 		if (p == me) {
 			continue;
 		}
@@ -5412,7 +5412,7 @@ Retaliate:
 	Acc: 100
 	Cat: Physical
 	Pow: 70
-	DoublePowerCondition: Effect.hasEffect(b.getEffects(me.user()), EffectNamesies.DEAD_ALLY)
+	DoublePowerCondition: Effect.hasEffect(b.getEffects(me.isPlayer()), EffectNamesies.DEAD_ALLY)
 *
 Circle Throw:
 	Desc: The user throws the target and drags out another Pok\u00e9mon in its party. In the wild, the battle ends.
@@ -5451,11 +5451,11 @@ Role Play:
 	Effect: ChangeAbility
 	AbilityChange: 
 	// TODO: Combine with Trace
-	Ability otherAbility = b.getOtherPokemon(victim.user()).getAbility();
+	Ability otherAbility = b.getOtherPokemon(victim.isPlayer()).getAbility();
 	return otherAbility.namesies().getNewAbility();
 	###
 	AbilityMessage: 
-	ActivePokemon other = b.getOtherPokemon(victim.user());
+	ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 	return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
 	###
 	Apply: 
@@ -5609,7 +5609,7 @@ Baton Pass:
 	Cat: Status
 	Type: Normal
 	ApplyEffects: 
-	Team t = b.getTrainer(user.user());
+	Team t = b.getTrainer(user.isPlayer());
 	if (t instanceof WildPokemon) {
 		Messages.add(new MessageUpdate(user.getName() + " left the battle!"));
 		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
