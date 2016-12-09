@@ -7,7 +7,7 @@ import pokemon.PokemonNamesies;
 
 public abstract class BaseEvolution extends Evolution {
 	private final EvolutionMethod evolutionMethod;
-	private final int evolutionNumber;
+	protected final int evolutionNumber;
 
 	protected BaseEvolution(EvolutionMethod evolutionMethod, int evolutionNumber) {
 		this.evolutionMethod = evolutionMethod;

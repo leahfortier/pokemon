@@ -1,7 +1,6 @@
 package pokemon.evolution;
 
 import item.ItemNamesies;
-import main.Global;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
@@ -9,18 +8,13 @@ import pokemon.Stat;
 class StatEvolution extends Evolution {
     private static final long serialVersionUID = 1L;
 
-    private LevelUpEvolution evolution;
-    private boolean equals;
-    private Stat higher;
-    private Stat lower;
+    private final BaseEvolution evolution;
+    private final boolean equals;
+    private final Stat higher;
+    private final Stat lower;
 
-    StatEvolution(String equals, String higher, String lower, Evolution evolution) {
-        if (!(evolution instanceof LevelUpEvolution)) {
-            Global.error("Stat evolutions must be level up");
-            return;
-        }
-
-        this.evolution = (LevelUpEvolution)evolution;
+    StatEvolution(String equals, String higher, String lower, BaseEvolution evolution) {
+        this.evolution = evolution;
         this.equals = equals.equals("Equal"); // Equality ftw
 
         this.higher = Stat.valueOf(higher.toUpperCase());
@@ -29,12 +23,9 @@ class StatEvolution extends Evolution {
 
     @Override
     public Evolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
-        if (type != EvolutionMethod.LEVEL) {
-            return null;
-        }
-
         int[] stats = p.getStats();
-        int high = stats[higher.index()], low = stats[lower.index()];
+        int high = stats[higher.index()];
+        int low = stats[lower.index()];
 
         if (equals && high == low) {
             return evolution.getEvolution(type, p, use);
@@ -50,5 +41,10 @@ class StatEvolution extends Evolution {
     @Override
     public PokemonNamesies[] getEvolutions() {
         return evolution.getEvolutions();
+    }
+
+    @Override
+    public String toString() {
+        return EvolutionType.STAT + " " + (equals ? "Equal" : "Higher") + " " + higher + " " + lower + " " + evolution;
     }
 }

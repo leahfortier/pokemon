@@ -22,4 +22,9 @@ class LevelUpEvolution extends BaseEvolution {
 
         return null;
     }
+
+    @Override
+    public String toString() {
+        return EvolutionType.LEVEL + " " + super.evolutionNumber + " " + this.level;
+    }
 }

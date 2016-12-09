@@ -5,7 +5,6 @@ import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 
 import java.io.Serializable;
-import java.util.Scanner;
 
 public abstract class Evolution implements Serializable {
 	private static final long serialVersionUID = 1L;

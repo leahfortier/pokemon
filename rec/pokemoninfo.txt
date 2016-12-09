@@ -75,7 +75,7 @@ Synthesis
 Worry Seed
 45
 0 0 0 1 0 0 
-Level 2 16
+LEVEL 2 16
 1
 5 Miracle Seed
 87
@@ -165,7 +165,7 @@ Synthesis
 Worry Seed
 45
 0 0 0 1 1 0 
-Level 3 32
+LEVEL 3 32
 1
 5 Miracle Seed
 87
@@ -265,7 +265,7 @@ Synthesis
 Worry Seed
 45
 0 0 0 2 1 0 
-None
+NONE
 1
 5 Miracle Seed
 87
@@ -357,7 +357,7 @@ Snore
 Thunder Punch
 45
 0 0 0 0 0 1 
-Level 5 16
+LEVEL 5 16
 1
 5 Charcoal
 87
@@ -450,7 +450,7 @@ Snore
 Thunder Punch
 45
 0 0 0 1 0 1 
-Level 6 36
+LEVEL 6 36
 1
 5 Charcoal
 87
@@ -566,7 +566,7 @@ Tailwind
 Thunder Punch
 45
 0 0 0 3 0 0 
-None
+NONE
 1
 5 Charcoal
 87
@@ -659,7 +659,7 @@ Water Pulse
 Zen Headbutt
 45
 0 0 1 0 0 0 
-Level 8 16
+LEVEL 8 16
 2
 5 Mystic Water
 1 Black Glasses
@@ -755,7 +755,7 @@ Water Pulse
 Zen Headbutt
 45
 0 0 1 0 1 0 
-Level 9 36
+LEVEL 9 36
 1
 5 Mystic Water
 87
@@ -865,7 +865,7 @@ Water Pulse
 Zen Headbutt
 45
 0 0 0 0 3 0 
-None
+NONE
 1
 5 Mystic Water
 87
@@ -895,7 +895,7 @@ Electroweb
 Snore
 255
 1 0 0 0 0 0 
-Level 11 7
+LEVEL 11 7
 0
 50
 Shield Dust
@@ -923,7 +923,7 @@ Electroweb
 Iron Defense
 120
 0 0 2 0 0 0 
-Level 12 10
+LEVEL 12 10
 0
 50
 Shed Skin
@@ -1002,7 +1002,7 @@ Snore
 Tailwind
 45
 0 0 0 2 1 0 
-None
+NONE
 1
 5 Silver Powder
 50
@@ -1031,7 +1031,7 @@ Bug Bite
 Electroweb
 255
 0 0 0 0 0 1 
-Level 14 7
+LEVEL 14 7
 0
 50
 Shield Dust
@@ -1059,7 +1059,7 @@ Electroweb
 Iron Defense
 120
 0 0 2 0 0 0 
-Level 15 10
+LEVEL 15 10
 0
 50
 Shed Skin
@@ -1138,7 +1138,7 @@ Snore
 Tailwind
 45
 0 2 0 0 1 0 
-None
+NONE
 1
 5 Poison Barb
 50
@@ -1211,7 +1211,7 @@ Tailwind
 Uproar
 255
 0 0 0 0 0 1 
-Level 17 18
+LEVEL 17 18
 0
 50
 Keen Eye
@@ -1285,7 +1285,7 @@ Tailwind
 Uproar
 120
 0 0 0 0 0 2 
-Level 18 36
+LEVEL 18 36
 0
 50
 Keen Eye
@@ -1363,7 +1363,7 @@ Tailwind
 Uproar
 45
 0 0 0 0 0 3 
-None
+NONE
 0
 50
 Keen Eye
@@ -1451,7 +1451,7 @@ Uproar
 Zen Headbutt
 255
 0 0 0 0 0 1 
-Level 20 20
+LEVEL 20 20
 1
 5 Chilan Berry
 50
@@ -1549,7 +1549,7 @@ Uproar
 Zen Headbutt
 127
 0 0 0 0 0 2 
-None
+NONE
 3
 5 Chilan Berry
 5 Sitrus Berry
@@ -1626,7 +1626,7 @@ Tailwind
 Uproar
 255
 0 0 0 0 0 1 
-Level 22 20
+LEVEL 22 20
 0
 50
 Keen Eye
@@ -1707,7 +1707,7 @@ Tailwind
 Uproar
 90
 0 0 0 0 0 2 
-None
+NONE
 1
 5 Sharp Beak
 50
@@ -1800,7 +1800,7 @@ Snore
 Spite
 255
 0 1 0 0 0 0 
-Level 24 22
+LEVEL 24 22
 1
 5 Binding Band
 50
@@ -1902,7 +1902,7 @@ Snore
 Spite
 90
 0 2 0 0 0 0 
-None
+NONE
 2
 5 Poison Barb
 5 Binding Band
@@ -2000,7 +2000,7 @@ Snore
 Thunder Punch
 190
 0 0 0 0 0 2 
-Item 26  Thunder Stone
+ITEM 26 THUNDER_STONE
 2
 50 Oran Berry
 5 Light Ball
@@ -2088,7 +2088,7 @@ Snore
 Thunder Punch
 75
 0 0 0 0 0 3 
-None
+NONE
 1
 50 Oran Berry
 50
@@ -2182,7 +2182,7 @@ Stealth Rock
 Super Fang
 255
 0 0 1 0 0 0 
-Level 28 22
+LEVEL 28 22
 2
 5 Quick Claw
 5 Grip Claw
@@ -2284,7 +2284,7 @@ Stealth Rock
 Super Fang
 90
 0 0 2 0 0 0 
-None
+NONE
 3
 5 Quick Claw
 5 Soft Sand
@@ -2373,7 +2373,7 @@ Super Fang
 Water Pulse
 235
 1 0 0 0 0 0 
-Level 30 16
+LEVEL 30 16
 0
 0
 Poison Point
@@ -2459,7 +2459,7 @@ Super Fang
 Water Pulse
 120
 2 0 0 0 0 0 
-Item 31  Moon Stone
+ITEM 31 MOON_STONE
 0
 0
 Poison Point
@@ -2577,7 +2577,7 @@ Uproar
 Water Pulse
 45
 3 0 0 0 0 0 
-None
+NONE
 0
 0
 Poison Point
@@ -2663,9 +2663,10 @@ Super Fang
 Water Pulse
 235
 0 1 0 0 0 0 
-Multi 2
-Gender Male Level 33 16
-Gender Female Level 30 16
+MULTI 2
+GENDER MALE LEVEL 33 16
+GENDER FEMALE LEVEL 30 16
+
 0
 50
 Poison Point
@@ -2751,7 +2752,7 @@ Super Fang
 Water Pulse
 120
 0 2 0 0 0 0 
-Item 34  Moon Stone
+ITEM 34 MOON_STONE
 0
 100
 Poison Point
@@ -2868,7 +2869,7 @@ Uproar
 Water Pulse
 45
 0 3 0 0 0 0 
-None
+NONE
 0
 100
 Poison Point
@@ -3001,7 +3002,7 @@ Wonder Room
 Zen Headbutt
 150
 2 0 0 0 0 0 
-Item 36  Moon Stone
+ITEM 36 MOON_STONE
 3
 50 Leppa Berry
 1 Comet Shard
@@ -3121,7 +3122,7 @@ Wonder Room
 Zen Headbutt
 25
 3 0 0 0 0 0 
-None
+NONE
 3
 50 Leppa Berry
 1 Comet Shard
@@ -3217,7 +3218,7 @@ Spite
 Zen Headbutt
 190
 0 0 0 0 0 1 
-Item 38  Fire Stone
+ITEM 38 FIRE_STONE
 2
 95 Rawst Berry
 5 Charcoal
@@ -3304,7 +3305,7 @@ Spite
 Zen Headbutt
 75
 0 0 0 0 1 1 
-None
+NONE
 2
 95 Rawst Berry
 5 Charcoal
@@ -3425,7 +3426,7 @@ Thunder Punch
 Water Pulse
 170
 2 0 0 0 0 0 
-Item 40  Moon Stone
+ITEM 40 MOON_STONE
 1
 50 Oran Berry
 25
@@ -3539,7 +3540,7 @@ Thunder Punch
 Water Pulse
 50
 3 0 0 0 0 0 
-None
+NONE
 1
 50 Oran Berry
 25
@@ -3628,7 +3629,7 @@ Uproar
 Zen Headbutt
 255
 0 0 0 0 0 1 
-Level 42 22
+LEVEL 42 22
 0
 50
 Inner Focus
@@ -3722,7 +3723,7 @@ Uproar
 Zen Headbutt
 90
 0 0 0 0 0 2 
-Item 169  Dusk Stone
+ITEM 169 DUSK_STONE
 0
 50
 Inner Focus
@@ -3800,7 +3801,7 @@ Synthesis
 Worry Seed
 255
 0 0 0 1 0 0 
-Level 44 21
+LEVEL 44 21
 1
 5 Absorb Bulb
 50
@@ -3883,9 +3884,10 @@ Synthesis
 Worry Seed
 120
 0 0 0 2 0 0 
-Multi 2
-Item 45  Leaf Stone
-Item 182  Sun Stone
+MULTI 2
+ITEM 45 LEAF_STONE
+ITEM 182 SUN_STONE
+
 1
 5 Absorb Bulb
 50
@@ -3961,7 +3963,7 @@ Synthesis
 Worry Seed
 45
 0 0 0 3 0 0 
-None
+NONE
 1
 5 Absorb Bulb
 50
@@ -4052,7 +4054,7 @@ Synthesis
 Worry Seed
 190
 0 1 0 0 0 0 
-Level 47 24
+LEVEL 47 24
 3
 50 Tiny Mushroom
 5 Big Mushroom
@@ -4151,7 +4153,7 @@ Synthesis
 Worry Seed
 75
 0 2 1 0 0 0 
-None
+NONE
 3
 50 Tiny Mushroom
 5 Big Mushroom
@@ -4229,7 +4231,7 @@ Snore
 Zen Headbutt
 190
 0 0 0 0 1 0 
-Level 49 31
+LEVEL 49 31
 0
 50
 Compoundeyes
@@ -4319,7 +4321,7 @@ Tailwind
 Zen Headbutt
 75
 0 0 0 1 0 1 
-None
+NONE
 2
 5 Silver Powder
 5 Shed Shell
@@ -4402,7 +4404,7 @@ Snore
 Stealth Rock
 255
 0 0 0 0 0 1 
-Level 51 26
+LEVEL 51 26
 1
 5 Soft Sand
 50
@@ -4493,7 +4495,7 @@ Snore
 Stealth Rock
 50
 0 0 0 0 0 2 
-None
+NONE
 1
 5 Soft Sand
 50
@@ -4594,7 +4596,7 @@ Uproar
 Water Pulse
 255
 0 0 0 0 0 1 
-Level 53 28
+LEVEL 53 28
 3
 5 Quick Claw
 5 Nugget
@@ -4706,7 +4708,7 @@ Uproar
 Water Pulse
 90
 0 0 0 0 0 2 
-None
+NONE
 2
 5 Quick Claw
 5 Amulet Coin
@@ -4810,7 +4812,7 @@ Worry Seed
 Zen Headbutt
 190
 0 0 0 1 0 0 
-Level 55 33
+LEVEL 55 33
 0
 50
 Damp
@@ -4920,7 +4922,7 @@ Worry Seed
 Zen Headbutt
 75
 0 0 0 2 0 0 
-None
+NONE
 0
 50
 Damp
@@ -5028,7 +5030,7 @@ Thunder Punch
 Uproar
 190
 0 1 0 0 0 0 
-Level 57 28
+LEVEL 57 28
 1
 5 Payapa Berry
 50
@@ -5142,7 +5144,7 @@ Thunder Punch
 Uproar
 75
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Payapa Berry
 50
@@ -5232,7 +5234,7 @@ Outrage
 Snore
 190
 0 1 0 0 0 0 
-Item 59  Fire Stone
+ITEM 59 FIRE_STONE
 1
 100 Rawst Berry
 75
@@ -5316,7 +5318,7 @@ Outrage
 Snore
 75
 0 2 0 0 0 0 
-None
+NONE
 1
 100 Rawst Berry
 75
@@ -5394,7 +5396,7 @@ Snore
 Water Pulse
 255
 0 0 0 0 0 1 
-Level 61 25
+LEVEL 61 25
 0
 50
 Water Absorb
@@ -5482,9 +5484,10 @@ Snore
 Water Pulse
 120
 0 0 0 0 0 2 
-Multi 2
-Item 62  Water Stone
-Item 186  King's Rock
+MULTI 2
+ITEM 62 WATER_STONE
+ITEM 186 KINGS_ROCK
+
 1
 5 King's Rock
 50
@@ -5575,7 +5578,7 @@ Snore
 Water Pulse
 45
 0 0 3 0 0 0 
-None
+NONE
 1
 5 King's Rock
 50
@@ -5668,7 +5671,7 @@ Wonder Room
 Zen Headbutt
 200
 0 0 0 1 0 0 
-Level 64 16
+LEVEL 64 16
 1
 5 Twisted Spoon
 75
@@ -5776,7 +5779,7 @@ Wonder Room
 Zen Headbutt
 100
 0 0 0 2 0 0 
-Item 65  Twisted Spoon
+ITEM 65 TWISTED_SPOON
 1
 5 Twisted Spoon
 75
@@ -5887,7 +5890,7 @@ Wonder Room
 Zen Headbutt
 50
 0 0 0 3 0 0 
-None
+NONE
 1
 5 Twisted Spoon
 75
@@ -5990,7 +5993,7 @@ Superpower
 Thunder Punch
 180
 0 1 0 0 0 0 
-Level 67 28
+LEVEL 67 28
 1
 5 Focus Band
 75
@@ -6095,7 +6098,7 @@ Superpower
 Thunder Punch
 90
 0 2 0 0 0 0 
-Item 68 Focus Band
+ITEM 68 FOCUS_BAND
 1
 5 Focus Band
 75
@@ -6204,7 +6207,7 @@ Superpower
 Thunder Punch
 45
 0 3 0 0 0 0 
-None
+NONE
 1
 5 Focus Band
 75
@@ -6290,7 +6293,7 @@ Synthesis
 Worry Seed
 255
 0 1 0 0 0 0 
-Level 70 21
+LEVEL 70 21
 0
 50
 Chlorophyll
@@ -6377,7 +6380,7 @@ Synthesis
 Worry Seed
 120
 0 2 0 0 0 0 
-Item 71  Leaf Stone
+ITEM 71 LEAF_STONE
 0
 50
 Chlorophyll
@@ -6461,7 +6464,7 @@ Synthesis
 Worry Seed
 45
 0 3 0 0 0 0 
-None
+NONE
 0
 50
 Chlorophyll
@@ -6551,7 +6554,7 @@ Snore
 Water Pulse
 190
 0 0 0 0 1 0 
-Level 73 30
+LEVEL 73 30
 2
 5 Poison Barb
 5 Binding Band
@@ -6650,7 +6653,7 @@ Snore
 Water Pulse
 60
 0 0 0 0 2 0 
-None
+NONE
 2
 5 Poison Barb
 5 Binding Band
@@ -6743,7 +6746,7 @@ Superpower
 Thunder Punch
 255
 0 0 1 0 0 0 
-Level 75 25
+LEVEL 75 25
 2
 5 Everstone
 5 Hard Stone
@@ -6838,7 +6841,7 @@ Superpower
 Thunder Punch
 120
 0 0 2 0 0 0 
-Item 76  Hard Stone
+ITEM 76 HARD_STONE
 2
 5 Everstone
 5 Hard Stone
@@ -6940,7 +6943,7 @@ Superpower
 Thunder Punch
 45
 0 0 3 0 0 0 
-None
+NONE
 2
 5 Everstone
 5 Hard Stone
@@ -7018,7 +7021,7 @@ Low Kick
 Snore
 190
 0 0 0 0 0 1 
-Level 78 40
+LEVEL 78 40
 1
 5 Shuca Berry
 50
@@ -7105,7 +7108,7 @@ Low Kick
 Snore
 60
 0 0 0 0 0 2 
-None
+NONE
 1
 5 Shuca Berry
 50
@@ -7210,9 +7213,10 @@ Wonder Room
 Zen Headbutt
 190
 1 0 0 0 0 0 
-Multi 2
-Level 80 37
-Item 199  King's Rock
+MULTI 2
+LEVEL 80 37
+ITEM 199 KINGS_ROCK
+
 2
 5 Lagging Tail
 5 King's Rock
@@ -7333,7 +7337,7 @@ Wonder Room
 Zen Headbutt
 75
 0 0 2 0 0 0 
-None
+NONE
 1
 5 King's Rock
 50
@@ -7410,7 +7414,7 @@ Signal Beam
 Snore
 190
 0 0 0 1 0 0 
-Level 82 30
+LEVEL 82 30
 2
 5 Magnet
 5 Metal Coat
@@ -7496,7 +7500,7 @@ Signal Beam
 Snore
 60
 0 0 0 2 0 0 
-Item 462  Thunder Stone
+ITEM 462 THUNDER_STONE
 2
 5 Magnet
 5 Metal Coat
@@ -7592,7 +7596,7 @@ Tailwind
 Uproar
 45
 0 1 0 0 0 0 
-None
+NONE
 1
 5 Stick
 50
@@ -7664,7 +7668,7 @@ Snore
 Uproar
 190
 0 1 0 0 0 0 
-Level 85 31
+LEVEL 85 31
 1
 5 Sharp Beak
 50
@@ -7744,7 +7748,7 @@ Snore
 Uproar
 45
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Sharp Beak
 50
@@ -7833,7 +7837,7 @@ Snore
 Water Pulse
 190
 0 0 0 0 1 0 
-Level 87 34
+LEVEL 87 34
 1
 50 Aspear Berry
 50
@@ -7929,7 +7933,7 @@ Snore
 Water Pulse
 75
 0 0 0 0 2 0 
-None
+NONE
 2
 50 Aspear Berry
 5 NeverMeltIce
@@ -8027,7 +8031,7 @@ Snore
 Thunder Punch
 190
 1 0 0 0 0 0 
-Level 89 38
+LEVEL 89 38
 2
 5 Black Sludge
 5 Nugget
@@ -8136,7 +8140,7 @@ Snore
 Thunder Punch
 75
 1 1 0 0 0 0 
-None
+NONE
 3
 50 Black Sludge
 1 Toxic Orb
@@ -8215,7 +8219,7 @@ Snore
 Water Pulse
 190
 0 0 1 0 0 0 
-Item 91  Water Stone
+ITEM 91 WATER_STONE
 2
 5 Big Pearl
 50 Pearl
@@ -8293,7 +8297,7 @@ Snore
 Water Pulse
 60
 0 0 2 0 0 0 
-None
+NONE
 2
 5 Big Pearl
 50 Pearl
@@ -8395,7 +8399,7 @@ Uproar
 Wonder Room
 190
 0 0 0 1 0 0 
-Level 93 25
+LEVEL 93 25
 1
 5 Spell Tag
 50
@@ -8501,7 +8505,7 @@ Uproar
 Wonder Room
 90
 0 0 0 2 0 0 
-Item 94  Spell Tag
+ITEM 94 SPELL_TAG
 1
 5 Spell Tag
 50
@@ -8618,7 +8622,7 @@ Uproar
 Wonder Room
 45
 0 0 0 3 0 0 
-None
+NONE
 1
 5 Spell Tag
 50
@@ -8716,7 +8720,7 @@ Snore
 Stealth Rock
 45
 0 0 1 0 0 0 
-Item 208  Metal Coat
+ITEM 208 METAL_COAT
 1
 5 Hard Stone
 50
@@ -8822,7 +8826,7 @@ Trick
 Zen Headbutt
 190
 0 0 0 0 1 0 
-Level 97 26
+LEVEL 97 26
 0
 50
 Insomnia
@@ -8936,7 +8940,7 @@ Trick
 Zen Headbutt
 75
 0 0 0 0 2 0 
-None
+NONE
 0
 50
 Insomnia
@@ -9024,7 +9028,7 @@ Superpower
 Water Pulse
 225
 0 1 0 0 0 0 
-Level 99 28
+LEVEL 99 28
 0
 50
 Hyper Cutter
@@ -9117,7 +9121,7 @@ Superpower
 Water Pulse
 60
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Hyper Cutter
@@ -9189,7 +9193,7 @@ Signal Beam
 Snore
 190
 0 0 0 0 0 1 
-Level 101 30
+LEVEL 101 30
 0
 -1
 Soundproof
@@ -9266,7 +9270,7 @@ Signal Beam
 Snore
 60
 0 0 0 0 0 2 
-None
+NONE
 0
 -1
 Soundproof
@@ -9358,7 +9362,7 @@ Uproar
 Worry Seed
 90
 0 0 1 0 0 0 
-Item 103  Leaf Stone
+ITEM 103 LEAF_STONE
 0
 50
 Chlorophyll
@@ -9448,7 +9452,7 @@ Worry Seed
 Zen Headbutt
 45
 0 0 0 2 0 0 
-None
+NONE
 0
 50
 Chlorophyll
@@ -9547,7 +9551,7 @@ Thunder Punch
 Uproar
 190
 0 0 1 0 0 0 
-Level 105 28
+LEVEL 105 28
 1
 5 Thick Club
 50
@@ -9655,7 +9659,7 @@ Thunder Punch
 Uproar
 75
 0 0 2 0 0 0 
-None
+NONE
 1
 5 Thick Club
 50
@@ -9748,7 +9752,7 @@ Snore
 Superpower
 45
 0 2 0 0 0 0 
-None
+NONE
 0
 100
 Limber
@@ -9841,7 +9845,7 @@ Snore
 Thunder Punch
 45
 0 0 0 0 2 0 
-None
+NONE
 0
 100
 Keen Eye
@@ -9949,7 +9953,7 @@ Water Pulse
 Zen Headbutt
 45
 2 0 0 0 0 0 
-Move 463 Rollout
+MOVE 463 ROLLOUT
 1
 5 Lagging Tail
 50
@@ -10038,7 +10042,7 @@ Spite
 Uproar
 190
 0 0 1 0 0 0 
-Level 110 35
+LEVEL 110 35
 1
 5 Smoke Ball
 50
@@ -10131,7 +10135,7 @@ Spite
 Uproar
 60
 0 0 2 0 0 0 
-None
+NONE
 1
 5 Smoke Ball
 50
@@ -10237,7 +10241,7 @@ Superpower
 Uproar
 120
 0 0 1 0 0 0 
-Level 112 42
+LEVEL 112 42
 1
 50 Protector
 50
@@ -10363,7 +10367,7 @@ Thunder Punch
 Uproar
 60
 0 2 0 0 0 0 
-Item 464  Protector
+ITEM 464 PROTECTOR
 1
 50 Protector
 50
@@ -10487,7 +10491,7 @@ Water Pulse
 Zen Headbutt
 30
 2 0 0 0 0 0 
-Item 242  Shiny Stone
+ITEM 242 SHINY_STONE
 2
 5 Lucky Egg
 50 Lucky Punch
@@ -10580,7 +10584,7 @@ Synthesis
 Worry Seed
 45
 0 0 1 0 0 0 
-Move 465  Ancient Power
+MOVE 465 ANCIENT_POWER
 0
 50
 Chlorophyll
@@ -10695,7 +10699,7 @@ Uproar
 Water Pulse
 45
 2 0 0 0 0 0 
-None
+NONE
 0
 0
 Early Bird
@@ -10772,7 +10776,7 @@ Snore
 Water Pulse
 225
 0 0 0 1 0 0 
-Level 117 32
+LEVEL 117 32
 1
 5 Dragon Scale
 50
@@ -10856,7 +10860,7 @@ Snore
 Water Pulse
 75
 0 0 1 1 0 0 
-Item 230  Dragon Scale
+ITEM 230 DRAGON_SCALE
 1
 5 Dragon Scale
 50
@@ -10935,7 +10939,7 @@ Snore
 Water Pulse
 225
 0 1 0 0 0 0 
-Level 119 33
+LEVEL 119 33
 1
 5 Mystic Water
 50
@@ -11019,7 +11023,7 @@ Snore
 Water Pulse
 60
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Mystic Water
 50
@@ -11101,7 +11105,7 @@ Snore
 Water Pulse
 225
 0 0 0 0 0 1 
-Item 121  Water Stone
+ITEM 121 WATER_STONE
 2
 50 Stardust
 5 Star Piece
@@ -11180,7 +11184,7 @@ Water Pulse
 Wonder Room
 60
 0 0 0 0 0 2 
-None
+NONE
 2
 50 Stardust
 5 Star Piece
@@ -11308,7 +11312,7 @@ Wonder Room
 Zen Headbutt
 45
 0 0 0 0 2 0 
-None
+NONE
 1
 5 Leppa Berry
 50
@@ -11397,7 +11401,7 @@ Snore
 Tailwind
 45
 0 1 0 0 0 0 
-Item 212  Metal Coat
+ITEM 212 METAL_COAT
 0
 50
 Swarm
@@ -11506,7 +11510,7 @@ Water Pulse
 Zen Headbutt
 45
 0 0 0 2 0 0 
-None
+NONE
 1
 100 Aspear Berry
 0
@@ -11602,7 +11606,7 @@ Snore
 Thunder Punch
 45
 0 0 0 0 0 2 
-Item 466  Electirizer
+ITEM 466 ELECTIRIZER
 2
 50 Electirizer
 5 Cheri Berry
@@ -11696,7 +11700,7 @@ Snore
 Thunder Punch
 45
 0 0 0 2 0 0 
-Item 467  Magmarizer
+ITEM 467 MAGMARIZER
 2
 50 Magmarizer
 5 Rawst Berry
@@ -11790,7 +11794,7 @@ Stealth Rock
 Superpower
 45
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Hyper Cutter
@@ -11876,7 +11880,7 @@ Water Pulse
 Zen Headbutt
 45
 0 1 0 0 0 1 
-None
+NONE
 0
 100
 Intimidate
@@ -11903,7 +11907,7 @@ Water No_Type
 Bounce
 255
 0 0 0 0 0 1 
-Level 130 20
+LEVEL 130 20
 0
 50
 Swift Swim
@@ -11990,7 +11994,7 @@ Uproar
 Water Pulse
 45
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Intimidate
@@ -12090,7 +12094,7 @@ Water Pulse
 Zen Headbutt
 45
 2 0 0 0 0 0 
-None
+NONE
 0
 50
 Water Absorb
@@ -12114,7 +12118,7 @@ Normal No_Type
 0
 35
 1 0 0 0 0 0 
-None
+NONE
 2
 50 Quick Powder
 5 Metal Powder
@@ -12194,15 +12198,16 @@ Last Resort
 Snore
 45
 0 0 0 0 1 0 
-Multi 8
-Item 134  Water Stone
-Item 135  Thunder Stone
-Item 136  Fire Stone
-Item 196  Sun Stone
-Item 197  Moon Stone
-Item 470  Leaf Stone
-Item 471  Dawn Stone
-Item 700  Shiny Stone
+MULTI 8
+ITEM 134 WATER_STONE
+ITEM 135 THUNDER_STONE
+ITEM 136 FIRE_STONE
+ITEM 196 SUN_STONE
+ITEM 197 MOON_STONE
+ITEM 470 LEAF_STONE
+ITEM 471 DAWN_STONE
+ITEM 700 SHINY_STONE
+
 1
 5 Eviolite
 87
@@ -12294,7 +12299,7 @@ Snore
 Water Pulse
 45
 2 0 0 0 0 0 
-None
+NONE
 0
 87
 Water Absorb
@@ -12385,7 +12390,7 @@ Signal Beam
 Snore
 45
 0 0 0 0 0 2 
-None
+NONE
 0
 87
 Volt Absorb
@@ -12473,7 +12478,7 @@ Snore
 Superpower
 45
 0 2 0 0 0 0 
-None
+NONE
 0
 87
 Flash Fire
@@ -12559,7 +12564,7 @@ Wonder Room
 Zen Headbutt
 45
 0 0 0 1 0 0 
-Item 233  Up-Grade
+ITEM 233 UP_GRADE
 1
 5 Up-Grade
 -1
@@ -12648,7 +12653,7 @@ Stealth Rock
 Water Pulse
 45
 0 0 1 0 0 0 
-Level 139 40
+LEVEL 139 40
 0
 87
 Swift Swim
@@ -12742,7 +12747,7 @@ Stealth Rock
 Water Pulse
 45
 0 0 2 0 0 0 
-None
+NONE
 0
 87
 Swift Swim
@@ -12826,7 +12831,7 @@ Stealth Rock
 Water Pulse
 45
 0 0 1 0 0 0 
-Level 141 40
+LEVEL 141 40
 0
 87
 Swift Swim
@@ -12929,7 +12934,7 @@ Superpower
 Water Pulse
 45
 0 2 0 0 0 0 
-None
+NONE
 0
 87
 Swift Swim
@@ -13031,7 +13036,7 @@ Stealth Rock
 Tailwind
 45
 0 0 0 0 0 2 
-None
+NONE
 0
 87
 Rock Head
@@ -13141,7 +13146,7 @@ Water Pulse
 Zen Headbutt
 25
 2 0 0 0 0 0 
-None
+NONE
 1
 100 Leftovers
 87
@@ -13221,7 +13226,7 @@ Tailwind
 Water Pulse
 3
 0 0 0 0 3 0 
-None
+NONE
 0
 -1
 Pressure
@@ -13301,7 +13306,7 @@ Snore
 Tailwind
 3
 0 0 0 3 0 0 
-None
+NONE
 0
 -1
 Pressure
@@ -13380,7 +13385,7 @@ Snore
 Tailwind
 3
 0 0 0 3 0 0 
-None
+NONE
 0
 -1
 Pressure
@@ -13467,7 +13472,7 @@ Snore
 Water Pulse
 45
 0 1 0 0 0 0 
-Level 148 30
+LEVEL 148 30
 1
 5 Dragon Scale
 50
@@ -13558,7 +13563,7 @@ Snore
 Water Pulse
 45
 0 2 0 0 0 0 
-Level 149 55
+LEVEL 149 55
 2
 5 Dragon Scale
 5 Dragon Fang
@@ -13686,7 +13691,7 @@ Thunder Punch
 Water Pulse
 45
 0 3 0 0 0 0 
-None
+NONE
 2
 5 Dragon Scale
 5 Dragon Fang
@@ -13813,7 +13818,7 @@ Wonder Room
 Zen Headbutt
 3
 0 0 0 3 0 0 
-None
+NONE
 0
 -1
 Pressure
@@ -14011,7 +14016,7 @@ Worry Seed
 Zen Headbutt
 45
 3 0 0 0 0 0 
-None
+NONE
 1
 100 Lum Berry
 -1
@@ -14096,7 +14101,7 @@ Synthesis
 Worry Seed
 45
 0 0 0 0 1 0 
-Level 153 16
+LEVEL 153 16
 1
 5 Miracle Seed
 87
@@ -14185,7 +14190,7 @@ Synthesis
 Worry Seed
 45
 0 0 1 0 1 0 
-Level 154 32
+LEVEL 154 32
 1
 5 Miracle Seed
 87
@@ -14283,7 +14288,7 @@ Synthesis
 Worry Seed
 45
 0 0 1 0 2 0 
-None
+NONE
 1
 5 Miracle Seed
 87
@@ -14364,7 +14369,7 @@ Heat Wave
 Snore
 45
 0 0 0 0 0 1 
-Level 156 16
+LEVEL 156 16
 1
 5 Charcoal
 87
@@ -14451,7 +14456,7 @@ Heat Wave
 Snore
 45
 0 0 0 1 0 1 
-Level 157 32
+LEVEL 157 32
 1
 5 Charcoal
 87
@@ -14557,7 +14562,7 @@ Snore
 Thunder Punch
 45
 0 0 0 3 0 0 
-None
+NONE
 1
 5 Charcoal
 87
@@ -14656,7 +14661,7 @@ Uproar
 Water Pulse
 45
 0 1 0 0 0 0 
-Level 159 18
+LEVEL 159 18
 1
 5 Mystic Water
 87
@@ -14759,7 +14764,7 @@ Uproar
 Water Pulse
 45
 0 1 1 0 0 0 
-Level 160 30
+LEVEL 160 30
 1
 5 Mystic Water
 87
@@ -14872,7 +14877,7 @@ Uproar
 Water Pulse
 45
 0 2 1 0 0 0 
-None
+NONE
 1
 5 Mystic Water
 87
@@ -14973,7 +14978,7 @@ Uproar
 Water Pulse
 255
 0 1 0 0 0 0 
-Level 162 15
+LEVEL 162 15
 1
 5 Oran Berry
 50
@@ -15083,7 +15088,7 @@ Uproar
 Water Pulse
 90
 0 0 0 0 0 2 
-None
+NONE
 2
 5 Sitrus Berry
 50 Oran Berry
@@ -15170,7 +15175,7 @@ Uproar
 Zen Headbutt
 255
 1 0 0 0 0 0 
-Level 164 20
+LEVEL 164 20
 0
 50
 Insomnia
@@ -15260,7 +15265,7 @@ Uproar
 Zen Headbutt
 90
 2 0 0 0 0 0 
-None
+NONE
 0
 50
 Insomnia
@@ -15349,7 +15354,7 @@ Thunder Punch
 Uproar
 255
 0 0 0 0 1 0 
-Level 166 18
+LEVEL 166 18
 0
 50
 Swarm
@@ -15445,7 +15450,7 @@ Thunder Punch
 Uproar
 90
 0 0 0 0 2 0 
-None
+NONE
 0
 50
 Swarm
@@ -15528,7 +15533,7 @@ Signal Beam
 Snore
 255
 0 1 0 0 0 0 
-Level 168 22
+LEVEL 168 22
 0
 50
 Swarm
@@ -15618,7 +15623,7 @@ Signal Beam
 Snore
 90
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Swarm
@@ -15716,7 +15721,7 @@ Uproar
 Zen Headbutt
 90
 0 0 0 0 0 3 
-None
+NONE
 0
 50
 Inner Focus
@@ -15802,7 +15807,7 @@ Snore
 Water Pulse
 190
 1 0 0 0 0 0 
-Level 171 27
+LEVEL 171 27
 2
 5 Deep Sea Scale
 5 Prism Scale
@@ -15899,7 +15904,7 @@ Snore
 Water Pulse
 75
 2 0 0 0 0 0 
-None
+NONE
 2
 5 Deep Sea Scale
 5 Prism Scale
@@ -15980,7 +15985,7 @@ Thunder Punch
 Uproar
 190
 0 0 0 0 0 1 
-Item 25  Sun Stone
+ITEM 25 SUN_STONE
 1
 50 Oran Berry
 50
@@ -16076,7 +16081,7 @@ Wonder Room
 Zen Headbutt
 150
 0 0 0 0 1 0 
-Item 35  Sun Stone
+ITEM 35 SUN_STONE
 3
 50 Leppa Berry
 1 Comet Shard
@@ -16170,7 +16175,7 @@ Uproar
 Water Pulse
 170
 1 0 0 0 0 0 
-Item 39  Sun Stone
+ITEM 39 SUN_STONE
 1
 50 Oran Berry
 25
@@ -16268,7 +16273,7 @@ Water Pulse
 Zen Headbutt
 190
 0 0 0 0 1 0 
-Item 176  Sun Stone
+ITEM 176 SUN_STONE
 0
 87
 Hustle
@@ -16380,7 +16385,7 @@ Water Pulse
 Zen Headbutt
 75
 0 0 0 0 2 0 
-Item 468  Shiny Stone
+ITEM 468 SHINY_STONE
 0
 87
 Hustle
@@ -16478,7 +16483,7 @@ Trick
 Zen Headbutt
 190
 0 0 0 1 0 0 
-Level 178 25
+LEVEL 178 25
 0
 50
 Synchronize
@@ -16584,7 +16589,7 @@ Trick
 Zen Headbutt
 75
 0 0 0 1 0 1 
-None
+NONE
 0
 50
 Synchronize
@@ -16663,7 +16668,7 @@ Signal Beam
 Snore
 235
 0 0 0 1 0 0 
-Level 180 15
+LEVEL 180 15
 0
 50
 Static
@@ -16753,7 +16758,7 @@ Snore
 Thunder Punch
 120
 0 0 0 2 0 0 
-Level 181 30
+LEVEL 181 30
 0
 50
 Static
@@ -16856,7 +16861,7 @@ Snore
 Thunder Punch
 45
 0 0 0 3 0 0 
-None
+NONE
 0
 50
 Static
@@ -16934,7 +16939,7 @@ Uproar
 Worry Seed
 45
 0 0 0 0 3 0 
-None
+NONE
 1
 5 Absorb Bulb
 50
@@ -17028,7 +17033,7 @@ Superpower
 Water Pulse
 190
 2 0 0 0 0 0 
-Level 184 18
+LEVEL 184 18
 0
 50
 Thick Fat
@@ -17127,7 +17132,7 @@ Superpower
 Water Pulse
 75
 3 0 0 0 0 0 
-None
+NONE
 0
 50
 Thick Fat
@@ -17225,7 +17230,7 @@ Stealth Rock
 Thunder Punch
 65
 0 0 2 0 0 0 
-None
+NONE
 0
 50
 Sturdy
@@ -17312,7 +17317,7 @@ Snore
 Water Pulse
 45
 0 0 0 0 3 0 
-None
+NONE
 1
 5 King's Rock
 50
@@ -17397,7 +17402,7 @@ Synthesis
 Worry Seed
 255
 0 0 0 0 1 0 
-Level 188 18
+LEVEL 188 18
 0
 50
 Chlorophyll
@@ -17484,7 +17489,7 @@ Synthesis
 Worry Seed
 120
 0 0 0 0 0 2 
-Level 189 27
+LEVEL 189 27
 0
 50
 Chlorophyll
@@ -17573,7 +17578,7 @@ Synthesis
 Worry Seed
 45
 0 0 0 0 0 3 
-None
+NONE
 0
 50
 Chlorophyll
@@ -17683,7 +17688,7 @@ Uproar
 Water Pulse
 45
 0 0 0 0 0 1 
-Move 424  Double Hit
+MOVE 424 DOUBLE_HIT
 0
 50
 Run Away
@@ -17766,7 +17771,7 @@ Uproar
 Worry Seed
 235
 0 0 0 1 0 0 
-Item 192  Sun Stone
+ITEM 192 SUN_STONE
 1
 5 Coba Berry
 50
@@ -17855,7 +17860,7 @@ Uproar
 Worry Seed
 120
 0 0 0 2 0 0 
-None
+NONE
 0
 50
 Chlorophyll
@@ -17934,7 +17939,7 @@ Tailwind
 Uproar
 75
 0 0 0 0 0 1 
-Move 469  Ancient Power
+MOVE 469 ANCIENT_POWER
 1
 5 Wide Lens
 50
@@ -18024,7 +18029,7 @@ Snore
 Water Pulse
 255
 1 0 0 0 0 0 
-Level 195 20
+LEVEL 195 20
 0
 50
 Damp
@@ -18126,7 +18131,7 @@ Snore
 Water Pulse
 90
 2 0 0 0 0 0 
-None
+NONE
 0
 50
 Damp
@@ -18221,7 +18226,7 @@ Trick
 Zen Headbutt
 45
 0 0 0 2 0 0 
-None
+NONE
 0
 87
 Synchronize
@@ -18312,7 +18317,7 @@ Spite
 Wonder Room
 45
 0 0 0 0 2 0 
-None
+NONE
 0
 87
 Synchronize
@@ -18407,7 +18412,7 @@ Tailwind
 Uproar
 30
 0 0 0 0 0 1 
-Item 430  Dusk Stone
+ITEM 430 DUSK_STONE
 0
 50
 Insomnia
@@ -18527,7 +18532,7 @@ Wonder Room
 Zen Headbutt
 70
 0 0 0 0 3 0 
-None
+NONE
 1
 5 King's Rock
 50
@@ -18629,7 +18634,7 @@ Uproar
 Wonder Room
 45
 0 0 0 0 1 0 
-Item 429  Dusk Stone
+ITEM 429 DUSK_STONE
 0
 50
 Levitate
@@ -18653,7 +18658,7 @@ Psychic No_Type
 0
 225
 0 1 0 1 0 0 
-None
+NONE
 0
 -1
 Levitate
@@ -18681,7 +18686,7 @@ Safeguard
 0
 45
 2 0 0 0 0 0 
-None
+NONE
 0
 50
 Shadow Tag
@@ -18786,7 +18791,7 @@ Uproar
 Zen Headbutt
 60
 0 0 0 2 0 0 
-None
+NONE
 1
 5 Persim Berry
 50
@@ -18873,7 +18878,7 @@ Snore
 Stealth Rock
 190
 0 0 1 0 0 0 
-Level 205 31
+LEVEL 205 31
 0
 50
 Sturdy
@@ -18976,7 +18981,7 @@ Snore
 Stealth Rock
 75
 0 0 2 0 0 0 
-None
+NONE
 0
 50
 Sturdy
@@ -19086,7 +19091,7 @@ Water Pulse
 Zen Headbutt
 190
 1 0 0 0 0 0 
-None
+NONE
 0
 50
 Serene Grace
@@ -19193,7 +19198,7 @@ Stealth Rock
 Tailwind
 60
 0 0 1 0 0 0 
-Item 472  Razor Fang
+ITEM 472 RAZOR_FANG
 1
 5 Razor Fang
 50
@@ -19300,7 +19305,7 @@ Snore
 Stealth Rock
 25
 0 0 2 0 0 0 
-None
+NONE
 1
 5 Metal Coat
 50
@@ -19412,7 +19417,7 @@ Thunder Punch
 Water Pulse
 190
 0 1 0 0 0 0 
-Level 210 23
+LEVEL 210 23
 0
 25
 Intimidate
@@ -19533,7 +19538,7 @@ Thunder Punch
 Water Pulse
 75
 0 2 0 0 0 0 
-None
+NONE
 0
 25
 Intimidate
@@ -19628,7 +19633,7 @@ Snore
 Water Pulse
 45
 0 1 0 0 0 0 
-None
+NONE
 1
 5 Poison Barb
 50
@@ -19726,7 +19731,7 @@ Superpower
 Tailwind
 25
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Swarm
@@ -19817,7 +19822,7 @@ Snore
 Stealth Rock
 190
 0 0 1 0 1 0 
-None
+NONE
 1
 100 Berry Juice
 50
@@ -19914,7 +19919,7 @@ Low Kick
 Snore
 45
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Swarm
@@ -20025,7 +20030,7 @@ Snore
 Spite
 60
 0 0 0 0 0 1 
-Item 461  Razor Claw
+ITEM 461 RAZOR_CLAW
 3
 50 Grip Claw
 5 Quick Claw
@@ -20130,7 +20135,7 @@ Superpower
 Thunder Punch
 120
 0 1 0 0 0 0 
-Level 217 30
+LEVEL 217 30
 3
 50 Oran Berry
 5 Sitrus Berry
@@ -20242,7 +20247,7 @@ Thunder Punch
 Uproar
 60
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Honey
 50
@@ -20326,7 +20331,7 @@ Pain Split
 Snore
 190
 0 0 0 1 0 0 
-Level 219 38
+LEVEL 219 38
 1
 5 Heat Rock
 50
@@ -20427,7 +20432,7 @@ Snore
 Stealth Rock
 75
 0 0 2 0 0 0 
-None
+NONE
 1
 5 Heat Rock
 50
@@ -20513,7 +20518,7 @@ Stealth Rock
 Superpower
 225
 0 1 0 0 0 0 
-Level 221 33
+LEVEL 221 33
 1
 50 Aspear Berry
 50
@@ -20606,7 +20611,7 @@ Stealth Rock
 Superpower
 75
 1 1 0 0 0 0 
-Move 473  Ancient Power
+MOVE 473 ANCIENT_POWER
 2
 50 Aspear Berry
 5 NeverMeltIce
@@ -20709,7 +20714,7 @@ Stealth Rock
 Water Pulse
 60
 0 0 1 0 1 0 
-None
+NONE
 2
 5 Hard Stone
 1 Luminous Moss
@@ -20798,7 +20803,7 @@ Snore
 Water Pulse
 190
 0 0 0 1 0 0 
-Level 224 25
+LEVEL 224 25
 0
 50
 Hustle
@@ -20898,7 +20903,7 @@ Snore
 Water Pulse
 75
 0 1 0 1 0 0 
-None
+NONE
 0
 50
 Suction Cups
@@ -20971,7 +20976,7 @@ Snore
 Water Pulse
 45
 0 0 0 0 0 1 
-None
+NONE
 0
 50
 Vital Spirit
@@ -21062,7 +21067,7 @@ Tailwind
 Water Pulse
 25
 0 0 0 0 2 0 
-None
+NONE
 0
 50
 Swift Swim
@@ -21152,7 +21157,7 @@ Stealth Rock
 Tailwind
 25
 0 0 2 0 0 0 
-None
+NONE
 2
 5 Sharp Beak
 5 Metal Coat
@@ -21251,7 +21256,7 @@ Super Fang
 Uproar
 120
 0 0 0 1 0 0 
-Level 229 24
+LEVEL 229 24
 0
 50
 Early Bird
@@ -21356,7 +21361,7 @@ Super Fang
 Uproar
 45
 0 0 0 2 0 0 
-None
+NONE
 0
 50
 Early Bird
@@ -21441,7 +21446,7 @@ Snore
 Water Pulse
 45
 0 1 0 1 1 0 
-None
+NONE
 1
 5 Dragon Scale
 50
@@ -21524,7 +21529,7 @@ Stealth Rock
 Superpower
 120
 1 0 0 0 0 0 
-Level 232 25
+LEVEL 232 25
 1
 5 Passho Berry
 50
@@ -21619,7 +21624,7 @@ Stealth Rock
 Superpower
 60
 0 1 1 0 0 0 
-None
+NONE
 1
 5 Passho Berry
 50
@@ -21709,7 +21714,7 @@ Wonder Room
 Zen Headbutt
 45
 0 0 0 2 0 0 
-Item 474  Dubious Disc
+ITEM 474 DUBIOUS_DISC
 1
 5 Dubious Disc
 -1
@@ -21811,7 +21816,7 @@ Uproar
 Zen Headbutt
 45
 0 1 0 0 0 0 
-None
+NONE
 0
 50
 Intimidate
@@ -21844,7 +21849,7 @@ Normal No_Type
 0
 45
 0 0 0 0 0 1 
-None
+NONE
 0
 50
 Own Tempo
@@ -21911,10 +21916,11 @@ Snore
 Uproar
 75
 0 1 0 0 0 0 
-Multi 3
-Stat Higher Attack Defense Level 106 20
-Stat Higher Defense Attack Level 107 20
-Stat Equal Attack Defense Level 237 20
+MULTI 3
+STAT Higher ATTACK DEFENSE LEVEL 106 20
+STAT Higher DEFENSE ATTACK LEVEL 107 20
+STAT Equal ATTACK DEFENSE LEVEL 237 20
+
 0
 100
 Guts
@@ -22000,7 +22006,7 @@ Role Play
 Snore
 45
 0 0 0 0 2 0 
-None
+NONE
 0
 100
 Intimidate
@@ -22094,7 +22100,7 @@ Water Pulse
 Zen Headbutt
 45
 0 0 0 1 0 0 
-Level 124 30
+LEVEL 124 30
 1
 100 Aspear Berry
 0
@@ -22184,7 +22190,7 @@ Thunder Punch
 Uproar
 45
 0 0 0 0 0 1 
-Level 125 30
+LEVEL 125 30
 2
 50 Electirizer
 5 Cheri Berry
@@ -22272,7 +22278,7 @@ Thunder Punch
 Uproar
 45
 0 0 0 0 0 1 
-Level 126 30
+LEVEL 126 30
 2
 50 Magmarizer
 5 Rawst Berry
@@ -22377,7 +22383,7 @@ Water Pulse
 Zen Headbutt
 45
 0 0 2 0 0 0 
-None
+NONE
 1
 100 Moomoo Milk
 0
@@ -22503,7 +22509,7 @@ Water Pulse
 Zen Headbutt
 30
 3 0 0 0 0 0 
-None
+NONE
 2
 5 Lucky Egg
 50 Oval Stone
@@ -22586,7 +22592,7 @@ Signal Beam
 Snore
 3
 0 0 0 1 0 2 
-None
+NONE
 0
 -1
 Pressure
@@ -22668,7 +22674,7 @@ Iron Tail
 Snore
 3
 1 2 0 0 0 0 
-None
+NONE
 0
 -1
 Pressure
@@ -22749,7 +22755,7 @@ Tailwind
 Water Pulse
 3
 0 0 1 0 2 0 
-None
+NONE
 0
 -1
 Pressure
@@ -22842,7 +22848,7 @@ Superpower
 Uproar
 45
 0 1 0 0 0 0 
-Level 247 30
+LEVEL 247 30
 1
 5 Hard Stone
 50
@@ -22938,7 +22944,7 @@ Superpower
 Uproar
 45
 0 2 0 0 0 0 
-Level 248 55
+LEVEL 248 55
 1
 5 Hard Stone
 50
@@ -23069,7 +23075,7 @@ Uproar
 Water Pulse
 45
 0 3 0 0 0 0 
-None
+NONE
 1
 5 Hard Stone
 50
@@ -23176,7 +23182,7 @@ Wonder Room
 Zen Headbutt
 3
 0 0 0 0 3 0 
-None
+NONE
 0
 -1
 Pressure
@@ -23274,7 +23280,7 @@ Tailwind
 Zen Headbutt
 3
 0 0 0 0 3 0 
-None
+NONE
 1
 100 Sacred Ash
 -1
@@ -23371,7 +23377,7 @@ Worry Seed
 Zen Headbutt
 45
 3 0 0 0 0 0 
-None
+NONE
 1
 100 Lum Berry
 -1
@@ -23468,7 +23474,7 @@ Thunder Punch
 Worry Seed
 45
 0 0 0 0 0 1 
-Level 253 16
+LEVEL 253 16
 1
 5 Miracle Seed
 87
@@ -23572,7 +23578,7 @@ Thunder Punch
 Worry Seed
 45
 0 0 0 0 0 2 
-Level 254 36
+LEVEL 254 36
 1
 5 Miracle Seed
 87
@@ -23690,7 +23696,7 @@ Thunder Punch
 Worry Seed
 45
 0 0 0 0 0 3 
-None
+NONE
 1
 5 Miracle Seed
 87
@@ -23776,7 +23782,7 @@ Low Kick
 Snore
 45
 0 0 0 1 0 0 
-Level 256 16
+LEVEL 256 16
 1
 5 Charcoal
 87
@@ -23877,7 +23883,7 @@ Snore
 Thunder Punch
 45
 0 1 0 1 0 0 
-Level 257 36
+LEVEL 257 36
 1
 5 Charcoal
 87
@@ -23993,7 +23999,7 @@ Superpower
 Thunder Punch
 45
 0 3 0 0 0 0 
-None
+NONE
 1
 5 Charcoal
 87
@@ -24084,7 +24090,7 @@ Uproar
 Water Pulse
 45
 0 1 0 0 0 0 
-Level 259 16
+LEVEL 259 16
 1
 5 Mystic Water
 87
@@ -24185,7 +24191,7 @@ Uproar
 Water Pulse
 45
 0 2 0 0 0 0 
-Level 260 36
+LEVEL 260 36
 1
 5 Mystic Water
 87
@@ -24295,7 +24301,7 @@ Uproar
 Water Pulse
 45
 0 3 0 0 0 0 
-None
+NONE
 1
 5 Mystic Water
 87
@@ -24383,7 +24389,7 @@ Super Fang
 Uproar
 255
 0 1 0 0 0 0 
-Level 262 18
+LEVEL 262 18
 1
 5 Pecha Berry
 50
@@ -24480,7 +24486,7 @@ Super Fang
 Uproar
 127
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Pecha Berry
 50
@@ -24572,7 +24578,7 @@ Trick
 Water Pulse
 255
 0 0 0 0 0 1 
-Level 264 20
+LEVEL 264 20
 3
 5 Oran Berry
 10 Potion
@@ -24675,7 +24681,7 @@ Trick
 Water Pulse
 90
 0 0 0 0 0 2 
-None
+NONE
 4
 5 Sitrus Berry
 50 Oran Berry
@@ -24709,9 +24715,10 @@ Electroweb
 Snore
 255
 1 0 0 0 0 0 
-Multi 2
-Gender Female Level 266 7
-Gender Male Level 268 7
+MULTI 2
+GENDER FEMALE LEVEL 266 7
+GENDER MALE LEVEL 268 7
+
 2
 10 Pecha Berry
 5 Bright Powder
@@ -24741,7 +24748,7 @@ Electroweb
 Iron Defense
 120
 0 0 2 0 0 0 
-Level 267 10
+LEVEL 267 10
 0
 50
 Shed Skin
@@ -24814,7 +24821,7 @@ Snore
 Tailwind
 45
 0 0 0 3 0 0 
-None
+NONE
 2
 5 Silver Powder
 5 Shed Shell
@@ -24844,7 +24851,7 @@ Electroweb
 Iron Defense
 120
 0 0 2 0 0 0 
-Level 269 10
+LEVEL 269 10
 0
 50
 Shed Skin
@@ -24918,7 +24925,7 @@ Snore
 Tailwind
 45
 0 0 0 0 3 0 
-None
+NONE
 2
 5 Silver Powder
 5 Shed Shell
@@ -25003,7 +25010,7 @@ Water Pulse
 Zen Headbutt
 255
 0 0 0 0 1 0 
-Level 271 14
+LEVEL 271 14
 1
 5 Mental Herb
 50
@@ -25100,7 +25107,7 @@ Water Pulse
 Zen Headbutt
 120
 0 0 0 0 2 0 
-Item 272  Water Stone
+ITEM 272 WATER_STONE
 1
 5 Mental Herb
 50
@@ -25192,7 +25199,7 @@ Water Pulse
 Zen Headbutt
 45
 0 0 0 0 3 0 
-None
+NONE
 1
 5 Mental Herb
 50
@@ -25269,7 +25276,7 @@ Synthesis
 Worry Seed
 255
 0 0 1 0 0 0 
-Level 274 14
+LEVEL 274 14
 1
 5 Power Herb
 50
@@ -25368,7 +25375,7 @@ Synthesis
 Worry Seed
 120
 0 2 0 0 0 0 
-Item 275  Leaf Stone
+ITEM 275 LEAF_STONE
 1
 5 Power Herb
 50
@@ -25470,7 +25477,7 @@ Tailwind
 Worry Seed
 45
 0 3 0 0 0 0 
-None
+NONE
 1
 5 Power Herb
 50
@@ -25545,7 +25552,7 @@ Snore
 Tailwind
 200
 0 0 0 0 0 1 
-Level 277 22
+LEVEL 277 22
 1
 5 Charti Berry
 50
@@ -25627,7 +25634,7 @@ Snore
 Tailwind
 45
 0 0 0 0 0 2 
-None
+NONE
 1
 5 Charti Berry
 50
@@ -25708,7 +25715,7 @@ Uproar
 Water Pulse
 190
 0 0 0 0 0 1 
-Level 279 25
+LEVEL 279 25
 6
 1 Health Wing
 1 Muscle Wing
@@ -25811,7 +25818,7 @@ Uproar
 Water Pulse
 45
 0 0 2 0 0 0 
-None
+NONE
 7
 2 Health Wing
 2 Muscle Wing
@@ -25923,7 +25930,7 @@ Wonder Room
 Zen Headbutt
 235
 0 0 0 1 0 0 
-Level 281 20
+LEVEL 281 20
 0
 50
 Synchronize
@@ -26031,9 +26038,10 @@ Wonder Room
 Zen Headbutt
 120
 0 0 0 2 0 0 
-Multi 2
-Level 282 30
-Gender Male Item 475  Dawn Stone
+MULTI 2
+LEVEL 282 30
+GENDER MALE ITEM 475 DAWN_STONE
+
 0
 50
 Synchronize
@@ -26151,7 +26159,7 @@ Wonder Room
 Zen Headbutt
 45
 0 0 0 3 0 0 
-None
+NONE
 0
 50
 Synchronize
@@ -26227,7 +26235,7 @@ Snore
 Water Pulse
 200
 0 0 0 0 0 1 
-Level 284 22
+LEVEL 284 22
 1
 5 Honey
 50
@@ -26320,7 +26328,7 @@ Tailwind
 Water Pulse
 75
 0 0 0 1 1 0 
-None
+NONE
 1
 5 Silver Powder
 50
@@ -26397,7 +26405,7 @@ Synthesis
 Worry Seed
 255
 1 0 0 0 0 0 
-Level 286 23
+LEVEL 286 23
 3
 5 Kebia Berry
 10 Tiny Mushroom
@@ -26497,7 +26505,7 @@ Thunder Punch
 Worry Seed
 90
 0 2 0 0 0 0 
-None
+NONE
 3
 5 Kebia Berry
 10 Tiny Mushroom
@@ -26591,7 +26599,7 @@ Thunder Punch
 Water Pulse
 255
 1 0 0 0 0 0 
-Level 288 18
+LEVEL 288 18
 0
 50
 Truant
@@ -26693,7 +26701,7 @@ Uproar
 Water Pulse
 120
 0 0 0 0 0 2 
-Level 289 36
+LEVEL 289 36
 0
 50
 Vital Spirit
@@ -26803,7 +26811,7 @@ Thunder Punch
 Water Pulse
 45
 3 0 0 0 0 0 
-None
+NONE
 0
 50
 Truant
@@ -26873,7 +26881,7 @@ Snore
 Spite
 255
 0 0 1 0 0 0 
-Level 291 20
+LEVEL 291 20
 1
 5 Soft Sand
 50
@@ -26958,7 +26966,7 @@ Spite
 Uproar
 120
 0 0 0 0 0 2 
-None
+NONE
 0
 50
 Speed Boost
@@ -27037,7 +27045,7 @@ Spite
 Trick
 45
 2 0 0 0 0 0 
-None
+NONE
 0
 -1
 Wonder Guard
@@ -27120,7 +27128,7 @@ Water Pulse
 Zen Headbutt
 190
 1 0 0 0 0 0 
-Level 294 20
+LEVEL 294 20
 1
 5 Chesto Berry
 50
@@ -27221,7 +27229,7 @@ Water Pulse
 Zen Headbutt
 120
 2 0 0 0 0 0 
-Level 295 40
+LEVEL 295 40
 1
 5 Chesto Berry
 50
@@ -27334,7 +27342,7 @@ Water Pulse
 Zen Headbutt
 45
 3 0 0 0 0 0 
-None
+NONE
 1
 5 Chesto Berry
 50
@@ -27428,7 +27436,7 @@ Superpower
 Thunder Punch
 180
 1 0 0 0 0 0 
-Level 297 24
+LEVEL 297 24
 1
 5 Black Belt
 75
@@ -27530,7 +27538,7 @@ Superpower
 Thunder Punch
 200
 2 0 0 0 0 0 
-None
+NONE
 2
 5 King's Rock
 5 Black Belt
@@ -27607,7 +27615,7 @@ Uproar
 Water Pulse
 150
 1 0 0 0 0 0 
-Item 183  Water Stone
+ITEM 183 WATER_STONE
 0
 25
 Thick Fat
@@ -27697,7 +27705,7 @@ Stealth Rock
 Thunder Punch
 255
 0 0 1 0 0 0 
-Item 476  Thunder Stone
+ITEM 476 THUNDER_STONE
 1
 5 Hard Stone
 50
@@ -27798,7 +27806,7 @@ Water Pulse
 Zen Headbutt
 255
 0 0 0 0 0 1 
-Item 301  Moon Stone
+ITEM 301 MOON_STONE
 2
 5 Leppa Berry
 50 Pecha Berry
@@ -27889,7 +27897,7 @@ Water Pulse
 Zen Headbutt
 60
 1 0 0 0 0 1 
-None
+NONE
 2
 5 Leppa Berry
 50 Pecha Berry
@@ -28010,7 +28018,7 @@ Wonder Room
 Zen Headbutt
 45
 0 1 1 0 0 0 
-None
+NONE
 1
 5 Wide Lens
 50
@@ -28128,7 +28136,7 @@ Super Fang
 Thunder Punch
 45
 0 1 1 0 0 0 
-None
+NONE
 2
 5 Occa Berry
 5 Iron Ball
@@ -28225,7 +28233,7 @@ Uproar
 Water Pulse
 180
 0 0 1 0 0 0 
-Level 305 32
+LEVEL 305 32
 1
 5 Hard Stone
 50
@@ -28324,7 +28332,7 @@ Uproar
 Water Pulse
 90
 0 0 2 0 0 0 
-Level 306 42
+LEVEL 306 42
 1
 5 Hard Stone
 50
@@ -28456,7 +28464,7 @@ Uproar
 Water Pulse
 45
 0 0 3 0 0 0 
-None
+NONE
 1
 5 Hard Stone
 50
@@ -28563,7 +28571,7 @@ Trick
 Zen Headbutt
 180
 0 0 0 0 0 1 
-Level 308 37
+LEVEL 308 37
 0
 50
 Pure Power
@@ -28679,7 +28687,7 @@ Trick
 Zen Headbutt
 90
 0 0 0 0 0 2 
-None
+NONE
 0
 50
 Pure Power
@@ -28763,7 +28771,7 @@ Snore
 Uproar
 120
 0 0 0 0 0 1 
-Level 310 26
+LEVEL 310 26
 0
 50
 Static
@@ -28855,7 +28863,7 @@ Snore
 Uproar
 45
 0 0 0 0 0 2 
-None
+NONE
 0
 50
 Static
@@ -28940,7 +28948,7 @@ Thunder Punch
 Uproar
 200
 0 0 0 0 0 1 
-None
+NONE
 1
 5 Cell Battery
 50
@@ -29026,7 +29034,7 @@ Thunder Punch
 Uproar
 200
 0 0 0 0 0 1 
-None
+NONE
 1
 5 Cell Battery
 50
@@ -29118,7 +29126,7 @@ Water Pulse
 Zen Headbutt
 150
 0 0 0 0 0 1 
-None
+NONE
 1
 5 Bright Powder
 100
@@ -29210,7 +29218,7 @@ Water Pulse
 Zen Headbutt
 150
 0 0 0 0 0 1 
-None
+NONE
 1
 5 Bright Powder
 0
@@ -29298,7 +29306,7 @@ Synthesis
 Worry Seed
 150
 0 0 0 2 0 0 
-Item 407  Shiny Stone
+ITEM 407 SHINY_STONE
 2
 5 Poison Barb
 1 Absorb Bulb
@@ -29386,7 +29394,7 @@ Thunder Punch
 Water Pulse
 225
 1 0 0 0 0 0 
-Level 317 26
+LEVEL 317 26
 1
 5 Big Pearl
 50
@@ -29484,7 +29492,7 @@ Thunder Punch
 Water Pulse
 75
 2 0 0 0 0 0 
-None
+NONE
 1
 5 Big Pearl
 50
@@ -29565,7 +29573,7 @@ Water Pulse
 Zen Headbutt
 225
 0 1 0 0 0 0 
-Level 319 30
+LEVEL 319 30
 1
 5 Deep Sea Tooth
 50
@@ -29662,7 +29670,7 @@ Water Pulse
 Zen Headbutt
 60
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Deep Sea Tooth
 50
@@ -29749,7 +29757,7 @@ Water Pulse
 Zen Headbutt
 125
 1 0 0 0 0 0 
-Level 321 40
+LEVEL 321 40
 0
 50
 Water Veil
@@ -29843,7 +29851,7 @@ Water Pulse
 Zen Headbutt
 60
 2 0 0 0 0 0 
-None
+NONE
 0
 50
 Water Veil
@@ -29932,7 +29940,7 @@ Snore
 Stealth Rock
 255
 0 0 0 1 0 0 
-Level 323 33
+LEVEL 323 33
 1
 100 Rawst Berry
 50
@@ -30035,7 +30043,7 @@ Snore
 Stealth Rock
 150
 0 1 0 1 0 0 
-None
+NONE
 1
 100 Rawst Berry
 50
@@ -30127,7 +30135,7 @@ Stealth Rock
 Superpower
 90
 0 0 2 0 0 0 
-None
+NONE
 1
 5 Heat Rock
 50
@@ -30224,7 +30232,7 @@ Trick
 Zen Headbutt
 255
 0 0 0 0 1 0 
-Level 326 32
+LEVEL 326 32
 2
 50 Persim Berry
 5 Tanga Berry
@@ -30339,7 +30347,7 @@ Trick
 Zen Headbutt
 60
 0 0 0 0 2 0 
-None
+NONE
 2
 50 Persim Berry
 5 Tanga Berry
@@ -30447,7 +30455,7 @@ Water Pulse
 Zen Headbutt
 255
 0 0 0 1 0 0 
-None
+NONE
 1
 5 Chesto Berry
 50
@@ -30529,7 +30537,7 @@ Snore
 Superpower
 255
 0 1 0 0 0 0 
-Level 329 35
+LEVEL 329 35
 1
 5 Soft Sand
 50
@@ -30621,7 +30629,7 @@ Tailwind
 Uproar
 120
 0 1 0 0 0 1 
-Level 330 45
+LEVEL 330 45
 0
 50
 Levitate
@@ -30726,7 +30734,7 @@ Thunder Punch
 Uproar
 45
 0 1 0 0 0 2 
-None
+NONE
 0
 50
 Levitate
@@ -30824,7 +30832,7 @@ Thunder Punch
 Worry Seed
 190
 0 0 0 1 0 0 
-Level 332 32
+LEVEL 332 32
 2
 5 Sticky Barb
 5 Poison Barb
@@ -30937,7 +30945,7 @@ Thunder Punch
 Worry Seed
 60
 0 1 0 1 0 0 
-None
+NONE
 2
 5 Sticky Barb
 5 Poison Barb
@@ -31025,7 +31033,7 @@ Tailwind
 Uproar
 255
 0 0 0 0 1 0 
-Level 334 35
+LEVEL 334 35
 0
 50
 Natural Cure
@@ -31130,7 +31138,7 @@ Uproar
 Wonder Room
 45
 0 0 0 0 2 0 
-None
+NONE
 0
 50
 Natural Cure
@@ -31243,7 +31251,7 @@ Thunder Punch
 Water Pulse
 90
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Quick Claw
 50
@@ -31338,7 +31346,7 @@ Snatch
 Snore
 90
 0 1 0 1 0 0 
-None
+NONE
 2
 95 Persim Berry
 5 Shed Shell
@@ -31435,7 +31443,7 @@ Stealth Rock
 Zen Headbutt
 45
 0 0 0 2 0 0 
-None
+NONE
 3
 5 Moon Stone
 1 Comet Shard
@@ -31537,7 +31545,7 @@ Wonder Room
 Zen Headbutt
 45
 0 2 0 0 0 0 
-None
+NONE
 3
 5 Sun Stone
 1 Comet Shard
@@ -31619,7 +31627,7 @@ Snore
 Water Pulse
 190
 1 0 0 0 0 0 
-Level 340 30
+LEVEL 340 30
 0
 50
 Oblivious
@@ -31710,7 +31718,7 @@ Water Pulse
 Zen Headbutt
 75
 2 0 0 0 0 0 
-None
+NONE
 0
 50
 Oblivious
@@ -31805,7 +31813,7 @@ Superpower
 Water Pulse
 205
 0 1 0 0 0 0 
-Level 342 30
+LEVEL 342 30
 0
 50
 Hyper Cutter
@@ -31912,7 +31920,7 @@ Superpower
 Water Pulse
 155
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Hyper Cutter
@@ -32005,7 +32013,7 @@ Wonder Room
 Zen Headbutt
 255
 0 0 0 0 1 0 
-Level 344 36
+LEVEL 344 36
 1
 5 Light Clay
 -1
@@ -32107,7 +32115,7 @@ Wonder Room
 Zen Headbutt
 90
 0 0 0 0 2 0 
-None
+NONE
 1
 5 Light Clay
 -1
@@ -32191,7 +32199,7 @@ Synthesis
 Worry Seed
 45
 0 0 0 0 1 0 
-Level 346 40
+LEVEL 346 40
 1
 5 Big Root
 87
@@ -32287,7 +32295,7 @@ Synthesis
 Worry Seed
 45
 0 0 0 0 2 0 
-None
+NONE
 1
 5 Big Root
 87
@@ -32371,7 +32379,7 @@ Stealth Rock
 Water Pulse
 45
 0 1 0 0 0 0 
-Level 348 40
+LEVEL 348 40
 0
 87
 Battle Armor
@@ -32468,7 +32476,7 @@ Superpower
 Water Pulse
 45
 0 2 0 0 0 0 
-None
+NONE
 0
 87
 Battle Armor
@@ -32533,7 +32541,7 @@ Snore
 Water Pulse
 255
 0 0 0 0 0 1 
-Item 350  Prism Scale
+ITEM 350 PRISM_SCALE
 0
 50
 Swift Swim
@@ -32622,7 +32630,7 @@ Snore
 Water Pulse
 60
 0 0 0 0 2 0 
-None
+NONE
 0
 50
 Marvel Scale
@@ -32707,7 +32715,7 @@ Tailwind
 Water Pulse
 45
 1 0 0 0 0 0 
-None
+NONE
 1
 100 Mystic Water
 50
@@ -32829,7 +32837,7 @@ Water Pulse
 Wonder Room
 200
 0 0 0 0 1 0 
-None
+NONE
 1
 5 Persim Berry
 50
@@ -32927,7 +32935,7 @@ Spite
 Trick
 225
 0 1 0 0 0 0 
-Level 354 37
+LEVEL 354 37
 1
 5 Spell Tag
 50
@@ -33034,7 +33042,7 @@ Spite
 Trick
 45
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Spell Tag
 50
@@ -33126,7 +33134,7 @@ Trick
 Wonder Room
 190
 0 0 0 0 1 0 
-Level 356 37
+LEVEL 356 37
 3
 5 Spell Tag
 5 Kasib Berry
@@ -33245,7 +33253,7 @@ Trick
 Wonder Room
 90
 0 0 1 0 1 0 
-Item 477  Reaper Cloth
+ITEM 477 REAPER_CLOTH
 3
 5 Spell Tag
 5 Kasib Berry
@@ -33341,7 +33349,7 @@ Tailwind
 Worry Seed
 200
 2 0 0 0 0 0 
-None
+NONE
 0
 50
 Chlorophyll
@@ -33444,7 +33452,7 @@ Uproar
 Zen Headbutt
 45
 0 0 0 1 1 0 
-None
+NONE
 2
 5 Colbur Berry
 5 Cleanse Tag
@@ -33574,7 +33582,7 @@ Water Pulse
 Zen Headbutt
 30
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Life Orb
 50
@@ -33606,7 +33614,7 @@ Safeguard
 0
 125
 1 0 0 0 0 0 
-Level 202 15
+LEVEL 202 15
 0
 50
 Shadow Tag
@@ -33679,9 +33687,10 @@ Spite
 Water Pulse
 190
 1 0 0 0 0 0 
-Multi 2
-Level 362 42
-Gender Female Item 478 Dawn Stone
+MULTI 2
+LEVEL 362 42
+GENDER FEMALE ITEM 478 DAWN_STONE
+
 2
 5 Babiri Berry
 5 Snowball
@@ -33774,7 +33783,7 @@ Super Fang
 Water Pulse
 75
 2 0 0 0 0 0 
-None
+NONE
 3
 5 Babiri Berry
 5 NeverMeltIce
@@ -33863,7 +33872,7 @@ Super Fang
 Water Pulse
 255
 1 0 0 0 0 0 
-Level 364 32
+LEVEL 364 32
 0
 50
 Thick Fat
@@ -33951,7 +33960,7 @@ Super Fang
 Water Pulse
 120
 2 0 0 0 0 0 
-Level 365 44
+LEVEL 365 44
 0
 50
 Thick Fat
@@ -34045,7 +34054,7 @@ Super Fang
 Water Pulse
 45
 3 0 0 0 0 0 
-None
+NONE
 0
 50
 Thick Fat
@@ -34109,9 +34118,10 @@ Snore
 Water Pulse
 255
 0 0 1 0 0 0 
-Multi 2
-Item 367  Deep Sea Tooth
-Item 368  Deep Sea Scale
+MULTI 2
+ITEM 367 DEEP_SEA_TOOTH
+ITEM 368 DEEP_SEA_SCALE
+
 2
 5 Big Pearl
 5 Pearl
@@ -34195,7 +34205,7 @@ Super Fang
 Water Pulse
 60
 0 1 1 0 0 0 
-None
+NONE
 1
 5 Deep Sea Tooth
 50
@@ -34280,7 +34290,7 @@ Snore
 Water Pulse
 60
 0 0 0 2 0 0 
-None
+NONE
 1
 5 Deep Sea Scale
 50
@@ -34375,7 +34385,7 @@ Water Pulse
 Zen Headbutt
 25
 1 0 1 0 0 0 
-None
+NONE
 1
 5 Deep Sea Scale
 87
@@ -34451,7 +34461,7 @@ Snore
 Water Pulse
 225
 0 0 0 0 0 1 
-None
+NONE
 1
 50 Heart Scale
 25
@@ -34532,7 +34542,7 @@ Snore
 Zen Headbutt
 45
 0 1 0 0 0 0 
-Level 372 30
+LEVEL 372 30
 2
 5 Dragon Scale
 5 Dragon Fang
@@ -34619,7 +34629,7 @@ Snore
 Zen Headbutt
 45
 0 0 2 0 0 0 
-Level 373 50
+LEVEL 373 50
 2
 5 Dragon Scale
 5 Dragon Fang
@@ -34722,7 +34732,7 @@ Tailwind
 Zen Headbutt
 45
 0 3 0 0 0 0 
-None
+NONE
 2
 5 Dragon Scale
 5 Dragon Fang
@@ -34751,7 +34761,7 @@ Iron Head
 Zen Headbutt
 3
 0 0 1 0 0 0 
-Level 375 20
+LEVEL 375 20
 1
 5 Metal Coat
 -1
@@ -34843,7 +34853,7 @@ Trick
 Zen Headbutt
 3
 0 0 2 0 0 0 
-Level 376 45
+LEVEL 376 45
 1
 5 Metal Coat
 -1
@@ -34938,7 +34948,7 @@ Trick
 Zen Headbutt
 3
 0 0 3 0 0 0 
-None
+NONE
 1
 5 Metal Coat
 -1
@@ -35030,7 +35040,7 @@ Superpower
 Thunder Punch
 3
 0 0 3 0 0 0 
-None
+NONE
 0
 -1
 Clear Body
@@ -35119,7 +35129,7 @@ Superpower
 Thunder Punch
 3
 0 0 0 0 3 0 
-None
+NONE
 0
 -1
 Clear Body
@@ -35212,7 +35222,7 @@ Superpower
 Thunder Punch
 3
 0 0 2 0 1 0 
-None
+NONE
 0
 -1
 Clear Body
@@ -35320,7 +35330,7 @@ Water Pulse
 Zen Headbutt
 3
 0 0 0 0 3 0 
-None
+NONE
 0
 0
 Levitate
@@ -35426,7 +35436,7 @@ Wonder Room
 Zen Headbutt
 3
 0 0 0 3 0 0 
-None
+NONE
 0
 100
 Levitate
@@ -35508,7 +35518,7 @@ Uproar
 Water Pulse
 5
 0 0 0 3 0 0 
-None
+NONE
 0
 -1
 Drizzle
@@ -35605,7 +35615,7 @@ Thunder Punch
 Uproar
 5
 0 3 0 0 0 0 
-None
+NONE
 0
 -1
 Drought
@@ -35710,7 +35720,7 @@ Uproar
 Water Pulse
 3
 0 2 0 1 0 0 
-None
+NONE
 0
 -1
 Air Lock
@@ -35810,7 +35820,7 @@ Water Pulse
 Zen Headbutt
 3
 3 0 0 0 0 0 
-None
+NONE
 1
 100 Star Piece
 -1
@@ -35924,7 +35934,7 @@ Superpower
 Iron Defense
 3
 0 1 0 1 0 1
-None
+NONE
 0
 -1
 Pressure
@@ -36009,7 +36019,7 @@ Synthesis
 Worry Seed
 45
 0 1 0 0 0 0 
-Level 388 18
+LEVEL 388 18
 1
 5 Miracle Seed
 87
@@ -36096,7 +36106,7 @@ Synthesis
 Worry Seed
 45
 0 1 1 0 0 0 
-Level 389 32
+LEVEL 389 32
 1
 5 Miracle Seed
 87
@@ -36200,7 +36210,7 @@ Synthesis
 Worry Seed
 45
 0 2 1 0 0 0 
-None
+NONE
 1
 5 Miracle Seed
 87
@@ -36301,7 +36311,7 @@ Thunder Punch
 Uproar
 45
 0 0 0 0 0 1 
-Level 391 14
+LEVEL 391 14
 1
 5 Charcoal
 87
@@ -36409,7 +36419,7 @@ Stealth Rock
 Thunder Punch
 45
 0 0 0 1 0 1 
-Level 392 36
+LEVEL 392 36
 1
 5 Charcoal
 87
@@ -36527,7 +36537,7 @@ Stealth Rock
 Thunder Punch
 45
 0 1 0 1 0 1 
-None
+NONE
 1
 5 Charcoal
 87
@@ -36612,7 +36622,7 @@ Stealth Rock
 Water Pulse
 45
 0 0 0 1 0 0 
-Level 394 16
+LEVEL 394 16
 1
 5 Mystic Water
 87
@@ -36703,7 +36713,7 @@ Stealth Rock
 Water Pulse
 45
 0 0 0 2 0 0 
-Level 395 36
+LEVEL 395 36
 1
 5 Mystic Water
 87
@@ -36807,7 +36817,7 @@ Stealth Rock
 Water Pulse
 45
 0 0 0 3 0 0 
-None
+NONE
 1
 5 Mystic Water
 87
@@ -36883,7 +36893,7 @@ Tailwind
 Uproar
 255
 0 0 0 0 0 1 
-Level 397 14
+LEVEL 397 14
 1
 5 Yache Berry
 50
@@ -36961,7 +36971,7 @@ Tailwind
 Uproar
 120
 0 0 0 0 0 2 
-Level 398 34
+LEVEL 398 34
 1
 5 Yache Berry
 50
@@ -37044,7 +37054,7 @@ Tailwind
 Uproar
 45
 0 3 0 0 0 0 
-None
+NONE
 1
 5 Yache Berry
 50
@@ -37132,7 +37142,7 @@ Super Fang
 Superpower
 255
 1 0 0 0 0 0 
-Level 400 15
+LEVEL 400 15
 0
 50
 Simple
@@ -37233,7 +37243,7 @@ Superpower
 Water Pulse
 127
 0 2 0 0 0 0 
-None
+NONE
 2
 5 Sitrus Berry
 50 Oran Berry
@@ -37267,7 +37277,7 @@ Snore
 Uproar
 255
 0 0 1 0 0 0 
-Level 402 10
+LEVEL 402 10
 1
 5 Metronome
 50
@@ -37345,7 +37355,7 @@ Snore
 Uproar
 45
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Metronome
 50
@@ -37426,7 +37436,7 @@ Signal Beam
 Snore
 235
 0 1 0 0 0 0 
-Level 404 15
+LEVEL 404 15
 0
 50
 Rivalry
@@ -37506,7 +37516,7 @@ Signal Beam
 Snore
 120
 0 2 0 0 0 0 
-Level 405 30
+LEVEL 405 30
 0
 50
 Rivalry
@@ -37592,7 +37602,7 @@ Snore
 Superpower
 45
 0 3 0 0 0 0 
-None
+NONE
 0
 50
 Rivalry
@@ -37668,7 +37678,7 @@ Uproar
 Worry Seed
 255
 0 0 0 1 0 0 
-Item 315  Leaf Stone
+ITEM 315 LEAF_STONE
 1
 5 Poison Barb
 50
@@ -37748,7 +37758,7 @@ Synthesis
 Worry Seed
 75
 0 0 0 3 0 0 
-None
+NONE
 2
 5 Poison Barb
 1 Absorb Bulb
@@ -37849,7 +37859,7 @@ Uproar
 Zen Headbutt
 45
 0 1 0 0 0 0 
-Level 409 30
+LEVEL 409 30
 0
 87
 Mold Breaker
@@ -37959,7 +37969,7 @@ Uproar
 Zen Headbutt
 45
 0 2 0 0 0 0 
-None
+NONE
 0
 87
 Mold Breaker
@@ -38051,7 +38061,7 @@ Snore
 Stealth Rock
 45
 0 0 1 0 0 0 
-Level 411 30
+LEVEL 411 30
 0
 87
 Sturdy
@@ -38151,7 +38161,7 @@ Snore
 Stealth Rock
 45
 0 0 2 0 0 0 
-None
+NONE
 0
 87
 Sturdy
@@ -38183,9 +38193,10 @@ Electroweb
 Snore
 120
 0 0 0 0 1 0 
-Multi 2
-Gender Male Level 414 20
-Gender Female Level 413 20
+MULTI 2
+GENDER MALE LEVEL 414 20
+GENDER FEMALE LEVEL 413 20
+
 0
 50
 Shed Skin
@@ -38275,7 +38286,7 @@ Iron Head
 Magnet Rise
 45
 0 0 0 0 2 0
-None
+NONE
 1
 5 Silver Powder
 0
@@ -38353,7 +38364,7 @@ Snore
 Tailwind
 45
 0 1 0 1 0 0 
-None
+NONE
 1
 5 Silver Powder
 100
@@ -38385,7 +38396,7 @@ Snore
 Tailwind
 120
 0 0 0 0 0 1 
-Gender Female Level 416 21
+GENDER FEMALE LEVEL 416 21
 1
 100 Honey
 87
@@ -38465,7 +38476,7 @@ Snore
 Tailwind
 45
 0 0 1 0 1 0 
-None
+NONE
 1
 5 Poison Barb
 0
@@ -38555,7 +38566,7 @@ Thunder Punch
 Uproar
 200
 0 0 0 0 0 1 
-None
+NONE
 0
 50
 Run Away
@@ -38642,7 +38653,7 @@ Snore
 Water Pulse
 190
 0 0 0 0 0 1 
-Level 419 26
+LEVEL 419 26
 1
 5 Wacan Berry
 50
@@ -38743,7 +38754,7 @@ Snore
 Water Pulse
 75
 0 0 0 0 0 2 
-None
+NONE
 1
 5 Wacan Berry
 50
@@ -38820,7 +38831,7 @@ Synthesis
 Worry Seed
 190
 0 0 0 1 0 0 
-Level 421 25
+LEVEL 421 25
 1
 5 Miracle Seed
 50
@@ -38901,7 +38912,7 @@ Synthesis
 Worry Seed
 75
 0 0 0 2 0 0 
-None
+NONE
 1
 5 Miracle Seed
 50
@@ -38977,7 +38988,7 @@ Snore
 Water Pulse
 190
 1 0 0 0 0 0 
-Level 423 30
+LEVEL 423 30
 0
 50
 Sticky Hold
@@ -39071,7 +39082,7 @@ Snore
 Water Pulse
 75
 2 0 0 0 0 0 
-None
+NONE
 0
 50
 Sticky Hold
@@ -39185,7 +39196,7 @@ Uproar
 Water Pulse
 45
 0 0 0 0 0 2 
-None
+NONE
 0
 50
 Technician
@@ -39278,7 +39289,7 @@ Tailwind
 Trick
 125
 1 0 0 0 0 0 
-Level 426 28
+LEVEL 426 28
 1
 5 Air Balloon
 50
@@ -39379,7 +39390,7 @@ Tailwind
 Trick
 60
 2 0 0 0 0 0 
-None
+NONE
 1
 1 Air Balloon
 50
@@ -39484,7 +39495,7 @@ Uproar
 Water Pulse
 190
 0 0 0 0 0 1 
-Item 428  Shiny Stone
+ITEM 428 SHINY_STONE
 2
 50 Pecha Berry
 5 Chople Berry
@@ -39602,7 +39613,7 @@ Uproar
 Water Pulse
 60
 0 0 0 0 0 2 
-None
+NONE
 2
 50 Pecha Berry
 5 Chople Berry
@@ -39703,7 +39714,7 @@ Uproar
 Wonder Room
 45
 0 0 0 1 1 0 
-None
+NONE
 0
 50
 Levitate
@@ -39799,7 +39810,7 @@ Tailwind
 Uproar
 30
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Insomnia
@@ -39890,7 +39901,7 @@ Super Fang
 Water Pulse
 190
 0 0 0 0 0 1 
-Level 432 38
+LEVEL 432 38
 1
 5 Cheri Berry
 25
@@ -39988,7 +39999,7 @@ Super Fang
 Water Pulse
 75
 0 0 0 0 0 2 
-None
+NONE
 1
 5 Cheri Berry
 25
@@ -40079,7 +40090,7 @@ Uproar
 Zen Headbutt
 120
 0 0 0 1 0 0 
-Item 358  Moon Stone
+ITEM 358 MOON_STONE
 1
 5 Colbur Berry
 50
@@ -40168,7 +40179,7 @@ Snatch
 Snore
 225
 0 0 0 0 0 1 
-Level 435 34
+LEVEL 435 34
 1
 5 Pecha Berry
 50
@@ -40263,7 +40274,7 @@ Snatch
 Snore
 60
 2 0 0 0 0 0 
-None
+NONE
 1
 5 Pecha Berry
 50
@@ -40349,7 +40360,7 @@ Trick
 Wonder Room
 255
 0 0 1 0 0 0 
-Level 437 33
+LEVEL 437 33
 1
 5 Metal Coat
 -1
@@ -40448,7 +40459,7 @@ Wonder Room
 Zen Headbutt
 90
 0 0 1 0 1 0 
-None
+NONE
 1
 5 Metal Coat
 -1
@@ -40529,7 +40540,7 @@ Stealth Rock
 Uproar
 255
 0 0 1 0 0 0 
-Move 185  Mimic
+MOVE 185 MIMIC
 0
 50
 Sturdy
@@ -40638,7 +40649,7 @@ Uproar
 Wonder Room
 145
 0 0 0 0 1 0 
-Move 122  Mimic
+MOVE 122 MIMIC
 1
 5 Leppa Berry
 50
@@ -40722,7 +40733,7 @@ Water Pulse
 Zen Headbutt
 130
 1 0 0 0 0 0 
-Item 113  Oval Stone
+ITEM 113 OVAL_STONE
 3
 5 Lucky Punch
 5 Lucky Egg
@@ -40808,7 +40819,7 @@ Tailwind
 Uproar
 30
 0 1 0 0 0 0 
-None
+NONE
 1
 5 Metronome
 50
@@ -40898,7 +40909,7 @@ Water Pulse
 Wonder Room
 100
 0 0 1 0 1 0 
-None
+NONE
 0
 50
 Pressure
@@ -40984,7 +40995,7 @@ Snore
 Stealth Rock
 45
 0 1 0 0 0 0 
-Level 444 24
+LEVEL 444 24
 1
 5 Haban Berry
 50
@@ -41074,7 +41085,7 @@ Snore
 Stealth Rock
 45
 0 2 0 0 0 0 
-Level 445 48
+LEVEL 445 48
 1
 5 Haban Berry
 50
@@ -41178,7 +41189,7 @@ Snore
 Stealth Rock
 45
 0 3 0 0 0 0 
-None
+NONE
 1
 5 Haban Berry
 50
@@ -41288,7 +41299,7 @@ Water Pulse
 Zen Headbutt
 50
 1 0 0 0 0 0 
-Item 143  Lax Incense
+ITEM 143 LAX_INCENSE
 1
 100 Leftovers
 87
@@ -41383,7 +41394,7 @@ Thunder Punch
 Zen Headbutt
 75
 0 1 0 0 0 0 
-Item 448  Dawn Stone
+ITEM 448 DAWN_STONE
 0
 87
 Steadfast
@@ -41499,7 +41510,7 @@ Water Pulse
 Zen Headbutt
 45
 0 1 0 1 0 0 
-None
+NONE
 0
 87
 Steadfast
@@ -41572,7 +41583,7 @@ Superpower
 Water Pulse
 140
 0 0 1 0 0 0 
-Level 450 34
+LEVEL 450 34
 0
 50
 Sand Stream
@@ -41654,7 +41665,7 @@ Superpower
 Water Pulse
 60
 0 0 2 0 0 0 
-None
+NONE
 0
 50
 Sand Stream
@@ -41750,7 +41761,7 @@ Knock Off
 Snore
 120
 0 0 1 0 0 0 
-Level 452 40
+LEVEL 452 40
 1
 5 Poison Barb
 50
@@ -41859,7 +41870,7 @@ Knock Off
 Snore
 45
 0 0 2 0 0 0 
-None
+NONE
 1
 5 Poison Barb
 50
@@ -41971,7 +41982,7 @@ Super Fang
 Thunder Punch
 140
 0 1 0 0 0 0 
-Level 454 37
+LEVEL 454 37
 1
 5 Black Sludge
 50
@@ -42090,7 +42101,7 @@ Super Fang
 Thunder Punch
 75
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Black Sludge
 50
@@ -42175,7 +42186,7 @@ Synthesis
 Worry Seed
 200
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Levitate
@@ -42257,7 +42268,7 @@ Tailwind
 Water Pulse
 190
 0 0 0 0 0 1 
-Level 457 31
+LEVEL 457 31
 1
 5 Rindo Berry
 50
@@ -42345,7 +42356,7 @@ Tailwind
 Water Pulse
 75
 0 0 0 0 0 2 
-None
+NONE
 1
 5 Rindo Berry
 50
@@ -42426,7 +42437,7 @@ Snore
 Water Pulse
 25
 0 0 0 0 1 0 
-Item 226  Water Stone
+ITEM 226 WATER_STONE
 0
 50
 Swift Swim
@@ -42508,7 +42519,7 @@ Water Pulse
 Worry Seed
 120
 0 1 0 0 0 0 
-Level 460 40
+LEVEL 460 40
 1
 5 NeverMeltIce
 50
@@ -42608,7 +42619,7 @@ Water Pulse
 Worry Seed
 60
 0 1 0 1 0 0 
-None
+NONE
 1
 5 NeverMeltIce
 50
@@ -42727,7 +42738,7 @@ Snore
 Spite
 45
 0 1 0 0 0 1 
-None
+NONE
 3
 50 Grip Claw
 5 Quick Claw
@@ -42817,7 +42828,7 @@ Signal Beam
 Snore
 30
 0 0 0 3 0 0 
-None
+NONE
 2
 5 Magnet
 5 Metal Coat
@@ -42934,7 +42945,7 @@ Water Pulse
 Zen Headbutt
 30
 3 0 0 0 0 0 
-None
+NONE
 1
 5 Lagging Tail
 50
@@ -43065,7 +43076,7 @@ Thunder Punch
 Uproar
 30
 0 3 0 0 0 0 
-None
+NONE
 1
 50 Protector
 50
@@ -43172,7 +43183,7 @@ Synthesis
 Worry Seed
 30
 0 0 2 0 0 0 
-None
+NONE
 0
 50
 Chlorophyll
@@ -43281,7 +43292,7 @@ Snore
 Thunder Punch
 30
 0 3 0 0 0 0 
-None
+NONE
 2
 50 Electirizer
 5 Cheri Berry
@@ -43386,7 +43397,7 @@ Snore
 Thunder Punch
 30
 0 0 0 3 0 0 
-None
+NONE
 2
 50 Magmarizer
 5 Rawst Berry
@@ -43487,7 +43498,7 @@ Water Pulse
 Zen Headbutt
 30
 0 0 0 2 1 0 
-None
+NONE
 0
 87
 Hustle
@@ -43576,7 +43587,7 @@ Tailwind
 Uproar
 30
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Wide Lens
 50
@@ -43670,7 +43681,7 @@ Synthesis
 Worry Seed
 45
 0 0 2 0 0 0 
-None
+NONE
 0
 87
 Leaf Guard
@@ -43758,7 +43769,7 @@ Snore
 Water Pulse
 45
 0 0 0 2 0 0 
-None
+NONE
 0
 87
 Snow Cloak
@@ -43875,7 +43886,7 @@ Stealth Rock
 Tailwind
 30
 0 0 2 0 0 0 
-None
+NONE
 1
 5 Razor Fang
 50
@@ -43972,7 +43983,7 @@ Stealth Rock
 Superpower
 50
 0 3 0 0 0 0 
-None
+NONE
 0
 50
 Oblivious
@@ -44064,7 +44075,7 @@ Uproar
 Zen Headbutt
 30
 0 0 0 3 0 0 
-None
+NONE
 0
 -1
 Adaptability
@@ -44201,7 +44212,7 @@ Wonder Room
 Zen Headbutt
 45
 0 3 0 0 0 0 
-None
+NONE
 0
 100
 Steadfast
@@ -44301,7 +44312,7 @@ Stealth Rock
 Thunder Punch
 60
 0 0 1 0 2 0 
-None
+NONE
 1
 5 Hard Stone
 50
@@ -44419,7 +44430,7 @@ Trick
 Wonder Room
 45
 0 0 1 0 2 0 
-None
+NONE
 3
 5 Spell Tag
 5 Reaper Cloth
@@ -44519,7 +44530,7 @@ Trick
 Water Pulse
 75
 0 0 0 0 0 2 
-None
+NONE
 2
 5 Babiri Berry
 5 Snowball
@@ -44598,7 +44609,7 @@ Trick
 Uproar
 45
 0 0 0 1 0 1 
-None
+NONE
 0
 -1
 Levitate
@@ -44697,7 +44708,7 @@ Wonder Room
 Zen Headbutt
 3
 0 0 2 0 1 0 
-None
+NONE
 0
 -1
 Levitate
@@ -44794,7 +44805,7 @@ Wonder Room
 Zen Headbutt
 3
 0 1 0 1 1 0 
-None
+NONE
 0
 -1
 Levitate
@@ -44897,7 +44908,7 @@ Wonder Room
 Zen Headbutt
 3
 0 2 0 1 0 0 
-None
+NONE
 0
 -1
 Levitate
@@ -44993,7 +45004,7 @@ Snore
 Stealth Rock
 30
 0 0 0 3 0 0 
-None
+NONE
 0
 -1
 Pressure
@@ -45089,7 +45100,7 @@ Snore
 Water Pulse
 30
 0 0 0 3 0 0 
-None
+NONE
 0
 -1
 Pressure
@@ -45178,7 +45189,7 @@ Stealth Rock
 Uproar
 3
 0 0 0 3 0 0 
-None
+NONE
 0
 50
 Flash Fire
@@ -45268,7 +45279,7 @@ Thunder Punch
 Zen Headbutt
 3
 0 3 0 0 0 0 
-None
+NONE
 0
 -1
 Slow Start
@@ -45364,7 +45375,7 @@ Magic Coat
 Tailwind
 3
 3 0 0 0 0 0 
-None
+NONE
 0
 -1
 Pressure
@@ -45448,7 +45459,7 @@ Trick
 Zen Headbutt
 3
 0 0 0 0 3 0 
-None
+NONE
 0
 0
 Levitate
@@ -45518,7 +45529,7 @@ Uproar
 Water Pulse
 30
 1 0 0 0 0 0 
-None
+NONE
 0
 -1
 Hydration
@@ -45600,7 +45611,7 @@ Uproar
 Water Pulse
 3
 3 0 0 0 0 0 
-None
+NONE
 0
 -1
 Hydration
@@ -45700,7 +45711,7 @@ Trick
 Wonder Room
 3
 0 0 0 2 0 1 
-None
+NONE
 0
 -1
 Bad Dreams
@@ -45771,7 +45782,7 @@ Zen Headbutt
 Tailwind
 45
 3 0 0 0 0 0
-None
+NONE
 1
 100 Lum Berry
 -1
@@ -45904,7 +45915,7 @@ Water Pulse
 Zen Headbutt
 3
 3 0 0 0 0 0 
-None
+NONE
 0
 -1
 Multitype
@@ -46004,7 +46015,7 @@ Uproar
 Zen Headbutt
 3
 3 0 0 0 0 0 
-None
+NONE
 0
 -1
 Victory Star
@@ -46092,7 +46103,7 @@ Synthesis
 Worry Seed
 45
 0 0 0 0 0 1 
-Level 496 17
+LEVEL 496 17
 1
 5 Miracle Seed
 87
@@ -46184,7 +46195,7 @@ Synthesis
 Worry Seed
 45
 0 0 0 0 0 2 
-Level 497 36
+LEVEL 497 36
 1
 5 Miracle Seed
 87
@@ -46283,7 +46294,7 @@ Synthesis
 Worry Seed
 45
 0 0 0 0 0 3 
-None
+NONE
 1
 5 Miracle Seed
 87
@@ -46370,7 +46381,7 @@ Superpower
 Zen Headbutt
 45
 1 0 0 0 0 0 
-Level 499 17
+LEVEL 499 17
 1
 5 Charcoal
 87
@@ -46474,7 +46485,7 @@ Thunder Punch
 Zen Headbutt
 45
 0 2 0 0 0 0 
-Level 500 36
+LEVEL 500 36
 1
 5 Charcoal
 87
@@ -46587,7 +46598,7 @@ Thunder Punch
 Zen Headbutt
 45
 0 3 0 0 0 0 
-None
+NONE
 1
 5 Charcoal
 87
@@ -46672,7 +46683,7 @@ Snore
 Water Pulse
 45
 0 0 0 1 0 0 
-Level 502 17
+LEVEL 502 17
 1
 5 Mystic Water
 87
@@ -46760,7 +46771,7 @@ Snore
 Water Pulse
 45
 0 0 0 2 0 0 
-Level 503 36
+LEVEL 503 36
 1
 5 Mystic Water
 87
@@ -46857,7 +46868,7 @@ Superpower
 Water Pulse
 45
 0 0 0 3 0 0 
-None
+NONE
 1
 5 Mystic Water
 87
@@ -46938,7 +46949,7 @@ Super Fang
 Zen Headbutt
 255
 0 1 0 0 0 0 
-Level 505 20
+LEVEL 505 20
 0
 50
 Run Away
@@ -47042,7 +47053,7 @@ Thunder Punch
 Zen Headbutt
 255
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Analytic
@@ -47124,7 +47135,7 @@ Snore
 Uproar
 255
 0 1 0 0 0 0 
-Level 507 16
+LEVEL 507 16
 0
 50
 Vital Spirit
@@ -47210,7 +47221,7 @@ Snore
 Uproar
 120
 0 2 0 0 0 0 
-Level 508 32
+LEVEL 508 32
 0
 50
 Intimidate
@@ -47303,7 +47314,7 @@ Superpower
 Uproar
 45
 0 3 0 0 0 0 
-None
+NONE
 0
 50
 Intimidate
@@ -47397,7 +47408,7 @@ Spite
 Trick
 255
 0 0 0 0 0 1 
-Level 510 20
+LEVEL 510 20
 0
 50
 Limber
@@ -47497,7 +47508,7 @@ Spite
 Trick
 90
 0 0 0 0 0 2 
-None
+NONE
 0
 50
 Limber
@@ -47595,7 +47606,7 @@ Uproar
 Worry Seed
 190
 0 0 0 0 0 1 
-Item 512  Leaf Stone
+ITEM 512 LEAF_STONE
 2
 50 Oran Berry
 5 Occa Berry
@@ -47690,7 +47701,7 @@ Uproar
 Worry Seed
 75
 0 0 0 0 0 2 
-None
+NONE
 2
 50 Oran Berry
 5 Occa Berry
@@ -47791,7 +47802,7 @@ Snore
 Uproar
 190
 0 0 0 0 0 1 
-Item 514  Fire Stone
+ITEM 514 FIRE_STONE
 2
 50 Oran Berry
 5 Passho Berry
@@ -47887,7 +47898,7 @@ Superpower
 Uproar
 75
 0 0 0 0 0 2 
-None
+NONE
 2
 50 Oran Berry
 5 Passho Berry
@@ -47990,7 +48001,7 @@ Uproar
 Water Pulse
 190
 0 0 0 0 0 1 
-Item 516  Water Stone
+ITEM 516 WATER_STONE
 2
 50 Oran Berry
 5 Rindo Berry
@@ -48088,7 +48099,7 @@ Uproar
 Water Pulse
 75
 0 0 0 0 0 2 
-None
+NONE
 2
 50 Oran Berry
 5 Rindo Berry
@@ -48184,7 +48195,7 @@ Worry Seed
 Zen Headbutt
 190
 1 0 0 0 0 0 
-Item 518  Moon Stone
+ITEM 518 MOON_STONE
 0
 50
 Forewarn
@@ -48267,7 +48278,7 @@ Worry Seed
 Zen Headbutt
 75
 2 0 0 0 0 0 
-None
+NONE
 0
 50
 Forewarn
@@ -48340,7 +48351,7 @@ Tailwind
 Uproar
 255
 0 1 0 0 0 0 
-Level 520 21
+LEVEL 520 21
 0
 50
 Big Pecks
@@ -48416,7 +48427,7 @@ Tailwind
 Uproar
 120
 0 2 0 0 0 0 
-Level 521 32
+LEVEL 521 32
 0
 50
 Big Pecks
@@ -48495,7 +48506,7 @@ Tailwind
 Uproar
 45
 0 3 0 0 0 0 
-None
+NONE
 0
 50
 Big Pecks
@@ -48570,7 +48581,7 @@ Snatch
 Snore
 190
 0 0 0 0 0 1 
-Level 523 27
+LEVEL 523 27
 1
 50 Cheri Berry
 50
@@ -48655,7 +48666,7 @@ Snatch
 Snore
 75
 0 0 0 0 0 2 
-None
+NONE
 1
 50 Cheri Berry
 50
@@ -48732,7 +48743,7 @@ Snore
 Stealth Rock
 255
 0 0 1 0 0 0 
-Level 525 25
+LEVEL 525 25
 2
 50 Everstone
 5 Hard Stone
@@ -48814,7 +48825,7 @@ Snore
 Stealth Rock
 120
 0 1 1 0 0 0 
-Item 526  Hard Stone
+ITEM 526 HARD_STONE
 2
 50 Everstone
 5 Hard Stone
@@ -48901,7 +48912,7 @@ Stealth Rock
 Superpower
 45
 0 3 0 0 0 0 
-None
+NONE
 2
 50 Everstone
 5 Hard Stone
@@ -49004,7 +49015,7 @@ Uproar
 Zen Headbutt
 190
 0 0 0 0 0 1 
-Item 528  Moon Stone
+ITEM 528 MOON_STONE
 0
 50
 Unaware
@@ -49111,7 +49122,7 @@ Uproar
 Zen Headbutt
 45
 0 0 0 0 0 2 
-None
+NONE
 0
 50
 Unaware
@@ -49193,7 +49204,7 @@ Snore
 Stealth Rock
 120
 0 1 0 0 0 0 
-Level 530 31
+LEVEL 530 31
 0
 50
 Sand Rush
@@ -49284,7 +49295,7 @@ Snore
 Stealth Rock
 60
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Sand Rush
@@ -49406,7 +49417,7 @@ Uproar
 Zen Headbutt
 255
 2 0 0 0 0 0 
-None
+NONE
 2
 5 Sitrus Berry
 50 Oran Berry
@@ -49500,7 +49511,7 @@ Superpower
 Thunder Punch
 180
 0 1 0 0 0 0 
-Level 533 25
+LEVEL 533 25
 0
 75
 Guts
@@ -49594,7 +49605,7 @@ Superpower
 Thunder Punch
 90
 0 2 0 0 0 0 
-Item 534 Black Belt
+ITEM 534 BLACK_BELT
 0
 75
 Guts
@@ -49692,7 +49703,7 @@ Superpower
 Thunder Punch
 45
 0 3 0 0 0 0 
-None
+NONE
 0
 75
 Guts
@@ -49766,7 +49777,7 @@ Uproar
 Water Pulse
 255
 0 0 0 0 0 1 
-Level 536 25
+LEVEL 536 25
 2
 50 Persim Berry
 50 Pecha Berry
@@ -49849,7 +49860,7 @@ Uproar
 Water Pulse
 120
 2 0 0 0 0 0 
-Level 537 36
+LEVEL 537 36
 2
 50 Persim Berry
 50 Pecha Berry
@@ -49953,7 +49964,7 @@ Uproar
 Water Pulse
 45
 3 0 0 0 0 0 
-None
+NONE
 2
 50 Persim Berry
 50 Pecha Berry
@@ -50040,7 +50051,7 @@ Thunder Punch
 Zen Headbutt
 45
 2 0 0 0 0 0 
-None
+NONE
 2
 5 Black Belt
 1 Expert Belt
@@ -50127,7 +50138,7 @@ Thunder Punch
 Zen Headbutt
 45
 0 2 0 0 0 0 
-None
+NONE
 2
 5 Black Belt
 1 Expert Belt
@@ -50206,7 +50217,7 @@ Synthesis
 Worry Seed
 255
 0 0 1 0 0 0 
-Level 541 20
+LEVEL 541 20
 1
 5 Mental Herb
 50
@@ -50281,7 +50292,7 @@ Synthesis
 Worry Seed
 120
 0 0 2 0 0 0 
-Item 542  Leaf Stone
+ITEM 542 LEAF_STONE
 1
 5 Mental Herb
 50
@@ -50380,7 +50391,7 @@ Synthesis
 Worry Seed
 45
 0 3 0 0 0 0 
-None
+NONE
 1
 5 Mental Herb
 50
@@ -50453,7 +50464,7 @@ Signal Beam
 Snore
 255
 0 0 1 0 0 0 
-Level 544 22
+LEVEL 544 22
 2
 5 Poison Barb
 50 Pecha Berry
@@ -50530,7 +50541,7 @@ Signal Beam
 Snore
 120
 0 0 2 0 0 0 
-Level 545 30
+LEVEL 545 30
 2
 5 Poison Barb
 50 Pecha Berry
@@ -50624,7 +50635,7 @@ Snore
 Superpower
 45
 0 0 0 0 0 3 
-None
+NONE
 2
 5 Poison Barb
 50 Pecha Berry
@@ -50707,7 +50718,7 @@ Tailwind
 Worry Seed
 190
 0 0 0 0 0 1 
-Item 547  Sun Stone
+ITEM 547 SUN_STONE
 0
 50
 Prankster
@@ -50788,7 +50799,7 @@ Tailwind
 Worry Seed
 75
 0 0 0 0 0 2 
-None
+NONE
 0
 50
 Prankster
@@ -50865,7 +50876,7 @@ Synthesis
 Worry Seed
 190
 0 0 0 1 0 0 
-Item 549  Sun Stone
+ITEM 549 SUN_STONE
 0
 0
 Chlorophyll
@@ -50939,7 +50950,7 @@ Synthesis
 Worry Seed
 75
 0 0 0 2 0 0 
-None
+NONE
 0
 0
 Chlorophyll
@@ -51020,7 +51031,7 @@ Uproar
 Zen Headbutt
 25
 0 0 0 0 0 2 
-None
+NONE
 2
 5 Deep Sea Tooth
 5 Deep Sea Scale
@@ -51115,7 +51126,7 @@ Stealth Rock
 Uproar
 180
 0 1 0 0 0 0 
-Level 552 29
+LEVEL 552 29
 0
 50
 Intimidate
@@ -51221,7 +51232,7 @@ Stealth Rock
 Uproar
 90
 0 2 0 0 0 0 
-Level 553 40
+LEVEL 553 40
 0
 50
 Intimidate
@@ -51340,7 +51351,7 @@ Superpower
 Uproar
 45
 0 3 0 0 0 0 
-None
+NONE
 0
 50
 Intimidate
@@ -51433,7 +51444,7 @@ Uproar
 Zen Headbutt
 120
 0 1 0 0 0 0 
-Level 555 35
+LEVEL 555 35
 1
 50 Rawst Berry
 50
@@ -51542,7 +51553,7 @@ Uproar
 Zen Headbutt
 60
 0 2 0 0 0 0
-None
+NONE
 1
 50 Rawst Berry
 50
@@ -51629,7 +51640,7 @@ Uproar
 Worry Seed
 255
 0 0 0 2 0 0 
-None
+NONE
 1
 5 Miracle Seed
 50
@@ -51717,7 +51728,7 @@ Snore
 Stealth Rock
 190
 0 0 1 0 0 0 
-Level 558 34
+LEVEL 558 34
 2
 1 Rare Bone
 5 Hard Stone
@@ -51811,7 +51822,7 @@ Snore
 Stealth Rock
 75
 0 0 2 0 0 0 
-None
+NONE
 2
 1 Rare Bone
 5 Hard Stone
@@ -51923,7 +51934,7 @@ Thunder Punch
 Zen Headbutt
 180
 0 1 0 0 0 0 
-Level 560 39
+LEVEL 560 39
 1
 5 Shed Shell
 50
@@ -52040,7 +52051,7 @@ Thunder Punch
 Zen Headbutt
 90
 0 0 1 0 1 0 
-None
+NONE
 1
 5 Shed Shell
 50
@@ -52141,7 +52152,7 @@ Trick
 Zen Headbutt
 45
 0 0 0 2 0 0 
-None
+NONE
 0
 50
 Wonder Skin
@@ -52231,7 +52242,7 @@ Wonder Room
 Zen Headbutt
 190
 0 0 1 0 0 0 
-Level 563 34
+LEVEL 563 34
 1
 5 Spell Tag
 50
@@ -52328,7 +52339,7 @@ Wonder Room
 Zen Headbutt
 90
 0 0 2 0 0 0 
-None
+NONE
 1
 5 Spell Tag
 50
@@ -52422,7 +52433,7 @@ Water Pulse
 Zen Headbutt
 45
 0 0 1 0 0 0 
-Level 565 37
+LEVEL 565 37
 0
 87
 Solid Rock
@@ -52522,7 +52533,7 @@ Water Pulse
 Zen Headbutt
 45
 0 0 2 0 0 0 
-None
+NONE
 0
 87
 Solid Rock
@@ -52620,7 +52631,7 @@ Uproar
 Zen Headbutt
 45
 0 1 0 0 0 0 
-Level 567 37
+LEVEL 567 37
 0
 87
 Defeatist
@@ -52726,7 +52737,7 @@ Uproar
 Zen Headbutt
 45
 0 2 0 0 0 0 
-None
+NONE
 0
 87
 Defeatist
@@ -52805,7 +52816,7 @@ Snore
 Spite
 190
 0 0 0 0 0 1 
-Level 569 36
+LEVEL 569 36
 2
 5 Black Sludge
 1 Nugget
@@ -52897,7 +52908,7 @@ Snore
 Spite
 60
 0 2 0 0 0 0 
-None
+NONE
 3
 1 Big Nugget
 5 Nugget
@@ -52994,7 +53005,7 @@ Trick
 Uproar
 75
 0 0 0 1 0 0 
-Level 571 30
+LEVEL 571 30
 0
 87
 Illusion
@@ -53102,7 +53113,7 @@ Trick
 Uproar
 45
 0 0 0 2 0 0 
-None
+NONE
 0
 87
 Illusion
@@ -53189,7 +53200,7 @@ Snore
 Uproar
 255
 0 0 0 0 0 1 
-Item 573  Shiny Stone
+ITEM 573 SHINY_STONE
 1
 50 Chesto Berry
 25
@@ -53271,7 +53282,7 @@ Snore
 Uproar
 60
 0 0 0 0 0 2 
-None
+NONE
 1
 50 Chesto Berry
 25
@@ -53374,7 +53385,7 @@ Uproar
 Zen Headbutt
 200
 0 0 0 0 1 0 
-Level 575 32
+LEVEL 575 32
 1
 50 Persim Berry
 25
@@ -53479,7 +53490,7 @@ Uproar
 Zen Headbutt
 100
 0 0 0 0 2 0 
-Level 576 41
+LEVEL 576 41
 1
 50 Persim Berry
 25
@@ -53589,7 +53600,7 @@ Uproar
 Zen Headbutt
 50
 0 0 0 0 3 0 
-None
+NONE
 1
 50 Persim Berry
 25
@@ -53685,7 +53696,7 @@ Wonder Room
 Zen Headbutt
 200
 0 0 0 1 0 0 
-Level 578 32
+LEVEL 578 32
 1
 50 Persim Berry
 50
@@ -53784,7 +53795,7 @@ Wonder Room
 Zen Headbutt
 100
 0 0 0 2 0 0 
-Level 579 41
+LEVEL 579 41
 1
 50 Persim Berry
 50
@@ -53899,7 +53910,7 @@ Wonder Room
 Zen Headbutt
 50
 0 0 0 3 0 0 
-None
+NONE
 1
 50 Persim Berry
 50
@@ -53975,7 +53986,7 @@ Uproar
 Water Pulse
 190
 1 0 0 0 0 0 
-Level 581 35
+LEVEL 581 35
 0
 50
 Keen Eye
@@ -54056,7 +54067,7 @@ Uproar
 Water Pulse
 45
 0 0 0 0 0 2 
-None
+NONE
 0
 50
 Keen Eye
@@ -54132,7 +54143,7 @@ Uproar
 Water Pulse
 255
 0 0 0 1 0 0 
-Level 583 35
+LEVEL 583 35
 0
 50
 Ice Body
@@ -54211,7 +54222,7 @@ Uproar
 Water Pulse
 120
 0 0 0 2 0 0 
-Level 584 47
+LEVEL 584 47
 0
 50
 Ice Body
@@ -54295,7 +54306,7 @@ Uproar
 Water Pulse
 45
 0 0 0 3 0 0 
-None
+NONE
 0
 50
 Ice Body
@@ -54376,7 +54387,7 @@ Synthesis
 Worry Seed
 190
 0 0 0 0 0 1 
-Level 586 34
+LEVEL 586 34
 0
 50
 Chlorophyll
@@ -54466,7 +54477,7 @@ Synthesis
 Worry Seed
 75
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Chlorophyll
@@ -54553,7 +54564,7 @@ Snore
 Tailwind
 200
 0 0 0 0 0 2 
-None
+NONE
 1
 100 Cheri Berry
 50
@@ -54631,7 +54642,7 @@ Signal Beam
 Snore
 200
 0 1 0 0 0 0 
-Item 589  Metal Coat
+ITEM 589 METAL_COAT
 0
 50
 Swarm
@@ -54719,7 +54730,7 @@ Signal Beam
 Snore
 75
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Swarm
@@ -54795,7 +54806,7 @@ Synthesis
 Worry Seed
 190
 1 0 0 0 0 0 
-Level 591 39
+LEVEL 591 39
 3
 50 Tiny Mushroom
 5 Big Mushroom
@@ -54879,7 +54890,7 @@ Synthesis
 Worry Seed
 75
 2 0 0 0 0 0 
-None
+NONE
 3
 50 Tiny Mushroom
 5 Big Mushroom
@@ -54970,7 +54981,7 @@ Trick
 Water Pulse
 190
 0 0 0 0 1 0 
-Level 593 40
+LEVEL 593 40
 0
 50
 Water Absorb
@@ -55064,7 +55075,7 @@ Trick
 Water Pulse
 60
 0 0 0 0 2 0 
-None
+NONE
 0
 50
 Water Absorb
@@ -55147,7 +55158,7 @@ Snore
 Water Pulse
 75
 2 0 0 0 0 0 
-None
+NONE
 0
 50
 Healer
@@ -55231,7 +55242,7 @@ Signal Beam
 Snore
 190
 0 0 0 0 0 1 
-Level 596 36
+LEVEL 596 36
 0
 50
 Compoundeyes
@@ -55321,7 +55332,7 @@ Signal Beam
 Snore
 75
 0 0 0 0 0 2 
-None
+NONE
 0
 50
 Compoundeyes
@@ -55406,7 +55417,7 @@ Stealth Rock
 Worry Seed
 255
 0 0 1 0 0 0 
-Level 598 40
+LEVEL 598 40
 1
 5 Sticky Barb
 50
@@ -55508,7 +55519,7 @@ Stealth Rock
 Worry Seed
 90
 0 0 2 0 0 0 
-None
+NONE
 1
 5 Sticky Barb
 50
@@ -55579,7 +55590,7 @@ Snore
 Uproar
 130
 0 0 1 0 0 0 
-Level 600 38
+LEVEL 600 38
 0
 -1
 Clear Body
@@ -55652,7 +55663,7 @@ Snore
 Uproar
 60
 0 0 2 0 0 0 
-Level 601 49
+LEVEL 601 49
 0
 -1
 Clear Body
@@ -55731,7 +55742,7 @@ Snore
 Uproar
 30
 0 0 3 0 0 0 
-None
+NONE
 0
 -1
 Clear Body
@@ -55761,7 +55772,7 @@ Thunder Wave
 Magnet Rise
 190
 0 0 0 0 0 1 
-Level 603 39
+LEVEL 603 39
 0
 50
 Levitate
@@ -55836,7 +55847,7 @@ Snore
 Super Fang
 60
 0 2 0 0 0 0 
-Item 604  Thunder Stone
+ITEM 604 THUNDER_STONE
 0
 50
 Levitate
@@ -55928,7 +55939,7 @@ Superpower
 Thunder Punch
 30
 0 3 0 0 0 0 
-None
+NONE
 0
 50
 Levitate
@@ -56028,7 +56039,7 @@ Wonder Room
 Zen Headbutt
 255
 0 0 0 1 0 0 
-Level 606 42
+LEVEL 606 42
 0
 50
 Analytic
@@ -56135,7 +56146,7 @@ Wonder Room
 Zen Headbutt
 90
 0 0 0 2 0 0 
-None
+NONE
 0
 50
 Analytic
@@ -56224,7 +56235,7 @@ Spite
 Trick
 190
 0 0 0 1 0 0 
-Level 608 41
+LEVEL 608 41
 0
 50
 Flash Fire
@@ -56315,7 +56326,7 @@ Spite
 Trick
 90
 0 0 0 2 0 0 
-Item 609  Dusk Stone
+ITEM 609 DUSK_STONE
 0
 50
 Flash Fire
@@ -56394,7 +56405,7 @@ Spite
 Trick
 45
 0 0 0 3 0 0 
-None
+NONE
 0
 50
 Flash Fire
@@ -56485,7 +56496,7 @@ Snore
 Superpower
 75
 0 1 0 0 0 0 
-Level 611 38
+LEVEL 611 38
 0
 50
 Rivalry
@@ -56582,7 +56593,7 @@ Snore
 Superpower
 60
 0 2 0 0 0 0 
-Level 612 48
+LEVEL 612 48
 0
 50
 Rivalry
@@ -56688,7 +56699,7 @@ Snore
 Superpower
 45
 0 3 0 0 0 0 
-None
+NONE
 0
 50
 Rivalry
@@ -56775,7 +56786,7 @@ Superpower
 Water Pulse
 120
 0 1 0 0 0 0 
-Level 614 37
+LEVEL 614 37
 1
 50 Aspear Berry
 50
@@ -56881,7 +56892,7 @@ Superpower
 Water Pulse
 60
 0 2 0 0 0 0 
-None
+NONE
 1
 50 Aspear Berry
 50
@@ -56963,7 +56974,7 @@ Snore
 Water Pulse
 25
 0 0 0 0 2 0 
-None
+NONE
 1
 5 NeverMeltIce
 -1
@@ -57036,7 +57047,7 @@ Signal Beam
 Snore
 200
 0 0 1 0 0 0 
-Item 617  Shed Shell
+ITEM 617 SHED_SHELL
 0
 50
 Hydration
@@ -57120,7 +57131,7 @@ Signal Beam
 Snore
 75
 0 0 0 0 0 2 
-None
+NONE
 0
 50
 Hydration
@@ -57219,7 +57230,7 @@ Uproar
 Water Pulse
 75
 2 0 0 0 0 0 
-None
+NONE
 1
 5 Soft Sand
 50
@@ -57314,7 +57325,7 @@ Role Play
 Snore
 180
 0 1 0 0 0 0 
-Level 620 50
+LEVEL 620 50
 0
 50
 Inner Focus
@@ -57415,7 +57426,7 @@ Role Play
 Snore
 45
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Inner Focus
@@ -57526,7 +57537,7 @@ Superpower
 Thunder Punch
 45
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Dragon Fang
 50
@@ -57615,7 +57626,7 @@ Superpower
 Thunder Punch
 190
 0 1 0 0 0 0 
-Level 623 43
+LEVEL 623 43
 1
 5 Light Clay
 -1
@@ -57718,7 +57729,7 @@ Thunder Punch
 Zen Headbutt
 90
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Light Clay
 -1
@@ -57819,7 +57830,7 @@ Spite
 Stealth Rock
 120
 0 1 0 0 0 0 
-Level 625 52
+LEVEL 625 52
 0
 50
 Defiant
@@ -57929,7 +57940,7 @@ Spite
 Stealth Rock
 45
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Defiant
@@ -58014,7 +58025,7 @@ Uproar
 Zen Headbutt
 45
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Reckless
@@ -58087,7 +58098,7 @@ Superpower
 Tailwind
 190
 0 1 0 0 0 0 
-Level 628 54
+LEVEL 628 54
 0
 100
 Keen Eye
@@ -58171,7 +58182,7 @@ Tailwind
 Zen Headbutt
 60
 0 2 0 0 0 0 
-None
+NONE
 0
 100
 Keen Eye
@@ -58258,7 +58269,7 @@ Snore
 Tailwind
 190
 0 0 1 0 0 0 
-Level 630 54
+LEVEL 630 54
 0
 0
 Big Pecks
@@ -58355,7 +58366,7 @@ Snore
 Tailwind
 60
 0 0 0 2 0 0 
-None
+NONE
 0
 0
 Big Pecks
@@ -58455,7 +58466,7 @@ Superpower
 Thunder Punch
 90
 0 0 0 2 0 0 
-None
+NONE
 1
 1 Flame Orb
 50
@@ -58541,7 +58552,7 @@ Snore
 Superpower
 90
 0 0 2 0 0 0 
-None
+NONE
 0
 50
 Swarm
@@ -58627,7 +58638,7 @@ Uproar
 Zen Headbutt
 45
 0 1 0 0 0 0 
-Level 634 50
+LEVEL 634 50
 0
 50
 Hustle
@@ -58715,7 +58726,7 @@ Uproar
 Zen Headbutt
 45
 0 2 0 0 0 0 
-Level 635 64
+LEVEL 635 64
 0
 50
 Hustle
@@ -58830,7 +58841,7 @@ Uproar
 Zen Headbutt
 45
 0 0 0 3 0 0 
-None
+NONE
 0
 50
 Levitate
@@ -58907,7 +58918,7 @@ Snore
 Zen Headbutt
 45
 0 1 0 0 0 0 
-Level 637 59
+LEVEL 637 59
 0
 50
 Flame Body
@@ -59004,7 +59015,7 @@ Tailwind
 Zen Headbutt
 15
 0 0 0 3 0 0 
-None
+NONE
 1
 100 Silver Powder
 50
@@ -59092,7 +59103,7 @@ Superpower
 Zen Headbutt
 3
 0 0 3 0 0 0 
-None
+NONE
 0
 -1
 Justified
@@ -59177,7 +59188,7 @@ Superpower
 Zen Headbutt
 3
 0 3 0 0 0 0 
-None
+NONE
 0
 -1
 Justified
@@ -59264,7 +59275,7 @@ Worry Seed
 Zen Headbutt
 3
 0 0 0 0 3 0 
-None
+NONE
 0
 -1
 Justified
@@ -59357,7 +59368,7 @@ Tailwind
 Uproar
 3
 0 3 0 0 0 0
-None
+NONE
 0
 100
 Prankster
@@ -59455,7 +59466,7 @@ Thunder Punch
 Uproar
 3
 0 3 0 0 0 0 
-None
+NONE
 0
 100
 Prankster
@@ -59546,7 +59557,7 @@ Tailwind
 Zen Headbutt
 45
 0 0 0 3 0 0 
-None
+NONE
 0
 -1
 Turboblaze
@@ -59641,7 +59652,7 @@ Thunder Punch
 Zen Headbutt
 45
 0 3 0 0 0 0 
-None
+NONE
 0
 -1
 Teravolt
@@ -59734,7 +59745,7 @@ Stealth Rock
 Superpower
 3
 0 3 0 0 0 0
-None
+NONE
 0
 100
 Sand Force
@@ -59824,7 +59835,7 @@ Snore
 Zen Headbutt
 3
 1 1 0 1 0 0
-None
+NONE
 0
 -1
 Pressure
@@ -59905,7 +59916,7 @@ Superpower
 Water Pulse
 3
 0 0 0 3 0 0 
-None
+NONE
 0
 -1
 Justified
@@ -60018,7 +60029,7 @@ Wonder Room
 Zen Headbutt
 3
 0 0 0 1 1 1
-None
+NONE
 1
 100 Star Piece
 -1
@@ -60117,7 +60128,7 @@ Snore
 Zen Headbutt
 3
 0 1 0 1 0 1 
-None
+NONE
 0
 -1
 Download
@@ -60223,7 +60234,7 @@ Worry Seed
 Zen Headbutt
 45
 0 0 1 0 0 0 
-Level 651 16
+LEVEL 651 16
 0
 87
 Overgrow
@@ -60331,7 +60342,7 @@ Worry Seed
 Zen Headbutt
 45
 0 0 2 0 0 0 
-Level 652 36
+LEVEL 652 36
 0
 87
 Overgrow
@@ -60452,7 +60463,7 @@ Worry Seed
 Zen Headbutt
 45
 0 0 3 0 0 0 
-None
+NONE
 0
 87
 Overgrow
@@ -60536,7 +60547,7 @@ Magic Room
 Snore
 45
 0 0 0 1 0 0 
-Level 654 16
+LEVEL 654 16
 0
 87
 Blaze
@@ -60630,7 +60641,7 @@ Wonder Room
 Zen Headbutt
 45
 0 0 0 2 0 0 
-Level 655 36
+LEVEL 655 36
 0
 87
 Blaze
@@ -60739,7 +60750,7 @@ Wonder Room
 Zen Headbutt
 45
 0 0 0 3 0 0 
-None
+NONE
 0
 87
 Blaze
@@ -60825,7 +60836,7 @@ Spite
 Water Pulse
 45
 0 0 0 0 0 1 
-Level 657 16
+LEVEL 657 16
 0
 87
 Torrent
@@ -60915,7 +60926,7 @@ Spite
 Water Pulse
 45
 0 0 0 0 0 2 
-Level 658 36
+LEVEL 658 36
 0
 87
 Torrent
@@ -61014,7 +61025,7 @@ Spite
 Water Pulse
 45
 0 0 0 0 0 3 
-None
+NONE
 0
 87
 Torrent
@@ -61101,7 +61112,7 @@ Snore
 Super Fang
 255
 0 0 0 0 0 1 
-Level 660 20
+LEVEL 660 20
 0
 50
 Pickup
@@ -61208,7 +61219,7 @@ Thunder Punch
 Uproar
 255
 2 0 0 0 0 0 
-None
+NONE
 0
 50
 Pickup
@@ -61277,7 +61288,7 @@ Snore
 Tailwind
 255
 0 0 0 0 0 1 
-Level 662 17
+LEVEL 662 17
 0
 50
 Big Pecks
@@ -61351,7 +61362,7 @@ Snore
 Tailwind
 255
 0 0 0 0 0 2 
-Level 663 35
+LEVEL 663 35
 0
 50
 Flame Body
@@ -61433,7 +61444,7 @@ Snore
 Tailwind
 255
 0 0 0 0 0 3 
-None
+NONE
 0
 50
 Flame Body
@@ -61463,7 +61474,7 @@ Stun Spore
 Bug Bite
 255
 0 0 1 0 0 0 
-Level 665 9
+LEVEL 665 9
 0
 50
 Shield Dust
@@ -61494,7 +61505,7 @@ Electroweb
 Iron Defense
 255
 0 0 2 0 0 0 
-Level 666 12
+LEVEL 666 12
 0
 50
 Shed Skin
@@ -61575,7 +61586,7 @@ Snore
 Tailwind
 255
 1 0 0 1 0 1 
-None
+NONE
 0
 50
 Shield Dust
@@ -61658,7 +61669,7 @@ Snatch
 Snore
 200
 0 0 0 1 0 0 
-Level 668 35
+LEVEL 668 35
 0
 25
 Rivalry
@@ -61745,7 +61756,7 @@ Snatch
 Snore
 200
 0 0 0 2 0 0 
-None
+NONE
 0
 25
 Rivalry
@@ -61819,7 +61830,7 @@ Synthesis
 Worry Seed
 255
 0 0 0 0 1 0 
-Level 670 19
+LEVEL 670 19
 0
 0
 Flower Veil
@@ -61893,7 +61904,7 @@ Synthesis
 Worry Seed
 255
 0 0 0 0 2 0 
-Item 671 Shiny Stone
+ITEM 671 SHINY_STONE
 0
 0
 Flower Veil
@@ -61968,7 +61979,7 @@ Synthesis
 Worry Seed
 255
 0 0 0 0 3 0 
-None
+NONE
 0
 0
 Flower Veil
@@ -62048,7 +62059,7 @@ Worry Seed
 Zen Headbutt
 160
 1 0 0 0 0 0 
-Level 673 32
+LEVEL 673 32
 0
 50
 Sap Sipper
@@ -62137,7 +62148,7 @@ Worry Seed
 Zen Headbutt
 160
 2 0 0 0 0 0 
-None
+NONE
 0
 50
 Sap Sipper
@@ -62239,7 +62250,7 @@ Uproar
 Zen Headbutt
 128
 0 1 0 0 0 0 
-Level 675 32
+LEVEL 675 32
 1
 5 Mental Herb
 50
@@ -62362,7 +62373,7 @@ Uproar
 Zen Headbutt
 128
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Iron Fist
@@ -62441,7 +62452,7 @@ Uproar
 Zen Headbutt
 120
 0 0 0 0 0 1 
-None
+NONE
 0
 50
 Fur Coat
@@ -62526,7 +62537,7 @@ Wonder Room
 Zen Headbutt
 228
 0 0 0 0 0 1 
-Level 678 25
+LEVEL 678 25
 0
 50
 Keen Eye
@@ -62628,7 +62639,7 @@ Wonder Room
 Zen Headbutt
 228
 0 0 0 0 0 2 
-None
+NONE
 0
 50
 Keen Eye
@@ -62700,7 +62711,7 @@ Snore
 Spite
 222
 0 0 1 0 0 0 
-Level 680 35
+LEVEL 680 35
 0
 50
 No Guard
@@ -62772,7 +62783,7 @@ Snore
 Spite
 222
 0 0 2 0 0 0 
-Item 681 Dusk Stone
+ITEM 681 DUSK_STONE
 0
 50
 No Guard
@@ -62849,7 +62860,7 @@ Snore
 Spite
 222
 0 0 2 0 1 0 
-None
+NONE
 0
 50
 Stance Change
@@ -62929,7 +62940,7 @@ Skill Swap
 Snore
 200
 1 0 0 0 0 0 
-Item 683 Sachet
+ITEM 683 SACHET
 1
 5 Sachet
 50
@@ -63019,7 +63030,7 @@ Skill Swap
 Snore
 200
 2 0 0 0 0 0 
-None
+NONE
 1
 5 Sachet
 50
@@ -63096,7 +63107,7 @@ Magic Coat
 Snore
 200
 0 0 1 0 0 0 
-Item 685 Whipped Dream
+ITEM 685 WHIPPED_DREAM
 1
 5 Whipped Dream
 50
@@ -63176,7 +63187,7 @@ Magic Coat
 Snore
 200
 0 0 2 0 0 0 
-None
+NONE
 1
 5 Whipped Dream
 50
@@ -63266,7 +63277,7 @@ Spite
 Superpower
 120
 0 1 0 0 0 0 
-Level 687 30
+LEVEL 687 30
 0
 50
 Contrary
@@ -63362,7 +63373,7 @@ Spite
 Superpower
 120
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Contrary
@@ -63462,7 +63473,7 @@ Stealth Rock
 Water Pulse
 255
 0 1 0 0 0 0 
-Level 689 39
+LEVEL 689 39
 0
 50
 Tough Claws
@@ -63574,7 +63585,7 @@ Superpower
 Water Pulse
 255
 0 2 0 0 0 0 
-None
+NONE
 0
 50
 Tough Claws
@@ -63652,7 +63663,7 @@ Snore
 Water Pulse
 225
 0 0 0 0 1 0 
-Level 691 48
+LEVEL 691 48
 0
 50
 Poison Point
@@ -63739,7 +63750,7 @@ Snore
 Water Pulse
 225
 0 0 0 0 2 0 
-None
+NONE
 0
 50
 Poison Point
@@ -63814,7 +63825,7 @@ Snore
 Water Pulse
 155
 0 0 0 1 0 0 
-Level 693 37
+LEVEL 693 37
 0
 50
 Mega Launcher
@@ -63901,7 +63912,7 @@ Snore
 Water Pulse
 155
 0 0 0 2 0 0 
-None
+NONE
 0
 50
 Mega Launcher
@@ -63982,7 +63993,7 @@ Signal Beam
 Snore
 90
 0 0 0 0 0 1 
-Item 695 Sun Stone
+ITEM 695 SUN_STONE
 0
 50
 Dry Skin
@@ -64065,7 +64076,7 @@ Snore
 Thunder Punch
 90
 0 0 0 1 0 1 
-None
+NONE
 0
 50
 Dry Skin
@@ -64153,7 +64164,7 @@ Superpower
 Zen Headbutt
 45
 0 1 0 0 0 0 
-Level 697 39
+LEVEL 697 39
 0
 87
 Strong Jaw
@@ -64247,7 +64258,7 @@ Superpower
 Zen Headbutt
 45
 0 2 0 0 0 0 
-None
+NONE
 0
 87
 Strong Jaw
@@ -64348,7 +64359,7 @@ Water Pulse
 Zen Headbutt
 45
 1 0 0 0 0 0 
-Level 699 39
+LEVEL 699 39
 0
 87
 Refrigerate
@@ -64455,7 +64466,7 @@ Water Pulse
 Zen Headbutt
 45
 2 0 0 0 0 0 
-None
+NONE
 0
 87
 Refrigerate
@@ -64544,7 +64555,7 @@ Skill Swap
 Snore
 45
 0 0 0 0 2 0 
-None
+NONE
 0
 87
 Cute Charm
@@ -64651,7 +64662,7 @@ Thunder Punch
 Zen Headbutt
 128
 0 2 0 0 0 0 
-None
+NONE
 1
 5 King's Rock
 50
@@ -64736,7 +64747,7 @@ Super Fang
 Thunder Punch
 200
 0 0 0 0 0 2 
-None
+NONE
 0
 50
 Cheek Pouch
@@ -64817,7 +64828,7 @@ Stealth Rock
 Wonder Room
 30
 0 0 1 0 1 0 
-None
+NONE
 18
 1 Fire Gem
 1 Fighting Gem
@@ -64901,7 +64912,7 @@ Snore
 Water Pulse
 20
 0 0 0 0 1 0 
-Level 705 40
+LEVEL 705 40
 0
 50
 Sap Sipper
@@ -64969,7 +64980,7 @@ Snore
 Water Pulse
 20
 0 0 0 0 2 0 
-Level 706 50
+LEVEL 706 50
 0
 50
 Sap Sipper
@@ -65060,7 +65071,7 @@ Thunder Punch
 Water Pulse
 20
 0 0 0 0 3 0 
-None
+NONE
 0
 50
 Sap Sipper
@@ -65141,7 +65152,7 @@ Recycle
 Snore
 60
 0 0 1 0 0 0 
-None
+NONE
 0
 50
 Prankster
@@ -65228,7 +65239,7 @@ Trick
 Worry Seed
 150
 0 1 0 0 0 0 
-Item 709 Big Root
+ITEM 709 BIG_ROOT
 1
 5 Big Root
 50
@@ -65328,7 +65339,7 @@ Trick
 Worry Seed
 150
 0 2 0 0 0 0 
-None
+NONE
 1
 5 Big Root
 50
@@ -65419,7 +65430,7 @@ Trick
 Worry Seed
 190
 0 0 1 0 0 0 
-Item 711 Miracle Seed
+ITEM 711 MIRACLE_SEED
 1
 5 Miracle Seed
 50
@@ -65519,7 +65530,7 @@ Trick
 Worry Seed
 190
 0 0 2 0 0 0 
-None
+NONE
 1
 5 Miracle Seed
 50
@@ -65595,7 +65606,7 @@ Snore
 Water Pulse
 255
 0 0 1 0 0 0 
-Level 713 37
+LEVEL 713 37
 2
 5 NeverMeltIce
 1 Icy Rock
@@ -65685,7 +65696,7 @@ Superpower
 Water Pulse
 255
 0 0 2 0 0 0 
-None
+NONE
 2
 5 NeverMeltIce
 1 Icy Rock
@@ -65776,7 +65787,7 @@ Uproar
 Water Pulse
 200
 0 0 0 0 0 1 
-Level 715 48
+LEVEL 715 48
 0
 50
 Frisk
@@ -65877,7 +65888,7 @@ Uproar
 Water Pulse
 200
 0 0 0 0 0 2 
-None
+NONE
 0
 50
 Frisk
@@ -65962,7 +65973,7 @@ Wonder Room
 Zen Headbutt
 70
 3 0 0 0 0 0 
-None
+NONE
 0
 -1
 Fairy Aura
@@ -66050,7 +66061,7 @@ Tailwind
 Zen Headbutt
 70
 3 0 0 0 0 0 
-None
+NONE
 0
 -1
 Dark Aura
@@ -66133,7 +66144,7 @@ Superpower
 Zen Headbutt
 3
 3 0 0 0 0 0 
-None
+NONE
 0
 -1
 Aura Break
@@ -66220,7 +66231,7 @@ Stealth Rock
 Wonder Room
 3
 0 0 1 0 2 0 
-None
+NONE
 0
 -1
 Clear Body

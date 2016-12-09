@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public enum EvolutionType {
     NONE(in -> new NoEvolution()),
-    GENDER(in -> new GenderEvolution(in.next(), getEvolution(in))),
-    STAT(in -> new StatEvolution(in.next(), in.next(), in.next(), getEvolution(in))),
+    GENDER(in -> new GenderEvolution(in.next(), getBaseEvolution(in))),
+    STAT(in -> new StatEvolution(in.next(), in.next(), in.next(), getBaseEvolution(in))),
     LEVEL(in -> new LevelUpEvolution(in.nextInt(), in.nextInt())),
     ITEM(in -> new ItemEvolution(in.nextInt(), in.nextLine().trim())),
     MOVE(in -> new MoveEvolution(in.nextInt(), in.nextLine().trim())),
@@ -30,6 +30,10 @@ public enum EvolutionType {
 
     private interface EvolutionReader {
         Evolution readEvolution(Scanner in);
+    }
+
+    private static BaseEvolution getBaseEvolution(Scanner in) {
+        return (BaseEvolution)getEvolution(in);
     }
 
     public static Evolution getEvolution(Scanner in) {

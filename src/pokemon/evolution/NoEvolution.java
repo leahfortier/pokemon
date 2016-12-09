@@ -21,4 +21,9 @@ class NoEvolution extends Evolution {
     public PokemonNamesies[] getEvolutions() {
         return new PokemonNamesies[0];
     }
+
+    @Override
+    public String toString() {
+        return EvolutionType.NONE.name();
+    }
 }

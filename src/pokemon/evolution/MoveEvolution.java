@@ -26,4 +26,9 @@ class MoveEvolution extends BaseEvolution {
 
         return null;
     }
+
+    @Override
+    public String toString() {
+        return EvolutionType.MOVE + " " + super.evolutionNumber + " " + this.move;
+    }
 }

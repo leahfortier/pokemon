@@ -9,14 +9,10 @@ import pokemon.PokemonNamesies;
 class GenderEvolution extends Evolution {
     private static final long serialVersionUID = 1L;
 
-    private Evolution evolution;
-    private Gender gender;
+    private final BaseEvolution evolution;
+    private final Gender gender;
 
-    GenderEvolution(String gender, Evolution evolution) {
-        if (!(evolution instanceof BaseEvolution)) {
-            Global.error("Gender evolution does not make any sense!");
-        }
-
+    GenderEvolution(String gender, BaseEvolution evolution) {
         this.evolution = evolution;
         this.gender = Gender.valueOf(gender.toUpperCase());
         if (this.gender != Gender.MALE && this.gender != Gender.FEMALE) {
@@ -36,5 +32,10 @@ class GenderEvolution extends Evolution {
     @Override
     public PokemonNamesies[] getEvolutions() {
         return this.evolution.getEvolutions();
+    }
+
+    @Override
+    public String toString() {
+        return EvolutionType.GENDER + " " + gender.name() + " " + evolution.toString();
     }
 }

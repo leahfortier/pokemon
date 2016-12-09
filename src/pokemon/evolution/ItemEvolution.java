@@ -22,4 +22,9 @@ class ItemEvolution extends BaseEvolution {
 
         return null;
     }
+
+    @Override
+    public String toString() {
+        return EvolutionType.ITEM + " " + super.evolutionNumber + " " + this.item;
+    }
 }
