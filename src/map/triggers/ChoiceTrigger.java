@@ -19,6 +19,6 @@ class ChoiceTrigger extends Trigger {
     }
 
     protected void executeTrigger() {
-        Messages.addMessageToFront(new MessageUpdate(this.question).withChoices(this.choices));
+        Messages.addToFront(new MessageUpdate(this.question).withChoices(this.choices));
     }
 }

@@ -50,11 +50,11 @@ public class Messages {
         getQueue().add(message);
     }
 
-    public static void addMessageToFront(String message) {
-        addMessageToFront(new MessageUpdate(message));
+    public static void addToFront(String message) {
+        addToFront(new MessageUpdate(message));
     }
 
-    public static void addMessageToFront(MessageUpdate messageUpdate) {
+    public static void addToFront(MessageUpdate messageUpdate) {
         getQueue().addFirst(messageUpdate);
     }
 }

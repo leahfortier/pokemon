@@ -34,6 +34,7 @@ import item.berry.Berry;
 import item.berry.HealthTriggeredBerry;
 import item.hold.EVItem;
 import item.hold.HoldItem;
+import main.Game;
 import main.Global;
 import main.Type;
 import message.MessageUpdate;
@@ -507,22 +508,17 @@ public class ActivePokemon implements Serializable {
 		if (getActualHeldItem().namesies() == ItemNamesies.EVERSTONE) {
 			return;
 		}
-		
-		boolean print = b != null;
-		boolean front = print && b.getPlayer().front() == this;
+
+		boolean front = b != null && b.getPlayer().front() == this;
 		boolean sameName = nickname.equals(pokemon.getName());
 		
 		ability = Ability.evolutionAssign(this, ev.getEvolution());
 		
 		String name = nickname;
-		if (print) {
-			Messages.add(new MessageUpdate(getActualName() + " is evolving!"));
-		}
+		Messages.add(new MessageUpdate(getActualName() + " is evolving!"));
 		
 		pokemon = ev.getEvolution();
-		if (print) {
-			b.getPlayer().getPokedex().setCaught(this.getPokemonInfo());
-		}
+		Game.getPlayer().getPokedex().setCaught(this.getPokemonInfo());
 		
 		// Set name if it was not given a nickname
 		if (sameName) {
@@ -538,19 +534,12 @@ public class ActivePokemon implements Serializable {
 			gain[i] = stats[i] - prevStats[i];
 		}
 		
-		if (print && front) {
+		if (front) {
 			Messages.add(new MessageUpdate().withNewPokemon(pokemon, shiny, true, playerPokemon));
 		}
-		
-		String message = name + " evolved into " + pokemon.getName() + "!";
-		
-		if (print) {
-			Messages.add(new MessageUpdate(message));
-		}
 
-		if (print && front) {
-			Messages.add(new MessageUpdate().withStatGains(b, this, gain, stats));
-		}
+		Messages.add(new MessageUpdate(name + " evolved into " + pokemon.getName() + "!"));
+		Messages.add(new MessageUpdate().withStatGains(b, this, gain, stats));
 		
 		// Learn new moves
 		Set<AttackNamesies> levelMoves = pokemon.getMoves(level);
@@ -567,28 +556,11 @@ public class ActivePokemon implements Serializable {
 		
 		Move m = new Move(attackName.getAttack());
 		if (moves.size() < Move.MAX_MOVES) {
-			if (b != null) {
-				Messages.add(new MessageUpdate(getActualName() + " learned " + m.getAttack().getName() + "!"));
-			}
-			
+			Messages.add(new MessageUpdate(getActualName() + " learned " + m.getAttack().getName() + "!"));
 			addMove(b, m, moves.size() - 1);
-			return;
+		} else {
+			Messages.add(new MessageUpdate().withLearnMove(this, m));
 		}
-		
-		// Only add messagy things whilst in battle TODO: But really we need to be able to do messagy things outside of battle too...
-		if (b == null) {
-			return;
-		}
-
-		Messages.add(new MessageUpdate().withLearnMove(this, m));
-		Messages.add(new MessageUpdate(getActualName() + " did not learn " + m.getAttack().getName() + "."));
-		
-		// Wait I think this is in a motherfucking for loop because this is really poorly and hackily implemented...
-		for (Move move : moves) {
-			Messages.add(new MessageUpdate(getActualName() + " forgot how to use " + move.getAttack().getName() + "..."));
-		}
-
-		Messages.add(new MessageUpdate("...and " + getActualName() + " learned " + m.getAttack().getName() + "!"));
 	}
 	
 	public void addMove(Battle b, Move m, int index) {

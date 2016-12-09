@@ -38,7 +38,7 @@ class GroupTrigger extends Trigger {
 			String triggerName = triggers.get(i);
 			Trigger trigger = Game.getData().getTrigger(triggerName);
 			if (trigger != null && trigger.isTriggered()) {
-				Messages.addMessageToFront(new MessageUpdate().withTrigger(triggerName));
+				Messages.addToFront(new MessageUpdate().withTrigger(triggerName));
 			}
 		}
 	}

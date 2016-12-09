@@ -143,6 +143,10 @@ public class MessageUpdate {
 	// Updates all current display information of the given pokemon
 	// Hp, status condition, type, name, and gender
 	public MessageUpdate updatePokemon(Battle b, ActivePokemon pokemon) {
+		if (b == null) {
+			return this;
+		}
+
 		boolean isPlayer = pokemon.user();
 		return this.withMaxHp(pokemon.getHP(), pokemon.getMaxHP(), isPlayer)
 				.withStatusCondition(pokemon.getStatus().getType(), isPlayer)

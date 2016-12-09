@@ -5,11 +5,11 @@ Bulbasaur
 Medium Slow
 Grass Poison
 15
-0 Tackle
+0 Surf
 3 Growl
-7 Leech Seed
-9 Vine Whip
-13 Poison Powder
+0 Leech Seed
+0 Vine Whip
+6 Poison Powder
 13 Sleep Powder
 15 Take Down
 19 Razor Leaf

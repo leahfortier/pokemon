@@ -13,6 +13,6 @@ class DialogueTrigger extends Trigger {
 	}
 
 	protected void executeTrigger() {
-		Messages.addMessageToFront(this.dialogue);
+		Messages.addToFront(this.dialogue);
 	}
 }

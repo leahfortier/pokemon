@@ -6,6 +6,7 @@ import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import message.MessageUpdate;
 import message.Messages;
+import pokemon.ActivePokemon;
 import util.DrawUtils;
 import util.FontMetrics;
 import util.Point;
@@ -69,21 +70,17 @@ public class LearnMoveDeleteState implements VisualStateHandler {
             for (int x = 0; x < Move.MAX_MOVES/2; x++, moveIndex++) {
                 int index = Point.getIndex(x, y, NUM_COLS);
                 if (buttons[index].checkConsumePress()) {
-                    // TODO: To fix that awful shitty shit see if we can utilize to new add to front method
-                    view.getLearnedPokemon().addMove(view.getCurrentBattle(), view.getLearnedMove(), moveIndex);
+                    ActivePokemon learner = view.getLearnedPokemon();
+                    String learnerName = learner.getActualName();
 
-                    // This is all done really silly, so we need to do this
-                    MessageUpdate message = Messages.getNextMessage();
-                    for (int j = 0; j < Move.MAX_MOVES; j++) {
-                        if (j == moveIndex) {
-                            message = Messages.getNextMessage();
-                        }
-                        else {
-                            Messages.getNextMessage();
-                        }
-                    }
+                    Move learnMove = view.getLearnedMove();
+                    String learnMoveName = learnMove.getAttack().getName();
+                    String deleteMoveName = learner.getActualMoves().get(moveIndex).getAttack().getName();
 
-                    Messages.add(message);
+                    learner.addMove(view.getCurrentBattle(), learnMove, moveIndex);
+
+                    Messages.addToFront(new MessageUpdate("...and " + learnerName + " learned " + learnMoveName + "!"));
+                    Messages.addToFront(new MessageUpdate(learnerName + " forgot how to use " + deleteMoveName + "..."));
 
                     view.setVisualState(VisualState.MESSAGE);
                     view.cycleMessage(false);
@@ -92,13 +89,10 @@ public class LearnMoveDeleteState implements VisualStateHandler {
         }
 
         if (newMoveButton().checkConsumePress()) {
-            // This is all done really silly, so we need to do this
-            MessageUpdate message = Messages.getNextMessage();
-            for (int i = 0; i < Move.MAX_MOVES + 1; i++) {
-                Messages.getNextMessage();
-            }
+            ActivePokemon learner = view.getLearnedPokemon();
+            Move move = view.getLearnedMove();
 
-            Messages.add(message);
+            Messages.addToFront(new MessageUpdate(learner.getActualName() + " did not learn " + move.getAttack().getName() + "."));
 
             view.setVisualState(VisualState.MESSAGE);
             view.cycleMessage(false);

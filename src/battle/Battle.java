@@ -84,15 +84,16 @@ public class Battle {
 		weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
 		player.enterBattle();
 
-		// TODO: Cast
+		ActivePokemon opponentFront = opponent.front();
 		if (opponent instanceof Trainer) {
-			((Trainer) opponent).enterBattle();
-			Messages.add(new MessageUpdate(((Trainer)opponent).getName() + " wants to fight!"));
-			((Trainer)opponent).setAction(Action.FIGHT);
-			enterBattle(opponent.front());
+			Trainer opponentTrainer = (Trainer) opponent;
+			opponentTrainer.enterBattle();
+			Messages.add(new MessageUpdate(opponentTrainer.getName() + " wants to fight!"));
+			opponentTrainer.setAction(Action.FIGHT);
+			enterBattle(opponentFront);
 		}
 		else {
-			enterBattle(opponent.front(), "Wild " + opponent.front().getName() + " appeared!");
+			enterBattle(opponentFront, "Wild " + opponentFront.getName() + " appeared!");
 		}
 
 		enterBattle(player.front());

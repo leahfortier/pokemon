@@ -59,7 +59,7 @@ class MessageState implements VisualStateHandler {
             if (currentMessage.isChoice()) {
                 ChoiceMatcher choice = currentMessage.getChoices()[dialogueSelection];
                 Trigger trigger = EntityAction.addActionGroupTrigger(null, null, null, choice.getActions());
-                Messages.addMessageToFront(new MessageUpdate().withTrigger(trigger.getName()));
+                Messages.addToFront(new MessageUpdate().withTrigger(trigger.getName()));
             }
 
             boolean newMessage = false;
