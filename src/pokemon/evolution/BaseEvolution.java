@@ -7,17 +7,17 @@ import pokemon.PokemonNamesies;
 
 public abstract class BaseEvolution extends Evolution {
 	private final EvolutionMethod evolutionMethod;
-	protected final int evolutionNumber;
+	private final PokemonNamesies evolutionNamesies;
 
-	protected BaseEvolution(EvolutionMethod evolutionMethod, int evolutionNumber) {
+	protected BaseEvolution(EvolutionMethod evolutionMethod, String namesies) {
 		this.evolutionMethod = evolutionMethod;
-		this.evolutionNumber = evolutionNumber;
+		this.evolutionNamesies = PokemonNamesies.valueOf(namesies);
 	}
 
 	protected abstract Evolution getEvolution(ActivePokemon toEvolve, ItemNamesies useItem);
 
 	public final PokemonInfo getEvolution() {
-		return PokemonInfo.getPokemonInfo(evolutionNumber);
+		return PokemonInfo.getPokemonInfo(evolutionNamesies);
 	}
 
 	@Override

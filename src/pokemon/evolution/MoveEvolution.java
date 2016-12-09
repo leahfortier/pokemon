@@ -10,8 +10,8 @@ class MoveEvolution extends BaseEvolution {
 
     private final AttackNamesies move;
 
-    MoveEvolution(int num, String m) {
-        super(EvolutionMethod.MOVE, num);
+    MoveEvolution(String namesies, String m) {
+        super(EvolutionMethod.MOVE, namesies);
 
         move = AttackNamesies.getValueOf(m);
     }
@@ -29,6 +29,6 @@ class MoveEvolution extends BaseEvolution {
 
     @Override
     public String toString() {
-        return EvolutionType.MOVE + " " + super.evolutionNumber + " " + this.move;
+        return EvolutionType.MOVE + " " + super.getEvolution().namesies() + " " + this.move;
     }
 }

@@ -8,8 +8,8 @@ class LevelUpEvolution extends BaseEvolution {
 
     private final int level;
 
-    LevelUpEvolution(int num, int level) {
-        super(EvolutionMethod.LEVEL, num);
+    LevelUpEvolution(String namesies, int level) {
+        super(EvolutionMethod.LEVEL, namesies);
 
         this.level = level;
     }
@@ -25,6 +25,6 @@ class LevelUpEvolution extends BaseEvolution {
 
     @Override
     public String toString() {
-        return EvolutionType.LEVEL + " " + super.evolutionNumber + " " + this.level;
+        return EvolutionType.LEVEL + " " + super.getEvolution().namesies() + " " + this.level;
     }
 }

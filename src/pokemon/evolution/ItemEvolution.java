@@ -8,8 +8,8 @@ class ItemEvolution extends BaseEvolution {
 
     private final ItemNamesies item;
 
-    ItemEvolution(int num, String item) {
-        super(EvolutionMethod.ITEM, num);
+    ItemEvolution(String namesies, String item) {
+        super(EvolutionMethod.ITEM, namesies);
 
         this.item = ItemNamesies.getValueOf(item);
     }
@@ -25,6 +25,6 @@ class ItemEvolution extends BaseEvolution {
 
     @Override
     public String toString() {
-        return EvolutionType.ITEM + " " + super.evolutionNumber + " " + this.item;
+        return EvolutionType.ITEM + " " + super.getEvolution().namesies() + " " + this.item;
     }
 }

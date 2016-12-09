@@ -6,9 +6,9 @@ public enum EvolutionType {
     NONE(in -> new NoEvolution()),
     GENDER(in -> new GenderEvolution(in.next(), getBaseEvolution(in))),
     STAT(in -> new StatEvolution(in.next(), in.next(), in.next(), getBaseEvolution(in))),
-    LEVEL(in -> new LevelUpEvolution(in.nextInt(), in.nextInt())),
-    ITEM(in -> new ItemEvolution(in.nextInt(), in.nextLine().trim())),
-    MOVE(in -> new MoveEvolution(in.nextInt(), in.nextLine().trim())),
+    LEVEL(in -> new LevelUpEvolution(in.next(), in.nextInt())),
+    ITEM(in -> new ItemEvolution(in.next(), in.next())),
+    MOVE(in -> new MoveEvolution(in.next(), in.next())),
     MULTI(in -> {
         Evolution[] evolutions = new Evolution[in.nextInt()];
         for (int i = 0; i < evolutions.length; i++) {
