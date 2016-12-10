@@ -2371,7 +2371,7 @@ Rivalry
 Poison Pin 
 31 44.1 When it senses danger, it raises all the barbs on its body. These barbs grow slower than Nidorino's.
 5120
-NONE NONE
+UNDISCOVERED NONE
 13
 0 Growl
 0 Scratch
@@ -2456,7 +2456,7 @@ Rivalry
 Drill 
 51 132.3 Its entire body is armored with hard scales. It will protect the young in its burrow with its life.
 5120
-NONE NONE
+UNDISCOVERED NONE
 9
 0 Superpower
 0 Scratch
@@ -13026,7 +13026,7 @@ Snow Cloak
 Freeze 
 67 122.1 A legendary bird Pok\u00e9mon. It can create blizzards by freezing moisture in the air.
 20480
-NONE NONE
+UNDISCOVERED NONE
 20
 0 Roost
 0 Hurricane
@@ -13104,7 +13104,7 @@ Static
 Electric 
 63 116.0 A legendary Pok\u00e9mon that is said to live in thunderclouds. It freely controls lightning bolts.
 20480
-NONE NONE
+UNDISCOVERED NONE
 18
 0 Roost
 0 Zap Cannon
@@ -13183,7 +13183,7 @@ Flame Body
 Flame 
 79 132.3 One of the legendary bird Pok\u00e9mon. It is said that its appearance indicates the coming of spring.
 20480
-NONE NONE
+UNDISCOVERED NONE
 19
 0 Roost
 0 Hurricane
@@ -13566,7 +13566,7 @@ Unnerve
 Genetic 
 79 269.0 A Pok\u00e9mon created by recombining Mew's genes. It's said to have the most savage heart among Pok\u00e9mon.
 30720
-NONE NONE
+UNDISCOVERED NONE
 18
 0 Confusion
 0 Disable
@@ -13691,7 +13691,7 @@ No Ability
 New Species
 16 8.8 Because it can use all kinds of moves, many scientists believe Mew to be the ancestor of Pok\u00e9mon.
 30720
-NONE NONE
+UNDISCOVERED NONE
 13
 0 Pound
 0 Reflect Type
@@ -15758,7 +15758,7 @@ Lightningrod
 Tiny Mouse 
 12 4.4 The electric sacs in its cheeks are small. If even a little electricity leaks, it becomes shocked.
 2560
-NONE NONE
+UNDISCOVERED NONE
 6
 0 Thunder Shock
 0 Charm
@@ -15839,7 +15839,7 @@ Magic Guard
 Star Shape 
 12 6.6 It is often seen when shooting stars fill the night skies. It's said to arrive riding on a shooting star.
 2560
-NONE NONE
+UNDISCOVERED NONE
 7
 0 Pound
 0 Charm
@@ -15934,7 +15934,7 @@ Competitive
 Balloon 
 12 2.2 It has a soft and bouncy body. Once it starts bouncing, it becomes impossible to stop.
 2560
-NONE NONE
+UNDISCOVERED NONE
 6
 0 Sing
 0 Charm
@@ -16024,7 +16024,7 @@ Serene Grace
 Spike Ball 
 12 3.3 It transforms the kindness and joy of others into happiness, which it stores in its shell.
 2560
-NONE NONE
+UNDISCOVERED NONE
 15
 0 Growl
 0 Charm
@@ -18456,7 +18456,7 @@ No Ability
 Symbol 
 20 11.0 When alone, nothing happens. However, if there are two or more, an odd power is said to emerge.
 10240
-NONE NONE
+UNDISCOVERED NONE
 1
 0 Hidden Power
 0
@@ -21639,7 +21639,7 @@ Steadfast
 Scuffle 
 28 46.3 It is famous for its eagerness to fight and always nurses injuries from challenging larger foes.
 6400
-NONE NONE
+UNDISCOVERED NONE
 4
 0 Tackle
 0 Covet
@@ -21791,7 +21791,7 @@ Forewarn
 Kiss 
 16 13.2 It tests everything by touching with its lips, which remember what it likes and dislikes.
 6400
-NONE NONE
+UNDISCOVERED NONE
 15
 0 Pound
 5 Lick
@@ -21886,7 +21886,7 @@ Vital Spirit
 Electric 
 24 51.8 A weak electric current flows between its horns. Sticking a hand there shocks the unwary.
 6400
-NONE NONE
+UNDISCOVERED NONE
 14
 0 Quick Attack
 0 Leer
@@ -21976,7 +21976,7 @@ Vital Spirit
 Live Coal 
 28 47.2 Its magma-like blood circulates throughout its body. Its body's heat can top 1,100 degrees F.
 6400
-NONE NONE
+UNDISCOVERED NONE
 14
 0 Smog
 0 Leer
@@ -22290,7 +22290,7 @@ Volt Absorb
 Thunder 
 75 392.4 It is said to have fallen with lightning. It can fire thunderbolts from the rain clouds on its back.
 20480
-NONE NONE
+UNDISCOVERED NONE
 16
 0 Extrasensory
 0 Discharge
@@ -22370,7 +22370,7 @@ Flash Fire
 Volcano 
 83 436.5 It is said that when it roars, a volcano erupts somewhere around the globe.
 20480
-NONE NONE
+UNDISCOVERED NONE
 18
 0 Sacred Fire
 0 Eruption
@@ -22451,7 +22451,7 @@ Water Absorb
 Aurora 
 79 412.3 It races around the world to purify fouled water. It dashes away with the north wind.
 20480
-NONE NONE
+UNDISCOVERED NONE
 17
 0 Hydro Pump
 0 Extrasensory
@@ -22849,7 +22849,7 @@ Multiscale
 Diving 
 205 476.2 It sleeps in a deep-sea trench. If it flaps its wings, it is said to cause a 40-day storm.
 30720
-NONE NONE
+UNDISCOVERED NONE
 16
 0 Whirlwind
 0 Weather Ball
@@ -22955,7 +22955,7 @@ Regenerator
 Rainbow 
 150 438.7 Its feathers are in seven colors. It is said that anyone seeing it is promised eternal happiness.
 30720
-NONE NONE
+UNDISCOVERED NONE
 16
 0 Whirlwind
 0 Weather Ball
@@ -23053,7 +23053,7 @@ No Ability
 Time Travel 
 24 11.0 It has the power to travel across time, but it is said to appear only in peaceful times.
 30720
-NONE NONE
+UNDISCOVERED NONE
 14
 0 Leech Seed
 0 Confusion
@@ -27262,7 +27262,7 @@ Huge Power
 Polka Dot 
 8 4.4 Its tail bounces like a rubber ball. It flings that tail around to fight opponents bigger than itself.
 2560
-NONE NONE
+UNDISCOVERED NONE
 10
 0 Splash
 0 Water Gun
@@ -33243,7 +33243,7 @@ No Ability
 Bright 
 24 30.9 It grows strong by pushing up against others en masse. It loves eating sweet fruit.
 5120
-NONE NONE
+UNDISCOVERED NONE
 7
 0 Splash
 0 Charm
@@ -34590,7 +34590,7 @@ Sturdy
 Rock Peak 
 67 507.1 Its entire body is made of rock. If any part chips off in battle, it attaches rocks to repair itself.
 20480
-NONE NONE
+UNDISCOVERED NONE
 17
 0 Explosion
 0 Stomp
@@ -34680,7 +34680,7 @@ Ice Body
 Iceberg 
 71 385.8 Its body is made of ice from the ice age. It controls frigid air of -328 degrees Fahrenheit.
 20480
-NONE NONE
+UNDISCOVERED NONE
 17
 0 Explosion
 0 Stomp
@@ -34768,7 +34768,7 @@ Light Metal
 Iron 
 75 451.9 Tempered by pressure underground over tens of thousands of years, its body cannot be scratched.
 20480
-NONE NONE
+UNDISCOVERED NONE
 19
 0 Explosion
 0 Stomp
@@ -34860,7 +34860,7 @@ No Ability
 Eon 
 55 88.2 Its body is covered with a down that can refract light in such a way that it becomes invisible.
 30720
-NONE NONE
+UNDISCOVERED NONE
 20
 0 Healing Wish
 0 Tailwind
@@ -34967,7 +34967,7 @@ No Ability
 Eon 
 79 132.3 A highly intelligent Pok\u00e9mon. By folding back its wings in flight, it can overtake jet planes.
 30720
-NONE NONE
+UNDISCOVERED NONE
 20
 0 Memento
 0 Tailwind
@@ -35072,7 +35072,7 @@ No Ability
 Sea Basin 
 177 776.0 It is said to have widened the seas by causing downpours. It had been asleep in a marine trench.
 30720
-NONE NONE
+UNDISCOVERED NONE
 14
 0 Ancient Power
 0 Water Pulse
@@ -35153,7 +35153,7 @@ No Ability
 Continent 
 138 2094.4 It had been asleep in underground magma ever since it fiercely fought Kyogre long ago.
 30720
-NONE NONE
+UNDISCOVERED NONE
 14
 0 Ancient Power
 0 Mud Shot
@@ -35249,7 +35249,7 @@ No Ability
 Sky High 
 276 455.2 It lives in the ozone layer far above the clouds and cannot be seen from the ground.
 30720
-NONE NONE
+UNDISCOVERED NONE
 13
 0 Twister
 5 Scary Face
@@ -35354,7 +35354,7 @@ No Ability
 Wish 
 12 2.4 It is said to have the ability to grant any wish for just one week every thousand years.
 30720
-NONE NONE
+UNDISCOVERED NONE
 16
 0 Wish
 0 Confusion
@@ -35453,7 +35453,7 @@ No Ability
 DNA 
 67 134.0 An alien virus that fell to earth on a meteor underwent a DNA mutation to become this Pok\u00e9mon.
 30720
-NONE NONE
+UNDISCOVERED NONE
 14
 0 Leer
 0 Wrap
@@ -37215,7 +37215,7 @@ Poison Point
 Bud 
 8 2.6 Sensitive to changing temperature, the bud is said to bloom when it feels the sun's warm touch.
 5120
-NONE NONE
+UNDISCOVERED NONE
 6
 0 Absorb
 4 Growth
@@ -39585,7 +39585,7 @@ No Ability
 Bell 
 8 1.3 There is an orb inside its mouth. When it hops, the orb bounces all over and makes a ringing sound.
 6400
-NONE NONE
+UNDISCOVERED NONE
 8
 0 Wrap
 4 Growl
@@ -40039,7 +40039,7 @@ Rock Head
 Bonsai 
 20 33.1 It prefers an arid atmosphere. It leaks water that looks like tears when adjusting its moisture level.
 5120
-NONE NONE
+UNDISCOVERED NONE
 13
 0 Fake Tears
 0 Copycat
@@ -40119,7 +40119,7 @@ Filter
 Mime 
 24 28.7 It mimics the expressions and motions of those it sees to understand the feelings of others.
 6400
-NONE NONE
+UNDISCOVERED NONE
 18
 0 Tickle
 0 Barrier
@@ -40230,7 +40230,7 @@ Serene Grace
 Playhouse 
 24 53.8 It likes to carry around a small rock. It may wander around others' feet and cause them to stumble.
 10240
-NONE NONE
+UNDISCOVERED NONE
 5
 0 Pound
 0 Charm
@@ -40762,7 +40762,7 @@ Thick Fat
 Big Eater 
 24 231.5 In its desperation to gulp down food, it forgets about the food it has hidden under its fur.
 10240
-NONE NONE
+UNDISCOVERED NONE
 20
 0 Last Resort
 0 Recycle
@@ -40870,7 +40870,7 @@ Inner Focus
 Emanation 
 28 44.5 It has the peculiar power of being able to see emotions such as joy and rage in the form of waves.
 6400
-NONE NONE
+UNDISCOVERED NONE
 11
 0 Foresight
 0 Quick Attack
@@ -41916,7 +41916,7 @@ Water Absorb
 Kite 
 39 143.3 People organize tours to see this Pok\u00e9mon frolic and skim the tops of waves with Remoraid.
 6400
-NONE NONE
+UNDISCOVERED NONE
 15
 0 Tackle
 0 Bubble
@@ -44146,7 +44146,7 @@ No Ability
 Knowledge 
 12 0.7 When Uxie flew, people gained the ability to solve problems. It was the birth of knowledge.
 20480
-NONE NONE
+UNDISCOVERED NONE
 15
 0 Memento
 0 Natural Gift
@@ -44244,7 +44244,7 @@ No Ability
 Emotion 
 12 0.7 When Mesprit flew, people learned the joy and sadness of living. It was the birth of emotions.
 20480
-NONE NONE
+UNDISCOVERED NONE
 15
 0 Healing Wish
 0 Natural Gift
@@ -44340,7 +44340,7 @@ No Ability
 Willpower 
 12 0.7 When Azelf flew, people gained the determination to do things. It was the birth of willpower.
 20480
-NONE NONE
+UNDISCOVERED NONE
 14
 0 Natural Gift
 0 Last Resort
@@ -44442,7 +44442,7 @@ No Ability
 Temporal 
 213 1505.7 A legendary Pok\u00e9mon of Sinnoh. It is said that time flows when Dialga's heart beats.
 30720
-NONE NONE
+UNDISCOVERED NONE
 13
 0 Dragon Breath
 0 Scary Face
@@ -44537,7 +44537,7 @@ No Ability
 Spatial 
 165 740.7 A legendary Pok\u00e9mon of Sinnoh. It is said that space becomes more stable with Palkia's every breath.
 30720
-NONE NONE
+UNDISCOVERED NONE
 13
 0 Dragon Breath
 0 Scary Face
@@ -44632,7 +44632,7 @@ Flame Body
 Lava Dome 
 67 948.0 Its body is made of rugged steel. However, it is partially melted in spots because of its own heat.
 2560
-NONE NONE
+UNDISCOVERED NONE
 18
 0 Magma Storm
 0 Heat Wave
@@ -44720,7 +44720,7 @@ No Ability
 Colossal 
 146 925.9 It is said to have made Pok\u00e9mon that look like itself from a special ice mountain, rocks, and magma.
 30720
-NONE NONE
+UNDISCOVERED NONE
 16
 0 Heavy Slam
 0 Crush Grip
@@ -44809,7 +44809,7 @@ No Ability
 Renegade 
 177 1653.4 It was banished for its violence. It silently gazed upon the old world from the Distortion World.
 30720
-NONE NONE
+UNDISCOVERED NONE
 13
 0 Dragon Breath
 0 Scary Face
@@ -44904,7 +44904,7 @@ No Ability
 Lunar 
 59 188.7 On nights around the quarter moon, the aurora from its tail extends and undulates beautifully.
 30720
-NONE NONE
+UNDISCOVERED NONE
 17
 0 Lunar Dance
 0 Psycho Shift
@@ -45137,7 +45137,7 @@ No Ability
 Pitch-Black 
 59 111.3 To protect itself, it afflicts those around it with nightmares. However, it means no harm.
 30720
-NONE NONE
+UNDISCOVERED NONE
 12
 0 Ominous Wind
 0 Disable
@@ -45237,7 +45237,7 @@ Serene Grace
 Gratitude 
 8 4.6 The flowers all over its body burst into bloom if it is lovingly hugged and senses gratitude.
 30720
-NONE NONE
+UNDISCOVERED NONE
 12
 0 Growth
 10 Magical Leaf
@@ -45307,7 +45307,7 @@ No Ability
 Alpha 
 126 705.5 It is said to have emerged from an egg in a place where there was nothing, then shaped the world.
 30720
-NONE NONE
+UNDISCOVERED NONE
 14
 0 Seismic Toss
 0 Cosmic Power
@@ -45438,7 +45438,7 @@ No Ability
 Victory 
 16 8.8 This Pok\u00e9mon brings victory. It is said that Trainers with Victini always win, regardless of the type of encounter.
 30720
-NONE NONE
+UNDISCOVERED NONE
 17
 0 Searing Shot
 0 Focus Energy
@@ -58395,7 +58395,7 @@ No Ability
 Iron Will 
 83 551.1 This legendary Pok\u00e9mon battled against humans to protect Pok\u00e9mon. Its personality is calm and composed.
 20480
-NONE NONE
+UNDISCOVERED NONE
 18
 0 Close Combat
 0 Metal Burst
@@ -58481,7 +58481,7 @@ No Ability
 Cavern 
 75 573.2 This Pok\u00e9mon came to the defense of Pok\u00e9mon that had lost their homes in a war among humans.
 20480
-NONE NONE
+UNDISCOVERED NONE
 17
 0 Close Combat
 0 Work Up
@@ -58565,7 +58565,7 @@ No Ability
 Grassland 
 79 440.9 This Pok\u00e9mon fought humans in order to protect its friends. Legends about it continue to be passed down.
 20480
-NONE NONE
+UNDISCOVERED NONE
 18
 0 Close Combat
 0 Leaf Blade
@@ -58651,7 +58651,7 @@ Defiant
 Cyclone 
 59 138.9 The lower half of its body is wrapped in a cloud of energy. It zooms through the sky at 200 mph.
 30720
-NONE NONE
+UNDISCOVERED NONE
 21
 0 Thrash
 0 Hammer Arm
@@ -58743,7 +58743,7 @@ Defiant
 Bolt Strike 
 59 134.5 Countless charred remains mar the landscape of places through which Thundurus has passed.
 30720
-NONE NONE
+UNDISCOVERED NONE
 21
 0 Thrash
 0 Hammer Arm
@@ -58840,7 +58840,7 @@ No Ability
 Vast White 
 126 727.5 This Pok\u00e9mon appears in legends. It sends flames into the air from its tail, burning up everything around it.
 30720
-NONE NONE
+UNDISCOVERED NONE
 16
 0 Fire Fang
 0 Dragon Rage
@@ -58930,7 +58930,7 @@ No Ability
 Deep Black 
 114 760.6 Concealing itself in lightning clouds, it flies throughout the Unova region. It creates electricity in its tail.
 30720
-NONE NONE
+UNDISCOVERED NONE
 16
 0 Thunder Fang
 0 Dragon Rage
@@ -59024,7 +59024,7 @@ Sheer Force
 Abundance 
 59 149.9 Lands visited by Landorus grant such bountiful crops that it has been hailed as "The Guardian of the Fields."
 30720
-NONE NONE
+UNDISCOVERED NONE
 20
 0 Outrage
 0 Hammer Arm
@@ -59116,7 +59116,7 @@ Teravolt
 Boundary 
 118 716.5 It generates a powerful, freezing energy inside itself, but its body became frozen when the energy leaked out.
 30720
-NONE NONE
+UNDISCOVERED NONE
 15
 0 Icy Wind
 0 Dragon Rage
@@ -59205,7 +59205,7 @@ No Ability
 Colt 
 55 106.9 By blasting water from its hooves, it can glide across water. It excels at using leg moves while battling.
 20480
-NONE NONE
+UNDISCOVERED NONE
 14
 0 Aqua Jet
 0 Leer
@@ -59286,7 +59286,7 @@ No Ability
 Melody 
 24 14.3 Its melodies are sung with a special vocalization method that can control the feelings of those who hear it.
 30720
-NONE NONE
+UNDISCOVERED NONE
 15
 0 Round
 6 Quick Attack
@@ -59398,7 +59398,7 @@ No Ability
 Paleozoic 
 59 181.9 Over 300 million years ago, it was feared as the strongest of hunters. It has been modified by Team Plasma.
 30720
-NONE NONE
+UNDISCOVERED NONE
 20
 0 Fell Stinger
 0 Techno Blast
@@ -65189,7 +65189,7 @@ No Ability
 Life
 118 474.0 When the horns on its head shine in seven colors, it is said to be sharing everlasting life.
 30720
-NONE NONE
+UNDISCOVERED NONE
 18
 0 Heal Pulse
 0 Aromatherapy
@@ -65273,7 +65273,7 @@ No Ability
 Destruction
 228 447.5 When its life comes to an end, it absorbs the life energy of every living thing and turns into a cocoon once more.
 30720
-NONE NONE
+UNDISCOVERED NONE
 18
 0 Hurricane
 0 Razor Wind
@@ -65360,7 +65360,7 @@ No Ability
 Order
 197 627.4 It's hypothesized that it's monitoring those who destroy the ecosystem from deep in the cave where it lives.
 30720
-NONE NONE
+UNDISCOVERED NONE
 18
 0 Glare
 0 Bulldoze
@@ -65442,7 +65442,7 @@ No Ability
 Jewel
 28 19.4 It can instantly create many diamonds by compressing the carbon in the air between its hands.
 30720
-NONE NONE
+UNDISCOVERED NONE
 17
 0 Tackle
 0 Harden
