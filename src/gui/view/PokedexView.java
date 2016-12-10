@@ -122,12 +122,8 @@ class PokedexView extends View {
 						40,
 						40,
 						ButtonHoverAction.BOX,
-						new int[] {
-								j == PC.BOX_WIDTH - 1 ? RETURN : k + 1, // Right
-								i == 0 ? PER_PAGE + j : k - PC.BOX_WIDTH, // Up
-								j == 0 ? RETURN : k - 1, // Left
-								i == PC.BOX_HEIGHT - 1 ? (j < PC.BOX_WIDTH/2 ? LEFT_ARROW : RIGHT_ARROW) : k + PC.BOX_WIDTH // Down
-						});
+						Button.getBasicTransitions(k, PC.BOX_HEIGHT, PC.BOX_WIDTH, 0, new int[] { RETURN, RIGHT_ARROW, -1, RIGHT_ARROW })
+				);
 			}
 		}
 		
@@ -183,7 +179,7 @@ class PokedexView extends View {
 		GameData data = Game.getData();
 
 		TileSet partyTiles = data.getPartyTiles();
-		TileSet pokemonTiles = data.getPokemonTilesSmall();
+		TileSet pokedexTiles = data.getPokedexTiles();
 
 		BasicPanels.drawCanvasPanel(g);
 
@@ -255,7 +251,7 @@ class PokedexView extends View {
 			imagePanel.label(g, 80, "?");
 		}
 		else {
-			BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageNumber());
+			BufferedImage pkmImg = pokedexTiles.getTile(selected.getNumber());
 			pkmImg.setRGB(0, 0, 0);
 
 			imagePanel.imageLabel(g, pkmImg);

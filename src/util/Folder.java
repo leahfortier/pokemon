@@ -34,6 +34,7 @@ public abstract class Folder {
     // Tile set folders
     public static final String TERRAIN_TILES = FileIO.makeFolderPath(TILES, "terrainTiles");
     public static final String POKEMON_TILES = FileIO.makeFolderPath(TILES, "pokemonTiles");
+    public static final String POKEDEX_TILES = FileIO.makeFolderPath(TILES, "pokedexTiles");
     public static final String PARTY_TILES = FileIO.makeFolderPath(TILES, "partyTiles");
     public static final String ITEM_TILES = FileIO.makeFolderPath(TILES, "itemTiles");
     public static final String MAP_TILES = FileIO.makeFolderPath(TILES, "mapTiles");

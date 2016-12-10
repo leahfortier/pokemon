@@ -4,7 +4,6 @@ from lxml import html
 import requests
 
 global infoTable
-global aaa
 
 def checkHeader(header, headerIndex):
     global infoTable
