@@ -126,8 +126,7 @@ public class MessageUpdate {
 	}
 	
 	// Show stat gains
-	public MessageUpdate withStatGains(Battle battle, ActivePokemon gainer, int[] gains, int[] stats) {
-		updatePokemon(battle, gainer);
+	public MessageUpdate withStatGains(int[] gains, int[] stats) {
 		maxHP = stats[Stat.HP.index()];
 		statGains = gains;
 		newStats = stats;
