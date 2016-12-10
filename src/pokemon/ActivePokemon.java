@@ -484,7 +484,7 @@ public class ActivePokemon implements Serializable {
 			gain[i] = stats[i] - prevStats[i];
 		}
 
-		Messages.add(new MessageUpdate().withStatGains(b, this, gain, stats));
+		Messages.add(new MessageUpdate().updatePokemon(b, this).withStatGains(gain, stats));
 		
 		// Learn new moves
 		pokemon.getMoves(level).forEach(attackNamesies -> learnMove(attackNamesies, inBattle));
