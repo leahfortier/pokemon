@@ -272,8 +272,7 @@ public class StuffGen {
 			out.println(in.nextLine()); // Classification
 			out.println(in.nextLine()); // Height Weight FlavorText
 			out.println(in.nextLine()); // Egg Steps
-			out.println(in.nextLine()); // Egg Group 1
-			out.println(in.nextLine()); // Egg Group 2
+			out.println(in.nextLine()); // Egg Groups
 			readMoves(in, out); // Level Up Moves
 			readMoves(in, out); // TM Moves
 			readMoves(in, out); // Egg Moves

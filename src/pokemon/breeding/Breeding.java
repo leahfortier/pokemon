@@ -1,4 +1,4 @@
-package pokemon;
+package pokemon.breeding;
 
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -6,6 +6,12 @@ import item.Item;
 import item.ItemNamesies;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
+import pokemon.ActivePokemon;
+import pokemon.Gender;
+import pokemon.Nature;
+import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
+import pokemon.Stat;
 import util.RandomUtils;
 
 import java.util.ArrayList;
@@ -14,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Breeding {
-	public static ActivePokemon breed(ActivePokemon aPokes, ActivePokemon bPokes) {
+	protected static ActivePokemon breed(ActivePokemon aPokes, ActivePokemon bPokes) {
 		if (!canBreed(aPokes, bPokes)) {
 			return null;
 		}
@@ -60,7 +66,7 @@ public class Breeding {
 		return babyInfo;
 	}
 
-	static int[] getBabyIVs(ActivePokemon daddy, ActivePokemon mommy) {
+	public static int[] getBabyIVs(ActivePokemon daddy, ActivePokemon mommy) {
 		List<Stat> remainingStats = new ArrayList<>();
 		Collections.addAll(remainingStats, Stat.STATS);
 
@@ -106,28 +112,28 @@ public class Breeding {
 	}
 
 	protected static boolean canBreed(ActivePokemon aPokes, ActivePokemon bPokes) {
-		if (isDitto(aPokes) && isDitto(bPokes)) {
-			return false;
-		}
 
-		if (isDittoAndManaphy(aPokes, bPokes)) {
-			return true;
-		}
-
+		// If either pokemon cannot breed, then they can't breed together
 		if (!aPokes.canBreed() || !bPokes.canBreed()) {
 			return false;
 		}
-		
-		if (!Gender.oppositeGenders(aPokes, bPokes) && !isDitto(aPokes) && !isDitto(bPokes)) {
+
+		// Ditto can breed with every breedable Pokemon except itself
+		if (isDitto(aPokes) || isDitto(bPokes)) {
+			return !(isDitto(aPokes) && isDitto(bPokes));
+		}
+
+		// If neither Pokemon is a ditto and the Pokemon do not have opposite genders, they can't breed together
+		if (!Gender.oppositeGenders(aPokes, bPokes)) {
 			return false;
 		}
 		
-		String[] aPokesEggGroups = aPokes.getPokemonInfo().getEggGroups();
-		String[] bPokesEggGroups = bPokes.getPokemonInfo().getEggGroups();
+		EggGroup[] aPokesEggGroups = aPokes.getPokemonInfo().getEggGroups();
+		EggGroup[] bPokesEggGroups = bPokes.getPokemonInfo().getEggGroups();
 
-		for (String aPokesEggGroup : aPokesEggGroups) {
-			for (String bPokesEggGroup : bPokesEggGroups) {
-				if (aPokesEggGroup.equals(bPokesEggGroup)) {
+		for (EggGroup aPokesEggGroup : aPokesEggGroups) {
+			for (EggGroup bPokesEggGroup : bPokesEggGroups) {
+				if (aPokesEggGroup == bPokesEggGroup && aPokesEggGroup != EggGroup.NONE) {
 					return true;
 				}
 			}
@@ -139,23 +145,11 @@ public class Breeding {
 		return pokes.isPokemon(PokemonNamesies.DITTO);
 	}
 
-	private static boolean isDittoAndManaphy(ActivePokemon aPokes, ActivePokemon bPokes) {
-		if (isDitto(aPokes)) {
-			return bPokes.isPokemon(PokemonNamesies.MANAPHY);
-		}
-
-		if (isDitto(bPokes)) {
-			return aPokes.isPokemon(PokemonNamesies.MANAPHY);
-		}
-
-		return false;
-	}
-
 	private static ActivePokemon getRandomParent(final ActivePokemon daddy, final ActivePokemon mommy) {
 		return RandomUtils.getRandomValue(new ActivePokemon[] { daddy, mommy });
 	}
 
-	static Nature getBabyNature(ActivePokemon daddy, ActivePokemon mommy) {
+	public static Nature getBabyNature(ActivePokemon daddy, ActivePokemon mommy) {
 		Item daddysItem = daddy.getActualHeldItem();
 		Item mommysItem = mommy.getActualHeldItem();
 		
@@ -173,7 +167,7 @@ public class Breeding {
 		}
 	}
 	
-	static List<Move> getBabyMoves(ActivePokemon daddy, ActivePokemon mommy, PokemonNamesies babyNamesies) {
+	public static List<Move> getBabyMoves(ActivePokemon daddy, ActivePokemon mommy, PokemonNamesies babyNamesies) {
 
 		PokemonInfo babyInfo = PokemonInfo.getPokemonInfo(babyNamesies);
 		List<AttackNamesies> babyMovesNamesies = new ArrayList<>();

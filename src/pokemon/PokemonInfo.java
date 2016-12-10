@@ -8,6 +8,7 @@ import item.hold.IncenseItem;
 import main.Global;
 import main.Type;
 import pokemon.ability.AbilityNamesies;
+import pokemon.breeding.EggGroup;
 import pokemon.evolution.Evolution;
 import pokemon.evolution.EvolutionType;
 import util.FileIO;
@@ -55,7 +56,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private final double weight;
 	private final String flavorText;
 	private final int eggSteps;
-	private final String[] eggGroups;
+	private final EggGroup[] eggGroups;
 
 	public PokemonInfo(
 			int number,
@@ -107,7 +108,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		this.weight = weight;
 		this.flavorText = flavorText;
 		this.eggSteps = eggSteps;
-		this.eggGroups = new String[] { eggGroup1, eggGroup2 };
+		this.eggGroups = new EggGroup[] { EggGroup.valueOf(eggGroup1), EggGroup.valueOf(eggGroup2) };
 	}
 
 	public Type[] getType() {
@@ -271,8 +272,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 					in.nextDouble(),
 					in.nextLine().trim(),
 					in.nextInt(),
-					in.nextLine().trim() + in.nextLine().trim(),
-					in.nextLine().trim(),
+					in.next(),
+					in.next(),
 					createLevelUpMoves(in),
 					createMovesSet(in),
 					createMovesSet(in),
@@ -341,7 +342,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	}
 
 	public boolean canBreed() {
-		return !eggGroups[0].equals("None") || !eggGroups[1].equals("None");
+		return eggGroups[0] != EggGroup.UNDISCOVERED;
 	}
 
 	// TODO: new file
@@ -413,7 +414,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		}
 	}
 	
-	public String[] getEggGroups() {
+	public EggGroup[] getEggGroups() {
 		return eggGroups;
 	}
 
