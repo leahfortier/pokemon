@@ -3,12 +3,15 @@ package gui.view;
 import gui.GameData;
 import gui.TileSet;
 import gui.panel.BasicPanels;
+import gui.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
+import message.MessageUpdate;
 import pokemon.ActivePokemon;
-import pokemon.BaseEvolution;
+import pokemon.Stat;
+import pokemon.evolution.BaseEvolution;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import util.DrawUtils;
@@ -23,7 +26,9 @@ import java.awt.image.BufferedImage;
 class EvolutionView extends View {
 	private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
 	private static final Point POKEMON_DRAW_LOCATION = Point.scaleDown(Global.GAME_SIZE, 2);
-	
+
+	private final DrawPanel statsPanel;
+
 	private int animationEvolve;
 
 	private ActivePokemon evolvingPokemon;
@@ -32,12 +37,16 @@ class EvolutionView extends View {
 	private boolean isEgg;
 	
 	private State state;
-	private String message;
+	private MessageUpdate message;
 		
 	private enum State {
 		START,
 		EVOLVE,
 		END,
+	}
+
+	EvolutionView() {
+		this.statsPanel = new DrawPanel(0, 280, 273, 161).withBlackOutline();
 	}
 
 	@Override
@@ -59,9 +68,13 @@ class EvolutionView extends View {
 				}
 				break;
 			case EVOLVE:
-				if (animationEvolve < 0) {
+				if (animationEvolve <= 0) {
 					state = State.END;
-					setFinalMessage();
+
+					int[] gains = evolvingPokemon.evolve(Game.getPlayer().getEvolution());
+					int[] stats = evolvingPokemon.getStats();
+
+					setFinalMessage(gains, stats);
 					addToPokedex();
 				}
 				break;
@@ -76,13 +89,7 @@ class EvolutionView extends View {
 					}
 				}
 				else {
-					if (!isEgg) {
-						evolvingPokemon.evolve(null, Game.getPlayer().getEvolution());
-						Game.instance().setViewMode(ViewMode.BAG_VIEW);
-					}
-					else {
-						Game.instance().setViewMode(ViewMode.MAP_VIEW);
-					}
+					Game.instance().setViewMode(ViewMode.MAP_VIEW);
 				}
 				break;
 		}
@@ -118,7 +125,22 @@ class EvolutionView extends View {
 		}
 		
 		if (message != null) {
-			BasicPanels.drawFullMessagePanel(g, message);
+			BasicPanels.drawFullMessagePanel(g, message.getMessage());
+			if (message.gainUpdate()) {
+				statsPanel.drawBackground(g);
+
+				int[] statGains = message.getGain();
+				int[] newStats = message.getNewStats();
+
+				g.setColor(Color.BLACK);
+				for (int i = 0; i < Stat.NUM_STATS; i++) {
+					FontMetrics.setFont(g, 16);
+					g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
+
+					DrawUtils.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
+					DrawUtils.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
+				}
+			}
 		}
 	}
 	
@@ -153,10 +175,10 @@ class EvolutionView extends View {
 	
 	private void setInitialMessage() {
 		if (isEgg) {
-			message = "Your egg is hatching!"; // TODO: this is lame
+			message = new MessageUpdate("Your egg is hatching!");
 		}
 		else {
-			message = "Your " + preEvolution.getName() + " is evolving!";
+			message = new MessageUpdate("Your " + preEvolution.getName() + " is evolving!");
 		}
 	}
 	
@@ -164,12 +186,12 @@ class EvolutionView extends View {
 		Game.getPlayer().getPokedex().setCaught(isEgg ? preEvolution : postEvolution);
 	}
 	
-	private void setFinalMessage() {
+	private void setFinalMessage(int[] gains, int[] newStats) {
 		if (isEgg) {
-			message = "Your egg hatched into " + StringUtils.articleString(preEvolution.getName()) + "!";
+			message = new MessageUpdate("Your egg hatched into " + StringUtils.articleString(preEvolution.getName()) + "!");
 		}
 		else {
-			message = "Your " + preEvolution.getName() + " evolved into " + StringUtils.articleString(postEvolution.getName()) + "!";
+			message = new MessageUpdate("Your " + preEvolution.getName() + " evolved into " + StringUtils.articleString(postEvolution.getName()) + "!").withStatGains(gains, newStats);
 		}
 	}
 

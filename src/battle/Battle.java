@@ -305,9 +305,6 @@ public class Battle {
 		// You have achieved total victory
 		if (opponent.blackout()) {
 			player.winBattle(this, opponent);
-
-			// WE'RE DONE HERE
-			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
 			return;
 		}
 

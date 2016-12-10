@@ -145,18 +145,22 @@ public abstract class Ability implements Serializable {
 	
 	public static Ability evolutionAssign(ActivePokemon p, PokemonInfo ev) {
 		AbilityNamesies prev = p.getAbility().namesies();
+
+		// Evolution has current ability
 		if (ev.hasAbility(prev)) {
 			return p.getAbility();
 		}
 
-		AbilityNamesies other = getOtherAbility(p.getPokemonInfo(), prev).namesies();
-		if (ev.hasAbility(other)) {
-			return getOtherAbility(ev, other);
-		}
-
+		// Evolution only has a single ability
 		AbilityNamesies[] abilities = ev.getAbilities();
 		if (abilities[1] == AbilityNamesies.NO_ABILITY) {
 			return abilities[0].getNewAbility();
+		}
+
+		// Evolution has the alternative
+		AbilityNamesies other = getOtherAbility(p.getPokemonInfo(), prev).namesies();
+		if (ev.hasAbility(other)) {
+			return getOtherAbility(ev, other);
 		}
 		
 		return RandomUtils.getRandomValue(abilities).getNewAbility();
