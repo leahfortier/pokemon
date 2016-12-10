@@ -43,6 +43,7 @@ class EvolutionView extends View {
 		START,
 		EVOLVE,
 		END,
+		CANCELED
 	}
 
 	EvolutionView() {
@@ -68,6 +69,11 @@ class EvolutionView extends View {
 				}
 				break;
 			case EVOLVE:
+				if (input.consumeIfDown(ControlKey.BACK) && !isEgg) {
+					state = State.CANCELED;
+					setCancelledMessage();
+				}
+
 				if (animationEvolve <= 0) {
 					state = State.END;
 
@@ -79,6 +85,7 @@ class EvolutionView extends View {
 				}
 				break;
 			case END:
+			case CANCELED:
 				if (message != null) {
 					if (input.consumeIfMouseDown()) {
 						message = null;
@@ -114,6 +121,7 @@ class EvolutionView extends View {
 		
 		switch (state) {
 			case START:
+			case CANCELED:
 				DrawUtils.drawBottomCenteredImage(g, currEvolution, POKEMON_DRAW_LOCATION);
 				break;
 			case EVOLVE:
@@ -184,6 +192,10 @@ class EvolutionView extends View {
 	
 	private void addToPokedex() {
 		Game.getPlayer().getPokedex().setCaught(isEgg ? preEvolution : postEvolution);
+	}
+
+	private void setCancelledMessage() {
+		message = new MessageUpdate("Whattt!?!?!??!! " + preEvolution.getName() + " stopped evolving!!!!");
 	}
 	
 	private void setFinalMessage(int[] gains, int[] newStats) {
