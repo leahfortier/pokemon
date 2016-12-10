@@ -8,6 +8,7 @@ import item.hold.IncenseItem;
 import main.Global;
 import main.Type;
 import pokemon.ability.AbilityNamesies;
+import pokemon.breeding.EggGroup;
 import pokemon.evolution.Evolution;
 import pokemon.evolution.EvolutionType;
 import util.FileIO;
@@ -107,7 +108,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		this.weight = weight;
 		this.flavorText = flavorText;
 		this.eggSteps = eggSteps;
-		this.eggGroups = new String[] { eggGroup1, eggGroup2 };
+		this.eggGroups = new String[] { EggGroup.valueOf(eggGroup1).name(), EggGroup.valueOf(eggGroup2).name() };
 	}
 
 	public Type[] getType() {
@@ -271,8 +272,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 					in.nextDouble(),
 					in.nextLine().trim(),
 					in.nextInt(),
-					in.nextLine().trim() + in.nextLine().trim(),
-					in.nextLine().trim(),
+					in.next(),
+					in.next(),
 					createLevelUpMoves(in),
 					createMovesSet(in),
 					createMovesSet(in),
