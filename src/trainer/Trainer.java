@@ -127,7 +127,7 @@ public abstract class Trainer implements Team, Serializable {
 		}
 	}
 	
-	public abstract void addPokemon(Battle b, ActivePokemon p);
+	public abstract void addPokemon(ActivePokemon p);
 
 	public void addItem(ItemNamesies item, int amount) {
 		bag.addItem(item, amount);

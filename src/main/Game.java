@@ -53,7 +53,7 @@ public class Game {
 	}
 	
 	private void setupCharacter() {
-		characterData.addPokemon(null, new ActivePokemon(PokemonNamesies.EEVEE, 1, false, true));
+		characterData.addPokemon(new ActivePokemon(PokemonNamesies.EEVEE, 1, false, true));
 		characterData.front().giveItem(ItemNamesies.ORAN_BERRY);
 	}
 	

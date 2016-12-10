@@ -15,6 +15,6 @@ class GivePokemonTrigger extends Trigger {
     }
 
     protected void executeTrigger() {
-        Game.getPlayer().addPokemon(null, ActivePokemon.createActivePokemon(this.pokemonMatcher, true));
+        Game.getPlayer().addPokemon(ActivePokemon.createActivePokemon(this.pokemonMatcher, true));
     }
 }

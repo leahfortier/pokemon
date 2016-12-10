@@ -377,27 +377,19 @@ public class CharacterData extends Trainer implements Serializable {
 		return pokedex;
 	}
 
-	// TODO: Remove battle parameter
-	public void addPokemon(Battle b, ActivePokemon p) {
+	@Override
+	public void addPokemon(ActivePokemon p) {
 		p.setCaught();
-		if (!pokedex.isCaught(p.getPokemonInfo().namesies())) {
-			if (b != null) {
-				Messages.add(new MessageUpdate(p.getPokemonInfo().getName() + " was registered in the " + PokeString.POKEDEX + "!"));
-			}
-
-			if (!p.isEgg()) {
-				pokedex.setCaught(p.getPokemonInfo());
-			}
+		if (!p.isEgg() && !pokedex.isCaught(p.getPokemonInfo().namesies())) {
+			Messages.add(new MessageUpdate(p.getPokemonInfo().getName() + " was registered in the " + PokeString.POKEDEX + "!"));
+			pokedex.setCaught(p.getPokemonInfo());
 		}
 		
 		if (team.size() < MAX_POKEMON) {
 			team.add(p);
 		}
 		else {
-			if (b != null) {
-				Messages.add(new MessageUpdate(p.getActualName() + " was sent to Box " + (pc.getBoxNum() + 1) + " of your PC!"));
-			}
-
+			Messages.add(new MessageUpdate(p.getActualName() + " was sent to Box " + (pc.getBoxNum() + 1) + " of your PC!"));
 			pc.depositPokemon(p);
 		}
 	}
@@ -459,7 +451,7 @@ public class CharacterData extends Trainer implements Serializable {
 		Messages.add(new MessageUpdate().withCatchPokemon(-1));
 		Messages.add(new MessageUpdate("Gotcha! " + catchPokemon.getName() + " was caught!"));
 		gainEXP(catchPokemon, b);
-		addPokemon(b, catchPokemon);
+		addPokemon(catchPokemon);
 
 		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
 		return true;
