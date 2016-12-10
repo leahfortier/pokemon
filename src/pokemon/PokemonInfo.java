@@ -65,10 +65,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			String growthRate,
 			String type1,
 			String type2,
-			Map<Integer, Set<AttackNamesies>> levelUpMoves,
-			Set<AttackNamesies> tmMoves,
-			Set<AttackNamesies> eggMoves,
-			Set<AttackNamesies> tutorMoves,
 			int catchRate,
 			int[] givenEVs,
 			Evolution evolution,
@@ -82,7 +78,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			String flavorText,
 			int eggSteps,
 			String eggGroup1,
-			String eggGroup2
+			String eggGroup2,
+			Map<Integer, Set<AttackNamesies>> levelUpMoves,
+			Set<AttackNamesies> tmMoves,
+			Set<AttackNamesies> eggMoves,
+			Set<AttackNamesies> tutorMoves
 	) {
 		this.number = number;
 		this.name = name;
@@ -260,10 +260,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 					in.nextLine().trim() + in.nextLine().trim(),
 					in.next(),
 					in.next(),
-					createLevelUpMoves(in),
-					createMovesSet(in),
-					createMovesSet(in),
-					createMovesSet(in),
 					in.nextInt(),
 					sixIntArray(in),
 					EvolutionType.getEvolution(in),
@@ -276,7 +272,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 					in.nextLine().trim(),
 					in.nextInt(),
 					in.nextLine().trim() + in.nextLine().trim(),
-					in.nextLine().trim()
+					in.nextLine().trim(),
+					createLevelUpMoves(in),
+					createMovesSet(in),
+					createMovesSet(in),
+					createMovesSet(in)
 			);
 
 			map.put(pokemonInfo.namesies, pokemonInfo);

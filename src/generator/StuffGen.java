@@ -3,6 +3,7 @@ package generator;
 import main.Global;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
+import pokemon.evolution.EvolutionType;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
@@ -261,10 +262,6 @@ public class StuffGen {
 			out.println(in.nextLine()); // Base Exp
 			out.println(in.nextLine()); // Growth Rate
 			out.println(in.nextLine()); // Type1 Type2
-			readMoves(in, out); // Level Up Moves
-			readMoves(in, out); // TM Moves
-			readMoves(in, out); // Egg Moves
-			readMoves(in, out); // Move Tutor Moves
 			out.println(in.nextLine()); // Catch Rate
 			out.println(in.nextLine()); // EVs
 			readEvolution(in, out); // Evolution
@@ -277,6 +274,10 @@ public class StuffGen {
 			out.println(in.nextLine()); // Egg Steps
 			out.println(in.nextLine()); // Egg Group 1
 			out.println(in.nextLine()); // Egg Group 2
+			readMoves(in, out); // Level Up Moves
+			readMoves(in, out); // TM Moves
+			readMoves(in, out); // Egg Moves
+			readMoves(in, out); // Move Tutor Moves
 			
 			out.println(in.nextLine()); // New Line
 		}
