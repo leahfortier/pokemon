@@ -512,6 +512,10 @@ public class ActivePokemon implements Serializable {
 	}
 
 	private boolean checkEvolution(EvolutionMethod method, ItemNamesies itemNamesies) {
+		if (getActualHeldItem().namesies() == ItemNamesies.EVERSTONE) {
+			return false;
+		}
+
 		BaseEvolution evolution = (BaseEvolution)pokemon.getEvolution().getEvolution(method, this, itemNamesies);
 		if (evolution != null) {
 			Game.getPlayer().setEvolution(this, evolution);
@@ -523,10 +527,6 @@ public class ActivePokemon implements Serializable {
 
 	// Returns stat gains
 	public int[] evolve(BaseEvolution evolution) {
-		if (getActualHeldItem().namesies() == ItemNamesies.EVERSTONE) {
-			return null;
-		}
-
 		boolean sameName = nickname.equals(pokemon.getName());
 		PokemonInfo evolutionInfo = evolution.getEvolution();
 
