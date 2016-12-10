@@ -4,7 +4,6 @@ import item.ItemNamesies;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import util.RandomUtils;
-import util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +47,11 @@ class MultipleEvolution extends Evolution {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        StringUtils.appendLine(builder, EvolutionType.MULTI + " " + this.evolutions.length);
+        String toString = EvolutionType.MULTI + " " + this.evolutions.length;
         for (Evolution evolution : this.evolutions) {
-            StringUtils.appendLine(builder, evolution.toString());
+            toString += "\n" + evolution.toString();
         }
 
-        return builder.toString();
+        return toString;
     }
 }

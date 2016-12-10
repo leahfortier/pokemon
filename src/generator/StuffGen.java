@@ -294,7 +294,7 @@ public class StuffGen {
 	
 	private static void readEvolution(Scanner in, PrintStream out) {
 		String type = in.next();
-		if (type.equals("Multi")) {
+		if (type.equals(EvolutionType.MULTI.name())) {
 			int x = in.nextInt();
 			out.println(type + " " + x);
 			for (int i = 0; i < x; i++) {
