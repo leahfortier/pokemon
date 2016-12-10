@@ -112,19 +112,19 @@ public class Breeding {
 	}
 
 	protected static boolean canBreed(ActivePokemon aPokes, ActivePokemon bPokes) {
-		if (isDitto(aPokes) && isDitto(bPokes)) {
-			return false;
-		}
 
-		if (isDittoAndManaphy(aPokes, bPokes)) {
-			return true;
-		}
-
+		// If either pokemon cannot breed, then they can't breed together
 		if (!aPokes.canBreed() || !bPokes.canBreed()) {
 			return false;
 		}
-		
-		if (!Gender.oppositeGenders(aPokes, bPokes) && !isDitto(aPokes) && !isDitto(bPokes)) {
+
+		// Ditto can breed with every breedable Pokemon except itself
+		if (isDitto(aPokes) || isDitto(bPokes)) {
+			return !(isDitto(aPokes) && isDitto(bPokes));
+		}
+
+		// If neither Pokemon is a ditto and the Pokemon do not have opposite genders, they can't breed together
+		if (!Gender.oppositeGenders(aPokes, bPokes)) {
 			return false;
 		}
 		
@@ -143,18 +143,6 @@ public class Breeding {
 
 	private static boolean isDitto(ActivePokemon pokes) {
 		return pokes.isPokemon(PokemonNamesies.DITTO);
-	}
-
-	private static boolean isDittoAndManaphy(ActivePokemon aPokes, ActivePokemon bPokes) {
-		if (isDitto(aPokes)) {
-			return bPokes.isPokemon(PokemonNamesies.MANAPHY);
-		}
-
-		if (isDitto(bPokes)) {
-			return aPokes.isPokemon(PokemonNamesies.MANAPHY);
-		}
-
-		return false;
 	}
 
 	private static ActivePokemon getRandomParent(final ActivePokemon daddy, final ActivePokemon mommy) {
