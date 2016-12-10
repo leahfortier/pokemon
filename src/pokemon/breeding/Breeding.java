@@ -128,12 +128,12 @@ public class Breeding {
 			return false;
 		}
 		
-		String[] aPokesEggGroups = aPokes.getPokemonInfo().getEggGroups();
-		String[] bPokesEggGroups = bPokes.getPokemonInfo().getEggGroups();
+		EggGroup[] aPokesEggGroups = aPokes.getPokemonInfo().getEggGroups();
+		EggGroup[] bPokesEggGroups = bPokes.getPokemonInfo().getEggGroups();
 
-		for (String aPokesEggGroup : aPokesEggGroups) {
-			for (String bPokesEggGroup : bPokesEggGroups) {
-				if (aPokesEggGroup.equals(bPokesEggGroup)) {
+		for (EggGroup aPokesEggGroup : aPokesEggGroups) {
+			for (EggGroup bPokesEggGroup : bPokesEggGroups) {
+				if (aPokesEggGroup == bPokesEggGroup && aPokesEggGroup != EggGroup.NONE) {
 					return true;
 				}
 			}
