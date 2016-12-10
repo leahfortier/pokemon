@@ -7,7 +7,6 @@ import gui.view.ViewMode;
 import item.Item;
 import item.ItemNamesies;
 import item.use.BallItem;
-import main.Game;
 import map.Direction;
 import map.entity.movable.PlayerEntity;
 import map.triggers.Trigger;
@@ -18,8 +17,8 @@ import message.Messages;
 import pattern.GroupTriggerMatcher;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
-import pokemon.evolution.BaseEvolution;
 import pokemon.PC;
+import pokemon.evolution.BaseEvolution;
 import trainer.pokedex.Pokedex;
 import util.JsonUtils;
 import util.Point;
@@ -359,8 +358,19 @@ public class CharacterData extends Trainer implements Serializable {
 		for (ActivePokemon p : team) {
 			EndBattleEffect.invokeEndBattleEffect(p.getAllEffects(b), this, b, p);
 		}
-		
+
 		setFront();
+
+		// WE'RE DONE HERE
+		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+	}
+
+	public void checkEvolution() {
+		for (ActivePokemon pokemon : team) {
+			if (pokemon.canFight()) {
+				pokemon.checkEvolution();
+			}
+		}
 	}
 	
 	public Pokedex getPokedex() {
@@ -458,8 +468,8 @@ public class CharacterData extends Trainer implements Serializable {
 	public void setEvolution(ActivePokemon pokemon, BaseEvolution evolution) {
 		this.evolvingPokemon = pokemon;
 		this.evolution = evolution;
-		
-		Game.instance().setViewMode(ViewMode.EVOLUTION_VIEW);
+
+		Messages.add(new MessageUpdate().withViewChange(ViewMode.EVOLUTION_VIEW));
 	}
 	
 	public void addLogMessage(MessageUpdate messageUpdate) {

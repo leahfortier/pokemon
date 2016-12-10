@@ -41,6 +41,7 @@ public class MessageUpdate {
 	private Integer duration;
 	private String triggerName;
 	private ChoiceMatcher[] choices;
+	private ViewMode viewMode;
 	
 	public enum Update {
 		NO_UPDATE,
@@ -58,6 +59,8 @@ public class MessageUpdate {
 			Messages.clearMessages(MessageState.FIGHTY_FIGHT);
 			Messages.setMessageState(MessageState.MAPPITY_MAP);
 			Game.getPlayer().getEntity().resetCurrentInteractionEntity();
+
+			Game.getPlayer().checkEvolution();
         }),
 		FORCE_SWITCH(battleView -> {
             battleView.setVisualState(VisualState.POKEMON);
@@ -250,7 +253,20 @@ public class MessageUpdate {
 	public MessageUpdate withCatchPokemon(int duration) {
 		this.duration = duration;
 		return this;
-	}	
+	}
+
+	public MessageUpdate withViewChange(ViewMode viewMode) {
+		this.viewMode = viewMode;
+		return this;
+	}
+
+	public boolean isViewChange() {
+		return this.viewMode != null;
+	}
+
+	public ViewMode getViewMode() {
+		return this.viewMode;
+	}
 	
 	public String getMessage() {
 		return message;
@@ -378,18 +394,6 @@ public class MessageUpdate {
 	
 	public Update getUpdateType() {
 		return updateType;
-	}
-	
-	public boolean endBattle() {
-		return updateType == Update.EXIT_BATTLE;
-	}
-	
-	public boolean promptSwitch() {
-		return updateType == Update.PROMPT_SWITCH;
-	}
-	
-	public boolean forceSwitch() {
-		return updateType == Update.FORCE_SWITCH;
 	}
 	
 	public boolean learnMove() {

@@ -248,13 +248,20 @@ public class MapView extends View {
 			playerEntity.update(dt, currentMap, this);
         }
 
-        boolean emptyMessage = this.currentMessage == null || StringUtils.isNullOrEmpty(this.currentMessage.getMessage());
-		if (showMessage && emptyMessage && Messages.hasMessages()) {
+		if (showMessage && emptyMessage() && Messages.hasMessages()) {
 			cycleMessage();
 			if (this.currentMessage != null && this.currentMessage.getUpdateType() != Update.ENTER_BATTLE) {
 				setState(VisualState.MESSAGE);
 			}
 		}
+
+		if (isState(VisualState.MESSAGE) && emptyMessage()) {
+			setState(VisualState.MAP);
+		}
+	}
+
+	private boolean emptyMessage() {
+		return this.currentMessage == null || StringUtils.isNullOrEmpty(this.currentMessage.getMessage());
 	}
 
 	private void checkMapReset() {
@@ -288,6 +295,8 @@ public class MapView extends View {
 				}
 
 			}
+		} else if (currentMessage.isViewChange()) {
+			Game.instance().setViewMode(currentMessage.getViewMode());
 		}
 	}
 

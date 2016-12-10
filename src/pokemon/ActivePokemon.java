@@ -464,17 +464,15 @@ public class ActivePokemon implements Serializable {
 		if (level == MAX_LEVEL) {
 			return false;
 		}
-		
-		boolean print = b != null;
-		boolean front = print && b.getPlayer().front() == this;
+
+		boolean inBattle = b != null;
+		boolean front = inBattle && b.getPlayer().front() == this;
 		
 		// Grow to the next level
 		level++;
-		if (print) {
-			Messages.add(new MessageUpdate(getActualName() + " grew to level " + level + "!"));
-		}
+		Messages.add(new MessageUpdate(getActualName() + " grew to level " + level + "!"));
 
-		if (print && front) {
+		if (front) {
 			Messages.add(new MessageUpdate().withExpGain(b, this, Math.min(1, expRatio()), true));
 		}
 		
@@ -485,41 +483,55 @@ public class ActivePokemon implements Serializable {
 		for (int i = 0; i < Stat.NUM_STATS; i++) {
 			gain[i] = stats[i] - prevStats[i];
 		}
-		
-		// TODO: Show gain update for other Pokemon in the party
-		if (print && front) {
-			Messages.add(new MessageUpdate().withStatGains(b, this, gain, stats));
-		}
+
+		Messages.add(new MessageUpdate().withStatGains(b, this, gain, stats));
 		
 		// Learn new moves
-		for (AttackNamesies attack : pokemon.getMoves(level)) {
-			learnMove(b, attack);
-		}
+		pokemon.getMoves(level).forEach(attackNamesies -> learnMove(attackNamesies, inBattle));
 		
 		// Maybe you'll evolve?!
-		BaseEvolution ev = (BaseEvolution)pokemon.getEvolution().getEvolution(EvolutionMethod.LEVEL, this, null);
-		if (ev != null) {
-			evolve(b, ev);
+		// Can only evolve outside of battle
+		if (!inBattle) {
+			checkEvolution(EvolutionMethod.LEVEL);
 		}
 		
 		return true;
 	}
-	
-	public void evolve(Battle b, BaseEvolution ev) {
-		if (getActualHeldItem().namesies() == ItemNamesies.EVERSTONE) {
-			return;
+
+	public boolean checkEvolution() {
+		return this.checkEvolution(EvolutionMethod.LEVEL) || this.checkEvolution(EvolutionMethod.MOVE);
+	}
+
+	public boolean checkEvolution(ItemNamesies itemNamesies) {
+		return checkEvolution(EvolutionMethod.ITEM, itemNamesies);
+	}
+
+	private boolean checkEvolution(EvolutionMethod method) {
+		return checkEvolution(method, null);
+	}
+
+	private boolean checkEvolution(EvolutionMethod method, ItemNamesies itemNamesies) {
+		BaseEvolution evolution = (BaseEvolution)pokemon.getEvolution().getEvolution(method, this, itemNamesies);
+		if (evolution != null) {
+			Game.getPlayer().setEvolution(this, evolution);
+			return true;
 		}
 
-		boolean front = b != null && b.getPlayer().front() == this;
+		return false;
+	}
+
+	// Returns stat gains
+	public int[] evolve(BaseEvolution evolution) {
+		if (getActualHeldItem().namesies() == ItemNamesies.EVERSTONE) {
+			return null;
+		}
+
 		boolean sameName = nickname.equals(pokemon.getName());
-		
-		ability = Ability.evolutionAssign(this, ev.getEvolution());
-		
-		String name = nickname;
-		Messages.add(new MessageUpdate(getActualName() + " is evolving!"));
-		
-		pokemon = ev.getEvolution();
-		Game.getPlayer().getPokedex().setCaught(this.getPokemonInfo());
+		PokemonInfo evolutionInfo = evolution.getEvolution();
+
+		ability = Ability.evolutionAssign(this, evolutionInfo);
+		pokemon = evolutionInfo;
+		Game.getPlayer().getPokedex().setCaught(evolutionInfo);
 		
 		// Set name if it was not given a nickname
 		if (sameName) {
@@ -534,47 +546,44 @@ public class ActivePokemon implements Serializable {
 		for (int i = 0; i < Stat.NUM_STATS; i++) {
 			gain[i] = stats[i] - prevStats[i];
 		}
-		
-		if (front) {
-			Messages.add(new MessageUpdate().withNewPokemon(pokemon, shiny, true, isPlayer));
-		}
 
-		Messages.add(new MessageUpdate(name + " evolved into " + pokemon.getName() + "!"));
-		Messages.add(new MessageUpdate().withStatGains(b, this, gain, stats));
-		
 		// Learn new moves
 		Set<AttackNamesies> levelMoves = pokemon.getMoves(level);
-		for (AttackNamesies attack : levelMoves) {
-			learnMove(b, attack);
-		}
+		levelMoves.forEach(attack -> learnMove(attack, false));
+
+		return gain;
 	}
 	
-	private void learnMove(Battle b, AttackNamesies attackName) {
+	private void learnMove(AttackNamesies attackName, boolean inBattle) {
 		// Don't want to learn a move you already know!
 		if (hasActualMove(attackName)) {
 			return;
 		}
 		
-		Move m = new Move(attackName.getAttack());
+		Move move = new Move(attackName.getAttack());
 		if (moves.size() < Move.MAX_MOVES) {
-			Messages.add(new MessageUpdate(getActualName() + " learned " + m.getAttack().getName() + "!"));
-			addMove(b, m, moves.size() - 1);
+			Messages.add(new MessageUpdate(getActualName() + " learned " + move.getAttack().getName() + "!"));
+			addMove(move, moves.size() - 1, inBattle);
 		} else {
-			Messages.add(new MessageUpdate().withLearnMove(this, m));
+			Messages.add(new MessageUpdate().withLearnMove(this, move));
 		}
 	}
-	
+
+	// TODO: Delete this after changing the tm generator
 	public void addMove(Battle b, Move m, int index) {
+		addMove(m, index, b != null);
+	}
+
+	public void addMove(Move m, int index, boolean inBattle) {
 		if (moves.size() < Move.MAX_MOVES) {
 			moves.add(m);
 		}
 		else {
 			moves.set(index, m);
 		}
-		
-		BaseEvolution ev = (BaseEvolution)pokemon.getEvolution().getEvolution(EvolutionMethod.MOVE, this, null);
-		if (ev != null) {
-			evolve(b, ev);
+
+		if (!inBattle) {
+			checkEvolution(EvolutionMethod.MOVE);
 		}
 	}
 	

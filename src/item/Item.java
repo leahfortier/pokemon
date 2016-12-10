@@ -3326,14 +3326,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3568,14 +3561,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3608,14 +3594,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3648,14 +3627,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3676,14 +3648,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3704,14 +3669,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3732,14 +3690,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3760,14 +3711,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3788,14 +3732,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3812,14 +3749,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
@@ -3862,14 +3792,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3890,14 +3813,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3918,14 +3834,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3946,14 +3855,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3987,14 +3889,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -4015,14 +3910,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -4047,14 +3935,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -4071,14 +3952,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
@@ -4121,14 +3995,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -4149,14 +4016,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -4177,14 +4037,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -4205,14 +4058,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -4233,14 +4079,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -4261,14 +4100,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -4289,14 +4121,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -4317,14 +4142,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Evolution ev = p.getPokemonInfo().getEvolution();
-			BaseEvolution base = (BaseEvolution) ev.getEvolution(EvolutionMethod.ITEM, p, this.namesies);
-			if (base == null) {
-				return false;
-			}
-			
-			Game.getPlayer().setEvolution(p, base);
-			return true;
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -9090,7 +8908,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9141,7 +8959,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9192,7 +9010,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9243,7 +9061,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9294,7 +9112,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9345,7 +9163,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9396,7 +9214,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9447,7 +9265,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9498,7 +9316,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9549,7 +9367,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9600,7 +9418,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9651,7 +9469,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9702,7 +9520,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9753,7 +9571,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9804,7 +9622,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9855,7 +9673,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9906,7 +9724,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -9957,7 +9775,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10008,7 +9826,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10059,7 +9877,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10110,7 +9928,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10161,7 +9979,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10212,7 +10030,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10263,7 +10081,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10314,7 +10132,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10365,7 +10183,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10416,7 +10234,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10467,7 +10285,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10518,7 +10336,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10569,7 +10387,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10620,7 +10438,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10671,7 +10489,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10722,7 +10540,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10773,7 +10591,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10824,7 +10642,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10875,7 +10693,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10926,7 +10744,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -10977,7 +10795,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11028,7 +10846,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11079,7 +10897,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11130,7 +10948,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11181,7 +10999,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11232,7 +11050,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11283,7 +11101,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11334,7 +11152,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11385,7 +11203,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11436,7 +11254,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11487,7 +11305,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11538,7 +11356,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11589,7 +11407,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11640,7 +11458,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11691,7 +11509,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11742,7 +11560,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11793,7 +11611,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11844,7 +11662,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11895,7 +11713,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11946,7 +11764,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -11997,7 +11815,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12048,7 +11866,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12099,7 +11917,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12150,7 +11968,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12201,7 +12019,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12252,7 +12070,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12303,7 +12121,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12354,7 +12172,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12405,7 +12223,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12456,7 +12274,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12507,7 +12325,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12558,7 +12376,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12609,7 +12427,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12660,7 +12478,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12711,7 +12529,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12762,7 +12580,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12813,7 +12631,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12864,7 +12682,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12915,7 +12733,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -12966,7 +12784,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13017,7 +12835,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13068,7 +12886,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13119,7 +12937,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13170,7 +12988,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13221,7 +13039,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13272,7 +13090,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13323,7 +13141,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13374,7 +13192,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13425,7 +13243,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13476,7 +13294,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13527,7 +13345,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13578,7 +13396,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13629,7 +13447,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13680,7 +13498,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13731,7 +13549,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13782,7 +13600,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13833,7 +13651,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13884,7 +13702,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13935,7 +13753,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -13986,7 +13804,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -14037,7 +13855,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -14088,7 +13906,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -14139,7 +13957,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -14190,7 +14008,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}
@@ -14241,7 +14059,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Otherwise, go through their moves and find the one that matches and replace with the TM move
 			for (int i = 0; i < moveList.size(); i++) {
 				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(null, tmMove, i);
+					p.addMove(tmMove, i, false);
 					return true;
 				}
 			}

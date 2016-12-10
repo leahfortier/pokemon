@@ -59,7 +59,7 @@ class EvolutionView extends View {
 				}
 				break;
 			case EVOLVE:
-				if (animationEvolve < 0) {
+				if (animationEvolve <= 0) {
 					state = State.END;
 					setFinalMessage();
 					addToPokedex();
@@ -77,12 +77,10 @@ class EvolutionView extends View {
 				}
 				else {
 					if (!isEgg) {
-						evolvingPokemon.evolve(null, Game.getPlayer().getEvolution());
-						Game.instance().setViewMode(ViewMode.BAG_VIEW);
+						evolvingPokemon.evolve(Game.getPlayer().getEvolution());
 					}
-					else {
-						Game.instance().setViewMode(ViewMode.MAP_VIEW);
-					}
+
+					Game.instance().setViewMode(ViewMode.MAP_VIEW);
 				}
 				break;
 		}

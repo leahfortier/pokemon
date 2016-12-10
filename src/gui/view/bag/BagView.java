@@ -225,6 +225,10 @@ public class BagView extends View {
 		while ((message == null || StringUtils.isNullOrWhiteSpace(message.getMessage()))
 				&& Messages.hasMessages()) {
 			message = Messages.getNextMessage();
+
+			if (message.isViewChange()) {
+				Game.instance().setViewMode(message.getViewMode());
+			}
         }
 
 		selectedButton = Button.update(buttons, selectedButton);
