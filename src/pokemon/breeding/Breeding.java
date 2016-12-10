@@ -1,4 +1,4 @@
-package pokemon;
+package pokemon.breeding;
 
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -6,6 +6,12 @@ import item.Item;
 import item.ItemNamesies;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
+import pokemon.ActivePokemon;
+import pokemon.Gender;
+import pokemon.Nature;
+import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
+import pokemon.Stat;
 import util.RandomUtils;
 
 import java.util.ArrayList;
@@ -14,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Breeding {
-	public static ActivePokemon breed(ActivePokemon aPokes, ActivePokemon bPokes) {
+	protected static ActivePokemon breed(ActivePokemon aPokes, ActivePokemon bPokes) {
 		if (!canBreed(aPokes, bPokes)) {
 			return null;
 		}
@@ -60,7 +66,7 @@ public class Breeding {
 		return babyInfo;
 	}
 
-	static int[] getBabyIVs(ActivePokemon daddy, ActivePokemon mommy) {
+	public static int[] getBabyIVs(ActivePokemon daddy, ActivePokemon mommy) {
 		List<Stat> remainingStats = new ArrayList<>();
 		Collections.addAll(remainingStats, Stat.STATS);
 
@@ -155,7 +161,7 @@ public class Breeding {
 		return RandomUtils.getRandomValue(new ActivePokemon[] { daddy, mommy });
 	}
 
-	static Nature getBabyNature(ActivePokemon daddy, ActivePokemon mommy) {
+	public static Nature getBabyNature(ActivePokemon daddy, ActivePokemon mommy) {
 		Item daddysItem = daddy.getActualHeldItem();
 		Item mommysItem = mommy.getActualHeldItem();
 		
@@ -173,7 +179,7 @@ public class Breeding {
 		}
 	}
 	
-	static List<Move> getBabyMoves(ActivePokemon daddy, ActivePokemon mommy, PokemonNamesies babyNamesies) {
+	public static List<Move> getBabyMoves(ActivePokemon daddy, ActivePokemon mommy, PokemonNamesies babyNamesies) {
 
 		PokemonInfo babyInfo = PokemonInfo.getPokemonInfo(babyNamesies);
 		List<AttackNamesies> babyMovesNamesies = new ArrayList<>();

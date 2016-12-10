@@ -40,6 +40,7 @@ import main.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.PokemonMatcher;
+import pokemon.breeding.Breeding;
 import pokemon.evolution.EvolutionMethod;
 import pokemon.PokemonInfo.WildHoldItem;
 import pokemon.ability.Ability;
@@ -1192,7 +1193,7 @@ public class ActivePokemon implements Serializable {
 		this.getAttributes().setAttacking(false);
 	}
 	
-	boolean canBreed() {
+	public boolean canBreed() {
 		return !isEgg && pokemon.canBreed();
 	}
 }
