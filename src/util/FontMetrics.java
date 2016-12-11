@@ -26,6 +26,15 @@ public class FontMetrics {
         this.letterHeight = letterHeight;
     }
 
+    public static int getTextWidth(Graphics g, String text) {
+        return getTextWidth(g.getFont().getSize(), text);
+    }
+
+    public static int getTextWidth(int fontSize, String text) {
+        FontMetrics fontMetrics = getFontMetrics(fontSize);
+        return fontMetrics.getTextLength(text);
+    }
+
     public static int getSuggestedWidth(String text, int fontSize) {
         FontMetrics fontMetrics = getFontMetrics(fontSize);
         return (text.length() + 2)*fontMetrics.horizontalSpacing;
@@ -82,10 +91,13 @@ public class FontMetrics {
         return (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR*1.5);
     }
 
+    public static int getTextHeight(int fontSize) {
+        FontMetrics fontMetrics = getFontMetrics(fontSize);
+        return fontMetrics.letterHeight;
+    }
+
     public static int getTextHeight(Graphics g) {
-		int fontSize = g.getFont().getSize();
-		FontMetrics fontMetrics = getFontMetrics(fontSize);
-		return fontMetrics.letterHeight;
+		return getTextHeight(g.getFont().getSize());
 	}
 
     public static int getDistanceBetweenRows(Graphics g) {
@@ -94,7 +106,7 @@ public class FontMetrics {
         return (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR);
     }
 
-    public int getLength(String s) {
+    int getTextLength(String s) {
         return s.length()*this.getHorizontalSpacing();
     }
 

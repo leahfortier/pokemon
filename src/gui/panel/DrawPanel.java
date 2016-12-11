@@ -297,6 +297,18 @@ public class DrawPanel {
         return y + height/2;
     }
 
+    public int rightX() {
+        return x + width;
+    }
+
+    public int bottomY() {
+        return y + height;
+    }
+
+    public void label(Graphics g, String text) {
+        label(g, g.getFont().getSize(), text);
+    }
+
     public void label(Graphics g, int fontSize, String text) {
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, fontSize);

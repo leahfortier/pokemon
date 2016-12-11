@@ -10,6 +10,7 @@ import main.Game;
 import main.Global;
 import main.Type;
 import pokemon.ActivePokemon;
+import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import trainer.Trainer;
 import util.DrawUtils;
@@ -24,6 +25,20 @@ import java.util.List;
 
 class NewPokemonView extends View {
     private static final int NUM_COLS = 4;
+    private static final int TEXT_SPACING = 15;
+
+    private static final int BOX_SPACING = (BasicPanels.getMessagePanelY()
+            - BasicPanels.getLabelPanel(0, 0, 30, TEXT_SPACING, StringUtils.empty()).height
+            - BasicPanels.getLabelPanel(0, 0, 24, TEXT_SPACING, StringUtils.empty()).height
+            - 5*BasicPanels.getLabelPanel(0, 0, 22, TEXT_SPACING, StringUtils.empty()).height)/6;
+
+    private static final int IMAGE_PANEL_LENGTH = 3*BOX_SPACING
+            + BasicPanels.getLabelPanel(0, 0, 30, TEXT_SPACING, StringUtils.empty()).height
+            + BasicPanels.getLabelPanel(0, 0, 24, TEXT_SPACING, StringUtils.empty()).height
+            + 2*BasicPanels.getLabelPanel(0, 0, 22, TEXT_SPACING, StringUtils.empty()).height;
+
+    private final DrawPanel canvasPanel;
+    private final DrawPanel imagePanel;
 
     private final Button[] buttons;
 
@@ -33,6 +48,7 @@ class NewPokemonView extends View {
     private State state;
     private String message;
     private int selectedButton;
+    private boolean displayInfo;
 
     private String nickname;
 
@@ -46,6 +62,18 @@ class NewPokemonView extends View {
     }
 
     NewPokemonView() {
+        this.canvasPanel = new DrawPanel(0, 0, Global.GAME_SIZE)
+                .withTransparentCount(2)
+                .withBorderPercentage(0);
+
+        this.imagePanel = new DrawPanel(
+                Global.GAME_SIZE.width - BOX_SPACING - IMAGE_PANEL_LENGTH,
+                BOX_SPACING,
+                IMAGE_PANEL_LENGTH,
+                IMAGE_PANEL_LENGTH)
+                .withFullTransparency()
+                .withBlackOutline();
+
         this.buttons = BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS);
         for (Button button : buttons) {
             button.setActive(false);
@@ -70,7 +98,11 @@ class NewPokemonView extends View {
         switch (state) {
             case POKEDEX:
                 if (input.consumeIfDown(ControlKey.SPACE)) {
-                    message = null;
+                    if (!displayInfo) {
+                        displayInfo = true;
+                    } else {
+                        message = null;
+                    }
                 }
 
                 if (message == null) {
@@ -156,21 +188,73 @@ class NewPokemonView extends View {
 
     @Override
     public void draw(Graphics g) {
-        BasicPanels.drawCanvasPanel(g);
+        canvasPanel.drawBackground(g);
         if (message != null) {
             BasicPanels.drawFullMessagePanel(g, message);
         }
 
+        BufferedImage pokemonImage = Game.getData().getPokedexTilesLarge().getTile(newPokemon.getTinyImageIndex());
+        if (displayInfo) {
+            imagePanel.drawBackground(g);
+            imagePanel.imageLabel(g, pokemonImage);
+
+            PokemonInfo pokemonInfo = newPokemon.getPokemonInfo();
+            DrawPanel namePanel = BasicPanels.drawLabelPanel(
+                    g,
+                    BOX_SPACING,
+                    BOX_SPACING,
+                    30,
+                    TEXT_SPACING,
+                    String.format("%-10s   #%03d", pokemonInfo.getName(), pokemonInfo.getNumber()));
+
+            DrawPanel classificationPanel = BasicPanels.drawLabelPanel(
+                    g,
+                    namePanel.x,
+                    namePanel.bottomY() + BOX_SPACING,
+                    24,
+                    TEXT_SPACING,
+                    pokemonInfo.getClassification() + " " + PokeString.POKEMON);
+
+            DrawPanel heightPanel = BasicPanels.drawLabelPanel(
+                    g,
+                    classificationPanel.x,
+                    classificationPanel.bottomY() + BOX_SPACING,
+                    22,
+                    TEXT_SPACING,
+                    "Height: " + pokemonInfo.getHeightString());
+
+            DrawPanel weightPanel = BasicPanels.drawLabelPanel(
+                    g,
+                    heightPanel.x,
+                    heightPanel.bottomY() + BOX_SPACING,
+                    22,
+                    TEXT_SPACING,
+                    "Weight: " + pokemonInfo.getWeight() + "lbs");
+
+            DrawPanel descriptionPanel = new DrawPanel(
+                    weightPanel.x,
+                    weightPanel.bottomY() + BOX_SPACING,
+                    Global.GAME_SIZE.width - 2*BOX_SPACING,
+                    3*weightPanel.height)
+                    .withFullTransparency()
+                    .withBlackOutline();
+            descriptionPanel.drawBackground(g);
+            descriptionPanel.drawMessage(g, 22, pokemonInfo.getFlavorText());
+        }
+        else if (state != State.NICKNAME && state != State.END) {
+            int imageCenterX = Global.GAME_SIZE.width/2;
+            int imageCenterY = BasicPanels.getMessagePanelY()/2;
+            DrawUtils.drawCenteredImage(g, pokemonImage, imageCenterX, imageCenterY);
+        }
+
         switch (state) {
-            case POKEDEX:
-                BufferedImage pokemonImage = Game.getData().getPokedexTilesLarge().getTile(newPokemon.getTinyImageIndex());
-                DrawUtils.drawCenteredImage(g, pokemonImage, Global.GAME_SIZE.width/2, BasicPanels.getMessagePanelY()/2);
-                break;
             case NICKNAME_QUESTION:
                 drawButton(g, leftButton(), new Color(120, 200, 80), "Yes");
                 drawButton(g, rightButton(), new Color(220, 20, 20), "No");
                 break;
             case NICKNAME:
+                g.drawImage(Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageIndex()), 200, 230, null);
+
                 StringBuilder display = new StringBuilder();
                 for (int i = 0; i < ActivePokemon.MAX_NAME_LENGTH; i++) {
                     if (i < nickname.length()) {
@@ -225,6 +309,7 @@ class NewPokemonView extends View {
     }
 
     private void setState(State state) {
+        this.displayInfo = false;
         for (Button button : buttons) {
             button.setActive(false);
         }
@@ -302,6 +387,8 @@ class NewPokemonView extends View {
 
         this.nickname = StringUtils.empty();
         this.selectedButton = 0;
+
+        this.canvasPanel.withBackgroundColors(Type.getColors(this.newPokemon));
 
         setState(State.POKEDEX);
     }

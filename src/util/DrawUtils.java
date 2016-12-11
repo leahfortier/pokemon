@@ -216,11 +216,11 @@ public class DrawUtils {
 	}
 	
 	private static int centerX(int centerX, String s, FontMetrics fontMetrics) {
-		return centerX - fontMetrics.getLength(s)/2;
+		return centerX - fontMetrics.getTextLength(s)/2;
 	}
 	
 	private static int rightX(int rightX, String s, FontMetrics fontMetrics) {
-		return rightX - fontMetrics.getLength(s);
+		return rightX - fontMetrics.getTextLength(s);
 	}
 	
 	public static void drawCenteredHeightString(Graphics g, String s, int x, int centerY) {
