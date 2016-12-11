@@ -76,7 +76,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 
 	public boolean consumeIfDown(ControlKey controlKey, int key) {
 		if (this.isDown(controlKey, key)) {
-			this.consumeKey(controlKey, key);
+			this.consumeKeys(key);
 			return true;
 		}
 
@@ -104,9 +104,9 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		return false;
 	}
 	
-	private void consumeKey(ControlKey controlKey, int key) {
+	private void consumeKeys(int key) {
 		if (lock == key) {
-			controlKey.getKey().consume();
+			ControlKey.consumeAll();
 		}
 	}
 

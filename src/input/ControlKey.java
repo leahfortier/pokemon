@@ -44,4 +44,8 @@ public enum ControlKey {
     static void resetAll() {
         CONTROL_KEYS.forEach(controlKey -> controlKey.getKey().reset());
     }
+
+    static void consumeAll() {
+        CONTROL_KEYS.forEach(controlKey -> controlKey.getKey().consume());
+    }
 }
