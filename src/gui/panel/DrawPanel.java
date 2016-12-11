@@ -284,6 +284,11 @@ public class DrawPanel {
         DrawUtils.drawCenteredImage(g, image, x + width/2, y + height/2);
     }
 
+    public void imageLabel(Graphics g, int fontSize, BufferedImage image, String label) {
+        FontMetrics.setFont(g, fontSize);
+        DrawUtils.drawCenteredImageLabel(g, image, label, centerX(), centerY());
+    }
+
     public int centerX() {
         return x + width/2;
     }

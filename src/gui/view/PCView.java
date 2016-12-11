@@ -211,7 +211,7 @@ class PCView extends View {
 		if (depositWithdrawButton.checkConsumePress()) {
 			if (party) { // Deposit
 				if (depositClicked) {
-					pc.depositPokemon(selected);
+					pc.depositPokemonFromPlayer(selected);
 				}
 
 				depositClicked = !depositClicked;

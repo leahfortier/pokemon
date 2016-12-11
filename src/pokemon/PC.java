@@ -128,7 +128,6 @@ public class PC implements Serializable {
 		}
 	}
 
-	// TODO: FIX RENAME
 	// Removes the Pokemon from the trainer and adds it to the box
 	public void depositPokemonFromPlayer(ActivePokemon p) {
 		CharacterData player = Game.getPlayer();

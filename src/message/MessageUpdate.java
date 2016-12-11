@@ -54,7 +54,7 @@ public class MessageUpdate {
 		LEARN_MOVE(VisualState.LEARN_MOVE_QUESTION),
 		STAT_GAIN(VisualState.STAT_GAIN),
 		EXIT_BATTLE(battleView -> exitBattle(battleView, ViewMode.MAP_VIEW)),
-		CATCH_POKEMON(battleView -> exitBattle(battleView, ViewMode.EVOLUTION_VIEW)),
+		CATCH_POKEMON(battleView -> exitBattle(battleView, ViewMode.NEW_POKEMON_VIEW)),
 		FORCE_SWITCH(battleView -> {
             battleView.setVisualState(VisualState.POKEMON);
             battleView.setSwitchForced();

@@ -74,7 +74,7 @@ public class CharacterData extends Trainer implements Serializable {
 	private BaseEvolution evolution;
 
 	private ActivePokemon newPokemon;
-	private Integer pokemonBox;
+	private Integer newPokemonBox;
 
 	private List<String> logMessages;
 
@@ -183,8 +183,8 @@ public class CharacterData extends Trainer implements Serializable {
 		return this.newPokemon;
 	}
 
-	public Integer getPokemonBox() {
-		return this.pokemonBox;
+	public Integer getNewPokemonBox() {
+		return this.newPokemonBox;
 	}
 
 	// Called when a character steps once in any given direction
@@ -396,11 +396,11 @@ public class CharacterData extends Trainer implements Serializable {
 
 		if (team.size() < MAX_POKEMON) {
             team.add(p);
-			this.pokemonBox = null;
+			this.newPokemonBox = null;
         }
         else {
 			pc.depositPokemon(p);
-			this.pokemonBox = pc.getBoxNum() + 1;
+			this.newPokemonBox = pc.getBoxNum() + 1;
 		}
 	}
 
