@@ -179,7 +179,7 @@ class PokedexView extends View {
 		GameData data = Game.getData();
 
 		TileSet partyTiles = data.getPartyTiles();
-		TileSet pokedexTiles = data.getPokedexTiles();
+		TileSet pokedexTiles = data.getPokedexTilesSmall();
 
 		BasicPanels.drawCanvasPanel(g);
 

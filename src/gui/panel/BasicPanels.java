@@ -23,4 +23,8 @@ public class BasicPanels {
     public static void drawCanvasPanel(Graphics g) {
         fullCanvasPanel.drawBackground(g);
     }
+
+    public static int getMessagePanelY() {
+        return fullMessagePanel.y;
+    }
 }

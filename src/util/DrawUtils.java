@@ -100,6 +100,10 @@ public class DrawUtils {
 				center.y - image.getHeight(),
 				null);
 	}
+
+	public static void drawCenteredImage(Graphics g, BufferedImage image, Point center) {
+		drawCenteredImage(g, image, center.x, center.y);
+	}
 	
 	public static void drawCenteredImage(Graphics g, BufferedImage image, int x, int y) {
 		g.drawImage(

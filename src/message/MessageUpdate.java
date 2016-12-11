@@ -53,15 +53,8 @@ public class MessageUpdate {
 		PROMPT_SWITCH(VisualState.POKEMON),
 		LEARN_MOVE(VisualState.LEARN_MOVE_QUESTION),
 		STAT_GAIN(VisualState.STAT_GAIN),
-		EXIT_BATTLE(battleView -> {
-            Game.instance().setViewMode(ViewMode.MAP_VIEW);
-            battleView.clearUpdate();
-			Messages.clearMessages(MessageState.FIGHTY_FIGHT);
-			Messages.setMessageState(MessageState.MAPPITY_MAP);
-			Game.getPlayer().getEntity().resetCurrentInteractionEntity();
-
-			Game.getPlayer().checkEvolution();
-        }),
+		EXIT_BATTLE(battleView -> exitBattle(battleView, ViewMode.MAP_VIEW)),
+		CATCH_POKEMON(battleView -> exitBattle(battleView, ViewMode.EVOLUTION_VIEW)),
 		FORCE_SWITCH(battleView -> {
             battleView.setVisualState(VisualState.POKEMON);
             battleView.setSwitchForced();
@@ -76,7 +69,7 @@ public class MessageUpdate {
                 SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_DEFEATED);
             }
         });
-		
+
 		private final PerformUpdate performUpdate;
 		
 		Update() {
@@ -100,6 +93,16 @@ public class MessageUpdate {
 		
 		private interface PerformUpdate {
 			void performUpdate(BattleView battleView);
+		}
+
+		private static void exitBattle(BattleView battleView, ViewMode viewMode) {
+			Game.instance().setViewMode(viewMode);
+			battleView.clearUpdate();
+			Messages.clearMessages(MessageState.FIGHTY_FIGHT);
+			Messages.setMessageState(MessageState.MAPPITY_MAP);
+			Game.getPlayer().getEntity().resetCurrentInteractionEntity();
+
+			Game.getPlayer().checkEvolution();
 		}
 	}
 

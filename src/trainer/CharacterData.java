@@ -22,7 +22,6 @@ import pokemon.evolution.BaseEvolution;
 import trainer.pokedex.Pokedex;
 import util.JsonUtils;
 import util.Point;
-import util.PokeString;
 import util.RandomUtils;
 import util.StringUtils;
 
@@ -73,6 +72,9 @@ public class CharacterData extends Trainer implements Serializable {
 
 	private ActivePokemon evolvingPokemon;
 	private BaseEvolution evolution;
+
+	private ActivePokemon newPokemon;
+	private Integer pokemonBox;
 
 	private List<String> logMessages;
 
@@ -176,7 +178,15 @@ public class CharacterData extends Trainer implements Serializable {
 	public BaseEvolution getEvolution() {
 		return evolution;
 	}
-	
+
+	public ActivePokemon getNewPokemon() {
+		return this.newPokemon;
+	}
+
+	public Integer getPokemonBox() {
+		return this.pokemonBox;
+	}
+
 	// Called when a character steps once in any given direction
 	public void step() {
 
@@ -379,19 +389,23 @@ public class CharacterData extends Trainer implements Serializable {
 
 	@Override
 	public void addPokemon(ActivePokemon p) {
+		this.newPokemon = p;
+		Messages.add(new MessageUpdate().withViewChange(ViewMode.NEW_POKEMON_VIEW));
+
 		p.setCaught();
-		if (!p.isEgg() && !pokedex.isCaught(p.getPokemonInfo().namesies())) {
-			Messages.add(new MessageUpdate(p.getPokemonInfo().getName() + " was registered in the " + PokeString.POKEDEX + "!"));
-			pokedex.setCaught(p.getPokemonInfo());
-		}
-		
+
 		if (team.size() < MAX_POKEMON) {
-			team.add(p);
-		}
-		else {
-			Messages.add(new MessageUpdate(p.getActualName() + " was sent to Box " + (pc.getBoxNum() + 1) + " of your PC!"));
+            team.add(p);
+			this.pokemonBox = null;
+        }
+        else {
 			pc.depositPokemon(p);
+			this.pokemonBox = pc.getBoxNum() + 1;
 		}
+	}
+
+	public boolean fullParty() {
+		return this.team.size() == MAX_POKEMON;
 	}
 	
 	// Determines whether or not a Pokemon can be deposited
@@ -453,7 +467,7 @@ public class CharacterData extends Trainer implements Serializable {
 		gainEXP(catchPokemon, b);
 		addPokemon(catchPokemon);
 
-		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+		Messages.add(new MessageUpdate().withUpdate(Update.CATCH_POKEMON));
 		return true;
 	}
 	
