@@ -168,7 +168,7 @@ public class Button {
 		if (!active) {
 			return;
 		}
-		
+
 		hover = false;
 		press = false;
 
@@ -221,6 +221,9 @@ public class Button {
 
 	public void setActive(boolean set) {
 		active = set;
+		if (!active) {
+			setForceHover(false);
+		}
 	}
 	
 	public void greyOut(Graphics g, boolean totesBlacks) {
