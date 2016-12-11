@@ -2,6 +2,7 @@ package input;
 
 import util.Point;
 import util.RandomUtils;
+import util.StringUtils;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -76,7 +77,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 
 	public boolean consumeIfDown(ControlKey controlKey, int key) {
 		if (this.isDown(controlKey, key)) {
-			this.consumeKey(controlKey, key);
+			this.consumeKeys(key);
 			return true;
 		}
 
@@ -104,9 +105,9 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		return false;
 	}
 	
-	private void consumeKey(ControlKey controlKey, int key) {
+	private void consumeKeys(int key) {
 		if (lock == key) {
-			controlKey.getKey().consume();
+			ControlKey.consumeAll();
 		}
 	}
 
@@ -136,6 +137,17 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 
 	public String getCapturedText() {
 		return capturedText.toString();
+	}
+
+	public String getCapturedText(int maxLength) {
+		trimCapturedText(maxLength);
+		return this.getCapturedText();
+	}
+
+	private void trimCapturedText(int maxLength) {
+		if (capturedText.length() > maxLength) {
+			capturedText.delete(maxLength, capturedText.length());
+		}
 	}
 
 	public boolean isCapturingText() {
@@ -222,5 +234,15 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 
 	public boolean isMouseInput() {
 		return isMouseInput;
+	}
+
+	public String getInputCaptureString(int maxLength) {
+		StringBuilder display = new StringBuilder(this.getCapturedText(maxLength));
+		StringUtils.appendRepeat(display, "_", maxLength - display.length());
+		for (int i = 0; i < maxLength; i++) {
+			display.insert(2*i + 1, ' ');
+		}
+
+		return display.toString();
 	}
 }

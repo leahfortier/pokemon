@@ -27,6 +27,10 @@ public class Pokedex implements Serializable {
 		return pokedex.get(namesies).isStatus(PokedexStatus.NOT_SEEN);
 	}
 
+	public boolean isCaught(ActivePokemon pokemon) {
+		return isCaught(pokemon.getPokemonInfo().namesies());
+	}
+
 	public boolean isCaught(PokemonNamesies namesies) {
 		return pokedex.get(namesies).isStatus(PokedexStatus.CAUGHT);
 	}

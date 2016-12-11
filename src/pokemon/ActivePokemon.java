@@ -61,7 +61,8 @@ public class ActivePokemon implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static final int MAX_LEVEL = 100;
-	
+	public static final int MAX_NAME_LENGTH = 10; // TODO: Look this up
+
 	private static final String[][] characteristics =
 		{{"Loves to eat",            "Proud of its power",      "Sturdy body",            "Highly curious",        "Strong willed",     "Likes to run"},
 		 {"Takes plenty of siestas", "Likes to thrash about",   "Capable of taking hits", "Mischievous",           "Somewhat vain",     "Alert to sounds"},
@@ -802,6 +803,12 @@ public class ActivePokemon implements Serializable {
 	
 	public String getActualName() {
 		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		if (!StringUtils.isNullOrEmpty(nickname)) {
+			this.nickname = nickname;
+		}
 	}
 	
 	public String getName() {

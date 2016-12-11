@@ -64,12 +64,15 @@ public class StringUtils {
         return "a" + (vowelStart ? "n" : "") + " " + s;
     }
 
-    public static String repeat(String repeat, int numTimes) {
-        StringBuilder builder = new StringBuilder();
+    public static void appendRepeat(StringBuilder builder, String repeat, int numTimes) {
         while (numTimes --> 0) {
             builder.append(repeat);
         }
+    }
 
+    public static String repeat(String repeat, int numTimes) {
+        StringBuilder builder = new StringBuilder();
+        appendRepeat(builder, repeat, numTimes);
         return builder.toString();
     }
 

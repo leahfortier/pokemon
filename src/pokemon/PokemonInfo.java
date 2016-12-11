@@ -151,12 +151,12 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return givenEVs;
 	}
 
-	public int getMaleRatio() {
+	int getMaleRatio() {
 		return maleRatio;
 	}
 
-	public int getHeight() {
-		return height;
+	public String getHeightString() {
+		return String.format("%d'%02d\"", height/12, height%12);
 	}
 
 	public double getWeight() {

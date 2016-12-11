@@ -30,6 +30,10 @@ public class Messages {
         messageState = newMessageState;
     }
 
+    public static void clearAllMessages() {
+        messageMap.keySet().forEach(Messages::clearMessages);
+    }
+
     public static void clearMessages(MessageState messageState) {
         messageMap.get(messageState).clear();
     }

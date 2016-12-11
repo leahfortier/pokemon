@@ -195,7 +195,7 @@ class DevConsole {
 					pokemon.setShiny();
 				}
 
-				Game.getPlayer().addPokemon(null, pokemon);
+				Game.getPlayer().addPokemon(pokemon);
 				break;
 			case "item":
 				String itemName = in.next().replaceAll("_", " ");

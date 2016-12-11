@@ -21,7 +21,8 @@ public class GameData {
 	private TileSet itemTiles;
 	private TileSet trainerTiles;
 	private TileSet partyTiles;
-	private TileSet pokedexTiles;
+	private TileSet pokedexTilesSmall;
+	private TileSet pokedexTilesLarge;
 
 	public void loadData() {
 		loadTiles();
@@ -37,7 +38,8 @@ public class GameData {
 		itemTiles = new TileSet(Folder.ITEM_TILES);
 		trainerTiles = new TileSet(Folder.TRAINER_TILES);
 		partyTiles = new TileSet(Folder.PARTY_TILES);
-		pokedexTiles = new TileSet(Folder.POKEDEX_TILES, .5f);
+		pokedexTilesSmall = new TileSet(Folder.POKEDEX_TILES, .5f);
+		pokedexTilesLarge = new TileSet(Folder.POKEDEX_TILES);
 	}
 
 	private void loadMaps() {
@@ -115,7 +117,11 @@ public class GameData {
 		return partyTiles;
 	}
 
-	public TileSet getPokedexTiles() {
-		return pokedexTiles;
+	public TileSet getPokedexTilesSmall() {
+		return pokedexTilesSmall;
+	}
+
+	public TileSet getPokedexTilesLarge() {
+		return pokedexTilesLarge;
 	}
 }

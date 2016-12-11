@@ -2,7 +2,6 @@ package trainer;
 
 import main.Global;
 import pokemon.ActivePokemon;
-import battle.Battle;
 
 public class EnemyTrainer extends Trainer implements Opponent {
 	private static final long serialVersionUID = 1L;
@@ -10,8 +9,9 @@ public class EnemyTrainer extends Trainer implements Opponent {
 	public EnemyTrainer(String name, int cashMoney) {
 		super(name, cashMoney);
 	}
-	
-	public void addPokemon(Battle b, ActivePokemon p) {
+
+	@Override
+	public void addPokemon(ActivePokemon p) {
 		if (team.size() < MAX_POKEMON) {
 			team.add(p);
 		}

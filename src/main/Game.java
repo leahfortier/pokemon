@@ -7,6 +7,7 @@ import gui.view.map.MapView;
 import gui.view.View;
 import gui.view.ViewMode;
 import item.ItemNamesies;
+import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import trainer.CharacterData;
@@ -53,7 +54,7 @@ public class Game {
 	}
 	
 	private void setupCharacter() {
-		characterData.addPokemon(null, new ActivePokemon(PokemonNamesies.EEVEE, 1, false, true));
+		characterData.addPokemon(new ActivePokemon(PokemonNamesies.EEVEE, 1, false, true));
 		characterData.front().giveItem(ItemNamesies.ORAN_BERRY);
 	}
 	
@@ -100,6 +101,8 @@ public class Game {
 		characterData.setFileNum(index);
 		setupCharacter();
 		setViews();
+
+		Messages.clearAllMessages();
 	}
 
 	private void addView(ViewMode viewMode) {

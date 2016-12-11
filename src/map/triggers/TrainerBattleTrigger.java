@@ -26,7 +26,7 @@ class TrainerBattleTrigger extends Trigger {
 		this.trainer = new EnemyTrainer(trainerName, cash);
 
 		for (PokemonMatcher matcher : battleMatcher.getPokemon()) {
-			trainer.addPokemon(null, ActivePokemon.createActivePokemon(matcher, false));
+			trainer.addPokemon(ActivePokemon.createActivePokemon(matcher, false));
 		}
 
 		this.npcUpdateInteraction = new UpdateMatcher(battleAction.getEntityName(), battleMatcher.getUpdateInteraction());

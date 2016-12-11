@@ -15,7 +15,6 @@ import sound.SoundTitle;
 import trainer.CharacterData;
 import util.FontMetrics;
 import util.PokeString;
-import util.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -35,8 +34,7 @@ class StartView extends View {
 	
 	private int dialogueIndex;
 	private String message;
-	
-	private String name;
+
 	private boolean ditto;
 		
 	private enum State {
@@ -49,62 +47,54 @@ class StartView extends View {
 		CharacterData player = Game.getPlayer();
 		InputControl input = InputControl.instance();
 
-		switch (state) {
-			case DEFAULT:
-				if (message != null) {
-					if (input.consumeIfMouseDown()) {
-						message = null;
-					}
+		if (message != null) {
+			if (input.consumeIfMouseDown()) {
+				message = null;
+			}
 
-					if (input.consumeIfDown(ControlKey.SPACE)) {
-						message = null;
-					}
-				}
-				
-				if (message == null) {
-					if (dialogueIndex == dialogue.length - 1) {
-						Game.instance().setViewMode(ViewMode.MAP_VIEW);
-					}
-					else {
-						dialogueIndex++;
-						message = dialogue[dialogueIndex].getMessage();
-						switch (dialogue[dialogueIndex].getUpdateType()) {
-							case ENTER_NAME:
-								state = State.NAME;
-								break;
-							case SHOW_POKEMON:
-								ditto = true;
-								state = State.DEFAULT;
-								break;
-							case APPEND_TO_NAME:
-								message = player.getName() + message;
-								state = State.DEFAULT;
-								break;
-							default:
-								state = State.DEFAULT;
-								break;
-						}
-					}
-				}
-				break;
-			case NAME:
-				if (!input.isCapturingText()) {
-					input.startTextCapture();
-				}
+			if (input.consumeIfDown(ControlKey.SPACE)) {
+				message = null;
+			}
+		}
 
-				if (input.isCapturingText()) {
-					name = input.getCapturedText();
-					if (name.length() > CharacterData.MAX_NAME_LENGTH) {
-						name = name.substring(0, CharacterData.MAX_NAME_LENGTH);
-					}
+		if (message == null) {
+			if (dialogueIndex == dialogue.length - 1) {
+				Game.instance().setViewMode(ViewMode.MAP_VIEW);
+			} else {
+				dialogueIndex++;
+				message = dialogue[dialogueIndex].getMessage();
+				switch (dialogue[dialogueIndex].getUpdateType()) {
+					case ENTER_NAME:
+						state = State.NAME;
+						break;
+					case SHOW_POKEMON:
+						ditto = true;
+						state = State.DEFAULT;
+						break;
+					case APPEND_TO_NAME:
+						message = player.getName() + message;
+						state = State.DEFAULT;
+						break;
+					default:
+						state = State.DEFAULT;
+						break;
 				}
+			}
+		}
 
-				if (input.consumeIfDown(ControlKey.ENTER)) {
-					input.stopTextCapture();
-					player.setName(name.isEmpty() ? CharacterData.DEFAULT_NAME : name);
-					state = State.DEFAULT;
-				}
-				break;
+		if (state == State.NAME) {
+			if (!input.isCapturingText()) {
+				input.startTextCapture();
+			}
+
+			if (input.consumeIfDown(ControlKey.ENTER)) {
+				input.stopTextCapture();
+
+				String name = input.getCapturedText(CharacterData.MAX_NAME_LENGTH);
+				player.setName(name.isEmpty() ? CharacterData.DEFAULT_NAME : name);
+
+				state = State.DEFAULT;
+			}
 		}
 		
 	}
@@ -130,20 +120,7 @@ class StartView extends View {
 				break;
 			case NAME:
 				g.drawImage(trainerTiles.getTile(0x4), 200, 230, null);
-
-				StringBuilder display = new StringBuilder();
-				for (int i = 0; i < CharacterData.MAX_NAME_LENGTH; i++) {
-					if (i < name.length()) {
-						display.append(name.charAt(i));
-					}
-					else {
-						display.append("_");
-					}
-
-					display.append(" ");
-				}
-				
-				g.drawString(display.toString(), 300, 260);
+				g.drawString(InputControl.instance().getInputCaptureString(CharacterData.MAX_NAME_LENGTH), 300, 260);
 				break;
 		}
 		
@@ -163,8 +140,7 @@ class StartView extends View {
 		
 		dialogueIndex = 0;
 		message = dialogue[dialogueIndex].getMessage();
-		
-		name = StringUtils.empty();
+
 		ditto = false;
 		
 		SoundPlayer.soundPlayer.playMusic(SoundTitle.NEW_GAME);

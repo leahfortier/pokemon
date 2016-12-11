@@ -1,11 +1,8 @@
 package gui.view.battle.handler;
 
-import battle.attack.Move;
 import gui.button.Button;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
-import message.MessageUpdate;
-import message.Messages;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -64,15 +61,6 @@ public class LearnMoveQuestionState implements VisualStateHandler {
         view.setSelectedButton(buttons);
 
         if (noButton().checkConsumePress()) {
-
-            // This is all done really silly, so we need to do this
-            MessageUpdate message = Messages.getNextMessage();
-            for (int i = 0; i < Move.MAX_MOVES + 1; i++) {
-                Messages.getNextMessage();
-            }
-
-            Messages.add(message);
-
             view.setVisualState(VisualState.MESSAGE);
             view.cycleMessage(false);
         }

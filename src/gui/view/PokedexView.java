@@ -179,7 +179,7 @@ class PokedexView extends View {
 		GameData data = Game.getData();
 
 		TileSet partyTiles = data.getPartyTiles();
-		TileSet pokedexTiles = data.getPokedexTiles();
+		TileSet pokedexTiles = data.getPokedexTilesSmall();
 
 		BasicPanels.drawCanvasPanel(g);
 
@@ -272,7 +272,7 @@ class PokedexView extends View {
 			}
 			
 			g.drawString((!caught ? "???" : selected.getClassification()) + " " + PokeString.POKEMON, 427, 179);
-			g.drawString("Height: " + (!caught ? "???'??\"" : String.format("%d'%02d\"", selected.getHeight()/12, selected.getHeight()%12)), 427, 198);
+			g.drawString("Height: " + (!caught ? "???'??\"" : selected.getHeightString()), 427, 198);
 			g.drawString("Weight: " + (!caught ? "???.?" : selected.getWeight()) + " lbs", 427, 217);
 			
 			if (caught) {

@@ -102,7 +102,26 @@
         "x": 3,
         "y": 1
       },
-      "triggerName": "PlayersHouseUp_TriggerEntity_PC_01"
+      "triggerName": "PlayersHouseUp_MiscEntity_PC_01"
+    },
+    {
+      "name": "PokePalooza",
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "GIVE_POKEMON",
+            "triggerContents": "{
+				namesies: EXEGGUTOR,
+				level: 4
+			}"
+          }
+        }
+      ],
+      "location": {
+        "x": 3,
+        "y": 6
+      },
+      "triggerName": "PlayersHouseUp_MiscEntity_PokePalooza_01"
     }
   ],
   "events": [],

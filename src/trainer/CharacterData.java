@@ -22,7 +22,6 @@ import pokemon.evolution.BaseEvolution;
 import trainer.pokedex.Pokedex;
 import util.JsonUtils;
 import util.Point;
-import util.PokeString;
 import util.RandomUtils;
 import util.StringUtils;
 
@@ -73,6 +72,10 @@ public class CharacterData extends Trainer implements Serializable {
 
 	private ActivePokemon evolvingPokemon;
 	private BaseEvolution evolution;
+
+	private ActivePokemon newPokemon;
+	private Integer newPokemonBox;
+	private boolean isFirstNewPokemon;
 
 	private List<String> logMessages;
 
@@ -176,7 +179,19 @@ public class CharacterData extends Trainer implements Serializable {
 	public BaseEvolution getEvolution() {
 		return evolution;
 	}
-	
+
+	public ActivePokemon getNewPokemon() {
+		return this.newPokemon;
+	}
+
+	public Integer getNewPokemonBox() {
+		return this.newPokemonBox;
+	}
+
+	public boolean isFirstNewPokemon() {
+		return this.isFirstNewPokemon;
+	}
+
 	// Called when a character steps once in any given direction
 	public void step() {
 
@@ -377,29 +392,32 @@ public class CharacterData extends Trainer implements Serializable {
 		return pokedex;
 	}
 
-	// TODO: Remove battle parameter
-	public void addPokemon(Battle b, ActivePokemon p) {
+	@Override
+	public void addPokemon(ActivePokemon p) {
+		this.newPokemon = p;
+		Messages.add(new MessageUpdate().withViewChange(ViewMode.NEW_POKEMON_VIEW));
+
 		p.setCaught();
-		if (!pokedex.isCaught(p.getPokemonInfo().namesies())) {
-			if (b != null) {
-				Messages.add(new MessageUpdate(p.getPokemonInfo().getName() + " was registered in the " + PokeString.POKEDEX + "!"));
-			}
 
-			if (!p.isEgg()) {
-				pokedex.setCaught(p.getPokemonInfo());
-			}
-		}
-		
 		if (team.size() < MAX_POKEMON) {
-			team.add(p);
-		}
-		else {
-			if (b != null) {
-				Messages.add(new MessageUpdate(p.getActualName() + " was sent to Box " + (pc.getBoxNum() + 1) + " of your PC!"));
-			}
-
+            team.add(p);
+			this.newPokemonBox = null;
+        }
+        else {
 			pc.depositPokemon(p);
+			this.newPokemonBox = pc.getBoxNum() + 1;
 		}
+
+		if (!pokedex.isCaught(newPokemon)) {
+			pokedex.setCaught(newPokemon.getPokemonInfo());
+			this.isFirstNewPokemon = true;
+		} else {
+			this.isFirstNewPokemon = false;
+		}
+	}
+
+	public boolean fullParty() {
+		return this.team.size() == MAX_POKEMON;
 	}
 	
 	// Determines whether or not a Pokemon can be deposited
@@ -459,9 +477,9 @@ public class CharacterData extends Trainer implements Serializable {
 		Messages.add(new MessageUpdate().withCatchPokemon(-1));
 		Messages.add(new MessageUpdate("Gotcha! " + catchPokemon.getName() + " was caught!"));
 		gainEXP(catchPokemon, b);
-		addPokemon(b, catchPokemon);
+		addPokemon(catchPokemon);
 
-		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+		Messages.add(new MessageUpdate().withUpdate(Update.CATCH_POKEMON));
 		return true;
 	}
 	
