@@ -50,8 +50,6 @@ class NewPokemonView extends View {
     private int selectedButton;
     private boolean displayInfo;
 
-    private String nickname;
-
     private enum State {
         POKEDEX,
         NICKNAME_QUESTION,
@@ -123,15 +121,12 @@ class NewPokemonView extends View {
                     input.startTextCapture();
                 }
 
-                // TODO: Make a method for this
-                nickname = input.getCapturedText();
-                if (nickname.length() > ActivePokemon.MAX_NAME_LENGTH) {
-                    nickname = nickname.substring(0, ActivePokemon.MAX_NAME_LENGTH);
-                }
-
                 if (input.consumeIfDown(ControlKey.ENTER)) {
                     input.stopTextCapture();
+
+                    String nickname = input.getCapturedText(ActivePokemon.MAX_NAME_LENGTH);
                     newPokemon.setNickname(nickname);
+
                     setState(State.LOCATION);
                 }
                 break;
@@ -242,9 +237,8 @@ class NewPokemonView extends View {
             descriptionPanel.drawMessage(g, 22, pokemonInfo.getFlavorText());
         }
         else if (state != State.NICKNAME && state != State.END) {
-            int imageCenterX = Global.GAME_SIZE.width/2;
-            int imageCenterY = BasicPanels.getMessagePanelY()/2;
-            DrawUtils.drawCenteredImage(g, pokemonImage, imageCenterX, imageCenterY);
+
+            DrawUtils.drawCenteredImage(g, pokemonImage, BasicPanels.canvasMessageCenter);
         }
 
         switch (state) {
@@ -253,21 +247,10 @@ class NewPokemonView extends View {
                 drawButton(g, rightButton(), new Color(220, 20, 20), "No");
                 break;
             case NICKNAME:
-                g.drawImage(Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageIndex()), 200, 230, null);
+                BufferedImage spriteImage = Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageIndex());
+                String nickname = InputControl.instance().getInputCaptureString(ActivePokemon.MAX_NAME_LENGTH);
 
-                StringBuilder display = new StringBuilder();
-                for (int i = 0; i < ActivePokemon.MAX_NAME_LENGTH; i++) {
-                    if (i < nickname.length()) {
-                        display.append(nickname.charAt(i));
-                    }
-                    else {
-                        display.append("_");
-                    }
-
-                    display.append(" ");
-                }
-
-                g.drawString(display.toString(), 300, 260);
+                DrawUtils.drawCenteredImageLabel(g, spriteImage, nickname, BasicPanels.canvasMessageCenter);
                 break;
             case LOCATION:
                 drawButton(g, leftButton(), new Color(35, 120, 220), "Party");
@@ -385,7 +368,6 @@ class NewPokemonView extends View {
         this.newPokemon = player.getNewPokemon();
         this.boxNum = player.getNewPokemonBox();
 
-        this.nickname = StringUtils.empty();
         this.selectedButton = 0;
 
         this.canvasPanel.withBackgroundColors(Type.getColors(this.newPokemon));

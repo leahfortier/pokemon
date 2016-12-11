@@ -15,7 +15,6 @@ import sound.SoundTitle;
 import trainer.CharacterData;
 import util.FontMetrics;
 import util.PokeString;
-import util.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -35,8 +34,7 @@ class StartView extends View {
 	
 	private int dialogueIndex;
 	private String message;
-	
-	private String name;
+
 	private boolean ditto;
 		
 	private enum State {
@@ -89,14 +87,12 @@ class StartView extends View {
 				input.startTextCapture();
 			}
 
-			name = input.getCapturedText();
-			if (name.length() > CharacterData.MAX_NAME_LENGTH) {
-				name = name.substring(0, CharacterData.MAX_NAME_LENGTH);
-			}
-
 			if (input.consumeIfDown(ControlKey.ENTER)) {
 				input.stopTextCapture();
+
+				String name = input.getCapturedText(CharacterData.MAX_NAME_LENGTH);
 				player.setName(name.isEmpty() ? CharacterData.DEFAULT_NAME : name);
+
 				state = State.DEFAULT;
 			}
 		}
@@ -124,20 +120,7 @@ class StartView extends View {
 				break;
 			case NAME:
 				g.drawImage(trainerTiles.getTile(0x4), 200, 230, null);
-
-				StringBuilder display = new StringBuilder();
-				for (int i = 0; i < CharacterData.MAX_NAME_LENGTH; i++) {
-					if (i < name.length()) {
-						display.append(name.charAt(i));
-					}
-					else {
-						display.append("_");
-					}
-
-					display.append(" ");
-				}
-				
-				g.drawString(display.toString(), 300, 260);
+				g.drawString(InputControl.instance().getInputCaptureString(CharacterData.MAX_NAME_LENGTH), 300, 260);
 				break;
 		}
 		
@@ -157,8 +140,7 @@ class StartView extends View {
 		
 		dialogueIndex = 0;
 		message = dialogue[dialogueIndex].getMessage();
-		
-		name = StringUtils.empty();
+
 		ditto = false;
 		
 		SoundPlayer.soundPlayer.playMusic(SoundTitle.NEW_GAME);
