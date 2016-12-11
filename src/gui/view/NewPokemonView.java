@@ -237,7 +237,6 @@ class NewPokemonView extends View {
             descriptionPanel.drawMessage(g, 22, pokemonInfo.getFlavorText());
         }
         else if (state != State.NICKNAME && state != State.END) {
-
             DrawUtils.drawCenteredImage(g, pokemonImage, BasicPanels.canvasMessageCenter);
         }
 
@@ -311,19 +310,15 @@ class NewPokemonView extends View {
                 }
                 break;
             case NICKNAME_QUESTION:
-                if (newPokemon.isEgg()) {
-                    setState(State.LOCATION);
-                } else {
-                    for (int i = 0; i < buttons.length; i++) {
-                        Button button = buttons[i];
-                        button.setActive(button == leftButton() || button == rightButton());
-                        if (button == rightButton()) {
-                            this.selectedButton = i;
-                        }
+                for (int i = 0; i < buttons.length; i++) {
+                    Button button = buttons[i];
+                    button.setActive(button == leftButton() || button == rightButton());
+                    if (button == rightButton()) {
+                        this.selectedButton = i;
                     }
-
-                    message = "Would you like to give " + pokemonName + " a nickname?";
                 }
+
+                message = "Would you like to give " + pokemonName + " a nickname?";
                 break;
             case NICKNAME:
                 message = "What would you like to name " + pokemonName + "?";
@@ -372,6 +367,10 @@ class NewPokemonView extends View {
 
         this.canvasPanel.withBackgroundColors(Type.getColors(this.newPokemon));
 
-        setState(State.POKEDEX);
+        if (newPokemon.isEgg()) {
+            setState(State.LOCATION);
+        } else {
+            setState(State.POKEDEX);
+        }
     }
 }
