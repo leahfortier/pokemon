@@ -49,62 +49,56 @@ class StartView extends View {
 		CharacterData player = Game.getPlayer();
 		InputControl input = InputControl.instance();
 
-		switch (state) {
-			case DEFAULT:
-				if (message != null) {
-					if (input.consumeIfMouseDown()) {
-						message = null;
-					}
+		if (message != null) {
+			if (input.consumeIfMouseDown()) {
+				message = null;
+			}
 
-					if (input.consumeIfDown(ControlKey.SPACE)) {
-						message = null;
-					}
-				}
-				
-				if (message == null) {
-					if (dialogueIndex == dialogue.length - 1) {
-						Game.instance().setViewMode(ViewMode.MAP_VIEW);
-					}
-					else {
-						dialogueIndex++;
-						message = dialogue[dialogueIndex].getMessage();
-						switch (dialogue[dialogueIndex].getUpdateType()) {
-							case ENTER_NAME:
-								state = State.NAME;
-								break;
-							case SHOW_POKEMON:
-								ditto = true;
-								state = State.DEFAULT;
-								break;
-							case APPEND_TO_NAME:
-								message = player.getName() + message;
-								state = State.DEFAULT;
-								break;
-							default:
-								state = State.DEFAULT;
-								break;
-						}
-					}
-				}
-				break;
-			case NAME:
-				if (!input.isCapturingText()) {
-					input.startTextCapture();
-				}
+			if (input.consumeIfDown(ControlKey.SPACE)) {
+				message = null;
+			}
+		}
 
-				if (input.isCapturingText()) {
-					name = input.getCapturedText();
-					if (name.length() > CharacterData.MAX_NAME_LENGTH) {
-						name = name.substring(0, CharacterData.MAX_NAME_LENGTH);
-					}
+		if (message == null) {
+			if (dialogueIndex == dialogue.length - 1) {
+				Game.instance().setViewMode(ViewMode.MAP_VIEW);
+			} else {
+				dialogueIndex++;
+				message = dialogue[dialogueIndex].getMessage();
+				switch (dialogue[dialogueIndex].getUpdateType()) {
+					case ENTER_NAME:
+						state = State.NAME;
+						break;
+					case SHOW_POKEMON:
+						ditto = true;
+						state = State.DEFAULT;
+						break;
+					case APPEND_TO_NAME:
+						message = player.getName() + message;
+						state = State.DEFAULT;
+						break;
+					default:
+						state = State.DEFAULT;
+						break;
 				}
+			}
+		}
 
-				if (input.consumeIfDown(ControlKey.ENTER)) {
-					input.stopTextCapture();
-					player.setName(name.isEmpty() ? CharacterData.DEFAULT_NAME : name);
-					state = State.DEFAULT;
-				}
-				break;
+		if (state == State.NAME) {
+			if (!input.isCapturingText()) {
+				input.startTextCapture();
+			}
+
+			name = input.getCapturedText();
+			if (name.length() > CharacterData.MAX_NAME_LENGTH) {
+				name = name.substring(0, CharacterData.MAX_NAME_LENGTH);
+			}
+
+			if (input.consumeIfDown(ControlKey.ENTER)) {
+				input.stopTextCapture();
+				player.setName(name.isEmpty() ? CharacterData.DEFAULT_NAME : name);
+				state = State.DEFAULT;
+			}
 		}
 		
 	}
