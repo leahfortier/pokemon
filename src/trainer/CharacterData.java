@@ -75,6 +75,7 @@ public class CharacterData extends Trainer implements Serializable {
 
 	private ActivePokemon newPokemon;
 	private Integer newPokemonBox;
+	private boolean isFirstNewPokemon;
 
 	private List<String> logMessages;
 
@@ -185,6 +186,10 @@ public class CharacterData extends Trainer implements Serializable {
 
 	public Integer getNewPokemonBox() {
 		return this.newPokemonBox;
+	}
+
+	public boolean isFirstNewPokemon() {
+		return this.isFirstNewPokemon;
 	}
 
 	// Called when a character steps once in any given direction
@@ -401,6 +406,13 @@ public class CharacterData extends Trainer implements Serializable {
         else {
 			pc.depositPokemon(p);
 			this.newPokemonBox = pc.getBoxNum() + 1;
+		}
+
+		if (!pokedex.isCaught(newPokemon)) {
+			pokedex.setCaught(newPokemon.getPokemonInfo());
+			this.isFirstNewPokemon = true;
+		} else {
+			this.isFirstNewPokemon = false;
 		}
 	}
 

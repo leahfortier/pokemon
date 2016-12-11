@@ -302,11 +302,10 @@ class NewPokemonView extends View {
         this.state = state;
         switch (state) {
             case POKEDEX:
-                if (player.getPokedex().isCaught(newPokemon)) {
-                    setState(State.NICKNAME_QUESTION);
-                } else {
+                if (player.isFirstNewPokemon()) {
                     message = pokemonName + " was registered in the " + PokeString.POKEDEX + "!";
-                    Game.getPlayer().getPokedex().setCaught(newPokemon.getPokemonInfo());
+                } else {
+                    setState(State.NICKNAME_QUESTION);
                 }
                 break;
             case NICKNAME_QUESTION:
@@ -324,9 +323,7 @@ class NewPokemonView extends View {
                 message = "What would you like to name " + pokemonName + "?";
                 break;
             case LOCATION:
-                if (!player.fullParty()) {
-                    setState(State.END);
-                } else {
+                if (player.fullParty()) {
                     for (int i = 0; i < buttons.length; i++) {
                         Button button = buttons[i];
                         button.setActive(button == leftButton() || button == rightButton());
@@ -336,6 +333,8 @@ class NewPokemonView extends View {
                     }
 
                     message = "Where would you like to send " + pokemonName + "?";
+                } else {
+                    setState(State.END);
                 }
                 break;
             case PARTY_SELECTION:
