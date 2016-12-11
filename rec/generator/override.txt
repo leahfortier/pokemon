@@ -141,6 +141,8 @@ Override:
 			}
 		}
 		
+		hit--;
+		
 		// Print hits and gtfo
 		Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
 		###

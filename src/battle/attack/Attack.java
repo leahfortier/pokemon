@@ -1630,14 +1630,16 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+
+				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				super.applyDamage(me, o, b);
 			}
+			
+			hit--;
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
@@ -1714,6 +1716,8 @@ public abstract class Attack implements Serializable {
 					break;
 				}
 			}
+			
+			hit--;
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
@@ -1803,6 +1807,8 @@ public abstract class Attack implements Serializable {
 					break;
 				}
 			}
+			
+			hit--;
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
@@ -2617,6 +2623,8 @@ public abstract class Attack implements Serializable {
 				}
 			}
 			
+			hit--;
+			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
 		}
@@ -2723,6 +2731,8 @@ public abstract class Attack implements Serializable {
 					break;
 				}
 			}
+			
+			hit--;
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
@@ -2941,6 +2951,8 @@ public abstract class Attack implements Serializable {
 					break;
 				}
 			}
+			
+			hit--;
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
@@ -4522,6 +4534,8 @@ public abstract class Attack implements Serializable {
 				}
 			}
 			
+			hit--;
+			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
 		}
@@ -4925,6 +4939,8 @@ public abstract class Attack implements Serializable {
 				}
 			}
 			
+			hit--;
+			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
 		}
@@ -5136,6 +5152,8 @@ public abstract class Attack implements Serializable {
 				}
 			}
 			
+			hit--;
+			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
 		}
@@ -5221,6 +5239,8 @@ public abstract class Attack implements Serializable {
 					break;
 				}
 			}
+			
+			hit--;
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
@@ -5656,6 +5676,8 @@ public abstract class Attack implements Serializable {
 				}
 			}
 			
+			hit--;
+			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
 		}
@@ -5692,6 +5714,8 @@ public abstract class Attack implements Serializable {
 					break;
 				}
 			}
+			
+			hit--;
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
@@ -5773,6 +5797,8 @@ public abstract class Attack implements Serializable {
 				}
 			}
 			
+			hit--;
+			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
 		}
@@ -5808,6 +5834,8 @@ public abstract class Attack implements Serializable {
 					break;
 				}
 			}
+			
+			hit--;
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
@@ -5936,6 +5964,8 @@ public abstract class Attack implements Serializable {
 					break;
 				}
 			}
+			
+			hit--;
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
@@ -7409,6 +7439,8 @@ public abstract class Attack implements Serializable {
 				}
 			}
 			
+			hit--;
+			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
 		}
@@ -7638,6 +7670,8 @@ public abstract class Attack implements Serializable {
 					break;
 				}
 			}
+			
+			hit--;
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
@@ -8004,6 +8038,8 @@ public abstract class Attack implements Serializable {
 					break;
 				}
 			}
+			
+			hit--;
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
@@ -8409,6 +8445,8 @@ public abstract class Attack implements Serializable {
 				}
 			}
 			
+			hit--;
+			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
 		}
@@ -8481,6 +8519,8 @@ public abstract class Attack implements Serializable {
 					break;
 				}
 			}
+			
+			hit--;
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
@@ -10314,6 +10354,8 @@ public abstract class Attack implements Serializable {
 					break;
 				}
 			}
+			
+			hit--;
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
