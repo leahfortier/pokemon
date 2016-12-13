@@ -120,9 +120,9 @@
     },
     {
       "name": "Rival",
-      "path": "llldddrrrrrruuulll",
+      "path": "w",
       "spriteIndex": 14,
-      "direction": "LEFT",
+      "direction": "UP",
       "interactions": [
         {
           "name": "battle",
@@ -146,20 +146,31 @@
                 ],
                 "update": "won"
               }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "..."
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "MOVE_NPC",
+                "triggerContents": "{
+					npcEntityName: RSATown_NPC_Rival_01,
+					endEntranceName: PokeCenter
+				}"
+              }
+            },
+            {
+              "global": "lalala"
             }
           ]
         },
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
-            {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "..."
-              }
-            }
-          ]
+          "npcActions": []
         }
       ],
       "location": {
