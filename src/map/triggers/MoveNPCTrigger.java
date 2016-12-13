@@ -59,10 +59,10 @@ class MoveNPCTrigger extends Trigger {
             PathState currentState = queue.poll();
             if (end.equals(currentState.location)) {
                 if (matcher.endLocationIsPlayer()) {
+                    // Remove the last character so they're not on top of the player
                     return currentState.path.substring(0, currentState.path.length() - 1);
                 } else {
-                    // TODO: Add map exit path direction
-                    return currentState.path + "u";
+                    return currentState.path + map.getExitDirection(matcher.getEndEntranceName()).getCharacter();
                 }
             }
 

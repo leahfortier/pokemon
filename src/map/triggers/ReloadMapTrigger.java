@@ -18,7 +18,9 @@ class ReloadMapTrigger extends Trigger {
     @Override
     protected void executeTrigger() {
         CharacterData player = Game.getPlayer();
-        MapData map = Game.getData().getMap(player.getMapName());
-        map.populateEntities();
+        MapData currentMap = Game.getData().getMap(player.getMapName());
+
+        // Repopulate the entities of the current map
+        currentMap.populateEntities();
     }
 }

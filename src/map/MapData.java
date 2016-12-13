@@ -40,7 +40,7 @@ public class MapData {
 
 	private final List<Entity> entities;
 	private final MultiMap<Integer, String> triggers;
-	private final Map<String, Integer> mapEntrances;
+	private final Map<String, MapTransitionMatcher> mapEntrances;
 
 	public MapData(File file) {
 		name = file.getName();
@@ -71,8 +71,7 @@ public class MapData {
 		for (MapTransitionMatcher matcher : mapDataMatcher.getMapTransitions()) {
             matcher.setMapName(this.name);
 
-			Point entrance = matcher.getLocation();
-			mapEntrances.put(matcher.getExitName(), getMapIndex(entrance));
+			mapEntrances.put(matcher.getExitName(), matcher);
 
             Point exit = matcher.getExitLocation();
 			if (exit != null) {
@@ -113,8 +112,12 @@ public class MapData {
 		return point.getIndex(getDimension().width);
 	}
 
+	public PathDirection getExitDirection(String entranceName) {
+		return this.mapEntrances.get(entranceName).getDirection();
+	}
+
 	public Point getEntranceLocation(String entranceName) {
-		return Point.getPointAtIndex(this.mapEntrances.get(entranceName), getDimension().width);
+		return this.mapEntrances.get(entranceName).getLocation();
 	}
 
 	public Dimension getDimension() {
@@ -187,8 +190,7 @@ public class MapData {
 		CharacterData player = Game.getPlayer();
 		String entranceName = player.getMapEntranceName();
         if (mapEntrances.containsKey(entranceName)) {
-			int entranceIndex = mapEntrances.get(entranceName);
-			Point entranceLocation = Point.getPointAtIndex(entranceIndex, dimension.width);
+			Point entranceLocation = getEntranceLocation(entranceName);
 			player.setLocation(entranceLocation);
 
 			return true;
