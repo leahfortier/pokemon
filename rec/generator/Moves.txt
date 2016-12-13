@@ -146,7 +146,7 @@ Struggle:
 	Cat: Physical
 	Recoil: 
 	Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-	user.reduceHealth(b, user.getMaxHP()/4);
+	user.reduceHealth(b, user.getMaxHP()/4, false);
 	###
 	MoveType: Encoreless, Mimicless, Assistless, Metronomeless
 	Int: RecoilMove

@@ -103,5 +103,3 @@ Info guy dialogue
 Gary come up to you
 PC box controls (weird movement and withdraw button preselected)
 generalize catch animation again
-sturdy shouldn't work with self destruct
-make sure hp bar doesn't display negative number briefly inside battle view

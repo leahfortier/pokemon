@@ -2606,7 +2606,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
 			if (murderer.getAttributes().isAttacking()) {
 				Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
-				murderer.reduceHealthFraction(b, 1);
+				murderer.killKillKillMurderMurderMurder(b);
 			}
 		}
 
@@ -2638,7 +2638,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			Messages.add(new MessageUpdate(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!"));
 			if (super.numTurns == 1) {
-				victim.reduceHealthFraction(b, 1);
+				victim.killKillKillMurderMurderMurder(b);
 			}
 		}
 	}

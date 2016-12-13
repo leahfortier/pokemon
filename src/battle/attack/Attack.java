@@ -354,7 +354,7 @@ public abstract class Attack implements Serializable {
 	public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 		// Kill yourself!!
 		if (isMoveType(MoveType.USER_FAINTS)) {
-			user.reduceHealthFraction(b, 1);
+			user.killKillKillMurderMurderMurder(b);
 		}
 		
 		// Don't apply effects to a fainted Pokemon
@@ -555,13 +555,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
-			{
+			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
 			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/4.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/4.0), false);
 		}
 	}
 
@@ -580,7 +579,7 @@ public abstract class Attack implements Serializable {
 
 		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
 			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, user.getMaxHP()/4);
+			user.reduceHealth(b, user.getMaxHP()/4, false);
 		}
 	}
 
@@ -646,13 +645,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
-			{
+			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
 			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
 		}
 	}
 
@@ -998,13 +996,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
-			{
+			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
 			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
 		}
 	}
 
@@ -1630,13 +1627,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
+				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				super.applyDamage(me, o, b);
+				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
-
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
-				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -4201,13 +4198,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
-			{
+			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
 			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/4.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/4.0), false);
 		}
 	}
 
@@ -4874,13 +4870,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
-			{
+			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
 			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
 		}
 	}
 
@@ -5752,13 +5747,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
-			{
+			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
 			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
 		}
 	}
 
@@ -7771,13 +7765,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
-			{
+			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
 			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/4.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/4.0), false);
 		}
 	}
 
@@ -7892,13 +7885,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
-			{
+			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
 			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/2.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/2.0), false);
 		}
 	}
 
@@ -8557,13 +8549,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
-			{
+			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
 			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/4.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/4.0), false);
 		}
 	}
 
@@ -9910,13 +9901,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD))
-			{
+			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}
 			
 			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0));
+			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
 		}
 	}
 

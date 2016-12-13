@@ -952,38 +952,51 @@ public class ActivePokemon implements Serializable {
 		attributes.removeEffect(EffectNamesies.NIGHTMARE); // TODO: There should be a way for effects to be tied to status conditions so that they don't have to be hardcoded here
 		attributes.removeEffect(EffectNamesies.BAD_POISON);
 	}
+
+	// Don't think you'll make it out alive
+	public void killKillKillMurderMurderMurder(Battle b) {
+		reduceHealth(b, this.hp, false);
+	}
+
+	public int reduceHealth(Battle b, int amount) {
+		return this.reduceHealth(b, amount, true);
+	}
 	
 	// Reduces hp by amount, returns the actual amount of hp that was reduced
-	public int reduceHealth(Battle b, int amount) {
+	public int reduceHealth(Battle b, int amount, boolean checkEffects) {
 
 		// Not actually reducing health...
 		if (amount == 0) {
 			return 0;
 		}
-		
-		// Substitute absorbs the damage instead of the Pokemon
-		IntegerHolder e = (IntegerHolder)getEffect(EffectNamesies.SUBSTITUTE);
-		if (e != null) {
-			e.decrease(amount);
-			if (e.getAmount() <= 0) {
-				Messages.add(new MessageUpdate("The substitute broke!"));
-				attributes.removeEffect(EffectNamesies.SUBSTITUTE);
+
+		if (checkEffects) {
+			// Substitute absorbs the damage instead of the Pokemon
+			IntegerHolder e = (IntegerHolder)getEffect(EffectNamesies.SUBSTITUTE);
+			if (e != null) {
+				e.decrease(amount);
+				if (e.getAmount() <= 0) {
+					Messages.add(new MessageUpdate("The substitute broke!"));
+					attributes.removeEffect(EffectNamesies.SUBSTITUTE);
+				}
+				else {
+					Messages.add(new MessageUpdate("The substitute absorbed the hit!"));
+				}
+
+				return 0;
 			}
-			else {
-				Messages.add(new MessageUpdate("The substitute absorbed the hit!"));
-			}
-			
-			return 0;
 		}
 		
 		boolean fullHealth = fullHealth();
 		
-		// Reduce HP, record damage, and check if fainted
-		int prev = hp, taken = prev - (hp = Math.max(0, hp - amount));
+		// Reduce HP and record damage
+		int prev = hp;
+		setHP(hp - amount);
+		int taken = prev - hp;
 		attributes.takeDamage(taken);
 		
 		// Enduring the hit
-		if (hp == 0) {
+		if (hp == 0 && checkEffects) {
 			BracingEffect brace = BracingEffect.getBracingEffect(b, this, fullHealth);
 			if (brace != null) {
 				taken -= heal(1);
