@@ -7,7 +7,6 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
-import map.WalkType;
 import map.entity.Entity;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
@@ -32,9 +31,10 @@ public class PlayerEntity extends MovableEntity {
 		super(location, null, null, 0);
 
 		justMoved = true;
-		stalled = false;
 		justCreated = true;
-	}
+
+        this.unstall();
+    }
 
 	@Override
 	public Point getLocation() {
@@ -76,7 +76,7 @@ public class PlayerEntity extends MovableEntity {
 
 		boolean spacePressed = false;
 
-		if (!stalled) {
+		if (!this.isStalled()) {
 			checkNPCs(currentMap);
 		}
 
@@ -92,7 +92,7 @@ public class PlayerEntity extends MovableEntity {
 				entityInteraction(this.getDirection(), currentMap);
 			}
 			
-			if (stalled) {
+			if (this.isStalled()) {
 				for (Direction direction : Direction.values()) {
 					if (entityInteraction(direction, currentMap)) {
 						this.setDirection(direction);
@@ -120,7 +120,7 @@ public class PlayerEntity extends MovableEntity {
 				if (newEntity instanceof NPCEntity) {
 					NPCEntity npc = (NPCEntity) newEntity;
 					if (npc.canWalkToPlayer(this.getLocation())) {
-						stalled = true;
+						this.stall();
 						npc.walkTowards(dist - 1, direction.getOpposite().getPathDirection());
 
 						if (npc.isTrainer()) {
@@ -137,7 +137,7 @@ public class PlayerEntity extends MovableEntity {
 
 		// TODO: Add support for multiple pressed keys. Weird things happen when you hold one key and press another.
 		Direction inputDirection = Direction.checkInputDirection();
-		if (inputDirection != null && !isTransitioning() && !stalled) {
+		if (inputDirection != null && !isTransitioning() && !this.isStalled()) {
 
 			// If not facing the input direction, transition this way
 			if (this.getDirection() != inputDirection) {
@@ -145,14 +145,8 @@ public class PlayerEntity extends MovableEntity {
 			}
 			// Otherwise, advance in the input direction
 			else {
-				Point newLocation = Point.add(player.getLocation(), inputDirection.getDeltaPoint());
-
-				WalkType curPassValue = currentMap.getPassValue(player.getLocation());
-				WalkType passValue = currentMap.getPassValue(newLocation);
-
-				if (passValue.isPassable(inputDirection) && !currentMap.hasEntity(newLocation)) {
-					newLocation = Point.add(newLocation, WalkType.getAdditionalMove(curPassValue, passValue, inputDirection).getDeltaPoint());
-
+				Point newLocation = this.getNewLocation(player.getLocation(), inputDirection, currentMap);
+				if (newLocation != null) {
 					player.setLocation(newLocation);
 					player.step();
 
@@ -160,6 +154,7 @@ public class PlayerEntity extends MovableEntity {
 					transitionTime = 1;
 				}
 			}
+
 		}
 	}
 
@@ -246,12 +241,24 @@ public class PlayerEntity extends MovableEntity {
 
 	public void setPath(String path) {
 		super.setTempPath(path);
+        this.stall();
+	}
+
+	public boolean isStalled() {
+        return this.stalled;
+    }
+
+	public void stall() {
 		stalled = true;
+	}
+
+	public void unstall() {
+        stalled = false;
 	}
 
 	@Override
 	protected void endPath() {
-		stalled = false;
+        this.unstall();
 	}
 
 	@Override
@@ -262,12 +269,12 @@ public class PlayerEntity extends MovableEntity {
 	@Override
 	public void getAttention(Direction direction) {
 		this.setDirection(direction);
-		stalled = true;
+		this.stall();
 	}
 
 	public void resetCurrentInteractionEntity() {
 		currentInteractionEntity = null;
-		stalled = false;
+		this.unstall();
 	}
 
 	@Override

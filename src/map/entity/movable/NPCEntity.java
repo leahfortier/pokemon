@@ -91,7 +91,7 @@ public class NPCEntity extends MovableEntity {
 
 	@Override
 	protected void endPath() {
-		this.walkingToPlayer = false;
+        this.walkingToPlayer = false;
 	}
 
 	@Override
@@ -112,8 +112,8 @@ public class NPCEntity extends MovableEntity {
 	@Override
 	public void getAttention(Direction direction) {
 		this.setDirection(direction);
-		if (this.moveAxis == MoveAxis.FACING) {
-			hasAttention = true;
+		if (this.moveAxis == MoveAxis.FACING && !this.hasTempPath()) {
+//			hasAttention = true;
 		}
 	}
 
@@ -172,4 +172,9 @@ public class NPCEntity extends MovableEntity {
 		dataCreated = true;
 	}
 
+	@Override
+	public void setTempPath(String path) {
+		super.setTempPath(path);
+		hasAttention = false;
+	}
 }

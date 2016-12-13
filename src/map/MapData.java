@@ -113,6 +113,10 @@ public class MapData {
 		return point.getIndex(getDimension().width);
 	}
 
+	public Point getEntranceLocation(String entranceName) {
+		return Point.getPointAtIndex(this.mapEntrances.get(entranceName), getDimension().width);
+	}
+
 	public Dimension getDimension() {
 		return this.dimension;
 	}
@@ -143,9 +147,11 @@ public class MapData {
 			return WalkType.NOT_WALKABLE;
 		}
 
-		// TODO: SRSLY WHAT IS GOING ON
-		int val = rgb&((1<<24) - 1);
-		return WalkType.getWalkType(val);
+		return WalkType.getWalkType(rgb);
+	}
+
+	public boolean isPassable(Point location, Direction direction) {
+		return getPassValue(location).isPassable(direction);
 	}
 
 	public AreaData getArea(Point location) {
@@ -201,15 +207,27 @@ public class MapData {
 				.filter(entity -> entity.isVisible() && entity.getLocation().equals(location))
 				.collect(Collectors.toList());
 
-		if (presentEntities.isEmpty()) {
+		return validateEntities(presentEntities);
+	}
+
+	public Entity getEntity(String entityName) {
+		List<Entity> presentEntities = entities.stream()
+				.filter(entity -> entity.isVisible() && entity.getEntityName().equals(entityName))
+				.collect(Collectors.toList());
+
+		return validateEntities(presentEntities);
+	}
+
+	private Entity validateEntities(List<Entity> entities) {
+		if (entities.isEmpty()) {
 			return null;
 		}
 
-		if (presentEntities.size() != 1) {
-			Global.error("Multiple entities present at location " + location);
+		if (entities.size() != 1) {
+			Global.error("Multiple entities present");
 		}
 
-		return presentEntities.get(0);
+		return entities.get(0);
 	}
 
 	public boolean hasEntity(Point location) {
