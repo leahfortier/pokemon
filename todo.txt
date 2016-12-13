@@ -102,5 +102,4 @@ Fix opponent gets extra turn after poke faints
 Info guy dialogue
 Gary come up to you
 PC box controls (weird movement and withdraw button preselected)
-Beat gym leader magnemite, died, came back, and his magnemite had a pikachu sprite
-Beedrill used fury attack, only attacked 5 times but displayed 6
+generalize catch animation again

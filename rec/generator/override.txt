@@ -19,13 +19,12 @@ RecoilMove:
 	Recoil:
 		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
 		Try: 
-		if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) 
-		{
+		if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 			return;
 		}
 		
 		Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-		user.reduceHealth(b, (int)Math.ceil(damage/{0}.0));
+		user.reduceHealth(b, (int)Math.ceil(damage/{0}.0), false);
 		###
 	*
 ***
@@ -924,31 +923,6 @@ PowerChangeEffect:
 OpponentPowerChangeEffect:
 	GetOppMultiplier:
 		Header: double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-	*
-***
-IntegerHolder:
-	IntegerName:
-		AddMapField: GetAmount: {0}
-		AddMapField: DecreaseAmount: {0}
-		AddMapField: IncreaseAmount: {0}
-	*
-	GetAmount:
-		Header: int getAmount()
-		Body:
-		return {0};
-		###
-	*
-	DecreaseAmount:
-		Header: void decrease(int amount)
-		Body:
-		{0} -= amount;
-		###
-	*
-	IncreaseAmount:
-		Header: void increase(int amount)
-		Body:
-		{0} += amount;
-		###
 	*
 ***
 EffectBlockerEffect:
@@ -2453,5 +2427,15 @@ IncenseItem:
 		Body:
 		return PokemonNamesies.{00};
 		###
+	*
+***
+AbsorbDamageEffect:
+	AbsorbDamage:
+		Header: boolean absorbDamage(ActivePokemon damageTaker, int damageAmount)
+	*
+***
+DamageTakenEffect:
+	DamageTaken:
+		Header: void damageTaken(Battle b, ActivePokemon damageTaker)
 	*
 ***

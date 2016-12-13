@@ -69,8 +69,8 @@ public class Battle {
 	private TerrainType currentTerrain;
 	
 	public Battle(Opponent o) {
-        Messages.clearMessages(MessageState.FIGHTY_FIGHT);
-        Messages.setMessageState(MessageState.FIGHTY_FIGHT);
+		Messages.clearMessages(MessageState.FIGHTY_FIGHT);
+		Messages.setMessageState(MessageState.FIGHTY_FIGHT);
 		Messages.add(new MessageUpdate().withUpdate(Update.ENTER_BATTLE));
 
 		player = Game.getPlayer();
@@ -84,16 +84,16 @@ public class Battle {
 		weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
 		player.enterBattle();
 
-		ActivePokemon opponentFront = opponent.front();
 		if (opponent instanceof Trainer) {
 			Trainer opponentTrainer = (Trainer) opponent;
 			opponentTrainer.enterBattle();
 			Messages.add(new MessageUpdate(opponentTrainer.getName() + " wants to fight!"));
 			opponentTrainer.setAction(Action.FIGHT);
-			enterBattle(opponentFront);
+			enterBattle(opponent.front());
 		}
 		else {
-			enterBattle(opponentFront, "Wild " + opponentFront.getName() + " appeared!");
+			ActivePokemon wildPokemon = opponent.front();
+			enterBattle(wildPokemon, "Wild " + wildPokemon.getName() + " appeared!");
 		}
 
 		enterBattle(player.front());

@@ -9,6 +9,7 @@ import battle.attack.MoveType;
 import battle.effect.PassableEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
+import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
@@ -19,6 +20,7 @@ import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
 import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
+import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
@@ -41,7 +43,6 @@ import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.holder.AbilityHolder;
-import battle.effect.holder.IntegerHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
@@ -2078,7 +2079,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Focusing extends PokemonEffect {
+	static class Focusing extends PokemonEffect implements DamageTakenEffect {
 		private static final long serialVersionUID = 1L;
 
 		Focusing() {
@@ -2091,6 +2092,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getName() + " began tightening its focus!";
+		}
+
+		public void damageTaken(Battle b, ActivePokemon damageTaker) {
+			Messages.add(new MessageUpdate(damageTaker.getName() + " lost its focus and couldn't move!"));
+			damageTaker.getAttributes().removeEffect(this.namesies);
+			damageTaker.addEffect((PokemonEffect)EffectNamesies.FLINCH.getEffect());
 		}
 	}
 
@@ -2173,7 +2180,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Substitute extends PokemonEffect implements IntegerHolder, PassableEffect, EffectBlockerEffect {
+	static class Substitute extends PokemonEffect implements AbsorbDamageEffect, PassableEffect, EffectBlockerEffect {
 		private static final long serialVersionUID = 1L;
 		private int hp;
 
@@ -2195,16 +2202,18 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " put in a substitute!";
 		}
 
-		public int getAmount() {
-			return hp;
-		}
-
-		public void decrease(int amount) {
-			hp -= amount;
-		}
-
-		public void increase(int amount) {
-			hp += amount;
+		public boolean absorbDamage(ActivePokemon damageTaker, int damageAmount) {
+			this.hp -= damageAmount;
+			if (this.hp <= 0) {
+				Messages.add(new MessageUpdate("The substitute broke!"));
+				damageTaker.getAttributes().removeEffect(this.namesies());
+			}
+			else {
+				Messages.add(new MessageUpdate("The substitute absorbed the hit!"));
+			}
+			
+			// Substitute always blocks damage
+			return true;
 		}
 
 		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -2289,7 +2298,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Bide extends PokemonEffect implements ForceMoveEffect, EndTurnEffect, IntegerHolder {
+	static class Bide extends PokemonEffect implements ForceMoveEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private Move move;
 		private int turns;
@@ -2346,19 +2355,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			increase(victim.getAttributes().getDamageTaken());
-		}
-
-		public int getAmount() {
-			return damage;
-		}
-
-		public void decrease(int amount) {
-			damage -= amount;
-		}
-
-		public void increase(int amount) {
-			damage += amount;
+			damage += victim.getAttributes().getDamageTaken();
 		}
 	}
 
@@ -2606,7 +2603,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
 			if (murderer.getAttributes().isAttacking()) {
 				Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
-				murderer.reduceHealthFraction(b, 1);
+				murderer.killKillKillMurderMurderMurder(b);
 			}
 		}
 
@@ -2638,7 +2635,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			Messages.add(new MessageUpdate(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!"));
 			if (super.numTurns == 1) {
-				victim.reduceHealthFraction(b, 1);
+				victim.killKillKillMurderMurderMurder(b);
 			}
 		}
 	}

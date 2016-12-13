@@ -770,6 +770,12 @@ Charge:
 Focusing:
 	CastMessage: user.getName() + " began tightening its focus!"
 	NumTurns: 1
+	Int: DamageTakenEffect
+	DamageTaken:
+	Messages.add(new MessageUpdate(damageTaker.getName() + " lost its focus and couldn't move!"));
+	damageTaker.getAttributes().removeEffect(this.namesies);
+	damageTaker.addEffect((PokemonEffect)EffectNamesies.FLINCH.getEffect());
+	###
 *
 FiddyPercentStronger:
 	Int: PowerChangeEffect
@@ -829,11 +835,10 @@ Transformed:
 	###
 *
 Substitute:
-	Int: IntegerHolder, PassableEffect, EffectBlockerEffect
+	Int: AbsorbDamageEffect, PassableEffect, EffectBlockerEffect
 	Field: 
 	private int hp;
 	###
-	IntegerName: hp
 	CastMessage: victim.getName() + " put in a substitute!"
 	Cast: 
 	hp = victim.reduceHealthFraction(b, .25) + 1;
@@ -858,6 +863,19 @@ Substitute:
 	}
 	
 	return false;
+	###
+	AbsorbDamage:
+	this.hp -= damageAmount;
+	if (this.hp <= 0) {
+		Messages.add(new MessageUpdate("The substitute broke!"));
+		damageTaker.getAttributes().removeEffect(this.namesies());
+	}
+	else {
+		Messages.add(new MessageUpdate("The substitute absorbed the hit!"));
+	}
+
+	// Substitute always blocks damage
+	return true;
 	###
 *	
 Mist:
@@ -884,11 +902,10 @@ Bide:
 	private int turns;
 	private int damage;
 	###
-	Int: ForceMoveEffect, EndTurnEffect, IntegerHolder
+	Int: ForceMoveEffect, EndTurnEffect
 	GetForceMove: 
 	return move;
 	###
-	IntegerName: damage
 	GetTurns: 
 	return turns;
 	###
@@ -930,7 +947,7 @@ Bide:
 	###
 	CanHave: True
 	ApplyEndTurn: 
-	increase(victim.getAttributes().getDamageTaken());
+	damage += victim.getAttributes().getDamageTaken();
 	###
 *
 HalfWeight:
@@ -1058,7 +1075,7 @@ DestinyBond:
 	DeathWish: 
 	if (murderer.getAttributes().isAttacking()) {
 		Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
-		murderer.reduceHealthFraction(b, 1);
+		murderer.killKillKillMurderMurderMurder(b);
 	}
 	###
 *
@@ -1074,7 +1091,7 @@ PerishSong:
 	ApplyEndTurn: 
 	Messages.add(new MessageUpdate(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!"));
 	if (super.numTurns == 1) {
-		victim.reduceHealthFraction(b, 1);
+		victim.killKillKillMurderMurderMurder(b);
 	}
 	###
 *

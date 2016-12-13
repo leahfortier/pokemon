@@ -25,7 +25,6 @@ import java.awt.image.BufferedImage;
 
 // Handles animation and keeps track of the current state
 class PokemonAnimationState {
-
     private static final int STATUS_BOX_SPACING = 25;
 
     // Loss Constants <-- Super Meaningful Comment
@@ -90,12 +89,12 @@ class PokemonAnimationState {
                 statusBox.width,
                 12)
                 .withBlackOutline();
-
-        this.oldState = new PokemonState();
-        this.state = new PokemonState();
     }
 
     void resetBattle(ActivePokemon p) {
+        this.oldState = new PokemonState();
+        this.state = new PokemonState();
+
         resetVals(p);
         state.imageNumber = 0;
     }
@@ -457,7 +456,7 @@ class PokemonAnimationState {
             }
 
             if (newMessage.catchUpdate()) {
-                startCatchAnimation(newMessage.getDuration() == -1? -1 : newMessage.getDuration());
+                startCatchAnimation(newMessage.getDuration());
             }
 
             if (newMessage.pokemonUpdate()) {
