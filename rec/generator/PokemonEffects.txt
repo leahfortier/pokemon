@@ -770,6 +770,12 @@ Charge:
 Focusing:
 	CastMessage: user.getName() + " began tightening its focus!"
 	NumTurns: 1
+	Int: DamageTakenEffect
+	DamageTaken:
+	Messages.add(new MessageUpdate(damageTaker.getName() + " lost its focus and couldn't move!"));
+	damageTaker.getAttributes().removeEffect(this.namesies);
+	damageTaker.addEffect((PokemonEffect)EffectNamesies.FLINCH.getEffect());
+	###
 *
 FiddyPercentStronger:
 	Int: PowerChangeEffect

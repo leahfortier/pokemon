@@ -2434,3 +2434,8 @@ AbsorbDamageEffect:
 		Header: boolean absorbDamage(ActivePokemon damageTaker, int damageAmount)
 	*
 ***
+DamageTakenEffect:
+	DamageTaken:
+		Header: void damageTaken(Battle b, ActivePokemon damageTaker)
+	*
+***

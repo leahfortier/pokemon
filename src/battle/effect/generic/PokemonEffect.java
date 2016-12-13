@@ -20,6 +20,7 @@ import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
 import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
+import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
@@ -2078,7 +2079,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Focusing extends PokemonEffect {
+	static class Focusing extends PokemonEffect implements DamageTakenEffect {
 		private static final long serialVersionUID = 1L;
 
 		Focusing() {
@@ -2091,6 +2092,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getName() + " began tightening its focus!";
+		}
+
+		public void damageTaken(Battle b, ActivePokemon damageTaker) {
+			Messages.add(new MessageUpdate(damageTaker.getName() + " lost its focus and couldn't move!"));
+			damageTaker.getAttributes().removeEffect(this.namesies);
+			damageTaker.addEffect((PokemonEffect)EffectNamesies.FLINCH.getEffect());
 		}
 	}
 

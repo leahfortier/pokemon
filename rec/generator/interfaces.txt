@@ -502,3 +502,10 @@ AbsorbDamageEffect:
 		InvokeParameters: Battle b
 	*
 ***
+DamageTakenEffect:
+	Method:
+		Header: void damageTaken(Battle b, ActivePokemon damageTaker)
+		Invoke: void
+		EffectList: damageTaker
+	*
+***

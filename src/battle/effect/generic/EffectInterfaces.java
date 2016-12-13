@@ -1063,4 +1063,19 @@ public final class EffectInterfaces {
 			return false;
 		}
 	}
+
+	public interface DamageTakenEffect {
+		void damageTaken(Battle b, ActivePokemon damageTaker);
+
+		static void invokeDamageTakenEffect(Battle b, ActivePokemon damageTaker) {
+			List<Object> invokees = b.getEffectsList(damageTaker);
+			for (Object invokee : invokees) {
+				if (invokee instanceof DamageTakenEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					DamageTakenEffect effect = (DamageTakenEffect)invokee;
+					effect.damageTaken(b, damageTaker);
+				}
+			}
+		}
+	}
 }
