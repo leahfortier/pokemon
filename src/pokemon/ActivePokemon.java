@@ -1047,7 +1047,7 @@ public class ActivePokemon implements Serializable {
 	// Removes status, restores PP for all moves, restores to full health
 	public void fullyHeal() {
 		removeStatus();
-		this.getActualMoves().forEach(Move::resetPP);
+		getActualMoves().forEach(Move::resetPP);
 		healHealthFraction(1);
 	}
 	

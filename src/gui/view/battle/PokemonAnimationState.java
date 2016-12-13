@@ -90,12 +90,14 @@ class PokemonAnimationState {
                 statusBox.width,
                 12)
                 .withBlackOutline();
-
-        this.oldState = new PokemonState();
-        this.state = new PokemonState();
     }
 
     void resetBattle(ActivePokemon p) {
+        System.out.println(p.getName());
+
+        this.oldState = new PokemonState();
+        this.state = new PokemonState();
+
         resetVals(p);
         state.imageNumber = 0;
     }
@@ -457,7 +459,7 @@ class PokemonAnimationState {
             }
 
             if (newMessage.catchUpdate()) {
-                startCatchAnimation(newMessage.getDuration() == -1? -1 : newMessage.getDuration());
+                startCatchAnimation(newMessage.getDuration());
             }
 
             if (newMessage.pokemonUpdate()) {

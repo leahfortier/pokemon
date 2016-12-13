@@ -109,21 +109,13 @@ public abstract class Trainer implements Team, Serializable {
 	
 	// Should be called when the trainer enters a new battle -- Sets all Pokemon to not be used yet and sets the front Pokemon
 	public void enterBattle() {
-		for (ActivePokemon p : team) {
-			p.resetAttributes();
-		}
-
+		team.forEach(ActivePokemon::resetAttributes);
 		setFront();
 	}
 	
 	public void resetUsed() {
 		for (int i = 0; i < team.size(); i++) {
-			if (i == frontIndex) {
-				team.get(i).getAttributes().setUsed(true);
-			}
-			else {
-				team.get(i).getAttributes().setUsed(false);
-			}
+			team.get(i).getAttributes().setUsed(i == frontIndex);
 		}
 	}
 	
@@ -172,9 +164,7 @@ public abstract class Trainer implements Team, Serializable {
 	}
 	
 	public void healAll() {
-		for (ActivePokemon p : team) {
-			p.fullyHeal();
-		}
+		team.forEach(ActivePokemon::fullyHeal);
 	}
 	
 	public void switchToRandom() {
