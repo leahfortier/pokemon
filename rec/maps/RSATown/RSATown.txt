@@ -163,7 +163,9 @@
               }
             },
             {
-              "global": "lalala"
+              "trigger": {
+                "triggerType": "RELOAD_MAP"
+              }
             }
           ]
         },
@@ -177,7 +179,8 @@
         "x": 29,
         "y": 21
       },
-      "triggerName": "RSATown_NPC_Rival_01"
+      "triggerName": "RSATown_NPC_Rival_01",
+      "condition": "!RSATown_NPC_Rival_01$won"
     }
   ],
   "items": [],

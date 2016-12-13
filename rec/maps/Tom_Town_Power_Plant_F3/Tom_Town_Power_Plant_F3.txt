@@ -24,15 +24,6 @@
         "y": 8
       },
       "triggerName": "Tom_Town_Power_Plant_F3_MapExit_FromFloor2_01"
-    },
-    {
-      "exitName": "ReloadLocation",
-      "deathPortal": false,
-      "location": {
-        "x": 10,
-        "y": 10
-      },
-      "triggerName": "Tom_Town_Power_Plant_F3_MapExit_ReloadLocation_01"
     }
   ],
   "NPCs": [
@@ -143,11 +134,7 @@
             },
             {
               "trigger": {
-                "triggerType": "MapTransition",
-                "triggerContents": "{
-                        nextMap: Tom_Town_Power_Plant_F3,
-                        nextEntrance: ReloadLocation
-                    }"
+                "triggerType": "RELOAD_MAP"
               }
             }
           ]

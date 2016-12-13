@@ -19,6 +19,7 @@ public enum TriggerType {
     MAP_TRANSITION(MapTransitionTrigger.class, MapTransitionTrigger::new, MapTransitionTrigger::getTriggerSuffix),
     MOVE_NPC(MoveNPCTrigger.class, MoveNPCTrigger::new),
     MOVE_PLAYER(MovePlayerTrigger.class, MovePlayerTrigger::new),
+    RELOAD_MAP(ReloadMapTrigger.class, ReloadMapTrigger::new),
     SOUND(SoundTrigger.class, SoundTrigger::new),
     TRAINER_BATTLE(TrainerBattleTrigger.class, TrainerBattleTrigger::new),
     UPDATE(UpdateTrigger.class, UpdateTrigger::new),
