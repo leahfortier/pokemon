@@ -42,10 +42,6 @@ public abstract class MovableEntity extends Entity {
 	public abstract Direction getDirection();
 	protected abstract void setDirection(Direction direction);
 
-	public void setTempPath(String path) {
-		setTempPath(path, null);
-	}
-
 	public void setTempPath(String path, EndPathListener listener) {
 		this.tempPath = path;
 		this.pathIndex = 0;

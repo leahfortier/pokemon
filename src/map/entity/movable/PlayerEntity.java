@@ -239,12 +239,12 @@ public class PlayerEntity extends MovableEntity {
 		return null;
 	}
 
-	public void setPath(String path) {
-		super.setTempPath(path);
+	public void setPath(String path, EndPathListener listener) {
+		super.setTempPath(path, listener);
         this.stall();
 	}
 
-	public boolean isStalled() {
+	private boolean isStalled() {
         return this.stalled;
     }
 
