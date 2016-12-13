@@ -9,6 +9,7 @@ import battle.attack.MoveType;
 import battle.effect.PassableEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
+import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
@@ -41,7 +42,6 @@ import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.holder.AbilityHolder;
-import battle.effect.holder.IntegerHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
@@ -2173,7 +2173,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Substitute extends PokemonEffect implements IntegerHolder, PassableEffect, EffectBlockerEffect {
+	static class Substitute extends PokemonEffect implements AbsorbDamageEffect, PassableEffect, EffectBlockerEffect {
 		private static final long serialVersionUID = 1L;
 		private int hp;
 
@@ -2195,16 +2195,18 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " put in a substitute!";
 		}
 
-		public int getAmount() {
-			return hp;
-		}
-
-		public void decrease(int amount) {
-			hp -= amount;
-		}
-
-		public void increase(int amount) {
-			hp += amount;
+		public boolean absorbDamage(ActivePokemon damageTaker, int damageAmount) {
+			this.hp -= damageAmount;
+			if (this.hp <= 0) {
+				Messages.add(new MessageUpdate("The substitute broke!"));
+				damageTaker.getAttributes().removeEffect(this.namesies());
+			}
+			else {
+				Messages.add(new MessageUpdate("The substitute absorbed the hit!"));
+			}
+			
+			// Substitute always blocks damage
+			return true;
 		}
 
 		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -2289,7 +2291,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Bide extends PokemonEffect implements ForceMoveEffect, EndTurnEffect, IntegerHolder {
+	static class Bide extends PokemonEffect implements ForceMoveEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private Move move;
 		private int turns;
@@ -2346,19 +2348,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			increase(victim.getAttributes().getDamageTaken());
-		}
-
-		public int getAmount() {
-			return damage;
-		}
-
-		public void decrease(int amount) {
-			damage -= amount;
-		}
-
-		public void increase(int amount) {
-			damage += amount;
+			damage += victim.getAttributes().getDamageTaken();
 		}
 	}
 

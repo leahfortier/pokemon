@@ -8,6 +8,7 @@ import battle.attack.Move;
 import battle.effect.StallingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.CastSource;
+import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
 import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
@@ -24,7 +25,6 @@ import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.holder.AbilityHolder;
-import battle.effect.holder.IntegerHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
@@ -40,12 +40,12 @@ import main.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.PokemonMatcher;
-import pokemon.breeding.Breeding;
-import pokemon.evolution.EvolutionMethod;
 import pokemon.PokemonInfo.WildHoldItem;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import pokemon.breeding.Breeding;
 import pokemon.evolution.BaseEvolution;
+import pokemon.evolution.EvolutionMethod;
 import util.DrawUtils;
 import util.RandomUtils;
 import util.StringUtils;
@@ -970,21 +970,9 @@ public class ActivePokemon implements Serializable {
 			return 0;
 		}
 
-		if (checkEffects) {
-			// Substitute absorbs the damage instead of the Pokemon
-			IntegerHolder e = (IntegerHolder)getEffect(EffectNamesies.SUBSTITUTE);
-			if (e != null) {
-				e.decrease(amount);
-				if (e.getAmount() <= 0) {
-					Messages.add(new MessageUpdate("The substitute broke!"));
-					attributes.removeEffect(EffectNamesies.SUBSTITUTE);
-				}
-				else {
-					Messages.add(new MessageUpdate("The substitute absorbed the hit!"));
-				}
-
-				return 0;
-			}
+		// Check if the damage will be absorbed by an effect
+		if (checkEffects && AbsorbDamageEffect.checkAbsorbDamageEffect(b, this, amount)) {
+			return 0;
 		}
 		
 		boolean fullHealth = fullHealth();

@@ -494,3 +494,11 @@ AdvantageMultiplierMove:
 		Move: attacking
 	*
 ***
+AbsorbDamageEffect:
+	Method:
+		Header: boolean absorbDamage(ActivePokemon damageTaker, int damageAmount)
+		Invoke: Check true
+		EffectList: damageTaker
+		InvokeParameters: Battle b
+	*
+***
