@@ -346,7 +346,7 @@ public class PokemonState implements VisualStateHandler {
                     player.setFront(selectedPokemonTab);
                     currentBattle.enterBattle(player.front());
 
-                    if (switchForced) {
+                    if (!switchForced) {
                         player.performAction(currentBattle, Action.SWITCH);
                     }
 
