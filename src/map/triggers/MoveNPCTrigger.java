@@ -5,7 +5,7 @@ import main.Global;
 import map.Direction;
 import map.MapData;
 import map.PathDirection;
-import map.entity.movable.MovableEntity;
+import map.entity.movable.NPCEntity;
 import map.entity.movable.PlayerEntity;
 import pattern.MoveNPCTriggerMatcher;
 import trainer.CharacterData;
@@ -32,7 +32,7 @@ class MoveNPCTrigger extends Trigger {
         playerEntity.stall();
 
         MapData map = Game.getData().getMap(player.getMapName());
-        MovableEntity entity = (MovableEntity)map.getEntity(this.matcher.getNpcEntityName());
+        NPCEntity entity = (NPCEntity)map.getEntity(this.matcher.getNpcEntityName());
 
         String path = getPath(entity, map);
         if (path == null) {
@@ -43,33 +43,40 @@ class MoveNPCTrigger extends Trigger {
         HaltTrigger.addHaltTrigger();
     }
 
-    private String getPath(MovableEntity entity, MapData map) {
-        CharacterData player = Game.getPlayer();
-
+    private String getPath(NPCEntity entity, MapData map) {
         Point start = entity.getLocation();
-        Point end = matcher.endLocationIsPlayer() ? player.getLocation() : map.getEntranceLocation(matcher.getEndEntranceName());
+        Point end = matcher.endLocationIsPlayer()
+                ? Game.getPlayer().getLocation()
+                : map.getEntranceLocation(matcher.getEndEntranceName());
 
         Queue<PathState> queue = new ArrayDeque<>();
-        Set<Point> visited = new HashSet<>();
+        Set<String> visited = new HashSet<>();
 
         queue.add(new PathState(start, PathDirection.defaultPath()));
-        visited.add(start);
+        visited.add(start.toString());
 
         while (!queue.isEmpty()) {
             PathState currentState = queue.poll();
-            if (end.equals(currentState.location)) {
-                if (matcher.endLocationIsPlayer()) {
-                    // Remove the last character so they're not on top of the player
-                    return currentState.path.substring(0, currentState.path.length() - 1);
-                } else {
-                    return currentState.path + map.getExitDirection(matcher.getEndEntranceName()).getCharacter();
-                }
+
+            if (!matcher.endLocationIsPlayer() && end.equals(currentState.location)) {
+                return currentState.path + map.getExitDirection(matcher.getEndEntranceName()).getCharacter();
             }
 
             for (Direction direction : Direction.values()) {
+                if (matcher.endLocationIsPlayer()) {
+                    Point newLocation = Point.add(currentState.location, direction.getDeltaPoint());
+                    if (newLocation.equals(end)) {
+                        return currentState.path;
+                    }
+                }
+
                 Point newLocation = entity.getNewLocation(currentState.location, direction, map);
-                if (newLocation != null && !visited.contains(newLocation)) {
-                    visited.add(newLocation);
+                if (newLocation == null) {
+                    continue;
+                }
+
+                if (!visited.contains(newLocation.toString())) {
+                    visited.add(newLocation.toString());
                     queue.add(new PathState(
                             newLocation,
                             currentState.path + direction.getPathDirection().getCharacter()

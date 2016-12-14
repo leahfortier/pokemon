@@ -122,11 +122,11 @@
       "name": "Rival",
       "path": "w",
       "spriteIndex": 14,
-      "direction": "UP",
+      "direction": "LEFT",
       "interactions": [
         {
           "name": "battle",
-          "walkToPlayer": true,
+          "walkToPlayer": false,
           "npcActions": [
             {
               "trigger": {
@@ -176,8 +176,8 @@
         }
       ],
       "location": {
-        "x": 29,
-        "y": 21
+        "x": 44,
+        "y": 19
       },
       "triggerName": "RSATown_NPC_Rival_01",
       "condition": "!RSATown_NPC_Rival_01$won"
@@ -185,6 +185,45 @@
   ],
   "items": [],
   "miscEntities": [],
-  "events": [],
+  "events": [
+    {
+      "name": "Rival_Battle",
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "MOVE_NPC",
+            "triggerContents": "{
+				npcEntityName: RSATown_NPC_Rival_01,
+				endLocationIsPlayer: true
+			}"
+          }
+        }
+      ],
+      "location": [
+        {
+          "x": 41,
+          "y": 17
+        },
+        {
+          "x": 41,
+          "y": 18
+        },
+        {
+          "x": 41,
+          "y": 19
+        },
+        {
+          "x": 41,
+          "y": 20
+        },
+        {
+          "x": 41,
+          "y": 21
+        }
+      ],
+      "triggerName": "RSATown_Event_Rival_Battle_01",
+      "condition": "!RSATown_NPC_Rival_01$won"
+    }
+  ],
   "wildBattles": []
 }

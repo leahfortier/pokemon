@@ -154,9 +154,7 @@ public abstract class MovableEntity extends Entity {
 	public Point getNewLocation(Point location, Direction direction, MapData currentMap) {
 		Point newLocation = Point.add(location, direction.getDeltaPoint());
 
-		WalkType curPassValue = currentMap.getPassValue(location);
 		WalkType passValue = currentMap.getPassValue(newLocation);
-
 		if (passValue.isPassable(direction) && !currentMap.hasEntity(newLocation)) {
 			return newLocation;
 		}

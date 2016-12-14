@@ -119,7 +119,7 @@ public class PlayerEntity extends MovableEntity {
 				Entity newEntity = currentMap.getEntity(newLocation);
 				if (newEntity instanceof NPCEntity) {
 					NPCEntity npc = (NPCEntity) newEntity;
-					if (npc.canWalkToPlayer(this.getLocation())) {
+					if (npc.canWalkToPlayer()) {
 						this.stall();
 						npc.walkTowards(dist - 1, direction.getOpposite().getPathDirection());
 
