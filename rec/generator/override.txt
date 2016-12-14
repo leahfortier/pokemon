@@ -925,31 +925,6 @@ OpponentPowerChangeEffect:
 		Header: double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 	*
 ***
-IntegerHolder:
-	IntegerName:
-		AddMapField: GetAmount: {0}
-		AddMapField: DecreaseAmount: {0}
-		AddMapField: IncreaseAmount: {0}
-	*
-	GetAmount:
-		Header: int getAmount()
-		Body:
-		return {0};
-		###
-	*
-	DecreaseAmount:
-		Header: void decrease(int amount)
-		Body:
-		{0} -= amount;
-		###
-	*
-	IncreaseAmount:
-		Header: void increase(int amount)
-		Body:
-		{0} += amount;
-		###
-	*
-***
 EffectBlockerEffect:
 	ValidMove:
 		Header: boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -2452,5 +2427,15 @@ IncenseItem:
 		Body:
 		return PokemonNamesies.{00};
 		###
+	*
+***
+AbsorbDamageEffect:
+	AbsorbDamage:
+		Header: boolean absorbDamage(ActivePokemon damageTaker, int damageAmount)
+	*
+***
+DamageTakenEffect:
+	DamageTaken:
+		Header: void damageTaken(Battle b, ActivePokemon damageTaker)
 	*
 ***

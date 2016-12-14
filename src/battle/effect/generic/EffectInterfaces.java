@@ -1044,4 +1044,38 @@ public final class EffectInterfaces {
 			return modifier;
 		}
 	}
+
+	public interface AbsorbDamageEffect {
+		boolean absorbDamage(ActivePokemon damageTaker, int damageAmount);
+
+		static boolean checkAbsorbDamageEffect(Battle b, ActivePokemon damageTaker, int damageAmount) {
+			List<Object> invokees = b.getEffectsList(damageTaker);
+			for (Object invokee : invokees) {
+				if (invokee instanceof AbsorbDamageEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					AbsorbDamageEffect effect = (AbsorbDamageEffect)invokee;
+					if (effect.absorbDamage(damageTaker, damageAmount)) {
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		}
+	}
+
+	public interface DamageTakenEffect {
+		void damageTaken(Battle b, ActivePokemon damageTaker);
+
+		static void invokeDamageTakenEffect(Battle b, ActivePokemon damageTaker) {
+			List<Object> invokees = b.getEffectsList(damageTaker);
+			for (Object invokee : invokees) {
+				if (invokee instanceof DamageTakenEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					DamageTakenEffect effect = (DamageTakenEffect)invokee;
+					effect.damageTaken(b, damageTaker);
+				}
+			}
+		}
+	}
 }

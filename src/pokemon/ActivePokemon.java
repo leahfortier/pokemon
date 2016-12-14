@@ -8,9 +8,11 @@ import battle.attack.Move;
 import battle.effect.StallingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.CastSource;
+import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
 import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
+import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.FaintEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
@@ -24,14 +26,12 @@ import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.holder.AbilityHolder;
-import battle.effect.holder.IntegerHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
-import item.berry.HealthTriggeredBerry;
 import item.hold.EVItem;
 import item.hold.HoldItem;
 import main.Game;
@@ -40,12 +40,12 @@ import main.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.PokemonMatcher;
-import pokemon.breeding.Breeding;
-import pokemon.evolution.EvolutionMethod;
 import pokemon.PokemonInfo.WildHoldItem;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import pokemon.breeding.Breeding;
 import pokemon.evolution.BaseEvolution;
+import pokemon.evolution.EvolutionMethod;
 import util.DrawUtils;
 import util.RandomUtils;
 import util.StringUtils;
@@ -106,8 +106,7 @@ public class ActivePokemon implements Serializable {
 		this.EVs = new int[Stat.NUM_STATS];
 		this.stats = new int[Stat.NUM_STATS];
 		setStats();
-		
-		this.hp = stats[Stat.HP.index()];
+
 		this.isPlayer = isPlayer;
 		this.attributes = new BattleAttributes();
 		
@@ -127,6 +126,8 @@ public class ActivePokemon implements Serializable {
 		
 		this.isEgg = false;
 		this.eggSteps = 0;
+
+		this.fullyHeal();
 	}
 	
 	// Constructor for Eggs
@@ -310,8 +311,8 @@ public class ActivePokemon implements Serializable {
 		for (int i = 0; i < stats.length; i++) {
 			stats[i] = Stat.getStat(i, level, pokemon.getStat(i), IVs[i], EVs[i], nature.getNatureVal(i));
 		}
-		
-		hp += stats[Stat.HP.index()] - prevHP;
+
+		setHP(hp + stats[Stat.HP.index()] - prevHP);
 	}
 	
 	private Type computeHiddenPowerType() {
@@ -970,21 +971,9 @@ public class ActivePokemon implements Serializable {
 			return 0;
 		}
 
-		if (checkEffects) {
-			// Substitute absorbs the damage instead of the Pokemon
-			IntegerHolder e = (IntegerHolder)getEffect(EffectNamesies.SUBSTITUTE);
-			if (e != null) {
-				e.decrease(amount);
-				if (e.getAmount() <= 0) {
-					Messages.add(new MessageUpdate("The substitute broke!"));
-					attributes.removeEffect(EffectNamesies.SUBSTITUTE);
-				}
-				else {
-					Messages.add(new MessageUpdate("The substitute absorbed the hit!"));
-				}
-
-				return 0;
-			}
+		// Check if the damage will be absorbed by an effect
+		if (checkEffects && AbsorbDamageEffect.checkAbsorbDamageEffect(b, this, amount)) {
+			return 0;
 		}
 		
 		boolean fullHealth = fullHealth();
@@ -1006,29 +995,9 @@ public class ActivePokemon implements Serializable {
 			}
 		}
 		
-		if (isFainted(b)) {
-			return taken;
-		}
-
-		Messages.add(new MessageUpdate().updatePokemon(b, this));
-		
-		// Check if the Pokemon fainted and also handle Focus Punch
-		if (hasEffect(EffectNamesies.FOCUSING)) {
-			Messages.add(new MessageUpdate(getName() + " lost its focus and couldn't move!"));
-			attributes.removeEffect(EffectNamesies.FOCUSING);
-			addEffect((PokemonEffect)EffectNamesies.FLINCH.getEffect());
-		}
-		
-		// Health Triggered Berries
-		Item item = getHeldItem(b);
-		if (item instanceof HealthTriggeredBerry) {
-			HealthTriggeredBerry berry  = (HealthTriggeredBerry)item;
-			double healthRatio = getHPRatio();
-			if ((healthRatio <= berry.healthTriggerRatio() || (healthRatio <= .5 && hasAbility(AbilityNamesies.GLUTTONY)))) {
-				if (berry.gainBerryEffect(b, this, CastSource.HELD_ITEM)) {
-					consumeItem(b);
-				}
-			}
+		if (!isFainted(b)) {
+			Messages.add(new MessageUpdate().updatePokemon(b, this));
+			DamageTakenEffect.invokeDamageTakenEffect(b, this);
 		}
 		
 		return taken;
@@ -1048,7 +1017,7 @@ public class ActivePokemon implements Serializable {
 		}
 		
 		int prev = hp;
-		hp = Math.min(getMaxHP(), hp + amount);
+		setHP(hp + amount);
 		return hp - prev;
 	}
 	
