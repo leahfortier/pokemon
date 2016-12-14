@@ -2,6 +2,7 @@ package battle.attack;
 
 import battle.Battle;
 import battle.effect.PassableEffect;
+import battle.effect.SapHealthEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
 import battle.effect.attack.MultiStrikeMove;
@@ -334,11 +335,9 @@ public abstract class Attack implements Serializable {
 			return;
 		}
 
-		// TODO: Can this just be an ApplyDamageEffect or its own interface or something I don't like this
 		// Sap the Health
-		if (isMoveType(MoveType.SAP_HEALTH)) {
-			int sapAmount = (int)Math.ceil(damage*(this.isMoveType(MoveType.SAP_75) ? .75 : .5));
-			me.sapHealth(o, sapAmount, b, true, this.namesies() == AttackNamesies.DREAM_EATER);
+		if (this instanceof SapHealthEffect) {
+			((SapHealthEffect)this).sapHealth(b, me, o, damage, true);
 		}
 		
 		// Effects that apply when a Pokemon makes physical contact with them
@@ -350,7 +349,7 @@ public abstract class Attack implements Serializable {
 		// Effects that apply to the opponent when they take damage
 		TakeDamageEffect.invokeTakeDamageEffect(b, me, o);
 	}
-	
+
 	public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 		// Kill yourself!!
 		if (isMoveType(MoveType.USER_FAINTS)) {
@@ -3268,14 +3267,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class LeechLife extends Attack {
+	static class LeechLife extends Attack implements SapHealthEffect {
 		private static final long serialVersionUID = 1L;
 
 		LeechLife() {
 			super(AttackNamesies.LEECH_LIFE, "The user drains the target's blood. The user's HP is restored by half the damage taken by the target.", 15, Type.BUG, MoveCategory.PHYSICAL);
 			super.power = 20;
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.SAP_HEALTH);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
@@ -3331,25 +3329,23 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Absorb extends Attack {
+	static class Absorb extends Attack implements SapHealthEffect {
 		private static final long serialVersionUID = 1L;
 
 		Absorb() {
 			super(AttackNamesies.ABSORB, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.", 25, Type.GRASS, MoveCategory.SPECIAL);
 			super.power = 20;
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.SAP_HEALTH);
 		}
 	}
 
-	static class MegaDrain extends Attack {
+	static class MegaDrain extends Attack implements SapHealthEffect {
 		private static final long serialVersionUID = 1L;
 
 		MegaDrain() {
 			super(AttackNamesies.MEGA_DRAIN, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.", 15, Type.GRASS, MoveCategory.SPECIAL);
 			super.power = 40;
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.SAP_HEALTH);
 		}
 	}
 
@@ -3391,14 +3387,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class GigaDrain extends Attack {
+	static class GigaDrain extends Attack implements SapHealthEffect {
 		private static final long serialVersionUID = 1L;
 
 		GigaDrain() {
 			super(AttackNamesies.GIGA_DRAIN, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.", 10, Type.GRASS, MoveCategory.SPECIAL);
 			super.power = 75;
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.SAP_HEALTH);
 		}
 	}
 
@@ -5333,14 +5328,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class DreamEater extends Attack {
+	static class DreamEater extends Attack implements SapHealthEffect {
 		private static final long serialVersionUID = 1L;
 
 		DreamEater() {
 			super(AttackNamesies.DREAM_EATER, "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal the user's HP.", 15, Type.PSYCHIC, MoveCategory.SPECIAL);
 			super.power = 100;
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.SAP_HEALTH);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -5350,6 +5344,10 @@ public abstract class Attack implements Serializable {
 			}
 			
 			super.apply(me, o, b);
+		}
+
+		public String getSapMessage(ActivePokemon victim) {
+			return victim.getName() + "'s dream was eaten!";
 		}
 	}
 
@@ -8339,7 +8337,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class DrainPunch extends Attack {
+	static class DrainPunch extends Attack implements SapHealthEffect {
 		private static final long serialVersionUID = 1L;
 
 		DrainPunch() {
@@ -8347,7 +8345,6 @@ public abstract class Attack implements Serializable {
 			super.power = 75;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PUNCHING);
-			super.moveTypes.add(MoveType.SAP_HEALTH);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
@@ -8466,14 +8463,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class HornLeech extends Attack {
+	static class HornLeech extends Attack implements SapHealthEffect {
 		private static final long serialVersionUID = 1L;
 
 		HornLeech() {
 			super(AttackNamesies.HORN_LEECH, "The user drains the target's energy with its horns. The user's HP is restored by half the damage taken by the target.", 10, Type.GRASS, MoveCategory.PHYSICAL);
 			super.power = 75;
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.SAP_HEALTH);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
@@ -9999,15 +9995,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class OblivionWing extends Attack {
+	static class OblivionWing extends Attack implements SapHealthEffect {
 		private static final long serialVersionUID = 1L;
 
 		OblivionWing() {
 			super(AttackNamesies.OBLIVION_WING, "The user absorbs its target's HP. The user's HP is restored by over half of the damage taken by the target.", 10, Type.FLYING, MoveCategory.SPECIAL);
 			super.power = 80;
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.SAP_HEALTH);
-			super.moveTypes.add(MoveType.SAP_75);
+		}
+
+		public double sapPercentage() {
+			return .75;
 		}
 	}
 
@@ -10091,16 +10089,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class DrainingKiss extends Attack {
+	static class DrainingKiss extends Attack implements SapHealthEffect {
 		private static final long serialVersionUID = 1L;
 
 		DrainingKiss() {
 			super(AttackNamesies.DRAINING_KISS, "The user steals the target's energy with a kiss. The user's HP is restored by over half of the damage taken by the target.", 10, Type.FAIRY, MoveCategory.SPECIAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.SAP_HEALTH);
-			super.moveTypes.add(MoveType.SAP_75);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public double sapPercentage() {
+			return .75;
 		}
 	}
 
@@ -10114,14 +10114,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class ParabolicCharge extends Attack {
+	static class ParabolicCharge extends Attack implements SapHealthEffect {
 		private static final long serialVersionUID = 1L;
 
 		ParabolicCharge() {
 			super(AttackNamesies.PARABOLIC_CHARGE, "The user attacks everything around it. The user's HP is restored by half the damage taken by those hit.", 20, Type.ELECTRIC, MoveCategory.SPECIAL);
 			super.power = 50;
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.SAP_HEALTH);
 		}
 	}
 

@@ -7,6 +7,7 @@ import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.PassableEffect;
+import battle.effect.SapHealthEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeMove;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
@@ -86,7 +87,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	static class LeechSeed extends PokemonEffect implements EndTurnEffect, RapidSpinRelease, PassableEffect {
+	static class LeechSeed extends PokemonEffect implements EndTurnEffect, RapidSpinRelease, PassableEffect, SapHealthEffect {
 		private static final long serialVersionUID = 1L;
 
 		LeechSeed() {
@@ -117,8 +118,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 				return;
 			}
 			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was sapped!"));
-			b.getOtherPokemon(victim.isPlayer()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false, false);
+			Messages.add(new MessageUpdate(this.getSapMessage(victim)));
+			this.sapHealth(b, b.getOtherPokemon(victim), victim, victim.reduceHealthFraction(b, 1/8.0), false);
 		}
 
 		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
@@ -2488,7 +2489,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (p.getAttack().isMoveType(MoveType.SAP_HEALTH)) {
+			if (p.getAttack() instanceof SapHealthEffect) {
 				b.printAttacking(p);
 				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 				return false;

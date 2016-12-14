@@ -20,7 +20,7 @@ Failure:
 ***
 
 LeechSeed:
-	Int: EndTurnEffect, RapidSpinRelease, PassableEffect
+	Int: EndTurnEffect, RapidSpinRelease, PassableEffect, SapHealthEffect
 	FailType: Grass
 	FailMessage: 
 	if (victim.isType(b, Type.GRASS)) {
@@ -36,8 +36,8 @@ LeechSeed:
 		return;
 	}
 	
-	Messages.add(new MessageUpdate(victim.getName() + "'s health was sapped!"));
-	b.getOtherPokemon(victim.isPlayer()).sapHealth(victim, victim.reduceHealthFraction(b, 1/8.0), b, false, false);
+	Messages.add(new MessageUpdate(this.getSapMessage(victim)));
+	this.sapHealth(b, b.getOtherPokemon(victim), victim, victim.reduceHealthFraction(b, 1/8.0), false);
 	###
 	RapidSpin: releaser.getName() + " was released from leech seed!"
 *
@@ -1006,7 +1006,7 @@ HealBlock:
 	SubsideMessage: "The effects of heal block wore off."
 	Int: BeforeTurnEffect
 	CanAttack:
-	if (p.getAttack().isMoveType(MoveType.SAP_HEALTH)) {
+	if (p.getAttack() instanceof SapHealthEffect) {
 		b.printAttacking(p);
 		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 		return false;

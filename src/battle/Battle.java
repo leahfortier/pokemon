@@ -505,6 +505,10 @@ public class Battle {
 	public Team getTrainer(boolean isPlayer) {
 		return isPlayer ? player : opponent;
 	}
+
+	public ActivePokemon getOtherPokemon(ActivePokemon pokemon) {
+		return getOtherPokemon(pokemon.isPlayer());
+	}
 	
 	// Returns the current Pokemon that is out on the team opposite to the one passed in
 	public ActivePokemon getOtherPokemon(boolean isPlayer) {

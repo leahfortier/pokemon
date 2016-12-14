@@ -2439,3 +2439,17 @@ DamageTakenEffect:
 		Header: void damageTaken(Battle b, ActivePokemon damageTaker)
 	*
 ***
+SapHealthEffect:
+	SapPercentage:
+		Header: double sapPercentage()
+		Optional: True
+	*
+	SapAmount:
+		Header: int getSapAmount(ActivePokemon victim, int damageAmount)
+		Optional: True
+	*
+	SapMessage:
+		Header: String getSapMessage(ActivePokemon victim)
+		Optional: True
+	*
+***

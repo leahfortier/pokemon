@@ -1811,7 +1811,7 @@ Hyper Voice:
 	MoveType: Sound_Based
 *
 Leech Life:
-	MoveType: Sap_Health
+	Int: SapHealthEffect
 	Cat: Physical
 	Acc: 100
 	Pow: 20
@@ -1861,12 +1861,12 @@ Absorb:
 	Cat: Special
 	Acc: 100
 	Type: Grass
-	MoveType: Sap_Health
+	Int: SapHealthEffect
 *
 Mega Drain:
 	PP: 15
 	Desc: A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.
-	MoveType: Sap_Health
+	Int: SapHealthEffect
 	Type: Grass
 	Pow: 40
 	Acc: 100
@@ -1900,7 +1900,7 @@ Natural Gift:
 *
 Giga Drain:
 	Desc: A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.
-	MoveType: Sap_Health
+	Int: SapHealthEffect
 	Type: Grass
 	Pow: 75
 	Acc: 100
@@ -3111,7 +3111,8 @@ Dream Eater:
 	Acc: 100
 	Cat: Special
 	Type: Psychic
-	MoveType: Sap_Health
+	Int: SapHealthEffect
+	SapMessage: return victim.getName() + "'s dream was eaten!";
 	ApplyError: !o.hasStatus(StatusCondition.ASLEEP)
 *
 Dark Pulse:
@@ -5024,7 +5025,8 @@ Drain Punch:
 	PP: 10
 	Type: Fighting
 	Pow: 75
-	MoveType: Punching, Sap_Health
+	MoveType: Punching
+	Int: SapHealthEffect
 	Acc: 100
 	Cat: Physical
 *
@@ -5103,7 +5105,7 @@ Horn Leech:
 	Cat: Physical
 	Acc: 100
 	Pow: 75
-	MoveType: Sap_Health
+	Int: SapHealthEffect
 *
 Electroweb:
 	Desc: The user captures and attacks opposing Pok\u00e9mon by using an electric net. It reduces the targets' Speed stat.
@@ -5932,7 +5934,8 @@ Oblivion Wing:
 	Acc: 100
 	Pow: 80
 	Type: Flying
-	MoveType: Sap_Health, Sap_75
+	Int: SapHealthEffect
+	SapPercentage: return .75;
 *
 Geomancy:
 	Desc: The user absorbs energy and sharply raises its Sp. Atk, Sp. Def, and Speed stats on the next turn.
@@ -5982,7 +5985,8 @@ Nuzzle:
 	Status: Paralyzed
 *
 Draining Kiss:
-	MoveType: Sap_Health, Sap_75
+	Int: SapHealthEffect
+	SapPercentage: return .75;
 	Desc: The user steals the target's energy with a kiss. The user's HP is restored by over half of the damage taken by the target.
 	PP: 10
 	Type: Fairy
@@ -6006,7 +6010,7 @@ Parabolic Charge:
 	Pow: 50
 	Acc: 100
 	Cat: Special
-	MoveType: Sap_Health
+	Int: SapHealthEffect
 *
 Disarming Voice:
 	Desc: Letting out a charming cry, the user does emotional damage to opposing Pok\u00e9mon. This attack never misses.

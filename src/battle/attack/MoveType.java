@@ -21,8 +21,6 @@ public enum MoveType {
     POWDER,
     PROTECT_PIERCING,
     PUNCHING,
-    SAP_75,
-    SAP_HEALTH,
     SLEEP_TALK_FAIL,
     SOUND_BASED,
     SUCCESSIVE_DECAY,
