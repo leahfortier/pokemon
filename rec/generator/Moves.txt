@@ -6326,3 +6326,18 @@ Precipice Blades:
 	Pow: 120
 	Acc: 85
 *
+Shore Up:
+	Desc: The user regains up to half of its max HP. It restores more HP in a sandstorm.
+	Type: Ground
+	Cat: Status
+	PP: 10
+	Int: SelfHealingMove
+	SelfHealing: 
+	if (b.getWeather().namesies() == EffectNamesies.SANDSTORM) {
+		victim.healHealthFraction(1);
+	} 
+	else {
+		victim.healHealthFraction(1/2.0);
+	}
+	###
+*

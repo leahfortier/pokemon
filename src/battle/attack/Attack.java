@@ -1655,7 +1655,7 @@ public abstract class Attack implements Serializable {
 
 		FalseSwipe() {
 			super(AttackNamesies.FALSE_SWIPE, "A restrained attack that prevents the target from fainting. The target is left with at least 1 HP.", 40, Type.NORMAL, MoveCategory.PHYSICAL);
-			super.power = 40;
+			super.power = 240;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -10576,6 +10576,31 @@ public abstract class Attack implements Serializable {
 			super.power = 120;
 			super.accuracy = 85;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class ShoreUp extends Attack implements SelfHealingMove {
+		private static final long serialVersionUID = 1L;
+
+		ShoreUp() {
+			super(AttackNamesies.SHORE_UP, "The user regains up to half of its max HP. It restores more HP in a sandstorm.", 10, Type.GROUND, MoveCategory.STATUS);
+			super.selfTarget = true;
+		}
+
+		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
+			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+				return;
+			}
+			
+			if (b.getWeather().namesies() == EffectNamesies.SANDSTORM) {
+				victim.healHealthFraction(1);
+			}
+			else {
+				victim.healHealthFraction(1/2.0);
+			}
+			
+			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
 		}
 	}
 }

@@ -457,6 +457,7 @@ import battle.attack.Attack.SheerCold;
 import battle.attack.Attack.ShellSmash;
 import battle.attack.Attack.ShiftGear;
 import battle.attack.Attack.ShockWave;
+import battle.attack.Attack.ShoreUp;
 import battle.attack.Attack.SignalBeam;
 import battle.attack.Attack.SilverWind;
 import battle.attack.Attack.SimpleBeam;
@@ -1199,7 +1200,8 @@ public enum AttackNamesies {
 	DAZZLING_GLEAM("Dazzling Gleam", DazzlingGleam::new),
 	STRENGTH("Strength", Strength::new),
 	ORIGIN_PULSE("Origin Pulse", OriginPulse::new),
-	PRECIPICE_BLADES("Precipice Blades", PrecipiceBlades::new);
+	PRECIPICE_BLADES("Precipice Blades", PrecipiceBlades::new),
+	SHORE_UP("Shore Up", ShoreUp::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
