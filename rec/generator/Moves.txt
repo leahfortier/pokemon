@@ -474,6 +474,13 @@ Spiky Shield:
 	Cat: Status
 	ProtectingAttack: SpikyShield
 *
+Baneful Bunker:
+	Desc: In addition to protecting the user from attacks, this move also poisons any attacker that makes direct contact.
+	Type: Poison
+	PP: 10
+	Cat: Status
+	ProtectingAttack: BanefulBunker
+*
 King's Shield:
 	Desc: The user takes a defensive stance while it protects itself from damage. It also harshly lowers the Attack stat of any attacker who makes direct contact.
 	Type: Steel
@@ -6340,4 +6347,14 @@ Shore Up:
 		victim.healHealthFraction(1/2.0);
 	}
 	###
+*
+First Impression:
+	Desc: Although this move has great power, it only works the first turn the user is in battle.
+	Type: Bug
+	Cat: Physical
+	Pow: 90
+	PP: 10
+	Acc: 100
+	Priority: 2
+	ApplyError: !me.getAttributes().isFirstTurn()
 *

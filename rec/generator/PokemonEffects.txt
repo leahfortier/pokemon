@@ -118,6 +118,15 @@ SpikyShield:
 	}
 	###
 *
+BanefulBunker:
+	ProtectingEffect: True
+	OnProtectingSuccess:
+	// Pokemon that make contact with the baneful bunker are become poisoned
+	if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusCondition.POISONED, b, opp, p)) {
+		Status.giveStatus(b, opp, p, StatusCondition.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
+	}
+	###
+*
 Protecting:
 	ProtectingEffect: True
 *

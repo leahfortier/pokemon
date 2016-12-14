@@ -715,6 +715,59 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
+	static class BanefulBunker extends PokemonEffect implements OpponentBeforeTurnEffect {
+		private static final long serialVersionUID = 1L;
+
+		BanefulBunker() {
+			super(EffectNamesies.BANEFUL_BUNKER, 1, 1, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(victim.hasEffect(this.namesies));
+		}
+
+		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
+			return true;
+		}
+
+		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b) {
+			// Pokemon that make contact with the baneful bunker are become poisoned
+			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusCondition.POISONED, b, opp, p)) {
+				Status.giveStatus(b, opp, p, StatusCondition.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
+			}
+		}
+
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
+				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
+				return;
+			}
+			
+			super.cast(b, caster, victim, source, printCast);
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + " protected itself!";
+		}
+
+		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+			// Self-target moves, moves that penetrate Protect, and other conditions
+			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) {
+				return true;
+			}
+			
+			// Protect is a success!
+			b.printAttacking(p);
+			Messages.add(new MessageUpdate(opp.getName() + " is protecting itself!"));
+			CrashDamageMove.invokeCrashDamageMove(b, p);
+			
+			// Additional Effects
+			protectingEffects(p, opp, b);
+			
+			return false;
+		}
+	}
+
 	static class Protecting extends PokemonEffect implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 

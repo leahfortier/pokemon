@@ -29,6 +29,7 @@ import battle.attack.Attack.AuroraBeam;
 import battle.attack.Attack.Autotomize;
 import battle.attack.Attack.Avalanche;
 import battle.attack.Attack.BabyDollEyes;
+import battle.attack.Attack.BanefulBunker;
 import battle.attack.Attack.Barrage;
 import battle.attack.Attack.Barrier;
 import battle.attack.Attack.BatonPass;
@@ -170,6 +171,7 @@ import battle.attack.Attack.FireBlast;
 import battle.attack.Attack.FireFang;
 import battle.attack.Attack.FirePunch;
 import battle.attack.Attack.FireSpin;
+import battle.attack.Attack.FirstImpression;
 import battle.attack.Attack.Fissure;
 import battle.attack.Attack.Flail;
 import battle.attack.Attack.FlameBurst;
@@ -651,6 +653,7 @@ public enum AttackNamesies {
 	RAPID_SPIN("Rapid Spin", RapidSpin::new),
 	REFLECT("Reflect", Reflect::new),
 	SPIKY_SHIELD("Spiky Shield", SpikyShield::new),
+	BANEFUL_BUNKER("Baneful Bunker", BanefulBunker::new),
 	KINGS_SHIELD("King's Shield", KingsShield::new),
 	PROTECT("Protect", Protect::new),
 	DETECT("Detect", Detect::new),
@@ -1201,7 +1204,8 @@ public enum AttackNamesies {
 	STRENGTH("Strength", Strength::new),
 	ORIGIN_PULSE("Origin Pulse", OriginPulse::new),
 	PRECIPICE_BLADES("Precipice Blades", PrecipiceBlades::new),
-	SHORE_UP("Shore Up", ShoreUp::new);
+	SHORE_UP("Shore Up", ShoreUp::new),
+	FIRST_IMPRESSION("First Impression", FirstImpression::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

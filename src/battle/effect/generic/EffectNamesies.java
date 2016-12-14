@@ -11,6 +11,7 @@ import battle.effect.generic.BattleEffect.WaterSport;
 import battle.effect.generic.BattleEffect.WonderRoom;
 import battle.effect.generic.PokemonEffect.AquaRing;
 import battle.effect.generic.PokemonEffect.BadPoison;
+import battle.effect.generic.PokemonEffect.BanefulBunker;
 import battle.effect.generic.PokemonEffect.Bide;
 import battle.effect.generic.PokemonEffect.Binded;
 import battle.effect.generic.PokemonEffect.Bracing;
@@ -119,6 +120,7 @@ public enum EffectNamesies {
 	SAND_TOMB("SandTomb", SandTomb::new),
 	KINGS_SHIELD("KingsShield", KingsShield::new),
 	SPIKY_SHIELD("SpikyShield", SpikyShield::new),
+	BANEFUL_BUNKER("BanefulBunker", BanefulBunker::new),
 	PROTECTING("Protecting", Protecting::new),
 	QUICK_GUARD("QuickGuard", QuickGuard::new),
 	CRAFTY_SHIELD("CraftyShield", CraftyShield::new),

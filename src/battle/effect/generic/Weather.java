@@ -185,7 +185,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			Messages.add(new MessageUpdate("The sandstorm rages"));
+			Messages.add(new MessageUpdate("The sandstorm rages."));
 			
 			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 			buffet(b, victim);

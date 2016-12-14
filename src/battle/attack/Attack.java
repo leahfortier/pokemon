@@ -1088,6 +1088,21 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	static class BanefulBunker extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		BanefulBunker() {
+			super(AttackNamesies.BANEFUL_BUNKER, "In addition to protecting the user from attacks, this move also poisons any attacker that makes direct contact.", 10, Type.POISON, MoveCategory.STATUS);
+			super.effects.add(EffectNamesies.BANEFUL_BUNKER);
+			super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
+			super.moveTypes.add(MoveType.ASSISTLESS);
+			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.NON_SNATCHABLE);
+			super.selfTarget = true;
+			super.priority = 4;
+		}
+	}
+
 	static class KingsShield extends Attack {
 		private static final long serialVersionUID = 1L;
 
@@ -1655,7 +1670,7 @@ public abstract class Attack implements Serializable {
 
 		FalseSwipe() {
 			super(AttackNamesies.FALSE_SWIPE, "A restrained attack that prevents the target from fainting. The target is left with at least 1 HP.", 40, Type.NORMAL, MoveCategory.PHYSICAL);
-			super.power = 240;
+			super.power = 40;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -10601,6 +10616,27 @@ public abstract class Attack implements Serializable {
 			}
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+	}
+
+	static class FirstImpression extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		FirstImpression() {
+			super(AttackNamesies.FIRST_IMPRESSION, "Although this move has great power, it only works the first turn the user is in battle.", 10, Type.BUG, MoveCategory.PHYSICAL);
+			super.power = 90;
+			super.accuracy = 100;
+			super.priority = 2;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (!me.getAttributes().isFirstTurn()) {
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+				return;
+			}
+			
+			super.apply(me, o, b);
 		}
 	}
 }
