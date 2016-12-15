@@ -6,6 +6,7 @@ import main.Global;
 import map.Direction;
 import map.MapData;
 import map.PathDirection;
+import map.WalkType;
 import map.entity.Entity;
 import util.Point;
 import util.StringUtils;
@@ -18,15 +19,18 @@ public abstract class MovableEntity extends Entity {
 	private int runFrame;
 	protected int transitionTime;
 	private int waitTime;
-	private String tempPath;
+
 	private int pathIndex;
+	private String tempPath;
+	private boolean endedTempPath;
+	private EndPathListener endPathListener;
 
 	MovableEntity(Point location, String triggerName, String condition, int spriteIndex) {
 		super(location, triggerName, condition);
-		
+
 		this.transitionTime = 0;
 		this.runFrame = 0;
-		
+
 		this.spriteIndex = spriteIndex;
 	}
 
@@ -39,9 +43,10 @@ public abstract class MovableEntity extends Entity {
 	public abstract Direction getDirection();
 	protected abstract void setDirection(Direction direction);
 
-	protected void setTempPath(String path) {
+	public void setTempPath(String path, EndPathListener listener) {
 		this.tempPath = path;
 		this.pathIndex = 0;
+		this.endPathListener = listener;
 	}
 
 	protected boolean hasTempPath() {
@@ -68,9 +73,9 @@ public abstract class MovableEntity extends Entity {
 	@Override
 	public void update(int dt, MapData currentMap, MapView view) {
 		if (transitionTime != 0) {
-			transitionTime += dt;	
+			transitionTime += dt;
 		}
-		
+
 		if (transitionTime > getTransitionTime()) {
 			transitionTime = 0;
 			runFrame = (runFrame + 1)%2;
@@ -85,6 +90,16 @@ public abstract class MovableEntity extends Entity {
 			String path = this.tempPath;
 			if (tempPath == null) {
 				path = this.getPath();
+			} else if (endedTempPath) {
+				if (this.endPathListener != null) {
+					this.endPathListener.endPathCallback();
+				}
+
+				tempPath = null;
+				endedTempPath = false;
+				endPath();
+
+				path = null;
 			}
 
 			if (!StringUtils.isNullOrEmpty(path)) {
@@ -110,8 +125,7 @@ public abstract class MovableEntity extends Entity {
 
 				pathIndex %= path.length();
 				if (pathIndex == 0 && tempPath != null) {
-					tempPath = null;
-					endPath();
+					endedTempPath = true;
 				}
 			}
 		}
@@ -141,5 +155,16 @@ public abstract class MovableEntity extends Entity {
 
 	public static int getTrainerSpriteIndex(int spriteIndex, Direction direction) {
 		return 12*spriteIndex + 1 + direction.ordinal();
+	}
+
+	public Point getNewLocation(Point location, Direction direction, MapData currentMap) {
+		Point newLocation = Point.add(location, direction.getDeltaPoint());
+
+		WalkType passValue = currentMap.getPassValue(newLocation);
+		if (passValue.isPassable(direction) && !currentMap.hasEntity(newLocation)) {
+			return newLocation;
+		}
+
+		return null;
 	}
 }

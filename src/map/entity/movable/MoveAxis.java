@@ -7,12 +7,12 @@ public enum MoveAxis {
     X_ONLY((thisLocation, thisDirection, otherLocation) -> thisLocation.x == otherLocation.x),
     Y_ONLY((thisLocation, thisDirection, otherLocation) -> thisLocation.y == otherLocation.y),
     BOTH((thisLocation, thisDirection, otherLocation) ->
-            X_ONLY.checker.canMove(thisLocation, thisDirection, otherLocation)
-                    || Y_ONLY.checker.canMove(thisLocation, thisDirection, otherLocation)
+            X_ONLY.checker.checkAxis(thisLocation, thisDirection, otherLocation)
+                    || Y_ONLY.checker.checkAxis(thisLocation, thisDirection, otherLocation)
     ),
     FACING((thisLocation, thisDirection, otherLocation) -> {
         // Not in the same row or the same column
-        if (!BOTH.checker.canMove(thisLocation, thisDirection, otherLocation)) {
+        if (!BOTH.checker.checkAxis(thisLocation, thisDirection, otherLocation)) {
             return false;
         }
 
@@ -23,17 +23,17 @@ public enum MoveAxis {
         return thisDirection.getDeltaPoint().equals(deltaDirection);
     });
 
-    private final MovableChecker checker;
+    private final AxisChecker checker;
 
-    MoveAxis(MovableChecker checker) {
+    MoveAxis(AxisChecker checker) {
         this.checker = checker;
     }
 
-    private interface MovableChecker {
-        boolean canMove(Point thisLocation, Direction thisDirection, Point otherLocation);
+    private interface AxisChecker {
+        boolean checkAxis(Point thisLocation, Direction thisDirection, Point otherLocation);
     }
 
-    public boolean canMove(Point thisLocation, Direction thisDirection, Point otherLocation) {
-        return this.checker.canMove(thisLocation, thisDirection, otherLocation);
+    public boolean checkAxis(Point thisLocation, Direction thisDirection, Point otherLocation) {
+        return this.checker.checkAxis(thisLocation, thisDirection, otherLocation);
     }
 }

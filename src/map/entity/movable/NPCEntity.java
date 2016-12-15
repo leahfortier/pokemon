@@ -57,7 +57,7 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	void walkTowards(int steps, PathDirection direction) {
-		super.setTempPath(direction.getTempPath(steps));
+		super.setTempPath(direction.getTempPath(steps), null);
 		walkingToPlayer = true;
 	}
 
@@ -112,15 +112,15 @@ public class NPCEntity extends MovableEntity {
 	@Override
 	public void getAttention(Direction direction) {
 		this.setDirection(direction);
-		if (this.moveAxis == MoveAxis.FACING) {
+		if (this.moveAxis == MoveAxis.FACING && !this.hasTempPath()) {
 			hasAttention = true;
 		}
 	}
 
-	boolean canWalkToPlayer(Point location) {
+	boolean canWalkToPlayer() {
 		return this.isWalkToPlayer()
 				&& !this.walkingToPlayer
-				&& this.moveAxis.canMove(this.getLocation(), this.getDirection(), location)
+				&& this.moveAxis.checkAxis(this.getLocation(), this.getDirection(), Game.getPlayer().getLocation())
 				&& Game.getData().getTrigger(this.getWalkTrigger()).isTriggered();
 	}
 
@@ -172,4 +172,9 @@ public class NPCEntity extends MovableEntity {
 		dataCreated = true;
 	}
 
+	@Override
+	public void setTempPath(String path, EndPathListener listener) {
+		super.setTempPath(path, listener);
+		hasAttention = false;
+	}
 }

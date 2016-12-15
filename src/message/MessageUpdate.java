@@ -46,6 +46,7 @@ public class MessageUpdate {
 	public enum Update {
 		NO_UPDATE,
 		TRIGGER,
+		RESET_STATE,
 		ENTER_BATTLE,
 		ENTER_NAME,
 		APPEND_TO_NAME,
@@ -404,6 +405,10 @@ public class MessageUpdate {
 
 	public boolean trigger() {
 		return updateType == Update.TRIGGER;
+	}
+
+	public boolean resetState() {
+		return updateType == Update.RESET_STATE;
 	}
 
 	public String getTriggerName() {

@@ -7,6 +7,7 @@ import input.InputControl;
 import main.Game;
 import map.entity.EntityAction;
 import map.entity.movable.PlayerEntity;
+import map.triggers.HaltTrigger;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.Messages;
@@ -63,9 +64,8 @@ class MessageState implements VisualStateHandler {
             }
 
             boolean newMessage = false;
-            while (Messages.hasMessages()) {
+            while (!HaltTrigger.isHalted() && Messages.hasMessages()) {
                 mapView.cycleMessage();
-
                 if (!mapView.isState(VisualState.MESSAGE) || !StringUtils.isNullOrEmpty(mapView.getCurrentMessage().getMessage())) {
                     newMessage = true;
                     break;
@@ -73,11 +73,7 @@ class MessageState implements VisualStateHandler {
             }
 
             if (!newMessage && !Messages.hasMessages()) {
-                playerEntity.resetCurrentInteractionEntity();
-                mapView.resetCurrentMessage();
-                if (!VisualState.hasBattle()) {
-                    mapView.setState(VisualState.MAP);
-                }
+                mapView.resetMessageState();
             }
         }
     }

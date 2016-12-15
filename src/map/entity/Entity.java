@@ -72,7 +72,7 @@ public abstract class Entity {
 	public abstract void addData();
 	public abstract void reset();
 
-	protected String getEntityName() {
+	public String getEntityName() {
 		return this.entityName;
 	}
 
