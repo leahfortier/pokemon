@@ -77,6 +77,7 @@ public enum WalkType {
     }
 
     public static WalkType getWalkType(int value) {
+        value &= (1<<24) - 1;
         if (valueMap.containsKey(value)) {
             return valueMap.get(value);
         }

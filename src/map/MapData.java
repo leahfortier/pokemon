@@ -40,7 +40,7 @@ public class MapData {
 
 	private final List<Entity> entities;
 	private final MultiMap<Integer, String> triggers;
-	private final Map<String, Integer> mapEntrances;
+	private final Map<String, MapTransitionMatcher> mapEntrances;
 
 	public MapData(File file) {
 		name = file.getName();
@@ -71,8 +71,7 @@ public class MapData {
 		for (MapTransitionMatcher matcher : mapDataMatcher.getMapTransitions()) {
             matcher.setMapName(this.name);
 
-			Point entrance = matcher.getLocation();
-			mapEntrances.put(matcher.getExitName(), getMapIndex(entrance));
+			mapEntrances.put(matcher.getExitName(), matcher);
 
             Point exit = matcher.getExitLocation();
 			if (exit != null) {
@@ -113,6 +112,14 @@ public class MapData {
 		return point.getIndex(getDimension().width);
 	}
 
+	public PathDirection getExitDirection(String entranceName) {
+		return this.mapEntrances.get(entranceName).getDirection();
+	}
+
+	public Point getEntranceLocation(String entranceName) {
+		return this.mapEntrances.get(entranceName).getLocation();
+	}
+
 	public Dimension getDimension() {
 		return this.dimension;
 	}
@@ -143,9 +150,11 @@ public class MapData {
 			return WalkType.NOT_WALKABLE;
 		}
 
-		// TODO: SRSLY WHAT IS GOING ON
-		int val = rgb&((1<<24) - 1);
-		return WalkType.getWalkType(val);
+		return WalkType.getWalkType(rgb);
+	}
+
+	public boolean isPassable(Point location, Direction direction) {
+		return getPassValue(location).isPassable(direction);
 	}
 
 	public AreaData getArea(Point location) {
@@ -181,8 +190,7 @@ public class MapData {
 		CharacterData player = Game.getPlayer();
 		String entranceName = player.getMapEntranceName();
         if (mapEntrances.containsKey(entranceName)) {
-			int entranceIndex = mapEntrances.get(entranceName);
-			Point entranceLocation = Point.getPointAtIndex(entranceIndex, dimension.width);
+			Point entranceLocation = getEntranceLocation(entranceName);
 			player.setLocation(entranceLocation);
 
 			return true;
@@ -201,15 +209,27 @@ public class MapData {
 				.filter(entity -> entity.isVisible() && entity.getLocation().equals(location))
 				.collect(Collectors.toList());
 
-		if (presentEntities.isEmpty()) {
+		return validateEntities(presentEntities);
+	}
+
+	public Entity getEntity(String entityName) {
+		List<Entity> presentEntities = entities.stream()
+				.filter(entity -> entity.isVisible() && entity.getEntityName().equals(entityName))
+				.collect(Collectors.toList());
+
+		return validateEntities(presentEntities);
+	}
+
+	private Entity validateEntities(List<Entity> entities) {
+		if (entities.isEmpty()) {
 			return null;
 		}
 
-		if (presentEntities.size() != 1) {
-			Global.error("Multiple entities present at location " + location);
+		if (entities.size() != 1) {
+			Global.error("Multiple entities present");
 		}
 
-		return presentEntities.get(0);
+		return entities.get(0);
 	}
 
 	public boolean hasEntity(Point location) {
