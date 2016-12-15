@@ -6,6 +6,7 @@ import battle.effect.generic.BattleEffect.Gravity;
 import battle.effect.generic.BattleEffect.MagicRoom;
 import battle.effect.generic.BattleEffect.MistyTerrain;
 import battle.effect.generic.BattleEffect.MudSport;
+import battle.effect.generic.BattleEffect.PsychicTerrain;
 import battle.effect.generic.BattleEffect.TrickRoom;
 import battle.effect.generic.BattleEffect.WaterSport;
 import battle.effect.generic.BattleEffect.WonderRoom;
@@ -69,6 +70,7 @@ import battle.effect.generic.PokemonEffect.Safeguard;
 import battle.effect.generic.PokemonEffect.SandTomb;
 import battle.effect.generic.PokemonEffect.SelfConfusion;
 import battle.effect.generic.PokemonEffect.Snatch;
+import battle.effect.generic.PokemonEffect.SoundBlock;
 import battle.effect.generic.PokemonEffect.SpikyShield;
 import battle.effect.generic.PokemonEffect.Stockpile;
 import battle.effect.generic.PokemonEffect.Substitute;
@@ -146,6 +148,7 @@ public enum EffectNamesies {
 	FORESIGHT("Foresight", Foresight::new),
 	MIRACLE_EYE("MiracleEye", MiracleEye::new),
 	TORMENT("Torment", Torment::new),
+	SOUND_BLOCK("SoundBlock", SoundBlock::new),
 	TAUNT("Taunt", Taunt::new),
 	LASER_FOCUS("LaserFocus", LaserFocus::new),
 	LOCK_ON("LockOn", LockOn::new),
@@ -206,6 +209,7 @@ public enum EffectNamesies {
 	MISTY_TERRAIN("MistyTerrain", MistyTerrain::new),
 	GRASSY_TERRAIN("GrassyTerrain", GrassyTerrain::new),
 	ELECTRIC_TERRAIN("ElectricTerrain", ElectricTerrain::new),
+	PSYCHIC_TERRAIN("PsychicTerrain", PsychicTerrain::new),
 	CLEAR_SKIES("ClearSkies", ClearSkies::new),
 	RAINING("Raining", Raining::new),
 	SUNNY("Sunny", Sunny::new),

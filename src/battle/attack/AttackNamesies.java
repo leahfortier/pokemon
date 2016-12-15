@@ -12,6 +12,7 @@ import battle.attack.Attack.Agility;
 import battle.attack.Attack.AirCutter;
 import battle.attack.Attack.AirSlash;
 import battle.attack.Attack.Amnesia;
+import battle.attack.Attack.AnchorShot;
 import battle.attack.Attack.AncientPower;
 import battle.attack.Attack.AquaJet;
 import battle.attack.Attack.AquaRing;
@@ -206,6 +207,7 @@ import battle.attack.Attack.FusionFlare;
 import battle.attack.Attack.FutureSight;
 import battle.attack.Attack.GastroAcid;
 import battle.attack.Attack.GearGrind;
+import battle.attack.Attack.GearUp;
 import battle.attack.Attack.Geomancy;
 import battle.attack.Attack.GigaDrain;
 import battle.attack.Attack.GigaImpact;
@@ -380,6 +382,7 @@ import battle.attack.Attack.PoisonJab;
 import battle.attack.Attack.PoisonPowder;
 import battle.attack.Attack.PoisonSting;
 import battle.attack.Attack.PoisonTail;
+import battle.attack.Attack.PollenPuff;
 import battle.attack.Attack.Pound;
 import battle.attack.Attack.Powder;
 import battle.attack.Attack.PowderSnow;
@@ -395,6 +398,7 @@ import battle.attack.Attack.Protect;
 import battle.attack.Attack.Psybeam;
 import battle.attack.Attack.PsychUp;
 import battle.attack.Attack.Psychic;
+import battle.attack.Attack.PsychicTerrain;
 import battle.attack.Attack.PsychoBoost;
 import battle.attack.Attack.PsychoCut;
 import battle.attack.Attack.PsychoShift;
@@ -553,6 +557,7 @@ import battle.attack.Attack.Telekinesis;
 import battle.attack.Attack.Teleport;
 import battle.attack.Attack.Thief;
 import battle.attack.Attack.Thrash;
+import battle.attack.Attack.ThroatChop;
 import battle.attack.Attack.Thunder;
 import battle.attack.Attack.ThunderFang;
 import battle.attack.Attack.ThunderPunch;
@@ -1210,6 +1215,7 @@ public enum AttackNamesies {
 	BELCH("Belch", Belch::new),
 	VENOM_DRENCH("Venom Drench", VenomDrench::new),
 	ELECTRIC_TERRAIN("Electric Terrain", ElectricTerrain::new),
+	PSYCHIC_TERRAIN("Psychic Terrain", PsychicTerrain::new),
 	POWER_UP_PUNCH("Power-Up Punch", PowerUpPunch::new),
 	CONFIDE("Confide", Confide::new),
 	CUT("Cut", Cut::new),
@@ -1220,6 +1226,7 @@ public enum AttackNamesies {
 	SHORE_UP("Shore Up", ShoreUp::new),
 	FLORAL_HEALING("Floral Healing", FloralHealing::new),
 	FIRST_IMPRESSION("First Impression", FirstImpression::new),
+	ANCHOR_SHOT("Anchor Shot", AnchorShot::new),
 	SPIRIT_SHACKLE("Spirit Shackle", SpiritShackle::new),
 	DARKEST_LARIAT("Darkest Lariat", DarkestLariat::new),
 	SPARKLING_ARIA("Sparkling Aria", SparklingAria::new),
@@ -1227,7 +1234,10 @@ public enum AttackNamesies {
 	STRENGTH_SAP("Strength Sap", StrengthSap::new),
 	LEAFAGE("Leafage", Leafage::new),
 	TOXIC_THREAD("Toxic Thread", ToxicThread::new),
-	LASER_FOCUS("Laser Focus", LaserFocus::new);
+	LASER_FOCUS("Laser Focus", LaserFocus::new),
+	GEAR_UP("Gear Up", GearUp::new),
+	THROAT_CHOP("Throat Chop", ThroatChop::new),
+	POLLEN_PUFF("Pollen Puff", PollenPuff::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

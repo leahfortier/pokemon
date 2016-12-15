@@ -6300,6 +6300,13 @@ Electric Terrain:
 	Cat: Status
 	BattleEffect: ElectricTerrain
 *
+Psychic Terrain:
+	Desc: This protects Pokémon on the ground from priority moves and powers up Psychic-type moves for five turns.
+	Type: Psychic
+	PP: 10
+	Cat: Status
+	BattleEffect: PsychicTerrain
+*
 Power-Up Punch:
 	Desc: Striking opponents over and over makes the user's fists harder. Hitting a target raises the Attack stat.
 	PP: 20
@@ -6399,6 +6406,15 @@ First Impression:
 	Priority: 2
 	ApplyError: !me.getAttributes().isFirstTurn()
 *
+Anchor Shot:
+	Desc: The user entangles the target with its anchor chain while attacking. The target becomes unable to flee.
+	Type: Steel
+	PP: 20
+	Acc: 100
+	Pow: 80
+	Cat: Physical
+	Effect: Trapped
+*
 Spirit Shackle:
 	Desc: The user attacks while simultaneously stitching the target's shadow to the ground to prevent the target from escaping.
 	Type: Ghost
@@ -6477,4 +6493,47 @@ Laser Focus:
 	PP: 30
 	SelfTarget: True
 	Effect: LaserFocus
+*
+Gear Up:
+	Desc: The user engages its gears to raise its Attack and Sp. Atk stats.
+	Type: Steel
+	PP: 20
+	SelfTarget: True
+	Cat: Status
+	StatChange: 2 Attack 1 Sp_Attack 1/2
+*
+Throat Chop:
+	Desc: The user attacks the target's throat, and the resultant suffering prevents the target from using moves that emit sound for two turns.
+	Type: Dark
+	Cat: Physical
+	PP: 15
+	Pow: 80
+	Acc: 100
+	Effect: SoundBlock
+*
+Pollen Puff:
+	Desc: The user attacks the enemy with a pollen puff that explodes. If the target is an ally, it gives the ally a pollen puff that restores its HP instead.
+	Type: Bug
+	Cat: Special
+	PP: 15
+	Pow: 90
+	Acc: 100
+*
+Lunge:
+	Desc: The user makes a lunge at the target, attacking with full force. This also lowers the target's Attack stat.
+	Type: Bug
+	Cat: Physical
+	Pow: 80
+	Acc: 100
+	PP: 15
+	StatChange: 1 Attack -1
+*
+Fire Lash:
+	Desc: The user strikes the target with a burning lash. This also lowers the target's Defense stat.
+	Type: Fire
+	Cat: Physical
+	Pow: 80
+	Acc: 100
+	PP: 15
+	StatChange: 1 Defense -1
 *

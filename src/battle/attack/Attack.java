@@ -10561,6 +10561,17 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	static class PsychicTerrain extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		PsychicTerrain() {
+			super(AttackNamesies.PSYCHIC_TERRAIN, "This protects Pokémon on the ground from priority moves and powers up Psychic-type moves for five turns.", 10, Type.PSYCHIC, MoveCategory.STATUS);
+			super.effects.add(EffectNamesies.PSYCHIC_TERRAIN);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+			super.moveTypes.add(MoveType.FIELD);
+		}
+	}
+
 	static class PowerUpPunch extends Attack {
 		private static final long serialVersionUID = 1L;
 
@@ -10710,6 +10721,18 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	static class AnchorShot extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		AnchorShot() {
+			super(AttackNamesies.ANCHOR_SHOT, "The user entangles the target with its anchor chain while attacking. The target becomes unable to flee.", 20, Type.STEEL, MoveCategory.PHYSICAL);
+			super.power = 80;
+			super.accuracy = 100;
+			super.effects.add(EffectNamesies.TRAPPED);
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
 	static class SpiritShackle extends Attack {
 		private static final long serialVersionUID = 1L;
 
@@ -10818,6 +10841,39 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.LASER_FOCUS, "The user concentrates intensely. The attack on the next turn always results in a critical hit.", 30, Type.NORMAL, MoveCategory.STATUS);
 			super.effects.add(EffectNamesies.LASER_FOCUS);
 			super.selfTarget = true;
+		}
+	}
+
+	static class GearUp extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		GearUp() {
+			super(AttackNamesies.GEAR_UP, "The user engages its gears to raise its Attack and Sp. Atk stats.", 20, Type.STEEL, MoveCategory.STATUS);
+			super.selfTarget = true;
+			super.statChanges[Stat.ATTACK.index()] = 1;
+			super.statChanges[Stat.SP_ATTACK.index()] = 1/2;
+		}
+	}
+
+	static class ThroatChop extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		ThroatChop() {
+			super(AttackNamesies.THROAT_CHOP, "The user attacks the target's throat, and the resultant suffering prevents the target from using moves that emit sound for two turns.", 15, Type.DARK, MoveCategory.PHYSICAL);
+			super.power = 80;
+			super.accuracy = 100;
+			super.effects.add(EffectNamesies.SOUND_BLOCK);
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class PollenPuff extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		PollenPuff() {
+			super(AttackNamesies.POLLEN_PUFF, "The user attacks the enemy with a pollen puff that explodes. If the target is an ally, it gives the ally a pollen puff that restores its HP instead.", 15, Type.BUG, MoveCategory.SPECIAL);
+			super.power = 90;
+			super.accuracy = 100;
 		}
 	}
 }

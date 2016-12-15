@@ -1737,6 +1737,31 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
+	static class SoundBlock extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
+		private static final long serialVersionUID = 1L;
+
+		SoundBlock() {
+			super(EffectNamesies.SOUND_BLOCK, 3, 3, false);
+		}
+
+		public boolean usable(ActivePokemon p, Move m) {
+			return !m.getAttack().isMoveType(MoveType.SOUND_BASED);
+		}
+
+		public String getUnusableMessage(ActivePokemon p) {
+			return p.getName() + " cannot use sound-based moves!!";
+		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+			if (!usable(p, p.getMove())) {
+				b.printAttacking(p);
+				Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
+				return false;
+			}
+			return true;
+		}
+	}
+
 	static class Taunt extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 

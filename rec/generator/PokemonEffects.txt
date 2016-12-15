@@ -596,7 +596,24 @@ Torment:
 	return true;
 	###
 	CastMessage: user.getName() + " tormented " + victim.getName() + "!"
-*	
+*
+SoundBlock:
+	NumTurns: 3
+	CanHave: True
+	Int: AttackSelectionEffect, BeforeTurnEffect
+	Usable:
+	return !m.getAttack().isMoveType(MoveType.SOUND_BASED);
+	###
+	UnusableMessage: p.getName() + " cannot use sound-based moves!!"
+	CanAttack:
+	if (!usable(p, p.getMove())) {
+		b.printAttacking(p);
+		Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
+		return false;
+	}
+	return true;
+	###
+*
 Taunt:
 	NumTurns: 3
 	FailAbility: Aroma Veil, Oblivious
