@@ -47,6 +47,7 @@ import battle.effect.generic.PokemonEffect.Infatuated;
 import battle.effect.generic.PokemonEffect.Infestation;
 import battle.effect.generic.PokemonEffect.Ingrain;
 import battle.effect.generic.PokemonEffect.KingsShield;
+import battle.effect.generic.PokemonEffect.LaserFocus;
 import battle.effect.generic.PokemonEffect.LeechSeed;
 import battle.effect.generic.PokemonEffect.LockOn;
 import battle.effect.generic.PokemonEffect.MagicCoat;
@@ -146,6 +147,7 @@ public enum EffectNamesies {
 	MIRACLE_EYE("MiracleEye", MiracleEye::new),
 	TORMENT("Torment", Torment::new),
 	TAUNT("Taunt", Taunt::new),
+	LASER_FOCUS("LaserFocus", LaserFocus::new),
 	LOCK_ON("LockOn", LockOn::new),
 	TELEKINESIS("Telekinesis", Telekinesis::new),
 	INGRAIN("Ingrain", Ingrain::new),

@@ -5070,14 +5070,14 @@ Storm Throw:
 	Acc: 100
 	Type: Fighting
 	Cat: Physical
-	MoveType: Always_Crit
+	Int: AlwaysCritEffect
 *
 Frost Breath:
 	Desc: The user blows a cold breath on the target. This attack always results in a critical hit.
 	PP: 10
 	Type: Ice
 	Cat: Special
-	MoveType: Always_Crit
+	Int: AlwaysCritEffect
 	Pow: 60
 	Acc: 90
 *
@@ -6469,4 +6469,12 @@ Toxic Thread:
 	PP: 20
 	Status: Poisoned
 	StatChange: 1 Speed -1
+*
+Laser Focus:
+	Desc: The user concentrates intensely. The attack on the next turn always results in a critical hit.
+	Type: Normal
+	Cat: Status
+	PP: 30
+	SelfTarget: True
+	Effect: LaserFocus
 *

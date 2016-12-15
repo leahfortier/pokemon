@@ -8,10 +8,11 @@ import battle.effect.attack.ChangeTypeMove;
 import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.SelfHealingMove;
-import battle.effect.generic.Effect;
 import battle.effect.generic.CastSource;
+import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
+import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
@@ -8410,26 +8411,24 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class StormThrow extends Attack {
+	static class StormThrow extends Attack implements AlwaysCritEffect {
 		private static final long serialVersionUID = 1L;
 
 		StormThrow() {
 			super(AttackNamesies.STORM_THROW, "The user strikes the target with a fierce blow. This attack always results in a critical hit.", 10, Type.FIGHTING, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.ALWAYS_CRIT);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 
-	static class FrostBreath extends Attack {
+	static class FrostBreath extends Attack implements AlwaysCritEffect {
 		private static final long serialVersionUID = 1L;
 
 		FrostBreath() {
 			super(AttackNamesies.FROST_BREATH, "The user blows a cold breath on the target. This attack always results in a critical hit.", 10, Type.ICE, MoveCategory.SPECIAL);
 			super.power = 60;
 			super.accuracy = 90;
-			super.moveTypes.add(MoveType.ALWAYS_CRIT);
 		}
 	}
 
@@ -10809,6 +10808,16 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 			super.status = StatusCondition.POISONED;
 			super.statChanges[Stat.SPEED.index()] = -1;
+		}
+	}
+
+	static class LaserFocus extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		LaserFocus() {
+			super(AttackNamesies.LASER_FOCUS, "The user concentrates intensely. The attack on the next turn always results in a critical hit.", 30, Type.NORMAL, MoveCategory.STATUS);
+			super.effects.add(EffectNamesies.LASER_FOCUS);
+			super.selfTarget = true;
 		}
 	}
 }

@@ -13,6 +13,7 @@ import battle.effect.attack.ChangeTypeMove;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
+import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
@@ -1778,6 +1779,22 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 				return false;
 			}
 			return true;
+		}
+	}
+
+	static class LaserFocus extends PokemonEffect implements AlwaysCritEffect {
+		private static final long serialVersionUID = 1L;
+
+		LaserFocus() {
+			super(EffectNamesies.LASER_FOCUS, 2, 2, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(victim.hasEffect(this.namesies));
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getName() + " began focusing!";
 		}
 	}
 

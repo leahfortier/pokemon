@@ -2,7 +2,6 @@ package battle.attack;
 
 public enum MoveType {
     AIRBORNE,
-    ALWAYS_CRIT,
     ASLEEP_USER,
     ASSISTLESS,
     AURA_PULSE,

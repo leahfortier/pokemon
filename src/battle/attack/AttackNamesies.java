@@ -281,11 +281,13 @@ import battle.attack.Attack.Kinesis;
 import battle.attack.Attack.KingsShield;
 import battle.attack.Attack.KnockOff;
 import battle.attack.Attack.LandsWrath;
+import battle.attack.Attack.LaserFocus;
 import battle.attack.Attack.LastResort;
 import battle.attack.Attack.LavaPlume;
 import battle.attack.Attack.LeafBlade;
 import battle.attack.Attack.LeafStorm;
 import battle.attack.Attack.LeafTornado;
+import battle.attack.Attack.Leafage;
 import battle.attack.Attack.LeechLife;
 import battle.attack.Attack.LeechSeed;
 import battle.attack.Attack.Leer;
@@ -492,6 +494,7 @@ import battle.attack.Attack.Snore;
 import battle.attack.Attack.Soak;
 import battle.attack.Attack.SoftBoiled;
 import battle.attack.Attack.SolarBeam;
+import battle.attack.Attack.SolarBlade;
 import battle.attack.Attack.SonicBoom;
 import battle.attack.Attack.SpacialRend;
 import battle.attack.Attack.Spark;
@@ -561,6 +564,7 @@ import battle.attack.Attack.TopsyTurvy;
 import battle.attack.Attack.Torment;
 import battle.attack.Attack.Toxic;
 import battle.attack.Attack.ToxicSpikes;
+import battle.attack.Attack.ToxicThread;
 import battle.attack.Attack.Transform;
 import battle.attack.Attack.TriAttack;
 import battle.attack.Attack.Trick;
@@ -1222,7 +1226,8 @@ public enum AttackNamesies {
 	HIGH_HORSEPOWER("High Horsepower", HighHorsepower::new),
 	STRENGTH_SAP("Strength Sap", StrengthSap::new),
 	LEAFAGE("Leafage", Leafage::new),
-	TOXIC_THREAD("Toxic Thread", ToxicThread::new);
+	TOXIC_THREAD("Toxic Thread", ToxicThread::new),
+	LASER_FOCUS("Laser Focus", LaserFocus::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

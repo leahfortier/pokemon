@@ -621,6 +621,11 @@ Taunt:
 	CastMessage: victim.getName() + " fell for the taunt!"
 	SubsideMessage: "The effects of the taunt wore off."
 *	
+LaserFocus:
+	NumTurns: 2
+	CastMessage: user.getName() + " began focusing!"
+	Int: AlwaysCritEffect
+*
 LockOn:
 	NumTurns: 2
 	CastMessage: user.getName() + " took aim!"
