@@ -857,6 +857,38 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	static class SolarBlade extends Attack implements MultiTurnMove {
+		private static final long serialVersionUID = 1L;
+
+		SolarBlade() {
+			super(AttackNamesies.SOLAR_BLADE, "In this two-turn attack, the user gathers light and fills a blade with the light's energy, attacking the target on the next turn.", 10, Type.GRASS, MoveCategory.PHYSICAL);
+			super.power = 125;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public boolean isMultiTurn(Battle b, ActivePokemon user) {
+			return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
+		}
+
+		public boolean chargesFirst() {
+			return true;
+		}
+
+		public boolean semiInvulnerability() {
+			return false;
+		}
+
+		public void charge(ActivePokemon user, Battle b) {
+			Messages.add(new MessageUpdate(getChargeMessage(user)));
+		}
+
+		private String getChargeMessage(ActivePokemon user) {
+			return user.getName() + " began taking in sunlight!";
+		}
+	}
+
 	static class Flamethrower extends Attack {
 		private static final long serialVersionUID = 1L;
 
@@ -6226,6 +6258,20 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	static class IceHammer extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		IceHammer() {
+			super(AttackNamesies.ICE_HAMMER, "The user swings and hits with its strong, heavy fist. It lowers the user's Speed, however.", 10, Type.ICE, MoveCategory.PHYSICAL);
+			super.power = 100;
+			super.accuracy = 90;
+			super.moveTypes.add(MoveType.PUNCHING);
+			super.selfTarget = true;
+			super.statChanges[Stat.SPEED.index()] = -1;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
 	static class SoftBoiled extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
@@ -10619,6 +10665,31 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	static class FloralHealing extends Attack implements SelfHealingMove {
+		private static final long serialVersionUID = 1L;
+
+		FloralHealing() {
+			super(AttackNamesies.FLORAL_HEALING, "The user restores the target's HP by up to half of its max HP. It restores more HP when the terrain is grass.", 10, Type.FAIRY, MoveCategory.STATUS);
+			super.selfTarget = true;
+		}
+
+		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
+			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+				return;
+			}
+			
+			if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
+				victim.healHealthFraction(1);
+			}
+			else {
+				victim.healHealthFraction(1/2.0);
+			}
+			
+			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+	}
+
 	static class FirstImpression extends Attack {
 		private static final long serialVersionUID = 1L;
 
@@ -10637,6 +10708,107 @@ public abstract class Attack implements Serializable {
 			}
 			
 			super.apply(me, o, b);
+		}
+	}
+
+	static class SpiritShackle extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		SpiritShackle() {
+			super(AttackNamesies.SPIRIT_SHACKLE, "The user attacks while simultaneously stitching the target's shadow to the ground to prevent the target from escaping.", 10, Type.GHOST, MoveCategory.PHYSICAL);
+			super.power = 80;
+			super.accuracy = 100;
+			super.effects.add(EffectNamesies.TRAPPED);
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class DarkestLariat extends Attack implements OpponentIgnoreStageEffect {
+		private static final long serialVersionUID = 1L;
+
+		DarkestLariat() {
+			super(AttackNamesies.DARKEST_LARIAT, "The user swings both arms and hits the target. The target's stat changes don't affect this attack's damage.", 10, Type.DARK, MoveCategory.PHYSICAL);
+			super.power = 85;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public boolean ignoreStage(Stat s) {
+			return !s.user();
+		}
+	}
+
+	static class SparklingAria extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		SparklingAria() {
+			super(AttackNamesies.SPARKLING_ARIA, "The user bursts into song, emitting many bubbles. Any Pokémon suffering from a burn will be healed by the touch of these bubbles.", 10, Type.WATER, MoveCategory.SPECIAL);
+			super.power = 90;
+			super.accuracy = 100;
+		}
+
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			return super.power*(o.hasStatus(StatusCondition.ASLEEP) ? 2 : 1);
+		}
+
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (victim.hasStatus(StatusCondition.ASLEEP)) {
+				Status.removeStatus(b, victim, CastSource.ATTACK);
+			}
+		}
+	}
+
+	static class HighHorsepower extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		HighHorsepower() {
+			super(AttackNamesies.HIGH_HORSEPOWER, "The user fiercely attacks the target using its entire body.", 10, Type.GROUND, MoveCategory.PHYSICAL);
+			super.power = 95;
+			super.accuracy = 95;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class StrengthSap extends Attack implements SapHealthEffect {
+		private static final long serialVersionUID = 1L;
+
+		StrengthSap() {
+			super(AttackNamesies.STRENGTH_SAP, "The user restores its HP by the same amount as the target's Attack stat. It also lowers the target's Attack stat.", 10, Type.GRASS, MoveCategory.STATUS);
+			super.accuracy = 100;
+			super.statChanges[Stat.ATTACK.index()] = -1;
+		}
+
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			int victimAttackStat = Stat.getStat(Stat.ATTACK, victim, user, b);
+			super.applyEffects(b, user, victim);
+			
+			this.sapHealth(b, user, victim, victimAttackStat, true);
+		}
+
+		public double sapPercentage() {
+			return 1;
+		}
+	}
+
+	static class Leafage extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		Leafage() {
+			super(AttackNamesies.LEAFAGE, "The user attacks by pelting the target with leaves.", 40, Type.GRASS, MoveCategory.PHYSICAL);
+			super.power = 40;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class ToxicThread extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		ToxicThread() {
+			super(AttackNamesies.TOXIC_THREAD, "The user shoots poisonous threads to poison the target and lower the target's Speed stat.", 20, Type.POISON, MoveCategory.STATUS);
+			super.accuracy = 100;
+			super.status = StatusCondition.POISONED;
+			super.statChanges[Stat.SPEED.index()] = -1;
 		}
 	}
 }

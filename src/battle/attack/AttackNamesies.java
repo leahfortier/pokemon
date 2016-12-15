@@ -100,6 +100,7 @@ import battle.attack.Attack.Curse;
 import battle.attack.Attack.Cut;
 import battle.attack.Attack.DarkPulse;
 import battle.attack.Attack.DarkVoid;
+import battle.attack.Attack.DarkestLariat;
 import battle.attack.Attack.DazzlingGleam;
 import battle.attack.Attack.DefendOrder;
 import battle.attack.Attack.DefenseCurl;
@@ -183,6 +184,7 @@ import battle.attack.Attack.Flash;
 import battle.attack.Attack.FlashCannon;
 import battle.attack.Attack.Flatter;
 import battle.attack.Attack.Fling;
+import battle.attack.Attack.FloralHealing;
 import battle.attack.Attack.FlowerShield;
 import battle.attack.Attack.Fly;
 import battle.attack.Attack.FlyingPress;
@@ -241,6 +243,7 @@ import battle.attack.Attack.HeatWave;
 import battle.attack.Attack.HeavySlam;
 import battle.attack.Attack.Hex;
 import battle.attack.Attack.HiddenPower;
+import battle.attack.Attack.HighHorsepower;
 import battle.attack.Attack.HighJumpKick;
 import battle.attack.Attack.HoneClaws;
 import battle.attack.Attack.HornAttack;
@@ -257,6 +260,7 @@ import battle.attack.Attack.IceBall;
 import battle.attack.Attack.IceBeam;
 import battle.attack.Attack.IceBurn;
 import battle.attack.Attack.IceFang;
+import battle.attack.Attack.IceHammer;
 import battle.attack.Attack.IcePunch;
 import battle.attack.Attack.IceShard;
 import battle.attack.Attack.IcicleCrash;
@@ -491,10 +495,12 @@ import battle.attack.Attack.SolarBeam;
 import battle.attack.Attack.SonicBoom;
 import battle.attack.Attack.SpacialRend;
 import battle.attack.Attack.Spark;
+import battle.attack.Attack.SparklingAria;
 import battle.attack.Attack.SpiderWeb;
 import battle.attack.Attack.SpikeCannon;
 import battle.attack.Attack.Spikes;
 import battle.attack.Attack.SpikyShield;
+import battle.attack.Attack.SpiritShackle;
 import battle.attack.Attack.SpitUp;
 import battle.attack.Attack.Spite;
 import battle.attack.Attack.Splash;
@@ -509,6 +515,7 @@ import battle.attack.Attack.StoneEdge;
 import battle.attack.Attack.StoredPower;
 import battle.attack.Attack.StormThrow;
 import battle.attack.Attack.Strength;
+import battle.attack.Attack.StrengthSap;
 import battle.attack.Attack.StringShot;
 import battle.attack.Attack.Struggle;
 import battle.attack.Attack.StruggleBug;
@@ -636,6 +643,7 @@ public enum AttackNamesies {
 	SLASH("Slash", Slash::new),
 	TAIL_WHIP("Tail Whip", TailWhip::new),
 	SOLAR_BEAM("Solar Beam", SolarBeam::new),
+	SOLAR_BLADE("Solar Blade", SolarBlade::new),
 	FLAMETHROWER("Flamethrower", Flamethrower::new),
 	FLY("Fly", Fly::new),
 	FIRE_SPIN("Fire Spin", FireSpin::new),
@@ -965,6 +973,7 @@ public enum AttackNamesies {
 	SMOG("Smog", Smog::new),
 	CLEAR_SMOG("Clear Smog", ClearSmog::new),
 	HAMMER_ARM("Hammer Arm", HammerArm::new),
+	ICE_HAMMER("Ice Hammer", IceHammer::new),
 	SOFT_BOILED("Soft-Boiled", SoftBoiled::new),
 	ANCIENT_POWER("Ancient Power", AncientPower::new),
 	TICKLE("Tickle", Tickle::new),
@@ -1205,7 +1214,15 @@ public enum AttackNamesies {
 	ORIGIN_PULSE("Origin Pulse", OriginPulse::new),
 	PRECIPICE_BLADES("Precipice Blades", PrecipiceBlades::new),
 	SHORE_UP("Shore Up", ShoreUp::new),
-	FIRST_IMPRESSION("First Impression", FirstImpression::new);
+	FLORAL_HEALING("Floral Healing", FloralHealing::new),
+	FIRST_IMPRESSION("First Impression", FirstImpression::new),
+	SPIRIT_SHACKLE("Spirit Shackle", SpiritShackle::new),
+	DARKEST_LARIAT("Darkest Lariat", DarkestLariat::new),
+	SPARKLING_ARIA("Sparkling Aria", SparklingAria::new),
+	HIGH_HORSEPOWER("High Horsepower", HighHorsepower::new),
+	STRENGTH_SAP("Strength Sap", StrengthSap::new),
+	LEAFAGE("Leafage", Leafage::new),
+	TOXIC_THREAD("Toxic Thread", ToxicThread::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

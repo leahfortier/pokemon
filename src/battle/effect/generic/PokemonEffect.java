@@ -1620,7 +1620,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return user.getName() + " can't escape!";
+			return victim.getName() + " can't escape!";
 		}
 
 		public boolean isTrapped(Battle b, ActivePokemon escaper) {

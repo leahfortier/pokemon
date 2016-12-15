@@ -566,7 +566,7 @@ Imprison:
 *
 Trapped:
 	Int: TrappingEffect
-	CastMessage: user.getName() + " can't escape!"
+	CastMessage: victim.getName() + " can't escape!"
 	TrappingMessage: trapped.getName() + " cannot be recalled at this time!"
 *	
 Foresight:

@@ -313,6 +313,21 @@ Solar Beam:
 	return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
 	###
 *
+Solar Blade:
+	Desc: In this two-turn attack, the user gathers light and fills a blade with the light's energy, attacking the target on the next turn.
+	Pow: 125
+	Acc: 100
+	PP: 10
+	Type: Grass
+	Cat: Physical
+	Int: MultiTurnMove
+	ChargeMessage: user.getName() + " began taking in sunlight!"
+	SemiInv: false
+	ChargeFirst: true
+	IsMultiTurn: 
+	return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
+	###
+*
 Flamethrower:
 	Desc: The target is scorched with an intense blast of fire. It may also leave the target with a burn.
 	Type: Fire
@@ -3619,6 +3634,17 @@ Hammer Arm:
 	StatChange: 1 Speed -1
 	SelfTarget: True
 *
+Ice Hammer:
+	Desc: The user swings and hits with its strong, heavy fist. It lowers the user's Speed, however.
+	PP: 10
+	Pow: 100
+	Acc: 90
+	MoveType: Punching
+	Cat: Physical
+	Type: Ice
+	StatChange: 1 Speed -1
+	SelfTarget: True
+*
 Soft-Boiled:
 	Desc: The user restores its own HP by up to half of its maximum HP. May also be used in the field to heal HP.
 	PP: 10
@@ -6348,6 +6374,21 @@ Shore Up:
 	}
 	###
 *
+Floral Healing:
+	Desc: The user restores the target's HP by up to half of its max HP. It restores more HP when the terrain is grass.
+	Type: Fairy
+	Cat: Status
+	PP: 10
+	Int: SelfHealingMove
+	SelfHealing: 
+	if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
+		victim.healHealthFraction(1);
+	} 
+	else {
+		victim.healHealthFraction(1/2.0);
+	}
+	###
+*
 First Impression:
 	Desc: Although this move has great power, it only works the first turn the user is in battle.
 	Type: Bug
@@ -6357,4 +6398,75 @@ First Impression:
 	Acc: 100
 	Priority: 2
 	ApplyError: !me.getAttributes().isFirstTurn()
+*
+Spirit Shackle:
+	Desc: The user attacks while simultaneously stitching the target's shadow to the ground to prevent the target from escaping.
+	Type: Ghost
+	PP: 10
+	Acc: 100
+	Pow: 80
+	Cat: Physical
+	Effect: Trapped
+*
+Darkest Lariat:
+	Desc: The user swings both arms and hits the target. The target's stat changes don't affect this attack's damage.
+	Type: Dark
+	Pow: 85
+	Acc: 100
+	PP: 10
+	Cat: Physical
+	Int: OpponentIgnoreStageEffect
+	IgnoreStage:
+	return !s.user();
+	###
+*
+Sparkling Aria:
+	Desc: The user bursts into song, emitting many bubbles. Any Pokémon suffering from a burn will be healed by the touch of these bubbles.
+	Type: Water
+	Pow: 90
+	Cat: Special
+	Acc: 100
+	PP: 10
+	StatusCureMove: Asleep
+*
+High Horsepower:
+	Desc: The user fiercely attacks the target using its entire body.
+	Type: Ground
+	PP: 10
+	Pow: 95
+	Acc: 95
+	Cat: Physical
+*
+Strength Sap:
+	Desc: The user restores its HP by the same amount as the target's Attack stat. It also lowers the target's Attack stat.
+	Type: Grass
+	Cat: Status
+	Acc: 100
+	PP: 10
+	Int: SapHealthEffect
+	ApplyEffects:
+	int victimAttackStat = Stat.getStat(Stat.ATTACK, victim, user, b);
+	super.applyEffects(b, user, victim);
+
+	this.sapHealth(b, user, victim, victimAttackStat, true);
+	###
+	StatChange: 1 Attack -1
+	SapPercentage: return 1;
+*
+Leafage:
+	Desc: The user attacks by pelting the target with leaves.
+	Type: Grass
+	Cat: Physical
+	Pow: 40
+	PP: 40
+	Acc: 100
+*
+Toxic Thread:
+	Desc: The user shoots poisonous threads to poison the target and lower the target's Speed stat.
+	Type: Poison
+	Cat: Status
+	Acc: 100
+	PP: 20
+	Status: Poisoned
+	StatChange: 1 Speed -1
 *
