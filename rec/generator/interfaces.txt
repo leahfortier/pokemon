@@ -509,3 +509,11 @@ DamageTakenEffect:
 		EffectList: damageTaker
 	*
 ***
+AlwaysCritEffect:
+	Method:
+		Parameters: Battle b, ActivePokemon p
+		Invoke: Contains
+		EffectList: p
+		InvokeAttack: p
+	*
+***
