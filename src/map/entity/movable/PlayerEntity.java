@@ -164,10 +164,8 @@ public class PlayerEntity extends MovableEntity {
 		Point newLocation = Point.add(this.getLocation(), direction.getDeltaPoint());
 		Entity entity = currentMap.getEntity(newLocation);
 
-		if (entity instanceof MovableEntity) {
-			if (((MovableEntity) entity).hasTempPath()) {
-				return false;
-			}
+		if (entity instanceof NPCEntity && ((NPCEntity)entity).hasTempPath()) {
+			return false;
 		}
 
 		if (entity != null && entity != currentInteractionEntity) {

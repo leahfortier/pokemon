@@ -20,8 +20,9 @@ public abstract class MovableEntity extends Entity {
 	protected int transitionTime;
 	private int waitTime;
 
-	private String tempPath;
 	private int pathIndex;
+	private String tempPath;
+	private boolean endedTempPath;
 	private EndPathListener endPathListener;
 
 	MovableEntity(Point location, String triggerName, String condition, int spriteIndex) {
@@ -97,7 +98,8 @@ public abstract class MovableEntity extends Entity {
 				tempPath = null;
 				endedTempPath = false;
 				endPath();
-				return;
+
+				path = null;
 			}
 
 			if (!StringUtils.isNullOrEmpty(path)) {
@@ -124,18 +126,10 @@ public abstract class MovableEntity extends Entity {
 				pathIndex %= path.length();
 				if (pathIndex == 0 && tempPath != null) {
 					endedTempPath = true;
-					/*if (this.endPathListener != null) {
-						this.endPathListener.endPathCallback();
-					}
-
-					tempPath = null;
-					endPath();*/
 				}
 			}
 		}
 	}
-
-	boolean endedTempPath;
 
 	@Override
 	protected BufferedImage getFrame() {

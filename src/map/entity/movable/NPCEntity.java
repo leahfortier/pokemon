@@ -91,7 +91,7 @@ public class NPCEntity extends MovableEntity {
 
 	@Override
 	protected void endPath() {
-        this.walkingToPlayer = false;
+		this.walkingToPlayer = false;
 	}
 
 	@Override

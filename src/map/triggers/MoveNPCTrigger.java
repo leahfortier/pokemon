@@ -39,8 +39,8 @@ class MoveNPCTrigger extends Trigger {
             Global.error("Cannot find valid path to exit :(");
         }
 
-        entity.setTempPath(path, HaltTrigger::resume);
         HaltTrigger.addHaltTrigger();
+        entity.setTempPath(path, HaltTrigger::resume);
     }
 
     private String getPath(NPCEntity entity, MapData map) {
@@ -89,8 +89,8 @@ class MoveNPCTrigger extends Trigger {
     }
 
     private class PathState {
-        Point location;
-        String path;
+        private final Point location;
+        private final String path;
 
         private PathState(Point location, String path) {
             this.location = location;
