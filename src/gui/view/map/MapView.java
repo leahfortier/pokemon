@@ -78,10 +78,6 @@ public class MapView extends View {
 		return this.currentMessage;
 	}
 
-	void resetCurrentMessage() {
-		this.currentMessage = null;
-	}
-
 	TerrainType getTerrain() {
 		return this.currentArea.getTerrain();
 	}
@@ -293,10 +289,19 @@ public class MapView extends View {
 				if (!this.isState(VisualState.MESSAGE)) {
 					currentMessage = null;
 				}
-
 			}
 		} else if (currentMessage.isViewChange()) {
 			Game.instance().setViewMode(currentMessage.getViewMode());
+		} else if (currentMessage.resetState()) {
+			resetMessageState();
+		}
+	}
+
+	void resetMessageState() {
+		Game.getPlayer().getEntity().resetCurrentInteractionEntity();
+		this.currentMessage = null;
+		if (!VisualState.hasBattle()) {
+			setState(VisualState.MAP);
 		}
 	}
 
@@ -306,9 +311,10 @@ public class MapView extends View {
 			music = currentMusicTitle;
 		}
 		else {
-			if(currentArea != null) {
+			if (currentArea != null) {
 				System.err.println("No music specified for current area " + currentArea.getAreaName() + ".");
 			}
+
 			music = SoundTitle.DEFAULT_TUNE;
 		}
 

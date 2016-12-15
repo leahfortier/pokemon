@@ -39,6 +39,10 @@ public enum PathDirection {
         return defaultPath() + StringUtils.repeat(this.character + "", steps);
     }
 
+    public char getCharacter() {
+        return this.character;
+    }
+
     public static PathDirection getDirection(char directionCharacter) {
         return characterDirectionMap.get(directionCharacter);
     }
