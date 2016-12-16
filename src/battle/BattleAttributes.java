@@ -296,4 +296,14 @@ public class BattleAttributes implements Serializable {
 		
 		return sum;
 	}
+
+	public void swapStages(Stat s, ActivePokemon other) {
+		int statIndex = s.index();
+
+		int userStat = this.getStage(statIndex);
+		int victimStat = other.getAttributes().getStage(statIndex);
+
+		this.setStage(statIndex, victimStat);
+		other.getAttributes().setStage(statIndex, userStat);
+	}
 }

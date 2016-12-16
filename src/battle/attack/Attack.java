@@ -6438,7 +6438,7 @@ public abstract class Attack implements Serializable {
 
 	static class PowerSwap extends Attack {
 		private static final long serialVersionUID = 1L;
-		private static Stat[] swapStats = { Stat.ATTACK, Stat.SP_ATTACK };
+		private static final Stat[] swapStats = { Stat.ATTACK, Stat.SP_ATTACK };
 
 		PowerSwap() {
 			super(AttackNamesies.POWER_SWAP, "The user employs its psychic power to switch changes to its Attack and Sp. Atk with the target.", 10, Type.PSYCHIC, MoveCategory.STATUS);
@@ -6447,13 +6447,7 @@ public abstract class Attack implements Serializable {
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			for (Stat s : swapStats) {
-				int statIndex = s.index();
-				
-				int userStat = user.getAttributes().getStage(statIndex);
-				int victimStat = victim.getAttributes().getStage(statIndex);
-				
-				user.getAttributes().setStage(statIndex, victimStat);
-				victim.getAttributes().setStage(statIndex, userStat);
+				user.getAttributes().swapStages(s, victim);
 			}
 			
 			Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
@@ -6462,7 +6456,7 @@ public abstract class Attack implements Serializable {
 
 	static class GuardSwap extends Attack {
 		private static final long serialVersionUID = 1L;
-		private static Stat[] swapStats = { Stat.DEFENSE, Stat.SP_DEFENSE };
+		private static final Stat[] swapStats = { Stat.DEFENSE, Stat.SP_DEFENSE };
 
 		GuardSwap() {
 			super(AttackNamesies.GUARD_SWAP, "The user employs its psychic power to switch changes to its Defense and Sp. Def with the target.", 10, Type.PSYCHIC, MoveCategory.STATUS);
@@ -6471,15 +6465,24 @@ public abstract class Attack implements Serializable {
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			for (Stat s : swapStats) {
-				int statIndex = s.index();
-				
-				int userStat = user.getAttributes().getStage(statIndex);
-				int victimStat = victim.getAttributes().getStage(statIndex);
-				
-				user.getAttributes().setStage(statIndex, victimStat);
-				victim.getAttributes().setStage(statIndex, userStat);
+				user.getAttributes().swapStages(s, victim);
 			}
 			
+			Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
+		}
+	}
+
+	static class SpeedSwap extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		SpeedSwap() {
+			super(AttackNamesies.SPEED_SWAP, "The user exchanges Speed stats with the target.", 10, Type.PSYCHIC, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+		}
+
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// NOTE: Looks like this is supposed to actually swap the stats and not just the stages but I don't really care it should do the same thing as power and guard swap because that makes more sense sue me
+			user.getAttributes().swapStages(Stat.SPEED, victim);
 			Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
 		}
 	}
@@ -10949,6 +10952,42 @@ public abstract class Attack implements Serializable {
 			}
 			
 			return null;
+		}
+	}
+
+	static class SmartStrike extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		SmartStrike() {
+			super(AttackNamesies.SMART_STRIKE, "The user stabs the target with a sharp horn. This attack never misses.", 10, Type.STEEL, MoveCategory.PHYSICAL);
+			super.power = 70;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class Purify extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		Purify() {
+			super(AttackNamesies.PURIFY, "The user heals the target's status condition. If the move succeeds, it also restores the user's own HP.", 20, Type.POISON, MoveCategory.STATUS);
+		}
+
+		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (!me.hasStatus()) {
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+				return;
+			}
+			
+			super.apply(me, o, b);
+		}
+
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Status.removeStatus(b, user, CastSource.ATTACK);
+			if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+				Messages.add(new MessageUpdate(user.getName() + "'s health was restored!"));
+				user.healHealthFraction(.5);
+				Messages.add(new MessageUpdate().updatePokemon(b, user));
+			}
 		}
 	}
 }

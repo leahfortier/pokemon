@@ -410,6 +410,7 @@ import battle.attack.Attack.Psyshock;
 import battle.attack.Attack.Psystrike;
 import battle.attack.Attack.Psywave;
 import battle.attack.Attack.Punishment;
+import battle.attack.Attack.Purify;
 import battle.attack.Attack.Pursuit;
 import battle.attack.Attack.QuickAttack;
 import battle.attack.Attack.QuickGuard;
@@ -493,6 +494,7 @@ import battle.attack.Attack.Sludge;
 import battle.attack.Attack.SludgeBomb;
 import battle.attack.Attack.SludgeWave;
 import battle.attack.Attack.SmackDown;
+import battle.attack.Attack.SmartStrike;
 import battle.attack.Attack.SmellingSalts;
 import battle.attack.Attack.Smog;
 import battle.attack.Attack.Smokescreen;
@@ -507,6 +509,7 @@ import battle.attack.Attack.SonicBoom;
 import battle.attack.Attack.SpacialRend;
 import battle.attack.Attack.Spark;
 import battle.attack.Attack.SparklingAria;
+import battle.attack.Attack.SpeedSwap;
 import battle.attack.Attack.SpiderWeb;
 import battle.attack.Attack.SpikeCannon;
 import battle.attack.Attack.Spikes;
@@ -1001,6 +1004,7 @@ public enum AttackNamesies {
 	MAGICAL_LEAF("Magical Leaf", MagicalLeaf::new),
 	POWER_SWAP("Power Swap", PowerSwap::new),
 	GUARD_SWAP("Guard Swap", GuardSwap::new),
+	SPEED_SWAP("Speed Swap", SpeedSwap::new),
 	COPYCAT("Copycat", Copycat::new),
 	TRANSFORM("Transform", Transform::new),
 	SUBSTITUTE("Substitute", Substitute::new),
@@ -1245,7 +1249,9 @@ public enum AttackNamesies {
 	POLLEN_PUFF("Pollen Puff", PollenPuff::new),
 	LUNGE("Lunge", Lunge::new),
 	FIRE_LASH("Fire Lash", FireLash::new),
-	BURN_UP("Burn Up", BurnUp::new);
+	BURN_UP("Burn Up", BurnUp::new),
+	SMART_STRIKE("Smart Strike", SmartStrike::new),
+	PURIFY("Purify", Purify::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

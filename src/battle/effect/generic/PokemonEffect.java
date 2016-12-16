@@ -2521,6 +2521,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			
+			// TODO: There should be a different interface for this type of modification and this one should just return a modifier
 			// If the stat is a splitting stat, return the average between the user and the opponent
 			if (s == Stat.ATTACK || s == Stat.SP_ATTACK) {
 				return (p.getStat(b, s) + opp.getStat(b, s))/2;
@@ -2547,6 +2548,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			
+			// TODO: There should be a different interface for this type of modification and this one should just return a modifier
 			// If the stat is a splitting stat, return the average between the user and the opponent
 			if (s == Stat.DEFENSE || s == Stat.SP_DEFENSE) {
 				return (p.getStat(b, s) + opp.getStat(b, s))/2;

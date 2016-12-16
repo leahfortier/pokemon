@@ -295,6 +295,7 @@ Override:
 		AddInterface: StatChangingEffect
 		AddMapField: ModifyStat:
 		
+		// TODO: There should be a different interface for this type of modification and this one should just return a modifier
 		// If the stat is a splitting stat, return the average between the user and the opponent
 		if (s == Stat.{11} || s == Stat.{22}) {
 			return (p.getStat(b, s) + opp.getStat(b, s))/2;
@@ -2012,17 +2013,11 @@ Override:
 Override:
 	StatSwapMove:
 		AddMapField: Field:
-		private static Stat[] swapStats = { Stat.{11}, Stat.{22} };
+		private static final Stat[] swapStats = { Stat.{11}, Stat.{22} };
 		###
 		AddMapField: ApplyEffects: 
 		for (Stat s : swapStats) {
-			int statIndex = s.index();
-			
-			int userStat = user.getAttributes().getStage(statIndex);
-			int victimStat = victim.getAttributes().getStage(statIndex);
-			
-			user.getAttributes().setStage(statIndex, victimStat);
-			victim.getAttributes().setStage(statIndex, userStat);
+			user.getAttributes().swapStages(s, victim);
 		}
 		
 		Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));

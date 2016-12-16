@@ -3762,6 +3762,18 @@ Guard Swap:
 	Cat: Status
 	StatSwapMove: Defense Sp_Defense
 *
+Speed Swap:
+	Desc: The user exchanges Speed stats with the target.
+	PP: 10
+	Type: Psychic
+	Cat: Status
+	MoveType: No_Magic_Coat
+	ApplyEffects:
+	// NOTE: Looks like this is supposed to actually swap the stats and not just the stages but I don't really care it should do the same thing as power and guard swap because that makes more sense sue me
+	user.getAttributes().swapStages(Stat.SPEED, victim);
+	Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
+	###
+*
 Copycat:
 	Desc: The user mimics the move used immediately before it. The move fails if no other move has been used yet.
 	Type: Normal
@@ -6544,13 +6556,28 @@ Burn Up:
 	PP: 5
 	SelfTarget: True
 	Effect: ChangeType
-	Apply:
-	if (!me.isType(b, Type.FIRE)) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-
-	super.apply(me, o, b);
-	###
+	ApplyError: !me.isType(b, Type.FIRE)
 	RemoveType: Fire
+*
+Smart Strike:
+	Desc: The user stabs the target with a sharp horn. This attack never misses.
+	Cat: Physical
+	Pow: 70
+	PP: 10
+	Type: Steel
+*
+Purify:
+	Desc: The user heals the target's status condition. If the move succeeds, it also restores the user's own HP.
+	Type: Poison
+	Cat: Status
+	PP: 20
+	ApplyError: !me.hasStatus()
+	ApplyEffects:
+	Status.removeStatus(b, user, CastSource.ATTACK);
+	if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+		Messages.add(new MessageUpdate(user.getName() + "'s health was restored!"));
+		user.healHealthFraction(.5);
+		Messages.add(new MessageUpdate().updatePokemon(b, user));
+	}
+	###
 *
