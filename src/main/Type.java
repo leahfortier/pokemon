@@ -34,7 +34,7 @@ public enum Type implements Serializable {
 	DARK(15, "Dark", new Color(49, 79, 79), 15),
 	STEEL(16, "Steel", new Color(200, 200, 210), 7),
 	FAIRY(17, "Fairy", new Color(221, 160, 221), -1),
-	NO_TYPE(18, "Unknown", Color.WHITE, -1); // TODO: TYPE: NULL MUTHAFUCKA
+	NO_TYPE(18, "Unknown", new Color(255, 255, 255, 0), -1); // TODO: TYPE: NULL MUTHAFUCKA
 
 	// TODO: This is ass do that other thingy
 	private static final double typeAdvantage[][] = {
@@ -99,9 +99,9 @@ public enum Type implements Serializable {
 	}
 	
 	public static Type getHiddenType(int hiddenIndex) {
-		for (Type t : values()) {
-			if (t.hiddenIndex == hiddenIndex) {
-				return t;
+		for (Type type : values()) {
+			if (type.hiddenIndex == hiddenIndex) {
+				return type;
 			}
 		}
 

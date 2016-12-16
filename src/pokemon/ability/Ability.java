@@ -12,7 +12,7 @@ import battle.effect.ModifyStageValueEffect;
 import battle.effect.StallingEffect;
 import battle.effect.SwitchOutEffect;
 import battle.effect.attack.ChangeAbilityMove;
-import battle.effect.attack.ChangeTypeMove;
+import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
@@ -1896,7 +1896,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class ColorChange extends Ability implements TakeDamageEffect, ChangeTypeMove {
+	static class ColorChange extends Ability implements TakeDamageEffect, ChangeTypeSource {
 		private static final long serialVersionUID = 1L;
 		private Type type;
 
@@ -3077,7 +3077,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Protean extends Ability implements BeforeTurnEffect, ChangeTypeMove {
+	static class Protean extends Ability implements BeforeTurnEffect, ChangeTypeSource {
 		private static final long serialVersionUID = 1L;
 		private Type type;
 

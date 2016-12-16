@@ -812,7 +812,7 @@ Storm Drain:
 	IncreaseStat: Sp_Attack
 *
 Color Change:
-	Int: TakeDamageEffect, ChangeTypeMove
+	Int: TakeDamageEffect, ChangeTypeSource
 	OnTakeDamage: 
 	Type t = user.getAttackType();
 	if (!victim.isType(b, t)) {
@@ -1386,7 +1386,7 @@ Gale Wings:
 *
 Protean:
 	Desc: Changes the Pok\u00e9mon's type to the type of the move it's using.
-	Int: BeforeTurnEffect, ChangeTypeMove
+	Int: BeforeTurnEffect, ChangeTypeSource
 	CanAttack:
 	// Protean activates for all moves except for Struggle
 	if (p.getAttack().namesies() != AttackNamesies.STRUGGLE) {

@@ -400,7 +400,7 @@ ChangeType:
 	Int: ChangeTypeEffect
 	Field: 
 	private Type[] type;
-	private ChangeTypeMove typeSource;
+	private ChangeTypeSource typeSource;
 	private CastSource castSource;
 	
 	private String castMessage(ActivePokemon victim) {
@@ -422,7 +422,7 @@ ChangeType:
 	###
 	Cast: 
 	castSource = source;
-	typeSource = (ChangeTypeMove)source.getSource(b, caster);
+	typeSource = (ChangeTypeSource)source.getSource(b, caster);
 	type = typeSource.getType(b, caster, victim);
 	
 	// Remove any other ChangeType effects that the victim may have

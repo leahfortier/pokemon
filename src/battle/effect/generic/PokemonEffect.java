@@ -9,7 +9,7 @@ import battle.attack.MoveType;
 import battle.effect.PassableEffect;
 import battle.effect.SapHealthEffect;
 import battle.effect.attack.ChangeAbilityMove;
-import battle.effect.attack.ChangeTypeMove;
+import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
@@ -1369,7 +1369,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 	static class ChangeType extends PokemonEffect implements ChangeTypeEffect {
 		private static final long serialVersionUID = 1L;
 		private Type[] type;
-		private ChangeTypeMove typeSource;
+		private ChangeTypeSource typeSource;
 		private CastSource castSource;
 		
 		private String castMessage(ActivePokemon victim) {
@@ -1395,7 +1395,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			castSource = source;
-			typeSource = (ChangeTypeMove)source.getSource(b, caster);
+			typeSource = (ChangeTypeSource)source.getSource(b, caster);
 			type = typeSource.getType(b, caster, victim);
 			
 			// Remove any other ChangeType effects that the victim may have

@@ -4,7 +4,7 @@ import battle.Battle;
 import battle.effect.PassableEffect;
 import battle.effect.SapHealthEffect;
 import battle.effect.attack.ChangeAbilityMove;
-import battle.effect.attack.ChangeTypeMove;
+import battle.effect.attack.ChangeTypeSource;
 import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.SelfHealingMove;
@@ -1983,7 +1983,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Roost extends Attack implements SelfHealingMove, ChangeTypeMove {
+	static class Roost extends Attack implements SelfHealingMove, ChangeTypeSource {
 		private static final long serialVersionUID = 1L;
 		private boolean healFail;
 
@@ -3161,6 +3161,21 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	static class PowerTrip extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		PowerTrip() {
+			super(AttackNamesies.POWER_TRIP, "The user boasts its strength and attacks the target. The more the user's stats are raised, the greater the move's power.", 10, Type.DARK, MoveCategory.PHYSICAL);
+			super.power = 20;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			return super.power*me.getAttributes().totalStatIncreases();
+		}
+	}
+
 	static class Mimic extends Attack {
 		private static final long serialVersionUID = 1L;
 
@@ -3864,7 +3879,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Soak extends Attack implements ChangeTypeMove {
+	static class Soak extends Attack implements ChangeTypeSource {
 		private static final long serialVersionUID = 1L;
 
 		Soak() {
@@ -3878,7 +3893,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class TrickOrTreat extends Attack implements ChangeTypeMove {
+	static class TrickOrTreat extends Attack implements ChangeTypeSource {
 		private static final long serialVersionUID = 1L;
 
 		TrickOrTreat() {
@@ -3894,7 +3909,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class ForestsCurse extends Attack implements ChangeTypeMove {
+	static class ForestsCurse extends Attack implements ChangeTypeSource {
 		private static final long serialVersionUID = 1L;
 
 		ForestsCurse() {
@@ -4097,7 +4112,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return (int)Math.min(super.power + 20*me.getAttributes().totalStatIncreases(), 200);
+			return (int)Math.min(super.power + 20*o.getAttributes().totalStatIncreases(), 200);
 		}
 	}
 
@@ -6397,7 +6412,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class ReflectType extends Attack implements ChangeTypeMove {
+	static class ReflectType extends Attack implements ChangeTypeSource {
 		private static final long serialVersionUID = 1L;
 
 		ReflectType() {
@@ -6775,7 +6790,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Conversion extends Attack implements ChangeTypeMove {
+	static class Conversion extends Attack implements ChangeTypeSource {
 		private static final long serialVersionUID = 1L;
 
 		Conversion() {
@@ -6808,7 +6823,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Conversion2 extends Attack implements ChangeTypeMove {
+	static class Conversion2 extends Attack implements ChangeTypeSource {
 		private static final long serialVersionUID = 1L;
 		private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b) {
 			List<Type> types = new ArrayList<>();
@@ -9385,7 +9400,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Camouflage extends Attack implements ChangeTypeMove {
+	static class Camouflage extends Attack implements ChangeTypeSource {
 		private static final long serialVersionUID = 1L;
 
 		Camouflage() {
@@ -10874,6 +10889,66 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.POLLEN_PUFF, "The user attacks the enemy with a pollen puff that explodes. If the target is an ally, it gives the ally a pollen puff that restores its HP instead.", 15, Type.BUG, MoveCategory.SPECIAL);
 			super.power = 90;
 			super.accuracy = 100;
+		}
+	}
+
+	static class Lunge extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		Lunge() {
+			super(AttackNamesies.LUNGE, "The user makes a lunge at the target, attacking with full force. This also lowers the target's Attack stat.", 15, Type.BUG, MoveCategory.PHYSICAL);
+			super.power = 80;
+			super.accuracy = 100;
+			super.statChanges[Stat.ATTACK.index()] = -1;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class FireLash extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		FireLash() {
+			super(AttackNamesies.FIRE_LASH, "The user strikes the target with a burning lash. This also lowers the target's Defense stat.", 15, Type.FIRE, MoveCategory.PHYSICAL);
+			super.power = 80;
+			super.accuracy = 100;
+			super.statChanges[Stat.DEFENSE.index()] = -1;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class BurnUp extends Attack implements ChangeTypeSource {
+		private static final long serialVersionUID = 1L;
+
+		BurnUp() {
+			super(AttackNamesies.BURN_UP, "To inflict massive damage, the user burns itself out. After using this move, the user will no longer be Fire type.", 5, Type.FIRE, MoveCategory.SPECIAL);
+			super.power = 130;
+			super.accuracy = 100;
+			super.effects.add(EffectNamesies.CHANGE_TYPE);
+			super.selfTarget = true;
+		}
+
+		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (!me.isType(b, Type.FIRE)) {
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+				return;
+			}
+			
+			super.apply(me, o, b);
+		}
+
+		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+			Type[] type = victim.getType(b);
+			
+			// TODO: Rewrite this because it looks stupid
+			if (type[0] == Type.FIRE) {
+				return new Type[] { type[1], Type.NO_TYPE };
+			}
+			
+			if (type[1] == Type.FIRE) {
+				return new Type[] { type[0], Type.NO_TYPE };
+			}
+			
+			return null;
 		}
 	}
 }

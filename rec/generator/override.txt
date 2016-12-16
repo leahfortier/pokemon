@@ -157,9 +157,28 @@ MultiStrikeMove:
 		Body: return {0};
 	*
 ***
-ChangeTypeMove:
+ChangeTypeSource:
 	ChangeType:
 		Header: Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
+	*
+***
+Override:
+	RemoveType:
+		AddInterface: ChangeTypeSource
+		AddMapField: ChangeType: 
+		Type[] type = victim.getType(b);
+				
+		// TODO: Rewrite this because it looks stupid
+		if (type[0] == Type.{00}) {
+			return new Type[] { type[1], Type.NO_TYPE };
+		}
+
+		if (type[1] == Type.{00}) {
+			return new Type[] { type[0], Type.NO_TYPE };
+		}
+
+		return null;
+		###
 	*
 ***
 Override:
@@ -1927,7 +1946,7 @@ Override:
 ***
 Override:
 	AddTypeMove:
-		AddInterface: ChangeTypeMove
+		AddInterface: ChangeTypeSource
 		AddMapField: Effect: ChangeType
 		AddMapField: ChangeType:
 		Type primary = victim.getType(b)[0];

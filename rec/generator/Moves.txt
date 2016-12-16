@@ -1010,10 +1010,11 @@ Roost:
 	healFail = false;
 	victim.healHealthFraction(1/2.0);
 	###
-	Int: SelfHealingMove, ChangeTypeMove
+	Int: SelfHealingMove
 	Type: Flying
 	Cat: Status
 	PrintCast: False
+	RemoveType: Flying
 	ApplyEffects: 
 	healFail = true;
 	super.applyEffects(b, user, victim);
@@ -1021,20 +1022,6 @@ Roost:
 		EffectNamesies.CHANGE_TYPE.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
 		user.getEffect(EffectNamesies.CHANGE_TYPE).setTurns(1);
 	}
-	###
-	ChangeType: 
-	Type[] type = victim.getType(b);
-			
-	// TODO: Rewrite this because it looks stupid
-	if (type[0] == Type.FLYING) {
-		return new Type[] { type[1], Type.NO_TYPE };
-	}
-	
-	if (type[1] == Type.FLYING) {
-		return new Type[] { type[0], Type.NO_TYPE };
-	}
-	
-	return null;
 	###
 	Field: 
 	private boolean healFail;
@@ -1721,6 +1708,17 @@ Stored Power:
 	return super.power*me.getAttributes().totalStatIncreases();
 	###
 *
+Power Trip:
+	Pow: 20
+	Desc: The user boasts its strength and attacks the target. The more the user's stats are raised, the greater the move's power.
+	Type: Dark
+	Cat: Physical
+	Acc: 100
+	PP: 10
+	GetPow: 
+	return super.power*me.getAttributes().totalStatIncreases();
+	###
+*
 Mimic: 
 	Desc: The user copies the target's last move. The move can be used during battle until the Pok\u00e9mon is switched out.
 	PP: 10
@@ -2188,7 +2186,7 @@ Soak:
 	ChangeType: 
 	return new Type[] { Type.WATER, Type.NO_TYPE };
 	###
-	Int: ChangeTypeMove
+	Int: ChangeTypeSource
 *
 Trick-or-Treat:
 	AddTypeMove: Ghost
@@ -2303,7 +2301,7 @@ Punishment:
 	PP: 5
 	Pow: 60
 	GetPow: 
-	return (int)Math.min(super.power + 20*me.getAttributes().totalStatIncreases(), 200);
+	return (int)Math.min(super.power + 20*o.getAttributes().totalStatIncreases(), 200);
 	###
 	Type: Dark
 	Cat: Physical
@@ -3737,7 +3735,7 @@ Reflect Type:
 	Cat: Status
 	SelfTarget: True
 	Effect: ChangeType
-	Int: ChangeTypeMove
+	Int: ChangeTypeSource
 	ChangeType: 
 	return b.getOtherPokemon(caster.isPlayer()).getType(b).clone();
 	###
@@ -3988,7 +3986,7 @@ Conversion:
 	
 	Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 	###
-	Int: ChangeTypeMove
+	Int: ChangeTypeSource
 	ChangeType: 
 	List<Type> types = new ArrayList<>();
 	for (Move m : victim.getMoves(b)) {
@@ -4009,7 +4007,7 @@ Conversion 2:
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
-	Int: ChangeTypeMove
+	Int: ChangeTypeSource
 	Apply: 
 	Move m = o.getAttributes().getLastMoveUsed();
 	if (m == null || getResistances(me, m.getType(), b).size() == 0) {
@@ -5592,7 +5590,7 @@ Camouflage:
 	Cat: Status
 	SelfTarget: True
 	Effect: ChangeType
-	Int: ChangeTypeMove
+	Int: ChangeTypeSource
 	ChangeType: 
 	return new Type[] { b.getTerrainType().getType(), Type.NO_TYPE };
 	###
@@ -6536,4 +6534,23 @@ Fire Lash:
 	Acc: 100
 	PP: 15
 	StatChange: 1 Defense -1
+*
+Burn Up:
+	Desc: To inflict massive damage, the user burns itself out. After using this move, the user will no longer be Fire type.
+	Type: Fire
+	Cat: Special
+	Pow: 130
+	Acc: 100
+	PP: 5
+	SelfTarget: True
+	Effect: ChangeType
+	Apply:
+	if (!me.isType(b, Type.FIRE)) {
+		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+		return;
+	}
+
+	super.apply(me, o, b);
+	###
+	RemoveType: Fire
 *

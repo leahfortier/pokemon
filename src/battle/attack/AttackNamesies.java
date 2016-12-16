@@ -63,6 +63,7 @@ import battle.attack.Attack.BulkUp;
 import battle.attack.Attack.Bulldoze;
 import battle.attack.Attack.BulletPunch;
 import battle.attack.Attack.BulletSeed;
+import battle.attack.Attack.BurnUp;
 import battle.attack.Attack.CalmMind;
 import battle.attack.Attack.Camouflage;
 import battle.attack.Attack.Captivate;
@@ -171,6 +172,7 @@ import battle.attack.Attack.FieryDance;
 import battle.attack.Attack.FinalGambit;
 import battle.attack.Attack.FireBlast;
 import battle.attack.Attack.FireFang;
+import battle.attack.Attack.FireLash;
 import battle.attack.Attack.FirePunch;
 import battle.attack.Attack.FireSpin;
 import battle.attack.Attack.FirstImpression;
@@ -301,6 +303,7 @@ import battle.attack.Attack.LowKick;
 import battle.attack.Attack.LowSweep;
 import battle.attack.Attack.LuckyChant;
 import battle.attack.Attack.LunarDance;
+import battle.attack.Attack.Lunge;
 import battle.attack.Attack.LusterPurge;
 import battle.attack.Attack.MachPunch;
 import battle.attack.Attack.MagicCoat;
@@ -390,6 +393,7 @@ import battle.attack.Attack.PowerGem;
 import battle.attack.Attack.PowerSplit;
 import battle.attack.Attack.PowerSwap;
 import battle.attack.Attack.PowerTrick;
+import battle.attack.Attack.PowerTrip;
 import battle.attack.Attack.PowerUpPunch;
 import battle.attack.Attack.PowerWhip;
 import battle.attack.Attack.PrecipiceBlades;
@@ -792,6 +796,7 @@ public enum AttackNamesies {
 	GRAVITY("Gravity", Gravity::new),
 	MOONLIGHT("Moonlight", Moonlight::new),
 	STORED_POWER("Stored Power", StoredPower::new),
+	POWER_TRIP("Power Trip", PowerTrip::new),
 	MIMIC("Mimic", Mimic::new),
 	METEOR_MASH("Meteor Mash", MeteorMash::new),
 	IMPRISON("Imprison", Imprison::new),
@@ -1237,7 +1242,10 @@ public enum AttackNamesies {
 	LASER_FOCUS("Laser Focus", LaserFocus::new),
 	GEAR_UP("Gear Up", GearUp::new),
 	THROAT_CHOP("Throat Chop", ThroatChop::new),
-	POLLEN_PUFF("Pollen Puff", PollenPuff::new);
+	POLLEN_PUFF("Pollen Puff", PollenPuff::new),
+	LUNGE("Lunge", Lunge::new),
+	FIRE_LASH("Fire Lash", FireLash::new),
+	BURN_UP("Burn Up", BurnUp::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
