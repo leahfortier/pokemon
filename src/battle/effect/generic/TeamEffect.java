@@ -198,7 +198,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			if (enterer.isLevitating(b)) {
+			if (enterer.isLevitating(b, null)) {
 				return;
 			}
 			

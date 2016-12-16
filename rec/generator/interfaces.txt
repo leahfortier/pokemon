@@ -134,10 +134,10 @@ LevitationEffect:
 		InvokeName: falllllllll
 	*
 	Method:
-		Comments: TODO: Shouldn't this be affected by mold breaker?
-		Parameters: Battle b, ActivePokemon p
+		Parameters: Battle b, ActivePokemon p, ActivePokemon moldBreaker
 		Invoke: Contains
 		EffectList: p
+		MoldBreaker: moldBreaker
 	*
 ***
 FaintEffect:

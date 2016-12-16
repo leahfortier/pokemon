@@ -605,14 +605,14 @@ public class ActivePokemon implements Serializable {
 	
 	// Pangoro breaks the mold!
 	public boolean breaksTheMold() {
-		switch (getAbility().namesies()) {
+        switch (getAbility().namesies()) {
 			case MOLD_BREAKER:
 			case TURBOBLAZE:
 			case TERAVOLT:
 				return true;
-			default:
-				return false;
 		}
+
+		return this.hasEffect(EffectNamesies.BREAKS_THE_MOLD);
 	}
 	
 	public boolean canFight() {
@@ -1064,9 +1064,13 @@ public class ActivePokemon implements Serializable {
 	public boolean isGrounded(Battle b) {
 		return GroundedEffect.containsGroundedEffect(b, this);
 	}
+
+    public boolean isLevitating(Battle b) {
+        return isLevitating(b, null);
+    }
 	
 	// Returns true if the Pokemon is currently levitating for any reason
-	public boolean isLevitating(Battle b) {
+	public boolean isLevitating(Battle b, ActivePokemon moldBreaker) {
 
 		// Grounded effect take precedence over levitation effects
 		if (isGrounded(b)) {
@@ -1075,7 +1079,7 @@ public class ActivePokemon implements Serializable {
 		
 		// Obvs levitating if you have a levitation effect
 		// Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker. -- NOT ANYMORE NOW WE HAVE Battle.hasInvoke FUCK YES YOU GO GLENN COCO
-		if (LevitationEffect.containsLevitationEffect(b, this)) {
+		if (LevitationEffect.containsLevitationEffect(b, this, moldBreaker)) {
 			return true;
 		}
 		

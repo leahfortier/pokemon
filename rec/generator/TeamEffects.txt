@@ -34,7 +34,7 @@ Tailwind:
 StickyWeb:
 	Int: EntryEffect, RapidSpinRelease, DefogRelease
 	Enter:
-	if (enterer.isLevitating(b)) {
+	if (enterer.isLevitating(b, null)) {
 		return;
 	}
 	

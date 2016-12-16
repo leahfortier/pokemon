@@ -10990,4 +10990,36 @@ public abstract class Attack implements Serializable {
 			}
 		}
 	}
+
+	static class RevelationDance extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		RevelationDance() {
+			super(AttackNamesies.REVELATION_DANCE, "The user attacks the target by dancing very hard. The user's type determines the type of this move.", 15, Type.NORMAL, MoveCategory.SPECIAL);
+			super.power = 90;
+			super.accuracy = 100;
+		}
+
+		public Type setType(Battle b, ActivePokemon user) {
+			return user.getType(b)[0];
+		}
+	}
+
+	static class CoreEnforcer extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		CoreEnforcer() {
+			super(AttackNamesies.CORE_ENFORCER, "If the Pokémon the user has inflicted damage on have already used their moves, this move eliminates the effect of the target's Ability.", 10, Type.DRAGON, MoveCategory.SPECIAL);
+			super.power = 100;
+			super.accuracy = 100;
+		}
+
+		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (!b.isFirstAttack()) {
+				EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, me, me, CastSource.ATTACK, false);
+			}
+			
+			super.apply(me, o, b);
+		}
+	}
 }

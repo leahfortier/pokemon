@@ -1180,3 +1180,6 @@ Electrified:
 EatenBerry:
 	UsedProof: True
 *
+BreaksTheMold:
+	NumTurns: 1
+*

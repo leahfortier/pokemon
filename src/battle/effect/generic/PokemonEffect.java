@@ -2861,4 +2861,16 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			}
 		}
 	}
+
+	static class BreaksTheMold extends PokemonEffect {
+		private static final long serialVersionUID = 1L;
+
+		BreaksTheMold() {
+			super(EffectNamesies.BREAKS_THE_MOLD, 1, 1, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(victim.hasEffect(this.namesies));
+		}
+	}
 }

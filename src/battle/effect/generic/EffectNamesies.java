@@ -16,6 +16,7 @@ import battle.effect.generic.PokemonEffect.BanefulBunker;
 import battle.effect.generic.PokemonEffect.Bide;
 import battle.effect.generic.PokemonEffect.Binded;
 import battle.effect.generic.PokemonEffect.Bracing;
+import battle.effect.generic.PokemonEffect.BreaksTheMold;
 import battle.effect.generic.PokemonEffect.ChangeAbility;
 import battle.effect.generic.PokemonEffect.ChangeItem;
 import battle.effect.generic.PokemonEffect.ChangeType;
@@ -185,6 +186,7 @@ public enum EffectNamesies {
 	POWDER("Powder", Powder::new),
 	ELECTRIFIED("Electrified", Electrified::new),
 	EATEN_BERRY("EatenBerry", EatenBerry::new),
+	BREAKS_THE_MOLD("BreaksTheMold", BreaksTheMold::new),
 	REFLECT("Reflect", Reflect::new),
 	LIGHT_SCREEN("LightScreen", LightScreen::new),
 	TAILWIND("Tailwind", Tailwind::new),

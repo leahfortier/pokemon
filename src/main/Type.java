@@ -128,7 +128,7 @@ public enum Type implements Serializable {
 		// If nothing was updated, do special case check stupid things for fucking levitation which fucks everything up
 		if (defendingType[0] == originalType[0] && defendingType[1] == originalType[1] && moveType == GROUND) {
 			// Pokemon that are levitating cannot be hit by ground type moves
-			if (defending.isLevitating(b)) {
+			if (defending.isLevitating(b, attacking)) {
 				return 0;
 			}
 

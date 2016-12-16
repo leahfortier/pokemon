@@ -6581,3 +6581,29 @@ Purify:
 	}
 	###
 *
+Revelation Dance:
+	Desc: The user attacks the target by dancing very hard. The user's type determines the type of this move.
+	Type: Normal
+	Cat: Special
+	Acc: 100
+	Pow: 90
+	PP: 15
+	GetType:
+	return user.getType(b)[0];
+	###
+*
+Core Enforcer:
+	Desc: If the Pokémon the user has inflicted damage on have already used their moves, this move eliminates the effect of the target's Ability.
+	PP: 10
+	Type: Dragon
+	Cat: Special
+	Pow: 100
+	Acc: 100
+	Apply: 
+	if (!b.isFirstAttack()) {
+		EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, me, me, CastSource.ATTACK, false);
+	}
+
+	super.apply(me, o, b);
+	###
+*

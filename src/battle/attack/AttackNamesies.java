@@ -86,6 +86,7 @@ import battle.attack.Attack.Constrict;
 import battle.attack.Attack.Conversion;
 import battle.attack.Attack.Conversion2;
 import battle.attack.Attack.Copycat;
+import battle.attack.Attack.CoreEnforcer;
 import battle.attack.Attack.CosmicPower;
 import battle.attack.Attack.CottonGuard;
 import battle.attack.Attack.CottonSpore;
@@ -429,6 +430,7 @@ import battle.attack.Attack.Refresh;
 import battle.attack.Attack.RelicSong;
 import battle.attack.Attack.Rest;
 import battle.attack.Attack.Retaliate;
+import battle.attack.Attack.RevelationDance;
 import battle.attack.Attack.Revenge;
 import battle.attack.Attack.Reversal;
 import battle.attack.Attack.Roar;
@@ -1251,7 +1253,9 @@ public enum AttackNamesies {
 	FIRE_LASH("Fire Lash", FireLash::new),
 	BURN_UP("Burn Up", BurnUp::new),
 	SMART_STRIKE("Smart Strike", SmartStrike::new),
-	PURIFY("Purify", Purify::new);
+	PURIFY("Purify", Purify::new),
+	REVELATION_DANCE("Revelation Dance", RevelationDance::new),
+	CORE_ENFORCER("Core Enforcer", CoreEnforcer::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
