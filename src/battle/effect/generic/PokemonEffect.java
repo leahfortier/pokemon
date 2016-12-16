@@ -35,6 +35,7 @@ import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
+import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
@@ -2194,6 +2195,26 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			Messages.add(new MessageUpdate(damageTaker.getName() + " lost its focus and couldn't move!"));
 			damageTaker.getAttributes().removeEffect(this.namesies);
 			damageTaker.addEffect((PokemonEffect)EffectNamesies.FLINCH.getEffect());
+		}
+	}
+
+	static class BeakBlast extends PokemonEffect implements PhysicalContactEffect {
+		private static final long serialVersionUID = 1L;
+
+		BeakBlast() {
+			super(EffectNamesies.BEAK_BLAST, 1, 1, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(victim.hasEffect(this.namesies));
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getName() + " started heating up its beak!";
+		}
+
+		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Status.giveStatus(b, victim, user, StatusCondition.BURNED);
 		}
 	}
 

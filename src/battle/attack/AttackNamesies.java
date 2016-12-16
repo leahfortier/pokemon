@@ -27,6 +27,7 @@ import battle.attack.Attack.AttackOrder;
 import battle.attack.Attack.Attract;
 import battle.attack.Attack.AuraSphere;
 import battle.attack.Attack.AuroraBeam;
+import battle.attack.Attack.AuroraVeil;
 import battle.attack.Attack.Autotomize;
 import battle.attack.Attack.Avalanche;
 import battle.attack.Attack.BabyDollEyes;
@@ -34,6 +35,7 @@ import battle.attack.Attack.BanefulBunker;
 import battle.attack.Attack.Barrage;
 import battle.attack.Attack.Barrier;
 import battle.attack.Attack.BatonPass;
+import battle.attack.Attack.BeakBlast;
 import battle.attack.Attack.BeatUp;
 import battle.attack.Attack.Belch;
 import battle.attack.Attack.BellyDrum;
@@ -55,6 +57,7 @@ import battle.attack.Attack.Bounce;
 import battle.attack.Attack.BraveBird;
 import battle.attack.Attack.BrickBreak;
 import battle.attack.Attack.Brine;
+import battle.attack.Attack.BrutalSwing;
 import battle.attack.Attack.Bubble;
 import battle.attack.Attack.BubbleBeam;
 import battle.attack.Attack.BugBite;
@@ -74,6 +77,7 @@ import battle.attack.Attack.Chatter;
 import battle.attack.Attack.ChipAway;
 import battle.attack.Attack.CircleThrow;
 import battle.attack.Attack.Clamp;
+import battle.attack.Attack.ClangingScales;
 import battle.attack.Attack.ClearSmog;
 import battle.attack.Attack.CloseCombat;
 import battle.attack.Attack.Coil;
@@ -128,6 +132,7 @@ import battle.attack.Attack.DragonAscent;
 import battle.attack.Attack.DragonBreath;
 import battle.attack.Attack.DragonClaw;
 import battle.attack.Attack.DragonDance;
+import battle.attack.Attack.DragonHammer;
 import battle.attack.Attack.DragonPulse;
 import battle.attack.Attack.DragonRage;
 import battle.attack.Attack.DragonRush;
@@ -585,6 +590,7 @@ import battle.attack.Attack.Trick;
 import battle.attack.Attack.TrickOrTreat;
 import battle.attack.Attack.TrickRoom;
 import battle.attack.Attack.TripleKick;
+import battle.attack.Attack.TropKick;
 import battle.attack.Attack.TrumpCard;
 import battle.attack.Attack.Twineedle;
 import battle.attack.Attack.Twister;
@@ -678,6 +684,7 @@ public enum AttackNamesies {
 	WATER_GUN("Water Gun", WaterGun::new),
 	RAPID_SPIN("Rapid Spin", RapidSpin::new),
 	REFLECT("Reflect", Reflect::new),
+	AURORA_VEIL("Aurora Veil", AuroraVeil::new),
 	SPIKY_SHIELD("Spiky Shield", SpikyShield::new),
 	BANEFUL_BUNKER("Baneful Bunker", BanefulBunker::new),
 	KINGS_SHIELD("King's Shield", KingsShield::new),
@@ -986,6 +993,7 @@ public enum AttackNamesies {
 	SKY_UPPERCUT("Sky Uppercut", SkyUppercut::new),
 	MEGA_PUNCH("Mega Punch", MegaPunch::new),
 	FOCUS_PUNCH("Focus Punch", FocusPunch::new),
+	BEAK_BLAST("Beak Blast", BeakBlast::new),
 	ME_FIRST("Me First", MeFirst::new),
 	REFRESH("Refresh", Refresh::new),
 	POWER_WHIP("Power Whip", PowerWhip::new),
@@ -1255,7 +1263,11 @@ public enum AttackNamesies {
 	SMART_STRIKE("Smart Strike", SmartStrike::new),
 	PURIFY("Purify", Purify::new),
 	REVELATION_DANCE("Revelation Dance", RevelationDance::new),
-	CORE_ENFORCER("Core Enforcer", CoreEnforcer::new);
+	CORE_ENFORCER("Core Enforcer", CoreEnforcer::new),
+	TROP_KICK("Trop Kick", TropKick::new),
+	CLANGING_SCALES("Clanging Scales", ClangingScales::new),
+	DRAGON_HAMMER("Dragon Hammer", DragonHammer::new),
+	BRUTAL_SWING("Brutal Swing", BrutalSwing::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

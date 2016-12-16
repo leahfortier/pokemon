@@ -1106,6 +1106,25 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	static class AuroraVeil extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		AuroraVeil() {
+			super(AttackNamesies.AURORA_VEIL, "This move reduces damage from physical and special moves for five turns. This can be used only in a hailstorm.", 20, Type.ICE, MoveCategory.STATUS);
+			super.effects.add(EffectNamesies.AURORA_VEIL);
+			super.selfTarget = true;
+		}
+
+		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (b.getWeather().namesies() != EffectNamesies.HAILING) {
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+				return;
+			}
+			
+			super.apply(me, o, b);
+		}
+	}
+
 	static class SpikyShield extends Attack {
 		private static final long serialVersionUID = 1L;
 
@@ -6176,6 +6195,22 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	static class BeakBlast extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		BeakBlast() {
+			super(AttackNamesies.BEAK_BLAST, "The user first heats up its beak, and then it attacks the target. Making direct contact with the Pokémon while it's heating up its beak results in a burn.", 15, Type.FLYING, MoveCategory.PHYSICAL);
+			super.power = 100;
+			super.effects.add(EffectNamesies.BEAK_BLAST);
+			super.selfTarget = true;
+			super.priority = -3;
+		}
+
+		public void startTurn(Battle b, ActivePokemon me) {
+			super.applyEffects(b, me, me);
+		}
+	}
+
 	static class MeFirst extends Attack {
 		private static final long serialVersionUID = 1L;
 
@@ -11020,6 +11055,53 @@ public abstract class Attack implements Serializable {
 			}
 			
 			super.apply(me, o, b);
+		}
+	}
+
+	static class TropKick extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		TropKick() {
+			super(AttackNamesies.TROP_KICK, "The user lands an intense kick of tropical origins on the target. This also lowers the target's Attack stat.", 15, Type.GRASS, MoveCategory.PHYSICAL);
+			super.power = 70;
+			super.accuracy = 100;
+			super.statChanges[Stat.ATTACK.index()] = -1;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class ClangingScales extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		ClangingScales() {
+			super(AttackNamesies.CLANGING_SCALES, "The user rubs the scales on its entire body and makes a huge noise to attack the opposing Pokémon. The user's Defense stat goes down after the attack.", 5, Type.DRAGON, MoveCategory.SPECIAL);
+			super.power = 110;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.SOUND_BASED);
+			super.selfTarget = true;
+			super.statChanges[Stat.DEFENSE.index()] = -1;
+		}
+	}
+
+	static class DragonHammer extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		DragonHammer() {
+			super(AttackNamesies.DRAGON_HAMMER, "The user uses its body like a hammer to attack the target and inflict damage.", 15, Type.DRAGON, MoveCategory.PHYSICAL);
+			super.power = 90;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class BrutalSwing extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		BrutalSwing() {
+			super(AttackNamesies.BRUTAL_SWING, "The user swings its body around violently to inflict damage on everything in its vicinity.", 20, Type.DARK, MoveCategory.PHYSICAL);
+			super.power = 60;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
 }

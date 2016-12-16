@@ -13,6 +13,7 @@ import battle.effect.generic.BattleEffect.WonderRoom;
 import battle.effect.generic.PokemonEffect.AquaRing;
 import battle.effect.generic.PokemonEffect.BadPoison;
 import battle.effect.generic.PokemonEffect.BanefulBunker;
+import battle.effect.generic.PokemonEffect.BeakBlast;
 import battle.effect.generic.PokemonEffect.Bide;
 import battle.effect.generic.PokemonEffect.Binded;
 import battle.effect.generic.PokemonEffect.Bracing;
@@ -86,6 +87,7 @@ import battle.effect.generic.PokemonEffect.UsedMinimize;
 import battle.effect.generic.PokemonEffect.Whirlpooled;
 import battle.effect.generic.PokemonEffect.Wrapped;
 import battle.effect.generic.PokemonEffect.Yawn;
+import battle.effect.generic.TeamEffect.AuroraVeil;
 import battle.effect.generic.TeamEffect.DeadAlly;
 import battle.effect.generic.TeamEffect.DoomDesire;
 import battle.effect.generic.TeamEffect.FutureSight;
@@ -164,6 +166,7 @@ public enum EffectNamesies {
 	NIGHTMARE("Nightmare", Nightmare::new),
 	CHARGE("Charge", Charge::new),
 	FOCUSING("Focusing", Focusing::new),
+	BEAK_BLAST("BeakBlast", BeakBlast::new),
 	FIDDY_PERCENT_STRONGER("FiddyPercentStronger", FiddyPercentStronger::new),
 	TRANSFORMED("Transformed", Transformed::new),
 	SUBSTITUTE("Substitute", Substitute::new),
@@ -190,6 +193,7 @@ public enum EffectNamesies {
 	REFLECT("Reflect", Reflect::new),
 	LIGHT_SCREEN("LightScreen", LightScreen::new),
 	TAILWIND("Tailwind", Tailwind::new),
+	AURORA_VEIL("AuroraVeil", AuroraVeil::new),
 	STICKY_WEB("StickyWeb", StickyWeb::new),
 	STEALTH_ROCK("StealthRock", StealthRock::new),
 	TOXIC_SPIKES("ToxicSpikes", ToxicSpikes::new),

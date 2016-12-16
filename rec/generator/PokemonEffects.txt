@@ -808,6 +808,14 @@ Focusing:
 	damageTaker.addEffect((PokemonEffect)EffectNamesies.FLINCH.getEffect());
 	###
 *
+BeakBlast:
+	CastMessage: user.getName() + " started heating up its beak!"
+	NumTurns: 1
+	Int: PhysicalContactEffect
+	Contact:
+	Status.giveStatus(b, victim, user, StatusCondition.BURNED);
+	###
+*
 FiddyPercentStronger:
 	Int: PowerChangeEffect
 	GetMultiplier: 

@@ -31,6 +31,13 @@ Tailwind:
 	SubsideMessage: "The effects of tailwind faded."
 	CastMessage: user.getName() + " raised the speed of its team!"
 *
+AuroraVeil:
+	TwoModify: Defense Sp_Defense
+	ModifyMultiplier: 2 true
+	SubsideMessage: "The effects of aurora veil faded."
+	CastMessage: user.getName() + " is covered by an aurora veil!"
+	LightClay: True
+*
 StickyWeb:
 	Int: EntryEffect, RapidSpinRelease, DefogRelease
 	Enter:

@@ -401,22 +401,27 @@ Override:
 		###
 	*
 ***
-BarrierEffect:
-	Barrier:
-		AddInterface: Hidden-DefogRelease
-		AddMapField: MinTurns: 5
-		AddMapField: MaxTurns: 5
-		AddMapField: ToModify: {1}
-		AddMapField: ModifyMultiplier: 2 !opp.hasAbility(AbilityNamesies.INFILTRATOR)
-		AddMapField: CastMessage: user.getName() + " raised the " + Stat.{11}.getName().toLowerCase() + " of its team!"
-		AddMapField: SubsideMessage: "The effects of {2-} faded."
-		AddMapField: Defog: "The effects of {2-} faded."
+Override:
+	LightClay:
 		AddMapField: Cast: 
 		super.cast(b, caster, victim, source, printCast);
 		if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
 			Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies).setTurns(8);
 		}
 		###
+		AddMapField: MinTurns: 5
+		AddMapField: MaxTurns: 5
+	*
+***
+BarrierEffect:
+	Barrier:
+		AddInterface: Hidden-DefogRelease
+		AddMapField: LightClay: True
+		AddMapField: ToModify: {1}
+		AddMapField: ModifyMultiplier: 2 !opp.hasAbility(AbilityNamesies.INFILTRATOR)
+		AddMapField: CastMessage: user.getName() + " raised the " + Stat.{11}.getName().toLowerCase() + " of its team!"
+		AddMapField: SubsideMessage: "The effects of {2-} faded."
+		AddMapField: Defog: "The effects of {2-} faded."
 		AddMapField: BreakBarrier: {2-}
 	*
 	BreakBarrier:
