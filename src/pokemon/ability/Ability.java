@@ -16,6 +16,7 @@ import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
+import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
@@ -3097,6 +3098,44 @@ public abstract class Ability implements Serializable {
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return new Type[] { type, Type.NO_TYPE };
+		}
+	}
+
+	static class Stamina extends Ability implements TakeDamageEffect {
+		private static final long serialVersionUID = 1L;
+
+		Stamina() {
+			super(AbilityNamesies.STAMINA, "Boosts the Defense stat when hit by an attack.");
+		}
+
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			victim.getAttributes().modifyStage(victim, victim, 1, Stat.DEFENSE, b, CastSource.ABILITY);
+		}
+	}
+
+	static class WaterCompaction extends Ability implements TakeDamageEffect {
+		private static final long serialVersionUID = 1L;
+
+		WaterCompaction() {
+			super(AbilityNamesies.WATER_COMPACTION, "Boosts the Pokémon's Defense stat sharply when hit by a Water-type move.");
+		}
+
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (user.getAttackType() == Type.WATER) {
+				victim.getAttributes().modifyStage(victim, victim, 2, Stat.DEFENSE, b, CastSource.ABILITY);
+			}
+		}
+	}
+
+	static class Merciless extends Ability implements AlwaysCritEffect {
+		private static final long serialVersionUID = 1L;
+
+		Merciless() {
+			super(AbilityNamesies.MERCILESS, "The Pokémon's attacks become critical hits if the target is poisoned.");
+		}
+
+		public boolean shouldCrit(Battle b, ActivePokemon p) {
+			return p.hasStatus(StatusCondition.POISONED);
 		}
 	}
 }

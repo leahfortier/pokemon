@@ -1085,13 +1085,17 @@ public final class EffectInterfaces {
 	}
 
 	public interface AlwaysCritEffect {
+		boolean shouldCrit(Battle b, ActivePokemon p);
 
-		static boolean containsAlwaysCritEffect(Battle b, ActivePokemon p) {
+		static boolean defCritsies(Battle b, ActivePokemon p) {
 			List<Object> invokees = b.getEffectsList(p, p.getAttack());
 			for (Object invokee : invokees) {
 				if (invokee instanceof AlwaysCritEffect && !Effect.isInactiveEffect(invokee)) {
 					
-					return true;
+					AlwaysCritEffect effect = (AlwaysCritEffect)invokee;
+					if (effect.shouldCrit(b, p)) {
+						return true;
+					}
 				}
 			}
 			

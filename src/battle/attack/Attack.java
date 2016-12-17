@@ -305,8 +305,8 @@ public abstract class Attack implements Serializable {
 	}
 	
 	// Physical and Special moves -- do dat damage!
-	public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-	{	
+	public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
+
 		// Print Advantage
 		double adv = Type.getAdvantage(me, o, b);
 		if (adv < 1) Messages.add(new MessageUpdate("It's not very effective..."));
@@ -8554,6 +8554,10 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
+
+		public boolean shouldCrit(Battle b, ActivePokemon p) {
+			return true;
+		}
 	}
 
 	static class FrostBreath extends Attack implements AlwaysCritEffect {
@@ -8563,6 +8567,10 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.FROST_BREATH, "The user blows a cold breath on the target. This attack always results in a critical hit.", 10, Type.ICE, MoveCategory.SPECIAL);
 			super.power = 60;
 			super.accuracy = 90;
+		}
+
+		public boolean shouldCrit(Battle b, ActivePokemon p) {
+			return true;
 		}
 	}
 

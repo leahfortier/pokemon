@@ -83,6 +83,7 @@ import pokemon.ability.Ability.MagmaArmor;
 import pokemon.ability.Ability.MagnetPull;
 import pokemon.ability.Ability.MarvelScale;
 import pokemon.ability.Ability.MegaLauncher;
+import pokemon.ability.Ability.Merciless;
 import pokemon.ability.Ability.MoldBreaker;
 import pokemon.ability.Ability.MotorDrive;
 import pokemon.ability.Ability.Moxie;
@@ -140,6 +141,7 @@ import pokemon.ability.Ability.SolidRock;
 import pokemon.ability.Ability.Soundproof;
 import pokemon.ability.Ability.SpeedBoost;
 import pokemon.ability.Ability.Stall;
+import pokemon.ability.Ability.Stamina;
 import pokemon.ability.Ability.StanceChange;
 import pokemon.ability.Ability.Static;
 import pokemon.ability.Ability.Steadfast;
@@ -172,6 +174,7 @@ import pokemon.ability.Ability.VictoryStar;
 import pokemon.ability.Ability.VitalSpirit;
 import pokemon.ability.Ability.VoltAbsorb;
 import pokemon.ability.Ability.WaterAbsorb;
+import pokemon.ability.Ability.WaterCompaction;
 import pokemon.ability.Ability.WaterVeil;
 import pokemon.ability.Ability.WeakArmor;
 import pokemon.ability.Ability.WhiteSmoke;
@@ -356,7 +359,10 @@ public enum AbilityNamesies {
 	GRASS_PELT("Grass Pelt", GrassPelt::new),
 	FLOWER_VEIL("Flower Veil", FlowerVeil::new),
 	GALE_WINGS("Gale Wings", GaleWings::new),
-	PROTEAN("Protean", Protean::new);
+	PROTEAN("Protean", Protean::new),
+	STAMINA("Stamina", Stamina::new),
+	WATER_COMPACTION("Water Compaction", WaterCompaction::new),
+	MERCILESS("Merciless", Merciless::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

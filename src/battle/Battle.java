@@ -582,7 +582,7 @@ public class Battle {
 		stage = CritStageEffect.updateCritStage(this, stage, me);
 		stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
 
-		boolean crit = AlwaysCritEffect.containsAlwaysCritEffect(this, me) || RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
+		boolean crit = AlwaysCritEffect.defCritsies(this, me) || RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
 		
 		// Crit yo pants
 		if (crit) {

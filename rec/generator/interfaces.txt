@@ -511,9 +511,10 @@ DamageTakenEffect:
 ***
 AlwaysCritEffect:
 	Method:
-		Parameters: Battle b, ActivePokemon p
-		Invoke: Contains
+		Header: boolean shouldCrit(Battle b, ActivePokemon p)
+		Invoke: Check true
 		EffectList: p
 		InvokeAttack: p
+		InvokeName: defCritsies
 	*
 ***

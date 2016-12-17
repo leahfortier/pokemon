@@ -1403,3 +1403,26 @@ Protean:
 	return new Type[] { type, Type.NO_TYPE };
 	###
 *
+Stamina:
+	Desc: Boosts the Defense stat when hit by an attack.
+	Int: TakeDamageEffect
+	OnTakeDamage:
+	victim.getAttributes().modifyStage(victim, victim, 1, Stat.DEFENSE, b, CastSource.ABILITY);
+	###
+*
+Water Compaction:
+	Desc: Boosts the Pokémon's Defense stat sharply when hit by a Water-type move.
+	Int: TakeDamageEffect
+	OnTakeDamage:
+	if (user.getAttackType() == Type.WATER) {
+		victim.getAttributes().modifyStage(victim, victim, 2, Stat.DEFENSE, b, CastSource.ABILITY);
+	}
+	###
+*
+Merciless:
+	Desc: The Pokémon's attacks become critical hits if the target is poisoned.
+	Int: AlwaysCritEffect
+	ShouldCrit:
+	return p.hasStatus(StatusCondition.POISONED);
+	###
+*

@@ -1822,6 +1822,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getName() + " began focusing!";
 		}
+
+		public boolean shouldCrit(Battle b, ActivePokemon p) {
+			return true;
+		}
 	}
 
 	static class LockOn extends PokemonEffect implements PassableEffect, AccuracyBypassEffect {
