@@ -1426,3 +1426,14 @@ Merciless:
 	return p.hasStatus(StatusCondition.POISONED);
 	###
 *
+Water Bubble:
+	Desc: The Pokémon's attacks become critical hits if the target is poisoned.
+	Int: PowerChangeEffect, OpponentPowerChangeEffect
+	StatusPreventAbility: Burned burns
+	GetMultiplier:
+	return user.isAttackType(Type.WATER) ? 2 : 1;
+	###
+	GetOppMultiplier: 
+	return user.getAttackType() == Type.FIRE ? .5 : 1;
+	###
+*

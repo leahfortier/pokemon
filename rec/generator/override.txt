@@ -1451,20 +1451,19 @@ Override:
 ***
 Override:
 	WeatherStatChange:
-		AddInterface: StatChangingEffect
-		AddMapField: ModifyStat:
-		if (s == Stat.ATTACK || s == Stat.SP_ATTACK) {
-			if (p.isAttackType(Type.{11})) {
-				// {1} is fiddy percent stronger in tha weathz
-				stat *= 1.5;
-			}
-			else if (p.isAttackType(Type.{22})) {
-				// {2} is fiddy percent weaker in tha weathz
-				stat *= .5;
-			}
+		AddInterface: PowerChangeEffect
+		AddMapField: GetMultiplier:
+		if (p.isAttackType(Type.{11})) {
+			// {1} is fiddy percent stronger in tha weathz
+			return 1.5;
 		}
-		
-		return stat;
+		else if (p.isAttackType(Type.{22})) {
+			// {2} is fiddy percent weaker in tha weathz
+			return .5;
+		}
+		else {
+			return 1;
+		}
 		###
 	*
 ***
@@ -1626,8 +1625,7 @@ Override:
 	TimeSpaceOrb:
 		Header: boolean canUseOrb(ActivePokemon user)
 		Body:
-		if (!user.isPokemon(PokemonNamesies.{11}))
-		{
+		if (!user.isPokemon(PokemonNamesies.{11})) {
 			return false;
 		}
 		
@@ -1639,8 +1637,7 @@ Override:
 		AddInterface: PowerChangeEffect
 		AddMapField: Cat: Misc
 		AddMapField: GetMultiplier:
-		if (canUseOrb(user))
-		{
+		if (canUseOrb(user)) {
 			return 1.2;
 		}
 		
@@ -1660,8 +1657,7 @@ PlateItem:
 		AddMapField: Cat: Misc
 		AddInterface: Hidden-PowerChangeEffect
 		AddMapField: GetMultiplier:
-		if (user.isAttackType(getType()))
-		{
+		if (user.isAttackType(getType())) {
 			return 1.2;
 		}
 

@@ -797,8 +797,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean canUseOrb(ActivePokemon user) {
-			if (!user.isPokemon(PokemonNamesies.DIALGA))
-			{
+			if (!user.isPokemon(PokemonNamesies.DIALGA)) {
 				return false;
 			}
 			
@@ -810,8 +809,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (canUseOrb(user))
-			{
+			if (canUseOrb(user)) {
 				return 1.2;
 			}
 			
@@ -828,8 +826,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean canUseOrb(ActivePokemon user) {
-			if (!user.isPokemon(PokemonNamesies.PALKIA))
-			{
+			if (!user.isPokemon(PokemonNamesies.PALKIA)) {
 				return false;
 			}
 			
@@ -841,8 +838,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (canUseOrb(user))
-			{
+			if (canUseOrb(user)) {
 				return 1.2;
 			}
 			
@@ -859,8 +855,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean canUseOrb(ActivePokemon user) {
-			if (!user.isPokemon(PokemonNamesies.GIRATINA))
-			{
+			if (!user.isPokemon(PokemonNamesies.GIRATINA)) {
 				return false;
 			}
 			
@@ -872,8 +867,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (canUseOrb(user))
-			{
+			if (canUseOrb(user)) {
 				return 1.2;
 			}
 			
@@ -2120,8 +2114,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2146,8 +2139,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2172,8 +2164,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2198,8 +2189,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2224,8 +2214,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2250,8 +2239,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2276,8 +2264,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2302,8 +2289,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2328,8 +2314,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2354,8 +2339,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2380,8 +2364,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2406,8 +2389,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2432,8 +2414,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2458,8 +2439,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2484,8 +2464,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2510,8 +2489,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2536,8 +2514,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			

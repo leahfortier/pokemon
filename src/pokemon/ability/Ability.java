@@ -3138,4 +3138,28 @@ public abstract class Ability implements Serializable {
 			return p.hasStatus(StatusCondition.POISONED);
 		}
 	}
+
+	static class WaterBubble extends Ability implements PowerChangeEffect, OpponentPowerChangeEffect, StatusPreventionEffect {
+		private static final long serialVersionUID = 1L;
+
+		WaterBubble() {
+			super(AbilityNamesies.WATER_BUBBLE, "The Pokémon's attacks become critical hits if the target is poisoned.");
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(Type.WATER) ? 2 : 1;
+		}
+
+		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttackType() == Type.FIRE ? .5 : 1;
+		}
+
+		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+			return status == StatusCondition.BURNED;
+		}
+
+		public String statusPreventionMessage(ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents burns!";
+		}
+	}
 }

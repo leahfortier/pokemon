@@ -174,6 +174,7 @@ import pokemon.ability.Ability.VictoryStar;
 import pokemon.ability.Ability.VitalSpirit;
 import pokemon.ability.Ability.VoltAbsorb;
 import pokemon.ability.Ability.WaterAbsorb;
+import pokemon.ability.Ability.WaterBubble;
 import pokemon.ability.Ability.WaterCompaction;
 import pokemon.ability.Ability.WaterVeil;
 import pokemon.ability.Ability.WeakArmor;
@@ -362,7 +363,8 @@ public enum AbilityNamesies {
 	PROTEAN("Protean", Protean::new),
 	STAMINA("Stamina", Stamina::new),
 	WATER_COMPACTION("Water Compaction", WaterCompaction::new),
-	MERCILESS("Merciless", Merciless::new);
+	MERCILESS("Merciless", Merciless::new),
+	WATER_BUBBLE("Water Bubble", WaterBubble::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
