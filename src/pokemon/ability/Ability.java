@@ -1466,7 +1466,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public String statusPreventionMessage(ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents poisoned!";
+			return victim.getName() + "'s " + this.getName() + " prevents poison!";
 		}
 	}
 
@@ -3322,6 +3322,34 @@ public abstract class Ability implements Serializable {
 			}
 			
 			return false;
+		}
+	}
+
+	static class Stakeout extends Ability implements PowerChangeEffect {
+		private static final long serialVersionUID = 1L;
+
+		Stakeout() {
+			super(AbilityNamesies.STAKEOUT, "Doubles the damage dealt to the target's replacement if the target switches out.");
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !user.getAttributes().isFirstTurn() && victim.getAttributes().isFirstTurn() ? 2 : 1;
+		}
+	}
+
+	static class Corrosion extends Ability {
+		private static final long serialVersionUID = 1L;
+
+		Corrosion() {
+			super(AbilityNamesies.CORROSION, "The Pokémon can poison the target even if it's a Steel or Poison type.");
+		}
+	}
+
+	static class Comatose extends Ability {
+		private static final long serialVersionUID = 1L;
+
+		Comatose() {
+			super(AbilityNamesies.COMATOSE, "It's always drowsing and will never wake up. It can attack without waking up.");
 		}
 	}
 }

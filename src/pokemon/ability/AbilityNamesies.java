@@ -24,6 +24,7 @@ import pokemon.ability.Ability.ColorChange;
 import pokemon.ability.Ability.Competitive;
 import pokemon.ability.Ability.Compoundeyes;
 import pokemon.ability.Ability.Contrary;
+import pokemon.ability.Ability.Corrosion;
 import pokemon.ability.Ability.CursedBody;
 import pokemon.ability.Ability.CuteCharm;
 import pokemon.ability.Ability.Damp;
@@ -146,6 +147,7 @@ import pokemon.ability.Ability.SolarPower;
 import pokemon.ability.Ability.SolidRock;
 import pokemon.ability.Ability.Soundproof;
 import pokemon.ability.Ability.SpeedBoost;
+import pokemon.ability.Ability.Stakeout;
 import pokemon.ability.Ability.Stall;
 import pokemon.ability.Ability.Stamina;
 import pokemon.ability.Ability.StanceChange;
@@ -382,7 +384,10 @@ public enum AbilityNamesies {
 	LIQUID_VOICE("Liquid Voice", LiquidVoice::new),
 	TRIAGE("Triage", Triage::new),
 	GALVANIZE("Galvanize", Galvanize::new),
-	DISGUISE("Disguise", Disguise::new);
+	DISGUISE("Disguise", Disguise::new),
+	STAKEOUT("Stakeout", Stakeout::new),
+	CORROSION("Corrosion", Corrosion::new),
+	COMATOSE("Comatose", Comatose::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

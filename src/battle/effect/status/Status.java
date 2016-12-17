@@ -119,7 +119,6 @@ public abstract class Status implements Serializable {
 			
 			return true;
 		}
-
 		return false;
 	}
 
@@ -134,7 +133,7 @@ public abstract class Status implements Serializable {
 			}
 		}
 	}
-	
+
 	private static void synchronizeCheck(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
 		Status s = getStatus(status, caster);
 		if (victim.hasAbility(AbilityNamesies.SYNCHRONIZE) && s.applies(b, victim, caster)

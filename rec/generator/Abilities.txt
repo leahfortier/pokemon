@@ -601,7 +601,7 @@ Pressure:
 *
 Immunity:
 	Desc: Prevents the Pok\u00e9mon from getting poisoned.
-	StatusPreventAbility: Poisoned poisoned
+	StatusPreventAbility: Poisoned poison
 *
 Snow Cloak:
 	Desc: Raises the Pok\u00e9mon's evasion during a hailstorm by one level.
@@ -1504,4 +1504,16 @@ Disguise:
 	return false;
 	###
 *
-		
+Stakeout:
+	Desc: Doubles the damage dealt to the target's replacement if the target switches out.
+	Int: PowerChangeEffect
+	GetMultiplier:
+	return !user.getAttributes().isFirstTurn() && victim.getAttributes().isFirstTurn() ? 2 : 1;
+	###
+*
+Corrosion:
+	Desc: The Pokémon can poison the target even if it's a Steel or Poison type.
+*
+Comatose:
+	Desc: It's always drowsing and will never wake up. It can attack without waking up.
+*
