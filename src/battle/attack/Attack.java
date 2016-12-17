@@ -1423,6 +1423,33 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	static class PrismaticLaser extends Attack implements MultiTurnMove {
+		private static final long serialVersionUID = 1L;
+
+		PrismaticLaser() {
+			super(AttackNamesies.PRISMATIC_LASER, "The user shoots powerful lasers using the power of a prism. The user can't move on the next turn.", 10, Type.PSYCHIC, MoveCategory.SPECIAL);
+			super.power = 160;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+		}
+
+		public boolean chargesFirst() {
+			return false;
+		}
+
+		public boolean semiInvulnerability() {
+			return false;
+		}
+
+		public void charge(ActivePokemon user, Battle b) {
+			Messages.add(new MessageUpdate(getChargeMessage(user)));
+		}
+
+		private String getChargeMessage(ActivePokemon user) {
+			return user.getName() + " must recharge!";
+		}
+	}
+
 	static class StringShot extends Attack {
 		private static final long serialVersionUID = 1L;
 
@@ -2173,6 +2200,19 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
+			o.reduceHealth(b, (int)Math.ceil(o.getHP()/2.0));
+		}
+	}
+
+	static class NaturesMadness extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		NaturesMadness() {
+			super(AttackNamesies.NATURES_MADNESS, "The user hits the target with the force of nature. It halves the target's HP.", 10, Type.FAIRY, MoveCategory.SPECIAL);
+			super.accuracy = 90;
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -5969,6 +6009,21 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	static class PsychicFangs extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		PsychicFangs() {
+			super(AttackNamesies.PSYCHIC_FANGS, "The user bites the target with its psychic capabilities. This can also destroy Light Screen and Reflect.", 10, Type.PSYCHIC, MoveCategory.PHYSICAL);
+			super.power = 85;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			BarrierEffect.breakBarriers(b, user);
+		}
+	}
+
 	static class HighJumpKick extends Attack implements CrashDamageMove {
 		private static final long serialVersionUID = 1L;
 
@@ -6192,6 +6247,32 @@ public abstract class Attack implements Serializable {
 			if (me.hasEffect(EffectNamesies.FOCUSING)) {
 				super.applyDamage(me, o, b);
 			}
+		}
+	}
+
+	static class ShellTrap extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		ShellTrap() {
+			super(AttackNamesies.SHELL_TRAP, "The user sets a shell trap. If the user is hit by a physical move, the trap will explode and inflict damage on the opposing Pokémon.", 5, Type.FIRE, MoveCategory.SPECIAL);
+			super.power = 150;
+			super.accuracy = 100;
+			super.effects.add(EffectNamesies.SHELL_TRAP);
+			super.selfTarget = true;
+			super.priority = -3;
+		}
+
+		public void startTurn(Battle b, ActivePokemon me) {
+			super.applyEffects(b, me, me);
+		}
+
+		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (me.hasEffect(EffectNamesies.SHELL_TRAP)) {
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+				return;
+			}
+			
+			super.applyDamage(me, o, b);
 		}
 	}
 
@@ -11101,6 +11182,135 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.BRUTAL_SWING, "The user swings its body around violently to inflict damage on everything in its vicinity.", 20, Type.DARK, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class FleurCannon extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		FleurCannon() {
+			super(AttackNamesies.FLEUR_CANNON, "The user unleashes a strong beam. The attack's recoil harshly lowers the user's Sp. Atk stat.", 5, Type.FAIRY, MoveCategory.SPECIAL);
+			super.power = 130;
+			super.accuracy = 90;
+			super.selfTarget = true;
+			super.statChanges[Stat.SP_ATTACK.index()] = -2;
+		}
+	}
+
+	static class ShadowBone extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		ShadowBone() {
+			super(AttackNamesies.SHADOW_BONE, "The user attacks by beating the target with a bone that contains a spirit. This may also lower the target's Defense stat.", 10, Type.GHOST, MoveCategory.PHYSICAL);
+			super.power = 85;
+			super.accuracy = 100;
+			super.effectChance = 20;
+			super.statChanges[Stat.DEFENSE.index()] = -1;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class Accelerock extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		Accelerock() {
+			super(AttackNamesies.ACCELEROCK, "The user smashes into the target at high speed. This move always goes first.", 20, Type.ROCK, MoveCategory.PHYSICAL);
+			super.power = 40;
+			super.accuracy = 100;
+			super.priority = 1;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class Liquidation extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		Liquidation() {
+			super(AttackNamesies.LIQUIDATION, "The user slams into the target using a full-force blast of water. This may also lower the target's Defense stat.", 10, Type.WATER, MoveCategory.PHYSICAL);
+			super.power = 85;
+			super.accuracy = 100;
+			super.effectChance = 20;
+			super.statChanges[Stat.DEFENSE.index()] = -1;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class SpectralThief extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		SpectralThief() {
+			super(AttackNamesies.SPECTRAL_THIEF, "The user hides in the target's shadow, steals the target's stat boosts, and then attacks.", 10, Type.GHOST, MoveCategory.PHYSICAL);
+			super.power = 90;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
+				int stage = o.getAttributes().getStage(i);
+				if (stage > 0) {
+					o.getAttributes().resetStage(i);
+					me.getAttributes().incrementStage(i, stage);
+				}
+			}
+			
+			super.apply(me, o, b);
+		}
+	}
+
+	static class SunsteelStrike extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		SunsteelStrike() {
+			super(AttackNamesies.SUNSTEEL_STRIKE, "The user slams into the target with the force of a meteor. This move can be used on the target regardless of its Abilities.", 5, Type.STEEL, MoveCategory.PHYSICAL);
+			super.power = 100;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+			EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, me, me, CastSource.ATTACK, false);
+			super.apply(me, o, b);
+			me.getAttributes().removeEffect(EffectNamesies.BREAKS_THE_MOLD);
+		}
+	}
+
+	static class MoongeistBeam extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		MoongeistBeam() {
+			super(AttackNamesies.MOONGEIST_BEAM, "The user emits a sinister ray to attack the target. This move can be used on the target regardless of its Abilities.", 5, Type.GHOST, MoveCategory.SPECIAL);
+			super.power = 100;
+			super.accuracy = 100;
+		}
+
+		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+			EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, me, me, CastSource.ATTACK, false);
+			super.apply(me, o, b);
+			me.getAttributes().removeEffect(EffectNamesies.BREAKS_THE_MOLD);
+		}
+	}
+
+	static class TearfulLook extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		TearfulLook() {
+			super(AttackNamesies.TEARFUL_LOOK, "The user gets teary eyed to make the target lose its combative spirit. This lowers the target's Attack and Sp. Atk stats.", 20, Type.NORMAL, MoveCategory.STATUS);
+			super.statChanges[Stat.ATTACK.index()] = -1;
+			super.statChanges[Stat.SP_ATTACK.index()] = -1;
+		}
+	}
+
+	static class ZingZap extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		ZingZap() {
+			super(AttackNamesies.ZING_ZAP, "A strong electric blast crashes down on the target, giving it an electric shock. This may also make the target flinch.", 10, Type.ELECTRIC, MoveCategory.PHYSICAL);
+			super.power = 80;
+			super.accuracy = 100;
+			super.effects.add(EffectNamesies.FLINCH);
+			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}

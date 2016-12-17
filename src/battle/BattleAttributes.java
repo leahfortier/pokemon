@@ -165,10 +165,22 @@ public class BattleAttributes implements Serializable {
 	
 	public void setStage(int index, int val) {
 		stages[index] = val;
+
+		// Don't let it go out of bounds, yo!
+		stages[index] = Math.min(Stat.MAX_STAT_CHANGES, stages[index]);
+		stages[index] = Math.max(-1*Stat.MAX_STAT_CHANGES, stages[index]);
+	}
+
+	public void incrementStage(int index, int val) {
+		setStage(index, getStage(index) + val);
+	}
+
+	public void resetStage(Stat stat) {
+		resetStage(stat.index());
 	}
 	
-	public void resetStage(Stat stat) {
-		stages[stat.index()] = 0;
+	public void resetStage(int index) {
+		setStage(index, 0);
 	}
 	
 	public boolean modifyStage(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source) {
@@ -271,12 +283,8 @@ public class BattleAttributes implements Serializable {
 				.replace("{change}", change)
 				.replace("{victimName}", victimName);
 		Messages.add(new MessageUpdate(message));
-		
-		stages[index] += val;
-		
-		// Don't let it go out of bounds, yo!
-		stages[index] = Math.min(Stat.MAX_STAT_CHANGES, stages[index]);
-		stages[index] = Math.max(-1*Stat.MAX_STAT_CHANGES, stages[index]);
+
+		this.incrementStage(index, val);
 		
 		// Defiant raises Attack stat by two when a stat is lowered by the opponent
 		if (val < 0 && caster != victim) {

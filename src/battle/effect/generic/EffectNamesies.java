@@ -71,6 +71,7 @@ import battle.effect.generic.PokemonEffect.RaiseCrits;
 import battle.effect.generic.PokemonEffect.Safeguard;
 import battle.effect.generic.PokemonEffect.SandTomb;
 import battle.effect.generic.PokemonEffect.SelfConfusion;
+import battle.effect.generic.PokemonEffect.ShellTrap;
 import battle.effect.generic.PokemonEffect.Snatch;
 import battle.effect.generic.PokemonEffect.SoundBlock;
 import battle.effect.generic.PokemonEffect.SpikyShield;
@@ -166,6 +167,7 @@ public enum EffectNamesies {
 	NIGHTMARE("Nightmare", Nightmare::new),
 	CHARGE("Charge", Charge::new),
 	FOCUSING("Focusing", Focusing::new),
+	SHELL_TRAP("ShellTrap", ShellTrap::new),
 	BEAK_BLAST("BeakBlast", BeakBlast::new),
 	FIDDY_PERCENT_STRONGER("FiddyPercentStronger", FiddyPercentStronger::new),
 	TRANSFORMED("Transformed", Transformed::new),

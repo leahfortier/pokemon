@@ -1,6 +1,7 @@
 package battle.attack;
 
 import battle.attack.Attack.Absorb;
+import battle.attack.Attack.Accelerock;
 import battle.attack.Attack.Acid;
 import battle.attack.Attack.AcidArmor;
 import battle.attack.Attack.AcidSpray;
@@ -192,6 +193,7 @@ import battle.attack.Attack.FlareBlitz;
 import battle.attack.Attack.Flash;
 import battle.attack.Attack.FlashCannon;
 import battle.attack.Attack.Flatter;
+import battle.attack.Attack.FleurCannon;
 import battle.attack.Attack.Fling;
 import battle.attack.Attack.FloralHealing;
 import battle.attack.Attack.FlowerShield;
@@ -303,6 +305,7 @@ import battle.attack.Attack.LeechSeed;
 import battle.attack.Attack.Leer;
 import battle.attack.Attack.Lick;
 import battle.attack.Attack.LightScreen;
+import battle.attack.Attack.Liquidation;
 import battle.attack.Attack.LockOn;
 import battle.attack.Attack.LovelyKiss;
 import battle.attack.Attack.LowKick;
@@ -346,6 +349,7 @@ import battle.attack.Attack.Mist;
 import battle.attack.Attack.MistBall;
 import battle.attack.Attack.MistyTerrain;
 import battle.attack.Attack.Moonblast;
+import battle.attack.Attack.MoongeistBeam;
 import battle.attack.Attack.Moonlight;
 import battle.attack.Attack.MorningSun;
 import battle.attack.Attack.MudBomb;
@@ -357,6 +361,7 @@ import battle.attack.Attack.MysticalFire;
 import battle.attack.Attack.NastyPlot;
 import battle.attack.Attack.NaturalGift;
 import battle.attack.Attack.NaturePower;
+import battle.attack.Attack.NaturesMadness;
 import battle.attack.Attack.NeedleArm;
 import battle.attack.Attack.NightDaze;
 import battle.attack.Attack.NightShade;
@@ -404,10 +409,12 @@ import battle.attack.Attack.PowerUpPunch;
 import battle.attack.Attack.PowerWhip;
 import battle.attack.Attack.PrecipiceBlades;
 import battle.attack.Attack.Present;
+import battle.attack.Attack.PrismaticLaser;
 import battle.attack.Attack.Protect;
 import battle.attack.Attack.Psybeam;
 import battle.attack.Attack.PsychUp;
 import battle.attack.Attack.Psychic;
+import battle.attack.Attack.PsychicFangs;
 import battle.attack.Attack.PsychicTerrain;
 import battle.attack.Attack.PsychoBoost;
 import battle.attack.Attack.PsychoCut;
@@ -472,6 +479,7 @@ import battle.attack.Attack.SeedFlare;
 import battle.attack.Attack.SeismicToss;
 import battle.attack.Attack.SelfDestruct;
 import battle.attack.Attack.ShadowBall;
+import battle.attack.Attack.ShadowBone;
 import battle.attack.Attack.ShadowClaw;
 import battle.attack.Attack.ShadowForce;
 import battle.attack.Attack.ShadowPunch;
@@ -479,6 +487,7 @@ import battle.attack.Attack.ShadowSneak;
 import battle.attack.Attack.Sharpen;
 import battle.attack.Attack.SheerCold;
 import battle.attack.Attack.ShellSmash;
+import battle.attack.Attack.ShellTrap;
 import battle.attack.Attack.ShiftGear;
 import battle.attack.Attack.ShockWave;
 import battle.attack.Attack.ShoreUp;
@@ -516,6 +525,7 @@ import battle.attack.Attack.SonicBoom;
 import battle.attack.Attack.SpacialRend;
 import battle.attack.Attack.Spark;
 import battle.attack.Attack.SparklingAria;
+import battle.attack.Attack.SpectralThief;
 import battle.attack.Attack.SpeedSwap;
 import battle.attack.Attack.SpiderWeb;
 import battle.attack.Attack.SpikeCannon;
@@ -545,6 +555,7 @@ import battle.attack.Attack.Submission;
 import battle.attack.Attack.Substitute;
 import battle.attack.Attack.SuckerPunch;
 import battle.attack.Attack.SunnyDay;
+import battle.attack.Attack.SunsteelStrike;
 import battle.attack.Attack.SuperFang;
 import battle.attack.Attack.Superpower;
 import battle.attack.Attack.Supersonic;
@@ -565,6 +576,7 @@ import battle.attack.Attack.TailWhip;
 import battle.attack.Attack.Tailwind;
 import battle.attack.Attack.TakeDown;
 import battle.attack.Attack.Taunt;
+import battle.attack.Attack.TearfulLook;
 import battle.attack.Attack.TechnoBlast;
 import battle.attack.Attack.TeeterDance;
 import battle.attack.Attack.Telekinesis;
@@ -630,6 +642,7 @@ import battle.attack.Attack.XScissor;
 import battle.attack.Attack.Yawn;
 import battle.attack.Attack.ZapCannon;
 import battle.attack.Attack.ZenHeadbutt;
+import battle.attack.Attack.ZingZap;
 import main.Global;
 import util.PokeString;
 
@@ -706,6 +719,7 @@ public enum AttackNamesies {
 	PETAL_DANCE("Petal Dance", PetalDance::new),
 	THRASH("Thrash", Thrash::new),
 	HYPER_BEAM("Hyper Beam", HyperBeam::new),
+	PRISMATIC_LASER("Prismatic Laser", PrismaticLaser::new),
 	STRING_SHOT("String Shot", StringShot::new),
 	BUG_BITE("Bug Bite", BugBite::new),
 	HARDEN("Harden", Harden::new),
@@ -748,6 +762,7 @@ public enum AttackNamesies {
 	SUCKER_PUNCH("Sucker Punch", SuckerPunch::new),
 	CRUNCH("Crunch", Crunch::new),
 	SUPER_FANG("Super Fang", SuperFang::new),
+	NATURES_MADNESS("Nature's Madness", NaturesMadness::new),
 	SWORDS_DANCE("Swords Dance", SwordsDance::new),
 	PECK("Peck", Peck::new),
 	LEER("Leer", Leer::new),
@@ -980,6 +995,7 @@ public enum AttackNamesies {
 	ROLLING_KICK("Rolling Kick", RollingKick::new),
 	JUMP_KICK("Jump Kick", JumpKick::new),
 	BRICK_BREAK("Brick Break", BrickBreak::new),
+	PSYCHIC_FANGS("Psychic Fangs", PsychicFangs::new),
 	HIGH_JUMP_KICK("High Jump Kick", HighJumpKick::new),
 	BLAZE_KICK("Blaze Kick", BlazeKick::new),
 	MEGA_KICK("Mega Kick", MegaKick::new),
@@ -993,6 +1009,7 @@ public enum AttackNamesies {
 	SKY_UPPERCUT("Sky Uppercut", SkyUppercut::new),
 	MEGA_PUNCH("Mega Punch", MegaPunch::new),
 	FOCUS_PUNCH("Focus Punch", FocusPunch::new),
+	SHELL_TRAP("Shell Trap", ShellTrap::new),
 	BEAK_BLAST("Beak Blast", BeakBlast::new),
 	ME_FIRST("Me First", MeFirst::new),
 	REFRESH("Refresh", Refresh::new),
@@ -1267,7 +1284,16 @@ public enum AttackNamesies {
 	TROP_KICK("Trop Kick", TropKick::new),
 	CLANGING_SCALES("Clanging Scales", ClangingScales::new),
 	DRAGON_HAMMER("Dragon Hammer", DragonHammer::new),
-	BRUTAL_SWING("Brutal Swing", BrutalSwing::new);
+	BRUTAL_SWING("Brutal Swing", BrutalSwing::new),
+	FLEUR_CANNON("Fleur Cannon", FleurCannon::new),
+	SHADOW_BONE("Shadow Bone", ShadowBone::new),
+	ACCELEROCK("Accelerock", Accelerock::new),
+	LIQUIDATION("Liquidation", Liquidation::new),
+	SPECTRAL_THIEF("Spectral Thief", SpectralThief::new),
+	SUNSTEEL_STRIKE("Sunsteel Strike", SunsteelStrike::new),
+	MOONGEIST_BEAM("Moongeist Beam", MoongeistBeam::new),
+	TEARFUL_LOOK("Tearful Look", TearfulLook::new),
+	ZING_ZAP("Zing Zap", ZingZap::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

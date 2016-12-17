@@ -808,6 +808,15 @@ Focusing:
 	damageTaker.addEffect((PokemonEffect)EffectNamesies.FLINCH.getEffect());
 	###
 *
+ShellTrap:
+	CastMessage: user.getName() + " set up a trap!"
+	NumTurns: 1
+	Int: PhysicalContactEffect
+	Contact:
+	Messages.add(new MessageUpdate(user.getName() + " set off " + victim.getName() + "'s trap!!"));
+	victim.getAttributes().removeEffect(this.namesies);
+	###
+*
 BeakBlast:
 	CastMessage: user.getName() + " started heating up its beak!"
 	NumTurns: 1

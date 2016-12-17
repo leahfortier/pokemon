@@ -671,6 +671,18 @@ Hyper Beam:
 	SemiInv: false
 	ChargeFirst: false
 *
+Prismatic Laser:
+	Desc: The user shoots powerful lasers using the power of a prism. The user can't move on the next turn.
+	PP: 10
+	Type: Psychic
+	Cat: Special
+	Acc: 100
+	Pow: 160
+	Int: MultiTurnMove
+	ChargeMessage: user.getName() + " must recharge!"
+	SemiInv: false
+	ChargeFirst: false
+*
 String Shot:
 	Desc: The targets are bound with silk blown from the user's mouth. This silk reduces the targets' Speed stat.
 	PP: 40
@@ -1104,6 +1116,14 @@ Super Fang:
 	Type: Normal
 	Cat: Physical
 	FixedDamage: (int)Math.ceil(o.getHP()/2.0)
+*
+Nature's Madness:
+	Desc: The user hits the target with the force of nature. It halves the target's HP.
+	PP: 10
+	Type: Fairy
+	Cat: Special
+	FixedDamage: (int)Math.ceil(o.getHP()/2.0)
+	Acc: 90
 *
 Swords Dance:
 	Desc: A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat.
@@ -3430,6 +3450,17 @@ Brick Break:
 	BarrierEffect.breakBarriers(b, user);
 	###
 *
+Psychic Fangs:
+	Desc: The user bites the target with its psychic capabilities. This can also destroy Light Screen and Reflect.
+	PP: 10
+	Type: Psychic
+	Cat: Physical
+	Acc: 100
+	Pow: 85
+	ApplyEffects: 
+	BarrierEffect.breakBarriers(b, user);
+	###
+*
 High Jump Kick:
 	Desc: The target is attacked with a knee kick from a jump. If it misses, the user is hurt instead.
 	PP: 10
@@ -3573,6 +3604,28 @@ Focus Punch:
 	if (me.hasEffect(EffectNamesies.FOCUSING)) {
 		super.applyDamage(me, o, b);
 	}
+	###
+*
+Shell Trap:
+	Desc: The user sets a shell trap. If the user is hit by a physical move, the trap will explode and inflict damage on the opposing Pokémon.
+	Pow: 150
+	Acc: 100
+	Cat: Special
+	Type: Fire
+	Priority: -3
+	PP: 5
+	Effect: ShellTrap
+	SelfTarget: True
+	StartTurn: 
+	super.applyEffects(b, me, me);
+	###
+	Apply:
+	if (me.hasEffect(EffectNamesies.SHELL_TRAP)) {
+		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+		return;
+	}
+	
+	super.applyDamage(me, o, b);
 	###
 *
 Beak Blast:
@@ -6665,4 +6718,97 @@ Brutal Swing:
 	Cat: Physical
 	Acc: 100
 	Pow: 60
+*
+Fleur Cannon:
+	Desc: The user unleashes a strong beam. The attack's recoil harshly lowers the user's Sp. Atk stat.
+	PP: 5
+	Type: Fairy
+	Cat: Special
+	Acc: 90
+	Pow: 130
+	SelfTarget: True
+	StatChange: 1 Sp_Attack -2
+*
+Shadow Bone:
+	Desc: The user attacks by beating the target with a bone that contains a spirit. This may also lower the target's Defense stat.
+	Type: Ghost
+	Cat: Physical
+	Acc: 100
+	Pow: 85
+	PP: 10
+	EffChance: 20
+	StatChange: 1 Defense -1
+*
+Accelerock:
+	Desc: The user smashes into the target at high speed. This move always goes first.
+	PP: 20
+	Type: Rock
+	Pow: 40
+	Priority: 1
+	Cat: Physical
+	Acc: 100
+*
+Liquidation:
+	Desc: The user slams into the target using a full-force blast of water. This may also lower the target's Defense stat.
+	Type: Water
+	Cat: Physical
+	Acc: 100
+	Pow: 85
+	PP: 10
+	EffChance: 20
+	StatChange: 1 Defense -1
+*
+Spectral Thief:
+	Desc: The user hides in the target's shadow, steals the target's stat boosts, and then attacks.
+	Type: Ghost
+	Pow: 90
+	Acc: 100
+	Cat: Physical
+	PP: 10
+	Apply:
+	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
+		int stage = o.getAttributes().getStage(i);
+		if (stage > 0) {
+			o.getAttributes().resetStage(i);
+			me.getAttributes().incrementStage(i, stage);
+		}
+	}
+
+	super.apply(me, o, b);
+	###
+*
+Sunsteel Strike:
+	Desc: The user slams into the target with the force of a meteor. This move can be used on the target regardless of its Abilities.
+	Type: Steel
+	Cat: Physical
+	PP: 5
+	Pow: 100
+	Acc: 100
+	IgnoreAbilityMove: True
+*
+Moongeist Beam:
+	Desc: The user emits a sinister ray to attack the target. This move can be used on the target regardless of its Abilities.
+	Type: Ghost
+	Cat: Special
+	PP: 5
+	Pow: 100
+	Acc: 100
+	IgnoreAbilityMove: True
+*
+Tearful Look:
+	Desc: The user gets teary eyed to make the target lose its combative spirit. This lowers the target's Attack and Sp. Atk stats.
+	Type: Normal
+	Cat: Status
+	PP: 20
+	StatChange: 2 Attack -1 Sp_Attack -1
+*
+Zing Zap:
+	Desc: A strong electric blast crashes down on the target, giving it an electric shock. This may also make the target flinch.
+	Type: Electric
+	Cat: Physical
+	Acc: 100
+	Pow: 80
+	Effect: Flinch
+	EffChance: 30
+	PP: 10
 *

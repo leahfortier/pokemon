@@ -2474,3 +2474,12 @@ SapHealthEffect:
 ***
 AlwaysCritEffect:
 ***
+Override:
+	IgnoreAbilityMove:
+		AddMapField: Apply:
+		EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, me, me, CastSource.ATTACK, false);
+		super.apply(me, o, b);
+		me.getAttributes().removeEffect(EffectNamesies.BREAKS_THE_MOLD);
+		###
+	*
+***

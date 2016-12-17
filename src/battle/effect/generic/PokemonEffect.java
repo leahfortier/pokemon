@@ -2198,6 +2198,27 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
+	static class ShellTrap extends PokemonEffect implements PhysicalContactEffect {
+		private static final long serialVersionUID = 1L;
+
+		ShellTrap() {
+			super(EffectNamesies.SHELL_TRAP, 1, 1, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(victim.hasEffect(this.namesies));
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getName() + " set up a trap!";
+		}
+
+		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Messages.add(new MessageUpdate(user.getName() + " set off " + victim.getName() + "'s trap!!"));
+			victim.getAttributes().removeEffect(this.namesies);
+		}
+	}
+
 	static class BeakBlast extends PokemonEffect implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
