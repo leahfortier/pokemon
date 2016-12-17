@@ -342,13 +342,13 @@ public abstract class Attack implements Serializable {
 		}
 		
 		// Effects that apply when a Pokemon makes physical contact with them
-		if (isMoveType(MoveType.PHYSICAL_CONTACT)) {
+		if (isMoveType(MoveType.PHYSICAL_CONTACT) && !me.hasAbility(AbilityNamesies.LONG_REACH)) {
 			PhysicalContactEffect.invokePhysicalContactEffect(b, me, o);
 		}
 
 		// TODO: This might need to be moved higher like before the recoil stuff so it gets activated even if the attacker dies
 		// Effects that apply to the opponent when they take damage
-		TakeDamageEffect.invokeTakeDamageEffect(b, me, o);
+		TakeDamageEffect.invokeTakeDamageEffect(b, me, o, damage);
 	}
 
 	public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -670,6 +670,7 @@ public abstract class Attack implements Serializable {
 
 		Synthesis() {
 			super(AttackNamesies.SYNTHESIS, "The user restores its own HP. The amount of HP regained varies with the weather.", 5, Type.GRASS, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -705,6 +706,7 @@ public abstract class Attack implements Serializable {
 
 		Recover() {
 			super(AttackNamesies.RECOVER, "Restoring its own cells, the user restores its own HP by half of its max HP.", 10, Type.NORMAL, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -1593,6 +1595,7 @@ public abstract class Attack implements Serializable {
 
 		MorningSun() {
 			super(AttackNamesies.MORNING_SUN, "The user restores its own HP. The amount of HP regained varies with the weather.", 5, Type.NORMAL, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -2035,6 +2038,7 @@ public abstract class Attack implements Serializable {
 
 		Roost() {
 			super(AttackNamesies.ROOST, "The user lands and rests its body. It restores the user's HP by up to half of its max HP.", 10, Type.FLYING, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 			super.printCast = false;
 		}
@@ -2410,6 +2414,7 @@ public abstract class Attack implements Serializable {
 
 		Swallow() {
 			super(AttackNamesies.SWALLOW, "The power stored using the move Stockpile is absorbed by the user to heal its HP. Storing more power heals more HP.", 10, Type.NORMAL, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -3176,6 +3181,7 @@ public abstract class Attack implements Serializable {
 
 		Moonlight() {
 			super(AttackNamesies.MOONLIGHT, "The user restores its own HP. The amount of HP regained varies with the weather.", 5, Type.FAIRY, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -3352,6 +3358,7 @@ public abstract class Attack implements Serializable {
 		Rest() {
 			super(AttackNamesies.REST, "The user goes to sleep for two turns. It fully restores the user's HP and heals any status problem.", 10, Type.PSYCHIC, MoveCategory.STATUS);
 			super.status = StatusCondition.ASLEEP;
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -3524,6 +3531,7 @@ public abstract class Attack implements Serializable {
 
 		Aromatherapy() {
 			super(AttackNamesies.AROMATHERAPY, "The user releases a soothing scent that heals all status problems affecting the user's party.", 5, Type.GRASS, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -4871,6 +4879,7 @@ public abstract class Attack implements Serializable {
 
 		SlackOff() {
 			super(AttackNamesies.SLACK_OFF, "The user slacks off, restoring its own HP by up to half of its maximum HP.", 10, Type.NORMAL, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -4892,6 +4901,7 @@ public abstract class Attack implements Serializable {
 		HealPulse() {
 			super(AttackNamesies.HEAL_PULSE, "The user emits a healing pulse which restores the target's HP by up to half of its max HP.", 10, Type.PSYCHIC, MoveCategory.STATUS);
 			super.moveTypes.add(MoveType.AURA_PULSE);
+			super.moveTypes.add(MoveType.HEALING);
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -6321,6 +6331,7 @@ public abstract class Attack implements Serializable {
 
 		Refresh() {
 			super(AttackNamesies.REFRESH, "The user rests to cure itself of a poisoning, burn, or paralysis.", 20, Type.NORMAL, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -6409,6 +6420,7 @@ public abstract class Attack implements Serializable {
 
 		SoftBoiled() {
 			super(AttackNamesies.SOFT_BOILED, "The user restores its own HP by up to half of its maximum HP. May also be used in the field to heal HP.", 10, Type.NORMAL, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -7647,6 +7659,7 @@ public abstract class Attack implements Serializable {
 
 		MilkDrink() {
 			super(AttackNamesies.MILK_DRINK, "The user restores its own HP by up to half of its maximum HP. May also be used in the field to heal HP.", 10, Type.NORMAL, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -7668,6 +7681,7 @@ public abstract class Attack implements Serializable {
 		HealBell() {
 			super(AttackNamesies.HEAL_BELL, "The user makes a soothing bell chime to heal the status problems of all the party Pok\u00e9mon.", 5, Type.NORMAL, MoveCategory.STATUS);
 			super.moveTypes.add(MoveType.SOUND_BASED);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -8160,6 +8174,7 @@ public abstract class Attack implements Serializable {
 
 		HealOrder() {
 			super(AttackNamesies.HEAL_ORDER, "The user calls out its underlings to heal it. The user regains up to half of its max HP.", 10, Type.BUG, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -10797,6 +10812,7 @@ public abstract class Attack implements Serializable {
 
 		ShoreUp() {
 			super(AttackNamesies.SHORE_UP, "The user regains up to half of its max HP. It restores more HP in a sandstorm.", 10, Type.GROUND, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -10822,6 +10838,7 @@ public abstract class Attack implements Serializable {
 
 		FloralHealing() {
 			super(AttackNamesies.FLORAL_HEALING, "The user restores the target's HP by up to half of its max HP. It restores more HP when the terrain is grass.", 10, Type.FAIRY, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 			super.selfTarget = true;
 		}
 
@@ -11094,6 +11111,7 @@ public abstract class Attack implements Serializable {
 
 		Purify() {
 			super(AttackNamesies.PURIFY, "The user heals the target's status condition. If the move succeeds, it also restores the user's own HP.", 20, Type.POISON, MoveCategory.STATUS);
+			super.moveTypes.add(MoveType.HEALING);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {

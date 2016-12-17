@@ -82,7 +82,7 @@ public class Move implements Serializable {
 		type = this.attack.setType(b, user);
 		
 		// Check if there is an effect that changes the type of the user -- if not just returns the actual type (I promise)
-		type = ChangeAttackTypeEffect.updateAttackType(b, user, type);
+		type = ChangeAttackTypeEffect.updateAttackType(b, user, attack, type);
 		
 //		System.out.println(user.getName() + " " + attack.getName() + " Type: " + type.getName());
 		

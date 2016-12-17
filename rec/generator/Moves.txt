@@ -1958,6 +1958,7 @@ Giga Drain:
 *
 Aromatherapy:
 	HealPartyStatus: True
+	MoveType: Healing
 	PP: 5
 	Type: Grass
 	Cat: Status
@@ -2803,7 +2804,7 @@ Heal Pulse:
 	PP: 10
 	Type: Psychic
 	Cat: Status
-	MoveType: Aura_Pulse
+	MoveType: Aura_Pulse, Healing
 	ApplyEffects: 
 	if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
@@ -3666,6 +3667,7 @@ Refresh:
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
+	MoveType: Healing
 	ApplyError: !me.hasStatus()
 	ApplyEffects: 
 	Status.removeStatus(b, user, CastSource.ATTACK);
@@ -4615,7 +4617,7 @@ Heal Bell:
 	HealPartyStatus: True
 	Type: Normal
 	Cat: Status
-	MoveType: Sound_Based
+	MoveType: Sound_Based, Healing
 *
 Weather Ball:
 	GetType: 
@@ -6647,6 +6649,7 @@ Purify:
 	Type: Poison
 	Cat: Status
 	PP: 20
+	MoveType: Healing
 	ApplyError: !me.hasStatus()
 	ApplyEffects:
 	Status.removeStatus(b, user, CastSource.ATTACK);

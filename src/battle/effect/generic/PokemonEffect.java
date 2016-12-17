@@ -2344,7 +2344,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " put in a substitute!";
 		}
 
-		public boolean absorbDamage(ActivePokemon damageTaker, int damageAmount) {
+		public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
 			this.hp -= damageAmount;
 			if (this.hp <= 0) {
 				Messages.add(new MessageUpdate("The substitute broke!"));
@@ -2886,7 +2886,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return user.getName() + " electrified " + victim.getName() + "!";
 		}
 
-		public Type changeAttackType(Type original) {
+		public Type changeAttackType(Attack attack, Type original) {
 			return Type.ELECTRIC;
 		}
 	}

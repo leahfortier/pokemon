@@ -3,6 +3,7 @@ package battle.effect.generic;
 import battle.Battle;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import item.Item;
@@ -81,11 +82,11 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (p.isAttackType(Type.WATER)) {
+			if (user.isAttackType(Type.WATER)) {
 				// Water is fiddy percent stronger in tha weathz
 				return 1.5;
 			}
-			else if (p.isAttackType(Type.FIRE)) {
+			else if (user.isAttackType(Type.FIRE)) {
 				// Fire is fiddy percent weaker in tha weathz
 				return .5;
 			}
@@ -119,11 +120,11 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (p.isAttackType(Type.FIRE)) {
+			if (user.isAttackType(Type.FIRE)) {
 				// Fire is fiddy percent stronger in tha weathz
 				return 1.5;
 			}
-			else if (p.isAttackType(Type.WATER)) {
+			else if (user.isAttackType(Type.WATER)) {
 				// Water is fiddy percent weaker in tha weathz
 				return .5;
 			}

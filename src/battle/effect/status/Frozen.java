@@ -44,7 +44,7 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
         return abilify.getName() + "'s " + abilify.getAbility().getName() + " froze " + victim.getName() + "!";
     }
 
-    public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+    public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
         // Fire-type moves defrost the user
         if (user.isAttackType(Type.FIRE)) {
             Status.removeStatus(b, victim, CastSource.EFFECT);

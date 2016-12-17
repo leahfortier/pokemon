@@ -832,6 +832,7 @@ public class ActivePokemon implements Serializable {
 	public void resetAttributes() {
 		attributes = new BattleAttributes();
 		moves.forEach(Move::resetReady);
+		ability = ability.namesies().getNewAbility();
 	}
 	
 	public void setCaught() {
@@ -1031,34 +1032,6 @@ public class ActivePokemon implements Serializable {
 		removeStatus();
 		getActualMoves().forEach(Move::resetPP);
 		healHealthFraction(1);
-	}
-	
-	// Heals the Pokemon by damage amount. It is assume damage has already been dealt to the victim
-	public void sapHealth(ActivePokemon victim, int amount, Battle b, boolean print, boolean dreamEater) {
-		if (victim.hasAbility(AbilityNamesies.LIQUID_OOZE)) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + getName() + " to lose health instead!"));
-			reduceHealth(b, amount);
-			return;
-		}
-		
-		// Big Root heals an additional 30%
-		if (isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
-			amount *= 1.3;
-		}
-		
-		// Sap message (different for Dream Eater)
-		if (print) {
-			String message = dreamEater ? victim.getName() + "'s dream was eaten!" : victim.getName() + "'s health was sapped!";
-			Messages.add(new MessageUpdate(message));
-		}
-		
-		// Healers gon' heal
-		if (!hasEffect(EffectNamesies.HEAL_BLOCK)) {
-			heal(amount);
-		}
-
-		Messages.add(new MessageUpdate().updatePokemon(b, victim));
-		Messages.add(new MessageUpdate().updatePokemon(b, this));
 	}
 	
 	public boolean isGrounded(Battle b) {

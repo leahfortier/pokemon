@@ -127,6 +127,10 @@ Sand Rush:
 	Desc: Speed rises in a Sandstorm.
 	SpeedWeather: Sandstorm
 *
+Slush Rush:
+	Desc: Boosts the Pokémon's Speed stat in a hailstorm.
+	SpeedWeather: Hailing
+*
 Poison Point:
 	Desc: Contact with the Pok\u00e9mon may poison the foe.
 	StatusContact: Poisoned
@@ -1368,6 +1372,11 @@ Grass Pelt:
 	ToModify: Defense
 	ModifyMultiplier: 1.5 b.hasEffect(EffectNamesies.GRASSY_TERRAIN)
 *
+Surge Surfer:
+	Desc: Doubles the Pokémon's Speed stat on Electric Terrain.
+	ToModify: Speed
+	ModifyMultiplier: 2 b.hasEffect(EffectNamesies.ELECTRIC_TERRAIN)
+*
 Flower Veil:
 	Desc: Prevents lowering of Grass-type Pok\u00e9mon's stats.
 	Int: StatusPreventionEffect, StatProtectingEffect
@@ -1427,7 +1436,7 @@ Merciless:
 	###
 *
 Water Bubble:
-	Desc: The Pokémon's attacks become critical hits if the target is poisoned.
+	Desc: Lowers the power of Fire-type moves done to the Pokémon and prevents the Pokémon from getting a burn.
 	Int: PowerChangeEffect, OpponentPowerChangeEffect
 	StatusPreventAbility: Burned burns
 	GetMultiplier:
@@ -1437,3 +1446,62 @@ Water Bubble:
 	return user.getAttackType() == Type.FIRE ? .5 : 1;
 	###
 *
+Steelworker:
+	Desc: Powers up Steel-type moves.
+	Int: PowerChangeEffect
+	GetMultiplier:
+	return user.isAttackType(Type.STEEL) ? 1.5 : 1;
+	###
+*
+Berserk:
+	Desc: Boosts the Pokémon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.
+	Int: TakeDamageEffect
+	OnTakeDamage:
+	if (victim.getHPRatio() < .5 && (victim.getHP() + damageTaken)/(double)victim.getMaxHP() >= .5) {
+		victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+	}
+	###
+*
+Long Reach:
+	Desc: The Pokémon uses its moves without making contact with the target.
+*
+Liquid Voice:
+	Desc: All sound-based moves become Water-type moves.
+	Int: ChangeAttackTypeEffect
+	ChangeAttackType:
+	if (attack.isMoveType(MoveType.SOUND_BASED)) {
+		return Type.WATER;
+	}
+	
+	return original;
+	###
+*
+Triage:
+	Desc: Gives priority to a healing move.
+	Int: PriorityChangeEffect
+	ChangePriority: user.getAttack().isMoveType(MoveType.HEALING)
+*
+Galvanize:
+	Desc: Normal-type moves become Electric-type moves. The power of those moves is boosted a little.
+	NormalTypeChanger: Electric
+*
+Disguise:
+	Desc: Once per battle, the shroud that covers the Pokémon can protect it from an attack.
+	Field:
+	private boolean activated;
+	###
+	Activate:
+	this.activated = false;
+	###
+	Int: AbsorbDamageEffect
+	AbsorbDamage:
+	if (!activated && b.getOtherPokemon(damageTaker).getAttributes().isAttacking()) {
+		Messages.add(new MessageUpdate(damageTaker.getName() + "'s disguise was busted!!"));
+		activated = true;
+		return true;
+	}
+
+	return false;
+	###
+*
+		

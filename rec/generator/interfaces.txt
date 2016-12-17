@@ -54,7 +54,7 @@ TakeDamageEffect:
 		// user: The user of the attack
 		// victim: The Pokemon who is taking damage, they are the one's probably implementing this
 		###
-		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken)
 		EffectList: victim
 		Invoke: Void
 		Deadsies: victim
@@ -378,7 +378,7 @@ PriorityChangeEffect:
 ***
 ChangeAttackTypeEffect:
 	Method:
-		Header: Type changeAttackType(Type original)
+		Header: Type changeAttackType(Attack attack, Type original)
 		Invoke: Update
 		Update: original
 		InvokeParameters: Battle b, ActivePokemon attacking
@@ -496,10 +496,9 @@ AdvantageMultiplierMove:
 ***
 AbsorbDamageEffect:
 	Method:
-		Header: boolean absorbDamage(ActivePokemon damageTaker, int damageAmount)
+		Header: boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount)
 		Invoke: Check true
 		EffectList: damageTaker
-		InvokeParameters: Battle b
 	*
 ***
 DamageTakenEffect:

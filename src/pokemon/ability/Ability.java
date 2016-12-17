@@ -14,6 +14,7 @@ import battle.effect.SwitchOutEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.CastSource;
+import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
@@ -484,6 +485,26 @@ public abstract class Ability implements Serializable {
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			if (isModifyStat(s) && b.getWeather().namesies() == EffectNamesies.SANDSTORM) {
+				stat *= 2;
+			}
+			
+			return stat;
+		}
+	}
+
+	static class SlushRush extends Ability implements StatChangingEffect {
+		private static final long serialVersionUID = 1L;
+
+		SlushRush() {
+			super(AbilityNamesies.SLUSH_RUSH, "Boosts the Pokémon's Speed stat in a hailstorm.");
+		}
+
+		public boolean isModifyStat(Stat s) {
+			return s == Stat.SPEED;
+		}
+
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+			if (isModifyStat(s) && b.getWeather().namesies() == EffectNamesies.HAILING) {
 				stat *= 2;
 			}
 			
@@ -1266,7 +1287,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.RATTLED, "Some move types scare it and boost its Speed.");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			Type type = user.getAttackType();
 			if (type == Type.BUG || type == Type.DARK || type == Type.GHOST) {
 				victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
@@ -1762,7 +1783,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.NORMALIZE, "All the Pok\u00e9mon's moves become the Normal type.");
 		}
 
-		public Type changeAttackType(Type original) {
+		public Type changeAttackType(Attack attack, Type original) {
 			return Type.NORMAL;
 		}
 	}
@@ -1905,7 +1926,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.COLOR_CHANGE, "Changes the Pok\u00e9mon's type to the foe's move.");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			Type t = user.getAttackType();
 			if (!victim.isType(b, t)) {
 				type = t;
@@ -2106,7 +2127,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.JUSTIFIED, "Raises Attack when hit by a Dark-type move.");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (user.getAttackType() == Type.DARK) {
 				victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
 			}
@@ -2324,7 +2345,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.WEAK_ARMOR, "Physical attacks lower Defense and raise Speed.");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
 				victim.getAttributes().modifyStage(victim, victim, -1, Stat.DEFENSE, b, CastSource.ABILITY);
 				victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
@@ -2381,7 +2402,7 @@ public abstract class Ability implements Serializable {
 			activated = false;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			breakIllusion(b, victim);
 		}
 
@@ -2908,7 +2929,7 @@ public abstract class Ability implements Serializable {
 			return Type.FAIRY;
 		}
 
-		public Type changeAttackType(Type original) {
+		public Type changeAttackType(Attack attack, Type original) {
 			if (original == Type.NORMAL) {
 				this.activated = true;
 				return getType();
@@ -2939,7 +2960,7 @@ public abstract class Ability implements Serializable {
 			return Type.ICE;
 		}
 
-		public Type changeAttackType(Type original) {
+		public Type changeAttackType(Attack attack, Type original) {
 			if (original == Type.NORMAL) {
 				this.activated = true;
 				return getType();
@@ -3034,6 +3055,26 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
+	static class SurgeSurfer extends Ability implements StatChangingEffect {
+		private static final long serialVersionUID = 1L;
+
+		SurgeSurfer() {
+			super(AbilityNamesies.SURGE_SURFER, "Doubles the Pokémon's Speed stat on Electric Terrain.");
+		}
+
+		public boolean isModifyStat(Stat s) {
+			return s == Stat.SPEED;
+		}
+
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+			if (isModifyStat(s) && b.hasEffect(EffectNamesies.ELECTRIC_TERRAIN)) {
+				stat *= 2;
+			}
+			
+			return stat;
+		}
+	}
+
 	static class FlowerVeil extends Ability implements StatusPreventionEffect, StatProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
@@ -3108,7 +3149,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.STAMINA, "Boosts the Defense stat when hit by an attack.");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			victim.getAttributes().modifyStage(victim, victim, 1, Stat.DEFENSE, b, CastSource.ABILITY);
 		}
 	}
@@ -3120,7 +3161,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.WATER_COMPACTION, "Boosts the Pokémon's Defense stat sharply when hit by a Water-type move.");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (user.getAttackType() == Type.WATER) {
 				victim.getAttributes().modifyStage(victim, victim, 2, Stat.DEFENSE, b, CastSource.ABILITY);
 			}
@@ -3143,7 +3184,7 @@ public abstract class Ability implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		WaterBubble() {
-			super(AbilityNamesies.WATER_BUBBLE, "The Pokémon's attacks become critical hits if the target is poisoned.");
+			super(AbilityNamesies.WATER_BUBBLE, "Lowers the power of Fire-type moves done to the Pokémon and prevents the Pokémon from getting a burn.");
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -3160,6 +3201,127 @@ public abstract class Ability implements Serializable {
 
 		public String statusPreventionMessage(ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " prevents burns!";
+		}
+	}
+
+	static class Steelworker extends Ability implements PowerChangeEffect {
+		private static final long serialVersionUID = 1L;
+
+		Steelworker() {
+			super(AbilityNamesies.STEELWORKER, "Powers up Steel-type moves.");
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(Type.STEEL) ? 1.5 : 1;
+		}
+	}
+
+	static class Berserk extends Ability implements TakeDamageEffect {
+		private static final long serialVersionUID = 1L;
+
+		Berserk() {
+			super(AbilityNamesies.BERSERK, "Boosts the Pokémon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.");
+		}
+
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
+			if (victim.getHPRatio() < .5 && (victim.getHP() + damageTaken)/(double)victim.getMaxHP() >= .5) {
+				victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+			}
+		}
+	}
+
+	static class LongReach extends Ability {
+		private static final long serialVersionUID = 1L;
+
+		LongReach() {
+			super(AbilityNamesies.LONG_REACH, "The Pokémon uses its moves without making contact with the target.");
+		}
+	}
+
+	static class LiquidVoice extends Ability implements ChangeAttackTypeEffect {
+		private static final long serialVersionUID = 1L;
+
+		LiquidVoice() {
+			super(AbilityNamesies.LIQUID_VOICE, "All sound-based moves become Water-type moves.");
+		}
+
+		public Type changeAttackType(Attack attack, Type original) {
+			if (attack.isMoveType(MoveType.SOUND_BASED)) {
+				return Type.WATER;
+			}
+			
+			return original;
+		}
+	}
+
+	static class Triage extends Ability implements PriorityChangeEffect {
+		private static final long serialVersionUID = 1L;
+
+		Triage() {
+			super(AbilityNamesies.TRIAGE, "Gives priority to a healing move.");
+		}
+
+		public int changePriority(Battle b, ActivePokemon user, int priority) {
+			if (user.getAttack().isMoveType(MoveType.HEALING)) {
+				if (this instanceof ConsumableItem) {
+					user.consumeItem(b);
+				}
+				
+				priority++;
+			}
+			
+			return priority;
+		}
+	}
+
+	static class Galvanize extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
+		private static final long serialVersionUID = 1L;
+		private boolean activated;
+
+		Galvanize() {
+			super(AbilityNamesies.GALVANIZE, "Normal-type moves become Electric-type moves. The power of those moves is boosted a little.");
+			this.activated = false;
+		}
+
+		public Type getType() {
+			return Type.ELECTRIC;
+		}
+
+		public Type changeAttackType(Attack attack, Type original) {
+			if (original == Type.NORMAL) {
+				this.activated = true;
+				return getType();
+			}
+			
+			return original;
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			this.activated = false;
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return activated ? 1.3 : 1;
+		}
+	}
+
+	static class Disguise extends Ability implements AbsorbDamageEffect {
+		private static final long serialVersionUID = 1L;
+		private boolean activated;
+
+		Disguise() {
+			super(AbilityNamesies.DISGUISE, "Once per battle, the shroud that covers the Pokémon can protect it from an attack.");
+			this.activated = false;
+		}
+
+		public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
+			if (!activated && b.getOtherPokemon(damageTaker).getAttributes().isAttacking()) {
+				Messages.add(new MessageUpdate(damageTaker.getName() + "'s disguise was busted!!"));
+				activated = true;
+				return true;
+			}
+			
+			return false;
 		}
 	}
 }

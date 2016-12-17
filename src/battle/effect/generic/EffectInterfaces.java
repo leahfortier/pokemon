@@ -1,13 +1,14 @@
 package battle.effect.generic;
 
 import battle.Battle;
+import battle.attack.Attack;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import main.Global;
 import main.Type;
-import pokemon.ability.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
+import pokemon.ability.Ability;
 import trainer.Trainer;
 
 import java.util.ArrayList;
@@ -117,9 +118,9 @@ public final class EffectInterfaces {
 		// b: The current battle
 		// user: The user of the attack
 		// victim: The Pokemon who is taking damage, they are the one's probably implementing this
-		void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim);
+		void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken);
 
-		static void invokeTakeDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+		static void invokeTakeDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (victim.isFainted(b)) {
 				return;
 			}
@@ -129,7 +130,7 @@ public final class EffectInterfaces {
 				if (invokee instanceof TakeDamageEffect && !Effect.isInactiveEffect(invokee)) {
 					
 					TakeDamageEffect effect = (TakeDamageEffect)invokee;
-					effect.takeDamage(b, user, victim);
+					effect.takeDamage(b, user, victim, damageTaken);
 					
 					if (victim.isFainted(b)) {
 						return;
@@ -822,15 +823,15 @@ public final class EffectInterfaces {
 	}
 
 	public interface ChangeAttackTypeEffect {
-		Type changeAttackType(Type original);
+		Type changeAttackType(Attack attack, Type original);
 
-		static Type updateAttackType(Battle b, ActivePokemon attacking, Type original) {
+		static Type updateAttackType(Battle b, ActivePokemon attacking, Attack attack, Type original) {
 			List<Object> invokees = b.getEffectsList(attacking);
 			for (Object invokee : invokees) {
 				if (invokee instanceof ChangeAttackTypeEffect && !Effect.isInactiveEffect(invokee)) {
 					
 					ChangeAttackTypeEffect effect = (ChangeAttackTypeEffect)invokee;
-					original = effect.changeAttackType(original);
+					original = effect.changeAttackType(attack, original);
 				}
 			}
 			
@@ -1051,7 +1052,7 @@ public final class EffectInterfaces {
 	}
 
 	public interface AbsorbDamageEffect {
-		boolean absorbDamage(ActivePokemon damageTaker, int damageAmount);
+		boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount);
 
 		static boolean checkAbsorbDamageEffect(Battle b, ActivePokemon damageTaker, int damageAmount) {
 			List<Object> invokees = b.getEffectsList(damageTaker);
@@ -1059,7 +1060,7 @@ public final class EffectInterfaces {
 				if (invokee instanceof AbsorbDamageEffect && !Effect.isInactiveEffect(invokee)) {
 					
 					AbsorbDamageEffect effect = (AbsorbDamageEffect)invokee;
-					if (effect.absorbDamage(damageTaker, damageAmount)) {
+					if (effect.absorbDamage(b, damageTaker, damageAmount)) {
 						return true;
 					}
 				}

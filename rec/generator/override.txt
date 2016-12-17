@@ -85,6 +85,7 @@ SelfHealingMove:
 		victim.healHealthFraction(1/{0}.0);
 		###
 		AddMapField: SelfTarget: True
+		AddMapField: MoveType: Healing
 	*
 ***
 MultiTurnMove:
@@ -1294,7 +1295,7 @@ SwitchOutEffect:
 ***
 TakeDamageEffect:
 	OnTakeDamage:
-		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken)
 	*
 ***
 StallingEffect:
@@ -1453,11 +1454,11 @@ Override:
 	WeatherStatChange:
 		AddInterface: PowerChangeEffect
 		AddMapField: GetMultiplier:
-		if (p.isAttackType(Type.{11})) {
+		if (user.isAttackType(Type.{11})) {
 			// {1} is fiddy percent stronger in tha weathz
 			return 1.5;
 		}
-		else if (p.isAttackType(Type.{22})) {
+		else if (user.isAttackType(Type.{22})) {
 			// {2} is fiddy percent weaker in tha weathz
 			return .5;
 		}
@@ -2303,7 +2304,7 @@ Override:
 ***
 ChangeAttackTypeEffect:
 	ChangeAttackType:
-		Header: Type changeAttackType(Type original)
+		Header: Type changeAttackType(Attack attack, Type original)
 	*
 ***
 Override:
@@ -2446,7 +2447,7 @@ IncenseItem:
 ***
 AbsorbDamageEffect:
 	AbsorbDamage:
-		Header: boolean absorbDamage(ActivePokemon damageTaker, int damageAmount)
+		Header: boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount)
 	*
 ***
 DamageTakenEffect:

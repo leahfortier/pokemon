@@ -331,8 +331,7 @@ public class Battle {
 		enterBattle(enterer, enterMessage, true);
 	}
 
-	public void enterBattle(ActivePokemon enterer, String enterMessage)
-	{
+	public void enterBattle(ActivePokemon enterer, String enterMessage) {
 		enterBattle(enterer, enterMessage, true);
 	}
 
@@ -594,7 +593,7 @@ public class Battle {
 			
 			return me.hasAbility(AbilityNamesies.SNIPER) ? 3 : 2;
 		}
-		
+
 		return 1;
 	}
 	

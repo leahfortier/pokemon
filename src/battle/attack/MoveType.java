@@ -10,6 +10,7 @@ public enum MoveType {
     DEFROST,
     ENCORELESS,
     FIELD,
+    HEALING,
     METRONOMELESS,
     MIMICLESS,
     MIRRORLESS,

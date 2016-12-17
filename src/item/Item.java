@@ -250,7 +250,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 30;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.HELD_ITEM)) {
 				victim.consumeItem(b);
 			}
@@ -276,7 +276,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			// Effect.removeEffect(fallen.getEffects(), this.namesies());
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " popped!"));
 			victim.consumeItem(b);
 		}
@@ -395,7 +395,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 30;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (user.getAttackType() == Type.ELECTRIC && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
 				victim.consumeItem(b);
 			}
@@ -613,7 +613,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 30;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			// TODO: Try to generalize with self-switching moves
 			Team t = b.getTrainer(victim.isPlayer());
 			if (t instanceof WildPokemon) {
@@ -1051,7 +1051,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 30;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
 				victim.consumeItem(b);
 			}
@@ -1451,7 +1451,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 10;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			// TODO: Generalize this code with that of moves like U-Turn
 			Team t = b.getTrainer(user.isPlayer());
 			if (t instanceof WildPokemon) {
@@ -1624,7 +1624,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 30;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (user.getAttackType() == Type.ICE && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
 				victim.consumeItem(b);
 			}
@@ -1767,7 +1767,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 30;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (Type.getAdvantage(user, victim, b) > 1) {
 				victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
 				victim.getAttributes().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
@@ -8139,7 +8139,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.FAIRY;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (checkModify(b, user, victim)) {
 				victim.consumeItem(b);
 			}
@@ -8170,7 +8170,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.DARK;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (checkModify(b, user, victim)) {
 				victim.consumeItem(b);
 			}
@@ -8201,7 +8201,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.DRAGON;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (user.getAttack().getCategory() == getCategory()) {
 				Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!"));
 				user.reduceHealthFraction(b, 1/8.0);
@@ -8234,7 +8234,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.DARK;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (user.getAttack().getCategory() == getCategory()) {
 				Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!"));
 				user.reduceHealthFraction(b, 1/8.0);
@@ -8296,7 +8296,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.BUG;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
 			if (!victim.fullHealth() && Type.getAdvantage(user, victim, b) > 1) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " restored its health!"));
 				victim.healHealthFraction(.25);

@@ -12,6 +12,7 @@ import pokemon.ability.Ability.AromaVeil;
 import pokemon.ability.Ability.AuraBreak;
 import pokemon.ability.Ability.BadDreams;
 import pokemon.ability.Ability.BattleArmor;
+import pokemon.ability.Ability.Berserk;
 import pokemon.ability.Ability.BigPecks;
 import pokemon.ability.Ability.Blaze;
 import pokemon.ability.Ability.Bulletproof;
@@ -29,6 +30,7 @@ import pokemon.ability.Ability.Damp;
 import pokemon.ability.Ability.DarkAura;
 import pokemon.ability.Ability.Defeatist;
 import pokemon.ability.Ability.Defiant;
+import pokemon.ability.Ability.Disguise;
 import pokemon.ability.Ability.Download;
 import pokemon.ability.Ability.Drizzle;
 import pokemon.ability.Ability.Drought;
@@ -46,6 +48,7 @@ import pokemon.ability.Ability.Forewarn;
 import pokemon.ability.Ability.Frisk;
 import pokemon.ability.Ability.FurCoat;
 import pokemon.ability.Ability.GaleWings;
+import pokemon.ability.Ability.Galvanize;
 import pokemon.ability.Ability.Gluttony;
 import pokemon.ability.Ability.GrassPelt;
 import pokemon.ability.Ability.Guts;
@@ -76,6 +79,8 @@ import pokemon.ability.Ability.LightMetal;
 import pokemon.ability.Ability.Lightningrod;
 import pokemon.ability.Ability.Limber;
 import pokemon.ability.Ability.LiquidOoze;
+import pokemon.ability.Ability.LiquidVoice;
+import pokemon.ability.Ability.LongReach;
 import pokemon.ability.Ability.MagicBounce;
 import pokemon.ability.Ability.MagicGuard;
 import pokemon.ability.Ability.Magician;
@@ -133,6 +138,7 @@ import pokemon.ability.Ability.ShieldDust;
 import pokemon.ability.Ability.Simple;
 import pokemon.ability.Ability.SkillLink;
 import pokemon.ability.Ability.SlowStart;
+import pokemon.ability.Ability.SlushRush;
 import pokemon.ability.Ability.Sniper;
 import pokemon.ability.Ability.SnowCloak;
 import pokemon.ability.Ability.SnowWarning;
@@ -145,6 +151,7 @@ import pokemon.ability.Ability.Stamina;
 import pokemon.ability.Ability.StanceChange;
 import pokemon.ability.Ability.Static;
 import pokemon.ability.Ability.Steadfast;
+import pokemon.ability.Ability.Steelworker;
 import pokemon.ability.Ability.Stench;
 import pokemon.ability.Ability.StickyHold;
 import pokemon.ability.Ability.StormDrain;
@@ -152,6 +159,7 @@ import pokemon.ability.Ability.StrongJaw;
 import pokemon.ability.Ability.Sturdy;
 import pokemon.ability.Ability.SuctionCups;
 import pokemon.ability.Ability.SuperLuck;
+import pokemon.ability.Ability.SurgeSurfer;
 import pokemon.ability.Ability.Swarm;
 import pokemon.ability.Ability.SweetVeil;
 import pokemon.ability.Ability.SwiftSwim;
@@ -165,6 +173,7 @@ import pokemon.ability.Ability.Torrent;
 import pokemon.ability.Ability.ToughClaws;
 import pokemon.ability.Ability.ToxicBoost;
 import pokemon.ability.Ability.Trace;
+import pokemon.ability.Ability.Triage;
 import pokemon.ability.Ability.Truant;
 import pokemon.ability.Ability.Turboblaze;
 import pokemon.ability.Ability.Unaware;
@@ -206,6 +215,7 @@ public enum AbilityNamesies {
 	LIGHTNINGROD("Lightningrod", Lightningrod::new),
 	SAND_VEIL("Sand Veil", SandVeil::new),
 	SAND_RUSH("Sand Rush", SandRush::new),
+	SLUSH_RUSH("Slush Rush", SlushRush::new),
 	POISON_POINT("Poison Point", PoisonPoint::new),
 	RIVALRY("Rivalry", Rivalry::new),
 	CUTE_CHARM("Cute Charm", CuteCharm::new),
@@ -358,13 +368,21 @@ public enum AbilityNamesies {
 	STANCE_CHANGE("Stance Change", StanceChange::new),
 	FUR_COAT("Fur Coat", FurCoat::new),
 	GRASS_PELT("Grass Pelt", GrassPelt::new),
+	SURGE_SURFER("Surge Surfer", SurgeSurfer::new),
 	FLOWER_VEIL("Flower Veil", FlowerVeil::new),
 	GALE_WINGS("Gale Wings", GaleWings::new),
 	PROTEAN("Protean", Protean::new),
 	STAMINA("Stamina", Stamina::new),
 	WATER_COMPACTION("Water Compaction", WaterCompaction::new),
 	MERCILESS("Merciless", Merciless::new),
-	WATER_BUBBLE("Water Bubble", WaterBubble::new);
+	WATER_BUBBLE("Water Bubble", WaterBubble::new),
+	STEELWORKER("Steelworker", Steelworker::new),
+	BERSERK("Berserk", Berserk::new),
+	LONG_REACH("Long Reach", LongReach::new),
+	LIQUID_VOICE("Liquid Voice", LiquidVoice::new),
+	TRIAGE("Triage", Triage::new),
+	GALVANIZE("Galvanize", Galvanize::new),
+	DISGUISE("Disguise", Disguise::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
