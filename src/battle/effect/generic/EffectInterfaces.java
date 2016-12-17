@@ -279,10 +279,15 @@ public final class EffectInterfaces {
 			}
 		}
 
-		static boolean containsLevitationEffect(Battle b, ActivePokemon p) {
+		static boolean containsLevitationEffect(Battle b, ActivePokemon p, ActivePokemon moldBreaker) {
 			List<Object> invokees = b.getEffectsList(p);
 			for (Object invokee : invokees) {
 				if (invokee instanceof LevitationEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+					if (invokee instanceof Ability && moldBreaker.breaksTheMold()) {
+						continue;
+					}
 					
 					return true;
 				}
@@ -1076,6 +1081,21 @@ public final class EffectInterfaces {
 					effect.damageTaken(b, damageTaker);
 				}
 			}
+		}
+	}
+
+	public interface AlwaysCritEffect {
+
+		static boolean containsAlwaysCritEffect(Battle b, ActivePokemon p) {
+			List<Object> invokees = b.getEffectsList(p, p.getAttack());
+			for (Object invokee : invokees) {
+				if (invokee instanceof AlwaysCritEffect && !Effect.isInactiveEffect(invokee)) {
+					
+					return true;
+				}
+			}
+			
+			return false;
 		}
 	}
 }

@@ -9,10 +9,11 @@ import battle.attack.MoveType;
 import battle.effect.PassableEffect;
 import battle.effect.SapHealthEffect;
 import battle.effect.attack.ChangeAbilityMove;
-import battle.effect.attack.ChangeTypeMove;
+import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
+import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
@@ -34,6 +35,7 @@ import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
+import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
@@ -715,6 +717,59 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
+	static class BanefulBunker extends PokemonEffect implements OpponentBeforeTurnEffect {
+		private static final long serialVersionUID = 1L;
+
+		BanefulBunker() {
+			super(EffectNamesies.BANEFUL_BUNKER, 1, 1, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(victim.hasEffect(this.namesies));
+		}
+
+		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
+			return true;
+		}
+
+		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b) {
+			// Pokemon that make contact with the baneful bunker are become poisoned
+			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusCondition.POISONED, b, opp, p)) {
+				Status.giveStatus(b, opp, p, StatusCondition.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
+			}
+		}
+
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
+				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
+				return;
+			}
+			
+			super.cast(b, caster, victim, source, printCast);
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + " protected itself!";
+		}
+
+		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+			// Self-target moves, moves that penetrate Protect, and other conditions
+			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) {
+				return true;
+			}
+			
+			// Protect is a success!
+			b.printAttacking(p);
+			Messages.add(new MessageUpdate(opp.getName() + " is protecting itself!"));
+			CrashDamageMove.invokeCrashDamageMove(b, p);
+			
+			// Additional Effects
+			protectingEffects(p, opp, b);
+			
+			return false;
+		}
+	}
+
 	static class Protecting extends PokemonEffect implements OpponentBeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
@@ -1315,7 +1370,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 	static class ChangeType extends PokemonEffect implements ChangeTypeEffect {
 		private static final long serialVersionUID = 1L;
 		private Type[] type;
-		private ChangeTypeMove typeSource;
+		private ChangeTypeSource typeSource;
 		private CastSource castSource;
 		
 		private String castMessage(ActivePokemon victim) {
@@ -1341,7 +1396,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			castSource = source;
-			typeSource = (ChangeTypeMove)source.getSource(b, caster);
+			typeSource = (ChangeTypeSource)source.getSource(b, caster);
 			type = typeSource.getType(b, caster, victim);
 			
 			// Remove any other ChangeType effects that the victim may have
@@ -1567,7 +1622,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return user.getName() + " can't escape!";
+			return victim.getName() + " can't escape!";
 		}
 
 		public boolean isTrapped(Battle b, ActivePokemon escaper) {
@@ -1683,6 +1738,31 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
+	static class SoundBlock extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
+		private static final long serialVersionUID = 1L;
+
+		SoundBlock() {
+			super(EffectNamesies.SOUND_BLOCK, 3, 3, false);
+		}
+
+		public boolean usable(ActivePokemon p, Move m) {
+			return !m.getAttack().isMoveType(MoveType.SOUND_BASED);
+		}
+
+		public String getUnusableMessage(ActivePokemon p) {
+			return p.getName() + " cannot use sound-based moves!!";
+		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+			if (!usable(p, p.getMove())) {
+				b.printAttacking(p);
+				Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
+				return false;
+			}
+			return true;
+		}
+	}
+
 	static class Taunt extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
@@ -1725,6 +1805,22 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 				return false;
 			}
 			return true;
+		}
+	}
+
+	static class LaserFocus extends PokemonEffect implements AlwaysCritEffect {
+		private static final long serialVersionUID = 1L;
+
+		LaserFocus() {
+			super(EffectNamesies.LASER_FOCUS, 2, 2, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(victim.hasEffect(this.namesies));
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getName() + " began focusing!";
 		}
 	}
 
@@ -2102,6 +2198,47 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
+	static class ShellTrap extends PokemonEffect implements PhysicalContactEffect {
+		private static final long serialVersionUID = 1L;
+
+		ShellTrap() {
+			super(EffectNamesies.SHELL_TRAP, 1, 1, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(victim.hasEffect(this.namesies));
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getName() + " set up a trap!";
+		}
+
+		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Messages.add(new MessageUpdate(user.getName() + " set off " + victim.getName() + "'s trap!!"));
+			victim.getAttributes().removeEffect(this.namesies);
+		}
+	}
+
+	static class BeakBlast extends PokemonEffect implements PhysicalContactEffect {
+		private static final long serialVersionUID = 1L;
+
+		BeakBlast() {
+			super(EffectNamesies.BEAK_BLAST, 1, 1, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(victim.hasEffect(this.namesies));
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getName() + " started heating up its beak!";
+		}
+
+		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Status.giveStatus(b, victim, user, StatusCondition.BURNED);
+		}
+	}
+
 	static class FiddyPercentStronger extends PokemonEffect implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
@@ -2426,6 +2563,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			
+			// TODO: There should be a different interface for this type of modification and this one should just return a modifier
 			// If the stat is a splitting stat, return the average between the user and the opponent
 			if (s == Stat.ATTACK || s == Stat.SP_ATTACK) {
 				return (p.getStat(b, s) + opp.getStat(b, s))/2;
@@ -2452,6 +2590,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
 			
+			// TODO: There should be a different interface for this type of modification and this one should just return a modifier
 			// If the stat is a splitting stat, return the average between the user and the opponent
 			if (s == Stat.DEFENSE || s == Stat.SP_DEFENSE) {
 				return (p.getStat(b, s) + opp.getStat(b, s))/2;
@@ -2762,6 +2901,18 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			else {
 				Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
 			}
+		}
+	}
+
+	static class BreaksTheMold extends PokemonEffect {
+		private static final long serialVersionUID = 1L;
+
+		BreaksTheMold() {
+			super(EffectNamesies.BREAKS_THE_MOLD, 1, 1, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(victim.hasEffect(this.namesies));
 		}
 	}
 }

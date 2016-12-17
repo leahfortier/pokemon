@@ -157,9 +157,28 @@ MultiStrikeMove:
 		Body: return {0};
 	*
 ***
-ChangeTypeMove:
+ChangeTypeSource:
 	ChangeType:
 		Header: Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
+	*
+***
+Override:
+	RemoveType:
+		AddInterface: ChangeTypeSource
+		AddMapField: ChangeType: 
+		Type[] type = victim.getType(b);
+				
+		// TODO: Rewrite this because it looks stupid
+		if (type[0] == Type.{00}) {
+			return new Type[] { type[1], Type.NO_TYPE };
+		}
+
+		if (type[1] == Type.{00}) {
+			return new Type[] { type[0], Type.NO_TYPE };
+		}
+
+		return null;
+		###
 	*
 ***
 Override:
@@ -276,6 +295,7 @@ Override:
 		AddInterface: StatChangingEffect
 		AddMapField: ModifyStat:
 		
+		// TODO: There should be a different interface for this type of modification and this one should just return a modifier
 		// If the stat is a splitting stat, return the average between the user and the opponent
 		if (s == Stat.{11} || s == Stat.{22}) {
 			return (p.getStat(b, s) + opp.getStat(b, s))/2;
@@ -381,22 +401,27 @@ Override:
 		###
 	*
 ***
-BarrierEffect:
-	Barrier:
-		AddInterface: Hidden-DefogRelease
-		AddMapField: MinTurns: 5
-		AddMapField: MaxTurns: 5
-		AddMapField: ToModify: {1}
-		AddMapField: ModifyMultiplier: 2 !opp.hasAbility(AbilityNamesies.INFILTRATOR)
-		AddMapField: CastMessage: user.getName() + " raised the " + Stat.{11}.getName().toLowerCase() + " of its team!"
-		AddMapField: SubsideMessage: "The effects of {2-} faded."
-		AddMapField: Defog: "The effects of {2-} faded."
+Override:
+	LightClay:
 		AddMapField: Cast: 
 		super.cast(b, caster, victim, source, printCast);
 		if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
 			Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies).setTurns(8);
 		}
 		###
+		AddMapField: MinTurns: 5
+		AddMapField: MaxTurns: 5
+	*
+***
+BarrierEffect:
+	Barrier:
+		AddInterface: Hidden-DefogRelease
+		AddMapField: LightClay: True
+		AddMapField: ToModify: {1}
+		AddMapField: ModifyMultiplier: 2 !opp.hasAbility(AbilityNamesies.INFILTRATOR)
+		AddMapField: CastMessage: user.getName() + " raised the " + Stat.{11}.getName().toLowerCase() + " of its team!"
+		AddMapField: SubsideMessage: "The effects of {2-} faded."
+		AddMapField: Defog: "The effects of {2-} faded."
 		AddMapField: BreakBarrier: {2-}
 	*
 	BreakBarrier:
@@ -1927,7 +1952,7 @@ Override:
 ***
 Override:
 	AddTypeMove:
-		AddInterface: ChangeTypeMove
+		AddInterface: ChangeTypeSource
 		AddMapField: Effect: ChangeType
 		AddMapField: ChangeType:
 		Type primary = victim.getType(b)[0];
@@ -1993,17 +2018,11 @@ Override:
 Override:
 	StatSwapMove:
 		AddMapField: Field:
-		private static Stat[] swapStats = { Stat.{11}, Stat.{22} };
+		private static final Stat[] swapStats = { Stat.{11}, Stat.{22} };
 		###
 		AddMapField: ApplyEffects: 
 		for (Stat s : swapStats) {
-			int statIndex = s.index();
-			
-			int userStat = user.getAttributes().getStage(statIndex);
-			int victimStat = victim.getAttributes().getStage(statIndex);
-			
-			user.getAttributes().setStage(statIndex, victimStat);
-			victim.getAttributes().setStage(statIndex, userStat);
+			user.getAttributes().swapStages(s, victim);
 		}
 		
 		Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
@@ -2451,5 +2470,16 @@ SapHealthEffect:
 	SapMessage:
 		Header: String getSapMessage(ActivePokemon victim)
 		Optional: True
+	*
+***
+AlwaysCritEffect:
+***
+Override:
+	IgnoreAbilityMove:
+		AddMapField: Apply:
+		EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, me, me, CastSource.ATTACK, false);
+		super.apply(me, o, b);
+		me.getAttributes().removeEffect(EffectNamesies.BREAKS_THE_MOLD);
+		###
 	*
 ***

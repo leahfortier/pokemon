@@ -8,6 +8,7 @@ import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
+import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
@@ -580,8 +581,8 @@ public class Battle {
 		int stage = 1;
 		stage = CritStageEffect.updateCritStage(this, stage, me);
 		stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
-		
-		boolean crit = me.getAttack().isMoveType(MoveType.ALWAYS_CRIT) || RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
+
+		boolean crit = AlwaysCritEffect.containsAlwaysCritEffect(this, me) || RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
 		
 		// Crit yo pants
 		if (crit) {

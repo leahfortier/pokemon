@@ -6,14 +6,18 @@ import battle.effect.generic.BattleEffect.Gravity;
 import battle.effect.generic.BattleEffect.MagicRoom;
 import battle.effect.generic.BattleEffect.MistyTerrain;
 import battle.effect.generic.BattleEffect.MudSport;
+import battle.effect.generic.BattleEffect.PsychicTerrain;
 import battle.effect.generic.BattleEffect.TrickRoom;
 import battle.effect.generic.BattleEffect.WaterSport;
 import battle.effect.generic.BattleEffect.WonderRoom;
 import battle.effect.generic.PokemonEffect.AquaRing;
 import battle.effect.generic.PokemonEffect.BadPoison;
+import battle.effect.generic.PokemonEffect.BanefulBunker;
+import battle.effect.generic.PokemonEffect.BeakBlast;
 import battle.effect.generic.PokemonEffect.Bide;
 import battle.effect.generic.PokemonEffect.Binded;
 import battle.effect.generic.PokemonEffect.Bracing;
+import battle.effect.generic.PokemonEffect.BreaksTheMold;
 import battle.effect.generic.PokemonEffect.ChangeAbility;
 import battle.effect.generic.PokemonEffect.ChangeItem;
 import battle.effect.generic.PokemonEffect.ChangeType;
@@ -46,6 +50,7 @@ import battle.effect.generic.PokemonEffect.Infatuated;
 import battle.effect.generic.PokemonEffect.Infestation;
 import battle.effect.generic.PokemonEffect.Ingrain;
 import battle.effect.generic.PokemonEffect.KingsShield;
+import battle.effect.generic.PokemonEffect.LaserFocus;
 import battle.effect.generic.PokemonEffect.LeechSeed;
 import battle.effect.generic.PokemonEffect.LockOn;
 import battle.effect.generic.PokemonEffect.MagicCoat;
@@ -66,7 +71,9 @@ import battle.effect.generic.PokemonEffect.RaiseCrits;
 import battle.effect.generic.PokemonEffect.Safeguard;
 import battle.effect.generic.PokemonEffect.SandTomb;
 import battle.effect.generic.PokemonEffect.SelfConfusion;
+import battle.effect.generic.PokemonEffect.ShellTrap;
 import battle.effect.generic.PokemonEffect.Snatch;
+import battle.effect.generic.PokemonEffect.SoundBlock;
 import battle.effect.generic.PokemonEffect.SpikyShield;
 import battle.effect.generic.PokemonEffect.Stockpile;
 import battle.effect.generic.PokemonEffect.Substitute;
@@ -81,6 +88,7 @@ import battle.effect.generic.PokemonEffect.UsedMinimize;
 import battle.effect.generic.PokemonEffect.Whirlpooled;
 import battle.effect.generic.PokemonEffect.Wrapped;
 import battle.effect.generic.PokemonEffect.Yawn;
+import battle.effect.generic.TeamEffect.AuroraVeil;
 import battle.effect.generic.TeamEffect.DeadAlly;
 import battle.effect.generic.TeamEffect.DoomDesire;
 import battle.effect.generic.TeamEffect.FutureSight;
@@ -119,6 +127,7 @@ public enum EffectNamesies {
 	SAND_TOMB("SandTomb", SandTomb::new),
 	KINGS_SHIELD("KingsShield", KingsShield::new),
 	SPIKY_SHIELD("SpikyShield", SpikyShield::new),
+	BANEFUL_BUNKER("BanefulBunker", BanefulBunker::new),
 	PROTECTING("Protecting", Protecting::new),
 	QUICK_GUARD("QuickGuard", QuickGuard::new),
 	CRAFTY_SHIELD("CraftyShield", CraftyShield::new),
@@ -143,7 +152,9 @@ public enum EffectNamesies {
 	FORESIGHT("Foresight", Foresight::new),
 	MIRACLE_EYE("MiracleEye", MiracleEye::new),
 	TORMENT("Torment", Torment::new),
+	SOUND_BLOCK("SoundBlock", SoundBlock::new),
 	TAUNT("Taunt", Taunt::new),
+	LASER_FOCUS("LaserFocus", LaserFocus::new),
 	LOCK_ON("LockOn", LockOn::new),
 	TELEKINESIS("Telekinesis", Telekinesis::new),
 	INGRAIN("Ingrain", Ingrain::new),
@@ -156,6 +167,8 @@ public enum EffectNamesies {
 	NIGHTMARE("Nightmare", Nightmare::new),
 	CHARGE("Charge", Charge::new),
 	FOCUSING("Focusing", Focusing::new),
+	SHELL_TRAP("ShellTrap", ShellTrap::new),
+	BEAK_BLAST("BeakBlast", BeakBlast::new),
 	FIDDY_PERCENT_STRONGER("FiddyPercentStronger", FiddyPercentStronger::new),
 	TRANSFORMED("Transformed", Transformed::new),
 	SUBSTITUTE("Substitute", Substitute::new),
@@ -178,9 +191,11 @@ public enum EffectNamesies {
 	POWDER("Powder", Powder::new),
 	ELECTRIFIED("Electrified", Electrified::new),
 	EATEN_BERRY("EatenBerry", EatenBerry::new),
+	BREAKS_THE_MOLD("BreaksTheMold", BreaksTheMold::new),
 	REFLECT("Reflect", Reflect::new),
 	LIGHT_SCREEN("LightScreen", LightScreen::new),
 	TAILWIND("Tailwind", Tailwind::new),
+	AURORA_VEIL("AuroraVeil", AuroraVeil::new),
 	STICKY_WEB("StickyWeb", StickyWeb::new),
 	STEALTH_ROCK("StealthRock", StealthRock::new),
 	TOXIC_SPIKES("ToxicSpikes", ToxicSpikes::new),
@@ -202,6 +217,7 @@ public enum EffectNamesies {
 	MISTY_TERRAIN("MistyTerrain", MistyTerrain::new),
 	GRASSY_TERRAIN("GrassyTerrain", GrassyTerrain::new),
 	ELECTRIC_TERRAIN("ElectricTerrain", ElectricTerrain::new),
+	PSYCHIC_TERRAIN("PsychicTerrain", PsychicTerrain::new),
 	CLEAR_SKIES("ClearSkies", ClearSkies::new),
 	RAINING("Raining", Raining::new),
 	SUNNY("Sunny", Sunny::new),

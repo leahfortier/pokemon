@@ -118,6 +118,15 @@ SpikyShield:
 	}
 	###
 *
+BanefulBunker:
+	ProtectingEffect: True
+	OnProtectingSuccess:
+	// Pokemon that make contact with the baneful bunker are become poisoned
+	if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusCondition.POISONED, b, opp, p)) {
+		Status.giveStatus(b, opp, p, StatusCondition.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
+	}
+	###
+*
 Protecting:
 	ProtectingEffect: True
 *
@@ -391,7 +400,7 @@ ChangeType:
 	Int: ChangeTypeEffect
 	Field: 
 	private Type[] type;
-	private ChangeTypeMove typeSource;
+	private ChangeTypeSource typeSource;
 	private CastSource castSource;
 	
 	private String castMessage(ActivePokemon victim) {
@@ -413,7 +422,7 @@ ChangeType:
 	###
 	Cast: 
 	castSource = source;
-	typeSource = (ChangeTypeMove)source.getSource(b, caster);
+	typeSource = (ChangeTypeSource)source.getSource(b, caster);
 	type = typeSource.getType(b, caster, victim);
 	
 	// Remove any other ChangeType effects that the victim may have
@@ -557,7 +566,7 @@ Imprison:
 *
 Trapped:
 	Int: TrappingEffect
-	CastMessage: user.getName() + " can't escape!"
+	CastMessage: victim.getName() + " can't escape!"
 	TrappingMessage: trapped.getName() + " cannot be recalled at this time!"
 *	
 Foresight:
@@ -587,7 +596,24 @@ Torment:
 	return true;
 	###
 	CastMessage: user.getName() + " tormented " + victim.getName() + "!"
-*	
+*
+SoundBlock:
+	NumTurns: 3
+	CanHave: True
+	Int: AttackSelectionEffect, BeforeTurnEffect
+	Usable:
+	return !m.getAttack().isMoveType(MoveType.SOUND_BASED);
+	###
+	UnusableMessage: p.getName() + " cannot use sound-based moves!!"
+	CanAttack:
+	if (!usable(p, p.getMove())) {
+		b.printAttacking(p);
+		Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
+		return false;
+	}
+	return true;
+	###
+*
 Taunt:
 	NumTurns: 3
 	FailAbility: Aroma Veil, Oblivious
@@ -612,6 +638,11 @@ Taunt:
 	CastMessage: victim.getName() + " fell for the taunt!"
 	SubsideMessage: "The effects of the taunt wore off."
 *	
+LaserFocus:
+	NumTurns: 2
+	CastMessage: user.getName() + " began focusing!"
+	Int: AlwaysCritEffect
+*
 LockOn:
 	NumTurns: 2
 	CastMessage: user.getName() + " took aim!"
@@ -775,6 +806,23 @@ Focusing:
 	Messages.add(new MessageUpdate(damageTaker.getName() + " lost its focus and couldn't move!"));
 	damageTaker.getAttributes().removeEffect(this.namesies);
 	damageTaker.addEffect((PokemonEffect)EffectNamesies.FLINCH.getEffect());
+	###
+*
+ShellTrap:
+	CastMessage: user.getName() + " set up a trap!"
+	NumTurns: 1
+	Int: PhysicalContactEffect
+	Contact:
+	Messages.add(new MessageUpdate(user.getName() + " set off " + victim.getName() + "'s trap!!"));
+	victim.getAttributes().removeEffect(this.namesies);
+	###
+*
+BeakBlast:
+	CastMessage: user.getName() + " started heating up its beak!"
+	NumTurns: 1
+	Int: PhysicalContactEffect
+	Contact:
+	Status.giveStatus(b, victim, user, StatusCondition.BURNED);
 	###
 *
 FiddyPercentStronger:
@@ -1148,4 +1196,7 @@ Electrified:
 *
 EatenBerry:
 	UsedProof: True
+*
+BreaksTheMold:
+	NumTurns: 1
 *

@@ -382,4 +382,59 @@ public abstract class BattleEffect extends Effect {
 			b.resetTerrain();
 		}
 	}
+
+	static class PsychicTerrain extends BattleEffect implements BeforeTurnEffect, PowerChangeEffect, TerrainEffect {
+		private static final long serialVersionUID = 1L;
+
+		PsychicTerrain() {
+			super(EffectNamesies.PSYCHIC_TERRAIN, 5, 5, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(Effect.hasEffect(b.getEffects(), this.namesies));
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return "Psychic energy evelops the battlefield!!!";
+		}
+
+		public String getSubsideMessage(ActivePokemon victim) {
+			return "The psychic energy disappeared.";
+		}
+
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+			// TODO: Generalize this pattern
+			if (p.getAttack().getPriority(b, p) > 0 && !opp.isLevitating(b)) {
+				b.printAttacking(p);
+				Messages.add(new MessageUpdate(DEFAULT_FAIL_MESSAGE));
+				return false;
+			}
+			
+			return true;
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// Psychic-type moves are 50% stronger with the psychic terrain
+			return user.getAttackType() == Type.PSYCHIC && !user.isLevitating(b) ? 1.5 : 1;
+		}
+
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+			// Remove all other Terrain Effects
+			for (int i = 0; i < b.getEffects().size(); i++) {
+				Effect effect = b.getEffects().get(i);
+				if (effect instanceof TerrainEffect) {
+					b.getEffects().remove(i);
+					i--;
+				}
+			}
+			
+			super.cast(b, caster, victim, source, printCast);
+			b.setTerrainType(TerrainType.PSYCHIC, false); // TODO: Need to send a terrain change message
+		}
+
+		public void subside(Battle b, ActivePokemon p) {
+			super.subside(b, p);
+			b.resetTerrain();
+		}
+	}
 }

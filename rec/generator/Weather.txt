@@ -45,7 +45,7 @@ Sandstorm:
 	WeatherElement: Rock
 	BuffetImmune: Type.ROCK, Type.GROUND, Type.STEEL
 	BuffetMessage: p.getName() + " is buffeted by the sandstorm!"
-	PreBuffetMessage: "The sandstorm rages"
+	PreBuffetMessage: "The sandstorm rages."
 	CastMessage: "A sandstorm kicked up!"
 	SubsideMessage: "The sandstorm subsided."
 	ToModify: Sp_Defense

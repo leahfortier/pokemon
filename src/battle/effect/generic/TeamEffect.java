@@ -182,6 +182,45 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 	}
 
+	static class AuroraVeil extends TeamEffect implements StatChangingEffect {
+		private static final long serialVersionUID = 1L;
+
+		AuroraVeil() {
+			super(EffectNamesies.AURORA_VEIL, 5, 5, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
+		}
+
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+			super.cast(b, caster, victim, source, printCast);
+			if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
+				Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies).setTurns(8);
+			}
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getName() + " is covered by an aurora veil!";
+		}
+
+		public String getSubsideMessage(ActivePokemon victim) {
+			return "The effects of aurora veil faded.";
+		}
+
+		public boolean isModifyStat(Stat s) {
+			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
+		}
+
+		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+			if (isModifyStat(s) && true) {
+				stat *= 2;
+			}
+			
+			return stat;
+		}
+	}
+
 	static class StickyWeb extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
 		private static final long serialVersionUID = 1L;
 
