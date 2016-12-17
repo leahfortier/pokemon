@@ -41,7 +41,7 @@ AuroraVeil:
 StickyWeb:
 	Int: EntryEffect, RapidSpinRelease, DefogRelease
 	Enter:
-	if (enterer.isLevitating(b, null)) {
+	if (enterer.isLevitating(b)) {
 		return;
 	}
 	
