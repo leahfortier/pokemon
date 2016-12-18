@@ -852,11 +852,9 @@ public class ActivePokemon implements Serializable {
 		// Deady
 		if (hp == 0) {
 			Messages.add(new MessageUpdate().updatePokemon(b, this));
-			
-			Status.die(this);
-			Messages.add(new MessageUpdate(getName() + " fainted!").updatePokemon(b, this));
-			
+
 			ActivePokemon murderer = b.getOtherPokemon(isPlayer());
+			Status.die(b, murderer, this);
 
 			// Apply effects which occur when the user faints
 			FaintEffect.grantDeathWish(b, this, murderer);

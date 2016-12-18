@@ -13,7 +13,7 @@ class NoStatus extends Status {
 
     @Override
     protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return true;
+        return victim.getHP() > 0;
     }
 
     public String getCastMessage(ActivePokemon p) {

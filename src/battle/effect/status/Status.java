@@ -157,11 +157,11 @@ public abstract class Status implements Serializable {
 		p.setStatus(new NoStatus());
 	}
 
-	public static void die(ActivePokemon p) {
-		if (p.getHP() > 0) {
+	public static void die(Battle b, ActivePokemon murderer, ActivePokemon deady) {
+		if (deady.getHP() > 0) {
 			Global.error("Only dead Pokemon can die.");
 		}
 
-		p.setStatus(new Fainted());
+		giveStatus(b, murderer, deady, StatusCondition.FAINTED);
 	}
 }

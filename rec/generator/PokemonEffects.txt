@@ -728,7 +728,7 @@ MagnetRise:
 *
 Uproar:
 	NumTurns: 3
-	SubsideMessage: victim.getName() + "'s The uproar ended."
+	SubsideMessage: victim.getName() + "'s uproar ended."
 	Cast: 
 	uproar = victim.getMove();
 	super.cast(b, caster, victim, source, printCast);

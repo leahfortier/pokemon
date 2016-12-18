@@ -2084,7 +2084,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public String getSubsideMessage(ActivePokemon victim) {
-			return victim.getName() + "'s The uproar ended.";
+			return victim.getName() + "'s uproar ended.";
 		}
 
 		public Move getForcedMove() {
