@@ -26,9 +26,11 @@ class Asleep extends Status implements BeforeTurnEffect {
         }
     }
 
+    // TODO: This shouldn't be hard-coded
     // No one can be asleep while Uproar is in effect by either Pokemon
-    public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return super.applies(b, caster, victim) && !caster.hasEffect(EffectNamesies.UPROAR) && !victim.hasEffect(EffectNamesies.UPROAR);
+    @Override
+    protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        return !caster.hasEffect(EffectNamesies.UPROAR) && !victim.hasEffect(EffectNamesies.UPROAR);
     }
 
     public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -50,8 +52,9 @@ class Asleep extends Status implements BeforeTurnEffect {
         return p.getAttack().isMoveType(MoveType.ASLEEP_USER);
     }
 
-    public String getCastMessage(ActivePokemon p)
-    {
+
+
+    public String getCastMessage(ActivePokemon p) {
         return p.getName() + " fell asleep!";
     }
 

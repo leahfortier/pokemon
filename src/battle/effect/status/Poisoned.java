@@ -37,9 +37,10 @@ class Poisoned extends Status implements EndTurnEffect {
         victim.reduceHealthFraction(b, badPoison == null ? 1/8.0 : badPoison.getTurns()/16.0);
     }
 
-    // Poison-type Pokemon cannot be poisoned
-    public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return super.applies(b, caster, victim) && !victim.isType(b, Type.POISON);
+    // Poison-type and Steel-type Pokemon cannot be poisoned
+    @Override
+    protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        return !victim.isType(b, Type.POISON) && !victim.isType(b, Type.STEEL);
     }
 
     public String getCastMessage(ActivePokemon p) {

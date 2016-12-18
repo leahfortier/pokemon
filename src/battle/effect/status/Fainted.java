@@ -1,5 +1,6 @@
 package battle.effect.status;
 
+import battle.Battle;
 import pokemon.ActivePokemon;
 import util.StringUtils;
 
@@ -8,6 +9,11 @@ class Fainted extends Status {
 
     public Fainted() {
         super(StatusCondition.FAINTED);
+    }
+
+    @Override
+    protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        return victim.getHP() == 0;
     }
 
     public String getCastMessage(ActivePokemon p) {

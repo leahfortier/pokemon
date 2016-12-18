@@ -21,28 +21,30 @@ public abstract class Status implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private final StatusCondition statusCondition;
-	
+
 	protected Status(StatusCondition statusCondition) {
 		this.statusCondition = statusCondition;
 	}
-	
+
+	protected abstract boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim);
+
 	protected abstract String getCastMessage(ActivePokemon p);
 	protected abstract String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim);
 
 	protected abstract String getRemoveMessage(ActivePokemon victim);
 	protected abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
-	
+
 	// A method to be overidden if anything related to conflicted victim is necessary to create this status
 	protected void postCreateEffect(ActivePokemon victim) {}
-	
+
 	public static void removeStatus(Battle b, ActivePokemon victim, CastSource source) {
 		Messages.add(new MessageUpdate(getRemoveStatus(b, victim, source)).updatePokemon(b, victim));
 	}
-	
+
 	public static String getRemoveStatus(Battle b, ActivePokemon victim, CastSource source) {
 		StatusCondition status = victim.getStatus().getType();
 		victim.removeStatus();
-		
+
 		switch (source) {
 			case ABILITY:
 				return getStatus(status, victim).getSourceRemoveMessage(victim, victim.getAbility().getName());
@@ -52,61 +54,63 @@ public abstract class Status implements Serializable {
 				return getStatus(status, victim).getRemoveMessage(victim);
 		}
 	}
-	
+
 	public static String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, StatusCondition status) {
 		return getStatus(status, victim).getFailMessage(b, user, victim);
 	}
-	
+
 	protected String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 		StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, user, victim, this.statusCondition);
 		if (statusPrevent != null) {
 			return statusPrevent.statusPreventionMessage(victim);
 		}
-		
+
 		return Effect.DEFAULT_FAIL_MESSAGE;
 	}
-	
+
 	// Creates a new status like a motherfucking champ
 	private static Status getStatus(StatusCondition s, ActivePokemon victim) {
 		Status status = s.getStatus();
 		status.postCreateEffect(victim);
-		
+
 		return status;
 	}
-	
+
+	public static boolean appliesWithoutStatusCheck(StatusCondition status, Battle b, ActivePokemon caster, ActivePokemon victim) {
+		return getStatus(status, victim).appliesWithoutStatusCheck(b, caster, victim);
+	}
+
 	public static boolean applies(StatusCondition status, Battle b, ActivePokemon caster, ActivePokemon victim) {
 		return getStatus(status, victim).applies(b, caster, victim);
 	}
-	
-	protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-		if (victim.hasStatus()) {
-			return false;
-		}
 
-		StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, caster, victim, this.statusCondition);
-		if (statusPrevent != null) {
-			return false;
-		}
-		
-		return true;
+	private boolean appliesWithoutStatusCheck(Battle b, ActivePokemon caster, ActivePokemon victim) {
+		return this.statusApplies(b, caster, victim) &&
+				StatusPreventionEffect.getPreventEffect(b, caster, victim, this.statusCondition) == null;
+
 	}
-	
+
+	private boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+		return !victim.hasStatus() && this.appliesWithoutStatusCheck(b, caster, victim);
+
+	}
+
 	public StatusCondition getType() {
 		return statusCondition;
 	}
-	
+
 	public void setTurns(int turns) {}
-	
+
 	// Returns true if a status was successfully given, and false if it failed for any reason
 	public static boolean giveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
 		return giveStatus(b, caster, victim, status, false);
 	}
-	
+
 	public static boolean giveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, boolean abilityCast) {
 		Status s = getStatus(status, victim);
 		return giveStatus(b, caster, victim, status, abilityCast ? s.getAbilityCastMessage(caster, victim) : s.getCastMessage(victim));
 	}
-	
+
 	public static boolean giveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, String castMessage) {
 		Status s = getStatus(status, victim);
 		if (s.applies(b, caster, victim)) {
@@ -116,10 +120,9 @@ public abstract class Status implements Serializable {
 			// TODO: There should be a StatusReceivedEffect interface or something
 			synchronizeCheck(b, caster, victim, status);
 			berryCheck(b, victim, status);
-			
+
 			return true;
 		}
-
 		return false;
 	}
 
@@ -128,13 +131,13 @@ public abstract class Status implements Serializable {
 		Item item = victim.getHeldItem(b);
 		if (item instanceof StatusBerry) {
 			GainableEffectBerry berry = ((GainableEffectBerry)item);
-			
+
 			if (berry.gainBerryEffect(b, victim, CastSource.HELD_ITEM)) {
-				victim.consumeItem(b);				
+				victim.consumeItem(b);
 			}
 		}
 	}
-	
+
 	private static void synchronizeCheck(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
 		Status s = getStatus(status, caster);
 		if (victim.hasAbility(AbilityNamesies.SYNCHRONIZE) && s.applies(b, victim, caster)
@@ -142,18 +145,18 @@ public abstract class Status implements Serializable {
 			if (victim.hasEffect(EffectNamesies.BAD_POISON)) {
 				caster.addEffect((PokemonEffect)EffectNamesies.BAD_POISON.getEffect());
 			}
-			
+
 			caster.setStatus(s);
 			Messages.add(new MessageUpdate(s.getAbilityCastMessage(victim, caster)).updatePokemon(b, caster));
-			
+
 			berryCheck(b, caster, status);
 		}
 	}
-	
+
 	public static void removeStatus(ActivePokemon p) {
 		p.setStatus(new NoStatus());
 	}
-	
+
 	public static void die(ActivePokemon p) {
 		if (p.getHP() > 0) {
 			Global.error("Only dead Pokemon can die.");
