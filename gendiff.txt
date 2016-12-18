@@ -1,0 +1,1706 @@
+Bulbasaur:
+	Gen 6 Only:
+		Solar Beam
+		Leech Seed
+
+Butterfree:
+	Gen 6 Only:
+		Morning Sun
+	Gen 7 Only:
+		Air Slash
+		Rage Powder
+	EXP Yield:
+		173 -> 178
+
+Beedrill:
+	Gen 7 Only:
+		Venoshock
+	EXP Yield:
+		173 -> 178
+
+Pidgeot:
+	EXP Yield:
+		211 -> 216
+
+Spearow:
+	Gen 7 Only:
+		Focus Energy
+
+Fearow:
+	Gen 7 Only:
+		Focus Energy
+
+Arbok:
+	Base Stats:
+		[60, 85, 69, 65, 79, 80] -> [60, 95, 69, 65, 79, 80]
+	EXP Yield:
+		153 -> 157
+
+Pikachu:
+	EXP Yield:
+		105 -> 112
+
+Raichu:
+	EXP Yield:
+		214 -> 218
+
+Nidoran F:
+	Gen 6 Only:
+		Poison Tail
+	Gen 7 Only:
+		Helping Hand
+
+Nidorina:
+	Gen 6 Only:
+		Poison Tail
+	Gen 7 Only:
+		Helping Hand
+
+Nidoqueen:
+	EXP Yield:
+		223 -> 227
+
+Nidoran M:
+	Gen 6 Only:
+		Poison Tail
+	Gen 7 Only:
+		Helping Hand
+	Gender Ratio:
+		50 -> 100
+
+Nidorino:
+	Gen 6 Only:
+		Poison Tail
+	Gen 7 Only:
+		Helping Hand
+
+Nidoking:
+	EXP Yield:
+		223 -> 227
+
+Clefairy:
+	Gen 6 Only:
+		Mimic
+		Light Screen
+		Wish
+	Gen 7 Only:
+		Follow Me
+		After You
+		Spotlight
+
+Clefable:
+	Gen 7 Only:
+		Spotlight
+	EXP Yield:
+		213 -> 217
+
+Jigglypuff:
+	Gen 7 Only:
+		Spit Up
+		Swallow
+		Stockpile
+
+Wigglytuff:
+	EXP Yield:
+		191 -> 196
+
+Zubat:
+	Gen 6 Only:
+		Acrobatics
+	Gen 7 Only:
+		Absorb
+
+Golbat:
+	Gen 6 Only:
+		Acrobatics
+	Gen 7 Only:
+		Absorb
+
+Oddish:
+	Gen 7 Only:
+		Growth
+
+Gloom:
+	Gen 7 Only:
+		Growth
+
+Vileplume:
+	EXP Yield:
+		216 -> 221
+
+Paras:
+	Gen 6 Only:
+		Cross Poison
+		Leech Life
+	Gen 7 Only:
+		Absorb
+		Rage Powder
+
+Parasect:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Absorb
+		Rage Powder
+
+Dugtrio:
+	Base Stats:
+		[35, 80, 50, 50, 70, 120] -> [35, 100, 50, 50, 70, 120]
+	EXP Yield:
+		142 -> 149
+
+Golduck:
+	Gen 7 Only:
+		Me First
+
+Mankey:
+	Gen 7 Only:
+		Outrage
+		Stomping Tantrum
+		Pursuit
+
+Primeape:
+	Gen 7 Only:
+		Outrage
+		Stomping Tantrum
+		Pursuit
+
+Growlithe:
+	Gen 6 Only:
+		Howl
+	Gen 7 Only:
+		Helping Hand
+
+Poliwrath:
+	EXP Yield:
+		225 -> 230
+
+Kadabra:
+	Gen 6 Only:
+		Barrier
+	Gen 7 Only:
+		Ally Switch
+
+Alakazam:
+	Gen 6 Only:
+		Barrier
+	Gen 7 Only:
+		Ally Switch
+	EXP Yield:
+		221 -> 225
+
+Machamp:
+	Gen 6 Only:
+		Superpower
+	Gen 7 Only:
+		Wide Guard
+		Strength
+
+Bellsprout:
+	Gen 7 Only:
+		Poison Jab
+
+Weepinbell:
+	Gen 7 Only:
+		Poison Jab
+
+Victreebel:
+	EXP Yield:
+		216 -> 221
+
+Golem:
+	EXP Yield:
+		218 -> 223
+
+Ponyta:
+	Abilities:
+		[Flame Body, Flash Fire] -> [Run Away, Flash Fire]
+
+Rapidash:
+	Gen 6 Only:
+		Blaze Kick
+	Abilities:
+		[Flame Body, Flash Fire] -> [Run Away, Flash Fire]
+
+Magnemite:
+	Gen 7 Only:
+		Light Screen
+
+Magneton:
+	Gen 7 Only:
+		Light Screen
+
+Farfetch'd:
+	Base Stats:
+		[52, 65, 55, 58, 62, 60] -> [52, 90, 55, 58, 62, 60]
+	EXP Yield:
+		123 -> 132
+
+Doduo:
+	Gen 7 Only:
+		Jump Kick
+		Swords Dance
+
+Dodrio:
+	Gen 7 Only:
+		Double Hit
+		Jump Kick
+		Swords Dance
+	Base Stats:
+		[60, 110, 70, 60, 60, 100] -> [60, 110, 70, 60, 60, 110]
+	EXP Yield:
+		161 -> 165
+
+Shellder:
+	Gen 7 Only:
+		Water Gun
+
+Gengar:
+	Abilities:
+		[Levitate, No Ability] -> [Cursed Body, No Ability]
+
+Kingler:
+	Gen 6 Only:
+		Fury Cutter
+	Gen 7 Only:
+		Wide Guard
+
+Electrode:
+	Base Stats:
+		[60, 50, 70, 80, 80, 140] -> [60, 50, 70, 80, 80, 150]
+	EXP Yield:
+		168 -> 172
+
+Exeggutor:
+	Base Stats:
+		[95, 95, 85, 125, 65, 55] -> [95, 95, 85, 125, 75, 55]
+	EXP Yield:
+		182 -> 186
+
+Cubone:
+	Gen 7 Only:
+		Stomping Tantrum
+
+Marowak:
+	Gen 7 Only:
+		Stomping Tantrum
+
+Hitmonlee:
+	Gen 6 Only:
+		Low Kick
+	Gen 7 Only:
+		Wide Guard
+
+Weezing:
+	Gen 7 Only:
+		Gyro Ball
+
+Staryu:
+	Abilities:
+		[Analytic, Natural Cure] -> [Illuminate, Natural Cure]
+
+Starmie:
+	Gen 7 Only:
+		Spotlight
+	Abilities:
+		[Analytic, Natural Cure] -> [Illuminate, Natural Cure]
+
+Mr. Mime:
+	Gen 6 Only:
+		Teeter Dance
+	Gen 7 Only:
+		Wide Guard
+
+Tauros:
+	EXP Yield:
+		211 -> 172
+
+Gyarados:
+	Gen 7 Only:
+		Scary Face
+		Hurricane
+	Type:
+		[WATER, DRAGON] -> [WATER, FLYING]
+
+Eevee:
+	Gen 7 Only:
+		Helping Hand
+
+Vaporeon:
+	Gen 7 Only:
+		Helping Hand
+		Baby-Doll Eyes
+
+Jolteon:
+	Gen 7 Only:
+		Helping Hand
+		Baby-Doll Eyes
+
+Flareon:
+	Gen 7 Only:
+		Helping Hand
+		Baby-Doll Eyes
+
+Snorlax:
+	Gen 7 Only:
+		High Horsepower
+
+Zapdos:
+	Gen 7 Only:
+		Magnetic Flux
+
+Moltres:
+	Gen 7 Only:
+		Burn Up
+
+Mewtwo:
+	Gen 7 Only:
+		Laser Focus
+		Psywave
+
+Cyndaquil:
+	Gen 7 Only:
+		Burn Up
+
+Quilava:
+	Gen 7 Only:
+		Burn Up
+
+Typhlosion:
+	Gen 7 Only:
+		Burn Up
+
+Sentret:
+	Gen 6 Only:
+		Charm
+		Covet
+	Gen 7 Only:
+		Helping Hand
+		Follow Me
+
+Furret:
+	Gen 6 Only:
+		Charm
+		Covet
+	Gen 7 Only:
+		Helping Hand
+		Follow Me
+		Agility
+		Coil
+
+Hoothoot:
+	Gen 7 Only:
+		Moonblast
+
+Noctowl:
+	Gen 7 Only:
+		Moonblast
+	Base Stats:
+		[100, 50, 50, 76, 96, 70] -> [100, 50, 50, 86, 96, 70]
+	EXP Yield:
+		155 -> 158
+
+Ledyba:
+	Gen 7 Only:
+		Air Slash
+
+Ledian:
+	Gen 7 Only:
+		Air Slash
+
+Spinarak:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Toxic Thread
+		Absorb
+		Infestation
+
+Ariados:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Focus Energy
+		Toxic Thread
+		Absorb
+		Swords Dance
+		Infestation
+	Base Stats:
+		[70, 90, 70, 60, 60, 40] -> [70, 90, 70, 60, 70, 40]
+	EXP Yield:
+		137 -> 140
+
+Crobat:
+	Gen 6 Only:
+		Acrobatics
+	Gen 7 Only:
+		Absorb
+
+Chinchou:
+	Gen 6 Only:
+		Electrify
+	Gen 7 Only:
+		Ion Deluge
+	Abilities:
+		[Volt Absorb, Water Absorb] -> [Volt Absorb, Illuminate]
+
+Lanturn:
+	Gen 6 Only:
+		Electrify
+	Gen 7 Only:
+		Ion Deluge
+	Abilities:
+		[Volt Absorb, Water Absorb] -> [Volt Absorb, Illuminate]
+
+Togepi:
+	Gen 6 Only:
+		Soft-Boiled
+		Draining Kiss
+	Gen 7 Only:
+		Follow Me
+		After You
+
+Togetic:
+	Gen 6 Only:
+		Draining Kiss
+		Moonblast
+	Gen 7 Only:
+		Follow Me
+		After You
+
+Natu:
+	Abilities:
+		[Synchronize, Magic Bounce] -> [Synchronize, Early Bird]
+
+Xatu:
+	Abilities:
+		[Synchronize, Magic Bounce] -> [Synchronize, Early Bird]
+
+Mareep:
+	Abilities:
+		[Static, No Ability] -> [Static, Plus]
+
+Flaaffy:
+	Abilities:
+		[Static, No Ability] -> [Static, Plus]
+
+Ampharos:
+	Gen 6 Only:
+		Electrify
+	Gen 7 Only:
+		Ion Deluge
+	Abilities:
+		[Static, No Ability] -> [Static, Plus]
+	EXP Yield:
+		225 -> 230
+
+Bellossom:
+	Gen 7 Only:
+		Petal Dance
+		Quiver Dance
+	EXP Yield:
+		216 -> 221
+
+Marill:
+	Gen 6 Only:
+		Draining Kiss
+	Gen 7 Only:
+		Helping Hand
+
+Azumarill:
+	Gen 6 Only:
+		Draining Kiss
+	Gen 7 Only:
+		Helping Hand
+	EXP Yield:
+		185 -> 189
+
+Sudowoodo:
+	Gen 7 Only:
+		Tearful Look
+		Head Smash
+
+Hoppip:
+	Gen 6 Only:
+		Silver Wind
+	Gen 7 Only:
+		Rage Powder
+
+Skiploom:
+	Gen 6 Only:
+		Silver Wind
+	Gen 7 Only:
+		Rage Powder
+
+Jumpluff:
+	Gen 6 Only:
+		Silver Wind
+	Gen 7 Only:
+		Rage Powder
+	EXP Yield:
+		203 -> 207
+
+Espeon:
+	Gen 7 Only:
+		Helping Hand
+		Baby-Doll Eyes
+
+Umbreon:
+	Gen 7 Only:
+		Helping Hand
+		Baby-Doll Eyes
+
+Murkrow:
+	Gen 6 Only:
+		Roost
+	Gen 7 Only:
+		Quash
+
+Wobbuffet:
+	Abilities:
+		[Shadow Tag, No Ability] -> [Shadow Tag, Telepathy]
+
+Dunsparce:
+	Gen 7 Only:
+		Air Slash
+		Dragon Rush
+		Body Slam
+
+Qwilfish:
+	Base Stats:
+		[65, 95, 75, 55, 55, 85] -> [65, 95, 85, 55, 55, 85]
+	EXP Yield:
+		86 -> 88
+
+Magcargo:
+	Base Stats:
+		[50, 50, 120, 80, 80, 30] -> [60, 50, 120, 90, 80, 30]
+	EXP Yield:
+		144 -> 151
+
+Corsola:
+	Base Stats:
+		[55, 55, 85, 65, 85, 35] -> [65, 55, 95, 65, 95, 35]
+	EXP Yield:
+		133 -> 144
+
+Delibird:
+	Gen 7 Only:
+		Drill Peck
+
+Mantine:
+	Gen 6 Only:
+		Dive
+	Gen 7 Only:
+		Roost
+		Wide Guard
+	Base Stats:
+		[65, 40, 70, 80, 140, 70] -> [85, 40, 70, 80, 140, 70]
+	EXP Yield:
+		163 -> 170
+
+Tyrogue:
+	Gen 6 Only:
+		Covet
+	Gen 7 Only:
+		Helping Hand
+
+Hitmontop:
+	Gen 6 Only:
+		Drill Run
+	Gen 7 Only:
+		Wide Guard
+
+Raikou:
+	Abilities:
+		[Pressure, Volt Absorb] -> [Pressure, Inner Focus]
+
+Entei:
+	Abilities:
+		[Pressure, Flash Fire] -> [Pressure, Inner Focus]
+
+Suicune:
+	Gen 7 Only:
+		Sheer Cold
+	Abilities:
+		[Pressure, Water Absorb] -> [Pressure, Inner Focus]
+
+Poochyena:
+	Gen 7 Only:
+		Play Rough
+		Yawn
+	EXP Yield:
+		44 -> 56
+
+Mightyena:
+	Gen 7 Only:
+		Thunder Fang
+		Play Rough
+		Ice Fang
+		Yawn
+		Fire Fang
+
+Zigzagoon:
+	Classification:
+		Tiny Raccoon -> Tiny Racoon
+	EXP Yield:
+		48 -> 56
+
+Wurmple:
+	EXP Yield:
+		39 -> 56
+
+Beautifly:
+	EXP Yield:
+		173 -> 178
+
+Cascoon:
+	EXP Yield:
+		41 -> 72
+
+Dustox:
+	EXP Yield:
+		135 -> 173
+
+Taillow:
+	Gen 7 Only:
+		Reversal
+
+Swellow:
+	Gen 7 Only:
+		Reversal
+	Base Stats:
+		[60, 85, 60, 50, 50, 125] -> [60, 85, 60, 75, 50, 125]
+	EXP Yield:
+		151 -> 159
+
+Wingull:
+	Abilities:
+		[Keen Eye, Rain Dish] -> [Keen Eye, Hydration]
+
+Pelipper:
+	Abilities:
+		[Keen Eye, Rain Dish] -> [Keen Eye, Drizzle]
+	Base Stats:
+		[60, 50, 100, 85, 70, 65] -> [60, 50, 100, 95, 70, 65]
+	EXP Yield:
+		151 -> 154
+
+Masquerain:
+	Base Stats:
+		[70, 60, 62, 80, 82, 60] -> [70, 60, 62, 100, 82, 80]
+	EXP Yield:
+		145 -> 159
+
+Nincada:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Absorb
+
+Ninjask:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Absorb
+
+Shedinja:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Absorb
+
+Exploud:
+	EXP Yield:
+		216 -> 221
+
+Azurill:
+	Gen 6 Only:
+		Draining Kiss
+	Gen 7 Only:
+		Helping Hand
+
+Delcatty:
+	Base Stats:
+		[70, 65, 65, 55, 55, 70] -> [70, 65, 65, 55, 55, 90]
+	EXP Yield:
+		133 -> 140
+
+Sableye:
+	Gen 6 Only:
+		Night Slash
+	Gen 7 Only:
+		Quash
+
+Meditite:
+	Abilities:
+		[Pure Power, No Ability] -> [Pure Power, Telepathy]
+
+Medicham:
+	Abilities:
+		[Pure Power, No Ability] -> [Pure Power, Telepathy]
+
+Plusle:
+	Gen 6 Only:
+		Sweet Kiss
+	Gen 7 Only:
+		Helping Hand
+	Abilities:
+		[Static, Lightningrod] -> [Plus, Lightningrod]
+
+Minun:
+	Gen 6 Only:
+		Sweet Kiss
+	Gen 7 Only:
+		Helping Hand
+	Abilities:
+		[Static, Volt Absorb] -> [Minus, Volt Absorb]
+
+Volbeat:
+	Gen 6 Only:
+		Dizzy Punch
+	Gen 7 Only:
+		Helping Hand
+		Infestation
+	Abilities:
+		[Prankster, Swarm] -> [Illuminate, Swarm]
+	Base Stats:
+		[65, 73, 55, 47, 75, 85] -> [65, 73, 75, 47, 85, 85]
+	EXP Yield:
+		140 -> 151
+
+Illumise:
+	Gen 6 Only:
+		Dizzy Punch
+	Gen 7 Only:
+		Helping Hand
+		Infestation
+	Base Stats:
+		[65, 47, 55, 73, 75, 85] -> [65, 47, 75, 73, 85, 85]
+	EXP Yield:
+		140 -> 151
+
+Swalot:
+	Gen 7 Only:
+		Venom Drench
+
+Wailord:
+	Gen 7 Only:
+		Noble Roar
+		Soak
+
+Torkoal:
+	Abilities:
+		[White Smoke, Shell Armor] -> [White Smoke, Drought]
+
+Grumpig:
+	Gen 7 Only:
+		Belch
+
+Flygon:
+	Gen 7 Only:
+		Dragon Dance
+
+Seviper:
+	Gen 7 Only:
+		Feint
+		Swords Dance
+
+Lunatone:
+	Gen 7 Only:
+		Psyshock
+		Power Gem
+	Base Stats:
+		[70, 55, 65, 95, 85, 70] -> [90, 55, 65, 95, 85, 70]
+	EXP Yield:
+		154 -> 161
+
+Solrock:
+	Gen 7 Only:
+		Flare Blitz
+	Base Stats:
+		[70, 95, 85, 55, 65, 70] -> [90, 95, 85, 55, 65, 70]
+	EXP Yield:
+		154 -> 161
+
+Whiscash:
+	Gen 7 Only:
+		Thrash
+		Belch
+
+Dusclops:
+	Gen 6 Only:
+		Phantom Force
+
+Chimecho:
+	Base Stats:
+		[65, 50, 70, 95, 80, 65] -> [75, 50, 80, 95, 90, 65]
+	EXP Yield:
+		149 -> 159
+
+Wynaut:
+	Abilities:
+		[Shadow Tag, No Ability] -> [Shadow Tag, Telepathy]
+
+Relicanth:
+	Gen 7 Only:
+		Flail
+
+Luvdisc:
+	Gen 7 Only:
+		Soak
+		Heart Stamp
+
+Latias:
+	Gen 6 Only:
+		Tailwind
+	Gen 7 Only:
+		Helping Hand
+
+Latios:
+	Gen 6 Only:
+		Tailwind
+	Gen 7 Only:
+		Helping Hand
+
+Kyogre:
+	Catch Rate:
+		5 -> 3
+
+Groudon:
+	Catch Rate:
+		5 -> 3
+
+Rayquaza:
+	Catch Rate:
+		3 -> 45
+
+Jirachi:
+	Gen 6 Only:
+		Calm Mind
+	Gen 7 Only:
+		Helping Hand
+
+Staraptor:
+	EXP Yield:
+		214 -> 218
+
+Bidoof:
+	Gen 7 Only:
+		Swords Dance
+		Crunch
+
+Bibarel:
+	Gen 7 Only:
+		Swords Dance
+		Aqua Jet
+		Crunch
+
+Kricketune:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Absorb
+
+Budew:
+	Gen 6 Only:
+		Leech Seed
+	Gen 7 Only:
+		Worry Seed
+
+Roserade:
+	EXP Yield:
+		227 -> 232
+
+Wormadam:
+	Gen 7 Only:
+		Sucker Punch
+		Bug Buzz
+		Quiver Dance
+
+Mothim:
+	Gen 7 Only:
+		Lunge
+
+Cherubi:
+	Gen 6 Only:
+		Tickle
+	Gen 7 Only:
+		Helping Hand
+
+Cherrim:
+	Gen 6 Only:
+		Tickle
+	Gen 7 Only:
+		Helping Hand
+
+Ambipom:
+	Gen 7 Only:
+		Dual Chop
+
+Buneary:
+	Gen 6 Only:
+		Fake Tears
+		Sweet Kiss
+	Gen 7 Only:
+		After You
+		Frustration
+
+Lopunny:
+	Gen 6 Only:
+		Captivate
+		Draining Kiss
+	Gen 7 Only:
+		After You
+		Return
+		Baby-Doll Eyes
+
+Honchkrow:
+	Gen 6 Only:
+		Roost
+	Gen 7 Only:
+		Quash
+
+Stunky:
+	Gen 7 Only:
+		Sucker Punch
+		Venom Drench
+		Bite
+
+Skuntank:
+	Gen 7 Only:
+		Sucker Punch
+		Venom Drench
+		Bite
+
+Bonsly:
+	Gen 7 Only:
+		Tearful Look
+
+Lucario:
+	Gen 7 Only:
+		Work Up
+		Laser Focus
+
+Mantyke:
+	Gen 6 Only:
+		Dive
+	Gen 7 Only:
+		Wide Guard
+
+Magnezone:
+	Gen 7 Only:
+		Tri Attack
+		Light Screen
+
+Electivire:
+	Gen 6 Only:
+		Electrify
+	Gen 7 Only:
+		Ion Deluge
+
+Togekiss:
+	Gen 6 Only:
+		Moonblast
+	Gen 7 Only:
+		After You
+
+Leafeon:
+	Gen 7 Only:
+		Helping Hand
+		Baby-Doll Eyes
+	EXP Yield:
+		196 -> 184
+
+Glaceon:
+	Gen 7 Only:
+		Helping Hand
+		Baby-Doll Eyes
+	EXP Yield:
+		196 -> 184
+
+Mamoswine:
+	Gen 7 Only:
+		Fury Attack
+	EXP Yield:
+		207 -> 239
+
+Gallade:
+	Gen 6 Only:
+		Sacred Sword
+		Dual Chop
+	Gen 7 Only:
+		Helping Hand
+		Wide Guard
+		Aerial Ace
+
+Probopass:
+	Gen 6 Only:
+		Stealth Rock
+	Gen 7 Only:
+		Magnetic Flux
+		Tri Attack
+		Wide Guard
+
+Dusknoir:
+	Gen 6 Only:
+		Phantom Force
+
+Froslass:
+	Gen 7 Only:
+		Will-O-Wisp
+
+Rotom:
+	Base Stats:
+		[50, 65, 107, 105, 107, 86] -> [50, 50, 77, 95, 77, 91]
+
+Dialga:
+	Gen 6 Only:
+		Roar Of Time
+	Gen 7 Only:
+		Roar of Time
+	Catch Rate:
+		30 -> 3
+	Abilities:
+		[Pressure, No Ability] -> [Pressure, Telepathy]
+
+Palkia:
+	Catch Rate:
+		30 -> 3
+	Abilities:
+		[Pressure, No Ability] -> [Pressure, Telepathy]
+
+Regigigas:
+	Gen 6 Only:
+		Mega Punch
+	Gen 7 Only:
+		Wide Guard
+
+Giratina:
+	Abilities:
+		[Pressure, No Ability] -> [Pressure, Telepathy]
+	Base Stats:
+		[150, 120, 100, 120, 100, 90] -> [150, 100, 120, 100, 120, 90]
+
+Arceus:
+	Gen 6 Only:
+		Judgement
+	Gen 7 Only:
+		Judgment
+
+Snivy:
+	EXP Yield:
+		28 -> 62
+
+Tepig:
+	EXP Yield:
+		28 -> 62
+
+Oshawott:
+	EXP Yield:
+		28 -> 62
+
+Patrat:
+	Gen 6 Only:
+		Covet
+	Gen 7 Only:
+		After You
+		Focus Energy
+		Nasty Plot
+
+Watchog:
+	Gen 6 Only:
+		Covet
+	Gen 7 Only:
+		After You
+		Focus Energy
+		Nasty Plot
+	Abilities:
+		[Analytic, Keen Eye] -> [Illuminate, Keen Eye]
+
+Lillipup:
+	Gen 6 Only:
+		Howl
+	Gen 7 Only:
+		Helping Hand
+
+Herdier:
+	Gen 6 Only:
+		Howl
+	Gen 7 Only:
+		Helping Hand
+
+Stoutland:
+	Gen 6 Only:
+		Howl
+	Gen 7 Only:
+		Helping Hand
+	EXP Yield:
+		221 -> 225
+
+Musharna:
+	Gen 7 Only:
+		Psychic Terrain
+
+Unfezant:
+	EXP Yield:
+		215 -> 220
+
+Zebstrika:
+	Gen 6 Only:
+		Electrify
+	Gen 7 Only:
+		Ion Deluge
+
+Roggenrola:
+	Abilities:
+		[Sturdy, Sand Force] -> [Sturdy, Weak Armor]
+
+Boldore:
+	Abilities:
+		[Sturdy, Sand Force] -> [Sturdy, Weak Armor]
+
+Gigalith:
+	Abilities:
+		[Sturdy, Sand Force] -> [Sturdy, Sand Stream]
+	EXP Yield:
+		227 -> 232
+
+Woobat:
+	Base Stats:
+		[55, 45, 43, 55, 43, 72] -> [65, 45, 43, 55, 43, 72]
+	EXP Yield:
+		63 -> 65
+
+Audino:
+	Gen 6 Only:
+		Heal Bell
+		Wish
+	Gen 7 Only:
+		Helping Hand
+		After You
+		Hyper Voice
+
+Seismitoad:
+	EXP Yield:
+		225 -> 229
+
+Throh:
+	Gen 6 Only:
+		Brick Break
+	Gen 7 Only:
+		Wide Guard
+		Mat Block
+
+Leavanny:
+	Gen 6 Only:
+		Me First
+	Gen 7 Only:
+		Helping Hand
+	EXP Yield:
+		221 -> 225
+
+Scolipede:
+	Gen 7 Only:
+		Iron Defense
+	EXP Yield:
+		214 -> 218
+
+Cottonee:
+	Gen 6 Only:
+		Tailwind
+	Gen 7 Only:
+		Helping Hand
+
+Petilil:
+	Gen 6 Only:
+		Fairy Wind
+		Heal Bell
+	Gen 7 Only:
+		Helping Hand
+		After You
+
+Basculin:
+	Gen 7 Only:
+		Head Smash
+
+Krookodile:
+	Gen 7 Only:
+		Power Trip
+	EXP Yield:
+		229 -> 234
+
+Darmanitan:
+	Abilities:
+		[Sheer Force, No Ability] -> [Sheer Force, Zen Mode]
+
+Maractus:
+	Gen 6 Only:
+		Wood Hammer
+	Gen 7 Only:
+		After You
+
+Crustle:
+	Base Stats:
+		[70, 95, 125, 65, 75, 45] -> [70, 105, 125, 65, 75, 45]
+	EXP Yield:
+		166 -> 170
+
+Tirtouga:
+	Gen 6 Only:
+		Iron Defense
+	Gen 7 Only:
+		Wide Guard
+
+Carracosta:
+	Gen 6 Only:
+		Iron Defense
+	Gen 7 Only:
+		Wide Guard
+
+Minccino:
+	Gen 6 Only:
+		Iron Tail
+		Covet
+	Gen 7 Only:
+		Helping Hand
+		After You
+
+Cinccino:
+	Gen 6 Only:
+		Iron Tail
+	Gen 7 Only:
+		Helping Hand
+
+Vanillite:
+	Abilities:
+		[Ice Body, Weak Armor] -> [Ice Body, Snow Cloak]
+
+Vanillish:
+	Abilities:
+		[Ice Body, Weak Armor] -> [Ice Body, Snow Cloak]
+
+Vanilluxe:
+	Abilities:
+		[Ice Body, Weak Armor] -> [Ice Body, Snow Warning]
+
+Foongus:
+	Gen 6 Only:
+		Gastro Acid
+	Gen 7 Only:
+		Rage Powder
+
+Amoonguss:
+	Gen 6 Only:
+		Gastro Acid
+	Gen 7 Only:
+		Rage Powder
+
+Alomomola:
+	Gen 6 Only:
+		Refresh
+		Mist
+	Gen 7 Only:
+		Helping Hand
+		Wide Guard
+		Whirlpool
+		Play Nice
+
+Joltik:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Absorb
+
+Galvantula:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Absorb
+
+Ferrothorn:
+	Abilities:
+		[Iron Barbs, No Ability] -> [Iron Barbs, Anticipation]
+
+Klink:
+	Abilities:
+		[Clear Body, No Ability] -> [Plus, Minus]
+
+Klang:
+	Abilities:
+		[Clear Body, No Ability] -> [Plus, Minus]
+
+Klinklang:
+	Gen 7 Only:
+		Gear Up
+	Abilities:
+		[Clear Body, No Ability] -> [Plus, Minus]
+
+Eelektross:
+	Gen 6 Only:
+		Electrify
+	Gen 7 Only:
+		Ion Deluge
+
+Elgyem:
+	Abilities:
+		[Analytic, Synchronize] -> [Telepathy, Synchronize]
+
+Beheeyem:
+	Gen 7 Only:
+		Psychic Terrain
+	Abilities:
+		[Analytic, Synchronize] -> [Telepathy, Synchronize]
+
+Cubchoo:
+	Abilities:
+		[Snow Cloak, Rattled] -> [Snow Cloak, Slush Rush]
+
+Beartic:
+	Abilities:
+		[Snow Cloak, Swift Swim] -> [Snow Cloak, Slush Rush]
+	Base Stats:
+		[95, 110, 80, 70, 80, 50] -> [95, 130, 80, 70, 80, 50]
+	EXP Yield:
+		170 -> 177
+
+Cryogonal:
+	Gen 7 Only:
+		Ancient Power
+	Base Stats:
+		[70, 50, 30, 95, 135, 105] -> [80, 50, 50, 95, 135, 105]
+
+Shelmet:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Absorb
+
+Accelgor:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Absorb
+
+Mienshao:
+	Gen 6 Only:
+		Dual Chop
+	Gen 7 Only:
+		Wide Guard
+
+Golett:
+	Gen 7 Only:
+		Stomping Tantrum
+
+Golurk:
+	Gen 7 Only:
+		High Horsepower
+		Stomping Tantrum
+
+Heatmor:
+	Gen 7 Only:
+		Fire Lash
+		Flare Blitz
+
+Larvesta:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Absorb
+
+Volcarona:
+	Gen 6 Only:
+		Leech Life
+		Morning Sun
+	Gen 7 Only:
+		Absorb
+		Rage Powder
+
+Cobalion:
+	Gen 6 Only:
+		Iron Defense
+	Gen 7 Only:
+		Helping Hand
+
+Terrakion:
+	Gen 6 Only:
+		Stealth Rock
+	Gen 7 Only:
+		Helping Hand
+
+Virizion:
+	Gen 6 Only:
+		Synthesis
+	Gen 7 Only:
+		Helping Hand
+
+Reshiram:
+	Catch Rate:
+		45 -> 3
+
+Zekrom:
+	Catch Rate:
+		45 -> 3
+
+Keldeo:
+	Gen 6 Only:
+		Icy Wind
+	Gen 7 Only:
+		Helping Hand
+
+Chespin:
+	Gen 6 Only:
+		Tackle
+
+Quilladin:
+	Gen 6 Only:
+		Tackle
+
+Diggersby:
+	Gen 7 Only:
+		Double Slap
+	Catch Rate:
+		255 -> 127
+
+Fletchinder:
+	Catch Rate:
+		255 -> 120
+
+Talonflame:
+	Catch Rate:
+		255 -> 45
+
+Spewpa:
+	Catch Rate:
+		255 -> 120
+	Abilities:
+		[Shed Skin, No Ability] -> [Shed Skin, Friend Guard]
+
+Vivillon:
+	Catch Rate:
+		255 -> 45
+
+Litleo:
+	Catch Rate:
+		200 -> 220
+
+Pyroar:
+	Catch Rate:
+		200 -> 65
+
+Flabebe:
+	Type:
+		[FAIRY, GRASS] -> [FAIRY, NO_TYPE]
+	Catch Rate:
+		255 -> 225
+	Abilities:
+		[Flower Veil, Flower Gift] -> [Flower Veil, Symbiosis]
+
+Floette:
+	Type:
+		[FAIRY, GRASS] -> [FAIRY, NO_TYPE]
+	Catch Rate:
+		255 -> 120
+	Abilities:
+		[Flower Veil, Flower Gift] -> [Flower Veil, Symbiosis]
+
+Florges:
+	Type:
+		[FAIRY, GRASS] -> [FAIRY, NO_TYPE]
+	Catch Rate:
+		255 -> 45
+	Abilities:
+		[Flower Veil, Flower Gift] -> [Flower Veil, Symbiosis]
+
+Skiddo:
+	Catch Rate:
+		160 -> 200
+
+Gogoat:
+	Catch Rate:
+		160 -> 45
+
+Pancham:
+	Catch Rate:
+		128 -> 220
+
+Pangoro:
+	Gen 7 Only:
+		Bullet Punch
+	Catch Rate:
+		128 -> 65
+
+Furfrou:
+	Catch Rate:
+		120 -> 160
+
+Espurr:
+	Catch Rate:
+		228 -> 190
+
+Meowstic:
+	Gen 6 Only:
+		Assist
+	Gen 7 Only:
+		Helping Hand
+	Catch Rate:
+		228 -> 75
+
+Honedge:
+	Catch Rate:
+		222 -> 180
+
+Doublade:
+	Catch Rate:
+		222 -> 90
+
+Aegislash:
+	Catch Rate:
+		222 -> 45
+
+Aromatisse:
+	Catch Rate:
+		200 -> 140
+
+Slurpuff:
+	Catch Rate:
+		200 -> 140
+
+Inkay:
+	Catch Rate:
+		120 -> 190
+
+Malamar:
+	Catch Rate:
+		120 -> 80
+
+Binacle:
+	Catch Rate:
+		255 -> 120
+
+Barbaracle:
+	Catch Rate:
+		255 -> 45
+
+Dragalge:
+	Catch Rate:
+		225 -> 55
+
+Clauncher:
+	Catch Rate:
+		155 -> 225
+
+Clawitzer:
+	Catch Rate:
+		155 -> 55
+
+Helioptile:
+	Catch Rate:
+		90 -> 190
+
+Heliolisk:
+	Catch Rate:
+		90 -> 75
+
+Sylveon:
+	Gen 7 Only:
+		Helping Hand
+		Baby-Doll Eyes
+
+Hawlucha:
+	Catch Rate:
+		128 -> 100
+
+Dedenne:
+	Catch Rate:
+		200 -> 180
+
+Carbink:
+	Catch Rate:
+		30 -> 60
+
+Goomy:
+	Type:
+		[DRAGON, WATER] -> [DRAGON, NO_TYPE]
+	Catch Rate:
+		20 -> 45
+
+Sliggoo:
+	Type:
+		[DRAGON, WATER] -> [DRAGON, NO_TYPE]
+	Catch Rate:
+		20 -> 45
+
+Goodra:
+	Type:
+		[DRAGON, WATER] -> [DRAGON, NO_TYPE]
+	Catch Rate:
+		20 -> 45
+
+Klefki:
+	Catch Rate:
+		60 -> 75
+
+Phantump:
+	Catch Rate:
+		150 -> 120
+
+Trevenant:
+	Catch Rate:
+		150 -> 60
+
+Pumpkaboo:
+	Catch Rate:
+		190 -> 120
+
+Gourgeist:
+	Catch Rate:
+		190 -> 60
+
+Bergmite:
+	Catch Rate:
+		255 -> 190
+
+Avalugg:
+	Gen 7 Only:
+		Body Slam
+	Catch Rate:
+		255 -> 55
+
+Noibat:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Absorb
+	Catch Rate:
+		200 -> 190
+
+Noivern:
+	Gen 6 Only:
+		Leech Life
+	Gen 7 Only:
+		Absorb
+	Catch Rate:
+		200 -> 45
+
+Xerneas:
+	Catch Rate:
+		70 -> 45
+
+Yveltal:
+	Catch Rate:
+		70 -> 45
+
+Zygarde:
+	Gen 6 Only:
+		Extreme Speed
+		Dragon Dance
+	Abilities:
+		[Aura Break, No Ability] -> [Aura Break, Power Construct]
+
+Diancie:
+	Gen 7 Only:
+		Power Gem
+	Egg Steps:
+		30720 -> 6400
+
