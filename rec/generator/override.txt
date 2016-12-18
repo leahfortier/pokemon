@@ -915,8 +915,13 @@ NameChanger:
 	*
 ***
 Override:
-	IsActive:
+	AbilityIsActive:
 		Header: boolean isActive()
+	*
+***
+Override:
+	EffectIsActive:
+		Header: boolean isActive(Battle b)
 	*
 ***
 Override:
@@ -1410,7 +1415,7 @@ RepellingEffect:
 Override:
 	BuffetImmune:
 		AddMapField: Field:
-		private static Type[] immunees = new Type[] {{0}};
+		private static Type[] immunees = new Type[] { {0} };
 		###
 	*
 ***

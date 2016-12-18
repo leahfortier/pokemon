@@ -169,7 +169,7 @@ Flash Fire:
 	Activate: 
 	this.activated = false;
 	###
-	IsActive:
+	AbilityIsActive:
 	return activated;
 	###
 	Int: DamageBlocker, PowerChangeEffect
@@ -1122,7 +1122,7 @@ Illusion:
 	
 	return p.getActualType();
 	###
-	IsActive:
+	AbilityIsActive:
 	return activated;
 	###
 	Desc: Comes out disguised as the Pok\u00e9mon in back.

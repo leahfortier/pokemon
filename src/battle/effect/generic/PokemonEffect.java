@@ -10,6 +10,7 @@ import battle.effect.PassableEffect;
 import battle.effect.SapHealthEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeSource;
+import battle.effect.generic.BattleEffect.FieldUproar;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
@@ -2072,6 +2073,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			uproar = victim.getMove();
 			super.cast(b, caster, victim, source, printCast);
+			b.addEffect(new FieldUproar());
 			
 			wakeUp(b, victim);
 			wakeUp(b, b.getOtherPokemon(victim.isPlayer()));
@@ -2082,7 +2084,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public String getSubsideMessage(ActivePokemon victim) {
-			return "The uproar ended.";
+			return victim.getName() + "'s The uproar ended.";
 		}
 
 		public Move getForcedMove() {

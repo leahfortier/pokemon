@@ -728,10 +728,11 @@ MagnetRise:
 *
 Uproar:
 	NumTurns: 3
-	SubsideMessage: "The uproar ended."
+	SubsideMessage: victim.getName() + "'s The uproar ended."
 	Cast: 
 	uproar = victim.getMove();
 	super.cast(b, caster, victim, source, printCast);
+	b.addEffect(new FieldUproar());
 	
 	wakeUp(b, victim);
 	wakeUp(b, b.getOtherPokemon(victim.isPlayer()));

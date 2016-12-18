@@ -144,9 +144,10 @@ class InterfaceMethod {
         final String invokeParameters = getField(fields, INVOKE_PARAMETERS);
         if (invokeParameters != null){
             this.additionalInvokeParameters = invokeParameters;
+            this.setParameters(this.additionalInvokeParameters, false);
         }
 
-        this.setParameters();
+        this.setParameters(this.parameters, true);
 
         final String comments = getField(fields, COMMENTS);
         if (comments != null) {
@@ -262,24 +263,26 @@ class InterfaceMethod {
         }
     }
 
-    private void setParameters() {
-        if (!StringUtils.isNullOrEmpty(this.parameters)) {
-            final String[] split = this.parameters.split(",");
+    private void setParameters(String parameters, boolean setTypeless) {
+        if (!StringUtils.isNullOrEmpty(parameters)) {
+            final String[] split = parameters.split(",");
             for (final String typedParameter : split) {
                 final String[] typeSplit = typedParameter.trim().split(" ");
                 if (typeSplit.length != 2) {
                     Global.error("Should be exactly one space between split parameters. " +
-                            "Parameters: " + this.parameters + ", Interface Name: " + this.interfaceName);
+                            "Parameters: " + parameters + ", Interface Name: " + this.interfaceName);
                 }
 
                 final String parameterType = typeSplit[0];
                 final String parameterName = typeSplit[1];
 
-                if (!this.typelessParameters.isEmpty()) {
-                    this.typelessParameters += ", ";
-                }
+                if (setTypeless) {
+                    if (!this.typelessParameters.isEmpty()) {
+                        this.typelessParameters += ", ";
+                    }
 
-                this.typelessParameters += parameterName;
+                    this.typelessParameters += parameterName;
+                }
 
                 if (parameterType.equals(Battle.class.getSimpleName())) {
                     if (!StringUtils.isNullOrEmpty(this.battleParameter)) {
@@ -289,10 +292,6 @@ class InterfaceMethod {
                     this.battleParameter = parameterName;
                 }
             }
-        }
-
-        if (StringUtils.isNullOrEmpty(this.battleParameter)) {
-            this.battleParameter = "b";
         }
     }
 

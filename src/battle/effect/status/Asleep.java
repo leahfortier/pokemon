@@ -4,7 +4,6 @@ import battle.Battle;
 import battle.attack.MoveType;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
-import battle.effect.generic.EffectNamesies;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
@@ -26,19 +25,10 @@ class Asleep extends Status implements BeforeTurnEffect {
         }
     }
 
-    // TODO: This shouldn't be hard-coded
-    // No one can be asleep while Uproar is in effect by either Pokemon
+    // All Pokemon can get sleepy
     @Override
     protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return !caster.hasEffect(EffectNamesies.UPROAR) && !victim.hasEffect(EffectNamesies.UPROAR);
-    }
-
-    public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-        if (user.hasEffect(EffectNamesies.UPROAR) || victim.hasEffect(EffectNamesies.UPROAR)) {
-            return "The uproar prevents sleep!";
-        }
-
-        return super.getFailMessage(b, user, victim);
+        return true;
     }
 
     public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
