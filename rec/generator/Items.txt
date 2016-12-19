@@ -2077,7 +2077,7 @@ Lum Berry:
 	Int: StatusBerry
 	Desc: If held by a Pok\u00e9mon, it recovers from any status problem.
 	NGType: Flying
-	FullHeal: True	
+	FullHeal: True
 *
 Sitrus Berry:
 	BattleCat: HP_PP

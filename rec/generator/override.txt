@@ -1697,7 +1697,8 @@ Override:
 ***
 Override:
 	FullHeal:
-		AddMapField: PokemonUse:
+		Header: boolean removeStatus(ActivePokemon p, CastSource source)
+		Body:
 		// Does not apply to the dead
 		if (p.hasStatus(StatusCondition.FAINTED)) {	
 			return false;
@@ -1708,8 +1709,11 @@ Override:
 			return false;
 		}
 		
-		message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
+		message = Status.getRemoveStatus(null, p, source);
 		return true;
+		###
+		AddMapField: PokemonUse:
+		return removeStatus(p, CastSource.USE_ITEM);
 		###
 		AddMapField: Field: 
 		private String message;
@@ -1742,14 +1746,18 @@ Override:
 ***
 Override:
 	StatusRemove:
-		AddInterface: PokemonUseItem
-		AddMapField: PokemonUse:
+		Header: boolean removeStatus(ActivePokemon p, CastSource source)
+		Body:
 		if (!p.hasStatus(StatusCondition.{00})) {
 			return false;
 		}
 
-		message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
+		message = Status.getRemoveStatus(null, p, source);
 		return true;
+		###
+		AddInterface: PokemonUseItem
+		AddMapField: PokemonUse:
+		return removeStatus(p, CastSource.USE_ITEM);
 		###
 		AddMapField: SuccessMessage: message
 		AddMapField: Field:
@@ -2034,7 +2042,7 @@ StatusBerry:
 	StatusBerryGainEffect:
 		Optional: True
 		AddMapField: GainEffect:
-		if (!use(user)) {
+		if (!removeStatus(user, CastSource.HELD_ITEM)) {
 			return false;
 		}
 		
