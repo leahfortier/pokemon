@@ -116,23 +116,9 @@ public abstract class Status implements Serializable {
 			Messages.add(new MessageUpdate(castMessage).updatePokemon(b, victim));
 
             StatusReceivedEffect.invokeStatusReceivedEffect(b, caster, victim);
-			berryCheck(b, victim, status);
-
 			return true;
 		}
 		return false;
-	}
-
-	// TODO: Check parameter
-	private static void berryCheck(Battle b, ActivePokemon victim, StatusCondition status) {
-		Item item = victim.getHeldItem(b);
-		if (item instanceof StatusBerry) {
-			GainableEffectBerry berry = ((GainableEffectBerry)item);
-
-			if (berry.gainBerryEffect(b, victim, CastSource.HELD_ITEM)) {
-				victim.consumeItem(b);
-			}
-		}
 	}
 
 	public static void removeStatus(ActivePokemon p) {
