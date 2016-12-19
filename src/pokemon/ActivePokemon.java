@@ -858,8 +858,6 @@ public class ActivePokemon implements Serializable {
 			ActivePokemon murderer = b.getOtherPokemon(this);
 			Status.die(b, murderer, this);
 
-			System.out.println(this.getStatus().getType());
-			
 			// If the pokemon fainted via murder (by direct result of an attack) -- apply kill wishes
 			if (murderer.getAttributes().isAttacking()) {
 				MurderEffect.killKillKillMurderMurderMurder(b, this, murderer);
