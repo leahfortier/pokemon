@@ -85,7 +85,7 @@ public abstract class Status implements Serializable {
 
 	}
 
-	private boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+	protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
 		return !victim.hasStatus() && this.appliesWithoutStatusCheck(b, caster, victim);
 
 	}
@@ -112,7 +112,7 @@ public abstract class Status implements Serializable {
 			victim.setStatus(s);
 			Messages.add(new MessageUpdate(castMessage).updatePokemon(b, victim));
 
-            StatusReceivedEffect.invokeStatusReceivedEffect(b, caster, victim);
+            StatusReceivedEffect.invokeStatusReceivedEffect(b, caster, victim, status);
 			return true;
 		}
 

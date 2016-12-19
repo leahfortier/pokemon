@@ -831,8 +831,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.SYNCHRONIZE, "Passes on a burn, poison, or paralysis to the foe.");
 		}
 
-		public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			StatusCondition statusType = victim.getStatus().getType();
+		public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
 			if ((statusType == StatusCondition.BURNED || statusType == StatusCondition.POISONED || statusType == StatusCondition.PARALYZED)
 			&& caster.getAttributes().isAttacking()
 			&& Status.giveStatus(b, victim, caster, statusType, true)

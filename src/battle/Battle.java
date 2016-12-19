@@ -171,8 +171,8 @@ public class Battle {
 
 		endTurn();
 
-		deadUser();
 		deadOpponent();
+		deadUser();
 
 		printShit();
 	}

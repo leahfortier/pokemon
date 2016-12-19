@@ -297,21 +297,6 @@ public final class EffectInterfaces {
 		}
 	}
 
-	public interface FaintEffect {
-		void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer);
-
-		static void grantDeathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-			List<Object> invokees = b.getEffectsList(dead);
-			for (Object invokee : invokees) {
-				if (invokee instanceof FaintEffect && !Effect.isInactiveEffect(invokee, b)) {
-					
-					FaintEffect effect = (FaintEffect)invokee;
-					effect.deathWish(b, dead, murderer);
-				}
-			}
-		}
-	}
-
 	// KILL KILL KILL MURDER MURDER MURDER
 	public interface MurderEffect {
 		void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer);
@@ -1100,15 +1085,15 @@ public final class EffectInterfaces {
 	}
 
 	public interface StatusReceivedEffect {
-		void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim);
+		void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType);
 
-		static void invokeStatusReceivedEffect(Battle b, ActivePokemon caster, ActivePokemon victim) {
+		static void invokeStatusReceivedEffect(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
 				if (invokee instanceof StatusReceivedEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					StatusReceivedEffect effect = (StatusReceivedEffect)invokee;
-					effect.receiveStatus(b, caster, victim);
+					effect.receiveStatus(b, caster, victim, statusType);
 				}
 			}
 		}

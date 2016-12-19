@@ -11,6 +11,12 @@ class Fainted extends Status {
         super(StatusCondition.FAINTED);
     }
 
+    // Fainted status condition applies regardless of other status conditions
+    @Override
+    protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        return this.statusApplies(b, caster, victim);
+    }
+
     @Override
     protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
         return victim.getHP() == 0;

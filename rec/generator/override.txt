@@ -1018,9 +1018,17 @@ Override:
 		###
 	*
 ***
-FaintEffect:
+Override:
 	DeathWish:
 		Header: void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer)
+		AccessModifier: Private
+		AddInterface: StatusReceivedEffect
+		AddMapField: StatusReceived:
+		if (statusType == StatusCondition.FAINTED) {
+			// DEATH WISH GRANTED
+			deathWish(b, victim, caster);
+		}
+		###
 	*
 ***
 MurderEffect:
@@ -2469,6 +2477,6 @@ Override:
 ***
 StatusReceivedEffect:
 	StatusReceived:
-		Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim)
+		Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType)
 	*
 ***

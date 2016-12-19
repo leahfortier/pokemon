@@ -14,7 +14,6 @@ import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
 import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
 import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
-import battle.effect.generic.EffectInterfaces.FaintEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
@@ -636,6 +635,10 @@ public class ActivePokemon implements Serializable {
 	public void addEffect(PokemonEffect e) {
 		attributes.addEffect(e);
 	}
+
+	public void removeEffect(PokemonEffect effect) {
+		attributes.removeEffect(effect);
+	}
 	
 	public void setMove(Move m) {
 		attributes.setMove(m);
@@ -838,8 +841,7 @@ public class ActivePokemon implements Serializable {
 		isPlayer = true;
 	}
 	
-	public boolean isFainted(Battle b)
-	{
+	public boolean isFainted(Battle b) {
 		// We have already checked that this Pokemon is fainted -- don't print/apply effects more than once
 		if (hasStatus(StatusCondition.FAINTED)) {
 			if (hp == 0) {
@@ -853,11 +855,10 @@ public class ActivePokemon implements Serializable {
 		if (hp == 0) {
 			Messages.add(new MessageUpdate().updatePokemon(b, this));
 
-			ActivePokemon murderer = b.getOtherPokemon(isPlayer());
+			ActivePokemon murderer = b.getOtherPokemon(this);
 			Status.die(b, murderer, this);
 
-			// Apply effects which occur when the user faints
-			FaintEffect.grantDeathWish(b, this, murderer);
+			System.out.println(this.getStatus().getType());
 			
 			// If the pokemon fainted via murder (by direct result of an attack) -- apply kill wishes
 			if (murderer.getAttributes().isAttacking()) {
@@ -1029,34 +1030,6 @@ public class ActivePokemon implements Serializable {
 		removeStatus();
 		getActualMoves().forEach(Move::resetPP);
 		healHealthFraction(1);
-	}
-	
-	// Heals the Pokemon by damage amount. It is assume damage has already been dealt to the victim
-	public void sapHealth(ActivePokemon victim, int amount, Battle b, boolean print, boolean dreamEater) {
-		if (victim.hasAbility(AbilityNamesies.LIQUID_OOZE)) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + getName() + " to lose health instead!"));
-			reduceHealth(b, amount);
-			return;
-		}
-		
-		// Big Root heals an additional 30%
-		if (isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
-			amount *= 1.3;
-		}
-		
-		// Sap message (different for Dream Eater)
-		if (print) {
-			String message = dreamEater ? victim.getName() + "'s dream was eaten!" : victim.getName() + "'s health was sapped!";
-			Messages.add(new MessageUpdate(message));
-		}
-		
-		// Healers gon' heal
-		if (!hasEffect(EffectNamesies.HEAL_BLOCK)) {
-			heal(amount);
-		}
-
-		Messages.add(new MessageUpdate().updatePokemon(b, victim));
-		Messages.add(new MessageUpdate().updatePokemon(b, this));
 	}
 	
 	public boolean isGrounded(Battle b) {

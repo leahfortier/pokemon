@@ -313,7 +313,6 @@ Synchronize:
 	Desc: Passes on a burn, poison, or paralysis to the foe.
 	Int: StatusReceivedEffect
 	StatusReceived:
-	StatusCondition statusType = victim.getStatus().getType();
 	if ((statusType == StatusCondition.BURNED || statusType == StatusCondition.POISONED || statusType == StatusCondition.PARALYZED)
 			&& caster.getAttributes().isAttacking()
 			&& Status.giveStatus(b, victim, caster, statusType, true)
