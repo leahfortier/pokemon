@@ -1823,11 +1823,22 @@ Override:
 		AddMapField: SuccessMessage: p.getName() + "'s " + toIncrease().getName() + " was raised!"
 	*
 ***
+Override:
+	CatchRateCondition:
+		AddMapField: CatchRate:
+		if ({2-}) {
+			return new double[] { {1}, 0 };
+		}
+		
+		return new double[] { 1, 0 };
+		###
+	*
+***
 BallItem:
 	CatchRate:
 		Header: double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
 		Try:
-		return new double[] {{0}, 0};
+		return new double[] { {0}, 0 };
 		###
 		AddMapField: Cat: Ball
 		AddMapField: BattleCat: Ball
@@ -1835,8 +1846,6 @@ BallItem:
 	AfterCaught:
 		Header: void afterCaught(ActivePokemon p)
 		Optional: True
-		Default:
-		###
 	*
 ***
 Override:

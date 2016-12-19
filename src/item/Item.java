@@ -5613,10 +5613,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5630,15 +5627,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			// TODO: Not sure yet if this will cover fishing
 			if (b.getTerrainType() == TerrainType.WATER) {
-				return new double[] {3.5, 0};
+				return new double[] { 3.5, 0 };
 			}
 			
-			return new double[] {1, 0};
+			return new double[] { 1, 0 };
 		}
 
 		public void afterCaught(ActivePokemon p) {
+			// TODO: Not sure yet if this will cover fishing
 		}
 	}
 
@@ -5653,13 +5650,10 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			if (b.getTerrainType() == TerrainType.CAVE) {
-				return new double[] {3.5, 0};
+				return new double[] { 3.5, 0 };
 			}
 			
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5673,15 +5667,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			// If the opponent has a base speed of 100 or higher, multiplier is 4
 			if (o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100) {
-				return new double[] {4, 0};
+				return new double[] { 4, 0 };
 			}
 			
-			return new double[] {1, 0};
+			return new double[] { 1, 0 };
 		}
 
 		public void afterCaught(ActivePokemon p) {
+			// TODO: Make comments available inside the generator
+			// If the opponent has a base speed of 100 or higher, multiplier is 4
 		}
 	}
 
@@ -5695,10 +5690,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1.5, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1.5, 0 };
 		}
 	}
 
@@ -5712,7 +5704,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1, 0};
+			return new double[] { 1, 0 };
 		}
 
 		public void afterCaught(ActivePokemon p) {
@@ -5743,9 +5735,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			
 			return res;
 		}
-
-		public void afterCaught(ActivePokemon p) {
-		}
 	}
 
 	static class LevelBall extends Item implements BallItem {
@@ -5764,9 +5753,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			else if (me.getLevel() > o.getLevel()) return new double[] {2, 0};
 			else return new double[] {1, 0};
 		}
-
-		public void afterCaught(ActivePokemon p) {
-		}
 	}
 
 	static class LoveBall extends Item implements BallItem {
@@ -5779,14 +5765,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (me.getGender() == o.getGender()) {
-				return new double[] {8, 0};
+			if (Gender.oppositeGenders(me, o)) {
+				return new double[] { 8, 0 };
 			}
 			
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5800,15 +5783,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			// TODO: Fishing
 			if (false) {
-				return new double[] {3, 0};
+				return new double[] { 3, 0 };
 			}
 			
-			return new double[] {1, 0};
+			return new double[] { 1, 0 };
 		}
 
 		public void afterCaught(ActivePokemon p) {
+			// TODO: Fishing
 		}
 	}
 
@@ -5822,7 +5805,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1, 0};
+			return new double[] { 1, 0 };
 		}
 
 		public void afterCaught(ActivePokemon p) {
@@ -5840,10 +5823,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {255, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 255, 0 };
 		}
 	}
 
@@ -5857,15 +5837,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			Evolution ev = o.getPokemonInfo().getEvolution();
-			if (ev.getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null) {
-				return new double[] {4, 0};
+			if (o.getPokemonInfo().getEvolution().getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null) {
+				return new double[] { 4, 0 };
 			}
 			
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5880,12 +5856,9 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			// TODO: Loopy and make it general with the others
-			if (o.getLevel() <= 19) return new double[] {3, 0};
-			else if (o.getLevel() <= 29) return new double[] {2, 0};
-			else return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			if (o.getLevel() <= 19) return new double[] { 3, 0 };
+			else if (o.getLevel() <= 29) return new double[] { 2, 0 };
+			else return new double[] { 1, 0 };
 		}
 	}
 
@@ -5900,13 +5873,10 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG)) {
-				return new double[] {3, 0};
+				return new double[] { 3, 0 };
 			}
 			
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5920,10 +5890,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5937,10 +5904,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5954,15 +5918,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			// TODO: Generalize this
 			if (b.getTurn() == 1) {
 				return new double[] { 3, 0 };
 			}
 			
 			return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
 		}
 	}
 
@@ -5982,9 +5942,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			
 			return new double[] { 1, 0 };
 		}
-
-		public void afterCaught(ActivePokemon p) {
-		}
 	}
 
 	static class SafariBall extends Item implements BallItem {
@@ -5996,10 +5953,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1.5, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1.5, 0 };
 		}
 	}
 
@@ -6018,9 +5972,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			else if (b.getTurn() <= 30) return new double[] {3, 0};
 			else return new double[] {4, 0};
 		}
-
-		public void afterCaught(ActivePokemon p) {
-		}
 	}
 
 	static class UltraBall extends Item implements BallItem {
@@ -6033,10 +5984,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {2, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 2, 0 };
 		}
 	}
 
