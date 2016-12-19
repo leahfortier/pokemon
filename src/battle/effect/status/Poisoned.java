@@ -38,10 +38,9 @@ class Poisoned extends Status implements EndTurnEffect {
     }
 
     // Poison-type and Steel-type Pokemon cannot be poisoned unless the caster has the Corrosion ability
-    public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return super.applies(b, caster, victim) &&
-                ((!victim.isType(b, Type.POISON) && !victim.isType(b, Type.STEEL)) ||
-                        caster.hasAbility(AbilityNamesies.CORROSION));
+    @Override
+    protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        return (!victim.isType(b, Type.POISON) && !victim.isType(b, Type.STEEL) || caster.hasAbility(AbilityNamesies.CORROSION));
     }
 
     public String getCastMessage(ActivePokemon p) {

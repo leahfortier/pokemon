@@ -57,20 +57,18 @@ import item.use.MoveUseItem;
 import item.use.PokemonUseItem;
 import item.use.TrainerUseItem;
 import item.use.UseItem;
-import main.Game;
 import main.Global;
 import main.Type;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
-import pokemon.evolution.BaseEvolution;
-import pokemon.evolution.Evolution;
-import pokemon.evolution.EvolutionMethod;
+import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import pokemon.evolution.EvolutionMethod;
 import trainer.CharacterData;
 import trainer.Team;
 import trainer.Trainer;
@@ -128,8 +126,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		return this.name;
 	}
 
-	public String getDescription()
-	{
+	public String getDescription() {
 		return this.description;
 	}
 
@@ -4133,8 +4130,13 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
-			return StatusCondition.POISONED;
+		public boolean removeStatus(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.POISONED)) {
+				return false;
+			}
+			
+			message = Status.getRemoveStatus(null, p, source);
+			return true;
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -4146,12 +4148,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(toRemove())) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
-			return true;
+			return removeStatus(p, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4165,8 +4162,13 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
-			return StatusCondition.ASLEEP;
+		public boolean removeStatus(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.ASLEEP)) {
+				return false;
+			}
+			
+			message = Status.getRemoveStatus(null, p, source);
+			return true;
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -4178,12 +4180,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(toRemove())) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
-			return true;
+			return removeStatus(p, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4197,8 +4194,13 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
-			return StatusCondition.BURNED;
+		public boolean removeStatus(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.BURNED)) {
+				return false;
+			}
+			
+			message = Status.getRemoveStatus(null, p, source);
+			return true;
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -4210,12 +4212,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(toRemove())) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
-			return true;
+			return removeStatus(p, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4229,8 +4226,13 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
-			return StatusCondition.FROZEN;
+		public boolean removeStatus(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.FROZEN)) {
+				return false;
+			}
+			
+			message = Status.getRemoveStatus(null, p, source);
+			return true;
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -4242,12 +4244,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(toRemove())) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
-			return true;
+			return removeStatus(p, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4261,8 +4258,13 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
-			return StatusCondition.PARALYZED;
+		public boolean removeStatus(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.PARALYZED)) {
+				return false;
+			}
+			
+			message = Status.getRemoveStatus(null, p, source);
+			return true;
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -4274,17 +4276,13 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(toRemove())) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
-			return true;
+			return removeStatus(p, CastSource.USE_ITEM);
 		}
 	}
 
 	static class FullHeal extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
+		private String message;
 
 		FullHeal() {
 			super(ItemNamesies.FULL_HEAL, "A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 169);
@@ -4292,15 +4290,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " was cured of its status condition!";
-		}
-
-		public int flingDamage() {
-			return 30;
-		}
-
-		public boolean use(ActivePokemon p) {
+		public boolean removeStatus(ActivePokemon p, CastSource source) {
 			// Does not apply to the dead
 			if (p.hasStatus(StatusCondition.FAINTED)) {
 				return false;
@@ -4311,8 +4301,20 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, source);
 			return true;
+		}
+
+		public String getSuccessMessage(ActivePokemon p) {
+			return message;
+		}
+
+		public int flingDamage() {
+			return 30;
+		}
+
+		public boolean use(ActivePokemon p) {
+			return removeStatus(p, CastSource.USE_ITEM);
 		}
 	}
 
@@ -5587,10 +5589,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5604,15 +5603,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			// TODO: Not sure yet if this will cover fishing
 			if (b.getTerrainType() == TerrainType.WATER) {
-				return new double[] {3.5, 0};
+				return new double[] { 3.5, 0 };
 			}
 			
-			return new double[] {1, 0};
+			return new double[] { 1, 0 };
 		}
 
 		public void afterCaught(ActivePokemon p) {
+			// TODO: Not sure yet if this will cover fishing
 		}
 	}
 
@@ -5627,13 +5626,10 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			if (b.getTerrainType() == TerrainType.CAVE) {
-				return new double[] {3.5, 0};
+				return new double[] { 3.5, 0 };
 			}
 			
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5647,15 +5643,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			// If the opponent has a base speed of 100 or higher, multiplier is 4
 			if (o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100) {
-				return new double[] {4, 0};
+				return new double[] { 4, 0 };
 			}
 			
-			return new double[] {1, 0};
+			return new double[] { 1, 0 };
 		}
 
 		public void afterCaught(ActivePokemon p) {
+			// TODO: Make comments available inside the generator
+			// If the opponent has a base speed of 100 or higher, multiplier is 4
 		}
 	}
 
@@ -5669,10 +5666,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1.5, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1.5, 0 };
 		}
 	}
 
@@ -5686,7 +5680,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1, 0};
+			return new double[] { 1, 0 };
 		}
 
 		public void afterCaught(ActivePokemon p) {
@@ -5717,9 +5711,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			
 			return res;
 		}
-
-		public void afterCaught(ActivePokemon p) {
-		}
 	}
 
 	static class LevelBall extends Item implements BallItem {
@@ -5738,9 +5729,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			else if (me.getLevel() > o.getLevel()) return new double[] {2, 0};
 			else return new double[] {1, 0};
 		}
-
-		public void afterCaught(ActivePokemon p) {
-		}
 	}
 
 	static class LoveBall extends Item implements BallItem {
@@ -5753,14 +5741,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (me.getGender() == o.getGender()) {
-				return new double[] {8, 0};
+			if (Gender.oppositeGenders(me, o)) {
+				return new double[] { 8, 0 };
 			}
 			
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5774,15 +5759,15 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			// TODO: Fishing
 			if (false) {
-				return new double[] {3, 0};
+				return new double[] { 3, 0 };
 			}
 			
-			return new double[] {1, 0};
+			return new double[] { 1, 0 };
 		}
 
 		public void afterCaught(ActivePokemon p) {
+			// TODO: Fishing
 		}
 	}
 
@@ -5796,7 +5781,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1, 0};
+			return new double[] { 1, 0 };
 		}
 
 		public void afterCaught(ActivePokemon p) {
@@ -5814,10 +5799,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {255, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 255, 0 };
 		}
 	}
 
@@ -5831,15 +5813,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			Evolution ev = o.getPokemonInfo().getEvolution();
-			if (ev.getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null) {
-				return new double[] {4, 0};
+			if (o.getPokemonInfo().getEvolution().getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null) {
+				return new double[] { 4, 0 };
 			}
 			
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5854,12 +5832,9 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			// TODO: Loopy and make it general with the others
-			if (o.getLevel() <= 19) return new double[] {3, 0};
-			else if (o.getLevel() <= 29) return new double[] {2, 0};
-			else return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			if (o.getLevel() <= 19) return new double[] { 3, 0 };
+			else if (o.getLevel() <= 29) return new double[] { 2, 0 };
+			else return new double[] { 1, 0 };
 		}
 	}
 
@@ -5874,13 +5849,10 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG)) {
-				return new double[] {3, 0};
+				return new double[] { 3, 0 };
 			}
 			
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5894,10 +5866,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5911,10 +5880,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1, 0 };
 		}
 	}
 
@@ -5928,15 +5894,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			// TODO: Generalize this
 			if (b.getTurn() == 1) {
 				return new double[] { 3, 0 };
 			}
 			
 			return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
 		}
 	}
 
@@ -5956,9 +5918,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			
 			return new double[] { 1, 0 };
 		}
-
-		public void afterCaught(ActivePokemon p) {
-		}
 	}
 
 	static class SafariBall extends Item implements BallItem {
@@ -5970,10 +5929,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {1.5, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 1.5, 0 };
 		}
 	}
 
@@ -5992,9 +5948,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			else if (b.getTurn() <= 30) return new double[] {3, 0};
 			else return new double[] {4, 0};
 		}
-
-		public void afterCaught(ActivePokemon p) {
-		}
 	}
 
 	static class UltraBall extends Item implements BallItem {
@@ -6007,10 +5960,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] {2, 0};
-		}
-
-		public void afterCaught(ActivePokemon p) {
+			return new double[] { 2, 0 };
 		}
 	}
 
@@ -6025,8 +5975,13 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
-			return StatusCondition.PARALYZED;
+		public boolean removeStatus(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.PARALYZED)) {
+				return false;
+			}
+			
+			message = Status.getRemoveStatus(null, p, source);
+			return true;
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -6034,49 +5989,20 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(toRemove())) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
-			return true;
+			return removeStatus(p, CastSource.USE_ITEM);
 		}
 
 		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
 			return holdMessage;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!user.hasStatus(toRemove())) {
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			if (!removeStatus(user, CastSource.HELD_ITEM)) {
 				return false;
 			}
 			
-			holdMessage = Status.getRemoveStatus(b, user, source);
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+			holdMessage = message;
+			return true;
 		}
 
 		public int naturalGiftPower() {
@@ -6107,8 +6033,13 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
-			return StatusCondition.ASLEEP;
+		public boolean removeStatus(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.ASLEEP)) {
+				return false;
+			}
+			
+			message = Status.getRemoveStatus(null, p, source);
+			return true;
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -6116,49 +6047,20 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(toRemove())) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
-			return true;
+			return removeStatus(p, CastSource.USE_ITEM);
 		}
 
 		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
 			return holdMessage;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!user.hasStatus(toRemove())) {
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			if (!removeStatus(user, CastSource.HELD_ITEM)) {
 				return false;
 			}
 			
-			holdMessage = Status.getRemoveStatus(b, user, source);
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+			holdMessage = message;
+			return true;
 		}
 
 		public int naturalGiftPower() {
@@ -6189,8 +6091,13 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
-			return StatusCondition.POISONED;
+		public boolean removeStatus(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.POISONED)) {
+				return false;
+			}
+			
+			message = Status.getRemoveStatus(null, p, source);
+			return true;
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -6198,49 +6105,20 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(toRemove())) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
-			return true;
+			return removeStatus(p, CastSource.USE_ITEM);
 		}
 
 		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
 			return holdMessage;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!user.hasStatus(toRemove())) {
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			if (!removeStatus(user, CastSource.HELD_ITEM)) {
 				return false;
 			}
 			
-			holdMessage = Status.getRemoveStatus(b, user, source);
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+			holdMessage = message;
+			return true;
 		}
 
 		public int naturalGiftPower() {
@@ -6271,8 +6149,13 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
-			return StatusCondition.BURNED;
+		public boolean removeStatus(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.BURNED)) {
+				return false;
+			}
+			
+			message = Status.getRemoveStatus(null, p, source);
+			return true;
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -6280,49 +6163,20 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(toRemove())) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
-			return true;
+			return removeStatus(p, CastSource.USE_ITEM);
 		}
 
 		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
 			return holdMessage;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!user.hasStatus(toRemove())) {
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			if (!removeStatus(user, CastSource.HELD_ITEM)) {
 				return false;
 			}
 			
-			holdMessage = Status.getRemoveStatus(b, user, source);
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+			holdMessage = message;
+			return true;
 		}
 
 		public int naturalGiftPower() {
@@ -6353,8 +6207,13 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public StatusCondition toRemove() {
-			return StatusCondition.FROZEN;
+		public boolean removeStatus(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.FROZEN)) {
+				return false;
+			}
+			
+			message = Status.getRemoveStatus(null, p, source);
+			return true;
 		}
 
 		public String getSuccessMessage(ActivePokemon p) {
@@ -6362,49 +6221,20 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (!p.hasStatus(toRemove())) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
-			return true;
+			return removeStatus(p, CastSource.USE_ITEM);
 		}
 
 		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
 			return holdMessage;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!user.hasStatus(toRemove())) {
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			if (!removeStatus(user, CastSource.HELD_ITEM)) {
 				return false;
 			}
 			
-			holdMessage = Status.getRemoveStatus(b, user, source);
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+			holdMessage = message;
+			return true;
 		}
 
 		public int naturalGiftPower() {
@@ -6453,7 +6283,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			Move lowestPPMove = null;
 			double lowestPPRatio = 1;
 			
@@ -6471,31 +6301,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			use(user, lowestPPMove);
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+			return true;
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
@@ -6538,10 +6344,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return p.getName() + " was healed by its " + this.name + "!";
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source) {
-			return use(user);
-		}
-
 		public double healthTriggerRatio() {
 			return 1/3.0;
 		}
@@ -6550,35 +6352,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return p.heal(10) != 0;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!useHealthTriggerBerry(b, user, source)) {
-				return false;
-			}
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user);
 		}
 
 		public int naturalGiftPower() {
@@ -6624,35 +6399,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return false;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!use(user, b)) {
-				return false;
-			}
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, b);
 		}
 
 		public int naturalGiftPower() {
@@ -6674,6 +6422,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 	static class LumBerry extends Item implements StatusBerry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
+		private String message;
 		private String holdMessage;
 
 		LumBerry() {
@@ -6682,11 +6431,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " was cured of its status condition!";
-		}
-
-		public boolean use(ActivePokemon p) {
+		public boolean removeStatus(ActivePokemon p, CastSource source) {
 			// Does not apply to the dead
 			if (p.hasStatus(StatusCondition.FAINTED)) {
 				return false;
@@ -6697,51 +6442,29 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				return false;
 			}
 			
-			p.removeStatus();
+			message = Status.getRemoveStatus(null, p, source);
 			return true;
+		}
+
+		public String getSuccessMessage(ActivePokemon p) {
+			return message;
+		}
+
+		public boolean use(ActivePokemon p) {
+			return removeStatus(p, CastSource.USE_ITEM);
 		}
 
 		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
 			return holdMessage;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			// Does not apply to the dead
-			if (user.hasStatus(StatusCondition.FAINTED)) {
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			if (!removeStatus(user, CastSource.HELD_ITEM)) {
 				return false;
 			}
 			
-			// YOU'RE FINE
-			if (!user.hasStatus()) {
-				return false;
-			}
-			
-			holdMessage = Status.getRemoveStatus(b, user, source);
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+			holdMessage = message;
+			return true;
 		}
 
 		public int naturalGiftPower() {
@@ -6782,43 +6505,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return p.healHealthFraction(1/4.0) != 0;
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source) {
-			return use(user);
-		}
-
 		public double healthTriggerRatio() {
 			return 1/2.0;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!useHealthTriggerBerry(b, user, source)) {
-				return false;
-			}
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user);
 		}
 
 		public int naturalGiftPower() {
@@ -6884,12 +6576,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
+			int decreaseIndex = toDecrease().index();
 			int[] vals = new int[Stat.NUM_STATS];
-			if (p.getEV(toDecrease().index()) > 110) {
-				vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+			
+			// For EVs over 110, the berry will decrease the EV to 100
+			if (p.getEV(decreaseIndex) > 110) {
+				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
 			}
+			// Otherwise, just decreases by 10
 			else {
-				vals[toDecrease().index()] -= 10;
+				vals[decreaseIndex] -= 10;
 			}
 			
 			return p.addEVs(vals);
@@ -6925,12 +6621,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
+			int decreaseIndex = toDecrease().index();
 			int[] vals = new int[Stat.NUM_STATS];
-			if (p.getEV(toDecrease().index()) > 110) {
-				vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+			
+			// For EVs over 110, the berry will decrease the EV to 100
+			if (p.getEV(decreaseIndex) > 110) {
+				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
 			}
+			// Otherwise, just decreases by 10
 			else {
-				vals[toDecrease().index()] -= 10;
+				vals[decreaseIndex] -= 10;
 			}
 			
 			return p.addEVs(vals);
@@ -6966,12 +6666,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
+			int decreaseIndex = toDecrease().index();
 			int[] vals = new int[Stat.NUM_STATS];
-			if (p.getEV(toDecrease().index()) > 110) {
-				vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+			
+			// For EVs over 110, the berry will decrease the EV to 100
+			if (p.getEV(decreaseIndex) > 110) {
+				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
 			}
+			// Otherwise, just decreases by 10
 			else {
-				vals[toDecrease().index()] -= 10;
+				vals[decreaseIndex] -= 10;
 			}
 			
 			return p.addEVs(vals);
@@ -7007,12 +6711,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
+			int decreaseIndex = toDecrease().index();
 			int[] vals = new int[Stat.NUM_STATS];
-			if (p.getEV(toDecrease().index()) > 110) {
-				vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+			
+			// For EVs over 110, the berry will decrease the EV to 100
+			if (p.getEV(decreaseIndex) > 110) {
+				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
 			}
+			// Otherwise, just decreases by 10
 			else {
-				vals[toDecrease().index()] -= 10;
+				vals[decreaseIndex] -= 10;
 			}
 			
 			return p.addEVs(vals);
@@ -7048,12 +6756,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
+			int decreaseIndex = toDecrease().index();
 			int[] vals = new int[Stat.NUM_STATS];
-			if (p.getEV(toDecrease().index()) > 110) {
-				vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+			
+			// For EVs over 110, the berry will decrease the EV to 100
+			if (p.getEV(decreaseIndex) > 110) {
+				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
 			}
+			// Otherwise, just decreases by 10
 			else {
-				vals[toDecrease().index()] -= 10;
+				vals[decreaseIndex] -= 10;
 			}
 			
 			return p.addEVs(vals);
@@ -7089,12 +6801,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
+			int decreaseIndex = toDecrease().index();
 			int[] vals = new int[Stat.NUM_STATS];
-			if (p.getEV(toDecrease().index()) > 110) {
-				vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+			
+			// For EVs over 110, the berry will decrease the EV to 100
+			if (p.getEV(decreaseIndex) > 110) {
+				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
 			}
+			// Otherwise, just decreases by 10
 			else {
-				vals[toDecrease().index()] -= 10;
+				vals[decreaseIndex] -= 10;
 			}
 			
 			return p.addEVs(vals);
@@ -7679,47 +7395,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return "";
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source) {
-			if (user.getAttributes().modifyStage(user, user, 1, Stat.ATTACK, b, source)) {
-				return true;
-			}
-			
-			return false;
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!useHealthTriggerBerry(b, user, source)) {
-				return false;
-			}
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return user.getAttributes().modifyStage(user, user, 1, Stat.ATTACK, b, source);
 		}
 
 		public int naturalGiftPower() {
@@ -7755,47 +7436,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return "";
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source) {
-			if (user.getAttributes().modifyStage(user, user, 1, Stat.DEFENSE, b, source)) {
-				return true;
-			}
-			
-			return false;
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!useHealthTriggerBerry(b, user, source)) {
-				return false;
-			}
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return user.getAttributes().modifyStage(user, user, 1, Stat.DEFENSE, b, source);
 		}
 
 		public int naturalGiftPower() {
@@ -7831,47 +7477,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return "";
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source) {
-			if (user.getAttributes().modifyStage(user, user, 1, Stat.SPEED, b, source)) {
-				return true;
-			}
-			
-			return false;
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!useHealthTriggerBerry(b, user, source)) {
-				return false;
-			}
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return user.getAttributes().modifyStage(user, user, 1, Stat.SPEED, b, source);
 		}
 
 		public int naturalGiftPower() {
@@ -7907,47 +7518,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return "";
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source) {
-			if (user.getAttributes().modifyStage(user, user, 1, Stat.SP_ATTACK, b, source)) {
-				return true;
-			}
-			
-			return false;
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!useHealthTriggerBerry(b, user, source)) {
-				return false;
-			}
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return user.getAttributes().modifyStage(user, user, 1, Stat.SP_ATTACK, b, source);
 		}
 
 		public int naturalGiftPower() {
@@ -7983,47 +7559,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return "";
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source) {
-			if (user.getAttributes().modifyStage(user, user, 1, Stat.SP_DEFENSE, b, source)) {
-				return true;
-			}
-			
-			return false;
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!useHealthTriggerBerry(b, user, source)) {
-				return false;
-			}
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return user.getAttributes().modifyStage(user, user, 1, Stat.SP_DEFENSE, b, source);
 		}
 
 		public int naturalGiftPower() {
@@ -8059,47 +7600,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return "";
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source) {
-			if (user.getAttributes().modifyStage(user, user, 1, Stat.ACCURACY, b, source)) {
-				return true;
-			}
-			
-			return false;
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!useHealthTriggerBerry(b, user, source)) {
-				return false;
-			}
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return user.getAttributes().modifyStage(user, user, 1, Stat.ACCURACY, b, source);
 		}
 
 		public int naturalGiftPower() {
@@ -8127,10 +7633,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 20;
 		}
 
-		public boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return user.getAttack().getCategory() == MoveCategory.PHYSICAL && victim.getAttributes().modifyStage(victim, victim, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM);
-		}
-
 		public int naturalGiftPower() {
 			return 100;
 		}
@@ -8140,7 +7642,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
-			if (checkModify(b, user, victim)) {
+			if (user.getAttack().getCategory() == MoveCategory.PHYSICAL && victim.getAttributes().modifyStage(victim, victim, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
 				victim.consumeItem(b);
 			}
 		}
@@ -8158,10 +7660,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 20;
 		}
 
-		public boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return user.getAttack().getCategory() == MoveCategory.SPECIAL && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM);
-		}
-
 		public int naturalGiftPower() {
 			return 100;
 		}
@@ -8171,7 +7669,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
-			if (checkModify(b, user, victim)) {
+			if (user.getAttack().getCategory() == MoveCategory.SPECIAL && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
 				victim.consumeItem(b);
 			}
 		}
@@ -8326,44 +7824,13 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return p.getName() + " is getting pumped due to its " + this.name + "!";
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source) {
-			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
-			return true;
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!useHealthTriggerBerry(b, user, source)) {
-				return false;
-			}
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
+			return true;
 		}
 
 		public int naturalGiftPower() {
@@ -8401,7 +7868,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return holdMessage;
 		}
 
-		public boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source) {
+		public double healthTriggerRatio() {
+			return 1/4.0;
+		}
+
+		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			holdMessage = "";
 			useMessage = "";
 			
@@ -8423,41 +7894,6 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			}
 			
 			return false;
-		}
-
-		public double healthTriggerRatio() {
-			return 1/4.0;
-		}
-
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!useHealthTriggerBerry(b, user, source)) {
-				return false;
-			}
-			
-			String message = "";
-			switch (source) {
-				case USE_ITEM:
-					message = getSuccessMessage(user);
-					break;
-				case HELD_ITEM:
-					message = getHoldSuccessMessage(b, user);
-					break;
-				default:
-					Global.error("Use item and held item are the only valid cast sources for berries.");
-				}
-				
-				Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-				
-				if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-					user.healHealthFraction(1/3.0);
-					Messages.add(new MessageUpdate().updatePokemon(b, user));
-				}
-				
-				// Eat dat berry!!
-				EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-				
-				return true;
 		}
 
 		public int naturalGiftPower() {
@@ -8698,6 +8134,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public boolean use(Trainer t) {
 			if (!(t instanceof CharacterData)) {
 				Global.error("Only the character should be using a Repel item");
+				return false;
 			}
 			
 			CharacterData player = (CharacterData) t;
@@ -8733,6 +8170,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public boolean use(Trainer t) {
 			if (!(t instanceof CharacterData)) {
 				Global.error("Only the character should be using a Repel item");
+				return false;
 			}
 			
 			CharacterData player = (CharacterData) t;
@@ -8768,6 +8206,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		public boolean use(Trainer t) {
 			if (!(t instanceof CharacterData)) {
 				Global.error("Only the character should be using a Repel item");
+				return false;
 			}
 			
 			CharacterData player = (CharacterData) t;

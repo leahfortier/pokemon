@@ -1754,39 +1754,24 @@ Dive Ball:
 	Int: BallItem
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.
 	Price: 1000
-	CatchRate:
-		// TODO: Not sure yet if this will cover fishing
-		if (b.getTerrainType() == TerrainType.WATER) {
-			return new double[] {3.5, 0};
-		}
-		
-		return new double[] {1, 0};
-		###
+	AfterCaught: // TODO: Not sure yet if this will cover fishing
+	CatchRateCondition: 3.5 b.getTerrainType() == TerrainType.WATER
 *
 Dusk Ball:
 	Int: BallItem
 	Desc: A somewhat different Pok\u00e9 Ball that makes it easier to catch wild Pok\u00e9mon at night or in dark places like caves.
 	Price: 1000
-	CatchRate:
-		if (b.getTerrainType() == TerrainType.CAVE) {
-			return new double[] {3.5, 0};
-		}
-		
-		return new double[] {1, 0};
-		###
+	CatchRateCondition: 3.5 b.getTerrainType() == TerrainType.CAVE
 *
 Fast Ball:
 	Int: BallItem
 	Desc: A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon which are quick to run away.
 	Price: 200
-	CatchRate:
-		// If the opponent has a base speed of 100 or higher, multiplier is 4
-		if (o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100) {
-			return new double[] {4, 0};
-		}
-		
-		return new double[] {1, 0};
-		###
+	AfterCaught:
+	// TODO: Make comments available inside the generator
+	// If the opponent has a base speed of 100 or higher, multiplier is 4
+	###
+	CatchRateCondition: 4 o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100
 *
 Great Ball:
 	Int: BallItem
@@ -1799,9 +1784,7 @@ Heal Ball:
 	Desc: A remedial Pok\u00e9 Ball that restores the caught Pok\u00e9mon's HP and eliminates any status problem.
 	Price: 300
 	CatchRate: 1
-	AfterCaught:
-		p.fullyHeal();
-		###
+	AfterCaught: p.fullyHeal();
 *
 Heavy Ball:
 	Int: BallItem
@@ -1838,35 +1821,21 @@ Love Ball:
 	Int: BallItem
 	Desc: Pok\u00e9 Ball for catching Pok\u00e9mon that are the opposite gender of your Pok\u00e9mon.
 	Price: 200
-	CatchRate:
-		if (me.getGender() == o.getGender()) {
-			return new double[] {8, 0};
-		}
-		
-		return new double[] {1, 0};
-		###
+	CatchRateCondition: 8 Gender.oppositeGenders(me, o)
 *
 Lure Ball:
 	Int: BallItem
 	Desc: A Pok\u00e9 Ball for catching Pok\u00e9mon hooked by a Rod when fishing.
 	Price: 200
-	CatchRate:
-		// TODO: Fishing
-		if (false) {
-			return new double[] {3, 0};
-		}
-		
-		return new double[] {1, 0};
-		###
+	AfterCaught: // TODO: Fishing
+	CatchRateCondition: 3 false
 *
 Luxury Ball:
 	Int: BallItem
 	Desc: A comfortable Pok\u00e9 Ball that makes a caught wild Pok\u00e9mon quickly grow friendly.
 	Price: 1000
 	CatchRate: 1
-	AfterCaught:
-	// TODO: Make this item do something more interesting
-	###
+	AfterCaught: // TODO: Make this item do something more interesting
 *
 Master Ball:
 	Int: BallItem
@@ -1878,14 +1847,7 @@ Moon Ball:
 	Int: BallItem
 	Desc: A Pok\u00e9 Ball for catching Pok\u00e9mon that evolve using the Moon Stone.
 	Price: 200
-	CatchRate:
-		Evolution ev = o.getPokemonInfo().getEvolution();
-		if (ev.getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null) {
-			return new double[] {4, 0};
-		}
-		
-		return new double[] {1, 0};
-		###
+	CatchRateCondition: 4 o.getPokemonInfo().getEvolution().getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null
 *
 Nest Ball:
 	Int: BallItem
@@ -1893,22 +1855,16 @@ Nest Ball:
 	Price: 1000
 	CatchRate:
 		// TODO: Loopy and make it general with the others
-		if (o.getLevel() <= 19) return new double[] {3, 0};
-		else if (o.getLevel() <= 29) return new double[] {2, 0};
-		else return new double[] {1, 0};
+		if (o.getLevel() <= 19) return new double[] { 3, 0 };
+		else if (o.getLevel() <= 29) return new double[] { 2, 0 };
+		else return new double[] { 1, 0 };
 		###
 *
 Net Ball:
 	Int: BallItem
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Water- and Bug-type Pok\u00e9mon.
 	Price: 1000
-	CatchRate:
-		if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG)) {
-			return new double[] {3, 0};
-		}
-		
-		return new double[] {1, 0};
-		###
+	CatchRateCondition: 3 o.isType(b, Type.WATER) || o.isType(b, Type.BUG)
 *
 Pok\u00e9 Ball:
 	Int: BallItem
@@ -1926,26 +1882,13 @@ Quick Ball:
 	Int: BallItem
 	Desc: A somewhat different Pok\u00e9 Ball that provides a better catch rate if it is used at the start of a wild encounter.
 	Price: 1000
-	CatchRate:
-		// TODO: Generalize this
-		if (b.getTurn() == 1) {
-			return new double[] { 3, 0 };
-		}
-		
-		return new double[] { 1, 0 };
-		###
+	CatchRateCondition: 3 b.getTurn() == 1
 *
 Repeat Ball:
 	Int: BallItem
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon species that were previously caught.
 	Price: 1000
-	CatchRate:
-		if (b.getPlayer().getPokedex().isCaught(o.getPokemonInfo().namesies())) {
-			return new double[] { 3, 0 };
-		}
-		
-		return new double[] { 1, 0 };
-		###
+	CatchRateCondition: 3 b.getPlayer().getPokedex().isCaught(o.getPokemonInfo().namesies())
 *
 Safari Ball:
 	Int: BallItem
@@ -2037,6 +1980,7 @@ Leppa Berry:
 		}
 		
 		use(user, lowestPPMove);
+		return true;
 		###
 	Ether: 10
 	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!"
@@ -2068,11 +2012,7 @@ Persim Berry:
 		
 		return false;
 		###
-	GainEffect:
-		if (!use(user, b)) {
-			return false;
-		}
-		###
+	GainEffect: return use(user, b);
 	SuccessMessage: p.getName() + " snapped out of its confusion!"
 	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
 *
@@ -2081,19 +2021,6 @@ Lum Berry:
 	Desc: If held by a Pok\u00e9mon, it recovers from any status problem.
 	NGType: Flying
 	FullHeal: True
-	GainEffect:
-	// Does not apply to the dead
-	if (user.hasStatus(StatusCondition.FAINTED)) {
-		return false;
-	}
-	
-	// YOU'RE FINE
-	if (!user.hasStatus()) {
-		return false;
-	}
-	
-	holdMessage = Status.getRemoveStatus(b, user, source);
-	###
 *
 Sitrus Berry:
 	BattleCat: HP_PP
@@ -2294,7 +2221,7 @@ Lansat Berry:
 	NGType: Flying
 	NGPow: 100
 	HealthTriggerRatio: 4
-	HealthTrigger:
+	GainEffect:
 		EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
 		return true;
 		###
@@ -2307,7 +2234,7 @@ Starf Berry:
 	NGType: Psychic
 	NGPow: 100
 	HealthTriggerRatio: 4
-	HealthTrigger:
+	GainEffect:
 		holdMessage = "";
 		useMessage = "";
 	

@@ -173,7 +173,7 @@ Flash Fire:
 	Activate: 
 	this.activated = false;
 	###
-	IsActive:
+	AbilityIsActive:
 	return activated;
 	###
 	Int: DamageBlocker, PowerChangeEffect
@@ -315,6 +315,15 @@ Anger Point:
 *
 Synchronize:
 	Desc: Passes on a burn, poison, or paralysis to the foe.
+	Int: StatusReceivedEffect
+	StatusReceived:
+	if ((statusType == StatusCondition.BURNED || statusType == StatusCondition.POISONED || statusType == StatusCondition.PARALYZED)
+			&& caster.getAttributes().isAttacking()
+			&& Status.giveStatus(b, victim, caster, statusType, true)
+			&& victim.hasEffect(EffectNamesies.BAD_POISON)) {
+		caster.addEffect((PokemonEffect)EffectNamesies.BAD_POISON.getEffect());
+	}
+	###
 *
 No Guard:
 	Desc: Ensures the Pok\u00e9mon and its foe's attacks land.
@@ -1126,7 +1135,7 @@ Illusion:
 	
 	return p.getActualType();
 	###
-	IsActive:
+	AbilityIsActive:
 	return activated;
 	###
 	Desc: Comes out disguised as the Pok\u00e9mon in back.

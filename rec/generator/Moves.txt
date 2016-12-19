@@ -1840,7 +1840,7 @@ Rest:
 	SelfHealing: 1
 	Status: Asleep
 	ApplyEffects: 
-	if (victim.fullHealth() || !Status.applies(StatusCondition.ASLEEP, b, victim, victim)) {
+	if (victim.fullHealth() || !Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, victim, victim)) {
 		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 		return;
 	}

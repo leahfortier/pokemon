@@ -437,4 +437,28 @@ public abstract class BattleEffect extends Effect {
 			b.resetTerrain();
 		}
 	}
+
+	static class FieldUproar extends BattleEffect implements StatusPreventionEffect {
+		private static final long serialVersionUID = 1L;
+
+		FieldUproar() {
+			super(EffectNamesies.FIELD_UPROAR, -1, -1, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(Effect.hasEffect(b.getEffects(), this.namesies));
+		}
+
+		public boolean isActive(Battle b) {
+			return b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR);
+		}
+
+		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+			return status == StatusCondition.ASLEEP;
+		}
+
+		public String statusPreventionMessage(ActivePokemon victim) {
+			return "The uproar prevents sleep!!";
+		}
+	}
 }

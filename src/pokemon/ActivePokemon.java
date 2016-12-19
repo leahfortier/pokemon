@@ -14,7 +14,6 @@ import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
 import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
 import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
-import battle.effect.generic.EffectInterfaces.FaintEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
@@ -636,6 +635,10 @@ public class ActivePokemon implements Serializable {
 	public void addEffect(PokemonEffect e) {
 		attributes.addEffect(e);
 	}
+
+	public void removeEffect(PokemonEffect effect) {
+		attributes.removeEffect(effect);
+	}
 	
 	public void setMove(Move m) {
 		attributes.setMove(m);
@@ -839,8 +842,7 @@ public class ActivePokemon implements Serializable {
 		isPlayer = true;
 	}
 	
-	public boolean isFainted(Battle b)
-	{
+	public boolean isFainted(Battle b) {
 		// We have already checked that this Pokemon is fainted -- don't print/apply effects more than once
 		if (hasStatus(StatusCondition.FAINTED)) {
 			if (hp == 0) {
@@ -853,15 +855,10 @@ public class ActivePokemon implements Serializable {
 		// Deady
 		if (hp == 0) {
 			Messages.add(new MessageUpdate().updatePokemon(b, this));
-			
-			Status.die(this);
-			Messages.add(new MessageUpdate(getName() + " fainted!").updatePokemon(b, this));
-			
-			ActivePokemon murderer = b.getOtherPokemon(isPlayer());
 
-			// Apply effects which occur when the user faints
-			FaintEffect.grantDeathWish(b, this, murderer);
-			
+			ActivePokemon murderer = b.getOtherPokemon(this);
+			Status.die(b, murderer, this);
+
 			// If the pokemon fainted via murder (by direct result of an attack) -- apply kill wishes
 			if (murderer.getAttributes().isAttacking()) {
 				MurderEffect.killKillKillMurderMurderMurder(b, this, murderer);

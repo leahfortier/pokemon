@@ -21,6 +21,7 @@ import pokemon.ability.Ability.Chlorophyll;
 import pokemon.ability.Ability.ClearBody;
 import pokemon.ability.Ability.CloudNine;
 import pokemon.ability.Ability.ColorChange;
+import pokemon.ability.Ability.Comatose;
 import pokemon.ability.Ability.Competitive;
 import pokemon.ability.Ability.Compoundeyes;
 import pokemon.ability.Ability.Contrary;

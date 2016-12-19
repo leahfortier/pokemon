@@ -58,6 +58,11 @@ BadPoison:
 	ApplyEndTurn: 
 	turns++;
 	###
+	FailMessage:
+	if (!Status.applies(StatusCondition.POISONED, b, user, victim)) {
+		return Status.getFailMessage(b, user, victim, StatusCondition.POISONED);
+	}
+	###
 *
 Flinch:
 	Int: BeforeTurnEffect
@@ -728,10 +733,11 @@ MagnetRise:
 *
 Uproar:
 	NumTurns: 3
-	SubsideMessage: "The uproar ended."
+	SubsideMessage: victim.getName() + "'s uproar ended."
 	Cast: 
 	uproar = victim.getMove();
 	super.cast(b, caster, victim, source, printCast);
+	b.addEffect(new FieldUproar());
 	
 	wakeUp(b, victim);
 	wakeUp(b, b.getOtherPokemon(victim.isPlayer()));
@@ -1105,19 +1111,18 @@ Snatch:
 *
 Grudge:
 	CastMessage: victim.getName() + " wants " + b.getOtherPokemon(victim.isPlayer()).getName() + " to bear a grudge!"
-	Int: FaintEffect
 	DeathWish: 
 	if (murderer.getAttributes().isAttacking()) {
-		Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to its grudge!"));
+		Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to " + dead.getName() + "'s grudge!"));
 		murderer.getMove().reducePP(murderer.getMove().getPP());
 	}
 	###
 *
 DestinyBond:
 	CastMessage: victim.getName() + " is trying to take " + b.getOtherPokemon(victim.isPlayer()).getName() + " down with it!"
-	Int: FaintEffect, BeforeTurnEffect
+	Int: BeforeTurnEffect
 	CanAttack:
-	super.active = false;
+	p.removeEffect(this);
 	return true;
 	###
 	DeathWish: 
@@ -1126,6 +1131,7 @@ DestinyBond:
 		murderer.killKillKillMurderMurderMurder(b);
 	}
 	###
+	SuccessiveDecay: True
 *
 PerishSong:
 	NumTurns: 3

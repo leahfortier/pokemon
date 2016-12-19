@@ -10,6 +10,7 @@ import battle.effect.PassableEffect;
 import battle.effect.SapHealthEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeSource;
+import battle.effect.generic.BattleEffect.FieldUproar;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
@@ -27,7 +28,6 @@ import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
-import battle.effect.generic.EffectInterfaces.FaintEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
@@ -43,6 +43,7 @@ import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
+import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.holder.AbilityHolder;
@@ -152,6 +153,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public int getTurns() {
 			return turns;
+		}
+
+		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (!Status.applies(StatusCondition.POISONED, b, user, victim)) {
+				return Status.getFailMessage(b, user, victim, StatusCondition.POISONED);
+			}
+			
+			return super.getFailMessage(b, user, victim);
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
@@ -2076,6 +2085,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			uproar = victim.getMove();
 			super.cast(b, caster, victim, source, printCast);
+			b.addEffect(new FieldUproar());
 			
 			wakeUp(b, victim);
 			wakeUp(b, b.getOtherPokemon(victim.isPlayer()));
@@ -2086,7 +2096,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public String getSubsideMessage(ActivePokemon victim) {
-			return "The uproar ended.";
+			return victim.getName() + "'s uproar ended.";
 		}
 
 		public Move getForcedMove() {
@@ -2706,7 +2716,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Grudge extends PokemonEffect implements FaintEffect {
+	static class Grudge extends PokemonEffect implements StatusReceivedEffect {
 		private static final long serialVersionUID = 1L;
 
 		Grudge() {
@@ -2721,15 +2731,22 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " wants " + b.getOtherPokemon(victim.isPlayer()).getName() + " to bear a grudge!";
 		}
 
-		public void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
+		private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
 			if (murderer.getAttributes().isAttacking()) {
-				Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to its grudge!"));
+				Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to " + dead.getName() + "'s grudge!"));
 				murderer.getMove().reducePP(murderer.getMove().getPP());
+			}
+		}
+
+		public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
+			if (statusType == StatusCondition.FAINTED) {
+				// DEATH WISH GRANTED
+				deathWish(b, victim, caster);
 			}
 		}
 	}
 
-	static class DestinyBond extends PokemonEffect implements FaintEffect, BeforeTurnEffect {
+	static class DestinyBond extends PokemonEffect implements BeforeTurnEffect, StatusReceivedEffect {
 		private static final long serialVersionUID = 1L;
 
 		DestinyBond() {
@@ -2740,11 +2757,20 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
+				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
+				return;
+			}
+			
+			super.cast(b, caster, victim, source, printCast);
+		}
+
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + " is trying to take " + b.getOtherPokemon(victim.isPlayer()).getName() + " down with it!";
 		}
 
-		public void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
+		private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
 			if (murderer.getAttributes().isAttacking()) {
 				Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
 				murderer.killKillKillMurderMurderMurder(b);
@@ -2752,8 +2778,15 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			super.active = false;
+			p.removeEffect(this);
 			return true;
+		}
+
+		public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
+			if (statusType == StatusCondition.FAINTED) {
+				// DEATH WISH GRANTED
+				deathWish(b, victim, caster);
+			}
 		}
 	}
 

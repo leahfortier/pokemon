@@ -3363,7 +3363,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.fullHealth() || !Status.applies(StatusCondition.ASLEEP, b, victim, victim)) {
+			if (victim.fullHealth() || !Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, victim, victim)) {
 				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 				return;
 			}
