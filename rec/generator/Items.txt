@@ -2037,6 +2037,7 @@ Leppa Berry:
 		}
 		
 		use(user, lowestPPMove);
+		return true;
 		###
 	Ether: 10
 	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!"
@@ -2068,11 +2069,7 @@ Persim Berry:
 		
 		return false;
 		###
-	GainEffect:
-		if (!use(user, b)) {
-			return false;
-		}
-		###
+	GainEffect: return use(user, b);
 	SuccessMessage: p.getName() + " snapped out of its confusion!"
 	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
 *
@@ -2080,20 +2077,7 @@ Lum Berry:
 	Int: StatusBerry
 	Desc: If held by a Pok\u00e9mon, it recovers from any status problem.
 	NGType: Flying
-	FullHeal: True
-	GainEffect:
-	// Does not apply to the dead
-	if (user.hasStatus(StatusCondition.FAINTED)) {
-		return false;
-	}
-	
-	// YOU'RE FINE
-	if (!user.hasStatus()) {
-		return false;
-	}
-	
-	holdMessage = Status.getRemoveStatus(b, user, source);
-	###
+	FullHeal: True	
 *
 Sitrus Berry:
 	BattleCat: HP_PP
@@ -2294,7 +2278,7 @@ Lansat Berry:
 	NGType: Flying
 	NGPow: 100
 	HealthTriggerRatio: 4
-	HealthTrigger:
+	GainEffect:
 		EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
 		return true;
 		###
@@ -2307,7 +2291,7 @@ Starf Berry:
 	NGType: Psychic
 	NGPow: 100
 	HealthTriggerRatio: 4
-	HealthTrigger:
+	GainEffect:
 		holdMessage = "";
 		useMessage = "";
 	

@@ -1708,10 +1708,13 @@ Override:
 			return false;
 		}
 		
-		p.removeStatus();
+		message = Status.getRemoveStatus(null, p, CastSource.USE_ITEM);
 		return true;
 		###
-		AddMapField: SuccessMessage: p.getName() + " was cured of its status condition!"
+		AddMapField: Field: 
+		private String message;
+		###
+		AddMapField: SuccessMessage: message
 		AddMapField: BattleCat: Status
 		AddInterface: PokemonUseItem
 	*
@@ -1739,13 +1742,9 @@ Override:
 ***
 Override:
 	StatusRemove:
-		Header: StatusCondition toRemove()
-		Body:
-		return StatusCondition.{00};
-		###
 		AddInterface: PokemonUseItem
 		AddMapField: PokemonUse:
-		if (!p.hasStatus(toRemove())) {
+		if (!p.hasStatus(StatusCondition.{00})) {
 			return false;
 		}
 
@@ -1841,12 +1840,16 @@ Override:
 		AddInterface: Berry
 		AddInterface: PokemonUseItem
 		AddMapField: PokemonUse:
+		int decreaseIndex = toDecrease().index();
 		int[] vals = new int[Stat.NUM_STATS];
-		if (p.getEV(toDecrease().index()) > 110) {
-			vals[toDecrease().index()] = 100 - p.getEV(toDecrease().index());
+		
+		// For EVs over 110, the berry will decrease the EV to 100
+		if (p.getEV(decreaseIndex) > 110) {
+			vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
 		}
+		// Otherwise, just decreases by 10
 		else {
-			vals[toDecrease().index()] -= 10;
+			vals[decreaseIndex] -= 10;
 		}
 
 		return p.addEVs(vals);
@@ -1875,12 +1878,8 @@ Override:
 Override:
 	HealthTriggeredStageIncreaseBerry:
 		AddInterface: HealthTriggeredBerry
-		AddMapField: HealthTrigger:
-		if (user.getAttributes().modifyStage(user, user, 1, Stat.{00}, b, source)) {
-			return true;
-		}
-
-		return false;
+		AddMapField: GainEffect:
+		return user.getAttributes().modifyStage(user, user, 1, Stat.{00}, b, source);
 		###
 		AddMapField: HealthTriggerRatio: 4
 		AddMapField: SuccessMessage: p.getName() + "'s " + Stat.{00}.getName() + " increased!"
@@ -1890,15 +1889,11 @@ Override:
 ***
 Override:
 	CategoryIncreaseBerry:
-		Header: boolean checkModify(Battle b, ActivePokemon user, ActivePokemon victim)
-		Body:
-		return user.getAttack().getCategory() == MoveCategory.{11} && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM);
-		###
 		AddMapField: NGPow: 100
 		AddInterface: Berry
 		AddInterface: TakeDamageEffect
 		AddMapField: OnTakeDamage:
-		if (checkModify(b, user, victim)) {
+		if (user.getAttack().getCategory() == MoveCategory.{11} && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
 			victim.consumeItem(b);
 		}
 		###
@@ -2039,11 +2034,12 @@ StatusBerry:
 	StatusBerryGainEffect:
 		Optional: True
 		AddMapField: GainEffect:
-		if (!user.hasStatus(toRemove())) {
+		if (!use(user)) {
 			return false;
 		}
-
-		holdMessage = Status.getRemoveStatus(b, user, source);
+		
+		holdMessage = message;
+		return true;
 		###
 		AddInterface: Hidden-GainableEffectBerry
 		AddMapField: HoldSuccessMessage: holdMessage
@@ -2055,33 +2051,10 @@ StatusBerry:
 ***
 GainableEffectBerry:
 	GainEffect:
-		Header: boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
-		End:
-		
-		String message = "";
-		switch (source) {
-			case USE_ITEM:
-				message = getSuccessMessage(user);
-				break;
-			case HELD_ITEM:
-				message = getHoldSuccessMessage(b, user);
-				break;
-			default:
-				Global.error("Use item and held item are the only valid cast sources for berries.");
-		}
-		
-		Messages.add(new MessageUpdate(message).updatePokemon(b, user));
-		
-		if (user.hasAbility(AbilityNamesies.CHEEK_POUCH) && !user.fullHealth()) {
-			Messages.add(new MessageUpdate(user.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-			user.healHealthFraction(1/3.0);
-			Messages.add(new MessageUpdate().updatePokemon(b, user));
-		}
-		
-		// Eat dat berry!!
-		EffectNamesies.EATEN_BERRY.getEffect().cast(b, user, user, source, false);
-		
-		return true;
+		Header: boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source)
+		Optional: True
+		Default:
+		return use(user);
 		###
 		AddInterface: Hidden-Berry
 		AddMapField: FlingEffect:
@@ -2090,20 +2063,8 @@ GainableEffectBerry:
 	*
 ***
 HealthTriggeredBerry:
-	HealthTrigger:
-		Header: boolean useHealthTriggerBerry(Battle b, ActivePokemon user, CastSource source)
-		Optional: True
-		Default:
-		return use(user);
-		###
-		AddInterface: Hidden-GainableEffectBerry
-		AddMapField: GainEffect:
-		if (!useHealthTriggerBerry(b, user, source)) {
-			return false;
-		}
-		###
-	*
 	HealthTriggerRatio:
+		AddInterface: Hidden-GainableEffectBerry
 		Header: double healthTriggerRatio()
 		Try:
 		return 1/{0}.0;
@@ -2140,6 +2101,7 @@ Override:
 		AddMapField: TrainerUse:
 		if (!(t instanceof CharacterData)) {
 			Global.error("Only the character should be using a Repel item");
+			return false;
 		}
 
 		CharacterData player = (CharacterData) t;
