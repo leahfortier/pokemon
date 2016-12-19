@@ -517,3 +517,10 @@ AlwaysCritEffect:
 		InvokeAttack: p
 	*
 ***
+StatusReceivedEffect:
+	Method:
+		Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim)
+		Invoke: Void
+		EffectList: victim
+	*
+***

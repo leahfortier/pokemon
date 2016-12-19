@@ -2488,3 +2488,8 @@ Override:
 		###
 	*
 ***
+StatusReceivedEffect:
+	StatusReceived:
+		Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim)
+	*
+***

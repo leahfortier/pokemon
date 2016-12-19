@@ -1,18 +1,16 @@
 package battle.effect.status;
 
 import battle.Battle;
-import battle.effect.generic.Effect;
 import battle.effect.generic.CastSource;
+import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
-import battle.effect.generic.PokemonEffect;
+import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
 import item.Item;
 import item.berry.GainableEffectBerry;
 import item.berry.StatusBerry;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.ability.AbilityNamesies;
-import battle.effect.generic.EffectNamesies;
 import pokemon.ActivePokemon;
 
 import java.io.Serializable;
@@ -117,8 +115,7 @@ public abstract class Status implements Serializable {
 			victim.setStatus(s);
 			Messages.add(new MessageUpdate(castMessage).updatePokemon(b, victim));
 
-			// TODO: There should be a StatusReceivedEffect interface or something
-			synchronizeCheck(b, caster, victim, status);
+            StatusReceivedEffect.invokeStatusReceivedEffect(b, caster, victim);
 			berryCheck(b, victim, status);
 
 			return true;
@@ -135,21 +132,6 @@ public abstract class Status implements Serializable {
 			if (berry.gainBerryEffect(b, victim, CastSource.HELD_ITEM)) {
 				victim.consumeItem(b);
 			}
-		}
-	}
-
-	private static void synchronizeCheck(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-		Status s = getStatus(status, caster);
-		if (victim.hasAbility(AbilityNamesies.SYNCHRONIZE) && s.applies(b, victim, caster)
-				&& (status == StatusCondition.BURNED || status == StatusCondition.POISONED || status == StatusCondition.PARALYZED)) {
-			if (victim.hasEffect(EffectNamesies.BAD_POISON)) {
-				caster.addEffect((PokemonEffect)EffectNamesies.BAD_POISON.getEffect());
-			}
-
-			caster.setStatus(s);
-			Messages.add(new MessageUpdate(s.getAbilityCastMessage(victim, caster)).updatePokemon(b, caster));
-
-			berryCheck(b, caster, status);
 		}
 	}
 

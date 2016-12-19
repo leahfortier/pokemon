@@ -1098,4 +1098,19 @@ public final class EffectInterfaces {
 			return false;
 		}
 	}
+
+	public interface StatusReceivedEffect {
+		void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim);
+
+		static void invokeStatusReceivedEffect(Battle b, ActivePokemon caster, ActivePokemon victim) {
+			List<Object> invokees = b.getEffectsList(victim);
+			for (Object invokee : invokees) {
+				if (invokee instanceof StatusReceivedEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					StatusReceivedEffect effect = (StatusReceivedEffect)invokee;
+					effect.receiveStatus(b, caster, victim);
+				}
+			}
+		}
+	}
 }
