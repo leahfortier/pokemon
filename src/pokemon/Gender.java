@@ -26,7 +26,7 @@ public enum Gender implements Serializable {
 		return color;
 	}
 	
-	public static Gender getGender (int ratio) {
+	public static Gender getGender(int ratio) {
 		if (ratio == -1) {
 			return GENDERLESS;
 		}

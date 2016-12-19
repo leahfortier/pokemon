@@ -171,8 +171,8 @@ public class Battle {
 
 		endTurn();
 
-		deadUser();
 		deadOpponent();
+		deadUser();
 
 		printShit();
 	}
@@ -394,10 +394,10 @@ public class Battle {
 		for (int i = 0; i < effects.size(); i++) {
 			Effect effect = effects.get(i);
 
-			boolean inactive = !effect.isActive();
+			boolean inactive = !effect.isActive(this);
 			if (!inactive) {
 				effect.decrement(this, p);
-				inactive = !effect.isActive() && !effect.nextTurnSubside();
+				inactive = !effect.isActive(this) && !effect.nextTurnSubside();
 			}
 
 			if (inactive) {
@@ -413,7 +413,7 @@ public class Battle {
 	}
 
 	private void decrementWeather() {
-		if (!weather.isActive()) {
+		if (!weather.isActive(this)) {
 			Messages.add(new MessageUpdate(weather.getSubsideMessage(player.front())));
 			weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
 			return;
@@ -482,7 +482,7 @@ public class Battle {
 			effects.add(effect);
 		}
 	}
-	
+
 	public List<BattleEffect> getEffects() {
 		return effects;
 	}	

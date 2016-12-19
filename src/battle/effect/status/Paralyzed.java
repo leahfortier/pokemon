@@ -19,8 +19,9 @@ class Paralyzed extends Status implements BeforeTurnEffect, StatChangingEffect {
     }
 
     // Electric-type Pokemon cannot be paralyzed
-    public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return super.applies(b, caster, victim) && !victim.isType(b, Type.ELECTRIC);
+    @Override
+    protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        return !victim.isType(b, Type.ELECTRIC);
     }
 
     public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {

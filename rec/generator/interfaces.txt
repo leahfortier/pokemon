@@ -140,14 +140,6 @@ LevitationEffect:
 		MoldBreaker: moldBreaker
 	*
 ***
-FaintEffect:
-	Method: 
-		Header: void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer)
-		Invoke: Void
-		InvokeName: grantDeathWish
-		EffectList: dead
-	*
-***
 MurderEffect:
 	Comments: // KILL KILL KILL MURDER MURDER MURDER
 	Method: 
@@ -515,5 +507,12 @@ AlwaysCritEffect:
 		Invoke: Contains
 		EffectList: p
 		InvokeAttack: p
+	*
+***
+StatusReceivedEffect:
+	Method:
+		Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType)
+		Invoke: Void
+		EffectList: victim
 	*
 ***

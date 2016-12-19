@@ -47,6 +47,7 @@ import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
+import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
@@ -823,11 +824,20 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Synchronize extends Ability {
+	static class Synchronize extends Ability implements StatusReceivedEffect {
 		private static final long serialVersionUID = 1L;
 
 		Synchronize() {
 			super(AbilityNamesies.SYNCHRONIZE, "Passes on a burn, poison, or paralysis to the foe.");
+		}
+
+		public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
+			if ((statusType == StatusCondition.BURNED || statusType == StatusCondition.POISONED || statusType == StatusCondition.PARALYZED)
+			&& caster.getAttributes().isAttacking()
+			&& Status.giveStatus(b, victim, caster, statusType, true)
+			&& victim.hasEffect(EffectNamesies.BAD_POISON)) {
+				caster.addEffect((PokemonEffect)EffectNamesies.BAD_POISON.getEffect());
+			}
 		}
 	}
 
@@ -1444,7 +1454,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public String statusPreventionMessage(ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents poisoned!";
+			return victim.getName() + "'s " + this.getName() + " prevents poison!";
 		}
 	}
 
