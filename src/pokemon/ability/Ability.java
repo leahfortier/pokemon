@@ -1455,7 +1455,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public String statusPreventionMessage(ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents poisoned!";
+			return victim.getName() + "'s " + this.getName() + " prevents poison!";
 		}
 	}
 

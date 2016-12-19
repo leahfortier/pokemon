@@ -58,6 +58,11 @@ BadPoison:
 	ApplyEndTurn: 
 	turns++;
 	###
+	FailMessage:
+	if (!Status.applies(StatusCondition.POISONED, b, user, victim)) {
+		return Status.getFailMessage(b, user, victim, StatusCondition.POISONED);
+	}
+	###
 *
 Flinch:
 	Int: BeforeTurnEffect

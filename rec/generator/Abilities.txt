@@ -607,7 +607,7 @@ Pressure:
 *
 Immunity:
 	Desc: Prevents the Pok\u00e9mon from getting poisoned.
-	StatusPreventAbility: Poisoned poisoned
+	StatusPreventAbility: Poisoned poison
 *
 Snow Cloak:
 	Desc: Raises the Pok\u00e9mon's evasion during a hailstorm by one level.

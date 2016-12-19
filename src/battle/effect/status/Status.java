@@ -5,9 +5,6 @@ import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
-import item.Item;
-import item.berry.GainableEffectBerry;
-import item.berry.StatusBerry;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
@@ -57,7 +54,7 @@ public abstract class Status implements Serializable {
 		return getStatus(status, victim).getFailMessage(b, user, victim);
 	}
 
-	protected String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+	private String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 		StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, user, victim, this.statusCondition);
 		if (statusPrevent != null) {
 			return statusPrevent.statusPreventionMessage(victim);
@@ -118,6 +115,7 @@ public abstract class Status implements Serializable {
             StatusReceivedEffect.invokeStatusReceivedEffect(b, caster, victim);
 			return true;
 		}
+
 		return false;
 	}
 

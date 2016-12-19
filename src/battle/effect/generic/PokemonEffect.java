@@ -155,6 +155,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return turns;
 		}
 
+		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (!Status.applies(StatusCondition.POISONED, b, user, victim)) {
+				return Status.getFailMessage(b, user, victim, StatusCondition.POISONED);
+			}
+			
+			return super.getFailMessage(b, user, victim);
+		}
+
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			turns++;
 		}
