@@ -2753,6 +2753,15 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
+				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
+				return;
+			}
+			
+			super.cast(b, caster, victim, source, printCast);
+		}
+
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + " is trying to take " + b.getOtherPokemon(victim.isPlayer()).getName() + " down with it!";
 		}

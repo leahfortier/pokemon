@@ -147,7 +147,7 @@ public class BattleAttributes implements Serializable {
 	}
 
 	public boolean removeEffect(PokemonEffect effect) {
-		effects.remove(effect);
+		return effects.remove(effect);
 	}
 	
 	public boolean removeEffect(EffectNamesies effect) {

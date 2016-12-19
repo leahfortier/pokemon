@@ -1120,6 +1120,7 @@ Grudge:
 *
 DestinyBond:
 	CastMessage: victim.getName() + " is trying to take " + b.getOtherPokemon(victim.isPlayer()).getName() + " down with it!"
+	Int: BeforeTurnEffect
 	CanAttack:
 	p.removeEffect(this);
 	return true;
@@ -1130,6 +1131,7 @@ DestinyBond:
 		murderer.killKillKillMurderMurderMurder(b);
 	}
 	###
+	SuccessiveDecay: True
 *
 PerishSong:
 	NumTurns: 3
