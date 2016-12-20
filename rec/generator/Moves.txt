@@ -4182,7 +4182,8 @@ Snore:
 	Acc: 100
 	Cat: Special
 	Type: Normal
-	MoveType: Sound_Based, Metronomeless, Asleep_User
+	Int: SleepyFightsterEffect
+	MoveType: Sound_Based, Metronomeless
 	Effect: Flinch
 	EffChance: 30
 	ApplyError: !me.hasStatus(StatusCondition.ASLEEP)
@@ -4192,7 +4193,8 @@ Sleep Talk:
 	PP: 10
 	Type: Normal
 	Cat: Status
-	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Asleep_User, Assistless, Metronomeless
+	Int: SleepyFightsterEffect
+	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Assistless, Metronomeless
 	Apply: 
 	if (!me.hasStatus(StatusCondition.ASLEEP)) {
 		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));

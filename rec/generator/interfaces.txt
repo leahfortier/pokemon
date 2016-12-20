@@ -27,6 +27,13 @@ EndTurnEffect:
 		###
 	*
 ***
+SuperDuperEndTurnEffect:
+	Method:
+		Header: boolean theVeryVeryEnd(Battle b, ActivePokemon p)
+		Invoke: Check true
+		EffectList: p
+	*
+***
 RecoilMove:
 	Method:
 		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
@@ -514,5 +521,13 @@ StatusReceivedEffect:
 		Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType)
 		Invoke: Void
 		EffectList: victim
+	*
+***
+SleepyFightsterEffect:
+	Method:
+		Parameters: Battle b, ActivePokemon p
+		Invoke: Contains
+		EffectList: p
+		InvokeAttack: p
 	*
 ***

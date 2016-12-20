@@ -26,6 +26,7 @@ import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
+import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectNamesies;
@@ -7059,7 +7060,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Snore extends Attack {
+	static class Snore extends Attack implements SleepyFightsterEffect {
 		private static final long serialVersionUID = 1L;
 
 		Snore() {
@@ -7070,7 +7071,6 @@ public abstract class Attack implements Serializable {
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.moveTypes.add(MoveType.METRONOMELESS);
-			super.moveTypes.add(MoveType.ASLEEP_USER);
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -7083,14 +7083,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class SleepTalk extends Attack {
+	static class SleepTalk extends Attack implements SleepyFightsterEffect {
 		private static final long serialVersionUID = 1L;
 
 		SleepTalk() {
 			super(AttackNamesies.SLEEP_TALK, "While it is asleep, the user randomly uses one of the moves it knows.", 10, Type.NORMAL, MoveCategory.STATUS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
-			super.moveTypes.add(MoveType.ASLEEP_USER);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 		}

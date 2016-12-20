@@ -44,12 +44,14 @@ import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
+import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
+import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
@@ -3355,11 +3357,42 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Comatose extends Ability {
+	static class Comatose extends Ability implements EntryEffect, SuperDuperEndTurnEffect, SleepyFightsterEffect {
 		private static final long serialVersionUID = 1L;
+		
+		// NOTE: This does not work exactly the same as in game
+		// New mechanics -- Pokemon with Comatose will:
+		// Become afflicted with a permanent Sleep condition upon entering battle
+		// Still be able to attack while sleeping
+		// Wake up from items, uproar, wake-up slap, etc.
+		// Fall back to sleep at the end of turn if applicable -- if another status condition is acquired during this time, it will remove it
+		// Other Pokemon are free to copy this ability
+		private boolean nightyNight(Battle b, ActivePokemon sleepyHead) {
+			
+			// Sleepy head is already a sleepster nighty night
+			if (sleepyHead.hasStatus(StatusCondition.ASLEEP)) {
+				return false;
+			}
+			
+			if (Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, sleepyHead, sleepyHead)) {
+				sleepyHead.removeStatus();
+				Status.giveStatus(b, sleepyHead, sleepyHead, StatusCondition.ASLEEP, true);
+				return true;
+			}
+			
+			return false;
+		}
 
 		Comatose() {
 			super(AbilityNamesies.COMATOSE, "It's always drowsing and will never wake up. It can attack without waking up.");
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			nightyNight(b, enterer);
+		}
+
+		public boolean theVeryVeryEnd(Battle b, ActivePokemon p) {
+			return nightyNight(b, p);
 		}
 	}
 }

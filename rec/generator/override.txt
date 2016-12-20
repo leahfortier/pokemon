@@ -2482,3 +2482,10 @@ StatusReceivedEffect:
 		Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType)
 	*
 ***
+SleepyFightsterEffect:
+***
+SuperDuperEndTurnEffect:
+	TheVeryEnd:
+		Header: boolean theVeryVeryEnd(Battle b, ActivePokemon p)
+	*
+***

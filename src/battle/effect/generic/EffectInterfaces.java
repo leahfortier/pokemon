@@ -71,6 +71,25 @@ public final class EffectInterfaces {
 		}
 	}
 
+	public interface SuperDuperEndTurnEffect {
+		boolean theVeryVeryEnd(Battle b, ActivePokemon p);
+
+		static boolean checkSuperDuperEndTurnEffect(Battle b, ActivePokemon p) {
+			List<Object> invokees = b.getEffectsList(p);
+			for (Object invokee : invokees) {
+				if (invokee instanceof SuperDuperEndTurnEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					SuperDuperEndTurnEffect effect = (SuperDuperEndTurnEffect)invokee;
+					if (effect.theVeryVeryEnd(b, p)) {
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		}
+	}
+
 	public interface RecoilMove {
 		void applyRecoil(Battle b, ActivePokemon user, int damage);
 
@@ -1101,6 +1120,21 @@ public final class EffectInterfaces {
 					effect.receiveStatus(b, caster, victim, statusType);
 				}
 			}
+		}
+	}
+
+	public interface SleepyFightsterEffect {
+
+		static boolean containsSleepyFightsterEffect(Battle b, ActivePokemon p) {
+			List<Object> invokees = b.getEffectsList(p, p.getAttack());
+			for (Object invokee : invokees) {
+				if (invokee instanceof SleepyFightsterEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					return true;
+				}
+			}
+			
+			return false;
 		}
 	}
 }

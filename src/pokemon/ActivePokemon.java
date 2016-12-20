@@ -948,8 +948,6 @@ public class ActivePokemon implements Serializable {
 	// Sets the Pokemon's status condition to be None
 	public void removeStatus() {
 		Status.removeStatus(this);
-		attributes.removeEffect(EffectNamesies.NIGHTMARE); // TODO: There should be a way for effects to be tied to status conditions so that they don't have to be hardcoded here
-		attributes.removeEffect(EffectNamesies.BAD_POISON);
 	}
 
 	// Don't think you'll make it out alive

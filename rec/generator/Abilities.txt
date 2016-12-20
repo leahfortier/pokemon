@@ -1525,4 +1525,36 @@ Corrosion:
 *
 Comatose:
 	Desc: It's always drowsing and will never wake up. It can attack without waking up.
+	Int: EntryEffect, SuperDuperEndTurnEffect, SleepyFightsterEffect
+	Enter:
+	nightyNight(b, enterer);
+	###
+	TheVeryEnd:
+	return nightyNight(b, p);
+	###
+	Field:
+	
+	// NOTE: This does not work exactly the same as in game
+	// New mechanics -- Pokemon with Comatose will:
+	// Become afflicted with a permanent Sleep condition upon entering battle
+	// Still be able to attack while sleeping
+	// Wake up from items, uproar, wake-up slap, etc.
+	// Fall back to sleep at the end of turn if applicable -- if another status condition is acquired during this time, it will remove it
+	// Other Pokemon are free to copy this ability
+	private boolean nightyNight(Battle b, ActivePokemon sleepyHead) {
+		
+		// Sleepy head is already a sleepster nighty night
+		if (sleepyHead.hasStatus(StatusCondition.ASLEEP)) {
+			return false;
+		}
+	
+		if (Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, sleepyHead, sleepyHead)) {
+			sleepyHead.removeStatus();
+			Status.giveStatus(b, sleepyHead, sleepyHead, StatusCondition.ASLEEP, true);
+			return true;
+		}
+		
+		return false;
+	}
+	###
 *

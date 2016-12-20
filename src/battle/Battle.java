@@ -21,6 +21,7 @@ import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
+import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
@@ -262,6 +263,10 @@ public class Battle {
 		// Decrement Battle effects
 		decrementEffects(effects, null);
 		decrementWeather();
+
+		// The very, very end
+		while (SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, player.front())
+				|| SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, opponent.front()));
 	}
 
 	private void deadUser() {
