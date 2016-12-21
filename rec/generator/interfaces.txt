@@ -190,15 +190,24 @@ OpponentAccuracyBypassEffect:
 ***
 AttackSelectionEffect:
 	Method:
-		Header: boolean usable(ActivePokemon p, Move m)
+		Header: boolean usable(Battle b, ActivePokemon p, Move m)
 		Invoke: CheckGet false
 		InvokeName: getUnusableEffect
-		InvokeParameters: Battle b
 		EffectList: p
 	*
 	Method:
-		Header: String getUnusableMessage(ActivePokemon p)
+		Header: String getUnusableMessage(Battle b, ActivePokemon p)
 	*
+***
+OpponentAttackSelectionEffect:
+	Method:
+		Header: boolean usable(Battle b, ActivePokemon p, Move m)
+		Invoke: CheckGet false
+		InvokeName: getUnusableEffect
+		EffectList: b.getOtherPokemon(p)
+		Comments: // TODO: Need to not include this method again since it already extends AttackSelectionEffect, but still need the invoke method
+	*
+	Extends: AttackSelectionEffect
 ***
 WeatherBlockerEffect:
 	Method:
@@ -368,7 +377,7 @@ CritStageEffect:
 ***
 PriorityChangeEffect:
 	Method:
-		Header: int changePriority(Battle b, ActivePokemon user, int priority)
+		Header: int changePriority(Battle b, ActivePokemon user, Attack attack, int priority)
 		Invoke: Update
 		Update: priority
 		InvokeName: updatePriority

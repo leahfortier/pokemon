@@ -405,8 +405,8 @@ public final class EffectInterfaces {
 	}
 
 	public interface AttackSelectionEffect {
-		boolean usable(ActivePokemon p, Move m);
-		String getUnusableMessage(ActivePokemon p);
+		boolean usable(Battle b, ActivePokemon p, Move m);
+		String getUnusableMessage(Battle b, ActivePokemon p);
 
 		static AttackSelectionEffect getUnusableEffect(Battle b, ActivePokemon p, Move m) {
 			List<Object> invokees = b.getEffectsList(p);
@@ -414,7 +414,28 @@ public final class EffectInterfaces {
 				if (invokee instanceof AttackSelectionEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					AttackSelectionEffect effect = (AttackSelectionEffect)invokee;
-					if (!effect.usable(p, m)) {
+					if (!effect.usable(b, p, m)) {
+						return effect;
+					}
+				}
+			}
+			
+			return null;
+		}
+	}
+
+	public interface OpponentAttackSelectionEffect extends AttackSelectionEffect {
+
+		// TODO: Need to not include this method again since it already extends AttackSelectionEffect, but still need the invoke method
+		boolean usable(Battle b, ActivePokemon p, Move m);
+
+		static OpponentAttackSelectionEffect getUnusableEffect(Battle b, ActivePokemon p, Move m) {
+			List<Object> invokees = b.getEffectsList(b.getOtherPokemon(p));
+			for (Object invokee : invokees) {
+				if (invokee instanceof OpponentAttackSelectionEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					OpponentAttackSelectionEffect effect = (OpponentAttackSelectionEffect)invokee;
+					if (!effect.usable(b, p, m)) {
 						return effect;
 					}
 				}
@@ -810,15 +831,15 @@ public final class EffectInterfaces {
 	}
 
 	public interface PriorityChangeEffect {
-		int changePriority(Battle b, ActivePokemon user, int priority);
+		int changePriority(Battle b, ActivePokemon user, Attack attack, int priority);
 
-		static int updatePriority(Battle b, ActivePokemon user, int priority) {
+		static int updatePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
 			List<Object> invokees = b.getEffectsList(user);
 			for (Object invokee : invokees) {
 				if (invokee instanceof PriorityChangeEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					PriorityChangeEffect effect = (PriorityChangeEffect)invokee;
-					priority = effect.changePriority(b, user, priority);
+					priority = effect.changePriority(b, user, attack, priority);
 				}
 			}
 			

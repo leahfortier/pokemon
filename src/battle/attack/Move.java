@@ -5,6 +5,7 @@ import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
+import battle.effect.generic.EffectInterfaces.OpponentAttackSelectionEffect;
 import main.Type;
 import message.MessageUpdate;
 import message.Messages;
@@ -207,9 +208,13 @@ public class Move implements Serializable {
 		
 		// BUT WHAT IF YOU HAVE A CONDITION THAT PREVENTS YOU FROM USING THAT MOVE?!!?! THEN WHAT?!!?!!
 		AttackSelectionEffect unusable = AttackSelectionEffect.getUnusableEffect(b, p, m);
+		if (unusable == null) {
+			unusable = OpponentAttackSelectionEffect.getUnusableEffect(b, p, m);
+		}
+
 		if (unusable != null) {
 			if (selecting) {
-				Messages.add(new MessageUpdate(unusable.getUnusableMessage(p)));
+				Messages.add(new MessageUpdate(unusable.getUnusableMessage(b, p)));
 			}
 			
 			// THAT'S WHAT

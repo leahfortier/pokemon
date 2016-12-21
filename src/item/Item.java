@@ -407,7 +407,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 100;
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			Move last = p.getAttributes().getLastMoveUsed();
 			if (last == null || m == last) {
 				return true;
@@ -416,7 +416,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return false;
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
 		}
 
@@ -445,7 +445,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			Move last = p.getAttributes().getLastMoveUsed();
 			if (last == null || m == last) {
 				return true;
@@ -454,7 +454,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return false;
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
 		}
 
@@ -483,7 +483,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			Move last = p.getAttributes().getLastMoveUsed();
 			if (last == null || m == last) {
 				return true;
@@ -492,7 +492,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return false;
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
 		}
 
@@ -7761,7 +7761,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.GHOST;
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, int priority) {
+		public int changePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
 			if (user.getHPRatio() < 1/3.0) {
 				if (this instanceof ConsumableItem) {
 					user.consumeItem(b);
@@ -8258,11 +8258,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 30;
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			return m.getAttack().getCategory() != MoveCategory.STATUS;
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return p.getName() + "'s " + this.name + " prevents the use of status moves!";
 		}
 

@@ -4,6 +4,7 @@ import main.Global;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
+import util.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -46,16 +47,19 @@ class InterfaceGen {
 		
 		private static final String COMMENTS = "Comments";
 		private static final String METHOD = "Method";
-		
+		private static final String EXTENDS = "Extends";
+
 		private final String interfaceName;
 		
 		private String headerComments;
+		private String extendsInterfaces;
 		private List<InterfaceMethod> methods;
 		
 		Interface(final Scanner in, final String interfaceName) {
 			this.interfaceName = interfaceName;
 			
-			this.headerComments = "";
+			this.headerComments = StringUtils.empty();
+			this.extendsInterfaces = StringUtils.empty();
 			this.methods = new LinkedList<>();
 			
 			readInterface(in);
@@ -75,20 +79,14 @@ class InterfaceGen {
 				switch (fieldKey) {
 					case COMMENTS:
 						// TODO: Right now class comment is restricted to a single line
-						if (split.length == 1) {
-							Global.error("Comments for " + this.interfaceName + " must be on a single line.");
-						}
-				
-						final String fieldValue = split[1].trim();
-						if (fieldValue.isEmpty()) {
-							Global.error("Comments for " + this.interfaceName + " is empty.");
-						}
-						
-						this.headerComments = fieldValue;
+						this.headerComments = getSingleLineInput(COMMENTS, split);
 						break;
 					case METHOD:
 						final Map<String, String> fields = StuffGen.readFields(in, this.interfaceName);
 						this.methods.add(new InterfaceMethod(this.interfaceName, fields));
+						break;
+					case EXTENDS:
+						this.extendsInterfaces = getSingleLineInput(EXTENDS, split);
 						break;
 					default:
 						Global.error("Invalid key name " + fieldKey + " for interface " + this.interfaceName);
@@ -96,10 +94,23 @@ class InterfaceGen {
 				}
 			}
 		}
+
+		private String getSingleLineInput(String key, String[] split) {
+			if (split.length == 1) {
+				Global.error(key + " for " + this.interfaceName + " must be on a single line.");
+			}
+
+			final String fieldValue = split[1].trim();
+			if (fieldValue.isEmpty()) {
+				Global.error(key + " for " + this.interfaceName + " is empty.");
+			}
+
+			return fieldValue;
+		}
 		
 		String writeInterface() {
-			final String superClass = null;
-			final String interfaces = null; // TODO: Will eventually not be null since some may extend other interfaces (unless that's superclass but whatever)
+			final String superClass = this.extendsInterfaces;
+			final String interfaces = null;
 			
 			final StringBuilder extraFields = new StringBuilder();
 			for (InterfaceMethod method : this.methods) {

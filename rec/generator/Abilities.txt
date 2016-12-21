@@ -1003,7 +1003,7 @@ Poison Touch:
 Prankster:
 	Desc: Gives priority to a status move.
 	Int: PriorityChangeEffect
-	ChangePriority: user.getAttack().getCategory() == MoveCategory.STATUS
+	ChangePriority: attack.getCategory() == MoveCategory.STATUS
 *
 Wonder Skin:
 	Desc: Makes status-changing moves more likely to miss.
@@ -1400,7 +1400,7 @@ Flower Veil:
 Gale Wings:
 	Desc: Gives priority to Flying-type moves.
 	Int: PriorityChangeEffect
-	ChangePriority: user.getAttack().getActualType() == Type.FLYING
+	ChangePriority: attack.getActualType() == Type.FLYING
 *
 Protean:
 	Desc: Changes the Pok\u00e9mon's type to the type of the move it's using.
@@ -1488,7 +1488,7 @@ Liquid Voice:
 Triage:
 	Desc: Gives priority to a healing move.
 	Int: PriorityChangeEffect
-	ChangePriority: user.getAttack().isMoveType(MoveType.HEALING)
+	ChangePriority: attack.isMoveType(MoveType.HEALING)
 *
 Galvanize:
 	Desc: Normal-type moves become Electric-type moves. The power of those moves is boosted a little.
@@ -1557,4 +1557,12 @@ Comatose:
 		return false;
 	}
 	###
+*
+Dazzling:
+	Desc: Surprises the opposing Pokémon, making it unable to attack using priority moves.
+	PriorityPrevention: True
+*
+Queenly Majesty:
+	Desc: Its majesty pressures the opposing Pokémon, making it unable to attack using priority moves.
+	PriorityPrevention: True
 *

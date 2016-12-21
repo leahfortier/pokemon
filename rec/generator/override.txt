@@ -607,11 +607,13 @@ EndTurnEffect:
 BeforeTurnEffect:
 	CanAttack:
 		Header: boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		Optional: True
 	*
 ***
 OpponentBeforeTurnEffect:
 	OpponentCanAttack:
 		Header: boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		Optional: True
 	*
 ***
 Override:
@@ -876,13 +878,19 @@ Override:
 ***
 AttackSelectionEffect:
 	Usable:
-		Header: boolean usable(ActivePokemon p, Move m)
+		Header: boolean usable(Battle b, ActivePokemon p, Move m)
 	*
 	UnusableMessage:
-		Header: String getUnusableMessage(ActivePokemon p)
+		Header: String getUnusableMessage(Battle b, ActivePokemon p)
 		Body: 
 		return {0};
 		###
+	*
+***
+OpponentAttackSelectionEffect:
+	OpponentUsable:
+		Optional: True
+		AddInterface: Hidden-AttackSelectionEffect
 	*
 ***
 Override:
@@ -2415,7 +2423,7 @@ Override:
 ***
 PriorityChangeEffect:
 	ChangePriority:
-		Header: int changePriority(Battle b, ActivePokemon user, int priority)
+		Header: int changePriority(Battle b, ActivePokemon user, Attack attack, int priority)
 		Body:
 		if ({0}) {
 			if (this instanceof ConsumableItem) {
@@ -2487,5 +2495,34 @@ SleepyFightsterEffect:
 SuperDuperEndTurnEffect:
 	TheVeryEnd:
 		Header: boolean theVeryVeryEnd(Battle b, ActivePokemon p)
+	*
+***
+Override:
+	PriorityPrevention:
+		AddInterface: OpponentBeforeTurnAttackSelectionEffect
+		AddMapField: Usable: 
+		return b.getPriority(p, m.getAttack()) <= 0;
+		###
+		AddMapField: UnusableMessage: b.getOtherPokemon(p).getName() + "'s " + this.getName() + " prevents priority moves!!"
+		AddMapField: Field:
+		
+		public String getFailMessage(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return getUnusableMessage(b, p);
+		}
+		###
+	*
+***
+BeforeTurnAttackSelectionEffect:
+	BeforeTurnAttackSelectionFail:
+		AddInterface: Hidden-AttackSelectionEffect
+		AddInterface: Hidden-BeforeTurnEffect
+		Optional: True
+	*
+***
+OpponentBeforeTurnAttackSelectionEffect:
+	OpponentBeforeTurnAttackSelectionFail:
+		AddInterface: Hidden-OpponentAttackSelectionEffect
+		AddInterface: Hidden-OpponentBeforeTurnEffect
+		Optional: True
 	*
 ***

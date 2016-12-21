@@ -9,6 +9,7 @@ import battle.attack.MoveType;
 import battle.effect.DamageBlocker;
 import battle.effect.DefiniteEscape;
 import battle.effect.ModifyStageValueEffect;
+import battle.effect.OpponentBeforeTurnAttackSelectionEffect;
 import battle.effect.StallingEffect;
 import battle.effect.SwitchOutEffect;
 import battle.effect.attack.ChangeAbilityMove;
@@ -2280,8 +2281,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.PRANKSTER, "Gives priority to a status move.");
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, int priority) {
-			if (user.getAttack().getCategory() == MoveCategory.STATUS) {
+		public int changePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
+			if (attack.getCategory() == MoveCategory.STATUS) {
 				if (this instanceof ConsumableItem) {
 					user.consumeItem(b);
 				}
@@ -3118,8 +3119,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.GALE_WINGS, "Gives priority to Flying-type moves.");
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, int priority) {
-			if (user.getAttack().getActualType() == Type.FLYING) {
+		public int changePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
+			if (attack.getActualType() == Type.FLYING) {
 				if (this instanceof ConsumableItem) {
 					user.consumeItem(b);
 				}
@@ -3273,8 +3274,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.TRIAGE, "Gives priority to a healing move.");
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, int priority) {
-			if (user.getAttack().isMoveType(MoveType.HEALING)) {
+		public int changePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
+			if (attack.isMoveType(MoveType.HEALING)) {
 				if (this instanceof ConsumableItem) {
 					user.consumeItem(b);
 				}
@@ -3393,6 +3394,46 @@ public abstract class Ability implements Serializable {
 
 		public boolean theVeryVeryEnd(Battle b, ActivePokemon p) {
 			return nightyNight(b, p);
+		}
+	}
+
+	static class Dazzling extends Ability implements OpponentBeforeTurnAttackSelectionEffect {
+		private static final long serialVersionUID = 1L;
+		
+		public String getFailMessage(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return getUnusableMessage(b, p);
+		}
+
+		Dazzling() {
+			super(AbilityNamesies.DAZZLING, "Surprises the opposing Pokémon, making it unable to attack using priority moves.");
+		}
+
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
+			return b.getPriority(p, m.getAttack()) <= 0;
+		}
+
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
+			return b.getOtherPokemon(p).getName() + "'s " + this.getName() + " prevents priority moves!!";
+		}
+	}
+
+	static class QueenlyMajesty extends Ability implements OpponentBeforeTurnAttackSelectionEffect {
+		private static final long serialVersionUID = 1L;
+		
+		public String getFailMessage(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return getUnusableMessage(b, p);
+		}
+
+		QueenlyMajesty() {
+			super(AbilityNamesies.QUEENLY_MAJESTY, "Its majesty pressures the opposing Pokémon, making it unable to attack using priority moves.");
+		}
+
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
+			return b.getPriority(p, m.getAttack()) <= 0;
+		}
+
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
+			return b.getOtherPokemon(p).getName() + "'s " + this.getName() + " prevents priority moves!!";
 		}
 	}
 }

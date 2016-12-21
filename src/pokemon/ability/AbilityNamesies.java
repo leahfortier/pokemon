@@ -30,6 +30,7 @@ import pokemon.ability.Ability.CursedBody;
 import pokemon.ability.Ability.CuteCharm;
 import pokemon.ability.Ability.Damp;
 import pokemon.ability.Ability.DarkAura;
+import pokemon.ability.Ability.Dazzling;
 import pokemon.ability.Ability.Defeatist;
 import pokemon.ability.Ability.Defiant;
 import pokemon.ability.Ability.Disguise;
@@ -115,6 +116,7 @@ import pokemon.ability.Ability.Prankster;
 import pokemon.ability.Ability.Pressure;
 import pokemon.ability.Ability.Protean;
 import pokemon.ability.Ability.PurePower;
+import pokemon.ability.Ability.QueenlyMajesty;
 import pokemon.ability.Ability.QuickFeet;
 import pokemon.ability.Ability.RainDish;
 import pokemon.ability.Ability.Rattled;
@@ -388,7 +390,9 @@ public enum AbilityNamesies {
 	DISGUISE("Disguise", Disguise::new),
 	STAKEOUT("Stakeout", Stakeout::new),
 	CORROSION("Corrosion", Corrosion::new),
-	COMATOSE("Comatose", Comatose::new);
+	COMATOSE("Comatose", Comatose::new),
+	DAZZLING("Dazzling", Dazzling::new),
+	QUEENLY_MAJESTY("Queenly Majesty", QueenlyMajesty::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

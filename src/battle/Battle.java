@@ -1,5 +1,6 @@
 package battle;
 
+import battle.attack.Attack;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
@@ -662,17 +663,21 @@ public class Battle {
 		// WOOOOOOOOOO
 		return true;
 	}
+
+	public int getPriority(ActivePokemon p, Attack attack) {
+		int priority = attack.getPriority(this, p);
+		priority = PriorityChangeEffect.updatePriority(this, p, attack, priority);
+
+//		System.out.println(attack.getName() + " Priority: " + priority);
+
+		return priority;
+	}
 	
 	// Returns the priority of the current action the player is performing
 	private int getPriority(ActivePokemon p) {
 		// They are attacking -- return the priority of the attack
 		if (isFighting(p.isPlayer())) {
-			int priority = p.getAttack().getPriority(this, p);
-			priority = PriorityChangeEffect.updatePriority(this, p, priority);
-			
-//			System.out.println(p.getAttack().getName() + " Priority: " + priority);
-			
-			return priority;
+			return getPriority(p, p.getAttack());
 		}
 		
 		return ((Trainer)getTrainer(p.isPlayer())).getAction().getPriority();
