@@ -532,6 +532,13 @@ StatusReceivedEffect:
 		EffectList: victim
 	*
 ***
+OpponentStatusReceivedEffect:
+	Method:
+		Header: void receiveStatus(Battle b, ActivePokemon victim, StatusCondition statusType)
+		Invoke: Void
+		EffectList: b.getOtherPokemon(victim)
+	*
+***
 SleepyFightsterEffect:
 	Method:
 		Parameters: Battle b, ActivePokemon p

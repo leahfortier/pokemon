@@ -2682,16 +2682,19 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-			if (murderer.getAttributes().isAttacking()) {
-				Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to " + dead.getName() + "'s grudge!"));
-				murderer.getMove().reducePP(murderer.getMove().getPP());
-			}
+			Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to " + dead.getName() + "'s grudge!"));
+			murderer.getMove().reducePP(murderer.getMove().getPP());
 		}
 
 		public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
 			if (statusType == StatusCondition.FAINTED) {
-				// DEATH WISH GRANTED
-				deathWish(b, victim, caster);
+				ActivePokemon murderer = b.getOtherPokemon(victim);
+				
+				// Only grant death wish if murdered through direct damage
+				if (murderer.getAttributes().isAttacking()) {
+					// DEATH WISH GRANTED
+					deathWish(b, victim, murderer);
+				}
 			}
 		}
 	}
@@ -2721,10 +2724,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-			if (murderer.getAttributes().isAttacking()) {
-				Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
-				murderer.killKillKillMurderMurderMurder(b);
-			}
+			Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
+			murderer.killKillKillMurderMurderMurder(b);
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
@@ -2734,8 +2735,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
 			if (statusType == StatusCondition.FAINTED) {
-				// DEATH WISH GRANTED
-				deathWish(b, victim, caster);
+				ActivePokemon murderer = b.getOtherPokemon(victim);
+				
+				// Only grant death wish if murdered through direct damage
+				if (murderer.getAttributes().isAttacking()) {
+					// DEATH WISH GRANTED
+					deathWish(b, victim, murderer);
+				}
 			}
 		}
 	}

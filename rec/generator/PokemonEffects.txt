@@ -1066,10 +1066,8 @@ Snatch:
 Grudge:
 	CastMessage: victim.getName() + " wants " + b.getOtherPokemon(victim.isPlayer()).getName() + " to bear a grudge!"
 	DeathWish: 
-	if (murderer.getAttributes().isAttacking()) {
-		Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to " + dead.getName() + "'s grudge!"));
-		murderer.getMove().reducePP(murderer.getMove().getPP());
-	}
+	Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to " + dead.getName() + "'s grudge!"));
+	murderer.getMove().reducePP(murderer.getMove().getPP());
 	###
 *
 DestinyBond:
@@ -1080,10 +1078,8 @@ DestinyBond:
 	return true;
 	###
 	DeathWish: 
-	if (murderer.getAttributes().isAttacking()) {
-		Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
-		murderer.killKillKillMurderMurderMurder(b);
-	}
+	Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
+	murderer.killKillKillMurderMurderMurder(b);
 	###
 	SuccessiveDecay: True
 *

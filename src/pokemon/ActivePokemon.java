@@ -604,7 +604,7 @@ public class ActivePokemon implements Serializable {
 	
 	// Pangoro breaks the mold!
 	public boolean breaksTheMold() {
-        switch (getAbility().namesies()) {
+		switch (getAbility().namesies()) {
 			case MOLD_BREAKER:
 			case TURBOBLAZE:
 			case TERAVOLT:
@@ -1028,7 +1028,22 @@ public class ActivePokemon implements Serializable {
 		getActualMoves().forEach(Move::resetPP);
 		healHealthFraction(1);
 	}
-	
+
+	public Stat getBestBattleStat() {
+		Stat bestStat = Stat.ATTACK;
+		for (Stat stat : Stat.STATS) {
+			if (stat == Stat.HP) {
+				continue;
+			}
+
+			if (this.stats[stat.index()] > this.stats[bestStat.index()]) {
+				bestStat = stat;
+			}
+		}
+
+		return bestStat;
+	}
+
 	public boolean isGrounded(Battle b) {
 		return GroundedEffect.containsGroundedEffect(b, this);
 	}

@@ -3,6 +3,7 @@ package battle.effect.status;
 import battle.Battle;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
+import battle.effect.generic.EffectInterfaces.OpponentStatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
 import battle.effect.generic.EffectNamesies;
@@ -114,6 +115,7 @@ public abstract class Status implements Serializable {
 			Messages.add(new MessageUpdate(castMessage).updatePokemon(b, victim));
 
             StatusReceivedEffect.invokeStatusReceivedEffect(b, caster, victim, status);
+			OpponentStatusReceivedEffect.invokeOpponentStatusReceivedEffect(b, victim, status);
 			return true;
 		}
 		return false;

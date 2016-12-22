@@ -41,6 +41,7 @@ import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
+import battle.effect.generic.EffectInterfaces.OpponentStatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
@@ -112,9 +113,23 @@ public abstract class Ability implements Serializable {
 	public boolean isActive() {
 		return true;
 	}
+
+	public boolean unbreakableMold() {
+		System.out.println(this.getName() + " unbreakable false");
+		return false;
+	}
 	
 	// Called when this ability is going to changed to a different ability -- can be overidden as necessary
 	public void deactivate(Battle b, ActivePokemon victim) {}
+
+	protected ActivePokemon getOtherPokemon(Battle b, ActivePokemon p) {
+		ActivePokemon other = b.getOtherPokemon(p);
+		if (other.getAbility() != this) {
+			Global.error(this.getName() + " invokee is not the opposite Pokemon.");
+		}
+
+		return other;
+	}
 	
 	// Abilities that block damage
 	public static boolean blockAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -909,6 +924,27 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
+	static class FullMetalBody extends Ability implements StatProtectingEffect {
+		private static final long serialVersionUID = 1L;
+
+		FullMetalBody() {
+			super(AbilityNamesies.FULL_METAL_BODY, "Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats.");
+		}
+
+		public boolean unbreakableMold() {
+			// Ability is not ignored even when the opponent breaks the mold
+			return true;
+		}
+
+		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
+			return true;
+		}
+
+		public String preventionMessage(ActivePokemon p, Stat s) {
+			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
+		}
+	}
+
 	static class LiquidOoze extends Ability {
 		private static final long serialVersionUID = 1L;
 
@@ -1280,6 +1316,23 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
+	static class PrismArmor extends Ability implements OpponentPowerChangeEffect {
+		private static final long serialVersionUID = 1L;
+
+		PrismArmor() {
+			super(AbilityNamesies.PRISM_ARMOR, "Reduces the power of supereffective attacks taken.");
+		}
+
+		public boolean unbreakableMold() {
+			// Ability is not ignored even when the opponent breaks the mold
+			return true;
+		}
+
+		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return Type.getAdvantage(user, victim, b) > 1 ? .75 : 1;
+		}
+	}
+
 	static class FlameBody extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
 
@@ -1318,6 +1371,33 @@ public abstract class Ability implements Serializable {
 
 		public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
 			murderer.getAttributes().modifyStage(murderer, murderer, 1, Stat.ATTACK, b, CastSource.ABILITY);
+		}
+	}
+
+	static class BeastBoost extends Ability implements MurderEffect {
+		private static final long serialVersionUID = 1L;
+
+		BeastBoost() {
+			super(AbilityNamesies.BEAST_BOOST, "The Pokémon boosts its most proficient stat each time it knocks out a Pokémon.");
+		}
+
+		public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
+			murderer.getAttributes().modifyStage(murderer, murderer, 1, murderer.getBestBattleStat(), b, CastSource.ABILITY);
+		}
+	}
+
+	static class SoulHeart extends Ability implements OpponentStatusReceivedEffect {
+		private static final long serialVersionUID = 1L;
+
+		SoulHeart() {
+			super(AbilityNamesies.SOUL_HEART, "Boosts its Sp. Atk stat every time a Pokémon faints.");
+		}
+
+		public void receiveStatus(Battle b, ActivePokemon victim, StatusCondition statusType) {
+			if (statusType == StatusCondition.FAINTED) {
+				ActivePokemon abilify = this.getOtherPokemon(b, victim);
+				abilify.getAttributes().modifyStage(abilify, abilify, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+			}
 		}
 	}
 
@@ -1521,6 +1601,23 @@ public abstract class Ability implements Serializable {
 
 		Multiscale() {
 			super(AbilityNamesies.MULTISCALE, "When this Pok\u00e9mon is at full HP, damage is lessened.");
+		}
+
+		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.fullHealth() ? .5 : 1;
+		}
+	}
+
+	static class ShadowShield extends Ability implements OpponentPowerChangeEffect {
+		private static final long serialVersionUID = 1L;
+
+		ShadowShield() {
+			super(AbilityNamesies.SHADOW_SHIELD, "Reduces the amount of damage the Pokémon takes while its HP is full.");
+		}
+
+		public boolean unbreakableMold() {
+			// Ability is not ignored even when the opponent breaks the mold
+			return true;
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -3453,16 +3550,121 @@ public abstract class Ability implements Serializable {
 
 		public void endsies(Battle b, ActivePokemon attacking, Attack attack) {
 			if (attack.getName().contains("Dance") && (!attacking.hasAbility(this.namesies) || !attacking.getAbility().isActive())) {
-				ActivePokemon abilify = b.getOtherPokemon(attacking);
-				if (abilify.getAbility() != this) {
-					Global.error("Dancer invokee is not the defending Pokemon.");
-				}
-				
 				activated = true;
+				ActivePokemon abilify = this.getOtherPokemon(b, attacking);
 				Messages.add(new MessageUpdate(abilify.getName() + "'s " + this.getName() + " allowed it to join in the dance!"));
 				abilify.callNewMove(b, attacking, new Move(attack));
 				activated = false;
 			}
+		}
+	}
+
+	static class InnardsOut extends Ability implements StatusReceivedEffect {
+		private static final long serialVersionUID = 1L;
+
+		InnardsOut() {
+			super(AbilityNamesies.INNARDS_OUT, "Damages the attacker landing the finishing hit by the amount equal to its last HP.");
+		}
+
+		private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
+			Messages.add(new MessageUpdate(murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!"));
+			murderer.reduceHealth(b, dead.getAttributes().getDamageTaken());
+		}
+
+		public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
+			if (statusType == StatusCondition.FAINTED) {
+				ActivePokemon murderer = b.getOtherPokemon(victim);
+				
+				// Only grant death wish if murdered through direct damage
+				if (murderer.getAttributes().isAttacking()) {
+					// DEATH WISH GRANTED
+					deathWish(b, victim, murderer);
+				}
+			}
+		}
+	}
+
+	static class Fluffy extends Ability implements OpponentPowerChangeEffect {
+		private static final long serialVersionUID = 1L;
+
+		Fluffy() {
+			super(AbilityNamesies.FLUFFY, "Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves.");
+		}
+
+		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && user.getMove().getType() != Type.FIRE) {
+				return .5;
+			}
+			
+			if (user.getMove().getType() == Type.FIRE) {
+				return 2;
+			}
+			
+			return 1;
+		}
+	}
+
+	static class TanglingHair extends Ability implements PhysicalContactEffect {
+		private static final long serialVersionUID = 1L;
+
+		TanglingHair() {
+			super(AbilityNamesies.TANGLING_HAIR, "Contact with the Pokémon lowers the attacker's Speed stat.");
+		}
+
+		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.getAttributes().modifyStage(victim, user, -1, Stat.SPEED, b, CastSource.ABILITY);
+		}
+	}
+
+	static class PsychicSurge extends Ability implements EntryEffect {
+		private static final long serialVersionUID = 1L;
+
+		PsychicSurge() {
+			super(AbilityNamesies.PSYCHIC_SURGE, "Turns the ground into Psychic Terrain when the Pokémon enters a battle.");
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " changed the field to Psychic Terrain!"));
+			EffectNamesies.PSYCHIC_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+		}
+	}
+
+	static class ElectricSurge extends Ability implements EntryEffect {
+		private static final long serialVersionUID = 1L;
+
+		ElectricSurge() {
+			super(AbilityNamesies.ELECTRIC_SURGE, "Turns the ground into Electric Terrain when the Pokémon enters a battle.");
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " changed the field to Electric Terrain!"));
+			EffectNamesies.ELECTRIC_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+		}
+	}
+
+	static class MistySurge extends Ability implements EntryEffect {
+		private static final long serialVersionUID = 1L;
+
+		MistySurge() {
+			super(AbilityNamesies.MISTY_SURGE, "Turns the ground into Misty Terrain when the Pokémon enters a battle.");
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " changed the field to Misty Terrain!"));
+			EffectNamesies.MISTY_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+		}
+	}
+
+	static class GrassySurge extends Ability implements EntryEffect {
+		private static final long serialVersionUID = 1L;
+
+		GrassySurge() {
+			super(AbilityNamesies.GRASSY_SURGE, "Turns the ground into Grassy Terrain when the Pokémon enters a battle.");
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " changed the field to Grassy Terrain!"));
+			EffectNamesies.GRASSY_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
 		}
 	}
 }

@@ -109,6 +109,7 @@ abstract class InvokeMethod {
 
         StringUtils.appendLine(body, "\n// If this is an ability that is being affected by mold breaker, we don't want to do anything with it");
         StringUtils.appendLine(body, "if (invokee instanceof Ability && " +
+                        "!((Ability)invokee).unbreakableMold() && " +
                         (interfaceMethod.isMoldBreakNullCheck()
                                 ? "moldBreaker != null && moldBreaker"
                                 : interfaceMethod.getMoldBreaker()) +

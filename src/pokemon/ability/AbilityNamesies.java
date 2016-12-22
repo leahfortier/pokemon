@@ -12,6 +12,7 @@ import pokemon.ability.Ability.AromaVeil;
 import pokemon.ability.Ability.AuraBreak;
 import pokemon.ability.Ability.BadDreams;
 import pokemon.ability.Ability.BattleArmor;
+import pokemon.ability.Ability.BeastBoost;
 import pokemon.ability.Ability.Berserk;
 import pokemon.ability.Ability.BigPecks;
 import pokemon.ability.Ability.Blaze;
@@ -41,20 +42,24 @@ import pokemon.ability.Ability.Drought;
 import pokemon.ability.Ability.DrySkin;
 import pokemon.ability.Ability.EarlyBird;
 import pokemon.ability.Ability.EffectSpore;
+import pokemon.ability.Ability.ElectricSurge;
 import pokemon.ability.Ability.FairyAura;
 import pokemon.ability.Ability.Filter;
 import pokemon.ability.Ability.FlameBody;
 import pokemon.ability.Ability.FlashFire;
 import pokemon.ability.Ability.FlowerGift;
 import pokemon.ability.Ability.FlowerVeil;
+import pokemon.ability.Ability.Fluffy;
 import pokemon.ability.Ability.Forecast;
 import pokemon.ability.Ability.Forewarn;
 import pokemon.ability.Ability.Frisk;
+import pokemon.ability.Ability.FullMetalBody;
 import pokemon.ability.Ability.FurCoat;
 import pokemon.ability.Ability.GaleWings;
 import pokemon.ability.Ability.Galvanize;
 import pokemon.ability.Ability.Gluttony;
 import pokemon.ability.Ability.GrassPelt;
+import pokemon.ability.Ability.GrassySurge;
 import pokemon.ability.Ability.Guts;
 import pokemon.ability.Ability.Harvest;
 import pokemon.ability.Ability.Healer;
@@ -69,6 +74,7 @@ import pokemon.ability.Ability.Illusion;
 import pokemon.ability.Ability.Immunity;
 import pokemon.ability.Ability.Imposter;
 import pokemon.ability.Ability.Infiltrator;
+import pokemon.ability.Ability.InnardsOut;
 import pokemon.ability.Ability.InnerFocus;
 import pokemon.ability.Ability.Insomnia;
 import pokemon.ability.Ability.Intimidate;
@@ -93,6 +99,7 @@ import pokemon.ability.Ability.MagnetPull;
 import pokemon.ability.Ability.MarvelScale;
 import pokemon.ability.Ability.MegaLauncher;
 import pokemon.ability.Ability.Merciless;
+import pokemon.ability.Ability.MistySurge;
 import pokemon.ability.Ability.MoldBreaker;
 import pokemon.ability.Ability.MotorDrive;
 import pokemon.ability.Ability.Moxie;
@@ -116,6 +123,7 @@ import pokemon.ability.Ability.PoisonTouch;
 import pokemon.ability.Ability.Prankster;
 import pokemon.ability.Ability.Pressure;
 import pokemon.ability.Ability.Protean;
+import pokemon.ability.Ability.PsychicSurge;
 import pokemon.ability.Ability.PurePower;
 import pokemon.ability.Ability.QueenlyMajesty;
 import pokemon.ability.Ability.QuickFeet;
@@ -135,6 +143,7 @@ import pokemon.ability.Ability.SandVeil;
 import pokemon.ability.Ability.SapSipper;
 import pokemon.ability.Ability.Scrappy;
 import pokemon.ability.Ability.SereneGrace;
+import pokemon.ability.Ability.ShadowShield;
 import pokemon.ability.Ability.ShadowTag;
 import pokemon.ability.Ability.ShedSkin;
 import pokemon.ability.Ability.SheerForce;
@@ -149,6 +158,7 @@ import pokemon.ability.Ability.SnowCloak;
 import pokemon.ability.Ability.SnowWarning;
 import pokemon.ability.Ability.SolarPower;
 import pokemon.ability.Ability.SolidRock;
+import pokemon.ability.Ability.SoulHeart;
 import pokemon.ability.Ability.Soundproof;
 import pokemon.ability.Ability.SpeedBoost;
 import pokemon.ability.Ability.Stakeout;
@@ -171,6 +181,7 @@ import pokemon.ability.Ability.SweetVeil;
 import pokemon.ability.Ability.SwiftSwim;
 import pokemon.ability.Ability.Synchronize;
 import pokemon.ability.Ability.TangledFeet;
+import pokemon.ability.Ability.TanglingHair;
 import pokemon.ability.Ability.Technician;
 import pokemon.ability.Ability.Teravolt;
 import pokemon.ability.Ability.ThickFat;
@@ -246,6 +257,7 @@ public enum AbilityNamesies {
 	NO_GUARD("No Guard", NoGuard::new),
 	OWN_TEMPO("Own Tempo", OwnTempo::new),
 	CLEAR_BODY("Clear Body", ClearBody::new),
+	FULL_METAL_BODY("Full Metal Body", FullMetalBody::new),
 	LIQUID_OOZE("Liquid Ooze", LiquidOoze::new),
 	ROCK_HEAD("Rock Head", RockHead::new),
 	STURDY("Sturdy", Sturdy::new),
@@ -272,9 +284,12 @@ public enum AbilityNamesies {
 	SWIFT_SWIM("Swift Swim", SwiftSwim::new),
 	WATER_VEIL("Water Veil", WaterVeil::new),
 	FILTER("Filter", Filter::new),
+	PRISM_ARMOR("Prism Armor", PrismArmor::new),
 	FLAME_BODY("Flame Body", FlameBody::new),
 	RATTLED("Rattled", Rattled::new),
 	MOXIE("Moxie", Moxie::new),
+	BEAST_BOOST("Beast Boost", BeastBoost::new),
+	SOUL_HEART("Soul-Heart", SoulHeart::new),
 	IMPOSTER("Imposter", Imposter::new),
 	ADAPTABILITY("Adaptability", Adaptability::new),
 	WATER_ABSORB("Water Absorb", WaterAbsorb::new),
@@ -287,6 +302,7 @@ public enum AbilityNamesies {
 	SNOW_CLOAK("Snow Cloak", SnowCloak::new),
 	MARVEL_SCALE("Marvel Scale", MarvelScale::new),
 	MULTISCALE("Multiscale", Multiscale::new),
+	SHADOW_SHIELD("Shadow Shield", ShadowShield::new),
 	SHEER_FORCE("Sheer Force", SheerForce::new),
 	HUSTLE("Hustle", Hustle::new),
 	HUGE_POWER("Huge Power", HugePower::new),
@@ -394,7 +410,14 @@ public enum AbilityNamesies {
 	COMATOSE("Comatose", Comatose::new),
 	DAZZLING("Dazzling", Dazzling::new),
 	QUEENLY_MAJESTY("Queenly Majesty", QueenlyMajesty::new),
-	DANCER("Dancer", Dancer::new);
+	DANCER("Dancer", Dancer::new),
+	INNARDS_OUT("Innards Out", InnardsOut::new),
+	FLUFFY("Fluffy", Fluffy::new),
+	TANGLING_HAIR("Tangling Hair", TanglingHair::new),
+	PSYCHIC_SURGE("Psychic Surge", PsychicSurge::new),
+	ELECTRIC_SURGE("Electric Surge", ElectricSurge::new),
+	MISTY_SURGE("Misty Surge", MistySurge::new),
+	GRASSY_SURGE("Grassy Surge", GrassySurge::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

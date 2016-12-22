@@ -347,6 +347,14 @@ Clear Body:
 	return true;
 	###
 *
+Full Metal Body:
+	Desc: Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats.
+	Int: StatProtectingEffect
+	StatProtect:
+	return true;
+	###
+	MoldBreakerBreaker: True
+*
 Liquid Ooze:
 	Desc: Inflicts damage on foes using any draining move.
 *
@@ -522,6 +530,14 @@ Filter:
 	return Type.getAdvantage(user, victim, b) > 1 ? .75 : 1;
 	###
 *
+Prism Armor:
+	Desc: Reduces the power of supereffective attacks taken.
+	Int: OpponentPowerChangeEffect
+	GetOppMultiplier: 
+	return Type.getAdvantage(user, victim, b) > 1 ? .75 : 1;
+	###
+	MoldBreakerBreaker: True
+*
 Flame Body:
 	Desc: Contact with the Pok\u00e9mon may burn the foe.
 	StatusContact: Burned
@@ -541,6 +557,23 @@ Moxie:
 	Int: MurderEffect
 	KillWish: 
 	murderer.getAttributes().modifyStage(murderer, murderer, 1, Stat.ATTACK, b, CastSource.ABILITY);
+	###
+*
+Beast Boost:
+	Desc: The Pokémon boosts its most proficient stat each time it knocks out a Pokémon.
+	Int: MurderEffect
+	KillWish: 
+	murderer.getAttributes().modifyStage(murderer, murderer, 1, murderer.getBestBattleStat(), b, CastSource.ABILITY);
+	###
+*
+Soul-Heart:
+	Desc: Boosts its Sp. Atk stat every time a Pokémon faints.
+	Int: OpponentStatusReceivedEffect
+	OppStatusReceived:
+	if (statusType == StatusCondition.FAINTED) {
+		ActivePokemon abilify = this.getOtherPokemon(b, victim);
+		abilify.getAttributes().modifyStage(abilify, abilify, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+	}
 	###
 *
 Imposter:
@@ -627,6 +660,14 @@ Multiscale:
 	GetOppMultiplier: 
 	return victim.fullHealth() ? .5 : 1;
 	###
+*
+Shadow Shield:
+	Desc: Reduces the amount of damage the Pokémon takes while its HP is full.
+	Int: OpponentPowerChangeEffect
+	GetOppMultiplier: 
+	return victim.fullHealth() ? .5 : 1;
+	###
+	MoldBreakerBreaker: True
 *
 Sheer Force:
 	Desc: Attacks gain power, but lose their secondary effect.
@@ -1571,12 +1612,8 @@ Dancer:
 	Int: OpponentEndAttackEffect
 	OpponentEndAttack:
 	if (attack.getName().contains("Dance") && (!attacking.hasAbility(this.namesies) || !attacking.getAbility().isActive())) {
-		ActivePokemon abilify = b.getOtherPokemon(attacking);
-		if (abilify.getAbility() != this) {
-			Global.error("Dancer invokee is not the defending Pokemon.");
-		}
-
 		activated = true;
+		ActivePokemon abilify = this.getOtherPokemon(b, attacking);
 		Messages.add(new MessageUpdate(abilify.getName() + "'s " + this.getName() + " allowed it to join in the dance!"));
 		abilify.callNewMove(b, attacking, new Move(attack));
 		activated = false;
@@ -1591,4 +1628,49 @@ Dancer:
 	AbilityIsActive:
 	return this.activated;
 	###
+*
+Innards Out:
+	Desc: Damages the attacker landing the finishing hit by the amount equal to its last HP.
+	DeathWish:
+	Messages.add(new MessageUpdate(murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!"));
+	murderer.reduceHealth(b, dead.getAttributes().getDamageTaken());
+	###
+*
+Fluffy:
+	Desc: Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves.
+	Int: OpponentPowerChangeEffect
+	GetOppMultiplier:
+	if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && user.getMove().getType() != Type.FIRE) {
+		return .5;
+	}
+
+	if (user.getMove().getType() == Type.FIRE) {
+		return 2;
+	}
+
+	return 1;
+	###
+*
+Tangling Hair:
+	Desc: Contact with the Pokémon lowers the attacker's Speed stat.
+	Int: PhysicalContactEffect
+	Contact:
+	user.getAttributes().modifyStage(victim, user, -1, Stat.SPEED, b, CastSource.ABILITY);
+	###
+*
+Psychic Surge:
+	Desc: Turns the ground into Psychic Terrain when the Pokémon enters a battle.
+	TerrainStarter: Psychic
+*
+Electric Surge:
+	Desc: Turns the ground into Electric Terrain when the Pokémon enters a battle.
+	TerrainStarter: Electric
+*
+Misty Surge:
+	Desc: Turns the ground into Misty Terrain when the Pokémon enters a battle.
+	TerrainStarter: Misty
+*
+Grassy Surge:
+	Desc: Turns the ground into Grassy Terrain when the Pokémon enters a battle.
+	TerrainStarter: Grassy
 *

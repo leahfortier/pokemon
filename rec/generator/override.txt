@@ -1034,8 +1034,13 @@ Override:
 		AddInterface: StatusReceivedEffect
 		AddMapField: StatusReceived:
 		if (statusType == StatusCondition.FAINTED) {
-			// DEATH WISH GRANTED
-			deathWish(b, victim, caster);
+			ActivePokemon murderer = b.getOtherPokemon(victim);
+			
+			// Only grant death wish if murdered through direct damage
+			if (murderer.getAttributes().isAttacking()) {
+				// DEATH WISH GRANTED
+				deathWish(b, victim, murderer);
+			}
 		}
 		###
 	*
@@ -2490,6 +2495,11 @@ StatusReceivedEffect:
 		Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType)
 	*
 ***
+OpponentStatusReceivedEffect:
+	OppStatusReceived:
+		Header: void receiveStatus(Battle b, ActivePokemon victim, StatusCondition statusType)
+	*
+***
 SleepyFightsterEffect:
 ***
 SuperDuperEndTurnEffect:
@@ -2529,5 +2539,23 @@ OpponentBeforeTurnAttackSelectionEffect:
 OpponentEndAttackEffect:
 	OpponentEndAttack:
 		Header: void endsies(Battle b, ActivePokemon attacking, Attack attack)
+	*
+***
+Override:
+	TerrainStarter:
+		AddInterface: EntryEffect
+		AddMapField: Enter:
+		Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " changed the field to {0} Terrain!"));
+		EffectNamesies.{00}_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+		###
+	*
+***
+Override:
+	MoldBreakerBreaker:
+		Header: boolean unbreakableMold()
+		Body:
+		// Ability is not ignored even when the opponent breaks the mold
+		return true;
+		###
 	*
 ***
