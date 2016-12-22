@@ -38,6 +38,7 @@ import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
+import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
@@ -3434,6 +3435,34 @@ public abstract class Ability implements Serializable {
 
 		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return b.getOtherPokemon(p).getName() + "'s " + this.getName() + " prevents priority moves!!";
+		}
+	}
+
+	static class Dancer extends Ability implements OpponentEndAttackEffect {
+		private static final long serialVersionUID = 1L;
+		private boolean activated;
+
+		Dancer() {
+			super(AbilityNamesies.DANCER, "When another Pokémon uses a dance move, it can use a dance move following it regardless of its Speed.");
+			activated = false;
+		}
+
+		public boolean isActive() {
+			return this.activated;
+		}
+
+		public void endsies(Battle b, ActivePokemon attacking, Attack attack) {
+			if (attack.getName().contains("Dance") && (!attacking.hasAbility(this.namesies) || !attacking.getAbility().isActive())) {
+				ActivePokemon abilify = b.getOtherPokemon(attacking);
+				if (abilify.getAbility() != this) {
+					Global.error("Dancer invokee is not the defending Pokemon.");
+				}
+				
+				activated = true;
+				Messages.add(new MessageUpdate(abilify.getName() + "'s " + this.getName() + " allowed it to join in the dance!"));
+				abilify.callNewMove(b, attacking, new Move(attack));
+				activated = false;
+			}
 		}
 	}
 }

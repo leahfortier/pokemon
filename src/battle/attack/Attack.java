@@ -21,6 +21,7 @@ import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
+import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
@@ -352,7 +353,8 @@ public abstract class Attack implements Serializable {
 		TakeDamageEffect.invokeTakeDamageEffect(b, me, o, damage);
 	}
 
-	public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+	// TODO: Need to make this final and have an overridable method that is called inside here
+	public 	void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 		// Kill yourself!!
 		if (isMoveType(MoveType.USER_FAINTS)) {
 			user.killKillKillMurderMurderMurder(b);
@@ -389,6 +391,8 @@ public abstract class Attack implements Serializable {
 		if (this instanceof SelfHealingMove) {
 			((SelfHealingMove)this).heal(user, victim, b);
 		}
+
+		OpponentEndAttackEffect.invokeOpponentEndAttackEffect(b, user, this);
 	}
 	
 	public boolean canPrintFail() {

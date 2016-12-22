@@ -29,6 +29,7 @@ import pokemon.ability.Ability.Corrosion;
 import pokemon.ability.Ability.CursedBody;
 import pokemon.ability.Ability.CuteCharm;
 import pokemon.ability.Ability.Damp;
+import pokemon.ability.Ability.Dancer;
 import pokemon.ability.Ability.DarkAura;
 import pokemon.ability.Ability.Dazzling;
 import pokemon.ability.Ability.Defeatist;
@@ -392,7 +393,8 @@ public enum AbilityNamesies {
 	CORROSION("Corrosion", Corrosion::new),
 	COMATOSE("Comatose", Comatose::new),
 	DAZZLING("Dazzling", Dazzling::new),
-	QUEENLY_MAJESTY("Queenly Majesty", QueenlyMajesty::new);
+	QUEENLY_MAJESTY("Queenly Majesty", QueenlyMajesty::new),
+	DANCER("Dancer", Dancer::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

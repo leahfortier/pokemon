@@ -2526,3 +2526,8 @@ OpponentBeforeTurnAttackSelectionEffect:
 		Optional: True
 	*
 ***
+OpponentEndAttackEffect:
+	OpponentEndAttack:
+		Header: void endsies(Battle b, ActivePokemon attacking, Attack attack)
+	*
+***

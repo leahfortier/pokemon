@@ -1566,3 +1566,29 @@ Queenly Majesty:
 	Desc: Its majesty pressures the opposing Pokémon, making it unable to attack using priority moves.
 	PriorityPrevention: True
 *
+Dancer:
+	Desc: When another Pokémon uses a dance move, it can use a dance move following it regardless of its Speed.
+	Int: OpponentEndAttackEffect
+	OpponentEndAttack:
+	if (attack.getName().contains("Dance") && (!attacking.hasAbility(this.namesies) || !attacking.getAbility().isActive())) {
+		ActivePokemon abilify = b.getOtherPokemon(attacking);
+		if (abilify.getAbility() != this) {
+			Global.error("Dancer invokee is not the defending Pokemon.");
+		}
+
+		activated = true;
+		Messages.add(new MessageUpdate(abilify.getName() + "'s " + this.getName() + " allowed it to join in the dance!"));
+		abilify.callNewMove(b, attacking, new Move(attack));
+		activated = false;
+	}
+	###
+	Field:
+	private boolean activated;
+	###
+	Activate:
+	activated = false;
+	###
+	AbilityIsActive:
+	return this.activated;
+	###
+*
