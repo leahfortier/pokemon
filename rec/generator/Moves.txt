@@ -1840,7 +1840,7 @@ Rest:
 	SelfHealing: 1
 	Status: Asleep
 	ApplyEffects: 
-	if (victim.fullHealth() || !Status.applies(StatusCondition.ASLEEP, b, victim, victim)) {
+	if (victim.fullHealth() || !Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, victim, victim)) {
 		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 		return;
 	}
@@ -1958,6 +1958,7 @@ Giga Drain:
 *
 Aromatherapy:
 	HealPartyStatus: True
+	MoveType: Healing
 	PP: 5
 	Type: Grass
 	Cat: Status
@@ -2803,7 +2804,7 @@ Heal Pulse:
 	PP: 10
 	Type: Psychic
 	Cat: Status
-	MoveType: Aura_Pulse
+	MoveType: Aura_Pulse, Healing
 	ApplyEffects: 
 	if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
@@ -3666,6 +3667,7 @@ Refresh:
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
+	MoveType: Healing
 	ApplyError: !me.hasStatus()
 	ApplyEffects: 
 	Status.removeStatus(b, user, CastSource.ATTACK);
@@ -4180,7 +4182,8 @@ Snore:
 	Acc: 100
 	Cat: Special
 	Type: Normal
-	MoveType: Sound_Based, Metronomeless, Asleep_User
+	Int: SleepyFightsterEffect
+	MoveType: Sound_Based, Metronomeless
 	Effect: Flinch
 	EffChance: 30
 	ApplyError: !me.hasStatus(StatusCondition.ASLEEP)
@@ -4190,7 +4193,8 @@ Sleep Talk:
 	PP: 10
 	Type: Normal
 	Cat: Status
-	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Asleep_User, Assistless, Metronomeless
+	Int: SleepyFightsterEffect
+	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Assistless, Metronomeless
 	Apply: 
 	if (!me.hasStatus(StatusCondition.ASLEEP)) {
 		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
@@ -4615,7 +4619,7 @@ Heal Bell:
 	HealPartyStatus: True
 	Type: Normal
 	Cat: Status
-	MoveType: Sound_Based
+	MoveType: Sound_Based, Healing
 *
 Weather Ball:
 	GetType: 
@@ -5064,15 +5068,7 @@ Judgement:
 	Pow: 100
 	Cat: Special
 	Acc: 100
-	GetType: 
-	Item i = user.getHeldItem(b);
-	if (i instanceof PlateItem) {
-		return ((PlateItem)i).getType(); 
-	}
-	
-	return super.type;
-	###
-	Type: Normal
+	SpecialItemMove: PlateItem
 *
 Searing Shot:
 	Desc: An inferno of scarlet flames torches everything around the user. It may leave targets with a burn.
@@ -5353,20 +5349,18 @@ Glaciate:
 Techno Blast:
 	Desc: The user fires a beam of light at its target. The type changes depending on the Drive the user holds.
 	PP: 5
-	Type: Normal
-	GetType: 
-	// TODO: Can combine this with Judgement
-	Item i = user.getHeldItem(b);
-	if (i instanceof DriveItem) {
-		return ((DriveItem)i).getType();
-	}
-	
-	return super.type;
-	###
+	SpecialItemMove: DriveItem
 	Pow: 120
 	Acc: 100
 	Cat: Special
-	MoveType: Metronomeless
+*
+Multi-Attack:
+	Desc: Cloaking itself in high energy, the user slams into the target. The memory held determines the move's type.
+	PP: 10
+	Pow: 90
+	Acc: 100
+	Cat: Physical
+	SpecialItemMove: MemoryItem
 *
 Explosion:
 	PhysicalContact: False
@@ -6647,6 +6641,7 @@ Purify:
 	Type: Poison
 	Cat: Status
 	PP: 20
+	MoveType: Healing
 	ApplyError: !me.hasStatus()
 	ApplyEffects:
 	Status.removeStatus(b, user, CastSource.ATTACK);

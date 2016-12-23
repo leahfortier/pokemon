@@ -45,10 +45,10 @@ public abstract class Effect implements Serializable {
 	}
 	
 	// Returns the effect if it is in the list, otherwise returns null
-	public static Effect getEffect(List<? extends Effect> effects, EffectNamesies effect) {
-		for (Effect e : effects) {
-			if (e.namesies() == effect && e.isActive()) {
-				return e;
+	public static Effect getEffect(List<? extends Effect> effects, EffectNamesies effectNamesies) {
+		for (Effect effect : effects) {
+			if (effect.namesies() == effectNamesies) {
+				return effect;
 			}
 		}
 			
@@ -62,9 +62,9 @@ public abstract class Effect implements Serializable {
 	public static boolean removeEffect(List<? extends Effect> effects, EffectNamesies effectToRemove) {
 		return effects.removeIf(effect -> effect.namesies() == effectToRemove);
 	}
-	
-	public static boolean isInactiveEffect(Object object) {
-		return object instanceof Effect && !((Effect)object).isActive();
+
+	public static boolean isInactiveEffect(Object object, Battle b) {
+		return object instanceof Effect && !((Effect)object).isActive(b);
 	}
 	
 	public void deactivate() {
@@ -124,7 +124,7 @@ public abstract class Effect implements Serializable {
 		return namesies.getName();
 	}
 	
-	public boolean isActive() {
+	public boolean isActive(Battle b) {
 		return active;
 	}
 	

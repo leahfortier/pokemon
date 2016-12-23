@@ -1,6 +1,7 @@
 package battle.effect.generic;
 
 import battle.effect.generic.BattleEffect.ElectricTerrain;
+import battle.effect.generic.BattleEffect.FieldUproar;
 import battle.effect.generic.BattleEffect.GrassyTerrain;
 import battle.effect.generic.BattleEffect.Gravity;
 import battle.effect.generic.BattleEffect.MagicRoom;
@@ -218,6 +219,7 @@ public enum EffectNamesies {
 	GRASSY_TERRAIN("GrassyTerrain", GrassyTerrain::new),
 	ELECTRIC_TERRAIN("ElectricTerrain", ElectricTerrain::new),
 	PSYCHIC_TERRAIN("PsychicTerrain", PsychicTerrain::new),
+	FIELD_UPROAR("FieldUproar", FieldUproar::new),
 	CLEAR_SKIES("ClearSkies", ClearSkies::new),
 	RAINING("Raining", Raining::new),
 	SUNNY("Sunny", Sunny::new),

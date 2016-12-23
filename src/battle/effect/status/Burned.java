@@ -27,8 +27,9 @@ class Burned extends Status implements EndTurnEffect, StatChangingEffect {
     }
 
     // Fire-type Pokemon cannot be burned
-    public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return super.applies(b, caster, victim) && !victim.isType(b, Type.FIRE);
+    @Override
+    protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        return !victim.isType(b, Type.FIRE);
     }
 
     public String getCastMessage(ActivePokemon p) {

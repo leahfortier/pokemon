@@ -27,6 +27,13 @@ EndTurnEffect:
 		###
 	*
 ***
+SuperDuperEndTurnEffect:
+	Method:
+		Header: boolean theVeryVeryEnd(Battle b, ActivePokemon p)
+		Invoke: Check true
+		EffectList: p
+	*
+***
 RecoilMove:
 	Method:
 		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
@@ -140,14 +147,6 @@ LevitationEffect:
 		MoldBreaker: moldBreaker
 	*
 ***
-FaintEffect:
-	Method: 
-		Header: void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer)
-		Invoke: Void
-		InvokeName: grantDeathWish
-		EffectList: dead
-	*
-***
 MurderEffect:
 	Comments: // KILL KILL KILL MURDER MURDER MURDER
 	Method: 
@@ -191,15 +190,24 @@ OpponentAccuracyBypassEffect:
 ***
 AttackSelectionEffect:
 	Method:
-		Header: boolean usable(ActivePokemon p, Move m)
+		Header: boolean usable(Battle b, ActivePokemon p, Move m)
 		Invoke: CheckGet false
 		InvokeName: getUnusableEffect
-		InvokeParameters: Battle b
 		EffectList: p
 	*
 	Method:
-		Header: String getUnusableMessage(ActivePokemon p)
+		Header: String getUnusableMessage(Battle b, ActivePokemon p)
 	*
+***
+OpponentAttackSelectionEffect:
+	Method:
+		Header: boolean usable(Battle b, ActivePokemon p, Move m)
+		Invoke: CheckGet false
+		InvokeName: getUnusableEffect
+		EffectList: b.getOtherPokemon(p)
+		Comments: // TODO: Need to not include this method again since it already extends AttackSelectionEffect, but still need the invoke method
+	*
+	Extends: AttackSelectionEffect
 ***
 WeatherBlockerEffect:
 	Method:
@@ -369,7 +377,7 @@ CritStageEffect:
 ***
 PriorityChangeEffect:
 	Method:
-		Header: int changePriority(Battle b, ActivePokemon user, int priority)
+		Header: int changePriority(Battle b, ActivePokemon user, Attack attack, int priority)
 		Invoke: Update
 		Update: priority
 		InvokeName: updatePriority
@@ -378,7 +386,7 @@ PriorityChangeEffect:
 ***
 ChangeAttackTypeEffect:
 	Method:
-		Header: Type changeAttackType(Type original)
+		Header: Type changeAttackType(Attack attack, Type original)
 		Invoke: Update
 		Update: original
 		InvokeParameters: Battle b, ActivePokemon attacking
@@ -496,10 +504,9 @@ AdvantageMultiplierMove:
 ***
 AbsorbDamageEffect:
 	Method:
-		Header: boolean absorbDamage(ActivePokemon damageTaker, int damageAmount)
+		Header: boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount)
 		Invoke: Check true
 		EffectList: damageTaker
-		InvokeParameters: Battle b
 	*
 ***
 DamageTakenEffect:
@@ -511,9 +518,39 @@ DamageTakenEffect:
 ***
 AlwaysCritEffect:
 	Method:
+		Header: boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending)
+		Invoke: Check true
+		EffectList: attacking
+		InvokeAttack: attacking
+		InvokeName: defCritsies
+	*
+***
+StatusReceivedEffect:
+	Method:
+		Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType)
+		Invoke: Void
+		EffectList: victim
+	*
+***
+OpponentStatusReceivedEffect:
+	Method:
+		Header: void receiveStatus(Battle b, ActivePokemon victim, StatusCondition statusType)
+		Invoke: Void
+		EffectList: b.getOtherPokemon(victim)
+	*
+***
+SleepyFightsterEffect:
+	Method:
 		Parameters: Battle b, ActivePokemon p
 		Invoke: Contains
 		EffectList: p
 		InvokeAttack: p
+	*
+***
+OpponentEndAttackEffect:
+	Method:
+		Header: void endsies(Battle b, ActivePokemon attacking, Attack attack)
+		Invoke: Void
+		EffectList: b.getOtherPokemon(attacking)
 	*
 ***

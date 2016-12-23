@@ -14,7 +14,6 @@ import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
 import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
 import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
-import battle.effect.generic.EffectInterfaces.FaintEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
@@ -38,6 +37,7 @@ import main.Game;
 import main.Global;
 import main.Type;
 import message.MessageUpdate;
+import message.MessageUpdate.Update;
 import message.Messages;
 import pattern.PokemonMatcher;
 import pokemon.PokemonInfo.WildHoldItem;
@@ -46,6 +46,9 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.Breeding;
 import pokemon.evolution.BaseEvolution;
 import pokemon.evolution.EvolutionMethod;
+import trainer.Team;
+import trainer.Trainer;
+import trainer.WildPokemon;
 import util.DrawUtils;
 import util.RandomUtils;
 import util.StringUtils;
@@ -487,8 +490,12 @@ public class ActivePokemon implements Serializable {
 			gain[i] = stats[i] - prevStats[i];
 		}
 
-		Messages.add(new MessageUpdate().updatePokemon(b, this).withStatGains(gain, stats));
-		
+		if (front) {
+			Messages.add(new MessageUpdate().updatePokemon(b, this));
+		}
+
+		Messages.add(new MessageUpdate().withStatGains(gain, stats));
+
 		// Learn new moves
 		pokemon.getMoves(level).forEach(attackNamesies -> learnMove(attackNamesies, inBattle));
 		
@@ -602,10 +609,59 @@ public class ActivePokemon implements Serializable {
 		getAttack().apply(this, opp, b);
 		setMove(temp);
 	}
+
+	public boolean switcheroo(Battle b, ActivePokemon caster, CastSource source, boolean wildExit) {
+		Team team = b.getTrainer(this);
+		String sourceName = source.getSourceName(b, this);
+		String selfReference = caster == this ? "it" : this.getName();
+
+		// End the battle against a wild Pokemon
+		if (team instanceof WildPokemon) {
+			if (!wildExit) {
+				return false;
+			}
+
+			final String message;
+			if (!StringUtils.isNullOrEmpty(sourceName)) {
+				message = caster.getName() + "'s " + sourceName + " caused " + selfReference + " to leave the battle!";
+			} else {
+				message = this.getName() + " left the battle!";
+			}
+
+			Messages.add(new MessageUpdate(message));
+			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+			return true;
+		}
+
+		Trainer trainer = (Trainer)team;
+		if (!trainer.hasRemainingPokemon()) {
+			// Don't switch if no one to switch to
+			return false;
+		}
+
+		// Send this Pokemon back to the trainer and send out the next one
+		final String message;
+		if (!StringUtils.isNullOrEmpty(sourceName)) {
+			message = caster.getName() + "'s " + sourceName + " sent " + selfReference + " back to " + trainer.getName() + "!";
+		} else {
+			message = this.getName() + " went back to " + trainer.getName() + "!";
+		}
+
+		Messages.add(new MessageUpdate(message));
+
+		// TODO: Prompt a legit switch fo user
+		// TODO: Once this happens, this should take in a random parameter since this is still correct for Red Card, I believe and should have the message "name was sent out!"
+		// TODO: Check if trainer action needs to be set to Switch
+		trainer.switchToRandom();
+		ActivePokemon front = trainer.front();
+		b.enterBattle(front, trainer.getName() + " sent out " + front.getName() + "!");
+
+		return true;
+	}
 	
 	// Pangoro breaks the mold!
 	public boolean breaksTheMold() {
-        switch (getAbility().namesies()) {
+		switch (getAbility().namesies()) {
 			case MOLD_BREAKER:
 			case TURBOBLAZE:
 			case TERAVOLT:
@@ -635,6 +691,10 @@ public class ActivePokemon implements Serializable {
 	
 	public void addEffect(PokemonEffect e) {
 		attributes.addEffect(e);
+	}
+
+	public void removeEffect(PokemonEffect effect) {
+		attributes.removeEffect(effect);
 	}
 	
 	public void setMove(Move m) {
@@ -832,14 +892,14 @@ public class ActivePokemon implements Serializable {
 	public void resetAttributes() {
 		attributes = new BattleAttributes();
 		moves.forEach(Move::resetReady);
+		ability = ability.namesies().getNewAbility();
 	}
 	
 	public void setCaught() {
 		isPlayer = true;
 	}
 	
-	public boolean isFainted(Battle b)
-	{
+	public boolean isFainted(Battle b) {
 		// We have already checked that this Pokemon is fainted -- don't print/apply effects more than once
 		if (hasStatus(StatusCondition.FAINTED)) {
 			if (hp == 0) {
@@ -852,15 +912,10 @@ public class ActivePokemon implements Serializable {
 		// Deady
 		if (hp == 0) {
 			Messages.add(new MessageUpdate().updatePokemon(b, this));
-			
-			Status.die(this);
-			Messages.add(new MessageUpdate(getName() + " fainted!").updatePokemon(b, this));
-			
-			ActivePokemon murderer = b.getOtherPokemon(isPlayer());
 
-			// Apply effects which occur when the user faints
-			FaintEffect.grantDeathWish(b, this, murderer);
-			
+			ActivePokemon murderer = b.getOtherPokemon(this);
+			Status.die(b, murderer, this);
+
 			// If the pokemon fainted via murder (by direct result of an attack) -- apply kill wishes
 			if (murderer.getAttributes().isAttacking()) {
 				MurderEffect.killKillKillMurderMurderMurder(b, this, murderer);
@@ -950,8 +1005,6 @@ public class ActivePokemon implements Serializable {
 	// Sets the Pokemon's status condition to be None
 	public void removeStatus() {
 		Status.removeStatus(this);
-		attributes.removeEffect(EffectNamesies.NIGHTMARE); // TODO: There should be a way for effects to be tied to status conditions so that they don't have to be hardcoded here
-		attributes.removeEffect(EffectNamesies.BAD_POISON);
 	}
 
 	// Don't think you'll make it out alive
@@ -1032,35 +1085,22 @@ public class ActivePokemon implements Serializable {
 		getActualMoves().forEach(Move::resetPP);
 		healHealthFraction(1);
 	}
-	
-	// Heals the Pokemon by damage amount. It is assume damage has already been dealt to the victim
-	public void sapHealth(ActivePokemon victim, int amount, Battle b, boolean print, boolean dreamEater) {
-		if (victim.hasAbility(AbilityNamesies.LIQUID_OOZE)) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + getName() + " to lose health instead!"));
-			reduceHealth(b, amount);
-			return;
-		}
-		
-		// Big Root heals an additional 30%
-		if (isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
-			amount *= 1.3;
-		}
-		
-		// Sap message (different for Dream Eater)
-		if (print) {
-			String message = dreamEater ? victim.getName() + "'s dream was eaten!" : victim.getName() + "'s health was sapped!";
-			Messages.add(new MessageUpdate(message));
-		}
-		
-		// Healers gon' heal
-		if (!hasEffect(EffectNamesies.HEAL_BLOCK)) {
-			heal(amount);
+
+	public Stat getBestBattleStat() {
+		Stat bestStat = Stat.ATTACK;
+		for (Stat stat : Stat.STATS) {
+			if (stat == Stat.HP) {
+				continue;
+			}
+
+			if (this.stats[stat.index()] > this.stats[bestStat.index()]) {
+				bestStat = stat;
+			}
 		}
 
-		Messages.add(new MessageUpdate().updatePokemon(b, victim));
-		Messages.add(new MessageUpdate().updatePokemon(b, this));
+		return bestStat;
 	}
-	
+
 	public boolean isGrounded(Battle b) {
 		return GroundedEffect.containsGroundedEffect(b, this);
 	}

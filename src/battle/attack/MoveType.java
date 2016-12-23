@@ -2,7 +2,6 @@ package battle.attack;
 
 public enum MoveType {
     AIRBORNE,
-    ASLEEP_USER,
     ASSISTLESS,
     AURA_PULSE,
     BITING,
@@ -10,6 +9,7 @@ public enum MoveType {
     DEFROST,
     ENCORELESS,
     FIELD,
+    HEALING,
     METRONOMELESS,
     MIMICLESS,
     MIRRORLESS,

@@ -5,7 +5,6 @@ import battle.attack.MoveType;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
-import battle.effect.generic.EffectNamesies;
 import main.Type;
 import message.MessageUpdate;
 import message.Messages;
@@ -19,9 +18,10 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
         super(StatusCondition.FROZEN);
     }
 
-    // Ice-type Pokemon cannot be frozen and no one can frozen while sunny
-    public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return super.applies(b, caster, victim) && !victim.isType(b, Type.ICE) && b.getWeather().namesies() != EffectNamesies.SUNNY;
+    // Ice-type Pokemon cannot be frozen
+    @Override
+    protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        return !victim.isType(b, Type.ICE);
     }
 
     public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {

@@ -33,13 +33,15 @@ Raining:
 *
 Sunny:
 	WeatherElement: Fire
-	Int: Hidden-EndTurnEffect
+	Int: Hidden-EndTurnEffect, StatusPreventionEffect
 	ApplyEndTurn:
 	Messages.add(new MessageUpdate("The sunlight is strong."));
 	###
 	CastMessage: "The sunlight turned harsh!"
 	SubsideMessage: "The sunlight faded."
 	WeatherStatChange: Fire Water
+	StatusPrevent: return status == StatusCondition.FROZEN;
+	StatusPreventMessage: "Too sunny to freeze!!"
 *
 Sandstorm:
 	WeatherElement: Rock

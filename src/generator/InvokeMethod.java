@@ -44,7 +44,8 @@ abstract class InvokeMethod {
         this.declareMoldBreaker(body, interfaceMethod);
         body.append(getDeclaration(interfaceMethod));
         StringUtils.appendLine(body, "\nfor (Object invokee : invokees) {");
-        StringUtils.appendLine(body, "if (invokee instanceof " + interfaceMethod.getInterfaceName() + " && !Effect.isInactiveEffect(invokee)) {");
+        StringUtils.appendLine(body, "if (invokee instanceof " + interfaceMethod.getInterfaceName() +
+                " && !Effect.isInactiveEffect(invokee, " + interfaceMethod.getBattleParameter() + ")) {");
         this.appendMoldBreaker(body, interfaceMethod);
         StringUtils.appendLine(body, "");
         this.appendInnerLoop(body, interfaceMethod);
@@ -108,6 +109,7 @@ abstract class InvokeMethod {
 
         StringUtils.appendLine(body, "\n// If this is an ability that is being affected by mold breaker, we don't want to do anything with it");
         StringUtils.appendLine(body, "if (invokee instanceof Ability && " +
+                        "!((Ability)invokee).unbreakableMold() && " +
                         (interfaceMethod.isMoldBreakNullCheck()
                                 ? "moldBreaker != null && moldBreaker"
                                 : interfaceMethod.getMoldBreaker()) +

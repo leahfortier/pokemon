@@ -1,13 +1,14 @@
 package battle.effect.generic;
 
 import battle.Battle;
+import battle.attack.Attack;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import main.Global;
 import main.Type;
-import pokemon.ability.Ability;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
+import pokemon.ability.Ability;
 import trainer.Trainer;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public final class EffectInterfaces {
 		static void invokeApplyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			List<Object> invokees = b.getEffectsList(user);
 			for (Object invokee : invokees) {
-				if (invokee instanceof ApplyDamageEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof ApplyDamageEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					ApplyDamageEffect effect = (ApplyDamageEffect)invokee;
 					effect.applyDamageEffect(b, user, victim, damage);
@@ -57,7 +58,7 @@ public final class EffectInterfaces {
 			invokees.remove(b.getWeather());
 			
 			for (Object invokee : invokees) {
-				if (invokee instanceof EndTurnEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof EndTurnEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					EndTurnEffect effect = (EndTurnEffect)invokee;
 					effect.applyEndTurn(victim, b);
@@ -70,13 +71,32 @@ public final class EffectInterfaces {
 		}
 	}
 
+	public interface SuperDuperEndTurnEffect {
+		boolean theVeryVeryEnd(Battle b, ActivePokemon p);
+
+		static boolean checkSuperDuperEndTurnEffect(Battle b, ActivePokemon p) {
+			List<Object> invokees = b.getEffectsList(p);
+			for (Object invokee : invokees) {
+				if (invokee instanceof SuperDuperEndTurnEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					SuperDuperEndTurnEffect effect = (SuperDuperEndTurnEffect)invokee;
+					if (effect.theVeryVeryEnd(b, p)) {
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		}
+	}
+
 	public interface RecoilMove {
 		void applyRecoil(Battle b, ActivePokemon user, int damage);
 
 		static void invokeRecoilMove(Battle b, ActivePokemon user, int damage) {
 			List<Object> invokees = Collections.singletonList(user.getAttack());
 			for (Object invokee : invokees) {
-				if (invokee instanceof RecoilMove && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof RecoilMove && !Effect.isInactiveEffect(invokee, b)) {
 					
 					RecoilMove effect = (RecoilMove)invokee;
 					effect.applyRecoil(b, user, damage);
@@ -99,7 +119,7 @@ public final class EffectInterfaces {
 			
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
-				if (invokee instanceof PhysicalContactEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof PhysicalContactEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					PhysicalContactEffect effect = (PhysicalContactEffect)invokee;
 					effect.contact(b, user, victim);
@@ -126,7 +146,7 @@ public final class EffectInterfaces {
 			
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
-				if (invokee instanceof TakeDamageEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof TakeDamageEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					TakeDamageEffect effect = (TakeDamageEffect)invokee;
 					effect.takeDamage(b, user, victim);
@@ -145,7 +165,7 @@ public final class EffectInterfaces {
 		static void invokeCrashDamageMove(Battle b, ActivePokemon user) {
 			List<Object> invokees = Collections.singletonList(user.getAttack());
 			for (Object invokee : invokees) {
-				if (invokee instanceof CrashDamageMove && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof CrashDamageMove && !Effect.isInactiveEffect(invokee, b)) {
 					
 					CrashDamageMove effect = (CrashDamageMove)invokee;
 					effect.crash(b, user);
@@ -160,7 +180,7 @@ public final class EffectInterfaces {
 		static void breakBarriers(Battle b, ActivePokemon breaker) {
 			List<Object> invokees = b.getEffectsList(b.getOtherPokemon(breaker.isPlayer()));
 			for (Object invokee : invokees) {
-				if (invokee instanceof BarrierEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof BarrierEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					BarrierEffect effect = (BarrierEffect)invokee;
 					effect.breakBarrier(b, breaker);
@@ -175,7 +195,7 @@ public final class EffectInterfaces {
 		static void release(Battle b, ActivePokemon victim) {
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
-				if (invokee instanceof DefogRelease && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof DefogRelease && !Effect.isInactiveEffect(invokee, b)) {
 					
 					DefogRelease effect = (DefogRelease)invokee;
 					effect.releaseDefog(b, victim);
@@ -190,7 +210,7 @@ public final class EffectInterfaces {
 		static void release(Battle b, ActivePokemon releaser) {
 			List<Object> invokees = b.getEffectsList(releaser);
 			for (Object invokee : invokees) {
-				if (invokee instanceof RapidSpinRelease && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof RapidSpinRelease && !Effect.isInactiveEffect(invokee, b)) {
 					
 					RapidSpinRelease effect = (RapidSpinRelease)invokee;
 					effect.releaseRapidSpin(b, releaser);
@@ -209,7 +229,7 @@ public final class EffectInterfaces {
 			List<Object> invokees = Collections.singletonList(p.getAbility());
 			
 			for (Object invokee : invokees) {
-				if (invokee instanceof NameChanger && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof NameChanger && !Effect.isInactiveEffect(invokee, null)) {
 					
 					NameChanger effect = (NameChanger)invokee;
 					return effect.getNameChange();
@@ -222,7 +242,7 @@ public final class EffectInterfaces {
 		static void setNameChanges(Battle b, ActivePokemon victim) {
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
-				if (invokee instanceof NameChanger && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof NameChanger && !Effect.isInactiveEffect(invokee, b)) {
 					
 					NameChanger effect = (NameChanger)invokee;
 					effect.setNameChange(b, victim);
@@ -237,7 +257,7 @@ public final class EffectInterfaces {
 		static void invokeEntryEffect(Battle b, ActivePokemon enterer) {
 			List<Object> invokees = b.getEffectsList(enterer);
 			for (Object invokee : invokees) {
-				if (invokee instanceof EntryEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof EntryEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					EntryEffect effect = (EntryEffect)invokee;
 					effect.enter(b, enterer);
@@ -256,7 +276,7 @@ public final class EffectInterfaces {
 		static void invokeStatLoweredEffect(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
-				if (invokee instanceof StatLoweredEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof StatLoweredEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					StatLoweredEffect effect = (StatLoweredEffect)invokee;
 					effect.takeItToTheNextLevel(b, caster, victim);
@@ -271,7 +291,7 @@ public final class EffectInterfaces {
 		static void falllllllll(Battle b, ActivePokemon fallen) {
 			List<Object> invokees = b.getEffectsList(fallen);
 			for (Object invokee : invokees) {
-				if (invokee instanceof LevitationEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof LevitationEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					LevitationEffect effect = (LevitationEffect)invokee;
 					effect.fall(b, fallen);
@@ -282,10 +302,10 @@ public final class EffectInterfaces {
 		static boolean containsLevitationEffect(Battle b, ActivePokemon p, ActivePokemon moldBreaker) {
 			List<Object> invokees = b.getEffectsList(p);
 			for (Object invokee : invokees) {
-				if (invokee instanceof LevitationEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof LevitationEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && moldBreaker.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && moldBreaker.breaksTheMold()) {
 						continue;
 					}
 					
@@ -297,21 +317,6 @@ public final class EffectInterfaces {
 		}
 	}
 
-	public interface FaintEffect {
-		void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer);
-
-		static void grantDeathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-			List<Object> invokees = b.getEffectsList(dead);
-			for (Object invokee : invokees) {
-				if (invokee instanceof FaintEffect && !Effect.isInactiveEffect(invokee)) {
-					
-					FaintEffect effect = (FaintEffect)invokee;
-					effect.deathWish(b, dead, murderer);
-				}
-			}
-		}
-	}
-
 	// KILL KILL KILL MURDER MURDER MURDER
 	public interface MurderEffect {
 		void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer);
@@ -319,7 +324,7 @@ public final class EffectInterfaces {
 		static void killKillKillMurderMurderMurder(Battle b, ActivePokemon dead, ActivePokemon murderer) {
 			List<Object> invokees = b.getEffectsList(murderer);
 			for (Object invokee : invokees) {
-				if (invokee instanceof MurderEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof MurderEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					MurderEffect effect = (MurderEffect)invokee;
 					effect.killWish(b, dead, murderer);
@@ -333,7 +338,7 @@ public final class EffectInterfaces {
 
 		static void invokeEndBattleEffect(List<?> invokees, Trainer player, Battle b, ActivePokemon p) {
 			for (Object invokee : invokees) {
-				if (invokee instanceof EndBattleEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof EndBattleEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					EndBattleEffect effect = (EndBattleEffect)invokee;
 					effect.afterBattle(player, b, p);
@@ -347,7 +352,7 @@ public final class EffectInterfaces {
 		static boolean containsGroundedEffect(Battle b, ActivePokemon p) {
 			List<Object> invokees = b.getEffectsList(p);
 			for (Object invokee : invokees) {
-				if (invokee instanceof GroundedEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof GroundedEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					return true;
 				}
@@ -365,7 +370,7 @@ public final class EffectInterfaces {
 		static boolean bypassAccuracyCheck(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			List<Object> invokees = b.getEffectsList(attacking, attacking.getAttack());
 			for (Object invokee : invokees) {
-				if (invokee instanceof AccuracyBypassEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof AccuracyBypassEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					AccuracyBypassEffect effect = (AccuracyBypassEffect)invokee;
 					if (effect.bypassAccuracy(b, attacking, defending)) {
@@ -386,7 +391,7 @@ public final class EffectInterfaces {
 		static boolean bypassAccuracyCheck(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			List<Object> invokees = b.getEffectsList(defending);
 			for (Object invokee : invokees) {
-				if (invokee instanceof OpponentAccuracyBypassEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof OpponentAccuracyBypassEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					OpponentAccuracyBypassEffect effect = (OpponentAccuracyBypassEffect)invokee;
 					if (effect.opponentBypassAccuracy(b, attacking, defending)) {
@@ -400,16 +405,37 @@ public final class EffectInterfaces {
 	}
 
 	public interface AttackSelectionEffect {
-		boolean usable(ActivePokemon p, Move m);
-		String getUnusableMessage(ActivePokemon p);
+		boolean usable(Battle b, ActivePokemon p, Move m);
+		String getUnusableMessage(Battle b, ActivePokemon p);
 
 		static AttackSelectionEffect getUnusableEffect(Battle b, ActivePokemon p, Move m) {
 			List<Object> invokees = b.getEffectsList(p);
 			for (Object invokee : invokees) {
-				if (invokee instanceof AttackSelectionEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof AttackSelectionEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					AttackSelectionEffect effect = (AttackSelectionEffect)invokee;
-					if (!effect.usable(p, m)) {
+					if (!effect.usable(b, p, m)) {
+						return effect;
+					}
+				}
+			}
+			
+			return null;
+		}
+	}
+
+	public interface OpponentAttackSelectionEffect extends AttackSelectionEffect {
+
+		// TODO: Need to not include this method again since it already extends AttackSelectionEffect, but still need the invoke method
+		boolean usable(Battle b, ActivePokemon p, Move m);
+
+		static OpponentAttackSelectionEffect getUnusableEffect(Battle b, ActivePokemon p, Move m) {
+			List<Object> invokees = b.getEffectsList(b.getOtherPokemon(p));
+			for (Object invokee : invokees) {
+				if (invokee instanceof OpponentAttackSelectionEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					OpponentAttackSelectionEffect effect = (OpponentAttackSelectionEffect)invokee;
+					if (!effect.usable(b, p, m)) {
 						return effect;
 					}
 				}
@@ -425,7 +451,7 @@ public final class EffectInterfaces {
 		static boolean checkBlocked(Battle b, ActivePokemon p, EffectNamesies weather) {
 			List<Object> invokees = b.getEffectsList(p);
 			for (Object invokee : invokees) {
-				if (invokee instanceof WeatherBlockerEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof WeatherBlockerEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					WeatherBlockerEffect effect = (WeatherBlockerEffect)invokee;
 					if (effect.block(weather)) {
@@ -446,7 +472,7 @@ public final class EffectInterfaces {
 		static TrappingEffect getTrapped(Battle b, ActivePokemon escaper) {
 			List<Object> invokees = b.getEffectsList(escaper);
 			for (Object invokee : invokees) {
-				if (invokee instanceof TrappingEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof TrappingEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					TrappingEffect effect = (TrappingEffect)invokee;
 					if (effect.isTrapped(b, escaper)) {
@@ -466,7 +492,7 @@ public final class EffectInterfaces {
 		static OpponentTrappingEffect getTrapped(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
 			List<Object> invokees = b.getEffectsList(escaper);
 			for (Object invokee : invokees) {
-				if (invokee instanceof OpponentTrappingEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof OpponentTrappingEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					OpponentTrappingEffect effect = (OpponentTrappingEffect)invokee;
 					if (effect.trapOpponent(b, escaper, trapper)) {
@@ -495,7 +521,7 @@ public final class EffectInterfaces {
 			
 			List<Object> invokees = b.getEffectsList(p);
 			for (Object invokee : invokees) {
-				if (invokee instanceof BeforeTurnEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof BeforeTurnEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					BeforeTurnEffect effect = (BeforeTurnEffect)invokee;
 					if (!effect.canAttack(p, opp, b)) {
@@ -530,10 +556,10 @@ public final class EffectInterfaces {
 			
 			List<Object> invokees = b.getEffectsList(opp);
 			for (Object invokee : invokees) {
-				if (invokee instanceof OpponentBeforeTurnEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof OpponentBeforeTurnEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && p.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && p.breaksTheMold()) {
 						continue;
 					}
 					
@@ -562,10 +588,10 @@ public final class EffectInterfaces {
 		static boolean checkBlocked(Battle b, ActivePokemon user, ActivePokemon victim) {
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
-				if (invokee instanceof EffectBlockerEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof EffectBlockerEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && user.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && user.breaksTheMold()) {
 						continue;
 					}
 					
@@ -586,10 +612,10 @@ public final class EffectInterfaces {
 		static boolean checkSwapTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
 			List<Object> invokees = b.getEffectsList(opponent);
 			for (Object invokee : invokees) {
-				if (invokee instanceof TargetSwapperEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof TargetSwapperEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && user.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && user.breaksTheMold()) {
 						continue;
 					}
 					
@@ -610,10 +636,10 @@ public final class EffectInterfaces {
 		static boolean checkBlocked(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			List<Object> invokees = b.getEffectsList(defending, attacking.getAttack());
 			for (Object invokee : invokees) {
-				if (invokee instanceof CritBlockerEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof CritBlockerEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && attacking.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && attacking.breaksTheMold()) {
 						continue;
 					}
 					
@@ -635,10 +661,10 @@ public final class EffectInterfaces {
 		static StatProtectingEffect getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
-				if (invokee instanceof StatProtectingEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof StatProtectingEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && caster.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && caster.breaksTheMold()) {
 						continue;
 					}
 					
@@ -662,10 +688,10 @@ public final class EffectInterfaces {
 		static StatusPreventionEffect getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
-				if (invokee instanceof StatusPreventionEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof StatusPreventionEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && caster.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && caster.breaksTheMold()) {
 						continue;
 					}
 					
@@ -687,10 +713,10 @@ public final class EffectInterfaces {
 		static BracingEffect getBracingEffect(Battle b, ActivePokemon bracer, boolean fullHealth) {
 			List<Object> invokees = b.getEffectsList(bracer);
 			for (Object invokee : invokees) {
-				if (invokee instanceof BracingEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof BracingEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && b.getOtherPokemon(bracer.isPlayer()).breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && b.getOtherPokemon(bracer.isPlayer()).breaksTheMold()) {
 						continue;
 					}
 					
@@ -716,10 +742,10 @@ public final class EffectInterfaces {
 			}
 			
 			for (Object invokee : invokees) {
-				if (invokee instanceof OpponentIgnoreStageEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof OpponentIgnoreStageEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && stagePokemon.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && stagePokemon.breaksTheMold()) {
 						continue;
 					}
 					
@@ -742,7 +768,7 @@ public final class EffectInterfaces {
 		static Type[] getChangedType(Battle b, ActivePokemon p, boolean display) {
 			List<Object> invokees = b.getEffectsList(p, p.getEffect(EffectNamesies.CHANGE_TYPE));
 			for (Object invokee : invokees) {
-				if (invokee instanceof ChangeTypeEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof ChangeTypeEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					ChangeTypeEffect effect = (ChangeTypeEffect)invokee;
 					return effect.getType(b, p, display);
@@ -759,7 +785,7 @@ public final class EffectInterfaces {
 		static Move getForcedMove(Battle b, ActivePokemon attacking) {
 			List<Object> invokees = b.getEffectsList(attacking);
 			for (Object invokee : invokees) {
-				if (invokee instanceof ForceMoveEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof ForceMoveEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					ForceMoveEffect effect = (ForceMoveEffect)invokee;
 					return effect.getForcedMove();
@@ -776,7 +802,7 @@ public final class EffectInterfaces {
 		static Integer getStat(Battle b, ActivePokemon user, Stat stat) {
 			List<Object> invokees = b.getEffectsList(user);
 			for (Object invokee : invokees) {
-				if (invokee instanceof DifferentStatEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof DifferentStatEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					DifferentStatEffect effect = (DifferentStatEffect)invokee;
 					return effect.getStat(user, stat);
@@ -793,7 +819,7 @@ public final class EffectInterfaces {
 		static int updateCritStage(Battle b, int stage, ActivePokemon p) {
 			List<Object> invokees = b.getEffectsList(p);
 			for (Object invokee : invokees) {
-				if (invokee instanceof CritStageEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof CritStageEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					CritStageEffect effect = (CritStageEffect)invokee;
 					stage = effect.increaseCritStage(stage, p);
@@ -805,15 +831,15 @@ public final class EffectInterfaces {
 	}
 
 	public interface PriorityChangeEffect {
-		int changePriority(Battle b, ActivePokemon user, int priority);
+		int changePriority(Battle b, ActivePokemon user, Attack attack, int priority);
 
-		static int updatePriority(Battle b, ActivePokemon user, int priority) {
+		static int updatePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
 			List<Object> invokees = b.getEffectsList(user);
 			for (Object invokee : invokees) {
-				if (invokee instanceof PriorityChangeEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof PriorityChangeEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					PriorityChangeEffect effect = (PriorityChangeEffect)invokee;
-					priority = effect.changePriority(b, user, priority);
+					priority = effect.changePriority(b, user, attack, priority);
 				}
 			}
 			
@@ -822,15 +848,15 @@ public final class EffectInterfaces {
 	}
 
 	public interface ChangeAttackTypeEffect {
-		Type changeAttackType(Type original);
+		Type changeAttackType(Attack attack, Type original);
 
-		static Type updateAttackType(Battle b, ActivePokemon attacking, Type original) {
+		static Type updateAttackType(Battle b, ActivePokemon attacking, Attack attack, Type original) {
 			List<Object> invokees = b.getEffectsList(attacking);
 			for (Object invokee : invokees) {
-				if (invokee instanceof ChangeAttackTypeEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof ChangeAttackTypeEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					ChangeAttackTypeEffect effect = (ChangeAttackTypeEffect)invokee;
-					original = effect.changeAttackType(original);
+					original = effect.changeAttackType(attack, original);
 				}
 			}
 			
@@ -850,7 +876,7 @@ public final class EffectInterfaces {
 			invokees.add(attacking.getAbility());
 			
 			for (Object invokee : invokees) {
-				if (invokee instanceof AdvantageChanger && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof AdvantageChanger && !Effect.isInactiveEffect(invokee, b)) {
 					
 					AdvantageChanger effect = (AdvantageChanger)invokee;
 					defendingType = effect.getAdvantageChange(attackingType, defendingType);
@@ -867,7 +893,7 @@ public final class EffectInterfaces {
 		static List<Move> getMoveList(Battle b, ActivePokemon p, List<Move> actualMoves) {
 			List<Object> invokees = b.getEffectsList(p);
 			for (Object invokee : invokees) {
-				if (invokee instanceof ChangeMoveListEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof ChangeMoveListEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					ChangeMoveListEffect effect = (ChangeMoveListEffect)invokee;
 					return effect.getMoveList(actualMoves);
@@ -884,7 +910,7 @@ public final class EffectInterfaces {
 		static Stat switchStat(Battle b, ActivePokemon statPokemon, ActivePokemon other, Stat s) {
 			List<Object> invokees = b.getEffectsList(statPokemon);
 			for (Object invokee : invokees) {
-				if (invokee instanceof StatSwitchingEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof StatSwitchingEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					StatSwitchingEffect effect = (StatSwitchingEffect)invokee;
 					s = effect.switchStat(s);
@@ -906,7 +932,7 @@ public final class EffectInterfaces {
 			}
 			
 			for (Object invokee : invokees) {
-				if (invokee instanceof OpponentStatSwitchingEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof OpponentStatSwitchingEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					OpponentStatSwitchingEffect effect = (OpponentStatSwitchingEffect)invokee;
 					s = effect.switchStat(s);
@@ -923,10 +949,10 @@ public final class EffectInterfaces {
 		static int updateHalfAmount(Battle b, ActivePokemon anorexic, int halfAmount) {
 			List<Object> invokees = b.getEffectsList(anorexic);
 			for (Object invokee : invokees) {
-				if (invokee instanceof HalfWeightEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof HalfWeightEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && b.getOtherPokemon(anorexic.isPlayer()).breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && b.getOtherPokemon(anorexic.isPlayer()).breaksTheMold()) {
 						continue;
 					}
 					
@@ -947,10 +973,10 @@ public final class EffectInterfaces {
 			
 			List<Object> invokees = b.getEffectsList(p);
 			for (Object invokee : invokees) {
-				if (invokee instanceof StageChangingEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof StageChangingEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && moldBreaker != null && moldBreaker.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && moldBreaker != null && moldBreaker.breaksTheMold()) {
 						continue;
 					}
 					
@@ -978,10 +1004,10 @@ public final class EffectInterfaces {
 			
 			List<Object> invokees = b.getEffectsList(p);
 			for (Object invokee : invokees) {
-				if (invokee instanceof StatChangingEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof StatChangingEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && moldBreaker != null && moldBreaker.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && moldBreaker != null && moldBreaker.breaksTheMold()) {
 						continue;
 					}
 					
@@ -1000,7 +1026,7 @@ public final class EffectInterfaces {
 		static double updateModifier(double modifier, Battle b, ActivePokemon user, ActivePokemon victim) {
 			List<Object> invokees = b.getEffectsList(user);
 			for (Object invokee : invokees) {
-				if (invokee instanceof PowerChangeEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof PowerChangeEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					PowerChangeEffect effect = (PowerChangeEffect)invokee;
 					modifier *= effect.getMultiplier(b, user, victim);
@@ -1017,10 +1043,10 @@ public final class EffectInterfaces {
 		static double updateModifier(double modifier, Battle b, ActivePokemon user, ActivePokemon victim) {
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
-				if (invokee instanceof OpponentPowerChangeEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof OpponentPowerChangeEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && user.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && user.breaksTheMold()) {
 						continue;
 					}
 					
@@ -1039,7 +1065,7 @@ public final class EffectInterfaces {
 		static double updateModifier(double modifier, ActivePokemon attacking, Type moveType, Type[] defendingType) {
 			List<Object> invokees = Collections.singletonList(attacking.getAttack());
 			for (Object invokee : invokees) {
-				if (invokee instanceof AdvantageMultiplierMove && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof AdvantageMultiplierMove && !Effect.isInactiveEffect(invokee, null)) {
 					
 					AdvantageMultiplierMove effect = (AdvantageMultiplierMove)invokee;
 					modifier *= effect.multiplyAdvantage(moveType, defendingType);
@@ -1051,15 +1077,15 @@ public final class EffectInterfaces {
 	}
 
 	public interface AbsorbDamageEffect {
-		boolean absorbDamage(ActivePokemon damageTaker, int damageAmount);
+		boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount);
 
 		static boolean checkAbsorbDamageEffect(Battle b, ActivePokemon damageTaker, int damageAmount) {
 			List<Object> invokees = b.getEffectsList(damageTaker);
 			for (Object invokee : invokees) {
-				if (invokee instanceof AbsorbDamageEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof AbsorbDamageEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					AbsorbDamageEffect effect = (AbsorbDamageEffect)invokee;
-					if (effect.absorbDamage(damageTaker, damageAmount)) {
+					if (effect.absorbDamage(b, damageTaker, damageAmount)) {
 						return true;
 					}
 				}
@@ -1075,7 +1101,7 @@ public final class EffectInterfaces {
 		static void invokeDamageTakenEffect(Battle b, ActivePokemon damageTaker) {
 			List<Object> invokees = b.getEffectsList(damageTaker);
 			for (Object invokee : invokees) {
-				if (invokee instanceof DamageTakenEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof DamageTakenEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					DamageTakenEffect effect = (DamageTakenEffect)invokee;
 					effect.damageTaken(b, damageTaker);
@@ -1085,17 +1111,81 @@ public final class EffectInterfaces {
 	}
 
 	public interface AlwaysCritEffect {
+		boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending);
 
-		static boolean containsAlwaysCritEffect(Battle b, ActivePokemon p) {
+		static boolean defCritsies(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			List<Object> invokees = b.getEffectsList(attacking, attacking.getAttack());
+			for (Object invokee : invokees) {
+				if (invokee instanceof AlwaysCritEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					AlwaysCritEffect effect = (AlwaysCritEffect)invokee;
+					if (effect.shouldCrit(b, attacking, defending)) {
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		}
+	}
+
+	public interface StatusReceivedEffect {
+		void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType);
+
+		static void invokeStatusReceivedEffect(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
+			List<Object> invokees = b.getEffectsList(victim);
+			for (Object invokee : invokees) {
+				if (invokee instanceof StatusReceivedEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					StatusReceivedEffect effect = (StatusReceivedEffect)invokee;
+					effect.receiveStatus(b, caster, victim, statusType);
+				}
+			}
+		}
+	}
+
+	public interface OpponentStatusReceivedEffect {
+		void receiveStatus(Battle b, ActivePokemon victim, StatusCondition statusType);
+
+		static void invokeOpponentStatusReceivedEffect(Battle b, ActivePokemon victim, StatusCondition statusType) {
+			List<Object> invokees = b.getEffectsList(b.getOtherPokemon(victim));
+			for (Object invokee : invokees) {
+				if (invokee instanceof OpponentStatusReceivedEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					OpponentStatusReceivedEffect effect = (OpponentStatusReceivedEffect)invokee;
+					effect.receiveStatus(b, victim, statusType);
+				}
+			}
+		}
+	}
+
+	public interface SleepyFightsterEffect {
+
+		static boolean containsSleepyFightsterEffect(Battle b, ActivePokemon p) {
 			List<Object> invokees = b.getEffectsList(p, p.getAttack());
 			for (Object invokee : invokees) {
-				if (invokee instanceof AlwaysCritEffect && !Effect.isInactiveEffect(invokee)) {
+				if (invokee instanceof SleepyFightsterEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					return true;
 				}
 			}
 			
 			return false;
+		}
+	}
+
+	public interface OpponentEndAttackEffect {
+		void endsies(Battle b, ActivePokemon attacking, Attack attack);
+
+		static void invokeOpponentEndAttackEffect(Battle b, ActivePokemon attacking, Attack attack) {
+			List<Object> invokees = b.getEffectsList(b.getOtherPokemon(attacking));
+			for (Object invokee : invokees) {
+				if (invokee instanceof OpponentEndAttackEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					OpponentEndAttackEffect effect = (OpponentEndAttackEffect)invokee;
+					effect.endsies(b, attacking, attack);
+				}
+			}
 		}
 	}
 }

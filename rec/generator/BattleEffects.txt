@@ -117,3 +117,12 @@ PsychicTerrain:
 	return user.getAttackType() == Type.PSYCHIC && !user.isLevitating(b) ? 1.5 : 1;
 	###
 *
+FieldUproar:
+	Int: StatusPreventionEffect
+	StatusPrevent: return status == StatusCondition.ASLEEP;
+	StatusPreventMessage: "The uproar prevents sleep!!"
+	EffectIsActive:
+	// TODO: This should just be a super duper end turn effect and revert back to the old isActive system
+	return b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR);
+	###
+*
