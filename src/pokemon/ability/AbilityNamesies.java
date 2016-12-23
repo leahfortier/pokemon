@@ -43,6 +43,7 @@ import pokemon.ability.Ability.DrySkin;
 import pokemon.ability.Ability.EarlyBird;
 import pokemon.ability.Ability.EffectSpore;
 import pokemon.ability.Ability.ElectricSurge;
+import pokemon.ability.Ability.EmergencyExit;
 import pokemon.ability.Ability.FairyAura;
 import pokemon.ability.Ability.Filter;
 import pokemon.ability.Ability.FlameBody;
@@ -122,6 +123,7 @@ import pokemon.ability.Ability.PoisonPoint;
 import pokemon.ability.Ability.PoisonTouch;
 import pokemon.ability.Ability.Prankster;
 import pokemon.ability.Ability.Pressure;
+import pokemon.ability.Ability.PrismArmor;
 import pokemon.ability.Ability.Protean;
 import pokemon.ability.Ability.PsychicSurge;
 import pokemon.ability.Ability.PurePower;
@@ -205,6 +207,7 @@ import pokemon.ability.Ability.WaterCompaction;
 import pokemon.ability.Ability.WaterVeil;
 import pokemon.ability.Ability.WeakArmor;
 import pokemon.ability.Ability.WhiteSmoke;
+import pokemon.ability.Ability.WimpOut;
 import pokemon.ability.Ability.WonderGuard;
 import pokemon.ability.Ability.WonderSkin;
 import util.PokeString;
@@ -400,6 +403,8 @@ public enum AbilityNamesies {
 	WATER_BUBBLE("Water Bubble", WaterBubble::new),
 	STEELWORKER("Steelworker", Steelworker::new),
 	BERSERK("Berserk", Berserk::new),
+	WIMP_OUT("Wimp Out", WimpOut::new),
+	EMERGENCY_EXIT("Emergency Exit", EmergencyExit::new),
 	LONG_REACH("Long Reach", LongReach::new),
 	LIQUID_VOICE("Liquid Voice", LiquidVoice::new),
 	TRIAGE("Triage", Triage::new),

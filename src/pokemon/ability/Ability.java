@@ -1354,7 +1354,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.RATTLED, "Some move types scare it and boost its Speed.");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Type type = user.getAttackType();
 			if (type == Type.BUG || type == Type.DARK || type == Type.GHOST) {
 				victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
@@ -2037,7 +2037,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.COLOR_CHANGE, "Changes the Pok\u00e9mon's type to the foe's move.");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Type t = user.getAttackType();
 			if (!victim.isType(b, t)) {
 				type = t;
@@ -2238,7 +2238,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.JUSTIFIED, "Raises Attack when hit by a Dark-type move.");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (user.getAttackType() == Type.DARK) {
 				victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
 			}
@@ -2456,7 +2456,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.WEAK_ARMOR, "Physical attacks lower Defense and raise Speed.");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
 				victim.getAttributes().modifyStage(victim, victim, -1, Stat.DEFENSE, b, CastSource.ABILITY);
 				victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
@@ -2513,7 +2513,7 @@ public abstract class Ability implements Serializable {
 			activated = false;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			breakIllusion(b, victim);
 		}
 
@@ -3260,7 +3260,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.STAMINA, "Boosts the Defense stat when hit by an attack.");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			victim.getAttributes().modifyStage(victim, victim, 1, Stat.DEFENSE, b, CastSource.ABILITY);
 		}
 	}
@@ -3272,7 +3272,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.WATER_COMPACTION, "Boosts the Pokémon's Defense stat sharply when hit by a Water-type move.");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (user.getAttackType() == Type.WATER) {
 				victim.getAttributes().modifyStage(victim, victim, 2, Stat.DEFENSE, b, CastSource.ABILITY);
 			}
@@ -3334,9 +3334,40 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.BERSERK, "Boosts the Pokémon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.");
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
-			if (victim.getHPRatio() < .5 && (victim.getHP() + damageTaken)/(double)victim.getMaxHP() >= .5) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getAttributes().getDamageTaken())/(double)victim.getMaxHP() >= .5) {
 				victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+				
+			}
+		}
+	}
+
+	static class WimpOut extends Ability implements TakeDamageEffect {
+		private static final long serialVersionUID = 1L;
+
+		WimpOut() {
+			super(AbilityNamesies.WIMP_OUT, "The Pokémon cowardly switches out when its HP becomes half or less.");
+		}
+
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getAttributes().getDamageTaken())/(double)victim.getMaxHP() >= .5) {
+				victim.switcheroo(b, victim, CastSource.ABILITY, true);
+				
+			}
+		}
+	}
+
+	static class EmergencyExit extends Ability implements TakeDamageEffect {
+		private static final long serialVersionUID = 1L;
+
+		EmergencyExit() {
+			super(AbilityNamesies.EMERGENCY_EXIT, "The Pokémon, sensing danger, switches out when its HP becomes half or less.");
+		}
+
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getAttributes().getDamageTaken())/(double)victim.getMaxHP() >= .5) {
+				victim.switcheroo(b, victim, CastSource.ABILITY, true);
+				
 			}
 		}
 	}

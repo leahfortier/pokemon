@@ -576,26 +576,7 @@ Override:
 		// First execute the move as normal
 		super.apply(me, o, b);
 		
-		Team t = b.getTrainer(me.isPlayer());
-		if (t instanceof WildPokemon) {
-			// End the battle against a wild Pokemon
-			Messages.add(new MessageUpdate(me.getName() + " left the battle!"));
-			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-			return;
-		}
-		
-		Trainer trainer = (Trainer)t;
-		if (!trainer.hasRemainingPokemon())
-		{
-			// Don't switch if no one to switch to
-			return;
-		}
-		
-		// Send this Pokemon back to the trainer and send out the next one
-		Messages.add(new MessageUpdate(me.getName() + " went back to " + trainer.getName() + "!"));
-		trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
-		me = trainer.front();
-		b.enterBattle(me, trainer.getName() + " sent out " + me.getName() + "!");
+		me.switcheroo(b, me, CastSource.ATTACK, true);
 		###
 	*
 ***
@@ -1321,7 +1302,7 @@ SwitchOutEffect:
 ***
 TakeDamageEffect:
 	OnTakeDamage:
-		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken)
+		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 	*
 ***
 StallingEffect:
@@ -2556,6 +2537,16 @@ Override:
 		Body:
 		// Ability is not ignored even when the opponent breaks the mold
 		return true;
+		###
+	*
+***
+Override:
+	DropBelowHalfHealth:
+		AddInterface: TakeDamageEffect
+		AddMapField: OnTakeDamage:
+		if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getAttributes().getDamageTaken())/(double)victim.getMaxHP() >= .5) {
+			{0}
+		}
 		###
 	*
 ***

@@ -224,23 +224,9 @@ Eject Button:
 	Price: 200
 	Fling: 30
 	OnTakeDamage:
-		// TODO: Try to generalize with self-switching moves
-		Team t = b.getTrainer(victim.isPlayer());
-		if (t instanceof WildPokemon) {
-			return;
+		if (victim.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
+			victim.consumeItem(b);
 		}
-
-		Trainer trainer = (Trainer)t;
-		if (!trainer.hasRemainingPokemon()) {
-			return;
-		}
-
-		Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " sent it back to " + trainer.getName() + "!"));
-		victim.consumeItem(b);
-		trainer.switchToRandom();
-		trainer.setAction(Action.SWITCH);
-		victim = trainer.front();
-		b.enterBattle(victim, victim.getName() + " was sent out!");
 		###
 *
 Destiny Knot:
@@ -563,24 +549,10 @@ Red Card:
 	Price: 200
 	Fling: 10
 	OnTakeDamage:
-		// TODO: Generalize this code with that of moves like U-Turn
-		Team t = b.getTrainer(user.isPlayer());
-		if (t instanceof WildPokemon) {
-			return;
-		}
-
-		Trainer trainer = (Trainer)t;
-		if (!trainer.hasRemainingPokemon()) {
-			return;
-		}
-
-		Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " sent " + user.getName() + " back to " + trainer.getName() + "!"));
+	if (user.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
 		victim.consumeItem(b);
-		trainer.switchToRandom();
-		trainer.setAction(Action.SWITCH);
-		user = trainer.front();
-		b.enterBattle(user, user.getName() + " was sent out!");
-		###
+	}
+	###
 *
 Ring Target:
 	Int: HoldItem, AdvantageChanger

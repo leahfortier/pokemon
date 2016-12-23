@@ -37,6 +37,7 @@ import main.Game;
 import main.Global;
 import main.Type;
 import message.MessageUpdate;
+import message.MessageUpdate.Update;
 import message.Messages;
 import pattern.PokemonMatcher;
 import pokemon.PokemonInfo.WildHoldItem;
@@ -45,6 +46,9 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.Breeding;
 import pokemon.evolution.BaseEvolution;
 import pokemon.evolution.EvolutionMethod;
+import trainer.Team;
+import trainer.Trainer;
+import trainer.WildPokemon;
 import util.DrawUtils;
 import util.RandomUtils;
 import util.StringUtils;
@@ -486,8 +490,12 @@ public class ActivePokemon implements Serializable {
 			gain[i] = stats[i] - prevStats[i];
 		}
 
-		Messages.add(new MessageUpdate().updatePokemon(b, this).withStatGains(gain, stats));
-		
+		if (front) {
+			Messages.add(new MessageUpdate().updatePokemon(b, this));
+		}
+
+		Messages.add(new MessageUpdate().withStatGains(gain, stats));
+
 		// Learn new moves
 		pokemon.getMoves(level).forEach(attackNamesies -> learnMove(attackNamesies, inBattle));
 		
@@ -600,6 +608,55 @@ public class ActivePokemon implements Serializable {
 		b.printAttacking(this);
 		getAttack().apply(this, opp, b);
 		setMove(temp);
+	}
+
+	public boolean switcheroo(Battle b, ActivePokemon caster, CastSource source, boolean wildExit) {
+		Team team = b.getTrainer(this);
+		String sourceName = source.getSourceName(b, this);
+		String selfReference = caster == this ? "it" : this.getName();
+
+		// End the battle against a wild Pokemon
+		if (team instanceof WildPokemon) {
+			if (!wildExit) {
+				return false;
+			}
+
+			final String message;
+			if (!StringUtils.isNullOrEmpty(sourceName)) {
+				message = caster.getName() + "'s " + sourceName + " caused " + selfReference + " to leave the battle!";
+			} else {
+				message = this.getName() + " left the battle!";
+			}
+
+			Messages.add(new MessageUpdate(message));
+			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+			return true;
+		}
+
+		Trainer trainer = (Trainer)team;
+		if (!trainer.hasRemainingPokemon()) {
+			// Don't switch if no one to switch to
+			return false;
+		}
+
+		// Send this Pokemon back to the trainer and send out the next one
+		final String message;
+		if (!StringUtils.isNullOrEmpty(sourceName)) {
+			message = caster.getName() + "'s " + sourceName + " sent " + selfReference + " back to " + trainer.getName() + "!";
+		} else {
+			message = this.getName() + " went back to " + trainer.getName() + "!";
+		}
+
+		Messages.add(new MessageUpdate(message));
+
+		// TODO: Prompt a legit switch fo user
+		// TODO: Once this happens, this should take in a random parameter since this is still correct for Red Card, I believe and should have the message "name was sent out!"
+		// TODO: Check if trainer action needs to be set to Switch
+		trainer.switchToRandom();
+		ActivePokemon front = trainer.front();
+		b.enterBattle(front, trainer.getName() + " sent out " + front.getName() + "!");
+
+		return true;
 	}
 	
 	// Pangoro breaks the mold!

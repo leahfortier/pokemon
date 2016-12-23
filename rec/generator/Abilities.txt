@@ -1505,11 +1505,20 @@ Steelworker:
 *
 Berserk:
 	Desc: Boosts the Pokémon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.
-	Int: TakeDamageEffect
-	OnTakeDamage:
-	if (victim.getHPRatio() < .5 && (victim.getHP() + damageTaken)/(double)victim.getMaxHP() >= .5) {
-		victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
-	}
+	DropBelowHalfHealth:
+	victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+	###
+*
+Wimp Out:
+	Desc: The Pokémon cowardly switches out when its HP becomes half or less.
+	DropBelowHalfHealth:
+	victim.switcheroo(b, victim, CastSource.ABILITY, true);
+	###
+*
+Emergency Exit:
+	Desc: The Pokémon, sensing danger, switches out when its HP becomes half or less.
+	DropBelowHalfHealth:
+	victim.switcheroo(b, victim, CastSource.ABILITY, true);
 	###
 *
 Long Reach:

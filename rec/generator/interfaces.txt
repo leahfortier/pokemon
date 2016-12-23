@@ -61,7 +61,7 @@ TakeDamageEffect:
 		// user: The user of the attack
 		// victim: The Pokemon who is taking damage, they are the one's probably implementing this
 		###
-		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken)
+		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		EffectList: victim
 		Invoke: Void
 		Deadsies: victim

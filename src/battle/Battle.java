@@ -439,7 +439,7 @@ public class Battle {
 	
 	private void executionSolution(ActivePokemon me, ActivePokemon o) {
 		// Don't do anything if they're not actually attacking
-		if (!isFighting(me.isPlayer())) {
+		if (!isFighting(me.isPlayer()) || me != getTrainer(me).front()) {
 			return;
 		}
 
@@ -507,7 +507,11 @@ public class Battle {
 		
 		return list;
 	}
-	
+
+	public Team getTrainer(ActivePokemon pokemon) {
+		return getTrainer(pokemon.isPlayer());
+	}
+
 	public Team getTrainer(boolean isPlayer) {
 		return isPlayer ? player : opponent;
 	}

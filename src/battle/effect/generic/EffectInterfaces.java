@@ -137,9 +137,9 @@ public final class EffectInterfaces {
 		// b: The current battle
 		// user: The user of the attack
 		// victim: The Pokemon who is taking damage, they are the one's probably implementing this
-		void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken);
+		void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim);
 
-		static void invokeTakeDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damageTaken) {
+		static void invokeTakeDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (victim.isFainted(b)) {
 				return;
 			}
@@ -149,7 +149,7 @@ public final class EffectInterfaces {
 				if (invokee instanceof TakeDamageEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					TakeDamageEffect effect = (TakeDamageEffect)invokee;
-					effect.takeDamage(b, user, victim, damageTaken);
+					effect.takeDamage(b, user, victim);
 					
 					if (victim.isFainted(b)) {
 						return;

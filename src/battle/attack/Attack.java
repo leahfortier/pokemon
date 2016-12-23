@@ -350,7 +350,7 @@ public abstract class Attack implements Serializable {
 
 		// TODO: This might need to be moved higher like before the recoil stuff so it gets activated even if the attacker dies
 		// Effects that apply to the opponent when they take damage
-		TakeDamageEffect.invokeTakeDamageEffect(b, me, o, damage);
+		TakeDamageEffect.invokeTakeDamageEffect(b, me, o);
 	}
 
 	// TODO: Need to make this final and have an overridable method that is called inside here
@@ -9595,26 +9595,7 @@ public abstract class Attack implements Serializable {
 			// First execute the move as normal
 			super.apply(me, o, b);
 			
-			Team t = b.getTrainer(me.isPlayer());
-			if (t instanceof WildPokemon) {
-				// End the battle against a wild Pokemon
-				Messages.add(new MessageUpdate(me.getName() + " left the battle!"));
-				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-				return;
-			}
-			
-			Trainer trainer = (Trainer)t;
-			if (!trainer.hasRemainingPokemon())
-			{
-				// Don't switch if no one to switch to
-				return;
-			}
-			
-			// Send this Pokemon back to the trainer and send out the next one
-			Messages.add(new MessageUpdate(me.getName() + " went back to " + trainer.getName() + "!"));
-			trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
-			me = trainer.front();
-			b.enterBattle(me, trainer.getName() + " sent out " + me.getName() + "!");
+			me.switcheroo(b, me, CastSource.ATTACK, true);
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -9637,26 +9618,7 @@ public abstract class Attack implements Serializable {
 			// First execute the move as normal
 			super.apply(me, o, b);
 			
-			Team t = b.getTrainer(me.isPlayer());
-			if (t instanceof WildPokemon) {
-				// End the battle against a wild Pokemon
-				Messages.add(new MessageUpdate(me.getName() + " left the battle!"));
-				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-				return;
-			}
-			
-			Trainer trainer = (Trainer)t;
-			if (!trainer.hasRemainingPokemon())
-			{
-				// Don't switch if no one to switch to
-				return;
-			}
-			
-			// Send this Pokemon back to the trainer and send out the next one
-			Messages.add(new MessageUpdate(me.getName() + " went back to " + trainer.getName() + "!"));
-			trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
-			me = trainer.front();
-			b.enterBattle(me, trainer.getName() + " sent out " + me.getName() + "!");
+			me.switcheroo(b, me, CastSource.ATTACK, true);
 		}
 	}
 
@@ -9998,26 +9960,7 @@ public abstract class Attack implements Serializable {
 			// First execute the move as normal
 			super.apply(me, o, b);
 			
-			Team t = b.getTrainer(me.isPlayer());
-			if (t instanceof WildPokemon) {
-				// End the battle against a wild Pokemon
-				Messages.add(new MessageUpdate(me.getName() + " left the battle!"));
-				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-				return;
-			}
-			
-			Trainer trainer = (Trainer)t;
-			if (!trainer.hasRemainingPokemon())
-			{
-				// Don't switch if no one to switch to
-				return;
-			}
-			
-			// Send this Pokemon back to the trainer and send out the next one
-			Messages.add(new MessageUpdate(me.getName() + " went back to " + trainer.getName() + "!"));
-			trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
-			me = trainer.front();
-			b.enterBattle(me, trainer.getName() + " sent out " + me.getName() + "!");
+			me.switcheroo(b, me, CastSource.ATTACK, true);
 		}
 	}
 
