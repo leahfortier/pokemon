@@ -357,6 +357,7 @@ import battle.attack.Attack.MudShot;
 import battle.attack.Attack.MudSlap;
 import battle.attack.Attack.MudSport;
 import battle.attack.Attack.MuddyWater;
+import battle.attack.Attack.MultiAttack;
 import battle.attack.Attack.MysticalFire;
 import battle.attack.Attack.NastyPlot;
 import battle.attack.Attack.NaturalGift;
@@ -1166,6 +1167,7 @@ public enum AttackNamesies {
 	BOLT_STRIKE("Bolt Strike", BoltStrike::new),
 	GLACIATE("Glaciate", Glaciate::new),
 	TECHNO_BLAST("Techno Blast", TechnoBlast::new),
+	MULTI_ATTACK("Multi-Attack", MultiAttack::new),
 	EXPLOSION("Explosion", Explosion::new),
 	SELF_DESTRUCT("Self-Destruct", SelfDestruct::new),
 	FLING("Fling", Fling::new),

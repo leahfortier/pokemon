@@ -129,6 +129,7 @@ import pokemon.ability.Ability.PsychicSurge;
 import pokemon.ability.Ability.PurePower;
 import pokemon.ability.Ability.QueenlyMajesty;
 import pokemon.ability.Ability.QuickFeet;
+import pokemon.ability.Ability.RKSSystem;
 import pokemon.ability.Ability.RainDish;
 import pokemon.ability.Ability.Rattled;
 import pokemon.ability.Ability.Reckless;
@@ -375,6 +376,7 @@ public enum AbilityNamesies {
 	HONEY_GATHER("Honey Gather", HoneyGather::new),
 	GLUTTONY("Gluttony", Gluttony::new),
 	MULTITYPE("Multitype", Multitype::new),
+	RKSSYSTEM("RKS System", RKSSystem::new),
 	FORECAST("Forecast", Forecast::new),
 	BULLETPROOF("Bulletproof", Bulletproof::new),
 	AURA_BREAK("Aura Break", AuraBreak::new),

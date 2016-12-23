@@ -69,7 +69,8 @@ import item.ItemNamesies;
 import item.berry.Berry;
 import item.hold.ConsumableItem;
 import item.hold.HoldItem;
-import item.hold.PlateItem;
+import item.hold.SpecialTypeItem.MemoryItem;
+import item.hold.SpecialTypeItem.PlateItem;
 import main.Global;
 import main.Type;
 import message.MessageUpdate;
@@ -2818,6 +2819,23 @@ public abstract class Ability implements Serializable {
 			Item item = p.getHeldItem(b);
 			if (item instanceof PlateItem) {
 				return new Type[] { ((PlateItem)item).getType(), Type.NO_TYPE };
+			}
+			
+			return p.getActualType();
+		}
+	}
+
+	static class RKSSystem extends Ability implements ChangeTypeEffect {
+		private static final long serialVersionUID = 1L;
+
+		RKSSystem() {
+			super(AbilityNamesies.RKSSYSTEM, "Changes the Pokémon's type to match the memory disc it holds.");
+		}
+
+		public Type[] getType(Battle b, ActivePokemon p, boolean display) {
+			Item item = p.getHeldItem(b);
+			if (item instanceof MemoryItem) {
+				return new Type[] { ((MemoryItem)item).getType(), Type.NO_TYPE };
 			}
 			
 			return p.getActualType();

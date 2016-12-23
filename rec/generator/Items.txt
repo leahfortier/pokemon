@@ -2391,3 +2391,88 @@ Power Herb:
 	Fling: 10
 	Cat: Misc
 *
+Fire Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Fire-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Fire
+*
+Water Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Water-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Water
+*
+Electric Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Electric-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Electric
+*
+Grass Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Grass-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Grass
+*
+Ice Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Ice-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Ice
+*
+Fighting Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Fighting-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Fighting
+*
+Poison Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Poison-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Poison
+*
+Ground Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Ground-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Ground
+*
+Flying Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Flying-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Flying
+*
+Psychic Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Psychic-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Psychic
+*
+Bug Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Bug-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Bug
+*
+Rock Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Rock-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Rock
+*
+Ghost Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Ghost-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Ghost
+*
+Dragon Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Dragon-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Dragon
+*
+Dark Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Dark-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Dark
+*
+Steel Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Steel-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Steel
+*
+Fairy Memory:
+	Int: MemoryItem
+	Desc: A memory disc that contains Fairy-type data. It changes the type of the holder if held by a certain species of Pokémon.
+	MemoryType: Fairy
+*

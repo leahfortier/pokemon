@@ -39,10 +39,11 @@ import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
 import item.berry.GainableEffectBerry;
-import item.hold.DriveItem;
-import item.hold.GemItem;
 import item.hold.HoldItem;
-import item.hold.PlateItem;
+import item.hold.SpecialTypeItem.DriveItem;
+import item.hold.SpecialTypeItem.GemItem;
+import item.hold.SpecialTypeItem.MemoryItem;
+import item.hold.SpecialTypeItem.PlateItem;
 import main.Global;
 import main.Type;
 import map.TerrainType;
@@ -8443,6 +8444,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.JUDGEMENT, "The user releases countless shots of light at the target. Its type varies with the kind of Plate the user is holding.", 10, Type.NORMAL, MoveCategory.SPECIAL);
 			super.power = 100;
 			super.accuracy = 100;
+			super.moveTypes.add(MoveType.METRONOMELESS);
 		}
 
 		public Type setType(Battle b, ActivePokemon user) {
@@ -8898,10 +8900,30 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Type setType(Battle b, ActivePokemon user) {
-			// TODO: Can combine this with Judgement
 			Item i = user.getHeldItem(b);
 			if (i instanceof DriveItem) {
 				return ((DriveItem)i).getType();
+			}
+			
+			return super.type;
+		}
+	}
+
+	static class MultiAttack extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		MultiAttack() {
+			super(AttackNamesies.MULTI_ATTACK, "Cloaking itself in high energy, the user slams into the target. The memory held determines the move's type.", 10, Type.NORMAL, MoveCategory.PHYSICAL);
+			super.power = 90;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.METRONOMELESS);
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public Type setType(Battle b, ActivePokemon user) {
+			Item i = user.getHeldItem(b);
+			if (i instanceof MemoryItem) {
+				return ((MemoryItem)i).getType();
 			}
 			
 			return super.type;

@@ -1294,15 +1294,11 @@ Gluttony:
 *
 Multitype:
 	Desc: Changes type to match the held Plate.
-	Int: ChangeTypeEffect
-	GetChangeTypeEffect:
-	Item item = p.getHeldItem(b);
-	if (item instanceof PlateItem) {
-		return new Type[] { ((PlateItem)item).getType(), Type.NO_TYPE };
-	}
-	
-	return p.getActualType();
-	###
+	SpecialItemAbility: PlateItem
+*
+RKS System:
+	Desc: Changes the Pokémon's type to match the memory disc it holds.
+	SpecialItemAbility: MemoryItem
 *
 Forecast:
 	Desc: Changes with the weather.

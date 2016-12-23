@@ -1653,36 +1653,64 @@ Override:
 		###
 	*
 ***
-PlateItem:
-	PlateType:
+Override:
+	SpecialItemAbility:
+		AddInterface: ChangeTypeEffect
+		AddMapField: GetChangeTypeEffect:
+		Item item = p.getHeldItem(b);
+		if (item instanceof {0}) {
+			return new Type[] { (({0})item).getType(), Type.NO_TYPE };
+		}
+		
+		return p.getActualType();
+		###
+	*
+***
+Override:
+	SpecialItemMove:
+		AddMapField: Type: Normal
+		AddMapField: MoveType: Metronomeless
+		AddMapField: GetType: 
+		Item i = user.getHeldItem(b);
+		if (i instanceof {0}) {
+			return (({0})i).getType(); 
+		}
+		
+		return super.type;
+		###
+	*
+***
+Override:
+	SpecialTypeItem:
 		Header: Type getType()
 		Body:
 		return Type.{00};
 		###
 		AddInterface: Hidden-HoldItem
 		AddMapField: Price: 1000
-		AddMapField: Fling: 90
 		AddMapField: Cat: Misc
+	*
+***
+PlateItem:
+	PlateType:
+		AddMapField: SpecialTypeItem: {0}
+		AddMapField: Fling: 90
 		AddInterface: Hidden-PowerChangeEffect
 		AddMapField: GetMultiplier:
-		if (user.isAttackType(getType())) {
-			return 1.2;
-		}
-
-		return 1;
+		return user.isAttackType(getType()) ? 1.2 : 1;
 		###
 	*
 ***
 DriveItem:
 	DriveType:
-		Header: Type getType()
-		Body:
-		return Type.{00};
-		###
-		AddInterface: Hidden-HoldItem
+		AddMapField: SpecialTypeItem: {0}
 		AddMapField: Fling: 70
-		AddMapField: Price: 1000
-		AddMapField: Cat: Misc
+	*
+***
+MemoryItem:
+	MemoryType:
+		AddMapField: SpecialTypeItem: {0}
+		AddMapField: Fling: 70
 	*
 ***
 Override:

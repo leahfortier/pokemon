@@ -44,13 +44,14 @@ import item.berry.GainableEffectBerry;
 import item.berry.HealthTriggeredBerry;
 import item.berry.StatusBerry;
 import item.hold.ConsumableItem;
-import item.hold.DriveItem;
 import item.hold.EVItem;
-import item.hold.GemItem;
 import item.hold.HoldItem;
 import item.hold.IncenseItem;
-import item.hold.PlateItem;
 import item.hold.PowerItem;
+import item.hold.SpecialTypeItem.DriveItem;
+import item.hold.SpecialTypeItem.GemItem;
+import item.hold.SpecialTypeItem.MemoryItem;
+import item.hold.SpecialTypeItem.PlateItem;
 import item.use.BallItem;
 import item.use.BattleUseItem;
 import item.use.MoveUseItem;
@@ -2075,16 +2076,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.DRAGON;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2100,16 +2097,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.DARK;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2125,16 +2118,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.GROUND;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2150,16 +2139,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.FIGHTING;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2175,16 +2160,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.FIRE;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2200,16 +2181,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.ICE;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2225,16 +2202,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.BUG;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2250,16 +2223,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.STEEL;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2275,16 +2244,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.GRASS;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2300,16 +2265,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.PSYCHIC;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2325,16 +2286,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.FAIRY;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2350,16 +2307,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.FLYING;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2375,16 +2328,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.WATER;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2400,16 +2349,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.GHOST;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2425,16 +2370,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.ROCK;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2450,16 +2391,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.POISON;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -2475,16 +2412,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.ELECTRIC;
 		}
 
-		public int flingDamage() {
-			return 90;
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isAttackType(getType()) ? 1.2 : 1;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType())) {
-				return 1.2;
-			}
-			
-			return 1;
+		public int flingDamage() {
+			return 90;
 		}
 	}
 
@@ -8254,6 +8187,295 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public int flingDamage() {
 			return 10;
+		}
+	}
+
+	static class FireMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		FireMemory() {
+			super(ItemNamesies.FIRE_MEMORY, "A memory disc that contains Fire-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 305);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.FIRE;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class WaterMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		WaterMemory() {
+			super(ItemNamesies.WATER_MEMORY, "A memory disc that contains Water-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 306);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.WATER;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class ElectricMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		ElectricMemory() {
+			super(ItemNamesies.ELECTRIC_MEMORY, "A memory disc that contains Electric-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 307);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.ELECTRIC;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class GrassMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		GrassMemory() {
+			super(ItemNamesies.GRASS_MEMORY, "A memory disc that contains Grass-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 308);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.GRASS;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class IceMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		IceMemory() {
+			super(ItemNamesies.ICE_MEMORY, "A memory disc that contains Ice-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 309);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.ICE;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class FightingMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		FightingMemory() {
+			super(ItemNamesies.FIGHTING_MEMORY, "A memory disc that contains Fighting-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 310);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.FIGHTING;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class PoisonMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		PoisonMemory() {
+			super(ItemNamesies.POISON_MEMORY, "A memory disc that contains Poison-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 311);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.POISON;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class GroundMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		GroundMemory() {
+			super(ItemNamesies.GROUND_MEMORY, "A memory disc that contains Ground-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 312);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.GROUND;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class FlyingMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		FlyingMemory() {
+			super(ItemNamesies.FLYING_MEMORY, "A memory disc that contains Flying-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 313);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.FLYING;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class PsychicMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		PsychicMemory() {
+			super(ItemNamesies.PSYCHIC_MEMORY, "A memory disc that contains Psychic-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 314);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.PSYCHIC;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class BugMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		BugMemory() {
+			super(ItemNamesies.BUG_MEMORY, "A memory disc that contains Bug-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 315);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.BUG;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class RockMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		RockMemory() {
+			super(ItemNamesies.ROCK_MEMORY, "A memory disc that contains Rock-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 316);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.ROCK;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class GhostMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		GhostMemory() {
+			super(ItemNamesies.GHOST_MEMORY, "A memory disc that contains Ghost-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 317);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.GHOST;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class DragonMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		DragonMemory() {
+			super(ItemNamesies.DRAGON_MEMORY, "A memory disc that contains Dragon-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 318);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.DRAGON;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class DarkMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		DarkMemory() {
+			super(ItemNamesies.DARK_MEMORY, "A memory disc that contains Dark-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 319);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.DARK;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class SteelMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		SteelMemory() {
+			super(ItemNamesies.STEEL_MEMORY, "A memory disc that contains Steel-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 320);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.STEEL;
+		}
+
+		public int flingDamage() {
+			return 70;
+		}
+	}
+
+	static class FairyMemory extends Item implements MemoryItem {
+		private static final long serialVersionUID = 1L;
+
+		FairyMemory() {
+			super(ItemNamesies.FAIRY_MEMORY, "A memory disc that contains Fairy-type data. It changes the type of the holder if held by a certain species of Pokémon.", BagCategory.MISC, 321);
+			super.price = 1000;
+		}
+
+		public Type getType() {
+			return Type.FAIRY;
+		}
+
+		public int flingDamage() {
+			return 70;
 		}
 	}
 
