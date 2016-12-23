@@ -1,5 +1,6 @@
 package battle;
 
+import battle.attack.Attack;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
@@ -21,6 +22,7 @@ import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
+import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
@@ -262,6 +264,10 @@ public class Battle {
 		// Decrement Battle effects
 		decrementEffects(effects, null);
 		decrementWeather();
+
+		// The very, very end
+		while (SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, player.front())
+				|| SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, opponent.front()));
 	}
 
 	private void deadUser() {
@@ -331,8 +337,7 @@ public class Battle {
 		enterBattle(enterer, enterMessage, true);
 	}
 
-	public void enterBattle(ActivePokemon enterer, String enterMessage)
-	{
+	public void enterBattle(ActivePokemon enterer, String enterMessage) {
 		enterBattle(enterer, enterMessage, true);
 	}
 
@@ -434,7 +439,7 @@ public class Battle {
 	
 	private void executionSolution(ActivePokemon me, ActivePokemon o) {
 		// Don't do anything if they're not actually attacking
-		if (!isFighting(me.isPlayer())) {
+		if (!isFighting(me.isPlayer()) || me != getTrainer(me).front()) {
 			return;
 		}
 
@@ -502,7 +507,11 @@ public class Battle {
 		
 		return list;
 	}
-	
+
+	public Team getTrainer(ActivePokemon pokemon) {
+		return getTrainer(pokemon.isPlayer());
+	}
+
 	public Team getTrainer(boolean isPlayer) {
 		return isPlayer ? player : opponent;
 	}
@@ -582,7 +591,7 @@ public class Battle {
 		stage = CritStageEffect.updateCritStage(this, stage, me);
 		stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
 
-		boolean crit = AlwaysCritEffect.containsAlwaysCritEffect(this, me) || RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
+		boolean crit = AlwaysCritEffect.defCritsies(this, me, o) || RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
 		
 		// Crit yo pants
 		if (crit) {
@@ -594,7 +603,7 @@ public class Battle {
 			
 			return me.hasAbility(AbilityNamesies.SNIPER) ? 3 : 2;
 		}
-		
+
 		return 1;
 	}
 	
@@ -658,17 +667,21 @@ public class Battle {
 		// WOOOOOOOOOO
 		return true;
 	}
+
+	public int getPriority(ActivePokemon p, Attack attack) {
+		int priority = attack.getPriority(this, p);
+		priority = PriorityChangeEffect.updatePriority(this, p, attack, priority);
+
+//		System.out.println(attack.getName() + " Priority: " + priority);
+
+		return priority;
+	}
 	
 	// Returns the priority of the current action the player is performing
 	private int getPriority(ActivePokemon p) {
 		// They are attacking -- return the priority of the attack
 		if (isFighting(p.isPlayer())) {
-			int priority = p.getAttack().getPriority(this, p);
-			priority = PriorityChangeEffect.updatePriority(this, p, priority);
-			
-//			System.out.println(p.getAttack().getName() + " Priority: " + priority);
-			
-			return priority;
+			return getPriority(p, p.getAttack());
 		}
 		
 		return ((Trainer)getTrainer(p.isPlayer())).getAction().getPriority();

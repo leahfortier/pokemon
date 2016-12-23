@@ -5,7 +5,6 @@ import battle.attack.MoveType;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
-import battle.effect.generic.EffectNamesies;
 import main.Type;
 import message.MessageUpdate;
 import message.Messages;

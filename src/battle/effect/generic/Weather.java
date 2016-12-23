@@ -3,6 +3,7 @@ package battle.effect.generic;
 import battle.Battle;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
@@ -59,7 +60,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 	}
 
-	static class Raining extends Weather implements StatChangingEffect {
+	static class Raining extends Weather implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Raining() {
@@ -82,23 +83,22 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			Messages.add(new MessageUpdate("The rain continues to pour."));
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (s == Stat.ATTACK || s == Stat.SP_ATTACK) {
-				if (p.isAttackType(Type.WATER)) {
-					// Water is fiddy percent stronger in tha weathz
-					stat *= 1.5;
-				}
-				else if (p.isAttackType(Type.FIRE)) {
-					// Fire is fiddy percent weaker in tha weathz
-					stat *= .5;
-				}
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (user.isAttackType(Type.WATER)) {
+				// Water is fiddy percent stronger in tha weathz
+				return 1.5;
 			}
-			
-			return stat;
+			else if (user.isAttackType(Type.FIRE)) {
+				// Fire is fiddy percent weaker in tha weathz
+				return .5;
+			}
+			else {
+				return 1;
+			}
 		}
 	}
 
-	static class Sunny extends Weather implements StatusPreventionEffect, StatChangingEffect {
+	static class Sunny extends Weather implements StatusPreventionEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Sunny() {
@@ -129,19 +129,18 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			return "Too sunny to freeze!!";
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (s == Stat.ATTACK || s == Stat.SP_ATTACK) {
-				if (p.isAttackType(Type.FIRE)) {
-					// Fire is fiddy percent stronger in tha weathz
-					stat *= 1.5;
-				}
-				else if (p.isAttackType(Type.WATER)) {
-					// Water is fiddy percent weaker in tha weathz
-					stat *= .5;
-				}
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (user.isAttackType(Type.FIRE)) {
+				// Fire is fiddy percent stronger in tha weathz
+				return 1.5;
 			}
-			
-			return stat;
+			else if (user.isAttackType(Type.WATER)) {
+				// Water is fiddy percent weaker in tha weathz
+				return .5;
+			}
+			else {
+				return 1;
+			}
 		}
 	}
 

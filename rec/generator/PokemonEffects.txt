@@ -251,7 +251,7 @@ Encore:
 		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being encored!";
 	}
 	###
-	Int: AttackSelectionEffect, ForceMoveEffect, BeforeTurnEffect, EndTurnEffect
+	Int: ForceMoveEffect, EndTurnEffect, BeforeTurnAttackSelectionEffect
 	Field: 
 	private Move move;
 	###
@@ -270,21 +270,13 @@ Encore:
 	move = victim.getAttributes().getLastMoveUsed();
 	super.cast(b, caster, victim, source, printCast);
 	###
-	CanAttack: 
-	if (p.getAttack().namesies() != move.getAttack().namesies()) {
-		b.printAttacking(p);
-		Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
-		return false;
-	}
-	return true;
-	###
 	ApplyEndTurn: 
 	if (move.getPP() == 0) active = false; // If the move runs out of PP, Encore immediately ends
 	###
 *
 Disable:
 	FailAbility: Aroma Veil
-	Int: AttackSelectionEffect, BeforeTurnEffect
+	Int: BeforeTurnAttackSelectionEffect
 	Field: 
 	private Move disabled;
 	private int turns;
@@ -299,12 +291,7 @@ Disable:
 	FailCondition: victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0
 	CanAttack: 
 	turns--;
-	if (p.getAttack().namesies() == disabled.getAttack().namesies()) {
-		b.printAttacking(p);
-		Messages.add(new MessageUpdate(p.getAttack().getName() + " is disabled!"));
-		return false;
-	}
-	return true;
+	return checkUsable(b, p, opp);
 	###
 	ShouldSubside: 
 	return turns == 0;
@@ -542,7 +529,7 @@ Mimic:
 	CastMessage: victim.getName() + " learned " + mimicMove.getAttack().getName() + "!"
 *
 Imprison:
-	Int: AttackSelectionEffect, BeforeTurnEffect
+	Int: BeforeTurnAttackSelectionEffect
 	Field: 
 	private List<AttackNamesies> unableMoves;
 	###
@@ -559,15 +546,6 @@ Imprison:
 	return !unableMoves.contains(m.getAttack().namesies());
 	###
 	UnusableMessage: "No!! You are imprisoned!!!"
-	CanAttack: 
-	if (unableMoves.contains(p.getAttack().namesies())) {
-		b.printAttacking(p);
-		Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
-		return false;
-	}
-	
-	return true;
-	###
 *
 Trapped:
 	Int: TrappingEffect
@@ -587,42 +565,26 @@ Torment:
 		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents torment!";
 	}
 	###
-	Int: AttackSelectionEffect, BeforeTurnEffect
+	Int: BeforeTurnAttackSelectionEffect
 	Usable: 
 	return (p.getAttributes().getLastMoveUsed() == null || p.getAttributes().getLastMoveUsed().getAttack().namesies() != m.getAttack().namesies());
 	###
 	UnusableMessage: p.getName() + " cannot use the same move twice in a row!"
-	CanAttack: 
-	if (!usable(p, p.getMove())) {
-		b.printAttacking(p);
-		Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
-		return false;
-	}
-	return true;
-	###
 	CastMessage: user.getName() + " tormented " + victim.getName() + "!"
 *
 SoundBlock:
 	NumTurns: 3
 	CanHave: True
-	Int: AttackSelectionEffect, BeforeTurnEffect
+	Int: BeforeTurnAttackSelectionEffect
 	Usable:
 	return !m.getAttack().isMoveType(MoveType.SOUND_BASED);
 	###
 	UnusableMessage: p.getName() + " cannot use sound-based moves!!"
-	CanAttack:
-	if (!usable(p, p.getMove())) {
-		b.printAttacking(p);
-		Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
-		return false;
-	}
-	return true;
-	###
 *
 Taunt:
 	NumTurns: 3
 	FailAbility: Aroma Veil, Oblivious
-	Int: AttackSelectionEffect, BeforeTurnEffect
+	Int: BeforeTurnAttackSelectionEffect
 	FailMessage: 
 	if (victim.hasAbility(AbilityNamesies.OBLIVIOUS) || victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
 		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being taunted!";
@@ -632,14 +594,6 @@ Taunt:
 	return m.getAttack().getCategory() != MoveCategory.STATUS;
 	###
 	UnusableMessage: "No!! Not while you're under the effects of taunt!!"
-	CanAttack:
-	if (!usable(p, p.getMove())) {
-		b.printAttacking(p);
-		Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
-		return false;
-	}
-	return true;
-	###
 	CastMessage: victim.getName() + " fell for the taunt!"
 	SubsideMessage: "The effects of the taunt wore off."
 *	
@@ -1112,10 +1066,8 @@ Snatch:
 Grudge:
 	CastMessage: victim.getName() + " wants " + b.getOtherPokemon(victim.isPlayer()).getName() + " to bear a grudge!"
 	DeathWish: 
-	if (murderer.getAttributes().isAttacking()) {
-		Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to " + dead.getName() + "'s grudge!"));
-		murderer.getMove().reducePP(murderer.getMove().getPP());
-	}
+	Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to " + dead.getName() + "'s grudge!"));
+	murderer.getMove().reducePP(murderer.getMove().getPP());
 	###
 *
 DestinyBond:
@@ -1126,10 +1078,8 @@ DestinyBond:
 	return true;
 	###
 	DeathWish: 
-	if (murderer.getAttributes().isAttacking()) {
-		Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
-		murderer.killKillKillMurderMurderMurder(b);
-	}
+	Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
+	murderer.killKillKillMurderMurderMurder(b);
 	###
 	SuccessiveDecay: True
 *

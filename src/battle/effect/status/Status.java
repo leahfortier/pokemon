@@ -3,8 +3,10 @@ package battle.effect.status;
 import battle.Battle;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
+import battle.effect.generic.EffectInterfaces.OpponentStatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
+import battle.effect.generic.EffectNamesies;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
@@ -113,14 +115,18 @@ public abstract class Status implements Serializable {
 			Messages.add(new MessageUpdate(castMessage).updatePokemon(b, victim));
 
             StatusReceivedEffect.invokeStatusReceivedEffect(b, caster, victim, status);
+			OpponentStatusReceivedEffect.invokeOpponentStatusReceivedEffect(b, victim, status);
 			return true;
 		}
-
 		return false;
 	}
 
 	public static void removeStatus(ActivePokemon p) {
 		p.setStatus(new NoStatus());
+
+		// TODO: There should be a way for effects to be tied to status conditions so that they don't have to be hardcoded here
+		p.getAttributes().removeEffect(EffectNamesies.NIGHTMARE);
+		p.getAttributes().removeEffect(EffectNamesies.BAD_POISON);
 	}
 
 	public static void die(Battle b, ActivePokemon murderer, ActivePokemon deady) {

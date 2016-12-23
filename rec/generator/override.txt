@@ -85,6 +85,7 @@ SelfHealingMove:
 		victim.healHealthFraction(1/{0}.0);
 		###
 		AddMapField: SelfTarget: True
+		AddMapField: MoveType: Healing
 	*
 ***
 MultiTurnMove:
@@ -575,26 +576,7 @@ Override:
 		// First execute the move as normal
 		super.apply(me, o, b);
 		
-		Team t = b.getTrainer(me.isPlayer());
-		if (t instanceof WildPokemon) {
-			// End the battle against a wild Pokemon
-			Messages.add(new MessageUpdate(me.getName() + " left the battle!"));
-			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-			return;
-		}
-		
-		Trainer trainer = (Trainer)t;
-		if (!trainer.hasRemainingPokemon())
-		{
-			// Don't switch if no one to switch to
-			return;
-		}
-		
-		// Send this Pokemon back to the trainer and send out the next one
-		Messages.add(new MessageUpdate(me.getName() + " went back to " + trainer.getName() + "!"));
-		trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
-		me = trainer.front();
-		b.enterBattle(me, trainer.getName() + " sent out " + me.getName() + "!");
+		me.switcheroo(b, me, CastSource.ATTACK, true);
 		###
 	*
 ***
@@ -606,11 +588,13 @@ EndTurnEffect:
 BeforeTurnEffect:
 	CanAttack:
 		Header: boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		Optional: True
 	*
 ***
 OpponentBeforeTurnEffect:
 	OpponentCanAttack:
 		Header: boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+		Optional: True
 	*
 ***
 Override:
@@ -875,13 +859,19 @@ Override:
 ***
 AttackSelectionEffect:
 	Usable:
-		Header: boolean usable(ActivePokemon p, Move m)
+		Header: boolean usable(Battle b, ActivePokemon p, Move m)
 	*
 	UnusableMessage:
-		Header: String getUnusableMessage(ActivePokemon p)
+		Header: String getUnusableMessage(Battle b, ActivePokemon p)
 		Body: 
 		return {0};
 		###
+	*
+***
+OpponentAttackSelectionEffect:
+	OpponentUsable:
+		Optional: True
+		AddInterface: Hidden-AttackSelectionEffect
 	*
 ***
 Override:
@@ -1025,8 +1015,13 @@ Override:
 		AddInterface: StatusReceivedEffect
 		AddMapField: StatusReceived:
 		if (statusType == StatusCondition.FAINTED) {
-			// DEATH WISH GRANTED
-			deathWish(b, victim, caster);
+			ActivePokemon murderer = b.getOtherPokemon(victim);
+			
+			// Only grant death wish if murdered through direct damage
+			if (murderer.getAttributes().isAttacking()) {
+				// DEATH WISH GRANTED
+				deathWish(b, victim, murderer);
+			}
 		}
 		###
 	*
@@ -1464,20 +1459,19 @@ Override:
 ***
 Override:
 	WeatherStatChange:
-		AddInterface: StatChangingEffect
-		AddMapField: ModifyStat:
-		if (s == Stat.ATTACK || s == Stat.SP_ATTACK) {
-			if (p.isAttackType(Type.{11})) {
-				// {1} is fiddy percent stronger in tha weathz
-				stat *= 1.5;
-			}
-			else if (p.isAttackType(Type.{22})) {
-				// {2} is fiddy percent weaker in tha weathz
-				stat *= .5;
-			}
+		AddInterface: PowerChangeEffect
+		AddMapField: GetMultiplier:
+		if (user.isAttackType(Type.{11})) {
+			// {1} is fiddy percent stronger in tha weathz
+			return 1.5;
 		}
-		
-		return stat;
+		else if (user.isAttackType(Type.{22})) {
+			// {2} is fiddy percent weaker in tha weathz
+			return .5;
+		}
+		else {
+			return 1;
+		}
 		###
 	*
 ***
@@ -1639,8 +1633,7 @@ Override:
 	TimeSpaceOrb:
 		Header: boolean canUseOrb(ActivePokemon user)
 		Body:
-		if (!user.isPokemon(PokemonNamesies.{11}))
-		{
+		if (!user.isPokemon(PokemonNamesies.{11})) {
 			return false;
 		}
 		
@@ -1652,8 +1645,7 @@ Override:
 		AddInterface: PowerChangeEffect
 		AddMapField: Cat: Misc
 		AddMapField: GetMultiplier:
-		if (canUseOrb(user))
-		{
+		if (canUseOrb(user)) {
 			return 1.2;
 		}
 		
@@ -1673,8 +1665,7 @@ PlateItem:
 		AddMapField: Cat: Misc
 		AddInterface: Hidden-PowerChangeEffect
 		AddMapField: GetMultiplier:
-		if (user.isAttackType(getType()))
-		{
+		if (user.isAttackType(getType())) {
 			return 1.2;
 		}
 
@@ -2299,7 +2290,7 @@ Override:
 ***
 ChangeAttackTypeEffect:
 	ChangeAttackType:
-		Header: Type changeAttackType(Type original)
+		Header: Type changeAttackType(Attack attack, Type original)
 	*
 ***
 Override:
@@ -2418,7 +2409,7 @@ Override:
 ***
 PriorityChangeEffect:
 	ChangePriority:
-		Header: int changePriority(Battle b, ActivePokemon user, int priority)
+		Header: int changePriority(Battle b, ActivePokemon user, Attack attack, int priority)
 		Body:
 		if ({0}) {
 			if (this instanceof ConsumableItem) {
@@ -2442,7 +2433,7 @@ IncenseItem:
 ***
 AbsorbDamageEffect:
 	AbsorbDamage:
-		Header: boolean absorbDamage(ActivePokemon damageTaker, int damageAmount)
+		Header: boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount)
 	*
 ***
 DamageTakenEffect:
@@ -2465,6 +2456,11 @@ SapHealthEffect:
 	*
 ***
 AlwaysCritEffect:
+	ShouldCrit:
+		Header: boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending)
+		Optional: True
+		Default: return true;
+	*
 ***
 Override:
 	IgnoreAbilityMove:
@@ -2478,5 +2474,79 @@ Override:
 StatusReceivedEffect:
 	StatusReceived:
 		Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType)
+	*
+***
+OpponentStatusReceivedEffect:
+	OppStatusReceived:
+		Header: void receiveStatus(Battle b, ActivePokemon victim, StatusCondition statusType)
+	*
+***
+SleepyFightsterEffect:
+***
+SuperDuperEndTurnEffect:
+	TheVeryEnd:
+		Header: boolean theVeryVeryEnd(Battle b, ActivePokemon p)
+	*
+***
+Override:
+	PriorityPrevention:
+		AddInterface: OpponentBeforeTurnAttackSelectionEffect
+		AddMapField: Usable: 
+		return b.getPriority(p, m.getAttack()) <= 0;
+		###
+		AddMapField: UnusableMessage: b.getOtherPokemon(p).getName() + "'s " + this.getName() + " prevents priority moves!!"
+		AddMapField: Field:
+		
+		public String getFailMessage(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return getUnusableMessage(b, p);
+		}
+		###
+	*
+***
+BeforeTurnAttackSelectionEffect:
+	BeforeTurnAttackSelectionFail:
+		AddInterface: Hidden-AttackSelectionEffect
+		AddInterface: Hidden-BeforeTurnEffect
+		Optional: True
+	*
+***
+OpponentBeforeTurnAttackSelectionEffect:
+	OpponentBeforeTurnAttackSelectionFail:
+		AddInterface: Hidden-OpponentAttackSelectionEffect
+		AddInterface: Hidden-OpponentBeforeTurnEffect
+		Optional: True
+	*
+***
+OpponentEndAttackEffect:
+	OpponentEndAttack:
+		Header: void endsies(Battle b, ActivePokemon attacking, Attack attack)
+	*
+***
+Override:
+	TerrainStarter:
+		AddInterface: EntryEffect
+		AddMapField: Enter:
+		Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " changed the field to {0} Terrain!"));
+		EffectNamesies.{00}_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+		###
+	*
+***
+Override:
+	MoldBreakerBreaker:
+		Header: boolean unbreakableMold()
+		Body:
+		// Ability is not ignored even when the opponent breaks the mold
+		return true;
+		###
+	*
+***
+Override:
+	DropBelowHalfHealth:
+		AddInterface: TakeDamageEffect
+		AddMapField: OnTakeDamage:
+		if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getAttributes().getDamageTaken())/(double)victim.getMaxHP() >= .5) {
+			{0}
+		}
+		###
 	*
 ***

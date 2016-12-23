@@ -70,10 +70,7 @@ import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.evolution.EvolutionMethod;
 import trainer.CharacterData;
-import trainer.Team;
 import trainer.Trainer;
-import trainer.Trainer.Action;
-import trainer.WildPokemon;
 import util.RandomUtils;
 
 import java.io.Serializable;
@@ -126,8 +123,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		return this.name;
 	}
 
-	public String getDescription()
-	{
+	public String getDescription() {
 		return this.description;
 	}
 
@@ -408,7 +404,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 100;
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			Move last = p.getAttributes().getLastMoveUsed();
 			if (last == null || m == last) {
 				return true;
@@ -417,7 +413,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return false;
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
 		}
 
@@ -446,7 +442,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			Move last = p.getAttributes().getLastMoveUsed();
 			if (last == null || m == last) {
 				return true;
@@ -455,7 +451,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return false;
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
 		}
 
@@ -484,7 +480,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			Move last = p.getAttributes().getLastMoveUsed();
 			if (last == null || m == last) {
 				return true;
@@ -493,7 +489,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return false;
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
 		}
 
@@ -612,23 +608,9 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Try to generalize with self-switching moves
-			Team t = b.getTrainer(victim.isPlayer());
-			if (t instanceof WildPokemon) {
-				return;
+			if (victim.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
+				victim.consumeItem(b);
 			}
-			
-			Trainer trainer = (Trainer)t;
-			if (!trainer.hasRemainingPokemon()) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " sent it back to " + trainer.getName() + "!"));
-			victim.consumeItem(b);
-			trainer.switchToRandom();
-			trainer.setAction(Action.SWITCH);
-			victim = trainer.front();
-			b.enterBattle(victim, victim.getName() + " was sent out!");
 		}
 	}
 
@@ -795,8 +777,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean canUseOrb(ActivePokemon user) {
-			if (!user.isPokemon(PokemonNamesies.DIALGA))
-			{
+			if (!user.isPokemon(PokemonNamesies.DIALGA)) {
 				return false;
 			}
 			
@@ -808,8 +789,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (canUseOrb(user))
-			{
+			if (canUseOrb(user)) {
 				return 1.2;
 			}
 			
@@ -826,8 +806,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean canUseOrb(ActivePokemon user) {
-			if (!user.isPokemon(PokemonNamesies.PALKIA))
-			{
+			if (!user.isPokemon(PokemonNamesies.PALKIA)) {
 				return false;
 			}
 			
@@ -839,8 +818,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (canUseOrb(user))
-			{
+			if (canUseOrb(user)) {
 				return 1.2;
 			}
 			
@@ -857,8 +835,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean canUseOrb(ActivePokemon user) {
-			if (!user.isPokemon(PokemonNamesies.GIRATINA))
-			{
+			if (!user.isPokemon(PokemonNamesies.GIRATINA)) {
 				return false;
 			}
 			
@@ -870,8 +847,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (canUseOrb(user))
-			{
+			if (canUseOrb(user)) {
 				return 1.2;
 			}
 			
@@ -1456,23 +1432,9 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Generalize this code with that of moves like U-Turn
-			Team t = b.getTrainer(user.isPlayer());
-			if (t instanceof WildPokemon) {
-				return;
+			if (user.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
+				victim.consumeItem(b);
 			}
-			
-			Trainer trainer = (Trainer)t;
-			if (!trainer.hasRemainingPokemon()) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " sent " + user.getName() + " back to " + trainer.getName() + "!"));
-			victim.consumeItem(b);
-			trainer.switchToRandom();
-			trainer.setAction(Action.SWITCH);
-			user = trainer.front();
-			b.enterBattle(user, user.getName() + " was sent out!");
 		}
 	}
 
@@ -2118,8 +2080,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2144,8 +2105,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2170,8 +2130,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2196,8 +2155,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2222,8 +2180,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2248,8 +2205,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2274,8 +2230,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2300,8 +2255,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2326,8 +2280,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2352,8 +2305,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2378,8 +2330,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2404,8 +2355,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2430,8 +2380,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2456,8 +2405,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2482,8 +2430,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2508,8 +2455,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -2534,8 +2480,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(getType()))
-			{
+			if (user.isAttackType(getType())) {
 				return 1.2;
 			}
 			
@@ -7785,7 +7730,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Type.GHOST;
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, int priority) {
+		public int changePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
 			if (user.getHPRatio() < 1/3.0) {
 				if (this instanceof ConsumableItem) {
 					user.consumeItem(b);
@@ -8282,11 +8227,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 30;
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			return m.getAttack().getCategory() != MoveCategory.STATUS;
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return p.getName() + "'s " + this.name + " prevents the use of status moves!";
 		}
 

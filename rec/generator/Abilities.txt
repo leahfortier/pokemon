@@ -127,6 +127,10 @@ Sand Rush:
 	Desc: Speed rises in a Sandstorm.
 	SpeedWeather: Sandstorm
 *
+Slush Rush:
+	Desc: Boosts the Pokémon's Speed stat in a hailstorm.
+	SpeedWeather: Hailing
+*
 Poison Point:
 	Desc: Contact with the Pok\u00e9mon may poison the foe.
 	StatusContact: Poisoned
@@ -343,6 +347,14 @@ Clear Body:
 	return true;
 	###
 *
+Full Metal Body:
+	Desc: Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats.
+	Int: StatProtectingEffect
+	StatProtect:
+	return true;
+	###
+	MoldBreakerBreaker: True
+*
 Liquid Ooze:
 	Desc: Inflicts damage on foes using any draining move.
 *
@@ -518,6 +530,14 @@ Filter:
 	return Type.getAdvantage(user, victim, b) > 1 ? .75 : 1;
 	###
 *
+Prism Armor:
+	Desc: Reduces the power of supereffective attacks taken.
+	Int: OpponentPowerChangeEffect
+	GetOppMultiplier: 
+	return Type.getAdvantage(user, victim, b) > 1 ? .75 : 1;
+	###
+	MoldBreakerBreaker: True
+*
 Flame Body:
 	Desc: Contact with the Pok\u00e9mon may burn the foe.
 	StatusContact: Burned
@@ -537,6 +557,23 @@ Moxie:
 	Int: MurderEffect
 	KillWish: 
 	murderer.getAttributes().modifyStage(murderer, murderer, 1, Stat.ATTACK, b, CastSource.ABILITY);
+	###
+*
+Beast Boost:
+	Desc: The Pokémon boosts its most proficient stat each time it knocks out a Pokémon.
+	Int: MurderEffect
+	KillWish: 
+	murderer.getAttributes().modifyStage(murderer, murderer, 1, murderer.getBestBattleStat(), b, CastSource.ABILITY);
+	###
+*
+Soul-Heart:
+	Desc: Boosts its Sp. Atk stat every time a Pokémon faints.
+	Int: OpponentStatusReceivedEffect
+	OppStatusReceived:
+	if (statusType == StatusCondition.FAINTED) {
+		ActivePokemon abilify = this.getOtherPokemon(b, victim);
+		abilify.getAttributes().modifyStage(abilify, abilify, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+	}
 	###
 *
 Imposter:
@@ -623,6 +660,14 @@ Multiscale:
 	GetOppMultiplier: 
 	return victim.fullHealth() ? .5 : 1;
 	###
+*
+Shadow Shield:
+	Desc: Reduces the amount of damage the Pokémon takes while its HP is full.
+	Int: OpponentPowerChangeEffect
+	GetOppMultiplier: 
+	return victim.fullHealth() ? .5 : 1;
+	###
+	MoldBreakerBreaker: True
 *
 Sheer Force:
 	Desc: Attacks gain power, but lose their secondary effect.
@@ -999,7 +1044,7 @@ Poison Touch:
 Prankster:
 	Desc: Gives priority to a status move.
 	Int: PriorityChangeEffect
-	ChangePriority: user.getAttack().getCategory() == MoveCategory.STATUS
+	ChangePriority: attack.getCategory() == MoveCategory.STATUS
 *
 Wonder Skin:
 	Desc: Makes status-changing moves more likely to miss.
@@ -1377,6 +1422,11 @@ Grass Pelt:
 	ToModify: Defense
 	ModifyMultiplier: 1.5 b.hasEffect(EffectNamesies.GRASSY_TERRAIN)
 *
+Surge Surfer:
+	Desc: Doubles the Pokémon's Speed stat on Electric Terrain.
+	ToModify: Speed
+	ModifyMultiplier: 2 b.hasEffect(EffectNamesies.ELECTRIC_TERRAIN)
+*
 Flower Veil:
 	Desc: Prevents lowering of Grass-type Pok\u00e9mon's stats.
 	Int: StatusPreventionEffect, StatProtectingEffect
@@ -1391,7 +1441,7 @@ Flower Veil:
 Gale Wings:
 	Desc: Gives priority to Flying-type moves.
 	Int: PriorityChangeEffect
-	ChangePriority: user.getAttack().getActualType() == Type.FLYING
+	ChangePriority: attack.getActualType() == Type.FLYING
 *
 Protean:
 	Desc: Changes the Pok\u00e9mon's type to the type of the move it's using.
@@ -1411,4 +1461,225 @@ Protean:
 	ChangeType: 
 	return new Type[] { type, Type.NO_TYPE };
 	###
+*
+Stamina:
+	Desc: Boosts the Defense stat when hit by an attack.
+	Int: TakeDamageEffect
+	OnTakeDamage:
+	victim.getAttributes().modifyStage(victim, victim, 1, Stat.DEFENSE, b, CastSource.ABILITY);
+	###
+*
+Water Compaction:
+	Desc: Boosts the Pokémon's Defense stat sharply when hit by a Water-type move.
+	Int: TakeDamageEffect
+	OnTakeDamage:
+	if (user.getAttackType() == Type.WATER) {
+		victim.getAttributes().modifyStage(victim, victim, 2, Stat.DEFENSE, b, CastSource.ABILITY);
+	}
+	###
+*
+Merciless:
+	Desc: The Pokémon's attacks become critical hits if the target is poisoned.
+	Int: AlwaysCritEffect
+	ShouldCrit:
+	return defending.hasStatus(StatusCondition.POISONED);
+	###
+*
+Water Bubble:
+	Desc: Lowers the power of Fire-type moves done to the Pokémon and prevents the Pokémon from getting a burn.
+	Int: PowerChangeEffect, OpponentPowerChangeEffect
+	StatusPreventAbility: Burned burns
+	GetMultiplier:
+	return user.isAttackType(Type.WATER) ? 2 : 1;
+	###
+	GetOppMultiplier: 
+	return user.isAttackType(Type.FIRE) ? .5 : 1;
+	###
+*
+Steelworker:
+	Desc: Powers up Steel-type moves.
+	Int: PowerChangeEffect
+	GetMultiplier:
+	return user.isAttackType(Type.STEEL) ? 1.5 : 1;
+	###
+*
+Berserk:
+	Desc: Boosts the Pokémon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.
+	DropBelowHalfHealth:
+	victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+	###
+*
+Wimp Out:
+	Desc: The Pokémon cowardly switches out when its HP becomes half or less.
+	DropBelowHalfHealth:
+	victim.switcheroo(b, victim, CastSource.ABILITY, true);
+	###
+*
+Emergency Exit:
+	Desc: The Pokémon, sensing danger, switches out when its HP becomes half or less.
+	DropBelowHalfHealth:
+	victim.switcheroo(b, victim, CastSource.ABILITY, true);
+	###
+*
+Long Reach:
+	Desc: The Pokémon uses its moves without making contact with the target.
+*
+Liquid Voice:
+	Desc: All sound-based moves become Water-type moves.
+	Int: ChangeAttackTypeEffect
+	ChangeAttackType:
+	if (attack.isMoveType(MoveType.SOUND_BASED)) {
+		return Type.WATER;
+	}
+	
+	return original;
+	###
+*
+Triage:
+	Desc: Gives priority to a healing move.
+	Int: PriorityChangeEffect
+	ChangePriority: attack.isMoveType(MoveType.HEALING)
+*
+Galvanize:
+	Desc: Normal-type moves become Electric-type moves. The power of those moves is boosted a little.
+	NormalTypeChanger: Electric
+*
+Disguise:
+	Desc: Once per battle, the shroud that covers the Pokémon can protect it from an attack.
+	Field:
+	private boolean activated;
+	###
+	Activate:
+	this.activated = false;
+	###
+	Int: AbsorbDamageEffect
+	AbsorbDamage:
+	if (!activated && b.getOtherPokemon(damageTaker).getAttributes().isAttacking()) {
+		Messages.add(new MessageUpdate(damageTaker.getName() + "'s disguise was busted!!"));
+		activated = true;
+		return true;
+	}
+
+	return false;
+	###
+*
+Stakeout:
+	Desc: Doubles the damage dealt to the target's replacement if the target switches out.
+	Int: PowerChangeEffect
+	GetMultiplier:
+	return !user.getAttributes().isFirstTurn() && victim.getAttributes().isFirstTurn() ? 2 : 1;
+	###
+*
+Corrosion:
+	Desc: The Pokémon can poison the target even if it's a Steel or Poison type.
+*
+Comatose:
+	Desc: It's always drowsing and will never wake up. It can attack without waking up.
+	Int: EntryEffect, SuperDuperEndTurnEffect, SleepyFightsterEffect
+	Enter:
+	nightyNight(b, enterer);
+	###
+	TheVeryEnd:
+	return nightyNight(b, p);
+	###
+	Field:
+	
+	// NOTE: This does not work exactly the same as in game
+	// New mechanics -- Pokemon with Comatose will:
+	// Become afflicted with a permanent Sleep condition upon entering battle
+	// Still be able to attack while sleeping
+	// Wake up from items, uproar, wake-up slap, etc.
+	// Fall back to sleep at the end of turn if applicable -- if another status condition is acquired during this time, it will remove it
+	// Other Pokemon are free to copy this ability
+	private boolean nightyNight(Battle b, ActivePokemon sleepyHead) {
+		
+		// Sleepy head is already a sleepster nighty night
+		if (sleepyHead.hasStatus(StatusCondition.ASLEEP)) {
+			return false;
+		}
+	
+		if (Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, sleepyHead, sleepyHead)) {
+			sleepyHead.removeStatus();
+			Status.giveStatus(b, sleepyHead, sleepyHead, StatusCondition.ASLEEP, true);
+			return true;
+		}
+		
+		return false;
+	}
+	###
+*
+Dazzling:
+	Desc: Surprises the opposing Pokémon, making it unable to attack using priority moves.
+	PriorityPrevention: True
+*
+Queenly Majesty:
+	Desc: Its majesty pressures the opposing Pokémon, making it unable to attack using priority moves.
+	PriorityPrevention: True
+*
+Dancer:
+	Desc: When another Pokémon uses a dance move, it can use a dance move following it regardless of its Speed.
+	Int: OpponentEndAttackEffect
+	OpponentEndAttack:
+	if (attack.getName().contains("Dance") && (!attacking.hasAbility(this.namesies) || !attacking.getAbility().isActive())) {
+		activated = true;
+		ActivePokemon abilify = this.getOtherPokemon(b, attacking);
+		Messages.add(new MessageUpdate(abilify.getName() + "'s " + this.getName() + " allowed it to join in the dance!"));
+		abilify.callNewMove(b, attacking, new Move(attack));
+		activated = false;
+	}
+	###
+	Field:
+	private boolean activated;
+	###
+	Activate:
+	activated = false;
+	###
+	AbilityIsActive:
+	return this.activated;
+	###
+*
+Innards Out:
+	Desc: Damages the attacker landing the finishing hit by the amount equal to its last HP.
+	DeathWish:
+	Messages.add(new MessageUpdate(murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!"));
+	murderer.reduceHealth(b, dead.getAttributes().getDamageTaken());
+	###
+*
+Fluffy:
+	Desc: Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves.
+	Int: OpponentPowerChangeEffect
+	GetOppMultiplier:
+	if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && user.isAttackType(Type.FIRE)) {
+		return .5;
+	}
+
+	if (user.isAttackType(Type.FIRE)) {
+		return 2;
+	}
+
+	return 1;
+	###
+*
+Tangling Hair:
+	Desc: Contact with the Pokémon lowers the attacker's Speed stat.
+	Int: PhysicalContactEffect
+	Contact:
+	user.getAttributes().modifyStage(victim, user, -1, Stat.SPEED, b, CastSource.ABILITY);
+	###
+*
+Psychic Surge:
+	Desc: Turns the ground into Psychic Terrain when the Pokémon enters a battle.
+	TerrainStarter: Psychic
+*
+Electric Surge:
+	Desc: Turns the ground into Electric Terrain when the Pokémon enters a battle.
+	TerrainStarter: Electric
+*
+Misty Surge:
+	Desc: Turns the ground into Misty Terrain when the Pokémon enters a battle.
+	TerrainStarter: Misty
+*
+Grassy Surge:
+	Desc: Turns the ground into Grassy Terrain when the Pokémon enters a battle.
+	TerrainStarter: Grassy
 *

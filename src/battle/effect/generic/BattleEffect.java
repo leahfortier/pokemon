@@ -450,6 +450,7 @@ public abstract class BattleEffect extends Effect {
 		}
 
 		public boolean isActive(Battle b) {
+			// TODO: This should just be a super duper end turn effect and revert back to the old isActive system
 			return b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR);
 		}
 

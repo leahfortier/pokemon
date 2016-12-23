@@ -6,6 +6,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
+import battle.effect.BeforeTurnAttackSelectionEffect;
 import battle.effect.PassableEffect;
 import battle.effect.SapHealthEffect;
 import battle.effect.attack.ChangeAbilityMove;
@@ -1167,7 +1168,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Encore extends PokemonEffect implements AttackSelectionEffect, ForceMoveEffect, BeforeTurnEffect, EndTurnEffect {
+	static class Encore extends PokemonEffect implements ForceMoveEffect, EndTurnEffect, BeforeTurnAttackSelectionEffect {
 		private static final long serialVersionUID = 1L;
 		private Move move;
 
@@ -1200,33 +1201,24 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return super.getFailMessage(b, user, victim);
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
-			return move.getAttack().namesies() == m.getAttack().namesies();
-		}
-
-		public String getUnusableMessage(ActivePokemon p) {
-			return "Only " + move.getAttack().getName() + " can be used right now!";
-		}
-
 		public Move getForcedMove() {
 			return move;
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (p.getAttack().namesies() != move.getAttack().namesies()) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
-				return false;
-			}
-			return true;
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (move.getPP() == 0) active = false; // If the move runs out of PP, Encore immediately ends
 		}
+
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
+			return move.getAttack().namesies() == m.getAttack().namesies();
+		}
+
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
+			return "Only " + move.getAttack().getName() + " can be used right now!";
+		}
 	}
 
-	static class Disable extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
+	static class Disable extends PokemonEffect implements BeforeTurnAttackSelectionEffect {
 		private static final long serialVersionUID = 1L;
 		private Move disabled;
 		private int turns;
@@ -1268,22 +1260,17 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return super.getFailMessage(b, user, victim);
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			return disabled.getAttack().namesies() != m.getAttack().namesies();
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return disabled.getAttack().getName() + " is disabled!";
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			turns--;
-			if (p.getAttack().namesies() == disabled.getAttack().namesies()) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(p.getAttack().getName() + " is disabled!"));
-				return false;
-			}
-			return true;
+			return checkUsable(b, p, opp);
 		}
 	}
 
@@ -1575,7 +1562,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Imprison extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
+	static class Imprison extends PokemonEffect implements BeforeTurnAttackSelectionEffect {
 		private static final long serialVersionUID = 1L;
 		private List<AttackNamesies> unableMoves;
 
@@ -1600,22 +1587,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return user.getName() + " sealed " + victim.getName() + "'s moves!";
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			return !unableMoves.contains(m.getAttack().namesies());
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return "No!! You are imprisoned!!!";
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (unableMoves.contains(p.getAttack().namesies())) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
-				return false;
-			}
-			
-			return true;
 		}
 	}
 
@@ -1706,7 +1683,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Torment extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
+	static class Torment extends PokemonEffect implements BeforeTurnAttackSelectionEffect {
 		private static final long serialVersionUID = 1L;
 
 		Torment() {
@@ -1729,50 +1706,32 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return super.getFailMessage(b, user, victim);
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			return (p.getAttributes().getLastMoveUsed() == null || p.getAttributes().getLastMoveUsed().getAttack().namesies() != m.getAttack().namesies());
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return p.getName() + " cannot use the same move twice in a row!";
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (!usable(p, p.getMove())) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
-				return false;
-			}
-			return true;
 		}
 	}
 
-	static class SoundBlock extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
+	static class SoundBlock extends PokemonEffect implements BeforeTurnAttackSelectionEffect {
 		private static final long serialVersionUID = 1L;
 
 		SoundBlock() {
 			super(EffectNamesies.SOUND_BLOCK, 3, 3, false);
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			return !m.getAttack().isMoveType(MoveType.SOUND_BASED);
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return p.getName() + " cannot use sound-based moves!!";
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (!usable(p, p.getMove())) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
-				return false;
-			}
-			return true;
 		}
 	}
 
-	static class Taunt extends PokemonEffect implements AttackSelectionEffect, BeforeTurnEffect {
+	static class Taunt extends PokemonEffect implements BeforeTurnAttackSelectionEffect {
 		private static final long serialVersionUID = 1L;
 
 		Taunt() {
@@ -1799,21 +1758,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return super.getFailMessage(b, user, victim);
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			return m.getAttack().getCategory() != MoveCategory.STATUS;
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return "No!! Not while you're under the effects of taunt!!";
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (!usable(p, p.getMove())) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(this.getFailMessage(b, p, opp)));
-				return false;
-			}
-			return true;
 		}
 	}
 
@@ -1830,6 +1780,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getName() + " began focusing!";
+		}
+
+		public boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			return true;
 		}
 	}
 
@@ -2099,11 +2053,11 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return uproar;
 		}
 
-		public boolean usable(ActivePokemon p, Move m) {
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			return m.getAttack().namesies() == AttackNamesies.UPROAR;
 		}
 
-		public String getUnusableMessage(ActivePokemon p) {
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return "Only Uproar can be used right now!";
 		}
 
@@ -2350,7 +2304,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " put in a substitute!";
 		}
 
-		public boolean absorbDamage(ActivePokemon damageTaker, int damageAmount) {
+		public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
 			this.hp -= damageAmount;
 			if (this.hp <= 0) {
 				Messages.add(new MessageUpdate("The substitute broke!"));
@@ -2728,16 +2682,19 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-			if (murderer.getAttributes().isAttacking()) {
-				Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to " + dead.getName() + "'s grudge!"));
-				murderer.getMove().reducePP(murderer.getMove().getPP());
-			}
+			Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to " + dead.getName() + "'s grudge!"));
+			murderer.getMove().reducePP(murderer.getMove().getPP());
 		}
 
 		public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
 			if (statusType == StatusCondition.FAINTED) {
-				// DEATH WISH GRANTED
-				deathWish(b, victim, caster);
+				ActivePokemon murderer = b.getOtherPokemon(victim);
+				
+				// Only grant death wish if murdered through direct damage
+				if (murderer.getAttributes().isAttacking()) {
+					// DEATH WISH GRANTED
+					deathWish(b, victim, murderer);
+				}
 			}
 		}
 	}
@@ -2767,10 +2724,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-			if (murderer.getAttributes().isAttacking()) {
-				Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
-				murderer.killKillKillMurderMurderMurder(b);
-			}
+			Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
+			murderer.killKillKillMurderMurderMurder(b);
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
@@ -2780,8 +2735,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
 			if (statusType == StatusCondition.FAINTED) {
-				// DEATH WISH GRANTED
-				deathWish(b, victim, caster);
+				ActivePokemon murderer = b.getOtherPokemon(victim);
+				
+				// Only grant death wish if murdered through direct damage
+				if (murderer.getAttributes().isAttacking()) {
+					// DEATH WISH GRANTED
+					deathWish(b, victim, murderer);
+				}
 			}
 		}
 	}
@@ -2915,7 +2875,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return user.getName() + " electrified " + victim.getName() + "!";
 		}
 
-		public Type changeAttackType(Type original) {
+		public Type changeAttackType(Attack attack, Type original) {
 			return Type.ELECTRIC;
 		}
 	}

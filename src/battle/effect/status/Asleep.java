@@ -1,9 +1,9 @@
 package battle.effect.status;
 
 import battle.Battle;
-import battle.attack.MoveType;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
+import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
@@ -37,12 +37,13 @@ class Asleep extends Status implements BeforeTurnEffect {
             return true;
         }
 
-        numTurns--;
+        if (!p.hasAbility(AbilityNamesies.COMATOSE)) {
+            numTurns--;
+        }
+
         Messages.add(new MessageUpdate(p.getName() + " is fast asleep..."));
-        return p.getAttack().isMoveType(MoveType.ASLEEP_USER);
+        return SleepyFightsterEffect.containsSleepyFightsterEffect(b, p);
     }
-
-
 
     public String getCastMessage(ActivePokemon p) {
         return p.getName() + " fell asleep!";
