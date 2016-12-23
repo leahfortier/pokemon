@@ -3286,8 +3286,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.MERCILESS, "The Pokémon's attacks become critical hits if the target is poisoned.");
 		}
 
-		public boolean shouldCrit(Battle b, ActivePokemon p) {
-			return p.hasStatus(StatusCondition.POISONED);
+		public boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			return defending.hasStatus(StatusCondition.POISONED);
 		}
 	}
 
@@ -3303,7 +3303,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return user.getAttackType() == Type.FIRE ? .5 : 1;
+			return user.isAttackType(Type.FIRE) ? .5 : 1;
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -3623,11 +3623,11 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && user.getMove().getType() != Type.FIRE) {
+			if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && user.isAttackType(Type.FIRE)) {
 				return .5;
 			}
 			
-			if (user.getMove().getType() == Type.FIRE) {
+			if (user.isAttackType(Type.FIRE)) {
 				return 2;
 			}
 			

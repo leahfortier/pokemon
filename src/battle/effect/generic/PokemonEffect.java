@@ -1782,7 +1782,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return user.getName() + " began focusing!";
 		}
 
-		public boolean shouldCrit(Battle b, ActivePokemon p) {
+		public boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			return true;
 		}
 	}

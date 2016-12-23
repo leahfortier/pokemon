@@ -8573,7 +8573,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean shouldCrit(Battle b, ActivePokemon p) {
+		public boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			return true;
 		}
 	}
@@ -8587,7 +8587,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 90;
 		}
 
-		public boolean shouldCrit(Battle b, ActivePokemon p) {
+		public boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			return true;
 		}
 	}

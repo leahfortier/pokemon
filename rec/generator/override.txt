@@ -2457,7 +2457,7 @@ SapHealthEffect:
 ***
 AlwaysCritEffect:
 	ShouldCrit:
-		Header: boolean shouldCrit(Battle b, ActivePokemon p)
+		Header: boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending)
 		Optional: True
 		Default: return true;
 	*

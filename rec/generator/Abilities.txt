@@ -1482,7 +1482,7 @@ Merciless:
 	Desc: The Pokémon's attacks become critical hits if the target is poisoned.
 	Int: AlwaysCritEffect
 	ShouldCrit:
-	return p.hasStatus(StatusCondition.POISONED);
+	return defending.hasStatus(StatusCondition.POISONED);
 	###
 *
 Water Bubble:
@@ -1493,7 +1493,7 @@ Water Bubble:
 	return user.isAttackType(Type.WATER) ? 2 : 1;
 	###
 	GetOppMultiplier: 
-	return user.getAttackType() == Type.FIRE ? .5 : 1;
+	return user.isAttackType(Type.FIRE) ? .5 : 1;
 	###
 *
 Steelworker:
@@ -1649,11 +1649,11 @@ Fluffy:
 	Desc: Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves.
 	Int: OpponentPowerChangeEffect
 	GetOppMultiplier:
-	if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && user.getMove().getType() != Type.FIRE) {
+	if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && user.isAttackType(Type.FIRE)) {
 		return .5;
 	}
 
-	if (user.getMove().getType() == Type.FIRE) {
+	if (user.isAttackType(Type.FIRE)) {
 		return 2;
 	}
 
