@@ -299,7 +299,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			}
 
 			String attackName = in.nextLine().trim();
-			AttackNamesies namesies = AttackNamesies.getValueOf(attackName);
+			AttackNamesies namesies = AttackNamesies.valueOf(attackName);
 
 			if (level < 0 || level > ActivePokemon.MAX_LEVEL) {
 				Global.error("Invalid level " + level + " (Move: " + attackName + ")");
@@ -319,7 +319,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		for (int i = 0; i < numMoves; i++) {
 			String attackName = in.nextLine().trim();
 
-			AttackNamesies namesies = AttackNamesies.getValueOf(attackName);
+			AttackNamesies namesies = AttackNamesies.valueOf(attackName);
 			tmMoves.add(namesies);
 		}
 
