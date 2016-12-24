@@ -3,6 +3,7 @@ package util;
 import main.Global;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 public final class GeneralUtils {
 
@@ -81,5 +82,14 @@ public final class GeneralUtils {
         }
 
         return (int)max;
+    }
+
+    public static int[] sixIntArray(Scanner in) {
+        int[] arr = new int[6];
+        for (int i = 0; i < 6; i++) {
+            arr[i] = in.nextInt();
+        }
+
+        return arr;
     }
 }

@@ -13,6 +13,7 @@ import pokemon.evolution.Evolution;
 import pokemon.evolution.EvolutionType;
 import util.FileIO;
 import util.FileName;
+import util.GeneralUtils;
 import util.RandomUtils;
 
 import java.io.Serializable;
@@ -256,13 +257,13 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			PokemonInfo pokemonInfo = new PokemonInfo(
 					in.nextInt(),
 					in.nextLine().trim() + in.nextLine().trim(),
-					sixIntArray(in),
+					GeneralUtils.sixIntArray(in),
 					in.nextInt(),
 					in.nextLine().trim() + in.nextLine().trim(),
 					in.next(),
 					in.next(),
 					in.nextInt(),
-					sixIntArray(in),
+					GeneralUtils.sixIntArray(in),
 					EvolutionType.getEvolution(in),
 					WildHoldItem.createList(in),
 					in.nextInt(),
@@ -284,15 +285,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		}
 
 		in.close();
-	}
-
-	private static int[] sixIntArray(Scanner in) {
-		int[] arr = new int[6];
-		for (int i = 0; i < 6; i++) {
-			arr[i] = in.nextInt();
-		}
-
-		return arr;
 	}
 
 	private static Map<Integer, Set<AttackNamesies>> createLevelUpMoves(Scanner in) {
