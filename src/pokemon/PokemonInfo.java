@@ -81,9 +81,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			String eggGroup1,
 			String eggGroup2,
 			Map<Integer, Set<AttackNamesies>> levelUpMoves,
-			Set<AttackNamesies> tmMoves,
-			Set<AttackNamesies> eggMoves,
-			Set<AttackNamesies> tutorMoves
+			Set<AttackNamesies> learnableMoves
 	) {
 		this.number = number;
 		this.name = name;
@@ -93,10 +91,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		this.growthRate = GrowthRate.valueOf(growthRate);
 		this.type = new Type[] { Type.valueOf(type1.toUpperCase()), Type.valueOf(type2.toUpperCase()) };
 		this.levelUpMoves = levelUpMoves;
-		this.learnableMoves = new HashSet<>();
-		this.learnableMoves.addAll(tmMoves);
-		this.learnableMoves.addAll(eggMoves);
-		this.learnableMoves.addAll(tutorMoves);
+		this.learnableMoves = new HashSet<>(learnableMoves);
 		this.catchRate = catchRate;
 		this.givenEVs = givenEVs;
 		this.evolution = evolution;
@@ -275,8 +270,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 					in.next(),
 					in.next(),
 					createLevelUpMoves(in),
-					createMovesSet(in),
-					createMovesSet(in),
 					createMovesSet(in)
 			);
 
