@@ -40,10 +40,6 @@ Nidoqueen:
 	EXP Yield:
 		223 -> 227
 
-Nidoran M:
-	Gender Ratio:
-		50 -> 100
-
 Nidoking:
 	EXP Yield:
 		223 -> 227
@@ -54,9 +50,9 @@ Clefable:
 
 Jigglypuff:
 	Gen 7 Only:
-		STOCKPILE
 		SWALLOW
 		SPIT_UP
+		STOCKPILE
 
 Wigglytuff:
 	EXP Yield:
@@ -246,8 +242,8 @@ Moltres:
 
 Mewtwo:
 	Gen 7 Only:
-		PSYWAVE
 		LASER_FOCUS
+		PSYWAVE
 
 Cyndaquil:
 	Gen 7 Only:
@@ -348,8 +344,8 @@ Umbreon:
 
 Dunsparce:
 	Gen 7 Only:
-		DRAGON_RUSH
 		BODY_SLAM
+		DRAGON_RUSH
 		AIR_SLASH
 
 Qwilfish:
@@ -405,11 +401,11 @@ Poochyena:
 
 Mightyena:
 	Gen 7 Only:
-		FIRE_FANG
-		THUNDER_FANG
 		ICE_FANG
+		THUNDER_FANG
 		PLAY_ROUGH
 		YAWN
+		FIRE_FANG
 
 Zigzagoon:
 	EXP Yield:
@@ -568,14 +564,6 @@ Luvdisc:
 		SOAK
 		HEART_STAMP
 
-Latias:
-	Gen 6 Only:
-		TAILWIND
-
-Latios:
-	Gen 6 Only:
-		TAILWIND
-
 Kyogre:
 	Catch Rate:
 		5 -> 3
@@ -619,8 +607,8 @@ Roserade:
 
 Wormadam:
 	Gen 7 Only:
-		BUG_BUZZ
 		QUIVER_DANCE
+		BUG_BUZZ
 		SUCKER_PUNCH
 
 Mothim:
