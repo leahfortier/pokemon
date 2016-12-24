@@ -48,10 +48,6 @@ Nidoking:
 	EXP Yield:
 		223 -> 227
 
-Clefairy:
-	Gen 6 Only:
-		WISH
-
 Clefable:
 	EXP Yield:
 		213 -> 217
@@ -131,8 +127,6 @@ Alakazam:
 		221 -> 225
 
 Machamp:
-	Gen 6 Only:
-		SUPERPOWER
 	Gen 7 Only:
 		STRENGTH
 
@@ -152,15 +146,9 @@ Golem:
 	EXP Yield:
 		218 -> 223
 
-Ponyta:
-	Abilities:
-		[FLAME_BODY, FLASH_FIRE] -> [RUN_AWAY, FLASH_FIRE]
-
 Rapidash:
 	Gen 6 Only:
 		BLAZE_KICK
-	Abilities:
-		[FLAME_BODY, FLASH_FIRE] -> [RUN_AWAY, FLASH_FIRE]
 
 Magnemite:
 	Gen 7 Only:
@@ -199,10 +187,6 @@ Gengar:
 	Abilities:
 		[LEVITATE, NO_ABILITY] -> [CURSED_BODY, NO_ABILITY]
 
-Kingler:
-	Gen 6 Only:
-		FURY_CUTTER
-
 Electrode:
 	Base Stats:
 		[60, 50, 70, 80, 80, 140] -> [60, 50, 70, 80, 80, 150]
@@ -227,10 +211,6 @@ Weezing:
 	Gen 7 Only:
 		GYRO_BALL
 
-Mr. Mime:
-	Gen 6 Only:
-		TEETER_DANCE
-
 Tauros:
 	EXP Yield:
 		211 -> 172
@@ -239,8 +219,6 @@ Gyarados:
 	Gen 7 Only:
 		HURRICANE
 		SCARY_FACE
-	Type:
-		[WATER, DRAGON] -> [WATER, FLYING]
 
 Vaporeon:
 	Gen 7 Only:
@@ -336,17 +314,7 @@ Crobat:
 	Gen 7 Only:
 		ABSORB
 
-Natu:
-	Abilities:
-		[SYNCHRONIZE, MAGIC_BOUNCE] -> [SYNCHRONIZE, EARLY_BIRD]
-
-Xatu:
-	Abilities:
-		[SYNCHRONIZE, MAGIC_BOUNCE] -> [SYNCHRONIZE, EARLY_BIRD]
-
 Ampharos:
-	Gen 6 Only:
-		ELECTRIFY
 	EXP Yield:
 		225 -> 230
 
@@ -414,10 +382,6 @@ Mantine:
 	EXP Yield:
 		163 -> 170
 
-Tyrogue:
-	Gen 6 Only:
-		COVET
-
 Raikou:
 	Abilities:
 		[PRESSURE, VOLT_ABSORB] -> [PRESSURE, INNER_FOCUS]
@@ -448,8 +412,6 @@ Mightyena:
 		YAWN
 
 Zigzagoon:
-	Classification:
-		Tiny Raccoon -> Tiny Racoon
 	EXP Yield:
 		48 -> 56
 
@@ -591,10 +553,6 @@ Whiscash:
 		THRASH
 		BELCH
 
-Dusclops:
-	Gen 6 Only:
-		PHANTOM_FORCE
-
 Chimecho:
 	Base Stats:
 		[65, 50, 70, 95, 80, 65] -> [75, 50, 80, 95, 90, 65]
@@ -652,8 +610,6 @@ Kricketune:
 		ABSORB
 
 Budew:
-	Gen 6 Only:
-		LEECH_SEED
 	Gen 7 Only:
 		WORRY_SEED
 
@@ -675,13 +631,7 @@ Ambipom:
 	Gen 7 Only:
 		DUAL_CHOP
 
-Buneary:
-	Gen 6 Only:
-		FAKE_TEARS
-
 Lopunny:
-	Gen 6 Only:
-		CAPTIVATE
 	Gen 7 Only:
 		BABY_DOLL_EYES
 
@@ -737,10 +687,6 @@ Probopass:
 	Gen 7 Only:
 		TRI_ATTACK
 		MAGNETIC_FLUX
-
-Dusknoir:
-	Gen 6 Only:
-		PHANTOM_FORCE
 
 Froslass:
 	Gen 7 Only:
@@ -959,14 +905,6 @@ Zekrom:
 	Catch Rate:
 		45 -> 3
 
-Chespin:
-	Gen 6 Only:
-		TACKLE
-
-Quilladin:
-	Gen 6 Only:
-		TACKLE
-
 Diggersby:
 	Gen 7 Only:
 		DOUBLE_SLAP
@@ -998,20 +936,14 @@ Pyroar:
 		200 -> 65
 
 Flabebe:
-	Type:
-		[FAIRY, GRASS] -> [FAIRY, NO_TYPE]
 	Catch Rate:
 		255 -> 225
 
 Floette:
-	Type:
-		[FAIRY, GRASS] -> [FAIRY, NO_TYPE]
 	Catch Rate:
 		255 -> 120
 
 Florges:
-	Type:
-		[FAIRY, GRASS] -> [FAIRY, NO_TYPE]
 	Catch Rate:
 		255 -> 45
 
@@ -1118,20 +1050,14 @@ Carbink:
 		30 -> 60
 
 Goomy:
-	Type:
-		[DRAGON, WATER] -> [DRAGON, NO_TYPE]
 	Catch Rate:
 		20 -> 45
 
 Sliggoo:
-	Type:
-		[DRAGON, WATER] -> [DRAGON, NO_TYPE]
 	Catch Rate:
 		20 -> 45
 
 Goodra:
-	Type:
-		[DRAGON, WATER] -> [DRAGON, NO_TYPE]
 	Catch Rate:
 		20 -> 45
 
@@ -1188,11 +1114,6 @@ Xerneas:
 Yveltal:
 	Catch Rate:
 		70 -> 45
-
-Zygarde:
-	Gen 6 Only:
-		DRAGON_DANCE
-		EXTREME_SPEED
 
 Diancie:
 	Gen 7 Only:
