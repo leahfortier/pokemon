@@ -13,10 +13,12 @@ import pokemon.evolution.Evolution;
 import pokemon.evolution.EvolutionType;
 import util.FileIO;
 import util.FileName;
+import util.GeneralUtils;
 import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -64,22 +66,19 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			int[] baseStats,
 			int baseExp,
 			String growthRate,
-			String type1,
-			String type2,
+			List<Type> type,
 			int catchRate,
 			int[] givenEVs,
 			Evolution evolution,
 			List<WildHoldItem> wildHoldItems,
 			int genderRatio,
-			String ability1,
-			String ability2,
+			List<AbilityNamesies> abilities,
 			String classification,
 			int height,
 			double weight,
 			String flavorText,
 			int eggSteps,
-			String eggGroup1,
-			String eggGroup2,
+			List<EggGroup> eggGroups,
 			Map<Integer, Set<AttackNamesies>> levelUpMoves,
 			Set<AttackNamesies> learnableMoves
 	) {
@@ -89,21 +88,21 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		this.baseStats = baseStats;
 		this.baseExp = baseExp;
 		this.growthRate = GrowthRate.valueOf(growthRate);
-		this.type = new Type[] { Type.valueOf(type1.toUpperCase()), Type.valueOf(type2.toUpperCase()) };
+		this.type = type.toArray(new Type[0]); // TODO: Test size == 2
 		this.levelUpMoves = levelUpMoves;
 		this.learnableMoves = new HashSet<>(learnableMoves);
 		this.catchRate = catchRate;
 		this.givenEVs = givenEVs;
 		this.evolution = evolution;
 		this.wildHoldItems = wildHoldItems;
-		this.abilities = new AbilityNamesies[] { AbilityNamesies.getValueOf(ability1), AbilityNamesies.getValueOf(ability2) };
+		this.abilities = abilities.toArray(new AbilityNamesies[0]);
 		this.maleRatio = genderRatio;
 		this.classification = classification;
 		this.height = height;
 		this.weight = weight;
 		this.flavorText = flavorText;
 		this.eggSteps = eggSteps;
-		this.eggGroups = new EggGroup[] { EggGroup.valueOf(eggGroup1), EggGroup.valueOf(eggGroup2) };
+		this.eggGroups = eggGroups.toArray(new EggGroup[0]);
 	}
 
 	public Type[] getType() {
@@ -249,28 +248,26 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.POKEMON_INFO, false));
 		while (in.hasNext()) {
 			PokemonInfo pokemonInfo = new PokemonInfo(
-					in.nextInt(),
-					in.nextLine().trim() + in.nextLine().trim(),
-					sixIntArray(in),
-					in.nextInt(),
-					in.nextLine().trim() + in.nextLine().trim(),
-					in.next(),
-					in.next(),
-					in.nextInt(),
-					sixIntArray(in),
-					EvolutionType.getEvolution(in),
-					WildHoldItem.createList(in),
-					in.nextInt(),
-					in.nextLine().trim() + in.nextLine().trim(),
-					in.nextLine().trim(),
-					in.nextLine().trim(), in.nextInt(),
-					in.nextDouble(),
-					in.nextLine().trim(),
-					in.nextInt(),
-					in.next(),
-					in.next(),
-					createLevelUpMoves(in),
-					createMovesSet(in)
+					in.nextInt(),									// Num
+					in.nextLine().trim() + in.nextLine().trim(),	// Name
+					sixIntArray(in),								// Base Stats
+					in.nextInt(),									// Base EXP
+					in.nextLine().trim() + in.nextLine().trim(),	// Growth Rate
+					createEnumList(in, Type.class),  				// Type
+					in.nextInt(),									// Catch Rate
+					sixIntArray(in),								// EVs
+					EvolutionType.getEvolution(in),					// Evolution
+					WildHoldItem.createList(in),					// Wild Items
+					Integer.parseInt(in.nextLine()),				// Male Ratio
+					createEnumList(in, AbilityNamesies.class), 		// Abilities
+					in.nextLine().trim(),							// Classification
+					in.nextInt(),									// Height
+					in.nextDouble(),								// Weight
+					in.nextLine().trim(),							// Flavor Text
+					Integer.parseInt(in.nextLine()),				// Egg Steps
+					createEnumList(in, EggGroup.class),  			// Egg Groups
+					createLevelUpMoves(in),							// Level Up Moves
+					createMovesSet(in)								// Learnable Moves
 			);
 
 			map.put(pokemonInfo.namesies, pokemonInfo);
@@ -286,6 +283,10 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		}
 
 		return arr;
+	}
+
+	private static <T extends Enum<T>> List<T> createEnumList(Scanner in, Class<T> enumType) {
+		return GeneralUtils.arrayValueOf(enumType, in.nextLine().trim().split(" "));
 	}
 
 	private static Map<Integer, Set<AttackNamesies>> createLevelUpMoves(Scanner in) {
@@ -353,7 +354,12 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		public static List<WildHoldItem> createList(Scanner in) {
 			List<WildHoldItem> list = new ArrayList<>();
 			int num = in.nextInt();
-			for (int i = 0; i < num; i++) list.add(new WildHoldItem(in.nextInt(), in.nextLine().trim()));
+			in.nextLine();
+
+			for (int i = 0; i < num; i++) {
+				list.add(new WildHoldItem(in.nextInt(), in.nextLine().trim()));
+			}
+
 			return list;
 		}
 		
