@@ -3,6 +3,8 @@ package util;
 import main.Global;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class GeneralUtils {
 
@@ -81,5 +83,11 @@ public final class GeneralUtils {
         }
 
         return (int)max;
+    }
+
+    public static <T extends Enum<T>> List<T> arrayValueOf(Class<T> enumType, String[] contents) {
+        return Arrays.stream(contents)
+                .map(value -> Enum.valueOf(enumType, PokeString.getNamesiesString(value)))
+                .collect(Collectors.toList());
     }
 }
