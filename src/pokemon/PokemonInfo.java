@@ -18,7 +18,6 @@ import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -346,8 +345,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		private HoldItem item;
 		private int chance;
 		
-		public WildHoldItem(int chance, String itemName) {
-			item = (HoldItem) ItemNamesies.getValueOf(itemName).getItem();
+		public WildHoldItem(int chance, ItemNamesies itemName) {
+			item = (HoldItem) itemName.getItem();
 			this.chance = chance;
 		}
 		
@@ -357,7 +356,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			in.nextLine();
 
 			for (int i = 0; i < num; i++) {
-				list.add(new WildHoldItem(in.nextInt(), in.nextLine().trim()));
+				list.add(new WildHoldItem(in.nextInt(), ItemNamesies.getValueOf(in.nextLine().trim())));
 			}
 
 			return list;
