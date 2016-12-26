@@ -6879,3 +6879,21 @@ Stomping Tantrum:
 	return super.power;
 	###
 *
+Hyperspace Hole:
+	Desc: Using a hyperspace hole, the user appears right next to the target and strikes. This also hits a target using a move such as Protect or Detect.
+	Type: Psychic
+	Cat: Special
+	PP: 5
+	MoveType: Protect_Piercing
+	Pow: 80
+*
+Steam Eruption:
+	Desc: The user immerses the target in superheated steam. This may also leave the target with a burn.
+	Type: Water
+	PP: 5
+	Pow: 110
+	Acc: 95
+	Status: Burned
+	EffChance: 30
+	Cat: Special
+*

@@ -11435,4 +11435,26 @@ public abstract class Attack implements Serializable {
 			return super.power;
 		}
 	}
+
+	static class HyperspaceHole extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		HyperspaceHole() {
+			super(AttackNamesies.HYPERSPACE_HOLE, "Using a hyperspace hole, the user appears right next to the target and strikes. This also hits a target using a move such as Protect or Detect.", 5, Type.PSYCHIC, MoveCategory.SPECIAL);
+			super.power = 80;
+			super.moveTypes.add(MoveType.PROTECT_PIERCING);
+		}
+	}
+
+	static class SteamEruption extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		SteamEruption() {
+			super(AttackNamesies.STEAM_ERUPTION, "The user immerses the target in superheated steam. This may also leave the target with a burn.", 5, Type.WATER, MoveCategory.SPECIAL);
+			super.power = 110;
+			super.accuracy = 95;
+			super.effectChance = 30;
+			super.status = StatusCondition.BURNED;
+		}
+	}
 }

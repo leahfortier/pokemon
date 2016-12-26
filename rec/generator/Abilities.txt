@@ -1374,6 +1374,20 @@ Refrigerate:
 	Desc: Normal-type moves become Ice-type moves.
 	NormalTypeChanger: Ice
 *
+Schooling:
+	Desc: When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low.
+	Int: EntryEffect
+	Enter:
+	// TODO: this
+	###
+*
+Shields Down:
+	Desc: When its HP becomes half or less, the Pokémon's shell breaks and it becomes aggressive.
+	Int: EntryEffect
+	Enter:
+	// TODO: this
+	###
+*	
 Stance Change:
 	Desc: The Pok\u00e9mon changes form depending on how it battles.
 	Field:

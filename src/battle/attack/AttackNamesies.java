@@ -272,6 +272,7 @@ import battle.attack.Attack.HydroPump;
 import battle.attack.Attack.HyperBeam;
 import battle.attack.Attack.HyperFang;
 import battle.attack.Attack.HyperVoice;
+import battle.attack.Attack.HyperspaceHole;
 import battle.attack.Attack.Hypnosis;
 import battle.attack.Attack.IceBall;
 import battle.attack.Attack.IceBeam;
@@ -543,6 +544,7 @@ import battle.attack.Attack.Spite;
 import battle.attack.Attack.Splash;
 import battle.attack.Attack.Spore;
 import battle.attack.Attack.StealthRock;
+import battle.attack.Attack.SteamEruption;
 import battle.attack.Attack.Steamroller;
 import battle.attack.Attack.SteelWing;
 import battle.attack.Attack.StickyWeb;
@@ -1309,7 +1311,9 @@ public enum AttackNamesies {
 	GRASS_PLEDGE("Grass Pledge", GrassPledge::new),
 	FIRE_PLEDGE("Fire Pledge", FirePledge::new),
 	WATER_PLEDGE("Water Pledge", WaterPledge::new),
-	STOMPING_TANTRUM("Stomping Tantrum", StompingTantrum::new);
+	STOMPING_TANTRUM("Stomping Tantrum", StompingTantrum::new),
+	HYPERSPACE_HOLE("Hyperspace Hole", HyperspaceHole::new),
+	STEAM_ERUPTION("Steam Eruption", SteamEruption::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

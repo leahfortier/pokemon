@@ -3107,6 +3107,30 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
+	static class Schooling extends Ability implements EntryEffect {
+		private static final long serialVersionUID = 1L;
+
+		Schooling() {
+			super(AbilityNamesies.SCHOOLING, "When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low.");
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			// TODO: this
+		}
+	}
+
+	static class ShieldsDown extends Ability implements EntryEffect {
+		private static final long serialVersionUID = 1L;
+
+		ShieldsDown() {
+			super(AbilityNamesies.SHIELDS_DOWN, "When its HP becomes half or less, the Pokémon's shell breaks and it becomes aggressive.");
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			// TODO: this
+		}
+	}
+
 	static class StanceChange extends Ability implements BeforeTurnEffect, EntryEffect, DifferentStatEffect {
 		private static final long serialVersionUID = 1L;
 		private static final int[] BLADE_STATS = new int[] {60, 150, 50, 150, 50, 60};
