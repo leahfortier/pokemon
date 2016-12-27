@@ -63027,7 +63027,7 @@ MAGICIAN NO_ABILITY
 Mischief
 20 19.8 It gathers things it likes and pushes them through its loop to teleport them to a secret place.
 30720
-NONE NONE
+UNDISCOVERED NONE
 20
 0 HYPERSPACE_HOLE
 0 TRICK
@@ -63104,7 +63104,7 @@ WATER_ABSORB NO_ABILITY
 Steam
 67 429.9 It expels its internal steam from the arms on its back. It has enough power to blow away a mountain.
 30720
-NONE NONE
+UNDISCOVERED NONE
 16
 0 STEAM_ERUPTION
 0 FLARE_BLITZ
@@ -66482,7 +66482,7 @@ BATTLE_ARMOR NO_ABILITY
 Synthetic
 75 265.7 The heavy control mask it wears suppresses its intrinsic capabilities. This Pok\u00e9mon has some hidden special power.
 30720
-NONE NONE
+UNDISCOVERED NONE
 18
 0 TACKLE
 5 RAGE
@@ -66547,7 +66547,7 @@ RKSSYSTEM NO_ABILITY
 Synthetic
 91 221.6 Its trust in its partner is what awakens it. This Pok\u00e9mon is capable of changing its type, a flexibility that is well displayed in battle.
 30720
-NONE NONE
+UNDISCOVERED NONE
 26
 -1 MULTI_ATTACK
 0 HEAL_BLOCK
@@ -67450,7 +67450,7 @@ ELECTRIC_SURGE NO_ABILITY
 Land Spirit
 71 45.2 This guardian deity of Melemele is brimming with curiosity. It summons thunderclouds and stores their lightning inside its body.
 3840
-NONE NONE
+UNDISCOVERED NONE
 18
 0 ELECTRIC_TERRAIN
 0 BRAVE_BIRD
@@ -67527,7 +67527,7 @@ PSYCHIC_SURGE NO_ABILITY
 Land Spirit
 47 41.0 This guardian deity of Akala is guilelessly cruel. The fragrant aroma of flowers is the source of its energy.
 3840
-NONE NONE
+UNDISCOVERED NONE
 18
 0 PSYCHIC_TERRAIN
 0 AROMATIC_MIST
@@ -67598,7 +67598,7 @@ GRASSY_SURGE NO_ABILITY
 Land Spirit
 75 100.3 It pulls large trees up by the roots and swings them around. It causes vegetation to grow, and then it absorbs energy from the growth.
 3840
-NONE NONE
+UNDISCOVERED NONE
 18
 0 GRASSY_TERRAIN
 0 WOOD_HAMMER
@@ -67675,7 +67675,7 @@ MISTY_SURGE NO_ABILITY
 Land Spirit
 51 46.7 The dense fog it creates brings the downfall and destruction of its confused enemies. Ocean currents are the source of its energy.
 3840
-NONE NONE
+UNDISCOVERED NONE
 18
 0 MISTY_TERRAIN
 0 MOONBLAST
@@ -67744,7 +67744,7 @@ UNAWARE NO_ABILITY
 Nebula
 8 0.2 Its body is gaseous and frail. It slowly grows as it collects dust from the atmosphere.
 30720
-NONE NONE
+UNDISCOVERED NONE
 2
 0 SPLASH
 23 TELEPORT
@@ -67765,7 +67765,7 @@ STURDY NO_ABILITY
 Protostar
 4 2204.4 Motionless as if dead, its body is faintly warm to the touch. In the distant past, it was called the cocoon of the stars.
 30720
-NONE NONE
+UNDISCOVERED NONE
 2
 -1 COSMIC_POWER
 0 TELEPORT
@@ -67786,7 +67786,7 @@ FULL_METAL_BODY NO_ABILITY
 Sunne
 134 507.1 It is said to live in another world. The intense light it radiates from the surface of its body can make the darkest of nights light up like midday.
 30720
-NONE NONE
+UNDISCOVERED NONE
 17
 -1 SUNSTEEL_STRIKE
 0 COSMIC_POWER
@@ -67863,7 +67863,7 @@ SHADOW_SHIELD NO_ABILITY
 Moone
 157 264.6 It is said to be a female evolution of Cosmog. When its third eye activates, away it flies to another world.
 30720
-NONE NONE
+UNDISCOVERED NONE
 17
 -1 MOONGEIST_BEAM
 0 COSMIC_POWER
@@ -67941,7 +67941,7 @@ BEAST_BOOST NO_ABILITY
 Parasite
 47 122.4 One of several mysterious Ultra Beasts. People on the street report observing those infested by it suddenly becoming violent.
 30720
-NONE NONE
+UNDISCOVERED NONE
 19
 0 POWER_SPLIT
 0 GUARD_SPLIT
@@ -68009,7 +68009,7 @@ BEAST_BOOST NO_ABILITY
 Swollen
 94 735.5 This Ultra Beast appeared from another world. It shows off its body, but whether that display is a boast or a threat remains unclear.
 30720
-NONE NONE
+UNDISCOVERED NONE
 20
 0 FELL_STINGER
 0 THUNDER_PUNCH
@@ -68078,7 +68078,7 @@ BEAST_BOOST NO_ABILITY
 Lissome
 71 55.1 One of the dangerous Ultra Beasts, it has been spotted running across the land at terrific speeds.
 30720
-NONE NONE
+UNDISCOVERED NONE
 19
 0 QUIVER_DANCE
 0 QUICK_GUARD
@@ -68142,7 +68142,7 @@ BEAST_BOOST NO_ABILITY
 Glowing
 150 220.5 One of the mysterious life-forms known as Ultra Beasts. Astonishing electric shocks emanate from its entire body, according to witnesses.
 30720
-NONE NONE
+UNDISCOVERED NONE
 18
 0 TAIL_GLOW
 0 SPARK
@@ -68210,7 +68210,7 @@ BEAST_BOOST NO_ABILITY
 Launch
 362 2204.4 It appeared from the Ultra Wormhole. Witnesses observed it flying across the sky at high speed.
 30720
-NONE NONE
+UNDISCOVERED NONE
 18
 0 AIR_SLASH
 0 INGRAIN
@@ -68278,7 +68278,7 @@ BEAST_BOOST NO_ABILITY
 Drawn Sword
 12 0.2 This Ultra Beast came from the Ultra Wormhole. It seems not to attack enemies on its own, but its sharp body is a dangerous weapon in itself.
 30720
-NONE NONE
+UNDISCOVERED NONE
 19
 0 SACRED_SWORD
 0 DEFOG
@@ -68334,7 +68334,7 @@ BEAST_BOOST NO_ABILITY
 Junkivore
 217 1957.7 It has gobbled mountains and swallowed whole buildings, according to reports. It's one of the Ultra Beasts.
 30720
-NONE NONE
+UNDISCOVERED NONE
 18
 0 BELCH
 0 SWALLOW
@@ -68405,7 +68405,7 @@ PRISM_ARMOR NO_ABILITY
 Prism
 94 507.1 Reminiscent of the Ultra Beasts, this life-form, apparently asleep underground, is thought to have come from another world in ancient times.
 30720
-NONE NONE
+UNDISCOVERED NONE
 18
 0 MOONLIGHT
 0 MORNING_SUN
@@ -68483,7 +68483,7 @@ SOUL_HEART NO_ABILITY
 Artificial
 39 177.5 This artificial Pok\u00e9mon, constructed more than 500 years ago, can understand human speech but cannot itself speak.
 30720
-NONE NONE
+UNDISCOVERED NONE
 19
 0 CRAFTY_SHIELD
 0 GEAR_UP
