@@ -170,6 +170,7 @@ import item.Item.IceBeamTM;
 import item.Item.IceGem;
 import item.Item.IceHeal;
 import item.Item.IceMemory;
+import item.Item.IceStone;
 import item.Item.IciclePlate;
 import item.Item.IcyRock;
 import item.Item.IncinerateTM;
@@ -594,6 +595,7 @@ public enum ItemNamesies {
 	SHINY_STONE("Shiny Stone", ShinyStone::new),
 	SUN_STONE("Sun Stone", SunStone::new),
 	THUNDER_STONE("Thunder Stone", ThunderStone::new),
+	ICE_STONE("Ice Stone", IceStone::new),
 	UP_GRADE("Up-Grade", UpGrade::new),
 	WATER_STONE("Water Stone", WaterStone::new),
 	WHIPPED_DREAM("Whipped Dream", WhippedDream::new),

@@ -1346,6 +1346,14 @@ Thunder Stone:
 	Price: 2100
 	Fling: 30
 *
+Ice Stone:
+	Int: HoldItem
+	EvolutionItem: True
+	Cat: Misc
+	Desc: A peculiar stone that can make certain species of Pokémon evolve. It has an unmistakable snowflake pattern.
+	Price: 2100
+	Fling: 30
+*
 Up-Grade:
 	Int: HoldItem
 	EvolutionItem: True
