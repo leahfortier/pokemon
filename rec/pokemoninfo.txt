@@ -8182,7 +8182,7 @@ NONE
 1
 5 SPELL_TAG
 50
-LEVITATE NO_ABILITY
+CURSED_BODY NO_ABILITY
 Shadow 
 59 89.3 The leer that floats in darkness belongs to a Gengar delighting in casting curses on people.
 5120
@@ -21491,7 +21491,7 @@ ELECTRIC NO_TYPE
 NONE
 0
 -1
-PRESSURE VOLT_ABSORB
+PRESSURE INNER_FOCUS
 Thunder 
 75 392.4 It is said to have fallen with lightning. It can fire thunderbolts from the rain clouds on its back.
 20480
@@ -21568,7 +21568,7 @@ FIRE NO_TYPE
 NONE
 0
 -1
-PRESSURE FLASH_FIRE
+PRESSURE INNER_FOCUS
 Volcano 
 83 436.5 It is said that when it roars, a volcano erupts somewhere around the globe.
 20480
@@ -21646,7 +21646,7 @@ WATER NO_TYPE
 NONE
 0
 -1
-PRESSURE WATER_ABSORB
+PRESSURE INNER_FOCUS
 Aurora 
 79 412.3 It races around the world to purify fouled water. It dashes away with the north wind.
 20480
@@ -24456,7 +24456,7 @@ LEVEL PELIPPER 25
 1 CLEVER_WING
 1 SWIFT_WING
 50
-KEEN_EYE RAIN_DISH
+KEEN_EYE HYDRATION
 Seagull 
 24 20.9 It soars high in the sky, riding on updrafts like a glider. It carries food tucked in its bill.
 5120
@@ -24537,7 +24537,7 @@ NONE
 2 SWIFT_WING
 5 LUCKY_EGG
 50
-KEEN_EYE RAIN_DISH
+KEEN_EYE DRIZZLE
 Water Bird 
 47 61.7 It is a messenger of the skies, carrying small Pok\u00e9mon and eggs to safety in its bill.
 5120
@@ -28621,7 +28621,7 @@ NONE
 1
 5 HEAT_ROCK
 50
-WHITE_SMOKE SHELL_ARMOR
+WHITE_SMOKE DROUGHT
 Coal 
 20 177.2 It burns coal inside its shell for energy. It blows out black soot if it is endangered.
 5120
@@ -46303,7 +46303,7 @@ LEVEL BOLDORE 25
 50 EVERSTONE
 5 HARD_STONE
 50
-STURDY SAND_FORCE
+STURDY WEAK_ARMOR
 Mantle 
 16 39.7 Its ear is hexagonal in shape. Compressed underground, its body is as hard as steel.
 3840
@@ -46375,7 +46375,7 @@ ITEM GIGALITH HARD_STONE
 50 EVERSTONE
 5 HARD_STONE
 50
-STURDY SAND_FORCE
+STURDY WEAK_ARMOR
 Ore 
 35 224.9 When it overflows with power, the orange crystal on its body glows. It looks for underground water in caves.
 3840
@@ -46451,7 +46451,7 @@ NONE
 50 EVERSTONE
 5 HARD_STONE
 50
-STURDY SAND_FORCE
+STURDY SAND_STREAM
 Compressed 
 67 573.2 Compressing the energy from its internal core lets it fire off an attack capable of blowing away a mountain.
 3840
@@ -51393,7 +51393,7 @@ ICE NO_TYPE
 LEVEL VANILLISH 35
 0
 50
-ICE_BODY WEAK_ARMOR
+ICE_BODY SNOW_CLOAK
 Fresh Snow 
 16 12.6 The temperature of their breath is -58° F. They create snow crystals and make snow fall in the areas around them.
 5120
@@ -51462,7 +51462,7 @@ ICE NO_TYPE
 LEVEL VANILLUXE 47
 0
 50
-ICE_BODY WEAK_ARMOR
+ICE_BODY SNOW_CLOAK
 Icy Snow 
 43 90.4 Snowy mountains are this Pok\u00e9mon's habitat. During an ancient ice age, they moved to southern areas.
 5120
@@ -51534,7 +51534,7 @@ ICE NO_TYPE
 NONE
 0
 50
-ICE_BODY WEAK_ARMOR
+ICE_BODY SNOW_WARNING
 Snowstorm 
 51 126.8 Swallowing large amounts of water, they make snow clouds inside their bodies and attack their foes with violent blizzards.
 5120
@@ -53863,7 +53863,7 @@ LEVEL BEARTIC 37
 1
 50 ASPEAR_BERRY
 50
-SNOW_CLOAK RATTLED
+SNOW_CLOAK SLUSH_RUSH
 Chill 
 20 18.7 When it is not feeling well, its mucus gets watery and the power of its Ice-type moves decreases.
 5120
@@ -53944,7 +53944,7 @@ NONE
 1
 50 ASPEAR_BERRY
 50
-SNOW_CLOAK SWIFT_SWIM
+SNOW_CLOAK SLUSH_RUSH
 Freezing 
 102 573.2 It can make its breath freeze at will. Very able in the water, it swims around in northern seas and catches prey.
 5120
