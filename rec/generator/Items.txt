@@ -83,7 +83,7 @@ Absorb Bulb:
 	TypeTakeDamageStatIncrease: Water Sp_Attack
 *
 Air Balloon:
-	Int: HoldItem, ConsumableItem, LevitationEffect, TakeDamageEffect, EntryEffect
+	Int: ConsumableItem, LevitationEffect, TakeDamageEffect, EntryEffect
 	Cat: Misc
 	Desc: When held by a Pok\u00e9mon, the Pok\u00e9mon will float into the air. When the holder is attacked, this item will burst.
 	Price: 200
@@ -293,7 +293,7 @@ Focus Band:
 	BraceMessage: bracer.getName() + " held on with its " + this.name + "!"
 *
 Focus Sash:
-	Int: HoldItem, ConsumableItem, BracingEffect
+	Int: ConsumableItem, BracingEffect
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. If it has full HP, the holder will endure one potential KO attack, leaving 1 HP.
 	Price: 200
@@ -2483,4 +2483,20 @@ Fairy Memory:
 	Int: MemoryItem
 	Desc: A memory disc that contains Fairy-type data. It changes the type of the holder if held by a certain species of Pokémon.
 	MemoryType: Fairy
+*
+Electric Seed:
+	Desc: An item to be held by a Pokémon. It boosts Defense on Electric Terrain. It can only be used once.
+	TerrainSeed: Electric Defense
+*
+Grassy Seed:
+	Desc: An item to be held by a Pokémon. It boosts Defense on Grassy Terrain. It can only be used once.
+	TerrainSeed: Grass Defense
+*
+Misty Seed:
+	Desc: An item to be held by a Pokémon. It boosts Sp. Def on Misty Terrain. It can only be used once.
+	TerrainSeed: Misty Sp_Defense
+*
+Psychic Seed:
+	Desc: An item to be held by a Pokémon. It boosts Sp. Def on Psychic Terrain. It can only be used once.
+	TerrainSeed: Psychic Sp_Defense
 *

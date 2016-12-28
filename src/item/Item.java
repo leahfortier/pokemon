@@ -31,6 +31,7 @@ import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
+import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
@@ -233,7 +234,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class AbsorbBulb extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
+	static class AbsorbBulb extends Item implements ConsumableItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		AbsorbBulb() {
@@ -241,27 +242,23 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.HELD_ITEM)) {
 				victim.consumeItem(b);
 			}
 		}
+
+		public int flingDamage() {
+			return 30;
+		}
 	}
 
-	static class AirBalloon extends Item implements HoldItem, ConsumableItem, LevitationEffect, TakeDamageEffect, EntryEffect {
+	static class AirBalloon extends Item implements ConsumableItem, LevitationEffect, TakeDamageEffect, EntryEffect {
 		private static final long serialVersionUID = 1L;
 
 		AirBalloon() {
 			super(ItemNamesies.AIR_BALLOON, "When held by a Pok\u00e9mon, the Pok\u00e9mon will float into the air. When the holder is attacked, this item will burst.", BagCategory.MISC, 6);
 			super.price = 200;
-		}
-
-		public int flingDamage() {
-			return 10;
 		}
 
 		public void fall(Battle b, ActivePokemon fallen) {
@@ -278,6 +275,10 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			Messages.add(new MessageUpdate(enterer.getName() + " floats with its " + this.name + "!"));
+		}
+
+		public int flingDamage() {
+			return 10;
 		}
 	}
 
@@ -378,7 +379,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class CellBattery extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
+	static class CellBattery extends Item implements ConsumableItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		CellBattery() {
@@ -386,14 +387,14 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (user.getAttackType() == Type.ELECTRIC && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
 				victim.consumeItem(b);
 			}
+		}
+
+		public int flingDamage() {
+			return 30;
 		}
 	}
 
@@ -730,16 +731,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class FocusSash extends Item implements HoldItem, ConsumableItem, BracingEffect {
+	static class FocusSash extends Item implements ConsumableItem, BracingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FocusSash() {
 			super(ItemNamesies.FOCUS_SASH, "An item to be held by a Pok\u00e9mon. If it has full HP, the holder will endure one potential KO attack, leaving 1 HP.", BagCategory.MISC, 28);
 			super.price = 200;
-		}
-
-		public int flingDamage() {
-			return 10;
 		}
 
 		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth) {
@@ -753,6 +750,10 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public String braceMessage(ActivePokemon bracer) {
 			return bracer.getName() + " held on with its " + this.name + "!";
+		}
+
+		public int flingDamage() {
+			return 10;
 		}
 	}
 
@@ -1020,7 +1021,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class LuminousMoss extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
+	static class LuminousMoss extends Item implements ConsumableItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		LuminousMoss() {
@@ -1028,14 +1029,14 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
 				victim.consumeItem(b);
 			}
+		}
+
+		public int flingDamage() {
+			return 30;
 		}
 	}
 
@@ -1579,7 +1580,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class Snowball extends Item implements HoldItem, ConsumableItem, TakeDamageEffect {
+	static class Snowball extends Item implements ConsumableItem, TakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Snowball() {
@@ -1587,14 +1588,14 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (user.getAttackType() == Type.ICE && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
 				victim.consumeItem(b);
 			}
+		}
+
+		public int flingDamage() {
+			return 30;
 		}
 	}
 
@@ -8497,6 +8498,82 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public int flingDamage() {
 			return 70;
+		}
+	}
+
+	static class ElectricSeed extends Item implements ConsumableItem, TerrainCastEffect {
+		private static final long serialVersionUID = 1L;
+
+		ElectricSeed() {
+			super(ItemNamesies.ELECTRIC_SEED, "An item to be held by a Pokémon. It boosts Defense on Electric Terrain. It can only be used once.", BagCategory.MISC, 323);
+			super.price = 4000;
+		}
+
+		public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
+			if (newTerrain == TerrainType.ELECTRIC && p.getAttributes().modifyStage(p, p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
+				p.consumeItem(b);
+			}
+		}
+
+		public int flingDamage() {
+			return 30;
+		}
+	}
+
+	static class GrassySeed extends Item implements ConsumableItem, TerrainCastEffect {
+		private static final long serialVersionUID = 1L;
+
+		GrassySeed() {
+			super(ItemNamesies.GRASSY_SEED, "An item to be held by a Pokémon. It boosts Defense on Grassy Terrain. It can only be used once.", BagCategory.MISC, 324);
+			super.price = 4000;
+		}
+
+		public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
+			if (newTerrain == TerrainType.GRASS && p.getAttributes().modifyStage(p, p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
+				p.consumeItem(b);
+			}
+		}
+
+		public int flingDamage() {
+			return 30;
+		}
+	}
+
+	static class MistySeed extends Item implements ConsumableItem, TerrainCastEffect {
+		private static final long serialVersionUID = 1L;
+
+		MistySeed() {
+			super(ItemNamesies.MISTY_SEED, "An item to be held by a Pokémon. It boosts Sp. Def on Misty Terrain. It can only be used once.", BagCategory.MISC, 325);
+			super.price = 4000;
+		}
+
+		public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
+			if (newTerrain == TerrainType.MISTY && p.getAttributes().modifyStage(p, p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
+				p.consumeItem(b);
+			}
+		}
+
+		public int flingDamage() {
+			return 30;
+		}
+	}
+
+	static class PsychicSeed extends Item implements ConsumableItem, TerrainCastEffect {
+		private static final long serialVersionUID = 1L;
+
+		PsychicSeed() {
+			super(ItemNamesies.PSYCHIC_SEED, "An item to be held by a Pokémon. It boosts Sp. Def on Psychic Terrain. It can only be used once.", BagCategory.MISC, 326);
+			super.price = 4000;
+		}
+
+		public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
+			if (newTerrain == TerrainType.PSYCHIC && p.getAttributes().modifyStage(p, p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
+				p.consumeItem(b);
+			}
+		}
+
+		public int flingDamage() {
+			return 30;
 		}
 	}
 

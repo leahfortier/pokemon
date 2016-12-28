@@ -92,6 +92,7 @@ import item.Item.EjectButton;
 import item.Item.Electirizer;
 import item.Item.ElectricGem;
 import item.Item.ElectricMemory;
+import item.Item.ElectricSeed;
 import item.Item.Elixir;
 import item.Item.EmbargoTM;
 import item.Item.EnergyBallTM;
@@ -143,6 +144,7 @@ import item.Item.GigaImpactTM;
 import item.Item.GrassGem;
 import item.Item.GrassKnotTM;
 import item.Item.GrassMemory;
+import item.Item.GrassySeed;
 import item.Item.GreatBall;
 import item.Item.GrepaBerry;
 import item.Item.GripClaw;
@@ -226,6 +228,7 @@ import item.Item.Metronome;
 import item.Item.MicleBerry;
 import item.Item.MindPlate;
 import item.Item.MiracleSeed;
+import item.Item.MistySeed;
 import item.Item.MoomooMilk;
 import item.Item.MoonBall;
 import item.Item.MoonStone;
@@ -278,6 +281,7 @@ import item.Item.Protein;
 import item.Item.PsychUpTM;
 import item.Item.PsychicGem;
 import item.Item.PsychicMemory;
+import item.Item.PsychicSeed;
 import item.Item.PsychicTM;
 import item.Item.PsyshockTM;
 import item.Item.PureIncense;
@@ -757,6 +761,10 @@ public enum ItemNamesies {
 	DARK_MEMORY("Dark Memory", DarkMemory::new),
 	STEEL_MEMORY("Steel Memory", SteelMemory::new),
 	FAIRY_MEMORY("Fairy Memory", FairyMemory::new),
+	ELECTRIC_SEED("Electric Seed", ElectricSeed::new),
+	GRASSY_SEED("Grassy Seed", GrassySeed::new),
+	MISTY_SEED("Misty Seed", MistySeed::new),
+	PSYCHIC_SEED("Psychic Seed", PsychicSeed::new),
 	HONE_CLAWS_TM("Hone Claws TM", HoneClawsTM::new),
 	DRAGON_CLAW_TM("Dragon Claw TM", DragonClawTM::new),
 	PSYSHOCK_TM("Psyshock TM", PsyshockTM::new),

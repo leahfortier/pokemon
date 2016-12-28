@@ -321,6 +321,10 @@ dragonmemory.png 0000013f
 darkmemory.png 00000140
 steelmemory.png 00000141
 fairymemory.png 00000142
+electricseed.png 00000143
+grassyseed.png 00000144
+mistyseed.png 00000145
+psychicseed.png 00000146
 normaltm.png 000007d0
 firetm.png 000007d1
 watertm.png 000007d2

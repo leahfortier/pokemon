@@ -1356,12 +1356,15 @@ Override:
 			victim.consumeItem(b);
 		}
 		###
-		AddInterface: HoldItem
 		AddInterface: ConsumableItem
 		AddInterface: TakeDamageEffect
 	*
 ***
 ConsumableItem:
+	ConsumeItem:
+		Optional: True
+		AddInterface: Hidden-HoldItem
+	*
 ***
 Override:
 	ChoiceItem:
@@ -2576,5 +2579,24 @@ Override:
 			{0}
 		}
 		###
+	*
+***
+TerrainCastEffect:
+	NewTerrain:
+		Header: void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain)
+	*
+***
+Override:
+	TerrainSeed:
+		AddInterface: ConsumableItem
+		AddInterface: TerrainCastEffect
+		AddMapField: NewTerrain:
+		if (newTerrain == TerrainType.{11} && p.getAttributes().modifyStage(p, p, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
+			p.consumeItem(b);
+		}
+		###
+		AddMapField: Price: 4000
+		AddMapField: Fling: 30
+		AddMapField: Cat: Misc
 	*
 ***

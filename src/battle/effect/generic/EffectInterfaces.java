@@ -6,6 +6,7 @@ import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import main.Global;
 import main.Type;
+import map.TerrainType;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.Ability;
@@ -1184,6 +1185,21 @@ public final class EffectInterfaces {
 					
 					OpponentEndAttackEffect effect = (OpponentEndAttackEffect)invokee;
 					effect.endsies(b, attacking, attack);
+				}
+			}
+		}
+	}
+
+	public interface TerrainCastEffect {
+		void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain);
+
+		static void invokeTerrainCastEffect(Battle b, ActivePokemon p, TerrainType newTerrain) {
+			List<Object> invokees = b.getEffectsList(p);
+			for (Object invokee : invokees) {
+				if (invokee instanceof TerrainCastEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					TerrainCastEffect effect = (TerrainCastEffect)invokee;
+					effect.newTerrain(b, p, newTerrain);
 				}
 			}
 		}
