@@ -259,7 +259,7 @@ public class ActivePokemon implements Serializable {
 	
 	private void setMoves() {
 		moves = new ArrayList<>();
-		Map<Integer, Set<AttackNamesies>> map = pokemon.getLevelUpMoves();
+		Map<Integer, List<AttackNamesies>> map = pokemon.getLevelUpMoves();
 		for (Integer levelLearned : map.keySet()) {
 			if (levelLearned > level) {
 				continue;
@@ -558,7 +558,7 @@ public class ActivePokemon implements Serializable {
 		}
 
 		// Learn new moves
-		Set<AttackNamesies> levelMoves = pokemon.getMoves(level);
+		List<AttackNamesies> levelMoves = pokemon.getMoves(level);
 		levelMoves.forEach(attack -> learnMove(attack, false));
 
 		return gain;

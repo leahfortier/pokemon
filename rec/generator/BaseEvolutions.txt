@@ -335,7 +335,6 @@ Passimian
 Wimpod
 Sandygast
 Pyukumuku
-Type: Null
 Minior
 Komala
 Turtonator
@@ -345,5 +344,4 @@ Bruxish
 Drampa
 Dhelmise
 Jangmo-o
-Cosmog
 

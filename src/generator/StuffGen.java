@@ -26,7 +26,6 @@ public class StuffGen {
 		new StuffGen();
 
 //		pokemonInfoStuff();
-//		compareMoves();
 
 		System.out.println("GEN GEN GEN");
 	}
@@ -102,7 +101,7 @@ public class StuffGen {
 			if (line.equals("*")) {
 				break;
 			}
-			
+
 			Entry<String, String> pair = getFieldPair(in, line);
 			
 			String key = pair.getKey();
@@ -222,8 +221,10 @@ public class StuffGen {
 			set.add(PokemonInfo.getPokemonInfo(i).namesies());
 		}
 
-		set.remove(PokemonNamesies.MANAPHY);
 		set.remove(PokemonNamesies.SHEDINJA); // TODO
+		set.remove(PokemonNamesies.MANAPHY);
+		set.remove(PokemonNamesies.TYPE_NULL);
+		set.remove(PokemonNamesies.COSMOG);
 
 		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
 			PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
@@ -261,34 +262,30 @@ public class StuffGen {
 			out.println(in.nextLine()); // Base Stats
 			out.println(in.nextLine()); // Base Exp
 			out.println(in.nextLine()); // Growth Rate
-			out.println(in.nextLine()); // Type1 Type2
+			out.println(in.nextLine()); // Types
 			out.println(in.nextLine()); // Catch Rate
 			out.println(in.nextLine()); // EVs
-			readEvolution(in, out); // Evolution
-			readHoldItems(in, out); // Wild Items
+			readEvolution(in, out);     // Evolution
+			readHoldItems(in, out);     // Wild Items
 			out.println(in.nextLine()); // Male Ratio
-			out.println(in.nextLine()); // Ability 1
-			out.println(in.nextLine()); // Ability 2
+			out.println(in.nextLine()); // Abilities
 			out.println(in.nextLine()); // Classification
 			out.println(in.nextLine()); // Height Weight FlavorText
 			out.println(in.nextLine()); // Egg Steps
 			out.println(in.nextLine()); // Egg Groups
-			readMoves(in, out); // Level Up Moves
-			readMoves(in, out); // TM Moves
-			readMoves(in, out); // Egg Moves
-			readMoves(in, out); // Move Tutor Moves
-			
+			readMoves(in, out);    // Level Up Moves
+			readMoves(in, out); // Learnable Moves
 			out.println(in.nextLine()); // New Line
 		}
 	}
-	
+
 	private static void readMoves(Scanner in, PrintStream out) {
 		int numMoves = in.nextInt();
-		out.println(numMoves); // Number of Moves 
+		out.println(numMoves); // Number of Moves
 		in.nextLine();
-		
+
 		for (int i = 0; i < numMoves; i++) {
-			out.println(in.nextLine()); // Each move and level
+			out.println(in.nextLine()); // Each move
 		}
 	}
 	
@@ -311,8 +308,10 @@ public class StuffGen {
 		int num = in.nextInt();
 		out.println(num);
 		in.nextLine();
-		for (int i = 0; i < num; i++) 
+
+		for (int i = 0; i < num; i++) {
 			out.println(in.nextLine());
+		}
 	}
 	
 	private static void generatePokemonTileIndices() {
