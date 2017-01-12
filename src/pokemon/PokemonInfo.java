@@ -5,7 +5,6 @@ import item.Item;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import item.hold.IncenseItem;
-import main.Global;
 import main.Type;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.EggGroup;
@@ -25,12 +24,11 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private static final long serialVersionUID = 1L;
 
-	public static final int NUM_POKEMON = 719;
+	public static final int NUM_POKEMON = 801;
 	public static final int EGG_IMAGE = 0x10000;
 
 	private static Map<PokemonNamesies, PokemonInfo> map;
@@ -44,7 +42,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private final int baseExp;
 	private final GrowthRate growthRate;
 	private final Type[] type;
-	private final Map<Integer, Set<AttackNamesies>> levelUpMoves;
+	private final Map<Integer, List<AttackNamesies>> levelUpMoves;
 	private final Set<AttackNamesies> learnableMoves;
 	private final int catchRate;
 	private final int[] givenEVs;
@@ -78,7 +76,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			String flavorText,
 			int eggSteps,
 			List<EggGroup> eggGroups,
-			Map<Integer, Set<AttackNamesies>> levelUpMoves,
+			Map<Integer, List<AttackNamesies>> levelUpMoves,
 			Set<AttackNamesies> learnableMoves
 	) {
 		this.number = number;
@@ -108,7 +106,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return type;
 	}
 
-	public Map<Integer, Set<AttackNamesies>> getLevelUpMoves() {
+	Map<Integer, List<AttackNamesies>> getLevelUpMoves() {
 		return levelUpMoves;
 	}
 
@@ -116,11 +114,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return baseStats[index];
 	}
 
-	public GrowthRate getGrowthRate() {
+	GrowthRate getGrowthRate() {
 		return growthRate;
 	}
 
-	public int getEggSteps() {
+	int getEggSteps() {
 		return eggSteps;
 	}
 
@@ -140,7 +138,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return baseExp;
 	}
 
-	public int[] getGivenEVs() {
+	int[] getGivenEVs() {
 		return givenEVs;
 	}
 
@@ -180,7 +178,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return evolution;
 	}
 
-	public List<WildHoldItem> getWildItems() {
+	List<WildHoldItem> getWildItems() {
 		return wildHoldItems;
 	}
 
@@ -196,7 +194,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return getImageNumber(this, shiny, front);
 	}
 
-	public static int getImageNumber(PokemonInfo pokemonInfo, boolean shiny, boolean front) {
+	private static int getImageNumber(PokemonInfo pokemonInfo, boolean shiny, boolean front) {
 		int imageNumber = 4*pokemonInfo.getNumber() + (front ? 0 : 1);
 		if (shiny) {
 			imageNumber += 2;
@@ -217,7 +215,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return getPokemonInfo(PokemonNamesies.values()[index]);
 	}
 
-	public static PokemonNamesies getRandomBaseEvolution() {
+	static PokemonNamesies getRandomBaseEvolution() {
 		if (baseEvolution == null) {
 			baseEvolution = new ArrayList<>();
 			Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.BASE_EVOLUTIONS, false));
@@ -249,12 +247,12 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			PokemonInfo pokemonInfo = new PokemonInfo(
 					in.nextInt(),									// Num
 					in.nextLine().trim() + in.nextLine().trim(),	// Name
-					sixIntArray(in),								// Base Stats
+					GeneralUtils.sixIntArray(in),					// Base Stats
 					in.nextInt(),									// Base EXP
 					in.nextLine().trim() + in.nextLine().trim(),	// Growth Rate
 					createEnumList(in, Type.class),  				// Type
 					in.nextInt(),									// Catch Rate
-					sixIntArray(in),								// EVs
+					GeneralUtils.sixIntArray(in),					// EVs
 					EvolutionType.getEvolution(in),					// Evolution
 					WildHoldItem.createList(in),					// Wild Items
 					Integer.parseInt(in.nextLine()),				// Male Ratio
@@ -275,37 +273,32 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		in.close();
 	}
 
-	private static int[] sixIntArray(Scanner in) {
-		int[] arr = new int[6];
-		for (int i = 0; i < 6; i++) {
-			arr[i] = in.nextInt();
-		}
-
-		return arr;
-	}
-
 	private static <T extends Enum<T>> List<T> createEnumList(Scanner in, Class<T> enumType) {
 		return GeneralUtils.arrayValueOf(enumType, in.nextLine().trim().split(" "));
 	}
 
-	private static Map<Integer, Set<AttackNamesies>> createLevelUpMoves(Scanner in) {
-		Map<Integer, Set<AttackNamesies>> levelUpMoves = new TreeMap<>();
+	private static Map<Integer, List<AttackNamesies>> createLevelUpMoves(Scanner in) {
+		Map<Integer, List<AttackNamesies>> levelUpMoves = new TreeMap<>();
 		int numMoves = in.nextInt();
 
 		for (int i = 0; i < numMoves; i++) {
 			int level = in.nextInt();
 			if (!levelUpMoves.containsKey(level)) {
-				levelUpMoves.put(level, new TreeSet<>());
+				levelUpMoves.put(level, new ArrayList<>());
 			}
 
+			List<AttackNamesies> levelMoves = levelUpMoves.get(level);
 			String attackName = in.nextLine().trim();
 			AttackNamesies namesies = AttackNamesies.valueOf(attackName);
 
-			if (level < 0 || level > ActivePokemon.MAX_LEVEL) {
-				Global.error("Invalid level " + level + " (Move: " + attackName + ")");
+			if (!levelMoves.contains(namesies)) {
+				levelMoves.add(namesies);
 			}
 
-			levelUpMoves.get(level).add(namesies);
+			// TODO: Test case for this but include -1 for evolution level
+//			if (level < 0 || level > ActivePokemon.MAX_LEVEL) {
+//				Global.error("Invalid level " + level + " (Move: " + attackName + ")");
+//			}
 		}
 
 		return levelUpMoves;
@@ -326,12 +319,12 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return tmMoves;
 	}
 
-	public Set<AttackNamesies> getMoves(int level) {
+	public List<AttackNamesies> getMoves(int level) {
 		if (levelUpMoves.containsKey(level)) {
 			return levelUpMoves.get(level);
 		}
 
-		return new TreeSet<>();
+		return new ArrayList<>();
 	}
 
 	public boolean canBreed() {
@@ -339,18 +332,18 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	}
 
 	// TODO: new file
-	public static class WildHoldItem implements Serializable {
+	static class WildHoldItem implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		private HoldItem item;
 		private int chance;
 		
-		public WildHoldItem(int chance, ItemNamesies itemName) {
+		WildHoldItem(int chance, ItemNamesies itemName) {
 			item = (HoldItem) itemName.getItem();
 			this.chance = chance;
 		}
 		
-		public static List<WildHoldItem> createList(Scanner in) {
+		static List<WildHoldItem> createList(Scanner in) {
 			List<WildHoldItem> list = new ArrayList<>();
 			int num = in.nextInt();
 			in.nextLine();
@@ -362,7 +355,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			return list;
 		}
 		
-		public static HoldItem getWildHoldItem(List<WildHoldItem> list) {
+		static HoldItem getWildHoldItem(List<WildHoldItem> list) {
 			int random = RandomUtils.getRandomInt(100);
 			int sum = 0;
 
@@ -382,7 +375,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	}
 
 	// TODO: Instead of generating this on the fly should just be added to the text file and stored
-	public static PokemonInfo getBaseEvolution(PokemonInfo targetPokes) {
+	private static PokemonInfo getBaseEvolution(PokemonInfo targetPokes) {
 		if (targetPokes.namesies() == PokemonNamesies.MANAPHY) {
 			return PokemonInfo.getPokemonInfo(PokemonNamesies.PHIONE);
 		}
@@ -443,7 +436,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 				}
 			}
 		}
-		
+
+		// TODO: -1 is valid now for evolution
 		return -1;
 	}
 	

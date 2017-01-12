@@ -44,6 +44,7 @@ import battle.attack.Attack.Bestow;
 import battle.attack.Attack.Bide;
 import battle.attack.Attack.Bind;
 import battle.attack.Attack.Bite;
+import battle.attack.Attack.BlastBurn;
 import battle.attack.Attack.BlazeKick;
 import battle.attack.Attack.Blizzard;
 import battle.attack.Attack.Block;
@@ -180,6 +181,7 @@ import battle.attack.Attack.FinalGambit;
 import battle.attack.Attack.FireBlast;
 import battle.attack.Attack.FireFang;
 import battle.attack.Attack.FireLash;
+import battle.attack.Attack.FirePledge;
 import battle.attack.Attack.FirePunch;
 import battle.attack.Attack.FireSpin;
 import battle.attack.Attack.FirstImpression;
@@ -208,6 +210,7 @@ import battle.attack.Attack.ForestsCurse;
 import battle.attack.Attack.FoulPlay;
 import battle.attack.Attack.FreezeDry;
 import battle.attack.Attack.FreezeShock;
+import battle.attack.Attack.FrenzyPlant;
 import battle.attack.Attack.FrostBreath;
 import battle.attack.Attack.FuryAttack;
 import battle.attack.Attack.FuryCutter;
@@ -224,6 +227,7 @@ import battle.attack.Attack.GigaImpact;
 import battle.attack.Attack.Glaciate;
 import battle.attack.Attack.Glare;
 import battle.attack.Attack.GrassKnot;
+import battle.attack.Attack.GrassPledge;
 import battle.attack.Attack.GrassWhistle;
 import battle.attack.Attack.GrassyTerrain;
 import battle.attack.Attack.Gravity;
@@ -263,10 +267,12 @@ import battle.attack.Attack.HornDrill;
 import battle.attack.Attack.HornLeech;
 import battle.attack.Attack.Howl;
 import battle.attack.Attack.Hurricane;
+import battle.attack.Attack.HydroCannon;
 import battle.attack.Attack.HydroPump;
 import battle.attack.Attack.HyperBeam;
 import battle.attack.Attack.HyperFang;
 import battle.attack.Attack.HyperVoice;
+import battle.attack.Attack.HyperspaceHole;
 import battle.attack.Attack.Hypnosis;
 import battle.attack.Attack.IceBall;
 import battle.attack.Attack.IceBeam;
@@ -538,11 +544,13 @@ import battle.attack.Attack.Spite;
 import battle.attack.Attack.Splash;
 import battle.attack.Attack.Spore;
 import battle.attack.Attack.StealthRock;
+import battle.attack.Attack.SteamEruption;
 import battle.attack.Attack.Steamroller;
 import battle.attack.Attack.SteelWing;
 import battle.attack.Attack.StickyWeb;
 import battle.attack.Attack.Stockpile;
 import battle.attack.Attack.Stomp;
+import battle.attack.Attack.StompingTantrum;
 import battle.attack.Attack.StoneEdge;
 import battle.attack.Attack.StoredPower;
 import battle.attack.Attack.StormThrow;
@@ -620,6 +628,7 @@ import battle.attack.Attack.VoltSwitch;
 import battle.attack.Attack.VoltTackle;
 import battle.attack.Attack.WakeUpSlap;
 import battle.attack.Attack.WaterGun;
+import battle.attack.Attack.WaterPledge;
 import battle.attack.Attack.WaterPulse;
 import battle.attack.Attack.WaterShuriken;
 import battle.attack.Attack.WaterSport;
@@ -720,6 +729,9 @@ public enum AttackNamesies {
 	PETAL_DANCE("Petal Dance", PetalDance::new),
 	THRASH("Thrash", Thrash::new),
 	HYPER_BEAM("Hyper Beam", HyperBeam::new),
+	FRENZY_PLANT("Frenzy Plant", FrenzyPlant::new),
+	BLAST_BURN("Blast Burn", BlastBurn::new),
+	HYDRO_CANNON("Hydro Cannon", HydroCannon::new),
 	PRISMATIC_LASER("Prismatic Laser", PrismaticLaser::new),
 	STRING_SHOT("String Shot", StringShot::new),
 	BUG_BITE("Bug Bite", BugBite::new),
@@ -1295,7 +1307,13 @@ public enum AttackNamesies {
 	SUNSTEEL_STRIKE("Sunsteel Strike", SunsteelStrike::new),
 	MOONGEIST_BEAM("Moongeist Beam", MoongeistBeam::new),
 	TEARFUL_LOOK("Tearful Look", TearfulLook::new),
-	ZING_ZAP("Zing Zap", ZingZap::new);
+	ZING_ZAP("Zing Zap", ZingZap::new),
+	GRASS_PLEDGE("Grass Pledge", GrassPledge::new),
+	FIRE_PLEDGE("Fire Pledge", FirePledge::new),
+	WATER_PLEDGE("Water Pledge", WaterPledge::new),
+	STOMPING_TANTRUM("Stomping Tantrum", StompingTantrum::new),
+	HYPERSPACE_HOLE("Hyperspace Hole", HyperspaceHole::new),
+	STEAM_ERUPTION("Steam Eruption", SteamEruption::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

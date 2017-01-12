@@ -671,6 +671,42 @@ Hyper Beam:
 	SemiInv: false
 	ChargeFirst: false
 *
+Frenzy Plant:
+	Desc: The user slams the target with an enormous tree. The user can't move on the next turn.
+	PP: 5
+	Cat: Special
+	Type: Grass
+	Acc: 90
+	Pow: 150
+	Int: MultiTurnMove
+	ChargeMessage: user.getName() + " must recharge!"
+	SemiInv: false
+	ChargeFirst: false
+*
+Blast Burn:
+	Desc: The target is razed by a fiery explosion. The user can't move on the next turn.
+	PP: 5
+	Cat: Special
+	Type: Fire
+	Acc: 90
+	Pow: 150
+	Int: MultiTurnMove
+	ChargeMessage: user.getName() + " must recharge!"
+	SemiInv: false
+	ChargeFirst: false
+*
+Hydro Cannon:
+	Desc: The target is hit with a watery blast. The user must rest on the next turn, however.
+	PP: 5
+	Cat: Special
+	Type: Water
+	Acc: 90
+	Pow: 150
+	Int: MultiTurnMove
+	ChargeMessage: user.getName() + " must recharge!"
+	SemiInv: false
+	ChargeFirst: false
+*
 Prismatic Laser:
 	Desc: The user shoots powerful lasers using the power of a prism. The user can't move on the next turn.
 	PP: 10
@@ -6806,4 +6842,58 @@ Zing Zap:
 	Effect: Flinch
 	EffChance: 30
 	PP: 10
+*
+Grass Pledge:
+	Desc: A column of grass hits opposing Pokémon. When used with its water equivalent, its damage increases into a vast swamp.
+	Type: Grass
+	Cat: Special
+	Acc: 100
+	Pow: 80
+	PP: 10
+*
+Fire Pledge:
+	Desc: A column of fire hits opposing Pokémon. When used with its Grass equivalent, its damage increases into a vast sea of fire.
+	Type: Fire
+	Cat: Special
+	Acc: 100
+	Pow: 80
+	PP: 10
+*
+Water Pledge:
+	Desc: A column of water strikes the target. When combined with its fire equivalent, the damage increases and a rainbow appears.
+	Type: Water
+	Cat: Special
+	Acc: 100
+	Pow: 80
+	PP: 10
+*
+Stomping Tantrum:
+	Desc: Driven by frustration, the user attacks the target. If the user's previous move has failed, the power of this move doubles.
+	Type: Ground
+	Pow: 75
+	Cat: Physical
+	Acc: 100
+	PP: 10
+	GetPow:
+	// TODO: Fuck this shit I hate this fucking move
+	return super.power;
+	###
+*
+Hyperspace Hole:
+	Desc: Using a hyperspace hole, the user appears right next to the target and strikes. This also hits a target using a move such as Protect or Detect.
+	Type: Psychic
+	Cat: Special
+	PP: 5
+	MoveType: Protect_Piercing
+	Pow: 80
+*
+Steam Eruption:
+	Desc: The user immerses the target in superheated steam. This may also leave the target with a burn.
+	Type: Water
+	PP: 5
+	Pow: 110
+	Acc: 95
+	Status: Burned
+	EffChance: 30
+	Cat: Special
 *

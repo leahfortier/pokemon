@@ -1431,6 +1431,87 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	static class FrenzyPlant extends Attack implements MultiTurnMove {
+		private static final long serialVersionUID = 1L;
+
+		FrenzyPlant() {
+			super(AttackNamesies.FRENZY_PLANT, "The user slams the target with an enormous tree. The user can't move on the next turn.", 5, Type.GRASS, MoveCategory.SPECIAL);
+			super.power = 150;
+			super.accuracy = 90;
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+		}
+
+		public boolean chargesFirst() {
+			return false;
+		}
+
+		public boolean semiInvulnerability() {
+			return false;
+		}
+
+		public void charge(ActivePokemon user, Battle b) {
+			Messages.add(new MessageUpdate(getChargeMessage(user)));
+		}
+
+		private String getChargeMessage(ActivePokemon user) {
+			return user.getName() + " must recharge!";
+		}
+	}
+
+	static class BlastBurn extends Attack implements MultiTurnMove {
+		private static final long serialVersionUID = 1L;
+
+		BlastBurn() {
+			super(AttackNamesies.BLAST_BURN, "The target is razed by a fiery explosion. The user can't move on the next turn.", 5, Type.FIRE, MoveCategory.SPECIAL);
+			super.power = 150;
+			super.accuracy = 90;
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+		}
+
+		public boolean chargesFirst() {
+			return false;
+		}
+
+		public boolean semiInvulnerability() {
+			return false;
+		}
+
+		public void charge(ActivePokemon user, Battle b) {
+			Messages.add(new MessageUpdate(getChargeMessage(user)));
+		}
+
+		private String getChargeMessage(ActivePokemon user) {
+			return user.getName() + " must recharge!";
+		}
+	}
+
+	static class HydroCannon extends Attack implements MultiTurnMove {
+		private static final long serialVersionUID = 1L;
+
+		HydroCannon() {
+			super(AttackNamesies.HYDRO_CANNON, "The target is hit with a watery blast. The user must rest on the next turn, however.", 5, Type.WATER, MoveCategory.SPECIAL);
+			super.power = 150;
+			super.accuracy = 90;
+			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+		}
+
+		public boolean chargesFirst() {
+			return false;
+		}
+
+		public boolean semiInvulnerability() {
+			return false;
+		}
+
+		public void charge(ActivePokemon user, Battle b) {
+			Messages.add(new MessageUpdate(getChargeMessage(user)));
+		}
+
+		private String getChargeMessage(ActivePokemon user) {
+			return user.getName() + " must recharge!";
+		}
+	}
+
 	static class PrismaticLaser extends Attack implements MultiTurnMove {
 		private static final long serialVersionUID = 1L;
 
@@ -11306,6 +11387,74 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.FLINCH);
 			super.effectChance = 30;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+	}
+
+	static class GrassPledge extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		GrassPledge() {
+			super(AttackNamesies.GRASS_PLEDGE, "A column of grass hits opposing Pokémon. When used with its water equivalent, its damage increases into a vast swamp.", 10, Type.GRASS, MoveCategory.SPECIAL);
+			super.power = 80;
+			super.accuracy = 100;
+		}
+	}
+
+	static class FirePledge extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		FirePledge() {
+			super(AttackNamesies.FIRE_PLEDGE, "A column of fire hits opposing Pokémon. When used with its Grass equivalent, its damage increases into a vast sea of fire.", 10, Type.FIRE, MoveCategory.SPECIAL);
+			super.power = 80;
+			super.accuracy = 100;
+		}
+	}
+
+	static class WaterPledge extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		WaterPledge() {
+			super(AttackNamesies.WATER_PLEDGE, "A column of water strikes the target. When combined with its fire equivalent, the damage increases and a rainbow appears.", 10, Type.WATER, MoveCategory.SPECIAL);
+			super.power = 80;
+			super.accuracy = 100;
+		}
+	}
+
+	static class StompingTantrum extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		StompingTantrum() {
+			super(AttackNamesies.STOMPING_TANTRUM, "Driven by frustration, the user attacks the target. If the user's previous move has failed, the power of this move doubles.", 10, Type.GROUND, MoveCategory.PHYSICAL);
+			super.power = 75;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			// TODO: Fuck this shit I hate this fucking move
+			return super.power;
+		}
+	}
+
+	static class HyperspaceHole extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		HyperspaceHole() {
+			super(AttackNamesies.HYPERSPACE_HOLE, "Using a hyperspace hole, the user appears right next to the target and strikes. This also hits a target using a move such as Protect or Detect.", 5, Type.PSYCHIC, MoveCategory.SPECIAL);
+			super.power = 80;
+			super.moveTypes.add(MoveType.PROTECT_PIERCING);
+		}
+	}
+
+	static class SteamEruption extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		SteamEruption() {
+			super(AttackNamesies.STEAM_ERUPTION, "The user immerses the target in superheated steam. This may also leave the target with a burn.", 5, Type.WATER, MoveCategory.SPECIAL);
+			super.power = 110;
+			super.accuracy = 95;
+			super.effectChance = 30;
+			super.status = StatusCondition.BURNED;
 		}
 	}
 }

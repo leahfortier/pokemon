@@ -23,6 +23,7 @@ import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
+import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
@@ -137,6 +138,9 @@ public class Battle {
 		}
 
 		this.currentTerrain = terrainType;
+
+		TerrainCastEffect.invokeTerrainCastEffect(this, player.front(), terrainType);
+		TerrainCastEffect.invokeTerrainCastEffect(this, opponent.front(), terrainType);
 	}
 
 	public void resetTerrain() {

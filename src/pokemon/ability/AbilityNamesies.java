@@ -144,6 +144,7 @@ import pokemon.ability.Ability.SandRush;
 import pokemon.ability.Ability.SandStream;
 import pokemon.ability.Ability.SandVeil;
 import pokemon.ability.Ability.SapSipper;
+import pokemon.ability.Ability.Schooling;
 import pokemon.ability.Ability.Scrappy;
 import pokemon.ability.Ability.SereneGrace;
 import pokemon.ability.Ability.ShadowShield;
@@ -152,6 +153,7 @@ import pokemon.ability.Ability.ShedSkin;
 import pokemon.ability.Ability.SheerForce;
 import pokemon.ability.Ability.ShellArmor;
 import pokemon.ability.Ability.ShieldDust;
+import pokemon.ability.Ability.ShieldsDown;
 import pokemon.ability.Ability.Simple;
 import pokemon.ability.Ability.SkillLink;
 import pokemon.ability.Ability.SlowStart;
@@ -392,6 +394,8 @@ public enum AbilityNamesies {
 	HEALER("Healer", Healer::new),
 	PIXILATE("Pixilate", Pixilate::new),
 	REFRIGERATE("Refrigerate", Refrigerate::new),
+	SCHOOLING("Schooling", Schooling::new),
+	SHIELDS_DOWN("Shields Down", ShieldsDown::new),
 	STANCE_CHANGE("Stance Change", StanceChange::new),
 	FUR_COAT("Fur Coat", FurCoat::new),
 	GRASS_PELT("Grass Pelt", GrassPelt::new),

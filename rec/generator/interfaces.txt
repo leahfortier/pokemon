@@ -554,3 +554,10 @@ OpponentEndAttackEffect:
 		EffectList: b.getOtherPokemon(attacking)
 	*
 ***
+TerrainCastEffect:
+	Method:
+		Header: void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain)
+		Invoke: Void
+		EffectList: p
+	*
+***
