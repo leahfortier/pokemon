@@ -31,10 +31,14 @@ public class StuffGen {
 	}
 
 	private StuffGen() {
-		new PokeGen();
+		this(new InputFormatter());
+	}
+
+	public StuffGen(InputFormatter inputFormatter) {
+		new PokeGen(inputFormatter);
 		new NamesiesGen(Folder.POKEMON, PokemonNamesies.class);
 		baseEvolutionGenerator();
-		
+
 		new InterfaceGen();
 
 		FontMetricsGen.writeFontMetrics();

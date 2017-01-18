@@ -17,11 +17,6 @@ import java.util.Scanner;
 import java.util.Set;
 
 class InputFormatter {
-    private static InputFormatter instance = new InputFormatter();
-    static InputFormatter instance() {
-        return instance;
-    }
-
     // TODO: Test case to never use {0-} or {1-}
     // TODO: Test case for not splitting after a previous split
     private enum ReplaceType {

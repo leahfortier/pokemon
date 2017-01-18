@@ -80,8 +80,8 @@ class PokeGen {
 	private NamesiesGen namesiesGen;
 	private Generator currentGen;
 	
-	PokeGen() {
-		this.inputFormatter = InputFormatter.instance();
+	PokeGen(InputFormatter inputFormatter) {
+		this.inputFormatter = inputFormatter;
 
 		final Map<Class, NamesiesGen> namesiesMap = new HashMap<>();
 
@@ -265,7 +265,7 @@ class PokeGen {
 		
 		boolean moreFields = true;
 		while (moreFields) {
-			moreFields = MethodInfo.addMethodInfo(methods, inputFormatter.getOverrideMethods(), fields, currentInterfaces, "", this.currentGen.superClassName);
+			moreFields = MethodInfo.addMethodInfo(methods, inputFormatter.getOverrideMethods(), fields, currentInterfaces, StringUtils.empty(), this.currentGen.superClassName, inputFormatter);
 
 			for (String interfaceName : currentInterfaces) {
 				interfaces.add(interfaceName);
@@ -277,7 +277,7 @@ class PokeGen {
 					Global.error("Invalid interface name " + interfaceName + " for " + className);
 				}
 
-				moreFields |= MethodInfo.addMethodInfo(methods, list, fields, nextInterfaces, interfaceName, this.currentGen.superClassName);
+				moreFields |= MethodInfo.addMethodInfo(methods, list, fields, nextInterfaces, interfaceName, this.currentGen.superClassName, inputFormatter);
 			}
 			
 			currentInterfaces = nextInterfaces;
@@ -285,7 +285,7 @@ class PokeGen {
 		}
 		
 		if (failureInfo != null) {
-			methods.insert(0, failureInfo.writeFailure(fields, this.currentGen.superClassName));
+			methods.insert(0, failureInfo.writeFailure(fields, this.currentGen.superClassName, inputFormatter));
 		}
 		
 		return methods.toString();

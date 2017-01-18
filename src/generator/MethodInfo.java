@@ -132,7 +132,7 @@ class MethodInfo {
         }
     }
 
-    private String writeFunction(String fieldValue, String className, String superClass) {
+    private String writeFunction(String fieldValue, String className, String superClass, InputFormatter inputFormatter) {
         if (this.header == null) {
             return StringUtils.empty();
         }
@@ -157,7 +157,7 @@ class MethodInfo {
         }
 
         this.fullBody = this.begin + this.fullBody + this.end;
-        this.fullBody = InputFormatter.instance().replaceBody(this.fullBody, fieldValue, className, superClass);
+        this.fullBody = inputFormatter.replaceBody(this.fullBody, fieldValue, className, superClass);
 
         if (!this.required && !this.defaultBody && StringUtils.isNullOrEmpty(this.fullBody)) {
             return StringUtils.empty();
@@ -193,7 +193,14 @@ class MethodInfo {
     }
 
     // Interface name should be empty if it is an override
-    static boolean addMethodInfo(StringBuilder methods, List<Map.Entry<String, MethodInfo>> methodList, Map<String, String> fields, List<String> interfaces, String interfaceName, String superClass) {
+    static boolean addMethodInfo(StringBuilder methods,
+                                 List<Map.Entry<String, MethodInfo>> methodList,
+                                 Map<String, String> fields,
+                                 List<String> interfaces,
+                                 String interfaceName,
+                                 String superClass,
+                                 InputFormatter inputFormatter
+    ) {
         boolean added = false;
 
         String className = fields.get("ClassName");
@@ -217,14 +224,14 @@ class MethodInfo {
                 fieldValue = "";
             }
 
-            String implementation = methodInfo.writeFunction(fieldValue, className, superClass);
+            String implementation = methodInfo.writeFunction(fieldValue, className, superClass, inputFormatter);
             methods.append(implementation);
 
             interfaces.addAll(methodInfo.addInterfaces);
 
             for (Map.Entry<String, String> addField : methodInfo.addMapFields) {
                 String fieldKey = addField.getKey();
-                String addFieldValue = InputFormatter.instance().replaceBody(addField.getValue(), fieldValue, className, superClass);
+                String addFieldValue = inputFormatter.replaceBody(addField.getValue(), fieldValue, className, superClass);
 
                 String mapField = fields.get(fieldKey);
                 if (mapField == null) {
