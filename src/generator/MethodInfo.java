@@ -157,7 +157,7 @@ class MethodInfo {
         }
 
         this.fullBody = this.begin + this.fullBody + this.end;
-        this.fullBody = StuffGen.replaceBody(this.fullBody, fieldValue, className, superClass);
+        this.fullBody = InputFormatter.instance().replaceBody(this.fullBody, fieldValue, className, superClass);
 
         if (!this.required && !this.defaultBody && StringUtils.isNullOrEmpty(this.fullBody)) {
             return StringUtils.empty();
@@ -224,7 +224,7 @@ class MethodInfo {
 
             for (Map.Entry<String, String> addField : methodInfo.addMapFields) {
                 String fieldKey = addField.getKey();
-                String addFieldValue = StuffGen.replaceBody(addField.getValue(), fieldValue, className, superClass);
+                String addFieldValue = InputFormatter.instance().replaceBody(addField.getValue(), fieldValue, className, superClass);
 
                 String mapField = fields.get(fieldKey);
                 if (mapField == null) {

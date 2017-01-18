@@ -91,7 +91,7 @@ class FailureInfo {
             for (String value : fieldValues) {
                 index = previousIndex;
 
-                Map.Entry<Integer, String> pair = PokeGen.getValue(split, value, index);
+                Map.Entry<Integer, String> pair = InputFormatter.instance().getValue(split, value, index);
                 index = pair.getKey();
                 String pairValue = pair.getValue();
 
@@ -103,7 +103,7 @@ class FailureInfo {
                     space = true;
                 }
 
-                body = StuffGen.replaceBody(body, pairValue, className, superClass);
+                body = InputFormatter.instance().replaceBody(body, pairValue, className, superClass);
 
                 failure += (first ? "" : " || ")  + body;
                 first = false;
