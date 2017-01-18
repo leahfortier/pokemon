@@ -4,6 +4,7 @@ import main.Global;
 import util.FileIO;
 import util.FileName;
 import util.PokeString;
+import util.StringUtils;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
@@ -21,36 +22,62 @@ class InputFormatter {
         return instance;
     }
 
+    // TODO: Test case to never use {0-} or {1-}
+    // TODO: Test case for not splitting after a previous split
+    private enum ReplaceType {
+        BASIC("", (original, remaining) -> original),
+        UPPER_CASE(index -> index + "", (original, remaining) -> original.toUpperCase()),
+        UNDER_SPACE("_", (original, remaining) -> original.replaceAll("_", " ")),
+        FINISH("-", (original, remaining) -> original + remaining);
+
+        private final SuffixGetter suffixGetter;
+        private final InputReplacer inputReplacer;
+
+        ReplaceType(String replaceSuffix, InputReplacer inputReplacer) {
+            this(index -> replaceSuffix, inputReplacer);
+        }
+
+        ReplaceType(SuffixGetter suffixGetter, InputReplacer inputReplacer) {
+            this.suffixGetter = suffixGetter;
+            this.inputReplacer = inputReplacer;
+        }
+
+        private interface SuffixGetter {
+            String getSuffix(int index);
+        }
+
+        private interface InputReplacer {
+            String replaceInput(String original, String remaining);
+        }
+
+        static String replaceBody(String body, String original, String remaining, int parameterIndex) {
+            for (ReplaceType replaceType : ReplaceType.values()) {
+                String suffix = replaceType.suffixGetter.getSuffix(parameterIndex);
+                String newValue = replaceType.inputReplacer.replaceInput(original, remaining);
+
+                body = body.replace(String.format("{%d%s}", parameterIndex, suffix), newValue);
+            }
+
+            return body;
+        }
+    }
+
     String replaceBody(String body, String fieldValue, String className, String superClass) {
         body = body.replace("@ClassName", className);
         body = body.replace("@SuperClass", superClass.toUpperCase());
 
-        body = body.replace("{0}", fieldValue);
-        body = body.replace("{00}", fieldValue.toUpperCase());
+        body = ReplaceType.replaceBody(body, fieldValue, StringUtils.empty(), 0);
 
+        int index = 0;
         String[] mcSplit = fieldValue.split(" ");
-        for (int i = 0; i < mcSplit.length; i++) {
-            body = body.replace(String.format("{%d}", i + 1), mcSplit[i]);
-            body = body.replace(String.format("{%d%d}", i + 1, i + 1), mcSplit[i].toUpperCase());
-            body = body.replace(String.format("{%d_}", i + 1), mcSplit[i].replaceAll("_", " "));
 
-            String pattern = String.format("{%d-}", i + 1);
-            if (body.contains(pattern)) {
-                if (i + 1 == 1) {
-                    Global.error("Don't use {1-}, instead use {0} (ClassName = " + className + ")");
-                }
+        // Go through each parameter and replace if applicable
+        // Increment the index to represent the space
+        for (int i = 0; i < mcSplit.length; i++, index++) {
+            index += mcSplit[i].length();
+            String remaining = fieldValue.substring(index, fieldValue.length());
 
-                String text = mcSplit[i];
-                for (int j = i + 1; j < mcSplit.length; j++) {
-                    if (body.contains("{" + (j + 1))) {
-                        Global.error(j + " Cannot have any more parameters once you split through. (ClassName = " + className + ")");
-                    }
-
-                    text += " " + mcSplit[j];
-                }
-
-                body = body.replace(pattern, text);
-            }
+            body = ReplaceType.replaceBody(body, mcSplit[i], remaining, i + 1);
         }
 
         return body;
