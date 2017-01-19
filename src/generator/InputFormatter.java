@@ -16,10 +16,8 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 
-class InputFormatter {
-    // TODO: Test case to never use {0-} or {1-}
-    // TODO: Test case for not splitting after a previous split
-    private enum ReplaceType {
+public class InputFormatter {
+    protected enum ReplaceType {
         BASIC("", (original, remaining) -> original),
         UPPER_CASE(index -> index + "", (original, remaining) -> original.toUpperCase()),
         UNDER_SPACE("_", (original, remaining) -> original.replaceAll("_", " ")),
@@ -45,23 +43,27 @@ class InputFormatter {
             String replaceInput(String original, String remaining);
         }
 
-        static String replaceBody(String body, String original, String remaining, int parameterIndex) {
-            for (ReplaceType replaceType : ReplaceType.values()) {
-                String suffix = replaceType.suffixGetter.getSuffix(parameterIndex);
-                String newValue = replaceType.inputReplacer.replaceInput(original, remaining);
+        public String replaceBody(String body, String original, String remaining, int parameterIndex) {
+            String suffix = this.suffixGetter.getSuffix(parameterIndex);
+            String newValue = this.inputReplacer.replaceInput(original, remaining);
 
-                body = body.replace(String.format("{%d%s}", parameterIndex, suffix), newValue);
-            }
-
-            return body;
+            return body.replace(String.format("{%d%s}", parameterIndex, suffix), newValue);
         }
+    }
+
+    protected String replaceBody(String body, String original, String remaining, int parameterIndex) {
+        for (ReplaceType replaceType : ReplaceType.values()) {
+            body = replaceType.replaceBody(body, original, remaining, parameterIndex);
+        }
+
+        return body;
     }
 
     String replaceBody(String body, String fieldValue, String className, String superClass) {
         body = body.replace("@ClassName", className);
         body = body.replace("@SuperClass", superClass.toUpperCase());
 
-        body = ReplaceType.replaceBody(body, fieldValue, StringUtils.empty(), 0);
+        body = replaceBody(body, fieldValue, StringUtils.empty(), 0);
 
         int index = 0;
         String[] mcSplit = fieldValue.split(" ");
@@ -72,7 +74,7 @@ class InputFormatter {
             index += mcSplit[i].length();
             String remaining = fieldValue.substring(index, fieldValue.length());
 
-            body = ReplaceType.replaceBody(body, mcSplit[i], remaining, i + 1);
+            body = replaceBody(body, mcSplit[i], remaining, i + 1);
         }
 
         return body;

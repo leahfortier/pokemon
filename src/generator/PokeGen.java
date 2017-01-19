@@ -335,16 +335,24 @@ class PokeGen {
 	
 		indexOut.append(String.format("%s.png %08x%n", imageName, index));
 	}
-	
-	private String getConstructor(Map<String, String> fields) {
-		// TODO: More hardcoded nonsense
-		String category = "";
+
+	private boolean getPhysicalContact(Map<String, String> fields) {
 		boolean physicalContact = false;
-		
 		if (this.currentGen == Generator.ATTACK_GEN) {
-			category = fields.get("Cat");
-			physicalContact = category.equals("Physical");	
+			String category = fields.get("Cat");
+			physicalContact = category.equals("Physical");
+
+			if (fields.containsKey("PhysicalContact")) {
+				physicalContact = Boolean.parseBoolean(fields.get("PhysicalContact"));
+				fields.remove("PhysicalContact");
+			}
 		}
+
+		return physicalContact;
+	}
+
+	private String getConstructor(Map<String, String> fields) {
+		boolean physicalContact = getPhysicalContact(fields);
 		
 		StringBuilder constructor = new StringBuilder();
 		constructor.append("super(");
@@ -384,36 +392,9 @@ class PokeGen {
 			
 			fields.remove("StatChange");
 		}
-		
-		if (this.currentGen == Generator.ATTACK_GEN) {
-			if (fields.containsKey("PhysicalContact")) {
-				String physicalContactSpecified = fields.get("PhysicalContact");
-				
-				if (!physicalContactSpecified.equals("True") && !physicalContactSpecified.equals("False")) {
-					Global.error("True and false are the only valid fields for physical contact (Move " + fields.get("ClassName") + ")");
-				}
-				
-				physicalContact = Boolean.parseBoolean(physicalContactSpecified);
 
-				// TODO: Move to test
-				if (category.contains("Status"))  {
-					Global.error("Status moves never make physical contact (Move " + fields.get("ClassName") + ")");
-				}
-				
-				if (physicalContact && category.contains("Physical")) { 
-					Global.error("Physical moves have implied physical contact (Move " + fields.get("ClassName") + ")");
-				}
-				
-				if (!physicalContact && category.contains("Special")) { 
-					Global.error("Special moves have implied no physical contact (Move " + fields.get("ClassName") + ")");
-				}
-				
-				fields.remove("PhysicalContact");	
-			}
-			
-			if (physicalContact) {
-				constructor.append("super.moveTypes.add(MoveType.PHYSICAL_CONTACT);\n");
-			}
+		if (physicalContact) {
+			constructor.append("super.moveTypes.add(MoveType.PHYSICAL_CONTACT);\n");
 		}
 
 		if (fields.containsKey("Activate")) {
