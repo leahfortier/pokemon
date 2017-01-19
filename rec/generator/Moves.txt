@@ -1131,7 +1131,7 @@ Sucker Punch:
 	Cat: Physical
 	Priority: 1
 	Type: Dark
-	ApplyError: o.getMove().getAttack().getCategory() == MoveCategory.STATUS
+	ApplyError: o.getMove().getAttack().isStatusMove()
 *
 Crunch:
 	Desc: The user crunches up the foe with sharp fangs. It may also lower the target's Defense stat.
@@ -3687,7 +3687,7 @@ Me First:
 	MoveType: Sleep_Talk_Fail, Assistless, No_Magic_Coat, Metronomeless
 	Apply:
 	// Fails if it is the second turn or the opponent is using a status move
-	if (!b.isFirstAttack() || o.getMove() == null || o.getAttack().getCategory() == MoveCategory.STATUS) {
+	if (!b.isFirstAttack() || o.getMove() == null || o.getAttack().isStatusMove()) {
 		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 		return;
 	}

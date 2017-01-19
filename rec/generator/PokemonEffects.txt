@@ -141,11 +141,11 @@ QuickGuard:
 *
 CraftyShield:
 	ProtectingEffect: True
-	ProtectingCondition: attacking.getAttack().getCategory() == MoveCategory.STATUS
+	ProtectingCondition: attacking.getAttack().isStatusMove()
 *
 MatBlock:
 	ProtectingEffect: True
-	ProtectingCondition: attacking.getAttack().getCategory() != MoveCategory.STATUS
+	ProtectingCondition: !attacking.getAttack().isStatusMove()
 	Cast:
 	// No successive decay for this move
 	super.cast(b, caster, victim, source, printCast);
@@ -591,7 +591,7 @@ Taunt:
 	}
 	###
 	Usable: 
-	return m.getAttack().getCategory() != MoveCategory.STATUS;
+	return !m.getAttack().isStatusMove();
 	###
 	UnusableMessage: "No!! Not while you're under the effects of taunt!!"
 	CastMessage: victim.getName() + " fell for the taunt!"
@@ -866,7 +866,7 @@ Substitute:
 	}
 	
 	// Print the failure for status moves
-	if (user.getAttack().getCategory() == MoveCategory.STATUS) {
+	if (user.getAttack().isStatusMove()) {
 		Messages.add(new MessageUpdate(this.getFailMessage(b, user, victim)));
 	}
 	
@@ -1055,7 +1055,7 @@ Snatch:
 	Int: TargetSwapperEffect
 	TargetSwap:
 	Attack attack = user.getAttack();
-	if (attack.isSelfTarget() && attack.getCategory() == MoveCategory.STATUS && !attack.isMoveType(MoveType.NON_SNATCHABLE)) {
+	if (attack.isSelfTarget() && attack.isStatusMove() && !attack.isMoveType(MoveType.NON_SNATCHABLE)) {
 		Messages.add(new MessageUpdate(opponent.getName() + " snatched " + user.getName() + "'s move!"));
 		return true;
 	}

@@ -1502,7 +1502,7 @@ Override:
 		AddInterface: TargetSwapperEffect
 		AddMapField: TargetSwap:
 		Attack attack = user.getAttack();
-		if (!attack.isSelfTarget() && attack.getCategory() == MoveCategory.STATUS && !attack.isMoveType(MoveType.NO_MAGIC_COAT)) {
+		if (!attack.isSelfTarget() && attack.isStatusMove() && !attack.isMoveType(MoveType.NO_MAGIC_COAT)) {
 			Messages.add(new MessageUpdate(opponent.getName() + "'s " + {0} + " reflected " + user.getName() + "'s move!"));
 			return true;
 		}
@@ -2184,7 +2184,7 @@ Override:
 			return true;
 		}
 		
-		if (user.getAttack().getCategory() == MoveCategory.STATUS) {
+		if (user.getAttack().isStatusMove()) {
 			Messages.add(new MessageUpdate(getPreventMessage(victim)));
 		}
 		

@@ -168,7 +168,11 @@ public abstract class Attack implements Serializable {
 		
 		return this.accuracy + "";
 	}
-	
+
+	public boolean isStatusMove() {
+		return this.getCategory() == MoveCategory.STATUS;
+	}
+
 	public MoveCategory getCategory() {
 		return this.category;
 	}
@@ -2260,7 +2264,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.getMove().getAttack().getCategory() == MoveCategory.STATUS) {
+			if (o.getMove().getAttack().isStatusMove()) {
 				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 				return;
 			}
@@ -6402,7 +6406,7 @@ public abstract class Attack implements Serializable {
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
 			// Fails if it is the second turn or the opponent is using a status move
-			if (!b.isFirstAttack() || o.getMove() == null || o.getAttack().getCategory() == MoveCategory.STATUS) {
+			if (!b.isFirstAttack() || o.getMove() == null || o.getAttack().isStatusMove()) {
 				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 				return;
 			}

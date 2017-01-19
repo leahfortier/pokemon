@@ -2,7 +2,6 @@ package battle;
 
 import battle.attack.Attack;
 import battle.attack.Move;
-import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.DefiniteEscape;
 import battle.effect.attack.MultiTurnMove;
@@ -540,13 +539,18 @@ public class Battle {
 		
 		final Stat attacking;
 		final Stat defending;
-		if (me.getAttack().getCategory() == MoveCategory.PHYSICAL) {
-			attacking = Stat.ATTACK;
-			defending = Stat.DEFENSE;
-		}
-		else {
-			attacking = Stat.SP_ATTACK;
-			defending = Stat.SP_DEFENSE;
+		switch (me.getAttack().getCategory()) {
+			case PHYSICAL:
+				attacking = Stat.ATTACK;
+				defending = Stat.DEFENSE;
+				break;
+			case SPECIAL:
+				attacking = Stat.SP_ATTACK;
+				defending = Stat.SP_DEFENSE;
+				break;
+			default:
+				Global.error("Invalid category " + me.getAttack().getCategory() + " for calculating damage");
+				return -1;
 		}
 		
 		int attackStat = Stat.getStat(attacking, me, o, this);
@@ -613,7 +617,7 @@ public class Battle {
 	
 	private boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
 		// Self-Target moves don't miss
-		if (me.getAttack().isSelfTarget() && me.getAttack().getCategory() == MoveCategory.STATUS) {
+		if (me.getAttack().isSelfTarget() && me.getAttack().isStatusMove()) {
 			return true;
 		}
 
