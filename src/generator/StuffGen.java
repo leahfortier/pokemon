@@ -31,10 +31,14 @@ public class StuffGen {
 	}
 
 	private StuffGen() {
-		new PokeGen();
+		this(new InputFormatter());
+	}
+
+	public StuffGen(InputFormatter inputFormatter) {
+		new PokeGen(inputFormatter);
 		new NamesiesGen(Folder.POKEMON, PokemonNamesies.class);
 		baseEvolutionGenerator();
-		
+
 		new InterfaceGen();
 
 		FontMetricsGen.writeFontMetrics();
@@ -56,41 +60,6 @@ public class StuffGen {
 		
 		original.close();
 		return out;
-	}
-	
-	static String replaceBody(String body, String fieldValue, String className, String superClass) {
-		body = body.replace("@ClassName", className);
-		body = body.replace("@SuperClass", superClass.toUpperCase());
-		
-		body = body.replace("{0}", fieldValue);
-		body = body.replace("{00}", fieldValue.toUpperCase());
-		
-		String[] mcSplit = fieldValue.split(" ");
-		for (int i = 0; i < mcSplit.length; i++) {
-			body = body.replace(String.format("{%d}", i + 1), mcSplit[i]);
-			body = body.replace(String.format("{%d%d}", i + 1, i + 1), mcSplit[i].toUpperCase());
-			body = body.replace(String.format("{%d_}", i + 1), mcSplit[i].replaceAll("_", " "));
-			
-			String pattern = String.format("{%d-}", i + 1);
-			if (body.contains(pattern)) {
-				if (i + 1 == 1) {
-					Global.error("Don't use {1-}, instead use {0} (ClassName = " + className + ")");
-				}
-				
-				String text = mcSplit[i];
-				for (int j = i + 1; j < mcSplit.length; j++) {
-					if (body.contains("{" + (j + 1))) {
-						Global.error(j + " Cannot have any more parameters once you split through. (ClassName = " + className + ")");
-					}
-					
-					text += " " + mcSplit[j];
-				}
-				
-				body = body.replace(pattern, text);
-			}
-		}
-		
-		return body;
 	}
 	
 	static Map<String, String> readFields(Scanner in, String className) {
