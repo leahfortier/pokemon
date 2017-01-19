@@ -1122,7 +1122,7 @@ public abstract class Ability implements Serializable {
 			int highestPower = -1;
 			
 			for (Move move : otherMoves) {
-				if (move.getAttack().getCategory() == MoveCategory.STATUS) {
+				if (move.getAttack().isStatusMove()) {
 					continue;
 				}
 				
@@ -1698,7 +1698,7 @@ public abstract class Ability implements Serializable {
 
 		public boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
 			Attack attack = user.getAttack();
-			if (!attack.isSelfTarget() && attack.getCategory() == MoveCategory.STATUS && !attack.isMoveType(MoveType.NO_MAGIC_COAT)) {
+			if (!attack.isSelfTarget() && attack.isStatusMove() && !attack.isMoveType(MoveType.NO_MAGIC_COAT)) {
 				Messages.add(new MessageUpdate(opponent.getName() + "'s " + this.getName() + " reflected " + user.getName() + "'s move!"));
 				return true;
 			}
@@ -1755,7 +1755,7 @@ public abstract class Ability implements Serializable {
 				return true;
 			}
 			
-			if (user.getAttack().getCategory() == MoveCategory.STATUS) {
+			if (user.getAttack().isStatusMove()) {
 				Messages.add(new MessageUpdate(getPreventMessage(victim)));
 			}
 			
@@ -1867,7 +1867,7 @@ public abstract class Ability implements Serializable {
 
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			// Status moves always hit
-			if (p.getAttack().getCategory() == MoveCategory.STATUS) {
+			if (p.getAttack().isStatusMove()) {
 				return true;
 			}
 			
@@ -2381,7 +2381,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public int changePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
-			if (attack.getCategory() == MoveCategory.STATUS) {
+			if (attack.isStatusMove()) {
 				if (this instanceof ConsumableItem) {
 					user.consumeItem(b);
 				}
@@ -2405,7 +2405,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && opp.getAttack().getCategory() == MoveCategory.STATUS) {
+			if (isModifyStat(s) && opp.getAttack().isStatusMove()) {
 				stat *= 1.5;
 			}
 			
@@ -3144,7 +3144,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (shieldForm && p.getAttack().getCategory() != MoveCategory.STATUS) {
+			if (shieldForm && !p.getAttack().isStatusMove()) {
 				shieldForm = false;
 				Messages.add(new MessageUpdate(p.getName() + " changed into Blade Forme!"));
 			}

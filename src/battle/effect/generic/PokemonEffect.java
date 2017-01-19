@@ -892,7 +892,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-			return attacking.getAttack().getCategory() == MoveCategory.STATUS;
+			return attacking.getAttack().isStatusMove();
 		}
 
 		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b) {
@@ -942,7 +942,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-			return attacking.getAttack().getCategory() != MoveCategory.STATUS;
+			return !attacking.getAttack().isStatusMove();
 		}
 
 		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b) {
@@ -1759,7 +1759,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
-			return m.getAttack().getCategory() != MoveCategory.STATUS;
+			return !m.getAttack().isStatusMove();
 		}
 
 		public String getUnusableMessage(Battle b, ActivePokemon p) {
@@ -2330,7 +2330,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			}
 			
 			// Print the failure for status moves
-			if (user.getAttack().getCategory() == MoveCategory.STATUS) {
+			if (user.getAttack().isStatusMove()) {
 				Messages.add(new MessageUpdate(this.getFailMessage(b, user, victim)));
 			}
 			
@@ -2391,7 +2391,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
 			Attack attack = user.getAttack();
-			if (!attack.isSelfTarget() && attack.getCategory() == MoveCategory.STATUS && !attack.isMoveType(MoveType.NO_MAGIC_COAT)) {
+			if (!attack.isSelfTarget() && attack.isStatusMove() && !attack.isMoveType(MoveType.NO_MAGIC_COAT)) {
 				Messages.add(new MessageUpdate(opponent.getName() + "'s " + "Magic Coat" + " reflected " + user.getName() + "'s move!"));
 				return true;
 			}
@@ -2657,7 +2657,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
 			Attack attack = user.getAttack();
-			if (attack.isSelfTarget() && attack.getCategory() == MoveCategory.STATUS && !attack.isMoveType(MoveType.NON_SNATCHABLE)) {
+			if (attack.isSelfTarget() && attack.isStatusMove() && !attack.isMoveType(MoveType.NON_SNATCHABLE)) {
 				Messages.add(new MessageUpdate(opponent.getName() + " snatched " + user.getName() + "'s move!"));
 				return true;
 			}

@@ -2387,7 +2387,7 @@ Assault Vest:
 	ToModify: Sp_Defense
 	ModifyMultiplier: 1.5 true
 	Usable:
-	return m.getAttack().getCategory() != MoveCategory.STATUS;
+	return !m.getAttack().isStatusMove();
 	###
 	UnusableMessage: p.getName() + "'s " + this.name + " prevents the use of status moves!"
 	Fling: 30

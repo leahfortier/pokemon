@@ -434,7 +434,7 @@ Forewarn:
 	int highestPower = -1;
 	
 	for (Move move : otherMoves) {
-		if (move.getAttack().getCategory() == MoveCategory.STATUS) {
+		if (move.getAttack().isStatusMove()) {
 			continue;
 		}
 		
@@ -782,7 +782,7 @@ Wonder Guard:
 	Int: OpponentBeforeTurnEffect
 	OpponentCanAttack: 
 	// Status moves always hit
-	if (p.getAttack().getCategory() == MoveCategory.STATUS) {
+	if (p.getAttack().isStatusMove()) {
 		return true;
 	}
 	
@@ -1044,12 +1044,12 @@ Poison Touch:
 Prankster:
 	Desc: Gives priority to a status move.
 	Int: PriorityChangeEffect
-	ChangePriority: attack.getCategory() == MoveCategory.STATUS
+	ChangePriority: attack.isStatusMove()
 *
 Wonder Skin:
 	Desc: Makes status-changing moves more likely to miss.
 	ToModify: Evasion
-	ModifyMultiplier: 1.5 opp.getAttack().getCategory() == MoveCategory.STATUS
+	ModifyMultiplier: 1.5 opp.getAttack().isStatusMove()
 *
 Mummy:
 	Desc: Contact with this Pok\u00e9mon spreads this Ability.
@@ -1401,7 +1401,7 @@ Stance Change:
 	###
 	Int: BeforeTurnEffect, EntryEffect, DifferentStatEffect
 	CanAttack:
-	if (shieldForm && p.getAttack().getCategory() != MoveCategory.STATUS) {
+	if (shieldForm && !p.getAttack().isStatusMove()) {
 		shieldForm = false;
 		Messages.add(new MessageUpdate(p.getName() + " changed into Blade Forme!"));
 	}

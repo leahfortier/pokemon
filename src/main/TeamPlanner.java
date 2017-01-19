@@ -1,13 +1,12 @@
 package main;
 
 import battle.attack.Attack;
-import battle.attack.MoveCategory;
-import pokemon.ability.AbilityNamesies;
 import battle.attack.AttackNamesies;
-import pokemon.PokemonNamesies;
 import pokemon.Nature;
 import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import pokemon.Stat;
+import pokemon.ability.AbilityNamesies;
 import util.FileIO;
 import util.StringUtils;
 
@@ -267,7 +266,7 @@ public class TeamPlanner {
 		
 		static void addCoverage(AttackTypeCoverage[] coverage, TeamMember member) {
 			for (Attack attack : member.moveList) {
-				if (attack.getCategory() != MoveCategory.STATUS) {
+				if (!attack.isStatusMove()) {
 					Type attackType = attack.getActualType();
 					coverage[attackType.getIndex()].moves.add(member.pokemonSpecies.getName() + " - " + attack.getName());
 				}

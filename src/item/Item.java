@@ -1506,7 +1506,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 				return true;
 			}
 			
-			if (user.getAttack().getCategory() == MoveCategory.STATUS) {
+			if (user.getAttack().isStatusMove()) {
 				Messages.add(new MessageUpdate(getPreventMessage(victim)));
 			}
 			
@@ -8183,7 +8183,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
-			return m.getAttack().getCategory() != MoveCategory.STATUS;
+			return !m.getAttack().isStatusMove();
 		}
 
 		public String getUnusableMessage(Battle b, ActivePokemon p) {
