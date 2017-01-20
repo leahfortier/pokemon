@@ -37,8 +37,6 @@ class FailureInfo {
 
     String writeFailure(ClassFields fields, String superClass, InputFormatter inputFormatter) {
         String failure = StringUtils.empty();
-
-        String className = fields.getRequired("ClassName");
         boolean first = true;
 
         for (Map.Entry<String, String> entry : failureInfo) {
@@ -103,7 +101,7 @@ class FailureInfo {
                     space = true;
                 }
 
-                body = inputFormatter.replaceBody(body, pairValue, className, superClass);
+                body = inputFormatter.replaceBody(body, pairValue, fields.getClassName(), superClass);
 
                 failure += (first ? "" : " || ")  + body;
                 first = false;

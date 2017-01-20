@@ -276,7 +276,6 @@ public class InputFormatter {
         String type = split[index++];
 
         String fieldValue = null;
-        String className = fields.getRequired(ClassFields.CLASS_NAME_FIELD);
 
         if (type.equals("Default")) {
             fieldValue = split[index++];
@@ -290,7 +289,7 @@ public class InputFormatter {
             fieldValue = value;
         }
         else if (fieldValue == null) {
-            Global.error("Missing required constructor field " + key + " for " + className);
+            Global.error("Missing required constructor field " + key + " for " + fields.getClassName());
         }
 
         return getValue(split, fieldValue, index).getValue();

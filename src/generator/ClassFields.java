@@ -7,13 +7,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 class ClassFields {
-    static final String CLASS_NAME_FIELD = "ClassName";
     static final String FIELD_FIELD = "Field";
     static final String INTERFACE_FIELD = "Int";
     private final Map<String, String> fields;
+    private String className;
 
     ClassFields() {
         this.fields = new HashMap<>();
+    }
+
+    String getClassName() {
+        if (StringUtils.isNullOrEmpty(this.className)) {
+            Global.error("Class name not set yet -- cannot retrieve.");
+        }
+
+        return this.className;
+    }
+
+    void setClassName(String className) {
+        if (!StringUtils.isNullOrEmpty(this.className) && !this.className.equals(className)) {
+            Global.error("Class name already set to " + this.className + ", New value: " + className + ")");
+        }
+
+        this.className = className;
     }
 
     void add(String fieldName, String value) {
@@ -32,9 +48,9 @@ class ClassFields {
         return fields.remove(fieldName);
     }
 
-    void addNew(String fieldName, String value, String className) {
+    void addNew(String fieldName, String value) {
         if (fields.containsKey(fieldName)) {
-            Global.error("Repeated field " + fieldName + " for " + className);
+            Global.error("Repeated field " + fieldName + " for " + this.className);
         }
 
         this.add(fieldName, value);
@@ -78,9 +94,9 @@ class ClassFields {
         return false;
     }
 
-    void confirmEmpty(String className) {
+    void confirmEmpty() {
         for (String field : fields.keySet()) {
-            Global.error("Unused field " + field + " for class " + className);
+            Global.error("Unused field " + field + " for class " + this.className);
         }
     }
 

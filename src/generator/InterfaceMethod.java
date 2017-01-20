@@ -252,7 +252,7 @@ class InterfaceMethod {
             }
         }
 
-        fields.confirmEmpty(this.interfaceName);
+        fields.confirmEmpty();
 
         if ((this.returnType == null || this.methodName == null) && this.invokeMethod == null) {
             Global.error("Interface method and invoke method are both missing for interface " + this.interfaceName);

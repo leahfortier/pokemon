@@ -74,7 +74,7 @@ public class StuffGen {
 			
 			String key = pair.getKey();
 			String value = pair.getValue();
-			fields.addNew(key, value, className);
+			fields.addNew(key, value);
 		}
 		
 		return fields;

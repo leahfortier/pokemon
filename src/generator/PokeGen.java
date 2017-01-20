@@ -105,10 +105,10 @@ class PokeGen {
 	
 	private ClassFields readFields(Scanner in, String name, String className, int index) {
 		ClassFields fields = StuffGen.readFields(in, className);
-		
+
+		fields.setClassName(className);
+
 		fields.add("Namesies", name);
-		fields.add("ClassName", className);
-		
 		fields.add("Index", index + "");
 		
 		// NumTurns matches to both MinTurns and MaxTurns
@@ -131,10 +131,9 @@ class PokeGen {
 
 		String extraFields = fields.getAndRemove(ClassFields.FIELD_FIELD);
 
-		fields.remove("ClassName");
 		fields.remove("Index");
 
-		fields.confirmEmpty(className);
+		fields.confirmEmpty();
 
 		return StuffGen.createClass(
 				null,
@@ -248,7 +247,7 @@ class PokeGen {
 	private static FailureInfo failureInfo;
 	
 	private String getAdditionalMethods(ClassFields fields, List<String> interfaces) {
-		String className = fields.getRequired(ClassFields.CLASS_NAME_FIELD);
+
 		StringBuilder methods = new StringBuilder();
 		
 		// Add all the interfaces to the interface list
@@ -272,7 +271,7 @@ class PokeGen {
 
 				List<Entry<String, MethodInfo>> list = inputFormatter.getInterfaceMethods(interfaceName);
 				if (list == null) {
-					Global.error("Invalid interface name " + interfaceName + " for " + className);
+					Global.error("Invalid interface name " + interfaceName + " for " + fields.getClassName());
 				}
 
 				moreFields |= MethodInfo.addMethodInfo(methods, list, fields, nextInterfaces, interfaceName, this.currentGen.superClassName, inputFormatter);
@@ -315,7 +314,7 @@ class PokeGen {
 			className += "TM";
 
 			ClassFields fields = new ClassFields();
-			fields.add("ClassName", className);
+			fields.setClassName(className);
 			fields.add("Namesies", attackName + "_TM");
 			fields.add("Index", TM_BASE_INDEX + attack.getActualType().getIndex() + "");
 			fields.add("Desc", attack.getDescription());
@@ -405,7 +404,7 @@ class PokeGen {
 		fields.getPerformAndRemove(ACTIVATE_FIELD, constructor::append);
 
 		return new MethodInfo(
-						fields.getRequired(ClassFields.CLASS_NAME_FIELD) + "()",
+						fields.getClassName() + "()",
 						constructor.toString(),
 						AccessModifier.PACKAGE_PRIVATE
 				).writeFunction();

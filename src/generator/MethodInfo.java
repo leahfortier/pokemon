@@ -202,7 +202,7 @@ class MethodInfo {
                                  InputFormatter inputFormatter
     ) {
         boolean added = false;
-        String className = fields.getRequired(ClassFields.CLASS_NAME_FIELD);
+        String className = fields.getClassName();
 
         for (Map.Entry<String, MethodInfo> pair : methodList) {
             String fieldName = pair.getKey();
