@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 class ClassFields {
-    static final String FIELD_FIELD = "Field";
-    static final String INTERFACE_FIELD = "Int";
     private final Map<String, String> fields;
     private String className;
 

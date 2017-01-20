@@ -129,7 +129,7 @@ class PokeGen {
 
 		String implementsString = inputFormatter.getImplementsString(interfaces);
 
-		String extraFields = fields.getAndRemove(ClassFields.FIELD_FIELD);
+		String extraFields = fields.getAndRemove("Field");
 
 		fields.remove("Index");
 
@@ -253,10 +253,7 @@ class PokeGen {
 		// Add all the interfaces to the interface list
 		List<String> currentInterfaces = new ArrayList<>();
 		List<String> finalCurrentInterfaces = currentInterfaces; // Java is dumb
-		fields.getPerformAndRemove(
-				ClassFields.INTERFACE_FIELD,
-				value -> Collections.addAll(finalCurrentInterfaces, value.split(", "))
-		);
+		fields.getPerformAndRemove("Int", value -> Collections.addAll(finalCurrentInterfaces, value.split(", ")));
 		
 		List<String> nextInterfaces = new ArrayList<>();
 		
@@ -333,18 +330,13 @@ class PokeGen {
 		indexOut.append(String.format("%s.png %08x%n", imageName, index));
 	}
 
-	private static final String ACTIVATE_FIELD = "Activate";
-	private static final String CATEGORY_FIELD = "Cat";
-	private static final String PHYSICAL_CONTACT_FIELD = "PhysicalContact";
-	private static final String STAT_CHANGE_FIELD = "StatChange";
-
 	private boolean getPhysicalContact(ClassFields fields) {
 		boolean physicalContact = false;
 		if (this.currentGen == Generator.ATTACK_GEN) {
-			String category = fields.getRequired(CATEGORY_FIELD);
+			String category = fields.getRequired("Cat");
 			physicalContact = category.toUpperCase().equals(MoveCategory.PHYSICAL.name());
 
-			String physicalContactField = fields.getAndRemove(PHYSICAL_CONTACT_FIELD);
+			String physicalContactField = fields.getAndRemove("PhysicalContact");
 			if (physicalContactField != null) {
 				physicalContact = Boolean.parseBoolean(physicalContactField);
 			}
@@ -382,7 +374,7 @@ class PokeGen {
             });
 		}
 
-		fields.getPerformAndRemove(STAT_CHANGE_FIELD, value -> {
+		fields.getPerformAndRemove("StatChange", value -> {
             String[] mcSplit = value.split(" ");
             for (int i = 0, index = 1; i < Integer.parseInt(mcSplit[0]); i++) {
                 constructor.append("super.statChanges[Stat.")
@@ -401,7 +393,7 @@ class PokeGen {
 					.append(");\n");
 		}
 
-		fields.getPerformAndRemove(ACTIVATE_FIELD, constructor::append);
+		fields.getPerformAndRemove("Activate", constructor::append);
 
 		return new MethodInfo(
 						fields.getClassName() + "()",
