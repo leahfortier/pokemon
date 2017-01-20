@@ -62,9 +62,8 @@ public class StuffGen {
 		return out;
 	}
 	
-	static Map<String, String> readFields(Scanner in, String className) {
-		Map<String, String> fields = new HashMap<>();
-		
+	static ClassFields readFields(Scanner in, String className) {
+		ClassFields fields = new ClassFields();
 		while (in.hasNextLine()) {
 			String line = in.nextLine().trim();
 			if (line.equals("*")) {
@@ -75,12 +74,7 @@ public class StuffGen {
 			
 			String key = pair.getKey();
 			String value = pair.getValue();
-			
-			if (fields.containsKey(key)) {
-				Global.error("Repeated field " + key + " for " + className);
-			}
-
-			fields.put(key, value);
+			fields.addNew(key, value, className);
 		}
 		
 		return fields;

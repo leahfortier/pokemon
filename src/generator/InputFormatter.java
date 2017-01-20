@@ -270,34 +270,24 @@ public class InputFormatter {
         return implementsString;
     }
 
-    String getConstructorValue(Entry<String, String> pair, Map<String, String> fields) {
+    String getConstructorValue(Entry<String, String> pair, ClassFields fields) {
         int index = 0;
         String[] split = pair.getValue().split(" ");
         String type = split[index++];
 
         String fieldValue = null;
-        String className = fields.get("ClassName");
+        String className = fields.getRequired(ClassFields.CLASS_NAME_FIELD);
 
-        if (type.equals("DefaultMap")) {
-            String mapKey = split[index++];
-            fieldValue = fields.get(mapKey);
-
-            if (fieldValue == null) {
-                Global.error("Invalid map key " + mapKey + " for " + className);
-            }
-
-            type = split[index++];
-        }
-        else if (type.equals("Default")) {
+        if (type.equals("Default")) {
             fieldValue = split[index++];
             type = split[index++];
         }
 
         String key = pair.getKey();
+        String value = fields.getAndRemove(key);
 
-        if (fields.containsKey(key)) {
-            fieldValue = fields.get(key);
-            fields.remove(key);
+        if (value != null) {
+            fieldValue = value;
         }
         else if (fieldValue == null) {
             Global.error("Missing required constructor field " + key + " for " + className);

@@ -13,8 +13,6 @@ import util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
 
 class InterfaceMethod {
@@ -84,7 +82,7 @@ class InterfaceMethod {
     private String comments;
     private InvokeMethod invokeMethod;
 
-    InterfaceMethod(final String interfaceName, Map<String, String> fields) {
+    InterfaceMethod(final String interfaceName, ClassFields fields) {
         this.interfaceName = interfaceName;
 
         this.parameters = StringUtils.empty();
@@ -94,10 +92,11 @@ class InterfaceMethod {
         this.readFields(fields);
     }
 
-    private void readFields(Map<String, String> fields) {
+    private void readFields(ClassFields fields) {
 
-        final String header = getField(fields, HEADER);
+        final String header = fields.getAndRemoveTrimmed(HEADER);
         if (header != null) {
+            // TODO: Use regex
             int openParenthesis = header.indexOf('(');
             int closeParenthesis = header.indexOf(')');
 
@@ -118,7 +117,7 @@ class InterfaceMethod {
             this.methodName = split[1];
         }
 
-        final String returnType = getField(fields, RETURN_TYPE);
+        final String returnType = fields.getAndRemoveTrimmed(RETURN_TYPE);
         if (returnType != null) {
             if (!StringUtils.isNullOrEmpty(this.returnType) || !StringUtils.isNullOrEmpty(this.methodName)) {
                 Global.error("Cannot set the return type manually if it has already be set via the header field. " +
@@ -126,7 +125,7 @@ class InterfaceMethod {
                         "New Return Type: " + returnType + ", Interface Name: " + this.interfaceName);
             }
 
-            final String methodName = getField(fields, METHOD_NAME);
+            final String methodName = fields.getAndRemoveTrimmed(METHOD_NAME);
             if (methodName == null) {
                 Global.error("Return type and method name must be specified together. " +
                         "Return Type: " + returnType + ", Interface Name: " + this.interfaceName);
@@ -136,12 +135,12 @@ class InterfaceMethod {
             this.methodName = methodName;
         }
 
-        final String parameters = getField(fields, PARAMETERS);
+        final String parameters = fields.getAndRemoveTrimmed(PARAMETERS);
         if (parameters != null) {
             this.parameters = parameters;
         }
 
-        final String invokeParameters = getField(fields, INVOKE_PARAMETERS);
+        final String invokeParameters = fields.getAndRemoveTrimmed(INVOKE_PARAMETERS);
         if (invokeParameters != null){
             this.additionalInvokeParameters = invokeParameters;
             this.setParameters(this.additionalInvokeParameters, false);
@@ -149,18 +148,18 @@ class InterfaceMethod {
 
         this.setParameters(this.parameters, true);
 
-        final String comments = getField(fields, COMMENTS);
+        final String comments = fields.getAndRemoveTrimmed(COMMENTS);
         if (comments != null) {
             this.comments = comments;
         }
 
-        final String invoke = getField(fields, INVOKE);
+        final String invoke = fields.getAndRemoveTrimmed(INVOKE);
         if (invoke != null) {
             Scanner in = new Scanner(invoke);
             this.invokeMethod = InvokeType.valueOf(in.next().toUpperCase()).getInvokeMethod(in);
         }
 
-        final String invokeName = getField(fields, INVOKE_NAME);
+        final String invokeName = fields.getAndRemoveTrimmed(INVOKE_NAME);
         if (invokeName != null) {
             if (this.invokeMethod == null) {
                 Global.error("Must specify type of invoke method if you want to name it.  Interface: " + this.interfaceName);
@@ -170,18 +169,18 @@ class InterfaceMethod {
         }
 
         // TODO: Clean all this shit up and put all the invoke declaration nonsense in a separate method
-        final String effectListParameter = getField(fields, EFFECT_LIST);
+        final String effectListParameter = fields.getAndRemoveTrimmed(EFFECT_LIST);
         if (effectListParameter != null) {
             this.invokeeDeclaration = String.format("List<Object> invokees = %s.getEffectsList(%s",
                     this.battleParameter, effectListParameter);
 
-            final String effectPriority = getField(fields, EFFECT_PRIORITY);
+            final String effectPriority = fields.getAndRemoveTrimmed(EFFECT_PRIORITY);
             if (effectPriority != null) {
                 this.invokeeDeclaration += ", " + effectPriority;
             }
 
 
-            final String invokeAttack = getField(fields, INVOKE_ATTACK);
+            final String invokeAttack = fields.getAndRemoveTrimmed(INVOKE_ATTACK);
             if (invokeAttack != null) {
                 this.invokeeDeclaration += ", " + invokeAttack + ".getAttack()";
             }
@@ -189,7 +188,7 @@ class InterfaceMethod {
             this.invokeeDeclaration += ");";
         }
 
-        final String statInvokeAttack = getField(fields, STAT_INVOKE_ATTACK);
+        final String statInvokeAttack = fields.getAndRemoveTrimmed(STAT_INVOKE_ATTACK);
         if (statInvokeAttack != null) {
             if (!StringUtils.isNullOrEmpty(this.invokeeDeclaration)) {
                 Global.error("Can not define multiple ways to set the effects list. Interface: " + this.interfaceName);
@@ -203,7 +202,7 @@ class InterfaceMethod {
                     "}\n";
         }
 
-        final String setInvokees = getField(fields, SET_INVOKEES);
+        final String setInvokees = fields.getAndRemoveTrimmed(SET_INVOKEES);
         if (setInvokees != null) {
             if (!StringUtils.isNullOrEmpty(this.invokeeDeclaration)) {
                 Global.error("Can not define multiple ways to set the effects list. " +
@@ -214,7 +213,7 @@ class InterfaceMethod {
         }
 
         // TODO: Eventually would just like to remove the invokee loop for this case and just operate directly on the attack
-        final String moveInvoke = getField(fields, MOVE);
+        final String moveInvoke = fields.getAndRemoveTrimmed(MOVE);
         if (moveInvoke != null) {
             if (!StringUtils.isNullOrEmpty(this.invokeeDeclaration)) {
                 Global.error("Can not define multiple ways to set the effects list. " +
@@ -225,17 +224,17 @@ class InterfaceMethod {
                     "Collections.singletonList(%s.getAttack());", moveInvoke);
         }
 
-        final String updateField = getField(fields, UPDATE);
+        final String updateField = fields.getAndRemoveTrimmed(UPDATE);
         if (updateField != null) {
             this.updateField = updateField;
         }
 
-        final String moldBreaker = getField(fields, MOLD_BREAKER);
+        final String moldBreaker = fields.getAndRemoveTrimmed(MOLD_BREAKER);
         if (moldBreaker != null) {
             this.moldBreaker = moldBreaker;
         }
 
-        final String moldBreakerNullCheck = getField(fields, MOLD_BREAKER_NULL_CHECK);
+        final String moldBreakerNullCheck = fields.getAndRemoveTrimmed(MOLD_BREAKER_NULL_CHECK);
         if (moldBreakerNullCheck != null) {
             if (!StringUtils.isNullOrEmpty(this.moldBreaker)) {
                 Global.error("Cannot define a mold breaker and a mold breaker null check. Interface: " + this.interfaceName);
@@ -245,7 +244,7 @@ class InterfaceMethod {
             this.moldBreakNullCheck = true;
         }
 
-        final String allDeadsies = getField(fields, DEADSIES);
+        final String allDeadsies = fields.getAndRemoveTrimmed(DEADSIES);
         if (allDeadsies != null) {
             Scanner in = new Scanner(allDeadsies);
             while (in.hasNext()) {
@@ -253,10 +252,7 @@ class InterfaceMethod {
             }
         }
 
-        for (final Entry<String, String> field : fields.entrySet()) {
-            Global.error("Unused field " + field.getKey() + ": " + field.getValue() +
-                    " for interface " + this.interfaceName);
-        }
+        fields.confirmEmpty(this.interfaceName);
 
         if ((this.returnType == null || this.methodName == null) && this.invokeMethod == null) {
             Global.error("Interface method and invoke method are both missing for interface " + this.interfaceName);
@@ -293,16 +289,6 @@ class InterfaceMethod {
                 }
             }
         }
-    }
-
-    private static String getField(final Map<String, String> fields, final String key) {
-        if (fields.containsKey(key)) {
-            final String value = fields.get(key).trim();
-            fields.remove(key);
-            return value;
-        }
-
-        return null;
     }
 
     String writeInterfaceMethod() {

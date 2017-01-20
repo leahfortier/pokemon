@@ -35,10 +35,10 @@ class FailureInfo {
         }
     }
 
-    String writeFailure(Map<String, String> fields, String superClass, InputFormatter inputFormatter) {
+    String writeFailure(ClassFields fields, String superClass, InputFormatter inputFormatter) {
         String failure = StringUtils.empty();
 
-        String className = fields.get("ClassName");
+        String className = fields.getRequired("ClassName");
         boolean first = true;
 
         for (Map.Entry<String, String> entry : failureInfo) {
