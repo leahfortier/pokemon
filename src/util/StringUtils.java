@@ -27,8 +27,14 @@ public class StringUtils {
         return isNullOrEmpty(s) ? empty() : s + " ";
     }
 
-    public static String addLeadingComma(final String s) {
-        return isNullOrEmpty(s) ? empty() : ", " + s;
+    public static void addCommaSeparatedValue(final StringBuilder builder, String newString) {
+        if (!isNullOrEmpty(newString)) {
+            if (builder.length() > 0) {
+                builder.append(", ");
+            }
+
+            builder.append(newString);
+        }
     }
 
     public static void appendLine(final StringBuilder builder, final String message) {

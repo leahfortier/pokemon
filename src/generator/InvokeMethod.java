@@ -63,23 +63,16 @@ abstract class InvokeMethod {
     }
 
     private String getInvokeParameters(final InterfaceMethod interfaceMethod) {
-        String invokeParameters = interfaceMethod.getParameters();
-        if (!StringUtils.isNullOrEmpty(interfaceMethod.getAdditionalInvokeParameters())) {
-            invokeParameters = interfaceMethod.getAdditionalInvokeParameters() +
-                    StringUtils.addLeadingComma(invokeParameters);
-        }
-
-        if (!StringUtils.isNullOrEmpty(this.getAdditionalInvokeParameters())) {
-            invokeParameters = this.getAdditionalInvokeParameters() +
-                    StringUtils.addLeadingComma(invokeParameters);
-        }
-
+        StringBuilder invokeParameters = new StringBuilder();
         if (passInvokees(interfaceMethod)) {
-            invokeParameters = "List<?> invokees" +
-                    StringUtils.addLeadingComma(invokeParameters);
+            StringUtils.addCommaSeparatedValue(invokeParameters, "List<?> invokees");
         }
 
-        return invokeParameters;
+        StringUtils.addCommaSeparatedValue(invokeParameters, this.getAdditionalInvokeParameters());
+        StringUtils.addCommaSeparatedValue(invokeParameters, interfaceMethod.getAdditionalInvokeParameters());
+        StringUtils.addCommaSeparatedValue(invokeParameters, interfaceMethod.getParameters());
+
+        return invokeParameters.toString();
     }
 
     private String getDeclaration(final InterfaceMethod interfaceMethod) {

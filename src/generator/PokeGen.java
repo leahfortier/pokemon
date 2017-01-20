@@ -352,10 +352,11 @@ class PokeGen {
 		boolean physicalContact = false;
 		if (this.currentGen == Generator.ATTACK_GEN) {
 			String category = fields.get(CATEGORY_FIELD);
-			physicalContact = category.equals(MoveCategory.PHYSICAL.getName());
+			physicalContact = category.toUpperCase().equals(MoveCategory.PHYSICAL.name());
 
-			if (fields.containsKey(PHYSICAL_CONTACT_FIELD)) {
-				physicalContact = Boolean.parseBoolean(fields.get(PHYSICAL_CONTACT_FIELD));
+			String physicalContactField = fields.get(PHYSICAL_CONTACT_FIELD);
+			if (physicalContactField != null) {
+				physicalContact = Boolean.parseBoolean(physicalContactField);
 				fields.remove(PHYSICAL_CONTACT_FIELD);
 			}
 		}
@@ -363,28 +364,33 @@ class PokeGen {
 		return physicalContact;
 	}
 
+	// For the super call inside the class constructor, returns the comma-separated field values
+	// (It's what's inside the super parentheses)
+	// Example: 'AttackNamesies.ATTACK_NAME, "Attack Description", 35, Type.NORMAL, MoveCategory.PHYSICAL'
+	private String getInternalConstructorValues(Map<String, String> fields) {
+		StringBuilder superValues = new StringBuilder();
+		for (Entry<String, String> pair : constructorKeys) {
+			String value = inputFormatter.getConstructorValue(pair, fields);
+			StringUtils.addCommaSeparatedValue(superValues, value);
+		}
+
+		return superValues.toString();
+	}
+
 	private String getConstructor(Map<String, String> fields) {
 		boolean physicalContact = getPhysicalContact(fields);
 		
 		StringBuilder constructor = new StringBuilder();
-		constructor.append("super(");
-		
-		boolean first = true;
-		for (Entry<String, String> pair : constructorKeys) {
-			String value = inputFormatter.getConstructorValue(pair, fields);
-			constructor.append(first ? "" : ", ")
-					.append(value);
-			
-			first = false;
-		}
-		
-		constructor.append(");\n");
+		constructor.append("super(")
+				.append(getInternalConstructorValues(fields))
+				.append(");\n");
 		
 		for (Entry<String, String> pair : fieldKeys) {
 			String fieldKey = pair.getKey();
-			
-			if (fields.containsKey(fieldKey)) {
-				String assignment = inputFormatter.getAssignment(pair.getValue(), fields.get(fieldKey));
+
+			String fieldValue = fields.get(fieldKey);
+			if (fieldValue != null) {
+				String assignment = inputFormatter.getAssignment(pair.getValue(), fieldValue);
 				StringUtils.appendLine(constructor, assignment);
 				fields.remove(fieldKey);
 			}
