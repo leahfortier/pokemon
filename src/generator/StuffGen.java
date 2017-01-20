@@ -96,7 +96,7 @@ public class StuffGen {
 		String value = split[1].trim();
 		
 		if (value.isEmpty()) {
-			value = readFunction(in);
+			value = readMethod(in);
 		}
 		
 		return new SimpleEntry<>(key, value);
@@ -168,7 +168,7 @@ public class StuffGen {
 		return accessModifier + " " + classType + " " + className;
 	}
 	
-	private static String readFunction(Scanner in) {
+	private static String readMethod(Scanner in) {
 		StringBuilder method = new StringBuilder();
 		MethodFormatter formatter = new MethodFormatter(2);
 		

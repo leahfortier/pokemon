@@ -2,6 +2,8 @@ package generator;
 
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
+import battle.attack.MoveCategory;
+import battle.attack.MoveType;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
@@ -121,7 +123,7 @@ class PokeGen {
 		return fields;
 	}
 	
-	private void addClass(StringBuilder classes, String name, String className, Map<String, String> fields) {
+	private String createClass(String name, String className, Map<String, String> fields) {
 		this.namesiesGen.createNamesies(name, className);
 		
 		List<String> interfaces = new ArrayList<>();
@@ -135,27 +137,32 @@ class PokeGen {
 			extraFields = fields.get("Field");
 			fields.remove("Field");
 		}
-		
-		String classString = StuffGen.createClass(null, className, this.currentGen.getSuperClassName(), implementsString, extraFields, constructor, additionalMethods, false);
-		
+
 		fields.remove("ClassName");
 		fields.remove("Index");
-		
-		for (String s : fields.keySet()) {
-			Global.error("Unused field " + s + " for class " + className);
+
+		for (String field : fields.keySet()) {
+			Global.error("Unused field " + field + " for class " + className);
 		}
-		
-		classes.append(classString);
+
+		return StuffGen.createClass(
+				null,
+				className,
+				this.currentGen.getSuperClassName(),
+				implementsString,
+				extraFields,
+				constructor,
+				additionalMethods,
+				false
+		);
 	}
 	
 	private void superGen() {
 		StringBuilder out = StuffGen.startGen(this.currentGen.getOutputPath());
+		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n"); // DON'T DO IT
 
 		Scanner in = FileIO.openFile(this.currentGen.getInputPath());
 		readFileFormat(in);
-		
-		// StringBuilder for the classes (does not append to out directly because of the map)
-		StringBuilder classes = new StringBuilder();
 		
 		// The image index file for the item generator
 		StringBuilder indexOut = new StringBuilder();
@@ -175,8 +182,9 @@ class PokeGen {
 			
 			// Read in all of the fields
 			Map<String, String> fields = readFields(in, name, className, index);
-			
-			addClass(classes, name, className, fields);
+
+			// Create class and append
+			out.append(createClass(name, className, fields));
 			
 			if (this.currentGen == Generator.ITEM_GEN) {
 				addImageIndex(indexOut, index, name, className.toLowerCase());
@@ -186,13 +194,11 @@ class PokeGen {
 		}
 
 		if (this.currentGen == Generator.ITEM_GEN) {
-			addTMs(classes, indexOut);
+			addTMs(out, indexOut);
 			FileIO.writeToFile(Folder.ITEM_TILES + "index.txt", indexOut);
 		}
-		
-		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n") // DON'T DO IT
-				.append(classes)
-				.append("}");
+
+		out.append("}");
 
 		FileIO.overwriteFile(this.currentGen.getOutputPath(), out);
 	}
@@ -297,13 +303,13 @@ class PokeGen {
 		}
 
 		// Add the image index for each type (except for None)
-		for (Type t : Type.values()) {
-			if (t == Type.NO_TYPE) {
+		for (Type type : Type.values()) {
+			if (type == Type.NO_TYPE) {
 				continue;
 			}
 
-			String name = t.getName() + "TM";
-			addImageIndex(indexOut, TM_BASE_INDEX + t.getIndex(), name, name.toLowerCase());
+			String name = type.getName() + "TM";
+			addImageIndex(indexOut, TM_BASE_INDEX + type.getIndex(), name, name.toLowerCase());
 		}
 
 		Scanner in = FileIO.openFile(FileName.TM_LIST);
@@ -323,7 +329,7 @@ class PokeGen {
 			fields.put("Desc", attack.getDescription());
 			fields.put("TM", attackName);
 
-			addClass(classes, itemName, className, fields);
+			classes.append(createClass(itemName, className, fields));
 		}
 	}
 	
@@ -336,15 +342,21 @@ class PokeGen {
 		indexOut.append(String.format("%s.png %08x%n", imageName, index));
 	}
 
+	private static final String CLASS_NAME_FIELD = "ClassName";
+	private static final String ACTIVATE_FIELD = "Activate";
+	private static final String CATEGORY_FIELD = "Cat";
+	private static final String PHYSICAL_CONTACT_FIELD = "PhysicalContact";
+	private static final String STAT_CHANGE_FIELD = "StatChange";
+
 	private boolean getPhysicalContact(Map<String, String> fields) {
 		boolean physicalContact = false;
 		if (this.currentGen == Generator.ATTACK_GEN) {
-			String category = fields.get("Cat");
-			physicalContact = category.equals("Physical");
+			String category = fields.get(CATEGORY_FIELD);
+			physicalContact = category.equals(MoveCategory.PHYSICAL.getName());
 
-			if (fields.containsKey("PhysicalContact")) {
-				physicalContact = Boolean.parseBoolean(fields.get("PhysicalContact"));
-				fields.remove("PhysicalContact");
+			if (fields.containsKey(PHYSICAL_CONTACT_FIELD)) {
+				physicalContact = Boolean.parseBoolean(fields.get(PHYSICAL_CONTACT_FIELD));
+				fields.remove(PHYSICAL_CONTACT_FIELD);
 			}
 		}
 
@@ -377,11 +389,9 @@ class PokeGen {
 				fields.remove(fieldKey);
 			}
 		}
-		
-		// TODO: I don't like that this is hardcoded -- find a way to change it
-		if (fields.containsKey("StatChange")) {
-			String[] mcSplit = fields.get("StatChange").split(" ");
-			
+
+		if (fields.containsKey(STAT_CHANGE_FIELD)) {
+			String[] mcSplit = fields.get(STAT_CHANGE_FIELD).split(" ");
 			for (int i = 0, index = 1; i < Integer.parseInt(mcSplit[0]); i++) {
 				constructor.append("super.statChanges[Stat.")
 						.append(mcSplit[index++].toUpperCase())
@@ -390,18 +400,26 @@ class PokeGen {
 						.append(";\n");
 			}	
 			
-			fields.remove("StatChange");
+			fields.remove(STAT_CHANGE_FIELD);
 		}
 
 		if (physicalContact) {
-			constructor.append("super.moveTypes.add(MoveType.PHYSICAL_CONTACT);\n");
+			constructor.append("super.moveTypes.add(")
+					.append(MoveType.class.getSimpleName())
+					.append(".")
+					.append(MoveType.PHYSICAL_CONTACT)
+					.append(");\n");
 		}
 
-		if (fields.containsKey("Activate")) {
-			constructor.append(fields.get("Activate"));
-			fields.remove("Activate");
+		if (fields.containsKey(ACTIVATE_FIELD)) {
+			constructor.append(fields.get(ACTIVATE_FIELD));
+			fields.remove(ACTIVATE_FIELD);
 		}
 
-		return new MethodInfo(fields.get("ClassName") + "()", constructor.toString(), AccessModifier.PACKAGE_PRIVATE).writeFunction();
+		return new MethodInfo(
+						fields.get(CLASS_NAME_FIELD) + "()",
+						constructor.toString(),
+						AccessModifier.PACKAGE_PRIVATE
+				).writeFunction();
 	}
 }

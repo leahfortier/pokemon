@@ -15,11 +15,15 @@ public enum MoveCategory implements Serializable {
     private BufferedImage image;
 
     MoveCategory() {
-        String imageName = "MoveCategory" + StringUtils.properCase(this.name().toLowerCase());
+        String imageName = "MoveCategory" + this.getName();
         this.image = FileIO.readImage(Folder.ATTACK_TILES + imageName);
     }
 
     public BufferedImage getImage() {
         return this.image;
+    }
+
+    public String getName() {
+        return StringUtils.properCase(this.name().toLowerCase());
     }
 }
