@@ -8,7 +8,6 @@ import util.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 class InterfaceGen {
@@ -82,7 +81,7 @@ class InterfaceGen {
 						this.headerComments = getSingleLineInput(COMMENTS, split);
 						break;
 					case METHOD:
-						final Map<String, String> fields = StuffGen.readFields(in, this.interfaceName);
+						final ClassFields fields = StuffGen.readFields(in, this.interfaceName);
 						this.methods.add(new InterfaceMethod(this.interfaceName, fields));
 						break;
 					case EXTENDS:

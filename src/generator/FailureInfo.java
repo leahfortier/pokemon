@@ -35,10 +35,8 @@ class FailureInfo {
         }
     }
 
-    String writeFailure(Map<String, String> fields, String superClass, InputFormatter inputFormatter) {
+    String writeFailure(ClassFields fields, String superClass, InputFormatter inputFormatter) {
         String failure = StringUtils.empty();
-
-        String className = fields.get("ClassName");
         boolean first = true;
 
         for (Map.Entry<String, String> entry : failureInfo) {
@@ -81,7 +79,7 @@ class FailureInfo {
                 continue;
             }
 
-            String[] fieldValues = new String[] {fieldValue};
+            String[] fieldValues = new String[] { fieldValue };
             if (list) {
                 fieldValues = fieldValue.split(",");
             }
@@ -103,7 +101,7 @@ class FailureInfo {
                     space = true;
                 }
 
-                body = inputFormatter.replaceBody(body, pairValue, className, superClass);
+                body = inputFormatter.replaceBody(body, pairValue, fields.getClassName(), superClass);
 
                 failure += (first ? "" : " || ")  + body;
                 first = false;

@@ -11,10 +11,8 @@ import util.StringUtils;
 
 import java.io.PrintStream;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
@@ -62,9 +60,8 @@ public class StuffGen {
 		return out;
 	}
 	
-	static Map<String, String> readFields(Scanner in, String className) {
-		Map<String, String> fields = new HashMap<>();
-		
+	static ClassFields readFields(Scanner in, String className) {
+		ClassFields fields = new ClassFields();
 		while (in.hasNextLine()) {
 			String line = in.nextLine().trim();
 			if (line.equals("*")) {
@@ -75,12 +72,7 @@ public class StuffGen {
 			
 			String key = pair.getKey();
 			String value = pair.getValue();
-			
-			if (fields.containsKey(key)) {
-				Global.error("Repeated field " + key + " for " + className);
-			}
-
-			fields.put(key, value);
+			fields.addNew(key, value);
 		}
 		
 		return fields;
@@ -96,7 +88,7 @@ public class StuffGen {
 		String value = split[1].trim();
 		
 		if (value.isEmpty()) {
-			value = readFunction(in);
+			value = readMethod(in);
 		}
 		
 		return new SimpleEntry<>(key, value);
@@ -168,7 +160,7 @@ public class StuffGen {
 		return accessModifier + " " + classType + " " + className;
 	}
 	
-	private static String readFunction(Scanner in) {
+	private static String readMethod(Scanner in) {
 		StringBuilder method = new StringBuilder();
 		MethodFormatter formatter = new MethodFormatter(2);
 		

@@ -195,15 +195,14 @@ class MethodInfo {
     // Interface name should be empty if it is an override
     static boolean addMethodInfo(StringBuilder methods,
                                  List<Map.Entry<String, MethodInfo>> methodList,
-                                 Map<String, String> fields,
+                                 ClassFields fields,
                                  List<String> interfaces,
                                  String interfaceName,
                                  String superClass,
                                  InputFormatter inputFormatter
     ) {
         boolean added = false;
-
-        String className = fields.get("ClassName");
+        String className = fields.getClassName();
 
         for (Map.Entry<String, MethodInfo> pair : methodList) {
             String fieldName = pair.getKey();
@@ -248,7 +247,7 @@ class MethodInfo {
 //					System.out.println("Map Field (ClassName = " + className + "): " + mapField);
 //				}
 
-                fields.put(fieldKey, mapField);
+                fields.add(fieldKey, mapField);
             }
 
             fields.remove(fieldName);
