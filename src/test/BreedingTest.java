@@ -6,11 +6,11 @@ import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ActivePokemon;
-import pokemon.breeding.Breeding;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
+import pokemon.breeding.Breeding;
 import util.StringUtils;
 
 import java.util.Arrays;

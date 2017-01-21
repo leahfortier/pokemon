@@ -1,8 +1,8 @@
 package mapMaker.tools;
 
 import map.entity.movable.MovableEntity;
-import mapMaker.MapMaker;
 import mapMaker.EditType;
+import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.map.NPCMatcher;

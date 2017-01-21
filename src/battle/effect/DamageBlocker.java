@@ -1,8 +1,8 @@
 package battle.effect;
 
+import battle.Battle;
 import main.Type;
 import pokemon.ActivePokemon;
-import battle.Battle;
 
 public interface DamageBlocker {
 	boolean block(Type attacking, ActivePokemon victim);

@@ -1,8 +1,8 @@
 package pattern.map;
 
 import map.AreaData;
-import map.weather.WeatherState;
 import map.TerrainType;
+import map.weather.WeatherState;
 import sound.MusicCondition;
 import sound.SoundTitle;
 import util.StringUtils;

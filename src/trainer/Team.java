@@ -1,10 +1,10 @@
 package trainer;
 
-import java.util.List;
-
 import battle.effect.generic.EffectNamesies;
-import pokemon.ActivePokemon;
 import battle.effect.generic.TeamEffect;
+import pokemon.ActivePokemon;
+
+import java.util.List;
 
 // THIS IS A DUMB NAME SOMEONE HELP ME RENAME IT
 public interface Team {

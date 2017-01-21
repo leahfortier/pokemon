@@ -4,7 +4,6 @@ import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.BeforeTurnAttackSelectionEffect;
 import battle.effect.PassableEffect;

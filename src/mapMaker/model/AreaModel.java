@@ -1,8 +1,8 @@
 package mapMaker.model;
 
-import map.weather.WeatherState;
 import map.MapDataType;
 import map.TerrainType;
+import map.weather.WeatherState;
 import mapMaker.MapMaker;
 import util.DrawUtils;
 import util.FontMetrics;

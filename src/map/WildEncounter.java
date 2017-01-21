@@ -1,7 +1,7 @@
 package map;
 
-import pokemon.PokemonNamesies;
 import pokemon.ActivePokemon;
+import pokemon.PokemonNamesies;
 import trainer.WildPokemon;
 import util.RandomUtils;
 

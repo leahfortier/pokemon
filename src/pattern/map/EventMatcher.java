@@ -2,8 +2,8 @@ package pattern.map;
 
 import map.entity.EntityAction;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import pattern.generic.MultiPointTriggerMatcher;
 import pattern.action.ActionMatcher;
+import pattern.generic.MultiPointTriggerMatcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,7 +1,7 @@
 package mapMaker.tools;
 
-import mapMaker.MapMaker;
 import mapMaker.EditType;
+import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import util.DrawUtils;
 import util.Point;

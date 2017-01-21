@@ -3,13 +3,13 @@ package gui;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import input.ControlKey;
+import input.InputControl;
 import item.ItemNamesies;
 import main.Game;
 import main.Global;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
-import input.InputControl;
-import input.ControlKey;
 import util.FontMetrics;
 
 import java.awt.Color;

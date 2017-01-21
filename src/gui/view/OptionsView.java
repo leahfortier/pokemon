@@ -1,11 +1,11 @@
 package gui.view;
 
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
 import main.Global;
 import sound.SoundPlayer;
 import util.DrawUtils;
-import input.InputControl;
-import input.ControlKey;
 import util.FontMetrics;
 
 import java.awt.Color;

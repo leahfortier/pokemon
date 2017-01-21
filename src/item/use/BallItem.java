@@ -1,7 +1,7 @@
 package item.use;
 
-import pokemon.ActivePokemon;
 import battle.Battle;
+import pokemon.ActivePokemon;
 
 public interface BallItem {
 	double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b);

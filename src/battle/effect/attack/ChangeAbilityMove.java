@@ -1,8 +1,8 @@
 package battle.effect.attack;
 
-import pokemon.ability.Ability;
-import pokemon.ActivePokemon;
 import battle.Battle;
+import pokemon.ActivePokemon;
+import pokemon.ability.Ability;
 
 public interface ChangeAbilityMove {
 	Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim);

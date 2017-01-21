@@ -1,7 +1,7 @@
 package mapMaker.tools;
 
-import util.Point;
 import mapMaker.MapMaker;
+import util.Point;
 
 class MoveTool extends Tool {
     private Point previousLocation;

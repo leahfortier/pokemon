@@ -2,8 +2,6 @@ package pokemon;
 
 import java.io.Serializable;
 
-import main.Global;
-
 enum GrowthRate implements Serializable {
 	FAST("Fast", level -> (int)(.8*Math.pow(level, 3))),
 	MEDIUM_FAST("Medium Fast", level -> (int)Math.pow(level, 3)),

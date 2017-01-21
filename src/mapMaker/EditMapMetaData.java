@@ -16,7 +16,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;

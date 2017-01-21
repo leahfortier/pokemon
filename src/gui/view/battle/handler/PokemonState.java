@@ -2,9 +2,9 @@ package gui.view.battle.handler;
 
 import battle.Battle;
 import battle.attack.Move;
+import gui.TileSet;
 import gui.button.Button;
 import gui.button.ButtonHoverAction;
-import gui.TileSet;
 import gui.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;

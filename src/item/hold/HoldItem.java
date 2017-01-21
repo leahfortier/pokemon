@@ -1,7 +1,7 @@
 package item.hold;
 
-import pokemon.ActivePokemon;
 import battle.Battle;
+import pokemon.ActivePokemon;
 
 public interface HoldItem {
 	int flingDamage();

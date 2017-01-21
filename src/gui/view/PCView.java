@@ -2,12 +2,14 @@ package gui.view;
 
 import battle.attack.Attack;
 import battle.attack.Move;
-import gui.button.Button;
-import gui.button.ButtonHoverAction;
 import gui.GameData;
 import gui.TileSet;
+import gui.button.Button;
+import gui.button.ButtonHoverAction;
 import gui.panel.BasicPanels;
 import gui.panel.DrawPanel;
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
 import main.Type;
 import map.Direction;
@@ -17,8 +19,6 @@ import pokemon.Stat;
 import trainer.CharacterData;
 import trainer.Trainer;
 import util.DrawUtils;
-import input.InputControl;
-import input.ControlKey;
 import util.FontMetrics;
 
 import java.awt.Color;
