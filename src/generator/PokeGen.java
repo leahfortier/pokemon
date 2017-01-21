@@ -113,8 +113,8 @@ class PokeGen {
 		
 		// NumTurns matches to both MinTurns and MaxTurns
 		fields.getPerformAndRemove("NumTurns", numTurns -> {
-			fields.add("MinTurns", numTurns); // TODO: Change to addNew
-			fields.add("MaxTurns", numTurns);
+			fields.addNew("MinTurns", numTurns);
+			fields.addNew("MaxTurns", numTurns);
 		});
 
 		return fields;
@@ -126,9 +126,7 @@ class PokeGen {
 		List<String> interfaces = new ArrayList<>();
 		String additionalMethods = getAdditionalMethods(fields, interfaces);
 		String constructor = getConstructor(fields);
-
 		String implementsString = inputFormatter.getImplementsString(interfaces);
-
 		String extraFields = fields.getAndRemove("Field");
 
 		fields.remove("Index");
@@ -259,7 +257,15 @@ class PokeGen {
 		
 		boolean moreFields = true;
 		while (moreFields) {
-			moreFields = MethodInfo.addMethodInfo(methods, inputFormatter.getOverrideMethods(), fields, currentInterfaces, StringUtils.empty(), this.currentGen.superClassName, inputFormatter);
+			moreFields = MethodInfo.addMethodInfo(
+					methods,
+					inputFormatter.getOverrideMethods(),
+					fields,
+					currentInterfaces,
+					StringUtils.empty(),
+					this.currentGen.getSuperClassName(),
+					inputFormatter
+			);
 
 			for (String interfaceName : currentInterfaces) {
 				interfaces.add(interfaceName);
@@ -271,7 +277,15 @@ class PokeGen {
 					Global.error("Invalid interface name " + interfaceName + " for " + fields.getClassName());
 				}
 
-				moreFields |= MethodInfo.addMethodInfo(methods, list, fields, nextInterfaces, interfaceName, this.currentGen.superClassName, inputFormatter);
+				moreFields |= MethodInfo.addMethodInfo(
+						methods,
+						list,
+						fields,
+						nextInterfaces,
+						interfaceName,
+						this.currentGen.getSuperClassName(),
+						inputFormatter
+				);
 			}
 			
 			currentInterfaces = nextInterfaces;
@@ -279,7 +293,7 @@ class PokeGen {
 		}
 		
 		if (failureInfo != null) {
-			methods.insert(0, failureInfo.writeFailure(fields, this.currentGen.superClassName, inputFormatter));
+			methods.insert(0, failureInfo.writeFailure(fields, this.currentGen.getSuperClassName(), inputFormatter));
 		}
 		
 		return methods.toString();
@@ -368,10 +382,10 @@ class PokeGen {
 		
 		for (Entry<String, String> pair : fieldKeys) {
 			String fieldKey = pair.getKey();
-			fields.getPerformAndRemove(fieldKey, value -> {
-                String assignment = inputFormatter.getAssignment(pair.getValue(), value);
-                StringUtils.appendLine(constructor, assignment);
-            });
+			fields.getPerformAndRemove(
+					fieldKey,
+					value -> StringUtils.appendLine(constructor, inputFormatter.getAssignment(pair.getValue(), value))
+			);
 		}
 
 		fields.getPerformAndRemove("StatChange", value -> {

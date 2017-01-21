@@ -79,7 +79,7 @@ class FailureInfo {
                 continue;
             }
 
-            String[] fieldValues = new String[] {fieldValue};
+            String[] fieldValues = new String[] { fieldValue };
             if (list) {
                 fieldValues = fieldValue.split(",");
             }

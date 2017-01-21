@@ -205,7 +205,7 @@ public class InputFormatter {
                 break;
             default:
                 Global.error("Invalid variable type " + type);
-                value = "";
+                value = StringUtils.empty();
                 break;
         }
 
