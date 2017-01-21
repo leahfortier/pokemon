@@ -81,7 +81,7 @@ class InterfaceGen {
 						this.headerComments = getSingleLineInput(COMMENTS, split);
 						break;
 					case METHOD:
-						final ClassFields fields = StuffGen.readFields(in, this.interfaceName);
+						final ClassFields fields = StuffGen.readFields(in);
 						this.methods.add(new InterfaceMethod(this.interfaceName, fields));
 						break;
 					case EXTENDS:

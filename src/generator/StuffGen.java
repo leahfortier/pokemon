@@ -60,7 +60,7 @@ public class StuffGen {
 		return out;
 	}
 	
-	static ClassFields readFields(Scanner in, String className) {
+	static ClassFields readFields(Scanner in) {
 		ClassFields fields = new ClassFields();
 		while (in.hasNextLine()) {
 			String line = in.nextLine().trim();
