@@ -9,11 +9,15 @@ import generator.InvokeMethod.MultiplyInvoke;
 import generator.InvokeMethod.UpdateInvoke;
 import generator.InvokeMethod.VoidInvoke;
 import main.Global;
+import pattern.MatchType;
 import util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class InterfaceMethod {
 
@@ -92,29 +96,23 @@ class InterfaceMethod {
         this.readFields(fields);
     }
 
+    private static final Pattern HEADER_PATTERN = Pattern.compile(
+            MatchType.VARIABLE_TYPE.group() + " " + // Group 1: return type
+            MatchType.WORD.group() +                // Group 2: method name
+            "\\((.*)\\)"                            // Group 3: method parameters
+    );
     private void readFields(ClassFields fields) {
 
         final String header = fields.getAndRemoveTrimmed(HEADER);
         if (header != null) {
-            // TODO: Use regex
-            int openParenthesis = header.indexOf('(');
-            int closeParenthesis = header.indexOf(')');
-
-            if (openParenthesis == -1 || closeParenthesis == -1 || openParenthesis > closeParenthesis) {
-                Global.error("Header must contain proper parentheses around parameters. " +
-                        header + " is not valid.  Interface: " + this.interfaceName);
+            Matcher matcher = HEADER_PATTERN.matcher(header);
+            if (!matcher.matches()) {
+                Global.error("Header not properly formatted for " + this.interfaceName + ", Header: " + header);
             }
 
-            this.parameters = header.substring(openParenthesis + 1, closeParenthesis);
-
-            String[] split = header.substring(0, openParenthesis).split(" ");
-            if (split.length != 2) {
-                Global.error("Header must have exactly two words -- return type and method name -- before parameter parentheses. " +
-                        header + " is not valid.  Interface: " + this.interfaceName);
-            }
-
-            this.returnType = split[0];
-            this.methodName = split[1];
+            this.returnType = matcher.group(1);
+            this.methodName = matcher.group(2);
+            this.parameters = matcher.group(3);
         }
 
         final String returnType = fields.getAndRemoveTrimmed(RETURN_TYPE);
@@ -190,38 +188,24 @@ class InterfaceMethod {
 
         final String statInvokeAttack = fields.getAndRemoveTrimmed(STAT_INVOKE_ATTACK);
         if (statInvokeAttack != null) {
-            if (!StringUtils.isNullOrEmpty(this.invokeeDeclaration)) {
-                Global.error("Can not define multiple ways to set the effects list. Interface: " + this.interfaceName);
-            }
-
-            this.invokeeDeclaration =
+            setInvokeeDeclaration(
                     "// Only add the attack when checking a defensive stat -- this means the other pokemon is the one currently attacking\n" +
                     "List<Object> invokees = " + this.battleParameter + ".getEffectsList(" + statInvokeAttack + ");\n" +
                     "if (!s.user()) {\n" +
                     "invokees.add(" + statInvokeAttack + ".getAttack());\n" +
-                    "}\n";
+                    "}\n"
+            );
         }
 
         final String setInvokees = fields.getAndRemoveTrimmed(SET_INVOKEES);
         if (setInvokees != null) {
-            if (!StringUtils.isNullOrEmpty(this.invokeeDeclaration)) {
-                Global.error("Can not define multiple ways to set the effects list. " +
-                        "Interface: " + this.interfaceName);
-            }
-
-            this.invokeeDeclaration = setInvokees + "\n";
+            setInvokeeDeclaration(setInvokees + "\n");
         }
 
         // TODO: Eventually would just like to remove the invokee loop for this case and just operate directly on the attack
         final String moveInvoke = fields.getAndRemoveTrimmed(MOVE);
         if (moveInvoke != null) {
-            if (!StringUtils.isNullOrEmpty(this.invokeeDeclaration)) {
-                Global.error("Can not define multiple ways to set the effects list. " +
-                        "Interface: " + this.interfaceName);
-            }
-
-            this.invokeeDeclaration = String.format("List<Object> invokees = " +
-                    "Collections.singletonList(%s.getAttack());", moveInvoke);
+            setInvokeeDeclaration(String.format("List<Object> invokees = Collections.singletonList(%s.getAttack());", moveInvoke));
         }
 
         final String updateField = fields.getAndRemoveTrimmed(UPDATE);
@@ -263,14 +247,9 @@ class InterfaceMethod {
         if (!StringUtils.isNullOrEmpty(parameters)) {
             final String[] split = parameters.split(",");
             for (final String typedParameter : split) {
-                final String[] typeSplit = typedParameter.trim().split(" ");
-                if (typeSplit.length != 2) {
-                    Global.error("Should be exactly one space between split parameters. " +
-                            "Parameters: " + parameters + ", Interface Name: " + this.interfaceName);
-                }
-
-                final String parameterType = typeSplit[0];
-                final String parameterName = typeSplit[1];
+                final Entry<String, String> parameterPair = MatchType.getVariableDeclaration(typedParameter.trim());
+                final String parameterType = parameterPair.getKey();
+                final String parameterName = parameterPair.getValue();
 
                 if (setTypeless) {
                     if (!this.typelessParameters.isEmpty()) {
@@ -289,6 +268,14 @@ class InterfaceMethod {
                 }
             }
         }
+    }
+
+    private void setInvokeeDeclaration(String invokeeDeclaration) {
+        if (!StringUtils.isNullOrEmpty(this.invokeeDeclaration)) {
+            Global.error("Can not define multiple ways to set the effects list. Interface: " + this.interfaceName);
+        }
+
+        this.invokeeDeclaration = invokeeDeclaration;
     }
 
     String writeInterfaceMethod() {

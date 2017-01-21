@@ -101,14 +101,4 @@ class ClassFields {
     interface ActionPerformer {
         void performAction(String value);
     }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        for (String key : fields.keySet()) {
-            StringUtils.appendLine(builder, key + " -> " + fields.get(key));
-        }
-
-        return builder.toString();
-    }
 }
