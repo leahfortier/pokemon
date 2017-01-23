@@ -1,6 +1,7 @@
 package test;
 
 import generator.InputFormatter;
+import generator.ReplaceType;
 import generator.StuffGen;
 import org.junit.Assert;
 import org.junit.Test;
