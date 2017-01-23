@@ -436,23 +436,13 @@ BarrierEffect:
 Override:
 	SpecificAbilityChange:
 		AddInterface: ChangeAbilityMove
+		AddMapField: ApplyError: !o.getAbility().isReplaceable()
 		AddMapField: Effect: ChangeAbility
 		AddMapField: AbilityChange:
 		return AbilityNamesies.{00}.getNewAbility();
 		###
 		AddMapField: AbilityMessage: 
 		return victim.getName() + "'s ability was changed to " + AbilityNamesies.{00}.getName() + "!";
-		###
-		AddMapField: Apply: 
-		switch (o.getAbility().namesies()) {
-			case TRUANT:
-			case MULTITYPE:
-			case STANCE_CHANGE:
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			default:
-				super.apply(me, o, b);
-		}	
 		###
 	*
 ***
@@ -1667,6 +1657,8 @@ Override:
 		
 		return p.getActualType();
 		###
+		AddMapField: Irrestealable: True
+		AddMapField: Irreplaceable: True
 	*
 ***
 Override:
@@ -2572,6 +2564,22 @@ Override:
 	*
 ***
 Override:
+	Irreplaceable:
+		Header: boolean isReplaceable()
+		Body:
+		return false;
+		###
+	*
+***
+Override:
+	Irrestealable:
+		Header: boolean isStealable()
+		Body:
+		return false;
+		###
+	*
+***
+Override:
 	DropBelowHalfHealth:
 		AddInterface: TakeDamageEffect
 		AddMapField: OnTakeDamage:
@@ -2602,6 +2610,8 @@ Override:
 ***
 Override:
 	FormChange:
+		AddMapField: Irrestealable: True
+		AddMapField: Irreplaceable: True
 		AddMapField: Field:
 		private static final int[] {33}_STATS = new int[] { {4}, {5}, {6}, {7}, {8}, {9} };
 		private static final int[] {1010}_STATS = new int[] { {11}, {12}, {13}, {14}, {15}, {16} };

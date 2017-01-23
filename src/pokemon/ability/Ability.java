@@ -115,12 +115,23 @@ public abstract class Ability implements Serializable {
 		return true;
 	}
 
+    // False if ability is ignored when the opponent breaks the mold
 	public boolean unbreakableMold() {
-		System.out.println(this.getName() + " unbreakable false");
 		return false;
 	}
+
+	// True if Pokemon with this ability can have it replaced by another
+    public boolean isReplaceable() {
+        return true;
+    }
+
+
+    // True if Pokemon can steal this ability when it is not their default
+    public boolean isStealable() {
+        return true;
+    }
 	
-	// Called when this ability is going to changed to a different ability -- can be overidden as necessary
+	// Called when this ability is going to changed to a different ability -- can be overridden as necessary
 	public void deactivate(Battle b, ActivePokemon victim) {}
 
 	protected ActivePokemon getOtherPokemon(Battle b, ActivePokemon p) {
@@ -1409,6 +1420,10 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.IMPOSTER, "It transforms itself into the Pok\u00e9mon it is facing.");
 		}
 
+		public boolean isStealable() {
+			return false;
+		}
+
 		public void enter(Battle b, ActivePokemon enterer) {
 			EffectNamesies.TRANSFORMED.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
 		}
@@ -1497,9 +1512,13 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.TRACE, "The Pok\u00e9mon copies the foe's ability.");
 		}
 
+		public boolean isStealable() {
+			return false;
+		}
+
 		public void enter(Battle b, ActivePokemon enterer) {
 			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
-			if (other.hasAbility(AbilityNamesies.MULTITYPE) || other.hasAbility(AbilityNamesies.ILLUSION) || other.hasAbility(AbilityNamesies.STANCE_CHANGE) || other.hasAbility(AbilityNamesies.IMPOSTER) || other.hasAbility(this.namesies)) {
+			if (!other.getAbility().isStealable() || other.hasAbility(this.namesies)) {
 				return;
 			}
 			
@@ -1863,6 +1882,14 @@ public abstract class Ability implements Serializable {
 
 		WonderGuard() {
 			super(AbilityNamesies.WONDER_GUARD, "Only supereffective moves will hit.");
+		}
+
+		public boolean isReplaceable() {
+			return false;
+		}
+
+		public boolean isStealable() {
+			return false;
 		}
 
 		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
@@ -2421,7 +2448,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.hasAbility(this.namesies) || user.hasAbility(AbilityNamesies.MULTITYPE) || user.hasAbility(AbilityNamesies.STANCE_CHANGE)) {
+			if (user.hasAbility(this.namesies) || !user.getAbility().isReplaceable()) {
 				return;
 			}
 			
@@ -2497,6 +2524,10 @@ public abstract class Ability implements Serializable {
 
 		public void deactivate(Battle b, ActivePokemon victim) {
 			breakIllusion(b, victim);
+		}
+
+		public boolean isStealable() {
+			return false;
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
@@ -2815,6 +2846,14 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.MULTITYPE, "Changes type to match the held Plate.");
 		}
 
+		public boolean isReplaceable() {
+			return false;
+		}
+
+		public boolean isStealable() {
+			return false;
+		}
+
 		public Type[] getType(Battle b, ActivePokemon p, boolean display) {
 			Item item = p.getHeldItem(b);
 			if (item instanceof PlateItem) {
@@ -2832,6 +2871,14 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.RKSSYSTEM, "Changes the Pokémon's type to match the memory disc it holds.");
 		}
 
+		public boolean isReplaceable() {
+			return false;
+		}
+
+		public boolean isStealable() {
+			return false;
+		}
+
 		public Type[] getType(Battle b, ActivePokemon p, boolean display) {
 			Item item = p.getHeldItem(b);
 			if (item instanceof MemoryItem) {
@@ -2847,6 +2894,10 @@ public abstract class Ability implements Serializable {
 
 		Forecast() {
 			super(AbilityNamesies.FORECAST, "Changes with the weather.");
+		}
+
+		public boolean isStealable() {
+			return false;
 		}
 
 		public Type[] getType(Battle b, ActivePokemon p, boolean display) {
@@ -3155,6 +3206,14 @@ public abstract class Ability implements Serializable {
 			int index = stat.index();
 			return Stat.getStat(index, user.getLevel(), getStats()[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
 		}
+
+		public boolean isReplaceable() {
+			return false;
+		}
+
+		public boolean isStealable() {
+			return false;
+		}
 	}
 
 	static class ShieldsDown extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect {
@@ -3205,6 +3264,14 @@ public abstract class Ability implements Serializable {
 			int index = stat.index();
 			return Stat.getStat(index, user.getLevel(), getStats()[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
 		}
+
+		public boolean isReplaceable() {
+			return false;
+		}
+
+		public boolean isStealable() {
+			return false;
+		}
 	}
 
 	static class StanceChange extends Ability implements BeforeTurnEffect, EntryEffect, DifferentStatEffect {
@@ -3244,6 +3311,14 @@ public abstract class Ability implements Serializable {
 			// Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
 			int index = stat.index();
 			return Stat.getStat(index, user.getLevel(), getStats()[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
+		}
+
+		public boolean isReplaceable() {
+			return false;
+		}
+
+		public boolean isStealable() {
+			return false;
 		}
 	}
 
@@ -3575,6 +3650,14 @@ public abstract class Ability implements Serializable {
 		Disguise() {
 			super(AbilityNamesies.DISGUISE, "Once per battle, the shroud that covers the Pokémon can protect it from an attack.");
 			this.activated = false;
+		}
+
+		public boolean isReplaceable() {
+			return false;
+		}
+
+		public boolean isStealable() {
+			return false;
 		}
 
 		public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
