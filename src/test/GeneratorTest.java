@@ -12,9 +12,9 @@ public class GeneratorTest extends InputFormatter {
     }
 
     @Override
-    protected String replaceBody(String body, String original, String remaining, int parameterIndex) {
+    protected String replaceBody(String body, String original, String remaining, int parameterIndex, int numParameters) {
         for (ReplaceType replaceType : ReplaceType.values()) {
-            String newBody = replaceType.replaceBody(body, original, remaining, parameterIndex);
+            String newBody = replaceType.replaceBody(body, original, remaining, parameterIndex, numParameters);
             if (!body.equals(newBody)) {
                 if (replaceType == ReplaceType.FINISH) {
                     Assert.assertTrue("Don't use {" + parameterIndex + "-}, use {0} instead.", parameterIndex != 0 && parameterIndex != 1);
