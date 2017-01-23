@@ -1,6 +1,6 @@
 package generator;
 
-enum ReplaceType {
+public enum ReplaceType {
     BASIC("", (original, remaining) -> original),
     UPPER_CASE((index, size) -> size < Integer.parseInt(index + "" + index) ? index + "" : "", (original, remaining) -> original.toUpperCase()),
     UNDER_SPACE("_", (original, remaining) -> original.replaceAll("_", " ")),

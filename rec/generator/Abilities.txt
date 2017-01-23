@@ -1376,37 +1376,11 @@ Refrigerate:
 *
 Schooling:
 	Desc: When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low.
-	Int: EntryEffect
-	Enter:
-	// TODO: this
-	###
+	EndTurnFormChange: schoolForm false Solo 45 20 20 25 25 40 School 45 140 130 140 135 30 formsie.getHPRatio() >= .25 && formsie.getLevel() >= 20
 *
 Shields Down:
 	Desc: When its HP becomes half or less, the Pokémon's shell breaks and it becomes aggressive.
-	FormChange: coreForm false Meteor 60 60 100 60 100 60 Core 60 100 60 100 60 120
-	Int: EndTurnEffect, EntryEffect
-	Enter:
-	if (enterer.getHPRatio() < .5) {
-		coreForm = true;
-		Messages.add(new MessageUpdate(enterer.getName() + " changed into Core Forme!"));
-	}
-	else {
-		coreForm = false;
-		Messages.add(new MessageUpdate(enterer.getName() + " changed into Meteor Forme!"));
-	}
-	###
-	ApplyEndTurn:
-	if (victim.getHPRatio() < .5) {
-		if (!coreForm) {
-			coreForm = true;
-			Messages.add(new MessageUpdate(victim.getName() + " changed into Core Forme!"));	
-		}
-	}
-	else if (coreForm){
-		coreForm = false;
-		Messages.add(new MessageUpdate(victim.getName() + " changed into Meteor Forme!"));
-	}
-	###
+	EndTurnFormChange: coreForm false Meteor 60 60 100 60 100 60 Core 60 100 60 100 60 120 formsie.getHPRatio() < .5
 *	
 Stance Change:
 	Desc: The Pok\u00e9mon changes form depending on how it battles.
@@ -1427,11 +1401,6 @@ Stance Change:
 	Enter:
 	Messages.add(new MessageUpdate(enterer.getName() + " is in Shield Forme!"));
 	shieldForm = true;
-	###
-	GetStat:
-	// Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-	int index = stat.index();
-	return Stat.getStat(index, user.getLevel(), (shieldForm ? SHIELD_STATS : BLADE_STATS)[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
 	###
 *
 Fur Coat:

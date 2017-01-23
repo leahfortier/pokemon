@@ -86,7 +86,6 @@ import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class Ability implements Serializable {
@@ -3108,15 +3107,53 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Schooling extends Ability implements EntryEffect {
+	static class Schooling extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect {
 		private static final long serialVersionUID = 1L;
+		private static final int[] SOLO_STATS = new int[] { 45, 20, 20, 25, 25, 40 };
+		private static final int[] SCHOOL_STATS = new int[] { 45, 140, 130, 140, 135, 30 };
+		
+		private boolean schoolForm;
+		private int[] getStats() {
+			return schoolForm ? SCHOOL_STATS : SOLO_STATS;
+		}
 
 		Schooling() {
 			super(AbilityNamesies.SCHOOLING, "When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low.");
+			this.schoolForm = false;
+		}
+
+		private boolean formCheck(ActivePokemon formsie) {
+			return formsie.getHPRatio() >= .25 && formsie.getLevel() >= 20;
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			if (formCheck(victim)) {
+				if (!schoolForm) {
+					schoolForm = true;
+					Messages.add(new MessageUpdate(victim.getName() + " changed into School Forme!"));
+				}
+			}
+			else if (schoolForm){
+				schoolForm = false;
+				Messages.add(new MessageUpdate(victim.getName() + " changed into Solo Forme!"));
+			}
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			// TODO: this
+			if (formCheck(enterer)) {
+				schoolForm = true;
+				Messages.add(new MessageUpdate(enterer.getName() + " changed into School Forme!"));
+			}
+			else {
+				schoolForm = false;
+				Messages.add(new MessageUpdate(enterer.getName() + " changed into Solo Forme!"));
+			}
+		}
+
+		public Integer getStat(ActivePokemon user, Stat stat) {
+			// Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
+			int index = stat.index();
+			return Stat.getStat(index, user.getLevel(), getStats()[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
 		}
 	}
 
@@ -3135,8 +3172,12 @@ public abstract class Ability implements Serializable {
 			this.coreForm = false;
 		}
 
+		private boolean formCheck(ActivePokemon formsie) {
+			return formsie.getHPRatio() < .5;
+		}
+
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (victim.getHPRatio() < .5) {
+			if (formCheck(victim)) {
 				if (!coreForm) {
 					coreForm = true;
 					Messages.add(new MessageUpdate(victim.getName() + " changed into Core Forme!"));
@@ -3149,7 +3190,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			if (enterer.getHPRatio() < .5) {
+			if (formCheck(enterer)) {
 				coreForm = true;
 				Messages.add(new MessageUpdate(enterer.getName() + " changed into Core Forme!"));
 			}
@@ -3160,7 +3201,6 @@ public abstract class Ability implements Serializable {
 		}
 
 		public Integer getStat(ActivePokemon user, Stat stat) {
-			System.out.println(stat + " " + coreForm + " " + Arrays.toString(getStats()));
 			// Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
 			int index = stat.index();
 			return Stat.getStat(index, user.getLevel(), getStats()[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
