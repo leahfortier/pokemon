@@ -86,6 +86,7 @@ import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class Ability implements Serializable {
@@ -3119,24 +3120,62 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class ShieldsDown extends Ability implements EntryEffect {
+	static class ShieldsDown extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect {
 		private static final long serialVersionUID = 1L;
+		private static final int[] METEOR_STATS = new int[] { 60, 60, 100, 60, 100, 60 };
+		private static final int[] CORE_STATS = new int[] { 60, 100, 60, 100, 60, 120 };
+		
+		private boolean coreForm;
+		private int[] getStats() {
+			return coreForm ? CORE_STATS : METEOR_STATS;
+		}
 
 		ShieldsDown() {
 			super(AbilityNamesies.SHIELDS_DOWN, "When its HP becomes half or less, the Pokémon's shell breaks and it becomes aggressive.");
+			this.coreForm = false;
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			if (victim.getHPRatio() < .5) {
+				if (!coreForm) {
+					coreForm = true;
+					Messages.add(new MessageUpdate(victim.getName() + " changed into Core Forme!"));
+				}
+			}
+			else if (coreForm){
+				coreForm = false;
+				Messages.add(new MessageUpdate(victim.getName() + " changed into Meteor Forme!"));
+			}
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			// TODO: this
+			if (enterer.getHPRatio() < .5) {
+				coreForm = true;
+				Messages.add(new MessageUpdate(enterer.getName() + " changed into Core Forme!"));
+			}
+			else {
+				coreForm = false;
+				Messages.add(new MessageUpdate(enterer.getName() + " changed into Meteor Forme!"));
+			}
+		}
+
+		public Integer getStat(ActivePokemon user, Stat stat) {
+			System.out.println(stat + " " + coreForm + " " + Arrays.toString(getStats()));
+			// Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
+			int index = stat.index();
+			return Stat.getStat(index, user.getLevel(), getStats()[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
 		}
 	}
 
 	static class StanceChange extends Ability implements BeforeTurnEffect, EntryEffect, DifferentStatEffect {
 		private static final long serialVersionUID = 1L;
-		private static final int[] BLADE_STATS = new int[] {60, 150, 50, 150, 50, 60};
-		private static final int[] SHIELD_STATS = new int[] {60, 50, 150, 50, 150, 60};
+		private static final int[] BLADE_STATS = new int[] { 60, 150, 50, 150, 50, 60 };
+		private static final int[] SHIELD_STATS = new int[] { 60, 50, 150, 50, 150, 60 };
 		
 		private boolean shieldForm;
+		private int[] getStats() {
+			return shieldForm ? SHIELD_STATS : BLADE_STATS;
+		}
 
 		StanceChange() {
 			super(AbilityNamesies.STANCE_CHANGE, "The Pok\u00e9mon changes form depending on how it battles.");
@@ -3164,7 +3203,7 @@ public abstract class Ability implements Serializable {
 		public Integer getStat(ActivePokemon user, Stat stat) {
 			// Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
 			int index = stat.index();
-			return Stat.getStat(index, user.getLevel(), (shieldForm ? SHIELD_STATS : BLADE_STATS)[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
+			return Stat.getStat(index, user.getLevel(), getStats()[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
 		}
 	}
 

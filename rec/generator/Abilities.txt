@@ -1383,23 +1383,35 @@ Schooling:
 *
 Shields Down:
 	Desc: When its HP becomes half or less, the Pokémon's shell breaks and it becomes aggressive.
-	Int: EntryEffect
+	FormChange: coreForm false Meteor 60 60 100 60 100 60 Core 60 100 60 100 60 120
+	Int: EndTurnEffect, EntryEffect
 	Enter:
-	// TODO: this
+	if (enterer.getHPRatio() < .5) {
+		coreForm = true;
+		Messages.add(new MessageUpdate(enterer.getName() + " changed into Core Forme!"));
+	}
+	else {
+		coreForm = false;
+		Messages.add(new MessageUpdate(enterer.getName() + " changed into Meteor Forme!"));
+	}
+	###
+	ApplyEndTurn:
+	if (victim.getHPRatio() < .5) {
+		if (!coreForm) {
+			coreForm = true;
+			Messages.add(new MessageUpdate(victim.getName() + " changed into Core Forme!"));	
+		}
+	}
+	else if (coreForm){
+		coreForm = false;
+		Messages.add(new MessageUpdate(victim.getName() + " changed into Meteor Forme!"));
+	}
 	###
 *	
 Stance Change:
 	Desc: The Pok\u00e9mon changes form depending on how it battles.
-	Field:
-	private static final int[] BLADE_STATS = new int[] {60, 150, 50, 150, 50, 60};
-	private static final int[] SHIELD_STATS = new int[] {60, 50, 150, 50, 150, 60};
-	
-	private boolean shieldForm;
-	###
-	Activate:
-	this.shieldForm = true;
-	###
-	Int: BeforeTurnEffect, EntryEffect, DifferentStatEffect
+	FormChange: shieldForm true Blade 60 150 50 150 50 60 Shield 60 50 150 50 150 60
+	Int: BeforeTurnEffect, EntryEffect
 	CanAttack:
 	if (shieldForm && !p.getAttack().isStatusMove()) {
 		shieldForm = false;

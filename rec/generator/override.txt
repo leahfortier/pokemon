@@ -2600,3 +2600,25 @@ Override:
 		AddMapField: Cat: Misc
 	*
 ***
+Override:
+	FormChange:
+		AddMapField: Field:
+		private static final int[] {33}_STATS = new int[] { {4}, {5}, {6}, {7}, {8}, {9} };
+		private static final int[] {1010}_STATS = new int[] { {11}, {12}, {13}, {14}, {15}, {16} };
+		
+		private boolean {1};
+		private int[] getStats() {
+			return {1} ? {1010}_STATS : {33}_STATS;
+		}
+		###
+		AddMapField: Activate:
+		this.{1} = {2};
+		###
+		AddInterface: DifferentStatEffect
+		AddMapField: GetStat:
+		// Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
+		int index = stat.index();
+		return Stat.getStat(index, user.getLevel(), getStats()[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
+		###
+	*
+***
