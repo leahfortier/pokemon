@@ -9149,15 +9149,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			switch (o.getAbility().namesies())
-			{
-				case MULTITYPE:
-				case STANCE_CHANGE:
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
-				default:
-					super.apply(me, o, b);
-				}
+			if (!o.getAbility().isReplaceable()) {
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+				return;
+			}
+			
+			super.apply(me, o, b);
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -9373,17 +9370,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			switch (o.getAbility().namesies()) {
-				case WONDER_GUARD:
-				case MULTITYPE:
-				case STANCE_CHANGE:
-				case IMPOSTER:
-				case ILLUSION:
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
-				default:
-					super.apply(me, o, b);
-				}
+			if (!o.getAbility().isStealable()) {
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+				return;
+			}
+			
+			super.apply(me, o, b);
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -9914,23 +9906,15 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			switch (me.getAbility().namesies())
-			{
-				case TRUANT:
-				case MULTITYPE:
-				case STANCE_CHANGE:
-				case ILLUSION:
-				case TRACE:
-				case IMPOSTER:
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
-				default:
-					super.apply(me, o, b);
-				}
+			if (!o.getAbility().isReplaceable() || !me.getAbility().isStealable()) {
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+				return;
+			}
+			
+			super.apply(me, o, b);
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			// TODO: Combine with Trace/Role Play
 			return caster.getAbility().namesies().getNewAbility();
 		}
 
@@ -9960,15 +9944,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			switch (o.getAbility().namesies()) {
-				case TRUANT:
-				case MULTITYPE:
-				case STANCE_CHANGE:
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
-				default:
-					super.apply(me, o, b);
-				}
+			if (!o.getAbility().isReplaceable()) {
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+				return;
+			}
+			
+			super.apply(me, o, b);
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -9990,15 +9971,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			switch (o.getAbility().namesies()) {
-				case TRUANT:
-				case MULTITYPE:
-				case STANCE_CHANGE:
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
-				default:
-					super.apply(me, o, b);
-				}
+			if (!o.getAbility().isReplaceable()) {
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+				return;
+			}
+			
+			super.apply(me, o, b);
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -10015,15 +9993,7 @@ public abstract class Attack implements Serializable {
 		private Ability ability;
 		
 		private static boolean canSkillSwap(ActivePokemon p) {
-			switch (p.getAbility().namesies()) {
-				case WONDER_GUARD:
-				case MULTITYPE:
-				case ILLUSION:
-				case STANCE_CHANGE:
-					return false;
-				default:
-					return true;
-			}
+			return p.getAbility().isReplaceable() && p.getAbility().isStealable();
 		}
 
 		SkillSwap() {

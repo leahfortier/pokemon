@@ -578,6 +578,7 @@ Soul-Heart:
 *
 Imposter:
 	Desc: It transforms itself into the Pok\u00e9mon it is facing.
+	Irrestealable: True
 	Int: EntryEffect
 	Enter: 
 	EffectNamesies.TRANSFORMED.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
@@ -601,10 +602,11 @@ Quick Feet:
 *
 Trace:
 	Desc: The Pok\u00e9mon copies the foe's ability.
+	Irrestealable: True
 	Int: EntryEffect, ChangeAbilityMove
 	Enter: 
 	ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
-	if (other.hasAbility(AbilityNamesies.MULTITYPE) || other.hasAbility(AbilityNamesies.ILLUSION) || other.hasAbility(AbilityNamesies.STANCE_CHANGE) || other.hasAbility(AbilityNamesies.IMPOSTER) || other.hasAbility(this.namesies)) {
+	if (!other.getAbility().isStealable() || other.hasAbility(this.namesies)) {
 		return;
 	}
 	
@@ -779,6 +781,8 @@ Truant:
 *
 Wonder Guard:
 	Desc: Only supereffective moves will hit.
+	Irreplaceable: True
+	Irrestealable: True
 	Int: OpponentBeforeTurnEffect
 	OpponentCanAttack: 
 	// Status moves always hit
@@ -1054,8 +1058,8 @@ Wonder Skin:
 Mummy:
 	Desc: Contact with this Pok\u00e9mon spreads this Ability.
 	Int: PhysicalContactEffect, ChangeAbilityMove
-	Contact: 
-	if (user.hasAbility(this.namesies) || user.hasAbility(AbilityNamesies.MULTITYPE) || user.hasAbility(AbilityNamesies.STANCE_CHANGE)) {
+	Contact:
+	if (user.hasAbility(this.namesies) || !user.getAbility().isReplaceable()) {
 		return;
 	}
 	
@@ -1087,6 +1091,8 @@ Weak Armor:
 	###
 *
 Illusion:
+	Desc: Comes out disguised as the Pok\u00e9mon in back.
+	Irrestealable: True
 	Field: 
 	private boolean activated;
 	private String illusionName;
@@ -1179,7 +1185,6 @@ Illusion:
 	AbilityIsActive:
 	return activated;
 	###
-	Desc: Comes out disguised as the Pok\u00e9mon in back.
 *
 Analytic:
 	Desc: Boosts move power when the Pok\u00e9mon moves last.
@@ -1302,6 +1307,7 @@ RKS System:
 *
 Forecast:
 	Desc: Changes with the weather.
+	Irrestealable: True
 	Int: ChangeTypeEffect
 	GetChangeTypeEffect:
 	return new Type[] { b.getWeather().getElement(), Type.NO_TYPE };
@@ -1376,30 +1382,16 @@ Refrigerate:
 *
 Schooling:
 	Desc: When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low.
-	Int: EntryEffect
-	Enter:
-	// TODO: this
-	###
+	EndTurnFormChange: schoolForm false Solo 45 20 20 25 25 40 School 45 140 130 140 135 30 formsie.getHPRatio() >= .25 && formsie.getLevel() >= 20
 *
 Shields Down:
 	Desc: When its HP becomes half or less, the Pokémon's shell breaks and it becomes aggressive.
-	Int: EntryEffect
-	Enter:
-	// TODO: this
-	###
+	EndTurnFormChange: coreForm false Meteor 60 60 100 60 100 60 Core 60 100 60 100 60 120 formsie.getHPRatio() < .5
 *	
 Stance Change:
 	Desc: The Pok\u00e9mon changes form depending on how it battles.
-	Field:
-	private static final int[] BLADE_STATS = new int[] {60, 150, 50, 150, 50, 60};
-	private static final int[] SHIELD_STATS = new int[] {60, 50, 150, 50, 150, 60};
-	
-	private boolean shieldForm;
-	###
-	Activate:
-	this.shieldForm = true;
-	###
-	Int: BeforeTurnEffect, EntryEffect, DifferentStatEffect
+	FormChange: shieldForm true Blade 60 150 50 150 50 60 Shield 60 50 150 50 150 60
+	Int: BeforeTurnEffect, EntryEffect
 	CanAttack:
 	if (shieldForm && !p.getAttack().isStatusMove()) {
 		shieldForm = false;
@@ -1415,11 +1407,6 @@ Stance Change:
 	Enter:
 	Messages.add(new MessageUpdate(enterer.getName() + " is in Shield Forme!"));
 	shieldForm = true;
-	###
-	GetStat:
-	// Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-	int index = stat.index();
-	return Stat.getStat(index, user.getLevel(), (shieldForm ? SHIELD_STATS : BLADE_STATS)[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
 	###
 *
 Fur Coat:
@@ -1556,6 +1543,8 @@ Galvanize:
 *
 Disguise:
 	Desc: Once per battle, the shroud that covers the Pokémon can protect it from an attack.
+	Irrestealable: True
+	Irreplaceable: True
 	Field:
 	private boolean activated;
 	###

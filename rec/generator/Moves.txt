@@ -5509,17 +5509,7 @@ Gastro Acid:
 	AbilityMessage: 
 	return caster.getName() + " suppressed " + victim.getName() + "'s ability!";
 	###
-	Apply: 
-	switch (o.getAbility().namesies())
-	{
-		case MULTITYPE:
-		case STANCE_CHANGE:
-			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			return;
-		default:
-			super.apply(me, o, b);
-	}	
-	###
+	ApplyError: !o.getAbility().isReplaceable()
 *
 Healing Wish:
 	Desc: The user faints. In return, the Pok\u00e9mon taking its place will have its HP restored and status cured.
@@ -5609,19 +5599,7 @@ Role Play:
 	ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 	return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
 	###
-	Apply: 
-	switch (o.getAbility().namesies()) {
-		case WONDER_GUARD:
-		case MULTITYPE:
-		case STANCE_CHANGE:
-		case IMPOSTER:
-		case ILLUSION:
-			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			return;
-		default:
-			super.apply(me, o, b);
-	}	
-	###
+	ApplyError: !o.getAbility().isStealable()
 *
 Knock Off:
 	Desc: The user slaps down the target's held item, preventing that item from being used in the battle.
@@ -5859,28 +5837,13 @@ Entrainment:
 	Cat: Status
 	Int: ChangeAbilityMove
 	Effect: ChangeAbility
-	AbilityChange: 
-	// TODO: Combine with Trace/Role Play
+	AbilityChange:
 	return caster.getAbility().namesies().getNewAbility();
 	###
 	AbilityMessage: 
 	return victim.getName() + " copied " + caster.getName() + "'s " + caster.getAbility().getName() + "!";
 	###
-	Apply: 
-	switch (me.getAbility().namesies())
-	{
-		case TRUANT:
-		case MULTITYPE:
-		case STANCE_CHANGE:
-		case ILLUSION:
-		case TRACE:
-		case IMPOSTER:
-			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			return;
-		default:
-			super.apply(me, o, b);
-	}	
-	###
+	ApplyError: !o.getAbility().isReplaceable() || !me.getAbility().isStealable()
 *
 Magic Room:
 	Desc: The user creates a bizarre area in which Pok\u00e9mon's held items lose their effects for five turns.
@@ -5922,15 +5885,7 @@ Skill Swap:
 	private Ability ability;
 	
 	private static boolean canSkillSwap(ActivePokemon p) {
-		switch (p.getAbility().namesies()) {
-			case WONDER_GUARD:
-			case MULTITYPE:
-			case ILLUSION:
-			case STANCE_CHANGE:
-				return false;
-			default:
-				return true;
-		}
+		return p.getAbility().isReplaceable() && p.getAbility().isStealable();
 	}
 	###
 	ApplyEffects:
