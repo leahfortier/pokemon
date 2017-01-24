@@ -423,8 +423,8 @@ public abstract class Attack implements Serializable {
 
 		Tackle() {
 			super(AttackNamesies.TACKLE, "A physical attack in which the user charges and slams into the target with its whole body.", 35, Type.NORMAL, MoveCategory.PHYSICAL);
-			super.power = 35;
-			super.accuracy = 95;
+			super.power = 40;
+			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 	}
@@ -444,7 +444,7 @@ public abstract class Attack implements Serializable {
 
 		ThunderWave() {
 			super(AttackNamesies.THUNDER_WAVE, "A weak electric charge is launched at the target. It causes paralysis if it hits.", 20, Type.ELECTRIC, MoveCategory.STATUS);
-			super.accuracy = 100;
+			super.accuracy = 90;
 			super.status = StatusCondition.PARALYZED;
 		}
 	}
@@ -2257,7 +2257,7 @@ public abstract class Attack implements Serializable {
 
 		SuckerPunch() {
 			super(AttackNamesies.SUCKER_PUNCH, "This move enables the user to attack first. It fails if the foe is not readying an attack, however.", 5, Type.DARK, MoveCategory.PHYSICAL);
-			super.power = 80;
+			super.power = 70;
 			super.accuracy = 100;
 			super.priority = 1;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3491,8 +3491,8 @@ public abstract class Attack implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		LeechLife() {
-			super(AttackNamesies.LEECH_LIFE, "The user drains the target's blood. The user's HP is restored by half the damage taken by the target.", 15, Type.BUG, MoveCategory.PHYSICAL);
-			super.power = 20;
+			super(AttackNamesies.LEECH_LIFE, "The user drains the target's blood. The user's HP is restored by half the damage taken by the target.", 10, Type.BUG, MoveCategory.PHYSICAL);
+			super.power = 80;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -4238,7 +4238,7 @@ public abstract class Attack implements Serializable {
 
 		Swagger() {
 			super(AttackNamesies.SWAGGER, "The user enrages and confuses the target. However, it also sharply raises the target's Attack stat.", 15, Type.NORMAL, MoveCategory.STATUS);
-			super.accuracy = 90;
+			super.accuracy = 85;
 			super.effects.add(EffectNamesies.CONFUSION);
 			super.statChanges[Stat.ATTACK.index()] = 2;
 		}
@@ -4407,7 +4407,7 @@ public abstract class Attack implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		Submission() {
-			super(AttackNamesies.SUBMISSION, "The user grabs the target and recklessly dives for the ground. It also hurts the user slightly.", 25, Type.FIGHTING, MoveCategory.PHYSICAL);
+			super(AttackNamesies.SUBMISSION, "The user grabs the target and recklessly dives for the ground. It also hurts the user slightly.", 20, Type.FIGHTING, MoveCategory.PHYSICAL);
 			super.power = 80;
 			super.accuracy = 80;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -5294,6 +5294,15 @@ public abstract class Attack implements Serializable {
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
 			return super.accuracy + (me.getLevel() - o.getLevel());
+		}
+
+		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (o.isType(b, Type.ICE)) {
+				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+				return;
+			}
+			
+			super.apply(me, o, b);
 		}
 	}
 
@@ -9394,7 +9403,7 @@ public abstract class Attack implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		KnockOff() {
-			super(AttackNamesies.KNOCK_OFF, "The user slaps down the target's held item, preventing that item from being used in the battle.", 25, Type.DARK, MoveCategory.PHYSICAL);
+			super(AttackNamesies.KNOCK_OFF, "The user slaps down the target's held item, preventing that item from being used in the battle.", 20, Type.DARK, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
 			super.effects.add(EffectNamesies.CHANGE_ITEM);
@@ -10359,7 +10368,7 @@ public abstract class Attack implements Serializable {
 
 		ParabolicCharge() {
 			super(AttackNamesies.PARABOLIC_CHARGE, "The user attacks everything around it. The user's HP is restored by half the damage taken by those hit.", 20, Type.ELECTRIC, MoveCategory.SPECIAL);
-			super.power = 50;
+			super.power = 65;
 			super.accuracy = 100;
 		}
 	}
@@ -10402,7 +10411,7 @@ public abstract class Attack implements Serializable {
 
 		FlyingPress() {
 			super(AttackNamesies.FLYING_PRESS, "The user dives down onto the target from the sky. This move is Fighting and Flying type simultaneously.", 10, Type.FIGHTING, MoveCategory.PHYSICAL);
-			super.power = 80;
+			super.power = 100;
 			super.accuracy = 95;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
@@ -10417,7 +10426,6 @@ public abstract class Attack implements Serializable {
 
 		TopsyTurvy() {
 			super(AttackNamesies.TOPSY_TURVY, "All stat changes affecting the target turn topsy-turvy and become the opposite of what they were.", 20, Type.DARK, MoveCategory.STATUS);
-			super.accuracy = 100;
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -10564,10 +10572,9 @@ public abstract class Attack implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		WaterShuriken() {
-			super(AttackNamesies.WATER_SHURIKEN, "The user hits the target with throwing stars two to five times in a row. This move always goes first.", 20, Type.WATER, MoveCategory.PHYSICAL);
+			super(AttackNamesies.WATER_SHURIKEN, "The user hits the target with throwing stars two to five times in a row. This move always goes first.", 20, Type.WATER, MoveCategory.SPECIAL);
 			super.power = 15;
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -10624,7 +10631,7 @@ public abstract class Attack implements Serializable {
 
 		MysticalFire() {
 			super(AttackNamesies.MYSTICAL_FIRE, "The user attacks by breathing a special, hot fire. This also lowers the target's Sp. Atk stat.", 10, Type.FIRE, MoveCategory.SPECIAL);
-			super.power = 65;
+			super.power = 75;
 			super.accuracy = 100;
 			super.statChanges[Stat.SP_ATTACK.index()] = -1;
 		}
@@ -10658,7 +10665,7 @@ public abstract class Attack implements Serializable {
 
 		FellStinger() {
 			super(AttackNamesies.FELL_STINGER, "When the user knocks out a target with this move, the user's Attack stat rises sharply.", 25, Type.BUG, MoveCategory.PHYSICAL);
-			super.power = 30;
+			super.power = 50;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}

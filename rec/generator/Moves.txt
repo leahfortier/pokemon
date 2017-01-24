@@ -23,8 +23,8 @@ Fields:
 ***
 
 Tackle:
-	Pow: 35
-	Acc: 95
+	Pow: 40
+	Acc: 100
 	PP: 35
 	Desc: A physical attack in which the user charges and slams into the target with its whole body.
 	Cat: Physical
@@ -39,7 +39,7 @@ Leech Seed:
 	Effect: LeechSeed
 *	
 Thunder Wave:
-	Acc: 100
+	Acc: 90
 	Type: Electric
 	Cat: Status
 	Desc: A weak electric charge is launched at the target. It causes paralysis if it hits.
@@ -1126,7 +1126,7 @@ Hyper Fang:
 Sucker Punch:
 	Desc: This move enables the user to attack first. It fails if the foe is not readying an attack, however.
 	PP: 5
-	Pow: 80
+	Pow: 70
 	Acc: 100
 	Cat: Physical
 	Priority: 1
@@ -1899,8 +1899,8 @@ Leech Life:
 	Int: SapHealthEffect
 	Cat: Physical
 	Acc: 100
-	Pow: 20
-	PP: 15
+	Pow: 80
+	PP: 10
 	Type: Bug
 	Desc: The user drains the target's blood. The user's HP is restored by half the damage taken by the target.
 *
@@ -2351,7 +2351,7 @@ Swagger:
 	Type: Normal
 	Effect: Confusion
 	StatChange: 1 Attack 2
-	Acc: 90
+	Acc: 85
 *
 Cross Chop:
 	Desc: The user delivers a double chop with its forearms crossed. Critical hits land more easily.
@@ -2469,7 +2469,7 @@ Belly Drum:
 *
 Submission:
 	Desc: The user grabs the target and recklessly dives for the ground. It also hurts the user slightly.
-	PP: 25
+	PP: 20
 	Pow: 80
 	Type: Fighting
 	Recoil: 4
@@ -3029,6 +3029,7 @@ Sheer Cold:
 	Acc: 30
 	Cat: Special
 	Type: Ice
+	ApplyError: o.isType(b, Type.ICE)
 *
 Poison Gas:
 	Desc: A cloud of poison gas is sprayed in the face of opposing Pok\u00e9mon. It may poison those hit.
@@ -5603,7 +5604,7 @@ Role Play:
 *
 Knock Off:
 	Desc: The user slaps down the target's held item, preventing that item from being used in the battle.
-	PP: 25
+	PP: 20
 	Type: Dark
 	Cat: Physical
 	Acc: 100
@@ -6111,7 +6112,7 @@ Parabolic Charge:
 	Desc: The user attacks everything around it. The user's HP is restored by half the damage taken by those hit.
 	PP: 20
 	Type: Electric
-	Pow: 50
+	Pow: 65
 	Acc: 100
 	Cat: Special
 	Int: SapHealthEffect
@@ -6148,7 +6149,7 @@ Freeze-Dry:
 Flying Press:
 	Desc: The user dives down onto the target from the sky. This move is Fighting and Flying type simultaneously.
 	Acc: 95
-	Pow: 80
+	Pow: 100
 	Type: Fighting
 	PP: 10
 	Cat: Physical
@@ -6158,7 +6159,6 @@ Flying Press:
 	###
 *
 Topsy-Turvy:
-	Acc: 100
 	Type: Dark
 	Cat: Status
 	PP: 20
@@ -6275,7 +6275,7 @@ Water Shuriken:
 	PP: 20
 	Pow: 15
 	Acc: 100
-	Cat: Physical
+	Cat: Special
 	Type: Water
 	MultiStrike: 2 5
 *
@@ -6293,7 +6293,7 @@ Mystical Fire:
 	Desc: The user attacks by breathing a special, hot fire. This also lowers the target's Sp. Atk stat.
 	PP: 10
 	Type: Fire
-	Pow: 65
+	Pow: 75
 	Cat: Special
 	Acc: 100
 	StatChange: 1 Sp_Attack -1
@@ -6323,7 +6323,7 @@ Fell Stinger:
 	Type: Bug
 	Cat: Physical
 	Acc: 100
-	Pow: 30
+	Pow: 50
 	Int: MurderEffect
 	KillWish:
 	murderer.getAttributes().modifyStage(murderer, murderer, 2, Stat.ATTACK, b, CastSource.ATTACK);
