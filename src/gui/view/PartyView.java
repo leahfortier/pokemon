@@ -12,7 +12,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
-import main.Type;
+import type.Type;
 import map.Direction;
 import pokemon.ActivePokemon;
 import pokemon.Stat;

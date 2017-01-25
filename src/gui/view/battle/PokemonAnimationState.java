@@ -6,7 +6,7 @@ import gui.TileSet;
 import gui.panel.DrawPanel;
 import main.Game;
 import main.Global;
-import main.Type;
+import type.Type;
 import message.MessageUpdate;
 import pokemon.ActivePokemon;
 import pokemon.Gender;

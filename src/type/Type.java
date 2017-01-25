@@ -1,9 +1,10 @@
-package main;
+package type;
 
 import battle.Battle;
 import battle.attack.MoveType;
 import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
+import main.Global;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;

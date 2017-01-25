@@ -7,6 +7,7 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import type.Type;
 import util.FileIO;
 import util.StringUtils;
 

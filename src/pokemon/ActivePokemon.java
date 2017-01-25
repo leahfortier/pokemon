@@ -35,7 +35,7 @@ import item.hold.EVItem;
 import item.hold.HoldItem;
 import main.Game;
 import main.Global;
-import main.Type;
+import type.Type;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;

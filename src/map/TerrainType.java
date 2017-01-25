@@ -5,7 +5,7 @@ import battle.attack.AttackNamesies;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.status.StatusCondition;
 import main.Game;
-import main.Type;
+import type.Type;
 import pokemon.Stat;
 
 import java.awt.image.BufferedImage;

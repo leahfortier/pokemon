@@ -1,4 +1,4 @@
-package main;
+package type;
 
 import java.util.EnumMap;
 import java.util.Map;

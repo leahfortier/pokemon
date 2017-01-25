@@ -1,7 +1,7 @@
 package test;
 
-import main.Type;
-import main.TypeAdvantage;
+import type.Type;
+import type.TypeAdvantage;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -21,7 +21,7 @@ import item.hold.HoldItem;
 import item.use.UseItem;
 import main.Game;
 import main.Global;
-import main.Type;
+import type.Type;
 import map.Direction;
 import message.MessageUpdate;
 import message.Messages;

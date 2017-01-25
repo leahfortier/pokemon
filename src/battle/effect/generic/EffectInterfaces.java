@@ -5,7 +5,7 @@ import battle.attack.Attack;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import main.Global;
-import main.Type;
+import type.Type;
 import map.TerrainType;
 import pokemon.ActivePokemon;
 import pokemon.Stat;

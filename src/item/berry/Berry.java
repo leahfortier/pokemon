@@ -2,7 +2,7 @@ package item.berry;
 
 import item.hold.ConsumableItem;
 import item.hold.HoldItem;
-import main.Type;
+import type.Type;
 
 public interface Berry extends ConsumableItem, HoldItem {
 	Type naturalGiftType();

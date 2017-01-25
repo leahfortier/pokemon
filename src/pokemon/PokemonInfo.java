@@ -5,7 +5,7 @@ import item.Item;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import item.hold.IncenseItem;
-import main.Type;
+import type.Type;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.EggGroup;
 import pokemon.evolution.Evolution;
