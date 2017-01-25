@@ -82,6 +82,7 @@ import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import trainer.Trainer;
 import trainer.WildPokemon;
+import type.TypeAdvantage;
 import util.RandomUtils;
 
 import java.io.Serializable;

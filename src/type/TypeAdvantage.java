@@ -1,5 +1,11 @@
 package type;
 
+import battle.Battle;
+import battle.effect.generic.EffectInterfaces.AdvantageChanger;
+import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
+import pokemon.ActivePokemon;
+import pokemon.ability.AbilityNamesies;
+
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -73,6 +79,57 @@ public enum TypeAdvantage {
         this.advantageMap = builder.advantageMap;
     }
 
+    public static double getBasicAdvantage(Type attacking, Type defending) {
+        return attacking.getAdvantage().getAdvantage(defending);
+    }
+
+    public static double getBasicAdvantage(Type attacking, ActivePokemon defending, Battle b) {
+        Type[] defendingType = defending.getType(b);
+        return getBasicAdvantage(attacking, defendingType[0])* getBasicAdvantage(attacking, defendingType[1]);
+    }
+
+    public static double getAdvantage(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+        Type moveType = attacking.getAttackType();
+
+        Type[] originalType = defending.getType(b);
+        Type[] defendingType = AdvantageChanger.updateDefendingType(b, attacking, defending, moveType, originalType.clone());
+
+        // TODO: I hate all of this change everything
+        // If nothing was updated, do special case check stupid things for fucking levitation which fucks everything up
+        if (defendingType[0] == originalType[0] && defendingType[1] == originalType[1] && moveType == Type.GROUND) {
+            // Pokemon that are levitating cannot be hit by ground type moves
+            if (defending.isLevitating(b, attacking)) {
+                return 0;
+            }
+
+            // If the Pokemon is not levitating due to some effect and is flying type, ground moves should hit
+            for (int i = 0; i < 2; i++) {
+                if (defendingType[i] == Type.FLYING) {
+                    defendingType[i] = Type.NO_TYPE;
+                }
+            }
+        }
+
+        // Get the advantage and apply any multiplier that may come from the attack
+        double adv = getBasicAdvantage(moveType, defendingType[0])* getBasicAdvantage(moveType, defendingType[1]);
+        adv = AdvantageMultiplierMove.updateModifier(adv, attacking, moveType, defendingType);
+
+        return adv;
+    }
+
+    public static double getSTAB(Battle b, ActivePokemon p) {
+        Type[] pokemonType = p.getType(b);
+        Type attackType = p.getAttackType();
+
+        // Same type -- STAB
+        if (pokemonType[0] == attackType || pokemonType[1] == attackType) {
+            // The adaptability ability increases stab
+            return p.hasAbility(AbilityNamesies.ADAPTABILITY) ? 2 : 1.5;
+        }
+
+        return 1;
+    }
+
     public double getAdvantage(Type defending) {
         return advantageMap.get(defending);
     }
@@ -80,7 +137,7 @@ public enum TypeAdvantage {
     private static class Builder {
         private final Map<Type, Double> advantageMap;
 
-        public Builder() {
+        Builder() {
             this.advantageMap = new EnumMap<>(Type.class);
             setAdvantage(1, Type.values());
         }

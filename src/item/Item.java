@@ -73,6 +73,7 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.evolution.EvolutionMethod;
 import trainer.CharacterData;
 import trainer.Trainer;
+import type.TypeAdvantage;
 import util.RandomUtils;
 
 import java.io.Serializable;

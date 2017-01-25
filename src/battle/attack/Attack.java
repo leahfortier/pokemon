@@ -59,6 +59,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
+import type.TypeAdvantage;
 import util.GeneralUtils;
 import util.RandomUtils;
 
@@ -279,7 +280,7 @@ public abstract class Attack implements Serializable {
 	}
 	
 	private boolean zeroAdvantage(Battle b, ActivePokemon p, ActivePokemon opp) {
-		if (Type.getAdvantage(p, opp, b) > 0) {
+		if (TypeAdvantage.getAdvantage(p, opp, b) > 0) {
 			return false;
 		}
 		
@@ -315,7 +316,7 @@ public abstract class Attack implements Serializable {
 	public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 
 		// Print Advantage
-		double adv = Type.getAdvantage(me, o, b);
+		double adv = TypeAdvantage.getAdvantage(me, o, b);
 		if (adv < 1) Messages.add(new MessageUpdate("It's not very effective..."));
 		else if (adv > 1) Messages.add(new MessageUpdate("It's super effective!"));
 		
@@ -404,7 +405,7 @@ public abstract class Attack implements Serializable {
 		return this.effectChance == 100 && this.category == MoveCategory.STATUS;
 	}
 	
-	public boolean canPrintCast() {
+	private boolean canPrintCast() {
 		return this.printCast;
 	}
 	

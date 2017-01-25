@@ -2,13 +2,10 @@ package type;
 
 import battle.Battle;
 import battle.attack.MoveType;
-import battle.effect.generic.EffectInterfaces.AdvantageChanger;
-import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
-import pokemon.ability.AbilityNamesies;
 import util.FileIO;
 import util.Folder;
 
@@ -36,28 +33,6 @@ public enum Type implements Serializable {
 	STEEL(16, "Steel", () -> TypeAdvantage.STEEL, new Color(200, 200, 210), 7),
 	FAIRY(17, "Fairy", () -> TypeAdvantage.FAIRY, new Color(221, 160, 221), -1),
 	NO_TYPE(18, "Unknown", () -> TypeAdvantage.NO_TYPE, new Color(255, 255, 255, 0), -1); // TODO: TYPE: NULL MUTHAFUCKA
-
-	// TODO: This is ass do that other thingy
-	private static final double typeAdvantage[][] = {
-		{1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, .5,  0,  1,  1, .5,  1, 1}, // Normal
-		{1, .5, .5,  1,  2,  2,  1,  1,  1,  1,  1,  2, .5,  1, .5,  1,  2,  1, 1}, // Fire
-		{1,  2, .5,  1, .5,  1,  1,  1,  2,  1,  1,  1,  2,  1, .5,  1,  1,  1, 1}, // Water
-		{1,  1,  2, .5, .5,  1,  1,  1,  0,  2,  1,  1,  1,  1, .5,  1,  1,  1, 1}, // Electric
-		{1, .5,  2,  1, .5,  1,  1, .5,  2, .5,  1, .5,  2,  1, .5,  1, .5,  1, 1}, // Grass
-		{1, .5, .5,  1,  2, .5,  1,  1,  2,  2,  1,  1,  1,  1,  2,  1, .5,  1, 1}, // Ice
-		{2,  1,  1,  1,  1,  2,  1, .5,  1, .5, .5, .5,  2,  0,  1,  2,  2, .5, 1}, // Fighting
-		{1,  1,  1,  1,  2,  1,  1, .5, .5,  1,  1,  1, .5, .5,  1,  1,  0,  2, 1}, // Poison
-		{1,  2,  1,  2, .5,  1,  1,  2,  1,  0,  1, .5,  2,  1,  1,  1,  2,  1, 1}, // Ground
-		{1,  1,  1, .5,  2,  1,  2,  1,  1,  1,  1,  2, .5,  1,  1,  1, .5,  1, 1}, // Flying
-		{1,  1,  1,  1,  1,  1,  2,  2,  1,  1, .5,  1,  1,  1,  1,  0, .5,  1, 1}, // Psychic
-		{1, .5,  1,  1,  2,  1, .5, .5,  1, .5,  2,  1,  1, .5,  1,  2, .5, .5, 1}, // Bug
-		{1,  2,  1,  1,  1,  2, .5,  1, .5,  2,  1,  2,  1,  1,  1,  1, .5,  1, 1}, // Rock
-		{0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1,  1,  2,  1, .5,  1,  1, 1}, // Ghost
-		{1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  1, .5,  0, 1}, // Dragon
-		{1,  1,  1,  1,  1,  1, .5,  1,  1,  1,  2,  1,  1,  2,  1, .5,  1, .5, 1}, // Dark
-		{1, .5, .5, .5,  1,  2,  1,  1,  1,  1,  1,  1,  2,  1,  1,  1, .5,  2, 1}, // Steel
-		{1, .5,  1,  1,  1,  1,  2, .5,  1,  1,  1,  1,  1,  1,  2,  2, .5,  1, 1}, // Fairy
-		{1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 1}}; // No Type
 
 	private final int index;
 	private final String name;
@@ -123,57 +98,6 @@ public enum Type implements Serializable {
 		}
 
 		return false;
-	}
-
-	public static double getAdvantage(ActivePokemon attacking, ActivePokemon defending, Battle b) {
-		Type moveType = attacking.getAttackType();
-
-		Type[] originalType = defending.getType(b);
-		Type[] defendingType = AdvantageChanger.updateDefendingType(b, attacking, defending, moveType, originalType.clone());
-
-		// TODO: I hate all of this change everything
-		// If nothing was updated, do special case check stupid things for fucking levitation which fucks everything up
-		if (defendingType[0] == originalType[0] && defendingType[1] == originalType[1] && moveType == GROUND) {
-			// Pokemon that are levitating cannot be hit by ground type moves
-			if (defending.isLevitating(b, attacking)) {
-				return 0;
-			}
-
-			// If the Pokemon is not levitating due to some effect and is flying type, ground moves should hit
-			for (int i = 0; i < 2; i++) {
-				if (defendingType[i] == FLYING) {
-					defendingType[i] = NO_TYPE;
-				}
-			}
-		}
-
-		// Get the advantage and apply any multiplier that may come from the attack
-		double adv = getBasicAdvantage(moveType, defendingType[0])*getBasicAdvantage(moveType, defendingType[1]);
-		adv = AdvantageMultiplierMove.updateModifier(adv, attacking, moveType, defendingType);
-
-		return adv;
-	}
-
-	public static double getBasicAdvantage(Type attacking, ActivePokemon defending, Battle b) {
-		Type[] defendingType = defending.getType(b);
-		return getBasicAdvantage(attacking, defendingType[0])*getBasicAdvantage(attacking, defendingType[1]);
-	}
-
-	public static double getBasicAdvantage(Type attacking, Type defending) {
-		return typeAdvantage[attacking.index][defending.index];
-	}
-
-	public static double getSTAB(Battle b, ActivePokemon p) {
-		Type[] pokemonType = p.getType(b);
-		Type attackType = p.getAttackType();
-
-		// Same type -- STAB
-		if (pokemonType[0] == attackType || pokemonType[1] == attackType) {
-			// The adaptability ability increases stab
-			return p.hasAbility(AbilityNamesies.ADAPTABILITY) ? 2 : 1.5;
-		}
-
-		return 1;
 	}
 
 	interface AdvantageGetter {

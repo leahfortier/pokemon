@@ -21,6 +21,7 @@ import pokemon.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import trainer.Trainer;
+import type.TypeAdvantage;
 
 import java.io.Serializable;
 
