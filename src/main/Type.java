@@ -16,25 +16,25 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
 public enum Type implements Serializable {
-	NORMAL(0, "Normal", new Color(230, 230, 250), -1),
-	FIRE(1, "Fire", new Color(220, 20, 20), 8),
-	WATER(2, "Water", new Color(35, 120, 220), 9),
-	ELECTRIC(3, "Electric", new Color(255, 215, 0), 11),
-	GRASS(4, "Grass", new Color(120, 200, 80), 10),
-	ICE(5, "Ice", new Color(5, 235, 235), 13),
-	FIGHTING(6, "Fighting", new Color(165, 82, 57), 0),
-	POISON(7, "Poison", new Color(150, 30, 160), 2),
-	GROUND(8, "Ground", new Color(190, 170, 120), 3),
-	FLYING(9, "Flying", new Color(135, 206, 250), 1),
-	PSYCHIC(10, "Psychic", new Color(218, 112, 214), 12),
-	BUG(11, "Bug", new Color(153, 235, 27), 5),
-	ROCK(12, "Rock", new Color(169, 135, 70), 4),
-	GHOST(13, "Ghost", new Color(92, 61, 139), 6),
-	DRAGON(14, "Dragon", new Color(106, 90, 205), 14),
-	DARK(15, "Dark", new Color(49, 79, 79), 15),
-	STEEL(16, "Steel", new Color(200, 200, 210), 7),
-	FAIRY(17, "Fairy", new Color(221, 160, 221), -1),
-	NO_TYPE(18, "Unknown", new Color(255, 255, 255, 0), -1); // TODO: TYPE: NULL MUTHAFUCKA
+	NORMAL(0, "Normal", () -> TypeAdvantage.NORMAL, new Color(230, 230, 250), -1),
+	FIRE(1, "Fire", () -> TypeAdvantage.FIRE, new Color(220, 20, 20), 8),
+	WATER(2, "Water", () -> TypeAdvantage.WATER, new Color(35, 120, 220), 9),
+	ELECTRIC(3, "Electric", () -> TypeAdvantage.ELECTRIC, new Color(255, 215, 0), 11),
+	GRASS(4, "Grass", () -> TypeAdvantage.GRASS, new Color(120, 200, 80), 10),
+	ICE(5, "Ice", () -> TypeAdvantage.ICE, new Color(5, 235, 235), 13),
+	FIGHTING(6, "Fighting", () -> TypeAdvantage.FIGHTING, new Color(165, 82, 57), 0),
+	POISON(7, "Poison", () -> TypeAdvantage.POISON, new Color(150, 30, 160), 2),
+	GROUND(8, "Ground", () -> TypeAdvantage.GROUND, new Color(190, 170, 120), 3),
+	FLYING(9, "Flying", () -> TypeAdvantage.FLYING, new Color(135, 206, 250), 1),
+	PSYCHIC(10, "Psychic", () -> TypeAdvantage.PSYCHIC, new Color(218, 112, 214), 12),
+	BUG(11, "Bug", () -> TypeAdvantage.BUG, new Color(153, 235, 27), 5),
+	ROCK(12, "Rock", () -> TypeAdvantage.ROCK, new Color(169, 135, 70), 4),
+	GHOST(13, "Ghost", () -> TypeAdvantage.GHOST, new Color(92, 61, 139), 6),
+	DRAGON(14, "Dragon", () -> TypeAdvantage.DRAGON, new Color(106, 90, 205), 14),
+	DARK(15, "Dark", () -> TypeAdvantage.DARK, new Color(49, 79, 79), 15),
+	STEEL(16, "Steel", () -> TypeAdvantage.STEEL, new Color(200, 200, 210), 7),
+	FAIRY(17, "Fairy", () -> TypeAdvantage.FAIRY, new Color(221, 160, 221), -1),
+	NO_TYPE(18, "Unknown", () -> TypeAdvantage.NO_TYPE, new Color(255, 255, 255, 0), -1); // TODO: TYPE: NULL MUTHAFUCKA
 
 	// TODO: This is ass do that other thingy
 	private static final double typeAdvantage[][] = {
@@ -60,13 +60,15 @@ public enum Type implements Serializable {
 
 	private final int index;
 	private final String name;
+	private final AdvantageGetter advantageGetter;
 	private final Color color;
 	private final int hiddenIndex;
 	private final BufferedImage image;
 
-	Type(int index, String name, Color color, int hiddenIndex) {
+	Type(int index, String name, AdvantageGetter advantageGetter, Color color, int hiddenIndex) {
 		this.index = index;
 		this.name = name;
+		this.advantageGetter = advantageGetter;
 		this.color = color;
 		this.hiddenIndex = hiddenIndex;
 
@@ -80,6 +82,10 @@ public enum Type implements Serializable {
 
 	public String getName() {
 		return this.name;
+	}
+
+	public TypeAdvantage getAdvantage() {
+		return this.advantageGetter.getAdvantage();
 	}
 
 	public Color getColor() {
@@ -167,5 +173,9 @@ public enum Type implements Serializable {
 		}
 
 		return 1;
+	}
+
+	interface AdvantageGetter {
+		TypeAdvantage getAdvantage();
 	}
 }
