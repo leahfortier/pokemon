@@ -283,7 +283,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			}
 			
 			Messages.add(new MessageUpdate(enterer.getName() + " was hurt by stealth rock!"));
-			enterer.reduceHealthFraction(b, Type.getBasicAdvantage(Type.ROCK, enterer, b)/8.0);
+			enterer.reduceHealthFraction(b, TypeAdvantage.getBasicAdvantage(Type.ROCK, enterer, b)/8.0);
 		}
 
 		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {

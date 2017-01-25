@@ -369,7 +369,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return Type.getAdvantage(user, victim, b) < 1 ? 2 : 1;
+			return TypeAdvantage.getAdvantage(user, victim, b) < 1 ? 2 : 1;
 		}
 	}
 
@@ -1325,7 +1325,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return Type.getAdvantage(user, victim, b) > 1 ? .75 : 1;
+			return TypeAdvantage.getAdvantage(user, victim, b) > 1 ? .75 : 1;
 		}
 	}
 
@@ -1342,7 +1342,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return Type.getAdvantage(user, victim, b) > 1 ? .75 : 1;
+			return TypeAdvantage.getAdvantage(user, victim, b) > 1 ? .75 : 1;
 		}
 	}
 
@@ -1900,7 +1900,7 @@ public abstract class Ability implements Serializable {
 			}
 			
 			// Super effective moves hit
-			if (Type.getAdvantage(p, opp, b) > 1) {
+			if (TypeAdvantage.getAdvantage(p, opp, b) > 1) {
 				return true;
 			}
 			
@@ -1977,7 +1977,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return Type.getAdvantage(user, victim, b) < 1 ? .75 : 1;
+			return TypeAdvantage.getAdvantage(user, victim, b) < 1 ? .75 : 1;
 		}
 	}
 
@@ -2028,7 +2028,7 @@ public abstract class Ability implements Serializable {
 			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 			for (Move m : other.getMoves(b)) {
 				Attack attack = m.getAttack();
-				if (Type.getBasicAdvantage(attack.getActualType(), enterer, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
+				if (TypeAdvantage.getBasicAdvantage(attack.getActualType(), enterer, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
 					// TODO: Shouldn't this be for a random move?
 					Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made it shudder!"));
 					break;

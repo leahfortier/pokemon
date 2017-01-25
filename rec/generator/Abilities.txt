@@ -70,7 +70,7 @@ Tinted Lens:
 	Desc: Powers up \"not very effective\" moves.
 	Int: PowerChangeEffect
 	GetMultiplier: 
-	return Type.getAdvantage(user, victim, b) < 1 ? 2 : 1;
+	return TypeAdvantage.getAdvantage(user, victim, b) < 1 ? 2 : 1;
 	###
 *
 Swarm:
@@ -527,14 +527,14 @@ Filter:
 	Desc: Powers down super-effective moves.
 	Int: OpponentPowerChangeEffect
 	GetOppMultiplier: 
-	return Type.getAdvantage(user, victim, b) > 1 ? .75 : 1;
+	return TypeAdvantage.getAdvantage(user, victim, b) > 1 ? .75 : 1;
 	###
 *
 Prism Armor:
 	Desc: Reduces the power of supereffective attacks taken.
 	Int: OpponentPowerChangeEffect
 	GetOppMultiplier: 
-	return Type.getAdvantage(user, victim, b) > 1 ? .75 : 1;
+	return TypeAdvantage.getAdvantage(user, victim, b) > 1 ? .75 : 1;
 	###
 	MoldBreakerBreaker: True
 *
@@ -791,7 +791,7 @@ Wonder Guard:
 	}
 	
 	// Super effective moves hit
-	if (Type.getAdvantage(p, opp, b) > 1) {
+	if (TypeAdvantage.getAdvantage(p, opp, b) > 1) {
 		return true;
 	}
 	
@@ -834,7 +834,7 @@ Solid Rock:
 	Desc: Reduces damage from supereffective attacks.
 	Int: OpponentPowerChangeEffect
 	GetOppMultiplier: 
-	return Type.getAdvantage(user, victim, b) < 1 ? .75 : 1;
+	return TypeAdvantage.getAdvantage(user, victim, b) < 1 ? .75 : 1;
 	###
 *
 White Smoke:
@@ -856,7 +856,7 @@ Anticipation:
 	ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 	for (Move m : other.getMoves(b)) {
 		Attack attack = m.getAttack();
-		if (Type.getBasicAdvantage(attack.getActualType(), enterer, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
+		if (TypeAdvantage.getBasicAdvantage(attack.getActualType(), enterer, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
 			// TODO: Shouldn't this be for a random move?
 			Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made it shudder!"));
 			break;
