@@ -4429,7 +4429,7 @@ Hidden Power:
 	Cat: Special
 	Acc: 100
 	GetType: 
-	return user.getHiddenPowerType();
+	return user.computeHiddenPowerType();
 	###
 	Pow: 60
 *

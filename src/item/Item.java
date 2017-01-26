@@ -8157,12 +8157,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public boolean use(ActivePokemon p) {
-			Ability other = Ability.getOtherAbility(p);
-			if (other.namesies() == AbilityNamesies.NO_ABILITY) {
+			AbilityNamesies other = Ability.getOtherAbility(p);
+			if (other == AbilityNamesies.NO_ABILITY) {
 				return false;
 			}
 			
-			p.assignAbility(other);
+			p.setAbility(other);
 			return true;
 		}
 	}

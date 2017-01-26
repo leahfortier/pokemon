@@ -162,7 +162,7 @@ public abstract class Ability implements Serializable {
 		return false;
 	}
 	
-	public static Ability assign(PokemonInfo p) {
+	public static AbilityNamesies assign(PokemonInfo p) {
 		AbilityNamesies[] abilities = p.getAbilities();
 		
 		if (abilities[0] == AbilityNamesies.NO_ABILITY) {
@@ -171,47 +171,47 @@ public abstract class Ability implements Serializable {
 		
 		// Only has one ability -- return the first one
 		if (abilities[1] == AbilityNamesies.NO_ABILITY) {
-			return abilities[0].getNewAbility();
+			return abilities[0];
 		}
 
 		// Has two abilties -- return a random one
-		return RandomUtils.getRandomValue(abilities).getNewAbility();
+		return RandomUtils.getRandomValue(abilities);
 	}
 	
-	public static Ability evolutionAssign(ActivePokemon p, PokemonInfo ev) {
+	public static AbilityNamesies evolutionAssign(ActivePokemon p, PokemonInfo ev) {
 		AbilityNamesies prev = p.getAbility().namesies();
 
 		// Evolution has current ability
 		if (ev.hasAbility(prev)) {
-			return p.getAbility();
+			return p.getAbility().namesies();
 		}
 
 		// Evolution only has a single ability
 		AbilityNamesies[] abilities = ev.getAbilities();
 		if (abilities[1] == AbilityNamesies.NO_ABILITY) {
-			return abilities[0].getNewAbility();
+			return abilities[0];
 		}
 
 		// Evolution has the alternative
-		AbilityNamesies other = getOtherAbility(p.getPokemonInfo(), prev).namesies();
+		AbilityNamesies other = getOtherAbility(p.getPokemonInfo(), prev);
 		if (ev.hasAbility(other)) {
 			return getOtherAbility(ev, other);
 		}
 		
-		return RandomUtils.getRandomValue(abilities).getNewAbility();
+		return RandomUtils.getRandomValue(abilities);
 	}
 	
-	public static Ability getOtherAbility(ActivePokemon p) {
+	public static AbilityNamesies getOtherAbility(ActivePokemon p) {
 		return getOtherAbility(p.getPokemonInfo(), p.getAbility().namesies());
 	}
 	
-	private static Ability getOtherAbility(PokemonInfo p, AbilityNamesies ability) {
+	private static AbilityNamesies getOtherAbility(PokemonInfo p, AbilityNamesies ability) {
 		if (!p.hasAbility(ability)) {
 			Global.error("Incorrect ability " + ability + " for " + p.getName() + ".");
 		}
 
 		AbilityNamesies[] abilities = p.getAbilities();
-		return (abilities[0] == ability ? abilities[1] : abilities[0]).getNewAbility();
+		return abilities[0] == ability ? abilities[1] : abilities[0];
 	}
 	
 	// EVERYTHING BELOW IS GENERATED ###

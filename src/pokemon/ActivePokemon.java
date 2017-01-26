@@ -90,7 +90,6 @@ public class ActivePokemon implements Serializable {
 	private String characteristic;
 	private boolean shiny;
 	private BattleAttributes attributes;
-	private Type hiddenPowerType;
 	private boolean isEgg;
 	private int eggSteps;
 
@@ -99,32 +98,24 @@ public class ActivePokemon implements Serializable {
 		this.pokemon = PokemonInfo.getPokemonInfo(pokemonNamesies);
 		this.nickname = this.pokemon.getName();
 		this.level = level;
-		
-		setIVs();
-		
+
 		this.nature = new Nature();
-		setCharacteristic();
-		
 		this.EVs = new int[Stat.NUM_STATS];
 		this.stats = new int[Stat.NUM_STATS];
-		setStats();
+		this.setIVs();
 
 		this.isPlayer = isPlayer;
 		this.attributes = new BattleAttributes();
-		
-		removeStatus();
-		
-		this.totalEXP = pokemon.getGrowthRate().getEXP(this.level);
-		this.totalEXP += RandomUtils.getRandomInt(expToNextLevel());
-		this.gender = Gender.getGender(pokemon.getMaleRatio());
+		this.totalEXP = pokemon.getGrowthRate().getEXP(this.level) + RandomUtils.getRandomInt(expToNextLevel());
 		this.shiny = (isPlayer || isWild) && RandomUtils.chanceTest(1, 8192);
+
+		this.setMoves();
+		this.setGender(Gender.getGender(pokemon.getMaleRatio()));
+		this.setAbility(Ability.assign(this.pokemon));
 		
-		setMoves();
-		
-		this.ability = Ability.assign(this.pokemon);
-		this.hiddenPowerType = computeHiddenPowerType();
-		
-		this.heldItem = isWild ? WildHoldItem.getWildHoldItem(this.pokemon.getWildItems()) : (HoldItem)ItemNamesies.NO_ITEM.getItem();
+		this.heldItem = isWild
+				? WildHoldItem.getWildHoldItem(this.pokemon.getWildItems())
+				: (HoldItem)ItemNamesies.NO_ITEM.getItem();
 		
 		this.isEgg = false;
 		this.eggSteps = 0;
@@ -145,11 +136,8 @@ public class ActivePokemon implements Serializable {
 		this(pokemonNamesies, 1, false, true);
 		
 		moves = Breeding.getBabyMoves(daddy, mommy, pokemonNamesies);
-		IVs = Breeding.getBabyIVs(daddy, mommy);
-		nature = Breeding.getBabyNature(daddy, mommy);
-		hiddenPowerType = computeHiddenPowerType();
-		setStats();
-		setCharacteristic();
+		this.setNature(Breeding.getBabyNature(daddy, mommy));
+		this.setIVs(Breeding.getBabyIVs(daddy, mommy));
 	}
 	
 	/*
@@ -201,8 +189,17 @@ public class ActivePokemon implements Serializable {
 		return pokemon;
 	}
 	
-	public void setGender(Gender gender) {
+	protected void setGender(Gender gender) {
 		this.gender = gender;
+	}
+
+	public void setAbility(AbilityNamesies ability) {
+		this.ability = ability.getNewAbility();
+	}
+
+	protected void setNature(Nature nature) {
+		this.nature = nature;
+		this.setStats();
 	}
 	
 	// Does not include shiny -- this is for the small party tiles
@@ -289,21 +286,27 @@ public class ActivePokemon implements Serializable {
 	
 	// Random value between 0 and 31
 	private void setIVs() {
-		IVs = new int[Stat.NUM_STATS];
+		int[] IVs = new int[Stat.NUM_STATS];
 		for (int i = 0; i < IVs.length; i++) {
 			IVs[i] = Stat.getRandomIv();
 		}
+
+		this.setIVs(IVs);
 	}
-	
-	private void setCharacteristic() {
+
+	// Random value between 0 and 31
+	private void setIVs(int[] IVs) {
+		this.IVs = IVs;
+
 		int maxIndex = 0;
-		for (int i = 1; i < IVs.length; i++) {
-			if (IVs[i] > IVs[maxIndex]) {
+		for (int i = 0; i < this.IVs.length; i++) {
+			if (this.IVs[i] > this.IVs[maxIndex]) {
 				maxIndex = i;
 			}
 		}
-		
-		characteristic = characteristics[IVs[maxIndex]%5][maxIndex];
+
+		this.characteristic = characteristics[this.IVs[maxIndex]%5][maxIndex];
+		this.setStats();
 	}
 	
 	private void setStats() {
@@ -317,7 +320,7 @@ public class ActivePokemon implements Serializable {
 		setHP(hp + stats[Stat.HP.index()] - prevHP);
 	}
 	
-	private Type computeHiddenPowerType() {
+	public Type computeHiddenPowerType() {
 		return Type.getHiddenType(((
 				IVs[Stat.HP.index()]%2 +
 				2*(IVs[Stat.ATTACK.index()]%2) +
@@ -326,10 +329,6 @@ public class ActivePokemon implements Serializable {
 				16*(IVs[Stat.SP_ATTACK.index()]%2) +
 				32*(IVs[Stat.SP_DEFENSE.index()]%2)
 			)*15)/63);
-	}
-	
-	public Type getHiddenPowerType() {
-		return hiddenPowerType;
 	}
 	
 	public String getCharacteristic() {
@@ -358,10 +357,6 @@ public class ActivePokemon implements Serializable {
 	
 	public Nature getNature() {
 		return nature;
-	}
-	
-	public void assignAbility(Ability newAbility) {
-		ability = newAbility;
 	}
 	
 	public Ability getActualAbility() {
@@ -538,7 +533,7 @@ public class ActivePokemon implements Serializable {
 		boolean sameName = nickname.equals(pokemon.getName());
 		PokemonInfo evolutionInfo = evolution.getEvolution();
 
-		ability = Ability.evolutionAssign(this, evolutionInfo);
+		this.setAbility(Ability.evolutionAssign(this, evolutionInfo));
 		pokemon = evolutionInfo;
 		Game.getPlayer().getPokedex().setCaught(evolutionInfo);
 		
