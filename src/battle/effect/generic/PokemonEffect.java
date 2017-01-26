@@ -61,6 +61,7 @@ import pokemon.Gender;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import type.TypeAdvantage;
 import util.RandomUtils;
 
 import java.io.Serializable;
@@ -1627,16 +1628,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			super(EffectNamesies.FORESIGHT, -1, -1, false);
 		}
 
-		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
-			for (int i = 0; i < 2; i++) {
-				if ((attacking == Type.NORMAL || attacking == Type.FIGHTING) && defending[i] == Type.GHOST) {
-					defending[i] = Type.NO_TYPE;
-				}
-			}
-			
-			return defending;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!victim.hasEffect(this.namesies)) {
 				super.cast(b, caster, victim, source, printCast);
@@ -1648,6 +1639,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getName() + " identified " + victim.getName() + "!";
+		}
+
+		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
+			if (attacking == Type.NORMAL || attacking == Type.FIGHTING) {
+				TypeAdvantage.removeDefendingType(defending, Type.GHOST);
+			}
+			
+			return defending;
 		}
 	}
 
@@ -1658,16 +1657,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			super(EffectNamesies.MIRACLE_EYE, -1, -1, false);
 		}
 
-		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
-			for (int i = 0; i < 2; i++) {
-				if ((attacking == Type.PSYCHIC || attacking == Type.PSYCHIC) && defending[i] == Type.DARK) {
-					defending[i] = Type.NO_TYPE;
-				}
-			}
-			
-			return defending;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!victim.hasEffect(this.namesies)) {
 				super.cast(b, caster, victim, source, printCast);
@@ -1679,6 +1668,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getName() + " identified " + victim.getName() + "!";
+		}
+
+		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
+			if (attacking == Type.PSYCHIC) {
+				TypeAdvantage.removeDefendingType(defending, Type.DARK);
+			}
+			
+			return defending;
 		}
 	}
 

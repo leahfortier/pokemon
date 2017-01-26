@@ -1271,10 +1271,8 @@ public abstract class Ability implements Serializable {
 		}
 
 		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
-			for (int i = 0; i < 2; i++) {
-				if ((attacking == Type.NORMAL || attacking == Type.FIGHTING) && defending[i] == Type.GHOST) {
-					defending[i] = Type.NO_TYPE;
-				}
+			if (attacking == Type.NORMAL || attacking == Type.FIGHTING) {
+				TypeAdvantage.removeDefendingType(defending, Type.GHOST);
 			}
 			
 			return defending;

@@ -124,11 +124,7 @@ public enum TypeAdvantage {
             }
 
             // If the Pokemon is not levitating due to some effect and is flying type, ground moves should hit
-            for (int i = 0; i < 2; i++) {
-                if (defendingType[i] == Type.FLYING) {
-                    defendingType[i] = Type.NO_TYPE;
-                }
-            }
+            removeDefendingType(defendingType, Type.FLYING);
         }
 
         // Get the advantage and apply any multiplier that may come from the attack
@@ -136,6 +132,14 @@ public enum TypeAdvantage {
         adv = AdvantageMultiplierMove.updateModifier(adv, attacking, moveType, defendingType);
 
         return adv;
+    }
+
+    public static void removeDefendingType(Type[] defendingType, Type toRemove) {
+        for (int i = 0; i < defendingType.length; i++) {
+            if (defendingType[i] == toRemove) {
+                defendingType[i] = Type.NO_TYPE;
+            }
+        }
     }
 
     public static double getSTAB(Battle b, ActivePokemon p) {

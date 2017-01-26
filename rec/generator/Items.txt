@@ -560,7 +560,15 @@ Ring Target:
 	Desc: Moves that would otherwise have no effect will land on the Pok\u00e9mon that holds it.
 	Price: 200
 	Fling: 10
-	AdvantageChange: attacking.getAdvantage().doesNotEffect(defending[i])
+	AdvantageChange:
+	for (int i = 0; i < defending.length; i++) {
+		if (attacking.getAdvantage().doesNotEffect(defending[i])) {
+			defending[i] = Type.NO_TYPE;	
+		}
+	}
+	
+	return defending;
+	###
 *
 Rocky Helmet:
 	Int: HoldItem, PhysicalContactEffect

@@ -3,13 +3,16 @@ package test;
 import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.effect.generic.CastSource;
+import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
-import pokemon.ActivePokemon;
-import pokemon.PokemonNamesies;
-import type.Type;
-import type.TypeAdvantage;
 import org.junit.Assert;
 import org.junit.Test;
+import pokemon.ActivePokemon;
+import pokemon.PokemonNamesies;
+import test.TestBattle.PokemonManipulator;
+import type.Type;
+import type.TypeAdvantage;
 
 public class TypeTest {
     private static final double typeAdvantage[][] = {
@@ -49,15 +52,40 @@ public class TypeTest {
 
     @Test
     public void ringTargetTest() {
-        ActivePokemon attacking = new TestPokemon(PokemonNamesies.SANDSHREW);
-        ActivePokemon defending = new TestPokemon(PokemonNamesies.PIDGEY);
+        changeEffectivenessTest(
+                PokemonNamesies.PIDGEY,
+                AttackNamesies.EARTHQUAKE,
+                (battle, attacking, defending) -> defending.giveItem(ItemNamesies.RING_TARGET)
+        );
+    }
+
+    @Test
+    public void foresightTest() {
+        foresightTest(PokemonNamesies.GASTLY, AttackNamesies.TACKLE, EffectNamesies.FORESIGHT);
+        foresightTest(PokemonNamesies.UMBREON, AttackNamesies.PSYCHIC, EffectNamesies.MIRACLE_EYE);
+    }
+
+    private void foresightTest(PokemonNamesies defendingPokemon, AttackNamesies attack, EffectNamesies effect) {
+        changeEffectivenessTest(
+                defendingPokemon,
+                attack,
+                (battle, attacking, defending) -> effect.getEffect().cast(battle, attacking, defending, CastSource.ATTACK, false)
+        );
+    }
+
+    // TODO: Scrappy
+    private void changeEffectivenessTest(PokemonNamesies defendingPokemon, AttackNamesies attack, PokemonManipulator manipulator) {
+        ActivePokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
+        ActivePokemon defending = new TestPokemon(defendingPokemon);
 
         Battle battle = TestBattle.create(attacking, defending);
 
-        attacking.setMove(new Move(AttackNamesies.EARTHQUAKE));
+        // Make sure attack is unsuccessful without the effect
+        attacking.setMove(new Move(attack));
         Assert.assertTrue(TypeAdvantage.getAdvantage(attacking, defending, battle) == 0);
 
-        defending.giveItem(ItemNamesies.RING_TARGET);
+        // Cast the effect and make sure the move hits
+        manipulator.manipulate(battle, attacking, defending);
         Assert.assertTrue(TypeAdvantage.getAdvantage(attacking, defending, battle) > 0);
     }
 }

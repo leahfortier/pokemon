@@ -1971,12 +1971,23 @@ Override:
 	*
 ***
 Override:
+	RemoveAdvantageType:
+		AddInterface: AdvantageChanger
+		AddMapField: AdvantageChange: 
+		if ({2-}) {
+			TypeAdvantage.removeDefendingType(defending, Type.{11});
+		}
+		
+		return defending;
+		###
+	*
+***
+Override:
 	ForesightEffect:
 		AddMapField: CastMessage: user.getName() + " identified " + victim.getName() + "!"
 		AddMapField: CanHave: True
 		AddMapField: UsedProof: True
-		AddInterface: AdvantageChanger
-		AddMapField: AdvantageChange: (attacking == Type.{11} || attacking == Type.{22}) && defending[i] == Type.{33}
+		AddMapField: RemoveAdvantageType: {0}
 	*
 ***
 Override:
@@ -2187,15 +2198,6 @@ Override:
 AdvantageChanger:
 	AdvantageChange:
 		Header: Type[] getAdvantageChange(Type attacking, Type[] defending)
-		Body:
-		for (int i = 0; i < 2; i++) {
-			if ({0}) {
-				defending[i] = Type.NO_TYPE;	
-			}
-		}
-		
-		return defending;
-		###
 	*
 ***
 AdvantageMultiplierMove:
