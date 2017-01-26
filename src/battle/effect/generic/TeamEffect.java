@@ -14,14 +14,13 @@ import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
-import type.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import trainer.Trainer;
-import type.TypeAdvantage;
+import type.Type;
 
 import java.io.Serializable;
 
@@ -283,7 +282,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			}
 			
 			Messages.add(new MessageUpdate(enterer.getName() + " was hurt by stealth rock!"));
-			enterer.reduceHealthFraction(b, TypeAdvantage.getBasicAdvantage(Type.ROCK, enterer, b)/8.0);
+			enterer.reduceHealthFraction(b, Type.ROCK.getAdvantage().getAdvantage(enterer, b)/8.0);
 		}
 
 		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {

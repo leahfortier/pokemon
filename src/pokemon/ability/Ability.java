@@ -2028,7 +2028,7 @@ public abstract class Ability implements Serializable {
 			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 			for (Move m : other.getMoves(b)) {
 				Attack attack = m.getAttack();
-				if (TypeAdvantage.getBasicAdvantage(attack.getActualType(), enterer, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
+				if (attack.getActualType().getAdvantage().isSuperEffective(enterer, b) || attack.isMoveType(MoveType.ONE_HIT_KO)) {
 					// TODO: Shouldn't this be for a random move?
 					Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made it shudder!"));
 					break;

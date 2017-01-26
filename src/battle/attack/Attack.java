@@ -7060,7 +7060,7 @@ public abstract class Attack implements Serializable {
 		private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b) {
 			List<Type> types = new ArrayList<>();
 			for (Type t : Type.values()) {
-				if (TypeAdvantage.getBasicAdvantage(attacking, t) < 1 && !victim.isType(b, t)) {
+				if (attacking.getAdvantage().isNotVeryEffective(t) && !victim.isType(b, t)) {
 					types.add(t);
 				}
 			}
@@ -10399,7 +10399,7 @@ public abstract class Attack implements Serializable {
 			double multiplier = 1;
 			for (int i = 0; i < 2; i++) {
 				if (defendingType[i] == Type.WATER) {
-					multiplier *= 2/TypeAdvantage.getBasicAdvantage(moveType, defendingType[i]);
+					multiplier *= 2/moveType.getAdvantage().getAdvantage(defendingType[i]);
 				}
 			}
 			
@@ -10418,7 +10418,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public double multiplyAdvantage(Type moveType, Type[] defendingType) {
-			return TypeAdvantage.getBasicAdvantage(Type.FLYING, defendingType[0])*TypeAdvantage.getBasicAdvantage(Type.FLYING, defendingType[1]);
+			return TypeAdvantage.FLYING.getAdvantage(defendingType);
 		}
 	}
 

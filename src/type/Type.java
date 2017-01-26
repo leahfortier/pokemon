@@ -73,7 +73,7 @@ public enum Type implements Serializable {
 	}
 	
 	public static Color[] getColors(Type[] t) {
-		return new Color[] {t[0].getColor(), t[t[1] == Type.NO_TYPE ? 0 : 1].getColor()};
+		return new Color[] { t[0].getColor(), t[t[1] == Type.NO_TYPE ? 0 : 1].getColor() };
 	}
 	
 	public static Color[] getColors(ActivePokemon p) {

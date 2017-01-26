@@ -1455,7 +1455,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
 			for (int i = 0; i < 2; i++) {
-				if (TypeAdvantage.getBasicAdvantage(attacking, defending[i]) == 0) {
+				if (attacking.getAdvantage().doesNotEffect(defending[i])) {
 					defending[i] = Type.NO_TYPE;
 				}
 			}

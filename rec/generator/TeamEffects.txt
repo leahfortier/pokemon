@@ -59,7 +59,7 @@ StealthRock:
 	}
 	
 	Messages.add(new MessageUpdate(enterer.getName() + " was hurt by stealth rock!"));
-	enterer.reduceHealthFraction(b, TypeAdvantage.getBasicAdvantage(Type.ROCK, enterer, b)/8.0);
+	enterer.reduceHealthFraction(b, Type.ROCK.getAdvantage().getAdvantage(enterer, b)/8.0);
 	###
 	CastMessage: "Floating rocks were scattered all around!"
 	RapidSpin: "The floating rocks spun away!"
