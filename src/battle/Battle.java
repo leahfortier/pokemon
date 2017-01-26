@@ -71,35 +71,37 @@ public class Battle {
 	private TerrainType baseTerrain;
 	private TerrainType currentTerrain;
 	
-	public Battle(Opponent o) {
+	public Battle(Opponent opponent) {
 		Messages.clearMessages(MessageState.FIGHTY_FIGHT);
 		Messages.setMessageState(MessageState.FIGHTY_FIGHT);
 		Messages.add(new MessageUpdate().withUpdate(Update.ENTER_BATTLE));
 
-		player = Game.getPlayer();
-		opponent = o;
-		effects = new ArrayList<>();
-		player.resetEffects();
-		opponent.resetEffects();
+		this.player = Game.getPlayer();
+		this.opponent = opponent;
+
+		this.effects = new ArrayList<>();
+		this.player.resetEffects();
+		this.opponent.resetEffects();
+
 		turn = 0;
 		escapeAttempts = 0;
 		firstAttacking = false;
 		weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
-		player.enterBattle();
 
-		if (opponent instanceof Trainer) {
-			Trainer opponentTrainer = (Trainer) opponent;
+		this.player.enterBattle();
+		if (this.opponent instanceof Trainer) {
+			Trainer opponentTrainer = (Trainer) this.opponent;
 			opponentTrainer.enterBattle();
 			Messages.add(new MessageUpdate(opponentTrainer.getName() + " wants to fight!"));
 			opponentTrainer.setAction(Action.FIGHT);
-			enterBattle(opponent.front());
+			enterBattle(this.opponent.front());
 		}
 		else {
-			ActivePokemon wildPokemon = opponent.front();
+			ActivePokemon wildPokemon = this.opponent.front();
 			enterBattle(wildPokemon, "Wild " + wildPokemon.getName() + " appeared!");
 		}
 
-		enterBattle(player.front());
+		enterBattle(this.player.front());
 	}
 
 	public Battle(EnemyTrainer npcTrainer, UpdateMatcher npcUpdateInteraction) {

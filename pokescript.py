@@ -5,6 +5,9 @@ import requests
 
 global infoTable
 
+def namesies(stringsies):
+    return stringsies.replace(' ', '_').replace('-', '_').upper()
+
 def checkHeader(header, headerIndex):
     global infoTable
     
@@ -85,15 +88,15 @@ def updateTableIndex(header, headerIndex):
                     infoTable = infoTable[0].getnext()
 
 with open ("temp.txt", "w") as f:
-    for num in range(1, 720):
-    #for num in [1]:
-        page = requests.get('http://www.serebii.net/pokedex-xy/' + str(num).zfill(3) + '.shtml')
+    for num in range(1, 802):
+#    for num in [11]:
+        page = requests.get('http://www.serebii.net/pokedex-sm/' + str(num).zfill(3) + '.shtml')
         tree = html.fromstring(page.text)
         mainDiv = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/div[2]/div')[0];
 
         tableCheck = True
 
-        if num < 650:
+        if num < 722:
             index = 1
             infoTable = mainDiv.xpath('p[1]')[0].getnext()
         else:
@@ -108,7 +111,7 @@ with open ("temp.txt", "w") as f:
         elif num == 29:
             name = "Nidoran F"
         elif num == 32:
-            name = "Nidoran"
+            name = "Nidoran M"
 
         print("Name: " + name)
 
@@ -132,15 +135,47 @@ with open ("temp.txt", "w") as f:
         # Shaymin
         elif num == 492:
             type1 = 'Grass'
-            type2 = 'None'
-        # Darmanitan
-        elif num == 555:
+            type2 = 'No_Type'
+        # Darmanitan, Vulpix, Ninetales
+        elif num == 555 or num == 37 or num == 38:
             type1 = 'Fire'
-            type2 = 'None'
+            type2 = 'No_Type'
+        # GROSS SHIT and Meowth and Persian
+        elif num == 19 or num == 20 or num == 52 or num == 53:
+            type1 = 'Normal'
+            type2 = 'No_Type'
+        # Raichu
+        elif num == 26:
+            type1 = 'Electric'
+            type2 = 'No_Type'
+        # Sandshrew and Sandslash and Diglett and Dugtrio
+        elif num == 27 or num == 28 or num == 50 or num == 51 or num == 105:
+            type1 = 'Ground'
+            type2 = 'No_Type'
+        # Geodude and Graveler and Golem
+        elif num == 74 or num == 75 or num == 76:
+            type1 = 'Rock'
+            type2 = 'Ground'
+        # Grimer and Muk
+        elif num == 88 or num == 89:
+            type1 = 'Poison'
+            type2 = 'No_Type'
+        # Exeggutor
+        elif num == 103:
+            type1 = 'Grass'
+            type2 = 'Psychic'
         # Meloetta
         elif num == 648:
             type1 = 'Normal'
             type2 = 'Psychic'
+        # Stupid dancing bird
+        elif num == 741:
+            type1 = 'Fire'
+            type2 = 'Flying'
+        # Hoopa
+        elif num == 720:
+            type1 = 'Psychic'
+            type2 = 'Ghost'
         else:
             types = infoTable.xpath('tr[2]/td[6]/a/img')
             type1 = types[0].attrib["src"]
@@ -151,13 +186,17 @@ with open ("temp.txt", "w") as f:
                 type2 = types[1].attrib["src"]
                 type2 = type2[type2.find("type") + 5 : -4].capitalize()
             else:
-                type2 = "None"
+                type2 = "No_Type"
                 
         print("Type1: " + type1)
         print("Type2: " + type2)
 
-        # Remove the Pokemon text from the end of weight
-        classification = infoTable.xpath('tr[4]/td[1]')[0].text[:-8]
+        # Hoopa apparently has a different classification for its different forms
+        if num == 720:
+            classification = 'Mischief'
+        # Remove the Pokemon text from the end of classification
+        else:
+            classification = infoTable.xpath('tr[4]/td[1]')[0].text[:-8]
         print("Classification: " + classification)
 
         # Height is specified in ft'in'' format -- convert to inches
@@ -174,9 +213,9 @@ with open ("temp.txt", "w") as f:
         weight = float(weight)
         print("Weight: " + str(weight))
 
-        # Diancie's capture is still unknown
-        if num == 719:
-            captureRate = 3
+        # Minior apparently has different catch rates for its different forms
+        if num == 774:
+            captureRate = 30
         else:
             captureRate = int(infoTable.xpath('tr[4]/td[4]')[0].text)
 
@@ -192,42 +231,45 @@ with open ("temp.txt", "w") as f:
         print("Egg Steps: " + str(eggSteps))
 
         # Next table -- the one with the abilities and such
-        if num < 650:
+        if num < 722:
             infoTable = infoTable.getnext()
         else:
             index = 3
             infoTable = mainDiv.xpath('table[3]')[0]
             
+    
         growthRate = infoTable.xpath('tr[4]/td[1]')[0].text_content()
         growthRate = growthRate[growthRate.find("Points") + 6 : ]
+        growthRate = namesies(growthRate)
 
         print("Growth Rate: " + growthRate)
 
         # Not in the mood to deal with Deoxys's multiple forms and effort yields
+        # Attack, Sp. Attack, and Speed
         if num == 386:
             evs = [0, 1, 0, 1, 0, 1]
         # Same with Wormadam
+        # 2 Sp. Def
         elif num == 413:
             evs = [0, 0, 0, 0, 2, 0]
         # And Shaymin
+        # 3 HP
         elif num == 492:
             evs = [3, 0, 0, 0, 0, 0]
         # And Darmanitan
+        # 2 Attack
         elif num == 555:
             evs = [0, 2, 0, 0, 0, 0]
-        # And Tornadus
-        elif num == 641:
-            evs = [0, 3, 0, 0, 0, 0]
-        # And Thundurus
-        elif num == 642:
-            evs = [0, 3, 0, 0, 0, 0]
-        # And Landorus Note: it actually has sp.attack but that's stupid its attack is higher
-        elif num == 645:
+        # And Tornadus and Thundurus and Landorus Note: Landorus actually has sp.attack but that's stupid its attack is higher
+        # 3 Attack
+        elif num == 641 or num == 642 or num == 645:
             evs = [0, 3, 0, 0, 0, 0]
         # And Kyurem
+        # HP, Attack, and Sp. Attack
         elif num == 646:
             evs = [1, 1, 0, 1, 0, 0]
         # And Meloetta
+        # Sp Attack, Sp. Defense, and Speed
         elif num == 648:
             evs = [0, 0, 0, 1, 1, 1]
         else:
@@ -241,6 +283,9 @@ with open ("temp.txt", "w") as f:
                 
                 ev = evString[: evIndex - 1]
                 evString = evString[evIndex + 8 :]
+                
+                if "Alola Form" in ev:
+                    break
                 
                 stat = ev[2:]
                 value = int(ev[0])
@@ -259,13 +304,14 @@ with open ("temp.txt", "w") as f:
                     evs[5] = value
 
         print("Effort Values: " + str(evs))
-
+        updateTable('Abilities')
         abilities = infoTable.xpath('tr[2]/td/a/b')
         ability1 = abilities[0].text
+
         if len(abilities) >= 2:
             ability2 = abilities[1].text
         else:
-            ability2 = "None"
+            ability2 = "No_Ability"
             
         print("Ability1: " + ability1)    
         print("Ability2: " + ability2)
@@ -274,9 +320,11 @@ with open ("temp.txt", "w") as f:
         if num < 650:
             infoTable = infoTable.getnext().getnext()
         else:
+#            updateTable('Egg Groups')
             index = 5
             infoTable = mainDiv.xpath('table[5]')[0]
-            
+#        if not updateTable('Egg Groups'):
+#            print('FAIL')
         eggGroup = infoTable.xpath('tr[2]/td[2]')[0]
         if eggGroup.text != None:
             eggGroup1 = "None"
@@ -290,30 +338,31 @@ with open ("temp.txt", "w") as f:
             else:
                 eggGroup2 = eggGroup2[0].text
 
+        eggGroup1 = namesies(eggGroup1)
+        eggGroup2 = namesies(eggGroup2)
+
         print("Egg Group1: " + eggGroup1)
         print("Egg Group2: " + eggGroup2)
 
-        updateTable('Flavor Text')
+        if updateTable('Flavor Text'):
+            flavorText = infoTable.xpath('tr[2]/td[2]')[0].text
+            if flavorText == 'Sun':
+                flavorText = infoTable.xpath('tr[2]/td[3]')[0].text
 
-        # Oddish's flavor text is srsly buggin' out
-        if num == 43:
-            flavorText = 'It often plants its root feet in the ground during the day and sows seeds as it walks about at night.'
-        # Same with Darmanitan TODO: Put the degree symbol back in
-        elif num == 555:
-            flavorText = 'Its internal fire burns at 2,500 F, making enough power that it can destroy a dump truck with one punch.'
         else:
-            flavorText = infoTable.xpath('tr[3]/td[2]')[0].text
-            
+            flavorText = 'None'
+        
         # Replace the special e character in the flavor text
-        u = u'é'
-        flavorText = flavorText.replace(u, "\u00e9").replace('  ', ' ')
-            
+        poke = u'é'
+        rightTick = u'\u2019'
+        dashy = u'\u2014'
+        leftQuote = u'\u201c'
+        rightQuote = u'\u201d'
+        flavorText = flavorText.replace(poke, "\u00e9").replace('  ', ' ').replace(rightTick, "'").replace(dashy, "--").replace(leftQuote, "\"").replace(rightQuote, "\"")
         print("Flavor Text: " + flavorText)
 
-        # If they have the same movelist for X/Y and R/S, then the movelist is displayed as Gen IV Level Up -- Otherwise, we want the updated R/S moves
-        if not updateTable('Generation VI Level Up'):
-            # The special characters are really messing things up so just start at the third character when comparing
-            updateTableIndex('S Level Up', 3)
+        if not updateTable('Sun/Moon Level Up'):
+            updateTable('Standard Level Up')
 
         attacks = []
         for i in range(2, len(infoTable) - 1, 2):
@@ -321,6 +370,9 @@ with open ("temp.txt", "w") as f:
             
             if type(level) == unicode:
                 level = 0
+                
+            if level == 'Evolve':
+                level = -1
                 
             attack = infoTable[i][1][0].text
             attacks.append(str(level) + " " + attack)
@@ -355,7 +407,7 @@ with open ("temp.txt", "w") as f:
 
         print("Move Tutor Moves:")
         tutorMoves = []
-        if updateTable('Omega Ruby/Alpha Sapphire Move Tutor Attacks'):
+        if updateTable('Move Tutor Attacks'):
             table = infoTable.xpath('thead/tr')
             for i in range(2, len(table) - 1, 2):
                 attack = table[i][0][0].text
@@ -376,74 +428,81 @@ with open ("temp.txt", "w") as f:
         print("Stats: " + str(stats))
 
         # Diancie's base experience is currently unknown
-##        if num == 719:
-##            baseExp = 270
-##        elif num == 29 or num == 32:
-##            baseExp = 55
-##        else:
-##            page = requests.get('http://bulbapedia.bulbagarden.net/wiki/' + name)
-##            tree = html.fromstring(page.text)
-##
-##            index = 9
-##
-##            # Pokemon that do not have hidden abilities have a stupid motherfucking format and I'm really fucking pissed
-##            if num == 676 or num == 679 or num == 680 or num == 681 or num == 692 or num == 693 or num == 716 or num == 717 or num == 718:
-##                index = 8
-##            
-##            baseExp = int(tree.xpath('//*[@id="mw-content-text"]/table[3]/tr[' + str(index) + ']/td[1]/table/tr/td[3]')[0].text)
-##        print("Base EXP: " + str(baseExp))
+        baseExp = -1
+        if num == 719:
+            baseExp = 270
+        elif num == 29 or num == 32:
+            baseExp = 55
+        else:
+            page = requests.get('http://bulbapedia.bulbagarden.net/wiki/' + name)
+#            //*[@id="mw-content-text"]/table[2]/tbody/tr[9]/td[1]/table/tbody/tr/td[2]
+            tree = html.fromstring(page.text)
 
-##        f.write(str(num) + '\n')
-##        f.write(str(name) + '\n')
-##
-##        for stat in stats:
-##            f.write(str(stat) + ' ')
-##        f.write('\n')
-##
-##        if len(str(baseExp)) == 1:
-##            f.write("BASE EXP: ")
-##        
-##        f.write(str(baseExp) + '\n')
-##        f.write(str(growthRate) + '\n')
-##        f.write(str(type1) + ' ')
-##        f.write(str(type2) + '\n')
+            index = 9
+
+            # Pokemon that do not have hidden abilities have a stupid motherfucking format and I'm really fucking pissed
+#            if num == 676 or num == 679 or num == 680 or num == 681 or num == 692 or num == 693 or num == 716 or num == 717 or num == 718:
+#                index = 8
+            
+#            baseExp = int(tree.xpath('//*[@id="mw-content-text"]/table[3]/tr[' + str(index) + ']/td[1]/table/tr/td[3]')[0].text)
+            baseExp = int(tree.xpath('//*[@id="mw-content-text"]/table[2]/tr[' + str(index) + ']/td[1]/table/tr/td[3]')[0].text)
+            if baseExp < 4:
+                index = 8
+                baseExp = int(tree.xpath('//*[@id="mw-content-text"]/table[2]/tr[' + str(index) + ']/td[1]/table/tr/td[3]')[0].text)
+        print("Base EXP: " + str(baseExp))
+
+        f.write(str(num) + '\n')
+        f.write(str(name) + '\n')
+
+        for stat in stats:
+            f.write(str(stat) + ' ')
+        f.write('\n')
+
+        if len(str(baseExp)) == 1:
+            f.write("BASE EXP: ")
         
-##        f.write(str(len(attacks)) + '\n')
-##        for attack in attacks:
-##            f.write(str(attack) + '\n')
+        f.write(str(baseExp) + '\n')
+        f.write(str(growthRate) + '\n')
+        f.write(str(type1) + ' ')
+        f.write(str(type2) + '\n')
+        
+        f.write(str(captureRate) + '\n')
 
-##        f.write(str(len(tms)) + '\n')
-##        for attack in tms:
-##            f.write(str(attack) + '\n')
+        for ev in evs:
+            f.write(str(ev) + ' ')
+        f.write('\n')
 
-##        f.write(str(len(eggMoves)) + '\n')
-##        for attack in eggMoves:
-##            f.write(str(attack) + '\n')
+        # TODO: Evolutions
+        f.write('None\n')
+        
+        # TODO: Wild Hold Items
+        f.write('0\n')
+
+        f.write(str(maleRatio) + '\n')
+        f.write(str(ability1) + '\n')
+        f.write(str(ability2) + '\n')
+        f.write(str(classification) + '\n')
+        f.write(str(height) + ' ')
+        f.write(str(weight) + ' ')
+        f.write(str(flavorText) + '\n')
+        f.write(str(eggSteps) + '\n')
+        f.write(str(eggGroup1) + ' ')
+        f.write(str(eggGroup2) + '\n')        
+        
+        f.write(str(len(attacks)) + '\n')
+        for attack in attacks:
+            f.write(str(attack) + '\n')
+
+        f.write(str(len(tms)) + '\n')
+        for attack in tms:
+            f.write(str(attack) + '\n')
+
+        f.write(str(len(eggMoves)) + '\n')
+        for attack in eggMoves:
+            f.write(str(attack) + '\n')
 
         f.write(str(len(tutorMoves)) + '\n')
         for attack in tutorMoves:
             f.write(str(attack) + '\n')
 
-##        f.write(str(captureRate) + '\n')
-##
-##        for ev in evs:
-##            f.write(str(ev) + ' ')
-##        f.write('\n')
-##
-##        # TODO: Evolutions
-##        f.write('None\n')
-##        
-##        # TODO: Wild Hold Items
-##        f.write('0\n')
-##
-##        f.write(str(maleRatio) + '\n')
-##        f.write(str(ability1) + '\n')
-##        f.write(str(ability2) + '\n')
-##        f.write(str(classification) + '\n')
-##        f.write(str(height) + ' ')
-##        f.write(str(weight) + '\n') # Change back to space instead of new line when the flavor text is put back in
-##        #f.write(str(flavorText) + '\n')
-##        f.write(str(eggSteps) + '\n')
-##        f.write(str(eggGroup1) + '\n')
-##        f.write(str(eggGroup2) + '\n')
         f.write('\n')
