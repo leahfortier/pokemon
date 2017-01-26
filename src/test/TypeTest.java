@@ -1,5 +1,11 @@
 package test;
 
+import battle.Battle;
+import battle.attack.AttackNamesies;
+import battle.attack.Move;
+import item.ItemNamesies;
+import pokemon.ActivePokemon;
+import pokemon.PokemonNamesies;
 import type.Type;
 import type.TypeAdvantage;
 import org.junit.Assert;
@@ -39,5 +45,19 @@ public class TypeTest {
                 Assert.assertTrue(String.format("%s %s %f %f", attacking, defending, chartAdv, classAdv), chartAdv  == classAdv);
             }
         }
+    }
+
+    @Test
+    public void ringTargetTest() {
+        ActivePokemon attacking = TestUtil.getPokemon(PokemonNamesies.SANDSHREW);
+        ActivePokemon defending = TestUtil.getPokemon(PokemonNamesies.PIDGEY);
+
+        Battle battle = TestBattle.create(attacking, defending);
+
+        attacking.setMove(new Move(AttackNamesies.EARTHQUAKE));
+        Assert.assertTrue(TypeAdvantage.getAdvantage(attacking, defending, battle) == 0);
+
+        defending.giveItem(ItemNamesies.RING_TARGET);
+        Assert.assertTrue(TypeAdvantage.getAdvantage(attacking, defending, battle) > 0);
     }
 }

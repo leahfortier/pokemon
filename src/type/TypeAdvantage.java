@@ -106,7 +106,7 @@ public enum TypeAdvantage {
     }
 
     public boolean doesNotEffect(Type defending) {
-        return this.getAdvantage(defending) == 1;
+        return this.getAdvantage(defending) == 0;
     }
 
     public static double getAdvantage(ActivePokemon attacking, ActivePokemon defending, Battle b) {
