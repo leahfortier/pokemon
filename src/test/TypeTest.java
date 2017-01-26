@@ -49,8 +49,8 @@ public class TypeTest {
 
     @Test
     public void ringTargetTest() {
-        ActivePokemon attacking = TestUtil.getPokemon(PokemonNamesies.SANDSHREW);
-        ActivePokemon defending = TestUtil.getPokemon(PokemonNamesies.PIDGEY);
+        ActivePokemon attacking = new TestPokemon(PokemonNamesies.SANDSHREW);
+        ActivePokemon defending = new TestPokemon(PokemonNamesies.PIDGEY);
 
         Battle battle = TestBattle.create(attacking, defending);
 
