@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
+import pokemon.ability.AbilityNamesies;
 import test.TestBattle.PokemonManipulator;
 import type.Type;
 import type.TypeAdvantage;
@@ -51,18 +52,24 @@ public class TypeTest {
     }
 
     @Test
-    public void ringTargetTest() {
+    public void changeEffectivenessTest() {
+        // Foresight and Miracle Eye
+        foresightTest(PokemonNamesies.GASTLY, AttackNamesies.TACKLE, EffectNamesies.FORESIGHT);
+        foresightTest(PokemonNamesies.UMBREON, AttackNamesies.PSYCHIC, EffectNamesies.MIRACLE_EYE);
+
+        // Ring Target
         changeEffectivenessTest(
                 PokemonNamesies.PIDGEY,
                 AttackNamesies.EARTHQUAKE,
                 (battle, attacking, defending) -> defending.giveItem(ItemNamesies.RING_TARGET)
         );
-    }
 
-    @Test
-    public void foresightTest() {
-        foresightTest(PokemonNamesies.GASTLY, AttackNamesies.TACKLE, EffectNamesies.FORESIGHT);
-        foresightTest(PokemonNamesies.UMBREON, AttackNamesies.PSYCHIC, EffectNamesies.MIRACLE_EYE);
+        // Scrappy
+        changeEffectivenessTest(
+                PokemonNamesies.GASTLY,
+                AttackNamesies.TACKLE,
+                (battle, attacking, defending) -> attacking.setAbility(AbilityNamesies.SCRAPPY)
+        );
     }
 
     private void foresightTest(PokemonNamesies defendingPokemon, AttackNamesies attack, EffectNamesies effect) {
@@ -73,7 +80,6 @@ public class TypeTest {
         );
     }
 
-    // TODO: Scrappy
     private void changeEffectivenessTest(PokemonNamesies defendingPokemon, AttackNamesies attack, PokemonManipulator manipulator) {
         ActivePokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
         ActivePokemon defending = new TestPokemon(defendingPokemon);
