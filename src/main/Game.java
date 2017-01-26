@@ -2,16 +2,16 @@ package main;
 
 import battle.Battle;
 import gui.GameData;
-import gui.view.battle.BattleView;
-import gui.view.map.MapView;
 import gui.view.View;
 import gui.view.ViewMode;
+import gui.view.battle.BattleView;
+import gui.view.map.MapView;
+import input.InputControl;
 import item.ItemNamesies;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import trainer.CharacterData;
-import input.InputControl;
 import util.Save;
 
 import java.awt.Graphics;
@@ -45,7 +45,7 @@ public class Game {
 	private ViewMode currentViewMode;
 	private View currentView;
 	
-	private Game() {
+	protected Game() {
 		viewMap = new EnumMap<>(ViewMode.class);
 		addView(ViewMode.MAIN_MENU_VIEW);
 		
@@ -117,5 +117,13 @@ public class Game {
 
 			addView(viewMode);
 		}
+	}
+
+	protected static void newInstance(Game newGame) {
+		instance = newGame;
+	}
+
+	protected void setCharacterData(CharacterData characterData) {
+		this.characterData = characterData;
 	}
 }
