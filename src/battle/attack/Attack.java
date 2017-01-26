@@ -7465,7 +7465,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Type setType(Battle b, ActivePokemon user) {
-			return user.getHiddenPowerType();
+			return user.computeHiddenPowerType();
 		}
 	}
 
