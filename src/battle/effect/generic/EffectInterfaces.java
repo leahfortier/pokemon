@@ -1063,15 +1063,15 @@ public final class EffectInterfaces {
 	}
 
 	public interface AdvantageMultiplierMove {
-		double multiplyAdvantage(Type moveType, Type[] defendingType);
+		double multiplyAdvantage(Type attackingType, Type[] defendingTypes);
 
-		static double updateModifier(double modifier, ActivePokemon attacking, Type moveType, Type[] defendingType) {
+		static double updateModifier(double modifier, ActivePokemon attacking, Type attackingType, Type[] defendingTypes) {
 			List<Object> invokees = Collections.singletonList(attacking.getAttack());
 			for (Object invokee : invokees) {
 				if (invokee instanceof AdvantageMultiplierMove && !Effect.isInactiveEffect(invokee, null)) {
 					
 					AdvantageMultiplierMove effect = (AdvantageMultiplierMove)invokee;
-					modifier *= effect.multiplyAdvantage(moveType, defendingType);
+					modifier *= effect.multiplyAdvantage(attackingType, defendingTypes);
 				}
 			}
 			

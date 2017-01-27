@@ -10395,11 +10395,11 @@ public abstract class Attack implements Serializable {
 			super.status = StatusCondition.FROZEN;
 		}
 
-		public double multiplyAdvantage(Type moveType, Type[] defendingType) {
+		public double multiplyAdvantage(Type attackingType, Type[] defendingTypes) {
 			double multiplier = 1;
-			for (int i = 0; i < 2; i++) {
-				if (defendingType[i] == Type.WATER) {
-					multiplier *= 2/moveType.getAdvantage().getAdvantage(defendingType[i]);
+			for (Type defendingType : defendingTypes) {
+				if (defendingType == Type.WATER) {
+					multiplier *= 2/attackingType.getAdvantage().getAdvantage(defendingType);
 				}
 			}
 			
@@ -10417,8 +10417,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public double multiplyAdvantage(Type moveType, Type[] defendingType) {
-			return TypeAdvantage.FLYING.getAdvantage(defendingType);
+		public double multiplyAdvantage(Type attackingType, Type[] defendingTypes) {
+			return TypeAdvantage.FLYING.getAdvantage(defendingTypes);
 		}
 	}
 

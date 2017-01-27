@@ -2199,7 +2199,22 @@ NoAdvantageChanger:
 ***
 AdvantageMultiplierMove:
 	MultiplyAdvantage:
-		Header: double multiplyAdvantage(Type moveType, Type[] defendingType)
+		Header: double multiplyAdvantage(Type attackingType, Type[] defendingTypes)
+	*
+***
+Override:
+	SuperEffectiveAdvantageType:
+		AddInterface: AdvantageMultiplierMove
+		AddMapField: MultiplyAdvantage:
+		double multiplier = 1;
+		for (Type defendingType : defendingTypes) {
+			if (defendingType == Type.{00}) {
+				multiplier *= 2/attackingType.getAdvantage().getAdvantage(defendingType);
+			}
+		}
+		
+		return multiplier;
+		###
 	*
 ***
 Override:

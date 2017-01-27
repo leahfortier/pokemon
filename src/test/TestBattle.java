@@ -13,8 +13,4 @@ class TestBattle extends Battle {
         new TestCharacter(mahBoiiiiiii);
         return new TestBattle(nahMahBoi);
     }
-
-    interface PokemonManipulator {
-        void manipulate(Battle battle, ActivePokemon attacking, ActivePokemon defending);
-    }
 }

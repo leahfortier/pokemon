@@ -6132,17 +6132,7 @@ Freeze-Dry:
 	Cat: Special
 	Acc: 100
 	Pow: 70
-	Int: AdvantageMultiplierMove
-	MultiplyAdvantage:
-	double multiplier = 1;
-	for (int i = 0; i < 2; i++) {
-		if (defendingType[i] == Type.WATER) {
-			multiplier *= 2/moveType.getAdvantage().getAdvantage(defendingType[i]);
-		}
-	}
-	
-	return multiplier;
-	###
+	SuperEffectiveAdvantageType: Water
 	Status: Frozen
 	EffChance: 10
 *
@@ -6155,7 +6145,7 @@ Flying Press:
 	Cat: Physical
 	Int: AdvantageMultiplierMove
 	MultiplyAdvantage:
-	return TypeAdvantage.FLYING.getAdvantage(defendingType);
+	return TypeAdvantage.FLYING.getAdvantage(defendingTypes);
 	###
 *
 Topsy-Turvy:
