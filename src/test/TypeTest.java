@@ -101,18 +101,18 @@ public class TypeTest {
 
     @Test
     public void freezeDryTest() {
-        ActivePokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
-        ActivePokemon defending = new TestPokemon(PokemonNamesies.SQUIRTLE);
-
-        Battle battle = TestBattle.create(attacking, defending);
+        AttackNamesies freezeDry = AttackNamesies.FREEZE_DRY;
 
         // Freeze-Dry is super effective against water types
-        attacking.setMove(new Move(AttackNamesies.FREEZE_DRY));
-        Assert.assertTrue(TypeAdvantage.getAdvantage(attacking, defending, battle) > 1);
+        advantageChecker(2, freezeDry, PokemonNamesies.SQUIRTLE);
 
         // Should have neutral effectiveness against a Water/Ice type, instead of .25
-        defending = new TestPokemon(PokemonNamesies.LAPRAS);
-        Assert.assertTrue(TypeAdvantage.getAdvantage(attacking, defending, battle) == 1);
+        advantageChecker(1, freezeDry, PokemonNamesies.LAPRAS);
+
+        // Super effective against a non-water type Pokemon that has been soaked
+        PokemonManipulator soak = (battle, attacking, defending) ->
+                attacking.callNewMove(battle, defending, new Move(AttackNamesies.SOAK));
+        advantageChecker(2, freezeDry, soak, PokemonNamesies.PIDGEY);
     }
 
     @Test
@@ -211,34 +211,35 @@ public class TypeTest {
                 PokemonNamesies.MIMIKYU
         };
 
-        AttackNamesies attack = AttackNamesies.FLYING_PRESS;
-        advantageChecker(4, attack, superDuperEffective);
-        advantageChecker(2, attack, superEffective);
-        advantageChecker(1, attack, neutralEffective);
-        advantageChecker(.5, attack, notVeryEffective);
-        advantageChecker(.25, attack, superNotVeryEffective);
-        advantageChecker(0, attack, noEffect);
+        // Flying Press is simultaneously a Fighting/Flying attack
+        AttackNamesies flyingPress = AttackNamesies.FLYING_PRESS;
+        advantageChecker(4, flyingPress, superDuperEffective);
+        advantageChecker(2, flyingPress, superEffective);
+        advantageChecker(1, flyingPress, neutralEffective);
+        advantageChecker(.5, flyingPress, notVeryEffective);
+        advantageChecker(.25, flyingPress, superNotVeryEffective);
+        advantageChecker(0, flyingPress, noEffect);
 
         // Electrify should make the attack Electic/Flying
         PokemonManipulator electrify = PokemonManipulator.giveAttackingEffect(EffectNamesies.ELECTRIFIED);
-        advantageChecker(4, attack, electrify, PokemonNamesies.HAWLUCHA, PokemonNamesies.BUTTERFREE);
-        advantageChecker(2, attack, electrify, PokemonNamesies.CATERPIE, PokemonNamesies.LARVESTA);
-        advantageChecker(1, attack, electrify, PokemonNamesies.ALAKAZAM, PokemonNamesies.AERODACTYL);
-        advantageChecker(.5, attack, electrify, PokemonNamesies.ZAPDOS, PokemonNamesies.MAWILE, PokemonNamesies.KLINK);
-        advantageChecker(.25, attack, electrify, PokemonNamesies.PIKACHU, PokemonNamesies.SHIELDON);
-        advantageChecker(.125, attack, electrify, PokemonNamesies.ZEKROM, PokemonNamesies.MAGNEZONE);
-        advantageChecker(0, attack, electrify, PokemonNamesies.SANDSHREW, PokemonNamesies.GLIGAR);
+        advantageChecker(4, flyingPress, electrify, PokemonNamesies.HAWLUCHA, PokemonNamesies.BUTTERFREE);
+        advantageChecker(2, flyingPress, electrify, PokemonNamesies.CATERPIE, PokemonNamesies.LARVESTA);
+        advantageChecker(1, flyingPress, electrify, PokemonNamesies.ALAKAZAM, PokemonNamesies.AERODACTYL);
+        advantageChecker(.5, flyingPress, electrify, PokemonNamesies.ZAPDOS, PokemonNamesies.MAWILE, PokemonNamesies.KLINK);
+        advantageChecker(.25, flyingPress, electrify, PokemonNamesies.PIKACHU, PokemonNamesies.SHIELDON);
+        advantageChecker(.125, flyingPress, electrify, PokemonNamesies.ZEKROM, PokemonNamesies.MAGNEZONE);
+        advantageChecker(0, flyingPress, electrify, PokemonNamesies.SANDSHREW, PokemonNamesies.GLIGAR);
 
         // Normalize should make the attack Normal/Flying
         PokemonManipulator normalize = PokemonManipulator.giveAttackingAbility(AbilityNamesies.NORMALIZE);
-        advantageChecker(4, attack, normalize, PokemonNamesies.BRELOOM, PokemonNamesies.PARASECT);
-        advantageChecker(2, attack, normalize, PokemonNamesies.MACHAMP, PokemonNamesies.BULBASAUR);
-        advantageChecker(1, attack, normalize, PokemonNamesies.PIDGEY, PokemonNamesies.JOLTIK);
-        advantageChecker(.5, attack, normalize, PokemonNamesies.PIKACHU, PokemonNamesies.LILEEP, PokemonNamesies.LANTURN);
-        advantageChecker(.25, attack, normalize, PokemonNamesies.KLINK, PokemonNamesies.BOLDORE);
-        advantageChecker(.125, attack, normalize, PokemonNamesies.MAGNEMITE);
-        advantageChecker(.0625, attack, normalize, PokemonNamesies.SHIELDON);
-        advantageChecker(0, attack, normalize, PokemonNamesies.GASTLY, PokemonNamesies.BANETTE);
+        advantageChecker(4, flyingPress, normalize, PokemonNamesies.BRELOOM, PokemonNamesies.PARASECT);
+        advantageChecker(2, flyingPress, normalize, PokemonNamesies.MACHAMP, PokemonNamesies.BULBASAUR);
+        advantageChecker(1, flyingPress, normalize, PokemonNamesies.PIDGEY, PokemonNamesies.JOLTIK);
+        advantageChecker(.5, flyingPress, normalize, PokemonNamesies.PIKACHU, PokemonNamesies.LILEEP, PokemonNamesies.LANTURN);
+        advantageChecker(.25, flyingPress, normalize, PokemonNamesies.KLINK, PokemonNamesies.BOLDORE);
+        advantageChecker(.125, flyingPress, normalize, PokemonNamesies.MAGNEMITE);
+        advantageChecker(.0625, flyingPress, normalize, PokemonNamesies.SHIELDON);
+        advantageChecker(0, flyingPress, normalize, PokemonNamesies.GASTLY, PokemonNamesies.BANETTE);
     }
 
     private void advantageChecker(double expectedAdvantage, AttackNamesies attack, PokemonNamesies... defendingPokemon) {

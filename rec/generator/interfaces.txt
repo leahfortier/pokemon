@@ -494,7 +494,7 @@ OpponentPowerChangeEffect:
 ***
 AdvantageMultiplierMove:
 	Method:
-		Header: double multiplyAdvantage(Type moveType, Type[] defendingType)
+		Header: double multiplyAdvantage(Type attackingType, Type[] defendingTypes)
 		Invoke: Multiply
 		InvokeParameters: ActivePokemon attacking
 		Move: attacking
