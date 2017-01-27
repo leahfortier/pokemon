@@ -63,32 +63,19 @@ public class TypeTest {
     @Test
     public void changeEffectivenessTest() {
         // Foresight
-        changeEffectivenessTest(
-                PokemonNamesies.GASTLY,
-                AttackNamesies.TACKLE,
-                PokemonManipulator.giveDefendingEffect(EffectNamesies.FORESIGHT)
-        );
+        changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.TACKLE, PokemonManipulator.giveDefendingEffect(EffectNamesies.FORESIGHT));
+        changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.KARATE_CHOP, PokemonManipulator.giveDefendingEffect(EffectNamesies.FORESIGHT));
 
         // Miracle Eye
-        changeEffectivenessTest(
-                PokemonNamesies.UMBREON,
-                AttackNamesies.PSYCHIC,
-                PokemonManipulator.giveDefendingEffect(EffectNamesies.MIRACLE_EYE)
-        );
+        changeEffectivenessTest(PokemonNamesies.UMBREON, AttackNamesies.PSYCHIC, PokemonManipulator.giveDefendingEffect(EffectNamesies.MIRACLE_EYE));
 
         // Ring Target
-        changeEffectivenessTest(
-                PokemonNamesies.PIDGEY,
-                AttackNamesies.EARTHQUAKE,
-                PokemonManipulator.giveDefendingItem(ItemNamesies.RING_TARGET)
-        );
+        changeEffectivenessTest(PokemonNamesies.PIDGEY, AttackNamesies.EARTHQUAKE, PokemonManipulator.giveDefendingItem(ItemNamesies.RING_TARGET));
+        changeEffectivenessTest(PokemonNamesies.SANDSHREW, AttackNamesies.THUNDER_PUNCH, PokemonManipulator.giveDefendingItem(ItemNamesies.RING_TARGET));
 
         // Scrappy
-        changeEffectivenessTest(
-                PokemonNamesies.GASTLY,
-                AttackNamesies.TACKLE,
-                PokemonManipulator.giveAttackingAbility(AbilityNamesies.SCRAPPY)
-        );
+        changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.TACKLE, PokemonManipulator.giveAttackingAbility(AbilityNamesies.SCRAPPY));
+        changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.KARATE_CHOP, PokemonManipulator.giveAttackingAbility(AbilityNamesies.SCRAPPY));
     }
 
     private void changeEffectivenessTest(PokemonNamesies defendingPokemon, AttackNamesies attack, PokemonManipulator manipulator) {
@@ -194,9 +181,12 @@ public class TypeTest {
         advantageChecker(1, freezeDry, PokemonNamesies.LAPRAS);
 
         // Super effective against a non-water type Pokemon that has been soaked
-        PokemonManipulator soak = (battle, attacking, defending) ->
-                attacking.callNewMove(battle, defending, new Move(AttackNamesies.SOAK));
-        advantageChecker(2, freezeDry, soak, PokemonNamesies.PIDGEY);
+        advantageChecker(
+                2,
+                freezeDry,
+                (battle, attacking, defending) -> attacking.callNewMove(battle, defending, new Move(AttackNamesies.SOAK)),
+                PokemonNamesies.PIDGEY
+        );
     }
 
     @Test

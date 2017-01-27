@@ -100,7 +100,7 @@ public enum Type implements Serializable {
 		return false;
 	}
 
-	interface AdvantageGetter {
+	private interface AdvantageGetter {
 		TypeAdvantage getAdvantage();
 	}
 }
