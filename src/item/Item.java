@@ -643,7 +643,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return TypeAdvantage.getAdvantage(user, victim, b) > 1 ? 1.2 : 1;
+			return TypeAdvantage.isSuperEffective(user, victim, b) ? 1.2 : 1;
 		}
 	}
 
@@ -1731,7 +1731,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (TypeAdvantage.isSuperEffective(user, victim, b)) {
 				victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
 				victim.getAttributes().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
 			}
@@ -6757,7 +6757,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.FIRE && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.FIRE && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -6788,7 +6788,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.WATER && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.WATER && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -6819,7 +6819,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.ELECTRIC && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.ELECTRIC && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -6850,7 +6850,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.GRASS && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.GRASS && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -6881,7 +6881,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.ICE && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.ICE && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -6912,7 +6912,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.FIGHTING && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.FIGHTING && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -6943,7 +6943,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.POISON && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.POISON && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -6974,7 +6974,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.GROUND && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.GROUND && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -7005,7 +7005,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.FLYING && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.FLYING && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -7036,7 +7036,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.PSYCHIC && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.PSYCHIC && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -7067,7 +7067,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.BUG && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.BUG && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -7098,7 +7098,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.ROCK && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.ROCK && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -7129,7 +7129,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.GHOST && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.GHOST && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -7160,7 +7160,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.DRAGON && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.DRAGON && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -7191,7 +7191,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.DARK && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.DARK && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -7222,7 +7222,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.STEEL && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.STEEL && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -7253,7 +7253,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.NORMAL && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.NORMAL && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -7284,7 +7284,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.FAIRY && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (user.getAttackType() == Type.FAIRY && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 				victim.consumeItem(b);
 				return .5;
@@ -7714,7 +7714,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!victim.fullHealth() && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+			if (!victim.fullHealth() && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " restored its health!"));
 				victim.healHealthFraction(.25);
 				Messages.add(new MessageUpdate().updatePokemon(b, victim));

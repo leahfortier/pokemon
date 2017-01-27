@@ -581,7 +581,7 @@ public class Battle {
 		return damage;
 	}
 
-	private double getDamageModifier(ActivePokemon me, ActivePokemon o) {
+	protected double getDamageModifier(ActivePokemon me, ActivePokemon o) {
 		double modifier = 1;
 		modifier = PowerChangeEffect.updateModifier(modifier, this, me, o);
 		modifier = OpponentPowerChangeEffect.updateModifier(modifier, this, me, o);
@@ -651,7 +651,7 @@ public class Battle {
 	
 	// Returns true if the Pokemon is able to execute their turn by checking effects that have been casted upon them
 	// This is where BeforeTurnEffects are handled
-	private boolean ableToAttack(ActivePokemon p, ActivePokemon opp) {
+	protected boolean ableToAttack(ActivePokemon p, ActivePokemon opp) {
 		// Dead Pokemon can't attack and it's not nice to attack a deady
 		if (p.isFainted(this) || opp.isFainted(this)) {
 			return false;

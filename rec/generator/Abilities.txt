@@ -70,7 +70,7 @@ Tinted Lens:
 	Desc: Powers up \"not very effective\" moves.
 	Int: PowerChangeEffect
 	GetMultiplier: 
-	return TypeAdvantage.getAdvantage(user, victim, b) < 1 ? 2 : 1;
+	return TypeAdvantage.isNotVeryEffective(user, victim, b) ? 2 : 1;
 	###
 *
 Swarm:
@@ -526,14 +526,14 @@ Filter:
 	Desc: Powers down super-effective moves.
 	Int: OpponentPowerChangeEffect
 	GetOppMultiplier: 
-	return TypeAdvantage.getAdvantage(user, victim, b) > 1 ? .75 : 1;
+	return TypeAdvantage.isSuperEffective(user, victim, b) ? .75 : 1;
 	###
 *
 Prism Armor:
 	Desc: Reduces the power of supereffective attacks taken.
 	Int: OpponentPowerChangeEffect
 	GetOppMultiplier: 
-	return TypeAdvantage.getAdvantage(user, victim, b) > 1 ? .75 : 1;
+	return TypeAdvantage.isSuperEffective(user, victim, b) ? .75 : 1;
 	###
 	MoldBreakerBreaker: True
 *
@@ -790,7 +790,7 @@ Wonder Guard:
 	}
 	
 	// Super effective moves hit
-	if (TypeAdvantage.getAdvantage(p, opp, b) > 1) {
+	if (TypeAdvantage.isSuperEffective(p, opp, b)) {
 		return true;
 	}
 	
@@ -833,7 +833,7 @@ Solid Rock:
 	Desc: Reduces damage from supereffective attacks.
 	Int: OpponentPowerChangeEffect
 	GetOppMultiplier: 
-	return TypeAdvantage.getAdvantage(user, victim, b) < 1 ? .75 : 1;
+	return TypeAdvantage.isSuperEffective(user, victim, b) ? .75 : 1;
 	###
 *
 White Smoke:

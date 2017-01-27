@@ -37,7 +37,7 @@ public class TypeTest {
             {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 1}}; // No Type
 
     @Test
-    public void typeAdvantageTest() {
+    public void typeAdvantageChartTest() {
         for (Type attacking : Type.values()) {
             TypeAdvantage advantage = attacking.getAdvantage();
             for (int i = 0; i < typeAdvantage[attacking.getIndex()].length; i++) {
@@ -51,6 +51,13 @@ public class TypeTest {
                 );
             }
         }
+    }
+
+    @Test
+    public void typeAdvantageTest() {
+        Assert.assertTrue(TypeAdvantage.ELECTRIC.doesNotEffect(Type.GROUND));
+        Assert.assertTrue(TypeAdvantage.WATER.isSuperEffective(Type.FIRE));
+        Assert.assertTrue(TypeAdvantage.NORMAL.isNotVeryEffective(Type.ROCK));
     }
 
     @Test
@@ -92,11 +99,76 @@ public class TypeTest {
 
         // Make sure attack is unsuccessful without the effect
         attacking.setMove(new Move(attack));
-        Assert.assertTrue(TypeAdvantage.getAdvantage(attacking, defending, battle) == 0);
+        Assert.assertTrue(TypeAdvantage.doesNotEffect(attacking, defending, battle));
 
         // Cast the effect and make sure the move hits
         manipulator.manipulate(battle, attacking, defending);
-        Assert.assertTrue(TypeAdvantage.getAdvantage(attacking, defending, battle) > 0);
+        Assert.assertFalse(TypeAdvantage.doesNotEffect(attacking, defending, battle));
+    }
+
+    @Test
+    public void filterTest() {
+        // Super-effective attack should be reduced by 25%
+        damageModifierTest(PokemonNamesies.SQUIRTLE, AttackNamesies.VINE_WHIP, .75, PokemonManipulator.giveDefendingAbility(AbilityNamesies.FILTER));
+        damageModifierTest(PokemonNamesies.CHANDELURE, AttackNamesies.SURF, .75, PokemonManipulator.giveDefendingAbility(AbilityNamesies.PRISM_ARMOR));
+        damageModifierTest(PokemonNamesies.DRIFBLIM, AttackNamesies.THUNDER_SHOCK, .75, PokemonManipulator.giveDefendingAbility(AbilityNamesies.SOLID_ROCK));
+
+        // Neutral and not very effective moves should not be modified
+        damageModifierTest(PokemonNamesies.RAICHU, AttackNamesies.VINE_WHIP, 1, PokemonManipulator.giveDefendingAbility(AbilityNamesies.FILTER));
+        damageModifierTest(PokemonNamesies.BUDEW, AttackNamesies.THUNDER_SHOCK, 1, PokemonManipulator.giveDefendingAbility(AbilityNamesies.SOLID_ROCK));
+
+        // Should not change modifier when the attacker has mold breaker
+        damageModifierTest(
+                PokemonNamesies.SQUIRTLE,
+                AttackNamesies.VINE_WHIP,
+                1,
+                (battle, attacking, defending) -> {
+                    attacking.setAbility(AbilityNamesies.MOLD_BREAKER);
+                    defending.setAbility(AbilityNamesies.FILTER);
+                }
+        );
+
+        // Prism Armor is unaffected by mold breaker
+        damageModifierTest(
+                PokemonNamesies.CHANDELURE,
+                AttackNamesies.SURF,
+                .75,
+                (battle, attacking, defending) -> {
+                    attacking.setAbility(AbilityNamesies.MOLD_BREAKER);
+                    defending.setAbility(AbilityNamesies.PRISM_ARMOR);
+                }
+        );
+    }
+
+    @Test
+    public void damageModifierTest() {
+        // Tinted Lens doubles the power when not very effective
+        damageModifierTest(PokemonNamesies.BUDEW, AttackNamesies.THUNDER_SHOCK, 2, PokemonManipulator.giveAttackingAbility(AbilityNamesies.TINTED_LENS));
+        damageModifierTest(PokemonNamesies.SQUIRTLE, AttackNamesies.VINE_WHIP, 1, PokemonManipulator.giveAttackingAbility(AbilityNamesies.TINTED_LENS));
+        damageModifierTest(PokemonNamesies.RAICHU, AttackNamesies.EMBER, 1, PokemonManipulator.giveAttackingAbility(AbilityNamesies.TINTED_LENS));
+
+        // Expert Belt increases the power of super effective movws by 20%
+        damageModifierTest(PokemonNamesies.SQUIRTLE, AttackNamesies.VINE_WHIP, 1.2, PokemonManipulator.giveAttackingItem(ItemNamesies.EXPERT_BELT));
+        damageModifierTest(PokemonNamesies.SQUIRTLE, AttackNamesies.DARK_PULSE, 1, PokemonManipulator.giveAttackingItem(ItemNamesies.EXPERT_BELT));
+        damageModifierTest(PokemonNamesies.SQUIRTLE, AttackNamesies.SURF, 1, PokemonManipulator.giveAttackingItem(ItemNamesies.EXPERT_BELT));
+    }
+
+    private void damageModifierTest(PokemonNamesies defendingName, AttackNamesies attackName, double expectedChange, PokemonManipulator manipulator) {
+        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
+        TestPokemon defending = new TestPokemon(defendingName);
+
+        TestBattle battle = TestBattle.create(attacking, defending);
+
+        attacking.setupMove(attackName, battle, defending);
+        double beforeModifier = battle.getDamageModifier(attacking, defending);
+
+        manipulator.manipulate(battle, attacking, defending);
+        double afterModifier = battle.getDamageModifier(attacking, defending);
+
+        Assert.assertTrue(
+                StringUtils.spaceSeparated(defendingName, attackName, beforeModifier, afterModifier, expectedChange),
+                expectedChange*beforeModifier == afterModifier
+        );
     }
 
     @Test

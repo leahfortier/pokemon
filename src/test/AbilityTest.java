@@ -24,17 +24,38 @@ public class AbilityTest {
 
         // Ground moves should not hit a levitating Pokemon
         attacking.setMove(new Move(AttackNamesies.EARTHQUAKE));
-        Assert.assertTrue(TypeAdvantage.getAdvantage(attacking, defending, battle) == 0);
+        Assert.assertTrue(TypeAdvantage.doesNotEffect(attacking, defending, battle));
 
         // Even if holding a Ring Target
         defending.giveItem(ItemNamesies.RING_TARGET);
-        Assert.assertTrue(TypeAdvantage.getAdvantage(attacking, defending, battle) == 0);
+        Assert.assertTrue(TypeAdvantage.doesNotEffect(attacking, defending, battle));
 
         // Unless the user has mold breaker
         attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
-        Assert.assertTrue(TypeAdvantage.getAdvantage(attacking, defending, battle) > 0);
+        Assert.assertFalse(TypeAdvantage.doesNotEffect(attacking, defending, battle));
 
         defending.removeItem();
-        Assert.assertTrue(TypeAdvantage.getAdvantage(attacking, defending, battle) > 0);
+        Assert.assertFalse(TypeAdvantage.doesNotEffect(attacking, defending, battle));
+    }
+
+    @Test
+    public void wonderGuardTest() {
+        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
+        TestPokemon defending = getPokemon(PokemonNamesies.SHEDINJA, AbilityNamesies.WONDER_GUARD);
+
+        TestBattle battle = TestBattle.create(attacking, defending);
+
+        // Status move should work
+        Assert.assertTrue(battle.ableToAttack(AttackNamesies.DRAGON_DANCE, attacking, defending));
+        Assert.assertTrue(battle.ableToAttack(AttackNamesies.THUNDER_WAVE, attacking, defending));
+
+        // Super-effective moves and moves without type work
+        Assert.assertTrue(battle.ableToAttack(AttackNamesies.SHADOW_BALL, attacking, defending));
+        Assert.assertTrue(battle.ableToAttack(AttackNamesies.STRUGGLE, attacking, defending));
+
+        // Attacking non-super effective moves should not work
+        Assert.assertFalse(battle.ableToAttack(AttackNamesies.SURF, attacking, defending));
+        Assert.assertFalse(battle.ableToAttack(AttackNamesies.VINE_WHIP, attacking, defending));
+        Assert.assertFalse(battle.ableToAttack(AttackNamesies.TACKLE, attacking, defending));
     }
 }

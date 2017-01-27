@@ -369,7 +369,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return TypeAdvantage.getAdvantage(user, victim, b) < 1 ? 2 : 1;
+			return TypeAdvantage.isNotVeryEffective(user, victim, b) ? 2 : 1;
 		}
 	}
 
@@ -1319,7 +1319,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return TypeAdvantage.getAdvantage(user, victim, b) > 1 ? .75 : 1;
+			return TypeAdvantage.isSuperEffective(user, victim, b) ? .75 : 1;
 		}
 	}
 
@@ -1336,7 +1336,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return TypeAdvantage.getAdvantage(user, victim, b) > 1 ? .75 : 1;
+			return TypeAdvantage.isSuperEffective(user, victim, b) ? .75 : 1;
 		}
 	}
 
@@ -1894,7 +1894,7 @@ public abstract class Ability implements Serializable {
 			}
 			
 			// Super effective moves hit
-			if (TypeAdvantage.getAdvantage(p, opp, b) > 1) {
+			if (TypeAdvantage.isSuperEffective(p, opp, b)) {
 				return true;
 			}
 			
@@ -1971,7 +1971,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return TypeAdvantage.getAdvantage(user, victim, b) < 1 ? .75 : 1;
+			return TypeAdvantage.isSuperEffective(user, victim, b) ? .75 : 1;
 		}
 	}
 

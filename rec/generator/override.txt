@@ -1904,7 +1904,7 @@ Override:
 		AddMapField: NGType: {0}
 		AddInterface: OpponentPowerChangeEffect
 		AddMapField: GetOppMultiplier:
-		if (user.getAttackType() == Type.{00} && TypeAdvantage.getAdvantage(user, victim, b) > 1) {
+		if (user.getAttackType() == Type.{00} && TypeAdvantage.isSuperEffective(user, victim, b)) {
 			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 			victim.consumeItem(b);
 			return .5;

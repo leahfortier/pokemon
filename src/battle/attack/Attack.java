@@ -280,14 +280,14 @@ public abstract class Attack implements Serializable {
 	}
 	
 	private boolean zeroAdvantage(Battle b, ActivePokemon p, ActivePokemon opp) {
-		if (TypeAdvantage.getAdvantage(p, opp, b) > 0) {
-			return false;
+		if (TypeAdvantage.doesNotEffect(p, opp, b)) {
+			Messages.add(new MessageUpdate(TypeAdvantage.getDoesNotEffectMessage(opp)));
+			CrashDamageMove.invokeCrashDamageMove(b, p);
+
+			return true;
 		}
-		
-		Messages.add(new MessageUpdate("It doesn't affect " + opp.getName() + "!"));
-		CrashDamageMove.invokeCrashDamageMove(b, p);
-		
-		return true;
+
+		return false;
 	}
 	
 	// Takes type advantage, victim ability, and victim type into account to determine if the attack is effective
@@ -316,9 +316,11 @@ public abstract class Attack implements Serializable {
 	public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 
 		// Print Advantage
-		double adv = TypeAdvantage.getAdvantage(me, o, b);
-		if (adv < 1) Messages.add(new MessageUpdate("It's not very effective..."));
-		else if (adv > 1) Messages.add(new MessageUpdate("It's super effective!"));
+		if (TypeAdvantage.isNotVeryEffective(me, o, b)) {
+			Messages.add(new MessageUpdate(TypeAdvantage.getNotVeryEffectiveMessage()));
+		} else if (TypeAdvantage.isSuperEffective(me, o, b)) {
+			Messages.add(new MessageUpdate(TypeAdvantage.getSuperEffectiveMessage()));
+		}
 		
 		// Deal damage
 		int damage = o.reduceHealth(b, b.calculateDamage(me, o));
