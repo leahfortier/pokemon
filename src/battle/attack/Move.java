@@ -6,7 +6,7 @@ import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import battle.effect.generic.EffectInterfaces.OpponentAttackSelectionEffect;
-import main.Type;
+import type.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;

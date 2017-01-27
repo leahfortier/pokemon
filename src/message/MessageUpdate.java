@@ -7,7 +7,7 @@ import gui.view.ViewMode;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
-import main.Type;
+import type.Type;
 import message.Messages.MessageState;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;

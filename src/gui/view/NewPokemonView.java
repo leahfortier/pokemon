@@ -8,7 +8,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
-import main.Type;
+import type.Type;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;

@@ -1,7 +1,7 @@
 package battle.effect;
 
 import battle.Battle;
-import main.Type;
+import type.Type;
 import pokemon.ActivePokemon;
 
 public interface DamageBlocker {

@@ -12,7 +12,7 @@ import battle.effect.generic.Weather;
 import item.Item;
 import item.ItemNamesies;
 import main.Global;
-import main.Type;
+import type.Type;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import util.FileIO;

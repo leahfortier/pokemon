@@ -12,7 +12,7 @@ import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.status.StatusCondition;
-import main.Type;
+import type.Type;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.Messages;

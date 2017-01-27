@@ -1,5 +1,8 @@
 package test;
 
+import battle.Battle;
+import battle.attack.AttackNamesies;
+import battle.attack.Move;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
@@ -18,5 +21,10 @@ class TestPokemon extends ActivePokemon {
     TestPokemon withAbility(AbilityNamesies ability) {
         super.setAbility(ability);
         return this;
+    }
+
+    void setupMove(AttackNamesies attackNamesies, Battle battle, ActivePokemon defending) {
+        this.setMove(new Move(attackNamesies));
+        this.startAttack(battle, defending);
     }
 }

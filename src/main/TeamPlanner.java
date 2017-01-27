@@ -7,6 +7,8 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import type.Type;
+import type.TypeAdvantage;
 import util.FileIO;
 import util.StringUtils;
 
@@ -303,10 +305,7 @@ public class TeamPlanner {
 						int first = firstType.getIndex();
 						int second = secondType.getIndex();
 						
-						double firstAdvantage = Type.getBasicAdvantage(attackType, firstType);
-						double secondAdvantage = Type.getBasicAdvantage(attackType, secondType);
-						
-						double advantage = firstAdvantage*secondAdvantage;
+						double advantage = attackType.getAdvantage().getAdvantage(firstType, secondType);
 						
 						if (advantage > 1) {
 							coverageCount[first][second]++;

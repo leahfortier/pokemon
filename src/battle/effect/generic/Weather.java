@@ -9,7 +9,7 @@ import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.status.StatusCondition;
 import item.Item;
-import main.Type;
+import type.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;

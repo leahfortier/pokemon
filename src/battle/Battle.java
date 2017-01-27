@@ -30,7 +30,6 @@ import battle.effect.generic.Weather;
 import item.ItemNamesies;
 import main.Game;
 import main.Global;
-import main.Type;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -47,6 +46,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
+import type.TypeAdvantage;
 import util.PokeString;
 import util.RandomUtils;
 
@@ -558,8 +558,8 @@ public class Battle {
 		int attackStat = Stat.getStat(attacking, me, o, this);
 		int defenseStat = Stat.getStat(defending, o, me, this);
 		
-		double stab = Type.getSTAB(this, me);
-		double adv = Type.getAdvantage(me, o, this);
+		double stab = TypeAdvantage.getSTAB(this, me);
+		double adv = TypeAdvantage.getAdvantage(me, o, this);
 		
 		int damage = (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
 		
@@ -581,7 +581,7 @@ public class Battle {
 		return damage;
 	}
 
-	private double getDamageModifier(ActivePokemon me, ActivePokemon o) {
+	protected double getDamageModifier(ActivePokemon me, ActivePokemon o) {
 		double modifier = 1;
 		modifier = PowerChangeEffect.updateModifier(modifier, this, me, o);
 		modifier = OpponentPowerChangeEffect.updateModifier(modifier, this, me, o);
@@ -651,7 +651,7 @@ public class Battle {
 	
 	// Returns true if the Pokemon is able to execute their turn by checking effects that have been casted upon them
 	// This is where BeforeTurnEffects are handled
-	private boolean ableToAttack(ActivePokemon p, ActivePokemon opp) {
+	protected boolean ableToAttack(ActivePokemon p, ActivePokemon opp) {
 		// Dead Pokemon can't attack and it's not nice to attack a deady
 		if (p.isFainted(this) || opp.isFainted(this)) {
 			return false;

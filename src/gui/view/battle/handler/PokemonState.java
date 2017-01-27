@@ -9,7 +9,7 @@ import gui.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
-import main.Type;
+import type.Type;
 import map.Direction;
 import pokemon.ActivePokemon;
 import pokemon.Stat;

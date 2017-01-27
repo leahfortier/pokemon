@@ -92,6 +92,15 @@ public class StringUtils {
         return builder.toString();
     }
 
+    public static String spaceSeparated(Object... values) {
+        StringBuilder builder = new StringBuilder();
+        for (Object value : values) {
+            builder.append(value).append(" ");
+        }
+
+        return builder.toString();
+    }
+
     // TODO: Look at this again and rewrite it
     public static String properCase(String string) {
         if (isNullOrEmpty(string)) {

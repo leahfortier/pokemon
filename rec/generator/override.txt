@@ -1904,7 +1904,7 @@ Override:
 		AddMapField: NGType: {0}
 		AddInterface: OpponentPowerChangeEffect
 		AddMapField: GetOppMultiplier:
-		if (user.getAttackType() == Type.{00} && Type.getAdvantage(user, victim, b) > 1) {
+		if (user.getAttackType() == Type.{00} && TypeAdvantage.isSuperEffective(user, victim, b)) {
 			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
 			victim.consumeItem(b);
 			return .5;
@@ -1971,12 +1971,17 @@ Override:
 	*
 ***
 Override:
+	RemoveAdvantageType:
+		AddInterface: NoAdvantageChanger
+		AddMapField: NegateNoAdvantage: defending == Type.{11} && ({2-})
+	*
+***
+Override:
 	ForesightEffect:
 		AddMapField: CastMessage: user.getName() + " identified " + victim.getName() + "!"
 		AddMapField: CanHave: True
 		AddMapField: UsedProof: True
-		AddInterface: AdvantageChanger
-		AddMapField: AdvantageChange: (attacking == Type.{11} || attacking == Type.{22}) && defending[i] == Type.{33}
+		AddMapField: RemoveAdvantageType: {0}
 	*
 ***
 Override:
@@ -2184,23 +2189,32 @@ Override:
 		###
 	*
 ***
-AdvantageChanger:
-	AdvantageChange:
-		Header: Type[] getAdvantageChange(Type attacking, Type[] defending)
+NoAdvantageChanger:
+	NegateNoAdvantage:
+		Header: boolean negateNoAdvantage(Type attacking, Type defending)
 		Body:
-		for (int i = 0; i < 2; i++) {
-			if ({0}) {
-				defending[i] = Type.NO_TYPE;	
-			}
-		}
-		
-		return defending;
+		return {0};
 		###
 	*
 ***
 AdvantageMultiplierMove:
 	MultiplyAdvantage:
-		Header: double multiplyAdvantage(Type moveType, Type[] defendingType)
+		Header: double multiplyAdvantage(Type attackingType, Type[] defendingTypes)
+	*
+***
+Override:
+	SuperEffectiveAdvantageType:
+		AddInterface: AdvantageMultiplierMove
+		AddMapField: MultiplyAdvantage:
+		double multiplier = 1;
+		for (Type defendingType : defendingTypes) {
+			if (defendingType == Type.{00}) {
+				multiplier *= 2/attackingType.getAdvantage().getAdvantage(defendingType);
+			}
+		}
+		
+		return multiplier;
+		###
 	*
 ***
 Override:

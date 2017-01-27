@@ -45,7 +45,7 @@ import item.hold.SpecialTypeItem.GemItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
 import main.Global;
-import main.Type;
+import type.Type;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -59,6 +59,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
+import type.TypeAdvantage;
 import util.GeneralUtils;
 import util.RandomUtils;
 
@@ -279,14 +280,14 @@ public abstract class Attack implements Serializable {
 	}
 	
 	private boolean zeroAdvantage(Battle b, ActivePokemon p, ActivePokemon opp) {
-		if (Type.getAdvantage(p, opp, b) > 0) {
-			return false;
+		if (TypeAdvantage.doesNotEffect(p, opp, b)) {
+			Messages.add(new MessageUpdate(TypeAdvantage.getDoesNotEffectMessage(opp)));
+			CrashDamageMove.invokeCrashDamageMove(b, p);
+
+			return true;
 		}
-		
-		Messages.add(new MessageUpdate("It doesn't affect " + opp.getName() + "!"));
-		CrashDamageMove.invokeCrashDamageMove(b, p);
-		
-		return true;
+
+		return false;
 	}
 	
 	// Takes type advantage, victim ability, and victim type into account to determine if the attack is effective
@@ -315,9 +316,11 @@ public abstract class Attack implements Serializable {
 	public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 
 		// Print Advantage
-		double adv = Type.getAdvantage(me, o, b);
-		if (adv < 1) Messages.add(new MessageUpdate("It's not very effective..."));
-		else if (adv > 1) Messages.add(new MessageUpdate("It's super effective!"));
+		if (TypeAdvantage.isNotVeryEffective(me, o, b)) {
+			Messages.add(new MessageUpdate(TypeAdvantage.getNotVeryEffectiveMessage()));
+		} else if (TypeAdvantage.isSuperEffective(me, o, b)) {
+			Messages.add(new MessageUpdate(TypeAdvantage.getSuperEffectiveMessage()));
+		}
 		
 		// Deal damage
 		int damage = o.reduceHealth(b, b.calculateDamage(me, o));
@@ -359,7 +362,7 @@ public abstract class Attack implements Serializable {
 	}
 
 	// TODO: Need to make this final and have an overridable method that is called inside here
-	public 	void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+	public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 		// Kill yourself!!
 		if (isMoveType(MoveType.USER_FAINTS)) {
 			user.killKillKillMurderMurderMurder(b);
@@ -404,7 +407,7 @@ public abstract class Attack implements Serializable {
 		return this.effectChance == 100 && this.category == MoveCategory.STATUS;
 	}
 	
-	public boolean canPrintCast() {
+	private boolean canPrintCast() {
 		return this.printCast;
 	}
 	
@@ -7059,7 +7062,7 @@ public abstract class Attack implements Serializable {
 		private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b) {
 			List<Type> types = new ArrayList<>();
 			for (Type t : Type.values()) {
-				if (Type.getBasicAdvantage(attacking, t) < 1 && !victim.isType(b, t)) {
+				if (attacking.getAdvantage().isNotVeryEffective(t) && !victim.isType(b, t)) {
 					types.add(t);
 				}
 			}
@@ -10394,11 +10397,11 @@ public abstract class Attack implements Serializable {
 			super.status = StatusCondition.FROZEN;
 		}
 
-		public double multiplyAdvantage(Type moveType, Type[] defendingType) {
+		public double multiplyAdvantage(Type attackingType, Type[] defendingTypes) {
 			double multiplier = 1;
-			for (int i = 0; i < 2; i++) {
-				if (defendingType[i] == Type.WATER) {
-					multiplier *= 2/Type.getBasicAdvantage(moveType, defendingType[i]);
+			for (Type defendingType : defendingTypes) {
+				if (defendingType == Type.WATER) {
+					multiplier *= 2/attackingType.getAdvantage().getAdvantage(defendingType);
 				}
 			}
 			
@@ -10416,8 +10419,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public double multiplyAdvantage(Type moveType, Type[] defendingType) {
-			return Type.getBasicAdvantage(Type.FLYING, defendingType[0])*Type.getBasicAdvantage(Type.FLYING, defendingType[1]);
+		public double multiplyAdvantage(Type attackingType, Type[] defendingTypes) {
+			return TypeAdvantage.FLYING.getAdvantage(defendingTypes);
 		}
 	}
 

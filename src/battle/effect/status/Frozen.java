@@ -5,7 +5,7 @@ import battle.attack.MoveType;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
-import main.Type;
+import type.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;

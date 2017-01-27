@@ -394,11 +394,10 @@ ChangeAttackTypeEffect:
 		InvokeName: updateAttackType
 	*
 ***
-AdvantageChanger:
+NoAdvantageChanger:
 	Method:
-		Header: Type[] getAdvantageChange(Type attackingType, Type[] defendingType)
-		Invoke: Update
-		Update: defendingType
+		Header: boolean negateNoAdvantage(Type attackingType, Type defendingType)
+		Invoke: Check true
 		InvokeParameters: Battle b, ActivePokemon attacking, ActivePokemon defending
 		SetInvokees:
 		// TODO: I really hate it when the invokee list takes from the attacker and the defender -- need to rewrite all of this
@@ -408,7 +407,6 @@ AdvantageChanger:
 		invokees.add(defending.getHeldItem(b));
 		invokees.add(attacking.getAbility());
 		###
-		InvokeName: updateDefendingType
 	*
 ***
 ChangeMoveListEffect:
@@ -496,7 +494,7 @@ OpponentPowerChangeEffect:
 ***
 AdvantageMultiplierMove:
 	Method:
-		Header: double multiplyAdvantage(Type moveType, Type[] defendingType)
+		Header: double multiplyAdvantage(Type attackingType, Type[] defendingTypes)
 		Invoke: Multiply
 		InvokeParameters: ActivePokemon attacking
 		Move: attacking

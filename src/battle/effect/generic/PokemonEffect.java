@@ -13,7 +13,6 @@ import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.BattleEffect.FieldUproar;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
-import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
@@ -32,6 +31,7 @@ import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
+import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
@@ -53,7 +53,6 @@ import battle.effect.status.StatusCondition;
 import item.Item;
 import item.ItemNamesies;
 import main.Global;
-import main.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
@@ -61,6 +60,7 @@ import pokemon.Gender;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import type.Type;
 import util.RandomUtils;
 
 import java.io.Serializable;
@@ -1620,23 +1620,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Foresight extends PokemonEffect implements AdvantageChanger {
+	static class Foresight extends PokemonEffect implements NoAdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		Foresight() {
 			super(EffectNamesies.FORESIGHT, -1, -1, false);
 		}
 
-		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
-			for (int i = 0; i < 2; i++) {
-				if ((attacking == Type.NORMAL || attacking == Type.FIGHTING) && defending[i] == Type.GHOST) {
-					defending[i] = Type.NO_TYPE;
-				}
-			}
-			
-			return defending;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!victim.hasEffect(this.namesies)) {
 				super.cast(b, caster, victim, source, printCast);
@@ -1649,25 +1639,19 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getName() + " identified " + victim.getName() + "!";
 		}
+
+		public boolean negateNoAdvantage(Type attacking, Type defending) {
+			return defending == Type.GHOST && (attacking == Type.NORMAL || attacking == Type.FIGHTING);
+		}
 	}
 
-	static class MiracleEye extends PokemonEffect implements AdvantageChanger {
+	static class MiracleEye extends PokemonEffect implements NoAdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		MiracleEye() {
 			super(EffectNamesies.MIRACLE_EYE, -1, -1, false);
 		}
 
-		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
-			for (int i = 0; i < 2; i++) {
-				if ((attacking == Type.PSYCHIC || attacking == Type.PSYCHIC) && defending[i] == Type.DARK) {
-					defending[i] = Type.NO_TYPE;
-				}
-			}
-			
-			return defending;
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!victim.hasEffect(this.namesies)) {
 				super.cast(b, caster, victim, source, printCast);
@@ -1679,6 +1663,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getName() + " identified " + victim.getName() + "!";
+		}
+
+		public boolean negateNoAdvantage(Type attacking, Type defending) {
+			return defending == Type.DARK && (attacking == Type.PSYCHIC);
 		}
 	}
 

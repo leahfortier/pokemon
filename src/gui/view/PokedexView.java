@@ -9,7 +9,7 @@ import gui.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
-import main.Type;
+import type.Type;
 import map.Direction;
 import pokemon.PC;
 import pokemon.PokemonInfo;

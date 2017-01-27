@@ -17,7 +17,6 @@ import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
-import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
@@ -36,6 +35,7 @@ import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
+import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
@@ -72,7 +72,6 @@ import item.hold.HoldItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
 import main.Global;
-import main.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
@@ -82,6 +81,8 @@ import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import trainer.Trainer;
 import trainer.WildPokemon;
+import type.Type;
+import type.TypeAdvantage;
 import util.RandomUtils;
 
 import java.io.Serializable;
@@ -368,7 +369,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return Type.getAdvantage(user, victim, b) < 1 ? 2 : 1;
+			return TypeAdvantage.isNotVeryEffective(user, victim, b) ? 2 : 1;
 		}
 	}
 
@@ -1262,21 +1263,15 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Scrappy extends Ability implements AdvantageChanger {
+	static class Scrappy extends Ability implements NoAdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		Scrappy() {
 			super(AbilityNamesies.SCRAPPY, "Enables moves to hit Ghost-type foes.");
 		}
 
-		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
-			for (int i = 0; i < 2; i++) {
-				if ((attacking == Type.NORMAL || attacking == Type.FIGHTING) && defending[i] == Type.GHOST) {
-					defending[i] = Type.NO_TYPE;
-				}
-			}
-			
-			return defending;
+		public boolean negateNoAdvantage(Type attacking, Type defending) {
+			return defending == Type.GHOST && (attacking == Type.NORMAL || attacking == Type.FIGHTING);
 		}
 	}
 
@@ -1324,7 +1319,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return Type.getAdvantage(user, victim, b) > 1 ? .75 : 1;
+			return TypeAdvantage.isSuperEffective(user, victim, b) ? .75 : 1;
 		}
 	}
 
@@ -1341,7 +1336,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return Type.getAdvantage(user, victim, b) > 1 ? .75 : 1;
+			return TypeAdvantage.isSuperEffective(user, victim, b) ? .75 : 1;
 		}
 	}
 
@@ -1899,7 +1894,7 @@ public abstract class Ability implements Serializable {
 			}
 			
 			// Super effective moves hit
-			if (Type.getAdvantage(p, opp, b) > 1) {
+			if (TypeAdvantage.isSuperEffective(p, opp, b)) {
 				return true;
 			}
 			
@@ -1976,7 +1971,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return Type.getAdvantage(user, victim, b) < 1 ? .75 : 1;
+			return TypeAdvantage.isSuperEffective(user, victim, b) ? .75 : 1;
 		}
 	}
 
@@ -2027,7 +2022,7 @@ public abstract class Ability implements Serializable {
 			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
 			for (Move m : other.getMoves(b)) {
 				Attack attack = m.getAttack();
-				if (Type.getBasicAdvantage(attack.getActualType(), enterer, b) > 1 || attack.isMoveType(MoveType.ONE_HIT_KO)) {
+				if (attack.getActualType().getAdvantage().isSuperEffective(enterer, b) || attack.isMoveType(MoveType.ONE_HIT_KO)) {
 					// TODO: Shouldn't this be for a random move?
 					Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made it shudder!"));
 					break;

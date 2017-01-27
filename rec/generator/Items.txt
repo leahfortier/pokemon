@@ -243,7 +243,7 @@ Expert Belt:
 	Price: 200
 	Fling: 10
 	GetMultiplier:
-		return Type.getAdvantage(user, victim, b) > 1 ? 1.2 : 1;
+		return TypeAdvantage.isSuperEffective(user, victim, b) ? 1.2 : 1;
 		###
 *
 Flame Orb:
@@ -555,12 +555,12 @@ Red Card:
 	###
 *
 Ring Target:
-	Int: HoldItem, AdvantageChanger
+	Int: HoldItem, NoAdvantageChanger
 	Cat: Misc
 	Desc: Moves that would otherwise have no effect will land on the Pok\u00e9mon that holds it.
 	Price: 200
 	Fling: 10
-	AdvantageChange: Type.getBasicAdvantage(attacking, defending[i]) == 0
+	NegateNoAdvantage: true
 *
 Rocky Helmet:
 	Int: HoldItem, PhysicalContactEffect
@@ -711,7 +711,7 @@ Weakness Policy:
 	Price: 200
 	Fling: 30
 	OnTakeDamage:
-		if (Type.getAdvantage(user, victim, b) > 1) {
+		if (TypeAdvantage.isSuperEffective(user, victim, b)) {
 			victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
 			victim.getAttributes().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
 		}
@@ -2187,7 +2187,7 @@ Enigma Berry:
 	NGPow: 100
 	Int: Berry, TakeDamageEffect
 	OnTakeDamage:
-		if (!victim.fullHealth() && Type.getAdvantage(user, victim, b) > 1) {
+		if (!victim.fullHealth() && TypeAdvantage.isSuperEffective(user, victim, b)) {
 			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " restored its health!"));
 			victim.healHealthFraction(.25);
 			Messages.add(new MessageUpdate().updatePokemon(b, victim));

@@ -553,10 +553,10 @@ Trapped:
 	TrappingMessage: trapped.getName() + " cannot be recalled at this time!"
 *	
 Foresight:
-	ForesightEffect: Normal Fighting Ghost
+	ForesightEffect: Ghost attacking == Type.NORMAL || attacking == Type.FIGHTING
 *
 MiracleEye:
-	ForesightEffect: Psychic Psychic Dark
+	ForesightEffect: Dark attacking == Type.PSYCHIC
 *
 Torment:
 	FailAbility: Aroma Veil
