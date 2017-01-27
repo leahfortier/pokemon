@@ -1,12 +1,11 @@
 package type;
 
 import battle.Battle;
-import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
+import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
 import pokemon.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -74,14 +73,25 @@ public enum TypeAdvantage {
             .weak(Type.FIRE, Type.POISON, Type.STEEL)),
     NO_TYPE(new Builder());
 
+    private final Type type;
     private final Map<Type, Double> advantageMap;
 
     TypeAdvantage(Builder builder) {
+        this.type = Type.valueOf(this.name());
         this.advantageMap = builder.advantageMap;
     }
 
     public double getAdvantage(Type defending) {
         return advantageMap.get(defending);
+    }
+
+    public double getAdvantage(Battle b, ActivePokemon attacking, ActivePokemon defending, Type defendingType) {
+        if (doesNotEffect(defendingType)
+                && NoAdvantageChanger.checkNoAdvantageChanger(b, attacking, defending, this.type, defendingType)) {
+            return 1;
+        }
+
+        return getAdvantage(defendingType);
     }
 
     public double getAdvantage(Type[] defending) {
@@ -110,36 +120,35 @@ public enum TypeAdvantage {
     }
 
     public static double getAdvantage(ActivePokemon attacking, ActivePokemon defending, Battle b) {
-        Type moveType = attacking.getAttackType();
+        Type attackingType = attacking.getAttackType();
+        TypeAdvantage typeAdvantage = attackingType.getAdvantage();
 
-        Type[] originalType = defending.getType(b);
-        Type[] defendingType = AdvantageChanger.updateDefendingType(b, attacking, defending, moveType, originalType.clone());
+        Type[] defendingTypes = defending.getType(b);
 
-        // TODO: I hate all of this change everything
-        // If nothing was updated, do special case check stupid things for fucking levitation which fucks everything up
-        if (moveType == Type.GROUND && Arrays.equals(defendingType, originalType)) {
-            // Pokemon that are levitating cannot be hit by ground type moves
-            if (defending.isLevitating(b, attacking)) {
-                return 0;
-            }
-
-            // If the Pokemon is not levitating due to some effect and is flying type, ground moves should hit
-            removeDefendingType(defendingType, Type.FLYING);
+        // Do special case check stupid things for fucking levitation which fucks everything up
+        // Pokemon that are levitating cannot be hit by ground type moves
+        if (attackingType == Type.GROUND && defending.isLevitatingWithoutTypeCheck(b, attacking)) {
+            return 0;
         }
 
+        double advantage = 1;
+
+        // Go through each defending type and multiply its advantage
+        for (Type defendingType : defendingTypes) {
+            // For moves that are completely uneffective, check if there is an effect which negates this and don't multiply
+            if (typeAdvantage.doesNotEffect(defendingType)
+                    && NoAdvantageChanger.checkNoAdvantageChanger(b, attacking, defending, attackingType, defendingType)) {
+                continue;
+            }
+
+            advantage *= typeAdvantage.getAdvantage(defendingType);
+        }
+
+        // TODO: Change this too
         // Get the advantage and apply any multiplier that may come from the attack
-        double adv = moveType.getAdvantage().getAdvantage(defendingType);
-        adv = AdvantageMultiplierMove.updateModifier(adv, attacking, moveType, defendingType);
+        advantage = AdvantageMultiplierMove.updateModifier(advantage, attacking, attackingType, defendingTypes);
 
-        return adv;
-    }
-
-    public static void removeDefendingType(Type[] defendingType, Type toRemove) {
-        for (int i = 0; i < defendingType.length; i++) {
-            if (defendingType[i] == toRemove) {
-                defendingType[i] = Type.NO_TYPE;
-            }
-        }
+        return advantage;
     }
 
     public static double getSTAB(Battle b, ActivePokemon p) {

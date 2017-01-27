@@ -17,7 +17,6 @@ import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
-import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
@@ -36,6 +35,7 @@ import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
+import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
@@ -72,7 +72,6 @@ import item.hold.HoldItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
 import main.Global;
-import type.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
@@ -82,6 +81,7 @@ import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import trainer.Trainer;
 import trainer.WildPokemon;
+import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
 
@@ -1263,19 +1263,15 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Scrappy extends Ability implements AdvantageChanger {
+	static class Scrappy extends Ability implements NoAdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		Scrappy() {
 			super(AbilityNamesies.SCRAPPY, "Enables moves to hit Ghost-type foes.");
 		}
 
-		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
-			if (attacking == Type.NORMAL || attacking == Type.FIGHTING) {
-				TypeAdvantage.removeDefendingType(defending, Type.GHOST);
-			}
-			
-			return defending;
+		public boolean negateNoAdvantage(Type attacking, Type defending) {
+			return defending == Type.GHOST && (attacking == Type.NORMAL || attacking == Type.FIGHTING);
 		}
 	}
 

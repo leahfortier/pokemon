@@ -1105,20 +1105,17 @@ public class ActivePokemon implements Serializable {
 	
 	// Returns true if the Pokemon is currently levitating for any reason
 	public boolean isLevitating(Battle b, ActivePokemon moldBreaker) {
-
-		// Grounded effect take precedence over levitation effects
-		if (isGrounded(b)) {
-			return false;
-		}
-		
-		// Obvs levitating if you have a levitation effect
-		// Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker. -- NOT ANYMORE NOW WE HAVE Battle.hasInvoke FUCK YES YOU GO GLENN COCO
-		if (LevitationEffect.containsLevitationEffect(b, this, moldBreaker)) {
-			return true;
-		}
-		
 		// Flyahs gon' Fly
-		return isType(b, Type.FLYING);
+		return isLevitatingWithoutTypeCheck(b, moldBreaker) || isType(b, Type.FLYING);
+	}
+
+	// Returns true if the Pokemon is currently levitating for any reason besides being a flying type pokemon
+	// Grounded effect take precedence over levitation effects
+	// Obvs levitating if you have a levitation effect
+	// Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker. -- NOT ANYMORE NOW WE HAVE Battle.hasInvoke FUCK YES YOU GO GLENN COCO
+	public boolean isLevitatingWithoutTypeCheck(Battle b, ActivePokemon moldBreaker) {
+		return !isGrounded(b) && LevitationEffect.containsLevitationEffect(b, this, moldBreaker);
+
 	}
 
 	public void giveItem(ItemNamesies itemName) {

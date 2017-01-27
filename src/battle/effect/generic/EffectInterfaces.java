@@ -865,10 +865,10 @@ public final class EffectInterfaces {
 		}
 	}
 
-	public interface AdvantageChanger {
-		Type[] getAdvantageChange(Type attackingType, Type[] defendingType);
+	public interface NoAdvantageChanger {
+		boolean negateNoAdvantage(Type attackingType, Type defendingType);
 
-		static Type[] updateDefendingType(Battle b, ActivePokemon attacking, ActivePokemon defending, Type attackingType, Type[] defendingType) {
+		static boolean checkNoAdvantageChanger(Battle b, ActivePokemon attacking, ActivePokemon defending, Type attackingType, Type defendingType) {
 			// TODO: I really hate it when the invokee list takes from the attacker and the defender -- need to rewrite all of this
 			// Check the defending Pokemon's effects and held item as well as the attacking Pokemon's ability for advantage changes
 			List<Object> invokees = new ArrayList<>();
@@ -877,14 +877,16 @@ public final class EffectInterfaces {
 			invokees.add(attacking.getAbility());
 			
 			for (Object invokee : invokees) {
-				if (invokee instanceof AdvantageChanger && !Effect.isInactiveEffect(invokee, b)) {
+				if (invokee instanceof NoAdvantageChanger && !Effect.isInactiveEffect(invokee, b)) {
 					
-					AdvantageChanger effect = (AdvantageChanger)invokee;
-					defendingType = effect.getAdvantageChange(attackingType, defendingType);
+					NoAdvantageChanger effect = (NoAdvantageChanger)invokee;
+					if (effect.negateNoAdvantage(attackingType, defendingType)) {
+						return true;
+					}
 				}
 			}
 			
-			return defendingType;
+			return false;
 		}
 	}
 

@@ -12,7 +12,6 @@ import battle.effect.StallingEffect;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
-import battle.effect.generic.EffectInterfaces.AdvantageChanger;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
@@ -24,6 +23,7 @@ import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
+import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
@@ -60,7 +60,6 @@ import item.use.PokemonUseItem;
 import item.use.TrainerUseItem;
 import item.use.UseItem;
 import main.Global;
-import type.Type;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.Messages;
@@ -73,6 +72,7 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.evolution.EvolutionMethod;
 import trainer.CharacterData;
 import trainer.Trainer;
+import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
 
@@ -1441,7 +1441,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class RingTarget extends Item implements HoldItem, AdvantageChanger {
+	static class RingTarget extends Item implements HoldItem, NoAdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		RingTarget() {
@@ -1453,14 +1453,8 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 10;
 		}
 
-		public Type[] getAdvantageChange(Type attacking, Type[] defending) {
-			for (int i = 0; i < defending.length; i++) {
-				if (attacking.getAdvantage().doesNotEffect(defending[i])) {
-					defending[i] = Type.NO_TYPE;
-				}
-			}
-			
-			return defending;
+		public boolean negateNoAdvantage(Type attacking, Type defending) {
+			return true;
 		}
 	}
 
