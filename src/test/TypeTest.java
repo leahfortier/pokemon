@@ -151,6 +151,18 @@ public class TypeTest {
         damageModifierTest(PokemonNamesies.SQUIRTLE, AttackNamesies.VINE_WHIP, 1.2, PokemonManipulator.giveAttackingItem(ItemNamesies.EXPERT_BELT));
         damageModifierTest(PokemonNamesies.SQUIRTLE, AttackNamesies.DARK_PULSE, 1, PokemonManipulator.giveAttackingItem(ItemNamesies.EXPERT_BELT));
         damageModifierTest(PokemonNamesies.SQUIRTLE, AttackNamesies.SURF, 1, PokemonManipulator.giveAttackingItem(ItemNamesies.EXPERT_BELT));
+
+        // Tanga berry reduces super-effective bug moves
+        damageModifierTest(PokemonNamesies.KADABRA, AttackNamesies.X_SCISSOR, .5, PokemonManipulator.giveDefendingItem(ItemNamesies.TANGA_BERRY));
+        damageModifierTest(PokemonNamesies.KADABRA, AttackNamesies.CRUNCH, 1, PokemonManipulator.giveDefendingItem(ItemNamesies.TANGA_BERRY));
+        damageModifierTest(PokemonNamesies.KADABRA, AttackNamesies.SURF, 1, PokemonManipulator.giveDefendingItem(ItemNamesies.TANGA_BERRY));
+        damageModifierTest(PokemonNamesies.KADABRA, AttackNamesies.PSYBEAM, 1, PokemonManipulator.giveDefendingItem(ItemNamesies.TANGA_BERRY));
+
+        // Yache berry reduces super-effective ice moves
+        damageModifierTest(PokemonNamesies.DRAGONITE, AttackNamesies.ICE_BEAM, .5, PokemonManipulator.giveDefendingItem(ItemNamesies.YACHE_BERRY));
+        damageModifierTest(PokemonNamesies.DRAGONITE, AttackNamesies.OUTRAGE, 1, PokemonManipulator.giveDefendingItem(ItemNamesies.YACHE_BERRY));
+        damageModifierTest(PokemonNamesies.DRAGONITE, AttackNamesies.TACKLE, 1, PokemonManipulator.giveDefendingItem(ItemNamesies.YACHE_BERRY));
+        damageModifierTest(PokemonNamesies.DRAGONITE, AttackNamesies.SURF, 1, PokemonManipulator.giveDefendingItem(ItemNamesies.YACHE_BERRY));
     }
 
     private void damageModifierTest(PokemonNamesies defendingName, AttackNamesies attackName, double expectedChange, PokemonManipulator manipulator) {
