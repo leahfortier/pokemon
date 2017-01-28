@@ -4,13 +4,13 @@ import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.effect.SimpleStatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
-import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
@@ -46,7 +46,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	static class Reflect extends TeamEffect implements BarrierEffect, StatChangingEffect {
+	static class Reflect extends TeamEffect implements BarrierEffect, SimpleStatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Reflect() {
@@ -77,6 +77,14 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "The effects of reflect faded.";
 		}
 
+		public double getModifier() {
+			return 2;
+		}
+
+		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
+		}
+
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.DEFENSE;
 		}
@@ -88,17 +96,9 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			victim.getEffects().remove(this);
 			b.getEffects(victim.isPlayer()).remove(this);
 		}
-
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && !opp.hasAbility(AbilityNamesies.INFILTRATOR)) {
-				stat *= 2;
-			}
-			
-			return stat;
-		}
 	}
 
-	static class LightScreen extends TeamEffect implements BarrierEffect, StatChangingEffect {
+	static class LightScreen extends TeamEffect implements BarrierEffect, SimpleStatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		LightScreen() {
@@ -129,6 +129,14 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "The effects of light screen faded.";
 		}
 
+		public double getModifier() {
+			return 2;
+		}
+
+		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
+		}
+
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SP_DEFENSE;
 		}
@@ -140,17 +148,9 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			victim.getEffects().remove(this);
 			b.getEffects(victim.isPlayer()).remove(this);
 		}
-
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && !opp.hasAbility(AbilityNamesies.INFILTRATOR)) {
-				stat *= 2;
-			}
-			
-			return stat;
-		}
 	}
 
-	static class Tailwind extends TeamEffect implements StatChangingEffect {
+	static class Tailwind extends TeamEffect implements SimpleStatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Tailwind() {
@@ -169,20 +169,20 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "The effects of tailwind faded.";
 		}
 
+		public double getModifier() {
+			return 2;
+		}
+
+		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
-
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
-				stat *= 2;
-			}
-			
-			return stat;
-		}
 	}
 
-	static class AuroraVeil extends TeamEffect implements StatChangingEffect {
+	static class AuroraVeil extends TeamEffect implements SimpleStatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		AuroraVeil() {
@@ -208,16 +208,16 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "The effects of aurora veil faded.";
 		}
 
-		public boolean isModifyStat(Stat s) {
-			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
+		public double getModifier() {
+			return 2;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
-				stat *= 2;
-			}
-			
-			return stat;
+		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		public boolean isModifyStat(Stat s) {
+			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
 		}
 	}
 

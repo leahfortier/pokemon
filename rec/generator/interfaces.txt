@@ -75,6 +75,7 @@ CrashDamageMove:
 	*
 ***
 BarrierEffect:
+	Extends: DefogRelease
 	Method:
 		Header: void breakBarrier(Battle b, ActivePokemon breaker)
 		EffectList: b.getOtherPokemon(breaker.isPlayer())
@@ -457,6 +458,14 @@ StageChangingEffect:
 		EffectList: p
 		Update: stage
 		InvokeName: updateStage
+	*
+***
+StatModifyingEffect:
+	Method:
+		Header: double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
+		Invoke: Multiply
+		EffectList: p
+		MoldBreakerNullCheck: s.user() ? null : opp
 	*
 ***
 StatChangingEffect:

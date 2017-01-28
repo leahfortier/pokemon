@@ -5,6 +5,7 @@ import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
+import battle.effect.generic.EffectInterfaces.StatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import main.Global;
 import util.RandomUtils;
@@ -112,8 +113,9 @@ public enum Stat {
 		}
 
 		// Applies stat changes to each for each item in list
+		stat *= StatModifyingEffect.getModifier(b, p, opp, s);
 		stat = StatChangingEffect.modifyStat(b, p, opp, s, stat);
-		
+
 //		System.out.println(p.getName() + " " + s.name + " Stat Change: " + temp + " -> " + stat);
 		
 		// Just to be safe
