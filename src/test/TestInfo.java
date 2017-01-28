@@ -44,6 +44,22 @@ class TestInfo {
         return this;
     }
 
+    TestInfo attacking(PokemonNamesies pokemonNamesies, EffectNamesies effectNamesies) {
+        return this.attacking(pokemonNamesies).attacking(effectNamesies);
+    }
+
+    TestInfo attacking(PokemonNamesies pokemonNamesies, ItemNamesies itemNamesies) {
+        return this.attacking(pokemonNamesies).attacking(itemNamesies);
+    }
+
+    TestInfo defending(PokemonNamesies pokemonNamesies, ItemNamesies itemNamesies) {
+        return this.defending(pokemonNamesies).defending(itemNamesies);
+    }
+
+    TestInfo defending(PokemonNamesies pokemonNamesies, AbilityNamesies abilityNamesies) {
+        return this.defending(pokemonNamesies).defending(abilityNamesies);
+    }
+
     TestInfo defending(AbilityNamesies abilityNamesies) {
         this.updateManipulator(PokemonManipulator.giveDefendingAbility(abilityNamesies));
         return this;
