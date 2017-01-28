@@ -294,7 +294,7 @@ CrashDamageMove:
 Override:
 	StatSplit:
 		AddInterface: StatChangingEffect
-		AddMapField: ModifyStat:
+		AddMapField: ChangeStat:
 		
 		// TODO: There should be a different interface for this type of modification and this one should just return a modifier
 		// If the stat is a splitting stat, return the average between the user and the opponent
@@ -805,27 +805,30 @@ RapidSpinRelease:
 	*
 ***
 StatChangingEffect:
-	ModifyStat:
+	ChangeStat:
 		Header: int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat)
 	*
 ***
+StatModifyingEffect:
+	ModifyStat:
+		Header: double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
+	*
+***
+SimpleStatModifyingEffect
+***
 Override:
 	ModifyMultiplier:
-		AddInterface: StatChangingEffect
-		AddMapField: CanModify: {2-}
-		AddMapField: ModifyStat:
-		if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-			stat *= {1};
-		}
-		
-		return stat;
+		Header: double getModifier()
+		Body:
+		return {1};
 		###
+		AddInterface: SimpleStatModifyingEffect
+		AddMapField: CanModify: {2-}
 	*
 ***
 Override:
 	CanModify:
 		Header: boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp)
-		AccessModifier: Private
 		Body:
 		return {0};
 		###
@@ -834,7 +837,6 @@ Override:
 Override:
 	TwoModify:
 		Header: boolean isModifyStat(Stat s)
-		AccessModifier: Private
 		Body:
 		return s == Stat.{11} || s == Stat.{22};
 		###
@@ -843,7 +845,6 @@ Override:
 Override:
 	ToModify:
 		Header: boolean isModifyStat(Stat s)
-		AccessModifier: Private
 		Body:
 		return s == Stat.{00};
 		###
@@ -1531,31 +1532,6 @@ PowerItem:
 		AddMapField: Cat: Misc
 	*
 ***
-GemItem:
-	GemType:
-		Header: Type getType()
-		Body:
-		return Type.{00};
-		###
-		AddInterface: Hidden-PowerChangeEffect
-		AddMapField: GetMultiplier:
-		if (user.isAttackType(getType())) {
-			// Consume the item
-			Messages.add(new MessageUpdate(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!"));
-			user.consumeItem(b);
-
-			// Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
-			return 1.5;
-		}
-
-		return 1;
-		###
-		AddInterface: Hidden-HoldItem
-		AddMapField: Fling: 30
-		AddMapField: Cat: Misc
-		AddMapField: Price: 100
-	*
-***
 Override:
 	TypeEnhance:
 		AddInterface: PowerChangeEffect
@@ -1693,31 +1669,31 @@ Override:
 		Body:
 		return Type.{00};
 		###
-		AddInterface: Hidden-HoldItem
-		AddMapField: Price: 1000
 		AddMapField: Cat: Misc
+	*
+***
+GemItem:
+	GemType:
+		AddMapField: SpecialTypeItem: {0}
+		AddMapField: Price: 100
 	*
 ***
 PlateItem:
 	PlateType:
 		AddMapField: SpecialTypeItem: {0}
-		AddMapField: Fling: 90
-		AddInterface: Hidden-PowerChangeEffect
-		AddMapField: GetMultiplier:
-		return user.isAttackType(getType()) ? 1.2 : 1;
-		###
+		AddMapField: Price: 1000
 	*
 ***
 DriveItem:
 	DriveType:
 		AddMapField: SpecialTypeItem: {0}
-		AddMapField: Fling: 70
+		AddMapField: Price: 1000
 	*
 ***
 MemoryItem:
 	MemoryType:
 		AddMapField: SpecialTypeItem: {0}
-		AddMapField: Fling: 70
+		AddMapField: Price: 1000
 	*
 ***
 Override:
