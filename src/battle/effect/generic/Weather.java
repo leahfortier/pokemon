@@ -181,12 +181,16 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			return "The sandstorm subsided.";
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return p.isType(b, Type.ROCK);
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SP_DEFENSE;
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && p.isType(b, Type.ROCK)) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.5;
 			}
 			

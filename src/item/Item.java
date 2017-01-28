@@ -363,7 +363,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 100;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.EVASION;
 		}
 
@@ -372,7 +376,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.1;
 			}
 			
@@ -424,12 +428,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 10;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.ATTACK;
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.5;
 			}
 			
@@ -462,12 +470,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 10;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.5;
 			}
 			
@@ -500,12 +512,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 10;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SP_ATTACK;
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.5;
 			}
 			
@@ -866,7 +882,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
 
@@ -889,7 +909,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= .5;
 			}
 			
@@ -954,7 +974,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 100;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return p.isPokemon(PokemonNamesies.PIKACHU);
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.ATTACK || s == Stat.SP_ATTACK;
 		}
 
@@ -967,7 +991,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.PIKACHU)) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 2;
 			}
 			
@@ -1049,7 +1073,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 3000;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
 
@@ -1062,7 +1090,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= .5;
 			}
 			
@@ -1129,7 +1157,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 10;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return p.isPokemon(PokemonNamesies.DITTO);
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
 		}
 
@@ -1138,7 +1170,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.DITTO)) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.5;
 			}
 			
@@ -1192,7 +1224,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Stat.SPEED;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
 
@@ -1202,7 +1238,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= .5;
 			}
 			
@@ -1226,7 +1262,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Stat.SP_DEFENSE;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
 
@@ -1236,7 +1276,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= .5;
 			}
 			
@@ -1260,7 +1300,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Stat.DEFENSE;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
 
@@ -1270,7 +1314,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= .5;
 			}
 			
@@ -1294,7 +1338,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Stat.ATTACK;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
 
@@ -1304,7 +1352,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= .5;
 			}
 			
@@ -1328,7 +1376,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Stat.SP_ATTACK;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
 
@@ -1338,7 +1390,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= .5;
 			}
 			
@@ -1362,7 +1414,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return Stat.HP;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
 
@@ -1372,7 +1428,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= .5;
 			}
 			
@@ -1405,7 +1461,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 10;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return p.isPokemon(PokemonNamesies.DITTO);
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
 
@@ -1414,7 +1474,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.DITTO)) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.5;
 			}
 			
@@ -1602,7 +1662,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 10;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS);
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE;
 		}
 
@@ -1611,7 +1675,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS)) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.5;
 			}
 			
@@ -1701,7 +1765,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 500;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return p.isPokemon(PokemonNamesies.CUBONE) || p.isPokemon(PokemonNamesies.MAROWAK);
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.ATTACK;
 		}
 
@@ -1710,7 +1778,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.CUBONE) || p.isPokemon(PokemonNamesies.MAROWAK)) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 2;
 			}
 			
@@ -1779,7 +1847,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.ACCURACY;
 		}
 
@@ -1788,7 +1860,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.1;
 			}
 			
@@ -1804,7 +1876,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SP_ATTACK;
 		}
 
@@ -1813,7 +1889,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.1;
 			}
 			
@@ -1829,7 +1905,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return !b.isFirstAttack();
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.ACCURACY;
 		}
 
@@ -1838,7 +1918,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && !b.isFirstAttack()) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.2;
 			}
 			
@@ -1871,7 +1951,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 9600;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.EVASION;
 		}
 
@@ -1884,7 +1968,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.1;
 			}
 			
@@ -3445,7 +3529,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return p.isPokemon(PokemonNamesies.CLAMPERL) || p.isPokemon(PokemonNamesies.CHINCHOU) || p.isPokemon(PokemonNamesies.LANTURN);
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SP_DEFENSE;
 		}
 
@@ -3458,7 +3546,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.CLAMPERL) || p.isPokemon(PokemonNamesies.CHINCHOU) || p.isPokemon(PokemonNamesies.LANTURN)) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 2;
 			}
 			
@@ -3478,7 +3566,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return p.isPokemon(PokemonNamesies.CLAMPERL);
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SP_ATTACK;
 		}
 
@@ -3491,7 +3583,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && p.isPokemon(PokemonNamesies.CLAMPERL)) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 2;
 			}
 			
@@ -4899,7 +4991,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		public Stat toIncrease() {
+		private Stat toIncrease() {
 			return Stat.ACCURACY;
 		}
 
@@ -4925,7 +5017,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		public Stat toIncrease() {
+		private Stat toIncrease() {
 			return Stat.ATTACK;
 		}
 
@@ -4951,7 +5043,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		public Stat toIncrease() {
+		private Stat toIncrease() {
 			return Stat.DEFENSE;
 		}
 
@@ -4977,7 +5069,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		public Stat toIncrease() {
+		private Stat toIncrease() {
 			return Stat.SP_ATTACK;
 		}
 
@@ -5003,7 +5095,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		public Stat toIncrease() {
+		private Stat toIncrease() {
 			return Stat.SP_DEFENSE;
 		}
 
@@ -5029,7 +5121,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		public Stat toIncrease() {
+		private Stat toIncrease() {
 			return Stat.SPEED;
 		}
 
@@ -8000,7 +8092,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return p.getPokemonInfo().getEvolution().canEvolve();
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
 		}
 
@@ -8009,7 +8105,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && p.getPokemonInfo().getEvolution().canEvolve()) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.5;
 			}
 			
@@ -8169,7 +8265,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 1000;
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SP_DEFENSE;
 		}
 
@@ -8186,7 +8286,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 1.5;
 			}
 			

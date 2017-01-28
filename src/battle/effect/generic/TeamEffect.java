@@ -77,7 +77,11 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "The effects of reflect faded.";
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.DEFENSE;
 		}
 
@@ -90,7 +94,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && !opp.hasAbility(AbilityNamesies.INFILTRATOR)) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 2;
 			}
 			
@@ -129,7 +133,11 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "The effects of light screen faded.";
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SP_DEFENSE;
 		}
 
@@ -142,7 +150,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && !opp.hasAbility(AbilityNamesies.INFILTRATOR)) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 2;
 			}
 			
@@ -169,12 +177,16 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "The effects of tailwind faded.";
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 2;
 			}
 			
@@ -208,12 +220,16 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "The effects of aurora veil faded.";
 		}
 
-		public boolean isModifyStat(Stat s) {
+		private boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		private boolean isModifyStat(Stat s) {
 			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
 		}
 
 		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-			if (isModifyStat(s) && true) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 				stat *= 2;
 			}
 			

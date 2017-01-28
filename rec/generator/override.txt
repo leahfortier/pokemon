@@ -812,8 +812,9 @@ StatChangingEffect:
 Override:
 	ModifyMultiplier:
 		AddInterface: StatChangingEffect
+		AddMapField: CanModify: {2-}
 		AddMapField: ModifyStat:
-		if (isModifyStat(s) && {2-}) {
+		if (isModifyStat(s) && canModifyStat(b, p, opp)) {
 			stat *= {1};
 		}
 		
@@ -822,8 +823,18 @@ Override:
 	*
 ***
 Override:
+	CanModify:
+		Header: boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp)
+		AccessModifier: Private
+		Body:
+		return {0};
+		###
+	*
+***
+Override:
 	TwoModify:
 		Header: boolean isModifyStat(Stat s)
+		AccessModifier: Private
 		Body:
 		return s == Stat.{11} || s == Stat.{22};
 		###
@@ -832,6 +843,7 @@ Override:
 Override:
 	ToModify:
 		Header: boolean isModifyStat(Stat s)
+		AccessModifier: Private
 		Body:
 		return s == Stat.{00};
 		###
@@ -1807,6 +1819,7 @@ Override:
 Override:
 	XStageIncrease:
 		Header: Stat toIncrease()
+		AccessModifier: Private
 		Body:
 		return Stat.{00};
 		###
