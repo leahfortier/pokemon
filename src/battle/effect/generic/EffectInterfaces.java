@@ -175,7 +175,7 @@ public final class EffectInterfaces {
 		}
 	}
 
-	public interface BarrierEffect {
+	public interface BarrierEffect extends DefogRelease {
 		void breakBarrier(Battle b, ActivePokemon breaker);
 
 		static void breakBarriers(Battle b, ActivePokemon breaker) {

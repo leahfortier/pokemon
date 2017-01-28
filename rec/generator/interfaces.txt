@@ -75,6 +75,7 @@ CrashDamageMove:
 	*
 ***
 BarrierEffect:
+	Extends: DefogRelease
 	Method:
 		Header: void breakBarrier(Battle b, ActivePokemon breaker)
 		EffectList: b.getOtherPokemon(breaker.isPlayer())

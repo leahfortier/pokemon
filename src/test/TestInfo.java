@@ -1,6 +1,8 @@
 package test;
 
 import battle.attack.AttackNamesies;
+import battle.effect.generic.EffectNamesies;
+import item.ItemNamesies;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import util.StringUtils;
@@ -47,8 +49,28 @@ class TestInfo {
         return this;
     }
 
+    TestInfo attacking(ItemNamesies itemNamesies) {
+        this.updateManipulator(PokemonManipulator.giveAttackingItem(itemNamesies));
+        return this;
+    }
+
+    TestInfo defending(ItemNamesies itemNamesies) {
+        this.updateManipulator(PokemonManipulator.giveDefendingItem(itemNamesies));
+        return this;
+    }
+
+    TestInfo attacking(EffectNamesies effectNamesies) {
+        this.updateManipulator(PokemonManipulator.giveAttackingEffect(effectNamesies));
+        return this;
+    }
+
+    TestInfo defending(EffectNamesies effectNamesies) {
+        this.updateManipulator(PokemonManipulator.giveDefendingEffect(effectNamesies));
+        return this;
+    }
+
     @Override
     public String toString() {
-        return StringUtils.spaceSeparated(attackingName, defendingName, attackingName);
+        return StringUtils.spaceSeparated(attackingName, defendingName, attackName);
     }
 }
