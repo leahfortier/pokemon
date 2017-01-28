@@ -1411,7 +1411,7 @@ RepellingEffect:
 Override:
 	BuffetImmune:
 		AddMapField: Field:
-		private static Type[] immunees = new Type[] { {0} };
+		private static final Type[] immunees = new Type[] { {0} };
 		###
 	*
 ***

@@ -13,6 +13,7 @@ abstract class InvokeMethod {
     protected abstract String getDefaultMethodName(InterfaceMethod interfaceMethod);
     protected abstract String getInnerLoop(InterfaceMethod interfaceMethod);
     protected abstract String getPostLoop(InterfaceMethod interfaceMethod);
+    protected String getPreLoop() { return StringUtils.empty(); }
 
     private InvokeMethod(final Scanner invokeInput) {
         if (invokeInput != null && invokeInput.hasNext()) {
@@ -40,6 +41,7 @@ abstract class InvokeMethod {
         );
 
         String body =
+                StringUtils.addNewLine(getPreLoop()) +
                 StringUtils.addNewLine(getDeadsies(interfaceMethod)) +
                 StringUtils.addNewLine(getMoldBreakerDeclaration(interfaceMethod)) +
                 getDeclaration(interfaceMethod) + "\n" +
@@ -101,7 +103,7 @@ abstract class InvokeMethod {
 
         return "\n// If this is an ability that is being affected by mold breaker, we don't want to do anything with it\n" +
                 "if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && " +
-                (interfaceMethod.isMoldBreakNullCheck()
+                (interfaceMethod.isMoldBreakNullCheck() || interfaceMethod.getMoldBreaker().equals("moldBreaker")
                         ? "moldBreaker != null && moldBreaker"
                         : interfaceMethod.getMoldBreaker()) +
                 ".breaksTheMold()) {\n" +
@@ -320,7 +322,7 @@ abstract class InvokeMethod {
 
         @Override
         protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
-            return "updateModifier";
+            return "getModifier";
         }
 
         @Override
@@ -335,8 +337,8 @@ abstract class InvokeMethod {
         }
 
         @Override
-        protected String getAdditionalInvokeParameters() {
-            return "double modifier";
+        protected String getPreLoop() {
+            return "double modifier = 1;";
         }
     }
 }

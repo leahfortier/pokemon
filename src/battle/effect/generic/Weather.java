@@ -18,7 +18,7 @@ import pokemon.Stat;
 public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	private static final long serialVersionUID = 1L;
 
-	protected Type weatherElement;
+	private Type weatherElement;
 	
 	public Weather(EffectNamesies namesies, Type weatherElement) {
 		super(namesies, -1, -1, true);
@@ -38,8 +38,8 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	}
 	
 	private int getTurns(Battle b, ActivePokemon caster) {
-		Item i = caster.getHeldItem(b);
-		if (i instanceof WeatherExtendingEffect && this.namesies == ((WeatherExtendingEffect)i).getWeatherType()) {
+		Item item = caster.getHeldItem(b);
+		if (item instanceof WeatherExtendingEffect && this.namesies == ((WeatherExtendingEffect)item).getWeatherType()) {
 			return 8;
 		}
 		
@@ -146,7 +146,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 
 	static class Sandstorm extends Weather implements StatChangingEffect {
 		private static final long serialVersionUID = 1L;
-		private static Type[] immunees = new Type[] { Type.ROCK, Type.GROUND, Type.STEEL };
+		private static final Type[] immunees = new Type[] { Type.ROCK, Type.GROUND, Type.STEEL };
 		private void buffet(Battle b, ActivePokemon p) {
 			// Don't buffet the immune!
 			for (Type type : immunees) {
@@ -204,7 +204,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 
 	static class Hailing extends Weather {
 		private static final long serialVersionUID = 1L;
-		private static Type[] immunees = new Type[] { Type.ICE };
+		private static final Type[] immunees = new Type[] { Type.ICE };
 		private void buffet(Battle b, ActivePokemon p) {
 			// Don't buffet the immune!
 			for (Type type : immunees) {

@@ -306,7 +306,7 @@ public final class EffectInterfaces {
 				if (invokee instanceof LevitationEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && moldBreaker.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && moldBreaker != null && moldBreaker.breaksTheMold()) {
 						continue;
 					}
 					
@@ -1026,7 +1026,9 @@ public final class EffectInterfaces {
 	public interface PowerChangeEffect {
 		double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim);
 
-		static double updateModifier(double modifier, Battle b, ActivePokemon user, ActivePokemon victim) {
+		static double getModifier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			double modifier = 1;
+			
 			List<Object> invokees = b.getEffectsList(user);
 			for (Object invokee : invokees) {
 				if (invokee instanceof PowerChangeEffect && !Effect.isInactiveEffect(invokee, b)) {
@@ -1043,7 +1045,9 @@ public final class EffectInterfaces {
 	public interface OpponentPowerChangeEffect {
 		double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim);
 
-		static double updateModifier(double modifier, Battle b, ActivePokemon user, ActivePokemon victim) {
+		static double getModifier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			double modifier = 1;
+			
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
 				if (invokee instanceof OpponentPowerChangeEffect && !Effect.isInactiveEffect(invokee, b)) {
@@ -1065,7 +1069,9 @@ public final class EffectInterfaces {
 	public interface AdvantageMultiplierMove {
 		double multiplyAdvantage(Type attackingType, Type[] defendingTypes);
 
-		static double updateModifier(double modifier, ActivePokemon attacking, Type attackingType, Type[] defendingTypes) {
+		static double getModifier(ActivePokemon attacking, Type attackingType, Type[] defendingTypes) {
+			double modifier = 1;
+			
 			List<Object> invokees = Collections.singletonList(attacking.getAttack());
 			for (Object invokee : invokees) {
 				if (invokee instanceof AdvantageMultiplierMove && !Effect.isInactiveEffect(invokee, null)) {

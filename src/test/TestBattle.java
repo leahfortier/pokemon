@@ -14,7 +14,7 @@ class TestBattle extends Battle {
         return super.getDamageModifier(attacking, defending);
     }
 
-    public boolean ableToAttack(AttackNamesies attack, TestPokemon attacking, ActivePokemon defending) {
+    boolean ableToAttack(AttackNamesies attack, TestPokemon attacking, ActivePokemon defending) {
         attacking.setupMove(attack, this, defending);
         return super.ableToAttack(attacking, defending);
     }

@@ -583,8 +583,8 @@ public class Battle {
 
 	protected double getDamageModifier(ActivePokemon me, ActivePokemon o) {
 		double modifier = 1;
-		modifier = PowerChangeEffect.updateModifier(modifier, this, me, o);
-		modifier = OpponentPowerChangeEffect.updateModifier(modifier, this, me, o);
+		modifier *= PowerChangeEffect.getModifier(this, me, o);
+		modifier *= OpponentPowerChangeEffect.getModifier(this, me, o);
 		
 //		System.out.println(me.getName() + " Modifier: " + modifier);
 		return modifier;

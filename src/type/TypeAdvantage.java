@@ -141,7 +141,7 @@ public enum TypeAdvantage {
 
         // Go through each defending type and multiply its advantage
         for (Type defendingType : defendingTypes) {
-            // For moves that are completely uneffective, check if there is an effect which negates this and don't multiply
+            // For moves that are completely uneffective, check if there is an effect which negates this and don't multiply if so
             if (typeAdvantage.doesNotEffect(defendingType)
                     && NoAdvantageChanger.checkNoAdvantageChanger(b, attacking, defending, attackingType, defendingType)) {
                 continue;
@@ -150,8 +150,8 @@ public enum TypeAdvantage {
             advantage *= typeAdvantage.getAdvantage(defendingType);
         }
 
-        // Get the advantage and apply any multiplier that may come from the attack
-        advantage = AdvantageMultiplierMove.updateModifier(advantage, attacking, attackingType, defendingTypes);
+        // Apply any multiplier that may come from the attack
+        advantage *= AdvantageMultiplierMove.getModifier(attacking, attackingType, defendingTypes);
 
         return advantage;
     }

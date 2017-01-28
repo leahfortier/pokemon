@@ -40,6 +40,18 @@ interface PokemonManipulator {
         return PokemonManipulator::startAttack;
     }
 
+    static PokemonManipulator combine(PokemonManipulator... manipulators) {
+        return (battle, attacking, defending) -> {
+            for (PokemonManipulator manipulator : manipulators) {
+                manipulator.manipulate(battle, attacking, defending);
+            }
+        };
+    }
+
+    static PokemonManipulator giveBattleEffect(EffectNamesies effectNamesies) {
+        return giveAttackingEffect(effectNamesies);
+    }
+
     static PokemonManipulator giveAttackingEffect(EffectNamesies effectNamesies) {
         return (battle, attacking, defending) -> giveEffect(effectNamesies, battle, attacking, defending, true);
     }
