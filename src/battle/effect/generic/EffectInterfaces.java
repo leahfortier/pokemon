@@ -992,6 +992,32 @@ public final class EffectInterfaces {
 		}
 	}
 
+	public interface StatModifyingEffect {
+		double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s);
+
+		static double getModifier(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
+			double modifier = 1;
+			
+			ActivePokemon moldBreaker = s.user() ? null : opp;
+			
+			List<Object> invokees = b.getEffectsList(p);
+			for (Object invokee : invokees) {
+				if (invokee instanceof StatModifyingEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && moldBreaker != null && moldBreaker.breaksTheMold()) {
+						continue;
+					}
+					
+					StatModifyingEffect effect = (StatModifyingEffect)invokee;
+					modifier *= effect.modify(b, p, opp, s);
+				}
+			}
+			
+			return modifier;
+		}
+	}
+
 	public interface StatChangingEffect {
 
 		// b: The current battle

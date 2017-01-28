@@ -28,7 +28,7 @@ import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
-import battle.effect.generic.EffectInterfaces.StatChangingEffect;
+import battle.effect.generic.EffectInterfaces.StatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
@@ -355,7 +355,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class BrightPowder extends Item implements HoldItem, StatChangingEffect {
+	static class BrightPowder extends Item implements HoldItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		BrightPowder() {
@@ -375,12 +375,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 10;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.1;
+				return 1.1;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -403,7 +403,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class ChoiceBand extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
+	static class ChoiceBand extends Item implements AttackSelectionEffect, HoldItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChoiceBand() {
@@ -436,16 +436,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return s == Stat.ATTACK;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
-	static class ChoiceScarf extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
+	static class ChoiceScarf extends Item implements AttackSelectionEffect, HoldItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChoiceScarf() {
@@ -478,16 +478,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
-	static class ChoiceSpecs extends Item implements AttackSelectionEffect, HoldItem, StatChangingEffect {
+	static class ChoiceSpecs extends Item implements AttackSelectionEffect, HoldItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ChoiceSpecs() {
@@ -520,12 +520,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return s == Stat.SP_ATTACK;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -874,7 +874,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class IronBall extends Item implements HoldItem, GroundedEffect, StatChangingEffect, BeforeTurnEffect {
+	static class IronBall extends Item implements HoldItem, GroundedEffect, StatModifyingEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		IronBall() {
@@ -908,12 +908,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			LevitationEffect.falllllllll(b, p);
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= .5;
+				return .5;
 			}
 			
-			return stat;
+			return 1;
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
@@ -966,7 +966,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class LightBall extends Item implements HoldItem, StatChangingEffect {
+	static class LightBall extends Item implements HoldItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		LightBall() {
@@ -990,12 +990,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			Status.giveStatus(b, pelted, pelted, StatusCondition.PARALYZED, pelted.getName() + " was paralyzed by the " + this.name + "!");
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 2;
+				return 2;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -1065,7 +1065,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class MachoBrace extends Item implements EVItem, StatChangingEffect {
+	static class MachoBrace extends Item implements EVItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		MachoBrace() {
@@ -1089,12 +1089,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= .5;
+				return .5;
 			}
 			
-			return stat;
+			return 1;
 		}
 
 		public int flingDamage() {
@@ -1149,7 +1149,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class MetalPowder extends Item implements HoldItem, StatChangingEffect {
+	static class MetalPowder extends Item implements HoldItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		MetalPowder() {
@@ -1169,12 +1169,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 10;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -1212,7 +1212,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class PowerAnklet extends Item implements PowerItem, StatChangingEffect {
+	static class PowerAnklet extends Item implements PowerItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerAnklet() {
@@ -1237,12 +1237,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= .5;
+				return .5;
 			}
 			
-			return stat;
+			return 1;
 		}
 
 		public int flingDamage() {
@@ -1250,7 +1250,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class PowerBand extends Item implements PowerItem, StatChangingEffect {
+	static class PowerBand extends Item implements PowerItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerBand() {
@@ -1275,12 +1275,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= .5;
+				return .5;
 			}
 			
-			return stat;
+			return 1;
 		}
 
 		public int flingDamage() {
@@ -1288,7 +1288,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class PowerBelt extends Item implements PowerItem, StatChangingEffect {
+	static class PowerBelt extends Item implements PowerItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerBelt() {
@@ -1313,12 +1313,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= .5;
+				return .5;
 			}
 			
-			return stat;
+			return 1;
 		}
 
 		public int flingDamage() {
@@ -1326,7 +1326,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class PowerBracer extends Item implements PowerItem, StatChangingEffect {
+	static class PowerBracer extends Item implements PowerItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerBracer() {
@@ -1351,12 +1351,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= .5;
+				return .5;
 			}
 			
-			return stat;
+			return 1;
 		}
 
 		public int flingDamage() {
@@ -1364,7 +1364,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class PowerLens extends Item implements PowerItem, StatChangingEffect {
+	static class PowerLens extends Item implements PowerItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerLens() {
@@ -1389,12 +1389,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= .5;
+				return .5;
 			}
 			
-			return stat;
+			return 1;
 		}
 
 		public int flingDamage() {
@@ -1402,7 +1402,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class PowerWeight extends Item implements PowerItem, StatChangingEffect {
+	static class PowerWeight extends Item implements PowerItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerWeight() {
@@ -1427,12 +1427,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return vals;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= .5;
+				return .5;
 			}
 			
-			return stat;
+			return 1;
 		}
 
 		public int flingDamage() {
@@ -1453,7 +1453,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class QuickPowder extends Item implements HoldItem, StatChangingEffect {
+	static class QuickPowder extends Item implements HoldItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		QuickPowder() {
@@ -1473,12 +1473,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 10;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -1654,7 +1654,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class SoulDew extends Item implements HoldItem, StatChangingEffect {
+	static class SoulDew extends Item implements HoldItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SoulDew() {
@@ -1674,12 +1674,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 30;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -1757,7 +1757,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class ThickClub extends Item implements HoldItem, StatChangingEffect {
+	static class ThickClub extends Item implements HoldItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ThickClub() {
@@ -1777,12 +1777,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 90;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 2;
+				return 2;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -1839,7 +1839,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class WideLens extends Item implements HoldItem, StatChangingEffect {
+	static class WideLens extends Item implements HoldItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WideLens() {
@@ -1859,16 +1859,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 10;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.1;
+				return 1.1;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
-	static class WiseGlasses extends Item implements HoldItem, StatChangingEffect {
+	static class WiseGlasses extends Item implements HoldItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WiseGlasses() {
@@ -1888,16 +1888,16 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 10;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.1;
+				return 1.1;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
-	static class ZoomLens extends Item implements HoldItem, StatChangingEffect {
+	static class ZoomLens extends Item implements HoldItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ZoomLens() {
@@ -1917,12 +1917,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 10;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.2;
+				return 1.2;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -1943,7 +1943,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class LaxIncense extends Item implements HoldItem, IncenseItem, StatChangingEffect {
+	static class LaxIncense extends Item implements HoldItem, IncenseItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		LaxIncense() {
@@ -1967,12 +1967,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return PokemonNamesies.WYNAUT;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.1;
+				return 1.1;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -3521,7 +3521,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class DeepSeaScale extends Item implements HoldItem, StatChangingEffect, PokemonUseItem {
+	static class DeepSeaScale extends Item implements HoldItem, StatModifyingEffect, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DeepSeaScale() {
@@ -3545,12 +3545,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 30;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 2;
+				return 2;
 			}
 			
-			return stat;
+			return 1;
 		}
 
 		public boolean use(ActivePokemon p) {
@@ -3558,7 +3558,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class DeepSeaTooth extends Item implements HoldItem, StatChangingEffect, PokemonUseItem {
+	static class DeepSeaTooth extends Item implements HoldItem, StatModifyingEffect, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 
 		DeepSeaTooth() {
@@ -3582,12 +3582,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 90;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 2;
+				return 2;
 			}
 			
-			return stat;
+			return 1;
 		}
 
 		public boolean use(ActivePokemon p) {
@@ -8084,7 +8084,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class Eviolite extends Item implements HoldItem, StatChangingEffect {
+	static class Eviolite extends Item implements HoldItem, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Eviolite() {
@@ -8104,12 +8104,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return 40;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -8257,7 +8257,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class AssaultVest extends Item implements HoldItem, AttackSelectionEffect, StatChangingEffect {
+	static class AssaultVest extends Item implements HoldItem, AttackSelectionEffect, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		AssaultVest() {
@@ -8285,12 +8285,12 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			return p.getName() + "'s " + this.name + " prevents the use of status moves!";
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 

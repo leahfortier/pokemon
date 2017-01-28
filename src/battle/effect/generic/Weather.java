@@ -4,16 +4,16 @@ import battle.Battle;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
-import battle.effect.generic.EffectInterfaces.StatChangingEffect;
+import battle.effect.generic.EffectInterfaces.StatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.status.StatusCondition;
 import item.Item;
-import type.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
+import type.Type;
 
 public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	private static final long serialVersionUID = 1L;
@@ -144,7 +144,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 	}
 
-	static class Sandstorm extends Weather implements StatChangingEffect {
+	static class Sandstorm extends Weather implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 		private static final Type[] immunees = new Type[] { Type.ROCK, Type.GROUND, Type.STEEL };
 		private void buffet(Battle b, ActivePokemon p) {
@@ -189,12 +189,12 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			return s == Stat.SP_DEFENSE;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {

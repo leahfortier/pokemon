@@ -459,6 +459,14 @@ StageChangingEffect:
 		InvokeName: updateStage
 	*
 ***
+StatModifyingEffect:
+	Method:
+		Header: double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
+		Invoke: Multiply
+		EffectList: p
+		MoldBreakerNullCheck: s.user() ? null : opp
+	*
+***
 StatChangingEffect:
 	Method:
 		Comments:

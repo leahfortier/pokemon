@@ -679,16 +679,17 @@ Sheer Force:
 *
 Hustle:
 	Desc: Boosts the Attack stat, but lowers accuracy.
-	Int: StatChangingEffect
+	Int: StatModifyingEffect
 	ModifyStat: 
 	if (s == Stat.ATTACK) {
-		stat *= 1.5;
+		return 1.5;
 	}
 	else if (s == Stat.ACCURACY) {
-		stat *= .8;
+		return .8;
 	}
-	
-	return stat;
+	else {
+		return 1;
+	}
 	###
 *
 Huge Power:

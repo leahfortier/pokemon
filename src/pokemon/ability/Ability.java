@@ -49,8 +49,8 @@ import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
-import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
+import battle.effect.generic.EffectInterfaces.StatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
@@ -237,7 +237,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Chlorophyll extends Ability implements StatChangingEffect {
+	static class Chlorophyll extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Chlorophyll() {
@@ -252,12 +252,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 2;
+				return 2;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -345,7 +345,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Compoundeyes extends Ability implements StatChangingEffect {
+	static class Compoundeyes extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Compoundeyes() {
@@ -360,12 +360,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ACCURACY;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.3;
+				return 1.3;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -433,7 +433,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Guts extends Ability implements StatChangingEffect {
+	static class Guts extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Guts() {
@@ -448,12 +448,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ATTACK;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -517,7 +517,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class SandRush extends Ability implements StatChangingEffect {
+	static class SandRush extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SandRush() {
@@ -532,16 +532,16 @@ public abstract class Ability implements Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 2;
+				return 2;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
-	static class SlushRush extends Ability implements StatChangingEffect {
+	static class SlushRush extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SlushRush() {
@@ -556,12 +556,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 2;
+				return 2;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -1295,7 +1295,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class SwiftSwim extends Ability implements StatChangingEffect {
+	static class SwiftSwim extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SwiftSwim() {
@@ -1310,12 +1310,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 2;
+				return 2;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -1504,7 +1504,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class QuickFeet extends Ability implements StatChangingEffect {
+	static class QuickFeet extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		QuickFeet() {
@@ -1519,12 +1519,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -1619,7 +1619,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class MarvelScale extends Ability implements StatChangingEffect {
+	static class MarvelScale extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		MarvelScale() {
@@ -1634,12 +1634,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.DEFENSE;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -1684,26 +1684,27 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Hustle extends Ability implements StatChangingEffect {
+	static class Hustle extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Hustle() {
 			super(AbilityNamesies.HUSTLE, "Boosts the Attack stat, but lowers accuracy.");
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (s == Stat.ATTACK) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			else if (s == Stat.ACCURACY) {
-				stat *= .8;
+				return .8;
 			}
-			
-			return stat;
+			else {
+				return 1;
+			}
 		}
 	}
 
-	static class HugePower extends Ability implements StatChangingEffect {
+	static class HugePower extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		HugePower() {
@@ -1718,12 +1719,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ATTACK;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 2;
+				return 2;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -1966,7 +1967,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class PurePower extends Ability implements StatChangingEffect {
+	static class PurePower extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PurePower() {
@@ -1981,12 +1982,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ATTACK;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 2;
+				return 2;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -2031,7 +2032,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class ToxicBoost extends Ability implements StatChangingEffect {
+	static class ToxicBoost extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		ToxicBoost() {
@@ -2046,12 +2047,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ATTACK;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -2199,7 +2200,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class FlowerGift extends Ability implements StatChangingEffect {
+	static class FlowerGift extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FlowerGift() {
@@ -2214,12 +2215,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ATTACK || s == Stat.SP_DEFENSE;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -2335,7 +2336,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class SlowStart extends Ability implements EndTurnEffect, EntryEffect, StatChangingEffect {
+	static class SlowStart extends Ability implements EndTurnEffect, EntryEffect, StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 		int count;
 
@@ -2360,12 +2361,12 @@ public abstract class Ability implements Serializable {
 			count = 0;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= .5;
+				return .5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -2385,7 +2386,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class VictoryStar extends Ability implements StatChangingEffect {
+	static class VictoryStar extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		VictoryStar() {
@@ -2400,12 +2401,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.ACCURACY;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.1;
+				return 1.1;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -2471,7 +2472,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class WonderSkin extends Ability implements StatChangingEffect {
+	static class WonderSkin extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		WonderSkin() {
@@ -2486,12 +2487,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.EVASION;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -2760,7 +2761,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Unburden extends Ability implements StatChangingEffect {
+	static class Unburden extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Unburden() {
@@ -2775,12 +2776,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 2;
+				return 2;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
@@ -3381,7 +3382,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class FurCoat extends Ability implements StatChangingEffect {
+	static class FurCoat extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		FurCoat() {
@@ -3396,16 +3397,16 @@ public abstract class Ability implements Serializable {
 			return s == Stat.DEFENSE;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 2;
+				return 2;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
-	static class GrassPelt extends Ability implements StatChangingEffect {
+	static class GrassPelt extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		GrassPelt() {
@@ -3420,16 +3421,16 @@ public abstract class Ability implements Serializable {
 			return s == Stat.DEFENSE;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 1.5;
+				return 1.5;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
-	static class SurgeSurfer extends Ability implements StatChangingEffect {
+	static class SurgeSurfer extends Ability implements StatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SurgeSurfer() {
@@ -3444,12 +3445,12 @@ public abstract class Ability implements Serializable {
 			return s == Stat.SPEED;
 		}
 
-		public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
+		public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-				stat *= 2;
+				return 2;
 			}
 			
-			return stat;
+			return 1;
 		}
 	}
 
