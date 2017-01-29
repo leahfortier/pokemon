@@ -94,7 +94,7 @@ Tangled Feet:
 	Desc: Raises evasion if the Pok\u00e9mon is confused.
 	Int: StageChangingEffect
 	StageChange: 
-	return s == Stat.EVASION && p.hasEffect(EffectNamesies.CONFUSION) ? stage + 1 : stage;
+	return s == Stat.EVASION && p.hasEffect(EffectNamesies.CONFUSION) ? 1 : 0;
 	###
 *
 Guts:

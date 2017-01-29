@@ -1,6 +1,7 @@
 package generator;
 
 import battle.Battle;
+import generator.InvokeMethod.AddInvoke;
 import generator.InvokeMethod.CheckGetInvoke;
 import generator.InvokeMethod.CheckInvoke;
 import generator.InvokeMethod.ContainsInvoke;
@@ -28,7 +29,8 @@ class InterfaceMethod {
         CHECKGET(CheckGetInvoke::new),
         GET(GetInvoke::new),
         UPDATE(UpdateInvoke::new),
-        MULTIPLY(MultiplyInvoke::new);
+        MULTIPLY(MultiplyInvoke::new),
+        ADD(AddInvoke::new);
 
         private final GetInvokeMethod getInvokeMethod;
 

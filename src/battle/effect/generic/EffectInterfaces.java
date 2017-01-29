@@ -969,9 +969,11 @@ public final class EffectInterfaces {
 	}
 
 	public interface StageChangingEffect {
-		int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage);
+		int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s);
 
-		static int updateStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage) {
+		static int getModifier(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
+			int modifier = 0;
+			
 			ActivePokemon moldBreaker = s.user() ? null : opp;
 			
 			List<Object> invokees = b.getEffectsList(p);
@@ -984,11 +986,11 @@ public final class EffectInterfaces {
 					}
 					
 					StageChangingEffect effect = (StageChangingEffect)invokee;
-					stage = effect.adjustStage(b, p, opp, s, stage);
+					modifier += effect.adjustStage(b, p, opp, s);
 				}
 			}
 			
-			return stage;
+			return modifier;
 		}
 	}
 

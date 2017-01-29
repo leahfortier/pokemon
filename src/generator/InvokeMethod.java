@@ -341,4 +341,37 @@ abstract class InvokeMethod {
             return "double modifier = 1;";
         }
     }
+
+    static class AddInvoke extends InvokeMethod {
+
+        AddInvoke(Scanner invokeInput) {
+            super(invokeInput);
+        }
+
+        @Override
+        protected String getReturnType(InterfaceMethod interfaceMethod) {
+            return "int";
+        }
+
+        @Override
+        protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
+            return "getModifier";
+        }
+
+        @Override
+        protected String getInnerLoop(InterfaceMethod interfaceMethod) {
+            return interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;\n" +
+                    "modifier += effect." + interfaceMethod.getMethodCall() + ";";
+        }
+
+        @Override
+        protected String getPostLoop(InterfaceMethod interfaceMethod) {
+            return "return modifier;";
+        }
+
+        @Override
+        protected String getPreLoop() {
+            return "int modifier = 0;";
+        }
+    }
 }

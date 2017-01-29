@@ -125,7 +125,7 @@ public enum Stat {
 	}
 
 	// TODO: Rename these pokemon names because they are srsly confusing the shit out of me
-	private static int getStage(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
+	public static int getStage(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
 
 		// Effects that completely ignore stage changes
 		if (OpponentIgnoreStageEffect.checkIgnoreStage(b, p, opp, s)) {
@@ -137,7 +137,7 @@ public enum Stat {
 //		int temp = stage;
 
 		// Update the stage due to effects
-		stage = StageChangingEffect.updateStage(b, p, opp, s, stage);
+		stage += StageChangingEffect.getModifier(b, p, opp, s);
 
 //		int temp2 = stage;
 		

@@ -156,18 +156,14 @@ public class Battle {
 		startTurn();
 
 		boolean playerFirst = speedPriority(player.front(), opponent.front());
-
-		final ActivePokemon attackFirst;
-		final ActivePokemon attackSecond;
-
 		if (playerFirst) {
-			attackFirst = player.front();
-			attackSecond = opponent.front();
+			fight(player.front(), opponent.front());
 		} else {
-			attackFirst = opponent.front();
-			attackSecond = player.front();
+			fight(opponent.front(), player.front());
 		}
+	}
 
+	protected void fight(ActivePokemon attackFirst, ActivePokemon attackSecond) {
 		// First turn
 		firstAttacking = true;
 		executionSolution(attackFirst, attackSecond);

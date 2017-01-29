@@ -2,7 +2,6 @@ package test;
 
 import battle.Battle;
 import battle.attack.AttackNamesies;
-import battle.attack.Move;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,7 +22,7 @@ public class AbilityTest {
         Battle battle = TestBattle.create(attacking, defending);
 
         // Ground moves should not hit a levitating Pokemon
-        attacking.setMove(new Move(AttackNamesies.EARTHQUAKE));
+        attacking.setupMove(AttackNamesies.EARTHQUAKE, battle, defending);
         Assert.assertTrue(TypeAdvantage.doesNotEffect(attacking, defending, battle));
 
         // Even if holding a Ring Target

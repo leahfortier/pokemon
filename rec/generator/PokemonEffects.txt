@@ -482,7 +482,7 @@ Stockpile:
 	Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
 	###
 	StageChange: 
-	return s == Stat.DEFENSE || s == Stat.SP_DEFENSE ? stage + turns : stage;
+	return s == Stat.DEFENSE || s == Stat.SP_DEFENSE ? turns : 0;
 	###
 	Subside: 
 	Messages.add(new MessageUpdate("The effects of " + p.getName() + "'s Stockpile ended!"));

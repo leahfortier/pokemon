@@ -73,8 +73,8 @@ public abstract class BattleEffect extends Effect {
 			LevitationEffect.falllllllll(b, p);
 		}
 
-		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage) {
-			return s == Stat.EVASION ? stage - 2 : stage;
+		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
+			return s == Stat.EVASION ? -2 : 0;
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {

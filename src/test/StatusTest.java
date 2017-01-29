@@ -40,8 +40,8 @@ public class StatusTest {
     }
 
     private void testStatChange(StatusCondition statusCondition, Stat stat, double ratio) {
-        ActivePokemon mahBoi = new TestPokemon(PokemonNamesies.RAPIDASH);
-        ActivePokemon uglyFace = new TestPokemon(PokemonNamesies.WATCHOG);
+        TestPokemon mahBoi = new TestPokemon(PokemonNamesies.RAPIDASH);
+        TestPokemon uglyFace = new TestPokemon(PokemonNamesies.WATCHOG);
 
         Battle b = TestBattle.create(mahBoi, uglyFace);
 

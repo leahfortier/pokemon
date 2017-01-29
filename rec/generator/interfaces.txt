@@ -452,12 +452,10 @@ HalfWeightEffect:
 ***
 StageChangingEffect:
 	Method:
-		Header: int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage)
-		Invoke: Update
+		Header: int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s)
+		Invoke: Add
 		MoldBreakerNullCheck: s.user() ? null : opp
 		EffectList: p
-		Update: stage
-		InvokeName: updateStage
 	*
 ***
 StatModifyingEffect:

@@ -1,6 +1,7 @@
 package test;
 
 import battle.attack.AttackNamesies;
+import battle.attack.Move;
 import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
 import pokemon.PokemonNamesies;
@@ -39,6 +40,15 @@ class TestInfo {
         return this;
     }
 
+    TestInfo callMove(AttackNamesies attackName) {
+        return this.with((battle, attacking, defending) -> attacking.callNewMove(battle, defending, new Move(attackName)));
+    }
+
+    TestInfo with(PokemonManipulator manipulator) {
+        this.updateManipulator(manipulator);
+        return this;
+    }
+
     TestInfo attacking(AbilityNamesies abilityNamesies) {
         this.updateManipulator(PokemonManipulator.giveAttackingAbility(abilityNamesies));
         return this;
@@ -58,6 +68,10 @@ class TestInfo {
 
     TestInfo defending(PokemonNamesies pokemonNamesies, AbilityNamesies abilityNamesies) {
         return this.defending(pokemonNamesies).defending(abilityNamesies);
+    }
+
+    TestInfo defending(AbilityNamesies abilityNamesies, EffectNamesies effectNamesies) {
+        return this.defending(abilityNamesies).defending(effectNamesies);
     }
 
     TestInfo defending(AbilityNamesies abilityNamesies) {

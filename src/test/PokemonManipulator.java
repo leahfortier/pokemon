@@ -8,7 +8,7 @@ import pokemon.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 
 interface PokemonManipulator {
-    void manipulate(Battle battle, ActivePokemon attacking, ActivePokemon defending);
+    void manipulate(TestBattle battle, TestPokemon attacking, TestPokemon defending);
 
     static void startAttack(Battle battle, ActivePokemon attacking, ActivePokemon defending) {
         attacking.startAttack(battle, defending);

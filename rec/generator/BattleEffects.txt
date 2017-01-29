@@ -20,7 +20,7 @@ Gravity:
 	NumTurns: 5
 	Int: GroundedEffect, StageChangingEffect
 	StageChange: 
-	return s == Stat.EVASION ? stage - 2 : stage;
+	return s == Stat.EVASION ? -2 : 0;
 	###
 	CastMessage: "Gravity intensified!"
 	Cast: 

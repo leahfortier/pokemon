@@ -1,6 +1,5 @@
 package test;
 
-import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.generic.EffectNamesies;
@@ -79,10 +78,10 @@ public class TypeTest {
     }
 
     private void changeEffectivenessTest(PokemonNamesies defendingPokemon, AttackNamesies attack, PokemonManipulator manipulator) {
-        ActivePokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
-        ActivePokemon defending = new TestPokemon(defendingPokemon);
+        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
+        TestPokemon defending = new TestPokemon(defendingPokemon);
 
-        Battle battle = TestBattle.create(attacking, defending);
+        TestBattle battle = TestBattle.create(attacking, defending);
 
         // Make sure attack is unsuccessful without the effect
         attacking.setMove(new Move(attack));
@@ -217,7 +216,7 @@ public class TypeTest {
         advantageChecker(.25, flyingPress, superNotVeryEffective);
         advantageChecker(0, flyingPress, noEffect);
 
-        // Electrify should make the attack Electic/Flying
+        // Electrify should make the attack Electric/Flying
         PokemonManipulator electrify = PokemonManipulator.giveAttackingEffect(EffectNamesies.ELECTRIFIED);
         advantageChecker(4, flyingPress, electrify, PokemonNamesies.HAWLUCHA, PokemonNamesies.BUTTERFREE);
         advantageChecker(2, flyingPress, electrify, PokemonNamesies.CATERPIE, PokemonNamesies.LARVESTA);
@@ -244,10 +243,10 @@ public class TypeTest {
     }
 
     private void advantageChecker(double expectedAdvantage, AttackNamesies attack, PokemonManipulator manipulator, PokemonNamesies... defendingPokemon) {
-        ActivePokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
+        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
         for (PokemonNamesies pokemonNamesies : defendingPokemon) {
-            ActivePokemon defending = new TestPokemon(pokemonNamesies);
-            Battle battle = TestBattle.create(attacking, defending);
+            TestPokemon defending = new TestPokemon(pokemonNamesies);
+            TestBattle battle = TestBattle.create(attacking, defending);
 
             attacking.setMove(new Move(attack));
             manipulator.manipulate(battle, attacking, defending);

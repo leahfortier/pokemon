@@ -296,7 +296,6 @@ Override:
 		AddInterface: StatChangingEffect
 		AddMapField: ChangeStat:
 		
-		// TODO: There should be a different interface for this type of modification and this one should just return a modifier
 		// If the stat is a splitting stat, return the average between the user and the opponent
 		if (s == Stat.{11} || s == Stat.{22}) {
 			return (p.getStat(b, s) + opp.getStat(b, s))/2;
@@ -308,7 +307,7 @@ Override:
 ***
 StageChangingEffect:
 	StageChange:
-		Header: int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage)
+		Header: int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s)
 	*
 ***
 OpponentIgnoreStageEffect:
@@ -1261,7 +1260,7 @@ Override:
 	WeatherEvasion:
 		AddInterface: StageChangingEffect
 		AddMapField: StageChange: 
-		return s == Stat.EVASION && b.getWeather().namesies() == EffectNamesies.{00} ? stage + 1 : stage;
+		return s == Stat.EVASION && b.getWeather().namesies() == EffectNamesies.{00} ? 1 : 0;
 		###
 	*
 ***
