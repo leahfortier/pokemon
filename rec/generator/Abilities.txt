@@ -363,11 +363,17 @@ Rock Head:
 *
 Sturdy:
 	Desc: The Pok\u00e9mon is protected against 1-hit KO attacks.
-	Int: BracingEffect
+	Int: BracingEffect, AttackBlocker
 	Bracing: 
 	return fullHealth;
 	###
 	BraceMessage: bracer.getName() + "'s " + this.getName() + " endured the hit!"
+	AttackBlock:
+	return attackName.getAttack().isMoveType(MoveType.ONE_HIT_KO);
+	###
+	AttackAlternateEffect:
+	Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " prevents OHKO moves!"));
+	###
 *
 Oblivious:
 	Desc: Prevents the Pok\u00e9mon from becoming infatuated.

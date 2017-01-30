@@ -958,7 +958,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Sturdy extends Ability implements BracingEffect {
+	static class Sturdy extends Ability implements BracingEffect, AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		Sturdy() {
@@ -971,6 +971,14 @@ public abstract class Ability implements Serializable {
 
 		public String braceMessage(ActivePokemon bracer) {
 			return bracer.getName() + "'s " + this.getName() + " endured the hit!";
+		}
+
+		public boolean block(AttackNamesies attackName, ActivePokemon victim) {
+			return attackName.getAttack().isMoveType(MoveType.ONE_HIT_KO);
+		}
+
+		public void alternateEffect(Battle b, ActivePokemon victim) {
+			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " prevents OHKO moves!"));
 		}
 	}
 

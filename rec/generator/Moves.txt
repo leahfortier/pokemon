@@ -3013,7 +3013,7 @@ Sheer Cold:
 	Acc: 30
 	Cat: Special
 	Type: Ice
-	Applies: !victim.isType(b, Type.ICE)
+	ExtraApplies: !victim.isType(b, Type.ICE)
 *
 Poison Gas:
 	Desc: A cloud of poison gas is sprayed in the face of opposing Pok\u00e9mon. It may poison those hit.

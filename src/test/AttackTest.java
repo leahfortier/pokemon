@@ -68,6 +68,36 @@ public class AttackTest {
     }
 
     @Test
+    public void ohkoTest() {
+        TestPokemon attacking = new TestPokemon(PokemonNamesies.MAGIKARP);
+        TestPokemon defending = new TestPokemon(PokemonNamesies.DRAGONITE);
+
+        TestBattle battle = TestBattle.create(attacking, defending);
+
+        // Ground type should not effect
+        battle.attackingFight(AttackNamesies.FISSURE);
+        Assert.assertTrue(defending.fullHealth());
+
+        // OHKO,MF
+        battle.attackingFight(AttackNamesies.HORN_DRILL);
+        Assert.assertTrue(defending.isFainted(battle));
+
+        // Sturdy prevents OHKO
+        defending.fullyHeal();
+        defending.withAbility(AbilityNamesies.STURDY);
+        battle.attackingFight(AttackNamesies.SHEER_COLD);
+        Assert.assertTrue(defending.fullHealth());
+
+        defending.withAbility(AbilityNamesies.NO_ABILITY);
+        battle.attackingFight(AttackNamesies.SHEER_COLD);
+        Assert.assertTrue(defending.isFainted(battle));
+
+        defending = new TestPokemon(PokemonNamesies.GLACEON);
+        battle.attackingFight(AttackNamesies.SHEER_COLD);
+        Assert.assertTrue(defending.fullHealth());
+    }
+
+    @Test
     public void multiTurnMoveTest() {
         // TODO
     }

@@ -3049,18 +3049,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			// Fails when the opponent is at a higher level than the user
-			if (me.getLevel() < o.getLevel()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			// Sturdy prevents OHKO moves if the user is not a mold breaker
-			if (o.hasAbility(AbilityNamesies.STURDY) && !me.breaksTheMold()) {
-				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.STURDY.getName() + " prevents OHKO moves!"));
-				return;
-			}
-			
 			// Certain death
 			o.reduceHealth(b, o.getHP());
 			Messages.add(new MessageUpdate("It's a One-Hit KO!"));
@@ -3068,6 +3056,10 @@ public abstract class Attack implements Serializable {
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
 			return super.accuracy + (me.getLevel() - o.getLevel());
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getLevel() >= victim.getLevel();
 		}
 	}
 
@@ -3873,18 +3865,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			// Fails when the opponent is at a higher level than the user
-			if (me.getLevel() < o.getLevel()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			// Sturdy prevents OHKO moves if the user is not a mold breaker
-			if (o.hasAbility(AbilityNamesies.STURDY) && !me.breaksTheMold()) {
-				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.STURDY.getName() + " prevents OHKO moves!"));
-				return;
-			}
-			
 			// Certain death
 			o.reduceHealth(b, o.getHP());
 			Messages.add(new MessageUpdate("It's a One-Hit KO!"));
@@ -3892,6 +3872,10 @@ public abstract class Attack implements Serializable {
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
 			return super.accuracy + (me.getLevel() - o.getLevel());
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getLevel() >= victim.getLevel();
 		}
 	}
 
@@ -5228,23 +5212,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.ONE_HIT_KO);
 		}
 
-		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.isType(b, Type.ICE);
-		}
-
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			// Fails when the opponent is at a higher level than the user
-			if (me.getLevel() < o.getLevel()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			// Sturdy prevents OHKO moves if the user is not a mold breaker
-			if (o.hasAbility(AbilityNamesies.STURDY) && !me.breaksTheMold()) {
-				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.STURDY.getName() + " prevents OHKO moves!"));
-				return;
-			}
-			
 			// Certain death
 			o.reduceHealth(b, o.getHP());
 			Messages.add(new MessageUpdate("It's a One-Hit KO!"));
@@ -5252,6 +5220,10 @@ public abstract class Attack implements Serializable {
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
 			return super.accuracy + (me.getLevel() - o.getLevel());
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.isType(b, Type.ICE) && user.getLevel() >= victim.getLevel();
 		}
 	}
 
@@ -5691,18 +5663,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			// Fails when the opponent is at a higher level than the user
-			if (me.getLevel() < o.getLevel()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			// Sturdy prevents OHKO moves if the user is not a mold breaker
-			if (o.hasAbility(AbilityNamesies.STURDY) && !me.breaksTheMold()) {
-				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.STURDY.getName() + " prevents OHKO moves!"));
-				return;
-			}
-			
 			// Certain death
 			o.reduceHealth(b, o.getHP());
 			Messages.add(new MessageUpdate("It's a One-Hit KO!"));
@@ -5710,6 +5670,10 @@ public abstract class Attack implements Serializable {
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
 			return super.accuracy + (me.getLevel() - o.getLevel());
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getLevel() >= victim.getLevel();
 		}
 	}
 

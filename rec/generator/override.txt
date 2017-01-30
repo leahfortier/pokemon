@@ -256,19 +256,8 @@ Override:
 ***
 Override:
 	OHKO:
+		AddMapField: Applies: user.getLevel() >= victim.getLevel()
 		AddMapField: ApplyDamage:
-		// Fails when the opponent is at a higher level than the user
-		if (me.getLevel() < o.getLevel()) {
-			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			return;
-		}
-		
-		// Sturdy prevents OHKO moves if the user is not a mold breaker
-		if (o.hasAbility(AbilityNamesies.STURDY) && !me.breaksTheMold()) {
-			Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.STURDY.getName() + " prevents OHKO moves!"));
-			return;
-		}
-		
 		// Certain death
 		o.reduceHealth(b, o.getHP());
 		Messages.add(new MessageUpdate("It's a One-Hit KO!"));
