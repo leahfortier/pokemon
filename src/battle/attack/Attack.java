@@ -15,6 +15,7 @@ import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
+import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
@@ -234,7 +235,7 @@ public abstract class Attack implements Serializable {
 		return this.power == 0 ? "--" : this.power + "";
 	}
 
-	protected boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+	public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
 		return true;
 	}
 	
@@ -306,7 +307,7 @@ public abstract class Attack implements Serializable {
 		if (this.isSelfTarget() || this.isMoveType(MoveType.FIELD)) {
 			return true;
 		}
-		
+
 		// Non-status moves (AND FUCKING THUNDER WAVE) -- need to check the type chart
 		if ((!isStatusMove() || this.namesies == AttackNamesies.THUNDER_WAVE) && this.zeroAdvantage(b, me, o)) {
 			return false;
@@ -319,6 +320,12 @@ public abstract class Attack implements Serializable {
 		TypeBlocker blocker = TypeBlocker.block(b, me, me.getAttackType(), o);
 		if (blocker != null) {
 			blocker.alternateEffect(b, o);
+			return false;
+		}
+
+		AttackBlocker attackBlocker = AttackBlocker.block(b, me, me.getAttack().namesies(), o);
+		if (attackBlocker != null) {
+			attackBlocker.alternateEffect(b, o);
 			return false;
 		}
 		
@@ -714,7 +721,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -734,7 +741,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -1105,6 +1112,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test
 			RapidSpinRelease.release(b, user);
 		}
 	}
@@ -1708,7 +1716,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -1731,17 +1739,8 @@ public abstract class Attack implements Serializable {
 			super.statChanges[Stat.SP_ATTACK.index()] = -2;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// Captivate does not work on members of the same sex or on victims with the Oblivious ability
-			if (victim.hasAbility(AbilityNamesies.OBLIVIOUS)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"));
-			}
-			else if (!Gender.oppositeGenders(user, victim)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			}
-			else {
-				super.applyEffects(b, user, victim);
-			}
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return Gender.oppositeGenders(user, victim);
 		}
 	}
 
@@ -2156,7 +2155,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -2525,7 +2524,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -3281,7 +3280,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -3453,7 +3452,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -4947,7 +4946,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -6471,7 +6470,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -7697,7 +7696,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -8201,7 +8200,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -10725,7 +10724,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -10750,7 +10749,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 

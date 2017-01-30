@@ -371,6 +371,13 @@ Sturdy:
 *
 Oblivious:
 	Desc: Prevents the Pok\u00e9mon from becoming infatuated.
+	Int: AttackBlocker
+	AttackBlock:
+	return attackName == AttackNamesies.CAPTIVATE;
+	###
+	AttackAlternateEffect:
+	Messages.add(new MessageUpdate(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"));
+	###
 *
 Magnet Pull:
 	Int: OpponentTrappingEffect

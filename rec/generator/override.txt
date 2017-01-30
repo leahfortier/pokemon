@@ -78,7 +78,7 @@ Override:
 SelfHealingMove:
 	SelfHealing:
 		Header: void heal(ActivePokemon user, ActivePokemon victim, Battle b)
-		AddMapField: Applies: !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK)
+		AddMapField: Applies: !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK)
 		End:
 		
 		Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
@@ -1160,6 +1160,14 @@ TypeBlocker:
 		Header: boolean block(Type attackType, ActivePokemon victim)
 	*
 	AlternateEffect:
+		Header: void alternateEffect(Battle b, ActivePokemon victim)
+	*
+***
+AttackBlocker:
+	AttackBlock:
+		Header: boolean block(AttackNamesies attackName, ActivePokemon victim)
+	*
+	AttackAlternateEffect:
 		Header: void alternateEffect(Battle b, ActivePokemon victim)
 	*
 ***
@@ -2267,6 +2275,11 @@ Override:
 		AddMapField: GetItem:
 		return item;
 		###
+	*
+***
+Override:
+	RaiseAllStats:
+		AddMapField: StatChange: 7 Attack 1 Defense 1 Sp_Attack 1 Sp_Defense 1 Speed 1 Accuracy 1 Evasion 1
 	*
 ***
 Override:

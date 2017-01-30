@@ -3,6 +3,7 @@ package test;
 import battle.attack.AttackNamesies;
 import org.junit.Assert;
 import org.junit.Test;
+import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 
@@ -39,5 +40,35 @@ public class AttackTest {
         battle.attackingFight(AttackNamesies.STRUGGLE);
         Assert.assertTrue(attacking.hasAbility(AbilityNamesies.ROCK_HEAD));
         Assert.assertFalse(attacking.fullHealth());
+    }
+
+    @Test
+    public void captivateTest() {
+        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR)
+                .withGender(Gender.MALE);
+        TestPokemon defending = new TestPokemon(PokemonNamesies.CHARMANDER)
+                .withGender(Gender.MALE);
+
+        TestBattle battle = TestBattle.create(attacking, defending);
+
+        // TODO: Test genderless too
+        // TODO: This shouldn't use applies and effective separately, but once apply returns a boolean should use that for all
+        attacking.setupMove(AttackNamesies.CAPTIVATE, battle, defending);
+        Assert.assertFalse(attacking.getAttack().applies(battle, attacking, defending));
+
+        defending.withGender(Gender.FEMALE);
+        Assert.assertTrue(attacking.getAttack().applies(battle, attacking, defending));
+
+        attacking.withAbility(AbilityNamesies.OBLIVIOUS);
+        Assert.assertTrue(attacking.getAttack().effective(battle, attacking, defending));
+
+        attacking.withAbility(AbilityNamesies.NO_ABILITY);
+        defending.withAbility(AbilityNamesies.OBLIVIOUS);
+        Assert.assertFalse(attacking.getAttack().effective(battle, attacking, defending));
+    }
+
+    @Test
+    public void multiTurnMoveTest() {
+        // TODO
     }
 }

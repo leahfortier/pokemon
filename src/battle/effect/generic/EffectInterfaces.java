@@ -2,15 +2,16 @@ package battle.effect.generic;
 
 import battle.Battle;
 import battle.attack.Attack;
+import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import main.Global;
-import type.Type;
 import map.TerrainType;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import trainer.Trainer;
+import type.Type;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1257,6 +1258,31 @@ public final class EffectInterfaces {
 					
 					TypeBlocker effect = (TypeBlocker)invokee;
 					if (effect.block(attackType, victim)) {
+						return effect;
+					}
+				}
+			}
+			
+			return null;
+		}
+	}
+
+	public interface AttackBlocker {
+		boolean block(AttackNamesies attackName, ActivePokemon victim);
+		void alternateEffect(Battle b, ActivePokemon victim);
+
+		static AttackBlocker block(Battle b, ActivePokemon attacking, AttackNamesies attackName, ActivePokemon victim) {
+			List<Object> invokees = b.getEffectsList(victim);
+			for (Object invokee : invokees) {
+				if (invokee instanceof AttackBlocker && !Effect.isInactiveEffect(invokee, b)) {
+					
+					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && attacking.breaksTheMold()) {
+						continue;
+					}
+					
+					AttackBlocker effect = (AttackBlocker)invokee;
+					if (effect.block(attackName, victim)) {
 						return effect;
 					}
 				}

@@ -472,6 +472,7 @@ Rapid Spin:
 	Type: Normal
 	Cat: Physical
 	ApplyEffects: 
+	// TODO: Test
 	RapidSpinRelease.release(b, user);
 	###
 *
@@ -799,7 +800,7 @@ Silver Wind:
 	Acc: 100
 	Cat: Special
 	Type: Bug
-	StatChange: 7 Attack 1 Defense 1 Sp_Attack 1 Sp_Defense 1 Speed 1 Accuracy 1 Evasion 1
+	RaiseAllStats: True
 	SelfTarget: True
 	EffChance: 10
 *
@@ -833,18 +834,7 @@ Captivate:
 	Acc: 100
 	PP: 20
 	StatChange: 1 Sp_attack -2
-	ApplyEffects:
-	// Captivate does not work on members of the same sex or on victims with the Oblivious ability
-	if (victim.hasAbility(AbilityNamesies.OBLIVIOUS)) {
-		Messages.add(new MessageUpdate(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"));
-	}
-	else if (!Gender.oppositeGenders(user, victim)) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-	} 
-	else {
-		super.applyEffects(b, user, victim);
-	}
-	###
+	Applies: Gender.oppositeGenders(user, victim)
 *
 Bug Buzz:
 	Desc: The user vibrates its wings to generate a damaging sound wave. It may also lower the target's Sp. Def stat.
@@ -3774,7 +3764,7 @@ Ancient Power:
 	Cat: Special
 	Acc: 100
 	Type: Rock
-	StatChange: 7 Attack 1 Defense 1 Sp_Attack 1 Sp_Defense 1 Speed 1 Accuracy 1 Evasion 1
+	RaiseAllStats: True
 	SelfTarget: True
 	EffChance: 10
 *
@@ -4384,7 +4374,7 @@ Ominous Wind:
 	Cat: Special
 	Acc: 100
 	Pow: 60
-	StatChange: 7 Attack 1 Defense 1 Sp_Attack 1 Sp_Defense 1 Speed 1 Accuracy 1 Evasion 1
+	RaiseAllStats: True
 	SelfTarget: True
 	EffChance: 10
 *

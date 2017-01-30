@@ -19,6 +19,7 @@ import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
+import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
@@ -973,11 +974,19 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Oblivious extends Ability {
+	static class Oblivious extends Ability implements AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		Oblivious() {
 			super(AbilityNamesies.OBLIVIOUS, "Prevents the Pok\u00e9mon from becoming infatuated.");
+		}
+
+		public boolean block(AttackNamesies attackName, ActivePokemon victim) {
+			return attackName == AttackNamesies.CAPTIVATE;
+		}
+
+		public void alternateEffect(Battle b, ActivePokemon victim) {
+			Messages.add(new MessageUpdate(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"));
 		}
 	}
 
