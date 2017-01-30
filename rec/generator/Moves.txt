@@ -176,6 +176,7 @@ Growth:
 	StatChange: 2 Attack 1 Sp_Attack 1
 	Type: Normal
 	ApplyEffects:
+	// TODO: Test
 	// Doubles stat changes in the sunlight
 	if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
 		int[] statChanges = super.statChanges.clone();
@@ -489,7 +490,7 @@ Aurora Veil:
 	Cat: Status
 	Effect: AuroraVeil
 	SelfTarget: True
-	ApplyError: b.getWeather().namesies() != EffectNamesies.HAILING
+	Applies: b.getWeather().namesies() == EffectNamesies.HAILING
 *
 Spiky Shield:
 	Desc: In addition to protecting the user from attacks, this move also damages any attacker who makes direct contact.
@@ -1021,7 +1022,7 @@ Endeavor:
 	Cat: Physical
 	PP: 5
 	Acc: 100
-	ApplyError: me.getHP() >= o.getHP()
+	Applies: user.getHP() < victim.getHP()
 	FixedDamage: o.getHP() - me.getHP()
 *
 Sand Attack:
@@ -1131,7 +1132,7 @@ Sucker Punch:
 	Cat: Physical
 	Priority: 1
 	Type: Dark
-	ApplyError: o.getMove().getAttack().isStatusMove()
+	Applies: !victim.getMove().getAttack().isStatusMove()
 *
 Crunch:
 	Desc: The user crunches up the foe with sharp fangs. It may also lower the target's Defense stat.
@@ -1981,7 +1982,7 @@ Natural Gift:
 		user.consumeItem(b);
 	}
 	###
-	ApplyError: !(me.getHeldItem(b) instanceof Berry)
+	Applies: user.getHeldItem(b) instanceof Berry
 *
 Giga Drain:
 	Desc: A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.
@@ -2198,7 +2199,7 @@ Fake Out:
 	Priority: 3
 	Pow: 40
 	Effect: Flinch
-	ApplyError: !me.getAttributes().isFirstTurn()
+	Applies: user.getAttributes().isFirstTurn()
 *
 Feint Attack:
 	Desc: The user approaches the target disarmingly, then throws a sucker punch. It hits without fail.
@@ -3029,7 +3030,7 @@ Sheer Cold:
 	Acc: 30
 	Cat: Special
 	Type: Ice
-	ApplyError: o.isType(b, Type.ICE)
+	Applies: !victim.isType(b, Type.ICE)
 *
 Poison Gas:
 	Desc: A cloud of poison gas is sprayed in the face of opposing Pok\u00e9mon. It may poison those hit.
@@ -3200,7 +3201,7 @@ Dream Eater:
 	Type: Psychic
 	Int: SapHealthEffect
 	SapMessage: return victim.getName() + "'s dream was eaten!";
-	ApplyError: !o.hasStatus(StatusCondition.ASLEEP)
+	Applies: victim.hasStatus(StatusCondition.ASLEEP)
 *
 Dark Pulse:
 	Desc: The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch.
@@ -3705,7 +3706,7 @@ Refresh:
 	Cat: Status
 	SelfTarget: True
 	MoveType: Healing
-	ApplyError: !me.hasStatus()
+	Applies: user.hasStatus()
 	ApplyEffects: 
 	Status.removeStatus(b, user, CastSource.ATTACK);
 	###
@@ -4189,7 +4190,7 @@ Sky Drop:
 	Cat: Physical
 	Acc: 100
 	MoveType: Airborne
-	ApplyError: o.getWeight(b) > 440
+	Applies: victim.getWeight(b) < 441
 *
 Iron Head:
 	Desc: The user slams the target with its steel-hard head. It may also make the target flinch.
@@ -4223,7 +4224,7 @@ Snore:
 	MoveType: Sound_Based, Metronomeless
 	Effect: Flinch
 	EffChance: 30
-	ApplyError: !me.hasStatus(StatusCondition.ASLEEP)
+	Applies: user.hasStatus(StatusCondition.ASLEEP)
 *
 Sleep Talk:
 	Desc: While it is asleep, the user randomly uses one of the moves it knows.
@@ -5510,7 +5511,7 @@ Gastro Acid:
 	AbilityMessage: 
 	return caster.getName() + " suppressed " + victim.getName() + "'s ability!";
 	###
-	ApplyError: !o.getAbility().isReplaceable()
+	Applies: victim.getAbility().isReplaceable()
 *
 Healing Wish:
 	Desc: The user faints. In return, the Pok\u00e9mon taking its place will have its HP restored and status cured.
@@ -5600,7 +5601,7 @@ Role Play:
 	ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 	return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
 	###
-	ApplyError: !o.getAbility().isStealable()
+	Applies: victim.getAbility().isStealable()
 *
 Knock Off:
 	Desc: The user slaps down the target's held item, preventing that item from being used in the battle.
@@ -5844,7 +5845,7 @@ Entrainment:
 	AbilityMessage: 
 	return victim.getName() + " copied " + caster.getName() + "'s " + caster.getAbility().getName() + "!";
 	###
-	ApplyError: !o.getAbility().isReplaceable() || !me.getAbility().isStealable()
+	Applies: victim.getAbility().isReplaceable() && user.getAbility().isStealable()
 *
 Magic Room:
 	Desc: The user creates a bizarre area in which Pok\u00e9mon's held items lose their effects for five turns.
@@ -6270,7 +6271,7 @@ Water Shuriken:
 	MultiStrike: 2 5
 *
 Mat Block:
-	ApplyError: !me.getAttributes().isFirstTurn()
+	Applies: user.getAttributes().isFirstTurn()
 	Desc: Using a pulled-up mat as a shield, the user protects itself and its allies from damaging moves. This does not stop status moves.
 	PP: 15
 	Type: Fighting
@@ -6343,7 +6344,7 @@ Belch:
 	Pow: 120
 	Cat: Special
 	Acc: 90
-	ApplyError: !me.hasEffect(EffectNamesies.EATEN_BERRY)
+	Applies: user.hasEffect(EffectNamesies.EATEN_BERRY)
 *
 Venom Drench:
 	Desc: Opposing Pok\u00e9mon are drenched in an odd poisonous liquid. This lowers the Attack, Sp. Atk, and Speed stats of a poisoned target.
@@ -6351,7 +6352,7 @@ Venom Drench:
 	Cat: Status
 	Acc: 100
 	StatChange: 3 Attack -1 Sp_Attack -1 Speed -1
-	ApplyError: !o.hasStatus(StatusCondition.POISONED)
+	Applies: victim.hasStatus(StatusCondition.POISONED)
 	PP: 20
 *
 Electric Terrain:
@@ -6465,7 +6466,7 @@ First Impression:
 	PP: 10
 	Acc: 100
 	Priority: 2
-	ApplyError: !me.getAttributes().isFirstTurn()
+	Applies: user.getAttributes().isFirstTurn()
 *
 Anchor Shot:
 	Desc: The user entangles the target with its anchor chain while attacking. The target becomes unable to flee.
@@ -6607,7 +6608,7 @@ Burn Up:
 	PP: 5
 	SelfTarget: True
 	Effect: ChangeType
-	ApplyError: !me.isType(b, Type.FIRE)
+	Applies: user.isType(b, Type.FIRE)
 	RemoveType: Fire
 *
 Smart Strike:
@@ -6623,7 +6624,7 @@ Purify:
 	Cat: Status
 	PP: 20
 	MoveType: Healing
-	ApplyError: !me.hasStatus()
+	Applies: user.hasStatus()
 	ApplyEffects:
 	Status.removeStatus(b, user, CastSource.ATTACK);
 	if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {

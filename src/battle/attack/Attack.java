@@ -247,6 +247,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		if (!applies(b, me, o)) {
+			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 			return;
 		}
 		
@@ -639,6 +640,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test
 			// Doubles stat changes in the sunlight
 			if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
 				int[] statChanges = super.statChanges.clone();
@@ -691,11 +693,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			switch (b.getWeather().namesies()) {
 				case CLEAR_SKIES:
 					victim.healHealthFraction(1/2.0);
@@ -715,6 +712,10 @@ public abstract class Attack implements Serializable {
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
 		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
+		}
 	}
 
 	static class Recover extends Attack implements SelfHealingMove {
@@ -727,14 +728,13 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			victim.healHealthFraction(1/2.0);
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -1128,13 +1128,8 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getWeather().namesies() != EffectNamesies.HAILING) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return b.getWeather().namesies() == EffectNamesies.HAILING;
 		}
 	}
 
@@ -1692,11 +1687,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			switch (b.getWeather().namesies()) {
 				case CLEAR_SKIES:
 					victim.healHealthFraction(1/2.0);
@@ -1715,6 +1705,10 @@ public abstract class Attack implements Serializable {
 			}
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -2056,17 +2050,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			o.reduceHealth(b, o.getHP() - me.getHP());
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getHP() < victim.getHP();
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (me.getHP() >= o.getHP()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
+			o.reduceHealth(b, o.getHP() - me.getHP());
 		}
 	}
 
@@ -2145,11 +2134,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			healFail = false;
 			victim.healHealthFraction(1/2.0);
 			
@@ -2169,6 +2153,10 @@ public abstract class Attack implements Serializable {
 			}
 			
 			return null;
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -2264,13 +2252,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.getMove().getAttack().isStatusMove()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.getMove().getAttack().isStatusMove();
 		}
 	}
 
@@ -2511,11 +2494,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			PokemonEffect stockpile = user.getEffect(EffectNamesies.STOCKPILE);
 			if (stockpile == null) {
 				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
@@ -2544,6 +2522,10 @@ public abstract class Attack implements Serializable {
 			stockpile.deactivate();
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -3278,11 +3260,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			switch (b.getWeather().namesies()) {
 				case CLEAR_SKIES:
 					victim.healHealthFraction(1/2.0);
@@ -3301,6 +3278,10 @@ public abstract class Attack implements Serializable {
 			}
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -3466,14 +3447,13 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			victim.healHealthFraction(1/1.0);
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -3587,17 +3567,12 @@ public abstract class Attack implements Serializable {
 			return super.type;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return ((Berry)me.getHeldItem(b)).naturalGiftPower();
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getHeldItem(b) instanceof Berry;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!(me.getHeldItem(b) instanceof Berry)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			return ((Berry)me.getHeldItem(b)).naturalGiftPower();
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -3974,13 +3949,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.getAttributes().isFirstTurn()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().isFirstTurn();
 		}
 	}
 
@@ -4971,14 +4941,13 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			victim.healHealthFraction(1/2.0);
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -5265,6 +5234,10 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.ONE_HIT_KO);
 		}
 
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.isType(b, Type.ICE);
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			// Fails when the opponent is at a higher level than the user
 			if (me.getLevel() < o.getLevel()) {
@@ -5285,15 +5258,6 @@ public abstract class Attack implements Serializable {
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
 			return super.accuracy + (me.getLevel() - o.getLevel());
-		}
-
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.isType(b, Type.ICE)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
 		}
 	}
 
@@ -5560,13 +5524,8 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.hasStatus(StatusCondition.ASLEEP)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasStatus(StatusCondition.ASLEEP);
 		}
 
 		public String getSapMessage(ActivePokemon victim) {
@@ -6421,13 +6380,8 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.hasStatus()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasStatus();
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -6511,14 +6465,13 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			victim.healHealthFraction(1/2.0);
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -7110,13 +7063,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.getWeight(b) > 440) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getWeight(b) < 441;
 		}
 	}
 
@@ -7158,13 +7106,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.METRONOMELESS);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.hasStatus(StatusCondition.ASLEEP)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasStatus(StatusCondition.ASLEEP);
 		}
 	}
 
@@ -7748,14 +7691,13 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			victim.healHealthFraction(1/2.0);
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -8253,14 +8195,13 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			victim.healHealthFraction(1/2.0);
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -9128,13 +9069,8 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.CHANGE_ABILITY);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.getAbility().isReplaceable()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getAbility().isReplaceable();
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -9349,13 +9285,8 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.getAbility().isStealable()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getAbility().isStealable();
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -9885,13 +9816,8 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.CHANGE_ABILITY);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.getAbility().isReplaceable() || !me.getAbility().isStealable()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getAbility().isReplaceable() && user.getAbility().isStealable();
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -9923,21 +9849,16 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.CHANGE_ABILITY);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.getAbility().isReplaceable()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
-		}
-
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return AbilityNamesies.INSOMNIA.getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return victim.getName() + "'s ability was changed to " + AbilityNamesies.INSOMNIA.getName() + "!";
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getAbility().isReplaceable();
 		}
 	}
 
@@ -9950,21 +9871,16 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.CHANGE_ABILITY);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.getAbility().isReplaceable()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
-		}
-
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return AbilityNamesies.SIMPLE.getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return victim.getName() + "'s ability was changed to " + AbilityNamesies.SIMPLE.getName() + "!";
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getAbility().isReplaceable();
 		}
 	}
 
@@ -10582,13 +10498,8 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.getAttributes().isFirstTurn()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().isFirstTurn();
 		}
 	}
 
@@ -10672,13 +10583,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.ASSISTLESS);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.hasEffect(EffectNamesies.EATEN_BERRY)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasEffect(EffectNamesies.EATEN_BERRY);
 		}
 	}
 
@@ -10693,13 +10599,8 @@ public abstract class Attack implements Serializable {
 			super.statChanges[Stat.SPEED.index()] = -1;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.hasStatus(StatusCondition.POISONED)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasStatus(StatusCondition.POISONED);
 		}
 	}
 
@@ -10813,11 +10714,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			if (b.getWeather().namesies() == EffectNamesies.SANDSTORM) {
 				victim.healHealthFraction(1);
 			}
@@ -10826,6 +10722,10 @@ public abstract class Attack implements Serializable {
 			}
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -10839,11 +10739,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
 				victim.healHealthFraction(1);
 			}
@@ -10852,6 +10747,10 @@ public abstract class Attack implements Serializable {
 			}
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -10866,13 +10765,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.getAttributes().isFirstTurn()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().isFirstTurn();
 		}
 	}
 
@@ -11067,13 +10961,8 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.isType(b, Type.FIRE)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isType(b, Type.FIRE);
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -11110,13 +10999,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.HEALING);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.hasStatus()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasStatus();
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {

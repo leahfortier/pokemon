@@ -2,6 +2,7 @@ package test;
 
 import battle.Battle;
 import battle.attack.AttackNamesies;
+import org.junit.Test;
 import pokemon.ActivePokemon;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
@@ -50,5 +51,10 @@ class TestBattle extends Battle {
         nahMahBoi.setupMove(AttackNamesies.SPLASH, testBattle, mahBoiiiiiii);
 
         return testBattle;
+    }
+
+    @Test
+    public void criticalHitTest() {
+        // TODO
     }
 }

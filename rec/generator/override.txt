@@ -18,6 +18,9 @@ Override:
 Override:
 	Applies:
 		Header: boolean applies(Battle b, ActivePokemon user, ActivePokemon victim)
+		Body:
+		return {0};
+		###
 	*
 ***
 RecoilMove:
@@ -75,13 +78,7 @@ Override:
 SelfHealingMove:
 	SelfHealing:
 		Header: void heal(ActivePokemon user, ActivePokemon victim, Battle b)
-		Begin:
-		if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			return;
-		}
-		
-		###
+		AddMapField: Applies: !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK)
 		End:
 		
 		Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
@@ -440,7 +437,7 @@ BarrierEffect:
 Override:
 	SpecificAbilityChange:
 		AddInterface: ChangeAbilityMove
-		AddMapField: ApplyError: !o.getAbility().isReplaceable()
+		AddMapField: Applies: victim.getAbility().isReplaceable()
 		AddMapField: Effect: ChangeAbility
 		AddMapField: AbilityChange:
 		return AbilityNamesies.{00}.getNewAbility();
@@ -745,18 +742,6 @@ Override:
 		Header: String getSubsideMessage(ActivePokemon victim)
 		Body:
 		return {0};
-		###
-	*
-***
-Override:
-	ApplyError:
-		AddMapField: Apply:
-		if ({0}) {
-			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			return;
-		}
-		
-		super.apply(me, o, b);
 		###
 	*
 ***
