@@ -3,6 +3,7 @@ package battle.attack;
 import battle.Battle;
 import battle.effect.PassableEffect;
 import battle.effect.SapHealthEffect;
+import battle.effect.attack.AttackInterfaces.RecoilPercentageMove;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.attack.MultiStrikeMove;
@@ -46,7 +47,6 @@ import item.hold.SpecialTypeItem.GemItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
 import main.Global;
-import type.Type;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -60,6 +60,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
+import type.Type;
 import type.TypeAdvantage;
 import util.GeneralUtils;
 import util.RandomUtils;
@@ -232,12 +233,20 @@ public abstract class Attack implements Serializable {
 	public String getPowerString() {
 		return this.power == 0 ? "--" : this.power + "";
 	}
+
+	protected boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+		return true;
+	}
 	
 	public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
 		ActivePokemon target = getTarget(b, me, o);
 		
 		// Don't do anything for moves that are uneffective
 		if (!effective(b, me, target)) {
+			return;
+		}
+
+		if (!applies(b, me, o)) {
 			return;
 		}
 		
@@ -561,7 +570,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class TakeDown extends Attack implements RecoilMove {
+	static class TakeDown extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		TakeDown() {
@@ -571,13 +580,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/4.0), false);
+		public int getDamagePercentageDenominator() {
+			return 4;
 		}
 	}
 
@@ -651,7 +655,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class DoubleEdge extends Attack implements RecoilMove {
+	static class DoubleEdge extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		DoubleEdge() {
@@ -661,13 +665,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
+		public int getDamagePercentageDenominator() {
+			return 3;
 		}
 	}
 
@@ -1033,7 +1032,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class FlareBlitz extends Attack implements RecoilMove {
+	static class FlareBlitz extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		FlareBlitz() {
@@ -1046,13 +1045,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
+		public int getDamagePercentageDenominator() {
+			return 3;
 		}
 	}
 
@@ -4410,7 +4404,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Submission extends Attack implements RecoilMove {
+	static class Submission extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		Submission() {
@@ -4420,13 +4414,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/4.0), false);
+		public int getDamagePercentageDenominator() {
+			return 4;
 		}
 	}
 
@@ -5084,7 +5073,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class BraveBird extends Attack implements RecoilMove {
+	static class BraveBird extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		BraveBird() {
@@ -5094,13 +5083,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
+		public int getDamagePercentageDenominator() {
+			return 3;
 		}
 	}
 
@@ -5973,7 +5957,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class WoodHammer extends Attack implements RecoilMove {
+	static class WoodHammer extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		WoodHammer() {
@@ -5983,13 +5967,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
+		public int getDamagePercentageDenominator() {
+			return 3;
 		}
 	}
 
@@ -8067,7 +8046,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class WildCharge extends Attack implements RecoilMove {
+	static class WildCharge extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		WildCharge() {
@@ -8077,13 +8056,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/4.0), false);
+		public int getDamagePercentageDenominator() {
+			return 4;
 		}
 	}
 
@@ -8187,7 +8161,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class HeadSmash extends Attack implements RecoilMove {
+	static class HeadSmash extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		HeadSmash() {
@@ -8197,13 +8171,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/2.0), false);
+		public int getDamagePercentageDenominator() {
+			return 2;
 		}
 	}
 
@@ -8857,7 +8826,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class HeadCharge extends Attack implements RecoilMove {
+	static class HeadCharge extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		HeadCharge() {
@@ -8867,13 +8836,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/4.0), false);
+		public int getDamagePercentageDenominator() {
+			return 4;
 		}
 	}
 
@@ -10140,7 +10104,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class VoltTackle extends Attack implements RecoilMove {
+	static class VoltTackle extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		VoltTackle() {
@@ -10152,13 +10116,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
+		public int getDamagePercentageDenominator() {
+			return 3;
 		}
 	}
 

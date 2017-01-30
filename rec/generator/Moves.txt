@@ -134,9 +134,9 @@ Take Down:
 	PP: 20
 	Type: Normal
 	Desc: A reckless, full-body charge attack for slamming into the target. It also damages the user a little.
-	Recoil: 4
+	RecoilPercentage: 4
+	Int: RecoilPercentageMove
 	Cat: Physical
-	Int: RecoilMove
 *
 Struggle:
 	Type: No_Type
@@ -144,7 +144,7 @@ Struggle:
 	Pow: 50
 	Desc: An attack that is used in desperation only if the user has no PP. It also hurts the user slightly.
 	Cat: Physical
-	Recoil: 
+	Recoil:
 	Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
 	user.reduceHealth(b, user.getMaxHP()/4, false);
 	###
@@ -199,8 +199,8 @@ Double-Edge:
 	Acc: 100
 	Type: Normal
 	Cat: Physical
-	Recoil: 3
-	Int: RecoilMove
+	RecoilPercentage: 3
+	Int: RecoilPercentageMove
 *
 Seed Bomb:
 	Desc: The user slams a barrage of hard-shelled seeds down on the target from above.
@@ -416,8 +416,8 @@ Heat Wave:
 *
 Flare Blitz:
 	Desc: The user cloaks itself in fire and charges at the target. The user sustains serious damage and may leave the target burned.
-	Recoil: 3
-	Int: RecoilMove
+	RecoilPercentage: 3
+	Int: RecoilPercentageMove
 	Status: Burned
 	EffChance: 10
 	Cat: Physical
@@ -2472,8 +2472,8 @@ Submission:
 	PP: 20
 	Pow: 80
 	Type: Fighting
-	Recoil: 4
-	Int: RecoilMove
+	RecoilPercentage: 4
+	Int: RecoilPercentageMove
 	Acc: 80
 	Cat: Physical
 *
@@ -2917,8 +2917,8 @@ Brave Bird:
 	Acc: 100
 	Cat: Physical
 	Type: Flying
-	Recoil: 3
-	Int: RecoilMove
+	RecoilPercentage: 3
+	Int: RecoilPercentageMove
 *
 Uproar:
 	Desc: The user attacks in an uproar for three turns. Over that time, no one can fall asleep.
@@ -3422,8 +3422,8 @@ Wood Hammer:
 	Acc: 100
 	Type: Grass
 	Cat: Physical
-	Recoil: 3
-	Int: RecoilMove
+	RecoilPercentage: 3
+	Int: RecoilPercentageMove
 *
 Bone Club:
 	Desc: The user clubs the target with a bone. It may also make the target flinch.
@@ -4819,8 +4819,8 @@ Wild Charge:
 	Cat: Physical
 	Acc: 100
 	Pow: 90
-	Recoil: 4
-	Int: RecoilMove
+	RecoilPercentage: 4
+	Int: RecoilPercentageMove
 *
 Flash:
 	Desc: The user flashes a bright light that cuts the target's accuracy. It can also be used to illuminate caves.
@@ -4902,8 +4902,8 @@ Head Smash:
 	Pow: 150
 	Acc: 80
 	Cat: Physical
-	Recoil: 2
-	Int: RecoilMove
+	RecoilPercentage: 2
+	Int: RecoilPercentageMove
 *
 Mist Ball:
 	Desc: A mistlike flurry of down envelops and damages the target. It may also lower the target's Sp. Atk.
@@ -5289,8 +5289,8 @@ Shift Gear:
 Head Charge:
 	Desc: The user charges its head into its target, using its powerful guard hair. It also damages the user a little.
 	PP: 15
-	Recoil: 4
-	Int: RecoilMove
+	RecoilPercentage: 4
+	Int: RecoilPercentageMove
 	Pow: 120
 	Acc: 100
 	Cat: Physical
@@ -5975,8 +5975,8 @@ Volt Tackle:
 	Type: Electric
 	Status: Paralyzed
 	EffChance: 10
-	Recoil: 3
-	Int: RecoilMove
+	RecoilPercentage: 3
+	Int: RecoilPercentageMove
 *
 Focus Blast:
 	Desc: The user heightens its mental focus and unleashes its power. It may also lower the target's Sp. Def.
