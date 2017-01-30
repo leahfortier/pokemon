@@ -1259,16 +1259,13 @@ Spit Up:
 	Type: Normal
 	Cat: Special
 	Acc: 100
+	Applies: user.hasEffect(EffectNamesies.STOCKPILE)
 	Apply: 
-	PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
-	if (stockpile == null) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-
 	super.apply(me, o, b);
 	
+	// TODO: Test
 	// Stockpile ends after Spit up is used
+	PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
 	stockpile.deactivate();
 	###
 	GetPow: 
@@ -1294,13 +1291,9 @@ Swallow:
 	PP: 10
 	Cat: Status
 	Int: SelfHealingMove
+	ExtraApplies: user.hasEffect(EffectNamesies.STOCKPILE)
 	SelfHealing: 
 	PokemonEffect stockpile = user.getEffect(EffectNamesies.STOCKPILE);
-	if (stockpile == null) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
 	if (stockpile.getTurns() <= 0) {
 		Global.error("Stockpile turns should never be nonpositive");
 	}

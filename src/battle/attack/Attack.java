@@ -2185,13 +2185,13 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+			// TODO: Test
 			Move mirror = o.getAttributes().getLastMoveUsed();
-			if (mirror == null || mirror.getAttack().isMoveType(MoveType.MIRRORLESS)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			me.callNewMove(b, o, new Move(mirror.getAttack()));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getAttributes().getLastMoveUsed() != null && !victim.getAttributes().getLastMoveUsed().getAttack().isMoveType(MoveType.MIRRORLESS);
 		}
 	}
 
@@ -2451,6 +2451,10 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasEffect(EffectNamesies.STOCKPILE);
+		}
+
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
 			
@@ -2470,15 +2474,11 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
-			if (stockpile == null) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			super.apply(me, o, b);
 			
+			// TODO: Test
 			// Stockpile ends after Spit up is used
+			PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
 			stockpile.deactivate();
 		}
 	}
@@ -2494,11 +2494,6 @@ public abstract class Attack implements Serializable {
 
 		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
 			PokemonEffect stockpile = user.getEffect(EffectNamesies.STOCKPILE);
-			if (stockpile == null) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			if (stockpile.getTurns() <= 0) {
 				Global.error("Stockpile turns should never be nonpositive");
 			}
@@ -2524,7 +2519,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
+			return user.hasEffect(EffectNamesies.STOCKPILE) && !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -6667,13 +6662,13 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+			// TODO: Test
 			Move mirror = o.getAttributes().getLastMoveUsed();
-			if (mirror == null || mirror.getAttack().isMoveType(MoveType.MIRRORLESS)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			me.callNewMove(b, o, new Move(mirror.getAttack()));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getAttributes().getLastMoveUsed() != null && !victim.getAttributes().getLastMoveUsed().getAttack().isMoveType(MoveType.MIRRORLESS);
 		}
 	}
 

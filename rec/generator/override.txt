@@ -23,6 +23,11 @@ Override:
 		###
 	*
 ***
+Override:
+	ExtraApplies:
+		AddMapField: Applies: {0}
+	*
+***
 RecoilMove:
 	Recoil:
 		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
@@ -479,13 +484,10 @@ ChangeAbilityMove:
 Override:
 	MirrorMove:
 		AddMapField: MoveType: Sleep_Talk_Fail, Encoreless, Metronomeless, Assistless, No_Magic_Coat, Mirrorless
+		AddMapField: Applies: victim.getAttributes().getLastMoveUsed() != null && !victim.getAttributes().getLastMoveUsed().getAttack().isMoveType(MoveType.MIRRORLESS)
 		AddMapField: Apply: 
+		// TODO: Test
 		Move mirror = o.getAttributes().getLastMoveUsed();
-		if (mirror == null || mirror.getAttack().isMoveType(MoveType.MIRRORLESS)) {
-			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			return;
-		}
-		
 		me.callNewMove(b, o, new Move(mirror.getAttack()));
 		###
 	*

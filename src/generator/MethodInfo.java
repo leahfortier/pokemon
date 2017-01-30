@@ -239,6 +239,9 @@ class MethodInfo {
                 else if (fieldKey.equals("MoveType")) {
                     mapField += ", " + addFieldValue;
                 }
+                else if (fieldKey.equals("Applies")) {
+                    mapField += " && " + addFieldValue;
+                }
                 else if (fieldKey.equals("Field")) {
                     mapField += addFieldValue;
                 }
