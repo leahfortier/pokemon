@@ -1165,9 +1165,9 @@ PhysicalContactEffect:
 		Header: void contact(Battle b, ActivePokemon user, ActivePokemon victim)
 	*
 ***
-DamageBlocker:
+TypeBlocker:
 	Block:
-		Header: boolean block(Type attacking, ActivePokemon victim)
+		Header: boolean block(Type attackType, ActivePokemon victim)
 	*
 	AlternateEffect:
 		Header: void alternateEffect(Battle b, ActivePokemon victim)
@@ -1175,9 +1175,9 @@ DamageBlocker:
 ***
 Override:
 	BlockType:
-		AddInterface: DamageBlocker
+		AddInterface: TypeBlocker
 		AddMapField: Block:
-		return attacking == Type.{00};
+		return attackType == Type.{00};
 		###
 		AddMapField: AlternateEffect:
 		Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " type moves!"));
@@ -1187,9 +1187,9 @@ Override:
 ***
 Override:
 	AbsorbType:
-		AddInterface: DamageBlocker
+		AddInterface: TypeBlocker
 		AddMapField: Block:
-		return attacking == Type.{00};
+		return attackType == Type.{00};
 		###
 		AddMapField: AlternateEffect:
 		Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " moves!"));
@@ -1346,6 +1346,7 @@ MoveUseItem:
 Override:
 	IncreaseStat:
 		Header: Stat toIncrease()
+		AccessModifier: Private
 		Body:
 		return Stat.{00};
 		###
@@ -2160,6 +2161,7 @@ CritBlockerEffect:
 Override:
 	PowderResist:
 		Header: String getPreventMessage(ActivePokemon victim)
+		AccessModifier: Private
 		Body:
 		return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
 		###

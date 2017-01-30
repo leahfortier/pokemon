@@ -1484,7 +1484,7 @@ public abstract class Item implements Comparable<Item>, Serializable {
 			super.price = 200;
 		}
 
-		public String getPreventMessage(ActivePokemon victim) {
+		private String getPreventMessage(ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
 		}
 

@@ -1295,7 +1295,7 @@ Spit Up:
 	}
 	
 	// Max power is 300
-	return (int)Math.min(turns, 3)*100;
+	return Math.min(turns, 3)*100;
 	###
 *
 Swallow:
@@ -1508,7 +1508,7 @@ Rollout:
 	Type: Rock
 	GetPow: 
 	// TODO: Combine these types of moves
-	return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
+	return super.power*Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
 	###
 *
 Fury Cutter:
@@ -1519,7 +1519,7 @@ Fury Cutter:
 	Type: Bug
 	Pow: 40
 	GetPow: 
-	return super.power*(int)Math.min(5, me.getAttributes().getCount());
+	return super.power*Math.min(5, me.getAttributes().getCount());
 	###
 *
 Sand Tomb:
@@ -2367,7 +2367,7 @@ Punishment:
 	PP: 5
 	Pow: 60
 	GetPow: 
-	return (int)Math.min(super.power + 20*o.getAttributes().totalStatIncreases(), 200);
+	return Math.min(super.power + 20*o.getAttributes().totalStatIncreases(), 200);
 	###
 	Type: Dark
 	Cat: Physical
@@ -4892,7 +4892,7 @@ Ice Ball:
 	Acc: 90
 	MoveType: Bomb_Ball
 	GetPow: 
-	return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
+	return super.power*Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
 	###
 *
 Head Smash:

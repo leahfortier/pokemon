@@ -566,3 +566,16 @@ TerrainCastEffect:
 		EffectList: p
 	*
 ***
+TypeBlocker:
+	Method:
+		Header: boolean block(Type attackType, ActivePokemon victim)
+		Invoke: CheckGet true
+		InvokeName: block
+		InvokeParameters: Battle b, ActivePokemon attacking
+		MoldBreaker: attacking
+		EffectList: victim
+	*
+	Method:
+		Header: void alternateEffect(Battle b, ActivePokemon victim)
+	*
+***

@@ -176,9 +176,9 @@ Flash Fire:
 	AbilityIsActive:
 	return activated;
 	###
-	Int: DamageBlocker, PowerChangeEffect
+	Int: TypeBlocker, PowerChangeEffect
 	Block: 
-	return attacking == Type.FIRE;
+	return attackType == Type.FIRE;
 	###
 	AlternateEffect: 
 	Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!"));

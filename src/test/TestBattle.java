@@ -37,6 +37,11 @@ class TestBattle extends Battle {
         fight(AttackNamesies.SPLASH, attackNamesies);
     }
 
+    // Moves always hit in tests`
+    protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
+        return true;
+    }
+
     static TestBattle create(TestPokemon mahBoiiiiiii, TestPokemon nahMahBoi) {
         new TestCharacter(mahBoiiiiiii);
         TestBattle testBattle = new TestBattle(nahMahBoi);

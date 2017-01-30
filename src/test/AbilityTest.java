@@ -57,4 +57,24 @@ public class AbilityTest {
         Assert.assertFalse(battle.ableToAttack(AttackNamesies.VINE_WHIP, attacking, defending));
         Assert.assertFalse(battle.ableToAttack(AttackNamesies.TACKLE, attacking, defending));
     }
+
+    @Test
+    public void absorbTypeTest() {
+        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
+        TestPokemon defending = new TestPokemon(PokemonNamesies.LANTURN).withAbility(AbilityNamesies.VOLT_ABSORB);
+
+        TestBattle battle = TestBattle.create(attacking, defending);
+
+        battle.attackingFight(AttackNamesies.CONSTRICT);
+        Assert.assertFalse(defending.fullHealth());
+
+        battle.attackingFight(AttackNamesies.THUNDERBOLT);
+        Assert.assertTrue(defending.fullHealth());
+
+        battle.attackingFight(AttackNamesies.CONSTRICT);
+        Assert.assertFalse(defending.fullHealth());
+
+        battle.attackingFight(AttackNamesies.WATER_GUN);
+        Assert.assertFalse(defending.fullHealth());
+    }
 }

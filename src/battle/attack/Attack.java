@@ -30,6 +30,7 @@ import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
+import battle.effect.generic.EffectInterfaces.TypeBlocker;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.holder.ItemHolder;
@@ -116,8 +117,8 @@ public abstract class Attack implements Serializable {
 	
 	// Returns true if an attack has secondary effects -- this only applies to physical and special moves
 	// Secondary effects include status conditions, confusing, flinching, and stat changes (unless the stat changes are negative for the user)
-	public boolean hasSecondaryEffects()
-	{
+	public boolean hasSecondaryEffects() {
+
 		// Effects are primary for status moves
 		if (category == MoveCategory.STATUS) {
 			return false;
@@ -195,7 +196,6 @@ public abstract class Attack implements Serializable {
 	}
 	
 	public boolean isMoveType(MoveType moveType) {
-		// TODO: Make sure this is still working -- I might be super dumb
 		return this.moveTypes.contains(moveType);
 	}
 	
@@ -242,7 +242,7 @@ public abstract class Attack implements Serializable {
 		}
 		
 		// Physical and special attacks -- apply dat damage
-		if (category != MoveCategory.STATUS) {
+		if (!isStatusMove()) {
 			applyDamage(me, o, b);
 		}
 		
@@ -298,13 +298,17 @@ public abstract class Attack implements Serializable {
 		}
 		
 		// Non-status moves (AND FUCKING THUNDER WAVE) -- need to check the type chart
-		if ((this.category != MoveCategory.STATUS || this.namesies == AttackNamesies.THUNDER_WAVE) && this.zeroAdvantage(b, me, o)) {
+		if ((!isStatusMove() || this.namesies == AttackNamesies.THUNDER_WAVE) && this.zeroAdvantage(b, me, o)) {
 			return false;
 		}
 
-		// TODO: Should generalize this to extend to more than just type and ability
-		// Check if type or ability will block the attack
-		if (Ability.blockAttack(b, me, o) || Type.blockAttack(b, me, o)) {
+		if (Type.blockAttack(b, me, o)) {
+			return false;
+		}
+
+		TypeBlocker blocker = TypeBlocker.block(b, me, me.getAttackType(), o);
+		if (blocker != null) {
+			blocker.alternateEffect(b, o);
 			return false;
 		}
 		
@@ -2486,7 +2490,7 @@ public abstract class Attack implements Serializable {
 			}
 			
 			// Max power is 300
-			return (int)Math.min(turns, 3)*100;
+			return Math.min(turns, 3)*100;
 		}
 
 		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -2852,7 +2856,7 @@ public abstract class Attack implements Serializable {
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			// TODO: Combine these types of moves
-			return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
+			return super.power*Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
 		}
 	}
 
@@ -2867,7 +2871,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(int)Math.min(5, me.getAttributes().getCount());
+			return super.power*Math.min(5, me.getAttributes().getCount());
 		}
 	}
 
@@ -4273,7 +4277,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return (int)Math.min(super.power + 20*o.getAttributes().totalStatIncreases(), 200);
+			return Math.min(super.power + 20*o.getAttributes().totalStatIncreases(), 200);
 		}
 	}
 
@@ -8179,7 +8183,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(int)Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
+			return super.power*Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
 		}
 	}
 

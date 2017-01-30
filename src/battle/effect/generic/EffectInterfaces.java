@@ -1240,4 +1240,29 @@ public final class EffectInterfaces {
 			}
 		}
 	}
+
+	public interface TypeBlocker {
+		boolean block(Type attackType, ActivePokemon victim);
+		void alternateEffect(Battle b, ActivePokemon victim);
+
+		static TypeBlocker block(Battle b, ActivePokemon attacking, Type attackType, ActivePokemon victim) {
+			List<Object> invokees = b.getEffectsList(victim);
+			for (Object invokee : invokees) {
+				if (invokee instanceof TypeBlocker && !Effect.isInactiveEffect(invokee, b)) {
+					
+					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && attacking.breaksTheMold()) {
+						continue;
+					}
+					
+					TypeBlocker effect = (TypeBlocker)invokee;
+					if (effect.block(attackType, victim)) {
+						return effect;
+					}
+				}
+			}
+			
+			return null;
+		}
+	}
 }

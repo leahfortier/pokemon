@@ -6,7 +6,6 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
-import battle.effect.DamageBlocker;
 import battle.effect.DefiniteEscape;
 import battle.effect.ModifyStageValueEffect;
 import battle.effect.OpponentBeforeTurnAttackSelectionEffect;
@@ -58,6 +57,7 @@ import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
+import battle.effect.generic.EffectInterfaces.TypeBlocker;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
@@ -143,24 +143,6 @@ public abstract class Ability implements Serializable {
 		}
 
 		return other;
-	}
-	
-	// Abilities that block damage
-	public static boolean blockAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
-		if (user.breaksTheMold()) {
-			return false;
-		}
-		
-		Ability a = victim.getAbility();
-		if (a instanceof DamageBlocker) {
-			DamageBlocker blockityBlock = (DamageBlocker)a;
-			if (blockityBlock.block(user.getAttackType(), victim)) {
-				blockityBlock.alternateEffect(b, victim);
-				return true;
-			}
-		}
-		
-		return false;
 	}
 	
 	public static AbilityNamesies assign(PokemonInfo p) {
@@ -473,19 +455,19 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Lightningrod extends Ability implements DamageBlocker {
+	static class Lightningrod extends Ability implements TypeBlocker {
 		private static final long serialVersionUID = 1L;
 
 		Lightningrod() {
 			super(AbilityNamesies.LIGHTNINGROD, "The Pok\u00e9mon draws in all Electric-type moves.");
 		}
 
-		public Stat toIncrease() {
+		private Stat toIncrease() {
 			return Stat.SP_ATTACK;
 		}
 
-		public boolean block(Type attacking, ActivePokemon victim) {
-			return attacking == Type.ELECTRIC;
+		public boolean block(Type attackType, ActivePokemon victim) {
+			return attackType == Type.ELECTRIC;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
@@ -605,7 +587,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class FlashFire extends Ability implements DamageBlocker, PowerChangeEffect {
+	static class FlashFire extends Ability implements TypeBlocker, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 		private boolean activated;
 
@@ -618,8 +600,8 @@ public abstract class Ability implements Serializable {
 			return activated;
 		}
 
-		public boolean block(Type attacking, ActivePokemon victim) {
-			return attacking == Type.FIRE;
+		public boolean block(Type attackType, ActivePokemon victim) {
+			return attackType == Type.FIRE;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
@@ -717,7 +699,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class DrySkin extends Ability implements EndTurnEffect, OpponentPowerChangeEffect, DamageBlocker {
+	static class DrySkin extends Ability implements EndTurnEffect, OpponentPowerChangeEffect, TypeBlocker {
 		private static final long serialVersionUID = 1L;
 
 		DrySkin() {
@@ -739,8 +721,8 @@ public abstract class Ability implements Serializable {
 			return user.getAttackType() == Type.FIRE ? 1.25 : 1;
 		}
 
-		public boolean block(Type attacking, ActivePokemon victim) {
-			return attacking == Type.WATER;
+		public boolean block(Type attackType, ActivePokemon victim) {
+			return attackType == Type.WATER;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
@@ -1433,15 +1415,15 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class WaterAbsorb extends Ability implements DamageBlocker {
+	static class WaterAbsorb extends Ability implements TypeBlocker {
 		private static final long serialVersionUID = 1L;
 
 		WaterAbsorb() {
 			super(AbilityNamesies.WATER_ABSORB, "Restores HP if hit by a Water-type move.");
 		}
 
-		public boolean block(Type attacking, ActivePokemon victim) {
-			return attacking == Type.WATER;
+		public boolean block(Type attackType, ActivePokemon victim) {
+			return attackType == Type.WATER;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
@@ -1457,15 +1439,15 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class VoltAbsorb extends Ability implements DamageBlocker {
+	static class VoltAbsorb extends Ability implements TypeBlocker {
 		private static final long serialVersionUID = 1L;
 
 		VoltAbsorb() {
 			super(AbilityNamesies.VOLT_ABSORB, "Restores HP if hit by an Electric-type move.");
 		}
 
-		public boolean block(Type attacking, ActivePokemon victim) {
-			return attacking == Type.ELECTRIC;
+		public boolean block(Type attackType, ActivePokemon victim) {
+			return attackType == Type.ELECTRIC;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
@@ -1758,7 +1740,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.OVERCOAT, "Protects the Pok\u00e9mon from damage from weather.");
 		}
 
-		public String getPreventMessage(ActivePokemon victim) {
+		private String getPreventMessage(ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
 		}
 
@@ -2033,19 +2015,19 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class StormDrain extends Ability implements DamageBlocker {
+	static class StormDrain extends Ability implements TypeBlocker {
 		private static final long serialVersionUID = 1L;
 
 		StormDrain() {
 			super(AbilityNamesies.STORM_DRAIN, "Draws in all Water-type moves to up Sp. Attack.");
 		}
 
-		public Stat toIncrease() {
+		private Stat toIncrease() {
 			return Stat.SP_ATTACK;
 		}
 
-		public boolean block(Type attacking, ActivePokemon victim) {
-			return attacking == Type.WATER;
+		public boolean block(Type attackType, ActivePokemon victim) {
+			return attackType == Type.WATER;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
@@ -2235,19 +2217,19 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class MotorDrive extends Ability implements DamageBlocker {
+	static class MotorDrive extends Ability implements TypeBlocker {
 		private static final long serialVersionUID = 1L;
 
 		MotorDrive() {
 			super(AbilityNamesies.MOTOR_DRIVE, "Raises Speed if hit by an Electric-type move.");
 		}
 
-		public Stat toIncrease() {
+		private Stat toIncrease() {
 			return Stat.SPEED;
 		}
 
-		public boolean block(Type attacking, ActivePokemon victim) {
-			return attacking == Type.ELECTRIC;
+		public boolean block(Type attackType, ActivePokemon victim) {
+			return attackType == Type.ELECTRIC;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
@@ -2608,19 +2590,19 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class SapSipper extends Ability implements DamageBlocker {
+	static class SapSipper extends Ability implements TypeBlocker {
 		private static final long serialVersionUID = 1L;
 
 		SapSipper() {
 			super(AbilityNamesies.SAP_SIPPER, "Boosts Attack when hit by a Grass-type move.");
 		}
 
-		public Stat toIncrease() {
+		private Stat toIncrease() {
 			return Stat.ATTACK;
 		}
 
-		public boolean block(Type attacking, ActivePokemon victim) {
-			return attacking == Type.GRASS;
+		public boolean block(Type attackType, ActivePokemon victim) {
+			return attackType == Type.GRASS;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {

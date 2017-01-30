@@ -613,7 +613,7 @@ public class Battle {
 		return 1;
 	}
 	
-	private boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
+	protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
 		// Self-Target moves don't miss
 		if (me.getAttack().isSelfTarget() && me.getAttack().isStatusMove()) {
 			return true;

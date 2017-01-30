@@ -1,7 +1,6 @@
 package test;
 
 import battle.attack.AttackNamesies;
-import battle.attack.Move;
 import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
 import pokemon.PokemonNamesies;
@@ -40,8 +39,16 @@ class TestInfo {
         return this;
     }
 
-    TestInfo callMove(AttackNamesies attackName) {
-        return this.with((battle, attacking, defending) -> attacking.callNewMove(battle, defending, new Move(attackName)));
+    TestInfo fight(AttackNamesies attackingName, AttackNamesies defendingName) {
+        return this.with((battle, attacking, defending) -> battle.fight(attackingName, defendingName));
+    }
+
+    TestInfo attackingFight(AttackNamesies attackName) {
+        return this.with((battle, attacking, defending) -> battle.attackingFight(attackName));
+    }
+
+    TestInfo defendingFight(AttackNamesies attackName) {
+        return this.with((battle, attacking, defending) -> battle.defendingFight(attackName));
     }
 
     TestInfo with(PokemonManipulator manipulator) {

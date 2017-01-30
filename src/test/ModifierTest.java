@@ -212,7 +212,7 @@ public class ModifierTest {
     @Test
     public void stageChangeTest() {
         stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.TANGLED_FEET, EffectNamesies.CONFUSION));
-        stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.TANGLED_FEET).callMove(AttackNamesies.CONFUSE_RAY));
+        stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.TANGLED_FEET).attackingFight(AttackNamesies.CONFUSE_RAY));
         stageChangeTest(0, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.TANGLED_FEET, EffectNamesies.CONFUSION));
 
         stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SAND_VEIL, EffectNamesies.SANDSTORM));
@@ -223,11 +223,11 @@ public class ModifierTest {
 
         stageChangeTest(-2, Stat.EVASION, new TestInfo().attacking(EffectNamesies.GRAVITY));
 
-        stageChangeTest(-2, Stat.DEFENSE, new TestInfo().callMove(AttackNamesies.SCREECH));
-        stageChangeTest(-4, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.SIMPLE).callMove(AttackNamesies.SCREECH));
+        stageChangeTest(-2, Stat.DEFENSE, new TestInfo().attackingFight(AttackNamesies.SCREECH));
+        stageChangeTest(-4, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.SIMPLE).attackingFight(AttackNamesies.SCREECH));
 
-        stageChangeTest(2, Stat.ATTACK, new TestInfo().callMove(AttackNamesies.SWORDS_DANCE));
-        stageChangeTest(4, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.SIMPLE).callMove(AttackNamesies.SWORDS_DANCE));
+        stageChangeTest(2, Stat.ATTACK, new TestInfo().attackingFight(AttackNamesies.SWORDS_DANCE));
+        stageChangeTest(4, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.SIMPLE).attackingFight(AttackNamesies.SWORDS_DANCE));
 
         stageChangeTest(
                 3,
@@ -258,10 +258,11 @@ public class ModifierTest {
                 2,
                 Stat.DEFENSE,
                 new TestInfo().with((battle, attacking, defending) -> {
-                    battle.fight(AttackNamesies.SONIC_BOOM, AttackNamesies.STOCKPILE);
+                    battle.fight(AttackNamesies.SWIFT, AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
+                    Assert.assertTrue(!defending.fullHealth());
                     battle.defendingFight(AttackNamesies.SWALLOW);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
@@ -289,5 +290,41 @@ public class ModifierTest {
                 StringUtils.spaceSeparated(afterStage, expectedStage, stat, testInfo.toString()),
                 afterStage == expectedStage
         );
+    }
+
+    @Test
+    public void absorbTypeTest() {
+        stageChangeTest(1, Stat.SP_ATTACK, new TestInfo()
+                .attacking(AbilityNamesies.LIGHTNINGROD)
+                .defendingFight(AttackNamesies.THUNDER_PUNCH));
+
+        stageChangeTest(0, Stat.SP_ATTACK, new TestInfo()
+                .defending(AbilityNamesies.LIGHTNINGROD)
+                .defendingFight(AttackNamesies.THUNDER_PUNCH));
+
+        stageChangeTest(0, Stat.SP_ATTACK, new TestInfo()
+                .attacking(AbilityNamesies.LIGHTNINGROD)
+                .defendingFight(AttackNamesies.TACKLE));
+    }
+
+    @Test
+    public void flashFireTest() {
+        TestPokemon attacking = new TestPokemon(PokemonNamesies.SQUIRTLE).withAbility(AbilityNamesies.FLASH_FIRE);
+        TestPokemon defending = new TestPokemon(PokemonNamesies.CHARMANDER);
+
+        TestBattle battle = TestBattle.create(attacking, defending);
+
+        attacking.setupMove(AttackNamesies.EMBER, battle, defending);
+        double unactivatedFire = battle.getDamageModifier(attacking, defending);
+        Assert.assertTrue(unactivatedFire + "", unactivatedFire == 1);
+
+        battle.defendingFight(AttackNamesies.EMBER);
+        attacking.setupMove(AttackNamesies.SURF, battle, defending);
+        double activatedNonFire = battle.getDamageModifier(attacking, defending);
+        Assert.assertTrue(activatedNonFire + "", activatedNonFire == 1);
+
+        attacking.setupMove(AttackNamesies.EMBER, battle, defending);
+        double activatedFire = battle.getDamageModifier(attacking, defending);
+        Assert.assertTrue(activatedFire + "", activatedFire == 1.5);
     }
 }
