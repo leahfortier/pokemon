@@ -2160,13 +2160,13 @@ Tri Attack:
 	Acc: 100
 	Cat: Special
 	EffChance: 20
-	ApplyEffects: 
+	StartTurn:
+	// TODO: Test
 	super.status = RandomUtils.getRandomValue(statusConditions);
-	super.applyEffects(b, user, victim);
 	###
 	Type: Normal
 	Field: 
-	private static StatusCondition[] statusConditions = {
+	private static final StatusCondition[] statusConditions = {
 			StatusCondition.PARALYZED,
 			StatusCondition.BURNED,
 			StatusCondition.FROZEN
@@ -2438,13 +2438,9 @@ Belly Drum:
 	Cat: Status
 	Type: Normal
 	SelfTarget: True
-	ApplyEffects: 
+	Applies: user.getStage(Stat.ATTACK.index()) < Stat.MAX_STAT_CHANGES && user.getHPRatio() > .5
+	ApplyEffects:
 	// Fails if attack is already maxed or if you have less than half your health to give up
-	if (user.getStage(Stat.ATTACK.index()) == Stat.MAX_STAT_CHANGES || user.getHPRatio() < .5) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
 	// Maximization station
 	Messages.add(new MessageUpdate(user.getName() + " cut its own HP and maximized its attack!"));
 	user.reduceHealthFraction(b, 1/2.0);
@@ -2825,12 +2821,8 @@ Heal Pulse:
 	Type: Psychic
 	Cat: Status
 	MoveType: Aura_Pulse, Healing
+	Applies: !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK)
 	ApplyEffects: 
-	if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
 	// Heal by 50% unless the user has Mega Launcher -- then heal by 75%
 	double fraction = user.hasAbility(AbilityNamesies.MEGA_LAUNCHER) ? .75 : .5;
 	
@@ -2921,12 +2913,10 @@ Acupressure:
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
-	ApplyEffects:
+	StartTurn:
 	// TODO: Test to make sure this works when both parties use during the same turn -- will it always be the same stat?
 	super.statChanges = new int[Stat.NUM_BATTLE_STATS];
 	super.statChanges[RandomUtils.getRandomInt(super.statChanges.length)] = 2;
-	
-	super.applyEffects(b, user, victim);
 	###
 *
 Double Hit:
@@ -3144,15 +3134,13 @@ Spite:
 	Cat: Status
 	MoveType: Substitute_Piercing
 	Type: Ghost
+	FullApplies: 
+	// Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
+	Move last = victim.getAttributes().getLastMoveUsed();
+	return last != null && last.getPP() > 0 && victim.hasMove(b, last.getAttack().namesies());
+	###
 	ApplyEffects: 
 	Move last = victim.getAttributes().getLastMoveUsed();
-	
-	// Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
-	if (last == null || last.getPP() == 0 || !victim.hasMove(b, last.getAttack().namesies())) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
 	Messages.add(new MessageUpdate(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!"));
 	###
 *
@@ -3268,16 +3256,10 @@ Synchronoise:
 	Cat: Special
 	Acc: 100
 	Pow: 120
-	Apply: 
-	Type[] type = me.getType(b);
-	
+	FullApplies:
 	// Like this is literally the stupidest move ever like srsly what is wrong with the creators
-	if (o.isType(b, type[0]) || (type[1] != Type.NO_TYPE && o.isType(b, type[1]))) {
-		super.apply(me, o, b);
-	}
-	else {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-	}
+	Type[] type = user.getType(b);
+	return victim.isType(b, type[0]) || (type[1] != Type.NO_TYPE && victim.isType(b, type[1]));
 	###
 *
 Psyshock:

@@ -16,9 +16,13 @@ Override:
 	*
 ***
 Override:
-	Applies:
+	FullApplies:
 		Header: boolean applies(Battle b, ActivePokemon user, ActivePokemon victim)
-		Body:
+	*
+***
+Override:
+	Applies:
+		AddMapField: FullApplies:
 		return {0};
 		###
 	*
@@ -46,14 +50,18 @@ Override:
 		AddMapField: EffChance: 20
 		AddMapField: Effect: Flinch
 		AddMapField: MoveType: Biting
-		AddMapField: ApplyEffects:
+		AddMapField: StartTurn:
+		// TODO: Test
+		super.status = StatusCondition.NO_STATUS;
+		super.effects.clear();
+		
 		// If the effect is being applied, 50/50 chance to give a status condition vs. flinching
 		if (RandomUtils.chanceTest(50)) {
-			Status.giveStatus(b, user, victim, StatusCondition.{00});
-			return;
+			super.status = StatusCondition.{00};
 		}
-		
-		super.applyEffects(b, user, victim);
+		else {
+			super.effects.add(EffectNamesies.FLINCH);
+		}
 		###
 	*
 ***
@@ -368,7 +376,7 @@ Override:
 			power *= .5;
 		}
 		
-		// Power is double when the opponent is underground
+		// Power is doubled when the opponent is underground
 		if (o.isSemiInvulnerableDigging()) {
 			power *= 2;
 		}
@@ -473,7 +481,10 @@ ChangeAbilityMove:
 Override:
 	MirrorMove:
 		AddMapField: MoveType: Sleep_Talk_Fail, Encoreless, Metronomeless, Assistless, No_Magic_Coat, Mirrorless
-		AddMapField: Applies: victim.getAttributes().getLastMoveUsed() != null && !victim.getAttributes().getLastMoveUsed().getAttack().isMoveType(MoveType.MIRRORLESS)
+		AddMapField: FullApplies: 
+		Move mirror = victim.getAttributes().getLastMoveUsed();
+		return mirror != null && !mirror.getAttack().isMoveType(MoveType.MIRRORLESS);
+		###
 		AddMapField: Apply: 
 		// TODO: Test
 		Move mirror = o.getAttributes().getLastMoveUsed();
@@ -487,15 +498,10 @@ Override:
 		AddMapField: MoveType: Assistless, Metronomeless
 		AddMapField: PP: 20
 		AddMapField: Acc: 100
-		AddMapField: ApplyDamage:
-		int damageTaken = me.getAttributes().getDamageTaken();
-		
+		AddMapField: Applies: user.getAttributes().getDamageTaken() > 0 && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.{00} && !b.isFirstAttack()
+		AddMapField: ApplyDamage: 
 		// Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
-		if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != MoveCategory.{00} || b.isFirstAttack()) {
-			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			return;
-		}
-		
+		int damageTaken = me.getAttributes().getDamageTaken();
 		o.reduceHealth(b, damageTaken*2);
 		###
 	*
