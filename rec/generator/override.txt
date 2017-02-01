@@ -473,11 +473,15 @@ Override:
 		AddMapField: MoveType: Assistless
 		AddMapField: Priority: -6
 		AddMapField: ApplyEffects:
+		// TODO: ExitBattleEffect
+		// TODO: ActivePokemon method for this
+		// TODO: AttackBlockerEffect for Suction Cups
+		// TODO: Everything else
 		// Fails against the Suction Cups ability
 		if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !user.breaksTheMold()) {
 			Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.SUCTION_CUPS.getName() + " prevents it from switching!"));
 			return;
-		}
+		}	
 		
 		// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
 		if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
@@ -1611,9 +1615,9 @@ Override:
 		AddMapField: Type: Normal
 		AddMapField: MoveType: Metronomeless
 		AddMapField: GetType: 
-		Item i = user.getHeldItem(b);
-		if (i instanceof {0}) {
-			return (({0})i).getType(); 
+		Item item = user.getHeldItem(b);
+		if (item instanceof {0}) {
+			return (({0})item).getType(); 
 		}
 		
 		return super.type;

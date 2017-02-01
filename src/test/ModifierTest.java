@@ -229,6 +229,9 @@ public class ModifierTest {
         stageChangeTest(2, Stat.ATTACK, new TestInfo().attackingFight(AttackNamesies.SWORDS_DANCE));
         stageChangeTest(4, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.SIMPLE).attackingFight(AttackNamesies.SWORDS_DANCE));
 
+        stageChangeTest(1, Stat.ATTACK, new TestInfo().attackingFight(AttackNamesies.GROWTH));
+        stageChangeTest(2, Stat.ATTACK, new TestInfo().attackingFight(AttackNamesies.SUNNY_DAY).attackingFight(AttackNamesies.GROWTH));
+
         stageChangeTest(
                 3,
                 Stat.SP_DEFENSE,
@@ -238,6 +241,7 @@ public class ModifierTest {
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
+                    Assert.assertTrue(defending.hasEffect(EffectNamesies.STOCKPILE));
                 })
         );
 
@@ -251,6 +255,7 @@ public class ModifierTest {
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.fight(AttackNamesies.ENDURE, AttackNamesies.SPIT_UP);
+                    Assert.assertFalse(defending.hasEffect(EffectNamesies.STOCKPILE));
                 })
         );
 
@@ -262,10 +267,13 @@ public class ModifierTest {
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
-                    Assert.assertTrue(!defending.fullHealth());
+                    Assert.assertTrue(defending.hasEffect(EffectNamesies.STOCKPILE));
+                    Assert.assertFalse(defending.fullHealth());
                     battle.defendingFight(AttackNamesies.SWALLOW);
+                    Assert.assertFalse(defending.hasEffect(EffectNamesies.STOCKPILE));
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
+                    Assert.assertTrue(defending.hasEffect(EffectNamesies.STOCKPILE));
                 })
         );
     }

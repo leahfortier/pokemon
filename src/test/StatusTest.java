@@ -1,6 +1,7 @@
 package test;
 
 import battle.Battle;
+import battle.attack.AttackNamesies;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import org.junit.Assert;
@@ -8,6 +9,9 @@ import org.junit.Test;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 /*
 TODO:
@@ -54,5 +58,44 @@ public class StatusTest {
         uglyFace.removeStatus();
         int afterRemoved = Stat.getStat(stat, uglyFace, mahBoi, b);
         Assert.assertTrue(original == afterRemoved);
+    }
+
+    @Test
+    public void triAttackTest() {
+        boolean alwaysSame = true;
+        Map<StatusCondition, Boolean> statusMap = new EnumMap<>(StatusCondition.class);
+        statusMap.put(StatusCondition.NO_STATUS, false);
+        statusMap.put(StatusCondition.PARALYZED, false);
+        statusMap.put(StatusCondition.BURNED, false);
+        statusMap.put(StatusCondition.FROZEN, false);
+
+        for (int i = 0; i < 1000; i++) {
+            TestPokemon attacking = new TestPokemon(PokemonNamesies.SHUCKLE);
+            TestPokemon defending = new TestPokemon(PokemonNamesies.SHUCKLE);
+
+            TestBattle b = TestBattle.create(attacking, defending);
+
+            b.fight(AttackNamesies.TRI_ATTACK, AttackNamesies.TRI_ATTACK);
+
+            StatusCondition attackingCondition = attacking.getStatus().getType();
+            StatusCondition defendingCondition = defending.getStatus().getType();
+
+            Assert.assertTrue(statusMap.containsKey(attackingCondition));
+            Assert.assertTrue(statusMap.containsKey(defendingCondition));
+
+            statusMap.put(attackingCondition, true);
+            statusMap.put(defendingCondition, true);
+
+            if (attackingCondition != defendingCondition) {
+                alwaysSame = false;
+            }
+        }
+
+        // TODO: Uncomment this once the begin and end applies shit is done
+//        Assert.assertFalse(alwaysSame);
+        Assert.assertTrue(statusMap.get(StatusCondition.NO_STATUS));
+//        Assert.assertTrue(statusMap.get(StatusCondition.PARALYZED));
+//        Assert.assertTrue(statusMap.get(StatusCondition.BURNED));
+//        Assert.assertTrue(statusMap.get(StatusCondition.FROZEN));
     }
 }

@@ -22,6 +22,9 @@ class TestBattle extends Battle {
         return super.getDamageModifier(attacking, defending);
     }
 
+    @Override
+    protected void printShit() {}
+
     boolean ableToAttack(AttackNamesies attack, TestPokemon attacking, ActivePokemon defending) {
         attacking.setupMove(attack, this, defending);
         return super.ableToAttack(attacking, defending);

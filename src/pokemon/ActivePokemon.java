@@ -726,7 +726,7 @@ public class ActivePokemon implements Serializable {
 	public void setStatus(Status s) {
 		status = s;
 	}
-	
+
 	public void addEffect(PokemonEffect e) {
 		attributes.addEffect(e);
 	}

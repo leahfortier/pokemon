@@ -176,7 +176,6 @@ Growth:
 	StatChange: 2 Attack 1 Sp_Attack 1
 	Type: Normal
 	ApplyEffects:
-	// TODO: Test
 	// Doubles stat changes in the sunlight
 	if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
 		int[] statChanges = super.statChanges.clone();
@@ -737,6 +736,9 @@ Bug Bite:
 	Acc: 100
 	Cat: Physical
 	ConsumeBerry: True
+	StartTurn:
+		// TODO: Sticky Hold
+		###
 *
 Harden:
 	Type: Normal
@@ -1261,30 +1263,22 @@ Spit Up:
 	Acc: 100
 	Applies: user.hasEffect(EffectNamesies.STOCKPILE)
 	Apply: 
-	super.apply(me, o, b);
-	
-	// TODO: Test
-	// Stockpile ends after Spit up is used
-	PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
-	stockpile.deactivate();
-	###
+		super.apply(me, o, b);
+		
+		// Stockpile ends after Spit up is used
+		PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
+		stockpile.deactivate();
+		###
 	GetPow: 
-	PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
-			
-	// TODO: Look at this again
-	// I really don't like this, because there's no way this value should actually be getting used -- but it's getting set now always even if the attack isn't going to work and we don't want a NullPointerException
-	if (stockpile == null) {
-		return super.setPower(b, me, o);
-	}
-	
-	int turns = stockpile.getTurns();
-	if (turns <= 0) {
-		Global.error("Stockpile turns should never be nonpositive");
-	}
-	
-	// Max power is 300
-	return Math.min(turns, 3)*100;
-	###
+		PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
+		int turns = stockpile.getTurns();
+		if (turns <= 0) {
+			Global.error("Stockpile turns should never be nonpositive");
+		}
+		
+		// Max power is 300
+		return Math.min(turns, 3)*100;
+		###
 *
 Swallow:
 	Desc: The power stored using the move Stockpile is absorbed by the user to heal its HP. Storing more power heals more HP.
@@ -1293,28 +1287,29 @@ Swallow:
 	Int: SelfHealingMove
 	ExtraApplies: user.hasEffect(EffectNamesies.STOCKPILE)
 	SelfHealing: 
-	PokemonEffect stockpile = user.getEffect(EffectNamesies.STOCKPILE);
-	if (stockpile.getTurns() <= 0) {
-		Global.error("Stockpile turns should never be nonpositive");
-	}
-	
-	// TODO: This doesn't need to be in a switch statement
-	// Heals differently based on number of stockpile turns
-	switch (stockpile.getTurns()) {
-		case 1:
-			victim.healHealthFraction(1/4.0);
-			break;
-		case 2:
-			victim.healHealthFraction(1/2.0);
-			break;
-		default:
-			victim.healHealthFraction(1);
-			break;
-	}
-	
-	// Stockpile ends after Swallow is used
-	stockpile.deactivate();
-	###
+		PokemonEffect stockpile = user.getEffect(EffectNamesies.STOCKPILE);
+		int turns = stockpile.getTurns();
+		if (turns <= 0) {
+			Global.error("Stockpile turns should never be nonpositive");
+		}
+
+		// Heals differently based on number of stockpile turns
+		final double healFraction;
+		if (turns == 1) {
+			healFraction = 1/4.0;
+		}
+		else if (turns == 2) {
+			healFraction = 1/2.0;
+		}
+		else {
+			healFraction = 1;
+		}
+
+		victim.healHealthFraction(healFraction);
+		
+		// Stockpile ends after Swallow is used
+		stockpile.deactivate();
+		###
 	Type: Normal
 *
 Acid Spray:
@@ -2161,7 +2156,6 @@ Tri Attack:
 	Cat: Special
 	EffChance: 20
 	StartTurn:
-	// TODO: Test
 	super.status = RandomUtils.getRandomValue(statusConditions);
 	###
 	Type: Normal
@@ -2443,14 +2437,16 @@ Belly Drum:
 	Cat: Status
 	Type: Normal
 	SelfTarget: True
-	Applies: user.getStage(Stat.ATTACK.index()) < Stat.MAX_STAT_CHANGES && user.getHPRatio() > .5
+	FullApplies: 
+		// Fails if attack is already maxed or if you have less than half your health to give up
+		return user.getStage(Stat.ATTACK.index()) < Stat.MAX_STAT_CHANGES && user.getHPRatio() > .5;
+		###
 	ApplyEffects:
-	// Fails if attack is already maxed or if you have less than half your health to give up
-	// Maximization station
-	Messages.add(new MessageUpdate(user.getName() + " cut its own HP and maximized its attack!"));
-	user.reduceHealthFraction(b, 1/2.0);
-	user.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
-	###
+		// Maximization station
+		Messages.add(new MessageUpdate(user.getName() + " cut its own HP and maximized its attack!"));
+		user.reduceHealthFraction(b, 1/2.0);
+		user.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
+		###
 *
 Submission:
 	Desc: The user grabs the target and recklessly dives for the ground. It also hurts the user slightly.
@@ -3657,17 +3653,15 @@ Me First:
 	Cat: Status
 	Type: Normal
 	MoveType: Sleep_Talk_Fail, Assistless, No_Magic_Coat, Metronomeless
+	FullApplies:
+		// Fails if it is the second turn or the opponent is using a status move
+		return b.isFirstAttack() && victim.getMove() != null && !victim.getAttack().isStatusMove();
+		###
 	Apply:
-	// Fails if it is the second turn or the opponent is using a status move
-	if (!b.isFirstAttack() || o.getMove() == null || o.getAttack().isStatusMove()) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	me.addEffect((PokemonEffect)EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect());
-	me.callNewMove(b, o, new Move(o.getAttack()));
-	me.getAttributes().removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
-	###
+		me.addEffect((PokemonEffect)EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect());
+		me.callNewMove(b, o, new Move(o.getAttack()));
+		me.getAttributes().removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
+		###
 *
 Refresh:
 	Desc: The user rests to cure itself of a poisoning, burn, or paralysis.
@@ -4020,20 +4014,16 @@ Last Resort:
 	Acc: 100
 	Pow: 140
 	Type: Normal
-	Apply:
-	for (Move m : me.getMoves(b)) {
-		if (m.getAttack().namesies() == super.namesies) {
-			continue;
+	FullApplies:
+		// TODO: Test
+		for (Move move : user.getMoves(b)) {
+			if (move.getAttack().namesies() != super.namesies && !move.used()) {
+				return false;
+			}
 		}
 		
-		if (!m.used()) {
-			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			return;
-		}
-	}
-	
-	super.apply(me, o, b);
-	###
+		return true;
+		###
 *
 Trump Card:
 	Desc: The fewer PP this move has, the greater its attack power.
@@ -4074,28 +4064,24 @@ Conversion:
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
-	Apply: 
-	for (Move m : me.getMoves(b)) {
-		if (!me.isType(b, m.getAttack().getActualType())) {
-			super.apply(me, o, b);
-			return;
+	Applies: this.types.size() > 0
+	Field:
+		private List<Type> types;
+		###
+	StartTurn:
+		// TODO: Test
+		this.types = new ArrayList<>();
+		for (Move move : me.getMoves(b)) {
+			Type type = move.getAttack().getActualType();
+			if (!me.isType(b, type)) {
+				this.types.add(type);
+			}
 		}
-	}
-	
-	Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-	###
+		###
 	Int: ChangeTypeSource
 	ChangeType: 
-	List<Type> types = new ArrayList<>();
-	for (Move m : victim.getMoves(b)) {
-		Type t = m.getAttack().getActualType();
-		if (!victim.isType(b, t)) {
-			types.add(t);
-		}
-	}
-	
-	return new Type[] { RandomUtils.getRandomValue(types), Type.NO_TYPE };
-	###
+		return new Type[] { RandomUtils.getRandomValue(this.types), Type.NO_TYPE };
+		###
 	Effect: ChangeType
 *
 Conversion 2:
@@ -4106,33 +4092,28 @@ Conversion 2:
 	Cat: Status
 	SelfTarget: True
 	Int: ChangeTypeSource
-	Apply: 
-	Move m = o.getAttributes().getLastMoveUsed();
-	if (m == null || getResistances(me, m.getType(), b).size() == 0) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	super.apply(me, o, b);
-	###
-	Effect: ChangeType
-	ChangeType: 
-	ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
-	List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getType(), b);
-	return new Type[] { RandomUtils.getRandomValue(types), Type.NO_TYPE };
-	###
-	Field: 
-	private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b) {
-		List<Type> types = new ArrayList<>();
-		for (Type t : Type.values()) {
-			if (attacking.getAdvantage().isNotVeryEffective(t) && !victim.isType(b, t)) {
-				types.add(t);
+	Field:
+		private List<Type> types;
+		###
+	StartTurn:
+		// TODO: Test
+		this.types = new ArrayList<>();
+
+		Move lastMoveUsed = b.getOtherPokemon(me).getAttributes().getLastMoveUsed();
+		if (lastMoveUsed != null) {
+			Type attacking = lastMoveUsed.getType();
+			for (Type type : Type.values()) {
+				if (attacking.getAdvantage().isNotVeryEffective(type) && !me.isType(b, type)) {
+					this.types.add(type);
+				}
 			}
 		}
-				
-		return types;
-	}
-	###
+		###
+	Applies: this.types.size() > 0
+	Effect: ChangeType
+	ChangeType: 
+		return new Type[] { RandomUtils.getRandomValue(this.types), Type.NO_TYPE };
+		###
 *
 Sharpen:
 	Desc: The user reduces its polygon count to make itself more jagged, raising the Attack stat.
@@ -4203,26 +4184,17 @@ Sleep Talk:
 	Cat: Status
 	Int: SleepyFightsterEffect
 	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Assistless, Metronomeless
-	Apply: 
-	if (!me.hasStatus(StatusCondition.ASLEEP)) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	List<Move> moves = new ArrayList<>();
-	for (Move m : me.getMoves(b)) {
-		if (!m.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL)) {
-			moves.add(m);
-		}
-	}
-	
-	if (moves.size() == 0) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	me.callNewMove(b, o, RandomUtils.getRandomValue(moves));
-	###
+	Field:	
+		private List<Move> moves;
+		###
+	StartTurn:
+		// TODO: Test
+		this.moves = me.getMoves(b).stream().filter(move -> !move.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL)).collect(Collectors.toList());
+		###
+	Applies: user.hasStatus(StatusCondition.ASLEEP) && this.moves.size() > 0
+	Apply:
+		me.callNewMove(b, o, RandomUtils.getRandomValue(this.moves));
+		###
 *
 Block:
 	Desc: The user blocks the target's way with arms spread wide to prevent escape.
@@ -4311,16 +4283,13 @@ Psycho Shift:
 	Type: Psychic
 	Cat: Status
 	Acc: 100
+	Applies: user.hasStatus() && Status.applies(user.getStatus().getType(), b, user, victim)
 	ApplyEffects: 
-	String message = user.getName() + " transferred its status condition to " + victim.getName() + "!";
-	if (!user.hasStatus() || !Status.giveStatus(b, user, victim, user.getStatus().getType(), message)) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	user.removeStatus();
-	Messages.add(new MessageUpdate().updatePokemon(b, user));
-	###
+		// TODO: Test
+		Status.giveStatus(b, user, victim, user.getStatus().getType(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
+		user.removeStatus();
+		Messages.add(new MessageUpdate().updatePokemon(b, user));
+		###
 	MoveType: No_Magic_Coat
 *	
 Shadow Sneak:
@@ -4551,6 +4520,7 @@ Present:
 	}
 	###
 	Apply: 
+	// TODO: This
 	if (!effective(b, me, o)) {
 		return;
 	}
@@ -4586,23 +4556,25 @@ Sketch:
 	Type: Normal
 	MoveType: Sleep_Talk_Fail, Encoreless, Mimicless, Assistless, Metronomeless, Protect_Piercing, No_Magic_Coat
 	Cat: Status
+	Field:
+		private Move copy;
+		###
+	StartTurn:
+		// TODO: Test
+		this.copy = b.getOtherPokemon(me).getAttributes().getLastMoveUsed();
+		###
+	Applies: copy != null && copy.getAttack().namesies() != AttackNamesies.STRUGGLE && !user.hasEffect(EffectNamesies.TRANSFORMED)
 	ApplyEffects: 
-	Move copy = victim.getAttributes().getLastMoveUsed();
-	if (copy == null || copy.getAttack().namesies() == AttackNamesies.STRUGGLE || user.hasEffect(EffectNamesies.TRANSFORMED)) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	List<Move> moves = user.getMoves(b);
-	for (int i = 0; i < moves.size(); i++) {
-		if (moves.get(i).getAttack().namesies() == super.namesies) {
-			moves.add(i, new Move(copy.getAttack()));
-			moves.remove(i + 1);
-			Messages.add(new MessageUpdate(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!"));
-			break;
+		List<Move> moves = user.getMoves(b);
+		for (int i = 0; i < moves.size(); i++) {
+			if (moves.get(i).getAttack().namesies() == super.namesies) {
+				moves.add(i, new Move(this.copy.getAttack()));
+				moves.remove(i + 1);
+				Messages.add(new MessageUpdate(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!"));
+				break;
+			}
 		}
-	}
-	###
+		###
 *
 Triple Kick:
 	Desc: A consecutive three-kick attack that becomes more powerful with each successive hit.
@@ -4749,27 +4721,26 @@ Assist:
 	Type: Normal
 	Cat: Status
 	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Metronomeless, Assistless
-	Apply: 
-	List<Attack> attacks = new ArrayList<>();
-	for (ActivePokemon p : b.getTrainer(me.isPlayer()).getTeam()) {
-		if (p == me) {
-			continue;
-		}
-		
-		for (Move move : p.getMoves(b)) {
-			if (!move.getAttack().isMoveType(MoveType.ASSISTLESS)) {
-				attacks.add(move.getAttack());
+	StartTurn:
+		// TODO: Test
+		this.attacks = new ArrayList<>();
+		for (ActivePokemon p : b.getTrainer(me.isPlayer()).getTeam()) {
+			if (p != me) {
+				for (Move move : p.getMoves(b)) {
+					if (!move.getAttack().isMoveType(MoveType.ASSISTLESS)) {
+						attacks.add(move.getAttack());
+					}
+				}
 			}
 		}
-	}
-	
-	if (attacks.isEmpty()) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	me.callNewMove(b, o, new Move(RandomUtils.getRandomValue(attacks)));
-	###
+		###
+	Applies: !this.attacks.isEmpty()
+	Field:
+		private List<Attack> attacks;
+		###
+	Apply: 	
+		me.callNewMove(b, o, new Move(RandomUtils.getRandomValue(attacks)));
+		###
 *
 Metal Burst:
 	Desc: The user retaliates with much greater power against the target that last inflicted damage on it.
@@ -4778,15 +4749,8 @@ Metal Burst:
 	Cat: Physical
 	Acc: 100
 	PhysicalContact: False
-	ApplyDamage:
-	int damageTaken = me.getAttributes().getDamageTaken();
-	if (damageTaken == 0 || b.isFirstAttack()) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	o.reduceHealth(b, (int)(damageTaken*1.5));
-	###
+	Applies: user.getAttributes().getDamageTaken() > 0 && !b.isFirstAttack()
+	FixedDamage: (int)(me.getAttributes().getDamageTaken()*1.5)
 *
 Wild Charge:
 	Desc: The user shrouds itself in electricity and smashes into its target. It also damages the user a little.
@@ -5047,8 +5011,7 @@ Heart Swap:
 	Cat: Status
 	MoveType: Substitute_Piercing, No_Magic_Coat
 	ApplyEffects: 
-	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++)
-	{
+	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
 		int temp = user.getAttributes().getStage(i);
 		user.getAttributes().setStage(i, victim.getAttributes().getStage(i));
 		victim.getAttributes().setStage(i, temp);
@@ -5102,8 +5065,8 @@ Incinerate:
 	Acc: 100
 	Pow: 60
 	ApplyEffects: 
+	// TODO: Sticky Hold
 	Item heldItem = victim.getHeldItem(b);
-	
 	if (heldItem instanceof Berry || heldItem instanceof GemItem) {
 		Messages.add(new MessageUpdate(victim.getName() + "'s " + heldItem.getName() + " was burned!"));
 		victim.consumeItem(b);
@@ -5409,19 +5372,15 @@ Fling:
 	
 	return super.power;
 	###
+	Applies: user.isHoldingItem(b)
 	Apply: 
-	if (!me.isHoldingItem(b)) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	Messages.add(new MessageUpdate(me.getName() + " flung its " + me.getHeldItem(b).getName() + "!"));
-	super.apply(me, o, b);
-	me.consumeItem(b);
-	###
+		Messages.add(new MessageUpdate(me.getName() + " flung its " + me.getHeldItem(b).getName() + "!"));
+		super.apply(me, o, b);
+		me.consumeItem(b);
+		###
 	ApplyEffects:
-	((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
-	###
+		((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
+		###
 *
 Freeze Shock:
 	Desc: On the second turn, the user hits the target with electrically charged ice. It may leave the target with paralysis.
@@ -5686,17 +5645,13 @@ Recycle:
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
+	Applies: user.hasEffect(EffectNamesies.CONSUMED_ITEM) && !user.isHoldingItem(b)
 	ApplyEffects: 
-	PokemonEffect consumed = victim.getEffect(EffectNamesies.CONSUMED_ITEM);
-	if (consumed == null || victim.isHoldingItem(b)) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	Item restored = ((ItemHolder)consumed).getItem();
-	victim.giveItem((HoldItem)restored);
-	Messages.add(new MessageUpdate(victim.getName() + "'s " + restored.getName() + " was restored!"));
-	###
+		// TODO: Test
+		Item restored = ((ItemHolder)victim.getEffect(EffectNamesies.CONSUMED_ITEM)).getItem();
+		victim.giveItem((HoldItem)restored);
+		Messages.add(new MessageUpdate(victim.getName() + "'s " + restored.getName() + " was restored!"));
+		###
 *
 Parting Shot:
 	Desc: With a parting threat, the user lowers the target's Attack and Sp. Atk stats. Then it switches with a party Pok\u00e9mon.
@@ -5877,18 +5832,15 @@ Skill Swap:
 		return p.getAbility().isReplaceable() && p.getAbility().isStealable();
 	}
 	###
+	Applies: canSkillSwap(user) && canSkillSwap(victim)
 	ApplyEffects:
-	if (!canSkillSwap(user) || !canSkillSwap(victim)) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	ability = user.getAbility();
-	EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
+		// TODO: Set CastSource shit instead
+		ability = user.getAbility();
+		EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
 
-	ability = victim.getAbility();
-	EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, user, CastSource.ATTACK, super.printCast);
-	###
+		ability = victim.getAbility();
+		EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, user, CastSource.ATTACK, super.printCast);
+		###
 *
 Volt Switch:
 	Desc: After making its attack, the user rushes back to switch places with a party Pok\u00e9mon in waiting.
@@ -6437,6 +6389,7 @@ Floral Healing:
 	PP: 10
 	Int: SelfHealingMove
 	SelfHealing: 
+	// TODO: Combine with Shore Up
 	if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
 		victim.healHealthFraction(1);
 	} 

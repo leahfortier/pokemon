@@ -180,7 +180,7 @@ public class Battle {
 		printShit();
 	}
 
-	private void printShit() {
+	protected void printShit() {
 		for (PokemonEffect e : player.front().getEffects()) {
 			System.out.println("P " + e);
 		}
