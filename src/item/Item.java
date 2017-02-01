@@ -23,6 +23,7 @@ import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
+import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
@@ -80,7 +81,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Item implements Comparable<Item>, Serializable {
+public abstract class Item implements Comparable<Item>, Serializable, ItemHolder {
 	private static final long serialVersionUID = 1L;
 
 	protected ItemNamesies namesies;
@@ -148,6 +149,11 @@ public abstract class Item implements Comparable<Item>, Serializable {
 
 	public int hashCode() {
 		return name.hashCode();
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
 	}
 
 	// EVERYTHING BELOW IS GENERATED ###
@@ -1640,9 +1646,14 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 	}
 
-	static class StickyBarb extends Item implements HoldItem, EndTurnEffect, PhysicalContactEffect, ItemHolder {
+	static class StickyBarb extends Item implements HoldItem, EndTurnEffect, PhysicalContactEffect, ItemSwapperEffect {
 		private static final long serialVersionUID = 1L;
-		private Item item;
+		private void stickyPoke(Battle b, ActivePokemon victim, String possession) {
+			if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+				Messages.add(new MessageUpdate(victim.getName() + " was hurt by " + possession + " " + this.getName() + "!"));
+				victim.reduceHealthFraction(b, 1/8.0);
+			}
+		}
 
 		StickyBarb() {
 			super(ItemNamesies.STICKY_BARB, "A held item that damages the holder on every turn. It may latch on to foes and allies that touch the holder.", BagCategory.MISC, 65);
@@ -1654,42 +1665,20 @@ public abstract class Item implements Comparable<Item>, Serializable {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(victim.getName() + " was hurt by its " + this.name + "!"));
-			victim.reduceHealthFraction(b, 1/8.0);
+			stickyPoke(b, victim, "its");
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!"));
-				user.reduceHealthFraction(b, 1/8.0);
-			}
-			
-			if (user.isHoldingItem(b) || user.isFainted(b)) {
+			stickyPoke(b, user, victim.getName() + "'s");
+			if (user.isFainted(b) || !victim.canGiftItem(b, user)) {
 				return;
 			}
 			
-			Messages.add(new MessageUpdate(victim.getName() + "s " + this.name + " latched onto " + user.getName() + "!"));
-			
-			if (b.isWildBattle()) {
-				victim.removeItem();
-				user.giveItem(this);
-				return;
-			}
-			
-			// TODO: Generalize this with other item stealing effects
-			item = this;
-			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, victim, user, CastSource.HELD_ITEM, false);
-			
-			item = ItemNamesies.NO_ITEM.getItem();
-			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, victim, victim, CastSource.HELD_ITEM, false);
+			victim.swapItems(b, user, this);
 		}
 
-		public Item getItem() {
-			return item;
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+			return victim.getName() + "s " + this.getName() + " latched onto " + user.getName() + "!";
 		}
 	}
 

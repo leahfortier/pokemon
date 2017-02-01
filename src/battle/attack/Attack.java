@@ -22,6 +22,7 @@ import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
+import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
@@ -407,11 +408,9 @@ public abstract class Attack implements Serializable {
 		
 		// Give additional effects
 		for (EffectNamesies effectNamesies : effects) {
-            Effect effect = effectNamesies.getEffect();
-			if (effect.applies(b, user, victim, CastSource.ATTACK)) {
-				effect.cast(b, user, victim, CastSource.ATTACK, canPrintCast());
-			}
-			else if (canPrintFail()) {
+			Effect effect = effectNamesies.getEffect();
+			boolean applies = effect.apply(b, user, victim, CastSource.ATTACK, canPrintCast());
+			if (!applies && canPrintFail()) {
 				Messages.add(new MessageUpdate(effect.getFailMessage(b, user, victim)));
 			}
 		}
@@ -4097,52 +4096,26 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Covet extends Attack implements ItemHolder {
+	static class Covet extends Attack implements ItemSwapperEffect {
 		private static final long serialVersionUID = 1L;
-		private Item item;
 
 		Covet() {
 			super(AttackNamesies.COVET, "The user endearingly approaches the target, then steals the target's held item.", 25, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
-			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		private String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
-			return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
-		}
-
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
+			if (user.canStealItem(b, victim)) {
+				user.swapItems(b, victim, this);
 			}
-			
-			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			Messages.add(new MessageUpdate(getSwitchMessage(user, userItem, victim, victimItem)));
-			
-			if (b.isWildBattle()) {
-				user.giveItem((HoldItem)victimItem);
-				victim.giveItem((HoldItem)userItem);
-				return;
-			}
-			
-			item = userItem;
-			super.applyEffects(b, user, victim);
-			
-			item = victimItem;
-			super.applyEffects(b, user, user);
 		}
 
-		public Item getItem() {
-			return item;
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+			return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
 		}
 	}
 
@@ -7759,52 +7732,26 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Thief extends Attack implements ItemHolder {
+	static class Thief extends Attack implements ItemSwapperEffect {
 		private static final long serialVersionUID = 1L;
-		private Item item;
 
 		Thief() {
 			super(AttackNamesies.THIEF, "The user attacks and steals the target's held item simultaneously. It can't steal if the user holds an item.", 25, Type.DARK, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
-			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		private String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
-			return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
-		}
-
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
+			if (user.canStealItem(b, victim)) {
+				user.swapItems(b, victim, this);
 			}
-			
-			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			Messages.add(new MessageUpdate(getSwitchMessage(user, userItem, victim, victimItem)));
-			
-			if (b.isWildBattle()) {
-				user.giveItem((HoldItem)victimItem);
-				victim.giveItem((HoldItem)userItem);
-				return;
-			}
-			
-			item = userItem;
-			super.applyEffects(b, user, victim);
-			
-			item = victimItem;
-			super.applyEffects(b, user, user);
 		}
 
-		public Item getItem() {
-			return item;
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+			return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
 		}
 	}
 
@@ -9258,14 +9205,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class KnockOff extends Attack implements ItemHolder {
+	static class KnockOff extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		KnockOff() {
 			super(AttackNamesies.KNOCK_OFF, "The user slaps down the target's held item, preventing that item from being used in the battle.", 20, Type.DARK, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
@@ -9274,16 +9220,16 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!victim.isHoldingItem(b) || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-				return;
+			if (user.canRemoveItem(b, victim)) {
+				Messages.add(new MessageUpdate(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!"));
+				if (b.isWildBattle()) {
+					victim.removeItem();
+				}
+				else {
+					user.getAttributes().setCastSource(ItemNamesies.NO_ITEM.getItem());
+					EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
+				}
 			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!"));
-			super.applyEffects(b, user, victim);
-		}
-
-		public Item getItem() {
-			return ItemNamesies.NO_ITEM.getItem();
 		}
 	}
 
@@ -9346,142 +9292,73 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Bestow extends Attack implements ItemHolder {
+	static class Bestow extends Attack implements ItemSwapperEffect {
 		private static final long serialVersionUID = 1L;
-		private Item item;
 
 		Bestow() {
 			super(AttackNamesies.BESTOW, "The user passes its held item to the target when the target isn't holding an item.", 15, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		private String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.swapItems(b, victim, this);
+		}
+
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
 			return user.getName() + " gave " + victim.getName() + " its " + userItem.getName() + "!";
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!user.isHoldingItem(b) || victim.isHoldingItem(b)) {
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			Messages.add(new MessageUpdate(getSwitchMessage(user, userItem, victim, victimItem)));
-			
-			if (b.isWildBattle()) {
-				user.giveItem((HoldItem)victimItem);
-				victim.giveItem((HoldItem)userItem);
-				return;
-			}
-			
-			item = userItem;
-			super.applyEffects(b, user, victim);
-			
-			item = victimItem;
-			super.applyEffects(b, user, user);
-		}
-
-		public Item getItem() {
-			return item;
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canGiftItem(b, victim);
 		}
 	}
 
-	static class Switcheroo extends Attack implements ItemHolder {
+	static class Switcheroo extends Attack implements ItemSwapperEffect {
 		private static final long serialVersionUID = 1L;
-		private Item item;
 
 		Switcheroo() {
 			super(AttackNamesies.SWITCHEROO, "The user passes its held item to the target when the target isn't holding an item.", 10, Type.DARK, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		private String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.swapItems(b, victim, this);
+		}
+
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
 			return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if ((!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(AbilityNamesies.STICKY_HOLD) || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			Messages.add(new MessageUpdate(getSwitchMessage(user, userItem, victim, victimItem)));
-			
-			if (b.isWildBattle()) {
-				user.giveItem((HoldItem)victimItem);
-				victim.giveItem((HoldItem)userItem);
-				return;
-			}
-			
-			item = userItem;
-			super.applyEffects(b, user, victim);
-			
-			item = victimItem;
-			super.applyEffects(b, user, user);
-		}
-
-		public Item getItem() {
-			return item;
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canSwapItems(b, victim);
 		}
 	}
 
-	static class Trick extends Attack implements ItemHolder {
+	static class Trick extends Attack implements ItemSwapperEffect {
 		private static final long serialVersionUID = 1L;
-		private Item item;
 
 		Trick() {
 			super(AttackNamesies.TRICK, "The user catches the target off guard and swaps its held item with its own.", 10, Type.PSYCHIC, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		private String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.swapItems(b, victim, this);
+		}
+
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
 			return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if ((!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(AbilityNamesies.STICKY_HOLD) || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			Messages.add(new MessageUpdate(getSwitchMessage(user, userItem, victim, victimItem)));
-			
-			if (b.isWildBattle()) {
-				user.giveItem((HoldItem)victimItem);
-				victim.giveItem((HoldItem)userItem);
-				return;
-			}
-			
-			item = userItem;
-			super.applyEffects(b, user, victim);
-			
-			item = victimItem;
-			super.applyEffects(b, user, user);
-		}
-
-		public Item getItem() {
-			return item;
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canSwapItems(b, victim);
 		}
 	}
 

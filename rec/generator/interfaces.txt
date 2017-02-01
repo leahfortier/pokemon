@@ -592,3 +592,8 @@ AttackBlocker:
 		Header: void alternateEffect(Battle b, ActivePokemon victim)
 	*
 ***
+ItemSwapperEffect:
+	Method:
+		Header: String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
+	*
+***

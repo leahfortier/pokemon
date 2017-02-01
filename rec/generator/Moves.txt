@@ -2294,13 +2294,18 @@ Aqua Jet:
 *
 Covet:
 	Pow: 60
-	MoveType: Assistless
+	MoveType: Assistless, Metronomeless
 	Acc: 100
 	PP: 25 	
 	Type: Normal
 	Cat: Physical
 	Desc: The user endearingly approaches the target, then steals the target's held item.
-	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)
+	Int: ItemSwapperEffect
+	ApplyEffects:
+		if (user.canStealItem(b, victim)) {
+			user.swapItems(b, victim, this);
+		}
+		###
 	SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 *
 Low Kick:
@@ -4688,12 +4693,17 @@ Bulk Up:
 Thief:
 	Desc: The user attacks and steals the target's held item simultaneously. It can't steal if the user holds an item.
 	PP: 25
-	MoveType: Assistless
+	MoveType: Assistless, Metronomeless
 	Type: Dark
 	Pow: 60
 	Cat: Physical
 	Acc: 100
-	SwitchItems: user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)
+	Int: ItemSwapperEffect
+	ApplyEffects:
+		if (user.canStealItem(b, victim)) {
+			user.swapItems(b, victim, this);
+		}
+		###
 	SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 *
 Attract:
@@ -5576,21 +5586,20 @@ Knock Off:
 	Acc: 100
 	Pow: 65
 	GetPow: 
-	return (int)(super.power*(o.isHoldingItem(b) ? 1.5 : 1));
-	###
+		return (int)(super.power*(o.isHoldingItem(b) ? 1.5 : 1));
+		###
 	ApplyEffects: 
-	if (!victim.isHoldingItem(b) || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-		return;
-	}
-	
-	Messages.add(new MessageUpdate(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!"));
-	super.applyEffects(b, user, victim);
-	###
-	GetItem: 
-	return ItemNamesies.NO_ITEM.getItem();
-	###
-	Effect: ChangeItem
-	Int: ItemHolder
+		if (user.canRemoveItem(b, victim)) {
+			Messages.add(new MessageUpdate(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!"));
+			if (b.isWildBattle()) {
+				victim.removeItem();
+			} 
+			else {
+				user.getAttributes().setCastSource(ItemNamesies.NO_ITEM.getItem());
+				EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
+			}
+		}
+		###
 *
 Whirlwind:
 	Desc: The target is blown away, to be replaced by another Pok\u00e9mon in its party. In the wild, the battle ends.
@@ -5605,7 +5614,12 @@ Bestow:
 	PP: 15
 	Type: Normal
 	Cat: Status
-	SwitchItems: !user.isHoldingItem(b) || victim.isHoldingItem(b)
+	MoveType: Metronomeless, No_Magic_Coat
+	Int: ItemSwapperEffect
+	Applies: user.canGiftItem(b, victim)
+	ApplyEffects:
+		user.swapItems(b, victim, this);
+		###
 	SwitchItemMessage: user.getName() + " gave " + victim.getName() + " its " + userItem.getName() + "!"
 *
 Switcheroo:
@@ -5614,9 +5628,13 @@ Switcheroo:
 	Type: Dark
 	Cat: Status
 	Acc: 100
-	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(AbilityNamesies.STICKY_HOLD) || victim.hasAbility(AbilityNamesies.STICKY_HOLD)
+	Int: ItemSwapperEffect
+	Applies: user.canSwapItems(b, victim)
+	ApplyEffects: 
+		user.swapItems(b, victim, this);
+		###
 	SwitchItemMessage: user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!"
-	MoveType: Assistless
+	MoveType: Assistless, Metronomeless, No_Magic_Coat
 *	
 Trick:
 	Desc: The user catches the target off guard and swaps its held item with its own.
@@ -5624,9 +5642,13 @@ Trick:
 	Type: Psychic
 	Acc: 100
 	Cat: Status
-	SwitchItems: (!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(AbilityNamesies.STICKY_HOLD) || victim.hasAbility(AbilityNamesies.STICKY_HOLD)
+	Int: ItemSwapperEffect
+	Applies: user.canSwapItems(b, victim)
+	ApplyEffects: 
+		user.swapItems(b, victim, this);
+		###
 	SwitchItemMessage: user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!"
-	MoveType: Assistless
+	MoveType: Assistless, Metronomeless, No_Magic_Coat
 *
 Memento:
 	Desc: The user faints when using this move. In return, it harshly lowers the target's Attack and Sp. Atk.

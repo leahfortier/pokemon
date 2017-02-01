@@ -16,6 +16,7 @@ import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
+import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
@@ -602,6 +603,49 @@ public class ActivePokemon implements Serializable {
 		b.printAttacking(this);
 		getAttack().apply(this, opp, b);
 		setMove(temp);
+	}
+
+	public boolean isWildPokemon(Battle b) {
+		return b.getTrainer(this.isPlayer()) instanceof WildPokemon;
+	}
+
+	public boolean canStealItem(Battle b, ActivePokemon victim) {
+		return !this.isHoldingItem(b)
+				&& victim.isHoldingItem(b)
+				&& this.canSwapItems(b, victim);
+	}
+
+	public boolean canGiftItem(Battle b, ActivePokemon receiver) {
+		return this.isHoldingItem(b) && !receiver.isHoldingItem(b);
+	}
+
+	public boolean canRemoveItem(Battle b, ActivePokemon victim) {
+		return victim.isHoldingItem(b) && canSwapItems(b, victim);
+	}
+
+	public boolean canSwapItems(Battle b, ActivePokemon swapster) {
+		return (this.isHoldingItem(b) || swapster.isHoldingItem(b))
+				&& !this.isWildPokemon(b)
+				&& !(swapster.hasAbility(AbilityNamesies.STICKY_HOLD) && !this.breaksTheMold());
+	}
+
+	public void swapItems(Battle b, ActivePokemon swapster, ItemSwapperEffect swapsicles) {
+		Item userItem = this.getHeldItem(b);
+		Item victimItem = swapster.getHeldItem(b);
+
+		Messages.add(new MessageUpdate(swapsicles.getSwitchMessage(this, userItem, swapster, victimItem)));
+
+		// For wild battles, an actual switch occurs
+		if (b.isWildBattle()) {
+			this.giveItem((HoldItem)victimItem);
+			swapster.giveItem((HoldItem)userItem);
+		} else {
+			this.getAttributes().setCastSource(victimItem);
+			EffectNamesies.CHANGE_ITEM.getEffect().apply(b, this, this, CastSource.CAST_SOURCE, false);
+
+			this.getAttributes().setCastSource(userItem);
+			EffectNamesies.CHANGE_ITEM.getEffect().apply(b, this, swapster, CastSource.CAST_SOURCE, false);
+		}
 	}
 
 	public boolean switcheroo(Battle b, ActivePokemon caster, CastSource source, boolean wildExit) {

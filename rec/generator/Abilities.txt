@@ -1256,12 +1256,14 @@ Unburden:
 	ModifyMultiplier: 2 p.hasEffect(EffectNamesies.CONSUMED_ITEM)
 *
 Pickpocket:
-	Int: PhysicalContactEffect
-	StealItem: True
+	Int: PhysicalContactEffect, ItemSwapperEffect
+	SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 	Contact: 
-	// Steal from the Pokemon who made physical contact with you
-	steal(b, victim, user);
-	###
+		// Steal from the Pokemon who made physical contact with you
+		if (!victim.isFainted(b) && victim.canStealItem(b, user)) {
+			victim.swapItems(b, user, this);
+		}
+		###
 	Desc: Steals an item when hit by another Pok\u00e9mon.
 *
 Harvest:
@@ -1343,12 +1345,14 @@ Dark Aura:
 *
 Magician:
 	Desc: The Pok\u00e9mon steals the held item of a Pok\u00e9mon it hits with a move.
-	Int: ApplyDamageEffect
+	Int: ApplyDamageEffect, ItemSwapperEffect
+	SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 	OnApplyDamage:
-	// Steal the victim's item when damage is dealt
-	steal(b, user, victim);
-	###
-	StealItem: True
+		// Steal the victim's item when damage is dealt
+		if (!user.isFainted(b) && user.canStealItem(b, victim)) {
+			user.swapItems(b, victim, this);
+		}
+		###
 *
 Cheek Pouch:
 	Desc: Restores HP as well when the Pok\u00e9mon eats a Berry.

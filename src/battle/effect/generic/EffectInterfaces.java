@@ -5,6 +5,7 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
+import item.Item;
 import main.Global;
 import map.TerrainType;
 import pokemon.ActivePokemon;
@@ -1290,5 +1291,9 @@ public final class EffectInterfaces {
 			
 			return null;
 		}
+	}
+
+	public interface ItemSwapperEffect {
+		String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem);
 	}
 }

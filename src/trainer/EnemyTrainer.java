@@ -10,6 +10,13 @@ public class EnemyTrainer extends Trainer implements Opponent {
 		super(name, cashMoney);
 	}
 
+	public EnemyTrainer(String name, int cashMoney, ActivePokemon... team) {
+		this(name, cashMoney);
+		for (ActivePokemon pokemon : team) {
+			addPokemon(pokemon);
+		}
+	}
+
 	@Override
 	public void addPokemon(ActivePokemon p) {
 		if (team.size() < MAX_POKEMON) {

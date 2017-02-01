@@ -34,6 +34,7 @@ public class BattleAttributes implements Serializable {
 	private boolean firstTurn;
 	private boolean attacking;
 	private boolean used;
+	private Object castSource;
 	
 	public BattleAttributes() {
 		resetStages();
@@ -45,8 +46,17 @@ public class BattleAttributes implements Serializable {
 		damageTaken = 0;
 		firstTurn = true;
 		attacking = false;
+		castSource = null;
 	}
-	
+
+	public void setCastSource(Object castSource) {
+		this.castSource = castSource;
+	}
+
+	public Object getCastSource() {
+		return this.castSource;
+	}
+
 	public void setAttacking(boolean isAttacking) {
 		attacking = isAttacking;
 	}

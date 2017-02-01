@@ -33,6 +33,7 @@ import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
+import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
@@ -82,7 +83,6 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import trainer.Trainer;
-import trainer.WildPokemon;
 import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
@@ -2721,46 +2721,22 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Pickpocket extends Ability implements PhysicalContactEffect, ItemHolder {
+	static class Pickpocket extends Ability implements PhysicalContactEffect, ItemSwapperEffect {
 		private static final long serialVersionUID = 1L;
-		private Item item;
 
 		Pickpocket() {
 			super(AbilityNamesies.PICKPOCKET, "Steals an item when hit by another Pok\u00e9mon.");
 		}
 
-		public void steal(Battle b, ActivePokemon thief, ActivePokemon victim) {
-			// Dead Pokemon and wild Pokemon cannot steal;
-			// Cannot steal if victim is not holding an item or thief is already holding an item;
-			// Cannot steal from a Pokemon with the Sticky Hold ability
-			if (thief.isFainted(b) || !victim.isHoldingItem(b) || thief.isHoldingItem(b) || b.getTrainer(thief.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-				return;
-			}
-			
-			// Stealers gon' steal
-			Item stolen = victim.getHeldItem(b);
-			Messages.add(new MessageUpdate(thief.getName() + " stole " + victim.getName() + "'s " + stolen.getName() + "!"));
-			
-			if (b.isWildBattle()) {
-				victim.removeItem();
-				thief.giveItem((HoldItem)stolen);
-				return;
-			}
-			
-			item = stolen;
-			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, thief, CastSource.ABILITY, false);
-			
-			item = ItemNamesies.NO_ITEM.getItem();
-			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, victim, CastSource.ABILITY, false);
-		}
-
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// Steal from the Pokemon who made physical contact with you
-			steal(b, victim, user);
+			if (!victim.isFainted(b) && victim.canStealItem(b, user)) {
+				victim.swapItems(b, user, this);
+			}
 		}
 
-		public Item getItem() {
-			return item;
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+			return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
 		}
 	}
 
@@ -2967,46 +2943,22 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Magician extends Ability implements ApplyDamageEffect, ItemHolder {
+	static class Magician extends Ability implements ApplyDamageEffect, ItemSwapperEffect {
 		private static final long serialVersionUID = 1L;
-		private Item item;
 
 		Magician() {
 			super(AbilityNamesies.MAGICIAN, "The Pok\u00e9mon steals the held item of a Pok\u00e9mon it hits with a move.");
 		}
 
-		public void steal(Battle b, ActivePokemon thief, ActivePokemon victim) {
-			// Dead Pokemon and wild Pokemon cannot steal;
-			// Cannot steal if victim is not holding an item or thief is already holding an item;
-			// Cannot steal from a Pokemon with the Sticky Hold ability
-			if (thief.isFainted(b) || !victim.isHoldingItem(b) || thief.isHoldingItem(b) || b.getTrainer(thief.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-				return;
-			}
-			
-			// Stealers gon' steal
-			Item stolen = victim.getHeldItem(b);
-			Messages.add(new MessageUpdate(thief.getName() + " stole " + victim.getName() + "'s " + stolen.getName() + "!"));
-			
-			if (b.isWildBattle()) {
-				victim.removeItem();
-				thief.giveItem((HoldItem)stolen);
-				return;
-			}
-			
-			item = stolen;
-			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, thief, CastSource.ABILITY, false);
-			
-			item = ItemNamesies.NO_ITEM.getItem();
-			EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, victim, CastSource.ABILITY, false);
-		}
-
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			// Steal the victim's item when damage is dealt
-			steal(b, user, victim);
+			if (!user.isFainted(b) && user.canStealItem(b, victim)) {
+				user.swapItems(b, victim, this);
+			}
 		}
 
-		public Item getItem() {
-			return item;
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+			return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
 		}
 	}
 

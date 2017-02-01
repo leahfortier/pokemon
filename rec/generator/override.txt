@@ -202,47 +202,9 @@ Override:
 		Header: void startTurn(Battle b, ActivePokemon me)
 	*
 ***
-Override:
-	SwitchItems:
-		AddMapField: ApplyEffects:
-		if ({0}) {
-			if (super.category == MoveCategory.STATUS) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			}
-			
-			return;
-		}
-
-		Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-		Messages.add(new MessageUpdate(getSwitchMessage(user, userItem, victim, victimItem)));
-
-		if (b.isWildBattle()) {
-			user.giveItem((HoldItem)victimItem);
-			victim.giveItem((HoldItem)userItem);
-			return;
-		}
-
-		item = userItem;
-		super.applyEffects(b, user, victim);
-		
-		item = victimItem;
-		super.applyEffects(b, user, user);
-		###
-		AddMapField: Effect: ChangeItem
-		AddInterface: ItemHolder
-		AddMapField: Field:
-		private Item item;
-		###
-		AddMapField: GetItem:
-		return item;
-		###
-		AddMapField: MoveType: Metronomeless, No_Magic_Coat
-	*
-***
-Override:
+ItemSwapperEffect:
 	SwitchItemMessage:
 		Header: String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
-		AccessModifier: Private
 		Body:
 		return {0};
 		###
@@ -2235,42 +2197,6 @@ Override:
 		}
 		
 		return 1;
-		###
-	*
-***
-Override:
-	StealItem:
-		Header: void steal(Battle b, ActivePokemon thief, ActivePokemon victim)
-		Body:
-		// Dead Pokemon and wild Pokemon cannot steal; 
-		// Cannot steal if victim is not holding an item or thief is already holding an item;
-		// Cannot steal from a Pokemon with the Sticky Hold ability 
-		if (thief.isFainted(b) || !victim.isHoldingItem(b) || thief.isHoldingItem(b) || b.getTrainer(thief.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-			return;
-		}
-		
-		// Stealers gon' steal
-		Item stolen = victim.getHeldItem(b);
-		Messages.add(new MessageUpdate(thief.getName() + " stole " + victim.getName() + "'s " + stolen.getName() + "!"));
-		
-		if (b.isWildBattle()) {
-			victim.removeItem();
-			thief.giveItem((HoldItem)stolen);
-			return;
-		}
-		
-		item = stolen;
-		EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, thief, CastSource.ABILITY, false);
-		
-		item = ItemNamesies.NO_ITEM.getItem();
-		EffectNamesies.CHANGE_ITEM.getEffect().cast(b, thief, victim, CastSource.ABILITY, false);
-		###
-		AddInterface: ItemHolder
-		AddMapField: Field:
-		private Item item;
-		###
-		AddMapField: GetItem:
-		return item;
 		###
 	*
 ***

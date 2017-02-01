@@ -10,6 +10,7 @@ public enum CastSource {
     ATTACK(false, (b, caster) -> caster.getAttack()),
     ABILITY(true, (b, caster) -> caster.getAbility()),
     HELD_ITEM(true, (b, caster) -> caster.getHeldItem(b)),
+    CAST_SOURCE(false, (b, caster) -> caster.getAttributes().getCastSource()),
     USE_ITEM,
     EFFECT;
 
@@ -30,17 +31,12 @@ public enum CastSource {
     }
 
     public Object getSource(Battle b, ActivePokemon caster) {
-        switch (this) {
-            case ATTACK:
-                return caster.getAttack();
-            case ABILITY:
-                return caster.getAbility();
-            case HELD_ITEM:
-                return caster.getHeldItem(b);
-            default:
-                Global.error("Cannot get source for CastSource." + this.name() + ".");
-                return null;
+        if (this.sourceGetter == null) {
+            Global.error("Cannot get source for CastSource." + this.name() + ".");
+            return null;
         }
+
+        return this.sourceGetter.getSource(b, caster);
     }
 
     public boolean hasSourceName() {

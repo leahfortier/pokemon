@@ -652,48 +652,31 @@ Stick:
 		###
 *
 Sticky Barb:
-	Int: HoldItem, EndTurnEffect, PhysicalContactEffect, ItemHolder
+	Int: HoldItem, EndTurnEffect, PhysicalContactEffect, ItemSwapperEffect
 	Cat: Misc
 	Desc: A held item that damages the holder on every turn. It may latch on to foes and allies that touch the holder.
 	Price: 200
 	Fling: 80
-	ApplyEndTurn:
-		if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-			return;
+	Field:
+		private void stickyPoke(Battle b, ActivePokemon victim, String possession) {
+			if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+				Messages.add(new MessageUpdate(victim.getName() + " was hurt by " + possession + " " + this.getName() + "!"));
+				victim.reduceHealthFraction(b, 1/8.0);
+			}
 		}
-		
-		Messages.add(new MessageUpdate(victim.getName() + " was hurt by its " + this.name + "!"));
-		victim.reduceHealthFraction(b, 1/8.0);
+		###
+	ApplyEndTurn:
+		stickyPoke(b, victim, "its");
 		###
 	Contact:
-		if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!"));
-			user.reduceHealthFraction(b, 1/8.0);
-		}
-	            
-		if (user.isHoldingItem(b) || user.isFainted(b)) {
+		stickyPoke(b, user, victim.getName() + "'s");
+		if (user.isFainted(b) || !victim.canGiftItem(b, user)) {
 			return;
 		}
-		
-		Messages.add(new MessageUpdate(victim.getName() + "s " + this.name + " latched onto " + user.getName() + "!"));
 
-		if (b.isWildBattle()) {
-			victim.removeItem();
-			user.giveItem(this);
-			return;
-		}
-	         
-		// TODO: Generalize this with other item stealing effects
-		item = this;
-		EffectNamesies.CHANGE_ITEM.getEffect().cast(b, victim, user, CastSource.HELD_ITEM, false);
-
-		item = ItemNamesies.NO_ITEM.getItem();
-		EffectNamesies.CHANGE_ITEM.getEffect().cast(b, victim, victim, CastSource.HELD_ITEM, false);
+		victim.swapItems(b, user, this);
 		###
-	GetItem: return item;
-	Field: 
-	private Item item;
-	###
+	SwitchItemMessage: victim.getName() + "s " + this.getName() + " latched onto " + user.getName() + "!"
 *
 Thick Club:
 	Int: HoldItem
