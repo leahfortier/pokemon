@@ -175,21 +175,18 @@ Growth:
 	SelfTarget: True
 	StatChange: 2 Attack 1 Sp_Attack 1
 	Type: Normal
-	ApplyEffects:
-	// Doubles stat changes in the sunlight
-	if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
-		int[] statChanges = super.statChanges.clone();
-		for (int i = 0; i < super.statChanges.length; i++) {
-			super.statChanges[i] *= 2;
-		}
-		
-		super.applyEffects(b, user, victim);
-		super.statChanges = statChanges;
-		return;
-	}
+	BeginAttack:
+		super.statChanges = new int[Stat.NUM_BATTLE_STATS];
+		super.statChanges[Stat.ATTACK.index()] = 1;
+		super.statChanges[Stat.SP_ATTACK.index()] = 1;
 	
-	super.applyEffects(b, user, victim);
-	###
+		// Doubles stat changes in the sunlight
+		if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
+			for (int i = 0; i < super.statChanges.length; i++) {
+				super.statChanges[i] *= 2;
+			}
+		}
+		###
 	PP: 20
 *
 Double-Edge:
@@ -221,8 +218,7 @@ Synthesis:
 *
 Recover:
 	Desc: Restoring its own cells, the user restores its own HP by half of its max HP.
-	SelfHealing: 2
-	Int: SelfHealingMove
+	HealFraction: 2
 	PP: 10
 	Type: Normal
 	Cat: Status
@@ -1056,26 +1052,23 @@ Feather Dance:
 Roost:
 	Desc: The user lands and rests its body. It restores the user's HP by up to half of its max HP.
 	PP: 10
-	SelfHealing: 
-	healFail = false;
-	victim.healHealthFraction(1/2.0);
-	###
-	Int: SelfHealingMove
 	Type: Flying
 	Cat: Status
 	PrintCast: False
 	RemoveType: Flying
-	ApplyEffects: 
-	healFail = true;
-	super.applyEffects(b, user, victim);
-	if (!healFail && getType(b, user, victim) != null) {
-		EffectNamesies.CHANGE_TYPE.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
-		user.getEffect(EffectNamesies.CHANGE_TYPE).setTurns(1);
-	}
-	###
-	Field: 
-	private boolean healFail;
-	###
+	Int: SelfHealingMove
+	SelfHealing: 
+		return .5;
+		###
+	UniqueEffects:
+		// TODO: Test
+		this.heal(b, victim);
+		
+		if (getType(b, user, victim) != null) {
+			EffectNamesies.CHANGE_TYPE.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
+			user.getEffect(EffectNamesies.CHANGE_TYPE).setTurns(1);
+		}
+		###
 *
 Thunder Shock:
 	PP: 30
@@ -1281,28 +1274,24 @@ Swallow:
 	Desc: The power stored using the move Stockpile is absorbed by the user to heal its HP. Storing more power heals more HP.
 	PP: 10
 	Cat: Status
-	Int: SelfHealingMove
 	ExtraApplies: user.hasEffect(EffectNamesies.STOCKPILE)
-	SelfHealing: 
-		PokemonEffect stockpile = user.getEffect(EffectNamesies.STOCKPILE);
+	BasicHealing: 
+		PokemonEffect stockpile = victim.getEffect(EffectNamesies.STOCKPILE);
 		int turns = stockpile.getTurns();
 		if (turns <= 0) {
 			Global.error("Stockpile turns should never be nonpositive");
 		}
 
 		// Heals differently based on number of stockpile turns
-		final double healFraction;
 		if (turns == 1) {
-			healFraction = 1/4.0;
+			return .25;
 		}
 		else if (turns == 2) {
-			healFraction = 1/2.0;
+			return .5;
 		}
 		else {
-			healFraction = 1;
+			return 1;
 		}
-
-		victim.healHealthFraction(healFraction);
 		###
 	EndAttack:
 		// Stockpile ends after Swallow is used
@@ -1849,19 +1838,16 @@ Rest:
 	PP: 10
 	Type: Psychic
 	Cat: Status
-	Int: SelfHealingMove
-	SelfHealing: 1
+	HealFraction: 1
 	Status: Asleep
-	ApplyEffects: 
-	if (victim.fullHealth() || !Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, victim, victim)) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	victim.removeStatus();
-	super.applyEffects(b, user, victim);
-	victim.getStatus().setTurns(3);
-	###
+	ExtraApplies: Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, user, user)
+	AfterApplyCheck:
+		victim.removeStatus();
+		###
+	EndAttack: 
+		// TODO: Test
+		victim.getStatus().setTurns(3);
+		###
 *
 Hyper Voice:
 	Desc: The user lets loose a horribly echoing shout with the power to inflict damage.
@@ -2805,8 +2791,7 @@ Headbutt:
 *
 Slack Off:
 	Desc: The user slacks off, restoring its own HP by up to half of its maximum HP.
-	SelfHealing: 2
-	Int: SelfHealingMove
+	HealFraction: 2
 	Type: Normal
 	Cat: Status
 	PP: 10
@@ -3597,13 +3582,13 @@ Focus Punch:
 	Effect: Focusing
 	SelfTarget: True
 	StartTurn: 
-	super.applyEffects(b, me, me);
-	###
-	ApplyDamage:
-	if (me.hasEffect(EffectNamesies.FOCUSING)) {
-		super.applyDamage(me, o, b);
-	}
-	###
+		super.applyBasicEffects(b, me, me);
+		###
+	Applies: user.hasEffect(EffectNamesies.FOCUSING)
+	ShouldApplyEffects:
+		// TODO: Test
+		return false;
+		###
 *
 Shell Trap:
 	Desc: The user sets a shell trap. If the user is hit by a physical move, the trap will explode and inflict damage on the opposing Pokémon.
@@ -3616,7 +3601,7 @@ Shell Trap:
 	Effect: ShellTrap
 	SelfTarget: True
 	StartTurn: 
-		super.applyEffects(b, me, me);
+		super.applyBasicEffects(b, me, me);
 		###
 	Applies: user.hasEffect(EffectNamesies.SHELL_TRAP)
 	ShouldApplyEffects:
@@ -3635,7 +3620,7 @@ Beak Blast:
 	Effect: BeakBlast
 	SelfTarget: True
 	StartTurn: 
-		super.applyEffects(b, me, me);
+		super.applyBasicEffects(b, me, me);
 		###
 *
 Me First:
@@ -3721,8 +3706,7 @@ Soft-Boiled:
 	PP: 10
 	Type: Normal
 	Cat: Status
-	SelfHealing: 2
-	Int: SelfHealingMove
+	HealFraction: 2
 *
 Ancient Power:
 	Desc: The user attacks with a prehistoric power. It may also raise all the user's stats at once.
@@ -4580,8 +4564,7 @@ Milk Drink:
 	Cat: Status
 	PP: 10
 	Desc: The user restores its own HP by up to half of its maximum HP. May also be used in the field to heal HP.
-	SelfHealing: 2
-	Int: SelfHealingMove
+	HealFraction: 2
 *
 Heal Bell:
 	PP: 5
@@ -4886,8 +4869,7 @@ Heal Order:
 	Desc: The user calls out its underlings to heal it. The user regains up to half of its max HP.
 	PP: 10
 	Type: Bug
-	SelfHealing: 2
-	Int: SelfHealingMove
+	HealFraction: 2
 	Cat: Status
 *
 Attack Order:
@@ -5172,10 +5154,10 @@ Defog:
 	Type: Flying
 	Cat: Status
 	StatChange: 1 Evasion -1
-	ApplyEffects:
-	super.applyEffects(b, user, victim);
-	DefogRelease.release(b, victim);
-	###
+	UniqueEffects:
+		// TODO: Test
+		DefogRelease.release(b, victim);
+		###
 *
 Horn Leech:
 	Desc: The user drains the target's energy with its horns. The user's HP is restored by half the damage taken by the target.
@@ -5395,19 +5377,14 @@ Secret Power:
 	Type: Normal
 	Cat: Physical
 	Acc: 100
-	ApplyEffects: 
-	TerrainType terrain = b.getTerrainType();
-			
-	super.status = terrain.getStatusCondition();
-	super.statChanges = terrain.getStatChanges();
-	super.effects = terrain.getEffects();
-	
-	super.applyEffects(b, user, victim);
-	
-	super.status = StatusCondition.NO_STATUS;
-	super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-	super.effects = new ArrayList<>();
-	###
+	BeginAttack:
+		// TODO: Test
+		TerrainType terrain = b.getTerrainType();
+		
+		super.status = terrain.getStatusCondition();
+		super.statChanges = terrain.getStatChanges();
+		super.effects = terrain.getEffects();
+		###
 	EffChance: 30
 *
 Final Gambit:
@@ -5701,18 +5678,13 @@ Perish Song:
 	PP: 5
 	Type: Normal
 	Cat: Status
-	Effect: PerishSong
-	ApplyEffects: 
-	Messages.add(new MessageUpdate("All Pokemon hearing this song will faint in three turns!"));
-	
-	if (!victim.hasEffect(EffectNamesies.PERISH_SONG)) {
-		super.applyEffects(b, user, victim);
-	}
-	
-	if (!user.hasEffect(EffectNamesies.PERISH_SONG)) {
-		super.applyEffects(b, user, user);
-	}
-	###
+	UniqueEffects:
+		Messages.add(new MessageUpdate("All Pokemon hearing this song will faint in three turns!"));
+
+		// TODO: Test and also this used to check if they didn't have the effect before casting just in case that's relevant later
+		EffectNamesies.PERISH_SONG.getEffect().apply(b, user, victim, CastSource.ATTACK, false);
+		EffectNamesies.PERISH_SONG.getEffect().apply(b, user, user, CastSource.ATTACK, false);
+		###
 *
 Dragon Tail:
 	Desc: The user knocks away the target and drags out another Pok\u00e9mon in its party. In the wild, the battle ends.
@@ -6350,31 +6322,20 @@ Shore Up:
 	Type: Ground
 	Cat: Status
 	PP: 10
-	Int: SelfHealingMove
-	SelfHealing: 
-	if (b.getWeather().namesies() == EffectNamesies.SANDSTORM) {
-		victim.healHealthFraction(1);
-	} 
-	else {
-		victim.healHealthFraction(1/2.0);
-	}
-	###
+	BasicHealing: 
+		// Fully heals in a sandstorm
+		return b.getWeather().namesies() == EffectNamesies.SANDSTORM ? 1 : .5;
+		###
 *
 Floral Healing:
 	Desc: The user restores the target's HP by up to half of its max HP. It restores more HP when the terrain is grass.
 	Type: Fairy
 	Cat: Status
 	PP: 10
-	Int: SelfHealingMove
-	SelfHealing: 
-	// TODO: Combine with Shore Up
-	if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
-		victim.healHealthFraction(1);
-	} 
-	else {
-		victim.healHealthFraction(1/2.0);
-	}
-	###
+	BasicHealing: 
+		// Fully heals in Grassy Terrain
+		return b.hasEffect(EffectNamesies.GRASSY_TERRAIN) ? 1 : .5;
+		###
 *
 First Impression:
 	Desc: Although this move has great power, it only works the first turn the user is in battle.
@@ -6440,12 +6401,16 @@ Strength Sap:
 	Acc: 100
 	PP: 10
 	Int: SapHealthEffect
-	ApplyEffects:
-	int victimAttackStat = Stat.getStat(Stat.ATTACK, victim, user, b);
-	super.applyEffects(b, user, victim);
-
-	this.sapHealth(b, user, victim, victimAttackStat, true);
-	###
+	Field:
+		private int victimAttackStat;
+		###
+	BeginAttack:
+		// TODO: Test
+		this.victimAttackStat = Stat.getStat(Stat.ATTACK, defending, attacking, b);
+		###
+	UniqueEffects:
+		this.sapHealth(b, user, victim, victimAttackStat, true);
+		###
 	StatChange: 1 Attack -1
 	SapPercentage: return 1;
 *

@@ -242,7 +242,7 @@ class MethodInfo {
                 else if (fieldKey.equals("Applies")) {
                     mapField += " && " + addFieldValue;
                 }
-                else if (fieldKey.equals("Field")) {
+                else if (fieldKey.equals("Field") || fieldKey.equals("UniqueEffects")) {
                     mapField += addFieldValue;
                 }
 //				else {

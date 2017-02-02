@@ -270,6 +270,7 @@ public class ModifierTest {
                     Assert.assertTrue(defending.hasEffect(EffectNamesies.STOCKPILE));
                     Assert.assertFalse(defending.fullHealth());
                     battle.defendingFight(AttackNamesies.SWALLOW);
+                    Assert.assertTrue(defending.fullHealth());
                     Assert.assertFalse(defending.hasEffect(EffectNamesies.STOCKPILE));
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);

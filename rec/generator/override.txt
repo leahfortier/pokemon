@@ -97,38 +97,43 @@ Override:
 ***
 Override:
 	WeatherHeal:
+		AddMapField: BasicHealing: 
+			switch (b.getWeather().namesies()) {
+				case CLEAR_SKIES:
+					return 1/2.0;
+				case SUNNY:
+					return 2/3.0;
+				case HAILING:
+				case RAINING:
+				case SANDSTORM:
+					return 1/4.0;
+				default:
+					Global.error("Funky weather problems!!!!");
+					return -1;
+			}
+			###
+	*
+***
+Override:
+	HealFraction:
+		AddMapField: BasicHealing: 
+			return {0};
+			###
+	*
+***
+Override:
+	BasicHealing:
 		AddInterface: SelfHealingMove
-		AddMapField: SelfHealing: 
-		switch (b.getWeather().namesies()) {
-			case CLEAR_SKIES:
-				victim.healHealthFraction(1/2.0);
-				break;
-			case SUNNY:
-				victim.healHealthFraction(2/3.0);
-				break;
-			case HAILING:
-			case RAINING:
-			case SANDSTORM:
-				victim.healHealthFraction(1/4.0);
-				break;
-			default:
-				Global.error("Funky weather problems!!!!");
-				break;
-		}
-		###
+		AddMapField: SelfHealing: {0}
+		AddMapField: UniqueEffects:
+			this.heal(b, victim);
+			###
 	*
 ***
 SelfHealingMove:
 	SelfHealing:
-		Header: void heal(ActivePokemon user, ActivePokemon victim, Battle b)
+		Header: double getHealFraction(Battle b, ActivePokemon victim)
 		AddMapField: Applies: !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK)
-		End:
-		
-		Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
-		###
-		Try:
-		victim.healHealthFraction(1/{0}.0);
-		###
 		AddMapField: SelfTarget: True
 		AddMapField: MoveType: Healing
 	*
@@ -1929,10 +1934,10 @@ Override:
 Override:
 	ForesightMove:
 		AddMapField: Effect: {0}
-		AddMapField: ApplyEffects: 
-		super.applyEffects(b, user, victim);
-		victim.getAttributes().resetStage(Stat.EVASION);
-		###
+		AddMapField: UniqueEffects: 
+			// TODO: Test
+			victim.getAttributes().resetStage(Stat.EVASION);
+			###
 		AddMapField: MoveType: Substitute_Piercing
 	*
 ***
@@ -2177,11 +2182,6 @@ Override:
 	*
 ***
 Override:
-	Apply:
-		Header: void apply(ActivePokemon me, ActivePokemon o, Battle b)
-	*
-***
-Override:
 	Aura:
 		Header: Type getAuraType()
 		Body:
@@ -2219,7 +2219,7 @@ Override:
 ***
 Override:
 	ApplyEffects:
-		Header: void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
+		Header: void applyBasicEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 	*
 ***
 Override:
