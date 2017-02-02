@@ -57,6 +57,7 @@ import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
+import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.TypeBlocker;
@@ -1794,11 +1795,19 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class SuctionCups extends Ability {
+	static class SuctionCups extends Ability implements AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		SuctionCups() {
 			super(AbilityNamesies.SUCTION_CUPS, "Negates all moves that force switching out.");
+		}
+
+		public boolean block(AttackNamesies attackName, ActivePokemon victim) {
+			return attackName.getAttack() instanceof SwapOpponentEffect && attackName.getAttack().isStatusMove();
+		}
+
+		public void alternateEffect(Battle b, ActivePokemon victim) {
+			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " prevents it from switching!"));
 		}
 	}
 

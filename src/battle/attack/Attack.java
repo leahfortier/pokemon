@@ -31,6 +31,7 @@ import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
+import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.TypeBlocker;
@@ -61,7 +62,6 @@ import pokemon.ability.AbilityNamesies;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
-import trainer.WildPokemon;
 import type.Type;
 import type.TypeAdvantage;
 import util.GeneralUtils;
@@ -8991,7 +8991,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Roar extends Attack {
+	static class Roar extends Attack implements SwapOpponentEffect {
 		private static final long serialVersionUID = 1L;
 
 		Roar() {
@@ -9003,55 +9003,16 @@ public abstract class Attack implements Serializable {
 			super.priority = -6;
 		}
 
+		public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + " fled in fear!";
+		}
+
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: ExitBattleEffect
-			// TODO: ActivePokemon method for this
-			// TODO: AttackBlockerEffect for Suction Cups
-			// TODO: Everything else
-			// Fails against the Suction Cups ability
-			if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !user.breaksTheMold()) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.SUCTION_CUPS.getName() + " prevents it from switching!"));
-				return;
-			}
-			
-			// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
-			if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
-				if (super.category == MoveCategory.STATUS)  {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Team opponent = b.getTrainer(victim.isPlayer());
-			if (opponent instanceof WildPokemon) {
-				// Fails against wild Pokemon of higher levels
-				if (victim.getLevel() > user.getLevel()) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
-				}
-				
-				// End the battle against a wild Pokemon
-				Messages.add(new MessageUpdate(victim.getName() + " fled in fear!"));
-				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-				return;
-			}
-			
-			Trainer trainer = (Trainer)opponent;
-			if (!trainer.hasRemainingPokemon()) {
-				// Fails against trainers on their last Pokemon
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			// Swap to a random Pokemon!
-			Messages.add(new MessageUpdate(victim.getName() + " fled in fear!"));
-			trainer.switchToRandom();
-			victim = trainer.front();
-			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
+			user.swapOpponent(b, victim, this);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canSwapOpponent(b, victim);
 		}
 	}
 
@@ -9082,7 +9043,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class CircleThrow extends Attack {
+	static class CircleThrow extends Attack implements SwapOpponentEffect {
 		private static final long serialVersionUID = 1L;
 
 		CircleThrow() {
@@ -9094,55 +9055,16 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
+		public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + " was thrown away!";
+		}
+
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: ExitBattleEffect
-			// TODO: ActivePokemon method for this
-			// TODO: AttackBlockerEffect for Suction Cups
-			// TODO: Everything else
-			// Fails against the Suction Cups ability
-			if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !user.breaksTheMold()) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.SUCTION_CUPS.getName() + " prevents it from switching!"));
-				return;
-			}
-			
-			// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
-			if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
-				if (super.category == MoveCategory.STATUS)  {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Team opponent = b.getTrainer(victim.isPlayer());
-			if (opponent instanceof WildPokemon) {
-				// Fails against wild Pokemon of higher levels
-				if (victim.getLevel() > user.getLevel()) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
-				}
-				
-				// End the battle against a wild Pokemon
-				Messages.add(new MessageUpdate(victim.getName() + " was thrown away!"));
-				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-				return;
-			}
-			
-			Trainer trainer = (Trainer)opponent;
-			if (!trainer.hasRemainingPokemon()) {
-				// Fails against trainers on their last Pokemon
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			// Swap to a random Pokemon!
-			Messages.add(new MessageUpdate(victim.getName() + " was thrown away!"));
-			trainer.switchToRandom();
-			victim = trainer.front();
-			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
+			user.swapOpponent(b, victim, this);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canSwapOpponent(b, victim);
 		}
 	}
 
@@ -9222,7 +9144,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Whirlwind extends Attack {
+	static class Whirlwind extends Attack implements SwapOpponentEffect {
 		private static final long serialVersionUID = 1L;
 
 		Whirlwind() {
@@ -9233,55 +9155,16 @@ public abstract class Attack implements Serializable {
 			super.priority = -6;
 		}
 
+		public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + " blew away!";
+		}
+
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: ExitBattleEffect
-			// TODO: ActivePokemon method for this
-			// TODO: AttackBlockerEffect for Suction Cups
-			// TODO: Everything else
-			// Fails against the Suction Cups ability
-			if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !user.breaksTheMold()) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.SUCTION_CUPS.getName() + " prevents it from switching!"));
-				return;
-			}
-			
-			// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
-			if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
-				if (super.category == MoveCategory.STATUS)  {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Team opponent = b.getTrainer(victim.isPlayer());
-			if (opponent instanceof WildPokemon) {
-				// Fails against wild Pokemon of higher levels
-				if (victim.getLevel() > user.getLevel()) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
-				}
-				
-				// End the battle against a wild Pokemon
-				Messages.add(new MessageUpdate(victim.getName() + " blew away!"));
-				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-				return;
-			}
-			
-			Trainer trainer = (Trainer)opponent;
-			if (!trainer.hasRemainingPokemon()) {
-				// Fails against trainers on their last Pokemon
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			// Swap to a random Pokemon!
-			Messages.add(new MessageUpdate(victim.getName() + " blew away!"));
-			trainer.switchToRandom();
-			victim = trainer.front();
-			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
+			user.swapOpponent(b, victim, this);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canSwapOpponent(b, victim);
 		}
 	}
 
@@ -9467,37 +9350,26 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Team team = b.getTrainer(user);
+			return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon();
+		}
+
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Team t = b.getTrainer(user.isPlayer());
-			if (t instanceof WildPokemon) {
-				Messages.add(new MessageUpdate(user.getName() + " left the battle!"));
-				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-				return;
-			}
+			// TODO: Hardcore test this shit not in the mood right now but this is one of the most complicated moves so lots of tests tests tests
+			user.switcheroo(b, user, CastSource.ATTACK, true);
 			
-			Trainer trainer = (Trainer)t;
-			if (!trainer.hasRemainingPokemon()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " went back to " + trainer.getName() + "!"));
-			trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
-			
-			ActivePokemon next = trainer.front();
+			ActivePokemon next = b.getTrainer(user).front();
 			next.resetAttributes();
 			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
 				next.getAttributes().setStage(i, user.getStage(i));
 			}
 			
-			for (PokemonEffect e : user.getEffects()) {
-				if (e instanceof PassableEffect) {
-					next.addEffect(e);
+			for (PokemonEffect effect : user.getEffects()) {
+				if (effect instanceof PassableEffect) {
+					next.addEffect(effect);
 				}
 			}
-			
-			user = next;
-			b.enterBattle(user, trainer.getName() + " sent out " + user.getName() + "!", false);
 		}
 	}
 
@@ -9526,7 +9398,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class DragonTail extends Attack {
+	static class DragonTail extends Attack implements SwapOpponentEffect {
 		private static final long serialVersionUID = 1L;
 
 		DragonTail() {
@@ -9538,55 +9410,16 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
+		public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + " was slapped away!";
+		}
+
 		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: ExitBattleEffect
-			// TODO: ActivePokemon method for this
-			// TODO: AttackBlockerEffect for Suction Cups
-			// TODO: Everything else
-			// Fails against the Suction Cups ability
-			if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !user.breaksTheMold()) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.SUCTION_CUPS.getName() + " prevents it from switching!"));
-				return;
-			}
-			
-			// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
-			if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
-				if (super.category == MoveCategory.STATUS)  {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Team opponent = b.getTrainer(victim.isPlayer());
-			if (opponent instanceof WildPokemon) {
-				// Fails against wild Pokemon of higher levels
-				if (victim.getLevel() > user.getLevel()) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
-				}
-				
-				// End the battle against a wild Pokemon
-				Messages.add(new MessageUpdate(victim.getName() + " was slapped away!"));
-				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-				return;
-			}
-			
-			Trainer trainer = (Trainer)opponent;
-			if (!trainer.hasRemainingPokemon()) {
-				// Fails against trainers on their last Pokemon
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			// Swap to a random Pokemon!
-			Messages.add(new MessageUpdate(victim.getName() + " was slapped away!"));
-			trainer.switchToRandom();
-			victim = trainer.front();
-			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
+			user.swapOpponent(b, victim, this);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canSwapOpponent(b, victim);
 		}
 	}
 

@@ -98,6 +98,57 @@ public class AttackTest {
     }
 
     @Test
+    public void selfSwitchingMoves() {
+        TestPokemon attacking1 = new TestPokemon(PokemonNamesies.CHANSEY);
+        TestPokemon attacking2 = new TestPokemon(PokemonNamesies.HAPPINY);
+        TestPokemon defending = new TestPokemon(PokemonNamesies.SHUCKLE);
+
+        TestBattle battle = TestBattle.createTrainerBattle(attacking1, defending);
+        battle.getPlayer().addPokemon(attacking2);
+
+        Assert.assertTrue(battle.getPlayer().front() == attacking1);
+
+        // Use U-Turn -- make sure they swap
+        battle.attackingFight(AttackNamesies.U_TURN);
+        Assert.assertTrue(battle.getPlayer().front() == attacking2);
+
+        // TODO: Baton Pass
+
+        // TODO: No more remaining Pokemon, wild battles, wimp out, red card, eject button
+    }
+
+    @Test
+    public void swapOpponentMoves() {
+        TestPokemon attacking1 = new TestPokemon(PokemonNamesies.STEELIX);
+        TestPokemon attacking2 = new TestPokemon(PokemonNamesies.REGIROCK);
+        TestPokemon defending = new TestPokemon(PokemonNamesies.SHUCKLE);
+
+        TestBattle battle = TestBattle.createTrainerBattle(attacking1, defending);
+        battle.getPlayer().addPokemon(attacking2);
+
+        Assert.assertTrue(battle.getPlayer().front() == attacking1);
+
+        // Use Dragon Tail -- make sure they swap
+        battle.fight(AttackNamesies.ENDURE, AttackNamesies.DRAGON_TAIL);
+        Assert.assertTrue(battle.getPlayer().front() == attacking2);
+
+        // Don't swap with Suction Cups
+        attacking2.withAbility(AbilityNamesies.SUCTION_CUPS);
+        battle.fight(AttackNamesies.ENDURE, AttackNamesies.CIRCLE_THROW);
+        Assert.assertTrue(battle.getPlayer().front() == attacking2);
+
+        attacking2.withAbility(AbilityNamesies.NO_ABILITY);
+        battle.fight(AttackNamesies.ENDURE, AttackNamesies.ROAR);
+        Assert.assertTrue(battle.getPlayer().front() == attacking1);
+
+        // Don't swap when ingrained
+        battle.fight(AttackNamesies.INGRAIN, AttackNamesies.WHIRLWIND);
+        Assert.assertTrue(battle.getPlayer().front() == attacking1);
+
+        // TODO: No more remaining Pokemon, wild battles, wimp out, red card, eject button
+    }
+
+    @Test
     public void multiTurnMoveTest() {
         // TODO
     }

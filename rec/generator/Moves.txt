@@ -5471,7 +5471,8 @@ Roar:
 	Type: Normal
 	Cat: Status
 	MoveType: Substitute_Piercing, Sound_Based, Protect_Piercing
-	ExitBattle: victim.getName() + " fled in fear!"
+	Int: SwapOpponentEffect
+	SwapOpponent: victim.getName() + " fled in fear!"
 *
 Grudge:
 	Desc: If the user faints, the user's grudge fully depletes the PP of the opponent's move that knocked it out.
@@ -5498,7 +5499,8 @@ Circle Throw:
 	Cat: Physical
 	Acc: 90
 	Pow: 60
-	ExitBattle: victim.getName() + " was thrown away!"
+	SwapOpponent: victim.getName() + " was thrown away!"
+	Int: SwapOpponentEffect
 *
 Teleport:
 	Type: Psychic
@@ -5565,7 +5567,8 @@ Whirlwind:
 	PP: 20
 	Type: Normal
 	Cat: Status
-	ExitBattle: victim.getName() + " blew away!"
+	SwapOpponent: victim.getName() + " blew away!"
+	Int: SwapOpponentEffect
 	MoveType: Substitute_Piercing, Protect_Piercing
 *
 Bestow:
@@ -5681,38 +5684,26 @@ Baton Pass:
 	PP: 40
 	Cat: Status
 	Type: Normal
+	FullApplies:
+		Team team = b.getTrainer(user);
+		return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon();
+		###
 	ApplyEffects: 
-	Team t = b.getTrainer(user.isPlayer());
-	if (t instanceof WildPokemon) {
-		Messages.add(new MessageUpdate(user.getName() + " left the battle!"));
-		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-		return;
-	}
-	
-	Trainer trainer = (Trainer)t;
-	if (!trainer.hasRemainingPokemon()) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	Messages.add(new MessageUpdate(user.getName() + " went back to " + trainer.getName() + "!"));
-	trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
-	
-	ActivePokemon next = trainer.front();
-	next.resetAttributes();
-	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
-		next.getAttributes().setStage(i, user.getStage(i));
-	}
-	
-	for (PokemonEffect e : user.getEffects()) {
-		if (e instanceof PassableEffect) {
-			next.addEffect(e);
+		// TODO: Hardcore test this shit not in the mood right now but this is one of the most complicated moves so lots of tests tests tests
+		user.switcheroo(b, user, CastSource.ATTACK, true);
+				
+		ActivePokemon next = b.getTrainer(user).front();
+		next.resetAttributes();
+		for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
+			next.getAttributes().setStage(i, user.getStage(i));
 		}
-	}
-	
-	user = next;
-	b.enterBattle(user, trainer.getName() + " sent out " + user.getName() + "!", false);
-	###
+		
+		for (PokemonEffect effect : user.getEffects()) {
+			if (effect instanceof PassableEffect) {
+				next.addEffect(effect);
+			}
+		}
+		###
 	SelfTarget: True
 	MoveType: Non_Snatchable
 *
@@ -5742,7 +5733,8 @@ Dragon Tail:
 	Cat: Physical
 	Acc: 90
 	Pow: 60
-	ExitBattle: victim.getName() + " was slapped away!"
+	Int: SwapOpponentEffect
+	SwapOpponent: victim.getName() + " was slapped away!"
 *
 Foul Play:
 	Desc: The user turns the target's power against it. The higher the target's Attack stat, the greater the damage.

@@ -559,17 +559,17 @@ public class Battle {
 		
 		int damage = (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
 		
-		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n",
-				me.getActualName(),
-				me.getAttack().getName(),
-				level,
-				power,
-				random,
-				attackStat,
-				defenseStat,
-				stab,
-				adv,
-				damage);
+//		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n",
+//				me.getActualName(),
+//				me.getAttack().getName(),
+//				level,
+//				power,
+//				random,
+//				attackStat,
+//				defenseStat,
+//				stab,
+//				adv,
+//				damage);
 		
 		damage *= getDamageModifier(me, o); 
 		damage *= criticalHit(me, o);

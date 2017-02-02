@@ -1296,4 +1296,8 @@ public final class EffectInterfaces {
 	public interface ItemSwapperEffect {
 		String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem);
 	}
+
+	public interface SwapOpponentEffect {
+		String getSwapMessage(ActivePokemon user, ActivePokemon victim);
+	}
 }

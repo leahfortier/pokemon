@@ -468,60 +468,18 @@ Override:
 		###
 	*
 ***
-Override:
-	ExitBattle:
+SwapOpponentEffect:
+	SwapOpponent:
+		Header: String getSwapMessage(ActivePokemon user, ActivePokemon victim)
+		Body:
+			return {0};
+			###
 		AddMapField: MoveType: Assistless
 		AddMapField: Priority: -6
+		AddMapField: Applies: user.canSwapOpponent(b, victim)
 		AddMapField: ApplyEffects:
-		// TODO: ExitBattleEffect
-		// TODO: ActivePokemon method for this
-		// TODO: AttackBlockerEffect for Suction Cups
-		// TODO: Everything else
-		// Fails against the Suction Cups ability
-		if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !user.breaksTheMold()) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.SUCTION_CUPS.getName() + " prevents it from switching!"));
-			return;
-		}	
-		
-		// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
-		if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
-			if (super.category == MoveCategory.STATUS)  {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			}
-			
-			return;
-		}
-		
-		Team opponent = b.getTrainer(victim.isPlayer());
-		if (opponent instanceof WildPokemon) {
-			// Fails against wild Pokemon of higher levels
-			if (victim.getLevel() > user.getLevel()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			// End the battle against a wild Pokemon
-			Messages.add(new MessageUpdate({0}));
-			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-			return;
-		}
-		
-		Trainer trainer = (Trainer)opponent;
-		if (!trainer.hasRemainingPokemon()) {
-			// Fails against trainers on their last Pokemon
-			if (super.category == MoveCategory.STATUS) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			}
-			
-			return;
-		}
-		
-		// Swap to a random Pokemon!
-		Messages.add(new MessageUpdate({0}));
-		trainer.switchToRandom();
-		victim = trainer.front();
-		b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
-		###
+			user.swapOpponent(b, victim, this);
+			###
 	*
 ***
 Override:

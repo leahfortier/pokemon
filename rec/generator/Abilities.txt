@@ -365,25 +365,25 @@ Sturdy:
 	Desc: The Pok\u00e9mon is protected against 1-hit KO attacks.
 	Int: BracingEffect, AttackBlocker
 	Bracing: 
-	return fullHealth;
-	###
+		return fullHealth;
+		###
 	BraceMessage: bracer.getName() + "'s " + this.getName() + " endured the hit!"
 	AttackBlock:
-	return attackName.getAttack().isMoveType(MoveType.ONE_HIT_KO);
-	###
+		return attackName.getAttack().isMoveType(MoveType.ONE_HIT_KO);
+		###
 	AttackAlternateEffect:
-	Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " prevents OHKO moves!"));
-	###
+		Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " prevents OHKO moves!"));
+		###
 *
 Oblivious:
 	Desc: Prevents the Pok\u00e9mon from becoming infatuated.
 	Int: AttackBlocker
 	AttackBlock:
-	return attackName == AttackNamesies.CAPTIVATE;
-	###
+		return attackName == AttackNamesies.CAPTIVATE;
+		###
 	AttackAlternateEffect:
-	Messages.add(new MessageUpdate(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"));
-	###
+		Messages.add(new MessageUpdate(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"));
+		###
 *
 Magnet Pull:
 	Int: OpponentTrappingEffect
@@ -746,6 +746,13 @@ Magma Armor:
 *
 Suction Cups:
 	Desc: Negates all moves that force switching out.
+	Int: AttackBlocker
+	AttackBlock:
+		return attackName.getAttack() instanceof SwapOpponentEffect && attackName.getAttack().isStatusMove();
+		###
+	AttackAlternateEffect:
+		Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " prevents it from switching!"));
+		###
 *
 Steadfast:
 	Desc: Raises Speed each time the Pok\u00e9mon flinches.

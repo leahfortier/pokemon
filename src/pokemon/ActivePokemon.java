@@ -21,6 +21,7 @@ import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
+import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
@@ -36,7 +37,6 @@ import item.hold.EVItem;
 import item.hold.HoldItem;
 import main.Game;
 import main.Global;
-import type.Type;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
@@ -50,6 +50,7 @@ import pokemon.evolution.EvolutionMethod;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.WildPokemon;
+import type.Type;
 import util.DrawUtils;
 import util.RandomUtils;
 import util.StringUtils;
@@ -645,6 +646,49 @@ public class ActivePokemon implements Serializable {
 
 			this.getAttributes().setCastSource(userItem);
 			EffectNamesies.CHANGE_ITEM.getEffect().apply(b, this, swapster, CastSource.CAST_SOURCE, false);
+		}
+	}
+
+	public boolean canSwapOpponent(Battle b, ActivePokemon victim) {
+		if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
+			return false;
+		}
+
+		if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !this.breaksTheMold()) {
+			return false;
+		}
+
+		Team opponent = b.getTrainer(victim.isPlayer());
+		if (opponent instanceof WildPokemon) {
+			// Fails against wild Pokemon of higher levels
+			return victim.getLevel() <= this.getLevel();
+		}
+		else {
+			// Fails against trainers on their last Pokemon
+			Trainer trainer = (Trainer)opponent;
+			return trainer.hasRemainingPokemon();
+		}
+	}
+
+	public void swapOpponent(Battle b, ActivePokemon victim, SwapOpponentEffect swapster) {
+		if (!canSwapOpponent(b, victim)) {
+			return;
+		}
+
+		Messages.add(new MessageUpdate(swapster.getSwapMessage(this, victim)));
+
+		Team opponent = b.getTrainer(victim);
+		if (opponent instanceof WildPokemon) {
+			// End the battle against a wild Pokemon
+			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+		}
+		else {
+			Trainer trainer = (Trainer)opponent;
+
+			// Swap to a random Pokemon!
+			trainer.switchToRandom();
+			victim = trainer.front();
+			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
 		}
 	}
 

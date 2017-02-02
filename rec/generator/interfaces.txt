@@ -597,3 +597,8 @@ ItemSwapperEffect:
 		Header: String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
 	*
 ***
+SwapOpponentEffect:
+	Method:
+		Header: String getSwapMessage(ActivePokemon user, ActivePokemon victim)
+	*
+***
