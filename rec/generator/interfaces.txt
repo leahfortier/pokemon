@@ -591,6 +591,12 @@ AttackBlocker:
 	Method:
 		Header: void alternateEffect(Battle b, ActivePokemon victim)
 	*
+	Method:
+		Header: String getBlockMessage(Battle b, ActivePokemon victim)
+		Default:
+			return Effect.DEFAULT_FAIL_MESSAGE;
+			###
+	*
 ***
 ItemSwapperEffect:
 	Method:

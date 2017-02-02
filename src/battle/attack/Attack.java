@@ -10679,6 +10679,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test
 			Status.removeStatus(b, user, CastSource.ATTACK);
 			if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 				this.heal(b, user);

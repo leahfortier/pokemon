@@ -1272,6 +1272,10 @@ public final class EffectInterfaces {
 		boolean block(AttackNamesies attackName, ActivePokemon victim);
 		void alternateEffect(Battle b, ActivePokemon victim);
 
+		default String getBlockMessage(Battle b, ActivePokemon victim) {
+			return Effect.DEFAULT_FAIL_MESSAGE;
+		}
+
 		static AttackBlocker block(Battle b, ActivePokemon attacking, AttackNamesies attackName, ActivePokemon victim) {
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
