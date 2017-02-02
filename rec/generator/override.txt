@@ -123,17 +123,22 @@ Override:
 ***
 Override:
 	BasicHealing:
-		AddInterface: SelfHealingMove
 		AddMapField: SelfHealing: {0}
 		AddMapField: UniqueEffects:
 			this.heal(b, victim);
 			###
 	*
 ***
-SelfHealingMove:
+Override:
 	SelfHealing:
-		Header: double getHealFraction(Battle b, ActivePokemon victim)
+		AddInterface: SelfHealingMove
+		AddMapField: RawSelfHealing: {0}
 		AddMapField: Applies: !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK)
+	*
+***
+SelfHealingMove:
+	RawSelfHealing:
+		Header: double getHealFraction(Battle b, ActivePokemon victim)
 		AddMapField: SelfTarget: True
 		AddMapField: MoveType: Healing
 	*
@@ -321,7 +326,7 @@ Override:
 		AddMapField: GetPow: 
 		return super.power*(o.hasStatus(StatusCondition.{00}) ? 2 : 1);
 		###
-		AddMapField: ApplyEffects:
+		AddMapField: UniqueEffects:
 		if (victim.hasStatus(StatusCondition.{00})) {
 			Status.removeStatus(b, victim, CastSource.ATTACK);
 		}
@@ -519,7 +524,7 @@ SwapOpponentEffect:
 		AddMapField: MoveType: Assistless
 		AddMapField: Priority: -6
 		AddMapField: Applies: user.canSwapOpponent(b, victim)
-		AddMapField: ApplyEffects:
+		AddMapField: UniqueEffects:
 			user.swapOpponent(b, victim, this);
 			###
 	*
@@ -1905,7 +1910,7 @@ Override:
 ***
 Override:
 	HealPartyStatus:
-		AddMapField: ApplyEffects:
+		AddMapField: UniqueEffects:
 		for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
 			if (!p.hasStatus(StatusCondition.FAINTED)) {
 				p.removeStatus();
@@ -2000,7 +2005,7 @@ Override:
 ***
 Override:
 	EliminateStatChanges:
-		AddMapField: ApplyEffects: 
+		AddMapField: UniqueEffects: 
 		user.getAttributes().resetStages();
 		victim.getAttributes().resetStages();
 		Messages.add(new MessageUpdate("All stat changes were eliminated!"));
@@ -2012,7 +2017,7 @@ Override:
 		AddMapField: Field:
 		private static final Stat[] swapStats = { Stat.{11}, Stat.{22} };
 		###
-		AddMapField: ApplyEffects: 
+		AddMapField: UniqueEffects: 
 		for (Stat s : swapStats) {
 			user.getAttributes().swapStages(s, victim);
 		}
@@ -2204,7 +2209,7 @@ Override:
 ***
 Override:
 	ConsumeBerry:
-		AddMapField: ApplyEffects: 
+		AddMapField: UniqueEffects: 
 		Item i = victim.getHeldItem(b);
 		if (i instanceof Berry) {
 			Messages.add(new MessageUpdate(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!"));
@@ -2215,11 +2220,6 @@ Override:
 			}
 		}
 		###
-	*
-***
-Override:
-	ApplyEffects:
-		Header: void applyBasicEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 	*
 ***
 Override:

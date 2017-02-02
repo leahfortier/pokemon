@@ -466,10 +466,10 @@ Rapid Spin:
 	Desc: A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.
 	Type: Normal
 	Cat: Physical
-	ApplyEffects: 
-	// TODO: Test
-	RapidSpinRelease.release(b, user);
-	###
+	UniqueEffects: 
+		// TODO: Test
+		RapidSpinRelease.release(b, user);
+		###
 *
 Reflect:
 	Desc: A wondrous wall of light is put up to suppress damage from physical attacks for five turns.
@@ -1056,7 +1056,6 @@ Roost:
 	Cat: Status
 	PrintCast: False
 	RemoveType: Flying
-	Int: SelfHealingMove
 	SelfHealing: 
 		return .5;
 		###
@@ -1938,7 +1937,7 @@ Natural Gift:
 	PhysicalContact: False
 	Type: Normal
 	Acc: 100
-	ApplyEffects: 
+	UniqueEffects: 
 	// This is so fucking stupid that it consumes the Berry upon use, like srsly what the fuck is the fucking point of this move
 	if (user.getHeldItem(b) instanceof Berry) {
 		user.consumeItem(b);
@@ -2236,7 +2235,7 @@ Psych Up:
 	PP: 10
 	Cat: Status
 	Type: Normal
-	ApplyEffects: 
+	UniqueEffects: 
 	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++)  {
 		user.getAttributes().setStage(i, victim.getStage(i));
 	}
@@ -2278,7 +2277,7 @@ Covet:
 	Cat: Physical
 	Desc: The user endearingly approaches the target, then steals the target's held item.
 	Int: ItemSwapperEffect
-	ApplyEffects:
+	UniqueEffects:
 		if (user.canStealItem(b, victim)) {
 			user.swapItems(b, victim, this);
 		}
@@ -2424,7 +2423,7 @@ Belly Drum:
 		// Fails if attack is already maxed or if you have less than half your health to give up
 		return user.getStage(Stat.ATTACK.index()) < Stat.MAX_STAT_CHANGES && user.getHPRatio() > .5;
 		###
-	ApplyEffects:
+	UniqueEffects:
 		// Maximization station
 		Messages.add(new MessageUpdate(user.getName() + " cut its own HP and maximized its attack!"));
 		user.reduceHealthFraction(b, 1/2.0);
@@ -2803,7 +2802,7 @@ Heal Pulse:
 	Cat: Status
 	MoveType: Aura_Pulse, Healing
 	Applies: !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK)
-	ApplyEffects: 
+	UniqueEffects: 
 	// Heal by 50% unless the user has Mega Launcher -- then heal by 75%
 	double fraction = user.hasAbility(AbilityNamesies.MEGA_LAUNCHER) ? .75 : .5;
 	
@@ -3119,7 +3118,7 @@ Spite:
 	Move last = victim.getAttributes().getLastMoveUsed();
 	return last != null && last.getPP() > 0 && victim.hasMove(b, last.getAttack().namesies());
 	###
-	ApplyEffects: 
+	UniqueEffects: 
 	Move last = victim.getAttributes().getLastMoveUsed();
 	Messages.add(new MessageUpdate(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!"));
 	###
@@ -3430,7 +3429,7 @@ Brick Break:
 	Pow: 75
 	Acc: 100
 	Cat: Physical
-	ApplyEffects: 
+	UniqueEffects: 
 	BarrierEffect.breakBarriers(b, user);
 	###
 *
@@ -3441,7 +3440,7 @@ Psychic Fangs:
 	Cat: Physical
 	Acc: 100
 	Pow: 85
-	ApplyEffects: 
+	UniqueEffects: 
 	BarrierEffect.breakBarriers(b, user);
 	###
 *
@@ -3649,7 +3648,7 @@ Refresh:
 	SelfTarget: True
 	MoveType: Healing
 	Applies: user.hasStatus()
-	ApplyEffects: 
+	UniqueEffects: 
 	Status.removeStatus(b, user, CastSource.ATTACK);
 	###
 *
@@ -3825,7 +3824,7 @@ Speed Swap:
 	Type: Psychic
 	Cat: Status
 	MoveType: No_Magic_Coat
-	ApplyEffects:
+	UniqueEffects:
 	// NOTE: Looks like this is supposed to actually swap the stats and not just the stages but I don't really care it should do the same thing as power and guard swap because that makes more sense sue me
 	user.getAttributes().swapStages(Stat.SPEED, victim);
 	Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
@@ -3971,7 +3970,7 @@ Splash:
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
-	ApplyEffects:
+	UniqueEffects:
 	Messages.add(new MessageUpdate("But nothing happened..."));
 	###
 	MoveType: Airborne
@@ -4259,7 +4258,7 @@ Psycho Shift:
 	Cat: Status
 	Acc: 100
 	Applies: user.hasStatus() && Status.applies(user.getStatus().getType(), b, user, victim)
-	ApplyEffects: 
+	UniqueEffects: 
 		// TODO: Test
 		Status.giveStatus(b, user, victim, user.getStatus().getType(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
 		user.removeStatus();
@@ -4361,7 +4360,7 @@ Pain Split:
 	PP: 20
 	Type: Normal
 	Cat: Status
-	ApplyEffects: 
+	UniqueEffects: 
 	int share = (user.getHP() + victim.getHP())/2;
 	user.setHP(share);
 	victim.setHP(share);
@@ -4538,7 +4537,7 @@ Sketch:
 		this.copy = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
 		###
 	Applies: copy != null && copy.getAttack().namesies() != AttackNamesies.STRUGGLE && !user.hasEffect(EffectNamesies.TRANSFORMED)
-	ApplyEffects: 
+	UniqueEffects: 
 		List<Move> moves = user.getMoves(b);
 		for (int i = 0; i < moves.size(); i++) {
 			if (moves.get(i).getAttack().namesies() == super.namesies) {
@@ -4644,7 +4643,7 @@ Thief:
 	Cat: Physical
 	Acc: 100
 	Int: ItemSwapperEffect
-	ApplyEffects:
+	UniqueEffects:
 		if (user.canStealItem(b, victim)) {
 			user.swapItems(b, victim, this);
 		}
@@ -4980,7 +4979,7 @@ Heart Swap:
 	Type: Psychic
 	Cat: Status
 	MoveType: Substitute_Piercing, No_Magic_Coat
-	ApplyEffects: 
+	UniqueEffects: 
 	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
 		int temp = user.getAttributes().getStage(i);
 		user.getAttributes().setStage(i, victim.getAttributes().getStage(i));
@@ -5034,7 +5033,7 @@ Incinerate:
 	Cat: Special
 	Acc: 100
 	Pow: 60
-	ApplyEffects: 
+	UniqueEffects: 
 	// TODO: Sticky Hold
 	Item heldItem = victim.getHeldItem(b);
 	if (heldItem instanceof Berry || heldItem instanceof GemItem) {
@@ -5475,15 +5474,11 @@ Teleport:
 	Cat: Status
 	MoveType: Non_Snatchable
 	SelfTarget: True
-	ApplyEffects: 
-	if (!b.isWildBattle()) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	Messages.add(new MessageUpdate(user.getName() + " teleported out of battle!"));
-	Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-	###
+	Applies: b.isWildBattle()
+	UniqueEffects:
+		Messages.add(new MessageUpdate(user.getName() + " teleported out of battle!"));
+		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+		###
 *
 Role Play:
 	Desc: The user mimics the target completely, copying the target's natural Ability.
@@ -5515,7 +5510,7 @@ Knock Off:
 	GetPow: 
 		return (int)(super.power*(o.isHoldingItem(b) ? 1.5 : 1));
 		###
-	ApplyEffects: 
+	UniqueEffects: 
 		if (user.canRemoveItem(b, victim)) {
 			Messages.add(new MessageUpdate(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!"));
 			if (b.isWildBattle()) {
@@ -5545,7 +5540,7 @@ Bestow:
 	MoveType: Metronomeless, No_Magic_Coat
 	Int: ItemSwapperEffect
 	Applies: user.canGiftItem(b, victim)
-	ApplyEffects:
+	UniqueEffects:
 		user.swapItems(b, victim, this);
 		###
 	SwitchItemMessage: user.getName() + " gave " + victim.getName() + " its " + userItem.getName() + "!"
@@ -5558,7 +5553,7 @@ Switcheroo:
 	Acc: 100
 	Int: ItemSwapperEffect
 	Applies: user.canSwapItems(b, victim)
-	ApplyEffects: 
+	UniqueEffects: 
 		user.swapItems(b, victim, this);
 		###
 	SwitchItemMessage: user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!"
@@ -5572,7 +5567,7 @@ Trick:
 	Cat: Status
 	Int: ItemSwapperEffect
 	Applies: user.canSwapItems(b, victim)
-	ApplyEffects: 
+	UniqueEffects: 
 		user.swapItems(b, victim, this);
 		###
 	SwitchItemMessage: user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!"
@@ -5615,7 +5610,7 @@ Recycle:
 	Cat: Status
 	SelfTarget: True
 	Applies: user.hasEffect(EffectNamesies.CONSUMED_ITEM) && !user.isHoldingItem(b)
-	ApplyEffects: 
+	UniqueEffects: 
 		// TODO: Test
 		Item restored = ((ItemHolder)victim.getEffect(EffectNamesies.CONSUMED_ITEM)).getItem();
 		victim.giveItem((HoldItem)restored);
@@ -5653,7 +5648,7 @@ Baton Pass:
 		Team team = b.getTrainer(user);
 		return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon();
 		###
-	ApplyEffects: 
+	UniqueEffects: 
 		// TODO: Hardcore test this shit not in the mood right now but this is one of the most complicated moves so lots of tests tests tests
 		user.switcheroo(b, user, CastSource.ATTACK, true);
 				
@@ -5783,7 +5778,7 @@ Skill Swap:
 	}
 	###
 	Applies: canSkillSwap(user) && canSkillSwap(victim)
-	ApplyEffects:
+	UniqueEffects:
 		// TODO: Set CastSource shit instead
 		ability = user.getAbility();
 		EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
@@ -6043,7 +6038,7 @@ Topsy-Turvy:
 	Cat: Status
 	PP: 20
 	Desc: All stat changes affecting the target turn topsy-turvy and become the opposite of what they were.
-	ApplyEffects:
+	UniqueEffects:
 	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
 		victim.getAttributes().setStage(i, -victim.getStage(i));
 	}
@@ -6506,16 +6501,18 @@ Purify:
 	Type: Poison
 	Cat: Status
 	PP: 20
-	MoveType: Healing
-	Applies: user.hasStatus()
-	ApplyEffects:
-	Status.removeStatus(b, user, CastSource.ATTACK);
-	if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-		Messages.add(new MessageUpdate(user.getName() + "'s health was restored!"));
-		user.healHealthFraction(.5);
-		Messages.add(new MessageUpdate().updatePokemon(b, user));
-	}
-	###
+	Int: SelfHealingMove
+	RawSelfHealing:
+		return .5;
+		###
+	ExtraApplies: user.hasStatus()
+	UniqueEffects:
+		// TODO: Test
+		Status.removeStatus(b, user, CastSource.ATTACK);
+		if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+			this.heal(b, user);
+		}
+		###
 *
 Revelation Dance:
 	Desc: The user attacks the target by dancing very hard. The user's type determines the type of this move.
