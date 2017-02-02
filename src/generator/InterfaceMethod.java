@@ -299,7 +299,11 @@ class InterfaceMethod {
         }
 
         if (!StringUtils.isNullOrEmpty(this.defaultMethod)) {
-            interfaceMethod.append(new MethodInfo(this.getHeader(), this.defaultMethod, AccessModifier.DEFAULT).writeFunction());
+            if (this.defaultMethod.equals("Empty")) {
+                StringUtils.appendLine(interfaceMethod, String.format("\t\tdefault %s {}", this.getHeader()));
+            } else {
+                interfaceMethod.append(new MethodInfo(this.getHeader(), this.defaultMethod, AccessModifier.DEFAULT).writeFunction());
+            }
         } else {
             StringUtils.appendLine(interfaceMethod, String.format("\t\t%s;", this.getHeader()));
         }

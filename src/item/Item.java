@@ -864,7 +864,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class IronBall extends Item implements HoldItem, GroundedEffect, SimpleStatModifyingEffect, BeforeTurnEffect {
+	static class IronBall extends Item implements HoldItem, GroundedEffect, SimpleStatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		IronBall() {
@@ -900,16 +900,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			}
 			
 			LevitationEffect.falllllllll(b, p);
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (p.getAttack().isMoveType(MoveType.AIRBORNE)) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return false;
-			}
-			
-			return true;
 		}
 	}
 

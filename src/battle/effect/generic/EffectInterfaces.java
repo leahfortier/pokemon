@@ -4,6 +4,7 @@ import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.attack.MoveType;
 import battle.effect.status.StatusCondition;
 import item.Item;
 import main.Global;
@@ -350,7 +351,11 @@ public final class EffectInterfaces {
 		}
 	}
 
-	public interface GroundedEffect {
+	public interface GroundedEffect extends SelfAttackBlocker {
+
+		default boolean block(ActivePokemon user) {
+			return user.getAttack().isMoveType(MoveType.AIRBORNE);
+		}
 
 		static boolean containsGroundedEffect(Battle b, ActivePokemon p) {
 			List<Object> invokees = b.getEffectsList(p);
@@ -1243,22 +1248,26 @@ public final class EffectInterfaces {
 		}
 	}
 
-	public interface TypeBlocker {
-		boolean block(Type attackType, ActivePokemon victim);
-		void alternateEffect(Battle b, ActivePokemon victim);
+	public interface AttackBlocker {
+		boolean block(ActivePokemon user, ActivePokemon victim);
+		default void alternateEffect(Battle b, ActivePokemon victim) {}
 
-		static TypeBlocker block(Battle b, ActivePokemon attacking, Type attackType, ActivePokemon victim) {
+		default String getBlockMessage(Battle b, ActivePokemon victim) {
+			return Effect.DEFAULT_FAIL_MESSAGE;
+		}
+
+		static AttackBlocker block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
-				if (invokee instanceof TypeBlocker && !Effect.isInactiveEffect(invokee, b)) {
+				if (invokee instanceof AttackBlocker && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && attacking.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && user.breaksTheMold()) {
 						continue;
 					}
 					
-					TypeBlocker effect = (TypeBlocker)invokee;
-					if (effect.block(attackType, victim)) {
+					AttackBlocker effect = (AttackBlocker)invokee;
+					if (effect.block(user, victim)) {
 						return effect;
 					}
 				}
@@ -1268,26 +1277,21 @@ public final class EffectInterfaces {
 		}
 	}
 
-	public interface AttackBlocker {
-		boolean block(AttackNamesies attackName, ActivePokemon victim);
-		void alternateEffect(Battle b, ActivePokemon victim);
+	public interface SelfAttackBlocker {
+		boolean block(ActivePokemon user);
+		default void alternateEffect(Battle b, ActivePokemon user) {}
 
-		default String getBlockMessage(Battle b, ActivePokemon victim) {
+		default String getBlockMessage(Battle b, ActivePokemon user) {
 			return Effect.DEFAULT_FAIL_MESSAGE;
 		}
 
-		static AttackBlocker block(Battle b, ActivePokemon attacking, AttackNamesies attackName, ActivePokemon victim) {
-			List<Object> invokees = b.getEffectsList(victim);
+		static SelfAttackBlocker block(Battle b, ActivePokemon user) {
+			List<Object> invokees = b.getEffectsList(user);
 			for (Object invokee : invokees) {
-				if (invokee instanceof AttackBlocker && !Effect.isInactiveEffect(invokee, b)) {
+				if (invokee instanceof SelfAttackBlocker && !Effect.isInactiveEffect(invokee, b)) {
 					
-					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && attacking.breaksTheMold()) {
-						continue;
-					}
-					
-					AttackBlocker effect = (AttackBlocker)invokee;
-					if (effect.block(attackName, victim)) {
+					SelfAttackBlocker effect = (SelfAttackBlocker)invokee;
+					if (effect.block(user)) {
 						return effect;
 					}
 				}

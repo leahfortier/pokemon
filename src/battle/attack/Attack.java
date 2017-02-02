@@ -30,11 +30,11 @@ import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
+import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
-import battle.effect.generic.EffectInterfaces.TypeBlocker;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.holder.ItemHolder;
@@ -341,14 +341,16 @@ public abstract class Attack implements Serializable {
 			return false;
 		}
 
-		TypeBlocker blocker = TypeBlocker.block(b, me, me.getAttackType(), o);
-		if (blocker != null) {
-			blocker.alternateEffect(b, o);
+		SelfAttackBlocker selfAttackBlocker = SelfAttackBlocker.block(b, me);
+		if (selfAttackBlocker != null) {
+			Messages.add(new MessageUpdate(selfAttackBlocker.getBlockMessage(b, me)));
+			selfAttackBlocker.alternateEffect(b, me);
 			return false;
 		}
 
-		AttackBlocker attackBlocker = AttackBlocker.block(b, me, me.getAttack().namesies(), o);
+		AttackBlocker attackBlocker = AttackBlocker.block(b, me, o);
 		if (attackBlocker != null) {
+			Messages.add(new MessageUpdate(attackBlocker.getBlockMessage(b, o)));
 			attackBlocker.alternateEffect(b, o);
 			return false;
 		}

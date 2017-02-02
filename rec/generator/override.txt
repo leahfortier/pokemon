@@ -1075,16 +1075,6 @@ GroundedEffect:
 		
 		LevitationEffect.falllllllll(b, p);
 		###
-		AddInterface: BeforeTurnEffect
-		AddMapField: CanAttack:
-		if (p.getAttack().isMoveType(MoveType.AIRBORNE)) {
-			b.printAttacking(p);
-			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			return false;
-		}
-		
-		return true;
-		###
 	*
 ***
 TerrainEffect:
@@ -1120,43 +1110,42 @@ PhysicalContactEffect:
 		Header: void contact(Battle b, ActivePokemon user, ActivePokemon victim)
 	*
 ***
-TypeBlocker:
+AttackBlocker:
 	Block:
-		Header: boolean block(Type attackType, ActivePokemon victim)
+		Header: boolean block(ActivePokemon user, ActivePokemon victim)
 	*
 	AlternateEffect:
 		Header: void alternateEffect(Battle b, ActivePokemon victim)
+		Optional: True
 	*
-***
-AttackBlocker:
-	AttackBlock:
-		Header: boolean block(AttackNamesies attackName, ActivePokemon victim)
-	*
-	AttackAlternateEffect:
-		Header: void alternateEffect(Battle b, ActivePokemon victim)
+	BlockMessage:
+		Header: String getBlockMessage(Battle b, ActivePokemon victim)
+		Body:
+			return {0};
+			###
+		Optional: True
 	*
 ***
 Override:
 	BlockType:
-		AddInterface: TypeBlocker
+		AddInterface: AttackBlocker
 		AddMapField: Block:
-		return attackType == Type.{00};
-		###
+			return user.getAttackType() == Type.{00};
+			###
+		AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " type moves!"
 		AddMapField: AlternateEffect:
-		Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " type moves!"));
-		victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
-		###
+			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+			###
 	*
 ***
 Override:
 	AbsorbType:
-		AddInterface: TypeBlocker
+		AddInterface: AttackBlocker
 		AddMapField: Block:
-		return attackType == Type.{00};
-		###
-		AddMapField: AlternateEffect:
-		Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " moves!"));
-		
+			return user.getAttackType() == Type.{00};
+			###
+		AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " moves!"
+		AddMapField: AlternateEffect: 
 		// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
 		if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 			return;

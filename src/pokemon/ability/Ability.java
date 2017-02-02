@@ -60,7 +60,6 @@ import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
-import battle.effect.generic.EffectInterfaces.TypeBlocker;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
@@ -457,7 +456,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Lightningrod extends Ability implements TypeBlocker {
+	static class Lightningrod extends Ability implements AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		Lightningrod() {
@@ -468,13 +467,16 @@ public abstract class Ability implements Serializable {
 			return Stat.SP_ATTACK;
 		}
 
-		public boolean block(Type attackType, ActivePokemon victim) {
-			return attackType == Type.ELECTRIC;
+		public boolean block(ActivePokemon user, ActivePokemon victim) {
+			return user.getAttackType() == Type.ELECTRIC;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " type moves!"));
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " type moves!";
 		}
 	}
 
@@ -589,7 +591,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class FlashFire extends Ability implements TypeBlocker, PowerChangeEffect {
+	static class FlashFire extends Ability implements AttackBlocker, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 		private boolean activated;
 
@@ -602,13 +604,16 @@ public abstract class Ability implements Serializable {
 			return activated;
 		}
 
-		public boolean block(Type attackType, ActivePokemon victim) {
-			return attackType == Type.FIRE;
+		public boolean block(ActivePokemon user, ActivePokemon victim) {
+			return user.getAttackType() == Type.FIRE;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!"));
 			activated = true;
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!";
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -701,7 +706,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class DrySkin extends Ability implements EndTurnEffect, OpponentPowerChangeEffect, TypeBlocker {
+	static class DrySkin extends Ability implements EndTurnEffect, OpponentPowerChangeEffect, AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		DrySkin() {
@@ -723,13 +728,11 @@ public abstract class Ability implements Serializable {
 			return user.getAttackType() == Type.FIRE ? 1.25 : 1;
 		}
 
-		public boolean block(Type attackType, ActivePokemon victim) {
-			return attackType == Type.WATER;
+		public boolean block(ActivePokemon user, ActivePokemon victim) {
+			return user.getAttackType() == Type.WATER;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!"));
-			
 			// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
 			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 				return;
@@ -737,6 +740,10 @@ public abstract class Ability implements Serializable {
 			
 			victim.healHealthFraction(1/4.0);
 			Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored instead!").updatePokemon(b, victim));
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!";
 		}
 	}
 
@@ -974,12 +981,12 @@ public abstract class Ability implements Serializable {
 			return bracer.getName() + "'s " + this.getName() + " endured the hit!";
 		}
 
-		public boolean block(AttackNamesies attackName, ActivePokemon victim) {
-			return attackName.getAttack().isMoveType(MoveType.ONE_HIT_KO);
+		public boolean block(ActivePokemon user, ActivePokemon victim) {
+			return user.getAttack().isMoveType(MoveType.ONE_HIT_KO);
 		}
 
-		public void alternateEffect(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " prevents OHKO moves!"));
+		public String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents OHKO moves!";
 		}
 	}
 
@@ -990,12 +997,12 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.OBLIVIOUS, "Prevents the Pok\u00e9mon from becoming infatuated.");
 		}
 
-		public boolean block(AttackNamesies attackName, ActivePokemon victim) {
-			return attackName == AttackNamesies.CAPTIVATE;
+		public boolean block(ActivePokemon user, ActivePokemon victim) {
+			return user.getAttack().namesies() == AttackNamesies.CAPTIVATE;
 		}
 
-		public void alternateEffect(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"));
+		public String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!";
 		}
 	}
 
@@ -1433,20 +1440,18 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class WaterAbsorb extends Ability implements TypeBlocker {
+	static class WaterAbsorb extends Ability implements AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		WaterAbsorb() {
 			super(AbilityNamesies.WATER_ABSORB, "Restores HP if hit by a Water-type move.");
 		}
 
-		public boolean block(Type attackType, ActivePokemon victim) {
-			return attackType == Type.WATER;
+		public boolean block(ActivePokemon user, ActivePokemon victim) {
+			return user.getAttackType() == Type.WATER;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!"));
-			
 			// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
 			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 				return;
@@ -1455,22 +1460,24 @@ public abstract class Ability implements Serializable {
 			victim.healHealthFraction(1/4.0);
 			Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored instead!").updatePokemon(b, victim));
 		}
+
+		public String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!";
+		}
 	}
 
-	static class VoltAbsorb extends Ability implements TypeBlocker {
+	static class VoltAbsorb extends Ability implements AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		VoltAbsorb() {
 			super(AbilityNamesies.VOLT_ABSORB, "Restores HP if hit by an Electric-type move.");
 		}
 
-		public boolean block(Type attackType, ActivePokemon victim) {
-			return attackType == Type.ELECTRIC;
+		public boolean block(ActivePokemon user, ActivePokemon victim) {
+			return user.getAttackType() == Type.ELECTRIC;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " moves!"));
-			
 			// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
 			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 				return;
@@ -1478,6 +1485,10 @@ public abstract class Ability implements Serializable {
 			
 			victim.healHealthFraction(1/4.0);
 			Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored instead!").updatePokemon(b, victim));
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " moves!";
 		}
 	}
 
@@ -1802,12 +1813,13 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.SUCTION_CUPS, "Negates all moves that force switching out.");
 		}
 
-		public boolean block(AttackNamesies attackName, ActivePokemon victim) {
-			return attackName.getAttack() instanceof SwapOpponentEffect && attackName.getAttack().isStatusMove();
+		public boolean block(ActivePokemon user, ActivePokemon victim) {
+			Attack attack = user.getAttack();
+			return attack instanceof SwapOpponentEffect && attack.isStatusMove();
 		}
 
-		public void alternateEffect(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " prevents it from switching!"));
+		public String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents it from switching!";
 		}
 	}
 
@@ -2041,7 +2053,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class StormDrain extends Ability implements TypeBlocker {
+	static class StormDrain extends Ability implements AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		StormDrain() {
@@ -2052,13 +2064,16 @@ public abstract class Ability implements Serializable {
 			return Stat.SP_ATTACK;
 		}
 
-		public boolean block(Type attackType, ActivePokemon victim) {
-			return attackType == Type.WATER;
+		public boolean block(ActivePokemon user, ActivePokemon victim) {
+			return user.getAttackType() == Type.WATER;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " type moves!"));
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " type moves!";
 		}
 	}
 
@@ -2243,7 +2258,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class MotorDrive extends Ability implements TypeBlocker {
+	static class MotorDrive extends Ability implements AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		MotorDrive() {
@@ -2254,13 +2269,16 @@ public abstract class Ability implements Serializable {
 			return Stat.SPEED;
 		}
 
-		public boolean block(Type attackType, ActivePokemon victim) {
-			return attackType == Type.ELECTRIC;
+		public boolean block(ActivePokemon user, ActivePokemon victim) {
+			return user.getAttackType() == Type.ELECTRIC;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " type moves!"));
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " type moves!";
 		}
 	}
 
@@ -2616,7 +2634,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class SapSipper extends Ability implements TypeBlocker {
+	static class SapSipper extends Ability implements AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		SapSipper() {
@@ -2627,13 +2645,16 @@ public abstract class Ability implements Serializable {
 			return Stat.ATTACK;
 		}
 
-		public boolean block(Type attackType, ActivePokemon victim) {
-			return attackType == Type.GRASS;
+		public boolean block(ActivePokemon user, ActivePokemon victim) {
+			return user.getAttackType() == Type.GRASS;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.GRASS.getName() + " type moves!"));
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.GRASS.getName() + " type moves!";
 		}
 	}
 

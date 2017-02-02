@@ -39,7 +39,7 @@ public abstract class BattleEffect extends Effect {
 	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	static class Gravity extends BattleEffect implements GroundedEffect, StageChangingEffect, BeforeTurnEffect {
+	static class Gravity extends BattleEffect implements GroundedEffect, StageChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Gravity() {
@@ -75,16 +75,6 @@ public abstract class BattleEffect extends Effect {
 
 		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
 			return s == Stat.EVASION ? -2 : 0;
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (p.getAttack().isMoveType(MoveType.AIRBORNE)) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return false;
-			}
-			
-			return true;
 		}
 	}
 

@@ -169,6 +169,13 @@ GroundedEffect:
 		Invoke: Contains
 		EffectList: p
 	*
+	Extends: SelfAttackBlocker
+	Method:
+		Header: boolean block(ActivePokemon user)
+		Default: 
+			return user.getAttack().isMoveType(MoveType.AIRBORNE);
+			###
+	*
 ***
 AccuracyBypassEffect
 	Method:
@@ -566,33 +573,40 @@ TerrainCastEffect:
 		EffectList: p
 	*
 ***
-TypeBlocker:
-	Method:
-		Header: boolean block(Type attackType, ActivePokemon victim)
-		Invoke: CheckGet true
-		InvokeName: block
-		InvokeParameters: Battle b, ActivePokemon attacking
-		MoldBreaker: attacking
-		EffectList: victim
-	*
-	Method:
-		Header: void alternateEffect(Battle b, ActivePokemon victim)
-	*
-***
 AttackBlocker:
 	Method:
-		Header: boolean block(AttackNamesies attackName, ActivePokemon victim)
+		Header: boolean block(ActivePokemon user, ActivePokemon victim)
 		Invoke: CheckGet true
 		InvokeName: block
-		InvokeParameters: Battle b, ActivePokemon attacking
-		MoldBreaker: attacking
+		InvokeParameters: Battle b
+		MoldBreaker: user
 		EffectList: victim
 	*
 	Method:
 		Header: void alternateEffect(Battle b, ActivePokemon victim)
+		Default: Empty
 	*
 	Method:
 		Header: String getBlockMessage(Battle b, ActivePokemon victim)
+		Default:
+			return Effect.DEFAULT_FAIL_MESSAGE;
+			###
+	*
+***
+SelfAttackBlocker:
+	Method:
+		Header: boolean block(ActivePokemon user)
+		Invoke: CheckGet true
+		InvokeName: block
+		InvokeParameters: Battle b
+		EffectList: user
+	*
+	Method:
+		Header: void alternateEffect(Battle b, ActivePokemon user)
+		Default: Empty
+	*
+	Method:
+		Header: String getBlockMessage(Battle b, ActivePokemon user)
 		Default:
 			return Effect.DEFAULT_FAIL_MESSAGE;
 			###

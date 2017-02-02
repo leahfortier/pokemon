@@ -1826,7 +1826,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Ingrain extends PokemonEffect implements TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect, BeforeTurnEffect {
+	static class Ingrain extends PokemonEffect implements TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect {
 		private static final long serialVersionUID = 1L;
 
 		Ingrain() {
@@ -1875,19 +1875,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			LevitationEffect.falllllllll(b, p);
 		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (p.getAttack().isMoveType(MoveType.AIRBORNE)) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return false;
-			}
-			
-			return true;
-		}
 	}
 
-	static class Grounded extends PokemonEffect implements GroundedEffect, BeforeTurnEffect {
+	static class Grounded extends PokemonEffect implements GroundedEffect {
 		private static final long serialVersionUID = 1L;
 
 		Grounded() {
@@ -1910,16 +1900,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			}
 			
 			LevitationEffect.falllllllll(b, p);
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (p.getAttack().isMoveType(MoveType.AIRBORNE)) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return false;
-			}
-			
-			return true;
 		}
 	}
 

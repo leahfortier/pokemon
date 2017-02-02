@@ -168,25 +168,25 @@ Magic Guard:
 Flash Fire:
 	Desc: Powers up Fire-type moves if hit by a fire move.
 	Field: 
-	private boolean activated;
-	###
+		private boolean activated;
+		###
 	Activate: 
-	this.activated = false;
-	###
+		this.activated = false;
+		###
 	AbilityIsActive:
-	return activated;
-	###
-	Int: TypeBlocker, PowerChangeEffect
+		return activated;
+		###
+	Int: AttackBlocker, PowerChangeEffect
 	Block: 
-	return attackType == Type.FIRE;
-	###
+		return user.getAttackType() == Type.FIRE;
+		###
+	BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!"
 	AlternateEffect: 
-	Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!"));
-	activated = true;
-	###
+		activated = true;
+		###
 	GetMultiplier: 
-	return activated && user.getAttackType() == Type.FIRE ? 1.5 : 1;
-	###
+		return activated && user.getAttackType() == Type.FIRE ? 1.5 : 1;
+		###
 *
 Drought:
 	WeatherStarter: Sunny made the sunlight turn harsh
@@ -368,22 +368,18 @@ Sturdy:
 		return fullHealth;
 		###
 	BraceMessage: bracer.getName() + "'s " + this.getName() + " endured the hit!"
-	AttackBlock:
-		return attackName.getAttack().isMoveType(MoveType.ONE_HIT_KO);
+	Block:
+		return user.getAttack().isMoveType(MoveType.ONE_HIT_KO);
 		###
-	AttackAlternateEffect:
-		Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " prevents OHKO moves!"));
-		###
+	BlockMessage: victim.getName() + "'s " + this.getName() + " prevents OHKO moves!"
 *
 Oblivious:
 	Desc: Prevents the Pok\u00e9mon from becoming infatuated.
 	Int: AttackBlocker
-	AttackBlock:
-		return attackName == AttackNamesies.CAPTIVATE;
+	Block:
+		return user.getAttack().namesies() == AttackNamesies.CAPTIVATE;
 		###
-	AttackAlternateEffect:
-		Messages.add(new MessageUpdate(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"));
-		###
+	BlockMessage: victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"
 *
 Magnet Pull:
 	Int: OpponentTrappingEffect
@@ -747,12 +743,11 @@ Magma Armor:
 Suction Cups:
 	Desc: Negates all moves that force switching out.
 	Int: AttackBlocker
-	AttackBlock:
-		return attackName.getAttack() instanceof SwapOpponentEffect && attackName.getAttack().isStatusMove();
+	Block:
+		Attack attack = user.getAttack();
+		return attack instanceof SwapOpponentEffect && attack.isStatusMove();
 		###
-	AttackAlternateEffect:
-		Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " prevents it from switching!"));
-		###
+	BlockMessage: victim.getName() + "'s " + this.getName() + " prevents it from switching!"
 *
 Steadfast:
 	Desc: Raises Speed each time the Pok\u00e9mon flinches.
