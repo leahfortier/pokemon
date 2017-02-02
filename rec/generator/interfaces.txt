@@ -171,7 +171,7 @@ GroundedEffect:
 	*
 	Extends: SelfAttackBlocker
 	Method:
-		Header: boolean block(ActivePokemon user)
+		Header: boolean block(Battle b, ActivePokemon user)
 		Default: 
 			return user.getAttack().isMoveType(MoveType.AIRBORNE);
 			###
@@ -575,10 +575,9 @@ TerrainCastEffect:
 ***
 AttackBlocker:
 	Method:
-		Header: boolean block(ActivePokemon user, ActivePokemon victim)
+		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
 		Invoke: CheckGet true
-		InvokeName: block
-		InvokeParameters: Battle b
+		InvokeName: checkBlocked
 		MoldBreaker: user
 		EffectList: victim
 	*
@@ -595,10 +594,9 @@ AttackBlocker:
 ***
 SelfAttackBlocker:
 	Method:
-		Header: boolean block(ActivePokemon user)
+		Header: boolean block(Battle b, ActivePokemon user)
 		Invoke: CheckGet true
-		InvokeName: block
-		InvokeParameters: Battle b
+		InvokeName: checkBlocked
 		EffectList: user
 	*
 	Method:

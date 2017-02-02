@@ -1708,26 +1708,22 @@ Rare Candy:
 
 # Balls
 Cherish Ball:
-	Int: BallItem
 	Desc: A quite rare Pok\u00e9 Ball that has been specially crafted to commemorate an occasion of some sort.
 	Price: 200
-	CatchRate: 1
+	FixedCatchRate: 1
 *
 Dive Ball:
-	Int: BallItem
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.
 	Price: 1000
 	AfterCaught: // TODO: Not sure yet if this will cover fishing
 	CatchRateCondition: 3.5 b.getTerrainType() == TerrainType.WATER
 *
 Dusk Ball:
-	Int: BallItem
 	Desc: A somewhat different Pok\u00e9 Ball that makes it easier to catch wild Pok\u00e9mon at night or in dark places like caves.
 	Price: 1000
 	CatchRateCondition: 3.5 b.getTerrainType() == TerrainType.CAVE
 *
 Fast Ball:
-	Int: BallItem
 	Desc: A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon which are quick to run away.
 	Price: 200
 	AfterCaught:
@@ -1737,16 +1733,14 @@ Fast Ball:
 	CatchRateCondition: 4 o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100
 *
 Great Ball:
-	Int: BallItem
 	Desc: A good, high-performance Ball that provides a higher Pok\u00e9mon catch rate than a standard Pok\u00e9 Ball.
 	Price: 600
-	CatchRate: 1.5
+	FixedCatchRate: 1.5
 *
 Heal Ball:
-	Int: BallItem
 	Desc: A remedial Pok\u00e9 Ball that restores the caught Pok\u00e9mon's HP and eliminates any status problem.
 	Price: 300
-	CatchRate: 1
+	FixedCatchRate: 1
 	AfterCaught: p.fullyHeal();
 *
 Heavy Ball:
@@ -1781,33 +1775,28 @@ Level Ball:
 		###
 *
 Love Ball:
-	Int: BallItem
 	Desc: Pok\u00e9 Ball for catching Pok\u00e9mon that are the opposite gender of your Pok\u00e9mon.
 	Price: 200
 	CatchRateCondition: 8 Gender.oppositeGenders(me, o)
 *
 Lure Ball:
-	Int: BallItem
 	Desc: A Pok\u00e9 Ball for catching Pok\u00e9mon hooked by a Rod when fishing.
 	Price: 200
 	AfterCaught: // TODO: Fishing
 	CatchRateCondition: 3 false
 *
 Luxury Ball:
-	Int: BallItem
 	Desc: A comfortable Pok\u00e9 Ball that makes a caught wild Pok\u00e9mon quickly grow friendly.
 	Price: 1000
-	CatchRate: 1
+	FixedCatchRate: 1
 	AfterCaught: // TODO: Make this item do something more interesting
 *
 Master Ball:
-	Int: BallItem
 	Desc: The best Ball with the ultimate level of performance. It will catch any wild Pok\u00e9mon without fail.
 	Price: 0
-	CatchRate: 255
+	FixedCatchRate: 255
 *
 Moon Ball:
-	Int: BallItem
 	Desc: A Pok\u00e9 Ball for catching Pok\u00e9mon that evolve using the Moon Stone.
 	Price: 200
 	CatchRateCondition: 4 o.getPokemonInfo().getEvolution().getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null
@@ -1824,39 +1813,33 @@ Nest Ball:
 		###
 *
 Net Ball:
-	Int: BallItem
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Water- and Bug-type Pok\u00e9mon.
 	Price: 1000
 	CatchRateCondition: 3 o.isType(b, Type.WATER) || o.isType(b, Type.BUG)
 *
 Pok\u00e9 Ball:
-	Int: BallItem
 	Desc: A device for catching wild Pok\u00e9mon. It is thrown like a ball at the target. It is designed as a capsule system.
 	Price: 200
-	CatchRate: 1
+	FixedCatchRate: 1
 *
 Premier Ball:
-	Int: BallItem
 	Desc: A somewhat rare Pok\u00e9 Ball that has been specially made to commemorate an event of some sort.
 	Price: 200
-	CatchRate: 1
+	FixedCatchRate: 1
 *
 Quick Ball:
-	Int: BallItem
 	Desc: A somewhat different Pok\u00e9 Ball that provides a better catch rate if it is used at the start of a wild encounter.
 	Price: 1000
 	CatchRateCondition: 3 b.getTurn() == 1
 *
 Repeat Ball:
-	Int: BallItem
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon species that were previously caught.
 	Price: 1000
 	CatchRateCondition: 3 b.getPlayer().getPokedex().isCaught(o.getPokemonInfo().namesies())
 *
 Safari Ball:
-	Int: BallItem
 	Desc: A special Pok\u00e9 Ball that is used only in the Safari Zone. It is decorated in a camouflage pattern.
-	CatchRate: 1.5
+	FixedCatchRate: 1.5
 *
 Timer Ball:
 	Int: BallItem
@@ -1870,10 +1853,9 @@ Timer Ball:
 		###
 *
 Ultra Ball:
-	Int: BallItem
 	Desc: An ultra-performance Ball that provides a higher Pok\u00e9mon catch rate than a Great Ball.
 	Price: 1200
-	CatchRate: 2
+	FixedCatchRate: 2
 *
 Cheri Berry:
 	Int: StatusBerry
@@ -1949,12 +1931,12 @@ Leppa Berry:
 	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!"
 *
 Oran Berry:
-	Int: HealthTriggeredBerry, PokemonUseItem
+	Int: PokemonUseItem
 	BattleCat: HP_PP
 	Desc: If held by a Pok\u00e9mon, it heals the user by just 10 HP.
 	NGType: Poison
 	NGPow: 80
-	HealthTriggerRatio: 3
+	FixedBerryHealthTrigger: 3
 	HoldSuccessMessage: p.getName() + " was healed by its " + this.name + "!"
 	SuccessMessage: p.getName() + "'s health was restored!"
 	PokemonUse:
@@ -1987,11 +1969,11 @@ Lum Berry:
 *
 Sitrus Berry:
 	BattleCat: HP_PP
-	Int: PokemonUseItem, HealthTriggeredBerry
+	Int: PokemonUseItem
 	Desc: If held by a Pok\u00e9mon, it heals the user by a little.
 	NGType: Psychic
 	NGPow: 80
-	HealthTriggerRatio: 2
+	FixedBerryHealthTrigger: 2
 	PokemonUse:
 		return p.healHealthFraction(1/4.0) != 0;
 		###
@@ -2179,11 +2161,10 @@ Enigma Berry:
 		###
 *	
 Lansat Berry:
-	Int: HealthTriggeredBerry
 	Desc: If held by a Pok\u00e9mon, it raises its critical-hit ratio in a pinch.
 	NGType: Flying
 	NGPow: 100
-	HealthTriggerRatio: 4
+	FixedBerryHealthTrigger: 4
 	GainEffect:
 		EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
 		return true;
@@ -2192,11 +2173,10 @@ Lansat Berry:
 	SuccessMessage: p.getName() + " is getting pumped!"
 *
 Starf Berry:
-	Int: HealthTriggeredBerry
 	Desc: If held by a Pok\u00e9mon, it raises a random stat in a pinch.
 	NGType: Psychic
 	NGPow: 100
-	HealthTriggerRatio: 4
+	FixedBerryHealthTrigger: 4
 	GainEffect:
 		holdMessage = "";
 		useMessage = "";

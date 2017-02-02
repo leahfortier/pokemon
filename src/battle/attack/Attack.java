@@ -341,14 +341,14 @@ public abstract class Attack implements Serializable {
 			return false;
 		}
 
-		SelfAttackBlocker selfAttackBlocker = SelfAttackBlocker.block(b, me);
+		SelfAttackBlocker selfAttackBlocker = SelfAttackBlocker.checkBlocked(b, me);
 		if (selfAttackBlocker != null) {
 			Messages.add(new MessageUpdate(selfAttackBlocker.getBlockMessage(b, me)));
 			selfAttackBlocker.alternateEffect(b, me);
 			return false;
 		}
 
-		AttackBlocker attackBlocker = AttackBlocker.block(b, me, o);
+		AttackBlocker attackBlocker = AttackBlocker.checkBlocked(b, me, o);;
 		if (attackBlocker != null) {
 			Messages.add(new MessageUpdate(attackBlocker.getBlockMessage(b, o)));
 			attackBlocker.alternateEffect(b, o);

@@ -20,7 +20,6 @@ class MethodInfo {
 
     private String fullBody;
 
-    private boolean tryParse;
     private boolean required;
     private boolean defaultBody;
 
@@ -37,7 +36,6 @@ class MethodInfo {
 
         this.fullBody = "";
 
-        this.tryParse = false;
         this.required = true;
         this.defaultBody = false;
 
@@ -84,10 +82,6 @@ class MethodInfo {
             switch (key) {
                 case "Header":
                     this.header = value;
-                    break;
-                case "Try":
-                    tryParse = true;
-                    this.body = value;
                     break;
                 case "Default":
                     this.defaultBody = true;
@@ -142,14 +136,6 @@ class MethodInfo {
         }
         else {
             this.fullBody = this.body;
-        }
-
-        if (this.tryParse) {
-            try {
-                Double.parseDouble(fieldValue);
-            } catch (NumberFormatException exception) {
-                this.fullBody = fieldValue;
-            }
         }
 
         if (fieldValue.length() > 0 && this.defaultBody) {

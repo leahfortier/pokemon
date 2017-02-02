@@ -1112,18 +1112,20 @@ PhysicalContactEffect:
 ***
 AttackBlocker:
 	Block:
-		Header: boolean block(ActivePokemon user, ActivePokemon victim)
+		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
 	*
 	AlternateEffect:
 		Header: void alternateEffect(Battle b, ActivePokemon victim)
 		Optional: True
 	*
+***
+# Optional method for AttackBlocker
+Override:
 	BlockMessage:
 		Header: String getBlockMessage(Battle b, ActivePokemon victim)
 		Body:
 			return {0};
 			###
-		Optional: True
 	*
 ***
 Override:
@@ -1788,6 +1790,7 @@ Override:
 ***
 Override:
 	CatchRateCondition:
+		AddInterface: BallItem
 		AddMapField: CatchRate:
 		if ({2-}) {
 			return new double[] { {1}, 0 };
@@ -1797,12 +1800,17 @@ Override:
 		###
 	*
 ***
+Override:
+	FixedCatchRate:
+		AddInterface: BallItem
+		AddMapField: CatchRate:
+			return new double[] { {0}, 0 };
+			###
+	*
+***
 BallItem:
 	CatchRate:
 		Header: double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		Try:
-		return new double[] { {0}, 0 };
-		###
 		AddMapField: Cat: Ball
 		AddMapField: BattleCat: Ball
 	*
@@ -1857,11 +1865,10 @@ Override:
 ***
 Override:
 	HealthTriggeredStageIncreaseBerry:
-		AddInterface: HealthTriggeredBerry
 		AddMapField: GainEffect:
 		return user.getAttributes().modifyStage(user, user, 1, Stat.{00}, b, source);
 		###
-		AddMapField: HealthTriggerRatio: 4
+		AddMapField: FixedBerryHealthTrigger: 4
 		AddMapField: SuccessMessage: p.getName() + "'s " + Stat.{00}.getName() + " increased!"
 		AddMapField: HoldSuccessMessage: ""
 		AddMapField: NGPow: 100
@@ -2048,13 +2055,18 @@ GainableEffectBerry:
 		###
 	*
 ***
+Override:
+	FixedBerryHealthTrigger:
+		AddInterface: HealthTriggeredBerry
+		AddMapField: HealthTriggerRatio:
+			return 1/{0}.0;
+			###
+	*
+***
 HealthTriggeredBerry:
 	HealthTriggerRatio:
 		AddInterface: Hidden-GainableEffectBerry
 		Header: double healthTriggerRatio()
-		Try:
-		return 1/{0}.0;
-		###
 	*
 ***
 Berry:

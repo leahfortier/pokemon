@@ -2,7 +2,6 @@ package battle.effect.generic;
 
 import battle.Battle;
 import battle.attack.Attack;
-import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.status.StatusCondition;
@@ -353,7 +352,7 @@ public final class EffectInterfaces {
 
 	public interface GroundedEffect extends SelfAttackBlocker {
 
-		default boolean block(ActivePokemon user) {
+		default boolean block(Battle b, ActivePokemon user) {
 			return user.getAttack().isMoveType(MoveType.AIRBORNE);
 		}
 
@@ -1249,14 +1248,14 @@ public final class EffectInterfaces {
 	}
 
 	public interface AttackBlocker {
-		boolean block(ActivePokemon user, ActivePokemon victim);
+		boolean block(Battle b, ActivePokemon user, ActivePokemon victim);
 		default void alternateEffect(Battle b, ActivePokemon victim) {}
 
 		default String getBlockMessage(Battle b, ActivePokemon victim) {
 			return Effect.DEFAULT_FAIL_MESSAGE;
 		}
 
-		static AttackBlocker block(Battle b, ActivePokemon user, ActivePokemon victim) {
+		static AttackBlocker checkBlocked(Battle b, ActivePokemon user, ActivePokemon victim) {
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
 				if (invokee instanceof AttackBlocker && !Effect.isInactiveEffect(invokee, b)) {
@@ -1267,7 +1266,7 @@ public final class EffectInterfaces {
 					}
 					
 					AttackBlocker effect = (AttackBlocker)invokee;
-					if (effect.block(user, victim)) {
+					if (effect.block(b, user, victim)) {
 						return effect;
 					}
 				}
@@ -1278,20 +1277,20 @@ public final class EffectInterfaces {
 	}
 
 	public interface SelfAttackBlocker {
-		boolean block(ActivePokemon user);
+		boolean block(Battle b, ActivePokemon user);
 		default void alternateEffect(Battle b, ActivePokemon user) {}
 
 		default String getBlockMessage(Battle b, ActivePokemon user) {
 			return Effect.DEFAULT_FAIL_MESSAGE;
 		}
 
-		static SelfAttackBlocker block(Battle b, ActivePokemon user) {
+		static SelfAttackBlocker checkBlocked(Battle b, ActivePokemon user) {
 			List<Object> invokees = b.getEffectsList(user);
 			for (Object invokee : invokees) {
 				if (invokee instanceof SelfAttackBlocker && !Effect.isInactiveEffect(invokee, b)) {
 					
 					SelfAttackBlocker effect = (SelfAttackBlocker)invokee;
-					if (effect.block(user)) {
+					if (effect.block(b, user)) {
 						return effect;
 					}
 				}

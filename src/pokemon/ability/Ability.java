@@ -467,7 +467,7 @@ public abstract class Ability implements Serializable {
 			return Stat.SP_ATTACK;
 		}
 
-		public boolean block(ActivePokemon user, ActivePokemon victim) {
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.ELECTRIC;
 		}
 
@@ -604,16 +604,16 @@ public abstract class Ability implements Serializable {
 			return activated;
 		}
 
-		public boolean block(ActivePokemon user, ActivePokemon victim) {
+		public String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!";
+		}
+
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.FIRE;
 		}
 
 		public void alternateEffect(Battle b, ActivePokemon victim) {
 			activated = true;
-		}
-
-		public String getBlockMessage(Battle b, ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!";
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -728,7 +728,7 @@ public abstract class Ability implements Serializable {
 			return user.getAttackType() == Type.FIRE ? 1.25 : 1;
 		}
 
-		public boolean block(ActivePokemon user, ActivePokemon victim) {
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.WATER;
 		}
 
@@ -973,6 +973,10 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.STURDY, "The Pok\u00e9mon is protected against 1-hit KO attacks.");
 		}
 
+		public String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents OHKO moves!";
+		}
+
 		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth) {
 			return fullHealth;
 		}
@@ -981,12 +985,8 @@ public abstract class Ability implements Serializable {
 			return bracer.getName() + "'s " + this.getName() + " endured the hit!";
 		}
 
-		public boolean block(ActivePokemon user, ActivePokemon victim) {
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttack().isMoveType(MoveType.ONE_HIT_KO);
-		}
-
-		public String getBlockMessage(Battle b, ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents OHKO moves!";
 		}
 	}
 
@@ -997,12 +997,12 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.OBLIVIOUS, "Prevents the Pok\u00e9mon from becoming infatuated.");
 		}
 
-		public boolean block(ActivePokemon user, ActivePokemon victim) {
-			return user.getAttack().namesies() == AttackNamesies.CAPTIVATE;
-		}
-
 		public String getBlockMessage(Battle b, ActivePokemon victim) {
 			return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!";
+		}
+
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttack().namesies() == AttackNamesies.CAPTIVATE;
 		}
 	}
 
@@ -1447,7 +1447,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.WATER_ABSORB, "Restores HP if hit by a Water-type move.");
 		}
 
-		public boolean block(ActivePokemon user, ActivePokemon victim) {
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.WATER;
 		}
 
@@ -1473,7 +1473,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.VOLT_ABSORB, "Restores HP if hit by an Electric-type move.");
 		}
 
-		public boolean block(ActivePokemon user, ActivePokemon victim) {
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.ELECTRIC;
 		}
 
@@ -1813,13 +1813,13 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.SUCTION_CUPS, "Negates all moves that force switching out.");
 		}
 
-		public boolean block(ActivePokemon user, ActivePokemon victim) {
-			Attack attack = user.getAttack();
-			return attack instanceof SwapOpponentEffect && attack.isStatusMove();
-		}
-
 		public String getBlockMessage(Battle b, ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " prevents it from switching!";
+		}
+
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Attack attack = user.getAttack();
+			return attack instanceof SwapOpponentEffect && attack.isStatusMove();
 		}
 	}
 
@@ -2064,7 +2064,7 @@ public abstract class Ability implements Serializable {
 			return Stat.SP_ATTACK;
 		}
 
-		public boolean block(ActivePokemon user, ActivePokemon victim) {
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.WATER;
 		}
 
@@ -2269,7 +2269,7 @@ public abstract class Ability implements Serializable {
 			return Stat.SPEED;
 		}
 
-		public boolean block(ActivePokemon user, ActivePokemon victim) {
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.ELECTRIC;
 		}
 
@@ -2645,7 +2645,7 @@ public abstract class Ability implements Serializable {
 			return Stat.ATTACK;
 		}
 
-		public boolean block(ActivePokemon user, ActivePokemon victim) {
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.GRASS;
 		}
 

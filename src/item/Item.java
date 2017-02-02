@@ -12,10 +12,8 @@ import battle.effect.SimpleStatModifyingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.CastSource;
-import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
-import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
@@ -5767,7 +5765,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class OranBerry extends Item implements HealthTriggeredBerry, PokemonUseItem {
+	static class OranBerry extends Item implements PokemonUseItem, HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		OranBerry() {
@@ -5784,12 +5782,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return p.getName() + " was healed by its " + this.name + "!";
 		}
 
-		public double healthTriggerRatio() {
-			return 1/3.0;
-		}
-
 		public boolean use(ActivePokemon p) {
 			return p.heal(10) != 0;
+		}
+
+		public double healthTriggerRatio() {
+			return 1/3.0;
 		}
 
 		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
