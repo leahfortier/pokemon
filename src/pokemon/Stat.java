@@ -163,7 +163,7 @@ public enum Stat {
 		}
 		
 		Global.error("Incorrect stat index " + index);
-		return null;
+		return HP; // Because I'm sick of NPE warnings and the above line does a system exit
 	}
 
 	public static int getRandomIv() {

@@ -172,6 +172,10 @@ public class BattleAttributes implements Serializable {
 	public boolean hasEffect(EffectNamesies effect) {
 		return Effect.hasEffect(effects, effect);
 	}
+
+	public int getStage(Stat stat) {
+		return this.getStage(stat.index());
+	}
 	
 	public int getStage(int index) {
 		return stages[index];

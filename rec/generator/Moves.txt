@@ -1262,12 +1262,9 @@ Spit Up:
 	Cat: Special
 	Acc: 100
 	Applies: user.hasEffect(EffectNamesies.STOCKPILE)
-	Apply: 
-		super.apply(me, o, b);
-		
+	EndAttack: 
 		// Stockpile ends after Spit up is used
-		PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
-		stockpile.deactivate();
+		user.getEffect(EffectNamesies.STOCKPILE).deactivate();
 		###
 	GetPow: 
 		PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
@@ -1306,9 +1303,10 @@ Swallow:
 		}
 
 		victim.healHealthFraction(healFraction);
-		
+		###
+	EndAttack:
 		// Stockpile ends after Swallow is used
-		stockpile.deactivate();
+		user.getEffect(EffectNamesies.STOCKPILE).deactivate();
 		###
 	Type: Normal
 *
@@ -1709,19 +1707,19 @@ Lucky Chant:
 *
 Metronome:
 	MoveType: Sleep_Talk_Fail, Mimicless, Assistless, Metronomeless, No_Magic_Coat
-	Apply: 
-	AttackNamesies[] attackNames = AttackNamesies.values();
-
-	int index;
-	Attack metronomeMove;
-
-	do {
-		index = RandomUtils.getRandomIndex(attackNames);
-		metronomeMove = attackNames[index].getAttack();
-	} while (metronomeMove.isMoveType(MoveType.METRONOMELESS));
-	
-	me.callNewMove(b, o, new Move(metronomeMove));
-	###
+	Field:
+		private Attack metronomeMove;
+		###
+	BeginAttack:
+		AttackNamesies[] attackNames = AttackNamesies.values();
+		
+		int index;
+		do {
+			index = RandomUtils.getRandomIndex(attackNames);
+			metronomeMove = attackNames[index].getAttack();
+		} while (metronomeMove.isMoveType(MoveType.METRONOMELESS));
+		###
+	CallNewMove: new Move(metronomeMove)
 	Desc: The user waggles a finger and stimulates its brain into randomly using nearly any move.
 	PP: 10
 	Type: Normal
@@ -2082,17 +2080,16 @@ Magnitude:
 	Cat: Physical
 	Acc: 100
 	Field: 
-	private static final int[] CHANCES = {5, 10, 20, 30, 20, 10, 5};
-	private static final int[] POWERS = {10, 30, 50, 70, 90, 110, 150};
-	
-	private int index;
-	###
+		private static final int[] CHANCES = { 5, 10, 20, 30, 20, 10, 5 };
+		private static final int[] POWERS = { 10, 30, 50, 70, 90, 110, 150 };
+		
+		private int index;
+		###
 	PhysicalContact: False
 	HitDig: POWERS[index = GeneralUtils.getPercentageIndex(CHANCES)]
-	Apply: 
-	Messages.add(new MessageUpdate("Magnitude " + (index + 4) + "!"));
-	super.apply(me, o, b);
-	###
+	UniqueEffects: 
+		Messages.add(new MessageUpdate("Magnitude " + (index + 4) + "!"));
+		###
 *
 Bulldoze:
 	Desc: The user stomps down on the ground and attacks everything in the area. Hit Pok\u00e9mon's Speed stat is reduced.
@@ -2155,9 +2152,9 @@ Tri Attack:
 	Acc: 100
 	Cat: Special
 	EffChance: 20
-	StartTurn:
-	super.status = RandomUtils.getRandomValue(statusConditions);
-	###
+	BeginAttack:
+		super.status = RandomUtils.getRandomValue(statusConditions);
+		###
 	Type: Normal
 	Field: 
 	private static final StatusCondition[] statusConditions = {
@@ -2771,24 +2768,22 @@ Curse:
 	PP: 10
 	Cat: Status
 	Type: Ghost
-	StatChange: 3 Attack 1 Defense 1 Speed -1
-	Apply: 
-	// Different effects based on the type of the user
-	if (me.isType(b, Type.GHOST)) {
-		Effect curse = EffectNamesies.CURSE.getEffect();
+	BeginAttack:
+		super.statChanges = new int[Stat.NUM_BATTLE_STATS];
+		super.effects.clear();
 
-		// Manually apply the effect if it applies
-		if (curse.applies(b, me, o, CastSource.ATTACK)) {
-			curse.cast(b, me, o, CastSource.ATTACK, super.printCast);
+		// Different effects based on the type of the user
+		if (attacking.isType(b, Type.GHOST)) {
+			super.effects.add(EffectNamesies.CURSE);
+			super.selfTarget = false;
 		}
 		else {
-			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+			super.statChanges[Stat.ATTACK.index()] = 1;
+			super.statChanges[Stat.DEFENSE.index()] = 1;
+			super.statChanges[Stat.SPEED.index()] = -1;
+			super.selfTarget = true;
 		}
-	}
-	else {
-		super.apply(me, o, b);
-	}
-	###
+		###
 	MoveType: Protect_Piercing, Substitute_Piercing, No_Magic_Coat
 *
 Yawn:
@@ -2914,11 +2909,10 @@ Acupressure:
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
-	StartTurn:
-	// TODO: Test to make sure this works when both parties use during the same turn -- will it always be the same stat?
-	super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-	super.statChanges[RandomUtils.getRandomInt(super.statChanges.length)] = 2;
-	###
+	BeginAttack:
+		super.statChanges = new int[Stat.NUM_BATTLE_STATS];
+		super.statChanges[RandomUtils.getRandomInt(super.statChanges.length)] = 2;
+		###
 *
 Double Hit:
 	Desc: The user slams the target with a long tail, vines, or tentacle. The target is hit twice in a row.
@@ -3622,16 +3616,13 @@ Shell Trap:
 	Effect: ShellTrap
 	SelfTarget: True
 	StartTurn: 
-	super.applyEffects(b, me, me);
-	###
-	Apply:
-	if (me.hasEffect(EffectNamesies.SHELL_TRAP)) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	super.applyDamage(me, o, b);
-	###
+		super.applyEffects(b, me, me);
+		###
+	Applies: user.hasEffect(EffectNamesies.SHELL_TRAP)
+	ShouldApplyEffects:
+		// TODO: Test
+		return false;
+		###
 *
 Beak Blast:
 	Desc: The user first heats up its beak, and then it attacks the target. Making direct contact with the Pokémon while it's heating up its beak results in a burn.
@@ -3644,8 +3635,8 @@ Beak Blast:
 	Effect: BeakBlast
 	SelfTarget: True
 	StartTurn: 
-	super.applyEffects(b, me, me);
-	###
+		super.applyEffects(b, me, me);
+		###
 *
 Me First:
 	Desc: The user tries to cut ahead of the target to steal and use the target's intended move with greater power.
@@ -3657,10 +3648,12 @@ Me First:
 		// Fails if it is the second turn or the opponent is using a status move
 		return b.isFirstAttack() && victim.getMove() != null && !victim.getAttack().isStatusMove();
 		###
-	Apply:
-		me.addEffect((PokemonEffect)EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect());
-		me.callNewMove(b, o, new Move(o.getAttack()));
-		me.getAttributes().removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
+	BeginAttack:
+		attacking.addEffect((PokemonEffect)EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect());
+		###
+	CallNewMove: new Move(victim.getAttack())
+	EndAttack:
+		user.getAttributes().removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
 		###
 *
 Refresh:
@@ -4068,12 +4061,12 @@ Conversion:
 	Field:
 		private List<Type> types;
 		###
-	StartTurn:
+	BeginAttack:
 		// TODO: Test
 		this.types = new ArrayList<>();
-		for (Move move : me.getMoves(b)) {
+		for (Move move : attacking.getMoves(b)) {
 			Type type = move.getAttack().getActualType();
-			if (!me.isType(b, type)) {
+			if (!attacking.isType(b, type)) {
 				this.types.add(type);
 			}
 		}
@@ -4095,15 +4088,15 @@ Conversion 2:
 	Field:
 		private List<Type> types;
 		###
-	StartTurn:
+	BeginAttack:
 		// TODO: Test
 		this.types = new ArrayList<>();
-
-		Move lastMoveUsed = b.getOtherPokemon(me).getAttributes().getLastMoveUsed();
+		
+		Move lastMoveUsed = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
 		if (lastMoveUsed != null) {
-			Type attacking = lastMoveUsed.getType();
+			Type attackingType = lastMoveUsed.getType();
 			for (Type type : Type.values()) {
-				if (attacking.getAdvantage().isNotVeryEffective(type) && !me.isType(b, type)) {
+				if (attackingType.getAdvantage().isNotVeryEffective(type) && !attacking.isType(b, type)) {
 					this.types.add(type);
 				}
 			}
@@ -4187,14 +4180,12 @@ Sleep Talk:
 	Field:	
 		private List<Move> moves;
 		###
-	StartTurn:
+	BeginAttack:
 		// TODO: Test
-		this.moves = me.getMoves(b).stream().filter(move -> !move.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL)).collect(Collectors.toList());
+		this.moves = attacking.getMoves(b).stream().filter(move -> !move.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL)).collect(Collectors.toList());
 		###
 	Applies: user.hasStatus(StatusCondition.ASLEEP) && this.moves.size() > 0
-	Apply:
-		me.callNewMove(b, o, RandomUtils.getRandomValue(this.moves));
-		###
+	CallNewMove: RandomUtils.getRandomValue(this.moves)
 *
 Block:
 	Desc: The user blocks the target's way with arms spread wide to prevent escape.
@@ -4404,9 +4395,9 @@ Bide:
 	Effect: Bide
 	SelfTarget: True
 	Priority: 1
-	Apply:
-	super.applyEffects(b, me, me);
-	###
+	ShouldApplyDamage:
+		return false;
+		###
 	MoveType: Sleep_Talk_Fail
 *
 Autotomize:
@@ -4519,25 +4510,24 @@ Present:
 		return 120;
 	}
 	###
-	Apply: 
-	// TODO: This
-	if (!effective(b, me, o)) {
-		return;
-	}
-	
-	if (RandomUtils.chanceTest(80)) {
-		super.applyDamage(me, o, b);
-		return;
-	}
-	
-	if (o.fullHealth() || o.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return;
-	}
-	
-	o.healHealthFraction(1/4.0);
-	Messages.add(new MessageUpdate(o.getName() + "'s health was restored!").updatePokemon(b, o));
-	###
+	Field:
+		private boolean applyDamage;
+		###
+	BeginAttack:
+		this.applyDamage = RandomUtils.chanceTest(80);
+		###
+	ShouldApplyEffects:
+		return !this.applyDamage;
+		###
+	ShouldApplyDamage:
+		return this.applyDamage;
+		###
+	Applies: this.applyDamage || (!victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK))
+	UniqueEffects: 
+		// TODO: Test
+		victim.healHealthFraction(1/4.0);
+		Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		###
 *
 Steel Wing:
 	Desc: The target is hit with wings of steel. It may also raise the user's Defense stat.
@@ -4559,9 +4549,9 @@ Sketch:
 	Field:
 		private Move copy;
 		###
-	StartTurn:
+	BeginAttack:
 		// TODO: Test
-		this.copy = b.getOtherPokemon(me).getAttributes().getLastMoveUsed();
+		this.copy = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
 		###
 	Applies: copy != null && copy.getAttack().namesies() != AttackNamesies.STRUGGLE && !user.hasEffect(EffectNamesies.TRANSFORMED)
 	ApplyEffects: 
@@ -4721,11 +4711,11 @@ Assist:
 	Type: Normal
 	Cat: Status
 	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Metronomeless, Assistless
-	StartTurn:
+	BeginAttack:
 		// TODO: Test
 		this.attacks = new ArrayList<>();
-		for (ActivePokemon p : b.getTrainer(me.isPlayer()).getTeam()) {
-			if (p != me) {
+		for (ActivePokemon p : b.getTrainer(attacking).getTeam()) {
+			if (p != attacking) {
 				for (Move move : p.getMoves(b)) {
 					if (!move.getAttack().isMoveType(MoveType.ASSISTLESS)) {
 						attacks.add(move.getAttack());
@@ -4738,9 +4728,7 @@ Assist:
 	Field:
 		private List<Attack> attacks;
 		###
-	Apply: 	
-		me.callNewMove(b, o, new Move(RandomUtils.getRandomValue(attacks)));
-		###
+	CallNewMove: new Move(RandomUtils.getRandomValue(attacks))
 *
 Metal Burst:
 	Desc: The user retaliates with much greater power against the target that last inflicted damage on it.
@@ -5366,20 +5354,21 @@ Fling:
 	Acc: 100
 	Cat: Physical
 	GetPow:
-	if (me.isHoldingItem(b)) {
-		return ((HoldItem)me.getHeldItem(b)).flingDamage();
-	}
-	
-	return super.power;
-	###
-	Applies: user.isHoldingItem(b)
-	Apply: 
-		Messages.add(new MessageUpdate(me.getName() + " flung its " + me.getHeldItem(b).getName() + "!"));
-		super.apply(me, o, b);
-		me.consumeItem(b);
+		if (me.isHoldingItem(b)) {
+			return ((HoldItem)me.getHeldItem(b)).flingDamage();
+		}
+		
+		return super.power;
 		###
-	ApplyEffects:
+	Applies: user.isHoldingItem(b)
+	AfterApplyCheck:
+		Messages.add(new MessageUpdate(user.getName() + " flung its " + user.getHeldItem(b).getName() + "!"));
+		###
+	UniqueEffects:
 		((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
+		###
+	EndAttack: 
+		user.consumeItem(b);
 		###
 *
 Freeze Shock:
@@ -5665,10 +5654,9 @@ Parting Shot:
 	StatChange: 2 Attack -1 Sp_Attack -1
 	SelfSwitching: True
 	MoveType: Sound_Based
-	ApplyEffects:
-	Messages.add(new MessageUpdate(user.getName() + " called " + victim.getName() + " a chump!!"));
-	super.applyEffects(b, user, victim);
-	###
+	AfterApplyCheck:
+		Messages.add(new MessageUpdate(user.getName() + " called " + victim.getName() + " a chump!!"));
+		###
 *
 U-turn:
 	Desc: After making its attack, the user rushes back to switch places with a party Pok\u00e9mon in waiting.
@@ -5758,12 +5746,10 @@ Nature Power:
 	Cat: Status
 	Type: Normal
 	MoveType: Assistless, Metronomeless, No_Magic_Coat
-	Apply: 
-	me.callNewMove(b, o, new Move(b.getTerrainType().getAttack()));
-	###
+	CallNewMove: new Move(b.getTerrainType().getAttack())
 	GetAccuracy: 
-	return b.getTerrainType().getAttack().getAccuracy(b, me, o);
-	###
+		return b.getTerrainType().getAttack().getAccuracy(b, me, o);
+		###
 *
 Entrainment:
 	Desc: The user dances with an odd rhythm that compels the target to mimic it, making the target's Ability the same as the user's.
@@ -6584,13 +6570,12 @@ Core Enforcer:
 	Cat: Special
 	Pow: 100
 	Acc: 100
-	Apply: 
-	if (!b.isFirstAttack()) {
-		EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, me, me, CastSource.ATTACK, false);
-	}
-
-	super.apply(me, o, b);
-	###
+	BeginAttack: 
+		// TODO: Test
+		if (!b.isFirstAttack()) {
+			EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+		}
+		###
 *
 Trop Kick:
 	Desc: The user lands an intense kick of tropical origins on the target. This also lowers the target's Attack stat.
@@ -6674,17 +6659,15 @@ Spectral Thief:
 	Acc: 100
 	Cat: Physical
 	PP: 10
-	Apply:
-	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
-		int stage = o.getAttributes().getStage(i);
-		if (stage > 0) {
-			o.getAttributes().resetStage(i);
-			me.getAttributes().incrementStage(i, stage);
+	AfterApplyCheck:
+		for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
+			int stage = victim.getAttributes().getStage(i);
+			if (stage > 0) {
+				victim.getAttributes().resetStage(i);
+				user.getAttributes().incrementStage(i, stage);
+			}
 		}
-	}
-
-	super.apply(me, o, b);
-	###
+		###
 *
 Sunsteel Strike:
 	Desc: The user slams into the target with the force of a meteor. This move can be used on the target regardless of its Abilities.

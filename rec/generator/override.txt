@@ -1,4 +1,34 @@
 Override:
+	BeginAttack:
+		Header: void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending)
+	*
+***
+Override:
+	UniqueEffects:
+		Header: void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim)
+	*
+***
+Override:
+	EndAttack:
+		Header: void endAttack(Battle b, ActivePokemon user, ActivePokemon victim)
+	*
+***
+Override:
+	AfterApplyCheck:
+		Header: void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim)
+	*
+***
+Override:
+	ShouldApplyDamage:
+		Header: boolean shouldApplyDamage()
+	*
+***
+Override:
+	ShouldApplyEffects:
+		Header: boolean shouldApplyEffects()
+	*
+***
+Override:
 	FixedDamage:
 		AddMapField: ApplyDamage:
 		o.reduceHealth(b, {0});
@@ -50,7 +80,7 @@ Override:
 		AddMapField: EffChance: 20
 		AddMapField: Effect: Flinch
 		AddMapField: MoveType: Biting
-		AddMapField: StartTurn:
+		AddMapField: BeginAttack:
 		// TODO: Test
 		super.status = StatusCondition.NO_STATUS;
 		super.effects.clear();
@@ -443,15 +473,15 @@ ChangeAbilityMove:
 Override:
 	MirrorMove:
 		AddMapField: MoveType: Sleep_Talk_Fail, Encoreless, Metronomeless, Assistless, No_Magic_Coat, Mirrorless
-		AddMapField: FullApplies: 
-		Move mirror = victim.getAttributes().getLastMoveUsed();
-		return mirror != null && !mirror.getAttack().isMoveType(MoveType.MIRRORLESS);
-		###
-		AddMapField: Apply: 
-		// TODO: Test
-		Move mirror = o.getAttributes().getLastMoveUsed();
-		me.callNewMove(b, o, new Move(mirror.getAttack()));
-		###
+		AddMapField: Field:
+			private Move mirror;
+			###
+		AddMapField: BeginAttack:
+			// TODO: Test
+			this.mirror = defending.getAttributes().getLastMoveUsed();
+			###
+		AddMapField: Applies: mirror != null && !mirror.getAttack().isMoveType(MoveType.MIRRORLESS)
+		AddMapField: CallNewMove: new Move(mirror.getAttack())
 	*
 ***
 Override:
@@ -466,6 +496,13 @@ Override:
 		int damageTaken = me.getAttributes().getDamageTaken();
 		o.reduceHealth(b, damageTaken*2);
 		###
+	*
+***
+Override:
+	CallNewMove:
+		AddMapField: UniqueEffects:
+			user.callNewMove(b, victim, {0});
+			###
 	*
 ***
 SwapOpponentEffect:
@@ -484,12 +521,9 @@ SwapOpponentEffect:
 ***
 Override:
 	SelfSwitching:
-		AddMapField: Apply:
-		// First execute the move as normal
-		super.apply(me, o, b);
-		
-		me.switcheroo(b, me, CastSource.ATTACK, true);
-		###
+		AddMapField: UniqueEffects:
+			user.switcheroo(b, user, CastSource.ATTACK, true);
+			###
 	*
 ***
 EndTurnEffect:
@@ -1924,9 +1958,10 @@ Override:
 Override:
 	FutureAttackMove:
 		AddMapField: Effect: {0}
-		AddMapField: Apply:
-		super.applyEffects(b, me, o); // Don't apply damage just yet!!
-		###
+		AddMapField: ShouldApplyDamage:
+			// Don't apply damage just yet!!
+			return false;
+			###
 		AddMapField: PrintFail: true
 	*
 ***
@@ -2379,11 +2414,12 @@ AlwaysCritEffect:
 ***
 Override:
 	IgnoreAbilityMove:
-		AddMapField: Apply:
-		EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, me, me, CastSource.ATTACK, false);
-		super.apply(me, o, b);
-		me.getAttributes().removeEffect(EffectNamesies.BREAKS_THE_MOLD);
-		###
+		AddMapField: BeginAttack:
+			EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+			###
+		AddMapField: EndAttack:
+			user.getAttributes().removeEffect(EffectNamesies.BREAKS_THE_MOLD);
+			###
 	*
 ***
 StatusReceivedEffect:
