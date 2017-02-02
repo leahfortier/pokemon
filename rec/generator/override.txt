@@ -1110,6 +1110,19 @@ PhysicalContactEffect:
 		Header: void contact(Battle b, ActivePokemon user, ActivePokemon victim)
 	*
 ***
+SelfAttackBlocker:
+	SelfBlock:
+		Header: boolean block(Battle b, ActivePokemon user)
+	*
+	SelfAlternateEffect:
+		Header: void alternateEffect(Battle b, ActivePokemon user)
+		Optional: True
+	*
+	SelfBlockMessage:
+		Header: String getBlockMessage(Battle b, ActivePokemon victim)
+		Optional: True
+	*
+***
 AttackBlocker:
 	Block:
 		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)

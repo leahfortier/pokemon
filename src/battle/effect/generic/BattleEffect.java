@@ -1,9 +1,8 @@
 package battle.effect.generic;
 
 import battle.Battle;
-import battle.attack.MoveType;
 import battle.effect.TerrainEffect;
-import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
+import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
@@ -12,12 +11,12 @@ import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.status.StatusCondition;
-import type.Type;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
+import type.Type;
 
 public abstract class BattleEffect extends Effect {
 	private static final long serialVersionUID = 1L;
@@ -373,7 +372,7 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	static class PsychicTerrain extends BattleEffect implements BeforeTurnEffect, PowerChangeEffect, TerrainEffect {
+	static class PsychicTerrain extends BattleEffect implements AttackBlocker, PowerChangeEffect, TerrainEffect {
 		private static final long serialVersionUID = 1L;
 
 		PsychicTerrain() {
@@ -392,15 +391,9 @@ public abstract class BattleEffect extends Effect {
 			return "The psychic energy disappeared.";
 		}
 
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// TODO: Generalize this pattern
-			if (p.getAttack().getPriority(b, p) > 0 && !opp.isLevitating(b)) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(DEFAULT_FAIL_MESSAGE));
-				return false;
-			}
-			
-			return true;
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// Psychic terrain prevents increased priority moves from hitting
+			return user.getAttack().getPriority(b, user) > 0 && !victim.isLevitating(b);
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {

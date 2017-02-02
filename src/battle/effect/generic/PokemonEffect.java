@@ -38,6 +38,7 @@ import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
+import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
@@ -2529,7 +2530,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class HealBlock extends PokemonEffect implements BeforeTurnEffect {
+	static class HealBlock extends PokemonEffect implements SelfAttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		HealBlock() {
@@ -2556,14 +2557,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return super.getFailMessage(b, user, victim);
 		}
 
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (p.getAttack() instanceof SapHealthEffect) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return false;
-			}
-			
-			return true;
+		public boolean block(Battle b, ActivePokemon user) {
+			return user.getAttack() instanceof SapHealthEffect;
 		}
 	}
 

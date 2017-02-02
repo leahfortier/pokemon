@@ -1012,16 +1012,11 @@ HealBlock:
 	NumTurns: 5
 	CastMessage: user.getName() + " blocked " + victim.getName() + " from healing!"
 	SubsideMessage: "The effects of heal block wore off."
-	Int: BeforeTurnEffect
-	CanAttack:
-	if (p.getAttack() instanceof SapHealthEffect) {
-		b.printAttacking(p);
-		Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-		return false;
-	}
-	
-	return true;
-	###
+	Int: SelfAttackBlocker
+	SelfBlock:
+		// TODO: Test
+		return user.getAttack() instanceof SapHealthEffect;
+		###
 *
 Infatuated:
 	FailAbility: Oblivious, Aroma Veil
