@@ -285,7 +285,7 @@ Damp:
 			return attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION;
 		}
 		
-		private String blockityMessage(Battle b, ActivePokemon attacking, ActivePokemon abilify) {
+		private String blockityMessage(ActivePokemon attacking, ActivePokemon abilify) {
 			return abilify.getName() + "'s " + this.getName() + " prevents " + attacking.getAttack().getName() + " from being used!";
 		}
 		###
@@ -296,9 +296,9 @@ Damp:
 		return checkeroo(user);
 		###
 	SelfBlockMessage:
-		return blockityMessage(b, user, user);
+		return blockityMessage(user, user);
 		###
-	BlockMessage: blockityMessage(b, user, victim)
+	BlockMessage: blockityMessage(user, victim)
 *
 Cloud Nine:
 	Desc: Eliminates the effects of weather.

@@ -8,7 +8,6 @@ import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.DefiniteEscape;
 import battle.effect.ModifyStageValueEffect;
-import battle.effect.OpponentBeforeTurnAttackSelectionEffect;
 import battle.effect.SimpleStatModifyingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.SwitchOutEffect;
@@ -39,7 +38,7 @@ import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
-import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
+import battle.effect.generic.EffectInterfaces.OpponentAttackSelectionBlockerEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
@@ -798,7 +797,7 @@ public abstract class Ability implements Serializable {
 			return attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION;
 		}
 		
-		private String blockityMessage(Battle b, ActivePokemon attacking, ActivePokemon abilify) {
+		private String blockityMessage(ActivePokemon attacking, ActivePokemon abilify) {
 			return abilify.getName() + "'s " + this.getName() + " prevents " + attacking.getAttack().getName() + " from being used!";
 		}
 
@@ -807,7 +806,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return blockityMessage(b, user, victim);
+			return blockityMessage(user, victim);
 		}
 
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -819,7 +818,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public String getBlockMessage(Battle b, ActivePokemon user) {
-			return blockityMessage(b, user, user);
+			return blockityMessage(user, user);
 		}
 	}
 
@@ -2931,7 +2930,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.FAIRY_AURA, "Powers up each Pok\u00e9mon's Fairy-type moves.");
 		}
 
-		public Type getAuraType() {
+		private Type getAuraType() {
 			return Type.FAIRY;
 		}
 
@@ -2951,7 +2950,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.DARK_AURA, "Powers up each Pok\u00e9mon's Dark-type moves.");
 		}
 
-		public Type getAuraType() {
+		private Type getAuraType() {
 			return Type.DARK;
 		}
 
@@ -3699,12 +3698,8 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Dazzling extends Ability implements OpponentBeforeTurnAttackSelectionEffect {
+	static class Dazzling extends Ability implements OpponentAttackSelectionBlockerEffect {
 		private static final long serialVersionUID = 1L;
-		
-		public String getFailMessage(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return getUnusableMessage(b, p);
-		}
 
 		Dazzling() {
 			super(AbilityNamesies.DAZZLING, "Surprises the opposing Pokémon, making it unable to attack using priority moves.");
@@ -3719,12 +3714,8 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class QueenlyMajesty extends Ability implements OpponentBeforeTurnAttackSelectionEffect {
+	static class QueenlyMajesty extends Ability implements OpponentAttackSelectionBlockerEffect {
 		private static final long serialVersionUID = 1L;
-		
-		public String getFailMessage(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return getUnusableMessage(b, p);
-		}
 
 		QueenlyMajesty() {
 			super(AbilityNamesies.QUEENLY_MAJESTY, "Its majesty pressures the opposing Pokémon, making it unable to attack using priority moves.");

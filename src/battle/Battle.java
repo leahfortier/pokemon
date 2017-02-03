@@ -491,7 +491,11 @@ public class Battle {
 
 	public List<BattleEffect> getEffects() {
 		return effects;
-	}	
+	}
+
+	public List<TeamEffect> getEffects(ActivePokemon teamMember) {
+		return getEffects(teamMember.isPlayer());
+	}
 	
 	public List<TeamEffect> getEffects(boolean isPlayer) {
 		return isPlayer ? player.getEffects() : opponent.getEffects();

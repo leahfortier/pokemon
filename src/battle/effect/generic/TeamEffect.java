@@ -94,7 +94,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.isPlayer()).remove(this);
+			b.getEffects(victim).remove(this);
 		}
 	}
 
@@ -146,7 +146,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.isPlayer()).remove(this);
+			b.getEffects(victim).remove(this);
 		}
 	}
 
@@ -249,7 +249,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.isPlayer()).remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
@@ -257,7 +257,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.isPlayer()).remove(this);
+			b.getEffects(victim).remove(this);
 		}
 	}
 
@@ -290,7 +290,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.isPlayer()).remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
@@ -298,7 +298,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.isPlayer()).remove(this);
+			b.getEffects(victim).remove(this);
 		}
 	}
 
@@ -353,7 +353,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.isPlayer()).remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
@@ -361,7 +361,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.isPlayer()).remove(this);
+			b.getEffects(victim).remove(this);
 		}
 	}
 
@@ -407,7 +407,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.isPlayer()).remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
@@ -415,7 +415,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.isPlayer()).remove(this);
+			b.getEffects(victim).remove(this);
 		}
 	}
 

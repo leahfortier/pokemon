@@ -653,3 +653,21 @@ ProtectingEffect:
 			###
 	*
 ***
+AttackSelectionSelfBlockerEffect:
+	Extends: AttackSelectionEffect, SelfAttackBlocker
+	Method:
+		Header: boolean block(Battle b, ActivePokemon user)
+		Default:
+			return !this.usable(b, user, user.getMove());
+			###
+	*
+***
+OpponentAttackSelectionBlockerEffect:
+	Extends: OpponentAttackSelectionEffect, AttackBlocker
+	Method:
+		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
+		Default:
+			return !this.usable(b, user, user.getMove());
+			###
+	*
+***

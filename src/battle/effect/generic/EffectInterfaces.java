@@ -1329,4 +1329,18 @@ public final class EffectInterfaces {
 			return victim.getName() + " is protecting itself!";
 		}
 	}
+
+	public interface AttackSelectionSelfBlockerEffect extends AttackSelectionEffect, SelfAttackBlocker {
+
+		default boolean block(Battle b, ActivePokemon user) {
+			return !this.usable(b, user, user.getMove());
+		}
+	}
+
+	public interface OpponentAttackSelectionBlockerEffect extends OpponentAttackSelectionEffect, AttackBlocker {
+
+		default boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !this.usable(b, user, user.getMove());
+		}
+	}
 }

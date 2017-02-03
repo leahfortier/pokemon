@@ -33,7 +33,7 @@ public enum CastSource {
     public Object getSource(Battle b, ActivePokemon caster) {
         if (this.sourceGetter == null) {
             Global.error("Cannot get source for CastSource." + this.name() + ".");
-            return null;
+            return caster;
         }
 
         return this.sourceGetter.getSource(b, caster);

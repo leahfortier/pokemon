@@ -5,7 +5,6 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
-import battle.effect.BeforeTurnAttackSelectionEffect;
 import battle.effect.PassableEffect;
 import battle.effect.SapHealthEffect;
 import battle.effect.attack.ChangeAbilityMove;
@@ -15,6 +14,7 @@ import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
+import battle.effect.generic.EffectInterfaces.AttackSelectionSelfBlockerEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
@@ -130,7 +130,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.isPlayer()).remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -244,7 +244,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.isPlayer()).remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -297,7 +297,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.isPlayer()).remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -350,7 +350,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.isPlayer()).remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -403,7 +403,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.isPlayer()).remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -456,7 +456,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.isPlayer()).remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -509,7 +509,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.isPlayer()).remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -562,7 +562,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.isPlayer()).remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -615,7 +615,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
-			b.getEffects(releaser.isPlayer()).remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -976,7 +976,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.isPlayer()).remove(this);
+			b.getEffects(victim).remove(this);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -1016,7 +1016,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Encore extends PokemonEffect implements ForceMoveEffect, EndTurnEffect, BeforeTurnAttackSelectionEffect {
+	static class Encore extends PokemonEffect implements ForceMoveEffect, EndTurnEffect, AttackSelectionSelfBlockerEffect {
 		private static final long serialVersionUID = 1L;
 		private Move move;
 
@@ -1066,7 +1066,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Disable extends PokemonEffect implements BeforeTurnAttackSelectionEffect {
+	static class Disable extends PokemonEffect implements AttackSelectionSelfBlockerEffect, BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private Move disabled;
 		private int turns;
@@ -1108,17 +1108,18 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return super.getFailMessage(b, user, victim);
 		}
 
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+			// TODO: What is happening here?
+			turns--;
+			return true;
+		}
+
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			return disabled.getAttack().namesies() != m.getAttack().namesies();
 		}
 
 		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return disabled.getAttack().getName() + " is disabled!";
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			turns--;
-			return checkUsable(b, p, opp);
 		}
 	}
 
@@ -1410,7 +1411,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Imprison extends PokemonEffect implements BeforeTurnAttackSelectionEffect {
+	static class Imprison extends PokemonEffect implements AttackSelectionSelfBlockerEffect {
 		private static final long serialVersionUID = 1L;
 		private List<AttackNamesies> unableMoves;
 
@@ -1519,7 +1520,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Torment extends PokemonEffect implements BeforeTurnAttackSelectionEffect {
+	static class Torment extends PokemonEffect implements AttackSelectionSelfBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		Torment() {
@@ -1551,7 +1552,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class SoundBlock extends PokemonEffect implements BeforeTurnAttackSelectionEffect {
+	static class SoundBlock extends PokemonEffect implements AttackSelectionSelfBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		SoundBlock() {
@@ -1567,7 +1568,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Taunt extends PokemonEffect implements BeforeTurnAttackSelectionEffect {
+	static class Taunt extends PokemonEffect implements AttackSelectionSelfBlockerEffect {
 		private static final long serialVersionUID = 1L;
 
 		Taunt() {
@@ -2186,7 +2187,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
-			b.getEffects(victim.isPlayer()).remove(this);
+			b.getEffects(victim).remove(this);
 		}
 	}
 

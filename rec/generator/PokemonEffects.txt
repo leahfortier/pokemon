@@ -257,7 +257,7 @@ Encore:
 		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being encored!";
 	}
 	###
-	Int: ForceMoveEffect, EndTurnEffect, BeforeTurnAttackSelectionEffect
+	Int: ForceMoveEffect, EndTurnEffect, AttackSelectionSelfBlockerEffect
 	Field: 
 	private Move move;
 	###
@@ -282,40 +282,41 @@ Encore:
 *
 Disable:
 	FailAbility: Aroma Veil
-	Int: BeforeTurnAttackSelectionEffect
+	Int: AttackSelectionSelfBlockerEffect, BeforeTurnEffect
 	Field: 
-	private Move disabled;
-	private int turns;
-	###
+		private Move disabled;
+		private int turns;
+		###
 	Activate: 
-	this.turns = RandomUtils.getRandomInt(4, 7); // Between 4 and 7 turns
-	###
+		this.turns = RandomUtils.getRandomInt(4, 7); // Between 4 and 7 turns
+		###
 	Usable: 
-	return disabled.getAttack().namesies() != m.getAttack().namesies();
-	###
+		return disabled.getAttack().namesies() != m.getAttack().namesies();
+		###
 	UnusableMessage: disabled.getAttack().getName() + " is disabled!"
 	FailCondition: victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0
 	CanAttack: 
-	turns--;
-	return checkUsable(b, p, opp);
-	###
+		// TODO: What is happening here?
+		turns--;
+		return true;
+		###
 	ShouldSubside: 
-	return turns == 0;
-	###
+		return turns == 0;
+		###
 	SubsideMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " is no longer disabled!"
 	CastMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " was disabled!"
 	Cast: 
-	disabled = victim.getAttributes().getLastMoveUsed();
-	super.cast(b, caster, victim, source, printCast);
-	###
+		disabled = victim.getAttributes().getLastMoveUsed();
+		super.cast(b, caster, victim, source, printCast);
+		###
 	FailMessage: 
-	if (victim.hasEffect(this.namesies)) {
-		return victim.getName() + " is already disabled!";
-	}
-	else if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being disabled!";
-	}
-	###
+		if (victim.hasEffect(this.namesies)) {
+			return victim.getName() + " is already disabled!";
+		}
+		else if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
+			return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being disabled!";
+		}
+		###
 *
 RaiseCrits:
 	Field: 
@@ -535,7 +536,7 @@ Mimic:
 	CastMessage: victim.getName() + " learned " + mimicMove.getAttack().getName() + "!"
 *
 Imprison:
-	Int: BeforeTurnAttackSelectionEffect
+	Int: AttackSelectionSelfBlockerEffect
 	Field: 
 	private List<AttackNamesies> unableMoves;
 	###
@@ -571,7 +572,7 @@ Torment:
 		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents torment!";
 	}
 	###
-	Int: BeforeTurnAttackSelectionEffect
+	Int: AttackSelectionSelfBlockerEffect
 	Usable: 
 	return (p.getAttributes().getLastMoveUsed() == null || p.getAttributes().getLastMoveUsed().getAttack().namesies() != m.getAttack().namesies());
 	###
@@ -581,7 +582,7 @@ Torment:
 SoundBlock:
 	NumTurns: 3
 	CanHave: True
-	Int: BeforeTurnAttackSelectionEffect
+	Int: AttackSelectionSelfBlockerEffect
 	Usable:
 	return !m.getAttack().isMoveType(MoveType.SOUND_BASED);
 	###
@@ -590,7 +591,7 @@ SoundBlock:
 Taunt:
 	NumTurns: 3
 	FailAbility: Aroma Veil, Oblivious
-	Int: BeforeTurnAttackSelectionEffect
+	Int: AttackSelectionSelfBlockerEffect
 	FailMessage: 
 	if (victim.hasAbility(AbilityNamesies.OBLIVIOUS) || victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
 		return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being taunted!";

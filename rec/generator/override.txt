@@ -731,7 +731,7 @@ RapidSpinRelease:
 		
 		// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 		releaser.getEffects().remove(this);
-		b.getEffects(releaser.isPlayer()).remove(this);
+		b.getEffects(releaser).remove(this);
 		###
 	*
 ***
@@ -979,7 +979,7 @@ DefogRelease:
 		
 		// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 		victim.getEffects().remove(this);
-		b.getEffects(victim.isPlayer()).remove(this);
+		b.getEffects(victim).remove(this);
 		###
 	*
 ***
@@ -1085,6 +1085,7 @@ PhysicalContactEffect:
 SelfAttackBlocker:
 	SelfBlock:
 		Header: boolean block(Battle b, ActivePokemon user)
+		Optional: True
 	*
 	SelfAlternateEffect:
 		Header: void alternateEffect(Battle b, ActivePokemon user)
@@ -1098,6 +1099,7 @@ SelfAttackBlocker:
 AttackBlocker:
 	Block:
 		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
+		Optional: True
 	*
 	AlternateEffect:
 		Header: void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim)
@@ -2175,17 +2177,18 @@ Override:
 Override:
 	Aura:
 		Header: Type getAuraType()
+		AccessModifier: Private
 		Body:
-		return Type.{00};
-		###
+			return Type.{00};
+			###
 		AddInterface: PowerChangeEffect
 		AddMapField: GetMultiplier:
-		if (user.getAttackType() == getAuraType()) {
-			return 1 + .33*(victim.hasAbility(AbilityNamesies.AURA_BREAK) ? -1 : 1);
-		}
-		
-		return 1;
-		###
+			if (user.getAttackType() == getAuraType()) {
+				return 1 + .33*(victim.hasAbility(AbilityNamesies.AURA_BREAK) ? -1 : 1);
+			}
+			
+			return 1;
+			###
 	*
 ***
 Override:
@@ -2427,30 +2430,24 @@ SuperDuperEndTurnEffect:
 ***
 Override:
 	PriorityPrevention:
-		AddInterface: OpponentBeforeTurnAttackSelectionEffect
+		AddInterface: OpponentAttackSelectionBlockerEffect
 		AddMapField: Usable: 
-		return b.getPriority(p, m.getAttack()) <= 0;
-		###
+			return b.getPriority(p, m.getAttack()) <= 0;
+			###
 		AddMapField: UnusableMessage: b.getOtherPokemon(p).getName() + "'s " + this.getName() + " prevents priority moves!!"
-		AddMapField: Field:
-		
-		public String getFailMessage(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return getUnusableMessage(b, p);
-		}
-		###
 	*
 ***
-BeforeTurnAttackSelectionEffect:
-	BeforeTurnAttackSelectionFail:
+AttackSelectionSelfBlockerEffect:
+	AttackSelectionSelfBlockerFail:
 		AddInterface: Hidden-AttackSelectionEffect
-		AddInterface: Hidden-BeforeTurnEffect
+		AddInterface: Hidden-SelfAttackBlocker
 		Optional: True
 	*
 ***
-OpponentBeforeTurnAttackSelectionEffect:
-	OpponentBeforeTurnAttackSelectionFail:
+OpponentAttackSelectionBlockerEffect:
+	OpponentAttackSelectionBlockerFail:
 		AddInterface: Hidden-OpponentAttackSelectionEffect
-		AddInterface: Hidden-OpponentBeforeTurnEffect
+		AddInterface: Hidden-AttackBlocker
 		Optional: True
 	*
 ***
