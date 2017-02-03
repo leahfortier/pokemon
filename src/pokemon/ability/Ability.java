@@ -49,6 +49,7 @@ import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
+import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
@@ -475,7 +476,7 @@ public abstract class Ability implements Serializable {
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon victim) {
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " type moves!";
 		}
 	}
@@ -604,7 +605,7 @@ public abstract class Ability implements Serializable {
 			return activated;
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon victim) {
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!";
 		}
 
@@ -742,7 +743,7 @@ public abstract class Ability implements Serializable {
 			Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored instead!").updatePokemon(b, victim));
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon victim) {
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!";
 		}
 	}
@@ -791,28 +792,34 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Damp extends Ability implements BeforeTurnEffect, OpponentBeforeTurnEffect {
+	static class Damp extends Ability implements AttackBlocker, SelfAttackBlocker {
 		private static final long serialVersionUID = 1L;
-		private boolean checkeroo(Battle b, ActivePokemon attacking, ActivePokemon abilify) {
-			if (attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION) {
-				b.printAttacking(attacking);
-				Messages.add(new MessageUpdate(abilify.getName() + "'s " + this.getName() + " prevents " + attacking.getAttack().getName() + " from being used!"));
-				return false;
-			}
-			
-			return true;
+		private boolean checkeroo(ActivePokemon attacking) {
+			return attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION;
+		}
+		
+		private String blockityMessage(Battle b, ActivePokemon attacking, ActivePokemon abilify) {
+			return abilify.getName() + "'s " + this.getName() + " prevents " + attacking.getAttack().getName() + " from being used!";
 		}
 
 		Damp() {
 			super(AbilityNamesies.DAMP, "Prevents combatants from self destructing.");
 		}
 
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			return checkeroo(b, p, p);
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return blockityMessage(b, user, victim);
 		}
 
-		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			return checkeroo(b, p, opp);
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return checkeroo(user);
+		}
+
+		public boolean block(Battle b, ActivePokemon user) {
+			return checkeroo(user);
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon user) {
+			return blockityMessage(b, user, user);
 		}
 	}
 
@@ -973,7 +980,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.STURDY, "The Pok\u00e9mon is protected against 1-hit KO attacks.");
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon victim) {
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " prevents OHKO moves!";
 		}
 
@@ -997,7 +1004,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.OBLIVIOUS, "Prevents the Pok\u00e9mon from becoming infatuated.");
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon victim) {
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!";
 		}
 
@@ -1185,21 +1192,19 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Soundproof extends Ability implements OpponentBeforeTurnEffect {
+	static class Soundproof extends Ability implements AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		Soundproof() {
 			super(AbilityNamesies.SOUNDPROOF, "Gives full immunity to all sound-based moves.");
 		}
 
-		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (p.getAttack().isMoveType(MoveType.SOUND_BASED)) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!"));
-				return false;
-			}
-			
-			return true;
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents sound-based moves!";
+		}
+
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttack().isMoveType(MoveType.SOUND_BASED);
 		}
 	}
 
@@ -1461,7 +1466,7 @@ public abstract class Ability implements Serializable {
 			Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored instead!").updatePokemon(b, victim));
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon victim) {
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!";
 		}
 	}
@@ -1487,7 +1492,7 @@ public abstract class Ability implements Serializable {
 			Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored instead!").updatePokemon(b, victim));
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon victim) {
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " moves!";
 		}
 	}
@@ -1813,7 +1818,7 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.SUCTION_CUPS, "Negates all moves that force switching out.");
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon victim) {
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " prevents it from switching!";
 		}
 
@@ -1894,11 +1899,15 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class WonderGuard extends Ability implements OpponentBeforeTurnEffect {
+	static class WonderGuard extends Ability implements AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		WonderGuard() {
 			super(AbilityNamesies.WONDER_GUARD, "Only supereffective moves will hit.");
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " makes it immune to " + user.getAttack().getName() + "!";
 		}
 
 		public boolean isReplaceable() {
@@ -1909,26 +1918,9 @@ public abstract class Ability implements Serializable {
 			return false;
 		}
 
-		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// Status moves always hit
-			if (p.getAttack().isStatusMove()) {
-				return true;
-			}
-			
-			// Super effective moves hit
-			if (TypeAdvantage.isSuperEffective(p, opp, b)) {
-				return true;
-			}
-			
-			// None-type moves always hit
-			if (p.isAttackType(Type.NO_TYPE)) {
-				return true;
-			}
-			
-			// Immunity Solunity
-			b.printAttacking(p);
-			Messages.add(new MessageUpdate(opp.getName() + "'s " + this.getName() + " makes it immune to " + p.getAttack().getName() + "!"));
-			return false;
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// Status moves, super-effective moves, and None-type moves always hit
+			return !user.getAttack().isStatusMove() && !TypeAdvantage.isSuperEffective(user, victim, b) && !user.isAttackType(Type.NO_TYPE);
 		}
 	}
 
@@ -2072,7 +2064,7 @@ public abstract class Ability implements Serializable {
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon victim) {
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " type moves!";
 		}
 	}
@@ -2209,6 +2201,7 @@ public abstract class Ability implements Serializable {
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// TODO: Pretty sure this doesn't work anymore
+			// TODO: Doesn't work on Damp
 			if (victim.isFainted(b)) {
 				Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
 				user.reduceHealthFraction(b, 1/4.0);
@@ -2277,7 +2270,7 @@ public abstract class Ability implements Serializable {
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon victim) {
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " type moves!";
 		}
 	}
@@ -2653,7 +2646,7 @@ public abstract class Ability implements Serializable {
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon victim) {
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.GRASS.getName() + " type moves!";
 		}
 	}
@@ -2907,21 +2900,19 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Bulletproof extends Ability implements OpponentBeforeTurnEffect {
+	static class Bulletproof extends Ability implements AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		Bulletproof() {
 			super(AbilityNamesies.BULLETPROOF, "Protects the Pok\u00e9mon from some ball and bomb moves.");
 		}
 
-		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (p.getAttack().isMoveType(MoveType.BOMB_BALL)) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!"));
-				return false;
-			}
-			
-			return true;
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents bomb/ball moves!";
+		}
+
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttack().isMoveType(MoveType.BOMB_BALL);
 		}
 	}
 

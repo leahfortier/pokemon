@@ -279,24 +279,26 @@ Limber:
 *
 Damp:
 	Desc: Prevents combatants from self destructing.
-	Int: BeforeTurnEffect, OpponentBeforeTurnEffect
+	Int: AttackBlocker, SelfAttackBlocker
 	Field:
-	private boolean checkeroo(Battle b, ActivePokemon attacking, ActivePokemon abilify) {
-		if (attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION) {
-			b.printAttacking(attacking);
-			Messages.add(new MessageUpdate(abilify.getName() + "'s " + this.getName() + " prevents " + attacking.getAttack().getName() + " from being used!"));
-			return false;
+		private boolean checkeroo(ActivePokemon attacking) {
+			return attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION;
 		}
 		
-		return true;
-	}
-	###
-	CanAttack:
-	return checkeroo(b, p, p);
-	###
-	OpponentCanAttack: 
-	return checkeroo(b, p, opp);
-	###
+		private String blockityMessage(Battle b, ActivePokemon attacking, ActivePokemon abilify) {
+			return abilify.getName() + "'s " + this.getName() + " prevents " + attacking.getAttack().getName() + " from being used!";
+		}
+		###
+	SelfBlock:
+		return checkeroo(user);
+		###
+	Block: 
+		return checkeroo(user);
+		###
+	SelfBlockMessage:
+		return blockityMessage(b, user, user);
+		###
+	BlockMessage: blockityMessage(b, user, victim)
 *
 Cloud Nine:
 	Desc: Eliminates the effects of weather.
@@ -363,15 +365,12 @@ Rock Head:
 *
 Sturdy:
 	Desc: The Pok\u00e9mon is protected against 1-hit KO attacks.
-	Int: BracingEffect, AttackBlocker
+	Int: BracingEffect
 	Bracing: 
 		return fullHealth;
 		###
 	BraceMessage: bracer.getName() + "'s " + this.getName() + " endured the hit!"
-	Block:
-		return user.getAttack().isMoveType(MoveType.ONE_HIT_KO);
-		###
-	BlockMessage: victim.getName() + "'s " + this.getName() + " prevents OHKO moves!"
+	MoveTypePrevent: ONE_HIT_KO OHKO moves
 *
 Oblivious:
 	Desc: Prevents the Pok\u00e9mon from becoming infatuated.
@@ -478,7 +477,7 @@ Hyper Cutter:
 *
 Soundproof:
 	Desc: Gives full immunity to all sound-based moves.
-	MoveTypePrevent: Sound_Based
+	MoveTypePrevent: Sound_Based sound-based moves
 *
 Reckless:
 	Desc: Powers up moves that have recoil damage.
@@ -798,28 +797,12 @@ Wonder Guard:
 	Desc: Only supereffective moves will hit.
 	Irreplaceable: True
 	Irrestealable: True
-	Int: OpponentBeforeTurnEffect
-	OpponentCanAttack: 
-	// Status moves always hit
-	if (p.getAttack().isStatusMove()) {
-		return true;
-	}
-	
-	// Super effective moves hit
-	if (TypeAdvantage.isSuperEffective(p, opp, b)) {
-		return true;
-	}
-	
-	// None-type moves always hit
-	if (p.isAttackType(Type.NO_TYPE)) {
-		return true;
-	}
-	
-	// Immunity Solunity
-	b.printAttacking(p);
-	Messages.add(new MessageUpdate(opp.getName() + "'s " + this.getName() + " makes it immune to " + p.getAttack().getName() + "!"));
-	return false;
-	###
+	Int: AttackBlocker
+	Block:
+		// Status moves, super-effective moves, and None-type moves always hit
+		return !user.getAttack().isStatusMove() && !TypeAdvantage.isSuperEffective(user, victim, b) && !user.isAttackType(Type.NO_TYPE);
+		###
+	BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + user.getAttack().getName() + "!"
 *
 Normalize:
 	Desc: All the Pok\u00e9mon's moves become the Normal type.
@@ -947,6 +930,7 @@ Aftermath:
 	Int: PhysicalContactEffect
 	Contact: 
 	// TODO: Pretty sure this doesn't work anymore
+	// TODO: Doesn't work on Damp
 	if (victim.isFainted(b)) {
 		Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
 		user.reduceHealthFraction(b, 1/4.0);
@@ -1332,7 +1316,7 @@ Forecast:
 *
 Bulletproof:
 	Desc: Protects the Pok\u00e9mon from some ball and bomb moves.
-	MoveTypePrevent: Bomb_Ball
+	MoveTypePrevent: Bomb_Ball bomb/ball moves
 *
 Aura Break:
 	Desc: The effects of Aura Abilities are reversed.

@@ -930,16 +930,11 @@ Override:
 ***
 Override:
 	MoveTypePrevent:
-		AddInterface: OpponentBeforeTurnEffect
-		AddMapField: OpponentCanAttack:
-		if (p.getAttack().isMoveType(MoveType.{00})) {
-			b.printAttacking(p);
-			Messages.add(new MessageUpdate(opp.getName() + "'s " + this.getName() + " prevents " + p.getAttack().getName() + " from being used!"));
-			return false;
-		}
-		
-		return true;
-		###
+		AddInterface: AttackBlocker
+		AddMapField: Block:
+			return user.getAttack().isMoveType(MoveType.{11});
+			###
+		AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " prevents {2-}!"
 	*
 ***
 Override:
@@ -1096,7 +1091,7 @@ SelfAttackBlocker:
 		Optional: True
 	*
 	SelfBlockMessage:
-		Header: String getBlockMessage(Battle b, ActivePokemon victim)
+		Header: String getBlockMessage(Battle b, ActivePokemon user)
 		Optional: True
 	*
 ***
@@ -1112,7 +1107,7 @@ AttackBlocker:
 # Optional method for AttackBlocker
 Override:
 	BlockMessage:
-		Header: String getBlockMessage(Battle b, ActivePokemon victim)
+		Header: String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		Body:
 			return {0};
 			###

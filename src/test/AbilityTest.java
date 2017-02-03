@@ -45,17 +45,17 @@ public class AbilityTest {
         TestBattle battle = TestBattle.create(attacking, defending);
 
         // Status move should work
-        Assert.assertTrue(battle.ableToAttack(AttackNamesies.DRAGON_DANCE, attacking, defending));
-        Assert.assertTrue(battle.ableToAttack(AttackNamesies.THUNDER_WAVE, attacking, defending));
+        Assert.assertTrue(attacking.apply(AttackNamesies.DRAGON_DANCE, battle, defending));
+        Assert.assertTrue(attacking.apply(AttackNamesies.THUNDER_WAVE, battle, defending));
 
         // Super-effective moves and moves without type work
-        Assert.assertTrue(battle.ableToAttack(AttackNamesies.SHADOW_BALL, attacking, defending));
-        Assert.assertTrue(battle.ableToAttack(AttackNamesies.STRUGGLE, attacking, defending));
+        Assert.assertTrue(attacking.apply(AttackNamesies.SHADOW_BALL, battle, defending));
+        Assert.assertTrue(attacking.apply(AttackNamesies.STRUGGLE, battle, defending));
 
         // Attacking non-super effective moves should not work
-        Assert.assertFalse(battle.ableToAttack(AttackNamesies.SURF, attacking, defending));
-        Assert.assertFalse(battle.ableToAttack(AttackNamesies.VINE_WHIP, attacking, defending));
-        Assert.assertFalse(battle.ableToAttack(AttackNamesies.TACKLE, attacking, defending));
+        Assert.assertFalse(attacking.apply(AttackNamesies.SURF, battle, defending));
+        Assert.assertFalse(attacking.apply(AttackNamesies.VINE_WHIP, battle, defending));
+        Assert.assertFalse(attacking.apply(AttackNamesies.TACKLE, battle, defending));
     }
 
     @Test

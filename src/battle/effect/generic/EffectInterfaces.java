@@ -1251,7 +1251,7 @@ public final class EffectInterfaces {
 		boolean block(Battle b, ActivePokemon user, ActivePokemon victim);
 		default void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {}
 
-		default String getBlockMessage(Battle b, ActivePokemon victim) {
+		default String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return Effect.DEFAULT_FAIL_MESSAGE;
 		}
 
@@ -1325,7 +1325,7 @@ public final class EffectInterfaces {
 			this.protectingEffects(b, user, victim);
 		}
 
-		default String getBlockMessage(Battle b, ActivePokemon victim) {
+		default String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + " is protecting itself!";
 		}
 	}

@@ -586,7 +586,7 @@ AttackBlocker:
 		Default: Empty
 	*
 	Method:
-		Header: String getBlockMessage(Battle b, ActivePokemon victim)
+		Header: String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		Default:
 			return Effect.DEFAULT_FAIL_MESSAGE;
 			###
@@ -647,7 +647,7 @@ ProtectingEffect:
 			###
 	*
 	Method:
-		Header: String getBlockMessage(Battle b, ActivePokemon victim)
+		Header: String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		Default:
 			return victim.getName() + " is protecting itself!";
 			###

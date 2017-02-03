@@ -27,4 +27,9 @@ class TestPokemon extends ActivePokemon {
         this.setMove(new Move(attackNamesies));
         this.startAttack(battle, defending);
     }
+
+    boolean apply(AttackNamesies attack, TestBattle battle, ActivePokemon defending) {
+        this.setupMove(attack, battle, defending);
+        return this.getAttack().apply(this, defending, battle);
+    }
 }
