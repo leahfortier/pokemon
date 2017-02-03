@@ -137,15 +137,21 @@ Protecting:
 *
 QuickGuard:
 	ProtectingEffect: True
-	ProtectingCondition: attacking.getAttack().getPriority(b, attacking) > 0
+	ProtectingCondition: 
+		return b.getPriority(attacking, attacking.getAttack()) > 0;
+		###
 *
 CraftyShield:
 	ProtectingEffect: True
-	ProtectingCondition: attacking.getAttack().isStatusMove()
+	ProtectingCondition: 
+		return attacking.getAttack().isStatusMove();
+		###
 *
 MatBlock:
 	ProtectingEffect: True
-	ProtectingCondition: !attacking.getAttack().isStatusMove()
+	ProtectingCondition: 
+		return !attacking.getAttack().isStatusMove();
+		###
 	Cast:
 	// No successive decay for this move
 	super.cast(b, caster, victim, source, printCast);

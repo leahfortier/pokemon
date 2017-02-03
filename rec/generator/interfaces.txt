@@ -431,7 +431,7 @@ StatSwitchingEffect:
 		Header: Stat switchStat(Stat s)
 		Invoke: Update
 		Update: s
-		InvokeParameters: Battle b, ActivePokemon statPokemon, ActivePokemon other
+		InvokeParameters: Battle b, ActivePokemon statPokemon
 		EffectList: statPokemon
 		InvokeName: switchStat
 	*
@@ -582,7 +582,7 @@ AttackBlocker:
 		EffectList: victim
 	*
 	Method:
-		Header: void alternateEffect(Battle b, ActivePokemon victim)
+		Header: void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim)
 		Default: Empty
 	*
 	Method:
@@ -618,5 +618,38 @@ ItemSwapperEffect:
 SwapOpponentEffect:
 	Method:
 		Header: String getSwapMessage(ActivePokemon user, ActivePokemon victim)
+	*
+***
+ProtectingEffect:
+	Extends: AttackBlocker
+	Method:
+		Header: void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp)
+		Default: Empty
+	*
+	Method:
+		Header: boolean protectingCondition(Battle b, ActivePokemon attacking)
+		Default:
+			return true;
+			###
+	*
+	Method:
+		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
+		Default:
+			Attack attack = user.getAttack();
+			return protectingCondition(b, user) && !attack.isSelfTarget() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.PROTECT_PIERCING);
+			###
+	*
+	Method:
+		Header: void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim)
+		Default:
+			CrashDamageMove.invokeCrashDamageMove(b, user);
+			this.protectingEffects(b, user, victim);
+			###
+	*
+	Method:
+		Header: String getBlockMessage(Battle b, ActivePokemon victim)
+		Default:
+			return victim.getName() + " is protecting itself!";
+			###
 	*
 ***

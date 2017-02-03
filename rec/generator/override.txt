@@ -555,44 +555,21 @@ OpponentBeforeTurnEffect:
 ***
 Override:
 	ProtectingEffect:
-		AddInterface: OpponentBeforeTurnEffect
+		AddInterface: ProtectingEffect
 		AddMapField: MinTurns: 1
 		AddMapField: MaxTurns: 1
 		AddMapField: CastMessage: victim.getName() + " protected itself!"
 		AddMapField: SuccessiveDecay: True
-		AddMapField: OnProtectingSuccess:
-		// No additional effects
-		###
-		AddMapField: ProtectingCondition: true
-		AddMapField: OpponentCanAttack:
-		// Self-target moves, moves that penetrate Protect, and other conditions
-		if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) {
-			return true;
-		}
-		
-		// Protect is a success!
-		b.printAttacking(p);
-		Messages.add(new MessageUpdate(opp.getName() + " is protecting itself!"));
-		CrashDamageMove.invokeCrashDamageMove(b, p);
-	
-		// Additional Effects
-		protectingEffects(p, opp, b);
-
-		return false;
-		###
 	*
 ***
-Override:
+ProtectingEffect:
 	ProtectingCondition:
 		Header: boolean protectingCondition(Battle b, ActivePokemon attacking)
-		Body:
-		return {0};
-		###
+		Optional: True
 	*
-***
-Override:
 	OnProtectingSuccess:
-		Header: void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b)
+		Header: void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp)
+		Optional: True
 	*
 ***
 Override: 
@@ -1128,7 +1105,7 @@ AttackBlocker:
 		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
 	*
 	AlternateEffect:
-		Header: void alternateEffect(Battle b, ActivePokemon victim)
+		Header: void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim)
 		Optional: True
 	*
 ***

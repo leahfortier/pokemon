@@ -471,7 +471,7 @@ public abstract class Ability implements Serializable {
 			return user.getAttackType() == Type.ELECTRIC;
 		}
 
-		public void alternateEffect(Battle b, ActivePokemon victim) {
+		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		}
 
@@ -612,7 +612,7 @@ public abstract class Ability implements Serializable {
 			return user.getAttackType() == Type.FIRE;
 		}
 
-		public void alternateEffect(Battle b, ActivePokemon victim) {
+		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
 			activated = true;
 		}
 
@@ -732,7 +732,7 @@ public abstract class Ability implements Serializable {
 			return user.getAttackType() == Type.WATER;
 		}
 
-		public void alternateEffect(Battle b, ActivePokemon victim) {
+		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
 			// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
 			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 				return;
@@ -1451,7 +1451,7 @@ public abstract class Ability implements Serializable {
 			return user.getAttackType() == Type.WATER;
 		}
 
-		public void alternateEffect(Battle b, ActivePokemon victim) {
+		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
 			// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
 			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 				return;
@@ -1477,7 +1477,7 @@ public abstract class Ability implements Serializable {
 			return user.getAttackType() == Type.ELECTRIC;
 		}
 
-		public void alternateEffect(Battle b, ActivePokemon victim) {
+		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
 			// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
 			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 				return;
@@ -2068,7 +2068,7 @@ public abstract class Ability implements Serializable {
 			return user.getAttackType() == Type.WATER;
 		}
 
-		public void alternateEffect(Battle b, ActivePokemon victim) {
+		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		}
 
@@ -2273,7 +2273,7 @@ public abstract class Ability implements Serializable {
 			return user.getAttackType() == Type.ELECTRIC;
 		}
 
-		public void alternateEffect(Battle b, ActivePokemon victim) {
+		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		}
 
@@ -2649,7 +2649,7 @@ public abstract class Ability implements Serializable {
 			return user.getAttackType() == Type.GRASS;
 		}
 
-		public void alternateEffect(Battle b, ActivePokemon victim) {
+		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
 			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
 		}
 

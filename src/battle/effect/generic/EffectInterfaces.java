@@ -916,7 +916,7 @@ public final class EffectInterfaces {
 	public interface StatSwitchingEffect {
 		Stat switchStat(Stat s);
 
-		static Stat switchStat(Battle b, ActivePokemon statPokemon, ActivePokemon other, Stat s) {
+		static Stat switchStat(Battle b, ActivePokemon statPokemon, Stat s) {
 			List<Object> invokees = b.getEffectsList(statPokemon);
 			for (Object invokee : invokees) {
 				if (invokee instanceof StatSwitchingEffect && !Effect.isInactiveEffect(invokee, b)) {
@@ -1249,7 +1249,7 @@ public final class EffectInterfaces {
 
 	public interface AttackBlocker {
 		boolean block(Battle b, ActivePokemon user, ActivePokemon victim);
-		default void alternateEffect(Battle b, ActivePokemon victim) {}
+		default void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {}
 
 		default String getBlockMessage(Battle b, ActivePokemon victim) {
 			return Effect.DEFAULT_FAIL_MESSAGE;
@@ -1306,5 +1306,27 @@ public final class EffectInterfaces {
 
 	public interface SwapOpponentEffect {
 		String getSwapMessage(ActivePokemon user, ActivePokemon victim);
+	}
+
+	public interface ProtectingEffect extends AttackBlocker {
+		default void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {}
+
+		default boolean protectingCondition(Battle b, ActivePokemon attacking) {
+			return true;
+		}
+
+		default boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Attack attack = user.getAttack();
+			return protectingCondition(b, user) && !attack.isSelfTarget() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.PROTECT_PIERCING);
+		}
+
+		default void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+			CrashDamageMove.invokeCrashDamageMove(b, user);
+			this.protectingEffects(b, user, victim);
+		}
+
+		default String getBlockMessage(Battle b, ActivePokemon victim) {
+			return victim.getName() + " is protecting itself!";
+		}
 	}
 }

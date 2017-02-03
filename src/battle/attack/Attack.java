@@ -351,7 +351,7 @@ public abstract class Attack implements Serializable {
 		AttackBlocker attackBlocker = AttackBlocker.checkBlocked(b, me, o);;
 		if (attackBlocker != null) {
 			Messages.add(new MessageUpdate(attackBlocker.getBlockMessage(b, o)));
-			attackBlocker.alternateEffect(b, o);
+			attackBlocker.alternateEffect(b, me, o);
 			return false;
 		}
 		

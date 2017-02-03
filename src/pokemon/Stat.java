@@ -69,16 +69,26 @@ public enum Stat {
 	public static final int MAX_IV = 31;
 	
 	public static final Stat[] STATS;
+	public static final Stat[] BATTLE_STATS;
 	static {
 		STATS = new Stat[NUM_STATS];
-		int i = 0;
-		
+		BATTLE_STATS = new Stat[NUM_BATTLE_STATS];
+		int statIndex = 0;
+		int battleStatIndex = 0;
+
 		for (Stat stat : Stat.values()) {
-			if (stat.onlyBattle == InBattle.ONLY) {
-				continue;
+			switch (stat.onlyBattle) {
+				case BOTH:
+					STATS[statIndex++] = stat;
+					BATTLE_STATS[battleStatIndex++] = stat;
+					break;
+				case ONLY:
+					BATTLE_STATS[battleStatIndex++] = stat;
+					break;
+				case NEVER:
+					STATS[statIndex++] = stat;
+					break;
 			}
-			
-			STATS[i++] = stat;
 		}
 	}
 	
@@ -95,7 +105,7 @@ public enum Stat {
 	public static int getStat(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
 
 		// Effects that manipulate stats
-		s = StatSwitchingEffect.switchStat(b, p, opp, s);
+		s = StatSwitchingEffect.switchStat(b, p, s);
 		s = OpponentStatSwitchingEffect.switchStat(b, opp, s);
 
 		// Apply stage changes

@@ -393,7 +393,7 @@ public abstract class BattleEffect extends Effect {
 
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// Psychic terrain prevents increased priority moves from hitting
-			return user.getAttack().getPriority(b, user) > 0 && !victim.isLevitating(b);
+			return b.getPriority(user, user.getAttack()) > 0 && !victim.isLevitating(b);
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {

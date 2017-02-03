@@ -157,6 +157,7 @@ public class AttackTest {
 
     @Test
     public void curseTest() {
+        // TODO: Protean
         TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
         TestPokemon defending = new TestPokemon(PokemonNamesies.CHARMANDER);
 

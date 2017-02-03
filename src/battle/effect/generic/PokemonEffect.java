@@ -20,7 +20,6 @@ import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
 import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
 import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
-import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
@@ -33,10 +32,10 @@ import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
-import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
+import battle.effect.generic.EffectInterfaces.ProtectingEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
@@ -620,7 +619,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class KingsShield extends PokemonEffect implements OpponentBeforeTurnEffect {
+	static class KingsShield extends PokemonEffect implements ProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		KingsShield() {
@@ -631,17 +630,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-			return true;
-		}
-
-		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// Pokemon that make contact with the king's shield have their attack reduced
-			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
-				p.getAttributes().modifyStage(opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT, "The King's Shield {change} " + p.getName() + "'s attack!");
-			}
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
@@ -655,25 +643,15 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " protected itself!";
 		}
 
-		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// Self-target moves, moves that penetrate Protect, and other conditions
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) {
-				return true;
+		public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
+			// Pokemon that make contact with the king's shield have their attack reduced
+			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
+				p.getAttributes().modifyStage(opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT, "The King's Shield {change} " + p.getName() + "'s attack!");
 			}
-			
-			// Protect is a success!
-			b.printAttacking(p);
-			Messages.add(new MessageUpdate(opp.getName() + " is protecting itself!"));
-			CrashDamageMove.invokeCrashDamageMove(b, p);
-			
-			// Additional Effects
-			protectingEffects(p, opp, b);
-			
-			return false;
 		}
 	}
 
-	static class SpikyShield extends PokemonEffect implements OpponentBeforeTurnEffect {
+	static class SpikyShield extends PokemonEffect implements ProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		SpikyShield() {
@@ -684,18 +662,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-			return true;
-		}
-
-		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// Pokemon that make contact with the spiky shield have their health reduced
-			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
-				Messages.add(new MessageUpdate(p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!"));
-				p.reduceHealthFraction(b, 1/8.0);
-			}
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
@@ -709,25 +675,16 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " protected itself!";
 		}
 
-		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// Self-target moves, moves that penetrate Protect, and other conditions
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) {
-				return true;
+		public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
+			// Pokemon that make contact with the spiky shield have their health reduced
+			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
+				Messages.add(new MessageUpdate(p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!"));
+				p.reduceHealthFraction(b, 1/8.0);
 			}
-			
-			// Protect is a success!
-			b.printAttacking(p);
-			Messages.add(new MessageUpdate(opp.getName() + " is protecting itself!"));
-			CrashDamageMove.invokeCrashDamageMove(b, p);
-			
-			// Additional Effects
-			protectingEffects(p, opp, b);
-			
-			return false;
 		}
 	}
 
-	static class BanefulBunker extends PokemonEffect implements OpponentBeforeTurnEffect {
+	static class BanefulBunker extends PokemonEffect implements ProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		BanefulBunker() {
@@ -738,17 +695,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-			return true;
-		}
-
-		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// Pokemon that make contact with the baneful bunker are become poisoned
-			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusCondition.POISONED, b, opp, p)) {
-				Status.giveStatus(b, opp, p, StatusCondition.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
-			}
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
@@ -762,25 +708,15 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " protected itself!";
 		}
 
-		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// Self-target moves, moves that penetrate Protect, and other conditions
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) {
-				return true;
+		public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
+			// Pokemon that make contact with the baneful bunker are become poisoned
+			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusCondition.POISONED, b, opp, p)) {
+				Status.giveStatus(b, opp, p, StatusCondition.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
 			}
-			
-			// Protect is a success!
-			b.printAttacking(p);
-			Messages.add(new MessageUpdate(opp.getName() + " is protecting itself!"));
-			CrashDamageMove.invokeCrashDamageMove(b, p);
-			
-			// Additional Effects
-			protectingEffects(p, opp, b);
-			
-			return false;
 		}
 	}
 
-	static class Protecting extends PokemonEffect implements OpponentBeforeTurnEffect {
+	static class Protecting extends PokemonEffect implements ProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Protecting() {
@@ -791,14 +727,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-			return true;
-		}
-
-		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// No additional effects
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
@@ -811,26 +739,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + " protected itself!";
 		}
-
-		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// Self-target moves, moves that penetrate Protect, and other conditions
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) {
-				return true;
-			}
-			
-			// Protect is a success!
-			b.printAttacking(p);
-			Messages.add(new MessageUpdate(opp.getName() + " is protecting itself!"));
-			CrashDamageMove.invokeCrashDamageMove(b, p);
-			
-			// Additional Effects
-			protectingEffects(p, opp, b);
-			
-			return false;
-		}
 	}
 
-	static class QuickGuard extends PokemonEffect implements OpponentBeforeTurnEffect {
+	static class QuickGuard extends PokemonEffect implements ProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		QuickGuard() {
@@ -841,14 +752,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-			return attacking.getAttack().getPriority(b, attacking) > 0;
-		}
-
-		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// No additional effects
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
@@ -862,25 +765,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " protected itself!";
 		}
 
-		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// Self-target moves, moves that penetrate Protect, and other conditions
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) {
-				return true;
-			}
-			
-			// Protect is a success!
-			b.printAttacking(p);
-			Messages.add(new MessageUpdate(opp.getName() + " is protecting itself!"));
-			CrashDamageMove.invokeCrashDamageMove(b, p);
-			
-			// Additional Effects
-			protectingEffects(p, opp, b);
-			
-			return false;
+		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
+			return b.getPriority(attacking, attacking.getAttack()) > 0;
 		}
 	}
 
-	static class CraftyShield extends PokemonEffect implements OpponentBeforeTurnEffect {
+	static class CraftyShield extends PokemonEffect implements ProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		CraftyShield() {
@@ -891,14 +781,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-			return attacking.getAttack().isStatusMove();
-		}
-
-		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// No additional effects
-		}
-
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
@@ -912,25 +794,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " protected itself!";
 		}
 
-		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// Self-target moves, moves that penetrate Protect, and other conditions
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) {
-				return true;
-			}
-			
-			// Protect is a success!
-			b.printAttacking(p);
-			Messages.add(new MessageUpdate(opp.getName() + " is protecting itself!"));
-			CrashDamageMove.invokeCrashDamageMove(b, p);
-			
-			// Additional Effects
-			protectingEffects(p, opp, b);
-			
-			return false;
+		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
+			return attacking.getAttack().isStatusMove();
 		}
 	}
 
-	static class MatBlock extends PokemonEffect implements OpponentBeforeTurnEffect {
+	static class MatBlock extends PokemonEffect implements ProtectingEffect {
 		private static final long serialVersionUID = 1L;
 
 		MatBlock() {
@@ -939,14 +808,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
 			return !(victim.hasEffect(this.namesies));
-		}
-
-		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-			return !attacking.getAttack().isStatusMove();
-		}
-
-		public void protectingEffects(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// No additional effects
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
@@ -958,21 +819,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " protected itself!";
 		}
 
-		public boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// Self-target moves, moves that penetrate Protect, and other conditions
-			if (p.getAttack().isSelfTarget() || p.getAttack().isMoveType(MoveType.FIELD) || p.getAttack().isMoveType(MoveType.PROTECT_PIERCING) || !protectingCondition(b, p)) {
-				return true;
-			}
-			
-			// Protect is a success!
-			b.printAttacking(p);
-			Messages.add(new MessageUpdate(opp.getName() + " is protecting itself!"));
-			CrashDamageMove.invokeCrashDamageMove(b, p);
-			
-			// Additional Effects
-			protectingEffects(p, opp, b);
-			
-			return false;
+		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
+			return !attacking.getAttack().isStatusMove();
 		}
 	}
 
@@ -2558,6 +2406,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public boolean block(Battle b, ActivePokemon user) {
+			// TODO: Test
 			return user.getAttack() instanceof SapHealthEffect;
 		}
 	}
