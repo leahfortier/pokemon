@@ -606,8 +606,9 @@ public class ActivePokemon implements Serializable {
 		setMove(temp);
 	}
 
+	// Wild Pokemon if in a wild battle and not the player's pokemon
 	public boolean isWildPokemon(Battle b) {
-		return b.getTrainer(this.isPlayer()) instanceof WildPokemon;
+		return b.isWildBattle() && !this.isPlayer();
 	}
 
 	public boolean canStealItem(Battle b, ActivePokemon victim) {
@@ -658,7 +659,7 @@ public class ActivePokemon implements Serializable {
 			return false;
 		}
 
-		Team opponent = b.getTrainer(victim.isPlayer());
+		Team opponent = b.getTrainer(victim);
 		if (opponent instanceof WildPokemon) {
 			// Fails against wild Pokemon of higher levels
 			return victim.getLevel() <= this.getLevel();

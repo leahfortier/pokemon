@@ -10947,8 +10947,8 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// TODO: Fuck this shit I hate this fucking move
-			return super.power;
+			// TODO: Test
+			return super.power*(me.getAttributes().lastMoveSucceeded() ? 1 : 2);
 		}
 	}
 

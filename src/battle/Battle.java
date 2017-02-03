@@ -475,8 +475,11 @@ public class Battle {
 	
 	private void executeAttack(ActivePokemon me, ActivePokemon o) {
 		me.getAttributes().count();
-		me.getAttack().apply(me, o, this);
-		me.getMove().use();
+
+		boolean success = me.getAttack().apply(me, o, this);
+		me.getAttributes().setLastMoveSucceeded(success);
+
+		me.getMove().setUsed();
 		me.getAttributes().decay();
 	}
 	

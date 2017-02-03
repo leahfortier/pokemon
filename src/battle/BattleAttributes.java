@@ -34,6 +34,7 @@ public class BattleAttributes implements Serializable {
 	private boolean firstTurn;
 	private boolean attacking;
 	private boolean used;
+	private boolean lastMoveSucceeded;
 	private Object castSource;
 	
 	public BattleAttributes() {
@@ -46,6 +47,7 @@ public class BattleAttributes implements Serializable {
 		damageTaken = 0;
 		firstTurn = true;
 		attacking = false;
+		lastMoveSucceeded = true;
 		castSource = null;
 	}
 
@@ -64,8 +66,16 @@ public class BattleAttributes implements Serializable {
 	public boolean isAttacking() {
 		return attacking;
 	}
+
+	void setLastMoveSucceeded(boolean lastMoveSucceeded) {
+		this.lastMoveSucceeded = lastMoveSucceeded;
+	}
+
+	public boolean lastMoveSucceeded() {
+		return this.lastMoveSucceeded;
+	}
 	
-	public void setFirstTurn(boolean isFirstTurn) {
+	void setFirstTurn(boolean isFirstTurn) {
 		firstTurn = isFirstTurn;
 	}
 	

@@ -6698,9 +6698,9 @@ Stomping Tantrum:
 	Acc: 100
 	PP: 10
 	GetPow:
-	// TODO: Fuck this shit I hate this fucking move
-	return super.power;
-	###
+		// TODO: Test
+		return super.power*(me.getAttributes().lastMoveSucceeded() ? 1 : 2);
+		###
 *
 Hyperspace Hole:
 	Desc: Using a hyperspace hole, the user appears right next to the target and strikes. This also hits a target using a move such as Protect or Detect.
