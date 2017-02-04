@@ -41,6 +41,23 @@ RecoilMove:
 		Move: user
 	*
 ***
+RecoilPercentageMove:
+	Extends: RecoilMove
+	Method:
+		Header: int getDamagePercentageDenominator()
+	*
+	Method:
+		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
+		Default:
+			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+                return;
+            }
+
+            Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
+            user.reduceHealth(b, (int)Math.ceil((double)damage/getDamagePercentageDenominator()), false);
+			###
+	*
+***
 PhysicalContactEffect:
 	Method:
 		Comments: 
