@@ -1,6 +1,7 @@
 package test;
 
 import battle.attack.AttackNamesies;
+import battle.attack.Move;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.status.StatusCondition;
 import org.junit.Assert;
@@ -11,16 +12,16 @@ import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import type.Type;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
 public class AttackTest {
     @Test
     public void recoilTest() {
-        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR).withAbility(AbilityNamesies.ROCK_HEAD);
-        TestPokemon defending = new TestPokemon(PokemonNamesies.CHARMANDER);
-
-        TestBattle battle = TestBattle.create(attacking, defending);
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.ROCK_HEAD);
+        TestPokemon defending = battle.getDefending();
 
         battle.attackingFight(AttackNamesies.TAKE_DOWN);
         Assert.assertTrue(attacking.fullHealth());
@@ -51,35 +52,28 @@ public class AttackTest {
 
     @Test
     public void captivateTest() {
-        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR)
-                .withGender(Gender.MALE);
-        TestPokemon defending = new TestPokemon(PokemonNamesies.CHARMANDER)
-                .withGender(Gender.MALE);
-
-        TestBattle battle = TestBattle.create(attacking, defending);
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking().withGender(Gender.MALE);
+        TestPokemon defending = battle.getDefending().withGender(Gender.MALE);
 
         // TODO: Test genderless too
-        // TODO: This shouldn't use applies and effective separately, but once apply returns a boolean should use that for all
-        attacking.setupMove(AttackNamesies.CAPTIVATE, battle, defending);
-        Assert.assertFalse(attacking.getAttack().applies(battle, attacking, defending));
+        attacking.apply(false, AttackNamesies.CAPTIVATE, battle);
 
         defending.withGender(Gender.FEMALE);
-        Assert.assertTrue(attacking.getAttack().applies(battle, attacking, defending));
+        attacking.apply(true, AttackNamesies.CAPTIVATE, battle);
 
         attacking.withAbility(AbilityNamesies.OBLIVIOUS);
-        Assert.assertTrue(attacking.getAttack().effective(battle, attacking, defending));
+        attacking.apply(true, AttackNamesies.CAPTIVATE, battle);
 
         attacking.withAbility(AbilityNamesies.NO_ABILITY);
         defending.withAbility(AbilityNamesies.OBLIVIOUS);
-        Assert.assertFalse(attacking.getAttack().effective(battle, attacking, defending));
+        attacking.apply(false, AttackNamesies.CAPTIVATE, battle);
     }
 
     @Test
     public void ohkoTest() {
-        TestPokemon attacking = new TestPokemon(PokemonNamesies.MAGIKARP);
-        TestPokemon defending = new TestPokemon(PokemonNamesies.DRAGONITE);
-
-        TestBattle battle = TestBattle.create(attacking, defending);
+        TestBattle battle = TestBattle.create(PokemonNamesies.MAGIKARP, PokemonNamesies.DRAGONITE);
+        TestPokemon defending = battle.getDefending();
 
         // Ground type should not effect
         battle.attackingFight(AttackNamesies.FISSURE);
@@ -133,24 +127,24 @@ public class AttackTest {
         TestBattle battle = TestBattle.createTrainerBattle(attacking1, defending);
         battle.getPlayer().addPokemon(attacking2);
 
-        Assert.assertTrue(battle.getPlayer().front() == attacking1);
+        Assert.assertTrue(battle.getAttacking() == attacking1);
 
         // Use Dragon Tail -- make sure they swap
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.DRAGON_TAIL);
-        Assert.assertTrue(battle.getPlayer().front() == attacking2);
+        Assert.assertTrue(battle.getAttacking() == attacking2);
 
         // Don't swap with Suction Cups
         attacking2.withAbility(AbilityNamesies.SUCTION_CUPS);
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.CIRCLE_THROW);
-        Assert.assertTrue(battle.getPlayer().front() == attacking2);
+        Assert.assertTrue(battle.getAttacking() == attacking2);
 
         attacking2.withAbility(AbilityNamesies.NO_ABILITY);
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.ROAR);
-        Assert.assertTrue(battle.getPlayer().front() == attacking1);
+        Assert.assertTrue(battle.getAttacking() == attacking1);
 
         // Don't swap when ingrained
         battle.fight(AttackNamesies.INGRAIN, AttackNamesies.WHIRLWIND);
-        Assert.assertTrue(battle.getPlayer().front() == attacking1);
+        Assert.assertTrue(battle.getAttacking() == attacking1);
 
         // TODO: No more remaining Pokemon, wild battles, wimp out, red card, eject button
     }
@@ -158,10 +152,9 @@ public class AttackTest {
     @Test
     public void curseTest() {
         // TODO: Protean
-        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
-        TestPokemon defending = new TestPokemon(PokemonNamesies.CHARMANDER);
-
-        TestBattle battle = TestBattle.create(attacking, defending);
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
 
         // Non-Ghost type curse -- apply stat changes
         battle.attackingFight(AttackNamesies.CURSE);
@@ -202,13 +195,12 @@ public class AttackTest {
         boolean[] acupressureStats = new boolean[Stat.NUM_BATTLE_STATS];
 
         for (int i = 0; i < 1000; i++) {
-            TestPokemon attacking = new TestPokemon(PokemonNamesies.SHUCKLE);
-            TestPokemon defending = new TestPokemon(PokemonNamesies.SHUCKLE);
-
-            TestBattle b = TestBattle.create(attacking, defending);
+            TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+            TestPokemon attacking = battle.getAttacking();
+            TestPokemon defending = battle.getDefending();
 
             // Tri-Attack
-            b.fight(AttackNamesies.TRI_ATTACK, AttackNamesies.TRI_ATTACK);
+            battle.fight(AttackNamesies.TRI_ATTACK, AttackNamesies.TRI_ATTACK);
 
             StatusCondition attackingCondition = attacking.getStatus().getType();
             StatusCondition defendingCondition = defending.getStatus().getType();
@@ -223,10 +215,10 @@ public class AttackTest {
                 triAttackAlwaysSame = false;
             }
 
-            b.emptyHeal();
+            battle.emptyHeal();
 
             // Acupressure
-            b.fight(AttackNamesies.ACUPRESSURE, AttackNamesies.ACUPRESSURE);
+            battle.fight(AttackNamesies.ACUPRESSURE, AttackNamesies.ACUPRESSURE);
 
             boolean foundAttacking = false;
             boolean foundDefending = false;
@@ -261,6 +253,162 @@ public class AttackTest {
         for (int j = 0; j < acupressureStats.length; j++) {
             Assert.assertTrue(Stat.getStat(j, true).getName(), acupressureStats[j]);
         }
+    }
+
+    @Test
+    public void roostTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.DRAGONITE, PokemonNamesies.MAGIKARP);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Should fail with full hp
+        Assert.assertTrue(attacking.isType(battle, Type.FLYING));
+        attacking.apply(false, AttackNamesies.ROOST, battle);
+        Assert.assertTrue(attacking.isType(battle, Type.FLYING));
+
+        // Reduce health and apply again
+        battle.attackingFight(AttackNamesies.BELLY_DRUM);
+        Assert.assertFalse(attacking.fullHealth());
+        attacking.apply(true, AttackNamesies.ROOST, battle);
+        Assert.assertFalse(attacking.isType(battle, Type.FLYING));
+        Assert.assertTrue(attacking.fullHealth());
+
+        // Should fail because attack is already maxed -- flying type should come back at the end of the turn
+        battle.attackingFight(AttackNamesies.BELLY_DRUM);
+        Assert.assertTrue(attacking.fullHealth());
+        Assert.assertTrue(attacking.isType(battle, Type.FLYING));
+
+        // Clear stat changes and reduce again
+        Assert.assertTrue(attacking.getStage(Stat.ATTACK.index()) == Stat.MAX_STAT_CHANGES);
+        battle.attackingFight(AttackNamesies.HAZE);
+        Assert.assertTrue(attacking.getStage(Stat.ATTACK.index()) == 0);
+        battle.attackingFight(AttackNamesies.BELLY_DRUM);
+        Assert.assertTrue(attacking.getStage(Stat.ATTACK.index()) == Stat.MAX_STAT_CHANGES);
+
+        // Using a full turn should bring the flying type back at the end
+        Assert.assertFalse(attacking.fullHealth());
+        battle.attackingFight(AttackNamesies.ROOST);
+        Assert.assertTrue(attacking.isType(battle, Type.FLYING));
+        Assert.assertTrue(attacking.fullHealth());
+
+        defending.apply(false, AttackNamesies.MUD_SLAP, battle);
+        defending.apply(true, AttackNamesies.TACKLE, battle);
+        Assert.assertFalse(attacking.fullHealth());
+        attacking.apply(true, AttackNamesies.ROOST, battle);
+        Assert.assertTrue(attacking.fullHealth());
+        defending.apply(true, AttackNamesies.MUD_SLAP, battle);
+        Assert.assertFalse(attacking.fullHealth());
+    }
+
+    @Test
+    public void lastResortTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking().withMoves(AttackNamesies.LAST_RESORT);
+        battle.getDefending().withMoves(AttackNamesies.SPLASH, AttackNamesies.ENDURE);
+
+        // Should work if it is the only move the pokemon knows
+        attacking.apply(true, AttackNamesies.LAST_RESORT, battle);
+
+        // Should fail if multiple moves and hasn't used all of them yet
+        battle.emptyHeal();
+        attacking.withMoves(AttackNamesies.TACKLE, AttackNamesies.LAST_RESORT);
+        attacking.apply(false, AttackNamesies.LAST_RESORT, battle);
+
+        // Use the other move and then it should work
+        Move tackle = attacking.getMove(battle, 0);
+        attacking.setMove(tackle);
+        Assert.assertFalse(tackle.used());
+        battle.fight();
+        Assert.assertTrue(tackle.used());
+        attacking.apply(true, AttackNamesies.LAST_RESORT, battle);
+    }
+
+    @Test
+    public void psychoShift() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.MAGIC_GUARD);
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.MAGIC_GUARD);
+
+        battle.fight(AttackNamesies.SOAK, AttackNamesies.SOAK);
+        Assert.assertTrue(attacking.isType(battle, Type.WATER));
+        Assert.assertTrue(defending.isType(battle, Type.WATER));
+
+        attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
+        battle.attackingFight(AttackNamesies.WILL_O_WISP);
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertTrue(defending.hasStatus(StatusCondition.BURNED));
+        attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
+        defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.BURNED));
+        Assert.assertFalse(defending.hasStatus());
+
+        battle.attackingFight(AttackNamesies.TOXIC);
+        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.BAD_POISON));
+
+        attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
+        defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.BURNED));
+        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+
+        battle.attackingFight(AttackNamesies.REFRESH);
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.BAD_POISON));
+
+        // TODO: Should transfer bad poison as well but doesn't but I'm gonna rewrite how that works so do it after that
+        attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
+        defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.POISONED));
+//        Assert.assertTrue(attacking.hasEffect(EffectNamesies.BAD_POISON));
+        Assert.assertFalse(defending.hasStatus());
+        Assert.assertFalse(defending.hasEffect(EffectNamesies.BAD_POISON));
+
+        attacking.withAbility(AbilityNamesies.PROTEAN);
+        Assert.assertTrue(attacking.isType(battle, Type.WATER));
+        battle.attackingFight(AttackNamesies.CLEAR_SMOG);
+        Assert.assertTrue(attacking.isType(battle, Type.POISON));
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.POISONED));
+//        Assert.assertTrue(attacking.hasEffect(EffectNamesies.BAD_POISON));
+        battle.attackingFight(AttackNamesies.PSYCHO_SHIFT);
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+//        Assert.assertTrue(defending.hasEffect(EffectNamesies.BAD_POISON));
+        Assert.assertTrue(attacking.isType(battle, Type.PSYCHIC));
+        battle.attackingFight(AttackNamesies.CLEAR_SMOG);
+        Assert.assertTrue(attacking.isType(battle, Type.POISON));
+        defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
+
+        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.PROTEAN));
+        battle.attackingFight(AttackNamesies.DRAGON_DANCE);
+        Assert.assertTrue(Arrays.toString(attacking.getType(battle)), attacking.isType(battle, Type.DRAGON));
+        defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.POISONED));
+
+        defending.withAbility(AbilityNamesies.IMMUNITY);
+        defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.POISONED));
+        Assert.assertFalse(defending.hasStatus());
+
+        battle.emptyHeal();
+        attacking.withMoves(AttackNamesies.PSYCHO_SHIFT);
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertFalse(defending.hasStatus());
+        battle.defendingFight(AttackNamesies.SPORE);
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
+        Assert.assertFalse(defending.hasStatus());
+        battle.attackingFight(AttackNamesies.SLEEP_TALK);
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertTrue(defending.hasStatus(StatusCondition.ASLEEP));
+
+        defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
+        Assert.assertFalse(defending.hasStatus());
+
+        defending.withAbility(AbilityNamesies.INSOMNIA);
+        battle.attackingFight(AttackNamesies.SLEEP_TALK);
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
+        Assert.assertFalse(defending.hasStatus());
     }
 
     @Test

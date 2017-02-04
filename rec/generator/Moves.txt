@@ -73,9 +73,10 @@ Toxic:
 	Acc: 90
 	Int: AccuracyBypassEffect
 	BypassAccuracy:
-	// Poison-type Pokemon bypass accuracy
-	return attacking.isType(b, Type.POISON);
-	###
+		// Poison-type Pokemon bypass accuracy
+		return attacking.isType(b, Type.POISON);
+		###
+	Applies: EffectNamesies.BAD_POISON.getEffect().applies(b, user, victim, CastSource.ATTACK)
 *
 Ember:
 	Acc: 100
@@ -1060,7 +1061,6 @@ Roost:
 		return .5;
 		###
 	UniqueEffects:
-		// TODO: Test
 		this.heal(b, victim);
 		
 		if (getType(b, user, victim) != null) {
@@ -3633,6 +3633,7 @@ Me First:
 		return b.isFirstAttack() && victim.getMove() != null && !victim.getAttack().isStatusMove();
 		###
 	BeginAttack:
+		// TODO: Test
 		attacking.addEffect((PokemonEffect)EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect());
 		###
 	CallNewMove: new Move(victim.getAttack())
@@ -3991,7 +3992,6 @@ Last Resort:
 	Pow: 140
 	Type: Normal
 	FullApplies:
-		// TODO: Test
 		for (Move move : user.getMoves(b)) {
 			if (move.getAttack().namesies() != super.namesies && !move.used()) {
 				return false;

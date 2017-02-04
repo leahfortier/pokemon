@@ -4,6 +4,7 @@ import battle.Battle;
 import battle.attack.AttackNamesies;
 import org.junit.Test;
 import pokemon.ActivePokemon;
+import pokemon.PokemonNamesies;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.Trainer.Action;
@@ -22,17 +23,30 @@ class TestBattle extends Battle {
         return super.getDamageModifier(attacking, defending);
     }
 
+    TestPokemon getAttacking() {
+        return ((TestPokemon)getPlayer().front());
+    }
+
+    TestPokemon getDefending() {
+        return ((TestPokemon)getOpponent().front());
+    }
+
     @Override
     protected void printShit() {}
 
+    @Override
+    public TestPokemon getOtherPokemon(ActivePokemon pokemon) {
+        return (TestPokemon)getOtherPokemon(pokemon.isPlayer());
+    }
+
     boolean ableToAttack(AttackNamesies attack, TestPokemon attacking, ActivePokemon defending) {
-        attacking.setupMove(attack, this, defending);
+        attacking.setupMove(attack, this);
         return super.ableToAttack(attacking, defending);
     }
 
     void emptyHeal() {
-        getPlayer().front().fullyHeal();
-        getOpponent().front().fullyHeal();
+        getAttacking().fullyHeal();
+        getDefending().fullyHeal();
 
         this.fight(AttackNamesies.SPLASH, AttackNamesies.SPLASH);
     }
@@ -40,9 +54,9 @@ class TestBattle extends Battle {
     void fight(AttackNamesies attackingMove, AttackNamesies defendingMove) {
         getPlayer().setAction(Action.FIGHT);
 
-        ((TestPokemon)getPlayer().front()).setupMove(attackingMove, this, getOpponent().front());
-        ((TestPokemon)getOpponent().front()).setupMove(defendingMove, this, getPlayer().front());
-        super.fight(getPlayer().front(), getOpponent().front());
+        getAttacking().setupMove(attackingMove, this);
+        getDefending().setupMove(defendingMove, this);
+        super.fight(getAttacking(), getDefending());
     }
 
     void attackingFight(AttackNamesies attackNamesies) {
@@ -64,18 +78,26 @@ class TestBattle extends Battle {
         EnemyTrainer enemy = new EnemyTrainer("MUTANT ENEMY", 93, nahMahBoi);
         TestBattle testBattle = new TestBattle(enemy);
 
-        mahBoiiiiiii.setupMove(AttackNamesies.SPLASH, testBattle, nahMahBoi);
-        nahMahBoi.setupMove(AttackNamesies.SPLASH, testBattle, mahBoiiiiiii);
+        mahBoiiiiiii.setupMove(AttackNamesies.SPLASH, testBattle);
+        nahMahBoi.setupMove(AttackNamesies.SPLASH, testBattle);
 
         return testBattle;
+    }
+
+    static TestBattle create() {
+        return create(new TestPokemon(PokemonNamesies.BULBASAUR), new TestPokemon(PokemonNamesies.CHARMANDER));
+    }
+
+    static TestBattle create(PokemonNamesies attacking, PokemonNamesies defending) {
+        return create(new TestPokemon(attacking), new TestPokemon(defending));
     }
 
     static TestBattle create(TestPokemon mahBoiiiiiii, TestPokemon nahMahBoi) {
         new TestCharacter(mahBoiiiiiii);
         TestBattle testBattle = new TestBattle(nahMahBoi);
 
-        mahBoiiiiiii.setupMove(AttackNamesies.SPLASH, testBattle, nahMahBoi);
-        nahMahBoi.setupMove(AttackNamesies.SPLASH, testBattle, mahBoiiiiiii);
+        mahBoiiiiiii.setupMove(AttackNamesies.SPLASH, testBattle);
+        nahMahBoi.setupMove(AttackNamesies.SPLASH, testBattle);
 
         return testBattle;
     }

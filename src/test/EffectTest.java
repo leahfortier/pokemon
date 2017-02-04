@@ -5,7 +5,6 @@ import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 
@@ -37,7 +36,7 @@ public class EffectTest {
         // Quick guard only protects against increased priority moves
         checkProtect(true, AttackNamesies.QUICK_GUARD, AttackNamesies.QUICK_ATTACK);
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.AVALANCHE);
-        checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.TOXIC);
+        checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.THUNDER_WAVE);
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.CONSTRICT);
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.WATER_GUN);
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.FEINT);
@@ -47,7 +46,7 @@ public class EffectTest {
                 (battle, attacking, defending) -> {
                     defending.setAbility(AbilityNamesies.PRANKSTER);
                     attacking.callNewMove(battle, defending, new Move(AttackNamesies.QUICK_GUARD));
-                    defending.setupMove(AttackNamesies.CONFUSE_RAY, battle, attacking);
+                    defending.setupMove(AttackNamesies.CONFUSE_RAY, battle);
                     Assert.assertFalse(defending.getAttack().apply(defending, attacking, battle));
                 });
 
@@ -63,10 +62,9 @@ public class EffectTest {
         checkProtect(true, AttackNamesies.KINGS_SHIELD, AttackNamesies.WATER_GUN,
                 (battle, attacking, defending) -> Assert.assertTrue(defending.getStage(Stat.ATTACK.index()) == 0));
 
-        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
-        TestPokemon defending = new TestPokemon(PokemonNamesies.CHARMANDER);
-
-        TestBattle battle = TestBattle.create(attacking, defending);
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
 
         battle.fight(AttackNamesies.PROTECT, AttackNamesies.SCREECH);
         Assert.assertTrue(attacking.getStage(Stat.DEFENSE.index()) == 0);
@@ -83,14 +81,12 @@ public class EffectTest {
     }
 
     private void checkProtect(boolean shouldProtect, AttackNamesies protectMove, AttackNamesies attack, PokemonManipulator manipulator) {
-        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
-        TestPokemon defending = new TestPokemon(PokemonNamesies.CHARMANDER);
-
-        TestBattle battle = TestBattle.create(attacking, defending);
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
 
         attacking.callNewMove(battle, defending, new Move(protectMove));
-        defending.setupMove(attack, battle, attacking);
-        Assert.assertFalse(defending.getAttack().apply(defending, attacking, battle) == shouldProtect);
+        defending.apply(!shouldProtect, attack, battle);
         manipulator.manipulate(battle, attacking, defending);
 
         if (shouldProtect) {

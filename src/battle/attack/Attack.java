@@ -531,6 +531,10 @@ public abstract class Attack implements Serializable {
 			// Poison-type Pokemon bypass accuracy
 			return attacking.isType(b, Type.POISON);
 		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return EffectNamesies.BAD_POISON.getEffect().applies(b, user, victim, CastSource.ATTACK);
+		}
 	}
 
 	static class Ember extends Attack {
@@ -2150,7 +2154,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
 			this.heal(b, victim);
 			
 			if (getType(b, user, victim) != null) {
@@ -6303,6 +6306,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
 			attacking.addEffect((PokemonEffect)EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect());
 		}
 
@@ -6862,7 +6866,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
 			for (Move move : user.getMoves(b)) {
 				if (move.getAttack().namesies() != super.namesies && !move.used()) {
 					return false;
