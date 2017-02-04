@@ -3,14 +3,19 @@ package battle.effect.generic;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.Move;
+import battle.attack.MoveType;
 import battle.effect.status.StatusCondition;
+import item.Item;
 import main.Global;
-import type.Type;
 import map.TerrainType;
+import message.MessageUpdate;
+import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.Ability;
+import pokemon.ability.AbilityNamesies;
 import trainer.Trainer;
+import type.Type;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -103,6 +108,31 @@ public final class EffectInterfaces {
 					effect.applyRecoil(b, user, damage);
 				}
 			}
+		}
+	}
+
+	public interface RecoilPercentageMove extends RecoilMove {
+		int getDamagePercentageDenominator();
+
+		default void applyRecoil(Battle b, ActivePokemon user, int damage) {
+			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+				return;
+			}
+			
+			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
+			user.reduceHealth(b, (int)Math.ceil((double)damage/getDamagePercentageDenominator()), false);
+		}
+	}
+
+	public interface SelfHealingMove {
+		double getHealFraction(Battle b, ActivePokemon victim);
+
+		default void heal(Battle b, ActivePokemon victim) {
+			// Heal yourself!
+			victim.healHealthFraction(this.getHealFraction(b, victim));
+			
+			// TODO: Make sure the message is set up correctly for the hp change
+			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
 		}
 	}
 
@@ -348,7 +378,11 @@ public final class EffectInterfaces {
 		}
 	}
 
-	public interface GroundedEffect {
+	public interface GroundedEffect extends SelfAttackBlocker {
+
+		default boolean block(Battle b, ActivePokemon user) {
+			return user.getAttack().isMoveType(MoveType.AIRBORNE);
+		}
 
 		static boolean containsGroundedEffect(Battle b, ActivePokemon p) {
 			List<Object> invokees = b.getEffectsList(p);
@@ -910,7 +944,7 @@ public final class EffectInterfaces {
 	public interface StatSwitchingEffect {
 		Stat switchStat(Stat s);
 
-		static Stat switchStat(Battle b, ActivePokemon statPokemon, ActivePokemon other, Stat s) {
+		static Stat switchStat(Battle b, ActivePokemon statPokemon, Stat s) {
 			List<Object> invokees = b.getEffectsList(statPokemon);
 			for (Object invokee : invokees) {
 				if (invokee instanceof StatSwitchingEffect && !Effect.isInactiveEffect(invokee, b)) {
@@ -1241,28 +1275,100 @@ public final class EffectInterfaces {
 		}
 	}
 
-	public interface TypeBlocker {
-		boolean block(Type attackType, ActivePokemon victim);
-		void alternateEffect(Battle b, ActivePokemon victim);
+	public interface AttackBlocker {
+		boolean block(Battle b, ActivePokemon user, ActivePokemon victim);
+		default void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {}
 
-		static TypeBlocker block(Battle b, ActivePokemon attacking, Type attackType, ActivePokemon victim) {
+		default String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return Effect.DEFAULT_FAIL_MESSAGE;
+		}
+
+		static AttackBlocker checkBlocked(Battle b, ActivePokemon user, ActivePokemon victim) {
 			List<Object> invokees = b.getEffectsList(victim);
 			for (Object invokee : invokees) {
-				if (invokee instanceof TypeBlocker && !Effect.isInactiveEffect(invokee, b)) {
+				if (invokee instanceof AttackBlocker && !Effect.isInactiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && attacking.breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && user.breaksTheMold()) {
 						continue;
 					}
 					
-					TypeBlocker effect = (TypeBlocker)invokee;
-					if (effect.block(attackType, victim)) {
+					AttackBlocker effect = (AttackBlocker)invokee;
+					if (effect.block(b, user, victim)) {
 						return effect;
 					}
 				}
 			}
 			
 			return null;
+		}
+	}
+
+	public interface SelfAttackBlocker {
+		boolean block(Battle b, ActivePokemon user);
+		default void alternateEffect(Battle b, ActivePokemon user) {}
+
+		default String getBlockMessage(Battle b, ActivePokemon user) {
+			return Effect.DEFAULT_FAIL_MESSAGE;
+		}
+
+		static SelfAttackBlocker checkBlocked(Battle b, ActivePokemon user) {
+			List<Object> invokees = b.getEffectsList(user);
+			for (Object invokee : invokees) {
+				if (invokee instanceof SelfAttackBlocker && !Effect.isInactiveEffect(invokee, b)) {
+					
+					SelfAttackBlocker effect = (SelfAttackBlocker)invokee;
+					if (effect.block(b, user)) {
+						return effect;
+					}
+				}
+			}
+			
+			return null;
+		}
+	}
+
+	public interface ItemSwapperEffect {
+		String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem);
+	}
+
+	public interface SwapOpponentEffect {
+		String getSwapMessage(ActivePokemon user, ActivePokemon victim);
+	}
+
+	public interface ProtectingEffect extends AttackBlocker {
+		default void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {}
+
+		default boolean protectingCondition(Battle b, ActivePokemon attacking) {
+			return true;
+		}
+
+		default boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Attack attack = user.getAttack();
+			return protectingCondition(b, user) && !attack.isSelfTarget() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.PROTECT_PIERCING);
+		}
+
+		default void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+			CrashDamageMove.invokeCrashDamageMove(b, user);
+			this.protectingEffects(b, user, victim);
+		}
+
+		default String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + " is protecting itself!";
+		}
+	}
+
+	public interface AttackSelectionSelfBlockerEffect extends AttackSelectionEffect, SelfAttackBlocker {
+
+		default boolean block(Battle b, ActivePokemon user) {
+			return !this.usable(b, user, user.getMove());
+		}
+	}
+
+	public interface OpponentAttackSelectionBlockerEffect extends OpponentAttackSelectionEffect, AttackBlocker {
+
+		default boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !this.usable(b, user, user.getMove());
 		}
 	}
 }

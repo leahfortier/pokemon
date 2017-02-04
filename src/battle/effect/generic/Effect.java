@@ -86,6 +86,15 @@ public abstract class Effect implements Serializable {
 			active = false;
 		}
 	}
+
+	public boolean apply(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+		if (this.applies(b, caster, victim, source)) {
+			this.cast(b, caster, victim, source, printCast);
+			return true;
+		}
+
+		return false;
+	}
 	
 	// Should be overriden by subclasses as deemed appropriate
 	public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {

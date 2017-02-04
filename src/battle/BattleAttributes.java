@@ -34,6 +34,8 @@ public class BattleAttributes implements Serializable {
 	private boolean firstTurn;
 	private boolean attacking;
 	private boolean used;
+	private boolean lastMoveSucceeded;
+	private Object castSource;
 	
 	public BattleAttributes() {
 		resetStages();
@@ -45,8 +47,18 @@ public class BattleAttributes implements Serializable {
 		damageTaken = 0;
 		firstTurn = true;
 		attacking = false;
+		lastMoveSucceeded = true;
+		castSource = null;
 	}
-	
+
+	public void setCastSource(Object castSource) {
+		this.castSource = castSource;
+	}
+
+	public Object getCastSource() {
+		return this.castSource;
+	}
+
 	public void setAttacking(boolean isAttacking) {
 		attacking = isAttacking;
 	}
@@ -54,8 +66,16 @@ public class BattleAttributes implements Serializable {
 	public boolean isAttacking() {
 		return attacking;
 	}
+
+	void setLastMoveSucceeded(boolean lastMoveSucceeded) {
+		this.lastMoveSucceeded = lastMoveSucceeded;
+	}
+
+	public boolean lastMoveSucceeded() {
+		return this.lastMoveSucceeded;
+	}
 	
-	public void setFirstTurn(boolean isFirstTurn) {
+	void setFirstTurn(boolean isFirstTurn) {
 		firstTurn = isFirstTurn;
 	}
 	
@@ -161,6 +181,10 @@ public class BattleAttributes implements Serializable {
 	
 	public boolean hasEffect(EffectNamesies effect) {
 		return Effect.hasEffect(effects, effect);
+	}
+
+	public int getStage(Stat stat) {
+		return this.getStage(stat.index());
 	}
 	
 	public int getStage(int index) {

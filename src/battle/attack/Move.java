@@ -94,7 +94,7 @@ public class Move implements Serializable {
 		return attack;
 	}
 	
-	public void use() {
+	public void setUsed() {
 		used = true;
 	}
 	

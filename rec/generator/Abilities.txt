@@ -168,25 +168,25 @@ Magic Guard:
 Flash Fire:
 	Desc: Powers up Fire-type moves if hit by a fire move.
 	Field: 
-	private boolean activated;
-	###
+		private boolean activated;
+		###
 	Activate: 
-	this.activated = false;
-	###
+		this.activated = false;
+		###
 	AbilityIsActive:
-	return activated;
-	###
-	Int: TypeBlocker, PowerChangeEffect
+		return activated;
+		###
+	Int: AttackBlocker, PowerChangeEffect
 	Block: 
-	return attackType == Type.FIRE;
-	###
+		return user.getAttackType() == Type.FIRE;
+		###
+	BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!"
 	AlternateEffect: 
-	Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!"));
-	activated = true;
-	###
+		activated = true;
+		###
 	GetMultiplier: 
-	return activated && user.getAttackType() == Type.FIRE ? 1.5 : 1;
-	###
+		return activated && user.getAttackType() == Type.FIRE ? 1.5 : 1;
+		###
 *
 Drought:
 	WeatherStarter: Sunny made the sunlight turn harsh
@@ -279,24 +279,26 @@ Limber:
 *
 Damp:
 	Desc: Prevents combatants from self destructing.
-	Int: BeforeTurnEffect, OpponentBeforeTurnEffect
+	Int: AttackBlocker, SelfAttackBlocker
 	Field:
-	private boolean checkeroo(Battle b, ActivePokemon attacking, ActivePokemon abilify) {
-		if (attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION) {
-			b.printAttacking(attacking);
-			Messages.add(new MessageUpdate(abilify.getName() + "'s " + this.getName() + " prevents " + attacking.getAttack().getName() + " from being used!"));
-			return false;
+		private boolean checkeroo(ActivePokemon attacking) {
+			return attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION;
 		}
 		
-		return true;
-	}
-	###
-	CanAttack:
-	return checkeroo(b, p, p);
-	###
-	OpponentCanAttack: 
-	return checkeroo(b, p, opp);
-	###
+		private String blockityMessage(ActivePokemon attacking, ActivePokemon abilify) {
+			return abilify.getName() + "'s " + this.getName() + " prevents " + attacking.getAttack().getName() + " from being used!";
+		}
+		###
+	SelfBlock:
+		return checkeroo(user);
+		###
+	Block: 
+		return checkeroo(user);
+		###
+	SelfBlockMessage:
+		return blockityMessage(user, user);
+		###
+	BlockMessage: blockityMessage(user, victim)
 *
 Cloud Nine:
 	Desc: Eliminates the effects of weather.
@@ -365,12 +367,18 @@ Sturdy:
 	Desc: The Pok\u00e9mon is protected against 1-hit KO attacks.
 	Int: BracingEffect
 	Bracing: 
-	return fullHealth;
-	###
+		return fullHealth;
+		###
 	BraceMessage: bracer.getName() + "'s " + this.getName() + " endured the hit!"
+	MoveTypePrevent: ONE_HIT_KO OHKO moves
 *
 Oblivious:
 	Desc: Prevents the Pok\u00e9mon from becoming infatuated.
+	Int: AttackBlocker
+	Block:
+		return user.getAttack().namesies() == AttackNamesies.CAPTIVATE;
+		###
+	BlockMessage: victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"
 *
 Magnet Pull:
 	Int: OpponentTrappingEffect
@@ -469,7 +477,7 @@ Hyper Cutter:
 *
 Soundproof:
 	Desc: Gives full immunity to all sound-based moves.
-	MoveTypePrevent: Sound_Based
+	MoveTypePrevent: Sound_Based sound-based moves
 *
 Reckless:
 	Desc: Powers up moves that have recoil damage.
@@ -733,6 +741,12 @@ Magma Armor:
 *
 Suction Cups:
 	Desc: Negates all moves that force switching out.
+	Int: AttackBlocker
+	Block:
+		Attack attack = user.getAttack();
+		return attack instanceof SwapOpponentEffect && attack.isStatusMove();
+		###
+	BlockMessage: victim.getName() + "'s " + this.getName() + " prevents it from switching!"
 *
 Steadfast:
 	Desc: Raises Speed each time the Pok\u00e9mon flinches.
@@ -783,28 +797,12 @@ Wonder Guard:
 	Desc: Only supereffective moves will hit.
 	Irreplaceable: True
 	Irrestealable: True
-	Int: OpponentBeforeTurnEffect
-	OpponentCanAttack: 
-	// Status moves always hit
-	if (p.getAttack().isStatusMove()) {
-		return true;
-	}
-	
-	// Super effective moves hit
-	if (TypeAdvantage.isSuperEffective(p, opp, b)) {
-		return true;
-	}
-	
-	// None-type moves always hit
-	if (p.isAttackType(Type.NO_TYPE)) {
-		return true;
-	}
-	
-	// Immunity Solunity
-	b.printAttacking(p);
-	Messages.add(new MessageUpdate(opp.getName() + "'s " + this.getName() + " makes it immune to " + p.getAttack().getName() + "!"));
-	return false;
-	###
+	Int: AttackBlocker
+	Block:
+		// Status moves, super-effective moves, and None-type moves always hit
+		return !user.getAttack().isStatusMove() && !TypeAdvantage.isSuperEffective(user, victim, b) && !user.isAttackType(Type.NO_TYPE);
+		###
+	BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + user.getAttack().getName() + "!"
 *
 Normalize:
 	Desc: All the Pok\u00e9mon's moves become the Normal type.
@@ -932,6 +930,7 @@ Aftermath:
 	Int: PhysicalContactEffect
 	Contact: 
 	// TODO: Pretty sure this doesn't work anymore
+	// TODO: Doesn't work on Damp
 	if (victim.isFainted(b)) {
 		Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
 		user.reduceHealthFraction(b, 1/4.0);
@@ -1243,12 +1242,14 @@ Unburden:
 	ModifyMultiplier: 2 p.hasEffect(EffectNamesies.CONSUMED_ITEM)
 *
 Pickpocket:
-	Int: PhysicalContactEffect
-	StealItem: True
+	Int: PhysicalContactEffect, ItemSwapperEffect
+	SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 	Contact: 
-	// Steal from the Pokemon who made physical contact with you
-	steal(b, victim, user);
-	###
+		// Steal from the Pokemon who made physical contact with you
+		if (!victim.isFainted(b) && victim.canStealItem(b, user)) {
+			victim.swapItems(b, user, this);
+		}
+		###
 	Desc: Steals an item when hit by another Pok\u00e9mon.
 *
 Harvest:
@@ -1315,7 +1316,7 @@ Forecast:
 *
 Bulletproof:
 	Desc: Protects the Pok\u00e9mon from some ball and bomb moves.
-	MoveTypePrevent: Bomb_Ball
+	MoveTypePrevent: Bomb_Ball bomb/ball moves
 *
 Aura Break:
 	Desc: The effects of Aura Abilities are reversed.
@@ -1330,12 +1331,14 @@ Dark Aura:
 *
 Magician:
 	Desc: The Pok\u00e9mon steals the held item of a Pok\u00e9mon it hits with a move.
-	Int: ApplyDamageEffect
+	Int: ApplyDamageEffect, ItemSwapperEffect
+	SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 	OnApplyDamage:
-	// Steal the victim's item when damage is dealt
-	steal(b, user, victim);
-	###
-	StealItem: True
+		// Steal the victim's item when damage is dealt
+		if (!user.isFainted(b) && user.canStealItem(b, victim)) {
+			user.swapItems(b, victim, this);
+		}
+		###
 *
 Cheek Pouch:
 	Desc: Restores HP as well when the Pok\u00e9mon eats a Berry.

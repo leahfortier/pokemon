@@ -1,6 +1,5 @@
 package test;
 
-import battle.Battle;
 import battle.attack.AttackNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
@@ -8,21 +7,22 @@ import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import type.TypeAdvantage;
+import util.RandomUtils;
 
 public class AbilityTest {
-    private static TestPokemon getPokemon(PokemonNamesies pokemon, AbilityNamesies ability) {
-        return new TestPokemon(pokemon).withAbility(ability);
+    @Test
+    public void printSeed() {
+        System.out.println("Random Seed: " + RandomUtils.getSeed());
     }
 
     @Test
     public void testLevitate() {
-        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
-        TestPokemon defending = getPokemon(PokemonNamesies.KOFFING, AbilityNamesies.LEVITATE);
-
-        Battle battle = TestBattle.create(attacking, defending);
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.LEVITATE);
 
         // Ground moves should not hit a levitating Pokemon
-        attacking.setupMove(AttackNamesies.EARTHQUAKE, battle, defending);
+        attacking.setupMove(AttackNamesies.EARTHQUAKE, battle);
         Assert.assertTrue(TypeAdvantage.doesNotEffect(attacking, defending, battle));
 
         // Even if holding a Ring Target
@@ -39,36 +39,36 @@ public class AbilityTest {
 
     @Test
     public void wonderGuardTest() {
-        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
-        TestPokemon defending = getPokemon(PokemonNamesies.SHEDINJA, AbilityNamesies.WONDER_GUARD);
-
-        TestBattle battle = TestBattle.create(attacking, defending);
+        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.SHEDINJA);
+        TestPokemon attacking = battle.getAttacking();
+        battle.getDefending().withAbility(AbilityNamesies.WONDER_GUARD);
 
         // Status move should work
-        Assert.assertTrue(battle.ableToAttack(AttackNamesies.DRAGON_DANCE, attacking, defending));
-        Assert.assertTrue(battle.ableToAttack(AttackNamesies.THUNDER_WAVE, attacking, defending));
+        attacking.apply(true, AttackNamesies.DRAGON_DANCE, battle);
+        attacking.apply(true, AttackNamesies.THUNDER_WAVE, battle);
 
         // Super-effective moves and moves without type work
-        Assert.assertTrue(battle.ableToAttack(AttackNamesies.SHADOW_BALL, attacking, defending));
-        Assert.assertTrue(battle.ableToAttack(AttackNamesies.STRUGGLE, attacking, defending));
+        attacking.apply(true, AttackNamesies.SHADOW_BALL, battle);
+        battle.emptyHeal();
+        attacking.apply(true, AttackNamesies.STRUGGLE, battle);
 
         // Attacking non-super effective moves should not work
-        Assert.assertFalse(battle.ableToAttack(AttackNamesies.SURF, attacking, defending));
-        Assert.assertFalse(battle.ableToAttack(AttackNamesies.VINE_WHIP, attacking, defending));
-        Assert.assertFalse(battle.ableToAttack(AttackNamesies.TACKLE, attacking, defending));
+        attacking.apply(false, AttackNamesies.SURF, battle);
+        attacking.apply(false, AttackNamesies.VINE_WHIP, battle);
+        attacking.apply(false, AttackNamesies.TACKLE, battle);
     }
 
     @Test
     public void absorbTypeTest() {
-        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
-        TestPokemon defending = new TestPokemon(PokemonNamesies.LANTURN).withAbility(AbilityNamesies.VOLT_ABSORB);
-
-        TestBattle battle = TestBattle.create(attacking, defending);
+        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.LANTURN);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.VOLT_ABSORB);
 
         battle.attackingFight(AttackNamesies.CONSTRICT);
         Assert.assertFalse(defending.fullHealth());
 
-        battle.attackingFight(AttackNamesies.THUNDERBOLT);
+        // Thunderbolt should heal
+        attacking.apply(false, AttackNamesies.THUNDERBOLT, battle);
         Assert.assertTrue(defending.fullHealth());
 
         battle.attackingFight(AttackNamesies.CONSTRICT);
@@ -76,5 +76,21 @@ public class AbilityTest {
 
         battle.attackingFight(AttackNamesies.WATER_GUN);
         Assert.assertFalse(defending.fullHealth());
+    }
+
+    @Test
+    public void dampTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        attacking.apply(true, AttackNamesies.SELF_DESTRUCT, battle);
+        battle.emptyHeal();
+        defending.apply(true, AttackNamesies.EXPLOSION, battle);
+
+        battle.emptyHeal();
+        attacking.withAbility(AbilityNamesies.DAMP);
+        attacking.apply(false, AttackNamesies.SELF_DESTRUCT, battle);
+        defending.apply(false, AttackNamesies.EXPLOSION, battle);
     }
 }

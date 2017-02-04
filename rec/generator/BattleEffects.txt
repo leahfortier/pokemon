@@ -101,21 +101,15 @@ PsychicTerrain:
 	CastMessage: "Psychic energy evelops the battlefield!!!"
 	SubsideMessage: "The psychic energy disappeared."
 	Terrain: Psychic
-	Int: BeforeTurnEffect, PowerChangeEffect, TerrainEffect
-	CanAttack:
-	// TODO: Generalize this pattern
-	if (p.getAttack().getPriority(b, p) > 0 && !opp.isLevitating(b)) {
-		b.printAttacking(p);
-		Messages.add(new MessageUpdate(DEFAULT_FAIL_MESSAGE));
-		return false;
-	}
-
-	return true;
-	###
+	Int: AttackBlocker, PowerChangeEffect, TerrainEffect
+	Block: 
+		// Psychic terrain prevents increased priority moves from hitting
+		return b.getPriority(user, user.getAttack()) > 0 && !victim.isLevitating(b);
+		###
 	GetMultiplier:
-	// Psychic-type moves are 50% stronger with the psychic terrain
-	return user.getAttackType() == Type.PSYCHIC && !user.isLevitating(b) ? 1.5 : 1;
-	###
+		// Psychic-type moves are 50% stronger with the psychic terrain
+		return user.getAttackType() == Type.PSYCHIC && !user.isLevitating(b) ? 1.5 : 1;
+		###
 *
 FieldUproar:
 	Int: StatusPreventionEffect

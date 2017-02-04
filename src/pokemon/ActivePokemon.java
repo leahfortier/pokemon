@@ -16,10 +16,12 @@ import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
+import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
+import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
@@ -35,7 +37,6 @@ import item.hold.EVItem;
 import item.hold.HoldItem;
 import main.Game;
 import main.Global;
-import type.Type;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
@@ -49,6 +50,7 @@ import pokemon.evolution.EvolutionMethod;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.WildPokemon;
+import type.Type;
 import util.DrawUtils;
 import util.RandomUtils;
 import util.StringUtils;
@@ -604,6 +606,93 @@ public class ActivePokemon implements Serializable {
 		setMove(temp);
 	}
 
+	// Wild Pokemon if in a wild battle and not the player's pokemon
+	public boolean isWildPokemon(Battle b) {
+		return b.isWildBattle() && !this.isPlayer();
+	}
+
+	public boolean canStealItem(Battle b, ActivePokemon victim) {
+		return !this.isHoldingItem(b)
+				&& victim.isHoldingItem(b)
+				&& this.canSwapItems(b, victim);
+	}
+
+	public boolean canGiftItem(Battle b, ActivePokemon receiver) {
+		return this.isHoldingItem(b) && !receiver.isHoldingItem(b);
+	}
+
+	public boolean canRemoveItem(Battle b, ActivePokemon victim) {
+		return victim.isHoldingItem(b) && canSwapItems(b, victim);
+	}
+
+	public boolean canSwapItems(Battle b, ActivePokemon swapster) {
+		return (this.isHoldingItem(b) || swapster.isHoldingItem(b))
+				&& !this.isWildPokemon(b)
+				&& !(swapster.hasAbility(AbilityNamesies.STICKY_HOLD) && !this.breaksTheMold());
+	}
+
+	public void swapItems(Battle b, ActivePokemon swapster, ItemSwapperEffect swapsicles) {
+		Item userItem = this.getHeldItem(b);
+		Item victimItem = swapster.getHeldItem(b);
+
+		Messages.add(new MessageUpdate(swapsicles.getSwitchMessage(this, userItem, swapster, victimItem)));
+
+		// For wild battles, an actual switch occurs
+		if (b.isWildBattle()) {
+			this.giveItem((HoldItem)victimItem);
+			swapster.giveItem((HoldItem)userItem);
+		} else {
+			this.getAttributes().setCastSource(victimItem);
+			EffectNamesies.CHANGE_ITEM.getEffect().apply(b, this, this, CastSource.CAST_SOURCE, false);
+
+			this.getAttributes().setCastSource(userItem);
+			EffectNamesies.CHANGE_ITEM.getEffect().apply(b, this, swapster, CastSource.CAST_SOURCE, false);
+		}
+	}
+
+	public boolean canSwapOpponent(Battle b, ActivePokemon victim) {
+		if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
+			return false;
+		}
+
+		if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !this.breaksTheMold()) {
+			return false;
+		}
+
+		Team opponent = b.getTrainer(victim);
+		if (opponent instanceof WildPokemon) {
+			// Fails against wild Pokemon of higher levels
+			return victim.getLevel() <= this.getLevel();
+		}
+		else {
+			// Fails against trainers on their last Pokemon
+			Trainer trainer = (Trainer)opponent;
+			return trainer.hasRemainingPokemon();
+		}
+	}
+
+	public void swapOpponent(Battle b, ActivePokemon victim, SwapOpponentEffect swapster) {
+		if (!canSwapOpponent(b, victim)) {
+			return;
+		}
+
+		Messages.add(new MessageUpdate(swapster.getSwapMessage(this, victim)));
+
+		Team opponent = b.getTrainer(victim);
+		if (opponent instanceof WildPokemon) {
+			// End the battle against a wild Pokemon
+			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+		}
+		else {
+			Trainer trainer = (Trainer)opponent;
+
+			// Swap to a random Pokemon!
+			trainer.switchToRandom();
+			victim = trainer.front();
+			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
+		}
+	}
+
 	public boolean switcheroo(Battle b, ActivePokemon caster, CastSource source, boolean wildExit) {
 		Team team = b.getTrainer(this);
 		String sourceName = source.getSourceName(b, this);
@@ -682,7 +771,7 @@ public class ActivePokemon implements Serializable {
 	public void setStatus(Status s) {
 		status = s;
 	}
-	
+
 	public void addEffect(PokemonEffect e) {
 		attributes.addEffect(e);
 	}

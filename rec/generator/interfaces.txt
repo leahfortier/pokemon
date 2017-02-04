@@ -41,6 +41,38 @@ RecoilMove:
 		Move: user
 	*
 ***
+RecoilPercentageMove:
+	Extends: RecoilMove
+	Method:
+		Header: int getDamagePercentageDenominator()
+	*
+	Method:
+		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
+		Default:
+			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+                return;
+            }
+
+            Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
+            user.reduceHealth(b, (int)Math.ceil((double)damage/getDamagePercentageDenominator()), false);
+			###
+	*
+***
+SelfHealingMove:
+	Method:
+		Header: double getHealFraction(Battle b, ActivePokemon victim)
+	*
+	Method:
+		Header: void heal(Battle b, ActivePokemon victim)
+		Default:
+			// Heal yourself!
+			victim.healHealthFraction(this.getHealFraction(b, victim));
+
+			// TODO: Make sure the message is set up correctly for the hp change
+			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+			###
+	*
+***
 PhysicalContactEffect:
 	Method:
 		Comments: 
@@ -168,6 +200,13 @@ GroundedEffect:
 		Parameters: Battle b, ActivePokemon p
 		Invoke: Contains
 		EffectList: p
+	*
+	Extends: SelfAttackBlocker
+	Method:
+		Header: boolean block(Battle b, ActivePokemon user)
+		Default: 
+			return user.getAttack().isMoveType(MoveType.AIRBORNE);
+			###
 	*
 ***
 AccuracyBypassEffect
@@ -424,7 +463,7 @@ StatSwitchingEffect:
 		Header: Stat switchStat(Stat s)
 		Invoke: Update
 		Update: s
-		InvokeParameters: Battle b, ActivePokemon statPokemon, ActivePokemon other
+		InvokeParameters: Battle b, ActivePokemon statPokemon
 		EffectList: statPokemon
 		InvokeName: switchStat
 	*
@@ -566,16 +605,101 @@ TerrainCastEffect:
 		EffectList: p
 	*
 ***
-TypeBlocker:
+AttackBlocker:
 	Method:
-		Header: boolean block(Type attackType, ActivePokemon victim)
+		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
 		Invoke: CheckGet true
-		InvokeName: block
-		InvokeParameters: Battle b, ActivePokemon attacking
-		MoldBreaker: attacking
+		InvokeName: checkBlocked
+		MoldBreaker: user
 		EffectList: victim
 	*
 	Method:
-		Header: void alternateEffect(Battle b, ActivePokemon victim)
+		Header: void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim)
+		Default: Empty
+	*
+	Method:
+		Header: String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim)
+		Default:
+			return Effect.DEFAULT_FAIL_MESSAGE;
+			###
+	*
+***
+SelfAttackBlocker:
+	Method:
+		Header: boolean block(Battle b, ActivePokemon user)
+		Invoke: CheckGet true
+		InvokeName: checkBlocked
+		EffectList: user
+	*
+	Method:
+		Header: void alternateEffect(Battle b, ActivePokemon user)
+		Default: Empty
+	*
+	Method:
+		Header: String getBlockMessage(Battle b, ActivePokemon user)
+		Default:
+			return Effect.DEFAULT_FAIL_MESSAGE;
+			###
+	*
+***
+ItemSwapperEffect:
+	Method:
+		Header: String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
+	*
+***
+SwapOpponentEffect:
+	Method:
+		Header: String getSwapMessage(ActivePokemon user, ActivePokemon victim)
+	*
+***
+ProtectingEffect:
+	Extends: AttackBlocker
+	Method:
+		Header: void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp)
+		Default: Empty
+	*
+	Method:
+		Header: boolean protectingCondition(Battle b, ActivePokemon attacking)
+		Default:
+			return true;
+			###
+	*
+	Method:
+		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
+		Default:
+			Attack attack = user.getAttack();
+			return protectingCondition(b, user) && !attack.isSelfTarget() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.PROTECT_PIERCING);
+			###
+	*
+	Method:
+		Header: void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim)
+		Default:
+			CrashDamageMove.invokeCrashDamageMove(b, user);
+			this.protectingEffects(b, user, victim);
+			###
+	*
+	Method:
+		Header: String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim)
+		Default:
+			return victim.getName() + " is protecting itself!";
+			###
+	*
+***
+AttackSelectionSelfBlockerEffect:
+	Extends: AttackSelectionEffect, SelfAttackBlocker
+	Method:
+		Header: boolean block(Battle b, ActivePokemon user)
+		Default:
+			return !this.usable(b, user, user.getMove());
+			###
+	*
+***
+OpponentAttackSelectionBlockerEffect:
+	Extends: OpponentAttackSelectionEffect, AttackBlocker
+	Method:
+		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
+		Default:
+			return !this.usable(b, user, user.getMove());
+			###
 	*
 ***

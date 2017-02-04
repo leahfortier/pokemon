@@ -180,7 +180,7 @@ public class Battle {
 		printShit();
 	}
 
-	private void printShit() {
+	protected void printShit() {
 		for (PokemonEffect e : player.front().getEffects()) {
 			System.out.println("P " + e);
 		}
@@ -475,8 +475,11 @@ public class Battle {
 	
 	private void executeAttack(ActivePokemon me, ActivePokemon o) {
 		me.getAttributes().count();
-		me.getAttack().apply(me, o, this);
-		me.getMove().use();
+
+		boolean success = me.getAttack().apply(me, o, this);
+		me.getAttributes().setLastMoveSucceeded(success);
+
+		me.getMove().setUsed();
 		me.getAttributes().decay();
 	}
 	
@@ -491,7 +494,11 @@ public class Battle {
 
 	public List<BattleEffect> getEffects() {
 		return effects;
-	}	
+	}
+
+	public List<TeamEffect> getEffects(ActivePokemon teamMember) {
+		return getEffects(teamMember.isPlayer());
+	}
 	
 	public List<TeamEffect> getEffects(boolean isPlayer) {
 		return isPlayer ? player.getEffects() : opponent.getEffects();
@@ -559,17 +566,17 @@ public class Battle {
 		
 		int damage = (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
 		
-		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n",
-				me.getActualName(),
-				me.getAttack().getName(),
-				level,
-				power,
-				random,
-				attackStat,
-				defenseStat,
-				stab,
-				adv,
-				damage);
+//		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n",
+//				me.getActualName(),
+//				me.getAttack().getName(),
+//				level,
+//				power,
+//				random,
+//				attackStat,
+//				defenseStat,
+//				stab,
+//				adv,
+//				damage);
 		
 		damage *= getDamageModifier(me, o); 
 		damage *= criticalHit(me, o);

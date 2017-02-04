@@ -7,19 +7,20 @@ import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove;
-import battle.effect.attack.SelfHealingMove;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
+import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
+import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
@@ -27,10 +28,13 @@ import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
+import battle.effect.generic.EffectInterfaces.RecoilPercentageMove;
+import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
+import battle.effect.generic.EffectInterfaces.SelfHealingMove;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
+import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
-import battle.effect.generic.EffectInterfaces.TypeBlocker;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.holder.ItemHolder;
@@ -46,7 +50,6 @@ import item.hold.SpecialTypeItem.GemItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
 import main.Global;
-import type.Type;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -59,7 +62,7 @@ import pokemon.ability.AbilityNamesies;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
-import trainer.WildPokemon;
+import type.Type;
 import type.TypeAdvantage;
 import util.GeneralUtils;
 import util.RandomUtils;
@@ -67,6 +70,7 @@ import util.RandomUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Attack implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -232,24 +236,55 @@ public abstract class Attack implements Serializable {
 	public String getPowerString() {
 		return this.power == 0 ? "--" : this.power + "";
 	}
-	
-	public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+
+	public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+		return true;
+	}
+
+	protected boolean shouldApplyDamage() {
+		return !this.isStatusMove();
+	}
+
+	protected boolean shouldApplyEffects() {
+		return true;
+	}
+
+	protected void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
+	protected void afterApplyCheck(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
+	protected void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {}
+	protected void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {}
+
+	public final boolean apply(ActivePokemon me, ActivePokemon o, Battle b) {
+		this.beginAttack(b, me, o);
+
 		ActivePokemon target = getTarget(b, me, o);
 		
 		// Don't do anything for moves that are uneffective
 		if (!effective(b, me, target)) {
-			return;
+			return false;
 		}
+
+		if (!applies(b, me, o)) {
+			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+			return false;
+		}
+
+		this.afterApplyCheck(b, me, target);
 		
 		// Physical and special attacks -- apply dat damage
-		if (!isStatusMove()) {
+		if (shouldApplyDamage()) {
 			applyDamage(me, o, b);
 		}
 		
 		// If you got it, flaunt it
 		if (canApplyEffects(b, me, target)) {
-			applyEffects(b, me, target);
+			applyBasicEffects(b, me, target);
 		}
+
+		this.applyUniqueEffects(b, me, target);
+		this.endAttack(b, me, target);
+
+		return true;
 	}
 	
 	private ActivePokemon getTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
@@ -265,18 +300,18 @@ public abstract class Attack implements Serializable {
 		if (!RandomUtils.chanceTest(chance)) {
 			return false;
 		}
-		
+
 		// Check the opponents effects and see if it will prevent effects from occurring
 		if (EffectBlockerEffect.checkBlocked(b, me, o)) {
 			return false;
 		}
-		
+
 		// Sheer Force prevents the user from having secondary effects for its moves
 		if (me.hasAbility(AbilityNamesies.SHEER_FORCE) && me.getAttack().hasSecondaryEffects()) {
 			return false;
 		}
-		
-		return true;
+
+		return this.shouldApplyEffects();
 	}
 	
 	private boolean zeroAdvantage(Battle b, ActivePokemon p, ActivePokemon opp) {
@@ -296,7 +331,7 @@ public abstract class Attack implements Serializable {
 		if (this.isSelfTarget() || this.isMoveType(MoveType.FIELD)) {
 			return true;
 		}
-		
+
 		// Non-status moves (AND FUCKING THUNDER WAVE) -- need to check the type chart
 		if ((!isStatusMove() || this.namesies == AttackNamesies.THUNDER_WAVE) && this.zeroAdvantage(b, me, o)) {
 			return false;
@@ -306,9 +341,17 @@ public abstract class Attack implements Serializable {
 			return false;
 		}
 
-		TypeBlocker blocker = TypeBlocker.block(b, me, me.getAttackType(), o);
-		if (blocker != null) {
-			blocker.alternateEffect(b, o);
+		SelfAttackBlocker selfAttackBlocker = SelfAttackBlocker.checkBlocked(b, me);
+		if (selfAttackBlocker != null) {
+			Messages.add(new MessageUpdate(selfAttackBlocker.getBlockMessage(b, me)));
+			selfAttackBlocker.alternateEffect(b, me);
+			return false;
+		}
+
+		AttackBlocker attackBlocker = AttackBlocker.checkBlocked(b, me, o);
+		if (attackBlocker != null) {
+			Messages.add(new MessageUpdate(attackBlocker.getBlockMessage(b, me, o)));
+			attackBlocker.alternateEffect(b, me, o);
 			return false;
 		}
 		
@@ -365,13 +408,19 @@ public abstract class Attack implements Serializable {
 		TakeDamageEffect.invokeTakeDamageEffect(b, me, o);
 	}
 
-	// TODO: Need to make this final and have an overridable method that is called inside here
-	public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+	private void applyUniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 		// Kill yourself!!
 		if (isMoveType(MoveType.USER_FAINTS)) {
 			user.killKillKillMurderMurderMurder(b);
 		}
-		
+
+		this.uniqueEffects(b, user, victim);
+
+		OpponentEndAttackEffect.invokeOpponentEndAttackEffect(b, user, this);
+	}
+
+	// TODO: Need to make this final and have an overridable method that is called inside here
+	private void applyBasicEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 		// Don't apply effects to a fainted Pokemon
 		if (victim.isFainted(b)) {
 			return;
@@ -390,21 +439,12 @@ public abstract class Attack implements Serializable {
 		
 		// Give additional effects
 		for (EffectNamesies effectNamesies : effects) {
-            Effect effect = effectNamesies.getEffect();
-			if (effect.applies(b, user, victim, CastSource.ATTACK)) {
-				effect.cast(b, user, victim, CastSource.ATTACK, canPrintCast());
-			}
-			else if (canPrintFail()) {
+			Effect effect = effectNamesies.getEffect();
+			boolean applies = effect.apply(b, user, victim, CastSource.ATTACK, canPrintCast());
+			if (!applies && canPrintFail()) {
 				Messages.add(new MessageUpdate(effect.getFailMessage(b, user, victim)));
 			}
 		}
-		
-		// Heal yourself!!
-		if (this instanceof SelfHealingMove) {
-			((SelfHealingMove)this).heal(user, victim, b);
-		}
-
-		OpponentEndAttackEffect.invokeOpponentEndAttackEffect(b, user, this);
 	}
 	
 	public boolean canPrintFail() {
@@ -491,6 +531,10 @@ public abstract class Attack implements Serializable {
 			// Poison-type Pokemon bypass accuracy
 			return attacking.isType(b, Type.POISON);
 		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return EffectNamesies.BAD_POISON.getEffect().applies(b, user, victim, CastSource.ATTACK);
+		}
 	}
 
 	static class Ember extends Attack {
@@ -561,7 +605,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class TakeDown extends Attack implements RecoilMove {
+	static class TakeDown extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		TakeDown() {
@@ -571,13 +615,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/4.0), false);
+		public int getDamagePercentageDenominator() {
+			return 4;
 		}
 	}
 
@@ -634,24 +673,21 @@ public abstract class Attack implements Serializable {
 			super.statChanges[Stat.SP_ATTACK.index()] = 1;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			super.statChanges = new int[Stat.NUM_BATTLE_STATS];
+			super.statChanges[Stat.ATTACK.index()] = 1;
+			super.statChanges[Stat.SP_ATTACK.index()] = 1;
+			
 			// Doubles stat changes in the sunlight
 			if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
-				int[] statChanges = super.statChanges.clone();
 				for (int i = 0; i < super.statChanges.length; i++) {
 					super.statChanges[i] *= 2;
 				}
-				
-				super.applyEffects(b, user, victim);
-				super.statChanges = statChanges;
-				return;
 			}
-			
-			super.applyEffects(b, user, victim);
 		}
 	}
 
-	static class DoubleEdge extends Attack implements RecoilMove {
+	static class DoubleEdge extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		DoubleEdge() {
@@ -661,13 +697,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
+		public int getDamagePercentageDenominator() {
+			return 3;
 		}
 	}
 
@@ -691,30 +722,28 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
+		public double getHealFraction(Battle b, ActivePokemon victim) {
 			switch (b.getWeather().namesies()) {
 				case CLEAR_SKIES:
-					victim.healHealthFraction(1/2.0);
-					break;
+					return 1/2.0;
 				case SUNNY:
-					victim.healHealthFraction(2/3.0);
-					break;
+					return 2/3.0;
 				case HAILING:
 				case RAINING:
 				case SANDSTORM:
-					victim.healHealthFraction(1/4.0);
-					break;
+					return 1/4.0;
 				default:
 					Global.error("Funky weather problems!!!!");
-					break;
+					return -1;
 			}
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			this.heal(b, victim);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -727,15 +756,16 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			victim.healHealthFraction(1/2.0);
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		public double getHealFraction(Battle b, ActivePokemon victim) {
+			return 2;
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			this.heal(b, victim);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -775,14 +805,18 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
+			super.status = StatusCondition.NO_STATUS;
+			super.effects.clear();
+			
 			// If the effect is being applied, 50/50 chance to give a status condition vs. flinching
 			if (RandomUtils.chanceTest(50)) {
-				Status.giveStatus(b, user, victim, StatusCondition.BURNED);
-				return;
+				super.status = StatusCondition.BURNED;
 			}
-			
-			super.applyEffects(b, user, victim);
+			else {
+				super.effects.add(EffectNamesies.FLINCH);
+			}
 		}
 	}
 
@@ -1033,7 +1067,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class FlareBlitz extends Attack implements RecoilMove {
+	static class FlareBlitz extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		FlareBlitz() {
@@ -1046,13 +1080,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
+		public int getDamagePercentageDenominator() {
+			return 3;
 		}
 	}
 
@@ -1110,7 +1139,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test
 			RapidSpinRelease.release(b, user);
 		}
 	}
@@ -1134,13 +1164,8 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getWeather().namesies() != EffectNamesies.HAILING) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return b.getWeather().namesies() == EffectNamesies.HAILING;
 		}
 	}
 
@@ -1570,7 +1595,11 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void startTurn(Battle b, ActivePokemon me) {
+			// TODO: Sticky Hold
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Item i = victim.getHeldItem(b);
 			if (i instanceof Berry) {
 				Messages.add(new MessageUpdate(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!"));
@@ -1697,30 +1726,28 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
+		public double getHealFraction(Battle b, ActivePokemon victim) {
 			switch (b.getWeather().namesies()) {
 				case CLEAR_SKIES:
-					victim.healHealthFraction(1/2.0);
-					break;
+					return 1/2.0;
 				case SUNNY:
-					victim.healHealthFraction(2/3.0);
-					break;
+					return 2/3.0;
 				case HAILING:
 				case RAINING:
 				case SANDSTORM:
-					victim.healHealthFraction(1/4.0);
-					break;
+					return 1/4.0;
 				default:
 					Global.error("Funky weather problems!!!!");
-					break;
+					return -1;
 			}
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			this.heal(b, victim);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -1743,17 +1770,8 @@ public abstract class Attack implements Serializable {
 			super.statChanges[Stat.SP_ATTACK.index()] = -2;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// Captivate does not work on members of the same sex or on victims with the Oblivious ability
-			if (victim.hasAbility(AbilityNamesies.OBLIVIOUS)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"));
-			}
-			else if (!Gender.oppositeGenders(user, victim)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			}
-			else {
-				super.applyEffects(b, user, victim);
-			}
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return Gender.oppositeGenders(user, victim);
 		}
 	}
 
@@ -2066,13 +2084,8 @@ public abstract class Attack implements Serializable {
 			o.reduceHealth(b, o.getHP() - me.getHP());
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (me.getHP() >= o.getHP()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getHP() < victim.getHP();
 		}
 	}
 
@@ -2132,7 +2145,6 @@ public abstract class Attack implements Serializable {
 
 	static class Roost extends Attack implements SelfHealingMove, ChangeTypeSource {
 		private static final long serialVersionUID = 1L;
-		private boolean healFail;
 
 		Roost() {
 			super(AttackNamesies.ROOST, "The user lands and rests its body. It restores the user's HP by up to half of its max HP.", 10, Type.FLYING, MoveCategory.STATUS);
@@ -2141,25 +2153,17 @@ public abstract class Attack implements Serializable {
 			super.printCast = false;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			healFail = true;
-			super.applyEffects(b, user, victim);
-			if (!healFail && getType(b, user, victim) != null) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			this.heal(b, victim);
+			
+			if (getType(b, user, victim) != null) {
 				EffectNamesies.CHANGE_TYPE.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
 				user.getEffect(EffectNamesies.CHANGE_TYPE).setTurns(1);
 			}
 		}
 
-		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			healFail = false;
-			victim.healHealthFraction(1/2.0);
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		public double getHealFraction(Battle b, ActivePokemon victim) {
+			return .5;
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -2175,6 +2179,10 @@ public abstract class Attack implements Serializable {
 			}
 			
 			return null;
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -2192,6 +2200,7 @@ public abstract class Attack implements Serializable {
 
 	static class MirrorMove extends Attack {
 		private static final long serialVersionUID = 1L;
+		private Move mirror;
 
 		MirrorMove() {
 			super(AttackNamesies.MIRROR_MOVE, "The user counters the target by mimicking the target's last move.", 20, Type.FLYING, MoveCategory.STATUS);
@@ -2203,14 +2212,17 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.MIRRORLESS);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			Move mirror = o.getAttributes().getLastMoveUsed();
-			if (mirror == null || mirror.getAttack().isMoveType(MoveType.MIRRORLESS)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			me.callNewMove(b, o, new Move(mirror.getAttack()));
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
+			this.mirror = defending.getAttributes().getLastMoveUsed();
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.callNewMove(b, victim, new Move(mirror.getAttack()));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return mirror != null && !mirror.getAttack().isMoveType(MoveType.MIRRORLESS);
 		}
 	}
 
@@ -2270,13 +2282,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.getMove().getAttack().isStatusMove()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.getMove().getAttack().isStatusMove();
 		}
 	}
 
@@ -2384,7 +2391,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Item i = victim.getHeldItem(b);
 			if (i instanceof Berry) {
 				Messages.add(new MessageUpdate(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!"));
@@ -2475,15 +2482,13 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
+		public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// Stockpile ends after Spit up is used
+			user.getEffect(EffectNamesies.STOCKPILE).deactivate();
+		}
+
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
-			
-			// TODO: Look at this again
-			// I really don't like this, because there's no way this value should actually be getting used -- but it's getting set now always even if the attack isn't going to work and we don't want a NullPointerException
-			if (stockpile == null) {
-				return super.setPower(b, me, o);
-			}
-			
 			int turns = stockpile.getTurns();
 			if (turns <= 0) {
 				Global.error("Stockpile turns should never be nonpositive");
@@ -2493,17 +2498,8 @@ public abstract class Attack implements Serializable {
 			return Math.min(turns, 3)*100;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
-			if (stockpile == null) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
-			
-			// Stockpile ends after Spit up is used
-			stockpile.deactivate();
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasEffect(EffectNamesies.STOCKPILE);
 		}
 	}
 
@@ -2516,40 +2512,36 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			PokemonEffect stockpile = user.getEffect(EffectNamesies.STOCKPILE);
-			if (stockpile == null) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			if (stockpile.getTurns() <= 0) {
+		public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// Stockpile ends after Swallow is used
+			user.getEffect(EffectNamesies.STOCKPILE).deactivate();
+		}
+
+		public double getHealFraction(Battle b, ActivePokemon victim) {
+			PokemonEffect stockpile = victim.getEffect(EffectNamesies.STOCKPILE);
+			int turns = stockpile.getTurns();
+			if (turns <= 0) {
 				Global.error("Stockpile turns should never be nonpositive");
 			}
 			
-			// TODO: This doesn't need to be in a switch statement
 			// Heals differently based on number of stockpile turns
-			switch (stockpile.getTurns()) {
-				case 1:
-					victim.healHealthFraction(1/4.0);
-					break;
-				case 2:
-					victim.healHealthFraction(1/2.0);
-					break;
-				default:
-					victim.healHealthFraction(1);
-					break;
+			if (turns == 1) {
+				return .25;
 			}
-			
-			// Stockpile ends after Swallow is used
-			stockpile.deactivate();
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+			else if (turns == 2) {
+				return .5;
+			}
+			else {
+				return 1;
+			}
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			this.heal(b, victim);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasEffect(EffectNamesies.STOCKPILE) && !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -2588,7 +2580,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.FIELD);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			user.getAttributes().resetStages();
 			victim.getAttributes().resetStages();
 			Messages.add(new MessageUpdate("All stat changes were eliminated!"));
@@ -2632,14 +2624,18 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
+			super.status = StatusCondition.NO_STATUS;
+			super.effects.clear();
+			
 			// If the effect is being applied, 50/50 chance to give a status condition vs. flinching
 			if (RandomUtils.chanceTest(50)) {
-				Status.giveStatus(b, user, victim, StatusCondition.FROZEN);
-				return;
+				super.status = StatusCondition.FROZEN;
 			}
-			
-			super.applyEffects(b, user, victim);
+			else {
+				super.effects.add(EffectNamesies.FLINCH);
+			}
 		}
 	}
 
@@ -2656,14 +2652,18 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
+			super.status = StatusCondition.NO_STATUS;
+			super.effects.clear();
+			
 			// If the effect is being applied, 50/50 chance to give a status condition vs. flinching
 			if (RandomUtils.chanceTest(50)) {
-				Status.giveStatus(b, user, victim, StatusCondition.PARALYZED);
-				return;
+				super.status = StatusCondition.PARALYZED;
 			}
-			
-			super.applyEffects(b, user, victim);
+			else {
+				super.effects.add(EffectNamesies.FLINCH);
+			}
 		}
 	}
 
@@ -3079,18 +3079,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			// Fails when the opponent is at a higher level than the user
-			if (me.getLevel() < o.getLevel()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			// Sturdy prevents OHKO moves if the user is not a mold breaker
-			if (o.hasAbility(AbilityNamesies.STURDY) && !me.breaksTheMold()) {
-				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.STURDY.getName() + " prevents OHKO moves!"));
-				return;
-			}
-			
 			// Certain death
 			o.reduceHealth(b, o.getHP());
 			Messages.add(new MessageUpdate("It's a One-Hit KO!"));
@@ -3098,6 +3086,10 @@ public abstract class Attack implements Serializable {
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
 			return super.accuracy + (me.getLevel() - o.getLevel());
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getLevel() >= victim.getLevel();
 		}
 	}
 
@@ -3208,7 +3200,7 @@ public abstract class Attack implements Serializable {
 			return super.power*(o.hasStatus(StatusCondition.ASLEEP) ? 2 : 1);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.ASLEEP)) {
 				Status.removeStatus(b, victim, CastSource.ATTACK);
 			}
@@ -3238,6 +3230,7 @@ public abstract class Attack implements Serializable {
 
 	static class Metronome extends Attack {
 		private static final long serialVersionUID = 1L;
+		private Attack metronomeMove;
 
 		Metronome() {
 			super(AttackNamesies.METRONOME, "The user waggles a finger and stimulates its brain into randomly using nearly any move.", 10, Type.NORMAL, MoveCategory.STATUS);
@@ -3248,18 +3241,18 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			AttackNamesies[] attackNames = AttackNamesies.values();
 			
 			int index;
-			Attack metronomeMove;
-			
 			do {
 				index = RandomUtils.getRandomIndex(attackNames);
 				metronomeMove = attackNames[index].getAttack();
 			} while (metronomeMove.isMoveType(MoveType.METRONOMELESS));
-			
-			me.callNewMove(b, o, new Move(metronomeMove));
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.callNewMove(b, victim, new Move(metronomeMove));
 		}
 	}
 
@@ -3283,30 +3276,28 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
+		public double getHealFraction(Battle b, ActivePokemon victim) {
 			switch (b.getWeather().namesies()) {
 				case CLEAR_SKIES:
-					victim.healHealthFraction(1/2.0);
-					break;
+					return 1/2.0;
 				case SUNNY:
-					victim.healHealthFraction(2/3.0);
-					break;
+					return 2/3.0;
 				case HAILING:
 				case RAINING:
 				case SANDSTORM:
-					victim.healHealthFraction(1/4.0);
-					break;
+					return 1/4.0;
 				default:
 					Global.error("Funky weather problems!!!!");
-					break;
+					return -1;
 			}
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			this.heal(b, victim);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -3460,26 +3451,25 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.fullHealth() || !Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, victim, victim)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			victim.removeStatus();
-			super.applyEffects(b, user, victim);
+		public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test
 			victim.getStatus().setTurns(3);
 		}
 
-		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			victim.healHealthFraction(1/1.0);
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			victim.removeStatus();
+		}
+
+		public double getHealFraction(Battle b, ActivePokemon victim) {
+			return 1;
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			this.heal(b, victim);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, user, user) && !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -3584,6 +3574,13 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// This is so fucking stupid that it consumes the Berry upon use, like srsly what the fuck is the fucking point of this move
+			if (user.getHeldItem(b) instanceof Berry) {
+				user.consumeItem(b);
+			}
+		}
+
 		public Type setType(Battle b, ActivePokemon user) {
 			Item i = user.getHeldItem(b);
 			if (i instanceof Berry) {
@@ -3597,20 +3594,8 @@ public abstract class Attack implements Serializable {
 			return ((Berry)me.getHeldItem(b)).naturalGiftPower();
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!(me.getHeldItem(b) instanceof Berry)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
-		}
-
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// This is so fucking stupid that it consumes the Berry upon use, like srsly what the fuck is the fucking point of this move
-			if (user.getHeldItem(b) instanceof Berry) {
-				user.consumeItem(b);
-			}
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getHeldItem(b) instanceof Berry;
 		}
 	}
 
@@ -3633,7 +3618,7 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
 				if (!p.hasStatus(StatusCondition.FAINTED)) {
 					p.removeStatus();
@@ -3692,8 +3677,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			super.applyEffects(b, user, victim);
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test
 			victim.getAttributes().resetStage(Stat.EVASION);
 		}
 	}
@@ -3707,8 +3692,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			super.applyEffects(b, user, victim);
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test
 			victim.getAttributes().resetStage(Stat.EVASION);
 		}
 	}
@@ -3722,8 +3707,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			super.applyEffects(b, user, victim);
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test
 			victim.getAttributes().resetStage(Stat.EVASION);
 		}
 	}
@@ -3788,14 +3773,18 @@ public abstract class Attack implements Serializable {
 
 	static class Magnitude extends Attack implements AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
-		private static final int[] CHANCES = {5, 10, 20, 30, 20, 10, 5};
-		private static final int[] POWERS = {10, 30, 50, 70, 90, 110, 150};
+		private static final int[] CHANCES = { 5, 10, 20, 30, 20, 10, 5 };
+		private static final int[] POWERS = { 10, 30, 50, 70, 90, 110, 150 };
 		
 		private int index;
 
 		Magnitude() {
 			super(AttackNamesies.MAGNITUDE, "The user looses a ground-shaking quake affecting everyone around the user. Its power varies.", 30, Type.GROUND, MoveCategory.PHYSICAL);
 			super.accuracy = 100;
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Messages.add(new MessageUpdate("Magnitude " + (index + 4) + "!"));
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
@@ -3806,17 +3795,12 @@ public abstract class Attack implements Serializable {
 				power *= .5;
 			}
 			
-			// Power is double when the opponent is underground
+			// Power is doubled when the opponent is underground
 			if (o.isSemiInvulnerableDigging()) {
 				power *= 2;
 			}
 			
 			return power;
-		}
-
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			Messages.add(new MessageUpdate("Magnitude " + (index + 4) + "!"));
-			super.apply(me, o, b);
 		}
 
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
@@ -3886,7 +3870,7 @@ public abstract class Attack implements Serializable {
 				power *= .5;
 			}
 			
-			// Power is double when the opponent is underground
+			// Power is doubled when the opponent is underground
 			if (o.isSemiInvulnerableDigging()) {
 				power *= 2;
 			}
@@ -3910,18 +3894,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			// Fails when the opponent is at a higher level than the user
-			if (me.getLevel() < o.getLevel()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			// Sturdy prevents OHKO moves if the user is not a mold breaker
-			if (o.hasAbility(AbilityNamesies.STURDY) && !me.breaksTheMold()) {
-				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.STURDY.getName() + " prevents OHKO moves!"));
-				return;
-			}
-			
 			// Certain death
 			o.reduceHealth(b, o.getHP());
 			Messages.add(new MessageUpdate("It's a One-Hit KO!"));
@@ -3929,6 +3901,10 @@ public abstract class Attack implements Serializable {
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
 			return super.accuracy + (me.getLevel() - o.getLevel());
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getLevel() >= victim.getLevel();
 		}
 	}
 
@@ -3949,7 +3925,7 @@ public abstract class Attack implements Serializable {
 
 	static class TriAttack extends Attack {
 		private static final long serialVersionUID = 1L;
-		private static StatusCondition[] statusConditions = {
+		private static final StatusCondition[] statusConditions = {
 			StatusCondition.PARALYZED,
 			StatusCondition.BURNED,
 			StatusCondition.FROZEN
@@ -3962,9 +3938,8 @@ public abstract class Attack implements Serializable {
 			super.effectChance = 20;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			super.status = RandomUtils.getRandomValue(statusConditions);
-			super.applyEffects(b, user, victim);
 		}
 	}
 
@@ -3980,13 +3955,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.getAttributes().isFirstTurn()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().isFirstTurn();
 		}
 	}
 
@@ -4100,7 +4070,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++)  {
 				user.getAttributes().setStage(i, victim.getStage(i));
 			}
@@ -4142,52 +4112,26 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Covet extends Attack implements ItemHolder {
+	static class Covet extends Attack implements ItemSwapperEffect {
 		private static final long serialVersionUID = 1L;
-		private Item item;
 
 		Covet() {
 			super(AttackNamesies.COVET, "The user endearingly approaches the target, then steals the target's held item.", 25, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
-			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		private String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (user.canStealItem(b, victim)) {
+				user.swapItems(b, victim, this);
+			}
+		}
+
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
 			return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
-		}
-
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			Messages.add(new MessageUpdate(getSwitchMessage(user, userItem, victim, victimItem)));
-			
-			if (b.isWildBattle()) {
-				user.giveItem((HoldItem)victimItem);
-				victim.giveItem((HoldItem)userItem);
-				return;
-			}
-			
-			item = userItem;
-			super.applyEffects(b, user, victim);
-			
-			item = victimItem;
-			super.applyEffects(b, user, user);
-		}
-
-		public Item getItem() {
-			return item;
 		}
 	}
 
@@ -4396,21 +4340,20 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// Fails if attack is already maxed or if you have less than half your health to give up
-			if (user.getStage(Stat.ATTACK.index()) == Stat.MAX_STAT_CHANGES || user.getHPRatio() < .5) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// Maximization station
 			Messages.add(new MessageUpdate(user.getName() + " cut its own HP and maximized its attack!"));
 			user.reduceHealthFraction(b, 1/2.0);
 			user.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
 		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// Fails if attack is already maxed or if you have less than half your health to give up
+			return user.getStage(Stat.ATTACK.index()) < Stat.MAX_STAT_CHANGES && user.getHPRatio() > .5;
+		}
 	}
 
-	static class Submission extends Attack implements RecoilMove {
+	static class Submission extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		Submission() {
@@ -4420,13 +4363,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/4.0), false);
+		public int getDamagePercentageDenominator() {
+			return 4;
 		}
 	}
 
@@ -4529,8 +4467,9 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.FUTURE_SIGHT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			super.applyEffects(b, me, o); // Don't apply damage just yet!!
+		public boolean shouldApplyDamage() {
+			// Don't apply damage just yet!!
+			return false;
 		}
 
 		public boolean canPrintFail() {
@@ -4548,8 +4487,9 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.DOOM_DESIRE);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			super.applyEffects(b, me, o); // Don't apply damage just yet!!
+		public boolean shouldApplyDamage() {
+			// Don't apply damage just yet!!
+			return false;
 		}
 
 		public boolean canPrintFail() {
@@ -4926,26 +4866,22 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
-			super.statChanges[Stat.ATTACK.index()] = 1;
-			super.statChanges[Stat.DEFENSE.index()] = 1;
-			super.statChanges[Stat.SPEED.index()] = -1;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			super.statChanges = new int[Stat.NUM_BATTLE_STATS];
+			super.effects.clear();
+			
 			// Different effects based on the type of the user
-			if (me.isType(b, Type.GHOST)) {
-				Effect curse = EffectNamesies.CURSE.getEffect();
-				
-				// Manually apply the effect if it applies
-				if (curse.applies(b, me, o, CastSource.ATTACK)) {
-					curse.cast(b, me, o, CastSource.ATTACK, super.printCast);
-				}
-				else {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
+			if (attacking.isType(b, Type.GHOST)) {
+				super.effects.add(EffectNamesies.CURSE);
+				super.selfTarget = false;
 			}
 			else {
-				super.apply(me, o, b);
+				super.statChanges[Stat.ATTACK.index()] = 1;
+				super.statChanges[Stat.DEFENSE.index()] = 1;
+				super.statChanges[Stat.SPEED.index()] = -1;
+				super.selfTarget = true;
 			}
 		}
 	}
@@ -4981,15 +4917,16 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			victim.healHealthFraction(1/2.0);
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		public double getHealFraction(Battle b, ActivePokemon victim) {
+			return 2;
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			this.heal(b, victim);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -5002,17 +4939,16 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.HEALING);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// Heal by 50% unless the user has Mega Launcher -- then heal by 75%
 			double fraction = user.hasAbility(AbilityNamesies.MEGA_LAUNCHER) ? .75 : .5;
 			
 			victim.healHealthFraction(fraction);
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -5084,7 +5020,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class BraveBird extends Attack implements RecoilMove {
+	static class BraveBird extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		BraveBird() {
@@ -5094,13 +5030,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
+		public int getDamagePercentageDenominator() {
+			return 3;
 		}
 	}
 
@@ -5126,12 +5057,9 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test to make sure this works when both parties use during the same turn -- will it always be the same stat?
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			super.statChanges = new int[Stat.NUM_BATTLE_STATS];
 			super.statChanges[RandomUtils.getRandomInt(super.statChanges.length)] = 2;
-			
-			super.applyEffects(b, user, victim);
 		}
 	}
 
@@ -5282,18 +5210,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			// Fails when the opponent is at a higher level than the user
-			if (me.getLevel() < o.getLevel()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			// Sturdy prevents OHKO moves if the user is not a mold breaker
-			if (o.hasAbility(AbilityNamesies.STURDY) && !me.breaksTheMold()) {
-				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.STURDY.getName() + " prevents OHKO moves!"));
-				return;
-			}
-			
 			// Certain death
 			o.reduceHealth(b, o.getHP());
 			Messages.add(new MessageUpdate("It's a One-Hit KO!"));
@@ -5303,13 +5219,8 @@ public abstract class Attack implements Serializable {
 			return super.accuracy + (me.getLevel() - o.getLevel());
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.isType(b, Type.ICE)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !victim.isType(b, Type.ICE) && user.getLevel() >= victim.getLevel();
 		}
 	}
 
@@ -5528,16 +5439,15 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Move last = victim.getAttributes().getLastMoveUsed();
-			
-			// Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
-			if (last == null || last.getPP() == 0 || !victim.hasMove(b, last.getAttack().namesies())) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
 			Messages.add(new MessageUpdate(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!"));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
+			Move last = victim.getAttributes().getLastMoveUsed();
+			return last != null && last.getPP() > 0 && victim.hasMove(b, last.getAttack().namesies());
 		}
 	}
 
@@ -5576,17 +5486,12 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.hasStatus(StatusCondition.ASLEEP)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
-		}
-
 		public String getSapMessage(ActivePokemon victim) {
 			return victim.getName() + "'s dream was eaten!";
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasStatus(StatusCondition.ASLEEP);
 		}
 	}
 
@@ -5692,16 +5597,10 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			Type[] type = me.getType(b);
-			
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// Like this is literally the stupidest move ever like srsly what is wrong with the creators
-			if (o.isType(b, type[0]) || (type[1] != Type.NO_TYPE && o.isType(b, type[1]))) {
-				super.apply(me, o, b);
-			}
-			else {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-			}
+			Type[] type = user.getType(b);
+			return victim.isType(b, type[0]) || (type[1] != Type.NO_TYPE && victim.isType(b, type[1]));
 		}
 	}
 
@@ -5754,18 +5653,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			// Fails when the opponent is at a higher level than the user
-			if (me.getLevel() < o.getLevel()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			// Sturdy prevents OHKO moves if the user is not a mold breaker
-			if (o.hasAbility(AbilityNamesies.STURDY) && !me.breaksTheMold()) {
-				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.STURDY.getName() + " prevents OHKO moves!"));
-				return;
-			}
-			
 			// Certain death
 			o.reduceHealth(b, o.getHP());
 			Messages.add(new MessageUpdate("It's a One-Hit KO!"));
@@ -5773,6 +5660,10 @@ public abstract class Attack implements Serializable {
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
 			return super.accuracy + (me.getLevel() - o.getLevel());
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getLevel() >= victim.getLevel();
 		}
 	}
 
@@ -5847,15 +5738,13 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			int damageTaken = me.getAttributes().getDamageTaken();
-			
 			// Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
-			if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != MoveCategory.SPECIAL || b.isFirstAttack()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
+			int damageTaken = me.getAttributes().getDamageTaken();
 			o.reduceHealth(b, damageTaken*2);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().getDamageTaken() > 0 && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.SPECIAL && !b.isFirstAttack();
 		}
 	}
 
@@ -5872,15 +5761,13 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			int damageTaken = me.getAttributes().getDamageTaken();
-			
 			// Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
-			if (damageTaken == 0 || o.getMove() == null || o.getAttack().getCategory() != MoveCategory.PHYSICAL || b.isFirstAttack()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
+			int damageTaken = me.getAttributes().getDamageTaken();
 			o.reduceHealth(b, damageTaken*2);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().getDamageTaken() > 0 && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.PHYSICAL && !b.isFirstAttack();
 		}
 	}
 
@@ -5973,7 +5860,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class WoodHammer extends Attack implements RecoilMove {
+	static class WoodHammer extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		WoodHammer() {
@@ -5983,13 +5870,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
+		public int getDamagePercentageDenominator() {
+			return 3;
 		}
 	}
 
@@ -6121,7 +6003,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			BarrierEffect.breakBarriers(b, user);
 		}
 	}
@@ -6136,7 +6018,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			BarrierEffect.breakBarriers(b, user);
 		}
 	}
@@ -6356,14 +6238,17 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void startTurn(Battle b, ActivePokemon me) {
-			super.applyEffects(b, me, me);
+		public boolean shouldApplyEffects() {
+			// TODO: Test
+			return false;
 		}
 
-		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (me.hasEffect(EffectNamesies.FOCUSING)) {
-				super.applyDamage(me, o, b);
-			}
+		public void startTurn(Battle b, ActivePokemon me) {
+			super.applyBasicEffects(b, me, me);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasEffect(EffectNamesies.FOCUSING);
 		}
 	}
 
@@ -6379,17 +6264,17 @@ public abstract class Attack implements Serializable {
 			super.priority = -3;
 		}
 
-		public void startTurn(Battle b, ActivePokemon me) {
-			super.applyEffects(b, me, me);
+		public boolean shouldApplyEffects() {
+			// TODO: Test
+			return false;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (me.hasEffect(EffectNamesies.SHELL_TRAP)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.applyDamage(me, o, b);
+		public void startTurn(Battle b, ActivePokemon me) {
+			super.applyBasicEffects(b, me, me);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasEffect(EffectNamesies.SHELL_TRAP);
 		}
 	}
 
@@ -6405,7 +6290,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void startTurn(Battle b, ActivePokemon me) {
-			super.applyEffects(b, me, me);
+			super.applyBasicEffects(b, me, me);
 		}
 	}
 
@@ -6420,16 +6305,22 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.METRONOMELESS);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
+			attacking.addEffect((PokemonEffect)EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect());
+		}
+
+		public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.getAttributes().removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// Fails if it is the second turn or the opponent is using a status move
-			if (!b.isFirstAttack() || o.getMove() == null || o.getAttack().isStatusMove()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			me.addEffect((PokemonEffect)EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect());
-			me.callNewMove(b, o, new Move(o.getAttack()));
-			me.getAttributes().removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
+			return b.isFirstAttack() && victim.getMove() != null && !victim.getAttack().isStatusMove();
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.callNewMove(b, victim, new Move(victim.getAttack()));
 		}
 	}
 
@@ -6442,17 +6333,12 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.hasStatus()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Status.removeStatus(b, user, CastSource.ATTACK);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Status.removeStatus(b, user, CastSource.ATTACK);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasStatus();
 		}
 	}
 
@@ -6487,7 +6373,7 @@ public abstract class Attack implements Serializable {
 			super.power = 50;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			user.getAttributes().resetStages();
 			victim.getAttributes().resetStages();
 			Messages.add(new MessageUpdate("All stat changes were eliminated!"));
@@ -6531,15 +6417,16 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			victim.healHealthFraction(1/2.0);
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		public double getHealFraction(Battle b, ActivePokemon victim) {
+			return 2;
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			this.heal(b, victim);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -6680,7 +6567,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			for (Stat s : swapStats) {
 				user.getAttributes().swapStages(s, victim);
 			}
@@ -6698,7 +6585,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			for (Stat s : swapStats) {
 				user.getAttributes().swapStages(s, victim);
 			}
@@ -6715,7 +6602,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// NOTE: Looks like this is supposed to actually swap the stats and not just the stages but I don't really care it should do the same thing as power and guard swap because that makes more sense sue me
 			user.getAttributes().swapStages(Stat.SPEED, victim);
 			Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
@@ -6724,6 +6611,7 @@ public abstract class Attack implements Serializable {
 
 	static class Copycat extends Attack {
 		private static final long serialVersionUID = 1L;
+		private Move mirror;
 
 		Copycat() {
 			super(AttackNamesies.COPYCAT, "The user mimics the move used immediately before it. The move fails if no other move has been used yet.", 20, Type.NORMAL, MoveCategory.STATUS);
@@ -6735,14 +6623,17 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.MIRRORLESS);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			Move mirror = o.getAttributes().getLastMoveUsed();
-			if (mirror == null || mirror.getAttack().isMoveType(MoveType.MIRRORLESS)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			me.callNewMove(b, o, new Move(mirror.getAttack()));
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
+			this.mirror = defending.getAttributes().getLastMoveUsed();
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.callNewMove(b, victim, new Move(mirror.getAttack()));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return mirror != null && !mirror.getAttack().isMoveType(MoveType.MIRRORLESS);
 		}
 	}
 
@@ -6949,7 +6840,7 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Messages.add(new MessageUpdate("But nothing happened..."));
 		}
 	}
@@ -6974,19 +6865,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			for (Move m : me.getMoves(b)) {
-				if (m.getAttack().namesies() == super.namesies) {
-					continue;
-				}
-				
-				if (!m.used()) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			for (Move move : user.getMoves(b)) {
+				if (move.getAttack().namesies() != super.namesies && !move.used()) {
+					return false;
 				}
 			}
 			
-			super.apply(me, o, b);
+			return true;
 		}
 	}
 
@@ -7030,6 +6916,7 @@ public abstract class Attack implements Serializable {
 
 	static class Conversion extends Attack implements ChangeTypeSource {
 		private static final long serialVersionUID = 1L;
+		private List<Type> types;
 
 		Conversion() {
 			super(AttackNamesies.CONVERSION, "The user changes its type to become the same type as one of its moves.", 30, Type.NORMAL, MoveCategory.STATUS);
@@ -7037,42 +6924,29 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			for (Move m : me.getMoves(b)) {
-				if (!me.isType(b, m.getAttack().getActualType())) {
-					super.apply(me, o, b);
-					return;
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
+			this.types = new ArrayList<>();
+			for (Move move : attacking.getMoves(b)) {
+				Type type = move.getAttack().getActualType();
+				if (!attacking.isType(b, type)) {
+					this.types.add(type);
 				}
 			}
-			
-			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			List<Type> types = new ArrayList<>();
-			for (Move m : victim.getMoves(b)) {
-				Type t = m.getAttack().getActualType();
-				if (!victim.isType(b, t)) {
-					types.add(t);
-				}
-			}
-			
-			return new Type[] { RandomUtils.getRandomValue(types), Type.NO_TYPE };
+			return new Type[] { RandomUtils.getRandomValue(this.types), Type.NO_TYPE };
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return this.types.size() > 0;
 		}
 	}
 
 	static class Conversion2 extends Attack implements ChangeTypeSource {
 		private static final long serialVersionUID = 1L;
-		private List<Type> getResistances(ActivePokemon victim, Type attacking, Battle b) {
-			List<Type> types = new ArrayList<>();
-			for (Type t : Type.values()) {
-				if (attacking.getAdvantage().isNotVeryEffective(t) && !victim.isType(b, t)) {
-					types.add(t);
-				}
-			}
-			
-			return types;
-		}
+		private List<Type> types;
 
 		Conversion2() {
 			super(AttackNamesies.CONVERSION2, "The user changes its type to make itself resistant to the type of the attack the opponent used last.", 30, Type.NORMAL, MoveCategory.STATUS);
@@ -7081,20 +6955,27 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			Move m = o.getAttributes().getLastMoveUsed();
-			if (m == null || getResistances(me, m.getType(), b).size() == 0) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
+			this.types = new ArrayList<>();
 			
-			super.apply(me, o, b);
+			Move lastMoveUsed = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
+			if (lastMoveUsed != null) {
+				Type attackingType = lastMoveUsed.getType();
+				for (Type type : Type.values()) {
+					if (attackingType.getAdvantage().isNotVeryEffective(type) && !attacking.isType(b, type)) {
+						this.types.add(type);
+					}
+				}
+			}
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
-			List<Type> types = getResistances(victim, other.getAttributes().getLastMoveUsed().getType(), b);
-			return new Type[] { RandomUtils.getRandomValue(types), Type.NO_TYPE };
+			return new Type[] { RandomUtils.getRandomValue(this.types), Type.NO_TYPE };
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return this.types.size() > 0;
 		}
 	}
 
@@ -7131,13 +7012,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.getWeight(b) > 440) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getWeight(b) < 441;
 		}
 	}
 
@@ -7179,18 +7055,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.METRONOMELESS);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.hasStatus(StatusCondition.ASLEEP)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasStatus(StatusCondition.ASLEEP);
 		}
 	}
 
 	static class SleepTalk extends Attack implements SleepyFightsterEffect {
 		private static final long serialVersionUID = 1L;
+		private List<Move> moves;
 
 		SleepTalk() {
 			super(AttackNamesies.SLEEP_TALK, "While it is asleep, the user randomly uses one of the moves it knows.", 10, Type.NORMAL, MoveCategory.STATUS);
@@ -7200,25 +7072,17 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.METRONOMELESS);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.hasStatus(StatusCondition.ASLEEP)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			List<Move> moves = new ArrayList<>();
-			for (Move m : me.getMoves(b)) {
-				if (!m.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL)) {
-					moves.add(m);
-				}
-			}
-			
-			if (moves.size() == 0) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			me.callNewMove(b, o, RandomUtils.getRandomValue(moves));
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
+			this.moves = attacking.getMoves(b).stream().filter(move -> !move.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL)).collect(Collectors.toList());
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.callNewMove(b, victim, RandomUtils.getRandomValue(this.moves));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasStatus(StatusCondition.ASLEEP) && this.moves.size() > 0;
 		}
 	}
 
@@ -7357,15 +7221,15 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			String message = user.getName() + " transferred its status condition to " + victim.getName() + "!";
-			if (!user.hasStatus() || !Status.giveStatus(b, user, victim, user.getStatus().getType(), message)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test
+			Status.giveStatus(b, user, victim, user.getStatus().getType(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
 			user.removeStatus();
 			Messages.add(new MessageUpdate().updatePokemon(b, user));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasStatus() && Status.applies(user.getStatus().getType(), b, user, victim);
 		}
 	}
 
@@ -7497,7 +7361,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			int share = (user.getHP() + victim.getHP())/2;
 			user.setHP(share);
 			victim.setHP(share);
@@ -7519,8 +7383,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			super.applyEffects(b, me, me);
+		public boolean shouldApplyDamage() {
+			return false;
 		}
 	}
 
@@ -7634,10 +7498,29 @@ public abstract class Attack implements Serializable {
 
 	static class Present extends Attack {
 		private static final long serialVersionUID = 1L;
+		private boolean applyDamage;
 
 		Present() {
 			super(AttackNamesies.PRESENT, "The user attacks by giving the target a gift with a hidden trap. It restores HP sometimes, however.", 15, Type.NORMAL, MoveCategory.PHYSICAL);
 			super.accuracy = 90;
+		}
+
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			this.applyDamage = RandomUtils.chanceTest(80);
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test
+			victim.healHealthFraction(1/4.0);
+			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
+
+		public boolean shouldApplyDamage() {
+			return this.applyDamage;
+		}
+
+		public boolean shouldApplyEffects() {
+			return !this.applyDamage;
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
@@ -7653,23 +7536,8 @@ public abstract class Attack implements Serializable {
 			}
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!effective(b, me, o)) {
-				return;
-			}
-			
-			if (RandomUtils.chanceTest(80)) {
-				super.applyDamage(me, o, b);
-				return;
-			}
-			
-			if (o.fullHealth() || o.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			o.healHealthFraction(1/4.0);
-			Messages.add(new MessageUpdate(o.getName() + "'s health was restored!").updatePokemon(b, o));
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return this.applyDamage || (!victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK));
 		}
 	}
 
@@ -7689,6 +7557,7 @@ public abstract class Attack implements Serializable {
 
 	static class Sketch extends Attack {
 		private static final long serialVersionUID = 1L;
+		private Move copy;
 
 		Sketch() {
 			super(AttackNamesies.SKETCH, "It enables the user to permanently learn the move last used by the target. Once used, Sketch disappears.", 1, Type.NORMAL, MoveCategory.STATUS);
@@ -7701,22 +7570,25 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Move copy = victim.getAttributes().getLastMoveUsed();
-			if (copy == null || copy.getAttack().namesies() == AttackNamesies.STRUGGLE || user.hasEffect(EffectNamesies.TRANSFORMED)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
+			this.copy = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			List<Move> moves = user.getMoves(b);
 			for (int i = 0; i < moves.size(); i++) {
 				if (moves.get(i).getAttack().namesies() == super.namesies) {
-					moves.add(i, new Move(copy.getAttack()));
+					moves.add(i, new Move(this.copy.getAttack()));
 					moves.remove(i + 1);
 					Messages.add(new MessageUpdate(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!"));
 					break;
 				}
 			}
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return copy != null && copy.getAttack().namesies() != AttackNamesies.STRUGGLE && !user.hasEffect(EffectNamesies.TRANSFORMED);
 		}
 	}
 
@@ -7768,15 +7640,16 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			victim.healHealthFraction(1/2.0);
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		public double getHealFraction(Battle b, ActivePokemon victim) {
+			return 2;
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			this.heal(b, victim);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -7790,7 +7663,7 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
 				if (!p.hasStatus(StatusCondition.FAINTED)) {
 					p.removeStatus();
@@ -7881,52 +7754,26 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Thief extends Attack implements ItemHolder {
+	static class Thief extends Attack implements ItemSwapperEffect {
 		private static final long serialVersionUID = 1L;
-		private Item item;
 
 		Thief() {
 			super(AttackNamesies.THIEF, "The user attacks and steals the target's held item simultaneously. It can't steal if the user holds an item.", 25, Type.DARK, MoveCategory.PHYSICAL);
 			super.power = 60;
 			super.accuracy = 100;
-			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
-			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		private String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (user.canStealItem(b, victim)) {
+				user.swapItems(b, victim, this);
+			}
+		}
+
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
 			return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
-		}
-
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isHoldingItem(b) || !victim.isHoldingItem(b) || b.getTrainer(user.isPlayer()) instanceof WildPokemon || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			Messages.add(new MessageUpdate(getSwitchMessage(user, userItem, victim, victimItem)));
-			
-			if (b.isWildBattle()) {
-				user.giveItem((HoldItem)victimItem);
-				victim.giveItem((HoldItem)userItem);
-				return;
-			}
-			
-			item = userItem;
-			super.applyEffects(b, user, victim);
-			
-			item = victimItem;
-			super.applyEffects(b, user, user);
-		}
-
-		public Item getItem() {
-			return item;
 		}
 	}
 
@@ -8007,7 +7854,7 @@ public abstract class Attack implements Serializable {
 			return super.power*(o.hasStatus(StatusCondition.PARALYZED) ? 2 : 1);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.PARALYZED)) {
 				Status.removeStatus(b, victim, CastSource.ATTACK);
 			}
@@ -8016,6 +7863,7 @@ public abstract class Attack implements Serializable {
 
 	static class Assist extends Attack {
 		private static final long serialVersionUID = 1L;
+		private List<Attack> attacks;
 
 		Assist() {
 			super(AttackNamesies.ASSIST, "The user hurriedly and randomly uses a move among those known by other Pok\u00e9mon in the party.", 20, Type.NORMAL, MoveCategory.STATUS);
@@ -8025,26 +7873,26 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.ASSISTLESS);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			List<Attack> attacks = new ArrayList<>();
-			for (ActivePokemon p : b.getTrainer(me.isPlayer()).getTeam()) {
-				if (p == me) {
-					continue;
-				}
-				
-				for (Move move : p.getMoves(b)) {
-					if (!move.getAttack().isMoveType(MoveType.ASSISTLESS)) {
-						attacks.add(move.getAttack());
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
+			this.attacks = new ArrayList<>();
+			for (ActivePokemon p : b.getTrainer(attacking).getTeam()) {
+				if (p != attacking) {
+					for (Move move : p.getMoves(b)) {
+						if (!move.getAttack().isMoveType(MoveType.ASSISTLESS)) {
+							attacks.add(move.getAttack());
+						}
 					}
 				}
 			}
-			
-			if (attacks.isEmpty()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			me.callNewMove(b, o, new Move(RandomUtils.getRandomValue(attacks)));
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.callNewMove(b, victim, new Move(RandomUtils.getRandomValue(attacks)));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !this.attacks.isEmpty();
 		}
 	}
 
@@ -8057,17 +7905,15 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			int damageTaken = me.getAttributes().getDamageTaken();
-			if (damageTaken == 0 || b.isFirstAttack()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			o.reduceHealth(b, (int)(damageTaken*1.5));
+			o.reduceHealth(b, (int)(me.getAttributes().getDamageTaken()*1.5));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().getDamageTaken() > 0 && !b.isFirstAttack();
 		}
 	}
 
-	static class WildCharge extends Attack implements RecoilMove {
+	static class WildCharge extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		WildCharge() {
@@ -8077,13 +7923,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/4.0), false);
+		public int getDamagePercentageDenominator() {
+			return 4;
 		}
 	}
 
@@ -8187,7 +8028,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class HeadSmash extends Attack implements RecoilMove {
+	static class HeadSmash extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		HeadSmash() {
@@ -8197,13 +8038,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/2.0), false);
+		public int getDamagePercentageDenominator() {
+			return 2;
 		}
 	}
 
@@ -8283,15 +8119,16 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			victim.healHealthFraction(1/2.0);
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		public double getHealFraction(Battle b, ActivePokemon victim) {
+			return 2;
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			this.heal(b, victim);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -8504,9 +8341,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++)
-			{
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
 				int temp = user.getAttributes().getStage(i);
 				user.getAttributes().setStage(i, victim.getAttributes().getStage(i));
 				victim.getAttributes().setStage(i, temp);
@@ -8549,9 +8385,9 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Type setType(Battle b, ActivePokemon user) {
-			Item i = user.getHeldItem(b);
-			if (i instanceof PlateItem) {
-				return ((PlateItem)i).getType();
+			Item item = user.getHeldItem(b);
+			if (item instanceof PlateItem) {
+				return ((PlateItem)item).getType();
 			}
 			
 			return super.type;
@@ -8580,9 +8416,9 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Sticky Hold
 			Item heldItem = victim.getHeldItem(b);
-			
 			if (heldItem instanceof Berry || heldItem instanceof GemItem) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + heldItem.getName() + " was burned!"));
 				victim.consumeItem(b);
@@ -8780,8 +8616,8 @@ public abstract class Attack implements Serializable {
 			super.statChanges[Stat.EVASION.index()] = -1;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			super.applyEffects(b, user, victim);
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test
 			DefogRelease.release(b, victim);
 		}
 	}
@@ -8857,7 +8693,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class HeadCharge extends Attack implements RecoilMove {
+	static class HeadCharge extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		HeadCharge() {
@@ -8867,13 +8703,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/4.0), false);
+		public int getDamagePercentageDenominator() {
+			return 4;
 		}
 	}
 
@@ -9001,9 +8832,9 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Type setType(Battle b, ActivePokemon user) {
-			Item i = user.getHeldItem(b);
-			if (i instanceof DriveItem) {
-				return ((DriveItem)i).getType();
+			Item item = user.getHeldItem(b);
+			if (item instanceof DriveItem) {
+				return ((DriveItem)item).getType();
 			}
 			
 			return super.type;
@@ -9022,9 +8853,9 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Type setType(Battle b, ActivePokemon user) {
-			Item i = user.getHeldItem(b);
-			if (i instanceof MemoryItem) {
-				return ((MemoryItem)i).getType();
+			Item item = user.getHeldItem(b);
+			if (item instanceof MemoryItem) {
+				return ((MemoryItem)item).getType();
 			}
 			
 			return super.type;
@@ -9061,6 +8892,18 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
+		}
+
+		public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.consumeItem(b);
+		}
+
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Messages.add(new MessageUpdate(user.getName() + " flung its " + user.getHeldItem(b).getName() + "!"));
+		}
+
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			if (me.isHoldingItem(b)) {
 				return ((HoldItem)me.getHeldItem(b)).flingDamage();
@@ -9069,19 +8912,8 @@ public abstract class Attack implements Serializable {
 			return super.power;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.isHoldingItem(b)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(me.getName() + " flung its " + me.getHeldItem(b).getName() + "!"));
-			super.apply(me, o, b);
-			me.consumeItem(b);
-		}
-
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isHoldingItem(b);
 		}
 	}
 
@@ -9125,18 +8957,13 @@ public abstract class Attack implements Serializable {
 			super.effectChance = 30;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
 			TerrainType terrain = b.getTerrainType();
 			
 			super.status = terrain.getStatusCondition();
 			super.statChanges = terrain.getStatChanges();
 			super.effects = terrain.getEffects();
-			
-			super.applyEffects(b, user, victim);
-			
-			super.status = StatusCondition.NO_STATUS;
-			super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-			super.effects = new ArrayList<>();
 		}
 	}
 
@@ -9164,21 +8991,16 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.CHANGE_ABILITY);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.getAbility().isReplaceable()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
-		}
-
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return AbilityNamesies.NO_ABILITY.getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return caster.getName() + " suppressed " + victim.getName() + "'s ability!";
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getAbility().isReplaceable();
 		}
 	}
 
@@ -9206,7 +9028,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Roar extends Attack {
+	static class Roar extends Attack implements SwapOpponentEffect {
 		private static final long serialVersionUID = 1L;
 
 		Roar() {
@@ -9218,51 +9040,16 @@ public abstract class Attack implements Serializable {
 			super.priority = -6;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// Fails against the Suction Cups ability
-			if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !user.breaksTheMold()) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.SUCTION_CUPS.getName() + " prevents it from switching!"));
-				return;
-			}
-			
-			// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
-			if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
-				if (super.category == MoveCategory.STATUS)  {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Team opponent = b.getTrainer(victim.isPlayer());
-			if (opponent instanceof WildPokemon) {
-				// Fails against wild Pokemon of higher levels
-				if (victim.getLevel() > user.getLevel()) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
-				}
-				
-				// End the battle against a wild Pokemon
-				Messages.add(new MessageUpdate(victim.getName() + " fled in fear!"));
-				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-				return;
-			}
-			
-			Trainer trainer = (Trainer)opponent;
-			if (!trainer.hasRemainingPokemon()) {
-				// Fails against trainers on their last Pokemon
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			// Swap to a random Pokemon!
-			Messages.add(new MessageUpdate(victim.getName() + " fled in fear!"));
-			trainer.switchToRandom();
-			victim = trainer.front();
-			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
+		public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + " fled in fear!";
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.swapOpponent(b, victim, this);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canSwapOpponent(b, victim);
 		}
 	}
 
@@ -9293,7 +9080,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class CircleThrow extends Attack {
+	static class CircleThrow extends Attack implements SwapOpponentEffect {
 		private static final long serialVersionUID = 1L;
 
 		CircleThrow() {
@@ -9305,51 +9092,16 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// Fails against the Suction Cups ability
-			if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !user.breaksTheMold()) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.SUCTION_CUPS.getName() + " prevents it from switching!"));
-				return;
-			}
-			
-			// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
-			if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
-				if (super.category == MoveCategory.STATUS)  {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Team opponent = b.getTrainer(victim.isPlayer());
-			if (opponent instanceof WildPokemon) {
-				// Fails against wild Pokemon of higher levels
-				if (victim.getLevel() > user.getLevel()) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
-				}
-				
-				// End the battle against a wild Pokemon
-				Messages.add(new MessageUpdate(victim.getName() + " was thrown away!"));
-				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-				return;
-			}
-			
-			Trainer trainer = (Trainer)opponent;
-			if (!trainer.hasRemainingPokemon()) {
-				// Fails against trainers on their last Pokemon
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			// Swap to a random Pokemon!
-			Messages.add(new MessageUpdate(victim.getName() + " was thrown away!"));
-			trainer.switchToRandom();
-			victim = trainer.front();
-			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
+		public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + " was thrown away!";
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.swapOpponent(b, victim, this);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canSwapOpponent(b, victim);
 		}
 	}
 
@@ -9362,14 +9114,13 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!b.isWildBattle()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Messages.add(new MessageUpdate(user.getName() + " teleported out of battle!"));
 			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return b.isWildBattle();
 		}
 	}
 
@@ -9385,15 +9136,6 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.getAbility().isStealable()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
-		}
-
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			// TODO: Combine with Trace
 			Ability otherAbility = b.getOtherPokemon(victim.isPlayer()).getAbility();
@@ -9404,38 +9146,41 @@ public abstract class Attack implements Serializable {
 			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
 			return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
 		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getAbility().isStealable();
+		}
 	}
 
-	static class KnockOff extends Attack implements ItemHolder {
+	static class KnockOff extends Attack {
 		private static final long serialVersionUID = 1L;
 
 		KnockOff() {
 			super(AttackNamesies.KNOCK_OFF, "The user slaps down the target's held item, preventing that item from being used in the battle.", 20, Type.DARK, MoveCategory.PHYSICAL);
 			super.power = 65;
 			super.accuracy = 100;
-			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (user.canRemoveItem(b, victim)) {
+				Messages.add(new MessageUpdate(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!"));
+				if (b.isWildBattle()) {
+					victim.removeItem();
+				}
+				else {
+					user.getAttributes().setCastSource(ItemNamesies.NO_ITEM.getItem());
+					EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
+				}
+			}
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			return (int)(super.power*(o.isHoldingItem(b) ? 1.5 : 1));
 		}
-
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!victim.isHoldingItem(b) || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!"));
-			super.applyEffects(b, user, victim);
-		}
-
-		public Item getItem() {
-			return ItemNamesies.NO_ITEM.getItem();
-		}
 	}
 
-	static class Whirlwind extends Attack {
+	static class Whirlwind extends Attack implements SwapOpponentEffect {
 		private static final long serialVersionUID = 1L;
 
 		Whirlwind() {
@@ -9446,190 +9191,86 @@ public abstract class Attack implements Serializable {
 			super.priority = -6;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// Fails against the Suction Cups ability
-			if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !user.breaksTheMold()) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.SUCTION_CUPS.getName() + " prevents it from switching!"));
-				return;
-			}
-			
-			// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
-			if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
-				if (super.category == MoveCategory.STATUS)  {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Team opponent = b.getTrainer(victim.isPlayer());
-			if (opponent instanceof WildPokemon) {
-				// Fails against wild Pokemon of higher levels
-				if (victim.getLevel() > user.getLevel()) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
-				}
-				
-				// End the battle against a wild Pokemon
-				Messages.add(new MessageUpdate(victim.getName() + " blew away!"));
-				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-				return;
-			}
-			
-			Trainer trainer = (Trainer)opponent;
-			if (!trainer.hasRemainingPokemon()) {
-				// Fails against trainers on their last Pokemon
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			// Swap to a random Pokemon!
-			Messages.add(new MessageUpdate(victim.getName() + " blew away!"));
-			trainer.switchToRandom();
-			victim = trainer.front();
-			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
+		public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + " blew away!";
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.swapOpponent(b, victim, this);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canSwapOpponent(b, victim);
 		}
 	}
 
-	static class Bestow extends Attack implements ItemHolder {
+	static class Bestow extends Attack implements ItemSwapperEffect {
 		private static final long serialVersionUID = 1L;
-		private Item item;
 
 		Bestow() {
 			super(AttackNamesies.BESTOW, "The user passes its held item to the target when the target isn't holding an item.", 15, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		private String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.swapItems(b, victim, this);
+		}
+
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
 			return user.getName() + " gave " + victim.getName() + " its " + userItem.getName() + "!";
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!user.isHoldingItem(b) || victim.isHoldingItem(b)) {
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			Messages.add(new MessageUpdate(getSwitchMessage(user, userItem, victim, victimItem)));
-			
-			if (b.isWildBattle()) {
-				user.giveItem((HoldItem)victimItem);
-				victim.giveItem((HoldItem)userItem);
-				return;
-			}
-			
-			item = userItem;
-			super.applyEffects(b, user, victim);
-			
-			item = victimItem;
-			super.applyEffects(b, user, user);
-		}
-
-		public Item getItem() {
-			return item;
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canGiftItem(b, victim);
 		}
 	}
 
-	static class Switcheroo extends Attack implements ItemHolder {
+	static class Switcheroo extends Attack implements ItemSwapperEffect {
 		private static final long serialVersionUID = 1L;
-		private Item item;
 
 		Switcheroo() {
 			super(AttackNamesies.SWITCHEROO, "The user passes its held item to the target when the target isn't holding an item.", 10, Type.DARK, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		private String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.swapItems(b, victim, this);
+		}
+
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
 			return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if ((!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(AbilityNamesies.STICKY_HOLD) || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			Messages.add(new MessageUpdate(getSwitchMessage(user, userItem, victim, victimItem)));
-			
-			if (b.isWildBattle()) {
-				user.giveItem((HoldItem)victimItem);
-				victim.giveItem((HoldItem)userItem);
-				return;
-			}
-			
-			item = userItem;
-			super.applyEffects(b, user, victim);
-			
-			item = victimItem;
-			super.applyEffects(b, user, user);
-		}
-
-		public Item getItem() {
-			return item;
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canSwapItems(b, victim);
 		}
 	}
 
-	static class Trick extends Attack implements ItemHolder {
+	static class Trick extends Attack implements ItemSwapperEffect {
 		private static final long serialVersionUID = 1L;
-		private Item item;
 
 		Trick() {
 			super(AttackNamesies.TRICK, "The user catches the target off guard and swaps its held item with its own.", 10, Type.PSYCHIC, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.effects.add(EffectNamesies.CHANGE_ITEM);
 			super.moveTypes.add(MoveType.ASSISTLESS);
 			super.moveTypes.add(MoveType.METRONOMELESS);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		private String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.swapItems(b, victim, this);
+		}
+
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
 			return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if ((!user.isHoldingItem(b) && !victim.isHoldingItem(b)) || user.hasAbility(AbilityNamesies.STICKY_HOLD) || victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Item userItem = user.getHeldItem(b), victimItem = victim.getHeldItem(b);
-			Messages.add(new MessageUpdate(getSwitchMessage(user, userItem, victim, victimItem)));
-			
-			if (b.isWildBattle()) {
-				user.giveItem((HoldItem)victimItem);
-				victim.giveItem((HoldItem)userItem);
-				return;
-			}
-			
-			item = userItem;
-			super.applyEffects(b, user, victim);
-			
-			item = victimItem;
-			super.applyEffects(b, user, user);
-		}
-
-		public Item getItem() {
-			return item;
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canSwapItems(b, victim);
 		}
 	}
 
@@ -9682,16 +9323,15 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			PokemonEffect consumed = victim.getEffect(EffectNamesies.CONSUMED_ITEM);
-			if (consumed == null || victim.isHoldingItem(b)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			Item restored = ((ItemHolder)consumed).getItem();
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test
+			Item restored = ((ItemHolder)victim.getEffect(EffectNamesies.CONSUMED_ITEM)).getItem();
 			victim.giveItem((HoldItem)restored);
 			Messages.add(new MessageUpdate(victim.getName() + "'s " + restored.getName() + " was restored!"));
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasEffect(EffectNamesies.CONSUMED_ITEM) && !user.isHoldingItem(b);
 		}
 	}
 
@@ -9706,16 +9346,12 @@ public abstract class Attack implements Serializable {
 			super.statChanges[Stat.SP_ATTACK.index()] = -1;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			// First execute the move as normal
-			super.apply(me, o, b);
-			
-			me.switcheroo(b, me, CastSource.ATTACK, true);
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Messages.add(new MessageUpdate(user.getName() + " called " + victim.getName() + " a chump!!"));
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(user.getName() + " called " + victim.getName() + " a chump!!"));
-			super.applyEffects(b, user, victim);
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.switcheroo(b, user, CastSource.ATTACK, true);
 		}
 	}
 
@@ -9729,11 +9365,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			// First execute the move as normal
-			super.apply(me, o, b);
-			
-			me.switcheroo(b, me, CastSource.ATTACK, true);
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.switcheroo(b, user, CastSource.ATTACK, true);
 		}
 	}
 
@@ -9746,37 +9379,26 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Team t = b.getTrainer(user.isPlayer());
-			if (t instanceof WildPokemon) {
-				Messages.add(new MessageUpdate(user.getName() + " left the battle!"));
-				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-				return;
-			}
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Hardcore test this shit not in the mood right now but this is one of the most complicated moves so lots of tests tests tests
+			user.switcheroo(b, user, CastSource.ATTACK, true);
 			
-			Trainer trainer = (Trainer)t;
-			if (!trainer.hasRemainingPokemon()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " went back to " + trainer.getName() + "!"));
-			trainer.switchToRandom(); // TODO: Prompt a legit switch fo user
-			
-			ActivePokemon next = trainer.front();
+			ActivePokemon next = b.getTrainer(user).front();
 			next.resetAttributes();
 			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
 				next.getAttributes().setStage(i, user.getStage(i));
 			}
 			
-			for (PokemonEffect e : user.getEffects()) {
-				if (e instanceof PassableEffect) {
-					next.addEffect(e);
+			for (PokemonEffect effect : user.getEffects()) {
+				if (effect instanceof PassableEffect) {
+					next.addEffect(effect);
 				}
 			}
-			
-			user = next;
-			b.enterBattle(user, trainer.getName() + " sent out " + user.getName() + "!", false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Team team = b.getTrainer(user);
+			return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon();
 		}
 	}
 
@@ -9785,27 +9407,22 @@ public abstract class Attack implements Serializable {
 
 		PerishSong() {
 			super(AttackNamesies.PERISH_SONG, "Any Pok\u00e9mon that hears this song faints in three turns, unless it switches out of battle.", 5, Type.NORMAL, MoveCategory.STATUS);
-			super.effects.add(EffectNamesies.PERISH_SONG);
 			super.moveTypes.add(MoveType.PROTECT_PIERCING);
 			super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
 			super.moveTypes.add(MoveType.SOUND_BASED);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Messages.add(new MessageUpdate("All Pokemon hearing this song will faint in three turns!"));
 			
-			if (!victim.hasEffect(EffectNamesies.PERISH_SONG)) {
-				super.applyEffects(b, user, victim);
-			}
-			
-			if (!user.hasEffect(EffectNamesies.PERISH_SONG)) {
-				super.applyEffects(b, user, user);
-			}
+			// TODO: Test and also this used to check if they didn't have the effect before casting just in case that's relevant later
+			EffectNamesies.PERISH_SONG.getEffect().apply(b, user, victim, CastSource.ATTACK, false);
+			EffectNamesies.PERISH_SONG.getEffect().apply(b, user, user, CastSource.ATTACK, false);
 		}
 	}
 
-	static class DragonTail extends Attack {
+	static class DragonTail extends Attack implements SwapOpponentEffect {
 		private static final long serialVersionUID = 1L;
 
 		DragonTail() {
@@ -9817,51 +9434,16 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// Fails against the Suction Cups ability
-			if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !user.breaksTheMold()) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.SUCTION_CUPS.getName() + " prevents it from switching!"));
-				return;
-			}
-			
-			// Fails if this is the first attack of the turn, or if the victim is rooted by Ingrain
-			if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
-				if (super.category == MoveCategory.STATUS)  {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			Team opponent = b.getTrainer(victim.isPlayer());
-			if (opponent instanceof WildPokemon) {
-				// Fails against wild Pokemon of higher levels
-				if (victim.getLevel() > user.getLevel()) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-					return;
-				}
-				
-				// End the battle against a wild Pokemon
-				Messages.add(new MessageUpdate(victim.getName() + " was slapped away!"));
-				Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-				return;
-			}
-			
-			Trainer trainer = (Trainer)opponent;
-			if (!trainer.hasRemainingPokemon()) {
-				// Fails against trainers on their last Pokemon
-				if (super.category == MoveCategory.STATUS) {
-					Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				}
-				
-				return;
-			}
-			
-			// Swap to a random Pokemon!
-			Messages.add(new MessageUpdate(victim.getName() + " was slapped away!"));
-			trainer.switchToRandom();
-			victim = trainer.front();
-			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
+		public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + " was slapped away!";
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.swapOpponent(b, victim, this);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.canSwapOpponent(b, victim);
 		}
 	}
 
@@ -9907,8 +9489,8 @@ public abstract class Attack implements Serializable {
 			return b.getTerrainType().getAttack().getAccuracy(b, me, o);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			me.callNewMove(b, o, new Move(b.getTerrainType().getAttack()));
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.callNewMove(b, victim, new Move(b.getTerrainType().getAttack()));
 		}
 	}
 
@@ -9921,21 +9503,16 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.CHANGE_ABILITY);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.getAbility().isReplaceable() || !me.getAbility().isStealable()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
-		}
-
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return caster.getAbility().namesies().getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return victim.getName() + " copied " + caster.getName() + "'s " + caster.getAbility().getName() + "!";
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getAbility().isReplaceable() && user.getAbility().isStealable();
 		}
 	}
 
@@ -9959,21 +9536,16 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.CHANGE_ABILITY);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.getAbility().isReplaceable()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
-		}
-
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return AbilityNamesies.INSOMNIA.getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return victim.getName() + "'s ability was changed to " + AbilityNamesies.INSOMNIA.getName() + "!";
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getAbility().isReplaceable();
 		}
 	}
 
@@ -9986,21 +9558,16 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.CHANGE_ABILITY);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.getAbility().isReplaceable()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
-		}
-
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return AbilityNamesies.SIMPLE.getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return victim.getName() + "'s ability was changed to " + AbilityNamesies.SIMPLE.getName() + "!";
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getAbility().isReplaceable();
 		}
 	}
 
@@ -10018,12 +9585,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!canSkillSwap(user) || !canSkillSwap(victim)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Set CastSource shit instead
 			ability = user.getAbility();
 			EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
 			
@@ -10038,6 +9601,10 @@ public abstract class Attack implements Serializable {
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			return victim.getName() + "'s ability was changed to " + ability.getName() + "!";
 		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return canSkillSwap(user) && canSkillSwap(victim);
+		}
 	}
 
 	static class VoltSwitch extends Attack {
@@ -10049,11 +9616,8 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			// First execute the move as normal
-			super.apply(me, o, b);
-			
-			me.switcheroo(b, me, CastSource.ATTACK, true);
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.switcheroo(b, user, CastSource.ATTACK, true);
 		}
 	}
 
@@ -10140,7 +9704,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class VoltTackle extends Attack implements RecoilMove {
+	static class VoltTackle extends Attack implements RecoilPercentageMove {
 		private static final long serialVersionUID = 1L;
 
 		VoltTackle() {
@@ -10152,13 +9716,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
-			user.reduceHealth(b, (int)Math.ceil(damage/3.0), false);
+		public int getDamagePercentageDenominator() {
+			return 3;
 		}
 	}
 
@@ -10435,7 +9994,7 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.TOPSY_TURVY, "All stat changes affecting the target turn topsy-turvy and become the opposite of what they were.", 20, Type.DARK, MoveCategory.STATUS);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
 				victim.getAttributes().setStage(i, -victim.getStage(i));
 			}
@@ -10623,13 +10182,8 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.getAttributes().isFirstTurn()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().isFirstTurn();
 		}
 	}
 
@@ -10713,13 +10267,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.ASSISTLESS);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.hasEffect(EffectNamesies.EATEN_BERRY)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasEffect(EffectNamesies.EATEN_BERRY);
 		}
 	}
 
@@ -10734,13 +10283,8 @@ public abstract class Attack implements Serializable {
 			super.statChanges[Stat.SPEED.index()] = -1;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!o.hasStatus(StatusCondition.POISONED)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasStatus(StatusCondition.POISONED);
 		}
 	}
 
@@ -10853,20 +10397,17 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			if (b.getWeather().namesies() == EffectNamesies.SANDSTORM) {
-				victim.healHealthFraction(1);
-			}
-			else {
-				victim.healHealthFraction(1/2.0);
-			}
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		public double getHealFraction(Battle b, ActivePokemon victim) {
+			// Fully heals in a sandstorm
+			return b.getWeather().namesies() == EffectNamesies.SANDSTORM ? 1 : .5;
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			this.heal(b, victim);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -10879,20 +10420,17 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void heal(ActivePokemon user, ActivePokemon victim, Battle b) {
-			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
-				victim.healHealthFraction(1);
-			}
-			else {
-				victim.healHealthFraction(1/2.0);
-			}
-			
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		public double getHealFraction(Battle b, ActivePokemon victim) {
+			// Fully heals in Grassy Terrain
+			return b.hasEffect(EffectNamesies.GRASSY_TERRAIN) ? 1 : .5;
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			this.heal(b, victim);
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
 		}
 	}
 
@@ -10907,13 +10445,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.getAttributes().isFirstTurn()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().isFirstTurn();
 		}
 	}
 
@@ -10969,7 +10502,7 @@ public abstract class Attack implements Serializable {
 			return super.power*(o.hasStatus(StatusCondition.ASLEEP) ? 2 : 1);
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.ASLEEP)) {
 				Status.removeStatus(b, victim, CastSource.ATTACK);
 			}
@@ -10989,6 +10522,7 @@ public abstract class Attack implements Serializable {
 
 	static class StrengthSap extends Attack implements SapHealthEffect {
 		private static final long serialVersionUID = 1L;
+		private int victimAttackStat;
 
 		StrengthSap() {
 			super(AttackNamesies.STRENGTH_SAP, "The user restores its HP by the same amount as the target's Attack stat. It also lowers the target's Attack stat.", 10, Type.GRASS, MoveCategory.STATUS);
@@ -10996,10 +10530,12 @@ public abstract class Attack implements Serializable {
 			super.statChanges[Stat.ATTACK.index()] = -1;
 		}
 
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			int victimAttackStat = Stat.getStat(Stat.ATTACK, victim, user, b);
-			super.applyEffects(b, user, victim);
-			
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
+			this.victimAttackStat = Stat.getStat(Stat.ATTACK, defending, attacking, b);
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			this.sapHealth(b, user, victim, victimAttackStat, true);
 		}
 
@@ -11108,15 +10644,6 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.isType(b, Type.FIRE)) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
-		}
-
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			Type[] type = victim.getType(b);
 			
@@ -11131,6 +10658,10 @@ public abstract class Attack implements Serializable {
 			
 			return null;
 		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isType(b, Type.FIRE);
+		}
 	}
 
 	static class SmartStrike extends Attack {
@@ -11143,30 +10674,29 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Purify extends Attack {
+	static class Purify extends Attack implements SelfHealingMove {
 		private static final long serialVersionUID = 1L;
 
 		Purify() {
 			super(AttackNamesies.PURIFY, "The user heals the target's status condition. If the move succeeds, it also restores the user's own HP.", 20, Type.POISON, MoveCategory.STATUS);
 			super.moveTypes.add(MoveType.HEALING);
+			super.selfTarget = true;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (!me.hasStatus()) {
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return;
-			}
-			
-			super.apply(me, o, b);
-		}
-
-		public void applyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test
 			Status.removeStatus(b, user, CastSource.ATTACK);
 			if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-				Messages.add(new MessageUpdate(user.getName() + "'s health was restored!"));
-				user.healHealthFraction(.5);
-				Messages.add(new MessageUpdate().updatePokemon(b, user));
+				this.heal(b, user);
 			}
+		}
+
+		public double getHealFraction(Battle b, ActivePokemon victim) {
+			return .5;
+		}
+
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasStatus();
 		}
 	}
 
@@ -11193,12 +10723,11 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// TODO: Test
 			if (!b.isFirstAttack()) {
-				EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, me, me, CastSource.ATTACK, false);
+				EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
 			}
-			
-			super.apply(me, o, b);
 		}
 	}
 
@@ -11309,16 +10838,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
 			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
-				int stage = o.getAttributes().getStage(i);
+				int stage = victim.getAttributes().getStage(i);
 				if (stage > 0) {
-					o.getAttributes().resetStage(i);
-					me.getAttributes().incrementStage(i, stage);
+					victim.getAttributes().resetStage(i);
+					user.getAttributes().incrementStage(i, stage);
 				}
 			}
-			
-			super.apply(me, o, b);
 		}
 	}
 
@@ -11332,10 +10859,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, me, me, CastSource.ATTACK, false);
-			super.apply(me, o, b);
-			me.getAttributes().removeEffect(EffectNamesies.BREAKS_THE_MOLD);
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+		}
+
+		public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.getAttributes().removeEffect(EffectNamesies.BREAKS_THE_MOLD);
 		}
 	}
 
@@ -11348,10 +10877,12 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public void apply(ActivePokemon me, ActivePokemon o, Battle b) {
-			EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, me, me, CastSource.ATTACK, false);
-			super.apply(me, o, b);
-			me.getAttributes().removeEffect(EffectNamesies.BREAKS_THE_MOLD);
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+		}
+
+		public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
+			user.getAttributes().removeEffect(EffectNamesies.BREAKS_THE_MOLD);
 		}
 	}
 
@@ -11419,8 +10950,8 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// TODO: Fuck this shit I hate this fucking move
-			return super.power;
+			// TODO: Test
+			return super.power*(me.getAttributes().lastMoveSucceeded() ? 1 : 2);
 		}
 	}
 

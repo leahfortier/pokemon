@@ -64,6 +64,7 @@ class InterfaceMethod {
     private static final String UPDATE = "Update";
     private static final String MOLD_BREAKER = "MoldBreaker";
     private static final String MOLD_BREAKER_NULL_CHECK = "MoldBreakerNullCheck";
+    private static final String DEFAULT = "Default";
     private static final String DEADSIES = "Deadsies";
 
     private final String interfaceName;
@@ -82,6 +83,8 @@ class InterfaceMethod {
 
     private String moldBreaker;
     private boolean moldBreakNullCheck;
+
+    private String defaultMethod;
 
     private List<String> deadsies;
 
@@ -230,6 +233,11 @@ class InterfaceMethod {
             this.moldBreakNullCheck = true;
         }
 
+        final String defaultMethod = fields.getAndRemoveTrimmed(DEFAULT);
+        if (defaultMethod != null) {
+            this.defaultMethod = defaultMethod;
+        }
+
         final String allDeadsies = fields.getAndRemoveTrimmed(DEADSIES);
         if (allDeadsies != null) {
             Scanner in = new Scanner(allDeadsies);
@@ -290,7 +298,16 @@ class InterfaceMethod {
             StringUtils.appendLine(interfaceMethod, "\n\t\t" + this.comments);
         }
 
-        interfaceMethod.append(String.format("\t\t%s;\n", this.getHeader()));
+        if (!StringUtils.isNullOrEmpty(this.defaultMethod)) {
+            if (this.defaultMethod.equals("Empty")) {
+                StringUtils.appendLine(interfaceMethod, String.format("\t\tdefault %s {}", this.getHeader()));
+            } else {
+                interfaceMethod.append(new MethodInfo(this.getHeader(), this.defaultMethod, AccessModifier.DEFAULT).writeFunction());
+            }
+        } else {
+            StringUtils.appendLine(interfaceMethod, String.format("\t\t%s;", this.getHeader()));
+        }
+
         return interfaceMethod.toString();
     }
 

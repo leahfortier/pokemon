@@ -6,7 +6,8 @@ enum AccessModifier {
     PUBLIC("public"),
     PRIVATE("private"),
     PROTECTED("protected"),
-    PACKAGE_PRIVATE("");
+    PACKAGE_PRIVATE(""),
+    DEFAULT("default"); // Technically not an access modifier, but works here all the same yeah yeah yeah I suck
 
     private final String modifierName;
 
