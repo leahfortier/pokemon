@@ -58,6 +58,21 @@ RecoilPercentageMove:
 			###
 	*
 ***
+SelfHealingMove:
+	Method:
+		Header: double getHealFraction(Battle b, ActivePokemon victim)
+	*
+	Method:
+		Header: void heal(Battle b, ActivePokemon victim)
+		Default:
+			// Heal yourself!
+			victim.healHealthFraction(this.getHealFraction(b, victim));
+
+			// TODO: Make sure the message is set up correctly for the hp change
+			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+			###
+	*
+***
 PhysicalContactEffect:
 	Method:
 		Comments: 

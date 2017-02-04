@@ -61,12 +61,14 @@ public class AbilityTest {
     @Test
     public void absorbTypeTest() {
         TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.LANTURN);
+        TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.VOLT_ABSORB);
 
         battle.attackingFight(AttackNamesies.CONSTRICT);
         Assert.assertFalse(defending.fullHealth());
 
-        battle.attackingFight(AttackNamesies.THUNDERBOLT);
+        // Thunderbolt should heal
+        attacking.apply(false, AttackNamesies.THUNDERBOLT, battle);
         Assert.assertTrue(defending.fullHealth());
 
         battle.attackingFight(AttackNamesies.CONSTRICT);
@@ -74,5 +76,21 @@ public class AbilityTest {
 
         battle.attackingFight(AttackNamesies.WATER_GUN);
         Assert.assertFalse(defending.fullHealth());
+    }
+
+    @Test
+    public void dampTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        attacking.apply(true, AttackNamesies.SELF_DESTRUCT, battle);
+        battle.emptyHeal();
+        defending.apply(true, AttackNamesies.EXPLOSION, battle);
+
+        battle.emptyHeal();
+        attacking.withAbility(AbilityNamesies.DAMP);
+        attacking.apply(false, AttackNamesies.SELF_DESTRUCT, battle);
+        defending.apply(false, AttackNamesies.EXPLOSION, battle);
     }
 }
