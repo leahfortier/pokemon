@@ -223,22 +223,23 @@ public class AttackTest {
 
             boolean foundAttacking = false;
             boolean foundDefending = false;
-            for (int j = 0; j < acupressureStats.length; j++) {
-                int attackingStage = attacking.getStage(j);
-                int defendingStage = defending.getStage(j);
+            for (Stat stat : Stat.BATTLE_STATS) {
+                int attackingStage = attacking.getStage(stat);
+                int defendingStage = defending.getStage(stat);
                 if (attackingStage != defendingStage) {
                     acupressureAlwaysSame = false;
                 }
 
+                int index = stat.index();
                 if (attackingStage > 0) {
                     Assert.assertFalse(foundAttacking);
-                    acupressureStats[j] = true;
+                    acupressureStats[index] = true;
                     foundAttacking = true;
                 }
 
                 if (defendingStage > 0) {
                     Assert.assertFalse(foundDefending);
-                    acupressureStats[j] = true;
+                    acupressureStats[index] = true;
                     foundDefending = true;
                 }
             }
@@ -280,11 +281,11 @@ public class AttackTest {
         Assert.assertTrue(attacking.isType(battle, Type.FLYING));
 
         // Clear stat changes and reduce again
-        Assert.assertTrue(attacking.getStage(Stat.ATTACK.index()) == Stat.MAX_STAT_CHANGES);
+        Assert.assertTrue(attacking.getStage(Stat.ATTACK) == Stat.MAX_STAT_CHANGES);
         battle.attackingFight(AttackNamesies.HAZE);
-        Assert.assertTrue(attacking.getStage(Stat.ATTACK.index()) == 0);
+        Assert.assertTrue(attacking.getStage(Stat.ATTACK) == 0);
         battle.attackingFight(AttackNamesies.BELLY_DRUM);
-        Assert.assertTrue(attacking.getStage(Stat.ATTACK.index()) == Stat.MAX_STAT_CHANGES);
+        Assert.assertTrue(attacking.getStage(Stat.ATTACK) == Stat.MAX_STAT_CHANGES);
 
         // Using a full turn should bring the flying type back at the end
         Assert.assertFalse(attacking.fullHealth());
@@ -316,7 +317,7 @@ public class AttackTest {
         attacking.apply(false, AttackNamesies.LAST_RESORT, battle);
 
         // Use the other move and then it should work
-        Move tackle = attacking.getMove(battle, 0);
+        Move tackle = attacking.getMoves(battle).get(0);
         attacking.setMove(tackle);
         Assert.assertFalse(tackle.used());
         battle.fight();

@@ -12,7 +12,7 @@ public enum MoveCategory implements Serializable {
     SPECIAL,
     STATUS;
 
-    private BufferedImage image;
+    private final BufferedImage image;
 
     MoveCategory() {
         String imageName = "MoveCategory" + StringUtils.properCase(this.name().toLowerCase());

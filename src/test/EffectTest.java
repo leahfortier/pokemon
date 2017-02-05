@@ -58,22 +58,22 @@ public class EffectTest {
 
         // King's Shield lowers attack when contact was made
         checkProtect(true, AttackNamesies.KINGS_SHIELD, AttackNamesies.TACKLE,
-                (battle, attacking, defending) -> Assert.assertTrue(defending.getStage(Stat.ATTACK.index()) == -2));
+                (battle, attacking, defending) -> Assert.assertTrue(defending.getStage(Stat.ATTACK) == -2));
         checkProtect(true, AttackNamesies.KINGS_SHIELD, AttackNamesies.WATER_GUN,
-                (battle, attacking, defending) -> Assert.assertTrue(defending.getStage(Stat.ATTACK.index()) == 0));
+                (battle, attacking, defending) -> Assert.assertTrue(defending.getStage(Stat.ATTACK) == 0));
 
         TestBattle battle = TestBattle.create();
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
         battle.fight(AttackNamesies.PROTECT, AttackNamesies.SCREECH);
-        Assert.assertTrue(attacking.getStage(Stat.DEFENSE.index()) == 0);
-        Assert.assertTrue(defending.getStage(Stat.DEFENSE.index()) == 0);
+        Assert.assertTrue(attacking.getStage(Stat.DEFENSE) == 0);
+        Assert.assertTrue(defending.getStage(Stat.DEFENSE) == 0);
 
         // Make sure wears off by the next turn
         battle.defendingFight(AttackNamesies.SCREECH);
-        Assert.assertTrue(attacking.getStage(Stat.DEFENSE.index()) < 0);
-        Assert.assertTrue(defending.getStage(Stat.DEFENSE.index()) == 0);
+        Assert.assertTrue(attacking.getStage(Stat.DEFENSE) < 0);
+        Assert.assertTrue(defending.getStage(Stat.DEFENSE) == 0);
     }
 
     private void checkProtect(boolean shouldProtect, AttackNamesies protectMove, AttackNamesies attack) {
@@ -98,7 +98,7 @@ public class EffectTest {
             Assert.assertTrue(attacking.getEffects().isEmpty());
 
             for (Stat stat : Stat.BATTLE_STATS) {
-                Assert.assertTrue(attacking.getStage(stat.index()) == 0);
+                Assert.assertTrue(attacking.getStage(stat) == 0);
             }
         }
     }

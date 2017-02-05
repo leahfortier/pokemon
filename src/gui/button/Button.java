@@ -30,8 +30,8 @@ public class Button {
 	private boolean forceHover;
 	private boolean active;
 
-	public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction) {
-		this(x, y, width, height, hoverAction, null);
+	public Button(int x, int y, int width, int height) {
+		this(x, y, width, height, null, null);
 	}
 
 	public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition) {

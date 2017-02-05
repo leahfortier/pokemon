@@ -29,9 +29,9 @@ public class Bag implements Serializable {
 
 	private static final String DEFAULT_FAIL_MESSAGE = "It won't have any effect.";
 
-	private Map<ItemNamesies, Integer> items; // Item -> quantity
-	private Map<BagCategory, Set<ItemNamesies>> bag;
-	private Map<BattleBagCategory, Set<ItemNamesies>> battleBag;
+	private final Map<ItemNamesies, Integer> items; // Item -> quantity
+	private final Map<BagCategory, Set<ItemNamesies>> bag;
+	private final Map<BattleBagCategory, Set<ItemNamesies>> battleBag;
 	private ItemNamesies lastUsedItem; // Only for battle
 	
 	public Bag() {

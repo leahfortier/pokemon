@@ -60,7 +60,7 @@ class NewPokemonView extends View {
     }
 
     NewPokemonView() {
-        this.canvasPanel = new DrawPanel(0, 0, Global.GAME_SIZE)
+        this.canvasPanel = DrawPanel.fullGamePanel()
                 .withTransparentCount(2)
                 .withBorderPercentage(0);
 

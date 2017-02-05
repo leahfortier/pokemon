@@ -26,7 +26,7 @@ public abstract class Trainer implements Team, Serializable {
 		ITEM(6),
 		RUN(6);
 		
-		private int priority;
+		private final int priority;
 		
 		Action(int p) {
 			priority = p;

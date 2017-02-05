@@ -131,7 +131,7 @@ public class StringUtils {
                 string = "";
             }
             else {
-                s.append(string.substring(0,index) + c);
+                s.append(string.substring(0, index)).append(c);
                 string = string.substring(index + 1, string.length());
             }
         }

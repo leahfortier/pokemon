@@ -66,7 +66,7 @@ public abstract class EntityAction {
     }
 
     public static class BattleAction extends EntityAction {
-        private BattleMatcher battleMatcher;
+        private final BattleMatcher battleMatcher;
         private String entityName;
 
         public BattleAction(BattleMatcher matcher) {

@@ -142,7 +142,7 @@ public enum Stat {
 			return 0;
 		}
 
-		int stage = p.getStage(s.index);
+		int stage = p.getStage(s);
 
 //		int temp = stage;
 

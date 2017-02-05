@@ -2069,8 +2069,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			}
 			
 			// Copy all stages
-			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
-				victim.getAttributes().setStage(i, transformee.getStage(i));
+			for (Stat stat : Stat.BATTLE_STATS) {
+				victim.getAttributes().setStage(stat, transformee.getStage(stat));
 			}
 			
 			// Copy the type

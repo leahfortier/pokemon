@@ -50,11 +50,11 @@ class PokedexView extends View {
 	private int numSeen;
 	private int numCaught;
 	
-	private Button[] buttons;
-	private Button[][] pokemonButtons;
-	private Button leftButton;
-	private Button rightButton;
-	private Button returnButton;
+	private final Button[] buttons;
+	private final Button[][] pokemonButtons;
+	private final Button leftButton;
+	private final Button rightButton;
+	private final Button returnButton;
 	
 	PokedexView() {
 		pokedexPanel = new DrawPanel(40, 40, 350, 418)

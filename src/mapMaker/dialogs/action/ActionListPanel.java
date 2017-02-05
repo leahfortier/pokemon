@@ -37,7 +37,7 @@ public class ActionListPanel extends JPanel {
         render();
     }
 
-    public void render() {
+    private void render() {
         removeAll();
 
         List<JComponent> components = new ArrayList<>();

@@ -62,7 +62,7 @@ public class BattleView extends View {
 		largeMenuPanel = new DrawPanel(0, 160, 417, 440).withBorderPercentage(3).withBlackOutline();
 
 		// Back Button
-		backButton = new Button(750, 560, 35, 20, null);
+		backButton = new Button(750, 560, 35, 20);
 	}
 
 	public void drawLargeMenuPanel(Graphics g) {

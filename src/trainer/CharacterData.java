@@ -381,11 +381,9 @@ public class CharacterData extends Trainer implements Serializable {
 	}
 
 	public void checkEvolution() {
-		for (ActivePokemon pokemon : team) {
-			if (pokemon.canFight()) {
-				pokemon.checkEvolution();
-			}
-		}
+		team.stream()
+				.filter(pokemon -> pokemon.canFight())
+				.forEach(pokemon -> pokemon.checkEvolution());
 	}
 	
 	public Pokedex getPokedex() {

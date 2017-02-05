@@ -221,7 +221,7 @@ Effect Spore:
 	Desc: Contact may paralyze, poison, or cause sleep.
 	Int: PhysicalContactEffect
 	Field: 
-		private static StatusCondition[] statuses = new StatusCondition[] {
+		private static final StatusCondition[] statuses = new StatusCondition[] {
 			StatusCondition.PARALYZED, 
 			StatusCondition.POISONED, 
 			StatusCondition.ASLEEP

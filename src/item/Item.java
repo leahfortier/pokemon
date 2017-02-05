@@ -415,11 +415,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			Move last = p.getAttributes().getLastMoveUsed();
-			if (last == null || m == last) {
-				return true;
-			}
-			
-			return false;
+			return last == null || m == last;
 		}
 
 		public String getUnusableMessage(Battle b, ActivePokemon p) {
@@ -453,11 +449,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			Move last = p.getAttributes().getLastMoveUsed();
-			if (last == null || m == last) {
-				return true;
-			}
-			
-			return false;
+			return last == null || m == last;
 		}
 
 		public String getUnusableMessage(Battle b, ActivePokemon p) {
@@ -491,11 +483,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			Move last = p.getAttributes().getLastMoveUsed();
-			if (last == null || m == last) {
-				return true;
-			}
-			
-			return false;
+			return last == null || m == last;
 		}
 
 		public String getUnusableMessage(Battle b, ActivePokemon p) {
@@ -1723,9 +1711,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 			// Restores negative stat changes to the pelted
-			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
-				if (pelted.getStage(i) < 0) {
-					pelted.getAttributes().setStage(i, 0);
+			for (Stat stat : Stat.BATTLE_STATS) {
+				if (pelted.getStage(stat) < 0) {
+					pelted.getAttributes().setStage(stat, 0);
 				}
 			}
 			

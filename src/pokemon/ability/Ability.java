@@ -160,7 +160,7 @@ public abstract class Ability implements Serializable {
 			return abilities[0];
 		}
 
-		// Has two abilties -- return a random one
+		// Has two abilities -- return a random one
 		return RandomUtils.getRandomValue(abilities);
 	}
 	
@@ -683,7 +683,7 @@ public abstract class Ability implements Serializable {
 
 	static class EffectSpore extends Ability implements PhysicalContactEffect {
 		private static final long serialVersionUID = 1L;
-		private static StatusCondition[] statuses = new StatusCondition[] {
+		private static final StatusCondition[] statuses = new StatusCondition[] {
 			StatusCondition.PARALYZED,
 			StatusCondition.POISONED,
 			StatusCondition.ASLEEP

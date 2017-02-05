@@ -18,7 +18,7 @@ import type.Type;
 public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	private static final long serialVersionUID = 1L;
 
-	private Type weatherElement;
+	private final Type weatherElement;
 	
 	public Weather(EffectNamesies namesies, Type weatherElement) {
 		super(namesies, -1, -1, true);

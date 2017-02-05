@@ -271,8 +271,8 @@ public class PC implements Serializable {
 	private static class Box implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
-		private ActivePokemon[][] pokemon;
-		private Color color;
+		private final ActivePokemon[][] pokemon;
+		private final Color color;
 		
 		public Box() {
 			pokemon = new ActivePokemon[BOX_HEIGHT][BOX_WIDTH];

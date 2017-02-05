@@ -55,11 +55,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class Battle {
-	private CharacterData player;
-	private Opponent opponent; // SO OBJECT-ORIENTED
+	private final CharacterData player;
+	private final Opponent opponent; // SO OBJECT-ORIENTED
 
-	private Weather weather;
 	private List<BattleEffect> effects;
+	private Weather weather;
 
 	private int turn;
 	private boolean firstAttacking;
@@ -205,13 +205,17 @@ public class Battle {
 			System.out.println("W " + weather);
 		}
 
-		for (int i = 0; i < 7; i++) {
-			System.out.print((i == 0 ? player.front().getActualName() + " " : "") + player.front().getStage(i) + (i == 6 ? "\n" : " "));
+		System.out.print(player.front().getActualName() + " ");
+		for (Stat stat : Stat.BATTLE_STATS) {
+			System.out.print(player.front().getStage(stat) + " ");
 		}
+		System.out.println();
 
-		for (int i = 0; i < 7; i++) {
-			System.out.print((i == 0 ? opponent.front().getActualName() + " " : "") + opponent.front().getStage(i) + (i == 6 ? "\n" : " "));
+		System.out.print(opponent.front().getActualName() + " ");
+		for (Stat stat : Stat.BATTLE_STATS) {
+			System.out.print(opponent.front().getStage(stat) + " ");
 		}
+		System.out.println();
 
 		System.out.println(player.front().getActualName() + " " + player.front().getAbility().getName() + " " + player.front().getHeldItem(this).getName());
 		System.out.println(opponent.front().getActualName() + " " + opponent.front().getAbility().getName() + " " + opponent.front().getHeldItem(this).getName());
@@ -335,14 +339,10 @@ public class Battle {
 			enterMessage = ((Trainer)opponent).getName() + " sent out " + enterer.getName() + "!";
 		}
 
-		enterBattle(enterer, enterMessage, true);
+		enterBattle(enterer, enterMessage);
 	}
 
 	public void enterBattle(ActivePokemon enterer, String enterMessage) {
-		enterBattle(enterer, enterMessage, true);
-	}
-
-	public void enterBattle(ActivePokemon enterer, String enterMessage, boolean reset) {
 		if (enterer.isEgg()) {
 			Global.error("Eggs can't battle!!!");
 		}
@@ -352,9 +352,7 @@ public class Battle {
 			player.getPokedex().setSeen(enterer, isWildBattle());
 		}
 
-		if (reset) {
-			enterer.resetAttributes();
-		}
+		enterer.resetAttributes();
 
 		Messages.add(new MessageUpdate(enterMessage).withSwitch(this, enterer));
 
@@ -611,7 +609,7 @@ public class Battle {
 			Messages.add(new MessageUpdate("It's a critical hit!!"));
 			if (o.hasAbility(AbilityNamesies.ANGER_POINT)) {
 				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!"));
-				o.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
+				o.getAttributes().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
 			}
 			
 			return me.hasAbility(AbilityNamesies.SNIPER) ? 3 : 2;

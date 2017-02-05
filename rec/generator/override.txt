@@ -1327,11 +1327,7 @@ Override:
 		AddInterface: AttackSelectionEffect
 		AddMapField: Usable:
 			Move last = p.getAttributes().getLastMoveUsed();
-			if (last == null || m == last) {
-				return true;
-			}
-			
-			return false;
+			return last == null || m == last;
 			###
 		AddMapField: UnusableMessage: p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!"
 		AddInterface: HoldItem

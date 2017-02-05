@@ -2,6 +2,7 @@ package gui.panel;
 
 import gui.button.Button;
 import gui.button.ButtonHoverAction;
+import main.Global;
 import map.Direction;
 import util.DrawUtils;
 import util.FontMetrics;
@@ -9,7 +10,6 @@ import util.GeneralUtils;
 import util.Point;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
@@ -35,12 +35,12 @@ public class DrawPanel {
     private boolean onlyTransparency;
     private int transparentCount;
 
-    public DrawPanel(Button button) {
-        this(button.x, button.y, button.width, button.height);
+    public static DrawPanel fullGamePanel() {
+        return new DrawPanel(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
     }
 
-    public DrawPanel(int x, int y, Dimension dimension) {
-        this(x, y, dimension.width, dimension.height);
+    public DrawPanel(Button button) {
+        this(button.x, button.y, button.width, button.height);
     }
 
     public DrawPanel(int x, int y, Point dimension) {

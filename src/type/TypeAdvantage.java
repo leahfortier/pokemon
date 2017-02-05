@@ -73,11 +73,9 @@ public enum TypeAdvantage {
             .weak(Type.FIRE, Type.POISON, Type.STEEL)),
     NO_TYPE(new Builder());
 
-    private final Type type;
     private final Map<Type, Double> advantageMap;
 
     TypeAdvantage(Builder builder) {
-        this.type = Type.valueOf(this.name());
         this.advantageMap = builder.advantageMap;
     }
 
@@ -179,6 +177,7 @@ public enum TypeAdvantage {
         return advantage == 0;
     }
 
+    // TODO: Constant
     public static String getSuperEffectiveMessage() {
         return "It's super effective!";
     }

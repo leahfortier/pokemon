@@ -335,8 +335,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	static class WildHoldItem implements Serializable {
 		private static final long serialVersionUID = 1L;
 
-		private HoldItem item;
-		private int chance;
+		private final HoldItem item;
+		private final int chance;
 		
 		WildHoldItem(int chance, ItemNamesies itemName) {
 			item = (HoldItem) itemName.getItem();

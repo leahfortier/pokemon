@@ -1319,8 +1319,8 @@ public enum AttackNamesies {
 
     private static final Map<AttackNamesies, Attack> attackMap = new EnumMap<>(AttackNamesies.class);
 
-	private String name;
-	private AttackCreator attackCreator;
+	private final String name;
+	private final AttackCreator attackCreator;
 
 	AttackNamesies(String name, AttackCreator attackCreator) {
 		this.name = name;

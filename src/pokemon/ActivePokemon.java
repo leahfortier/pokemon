@@ -375,9 +375,9 @@ public class ActivePokemon implements Serializable {
 		
 		return this.ability;
 	}
-	
-	public int getStage(int index) {
-		return attributes.getStage(index);
+
+	public int getStage(Stat stat) {
+		return attributes.getStage(stat);
 	}
 	
 	public Move getMove(Battle b, int index) {

@@ -8,8 +8,8 @@ import java.awt.Stroke;
 
 public enum ButtonHoverAction {
     BOX(new HoverActionDrawer() {
+        private final Stroke lineStroke = new BasicStroke(5f);
         private int time = 0;
-        private Stroke lineStroke = new BasicStroke(5f);
 
         public void draw(Graphics g, Button button) {
             time = (time + 1) % 80;
@@ -42,7 +42,7 @@ public enum ButtonHoverAction {
         }
     });
 
-    private HoverActionDrawer hoverActionDrawer;
+    private final HoverActionDrawer hoverActionDrawer;
 
     ButtonHoverAction(HoverActionDrawer hoverActionDrawer) {
         this.hoverActionDrawer = hoverActionDrawer;

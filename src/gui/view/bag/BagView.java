@@ -72,12 +72,12 @@ public class BagView extends View {
 	ItemNamesies selectedItem;
 	ActivePokemon selectedPokemon;
 	
-	private Button[] buttons;
+	private final Button[] buttons;
 	
-	private Button[] tabButtons;
-	private Button[] partyButtons;
-	private Button[] moveButtons;
-	private Button[] itemButtons;
+	private final Button[] tabButtons;
+	private final Button[] partyButtons;
+	private final Button[] moveButtons;
+	private final Button[] itemButtons;
 
 	public BagView() {
 		int tabHeight = 55;

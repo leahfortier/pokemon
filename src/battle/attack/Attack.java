@@ -4040,8 +4040,8 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++)  {
-				user.getAttributes().setStage(i, victim.getStage(i));
+			for (Stat stat : Stat.BATTLE_STATS)  {
+				user.getAttributes().setStage(stat, victim.getStage(stat));
 			}
 			
 			Messages.add(new MessageUpdate(user.getName() + " copied " + victim.getName() + "'s stat changes!"));
@@ -4313,12 +4313,12 @@ public abstract class Attack implements Serializable {
 			// Maximization station
 			Messages.add(new MessageUpdate(user.getName() + " cut its own HP and maximized its attack!"));
 			user.reduceHealthFraction(b, 1/2.0);
-			user.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
+			user.getAttributes().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// Fails if attack is already maxed or if you have less than half your health to give up
-			return user.getStage(Stat.ATTACK.index()) < Stat.MAX_STAT_CHANGES && user.getHPRatio() > .5;
+			return user.getStage(Stat.ATTACK) < Stat.MAX_STAT_CHANGES && user.getHPRatio() > .5;
 		}
 	}
 
@@ -8310,10 +8310,10 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
-				int temp = user.getAttributes().getStage(i);
-				user.getAttributes().setStage(i, victim.getAttributes().getStage(i));
-				victim.getAttributes().setStage(i, temp);
+			for (Stat stat : Stat.BATTLE_STATS) {
+				int temp = user.getAttributes().getStage(stat);
+				user.getAttributes().setStage(stat, victim.getAttributes().getStage(stat));
+				victim.getAttributes().setStage(stat, temp);
 			}
 			
 			Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
@@ -9353,8 +9353,8 @@ public abstract class Attack implements Serializable {
 			
 			ActivePokemon next = b.getTrainer(user).front();
 			next.resetAttributes();
-			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
-				next.getAttributes().setStage(i, user.getStage(i));
+			for (Stat stat : Stat.BATTLE_STATS) {
+				next.getAttributes().setStage(stat, user.getStage(stat));
 			}
 			
 			for (PokemonEffect effect : user.getEffects()) {
@@ -9963,8 +9963,8 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
-				victim.getAttributes().setStage(i, -victim.getStage(i));
+			for (Stat stat : Stat.BATTLE_STATS) {
+				victim.getAttributes().setStage(stat, -victim.getStage(stat));
 			}
 			
 			Messages.add(new MessageUpdate(victim.getName() + "'s stat changes were all reversed!"));
@@ -10806,11 +10806,11 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-			for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
-				int stage = victim.getAttributes().getStage(i);
+			for (Stat stat : Stat.BATTLE_STATS) {
+				int stage = victim.getAttributes().getStage(stat);
 				if (stage > 0) {
-					victim.getAttributes().resetStage(i);
-					user.getAttributes().incrementStage(i, stage);
+					victim.getAttributes().resetStage(stat);
+					user.getAttributes().incrementStage(stat, stage);
 				}
 			}
 		}

@@ -1,7 +1,6 @@
 package gui.view.mainmenu;
 
 import gui.panel.DrawPanel;
-import main.Global;
 import util.FileIO;
 import util.Folder;
 
@@ -39,7 +38,7 @@ public enum Theme {
     }
 
     private static void drawBasicTheme(Graphics g) {
-        new DrawPanel(0, 0, Global.GAME_SIZE)
+        DrawPanel.fullGamePanel()
                 .withTransparentBackground(new Color(68, 123, 184))
                 .withTransparentCount(2)
                 .withBorderPercentage(3)
@@ -53,7 +52,7 @@ public enum Theme {
 
         g.drawImage(DFS_TOWN_BG, xLoc, yLoc, null);
 
-        new DrawPanel(0, 0, Global.GAME_SIZE)
+        DrawPanel.fullGamePanel()
                 .withBackgroundColor(null)
                 .withBorderColor(new Color(255, 255, 255, 200))
                 .withBorderPercentage(3)

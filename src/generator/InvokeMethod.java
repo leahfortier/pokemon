@@ -47,7 +47,7 @@ abstract class InvokeMethod {
                 getDeclaration(interfaceMethod) + "\n" +
                 "for (Object invokee : invokees) {\n" +
                 "if (invokee instanceof " + interfaceMethod.getInterfaceName() +
-                        " && !Effect.isInactiveEffect(invokee, " + interfaceMethod.getBattleParameter() + ")) {\n" +
+                        " && Effect.isActiveEffect(invokee, " + interfaceMethod.getBattleParameter() + ")) {\n" +
                 StringUtils.addNewLine(getMoldBreaker(interfaceMethod)) + "\n" +
                 getInnerLoop(interfaceMethod) + "\n" +
                 StringUtils.addNewLine(getDeadsies(interfaceMethod)) +

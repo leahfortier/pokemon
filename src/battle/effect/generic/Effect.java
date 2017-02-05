@@ -16,11 +16,11 @@ public abstract class Effect implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected EffectNamesies namesies;
+	protected final EffectNamesies namesies;
 	protected boolean active;
 
 	protected int numTurns;
-	private boolean nextTurnSubside;
+	private final boolean nextTurnSubside;
 
 	public Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		// TODO: Should have a constant for -1
@@ -63,8 +63,8 @@ public abstract class Effect implements Serializable {
 		return effects.removeIf(effect -> effect.namesies() == effectToRemove);
 	}
 
-	public static boolean isInactiveEffect(Object object, Battle b) {
-		return object instanceof Effect && !((Effect)object).isActive(b);
+	public static boolean isActiveEffect(Object object, Battle b) {
+		return !(object instanceof Effect) || ((Effect)object).isActive(b);
 	}
 	
 	public void deactivate() {

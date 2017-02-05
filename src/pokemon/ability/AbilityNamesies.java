@@ -432,8 +432,8 @@ public enum AbilityNamesies {
 
     // EVERYTHING ABOVE IS GENERATED ###
 
-    private String name;
-	private AbilityCreator abilityCreator;
+	private final String name;
+	private final AbilityCreator abilityCreator;
 
     AbilityNamesies(String name, AbilityCreator abilityCreator) {
         this.name = name;
