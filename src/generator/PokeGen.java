@@ -127,13 +127,14 @@ class PokeGen {
 		String constructor = getConstructor(fields);
 		String implementsString = inputFormatter.getImplementsString(interfaces);
 		String extraFields = fields.getAndRemove("Field");
+		String headerComments = fields.getAndRemove("Comments");
 
 		fields.remove("Index");
 
 		fields.confirmEmpty();
 
 		return StuffGen.createClass(
-				null,
+				headerComments,
 				className,
 				this.currentGen.getSuperClassName(),
 				implementsString,

@@ -733,9 +733,7 @@ Bug Bite:
 	Acc: 100
 	Cat: Physical
 	ConsumeBerry: True
-	StartTurn:
-		// TODO: Sticky Hold
-		###
+	Comments: // TODO: Sticky Hold
 *
 Harden:
 	Type: Normal
@@ -4852,7 +4850,7 @@ Facade:
 	Type: Normal
 	Pow: 70
 	DoublePowerCondition: me.hasStatus()
-	StartTurn: // TODO: Should not take the attack reduction from burn
+	Comments: // TODO: Should not take the attack reduction from burn
 	Acc: 100
 	Cat: Physical
 *
@@ -5249,7 +5247,7 @@ Fusion Flare:
 	Cat: Special
 	Type: Fire
 	DoublePowerCondition: !b.isFirstAttack() && o.getAttack().namesies() == AttackNamesies.FUSION_BOLT
-	StartTurn: // TODO: Can combine power condition with Fusion Bolt
+	Comments: // TODO: Can combine power condition with Fusion Bolt
 	MoveType: Defrost
 *
 Fusion Bolt:

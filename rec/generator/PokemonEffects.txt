@@ -573,8 +573,9 @@ Torment:
 		}
 		###
 	Int: AttackSelectionSelfBlockerEffect
-	Usable: 
-		return (p.getAttributes().getLastMoveUsed() == null || p.getAttributes().getLastMoveUsed().getAttack().namesies() != m.getAttack().namesies());
+	Usable:
+		Move lastMoveUsed = p.getAttributes().getLastMoveUsed();
+		return (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != m.getAttack().namesies());
 		###
 	UnusableMessage: p.getName() + " cannot use the same move twice in a row!"
 	CastMessage: user.getName() + " tormented " + victim.getName() + "!"

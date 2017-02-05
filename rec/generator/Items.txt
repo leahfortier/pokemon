@@ -1715,7 +1715,7 @@ Cherish Ball:
 Dive Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.
 	Price: 1000
-	AfterCaught: // TODO: Not sure yet if this will cover fishing
+	Comments: // TODO: Not sure yet if this will cover fishing
 	CatchRateCondition: 3.5 b.getTerrainType() == TerrainType.WATER
 *
 Dusk Ball:
@@ -1726,10 +1726,7 @@ Dusk Ball:
 Fast Ball:
 	Desc: A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon which are quick to run away.
 	Price: 200
-	AfterCaught:
-		// TODO: Make comments available inside the generator
-		// If the opponent has a base speed of 100 or higher, multiplier is 4
-		###
+	Comments: // If the opponent has a base speed of 100 or higher, multiplier is 4
 	CatchRateCondition: 4 o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100
 *
 Great Ball:
@@ -1782,14 +1779,14 @@ Love Ball:
 Lure Ball:
 	Desc: A Pok\u00e9 Ball for catching Pok\u00e9mon hooked by a Rod when fishing.
 	Price: 200
-	AfterCaught: // TODO: Fishing
+	Comments: // TODO: Fishing
 	CatchRateCondition: 3 false
 *
 Luxury Ball:
 	Desc: A comfortable Pok\u00e9 Ball that makes a caught wild Pok\u00e9mon quickly grow friendly.
 	Price: 1000
 	FixedCatchRate: 1
-	AfterCaught: // TODO: Make this item do something more interesting
+	Comments: // TODO: Make this item do something more interesting
 *
 Master Ball:
 	Desc: The best Ball with the ultimate level of performance. It will catch any wild Pok\u00e9mon without fail.
@@ -2291,9 +2288,7 @@ Honey:
 	Desc: A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in grass, caves, or on special trees.
 	Fling: 30
 	Price: 100
-	FlingEffect:
-		// TODO: We need this item to do something (not in the fling effect, that's only there so I can put this todo in from le generator)
-		###
+	Comments: // TODO: We need this item to do something (not in the fling effect, that's only there so I can put this todo in from le generator)
 *
 Eviolite:
 	Int: HoldItem

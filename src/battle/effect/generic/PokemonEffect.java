@@ -1544,7 +1544,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
-			return (p.getAttributes().getLastMoveUsed() == null || p.getAttributes().getLastMoveUsed().getAttack().namesies() != m.getAttack().namesies());
+			Move lastMoveUsed = p.getAttributes().getLastMoveUsed();
+			return (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != m.getAttack().namesies());
 		}
 
 		public String getUnusableMessage(Battle b, ActivePokemon p) {

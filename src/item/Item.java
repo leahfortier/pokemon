@@ -5001,6 +5001,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
+	// TODO: Not sure yet if this will cover fishing
 	static class DiveBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
@@ -5016,10 +5017,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			}
 			
 			return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			// TODO: Not sure yet if this will cover fishing
 		}
 	}
 
@@ -5041,6 +5038,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
+	// If the opponent has a base speed of 100 or higher, multiplier is 4
 	static class FastBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
@@ -5056,11 +5054,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			}
 			
 			return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			// TODO: Make comments available inside the generator
-			// If the opponent has a base speed of 100 or higher, multiplier is 4
 		}
 	}
 
@@ -5157,6 +5150,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
+	// TODO: Fishing
 	static class LureBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
@@ -5173,12 +5167,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			
 			return new double[] { 1, 0 };
 		}
-
-		public void afterCaught(ActivePokemon p) {
-			// TODO: Fishing
-		}
 	}
 
+	// TODO: Make this item do something more interesting
 	static class LuxuryBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
@@ -5190,10 +5181,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
 			return new double[] { 1, 0 };
-		}
-
-		public void afterCaught(ActivePokemon p) {
-			// TODO: Make this item do something more interesting
 		}
 	}
 
@@ -7456,6 +7443,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
+	// TODO: We need this item to do something (not in the fling effect, that's only there so I can put this todo in from le generator)
 	static class Honey extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
@@ -7466,10 +7454,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public int flingDamage() {
 			return 30;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			// TODO: We need this item to do something (not in the fling effect, that's only there so I can put this todo in from le generator)
 		}
 	}
 

@@ -1556,6 +1556,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	// TODO: Sticky Hold
 	static class BugBite extends Attack {
 		private static final long serialVersionUID = 1L;
 
@@ -1564,10 +1565,6 @@ public abstract class Attack implements Serializable {
 			super.power = 60;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-		}
-
-		public void startTurn(Battle b, ActivePokemon me) {
-			// TODO: Sticky Hold
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -8048,6 +8045,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	// TODO: Should not take the attack reduction from burn
 	static class Facade extends Attack {
 		private static final long serialVersionUID = 1L;
 
@@ -8056,10 +8054,6 @@ public abstract class Attack implements Serializable {
 			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-		}
-
-		public void startTurn(Battle b, ActivePokemon me) {
-			// TODO: Should not take the attack reduction from burn
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
@@ -8720,6 +8714,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
+	// TODO: Can combine power condition with Fusion Bolt
 	static class FusionFlare extends Attack {
 		private static final long serialVersionUID = 1L;
 
@@ -8728,10 +8723,6 @@ public abstract class Attack implements Serializable {
 			super.power = 100;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.DEFROST);
-		}
-
-		public void startTurn(Battle b, ActivePokemon me) {
-			// TODO: Can combine power condition with Fusion Bolt
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
