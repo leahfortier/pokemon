@@ -1,6 +1,7 @@
 package battle.effect;
 
 import battle.Battle;
+import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
 import message.MessageUpdate;
@@ -8,7 +9,12 @@ import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 
-public interface SapHealthEffect {
+public interface SapHealthEffect extends ApplyDamageEffect {
+    @Override
+    default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+        this.sapHealth(b, user, victim, damage, true);
+    }
+
     default double sapPercentage() {
         return .5;
     }

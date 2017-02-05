@@ -208,12 +208,10 @@ Infiltrator:
 *
 Stench:
 	Desc: The stench may cause the target to flinch.
-	Int: ApplyDamageEffect
-	OnApplyDamage: 
+	Int: OpponentTakeDamageEffect
+	OpponentTakeDamage: 
 		if (RandomUtils.chanceTest(10)) {
-			PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
-			if (flinch.applies(b, user, victim, CastSource.ABILITY)) {
-				flinch.cast(b, user, victim, CastSource.ABILITY, false);
+			if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.ABILITY, false)) {
 				Messages.add(new MessageUpdate(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!"));
 			}
 		}
@@ -1037,8 +1035,8 @@ Big Pecks:
 *
 Poison Touch:
 	Desc: May poison targets when a Pok\u00e9mon makes contact.
-	Int: ApplyDamageEffect
-	OnApplyDamage: 
+	Int: OpponentTakeDamageEffect
+	OpponentTakeDamage: 
 		if (RandomUtils.chanceTest(30)) {
 			Status.giveStatus(b, user, victim, StatusCondition.POISONED, true);
 		}
@@ -1085,7 +1083,7 @@ Weak Armor:
 	OnTakeDamage: 
 		if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
 			victim.getAttributes().modifyStage(victim, victim, -1, Stat.DEFENSE, b, CastSource.ABILITY);
-			victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+			victim.getAttributes().modifyStage(victim, victim, 2, Stat.SPEED, b, CastSource.ABILITY);
 		}
 		###
 *
@@ -1505,21 +1503,15 @@ Steelworker:
 *
 Berserk:
 	Desc: Boosts the Pokémon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.
-	DropBelowHalfHealth:
-		victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
-		###
+	DropBelowHalfHealth: victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
 *
 Wimp Out:
 	Desc: The Pokémon cowardly switches out when its HP becomes half or less.
-	DropBelowHalfHealth:
-		victim.switcheroo(b, victim, CastSource.ABILITY, true);
-		###
+	DropBelowHalfHealth: victim.switcheroo(b, victim, CastSource.ABILITY, true);
 *
 Emergency Exit:
 	Desc: The Pokémon, sensing danger, switches out when its HP becomes half or less.
-	DropBelowHalfHealth:
-		victim.switcheroo(b, victim, CastSource.ABILITY, true);
-		###
+	DropBelowHalfHealth: victim.switcheroo(b, victim, CastSource.ABILITY, true);
 *
 Long Reach:
 	Desc: The Pokémon uses its moves without making contact with the target.

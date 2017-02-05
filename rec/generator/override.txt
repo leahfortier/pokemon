@@ -1233,6 +1233,11 @@ ApplyDamageEffect:
 		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
 	*
 ***
+OpponentApplyDamageEffect:
+	OpponentApplyDamage:
+		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
+	*
+***
 ModifyStageValueEffect:
 	ModifyStageValue:
 		Header: int modifyStageValue(int modVal)
@@ -1245,6 +1250,11 @@ SwitchOutEffect:
 ***
 TakeDamageEffect:
 	OnTakeDamage:
+		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+	*
+***
+OpponentTakeDamageEffect:
+	OpponentTakeDamage:
 		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 	*
 ***
@@ -1873,15 +1883,11 @@ Override:
 ***
 Override:
 	CategoryDamagerBerry:
-		Header: MoveCategory getCategory()
-		Body:
-			return MoveCategory.{00};
-			###
 		AddMapField: NGPow: 100
 		AddInterface: Berry
-		AddInterface: TakeDamageEffect
-		AddMapField: OnTakeDamage:
-			if (user.getAttack().getCategory() == getCategory()) {
+		AddInterface: OpponentApplyDamageEffect
+		AddMapField: OpponentApplyDamage:
+			if (user.getAttack().getCategory() == MoveCategory.{00}) {
 				Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!"));
 				user.reduceHealthFraction(b, 1/8.0);
 				victim.consumeItem(b);
@@ -2260,22 +2266,18 @@ StatLoweredEffect:
 Override:
 	FlinchItem:
 		AddMapField: FlingEffect:
-		PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
-			if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM)) {
-				flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
+			if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
 				Messages.add(new MessageUpdate("The " + this.name + " caused " + pelted.getName() + " to flinch!"));
 			}
 			###
-		AddMapField: OnApplyDamage:
+		AddMapField: OpponentTakeDamage:
 			if (RandomUtils.chanceTest(10)) {
-				PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
-				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
-					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
+				if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
 					Messages.add(new MessageUpdate(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!"));
 				}
 			}
 			###
-		AddInterface: ApplyDamageEffect
+		AddInterface: OpponentTakeDamageEffect
 		AddInterface: HoldItem
 	*
 ***
@@ -2289,7 +2291,7 @@ Override:
 Override:
 	TM:
 		Header: Attack getAttack()
-		AccessModifier: PRIVATE
+		AccessModifier: Private
 		Body:
 			return AttackNamesies.getValueOf("{0}").getAttack();
 			###

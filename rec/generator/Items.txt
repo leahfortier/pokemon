@@ -543,12 +543,12 @@ Quick Powder:
 	ModifyMultiplier: 1.5 p.isPokemon(PokemonNamesies.DITTO)
 *
 Red Card:
-	Int: HoldItem, TakeDamageEffect
+	Int: HoldItem, OpponentApplyDamageEffect
 	Cat: Misc
 	Desc: A card with a mysterious power. When the holder is struck by a foe, the attacker is removed from battle.
 	Price: 200
 	Fling: 10
-	OnTakeDamage:
+	OpponentApplyDamage:
 		if (user.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
 			victim.consumeItem(b);
 		}

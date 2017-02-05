@@ -2,7 +2,7 @@
 # If this is unspecified, then the invokee list will default to being passed in as a new parameter in the invoke method
 
 ApplyDamageEffect:
-	Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated
+	Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
 	Method:
 		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
 		Comments:
@@ -13,6 +13,23 @@ ApplyDamageEffect:
 			###
 		Invoke: Void
 		EffectList: user
+		InvokeAttack: user
+		Deadsies: user
+	*
+***
+OpponentApplyDamageEffect:
+	Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
+	Method:
+		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
+		Comments:
+			// b: The current battle
+			// user: The user of that attack
+			// victim: The Pokemon that received the attack, the one who is probably implementing this effect
+			// damage: The amount of damage that was dealt to victim by the user 
+			###
+		Invoke: Void
+		EffectList: victim
+		Deadsies: user
 	*
 ***
 EndTurnEffect:
@@ -37,8 +54,13 @@ SuperDuperEndTurnEffect:
 RecoilMove:
 	Method:
 		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
-		Invoke: Void
-		Move: user
+	*
+	Extends: ApplyDamageEffect
+	Method:
+		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
+		Default:
+			this.applyRecoil(b, user, damage);
+			###
 	*
 ***
 RecoilPercentageMove:
@@ -81,9 +103,16 @@ PhysicalContactEffect:
 			// victim: The Pokemon that received the physical contact attack
 			###
 		Header: void contact(Battle b, ActivePokemon user, ActivePokemon victim)
-		Invoke: Void
-		Deadsies: user
-		EffectList: victim
+	*
+	Extends: OpponentApplyDamageEffect
+	Method:
+		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
+		Default:
+			// Only apply if physical contact is made
+			if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && !user.hasAbility(AbilityNamesies.LONG_REACH)) {
+				this.contact(b, user, victim);
+			}
+			###
 	*
 ***
 TakeDamageEffect:
@@ -95,6 +124,19 @@ TakeDamageEffect:
 			###
 		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		EffectList: victim
+		Invoke: Void
+		Deadsies: victim
+	*
+***
+OpponentTakeDamageEffect:
+	Method:
+		Comments:
+			// b: The current battle
+			// user: The user of the attack and implementer of the effect
+			// victim: The Pokemon who is taking damage
+			###
+		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+		EffectList: user
 		Invoke: Void
 		Deadsies: victim
 	*
@@ -631,10 +673,6 @@ SelfAttackBlocker:
 		InvokeName: checkBlocked
 		EffectList: user
 		InvokeAttack: user
-	*
-	Method:
-		Header: void alternateEffect(Battle b, ActivePokemon user)
-		Default: Empty
 	*
 	Method:
 		Header: String getBlockMessage(Battle b, ActivePokemon user)

@@ -43,6 +43,7 @@ import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.OpponentStatusReceivedEffect;
+import battle.effect.generic.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowderMove;
@@ -664,18 +665,16 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Stench extends Ability implements ApplyDamageEffect {
+	static class Stench extends Ability implements OpponentTakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		Stench() {
 			super(AbilityNamesies.STENCH, "The stench may cause the target to flinch.");
 		}
 
-		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (RandomUtils.chanceTest(10)) {
-				PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
-				if (flinch.applies(b, user, victim, CastSource.ABILITY)) {
-					flinch.cast(b, user, victim, CastSource.ABILITY, false);
+				if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.ABILITY, false)) {
 					Messages.add(new MessageUpdate(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!"));
 				}
 			}
@@ -2394,14 +2393,14 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class PoisonTouch extends Ability implements ApplyDamageEffect {
+	static class PoisonTouch extends Ability implements OpponentTakeDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		PoisonTouch() {
 			super(AbilityNamesies.POISON_TOUCH, "May poison targets when a Pok\u00e9mon makes contact.");
 		}
 
-		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (RandomUtils.chanceTest(30)) {
 				Status.giveStatus(b, user, victim, StatusCondition.POISONED, true);
 			}
@@ -2495,7 +2494,7 @@ public abstract class Ability implements Serializable {
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
 				victim.getAttributes().modifyStage(victim, victim, -1, Stat.DEFENSE, b, CastSource.ABILITY);
-				victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+				victim.getAttributes().modifyStage(victim, victim, 2, Stat.SPEED, b, CastSource.ABILITY);
 			}
 		}
 	}
@@ -3494,7 +3493,6 @@ public abstract class Ability implements Serializable {
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getAttributes().getDamageTaken())/(double)victim.getMaxHP() >= .5) {
 				victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
-				
 			}
 		}
 	}
@@ -3509,7 +3507,6 @@ public abstract class Ability implements Serializable {
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getAttributes().getDamageTaken())/(double)victim.getMaxHP() >= .5) {
 				victim.switcheroo(b, victim, CastSource.ABILITY, true);
-				
 			}
 		}
 	}
@@ -3524,7 +3521,6 @@ public abstract class Ability implements Serializable {
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getAttributes().getDamageTaken())/(double)victim.getMaxHP() >= .5) {
 				victim.switcheroo(b, victim, CastSource.ABILITY, true);
-				
 			}
 		}
 	}

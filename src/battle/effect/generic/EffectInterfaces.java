@@ -30,7 +30,7 @@ public final class EffectInterfaces {
 
 	// EVERYTHING BELOW IS GENERATED ###
 
-	// This is used when the user applies direct damage to an opponent, and has special effects associated
+	// This is used when the user applies direct damage to an opponent, and has special effects associated with the user
 	public interface ApplyDamageEffect {
 
 		// b: The current battle
@@ -40,12 +40,49 @@ public final class EffectInterfaces {
 		void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage);
 
 		static void invokeApplyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-			List<Object> invokees = b.getEffectsList(user);
+			if (user.isFainted(b)) {
+				return;
+			}
+			
+			List<Object> invokees = b.getEffectsList(user, user.getAttack());
 			for (Object invokee : invokees) {
 				if (invokee instanceof ApplyDamageEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					ApplyDamageEffect effect = (ApplyDamageEffect)invokee;
 					effect.applyDamageEffect(b, user, victim, damage);
+					
+					if (user.isFainted(b)) {
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	// This is used when the user applies direct damage to an opponent, and has special effects associated with the user
+	public interface OpponentApplyDamageEffect {
+
+		// b: The current battle
+		// user: The user of that attack
+		// victim: The Pokemon that received the attack, the one who is probably implementing this effect
+		// damage: The amount of damage that was dealt to victim by the user
+		void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage);
+
+		static void invokeOpponentApplyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+			if (user.isFainted(b)) {
+				return;
+			}
+			
+			List<Object> invokees = b.getEffectsList(victim);
+			for (Object invokee : invokees) {
+				if (invokee instanceof OpponentApplyDamageEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					OpponentApplyDamageEffect effect = (OpponentApplyDamageEffect)invokee;
+					effect.applyDamageEffect(b, user, victim, damage);
+					
+					if (user.isFainted(b)) {
+						return;
+					}
 				}
 			}
 		}
@@ -96,18 +133,11 @@ public final class EffectInterfaces {
 		}
 	}
 
-	public interface RecoilMove {
+	public interface RecoilMove extends ApplyDamageEffect {
 		void applyRecoil(Battle b, ActivePokemon user, int damage);
 
-		static void invokeRecoilMove(Battle b, ActivePokemon user, int damage) {
-			List<Object> invokees = Collections.singletonList(user.getAttack());
-			for (Object invokee : invokees) {
-				if (invokee instanceof RecoilMove && !Effect.isInactiveEffect(invokee, b)) {
-					
-					RecoilMove effect = (RecoilMove)invokee;
-					effect.applyRecoil(b, user, damage);
-				}
-			}
+		default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+			this.applyRecoil(b, user, damage);
 		}
 	}
 
@@ -136,29 +166,17 @@ public final class EffectInterfaces {
 		}
 	}
 
-	public interface PhysicalContactEffect {
+	public interface PhysicalContactEffect extends OpponentApplyDamageEffect {
 
 		// b: The current battle
 		// user: The user of the attack that caused the physical contact
 		// victim: The Pokemon that received the physical contact attack
 		void contact(Battle b, ActivePokemon user, ActivePokemon victim);
 
-		static void invokePhysicalContactEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isFainted(b)) {
-				return;
-			}
-			
-			List<Object> invokees = b.getEffectsList(victim);
-			for (Object invokee : invokees) {
-				if (invokee instanceof PhysicalContactEffect && !Effect.isInactiveEffect(invokee, b)) {
-					
-					PhysicalContactEffect effect = (PhysicalContactEffect)invokee;
-					effect.contact(b, user, victim);
-					
-					if (user.isFainted(b)) {
-						return;
-					}
-				}
+		default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+			// Only apply if physical contact is made
+			if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && !user.hasAbility(AbilityNamesies.LONG_REACH)) {
+				this.contact(b, user, victim);
 			}
 		}
 	}
@@ -180,6 +198,33 @@ public final class EffectInterfaces {
 				if (invokee instanceof TakeDamageEffect && !Effect.isInactiveEffect(invokee, b)) {
 					
 					TakeDamageEffect effect = (TakeDamageEffect)invokee;
+					effect.takeDamage(b, user, victim);
+					
+					if (victim.isFainted(b)) {
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	public interface OpponentTakeDamageEffect {
+
+		// b: The current battle
+		// user: The user of the attack and implementer of the effect
+		// victim: The Pokemon who is taking damage
+		void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim);
+
+		static void invokeOpponentTakeDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (victim.isFainted(b)) {
+				return;
+			}
+			
+			List<Object> invokees = b.getEffectsList(user);
+			for (Object invokee : invokees) {
+				if (invokee instanceof OpponentTakeDamageEffect && !Effect.isInactiveEffect(invokee, b)) {
+					
+					OpponentTakeDamageEffect effect = (OpponentTakeDamageEffect)invokee;
 					effect.takeDamage(b, user, victim);
 					
 					if (victim.isFainted(b)) {
@@ -1306,7 +1351,6 @@ public final class EffectInterfaces {
 
 	public interface SelfAttackBlocker {
 		boolean block(Battle b, ActivePokemon user);
-		default void alternateEffect(Battle b, ActivePokemon user) {}
 
 		default String getBlockMessage(Battle b, ActivePokemon user) {
 			return Effect.DEFAULT_FAIL_MESSAGE;

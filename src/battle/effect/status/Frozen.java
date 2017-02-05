@@ -24,6 +24,7 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
         return !victim.isType(b, Type.ICE);
     }
 
+    @Override
     public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
         // 20% chance to thaw out each turn
         if (RandomUtils.chanceTest(20) || p.getAttack().isMoveType(MoveType.DEFROST)) {
@@ -36,14 +37,17 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
         return false;
     }
 
+    @Override
     public String getCastMessage(ActivePokemon p) {
         return p.getName() + " was frozen!";
     }
 
+    @Override
     public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
         return abilify.getName() + "'s " + abilify.getAbility().getName() + " froze " + victim.getName() + "!";
     }
 
+    @Override
     public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
         // Fire-type moves defrost the user
         if (user.isAttackType(Type.FIRE)) {
@@ -51,10 +55,12 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
         }
     }
 
+    @Override
     public String getRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " thawed out!";
     }
 
+    @Override
     public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
         return victim.getName() + "'s " + sourceName + " thawed it out!";
     }

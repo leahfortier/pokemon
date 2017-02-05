@@ -22,10 +22,11 @@ import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
+import battle.effect.generic.EffectInterfaces.OpponentApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;
-import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
+import battle.effect.generic.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
@@ -341,7 +342,6 @@ public abstract class Attack implements Serializable {
 		SelfAttackBlocker selfAttackBlocker = SelfAttackBlocker.checkBlocked(b, me);
 		if (selfAttackBlocker != null) {
 			Messages.add(new MessageUpdate(selfAttackBlocker.getBlockMessage(b, me)));
-			selfAttackBlocker.alternateEffect(b, me);
 			return false;
 		}
 
@@ -369,40 +369,17 @@ public abstract class Attack implements Serializable {
 		// Deal damage
 		int damage = o.reduceHealth(b, b.calculateDamage(me, o));
 		
-		// Check if target is fainted
+		// Deadsies check
 		o.isFainted(b);
-		
-		if (me.isFainted(b)) {
-			return;
-		}
+		me.isFainted(b);
 		
 		// Apply a damage effect
 		ApplyDamageEffect.invokeApplyDamageEffect(b, me, o, damage);
-		
-		if (me.isFainted(b)) {
-			return;
-		}
-		
-		// Take Recoil Damage
-		RecoilMove.invokeRecoilMove(b, me, damage);
-	
-		if (me.isFainted(b)) {
-			return;
-		}
+		OpponentApplyDamageEffect.invokeOpponentApplyDamageEffect(b, me, o, damage);
 
-		// Sap the Health
-		if (this instanceof SapHealthEffect) {
-			((SapHealthEffect)this).sapHealth(b, me, o, damage, true);
-		}
-		
-		// Effects that apply when a Pokemon makes physical contact with them
-		if (isMoveType(MoveType.PHYSICAL_CONTACT) && !me.hasAbility(AbilityNamesies.LONG_REACH)) {
-			PhysicalContactEffect.invokePhysicalContactEffect(b, me, o);
-		}
-
-		// TODO: This might need to be moved higher like before the recoil stuff so it gets activated even if the attacker dies
 		// Effects that apply to the opponent when they take damage
 		TakeDamageEffect.invokeTakeDamageEffect(b, me, o);
+		OpponentTakeDamageEffect.invokeOpponentTakeDamageEffect(b, me, o);
 	}
 
 	private void applyUniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {

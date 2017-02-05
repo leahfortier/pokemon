@@ -23,7 +23,9 @@ import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
+import battle.effect.generic.EffectInterfaces.OpponentApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
+import battle.effect.generic.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
@@ -1416,7 +1418,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class RedCard extends Item implements HoldItem, TakeDamageEffect {
+	static class RedCard extends Item implements HoldItem, OpponentApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		RedCard() {
@@ -1428,7 +1430,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return 10;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (user.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
 				victim.consumeItem(b);
 			}
@@ -3119,7 +3121,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class KingsRock extends Item implements PokemonUseItem, ApplyDamageEffect, HoldItem {
+	static class KingsRock extends Item implements PokemonUseItem, OpponentTakeDamageEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		KingsRock() {
@@ -3135,11 +3137,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return p.checkEvolution(this.namesies);
 		}
 
-		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (RandomUtils.chanceTest(10)) {
-				PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
-				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
-					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
+				if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
 					Messages.add(new MessageUpdate(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!"));
 				}
 			}
@@ -3150,9 +3150,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
-			PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
-			if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM)) {
-				flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
+			if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
 				Messages.add(new MessageUpdate("The " + this.name + " caused " + pelted.getName() + " to flinch!"));
 			}
 		}
@@ -3322,7 +3320,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class RazorFang extends Item implements PokemonUseItem, ApplyDamageEffect, HoldItem {
+	static class RazorFang extends Item implements PokemonUseItem, OpponentTakeDamageEffect, HoldItem {
 		private static final long serialVersionUID = 1L;
 
 		RazorFang() {
@@ -3338,11 +3336,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return p.checkEvolution(this.namesies);
 		}
 
-		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (RandomUtils.chanceTest(10)) {
-				PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
-				if (flinch.applies(b, user, victim, CastSource.HELD_ITEM)) {
-					flinch.cast(b, user, victim, CastSource.HELD_ITEM, false);
+				if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
 					Messages.add(new MessageUpdate(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!"));
 				}
 			}
@@ -3353,9 +3349,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
-			PokemonEffect flinch = (PokemonEffect)EffectNamesies.FLINCH.getEffect();
-			if (flinch.applies(b, pelted, pelted, CastSource.USE_ITEM)) {
-				flinch.cast(b, pelted, pelted, CastSource.USE_ITEM, false);
+			if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
 				Messages.add(new MessageUpdate("The " + this.name + " caused " + pelted.getName() + " to flinch!"));
 			}
 		}
@@ -7105,16 +7099,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class JabocaBerry extends Item implements Berry, TakeDamageEffect {
+	static class JabocaBerry extends Item implements Berry, OpponentApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		JabocaBerry() {
 			super(ItemNamesies.JABOCA_BERRY, "If held by a Pok\u00e9mon and a physical attack lands, the attacker also takes damage.", BagCategory.BERRY, 280);
 			super.price = 20;
-		}
-
-		public MoveCategory getCategory() {
-			return MoveCategory.PHYSICAL;
 		}
 
 		public int naturalGiftPower() {
@@ -7125,8 +7115,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return Type.DRAGON;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttack().getCategory() == getCategory()) {
+		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+			if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
 				Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!"));
 				user.reduceHealthFraction(b, 1/8.0);
 				victim.consumeItem(b);
@@ -7138,16 +7128,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class RowapBerry extends Item implements Berry, TakeDamageEffect {
+	static class RowapBerry extends Item implements Berry, OpponentApplyDamageEffect {
 		private static final long serialVersionUID = 1L;
 
 		RowapBerry() {
 			super(ItemNamesies.ROWAP_BERRY, "If held by a Pok\u00e9mon and a special attack lands, the attacker also takes damage.", BagCategory.BERRY, 281);
 			super.price = 20;
-		}
-
-		public MoveCategory getCategory() {
-			return MoveCategory.SPECIAL;
 		}
 
 		public int naturalGiftPower() {
@@ -7158,8 +7144,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return Type.DARK;
 		}
 
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttack().getCategory() == getCategory()) {
+		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+			if (user.getAttack().getCategory() == MoveCategory.SPECIAL) {
 				Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!"));
 				user.reduceHealthFraction(b, 1/8.0);
 				victim.consumeItem(b);
