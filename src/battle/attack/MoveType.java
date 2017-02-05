@@ -17,7 +17,6 @@ public enum MoveType {
     NON_SNATCHABLE,
     ONE_HIT_KO,
     PHYSICAL_CONTACT,
-    POWDER,
     PROTECT_PIERCING,
     PUNCHING,
     SLEEP_TALK_FAIL,

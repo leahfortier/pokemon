@@ -5,7 +5,6 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
-import battle.attack.MoveType;
 import battle.effect.DefiniteEscape;
 import battle.effect.RepellingEffect;
 import battle.effect.SimpleStatModifyingEffect;
@@ -13,10 +12,10 @@ import battle.effect.StallingEffect;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
+import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
-import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
@@ -26,6 +25,7 @@ import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
+import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
@@ -1470,16 +1470,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class SafetyGoggles extends Item implements HoldItem, WeatherBlockerEffect, EffectBlockerEffect {
+	static class SafetyGoggles extends Item implements HoldItem, WeatherBlockerEffect, AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		SafetyGoggles() {
 			super(ItemNamesies.SAFETY_GOGGLES, "An item to be held by a Pok\u00e9mon. These goggles protect the holder from both weather-related damage and powder.", BagCategory.MISC, 57);
 			super.price = 200;
-		}
-
-		private String getPreventMessage(ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
 		}
 
 		public int flingDamage() {
@@ -1490,16 +1486,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!user.getAttack().isMoveType(MoveType.POWDER)) {
-				return true;
-			}
-			
-			if (user.getAttack().isStatusMove()) {
-				Messages.add(new MessageUpdate(getPreventMessage(victim)));
-			}
-			
-			return false;
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttack() instanceof PowderMove;
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
 		}
 	}
 

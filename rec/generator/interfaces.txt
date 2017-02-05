@@ -630,6 +630,7 @@ SelfAttackBlocker:
 		Invoke: CheckGet true
 		InvokeName: checkBlocked
 		EffectList: user
+		InvokeAttack: user
 	*
 	Method:
 		Header: void alternateEffect(Battle b, ActivePokemon user)
@@ -700,6 +701,16 @@ OpponentAttackSelectionBlockerEffect:
 		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
 		Default:
 			return !this.usable(b, user, user.getMove());
+			###
+	*
+***
+PowderMove:
+	Extends: SelfAttackBlocker
+	Method:
+		Header: boolean block(Battle b, ActivePokemon user)
+		Default:
+			// Powder moves don't work against Grass-type Pokemon
+			return b.getOtherPokemon(user).isType(b, Type.GRASS);
 			###
 	*
 ***

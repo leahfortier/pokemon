@@ -1,10 +1,6 @@
 package type;
 
-import battle.Battle;
-import battle.attack.MoveType;
 import main.Global;
-import message.MessageUpdate;
-import message.Messages;
 import pokemon.ActivePokemon;
 import util.FileIO;
 import util.Folder;
@@ -89,15 +85,6 @@ public enum Type implements Serializable {
 
 		Global.error("Invalid hidden type index " + hiddenIndex);
 		return null;
-	}
-
-	public static boolean blockAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-		if (defending.isType(b, Type.GRASS) && attacking.getAttack().isMoveType(MoveType.POWDER)) {
-			Messages.add(new MessageUpdate(defending.getName() + " is immune to Powder moves!"));
-			return true;
-		}
-
-		return false;
 	}
 
 	private interface AdvantageGetter {

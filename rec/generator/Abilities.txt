@@ -731,8 +731,8 @@ Overcoat:
 	Desc: Protects the Pok\u00e9mon from damage from weather.
 	Int: WeatherBlockerEffect
 	WeatherBlock: 
-	return true;
-	###
+		return true;
+		###
 	PowderResist: True
 *
 Magma Armor:

@@ -2112,23 +2112,11 @@ CritBlockerEffect:
 ***
 Override:
 	PowderResist:
-		Header: String getPreventMessage(ActivePokemon victim)
-		AccessModifier: Private
-		Body:
-		return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
-		###
-		AddInterface: EffectBlockerEffect
-		AddMapField: ValidMove:
-		if (!user.getAttack().isMoveType(MoveType.POWDER)) {
-			return true;
-		}
-		
-		if (user.getAttack().isStatusMove()) {
-			Messages.add(new MessageUpdate(getPreventMessage(victim)));
-		}
-		
-		return false;
-		###
+		AddInterface: AttackBlocker
+		AddMapField: Block:
+			return user.getAttack() instanceof PowderMove;
+			###
+		AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " protects it from powder moves!"
 	*
 ***
 NoAdvantageChanger:
@@ -2576,4 +2564,6 @@ Override:
 		}
 		###
 	*
+***
+PowderMove:
 ***

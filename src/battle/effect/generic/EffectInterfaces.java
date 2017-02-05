@@ -1313,7 +1313,7 @@ public final class EffectInterfaces {
 		}
 
 		static SelfAttackBlocker checkBlocked(Battle b, ActivePokemon user) {
-			List<Object> invokees = b.getEffectsList(user);
+			List<Object> invokees = b.getEffectsList(user, user.getAttack());
 			for (Object invokee : invokees) {
 				if (invokee instanceof SelfAttackBlocker && !Effect.isInactiveEffect(invokee, b)) {
 					
@@ -1369,6 +1369,14 @@ public final class EffectInterfaces {
 
 		default boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return !this.usable(b, user, user.getMove());
+		}
+	}
+
+	public interface PowderMove extends SelfAttackBlocker {
+
+		default boolean block(Battle b, ActivePokemon user) {
+			// Powder moves don't work against Grass-type Pokemon
+			return b.getOtherPokemon(user).isType(b, Type.GRASS);
 		}
 	}
 }

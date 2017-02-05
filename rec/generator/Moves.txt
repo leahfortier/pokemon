@@ -53,7 +53,7 @@ Poison Powder:
 	Cat: Status
 	PP: 35
 	Status: Poisoned
-	MoveType: Powder
+	Int: PowderMove
 *
 Sleep Powder:
 	Acc: 75
@@ -62,7 +62,7 @@ Sleep Powder:
 	Desc: The user scatters a big cloud of sleep-inducing dust around the target.
 	Status: Asleep
 	Cat: Status
-	MoveType: Powder
+	Int: PowderMove
 *
 Toxic:
 	PP: 10
@@ -762,7 +762,7 @@ Stun Spore:
 	Acc: 75
 	Status: Paralyzed
 	Cat: Status
-	MoveType: Powder
+	Int: PowderMove
 *
 Gust:
 	Desc: A gust of wind is whipped up by wings and launched at the target to inflict damage.
@@ -1969,7 +1969,7 @@ Spore:
 	Status: Asleep
 	Type: Grass
 	Cat: Status
-	MoveType: Powder
+	Int: PowderMove
 *
 Cross Poison:
 	Desc: A slashing attack with a poisonous blade that may also leave the target poisoned. Critical hits land more easily.
@@ -4308,7 +4308,7 @@ Cotton Spore:
 	Type: Grass
 	Cat: Status
 	StatChange: 1 Speed -2
-	MoveType: Powder
+	Int: PowderMove
 *
 Cotton Guard:
 	Desc: The user protects itself by wrapping its body in soft cotton, drastically raising the user's Defense stat.
@@ -6134,7 +6134,7 @@ Powder:
 	Acc: 100
 	Cat: Status
 	Effect: Powder
-	MoveType: Powder
+	Int: PowderMove
 	Priority: 1
 *
 Rototiller:

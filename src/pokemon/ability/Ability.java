@@ -45,6 +45,7 @@ import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.OpponentStatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
+import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
@@ -1766,31 +1767,23 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Overcoat extends Ability implements WeatherBlockerEffect, EffectBlockerEffect {
+	static class Overcoat extends Ability implements WeatherBlockerEffect, AttackBlocker {
 		private static final long serialVersionUID = 1L;
 
 		Overcoat() {
 			super(AbilityNamesies.OVERCOAT, "Protects the Pok\u00e9mon from damage from weather.");
 		}
 
-		private String getPreventMessage(ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
-		}
-
 		public boolean block(EffectNamesies weather) {
 			return true;
 		}
 
-		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!user.getAttack().isMoveType(MoveType.POWDER)) {
-				return true;
-			}
-			
-			if (user.getAttack().isStatusMove()) {
-				Messages.add(new MessageUpdate(getPreventMessage(victim)));
-			}
-			
-			return false;
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttack() instanceof PowderMove;
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
 		}
 	}
 

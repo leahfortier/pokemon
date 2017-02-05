@@ -26,6 +26,7 @@ import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
+import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.RecoilPercentageMove;
@@ -337,10 +338,6 @@ public abstract class Attack implements Serializable {
 			return false;
 		}
 
-		if (Type.blockAttack(b, me, o)) {
-			return false;
-		}
-
 		SelfAttackBlocker selfAttackBlocker = SelfAttackBlocker.checkBlocked(b, me);
 		if (selfAttackBlocker != null) {
 			Messages.add(new MessageUpdate(selfAttackBlocker.getBlockMessage(b, me)));
@@ -419,7 +416,6 @@ public abstract class Attack implements Serializable {
 		OpponentEndAttackEffect.invokeOpponentEndAttackEffect(b, user, this);
 	}
 
-	// TODO: Need to make this final and have an overridable method that is called inside here
 	private void applyBasicEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 		// Don't apply effects to a fainted Pokemon
 		if (victim.isFainted(b)) {
@@ -496,25 +492,23 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class PoisonPowder extends Attack {
+	static class PoisonPowder extends Attack implements PowderMove {
 		private static final long serialVersionUID = 1L;
 
 		PoisonPowder() {
 			super(AttackNamesies.POISON_POWDER, "The user scatters a cloud of poisonous dust on the target. It may poison the target.", 35, Type.POISON, MoveCategory.STATUS);
 			super.accuracy = 75;
 			super.status = StatusCondition.POISONED;
-			super.moveTypes.add(MoveType.POWDER);
 		}
 	}
 
-	static class SleepPowder extends Attack {
+	static class SleepPowder extends Attack implements PowderMove {
 		private static final long serialVersionUID = 1L;
 
 		SleepPowder() {
 			super(AttackNamesies.SLEEP_POWDER, "The user scatters a big cloud of sleep-inducing dust around the target.", 15, Type.GRASS, MoveCategory.STATUS);
 			super.accuracy = 75;
 			super.status = StatusCondition.ASLEEP;
-			super.moveTypes.add(MoveType.POWDER);
 		}
 	}
 
@@ -1634,14 +1628,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class StunSpore extends Attack {
+	static class StunSpore extends Attack implements PowderMove {
 		private static final long serialVersionUID = 1L;
 
 		StunSpore() {
 			super(AttackNamesies.STUN_SPORE, "The user scatters a cloud of paralyzing powder. It may leave the target with paralysis.", 30, Type.GRASS, MoveCategory.STATUS);
 			super.accuracy = 75;
 			super.status = StatusCondition.PARALYZED;
-			super.moveTypes.add(MoveType.POWDER);
 		}
 	}
 
@@ -3629,14 +3622,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Spore extends Attack {
+	static class Spore extends Attack implements PowderMove {
 		private static final long serialVersionUID = 1L;
 
 		Spore() {
 			super(AttackNamesies.SPORE, "The user scatters bursts of spores that induce sleep.", 15, Type.GRASS, MoveCategory.STATUS);
 			super.accuracy = 100;
 			super.status = StatusCondition.ASLEEP;
-			super.moveTypes.add(MoveType.POWDER);
 		}
 	}
 
@@ -7283,13 +7275,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class CottonSpore extends Attack {
+	static class CottonSpore extends Attack implements PowderMove {
 		private static final long serialVersionUID = 1L;
 
 		CottonSpore() {
 			super(AttackNamesies.COTTON_SPORE, "The user releases cotton-like spores that cling to the target, harshly reducing its Speed stat.", 40, Type.GRASS, MoveCategory.STATUS);
 			super.accuracy = 100;
-			super.moveTypes.add(MoveType.POWDER);
 			super.statChanges[Stat.SPEED.index()] = -2;
 		}
 	}
@@ -10111,14 +10102,13 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Powder extends Attack {
+	static class Powder extends Attack implements PowderMove {
 		private static final long serialVersionUID = 1L;
 
 		Powder() {
 			super(AttackNamesies.POWDER, "The user covers the target in a powder that explodes and damages the target if it uses a Fire-type move.", 20, Type.BUG, MoveCategory.STATUS);
 			super.accuracy = 100;
 			super.effects.add(EffectNamesies.POWDER);
-			super.moveTypes.add(MoveType.POWDER);
 			super.priority = 1;
 		}
 	}

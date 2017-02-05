@@ -4,6 +4,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.status.StatusCondition;
+import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Gender;
@@ -409,6 +410,38 @@ public class AttackTest {
         battle.attackingFight(AttackNamesies.SLEEP_TALK);
         Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
         Assert.assertFalse(defending.hasStatus());
+    }
+
+    @Test
+    public void powderMoveTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Powder moves shouldn't work on Grass-type Pokemon
+        Assert.assertTrue(attacking.isType(battle, Type.GRASS));
+        defending.apply(false, AttackNamesies.SLEEP_POWDER, battle);
+        attacking.apply(true, AttackNamesies.SLEEP_POWDER, battle);
+
+        battle.emptyHeal();
+        battle.defendingFight(AttackNamesies.SOAK);
+        Assert.assertFalse(attacking.isType(battle, Type.GRASS));
+        defending.apply(true, AttackNamesies.SLEEP_POWDER, battle);
+
+        // Or Pokemon with Overcoat
+        battle.emptyHeal();
+        defending.withAbility(AbilityNamesies.OVERCOAT);
+        attacking.apply(false, AttackNamesies.SLEEP_POWDER, battle);
+        attacking.apply(false, AttackNamesies.COTTON_SPORE, battle);
+        attacking.apply(true, AttackNamesies.LEECH_SEED, battle);
+
+        // Or Pokemon holding Safety Goggles
+        battle.emptyHeal();
+        defending.withAbility(AbilityNamesies.NO_ABILITY);
+        defending.giveItem(ItemNamesies.SAFETY_GOGGLES);
+        attacking.apply(false, AttackNamesies.SPORE, battle);
+        attacking.apply(false, AttackNamesies.POISON_POWDER, battle);
+        attacking.apply(true, AttackNamesies.VINE_WHIP, battle);
     }
 
     @Test
