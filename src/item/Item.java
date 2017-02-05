@@ -3785,11 +3785,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class Elixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
-		private boolean use(List<Move> moves)
-		{
+		private boolean use(List<Move> moves) {
 			boolean changed = false;
-			for (Move m : moves)
-			{
+			for (Move m : moves) {
 				changed |= m.increasePP(increaseAmount(m));
 			}
 			
@@ -3825,11 +3823,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class MaxElixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
-		private boolean use(List<Move> moves)
-		{
+		private boolean use(List<Move> moves) {
 			boolean changed = false;
-			for (Move m : moves)
-			{
+			for (Move m : moves) {
 				changed |= m.increasePP(increaseAmount(m));
 			}
 			
@@ -8027,6 +8023,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8078,6 +8075,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8129,6 +8127,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8180,6 +8179,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8231,6 +8231,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8282,6 +8283,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8333,6 +8335,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8384,6 +8387,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8435,6 +8439,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8486,6 +8491,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8537,6 +8543,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8588,6 +8595,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8639,6 +8647,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8690,6 +8699,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8741,6 +8751,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8792,6 +8803,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8843,6 +8855,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8894,6 +8907,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8945,6 +8959,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -8996,6 +9011,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9047,6 +9063,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9098,6 +9115,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9149,6 +9167,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9200,6 +9219,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9251,6 +9271,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9302,6 +9323,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9353,6 +9375,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9404,6 +9427,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9455,6 +9479,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9506,6 +9531,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9557,6 +9583,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9608,6 +9635,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9659,6 +9687,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9710,6 +9739,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9761,6 +9791,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9812,6 +9843,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9863,6 +9895,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9914,6 +9947,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -9965,6 +9999,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10016,6 +10051,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10067,6 +10103,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10118,6 +10155,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10169,6 +10207,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10220,6 +10259,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10271,6 +10311,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10322,6 +10363,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10373,6 +10415,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10424,6 +10467,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10475,6 +10519,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10526,6 +10571,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10577,6 +10623,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10628,6 +10675,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10679,6 +10727,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10730,6 +10779,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10781,6 +10831,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10832,6 +10883,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10883,6 +10935,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10934,6 +10987,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -10985,6 +11039,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11036,6 +11091,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11087,6 +11143,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11138,6 +11195,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11189,6 +11247,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11240,6 +11299,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11291,6 +11351,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11342,6 +11403,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11393,6 +11455,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11444,6 +11507,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11495,6 +11559,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11546,6 +11611,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11597,6 +11663,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11648,6 +11715,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11699,6 +11767,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11750,6 +11819,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11801,6 +11871,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11852,6 +11923,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11903,6 +11975,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -11954,6 +12027,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12005,6 +12079,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12056,6 +12131,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12107,6 +12183,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12158,6 +12235,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12209,6 +12287,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12260,6 +12339,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12311,6 +12391,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12362,6 +12443,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12413,6 +12495,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12464,6 +12547,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12515,6 +12599,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12566,6 +12651,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12617,6 +12703,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12668,6 +12755,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12719,6 +12807,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12770,6 +12859,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12821,6 +12911,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12872,6 +12963,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12923,6 +13015,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -12974,6 +13067,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -13025,6 +13119,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -13076,6 +13171,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -13127,6 +13223,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move
@@ -13178,6 +13275,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
+			// TODO: Move to default method or something
 			Attack attack = getAttack();
 			
 			// Cannot learn if you already know the move

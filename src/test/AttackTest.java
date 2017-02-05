@@ -376,7 +376,7 @@ public class AttackTest {
         Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
 //        Assert.assertTrue(defending.hasEffect(EffectNamesies.BAD_POISON));
         Assert.assertTrue(attacking.isType(battle, Type.PSYCHIC));
-        battle.attackingFight(AttackNamesies.CLEAR_SMOG);
+        battle.attackingFight(AttackNamesies.ACID_ARMOR);
         Assert.assertTrue(attacking.isType(battle, Type.POISON));
         defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
 

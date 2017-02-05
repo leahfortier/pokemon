@@ -20,14 +20,14 @@ Gravity:
 	NumTurns: 5
 	Int: GroundedEffect, StageChangingEffect
 	StageChange: 
-	return s == Stat.EVASION ? -2 : 0;
-	###
+		return s == Stat.EVASION ? -2 : 0;
+		###
 	CastMessage: "Gravity intensified!"
 	Cast: 
-	super.cast(b, caster, victim, source, printCast);
-	removeLevitation(b, caster);
-	removeLevitation(b, victim);
-	###
+		super.cast(b, caster, victim, source, printCast);
+		removeLevitation(b, caster);
+		removeLevitation(b, victim);
+		###
 	SubsideMessage: "The gravity returned to normal."
 *
 WaterSport:
@@ -39,11 +39,11 @@ MudSport:
 WonderRoom:
 	Int: StatSwitchingEffect
 	SwitchStat: 
-	// Defense and Special Defense are swapped
-	if (s == Stat.DEFENSE) return Stat.SP_DEFENSE;
-	if (s == Stat.SP_DEFENSE) return Stat.DEFENSE;
-	return s;
-	###
+		// Defense and Special Defense are swapped
+		if (s == Stat.DEFENSE) return Stat.SP_DEFENSE;
+		if (s == Stat.SP_DEFENSE) return Stat.DEFENSE;
+		return s;
+		###
 	SpecialRoom: wonder switch defense and special defense
 *
 TrickRoom:
@@ -58,14 +58,14 @@ MistyTerrain:
 	Terrain: Misty
 	Int: StatusPreventionEffect, PowerChangeEffect, TerrainEffect
 	StatusPrevent: 
-	// Levitating Pokemon are immune to the mist
-	return !victim.isLevitating(b);
-	###
+		// Levitating Pokemon are immune to the mist
+		return !victim.isLevitating(b);
+		###
 	StatusPreventMessage: "The protective mist prevents status conditions!"
 	GetMultiplier:
-	// Dragon type moves have halved power during the misty terrain
-	return user.getAttackType() == Type.DRAGON && !user.isLevitating(b) ? .5 : 1;
-	###
+		// Dragon type moves have halved power during the misty terrain
+		return user.getAttackType() == Type.DRAGON && !user.isLevitating(b) ? .5 : 1;
+		###
 *
 GrassyTerrain:
 	CastMessage: "Grass sprouted around the battlefield!"
@@ -73,15 +73,15 @@ GrassyTerrain:
 	Terrain: Grass
 	Int: EndTurnEffect, PowerChangeEffect, TerrainEffect
 	ApplyEndTurn:
-	if (!victim.fullHealth() && !victim.isLevitating(b)) {
-		victim.healHealthFraction(1/16.0);
-		Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to the Grassy Terrain!").updatePokemon(b, victim));
-	}
-	###
+		if (!victim.fullHealth() && !victim.isLevitating(b)) {
+			victim.healHealthFraction(1/16.0);
+			Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to the Grassy Terrain!").updatePokemon(b, victim));
+		}
+		###
 	GetMultiplier:
-	// Grass-type moves are 50% stronger with the grassy terrain
-	return user.getAttackType() == Type.GRASS && !user.isLevitating(b) ? 1.5 : 1;
-	###
+		// Grass-type moves are 50% stronger with the grassy terrain
+		return user.getAttackType() == Type.GRASS && !user.isLevitating(b) ? 1.5 : 1;
+		###
 *
 ElectricTerrain:
 	CastMessage: "Electricity crackled around the battlefield!"
@@ -89,13 +89,13 @@ ElectricTerrain:
 	Terrain: Electric
 	Int: StatusPreventionEffect, PowerChangeEffect, TerrainEffect
 	StatusPrevent:
-	return status == StatusCondition.ASLEEP && !victim.isLevitating(b);
-	###
+		return status == StatusCondition.ASLEEP && !victim.isLevitating(b);
+		###
 	StatusPreventMessage: "The electric terrain prevents sleep!"
 	GetMultiplier:
-	// Electric-type moves are 50% stronger with the electric terrain
-	return user.getAttackType() == Type.ELECTRIC && !user.isLevitating(b) ? 1.5 : 1;
-	###
+		// Electric-type moves are 50% stronger with the electric terrain
+		return user.getAttackType() == Type.ELECTRIC && !user.isLevitating(b) ? 1.5 : 1;
+		###
 *
 PsychicTerrain:
 	CastMessage: "Psychic energy evelops the battlefield!!!"
@@ -116,7 +116,7 @@ FieldUproar:
 	StatusPrevent: return status == StatusCondition.ASLEEP;
 	StatusPreventMessage: "The uproar prevents sleep!!"
 	EffectIsActive:
-	// TODO: This should just be a super duper end turn effect and revert back to the old isActive system
-	return b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR);
-	###
+		// TODO: This should just be a super duper end turn effect and revert back to the old isActive system
+		return b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR);
+		###
 *

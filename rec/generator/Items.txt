@@ -336,9 +336,9 @@ Iron Ball:
 	ToModify: Speed
 	ModifyMultiplier: .5 true
 	FlingEffect:
-	// Technically the Iron Ball doesn't do this as a fling effect, but it almost makes sense so I'm doing it
-	removeLevitation(b, pelted);
-	###
+		// Technically the Iron Ball doesn't do this as a fling effect, but it almost makes sense so I'm doing it
+		removeLevitation(b, pelted);
+		###
 *
 Lagging Tail:
 	Int: HoldItem, StallingEffect
@@ -417,12 +417,12 @@ Macho Brace:
 	Price: 3000
 	Fling: 60
 	GetEVs:
-	for (int i = 0; i < vals.length; i++) {
-		vals[i] *= 2;
-	}
-	
-	return vals;
-	###
+		for (int i = 0; i < vals.length; i++) {
+			vals[i] *= 2;
+		}
+		
+		return vals;
+		###
 	ToModify: Speed
 	ModifyMultiplier: .5 true
 *
@@ -549,10 +549,10 @@ Red Card:
 	Price: 200
 	Fling: 10
 	OnTakeDamage:
-	if (user.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
-		victim.consumeItem(b);
-	}
-	###
+		if (user.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
+			victim.consumeItem(b);
+		}
+		###
 *
 Ring Target:
 	Int: HoldItem, NoAdvantageChanger
@@ -580,8 +580,8 @@ Safety Goggles:
 	Price: 200
 	Fling: 30
 	WeatherBlock: 
-	return true;
-	###
+		return true;
+		###
 	PowderResist: True
 *
 Scope Lens:
@@ -711,15 +711,15 @@ White Herb:
 		return true;
 		###
 	FlingEffect:
-	// Restores negative stat changes to the pelted
-	for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
-		if (pelted.getStage(i) < 0) {
-			pelted.getAttributes().setStage(i, 0);
+		// Restores negative stat changes to the pelted
+		for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
+			if (pelted.getStage(i) < 0) {
+				pelted.getAttributes().setStage(i, 0);
+			}
 		}
-	}
-	
-	Messages.add(new MessageUpdate("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!"));
-	###
+		
+		Messages.add(new MessageUpdate("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!"));
+		###
 *
 Wide Lens:
 	Int: HoldItem
@@ -1727,9 +1727,9 @@ Fast Ball:
 	Desc: A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon which are quick to run away.
 	Price: 200
 	AfterCaught:
-	// TODO: Make comments available inside the generator
-	// If the opponent has a base speed of 100 or higher, multiplier is 4
-	###
+		// TODO: Make comments available inside the generator
+		// If the opponent has a base speed of 100 or higher, multiplier is 4
+		###
 	CatchRateCondition: 4 o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100
 *
 Great Ball:
@@ -2201,9 +2201,9 @@ Starf Berry:
 		return false;
 		###
 	Field:
-	private String holdMessage;
-	private String useMessage;
-	###
+		private String holdMessage;
+		private String useMessage;
+		###
 	SuccessMessage: useMessage
 	HoldSuccessMessage: holdMessage
 *
@@ -2292,8 +2292,8 @@ Honey:
 	Fling: 30
 	Price: 100
 	FlingEffect:
-	// TODO: We need this item to do something (not in the fling effect, that's only there so I can put this todo in from le generator)
-	###
+		// TODO: We need this item to do something (not in the fling effect, that's only there so I can put this todo in from le generator)
+		###
 *
 Eviolite:
 	Int: HoldItem
@@ -2350,8 +2350,8 @@ Assault Vest:
 	ToModify: Sp_Defense
 	ModifyMultiplier: 1.5 true
 	Usable:
-	return !m.getAttack().isStatusMove();
-	###
+		return !m.getAttack().isStatusMove();
+		###
 	UnusableMessage: p.getName() + "'s " + this.name + " prevents the use of status moves!"
 	Fling: 30
 *

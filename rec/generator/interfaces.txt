@@ -6,11 +6,11 @@ ApplyDamageEffect:
 	Method:
 		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
 		Comments:
-		// b: The current battle
-		// user: The user of that attack, the one who is probably implementing this effect
-		// victim: The Pokemon that received the attack
-		// damage: The amount of damage that was dealt to victim by the user 
-		###
+			// b: The current battle
+			// user: The user of that attack, the one who is probably implementing this effect
+			// victim: The Pokemon that received the attack
+			// damage: The amount of damage that was dealt to victim by the user 
+			###
 		Invoke: Void
 		EffectList: user
 	*
@@ -21,10 +21,10 @@ EndTurnEffect:
 		Invoke: Void
 		Deadsies: victim
 		SetInvokees:
-		// Weather is handled separately
-		List<Object> invokees = b.getEffectsList(victim);
-		invokees.remove(b.getWeather());
-		###
+			// Weather is handled separately
+			List<Object> invokees = b.getEffectsList(victim);
+			invokees.remove(b.getWeather());
+			###
 	*
 ***
 SuperDuperEndTurnEffect:
@@ -76,10 +76,10 @@ SelfHealingMove:
 PhysicalContactEffect:
 	Method:
 		Comments: 
-		// b: The current battle
-		// user: The user of the attack that caused the physical contact
-		// victim: The Pokemon that received the physical contact attack
-		###
+			// b: The current battle
+			// user: The user of the attack that caused the physical contact
+			// victim: The Pokemon that received the physical contact attack
+			###
 		Header: void contact(Battle b, ActivePokemon user, ActivePokemon victim)
 		Invoke: Void
 		Deadsies: user
@@ -89,10 +89,10 @@ PhysicalContactEffect:
 TakeDamageEffect:
 	Method:
 		Comments:
-		// b: The current battle
-		// user: The user of the attack
-		// victim: The Pokemon who is taking damage, they are the one's probably implementing this
-		###
+			// b: The current battle
+			// user: The user of the attack
+			// victim: The Pokemon who is taking damage, they are the one's probably implementing this
+			###
 		Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 		EffectList: victim
 		Invoke: Void
@@ -157,10 +157,10 @@ EntryEffect:
 StatLoweredEffect:
 	Method:
 		Comments:
-		// b: The current battle
-		// caster: The Pokemon responsible for causing the stat to be lowered
-		// victim: The Pokemon who's stat is being lowered
-		###
+			// b: The current battle
+			// caster: The Pokemon responsible for causing the stat to be lowered
+			// victim: The Pokemon who's stat is being lowered
+			###
 		Header: void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)
 		Invoke: Void
 		EffectList: victim
@@ -440,13 +440,13 @@ NoAdvantageChanger:
 		Invoke: Check true
 		InvokeParameters: Battle b, ActivePokemon attacking, ActivePokemon defending
 		SetInvokees:
-		// TODO: I really hate it when the invokee list takes from the attacker and the defender -- need to rewrite all of this
-		// Check the defending Pokemon's effects and held item as well as the attacking Pokemon's ability for advantage changes 
-		List<Object> invokees = new ArrayList<>();
-		invokees.addAll(defending.getEffects());
-		invokees.add(defending.getHeldItem(b));
-		invokees.add(attacking.getAbility());
-		###
+			// TODO: I really hate it when the invokee list takes from the attacker and the defender -- need to rewrite all of this
+			// Check the defending Pokemon's effects and held item as well as the attacking Pokemon's ability for advantage changes 
+			List<Object> invokees = new ArrayList<>();
+			invokees.addAll(defending.getEffects());
+			invokees.add(defending.getHeldItem(b));
+			invokees.add(attacking.getAbility());
+			###
 	*
 ***
 ChangeMoveListEffect:
@@ -508,13 +508,13 @@ StatModifyingEffect:
 StatChangingEffect:
 	Method:
 		Comments:
-		// b: The current battle
-		// p: The Pokemon that the stat is being altered on
-		// opp: The opposing Pokemon
-		// s: The stat that is being altered
-		// stat: The current value of stat s
-		// Return: The modified value of stat, if stat was not altered, just return stat
-		###
+			// b: The current battle
+			// p: The Pokemon that the stat is being altered on
+			// opp: The opposing Pokemon
+			// s: The stat that is being altered
+			// stat: The current value of stat s
+			// Return: The modified value of stat, if stat was not altered, just return stat
+			###
 		Header: int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat)
 		Invoke: Update
 		Update: stat
