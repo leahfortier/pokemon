@@ -3,10 +3,12 @@ package test;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
+import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import type.Type;
 
 public class EffectTest {
     @Test
@@ -101,5 +103,82 @@ public class EffectTest {
                 Assert.assertTrue(attacking.getStage(stat) == 0);
             }
         }
+    }
+
+    @Test
+    public void trappingTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        Assert.assertTrue(attacking.canEscape(battle));
+
+        // Can't escape from a Pokemon with Shadow Tag
+        defending.withAbility(AbilityNamesies.SHADOW_TAG);
+        Assert.assertFalse(attacking.canEscape(battle));
+
+        // Unless holding a shed shell
+        attacking.giveItem(ItemNamesies.SHED_SHELL);
+        Assert.assertTrue(attacking.canEscape(battle));
+        attacking.removeItem();
+        Assert.assertFalse(attacking.canEscape(battle));
+
+        // Or both Pokemon have Shadow Tag
+        attacking.withAbility(AbilityNamesies.SHADOW_TAG);
+        Assert.assertTrue(attacking.canEscape(battle));
+
+        // Mold Breaker shouldn't work
+        attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
+        Assert.assertFalse(attacking.canEscape(battle));
+
+        // Ghost-type Pokemon can always escape
+        attacking.withAbility(AbilityNamesies.PROTEAN);
+        battle.attackingFight(AttackNamesies.SPITE);
+        Assert.assertTrue(attacking.isType(battle, Type.GHOST));
+        Assert.assertTrue(attacking.canEscape(battle));
+
+        // Arena trap only works non-levitating Pokemon
+        defending.withAbility(AbilityNamesies.ARENA_TRAP);
+        Assert.assertTrue(attacking.canEscape(battle));
+        battle.attackingFight(AttackNamesies.TAILWIND);
+        Assert.assertTrue(attacking.isType(battle, Type.FLYING));
+        Assert.assertTrue(attacking.canEscape(battle));
+        attacking.giveItem(ItemNamesies.IRON_BALL);
+        Assert.assertFalse(attacking.canEscape(battle));
+        attacking.removeItem();
+        Assert.assertTrue(attacking.canEscape(battle));
+
+        // Only steel-type Pokemon cannot escape from a Pokemon with Magnet Pull
+        defending.withAbility(AbilityNamesies.MAGNET_PULL);
+        Assert.assertTrue(attacking.canEscape(battle));
+        battle.attackingFight(AttackNamesies.GEAR_UP);
+        Assert.assertTrue(attacking.isType(battle, Type.STEEL));
+        Assert.assertFalse(attacking.canEscape(battle));
+        battle.attackingFight(AttackNamesies.HAZE);
+        Assert.assertTrue(attacking.canEscape(battle));
+
+        // Partial trapping moves trap
+        battle.defendingFight(AttackNamesies.WHIRLPOOL);
+        Assert.assertFalse(attacking.canEscape(battle));
+        attacking.getEffects().clear();
+        Assert.assertTrue(attacking.canEscape(battle));
+
+        // Ingrain prevents escaping
+        battle.defendingFight(AttackNamesies.INGRAIN);
+        Assert.assertTrue(attacking.canEscape(battle));
+        battle.attackingFight(AttackNamesies.INGRAIN);
+        Assert.assertFalse(attacking.canEscape(battle));
+        attacking.getEffects().clear();
+        Assert.assertTrue(attacking.canEscape(battle));
+
+        // Straight up trap
+        battle.defendingFight(AttackNamesies.MEAN_LOOK);
+        Assert.assertFalse(attacking.canEscape(battle));
+        attacking.getEffects().clear();
+        Assert.assertTrue(attacking.canEscape(battle));
+
+        // TODO: This is not supposed to block Ghosts from escaping
+        battle.defendingFight(AttackNamesies.FAIRY_LOCK);
+        Assert.assertFalse(attacking.canEscape(battle));
     }
 }

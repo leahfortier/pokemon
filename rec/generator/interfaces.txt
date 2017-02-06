@@ -315,9 +315,9 @@ TrappingEffect:
 OpponentTrappingEffect:
 	Method:
 		Header: boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper)
-		Invoke: CheckGet true
-		InvokeName: getTrapped
-		EffectList: escaper
+		Invoke: CheckMessage true opponentTrappingMessage(escaper, trapper)
+		InvokeName: isTrapped
+		EffectList: trapper
 	*
 	Method:
 		Header: String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper)

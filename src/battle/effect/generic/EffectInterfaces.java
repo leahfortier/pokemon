@@ -570,19 +570,20 @@ public final class EffectInterfaces {
 		boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper);
 		String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper);
 
-		static OpponentTrappingEffect getTrapped(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
-			List<Object> invokees = b.getEffectsList(escaper);
+		static boolean isTrapped(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
+			List<Object> invokees = b.getEffectsList(trapper);
 			for (Object invokee : invokees) {
 				if (invokee instanceof OpponentTrappingEffect && Effect.isActiveEffect(invokee, b)) {
 					
 					OpponentTrappingEffect effect = (OpponentTrappingEffect)invokee;
 					if (effect.trapOpponent(b, escaper, trapper)) {
-						return effect;
+						Messages.add(new MessageUpdate(effect.opponentTrappingMessage(escaper, trapper)));
+						return true;
 					}
 				}
 			}
 			
-			return null;
+			return false;
 		}
 	}
 

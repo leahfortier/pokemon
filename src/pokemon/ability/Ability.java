@@ -755,8 +755,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
-			// TODO: Test Mold Breaker
-			return !escaper.isLevitating(b, trapper) && !escaper.isType(b, Type.GHOST);
+			return !escaper.isLevitating(b) && !escaper.isType(b, Type.GHOST);
 		}
 
 		public String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper) {

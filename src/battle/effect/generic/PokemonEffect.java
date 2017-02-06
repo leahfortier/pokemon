@@ -2636,6 +2636,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
+			// TODO: This isn't right
 			return true;
 		}
 
