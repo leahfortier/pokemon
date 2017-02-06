@@ -1021,17 +1021,13 @@ public class ActivePokemon implements Serializable {
 		}
 		
 		// Check if the user is under an effect that prevents escape
-		TrappingEffect trapped = TrappingEffect.getTrapped(b, this);
-		if (trapped != null) {
-			Messages.add(new MessageUpdate(trapped.trappingMessage(this)));
+		if (TrappingEffect.isTrapped(b, this)) {
 			return false;
 		}
 		
 		// The opponent has an effect that prevents escape
 		ActivePokemon other = b.getOtherPokemon(isPlayer());
-		OpponentTrappingEffect trappedByOpponent = OpponentTrappingEffect.getTrapped(b, this, other);
-		if (trappedByOpponent != null) {
-			Messages.add(new MessageUpdate(trappedByOpponent.opponentTrappingMessage(this, other)));
+		if (OpponentTrappingEffect.isTrapped(b, this, other)) {
 			return false;
 		}
 		
@@ -1194,6 +1190,10 @@ public class ActivePokemon implements Serializable {
 	
 	// Returns true if the Pokemon is currently levitating for any reason
 	public boolean isLevitating(Battle b, ActivePokemon moldBreaker) {
+		if (isGrounded(b)) {
+			return false;
+		}
+
 		// Flyahs gon' Fly
 		return isLevitatingWithoutTypeCheck(b, moldBreaker) || isType(b, Type.FLYING);
 	}

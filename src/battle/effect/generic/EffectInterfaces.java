@@ -546,22 +546,23 @@ public final class EffectInterfaces {
 
 	// Any effect that implements this will prevent a Pokemon with said effect from escaping battle
 	public interface TrappingEffect {
-		boolean isTrapped(Battle b, ActivePokemon escaper);
+		boolean trapped(Battle b, ActivePokemon escaper);
 		String trappingMessage(ActivePokemon trapped);
 
-		static TrappingEffect getTrapped(Battle b, ActivePokemon escaper) {
+		static boolean isTrapped(Battle b, ActivePokemon escaper) {
 			List<Object> invokees = b.getEffectsList(escaper);
 			for (Object invokee : invokees) {
 				if (invokee instanceof TrappingEffect && Effect.isActiveEffect(invokee, b)) {
 					
 					TrappingEffect effect = (TrappingEffect)invokee;
-					if (effect.isTrapped(b, escaper)) {
-						return effect;
+					if (effect.trapped(b, escaper)) {
+						Messages.add(new MessageUpdate(effect.trappingMessage(escaper)));
+						return true;
 					}
 				}
 			}
 			
-			return null;
+			return false;
 		}
 	}
 
@@ -569,19 +570,20 @@ public final class EffectInterfaces {
 		boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper);
 		String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper);
 
-		static OpponentTrappingEffect getTrapped(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
-			List<Object> invokees = b.getEffectsList(escaper);
+		static boolean isTrapped(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
+			List<Object> invokees = b.getEffectsList(trapper);
 			for (Object invokee : invokees) {
 				if (invokee instanceof OpponentTrappingEffect && Effect.isActiveEffect(invokee, b)) {
 					
 					OpponentTrappingEffect effect = (OpponentTrappingEffect)invokee;
 					if (effect.trapOpponent(b, escaper, trapper)) {
-						return effect;
+						Messages.add(new MessageUpdate(effect.opponentTrappingMessage(escaper, trapper)));
+						return true;
 					}
 				}
 			}
 			
-			return null;
+			return false;
 		}
 	}
 

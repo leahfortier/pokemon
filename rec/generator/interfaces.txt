@@ -303,9 +303,9 @@ WeatherBlockerEffect:
 TrappingEffect:
 	Comments: // Any effect that implements this will prevent a Pokemon with said effect from escaping battle
 	Method:
-		Header: boolean isTrapped(Battle b, ActivePokemon escaper)
-		Invoke: CheckGet true
-		InvokeName: getTrapped
+		Header: boolean trapped(Battle b, ActivePokemon escaper)
+		Invoke: CheckMessage true trappingMessage(escaper)
+		InvokeName: isTrapped
 		EffectList: escaper
 	*
 	Method:
@@ -315,9 +315,9 @@ TrappingEffect:
 OpponentTrappingEffect:
 	Method:
 		Header: boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper)
-		Invoke: CheckGet true
-		InvokeName: getTrapped
-		EffectList: escaper
+		Invoke: CheckMessage true opponentTrappingMessage(escaper, trapper)
+		InvokeName: isTrapped
+		EffectList: trapper
 	*
 	Method:
 		Header: String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper)

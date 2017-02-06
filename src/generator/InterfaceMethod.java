@@ -4,6 +4,7 @@ import battle.Battle;
 import generator.InvokeMethod.AddInvoke;
 import generator.InvokeMethod.CheckGetInvoke;
 import generator.InvokeMethod.CheckInvoke;
+import generator.InvokeMethod.CheckMessageInvoke;
 import generator.InvokeMethod.ContainsInvoke;
 import generator.InvokeMethod.GetInvoke;
 import generator.InvokeMethod.MultiplyInvoke;
@@ -23,14 +24,15 @@ import java.util.regex.Pattern;
 class InterfaceMethod {
 
     private enum InvokeType {
-        VOID(VoidInvoke::new),
-        CONTAINS(ContainsInvoke::new),
+        VOID(input -> new VoidInvoke()),
+        CONTAINS(input -> new ContainsInvoke()),
         CHECK(CheckInvoke::new),
         CHECKGET(CheckGetInvoke::new),
-        GET(GetInvoke::new),
-        UPDATE(UpdateInvoke::new),
-        MULTIPLY(MultiplyInvoke::new),
-        ADD(AddInvoke::new);
+        CHECKMESSAGE(CheckMessageInvoke::new),
+        GET(input -> new GetInvoke()),
+        UPDATE(input -> new UpdateInvoke()),
+        MULTIPLY(input -> new MultiplyInvoke()),
+        ADD(input -> new AddInvoke());
 
         private final GetInvokeMethod getInvokeMethod;
 
@@ -43,7 +45,12 @@ class InterfaceMethod {
         }
 
         public InvokeMethod getInvokeMethod(final Scanner invokeInput) {
-            return this.getInvokeMethod.getInvokeMethod(invokeInput);
+            InvokeMethod invokeMethod = this.getInvokeMethod.getInvokeMethod(invokeInput);
+            if (invokeInput.hasNext()) {
+                Global.error("Too much input for " + this.getClass().getSimpleName() + ": " + invokeInput);
+            }
+
+            return invokeMethod;
         }
     }
 

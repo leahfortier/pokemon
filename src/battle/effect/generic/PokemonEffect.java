@@ -230,7 +230,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon escaper) {
+		public boolean trapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
 			return !escaper.isType(b, Type.GHOST);
 		}
@@ -283,7 +283,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon escaper) {
+		public boolean trapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
 			return !escaper.isType(b, Type.GHOST);
 		}
@@ -336,7 +336,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon escaper) {
+		public boolean trapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
 			return !escaper.isType(b, Type.GHOST);
 		}
@@ -389,7 +389,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon escaper) {
+		public boolean trapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
 			return !escaper.isType(b, Type.GHOST);
 		}
@@ -442,7 +442,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon escaper) {
+		public boolean trapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
 			return !escaper.isType(b, Type.GHOST);
 		}
@@ -495,7 +495,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon escaper) {
+		public boolean trapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
 			return !escaper.isType(b, Type.GHOST);
 		}
@@ -548,7 +548,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon escaper) {
+		public boolean trapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
 			return !escaper.isType(b, Type.GHOST);
 		}
@@ -601,7 +601,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon escaper) {
+		public boolean trapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
 			return !escaper.isType(b, Type.GHOST);
 		}
@@ -1460,7 +1460,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " can't escape!";
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon escaper) {
+		public boolean trapped(Battle b, ActivePokemon escaper) {
 			// Ghost-type Pokemon can always escape
 			return !escaper.isType(b, Type.GHOST);
 		}
@@ -1697,7 +1697,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " planted its roots!";
 		}
 
-		public boolean isTrapped(Battle b, ActivePokemon escaper) {
+		public boolean trapped(Battle b, ActivePokemon escaper) {
 			return true;
 		}
 
@@ -2636,6 +2636,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
+			// TODO: This isn't right
 			return true;
 		}
 

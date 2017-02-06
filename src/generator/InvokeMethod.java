@@ -1,6 +1,5 @@
 package generator;
 
-import main.Global;
 import util.StringUtils;
 
 import java.util.Scanner;
@@ -15,11 +14,7 @@ abstract class InvokeMethod {
     protected abstract String getPostLoop(InterfaceMethod interfaceMethod);
     protected String getPreLoop() { return StringUtils.empty(); }
 
-    private InvokeMethod(final Scanner invokeInput) {
-        if (invokeInput != null && invokeInput.hasNext()) {
-            Global.error("Too much input for " + this.getClass().getSimpleName() + ": " + invokeInput);
-        }
-    }
+    private InvokeMethod() {}
 
     private String getMethodName(final InterfaceMethod interfaceMethod) {
         if (StringUtils.isNullOrEmpty(this.methodName)) {
@@ -132,10 +127,6 @@ abstract class InvokeMethod {
 
     static class VoidInvoke extends InvokeMethod {
 
-        VoidInvoke(Scanner invokeInput) {
-            super(invokeInput);
-        }
-
         @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return "void";
@@ -159,10 +150,6 @@ abstract class InvokeMethod {
     }
 
     static class ContainsInvoke extends InvokeMethod {
-
-        ContainsInvoke(Scanner invokeInput) {
-            super(invokeInput);
-        }
 
         @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
@@ -190,12 +177,9 @@ abstract class InvokeMethod {
         private final boolean check;
 
         CheckInvoke(final Scanner invokeInput) {
-            super(null);
+            super();
 
             this.check = invokeInput.nextBoolean();
-            if (invokeInput.hasNext()) {
-                Global.error("Too much input for " + this.getClass().getSimpleName() + ": " + invokeInput);
-            }
         }
 
         @Override
@@ -253,11 +237,24 @@ abstract class InvokeMethod {
         }
     }
 
-    static class GetInvoke extends InvokeMethod {
+    static class CheckMessageInvoke extends CheckInvoke {
 
-        GetInvoke(Scanner invokeInput) {
+        private final String getMessageCall;
+
+        CheckMessageInvoke(Scanner invokeInput) {
             super(invokeInput);
+
+            this.getMessageCall = invokeInput.nextLine().trim();
         }
+
+        @Override
+        protected String successfulCheck() {
+            return "Messages.add(new MessageUpdate(effect." + this.getMessageCall + "));\n"
+                    + super.successfulCheck();
+        }
+    }
+
+    static class GetInvoke extends InvokeMethod {
 
         @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
@@ -283,10 +280,6 @@ abstract class InvokeMethod {
 
     static class UpdateInvoke extends InvokeMethod {
 
-        UpdateInvoke(Scanner invokeInput) {
-            super(invokeInput);
-        }
-
         @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return interfaceMethod.getReturnType();
@@ -310,10 +303,6 @@ abstract class InvokeMethod {
     }
 
     static class MultiplyInvoke extends InvokeMethod {
-
-        MultiplyInvoke(Scanner invokeInput) {
-            super(invokeInput);
-        }
 
         @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
@@ -343,10 +332,6 @@ abstract class InvokeMethod {
     }
 
     static class AddInvoke extends InvokeMethod {
-
-        AddInvoke(Scanner invokeInput) {
-            super(invokeInput);
-        }
 
         @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
