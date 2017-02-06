@@ -261,7 +261,8 @@ Arena Trap:
 	Desc: Prevents the foe from fleeing.
 	Int: OpponentTrappingEffect
 	OppTrapped: 
-		return !escaper.isLevitating(b) && !escaper.isType(b, Type.GHOST);
+		// TODO: Test Mold Breaker
+		return !escaper.isLevitating(b, trapper) && !escaper.isType(b, Type.GHOST);
 		###
 *
 Technician:

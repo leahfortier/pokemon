@@ -1021,9 +1021,7 @@ public class ActivePokemon implements Serializable {
 		}
 		
 		// Check if the user is under an effect that prevents escape
-		TrappingEffect trapped = TrappingEffect.getTrapped(b, this);
-		if (trapped != null) {
-			Messages.add(new MessageUpdate(trapped.trappingMessage(this)));
+		if (TrappingEffect.isTrapped(b, this)) {
 			return false;
 		}
 		

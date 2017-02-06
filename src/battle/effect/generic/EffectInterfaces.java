@@ -546,22 +546,23 @@ public final class EffectInterfaces {
 
 	// Any effect that implements this will prevent a Pokemon with said effect from escaping battle
 	public interface TrappingEffect {
-		boolean isTrapped(Battle b, ActivePokemon escaper);
+		boolean trapped(Battle b, ActivePokemon escaper);
 		String trappingMessage(ActivePokemon trapped);
 
-		static TrappingEffect getTrapped(Battle b, ActivePokemon escaper) {
+		static boolean isTrapped(Battle b, ActivePokemon escaper) {
 			List<Object> invokees = b.getEffectsList(escaper);
 			for (Object invokee : invokees) {
 				if (invokee instanceof TrappingEffect && Effect.isActiveEffect(invokee, b)) {
 					
 					TrappingEffect effect = (TrappingEffect)invokee;
-					if (effect.isTrapped(b, escaper)) {
-						return effect;
+					if (effect.trapped(b, escaper)) {
+						Messages.add(new MessageUpdate(effect.trappingMessage(escaper)));
+						return true;
 					}
 				}
 			}
 			
-			return null;
+			return false;
 		}
 	}
 

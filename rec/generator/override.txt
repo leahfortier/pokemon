@@ -586,7 +586,7 @@ Override:
 ***
 TrappingEffect:
 	Trapped:
-		Header: boolean isTrapped(Battle b, ActivePokemon escaper)
+		Header: boolean trapped(Battle b, ActivePokemon escaper)
 		Optional: True
 		Default:
 			// Ghost-type Pokemon can always escape
