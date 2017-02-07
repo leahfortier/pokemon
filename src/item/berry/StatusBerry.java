@@ -13,4 +13,9 @@ public interface StatusBerry extends GainableEffectBerry, PokemonUseItem, Status
             victim.consumeItem(b);
         }
     }
+
+    // TODO: Remove this -- just avoiding compilation errors
+    default String getSuccessMessage(ActivePokemon p) {
+        return "";
+    }
 }

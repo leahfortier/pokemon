@@ -40,7 +40,6 @@ Syrup:
 	TrainerUse:
 		return false;
 		###
-	SuccessMessage: ""
 *
 Bicycle:
 	Int: TrainerUseItem
@@ -51,7 +50,6 @@ Bicycle:
 		// May need to make this take in info on the route
 		return false;
 		###
-	SuccessMessage: ""
 *
 Surfboard:
 	Int: TrainerUseItem
@@ -61,7 +59,6 @@ Surfboard:
 		// TODO: DOESN'T DO SHIT
 		return false;
 		###
-	SuccessMessage: ""
 *
 Fishing Rod:
 	Int: TrainerUseItem
@@ -72,7 +69,6 @@ Fishing Rod:
 		// May need to make this take in info on the route
 		return false;
 		###
-	SuccessMessage: "Oh! A bite!"
 *
 # HoldItems
 Absorb Bulb:
@@ -1423,7 +1419,7 @@ Full Restore:
 	Desc: A medicine that fully restores the HP and heals any status problems of a single Pok\u00e9mon.
 	Price: 3000
 	Fling: 30
-	PokemonUse:
+	PokemonApplies:
 		// Does not apply to the dead
 		if (p.hasStatus(StatusCondition.FAINTED)) {
 			return false;
@@ -1434,11 +1430,14 @@ Full Restore:
 			return false;
 		}
 		
-		p.removeStatus();
-		p.healHealthFraction(1);
 		return true;
 		###
-	SuccessMessage: p.getName() + " was fully healed!"
+	PokemonUse:
+		p.removeStatus();
+		p.healHealthFraction(1);
+		Messages.add(new MessageUpdate(p.getName() + " was fully healed!"));
+		return true;
+		###
 *
 Elixir:
 	Desc: It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.
@@ -1568,6 +1567,12 @@ Sacred Ash:
 		###
 	BattleUse: return use((Trainer)b.getTrainer(p.isPlayer()));
 	SuccessMessage: "All fainted Pok\u00e9mon were fully revived!"
+	FullItemApplies:
+		return b == null ? applies(t) : applies(p, b);
+		###
+	FullItemUse:
+		return b == null ? use(t) : use(p, b);
+		###
 *
 Dire Hit:
 	Int: BattleUseItem, HoldItem
