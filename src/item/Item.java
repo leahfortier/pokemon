@@ -4982,7 +4982,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			// TODO: Doesn't show animation if it causes an evolution
 			return p.levelUp(null);
 		}
 	}

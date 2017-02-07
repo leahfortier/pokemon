@@ -108,7 +108,6 @@ public class ActivePokemon implements Serializable {
 
 		this.isPlayer = isPlayer;
 		this.attributes = new BattleAttributes();
-		this.totalEXP = pokemon.getGrowthRate().getEXP(this.level) + RandomUtils.getRandomInt(expToNextLevel());
 		this.shiny = (isPlayer || isWild) && RandomUtils.chanceTest(1, 8192);
 
 		this.setMoves();
@@ -121,6 +120,9 @@ public class ActivePokemon implements Serializable {
 		
 		this.isEgg = false;
 		this.eggSteps = 0;
+
+		this.totalEXP = pokemon.getGrowthRate().getEXP(this.level);
+		this.totalEXP += RandomUtils.getRandomInt(expToNextLevel());
 
 		this.fullyHeal();
 	}
@@ -448,10 +450,10 @@ public class ActivePokemon implements Serializable {
 		}
 		
 		// Add EVs
-		Item i = getHeldItem(b);
+		Item item = getHeldItem(b);
 		int[] vals = dead.getPokemonInfo().getGivenEVs();
-		if (i instanceof EVItem) {
-			vals = ((EVItem)i).getEVs(vals);
+		if (item instanceof EVItem) {
+			vals = ((EVItem)item).getEVs(vals);
 		}
 		
 		addEVs(vals);

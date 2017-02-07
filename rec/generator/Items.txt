@@ -1698,7 +1698,6 @@ Rare Candy:
 	Cat: Stat
 	Desc: A candy that is packed with energy. It raises the level of a single Pok\u00e9mon by one.
 	PokemonUse:
-		// TODO: Doesn't show animation if it causes an evolution
 		return p.levelUp(null);
 		###
 	SuccessMessage: p.getName() + " gained a level!"
