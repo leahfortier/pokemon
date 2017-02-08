@@ -156,6 +156,25 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		return this;
 	}
 
+	protected boolean canHealHealth(ActivePokemon p) {
+		return !p.isActuallyDead() && !p.fullHealth();
+	}
+
+	protected void removeStatus(ActivePokemon p) {
+		Status status = p.getStatus();
+		p.removeStatus();
+		Messages.add(new MessageUpdate(status.getRemoveMessage(p)).withStatusCondition(StatusCondition.NO_STATUS, p.isPlayer()));
+	}
+
+	protected void addHealMessage(ActivePokemon p, int healAmount) {
+		if (healAmount == 0) {
+			return;
+		}
+
+		Messages.add(new MessageUpdate(p.getName() + "'s health was restored!")
+				.withHp(p.getHP(), p.isPlayer()));
+	}
+
 	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
@@ -3725,15 +3744,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			p.removeStatus();
-			p.healHealthFraction(1);
-			Messages.add(new MessageUpdate(p.getName() + " was fully healed!"));
-			return true;
-		}
-
-		public boolean applies(ActivePokemon p) {
 			// Does not apply to the dead
-			if (p.hasStatus(StatusCondition.FAINTED)) {
+			if (p.isActuallyDead()) {
 				return false;
 			}
 			
@@ -3742,6 +3754,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
+			this.removeStatus(p);
+			this.addHealMessage(p, p.healHealthFraction(1));
 			return true;
 		}
 
@@ -3790,10 +3804,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public boolean use(Trainer t, Battle b, ActivePokemon p, Move m) {
 			return b == null ? use(p) : use(p, b);
 		}
-
-		public boolean applies(Trainer t, Battle b, ActivePokemon p, Move m) {
-			return b == null ? applies(p) : applies(p, b);
-		}
 	}
 
 	static class MaxElixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
@@ -3835,10 +3845,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public boolean use(Trainer t, Battle b, ActivePokemon p, Move m) {
 			return b == null ? use(p) : use(p, b);
-		}
-
-		public boolean applies(Trainer t, Battle b, ActivePokemon p, Move m) {
-			return b == null ? applies(p) : applies(p, b);
 		}
 	}
 
@@ -4187,12 +4193,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.healHealthFraction(1) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.healHealthFraction(1));
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4299,24 +4306,25 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "All fainted Pok\u00e9mon were fully revived!";
-		}
-
 		public boolean use(Trainer t) {
-			boolean changed = false;
+			boolean healed = false;
 			for (ActivePokemon p : t.getTeam()) {
-				if (p.hasStatus(StatusCondition.FAINTED)) {
-					changed = true;
+				if (p.isActuallyDead()) {
+					healed = true;
 					p.removeStatus();
 					p.healHealthFraction(1);
 				}
 			}
-			return changed;
+			
+			if (healed) {
+				Messages.add(new MessageUpdate("All fainted Pok\u00e9mon were fully revived!"));
+			}
+			
+			return healed;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return use((Trainer)b.getTrainer(p.isPlayer()));
+			return use((Trainer)b.getTrainer(p));
 		}
 
 		public int flingDamage() {
@@ -4325,10 +4333,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public boolean use(Trainer t, Battle b, ActivePokemon p, Move m) {
 			return b == null ? use(t) : use(p, b);
-		}
-
-		public boolean applies(Trainer t, Battle b, ActivePokemon p, Move m) {
-			return b == null ? applies(t) : applies(p, b);
 		}
 	}
 
@@ -4341,18 +4345,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " is getting pumped!";
-		}
-
 		public boolean use(ActivePokemon p, Battle b) {
-			PokemonEffect crits = (PokemonEffect)EffectNamesies.RAISE_CRITS.getEffect();
-			if (!crits.applies(b, p, p, CastSource.USE_ITEM)) {
-				return false;
-			}
-			
-			crits.cast(b, p, p, CastSource.USE_ITEM, false);
-			return true;
+			return EffectNamesies.RAISE_CRITS.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
 		}
 
 		public int flingDamage() {
@@ -4369,18 +4363,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " is covered by a veil!";
-		}
-
 		public boolean use(ActivePokemon p, Battle b) {
-			PokemonEffect gSpesh = (PokemonEffect)EffectNamesies.GUARD_SPECIAL.getEffect();
-			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) {
-				return false;
-			}
-			
-			gSpesh.cast(b, p, p, CastSource.USE_ITEM, false);
-			return true;
+			return EffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
 		}
 
 		public int flingDamage() {
@@ -4980,10 +4964,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		RareCandy() {
 			super(ItemNamesies.RARE_CANDY, "A candy that is packed with energy. It raises the level of a single Pok\u00e9mon by one.", BagCategory.STAT, 214);
 			super.price = 4800;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " gained a level!";
 		}
 
 		public int flingDamage() {

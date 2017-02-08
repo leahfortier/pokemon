@@ -1279,19 +1279,11 @@ UseItem:
 		Header: boolean use(Trainer t, Battle b, ActivePokemon p, Move m)
 		Optional: True
 	*
-	FullItemApplies:
-		Header: boolean applies(Trainer t, Battle b, ActivePokemon p, Move m)
-		Optional: True
-	*
 ***
 TrainerUseItem:
 	TrainerUse:
 		Header: boolean use(Trainer t)
 		AddInterface: Hidden-UseItem
-	*
-	TrainerApplies:
-		Header: boolean applies(Trainer t)
-		Optional: True
 	*
 ***
 PokemonUseItem:
@@ -1299,29 +1291,17 @@ PokemonUseItem:
 		Header: boolean use(ActivePokemon p)
 		AddInterface: Hidden-UseItem
 	*
-	PokemonApplies:
-		Header: boolean applies(ActivePokemon p)
-		Optional: True
-	*
 ***
 BattleUseItem:
 	BattleUse:
 		Header: boolean use(ActivePokemon p, Battle b)
 		AddInterface: Hidden-UseItem
 	*
-	BattleApplies:
-		Header: boolean applies(ActivePokemon p, Battle b)
-		Optional: True
-	*
 ***
 MoveUseItem:
 	MoveUse:
 		Header: boolean use(ActivePokemon p, Move m)
 		AddInterface: Hidden-UseItem
-	*
-	MoveApplies:
-		Header: boolean applies(ActivePokemon p, Move m)
-		Optional: True
 	*
 ***
 Override:
@@ -1583,9 +1563,6 @@ Override:
 		AddInterface: HoldItem
 		AddMapField: Cat: Medicine
 		AddMapField: BattleCat: HP_PP
-		AddMapField: FullItemApplies:
-			return b == null ? applies(p) : applies(p, b);
-			###
 		AddMapField: FullItemUse:
 			return b == null ? use(p) : use(p, b);
 			###

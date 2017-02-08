@@ -149,7 +149,7 @@ public class Bag implements Serializable {
 	
 	public boolean useItem(ItemNamesies item) {
 		Item useItem = item.getItem();
-		if (useItem instanceof TrainerUseItem && ((TrainerUseItem) useItem).apply(Game.getPlayer())) {
+		if (useItem instanceof TrainerUseItem && ((TrainerUseItem) useItem).use(Game.getPlayer())) {
 			removeItem(item);
 			return true;
 		}
@@ -177,7 +177,7 @@ public class Bag implements Serializable {
 
 		// Try to use the item
 		UseItem useItem = (UseItem) itemValue;
-		final boolean success = useItem.apply(null, null, p, move);
+		final boolean success = useItem.use(null, null, p, move);
 
 		// :(
 		if (!success) {
@@ -186,6 +186,7 @@ public class Bag implements Serializable {
 		}
 
 		// Item successfully used -- display success messages to the user and remove this item from the bag
+		Messages.addToFront(new MessageUpdate(Game.getPlayer().getName() + " used the " + item.getName() + "!"));
 		removeItem(item);
 		return true;
 	}
@@ -207,13 +208,15 @@ public class Bag implements Serializable {
 			used = player.catchPokemon(battle, (BallItem) useItem);
 		}
 		else if (useItem instanceof UseItem) {
-			used = ((UseItem) useItem).apply(Game.getPlayer(), battle, activePokemon, null);
+			used = ((UseItem) useItem).use(Game.getPlayer(), battle, activePokemon, null);
 			if (used && player.front() == activePokemon) {
 				Messages.add(new MessageUpdate().updatePokemon(battle, activePokemon));
 			}
 		}
 
 		if (used) {
+			Messages.addToFront(new MessageUpdate(Game.getPlayer().getName() + " used the " + item.getName() + "!"));
+
 			if (items.get(item) > 1) {
 				lastUsedItem = item;
 			}

@@ -28,7 +28,7 @@ public abstract class Status implements Serializable {
 	protected abstract String getCastMessage(ActivePokemon p);
 	protected abstract String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim);
 
-	protected abstract String getRemoveMessage(ActivePokemon victim);
+	public abstract String getRemoveMessage(ActivePokemon victim);
 	protected abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
 
 	// A method to be overidden if anything related to conflicted victim is necessary to create this status
@@ -39,16 +39,14 @@ public abstract class Status implements Serializable {
 	}
 
 	public static String getRemoveStatus(Battle b, ActivePokemon victim, CastSource source) {
-		StatusCondition status = victim.getStatus().getType();
+		Status status = victim.getStatus();
 		victim.removeStatus();
 
-		switch (source) {
-			case ABILITY:
-				return getStatus(status, victim).getSourceRemoveMessage(victim, victim.getAbility().getName());
-			case HELD_ITEM:
-				return getStatus(status, victim).getSourceRemoveMessage(victim, victim.getHeldItem(b).getName());
-			default:
-				return getStatus(status, victim).getRemoveMessage(victim);
+		if (source.hasSourceName()) {
+			return status.getSourceRemoveMessage(victim, source.getSourceName(b, victim));
+		}
+		else {
+			return status.getRemoveMessage(victim);
 		}
 	}
 

@@ -1419,9 +1419,9 @@ Full Restore:
 	Desc: A medicine that fully restores the HP and heals any status problems of a single Pok\u00e9mon.
 	Price: 3000
 	Fling: 30
-	PokemonApplies:
+	PokemonUse:
 		// Does not apply to the dead
-		if (p.hasStatus(StatusCondition.FAINTED)) {
+		if (p.isActuallyDead()) {
 			return false;
 		}
 		
@@ -1429,13 +1429,9 @@ Full Restore:
 		if (!p.hasStatus() && p.fullHealth()) {
 			return false;
 		}
-		
-		return true;
-		###
-	PokemonUse:
-		p.removeStatus();
-		p.healHealthFraction(1);
-		Messages.add(new MessageUpdate(p.getName() + " was fully healed!"));
+	
+		this.removeStatus(p);
+		this.addHealMessage(p, p.healHealthFraction(1));
 		return true;
 		###
 *
@@ -1528,9 +1524,13 @@ Max Potion:
 	Price: 2500
 	Fling: 30
 	PokemonUse:
-		return p.healHealthFraction(1) != 0;
+		if (!this.canHealHealth(p)) {
+			return false;
+		}
+	
+		this.addHealMessage(p, p.healHealthFraction(1));
+		return true;
 		###
-	SuccessMessage: p.getName() + "'s health was restored!"
 *
 Revive:
 	Desc: A medicine that revives a fainted Pok\u00e9mon. It restores half the Pok\u00e9mon's maximum HP.
@@ -1555,21 +1555,22 @@ Sacred Ash:
 	Price: 4000
 	Fling: 30
 	TrainerUse:
-		boolean changed = false;
+		boolean healed = false;
 		for (ActivePokemon p : t.getTeam()) {
-			if (p.hasStatus(StatusCondition.FAINTED)) {
-				changed = true;
+			if (p.isActuallyDead()) {
+				healed = true;
 				p.removeStatus();
 				p.healHealthFraction(1);
 			}
 		}
-		return changed;
+		
+		if (healed) {
+			Messages.add(new MessageUpdate("All fainted Pok\u00e9mon were fully revived!"));
+		}
+		
+		return healed;
 		###
-	BattleUse: return use((Trainer)b.getTrainer(p.isPlayer()));
-	SuccessMessage: "All fainted Pok\u00e9mon were fully revived!"
-	FullItemApplies:
-		return b == null ? applies(t) : applies(p, b);
-		###
+	BattleUse: return use((Trainer)b.getTrainer(p));
 	FullItemUse:
 		return b == null ? use(t) : use(p, b);
 		###
@@ -1581,16 +1582,9 @@ Dire Hit:
 	Desc: It raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.
 	Price: 650
 	Fling: 30
-	BattleUse:
-		PokemonEffect crits = (PokemonEffect)EffectNamesies.RAISE_CRITS.getEffect();
-		if (!crits.applies(b, p, p, CastSource.USE_ITEM)) {
-			return false;
-		}
-
-		crits.cast(b, p, p, CastSource.USE_ITEM, false);
-		return true;
+	BattleUse: 
+		return EffectNamesies.RAISE_CRITS.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
 		###
-	SuccessMessage: p.getName() + " is getting pumped!"
 *
 Guard Spec.:
 	Int: BattleUseItem, HoldItem
@@ -1599,16 +1593,9 @@ Guard Spec.:
 	Desc: An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after use.
 	Price: 700
 	Fling: 30
-	BattleUse:
-		PokemonEffect gSpesh = (PokemonEffect)EffectNamesies.GUARD_SPECIAL.getEffect();
-		if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) {
-			return false;
-		}
-
-		gSpesh.cast(b, p, p, CastSource.USE_ITEM, false);
-		return true;
+	BattleUse: 
+		return EffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
 		###
-	SuccessMessage: p.getName() + " is covered by a veil!"
 *
 X Accuracy:
 	Desc: An item that raises the accuracy of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.
@@ -1705,7 +1692,6 @@ Rare Candy:
 	PokemonUse:
 		return p.levelUp(null);
 		###
-	SuccessMessage: p.getName() + " gained a level!"
 	Price: 4800
 	Fling: 30
 *

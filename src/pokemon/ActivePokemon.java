@@ -983,10 +983,14 @@ public class ActivePokemon implements Serializable {
 	public void setCaught() {
 		isPlayer = true;
 	}
-	
+
+	public boolean isActuallyDead() {
+		return this.hasStatus(StatusCondition.FAINTED);
+	}
+
 	public boolean isFainted(Battle b) {
 		// We have already checked that this Pokemon is fainted -- don't print/apply effects more than once
-		if (hasStatus(StatusCondition.FAINTED)) {
+		if (isActuallyDead()) {
 			if (hp == 0) {
 				return true;
 			}
