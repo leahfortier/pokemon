@@ -1155,6 +1155,7 @@ Electrified:
 		###
 *
 EatenBerry:
+	Comments: // TODO: Why does this need the UsedProof field?
 	UsedProof: True
 *
 BreaksTheMold:

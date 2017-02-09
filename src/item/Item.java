@@ -3766,10 +3766,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class Elixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
-		private boolean use(List<Move> moves) {
+		private boolean use(ActivePokemon p, List<Move> moves) {
 			boolean changed = false;
 			for (Move m : moves) {
-				changed |= m.increasePP(increaseAmount(m));
+				changed |= m.increasePP(10);
+			}
+			
+			if (changed) {
+				Messages.add(new MessageUpdate(p.getName() + "'s PP was restored!"));
 			}
 			
 			return changed;
@@ -3781,20 +3785,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int increaseAmount(Move m) {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s PP was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return use(p.getActualMoves());
+			return use(p, p.getActualMoves());
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return use(p.getMoves(b));
+			return use(p, p.getMoves(b));
 		}
 
 		public int flingDamage() {
@@ -3808,10 +3804,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class MaxElixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
-		private boolean use(List<Move> moves) {
+		private boolean use(ActivePokemon p, List<Move> moves) {
 			boolean changed = false;
 			for (Move m : moves) {
-				changed |= m.increasePP(increaseAmount(m));
+				changed |= m.increasePP(m.getMaxPP());
+			}
+			
+			if (changed) {
+				Messages.add(new MessageUpdate(p.getName() + "'s PP was restored!"));
 			}
 			
 			return changed;
@@ -3823,20 +3823,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int increaseAmount(Move m) {
-			return m.getMaxPP();
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s PP was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return use(p.getActualMoves());
+			return use(p, p.getActualMoves());
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return use(p.getMoves(b));
+			return use(p, p.getMoves(b));
 		}
 
 		public int flingDamage() {
@@ -3850,7 +3842,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class Ether extends Item implements HoldItem, MoveUseItem {
 		private static final long serialVersionUID = 1L;
-		private String restore;
 
 		Ether() {
 			super(ItemNamesies.ETHER, "It restores the PP of a Pok\u00e9mon's selected move by a maximum of 10 points.", BagCategory.MEDICINE, 174);
@@ -3858,24 +3849,23 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s PP for " + restore + " PP was restored!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
 			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-			restore = m.getAttack().getName();
-			return m.increasePP(10);
+			if (m.increasePP(10)) {
+				Messages.add(new MessageUpdate(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!"));
+				return true;
+			}
+			
+			return false;
 		}
 	}
 
 	static class MaxEther extends Item implements HoldItem, MoveUseItem {
 		private static final long serialVersionUID = 1L;
-		private String restore;
 
 		MaxEther() {
 			super(ItemNamesies.MAX_ETHER, "It fully restores the PP of a single selected move that has been learned by the target Pok\u00e9mon.", BagCategory.MEDICINE, 175);
@@ -3883,18 +3873,18 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s PP for " + restore + " PP was restored!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
 			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-			restore = m.getAttack().getName();
-			return m.increasePP(m.getMaxPP());
+			if (m.increasePP(m.getMaxPP())) {
+				Messages.add(new MessageUpdate(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!"));
+				return true;
+			}
+			
+			return false;
 		}
 	}
 
@@ -4914,20 +4904,19 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class PPMax extends Item implements MoveUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
-		private String increase;
 
 		PPMax() {
 			super(ItemNamesies.PPMAX, "It maximally raises the top PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 212);
 			super.price = 9800;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + increase + "'s Max PP was increased!";
-		}
-
 		public boolean use(ActivePokemon p, Move m) {
-			increase = m.getAttack().getName();
-			return m.increaseMaxPP(3);
+			if (m.increaseMaxPP(3)) {
+				Messages.add(new MessageUpdate(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!"));
+				return true;
+			}
+			
+			return false;
 		}
 
 		public int flingDamage() {
@@ -4937,20 +4926,19 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class PPUp extends Item implements MoveUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
-		private String increase;
 
 		PPUp() {
 			super(ItemNamesies.PPUP, "It slightly raises the maximum PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 213);
 			super.price = 9800;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + increase + "'s Max PP was increased!";
-		}
-
 		public boolean use(ActivePokemon p, Move m) {
-			increase = m.getAttack().getName();
-			return m.increaseMaxPP(1);
+			if (m.increaseMaxPP(1)) {
+				Messages.add(new MessageUpdate(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!"));
+				return true;
+			}
+			
+			return false;
 		}
 
 		public int flingDamage() {
@@ -5637,9 +5625,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class LeppaBerry extends Item implements EndTurnEffect, GainableEffectBerry, MoveUseItem {
+	static class LeppaBerry extends Item implements MoveUseItem, EndTurnEffect, GainableEffectBerry {
 		private static final long serialVersionUID = 1L;
-		private String restore;
 
 		LeppaBerry() {
 			super(ItemNamesies.LEPPA_BERRY, "If held by a Pok\u00e9mon, it restores a move's PP by 10.", BagCategory.BERRY, 242);
@@ -5647,19 +5634,15 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s PP for " + restore + " PP was restored!";
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!";
+		public boolean use(ActivePokemon p, Move m) {
+			return m.increasePP(10);
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			for (Move m : victim.getMoves(b)) {
 				if (m.getPP() == 0) {
 					use(victim, m);
-					Messages.add(new MessageUpdate(getHoldSuccessMessage(b, victim)));
+					Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " restored " + m.getAttack().getName() + "'s PP!"));
 					victim.consumeItem(b);
 					break;
 				}
@@ -5685,12 +5668,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			
 			use(user, lowestPPMove);
 			return true;
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-			restore = m.getAttack().getName();
-			return m.increasePP(10);
 		}
 
 		public int naturalGiftPower() {
@@ -7599,10 +7576,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 1000;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!";
-		}
-
 		public boolean use(ActivePokemon p) {
 			AbilityNamesies other = Ability.getOtherAbility(p);
 			if (other == AbilityNamesies.NO_ABILITY) {
@@ -7610,6 +7583,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			}
 			
 			p.setAbility(other);
+			Messages.add(new MessageUpdate(p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!"));
 			return true;
 		}
 	}

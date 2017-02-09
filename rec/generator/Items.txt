@@ -1880,15 +1880,19 @@ Aspear Berry:
 	NGType: Ice
 *
 Leppa Berry:
-	Int: EndTurnEffect, GainableEffectBerry
+	Int: MoveUseItem, EndTurnEffect, GainableEffectBerry
 	Desc: If held by a Pok\u00e9mon, it restores a move's PP by 10.
 	NGType: Fighting
 	NGPow: 80
+	BattleCat: HP_PP
+	MoveUse:
+		return m.increasePP(10);
+		###
 	ApplyEndTurn:
 		for (Move m : victim.getMoves(b)) {
 			if (m.getPP() == 0) {
 				use(victim, m);
-				Messages.add(new MessageUpdate(getHoldSuccessMessage(b, victim)));
+				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " restored " + m.getAttack().getName() + "'s PP!"));
 				victim.consumeItem(b);
 				break;
 			}
@@ -1914,8 +1918,6 @@ Leppa Berry:
 		use(user, lowestPPMove);
 		return true;
 		###
-	Ether: 10
-	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!"
 *
 Oran Berry:
 	Int: PokemonUseItem
@@ -2323,9 +2325,9 @@ Ability Capsule:
 		}
 		
 		p.setAbility(other);
+		Messages.add(new MessageUpdate(p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!"));
 		return true;
 		###
-	SuccessMessage: p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!"
 *
 Assault Vest:
 	Desc: An item to be held by a Pok\u00e9mon. This offensive vest raises Sp. Def but prevents the use of status moves.

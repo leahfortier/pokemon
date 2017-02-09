@@ -33,6 +33,7 @@ import battle.effect.status.StatusCondition;
 import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
+import item.berry.GainableEffectBerry;
 import item.hold.EVItem;
 import item.hold.HoldItem;
 import main.Game;
@@ -1227,11 +1228,34 @@ public class ActivePokemon implements Serializable {
 	public void removeItem() {
 		heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();
 	}
-	
-	public void consumeItem(Battle b) {
+
+	public void consumeBerry(Item consumed, Battle b) {
+		if (consumed instanceof Berry) {
+			// Eat dat berry!!
+			EffectNamesies.EATEN_BERRY.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
+
+			if (consumed instanceof GainableEffectBerry
+					&& this.hasAbility(AbilityNamesies.CHEEK_POUCH)
+					&& !this.fullHealth()) {
+				Messages.add(new MessageUpdate(this.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
+				this.healHealthFraction(1/3.0);
+				Messages.add(new MessageUpdate().updatePokemon(b, this));
+			}
+		}
+	}
+
+	public Item consumeItemWithoutEffects(Battle b) {
 		Item consumed = getHeldItem(b);
 		EffectNamesies.CONSUMED_ITEM.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
-		
+
+		return consumed;
+	}
+	
+	public void consumeItem(Battle b) {
+		Item consumed = this.consumeItemWithoutEffects(b);
+
+		consumeBerry(consumed, b);
+
 		ActivePokemon other = b.getOtherPokemon(isPlayer);
 		if (other.hasAbility(AbilityNamesies.PICKUP) && !other.isHoldingItem(b)) {
 			other.giveItem((HoldItem)consumed);

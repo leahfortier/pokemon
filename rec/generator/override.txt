@@ -1506,13 +1506,13 @@ Override:
 Override:
 	PPIncrease:
 		AddMapField: Fling: 30
-		AddMapField: Field:
-			private String increase;
-			###
-		AddMapField: SuccessMessage: p.getName() + "'s " + increase + "'s Max PP was increased!"
 		AddMapField: MoveUse:
-			increase = m.getAttack().getName();
-			return m.increaseMaxPP({0});
+			if (m.increaseMaxPP({0})) {
+				Messages.add(new MessageUpdate(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!"));
+				return true;
+			}
+			
+			return false;
 			###
 		AddInterface: MoveUseItem
 		AddInterface: HoldItem
@@ -1525,38 +1525,37 @@ Override:
 		AddMapField: BattleCat: HP_PP
 		AddMapField: MoveUse:
 			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-			restore = m.getAttack().getName();
-			return m.increasePP({0});
+			if (m.increasePP({0})) {
+				Messages.add(new MessageUpdate(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!"));
+				return true;
+			}
+			
+			return false;
 			###
-		AddMapField: Field: 
-			private String restore;
-			###
-		AddMapField: SuccessMessage: p.getName() + "'s PP for " + restore + " PP was restored!"
 	*
 ***
 Override:
 	Elixir:
-		Header: int increaseAmount(Move m)
-		Body:
-			return {0};
-			###
 		AddMapField: Field:
-			private boolean use(List<Move> moves) {
+			private boolean use(ActivePokemon p, List<Move> moves) {
 				boolean changed = false;
 				for (Move m : moves) {
-					changed |= m.increasePP(increaseAmount(m));
+					changed |= m.increasePP({0});
+				}
+				
+				if (changed) {
+					Messages.add(new MessageUpdate(p.getName() + "'s PP was restored!"));
 				}
 				
 				return changed;
 			}
 			###
 		AddMapField: BattleUse:
-			return use(p.getMoves(b));
+			return use(p, p.getMoves(b));
 			###
 		AddMapField: PokemonUse:
-			return use(p.getActualMoves());
+			return use(p, p.getActualMoves());
 			###
-		AddMapField: SuccessMessage: p.getName() + "'s PP was restored!"
 		AddMapField: Fling: 30
 		AddInterface: PokemonUseItem
 		AddInterface: BattleUseItem

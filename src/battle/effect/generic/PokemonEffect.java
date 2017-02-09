@@ -2692,6 +2692,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
+	// TODO: Why does this need the UsedProof field?
 	static class EatenBerry extends PokemonEffect {
 		private static final long serialVersionUID = 1L;
 
