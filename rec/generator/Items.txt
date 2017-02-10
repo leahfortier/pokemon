@@ -1430,7 +1430,7 @@ Full Restore:
 			return false;
 		}
 	
-		this.removeStatus(p);
+		Status.removeStatus(null, p, CastSource.USE_ITEM);
 		this.addHealMessage(p, p.healHealthFraction(1));
 		return true;
 		###

@@ -40,8 +40,8 @@ public abstract class Status implements Serializable {
 		}.getMessage(b, p, source);
 	}
 
-	public abstract String getGenericRemoveMessage(ActivePokemon victim);
-	public abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
+	protected abstract String getGenericRemoveMessage(ActivePokemon victim);
+	protected abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
 
 	protected abstract String getCastMessage(ActivePokemon p);
 	protected abstract String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim);

@@ -1746,15 +1746,16 @@ Override:
 ***
 Override:
 	HealAmt:
-		Header: int healAmount()
-		Body:
-			return {0};
-			###
 		AddInterface: PokemonUseItem
 		AddMapField: PokemonUse:
-			return p.heal(healAmount()) != 0;
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.heal({0});
+			Messages.add(p.getName() + "'s health was restored!");
+			return true;
 			###
-		AddMapField: SuccessMessage: p.getName() + "'s health was restored!"
 		AddMapField: Cat: Medicine
 		AddMapField: BattleCat: HP_PP
 		AddMapField: Fling: 30

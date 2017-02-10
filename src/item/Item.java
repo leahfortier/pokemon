@@ -159,14 +159,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		return this;
 	}
 
-	boolean canHealHealth(ActivePokemon p) {
+	protected boolean canHealHealth(ActivePokemon p) {
 		return !p.isActuallyDead() && !p.fullHealth();
-	}
-
-	protected void removeStatus(ActivePokemon p) {
-		Status status = p.getStatus();
-		p.removeStatus();
-		Messages.add(new MessageUpdate(status.getGenericRemoveMessage(p)).withStatusCondition(StatusCondition.NO_STATUS, p.isPlayer()));
 	}
 
 	void addHealMessage(ActivePokemon p, int healAmount) {
@@ -3727,7 +3721,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			this.removeStatus(p);
+			Status.removeStatus(null, p, CastSource.USE_ITEM);
 			this.addHealMessage(p, p.healHealthFraction(1));
 			return true;
 		}
@@ -3870,16 +3864,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 20;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.heal(20);
+			Messages.add(p.getName() + "'s health was restored!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -3896,16 +3888,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 20;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.heal(20);
+			Messages.add(p.getName() + "'s health was restored!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -3922,16 +3912,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 20;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.heal(20);
+			Messages.add(p.getName() + "'s health was restored!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -3948,16 +3936,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 50;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.heal(50);
+			Messages.add(p.getName() + "'s health was restored!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -3974,16 +3960,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 50;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.heal(50);
+			Messages.add(p.getName() + "'s health was restored!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4000,16 +3984,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 50;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.heal(50);
+			Messages.add(p.getName() + "'s health was restored!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4026,16 +4008,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 60;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.heal(60);
+			Messages.add(p.getName() + "'s health was restored!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4052,16 +4032,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 80;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.heal(80);
+			Messages.add(p.getName() + "'s health was restored!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4078,16 +4056,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.heal(100);
+			Messages.add(p.getName() + "'s health was restored!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4104,16 +4080,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 200;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.heal(200);
+			Messages.add(p.getName() + "'s health was restored!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4130,16 +4104,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 200;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.heal(200);
+			Messages.add(p.getName() + "'s health was restored!");
+			return true;
 		}
 
 		public int flingDamage() {
