@@ -115,7 +115,7 @@ public abstract class Status implements Serializable {
 			OpponentStatusReceivedEffect.invokeOpponentStatusReceivedEffect(b, victim, status);
 			return true;
 		}
-		
+
 		return false;
 	}
 

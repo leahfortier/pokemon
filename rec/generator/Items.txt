@@ -1920,17 +1920,12 @@ Leppa Berry:
 		###
 *
 Oran Berry:
-	Int: PokemonUseItem
 	BattleCat: HP_PP
 	Desc: If held by a Pok\u00e9mon, it heals the user by just 10 HP.
 	NGType: Poison
 	NGPow: 80
 	FixedBerryHealthTrigger: 3
-	HoldSuccessMessage: p.getName() + " was healed by its " + this.name + "!"
-	SuccessMessage: p.getName() + "'s health was restored!"
-	PokemonUse:
-		return p.heal(10) != 0;
-		###
+	HoldHealer: p.heal(10)
 *
 Persim Berry:
 	Int: BattleUseItem, GainableEffectBerry
@@ -1958,16 +1953,11 @@ Lum Berry:
 *
 Sitrus Berry:
 	BattleCat: HP_PP
-	Int: PokemonUseItem
 	Desc: If held by a Pok\u00e9mon, it heals the user by a little.
 	NGType: Psychic
 	NGPow: 80
 	FixedBerryHealthTrigger: 2
-	PokemonUse:
-		return p.healHealthFraction(1/4.0) != 0;
-		###
-	SuccessMessage: p.getName() + "'s health was restored!"
-	HoldSuccessMessage: p.getName() + " was healed by its " + this.name + "!"
+	HoldHealer: p.healHealthFraction(1/4.0)
 *
 Razz Berry:
 	Int: Berry

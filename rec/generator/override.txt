@@ -1664,8 +1664,8 @@ Override:
 ***
 Override:
 	StatusHealAll:
-		Header: boolean removeStatus(ActivePokemon p, CastSource source)
-		Body:
+		AddMapField: BattleCat: Status
+		AddMapField: SourceUse:
 			// Does not apply to the dead
 			if (p.hasStatus(StatusCondition.FAINTED)) {	
 				return false;
@@ -1679,11 +1679,6 @@ Override:
 			Status.removeStatus(null, p, source);
 			return true;
 			###
-		AddMapField: PokemonUse:
-			return removeStatus(p, CastSource.USE_ITEM);
-			###
-		AddMapField: BattleCat: Status
-		AddInterface: PokemonUseItem
 	*
 ***
 Override:
@@ -1708,19 +1703,39 @@ Override:
 	*
 ***
 Override:
+	HoldHealer:
+		AddMapField: SourceUse:
+			if (p.fullHealth()) {
+				return false;
+			}
+
+			{0};
+			this.addMessage(p, source);
+			return true;
+			###
+		AddInterface: MessageGetter
+		AddMapField: HoldSuccessMessage: p.getName() + " was healed by its " + this.name + "!"
+		AddMapField: SuccessMessage: p.getName() + "'s health was restored!"
+	*
+***
+Override:
+	SourceUse:
+		Header: boolean use(ActivePokemon p, CastSource source)
+		AddInterface: PokemonUseItem
+		AddMapField: PokemonUse:
+			return use(p, CastSource.USE_ITEM);
+			###
+	*
+***
+Override:
 	StatusRemove:
-		Header: boolean removeStatus(ActivePokemon p, CastSource source)
-		Body:
+		AddMapField: SourceUse:
 			if (!p.hasStatus(StatusCondition.{00})) {
 				return false;
 			}
 
 			Status.removeStatus(null, p, source);
 			return true;
-			###
-		AddInterface: PokemonUseItem
-		AddMapField: PokemonUse:
-			return removeStatus(p, CastSource.USE_ITEM);
 			###
 	*
 ***
@@ -2018,7 +2033,7 @@ StatusBerry:
 	StatusBerryGainEffect:
 		Optional: True
 		AddMapField: GainEffect:
-			return removeStatus(user, source);
+			return use(user, source);
 			###
 		AddInterface: Hidden-GainableEffectBerry
 		AddMapField: NGPow: 80
@@ -2029,7 +2044,7 @@ GainableEffectBerry:
 		Header: boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		Optional: True
 		Default:
-			return use(user);
+			return use(user, source);
 			###
 		AddInterface: Hidden-Berry
 	*
@@ -2068,15 +2083,11 @@ Berry:
 ***
 Override:
 	RepelSteps:
-		Header: int repelSteps()
-		Body:
-			return {0};
-			###
 		AddInterface: HoldItem
 		AddMapField: Fling: 30
 		AddInterface: TrainerUseItem
 		AddMapField: TrainerUse:
-			if (!(t instanceof CharacterData)) {
+			if (t != Game.getPlayer()) {
 				Global.error("Only the character should be using a Repel item");
 				return false;
 			}
@@ -2086,7 +2097,7 @@ Override:
 				return false;
 			}
 
-			player.addRepelSteps(repelSteps());
+			player.addRepelSteps({0});
 			return true;
 			###
 		AddMapField: SuccessMessage: "Weak wild Pok\u00e9mon will not appear for " + repelSteps() + " steps!"
@@ -2193,11 +2204,14 @@ Override:
 ***
 Override:
 	HoldSuccessMessage:
-		Header: String getHoldSuccessMessage(Battle b, ActivePokemon p)
+		Header: String getHoldSuccessMessage(ActivePokemon p)
 		Body:
 			return {0};
 			###
 	*
+***
+# TODO: Move Success Message methods inside here
+MessageGetter:
 ***
 ChangeAttackTypeEffect:
 	ChangeAttackType:

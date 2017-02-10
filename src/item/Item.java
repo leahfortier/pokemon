@@ -49,6 +49,7 @@ import item.hold.ConsumableItem;
 import item.hold.EVItem;
 import item.hold.HoldItem;
 import item.hold.IncenseItem;
+import item.hold.MessageGetter;
 import item.hold.PowerItem;
 import item.hold.SpecialTypeItem.DriveItem;
 import item.hold.SpecialTypeItem.GemItem;
@@ -3544,7 +3545,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		public int flingDamage() {
+			return 30;
+		}
+
+		public boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.POISONED)) {
 				return false;
 			}
@@ -3553,12 +3558,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 	}
 
@@ -3571,7 +3572,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		public int flingDamage() {
+			return 30;
+		}
+
+		public boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.ASLEEP)) {
 				return false;
 			}
@@ -3580,12 +3585,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 	}
 
@@ -3598,7 +3599,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		public int flingDamage() {
+			return 30;
+		}
+
+		public boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.BURNED)) {
 				return false;
 			}
@@ -3607,12 +3612,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 	}
 
@@ -3625,7 +3626,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		public int flingDamage() {
+			return 30;
+		}
+
+		public boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.FROZEN)) {
 				return false;
 			}
@@ -3634,12 +3639,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 	}
 
@@ -3652,7 +3653,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		public int flingDamage() {
+			return 30;
+		}
+
+		public boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.PARALYZED)) {
 				return false;
 			}
@@ -3661,12 +3666,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public int flingDamage() {
-			return 30;
-		}
-
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 	}
 
@@ -3679,7 +3680,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		public boolean use(ActivePokemon p, CastSource source) {
 			// Does not apply to the dead
 			if (p.hasStatus(StatusCondition.FAINTED)) {
 				return false;
@@ -3699,7 +3700,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 	}
 
@@ -5314,7 +5315,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		public boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.PARALYZED)) {
 				return false;
 			}
@@ -5323,12 +5324,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return removeStatus(user, source);
+		public boolean use(ActivePokemon p) {
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5353,7 +5354,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		public boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.ASLEEP)) {
 				return false;
 			}
@@ -5362,12 +5363,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return removeStatus(user, source);
+		public boolean use(ActivePokemon p) {
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5392,7 +5393,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		public boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.POISONED)) {
 				return false;
 			}
@@ -5401,12 +5402,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return removeStatus(user, source);
+		public boolean use(ActivePokemon p) {
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5431,7 +5432,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		public boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.BURNED)) {
 				return false;
 			}
@@ -5440,12 +5441,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return removeStatus(user, source);
+		public boolean use(ActivePokemon p) {
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5470,7 +5471,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		public boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.FROZEN)) {
 				return false;
 			}
@@ -5479,12 +5480,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return removeStatus(user, source);
+		public boolean use(ActivePokemon p) {
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5558,7 +5559,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class OranBerry extends Item implements PokemonUseItem, HealthTriggeredBerry {
+	static class OranBerry extends Item implements MessageGetter, PokemonUseItem, HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		OranBerry() {
@@ -5567,16 +5568,26 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
+		public boolean use(ActivePokemon p, CastSource source) {
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.heal(10);
+			this.addMessage(p, source);
+			return true;
+		}
+
 		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + "'s health was restored!";
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getHoldSuccessMessage(ActivePokemon p) {
 			return p.getName() + " was healed by its " + this.name + "!";
 		}
 
 		public boolean use(ActivePokemon p) {
-			return p.heal(10) != 0;
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public double healthTriggerRatio() {
@@ -5584,7 +5595,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return use(user);
+			return use(user, source);
 		}
 
 		public int naturalGiftPower() {
@@ -5613,7 +5624,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return p.getName() + " snapped out of its confusion!";
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getHoldSuccessMessage(ActivePokemon p) {
 			return p.getName() + "'s " + this.getName() + " snapped it out of confusion!";
 		}
 
@@ -5652,7 +5663,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		public boolean use(ActivePokemon p, CastSource source) {
 			// Does not apply to the dead
 			if (p.hasStatus(StatusCondition.FAINTED)) {
 				return false;
@@ -5668,11 +5679,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return removeStatus(user, source);
+			return use(user, source);
 		}
 
 		public int naturalGiftPower() {
@@ -5688,7 +5699,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class SitrusBerry extends Item implements PokemonUseItem, HealthTriggeredBerry {
+	static class SitrusBerry extends Item implements MessageGetter, PokemonUseItem, HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		SitrusBerry() {
@@ -5697,16 +5708,26 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
+		public boolean use(ActivePokemon p, CastSource source) {
+			if (p.fullHealth()) {
+				return false;
+			}
+			
+			p.healHealthFraction(1/4.0);
+			this.addMessage(p, source);
+			return true;
+		}
+
 		public String getSuccessMessage(ActivePokemon p) {
 			return p.getName() + "'s health was restored!";
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getHoldSuccessMessage(ActivePokemon p) {
 			return p.getName() + " was healed by its " + this.name + "!";
 		}
 
 		public boolean use(ActivePokemon p) {
-			return p.healHealthFraction(1/4.0) != 0;
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public double healthTriggerRatio() {
@@ -5714,7 +5735,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return use(user);
+			return use(user, source);
 		}
 
 		public int naturalGiftPower() {
@@ -6591,7 +6612,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return p.getName() + "'s " + Stat.ATTACK.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getHoldSuccessMessage(ActivePokemon p) {
 			return "";
 		}
 
@@ -6628,7 +6649,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return p.getName() + "'s " + Stat.DEFENSE.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getHoldSuccessMessage(ActivePokemon p) {
 			return "";
 		}
 
@@ -6665,7 +6686,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return p.getName() + "'s " + Stat.SPEED.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getHoldSuccessMessage(ActivePokemon p) {
 			return "";
 		}
 
@@ -6702,7 +6723,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return p.getName() + "'s " + Stat.SP_ATTACK.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getHoldSuccessMessage(ActivePokemon p) {
 			return "";
 		}
 
@@ -6739,7 +6760,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getHoldSuccessMessage(ActivePokemon p) {
 			return "";
 		}
 
@@ -6776,7 +6797,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return p.getName() + "'s " + Stat.ACCURACY.getName() + " increased!";
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getHoldSuccessMessage(ActivePokemon p) {
 			return "";
 		}
 
@@ -6988,7 +7009,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return p.getName() + " is getting pumped!";
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getHoldSuccessMessage(ActivePokemon p) {
 			return p.getName() + " is getting pumped due to its " + this.name + "!";
 		}
 
@@ -7028,7 +7049,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return useMessage;
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getHoldSuccessMessage(ActivePokemon p) {
 			return holdMessage;
 		}
 
