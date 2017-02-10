@@ -1,6 +1,7 @@
 package battle.effect.status;
 
 import battle.Battle;
+import battle.effect.MessageGetter;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.OpponentStatusReceivedEffect;
@@ -25,11 +26,25 @@ public abstract class Status implements Serializable {
 
 	protected abstract boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim);
 
+	private String getRemoveMessage(Battle b, ActivePokemon p, CastSource source) {
+		return new MessageGetter() {
+			@Override
+			public String getGenericMessage(ActivePokemon p) {
+				return getGenericRemoveMessage(p);
+			}
+
+			@Override
+			public String getSourceMessage(ActivePokemon p, String sourceName) {
+				return getSourceRemoveMessage(p, sourceName);
+			}
+		}.getMessage(b, p, source);
+	}
+
+	public abstract String getGenericRemoveMessage(ActivePokemon victim);
+	public abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
+
 	protected abstract String getCastMessage(ActivePokemon p);
 	protected abstract String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim);
-
-	public abstract String getRemoveMessage(ActivePokemon victim);
-	protected abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
 
 	// A method to be overridden if anything related to conflicted victim is necessary to create this status
 	protected void postCreateEffect(ActivePokemon victim) {}
@@ -38,15 +53,7 @@ public abstract class Status implements Serializable {
 		Status status = victim.getStatus();
 		victim.removeStatus();
 
-		final String message;
-		if (source.hasSourceName()) {
-			message = status.getSourceRemoveMessage(victim, source.getSourceName(b, victim));
-		}
-		else {
-			message = status.getRemoveMessage(victim);
-		}
-
-		Messages.add(new MessageUpdate(message).updatePokemon(b, victim));
+		Messages.add(new MessageUpdate(status.getRemoveMessage(b, victim, source)).updatePokemon(b, victim));
 	}
 
 	public static String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, StatusCondition status) {
@@ -86,7 +93,6 @@ public abstract class Status implements Serializable {
 
 	protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
 		return !victim.hasStatus() && this.appliesWithoutStatusCheck(b, caster, victim);
-
 	}
 
 	public StatusCondition getType() {

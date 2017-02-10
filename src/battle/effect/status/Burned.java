@@ -44,7 +44,7 @@ class Burned extends Status implements EndTurnEffect, StatChangingEffect {
         return (int)(stat*(s == Stat.ATTACK && !p.hasAbility(AbilityNamesies.GUTS) ? .5 : 1));
     }
 
-    public String getRemoveMessage(ActivePokemon victim) {
+    public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " is no longer burned!";
     }
 

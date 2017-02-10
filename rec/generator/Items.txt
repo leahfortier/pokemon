@@ -1928,22 +1928,23 @@ Oran Berry:
 	HoldHealer: p.heal(10)
 *
 Persim Berry:
-	Int: BattleUseItem, GainableEffectBerry
+	Int: MessageGetter, GainableEffectBerry
 	BattleCat: HP_PP
 	Desc: If held by a Pok\u00e9mon, it recovers from confusion.
 	NGType: Ground
 	NGPow: 80
-	BattleUse:
+	BattleSourceUse:
 		if (p.hasEffect(EffectNamesies.CONFUSION)) {
 			p.getAttributes().removeEffect(EffectNamesies.CONFUSION);
+			this.addMessage(p, source);
 			return true;
 		}
 		
 		return false;
 		###
-	GainEffect: return use(user, b);
-	SuccessMessage: p.getName() + " snapped out of its confusion!"
-	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
+	GainEffect: return use(user, b, source);
+	GenericMessage: p.getName() + " snapped out of its confusion!"
+	SourceMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
 *
 Lum Berry:
 	Int: StatusBerry
@@ -2144,12 +2145,14 @@ Lansat Berry:
 	NGType: Flying
 	NGPow: 100
 	FixedBerryHealthTrigger: 4
+	Int: MessageGetter
 	GainEffect:
 		EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
+		this.addMessage(user, source);
 		return true;
 		###
-	HoldSuccessMessage: p.getName() + " is getting pumped due to its " + this.name + "!"
-	SuccessMessage: p.getName() + " is getting pumped!"
+	SourceMessage: p.getName() + " is getting pumped due to its " + this.name + "!"
+	GenericMessage: p.getName() + " is getting pumped!"
 *
 Starf Berry:
 	Desc: If held by a Pok\u00e9mon, it raises a random stat in a pinch.
@@ -2157,34 +2160,36 @@ Starf Berry:
 	NGPow: 100
 	FixedBerryHealthTrigger: 4
 	GainEffect:
-		holdMessage = "";
-		useMessage = "";
-	
 		int rand = RandomUtils.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
 		
 		// Raise crit
 		if (rand == Stat.NUM_BATTLE_STATS) {
 			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
-			holdMessage = user.getName() + " is getting pumped due to its " + this.name + "!";
-			useMessage = user.getName() + " is getting pumped!";
+			final String message;
+			switch (source) {
+				case HELD_ITEM:
+					message = user.getName() + " is getting pumped due to its " + this.name + "!";
+					break;
+				case USE_ITEM:
+					message = user.getName() + " is getting pumped!";
+					break;
+				default:
+					Global.error("Invalid source " + source);
+					break;
+			}
+			
 			return true;
 		}
 		
 		// Raise random battle stat
 		Stat stat = Stat.getStat(rand, true);
 		if (user.getAttributes().modifyStage(user, user, 1, stat, b, source)) {
-			useMessage = user.getName() + "'s " + stat.getName() + " increased!";
 			return true;
 		}
+		
 
 		return false;
 		###
-	Field:
-		private String holdMessage;
-		private String useMessage;
-		###
-	SuccessMessage: useMessage
-	HoldSuccessMessage: holdMessage
 *
 # Other Items
 Comet Shard:

@@ -113,7 +113,7 @@ public abstract class Effect implements Serializable {
 	// TODO: Move this it's in a weird place and I'm a psycho for location
 	public abstract void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast);
 	
-	public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+	public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 		return StringUtils.empty();
 	}
 	

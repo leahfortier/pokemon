@@ -361,7 +361,7 @@ RaiseCrits:
 		}
 		// Doesn't 'fail' if they already have the effect -- just display the message again
 		else if (printCast) {
-			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+			Messages.add(getCastMessage(b, caster, victim, source));
 		}
 		
 		RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
@@ -943,7 +943,7 @@ Bide:
 		// Already has the effect, but not ready for it to end yet -- store dat energy 
 		if (bidesies.turns > 0) {
 			bidesies.turns--;
-			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+			Messages.add(getCastMessage(b, caster, victim, source));
 			return;
 		}
 		
@@ -998,7 +998,7 @@ PowerTrick:
 			return;
 		}
 		
-		Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+		Messages.add(getCastMessage(b, caster, victim, source));
 		victim.getAttributes().removeEffect(this.namesies);
 		###
 *

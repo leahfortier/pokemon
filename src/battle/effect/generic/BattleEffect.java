@@ -26,7 +26,7 @@ public abstract class BattleEffect extends Effect {
 
 	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 		if (printCast) {
-			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim, source)));
 		}
 
 		b.addEffect(this);
@@ -55,7 +55,7 @@ public abstract class BattleEffect extends Effect {
 			removeLevitation(b, victim);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Gravity intensified!";
 		}
 
@@ -92,7 +92,7 @@ public abstract class BattleEffect extends Effect {
 			return user.getAttackType() == Type.FIRE ? .33 : 1;
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Fire's power was weakened!";
 		}
 
@@ -116,7 +116,7 @@ public abstract class BattleEffect extends Effect {
 			return user.getAttackType() == Type.ELECTRIC ? .33 : 1;
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Electricity's power was weakened!";
 		}
 
@@ -151,7 +151,7 @@ public abstract class BattleEffect extends Effect {
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return user.getName() + " twisted the dimensions to switch defense and special defense!";
 		}
 
@@ -179,7 +179,7 @@ public abstract class BattleEffect extends Effect {
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return user.getName() + " twisted the dimensions to switch speeds!";
 		}
 
@@ -207,7 +207,7 @@ public abstract class BattleEffect extends Effect {
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return user.getName() + " twisted the dimensions to prevent using items!";
 		}
 
@@ -227,7 +227,7 @@ public abstract class BattleEffect extends Effect {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Mist swirled around the battlefield!";
 		}
 
@@ -280,7 +280,7 @@ public abstract class BattleEffect extends Effect {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Grass sprouted around the battlefield!";
 		}
 
@@ -331,7 +331,7 @@ public abstract class BattleEffect extends Effect {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Electricity crackled around the battlefield!";
 		}
 
@@ -383,7 +383,7 @@ public abstract class BattleEffect extends Effect {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Psychic energy evelops the battlefield!!!";
 		}
 

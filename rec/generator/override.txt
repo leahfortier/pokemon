@@ -661,7 +661,7 @@ Override:
 				super.cast(b, caster, victim, source, printCast);
 			}
 			else {
-				Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+				Messages.add(getCastMessage(b, caster, victim, source));
 			}
 			###
 	*
@@ -673,7 +673,7 @@ Override:
 ***
 Override:
 	CastMessage:
-		Header: String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
+		Header: String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source)
 		Body:
 			return {0};
 			###
@@ -1346,11 +1346,7 @@ Override:
 ***
 Override:
 	Wing:
-		Header: Stat toIncrease()
-		Body:
-			return Stat.{00};
-			###
-		AddMapField: EVIncreaseAmt: 1
+		AddMapField: EVIncreaseAmt: {0} 1
 		AddMapField: Price: 3000
 		AddMapField: Fling: 20
 		AddInterface: HoldItem
@@ -1359,11 +1355,7 @@ Override:
 ***
 Override:	
 	Vitamin:
-		Header: Stat toIncrease()
-		Body:
-			return Stat.{00};
-			###
-		AddMapField: EVIncreaseAmt: 10
+		AddMapField: EVIncreaseAmt: {0} 10
 		AddMapField: Price: 9800
 		AddMapField: Fling: 30
 		AddInterface: HoldItem
@@ -1570,6 +1562,7 @@ Override:
 Override:
 	TimeSpaceOrb:
 		Header: boolean canUseOrb(ActivePokemon user)
+		AccessModifier: Private
 		Body:
 			if (!user.isPokemon(PokemonNamesies.{11})) {
 				return false;
@@ -1697,9 +1690,10 @@ Override:
 			p.removeStatus();
 			p.healHealthFraction({1});
 			
+			Messages.add(p.getName() + " was {2} revived!");
+			
 			return true;
 			###
-		AddMapField: SuccessMessage: p.getName() + " was {2} revived!"
 	*
 ***
 Override:
@@ -1714,13 +1708,24 @@ Override:
 			return true;
 			###
 		AddInterface: MessageGetter
-		AddMapField: HoldSuccessMessage: p.getName() + " was healed by its " + this.name + "!"
-		AddMapField: SuccessMessage: p.getName() + "'s health was restored!"
+		AddMapField: SourceMessage: p.getName() + " was healed by its " + this.name + "!"
+		AddMapField: GenericMessage: p.getName() + "'s health was restored!"
+	*
+***
+Override:
+	BattleSourceUse:
+		Header: boolean use(ActivePokemon p, Battle b, CastSource source)
+		AccessModifier: Private
+		AddInterface: BattleUseItem
+		AddMapField: BattleUse:
+			return use(p, b, CastSource.USE_ITEM);
+			###
 	*
 ***
 Override:
 	SourceUse:
 		Header: boolean use(ActivePokemon p, CastSource source)
+		AccessModifier: Private
 		AddInterface: PokemonUseItem
 		AddMapField: PokemonUse:
 			return use(p, CastSource.USE_ITEM);
@@ -1758,20 +1763,14 @@ Override:
 ***
 Override:
 	XStageIncrease:
-		Header: Stat toIncrease()
-		AccessModifier: Private
-		Body:
-			return Stat.{00};
-			###
 		AddMapField: Fling: 30
 		AddMapField: Cat: Stat
 		AddMapField: BattleCat: Battle
 		AddInterface: HoldItem
 		AddInterface: BattleUseItem
 		AddMapField: BattleUse:
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.{00}, b, CastSource.USE_ITEM);
 			###
-		AddMapField: SuccessMessage: p.getName() + "'s " + toIncrease().getName() + " was raised!"
 	*
 ***
 Override:
@@ -1784,18 +1783,18 @@ Override:
 ***
 Override:
 	EVIncreaseAmt:
-		Header: int increaseAmount()
-		Body:
-			return {0};
-			###
 		AddInterface: PokemonUseItem
 		AddMapField: PokemonUse:
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.{11}.index()] += {2};
 
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+
+			Messages.add(p.getName() + "'s " + Stat.{11}.getName() + " was raised!");
+			return true;
 			###
-		AddMapField: SuccessMessage: p.getName() + "'s " + toIncrease().getName() + " was raised!"
 	*
 ***
 Override:
@@ -1831,14 +1830,10 @@ BallItem:
 ***
 Override:
 	EVDecreaseBerry:
-		Header: Stat toDecrease()
-		Body:
-			return Stat.{00};
-			###
 		AddInterface: Berry
 		AddInterface: PokemonUseItem
 		AddMapField: PokemonUse:
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.{00}.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -1850,9 +1845,13 @@ Override:
 				vals[decreaseIndex] -= 10;
 			}
 
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.{00}.getName() + " was lowered!");
+			return true;
 			###
-		AddMapField: SuccessMessage: p.getName() + "'s " + toDecrease().getName() + " was lowered!"
 		AddMapField: NGPow: 90
 	*
 ***
@@ -1879,8 +1878,6 @@ Override:
 			return user.getAttributes().modifyStage(user, user, 1, Stat.{00}, b, source);
 			###
 		AddMapField: FixedBerryHealthTrigger: 4
-		AddMapField: SuccessMessage: p.getName() + "'s " + Stat.{00}.getName() + " increased!"
-		AddMapField: HoldSuccessMessage: ""
 		AddMapField: NGPow: 100
 	*
 ***
@@ -2210,8 +2207,19 @@ Override:
 			###
 	*
 ***
-# TODO: Move Success Message methods inside here
 MessageGetter:
+	GenericMessage:
+		Header: String getGenericMessage(ActivePokemon p)
+		Body:
+			return {0};
+			###
+	*
+	SourceMessage:
+		Header: String getSourceMessage(ActivePokemon p, String sourceName)
+		Body:
+			return {0};
+			###
+	*
 ***
 ChangeAttackTypeEffect:
 	ChangeAttackType:

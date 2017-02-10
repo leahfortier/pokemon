@@ -49,7 +49,7 @@ import item.hold.ConsumableItem;
 import item.hold.EVItem;
 import item.hold.HoldItem;
 import item.hold.IncenseItem;
-import item.hold.MessageGetter;
+import battle.effect.MessageGetter;
 import item.hold.PowerItem;
 import item.hold.SpecialTypeItem.DriveItem;
 import item.hold.SpecialTypeItem.GemItem;
@@ -159,17 +159,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		return this;
 	}
 
-	protected boolean canHealHealth(ActivePokemon p) {
+	boolean canHealHealth(ActivePokemon p) {
 		return !p.isActuallyDead() && !p.fullHealth();
 	}
 
 	protected void removeStatus(ActivePokemon p) {
 		Status status = p.getStatus();
 		p.removeStatus();
-		Messages.add(new MessageUpdate(status.getRemoveMessage(p)).withStatusCondition(StatusCondition.NO_STATUS, p.isPlayer()));
+		Messages.add(new MessageUpdate(status.getGenericRemoveMessage(p)).withStatusCondition(StatusCondition.NO_STATUS, p.isPlayer()));
 	}
 
-	protected void addHealMessage(ActivePokemon p, int healAmount) {
+	void addHealMessage(ActivePokemon p, int healAmount) {
 		if (healAmount == 0) {
 			return;
 		}
@@ -779,7 +779,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 10000;
 		}
 
-		public boolean canUseOrb(ActivePokemon user) {
+		private boolean canUseOrb(ActivePokemon user) {
 			if (!user.isPokemon(PokemonNamesies.DIALGA)) {
 				return false;
 			}
@@ -808,7 +808,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 10000;
 		}
 
-		public boolean canUseOrb(ActivePokemon user) {
+		private boolean canUseOrb(ActivePokemon user) {
 			if (!user.isPokemon(PokemonNamesies.PALKIA)) {
 				return false;
 			}
@@ -837,7 +837,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 10000;
 		}
 
-		public boolean canUseOrb(ActivePokemon user) {
+		private boolean canUseOrb(ActivePokemon user) {
 			if (!user.isPokemon(PokemonNamesies.GIRATINA)) {
 				return false;
 			}
@@ -3551,7 +3551,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return 30;
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.POISONED)) {
 				return false;
 			}
@@ -3578,7 +3578,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return 30;
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.ASLEEP)) {
 				return false;
 			}
@@ -3605,7 +3605,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return 30;
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.BURNED)) {
 				return false;
 			}
@@ -3632,7 +3632,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return 30;
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.FROZEN)) {
 				return false;
 			}
@@ -3659,7 +3659,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return 30;
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.PARALYZED)) {
 				return false;
 			}
@@ -3682,7 +3682,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			// Does not apply to the dead
 			if (p.hasStatus(StatusCondition.FAINTED)) {
 				return false;
@@ -4179,10 +4179,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " was partially revived!";
-		}
-
 		public boolean use(ActivePokemon p) {
 			// Only applies to the dead
 			if (!p.hasStatus(StatusCondition.FAINTED)) {
@@ -4191,6 +4187,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			
 			p.removeStatus();
 			p.healHealthFraction(.5);
+			
+			Messages.add(p.getName() + " was partially revived!");
 			
 			return true;
 		}
@@ -4209,10 +4207,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " was fully revived!";
-		}
-
 		public boolean use(ActivePokemon p) {
 			// Only applies to the dead
 			if (!p.hasStatus(StatusCondition.FAINTED)) {
@@ -4221,6 +4215,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			
 			p.removeStatus();
 			p.healHealthFraction(1);
+			
+			Messages.add(p.getName() + " was fully revived!");
 			
 			return true;
 		}
@@ -4239,10 +4235,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " was fully revived!";
-		}
-
 		public boolean use(ActivePokemon p) {
 			// Only applies to the dead
 			if (!p.hasStatus(StatusCondition.FAINTED)) {
@@ -4251,6 +4243,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			
 			p.removeStatus();
 			p.healHealthFraction(1);
+			
+			Messages.add(p.getName() + " was fully revived!");
 			
 			return true;
 		}
@@ -4344,20 +4338,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		private Stat toIncrease() {
-			return Stat.ACCURACY;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.ACCURACY, b, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4370,20 +4356,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		private Stat toIncrease() {
-			return Stat.ATTACK;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.ATTACK, b, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4396,20 +4374,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		private Stat toIncrease() {
-			return Stat.DEFENSE;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.DEFENSE, b, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4422,20 +4392,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		private Stat toIncrease() {
-			return Stat.SP_ATTACK;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.SP_ATTACK, b, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4448,20 +4410,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		private Stat toIncrease() {
-			return Stat.SP_DEFENSE;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.SP_DEFENSE, b, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4474,20 +4428,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		private Stat toIncrease() {
-			return Stat.SPEED;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.SPEED, b, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4499,27 +4445,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
-			return Stat.HP;
-		}
-
-		public int increaseAmount() {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.HP.index()] += 10;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.HP.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4531,27 +4470,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
-			return Stat.ATTACK;
-		}
-
-		public int increaseAmount() {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.ATTACK.index()] += 10;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.ATTACK.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4563,27 +4495,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
-			return Stat.DEFENSE;
-		}
-
-		public int increaseAmount() {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.DEFENSE.index()] += 10;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.DEFENSE.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4595,27 +4520,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
-			return Stat.SP_ATTACK;
-		}
-
-		public int increaseAmount() {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.SP_ATTACK.index()] += 10;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SP_ATTACK.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4627,27 +4545,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
-			return Stat.SP_DEFENSE;
-		}
-
-		public int increaseAmount() {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.SP_DEFENSE.index()] += 10;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4659,27 +4570,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
-			return Stat.SPEED;
-		}
-
-		public int increaseAmount() {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.SPEED.index()] += 10;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SPEED.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4691,27 +4595,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
-			return Stat.HP;
-		}
-
-		public int increaseAmount() {
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 20;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.HP.index()] += 1;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.HP.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4723,27 +4620,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
-			return Stat.ATTACK;
-		}
-
-		public int increaseAmount() {
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 20;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.ATTACK.index()] += 1;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.ATTACK.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4755,27 +4645,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
-			return Stat.DEFENSE;
-		}
-
-		public int increaseAmount() {
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 20;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.DEFENSE.index()] += 1;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.DEFENSE.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4787,27 +4670,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
-			return Stat.SP_ATTACK;
-		}
-
-		public int increaseAmount() {
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 20;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.SP_ATTACK.index()] += 1;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SP_ATTACK.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4819,27 +4695,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
-			return Stat.SP_DEFENSE;
-		}
-
-		public int increaseAmount() {
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 20;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.SP_DEFENSE.index()] += 1;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4851,27 +4720,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
-			return Stat.SPEED;
-		}
-
-		public int increaseAmount() {
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 20;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.SPEED.index()] += 1;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SPEED.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -5317,7 +5179,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.PARALYZED)) {
 				return false;
 			}
@@ -5356,7 +5218,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.ASLEEP)) {
 				return false;
 			}
@@ -5395,7 +5257,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.POISONED)) {
 				return false;
 			}
@@ -5434,7 +5296,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.BURNED)) {
 				return false;
 			}
@@ -5473,7 +5335,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.FROZEN)) {
 				return false;
 			}
@@ -5570,7 +5432,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (p.fullHealth()) {
 				return false;
 			}
@@ -5580,11 +5442,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getGenericMessage(ActivePokemon p) {
 			return p.getName() + "'s health was restored!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p) {
+		public String getSourceMessage(ActivePokemon p, String sourceName) {
 			return p.getName() + " was healed by its " + this.name + "!";
 		}
 
@@ -5613,7 +5475,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class PersimBerry extends Item implements BattleUseItem, GainableEffectBerry {
+	static class PersimBerry extends Item implements MessageGetter, GainableEffectBerry, BattleUseItem {
 		private static final long serialVersionUID = 1L;
 
 		PersimBerry() {
@@ -5622,25 +5484,30 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " snapped out of its confusion!";
-		}
-
-		public String getHoldSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + this.getName() + " snapped it out of confusion!";
-		}
-
-		public boolean use(ActivePokemon p, Battle b) {
+		private boolean use(ActivePokemon p, Battle b, CastSource source) {
 			if (p.hasEffect(EffectNamesies.CONFUSION)) {
 				p.getAttributes().removeEffect(EffectNamesies.CONFUSION);
+				this.addMessage(p, source);
 				return true;
 			}
 			
 			return false;
 		}
 
+		public String getGenericMessage(ActivePokemon p) {
+			return p.getName() + " snapped out of its confusion!";
+		}
+
+		public String getSourceMessage(ActivePokemon p, String sourceName) {
+			return p.getName() + "'s " + this.getName() + " snapped it out of confusion!";
+		}
+
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return use(user, b);
+			return use(user, b, source);
+		}
+
+		public boolean use(ActivePokemon p, Battle b) {
+			return use(p, b, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5665,7 +5532,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			// Does not apply to the dead
 			if (p.hasStatus(StatusCondition.FAINTED)) {
 				return false;
@@ -5710,7 +5577,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (p.fullHealth()) {
 				return false;
 			}
@@ -5720,11 +5587,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getGenericMessage(ActivePokemon p) {
 			return p.getName() + "'s health was restored!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p) {
+		public String getSourceMessage(ActivePokemon p, String sourceName) {
 			return p.getName() + " was healed by its " + this.name + "!";
 		}
 
@@ -5782,14 +5649,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
-			return Stat.HP;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
-		}
-
 		public int naturalGiftPower() {
 			return 90;
 		}
@@ -5799,7 +5658,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.HP.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -5811,7 +5670,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				vals[decreaseIndex] -= 10;
 			}
 			
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.HP.getName() + " was lowered!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -5827,14 +5691,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
-			return Stat.ATTACK;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
-		}
-
 		public int naturalGiftPower() {
 			return 90;
 		}
@@ -5844,7 +5700,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.ATTACK.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -5856,7 +5712,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				vals[decreaseIndex] -= 10;
 			}
 			
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.ATTACK.getName() + " was lowered!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -5872,14 +5733,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
-			return Stat.DEFENSE;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
-		}
-
 		public int naturalGiftPower() {
 			return 90;
 		}
@@ -5889,7 +5742,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.DEFENSE.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -5901,7 +5754,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				vals[decreaseIndex] -= 10;
 			}
 			
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.DEFENSE.getName() + " was lowered!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -5917,14 +5775,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
-			return Stat.SP_ATTACK;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
-		}
-
 		public int naturalGiftPower() {
 			return 90;
 		}
@@ -5934,7 +5784,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.SP_ATTACK.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -5946,7 +5796,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				vals[decreaseIndex] -= 10;
 			}
 			
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SP_ATTACK.getName() + " was lowered!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -5962,14 +5817,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
-			return Stat.SP_DEFENSE;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
-		}
-
 		public int naturalGiftPower() {
 			return 90;
 		}
@@ -5979,7 +5826,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.SP_DEFENSE.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -5991,7 +5838,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				vals[decreaseIndex] -= 10;
 			}
 			
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " was lowered!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -6007,14 +5859,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
-			return Stat.SPEED;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
-		}
-
 		public int naturalGiftPower() {
 			return 90;
 		}
@@ -6024,7 +5868,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.SPEED.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -6036,7 +5880,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				vals[decreaseIndex] -= 10;
 			}
 			
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SPEED.getName() + " was lowered!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -6610,14 +6459,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + Stat.ATTACK.getName() + " increased!";
-		}
-
-		public String getHoldSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
@@ -6645,14 +6486,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		GanlonBerry() {
 			super(ItemNamesies.GANLON_BERRY, "If held by a Pok\u00e9mon, it raises its Defense stat in a pinch.", BagCategory.BERRY, 273);
 			super.price = 20;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + Stat.DEFENSE.getName() + " increased!";
-		}
-
-		public String getHoldSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public double healthTriggerRatio() {
@@ -6684,14 +6517,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + Stat.SPEED.getName() + " increased!";
-		}
-
-		public String getHoldSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
@@ -6719,14 +6544,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		PetayaBerry() {
 			super(ItemNamesies.PETAYA_BERRY, "If held by a Pok\u00e9mon, it raises its Speed stat in a pinch.", BagCategory.BERRY, 275);
 			super.price = 20;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + Stat.SP_ATTACK.getName() + " increased!";
-		}
-
-		public String getHoldSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public double healthTriggerRatio() {
@@ -6758,14 +6575,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " increased!";
-		}
-
-		public String getHoldSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
@@ -6793,14 +6602,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		MicleBerry() {
 			super(ItemNamesies.MICLE_BERRY, "If held by a Pok\u00e9mon, it raises its Accuracy stat in a pinch.", BagCategory.BERRY, 277);
 			super.price = 20;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + Stat.ACCURACY.getName() + " increased!";
-		}
-
-		public String getHoldSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public double healthTriggerRatio() {
@@ -6999,7 +6800,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class LansatBerry extends Item implements HealthTriggeredBerry {
+	static class LansatBerry extends Item implements MessageGetter, HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		LansatBerry() {
@@ -7007,11 +6808,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public String getGenericMessage(ActivePokemon p) {
 			return p.getName() + " is getting pumped!";
 		}
 
-		public String getHoldSuccessMessage(ActivePokemon p) {
+		public String getSourceMessage(ActivePokemon p, String sourceName) {
 			return p.getName() + " is getting pumped due to its " + this.name + "!";
 		}
 
@@ -7021,6 +6822,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
+			this.addMessage(user, source);
 			return true;
 		}
 
@@ -7039,20 +6841,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class StarfBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
-		private String holdMessage;
-		private String useMessage;
 
 		StarfBerry() {
 			super(ItemNamesies.STARF_BERRY, "If held by a Pok\u00e9mon, it raises a random stat in a pinch.", BagCategory.BERRY, 285);
 			super.price = 20;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return useMessage;
-		}
-
-		public String getHoldSuccessMessage(ActivePokemon p) {
-			return holdMessage;
 		}
 
 		public double healthTriggerRatio() {
@@ -7060,25 +6852,33 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			holdMessage = "";
-			useMessage = "";
-			
 			int rand = RandomUtils.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
 			
 			// Raise crit
 			if (rand == Stat.NUM_BATTLE_STATS) {
 				EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
-				holdMessage = user.getName() + " is getting pumped due to its " + this.name + "!";
-				useMessage = user.getName() + " is getting pumped!";
+				final String message;
+				switch (source) {
+					case HELD_ITEM:
+						message = user.getName() + " is getting pumped due to its " + this.name + "!";
+						break;
+					case USE_ITEM:
+						message = user.getName() + " is getting pumped!";
+						break;
+					default:
+						Global.error("Invalid source " + source);
+						break;
+				}
+				
 				return true;
 			}
 			
 			// Raise random battle stat
 			Stat stat = Stat.getStat(rand, true);
 			if (user.getAttributes().modifyStage(user, user, 1, stat, b, source)) {
-				useMessage = user.getName() + "'s " + stat.getName() + " increased!";
 				return true;
 			}
+			
 			
 			return false;
 		}
