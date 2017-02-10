@@ -3549,7 +3549,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			Messages.add(new MessageUpdate(Status.getRemoveStatus(null, p, source)));
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
@@ -3576,7 +3576,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			Messages.add(new MessageUpdate(Status.getRemoveStatus(null, p, source)));
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
@@ -3603,7 +3603,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			Messages.add(new MessageUpdate(Status.getRemoveStatus(null, p, source)));
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
@@ -3630,7 +3630,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			Messages.add(new MessageUpdate(Status.getRemoveStatus(null, p, source)));
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
@@ -3657,7 +3657,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			Messages.add(new MessageUpdate(Status.getRemoveStatus(null, p, source)));
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
@@ -3672,7 +3672,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class FullHeal extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		FullHeal() {
 			super(ItemNamesies.FULL_HEAL, "A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 170);
@@ -3691,12 +3690,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			message = Status.getRemoveStatus(null, p, source);
+			Status.removeStatus(null, p, source);
 			return true;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
 		}
 
 		public int flingDamage() {
@@ -5324,7 +5319,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			Messages.add(new MessageUpdate(Status.getRemoveStatus(null, p, source)));
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
@@ -5363,7 +5358,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			Messages.add(new MessageUpdate(Status.getRemoveStatus(null, p, source)));
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
@@ -5402,7 +5397,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			Messages.add(new MessageUpdate(Status.getRemoveStatus(null, p, source)));
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
@@ -5441,7 +5436,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			Messages.add(new MessageUpdate(Status.getRemoveStatus(null, p, source)));
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
@@ -5480,7 +5475,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			Messages.add(new MessageUpdate(Status.getRemoveStatus(null, p, source)));
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
@@ -5650,7 +5645,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class LumBerry extends Item implements StatusBerry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		LumBerry() {
 			super(ItemNamesies.LUM_BERRY, "If held by a Pok\u00e9mon, it recovers from any status problem.", BagCategory.BERRY, 245);
@@ -5669,12 +5663,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			message = Status.getRemoveStatus(null, p, source);
+			Status.removeStatus(null, p, source);
 			return true;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
 		}
 
 		public boolean use(ActivePokemon p) {

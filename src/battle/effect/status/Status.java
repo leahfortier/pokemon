@@ -31,23 +31,22 @@ public abstract class Status implements Serializable {
 	public abstract String getRemoveMessage(ActivePokemon victim);
 	protected abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
 
-	// A method to be overidden if anything related to conflicted victim is necessary to create this status
+	// A method to be overridden if anything related to conflicted victim is necessary to create this status
 	protected void postCreateEffect(ActivePokemon victim) {}
 
 	public static void removeStatus(Battle b, ActivePokemon victim, CastSource source) {
-		Messages.add(new MessageUpdate(getRemoveStatus(b, victim, source)).updatePokemon(b, victim));
-	}
-
-	public static String getRemoveStatus(Battle b, ActivePokemon victim, CastSource source) {
 		Status status = victim.getStatus();
 		victim.removeStatus();
 
+		final String message;
 		if (source.hasSourceName()) {
-			return status.getSourceRemoveMessage(victim, source.getSourceName(b, victim));
+			message = status.getSourceRemoveMessage(victim, source.getSourceName(b, victim));
 		}
 		else {
-			return status.getRemoveMessage(victim);
+			message = status.getRemoveMessage(victim);
 		}
+
+		Messages.add(new MessageUpdate(message).updatePokemon(b, victim));
 	}
 
 	public static String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, StatusCondition status) {
@@ -116,6 +115,7 @@ public abstract class Status implements Serializable {
 			OpponentStatusReceivedEffect.invokeOpponentStatusReceivedEffect(b, victim, status);
 			return true;
 		}
+		
 		return false;
 	}
 

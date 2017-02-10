@@ -1663,7 +1663,7 @@ Override:
 	*
 ***
 Override:
-	FullHeal:
+	StatusHealAll:
 		Header: boolean removeStatus(ActivePokemon p, CastSource source)
 		Body:
 			// Does not apply to the dead
@@ -1676,16 +1676,12 @@ Override:
 				return false;
 			}
 			
-			message = Status.getRemoveStatus(null, p, source);
+			Status.removeStatus(null, p, source);
 			return true;
 			###
 		AddMapField: PokemonUse:
 			return removeStatus(p, CastSource.USE_ITEM);
 			###
-		AddMapField: Field: 
-			private String message;
-			###
-		AddMapField: SuccessMessage: message
 		AddMapField: BattleCat: Status
 		AddInterface: PokemonUseItem
 	*
@@ -1719,7 +1715,7 @@ Override:
 				return false;
 			}
 
-			Messages.add(new MessageUpdate(Status.getRemoveStatus(null, p, source)));
+			Status.removeStatus(null, p, source);
 			return true;
 			###
 		AddInterface: PokemonUseItem

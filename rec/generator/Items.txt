@@ -1410,7 +1410,7 @@ Full Heal:
 	Desc: A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.
 	Price: 250
 	Fling: 30
-	FullHeal: True
+	StatusHealAll: True
 *
 Full Restore:
 	Int: PokemonUseItem, HoldItem
@@ -1954,7 +1954,7 @@ Lum Berry:
 	Int: StatusBerry
 	Desc: If held by a Pok\u00e9mon, it recovers from any status problem.
 	NGType: Flying
-	FullHeal: True
+	StatusHealAll: True
 *
 Sitrus Berry:
 	BattleCat: HP_PP
