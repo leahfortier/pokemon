@@ -571,19 +571,14 @@ public class ActivePokemon implements Serializable {
 		
 		Move move = new Move(attackName.getAttack());
 		if (moves.size() < Move.MAX_MOVES) {
-			Messages.add(new MessageUpdate(getActualName() + " learned " + move.getAttack().getName() + "!"));
 			addMove(move, moves.size() - 1, inBattle);
 		} else {
 			Messages.add(new MessageUpdate().withLearnMove(this, move));
 		}
 	}
 
-	// TODO: Delete this after changing the tm generator
-	public void addMove(Battle b, Move m, int index) {
-		addMove(m, index, b != null);
-	}
-
 	public void addMove(Move m, int index, boolean inBattle) {
+		Messages.add(getActualName() + " learned " + m.getAttack().getName() + "!");
 		if (moves.size() < Move.MAX_MOVES) {
 			moves.add(m);
 		}
