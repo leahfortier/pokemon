@@ -733,7 +733,6 @@ Bug Bite:
 	Acc: 100
 	Cat: Physical
 	ConsumeBerry: True
-	Comments: // TODO: Sticky Hold
 *
 Harden:
 	Type: Normal

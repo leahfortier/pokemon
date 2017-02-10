@@ -1229,18 +1229,29 @@ public class ActivePokemon implements Serializable {
 		heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();
 	}
 
-	public void consumeBerry(Item consumed, Battle b) {
-		if (consumed instanceof Berry) {
-			// Eat dat berry!!
-			EffectNamesies.EATEN_BERRY.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
+	public void stealBerry(Battle b, ActivePokemon victim) {
+		Item item = victim.getHeldItem(b);
+		if (item instanceof Berry && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
+			Messages.add(new MessageUpdate(this.getName() + " ate " + victim.getName() + "'s " + item.getName() + "!"));
+			victim.consumeItemWithoutEffects(b);
 
-			if (consumed instanceof GainableEffectBerry
-					&& this.hasAbility(AbilityNamesies.CHEEK_POUCH)
-					&& !this.fullHealth()) {
-				Messages.add(new MessageUpdate(this.getName() + "'s " + AbilityNamesies.CHEEK_POUCH.getName() + " restored its health!"));
-				this.healHealthFraction(1/3.0);
-				Messages.add(new MessageUpdate().updatePokemon(b, this));
+			if (item instanceof GainableEffectBerry) {
+				((GainableEffectBerry)item).gainBerryEffect(b, this, CastSource.USE_ITEM);
+				this.consumeBerry((Berry)item, b);
 			}
+		}
+	}
+
+	public void consumeBerry(Berry consumed, Battle b) {
+		// Eat dat berry!!
+		EffectNamesies.EATEN_BERRY.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
+
+		if (consumed instanceof GainableEffectBerry
+				&& this.hasAbility(AbilityNamesies.CHEEK_POUCH)
+				&& !this.fullHealth()) {
+			Messages.add(new MessageUpdate(this.getName() + "'s " + this.getAbility().getName() + " restored its health!"));
+			this.healHealthFraction(1/3.0);
+			Messages.add(new MessageUpdate().updatePokemon(b, this));
 		}
 	}
 
@@ -1254,7 +1265,9 @@ public class ActivePokemon implements Serializable {
 	public void consumeItem(Battle b) {
 		Item consumed = this.consumeItemWithoutEffects(b);
 
-		consumeBerry(consumed, b);
+		if (consumed instanceof Berry) {
+			this.consumeBerry((Berry)consumed, b);
+		}
 
 		ActivePokemon other = b.getOtherPokemon(isPlayer);
 		if (other.hasAbility(AbilityNamesies.PICKUP) && !other.isHoldingItem(b)) {

@@ -1719,16 +1719,12 @@ Override:
 				return false;
 			}
 
-			message = Status.getRemoveStatus(null, p, source);
+			Messages.add(new MessageUpdate(Status.getRemoveStatus(null, p, source)));
 			return true;
 			###
 		AddInterface: PokemonUseItem
 		AddMapField: PokemonUse:
 			return removeStatus(p, CastSource.USE_ITEM);
-			###
-		AddMapField: SuccessMessage: message
-		AddMapField: Field:
-			private String message;
 			###
 	*
 ***
@@ -2026,32 +2022,20 @@ StatusBerry:
 	StatusBerryGainEffect:
 		Optional: True
 		AddMapField: GainEffect:
-			if (!removeStatus(user, CastSource.HELD_ITEM)) {
-				return false;
-			}
-			
-			holdMessage = message;
-			return true;
+			return removeStatus(user, source);
 			###
 		AddInterface: Hidden-GainableEffectBerry
-		AddMapField: HoldSuccessMessage: holdMessage
 		AddMapField: NGPow: 80
-		AddMapField: Field:
-			private String holdMessage;
-			###
 	*
 ***
 GainableEffectBerry:
 	GainEffect:
-		Header: boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source)
+		Header: boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		Optional: True
 		Default:
 			return use(user);
 			###
 		AddInterface: Hidden-Berry
-		AddMapField: FlingEffect:
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-			###
 	*
 ***
 Override:
@@ -2199,15 +2183,7 @@ Override:
 Override:
 	ConsumeBerry:
 		AddMapField: UniqueEffects: 
-			Item i = victim.getHeldItem(b);
-			if (i instanceof Berry) {
-				Messages.add(new MessageUpdate(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!"));
-				victim.consumeItem(b);
-				
-				if (i instanceof GainableEffectBerry) {
-					((GainableEffectBerry)i).gainBerryEffect(b, user, CastSource.USE_ITEM);
-				}
-			}
+			user.stealBerry(b, victim);
 			###
 	*
 ***
