@@ -37,7 +37,6 @@ import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
-import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.bag.BagCategory;
@@ -56,6 +55,8 @@ import item.hold.SpecialTypeItem.GemItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
 import item.medicine.AllPPHealer;
+import item.medicine.FixedHpHealer;
+import item.medicine.HpHealer;
 import item.medicine.PPHealer;
 import item.medicine.StatusHealer;
 import item.use.BallItem;
@@ -87,7 +88,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Item implements Comparable<Item>, Serializable, ItemHolder {
+public abstract class Item implements Comparable<Item>, Serializable, ItemInterface {
 	private static final long serialVersionUID = 1L;
 
 	protected ItemNamesies namesies;
@@ -162,19 +163,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		return this;
 	}
 
-	protected boolean canHealHealth(ActivePokemon p) {
-		return !p.isActuallyDead() && !p.fullHealth();
-	}
-
-	protected void addHealMessage(ActivePokemon p, int healAmount) {
-		if (healAmount == 0) {
-			return;
-		}
-
-		Messages.add(new MessageUpdate(p.getName() + "'s health was restored!")
-				.withHp(p.getHP(), p.isPlayer()));
-	}
-
 	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
@@ -182,7 +170,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		private static final long serialVersionUID = 1L;
 
 		NoItem() {
-			super(ItemNamesies.NO_ITEM, "YOU SHUOLDN'T SEE THIS", BagCategory.MISC, 0);
+			super(ItemNamesies.NO_ITEM, "YOU SHOULDN'T SEE THIS", BagCategory.MISC, 0);
 			super.price = -1;
 		}
 
@@ -777,11 +765,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		private boolean canUseOrb(ActivePokemon user) {
-			if (!user.isPokemon(PokemonNamesies.DIALGA)) {
-				return false;
-			}
-			
-			return user.isAttackType(Type.DRAGON) || user.isAttackType(Type.STEEL);
+			return user.isPokemon(PokemonNamesies.DIALGA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.STEEL));
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -806,11 +790,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		private boolean canUseOrb(ActivePokemon user) {
-			if (!user.isPokemon(PokemonNamesies.PALKIA)) {
-				return false;
-			}
-			
-			return user.isAttackType(Type.DRAGON) || user.isAttackType(Type.WATER);
+			return user.isPokemon(PokemonNamesies.PALKIA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.WATER));
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -835,11 +815,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		private boolean canUseOrb(ActivePokemon user) {
-			if (!user.isPokemon(PokemonNamesies.GIRATINA)) {
-				return false;
-			}
-			
-			return user.isAttackType(Type.DRAGON) || user.isAttackType(Type.GHOST);
+			return user.isPokemon(PokemonNamesies.GIRATINA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.GHOST));
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -3628,7 +3604,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class BerryJuice extends Item implements PokemonUseItem, HoldItem {
+	static class BerryJuice extends Item implements FixedHpHealer {
 		private static final long serialVersionUID = 1L;
 
 		BerryJuice() {
@@ -3637,13 +3613,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.heal(20));
-			return true;
+		public int getFixedHealAmount(ActivePokemon p) {
+			return 20;
 		}
 
 		public int flingDamage() {
@@ -3651,7 +3622,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class SweetHeart extends Item implements PokemonUseItem, HoldItem {
+	static class SweetHeart extends Item implements FixedHpHealer {
 		private static final long serialVersionUID = 1L;
 
 		SweetHeart() {
@@ -3660,13 +3631,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.heal(20));
-			return true;
+		public int getFixedHealAmount(ActivePokemon p) {
+			return 20;
 		}
 
 		public int flingDamage() {
@@ -3674,7 +3640,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class Potion extends Item implements PokemonUseItem, HoldItem {
+	static class Potion extends Item implements FixedHpHealer {
 		private static final long serialVersionUID = 1L;
 
 		Potion() {
@@ -3683,13 +3649,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.heal(20));
-			return true;
+		public int getFixedHealAmount(ActivePokemon p) {
+			return 20;
 		}
 
 		public int flingDamage() {
@@ -3697,7 +3658,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class EnergyPowder extends Item implements PokemonUseItem, HoldItem {
+	static class EnergyPowder extends Item implements FixedHpHealer {
 		private static final long serialVersionUID = 1L;
 
 		EnergyPowder() {
@@ -3706,13 +3667,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.heal(50));
-			return true;
+		public int getFixedHealAmount(ActivePokemon p) {
+			return 50;
 		}
 
 		public int flingDamage() {
@@ -3720,7 +3676,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class FreshWater extends Item implements PokemonUseItem, HoldItem {
+	static class FreshWater extends Item implements FixedHpHealer {
 		private static final long serialVersionUID = 1L;
 
 		FreshWater() {
@@ -3729,13 +3685,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.heal(50));
-			return true;
+		public int getFixedHealAmount(ActivePokemon p) {
+			return 50;
 		}
 
 		public int flingDamage() {
@@ -3743,7 +3694,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class SuperPotion extends Item implements PokemonUseItem, HoldItem {
+	static class SuperPotion extends Item implements FixedHpHealer {
 		private static final long serialVersionUID = 1L;
 
 		SuperPotion() {
@@ -3752,13 +3703,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.heal(50));
-			return true;
+		public int getFixedHealAmount(ActivePokemon p) {
+			return 50;
 		}
 
 		public int flingDamage() {
@@ -3766,7 +3712,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class SodaPop extends Item implements PokemonUseItem, HoldItem {
+	static class SodaPop extends Item implements FixedHpHealer {
 		private static final long serialVersionUID = 1L;
 
 		SodaPop() {
@@ -3775,13 +3721,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.heal(60));
-			return true;
+		public int getFixedHealAmount(ActivePokemon p) {
+			return 60;
 		}
 
 		public int flingDamage() {
@@ -3789,7 +3730,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class Lemonade extends Item implements PokemonUseItem, HoldItem {
+	static class Lemonade extends Item implements FixedHpHealer {
 		private static final long serialVersionUID = 1L;
 
 		Lemonade() {
@@ -3798,13 +3739,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.heal(80));
-			return true;
+		public int getFixedHealAmount(ActivePokemon p) {
+			return 80;
 		}
 
 		public int flingDamage() {
@@ -3812,7 +3748,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class MoomooMilk extends Item implements PokemonUseItem, HoldItem {
+	static class MoomooMilk extends Item implements FixedHpHealer {
 		private static final long serialVersionUID = 1L;
 
 		MoomooMilk() {
@@ -3821,13 +3757,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.heal(100));
-			return true;
+		public int getFixedHealAmount(ActivePokemon p) {
+			return 100;
 		}
 
 		public int flingDamage() {
@@ -3835,7 +3766,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class EnergyRoot extends Item implements PokemonUseItem, HoldItem {
+	static class EnergyRoot extends Item implements FixedHpHealer {
 		private static final long serialVersionUID = 1L;
 
 		EnergyRoot() {
@@ -3844,13 +3775,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.heal(200));
-			return true;
+		public int getFixedHealAmount(ActivePokemon p) {
+			return 200;
 		}
 
 		public int flingDamage() {
@@ -3858,7 +3784,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class HyperPotion extends Item implements PokemonUseItem, HoldItem {
+	static class HyperPotion extends Item implements FixedHpHealer {
 		private static final long serialVersionUID = 1L;
 
 		HyperPotion() {
@@ -3867,13 +3793,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.heal(200));
-			return true;
+		public int getFixedHealAmount(ActivePokemon p) {
+			return 200;
 		}
 
 		public int flingDamage() {
@@ -3881,7 +3802,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class MaxPotion extends Item implements PokemonUseItem, HoldItem {
+	static class MaxPotion extends Item implements HpHealer {
 		private static final long serialVersionUID = 1L;
 
 		MaxPotion() {
@@ -3890,13 +3811,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.healHealthFraction(1));
-			return true;
+		public int getAmountHealed(ActivePokemon p) {
+			return p.healHealthFraction(1);
 		}
 
 		public int flingDamage() {
@@ -4695,7 +4611,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	// TODO: Fishing
 	static class LureBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 
@@ -4706,7 +4621,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (false) {
+			if (Game.getPlayer().isFishing()) {
 				return new double[] { 3, 0 };
 			}
 			
@@ -5087,7 +5002,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class OranBerry extends Item implements MessageGetter, PokemonUseItem, HealthTriggeredBerry {
+	static class OranBerry extends Item implements FixedHpHealer, HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		OranBerry() {
@@ -5096,26 +5011,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			p.heal(10);
-			Messages.add(new MessageUpdate(this.getMessage(p, source)).withHp(p.getHP(), p.isPlayer()));
-			return true;
-		}
-
-		public String getGenericMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
-		public String getSourceMessage(ActivePokemon p, String sourceName) {
-			return p.getName() + " was healed by its " + this.name + "!";
-		}
-
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
+		public int getFixedHealAmount(ActivePokemon p) {
+			return 10;
 		}
 
 		public double healthTriggerRatio() {
@@ -5205,7 +5102,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class SitrusBerry extends Item implements MessageGetter, PokemonUseItem, HealthTriggeredBerry {
+	static class SitrusBerry extends Item implements HpHealer, HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		SitrusBerry() {
@@ -5214,26 +5111,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			p.healHealthFraction(1/4.0);
-			Messages.add(new MessageUpdate(this.getMessage(p, source)).withHp(p.getHP(), p.isPlayer()));
-			return true;
-		}
-
-		public String getGenericMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
-		public String getSourceMessage(ActivePokemon p, String sourceName) {
-			return p.getName() + " was healed by its " + this.name + "!";
-		}
-
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
+		public int getAmountHealed(ActivePokemon p) {
+			return p.healHealthFraction(1/4.0);
 		}
 
 		public double healthTriggerRatio() {
@@ -6246,16 +6125,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return Type.GHOST;
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
+		public int changePriority(Battle b, ActivePokemon user, Attack attack) {
 			if (user.getHPRatio() < 1/3.0) {
-				if (this instanceof ConsumableItem) {
-					user.consumeItem(b);
-				}
-				
-				priority++;
+				user.consumeItem(b);
+				return 1;
 			}
 			
-			return priority;
+			return 0;
 		}
 	}
 

@@ -225,7 +225,12 @@ public class CharacterData extends Trainer implements Serializable {
 			}
 		}
 	}
-	
+
+	public boolean isFishing() {
+		// TODO
+		return false;
+	}
+
 	public boolean isUsingRepel() {
 		return repelSteps > 0;
 	}

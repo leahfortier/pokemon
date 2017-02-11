@@ -913,19 +913,21 @@ public final class EffectInterfaces {
 	}
 
 	public interface PriorityChangeEffect {
-		int changePriority(Battle b, ActivePokemon user, Attack attack, int priority);
+		int changePriority(Battle b, ActivePokemon user, Attack attack);
 
-		static int updatePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
+		static int getModifier(Battle b, ActivePokemon user, Attack attack) {
+			int modifier = 0;
+			
 			List<Object> invokees = b.getEffectsList(user);
 			for (Object invokee : invokees) {
 				if (invokee instanceof PriorityChangeEffect && Effect.isActiveEffect(invokee, b)) {
 					
 					PriorityChangeEffect effect = (PriorityChangeEffect)invokee;
-					priority = effect.changePriority(b, user, attack, priority);
+					modifier += effect.changePriority(b, user, attack);
 				}
 			}
 			
-			return priority;
+			return modifier;
 		}
 	}
 

@@ -1555,11 +1555,7 @@ Override:
 		Header: boolean canUseOrb(ActivePokemon user)
 		AccessModifier: Private
 		Body:
-			if (!user.isPokemon(PokemonNamesies.{11})) {
-				return false;
-			}
-			
-			return user.isAttackType(Type.DRAGON) || user.isAttackType(Type.{22});
+			return user.isPokemon(PokemonNamesies.{11}) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.{22}));
 			###
 		AddMapField: Fling: 60
 		AddMapField: Price: 10000
@@ -1678,22 +1674,6 @@ Override:
 	*
 ***
 Override:
-	HoldHealer:
-		AddMapField: SourceUse:
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-
-			{0};
-			Messages.add(new MessageUpdate(this.getMessage(p, source)).withHp(p.getHP(), p.isPlayer()));
-			return true;
-			###
-		AddInterface: MessageGetter
-		AddMapField: SourceMessage: p.getName() + " was healed by its " + this.name + "!"
-		AddMapField: GenericMessage: p.getName() + "'s health was restored!"
-	*
-***
-Override:
 	SourceUse:
 		Header: boolean use(ActivePokemon p, CastSource source)
 		AccessModifier: Private
@@ -1716,21 +1696,27 @@ Override:
 			###
 	*
 ***
+FixedHpHealer:
+	FixedHealAmount:
+		Header: int getFixedHealAmount(ActivePokemon p)
+	*
+***
+HpHealer:
+	GetAmountHealed:
+		Header: int getAmountHealed(ActivePokemon p)
+		Optional: True
+	*
+***
 Override:
 	HealAmt:
-		AddInterface: PokemonUseItem
-		AddMapField: PokemonUse:
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.heal({0}));
-			return true;
+		AddInterface: FixedHpHealer
+		AddMapField: FixedHealAmount:
+			return {0};
 			###
 		AddMapField: Cat: Medicine
 		AddMapField: BattleCat: HP_PP
 		AddMapField: Fling: 30
-		AddInterface: HoldItem
+		AddInterface: Hidden-HoldItem
 	*
 ***
 Override:
@@ -2250,20 +2236,17 @@ TechnicalMachine:
 		AddMapField: Cat: TM
 	*
 ***
+Override:
+	ChangePriorityAbility:
+		AddInterface: PriorityChangeEffect
+		AddMapField: ChangePriority:
+			return {0} ? 1 : 0;
+			###
+	*
+***
 PriorityChangeEffect:
 	ChangePriority:
-		Header: int changePriority(Battle b, ActivePokemon user, Attack attack, int priority)
-		Body:
-			if ({0}) {
-				if (this instanceof ConsumableItem) {
-					user.consumeItem(b);
-				}
-				
-				priority++;
-			}
-			
-			return priority;
-			###
+		Header: int changePriority(Battle b, ActivePokemon user, Attack attack)
 	*
 ***
 IncenseItem:

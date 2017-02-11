@@ -459,10 +459,9 @@ CritStageEffect:
 ***
 PriorityChangeEffect:
 	Method:
-		Header: int changePriority(Battle b, ActivePokemon user, Attack attack, int priority)
-		Invoke: Update
-		Update: priority
-		InvokeName: updatePriority
+		Header: int changePriority(Battle b, ActivePokemon user, Attack attack)
+		Invoke: Add
+		InvokeName: getModifier
 		EffectList: user
 	*
 ***

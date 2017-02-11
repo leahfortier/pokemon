@@ -207,7 +207,7 @@ public class Bag implements Serializable {
 		if (useItem instanceof BallItem) {
 			used = player.catchPokemon(battle, (BallItem) useItem);
 		}
-		else if (useItem instanceof UseItem) {
+		else if (useItem.isUsable()) {
 			used = ((UseItem) useItem).use(Game.getPlayer(), battle, activePokemon, null);
 			if (used && player.front() == activePokemon) {
 				Messages.add(new MessageUpdate().updatePokemon(battle, activePokemon));
@@ -226,7 +226,7 @@ public class Bag implements Serializable {
 			
 			removeItem(item);
 		}
-		else if (useItem instanceof UseItem) {
+		else if (useItem.isUsable()) {
 			Messages.add(new MessageUpdate(DEFAULT_FAIL_MESSAGE));
 		}
 

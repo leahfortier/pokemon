@@ -2414,16 +2414,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.PRANKSTER, "Gives priority to a status move.");
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
-			if (attack.isStatusMove()) {
-				if (this instanceof ConsumableItem) {
-					user.consumeItem(b);
-				}
-				
-				priority++;
-			}
-			
-			return priority;
+		public int changePriority(Battle b, ActivePokemon user, Attack attack) {
+			return attack.isStatusMove() ? 1 : 0;
 		}
 	}
 
@@ -3373,16 +3365,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.GALE_WINGS, "Gives priority to Flying-type moves.");
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
-			if (attack.getActualType() == Type.FLYING) {
-				if (this instanceof ConsumableItem) {
-					user.consumeItem(b);
-				}
-				
-				priority++;
-			}
-			
-			return priority;
+		public int changePriority(Battle b, ActivePokemon user, Attack attack) {
+			return attack.getActualType() == Type.FLYING ? 1 : 0;
 		}
 	}
 
@@ -3556,16 +3540,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.TRIAGE, "Gives priority to a healing move.");
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
-			if (attack.isMoveType(MoveType.HEALING)) {
-				if (this instanceof ConsumableItem) {
-					user.consumeItem(b);
-				}
-				
-				priority++;
-			}
-			
-			return priority;
+		public int changePriority(Battle b, ActivePokemon user, Attack attack) {
+			return attack.isMoveType(MoveType.HEALING) ? 1 : 0;
 		}
 	}
 

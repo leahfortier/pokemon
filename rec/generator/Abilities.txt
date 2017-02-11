@@ -1044,8 +1044,7 @@ Poison Touch:
 *
 Prankster:
 	Desc: Gives priority to a status move.
-	Int: PriorityChangeEffect
-	ChangePriority: attack.isStatusMove()
+	ChangePriorityAbility: attack.isStatusMove()
 *
 Wonder Skin:
 	Desc: Makes status-changing moves more likely to miss.
@@ -1438,8 +1437,7 @@ Flower Veil:
 *
 Gale Wings:
 	Desc: Gives priority to Flying-type moves.
-	Int: PriorityChangeEffect
-	ChangePriority: attack.getActualType() == Type.FLYING
+	ChangePriorityAbility: attack.getActualType() == Type.FLYING
 *
 Protean:
 	Desc: Changes the Pok\u00e9mon's type to the type of the move it's using.
@@ -1529,8 +1527,7 @@ Liquid Voice:
 *
 Triage:
 	Desc: Gives priority to a healing move.
-	Int: PriorityChangeEffect
-	ChangePriority: attack.isMoveType(MoveType.HEALING)
+	ChangePriorityAbility: attack.isMoveType(MoveType.HEALING)
 *
 Galvanize:
 	Desc: Normal-type moves become Electric-type moves. The power of those moves is boosted a little.

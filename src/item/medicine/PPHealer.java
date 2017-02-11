@@ -2,14 +2,14 @@ package item.medicine;
 
 import battle.attack.Move;
 import battle.effect.generic.CastSource;
-import battle.effect.holder.ItemHolder;
+import item.ItemInterface;
 import item.hold.HoldItem;
 import item.use.MoveUseItem;
 import main.Global;
 import message.Messages;
 import pokemon.ActivePokemon;
 
-public interface PPHealer extends MoveUseItem, HoldItem, ItemHolder {
+public interface PPHealer extends MoveUseItem, HoldItem, ItemInterface {
     int restoreAmount(Move toRestore);
 
     // TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed

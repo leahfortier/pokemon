@@ -28,7 +28,7 @@ Fields:
 No Item:
 	Int: HoldItem
 	Cat: Misc
-	Desc: YOU SHUOLDN'T SEE THIS
+	Desc: YOU SHOULDN'T SEE THIS
 	Price: -1
 	Fling: 9001
 *
@@ -1506,19 +1506,14 @@ Hyper Potion:
 	HealAmt: 200
 *
 Max Potion:
-	Int: PokemonUseItem, HoldItem
 	Cat: Medicine
 	BattleCat: HP_PP
 	Desc: A spray-type medicine for wounds. It completely restores the HP of a single Pok\u00e9mon.
 	Price: 2500
 	Fling: 30
-	PokemonUse:
-		if (!this.canHealHealth(p)) {
-			return false;
-		}
-	
-		this.addHealMessage(p, p.healHealthFraction(1));
-		return true;
+	Int: HpHealer
+	GetAmountHealed: 
+		return p.healHealthFraction(1);
 		###
 *
 Revive:
@@ -1758,8 +1753,7 @@ Love Ball:
 Lure Ball:
 	Desc: A Pok\u00e9 Ball for catching Pok\u00e9mon hooked by a Rod when fishing.
 	Price: 200
-	Comments: // TODO: Fishing
-	CatchRateCondition: 3 false
+	CatchRateCondition: 3 Game.getPlayer().isFishing()
 *
 Luxury Ball:
 	Desc: A comfortable Pok\u00e9 Ball that makes a caught wild Pok\u00e9mon quickly grow friendly.
@@ -1910,7 +1904,10 @@ Oran Berry:
 	NGType: Poison
 	NGPow: 80
 	FixedBerryHealthTrigger: 3
-	HoldHealer: p.heal(10)
+	Int: FixedHpHealer
+	FixedHealAmount:
+		return 10;
+		###
 *
 Persim Berry:
 	Int: BattleUseItem, MessageGetter, GainableEffectBerry
@@ -1946,7 +1943,10 @@ Sitrus Berry:
 	NGType: Psychic
 	NGPow: 80
 	FixedBerryHealthTrigger: 2
-	HoldHealer: p.healHealthFraction(1/4.0)
+	Int: HpHealer
+	GetAmountHealed: 
+		return p.healHealthFraction(1/4.0);
+		###
 *
 Razz Berry:
 	Int: Berry
@@ -2112,7 +2112,14 @@ Custap Berry:
 	NGType: Ghost
 	NGPow: 100
 	Int: Berry, PriorityChangeEffect
-	ChangePriority: user.getHPRatio() < 1/3.0
+	ChangePriority: 
+		if (user.getHPRatio() < 1/3.0) {
+			user.consumeItem(b);
+			return 1;
+		}
+		
+		return 0;
+		###
 *
 Enigma Berry:
 	Desc: If held by a Pok\u00e9mon, it restores its HP if it is hit by any supereffective attack.
