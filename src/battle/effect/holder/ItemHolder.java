@@ -4,4 +4,5 @@ import item.Item;
 
 public interface ItemHolder {
 	Item getItem();
+	String getName();
 }

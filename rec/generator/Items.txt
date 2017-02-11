@@ -1420,19 +1420,8 @@ Full Restore:
 	Price: 3000
 	Fling: 30
 	PokemonUse:
-		// Does not apply to the dead
-		if (p.isActuallyDead()) {
-			return false;
-		}
-		
-		// Does not apply to the fully healed -- status condition or otherwise
-		if (!p.hasStatus() && p.fullHealth()) {
-			return false;
-		}
-	
-		Status.removeStatus(null, p, CastSource.USE_ITEM);
-		this.addHealMessage(p, p.healHealthFraction(1));
-		return true;
+		// Essentially Full Restore is just a combined Max Potion and Full Heal
+		return new MaxPotion().use(p) || new FullHeal().use(p);
 		###
 *
 Elixir:
@@ -1443,7 +1432,7 @@ Elixir:
 Max Elixir:
 	Desc: It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.
 	Price: 4500
-	Elixir: m.getMaxPP()
+	Elixir: toRestore.getMaxPP()
 *
 Ether:
 	Desc: It restores the PP of a Pok\u00e9mon's selected move by a maximum of 10 points.
@@ -1456,7 +1445,7 @@ Ether:
 Max Ether:
 	Desc: It fully restores the PP of a single selected move that has been learned by the target Pok\u00e9mon.
 	Price: 2000
-	Ether: m.getMaxPP()
+	Ether: toRestore.getMaxPP()
 	Int: HoldItem
 	Cat: Medicine
 	Fling: 30
@@ -1880,19 +1869,15 @@ Aspear Berry:
 	NGType: Ice
 *
 Leppa Berry:
-	Int: MoveUseItem, EndTurnEffect, GainableEffectBerry
+	Int: EndTurnEffect, GainableEffectBerry
 	Desc: If held by a Pok\u00e9mon, it restores a move's PP by 10.
 	NGType: Fighting
 	NGPow: 80
-	BattleCat: HP_PP
-	MoveUse:
-		return m.increasePP(10);
-		###
+	Ether: 10
 	ApplyEndTurn:
 		for (Move m : victim.getMoves(b)) {
 			if (m.getPP() == 0) {
-				use(victim, m);
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " restored " + m.getAttack().getName() + "'s PP!"));
+				use(victim, m, CastSource.HELD_ITEM);
 				victim.consumeItem(b);
 				break;
 			}
@@ -2169,12 +2154,7 @@ Starf Berry:
 		
 		// Raise random battle stat
 		Stat stat = Stat.getStat(rand, true);
-		if (user.getAttributes().modifyStage(user, user, 1, stat, b, source)) {
-			return true;
-		}
-		
-
-		return false;
+		return user.getAttributes().modifyStage(user, user, 1, stat, b, source);
 		###
 *
 # Other Items

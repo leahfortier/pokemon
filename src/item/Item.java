@@ -6,6 +6,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.effect.DefiniteEscape;
+import battle.effect.MessageGetter;
 import battle.effect.RepellingEffect;
 import battle.effect.SimpleStatModifyingEffect;
 import battle.effect.StallingEffect;
@@ -49,12 +50,14 @@ import item.hold.ConsumableItem;
 import item.hold.EVItem;
 import item.hold.HoldItem;
 import item.hold.IncenseItem;
-import battle.effect.MessageGetter;
 import item.hold.PowerItem;
 import item.hold.SpecialTypeItem.DriveItem;
 import item.hold.SpecialTypeItem.GemItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
+import item.medicine.AllPPHealer;
+import item.medicine.PPHealer;
+import item.medicine.StatusHealer;
 import item.use.BallItem;
 import item.use.BattleUseItem;
 import item.use.MoveUseItem;
@@ -3424,7 +3427,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class Antidote extends Item implements HoldItem, PokemonUseItem {
+	static class Antidote extends Item implements HoldItem, StatusHealer {
 		private static final long serialVersionUID = 1L;
 
 		Antidote() {
@@ -3437,21 +3440,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return 30;
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.POISONED)) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
-		}
-
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.POISONED;
 		}
 	}
 
-	static class Awakening extends Item implements HoldItem, PokemonUseItem {
+	static class Awakening extends Item implements HoldItem, StatusHealer {
 		private static final long serialVersionUID = 1L;
 
 		Awakening() {
@@ -3464,21 +3458,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return 30;
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.ASLEEP)) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
-		}
-
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.ASLEEP;
 		}
 	}
 
-	static class BurnHeal extends Item implements HoldItem, PokemonUseItem {
+	static class BurnHeal extends Item implements HoldItem, StatusHealer {
 		private static final long serialVersionUID = 1L;
 
 		BurnHeal() {
@@ -3491,21 +3476,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return 30;
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.BURNED)) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
-		}
-
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.BURNED;
 		}
 	}
 
-	static class IceHeal extends Item implements HoldItem, PokemonUseItem {
+	static class IceHeal extends Item implements HoldItem, StatusHealer {
 		private static final long serialVersionUID = 1L;
 
 		IceHeal() {
@@ -3518,21 +3494,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return 30;
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.FROZEN)) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
-		}
-
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.FROZEN;
 		}
 	}
 
-	static class ParalyzeHeal extends Item implements HoldItem, PokemonUseItem {
+	static class ParalyzeHeal extends Item implements HoldItem, StatusHealer {
 		private static final long serialVersionUID = 1L;
 
 		ParalyzeHeal() {
@@ -3545,21 +3512,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return 30;
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.PARALYZED)) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
-		}
-
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.PARALYZED;
 		}
 	}
 
-	static class FullHeal extends Item implements HoldItem, PokemonUseItem {
+	static class FullHeal extends Item implements HoldItem, StatusHealer {
 		private static final long serialVersionUID = 1L;
 
 		FullHeal() {
@@ -3568,27 +3526,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			// Does not apply to the dead
-			if (p.isActuallyDead()) {
-				return false;
-			}
-			
-			// YOU'RE FINE
-			if (!p.hasStatus()) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			// Does not apply to the healthy and the dead
+			return statusCondition != StatusCondition.NO_STATUS && statusCondition != StatusCondition.FAINTED;
 		}
 	}
 
@@ -3603,19 +3547,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			// Does not apply to the dead
-			if (p.isActuallyDead()) {
-				return false;
-			}
-			
-			// Does not apply to the fully healed -- status condition or otherwise
-			if (!p.hasStatus() && p.fullHealth()) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, CastSource.USE_ITEM);
-			this.addHealMessage(p, p.healHealthFraction(1));
-			return true;
+			// Essentially Full Restore is just a combined Max Potion and Full Heal
+			return new MaxPotion().use(p) || new FullHeal().use(p);
 		}
 
 		public int flingDamage() {
@@ -3623,20 +3556,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class Elixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class Elixir extends Item implements AllPPHealer, HoldItem {
 		private static final long serialVersionUID = 1L;
-		private boolean use(ActivePokemon p, List<Move> moves) {
-			boolean changed = false;
-			for (Move m : moves) {
-				changed |= m.increasePP(10);
-			}
-			
-			if (changed) {
-				Messages.add(new MessageUpdate(p.getName() + "'s PP was restored!"));
-			}
-			
-			return changed;
-		}
 
 		Elixir() {
 			super(ItemNamesies.ELIXIR, "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 172);
@@ -3644,16 +3565,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			return use(p, p.getActualMoves());
-		}
-
-		public boolean use(ActivePokemon p, Battle b) {
-			return use(p, p.getMoves(b));
-		}
-
-		public boolean use(Trainer t, Battle b, ActivePokemon p, Move m) {
-			return b == null ? use(p) : use(p, b);
+		public int restoreAmount(Move toRestore) {
+			return 10;
 		}
 
 		public int flingDamage() {
@@ -3661,20 +3574,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class MaxElixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
+	static class MaxElixir extends Item implements AllPPHealer, HoldItem {
 		private static final long serialVersionUID = 1L;
-		private boolean use(ActivePokemon p, List<Move> moves) {
-			boolean changed = false;
-			for (Move m : moves) {
-				changed |= m.increasePP(m.getMaxPP());
-			}
-			
-			if (changed) {
-				Messages.add(new MessageUpdate(p.getName() + "'s PP was restored!"));
-			}
-			
-			return changed;
-		}
 
 		MaxElixir() {
 			super(ItemNamesies.MAX_ELIXIR, "It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.", BagCategory.MEDICINE, 173);
@@ -3682,16 +3583,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p) {
-			return use(p, p.getActualMoves());
-		}
-
-		public boolean use(ActivePokemon p, Battle b) {
-			return use(p, p.getMoves(b));
-		}
-
-		public boolean use(Trainer t, Battle b, ActivePokemon p, Move m) {
-			return b == null ? use(p) : use(p, b);
+		public int restoreAmount(Move toRestore) {
+			return toRestore.getMaxPP();
 		}
 
 		public int flingDamage() {
@@ -3699,7 +3592,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class Ether extends Item implements HoldItem, MoveUseItem {
+	static class Ether extends Item implements HoldItem, PPHealer {
 		private static final long serialVersionUID = 1L;
 
 		Ether() {
@@ -3712,18 +3605,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return 30;
 		}
 
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-			if (m.increasePP(10)) {
-				Messages.add(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!");
-				return true;
-			}
-			
-			return false;
+		public int restoreAmount(Move toRestore) {
+			return 10;
 		}
 	}
 
-	static class MaxEther extends Item implements HoldItem, MoveUseItem {
+	static class MaxEther extends Item implements HoldItem, PPHealer {
 		private static final long serialVersionUID = 1L;
 
 		MaxEther() {
@@ -3736,14 +3623,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return 30;
 		}
 
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-			if (m.increasePP(m.getMaxPP())) {
-				Messages.add(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!");
-				return true;
-			}
-			
-			return false;
+		public int restoreAmount(Move toRestore) {
+			return toRestore.getMaxPP();
 		}
 	}
 
@@ -5023,7 +4904,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class CheriBerry extends Item implements StatusBerry, PokemonUseItem {
+	static class CheriBerry extends Item implements StatusBerry, StatusHealer {
 		private static final long serialVersionUID = 1L;
 
 		CheriBerry() {
@@ -5032,21 +4913,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.PARALYZED)) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.PARALYZED;
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return use(user, source);
-		}
-
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5058,7 +4930,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class ChestoBerry extends Item implements StatusBerry, PokemonUseItem {
+	static class ChestoBerry extends Item implements StatusBerry, StatusHealer {
 		private static final long serialVersionUID = 1L;
 
 		ChestoBerry() {
@@ -5067,21 +4939,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.ASLEEP)) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.ASLEEP;
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return use(user, source);
-		}
-
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5093,7 +4956,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class PechaBerry extends Item implements StatusBerry, PokemonUseItem {
+	static class PechaBerry extends Item implements StatusBerry, StatusHealer {
 		private static final long serialVersionUID = 1L;
 
 		PechaBerry() {
@@ -5102,21 +4965,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.POISONED)) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.POISONED;
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return use(user, source);
-		}
-
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5128,7 +4982,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class RawstBerry extends Item implements StatusBerry, PokemonUseItem {
+	static class RawstBerry extends Item implements StatusBerry, StatusHealer {
 		private static final long serialVersionUID = 1L;
 
 		RawstBerry() {
@@ -5137,21 +4991,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.BURNED)) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.BURNED;
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return use(user, source);
-		}
-
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5163,7 +5008,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class AspearBerry extends Item implements StatusBerry, PokemonUseItem {
+	static class AspearBerry extends Item implements StatusBerry, StatusHealer {
 		private static final long serialVersionUID = 1L;
 
 		AspearBerry() {
@@ -5172,21 +5017,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.FROZEN)) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.FROZEN;
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return use(user, source);
-		}
-
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5198,7 +5034,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class LeppaBerry extends Item implements MoveUseItem, EndTurnEffect, GainableEffectBerry {
+	static class LeppaBerry extends Item implements EndTurnEffect, GainableEffectBerry, PPHealer {
 		private static final long serialVersionUID = 1L;
 
 		LeppaBerry() {
@@ -5207,15 +5043,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public boolean use(ActivePokemon p, Move m) {
-			return m.increasePP(10);
-		}
-
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			for (Move m : victim.getMoves(b)) {
 				if (m.getPP() == 0) {
-					use(victim, m);
-					Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " restored " + m.getAttack().getName() + "'s PP!"));
+					use(victim, m, CastSource.HELD_ITEM);
 					victim.consumeItem(b);
 					break;
 				}
@@ -5241,6 +5072,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			
 			use(user, lowestPPMove);
 			return true;
+		}
+
+		public int restoreAmount(Move toRestore) {
+			return 10;
 		}
 
 		public int naturalGiftPower() {
@@ -5343,7 +5178,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class LumBerry extends Item implements StatusBerry, PokemonUseItem {
+	static class LumBerry extends Item implements StatusBerry, StatusHealer {
 		private static final long serialVersionUID = 1L;
 
 		LumBerry() {
@@ -5352,23 +5187,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		private boolean use(ActivePokemon p, CastSource source) {
-			// Does not apply to the dead
-			if (p.isActuallyDead()) {
-				return false;
-			}
-			
-			// YOU'RE FINE
-			if (!p.hasStatus()) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
-		}
-
-		public boolean use(ActivePokemon p) {
-			return use(p, CastSource.USE_ITEM);
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			// Does not apply to the healthy and the dead
+			return statusCondition != StatusCondition.NO_STATUS && statusCondition != StatusCondition.FAINTED;
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
@@ -6513,12 +6334,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			
 			// Raise random battle stat
 			Stat stat = Stat.getStat(rand, true);
-			if (user.getAttributes().modifyStage(user, user, 1, stat, b, source)) {
-				return true;
-			}
-			
-			
-			return false;
+			return user.getAttributes().modifyStage(user, user, 1, stat, b, source);
 		}
 
 		public int naturalGiftPower() {

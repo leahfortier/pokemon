@@ -1519,50 +1519,35 @@ Override:
 ***
 Override:
 	Ether:
-		AddInterface: MoveUseItem
 		AddMapField: BattleCat: HP_PP
-		AddMapField: MoveUse:
-			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-			if (m.increasePP({0})) {
-				Messages.add(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!");
-				return true;
-			}
-			
-			return false;
+		AddInterface: PPHealer
+		AddMapField: PPRestoreAmount:
+			return {0};
 			###
+	*
+***
+# Like Ethers and such
+PPHealer:
+	PPRestoreAmount:
+		Header: int restoreAmount(Move toRestore)
+	*
+***
+# Like Elixirs and such
+AllPPHealer:
+	AllPPRestoreAmount:
+		Header: int restoreAmount(Move toRestore)
 	*
 ***
 Override:
 	Elixir:
-		AddMapField: Field:
-			private boolean use(ActivePokemon p, List<Move> moves) {
-				boolean changed = false;
-				for (Move m : moves) {
-					changed |= m.increasePP({0});
-				}
-				
-				if (changed) {
-					Messages.add(new MessageUpdate(p.getName() + "'s PP was restored!"));
-				}
-				
-				return changed;
-			}
-			###
-		AddMapField: BattleUse:
-			return use(p, p.getMoves(b));
-			###
-		AddMapField: PokemonUse:
-			return use(p, p.getActualMoves());
+		AddInterface: AllPPHealer
+		AddMapField: AllPPRestoreAmount:
+			return {0};
 			###
 		AddMapField: Fling: 30
-		AddInterface: PokemonUseItem
-		AddInterface: BattleUseItem
 		AddInterface: HoldItem
 		AddMapField: Cat: Medicine
 		AddMapField: BattleCat: HP_PP
-		AddMapField: FullItemUse:
-			return b == null ? use(p) : use(p, b);
-			###
 	*
 ***
 Override:
@@ -1663,19 +1648,10 @@ Override:
 Override:
 	StatusHealAll:
 		AddMapField: BattleCat: Status
-		AddMapField: SourceUse:
-			// Does not apply to the dead
-			if (p.isActuallyDead()) {
-				return false;
-			}
-			
-			// YOU'RE FINE
-			if (!p.hasStatus()) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
+		AddInterface: StatusHealer
+		AddMapField: ShouldHealStatus:
+			// Does not apply to the healthy and the dead
+			return statusCondition != StatusCondition.NO_STATUS && statusCondition != StatusCondition.FAINTED;
 			###
 	*
 ***
@@ -1727,15 +1703,16 @@ Override:
 			###
 	*
 ***
+StatusHealer:
+	ShouldHealStatus:
+		Header: boolean shouldHeal(StatusCondition statusCondition)
+	*
+***
 Override:
 	StatusRemove:
-		AddMapField: SourceUse:
-			if (!p.hasStatus(StatusCondition.{00})) {
-				return false;
-			}
-
-			Status.removeStatus(null, p, source);
-			return true;
+		AddInterface: StatusHealer
+		AddMapField: ShouldHealStatus:
+			return statusCondition == StatusCondition.{00};
 			###
 	*
 ***
@@ -2024,9 +2001,6 @@ Override:
 StatusBerry:
 	StatusBerryGainEffect:
 		Optional: True
-		AddMapField: GainEffect:
-			return use(user, source);
-			###
 		AddInterface: Hidden-GainableEffectBerry
 		AddMapField: NGPow: 80
 	*
