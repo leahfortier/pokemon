@@ -24,7 +24,7 @@ class NoStatus extends Status {
         return StringUtils.empty();
     }
 
-    public String getRemoveMessage(ActivePokemon victim) {
+    public String getGenericRemoveMessage(ActivePokemon victim) {
         return StringUtils.empty();
     }
 

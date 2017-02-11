@@ -1556,7 +1556,6 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	// TODO: Sticky Hold
 	static class BugBite extends Attack {
 		private static final long serialVersionUID = 1L;
 
@@ -1568,15 +1567,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Item i = victim.getHeldItem(b);
-			if (i instanceof Berry) {
-				Messages.add(new MessageUpdate(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!"));
-				victim.consumeItem(b);
-				
-				if (i instanceof GainableEffectBerry) {
-					((GainableEffectBerry)i).gainBerryEffect(b, user, CastSource.USE_ITEM);
-				}
-			}
+			user.stealBerry(b, victim);
 		}
 	}
 
@@ -2359,15 +2350,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Item i = victim.getHeldItem(b);
-			if (i instanceof Berry) {
-				Messages.add(new MessageUpdate(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!"));
-				victim.consumeItem(b);
-				
-				if (i instanceof GainableEffectBerry) {
-					((GainableEffectBerry)i).gainBerryEffect(b, user, CastSource.USE_ITEM);
-				}
-			}
+			user.stealBerry(b, victim);
 		}
 	}
 
@@ -3587,12 +3570,12 @@ public abstract class Attack implements Serializable {
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
-				if (!p.hasStatus(StatusCondition.FAINTED)) {
+				if (!p.isActuallyDead()) {
 					p.removeStatus();
 				}
 			}
 			
-			Messages.add(new MessageUpdate("All status problems were cured!"));
+			Messages.add("All status problems were cured!");
 		}
 	}
 
@@ -7630,12 +7613,12 @@ public abstract class Attack implements Serializable {
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
-				if (!p.hasStatus(StatusCondition.FAINTED)) {
+				if (!p.isActuallyDead()) {
 					p.removeStatus();
 				}
 			}
 			
-			Messages.add(new MessageUpdate("All status problems were cured!"));
+			Messages.add("All status problems were cured!");
 		}
 	}
 

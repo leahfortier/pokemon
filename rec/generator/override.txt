@@ -661,7 +661,7 @@ Override:
 				super.cast(b, caster, victim, source, printCast);
 			}
 			else {
-				Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+				Messages.add(getCastMessage(b, caster, victim, source));
 			}
 			###
 	*
@@ -673,7 +673,7 @@ Override:
 ***
 Override:
 	CastMessage:
-		Header: String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim)
+		Header: String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source)
 		Body:
 			return {0};
 			###
@@ -1274,24 +1274,34 @@ HoldItem:
 		Optional: True
 	*
 ***
+UseItem:
+	FullItemUse:
+		Header: boolean use(Trainer t, Battle b, ActivePokemon p, Move m)
+		Optional: True
+	*
+***
 TrainerUseItem:
 	TrainerUse:
 		Header: boolean use(Trainer t)
+		AddInterface: Hidden-UseItem
 	*
 ***
 PokemonUseItem:
 	PokemonUse:
 		Header: boolean use(ActivePokemon p)
+		AddInterface: Hidden-UseItem
 	*
 ***
 BattleUseItem:
 	BattleUse:
 		Header: boolean use(ActivePokemon p, Battle b)
+		AddInterface: Hidden-UseItem
 	*
 ***
 MoveUseItem:
 	MoveUse:
 		Header: boolean use(ActivePokemon p, Move m)
+		AddInterface: Hidden-UseItem
 	*
 ***
 Override:
@@ -1336,11 +1346,7 @@ Override:
 ***
 Override:
 	Wing:
-		Header: Stat toIncrease()
-		Body:
-			return Stat.{00};
-			###
-		AddMapField: EVIncreaseAmt: 1
+		AddMapField: EVIncreaseAmt: {0} 1
 		AddMapField: Price: 3000
 		AddMapField: Fling: 20
 		AddInterface: HoldItem
@@ -1349,11 +1355,7 @@ Override:
 ***
 Override:	
 	Vitamin:
-		Header: Stat toIncrease()
-		Body:
-			return Stat.{00};
-			###
-		AddMapField: EVIncreaseAmt: 10
+		AddMapField: EVIncreaseAmt: {0} 10
 		AddMapField: Price: 9800
 		AddMapField: Fling: 30
 		AddInterface: HoldItem
@@ -1496,13 +1498,13 @@ Override:
 Override:
 	PPIncrease:
 		AddMapField: Fling: 30
-		AddMapField: Field:
-			private String increase;
-			###
-		AddMapField: SuccessMessage: p.getName() + "'s " + increase + "'s Max PP was increased!"
 		AddMapField: MoveUse:
-			increase = m.getAttack().getName();
-			return m.increaseMaxPP({0});
+			if (m.increaseMaxPP({0})) {
+				Messages.add(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!");
+				return true;
+			}
+			
+			return false;
 			###
 		AddInterface: MoveUseItem
 		AddInterface: HoldItem
@@ -1515,49 +1517,52 @@ Override:
 		AddMapField: BattleCat: HP_PP
 		AddMapField: MoveUse:
 			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-			restore = m.getAttack().getName();
-			return m.increasePP({0});
+			if (m.increasePP({0})) {
+				Messages.add(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!");
+				return true;
+			}
+			
+			return false;
 			###
-		AddMapField: Field: 
-			private String restore;
-			###
-		AddMapField: SuccessMessage: p.getName() + "'s PP for " + restore + " PP was restored!"
 	*
 ***
 Override:
 	Elixir:
-		Header: int increaseAmount(Move m)
-		Body:
-			return {0};
-			###
 		AddMapField: Field:
-			private boolean use(List<Move> moves) {
+			private boolean use(ActivePokemon p, List<Move> moves) {
 				boolean changed = false;
 				for (Move m : moves) {
-					changed |= m.increasePP(increaseAmount(m));
+					changed |= m.increasePP({0});
+				}
+				
+				if (changed) {
+					Messages.add(new MessageUpdate(p.getName() + "'s PP was restored!"));
 				}
 				
 				return changed;
 			}
 			###
 		AddMapField: BattleUse:
-			return use(p.getMoves(b));
+			return use(p, p.getMoves(b));
 			###
 		AddMapField: PokemonUse:
-			return use(p.getActualMoves());
+			return use(p, p.getActualMoves());
 			###
-		AddMapField: SuccessMessage: p.getName() + "'s PP was restored!"
 		AddMapField: Fling: 30
 		AddInterface: PokemonUseItem
 		AddInterface: BattleUseItem
 		AddInterface: HoldItem
 		AddMapField: Cat: Medicine
 		AddMapField: BattleCat: HP_PP
+		AddMapField: FullItemUse:
+			return b == null ? use(p) : use(p, b);
+			###
 	*
 ***
 Override:
 	TimeSpaceOrb:
 		Header: boolean canUseOrb(ActivePokemon user)
+		AccessModifier: Private
 		Body:
 			if (!user.isPokemon(PokemonNamesies.{11})) {
 				return false;
@@ -1644,18 +1649,17 @@ MemoryItem:
 Override:
 	EvolutionItem:
 		AddInterface: PokemonUseItem
-		AddMapField: SuccessMessage: ""
 		AddMapField: PokemonUse:
 			return p.checkEvolution(this.namesies);
 			###
 	*
 ***
 Override:
-	FullHeal:
-		Header: boolean removeStatus(ActivePokemon p, CastSource source)
-		Body:
+	StatusHealAll:
+		AddMapField: BattleCat: Status
+		AddMapField: SourceUse:
 			// Does not apply to the dead
-			if (p.hasStatus(StatusCondition.FAINTED)) {	
+			if (p.isActuallyDead()) {
 				return false;
 			}
 			
@@ -1664,18 +1668,9 @@ Override:
 				return false;
 			}
 			
-			message = Status.getRemoveStatus(null, p, source);
+			Status.removeStatus(null, p, source);
 			return true;
 			###
-		AddMapField: PokemonUse:
-			return removeStatus(p, CastSource.USE_ITEM);
-			###
-		AddMapField: Field: 
-			private String message;
-			###
-		AddMapField: SuccessMessage: message
-		AddMapField: BattleCat: Status
-		AddInterface: PokemonUseItem
 	*
 ***
 Override:
@@ -1687,50 +1682,68 @@ Override:
 		AddMapField: Fling: 30
 		AddMapField: PokemonUse:
 			// Only applies to the dead
-			if (!p.hasStatus(StatusCondition.FAINTED)) {
+			if (!p.isActuallyDead()) {
 				return false;
 			}
 			
 			p.removeStatus();
 			p.healHealthFraction({1});
 			
+			Messages.add(p.getName() + " was {2} revived!");
+			
 			return true;
 			###
-		AddMapField: SuccessMessage: p.getName() + " was {2} revived!"
+	*
+***
+Override:
+	HoldHealer:
+		AddMapField: SourceUse:
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+
+			{0};
+			Messages.add(new MessageUpdate(this.getMessage(p, source)).withHp(p.getHP(), p.isPlayer()));
+			return true;
+			###
+		AddInterface: MessageGetter
+		AddMapField: SourceMessage: p.getName() + " was healed by its " + this.name + "!"
+		AddMapField: GenericMessage: p.getName() + "'s health was restored!"
+	*
+***
+Override:
+	SourceUse:
+		Header: boolean use(ActivePokemon p, CastSource source)
+		AccessModifier: Private
+		AddInterface: PokemonUseItem
+		AddMapField: PokemonUse:
+			return use(p, CastSource.USE_ITEM);
+			###
 	*
 ***
 Override:
 	StatusRemove:
-		Header: boolean removeStatus(ActivePokemon p, CastSource source)
-		Body:
+		AddMapField: SourceUse:
 			if (!p.hasStatus(StatusCondition.{00})) {
 				return false;
 			}
 
-			message = Status.getRemoveStatus(null, p, source);
+			Status.removeStatus(null, p, source);
 			return true;
-			###
-		AddInterface: PokemonUseItem
-		AddMapField: PokemonUse:
-			return removeStatus(p, CastSource.USE_ITEM);
-			###
-		AddMapField: SuccessMessage: message
-		AddMapField: Field:
-			private String message;
 			###
 	*
 ***
 Override:
 	HealAmt:
-		Header: int healAmount()
-		Body:
-			return {0};
-			###
 		AddInterface: PokemonUseItem
 		AddMapField: PokemonUse:
-			return p.heal(healAmount()) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.heal({0}));
+			return true;
 			###
-		AddMapField: SuccessMessage: p.getName() + "'s health was restored!"
 		AddMapField: Cat: Medicine
 		AddMapField: BattleCat: HP_PP
 		AddMapField: Fling: 30
@@ -1739,20 +1752,14 @@ Override:
 ***
 Override:
 	XStageIncrease:
-		Header: Stat toIncrease()
-		AccessModifier: Private
-		Body:
-			return Stat.{00};
-			###
 		AddMapField: Fling: 30
 		AddMapField: Cat: Stat
 		AddMapField: BattleCat: Battle
 		AddInterface: HoldItem
 		AddInterface: BattleUseItem
 		AddMapField: BattleUse:
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.{00}, b, CastSource.USE_ITEM);
 			###
-		AddMapField: SuccessMessage: p.getName() + "'s " + toIncrease().getName() + " was raised!"
 	*
 ***
 Override:
@@ -1765,18 +1772,18 @@ Override:
 ***
 Override:
 	EVIncreaseAmt:
-		Header: int increaseAmount()
-		Body:
-			return {0};
-			###
 		AddInterface: PokemonUseItem
 		AddMapField: PokemonUse:
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.{11}.index()] += {2};
 
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+
+			Messages.add(p.getName() + "'s " + Stat.{11}.getName() + " was raised!");
+			return true;
 			###
-		AddMapField: SuccessMessage: p.getName() + "'s " + toIncrease().getName() + " was raised!"
 	*
 ***
 Override:
@@ -1812,14 +1819,10 @@ BallItem:
 ***
 Override:
 	EVDecreaseBerry:
-		Header: Stat toDecrease()
-		Body:
-			return Stat.{00};
-			###
 		AddInterface: Berry
 		AddInterface: PokemonUseItem
 		AddMapField: PokemonUse:
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.{00}.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -1831,9 +1834,13 @@ Override:
 				vals[decreaseIndex] -= 10;
 			}
 
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.{00}.getName() + " was lowered!");
+			return true;
 			###
-		AddMapField: SuccessMessage: p.getName() + "'s " + toDecrease().getName() + " was lowered!"
 		AddMapField: NGPow: 90
 	*
 ***
@@ -1860,8 +1867,6 @@ Override:
 			return user.getAttributes().modifyStage(user, user, 1, Stat.{00}, b, source);
 			###
 		AddMapField: FixedBerryHealthTrigger: 4
-		AddMapField: SuccessMessage: p.getName() + "'s " + Stat.{00}.getName() + " increased!"
-		AddMapField: HoldSuccessMessage: ""
 		AddMapField: NGPow: 100
 	*
 ***
@@ -1895,12 +1900,12 @@ Override:
 	HealPartyStatus:
 		AddMapField: UniqueEffects:
 			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
-				if (!p.hasStatus(StatusCondition.FAINTED)) {
+				if (!p.isActuallyDead()) {
 					p.removeStatus();
 				}
 			}
 			
-			Messages.add(new MessageUpdate("All status problems were cured!"));
+			Messages.add("All status problems were cured!");
 			###
 		AddMapField: SelfTarget: True
 	*
@@ -2014,32 +2019,20 @@ StatusBerry:
 	StatusBerryGainEffect:
 		Optional: True
 		AddMapField: GainEffect:
-			if (!removeStatus(user, CastSource.HELD_ITEM)) {
-				return false;
-			}
-			
-			holdMessage = message;
-			return true;
+			return use(user, source);
 			###
 		AddInterface: Hidden-GainableEffectBerry
-		AddMapField: HoldSuccessMessage: holdMessage
 		AddMapField: NGPow: 80
-		AddMapField: Field:
-			private String holdMessage;
-			###
 	*
 ***
 GainableEffectBerry:
 	GainEffect:
-		Header: boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source)
+		Header: boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
 		Optional: True
 		Default:
-			return use(user);
+			return use(user, source);
 			###
 		AddInterface: Hidden-Berry
-		AddMapField: FlingEffect:
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-			###
 	*
 ***
 Override:
@@ -2076,15 +2069,11 @@ Berry:
 ***
 Override:
 	RepelSteps:
-		Header: int repelSteps()
-		Body:
-			return {0};
-			###
 		AddInterface: HoldItem
 		AddMapField: Fling: 30
 		AddInterface: TrainerUseItem
 		AddMapField: TrainerUse:
-			if (!(t instanceof CharacterData)) {
+			if (t != Game.getPlayer()) {
 				Global.error("Only the character should be using a Repel item");
 				return false;
 			}
@@ -2094,10 +2083,10 @@ Override:
 				return false;
 			}
 
-			player.addRepelSteps(repelSteps());
+			player.addRepelSteps({0});
+			Messages.add("Weak wild Pok\u00e9mon will not appear for {0} steps!");
 			return true;
 			###
-		AddMapField: SuccessMessage: "Weak wild Pok\u00e9mon will not appear for " + repelSteps() + " steps!"
 		AddMapField: Cat: Misc
 	*
 ***
@@ -2187,29 +2176,19 @@ Override:
 Override:
 	ConsumeBerry:
 		AddMapField: UniqueEffects: 
-			Item i = victim.getHeldItem(b);
-			if (i instanceof Berry) {
-				Messages.add(new MessageUpdate(user.getName() + " ate " + victim.getName() + "'s " + i.getName() + "!"));
-				victim.consumeItem(b);
-				
-				if (i instanceof GainableEffectBerry) {
-					((GainableEffectBerry)i).gainBerryEffect(b, user, CastSource.USE_ITEM);
-				}
-			}
+			user.stealBerry(b, victim);
 			###
 	*
 ***
-Override:
-	SuccessMessage:
-		Header: String getSuccessMessage(ActivePokemon p)
+MessageGetter:
+	GenericMessage:
+		Header: String getGenericMessage(ActivePokemon p)
 		Body:
 			return {0};
 			###
 	*
-***
-Override:
-	HoldSuccessMessage:
-		Header: String getHoldSuccessMessage(Battle b, ActivePokemon p)
+	SourceMessage:
+		Header: String getSourceMessage(ActivePokemon p, String sourceName)
 		Body:
 			return {0};
 			###
@@ -2284,51 +2263,13 @@ Override:
 			###
 	*
 ***
-Override:
+TechnicalMachine:
 	TM:
-		Header: Attack getAttack()
-		AccessModifier: Private
+		Header: AttackNamesies getAttack()
 		Body:
-			return AttackNamesies.getValueOf("{0}").getAttack();
+			return AttackNamesies.{0};
 			###
 		AddMapField: Cat: TM
-		AddInterface: MoveUseItem
-		AddMapField: SuccessMessage: p.getName() + " learned " + getAttack().getName() + "!"
-		AddMapField: MoveUse:
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-			###
 	*
 ***
 PriorityChangeEffect:

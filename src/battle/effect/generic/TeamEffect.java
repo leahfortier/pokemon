@@ -34,7 +34,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 	
 	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 		if (printCast) {
-			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim, source)));
 		}
 
 		b.getTrainer(victim.isPlayer()).addEffect(this);
@@ -69,7 +69,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			}
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return user.getName() + " raised the " + Stat.DEFENSE.getName().toLowerCase() + " of its team!";
 		}
 
@@ -121,7 +121,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			}
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return user.getName() + " raised the " + Stat.SP_DEFENSE.getName().toLowerCase() + " of its team!";
 		}
 
@@ -161,7 +161,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return user.getName() + " raised the speed of its team!";
 		}
 
@@ -200,7 +200,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			}
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return user.getName() + " is covered by an aurora veil!";
 		}
 
@@ -232,7 +232,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Sticky web covers everything!";
 		}
 
@@ -272,7 +272,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Floating rocks were scattered all around!";
 		}
 
@@ -319,10 +319,10 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			}
 			
 			((ToxicSpikes)spikesies).layers++;
-			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+			Messages.add(getCastMessage(b, caster, victim, source));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Toxic spikes were scattered all around!";
 		}
 
@@ -382,10 +382,10 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			}
 			
 			((Spikes)spikesies).layers++;
-			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+			Messages.add(getCastMessage(b, caster, victim, source));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Spikes were scattered all around!";
 		}
 
@@ -457,7 +457,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return !(Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "The lucky chant shielded " + victim.getName() + "'s team from critical hits!";
 		}
 
@@ -487,7 +487,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			super.cast(b, caster, victim, source, printCast);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return theSeeer.getName() + " foresaw an attack!";
 		}
 
@@ -523,7 +523,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			super.cast(b, caster, victim, source, printCast);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return theSeeer.getName() + " foresaw an attack!";
 		}
 
@@ -591,7 +591,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			PayDay payday = (PayDay)Effect.getEffect(b.getEffects(true), this.namesies);
-			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+			Messages.add(getCastMessage(b, caster, victim, source));
 			coins = 5*caster.getLevel();
 			if (payday == null) {
 				b.getPlayer().addEffect(this);
@@ -601,7 +601,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			}
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Coins scattered everywhere!";
 		}
 

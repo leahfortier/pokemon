@@ -57,7 +57,7 @@ class Asleep extends Status implements BeforeTurnEffect {
         this.numTurns = turns;
     }
 
-    public String getRemoveMessage(ActivePokemon victim) {
+    public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " woke up!";
     }
 

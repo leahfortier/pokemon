@@ -49,6 +49,7 @@ import item.hold.ConsumableItem;
 import item.hold.EVItem;
 import item.hold.HoldItem;
 import item.hold.IncenseItem;
+import battle.effect.MessageGetter;
 import item.hold.PowerItem;
 import item.hold.SpecialTypeItem.DriveItem;
 import item.hold.SpecialTypeItem.GemItem;
@@ -58,8 +59,10 @@ import item.use.BallItem;
 import item.use.BattleUseItem;
 import item.use.MoveUseItem;
 import item.use.PokemonUseItem;
+import item.use.TechnicalMachine;
 import item.use.TrainerUseItem;
 import item.use.UseItem;
+import main.Game;
 import main.Global;
 import map.TerrainType;
 import message.MessageUpdate;
@@ -156,6 +159,19 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		return this;
 	}
 
+	protected boolean canHealHealth(ActivePokemon p) {
+		return !p.isActuallyDead() && !p.fullHealth();
+	}
+
+	protected void addHealMessage(ActivePokemon p, int healAmount) {
+		if (healAmount == 0) {
+			return;
+		}
+
+		Messages.add(new MessageUpdate(p.getName() + "'s health was restored!")
+				.withHp(p.getHP(), p.isPlayer()));
+	}
+
 	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
@@ -179,10 +195,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super(ItemNamesies.SYRUP, "A mysterious bottle of syrup. Maybe it will be useful some day.", BagCategory.KEY_ITEM, 1);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public boolean use(Trainer t) {
 			return false;
 		}
@@ -193,10 +205,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		Bicycle() {
 			super(ItemNamesies.BICYCLE, "A folding Bicycle that enables much faster movement than the Running Shoes.", BagCategory.KEY_ITEM, 2);
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public boolean use(Trainer t) {
@@ -213,10 +221,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super(ItemNamesies.SURFBOARD, "A fancy shmancy surfboard that lets you be RADICAL DUDE!", BagCategory.KEY_ITEM, 3);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public boolean use(Trainer t) {
 			// TODO: DOESN'T DO SHIT
 			return false;
@@ -228,10 +232,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		FishingRod() {
 			super(ItemNamesies.FISHING_ROD, "A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.", BagCategory.KEY_ITEM, 4);
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "Oh! A bite!";
 		}
 
 		public boolean use(Trainer t) {
@@ -773,7 +773,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 10000;
 		}
 
-		public boolean canUseOrb(ActivePokemon user) {
+		private boolean canUseOrb(ActivePokemon user) {
 			if (!user.isPokemon(PokemonNamesies.DIALGA)) {
 				return false;
 			}
@@ -802,7 +802,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 10000;
 		}
 
-		public boolean canUseOrb(ActivePokemon user) {
+		private boolean canUseOrb(ActivePokemon user) {
 			if (!user.isPokemon(PokemonNamesies.PALKIA)) {
 				return false;
 			}
@@ -831,7 +831,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 10000;
 		}
 
-		public boolean canUseOrb(ActivePokemon user) {
+		private boolean canUseOrb(ActivePokemon user) {
 			if (!user.isPokemon(PokemonNamesies.GIRATINA)) {
 				return false;
 			}
@@ -2682,10 +2682,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (user.isAttackType(Type.STEEL)) {
 				return 1.2;
@@ -2925,10 +2921,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 80;
 		}
@@ -2956,10 +2948,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SP_DEFENSE;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -2991,10 +2979,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return s == Stat.SP_ATTACK;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 90;
 		}
@@ -3010,10 +2994,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		DragonScale() {
 			super(ItemNamesies.DRAGON_SCALE, "A thick and tough scale. Dragon-type Pok\u00e9mon may be holding this item when caught.", BagCategory.MISC, 141);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3033,10 +3013,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 50;
 		}
@@ -3052,10 +3028,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		DuskStone() {
 			super(ItemNamesies.DUSK_STONE, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as dark as dark can be.", BagCategory.MISC, 143);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3075,10 +3047,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 80;
 		}
@@ -3096,10 +3064,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3115,10 +3079,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		KingsRock() {
 			super(ItemNamesies.KINGS_ROCK, "An item to be held by a Pok\u00e9mon. When the holder inflicts damage, the target may flinch.", BagCategory.MISC, 146);
 			super.price = 100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public boolean use(ActivePokemon p) {
@@ -3152,10 +3112,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3171,10 +3127,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		Magmarizer() {
 			super(ItemNamesies.MAGMARIZER, "A box packed with a tremendous amount of magma energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 148);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3194,10 +3146,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3213,10 +3161,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		OvalStone() {
 			super(ItemNamesies.OVAL_STONE, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is shaped like an egg.", BagCategory.MISC, 150);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3249,10 +3193,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 500;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3270,10 +3210,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 80;
 		}
@@ -3289,10 +3225,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		RazorClaw() {
 			super(ItemNamesies.RAZOR_CLAW, "An item to be held by a Pok\u00e9mon. It is a sharply hooked claw that ups the holder's critical-hit ratio.", BagCategory.MISC, 154);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3314,10 +3246,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		RazorFang() {
 			super(ItemNamesies.RAZOR_FANG, "An item to be held by a Pok\u00e9mon. It may make foes and allies flinch when the holder inflicts damage.`", BagCategory.MISC, 155);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public boolean use(ActivePokemon p) {
@@ -3351,10 +3279,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 10;
 		}
@@ -3370,10 +3294,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		Sachet() {
 			super(ItemNamesies.SACHET, "A sachet filled with fragrant perfumes that are just slightly too overwhelming. Yet it's loved by a certain Pok\u00e9mon.", BagCategory.MISC, 157);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3393,10 +3313,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 80;
 		}
@@ -3412,10 +3328,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		SunStone() {
 			super(ItemNamesies.SUN_STONE, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as red as the sun.", BagCategory.MISC, 159);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3435,10 +3347,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3454,10 +3362,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		IceStone() {
 			super(ItemNamesies.ICE_STONE, "A peculiar stone that can make certain species of Pokémon evolve. It has an unmistakable snowflake pattern.", BagCategory.MISC, 161);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3477,10 +3381,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3496,10 +3396,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		WaterStone() {
 			super(ItemNamesies.WATER_STONE, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is a clear, light blue.", BagCategory.MISC, 163);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3519,10 +3415,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3534,7 +3426,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class Antidote extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		Antidote() {
 			super(ItemNamesies.ANTIDOTE, "A spray-type medicine. It lifts the effect of poison from one Pok\u00e9mon.", BagCategory.MEDICINE, 165);
@@ -3542,31 +3433,26 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.POISONED)) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, source);
-			return true;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
+		private boolean use(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.POISONED)) {
+				return false;
+			}
+			
+			Status.removeStatus(null, p, source);
+			return true;
+		}
+
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 	}
 
 	static class Awakening extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		Awakening() {
 			super(ItemNamesies.AWAKENING, "A spray-type medicine. It awakens a Pok\u00e9mon from the clutches of sleep.", BagCategory.MEDICINE, 166);
@@ -3574,31 +3460,26 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.ASLEEP)) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, source);
-			return true;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
+		private boolean use(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.ASLEEP)) {
+				return false;
+			}
+			
+			Status.removeStatus(null, p, source);
+			return true;
+		}
+
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 	}
 
 	static class BurnHeal extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		BurnHeal() {
 			super(ItemNamesies.BURN_HEAL, "A spray-type medicine. It heals a single Pok\u00e9mon that is suffering from a burn.", BagCategory.MEDICINE, 167);
@@ -3606,31 +3487,26 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.BURNED)) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, source);
-			return true;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
+		private boolean use(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.BURNED)) {
+				return false;
+			}
+			
+			Status.removeStatus(null, p, source);
+			return true;
+		}
+
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 	}
 
 	static class IceHeal extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		IceHeal() {
 			super(ItemNamesies.ICE_HEAL, "A spray-type medicine. It defrosts a Pok\u00e9mon that has been frozen solid.", BagCategory.MEDICINE, 168);
@@ -3638,31 +3514,26 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.FROZEN)) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, source);
-			return true;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
+		private boolean use(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.FROZEN)) {
+				return false;
+			}
+			
+			Status.removeStatus(null, p, source);
+			return true;
+		}
+
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 	}
 
 	static class ParalyzeHeal extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		ParalyzeHeal() {
 			super(ItemNamesies.PARALYZE_HEAL, "A spray-type medicine. It eliminates paralysis from a single Pok\u00e9mon.", BagCategory.MEDICINE, 169);
@@ -3670,31 +3541,26 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
-			if (!p.hasStatus(StatusCondition.PARALYZED)) {
-				return false;
-			}
-			
-			message = Status.getRemoveStatus(null, p, source);
-			return true;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
+		private boolean use(ActivePokemon p, CastSource source) {
+			if (!p.hasStatus(StatusCondition.PARALYZED)) {
+				return false;
+			}
+			
+			Status.removeStatus(null, p, source);
+			return true;
+		}
+
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 	}
 
 	static class FullHeal extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
 
 		FullHeal() {
 			super(ItemNamesies.FULL_HEAL, "A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE, 170);
@@ -3702,9 +3568,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			// Does not apply to the dead
-			if (p.hasStatus(StatusCondition.FAINTED)) {
+			if (p.isActuallyDead()) {
 				return false;
 			}
 			
@@ -3713,12 +3579,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			message = Status.getRemoveStatus(null, p, source);
+			Status.removeStatus(null, p, source);
 			return true;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
 		}
 
 		public int flingDamage() {
@@ -3726,7 +3588,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 	}
 
@@ -3740,13 +3602,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " was fully healed!";
-		}
-
 		public boolean use(ActivePokemon p) {
 			// Does not apply to the dead
-			if (p.hasStatus(StatusCondition.FAINTED)) {
+			if (p.isActuallyDead()) {
 				return false;
 			}
 			
@@ -3755,8 +3613,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			p.removeStatus();
-			p.healHealthFraction(1);
+			Status.removeStatus(null, p, CastSource.USE_ITEM);
+			this.addHealMessage(p, p.healHealthFraction(1));
 			return true;
 		}
 
@@ -3767,10 +3625,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class Elixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
-		private boolean use(List<Move> moves) {
+		private boolean use(ActivePokemon p, List<Move> moves) {
 			boolean changed = false;
 			for (Move m : moves) {
-				changed |= m.increasePP(increaseAmount(m));
+				changed |= m.increasePP(10);
+			}
+			
+			if (changed) {
+				Messages.add(new MessageUpdate(p.getName() + "'s PP was restored!"));
 			}
 			
 			return changed;
@@ -3782,33 +3644,33 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int increaseAmount(Move m) {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s PP was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return use(p.getActualMoves());
+			return use(p, p.getActualMoves());
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return use(p.getMoves(b));
+			return use(p, p.getMoves(b));
 		}
 
 		public int flingDamage() {
 			return 30;
 		}
+
+		public boolean use(Trainer t, Battle b, ActivePokemon p, Move m) {
+			return b == null ? use(p) : use(p, b);
+		}
 	}
 
 	static class MaxElixir extends Item implements PokemonUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
-		private boolean use(List<Move> moves) {
+		private boolean use(ActivePokemon p, List<Move> moves) {
 			boolean changed = false;
 			for (Move m : moves) {
-				changed |= m.increasePP(increaseAmount(m));
+				changed |= m.increasePP(m.getMaxPP());
+			}
+			
+			if (changed) {
+				Messages.add(new MessageUpdate(p.getName() + "'s PP was restored!"));
 			}
 			
 			return changed;
@@ -3820,30 +3682,25 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int increaseAmount(Move m) {
-			return m.getMaxPP();
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s PP was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return use(p.getActualMoves());
+			return use(p, p.getActualMoves());
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return use(p.getMoves(b));
+			return use(p, p.getMoves(b));
 		}
 
 		public int flingDamage() {
 			return 30;
 		}
+
+		public boolean use(Trainer t, Battle b, ActivePokemon p, Move m) {
+			return b == null ? use(p) : use(p, b);
+		}
 	}
 
 	static class Ether extends Item implements HoldItem, MoveUseItem {
 		private static final long serialVersionUID = 1L;
-		private String restore;
 
 		Ether() {
 			super(ItemNamesies.ETHER, "It restores the PP of a Pok\u00e9mon's selected move by a maximum of 10 points.", BagCategory.MEDICINE, 174);
@@ -3851,24 +3708,23 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s PP for " + restore + " PP was restored!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
 			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-			restore = m.getAttack().getName();
-			return m.increasePP(10);
+			if (m.increasePP(10)) {
+				Messages.add(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!");
+				return true;
+			}
+			
+			return false;
 		}
 	}
 
 	static class MaxEther extends Item implements HoldItem, MoveUseItem {
 		private static final long serialVersionUID = 1L;
-		private String restore;
 
 		MaxEther() {
 			super(ItemNamesies.MAX_ETHER, "It fully restores the PP of a single selected move that has been learned by the target Pok\u00e9mon.", BagCategory.MEDICINE, 175);
@@ -3876,18 +3732,18 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s PP for " + restore + " PP was restored!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Move m) {
 			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-			restore = m.getAttack().getName();
-			return m.increasePP(m.getMaxPP());
+			if (m.increasePP(m.getMaxPP())) {
+				Messages.add(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!");
+				return true;
+			}
+			
+			return false;
 		}
 	}
 
@@ -3900,16 +3756,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 20;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.heal(20));
+			return true;
 		}
 
 		public int flingDamage() {
@@ -3926,16 +3779,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 20;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.heal(20));
+			return true;
 		}
 
 		public int flingDamage() {
@@ -3952,16 +3802,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 20;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.heal(20));
+			return true;
 		}
 
 		public int flingDamage() {
@@ -3978,16 +3825,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 50;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.heal(50));
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4004,16 +3848,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 50;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.heal(50));
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4030,16 +3871,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 50;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.heal(50));
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4056,16 +3894,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 60;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.heal(60));
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4082,16 +3917,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 80;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.heal(80));
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4108,16 +3940,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.heal(100));
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4134,16 +3963,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 200;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.heal(200));
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4160,16 +3986,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public int healAmount() {
-			return 200;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.heal(healAmount()) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.heal(200));
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4186,12 +4009,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s health was restored!";
-		}
-
 		public boolean use(ActivePokemon p) {
-			return p.healHealthFraction(1) != 0;
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			this.addHealMessage(p, p.healHealthFraction(1));
+			return true;
 		}
 
 		public int flingDamage() {
@@ -4208,18 +4032,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " was partially revived!";
-		}
-
 		public boolean use(ActivePokemon p) {
 			// Only applies to the dead
-			if (!p.hasStatus(StatusCondition.FAINTED)) {
+			if (!p.isActuallyDead()) {
 				return false;
 			}
 			
 			p.removeStatus();
 			p.healHealthFraction(.5);
+			
+			Messages.add(p.getName() + " was partially revived!");
 			
 			return true;
 		}
@@ -4238,18 +4060,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " was fully revived!";
-		}
-
 		public boolean use(ActivePokemon p) {
 			// Only applies to the dead
-			if (!p.hasStatus(StatusCondition.FAINTED)) {
+			if (!p.isActuallyDead()) {
 				return false;
 			}
 			
 			p.removeStatus();
 			p.healHealthFraction(1);
+			
+			Messages.add(p.getName() + " was fully revived!");
 			
 			return true;
 		}
@@ -4268,18 +4088,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " was fully revived!";
-		}
-
 		public boolean use(ActivePokemon p) {
 			// Only applies to the dead
-			if (!p.hasStatus(StatusCondition.FAINTED)) {
+			if (!p.isActuallyDead()) {
 				return false;
 			}
 			
 			p.removeStatus();
 			p.healHealthFraction(1);
+			
+			Messages.add(p.getName() + " was fully revived!");
 			
 			return true;
 		}
@@ -4298,28 +4116,33 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "All fainted Pok\u00e9mon were fully revived!";
-		}
-
 		public boolean use(Trainer t) {
-			boolean changed = false;
+			boolean healed = false;
 			for (ActivePokemon p : t.getTeam()) {
-				if (p.hasStatus(StatusCondition.FAINTED)) {
-					changed = true;
+				if (p.isActuallyDead()) {
+					healed = true;
 					p.removeStatus();
 					p.healHealthFraction(1);
 				}
 			}
-			return changed;
+			
+			if (healed) {
+				Messages.add(new MessageUpdate("All fainted Pok\u00e9mon were fully revived!"));
+			}
+			
+			return healed;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return use((Trainer)b.getTrainer(p.isPlayer()));
+			return use((Trainer)b.getTrainer(p));
 		}
 
 		public int flingDamage() {
 			return 30;
+		}
+
+		public boolean use(Trainer t, Battle b, ActivePokemon p, Move m) {
+			return b == null ? use(t) : use(p, b);
 		}
 	}
 
@@ -4332,18 +4155,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " is getting pumped!";
-		}
-
 		public boolean use(ActivePokemon p, Battle b) {
-			PokemonEffect crits = (PokemonEffect)EffectNamesies.RAISE_CRITS.getEffect();
-			if (!crits.applies(b, p, p, CastSource.USE_ITEM)) {
-				return false;
-			}
-			
-			crits.cast(b, p, p, CastSource.USE_ITEM, false);
-			return true;
+			return EffectNamesies.RAISE_CRITS.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
 		}
 
 		public int flingDamage() {
@@ -4360,18 +4173,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " is covered by a veil!";
-		}
-
 		public boolean use(ActivePokemon p, Battle b) {
-			PokemonEffect gSpesh = (PokemonEffect)EffectNamesies.GUARD_SPECIAL.getEffect();
-			if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) {
-				return false;
-			}
-			
-			gSpesh.cast(b, p, p, CastSource.USE_ITEM, false);
-			return true;
+			return EffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
 		}
 
 		public int flingDamage() {
@@ -4388,20 +4191,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		private Stat toIncrease() {
-			return Stat.ACCURACY;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.ACCURACY, b, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4414,20 +4209,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		private Stat toIncrease() {
-			return Stat.ATTACK;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.ATTACK, b, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4440,20 +4227,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		private Stat toIncrease() {
-			return Stat.DEFENSE;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.DEFENSE, b, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4466,20 +4245,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		private Stat toIncrease() {
-			return Stat.SP_ATTACK;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.SP_ATTACK, b, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4492,20 +4263,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		private Stat toIncrease() {
-			return Stat.SP_DEFENSE;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.SP_DEFENSE, b, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4518,20 +4281,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.BATTLE);
 		}
 
-		private Stat toIncrease() {
-			return Stat.SPEED;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
-			return p.getAttributes().modifyStage(p, p, 1, toIncrease(), b, CastSource.USE_ITEM);
+			return p.getAttributes().modifyStage(p, p, 1, Stat.SPEED, b, CastSource.USE_ITEM);
 		}
 	}
 
@@ -4543,27 +4298,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
-			return Stat.HP;
-		}
-
-		public int increaseAmount() {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.HP.index()] += 10;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.HP.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4575,27 +4323,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
-			return Stat.ATTACK;
-		}
-
-		public int increaseAmount() {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.ATTACK.index()] += 10;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.ATTACK.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4607,27 +4348,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
-			return Stat.DEFENSE;
-		}
-
-		public int increaseAmount() {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.DEFENSE.index()] += 10;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.DEFENSE.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4639,27 +4373,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
-			return Stat.SP_ATTACK;
-		}
-
-		public int increaseAmount() {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.SP_ATTACK.index()] += 10;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SP_ATTACK.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4671,27 +4398,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
-			return Stat.SP_DEFENSE;
-		}
-
-		public int increaseAmount() {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.SP_DEFENSE.index()] += 10;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4703,27 +4423,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public Stat toIncrease() {
-			return Stat.SPEED;
-		}
-
-		public int increaseAmount() {
-			return 10;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.SPEED.index()] += 10;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SPEED.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4735,27 +4448,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
-			return Stat.HP;
-		}
-
-		public int increaseAmount() {
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 20;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.HP.index()] += 1;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.HP.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4767,27 +4473,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
-			return Stat.ATTACK;
-		}
-
-		public int increaseAmount() {
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 20;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.ATTACK.index()] += 1;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.ATTACK.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4799,27 +4498,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
-			return Stat.DEFENSE;
-		}
-
-		public int increaseAmount() {
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 20;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.DEFENSE.index()] += 1;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.DEFENSE.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4831,27 +4523,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
-			return Stat.SP_ATTACK;
-		}
-
-		public int increaseAmount() {
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 20;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.SP_ATTACK.index()] += 1;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SP_ATTACK.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4863,27 +4548,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
-			return Stat.SP_DEFENSE;
-		}
-
-		public int increaseAmount() {
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 20;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.SP_DEFENSE.index()] += 1;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " was raised!");
+			return true;
 		}
 	}
 
@@ -4895,46 +4573,38 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 3000;
 		}
 
-		public Stat toIncrease() {
-			return Stat.SPEED;
-		}
-
-		public int increaseAmount() {
-			return 1;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toIncrease().getName() + " was raised!";
-		}
-
 		public int flingDamage() {
 			return 20;
 		}
 
 		public boolean use(ActivePokemon p) {
 			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[toIncrease().index()] += increaseAmount();
+			toAdd[Stat.SPEED.index()] += 1;
 			
-			return p.addEVs(toAdd);
+			if (!p.addEVs(toAdd)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SPEED.getName() + " was raised!");
+			return true;
 		}
 	}
 
 	static class PPMax extends Item implements MoveUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
-		private String increase;
 
 		PPMax() {
 			super(ItemNamesies.PPMAX, "It maximally raises the top PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 212);
 			super.price = 9800;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + increase + "'s Max PP was increased!";
-		}
-
 		public boolean use(ActivePokemon p, Move m) {
-			increase = m.getAttack().getName();
-			return m.increaseMaxPP(3);
+			if (m.increaseMaxPP(3)) {
+				Messages.add(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!");
+				return true;
+			}
+			
+			return false;
 		}
 
 		public int flingDamage() {
@@ -4944,20 +4614,19 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class PPUp extends Item implements MoveUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
-		private String increase;
 
 		PPUp() {
 			super(ItemNamesies.PPUP, "It slightly raises the maximum PP of a selected move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT, 213);
 			super.price = 9800;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + increase + "'s Max PP was increased!";
-		}
-
 		public boolean use(ActivePokemon p, Move m) {
-			increase = m.getAttack().getName();
-			return m.increaseMaxPP(1);
+			if (m.increaseMaxPP(1)) {
+				Messages.add(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!");
+				return true;
+			}
+			
+			return false;
 		}
 
 		public int flingDamage() {
@@ -4973,16 +4642,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 4800;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " gained a level!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(ActivePokemon p) {
-			// TODO: Doesn't show animation if it causes an evolution
 			return p.levelUp(null);
 		}
 	}
@@ -5361,8 +5025,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 	static class CheriBerry extends Item implements StatusBerry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
-		private String holdMessage;
 
 		CheriBerry() {
 			super(ItemNamesies.CHERI_BERRY, "If held by a Pok\u00e9mon, it recovers from paralysis.", BagCategory.BERRY, 237);
@@ -5370,34 +5032,21 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.PARALYZED)) {
 				return false;
 			}
 			
-			message = Status.getRemoveStatus(null, p, source);
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return holdMessage;
-		}
-
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!removeStatus(user, CastSource.HELD_ITEM)) {
-				return false;
-			}
-			
-			holdMessage = message;
-			return true;
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5411,16 +5060,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
 	static class ChestoBerry extends Item implements StatusBerry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
-		private String holdMessage;
 
 		ChestoBerry() {
 			super(ItemNamesies.CHESTO_BERRY, "If held by a Pok\u00e9mon, it recovers from sleep.", BagCategory.BERRY, 238);
@@ -5428,34 +5071,21 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.ASLEEP)) {
 				return false;
 			}
 			
-			message = Status.getRemoveStatus(null, p, source);
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return holdMessage;
-		}
-
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!removeStatus(user, CastSource.HELD_ITEM)) {
-				return false;
-			}
-			
-			holdMessage = message;
-			return true;
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5469,16 +5099,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
 	static class PechaBerry extends Item implements StatusBerry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
-		private String holdMessage;
 
 		PechaBerry() {
 			super(ItemNamesies.PECHA_BERRY, "If held by a Pok\u00e9mon, it recovers from poison.", BagCategory.BERRY, 239);
@@ -5486,34 +5110,21 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.POISONED)) {
 				return false;
 			}
 			
-			message = Status.getRemoveStatus(null, p, source);
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return holdMessage;
-		}
-
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!removeStatus(user, CastSource.HELD_ITEM)) {
-				return false;
-			}
-			
-			holdMessage = message;
-			return true;
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5527,16 +5138,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
 	static class RawstBerry extends Item implements StatusBerry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
-		private String holdMessage;
 
 		RawstBerry() {
 			super(ItemNamesies.RAWST_BERRY, "If held by a Pok\u00e9mon, it recovers from a burn.", BagCategory.BERRY, 240);
@@ -5544,34 +5149,21 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.BURNED)) {
 				return false;
 			}
 			
-			message = Status.getRemoveStatus(null, p, source);
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return holdMessage;
-		}
-
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!removeStatus(user, CastSource.HELD_ITEM)) {
-				return false;
-			}
-			
-			holdMessage = message;
-			return true;
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5585,16 +5177,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
 	static class AspearBerry extends Item implements StatusBerry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
-		private String holdMessage;
 
 		AspearBerry() {
 			super(ItemNamesies.ASPEAR_BERRY, "If held by a Pok\u00e9mon, it defrosts it.", BagCategory.BERRY, 241);
@@ -5602,34 +5188,21 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (!p.hasStatus(StatusCondition.FROZEN)) {
 				return false;
 			}
 			
-			message = Status.getRemoveStatus(null, p, source);
+			Status.removeStatus(null, p, source);
 			return true;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return holdMessage;
-		}
-
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!removeStatus(user, CastSource.HELD_ITEM)) {
-				return false;
-			}
-			
-			holdMessage = message;
-			return true;
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public int naturalGiftPower() {
@@ -5643,15 +5216,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
-	static class LeppaBerry extends Item implements EndTurnEffect, GainableEffectBerry, MoveUseItem {
+	static class LeppaBerry extends Item implements MoveUseItem, EndTurnEffect, GainableEffectBerry {
 		private static final long serialVersionUID = 1L;
-		private String restore;
 
 		LeppaBerry() {
 			super(ItemNamesies.LEPPA_BERRY, "If held by a Pok\u00e9mon, it restores a move's PP by 10.", BagCategory.BERRY, 242);
@@ -5659,26 +5227,22 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s PP for " + restore + " PP was restored!";
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!";
+		public boolean use(ActivePokemon p, Move m) {
+			return m.increasePP(10);
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			for (Move m : victim.getMoves(b)) {
 				if (m.getPP() == 0) {
 					use(victim, m);
-					Messages.add(new MessageUpdate(getHoldSuccessMessage(b, victim)));
+					Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " restored " + m.getAttack().getName() + "'s PP!"));
 					victim.consumeItem(b);
 					break;
 				}
 			}
 		}
 
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			Move lowestPPMove = null;
 			double lowestPPRatio = 1;
 			
@@ -5699,12 +5263,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return true;
 		}
 
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-			restore = m.getAttack().getName();
-			return m.increasePP(10);
-		}
-
 		public int naturalGiftPower() {
 			return 80;
 		}
@@ -5716,13 +5274,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
-	static class OranBerry extends Item implements PokemonUseItem, HealthTriggeredBerry {
+	static class OranBerry extends Item implements MessageGetter, PokemonUseItem, HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		OranBerry() {
@@ -5731,24 +5285,34 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		private boolean use(ActivePokemon p, CastSource source) {
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			p.heal(10);
+			Messages.add(new MessageUpdate(this.getMessage(p, source)).withHp(p.getHP(), p.isPlayer()));
+			return true;
+		}
+
+		public String getGenericMessage(ActivePokemon p) {
 			return p.getName() + "'s health was restored!";
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getSourceMessage(ActivePokemon p, String sourceName) {
 			return p.getName() + " was healed by its " + this.name + "!";
 		}
 
 		public boolean use(ActivePokemon p) {
-			return p.heal(10) != 0;
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public double healthTriggerRatio() {
 			return 1/3.0;
 		}
 
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return use(user);
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
 		public int naturalGiftPower() {
@@ -5762,14 +5326,19 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
-	static class PersimBerry extends Item implements BattleUseItem, GainableEffectBerry {
+	static class PersimBerry extends Item implements BattleUseItem, MessageGetter, GainableEffectBerry {
 		private static final long serialVersionUID = 1L;
+		private boolean use(ActivePokemon p, CastSource source) {
+			if (p.hasEffect(EffectNamesies.CONFUSION)) {
+				p.getAttributes().removeEffect(EffectNamesies.CONFUSION);
+				this.addMessage(p, source);
+				return true;
+			}
+			
+			return false;
+		}
 
 		PersimBerry() {
 			super(ItemNamesies.PERSIM_BERRY, "If held by a Pok\u00e9mon, it recovers from confusion.", BagCategory.BERRY, 244);
@@ -5777,25 +5346,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		public boolean use(ActivePokemon p, Battle b) {
+			return use(p, CastSource.USE_ITEM);
+		}
+
+		public String getGenericMessage(ActivePokemon p) {
 			return p.getName() + " snapped out of its confusion!";
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getSourceMessage(ActivePokemon p, String sourceName) {
 			return p.getName() + "'s " + this.getName() + " snapped it out of confusion!";
 		}
 
-		public boolean use(ActivePokemon p, Battle b) {
-			if (p.hasEffect(EffectNamesies.CONFUSION)) {
-				p.getAttributes().removeEffect(EffectNamesies.CONFUSION);
-				return true;
-			}
-			
-			return false;
-		}
-
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return use(user, b);
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
 		public int naturalGiftPower() {
@@ -5809,16 +5373,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
 	static class LumBerry extends Item implements StatusBerry, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
-		private String message;
-		private String holdMessage;
 
 		LumBerry() {
 			super(ItemNamesies.LUM_BERRY, "If held by a Pok\u00e9mon, it recovers from any status problem.", BagCategory.BERRY, 245);
@@ -5826,9 +5384,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean removeStatus(ActivePokemon p, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			// Does not apply to the dead
-			if (p.hasStatus(StatusCondition.FAINTED)) {
+			if (p.isActuallyDead()) {
 				return false;
 			}
 			
@@ -5837,29 +5395,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			message = Status.getRemoveStatus(null, p, source);
+			Status.removeStatus(null, p, source);
 			return true;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return message;
 		}
 
 		public boolean use(ActivePokemon p) {
-			return removeStatus(p, CastSource.USE_ITEM);
+			return use(p, CastSource.USE_ITEM);
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return holdMessage;
-		}
-
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			if (!removeStatus(user, CastSource.HELD_ITEM)) {
-				return false;
-			}
-			
-			holdMessage = message;
-			return true;
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
 		public int naturalGiftPower() {
@@ -5873,13 +5418,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
-	static class SitrusBerry extends Item implements PokemonUseItem, HealthTriggeredBerry {
+	static class SitrusBerry extends Item implements MessageGetter, PokemonUseItem, HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		SitrusBerry() {
@@ -5888,24 +5429,34 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.battleBagCategories.add(BattleBagCategory.HP_PP);
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
+		private boolean use(ActivePokemon p, CastSource source) {
+			if (!this.canHealHealth(p)) {
+				return false;
+			}
+			
+			p.healHealthFraction(1/4.0);
+			Messages.add(new MessageUpdate(this.getMessage(p, source)).withHp(p.getHP(), p.isPlayer()));
+			return true;
+		}
+
+		public String getGenericMessage(ActivePokemon p) {
 			return p.getName() + "'s health was restored!";
 		}
 
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
+		public String getSourceMessage(ActivePokemon p, String sourceName) {
 			return p.getName() + " was healed by its " + this.name + "!";
 		}
 
 		public boolean use(ActivePokemon p) {
-			return p.healHealthFraction(1/4.0) != 0;
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public double healthTriggerRatio() {
 			return 1/2.0;
 		}
 
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return use(user);
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			return use(user, source);
 		}
 
 		public int naturalGiftPower() {
@@ -5918,10 +5469,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public int flingDamage() {
 			return 10;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
 		}
 	}
 
@@ -5954,14 +5501,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
-			return Stat.HP;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
-		}
-
 		public int naturalGiftPower() {
 			return 90;
 		}
@@ -5971,7 +5510,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.HP.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -5983,7 +5522,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				vals[decreaseIndex] -= 10;
 			}
 			
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.HP.getName() + " was lowered!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -5999,14 +5543,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
-			return Stat.ATTACK;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
-		}
-
 		public int naturalGiftPower() {
 			return 90;
 		}
@@ -6016,7 +5552,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.ATTACK.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -6028,7 +5564,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				vals[decreaseIndex] -= 10;
 			}
 			
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.ATTACK.getName() + " was lowered!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -6044,14 +5585,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
-			return Stat.DEFENSE;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
-		}
-
 		public int naturalGiftPower() {
 			return 90;
 		}
@@ -6061,7 +5594,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.DEFENSE.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -6073,7 +5606,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				vals[decreaseIndex] -= 10;
 			}
 			
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.DEFENSE.getName() + " was lowered!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -6089,14 +5627,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
-			return Stat.SP_ATTACK;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
-		}
-
 		public int naturalGiftPower() {
 			return 90;
 		}
@@ -6106,7 +5636,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.SP_ATTACK.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -6118,7 +5648,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				vals[decreaseIndex] -= 10;
 			}
 			
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SP_ATTACK.getName() + " was lowered!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -6134,14 +5669,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
-			return Stat.SP_DEFENSE;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
-		}
-
 		public int naturalGiftPower() {
 			return 90;
 		}
@@ -6151,7 +5678,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.SP_DEFENSE.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -6163,7 +5690,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				vals[decreaseIndex] -= 10;
 			}
 			
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " was lowered!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -6179,14 +5711,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public Stat toDecrease() {
-			return Stat.SPEED;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + toDecrease().getName() + " was lowered!";
-		}
-
 		public int naturalGiftPower() {
 			return 90;
 		}
@@ -6196,7 +5720,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			int decreaseIndex = toDecrease().index();
+			int decreaseIndex = Stat.SPEED.index();
 			int[] vals = new int[Stat.NUM_STATS];
 			
 			// For EVs over 110, the berry will decrease the EV to 100
@@ -6208,7 +5732,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				vals[decreaseIndex] -= 10;
 			}
 			
-			return p.addEVs(vals);
+			if (!p.addEVs(vals)) {
+				return false;
+			}
+			
+			Messages.add(p.getName() + "'s " + Stat.SPEED.getName() + " was lowered!");
+			return true;
 		}
 
 		public int flingDamage() {
@@ -6782,19 +6311,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + Stat.ATTACK.getName() + " increased!";
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return "";
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return user.getAttributes().modifyStage(user, user, 1, Stat.ATTACK, b, source);
 		}
 
@@ -6809,10 +6330,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
 	static class GanlonBerry extends Item implements HealthTriggeredBerry {
@@ -6823,19 +6340,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + Stat.DEFENSE.getName() + " increased!";
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return "";
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return user.getAttributes().modifyStage(user, user, 1, Stat.DEFENSE, b, source);
 		}
 
@@ -6850,10 +6359,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
 	static class SalacBerry extends Item implements HealthTriggeredBerry {
@@ -6864,19 +6369,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + Stat.SPEED.getName() + " increased!";
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return "";
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return user.getAttributes().modifyStage(user, user, 1, Stat.SPEED, b, source);
 		}
 
@@ -6891,10 +6388,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
 	static class PetayaBerry extends Item implements HealthTriggeredBerry {
@@ -6905,19 +6398,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + Stat.SP_ATTACK.getName() + " increased!";
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return "";
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return user.getAttributes().modifyStage(user, user, 1, Stat.SP_ATTACK, b, source);
 		}
 
@@ -6932,10 +6417,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
 	static class ApicotBerry extends Item implements HealthTriggeredBerry {
@@ -6946,19 +6427,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " increased!";
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return "";
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return user.getAttributes().modifyStage(user, user, 1, Stat.SP_DEFENSE, b, source);
 		}
 
@@ -6973,10 +6446,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
 	static class MicleBerry extends Item implements HealthTriggeredBerry {
@@ -6987,19 +6456,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s " + Stat.ACCURACY.getName() + " increased!";
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return "";
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return user.getAttributes().modifyStage(user, user, 1, Stat.ACCURACY, b, source);
 		}
 
@@ -7013,10 +6474,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public int flingDamage() {
 			return 10;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
 		}
 	}
 
@@ -7203,20 +6660,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " is getting pumped!";
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return p.getName() + " is getting pumped due to its " + this.name + "!";
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
 			return true;
 		}
 
@@ -7231,54 +6680,35 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public int flingDamage() {
 			return 10;
 		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
-		}
 	}
 
 	static class StarfBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
-		private String holdMessage;
-		private String useMessage;
 
 		StarfBerry() {
 			super(ItemNamesies.STARF_BERRY, "If held by a Pok\u00e9mon, it raises a random stat in a pinch.", BagCategory.BERRY, 285);
 			super.price = 20;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return useMessage;
-		}
-
-		public String getHoldSuccessMessage(Battle b, ActivePokemon p) {
-			return holdMessage;
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
-		public boolean beginGainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			holdMessage = "";
-			useMessage = "";
-			
+		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			int rand = RandomUtils.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
 			
 			// Raise crit
 			if (rand == Stat.NUM_BATTLE_STATS) {
-				EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
-				holdMessage = user.getName() + " is getting pumped due to its " + this.name + "!";
-				useMessage = user.getName() + " is getting pumped!";
+				EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
 				return true;
 			}
 			
 			// Raise random battle stat
 			Stat stat = Stat.getStat(rand, true);
 			if (user.getAttributes().modifyStage(user, user, 1, stat, b, source)) {
-				useMessage = user.getName() + "'s " + stat.getName() + " increased!";
 				return true;
 			}
+			
 			
 			return false;
 		}
@@ -7293,10 +6723,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public int flingDamage() {
 			return 10;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			gainBerryEffect(b, pelted, CastSource.USE_ITEM);
 		}
 	}
 
@@ -7503,20 +6929,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 350;
 		}
 
-		public int repelSteps() {
-			return 100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "Weak wild Pok\u00e9mon will not appear for " + repelSteps() + " steps!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(Trainer t) {
-			if (!(t instanceof CharacterData)) {
+			if (t != Game.getPlayer()) {
 				Global.error("Only the character should be using a Repel item");
 				return false;
 			}
@@ -7526,7 +6944,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			player.addRepelSteps(repelSteps());
+			player.addRepelSteps(100);
+			Messages.add("Weak wild Pok\u00e9mon will not appear for 100 steps!");
 			return true;
 		}
 	}
@@ -7539,20 +6958,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 500;
 		}
 
-		public int repelSteps() {
-			return 200;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "Weak wild Pok\u00e9mon will not appear for " + repelSteps() + " steps!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(Trainer t) {
-			if (!(t instanceof CharacterData)) {
+			if (t != Game.getPlayer()) {
 				Global.error("Only the character should be using a Repel item");
 				return false;
 			}
@@ -7562,7 +6973,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			player.addRepelSteps(repelSteps());
+			player.addRepelSteps(200);
+			Messages.add("Weak wild Pok\u00e9mon will not appear for 200 steps!");
 			return true;
 		}
 	}
@@ -7575,20 +6987,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 700;
 		}
 
-		public int repelSteps() {
-			return 250;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "Weak wild Pok\u00e9mon will not appear for " + repelSteps() + " steps!";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
 
 		public boolean use(Trainer t) {
-			if (!(t instanceof CharacterData)) {
+			if (t != Game.getPlayer()) {
 				Global.error("Only the character should be using a Repel item");
 				return false;
 			}
@@ -7598,7 +7002,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			player.addRepelSteps(repelSteps());
+			player.addRepelSteps(250);
+			Messages.add("Weak wild Pok\u00e9mon will not appear for 250 steps!");
 			return true;
 		}
 	}
@@ -7611,10 +7016,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 1000;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!";
-		}
-
 		public boolean use(ActivePokemon p) {
 			AbilityNamesies other = Ability.getOtherAbility(p);
 			if (other == AbilityNamesies.NO_ABILITY) {
@@ -7622,6 +7023,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			}
 			
 			p.setAbility(other);
+			Messages.add(p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!")	;
 			return true;
 		}
 	}
@@ -7969,5307 +7371,1227 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class HoneClawsTM extends Item implements MoveUseItem {
+	static class HoneClawsTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		HoneClawsTM() {
 			super(ItemNamesies.HONE_CLAWS_TM, "The user sharpens its claws to boost its Attack stat and accuracy.", BagCategory.TM, 2015);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Hone Claws").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.HONE_CLAWS;
 		}
 	}
 
-	static class DragonClawTM extends Item implements MoveUseItem {
+	static class DragonClawTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		DragonClawTM() {
 			super(ItemNamesies.DRAGON_CLAW_TM, "The user slashes the target with huge, sharp claws.", BagCategory.TM, 2014);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Dragon Claw").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.DRAGON_CLAW;
 		}
 	}
 
-	static class PsyshockTM extends Item implements MoveUseItem {
+	static class PsyshockTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		PsyshockTM() {
 			super(ItemNamesies.PSYSHOCK_TM, "The user materializes an odd psychic wave to attack the target. This attack does physical damage.", BagCategory.TM, 2010);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Psyshock").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.PSYSHOCK;
 		}
 	}
 
-	static class CalmMindTM extends Item implements MoveUseItem {
+	static class CalmMindTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		CalmMindTM() {
 			super(ItemNamesies.CALM_MIND_TM, "The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats.", BagCategory.TM, 2010);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Calm Mind").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.CALM_MIND;
 		}
 	}
 
-	static class RoarTM extends Item implements MoveUseItem {
+	static class RoarTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		RoarTM() {
 			super(ItemNamesies.ROAR_TM, "The target is scared off and replaced by another Pokémon in its party. In the wild, the battle ends.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Roar").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.ROAR;
 		}
 	}
 
-	static class ToxicTM extends Item implements MoveUseItem {
+	static class ToxicTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		ToxicTM() {
 			super(ItemNamesies.TOXIC_TM, "A move that leaves the target badly poisoned. Its poison damage worsens every turn.", BagCategory.TM, 2007);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Toxic").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.TOXIC;
 		}
 	}
 
-	static class HailTM extends Item implements MoveUseItem {
+	static class HailTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		HailTM() {
 			super(ItemNamesies.HAIL_TM, "The user summons a hailstorm lasting five turns. It damages all Pokémon except the Ice type.", BagCategory.TM, 2005);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Hail").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.HAIL;
 		}
 	}
 
-	static class BulkUpTM extends Item implements MoveUseItem {
+	static class BulkUpTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		BulkUpTM() {
 			super(ItemNamesies.BULK_UP_TM, "The user tenses its muscles to bulk up its body, boosting both its Attack and Defense stats.", BagCategory.TM, 2006);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Bulk Up").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.BULK_UP;
 		}
 	}
 
-	static class VenoshockTM extends Item implements MoveUseItem {
+	static class VenoshockTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		VenoshockTM() {
 			super(ItemNamesies.VENOSHOCK_TM, "The user drenches the target in a special poisonous liquid. Its power is doubled if the target is poisoned.", BagCategory.TM, 2007);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Venoshock").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.VENOSHOCK;
 		}
 	}
 
-	static class HiddenPowerTM extends Item implements MoveUseItem {
+	static class HiddenPowerTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		HiddenPowerTM() {
 			super(ItemNamesies.HIDDEN_POWER_TM, "A unique attack that varies in type and intensity depending on the Pokémon using it.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Hidden Power").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.HIDDEN_POWER;
 		}
 	}
 
-	static class SunnyDayTM extends Item implements MoveUseItem {
+	static class SunnyDayTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SunnyDayTM() {
 			super(ItemNamesies.SUNNY_DAY_TM, "The user intensifies the sun for five turns, powering up Fire-type moves.", BagCategory.TM, 2001);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Sunny Day").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SUNNY_DAY;
 		}
 	}
 
-	static class TauntTM extends Item implements MoveUseItem {
+	static class TauntTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		TauntTM() {
 			super(ItemNamesies.TAUNT_TM, "The target is taunted into a rage that allows it to use only attack moves for three turns.", BagCategory.TM, 2015);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Taunt").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.TAUNT;
 		}
 	}
 
-	static class IceBeamTM extends Item implements MoveUseItem {
+	static class IceBeamTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		IceBeamTM() {
 			super(ItemNamesies.ICE_BEAM_TM, "The target is struck with an icy-cold beam of energy. It may also freeze the target solid.", BagCategory.TM, 2005);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Ice Beam").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.ICE_BEAM;
 		}
 	}
 
-	static class BlizzardTM extends Item implements MoveUseItem {
+	static class BlizzardTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		BlizzardTM() {
 			super(ItemNamesies.BLIZZARD_TM, "A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.", BagCategory.TM, 2005);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Blizzard").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.BLIZZARD;
 		}
 	}
 
-	static class HyperBeamTM extends Item implements MoveUseItem {
+	static class HyperBeamTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		HyperBeamTM() {
 			super(ItemNamesies.HYPER_BEAM_TM, "The target is attacked with a powerful beam. The user must rest on the next turn to regain its energy.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Hyper Beam").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.HYPER_BEAM;
 		}
 	}
 
-	static class LightScreenTM extends Item implements MoveUseItem {
+	static class LightScreenTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		LightScreenTM() {
 			super(ItemNamesies.LIGHT_SCREEN_TM, "A wondrous wall of light is put up to suppress damage from special attacks for five turns.", BagCategory.TM, 2010);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Light Screen").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.LIGHT_SCREEN;
 		}
 	}
 
-	static class ProtectTM extends Item implements MoveUseItem {
+	static class ProtectTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		ProtectTM() {
 			super(ItemNamesies.PROTECT_TM, "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Protect").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.PROTECT;
 		}
 	}
 
-	static class RainDanceTM extends Item implements MoveUseItem {
+	static class RainDanceTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		RainDanceTM() {
 			super(ItemNamesies.RAIN_DANCE_TM, "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", BagCategory.TM, 2002);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Rain Dance").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.RAIN_DANCE;
 		}
 	}
 
-	static class RoostTM extends Item implements MoveUseItem {
+	static class RoostTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		RoostTM() {
 			super(ItemNamesies.ROOST_TM, "The user lands and rests its body. It restores the user's HP by up to half of its max HP.", BagCategory.TM, 2009);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Roost").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.ROOST;
 		}
 	}
 
-	static class SafeguardTM extends Item implements MoveUseItem {
+	static class SafeguardTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SafeguardTM() {
 			super(ItemNamesies.SAFEGUARD_TM, "The user creates a protective field that prevents status problems for five turns.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Safeguard").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SAFEGUARD;
 		}
 	}
 
-	static class SolarBeamTM extends Item implements MoveUseItem {
+	static class SolarBeamTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SolarBeamTM() {
 			super(ItemNamesies.SOLAR_BEAM_TM, "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn.", BagCategory.TM, 2004);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Solar Beam").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SOLAR_BEAM;
 		}
 	}
 
-	static class SmackDownTM extends Item implements MoveUseItem {
+	static class SmackDownTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SmackDownTM() {
 			super(ItemNamesies.SMACK_DOWN_TM, "The user throws a stone or projectile to attack an opponent. A flying Pokémon will fall to the ground when hit.", BagCategory.TM, 2012);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Smack Down").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SMACK_DOWN;
 		}
 	}
 
-	static class ThunderboltTM extends Item implements MoveUseItem {
+	static class ThunderboltTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		ThunderboltTM() {
 			super(ItemNamesies.THUNDERBOLT_TM, "A strong electric blast is loosed at the target. It may also leave the target with paralysis.", BagCategory.TM, 2003);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Thunderbolt").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.THUNDERBOLT;
 		}
 	}
 
-	static class ThunderTM extends Item implements MoveUseItem {
+	static class ThunderTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		ThunderTM() {
 			super(ItemNamesies.THUNDER_TM, "A wicked thunderbolt is dropped on the target to inflict damage. It may also leave the target with paralysis.", BagCategory.TM, 2003);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Thunder").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.THUNDER;
 		}
 	}
 
-	static class EarthquakeTM extends Item implements MoveUseItem {
+	static class EarthquakeTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		EarthquakeTM() {
 			super(ItemNamesies.EARTHQUAKE_TM, "The user sets off an earthquake that strikes those around it.", BagCategory.TM, 2008);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Earthquake").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.EARTHQUAKE;
 		}
 	}
 
-	static class DigTM extends Item implements MoveUseItem {
+	static class DigTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		DigTM() {
 			super(ItemNamesies.DIG_TM, "The user burrows, then attacks on the second turn. It can also be used to exit dungeons.", BagCategory.TM, 2008);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Dig").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.DIG;
 		}
 	}
 
-	static class PsychicTM extends Item implements MoveUseItem {
+	static class PsychicTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		PsychicTM() {
 			super(ItemNamesies.PSYCHIC_TM, "The target is hit by a strong telekinetic force. It may also reduce the target's Sp. Def stat.", BagCategory.TM, 2010);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Psychic").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.PSYCHIC;
 		}
 	}
 
-	static class ShadowBallTM extends Item implements MoveUseItem {
+	static class ShadowBallTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		ShadowBallTM() {
 			super(ItemNamesies.SHADOW_BALL_TM, "The user hurls a shadowy blob at the target. It may also lower the target's Sp. Def stat.", BagCategory.TM, 2013);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Shadow Ball").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SHADOW_BALL;
 		}
 	}
 
-	static class BrickBreakTM extends Item implements MoveUseItem {
+	static class BrickBreakTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		BrickBreakTM() {
 			super(ItemNamesies.BRICK_BREAK_TM, "The user attacks with a swift chop. It can also break any barrier such as Light Screen and Reflect.", BagCategory.TM, 2006);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Brick Break").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.BRICK_BREAK;
 		}
 	}
 
-	static class DoubleTeamTM extends Item implements MoveUseItem {
+	static class DoubleTeamTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		DoubleTeamTM() {
 			super(ItemNamesies.DOUBLE_TEAM_TM, "By moving rapidly, the user makes illusory copies of itself to raise its evasiveness.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Double Team").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.DOUBLE_TEAM;
 		}
 	}
 
-	static class ReflectTM extends Item implements MoveUseItem {
+	static class ReflectTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		ReflectTM() {
 			super(ItemNamesies.REFLECT_TM, "A wondrous wall of light is put up to suppress damage from physical attacks for five turns.", BagCategory.TM, 2010);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Reflect").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.REFLECT;
 		}
 	}
 
-	static class SludgeWaveTM extends Item implements MoveUseItem {
+	static class SludgeWaveTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SludgeWaveTM() {
 			super(ItemNamesies.SLUDGE_WAVE_TM, "It swamps the area around the user with a giant sludge wave. It may also poison those hit.", BagCategory.TM, 2007);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Sludge Wave").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SLUDGE_WAVE;
 		}
 	}
 
-	static class FlamethrowerTM extends Item implements MoveUseItem {
+	static class FlamethrowerTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		FlamethrowerTM() {
 			super(ItemNamesies.FLAMETHROWER_TM, "The target is scorched with an intense blast of fire. It may also leave the target with a burn.", BagCategory.TM, 2001);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Flamethrower").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.FLAMETHROWER;
 		}
 	}
 
-	static class SludgeBombTM extends Item implements MoveUseItem {
+	static class SludgeBombTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SludgeBombTM() {
 			super(ItemNamesies.SLUDGE_BOMB_TM, "Unsanitary sludge is hurled at the target. It may also poison the target.", BagCategory.TM, 2007);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Sludge Bomb").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SLUDGE_BOMB;
 		}
 	}
 
-	static class SandstormTM extends Item implements MoveUseItem {
+	static class SandstormTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SandstormTM() {
 			super(ItemNamesies.SANDSTORM_TM, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.", BagCategory.TM, 2012);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Sandstorm").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SANDSTORM;
 		}
 	}
 
-	static class FireBlastTM extends Item implements MoveUseItem {
+	static class FireBlastTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		FireBlastTM() {
 			super(ItemNamesies.FIRE_BLAST_TM, "The target is attacked with an intense blast of all-consuming fire. It may also leave the target with a burn.", BagCategory.TM, 2001);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Fire Blast").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.FIRE_BLAST;
 		}
 	}
 
-	static class RockTombTM extends Item implements MoveUseItem {
+	static class RockTombTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		RockTombTM() {
 			super(ItemNamesies.ROCK_TOMB_TM, "Boulders are hurled at the target. It also lowers the target's Speed by preventing its movement.", BagCategory.TM, 2012);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Rock Tomb").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.ROCK_TOMB;
 		}
 	}
 
-	static class AerialAceTM extends Item implements MoveUseItem {
+	static class AerialAceTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		AerialAceTM() {
 			super(ItemNamesies.AERIAL_ACE_TM, "The user confounds the foe with speed, then slashes. The attack lands without fail.", BagCategory.TM, 2009);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Aerial Ace").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.AERIAL_ACE;
 		}
 	}
 
-	static class TormentTM extends Item implements MoveUseItem {
+	static class TormentTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		TormentTM() {
 			super(ItemNamesies.TORMENT_TM, "The user torments and enrages the target, making it incapable of using the same move twice in a row.", BagCategory.TM, 2015);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Torment").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.TORMENT;
 		}
 	}
 
-	static class FacadeTM extends Item implements MoveUseItem {
+	static class FacadeTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		FacadeTM() {
 			super(ItemNamesies.FACADE_TM, "An attack move that doubles its power if the user is poisoned, burned, or has paralysis.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Facade").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.FACADE;
 		}
 	}
 
-	static class FlameChargeTM extends Item implements MoveUseItem {
+	static class FlameChargeTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		FlameChargeTM() {
 			super(ItemNamesies.FLAME_CHARGE_TM, "The user cloaks itself with flame and attacks. Building up more power, it raises the user's Speed stat.", BagCategory.TM, 2001);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Flame Charge").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.FLAME_CHARGE;
 		}
 	}
 
-	static class RestTM extends Item implements MoveUseItem {
+	static class RestTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		RestTM() {
 			super(ItemNamesies.REST_TM, "The user goes to sleep for two turns. It fully restores the user's HP and heals any status problem.", BagCategory.TM, 2010);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Rest").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.REST;
 		}
 	}
 
-	static class AttractTM extends Item implements MoveUseItem {
+	static class AttractTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		AttractTM() {
 			super(ItemNamesies.ATTRACT_TM, "If it is the opposite gender of the user, the target becomes infatuated and less likely to attack.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Attract").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.ATTRACT;
 		}
 	}
 
-	static class ThiefTM extends Item implements MoveUseItem {
+	static class ThiefTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		ThiefTM() {
 			super(ItemNamesies.THIEF_TM, "The user attacks and steals the target's held item simultaneously. It can't steal if the user holds an item.", BagCategory.TM, 2015);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Thief").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.THIEF;
 		}
 	}
 
-	static class LowSweepTM extends Item implements MoveUseItem {
+	static class LowSweepTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		LowSweepTM() {
 			super(ItemNamesies.LOW_SWEEP_TM, "The user attacks the target's legs swiftly, reducing the target's Speed stat.", BagCategory.TM, 2006);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Low Sweep").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.LOW_SWEEP;
 		}
 	}
 
-	static class RoundTM extends Item implements MoveUseItem {
+	static class RoundTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		RoundTM() {
 			super(ItemNamesies.ROUND_TM, "The user attacks the target with a song.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Round").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.ROUND;
 		}
 	}
 
-	static class EchoedVoiceTM extends Item implements MoveUseItem {
+	static class EchoedVoiceTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		EchoedVoiceTM() {
 			super(ItemNamesies.ECHOED_VOICE_TM, "The user attacks the target with an echoing voice. If this move is used every turn, it does greater damage.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Echoed Voice").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.ECHOED_VOICE;
 		}
 	}
 
-	static class OverheatTM extends Item implements MoveUseItem {
+	static class OverheatTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		OverheatTM() {
 			super(ItemNamesies.OVERHEAT_TM, "The user attacks the target at full power. The attack's recoil harshly reduces the user's Sp. Atk stat.", BagCategory.TM, 2001);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Overheat").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.OVERHEAT;
 		}
 	}
 
-	static class SteelWingTM extends Item implements MoveUseItem {
+	static class SteelWingTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SteelWingTM() {
 			super(ItemNamesies.STEEL_WING_TM, "The target is hit with wings of steel. It may also raise the user's Defense stat.", BagCategory.TM, 2016);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Steel Wing").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.STEEL_WING;
 		}
 	}
 
-	static class FocusBlastTM extends Item implements MoveUseItem {
+	static class FocusBlastTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		FocusBlastTM() {
 			super(ItemNamesies.FOCUS_BLAST_TM, "The user heightens its mental focus and unleashes its power. It may also lower the target's Sp. Def.", BagCategory.TM, 2006);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Focus Blast").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.FOCUS_BLAST;
 		}
 	}
 
-	static class EnergyBallTM extends Item implements MoveUseItem {
+	static class EnergyBallTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		EnergyBallTM() {
 			super(ItemNamesies.ENERGY_BALL_TM, "The user draws power from nature and fires it at the target. It may also lower the target's Sp. Def.", BagCategory.TM, 2004);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Energy Ball").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.ENERGY_BALL;
 		}
 	}
 
-	static class FalseSwipeTM extends Item implements MoveUseItem {
+	static class FalseSwipeTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		FalseSwipeTM() {
 			super(ItemNamesies.FALSE_SWIPE_TM, "A restrained attack that prevents the target from fainting. The target is left with at least 1 HP.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("False Swipe").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.FALSE_SWIPE;
 		}
 	}
 
-	static class ScaldTM extends Item implements MoveUseItem {
+	static class ScaldTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		ScaldTM() {
 			super(ItemNamesies.SCALD_TM, "The user shoots boiling hot water at its target. It may also leave the target with a burn.", BagCategory.TM, 2002);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Scald").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SCALD;
 		}
 	}
 
-	static class FlingTM extends Item implements MoveUseItem {
+	static class FlingTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		FlingTM() {
 			super(ItemNamesies.FLING_TM, "The user flings its held item at the target to attack. Its power and effects depend on the item.", BagCategory.TM, 2015);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Fling").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.FLING;
 		}
 	}
 
-	static class ChargeBeamTM extends Item implements MoveUseItem {
+	static class ChargeBeamTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		ChargeBeamTM() {
 			super(ItemNamesies.CHARGE_BEAM_TM, "The user attacks with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.", BagCategory.TM, 2003);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Charge Beam").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.CHARGE_BEAM;
 		}
 	}
 
-	static class SkyDropTM extends Item implements MoveUseItem {
+	static class SkyDropTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SkyDropTM() {
 			super(ItemNamesies.SKY_DROP_TM, "The user takes the target into the sky, then slams it into the ground.", BagCategory.TM, 2009);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Sky Drop").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SKY_DROP;
 		}
 	}
 
-	static class IncinerateTM extends Item implements MoveUseItem {
+	static class IncinerateTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		IncinerateTM() {
 			super(ItemNamesies.INCINERATE_TM, "The user attacks the target with fire. If the target is holding a Berry, the Berry becomes burnt up and unusable.", BagCategory.TM, 2001);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Incinerate").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.INCINERATE;
 		}
 	}
 
-	static class WillOWispTM extends Item implements MoveUseItem {
+	static class WillOWispTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		WillOWispTM() {
 			super(ItemNamesies.WILL_O_WISP_TM, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", BagCategory.TM, 2001);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Will-O-Wisp").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.WILL_O_WISP;
 		}
 	}
 
-	static class AcrobaticsTM extends Item implements MoveUseItem {
+	static class AcrobaticsTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		AcrobaticsTM() {
 			super(ItemNamesies.ACROBATICS_TM, "The user nimbly strikes the target. If the user is not holding an item, this attack inflicts massive damage.", BagCategory.TM, 2009);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Acrobatics").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.ACROBATICS;
 		}
 	}
 
-	static class EmbargoTM extends Item implements MoveUseItem {
+	static class EmbargoTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		EmbargoTM() {
 			super(ItemNamesies.EMBARGO_TM, "It prevents the target from using its held item. Its Trainer is also prevented from using items on it.", BagCategory.TM, 2015);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Embargo").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.EMBARGO;
 		}
 	}
 
-	static class ExplosionTM extends Item implements MoveUseItem {
+	static class ExplosionTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		ExplosionTM() {
 			super(ItemNamesies.EXPLOSION_TM, "The user explodes to inflict damage on those around it. The user faints upon using this move.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Explosion").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.EXPLOSION;
 		}
 	}
 
-	static class ShadowClawTM extends Item implements MoveUseItem {
+	static class ShadowClawTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		ShadowClawTM() {
 			super(ItemNamesies.SHADOW_CLAW_TM, "The user slashes with a sharp claw made from shadows. Critical hits land more easily.", BagCategory.TM, 2013);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Shadow Claw").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SHADOW_CLAW;
 		}
 	}
 
-	static class PaybackTM extends Item implements MoveUseItem {
+	static class PaybackTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		PaybackTM() {
 			super(ItemNamesies.PAYBACK_TM, "If the user moves after the target, this attack's power will be doubled.", BagCategory.TM, 2015);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Payback").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.PAYBACK;
 		}
 	}
 
-	static class RetaliateTM extends Item implements MoveUseItem {
+	static class RetaliateTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		RetaliateTM() {
 			super(ItemNamesies.RETALIATE_TM, "The user gets revenge for a fainted ally. If an ally fainted in the previous turn, this attack's damage increases.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Retaliate").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.RETALIATE;
 		}
 	}
 
-	static class GigaImpactTM extends Item implements MoveUseItem {
+	static class GigaImpactTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		GigaImpactTM() {
 			super(ItemNamesies.GIGA_IMPACT_TM, "The user charges at the target using every bit of its power. The user must rest on the next turn.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Giga Impact").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.GIGA_IMPACT;
 		}
 	}
 
-	static class RockPolishTM extends Item implements MoveUseItem {
+	static class RockPolishTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		RockPolishTM() {
 			super(ItemNamesies.ROCK_POLISH_TM, "The user polishes its body to reduce drag. It can sharply raise the Speed stat.", BagCategory.TM, 2012);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Rock Polish").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.ROCK_POLISH;
 		}
 	}
 
-	static class FlashTM extends Item implements MoveUseItem {
+	static class FlashTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		FlashTM() {
 			super(ItemNamesies.FLASH_TM, "The user flashes a bright light that cuts the target's accuracy. It can also be used to illuminate caves.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Flash").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.FLASH;
 		}
 	}
 
-	static class StoneEdgeTM extends Item implements MoveUseItem {
+	static class StoneEdgeTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		StoneEdgeTM() {
 			super(ItemNamesies.STONE_EDGE_TM, "The user stabs the foe with sharpened stones from below. It has a high critical-hit ratio.", BagCategory.TM, 2012);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Stone Edge").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.STONE_EDGE;
 		}
 	}
 
-	static class VoltSwitchTM extends Item implements MoveUseItem {
+	static class VoltSwitchTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		VoltSwitchTM() {
 			super(ItemNamesies.VOLT_SWITCH_TM, "After making its attack, the user rushes back to switch places with a party Pokémon in waiting.", BagCategory.TM, 2003);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Volt Switch").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.VOLT_SWITCH;
 		}
 	}
 
-	static class ThunderWaveTM extends Item implements MoveUseItem {
+	static class ThunderWaveTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		ThunderWaveTM() {
 			super(ItemNamesies.THUNDER_WAVE_TM, "A weak electric charge is launched at the target. It causes paralysis if it hits.", BagCategory.TM, 2003);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Thunder Wave").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.THUNDER_WAVE;
 		}
 	}
 
-	static class GyroBallTM extends Item implements MoveUseItem {
+	static class GyroBallTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		GyroBallTM() {
 			super(ItemNamesies.GYRO_BALL_TM, "The user tackles the target with a high-speed spin. The slower the user, the greater the damage.", BagCategory.TM, 2016);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Gyro Ball").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.GYRO_BALL;
 		}
 	}
 
-	static class SwordsDanceTM extends Item implements MoveUseItem {
+	static class SwordsDanceTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SwordsDanceTM() {
 			super(ItemNamesies.SWORDS_DANCE_TM, "A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Swords Dance").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SWORDS_DANCE;
 		}
 	}
 
-	static class StruggleBugTM extends Item implements MoveUseItem {
+	static class StruggleBugTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		StruggleBugTM() {
 			super(ItemNamesies.STRUGGLE_BUG_TM, "While resisting, the user attacks the opposing Pokémon. The targets' Sp. Atk stat is reduced.", BagCategory.TM, 2011);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Struggle Bug").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.STRUGGLE_BUG;
 		}
 	}
 
-	static class PsychUpTM extends Item implements MoveUseItem {
+	static class PsychUpTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		PsychUpTM() {
 			super(ItemNamesies.PSYCH_UP_TM, "The user hypnotizes itself into copying any stat change made by the target.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Psych Up").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.PSYCH_UP;
 		}
 	}
 
-	static class BulldozeTM extends Item implements MoveUseItem {
+	static class BulldozeTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		BulldozeTM() {
 			super(ItemNamesies.BULLDOZE_TM, "The user stomps down on the ground and attacks everything in the area. Hit Pokémon's Speed stat is reduced.", BagCategory.TM, 2008);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Bulldoze").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.BULLDOZE;
 		}
 	}
 
-	static class FrostBreathTM extends Item implements MoveUseItem {
+	static class FrostBreathTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		FrostBreathTM() {
 			super(ItemNamesies.FROST_BREATH_TM, "The user blows a cold breath on the target. This attack always results in a critical hit.", BagCategory.TM, 2005);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Frost Breath").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.FROST_BREATH;
 		}
 	}
 
-	static class RockSlideTM extends Item implements MoveUseItem {
+	static class RockSlideTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		RockSlideTM() {
 			super(ItemNamesies.ROCK_SLIDE_TM, "Large boulders are hurled at the opposing team to inflict damage. It may also make the targets flinch.", BagCategory.TM, 2012);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Rock Slide").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.ROCK_SLIDE;
 		}
 	}
 
-	static class XScissorTM extends Item implements MoveUseItem {
+	static class XScissorTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		XScissorTM() {
 			super(ItemNamesies.X_SCISSOR_TM, "The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.", BagCategory.TM, 2011);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("X-Scissor").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.X_SCISSOR;
 		}
 	}
 
-	static class DragonTailTM extends Item implements MoveUseItem {
+	static class DragonTailTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		DragonTailTM() {
 			super(ItemNamesies.DRAGON_TAIL_TM, "The user knocks away the target and drags out another Pokémon in its party. In the wild, the battle ends.", BagCategory.TM, 2014);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Dragon Tail").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.DRAGON_TAIL;
 		}
 	}
 
-	static class InfestationTM extends Item implements MoveUseItem {
+	static class InfestationTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		InfestationTM() {
 			super(ItemNamesies.INFESTATION_TM, "The target is infested and attacked for four to five turns. The target can't flee during this time.", BagCategory.TM, 2011);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Infestation").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.INFESTATION;
 		}
 	}
 
-	static class PoisonJabTM extends Item implements MoveUseItem {
+	static class PoisonJabTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		PoisonJabTM() {
 			super(ItemNamesies.POISON_JAB_TM, "The target is stabbed with a tentacle or arm steeped in poison. It may also poison the target.", BagCategory.TM, 2007);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Poison Jab").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.POISON_JAB;
 		}
 	}
 
-	static class DreamEaterTM extends Item implements MoveUseItem {
+	static class DreamEaterTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		DreamEaterTM() {
 			super(ItemNamesies.DREAM_EATER_TM, "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal the user's HP.", BagCategory.TM, 2010);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Dream Eater").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.DREAM_EATER;
 		}
 	}
 
-	static class GrassKnotTM extends Item implements MoveUseItem {
+	static class GrassKnotTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		GrassKnotTM() {
 			super(ItemNamesies.GRASS_KNOT_TM, "The user snares the target with grass and trips it. The heavier the target, the greater the damage.", BagCategory.TM, 2004);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Grass Knot").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.GRASS_KNOT;
 		}
 	}
 
-	static class SwaggerTM extends Item implements MoveUseItem {
+	static class SwaggerTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SwaggerTM() {
 			super(ItemNamesies.SWAGGER_TM, "The user enrages and confuses the target. However, it also sharply raises the target's Attack stat.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Swagger").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SWAGGER;
 		}
 	}
 
-	static class SleepTalkTM extends Item implements MoveUseItem {
+	static class SleepTalkTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SleepTalkTM() {
 			super(ItemNamesies.SLEEP_TALK_TM, "While it is asleep, the user randomly uses one of the moves it knows.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Sleep Talk").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SLEEP_TALK;
 		}
 	}
 
-	static class UTurnTM extends Item implements MoveUseItem {
+	static class UTurnTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		UTurnTM() {
 			super(ItemNamesies.U_TURN_TM, "After making its attack, the user rushes back to switch places with a party Pokémon in waiting.", BagCategory.TM, 2011);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("U-turn").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.U_TURN;
 		}
 	}
 
-	static class SubstituteTM extends Item implements MoveUseItem {
+	static class SubstituteTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SubstituteTM() {
 			super(ItemNamesies.SUBSTITUTE_TM, "The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Substitute").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SUBSTITUTE;
 		}
 	}
 
-	static class FlashCannonTM extends Item implements MoveUseItem {
+	static class FlashCannonTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		FlashCannonTM() {
 			super(ItemNamesies.FLASH_CANNON_TM, "The user gathers all its light energy and releases it at once. It may also lower the target's Sp. Def stat.", BagCategory.TM, 2016);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Flash Cannon").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.FLASH_CANNON;
 		}
 	}
 
-	static class TrickRoomTM extends Item implements MoveUseItem {
+	static class TrickRoomTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		TrickRoomTM() {
 			super(ItemNamesies.TRICK_ROOM_TM, "The user creates a bizarre area in which slower Pokémon get to move first for five turns.", BagCategory.TM, 2010);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Trick Room").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.TRICK_ROOM;
 		}
 	}
 
-	static class WildChargeTM extends Item implements MoveUseItem {
+	static class WildChargeTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		WildChargeTM() {
 			super(ItemNamesies.WILD_CHARGE_TM, "The user shrouds itself in electricity and smashes into its target. It also damages the user a little.", BagCategory.TM, 2003);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Wild Charge").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.WILD_CHARGE;
 		}
 	}
 
-	static class RockSmashTM extends Item implements MoveUseItem {
+	static class RockSmashTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		RockSmashTM() {
 			super(ItemNamesies.ROCK_SMASH_TM, "The user attacks with a punch that can shatter a rock. It may also lower the target's Defense stat.", BagCategory.TM, 2006);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Rock Smash").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.ROCK_SMASH;
 		}
 	}
 
-	static class SnarlTM extends Item implements MoveUseItem {
+	static class SnarlTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SnarlTM() {
 			super(ItemNamesies.SNARL_TM, "The user yells as if it is ranting about something, making the target's Sp. Atk stat decrease.", BagCategory.TM, 2015);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Snarl").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SNARL;
 		}
 	}
 
-	static class NaturePowerTM extends Item implements MoveUseItem {
+	static class NaturePowerTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		NaturePowerTM() {
 			super(ItemNamesies.NATURE_POWER_TM, "An attack that makes use of nature's power. Its effects vary depending on the user's environment.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Nature Power").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.NATURE_POWER;
 		}
 	}
 
-	static class DarkPulseTM extends Item implements MoveUseItem {
+	static class DarkPulseTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		DarkPulseTM() {
 			super(ItemNamesies.DARK_PULSE_TM, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch.", BagCategory.TM, 2015);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Dark Pulse").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.DARK_PULSE;
 		}
 	}
 
-	static class PowerUpPunchTM extends Item implements MoveUseItem {
+	static class PowerUpPunchTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		PowerUpPunchTM() {
 			super(ItemNamesies.POWER_UP_PUNCH_TM, "Striking opponents over and over makes the user's fists harder. Hitting a target raises the Attack stat.", BagCategory.TM, 2006);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Power-Up Punch").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.POWER_UP_PUNCH;
 		}
 	}
 
-	static class DazzlingGleamTM extends Item implements MoveUseItem {
+	static class DazzlingGleamTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		DazzlingGleamTM() {
 			super(ItemNamesies.DAZZLING_GLEAM_TM, "The user damages opposing Pokémon by emitting a powerful flash.", BagCategory.TM, 2017);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Dazzling Gleam").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.DAZZLING_GLEAM;
 		}
 	}
 
-	static class ConfideTM extends Item implements MoveUseItem {
+	static class ConfideTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		ConfideTM() {
 			super(ItemNamesies.CONFIDE_TM, "The user tells the target a secret, and the target loses its ability to concentrate. This lowers the target's Sp. Atk stat.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Confide").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.CONFIDE;
 		}
 	}
 
-	static class CutTM extends Item implements MoveUseItem {
+	static class CutTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		CutTM() {
 			super(ItemNamesies.CUT_TM, "The target is cut with a scythe or a claw. It can also be used to cut down thin trees.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Cut").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.CUT;
 		}
 	}
 
-	static class FlyTM extends Item implements MoveUseItem {
+	static class FlyTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		FlyTM() {
 			super(ItemNamesies.FLY_TM, "The user soars, then strikes its target on the second turn. It can also be used for flying to any familiar town.", BagCategory.TM, 2009);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Fly").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.FLY;
 		}
 	}
 
-	static class SurfTM extends Item implements MoveUseItem {
+	static class SurfTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		SurfTM() {
 			super(ItemNamesies.SURF_TM, "It swamps the area around the user with a giant wave. It can also be used for crossing water.", BagCategory.TM, 2002);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Surf").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.SURF;
 		}
 	}
 
-	static class StrengthTM extends Item implements MoveUseItem {
+	static class StrengthTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		StrengthTM() {
 			super(ItemNamesies.STRENGTH_TM, "The target is slugged with a punch thrown at maximum power. It can also be used to move heavy boulders.", BagCategory.TM, 2000);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Strength").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.STRENGTH;
 		}
 	}
 
-	static class WaterfallTM extends Item implements MoveUseItem {
+	static class WaterfallTM extends Item implements TechnicalMachine {
 		private static final long serialVersionUID = 1L;
 
 		WaterfallTM() {
 			super(ItemNamesies.WATERFALL_TM, "The user charges at the target and may make it flinch. It can also be used to climb a waterfall.", BagCategory.TM, 2002);
 		}
 
-		private Attack getAttack() {
-			return AttackNamesies.getValueOf("Waterfall").getAttack();
-		}
-
-		public boolean use(ActivePokemon p, Move m) {
-			// TODO: Move to default method or something
-			Attack attack = getAttack();
-			
-			// Cannot learn if you already know the move
-			if (p.hasActualMove(attack.namesies())) {
-				return false;
-			}
-			
-			// Cannot learn if the TM is not compatible with the Pokemon
-			if (!p.getPokemonInfo().canLearnMove(attack.namesies())) {
-				return false;
-			}
-			
-			Move tmMove = new Move(attack);
-			List<Move> moveList = p.getActualMoves();
-			
-			// If they don't have a full move list, append to the end
-			if (moveList.size() < Move.MAX_MOVES) {
-				p.addMove(null, tmMove, moveList.size());
-				return true;
-			}
-			
-			// Otherwise, go through their moves and find the one that matches and replace with the TM move
-			for (int i = 0; i < moveList.size(); i++) {
-				if (moveList.get(i).getAttack().namesies() == m.getAttack().namesies()) {
-					p.addMove(tmMove, i, false);
-					return true;
-				}
-			}
-			
-			// Did not find move to replace -- throw error
-			Global.error("ActivePokemon " + p.getName() + " does not have move to replace " + m.getAttack().getName());
-			return false;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return p.getName() + " learned " + getAttack().getName() + "!";
+		public AttackNamesies getAttack() {
+			return AttackNamesies.WATERFALL;
 		}
 	}
 }

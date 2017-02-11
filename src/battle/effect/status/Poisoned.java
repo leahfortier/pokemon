@@ -51,7 +51,7 @@ class Poisoned extends Status implements EndTurnEffect {
         return abilify.getName() + "'s " + abilify.getAbility().getName() + (victim.hasEffect(EffectNamesies.BAD_POISON) ? " badly " : " ") + "poisoned " + victim.getName() + "!";
     }
 
-    public String getRemoveMessage(ActivePokemon victim) {
+    public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " is no longer poisoned!";
     }
 

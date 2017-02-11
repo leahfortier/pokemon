@@ -56,7 +56,7 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
     }
 
     @Override
-    public String getRemoveMessage(ActivePokemon victim) {
+    public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " thawed out!";
     }
 

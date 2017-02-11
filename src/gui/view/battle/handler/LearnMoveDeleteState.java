@@ -77,7 +77,7 @@ public class LearnMoveDeleteState implements VisualStateHandler {
                     String learnMoveName = learnMove.getAttack().getName();
                     String deleteMoveName = learner.getActualMoves().get(moveIndex).getAttack().getName();
 
-                    learner.addMove(view.getCurrentBattle(), learnMove, moveIndex);
+                    learner.addMove(learnMove, moveIndex, true);
 
                     Messages.addToFront(new MessageUpdate("...and " + learnerName + " learned " + learnMoveName + "!"));
                     Messages.addToFront(new MessageUpdate(learnerName + " forgot how to use " + deleteMoveName + "..."));

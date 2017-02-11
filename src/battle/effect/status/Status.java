@@ -1,6 +1,7 @@
 package battle.effect.status;
 
 import battle.Battle;
+import battle.effect.MessageGetter;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.OpponentStatusReceivedEffect;
@@ -18,38 +19,39 @@ public abstract class Status implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private final StatusCondition statusCondition;
+	private final MessageGetter removeMessageGetter;
 
 	protected Status(StatusCondition statusCondition) {
 		this.statusCondition = statusCondition;
+		this.removeMessageGetter = new MessageGetter() {
+			@Override
+			public String getGenericMessage(ActivePokemon p) {
+				return getGenericRemoveMessage(p);
+			}
+
+			@Override
+			public String getSourceMessage(ActivePokemon p, String sourceName) {
+				return getSourceRemoveMessage(p, sourceName);
+			}
+		};
 	}
 
 	protected abstract boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim);
 
+	protected abstract String getGenericRemoveMessage(ActivePokemon victim);
+	protected abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
+
 	protected abstract String getCastMessage(ActivePokemon p);
 	protected abstract String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim);
 
-	protected abstract String getRemoveMessage(ActivePokemon victim);
-	protected abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
-
-	// A method to be overidden if anything related to conflicted victim is necessary to create this status
+	// A method to be overridden if anything related to conflicted victim is necessary to create this status
 	protected void postCreateEffect(ActivePokemon victim) {}
 
 	public static void removeStatus(Battle b, ActivePokemon victim, CastSource source) {
-		Messages.add(new MessageUpdate(getRemoveStatus(b, victim, source)).updatePokemon(b, victim));
-	}
-
-	public static String getRemoveStatus(Battle b, ActivePokemon victim, CastSource source) {
-		StatusCondition status = victim.getStatus().getType();
+		Status status = victim.getStatus();
 		victim.removeStatus();
 
-		switch (source) {
-			case ABILITY:
-				return getStatus(status, victim).getSourceRemoveMessage(victim, victim.getAbility().getName());
-			case HELD_ITEM:
-				return getStatus(status, victim).getSourceRemoveMessage(victim, victim.getHeldItem(b).getName());
-			default:
-				return getStatus(status, victim).getRemoveMessage(victim);
-		}
+		Messages.add(new MessageUpdate(status.removeMessageGetter.getMessage(b, victim, source)).updatePokemon(b, victim));
 	}
 
 	public static String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, StatusCondition status) {
@@ -89,7 +91,6 @@ public abstract class Status implements Serializable {
 
 	protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
 		return !victim.hasStatus() && this.appliesWithoutStatusCheck(b, caster, victim);
-
 	}
 
 	public StatusCondition getType() {
@@ -118,6 +119,7 @@ public abstract class Status implements Serializable {
 			OpponentStatusReceivedEffect.invokeOpponentStatusReceivedEffect(b, victim, status);
 			return true;
 		}
+
 		return false;
 	}
 

@@ -209,6 +209,7 @@ public class BattleAttributes implements Serializable {
 		
 		switch (source) {
 			case ATTACK:
+			case USE_ITEM:
 				message = victim.getName() + "'s {statName} was {change}!";
 				break;
 			case ABILITY:
@@ -217,8 +218,6 @@ public class BattleAttributes implements Serializable {
 			case HELD_ITEM:
 				message = caster.getName() + "'s " + caster.getHeldItem(b).getName() + " {change} {victimName} {statName}!";
 				break;
-			case USE_ITEM:
-				break; // Don't print anything for these, they will be handled manually
 			case EFFECT:
 				Global.error("Effect message should be handled manually using the other modifyStage method.");
 				break;

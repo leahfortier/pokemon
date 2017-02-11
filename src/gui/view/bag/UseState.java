@@ -5,7 +5,6 @@ import item.use.MoveUseItem;
 import item.use.TrainerUseItem;
 import main.Game;
 import pokemon.ActivePokemon;
-import trainer.CharacterData;
 
 import java.awt.Graphics;
 
@@ -100,8 +99,7 @@ enum UseState {
         }
 
         if (this == UseState.USE && view.selectedItem.getItem() instanceof TrainerUseItem) {
-            CharacterData player = Game.getPlayer();
-            player.getBag().useItem(view.selectedItem, player);
+            Game.getPlayer().getBag().useItem(view.selectedItem);
         }
 
         view.updateActiveButtons();

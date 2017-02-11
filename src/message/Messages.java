@@ -50,6 +50,10 @@ public class Messages {
         return StringUtils.isNullOrEmpty(getQueue().peek().getMessage());
     }
 
+    public static void add(String message) {
+        add(new MessageUpdate(message));
+    }
+
     public static void add(MessageUpdate message) {
         getQueue().add(message);
     }

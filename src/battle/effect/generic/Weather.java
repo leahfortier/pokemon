@@ -71,7 +71,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			return !(b.getWeather().namesies() == this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "It started to rain!";
 		}
 
@@ -109,7 +109,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			return !(b.getWeather().namesies() == this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "The sunlight turned harsh!";
 		}
 
@@ -173,7 +173,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			return !(b.getWeather().namesies() == this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "A sandstorm kicked up!";
 		}
 
@@ -231,7 +231,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			return !(b.getWeather().namesies() == this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "It started to hail!";
 		}
 

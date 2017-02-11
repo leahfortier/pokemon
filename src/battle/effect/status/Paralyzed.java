@@ -45,7 +45,7 @@ class Paralyzed extends Status implements BeforeTurnEffect, StatChangingEffect {
         return (int)(stat*(s == Stat.SPEED && !p.hasAbility(AbilityNamesies.QUICK_FEET) ? .25 : 1));
     }
 
-    public String getRemoveMessage(ActivePokemon victim) {
+    public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " is no longer paralyzed!";
     }
 

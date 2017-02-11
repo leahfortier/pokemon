@@ -33,6 +33,7 @@ import battle.effect.status.StatusCondition;
 import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
+import item.berry.GainableEffectBerry;
 import item.hold.EVItem;
 import item.hold.HoldItem;
 import main.Game;
@@ -108,7 +109,6 @@ public class ActivePokemon implements Serializable {
 
 		this.isPlayer = isPlayer;
 		this.attributes = new BattleAttributes();
-		this.totalEXP = pokemon.getGrowthRate().getEXP(this.level) + RandomUtils.getRandomInt(expToNextLevel());
 		this.shiny = (isPlayer || isWild) && RandomUtils.chanceTest(1, 8192);
 
 		this.setMoves();
@@ -121,6 +121,9 @@ public class ActivePokemon implements Serializable {
 		
 		this.isEgg = false;
 		this.eggSteps = 0;
+
+		this.totalEXP = pokemon.getGrowthRate().getEXP(this.level);
+		this.totalEXP += RandomUtils.getRandomInt(expToNextLevel());
 
 		this.fullyHeal();
 	}
@@ -442,16 +445,16 @@ public class ActivePokemon implements Serializable {
 		
 		// Add EXP
 		totalEXP += gain;
-		Messages.add(new MessageUpdate(getActualName() + " gained " + gain + " EXP points!"));
+		Messages.add(getActualName() + " gained " + gain + " EXP points!");
 		if (front) {
 			Messages.add(new MessageUpdate().withExpGain(b, this, Math.min(1, expRatio()), false));
 		}
 		
 		// Add EVs
-		Item i = getHeldItem(b);
+		Item item = getHeldItem(b);
 		int[] vals = dead.getPokemonInfo().getGivenEVs();
-		if (i instanceof EVItem) {
-			vals = ((EVItem)i).getEVs(vals);
+		if (item instanceof EVItem) {
+			vals = ((EVItem)item).getEVs(vals);
 		}
 		
 		addEVs(vals);
@@ -472,7 +475,7 @@ public class ActivePokemon implements Serializable {
 		
 		// Grow to the next level
 		level++;
-		Messages.add(new MessageUpdate(getActualName() + " grew to level " + level + "!"));
+		Messages.add(getActualName() + " grew to level " + level + "!");
 
 		if (front) {
 			Messages.add(new MessageUpdate().withExpGain(b, this, Math.min(1, expRatio()), true));
@@ -568,19 +571,14 @@ public class ActivePokemon implements Serializable {
 		
 		Move move = new Move(attackName.getAttack());
 		if (moves.size() < Move.MAX_MOVES) {
-			Messages.add(new MessageUpdate(getActualName() + " learned " + move.getAttack().getName() + "!"));
 			addMove(move, moves.size() - 1, inBattle);
 		} else {
 			Messages.add(new MessageUpdate().withLearnMove(this, move));
 		}
 	}
 
-	// TODO: Delete this after changing the tm generator
-	public void addMove(Battle b, Move m, int index) {
-		addMove(m, index, b != null);
-	}
-
 	public void addMove(Move m, int index, boolean inBattle) {
+		Messages.add(getActualName() + " learned " + m.getAttack().getName() + "!");
 		if (moves.size() < Move.MAX_MOVES) {
 			moves.add(m);
 		}
@@ -635,7 +633,7 @@ public class ActivePokemon implements Serializable {
 		Item userItem = this.getHeldItem(b);
 		Item victimItem = swapster.getHeldItem(b);
 
-		Messages.add(new MessageUpdate(swapsicles.getSwitchMessage(this, userItem, swapster, victimItem)));
+		Messages.add(swapsicles.getSwitchMessage(this, userItem, swapster, victimItem));
 
 		// For wild battles, an actual switch occurs
 		if (b.isWildBattle()) {
@@ -676,7 +674,7 @@ public class ActivePokemon implements Serializable {
 			return;
 		}
 
-		Messages.add(new MessageUpdate(swapster.getSwapMessage(this, victim)));
+		Messages.add(swapster.getSwapMessage(this, victim));
 
 		Team opponent = b.getTrainer(victim);
 		if (opponent instanceof WildPokemon) {
@@ -711,7 +709,7 @@ public class ActivePokemon implements Serializable {
 				message = this.getName() + " left the battle!";
 			}
 
-			Messages.add(new MessageUpdate(message));
+			Messages.add(message);
 			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
 			return true;
 		}
@@ -730,7 +728,7 @@ public class ActivePokemon implements Serializable {
 			message = this.getName() + " went back to " + trainer.getName() + "!";
 		}
 
-		Messages.add(new MessageUpdate(message));
+		Messages.add(message);
 
 		// TODO: Prompt a legit switch fo user
 		// TODO: Once this happens, this should take in a random parameter since this is still correct for Red Card, I believe and should have the message "name was sent out!"
@@ -981,10 +979,14 @@ public class ActivePokemon implements Serializable {
 	public void setCaught() {
 		isPlayer = true;
 	}
-	
+
+	public boolean isActuallyDead() {
+		return this.hasStatus(StatusCondition.FAINTED);
+	}
+
 	public boolean isFainted(Battle b) {
 		// We have already checked that this Pokemon is fainted -- don't print/apply effects more than once
-		if (hasStatus(StatusCondition.FAINTED)) {
+		if (isActuallyDead()) {
 			if (hp == 0) {
 				return true;
 			}
@@ -1123,7 +1125,7 @@ public class ActivePokemon implements Serializable {
 				taken -= heal(1);
 
 				Messages.add(new MessageUpdate().updatePokemon(b, this));
-				Messages.add(new MessageUpdate(brace.braceMessage(this)));
+				Messages.add(brace.braceMessage(this));
 			}
 		}
 		
@@ -1221,15 +1223,51 @@ public class ActivePokemon implements Serializable {
 	public void removeItem() {
 		heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();
 	}
-	
-	public void consumeItem(Battle b) {
+
+	public void stealBerry(Battle b, ActivePokemon victim) {
+		Item item = victim.getHeldItem(b);
+		if (item instanceof Berry && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
+			Messages.add(this.getName() + " ate " + victim.getName() + "'s " + item.getName() + "!");
+			victim.consumeItemWithoutEffects(b);
+
+			if (item instanceof GainableEffectBerry) {
+				((GainableEffectBerry)item).gainBerryEffect(b, this, CastSource.USE_ITEM);
+				this.consumeBerry((Berry)item, b);
+			}
+		}
+	}
+
+	private void consumeBerry(Berry consumed, Battle b) {
+		// Eat dat berry!!
+		EffectNamesies.EATEN_BERRY.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
+
+		if (consumed instanceof GainableEffectBerry
+				&& this.hasAbility(AbilityNamesies.CHEEK_POUCH)
+				&& !this.fullHealth()) {
+			Messages.add(this.getName() + "'s " + this.getAbility().getName() + " restored its health!");
+			this.healHealthFraction(1/3.0);
+			Messages.add(new MessageUpdate().updatePokemon(b, this));
+		}
+	}
+
+	private Item consumeItemWithoutEffects(Battle b) {
 		Item consumed = getHeldItem(b);
 		EffectNamesies.CONSUMED_ITEM.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
-		
+
+		return consumed;
+	}
+	
+	public void consumeItem(Battle b) {
+		Item consumed = this.consumeItemWithoutEffects(b);
+
+		if (consumed instanceof Berry) {
+			this.consumeBerry((Berry)consumed, b);
+		}
+
 		ActivePokemon other = b.getOtherPokemon(isPlayer);
 		if (other.hasAbility(AbilityNamesies.PICKUP) && !other.isHoldingItem(b)) {
 			other.giveItem((HoldItem)consumed);
-			Messages.add(new MessageUpdate(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!"));
+			Messages.add(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!");
 		}
 	}
 	

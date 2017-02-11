@@ -11,6 +11,7 @@ import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
 import item.Item;
 import item.ItemNamesies;
+import item.use.TechnicalMachine;
 import main.Global;
 import type.Type;
 import pokemon.ability.Ability;
@@ -319,7 +320,8 @@ class PokeGen {
 			String attackName = in.nextLine().trim();
 			String className = PokeString.writeClassName(attackName);
 
-			Attack attack = AttackNamesies.getValueOf(attackName).getAttack();
+			AttackNamesies namesies = AttackNamesies.getValueOf(attackName);
+			Attack attack = namesies.getAttack();
 
 			String itemName = attackName + " TM";
 			className += "TM";
@@ -329,7 +331,9 @@ class PokeGen {
 			fields.add("Namesies", attackName + "_TM");
 			fields.add("Index", TM_BASE_INDEX + attack.getActualType().getIndex() + "");
 			fields.add("Desc", attack.getDescription());
-			fields.add("TM", attackName);
+
+			fields.add("Int", TechnicalMachine.class.getSimpleName());
+			fields.add("TM", namesies.name());
 
 			classes.append(createClass(itemName, className, fields));
 		}

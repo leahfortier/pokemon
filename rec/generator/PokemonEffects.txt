@@ -329,7 +329,7 @@ RaiseCrits:
 		this.direHit = false;
 		this.berrylicious = false;
 		###
-	Int: CritStageEffect, PassableEffect
+	Int: CritStageEffect, PassableEffect, MessageGetter
 	IncreaseCritStage: 
 		int critStage = 0;
 		
@@ -353,7 +353,9 @@ RaiseCrits:
 		return critStage + stage;
 		###
 	FailCondition: source == CastSource.USE_ITEM && victim.hasEffect(this.namesies) && ((RaiseCrits)victim.getEffect(this.namesies)).direHit
-	CastMessage: victim.getName() + " is getting pumped!"
+	CastMessage: this.getMessage(b, victim, source)
+	GenericMessage: p.getName() + " is getting pumped!"
+	SourceMessage: p.getName() + " is getting pumped due to its " + sourceName + "!"
 	CanHave: True
 	Cast: 
 		if (!victim.hasEffect(this.namesies)) {
@@ -361,7 +363,7 @@ RaiseCrits:
 		}
 		// Doesn't 'fail' if they already have the effect -- just display the message again
 		else if (printCast) {
-			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+			Messages.add(getCastMessage(b, caster, victim, source));
 		}
 		
 		RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
@@ -384,7 +386,7 @@ ChangeItem:
 	Int: ItemHolder
 	Cast: 
 		item = ((ItemHolder)source.getSource(b, caster)).getItem();
-		while (victim.getAttributes().removeEffect(this.namesies));
+		victim.getAttributes().removeEffect(this.namesies);
 		super.cast(b, caster, victim, source, printCast);
 		###
 	Field:
@@ -943,7 +945,7 @@ Bide:
 		// Already has the effect, but not ready for it to end yet -- store dat energy 
 		if (bidesies.turns > 0) {
 			bidesies.turns--;
-			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+			Messages.add(getCastMessage(b, caster, victim, source));
 			return;
 		}
 		
@@ -998,7 +1000,7 @@ PowerTrick:
 			return;
 		}
 		
-		Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+		Messages.add(getCastMessage(b, caster, victim, source));
 		victim.getAttributes().removeEffect(this.namesies);
 		###
 *
@@ -1115,7 +1117,7 @@ ConsumedItem:
 	Cast: 
 		consumed = victim.getHeldItem(b);
 		victim.removeItem();
-		while (victim.getAttributes().removeEffect(this.namesies));
+		victim.getAttributes().removeEffect(this.namesies);
 		super.cast(b, caster, victim, source, printCast);
 		###
 	Int: ItemHolder
@@ -1155,6 +1157,7 @@ Electrified:
 		###
 *
 EatenBerry:
+	Comments: // TODO: Why does this need the UsedProof field?
 	UsedProof: True
 *
 BreaksTheMold:

@@ -40,7 +40,6 @@ Syrup:
 	TrainerUse:
 		return false;
 		###
-	SuccessMessage: ""
 *
 Bicycle:
 	Int: TrainerUseItem
@@ -51,7 +50,6 @@ Bicycle:
 		// May need to make this take in info on the route
 		return false;
 		###
-	SuccessMessage: ""
 *
 Surfboard:
 	Int: TrainerUseItem
@@ -61,7 +59,6 @@ Surfboard:
 		// TODO: DOESN'T DO SHIT
 		return false;
 		###
-	SuccessMessage: ""
 *
 Fishing Rod:
 	Int: TrainerUseItem
@@ -72,7 +69,6 @@ Fishing Rod:
 		// May need to make this take in info on the route
 		return false;
 		###
-	SuccessMessage: "Oh! A bite!"
 *
 # HoldItems
 Absorb Bulb:
@@ -1414,7 +1410,7 @@ Full Heal:
 	Desc: A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.
 	Price: 250
 	Fling: 30
-	FullHeal: True
+	StatusHealAll: True
 *
 Full Restore:
 	Int: PokemonUseItem, HoldItem
@@ -1425,7 +1421,7 @@ Full Restore:
 	Fling: 30
 	PokemonUse:
 		// Does not apply to the dead
-		if (p.hasStatus(StatusCondition.FAINTED)) {
+		if (p.isActuallyDead()) {
 			return false;
 		}
 		
@@ -1433,12 +1429,11 @@ Full Restore:
 		if (!p.hasStatus() && p.fullHealth()) {
 			return false;
 		}
-		
-		p.removeStatus();
-		p.healHealthFraction(1);
+	
+		Status.removeStatus(null, p, CastSource.USE_ITEM);
+		this.addHealMessage(p, p.healHealthFraction(1));
 		return true;
 		###
-	SuccessMessage: p.getName() + " was fully healed!"
 *
 Elixir:
 	Desc: It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.
@@ -1529,9 +1524,13 @@ Max Potion:
 	Price: 2500
 	Fling: 30
 	PokemonUse:
-		return p.healHealthFraction(1) != 0;
+		if (!this.canHealHealth(p)) {
+			return false;
+		}
+	
+		this.addHealMessage(p, p.healHealthFraction(1));
+		return true;
 		###
-	SuccessMessage: p.getName() + "'s health was restored!"
 *
 Revive:
 	Desc: A medicine that revives a fainted Pok\u00e9mon. It restores half the Pok\u00e9mon's maximum HP.
@@ -1556,18 +1555,25 @@ Sacred Ash:
 	Price: 4000
 	Fling: 30
 	TrainerUse:
-		boolean changed = false;
+		boolean healed = false;
 		for (ActivePokemon p : t.getTeam()) {
-			if (p.hasStatus(StatusCondition.FAINTED)) {
-				changed = true;
+			if (p.isActuallyDead()) {
+				healed = true;
 				p.removeStatus();
 				p.healHealthFraction(1);
 			}
 		}
-		return changed;
+		
+		if (healed) {
+			Messages.add(new MessageUpdate("All fainted Pok\u00e9mon were fully revived!"));
+		}
+		
+		return healed;
 		###
-	BattleUse: return use((Trainer)b.getTrainer(p.isPlayer()));
-	SuccessMessage: "All fainted Pok\u00e9mon were fully revived!"
+	BattleUse: return use((Trainer)b.getTrainer(p));
+	FullItemUse:
+		return b == null ? use(t) : use(p, b);
+		###
 *
 Dire Hit:
 	Int: BattleUseItem, HoldItem
@@ -1576,16 +1582,9 @@ Dire Hit:
 	Desc: It raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.
 	Price: 650
 	Fling: 30
-	BattleUse:
-		PokemonEffect crits = (PokemonEffect)EffectNamesies.RAISE_CRITS.getEffect();
-		if (!crits.applies(b, p, p, CastSource.USE_ITEM)) {
-			return false;
-		}
-
-		crits.cast(b, p, p, CastSource.USE_ITEM, false);
-		return true;
+	BattleUse: 
+		return EffectNamesies.RAISE_CRITS.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
 		###
-	SuccessMessage: p.getName() + " is getting pumped!"
 *
 Guard Spec.:
 	Int: BattleUseItem, HoldItem
@@ -1594,16 +1593,9 @@ Guard Spec.:
 	Desc: An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after use.
 	Price: 700
 	Fling: 30
-	BattleUse:
-		PokemonEffect gSpesh = (PokemonEffect)EffectNamesies.GUARD_SPECIAL.getEffect();
-		if (!gSpesh.applies(b, p, p, CastSource.USE_ITEM)) {
-			return false;
-		}
-
-		gSpesh.cast(b, p, p, CastSource.USE_ITEM, false);
-		return true;
+	BattleUse: 
+		return EffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
 		###
-	SuccessMessage: p.getName() + " is covered by a veil!"
 *
 X Accuracy:
 	Desc: An item that raises the accuracy of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.
@@ -1698,10 +1690,8 @@ Rare Candy:
 	Cat: Stat
 	Desc: A candy that is packed with energy. It raises the level of a single Pok\u00e9mon by one.
 	PokemonUse:
-		// TODO: Doesn't show animation if it causes an evolution
 		return p.levelUp(null);
 		###
-	SuccessMessage: p.getName() + " gained a level!"
 	Price: 4800
 	Fling: 30
 *
@@ -1890,15 +1880,19 @@ Aspear Berry:
 	NGType: Ice
 *
 Leppa Berry:
-	Int: EndTurnEffect, GainableEffectBerry
+	Int: MoveUseItem, EndTurnEffect, GainableEffectBerry
 	Desc: If held by a Pok\u00e9mon, it restores a move's PP by 10.
 	NGType: Fighting
 	NGPow: 80
+	BattleCat: HP_PP
+	MoveUse:
+		return m.increasePP(10);
+		###
 	ApplyEndTurn:
 		for (Move m : victim.getMoves(b)) {
 			if (m.getPP() == 0) {
 				use(victim, m);
-				Messages.add(new MessageUpdate(getHoldSuccessMessage(b, victim)));
+				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " restored " + m.getAttack().getName() + "'s PP!"));
 				victim.consumeItem(b);
 				break;
 			}
@@ -1924,58 +1918,50 @@ Leppa Berry:
 		use(user, lowestPPMove);
 		return true;
 		###
-	Ether: 10
-	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " restored " + restore + "'s PP!"
 *
 Oran Berry:
-	Int: PokemonUseItem
 	BattleCat: HP_PP
 	Desc: If held by a Pok\u00e9mon, it heals the user by just 10 HP.
 	NGType: Poison
 	NGPow: 80
 	FixedBerryHealthTrigger: 3
-	HoldSuccessMessage: p.getName() + " was healed by its " + this.name + "!"
-	SuccessMessage: p.getName() + "'s health was restored!"
-	PokemonUse:
-		return p.heal(10) != 0;
-		###
+	HoldHealer: p.heal(10)
 *
 Persim Berry:
-	Int: BattleUseItem, GainableEffectBerry
+	Int: BattleUseItem, MessageGetter, GainableEffectBerry
 	BattleCat: HP_PP
 	Desc: If held by a Pok\u00e9mon, it recovers from confusion.
 	NGType: Ground
 	NGPow: 80
-	BattleUse:
-		if (p.hasEffect(EffectNamesies.CONFUSION)) {
-			p.getAttributes().removeEffect(EffectNamesies.CONFUSION);
-			return true;
+	Field:
+		private boolean use(ActivePokemon p, CastSource source) {
+			if (p.hasEffect(EffectNamesies.CONFUSION)) {
+				p.getAttributes().removeEffect(EffectNamesies.CONFUSION);
+				this.addMessage(p, source);
+				return true;
+			}
+			
+			return false;
 		}
-		
-		return false;
 		###
-	GainEffect: return use(user, b);
-	SuccessMessage: p.getName() + " snapped out of its confusion!"
-	HoldSuccessMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
+	BattleUse: return use(p, CastSource.USE_ITEM);
+	GainEffect: return use(user, source);
+	GenericMessage: p.getName() + " snapped out of its confusion!"
+	SourceMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
 *
 Lum Berry:
 	Int: StatusBerry
 	Desc: If held by a Pok\u00e9mon, it recovers from any status problem.
 	NGType: Flying
-	FullHeal: True
+	StatusHealAll: True
 *
 Sitrus Berry:
 	BattleCat: HP_PP
-	Int: PokemonUseItem
 	Desc: If held by a Pok\u00e9mon, it heals the user by a little.
 	NGType: Psychic
 	NGPow: 80
 	FixedBerryHealthTrigger: 2
-	PokemonUse:
-		return p.healHealthFraction(1/4.0) != 0;
-		###
-	SuccessMessage: p.getName() + "'s health was restored!"
-	HoldSuccessMessage: p.getName() + " was healed by its " + this.name + "!"
+	HoldHealer: p.healHealthFraction(1/4.0)
 *
 Razz Berry:
 	Int: Berry
@@ -2163,11 +2149,9 @@ Lansat Berry:
 	NGPow: 100
 	FixedBerryHealthTrigger: 4
 	GainEffect:
-		EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
+		EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
 		return true;
 		###
-	HoldSuccessMessage: p.getName() + " is getting pumped due to its " + this.name + "!"
-	SuccessMessage: p.getName() + " is getting pumped!"
 *
 Starf Berry:
 	Desc: If held by a Pok\u00e9mon, it raises a random stat in a pinch.
@@ -2175,34 +2159,23 @@ Starf Berry:
 	NGPow: 100
 	FixedBerryHealthTrigger: 4
 	GainEffect:
-		holdMessage = "";
-		useMessage = "";
-	
 		int rand = RandomUtils.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
 		
 		// Raise crit
 		if (rand == Stat.NUM_BATTLE_STATS) {
-			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
-			holdMessage = user.getName() + " is getting pumped due to its " + this.name + "!";
-			useMessage = user.getName() + " is getting pumped!";
+			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
 			return true;
 		}
 		
 		// Raise random battle stat
 		Stat stat = Stat.getStat(rand, true);
 		if (user.getAttributes().modifyStage(user, user, 1, stat, b, source)) {
-			useMessage = user.getName() + "'s " + stat.getName() + " increased!";
 			return true;
 		}
+		
 
 		return false;
 		###
-	Field:
-		private String holdMessage;
-		private String useMessage;
-		###
-	SuccessMessage: useMessage
-	HoldSuccessMessage: holdMessage
 *
 # Other Items
 Comet Shard:
@@ -2333,9 +2306,9 @@ Ability Capsule:
 		}
 		
 		p.setAbility(other);
+		Messages.add(p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!")	;
 		return true;
 		###
-	SuccessMessage: p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!"
 *
 Assault Vest:
 	Desc: An item to be held by a Pok\u00e9mon. This offensive vest raises Sp. Def but prevents the use of status moves.
