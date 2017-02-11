@@ -2682,10 +2682,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 9800;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (user.isAttackType(Type.STEEL)) {
 				return 1.2;
@@ -2925,10 +2921,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 80;
 		}
@@ -2956,10 +2948,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SP_DEFENSE;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -2991,10 +2979,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			return s == Stat.SP_ATTACK;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 90;
 		}
@@ -3010,10 +2994,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		DragonScale() {
 			super(ItemNamesies.DRAGON_SCALE, "A thick and tough scale. Dragon-type Pok\u00e9mon may be holding this item when caught.", BagCategory.MISC, 141);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3033,10 +3013,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 50;
 		}
@@ -3052,10 +3028,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		DuskStone() {
 			super(ItemNamesies.DUSK_STONE, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as dark as dark can be.", BagCategory.MISC, 143);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3075,10 +3047,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 80;
 		}
@@ -3096,10 +3064,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3115,10 +3079,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		KingsRock() {
 			super(ItemNamesies.KINGS_ROCK, "An item to be held by a Pok\u00e9mon. When the holder inflicts damage, the target may flinch.", BagCategory.MISC, 146);
 			super.price = 100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public boolean use(ActivePokemon p) {
@@ -3152,10 +3112,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3171,10 +3127,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		Magmarizer() {
 			super(ItemNamesies.MAGMARIZER, "A box packed with a tremendous amount of magma energy. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 148);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3194,10 +3146,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3213,10 +3161,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		OvalStone() {
 			super(ItemNamesies.OVAL_STONE, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is shaped like an egg.", BagCategory.MISC, 150);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3249,10 +3193,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 500;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3270,10 +3210,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 80;
 		}
@@ -3289,10 +3225,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		RazorClaw() {
 			super(ItemNamesies.RAZOR_CLAW, "An item to be held by a Pok\u00e9mon. It is a sharply hooked claw that ups the holder's critical-hit ratio.", BagCategory.MISC, 154);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3314,10 +3246,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		RazorFang() {
 			super(ItemNamesies.RAZOR_FANG, "An item to be held by a Pok\u00e9mon. It may make foes and allies flinch when the holder inflicts damage.`", BagCategory.MISC, 155);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public boolean use(ActivePokemon p) {
@@ -3351,10 +3279,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 10;
 		}
@@ -3370,10 +3294,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		Sachet() {
 			super(ItemNamesies.SACHET, "A sachet filled with fragrant perfumes that are just slightly too overwhelming. Yet it's loved by a certain Pok\u00e9mon.", BagCategory.MISC, 157);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3393,10 +3313,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 80;
 		}
@@ -3412,10 +3328,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		SunStone() {
 			super(ItemNamesies.SUN_STONE, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as red as the sun.", BagCategory.MISC, 159);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3435,10 +3347,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3454,10 +3362,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		IceStone() {
 			super(ItemNamesies.ICE_STONE, "A peculiar stone that can make certain species of Pokémon evolve. It has an unmistakable snowflake pattern.", BagCategory.MISC, 161);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -3477,10 +3381,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3498,10 +3398,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 2100;
 		}
 
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
-		}
-
 		public int flingDamage() {
 			return 30;
 		}
@@ -3517,10 +3413,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		WhippedDream() {
 			super(ItemNamesies.WHIPPED_DREAM, "A soft and sweet treat made of fluffy, puffy, whipped and whirled cream. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC, 164);
 			super.price = 2100;
-		}
-
-		public String getSuccessMessage(ActivePokemon p) {
-			return "";
 		}
 
 		public int flingDamage() {
@@ -6772,7 +6664,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class LansatBerry extends Item implements MessageGetter, HealthTriggeredBerry {
+	static class LansatBerry extends Item implements HealthTriggeredBerry {
 		private static final long serialVersionUID = 1L;
 
 		LansatBerry() {
@@ -6780,21 +6672,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			super.price = 20;
 		}
 
-		public String getGenericMessage(ActivePokemon p) {
-			return p.getName() + " is getting pumped!";
-		}
-
-		public String getSourceMessage(ActivePokemon p, String sourceName) {
-			return p.getName() + " is getting pumped due to its " + this.name + "!";
-		}
-
 		public double healthTriggerRatio() {
 			return 1/4.0;
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
-			this.addMessage(user, source);
+			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
 			return true;
 		}
 
@@ -6828,20 +6711,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			
 			// Raise crit
 			if (rand == Stat.NUM_BATTLE_STATS) {
-				EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
-				final String message;
-				switch (source) {
-					case HELD_ITEM:
-						message = user.getName() + " is getting pumped due to its " + this.name + "!";
-						break;
-					case USE_ITEM:
-						message = user.getName() + " is getting pumped!";
-						break;
-					default:
-						Global.error("Invalid source " + source);
-						break;
-				}
-				
+				EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
 				return true;
 			}
 			

@@ -5,6 +5,7 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
+import battle.effect.MessageGetter;
 import battle.effect.PassableEffect;
 import battle.effect.SapHealthEffect;
 import battle.effect.attack.ChangeAbilityMove;
@@ -1123,7 +1124,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class RaiseCrits extends PokemonEffect implements CritStageEffect, PassableEffect {
+	static class RaiseCrits extends PokemonEffect implements CritStageEffect, PassableEffect, MessageGetter {
 		private static final long serialVersionUID = 1L;
 		private boolean focusEnergy;
 		private boolean direHit;
@@ -1166,7 +1167,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-			return victim.getName() + " is getting pumped!";
+			return this.getMessage(b, victim, source);
 		}
 
 		public int increaseCritStage(int stage, ActivePokemon p) {
@@ -1191,6 +1192,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			return critStage + stage;
 		}
+
+		public String getGenericMessage(ActivePokemon p) {
+			return p.getName() + " is getting pumped!";
+		}
+
+		public String getSourceMessage(ActivePokemon p, String sourceName) {
+			return p.getName() + " is getting pumped due to its " + sourceName + "!";
+		}
 	}
 
 	static class ChangeItem extends PokemonEffect implements ItemHolder {
@@ -1203,7 +1212,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			item = ((ItemHolder)source.getSource(b, caster)).getItem();
-			while (victim.getAttributes().removeEffect(this.namesies));
+			victim.getAttributes().removeEffect(this.namesies);
 			super.cast(b, caster, victim, source, printCast);
 		}
 
@@ -2615,7 +2624,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			consumed = victim.getHeldItem(b);
 			victim.removeItem();
-			while (victim.getAttributes().removeEffect(this.namesies));
+			victim.getAttributes().removeEffect(this.namesies);
 			super.cast(b, caster, victim, source, printCast);
 		}
 

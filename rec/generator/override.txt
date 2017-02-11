@@ -1649,7 +1649,6 @@ MemoryItem:
 Override:
 	EvolutionItem:
 		AddInterface: PokemonUseItem
-		AddMapField: SuccessMessage: ""
 		AddMapField: PokemonUse:
 			return p.checkEvolution(this.namesies);
 			###
@@ -2189,22 +2188,6 @@ Override:
 	ConsumeBerry:
 		AddMapField: UniqueEffects: 
 			user.stealBerry(b, victim);
-			###
-	*
-***
-Override:
-	SuccessMessage:
-		Header: String getSuccessMessage(ActivePokemon p)
-		Body:
-			return {0};
-			###
-	*
-***
-Override:
-	HoldSuccessMessage:
-		Header: String getHoldSuccessMessage(ActivePokemon p)
-		Body:
-			return {0};
 			###
 	*
 ***

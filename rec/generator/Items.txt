@@ -2145,14 +2145,10 @@ Lansat Berry:
 	NGType: Flying
 	NGPow: 100
 	FixedBerryHealthTrigger: 4
-	Int: MessageGetter
 	GainEffect:
-		EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
-		this.addMessage(user, source);
+		EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
 		return true;
 		###
-	SourceMessage: p.getName() + " is getting pumped due to its " + this.name + "!"
-	GenericMessage: p.getName() + " is getting pumped!"
 *
 Starf Berry:
 	Desc: If held by a Pok\u00e9mon, it raises a random stat in a pinch.
@@ -2164,20 +2160,7 @@ Starf Berry:
 		
 		// Raise crit
 		if (rand == Stat.NUM_BATTLE_STATS) {
-			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, false);
-			final String message;
-			switch (source) {
-				case HELD_ITEM:
-					message = user.getName() + " is getting pumped due to its " + this.name + "!";
-					break;
-				case USE_ITEM:
-					message = user.getName() + " is getting pumped!";
-					break;
-				default:
-					Global.error("Invalid source " + source);
-					break;
-			}
-			
+			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
 			return true;
 		}
 		

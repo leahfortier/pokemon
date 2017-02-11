@@ -329,7 +329,7 @@ RaiseCrits:
 		this.direHit = false;
 		this.berrylicious = false;
 		###
-	Int: CritStageEffect, PassableEffect
+	Int: CritStageEffect, PassableEffect, MessageGetter
 	IncreaseCritStage: 
 		int critStage = 0;
 		
@@ -353,7 +353,9 @@ RaiseCrits:
 		return critStage + stage;
 		###
 	FailCondition: source == CastSource.USE_ITEM && victim.hasEffect(this.namesies) && ((RaiseCrits)victim.getEffect(this.namesies)).direHit
-	CastMessage: victim.getName() + " is getting pumped!"
+	CastMessage: this.getMessage(b, victim, source)
+	GenericMessage: p.getName() + " is getting pumped!"
+	SourceMessage: p.getName() + " is getting pumped due to its " + sourceName + "!"
 	CanHave: True
 	Cast: 
 		if (!victim.hasEffect(this.namesies)) {
@@ -384,7 +386,7 @@ ChangeItem:
 	Int: ItemHolder
 	Cast: 
 		item = ((ItemHolder)source.getSource(b, caster)).getItem();
-		while (victim.getAttributes().removeEffect(this.namesies));
+		victim.getAttributes().removeEffect(this.namesies);
 		super.cast(b, caster, victim, source, printCast);
 		###
 	Field:
@@ -1115,7 +1117,7 @@ ConsumedItem:
 	Cast: 
 		consumed = victim.getHeldItem(b);
 		victim.removeItem();
-		while (victim.getAttributes().removeEffect(this.namesies));
+		victim.getAttributes().removeEffect(this.namesies);
 		super.cast(b, caster, victim, source, printCast);
 		###
 	Int: ItemHolder
