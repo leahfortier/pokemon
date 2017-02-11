@@ -2306,7 +2306,7 @@ Ability Capsule:
 		}
 		
 		p.setAbility(other);
-		Messages.add(new MessageUpdate(p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!"));
+		Messages.add(p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!")	;
 		return true;
 		###
 *

@@ -3570,7 +3570,7 @@ public abstract class Attack implements Serializable {
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
-				if (!p.hasStatus(StatusCondition.FAINTED)) {
+				if (!p.isActuallyDead()) {
 					p.removeStatus();
 				}
 			}
@@ -7613,7 +7613,7 @@ public abstract class Attack implements Serializable {
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
-				if (!p.hasStatus(StatusCondition.FAINTED)) {
+				if (!p.isActuallyDead()) {
 					p.removeStatus();
 				}
 			}

@@ -445,7 +445,7 @@ public class ActivePokemon implements Serializable {
 		
 		// Add EXP
 		totalEXP += gain;
-		Messages.add(new MessageUpdate(getActualName() + " gained " + gain + " EXP points!"));
+		Messages.add(getActualName() + " gained " + gain + " EXP points!");
 		if (front) {
 			Messages.add(new MessageUpdate().withExpGain(b, this, Math.min(1, expRatio()), false));
 		}
@@ -475,7 +475,7 @@ public class ActivePokemon implements Serializable {
 		
 		// Grow to the next level
 		level++;
-		Messages.add(new MessageUpdate(getActualName() + " grew to level " + level + "!"));
+		Messages.add(getActualName() + " grew to level " + level + "!");
 
 		if (front) {
 			Messages.add(new MessageUpdate().withExpGain(b, this, Math.min(1, expRatio()), true));
@@ -633,7 +633,7 @@ public class ActivePokemon implements Serializable {
 		Item userItem = this.getHeldItem(b);
 		Item victimItem = swapster.getHeldItem(b);
 
-		Messages.add(new MessageUpdate(swapsicles.getSwitchMessage(this, userItem, swapster, victimItem)));
+		Messages.add(swapsicles.getSwitchMessage(this, userItem, swapster, victimItem));
 
 		// For wild battles, an actual switch occurs
 		if (b.isWildBattle()) {
@@ -674,7 +674,7 @@ public class ActivePokemon implements Serializable {
 			return;
 		}
 
-		Messages.add(new MessageUpdate(swapster.getSwapMessage(this, victim)));
+		Messages.add(swapster.getSwapMessage(this, victim));
 
 		Team opponent = b.getTrainer(victim);
 		if (opponent instanceof WildPokemon) {
@@ -709,7 +709,7 @@ public class ActivePokemon implements Serializable {
 				message = this.getName() + " left the battle!";
 			}
 
-			Messages.add(new MessageUpdate(message));
+			Messages.add(message);
 			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
 			return true;
 		}
@@ -728,7 +728,7 @@ public class ActivePokemon implements Serializable {
 			message = this.getName() + " went back to " + trainer.getName() + "!";
 		}
 
-		Messages.add(new MessageUpdate(message));
+		Messages.add(message);
 
 		// TODO: Prompt a legit switch fo user
 		// TODO: Once this happens, this should take in a random parameter since this is still correct for Red Card, I believe and should have the message "name was sent out!"
@@ -1125,7 +1125,7 @@ public class ActivePokemon implements Serializable {
 				taken -= heal(1);
 
 				Messages.add(new MessageUpdate().updatePokemon(b, this));
-				Messages.add(new MessageUpdate(brace.braceMessage(this)));
+				Messages.add(brace.braceMessage(this));
 			}
 		}
 		
@@ -1227,7 +1227,7 @@ public class ActivePokemon implements Serializable {
 	public void stealBerry(Battle b, ActivePokemon victim) {
 		Item item = victim.getHeldItem(b);
 		if (item instanceof Berry && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-			Messages.add(new MessageUpdate(this.getName() + " ate " + victim.getName() + "'s " + item.getName() + "!"));
+			Messages.add(this.getName() + " ate " + victim.getName() + "'s " + item.getName() + "!");
 			victim.consumeItemWithoutEffects(b);
 
 			if (item instanceof GainableEffectBerry) {
@@ -1237,20 +1237,20 @@ public class ActivePokemon implements Serializable {
 		}
 	}
 
-	public void consumeBerry(Berry consumed, Battle b) {
+	private void consumeBerry(Berry consumed, Battle b) {
 		// Eat dat berry!!
 		EffectNamesies.EATEN_BERRY.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
 
 		if (consumed instanceof GainableEffectBerry
 				&& this.hasAbility(AbilityNamesies.CHEEK_POUCH)
 				&& !this.fullHealth()) {
-			Messages.add(new MessageUpdate(this.getName() + "'s " + this.getAbility().getName() + " restored its health!"));
+			Messages.add(this.getName() + "'s " + this.getAbility().getName() + " restored its health!");
 			this.healHealthFraction(1/3.0);
 			Messages.add(new MessageUpdate().updatePokemon(b, this));
 		}
 	}
 
-	public Item consumeItemWithoutEffects(Battle b) {
+	private Item consumeItemWithoutEffects(Battle b) {
 		Item consumed = getHeldItem(b);
 		EffectNamesies.CONSUMED_ITEM.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
 
@@ -1267,7 +1267,7 @@ public class ActivePokemon implements Serializable {
 		ActivePokemon other = b.getOtherPokemon(isPlayer);
 		if (other.hasAbility(AbilityNamesies.PICKUP) && !other.isHoldingItem(b)) {
 			other.giveItem((HoldItem)consumed);
-			Messages.add(new MessageUpdate(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!"));
+			Messages.add(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!");
 		}
 	}
 	

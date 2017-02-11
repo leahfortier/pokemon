@@ -3570,7 +3570,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		private boolean use(ActivePokemon p, CastSource source) {
 			// Does not apply to the dead
-			if (p.hasStatus(StatusCondition.FAINTED)) {
+			if (p.isActuallyDead()) {
 				return false;
 			}
 			
@@ -3715,7 +3715,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public boolean use(ActivePokemon p, Move m) {
 			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
 			if (m.increasePP(10)) {
-				Messages.add(new MessageUpdate(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!"));
+				Messages.add(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!");
 				return true;
 			}
 			
@@ -3739,7 +3739,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		public boolean use(ActivePokemon p, Move m) {
 			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
 			if (m.increasePP(m.getMaxPP())) {
-				Messages.add(new MessageUpdate(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!"));
+				Messages.add(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!");
 				return true;
 			}
 			
@@ -3761,8 +3761,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			p.heal(20);
-			Messages.add(p.getName() + "'s health was restored!");
+			this.addHealMessage(p, p.heal(20));
 			return true;
 		}
 
@@ -3785,8 +3784,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			p.heal(20);
-			Messages.add(p.getName() + "'s health was restored!");
+			this.addHealMessage(p, p.heal(20));
 			return true;
 		}
 
@@ -3809,8 +3807,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			p.heal(20);
-			Messages.add(p.getName() + "'s health was restored!");
+			this.addHealMessage(p, p.heal(20));
 			return true;
 		}
 
@@ -3833,8 +3830,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			p.heal(50);
-			Messages.add(p.getName() + "'s health was restored!");
+			this.addHealMessage(p, p.heal(50));
 			return true;
 		}
 
@@ -3857,8 +3853,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			p.heal(50);
-			Messages.add(p.getName() + "'s health was restored!");
+			this.addHealMessage(p, p.heal(50));
 			return true;
 		}
 
@@ -3881,8 +3876,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			p.heal(50);
-			Messages.add(p.getName() + "'s health was restored!");
+			this.addHealMessage(p, p.heal(50));
 			return true;
 		}
 
@@ -3905,8 +3899,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			p.heal(60);
-			Messages.add(p.getName() + "'s health was restored!");
+			this.addHealMessage(p, p.heal(60));
 			return true;
 		}
 
@@ -3929,8 +3922,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			p.heal(80);
-			Messages.add(p.getName() + "'s health was restored!");
+			this.addHealMessage(p, p.heal(80));
 			return true;
 		}
 
@@ -3953,8 +3945,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			p.heal(100);
-			Messages.add(p.getName() + "'s health was restored!");
+			this.addHealMessage(p, p.heal(100));
 			return true;
 		}
 
@@ -3977,8 +3968,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			p.heal(200);
-			Messages.add(p.getName() + "'s health was restored!");
+			this.addHealMessage(p, p.heal(200));
 			return true;
 		}
 
@@ -4001,8 +3991,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 				return false;
 			}
 			
-			p.heal(200);
-			Messages.add(p.getName() + "'s health was restored!");
+			this.addHealMessage(p, p.heal(200));
 			return true;
 		}
 
@@ -4045,7 +4034,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public boolean use(ActivePokemon p) {
 			// Only applies to the dead
-			if (!p.hasStatus(StatusCondition.FAINTED)) {
+			if (!p.isActuallyDead()) {
 				return false;
 			}
 			
@@ -4073,7 +4062,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public boolean use(ActivePokemon p) {
 			// Only applies to the dead
-			if (!p.hasStatus(StatusCondition.FAINTED)) {
+			if (!p.isActuallyDead()) {
 				return false;
 			}
 			
@@ -4101,7 +4090,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public boolean use(ActivePokemon p) {
 			// Only applies to the dead
-			if (!p.hasStatus(StatusCondition.FAINTED)) {
+			if (!p.isActuallyDead()) {
 				return false;
 			}
 			
@@ -4611,7 +4600,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public boolean use(ActivePokemon p, Move m) {
 			if (m.increaseMaxPP(3)) {
-				Messages.add(new MessageUpdate(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!"));
+				Messages.add(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!");
 				return true;
 			}
 			
@@ -4633,7 +4622,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		public boolean use(ActivePokemon p, Move m) {
 			if (m.increaseMaxPP(1)) {
-				Messages.add(new MessageUpdate(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!"));
+				Messages.add(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!");
 				return true;
 			}
 			
@@ -5302,7 +5291,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			}
 			
 			p.heal(10);
-			this.addMessage(p, source);
+			Messages.add(new MessageUpdate(this.getMessage(p, source)).withHp(p.getHP(), p.isPlayer()));
 			return true;
 		}
 
@@ -5397,7 +5386,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 
 		private boolean use(ActivePokemon p, CastSource source) {
 			// Does not apply to the dead
-			if (p.hasStatus(StatusCondition.FAINTED)) {
+			if (p.isActuallyDead()) {
 				return false;
 			}
 			
@@ -5446,7 +5435,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			}
 			
 			p.healHealthFraction(1/4.0);
-			this.addMessage(p, source);
+			Messages.add(new MessageUpdate(this.getMessage(p, source)).withHp(p.getHP(), p.isPlayer()));
 			return true;
 		}
 
@@ -7034,7 +7023,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			}
 			
 			p.setAbility(other);
-			Messages.add(new MessageUpdate(p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!"));
+			Messages.add(p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!")	;
 			return true;
 		}
 	}

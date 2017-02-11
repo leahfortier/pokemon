@@ -446,6 +446,59 @@ public class AttackTest {
     }
 
     @Test
+    public void bugBiteTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.DRAGONITE, PokemonNamesies.DRAGONITE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        attacking.giveItem(ItemNamesies.RAWST_BERRY);
+        battle.attackingFight(AttackNamesies.WILL_O_WISP);
+        Assert.assertTrue(attacking.isHoldingItem(battle));
+        Assert.assertTrue(defending.hasStatus(StatusCondition.BURNED));
+
+        battle.fight(AttackNamesies.ENDURE, AttackNamesies.BUG_BITE);
+        Assert.assertFalse(attacking.isHoldingItem(battle));
+        Assert.assertFalse(defending.isHoldingItem(battle));
+        Assert.assertFalse(defending.hasStatus());
+        Assert.assertFalse(attacking.hasEffect(EffectNamesies.EATEN_BERRY));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.EATEN_BERRY));
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.CONSUMED_ITEM));
+        Assert.assertFalse(defending.hasEffect(EffectNamesies.CONSUMED_ITEM));
+
+        battle.attackingFight(AttackNamesies.RECYCLE);
+        Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.RAWST_BERRY));
+        Assert.assertFalse(defending.isHoldingItem(battle));
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertFalse(defending.hasStatus());
+        Assert.assertFalse(attacking.hasEffect(EffectNamesies.EATEN_BERRY));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.EATEN_BERRY));
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.CONSUMED_ITEM));
+        Assert.assertFalse(defending.hasEffect(EffectNamesies.CONSUMED_ITEM));
+
+        battle.defendingFight(AttackNamesies.POISON_POWDER);
+        Assert.assertTrue(attacking.isHoldingItem(battle));
+        Assert.assertFalse(defending.isHoldingItem(battle));
+        Assert.assertTrue(attacking.hasStatus());
+        Assert.assertFalse(defending.hasStatus());
+
+        battle.attackingFight(AttackNamesies.PSYCHO_SHIFT);
+        Assert.assertTrue(attacking.isHoldingItem(battle));
+        Assert.assertFalse(defending.isHoldingItem(battle));
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertTrue(defending.hasStatus());
+
+        battle.defendingFight(AttackNamesies.WILL_O_WISP);
+        Assert.assertFalse(attacking.isHoldingItem(battle));
+        Assert.assertFalse(defending.isHoldingItem(battle));
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertTrue(defending.hasStatus());
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.EATEN_BERRY));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.EATEN_BERRY));
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.CONSUMED_ITEM));
+        Assert.assertFalse(defending.hasEffect(EffectNamesies.CONSUMED_ITEM));
+    }
+
+    @Test
     public void multiTurnMoveTest() {
         // TODO
     }

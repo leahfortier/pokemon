@@ -19,15 +19,11 @@ public abstract class Status implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private final StatusCondition statusCondition;
+	private final MessageGetter removeMessageGetter;
 
 	protected Status(StatusCondition statusCondition) {
 		this.statusCondition = statusCondition;
-	}
-
-	protected abstract boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim);
-
-	private String getRemoveMessage(Battle b, ActivePokemon p, CastSource source) {
-		return new MessageGetter() {
+		this.removeMessageGetter = new MessageGetter() {
 			@Override
 			public String getGenericMessage(ActivePokemon p) {
 				return getGenericRemoveMessage(p);
@@ -37,8 +33,10 @@ public abstract class Status implements Serializable {
 			public String getSourceMessage(ActivePokemon p, String sourceName) {
 				return getSourceRemoveMessage(p, sourceName);
 			}
-		}.getMessage(b, p, source);
+		};
 	}
+
+	protected abstract boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim);
 
 	protected abstract String getGenericRemoveMessage(ActivePokemon victim);
 	protected abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
@@ -53,7 +51,7 @@ public abstract class Status implements Serializable {
 		Status status = victim.getStatus();
 		victim.removeStatus();
 
-		Messages.add(new MessageUpdate(status.getRemoveMessage(b, victim, source)).updatePokemon(b, victim));
+		Messages.add(new MessageUpdate(status.removeMessageGetter.getMessage(b, victim, source)).updatePokemon(b, victim));
 	}
 
 	public static String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, StatusCondition status) {

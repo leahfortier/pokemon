@@ -1500,7 +1500,7 @@ Override:
 		AddMapField: Fling: 30
 		AddMapField: MoveUse:
 			if (m.increaseMaxPP({0})) {
-				Messages.add(new MessageUpdate(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!"));
+				Messages.add(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!");
 				return true;
 			}
 			
@@ -1518,7 +1518,7 @@ Override:
 		AddMapField: MoveUse:
 			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
 			if (m.increasePP({0})) {
-				Messages.add(new MessageUpdate(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!"));
+				Messages.add(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!");
 				return true;
 			}
 			
@@ -1659,7 +1659,7 @@ Override:
 		AddMapField: BattleCat: Status
 		AddMapField: SourceUse:
 			// Does not apply to the dead
-			if (p.hasStatus(StatusCondition.FAINTED)) {	
+			if (p.isActuallyDead()) {
 				return false;
 			}
 			
@@ -1682,7 +1682,7 @@ Override:
 		AddMapField: Fling: 30
 		AddMapField: PokemonUse:
 			// Only applies to the dead
-			if (!p.hasStatus(StatusCondition.FAINTED)) {
+			if (!p.isActuallyDead()) {
 				return false;
 			}
 			
@@ -1703,7 +1703,7 @@ Override:
 			}
 
 			{0};
-			this.addMessage(p, source);
+			Messages.add(new MessageUpdate(this.getMessage(p, source)).withHp(p.getHP(), p.isPlayer()));
 			return true;
 			###
 		AddInterface: MessageGetter
@@ -1741,8 +1741,7 @@ Override:
 				return false;
 			}
 			
-			p.heal({0});
-			Messages.add(p.getName() + "'s health was restored!");
+			this.addHealMessage(p, p.heal({0}));
 			return true;
 			###
 		AddMapField: Cat: Medicine
@@ -1901,7 +1900,7 @@ Override:
 	HealPartyStatus:
 		AddMapField: UniqueEffects:
 			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
-				if (!p.hasStatus(StatusCondition.FAINTED)) {
+				if (!p.isActuallyDead()) {
 					p.removeStatus();
 				}
 			}
