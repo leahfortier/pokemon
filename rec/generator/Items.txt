@@ -1928,21 +1928,24 @@ Oran Berry:
 	HoldHealer: p.heal(10)
 *
 Persim Berry:
-	Int: MessageGetter, GainableEffectBerry
+	Int: BattleUseItem, MessageGetter, GainableEffectBerry
 	BattleCat: HP_PP
 	Desc: If held by a Pok\u00e9mon, it recovers from confusion.
 	NGType: Ground
 	NGPow: 80
-	BattleSourceUse:
-		if (p.hasEffect(EffectNamesies.CONFUSION)) {
-			p.getAttributes().removeEffect(EffectNamesies.CONFUSION);
-			this.addMessage(p, source);
-			return true;
+	Field:
+		private boolean use(ActivePokemon p, CastSource source) {
+			if (p.hasEffect(EffectNamesies.CONFUSION)) {
+				p.getAttributes().removeEffect(EffectNamesies.CONFUSION);
+				this.addMessage(p, source);
+				return true;
+			}
+			
+			return false;
 		}
-		
-		return false;
 		###
-	GainEffect: return use(user, b, source);
+	BattleUse: return use(p, CastSource.USE_ITEM);
+	GainEffect: return use(user, source);
 	GenericMessage: p.getName() + " snapped out of its confusion!"
 	SourceMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
 *

@@ -3575,7 +3575,7 @@ public abstract class Attack implements Serializable {
 				}
 			}
 			
-			Messages.add(new MessageUpdate("All status problems were cured!"));
+			Messages.add("All status problems were cured!");
 		}
 	}
 
@@ -7618,7 +7618,7 @@ public abstract class Attack implements Serializable {
 				}
 			}
 			
-			Messages.add(new MessageUpdate("All status problems were cured!"));
+			Messages.add("All status problems were cured!");
 		}
 	}
 

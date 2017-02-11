@@ -163,7 +163,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		return !p.isActuallyDead() && !p.fullHealth();
 	}
 
-	void addHealMessage(ActivePokemon p, int healAmount) {
+	protected void addHealMessage(ActivePokemon p, int healAmount) {
 		if (healAmount == 0) {
 			return;
 		}
@@ -3757,7 +3757,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3781,7 +3781,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3805,7 +3805,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3829,7 +3829,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3853,7 +3853,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3877,7 +3877,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3901,7 +3901,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3925,7 +3925,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3949,7 +3949,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3973,7 +3973,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3997,7 +3997,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -5297,7 +5297,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		private boolean use(ActivePokemon p, CastSource source) {
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -5339,16 +5339,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 	}
 
-	static class PersimBerry extends Item implements MessageGetter, GainableEffectBerry, BattleUseItem {
+	static class PersimBerry extends Item implements BattleUseItem, MessageGetter, GainableEffectBerry {
 		private static final long serialVersionUID = 1L;
-
-		PersimBerry() {
-			super(ItemNamesies.PERSIM_BERRY, "If held by a Pok\u00e9mon, it recovers from confusion.", BagCategory.BERRY, 244);
-			super.price = 20;
-			super.battleBagCategories.add(BattleBagCategory.HP_PP);
-		}
-
-		private boolean use(ActivePokemon p, Battle b, CastSource source) {
+		private boolean use(ActivePokemon p, CastSource source) {
 			if (p.hasEffect(EffectNamesies.CONFUSION)) {
 				p.getAttributes().removeEffect(EffectNamesies.CONFUSION);
 				this.addMessage(p, source);
@@ -5356,6 +5349,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 			}
 			
 			return false;
+		}
+
+		PersimBerry() {
+			super(ItemNamesies.PERSIM_BERRY, "If held by a Pok\u00e9mon, it recovers from confusion.", BagCategory.BERRY, 244);
+			super.price = 20;
+			super.battleBagCategories.add(BattleBagCategory.HP_PP);
+		}
+
+		public boolean use(ActivePokemon p, Battle b) {
+			return use(p, CastSource.USE_ITEM);
 		}
 
 		public String getGenericMessage(ActivePokemon p) {
@@ -5367,11 +5370,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return use(user, b, source);
-		}
-
-		public boolean use(ActivePokemon p, Battle b) {
-			return use(p, b, CastSource.USE_ITEM);
+			return use(user, source);
 		}
 
 		public int naturalGiftPower() {
@@ -5442,7 +5441,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		private boolean use(ActivePokemon p, CastSource source) {
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			

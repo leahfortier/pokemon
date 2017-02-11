@@ -1698,7 +1698,7 @@ Override:
 Override:
 	HoldHealer:
 		AddMapField: SourceUse:
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 
@@ -1709,16 +1709,6 @@ Override:
 		AddInterface: MessageGetter
 		AddMapField: SourceMessage: p.getName() + " was healed by its " + this.name + "!"
 		AddMapField: GenericMessage: p.getName() + "'s health was restored!"
-	*
-***
-Override:
-	BattleSourceUse:
-		Header: boolean use(ActivePokemon p, Battle b, CastSource source)
-		AccessModifier: Private
-		AddInterface: BattleUseItem
-		AddMapField: BattleUse:
-			return use(p, b, CastSource.USE_ITEM);
-			###
 	*
 ***
 Override:
@@ -1747,7 +1737,7 @@ Override:
 	HealAmt:
 		AddInterface: PokemonUseItem
 		AddMapField: PokemonUse:
-			if (p.fullHealth()) {
+			if (this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -1916,7 +1906,7 @@ Override:
 				}
 			}
 			
-			Messages.add(new MessageUpdate("All status problems were cured!"));
+			Messages.add("All status problems were cured!");
 			###
 		AddMapField: SelfTarget: True
 	*
