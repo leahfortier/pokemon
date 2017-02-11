@@ -1698,7 +1698,7 @@ Override:
 Override:
 	HoldHealer:
 		AddMapField: SourceUse:
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 
@@ -1737,7 +1737,7 @@ Override:
 	HealAmt:
 		AddInterface: PokemonUseItem
 		AddMapField: PokemonUse:
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			

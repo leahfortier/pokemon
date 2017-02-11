@@ -3757,7 +3757,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3781,7 +3781,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3805,7 +3805,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3829,7 +3829,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3853,7 +3853,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3877,7 +3877,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3901,7 +3901,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3925,7 +3925,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3949,7 +3949,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3973,7 +3973,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -3997,7 +3997,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		public boolean use(ActivePokemon p) {
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -5297,7 +5297,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		private boolean use(ActivePokemon p, CastSource source) {
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			
@@ -5441,7 +5441,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemHolder
 		}
 
 		private boolean use(ActivePokemon p, CastSource source) {
-			if (this.canHealHealth(p)) {
+			if (!this.canHealHealth(p)) {
 				return false;
 			}
 			
