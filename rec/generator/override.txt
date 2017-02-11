@@ -1262,12 +1262,18 @@ StallingEffect:
 ***
 DefiniteEscape:
 ***
-HoldItem:
+Override:
 	Fling:
-		Header: int flingDamage()
-		Body:
+		AddInterface: Hidden-HoldItem
+		AddMapField: FlingDamage:
 			return {0};
 			###
+	*
+***
+HoldItem:
+	FlingDamage:
+		Header: int flingDamage()
+		Optional: True
 	*
 	FlingEffect:
 		Header: void flingEffect(Battle b, ActivePokemon pelted)
@@ -2056,8 +2062,6 @@ Berry:
 			return {0};
 			###
 		AddMapField: Cat: Berry
-		AddInterface: Hidden-HoldItem
-		AddMapField: Fling: 10
 		AddMapField: Price: 20
 	*
 	NGType:
