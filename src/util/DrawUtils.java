@@ -1,8 +1,8 @@
 package util;
 
 import main.Global;
-import type.Type;
 import map.Direction;
+import type.Type;
 
 import java.awt.Color;
 import java.awt.Dimension;

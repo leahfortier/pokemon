@@ -3,12 +3,12 @@ package battle.effect.status;
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
-import type.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import type.Type;
 import util.RandomUtils;
 
 class Paralyzed extends Status implements BeforeTurnEffect, StatChangingEffect {

@@ -7,7 +7,6 @@ import gui.view.ViewMode;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
-import type.Type;
 import message.Messages.MessageState;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
@@ -16,6 +15,7 @@ import pokemon.PokemonInfo;
 import pokemon.Stat;
 import sound.SoundPlayer;
 import sound.SoundTitle;
+import type.Type;
 import util.StringUtils;
 
 public class MessageUpdate {
