@@ -2070,14 +2070,9 @@ Override:
 ***
 Override:
 	Aura:
-		Header: Type getAuraType()
-		AccessModifier: Private
-		Body:
-			return Type.{00};
-			###
 		AddInterface: PowerChangeEffect
 		AddMapField: GetMultiplier:
-			if (user.getAttackType() == getAuraType()) {
+			if (user.getAttackType() == Type.{00}) {
 				return 1 + .33*(victim.hasAbility(AbilityNamesies.AURA_BREAK) ? -1 : 1);
 			}
 			
@@ -2419,3 +2414,21 @@ Override:
 ***
 PowderMove:
 ***
+Override:
+	GET_DAT_CASH_MONEY_TWICE_ITEM:
+		Header: void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice)
+		AccessModifier: Private
+		Body:
+			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
+			###
+		AddInterface: EntryEffect
+		AddMapField: Enter:
+			getDatCashMoneyGetDatCashMoneyCast(b, enterer);
+			###
+		AddInterface: EndTurnEffect
+		AddMapField: ApplyEndTurn:
+			getDatCashMoneyGetDatCashMoneyCast(b, victim);
+			###
+	*
+***
+			

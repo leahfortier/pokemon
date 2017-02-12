@@ -278,7 +278,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class AmuletCoin extends Item implements HoldItem, EntryEffect {
+	static class AmuletCoin extends Item implements HoldItem, EntryEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		AmuletCoin() {
@@ -286,8 +286,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 100;
 		}
 
+		private void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice) {
+			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
+		}
+
 		public void enter(Battle b, ActivePokemon enterer) {
-			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
+			getDatCashMoneyGetDatCashMoneyCast(b, enterer);
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			getDatCashMoneyGetDatCashMoneyCast(b, victim);
 		}
 	}
 
@@ -1708,7 +1716,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class LuckIncense extends Item implements EntryEffect, IncenseItem {
+	static class LuckIncense extends Item implements IncenseItem, EntryEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		LuckIncense() {
@@ -1716,13 +1724,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 9600;
 		}
 
-		public void enter(Battle b, ActivePokemon enterer) {
-			// TODO: Combine with Amulet Coin
-			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
+		private void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice) {
+			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
 		}
 
 		public PokemonNamesies getBaby() {
 			return PokemonNamesies.HAPPINY;
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			getDatCashMoneyGetDatCashMoneyCast(b, enterer);
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			getDatCashMoneyGetDatCashMoneyCast(b, victim);
 		}
 	}
 

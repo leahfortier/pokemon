@@ -2914,12 +2914,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.FAIRY_AURA, "Powers up each Pok\u00e9mon's Fairy-type moves.");
 		}
 
-		private Type getAuraType() {
-			return Type.FAIRY;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == getAuraType()) {
+			if (user.getAttackType() == Type.FAIRY) {
 				return 1 + .33*(victim.hasAbility(AbilityNamesies.AURA_BREAK) ? -1 : 1);
 			}
 			
@@ -2934,12 +2930,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.DARK_AURA, "Powers up each Pok\u00e9mon's Dark-type moves.");
 		}
 
-		private Type getAuraType() {
-			return Type.DARK;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == getAuraType()) {
+			if (user.getAttackType() == Type.DARK) {
 				return 1 + .33*(victim.hasAbility(AbilityNamesies.AURA_BREAK) ? -1 : 1);
 			}
 			

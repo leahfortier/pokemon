@@ -93,13 +93,11 @@ Air Balloon:
 		###
 *
 Amulet Coin:
-	Int: HoldItem, EntryEffect
+	Int: HoldItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.
 	Price: 100
-	Enter:
-		EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
-		###
+	GET_DAT_CASH_MONEY_TWICE_ITEM: True
 *
 Big Root:
 	Int: HoldItem
@@ -738,14 +736,11 @@ Lax Incense:
 	ModifyMultiplier: 1.1 true
 *
 Luck Incense:
-	Int: EntryEffect, IncenseItem
+	Int: IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.
 	Price: 9600
-	Enter:
-		// TODO: Combine with Amulet Coin
-		EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
-		###
+	GET_DAT_CASH_MONEY_TWICE_ITEM: True
 	Baby: Happiny
 *
 
