@@ -44,6 +44,7 @@ import item.berry.Berry;
 import item.berry.EvDecreaseBerry;
 import item.berry.GainableEffectBerry;
 import item.berry.HealthTriggeredBerry;
+import item.berry.HealthTriggeredStageIncreaseBerry;
 import item.berry.StatusBerry;
 import item.berry.SuperEffectivePowerReduceBerry;
 import item.hold.ConsumableItem;
@@ -4756,7 +4757,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class LiechiBerry extends Item implements HealthTriggeredBerry {
+	static class LiechiBerry extends Item implements HealthTriggeredStageIncreaseBerry {
 		private static final long serialVersionUID = 1L;
 
 		LiechiBerry() {
@@ -4764,24 +4765,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public double healthTriggerRatio() {
-			return 1/4.0;
-		}
-
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return user.getAttributes().modifyStage(user, user, 1, Stat.ATTACK, b, source);
-		}
-
-		public int naturalGiftPower() {
-			return 100;
-		}
-
 		public Type naturalGiftType() {
 			return Type.GRASS;
 		}
+
+		public Stat getStat() {
+			return Stat.ATTACK;
+		}
 	}
 
-	static class GanlonBerry extends Item implements HealthTriggeredBerry {
+	static class GanlonBerry extends Item implements HealthTriggeredStageIncreaseBerry {
 		private static final long serialVersionUID = 1L;
 
 		GanlonBerry() {
@@ -4789,24 +4782,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public double healthTriggerRatio() {
-			return 1/4.0;
-		}
-
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return user.getAttributes().modifyStage(user, user, 1, Stat.DEFENSE, b, source);
-		}
-
-		public int naturalGiftPower() {
-			return 100;
-		}
-
 		public Type naturalGiftType() {
 			return Type.ICE;
 		}
+
+		public Stat getStat() {
+			return Stat.DEFENSE;
+		}
 	}
 
-	static class SalacBerry extends Item implements HealthTriggeredBerry {
+	static class SalacBerry extends Item implements HealthTriggeredStageIncreaseBerry {
 		private static final long serialVersionUID = 1L;
 
 		SalacBerry() {
@@ -4814,24 +4799,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public double healthTriggerRatio() {
-			return 1/4.0;
-		}
-
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return user.getAttributes().modifyStage(user, user, 1, Stat.SPEED, b, source);
-		}
-
-		public int naturalGiftPower() {
-			return 100;
-		}
-
 		public Type naturalGiftType() {
 			return Type.FIGHTING;
 		}
+
+		public Stat getStat() {
+			return Stat.SPEED;
+		}
 	}
 
-	static class PetayaBerry extends Item implements HealthTriggeredBerry {
+	static class PetayaBerry extends Item implements HealthTriggeredStageIncreaseBerry {
 		private static final long serialVersionUID = 1L;
 
 		PetayaBerry() {
@@ -4839,24 +4816,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public double healthTriggerRatio() {
-			return 1/4.0;
-		}
-
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return user.getAttributes().modifyStage(user, user, 1, Stat.SP_ATTACK, b, source);
-		}
-
-		public int naturalGiftPower() {
-			return 100;
-		}
-
 		public Type naturalGiftType() {
 			return Type.POISON;
 		}
+
+		public Stat getStat() {
+			return Stat.SP_ATTACK;
+		}
 	}
 
-	static class ApicotBerry extends Item implements HealthTriggeredBerry {
+	static class ApicotBerry extends Item implements HealthTriggeredStageIncreaseBerry {
 		private static final long serialVersionUID = 1L;
 
 		ApicotBerry() {
@@ -4864,24 +4833,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public double healthTriggerRatio() {
-			return 1/4.0;
-		}
-
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return user.getAttributes().modifyStage(user, user, 1, Stat.SP_DEFENSE, b, source);
-		}
-
-		public int naturalGiftPower() {
-			return 100;
-		}
-
 		public Type naturalGiftType() {
 			return Type.GROUND;
 		}
+
+		public Stat getStat() {
+			return Stat.SP_DEFENSE;
+		}
 	}
 
-	static class MicleBerry extends Item implements HealthTriggeredBerry {
+	static class MicleBerry extends Item implements HealthTriggeredStageIncreaseBerry {
 		private static final long serialVersionUID = 1L;
 
 		MicleBerry() {
@@ -4889,20 +4850,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public double healthTriggerRatio() {
-			return 1/4.0;
-		}
-
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return user.getAttributes().modifyStage(user, user, 1, Stat.ACCURACY, b, source);
-		}
-
-		public int naturalGiftPower() {
-			return 100;
-		}
-
 		public Type naturalGiftType() {
 			return Type.ROCK;
+		}
+
+		public Stat getStat() {
+			return Stat.ACCURACY;
 		}
 	}
 

@@ -19,6 +19,6 @@ public interface StatusBerry extends StatusHealer, GainableEffectBerry, StatusRe
     }
 
     default int naturalGiftPower() {
-        return 90;
+        return 80;
     }
 }

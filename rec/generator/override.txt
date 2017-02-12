@@ -1788,13 +1788,18 @@ SuperEffectivePowerReduceBerry:
 		AddInterface: Hidden-Berry
 	*
 ***
+HealthTriggeredStageIncreaseBerry:
+	HealthTriggeredStageIncreaseBerryField:
+		Header: Stat getStat()
+	*
+***
 Override:
 	HealthTriggeredStageIncreaseBerry:
-		AddMapField: GainEffect:
-			return user.getAttributes().modifyStage(user, user, 1, Stat.{00}, b, source);
+		AddInterface: Hidden-Berry
+		AddInterface: HealthTriggeredStageIncreaseBerry
+		AddMapField: HealthTriggeredStageIncreaseBerryField: 
+			return Stat.{00};
 			###
-		AddMapField: FixedBerryHealthTrigger: 4
-		AddMapField: NGPow: 100
 	*
 ***
 Override:
