@@ -1670,7 +1670,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class FullIncense extends Item implements HoldItem, StallingEffect, IncenseItem {
+	static class FullIncense extends Item implements StallingEffect, IncenseItem {
 		private static final long serialVersionUID = 1L;
 
 		FullIncense() {
@@ -1678,16 +1678,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 9600;
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
 		public PokemonNamesies getBaby() {
 			return PokemonNamesies.MUNCHLAX;
 		}
 	}
 
-	static class LaxIncense extends Item implements HoldItem, IncenseItem, SimpleStatModifyingEffect {
+	static class LaxIncense extends Item implements IncenseItem, SimpleStatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		LaxIncense() {
@@ -1707,25 +1703,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return s == Stat.EVASION;
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
 		public PokemonNamesies getBaby() {
 			return PokemonNamesies.WYNAUT;
 		}
 	}
 
-	static class LuckIncense extends Item implements HoldItem, EntryEffect, IncenseItem {
+	static class LuckIncense extends Item implements EntryEffect, IncenseItem {
 		private static final long serialVersionUID = 1L;
 
 		LuckIncense() {
 			super(ItemNamesies.LUCK_INCENSE, "An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.", BagCategory.MISC, 74);
 			super.price = 9600;
-		}
-
-		public int flingDamage() {
-			return 10;
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
@@ -1750,25 +1738,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return PokemonNamesies.MIME_JR;
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.isAttackType(Type.PSYCHIC) ? 1.2 : 1;
 		}
 	}
 
-	static class PureIncense extends Item implements HoldItem, RepellingEffect, IncenseItem {
+	static class PureIncense extends Item implements RepellingEffect, IncenseItem {
 		private static final long serialVersionUID = 1L;
 
 		PureIncense() {
 			super(ItemNamesies.PURE_INCENSE, "An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.", BagCategory.MISC, 76);
 			super.price = 9600;
-		}
-
-		public int flingDamage() {
-			return 10;
 		}
 
 		public double chance() {
@@ -1792,10 +1772,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return PokemonNamesies.BONSLY;
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.isAttackType(Type.ROCK) ? 1.2 : 1;
 		}
@@ -1811,10 +1787,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public PokemonNamesies getBaby() {
 			return PokemonNamesies.BUDEW;
-		}
-
-		public int flingDamage() {
-			return 10;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -1834,10 +1806,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return PokemonNamesies.AZURILL;
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.isAttackType(Type.WATER) ? 1.2 : 1;
 		}
@@ -1853,10 +1821,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public PokemonNamesies getBaby() {
 			return PokemonNamesies.MANTYKE;
-		}
-
-		public int flingDamage() {
-			return 10;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
