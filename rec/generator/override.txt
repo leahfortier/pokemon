@@ -1762,46 +1762,31 @@ BallItem:
 ***
 Override:
 	EVDecreaseBerry:
-		AddInterface: Berry
-		AddInterface: PokemonUseItem
-		AddMapField: PokemonUse:
-			int decreaseIndex = Stat.{00}.index();
-			int[] vals = new int[Stat.NUM_STATS];
-			
-			// For EVs over 110, the berry will decrease the EV to 100
-			if (p.getEV(decreaseIndex) > 110) {
-				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
-			}
-			// Otherwise, just decreases by 10
-			else {
-				vals[decreaseIndex] -= 10;
-			}
-
-			if (!p.addEVs(vals)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.{00}.getName() + " was lowered!");
-			return true;
+		AddMapField: DecreaseEVs:
+			return Stat.{00};
 			###
-		AddMapField: NGPow: 90
+		AddInterface: EvDecreaseBerry
+	*
+***
+EvDecreaseBerry:
+	DecreaseEVs:
+		Header: Stat toDecrease()
+		AddInterface: Hidden-Berry
 	*
 ***
 Override:
 	SuperEffectivePowerReduceBerry:
-		AddInterface: Berry
-		AddMapField: NGPow: 80
-		AddMapField: NGType: {0}
-		AddInterface: OpponentPowerChangeEffect
-		AddMapField: GetOppMultiplier:
-			if (user.getAttackType() == Type.{00} && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-
-			return 1;
+		AddMapField: HiddenBerry: True 
+		AddInterface: SuperEffectivePowerReduceBerry
+		AddMapField: SuperDuperEffectivePowerReduceBerry:
+			return Type.{00};
 			###
+	*
+***
+SuperEffectivePowerReduceBerry:
+	SuperDuperEffectivePowerReduceBerry:
+		Header: Type getType()
+		AddInterface: Hidden-Berry
 	*
 ***
 Override:
@@ -1989,42 +1974,42 @@ HealthTriggeredBerry:
 		Header: double healthTriggerRatio()
 	*
 ***
-Berry:
+Override:
 	NGPow:
-		Header: int naturalGiftPower()
-		Body:
+		AddMapField: NaturalGiftPower:
 			return {0};
 			###
-		AddMapField: Cat: Berry
-		AddMapField: Price: 20
 	*
+***
+Override:
 	NGType:
-		Header: Type naturalGiftType()
-		Body:
+		AddMapField: HiddenBerry: True
+		AddMapField: NaturalGiftType:
 			return Type.{00};
 			###
 	*
 ***
 Override:
+	HiddenBerry:
+		AddMapField: Cat: Berry
+		AddMapField: Price: 20
+	*
+***
+Berry:
+	NaturalGiftPower:
+		Header: int naturalGiftPower()
+		Optional: True
+	*
+	NaturalGiftType:
+		Header: Type naturalGiftType()
+		Optional: True
+	*
+***
+Repelling:
 	RepelSteps:
-		AddInterface: HoldItem
+		Header: int repelSteps()
+		Body: return {0};
 		AddMapField: Fling: 30
-		AddInterface: TrainerUseItem
-		AddMapField: TrainerUse:
-			if (t != Game.getPlayer()) {
-				Global.error("Only the character should be using a Repel item");
-				return false;
-			}
-
-			CharacterData player = (CharacterData) t;
-			if (player.isUsingRepel()) {
-				return false;
-			}
-
-			player.addRepelSteps({0});
-			Messages.add("Weak wild Pok\u00e9mon will not appear for {0} steps!");
-			return true;
-			###
 		AddMapField: Cat: Misc
 	*
 ***

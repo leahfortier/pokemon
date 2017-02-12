@@ -1829,7 +1829,7 @@ Timer Ball:
 	Desc: A somewhat different Ball that becomes progressively better the more turns there are in a battle.
 	Price: 1000
 	CatchRate:
-		return Math.min((int)(b.getTurn()/10) + 1, 4);
+		return Math.min(b.getTurn()/10 + 1, 4);
 		###
 *
 Ultra Ball:
@@ -2278,16 +2278,19 @@ Heart Scale:
 *
 Repel:
 	Desc: An item that prevents weak wild Pok\u00e9mon from appearing for 100 steps after its use.
+	Int: Repelling
 	RepelSteps: 100
 	Price: 350
 *
 Super Repel:
 	Desc: An item that prevents weak wild Pok\u00e9mon from appearing for 200 steps after its use.
+	Int: Repelling
 	RepelSteps: 200
 	Price: 500
 *
 Max Repel:
 	Desc: An item that prevents weak wild Pok\u00e9mon from appearing for 250 steps after its use.
+	Int: Repelling
 	RepelSteps: 250
 	Price: 700
 *

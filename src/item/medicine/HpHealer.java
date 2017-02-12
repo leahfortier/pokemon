@@ -2,14 +2,13 @@ package item.medicine;
 
 import battle.effect.MessageGetter;
 import battle.effect.generic.CastSource;
-import item.ItemInterface;
 import item.hold.HoldItem;
 import item.use.PokemonUseItem;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 
-public interface HpHealer extends MessageGetter, PokemonUseItem, HoldItem, ItemInterface {
+public interface HpHealer extends MessageGetter, PokemonUseItem, HoldItem {
     int getAmountHealed(ActivePokemon p);
 
     default String getGenericMessage(ActivePokemon p) {

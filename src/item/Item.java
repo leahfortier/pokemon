@@ -25,7 +25,6 @@ import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.OpponentApplyDamageEffect;
-import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowderMove;
@@ -42,9 +41,11 @@ import battle.effect.status.StatusCondition;
 import item.bag.BagCategory;
 import item.bag.BattleBagCategory;
 import item.berry.Berry;
+import item.berry.EvDecreaseBerry;
 import item.berry.GainableEffectBerry;
 import item.berry.HealthTriggeredBerry;
 import item.berry.StatusBerry;
+import item.berry.SuperEffectivePowerReduceBerry;
 import item.hold.ConsumableItem;
 import item.hold.EVItem;
 import item.hold.HoldItem;
@@ -55,12 +56,12 @@ import item.hold.SpecialTypeItem.GemItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
 import item.medicine.AllPPHealer;
-import item.medicine.EvIncreaser;
 import item.medicine.EvIncreaser.Vitamin;
 import item.medicine.EvIncreaser.Wing;
 import item.medicine.FixedHpHealer;
 import item.medicine.HpHealer;
 import item.medicine.PPHealer;
+import item.medicine.Repelling;
 import item.medicine.StatusHealer;
 import item.use.BallItem;
 import item.use.BattleUseItem;
@@ -70,7 +71,6 @@ import item.use.TechnicalMachine;
 import item.use.TrainerUseItem;
 import item.use.UseItem;
 import main.Game;
-import main.Global;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.Messages;
@@ -81,7 +81,6 @@ import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.evolution.EvolutionMethod;
-import trainer.CharacterData;
 import trainer.Trainer;
 import type.Type;
 import type.TypeAdvantage;
@@ -4502,7 +4501,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
-			return Math.min((int)(b.getTurn()/10) + 1, 4);
+			return Math.min(b.getTurn()/10 + 1, 4);
 		}
 	}
 
@@ -4850,7 +4849,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class PomegBerry extends Item implements Berry, PokemonUseItem {
+	static class PomegBerry extends Item implements EvDecreaseBerry {
 		private static final long serialVersionUID = 1L;
 
 		PomegBerry() {
@@ -4858,37 +4857,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 90;
+		public Stat toDecrease() {
+			return Stat.HP;
 		}
 
 		public Type naturalGiftType() {
 			return Type.ICE;
 		}
-
-		public boolean use(ActivePokemon p) {
-			int decreaseIndex = Stat.HP.index();
-			int[] vals = new int[Stat.NUM_STATS];
-			
-			// For EVs over 110, the berry will decrease the EV to 100
-			if (p.getEV(decreaseIndex) > 110) {
-				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
-			}
-			// Otherwise, just decreases by 10
-			else {
-				vals[decreaseIndex] -= 10;
-			}
-			
-			if (!p.addEVs(vals)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.HP.getName() + " was lowered!");
-			return true;
-		}
 	}
 
-	static class KelpsyBerry extends Item implements Berry, PokemonUseItem {
+	static class KelpsyBerry extends Item implements EvDecreaseBerry {
 		private static final long serialVersionUID = 1L;
 
 		KelpsyBerry() {
@@ -4896,37 +4874,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 90;
+		public Stat toDecrease() {
+			return Stat.ATTACK;
 		}
 
 		public Type naturalGiftType() {
 			return Type.FIGHTING;
 		}
-
-		public boolean use(ActivePokemon p) {
-			int decreaseIndex = Stat.ATTACK.index();
-			int[] vals = new int[Stat.NUM_STATS];
-			
-			// For EVs over 110, the berry will decrease the EV to 100
-			if (p.getEV(decreaseIndex) > 110) {
-				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
-			}
-			// Otherwise, just decreases by 10
-			else {
-				vals[decreaseIndex] -= 10;
-			}
-			
-			if (!p.addEVs(vals)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.ATTACK.getName() + " was lowered!");
-			return true;
-		}
 	}
 
-	static class QualotBerry extends Item implements Berry, PokemonUseItem {
+	static class QualotBerry extends Item implements EvDecreaseBerry {
 		private static final long serialVersionUID = 1L;
 
 		QualotBerry() {
@@ -4934,37 +4891,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 90;
+		public Stat toDecrease() {
+			return Stat.DEFENSE;
 		}
 
 		public Type naturalGiftType() {
 			return Type.POISON;
 		}
-
-		public boolean use(ActivePokemon p) {
-			int decreaseIndex = Stat.DEFENSE.index();
-			int[] vals = new int[Stat.NUM_STATS];
-			
-			// For EVs over 110, the berry will decrease the EV to 100
-			if (p.getEV(decreaseIndex) > 110) {
-				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
-			}
-			// Otherwise, just decreases by 10
-			else {
-				vals[decreaseIndex] -= 10;
-			}
-			
-			if (!p.addEVs(vals)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.DEFENSE.getName() + " was lowered!");
-			return true;
-		}
 	}
 
-	static class HondewBerry extends Item implements Berry, PokemonUseItem {
+	static class HondewBerry extends Item implements EvDecreaseBerry {
 		private static final long serialVersionUID = 1L;
 
 		HondewBerry() {
@@ -4972,37 +4908,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 90;
+		public Stat toDecrease() {
+			return Stat.SP_ATTACK;
 		}
 
 		public Type naturalGiftType() {
 			return Type.GROUND;
 		}
-
-		public boolean use(ActivePokemon p) {
-			int decreaseIndex = Stat.SP_ATTACK.index();
-			int[] vals = new int[Stat.NUM_STATS];
-			
-			// For EVs over 110, the berry will decrease the EV to 100
-			if (p.getEV(decreaseIndex) > 110) {
-				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
-			}
-			// Otherwise, just decreases by 10
-			else {
-				vals[decreaseIndex] -= 10;
-			}
-			
-			if (!p.addEVs(vals)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.SP_ATTACK.getName() + " was lowered!");
-			return true;
-		}
 	}
 
-	static class GrepaBerry extends Item implements Berry, PokemonUseItem {
+	static class GrepaBerry extends Item implements EvDecreaseBerry {
 		private static final long serialVersionUID = 1L;
 
 		GrepaBerry() {
@@ -5010,37 +4925,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 90;
+		public Stat toDecrease() {
+			return Stat.SP_DEFENSE;
 		}
 
 		public Type naturalGiftType() {
 			return Type.FLYING;
 		}
-
-		public boolean use(ActivePokemon p) {
-			int decreaseIndex = Stat.SP_DEFENSE.index();
-			int[] vals = new int[Stat.NUM_STATS];
-			
-			// For EVs over 110, the berry will decrease the EV to 100
-			if (p.getEV(decreaseIndex) > 110) {
-				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
-			}
-			// Otherwise, just decreases by 10
-			else {
-				vals[decreaseIndex] -= 10;
-			}
-			
-			if (!p.addEVs(vals)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " was lowered!");
-			return true;
-		}
 	}
 
-	static class TamatoBerry extends Item implements Berry, PokemonUseItem {
+	static class TamatoBerry extends Item implements EvDecreaseBerry {
 		private static final long serialVersionUID = 1L;
 
 		TamatoBerry() {
@@ -5048,37 +4942,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 90;
+		public Stat toDecrease() {
+			return Stat.SPEED;
 		}
 
 		public Type naturalGiftType() {
 			return Type.PSYCHIC;
 		}
-
-		public boolean use(ActivePokemon p) {
-			int decreaseIndex = Stat.SPEED.index();
-			int[] vals = new int[Stat.NUM_STATS];
-			
-			// For EVs over 110, the berry will decrease the EV to 100
-			if (p.getEV(decreaseIndex) > 110) {
-				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
-			}
-			// Otherwise, just decreases by 10
-			else {
-				vals[decreaseIndex] -= 10;
-			}
-			
-			if (!p.addEVs(vals)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.SPEED.getName() + " was lowered!");
-			return true;
-		}
 	}
 
-	static class OccaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class OccaBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		OccaBerry() {
@@ -5086,26 +4959,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.FIRE;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.FIRE && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class PasshoBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class PasshoBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		PasshoBerry() {
@@ -5113,26 +4972,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.WATER;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.WATER && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class WacanBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class WacanBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		WacanBerry() {
@@ -5140,26 +4985,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.ELECTRIC;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.ELECTRIC && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class RindoBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class RindoBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		RindoBerry() {
@@ -5167,26 +4998,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.GRASS;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.GRASS && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class YacheBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class YacheBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		YacheBerry() {
@@ -5194,26 +5011,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.ICE;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.ICE && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class ChopleBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ChopleBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		ChopleBerry() {
@@ -5221,26 +5024,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.FIGHTING;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.FIGHTING && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class KebiaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class KebiaBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		KebiaBerry() {
@@ -5248,26 +5037,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.POISON;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.POISON && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class ShucaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ShucaBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		ShucaBerry() {
@@ -5275,26 +5050,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.GROUND;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.GROUND && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class CobaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class CobaBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		CobaBerry() {
@@ -5302,26 +5063,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.FLYING;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.FLYING && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class PayapaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class PayapaBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		PayapaBerry() {
@@ -5329,26 +5076,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.PSYCHIC;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.PSYCHIC && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class TangaBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class TangaBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		TangaBerry() {
@@ -5356,26 +5089,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.BUG;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.BUG && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class ChartiBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ChartiBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		ChartiBerry() {
@@ -5383,26 +5102,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.ROCK;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.ROCK && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class KasibBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class KasibBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		KasibBerry() {
@@ -5410,26 +5115,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.GHOST;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.GHOST && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class HabanBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class HabanBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		HabanBerry() {
@@ -5437,26 +5128,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.DRAGON;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.DRAGON && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class ColburBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ColburBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		ColburBerry() {
@@ -5464,26 +5141,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.DARK;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.DARK && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class BabiriBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class BabiriBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		BabiriBerry() {
@@ -5491,26 +5154,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.STEEL;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.STEEL && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class ChilanBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class ChilanBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		ChilanBerry() {
@@ -5518,26 +5167,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.NORMAL;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.NORMAL && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
-	static class RoseliBerry extends Item implements Berry, OpponentPowerChangeEffect {
+	static class RoseliBerry extends Item implements SuperEffectivePowerReduceBerry {
 		private static final long serialVersionUID = 1L;
 
 		RoseliBerry() {
@@ -5545,22 +5180,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 80;
-		}
-
-		public Type naturalGiftType() {
+		public Type getType() {
 			return Type.FAIRY;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == Type.FAIRY && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-			
-			return 1;
 		}
 	}
 
@@ -6118,7 +5739,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class Repel extends Item implements HoldItem, TrainerUseItem {
+	static class Repel extends Item implements Repelling {
 		private static final long serialVersionUID = 1L;
 
 		Repel() {
@@ -6126,20 +5747,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 350;
 		}
 
-		public boolean use(Trainer t) {
-			if (t != Game.getPlayer()) {
-				Global.error("Only the character should be using a Repel item");
-				return false;
-			}
-			
-			CharacterData player = (CharacterData) t;
-			if (player.isUsingRepel()) {
-				return false;
-			}
-			
-			player.addRepelSteps(100);
-			Messages.add("Weak wild Pok\u00e9mon will not appear for 100 steps!");
-			return true;
+		public int repelSteps() {
+			return 100;
 		}
 
 		public int flingDamage() {
@@ -6147,7 +5756,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class SuperRepel extends Item implements HoldItem, TrainerUseItem {
+	static class SuperRepel extends Item implements Repelling {
 		private static final long serialVersionUID = 1L;
 
 		SuperRepel() {
@@ -6155,20 +5764,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 500;
 		}
 
-		public boolean use(Trainer t) {
-			if (t != Game.getPlayer()) {
-				Global.error("Only the character should be using a Repel item");
-				return false;
-			}
-			
-			CharacterData player = (CharacterData) t;
-			if (player.isUsingRepel()) {
-				return false;
-			}
-			
-			player.addRepelSteps(200);
-			Messages.add("Weak wild Pok\u00e9mon will not appear for 200 steps!");
-			return true;
+		public int repelSteps() {
+			return 200;
 		}
 
 		public int flingDamage() {
@@ -6176,7 +5773,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class MaxRepel extends Item implements HoldItem, TrainerUseItem {
+	static class MaxRepel extends Item implements Repelling {
 		private static final long serialVersionUID = 1L;
 
 		MaxRepel() {
@@ -6184,20 +5781,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 700;
 		}
 
-		public boolean use(Trainer t) {
-			if (t != Game.getPlayer()) {
-				Global.error("Only the character should be using a Repel item");
-				return false;
-			}
-			
-			CharacterData player = (CharacterData) t;
-			if (player.isUsingRepel()) {
-				return false;
-			}
-			
-			player.addRepelSteps(250);
-			Messages.add("Weak wild Pok\u00e9mon will not appear for 250 steps!");
-			return true;
+		public int repelSteps() {
+			return 250;
 		}
 
 		public int flingDamage() {
