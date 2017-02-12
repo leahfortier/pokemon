@@ -45,7 +45,6 @@ import battle.effect.status.StatusCondition;
 import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
-import item.berry.GainableEffectBerry;
 import item.hold.HoldItem;
 import item.hold.SpecialTypeItem.DriveItem;
 import item.hold.SpecialTypeItem.GemItem;
@@ -1933,7 +1932,7 @@ public abstract class Attack implements Serializable {
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			// TODO: Once the Begin- shit is resolved, then this should be combined there
-			Team trainer = b.getTrainer(o.isPlayer());
+			Team trainer = b.getTrainer(o);
 			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) {
 				return super.power*2;
 			}
@@ -3569,7 +3568,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
+			for (ActivePokemon p : b.getTrainer(user).getTeam()) {
 				if (!p.isActuallyDead()) {
 					p.removeStatus();
 				}
@@ -6494,7 +6493,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return b.getOtherPokemon(caster.isPlayer()).getType(b).clone();
+			return b.getOtherPokemon(caster).getType(b).clone();
 		}
 	}
 
@@ -7411,7 +7410,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-			for (ActivePokemon p : b.getTrainer(me.isPlayer()).getTeam()) {
+			for (ActivePokemon p : b.getTrainer(me).getTeam()) {
 				// Only healthy Pokemon get to attack
 				if (!p.canFight() || p.hasStatus()) {
 					continue;
@@ -7612,7 +7611,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
+			for (ActivePokemon p : b.getTrainer(user).getTeam()) {
 				if (!p.isActuallyDead()) {
 					p.removeStatus();
 				}
@@ -9018,7 +9017,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(Effect.hasEffect(b.getEffects(me.isPlayer()), EffectNamesies.DEAD_ALLY) ? 2 : 1);
+			return super.power*(Effect.hasEffect(b.getEffects(me), EffectNamesies.DEAD_ALLY) ? 2 : 1);
 		}
 	}
 
@@ -9080,12 +9079,12 @@ public abstract class Attack implements Serializable {
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			// TODO: Combine with Trace
-			Ability otherAbility = b.getOtherPokemon(victim.isPlayer()).getAbility();
+			Ability otherAbility = b.getOtherPokemon(victim).getAbility();
 			return otherAbility.namesies().getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(victim);
 			return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
 		}
 

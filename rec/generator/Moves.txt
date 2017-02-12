@@ -943,7 +943,7 @@ Pursuit:
 	Cat: Physical
 	GetPow:
 		// TODO: Once the Begin- shit is resolved, then this should be combined there
-		Team trainer = b.getTrainer(o.isPlayer());
+		Team trainer = b.getTrainer(o);
 		if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) {
 			return super.power*2;
 		}
@@ -3791,7 +3791,7 @@ Reflect Type:
 	Effect: ChangeType
 	Int: ChangeTypeSource
 	ChangeType: 
-		return b.getOtherPokemon(caster.isPlayer()).getType(b).clone();
+		return b.getOtherPokemon(caster).getType(b).clone();
 		###
 	MoveType: Non_Snatchable
 *
@@ -4439,7 +4439,7 @@ Beat Up:
 	Cat: Physical
 	Type: Dark
 	ApplyDamage: 
-		for (ActivePokemon p : b.getTrainer(me.isPlayer()).getTeam()) {
+		for (ActivePokemon p : b.getTrainer(me).getTeam()) {
 			// Only healthy Pokemon get to attack
 			if (!p.canFight() || p.hasStatus()) {
 				continue;
@@ -5452,7 +5452,7 @@ Retaliate:
 	Acc: 100
 	Cat: Physical
 	Pow: 70
-	DoublePowerCondition: Effect.hasEffect(b.getEffects(me.isPlayer()), EffectNamesies.DEAD_ALLY)
+	DoublePowerCondition: Effect.hasEffect(b.getEffects(me), EffectNamesies.DEAD_ALLY)
 *
 Circle Throw:
 	Desc: The user throws the target and drags out another Pok\u00e9mon in its party. In the wild, the battle ends.
@@ -5488,11 +5488,11 @@ Role Play:
 	Effect: ChangeAbility
 	AbilityChange: 
 		// TODO: Combine with Trace
-		Ability otherAbility = b.getOtherPokemon(victim.isPlayer()).getAbility();
+		Ability otherAbility = b.getOtherPokemon(victim).getAbility();
 		return otherAbility.namesies().getNewAbility();
 		###
 	AbilityMessage: 
-		ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
+		ActivePokemon other = b.getOtherPokemon(victim);
 		return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
 		###
 	Applies: victim.getAbility().isStealable()

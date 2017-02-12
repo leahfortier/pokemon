@@ -1028,7 +1028,7 @@ public class ActivePokemon implements Serializable {
 		}
 		
 		// The opponent has an effect that prevents escape
-		ActivePokemon other = b.getOtherPokemon(isPlayer());
+		ActivePokemon other = b.getOtherPokemon(this);
 		if (OpponentTrappingEffect.isTrapped(b, this, other)) {
 			return false;
 		}
@@ -1264,7 +1264,7 @@ public class ActivePokemon implements Serializable {
 			this.consumeBerry((Berry)consumed, b);
 		}
 
-		ActivePokemon other = b.getOtherPokemon(isPlayer);
+		ActivePokemon other = b.getOtherPokemon(this);
 		if (other.hasAbility(AbilityNamesies.PICKUP) && !other.isHoldingItem(b)) {
 			other.giveItem((HoldItem)consumed);
 			Messages.add(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!");
@@ -1289,7 +1289,7 @@ public class ActivePokemon implements Serializable {
 		PokemonEffect changeItem = getEffect(EffectNamesies.CHANGE_ITEM);
 		Item item = changeItem == null ? getActualHeldItem() : ((ItemHolder)changeItem).getItem();
 		
-		if (item instanceof Berry && b.getOtherPokemon(isPlayer()).hasAbility(AbilityNamesies.UNNERVE)) {
+		if (item instanceof Berry && b.getOtherPokemon(this).hasAbility(AbilityNamesies.UNNERVE)) {
 			return ItemNamesies.NO_ITEM.getItem();
 		}
 		

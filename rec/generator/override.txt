@@ -412,7 +412,7 @@ Override:
 		AddMapField: Cast: 
 			super.cast(b, caster, victim, source, printCast);
 			if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-				Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies).setTurns(8);
+				Effect.getEffect(b.getEffects(victim), this.namesies).setTurns(8);
 			}
 			###
 		AddMapField: MinTurns: 5
@@ -636,7 +636,7 @@ Override:
 			Messages.add(new MessageUpdate(victim.getName() + " is hurt by {1_}!"));
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 			###
 	*
 ***
@@ -1416,7 +1416,7 @@ Override:
 		AddMapField: ApplyEndTurn:
 			Messages.add(new MessageUpdate({0}));
 					
-			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(victim);
 			buffet(b, victim);
 			buffet(b, other);
 			###
@@ -1826,7 +1826,7 @@ Override:
 Override:
 	HealPartyStatus:
 		AddMapField: UniqueEffects:
-			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
+			for (ActivePokemon p : b.getTrainer(user).getTeam()) {
 				if (!p.isActuallyDead()) {
 					p.removeStatus();
 				}

@@ -523,7 +523,7 @@ Mimic:
 		return list;
 		###
 	Cast: 
-		ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
+		ActivePokemon other = b.getOtherPokemon(victim);
 		final Move lastMoveUsed = other.getAttributes().getLastMoveUsed();
 		Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
 		
@@ -683,7 +683,7 @@ Yawn:
 	NumTurns: 2
 	FailCondition: !Status.applies(StatusCondition.ASLEEP, b, caster, victim)
 	Subside: 
-		Status.giveStatus(b, b.getOtherPokemon(p.isPlayer()), p, StatusCondition.ASLEEP);
+		Status.giveStatus(b, b.getOtherPokemon(p), p, StatusCondition.ASLEEP);
 		###
 	CastMessage: victim.getName() + " grew drowsy!"
 *
@@ -704,7 +704,7 @@ Uproar:
 		b.addEffect(new FieldUproar());
 		
 		wakeUp(b, victim);
-		wakeUp(b, b.getOtherPokemon(victim.isPlayer()));
+		wakeUp(b, b.getOtherPokemon(victim));
 		###
 	Field: 
 		private Move uproar;
@@ -808,10 +808,10 @@ Transformed:
 		private int[] stats;
 		private Type[] type;
 		###
-	CastMessage: victim.getName() + " transformed into " + b.getOtherPokemon(victim.isPlayer()).getPokemonInfo().getName() + "!"
+	CastMessage: victim.getName() + " transformed into " + b.getOtherPokemon(victim).getPokemonInfo().getName() + "!"
 	Cast: 
 		// Pokemon to transform into
-		ActivePokemon transformee = b.getOtherPokemon(victim.isPlayer());
+		ActivePokemon transformee = b.getOtherPokemon(victim);
 		
 		// Set the new stats
 		stats = new int[Stat.NUM_STATS];
@@ -840,7 +840,7 @@ Transformed:
 		Messages.add(new MessageUpdate().withNewPokemon(transformee.getPokemonInfo(), transformee.isShiny(), true, victim.isPlayer()));
 		Messages.add(new MessageUpdate().updatePokemon(b, victim));
 		###
-	FailCondition: b.getOtherPokemon(victim.isPlayer()).hasEffect(this.namesies) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive()))
+	FailCondition: b.getOtherPokemon(victim).hasEffect(this.namesies) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive()))
 	Int: ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect
 	GetMoveList:
 		return Arrays.asList(moveList);
@@ -957,7 +957,7 @@ Bide:
 		}
 		else {
 			// RETALIATION STATION
-			b.getOtherPokemon(victim.isPlayer()).reduceHealth(b, 2*bidesies.damage);
+			b.getOtherPokemon(victim).reduceHealth(b, 2*bidesies.damage);
 		}
 		
 		// Bye Bye Bidesies
@@ -1069,14 +1069,14 @@ Snatch:
 		###
 *
 Grudge:
-	CastMessage: victim.getName() + " wants " + b.getOtherPokemon(victim.isPlayer()).getName() + " to bear a grudge!"
+	CastMessage: victim.getName() + " wants " + b.getOtherPokemon(victim).getName() + " to bear a grudge!"
 	DeathWish: 
 		Messages.add(new MessageUpdate(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to " + dead.getName() + "'s grudge!"));
 		murderer.getMove().reducePP(murderer.getMove().getPP());
 		###
 *
 DestinyBond:
-	CastMessage: victim.getName() + " is trying to take " + b.getOtherPokemon(victim.isPlayer()).getName() + " down with it!"
+	CastMessage: victim.getName() + " is trying to take " + b.getOtherPokemon(victim).getName() + " down with it!"
 	Int: BeforeTurnEffect
 	CanAttack:
 		p.removeEffect(this);

@@ -72,7 +72,6 @@ import battle.effect.status.StatusCondition;
 import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
-import item.hold.ConsumableItem;
 import item.hold.HoldItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
@@ -435,7 +434,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(enterer);
 			other.getAttributes().modifyStage(enterer, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
 		}
 	}
@@ -640,7 +639,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(enterer);
 			if (other.isHoldingItem(b)) Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!"));
 		}
 	}
@@ -1137,7 +1136,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(enterer);
 			List<Move> otherMoves = other.getMoves(b);
 			
 			List<AttackNamesies> besties = new ArrayList<>();
@@ -1524,7 +1523,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(enterer);
 			if (!other.getAbility().isStealable() || other.hasAbility(this.namesies)) {
 				return;
 			}
@@ -1533,12 +1532,12 @@ public abstract class Ability implements Serializable {
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			Ability otherAbility = b.getOtherPokemon(victim.isPlayer()).getAbility();
+			Ability otherAbility = b.getOtherPokemon(victim).getAbility();
 			return otherAbility.namesies().getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(victim);
 			return victim.getName() + " traced " + other.getName() + "'s " + other.getAbility().getName() + "!";
 		}
 	}
@@ -1551,7 +1550,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(enterer);
 			PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getPokemonInfo().namesies());
 			
 			int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
@@ -2012,7 +2011,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(enterer);
 			for (Move m : other.getMoves(b)) {
 				Attack attack = m.getAttack();
 				if (attack.getActualType().getAdvantage().isSuperEffective(enterer, b) || attack.isMoveType(MoveType.ONE_HIT_KO)) {
@@ -2325,7 +2324,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(victim);
 			if (other.hasStatus(StatusCondition.ASLEEP)) {
 				Messages.add(new MessageUpdate(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
 				other.reduceHealthFraction(b, 1/8.0);
@@ -2545,7 +2544,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void setNameChange(Battle b, ActivePokemon victim) {
-			List<ActivePokemon> team = b.getTrainer(victim.isPlayer()).getTeam();
+			List<ActivePokemon> team = b.getTrainer(victim).getTeam();
 			ActivePokemon illusion = null;
 			
 			// Starting from the back of the party, locate the first conscious Pokemon that is of a different species to be the illusion
@@ -2774,7 +2773,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer.isPlayer()).getName() + " too nervous to eat berries!"));
+			Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer).getName() + " too nervous to eat berries!"));
 		}
 	}
 
