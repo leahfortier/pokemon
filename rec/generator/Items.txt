@@ -1684,7 +1684,7 @@ Rare Candy:
 Cherish Ball:
 	Desc: A quite rare Pok\u00e9 Ball that has been specially crafted to commemorate an occasion of some sort.
 	Price: 200
-	FixedCatchRate: 1
+	BallItem: True
 *
 Dive Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.
@@ -1711,38 +1711,46 @@ Great Ball:
 Heal Ball:
 	Desc: A remedial Pok\u00e9 Ball that restores the caught Pok\u00e9mon's HP and eliminates any status problem.
 	Price: 300
-	FixedCatchRate: 1
+	BallItem: True
 	AfterCaught: p.fullyHeal();
 *
 Heavy Ball:
-	Int: BallItem
 	Desc: A Pok\u00e9 Ball for catching very heavy Pok\u00e9mon.
 	Price: 200
-	CatchRate:
+	BallItem: True
+	AdditiveCatch:
 		double weight = o.getWeight(b);
-		
-		double[] res = new double[2];
-		res[0] = 1;
-		
-		// TODO: Rewrite this with a loop
-		if (weight <= 451.5) res[1] = -20;
-		else if (weight <= 661.5) res[1] = 20;
-		else if (weight <= 903.0) res[1] = 30;
-		else res[1] = 40;
-		
-		return res;
+		if (weight <= 451.5) {
+			return -20;
+		}
+		else if (weight <= 661.5) {
+			return 20;
+		}
+		else if (weight <= 903.0) {
+			return 30;
+		}
+		else {
+			return 40;
+		}
 		###
 *
 Level Ball:
-	Int: BallItem
+	BallItem: True
 	Desc: A Pok\u00e9 Ball for catching Pok\u00e9mon that are a lower level than your own.
 	Price: 200
 	CatchRate:
-		// TODO: Rewrite this in a loop
-		if (me.getLevel()/4 > o.getLevel()) return new double[] {8, 0};
-		else if (me.getLevel()/2 > o.getLevel()) return new double[] {4, 0};
-		else if (me.getLevel() > o.getLevel()) return new double[] {2, 0};
-		else return new double[] {1, 0};
+		if (me.getLevel()/4 > o.getLevel()) {
+			return 8;
+		}
+		else if (me.getLevel()/2 > o.getLevel()) {
+			return 4;
+		}
+		else if (me.getLevel() > o.getLevel()) {
+			return 2;
+		}
+		else {
+			return 1;
+		}
 		###
 *
 Love Ball:
@@ -1758,7 +1766,7 @@ Lure Ball:
 Luxury Ball:
 	Desc: A comfortable Pok\u00e9 Ball that makes a caught wild Pok\u00e9mon quickly grow friendly.
 	Price: 1000
-	FixedCatchRate: 1
+	BallItem: True
 	Comments: // TODO: Make this item do something more interesting
 *
 Master Ball:
@@ -1772,14 +1780,19 @@ Moon Ball:
 	CatchRateCondition: 4 o.getPokemonInfo().getEvolution().getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null
 *
 Nest Ball:
-	Int: BallItem
+	BallItem: True
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on weaker Pok\u00e9mon in the wild.
 	Price: 1000
 	CatchRate:
-		// TODO: Loopy and make it general with the others
-		if (o.getLevel() <= 19) return new double[] { 3, 0 };
-		else if (o.getLevel() <= 29) return new double[] { 2, 0 };
-		else return new double[] { 1, 0 };
+		if (o.getLevel() <= 19) {
+			return 3;
+		}
+		else if (o.getLevel() <= 29) {
+			return 2;
+		}
+		else {
+			return 1;
+		}
 		###
 *
 Net Ball:
@@ -1790,12 +1803,12 @@ Net Ball:
 Pok\u00e9 Ball:
 	Desc: A device for catching wild Pok\u00e9mon. It is thrown like a ball at the target. It is designed as a capsule system.
 	Price: 200
-	FixedCatchRate: 1
+	BallItem: True
 *
 Premier Ball:
 	Desc: A somewhat rare Pok\u00e9 Ball that has been specially made to commemorate an event of some sort.
 	Price: 200
-	FixedCatchRate: 1
+	BallItem: True
 *
 Quick Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that provides a better catch rate if it is used at the start of a wild encounter.
@@ -1812,14 +1825,11 @@ Safari Ball:
 	FixedCatchRate: 1.5
 *
 Timer Ball:
-	Int: BallItem
+	BallItem: True
 	Desc: A somewhat different Ball that becomes progressively better the more turns there are in a battle.
 	Price: 1000
 	CatchRate:
-		if (b.getTurn() <= 10) return new double[] {1, 0};
-		else if (b.getTurn() <= 20) return new double[] {2, 0};
-		else if (b.getTurn() <= 30) return new double[] {3, 0};
-		else return new double[] {4, 0};
+		return Math.min((int)(b.getTurn()/10) + 1, 4);
 		###
 *
 Ultra Ball:

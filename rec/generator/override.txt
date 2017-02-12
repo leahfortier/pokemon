@@ -1350,22 +1350,22 @@ Override:
 		AddMapField: Fling: 10
 	*
 ***
+Wing:
+***
+Vitamin:
+***
 Override:
 	Wing:
-		AddMapField: EVIncreaseAmt: {0} 1
+		AddMapField: EVIncreaseAmt: {0}
 		AddMapField: Price: 3000
-		AddMapField: Fling: 20
-		AddInterface: HoldItem
-		AddMapField: Cat: Stat
+		AddInterface: Wing
 	*
 ***
 Override:	
 	Vitamin:
-		AddMapField: EVIncreaseAmt: {0} 10
+		AddMapField: EVIncreaseAmt: {0}
 		AddMapField: Price: 9800
-		AddMapField: Fling: 30
-		AddInterface: HoldItem
-		AddMapField: Cat: Stat
+		AddInterface: Vitamin
 	*
 ***
 RepellingEffect:
@@ -1491,11 +1491,7 @@ Override:
 	TypeEnhance:
 		AddInterface: PowerChangeEffect
 		AddMapField: GetMultiplier:
-			if (user.isAttackType(Type.{00})) {
-				return 1.2;
-			}
-
-			return 1;
+			return user.isAttackType(Type.{00}) ? 1.2 : 1;
 			###
 		AddInterface: HoldItem
 		AddMapField: Cat: Misc
@@ -1552,22 +1548,13 @@ Override:
 ***
 Override:
 	TimeSpaceOrb:
-		Header: boolean canUseOrb(ActivePokemon user)
-		AccessModifier: Private
-		Body:
-			return user.isPokemon(PokemonNamesies.{11}) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.{22}));
-			###
 		AddMapField: Fling: 60
 		AddMapField: Price: 10000
 		AddInterface: HoldItem
-		AddInterface: PowerChangeEffect
 		AddMapField: Cat: Misc
+		AddInterface: PowerChangeEffect
 		AddMapField: GetMultiplier:
-			if (canUseOrb(user)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isPokemon(PokemonNamesies.{11}) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.{22})) ? 1.2 : 1;
 			###
 	*
 ***
@@ -1673,16 +1660,6 @@ Override:
 			###
 	*
 ***
-Override:
-	SourceUse:
-		Header: boolean use(ActivePokemon p, CastSource source)
-		AccessModifier: Private
-		AddInterface: PokemonUseItem
-		AddMapField: PokemonUse:
-			return use(p, CastSource.USE_ITEM);
-			###
-	*
-***
 StatusHealer:
 	ShouldHealStatus:
 		Header: boolean shouldHeal(StatusCondition statusCondition)
@@ -1731,7 +1708,7 @@ Override:
 			###
 	*
 ***
-Override:
+EvIncreaser:
 	EVIncrease:
 		Header: Stat toIncrease()
 		Body:
@@ -1741,45 +1718,42 @@ Override:
 ***
 Override:
 	EVIncreaseAmt:
-		AddInterface: PokemonUseItem
-		AddMapField: PokemonUse:
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.{11}.index()] += {2};
-
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-
-			Messages.add(p.getName() + "'s " + Stat.{11}.getName() + " was raised!");
-			return true;
-			###
+		AddInterface: Hidden-EvIncreaser
+		AddMapField: EVIncrease: {0}
+		AddMapField: Cat: Stat
 	*
 ***
 Override:
 	CatchRateCondition:
-		AddInterface: BallItem
+		AddMapField: BallItem: True
 		AddMapField: CatchRate:
-			if ({2-}) {
-				return new double[] { {1}, 0 };
-			}
-			
-			return new double[] { 1, 0 };
+			return {2-} ? {1} : 1;
 			###
 	*
 ***
 Override:
 	FixedCatchRate:
-		AddInterface: BallItem
+		AddMapField: BallItem: True
 		AddMapField: CatchRate:
-			return new double[] { {0}, 0 };
+			return {0};
 			###
+	*
+***
+Override:
+	BallItem:
+		AddInterface: BallItem
+		AddMapField: Cat: Ball
+		AddMapField: BattleCat: Ball
 	*
 ***
 BallItem:
 	CatchRate:
-		Header: double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		AddMapField: Cat: Ball
-		AddMapField: BattleCat: Ball
+		Header: double getModifier(ActivePokemon me, ActivePokemon o, Battle b)
+		Optional: True
+	*
+	AdditiveCatch:
+		Header: int getAdditive(ActivePokemon me, ActivePokemon o, Battle b)
+		Optional: True
 	*
 	AfterCaught:
 		Header: void afterCaught(ActivePokemon p)

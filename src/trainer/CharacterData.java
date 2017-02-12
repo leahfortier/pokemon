@@ -462,9 +462,8 @@ public class CharacterData extends Trainer implements Serializable {
 		int catchRate = catchPokemon.getPokemonInfo().getCatchRate();
 		double statusMod = catchPokemon.getStatus().getType().getCatchModifier();
 
-		double[] ballInfo = ball.catchRate(front(), catchPokemon, b);
-		double ballMod = ballInfo[0];
-		double ballAdd = ballInfo[1];
+		double ballMod = ball.getModifier(front(), catchPokemon, b);
+		int ballAdd = ball.getAdditive(front(), catchPokemon, b);
 
 		double catchVal = (3*maxHP - 2*hp)*catchRate*ballMod*statusMod/(3*maxHP) + ballAdd;
 		int shakeVal = (int)Math.ceil(65536/Math.pow(255/catchVal, .25));
@@ -481,6 +480,7 @@ public class CharacterData extends Trainer implements Serializable {
 		Messages.add(new MessageUpdate("Gotcha! " + catchPokemon.getName() + " was caught!"));
 		gainEXP(catchPokemon, b);
 		addPokemon(catchPokemon);
+		ball.afterCaught(catchPokemon);
 
 		Messages.add(new MessageUpdate().withUpdate(Update.CATCH_POKEMON));
 		return true;

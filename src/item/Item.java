@@ -55,6 +55,9 @@ import item.hold.SpecialTypeItem.GemItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
 import item.medicine.AllPPHealer;
+import item.medicine.EvIncreaser;
+import item.medicine.EvIncreaser.Vitamin;
+import item.medicine.EvIncreaser.Wing;
 import item.medicine.FixedHpHealer;
 import item.medicine.HpHealer;
 import item.medicine.PPHealer;
@@ -764,16 +767,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 10000;
 		}
 
-		private boolean canUseOrb(ActivePokemon user) {
-			return user.isPokemon(PokemonNamesies.DIALGA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.STEEL));
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (canUseOrb(user)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isPokemon(PokemonNamesies.DIALGA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.STEEL)) ? 1.2 : 1;
 		}
 
 		public int flingDamage() {
@@ -789,16 +784,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 10000;
 		}
 
-		private boolean canUseOrb(ActivePokemon user) {
-			return user.isPokemon(PokemonNamesies.PALKIA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.WATER));
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (canUseOrb(user)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isPokemon(PokemonNamesies.PALKIA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.WATER)) ? 1.2 : 1;
 		}
 
 		public int flingDamage() {
@@ -814,16 +801,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 10000;
 		}
 
-		private boolean canUseOrb(ActivePokemon user) {
-			return user.isPokemon(PokemonNamesies.GIRATINA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.GHOST));
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (canUseOrb(user)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isPokemon(PokemonNamesies.GIRATINA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.GHOST)) ? 1.2 : 1;
 		}
 
 		public int flingDamage() {
@@ -1869,11 +1848,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.PSYCHIC)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.PSYCHIC) ? 1.2 : 1;
 		}
 	}
 
@@ -1915,11 +1890,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.ROCK)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.ROCK) ? 1.2 : 1;
 		}
 	}
 
@@ -1940,11 +1911,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.GRASS)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.GRASS) ? 1.2 : 1;
 		}
 	}
 
@@ -1965,11 +1932,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.WATER)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.WATER) ? 1.2 : 1;
 		}
 	}
 
@@ -1990,11 +1953,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.WATER)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.WATER) ? 1.2 : 1;
 		}
 	}
 
@@ -2540,11 +2499,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.FIGHTING)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.FIGHTING) ? 1.2 : 1;
 		}
 	}
 
@@ -2561,11 +2516,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.DARK)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.DARK) ? 1.2 : 1;
 		}
 	}
 
@@ -2582,11 +2533,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.FIRE)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.FIRE) ? 1.2 : 1;
 		}
 	}
 
@@ -2603,11 +2550,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.DRAGON)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.DRAGON) ? 1.2 : 1;
 		}
 	}
 
@@ -2624,11 +2567,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.ROCK)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.ROCK) ? 1.2 : 1;
 		}
 	}
 
@@ -2645,11 +2584,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.ELECTRIC)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.ELECTRIC) ? 1.2 : 1;
 		}
 	}
 
@@ -2666,11 +2601,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.STEEL)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.STEEL) ? 1.2 : 1;
 		}
 
 		public boolean use(ActivePokemon p) {
@@ -2691,11 +2622,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.GRASS)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.GRASS) ? 1.2 : 1;
 		}
 	}
 
@@ -2712,11 +2639,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.WATER)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.WATER) ? 1.2 : 1;
 		}
 	}
 
@@ -2733,11 +2656,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.ICE)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.ICE) ? 1.2 : 1;
 		}
 	}
 
@@ -2758,11 +2677,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.POISON)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.POISON) ? 1.2 : 1;
 		}
 	}
 
@@ -2779,11 +2694,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.FLYING)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.FLYING) ? 1.2 : 1;
 		}
 	}
 
@@ -2800,11 +2711,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.NORMAL)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.NORMAL) ? 1.2 : 1;
 		}
 	}
 
@@ -2821,11 +2728,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.BUG)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.BUG) ? 1.2 : 1;
 		}
 	}
 
@@ -2842,11 +2745,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.GROUND)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.GROUND) ? 1.2 : 1;
 		}
 	}
 
@@ -2863,11 +2762,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.GHOST)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.GHOST) ? 1.2 : 1;
 		}
 	}
 
@@ -2884,11 +2779,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.isAttackType(Type.PSYCHIC)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isAttackType(Type.PSYCHIC) ? 1.2 : 1;
 		}
 	}
 
@@ -4087,7 +3978,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class HPUp extends Item implements HoldItem, PokemonUseItem {
+	static class HPUp extends Item implements Vitamin {
 		private static final long serialVersionUID = 1L;
 
 		HPUp() {
@@ -4095,24 +3986,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 9800;
 		}
 
-		public boolean use(ActivePokemon p) {
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.HP.index()] += 10;
-			
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.HP.getName() + " was raised!");
-			return true;
-		}
-
-		public int flingDamage() {
-			return 30;
+		public Stat toIncrease() {
+			return Stat.HP;
 		}
 	}
 
-	static class Protein extends Item implements HoldItem, PokemonUseItem {
+	static class Protein extends Item implements Vitamin {
 		private static final long serialVersionUID = 1L;
 
 		Protein() {
@@ -4120,24 +3999,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 9800;
 		}
 
-		public boolean use(ActivePokemon p) {
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.ATTACK.index()] += 10;
-			
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.ATTACK.getName() + " was raised!");
-			return true;
-		}
-
-		public int flingDamage() {
-			return 30;
+		public Stat toIncrease() {
+			return Stat.ATTACK;
 		}
 	}
 
-	static class Iron extends Item implements HoldItem, PokemonUseItem {
+	static class Iron extends Item implements Vitamin {
 		private static final long serialVersionUID = 1L;
 
 		Iron() {
@@ -4145,24 +4012,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 9800;
 		}
 
-		public boolean use(ActivePokemon p) {
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.DEFENSE.index()] += 10;
-			
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.DEFENSE.getName() + " was raised!");
-			return true;
-		}
-
-		public int flingDamage() {
-			return 30;
+		public Stat toIncrease() {
+			return Stat.DEFENSE;
 		}
 	}
 
-	static class Calcium extends Item implements HoldItem, PokemonUseItem {
+	static class Calcium extends Item implements Vitamin {
 		private static final long serialVersionUID = 1L;
 
 		Calcium() {
@@ -4170,24 +4025,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 9800;
 		}
 
-		public boolean use(ActivePokemon p) {
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.SP_ATTACK.index()] += 10;
-			
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.SP_ATTACK.getName() + " was raised!");
-			return true;
-		}
-
-		public int flingDamage() {
-			return 30;
+		public Stat toIncrease() {
+			return Stat.SP_ATTACK;
 		}
 	}
 
-	static class Zinc extends Item implements HoldItem, PokemonUseItem {
+	static class Zinc extends Item implements Vitamin {
 		private static final long serialVersionUID = 1L;
 
 		Zinc() {
@@ -4195,24 +4038,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 9800;
 		}
 
-		public boolean use(ActivePokemon p) {
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.SP_DEFENSE.index()] += 10;
-			
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " was raised!");
-			return true;
-		}
-
-		public int flingDamage() {
-			return 30;
+		public Stat toIncrease() {
+			return Stat.SP_DEFENSE;
 		}
 	}
 
-	static class Carbos extends Item implements HoldItem, PokemonUseItem {
+	static class Carbos extends Item implements Vitamin {
 		private static final long serialVersionUID = 1L;
 
 		Carbos() {
@@ -4220,24 +4051,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 9800;
 		}
 
-		public boolean use(ActivePokemon p) {
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.SPEED.index()] += 10;
-			
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.SPEED.getName() + " was raised!");
-			return true;
-		}
-
-		public int flingDamage() {
-			return 30;
+		public Stat toIncrease() {
+			return Stat.SPEED;
 		}
 	}
 
-	static class HealthWing extends Item implements HoldItem, PokemonUseItem {
+	static class HealthWing extends Item implements Wing {
 		private static final long serialVersionUID = 1L;
 
 		HealthWing() {
@@ -4245,24 +4064,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 3000;
 		}
 
-		public boolean use(ActivePokemon p) {
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.HP.index()] += 1;
-			
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.HP.getName() + " was raised!");
-			return true;
-		}
-
-		public int flingDamage() {
-			return 20;
+		public Stat toIncrease() {
+			return Stat.HP;
 		}
 	}
 
-	static class MuscleWing extends Item implements HoldItem, PokemonUseItem {
+	static class MuscleWing extends Item implements Wing {
 		private static final long serialVersionUID = 1L;
 
 		MuscleWing() {
@@ -4270,24 +4077,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 3000;
 		}
 
-		public boolean use(ActivePokemon p) {
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.ATTACK.index()] += 1;
-			
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.ATTACK.getName() + " was raised!");
-			return true;
-		}
-
-		public int flingDamage() {
-			return 20;
+		public Stat toIncrease() {
+			return Stat.ATTACK;
 		}
 	}
 
-	static class ResistWing extends Item implements HoldItem, PokemonUseItem {
+	static class ResistWing extends Item implements Wing {
 		private static final long serialVersionUID = 1L;
 
 		ResistWing() {
@@ -4295,24 +4090,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 3000;
 		}
 
-		public boolean use(ActivePokemon p) {
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.DEFENSE.index()] += 1;
-			
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.DEFENSE.getName() + " was raised!");
-			return true;
-		}
-
-		public int flingDamage() {
-			return 20;
+		public Stat toIncrease() {
+			return Stat.DEFENSE;
 		}
 	}
 
-	static class GeniusWing extends Item implements HoldItem, PokemonUseItem {
+	static class GeniusWing extends Item implements Wing {
 		private static final long serialVersionUID = 1L;
 
 		GeniusWing() {
@@ -4320,24 +4103,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 3000;
 		}
 
-		public boolean use(ActivePokemon p) {
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.SP_ATTACK.index()] += 1;
-			
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.SP_ATTACK.getName() + " was raised!");
-			return true;
-		}
-
-		public int flingDamage() {
-			return 20;
+		public Stat toIncrease() {
+			return Stat.SP_ATTACK;
 		}
 	}
 
-	static class CleverWing extends Item implements HoldItem, PokemonUseItem {
+	static class CleverWing extends Item implements Wing {
 		private static final long serialVersionUID = 1L;
 
 		CleverWing() {
@@ -4345,24 +4116,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 3000;
 		}
 
-		public boolean use(ActivePokemon p) {
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.SP_DEFENSE.index()] += 1;
-			
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.SP_DEFENSE.getName() + " was raised!");
-			return true;
-		}
-
-		public int flingDamage() {
-			return 20;
+		public Stat toIncrease() {
+			return Stat.SP_DEFENSE;
 		}
 	}
 
-	static class SwiftWing extends Item implements HoldItem, PokemonUseItem {
+	static class SwiftWing extends Item implements Wing {
 		private static final long serialVersionUID = 1L;
 
 		SwiftWing() {
@@ -4370,20 +4129,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 3000;
 		}
 
-		public boolean use(ActivePokemon p) {
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.SPEED.index()] += 1;
-			
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.SPEED.getName() + " was raised!");
-			return true;
-		}
-
-		public int flingDamage() {
-			return 20;
+		public Stat toIncrease() {
+			return Stat.SPEED;
 		}
 	}
 
@@ -4456,10 +4203,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
-
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 1, 0 };
-		}
 	}
 
 	// TODO: Not sure yet if this will cover fishing
@@ -4472,12 +4215,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getTerrainType() == TerrainType.WATER) {
-				return new double[] { 3.5, 0 };
-			}
-			
-			return new double[] { 1, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return b.getTerrainType() == TerrainType.WATER ? 3.5 : 1;
 		}
 	}
 
@@ -4490,12 +4229,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getTerrainType() == TerrainType.CAVE) {
-				return new double[] { 3.5, 0 };
-			}
-			
-			return new double[] { 1, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return b.getTerrainType() == TerrainType.CAVE ? 3.5 : 1;
 		}
 	}
 
@@ -4509,12 +4244,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100) {
-				return new double[] { 4, 0 };
-			}
-			
-			return new double[] { 1, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100 ? 4 : 1;
 		}
 	}
 
@@ -4527,8 +4258,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 1.5, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return 1.5;
 		}
 	}
 
@@ -4539,10 +4270,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super(ItemNamesies.HEAL_BALL, "A remedial Pok\u00e9 Ball that restores the caught Pok\u00e9mon's HP and eliminates any status problem.", BagCategory.BALL, 220);
 			super.price = 300;
 			super.battleBagCategories.add(BattleBagCategory.BALL);
-		}
-
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 1, 0 };
 		}
 
 		public void afterCaught(ActivePokemon p) {
@@ -4559,19 +4286,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
+		public int getAdditive(ActivePokemon me, ActivePokemon o, Battle b) {
 			double weight = o.getWeight(b);
-			
-			double[] res = new double[2];
-			res[0] = 1;
-			
-			// TODO: Rewrite this with a loop
-			if (weight <= 451.5) res[1] = -20;
-			else if (weight <= 661.5) res[1] = 20;
-			else if (weight <= 903.0) res[1] = 30;
-			else res[1] = 40;
-			
-			return res;
+			if (weight <= 451.5) {
+				return -20;
+			}
+			else if (weight <= 661.5) {
+				return 20;
+			}
+			else if (weight <= 903.0) {
+				return 30;
+			}
+			else {
+				return 40;
+			}
 		}
 	}
 
@@ -4584,12 +4312,19 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			// TODO: Rewrite this in a loop
-			if (me.getLevel()/4 > o.getLevel()) return new double[] {8, 0};
-			else if (me.getLevel()/2 > o.getLevel()) return new double[] {4, 0};
-			else if (me.getLevel() > o.getLevel()) return new double[] {2, 0};
-			else return new double[] {1, 0};
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (me.getLevel()/4 > o.getLevel()) {
+				return 8;
+			}
+			else if (me.getLevel()/2 > o.getLevel()) {
+				return 4;
+			}
+			else if (me.getLevel() > o.getLevel()) {
+				return 2;
+			}
+			else {
+				return 1;
+			}
 		}
 	}
 
@@ -4602,12 +4337,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (Gender.oppositeGenders(me, o)) {
-				return new double[] { 8, 0 };
-			}
-			
-			return new double[] { 1, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return Gender.oppositeGenders(me, o) ? 8 : 1;
 		}
 	}
 
@@ -4620,12 +4351,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (Game.getPlayer().isFishing()) {
-				return new double[] { 3, 0 };
-			}
-			
-			return new double[] { 1, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return Game.getPlayer().isFishing() ? 3 : 1;
 		}
 	}
 
@@ -4638,10 +4365,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 1000;
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
-
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 1, 0 };
-		}
 	}
 
 	static class MasterBall extends Item implements BallItem {
@@ -4653,8 +4376,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 255, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return 255;
 		}
 	}
 
@@ -4667,12 +4390,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.getPokemonInfo().getEvolution().getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null) {
-				return new double[] { 4, 0 };
-			}
-			
-			return new double[] { 1, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return o.getPokemonInfo().getEvolution().getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null ? 4 : 1;
 		}
 	}
 
@@ -4685,11 +4404,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			// TODO: Loopy and make it general with the others
-			if (o.getLevel() <= 19) return new double[] { 3, 0 };
-			else if (o.getLevel() <= 29) return new double[] { 2, 0 };
-			else return new double[] { 1, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			if (o.getLevel() <= 19) {
+				return 3;
+			}
+			else if (o.getLevel() <= 29) {
+				return 2;
+			}
+			else {
+				return 1;
+			}
 		}
 	}
 
@@ -4702,12 +4426,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (o.isType(b, Type.WATER) || o.isType(b, Type.BUG)) {
-				return new double[] { 3, 0 };
-			}
-			
-			return new double[] { 1, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return o.isType(b, Type.WATER) || o.isType(b, Type.BUG) ? 3 : 1;
 		}
 	}
 
@@ -4719,10 +4439,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
-
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 1, 0 };
-		}
 	}
 
 	static class PremierBall extends Item implements BallItem {
@@ -4732,10 +4448,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super(ItemNamesies.PREMIER_BALL, "A somewhat rare Pok\u00e9 Ball that has been specially made to commemorate an event of some sort.", BagCategory.BALL, 231);
 			super.price = 200;
 			super.battleBagCategories.add(BattleBagCategory.BALL);
-		}
-
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 1, 0 };
 		}
 	}
 
@@ -4748,12 +4460,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getTurn() == 1) {
-				return new double[] { 3, 0 };
-			}
-			
-			return new double[] { 1, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return b.getTurn() == 1 ? 3 : 1;
 		}
 	}
 
@@ -4766,12 +4474,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getPlayer().getPokedex().isCaught(o.getPokemonInfo().namesies())) {
-				return new double[] { 3, 0 };
-			}
-			
-			return new double[] { 1, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return b.getPlayer().getPokedex().isCaught(o.getPokemonInfo().namesies()) ? 3 : 1;
 		}
 	}
 
@@ -4783,8 +4487,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 1.5, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return 1.5;
 		}
 	}
 
@@ -4797,11 +4501,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			if (b.getTurn() <= 10) return new double[] {1, 0};
-			else if (b.getTurn() <= 20) return new double[] {2, 0};
-			else if (b.getTurn() <= 30) return new double[] {3, 0};
-			else return new double[] {4, 0};
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return Math.min((int)(b.getTurn()/10) + 1, 4);
 		}
 	}
 
@@ -4814,8 +4515,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.BALL);
 		}
 
-		public double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b) {
-			return new double[] { 2, 0 };
+		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
+			return 2;
 		}
 	}
 
