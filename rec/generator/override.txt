@@ -1499,7 +1499,6 @@ Override:
 ***
 Override:
 	PPIncrease:
-		AddMapField: Fling: 30
 		AddMapField: MoveUse:
 			if (m.increaseMaxPP({0})) {
 				Messages.add(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!");
@@ -1540,7 +1539,6 @@ Override:
 		AddMapField: AllPPRestoreAmount:
 			return {0};
 			###
-		AddMapField: Fling: 30
 		AddInterface: HoldItem
 		AddMapField: Cat: Medicine
 		AddMapField: BattleCat: HP_PP
@@ -1644,7 +1642,6 @@ Override:
 		AddInterface: HoldItem
 		AddMapField: Cat: Medicine
 		AddMapField: BattleCat: Status
-		AddMapField: Fling: 30
 		AddMapField: PokemonUse:
 			// Only applies to the dead
 			if (!p.isActuallyDead()) {
@@ -1692,13 +1689,11 @@ Override:
 			###
 		AddMapField: Cat: Medicine
 		AddMapField: BattleCat: HP_PP
-		AddMapField: Fling: 30
 		AddInterface: Hidden-HoldItem
 	*
 ***
 Override:
 	XStageIncrease:
-		AddMapField: Fling: 30
 		AddMapField: Cat: Stat
 		AddMapField: BattleCat: Battle
 		AddInterface: HoldItem
@@ -2009,7 +2004,6 @@ Repelling:
 	RepelSteps:
 		Header: int repelSteps()
 		Body: return {0};
-		AddMapField: Fling: 30
 		AddMapField: Cat: Misc
 	*
 ***
@@ -2360,8 +2354,8 @@ Override:
 				p.consumeItem(b);
 			}
 			###
+		AddMapField: Comments: // TODO: Still have not confirmed fling damage
 		AddMapField: Price: 4000
-		AddMapField: Fling: 30
 		AddMapField: Cat: Misc
 	*
 ***
