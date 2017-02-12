@@ -746,23 +746,27 @@ StatModifyingEffect:
 	*
 ***
 SimpleStatModifyingEffect
+	SimpleGetModifier:
+		Header: double getModifier()
+		Body: return {0};
+	*	
+***
+Override:
+	SimpleModifier:
+		AddMapField: SimpleGetModifier: {1}
+		AddInterface: SimpleStatModifyingEffect
+	*
 ***
 Override:
 	ModifyMultiplier:
-		Header: double getModifier()
-		Body:
-			return {1};
-			###
-		AddInterface: SimpleStatModifyingEffect
+		AddMapField: SimpleModifier: {1}
 		AddMapField: CanModify: {2-}
 	*
 ***
 Override:
 	CanModify:
 		Header: boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp)
-		Body:
-			return {0};
-			###
+		Body: return {0};
 	*
 ***
 Override:
@@ -1339,7 +1343,7 @@ ConsumableItem:
 Override:
 	ChoiceItem:
 		AddMapField: ToModify: {0}
-		AddMapField: ModifyMultiplier: 1.5 true
+		AddMapField: SimpleModifier: 1.5
 		AddInterface: AttackSelectionEffect
 		AddMapField: Usable:
 			Move last = p.getAttributes().getLastMoveUsed();
@@ -1476,7 +1480,7 @@ PowerItem:
 			return Stat.{00};
 			###
 		AddMapField: ToModify: Speed
-		AddMapField: ModifyMultiplier: .5 true
+		AddMapField: SimpleModifier: .5
 		AddInterface: Hidden-EVItem
 		AddMapField: GetEVs:
 			vals[powerStat().index()] += 4;

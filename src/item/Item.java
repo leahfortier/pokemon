@@ -354,20 +354,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 100;
 		}
 
-		public double getModifier() {
-			return 1.1;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.EVASION;
 		}
 
 		public int flingDamage() {
 			return 10;
+		}
+
+		public double getModifier() {
+			return 1.1;
 		}
 	}
 
@@ -403,16 +399,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.ATTACK;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 
 		public int flingDamage() {
@@ -437,16 +429,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 
 		public int flingDamage() {
@@ -471,16 +459,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SP_ATTACK;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 
 		public int flingDamage() {
@@ -785,14 +769,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public double getModifier() {
-			return .5;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
@@ -813,6 +789,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			}
 			
 			LevitationEffect.falllllllll(b, p);
+		}
+
+		public double getModifier() {
+			return .5;
 		}
 	}
 
@@ -859,10 +839,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 100;
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return p.isPokemon(PokemonNamesies.PIKACHU);
 		}
@@ -873,6 +849,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 			Status.giveStatus(b, pelted, pelted, StatusCondition.PARALYZED, pelted.getName() + " was paralyzed by the " + this.name + "!");
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -938,14 +918,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 3000;
 		}
 
-		public double getModifier() {
-			return .5;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
@@ -956,6 +928,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			}
 			
 			return vals;
+		}
+
+		public double getModifier() {
+			return .5;
 		}
 
 		public int flingDamage() {
@@ -1018,10 +994,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 10;
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return p.isPokemon(PokemonNamesies.DITTO);
 		}
@@ -1032,6 +1004,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public int flingDamage() {
 			return 10;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 	}
 
@@ -1077,14 +1053,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return Stat.SPEED;
 		}
 
-		public double getModifier() {
-			return .5;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
@@ -1092,6 +1060,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		public int[] getEVs(int[] vals) {
 			vals[powerStat().index()] += 4;
 			return vals;
+		}
+
+		public double getModifier() {
+			return .5;
 		}
 
 		public int flingDamage() {
@@ -1111,14 +1083,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return Stat.SP_DEFENSE;
 		}
 
-		public double getModifier() {
-			return .5;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
@@ -1126,6 +1090,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		public int[] getEVs(int[] vals) {
 			vals[powerStat().index()] += 4;
 			return vals;
+		}
+
+		public double getModifier() {
+			return .5;
 		}
 
 		public int flingDamage() {
@@ -1145,14 +1113,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return Stat.DEFENSE;
 		}
 
-		public double getModifier() {
-			return .5;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
@@ -1160,6 +1120,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		public int[] getEVs(int[] vals) {
 			vals[powerStat().index()] += 4;
 			return vals;
+		}
+
+		public double getModifier() {
+			return .5;
 		}
 
 		public int flingDamage() {
@@ -1179,14 +1143,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return Stat.ATTACK;
 		}
 
-		public double getModifier() {
-			return .5;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
@@ -1194,6 +1150,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		public int[] getEVs(int[] vals) {
 			vals[powerStat().index()] += 4;
 			return vals;
+		}
+
+		public double getModifier() {
+			return .5;
 		}
 
 		public int flingDamage() {
@@ -1213,14 +1173,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return Stat.SP_ATTACK;
 		}
 
-		public double getModifier() {
-			return .5;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
@@ -1228,6 +1180,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		public int[] getEVs(int[] vals) {
 			vals[powerStat().index()] += 4;
 			return vals;
+		}
+
+		public double getModifier() {
+			return .5;
 		}
 
 		public int flingDamage() {
@@ -1247,14 +1203,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return Stat.HP;
 		}
 
-		public double getModifier() {
-			return .5;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
 		}
@@ -1262,6 +1210,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		public int[] getEVs(int[] vals) {
 			vals[powerStat().index()] += 4;
 			return vals;
+		}
+
+		public double getModifier() {
+			return .5;
 		}
 
 		public int flingDamage() {
@@ -1290,10 +1242,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 10;
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return p.isPokemon(PokemonNamesies.DITTO);
 		}
@@ -1304,6 +1252,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public int flingDamage() {
 			return 10;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 	}
 
@@ -1459,16 +1411,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 10;
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS);
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 	}
 
@@ -1537,10 +1489,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 500;
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return p.isPokemon(PokemonNamesies.CUBONE) || p.isPokemon(PokemonNamesies.MAROWAK);
 		}
@@ -1551,6 +1499,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public int flingDamage() {
 			return 90;
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -1611,20 +1563,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public double getModifier() {
-			return 1.1;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.ACCURACY;
 		}
 
 		public int flingDamage() {
 			return 10;
+		}
+
+		public double getModifier() {
+			return 1.1;
 		}
 	}
 
@@ -1636,20 +1584,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public double getModifier() {
-			return 1.1;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SP_ATTACK;
 		}
 
 		public int flingDamage() {
 			return 10;
+		}
+
+		public double getModifier() {
+			return 1.1;
 		}
 	}
 
@@ -1659,10 +1603,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		ZoomLens() {
 			super(ItemNamesies.ZOOM_LENS, "An item to be held by a Pok\u00e9mon. If the holder moves after its target, its accuracy will be boosted.", BagCategory.MISC, 71);
 			super.price = 200;
-		}
-
-		public double getModifier() {
-			return 1.2;
 		}
 
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
@@ -1675,6 +1615,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public int flingDamage() {
 			return 10;
+		}
+
+		public double getModifier() {
+			return 1.2;
 		}
 	}
 
@@ -1699,20 +1643,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 9600;
 		}
 
-		public double getModifier() {
-			return 1.1;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.EVASION;
 		}
 
 		public PokemonNamesies getBaby() {
 			return PokemonNamesies.WYNAUT;
+		}
+
+		public double getModifier() {
+			return 1.1;
 		}
 	}
 
@@ -2646,16 +2586,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class DeepSeaScale extends Item implements HoldItem, SimpleStatModifyingEffect, PokemonUseItem {
+	static class DeepSeaScale extends Item implements HoldItem, PokemonUseItem, SimpleStatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		DeepSeaScale() {
 			super(ItemNamesies.DEEP_SEA_SCALE, "An item to be held by Clamperl, Chinchou, or Lanturn. A scale that shines a faint pink, it raises the Sp. Def stat.", BagCategory.MISC, 139);
 			super.price = 200;
-		}
-
-		public double getModifier() {
-			return 2;
 		}
 
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
@@ -2669,18 +2605,18 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		public boolean use(ActivePokemon p) {
 			return p.checkEvolution(this.namesies);
 		}
+
+		public double getModifier() {
+			return 2;
+		}
 	}
 
-	static class DeepSeaTooth extends Item implements HoldItem, SimpleStatModifyingEffect, PokemonUseItem {
+	static class DeepSeaTooth extends Item implements HoldItem, PokemonUseItem, SimpleStatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		DeepSeaTooth() {
 			super(ItemNamesies.DEEP_SEA_TOOTH, "An item to be held by Clamperl. A fang that gleams a sharp silver, it raises the Sp. Atk stat.", BagCategory.MISC, 140);
 			super.price = 200;
-		}
-
-		public double getModifier() {
-			return 2;
 		}
 
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
@@ -2697,6 +2633,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public boolean use(ActivePokemon p) {
 			return p.checkEvolution(this.namesies);
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -5296,10 +5236,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return p.getPokemonInfo().getEvolution().canEvolve();
 		}
@@ -5310,6 +5246,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public int flingDamage() {
 			return 40;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 	}
 
@@ -5389,14 +5329,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 1000;
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SP_DEFENSE;
 		}
@@ -5411,6 +5343,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return p.getName() + "'s " + this.name + " prevents the use of status moves!";
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 	}
 

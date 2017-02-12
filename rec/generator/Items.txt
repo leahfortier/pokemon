@@ -140,7 +140,7 @@ Bright Powder:
 	Price: 100
 	Fling: 10
 	ToModify: Evasion
-	ModifyMultiplier: 1.1 true
+	SimpleModifier: 1.1 
 *
 Cell Battery:
 	Cat: Misc
@@ -318,7 +318,7 @@ Iron Ball:
 	Price: 200
 	Fling: 130
 	ToModify: Speed
-	ModifyMultiplier: .5 true
+	SimpleModifier: .5 
 	FlingEffect:
 		// Technically the Iron Ball doesn't do this as a fling effect, but it almost makes sense so I'm doing it
 		removeLevitation(b, pelted);
@@ -403,7 +403,7 @@ Macho Brace:
 		return vals;
 		###
 	ToModify: Speed
-	ModifyMultiplier: .5 true
+	SimpleModifier: .5 
 *
 Mental Herb:
 	Int: HoldItem, EndTurnEffect
@@ -699,7 +699,7 @@ Wide Lens:
 	Price: 200
 	Fling: 10
 	ToModify: Accuracy
-	ModifyMultiplier: 1.1 true
+	SimpleModifier: 1.1 
 *
 Wise Glasses:
 	Int: HoldItem
@@ -708,7 +708,7 @@ Wise Glasses:
 	Price: 200
 	Fling: 10
 	ToModify: Sp_Attack
-	ModifyMultiplier: 1.1 true
+	SimpleModifier: 1.1 
 *
 Zoom Lens:
 	Int: HoldItem
@@ -733,7 +733,7 @@ Lax Incense:
 	Price: 9600
 	ToModify: Evasion
 	Baby: Wynaut
-	ModifyMultiplier: 1.1 true
+	SimpleModifier: 1.1 
 *
 Luck Incense:
 	Int: IncenseItem
@@ -2227,7 +2227,7 @@ Assault Vest:
 	Cat: Misc
 	Int: HoldItem, AttackSelectionEffect
 	ToModify: Sp_Defense
-	ModifyMultiplier: 1.5 true
+	SimpleModifier: 1.5 
 	Usable:
 		return !m.getAttack().isStatusMove();
 		###

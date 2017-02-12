@@ -63,7 +63,7 @@ Shed Skin:
 *
 Compoundeyes:
 	Desc: The Pok\u00e9mon's accuracy is boosted.
-	ModifyMultiplier: 1.3 true
+	SimpleModifier: 1.3 
 	ToModify: Accuracy
 *
 Tinted Lens:
@@ -701,7 +701,7 @@ Hustle:
 Huge Power:
 	Desc: Raises the Pok\u00e9mon's Attack stat.
 	ToModify: Attack
-	ModifyMultiplier: 2 true
+	SimpleModifier: 2 
 *
 Speed Boost:
 	Desc: The Pok\u00e9mon's Speed stat is gradually boosted.
@@ -816,7 +816,7 @@ Stall:
 Pure Power:
 	Desc: Raises the Pok\u00e9mon's Attack stat.
 	ToModify: Attack
-	ModifyMultiplier: 2 true
+	SimpleModifier: 2 
 *
 Rough Skin:
 	Desc: Inflicts damage to the foe on contact.
@@ -1017,7 +1017,7 @@ Bad Dreams:
 Victory Star:
 	Desc: Boosts the accuracy of its allies and itself.
 	ToModify: Accuracy
-	ModifyMultiplier: 1.1 true
+	SimpleModifier: 1.1 
 *
 Contrary:
 	Desc: Makes stat changes have an opposite effect.
@@ -1412,7 +1412,7 @@ Stance Change:
 Fur Coat:
 	Desc: Halves damage from physical moves.
 	ToModify: Defense
-	ModifyMultiplier: 2 true
+	SimpleModifier: 2 
 *
 Grass Pelt:
 	Desc: Boosts the Defense stat in Grassy Terrain.

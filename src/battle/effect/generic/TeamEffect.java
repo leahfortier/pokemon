@@ -77,10 +77,6 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "The effects of reflect faded.";
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
 		}
@@ -95,6 +91,10 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
 			b.getEffects(victim).remove(this);
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -129,10 +129,6 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "The effects of light screen faded.";
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
 		}
@@ -147,6 +143,10 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
 			b.getEffects(victim).remove(this);
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -169,16 +169,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "The effects of tailwind faded.";
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -208,16 +204,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "The effects of aurora veil faded.";
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 

@@ -26,14 +26,14 @@ LightScreen:
 *
 Tailwind:
 	ToModify: Speed
-	ModifyMultiplier: 2 true
+	SimpleModifier: 2 
 	NumTurns: 4
 	SubsideMessage: "The effects of tailwind faded."
 	CastMessage: user.getName() + " raised the speed of its team!"
 *
 AuroraVeil:
 	TwoModify: Defense Sp_Defense
-	ModifyMultiplier: 2 true
+	SimpleModifier: 2 
 	SubsideMessage: "The effects of aurora veil faded."
 	CastMessage: user.getName() + " is covered by an aurora veil!"
 	LightClay: True
