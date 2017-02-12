@@ -412,7 +412,7 @@ Override:
 		AddMapField: Cast: 
 			super.cast(b, caster, victim, source, printCast);
 			if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-				Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies).setTurns(8);
+				Effect.getEffect(b.getEffects(victim), this.namesies).setTurns(8);
 			}
 			###
 		AddMapField: MinTurns: 5
@@ -636,7 +636,7 @@ Override:
 			Messages.add(new MessageUpdate(victim.getName() + " is hurt by {1_}!"));
 			
 			// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-			victim.reduceHealthFraction(b, b.getOtherPokemon(victim.isPlayer()).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+			victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 			###
 	*
 ***
@@ -746,23 +746,27 @@ StatModifyingEffect:
 	*
 ***
 SimpleStatModifyingEffect
+	SimpleGetModifier:
+		Header: double getModifier()
+		Body: return {0};
+	*	
+***
+Override:
+	SimpleModifier:
+		AddMapField: SimpleGetModifier: {1}
+		AddInterface: SimpleStatModifyingEffect
+	*
 ***
 Override:
 	ModifyMultiplier:
-		Header: double getModifier()
-		Body:
-			return {1};
-			###
-		AddInterface: SimpleStatModifyingEffect
+		AddMapField: SimpleModifier: {1}
 		AddMapField: CanModify: {2-}
 	*
 ***
 Override:
 	CanModify:
 		Header: boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp)
-		Body:
-			return {0};
-			###
+		Body: return {0};
 	*
 ***
 Override:
@@ -1262,12 +1266,18 @@ StallingEffect:
 ***
 DefiniteEscape:
 ***
-HoldItem:
+Override:
 	Fling:
-		Header: int flingDamage()
-		Body:
+		AddInterface: Hidden-HoldItem
+		AddMapField: FlingDamage:
 			return {0};
 			###
+	*
+***
+HoldItem:
+	FlingDamage:
+		Header: int flingDamage()
+		Optional: True
 	*
 	FlingEffect:
 		Header: void flingEffect(Battle b, ActivePokemon pelted)
@@ -1333,7 +1343,7 @@ ConsumableItem:
 Override:
 	ChoiceItem:
 		AddMapField: ToModify: {0}
-		AddMapField: ModifyMultiplier: 1.5 true
+		AddMapField: SimpleModifier: 1.5
 		AddInterface: AttackSelectionEffect
 		AddMapField: Usable:
 			Move last = p.getAttributes().getLastMoveUsed();
@@ -1344,22 +1354,22 @@ Override:
 		AddMapField: Fling: 10
 	*
 ***
+Wing:
+***
+Vitamin:
+***
 Override:
 	Wing:
-		AddMapField: EVIncreaseAmt: {0} 1
+		AddMapField: EVIncreaseAmt: {0}
 		AddMapField: Price: 3000
-		AddMapField: Fling: 20
-		AddInterface: HoldItem
-		AddMapField: Cat: Stat
+		AddInterface: Wing
 	*
 ***
 Override:	
 	Vitamin:
-		AddMapField: EVIncreaseAmt: {0} 10
+		AddMapField: EVIncreaseAmt: {0}
 		AddMapField: Price: 9800
-		AddMapField: Fling: 30
-		AddInterface: HoldItem
-		AddMapField: Cat: Stat
+		AddInterface: Vitamin
 	*
 ***
 RepellingEffect:
@@ -1406,7 +1416,7 @@ Override:
 		AddMapField: ApplyEndTurn:
 			Messages.add(new MessageUpdate({0}));
 					
-			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(victim);
 			buffet(b, victim);
 			buffet(b, other);
 			###
@@ -1470,7 +1480,7 @@ PowerItem:
 			return Stat.{00};
 			###
 		AddMapField: ToModify: Speed
-		AddMapField: ModifyMultiplier: .5 true
+		AddMapField: SimpleModifier: .5
 		AddInterface: Hidden-EVItem
 		AddMapField: GetEVs:
 			vals[powerStat().index()] += 4;
@@ -1485,11 +1495,7 @@ Override:
 	TypeEnhance:
 		AddInterface: PowerChangeEffect
 		AddMapField: GetMultiplier:
-			if (user.isAttackType(Type.{00})) {
-				return 1.2;
-			}
-
-			return 1;
+			return user.isAttackType(Type.{00}) ? 1.2 : 1;
 			###
 		AddInterface: HoldItem
 		AddMapField: Cat: Misc
@@ -1497,7 +1503,6 @@ Override:
 ***
 Override:
 	PPIncrease:
-		AddMapField: Fling: 30
 		AddMapField: MoveUse:
 			if (m.increaseMaxPP({0})) {
 				Messages.add(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!");
@@ -1513,74 +1518,45 @@ Override:
 ***
 Override:
 	Ether:
-		AddInterface: MoveUseItem
 		AddMapField: BattleCat: HP_PP
-		AddMapField: MoveUse:
-			// TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
-			if (m.increasePP({0})) {
-				Messages.add(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!");
-				return true;
-			}
-			
-			return false;
+		AddInterface: PPHealer
+		AddMapField: PPRestoreAmount:
+			return {0};
 			###
+	*
+***
+# Like Ethers and such
+PPHealer:
+	PPRestoreAmount:
+		Header: int restoreAmount(Move toRestore)
+	*
+***
+# Like Elixirs and such
+AllPPHealer:
+	AllPPRestoreAmount:
+		Header: int restoreAmount(Move toRestore)
 	*
 ***
 Override:
 	Elixir:
-		AddMapField: Field:
-			private boolean use(ActivePokemon p, List<Move> moves) {
-				boolean changed = false;
-				for (Move m : moves) {
-					changed |= m.increasePP({0});
-				}
-				
-				if (changed) {
-					Messages.add(new MessageUpdate(p.getName() + "'s PP was restored!"));
-				}
-				
-				return changed;
-			}
+		AddInterface: AllPPHealer
+		AddMapField: AllPPRestoreAmount:
+			return {0};
 			###
-		AddMapField: BattleUse:
-			return use(p, p.getMoves(b));
-			###
-		AddMapField: PokemonUse:
-			return use(p, p.getActualMoves());
-			###
-		AddMapField: Fling: 30
-		AddInterface: PokemonUseItem
-		AddInterface: BattleUseItem
 		AddInterface: HoldItem
 		AddMapField: Cat: Medicine
 		AddMapField: BattleCat: HP_PP
-		AddMapField: FullItemUse:
-			return b == null ? use(p) : use(p, b);
-			###
 	*
 ***
 Override:
 	TimeSpaceOrb:
-		Header: boolean canUseOrb(ActivePokemon user)
-		AccessModifier: Private
-		Body:
-			if (!user.isPokemon(PokemonNamesies.{11})) {
-				return false;
-			}
-			
-			return user.isAttackType(Type.DRAGON) || user.isAttackType(Type.{22});
-			###
 		AddMapField: Fling: 60
 		AddMapField: Price: 10000
 		AddInterface: HoldItem
-		AddInterface: PowerChangeEffect
 		AddMapField: Cat: Misc
+		AddInterface: PowerChangeEffect
 		AddMapField: GetMultiplier:
-			if (canUseOrb(user)) {
-				return 1.2;
-			}
-			
-			return 1;
+			return user.isPokemon(PokemonNamesies.{11}) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.{22})) ? 1.2 : 1;
 			###
 	*
 ***
@@ -1657,19 +1633,10 @@ Override:
 Override:
 	StatusHealAll:
 		AddMapField: BattleCat: Status
-		AddMapField: SourceUse:
-			// Does not apply to the dead
-			if (p.isActuallyDead()) {
-				return false;
-			}
-			
-			// YOU'RE FINE
-			if (!p.hasStatus()) {
-				return false;
-			}
-			
-			Status.removeStatus(null, p, source);
-			return true;
+		AddInterface: StatusHealer
+		AddMapField: ShouldHealStatus:
+			// Does not apply to the healthy and the dead
+			return statusCondition != StatusCondition.NO_STATUS && statusCondition != StatusCondition.FAINTED;
 			###
 	*
 ***
@@ -1679,7 +1646,6 @@ Override:
 		AddInterface: HoldItem
 		AddMapField: Cat: Medicine
 		AddMapField: BattleCat: Status
-		AddMapField: Fling: 30
 		AddMapField: PokemonUse:
 			// Only applies to the dead
 			if (!p.isActuallyDead()) {
@@ -1695,64 +1661,43 @@ Override:
 			###
 	*
 ***
-Override:
-	HoldHealer:
-		AddMapField: SourceUse:
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-
-			{0};
-			Messages.add(new MessageUpdate(this.getMessage(p, source)).withHp(p.getHP(), p.isPlayer()));
-			return true;
-			###
-		AddInterface: MessageGetter
-		AddMapField: SourceMessage: p.getName() + " was healed by its " + this.name + "!"
-		AddMapField: GenericMessage: p.getName() + "'s health was restored!"
-	*
-***
-Override:
-	SourceUse:
-		Header: boolean use(ActivePokemon p, CastSource source)
-		AccessModifier: Private
-		AddInterface: PokemonUseItem
-		AddMapField: PokemonUse:
-			return use(p, CastSource.USE_ITEM);
-			###
+StatusHealer:
+	ShouldHealStatus:
+		Header: boolean shouldHeal(StatusCondition statusCondition)
 	*
 ***
 Override:
 	StatusRemove:
-		AddMapField: SourceUse:
-			if (!p.hasStatus(StatusCondition.{00})) {
-				return false;
-			}
-
-			Status.removeStatus(null, p, source);
-			return true;
+		AddInterface: StatusHealer
+		AddMapField: ShouldHealStatus:
+			return statusCondition == StatusCondition.{00};
 			###
+	*
+***
+FixedHpHealer:
+	FixedHealAmount:
+		Header: int getFixedHealAmount(ActivePokemon p)
+	*
+***
+HpHealer:
+	GetAmountHealed:
+		Header: int getAmountHealed(ActivePokemon p)
+		Optional: True
 	*
 ***
 Override:
 	HealAmt:
-		AddInterface: PokemonUseItem
-		AddMapField: PokemonUse:
-			if (!this.canHealHealth(p)) {
-				return false;
-			}
-			
-			this.addHealMessage(p, p.heal({0}));
-			return true;
+		AddInterface: FixedHpHealer
+		AddMapField: FixedHealAmount:
+			return {0};
 			###
 		AddMapField: Cat: Medicine
 		AddMapField: BattleCat: HP_PP
-		AddMapField: Fling: 30
-		AddInterface: HoldItem
+		AddInterface: Hidden-HoldItem
 	*
 ***
 Override:
 	XStageIncrease:
-		AddMapField: Fling: 30
 		AddMapField: Cat: Stat
 		AddMapField: BattleCat: Battle
 		AddInterface: HoldItem
@@ -1762,7 +1707,7 @@ Override:
 			###
 	*
 ***
-Override:
+EvIncreaser:
 	EVIncrease:
 		Header: Stat toIncrease()
 		Body:
@@ -1772,45 +1717,42 @@ Override:
 ***
 Override:
 	EVIncreaseAmt:
-		AddInterface: PokemonUseItem
-		AddMapField: PokemonUse:
-			int[] toAdd = new int[Stat.NUM_STATS];
-			toAdd[Stat.{11}.index()] += {2};
-
-			if (!p.addEVs(toAdd)) {
-				return false;
-			}
-
-			Messages.add(p.getName() + "'s " + Stat.{11}.getName() + " was raised!");
-			return true;
-			###
+		AddInterface: Hidden-EvIncreaser
+		AddMapField: EVIncrease: {0}
+		AddMapField: Cat: Stat
 	*
 ***
 Override:
 	CatchRateCondition:
-		AddInterface: BallItem
+		AddMapField: BallItem: True
 		AddMapField: CatchRate:
-			if ({2-}) {
-				return new double[] { {1}, 0 };
-			}
-			
-			return new double[] { 1, 0 };
+			return {2-} ? {1} : 1;
 			###
 	*
 ***
 Override:
 	FixedCatchRate:
-		AddInterface: BallItem
+		AddMapField: BallItem: True
 		AddMapField: CatchRate:
-			return new double[] { {0}, 0 };
+			return {0};
 			###
+	*
+***
+Override:
+	BallItem:
+		AddInterface: BallItem
+		AddMapField: Cat: Ball
+		AddMapField: BattleCat: Ball
 	*
 ***
 BallItem:
 	CatchRate:
-		Header: double[] catchRate(ActivePokemon me, ActivePokemon o, Battle b)
-		AddMapField: Cat: Ball
-		AddMapField: BattleCat: Ball
+		Header: double getModifier(ActivePokemon me, ActivePokemon o, Battle b)
+		Optional: True
+	*
+	AdditiveCatch:
+		Header: int getAdditive(ActivePokemon me, ActivePokemon o, Battle b)
+		Optional: True
 	*
 	AfterCaught:
 		Header: void afterCaught(ActivePokemon p)
@@ -1819,55 +1761,45 @@ BallItem:
 ***
 Override:
 	EVDecreaseBerry:
-		AddInterface: Berry
-		AddInterface: PokemonUseItem
-		AddMapField: PokemonUse:
-			int decreaseIndex = Stat.{00}.index();
-			int[] vals = new int[Stat.NUM_STATS];
-			
-			// For EVs over 110, the berry will decrease the EV to 100
-			if (p.getEV(decreaseIndex) > 110) {
-				vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
-			}
-			// Otherwise, just decreases by 10
-			else {
-				vals[decreaseIndex] -= 10;
-			}
-
-			if (!p.addEVs(vals)) {
-				return false;
-			}
-			
-			Messages.add(p.getName() + "'s " + Stat.{00}.getName() + " was lowered!");
-			return true;
+		AddMapField: DecreaseEVs:
+			return Stat.{00};
 			###
-		AddMapField: NGPow: 90
+		AddInterface: EvDecreaseBerry
+	*
+***
+EvDecreaseBerry:
+	DecreaseEVs:
+		Header: Stat toDecrease()
+		AddInterface: Hidden-Berry
 	*
 ***
 Override:
 	SuperEffectivePowerReduceBerry:
-		AddInterface: Berry
-		AddMapField: NGPow: 80
-		AddMapField: NGType: {0}
-		AddInterface: OpponentPowerChangeEffect
-		AddMapField: GetOppMultiplier:
-			if (user.getAttackType() == Type.{00} && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " decreased " + user.getName() + "'s attack!"));
-				victim.consumeItem(b);
-				return .5;
-			}
-
-			return 1;
+		AddMapField: HiddenBerry: True 
+		AddInterface: SuperEffectivePowerReduceBerry
+		AddMapField: SuperDuperEffectivePowerReduceBerry:
+			return Type.{00};
 			###
+	*
+***
+SuperEffectivePowerReduceBerry:
+	SuperDuperEffectivePowerReduceBerry:
+		Header: Type getType()
+		AddInterface: Hidden-Berry
+	*
+***
+HealthTriggeredStageIncreaseBerry:
+	HealthTriggeredStageIncreaseBerryField:
+		Header: Stat getStat()
 	*
 ***
 Override:
 	HealthTriggeredStageIncreaseBerry:
-		AddMapField: GainEffect:
-			return user.getAttributes().modifyStage(user, user, 1, Stat.{00}, b, source);
+		AddInterface: Hidden-Berry
+		AddInterface: HealthTriggeredStageIncreaseBerry
+		AddMapField: HealthTriggeredStageIncreaseBerryField: 
+			return Stat.{00};
 			###
-		AddMapField: FixedBerryHealthTrigger: 4
-		AddMapField: NGPow: 100
 	*
 ***
 Override:
@@ -1899,7 +1831,7 @@ Override:
 Override:
 	HealPartyStatus:
 		AddMapField: UniqueEffects:
-			for (ActivePokemon p : b.getTrainer(user.isPlayer()).getTeam()) {
+			for (ActivePokemon p : b.getTrainer(user).getTeam()) {
 				if (!p.isActuallyDead()) {
 					p.removeStatus();
 				}
@@ -2018,9 +1950,6 @@ Override:
 StatusBerry:
 	StatusBerryGainEffect:
 		Optional: True
-		AddMapField: GainEffect:
-			return use(user, source);
-			###
 		AddInterface: Hidden-GainableEffectBerry
 		AddMapField: NGPow: 80
 	*
@@ -2049,44 +1978,41 @@ HealthTriggeredBerry:
 		Header: double healthTriggerRatio()
 	*
 ***
-Berry:
+Override:
 	NGPow:
-		Header: int naturalGiftPower()
-		Body:
+		AddMapField: NaturalGiftPower:
 			return {0};
 			###
-		AddMapField: Cat: Berry
-		AddInterface: Hidden-HoldItem
-		AddMapField: Fling: 10
-		AddMapField: Price: 20
 	*
+***
+Override:
 	NGType:
-		Header: Type naturalGiftType()
-		Body:
+		AddMapField: HiddenBerry: True
+		AddMapField: NaturalGiftType:
 			return Type.{00};
 			###
 	*
 ***
 Override:
+	HiddenBerry:
+		AddMapField: Cat: Berry
+		AddMapField: Price: 20
+	*
+***
+Berry:
+	NaturalGiftPower:
+		Header: int naturalGiftPower()
+		Optional: True
+	*
+	NaturalGiftType:
+		Header: Type naturalGiftType()
+		Optional: True
+	*
+***
+Repelling:
 	RepelSteps:
-		AddInterface: HoldItem
-		AddMapField: Fling: 30
-		AddInterface: TrainerUseItem
-		AddMapField: TrainerUse:
-			if (t != Game.getPlayer()) {
-				Global.error("Only the character should be using a Repel item");
-				return false;
-			}
-
-			CharacterData player = (CharacterData) t;
-			if (player.isUsingRepel()) {
-				return false;
-			}
-
-			player.addRepelSteps({0});
-			Messages.add("Weak wild Pok\u00e9mon will not appear for {0} steps!");
-			return true;
-			###
+		Header: int repelSteps()
+		Body: return {0};
 		AddMapField: Cat: Misc
 	*
 ***
@@ -2153,14 +2079,9 @@ Override:
 ***
 Override:
 	Aura:
-		Header: Type getAuraType()
-		AccessModifier: Private
-		Body:
-			return Type.{00};
-			###
 		AddInterface: PowerChangeEffect
 		AddMapField: GetMultiplier:
-			if (user.getAttackType() == getAuraType()) {
+			if (user.getAttackType() == Type.{00}) {
 				return 1 + .33*(victim.hasAbility(AbilityNamesies.AURA_BREAK) ? -1 : 1);
 			}
 			
@@ -2272,20 +2193,17 @@ TechnicalMachine:
 		AddMapField: Cat: TM
 	*
 ***
+Override:
+	ChangePriorityAbility:
+		AddInterface: PriorityChangeEffect
+		AddMapField: ChangePriority:
+			return {0} ? 1 : 0;
+			###
+	*
+***
 PriorityChangeEffect:
 	ChangePriority:
-		Header: int changePriority(Battle b, ActivePokemon user, Attack attack, int priority)
-		Body:
-			if ({0}) {
-				if (this instanceof ConsumableItem) {
-					user.consumeItem(b);
-				}
-				
-				priority++;
-			}
-			
-			return priority;
-			###
+		Header: int changePriority(Battle b, ActivePokemon user, Attack attack)
 	*
 ***
 IncenseItem:
@@ -2440,8 +2358,8 @@ Override:
 				p.consumeItem(b);
 			}
 			###
+		AddMapField: Comments: // TODO: Still have not confirmed fling damage
 		AddMapField: Price: 4000
-		AddMapField: Fling: 30
 		AddMapField: Cat: Misc
 	*
 ***
@@ -2505,3 +2423,21 @@ Override:
 ***
 PowderMove:
 ***
+Override:
+	GET_DAT_CASH_MONEY_TWICE_ITEM:
+		Header: void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice)
+		AccessModifier: Private
+		Body:
+			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
+			###
+		AddInterface: EntryEffect
+		AddMapField: Enter:
+			getDatCashMoneyGetDatCashMoneyCast(b, enterer);
+			###
+		AddInterface: EndTurnEffect
+		AddMapField: ApplyEndTurn:
+			getDatCashMoneyGetDatCashMoneyCast(b, victim);
+			###
+	*
+***
+			

@@ -4,11 +4,11 @@ import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
-import type.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
+import type.Type;
 
 class Poisoned extends Status implements EndTurnEffect {
     private static final long serialVersionUID = 1L;

@@ -36,7 +36,7 @@ class TestBattle extends Battle {
 
     @Override
     public TestPokemon getOtherPokemon(ActivePokemon pokemon) {
-        return (TestPokemon)getOtherPokemon(pokemon.isPlayer());
+        return (TestPokemon)super.getOtherPokemon(pokemon);
     }
 
     boolean ableToAttack(AttackNamesies attack, TestPokemon attacking, ActivePokemon defending) {

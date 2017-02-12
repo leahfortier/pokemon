@@ -7,8 +7,11 @@ import pokemon.Stat;
 
 public interface SimpleStatModifyingEffect extends StatModifyingEffect {
     boolean isModifyStat(Stat s);
-    boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp);
     double getModifier();
+
+    default boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+        return true;
+    }
 
     @Override
     default double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {

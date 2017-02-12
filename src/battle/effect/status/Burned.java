@@ -3,12 +3,12 @@ package battle.effect.status;
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
-import type.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import type.Type;
 
 class Burned extends Status implements EndTurnEffect, StatChangingEffect {
     private static final long serialVersionUID = 1L;

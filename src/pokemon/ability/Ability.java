@@ -72,7 +72,6 @@ import battle.effect.status.StatusCondition;
 import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
-import item.hold.ConsumableItem;
 import item.hold.HoldItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
@@ -230,16 +229,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.CHLOROPHYLL, "Boosts the Pok\u00e9mon's Speed in sunshine.");
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return b.getWeather().namesies() == EffectNamesies.SUNNY;
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -334,16 +333,12 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.COMPOUNDEYES, "The Pok\u00e9mon's accuracy is boosted.");
 		}
 
-		public double getModifier() {
-			return 1.3;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.ACCURACY;
+		}
+
+		public double getModifier() {
+			return 1.3;
 		}
 	}
 
@@ -418,16 +413,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.GUTS, "Boosts Attack if there is a status problem.");
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return p.hasStatus();
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.ATTACK;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 	}
 
@@ -439,7 +434,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(enterer);
 			other.getAttributes().modifyStage(enterer, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
 		}
 	}
@@ -501,16 +496,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.SAND_RUSH, "Speed rises in a Sandstorm.");
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return b.getWeather().namesies() == EffectNamesies.SANDSTORM;
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -521,16 +516,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.SLUSH_RUSH, "Boosts the Pokémon's Speed stat in a hailstorm.");
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return b.getWeather().namesies() == EffectNamesies.HAILING;
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -644,7 +639,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(enterer);
 			if (other.isHoldingItem(b)) Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!"));
 		}
 	}
@@ -1141,7 +1136,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(enterer);
 			List<Move> otherMoves = other.getMoves(b);
 			
 			List<AttackNamesies> besties = new ArrayList<>();
@@ -1294,16 +1289,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.SWIFT_SWIM, "Boosts the Pok\u00e9mon's Speed in rain.");
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return b.getWeather().namesies() == EffectNamesies.RAINING;
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -1503,16 +1498,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.QUICK_FEET, "Boosts Speed if there is a status problem.");
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return p.hasStatus();
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 	}
 
@@ -1528,7 +1523,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(enterer);
 			if (!other.getAbility().isStealable() || other.hasAbility(this.namesies)) {
 				return;
 			}
@@ -1537,12 +1532,12 @@ public abstract class Ability implements Serializable {
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			Ability otherAbility = b.getOtherPokemon(victim.isPlayer()).getAbility();
+			Ability otherAbility = b.getOtherPokemon(victim).getAbility();
 			return otherAbility.namesies().getNewAbility();
 		}
 
 		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(victim);
 			return victim.getName() + " traced " + other.getName() + "'s " + other.getAbility().getName() + "!";
 		}
 	}
@@ -1555,7 +1550,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(enterer);
 			PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getPokemonInfo().namesies());
 			
 			int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
@@ -1614,16 +1609,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.MARVEL_SCALE, "Boosts Defense if there is a status problem.");
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return p.hasStatus();
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.DEFENSE;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 	}
 
@@ -1695,16 +1690,12 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.HUGE_POWER, "Raises the Pok\u00e9mon's Attack stat.");
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.ATTACK;
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -1942,16 +1933,12 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.PURE_POWER, "Raises the Pok\u00e9mon's Attack stat.");
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.ATTACK;
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -2003,16 +1990,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.TOXIC_BOOST, "Powers up physical attacks when poisoned.");
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return p.hasStatus(StatusCondition.POISONED);
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.ATTACK;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 	}
 
@@ -2024,7 +2011,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(enterer);
 			for (Move m : other.getMoves(b)) {
 				Attack attack = m.getAttack();
 				if (attack.getActualType().getAdvantage().isSuperEffective(enterer, b) || attack.isMoveType(MoveType.ONE_HIT_KO)) {
@@ -2170,16 +2157,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.FLOWER_GIFT, "Powers up party Pok\u00e9mon when it is sunny.");
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return b.getWeather().namesies() == EffectNamesies.SUNNY;
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.ATTACK || s == Stat.SP_DEFENSE;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 	}
 
@@ -2308,10 +2295,6 @@ public abstract class Ability implements Serializable {
 			this.count = 0;
 		}
 
-		public double getModifier() {
-			return .5;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return count < 5;
 		}
@@ -2327,6 +2310,10 @@ public abstract class Ability implements Serializable {
 		public void enter(Battle b, ActivePokemon enterer) {
 			count = 0;
 		}
+
+		public double getModifier() {
+			return .5;
+		}
 	}
 
 	static class BadDreams extends Ability implements EndTurnEffect {
@@ -2337,7 +2324,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(victim);
 			if (other.hasStatus(StatusCondition.ASLEEP)) {
 				Messages.add(new MessageUpdate(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
 				other.reduceHealthFraction(b, 1/8.0);
@@ -2352,16 +2339,12 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.VICTORY_STAR, "Boosts the accuracy of its allies and itself.");
 		}
 
-		public double getModifier() {
-			return 1.1;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.ACCURACY;
+		}
+
+		public double getModifier() {
+			return 1.1;
 		}
 	}
 
@@ -2414,16 +2397,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.PRANKSTER, "Gives priority to a status move.");
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
-			if (attack.isStatusMove()) {
-				if (this instanceof ConsumableItem) {
-					user.consumeItem(b);
-				}
-				
-				priority++;
-			}
-			
-			return priority;
+		public int changePriority(Battle b, ActivePokemon user, Attack attack) {
+			return attack.isStatusMove() ? 1 : 0;
 		}
 	}
 
@@ -2434,16 +2409,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.WONDER_SKIN, "Makes status-changing moves more likely to miss.");
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return opp.getAttack().isStatusMove();
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.EVASION;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 	}
 
@@ -2569,7 +2544,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void setNameChange(Battle b, ActivePokemon victim) {
-			List<ActivePokemon> team = b.getTrainer(victim.isPlayer()).getTeam();
+			List<ActivePokemon> team = b.getTrainer(victim).getTeam();
 			ActivePokemon illusion = null;
 			
 			// Starting from the back of the party, locate the first conscious Pokemon that is of a different species to be the illusion
@@ -2722,16 +2697,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.UNBURDEN, "Raises Speed if a held item is used.");
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return p.hasEffect(EffectNamesies.CONSUMED_ITEM);
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -2798,7 +2773,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer.isPlayer()).getName() + " too nervous to eat berries!"));
+			Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer).getName() + " too nervous to eat berries!"));
 		}
 	}
 
@@ -2922,12 +2897,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.FAIRY_AURA, "Powers up each Pok\u00e9mon's Fairy-type moves.");
 		}
 
-		private Type getAuraType() {
-			return Type.FAIRY;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == getAuraType()) {
+			if (user.getAttackType() == Type.FAIRY) {
 				return 1 + .33*(victim.hasAbility(AbilityNamesies.AURA_BREAK) ? -1 : 1);
 			}
 			
@@ -2942,12 +2913,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.DARK_AURA, "Powers up each Pok\u00e9mon's Dark-type moves.");
 		}
 
-		private Type getAuraType() {
-			return Type.DARK;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (user.getAttackType() == getAuraType()) {
+			if (user.getAttackType() == Type.DARK) {
 				return 1 + .33*(victim.hasAbility(AbilityNamesies.AURA_BREAK) ? -1 : 1);
 			}
 			
@@ -3289,16 +3256,12 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.FUR_COAT, "Halves damage from physical moves.");
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
-		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-			return true;
-		}
-
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.DEFENSE;
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -3309,16 +3272,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.GRASS_PELT, "Boosts the Defense stat in Grassy Terrain.");
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return b.hasEffect(EffectNamesies.GRASSY_TERRAIN);
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.DEFENSE;
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 	}
 
@@ -3329,16 +3292,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.SURGE_SURFER, "Doubles the Pokémon's Speed stat on Electric Terrain.");
 		}
 
-		public double getModifier() {
-			return 2;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return b.hasEffect(EffectNamesies.ELECTRIC_TERRAIN);
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
+		}
+
+		public double getModifier() {
+			return 2;
 		}
 	}
 
@@ -3373,16 +3336,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.GALE_WINGS, "Gives priority to Flying-type moves.");
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
-			if (attack.getActualType() == Type.FLYING) {
-				if (this instanceof ConsumableItem) {
-					user.consumeItem(b);
-				}
-				
-				priority++;
-			}
-			
-			return priority;
+		public int changePriority(Battle b, ActivePokemon user, Attack attack) {
+			return attack.getActualType() == Type.FLYING ? 1 : 0;
 		}
 	}
 
@@ -3556,16 +3511,8 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.TRIAGE, "Gives priority to a healing move.");
 		}
 
-		public int changePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
-			if (attack.isMoveType(MoveType.HEALING)) {
-				if (this instanceof ConsumableItem) {
-					user.consumeItem(b);
-				}
-				
-				priority++;
-			}
-			
-			return priority;
+		public int changePriority(Battle b, ActivePokemon user, Attack attack) {
+			return attack.isMoveType(MoveType.HEALING) ? 1 : 0;
 		}
 	}
 

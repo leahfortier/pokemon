@@ -152,7 +152,7 @@ BarrierEffect:
 	Extends: DefogRelease
 	Method:
 		Header: void breakBarrier(Battle b, ActivePokemon breaker)
-		EffectList: b.getOtherPokemon(breaker.isPlayer())
+		EffectList: b.getOtherPokemon(breaker)
 		Invoke: Void
 		InvokeName: breakBarriers
 	*
@@ -403,7 +403,7 @@ BracingEffect:
 		Invoke: CheckGet true
 		InvokeName: getBracingEffect
 		EffectList: bracer
-		MoldBreaker: b.getOtherPokemon(bracer.isPlayer())
+		MoldBreaker: b.getOtherPokemon(bracer)
 	*
 	Method:
 		Header: String braceMessage(ActivePokemon bracer)
@@ -459,10 +459,9 @@ CritStageEffect:
 ***
 PriorityChangeEffect:
 	Method:
-		Header: int changePriority(Battle b, ActivePokemon user, Attack attack, int priority)
-		Invoke: Update
-		Update: priority
-		InvokeName: updatePriority
+		Header: int changePriority(Battle b, ActivePokemon user, Attack attack)
+		Invoke: Add
+		InvokeName: getModifier
 		EffectList: user
 	*
 ***
@@ -527,7 +526,7 @@ HalfWeightEffect:
 		Update: halfAmount
 		InvokeName: updateHalfAmount
 		InvokeParameters: Battle b, ActivePokemon anorexic
-		MoldBreaker: b.getOtherPokemon(anorexic.isPlayer())
+		MoldBreaker: b.getOtherPokemon(anorexic)
 		EffectList: anorexic
 	*
 ***

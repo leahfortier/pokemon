@@ -681,7 +681,7 @@ public class Battle {
 
 	public int getPriority(ActivePokemon p, Attack attack) {
 		int priority = attack.getPriority(this, p);
-		priority = PriorityChangeEffect.updatePriority(this, p, attack, priority);
+		priority += PriorityChangeEffect.getModifier(this, p, attack);
 
 //		System.out.println(attack.getName() + " Priority: " + priority);
 

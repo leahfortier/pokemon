@@ -28,7 +28,7 @@ Fields:
 No Item:
 	Int: HoldItem
 	Cat: Misc
-	Desc: YOU SHUOLDN'T SEE THIS
+	Desc: YOU SHOULDN'T SEE THIS
 	Price: -1
 	Fling: 9001
 *
@@ -75,7 +75,6 @@ Absorb Bulb:
 	Cat: Misc
 	Desc: A consumable bulb. If the holder is hit by a Water-type move, its Sp. Atk will rise.
 	Price: 200
-	Fling: 30
 	TypeTakeDamageStatIncrease: Water Sp_Attack
 *
 Air Balloon:
@@ -94,14 +93,11 @@ Air Balloon:
 		###
 *
 Amulet Coin:
-	Int: HoldItem, EntryEffect
+	Int: HoldItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.
 	Price: 100
-	Fling: 30
-	Enter:
-		EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
-		###
+	GET_DAT_CASH_MONEY_TWICE_ITEM: True
 *
 Big Root:
 	Int: HoldItem
@@ -115,14 +111,12 @@ Binding Band:
 	Cat: Misc
 	Desc: This item, when attached to a Pok\u00e9mon, increases damage caused by moves that constrict the opponent.
 	Price: 200
-	Fling: 30
 *
 Black Sludge:
 	Int: HoldItem, EndTurnEffect
 	Cat: Misc
 	Desc: A held item that gradually restores the HP of Poison-type Pok\u00e9mon. It inflicts damage on all other types.
 	Price: 200
-	Fling: 30
 	ApplyEndTurn:
 		if (victim.isType(b, Type.POISON)) {
 			// Don't heal if at full health
@@ -146,13 +140,12 @@ Bright Powder:
 	Price: 100
 	Fling: 10
 	ToModify: Evasion
-	ModifyMultiplier: 1.1 true
+	SimpleModifier: 1.1 
 *
 Cell Battery:
 	Cat: Misc
 	Desc: A consumable battery. If the holder is hit by an Electric-type move, its Attack will rise.
 	Price: 200
-	Fling: 30
 	TypeTakeDamageStatIncrease: Electric Attack
 *
 Choice Band:
@@ -178,7 +171,6 @@ Cleanse Tag:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.
 	Price: 200
-	Fling: 30
 	RepelChance: .33
 *
 Damp Rock:
@@ -218,7 +210,6 @@ Eject Button:
 	Cat: Misc
 	Desc: If the holder is hit by an attack, it will switch with another Pok\u00e9mon in your party.
 	Price: 200
-	Fling: 30
 	OnTakeDamage:
 		if (victim.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
 			victim.consumeItem(b);
@@ -247,7 +238,6 @@ Flame Orb:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.
 	Price: 200
-	Fling: 30
 	ApplyEndTurn:
 		Status.giveStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.name + "!");
 		###
@@ -258,7 +248,6 @@ Toxic Orb:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.
 	Price: 200
-	Fling: 30
 	ApplyEndTurn:
 		// Badly poisons the holder at the end of the turn
 		if (Status.applies(StatusCondition.POISONED, b, victim, victim)) {
@@ -276,7 +265,6 @@ Float Stone:
 	Cat: Misc
 	Desc: This item, when attached to a Pok\u00e9mon, halves the Pok\u00e9mon's weight for use with attacks that deal with weight
 	Price: 200
-	Fling: 30
 	HalfAmount: 1
 *
 Focus Band:
@@ -330,7 +318,7 @@ Iron Ball:
 	Price: 200
 	Fling: 130
 	ToModify: Speed
-	ModifyMultiplier: .5 true
+	SimpleModifier: .5 
 	FlingEffect:
 		// Technically the Iron Ball doesn't do this as a fling effect, but it almost makes sense so I'm doing it
 		removeLevitation(b, pelted);
@@ -348,7 +336,6 @@ Life Orb:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It boosts the power of moves, but at the cost of some HP on each hit.
 	Price: 200
-	Fling: 30
 	GetMultiplier:
 		return 5324.0/4096.0;
 		###
@@ -366,7 +353,6 @@ Light Ball:
 	Cat: Misc
 	Desc: An item to be held by Pikachu. It is a puzzling orb that raises the Attack and Sp. Atk stat.
 	Price: 100
-	Fling: 30
 	TwoModify: Attack Sp_Attack
 	ModifyMultiplier: 2 p.isPokemon(PokemonNamesies.PIKACHU)
 	StatusFling: paralyzed
@@ -376,14 +362,12 @@ Light Clay:
 	Cat: Misc
 	Desc: A Pok\u00e9mon held item that extends the duration of barrier moves like Light Screen and Reflect used by the holder.
 	Price: 200
-	Fling: 30
 *
 Lucky Egg:
 	Int: HoldItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is an egg filled with happiness that earns extra Exp. Points in battle.
 	Price: 200
-	Fling: 30
 *
 Lucky Punch:
 	Int: HoldItem, CritStageEffect
@@ -403,7 +387,6 @@ Luminous Moss:
 	Cat: Misc
 	Desc: If the holder is hit by an Water-type attack, the holder's Special Defense stat is increased one stage. The item is consumed.
 	Price: 200
-	Fling: 30
 	TypeTakeDamageStatIncrease: Water Sp_Defense
 *
 Macho Brace:
@@ -420,7 +403,7 @@ Macho Brace:
 		return vals;
 		###
 	ToModify: Speed
-	ModifyMultiplier: .5 true
+	SimpleModifier: .5 
 *
 Mental Herb:
 	Int: HoldItem, EndTurnEffect
@@ -477,7 +460,6 @@ Metronome:
 	Cat: Misc
 	Desc: A Pok\u00e9mon held item that boosts a move used consecutively. Its effect is reset if another move is used.
 	Price: 200
-	Fling: 30
 	GetMultiplier:
 		return Math.min(2, 1 + .2*(user.getAttributes().getCount() - 1));
 		###
@@ -574,7 +556,6 @@ Safety Goggles:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. These goggles protect the holder from both weather-related damage and powder.
 	Price: 200
-	Fling: 30
 	WeatherBlock: 
 		return true;
 		###
@@ -585,7 +566,6 @@ Scope Lens:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is a lens that boosts the holder's critical-hit ratio.
 	Price: 200
-	Fling: 30
 *
 Shed Shell:
 	Int: HoldItem
@@ -599,7 +579,6 @@ Shell Bell:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. The holder's HP is restored a little every time it inflicts damage.
 	Price: 200
-	Fling: 30
 	OnApplyDamage:
 		if (user.fullHealth()) {
 			return;
@@ -615,13 +594,11 @@ Smoke Ball:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It enables the holder to flee from any wild Pok\u00e9mon without fail.
 	Price: 200
-	Fling: 30
 *
 Snowball:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It boosts Attack if hit with an Ice-type attack. It can only be used once.
 	Price: 200
-	Fling: 30
 	TypeTakeDamageStatIncrease: Ice Attack
 *
 Soul Dew:
@@ -629,7 +606,6 @@ Soul Dew:
 	Cat: Misc
 	Desc: If the Soul Dew is attached to Latios or Latias, the holder's Special Attack and Special Defence is increased by 50%.
 	Price: 10
-	Fling: 30
 	TwoModify: Sp_Attack Sp_Defense
 	ModifyMultiplier: 1.5 p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS)
 *
@@ -688,7 +664,6 @@ Weakness Policy:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. Attack and Sp. Atk sharply increase if the holder is hit with a move it's weak to.
 	Price: 200
-	Fling: 30
 	OnTakeDamage:
 		if (TypeAdvantage.isSuperEffective(user, victim, b)) {
 			victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
@@ -724,7 +699,7 @@ Wide Lens:
 	Price: 200
 	Fling: 10
 	ToModify: Accuracy
-	ModifyMultiplier: 1.1 true
+	SimpleModifier: 1.1 
 *
 Wise Glasses:
 	Int: HoldItem
@@ -733,7 +708,7 @@ Wise Glasses:
 	Price: 200
 	Fling: 10
 	ToModify: Sp_Attack
-	ModifyMultiplier: 1.1 true
+	SimpleModifier: 1.1 
 *
 Zoom Lens:
 	Int: HoldItem
@@ -745,33 +720,27 @@ Zoom Lens:
 	ModifyMultiplier: 1.2 !b.isFirstAttack()
 *
 Full Incense:
-	Int: HoldItem, StallingEffect, IncenseItem
+	Int: StallingEffect, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that makes the holder bloated and slow moving.
 	Price: 9600
-	Fling: 10
 	Baby: Munchlax
 *
 Lax Incense:
-	Int: HoldItem, IncenseItem
+	Int: IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. The tricky aroma of this incense may make attacks miss the holder.
 	Price: 9600
-	Fling: 10
 	ToModify: Evasion
 	Baby: Wynaut
-	ModifyMultiplier: 1.1 true
+	SimpleModifier: 1.1 
 *
 Luck Incense:
-	Int: HoldItem, EntryEffect, IncenseItem
+	Int: IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It doubles a battle's prize money if the holding Pok\u00e9mon joins in.
 	Price: 9600
-	Fling: 10
-	Enter:
-		// TODO: Combine with Amulet Coin
-		EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, enterer, enterer, CastSource.HELD_ITEM, false);
-		###
+	GET_DAT_CASH_MONEY_TWICE_ITEM: True
 	Baby: Happiny
 *
 
@@ -779,16 +748,14 @@ Odd Incense:
 	Int: IncenseItem
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Psychic-type moves.
 	Price: 9600
-	Fling: 10
 	TypeEnhance: Psychic
 	Baby: Mime_Jr
 *
 Pure Incense:
-	Int: HoldItem, RepellingEffect, IncenseItem
+	Int: RepellingEffect, IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.
 	Price: 9600
-	Fling: 10
 	RepelChance: .33
 	Baby: Chingling
 *
@@ -796,7 +763,6 @@ Rock Incense:
 	Int: IncenseItem
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Rock-type moves.
 	Price: 9600
-	Fling: 10
 	TypeEnhance: Rock
 	Baby: Bonsly
 *
@@ -804,7 +770,6 @@ Rose Incense:
 	Int: IncenseItem
 	Desc: An item to be held by a Pok\u00e9mon. It is an exotic-smelling incense that boosts the power of Grass-type moves.
 	Price: 9600
-	Fling: 10
 	TypeEnhance: Grass
 	Baby: Budew
 *
@@ -812,7 +777,6 @@ Sea Incense:
 	Int: IncenseItem
 	Desc: An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.
 	Price: 9600
-	Fling: 10
 	TypeEnhance: Water
 	Baby: Azurill
 *
@@ -820,7 +784,6 @@ Wave Incense:
 	Int: IncenseItem
 	Desc: An item to be held by a Pok\u00e9mon. It is incense with a curious aroma that boosts the power of Water-type moves.
 	Price: 9600
-	Fling: 10
 	TypeEnhance: Water
 	Baby: Mantyke
 *
@@ -1037,19 +1000,16 @@ Leftovers:
 Black Belt:
 	Desc: An item to be held by a Pok\u00e9mon. It is a belt that boosts determination and Fighting-type moves.
 	Price: 9800
-	Fling: 30
 	TypeEnhance: Fighting
 *
 Black Glasses:
 	Desc: An item to be held by a Pok\u00e9mon. It is a shady-looking pair of glasses that boosts Dark-type moves.
 	Price: 9800
-	Fling: 30
 	TypeEnhance: Dark
 *
 Charcoal:
 	Desc: An item to be held by a Pok\u00e9mon. It is a combustible fuel that boosts the power of Fire-type moves.
 	Price: 9800
-	Fling: 30
 	TypeEnhance: Fire
 *
 Dragon Fang:
@@ -1067,32 +1027,27 @@ Hard Stone:
 Magnet:
 	Desc: An item to be held by a Pok\u00e9mon. It is a powerful magnet that boosts the power of Electric-type moves.
 	Price: 9800
-	Fling: 30
 	TypeEnhance: Electric
 *
 Metal Coat:
 	EvolutionItem: True
 	Desc: A mysterious substance full of a special filmy metal. It allows certain kinds of Pok\u00e9mon to evolve.
 	Price: 9800
-	Fling: 30
 	TypeEnhance: Steel
 *
 Miracle Seed:
 	Desc: An item to be held by a Pok\u00e9mon. It is a seed imbued with life that ups the power of Grass-type moves.
 	Price: 9800
-	Fling: 30
 	TypeEnhance: Grass
 *
 Mystic Water:
 	Desc: An item to be held by a Pok\u00e9mon. It is a teardrop-shaped gem that ups the power of Water-type moves.
 	Price: 9800
-	Fling: 30
 	TypeEnhance: Water
 *
 NeverMeltIce:
 	Desc: An item to be held by a Pok\u00e9mon. It is a piece of ice that repels heat and boosts Ice-type moves.
 	Price: 9800
-	Fling: 30
 	TypeEnhance: Ice
 *
 Poison Barb:
@@ -1129,13 +1084,11 @@ Soft Sand:
 Spell Tag:
 	Desc: An item to be held by a Pok\u00e9mon. It is a sinister, eerie tag that boosts the power of Ghost-type moves.
 	Price: 9800
-	Fling: 30
 	TypeEnhance: Ghost
 *
 Twisted Spoon:
 	Desc: An item to be held by a Pok\u00e9mon. It is a spoon imbued with telekinetic power that boosts Psychic-type moves.
 	Price: 9800
-	Fling: 30
 	TypeEnhance: Psychic
 *
 Dawn Stone:
@@ -1152,7 +1105,6 @@ Deep Sea Scale:
 	Cat: Misc
 	Desc: An item to be held by Clamperl, Chinchou, or Lanturn. A scale that shines a faint pink, it raises the Sp. Def stat.
 	Price: 200
-	Fling: 30
 	ToModify: Sp_Defense
 	ModifyMultiplier: 2 p.isPokemon(PokemonNamesies.CLAMPERL) || p.isPokemon(PokemonNamesies.CHINCHOU) || p.isPokemon(PokemonNamesies.LANTURN)
 *
@@ -1172,7 +1124,6 @@ Dragon Scale:
 	Cat: Misc
 	Desc: A thick and tough scale. Dragon-type Pok\u00e9mon may be holding this item when caught.
 	Price: 2100
-	Fling: 30
 *
 Dubious Disc:
 	Int: HoldItem
@@ -1204,14 +1155,12 @@ Fire Stone:
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is colored orange.
 	Price: 2100
-	Fling: 30
 *
 King's Rock:
 	EvolutionItem: True
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. When the holder inflicts damage, the target may flinch.
 	Price: 100
-	Fling: 30
 	FlinchItem: True
 *
 Leaf Stone:
@@ -1220,7 +1169,6 @@ Leaf Stone:
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a leaf pattern.
 	Price: 2100
-	Fling: 30
 *
 Magmarizer:
 	Int: HoldItem
@@ -1236,7 +1184,6 @@ Moon Stone:
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as black as the night sky.
 	Price: 2100
-	Fling: 30
 *
 Oval Stone:
 	Int: HoldItem
@@ -1251,7 +1198,6 @@ Everstone:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. The Pok\u00e9mon holding this peculiar stone is prevented from evolving.
 	Price: 200
-	Fling: 30
 *
 Prism Scale:
 	Int: HoldItem
@@ -1259,7 +1205,6 @@ Prism Scale:
 	Cat: Misc
 	Desc: A mysterious scale that evolves certain Pok\u00e9mon. It shines in rainbow colors.
 	Price: 500
-	Fling: 30
 *
 Protector:
 	Int: HoldItem
@@ -1282,7 +1227,6 @@ Razor Fang:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It may make foes and allies flinch when the holder inflicts damage.`
 	Price: 2100
-	Fling: 30
 	FlinchItem: True
 *
 Reaper Cloth:
@@ -1299,7 +1243,6 @@ Sachet:
 	Cat: Misc
 	Desc: A sachet filled with fragrant perfumes that are just slightly too overwhelming. Yet it's loved by a certain Pok\u00e9mon.
 	Price: 2100
-	Fling: 30
 *
 Shiny Stone:
 	Int: HoldItem
@@ -1315,7 +1258,6 @@ Sun Stone:
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as red as the sun.
 	Price: 2100
-	Fling: 30
 *
 Thunder Stone:
 	Int: HoldItem
@@ -1323,7 +1265,6 @@ Thunder Stone:
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a thunderbolt pattern.
 	Price: 2100
-	Fling: 30
 *
 Ice Stone:
 	Int: HoldItem
@@ -1331,7 +1272,6 @@ Ice Stone:
 	Cat: Misc
 	Desc: A peculiar stone that can make certain species of Pokémon evolve. It has an unmistakable snowflake pattern.
 	Price: 2100
-	Fling: 30
 *
 Up-Grade:
 	Int: HoldItem
@@ -1339,7 +1279,6 @@ Up-Grade:
 	Cat: Misc
 	Desc: A transparent device filled with all sorts of data. It was produced by Silph Co.
 	Price: 2100
-	Fling: 30
 *
 Water Stone:
 	Int: HoldItem
@@ -1347,7 +1286,6 @@ Water Stone:
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is a clear, light blue.
 	Price: 2100
-	Fling: 30
 *
 Whipped Dream:
 	Int: HoldItem
@@ -1355,7 +1293,6 @@ Whipped Dream:
 	Cat: Misc
 	Desc: A soft and sweet treat made of fluffy, puffy, whipped and whirled cream. It is loved by a certain Pok\u00e9mon.
 	Price: 2100
-	Fling: 30
 *
 
 # Medicine
@@ -1366,7 +1303,6 @@ Antidote:
 	Desc: A spray-type medicine. It lifts the effect of poison from one Pok\u00e9mon.
 	StatusRemove: Poisoned
 	Price: 100
-	Fling: 30
 *
 Awakening:
 	Int: HoldItem
@@ -1375,7 +1311,6 @@ Awakening:
 	Desc: A spray-type medicine. It awakens a Pok\u00e9mon from the clutches of sleep.
 	StatusRemove: Asleep
 	Price: 250
-	Fling: 30
 *
 Burn Heal:
 	Int: HoldItem
@@ -1384,7 +1319,6 @@ Burn Heal:
 	Desc: A spray-type medicine. It heals a single Pok\u00e9mon that is suffering from a burn.
 	StatusRemove: Burned
 	Price: 250
-	Fling: 30
 *
 Ice Heal:
 	Int: HoldItem
@@ -1393,7 +1327,6 @@ Ice Heal:
 	Desc: A spray-type medicine. It defrosts a Pok\u00e9mon that has been frozen solid.
 	StatusRemove: Frozen
 	Price: 250
-	Fling: 30
 *
 Paralyze Heal:
 	Int: HoldItem
@@ -1402,14 +1335,12 @@ Paralyze Heal:
 	Desc: A spray-type medicine. It eliminates paralysis from a single Pok\u00e9mon.
 	StatusRemove: Paralyzed
 	Price: 200
-	Fling: 30
 *
 Full Heal:
 	Int: HoldItem
 	Cat: Medicine
 	Desc: A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.
 	Price: 250
-	Fling: 30
 	StatusHealAll: True
 *
 Full Restore:
@@ -1418,21 +1349,9 @@ Full Restore:
 	BattleCat: HP_PP, Status
 	Desc: A medicine that fully restores the HP and heals any status problems of a single Pok\u00e9mon.
 	Price: 3000
-	Fling: 30
 	PokemonUse:
-		// Does not apply to the dead
-		if (p.isActuallyDead()) {
-			return false;
-		}
-		
-		// Does not apply to the fully healed -- status condition or otherwise
-		if (!p.hasStatus() && p.fullHealth()) {
-			return false;
-		}
-	
-		Status.removeStatus(null, p, CastSource.USE_ITEM);
-		this.addHealMessage(p, p.healHealthFraction(1));
-		return true;
+		// Essentially Full Restore is just a combined Max Potion and Full Heal
+		return new MaxPotion().use(p) || new FullHeal().use(p);
 		###
 *
 Elixir:
@@ -1443,7 +1362,7 @@ Elixir:
 Max Elixir:
 	Desc: It restores the PP of all the moves learned by the targeted Pok\u00e9mon by 10 points each.
 	Price: 4500
-	Elixir: m.getMaxPP()
+	Elixir: toRestore.getMaxPP()
 *
 Ether:
 	Desc: It restores the PP of a Pok\u00e9mon's selected move by a maximum of 10 points.
@@ -1451,15 +1370,13 @@ Ether:
 	Ether: 10
 	Int: HoldItem
 	Cat: Medicine
-	Fling: 30
 *
 Max Ether:
 	Desc: It fully restores the PP of a single selected move that has been learned by the target Pok\u00e9mon.
 	Price: 2000
-	Ether: m.getMaxPP()
+	Ether: toRestore.getMaxPP()
 	Int: HoldItem
 	Cat: Medicine
-	Fling: 30
 *
 Berry Juice:
 	Desc: A 100% pure juice made of Berries. It restores the HP of one Pok\u00e9mon by just 20 points.
@@ -1517,19 +1434,13 @@ Hyper Potion:
 	HealAmt: 200
 *
 Max Potion:
-	Int: PokemonUseItem, HoldItem
 	Cat: Medicine
 	BattleCat: HP_PP
 	Desc: A spray-type medicine for wounds. It completely restores the HP of a single Pok\u00e9mon.
 	Price: 2500
-	Fling: 30
-	PokemonUse:
-		if (!this.canHealHealth(p)) {
-			return false;
-		}
-	
-		this.addHealMessage(p, p.healHealthFraction(1));
-		return true;
+	Int: HpHealer
+	GetAmountHealed: 
+		return p.healHealthFraction(1);
 		###
 *
 Revive:
@@ -1553,7 +1464,6 @@ Sacred Ash:
 	BattleCat: Status
 	Desc: It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.
 	Price: 4000
-	Fling: 30
 	TrainerUse:
 		boolean healed = false;
 		for (ActivePokemon p : t.getTeam()) {
@@ -1581,7 +1491,6 @@ Dire Hit:
 	BattleCat: Battle
 	Desc: It raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.
 	Price: 650
-	Fling: 30
 	BattleUse: 
 		return EffectNamesies.RAISE_CRITS.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
 		###
@@ -1592,7 +1501,6 @@ Guard Spec.:
 	BattleCat: Battle
 	Desc: An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after use.
 	Price: 700
-	Fling: 30
 	BattleUse: 
 		return EffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
 		###
@@ -1693,14 +1601,13 @@ Rare Candy:
 		return p.levelUp(null);
 		###
 	Price: 4800
-	Fling: 30
 *
 
 # Balls
 Cherish Ball:
 	Desc: A quite rare Pok\u00e9 Ball that has been specially crafted to commemorate an occasion of some sort.
 	Price: 200
-	FixedCatchRate: 1
+	BallItem: True
 *
 Dive Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.
@@ -1727,38 +1634,46 @@ Great Ball:
 Heal Ball:
 	Desc: A remedial Pok\u00e9 Ball that restores the caught Pok\u00e9mon's HP and eliminates any status problem.
 	Price: 300
-	FixedCatchRate: 1
+	BallItem: True
 	AfterCaught: p.fullyHeal();
 *
 Heavy Ball:
-	Int: BallItem
 	Desc: A Pok\u00e9 Ball for catching very heavy Pok\u00e9mon.
 	Price: 200
-	CatchRate:
+	BallItem: True
+	AdditiveCatch:
 		double weight = o.getWeight(b);
-		
-		double[] res = new double[2];
-		res[0] = 1;
-		
-		// TODO: Rewrite this with a loop
-		if (weight <= 451.5) res[1] = -20;
-		else if (weight <= 661.5) res[1] = 20;
-		else if (weight <= 903.0) res[1] = 30;
-		else res[1] = 40;
-		
-		return res;
+		if (weight <= 451.5) {
+			return -20;
+		}
+		else if (weight <= 661.5) {
+			return 20;
+		}
+		else if (weight <= 903.0) {
+			return 30;
+		}
+		else {
+			return 40;
+		}
 		###
 *
 Level Ball:
-	Int: BallItem
+	BallItem: True
 	Desc: A Pok\u00e9 Ball for catching Pok\u00e9mon that are a lower level than your own.
 	Price: 200
 	CatchRate:
-		// TODO: Rewrite this in a loop
-		if (me.getLevel()/4 > o.getLevel()) return new double[] {8, 0};
-		else if (me.getLevel()/2 > o.getLevel()) return new double[] {4, 0};
-		else if (me.getLevel() > o.getLevel()) return new double[] {2, 0};
-		else return new double[] {1, 0};
+		if (me.getLevel()/4 > o.getLevel()) {
+			return 8;
+		}
+		else if (me.getLevel()/2 > o.getLevel()) {
+			return 4;
+		}
+		else if (me.getLevel() > o.getLevel()) {
+			return 2;
+		}
+		else {
+			return 1;
+		}
 		###
 *
 Love Ball:
@@ -1769,13 +1684,12 @@ Love Ball:
 Lure Ball:
 	Desc: A Pok\u00e9 Ball for catching Pok\u00e9mon hooked by a Rod when fishing.
 	Price: 200
-	Comments: // TODO: Fishing
-	CatchRateCondition: 3 false
+	CatchRateCondition: 3 Game.getPlayer().isFishing()
 *
 Luxury Ball:
 	Desc: A comfortable Pok\u00e9 Ball that makes a caught wild Pok\u00e9mon quickly grow friendly.
 	Price: 1000
-	FixedCatchRate: 1
+	BallItem: True
 	Comments: // TODO: Make this item do something more interesting
 *
 Master Ball:
@@ -1789,14 +1703,19 @@ Moon Ball:
 	CatchRateCondition: 4 o.getPokemonInfo().getEvolution().getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null
 *
 Nest Ball:
-	Int: BallItem
+	BallItem: True
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on weaker Pok\u00e9mon in the wild.
 	Price: 1000
 	CatchRate:
-		// TODO: Loopy and make it general with the others
-		if (o.getLevel() <= 19) return new double[] { 3, 0 };
-		else if (o.getLevel() <= 29) return new double[] { 2, 0 };
-		else return new double[] { 1, 0 };
+		if (o.getLevel() <= 19) {
+			return 3;
+		}
+		else if (o.getLevel() <= 29) {
+			return 2;
+		}
+		else {
+			return 1;
+		}
 		###
 *
 Net Ball:
@@ -1807,12 +1726,12 @@ Net Ball:
 Pok\u00e9 Ball:
 	Desc: A device for catching wild Pok\u00e9mon. It is thrown like a ball at the target. It is designed as a capsule system.
 	Price: 200
-	FixedCatchRate: 1
+	BallItem: True
 *
 Premier Ball:
 	Desc: A somewhat rare Pok\u00e9 Ball that has been specially made to commemorate an event of some sort.
 	Price: 200
-	FixedCatchRate: 1
+	BallItem: True
 *
 Quick Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that provides a better catch rate if it is used at the start of a wild encounter.
@@ -1829,14 +1748,11 @@ Safari Ball:
 	FixedCatchRate: 1.5
 *
 Timer Ball:
-	Int: BallItem
+	BallItem: True
 	Desc: A somewhat different Ball that becomes progressively better the more turns there are in a battle.
 	Price: 1000
 	CatchRate:
-		if (b.getTurn() <= 10) return new double[] {1, 0};
-		else if (b.getTurn() <= 20) return new double[] {2, 0};
-		else if (b.getTurn() <= 30) return new double[] {3, 0};
-		else return new double[] {4, 0};
+		return Math.min(b.getTurn()/10 + 1, 4);
 		###
 *
 Ultra Ball:
@@ -1880,19 +1796,15 @@ Aspear Berry:
 	NGType: Ice
 *
 Leppa Berry:
-	Int: MoveUseItem, EndTurnEffect, GainableEffectBerry
+	Int: EndTurnEffect, GainableEffectBerry
 	Desc: If held by a Pok\u00e9mon, it restores a move's PP by 10.
 	NGType: Fighting
 	NGPow: 80
-	BattleCat: HP_PP
-	MoveUse:
-		return m.increasePP(10);
-		###
+	Ether: 10
 	ApplyEndTurn:
 		for (Move m : victim.getMoves(b)) {
 			if (m.getPP() == 0) {
-				use(victim, m);
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " restored " + m.getAttack().getName() + "'s PP!"));
+				use(victim, m, CastSource.HELD_ITEM);
 				victim.consumeItem(b);
 				break;
 			}
@@ -1925,7 +1837,10 @@ Oran Berry:
 	NGType: Poison
 	NGPow: 80
 	FixedBerryHealthTrigger: 3
-	HoldHealer: p.heal(10)
+	Int: FixedHpHealer
+	FixedHealAmount:
+		return 10;
+		###
 *
 Persim Berry:
 	Int: BattleUseItem, MessageGetter, GainableEffectBerry
@@ -1961,7 +1876,10 @@ Sitrus Berry:
 	NGType: Psychic
 	NGPow: 80
 	FixedBerryHealthTrigger: 2
-	HoldHealer: p.healHealthFraction(1/4.0)
+	Int: HpHealer
+	GetAmountHealed: 
+		return p.healHealthFraction(1/4.0);
+		###
 *
 Razz Berry:
 	Int: Berry
@@ -2127,7 +2045,14 @@ Custap Berry:
 	NGType: Ghost
 	NGPow: 100
 	Int: Berry, PriorityChangeEffect
-	ChangePriority: user.getHPRatio() < 1/3.0
+	ChangePriority: 
+		if (user.getHPRatio() < 1/3.0) {
+			user.consumeItem(b);
+			return 1;
+		}
+		
+		return 0;
+		###
 *
 Enigma Berry:
 	Desc: If held by a Pok\u00e9mon, it restores its HP if it is hit by any supereffective attack.
@@ -2169,12 +2094,7 @@ Starf Berry:
 		
 		// Raise random battle stat
 		Stat stat = Stat.getStat(rand, true);
-		if (user.getAttributes().modifyStage(user, user, 1, stat, b, source)) {
-			return true;
-		}
-		
-
-		return false;
+		return user.getAttributes().modifyStage(user, user, 1, stat, b, source);
 		###
 *
 # Other Items
@@ -2182,70 +2102,60 @@ Comet Shard:
 	Int: HoldItem
 	Cat: Misc
 	Desc: A shard which fell to the ground when a comet approached. A maniac will buy it for a high price.
-	Fling: 30
 	Price: 120000
 *
 Tiny Mushroom:
 	Int: HoldItem
 	Cat: Misc
 	Desc: A small and rare mushroom. It is sought after by collectors.
-	Fling: 30
 	Price: 500
 *
 Big Mushroom:
 	Int: HoldItem
 	Cat: Misc
 	Desc: A large and rare mushroom. It is sought after by collectors.
-	Fling: 30
 	Price: 5000
 *
 Balm Mushroom:
 	Int: HoldItem
 	Cat: Misc
 	Desc: A rare mushroom which gives off a nice fragrance. A maniac will buy it for a high price.
-	Fling: 30
 	Price: 50000
 *
 Nugget:
 	Int: HoldItem
 	Cat: Misc
 	Desc: A nugget of pure gold that gives off a lustrous gleam. It can be sold at a high price to shops.
-	Fling: 30
 	Price: 10000
 *
 Big Nugget:
 	Int: HoldItem
 	Cat: Misc
 	Desc: A big nugget of pure gold that gives off a lustrous gleam. A maniac will buy it for a high price.
-	Fling: 30
 	Price: 60000
 *	
 Pearl:
 	Int: HoldItem
 	Cat: Misc
 	Desc: A somewhat-small pearl that sparkles in a pretty silver color. It can be sold cheaply to shops.
-	Fling: 30
 	Price: 1400
 *
 Big Pearl:
 	Int: HoldItem
 	Cat: Misc
 	Desc: A quite-large pearl that sparkles in a pretty silver color. It can be sold at a high price to shops.
-	Fling: 30
 	Price: 7500
 *
 Stardust:
 	Int: HoldItem
 	Cat: Misc
 	Desc: Lovely, red-colored sand with a loose, silky feel. It can be sold at a high price to shops.
-	Fling: 30
 	Price: 2000
 *
 Star Piece:
 	Int: HoldItem
 	Cat: Misc
 	Desc: A shard of a pretty gem that sparkles in a red color. It can be sold at a high price to shops.
-	Fling: 30
 	Price: 9800
 *
 Rare Bone:
@@ -2259,7 +2169,6 @@ Honey:
 	Int: HoldItem
 	Cat: Misc
 	Desc: A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in grass, caves, or on special trees.
-	Fling: 30
 	Price: 100
 	Comments: // TODO: We need this item to do something (not in the fling effect, that's only there so I can put this todo in from le generator)
 *
@@ -2276,21 +2185,23 @@ Heart Scale:
 	Int: HoldItem
 	Cat: Misc
 	Desc: A pretty, heart-shaped scale that is extremely rare. It glows faintly in the colors of the rainbow.
-	Fling: 30
 	Price: 100
 *
 Repel:
 	Desc: An item that prevents weak wild Pok\u00e9mon from appearing for 100 steps after its use.
+	Int: Repelling
 	RepelSteps: 100
 	Price: 350
 *
 Super Repel:
 	Desc: An item that prevents weak wild Pok\u00e9mon from appearing for 200 steps after its use.
+	Int: Repelling
 	RepelSteps: 200
 	Price: 500
 *
 Max Repel:
 	Desc: An item that prevents weak wild Pok\u00e9mon from appearing for 250 steps after its use.
+	Int: Repelling
 	RepelSteps: 250
 	Price: 700
 *
@@ -2316,12 +2227,12 @@ Assault Vest:
 	Cat: Misc
 	Int: HoldItem, AttackSelectionEffect
 	ToModify: Sp_Defense
-	ModifyMultiplier: 1.5 true
+	SimpleModifier: 1.5 
 	Usable:
 		return !m.getAttack().isStatusMove();
 		###
 	UnusableMessage: p.getName() + "'s " + this.name + " prevents the use of status moves!"
-	Fling: 30
+	Fling: 80
 *
 Power Herb:
 	Desc: A single-use item to be held by a Pokémon. It allows the immediate use of a move that charges on the first turn.

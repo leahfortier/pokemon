@@ -11,7 +11,7 @@ Constructor:
 *
 Failure:
 	Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-	CanHave Not Default True Boolean Effect.hasEffect(b.getEffects(victim.isPlayer()), this.namesies)
+	CanHave Not Default True Boolean Effect.hasEffect(b.getEffects(victim), this.namesies)
 *
 
 ***
@@ -26,14 +26,14 @@ LightScreen:
 *
 Tailwind:
 	ToModify: Speed
-	ModifyMultiplier: 2 true
+	SimpleModifier: 2 
 	NumTurns: 4
 	SubsideMessage: "The effects of tailwind faded."
 	CastMessage: user.getName() + " raised the speed of its team!"
 *
 AuroraVeil:
 	TwoModify: Defense Sp_Defense
-	ModifyMultiplier: 2 true
+	SimpleModifier: 2 
 	SubsideMessage: "The effects of aurora veil faded."
 	CastMessage: user.getName() + " is covered by an aurora veil!"
 	LightClay: True
@@ -45,7 +45,7 @@ StickyWeb:
 			return;
 		}
 		
-		enterer.getAttributes().modifyStage(b.getOtherPokemon(enterer.isPlayer()), enterer, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + enterer.getName() + "'s {statName}!");
+		enterer.getAttributes().modifyStage(b.getOtherPokemon(enterer), enterer, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + enterer.getName() + "'s {statName}!");
 		###
 	CastMessage: "Sticky web covers everything!"
 	RapidSpin: "The sticky web spun away!"
@@ -84,7 +84,7 @@ ToxicSpikes:
 			return;
 		}
 		
-		ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer.isPlayer());
+		ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer);
 		if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, enterer)) {
 			if (layers >= 2) {
 				EffectNamesies.BAD_POISON.getEffect().cast(b, theOtherPokemon, enterer, CastSource.EFFECT, false);
@@ -97,7 +97,7 @@ ToxicSpikes:
 	CastMessage: "Toxic spikes were scattered all around!"
 	CanHave: True
 	Cast: 
-		Effect spikesies = Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies);
+		Effect spikesies = Effect.getEffect(b.getEffects(victim), this.namesies);
 		if (spikesies == null) {
 			super.cast(b, caster, victim, source, printCast);
 			return;
@@ -132,7 +132,7 @@ Spikes:
 	CastMessage: "Spikes were scattered all around!"
 	CanHave: True
 	Cast: 
-		Effect spikesies = Effect.getEffect(b.getEffects(victim.isPlayer()), this.namesies);
+		Effect spikesies = Effect.getEffect(b.getEffects(victim), this.namesies);
 		if (spikesies == null) {
 			super.cast(b, caster, victim, source, printCast);
 			return;

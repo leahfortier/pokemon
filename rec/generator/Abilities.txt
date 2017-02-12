@@ -63,7 +63,7 @@ Shed Skin:
 *
 Compoundeyes:
 	Desc: The Pok\u00e9mon's accuracy is boosted.
-	ModifyMultiplier: 1.3 true
+	SimpleModifier: 1.3 
 	ToModify: Accuracy
 *
 Tinted Lens:
@@ -106,7 +106,7 @@ Intimidate:
 	Desc: Lowers the foe's Attack stat.
 	Int: EntryEffect
 	Enter: 
-		ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+		ActivePokemon other = b.getOtherPokemon(enterer);
 		other.getAttributes().modifyStage(enterer, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
 		###
 *
@@ -196,7 +196,7 @@ Frisk:
 	Desc: The Pok\u00e9mon can check the foe's held item.
 	Int: EntryEffect
 	Enter: 
-		ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+		ActivePokemon other = b.getOtherPokemon(enterer);
 		if (other.isHoldingItem(b)) Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!"));
 		###
 *
@@ -433,7 +433,7 @@ Forewarn:
 	Desc: Determines what moves the foe has.
 	Int: EntryEffect
 	Enter: 
-		ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+		ActivePokemon other = b.getOtherPokemon(enterer);
 		List<Move> otherMoves = other.getMoves(b);
 		
 		List<AttackNamesies> besties = new ArrayList<>();
@@ -610,7 +610,7 @@ Trace:
 	Irrestealable: True
 	Int: EntryEffect, ChangeAbilityMove
 	Enter: 
-		ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+		ActivePokemon other = b.getOtherPokemon(enterer);
 		if (!other.getAbility().isStealable() || other.hasAbility(this.namesies)) {
 			return;
 		}
@@ -618,11 +618,11 @@ Trace:
 		EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, true);
 		###
 	AbilityChange: 
-		Ability otherAbility = b.getOtherPokemon(victim.isPlayer()).getAbility();
+		Ability otherAbility = b.getOtherPokemon(victim).getAbility();
 		return otherAbility.namesies().getNewAbility();
 		###
 	AbilityMessage: 
-		ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
+		ActivePokemon other = b.getOtherPokemon(victim);
 		return victim.getName() + " traced " + other.getName() + "'s " + other.getAbility().getName() + "!";
 		###
 *
@@ -630,7 +630,7 @@ Download:
 	Desc: Adjusts power according to a foe's defenses.
 	Int: EntryEffect
 	Enter: 
-		ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+		ActivePokemon other = b.getOtherPokemon(enterer);
 		PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getPokemonInfo().namesies());
 		
 		int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
@@ -701,7 +701,7 @@ Hustle:
 Huge Power:
 	Desc: Raises the Pok\u00e9mon's Attack stat.
 	ToModify: Attack
-	ModifyMultiplier: 2 true
+	SimpleModifier: 2 
 *
 Speed Boost:
 	Desc: The Pok\u00e9mon's Speed stat is gradually boosted.
@@ -816,7 +816,7 @@ Stall:
 Pure Power:
 	Desc: Raises the Pok\u00e9mon's Attack stat.
 	ToModify: Attack
-	ModifyMultiplier: 2 true
+	SimpleModifier: 2 
 *
 Rough Skin:
 	Desc: Inflicts damage to the foe on contact.
@@ -849,7 +849,7 @@ Anticipation:
 	Desc: Senses a foe's dangerous moves.
 	Int: EntryEffect
 	Enter: 
-		ActivePokemon other = b.getOtherPokemon(enterer.isPlayer());
+		ActivePokemon other = b.getOtherPokemon(enterer);
 		for (Move m : other.getMoves(b)) {
 			Attack attack = m.getAttack();
 			if (attack.getActualType().getAdvantage().isSuperEffective(enterer, b) || attack.isMoveType(MoveType.ONE_HIT_KO)) {
@@ -1007,7 +1007,7 @@ Bad Dreams:
 	Desc: Reduces a sleeping foe's HP.
 	Int: EndTurnEffect
 	ApplyEndTurn: 
-		ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
+		ActivePokemon other = b.getOtherPokemon(victim);
 		if (other.hasStatus(StatusCondition.ASLEEP)) {
 			Messages.add(new MessageUpdate(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
 			other.reduceHealthFraction(b, 1/8.0);
@@ -1017,7 +1017,7 @@ Bad Dreams:
 Victory Star:
 	Desc: Boosts the accuracy of its allies and itself.
 	ToModify: Accuracy
-	ModifyMultiplier: 1.1 true
+	SimpleModifier: 1.1 
 *
 Contrary:
 	Desc: Makes stat changes have an opposite effect.
@@ -1044,8 +1044,7 @@ Poison Touch:
 *
 Prankster:
 	Desc: Gives priority to a status move.
-	Int: PriorityChangeEffect
-	ChangePriority: attack.isStatusMove()
+	ChangePriorityAbility: attack.isStatusMove()
 *
 Wonder Skin:
 	Desc: Makes status-changing moves more likely to miss.
@@ -1131,7 +1130,7 @@ Illusion:
 		return activated ? illusionName : null;
 		###
 	SetNameChange:
-		List<ActivePokemon> team = b.getTrainer(victim.isPlayer()).getTeam();
+		List<ActivePokemon> team = b.getTrainer(victim).getTeam();
 		ActivePokemon illusion = null;
 		
 		// Starting from the back of the party, locate the first conscious Pokemon that is of a different species to be the illusion
@@ -1280,7 +1279,7 @@ Unnerve:
 	Desc: Makes the foe nervous and unable to eat Berries.
 	Int: EntryEffect
 	Enter: 
-		Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer.isPlayer()).getName() + " too nervous to eat berries!"));
+		Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer).getName() + " too nervous to eat berries!"));
 		###
 *
 Honey Gather:
@@ -1413,7 +1412,7 @@ Stance Change:
 Fur Coat:
 	Desc: Halves damage from physical moves.
 	ToModify: Defense
-	ModifyMultiplier: 2 true
+	SimpleModifier: 2 
 *
 Grass Pelt:
 	Desc: Boosts the Defense stat in Grassy Terrain.
@@ -1438,8 +1437,7 @@ Flower Veil:
 *
 Gale Wings:
 	Desc: Gives priority to Flying-type moves.
-	Int: PriorityChangeEffect
-	ChangePriority: attack.getActualType() == Type.FLYING
+	ChangePriorityAbility: attack.getActualType() == Type.FLYING
 *
 Protean:
 	Desc: Changes the Pok\u00e9mon's type to the type of the move it's using.
@@ -1529,8 +1527,7 @@ Liquid Voice:
 *
 Triage:
 	Desc: Gives priority to a healing move.
-	Int: PriorityChangeEffect
-	ChangePriority: attack.isMoveType(MoveType.HEALING)
+	ChangePriorityAbility: attack.isMoveType(MoveType.HEALING)
 *
 Galvanize:
 	Desc: Normal-type moves become Electric-type moves. The power of those moves is boosted a little.

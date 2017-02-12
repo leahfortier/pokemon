@@ -17,11 +17,8 @@ import item.Item;
 import item.ItemNamesies;
 import item.bag.Bag;
 import item.bag.BagCategory;
-import item.hold.HoldItem;
-import item.use.UseItem;
 import main.Game;
 import main.Global;
-import type.Type;
 import map.Direction;
 import message.MessageUpdate;
 import message.Messages;
@@ -29,6 +26,7 @@ import message.Messages.MessageState;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Trainer;
+import type.Type;
 import util.DrawUtils;
 import util.FontMetrics;
 import util.GeneralUtils;
@@ -585,8 +583,8 @@ public class BagView extends View {
 			buttons[USE].setActive(false);
 		} else {
 			Item selectedItemValue = selectedItem.getItem();
-			buttons[GIVE].setActive(selectedItemValue instanceof HoldItem);
-			buttons[USE].setActive(selectedItemValue instanceof UseItem);
+			buttons[GIVE].setActive(selectedItemValue.isUsable());
+			buttons[USE].setActive(selectedItemValue.isUsable());
 		}
 	}
 }

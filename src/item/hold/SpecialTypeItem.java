@@ -40,10 +40,6 @@ public interface SpecialTypeItem extends HoldItem {
 
             return 1;
         }
-
-        default int flingDamage() {
-            return 30;
-        }
     }
 
     interface PlateItem extends SpecialTypeItem, PowerChangeEffect {

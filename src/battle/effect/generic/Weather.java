@@ -181,10 +181,6 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			return "The sandstorm subsided.";
 		}
 
-		public double getModifier() {
-			return 1.5;
-		}
-
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return p.isType(b, Type.ROCK);
 		}
@@ -196,9 +192,13 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			Messages.add(new MessageUpdate("The sandstorm rages."));
 			
-			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(victim);
 			buffet(b, victim);
 			buffet(b, other);
+		}
+
+		public double getModifier() {
+			return 1.5;
 		}
 	}
 
@@ -242,7 +242,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			Messages.add(new MessageUpdate("The hail continues to fall."));
 			
-			ActivePokemon other = b.getOtherPokemon(victim.isPlayer());
+			ActivePokemon other = b.getOtherPokemon(victim);
 			buffet(b, victim);
 			buffet(b, other);
 		}

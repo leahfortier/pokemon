@@ -254,7 +254,7 @@ public final class EffectInterfaces {
 		void breakBarrier(Battle b, ActivePokemon breaker);
 
 		static void breakBarriers(Battle b, ActivePokemon breaker) {
-			List<Object> invokees = b.getEffectsList(b.getOtherPokemon(breaker.isPlayer()));
+			List<Object> invokees = b.getEffectsList(b.getOtherPokemon(breaker));
 			for (Object invokee : invokees) {
 				if (invokee instanceof BarrierEffect && Effect.isActiveEffect(invokee, b)) {
 					
@@ -798,7 +798,7 @@ public final class EffectInterfaces {
 				if (invokee instanceof BracingEffect && Effect.isActiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && b.getOtherPokemon(bracer.isPlayer()).breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && b.getOtherPokemon(bracer).breaksTheMold()) {
 						continue;
 					}
 					
@@ -913,19 +913,21 @@ public final class EffectInterfaces {
 	}
 
 	public interface PriorityChangeEffect {
-		int changePriority(Battle b, ActivePokemon user, Attack attack, int priority);
+		int changePriority(Battle b, ActivePokemon user, Attack attack);
 
-		static int updatePriority(Battle b, ActivePokemon user, Attack attack, int priority) {
+		static int getModifier(Battle b, ActivePokemon user, Attack attack) {
+			int modifier = 0;
+			
 			List<Object> invokees = b.getEffectsList(user);
 			for (Object invokee : invokees) {
 				if (invokee instanceof PriorityChangeEffect && Effect.isActiveEffect(invokee, b)) {
 					
 					PriorityChangeEffect effect = (PriorityChangeEffect)invokee;
-					priority = effect.changePriority(b, user, attack, priority);
+					modifier += effect.changePriority(b, user, attack);
 				}
 			}
 			
-			return priority;
+			return modifier;
 		}
 	}
 
@@ -1036,7 +1038,7 @@ public final class EffectInterfaces {
 				if (invokee instanceof HalfWeightEffect && Effect.isActiveEffect(invokee, b)) {
 					
 					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && b.getOtherPokemon(anorexic.isPlayer()).breaksTheMold()) {
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && b.getOtherPokemon(anorexic).breaksTheMold()) {
 						continue;
 					}
 					
