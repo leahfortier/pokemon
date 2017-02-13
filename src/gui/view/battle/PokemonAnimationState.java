@@ -36,7 +36,7 @@ class PokemonAnimationState {
     private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
     private static final int CATCH_SHAKE_ANIMATION_LIFESPAN = 1000;
     private static final int CATCH_TRANSFORM_ANIMATION_LIFESPAN = 2000;
-    private static final int CATCH_ANIMATION_LIFESPAN = CATCH_SHAKE_ANIMATION_LIFESPAN* CharacterData.CATCH_SHAKES + CATCH_TRANSFORM_ANIMATION_LIFESPAN;
+    private static final int CATCH_ANIMATION_LIFESPAN = CATCH_SHAKE_ANIMATION_LIFESPAN*CharacterData.CATCH_SHAKES + CATCH_TRANSFORM_ANIMATION_LIFESPAN;
 
     private final BattleView battleView;
     private final boolean isPlayer;
@@ -77,7 +77,7 @@ class PokemonAnimationState {
 
         int hpBarWidth = 200;
         this.hpBar = new DrawPanel(
-                statusBox.x + statusBox.width - STATUS_BOX_SPACING - hpBarWidth,
+                statusBox.rightX() - STATUS_BOX_SPACING - hpBarWidth,
                 statusBox.y + 48,
                 hpBarWidth,
                 19)
@@ -85,7 +85,7 @@ class PokemonAnimationState {
 
         this.expBar = new DrawPanel(
                 statusBox.x,
-                statusBox.y + statusBox.height - DrawUtils.OUTLINE_SIZE,
+                statusBox.bottomY() - DrawUtils.OUTLINE_SIZE,
                 statusBox.width,
                 12)
                 .withBlackOutline();
@@ -323,8 +323,8 @@ class PokemonAnimationState {
             DrawUtils.drawShadowText(
                     g,
                     hpStr,
-                    statusBox.x + statusBox.width - STATUS_BOX_SPACING,
-                    hpBar.y + hpBar.height + FontMetrics.getTextHeight(g) + 5,
+                    statusBox.rightX() - STATUS_BOX_SPACING,
+                    hpBar.bottomY() + FontMetrics.getTextHeight(g) + 5,
                     Alignment.RIGHT);
         }
     }
@@ -399,7 +399,7 @@ class PokemonAnimationState {
         DrawUtils.drawShadowText(
                 g,
                 "Lv" + state.level,
-                statusBox.x + statusBox.width - STATUS_BOX_SPACING,
+                statusBox.rightX() - STATUS_BOX_SPACING,
                 statusBox.y + STATUS_BOX_SPACING + FontMetrics.getTextHeight(g),
                 Alignment.RIGHT);
 
@@ -409,7 +409,7 @@ class PokemonAnimationState {
                 g,
                 state.status.getName(),
                 statusBox.x + STATUS_BOX_SPACING,
-                hpBar.y + hpBar.height/2,
+                hpBar.centerY(),
                 Alignment.CENTER_Y);
 
         // Show whether or not the wild Pokemon has already been caught
@@ -417,8 +417,8 @@ class PokemonAnimationState {
             DrawUtils.drawCenteredImage(
                     g,
                     TileSet.TINY_POKEBALL,
-                    hpBar.x + hpBar.width + (STATUS_BOX_SPACING - statusBox.getBorderSize())/2,
-                    hpBar.y + hpBar.height/2
+                    hpBar.rightX() + (STATUS_BOX_SPACING - statusBox.getBorderSize())/2,
+                    hpBar.centerY()
             );
         }
     }

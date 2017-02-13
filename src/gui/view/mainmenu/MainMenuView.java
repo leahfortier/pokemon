@@ -1,5 +1,6 @@
 package gui.view.mainmenu;
 
+import draw.Alignment;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import gui.view.View;
@@ -7,7 +8,6 @@ import gui.view.ViewMode;
 import input.ControlKey;
 import input.InputControl;
 import sound.SoundPlayer;
-import draw.DrawUtils;
 import util.FileIO;
 import util.Folder;
 import util.FontMetrics;
@@ -148,16 +148,16 @@ public class MainMenuView extends View {
 			FontMetrics.setFont(g, 20);
 
 			g.drawString("Name:", 16, 28);
-			DrawUtils.drawRightAlignedString(g, info.getName(), 189, 28);
+			Alignment.drawRightAlignedString(g, info.getName(), 189, 28);
 
 			g.drawString("Time:", 210, 28);
-			DrawUtils.drawRightAlignedString(g, "" + Save.formatTime(info.getTime()), 383, 28);
+			Alignment.drawRightAlignedString(g, "" + Save.formatTime(info.getTime()), 383, 28);
 
 			g.drawString("Badges:", 16, 58);
-			DrawUtils.drawRightAlignedString(g, "" + info.getBadges(), 189, 58);
+			Alignment.drawRightAlignedString(g, "" + info.getBadges(), 189, 58);
 
 			g.drawString("Pokedex:", 210, 58);
-			DrawUtils.drawRightAlignedString(g, "" + info.getPokemonSeen(), 383, 58);
+			Alignment.drawRightAlignedString(g, "" + info.getPokemonSeen(), 383, 58);
 
 			g.translate(-b.x, -b.y);
 		}

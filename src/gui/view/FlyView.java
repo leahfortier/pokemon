@@ -1,5 +1,6 @@
 package gui.view;
 
+import draw.Alignment;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.panel.BasicPanels;
@@ -11,7 +12,6 @@ import main.Global;
 import map.AreaData;
 import map.Direction;
 import trainer.CharacterData;
-import draw.DrawUtils;
 import util.GeneralUtils;
 
 import java.awt.Graphics;
@@ -144,7 +144,7 @@ class FlyView extends View {
         Button rightButton = this.buttons[RIGHT_BUTTON];
         leftButton.drawArrow(g, Direction.LEFT);
         rightButton.drawArrow(g, Direction.RIGHT);
-        DrawUtils.drawCenteredString(
+        Alignment.drawCenteredString(
                 g,
                 pageNum + 1 + "",
                 (leftButton.centerX() + rightButton.centerX())/2,

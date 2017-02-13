@@ -15,7 +15,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.util.Map;
 
-public class DrawUtils {
+public final class DrawUtils {
 	public static final Color EXP_BAR_COLOR = new Color(51, 102, 204);
 	public static final int OUTLINE_SIZE = 2;
 
@@ -32,50 +32,6 @@ public class DrawUtils {
 		else {
 			return new Color(35, 238, 91);
 		}
-	}
-
-	public static void drawCenteredArrow(Graphics g, int centerX, int centerY, int width, int height, Direction direction) {
-		drawArrow(g, centerX - width/2, centerY - height/2, width, height, direction);
-	}
-
-	public static void drawArrow(Graphics g, int x, int y, int width, int height, Direction direction) {
-		int yMax = height;
-		int xMax = width;
-
-		boolean yAxis = direction.getDeltaPoint().x == 0;
-		if (yAxis) {
-			yMax = width;
-			xMax = height;
-		}
-
-		int arrowLineTop = yMax/4;
-		int arrowLineBottom = yMax - arrowLineTop;
-
-		int arrowMidpoint = xMax/2;
-
-		g.translate(x, y);
-
-		int[] xValues = new int[] { 0, arrowMidpoint, arrowMidpoint, xMax, xMax, arrowMidpoint, arrowMidpoint };
-		int[] yValues = new int[] { yMax/2, 0, arrowLineTop, arrowLineTop, arrowLineBottom, arrowLineBottom, yMax};
-
-		if (yAxis) {
-			GeneralUtils.swapArrays(xValues, yValues);
-		}
-
-		if (direction == Direction.RIGHT) {
-			for (int i = 0; i < xValues.length; i++) {
-				xValues[i] = xMax - xValues[i];
-			}
-		} else if (direction == Direction.DOWN) {
-			for (int i = 0; i < yValues.length; i++) {
-				yValues[i] = yMax - yValues[i];
-			}
-		}
-
-		g.setColor(Color.BLACK);
-		g.fillPolygon(xValues, yValues, xValues.length);
-
-		g.translate(-x, -y);
 	}
 
 	public static void drawTypeTiles(Graphics g, Type[] type, int rightX, int textY) {
@@ -114,7 +70,7 @@ public class DrawUtils {
 		int halfSize = (imageWidth + textWidth)/2;
 
 		drawCenteredImage(g, image, x - halfSize + imageWidth/2, y);
-		drawCenteredString(g, text, x - halfSize + imageWidth + textWidth/2, y);
+		Alignment.drawCenteredString(g, text, x - halfSize + imageWidth + textWidth/2, y);
 	}
 
 	public static void drawCenteredImage(Graphics g, BufferedImage image, Point center) {
@@ -195,60 +151,6 @@ public class DrawUtils {
 		DrawUtils.drawBottomCenteredImage(g, DrawUtils.colorImage(second, firstScales, firstOffsets), drawLocation);
 
 		return animationValue;
-	}
-	
-	public static void drawCenteredString(Graphics g, String s, int x, int y, int width, int height) {
-		int centerX = x + width/2;
-		int centerY = y + height/2;
-		
-		drawCenteredString(g, s, centerX, centerY);
-	}
-	
-	public static void drawCenteredString(Graphics g, String s, int centerX, int centerY) {
-		int fontSize = g.getFont().getSize();
-		FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
-		
-		int leftX = centerX(centerX, s, fontMetrics);
-		int bottomY = centerY(centerY, fontMetrics);
-		
-		g.drawString(s, leftX, bottomY);
-	}
-	
-	public static void drawCenteredWidthString(Graphics g, String s, int centerX, int y) {
-		int fontSize = g.getFont().getSize();
-		FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
-		
-		int leftX = centerX(centerX, s, fontMetrics);
-		g.drawString(s, leftX, y);
-	}
-	
-	private static int centerY(int centerY, FontMetrics fontMetrics) {
-		return centerY + fontMetrics.getLetterHeight()/2;
-	}
-	
-	private static int centerX(int centerX, String s, FontMetrics fontMetrics) {
-		return centerX - fontMetrics.getTextLength(s)/2;
-	}
-	
-	private static int rightX(int rightX, String s, FontMetrics fontMetrics) {
-		return rightX - fontMetrics.getTextLength(s);
-	}
-	
-	public static void drawCenteredHeightString(Graphics g, String s, int x, int centerY) {
-		int fontSize = g.getFont().getSize();
-		FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
-		
-		int bottomY = centerY(centerY, fontMetrics);
-		g.drawString(s, x, bottomY);
-	}
-
-	public static void drawRightAlignedString(Graphics g, String s, int rightX, int y) {
-		int fontSize = g.getFont().getSize();
-		FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
-		
-		int leftX = rightX(rightX, s, fontMetrics);
-		
-		g.drawString(s, leftX, y);
 	}
 
 	// Draws a string with a shadow behind it the specified location

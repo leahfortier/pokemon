@@ -2,6 +2,7 @@ package gui.view;
 
 import battle.attack.Attack;
 import battle.attack.Move;
+import draw.Alignment;
 import gui.GameData;
 import gui.TileSet;
 import draw.button.Button;
@@ -273,7 +274,7 @@ class PCView extends View {
 		}
 		
 		FontMetrics.setFont(g, 16);
-		DrawUtils.drawCenteredWidthString(g, (pc.getBoxNum() + 1) + "/" + pc.getNumBoxes(), 215, 433);
+		Alignment.drawCenteredWidthString(g, (pc.getBoxNum() + 1) + "/" + pc.getNumBoxes(), 215, 433);
 
 		leftButton.drawArrow(g, Direction.LEFT);
 		rightButton.drawArrow(g, Direction.RIGHT);
@@ -323,7 +324,7 @@ class PCView extends View {
 			DrawUtils.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
 		}
 		else {
-			DrawUtils.drawRightAlignedString(g, "Lv" + selected.getLevel(), 740, 82);
+			Alignment.drawRightAlignedString(g, "Lv" + selected.getLevel(), 740, 82);
 			g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 541, 110);
 			
 			int index = 0;
@@ -338,17 +339,17 @@ class PCView extends View {
 			
 			// Total EXP
 			g.drawString("EXP:", 540, 135);
-			DrawUtils.drawRightAlignedString(g, selected.getTotalEXP() + "", 740, 135);
+			Alignment.drawRightAlignedString(g, selected.getTotalEXP() + "", 740, 135);
 			
 			// EXP to the next level
 			g.drawString("To Next Lv:", 540, 156);
-			DrawUtils.drawRightAlignedString(g, selected.expToNextLevel() + "", 740, 156);
+			Alignment.drawRightAlignedString(g, selected.expToNextLevel() + "", 740, 156);
 			
 			// Ability
 			g.drawString(selected.getAbility().getName(), 427, 179);
 			
 			// Held Item
-			DrawUtils.drawRightAlignedString(g, selected.getActualHeldItem().getName(), 740, 179);
+			Alignment.drawRightAlignedString(g, selected.getActualHeldItem().getName(), 740, 179);
 			
 			// Nature
 			g.drawString(selected.getNature().getName() + " Nature", 427, 198);
@@ -373,9 +374,9 @@ class PCView extends View {
 				movePanel.label(g, 16, attack.getName());
 			}
 			
-			DrawUtils.drawRightAlignedString(g, "Stat", 635, 340);
-			DrawUtils.drawRightAlignedString(g, "IV", 681, 340);
-			DrawUtils.drawRightAlignedString(g, "EV", 735, 340);
+			Alignment.drawRightAlignedString(g, "Stat", 635, 340);
+			Alignment.drawRightAlignedString(g, "IV", 681, 340);
+			Alignment.drawRightAlignedString(g, "EV", 735, 340);
 			
 			int[] stats = selected.getStats();
 			int[] ivs = selected.getIVs();
@@ -390,9 +391,9 @@ class PCView extends View {
 				FontMetrics.setFont(g, 14);
 				
 				// TODO: What's up with the + i/2 in the y????
-				DrawUtils.drawRightAlignedString(g, stats[i] + "", 635, 360 + i*18 + i/2);
-				DrawUtils.drawRightAlignedString(g, ivs[i] + "", 681, 360 + i*18 + i/2);
-				DrawUtils.drawRightAlignedString(g, evs[i] + "", 735, 360 + i*18 + i/2);
+				Alignment.drawRightAlignedString(g, stats[i] + "", 635, 360 + i*18 + i/2);
+				Alignment.drawRightAlignedString(g, ivs[i] + "", 681, 360 + i*18 + i/2);
+				Alignment.drawRightAlignedString(g, evs[i] + "", 735, 360 + i*18 + i/2);
 			}
 		}
 		

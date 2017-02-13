@@ -2,6 +2,7 @@ package gui.view.battle.handler;
 
 import battle.Battle;
 import battle.attack.Move;
+import draw.Alignment;
 import gui.TileSet;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
@@ -65,8 +66,8 @@ public class PokemonState implements VisualStateHandler {
 
         int movesPanelHeight = 193;
         movesPanel = new DrawPanel(
-                pokemonPanel.x + pokemonPanel.width - spacing - sidePanelWidth,
-                pokemonPanel.y + pokemonPanel.height - spacing - movesPanelHeight,
+                pokemonPanel.rightX() - spacing - sidePanelWidth,
+                pokemonPanel.bottomY() - spacing - movesPanelHeight,
                 sidePanelWidth,
                 movesPanelHeight)
                 .withFullTransparency()
@@ -96,8 +97,8 @@ public class PokemonState implements VisualStateHandler {
                 .withBlackOutline();
 
         expBar = new DrawPanel(
-                basicInformationPanel.x + basicInformationPanel.width - sidePanelWidth,
-                basicInformationPanel.y + basicInformationPanel.height - DrawUtils.OUTLINE_SIZE,
+                basicInformationPanel.rightX() - sidePanelWidth,
+                basicInformationPanel.bottomY() - DrawUtils.OUTLINE_SIZE,
                 sidePanelWidth,
                 barHeight)
                 .withBlackOutline();
@@ -236,10 +237,10 @@ public class PokemonState implements VisualStateHandler {
 
             // Experience
             g.drawString("EXP", 220, 288);
-            DrawUtils.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), 352, 288);
+            Alignment.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), 352, 288);
 
             g.drawString("To Next Lv", 220, 307);
-            DrawUtils.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), 352, 307);
+            Alignment.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), 352, 307);
 
             // Experience Bar
             float expRatio = selectedPkm.expRatio();
@@ -258,7 +259,7 @@ public class PokemonState implements VisualStateHandler {
 
                 g.setColor(Color.BLACK);
                 String valStr = i == Stat.HP.index() ? selectedPkm.getHP() + "/" + statsVal[i] : "" + statsVal[i];
-                DrawUtils.drawRightAlignedString(g, valStr, 188, 21*i + 372);
+                Alignment.drawRightAlignedString(g, valStr, 188, 21*i + 372);
             }
 
             // Draw Move List
@@ -281,7 +282,7 @@ public class PokemonState implements VisualStateHandler {
                 g.drawString(move.getAttack().getName(), 7, 17);
 
                 // Draw PP amount
-                DrawUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 118, 33);
+                Alignment.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 118, 33);
 
                 BufferedImage categoryImage = move.getAttack().getCategory().getImage();
                 g.drawImage(categoryImage, 7, 21, null);

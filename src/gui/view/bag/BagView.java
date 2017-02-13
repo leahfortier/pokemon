@@ -3,6 +3,7 @@ package gui.view.bag;
 import battle.attack.Attack;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
+import draw.Alignment;
 import gui.GameData;
 import gui.TileSet;
 import draw.button.Button;
@@ -104,7 +105,7 @@ public class BagView extends View {
 				.withBlackOutline();
 
 		selectedPanel = new DrawPanel(
-				pokemonPanel.x + pokemonPanel.width + spacing,
+				pokemonPanel.rightX() + spacing,
 				bagPanel.y + spacing,
 				halfPanelWidth,
 				selectedHeight)
@@ -113,7 +114,7 @@ public class BagView extends View {
 
 		Button returnButton = new Button(
 				selectedPanel.x,
-				bagPanel.y + bagPanel.height - spacing - buttonHeight,
+				bagPanel.bottomY() - spacing - buttonHeight,
 				halfPanelWidth,
 				buttonHeight,
 				ButtonHoverAction.BOX,
@@ -121,7 +122,7 @@ public class BagView extends View {
 
 		itemsPanel = new DrawPanel(
 				selectedPanel.x,
-				selectedPanel.y + selectedPanel.height + buttonHeight + spacing,
+				selectedPanel.bottomY() + buttonHeight + spacing,
 				halfPanelWidth,
 				pokemonPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing)
 				.withFullTransparency()
@@ -189,7 +190,7 @@ public class BagView extends View {
 		);
 
 		Button rightArrow = new Button(
-				itemsPanel.x + itemsPanel.width - (leftArrow.x - itemsPanel.x) - leftArrow.width,
+				itemsPanel.rightX() - (leftArrow.x - itemsPanel.x) - leftArrow.width,
 				leftArrow.y,
 				leftArrow.width,
 				leftArrow.height,
@@ -341,7 +342,7 @@ public class BagView extends View {
 			
 			if (selectedItemValue.hasQuantity()) {
 				String quantityString = "x" + bag.getQuantity(selectedItem);
-				DrawUtils.drawRightAlignedString(g, quantityString, selectedPanel.x + selectedPanel.width - 2*spacing, startY);
+				Alignment.drawRightAlignedString(g, quantityString, selectedPanel.rightX() - 2*spacing, startY);
 			}
 			
 			FontMetrics.setFont(g, 14);
@@ -378,7 +379,7 @@ public class BagView extends View {
 				g.drawString(item.getName(), 29, 18);
 				
 				if (itemValue.hasQuantity()) {
-					DrawUtils.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
+					Alignment.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
 				}
 				
 				g.translate(-itemButton.x, -itemButton.y);
@@ -387,7 +388,7 @@ public class BagView extends View {
 		
 		// Draw page numbers
 		FontMetrics.setFont(g, 16);
-		DrawUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(list.size()), itemsPanel.centerX(), buttons[RIGHT_ARROW].centerY());
+		Alignment.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(list.size()), itemsPanel.centerX(), buttons[RIGHT_ARROW].centerY());
 		
 		// Left and Right arrows
 		buttons[LEFT_ARROW].drawArrow(g, Direction.LEFT);
@@ -418,7 +419,7 @@ public class BagView extends View {
 				
 				g.setColor(Color.BLACK);
 				FontMetrics.setFont(g, 14);
-				DrawUtils.drawCenteredHeightString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 166, movePanel.centerY());
+				Alignment.drawCenteredHeightString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 166, movePanel.centerY());
 
 				g.setColor(Color.BLACK);
 				FontMetrics.setFont(g, 20);
@@ -457,7 +458,7 @@ public class BagView extends View {
 					g.drawString("Lv" + p.getLevel(), 153, 22);
 					
 					// Status condition
-					DrawUtils.drawRightAlignedString(g, p.getStatus().getType().getName(), 293, 22);
+					Alignment.drawRightAlignedString(g, p.getStatus().getType().getName(), 293, 22);
 					
 					// Draw HP Box
 					g.fillRect(50, 26, 244, 11);
@@ -470,7 +471,7 @@ public class BagView extends View {
 					FontMetrics.setFont(g, 12);
 					
 					g.drawString(p.getActualHeldItem().getName(), 50, 47);
-					DrawUtils.drawRightAlignedString(g, p.getHP() + "/" + p.getMaxHP(), 293, 47);
+					Alignment.drawRightAlignedString(g, p.getHP() + "/" + p.getMaxHP(), 293, 47);
 					
 					if (p.hasStatus(StatusCondition.FAINTED)) {
 						// TODO: Look if this color appears in multiple place and see if it should be a constant

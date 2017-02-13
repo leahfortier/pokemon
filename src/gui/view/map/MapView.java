@@ -1,6 +1,7 @@
 package gui.view.map;
 
 import battle.Battle;
+import draw.Alignment;
 import gui.GameData;
 import gui.TileSet;
 import gui.view.View;
@@ -194,7 +195,7 @@ public class MapView extends View {
 
 		g.setColor(Color.BLACK);
 		FontMetrics.setFont(g, fontSize);
-		DrawUtils.drawCenteredString(g, currentArea.getAreaName(), 0, yValue, totalWidth, totalHeight);
+		Alignment.drawCenteredString(g, currentArea.getAreaName(), 0, yValue, totalWidth, totalHeight);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package gui.view;
 
+import draw.Alignment;
 import gui.GameData;
 import gui.TileSet;
 import draw.button.panel.BasicPanels;
@@ -145,8 +146,8 @@ class EvolutionView extends View {
 					FontMetrics.setFont(g, 16);
 					g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
 
-					DrawUtils.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
-					DrawUtils.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
+					Alignment.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
+					Alignment.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
 				}
 			}
 		}

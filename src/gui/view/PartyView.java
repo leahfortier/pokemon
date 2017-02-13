@@ -2,6 +2,7 @@ package gui.view;
 
 import battle.attack.Attack;
 import battle.attack.Move;
+import draw.Alignment;
 import gui.GameData;
 import gui.TileSet;
 import draw.button.Button;
@@ -84,7 +85,7 @@ class PartyView extends View {
 				.withBlackOutline();
 
 		basicInformationPanel = new DrawPanel(
-				imagePanel.x + imagePanel.width + spacing,
+				imagePanel.rightX() + spacing,
 				imagePanel.y,
 				pokemonPanel.width - 3*spacing - imagePanel.width,
 				imagePanel.height)
@@ -94,8 +95,8 @@ class PartyView extends View {
 		int barHeight = 15;
 		int expBarWidth = basicInformationPanel.width/3;
 		expBar = new DrawPanel(
-				basicInformationPanel.x + basicInformationPanel.width - expBarWidth,
-				basicInformationPanel.y + basicInformationPanel.height - DrawUtils.OUTLINE_SIZE,
+				basicInformationPanel.rightX() - expBarWidth,
+				basicInformationPanel.bottomY() - DrawUtils.OUTLINE_SIZE,
 				expBarWidth,
 				barHeight)
 				.withBlackOutline();
@@ -128,10 +129,10 @@ class PartyView extends View {
 				.withBlackOutline();
 
 		movesPanel = new DrawPanel(
-				abilityPanel.x + abilityPanel.width + spacing,
+				abilityPanel.rightX() + spacing,
 				abilityPanel.y,
 				halfPanelWidth,
-				statsPanel.y + statsPanel.height - abilityPanel.y)
+				statsPanel.bottomY() - abilityPanel.y)
 				.withFullTransparency()
 				.withBlackOutline();
 
@@ -279,7 +280,7 @@ class PartyView extends View {
 			int secondLineY = topLineY + inset + FontMetrics.getTextHeight(g);
 			int thirdLineY = secondLineY + inset + FontMetrics.getTextHeight(g);
 			int fourthLineY = thirdLineY + inset + FontMetrics.getTextHeight(g);
-			int rightAlignedX = basicInformationPanel.x + basicInformationPanel.width - inset;
+			int rightAlignedX = basicInformationPanel.rightX() - inset;
 
 			// Type Tiles
 			DrawUtils.drawTypeTiles(g, type, rightAlignedX, topLineY);
@@ -289,14 +290,14 @@ class PartyView extends View {
 			
 			// Total EXP
 			g.drawString("EXP:", levelX, secondLineY);
-			DrawUtils.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), rightAlignedX, secondLineY);
+			Alignment.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), rightAlignedX, secondLineY);
 			
 			// Characteristic
 			g.drawString(selectedPkm.getCharacteristic(), nameX, thirdLineY);
 			
 			// EXP To Next Level
 			g.drawString("To Next Lv:", levelX, thirdLineY);
-			DrawUtils.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), rightAlignedX, thirdLineY);
+			Alignment.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), rightAlignedX, thirdLineY);
 			
 			// Held Item
 			g.drawString(selectedPkm.getActualHeldItem().getName(), nameX, fourthLineY);
@@ -343,9 +344,9 @@ class PartyView extends View {
 				}
 
 				int drawY = firstRowY + (i + 1)*spacing;
-				DrawUtils.drawRightAlignedString(g, statString, 285, drawY);
-				DrawUtils.drawRightAlignedString(g, "" + ivs[i], 327, drawY);
-				DrawUtils.drawRightAlignedString(g, "" + evs[i], 371, drawY);
+				Alignment.drawRightAlignedString(g, statString, 285, drawY);
+				Alignment.drawRightAlignedString(g, "" + ivs[i], 327, drawY);
+				Alignment.drawRightAlignedString(g, "" + evs[i], 371, drawY);
 			}
 
 			// HP Bar
@@ -387,16 +388,16 @@ class PartyView extends View {
 					
 					// PP
 					g.drawString("PP:", middleX, firstY);
-					DrawUtils.drawRightAlignedString(g, move.getPP() + "/" + move.getMaxPP(), rightAlignedMiddleX, firstY);
+					Alignment.drawRightAlignedString(g, move.getPP() + "/" + move.getMaxPP(), rightAlignedMiddleX, firstY);
 					
 					// Accuracy
 					FontMetrics.setFont(g, 12);
 					g.drawString("Accuracy:", moveInset, secondY);
-					DrawUtils.drawRightAlignedString(g, attack.getAccuracyString(), moveInset + 93, secondY);
+					Alignment.drawRightAlignedString(g, attack.getAccuracyString(), moveInset + 93, secondY);
 					
 					// Power
 					g.drawString("Power:", middleX, secondY);
-					DrawUtils.drawRightAlignedString(g, attack.getPowerString(), rightAlignedMiddleX, secondY);
+					Alignment.drawRightAlignedString(g, attack.getPowerString(), rightAlignedMiddleX, secondY);
 
 					BufferedImage typeImage = move.getAttack().getActualType().getImage();
 					int imageX = movePanel.width - moveInset - typeImage.getWidth();

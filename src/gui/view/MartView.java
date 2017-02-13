@@ -1,5 +1,7 @@
 package gui.view;
 
+import draw.Alignment;
+import draw.PolygonUtils;
 import gui.GameData;
 import gui.TileSet;
 import draw.button.Button;
@@ -140,7 +142,7 @@ class MartView extends View {
 				new int[] { AMOUNT_RIGHT_ARROW, RETURN, BUY, 0 });
 
 		amountRightButton = new Button(
-				selectedPanel.x + selectedPanel.width - amountLeftButton.width,
+				selectedPanel.rightX() - amountLeftButton.width,
 				amountLeftButton.y,
 				amountLeftButton.width,
 				amountLeftButton.height,
@@ -304,11 +306,11 @@ class MartView extends View {
 
 			amountLeftButton.fillTransparent(g);
 			amountLeftButton.blackOutline(g);
-			DrawUtils.drawCenteredArrow(g, amountLeftButton.centerX(), amountLeftButton.centerY(), 35, 20, Direction.LEFT);
+			PolygonUtils.drawCenteredArrow(g, amountLeftButton.centerX(), amountLeftButton.centerY(), 35, 20, Direction.LEFT);
 
 			amountRightButton.fillTransparent(g);
 			amountRightButton.blackOutline(g);
-			DrawUtils.drawCenteredArrow(g, amountRightButton.centerX(), amountRightButton.centerY(), 35, 20, Direction.RIGHT);
+			PolygonUtils.drawCenteredArrow(g, amountRightButton.centerX(), amountRightButton.centerY(), 35, 20, Direction.RIGHT);
 		}
 		
 		FontMetrics.setFont(g, 12);
@@ -341,7 +343,7 @@ class MartView extends View {
 		
 		// Draw page numbers
 		FontMetrics.setFont(g, 16);
-		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(), 573, 466);
+		Alignment.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(), 573, 466);
 		
 		// Left and Right arrows
 		shopLeftButton.drawArrow(g, Direction.LEFT);
