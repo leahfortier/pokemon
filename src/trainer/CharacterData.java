@@ -7,6 +7,7 @@ import gui.view.ViewMode;
 import item.Item;
 import item.ItemNamesies;
 import item.use.BallItem;
+import map.AreaData;
 import map.Direction;
 import map.entity.movable.PlayerEntity;
 import map.triggers.Trigger;
@@ -26,13 +27,16 @@ import util.RandomUtils;
 import util.StringUtils;
 
 import java.io.Serializable;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CharacterData extends Trainer implements Serializable {
 	private static final long serialVersionUID = 4283479774388652604L;
@@ -50,6 +54,7 @@ public class CharacterData extends Trainer implements Serializable {
 	private String mapName;
 	private String mapEntranceName;
 	private String areaName;
+	private Set<Entry<String, String>> flyLocations;
 
 	private transient PlayerEntity entity;
 
@@ -98,6 +103,7 @@ public class CharacterData extends Trainer implements Serializable {
 		direction = Direction.DOWN;
 		areaName = StringUtils.empty();
 		mapReset = false;
+		flyLocations = new HashSet<>();
 	}
 
 	// Initializes the character with the current game -- used when recovering a save file as well as the generic constructor
@@ -168,8 +174,16 @@ public class CharacterData extends Trainer implements Serializable {
 		mapEntranceName = mapEntrance;
 	}
 
-	public void setAreaName(String areaName) {
-		this.areaName = areaName;
+	public void setArea(String mapName, AreaData area) {
+		this.areaName = area.getAreaName();
+
+		if (area.isFlyLocation()) {
+			this.flyLocations.add(new SimpleEntry<>(mapName, this.areaName));
+		}
+	}
+
+	public List<Entry<String, String>> getFlyLocations() {
+		return this.flyLocations.stream().collect(Collectors.toList());
 	}
 
 	public ActivePokemon getEvolvingPokemon() {

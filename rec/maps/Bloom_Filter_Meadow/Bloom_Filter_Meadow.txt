@@ -2,6 +2,7 @@
   "areas": [
     {
       "displayName": "Bloom Filter Meadow",
+      "flyLocation": "FlyLocation",
       "terrain": "GRASS",
       "weather": "SUN",
       "music": "BLOOM_FILTER_MEADOW"
@@ -43,6 +44,16 @@
         "y": 20
       },
       "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingTop_01"
+    },
+    {
+      "exitName": "FlyLocation",
+      "direction": "WAIT",
+      "deathPortal": false,
+      "location": {
+        "x": 31,
+        "y": 17
+      },
+      "triggerName": "Bloom_Filter_Meadow_MapExit_FlyLocation_01"
     },
     {
       "exitName": "WestTransitionBuildingBottom",

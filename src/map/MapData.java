@@ -157,6 +157,17 @@ public class MapData {
 		return getPassValue(location).isPassable(direction);
 	}
 
+	public AreaData getArea(String areaName) {
+		for (AreaData data : areaData) {
+			if (data.getAreaName().equals(areaName)) {
+				return data;
+			}
+		}
+
+		Global.error("No area found with area name " + areaName + " for map " + this.name);
+		return AreaData.VOID;
+	}
+
 	public AreaData getArea(Point location) {
 		if (areaData.length == 1) {
 			return areaData[0];

@@ -219,7 +219,7 @@ public class MapView extends View {
 			areaDisplayTime = AREA_NAME_ANIMATION_LIFESPAN;
 		}
 
-		player.setAreaName(areaName);
+		player.setArea(currentMapName, area);
 		currentArea = area;
 
 		// Queue to play new area's music.

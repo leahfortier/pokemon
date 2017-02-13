@@ -2,6 +2,7 @@
   "areas": [
     {
       "displayName": "RSA Town",
+      "flyLocation": "PokeCenter",
       "terrain": "GRASS",
       "music": "RSA_TOWN"
     }

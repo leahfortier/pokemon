@@ -3,6 +3,7 @@
     {
       "color": "ffff220b",
       "displayName": "Depth First Search Town",
+      "flyLocation": "MaplesLab",
       "terrain": "GRASS",
       "music": "DFS_TOWN"
     },

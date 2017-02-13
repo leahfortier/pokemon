@@ -10,6 +10,7 @@ import util.StringUtils;
 public class AreaMatcher {
     private String color;
     private String displayName;
+    private String flyLocation;
     private TerrainType terrain;
     private WeatherState weather;
     private SoundTitle music;
@@ -47,7 +48,15 @@ public class AreaMatcher {
             return areaData;
         }
 
-        areaData = new AreaData(this.displayName, this.getColor(), this.terrain, this.getWeather(), this.music, this.getMusicConditions());
+        areaData = new AreaData(
+                this.displayName,
+                this.getColor(),
+                this.flyLocation,
+                this.terrain,
+                this.getWeather(),
+                this.music,
+                this.getMusicConditions()
+        );
         return areaData;
     }
 

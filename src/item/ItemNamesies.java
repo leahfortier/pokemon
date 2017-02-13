@@ -182,6 +182,7 @@ import item.Item.Iron;
 import item.Item.IronBall;
 import item.Item.IronPlate;
 import item.Item.JabocaBerry;
+import item.Item.Jetpack;
 import item.Item.KasibBerry;
 import item.Item.KebiaBerry;
 import item.Item.KeeBerry;
@@ -440,6 +441,7 @@ public enum ItemNamesies {
     // EVERYTHING BELOW IS GENERATED ###
 	NO_ITEM("No Item", NoItem::new),
 	SYRUP("Syrup", Syrup::new),
+	JETPACK("Jetpack", Jetpack::new),
 	BICYCLE("Bicycle", Bicycle::new),
 	SURFBOARD("Surfboard", Surfboard::new),
 	FISHING_ROD("Fishing Rod", FishingRod::new),

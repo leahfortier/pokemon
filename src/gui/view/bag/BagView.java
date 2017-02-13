@@ -253,12 +253,8 @@ public class BagView extends View {
 			}
 		}
 
-		// TODO: Maybe there should be a method that returns the iterator set to the appropriate page
 		Set<ItemNamesies> list = player.getBag().getCategory(CATEGORIES[selectedTab]);
-		Iterator<ItemNamesies> iter = list.iterator();
-		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
-			iter.next();
-		}
+		Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(list, pageNum, ITEMS_PER_PAGE);
 
 		for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
 			ItemNamesies item = iter.next();
@@ -364,11 +360,7 @@ public class BagView extends View {
 		// Draw each items in category
 		itemsPanel.drawBackground(g);
 		Set<ItemNamesies> list = bag.getCategory(CATEGORIES[selectedTab]);
-		Iterator<ItemNamesies> iter = list.iterator();
-		
-		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
-			iter.next();
-		}
+		Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(list, pageNum, ITEMS_PER_PAGE);
 		
 		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
 			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
@@ -405,7 +397,7 @@ public class BagView extends View {
 		pokemonPanel.drawBackground(g);
 		if (state == BagState.MOVE_SELECT) {
 			List<Move> moveList = selectedPokemon.getActualMoves();
-			
+
 			for (int i = 0; i < moveList.size(); i++) {
 				Move move = moveList.get(i);
 				Attack attack = move.getAttack();

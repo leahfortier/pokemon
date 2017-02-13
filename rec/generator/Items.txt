@@ -41,6 +41,16 @@ Syrup:
 		return false;
 		###
 *
+Jetpack:
+	Int: PlayerUseItem
+	Cat: Key_Item
+	Desc: Jetpacky. Fly.
+	PlayerUse:
+		// TODO: Shouldn't be able to jetpack inside a building and such
+		Messages.add(new MessageUpdate().withViewChange(ViewMode.FLY_VIEW));
+		return true;
+		###
+*
 Bicycle:
 	Int: PlayerUseItem
 	Cat: Key_Item

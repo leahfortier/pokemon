@@ -2,6 +2,7 @@
   "areas": [
     {
       "displayName": "Tomasulo Town",
+      "flyLocation": "PokeCenter",
       "terrain": "GRASS",
       "music": "TOM_TOWN"
     }
