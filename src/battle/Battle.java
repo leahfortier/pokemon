@@ -507,7 +507,7 @@ public class Battle {
 		Collections.addAll(list, additionalItems);
 		
 		list.addAll(p.getAllEffects(this));
-		list.addAll(getEffects(p.isPlayer()));
+		list.addAll(getEffects(p));
 		list.addAll(getEffects());
 		list.add(weather);
 		

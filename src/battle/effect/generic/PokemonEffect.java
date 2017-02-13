@@ -133,6 +133,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			releaser.getEffects().remove(this);
 			b.getEffects(releaser).remove(this);
 		}
+
+		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+			// Need to override this to not sap health when applying damage
+		}
 	}
 
 	static class BadPoison extends PokemonEffect implements EndTurnEffect {

@@ -20,7 +20,7 @@ Failure:
 ***
 
 LeechSeed:
-	Int: EndTurnEffect, RapidSpinRelease, PassableEffect, SapHealthEffect
+	Int: EndTurnEffect, RapidSpinRelease, PassableEffect, SapHealthEffect, Hidden-ApplyDamageEffect
 	FailType: Grass
 	FailMessage: 
 		if (victim.isType(b, Type.GRASS)) {
@@ -40,6 +40,9 @@ LeechSeed:
 		this.sapHealth(b, b.getOtherPokemon(victim), victim, victim.reduceHealthFraction(b, 1/8.0), false);
 		###
 	RapidSpin: releaser.getName() + " was released from leech seed!"
+	OnApplyDamage:
+		// Need to override this to not sap health when applying damage
+		###
 *
 BadPoison:
 	Field: 

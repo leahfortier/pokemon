@@ -6,7 +6,9 @@ import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 
-public interface MessageGetter {
+import java.io.Serializable;
+
+public interface MessageGetter extends Serializable {
     String getGenericMessage(ActivePokemon p);
     String getSourceMessage(ActivePokemon p, String sourceName);
 
