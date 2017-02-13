@@ -36,7 +36,7 @@ public interface AllPPHealer extends PokemonUseItem, BattleUseItem, HoldItem {
         return use(p, p.getMoves(b));
     }
 
-    default boolean use(Trainer t, Battle b, ActivePokemon p, Move m) {
+    default boolean use(Battle b, ActivePokemon p, Move m) {
         return b == null ? use(p) : use(p, b);
     }
 }

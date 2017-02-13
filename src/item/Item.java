@@ -69,7 +69,7 @@ import item.use.BattleUseItem;
 import item.use.MoveUseItem;
 import item.use.PokemonUseItem;
 import item.use.TechnicalMachine;
-import item.use.TrainerUseItem;
+import item.use.PlayerUseItem;
 import item.use.UseItem;
 import main.Game;
 import map.TerrainType;
@@ -182,53 +182,53 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class Syrup extends Item implements TrainerUseItem {
+	static class Syrup extends Item implements PlayerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Syrup() {
 			super(ItemNamesies.SYRUP, "A mysterious bottle of syrup. Maybe it will be useful some day.", BagCategory.KEY_ITEM, 1);
 		}
 
-		public boolean use(Trainer t) {
+		public boolean use() {
 			return false;
 		}
 	}
 
-	static class Bicycle extends Item implements TrainerUseItem {
+	static class Bicycle extends Item implements PlayerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Bicycle() {
 			super(ItemNamesies.BICYCLE, "A folding Bicycle that enables much faster movement than the Running Shoes.", BagCategory.KEY_ITEM, 2);
 		}
 
-		public boolean use(Trainer t) {
+		public boolean use() {
 			// TODO: if (Can ride bike) Set the bike as a 'currentlyUsing' item
 			// May need to make this take in info on the route
 			return false;
 		}
 	}
 
-	static class Surfboard extends Item implements TrainerUseItem {
+	static class Surfboard extends Item implements PlayerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		Surfboard() {
 			super(ItemNamesies.SURFBOARD, "A fancy shmancy surfboard that lets you be RADICAL DUDE!", BagCategory.KEY_ITEM, 3);
 		}
 
-		public boolean use(Trainer t) {
+		public boolean use() {
 			// TODO: DOESN'T DO SHIT
 			return false;
 		}
 	}
 
-	static class FishingRod extends Item implements TrainerUseItem {
+	static class FishingRod extends Item implements PlayerUseItem {
 		private static final long serialVersionUID = 1L;
 
 		FishingRod() {
 			super(ItemNamesies.FISHING_ROD, "A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.", BagCategory.KEY_ITEM, 4);
 		}
 
-		public boolean use(Trainer t) {
+		public boolean use() {
 			// TODO: if (spot in front of player is a fishing spot) Set as 'currentlyUsing'
 			// May need to make this take in info on the route
 			return false;
@@ -3414,15 +3414,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class SacredAsh extends Item implements TrainerUseItem, BattleUseItem, HoldItem {
+	static class SacredAsh extends Item implements PlayerUseItem, BattleUseItem, HoldItem {
 		private static final long serialVersionUID = 1L;
-
-		SacredAsh() {
-			super(ItemNamesies.SACRED_ASH, "It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.", BagCategory.MEDICINE, 191);
-			super.price = 4000;
-			super.battleBagCategories.add(BattleBagCategory.STATUS);
-		}
-
 		public boolean use(Trainer t) {
 			boolean healed = false;
 			for (ActivePokemon p : t.getTeam()) {
@@ -3440,12 +3433,22 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return healed;
 		}
 
+		SacredAsh() {
+			super(ItemNamesies.SACRED_ASH, "It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.", BagCategory.MEDICINE, 191);
+			super.price = 4000;
+			super.battleBagCategories.add(BattleBagCategory.STATUS);
+		}
+
+		public boolean use() {
+			return this.use(Game.getPlayer());
+		}
+
 		public boolean use(ActivePokemon p, Battle b) {
 			return use((Trainer)b.getTrainer(p));
 		}
 
-		public boolean use(Trainer t, Battle b, ActivePokemon p, Move m) {
-			return b == null ? use(t) : use(p, b);
+		public boolean use(Battle b, ActivePokemon p, Move m) {
+			return b == null ? use() : use(p, b);
 		}
 	}
 

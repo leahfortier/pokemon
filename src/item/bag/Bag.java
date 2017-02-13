@@ -7,7 +7,7 @@ import item.ItemNamesies;
 import item.use.BallItem;
 import item.use.MoveUseItem;
 import item.use.PokemonUseItem;
-import item.use.TrainerUseItem;
+import item.use.PlayerUseItem;
 import item.use.UseItem;
 import main.Game;
 import main.Global;
@@ -149,7 +149,7 @@ public class Bag implements Serializable {
 	
 	public boolean useItem(ItemNamesies item) {
 		Item useItem = item.getItem();
-		if (useItem instanceof TrainerUseItem && ((TrainerUseItem) useItem).use(Game.getPlayer())) {
+		if (useItem instanceof PlayerUseItem && ((PlayerUseItem) useItem).use()) {
 			removeItem(item);
 			return true;
 		}
@@ -177,7 +177,7 @@ public class Bag implements Serializable {
 
 		// Try to use the item
 		UseItem useItem = (UseItem) itemValue;
-		final boolean success = useItem.use(null, null, p, move);
+		final boolean success = useItem.use(null, p, move);
 
 		// :(
 		if (!success) {
@@ -208,7 +208,7 @@ public class Bag implements Serializable {
 			used = player.catchPokemon(battle, (BallItem) useItem);
 		}
 		else if (useItem.isUsable()) {
-			used = ((UseItem) useItem).use(Game.getPlayer(), battle, activePokemon, null);
+			used = ((UseItem) useItem).use(battle, activePokemon, null);
 			if (used && player.front() == activePokemon) {
 				Messages.add(new MessageUpdate().updatePokemon(battle, activePokemon));
 			}

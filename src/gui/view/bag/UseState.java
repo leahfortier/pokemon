@@ -2,7 +2,7 @@ package gui.view.bag;
 
 import gui.button.Button;
 import item.use.MoveUseItem;
-import item.use.TrainerUseItem;
+import item.use.PlayerUseItem;
 import main.Game;
 import pokemon.ActivePokemon;
 
@@ -98,7 +98,7 @@ enum UseState {
             otherState.clicked = false;
         }
 
-        if (this == UseState.USE && view.selectedItem.getItem() instanceof TrainerUseItem) {
+        if (this == UseState.USE && view.selectedItem.getItem() instanceof PlayerUseItem) {
             Game.getPlayer().getBag().useItem(view.selectedItem);
         }
 

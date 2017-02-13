@@ -8,7 +8,7 @@ import trainer.Trainer;
 public interface MoveUseItem extends UseItem {
 	boolean use(ActivePokemon p, Move m);
 
-	default boolean use(Trainer t, Battle b, ActivePokemon p, Move m) {
+	default boolean use(Battle b, ActivePokemon p, Move m) {
 		return this.use(p, m);
 	}
 }

@@ -34,37 +34,37 @@ No Item:
 *
 # KEY_ITEMs
 Syrup:
-	Int: TrainerUseItem
+	Int: PlayerUseItem
 	Cat: Key_Item
 	Desc: A mysterious bottle of syrup. Maybe it will be useful some day.
-	TrainerUse:
+	PlayerUse:
 		return false;
 		###
 *
 Bicycle:
-	Int: TrainerUseItem
+	Int: PlayerUseItem
 	Cat: Key_Item
 	Desc: A folding Bicycle that enables much faster movement than the Running Shoes.
-	TrainerUse:
+	PlayerUse:
 		// TODO: if (Can ride bike) Set the bike as a 'currentlyUsing' item
 		// May need to make this take in info on the route
 		return false;
 		###
 *
 Surfboard:
-	Int: TrainerUseItem
+	Int: PlayerUseItem
 	Cat: Key_Item
 	Desc: A fancy shmancy surfboard that lets you be RADICAL DUDE!
-	TrainerUse:
+	PlayerUse:
 		// TODO: DOESN'T DO SHIT
 		return false;
 		###
 *
 Fishing Rod:
-	Int: TrainerUseItem
+	Int: PlayerUseItem
 	Cat: Key_Item
 	Desc: A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.
-	TrainerUse:
+	PlayerUse:
 		// TODO: if (spot in front of player is a fishing spot) Set as 'currentlyUsing'
 		// May need to make this take in info on the route
 		return false;
@@ -1459,30 +1459,35 @@ Revival Herb:
 	Revive: 1 fully
 *
 Sacred Ash:
-	Int: TrainerUseItem, BattleUseItem, HoldItem
+	Int: PlayerUseItem, BattleUseItem, HoldItem
 	Cat: Medicine
 	BattleCat: Status
 	Desc: It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.
 	Price: 4000
-	TrainerUse:
-		boolean healed = false;
-		for (ActivePokemon p : t.getTeam()) {
-			if (p.isActuallyDead()) {
-				healed = true;
-				p.removeStatus();
-				p.healHealthFraction(1);
+	Field:
+		public boolean use(Trainer t) {
+			boolean healed = false;
+			for (ActivePokemon p : t.getTeam()) {
+				if (p.isActuallyDead()) {
+					healed = true;
+					p.removeStatus();
+					p.healHealthFraction(1);
+				}
 			}
+			
+			if (healed) {
+				Messages.add(new MessageUpdate("All fainted Pok\u00e9mon were fully revived!"));
+			}
+			
+			return healed;
 		}
-		
-		if (healed) {
-			Messages.add(new MessageUpdate("All fainted Pok\u00e9mon were fully revived!"));
-		}
-		
-		return healed;
+		###
+	PlayerUse:
+		return this.use(Game.getPlayer());
 		###
 	BattleUse: return use((Trainer)b.getTrainer(p));
 	FullItemUse:
-		return b == null ? use(t) : use(p, b);
+		return b == null ? use() : use(p, b);
 		###
 *
 Dire Hit:

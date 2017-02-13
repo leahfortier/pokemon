@@ -1286,13 +1286,13 @@ HoldItem:
 ***
 UseItem:
 	FullItemUse:
-		Header: boolean use(Trainer t, Battle b, ActivePokemon p, Move m)
+		Header: boolean use(Battle b, ActivePokemon p, Move m)
 		Optional: True
 	*
 ***
-TrainerUseItem:
-	TrainerUse:
-		Header: boolean use(Trainer t)
+PlayerUseItem:
+	PlayerUse:
+		Header: boolean use()
 		AddInterface: Hidden-UseItem
 	*
 ***
