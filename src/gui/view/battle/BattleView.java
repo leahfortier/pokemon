@@ -2,9 +2,9 @@ package gui.view.battle;
 
 import battle.Battle;
 import battle.attack.Move;
-import gui.button.Button;
-import gui.panel.BasicPanels;
-import gui.panel.DrawPanel;
+import draw.button.Button;
+import draw.button.panel.BasicPanels;
+import draw.button.panel.DrawPanel;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
@@ -16,7 +16,7 @@ import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import pokemon.ActivePokemon;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.StringUtils;
 

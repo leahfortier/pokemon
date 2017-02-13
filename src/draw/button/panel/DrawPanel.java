@@ -1,10 +1,10 @@
-package gui.panel;
+package draw.button.panel;
 
-import gui.button.Button;
-import gui.button.ButtonHoverAction;
+import draw.button.Button;
+import draw.button.ButtonHoverAction;
 import main.Global;
 import map.Direction;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.Point;
@@ -131,7 +131,7 @@ public class DrawPanel {
         g.fillRect(x, y, width, height);
 
         // Don't need to draw a polygon that is the same color
-        if (secondBackgroundColor == backgroundColor) {
+        if (backgroundColor.equals(secondBackgroundColor)) {
             return;
         }
 

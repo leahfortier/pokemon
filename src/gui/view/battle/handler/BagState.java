@@ -2,9 +2,9 @@ package gui.view.battle.handler;
 
 import battle.Battle;
 import gui.TileSet;
-import gui.button.Button;
-import gui.button.ButtonHoverAction;
-import gui.panel.DrawPanel;
+import draw.button.Button;
+import draw.button.ButtonHoverAction;
+import draw.button.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import item.ItemNamesies;
@@ -15,7 +15,7 @@ import main.Game;
 import map.Direction;
 import trainer.CharacterData;
 import trainer.Trainer.Action;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 
 import java.awt.Color;

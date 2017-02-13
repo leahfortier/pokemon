@@ -1,9 +1,9 @@
 package gui.view;
 
 import gui.TileSet;
-import gui.button.Button;
-import gui.panel.BasicPanels;
-import gui.panel.DrawPanel;
+import draw.button.Button;
+import draw.button.panel.BasicPanels;
+import draw.button.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -13,7 +13,7 @@ import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import trainer.Trainer;
 import type.Type;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.Point;
 import util.PokeString;
 import util.StringUtils;

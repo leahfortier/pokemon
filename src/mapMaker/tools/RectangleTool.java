@@ -2,7 +2,7 @@ package mapMaker.tools;
 
 import mapMaker.EditType;
 import mapMaker.MapMaker;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.Point;
 
 import java.awt.Graphics;

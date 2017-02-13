@@ -1,13 +1,13 @@
 package gui.view.battle.handler;
 
 import battle.attack.Move;
-import gui.button.Button;
+import draw.button.Button;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.Point;
 import util.StringUtils;

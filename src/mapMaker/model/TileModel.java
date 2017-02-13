@@ -2,7 +2,7 @@ package mapMaker.model;
 
 import main.Global;
 import mapMaker.MapMaker;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FileIO;
 import util.FileName;
 import util.Folder;

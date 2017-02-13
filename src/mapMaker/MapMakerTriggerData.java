@@ -23,7 +23,7 @@ import pattern.map.MapTransitionMatcher;
 import pattern.map.MiscEntityMatcher;
 import pattern.map.NPCMatcher;
 import pattern.map.WildBattleMatcher;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FileIO;
 import util.JsonUtils;
 import util.Point;

@@ -22,7 +22,7 @@ import message.Messages;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.Point;
 import util.StringUtils;

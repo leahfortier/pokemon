@@ -1,10 +1,10 @@
 package gui.view.mainmenu;
 
-import gui.button.Button;
+import draw.button.Button;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 import main.Global;
 import sound.SoundTitle;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 
 import java.awt.Color;

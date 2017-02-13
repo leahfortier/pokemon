@@ -2,7 +2,7 @@ package mapMaker.model;
 
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
-import util.DrawUtils;
+import draw.DrawUtils;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;

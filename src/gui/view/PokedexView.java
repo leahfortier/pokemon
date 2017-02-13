@@ -2,10 +2,10 @@ package gui.view;
 
 import gui.GameData;
 import gui.TileSet;
-import gui.button.Button;
-import gui.button.ButtonHoverAction;
-import gui.panel.BasicPanels;
-import gui.panel.DrawPanel;
+import draw.button.Button;
+import draw.button.ButtonHoverAction;
+import draw.button.panel.BasicPanels;
+import draw.button.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -14,7 +14,7 @@ import pokemon.PC;
 import pokemon.PokemonInfo;
 import trainer.pokedex.Pokedex;
 import type.Type;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.PokeString;
 

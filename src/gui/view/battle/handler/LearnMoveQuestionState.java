@@ -1,6 +1,6 @@
 package gui.view.battle.handler;
 
-import gui.button.Button;
+import draw.button.Button;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 

@@ -1,4 +1,6 @@
-package util;
+package draw;
+
+import draw.DrawUtils;
 
 import java.awt.Graphics;
 

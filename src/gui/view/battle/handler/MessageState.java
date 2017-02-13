@@ -1,13 +1,13 @@
 package gui.view.battle.handler;
 
-import gui.panel.DrawPanel;
+import draw.button.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
 import input.InputControl;
 import message.MessageUpdate;
 import pokemon.Stat;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 
 import java.awt.Color;

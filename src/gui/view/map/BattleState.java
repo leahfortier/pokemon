@@ -10,7 +10,7 @@ import map.TerrainType;
 import pokemon.ActivePokemon;
 import sound.SoundPlayer;
 import sound.SoundTitle;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FileIO;
 import util.Folder;
 

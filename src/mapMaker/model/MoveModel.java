@@ -2,7 +2,7 @@ package mapMaker.model;
 
 import map.WalkType;
 import mapMaker.MapMaker;
-import util.DrawUtils;
+import draw.DrawUtils;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;

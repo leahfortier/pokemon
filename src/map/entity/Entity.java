@@ -5,7 +5,7 @@ import map.Condition;
 import map.Direction;
 import map.MapData;
 import map.triggers.TriggerType;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.Point;
 
 import java.awt.Graphics;

@@ -52,7 +52,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.WildPokemon;
 import type.Type;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.RandomUtils;
 import util.StringUtils;
 

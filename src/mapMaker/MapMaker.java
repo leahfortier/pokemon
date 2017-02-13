@@ -10,7 +10,7 @@ import mapMaker.tools.Tool;
 import mapMaker.tools.Tool.ToolType;
 import mapMaker.tools.ToolRenderer;
 import pattern.generic.LocationTriggerMatcher;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FileIO;
 import util.Folder;
 import util.FontMetrics;

@@ -1,10 +1,10 @@
-package gui.button;
+package draw.button;
 
-import gui.panel.DrawPanel;
+import draw.button.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import map.Direction;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.Point;
 

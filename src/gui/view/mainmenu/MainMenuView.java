@@ -1,13 +1,13 @@
 package gui.view.mainmenu;
 
-import gui.button.Button;
-import gui.button.ButtonHoverAction;
+import draw.button.Button;
+import draw.button.ButtonHoverAction;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
 import input.InputControl;
 import sound.SoundPlayer;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FileIO;
 import util.Folder;
 import util.FontMetrics;

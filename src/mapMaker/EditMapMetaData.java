@@ -5,7 +5,7 @@ import map.WalkType;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.TileModel;
 import mapMaker.model.TileModel.TileType;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FileIO;
 import util.Point;
 
