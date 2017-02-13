@@ -15,6 +15,7 @@ import trainer.CharacterData;
 import util.Save;
 
 import java.awt.Graphics;
+import java.util.ArrayDeque;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -43,14 +44,16 @@ public class Game {
 	
 	private CharacterData characterData;
 	private ViewMode currentViewMode;
-	private View currentView;
+	private ArrayDeque<View> currentView;
 	
 	protected Game() {
 		viewMap = new EnumMap<>(ViewMode.class);
 		addView(ViewMode.MAIN_MENU_VIEW);
-		
+
+		currentView = new ArrayDeque<>();
+		currentView.push(viewMap.get(ViewMode.MAIN_MENU_VIEW));
+
 		currentViewMode = ViewMode.MAIN_MENU_VIEW;
-		currentView = viewMap.get(ViewMode.MAIN_MENU_VIEW);
 	}
 	
 	private void setupCharacter() {
@@ -59,16 +62,34 @@ public class Game {
 	}
 	
 	private void checkViewSwitch() {
-		if (!currentView.getViewModel().equals(currentViewMode)) {
+		if (!currentView.peek().getViewModel().equals(currentViewMode)) {
 			InputControl.instance().resetKeys();
-			currentView = viewMap.get(currentViewMode);
-			currentView.movedToFront();
+
+			if (this.hasViewModeInStack(currentViewMode)) {
+				while (currentView.peek().getViewModel() != currentViewMode) {
+					currentView.pop();
+				}
+			} else {
+				currentView.push(viewMap.get(currentViewMode));
+			}
+
+			currentView.peek().movedToFront();
 		}
+	}
+
+	private boolean hasViewModeInStack(ViewMode viewMode) {
+		for (View view : currentView) {
+			if (view.getViewModel() == viewMode) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public void update(int dt) {
 		checkViewSwitch();
-		currentView.update(dt);
+		currentView.peek().update(dt);
 		checkViewSwitch();
 	}
 
@@ -78,11 +99,16 @@ public class Game {
 	}
 
 	public void draw(Graphics g) {
-		currentView.draw(g);
+		currentView.peek().draw(g);
 	}
 	
 	public void setViewMode(ViewMode mode) {
 		currentViewMode = mode;
+	}
+
+	public void popView() {
+		currentView.pop();
+		currentViewMode = currentView.peek().getViewModel();
 	}
 
 	public void loadSave(int index) {

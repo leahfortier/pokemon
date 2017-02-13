@@ -15,7 +15,7 @@ class TrainerCardView extends View {
 	@Override
 	public void update(int dt) {
 		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
-			Game.instance().setViewMode(ViewMode.MAP_VIEW);
+			Game.instance().popView();
 		}
 	}
 

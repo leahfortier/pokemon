@@ -229,11 +229,11 @@ class PCView extends View {
 		}
 		
 		if (returnButton.checkConsumePress()) {
-			Game.instance().setViewMode(ViewMode.MAP_VIEW);
+			Game.instance().popView();
 		}
 		
 		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
-			Game.instance().setViewMode(ViewMode.MAP_VIEW);
+			Game.instance().popView();
 		}
 	}
 

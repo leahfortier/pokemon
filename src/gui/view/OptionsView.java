@@ -30,7 +30,7 @@ class OptionsView extends View {
 		}
 		
 		if (input.consumeIfDown(ControlKey.ESC)) {
-			Game.instance().setViewMode(ViewMode.MAP_VIEW);
+			Game.instance().popView();
 		}
 	}
 

@@ -169,7 +169,7 @@ class NewPokemonView extends View {
                 }
 
                 if (message == null) {
-                    Game.instance().setViewMode(ViewMode.MAP_VIEW);
+                    Game.instance().popView();
                 }
                 break;
         }

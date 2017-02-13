@@ -4,6 +4,8 @@ import gui.button.Button;
 import gui.button.ButtonHoverAction;
 import gui.panel.BasicPanels;
 import gui.panel.DrawPanel;
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
 import main.Global;
 import map.AreaData;
@@ -75,6 +77,8 @@ class FlyView extends View {
 
     @Override
     public void update(int dt) {
+        InputControl input = InputControl.instance();
+
         selectedButton = Button.update(this.buttons, selectedButton);
 
         if (this.buttons[selectedButton].checkConsumePress()) {
@@ -106,6 +110,10 @@ class FlyView extends View {
             }
 
             updateActiveButtons();
+        }
+
+        if (input.consumeIfDown(ControlKey.ESC)) {
+            Game.instance().popView();
         }
     }
 

@@ -96,7 +96,7 @@ class EvolutionView extends View {
 					}
 				}
 				else {
-					Game.instance().setViewMode(ViewMode.MAP_VIEW);
+					Game.instance().popView();
 				}
 				break;
 		}
