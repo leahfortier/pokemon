@@ -1,9 +1,10 @@
 package gui.view;
 
-import gui.button.Button;
-import gui.button.ButtonHoverAction;
-import gui.panel.BasicPanels;
-import gui.panel.DrawPanel;
+import draw.TextUtils;
+import draw.button.Button;
+import draw.button.ButtonHoverAction;
+import draw.button.panel.BasicPanels;
+import draw.button.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -11,7 +12,6 @@ import main.Global;
 import map.AreaData;
 import map.Direction;
 import trainer.CharacterData;
-import util.DrawUtils;
 import util.GeneralUtils;
 
 import java.awt.Graphics;
@@ -144,7 +144,7 @@ class FlyView extends View {
         Button rightButton = this.buttons[RIGHT_BUTTON];
         leftButton.drawArrow(g, Direction.LEFT);
         rightButton.drawArrow(g, Direction.RIGHT);
-        DrawUtils.drawCenteredString(
+        TextUtils.drawCenteredString(
                 g,
                 pageNum + 1 + "",
                 (leftButton.centerX() + rightButton.centerX())/2,

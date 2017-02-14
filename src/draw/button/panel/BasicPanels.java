@@ -1,6 +1,6 @@
-package gui.panel;
+package draw.button.panel;
 
-import gui.button.Button;
+import draw.button.Button;
 import main.Global;
 import util.FontMetrics;
 import util.Point;

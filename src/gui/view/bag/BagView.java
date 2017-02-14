@@ -3,12 +3,14 @@ package gui.view.bag;
 import battle.attack.Attack;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
+import draw.ImageUtils;
+import draw.TextUtils;
 import gui.GameData;
 import gui.TileSet;
-import gui.button.Button;
-import gui.button.ButtonHoverAction;
-import gui.panel.BasicPanels;
-import gui.panel.DrawPanel;
+import draw.button.Button;
+import draw.button.ButtonHoverAction;
+import draw.button.panel.BasicPanels;
+import draw.button.panel.DrawPanel;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
@@ -27,7 +29,7 @@ import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Trainer;
 import type.Type;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.Point;
@@ -104,7 +106,7 @@ public class BagView extends View {
 				.withBlackOutline();
 
 		selectedPanel = new DrawPanel(
-				pokemonPanel.x + pokemonPanel.width + spacing,
+				pokemonPanel.rightX() + spacing,
 				bagPanel.y + spacing,
 				halfPanelWidth,
 				selectedHeight)
@@ -113,7 +115,7 @@ public class BagView extends View {
 
 		Button returnButton = new Button(
 				selectedPanel.x,
-				bagPanel.y + bagPanel.height - spacing - buttonHeight,
+				bagPanel.bottomY() - spacing - buttonHeight,
 				halfPanelWidth,
 				buttonHeight,
 				ButtonHoverAction.BOX,
@@ -121,7 +123,7 @@ public class BagView extends View {
 
 		itemsPanel = new DrawPanel(
 				selectedPanel.x,
-				selectedPanel.y + selectedPanel.height + buttonHeight + spacing,
+				selectedPanel.bottomY() + buttonHeight + spacing,
 				halfPanelWidth,
 				pokemonPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing)
 				.withFullTransparency()
@@ -189,7 +191,7 @@ public class BagView extends View {
 		);
 
 		Button rightArrow = new Button(
-				itemsPanel.x + itemsPanel.width - (leftArrow.x - itemsPanel.x) - leftArrow.width,
+				itemsPanel.rightX() - (leftArrow.x - itemsPanel.x) - leftArrow.width,
 				leftArrow.y,
 				leftArrow.width,
 				leftArrow.height,
@@ -337,15 +339,16 @@ public class BagView extends View {
 
 			int startY = selectedPanel.y + FontMetrics.getDistanceBetweenRows(g);
 
+			// TODO: Why are we using Tile Size in the bag view
 			g.drawString(selectedItem.getName(), selectedPanel.x + 2*spacing + Global.TILE_SIZE, startY);
 			
 			if (selectedItemValue.hasQuantity()) {
 				String quantityString = "x" + bag.getQuantity(selectedItem);
-				DrawUtils.drawRightAlignedString(g, quantityString, selectedPanel.x + selectedPanel.width - 2*spacing, startY);
+				TextUtils.drawRightAlignedString(g, quantityString, selectedPanel.rightX() - 2*spacing, startY);
 			}
 			
 			FontMetrics.setFont(g, 14);
-			DrawUtils.drawWrappedText(
+			TextUtils.drawWrappedText(
 					g,
 					selectedItemValue.getDescription(),
 					selectedPanel.x + spacing,
@@ -373,12 +376,12 @@ public class BagView extends View {
 
 				g.translate(itemButton.x, itemButton.y);
 
-				DrawUtils.drawCenteredImage(g, itemTiles.getTile(itemValue.getImageIndex()), 14, 14);
+				ImageUtils.drawCenteredImage(g, itemTiles.getTile(itemValue.getImageIndex()), 14, 14);
 				
 				g.drawString(item.getName(), 29, 18);
 				
 				if (itemValue.hasQuantity()) {
-					DrawUtils.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
+					TextUtils.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
 				}
 				
 				g.translate(-itemButton.x, -itemButton.y);
@@ -387,7 +390,7 @@ public class BagView extends View {
 		
 		// Draw page numbers
 		FontMetrics.setFont(g, 16);
-		DrawUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(list.size()), itemsPanel.centerX(), buttons[RIGHT_ARROW].centerY());
+		TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(list.size()), itemsPanel.centerX(), buttons[RIGHT_ARROW].centerY());
 		
 		// Left and Right arrows
 		buttons[LEFT_ARROW].drawArrow(g, Direction.LEFT);
@@ -418,7 +421,7 @@ public class BagView extends View {
 				
 				g.setColor(Color.BLACK);
 				FontMetrics.setFont(g, 14);
-				DrawUtils.drawCenteredHeightString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 166, movePanel.centerY());
+				TextUtils.drawCenteredHeightString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 166, movePanel.centerY());
 
 				g.setColor(Color.BLACK);
 				FontMetrics.setFont(g, 20);
@@ -444,7 +447,7 @@ public class BagView extends View {
 
 
 				BufferedImage img = partyTiles.getTile(p.getTinyImageIndex());
-				DrawUtils.drawCenteredImage(g, img, 30, 30); // TODO: This looks slightly off
+				ImageUtils.drawCenteredImage(g, img, 30, 30); // TODO: This looks slightly off
 				
 				g.setColor(Color.BLACK);
 				FontMetrics.setFont(g, 14);
@@ -457,7 +460,7 @@ public class BagView extends View {
 					g.drawString("Lv" + p.getLevel(), 153, 22);
 					
 					// Status condition
-					DrawUtils.drawRightAlignedString(g, p.getStatus().getType().getName(), 293, 22);
+					TextUtils.drawRightAlignedString(g, p.getStatus().getType().getName(), 293, 22);
 					
 					// Draw HP Box
 					g.fillRect(50, 26, 244, 11);
@@ -470,7 +473,7 @@ public class BagView extends View {
 					FontMetrics.setFont(g, 12);
 					
 					g.drawString(p.getActualHeldItem().getName(), 50, 47);
-					DrawUtils.drawRightAlignedString(g, p.getHP() + "/" + p.getMaxHP(), 293, 47);
+					TextUtils.drawRightAlignedString(g, p.getHP() + "/" + p.getMaxHP(), 293, 47);
 					
 					if (p.hasStatus(StatusCondition.FAINTED)) {
 						// TODO: Look if this color appears in multiple place and see if it should be a constant
@@ -497,7 +500,7 @@ public class BagView extends View {
 			g.setColor(Color.BLACK);
 			FontMetrics.setFont(g, 14);
 
-			DrawUtils.drawCenteredImage(g, CATEGORIES[i].getIcon(), 16, 26);
+			ImageUtils.drawCenteredImage(g, CATEGORIES[i].getIcon(), 16, 26);
 			g.drawString(CATEGORIES[i].getDisplayName(), 30, 30);
 			
 			g.translate(-tabButton.x, -tabButton.y);

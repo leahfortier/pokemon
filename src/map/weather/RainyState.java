@@ -2,7 +2,7 @@ package map.weather;
 
 import main.Global;
 import map.weather.WeatherState.WeatherDrawer;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.RandomUtils;
 
 import java.awt.Color;

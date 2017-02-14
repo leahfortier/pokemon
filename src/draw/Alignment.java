@@ -1,13 +1,12 @@
-package util;
+package draw;
 
 import java.awt.Graphics;
 
-// TODO: Move these methods inside this class
 public enum Alignment {
-    RIGHT(DrawUtils::drawRightAlignedString),
-    CENTER(DrawUtils::drawCenteredString),
-    CENTER_X(DrawUtils::drawCenteredWidthString),
-    CENTER_Y(DrawUtils::drawCenteredHeightString),
+    RIGHT(TextUtils::drawRightAlignedString),
+    CENTER(TextUtils::drawCenteredString),
+    CENTER_X(TextUtils::drawCenteredWidthString),
+    CENTER_Y(TextUtils::drawCenteredHeightString),
     LEFT(Graphics::drawString);
 
     private final DrawAlignment drawAlignment;

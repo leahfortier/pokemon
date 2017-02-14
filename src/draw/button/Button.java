@@ -1,10 +1,13 @@
-package gui.button;
+package draw.button;
 
-import gui.panel.DrawPanel;
+import draw.ImageUtils;
+import draw.PolygonUtils;
+import draw.TextUtils;
+import draw.button.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import map.Direction;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.Point;
 
@@ -294,11 +297,11 @@ public class Button {
 	public void label(Graphics g, int fontSize, Color color, String text) {
 		g.setColor(color);
 		FontMetrics.setFont(g, fontSize);
-		DrawUtils.drawCenteredString(g, text, x, y, width, height);
+		TextUtils.drawCenteredString(g, text, x, y, width, height);
 	}
 
 	public void imageLabel(Graphics g, BufferedImage image) {
-		DrawUtils.drawCenteredImage(g, image, centerX(), centerY());
+		ImageUtils.drawCenteredImage(g, image, centerX(), centerY());
 	}
 
 	public int centerX() {
@@ -310,6 +313,6 @@ public class Button {
 	}
 
 	public void drawArrow(Graphics g, Direction direction) {
-		DrawUtils.drawArrow(g, x, y, width, height, direction);
+		PolygonUtils.drawArrow(g, x, y, width, height, direction);
 	}
 }

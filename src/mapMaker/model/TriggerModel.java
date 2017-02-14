@@ -1,8 +1,8 @@
 package mapMaker.model;
 
+import draw.TileUtils;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
-import util.DrawUtils;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -44,7 +44,7 @@ public class TriggerModel extends MapMakerModel {
         }
 
         public ImageIcon getImageIcon(final MapMaker mapMaker) {
-            return new ImageIcon(DrawUtils.imageWithText(this.getImage(mapMaker), name), this.ordinal() + "");
+            return new ImageIcon(TileUtils.imageWithText(this.getImage(mapMaker), name), this.ordinal() + "");
         }
 
         public static TriggerModelType getModelTypeFromIndex(int selectedIndex) {

@@ -1,6 +1,6 @@
 package gui.view.bag;
 
-import gui.button.Button;
+import draw.button.Button;
 import item.use.MoveUseItem;
 import item.use.PlayerUseItem;
 import main.Game;

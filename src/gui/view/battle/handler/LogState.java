@@ -1,7 +1,7 @@
 package gui.view.battle.handler;
 
-import gui.button.Button;
-import gui.button.ButtonHoverAction;
+import draw.button.Button;
+import draw.button.ButtonHoverAction;
 import gui.view.battle.BattleView;
 import main.Game;
 import map.Direction;

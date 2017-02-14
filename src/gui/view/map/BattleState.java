@@ -1,6 +1,7 @@
 package gui.view.map;
 
 import battle.Battle;
+import draw.ImageUtils;
 import gui.GameData;
 import gui.view.ViewMode;
 import gui.view.map.VisualState.VisualStateHandler;
@@ -10,7 +11,6 @@ import map.TerrainType;
 import pokemon.ActivePokemon;
 import sound.SoundPlayer;
 import sound.SoundTitle;
-import util.DrawUtils;
 import util.FileIO;
 import util.Folder;
 
@@ -136,7 +136,7 @@ class BattleState implements VisualStateHandler {
             battleImageSlideRight = data.getPokemonTilesLarge().getTile(p.getImageIndex());
 
             if (seenWild) {
-                battleImageSlideRight = DrawUtils.colorImage(battleImageSlideRight, new float[] { 0, 0, 0, 1 }, new float[] { 0, 0, 0, 0 });
+                battleImageSlideRight = ImageUtils.colorImage(battleImageSlideRight, new float[] { 0, 0, 0, 1 }, new float[] { 0, 0, 0, 0 });
             }
         }
         else {

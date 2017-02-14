@@ -1,10 +1,10 @@
 package gui.view.mainmenu;
 
-import gui.button.Button;
+import draw.TextUtils;
+import draw.button.Button;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 import main.Global;
 import sound.SoundTitle;
-import util.DrawUtils;
 import util.FontMetrics;
 
 import java.awt.Color;
@@ -42,11 +42,11 @@ class CreditsState implements VisualStateHandler {
         for (int i = 1; i < creditsText.length; i++) {
             if (creditsText[i - 1].isEmpty()) {
                 FontMetrics.setFont(g, 40);
-                DrawUtils.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
+                TextUtils.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
             }
             else {
                 FontMetrics.setFont(g, 30);
-                DrawUtils.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
+                TextUtils.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
             }
         }
 

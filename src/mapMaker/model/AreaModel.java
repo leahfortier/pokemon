@@ -1,10 +1,11 @@
 package mapMaker.model;
 
+import draw.TileUtils;
 import map.MapDataType;
 import map.TerrainType;
 import map.weather.WeatherState;
 import mapMaker.MapMaker;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.Point;
 import util.StringUtils;
@@ -51,7 +52,7 @@ public class AreaModel extends MapMakerModel {
     public void addArea(int rgb, String name) {
         areaIndexMap.put(rgb, name);
         areasOnMap.add(rgb);
-        areaListModel.addElement(new ImageIcon(DrawUtils.colorWithText(name, new Color(rgb, true)), rgb + ""));
+        areaListModel.addElement(new ImageIcon(TileUtils.colorWithText(name, new Color(rgb, true)), rgb + ""));
     }
 
     // TODO: Redo all of this
@@ -128,7 +129,7 @@ public class AreaModel extends MapMakerModel {
 //                            }
 
                             // Add area to the list.
-                            areaListModel.addElement(new ImageIcon(DrawUtils.colorWithText(newAreaName, color), color.getRGB() + ""));
+                            areaListModel.addElement(new ImageIcon(TileUtils.colorWithText(newAreaName, color), color.getRGB() + ""));
                             areaIndexMap.put(color.getRGB(), newAreaName);
                         }
                     }
@@ -145,7 +146,7 @@ public class AreaModel extends MapMakerModel {
                     }
                 }
 
-                areaListModel.addElement(new ImageIcon(DrawUtils.colorWithText(newAreaName, new Color(color, true)), color + ""));
+                areaListModel.addElement(new ImageIcon(TileUtils.colorWithText(newAreaName, new Color(color, true)), color + ""));
             }
         }
     }
@@ -154,7 +155,7 @@ public class AreaModel extends MapMakerModel {
     @Override
     public void draw(Graphics2D g2d, MapMaker mapMaker) {
         Point mouseHoverLocation = mapMaker.getMouseHoverLocation();
-        Point location = DrawUtils.getLocation(mouseHoverLocation, mapMaker.getMapLocation());
+        Point location = TileUtils.getLocation(mouseHoverLocation, mapMaker.getMapLocation());
         int tileColor = mapMaker.getTile(location, MapDataType.AREA);
 
         String areaName = areaIndexMap.get(tileColor);

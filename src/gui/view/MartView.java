@@ -1,11 +1,14 @@
 package gui.view;
 
+import draw.ImageUtils;
+import draw.PolygonUtils;
+import draw.TextUtils;
 import gui.GameData;
 import gui.TileSet;
-import gui.button.Button;
-import gui.button.ButtonHoverAction;
-import gui.panel.BasicPanels;
-import gui.panel.DrawPanel;
+import draw.button.Button;
+import draw.button.ButtonHoverAction;
+import draw.button.panel.BasicPanels;
+import draw.button.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import item.Item;
@@ -14,7 +17,7 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import trainer.CharacterData;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.Point;
@@ -140,7 +143,7 @@ class MartView extends View {
 				new int[] { AMOUNT_RIGHT_ARROW, RETURN, BUY, 0 });
 
 		amountRightButton = new Button(
-				selectedPanel.x + selectedPanel.width - amountLeftButton.width,
+				selectedPanel.rightX() - amountLeftButton.width,
 				amountLeftButton.y,
 				amountLeftButton.width,
 				amountLeftButton.height,
@@ -290,25 +293,25 @@ class MartView extends View {
 
 			// Draw item image
 			BufferedImage img = itemTiles.getTile(selectedItemValue.getImageIndex());
-			DrawUtils.drawCenteredImage(g, img, 430, 132);
+			ImageUtils.drawCenteredImage(g, img, 430, 132);
 			
 			g.setColor(Color.BLACK);
 			FontMetrics.setFont(g, 20);
 			g.drawString(selectedItem.getName(), 448, 138);
 			
 			FontMetrics.setFont(g, 14);
-			DrawUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - amountLeftButton.x);
+			TextUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - amountLeftButton.x);
 
 			amountPanel.drawBackground(g);
 			amountPanel.label(g, 20, itemAmount + "");
 
 			amountLeftButton.fillTransparent(g);
 			amountLeftButton.blackOutline(g);
-			DrawUtils.drawCenteredArrow(g, amountLeftButton.centerX(), amountLeftButton.centerY(), 35, 20, Direction.LEFT);
+			PolygonUtils.drawCenteredArrow(g, amountLeftButton.centerX(), amountLeftButton.centerY(), 35, 20, Direction.LEFT);
 
 			amountRightButton.fillTransparent(g);
 			amountRightButton.blackOutline(g);
-			DrawUtils.drawCenteredArrow(g, amountRightButton.centerX(), amountRightButton.centerY(), 35, 20, Direction.RIGHT);
+			PolygonUtils.drawCenteredArrow(g, amountRightButton.centerX(), amountRightButton.centerY(), 35, 20, Direction.RIGHT);
 		}
 		
 		FontMetrics.setFont(g, 12);
@@ -332,7 +335,7 @@ class MartView extends View {
 
 				g.translate(itemButton.x, itemButton.y);
 
-				DrawUtils.drawCenteredImage(g, img, 14, 14);
+				ImageUtils.drawCenteredImage(g, img, 14, 14);
 				g.drawString(item.getName(), 29, 18);
 				
 				g.translate(-itemButton.x, -itemButton.y);
@@ -341,7 +344,7 @@ class MartView extends View {
 		
 		// Draw page numbers
 		FontMetrics.setFont(g, 16);
-		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(), 573, 466);
+		TextUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(), 573, 466);
 		
 		// Left and Right arrows
 		shopLeftButton.drawArrow(g, Direction.LEFT);

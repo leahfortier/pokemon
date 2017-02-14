@@ -1,12 +1,12 @@
 package mapMaker.tools;
 
+import draw.TileUtils;
 import map.entity.movable.MovableEntity;
 import mapMaker.EditType;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.map.NPCMatcher;
-import util.DrawUtils;
 import util.Point;
 
 import java.awt.Graphics;
@@ -23,7 +23,7 @@ class SingleClickTool extends Tool {
             return;
         }
 
-        Point location = DrawUtils.getLocation(clickedLocation, mapMaker.getMapLocation());
+        Point location = TileUtils.getLocation(clickedLocation, mapMaker.getMapLocation());
         System.out.println("click: " + clickedLocation);
 
         int val = mapMaker.getSelectedTile();
@@ -37,8 +37,8 @@ class SingleClickTool extends Tool {
 
     @Override
     public void draw(Graphics g) {
-        Point location = DrawUtils.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
-        DrawUtils.outlineTileRed(g, location, mapMaker.getMapLocation());
+        Point location = TileUtils.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
+        TileUtils.outlineTileRed(g, location, mapMaker.getMapLocation());
 
         if (mapMaker.isTileSelectionEmpty()) {
             return;
@@ -49,7 +49,7 @@ class SingleClickTool extends Tool {
             int val = mapMaker.getSelectedTile();
             BufferedImage image = mapMaker.getTileFromSet(TileType.MAP, val);
             if (image != null) {
-                DrawUtils.drawTileImage(g, image, location, mapMaker.getMapLocation());
+                TileUtils.drawTileImage(g, image, location, mapMaker.getMapLocation());
             }
         }
         // Show preview image for current trigger
@@ -67,7 +67,7 @@ class SingleClickTool extends Tool {
             }
 
             if (image != null) {
-                DrawUtils.drawTileImage(g, image, location, mapMaker.getMapLocation());
+                TileUtils.drawTileImage(g, image, location, mapMaker.getMapLocation());
             }
         }
     }

@@ -2,7 +2,7 @@ package gui.view;
 
 import gui.GameData;
 import gui.TileSet;
-import gui.panel.BasicPanels;
+import draw.button.panel.BasicPanels;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;

@@ -1,11 +1,11 @@
 package map.entity;
 
+import draw.TileUtils;
 import gui.view.map.MapView;
 import map.Condition;
 import map.Direction;
 import map.MapData;
 import map.triggers.TriggerType;
-import util.DrawUtils;
 import util.Point;
 
 import java.awt.Graphics;
@@ -56,11 +56,11 @@ public abstract class Entity {
 			return;
 		}
 
-		DrawUtils.drawEntityTileImage(g, this.getFrame(), this.getCanvasCoordinates(drawLocation));
+		TileUtils.drawEntityTileImage(g, this.getFrame(), this.getCanvasCoordinates(drawLocation));
 	}
 
 	protected Point getCanvasCoordinates(Point drawLocation) {
-		return DrawUtils.getDrawLocation(this.location, drawLocation);
+		return TileUtils.getDrawLocation(this.location, drawLocation);
 	}
 
 	public abstract void update(int dt, MapData currentMap, MapView view);

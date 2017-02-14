@@ -1,11 +1,12 @@
 package gui.view;
 
+import draw.TextUtils;
 import gui.GameData;
 import gui.TileSet;
-import gui.button.Button;
-import gui.button.ButtonHoverAction;
-import gui.panel.BasicPanels;
-import gui.panel.DrawPanel;
+import draw.button.Button;
+import draw.button.ButtonHoverAction;
+import draw.button.panel.BasicPanels;
+import draw.button.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -14,7 +15,7 @@ import pokemon.PC;
 import pokemon.PokemonInfo;
 import trainer.pokedex.Pokedex;
 import type.Type;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.PokeString;
 
@@ -219,7 +220,7 @@ class PokedexView extends View {
 		// Draw page numbers and arrows
 		g.setColor(Color.BLACK);
 		FontMetrics.setFont(g, 16);
-		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, pokedexPanel.centerX(), 433);
+		TextUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, pokedexPanel.centerX(), 433);
 
 		leftButton.drawArrow(g, Direction.LEFT);
 		rightButton.drawArrow(g, Direction.RIGHT);
@@ -260,7 +261,7 @@ class PokedexView extends View {
 		g.setColor(Color.BLACK);
 		FontMetrics.setFont(g, 20);
 		g.drawString(notSeen ? "?????" : selected.getName(), 541, 82);
-		DrawUtils.drawRightAlignedString(g, "#" + String.format("%03d", selected.getNumber()), 740, 82);
+		TextUtils.drawRightAlignedString(g, "#" + String.format("%03d", selected.getNumber()), 740, 82);
 		
 		if (!notSeen) {
 			FontMetrics.setFont(g, 16);
