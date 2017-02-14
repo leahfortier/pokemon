@@ -29,9 +29,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private static final long serialVersionUID = 1L;
 
 	public static final int NUM_POKEMON = 801;
-	public static final String TINY_EGG_IMAGE_NAME = "egg-small";
-	public static final String BASE_EGG_IMAGE_NAME = "egg";
-	public static final String SPRITE_EGG_IMAGE_NAME = "EggSprite";
 
 	private static Map<PokemonNamesies, PokemonInfo> map;
 	private static List<PokemonNamesies> baseEvolution;

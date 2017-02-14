@@ -2,10 +2,10 @@ package gui.view;
 
 import draw.ImageUtils;
 import draw.TextUtils;
-import gui.GameData;
-import gui.TileSet;
 import draw.button.panel.BasicPanels;
 import draw.button.panel.DrawPanel;
+import gui.GameData;
+import gui.TileSet;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -78,10 +78,15 @@ class EvolutionView extends View {
 				if (animationEvolve <= 0) {
 					state = State.END;
 
-					int[] gains = evolvingPokemon.evolve(Game.getPlayer().getEvolution());
-					int[] stats = evolvingPokemon.getStats();
+					if (isEgg) {
+						message = new MessageUpdate("Your egg hatched into " + StringUtils.articleString(preEvolution.getName()) + "!");
+					} else {
+						int[] gains = evolvingPokemon.evolve(Game.getPlayer().getEvolution());
+						int[] stats = evolvingPokemon.getStats();
 
-					setFinalMessage(gains, stats);
+						message = new MessageUpdate("Your " + preEvolution.getName() + " evolved into " + StringUtils.articleString(postEvolution.getName()) + "!").withStatGains(gains, stats);
+					}
+
 					addToPokedex();
 				}
 				break;
@@ -114,7 +119,7 @@ class EvolutionView extends View {
 		FontMetrics.setFont(g, 30);
 		g.setColor(Color.BLACK);
 		
-		String preIndex = isEgg ? PokemonInfo.SPRITE_EGG_IMAGE_NAME : preEvolution.getImageName(evolvingPokemon.isShiny());
+		String preIndex = isEgg ? ActivePokemon.SPRITE_EGG_IMAGE_NAME : preEvolution.getImageName(evolvingPokemon.isShiny());
 		String postIndex = isEgg ? preEvolution.getImageName(evolvingPokemon.isShiny()) : postEvolution.getImageName(evolvingPokemon.isShiny());
 		
 		BufferedImage currEvolution = pokemonTiles.getTile(preIndex);
@@ -197,15 +202,6 @@ class EvolutionView extends View {
 
 	private void setCancelledMessage() {
 		message = new MessageUpdate("Whattt!?!?!??!! " + preEvolution.getName() + " stopped evolving!!!!");
-	}
-	
-	private void setFinalMessage(int[] gains, int[] newStats) {
-		if (isEgg) {
-			message = new MessageUpdate("Your egg hatched into " + StringUtils.articleString(preEvolution.getName()) + "!");
-		}
-		else {
-			message = new MessageUpdate("Your " + preEvolution.getName() + " evolved into " + StringUtils.articleString(postEvolution.getName()) + "!").withStatGains(gains, newStats);
-		}
 	}
 
 	@Override
