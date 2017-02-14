@@ -1,8 +1,8 @@
 package mapMaker.model;
 
+import draw.TileUtils;
 import map.WalkType;
 import mapMaker.MapMaker;
-import draw.DrawUtils;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -26,7 +26,7 @@ public class MoveModel extends MapMakerModel {
     public void reload(MapMaker mapMaker) {
         this.moveListModel.clear();
         for (WalkType type : WalkType.values()) {
-            BufferedImage image = DrawUtils.colorWithText(type.name(), type.getColor());
+            BufferedImage image = TileUtils.colorWithText(type.name(), type.getColor());
             ImageIcon icon = new ImageIcon(image, type.getRGB() + "");
             this.moveListModel.addElement(icon);
         }

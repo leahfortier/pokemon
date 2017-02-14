@@ -1,7 +1,8 @@
 package gui.view.battle.handler;
 
 import battle.Battle;
-import draw.Alignment;
+import draw.ImageUtils;
+import draw.TextUtils;
 import gui.TileSet;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
@@ -176,7 +177,7 @@ public class BagState implements VisualStateHandler {
 
         // Bag page number
         FontMetrics.setFont(g, 20);
-        Alignment.drawCenteredWidthString(g, (bagPage + 1) + "/" + Math.max(1, (int)Math.ceil(toDraw.size()/10.0)), 210, 450);
+        TextUtils.drawCenteredWidthString(g, (bagPage + 1) + "/" + Math.max(1, (int)Math.ceil(toDraw.size()/10.0)), 210, 450);
 
         // Left/Right Arrows
         bagLeftButton.drawArrow(g, Direction.LEFT);
@@ -211,13 +212,13 @@ public class BagState implements VisualStateHandler {
         g.translate(dx, dy);
 
         BufferedImage img = itemTiles.getTile(itemNamesies.getItem().getImageIndex());
-        DrawUtils.drawCenteredImage(g, img, 14, 14);
+        ImageUtils.drawCenteredImage(g, img, 14, 14);
 
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 12);
 
         g.drawString(itemNamesies.getName(), 28, 19);
-        Alignment.drawRightAlignedString(g, "x" + Game.getPlayer().getBag().getQuantity(itemNamesies), 140, 19);
+        TextUtils.drawRightAlignedString(g, "x" + Game.getPlayer().getBag().getQuantity(itemNamesies), 140, 19);
 
         g.translate(-dx, -dy);
     }

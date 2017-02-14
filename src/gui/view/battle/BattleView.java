@@ -2,7 +2,7 @@ package gui.view.battle;
 
 import battle.Battle;
 import battle.attack.Move;
-import draw.Alignment;
+import draw.TextUtils;
 import draw.button.Button;
 import draw.button.panel.BasicPanels;
 import draw.button.panel.DrawPanel;
@@ -310,7 +310,7 @@ public class BattleView extends View {
 		g.drawString(move.getAttack().getName(), 10, 26);
 
 		FontMetrics.setFont(g, 18);
-		Alignment.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
+		TextUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
 
 		BufferedImage categoryImage = move.getAttack().getCategory().getImage();
 		g.drawImage(categoryImage, 12, 32, null);

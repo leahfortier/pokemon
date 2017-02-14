@@ -1,7 +1,8 @@
 package gui.view.map;
 
 import battle.Battle;
-import draw.Alignment;
+import draw.TextUtils;
+import draw.TileUtils;
 import gui.GameData;
 import gui.TileSet;
 import gui.view.View;
@@ -111,7 +112,7 @@ public class MapView extends View {
 				int bgTile = currentMap.getBgTile(x,y);
 				if (TileSet.isValidMapTile(bgTile)) {
 					BufferedImage img = mapTiles.getTile(bgTile);
-					DrawUtils.drawTileImage(g, img, x, y, draw);
+					TileUtils.drawTileImage(g, img, x, y, draw);
 				}
 			}
 		}
@@ -124,7 +125,7 @@ public class MapView extends View {
 				int fgTile = currentMap.getFgTile(x, y);
 				if (TileSet.isValidMapTile(fgTile)) {
 					BufferedImage img = mapTiles.getTile(fgTile);
-					DrawUtils.drawTileImage(g, img, x, y, draw);
+					TileUtils.drawTileImage(g, img, x, y, draw);
 				}
 
 				// Draw entities
@@ -195,7 +196,7 @@ public class MapView extends View {
 
 		g.setColor(Color.BLACK);
 		FontMetrics.setFont(g, fontSize);
-		Alignment.drawCenteredString(g, currentArea.getAreaName(), 0, yValue, totalWidth, totalHeight);
+		TextUtils.drawCenteredString(g, currentArea.getAreaName(), 0, yValue, totalWidth, totalHeight);
 	}
 
 	@Override

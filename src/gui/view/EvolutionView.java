@@ -1,6 +1,7 @@
 package gui.view;
 
-import draw.Alignment;
+import draw.ImageUtils;
+import draw.TextUtils;
 import gui.GameData;
 import gui.TileSet;
 import draw.button.panel.BasicPanels;
@@ -15,7 +16,6 @@ import pokemon.PokemonInfo;
 import pokemon.Stat;
 import pokemon.evolution.BaseEvolution;
 import trainer.CharacterData;
-import draw.DrawUtils;
 import util.FontMetrics;
 import util.Point;
 import util.StringUtils;
@@ -123,13 +123,13 @@ class EvolutionView extends View {
 		switch (state) {
 			case START:
 			case CANCELED:
-				DrawUtils.drawBottomCenteredImage(g, currEvolution, POKEMON_DRAW_LOCATION);
+				ImageUtils.drawBottomCenteredImage(g, currEvolution, POKEMON_DRAW_LOCATION);
 				break;
 			case EVOLVE:
 				evolveAnimation(g, currEvolution, nextEvolution);
 				break;
 			case END:
-				DrawUtils.drawBottomCenteredImage(g, nextEvolution, POKEMON_DRAW_LOCATION);
+				ImageUtils.drawBottomCenteredImage(g, nextEvolution, POKEMON_DRAW_LOCATION);
 				break;
 		}
 		
@@ -146,15 +146,15 @@ class EvolutionView extends View {
 					FontMetrics.setFont(g, 16);
 					g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
 
-					Alignment.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
-					Alignment.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
+					TextUtils.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
+					TextUtils.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
 				}
 			}
 		}
 	}
 	
 	private void evolveAnimation(Graphics g, BufferedImage currEvolution, BufferedImage nextEvolution) {
-		animationEvolve = DrawUtils.transformAnimation(
+		animationEvolve = ImageUtils.transformAnimation(
 				g,
 				animationEvolve,
 				EVOLVE_ANIMATION_LIFESPAN,

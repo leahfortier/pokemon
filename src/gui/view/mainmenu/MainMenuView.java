@@ -1,6 +1,6 @@
 package gui.view.mainmenu;
 
-import draw.Alignment;
+import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import gui.view.View;
@@ -148,16 +148,16 @@ public class MainMenuView extends View {
 			FontMetrics.setFont(g, 20);
 
 			g.drawString("Name:", 16, 28);
-			Alignment.drawRightAlignedString(g, info.getName(), 189, 28);
+			TextUtils.drawRightAlignedString(g, info.getName(), 189, 28);
 
 			g.drawString("Time:", 210, 28);
-			Alignment.drawRightAlignedString(g, "" + Save.formatTime(info.getTime()), 383, 28);
+			TextUtils.drawRightAlignedString(g, "" + Save.formatTime(info.getTime()), 383, 28);
 
 			g.drawString("Badges:", 16, 58);
-			Alignment.drawRightAlignedString(g, "" + info.getBadges(), 189, 58);
+			TextUtils.drawRightAlignedString(g, "" + info.getBadges(), 189, 58);
 
 			g.drawString("Pokedex:", 210, 58);
-			Alignment.drawRightAlignedString(g, "" + info.getPokemonSeen(), 383, 58);
+			TextUtils.drawRightAlignedString(g, "" + info.getPokemonSeen(), 383, 58);
 
 			g.translate(-b.x, -b.y);
 		}

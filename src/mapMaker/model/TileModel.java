@@ -1,5 +1,6 @@
 package mapMaker.model;
 
+import draw.TileUtils;
 import main.Global;
 import mapMaker.MapMaker;
 import draw.DrawUtils;
@@ -23,7 +24,7 @@ import java.util.Scanner;
 
 public class TileModel extends MapMakerModel {
     private static final int BLANK_TILE_INDEX = Color.MAGENTA.getRGB(); // TODO: No I hate this
-    private static final BufferedImage BLANK_TILE_IMAGE = DrawUtils.createBlankTile();
+    private static final BufferedImage BLANK_TILE_IMAGE = TileUtils.createBlankTile();
     private static final ImageIcon BLANK_TILE_ICON = new ImageIcon(BLANK_TILE_IMAGE, "0"); // TODO: Is 0 still necessary?
 
     private final DefaultListModel<ImageIcon> tileListModel;

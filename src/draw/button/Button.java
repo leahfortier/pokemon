@@ -1,7 +1,8 @@
 package draw.button;
 
-import draw.Alignment;
+import draw.ImageUtils;
 import draw.PolygonUtils;
+import draw.TextUtils;
 import draw.button.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
@@ -296,11 +297,11 @@ public class Button {
 	public void label(Graphics g, int fontSize, Color color, String text) {
 		g.setColor(color);
 		FontMetrics.setFont(g, fontSize);
-		Alignment.drawCenteredString(g, text, x, y, width, height);
+		TextUtils.drawCenteredString(g, text, x, y, width, height);
 	}
 
 	public void imageLabel(Graphics g, BufferedImage image) {
-		DrawUtils.drawCenteredImage(g, image, centerX(), centerY());
+		ImageUtils.drawCenteredImage(g, image, centerX(), centerY());
 	}
 
 	public int centerX() {

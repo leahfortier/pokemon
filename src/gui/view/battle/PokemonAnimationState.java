@@ -1,6 +1,8 @@
 package gui.view.battle;
 
 import battle.effect.status.StatusCondition;
+import draw.ImageUtils;
+import draw.TextUtils;
 import gui.GameData;
 import gui.TileSet;
 import draw.button.panel.DrawPanel;
@@ -277,13 +279,13 @@ class PokemonAnimationState {
         int px = pokemonDrawLocation.x;
         int py = pokemonDrawLocation.y;
 
-        g2d.drawImage(DrawUtils.colorImage(pkBall, ballScales, ballOffsets), px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight(), null);
-        g2d.drawImage(DrawUtils.colorImage(plyrImg, pokeyScales, pokeyOffsets), px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null);
+        g2d.drawImage(ImageUtils.colorImage(pkBall, ballScales, ballOffsets), px - pkBall.getWidth()/2 + xOffset, py - pkBall.getHeight(), null);
+        g2d.drawImage(ImageUtils.colorImage(plyrImg, pokeyScales, pokeyOffsets), px - plyrImg.getWidth()/2, py - plyrImg.getHeight(), null);
     }
 
     // hi :)
     private void evolveAnimation(Graphics g, BufferedImage plyrImg, TileSet pkmTiles) {
-        animationEvolve = DrawUtils.transformAnimation(
+        animationEvolve = ImageUtils.transformAnimation(
                 g,
                 animationEvolve,
                 EVOLVE_ANIMATION_LIFESPAN,
@@ -320,7 +322,7 @@ class PokemonAnimationState {
 
         if (isPlayer) {
             FontMetrics.setFont(g, 24);
-            DrawUtils.drawShadowText(
+            TextUtils.drawShadowText(
                     g,
                     hpStr,
                     statusBox.rightX() - STATUS_BOX_SPACING,
@@ -363,7 +365,7 @@ class PokemonAnimationState {
                         plyrImg = pkmTiles.getTile(0x11111);
                     }
 
-                    DrawUtils.drawBottomCenteredImage(g, plyrImg, pokemonDrawLocation);
+                    ImageUtils.drawBottomCenteredImage(g, plyrImg, pokemonDrawLocation);
 
                     animationEvolve = 0;
                     animationCatch = 0;
@@ -388,7 +390,7 @@ class PokemonAnimationState {
 
         // Name and gender in top left
         FontMetrics.setFont(g, 27);
-        DrawUtils.drawShadowText(
+        TextUtils.drawShadowText(
                 g,
                 state.name + " " + state.gender.getCharacter(),
                 statusBox.x + STATUS_BOX_SPACING,
@@ -396,7 +398,7 @@ class PokemonAnimationState {
                 Alignment.LEFT);
 
         // Level in top right
-        DrawUtils.drawShadowText(
+        TextUtils.drawShadowText(
                 g,
                 "Lv" + state.level,
                 statusBox.rightX() - STATUS_BOX_SPACING,
@@ -405,7 +407,7 @@ class PokemonAnimationState {
 
         // Status to the left of the hp bar
         FontMetrics.setFont(g, 24);
-        DrawUtils.drawShadowText(
+        TextUtils.drawShadowText(
                 g,
                 state.status.getName(),
                 statusBox.x + STATUS_BOX_SPACING,
@@ -414,7 +416,7 @@ class PokemonAnimationState {
 
         // Show whether or not the wild Pokemon has already been caught
         if (!isPlayer && state.caught) {
-            DrawUtils.drawCenteredImage(
+            ImageUtils.drawCenteredImage(
                     g,
                     TileSet.TINY_POKEBALL,
                     hpBar.rightX() + (STATUS_BOX_SPACING - statusBox.getBorderSize())/2,

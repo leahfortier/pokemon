@@ -2,7 +2,8 @@ package gui.view;
 
 import battle.attack.Attack;
 import battle.attack.Move;
-import draw.Alignment;
+import draw.ImageUtils;
+import draw.TextUtils;
 import gui.GameData;
 import gui.TileSet;
 import draw.button.Button;
@@ -260,7 +261,7 @@ class PartyView extends View {
 			FontMetrics.setFont(g, 16);
 			
 			// Description
-			DrawUtils.drawWrappedText(g, selectedPkm.getEggMessage(),
+			TextUtils.drawWrappedText(g, selectedPkm.getEggMessage(),
 					basicInformationPanel.x + inset,
 					topLineY + inset + FontMetrics.getTextHeight(g),
 					basicInformationPanel.width - 2*inset);
@@ -283,21 +284,21 @@ class PartyView extends View {
 			int rightAlignedX = basicInformationPanel.rightX() - inset;
 
 			// Type Tiles
-			DrawUtils.drawTypeTiles(g, type, rightAlignedX, topLineY);
+			ImageUtils.drawTypeTiles(g, type, rightAlignedX, topLineY);
 			
 			// Nature
 			g.drawString(selectedPkm.getNature().getName() +" Nature", nameX, secondLineY);
 			
 			// Total EXP
 			g.drawString("EXP:", levelX, secondLineY);
-			Alignment.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), rightAlignedX, secondLineY);
+			TextUtils.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), rightAlignedX, secondLineY);
 			
 			// Characteristic
 			g.drawString(selectedPkm.getCharacteristic(), nameX, thirdLineY);
 			
 			// EXP To Next Level
 			g.drawString("To Next Lv:", levelX, thirdLineY);
-			Alignment.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), rightAlignedX, thirdLineY);
+			TextUtils.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), rightAlignedX, thirdLineY);
 			
 			// Held Item
 			g.drawString(selectedPkm.getActualHeldItem().getName(), nameX, fourthLineY);
@@ -344,9 +345,9 @@ class PartyView extends View {
 				}
 
 				int drawY = firstRowY + (i + 1)*spacing;
-				Alignment.drawRightAlignedString(g, statString, 285, drawY);
-				Alignment.drawRightAlignedString(g, "" + ivs[i], 327, drawY);
-				Alignment.drawRightAlignedString(g, "" + evs[i], 371, drawY);
+				TextUtils.drawRightAlignedString(g, statString, 285, drawY);
+				TextUtils.drawRightAlignedString(g, "" + ivs[i], 327, drawY);
+				TextUtils.drawRightAlignedString(g, "" + evs[i], 371, drawY);
 			}
 
 			// HP Bar
@@ -388,16 +389,16 @@ class PartyView extends View {
 					
 					// PP
 					g.drawString("PP:", middleX, firstY);
-					Alignment.drawRightAlignedString(g, move.getPP() + "/" + move.getMaxPP(), rightAlignedMiddleX, firstY);
+					TextUtils.drawRightAlignedString(g, move.getPP() + "/" + move.getMaxPP(), rightAlignedMiddleX, firstY);
 					
 					// Accuracy
 					FontMetrics.setFont(g, 12);
 					g.drawString("Accuracy:", moveInset, secondY);
-					Alignment.drawRightAlignedString(g, attack.getAccuracyString(), moveInset + 93, secondY);
+					TextUtils.drawRightAlignedString(g, attack.getAccuracyString(), moveInset + 93, secondY);
 					
 					// Power
 					g.drawString("Power:", middleX, secondY);
-					Alignment.drawRightAlignedString(g, attack.getPowerString(), rightAlignedMiddleX, secondY);
+					TextUtils.drawRightAlignedString(g, attack.getPowerString(), rightAlignedMiddleX, secondY);
 
 					BufferedImage typeImage = move.getAttack().getActualType().getImage();
 					int imageX = movePanel.width - moveInset - typeImage.getWidth();
@@ -453,7 +454,7 @@ class PartyView extends View {
 			g.drawString(pkm.getActualName(), 40, 34);
 			
 			pkmImg = partyTiles.getTile(pkm.getTinyImageIndex());
-			DrawUtils.drawCenteredImage(g, pkmImg, 19, 26);
+			ImageUtils.drawCenteredImage(g, pkmImg, 19, 26);
 			
 			g.translate(-tabButton.x, -tabButton.y);
 		}

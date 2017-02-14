@@ -1,6 +1,6 @@
 package gui.view;
 
-import draw.Alignment;
+import draw.TextUtils;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -62,7 +62,7 @@ class OptionsView extends View {
 		
 		g.setColor(Color.WHITE);
 		FontMetrics.setFont(g, 150);
-		Alignment.drawCenteredWidthString(g, "VOLUME", d.width/2, d.height/4);
+		TextUtils.drawCenteredWidthString(g, "VOLUME", d.width/2, d.height/4);
 		
 		if (musicOn) {
 			g.setColor(Color.GREEN);

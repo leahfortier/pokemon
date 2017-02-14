@@ -1,5 +1,6 @@
 package mapMaker;
 
+import draw.TileUtils;
 import main.Global;
 import map.entity.movable.MovableEntity;
 import mapMaker.dialogs.EventTriggerDialog;
@@ -23,7 +24,6 @@ import pattern.map.MapTransitionMatcher;
 import pattern.map.MiscEntityMatcher;
 import pattern.map.NPCMatcher;
 import pattern.map.WildBattleMatcher;
-import draw.DrawUtils;
 import util.FileIO;
 import util.JsonUtils;
 import util.Point;
@@ -149,7 +149,7 @@ public class MapMakerTriggerData {
 						Point exit = ((MapTransitionMatcher)entity).getExitLocation();
 						if (exit != null) {
 							BufferedImage exitImage = TriggerModel.getMapExitImage(mapMaker);
-							DrawUtils.drawTileImage(g2d, exitImage, exit, mapLocation);
+							TileUtils.drawTileImage(g2d, exitImage, exit, mapLocation);
 						}
 						break;
 					case NPC:
@@ -163,12 +163,12 @@ public class MapMakerTriggerData {
 					image = triggerModelType.getImage(mapMaker);
 				}
 
-				DrawUtils.drawTileImage(g2d, image, point, mapLocation);
+				TileUtils.drawTileImage(g2d, image, point, mapLocation);
 			} else if (entity instanceof MultiPointTriggerMatcher) {
 				List<Point> entityLocation = ((MultiPointTriggerMatcher) entity).getLocation();
 				for (Point point : entityLocation) {
 					BufferedImage image = triggerModelType.getImage(mapMaker);
-					DrawUtils.drawTileImage(g2d, image, point, mapLocation);
+					TileUtils.drawTileImage(g2d, image, point, mapLocation);
 				}
 			} else {
 				Global.error("Unknown entity matcher class " + entity.getClass().getSimpleName());

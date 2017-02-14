@@ -1,8 +1,9 @@
 package draw.button.panel;
 
-import draw.Alignment;
 import draw.DrawUtils;
+import draw.ImageUtils;
 import draw.PolygonUtils;
+import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import main.Global;
@@ -246,7 +247,7 @@ public class DrawPanel {
 
         int textWidth = width - 2*textSpace;
 
-        return DrawUtils.drawWrappedText(g, text, startX, startY, textWidth);
+        return TextUtils.drawWrappedText(g, text, startX, startY, textWidth);
     }
 
     public void drawLeftLabel(Graphics g, int fontSize, String label) {
@@ -254,16 +255,16 @@ public class DrawPanel {
         int centerY = centerY();
 
         FontMetrics.setFont(g, fontSize);
-        Alignment.drawCenteredHeightString(g, label, startX, centerY);
+        TextUtils.drawCenteredHeightString(g, label, startX, centerY);
     }
 
     public void imageLabel(Graphics g, BufferedImage image) {
-        DrawUtils.drawCenteredImage(g, image, x + width/2, y + height/2);
+        ImageUtils.drawCenteredImage(g, image, x + width/2, y + height/2);
     }
 
     public void imageLabel(Graphics g, int fontSize, BufferedImage image, String label) {
         FontMetrics.setFont(g, fontSize);
-        DrawUtils.drawCenteredImageLabel(g, image, label, centerX(), centerY());
+        ImageUtils.drawCenteredImageLabel(g, image, label, centerX(), centerY());
     }
 
     public int centerX() {
@@ -289,6 +290,6 @@ public class DrawPanel {
     public void label(Graphics g, int fontSize, String text) {
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, fontSize);
-        Alignment.drawCenteredString(g, text, x, y, width, height);
+        TextUtils.drawCenteredString(g, text, x, y, width, height);
     }
 }

@@ -1,7 +1,8 @@
 package gui.view;
 
-import draw.Alignment;
+import draw.ImageUtils;
 import draw.PolygonUtils;
+import draw.TextUtils;
 import gui.GameData;
 import gui.TileSet;
 import draw.button.Button;
@@ -292,14 +293,14 @@ class MartView extends View {
 
 			// Draw item image
 			BufferedImage img = itemTiles.getTile(selectedItemValue.getImageIndex());
-			DrawUtils.drawCenteredImage(g, img, 430, 132);
+			ImageUtils.drawCenteredImage(g, img, 430, 132);
 			
 			g.setColor(Color.BLACK);
 			FontMetrics.setFont(g, 20);
 			g.drawString(selectedItem.getName(), 448, 138);
 			
 			FontMetrics.setFont(g, 14);
-			DrawUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - amountLeftButton.x);
+			TextUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - amountLeftButton.x);
 
 			amountPanel.drawBackground(g);
 			amountPanel.label(g, 20, itemAmount + "");
@@ -334,7 +335,7 @@ class MartView extends View {
 
 				g.translate(itemButton.x, itemButton.y);
 
-				DrawUtils.drawCenteredImage(g, img, 14, 14);
+				ImageUtils.drawCenteredImage(g, img, 14, 14);
 				g.drawString(item.getName(), 29, 18);
 				
 				g.translate(-itemButton.x, -itemButton.y);
@@ -343,7 +344,7 @@ class MartView extends View {
 		
 		// Draw page numbers
 		FontMetrics.setFont(g, 16);
-		Alignment.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(), 573, 466);
+		TextUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + totalPages(), 573, 466);
 		
 		// Left and Right arrows
 		shopLeftButton.drawArrow(g, Direction.LEFT);

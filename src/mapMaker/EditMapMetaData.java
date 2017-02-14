@@ -1,11 +1,12 @@
 package mapMaker;
 
+import draw.ImageUtils;
+import draw.TileUtils;
 import map.MapDataType;
 import map.WalkType;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.TileModel;
 import mapMaker.model.TileModel.TileType;
-import draw.DrawUtils;
 import util.FileIO;
 import util.Point;
 
@@ -59,7 +60,7 @@ public class EditMapMetaData {
 
     private void resetMaps() {
         for (MapDataType dataType : MapDataType.values()) {
-            this.currentMap.put(dataType, DrawUtils.createNewImage(this.currentMapSize));
+            this.currentMap.put(dataType, ImageUtils.createNewImage(this.currentMapSize));
         }
 
         Graphics g = this.getMapImage(MapDataType.MOVE).getGraphics();
@@ -189,11 +190,11 @@ public class EditMapMetaData {
                 int val = getTile(location, type);
 
                 if (type == MapDataType.MOVE || type == MapDataType.AREA) {
-                    DrawUtils.fillTile(g2d, location, mapLocation, new Color(val, true));
+                    TileUtils.fillTile(g2d, location, mapLocation, new Color(val, true));
                 }
                 else if (type != null && tileModel.containsTile(TileType.MAP, val)) {
                     BufferedImage image = tileModel.getTile(TileType.MAP, val);
-                    DrawUtils.drawTileImage(g2d, image, location, mapLocation);
+                    TileUtils.drawTileImage(g2d, image, location, mapLocation);
                 }
             }
         }

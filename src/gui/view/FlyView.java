@@ -1,6 +1,6 @@
 package gui.view;
 
-import draw.Alignment;
+import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.panel.BasicPanels;
@@ -144,7 +144,7 @@ class FlyView extends View {
         Button rightButton = this.buttons[RIGHT_BUTTON];
         leftButton.drawArrow(g, Direction.LEFT);
         rightButton.drawArrow(g, Direction.RIGHT);
-        Alignment.drawCenteredString(
+        TextUtils.drawCenteredString(
                 g,
                 pageNum + 1 + "",
                 (leftButton.centerX() + rightButton.centerX())/2,

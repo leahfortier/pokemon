@@ -1,7 +1,7 @@
 package gui.view.battle.handler;
 
 import battle.attack.Move;
-import draw.Alignment;
+import draw.TextUtils;
 import draw.button.Button;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -55,7 +55,7 @@ public class LearnMoveDeleteState implements VisualStateHandler {
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 25);
         int centerX = (buttons[NUM_COLS - 2].centerX() + buttons[NUM_COLS - 1].centerX())/2;
-        Alignment.drawCenteredString(g, "Select a move to delete!", centerX, buttons[0].centerY());
+        TextUtils.drawCenteredString(g, "Select a move to delete!", centerX, buttons[0].centerY());
 
         for (Button button : buttons) {
             button.draw(g);

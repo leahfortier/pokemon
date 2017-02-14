@@ -2,7 +2,7 @@ package gui.view.battle.handler;
 
 import battle.Battle;
 import battle.attack.Move;
-import draw.Alignment;
+import draw.TextUtils;
 import gui.TileSet;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
@@ -207,7 +207,7 @@ public class PokemonState implements VisualStateHandler {
         if (selectedPkm.isEgg()) {
             // Description
             FontMetrics.setFont(g, 14);
-            DrawUtils.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
+            TextUtils.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
         }
         else {
             // Status Condition
@@ -237,10 +237,10 @@ public class PokemonState implements VisualStateHandler {
 
             // Experience
             g.drawString("EXP", 220, 288);
-            Alignment.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), 352, 288);
+            TextUtils.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), 352, 288);
 
             g.drawString("To Next Lv", 220, 307);
-            Alignment.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), 352, 307);
+            TextUtils.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), 352, 307);
 
             // Experience Bar
             float expRatio = selectedPkm.expRatio();
@@ -259,7 +259,7 @@ public class PokemonState implements VisualStateHandler {
 
                 g.setColor(Color.BLACK);
                 String valStr = i == Stat.HP.index() ? selectedPkm.getHP() + "/" + statsVal[i] : "" + statsVal[i];
-                Alignment.drawRightAlignedString(g, valStr, 188, 21*i + 372);
+                TextUtils.drawRightAlignedString(g, valStr, 188, 21*i + 372);
             }
 
             // Draw Move List
@@ -282,7 +282,7 @@ public class PokemonState implements VisualStateHandler {
                 g.drawString(move.getAttack().getName(), 7, 17);
 
                 // Draw PP amount
-                Alignment.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 118, 33);
+                TextUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 118, 33);
 
                 BufferedImage categoryImage = move.getAttack().getCategory().getImage();
                 g.drawImage(categoryImage, 7, 21, null);

@@ -1,6 +1,6 @@
 package gui.view.battle.handler;
 
-import draw.Alignment;
+import draw.TextUtils;
 import draw.button.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -39,8 +39,8 @@ public class MessageState implements VisualStateHandler {
                 FontMetrics.setFont(g, 16);
                 g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
 
-                Alignment.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
-                Alignment.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
+                TextUtils.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
+                TextUtils.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
             }
         }
     }

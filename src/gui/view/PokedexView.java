@@ -1,6 +1,6 @@
 package gui.view;
 
-import draw.Alignment;
+import draw.TextUtils;
 import gui.GameData;
 import gui.TileSet;
 import draw.button.Button;
@@ -220,7 +220,7 @@ class PokedexView extends View {
 		// Draw page numbers and arrows
 		g.setColor(Color.BLACK);
 		FontMetrics.setFont(g, 16);
-		Alignment.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, pokedexPanel.centerX(), 433);
+		TextUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, pokedexPanel.centerX(), 433);
 
 		leftButton.drawArrow(g, Direction.LEFT);
 		rightButton.drawArrow(g, Direction.RIGHT);
@@ -261,7 +261,7 @@ class PokedexView extends View {
 		g.setColor(Color.BLACK);
 		FontMetrics.setFont(g, 20);
 		g.drawString(notSeen ? "?????" : selected.getName(), 541, 82);
-		Alignment.drawRightAlignedString(g, "#" + String.format("%03d", selected.getNumber()), 740, 82);
+		TextUtils.drawRightAlignedString(g, "#" + String.format("%03d", selected.getNumber()), 740, 82);
 		
 		if (!notSeen) {
 			FontMetrics.setFont(g, 16);

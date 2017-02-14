@@ -1,5 +1,6 @@
 package gui.view;
 
+import draw.ImageUtils;
 import gui.TileSet;
 import draw.button.Button;
 import draw.button.panel.BasicPanels;
@@ -13,7 +14,6 @@ import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import trainer.Trainer;
 import type.Type;
-import draw.DrawUtils;
 import util.Point;
 import util.PokeString;
 import util.StringUtils;
@@ -237,7 +237,7 @@ class NewPokemonView extends View {
             descriptionPanel.drawMessage(g, 22, pokemonInfo.getFlavorText());
         }
         else if (state != State.NICKNAME && state != State.END) {
-            DrawUtils.drawCenteredImage(g, pokemonImage, BasicPanels.canvasMessageCenter);
+            ImageUtils.drawCenteredImage(g, pokemonImage, BasicPanels.canvasMessageCenter);
         }
 
         switch (state) {
@@ -249,7 +249,7 @@ class NewPokemonView extends View {
                 BufferedImage spriteImage = Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageIndex());
                 String nickname = InputControl.instance().getInputCaptureString(ActivePokemon.MAX_NAME_LENGTH);
 
-                DrawUtils.drawCenteredImageLabel(g, spriteImage, nickname, BasicPanels.canvasMessageCenter);
+                ImageUtils.drawCenteredImageLabel(g, spriteImage, nickname, BasicPanels.canvasMessageCenter);
                 break;
             case LOCATION:
                 drawButton(g, leftButton(), new Color(35, 120, 220), "Party");
