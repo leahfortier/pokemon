@@ -51,4 +51,53 @@ public final class PolygonUtils {
 
         g.translate(-x, -y);
     }
+
+    public static void drawDualColoredBackground(
+            Graphics g,
+            int x,
+            int y,
+            int width,
+            int height,
+            Color firstColor,
+            Color secondColor,
+            boolean swapDimensions) {
+        g.setColor(firstColor);
+        g.fillRect(x, y, width, height);
+
+        // Don't need to draw a polygon that is the same color
+        if (firstColor.equals(secondColor)) {
+            return;
+        }
+
+        int smallDimension = Math.min(width, height);
+        int largeDimension = Math.max(width, height);
+
+        int smallLength = smallDimension/3;
+
+
+        if (swapDimensions) {
+            int temp = smallDimension;
+            smallDimension = largeDimension;
+            largeDimension = temp;
+
+            smallLength = largeDimension/3;
+        }
+
+        int largeLength = largeDimension - smallLength;
+
+        // (width, 0) -> (large, 0) -> (small, height) -> (width, height)
+        int[] rightXValues = new int[] { largeDimension, largeLength, smallLength, largeDimension };
+        int[] rightYValues = new int[] { 0, 0, smallDimension, smallDimension};
+
+        if (width < height || swapDimensions) {
+            GeneralUtils.swapArrays(rightXValues, rightYValues);
+        }
+
+        g.translate(x, y);
+
+        g.setColor(secondColor);
+        g.fillPolygon(rightXValues, rightYValues, rightXValues.length);
+
+        g.translate(-x, -y);
+    }
 }

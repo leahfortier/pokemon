@@ -1,12 +1,13 @@
 package draw.button.panel;
 
+import draw.Alignment;
+import draw.DrawUtils;
+import draw.PolygonUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import main.Global;
 import map.Direction;
-import draw.DrawUtils;
 import util.FontMetrics;
-import util.GeneralUtils;
 import util.Point;
 
 import java.awt.Color;
@@ -25,7 +26,9 @@ public class DrawPanel {
 
     private Color backgroundColor;
     private Color borderColor;
+
     private Color secondBackgroundColor;
+    private boolean swapDualColoredDimensions;
 
     private Direction[] outlineDirections;
 
@@ -74,8 +77,13 @@ public class DrawPanel {
     }
 
     public DrawPanel withBackgroundColors(Color[] backgroundColors) {
+        return this.withBackgroundColors(backgroundColors, false);
+    }
+
+    public DrawPanel withBackgroundColors(Color[] backgroundColors, boolean swapDualColoredDimensions) {
         this.backgroundColor = backgroundColors[0];
         this.secondBackgroundColor = backgroundColors[1];
+        this.swapDualColoredDimensions = swapDualColoredDimensions;
         return this;
     }
 
@@ -126,37 +134,6 @@ public class DrawPanel {
         return (int)(borderPercentage/100.0*Math.min(width, height));
     }
 
-    private void drawDualColoredBackground(Graphics g) {
-        g.setColor(backgroundColor);
-        g.fillRect(x, y, width, height);
-
-        // Don't need to draw a polygon that is the same color
-        if (backgroundColor.equals(secondBackgroundColor)) {
-            return;
-        }
-
-        int smallDimension = Math.min(width, height);
-        int largeDimension = Math.max(width, height);
-
-        int smallLength = smallDimension/2;
-        int largeLength = largeDimension - smallLength;
-
-        // (width, 0) -> (large, 0) -> (small, height) -> (width, height)
-        int[] rightXValues = new int[] { largeDimension, largeLength, smallLength, largeDimension };
-        int[] rightYValues = new int[] { 0, 0, smallDimension, smallDimension};
-
-        if (width < height) {
-            GeneralUtils.swapArrays(rightXValues, rightYValues);
-        }
-
-        g.translate(x, y);
-
-        g.setColor(secondBackgroundColor);
-        g.fillPolygon(rightXValues, rightYValues, rightXValues.length);
-
-        g.translate(-x, -y);
-    }
-
     public void fillBar(Graphics g, Color color, double ratio) {
         ratio = Math.min(1, ratio);
 
@@ -183,7 +160,7 @@ public class DrawPanel {
                 g.setColor(backgroundColor);
                 g.fillRect(x, y, width, height);
             } else {
-                drawDualColoredBackground(g);
+                PolygonUtils.drawDualColoredBackground(g, x, y, width, height, backgroundColor, secondBackgroundColor, swapDualColoredDimensions);
             }
         }
 
@@ -277,7 +254,7 @@ public class DrawPanel {
         int centerY = centerY();
 
         FontMetrics.setFont(g, fontSize);
-        DrawUtils.drawCenteredHeightString(g, label, startX, centerY);
+        Alignment.drawCenteredHeightString(g, label, startX, centerY);
     }
 
     public void imageLabel(Graphics g, BufferedImage image) {
@@ -312,6 +289,6 @@ public class DrawPanel {
     public void label(Graphics g, int fontSize, String text) {
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, fontSize);
-        DrawUtils.drawCenteredString(g, text, x, y, width, height);
+        Alignment.drawCenteredString(g, text, x, y, width, height);
     }
 }

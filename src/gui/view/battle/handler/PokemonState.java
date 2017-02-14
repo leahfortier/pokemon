@@ -162,7 +162,7 @@ public class PokemonState implements VisualStateHandler {
         ActivePokemon selectedPkm = list.get(selectedPokemonTab);
 
         // Draw type color polygons
-        pokemonPanel.withBackgroundColors(Type.getColors(selectedPkm));
+        pokemonPanel.withBackgroundColors(Type.getColors(selectedPkm), true);
 
         if (!selectedPkm.canFight()) {
             pokemonPanel.greyOut();

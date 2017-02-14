@@ -230,7 +230,7 @@ class PartyView extends View {
 		Type[] type = selectedPkm.getActualType();
 
 		// Draw type color polygons
-		pokemonPanel.withBackgroundColors(Type.getColors(selectedPkm));
+		pokemonPanel.withBackgroundColors(Type.getColors(selectedPkm), true);
 		if (!selectedPkm.canFight()) {
 			pokemonPanel.greyOut();
 		}
@@ -434,12 +434,7 @@ class PartyView extends View {
 			Button tabButton = tabButtons[i];
 
 			// Color tab
-			int colorIndex = 0;
-			if (i == tabButtons.length - 1 && pkm.isDualTyped()) {
-				colorIndex = 1;
-			}
-
-			tabButton.fill(g, Type.getColors(pkm)[colorIndex]);
+			tabButton.fill(g, Type.getColors(pkm)[0]);
 
 			// Fade out fainted Pokemon
 			if (!pkm.canFight()) {
