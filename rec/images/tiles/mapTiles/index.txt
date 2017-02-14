@@ -1,456 +1,457 @@
-WaterTile01.png -cccc01
-GrassTile01.png -99009a
-GrassTile02.png ff5dea5d
-GrassTile03.png ff4ad64a
-GrassTile04.png ff37c237
-GrassTile05.png ff20b420
+WaterTile01 -cccc01
+GrassTile01 -99009a
+GrassTile02 ff5dea5d
+GrassTile03 ff4ad64a
+GrassTile04 ff37c237
+GrassTile05 ff20b420
 
-TallGrass01.png ff73bb4b
-TallFlowerGrass01.png ff1b8620
-TallFlowerGrass02.png ff1b8621
+TallGrass01 ff73bb4b
+TallFlowerGrass01 ff1b8620
+TallFlowerGrass02 ff1b8621
 
-Flowers01.png ffd8f0d8
-Flowers02.png ffecd3ea
-Flowers03.png ffe89068
-Flowers04.png ff8e9ace
-Flowers05.png ff8e9ac0
-Flowers06.png ff8e9ac1
-Flowers07.png ff8e9ac2
-Flowers08.png ff8e9ac3
-Flowers09.png ff8e9ac4
-Flowers0a.png ff8e9ac5
-Flowers0b.png ff8e9ac6
-Flowers0c.png ff8e9ac7
-Flowers0d.png ff8e9ac8
-Flowers0e.png ff8e9ac9
-Flowers10.png ff8e9aca
-Flowers11.png ff8e9acb
-Flowers12.png ff8e9acc
-Flowers13.png ff8e9acd
-Flowers14.png ff8e9acf
-Flowers15.png ff8e9ad0
-
-
-TreeSprite02.png -ff66cd
-
-Tree18.png ff6d5d45
-Tree17.png ffacd450
-Tree16.png ffacd451
-Tree15.png ffacd452
-Tree14.png ffacd453
-Tree13.png ffacd454
-Tree12.png ffacd455
-Tree11.png ffacd456
-Tree10.png ffacd457
-Tree09.png ffacd460
-Tree08.png ffacd458
-Tree07.png ffde5b31
-Tree06.png ffacd459
-Tree05.png ffacd45a
-Tree03.png ffacd45b
-Tree04.png ffacd45c
-Tree02.png ffacd45d
-Tree01.png ffacd45e
-
-TreeBFM-Left.png ffacd461
-TreeBFM-Right.png ffacd462
-
-LedgeDL.png ff967b60
-LedgeL.png ff967b61
-LedgeLD.png ff967b62
-LedgeD.png ff967b63
-LedgeDR.png ff967b64
-LedgeR.png ff967b65
-LedgeRD.png ff967b66
-LedgeLUEnd.png ff967b67
-LedgeLDEnd.png ff967b68
-LedgeDLEnd.png ff967b69
-LedgeDREnd.png ff967b6a
-LedgeRDEnd.png ff967b6b
-LedgeRUEnd.png ff967b6c
-
-DirtPathC.png fff6dd90
-DirtPathUR.png fff6dd91
-DirtPathR.png fff6dd92
-DirtPathDR.png fff6dd93
-DirtPathD.png fff6dd94
-DirtPathDL.png fff6dd95
-DirtPathL.png fff6dd96
-DirtPathU.png fff6dd97
-DirtPathUL.png fff6dd98
-DirtPathRD.png fff6dd99
-DirtPathLD.png fff6dd9a
-DirtPathLU.png fff6dd9b
-DirtPathRU.png fff6dd9c
-
-GrassPathU.png ff90de70
-GrassPathUL.png ff90de71
-GrassPathL.png ff90de72
-GrassPathUR.png ff90de73
-GrassPathC.png ff90de74
-GrassPathR.png ff90de75
-GrassPathDL.png ff90de76
-GrassPathD.png ff90de77
-GrassPathDR.png ff90de78
-GrassPathLU.png ff90de79
-GrassPathRU.png ff90de7a
-GrassPathLD.png ff90de7b
-GrassPathRD.png ff90de7c
-
-ConcreteUL.png ff6b7a90
-ConcreteU.png ff6b7a91
-ConcreteUR.png ff6b7a92
-ConcreteR.png ff6b7a93
-ConcreteDR.png ff6b7a94
-ConcreteD.png ff6b7a95
-ConcreteDL.png ff6b7a96
-ConcreteL.png ff6b7a97
-ConcreteLU.png ff6b7a98
-ConcreteRU.png ff6b7a99
-ConcreteLD.png ff6b7a9a
-ConcreteRD.png ff6b7a9b
-ConcreteC.png ff6b7a9c
-
-StoneBrickPathU.png ff8d9790
-StoneBrickPathC.png ff8d9791
-StoneBrickPathL.png ff8d9792
-StoneBrickPathR.png ff8d9793
-StoneBrickPathD.png ff8d9794
-StoneBrickPathDL.png ff8d9795
-StoneBrickPathDR.png ff8d9796
-StoneBrickPathUR.png ff8d9797
-StoneBrickPathUL.png ff8d9798
-StoneBrickPathRD.png ff8d9799
-StoneBrickPathLD.png ff8d979a
-StoneBrickPathRU.png ff8d979b
-StoneBrickPathLU.png ff8d979c
-
-StoneBrickPath2U.png ff98b0b0
-StoneBrickPath2L.png ff98b0b1
-StoneBrickPath2C.png ff98b0b2
-StoneBrickPath2D.png ff98b0b3
-StoneBrickPath2R.png ff98b0b4
-StoneBrickPath2UR.png ff98b0b5
-StoneBrickPath2DR.png ff98b0b6
-StoneBrickPath2DL.png ff98b0b7
-StoneBrickPath2UL.png ff98b0b8
-StoneBrickPath2RD.png ff98b0b9
-StoneBrickPath2LD.png ff98b0ba
-StoneBrickPath2RU.png ff98b0bb
-StoneBrickPath2LU.png ff98b0bc
-
-Stairs01StairsUpLeftTop.png ffa5ad82
-Stairs01StairsUpLeftCenter.png ffa5ad81
-Stairs01StairsUpLeftBottom.png ffa5ad80
-Stairs01StairsUpRightTop.png ffa5ad85
-Stairs01StairsUpRightCenter.png ffa5ad84
-Stairs01StairsUpRightBottom.png ffa5ad83
-
-Flag.png ffefbd00
-
-House0.png ff89654a
-House1.png ff4ea8d3
-House2.png ff896500
-House3.png ff896501
-House5.png ff896502
-House6.png ff896503
-House4.png ff896504
-House7.png ff896505
-House8.png ff896506
-House9.png ff896507
-House10.png ff896508
-House11.png ff896509
-House12.png ff89650a
-House13.png ff89650b
-House14.png ff89650c
-House15.png ff89650d
-House16.png ff89650e
-House19.png ff89650f
-House17.png ff896510
-House18.png ff896511
-House20.png ff896512
-House21.png ff896513
-House22.png ff896514
-House23.png ff896515
-House24.png ff896516
-House25.png ff896517
-House26.png ff896518
-House28.png ff896519
-House27.png ff89651a
-House29.png ff89651b
-House31.png ff89651c
-House30.png ff89651d
-House32.png ff89651e
-House33.png ff89651f
-House34.png ff896520
-House35.png ff896521
-House36.png ff896522
-House37.png ff896523
-House38.png ff896524
-House39.png ff896525
-House40.png ff896526
-House41.png ff896527
-House42.png ff896528
-House43.png ff896529
-House44.png ff89652a
-House45.png ff89652b
-House46.png ff89652c
-House47.png ff89652d
-House48.png ff89652e
-House49.png ff89652f
-House51.png ff896530
-House50.png ff896531
-House52.png ff896532
-House53.png ff896533
-House54.png ff896534
-House55.png ff896535
-House56.png ff896536
-House57.png ff896537
-House58.png ff896538
-
-MaplesHouseF.png ffe0b060
-MaplesHouseB1.png ffd7a950
-MaplesHouseB2.png ffd7a951
-MaplesHouseB3.png ffd7a952
-
-PokeCenter.png ffa02000
-TransitionBuildingH.png ffa0e8f8
-TransitionBuildingV.png ff95dded
-
-Apartment01.png ff808860
-MagnemiteInductorBuilding.png ffffff00
-
-GymP.png ffeb8830
-GymR.png ffeb8831
-GymY.png ffeb8832
-GymB.png ffeb8833
-GymK.png ffeb8834
-GymW.png ffeb8835
-GymRAINBOW.png ffeb8836
-
-Mailbox01.png ff007823
-Mailbox02.png ff904900
-Mailbox03.png ff946e02
-Mailbox04.png ff005578
-Mailbox05.png ff3c3c42
-Mailbox06.png ff621700
-Mailbox07.png ff9d004f
-Mailbox08.png ff4b2367
-Mailbox09.png ff1d175a
-
-Poles01C.png ffd8d8c0
-Poles01L.png ffd8d8c1
-Poles01R.png ffd8d8c2
-
-Fountain.png ffa09868
-Item.png ff903028
-SmallRock.png ff493919
-Sign.png ff103860
-
-SmallWaterRock01.png ffb1c5cf
-SmallWaterRock02.png ffa9794c
+Flowers01 ffd8f0d8
+Flowers02 ffecd3ea
+Flowers03 ffe89068
+Flowers04 ff8e9ace
+Flowers05 ff8e9ac0
+Flowers06 ff8e9ac1
+Flowers07 ff8e9ac2
+Flowers08 ff8e9ac3
+Flowers09 ff8e9ac4
+Flowers0a ff8e9ac5
+Flowers0b ff8e9ac6
+Flowers0c ff8e9ac7
+Flowers0d ff8e9ac8
+Flowers0e ff8e9ac9
+Flowers10 ff8e9aca
+Flowers11 ff8e9acb
+Flowers12 ff8e9acc
+Flowers13 ff8e9acd
+Flowers14 ff8e9acf
+Flowers15 ff8e9ad0
 
 
+TreeSprite02 -ff66cd
+
+Tree18 ff6d5d45
+Tree17 ffacd450
+Tree16 ffacd451
+Tree15 ffacd452
+Tree14 ffacd453
+Tree13 ffacd454
+Tree12 ffacd455
+Tree11 ffacd456
+Tree10 ffacd457
+Tree09 ffacd460
+Tree08 ffacd458
+Tree07 ffde5b31
+Tree06 ffacd459
+Tree05 ffacd45a
+Tree03 ffacd45b
+Tree04 ffacd45c
+Tree02 ffacd45d
+Tree01 ffacd45e
+
+TreeBFM-Left ffacd461
+TreeBFM-Right ffacd462
+
+LedgeDL ff967b60
+LedgeL ff967b61
+LedgeLD ff967b62
+LedgeD ff967b63
+LedgeDR ff967b64
+LedgeR ff967b65
+LedgeRD ff967b66
+LedgeLUEnd ff967b67
+LedgeLDEnd ff967b68
+LedgeDLEnd ff967b69
+LedgeDREnd ff967b6a
+LedgeRDEnd ff967b6b
+LedgeRUEnd ff967b6c
+
+DirtPathC fff6dd90
+DirtPathUR fff6dd91
+DirtPathR fff6dd92
+DirtPathDR fff6dd93
+DirtPathD fff6dd94
+DirtPathDL fff6dd95
+DirtPathL fff6dd96
+DirtPathU fff6dd97
+DirtPathUL fff6dd98
+DirtPathRD fff6dd99
+DirtPathLD fff6dd9a
+DirtPathLU fff6dd9b
+DirtPathRU fff6dd9c
+
+GrassPathU ff90de70
+GrassPathUL ff90de71
+GrassPathL ff90de72
+GrassPathUR ff90de73
+GrassPathC ff90de74
+GrassPathR ff90de75
+GrassPathDL ff90de76
+GrassPathD ff90de77
+GrassPathDR ff90de78
+GrassPathLU ff90de79
+GrassPathRU ff90de7a
+GrassPathLD ff90de7b
+GrassPathRD ff90de7c
+
+ConcreteUL ff6b7a90
+ConcreteU ff6b7a91
+ConcreteUR ff6b7a92
+ConcreteR ff6b7a93
+ConcreteDR ff6b7a94
+ConcreteD ff6b7a95
+ConcreteDL ff6b7a96
+ConcreteL ff6b7a97
+ConcreteLU ff6b7a98
+ConcreteRU ff6b7a99
+ConcreteLD ff6b7a9a
+ConcreteRD ff6b7a9b
+ConcreteC ff6b7a9c
+
+StoneBrickPathU ff8d9790
+StoneBrickPathC ff8d9791
+StoneBrickPathL ff8d9792
+StoneBrickPathR ff8d9793
+StoneBrickPathD ff8d9794
+StoneBrickPathDL ff8d9795
+StoneBrickPathDR ff8d9796
+StoneBrickPathUR ff8d9797
+StoneBrickPathUL ff8d9798
+StoneBrickPathRD ff8d9799
+StoneBrickPathLD ff8d979a
+StoneBrickPathRU ff8d979b
+StoneBrickPathLU ff8d979c
+
+StoneBrickPath2U ff98b0b0
+StoneBrickPath2L ff98b0b1
+StoneBrickPath2C ff98b0b2
+StoneBrickPath2D ff98b0b3
+StoneBrickPath2R ff98b0b4
+StoneBrickPath2UR ff98b0b5
+StoneBrickPath2DR ff98b0b6
+StoneBrickPath2DL ff98b0b7
+StoneBrickPath2UL ff98b0b8
+StoneBrickPath2RD ff98b0b9
+StoneBrickPath2LD ff98b0ba
+StoneBrickPath2RU ff98b0bb
+StoneBrickPath2LU ff98b0bc
+
+Stairs01StairsUpLeftTop ffa5ad82
+Stairs01StairsUpLeftCenter ffa5ad81
+Stairs01StairsUpLeftBottom ffa5ad80
+Stairs01StairsUpRightTop ffa5ad85
+Stairs01StairsUpRightCenter ffa5ad84
+Stairs01StairsUpRightBottom ffa5ad83
+
+Flag ffefbd00
+
+House0 ff89654a
+House1 ff4ea8d3
+House2 ff896500
+House3 ff896501
+House5 ff896502
+House6 ff896503
+House4 ff896504
+House7 ff896505
+House8 ff896506
+House9 ff896507
+House10 ff896508
+House11 ff896509
+House12 ff89650a
+House13 ff89650b
+House14 ff89650c
+House15 ff89650d
+House16 ff89650e
+House19 ff89650f
+House17 ff896510
+House18 ff896511
+House20 ff896512
+House21 ff896513
+House22 ff896514
+House23 ff896515
+House24 ff896516
+House25 ff896517
+House26 ff896518
+House28 ff896519
+House27 ff89651a
+House29 ff89651b
+House31 ff89651c
+House30 ff89651d
+House32 ff89651e
+House33 ff89651f
+House34 ff896520
+House35 ff896521
+House36 ff896522
+House37 ff896523
+House38 ff896524
+House39 ff896525
+House40 ff896526
+House41 ff896527
+House42 ff896528
+House43 ff896529
+House44 ff89652a
+House45 ff89652b
+House46 ff89652c
+House47 ff89652d
+House48 ff89652e
+House49 ff89652f
+House51 ff896530
+House50 ff896531
+House52 ff896532
+House53 ff896533
+House54 ff896534
+House55 ff896535
+House56 ff896536
+House57 ff896537
+House58 ff896538
+
+MaplesHouseF ffe0b060
+MaplesHouseB1 ffd7a950
+MaplesHouseB2 ffd7a951
+MaplesHouseB3 ffd7a952
+
+PokeCenter ffa02000
+TransitionBuildingH ffa0e8f8
+TransitionBuildingV ff95dded
+
+Apartment01 ff808860
+MagnemiteInductorBuilding ffffff00
+
+GymP ffeb8830
+GymR ffeb8831
+GymY ffeb8832
+GymB ffeb8833
+GymK ffeb8834
+GymW ffeb8835
+GymRAINBOW ffeb8836
+
+Mailbox01 ff007823
+Mailbox02 ff904900
+Mailbox03 ff946e02
+Mailbox04 ff005578
+Mailbox05 ff3c3c42
+Mailbox06 ff621700
+Mailbox07 ff9d004f
+Mailbox08 ff4b2367
+Mailbox09 ff1d175a
+
+Poles01C ffd8d8c0
+Poles01L ffd8d8c1
+Poles01R ffd8d8c2
+
+Fountain ffa09868
+Item ff903028
+SmallRock ff493919
+Sign ff103860
+
+SmallWaterRock01 ffb1c5cf
+SmallWaterRock02 ffa9794c
 
 
 
-Flooring03.png ffa08050
-Flooring02.png ffaf8547
-Flooring01.png ff917141
-Flooring08.png ff9d7944
-
-Flooring04.png ff9c7d33
-Flooring05.png ffbc9c53
-Flooring06.png ffac8c41
-Flooring07.png ffd0b068
-
-FloorTileGray01.png ffb8c0d0
-FloorTileGray02.png ffb8c0d1
-
-FloorTileTan01.png fff8e090
-FloorTileTan02.png fff8e091
-FloorTilePC.png fff8c868
 
 
-FloorYellowBrick01.png ff20b421
-FloorYellowBrick02.png ff20b424
+Flooring03 ffa08050
+Flooring02 ffaf8547
+Flooring01 ff917141
+Flooring08 ff9d7944
 
-YellowLedge01.png ff20b425
-YellowLedge02.png ff20b426
-YellowStair01.png ff20b427
-YellowStair02.png ff20b428
-YellowStair03.png ff20b429
-YellowStair04.png ff20b42a
+Flooring04 ff9c7d33
+Flooring05 ffbc9c53
+Flooring06 ffac8c41
+Flooring07 ffd0b068
 
-TomGymRightWall.png ff20b422
-TomGymLeftWall.png ff20b423
+FloorTileGray01 ffb8c0d0
+FloorTileGray02 ffb8c0d1
 
-WallGray.png ffa8a8a8
-WallRed.png ff85736c
-WallOrange.png fff89840
-WallPC.png fff0f0d0
-
-Window01.png ffa05838
-Window02.png ffa05837
-
-Entrance.png fff04030
-EntranceH.png fff04031
-EntranceV.png fff04032
-
-StairsDownL.png ff662510
-StairsDownR.png ff662511
-StairsUpL.png ff662512
-StairsUpR.png ff662513
-
-BookCase01.png ffd0d078
-BookCaseBack01.png ff596752
-Shelf01.png ff7088e8
-ShelfBack01.png ff394069
-Shelf02.png ff48b088
-ShelfBack02.png ff277069
-BookShelfPC1.png ff58e8a8
-BookShelfPC2.png ffd8d8e0
-BookShelfPC3.png ff40a880
-
-Bed.png ffe898b0
-LaptopDesk.png ff105080
-TV.png ff1a2d5b
-Sink.png ff782828
-Fridge.png ff7888b0
-CounterKitchen.png ffb7a883
-
-Table02.png ff505048
-Table03.png fff8d060
-GlassTable.png fff5ecff
-
-TableWide.png fff8d061
-
-TableSmall01.png fff8d062
-TableSmall02.png fff8d063
-TableSmall03.png fff8d064
-
-Stool02.png fff88830
-Stool03.png fff8e858
-Stool04.png ff28b8e8
-
-Crate01.png ffc0a068
-Crate02.png ff1898d0
-SmallBox01.png fff8e088
-
-InsideTree01.png ffd06098
-
-PokemonStatue.png ffa8b6be
-
-TVPC.png fff8f0d0
-
-PC.png ff0b5f9b
-
-MachinePC.png fff0a000
-
-MapleMachine1.png ff7c3f19
-MapleMachine2.png ff7c3f18
-LabMachine1.png fff0a001
-LabMachine2.png fff0a002
-LabMachine3.png fff0a003
-LabMachine4.png fff0a004
-LabMachine5.png ffe8c048
-LabMachine6.png ff085890
-LabMachine7.png fff0a828
-
-ElectricMachine.png ffe6cf27
-
-CounterBlueD.png ff0059e0
-CounterBlueDLE.png ff0059e1
-CounterBlueDM.png ff0059e2
-CounterBlueDRE.png ff0059e3
-CounterBlueL.png ff0059e4
-CounterBlueLD.png ff0059e5
-CounterBlueLDE.png ff0059e6
-CounterBlueLM.png ff0059e7
-CounterBlueLU.png ff0059e8
-CounterBlueLUE.png ff0059e9
-CounterBlueR.png ff0059ea
-CounterBlueRD.png ff0059eb
-CounterBlueRDE.png ff0059ec
-CounterBlueRM.png ff0059ed
-CounterBlueRU.png ff0059ee
-CounterBlueRUE.png ff0059ef
-
-CounterRedD.png ffe03000
-CounterRedDLE.png ffe03001
-CounterRedDM.png ffe03002
-CounterRedDRE.png ffe03003
-CounterRedL.png ffe03004
-CounterRedLD.png ffe03005
-CounterRedLDE.png ffe03006
-CounterRedLM.png ffe03007
-CounterRedLU.png ffe03008
-CounterRedLUE.png ffe03009
-CounterRedR.png ffe0300a
-CounterRedRD.png ffe0300b
-CounterRedRDE.png ffe0300c
-CounterRedRM.png ffe0300d
-CounterRedRU.png ffe0300e
-CounterRedRUE.png ffe0300f
-
-CounterGreenD.png ff1bc910
-CounterGreenDLE.png ff1bc911
-CounterGreenDM.png ff1bc912
-CounterGreenDRE.png ff1bc913
-CounterGreenL.png ff1bc914
-CounterGreenLD.png ff1bc915
-CounterGreenLDE.png ff1bc916
-CounterGreenLM.png ff1bc917
-CounterGreenLU.png ff1bc918
-CounterGreenLUE.png ff1bc919
-CounterGreenR.png ff1bc91a
-CounterGreenRD.png ff1bc91b
-CounterGreenRDE.png ff1bc91c
-CounterGreenRM.png ff1bc91d
-CounterGreenRU.png ff1bc91e
-CounterGreenRUE.png ff1bc91f
-
-CounterOrangeD.png ffe08700
-CounterOrangeDLE.png ffe08701
-CounterOrangeDM.png ffe08702
-CounterOrangeDRE.png ffe08703
-CounterOrangeL.png ffe08704
-CounterOrangeLD.png ffe08705
-CounterOrangeLDE.png ffe08706
-CounterOrangeLM.png ffe08707
-CounterOrangeLU.png ffe08708
-CounterOrangeLUE.png ffe08709
-CounterOrangeR.png ffe0870a
-CounterOrangeRD.png ffe0870b
-CounterOrangeRDE.png ffe0870c
-CounterOrangeRM.png ffe0870d
-CounterOrangeRU.png ffe0870e
-CounterOrangeRUE.png ffe0870f
-
-CounterPC01.png fff00000
-
-MartCounter01.png ff5878c0
-MartCounter02.png ff70c8d0
-
-BlockingDoor.png ff908058
-
-RedRugB.png ffcf4a2f
-RedRugBL.png ffc44830
-RedRugBR.png ffcd4e35
-RedRugC.png ffd86048
-RedRugL.png ffce5841
-RedRugR.png ffda5a40
-RedRugT.png ffd95338
-RedRugTL.png ffd15d46
-RedRugTR.png ffc1523c
+FloorTileTan01 fff8e090
+FloorTileTan02 fff8e091
+FloorTilePC fff8c868
 
 
-RedRug2C.png ffc06870
-RedRug2UL.png ffc06871
-RedRug2UR.png ffc06872
-RedRug2DL.png ffc06873
-RedRug2DR.png ffc06874
-RedRug2U.png ffc06875
-RedRug2L.png ffc06876
-RedRug2R.png ffc06877
-RedRug2D.png ffc06878
+FloorYellowBrick01 ff20b421
+FloorYellowBrick02 ff20b424
+
+YellowLedge01 ff20b425
+YellowLedge02 ff20b426
+YellowStair01 ff20b427
+YellowStair02 ff20b428
+YellowStair03 ff20b429
+YellowStair04 ff20b42a
+
+TomGymRightWall ff20b422
+TomGymLeftWall ff20b423
+
+WallGray ffa8a8a8
+WallRed ff85736c
+WallOrange fff89840
+WallPC fff0f0d0
+
+Window01 ffa05838
+Window02 ffa05837
+
+Entrance fff04030
+EntranceH fff04031
+EntranceV fff04032
+
+StairsDownL ff662510
+StairsDownR ff662511
+StairsUpL ff662512
+StairsUpR ff662513
+
+BookCase01 ffd0d078
+BookCaseBack01 ff596752
+Shelf01 ff7088e8
+ShelfBack01 ff394069
+Shelf02 ff48b088
+ShelfBack02 ff277069
+BookShelfPC1 ff58e8a8
+BookShelfPC2 ffd8d8e0
+BookShelfPC3 ff40a880
+
+Bed ffe898b0
+LaptopDesk ff105080
+TV ff1a2d5b
+Sink ff782828
+Fridge ff7888b0
+CounterKitchen ffb7a883
+
+Table02 ff505048
+Table03 fff8d060
+GlassTable fff5ecff
+
+TableWide fff8d061
+
+TableSmall01 fff8d062
+TableSmall02 fff8d063
+TableSmall03 fff8d064
+
+Stool02 fff88830
+Stool03 fff8e858
+Stool04 ff28b8e8
+
+Crate01 ffc0a068
+Crate02 ff1898d0
+SmallBox01 fff8e088
+
+InsideTree01 ffd06098
+
+PokemonStatue ffa8b6be
+
+TVPC fff8f0d0
+
+PC ff0b5f9b
+
+MachinePC fff0a000
+
+MapleMachine1 ff7c3f19
+MapleMachine2 ff7c3f18
+LabMachine1 fff0a001
+LabMachine2 fff0a002
+LabMachine3 fff0a003
+LabMachine4 fff0a004
+LabMachine5 ffe8c048
+LabMachine6 ff085890
+LabMachine7 fff0a828
+
+ElectricMachine ffe6cf27
+
+CounterBlueD ff0059e0
+CounterBlueDLE ff0059e1
+CounterBlueDM ff0059e2
+CounterBlueDRE ff0059e3
+CounterBlueL ff0059e4
+CounterBlueLD ff0059e5
+CounterBlueLDE ff0059e6
+CounterBlueLM ff0059e7
+CounterBlueLU ff0059e8
+CounterBlueLUE ff0059e9
+CounterBlueR ff0059ea
+CounterBlueRD ff0059eb
+CounterBlueRDE ff0059ec
+CounterBlueRM ff0059ed
+CounterBlueRU ff0059ee
+CounterBlueRUE ff0059ef
+
+CounterRedD ffe03000
+CounterRedDLE ffe03001
+CounterRedDM ffe03002
+CounterRedDRE ffe03003
+CounterRedL ffe03004
+CounterRedLD ffe03005
+CounterRedLDE ffe03006
+CounterRedLM ffe03007
+CounterRedLU ffe03008
+CounterRedLUE ffe03009
+CounterRedR ffe0300a
+CounterRedRD ffe0300b
+CounterRedRDE ffe0300c
+CounterRedRM ffe0300d
+CounterRedRU ffe0300e
+CounterRedRUE ffe0300f
+
+CounterGreenD ff1bc910
+CounterGreenDLE ff1bc911
+CounterGreenDM ff1bc912
+CounterGreenDRE ff1bc913
+CounterGreenL ff1bc914
+CounterGreenLD ff1bc915
+CounterGreenLDE ff1bc916
+CounterGreenLM ff1bc917
+CounterGreenLU ff1bc918
+CounterGreenLUE ff1bc919
+CounterGreenR ff1bc91a
+CounterGreenRD ff1bc91b
+CounterGreenRDE ff1bc91c
+CounterGreenRM ff1bc91d
+CounterGreenRU ff1bc91e
+CounterGreenRUE ff1bc91f
+
+CounterOrangeD ffe08700
+CounterOrangeDLE ffe08701
+CounterOrangeDM ffe08702
+CounterOrangeDRE ffe08703
+CounterOrangeL ffe08704
+CounterOrangeLD ffe08705
+CounterOrangeLDE ffe08706
+CounterOrangeLM ffe08707
+CounterOrangeLU ffe08708
+CounterOrangeLUE ffe08709
+CounterOrangeR ffe0870a
+CounterOrangeRD ffe0870b
+CounterOrangeRDE ffe0870c
+CounterOrangeRM ffe0870d
+CounterOrangeRU ffe0870e
+CounterOrangeRUE ffe0870f
+
+CounterPC01 fff00000
+
+MartCounter01 ff5878c0
+MartCounter02 ff70c8d0
+
+BlockingDoor ff908058
+
+RedRugB ffcf4a2f
+RedRugBL ffc44830
+RedRugBR ffcd4e35
+RedRugC ffd86048
+RedRugL ffce5841
+RedRugR ffda5a40
+RedRugT ffd95338
+RedRugTL ffd15d46
+RedRugTR ffc1523c
+
+
+RedRug2C ffc06870
+RedRug2UL ffc06871
+RedRug2UR ffc06872
+RedRug2DL ffc06873
+RedRug2DR ffc06874
+RedRug2U ffc06875
+RedRug2L ffc06876
+RedRug2R ffc06877
+RedRug2D ffc06878
+
