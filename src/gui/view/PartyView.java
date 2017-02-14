@@ -241,7 +241,7 @@ class PartyView extends View {
 		// Draw Pokemon Image
 		imagePanel.drawBackground(g);
 		TileSet pkmTiles = data.getPokemonTilesSmall();
-		BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageIndex());
+		BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageName());
 		imagePanel.imageLabel(g, pkmImg);
 
 		// Draw basic information panel
@@ -453,7 +453,7 @@ class PartyView extends View {
 			g.setColor(Color.BLACK);
 			g.drawString(pkm.getActualName(), 40, 34);
 			
-			pkmImg = partyTiles.getTile(pkm.getTinyImageIndex());
+			pkmImg = partyTiles.getTile(pkm.getTinyImageName());
 			ImageUtils.drawCenteredImage(g, pkmImg, 19, 26);
 			
 			g.translate(-tabButton.x, -tabButton.y);

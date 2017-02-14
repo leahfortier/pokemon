@@ -331,7 +331,7 @@ public class BagView extends View {
 			Item selectedItemValue = selectedItem.getItem();
 
 			// Draw item image
-			BufferedImage img = itemTiles.getTile(selectedItemValue.getImageIndex());
+			BufferedImage img = itemTiles.getTile(selectedItemValue.getImageName());
 			g.drawImage(img, selectedPanel.x + 5, selectedPanel.y, null);
 			
 			g.setColor(Color.BLACK);
@@ -376,7 +376,7 @@ public class BagView extends View {
 
 				g.translate(itemButton.x, itemButton.y);
 
-				ImageUtils.drawCenteredImage(g, itemTiles.getTile(itemValue.getImageIndex()), 14, 14);
+				ImageUtils.drawCenteredImage(g, itemTiles.getTile(itemValue.getImageName()), 14, 14);
 				
 				g.drawString(item.getName(), 29, 18);
 				
@@ -446,7 +446,7 @@ public class BagView extends View {
 				pokemonPanel.drawBackground(g);
 
 
-				BufferedImage img = partyTiles.getTile(p.getTinyImageIndex());
+				BufferedImage img = partyTiles.getTile(p.getTinyImageName());
 				ImageUtils.drawCenteredImage(g, img, 30, 30); // TODO: This looks slightly off
 				
 				g.setColor(Color.BLACK);

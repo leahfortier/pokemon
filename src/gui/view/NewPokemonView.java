@@ -188,7 +188,7 @@ class NewPokemonView extends View {
             BasicPanels.drawFullMessagePanel(g, message);
         }
 
-        BufferedImage pokemonImage = Game.getData().getPokedexTilesLarge().getTile(newPokemon.getTinyImageIndex());
+        BufferedImage pokemonImage = Game.getData().getPokedexTilesLarge().getTile(newPokemon.getBaseImageName());
         if (displayInfo) {
             imagePanel.drawBackground(g);
             imagePanel.imageLabel(g, pokemonImage);
@@ -246,7 +246,7 @@ class NewPokemonView extends View {
                 drawButton(g, rightButton(), new Color(220, 20, 20), "No");
                 break;
             case NICKNAME:
-                BufferedImage spriteImage = Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageIndex());
+                BufferedImage spriteImage = Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageName());
                 String nickname = InputControl.instance().getInputCaptureString(ActivePokemon.MAX_NAME_LENGTH);
 
                 ImageUtils.drawCenteredImageLabel(g, spriteImage, nickname, BasicPanels.canvasMessageCenter);
@@ -268,7 +268,7 @@ class NewPokemonView extends View {
 
                         Button pokemonButton = buttons[buttonIndex];
                         ActivePokemon partyPokemon = party.get(partyIndex);
-                        BufferedImage partyPokemonImage = partyTiles.getTile(partyPokemon.getTinyImageIndex());
+                        BufferedImage partyPokemonImage = partyTiles.getTile(partyPokemon.getTinyImageName());
 
                         DrawPanel pokemonPanel = new DrawPanel(pokemonButton)
                                 .withBackgroundColors(Type.getColors(partyPokemon))

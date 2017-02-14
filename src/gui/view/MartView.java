@@ -292,7 +292,7 @@ class MartView extends View {
 			Item selectedItemValue = selectedItem.getItem();
 
 			// Draw item image
-			BufferedImage img = itemTiles.getTile(selectedItemValue.getImageIndex());
+			BufferedImage img = itemTiles.getTile(selectedItemValue.getImageName());
 			ImageUtils.drawCenteredImage(g, img, 430, 132);
 			
 			g.setColor(Color.BLACK);
@@ -327,7 +327,7 @@ class MartView extends View {
 		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
 			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
 				ItemNamesies item = iter.next();
-				BufferedImage img = itemTiles.getTile(item.getItem().getImageIndex());
+				BufferedImage img = itemTiles.getTile(item.getItem().getImageName());
 
 				Button itemButton = itemButtons[k];
 				itemButton.fill(g, Color.WHITE);

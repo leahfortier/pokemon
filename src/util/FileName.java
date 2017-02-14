@@ -14,9 +14,6 @@ public abstract class FileName {
     public static final String MAP_TILES_INDEX = getIndexFileName(Folder.MAP_TILES);
     public static final String TRAINER_TILES_INDEX = getIndexFileName(Folder.TRAINER_TILES);
     public static final String MAP_MAKER_TILES_INDEX = getIndexFileName(Folder.MAP_MAKER_TILES);
-    public static final String ITEM_TILES_INDEX = getIndexFileName(Folder.ITEM_TILES);
-    public static final String POKEMON_TILES_INDEX = getIndexFileName(Folder.POKEMON_TILES);
-    public static final String PARTY_TILES_INDEX = getIndexFileName(Folder.PARTY_TILES);
 
     public static String getIndexFileName(final String folderName) {
         return folderName + "index.txt";

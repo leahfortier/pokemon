@@ -15,14 +15,12 @@ import item.use.TechnicalMachine;
 import main.Global;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
-import type.Type;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
 import util.PokeString;
 import util.StringUtils;
 
-import java.io.File;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,8 +31,6 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 class PokeGen {
-	private static final int TM_BASE_INDEX = 2000;
-
 	private enum Generator {
 		ATTACK_GEN("Moves.txt", Folder.ATTACK, Attack.class, AttackNamesies.class),
 		POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.GENERIC_EFFECT, PokemonEffect.class, EffectNamesies.class),
@@ -154,7 +150,6 @@ class PokeGen {
 		readFileFormat(in);
 		
 		// The image index file for the item generator
-		StringBuilder indexOut = new StringBuilder();
 		int index = 0;
 		
 		while (in.hasNext()) {
@@ -174,17 +169,10 @@ class PokeGen {
 
 			// Create class and append
 			out.append(createClass(name, className, fields));
-			
-			if (this.currentGen == Generator.ITEM_GEN) {
-				addImageIndex(indexOut, index, name, className.toLowerCase());
-			}
-			
-			index++;
 		}
 
 		if (this.currentGen == Generator.ITEM_GEN) {
-			addTMs(out, indexOut);
-			FileIO.writeToFile(Folder.ITEM_TILES + "index.txt", indexOut);
+			addTMs(out);
 		}
 
 		out.append("}");
@@ -300,19 +288,9 @@ class PokeGen {
 		return methods.toString();
 	}
 	
-	private void addTMs(StringBuilder classes, StringBuilder indexOut) {
+	private void addTMs(StringBuilder classes) {
 		if (this.currentGen != Generator.ITEM_GEN) {
 			Global.error("Can only add TMs for the Item class");
-		}
-
-		// Add the image index for each type (except for None)
-		for (Type type : Type.values()) {
-			if (type == Type.NO_TYPE) {
-				continue;
-			}
-
-			String name = type.getName() + "TM";
-			addImageIndex(indexOut, TM_BASE_INDEX + type.getIndex(), name, name.toLowerCase());
 		}
 
 		Scanner in = FileIO.openFile(FileName.TM_LIST);
@@ -329,7 +307,6 @@ class PokeGen {
 			ClassFields fields = new ClassFields();
 			fields.setClassName(className);
 			fields.add("Namesies", attackName + "_TM");
-			fields.add("Index", TM_BASE_INDEX + attack.getActualType().getIndex() + "");
 			fields.add("Desc", attack.getDescription());
 
 			fields.add("Int", TechnicalMachine.class.getSimpleName());
@@ -337,15 +314,6 @@ class PokeGen {
 
 			classes.append(createClass(itemName, className, fields));
 		}
-	}
-	
-	private static void addImageIndex(StringBuilder indexOut, int index, String name, String imageName) {
-		File imageFile = new File(Folder.ITEM_TILES + imageName + ".png");
-		if (!imageFile.exists()) {
-			Global.error("Image for " + name + " does not exist." + imageFile.getAbsolutePath());
-		}
-	
-		indexOut.append(String.format("%s.png %08x%n", imageName, index));
 	}
 
 	private boolean getPhysicalContact(ClassFields fields) {

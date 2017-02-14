@@ -133,7 +133,7 @@ class BattleState implements VisualStateHandler {
             battleImageSlideLeft = mapView.getTerrain().getOpponentCircleImage();
 
             ActivePokemon p = battle.getOpponent().front();
-            battleImageSlideRight = data.getPokemonTilesLarge().getTile(p.getImageIndex());
+            battleImageSlideRight = data.getPokemonTilesLarge().getTile(p.getImageName());
 
             if (seenWild) {
                 battleImageSlideRight = ImageUtils.colorImage(battleImageSlideRight, new float[] { 0, 0, 0, 1 }, new float[] { 0, 0, 0, 0 });

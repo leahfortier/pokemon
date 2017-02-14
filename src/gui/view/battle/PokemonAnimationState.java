@@ -20,6 +20,7 @@ import draw.Alignment;
 import draw.DrawUtils;
 import util.FontMetrics;
 import util.Point;
+import util.StringUtils;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -98,7 +99,7 @@ class PokemonAnimationState {
         this.state = new PokemonState();
 
         resetVals(p);
-        state.imageNumber = 0;
+        state.imageName = null;
     }
 
     private void resetVals(ActivePokemon p) {
@@ -137,7 +138,7 @@ class PokemonAnimationState {
         state.status = oldState.status = status;
         state.type = type;
         state.shiny = shiny;
-        state.imageNumber = pokemon.getImageNumber(state.shiny, !isPlayer);
+        state.imageName = pokemon.getImageName(state.shiny, !isPlayer);
         state.caught = battleView.getCurrentBattle().isWildBattle() && Game.getPlayer().getPokedex().isCaught(pokemon.namesies());
         state.name = name;
         state.maxHp = oldState.maxHp = maxHP;
@@ -171,14 +172,14 @@ class PokemonAnimationState {
 
     private void startPokemonUpdateAnimation(PokemonInfo newPokemon, boolean newShiny, boolean animate) {
         state.shiny = newShiny;
-        if (state.imageNumber != 0) {
-            oldState.imageNumber = state.imageNumber;
+        if (!StringUtils.isNullOrEmpty(state.imageName)) {
+            oldState.imageName= state.imageName;
             if (animate) {
                 animationEvolve = EVOLVE_ANIMATION_LIFESPAN;
             }
         }
 
-        state.imageNumber = newPokemon.getImageNumber(state.shiny, !isPlayer);
+        state.imageName = newPokemon.getImageName(state.shiny, !isPlayer);
         animationCatchDuration = 0;
     }
 
@@ -212,7 +213,7 @@ class PokemonAnimationState {
     }
 
     public boolean isEmpty() {
-        return state.imageNumber == 0;
+        return StringUtils.isNullOrEmpty(state.imageName);
     }
 
     boolean isAnimationPlaying() {
@@ -274,7 +275,7 @@ class PokemonAnimationState {
 
         animationCatch -= Global.MS_BETWEEN_FRAMES;
 
-        BufferedImage pkBall = pkmTiles.getTile(0x11111);
+        BufferedImage pkBall = TileSet.POKEBALL;
 
         int px = pokemonDrawLocation.x;
         int py = pokemonDrawLocation.y;
@@ -290,7 +291,7 @@ class PokemonAnimationState {
                 animationEvolve,
                 EVOLVE_ANIMATION_LIFESPAN,
                 plyrImg,
-                pkmTiles.getTile(oldState.imageNumber),
+                pkmTiles.getTile(oldState.imageName),
                 pokemonDrawLocation);
     }
 
@@ -352,7 +353,7 @@ class PokemonAnimationState {
             GameData data = Game.getData();
             TileSet pkmTiles = isPlayer ? data.getPokemonTilesLarge() : data.getPokemonTilesMedium();
 
-            BufferedImage plyrImg = pkmTiles.getTile(state.imageNumber);
+            BufferedImage plyrImg = pkmTiles.getTile(state.imageName);
             if (plyrImg != null) {
                 if (animationEvolve > 0) {
                     evolveAnimation(g, plyrImg, pkmTiles);
@@ -362,7 +363,7 @@ class PokemonAnimationState {
                 }
                 else {
                     if (animationCatchDuration == -1) {
-                        plyrImg = pkmTiles.getTile(0x11111);
+                        plyrImg = TileSet.POKEBALL;
                     }
 
                     ImageUtils.drawBottomCenteredImage(g, plyrImg, pokemonDrawLocation);
@@ -488,7 +489,7 @@ class PokemonAnimationState {
     private static class PokemonState {
         private int maxHp;
         private int hp;
-        private int imageNumber;
+        private String imageName;
         private int level;
         private String name;
         private StatusCondition status;

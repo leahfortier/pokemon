@@ -274,37 +274,4 @@ public class StuffGen {
 			out.println(in.nextLine());
 		}
 	}
-	
-	private static void generatePokemonTileIndices() {
-		StringBuilder out = new StringBuilder();
-		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-			out.append(String.format("%03d.png %08x%n", i, i*4));
-			out.append(String.format("%03d-back.png %08x%n", i, i*4 + 1));
-			
-			if (i >= 650) {
-				out.append(String.format("%03d.png %08x%n", i, i*4 + 2));
-				out.append(String.format("%03d-back.png %08x%n", i, i*4 + 3));
-			}
-			else {
-				out.append(String.format("%03d-shiny.png %08x%n", i, i*4 + 2));
-				out.append(String.format("%03d-shiny-back.png %08x%n", i, i*4 + 3));				
-			}
-		}
-		
-		out.append("pokeball.png 00011111\n");
-		out.append("egg.png 00010000\n");
-		
-		FileIO.writeToFile(FileName.POKEMON_TILES_INDEX, out);
-	}
-	
-	private static void generatePokemonPartyTileIndices() {
-		StringBuilder out = new StringBuilder();
-		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-			out.append(String.format("%03d-small.png %08x%n", i, i));
-		}
-		
-		out.append("egg-small.png 00010000\n");
-		
-		FileIO.writeToFile(FileName.PARTY_TILES_INDEX, out);
-	}
 }

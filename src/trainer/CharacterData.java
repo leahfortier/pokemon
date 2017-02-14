@@ -226,6 +226,7 @@ public class CharacterData extends Trainer implements Serializable {
 		for (ActivePokemon p : team) {
 			if (p.isEgg() && p.hatch()) {
 				evolvingPokemon = p;
+				evolution = null;
 
 				Trigger dialogue = TriggerType.DIALOGUE.createTrigger("Huh?", null);
 				Trigger evolutionView = TriggerType.CHANGE_VIEW.createTrigger(ViewMode.EVOLUTION_VIEW.name(), null);
