@@ -274,7 +274,7 @@ class PokemonAnimationState {
 
         animationCatch -= Global.MS_BETWEEN_FRAMES;
 
-        BufferedImage pkBall = pkmTiles.getTile(0x11111);
+        BufferedImage pkBall = TileSet.POKEBALL;
 
         int px = pokemonDrawLocation.x;
         int py = pokemonDrawLocation.y;

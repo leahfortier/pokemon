@@ -14,7 +14,8 @@ public class TileSet {
 	public static final int EMPTY_IMAGE = -1;
 	public static final int INVALID_RGB = -1000;
 
-	public static final BufferedImage TINY_POKEBALL = FileIO.readImage(Folder.IMAGES + "Pokeball.png");
+	public static final BufferedImage POKEBALL = FileIO.readImage(Folder.IMAGES + "Pokeball.png");
+	public static final BufferedImage TINY_POKEBALL = FileIO.readImage(Folder.IMAGES + "TinyPokeball.png");
 
 	private static final BufferedImage IMAGE_NOT_FOUND = FileIO.readImage(Folder.IMAGES + "imageNotFound.png");
 
