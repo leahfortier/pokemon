@@ -16,7 +16,6 @@ Constructor:
 	Namesies Enum ItemNamesies
 	Desc String
 	Cat Enum BagCategory
-	Index Int
 *
 Fields:
 	Price Int price

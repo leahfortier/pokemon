@@ -2,12 +2,13 @@ package item.use;
 
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import item.ItemInterface;
 import main.Global;
 import pokemon.ActivePokemon;
 
 import java.util.List;
 
-public interface TechnicalMachine extends MoveUseItem {
+public interface TechnicalMachine extends MoveUseItem, ItemInterface {
     AttackNamesies getAttack();
 
     default boolean use(ActivePokemon p, Move m) {
@@ -43,5 +44,9 @@ public interface TechnicalMachine extends MoveUseItem {
         // Did not find move to replace -- throw error
         Global.error(p.getName() + " does not have move to replace " + m.getAttack().getName());
         return false;
+    }
+
+    default String getImageName() {
+        return this.getAttack().getAttack().getActualType().getName().toLowerCase() + "tm";
     }
 }

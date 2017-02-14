@@ -214,7 +214,7 @@ public class MapMakerTriggerData {
 	private LocationTriggerMatcher getTriggerFromDialog(TriggerModelType triggerModelType, LocationTriggerMatcher oldTrigger) {
 		switch (triggerModelType) {
 			case ITEM:
-				return new ItemEntityDialog((ItemMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
+				return new ItemEntityDialog((ItemMatcher)oldTrigger).getMatcher(mapMaker);
 			case NPC:
 				return new NPCEntityDialog((NPCMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
 			case MISC_ENTITY:
