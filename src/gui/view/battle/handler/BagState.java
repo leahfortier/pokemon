@@ -211,7 +211,7 @@ public class BagState implements VisualStateHandler {
 
         g.translate(dx, dy);
 
-        BufferedImage img = itemTiles.getTile(itemNamesies.getItem().getImageIndex());
+        BufferedImage img = itemTiles.getTile(itemNamesies.getItem().getImageName());
         ImageUtils.drawCenteredImage(g, img, 14, 14);
 
         g.setColor(Color.BLACK);

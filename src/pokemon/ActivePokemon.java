@@ -208,17 +208,22 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	// Does not include shiny -- this is for the small party tiles
-	public int getTinyImageIndex() {
-		return this.isEgg ? PokemonInfo.EGG_IMAGE : pokemon.getNumber();
+	public String getTinyImageName() {
+		return this.isEgg ? PokemonInfo.TINY_EGG_IMAGE_NAME : this.pokemon.getTinyImageName();
 	}
 
-	public int getImageIndex() {
-		return this.getImageIndex(true);
+	// Does not include shiny -- this is for the small party tiles
+	public String getBaseImageName() {
+		return this.isEgg ? PokemonInfo.BASE_EGG_IMAGE_NAME : this.pokemon.getBaseImageName();
+	}
+
+	public String getImageName() {
+		return this.getImageName(true);
 	}
 
 	// Larger image index
-	public int getImageIndex(boolean front) {
-		return this.isEgg() ? PokemonInfo.EGG_IMAGE : this.pokemon.getImageNumber(this.isShiny(), front);
+	public String getImageName(boolean front) {
+		return this.isEgg() ? PokemonInfo.SPRITE_EGG_IMAGE_NAME : this.pokemon.getImageName(this.isShiny(), front);
 	}
 	
 	public boolean isEgg() {

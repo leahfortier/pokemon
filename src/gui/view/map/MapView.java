@@ -5,6 +5,7 @@ import draw.TextUtils;
 import draw.TileUtils;
 import gui.GameData;
 import gui.TileSet;
+import gui.IndexTileSet;
 import gui.view.View;
 import gui.view.ViewMode;
 import main.Game;
@@ -104,7 +105,7 @@ public class MapView extends View {
 
 	private void drawTiles(Graphics g) {
 		GameData data = Game.getData();
-		TileSet mapTiles = data.getMapTiles();
+		IndexTileSet mapTiles = data.getMapTiles();
 
 		// Background
 		for (int y = start.y; y < end.y; y++) {

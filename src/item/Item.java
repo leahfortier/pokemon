@@ -73,7 +73,6 @@ import item.use.PokemonUseItem;
 import item.use.TechnicalMachine;
 import item.use.UseItem;
 import main.Game;
-import map.AreaData;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.Messages;
@@ -149,6 +148,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 	public int getImageIndex() {
 		return this.imageIndex;
+	}
+
+	public String getImageName() {
+		return this.getClass().getSimpleName().toLowerCase();
 	}
 
 	public BagCategory getBagCategory() {

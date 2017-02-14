@@ -247,7 +247,7 @@ class PCView extends View {
 			button.blackOutline(g);
 		}
 
-		button.imageLabel(g, Game.getData().getPartyTiles().getTile(pokemon.getTinyImageIndex()));
+		button.imageLabel(g, Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()));
 	}
 
 	@Override
@@ -311,7 +311,7 @@ class PCView extends View {
 		movesPanel.drawBackground(g);
 		statsPanel.drawBackground(g);
 
-		BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageIndex());
+		BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageName());
 		imagePanel.drawBackground(g);
 		imagePanel.imageLabel(g, pkmImg);
 

@@ -176,6 +176,14 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return number;
 	}
 
+	public String getBaseImageName() {
+		return String.format("%03d", number);
+	}
+
+	public String getTinyImageName() {
+		return this.getBaseImageName() + "-small";
+	}
+
 	public Evolution getEvolution() {
 		return evolution;
 	}
@@ -184,25 +192,28 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return wildHoldItems;
 	}
 
-	public int getImageNumber() {
-		return this.getImageNumber(false, true);
+	public String getImageName() {
+		return this.getImageName(false, true);
 	}
 
-	public int getImageNumber(boolean shiny) {
-		return this.getImageNumber(shiny, true);
+	public String getImageName(boolean shiny) {
+		return this.getImageName(shiny, true);
 	}
 
-	public int getImageNumber(boolean shiny, boolean front) {
-		return getImageNumber(this, shiny, front);
+	public String getImageName(boolean shiny, boolean front) {
+		return getImageName(this, shiny, front);
 	}
 
-	private static int getImageNumber(PokemonInfo pokemonInfo, boolean shiny, boolean front) {
-		int imageNumber = 4*pokemonInfo.getNumber() + (front ? 0 : 1);
+	private static String getImageName(PokemonInfo pokemonInfo, boolean shiny, boolean front) {
+		String imageName = pokemonInfo.getBaseImageName();
 		if (shiny) {
-			imageNumber += 2;
+			imageName += "-shiny";
+		}
+		if (!front) {
+			imageName += "-back";
 		}
 
-		return imageNumber;
+		return imageName;
 	}
 
 	public static PokemonInfo getPokemonInfo(PokemonNamesies pokemon) {

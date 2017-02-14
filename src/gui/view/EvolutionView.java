@@ -114,8 +114,8 @@ class EvolutionView extends View {
 		FontMetrics.setFont(g, 30);
 		g.setColor(Color.BLACK);
 		
-		int preIndex = isEgg ? PokemonInfo.EGG_IMAGE : preEvolution.getImageNumber(evolvingPokemon.isShiny());
-		int postIndex = isEgg ? preEvolution.getImageNumber(evolvingPokemon.isShiny()) : postEvolution.getImageNumber(evolvingPokemon.isShiny());
+		String preIndex = isEgg ? PokemonInfo.SPRITE_EGG_IMAGE_NAME : preEvolution.getImageName(evolvingPokemon.isShiny());
+		String postIndex = isEgg ? preEvolution.getImageName(evolvingPokemon.isShiny()) : postEvolution.getImageName(evolvingPokemon.isShiny());
 		
 		BufferedImage currEvolution = pokemonTiles.getTile(preIndex);
 		BufferedImage nextEvolution = pokemonTiles.getTile(postIndex);

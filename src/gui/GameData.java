@@ -13,16 +13,16 @@ public class GameData {
 	private Map<String, MapData> maps;
 	private Map<String, Trigger> triggers;
 
-	private TileSet mapTiles;
-	private TileSet terrainTiles;
-	private TileSet pokemonTilesLarge;
-	private TileSet pokemonTilesMedium;
-	private TileSet pokemonTilesSmall;
-	private TileSet itemTiles;
-	private TileSet trainerTiles;
 	private TileSet partyTiles;
+	private TileSet pokemonTilesSmall;
+	private TileSet pokemonTilesMedium;
+	private TileSet pokemonTilesLarge;
 	private TileSet pokedexTilesSmall;
 	private TileSet pokedexTilesLarge;
+	private TileSet itemTiles;
+	private IndexTileSet mapTiles;
+	private IndexTileSet trainerTiles;
+	private IndexTileSet terrainTiles;
 
 	public void loadData() {
 		loadTiles();
@@ -30,16 +30,16 @@ public class GameData {
 	}
 
 	private void loadTiles() {
-		mapTiles = new TileSet(Folder.MAP_TILES);
-		terrainTiles = new TileSet(Folder.TERRAIN_TILES);
-		pokemonTilesLarge = new TileSet(Folder.POKEMON_TILES, 2.9f);
-		pokemonTilesMedium = new TileSet(Folder.POKEMON_TILES, 2.3f);
-		pokemonTilesSmall = new TileSet(Folder.POKEMON_TILES);
-		itemTiles = new TileSet(Folder.ITEM_TILES);
-		trainerTiles = new TileSet(Folder.TRAINER_TILES);
 		partyTiles = new TileSet(Folder.PARTY_TILES);
+		pokemonTilesSmall = new TileSet(Folder.POKEMON_TILES);
+		pokemonTilesMedium = new TileSet(Folder.POKEMON_TILES, 2.3f);
+		pokemonTilesLarge = new TileSet(Folder.POKEMON_TILES, 2.9f);
 		pokedexTilesSmall = new TileSet(Folder.POKEDEX_TILES, .5f);
 		pokedexTilesLarge = new TileSet(Folder.POKEDEX_TILES);
+		itemTiles = new TileSet(Folder.ITEM_TILES);
+		mapTiles = new IndexTileSet(Folder.MAP_TILES);
+		trainerTiles = new IndexTileSet(Folder.TRAINER_TILES);
+		terrainTiles = new IndexTileSet(Folder.TERRAIN_TILES);
 	}
 
 	private void loadMaps() {
@@ -85,11 +85,11 @@ public class GameData {
 		triggers.put(trigger.getName(), trigger);
 	}
 
-	public TileSet getMapTiles() {
+	public IndexTileSet getMapTiles() {
 		return mapTiles;
 	}
 
-	public TileSet getTerrainTiles() {
+	public IndexTileSet getTerrainTiles() {
 		return terrainTiles;
 	}
 
@@ -109,7 +109,8 @@ public class GameData {
 		return pokemonTilesSmall;
 	}
 
-	public TileSet getTrainerTiles() {
+	// TODO: Eventually might want this to not be indexed and have an enum or something so it can be referenced easily
+	public IndexTileSet getTrainerTiles() {
 		return trainerTiles;
 	}
 

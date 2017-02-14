@@ -191,7 +191,7 @@ public class PokemonState implements VisualStateHandler {
             tabButton.outlineTab(g, i, selectedPokemonTab);
 
             // Draw Pokemon Image
-            BufferedImage img = partyTiles.getTile(pkm.getTinyImageIndex());
+            BufferedImage img = partyTiles.getTile(pkm.getTinyImageName());
             tabButton.imageLabel(g, img);
         }
 

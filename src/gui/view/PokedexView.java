@@ -187,7 +187,8 @@ class PokedexView extends View {
 		pokedexPanel.drawBackground(g);
 		titlePanel.drawBackground(g);
 		titlePanel.label(g, 20, PokeString.POKEDEX);
-		
+
+		// TODO: Have unique constants for number of rows and columns
 		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
 			for (int j = 0; j < PC.BOX_WIDTH; j++) {
 				int number = getIndex(i, j) + 1;
@@ -202,7 +203,7 @@ class PokedexView extends View {
 						pokemonButton.blackOutline(g);
 					}
 
-					pokemonButton.imageLabel(g, partyTiles.getTile(number));
+					pokemonButton.imageLabel(g, partyTiles.getTile(p.getBaseImageName()));
 
 					if (pokedex.isCaught(p.namesies())) {
 						BufferedImage pokeball = TileSet.TINY_POKEBALL;
@@ -252,7 +253,7 @@ class PokedexView extends View {
 			imagePanel.label(g, 80, "?");
 		}
 		else {
-			BufferedImage pkmImg = pokedexTiles.getTile(selected.getNumber());
+			BufferedImage pkmImg = pokedexTiles.getTile(selected.getBaseImageName());
 			pkmImg.setRGB(0, 0, 0);
 
 			imagePanel.imageLabel(g, pkmImg);
