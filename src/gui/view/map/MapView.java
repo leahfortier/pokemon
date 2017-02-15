@@ -161,9 +161,14 @@ public class MapView extends View {
 	}
 
 	private void drawAreaTransitionAnimation(Graphics g) {
+		String areaName = currentArea.getAreaName();
+		if (StringUtils.isNullOrEmpty(areaName)) {
+			return;
+		}
+
 		int fontSize = 30;
 		
-		int insideWidth = FontMetrics.getSuggestedWidth(currentArea.getAreaName(), fontSize);
+		int insideWidth = FontMetrics.getSuggestedWidth(areaName, fontSize);
 		int insideHeight = FontMetrics.getSuggestedHeight(fontSize);
 		
 		int borderSize = 2;
