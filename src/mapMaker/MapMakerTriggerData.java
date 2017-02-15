@@ -62,7 +62,7 @@ public class MapMakerTriggerData {
 		this(mapMaker);
 
 		this.defaultArea = defaultArea;
-		this.areaData.add(defaultArea);
+		this.addArea(defaultArea);
 	}
 
 	MapMakerTriggerData(MapMaker mapMaker, String mapTriggerFileName) {
@@ -265,6 +265,15 @@ public class MapMakerTriggerData {
 	public void moveTrigger(LocationTriggerMatcher trigger) {
 		removeTrigger(trigger);
 		mapMaker.setPlaceableTrigger(trigger);
+	}
+
+	public void addArea(AreaMatcher newArea) {
+		this.areaData.add(newArea);
+		triggersSaved = false;
+	}
+
+	public AreaMatcher getDefaultArea() {
+		return this.defaultArea;
 	}
 
 	public Set<AreaMatcher> getAreaData() {

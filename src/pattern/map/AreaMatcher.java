@@ -35,16 +35,16 @@ public class AreaMatcher {
         this.musicConditions = musicConditions;
     }
 
-    boolean hasColor() {
+    public boolean hasColor() {
         return !StringUtils.isNullOrEmpty(color);
     }
 
     public Color getColor() {
-        return StringUtils.isNullOrEmpty(this.color) ? Color.BLACK : new Color((int)Long.parseLong(this.color, 16));
+        return StringUtils.isNullOrEmpty(this.color) ? Color.BLACK : new Color(Integer.parseInt(this.color));
     }
 
-    public void setColor(int color) {
-        this.color = color + "";
+    public void setColor(Color color) {
+        this.color = color.getRGB() + "";
     }
 
     public String getDisplayName() {
