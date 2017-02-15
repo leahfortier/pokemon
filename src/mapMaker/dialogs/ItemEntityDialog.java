@@ -56,6 +56,7 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
 				GUIUtils.createTextFieldComponent("Item Name", itemTextField)
 		);
 
+		// TODO: Not currently saving the condition I believe
 		GUIUtils.setVerticalLayout(
 				this,
 				itemImageAndNameComponent,

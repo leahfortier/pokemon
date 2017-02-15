@@ -46,8 +46,9 @@ public class MapMakerTriggerData {
 	private boolean triggersSaved;
 
 	private MapMaker mapMaker;
+	private AreaMatcher defaultArea;
 
-	MapMakerTriggerData(MapMaker mapMaker) {
+	private MapMakerTriggerData(MapMaker mapMaker) {
 		this.mapMaker = mapMaker;
 
 		this.areaData = new HashSet<>();
@@ -57,10 +58,18 @@ public class MapMakerTriggerData {
 		triggersSaved = false;
 	}
 
+	MapMakerTriggerData(MapMaker mapMaker, AreaMatcher defaultArea) {
+		this(mapMaker);
+
+		this.defaultArea = defaultArea;
+		this.areaData.add(defaultArea);
+	}
+
 	MapMakerTriggerData(MapMaker mapMaker, String mapTriggerFileName) {
 		this(mapMaker);
 
 		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapTriggerFileName);
+		this.defaultArea = mapDataMatcher.getDefaultArea();
 		this.areaData.addAll(mapDataMatcher.getAreas());
 		this.entities.addAll(mapDataMatcher.getAllEntities());
 
@@ -86,10 +95,7 @@ public class MapMakerTriggerData {
 		Set<String> entityNames = new HashSet<>();
 		entityList.forEach(matcher -> getUniqueEntityName(matcher, entityNames));
 
-		MapDataMatcher mapDataMatcher = new MapDataMatcher(
-				areaData,
-				entityList
-		);
+		MapDataMatcher mapDataMatcher = new MapDataMatcher(areaData, entityList);
 
 		FileIO.createFile(mapFileName);
 		FileIO.overwriteFile(mapFileName, new StringBuilder(JsonUtils.getJson(mapDataMatcher)));
@@ -259,5 +265,9 @@ public class MapMakerTriggerData {
 	public void moveTrigger(LocationTriggerMatcher trigger) {
 		removeTrigger(trigger);
 		mapMaker.setPlaceableTrigger(trigger);
+	}
+
+	public Set<AreaMatcher> getAreaData() {
+		return this.areaData;
 	}
 }

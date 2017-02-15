@@ -1,11 +1,13 @@
 package mapMaker.model;
 
+import draw.DrawUtils;
 import draw.TileUtils;
 import map.MapDataType;
 import map.TerrainType;
 import map.weather.WeatherState;
 import mapMaker.MapMaker;
-import draw.DrawUtils;
+import mapMaker.MapMakerTriggerData;
+import pattern.map.AreaMatcher;
 import util.FontMetrics;
 import util.Point;
 import util.StringUtils;
@@ -43,6 +45,17 @@ public class AreaModel extends MapMakerModel {
         this.addArea(VOID_INDEX, "Void");
     }
 
+    public void loadMap(MapMakerTriggerData triggerData) {
+        this.resetMap();
+
+        Set<AreaMatcher> areaData = triggerData.getAreaData();
+        for (AreaMatcher area : areaData) {
+            int areaColor = area.getColor();
+            String areaName = StringUtils.isNullOrEmpty(area.getDisplayName()) ? "Nameless" : area.getDisplayName();
+            this.addArea(areaColor, areaName);
+        }
+    }
+
     public void updateExistingAreas(int rgb) {
         if (!areasOnMap.contains(rgb) && areaIndexMap.containsKey(rgb)) {
             this.addArea(rgb, areaIndexMap.get(rgb));
@@ -55,25 +68,13 @@ public class AreaModel extends MapMakerModel {
         areaListModel.addElement(new ImageIcon(TileUtils.colorWithText(name, new Color(rgb, true)), rgb + ""));
     }
 
-    // TODO: Redo all of this
     @Override
     public void reload(MapMaker mapMaker) {
-//        File areaIndexFile = new File(mapMaker.getPathWithRoot(FileName.MAP_AREA_INDEX));
         areaIndexMap.clear();
         areasOnMap.clear();
         areaListModel.clear();
 
-//        if (areaIndexFile.exists()) {
-//            String fileText = FileIO.readEntireFileWithReplacements(areaIndexFile, false);
-//
-//            Matcher m = mapAreaPattern.matcher(fileText);
-//            while (m.find()) {
-//                String name = m.group(1);
-//                int val = (int) Long.parseLong(m.group(2), 16);
-//
-//                this.addArea(val, name);
-//            }
-//        }
+        this.loadMap(mapMaker.getTriggerData());
     }
 
     @Override
@@ -93,7 +94,7 @@ public class AreaModel extends MapMakerModel {
         String newAreaName = JOptionPane.showInputDialog(this, "Please specify a new area:");
 
         // Keep getting a name until something unused is found.
-        while (!StringUtils.isNullOrEmpty(newAreaName)) {// && areaIndexMap.containsValue(newAreaName)
+        while (!StringUtils.isNullOrEmpty(newAreaName) && areaIndexMap.containsValue(newAreaName)) {
             newAreaName = JOptionPane.showInputDialog(this, "The area \"" + newAreaName +"\" is already in use.\nPlease specify a new area:");
         }
 

@@ -18,16 +18,51 @@ public class AreaMatcher {
 
     private transient AreaData areaData;
 
+    public AreaMatcher(String displayName,
+                       String flyLocation,
+                       TerrainType terrain,
+                       WeatherState weather,
+                       SoundTitle music,
+                       MusicConditionMatcher[] musicConditions
+    ) {
+        this.displayName = displayName;
+        this.flyLocation = flyLocation;
+        this.terrain = terrain;
+        this.weather = weather;
+        this.music = music;
+        this.musicConditions = musicConditions;
+    }
+
     public boolean hasColor() {
         return !StringUtils.isNullOrEmpty(color);
     }
 
-    private int getColor() {
+    public int getColor() {
         return StringUtils.isNullOrEmpty(this.color) ? 0 : (int) Long.parseLong(this.color, 16);
     }
 
-    private WeatherState getWeather() {
+    public void setColor(int color) {
+        this.color = color + "";
+    }
+
+    public String getDisplayName() {
+        return this.displayName;
+    }
+
+    public String getFlyLocation() {
+        return this.flyLocation;
+    }
+
+    public TerrainType getTerrain() {
+        return this.terrain == null ? TerrainType.BUILDING : this.terrain;
+    }
+
+    public WeatherState getWeather() {
         return this.weather == null ? WeatherState.NORMAL : this.weather;
+    }
+
+    public SoundTitle getMusic() {
+        return this.music == null ? SoundTitle.DEFAULT_TUNE : this.music;
     }
 
     private MusicCondition[] getMusicConditions() {
