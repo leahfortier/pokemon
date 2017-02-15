@@ -9,6 +9,8 @@ import util.FileName;
 import util.Folder;
 import util.StringUtils;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.PrintStream;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashSet;
@@ -272,6 +274,51 @@ public class StuffGen {
 
 		for (int i = 0; i < num; i++) {
 			out.println(in.nextLine());
+		}
+	}
+
+	private static void trimImages(String inputLocation, String outputLocation) {
+		File folder = new File(inputLocation);
+		for (File file : folder.listFiles()) {
+			if (file.isDirectory()) {
+				continue;
+			}
+
+			BufferedImage image = FileIO.readImage(file);
+			int empty = image.getRGB(0, 0); // This assumes the top right corner is blank just FYI...
+
+			int leftmost = image.getWidth();
+			int topmost = image.getHeight();
+			int rightmost = 0;
+			int bottommost = 0;
+
+			for (int i = 0; i < image.getWidth(); i++)  {
+				for (int j = 0; j < image.getHeight(); j++) {
+					if (image.getRGB(i, j) != empty) {
+						leftmost = Math.min(i, leftmost);
+						rightmost = Math.max(i, rightmost);
+						topmost = Math.min(j, topmost);
+						bottommost = Math.max(j, bottommost);
+					}
+				}
+			}
+
+
+			String oldName = file.getName();
+
+			// First three characters -- make sure it's an integer
+			String newName = Integer.parseInt(oldName.substring(0, 3)) + "";
+
+			if (oldName.contains("s")) {
+				newName += "-shiny";
+			}
+
+			if (oldName.contains("b")) {
+				newName += "-back";
+			}
+
+			File f = new File(outputLocation + "\\" + newName + ".png");
+			FileIO.writeImage(image.getSubimage(leftmost, topmost, rightmost - leftmost, bottommost - topmost), f);
 		}
 	}
 }
