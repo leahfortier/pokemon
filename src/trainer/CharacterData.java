@@ -231,7 +231,7 @@ public class CharacterData extends Trainer implements Serializable {
 				Trigger dialogue = TriggerType.DIALOGUE.createTrigger("Huh?", null);
 				Trigger evolutionView = TriggerType.CHANGE_VIEW.createTrigger(ViewMode.EVOLUTION_VIEW.name(), null);
 
-				GroupTriggerMatcher matcher = new GroupTriggerMatcher(dialogue.getName(), evolutionView.getName());
+				GroupTriggerMatcher matcher = new GroupTriggerMatcher("EggHatching", dialogue.getName(), evolutionView.getName());
 				Trigger group = TriggerType.GROUP.createTrigger(JsonUtils.getJson(matcher), null);
 				Messages.add(new MessageUpdate().withTrigger(group.getName()));
 				
