@@ -33,8 +33,6 @@ public class Rectangle {
                 lowerRightRectangleCoordinate.x - this.upperLeftRectangleCoordinate.x + 1,
                 lowerRightRectangleCoordinate.y - this.upperLeftRectangleCoordinate.y + 1
         );
-
-        System.out.println("New rectangle with dimension " + this.dimension.width + " " + this.dimension.height);
     }
 
     void outlineRed(Graphics g, Point mapLocation) {

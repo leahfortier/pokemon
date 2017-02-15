@@ -5,10 +5,11 @@ import map.TerrainType;
 import map.weather.WeatherState;
 import sound.MusicCondition;
 import sound.SoundTitle;
-import util.StringUtils;
+
+import java.awt.Color;
 
 public class AreaMatcher {
-    private String color;
+    private Integer color;
     private String displayName;
     private String flyLocation;
     private TerrainType terrain;
@@ -18,16 +19,51 @@ public class AreaMatcher {
 
     private transient AreaData areaData;
 
+    public AreaMatcher(String displayName,
+                       String flyLocation,
+                       TerrainType terrain,
+                       WeatherState weather,
+                       SoundTitle music,
+                       MusicConditionMatcher[] musicConditions
+    ) {
+        this.displayName = displayName;
+        this.flyLocation = flyLocation;
+        this.terrain = terrain;
+        this.weather = weather;
+        this.music = music;
+        this.musicConditions = musicConditions;
+    }
+
     public boolean hasColor() {
-        return !StringUtils.isNullOrEmpty(color);
+        return color != null && color != 0;
     }
 
-    private int getColor() {
-        return StringUtils.isNullOrEmpty(this.color) ? 0 : (int) Long.parseLong(this.color, 16);
+    public Color getColor() {
+        return this.hasColor() ? new Color(this.color) : Color.BLACK;
     }
 
-    private WeatherState getWeather() {
+    public void setColor(Color color) {
+        this.color = color.getRGB();
+    }
+
+    public String getDisplayName() {
+        return this.displayName;
+    }
+
+    public String getFlyLocation() {
+        return this.flyLocation;
+    }
+
+    public TerrainType getTerrain() {
+        return this.terrain == null ? TerrainType.BUILDING : this.terrain;
+    }
+
+    public WeatherState getWeather() {
         return this.weather == null ? WeatherState.NORMAL : this.weather;
+    }
+
+    public SoundTitle getMusic() {
+        return this.music == null ? SoundTitle.DEFAULT_TUNE : this.music;
     }
 
     private MusicCondition[] getMusicConditions() {

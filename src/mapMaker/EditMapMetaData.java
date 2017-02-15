@@ -4,9 +4,11 @@ import draw.ImageUtils;
 import draw.TileUtils;
 import map.MapDataType;
 import map.WalkType;
+import mapMaker.dialogs.AreaDialog;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.TileModel;
 import mapMaker.model.TileModel.TileType;
+import pattern.map.AreaMatcher;
 import util.FileIO;
 import util.Point;
 
@@ -75,8 +77,11 @@ public class EditMapMetaData {
         currentMapSize = DEFAULT_MAP_SIZE;
         this.resetMaps();
 
+        AreaMatcher defaultArea = new AreaDialog(null).getMatcher(mapMaker);
+
         // Create empty trigger data structure
-        triggerData = new MapMakerTriggerData(mapMaker);
+        triggerData = new MapMakerTriggerData(mapMaker, defaultArea);
+        MapMakerModel.getAreaModel().loadMap(this.triggerData);
 
         save(mapMaker);
     }
@@ -106,13 +111,13 @@ public class EditMapMetaData {
         final String mapFolderPath = mapMaker.getMapFolderPath(currentMapName);
         this.currentMap = MapDataType.getImageMap(mapFolderPath, currentMapName);
 
-        MapMakerModel.getAreaModel().resetMap();
-
         BufferedImage mapBackground = this.getMapImage(MapDataType.BACKGROUND);
         this.currentMapSize = new Dimension(mapBackground.getWidth(), mapBackground.getHeight());
 
         String mapTextFileName = mapFolderPath + currentMapName + ".txt";
         this.triggerData = new MapMakerTriggerData(mapMaker, mapTextFileName);
+        MapMakerModel.getAreaModel().loadMap(this.triggerData);
+
         this.saved = true;
     }
 

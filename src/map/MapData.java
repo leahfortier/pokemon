@@ -20,6 +20,7 @@ import util.JsonUtils;
 import util.MultiMap;
 import util.Point;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -36,7 +37,7 @@ public class MapData {
 	private final Dimension dimension;
 
 	private final Map<MapDataType, int[]> dataMap;
-	private final AreaData[] areaData;
+	protected final AreaData[] areaData;
 
 	private final List<Entity> entities;
 	private final MultiMap<Integer, String> triggers;
@@ -112,6 +113,14 @@ public class MapData {
 		return point.getIndex(getDimension().width);
 	}
 
+	public String getName() {
+		return this.name;
+	}
+
+	public boolean hasEntrance(String entranceName) {
+		return this.mapEntrances.containsKey(entranceName);
+	}
+
 	public PathDirection getExitDirection(String entranceName) {
 		return this.mapEntrances.get(entranceName).getDirection();
 	}
@@ -128,7 +137,7 @@ public class MapData {
 		return getRGB(location.x, location.y, dataType);
 	}
 
-	private int getRGB(int x, int y, MapDataType dataType) {
+	public int getRGB(int x, int y, MapDataType dataType) {
 		if (!Point.inBounds(x, y, this.dimension)) {
 			return TileSet.INVALID_RGB;
 		}
@@ -173,18 +182,19 @@ public class MapData {
 			return areaData[0];
 		}
 
-		int areaColor = getRGB(location, MapDataType.AREA);
-		if (areaColor == TileSet.INVALID_RGB) {
+		int areaRgb = getRGB(location, MapDataType.AREA);
+		if (areaRgb == TileSet.INVALID_RGB) {
 			return AreaData.VOID;
 		}
 
+		Color areaColor = new Color(areaRgb);
 		for (AreaData data : areaData) {
 			if (data.isColor(areaColor)) {
 				return data;
 			}
 		}
 
-		Global.error("No area found with color " + areaColor + " for map " + this.name);
+		Global.error("No area found with color " + areaRgb + " for map " + this.name, false);
 		return AreaData.VOID;
 	}
 

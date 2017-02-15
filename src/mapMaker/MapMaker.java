@@ -275,7 +275,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		String name = JOptionPane.showInputDialog(this, "Name the map");
 		if (!StringUtils.isNullOrEmpty(name)) {
             this.mapData.createNewMap(this, name);
-            this.resetMap();
 		}
 	}
 
@@ -284,7 +283,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		String name = (String)JOptionPane.showInputDialog(this, "Select a map", "Load", JOptionPane.PLAIN_MESSAGE, null, mapList, mapList[0]);
         if (!StringUtils.isNullOrEmpty(name)) {
 			this.mapData.loadPreviousMap(this, name);
-            this.resetMap();
 		}
 	}
 

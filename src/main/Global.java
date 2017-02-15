@@ -33,10 +33,17 @@ public final class Global {
 	public static final String MONEY_SYMBOL = "\u00A5";
 
 	public static void error(String errorMessage) {
+		error(errorMessage, true);
+	}
+
+	public static void error(String errorMessage, boolean exit) {
 		JOptionPane.showMessageDialog(null, "Eggs aren't supposed to be green.", "ERROR", JOptionPane.ERROR_MESSAGE);
 		Thread.dumpStack();
 		System.err.println(errorMessage);
-		System.exit(1);
+
+		if (exit) {
+			System.exit(1);
+		}
 	}
 
 	// Cannot be instantiated

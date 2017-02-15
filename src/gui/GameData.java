@@ -3,6 +3,7 @@ package gui;
 import main.Global;
 import map.MapData;
 import map.triggers.Trigger;
+import util.FileIO;
 import util.Folder;
 
 import java.io.File;
@@ -45,23 +46,10 @@ public class GameData {
 	private void loadMaps() {
 		triggers = new HashMap<>();
 		maps = new HashMap<>();
-		File dir = new File(Folder.MAPS);
 
-		for (File d : dir.listFiles()) {
-			if (d.getName().charAt(0) == '.') {
-				continue;
-			}
-
-			maps.put(d.getName(), new MapData(d));
-
-//			if (!d.isDirectory()) {
-//				continue;
-//			}
-//
-//			for (File mapFolder : d.listFiles()) {
-//				maps.put(mapFolder.getName(), new MapData(mapFolder));
-//			}
-
+		File mapsDirectory = new File(Folder.MAPS);
+		for (File mapFolder : FileIO.listDirectories(mapsDirectory)) {
+			maps.put(mapFolder.getName(), new MapData(mapFolder));
 		}
 	}
 

@@ -5,10 +5,12 @@ import sound.MusicCondition;
 import sound.SoundTitle;
 import util.StringUtils;
 
+import java.awt.Color;
+
 public class AreaData {
-	static final AreaData VOID = new AreaData(
+	public static final AreaData VOID = new AreaData(
 			"Void",
-			0,
+			Color.BLACK,
 			null,
 			TerrainType.CAVE,
 			WeatherState.NORMAL,
@@ -17,7 +19,7 @@ public class AreaData {
 	);
 
 	private final String name;
-	private final int color;
+	private final Color color;
 
 	private final String flyLocation;
 	private final TerrainType terrainType;
@@ -27,7 +29,7 @@ public class AreaData {
 	private final MusicCondition[] musicConditions;
 
 	public AreaData(String name,
-					int color,
+					Color color,
 					String flyLocation,
 					TerrainType terrainType,
 					WeatherState weather,
@@ -44,8 +46,8 @@ public class AreaData {
 		this.musicConditions = musicConditions;
 	}
 
-	public boolean isColor(int color) {
-		return this.color == color;
+	public boolean isColor(Color color) {
+		return this.color.equals(color);
 	}
 
 	public boolean isFlyLocation() {

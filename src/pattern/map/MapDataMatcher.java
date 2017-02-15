@@ -62,6 +62,10 @@ public class MapDataMatcher {
                 .toArray(array);
     }
 
+    public AreaMatcher getDefaultArea() {
+        return this.areas[0];
+    }
+
     public List<AreaMatcher> getAreas() {
         return Arrays.asList(this.areas);
     }

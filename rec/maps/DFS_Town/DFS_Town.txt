@@ -1,14 +1,14 @@
 {
   "areas": [
     {
-      "color": "ffff220b",
+      "color": -56821,
       "displayName": "Depth First Search Town",
       "flyLocation": "MaplesLab",
       "terrain": "GRASS",
       "music": "DFS_TOWN"
     },
     {
-      "color": "ff1a8524",
+      "color": -15039196,
       "displayName": "Edge 1",
       "terrain": "GRASS",
       "weather": "RAIN",
