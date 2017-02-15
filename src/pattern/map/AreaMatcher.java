@@ -5,12 +5,11 @@ import map.TerrainType;
 import map.weather.WeatherState;
 import sound.MusicCondition;
 import sound.SoundTitle;
-import util.StringUtils;
 
 import java.awt.Color;
 
 public class AreaMatcher {
-    private String color;
+    private Integer color;
     private String displayName;
     private String flyLocation;
     private TerrainType terrain;
@@ -36,15 +35,15 @@ public class AreaMatcher {
     }
 
     public boolean hasColor() {
-        return !StringUtils.isNullOrEmpty(color);
+        return color != null && color != 0;
     }
 
     public Color getColor() {
-        return StringUtils.isNullOrEmpty(this.color) ? Color.BLACK : new Color(Integer.parseInt(this.color));
+        return this.hasColor() ? new Color(this.color) : Color.BLACK;
     }
 
     public void setColor(Color color) {
-        this.color = color.getRGB() + "";
+        this.color = color.getRGB();
     }
 
     public String getDisplayName() {
