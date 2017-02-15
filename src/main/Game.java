@@ -152,4 +152,8 @@ public class Game {
 	protected void setCharacterData(CharacterData characterData) {
 		this.characterData = characterData;
 	}
+
+	protected void setGameData(GameData data) {
+		this.data = data;
+	}
 }

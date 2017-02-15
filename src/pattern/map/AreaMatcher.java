@@ -7,6 +7,8 @@ import sound.MusicCondition;
 import sound.SoundTitle;
 import util.StringUtils;
 
+import java.awt.Color;
+
 public class AreaMatcher {
     private String color;
     private String displayName;
@@ -33,12 +35,12 @@ public class AreaMatcher {
         this.musicConditions = musicConditions;
     }
 
-    public boolean hasColor() {
+    boolean hasColor() {
         return !StringUtils.isNullOrEmpty(color);
     }
 
-    public int getColor() {
-        return StringUtils.isNullOrEmpty(this.color) ? 0 : (int) Long.parseLong(this.color, 16);
+    public Color getColor() {
+        return StringUtils.isNullOrEmpty(this.color) ? Color.BLACK : new Color((int)Long.parseLong(this.color, 16));
     }
 
     public void setColor(int color) {

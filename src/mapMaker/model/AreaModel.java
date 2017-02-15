@@ -50,9 +50,9 @@ public class AreaModel extends MapMakerModel {
 
         Set<AreaMatcher> areaData = triggerData.getAreaData();
         for (AreaMatcher area : areaData) {
-            int areaColor = area.getColor();
+            Color areaColor = area.getColor();
             String areaName = StringUtils.isNullOrEmpty(area.getDisplayName()) ? "Nameless" : area.getDisplayName();
-            this.addArea(areaColor, areaName);
+            this.addArea(areaColor.getRGB(), areaName);
         }
     }
 
