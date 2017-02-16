@@ -2,6 +2,7 @@ package gui;
 
 import main.Global;
 import map.MapData;
+import map.MapName;
 import map.triggers.Trigger;
 import util.FileIO;
 import util.Folder;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameData {
-	private Map<String, MapData> maps;
+	private Map<MapName, MapData> maps;
 	private Map<String, Trigger> triggers;
 
 	private TileSet partyTiles;
@@ -48,12 +49,14 @@ public class GameData {
 		maps = new HashMap<>();
 
 		File mapsDirectory = new File(Folder.MAPS);
-		for (File mapFolder : FileIO.listDirectories(mapsDirectory)) {
-			maps.put(mapFolder.getName(), new MapData(mapFolder));
+		for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
+			MapData mapData = new MapData(mapFolder);
+			System.out.println(mapData.getName());
+			maps.put(mapData.getName(), mapData);
 		}
 	}
 
-	public MapData getMap(String name) {
+	public MapData getMap(MapName name) {
 		if (!maps.containsKey(name)) {
 			Global.error("Cannot find map with name " + name);
 		}

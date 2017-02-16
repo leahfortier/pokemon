@@ -11,6 +11,7 @@ import main.Game;
 import main.Global;
 import map.AreaData;
 import map.Direction;
+import map.MapName;
 import trainer.CharacterData;
 import util.GeneralUtils;
 
@@ -29,7 +30,7 @@ class FlyView extends View {
     private final DrawPanel titlePanel;
     private final Button[] buttons;
 
-    private List<Entry<String, String>> flyLocations;
+    private List<Entry<MapName, String>> flyLocations;
 
     private int selectedButton;
     private int pageNum;
@@ -84,9 +85,9 @@ class FlyView extends View {
         if (this.buttons[selectedButton].checkConsumePress()) {
             if (selectedButton < NUM_AREA_BUTTONS) {
                 CharacterData player = Game.getPlayer();
-                Entry<String, String> entry = this.flyLocations.get(selectedButton + pageNum*NUM_AREA_BUTTONS);
+                Entry<MapName, String> entry = this.flyLocations.get(selectedButton + pageNum*NUM_AREA_BUTTONS);
 
-                String mapName = entry.getKey();
+                MapName mapName = entry.getKey();
                 String areaName = entry.getValue();
 
                 AreaData area = Game.getData().getMap(mapName).getArea(areaName);
@@ -130,9 +131,9 @@ class FlyView extends View {
         titlePanel.drawBackground(g);
         titlePanel.label(g, 32, "Where to fly?");
 
-        Iterator<Entry<String, String>> iter = GeneralUtils.pageIterator(this.flyLocations, pageNum, NUM_AREA_BUTTONS);
+        Iterator<Entry<MapName, String>> iter = GeneralUtils.pageIterator(this.flyLocations, pageNum, NUM_AREA_BUTTONS);
         for (int i = 0; i < NUM_AREA_BUTTONS && iter.hasNext(); i++) {
-            Entry<String, String> entry = iter.next();
+            Entry<MapName, String> entry = iter.next();
 
             Button locationButton = this.buttons[i];
             locationButton.fillTransparent(g);

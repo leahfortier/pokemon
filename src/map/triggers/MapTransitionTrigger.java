@@ -1,13 +1,14 @@
 package map.triggers;
 
 import main.Game;
+import map.MapName;
 import map.PathDirection;
 import pattern.map.MapTransitionMatcher;
 import trainer.CharacterData;
 import util.JsonUtils;
 
 class MapTransitionTrigger extends Trigger {
-	private final String nextMap;
+	private final MapName nextMap;
 	private final String mapEntranceName;
 	private final PathDirection direction;
 	private final boolean deathPortal;

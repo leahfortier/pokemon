@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MapData {
-	private final String name;
+	private final MapName name;
 
 	private final Dimension dimension;
 
@@ -43,11 +43,11 @@ public class MapData {
 	private final MultiMap<Integer, String> triggers;
 	private final Map<String, MapTransitionMatcher> mapEntrances;
 
-	public MapData(File file) {
-		name = file.getName();
+	public MapData(File mapFile) {
+		name = new MapName(mapFile.getParentFile().getName(), mapFile.getName());
 
-		String beginFilePath = FileIO.makeFolderPath(file.getPath());
-		final Map<MapDataType, BufferedImage> imageMap = MapDataType.getImageMap(beginFilePath, name);
+		String beginFilePath = FileIO.makeFolderPath(mapFile.getPath());
+		final Map<MapDataType, BufferedImage> imageMap = MapDataType.getImageMap(beginFilePath, name.getMapName());
 
 		BufferedImage backgroundMap = imageMap.get(MapDataType.BACKGROUND);
 		dimension = new Dimension(backgroundMap.getWidth(), backgroundMap.getHeight());
@@ -62,7 +62,7 @@ public class MapData {
 		triggers = new MultiMap<>();
 		mapEntrances = new HashMap<>();
 
-		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(beginFilePath + name + ".txt");
+		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(beginFilePath + name.getMapName() + ".txt");
 		this.areaData = mapDataMatcher.getAreaData();
 
 		addEntities(mapDataMatcher.getNPCs());
@@ -113,7 +113,7 @@ public class MapData {
 		return point.getIndex(getDimension().width);
 	}
 
-	public String getName() {
+	public MapName getName() {
 		return this.name;
 	}
 

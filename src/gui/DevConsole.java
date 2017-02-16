@@ -81,39 +81,11 @@ class DevConsole {
 			case "global":
 				global(in);
 				break;
-			case "tele":
-			case "teleport":
-				transition(in);
-				break;
 			default:
 				break;
 		}
 		
 		in.close();
-	}
-	
-	private void transition(Scanner in) {
-		if (Game.getPlayer() == null) {
-			Global.error("Can't teleport before loading a player!");
-		}
-
-		if (!in.hasNext()) {
-			Global.error("Teleport to which map???");
-		}
-		
-		String mapName = in.next();
-		String mapEntrance = null;
-		
-		if (in.hasNext()) {
-			mapEntrance = in.next();
-		}
-		
-		System.out.println("Teleporting Player to map " + mapName +" and to " + (mapEntrance == null? "location (0,0)": "map entrance "+mapEntrance) +".");
-		Game.getPlayer().setMap(mapName, mapEntrance);
-		
-		if (mapEntrance != null) {
-			Game.getData().getMap(mapName).setCharacterToEntrance();
-		}
 	}
 	
 	private void global(Scanner in) {

@@ -9,6 +9,7 @@ import item.ItemNamesies;
 import item.use.BallItem;
 import map.AreaData;
 import map.Direction;
+import map.MapName;
 import map.entity.movable.PlayerEntity;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
@@ -51,10 +52,10 @@ public class CharacterData extends Trainer implements Serializable {
 	private Direction direction;
 
 	private boolean mapReset;
-	private String mapName;
+	private MapName mapName;
 	private String mapEntranceName;
 	private String areaName;
-	private Set<Entry<String, String>> flyLocations;
+	private Set<Entry<MapName, String>> flyLocations;
 
 	private transient PlayerEntity entity;
 
@@ -67,7 +68,7 @@ public class CharacterData extends Trainer implements Serializable {
 
 	private transient long timeSinceUpdate;
 
-	private String lastPCMap;
+	private MapName lastPCMap;
 	private String lastPCMapEntrance;
 
 	private Pokedex pokedex;
@@ -169,12 +170,12 @@ public class CharacterData extends Trainer implements Serializable {
 		this.direction = direction;
 	}
 	
-	public void setMap(String name, String mapEntrance) {
+	public void setMap(MapName name, String mapEntrance) {
 		mapName = name;
 		mapEntranceName = mapEntrance;
 	}
 
-	public void setArea(String mapName, AreaData area) {
+	public void setArea(MapName mapName, AreaData area) {
 		this.areaName = area.getAreaName();
 
 		if (area.isFlyLocation()) {
@@ -182,7 +183,7 @@ public class CharacterData extends Trainer implements Serializable {
 		}
 	}
 
-	public List<Entry<String, String>> getFlyLocations() {
+	public List<Entry<MapName, String>> getFlyLocations() {
 		return this.flyLocations.stream().collect(Collectors.toList());
 	}
 
@@ -254,7 +255,7 @@ public class CharacterData extends Trainer implements Serializable {
 		repelSteps += steps;
 	}
 
-	public String getMapName() {
+	public MapName getMapName() {
 		return this.mapName;
 	}
 
@@ -274,7 +275,7 @@ public class CharacterData extends Trainer implements Serializable {
 		return areaName;
 	}
 	
-	public void setPokeCenter(String mapName, String entranceName) {
+	public void setPokeCenter(MapName mapName, String entranceName) {
 		lastPCMap = mapName;
 		lastPCMapEntrance = entranceName;
 	}

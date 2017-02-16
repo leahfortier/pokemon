@@ -1,0 +1,114 @@
+{
+  "areas": [
+    {
+      "displayName": "Tomasulo Town",
+      "terrain": "BUILDING",
+      "music": "TOM_TOWN"
+    }
+  ],
+  "mapTransitions": [
+    {
+      "exitName": "FromBasement1",
+      "nextMap": {
+        "region": "Tomasulo Town",
+        "mapName": "Tom_Town_Power_Plant_B1"
+      },
+      "nextEntrance": "FromFloor1",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 2,
+        "y": 9
+      },
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromBasement1_01"
+    },
+    {
+      "exitName": "FromFloor2",
+      "nextMap": {
+        "region": "Tomasulo Town",
+        "mapName": "Tom_Town_Power_Plant_F2"
+      },
+      "nextEntrance": "FromFloor1",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 2,
+        "y": 11
+      },
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromFloor2_01"
+    },
+    {
+      "exitName": "FromTomTown",
+      "nextMap": {
+        "region": "Tomasulo Town",
+        "mapName": "Tom_Town"
+      },
+      "nextEntrance": "TomTownPowerPlant",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "location": {
+        "x": 8,
+        "y": 12
+      },
+      "triggerName": "Tom_Town_Power_Plant_F1_MapExit_FromTomTown_01"
+    }
+  ],
+  "NPCs": [
+    {
+      "name": "Officer",
+      "path": "w",
+      "spriteIndex": 18,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "It's not safe here."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 7,
+        "y": 9
+      },
+      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Officer_01",
+      "condition": "!VisitedTomTownPowerPlant"
+    },
+    {
+      "name": "Scientist",
+      "path": "w",
+      "spriteIndex": 19,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "dialogue",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Time to get back to my research."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 12,
+        "y": 6
+      },
+      "triggerName": "Tom_Town_Power_Plant_F1_NPC_Scientist_01",
+      "condition": "VisitedTomTownPowerPlant"
+    }
+  ],
+  "items": [],
+  "miscEntities": [],
+  "events": [],
+  "wildBattles": []
+}

@@ -1,28 +1,33 @@
 package mapMaker.dialogs;
 
+import map.MapName;
 import map.PathDirection;
 import mapMaker.MapMaker;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import util.GUIUtils;
-import util.StringUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 	private static final long serialVersionUID = 6937677302812347311L;
 
-	private JComboBox<String> destinationComboBox;
+	private static final MapName EMPTY_MAP = new MapName("No Destination", "");
+
+	private JComboBox<MapName> destinationComboBox;
 	private final JComboBox<String> entranceComboBox;
 	private final JComboBox<PathDirection> directionComboBox;
 	private final JCheckBox deathPortalCheckBox;
 	private final JTextField entranceNameTextField;
 
-	private static Set<String> getMapEntrancesForMap(MapMaker mapMaker, String mapName) {
+	private static Set<String> getMapEntrancesForMap(MapMaker mapMaker, MapName mapName) {
 		String mapFileName = mapMaker.getMapTextFileName(mapName);
 		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapFileName);
 
@@ -39,34 +44,38 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 		entranceNameTextField = GUIUtils.createTextField();
 
 		// Fill combo boxes with available maps.
-		String[] mapList = givenMapMaker.getAvailableMaps();
-		String[] updatedMapList = new String[mapList.length + 1];
-		updatedMapList[0] = "";
-		System.arraycopy(mapList, 0, updatedMapList, 1, mapList.length);
+		String[] regionList = givenMapMaker.getAvailableRegions();
+		List<MapName> mapList = new ArrayList<>();
+		for (String region : regionList) {
+			MapName[] maps = givenMapMaker.getAvailableMaps(region);
+			Collections.addAll(mapList, maps);
+		}
 
-		entranceComboBox = GUIUtils.createComboBox(new String[0], null);
+		MapName[] updatedMapList = new MapName[mapList.size() + 1];
+		updatedMapList[0] = EMPTY_MAP;
+		for (int i = 0; i < mapList.size(); i++) {
+			updatedMapList[i + 1] = mapList.get(i);
+		}
+
+		entranceComboBox = GUIUtils.createComboBox(new String[0]);
 		entranceComboBox.setEnabled(false);
 
 		destinationComboBox = GUIUtils.createComboBox(
 				updatedMapList,
 				actionEvent -> {
-					// Fill entranceComboBox with available entrances.
-					if (destinationComboBox.getSelectedIndex() == 0) {
-						entranceComboBox.setEnabled(false);
-						entranceComboBox.removeAllItems();
-					}
-					else {
-						entranceComboBox.setEnabled(true);
-						entranceComboBox.removeAllItems();
+					entranceComboBox.setEnabled(destinationComboBox.getSelectedIndex() != 0);
+					entranceComboBox.removeAllItems();
 
-						String destinationMap = (String)destinationComboBox.getSelectedItem();
+					// Fill entranceComboBox with available entrances.
+					if (entranceComboBox.isEnabled()) {
+						MapName destinationMap = (MapName) destinationComboBox.getSelectedItem();
 						getMapEntrancesForMap(givenMapMaker, destinationMap)
 								.forEach(entranceComboBox::addItem);
 					}
 				}
 		);
 
-		directionComboBox = GUIUtils.createComboBox(PathDirection.values(), null);
+		directionComboBox = GUIUtils.createComboBox(PathDirection.values());
 
 		GUIUtils.setVerticalLayout(
 				this,
@@ -80,8 +89,8 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 		this.load(mapTransitionMatcher);
 	}
 
-	private String getDestination() {
-		return (String)destinationComboBox.getSelectedItem();
+	private MapName getDestination() {
+		return (MapName)destinationComboBox.getSelectedItem();
 	}
 	
 	private String getMapEntrance() {
@@ -90,16 +99,10 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 
 	@Override
 	protected MapTransitionMatcher getMatcher() {
-		String destinationMap = getDestination();
-		String destinationEntrance = getMapEntrance();
-		if (StringUtils.isNullOrEmpty(destinationMap) || StringUtils.isNullOrEmpty(destinationEntrance)) {
-			return null;
-		}
-
 		return new MapTransitionMatcher(
 				this.getNameField(entranceNameTextField),
-				destinationMap,
-				destinationEntrance,
+				getDestination(),
+				getMapEntrance(),
 				(PathDirection)directionComboBox.getSelectedItem(),
 				this.deathPortalCheckBox.isSelected()
 		);
@@ -110,9 +113,9 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
 			return;
 		}
 
-		String destination = matcher.getNextMap();
-		if (StringUtils.isNullOrEmpty(destination)) {
-			destination = StringUtils.empty();
+		MapName destination = matcher.getNextMap();
+		if (destination == null) {
+			destination = EMPTY_MAP;
 		}
 
 		entranceNameTextField.setText(matcher.getExitName());

@@ -13,6 +13,7 @@ import main.Global;
 import map.AreaData;
 import map.Direction;
 import map.MapData;
+import map.MapName;
 import map.PathDirection;
 import map.TerrainType;
 import map.entity.Entity;
@@ -44,7 +45,7 @@ public class MapView extends View {
 			PathDirection.UP
     };
 
-	private String currentMapName;
+	private MapName currentMapName;
 	private AreaData currentArea;
 	private MapData currentMap;
 	private SoundTitle currentMusicTitle;
@@ -59,7 +60,7 @@ public class MapView extends View {
 	private MessageUpdate currentMessage;
 	
 	public MapView() {
-		currentMapName = StringUtils.empty();
+		currentMapName = null;
 		setState(VisualState.MAP);
 
 		areaDisplayTime = 0;
@@ -272,7 +273,7 @@ public class MapView extends View {
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
 
-		if (!currentMapName.equals(player.getMapName()) || player.mapReset()) {
+		if (player.mapReset() || currentMapName == null || !currentMapName.equals(player.getMapName())) {
 			currentMapName = player.getMapName();
 			currentMap = data.getMap(currentMapName);
 

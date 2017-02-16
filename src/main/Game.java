@@ -8,6 +8,7 @@ import gui.view.battle.BattleView;
 import gui.view.map.MapView;
 import input.InputControl;
 import item.ItemNamesies;
+import map.MapName;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
@@ -119,7 +120,7 @@ public class Game {
 	public void newSave(int index) {
 		characterData = new CharacterData();
 		
-		String startingMap = "PlayersHouseUp";
+		MapName startingMap = new MapName("Depth First Search Town", "PlayersHouseUp");
 		String startingMapEntrance = "GameStartLocation";
 		characterData.setMap(startingMap, startingMapEntrance);
 		data.getMap(startingMap).setCharacterToEntrance();

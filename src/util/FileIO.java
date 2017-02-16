@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -165,7 +166,7 @@ public class FileIO {
 			return new BufferedReader(new FileReader(file));
 		}
 		catch (FileNotFoundException e) {
-			Global.error(file.getName() + " not found!");
+			Global.error(file.getAbsolutePath() + " not found!");
 			return null;
 		}
 	}
@@ -246,7 +247,14 @@ public class FileIO {
 		return fileChooser;
 	}
 
-	public static Iterable<File> listDirectories(File parentDirectory) {
+	public static Iterable<File> listSubdirectories(File parentDirectory) {
+		return listDirectories(parentDirectory).stream()
+				.map(FileIO::listDirectories)
+				.flatMap(List::stream)
+				.collect(Collectors.toList());
+	}
+
+	public static List<File> listDirectories(File parentDirectory) {
 		try {
 			return Files.walk(Paths.get(parentDirectory.getAbsolutePath()))
 					.filter(Files::isDirectory)

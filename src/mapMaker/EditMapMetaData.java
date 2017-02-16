@@ -3,6 +3,7 @@ package mapMaker;
 import draw.ImageUtils;
 import draw.TileUtils;
 import map.MapDataType;
+import map.MapName;
 import map.WalkType;
 import mapMaker.dialogs.AreaDialog;
 import mapMaker.model.MapMakerModel;
@@ -27,7 +28,7 @@ import java.util.Map.Entry;
 public class EditMapMetaData {
     private static final Dimension DEFAULT_MAP_SIZE = new Dimension(10, 10);
 
-    private String currentMapName;
+    private MapName currentMapName;
     private Dimension currentMapSize;
 
     private Map<MapDataType, BufferedImage> currentMap;
@@ -44,7 +45,7 @@ public class EditMapMetaData {
         this.saved = true;
     }
 
-    public String getMapName() {
+    public MapName getMapName() {
         return this.currentMapName;
     }
 
@@ -71,7 +72,7 @@ public class EditMapMetaData {
         g.dispose();
     }
 
-    public void createNewMap(MapMaker mapMaker, String mapName) {
+    public void createNewMap(MapMaker mapMaker, MapName mapName) {
         currentMapName = mapName;
 
         currentMapSize = DEFAULT_MAP_SIZE;
@@ -95,7 +96,7 @@ public class EditMapMetaData {
         FileIO.createFolder(mapFolderPath);
 
         for (MapDataType dataType : MapDataType.values()) {
-            String mapFileName = mapFolderPath + dataType.getImageName(this.currentMapName);
+            String mapFileName = mapFolderPath + dataType.getImageName(currentMapName.getMapName());
             FileIO.writeImage(this.getMapImage(dataType), mapFileName);
         }
 
@@ -105,16 +106,16 @@ public class EditMapMetaData {
         saved = true;
     }
 
-    public void loadPreviousMap(MapMaker mapMaker, String mapName) {
+    public void loadPreviousMap(MapMaker mapMaker, MapName mapName) {
         this.currentMapName = mapName;
 
-        final String mapFolderPath = mapMaker.getMapFolderPath(currentMapName);
-        this.currentMap = MapDataType.getImageMap(mapFolderPath, currentMapName);
+        final String mapFolderPath = mapMaker.getMapFolderPath(mapName);
+        this.currentMap = MapDataType.getImageMap(mapFolderPath, currentMapName.getMapName());
 
         BufferedImage mapBackground = this.getMapImage(MapDataType.BACKGROUND);
         this.currentMapSize = new Dimension(mapBackground.getWidth(), mapBackground.getHeight());
 
-        String mapTextFileName = mapFolderPath + currentMapName + ".txt";
+        String mapTextFileName = mapFolderPath + mapName + ".txt";
         this.triggerData = new MapMakerTriggerData(mapMaker, mapTextFileName);
         MapMakerModel.getAreaModel().loadMap(this.triggerData);
 

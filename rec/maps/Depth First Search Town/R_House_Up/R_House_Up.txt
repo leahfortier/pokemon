@@ -1,0 +1,31 @@
+{
+  "areas": [
+    {
+      "displayName": "Depth First Search Town",
+      "terrain": "BUILDING",
+      "music": "DFS_TOWN"
+    }
+  ],
+  "mapTransitions": [
+    {
+      "exitName": "stairs",
+      "nextMap": {
+        "region": "Depth First Search Town",
+        "mapName": "Rival_House"
+      },
+      "nextEntrance": "stairs",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "location": {
+        "x": 4,
+        "y": 2
+      },
+      "triggerName": "R_House_Up_MapExit_stairs_01"
+    }
+  ],
+  "NPCs": [],
+  "items": [],
+  "miscEntities": [],
+  "events": [],
+  "wildBattles": []
+}
