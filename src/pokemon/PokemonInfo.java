@@ -17,6 +17,7 @@ import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +31,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 
 	public static final int NUM_POKEMON = 815;
 
-	private static Map<PokemonNamesies, PokemonInfo> map;
+	private static Map<Integer, PokemonInfo> map;
 	private static List<PokemonNamesies> baseEvolution;
 	private static Set<PokemonNamesies> incenseBabies;
 
@@ -214,15 +215,15 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	}
 
 	public static PokemonInfo getPokemonInfo(PokemonNamesies pokemon) {
+		return getPokemonInfo(pokemon.ordinal());
+	}
+
+	public static PokemonInfo getPokemonInfo(int index) {
 		if (map == null) {
 			loadPokemonInfo();
 		}
 
-		return map.get(pokemon);
-	}
-
-	public static PokemonInfo getPokemonInfo(int index) {
-		return getPokemonInfo(PokemonNamesies.values()[index]);
+		return map.get(index);
 	}
 
 	static PokemonNamesies getRandomBaseEvolution() {
@@ -277,7 +278,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 					createMovesSet(in)								// Learnable Moves
 			);
 
-			map.put(pokemonInfo.namesies, pokemonInfo);
+			map.put(pokemonInfo.getNumber(), pokemonInfo);
 		}
 
 		in.close();
@@ -390,11 +391,12 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			return PokemonInfo.getPokemonInfo(PokemonNamesies.PHIONE);
 		}
 
-		Set<PokemonNamesies> allPokes = map.keySet();
+		Set<PokemonNamesies> allPokes = EnumSet.complementOf(EnumSet.of(PokemonNamesies.NONE));
+
 		while (true) {
 			boolean changed = false;
 			for (PokemonNamesies pokesName : allPokes) {
-				PokemonInfo pokes = map.get(pokesName);
+				PokemonInfo pokes = map.get(pokesName.ordinal());
 				PokemonNamesies[] evolutionNamesies = pokes.getEvolution().getEvolutions();
 				for (PokemonNamesies namesies : evolutionNamesies) {
 					if (namesies == targetPokes.namesies()) {
