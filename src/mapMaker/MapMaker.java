@@ -54,6 +54,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class MapMaker extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener, ListSelectionListener {
@@ -295,7 +296,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 			return;
 		}
 
-		MapName[] availableMaps = getAvailableMaps(region);
+		String[] availableMaps = Arrays.stream(getAvailableMaps(region)).map(MapName::getMapName).collect(Collectors.toList()).toArray(new String[0]);
 		String map = (String)JOptionPane.showInputDialog(this, "Select a map", "Load", JOptionPane.PLAIN_MESSAGE, null, availableMaps, availableMaps[0]);
 		if (StringUtils.isNullOrEmpty(map)) {
 			return;
@@ -379,7 +380,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 
 	public String getMapTextFileName(final MapName mapName) {
-		return getMapFolderPath(mapName) + mapName + ".txt";
+		return getMapFolderPath(mapName) + mapName.getMapName() + ".txt";
 	}
 
 	// TODO: Srsly what is going on with setting the root what the fuck

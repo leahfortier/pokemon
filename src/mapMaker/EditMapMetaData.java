@@ -115,7 +115,7 @@ public class EditMapMetaData {
         BufferedImage mapBackground = this.getMapImage(MapDataType.BACKGROUND);
         this.currentMapSize = new Dimension(mapBackground.getWidth(), mapBackground.getHeight());
 
-        String mapTextFileName = mapFolderPath + mapName + ".txt";
+        String mapTextFileName = mapFolderPath + mapName.getMapName() + ".txt";
         this.triggerData = new MapMakerTriggerData(mapMaker, mapTextFileName);
         MapMakerModel.getAreaModel().loadMap(this.triggerData);
 

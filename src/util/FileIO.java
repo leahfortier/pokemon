@@ -256,7 +256,7 @@ public class FileIO {
 
 	public static List<File> listDirectories(File parentDirectory) {
 		try {
-			return Files.walk(Paths.get(parentDirectory.getAbsolutePath()))
+			return Files.walk(Paths.get(parentDirectory.getAbsolutePath()), 1)
 					.filter(Files::isDirectory)
 					.map(Path::toFile)
 					.filter(directory -> !directory.getAbsolutePath().equals(parentDirectory.getAbsolutePath()))
