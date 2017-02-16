@@ -16,10 +16,12 @@
         "mapName": "Rival_House"
       },
       "nextEntrance": "stairs",
-      "location": {
-        "x": 4,
-        "y": 2
-      },
+      "location2": [
+        {
+          "x": 4,
+          "y": 2
+        }
+      ],
       "triggerName": "R_House_Up_MapExit_stairs_01"
     }
   ],

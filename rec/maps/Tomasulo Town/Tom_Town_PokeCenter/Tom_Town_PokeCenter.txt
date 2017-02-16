@@ -16,10 +16,12 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "PokeCenter",
-      "location": {
-        "x": 7,
-        "y": 8
-      },
+      "location2": [
+        {
+          "x": 7,
+          "y": 8
+        }
+      ],
       "triggerName": "Tom_Town_PokeCenter_MapExit_FrontDoor_01"
     }
   ],

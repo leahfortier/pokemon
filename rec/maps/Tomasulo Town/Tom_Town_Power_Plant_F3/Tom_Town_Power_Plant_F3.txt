@@ -22,10 +22,12 @@
         "mapName": "Tom_Town_Power_Plant_F2"
       },
       "nextEntrance": "FromFloor3",
-      "location": {
-        "x": 2,
-        "y": 8
-      },
+      "location2": [
+        {
+          "x": 2,
+          "y": 8
+        }
+      ],
       "triggerName": "Tom_Town_Power_Plant_F3_MapExit_FromFloor2_01"
     }
   ],

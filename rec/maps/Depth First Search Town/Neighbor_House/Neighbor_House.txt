@@ -16,10 +16,12 @@
         "mapName": "DFS_Town"
       },
       "nextEntrance": "NeighborsHouse",
-      "location": {
-        "x": 3,
-        "y": 6
-      },
+      "location2": [
+        {
+          "x": 3,
+          "y": 6
+        }
+      ],
       "triggerName": "Neighbor_House_MapExit_DFS_Town_01"
     }
   ],

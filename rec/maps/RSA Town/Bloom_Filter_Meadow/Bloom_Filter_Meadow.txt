@@ -18,10 +18,12 @@
         "mapName": "RSATown_BFM_TransitionBuilding"
       },
       "nextEntrance": "WestDoorBottom",
-      "location": {
-        "x": 55,
-        "y": 22
-      },
+      "location2": [
+        {
+          "x": 55,
+          "y": 22
+        }
+      ],
       "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingBottom_01"
     },
     {
@@ -33,10 +35,12 @@
         "mapName": "RSATown_BFM_TransitionBuilding"
       },
       "nextEntrance": "WestDoorMiddle",
-      "location": {
-        "x": 55,
-        "y": 21
-      },
+      "location2": [
+        {
+          "x": 55,
+          "y": 21
+        }
+      ],
       "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingMiddle_01"
     },
     {
@@ -48,20 +52,24 @@
         "mapName": "RSATown_BFM_TransitionBuilding"
       },
       "nextEntrance": "WestDoorTop",
-      "location": {
-        "x": 55,
-        "y": 20
-      },
+      "location2": [
+        {
+          "x": 55,
+          "y": 20
+        }
+      ],
       "triggerName": "Bloom_Filter_Meadow_MapExit_EastTransitionBuildingTop_01"
     },
     {
       "exitName": "FlyLocation",
       "direction": "WAIT",
       "deathPortal": false,
-      "location": {
-        "x": 31,
-        "y": 17
-      },
+      "location2": [
+        {
+          "x": 31,
+          "y": 17
+        }
+      ],
       "triggerName": "Bloom_Filter_Meadow_MapExit_FlyLocation_01"
     },
     {
@@ -73,10 +81,12 @@
         "mapName": "BFM_TomTown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorBottom",
-      "location": {
-        "x": 13,
-        "y": 22
-      },
+      "location2": [
+        {
+          "x": 13,
+          "y": 22
+        }
+      ],
       "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingBottom_01"
     },
     {
@@ -88,10 +98,12 @@
         "mapName": "BFM_TomTown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorMiddle",
-      "location": {
-        "x": 13,
-        "y": 21
-      },
+      "location2": [
+        {
+          "x": 13,
+          "y": 21
+        }
+      ],
       "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingMiddle_01"
     },
     {
@@ -103,10 +115,12 @@
         "mapName": "BFM_TomTown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorTop",
-      "location": {
-        "x": 13,
-        "y": 20
-      },
+      "location2": [
+        {
+          "x": 13,
+          "y": 20
+        }
+      ],
       "triggerName": "Bloom_Filter_Meadow_MapExit_WestTransitionBuildingTop_01"
     }
   ],

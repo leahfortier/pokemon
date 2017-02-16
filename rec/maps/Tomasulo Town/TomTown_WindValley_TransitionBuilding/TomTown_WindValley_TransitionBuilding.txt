@@ -15,10 +15,12 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "SouthTransitionBuildingLeft",
-      "location": {
-        "x": 5,
-        "y": 2
-      },
+      "location2": [
+        {
+          "x": 5,
+          "y": 2
+        }
+      ],
       "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoorLeft_01"
     },
     {
@@ -30,10 +32,12 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "SouthTransitionBuildingMiddle",
-      "location": {
-        "x": 6,
-        "y": 2
-      },
+      "location2": [
+        {
+          "x": 6,
+          "y": 2
+        }
+      ],
       "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoorMiddle_01"
     },
     {
@@ -45,10 +49,12 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "SouthTransitionBuildingRight",
-      "location": {
-        "x": 7,
-        "y": 2
-      },
+      "location2": [
+        {
+          "x": 7,
+          "y": 2
+        }
+      ],
       "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoorRight_01"
     },
     {
@@ -60,10 +66,12 @@
         "mapName": "WindValley"
       },
       "nextEntrance": "NorthTransitionBuildingLeft",
-      "location": {
-        "x": 5,
-        "y": 10
-      },
+      "location2": [
+        {
+          "x": 5,
+          "y": 10
+        }
+      ],
       "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoorLeft_01"
     },
     {
@@ -75,10 +83,12 @@
         "mapName": "WindValley"
       },
       "nextEntrance": "NorthTransitionBuildingMiddle",
-      "location": {
-        "x": 6,
-        "y": 10
-      },
+      "location2": [
+        {
+          "x": 6,
+          "y": 10
+        }
+      ],
       "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoorMiddle_01"
     },
     {
@@ -90,10 +100,12 @@
         "mapName": "WindValley"
       },
       "nextEntrance": "NorthTransitionBuildingRight",
-      "location": {
-        "x": 7,
-        "y": 10
-      },
+      "location2": [
+        {
+          "x": 7,
+          "y": 10
+        }
+      ],
       "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoorRight_01"
     }
   ],

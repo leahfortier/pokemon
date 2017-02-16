@@ -10,10 +10,12 @@
     {
       "exitName": "GameStartLocation",
       "deathPortal": false,
-      "location": {
-        "x": 6,
-        "y": 5
-      },
+      "location2": [
+        {
+          "x": 6,
+          "y": 5
+        }
+      ],
       "triggerName": "PlayersHouseUp_MapExit_GameStartLocation_01"
     },
     {
@@ -25,10 +27,12 @@
         "mapName": "PlayersHouseDown"
       },
       "nextEntrance": "stairs",
-      "location": {
-        "x": 8,
-        "y": 1
-      },
+      "location2": [
+        {
+          "x": 8,
+          "y": 1
+        }
+      ],
       "triggerName": "PlayersHouseUp_MapExit_stairs_01"
     }
   ],

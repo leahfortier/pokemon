@@ -15,10 +15,12 @@
         "mapName": "RSATown"
       },
       "nextEntrance": "WestTransitionBuildingBottom",
-      "location": {
-        "x": 11,
-        "y": 6
-      },
+      "location2": [
+        {
+          "x": 11,
+          "y": 6
+        }
+      ],
       "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoorBottom_01"
     },
     {
@@ -30,10 +32,12 @@
         "mapName": "RSATown"
       },
       "nextEntrance": "WestTransitionBuildingMiddle",
-      "location": {
-        "x": 11,
-        "y": 5
-      },
+      "location2": [
+        {
+          "x": 11,
+          "y": 5
+        }
+      ],
       "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoorMiddle_01"
     },
     {
@@ -45,10 +49,12 @@
         "mapName": "RSATown"
       },
       "nextEntrance": "WestTransitionBuildingTop",
-      "location": {
-        "x": 11,
-        "y": 4
-      },
+      "location2": [
+        {
+          "x": 11,
+          "y": 4
+        }
+      ],
       "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_EastDoorTop_01"
     },
     {
@@ -60,10 +66,12 @@
         "mapName": "Bloom_Filter_Meadow"
       },
       "nextEntrance": "EastTransitionBuildingBottom",
-      "location": {
-        "x": 1,
-        "y": 6
-      },
+      "location2": [
+        {
+          "x": 1,
+          "y": 6
+        }
+      ],
       "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorBottom_01"
     },
     {
@@ -75,10 +83,12 @@
         "mapName": "Bloom_Filter_Meadow"
       },
       "nextEntrance": "EastTransitionBuildingMiddle",
-      "location": {
-        "x": 1,
-        "y": 5
-      },
+      "location2": [
+        {
+          "x": 1,
+          "y": 5
+        }
+      ],
       "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorMiddle_01"
     },
     {
@@ -90,10 +100,12 @@
         "mapName": "Bloom_Filter_Meadow"
       },
       "nextEntrance": "EastTransitionBuildingTop",
-      "location": {
-        "x": 1,
-        "y": 4
-      },
+      "location2": [
+        {
+          "x": 1,
+          "y": 4
+        }
+      ],
       "triggerName": "RSATown_BFM_TransitionBuilding_MapExit_WestDoorTop_01"
     }
   ],

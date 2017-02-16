@@ -16,10 +16,12 @@
         "mapName": "Tom_Town_Power_Plant_F1"
       },
       "nextEntrance": "FromFloor2",
-      "location": {
-        "x": 6,
-        "y": 11
-      },
+      "location2": [
+        {
+          "x": 6,
+          "y": 11
+        }
+      ],
       "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor1_01"
     },
     {
@@ -31,10 +33,12 @@
         "mapName": "Tom_Town_Power_Plant_F3"
       },
       "nextEntrance": "FromFloor2",
-      "location": {
-        "x": 6,
-        "y": 9
-      },
+      "location2": [
+        {
+          "x": 6,
+          "y": 9
+        }
+      ],
       "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor3_01"
     }
   ],

@@ -16,10 +16,12 @@
         "mapName": "DFS_Town"
       },
       "nextEntrance": "MaplesLab",
-      "location": {
-        "x": 10,
-        "y": 15
-      },
+      "location2": [
+        {
+          "x": 10,
+          "y": 15
+        }
+      ],
       "triggerName": "MaplesLab_MapExit_DFS_Town_01"
     }
   ],

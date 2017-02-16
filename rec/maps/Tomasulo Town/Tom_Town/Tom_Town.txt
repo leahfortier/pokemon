@@ -17,10 +17,12 @@
         "mapName": "BFM_TomTown_TransitionBuilding"
       },
       "nextEntrance": "WestDoorBottom",
-      "location": {
-        "x": 52,
-        "y": 27
-      },
+      "location2": [
+        {
+          "x": 52,
+          "y": 27
+        }
+      ],
       "triggerName": "Tom_Town_MapExit_EastTransitionBuildingBottom_01"
     },
     {
@@ -32,10 +34,12 @@
         "mapName": "BFM_TomTown_TransitionBuilding"
       },
       "nextEntrance": "WestDoorMiddle",
-      "location": {
-        "x": 52,
-        "y": 26
-      },
+      "location2": [
+        {
+          "x": 52,
+          "y": 26
+        }
+      ],
       "triggerName": "Tom_Town_MapExit_EastTransitionBuildingMiddle_01"
     },
     {
@@ -47,10 +51,12 @@
         "mapName": "BFM_TomTown_TransitionBuilding"
       },
       "nextEntrance": "WestDoorTop",
-      "location": {
-        "x": 52,
-        "y": 25
-      },
+      "location2": [
+        {
+          "x": 52,
+          "y": 25
+        }
+      ],
       "triggerName": "Tom_Town_MapExit_EastTransitionBuildingTop_01"
     },
     {
@@ -62,10 +68,12 @@
         "mapName": "Tom_Gym"
       },
       "nextEntrance": "Tom_Town",
-      "location": {
-        "x": 17,
-        "y": 32
-      },
+      "location2": [
+        {
+          "x": 17,
+          "y": 32
+        }
+      ],
       "triggerName": "Tom_Town_MapExit_Gym_01"
     },
     {
@@ -77,10 +85,12 @@
         "mapName": "Tom_Town_PokeCenter"
       },
       "nextEntrance": "FrontDoor",
-      "location": {
-        "x": 38,
-        "y": 32
-      },
+      "location2": [
+        {
+          "x": 38,
+          "y": 32
+        }
+      ],
       "triggerName": "Tom_Town_MapExit_PokeCenter_01"
     },
     {
@@ -92,10 +102,12 @@
         "mapName": "TomTown_WindValley_TransitionBuilding"
       },
       "nextEntrance": "NorthDoorLeft",
-      "location": {
-        "x": 25,
-        "y": 36
-      },
+      "location2": [
+        {
+          "x": 25,
+          "y": 36
+        }
+      ],
       "triggerName": "Tom_Town_MapExit_SouthTransitionBuildingLeft_01"
     },
     {
@@ -107,10 +119,12 @@
         "mapName": "TomTown_WindValley_TransitionBuilding"
       },
       "nextEntrance": "NorthDoorMiddle",
-      "location": {
-        "x": 26,
-        "y": 36
-      },
+      "location2": [
+        {
+          "x": 26,
+          "y": 36
+        }
+      ],
       "triggerName": "Tom_Town_MapExit_SouthTransitionBuildingMiddle_01"
     },
     {
@@ -122,10 +136,12 @@
         "mapName": "TomTown_WindValley_TransitionBuilding"
       },
       "nextEntrance": "NorthDoorRight",
-      "location": {
-        "x": 27,
-        "y": 36
-      },
+      "location2": [
+        {
+          "x": 27,
+          "y": 36
+        }
+      ],
       "triggerName": "Tom_Town_MapExit_SouthTransitionBuildingRight_01"
     },
     {
@@ -137,10 +153,12 @@
         "mapName": "Tom_Town_Power_Plant_F1"
       },
       "nextEntrance": "FromTomTown",
-      "location": {
-        "x": 29,
-        "y": 14
-      },
+      "location2": [
+        {
+          "x": 29,
+          "y": 14
+        }
+      ],
       "triggerName": "Tom_Town_MapExit_TomTownPowerPlant_01"
     }
   ],

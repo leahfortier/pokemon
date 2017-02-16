@@ -16,10 +16,12 @@
         "mapName": "DFS_Town"
       },
       "nextEntrance": "PlayersHouse",
-      "location": {
-        "x": 6,
-        "y": 8
-      },
+      "location2": [
+        {
+          "x": 6,
+          "y": 8
+        }
+      ],
       "triggerName": "PlayersHouseDown_MapExit_DFS_Town_01"
     },
     {
@@ -31,10 +33,12 @@
         "mapName": "PlayersHouseUp"
       },
       "nextEntrance": "stairs",
-      "location": {
-        "x": 10,
-        "y": 1
-      },
+      "location2": [
+        {
+          "x": 10,
+          "y": 1
+        }
+      ],
       "triggerName": "PlayersHouseDown_MapExit_stairs_01"
     }
   ],

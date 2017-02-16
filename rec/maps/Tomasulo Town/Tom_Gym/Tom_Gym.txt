@@ -16,10 +16,12 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "Gym",
-      "location": {
-        "x": 9,
-        "y": 15
-      },
+      "location2": [
+        {
+          "x": 9,
+          "y": 15
+        }
+      ],
       "triggerName": "Tom_Gym_MapExit_Tom_Town_01"
     }
   ],

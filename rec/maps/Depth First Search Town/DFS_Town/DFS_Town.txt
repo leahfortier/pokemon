@@ -25,10 +25,12 @@
         "mapName": "MaplesLab"
       },
       "nextEntrance": "DFS_Town",
-      "location": {
-        "x": 74,
-        "y": 17
-      },
+      "location2": [
+        {
+          "x": 74,
+          "y": 17
+        }
+      ],
       "triggerName": "DFS_Town_MapExit_MaplesLab_01"
     },
     {
@@ -40,10 +42,12 @@
         "mapName": "Neighbor_House"
       },
       "nextEntrance": "DFS_Town",
-      "location": {
-        "x": 74,
-        "y": 27
-      },
+      "location2": [
+        {
+          "x": 74,
+          "y": 27
+        }
+      ],
       "triggerName": "DFS_Town_MapExit_NeighborsHouse_01"
     },
     {
@@ -55,10 +59,12 @@
         "mapName": "PlayersHouseDown"
       },
       "nextEntrance": "DFS_Town",
-      "location": {
-        "x": 85,
-        "y": 27
-      },
+      "location2": [
+        {
+          "x": 85,
+          "y": 27
+        }
+      ],
       "triggerName": "DFS_Town_MapExit_PlayersHouse_01"
     },
     {
@@ -70,10 +76,12 @@
         "mapName": "Rival_House"
       },
       "nextEntrance": "DFS_Town",
-      "location": {
-        "x": 85,
-        "y": 15
-      },
+      "location2": [
+        {
+          "x": 85,
+          "y": 15
+        }
+      ],
       "triggerName": "DFS_Town_MapExit_RivalsHouse_01"
     },
     {
@@ -85,10 +93,12 @@
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorBottom",
-      "location": {
-        "x": 14,
-        "y": 21
-      },
+      "location2": [
+        {
+          "x": 14,
+          "y": 21
+        }
+      ],
       "triggerName": "DFS_Town_MapExit_WestTransitionBuildingBottom_01"
     },
     {
@@ -100,10 +110,12 @@
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorMiddle",
-      "location": {
-        "x": 14,
-        "y": 20
-      },
+      "location2": [
+        {
+          "x": 14,
+          "y": 20
+        }
+      ],
       "triggerName": "DFS_Town_MapExit_WestTransitionBuildingMiddle_01"
     },
     {
@@ -115,10 +127,12 @@
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorTop",
-      "location": {
-        "x": 14,
-        "y": 19
-      },
+      "location2": [
+        {
+          "x": 14,
+          "y": 19
+        }
+      ],
       "triggerName": "DFS_Town_MapExit_WestTransitionBuildingTop_01"
     }
   ],

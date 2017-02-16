@@ -15,10 +15,12 @@
         "mapName": "Bloom_Filter_Meadow"
       },
       "nextEntrance": "WestTransitionBuildingBottom",
-      "location": {
-        "x": 11,
-        "y": 4
-      },
+      "location2": [
+        {
+          "x": 11,
+          "y": 4
+        }
+      ],
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorBottom_01"
     },
     {
@@ -30,10 +32,12 @@
         "mapName": "Bloom_Filter_Meadow"
       },
       "nextEntrance": "WestTransitionBuildingMiddle",
-      "location": {
-        "x": 11,
-        "y": 3
-      },
+      "location2": [
+        {
+          "x": 11,
+          "y": 3
+        }
+      ],
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorMiddle_01"
     },
     {
@@ -45,10 +49,12 @@
         "mapName": "Bloom_Filter_Meadow"
       },
       "nextEntrance": "WestTransitionBuildingTop",
-      "location": {
-        "x": 11,
-        "y": 2
-      },
+      "location2": [
+        {
+          "x": 11,
+          "y": 2
+        }
+      ],
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoorTop_01"
     },
     {
@@ -60,10 +66,12 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "EastTransitionBuildingBottom",
-      "location": {
-        "x": 1,
-        "y": 4
-      },
+      "location2": [
+        {
+          "x": 1,
+          "y": 4
+        }
+      ],
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorBottom_01"
     },
     {
@@ -75,10 +83,12 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "EastTransitionBuildingMiddle",
-      "location": {
-        "x": 1,
-        "y": 3
-      },
+      "location2": [
+        {
+          "x": 1,
+          "y": 3
+        }
+      ],
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorMiddle_01"
     },
     {
@@ -90,10 +100,12 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "EastTransitionBuildingTop",
-      "location": {
-        "x": 1,
-        "y": 2
-      },
+      "location2": [
+        {
+          "x": 1,
+          "y": 2
+        }
+      ],
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoorTop_01"
     }
   ],

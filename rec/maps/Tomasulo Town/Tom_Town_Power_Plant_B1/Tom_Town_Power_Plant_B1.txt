@@ -16,10 +16,12 @@
         "mapName": "Tom_Town_Power_Plant_F1"
       },
       "nextEntrance": "FromBasement1",
-      "location": {
-        "x": 6,
-        "y": 9
-      },
+      "location2": [
+        {
+          "x": 6,
+          "y": 9
+        }
+      ],
       "triggerName": "Tom_Town_Power_Plant_B1_MapExit_FromFloor1_01"
     }
   ],
