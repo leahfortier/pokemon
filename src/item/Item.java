@@ -3000,6 +3000,19 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
+	static class PrettyWing extends Item implements HoldItem, PokemonUseItem {
+		private static final long serialVersionUID = 1L;
+
+		PrettyWing() {
+			super(ItemNamesies.PRETTY_WING, "Though this feather is beautiful, it's just a regular feather and has no effect on Pok\u00e9mon.", BagCategory.MISC);
+			super.price = 200;
+		}
+
+		public boolean use(ActivePokemon p) {
+			return p.checkEvolution(this.namesies);
+		}
+	}
+
 	static class WaterStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 

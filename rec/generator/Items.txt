@@ -1289,6 +1289,13 @@ Up-Grade:
 	Desc: A transparent device filled with all sorts of data. It was produced by Silph Co.
 	Price: 2100
 *
+Pretty Wing:
+	Int: HoldItem
+	EvolutionItem: True
+	Cat: Misc
+	Desc: Though this feather is beautiful, it's just a regular feather and has no effect on Pok\u00e9mon.
+	Price: 200
+*
 Water Stone:
 	Int: HoldItem
 	EvolutionItem: True

@@ -28,7 +28,7 @@ import java.util.TreeMap;
 public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private static final long serialVersionUID = 1L;
 
-	public static final int NUM_POKEMON = 801;
+	public static final int NUM_POKEMON = 815;
 
 	private static Map<PokemonNamesies, PokemonInfo> map;
 	private static List<PokemonNamesies> baseEvolution;

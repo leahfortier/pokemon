@@ -806,7 +806,21 @@ public enum PokemonNamesies {
 	KARTANA("Kartana"),
 	GUZZLORD("Guzzlord"),
 	NECROZMA("Necrozma"),
-	MAGEARNA("Magearna");
+	MAGEARNA("Magearna"),
+	MARSHADOW("Marshadow"),
+	RIZARDON("Rizardon"),
+	KUCHIITO("Kuchiito"),
+	ASBEL("Asbel"),
+	YAMIRAMI("Yamirami"),
+	SILPH_SURFER("Silph Surfer"),
+	SNOWSHREW("Snowshrew"),
+	SNOWSLASH("Snowslash"),
+	YUKIKON("Yukikon"),
+	KYUKON("Kyukon"),
+	SLEIMA("Sleima"),
+	SLEIMOK("Sleimok"),
+	KOKONATSU("Kokonatsu"),
+	GARA_GARA("GaraGara");
 
     // EVERYTHING ABOVE IS GENERATED ###
 

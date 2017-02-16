@@ -275,6 +275,7 @@ import item.Item.PowerLens;
 import item.Item.PowerUpPunchTM;
 import item.Item.PowerWeight;
 import item.Item.PremierBall;
+import item.Item.PrettyWing;
 import item.Item.PrismScale;
 import item.Item.ProtectTM;
 import item.Item.Protector;
@@ -603,6 +604,7 @@ public enum ItemNamesies {
 	THUNDER_STONE("Thunder Stone", ThunderStone::new),
 	ICE_STONE("Ice Stone", IceStone::new),
 	UP_GRADE("Up-Grade", UpGrade::new),
+	PRETTY_WING("Pretty Wing", PrettyWing::new),
 	WATER_STONE("Water Stone", WaterStone::new),
 	WHIPPED_DREAM("Whipped Dream", WhippedDream::new),
 	ANTIDOTE("Antidote", Antidote::new),
