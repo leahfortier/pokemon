@@ -9,13 +9,13 @@
   "mapTransitions": [
     {
       "exitName": "FrontDoor",
+      "direction": "DOWN",
+      "deathPortal": true,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "RSATown"
       },
       "nextEntrance": "PokeCenter",
-      "direction": "DOWN",
-      "deathPortal": true,
       "location": {
         "x": 7,
         "y": 8

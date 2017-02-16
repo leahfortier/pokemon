@@ -8,13 +8,13 @@
   "mapTransitions": [
     {
       "exitName": "NorthTransitionBuildingLeft",
+      "direction": "UP",
+      "deathPortal": false,
       "nextMap": {
         "region": "Tomasulo Town",
         "mapName": "TomTown_WindValley_TransitionBuilding"
       },
       "nextEntrance": "SouthDoorLeft",
-      "direction": "UP",
-      "deathPortal": false,
       "location": {
         "x": 30,
         "y": 11
@@ -23,13 +23,13 @@
     },
     {
       "exitName": "NorthTransitionBuildingMiddle",
+      "direction": "UP",
+      "deathPortal": false,
       "nextMap": {
         "region": "Tomasulo Town",
         "mapName": "TomTown_WindValley_TransitionBuilding"
       },
       "nextEntrance": "SouthDoorMiddle",
-      "direction": "UP",
-      "deathPortal": false,
       "location": {
         "x": 31,
         "y": 11
@@ -38,13 +38,13 @@
     },
     {
       "exitName": "NorthTransitionBuildingRight",
+      "direction": "UP",
+      "deathPortal": false,
       "nextMap": {
         "region": "Tomasulo Town",
         "mapName": "TomTown_WindValley_TransitionBuilding"
       },
       "nextEntrance": "SouthDoorRight",
-      "direction": "UP",
-      "deathPortal": false,
       "location": {
         "x": 32,
         "y": 11

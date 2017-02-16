@@ -9,13 +9,13 @@
   "mapTransitions": [
     {
       "exitName": "DFS_Town",
+      "direction": "DOWN",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "DFS_Town"
       },
       "nextEntrance": "MaplesLab",
-      "direction": "DOWN",
-      "deathPortal": false,
       "location": {
         "x": 10,
         "y": 15

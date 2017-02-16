@@ -11,13 +11,13 @@
   "mapTransitions": [
     {
       "exitName": "EastTransitionBuildingBottom",
+      "direction": "RIGHT",
+      "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "RSATown_BFM_TransitionBuilding"
       },
       "nextEntrance": "WestDoorBottom",
-      "direction": "RIGHT",
-      "deathPortal": false,
       "location": {
         "x": 55,
         "y": 22
@@ -26,13 +26,13 @@
     },
     {
       "exitName": "EastTransitionBuildingMiddle",
+      "direction": "RIGHT",
+      "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "RSATown_BFM_TransitionBuilding"
       },
       "nextEntrance": "WestDoorMiddle",
-      "direction": "RIGHT",
-      "deathPortal": false,
       "location": {
         "x": 55,
         "y": 21
@@ -41,13 +41,13 @@
     },
     {
       "exitName": "EastTransitionBuildingTop",
+      "direction": "RIGHT",
+      "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "RSATown_BFM_TransitionBuilding"
       },
       "nextEntrance": "WestDoorTop",
-      "direction": "RIGHT",
-      "deathPortal": false,
       "location": {
         "x": 55,
         "y": 20
@@ -66,13 +66,13 @@
     },
     {
       "exitName": "WestTransitionBuildingBottom",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "BFM_TomTown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorBottom",
-      "direction": "LEFT",
-      "deathPortal": false,
       "location": {
         "x": 13,
         "y": 22
@@ -81,13 +81,13 @@
     },
     {
       "exitName": "WestTransitionBuildingMiddle",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "BFM_TomTown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorMiddle",
-      "direction": "LEFT",
-      "deathPortal": false,
       "location": {
         "x": 13,
         "y": 21
@@ -96,13 +96,13 @@
     },
     {
       "exitName": "WestTransitionBuildingTop",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "BFM_TomTown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorTop",
-      "direction": "LEFT",
-      "deathPortal": false,
       "location": {
         "x": 13,
         "y": 20

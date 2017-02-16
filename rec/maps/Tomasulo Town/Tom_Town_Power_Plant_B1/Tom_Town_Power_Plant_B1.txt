@@ -9,13 +9,13 @@
   "mapTransitions": [
     {
       "exitName": "FromFloor1",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Tomasulo Town",
         "mapName": "Tom_Town_Power_Plant_F1"
       },
       "nextEntrance": "FromBasement1",
-      "direction": "LEFT",
-      "deathPortal": false,
       "location": {
         "x": 6,
         "y": 9

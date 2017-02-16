@@ -8,13 +8,13 @@
   "mapTransitions": [
     {
       "exitName": "EastDoorBottom",
+      "direction": "RIGHT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "DFS_Town"
       },
       "nextEntrance": "WestTransitionBuildingBottom",
-      "direction": "RIGHT",
-      "deathPortal": false,
       "location": {
         "x": 11,
         "y": 4
@@ -23,13 +23,13 @@
     },
     {
       "exitName": "EastDoorMiddle",
+      "direction": "RIGHT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "DFS_Town"
       },
       "nextEntrance": "WestTransitionBuildingMiddle",
-      "direction": "RIGHT",
-      "deathPortal": false,
       "location": {
         "x": 11,
         "y": 3
@@ -38,13 +38,13 @@
     },
     {
       "exitName": "EastDoorTop",
+      "direction": "RIGHT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "DFS_Town"
       },
       "nextEntrance": "WestTransitionBuildingTop",
-      "direction": "RIGHT",
-      "deathPortal": false,
       "location": {
         "x": 11,
         "y": 2
@@ -53,13 +53,13 @@
     },
     {
       "exitName": "WestDoorBottom",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "RSATown"
       },
       "nextEntrance": "EastTransitionBuildingBottom",
-      "direction": "LEFT",
-      "deathPortal": false,
       "location": {
         "x": 1,
         "y": 4
@@ -68,13 +68,13 @@
     },
     {
       "exitName": "WestDoorMiddle",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "RSATown"
       },
       "nextEntrance": "EastTransitionBuildingMiddle",
-      "direction": "LEFT",
-      "deathPortal": false,
       "location": {
         "x": 1,
         "y": 3
@@ -83,13 +83,13 @@
     },
     {
       "exitName": "WestDoorTop",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "RSATown"
       },
       "nextEntrance": "EastTransitionBuildingTop",
-      "direction": "LEFT",
-      "deathPortal": false,
       "location": {
         "x": 1,
         "y": 2

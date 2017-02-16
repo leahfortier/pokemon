@@ -10,13 +10,13 @@
   "mapTransitions": [
     {
       "exitName": "EastTransitionBuildingBottom",
+      "direction": "RIGHT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
       "nextEntrance": "WestDoorBottom",
-      "direction": "RIGHT",
-      "deathPortal": false,
       "location": {
         "x": 43,
         "y": 21
@@ -25,13 +25,13 @@
     },
     {
       "exitName": "EastTransitionBuildingMiddle",
+      "direction": "RIGHT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
       "nextEntrance": "WestDoorMiddle",
-      "direction": "RIGHT",
-      "deathPortal": false,
       "location": {
         "x": 43,
         "y": 20
@@ -40,13 +40,13 @@
     },
     {
       "exitName": "EastTransitionBuildingTop",
+      "direction": "RIGHT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
       "nextEntrance": "WestDoorTop",
-      "direction": "RIGHT",
-      "deathPortal": false,
       "location": {
         "x": 43,
         "y": 19
@@ -55,13 +55,13 @@
     },
     {
       "exitName": "PokeCenter",
+      "direction": "UP",
+      "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "RSATown_PokeCenter"
       },
       "nextEntrance": "FrontDoor",
-      "direction": "UP",
-      "deathPortal": false,
       "location": {
         "x": 25,
         "y": 17
@@ -70,13 +70,13 @@
     },
     {
       "exitName": "WestTransitionBuildingBottom",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "RSATown_BFM_TransitionBuilding"
       },
       "nextEntrance": "EastDoorBottom",
-      "direction": "LEFT",
-      "deathPortal": false,
       "location": {
         "x": 16,
         "y": 21
@@ -85,13 +85,13 @@
     },
     {
       "exitName": "WestTransitionBuildingMiddle",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "RSATown_BFM_TransitionBuilding"
       },
       "nextEntrance": "EastDoorMiddle",
-      "direction": "LEFT",
-      "deathPortal": false,
       "location": {
         "x": 16,
         "y": 20
@@ -100,13 +100,13 @@
     },
     {
       "exitName": "WestTransitionBuildingTop",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "RSATown_BFM_TransitionBuilding"
       },
       "nextEntrance": "EastDoorTop",
-      "direction": "LEFT",
-      "deathPortal": false,
       "location": {
         "x": 16,
         "y": 19

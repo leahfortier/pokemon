@@ -18,13 +18,13 @@
     },
     {
       "exitName": "stairs",
+      "direction": "RIGHT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "PlayersHouseDown"
       },
       "nextEntrance": "stairs",
-      "direction": "RIGHT",
-      "deathPortal": false,
       "location": {
         "x": 8,
         "y": 1

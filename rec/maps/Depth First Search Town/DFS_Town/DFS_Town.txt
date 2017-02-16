@@ -18,13 +18,13 @@
   "mapTransitions": [
     {
       "exitName": "MaplesLab",
+      "direction": "UP",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "MaplesLab"
       },
       "nextEntrance": "DFS_Town",
-      "direction": "UP",
-      "deathPortal": false,
       "location": {
         "x": 74,
         "y": 17
@@ -33,13 +33,13 @@
     },
     {
       "exitName": "NeighborsHouse",
+      "direction": "UP",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Neighbor_House"
       },
       "nextEntrance": "DFS_Town",
-      "direction": "UP",
-      "deathPortal": false,
       "location": {
         "x": 74,
         "y": 27
@@ -48,13 +48,13 @@
     },
     {
       "exitName": "PlayersHouse",
+      "direction": "UP",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "PlayersHouseDown"
       },
       "nextEntrance": "DFS_Town",
-      "direction": "UP",
-      "deathPortal": false,
       "location": {
         "x": 85,
         "y": 27
@@ -63,13 +63,13 @@
     },
     {
       "exitName": "RivalsHouse",
+      "direction": "UP",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Rival_House"
       },
       "nextEntrance": "DFS_Town",
-      "direction": "UP",
-      "deathPortal": false,
       "location": {
         "x": 85,
         "y": 15
@@ -78,13 +78,13 @@
     },
     {
       "exitName": "WestTransitionBuildingBottom",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorBottom",
-      "direction": "LEFT",
-      "deathPortal": false,
       "location": {
         "x": 14,
         "y": 21
@@ -93,13 +93,13 @@
     },
     {
       "exitName": "WestTransitionBuildingMiddle",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorMiddle",
-      "direction": "LEFT",
-      "deathPortal": false,
       "location": {
         "x": 14,
         "y": 20
@@ -108,13 +108,13 @@
     },
     {
       "exitName": "WestTransitionBuildingTop",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorTop",
-      "direction": "LEFT",
-      "deathPortal": false,
       "location": {
         "x": 14,
         "y": 19
