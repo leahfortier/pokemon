@@ -26,7 +26,7 @@ import java.util.List;
 
 class PokedexView extends View {
 	private static final int PER_PAGE = PC.BOX_HEIGHT*PC.BOX_WIDTH;
-	private static final int NUM_PAGES = PokemonInfo.NUM_POKEMON/PER_PAGE;
+	private static final int NUM_PAGES = (int)Math.ceil((double)PokemonInfo.NUM_POKEMON/PER_PAGE);
 	
 	private static final int NUM_BUTTONS = PER_PAGE + 3;
 	private static final int RETURN = NUM_BUTTONS - 1;
@@ -192,6 +192,10 @@ class PokedexView extends View {
 		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
 			for (int j = 0; j < PC.BOX_WIDTH; j++) {
 				int number = getIndex(i, j) + 1;
+				if (number > PokemonInfo.NUM_POKEMON) {
+					continue;
+				}
+
 				PokemonInfo p = PokemonInfo.getPokemonInfo(number);
 				Button pokemonButton = pokemonButtons[j][i];
 
@@ -203,7 +207,7 @@ class PokedexView extends View {
 						pokemonButton.blackOutline(g);
 					}
 
-					pokemonButton.imageLabel(g, partyTiles.getTile(p.getBaseImageName()));
+					pokemonButton.imageLabel(g, partyTiles.getTile(p.getTinyImageName()));
 
 					if (pokedex.isCaught(p.namesies())) {
 						BufferedImage pokeball = TileSet.TINY_POKEBALL;
