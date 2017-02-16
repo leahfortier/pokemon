@@ -131,7 +131,6 @@ public class MessageUpdate {
 	
 	// Show stat gains
 	public MessageUpdate withStatGains(int[] gains, int[] stats) {
-		maxHP = stats[Stat.HP.index()];
 		statGains = gains;
 		newStats = stats;
 		updateType = Update.STAT_GAIN;
