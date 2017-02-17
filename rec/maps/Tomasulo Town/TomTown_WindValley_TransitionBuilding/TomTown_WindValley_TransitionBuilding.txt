@@ -7,106 +7,54 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "NorthDoorLeft",
+      "exitName": "NorthDoor",
       "direction": "UP",
       "deathPortal": false,
       "nextMap": {
         "region": "Tomasulo Town",
         "mapName": "Tom_Town"
       },
-      "nextEntrance": "SouthTransitionBuildingLeft",
+      "nextEntrance": "SouthTransitionBuilding",
       "location": [
         {
           "x": 5,
           "y": 2
-        }
-      ],
-      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoorLeft_01"
-    },
-    {
-      "exitName": "NorthDoorMiddle",
-      "direction": "UP",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "Tomasulo Town",
-        "mapName": "Tom_Town"
-      },
-      "nextEntrance": "SouthTransitionBuildingMiddle",
-      "location": [
+        },
         {
           "x": 6,
           "y": 2
-        }
-      ],
-      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoorMiddle_01"
-    },
-    {
-      "exitName": "NorthDoorRight",
-      "direction": "UP",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "Tomasulo Town",
-        "mapName": "Tom_Town"
-      },
-      "nextEntrance": "SouthTransitionBuildingRight",
-      "location": [
+        },
         {
           "x": 7,
           "y": 2
         }
       ],
-      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoorRight_01"
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_NorthDoor_01"
     },
     {
-      "exitName": "SouthDoorLeft",
+      "exitName": "SouthDoor",
       "direction": "DOWN",
       "deathPortal": false,
       "nextMap": {
         "region": "Yamartino Valley of the Wind",
         "mapName": "WindValley"
       },
-      "nextEntrance": "NorthTransitionBuildingLeft",
+      "nextEntrance": "NorthTransitionBuilding",
       "location": [
         {
           "x": 5,
           "y": 10
-        }
-      ],
-      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoorLeft_01"
-    },
-    {
-      "exitName": "SouthDoorMiddle",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "Yamartino Valley of the Wind",
-        "mapName": "WindValley"
-      },
-      "nextEntrance": "NorthTransitionBuildingMiddle",
-      "location": [
+        },
         {
           "x": 6,
           "y": 10
-        }
-      ],
-      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoorMiddle_01"
-    },
-    {
-      "exitName": "SouthDoorRight",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "Yamartino Valley of the Wind",
-        "mapName": "WindValley"
-      },
-      "nextEntrance": "NorthTransitionBuildingRight",
-      "location": [
+        },
         {
           "x": 7,
           "y": 10
         }
       ],
-      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoorRight_01"
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MapExit_SouthDoor_01"
     }
   ],
   "NPCs": [

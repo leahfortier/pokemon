@@ -75,7 +75,7 @@ public class MapData {
 
 			mapEntrances.put(matcher.getExitName(), matcher);
 
-            List<Point> exits = matcher.getExitLocation();
+            List<Point> exits = matcher.getExitLocations();
 			if (exits != null) {
 				Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(JsonUtils.getJson(matcher), null);
 				exits.forEach(exit -> triggers.put(getMapIndex(exit), trigger.getName()));

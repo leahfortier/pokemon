@@ -9,55 +9,29 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "EastTransitionBuildingBottom",
+      "exitName": "EastTransitionBuilding",
       "direction": "RIGHT",
       "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "BFM_TomTown_TransitionBuilding"
       },
-      "nextEntrance": "WestDoorBottom",
+      "nextEntrance": "WestDoor",
       "location": [
         {
           "x": 52,
           "y": 27
-        }
-      ],
-      "triggerName": "Tom_Town_MapExit_EastTransitionBuildingBottom_01"
-    },
-    {
-      "exitName": "EastTransitionBuildingMiddle",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "RSA Town",
-        "mapName": "BFM_TomTown_TransitionBuilding"
-      },
-      "nextEntrance": "WestDoorMiddle",
-      "location": [
+        },
         {
           "x": 52,
           "y": 26
-        }
-      ],
-      "triggerName": "Tom_Town_MapExit_EastTransitionBuildingMiddle_01"
-    },
-    {
-      "exitName": "EastTransitionBuildingTop",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "RSA Town",
-        "mapName": "BFM_TomTown_TransitionBuilding"
-      },
-      "nextEntrance": "WestDoorTop",
-      "location": [
+        },
         {
           "x": 52,
           "y": 25
         }
       ],
-      "triggerName": "Tom_Town_MapExit_EastTransitionBuildingTop_01"
+      "triggerName": "Tom_Town_MapExit_EastTransitionBuilding_01"
     },
     {
       "exitName": "Gym",
@@ -94,55 +68,29 @@
       "triggerName": "Tom_Town_MapExit_PokeCenter_01"
     },
     {
-      "exitName": "SouthTransitionBuildingLeft",
+      "exitName": "SouthTransitionBuilding",
       "direction": "DOWN",
       "deathPortal": false,
       "nextMap": {
         "region": "Tomasulo Town",
         "mapName": "TomTown_WindValley_TransitionBuilding"
       },
-      "nextEntrance": "NorthDoorLeft",
+      "nextEntrance": "NorthDoor",
       "location": [
         {
           "x": 25,
           "y": 36
-        }
-      ],
-      "triggerName": "Tom_Town_MapExit_SouthTransitionBuildingLeft_01"
-    },
-    {
-      "exitName": "SouthTransitionBuildingMiddle",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "Tomasulo Town",
-        "mapName": "TomTown_WindValley_TransitionBuilding"
-      },
-      "nextEntrance": "NorthDoorMiddle",
-      "location": [
+        },
         {
           "x": 26,
           "y": 36
-        }
-      ],
-      "triggerName": "Tom_Town_MapExit_SouthTransitionBuildingMiddle_01"
-    },
-    {
-      "exitName": "SouthTransitionBuildingRight",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "Tomasulo Town",
-        "mapName": "TomTown_WindValley_TransitionBuilding"
-      },
-      "nextEntrance": "NorthDoorRight",
-      "location": [
+        },
         {
           "x": 27,
           "y": 36
         }
       ],
-      "triggerName": "Tom_Town_MapExit_SouthTransitionBuildingRight_01"
+      "triggerName": "Tom_Town_MapExit_SouthTransitionBuilding_01"
     },
     {
       "exitName": "TomTownPowerPlant",

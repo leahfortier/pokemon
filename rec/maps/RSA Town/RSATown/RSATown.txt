@@ -9,55 +9,29 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "EastTransitionBuildingBottom",
+      "exitName": "EastTransitionBuilding",
       "direction": "RIGHT",
       "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
-      "nextEntrance": "WestDoorBottom",
+      "nextEntrance": "WestDoor",
       "location": [
         {
           "x": 43,
           "y": 21
-        }
-      ],
-      "triggerName": "RSATown_MapExit_EastTransitionBuildingBottom_01"
-    },
-    {
-      "exitName": "EastTransitionBuildingMiddle",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "Depth First Search Town",
-        "mapName": "Edge1_RSATown_TransitionBuilding"
-      },
-      "nextEntrance": "WestDoorMiddle",
-      "location": [
+        },
         {
           "x": 43,
           "y": 20
-        }
-      ],
-      "triggerName": "RSATown_MapExit_EastTransitionBuildingMiddle_01"
-    },
-    {
-      "exitName": "EastTransitionBuildingTop",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "Depth First Search Town",
-        "mapName": "Edge1_RSATown_TransitionBuilding"
-      },
-      "nextEntrance": "WestDoorTop",
-      "location": [
+        },
         {
           "x": 43,
           "y": 19
         }
       ],
-      "triggerName": "RSATown_MapExit_EastTransitionBuildingTop_01"
+      "triggerName": "RSATown_MapExit_EastTransitionBuilding_01"
     },
     {
       "exitName": "PokeCenter",
@@ -77,55 +51,29 @@
       "triggerName": "RSATown_MapExit_PokeCenter_01"
     },
     {
-      "exitName": "WestTransitionBuildingBottom",
+      "exitName": "WestTransitionBuilding",
       "direction": "LEFT",
       "deathPortal": false,
       "nextMap": {
         "region": "RSA Town",
         "mapName": "RSATown_BFM_TransitionBuilding"
       },
-      "nextEntrance": "EastDoorBottom",
+      "nextEntrance": "EastDoor",
       "location": [
         {
           "x": 16,
           "y": 21
-        }
-      ],
-      "triggerName": "RSATown_MapExit_WestTransitionBuildingBottom_01"
-    },
-    {
-      "exitName": "WestTransitionBuildingMiddle",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "RSA Town",
-        "mapName": "RSATown_BFM_TransitionBuilding"
-      },
-      "nextEntrance": "EastDoorMiddle",
-      "location": [
+        },
         {
           "x": 16,
           "y": 20
-        }
-      ],
-      "triggerName": "RSATown_MapExit_WestTransitionBuildingMiddle_01"
-    },
-    {
-      "exitName": "WestTransitionBuildingTop",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "RSA Town",
-        "mapName": "RSATown_BFM_TransitionBuilding"
-      },
-      "nextEntrance": "EastDoorTop",
-      "location": [
+        },
         {
           "x": 16,
           "y": 19
         }
       ],
-      "triggerName": "RSATown_MapExit_WestTransitionBuildingTop_01"
+      "triggerName": "RSATown_MapExit_WestTransitionBuilding_01"
     }
   ],
   "NPCs": [

@@ -4,7 +4,9 @@ import map.MapName;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.MultiPointTriggerMatcher;
 
-public class SimpleMapTransition extends MultiPointTriggerMatcher {
+import java.io.Serializable;
+
+public class SimpleMapTransition extends MultiPointTriggerMatcher implements Serializable {
     private MapName nextMap;
     private String nextEntrance;
 

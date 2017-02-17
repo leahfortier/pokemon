@@ -109,11 +109,6 @@ public class MapDataMatcher {
     public AreaData[] getAreaData() {
         AreaData[] areaData = new AreaData[this.areas.length];
         for (int i = 0; i < this.areas.length; i++) {
-            // TODO move to test
-            if (i > 0 && !this.areas[i].hasColor()) {
-                Global.error("Color required for maps with multiple areas.");
-            }
-
             areaData[i] = this.areas[i].getAreaData();
         }
 

@@ -1,18 +1,13 @@
 package map.triggers;
 
 import main.Game;
-import map.MapName;
 import map.PathDirection;
-import pattern.SimpleMapTransition;
 import pattern.map.MapTransitionMatcher;
 import trainer.CharacterData;
 import util.JsonUtils;
 
 class MapTransitionTrigger extends Trigger {
-	private final MapName nextMap;
-	private final String mapEntranceName;
-	private final PathDirection direction;
-	private final boolean deathPortal;
+	private final MapTransitionMatcher mapTransitionMatcher;
 
 	static String getTriggerSuffix(String contents) {
 		MapTransitionMatcher matcher = JsonUtils.deserialize(contents, MapTransitionMatcher.class);
@@ -22,23 +17,21 @@ class MapTransitionTrigger extends Trigger {
 	MapTransitionTrigger(String contents, String condition) {
 		super(TriggerType.MAP_TRANSITION, contents, condition);
 
-		MapTransitionMatcher matcher = JsonUtils.deserialize(contents, MapTransitionMatcher.class);
-		this.nextMap = matcher.getNextMap();
-		this.mapEntranceName = matcher.getNextEntranceName();
-		this.direction = matcher.getDirection();
-		this.deathPortal = matcher.isDeathPortal();
+		this.mapTransitionMatcher = JsonUtils.deserialize(contents, MapTransitionMatcher.class);
 	}
 	
 	protected void executeTrigger() {
 		CharacterData player = Game.getPlayer();
-		player.setMap(new SimpleMapTransition(nextMap, mapEntranceName));
-		
+		player.setMap(mapTransitionMatcher);
+		mapTransitionMatcher.setTransitionIndex();
+
+		PathDirection direction = mapTransitionMatcher.getDirection();
 		if (direction != null && direction != PathDirection.WAIT) {
 			player.setDirection(direction.getDirection());
 		}
 
-		if (deathPortal) {
-			Game.getPlayer().setPokeCenter(new SimpleMapTransition(nextMap, mapEntranceName));
+		if (mapTransitionMatcher.isDeathPortal()) {
+			Game.getPlayer().setPokeCenter(mapTransitionMatcher);
 		}
 
 		player.setMapReset(true);

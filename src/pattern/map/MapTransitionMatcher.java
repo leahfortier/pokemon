@@ -1,5 +1,6 @@
 package pattern.map;
 
+import main.Game;
 import map.MapName;
 import map.PathDirection;
 import pattern.SimpleMapTransition;
@@ -44,7 +45,18 @@ public class MapTransitionMatcher extends SimpleMapTransition {
         return this.getExitName();
     }
 
-    public List<Point> getExitLocation() {
+    public void setTransitionIndex() {
+        Point playerLocation = Game.getPlayer().getLocation();
+        List<Point> transitionPoints = this.getExitLocations();
+
+        for (int i = 0; i < transitionPoints.size(); i++) {
+            if (transitionPoints.get(i).equals(playerLocation)) {
+                super.setTransitionIndex(i);
+            }
+        }
+    }
+
+    public List<Point> getExitLocations() {
         if (this.direction == null) {
             return null;
         }

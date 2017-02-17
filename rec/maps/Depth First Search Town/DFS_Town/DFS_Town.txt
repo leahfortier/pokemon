@@ -85,55 +85,29 @@
       "triggerName": "DFS_Town_MapExit_RivalsHouse_01"
     },
     {
-      "exitName": "WestTransitionBuildingBottom",
+      "exitName": "WestTransitionBuilding",
       "direction": "LEFT",
       "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
-      "nextEntrance": "EastDoorBottom",
+      "nextEntrance": "EastDoor",
       "location": [
         {
           "x": 14,
           "y": 21
-        }
-      ],
-      "triggerName": "DFS_Town_MapExit_WestTransitionBuildingBottom_01"
-    },
-    {
-      "exitName": "WestTransitionBuildingMiddle",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "Depth First Search Town",
-        "mapName": "Edge1_RSATown_TransitionBuilding"
-      },
-      "nextEntrance": "EastDoorMiddle",
-      "location": [
+        },
         {
           "x": 14,
           "y": 20
-        }
-      ],
-      "triggerName": "DFS_Town_MapExit_WestTransitionBuildingMiddle_01"
-    },
-    {
-      "exitName": "WestTransitionBuildingTop",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "Depth First Search Town",
-        "mapName": "Edge1_RSATown_TransitionBuilding"
-      },
-      "nextEntrance": "EastDoorTop",
-      "location": [
+        },
         {
           "x": 14,
           "y": 19
         }
       ],
-      "triggerName": "DFS_Town_MapExit_WestTransitionBuildingTop_01"
+      "triggerName": "DFS_Town_MapExit_WestTransitionBuilding_01"
     }
   ],
   "NPCs": [

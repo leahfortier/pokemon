@@ -7,55 +7,29 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "NorthTransitionBuildingLeft",
+      "exitName": "NorthTransitionBuilding",
       "direction": "UP",
       "deathPortal": false,
       "nextMap": {
         "region": "Tomasulo Town",
         "mapName": "TomTown_WindValley_TransitionBuilding"
       },
-      "nextEntrance": "SouthDoorLeft",
+      "nextEntrance": "SouthDoor",
       "location": [
         {
           "x": 30,
           "y": 11
-        }
-      ],
-      "triggerName": "WindValley_MapExit_NorthTransitionBuildingLeft_01"
-    },
-    {
-      "exitName": "NorthTransitionBuildingMiddle",
-      "direction": "UP",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "Tomasulo Town",
-        "mapName": "TomTown_WindValley_TransitionBuilding"
-      },
-      "nextEntrance": "SouthDoorMiddle",
-      "location": [
+        },
         {
           "x": 31,
           "y": 11
-        }
-      ],
-      "triggerName": "WindValley_MapExit_NorthTransitionBuildingMiddle_01"
-    },
-    {
-      "exitName": "NorthTransitionBuildingRight",
-      "direction": "UP",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "Tomasulo Town",
-        "mapName": "TomTown_WindValley_TransitionBuilding"
-      },
-      "nextEntrance": "SouthDoorRight",
-      "location": [
+        },
         {
           "x": 32,
           "y": 11
         }
       ],
-      "triggerName": "WindValley_MapExit_NorthTransitionBuildingRight_01"
+      "triggerName": "WindValley_MapExit_NorthTransitionBuilding_01"
     }
   ],
   "NPCs": [],
