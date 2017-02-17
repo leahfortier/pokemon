@@ -11,6 +11,7 @@ import map.AreaData;
 import map.Direction;
 import map.MapName;
 import map.entity.movable.PlayerEntity;
+import map.overworld.OverworldTool;
 import map.triggers.FishingTrigger;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
@@ -84,7 +85,7 @@ public class CharacterData extends Trainer implements Serializable {
 	private Integer newPokemonBox;
 	private boolean isFirstNewPokemon;
 
-	private List<String> logMessages;
+	private transient List<String> logMessages;
 
 	public CharacterData() {
 		super(DEFAULT_NAME, START_MONEY);
@@ -128,6 +129,10 @@ public class CharacterData extends Trainer implements Serializable {
 
 	public PlayerEntity getEntity() {
 		return this.entity;
+	}
+
+	public boolean hasTool(OverworldTool tool) {
+		return this.globalsContain(tool.getGlobalName());
 	}
 
 	public int getNumBadges() {

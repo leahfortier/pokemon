@@ -1,5 +1,6 @@
 package map.overworld;
 
+import main.Game;
 import map.Direction;
 import map.PathDirection;
 
@@ -10,7 +11,7 @@ import java.util.Map;
 public enum WalkType {
     NOT_WALKABLE(0x000000, false),
     WALKABLE(0xFFFFFF, true),
-    WATER(0x0000FF, true), // TODO: player.canSurf()
+    WATER(0x0000FF, Game.getPlayer().hasTool(OverworldTool.SURF)),
     DOWN_LEDGE(0x00FF00, Direction.DOWN),
     UP_LEDGE(0xFF0000, Direction.UP),
     LEFT_LEDGE(0xFFFF00, Direction.LEFT),
