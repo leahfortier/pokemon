@@ -2,8 +2,8 @@ package test.maps;
 
 import map.AreaData;
 import map.MapDataType;
-import map.WalkType;
-import map.WildEncounter;
+import map.overworld.WalkType;
+import map.overworld.WildEncounter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

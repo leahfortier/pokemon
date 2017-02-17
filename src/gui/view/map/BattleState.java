@@ -7,7 +7,7 @@ import gui.view.ViewMode;
 import gui.view.map.VisualState.VisualStateHandler;
 import main.Game;
 import main.Global;
-import map.TerrainType;
+import map.overworld.TerrainType;
 import pokemon.ActivePokemon;
 import sound.SoundPlayer;
 import sound.SoundTitle;

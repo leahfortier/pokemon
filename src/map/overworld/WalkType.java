@@ -1,4 +1,7 @@
-package map;
+package map.overworld;
+
+import map.Direction;
+import map.PathDirection;
 
 import java.awt.Color;
 import java.util.HashMap;

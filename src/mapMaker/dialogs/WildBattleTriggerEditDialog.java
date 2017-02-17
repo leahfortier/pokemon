@@ -1,7 +1,7 @@
 package mapMaker.dialogs;
 
-import map.EncounterRate;
-import map.WildEncounter;
+import map.overworld.EncounterRate;
+import map.overworld.WildEncounter;
 import pattern.map.WildBattleMatcher;
 import util.GUIUtils;
 

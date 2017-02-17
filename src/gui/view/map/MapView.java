@@ -15,7 +15,7 @@ import map.Direction;
 import map.MapData;
 import map.MapName;
 import map.PathDirection;
-import map.TerrainType;
+import map.overworld.TerrainType;
 import map.entity.Entity;
 import map.entity.movable.MovableEntity;
 import map.entity.movable.PlayerEntity;

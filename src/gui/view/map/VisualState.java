@@ -3,7 +3,7 @@ package gui.view.map;
 import battle.Battle;
 import input.ControlKey;
 import input.InputControl;
-import map.TerrainType;
+import map.overworld.TerrainType;
 
 import java.awt.Graphics;
 

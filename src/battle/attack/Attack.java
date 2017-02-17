@@ -51,7 +51,7 @@ import item.hold.SpecialTypeItem.GemItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
 import main.Global;
-import map.TerrainType;
+import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;

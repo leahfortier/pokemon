@@ -1,7 +1,7 @@
 package mapMaker.model;
 
 import draw.TileUtils;
-import map.WalkType;
+import map.overworld.WalkType;
 import mapMaker.MapMaker;
 
 import javax.swing.DefaultListModel;

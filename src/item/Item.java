@@ -73,7 +73,7 @@ import item.use.PokemonUseItem;
 import item.use.TechnicalMachine;
 import item.use.UseItem;
 import main.Game;
-import map.TerrainType;
+import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
