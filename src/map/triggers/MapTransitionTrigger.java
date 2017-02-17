@@ -3,6 +3,7 @@ package map.triggers;
 import main.Game;
 import map.MapName;
 import map.PathDirection;
+import pattern.SimpleMapTransition;
 import pattern.map.MapTransitionMatcher;
 import trainer.CharacterData;
 import util.JsonUtils;
@@ -30,14 +31,14 @@ class MapTransitionTrigger extends Trigger {
 	
 	protected void executeTrigger() {
 		CharacterData player = Game.getPlayer();
-		player.setMap(nextMap, mapEntranceName);
+		player.setMap(new SimpleMapTransition(nextMap, mapEntranceName));
 		
 		if (direction != null && direction != PathDirection.WAIT) {
 			player.setDirection(direction.getDirection());
 		}
 
 		if (deathPortal) {
-			Game.getPlayer().setPokeCenter(nextMap, mapEntranceName);
+			Game.getPlayer().setPokeCenter(new SimpleMapTransition(nextMap, mapEntranceName));
 		}
 
 		player.setMapReset(true);

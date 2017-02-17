@@ -11,7 +11,6 @@ import mapMaker.dialogs.NPCEntityDialog;
 import mapMaker.dialogs.WildBattleTriggerEditDialog;
 import mapMaker.dialogs.WildBattleTriggerOptionsDialog;
 import mapMaker.model.TileModel.TileType;
-import mapMaker.model.TriggerModel;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.LocationTriggerMatcher;
 import pattern.generic.MultiPointTriggerMatcher;
@@ -151,13 +150,6 @@ public class MapMakerTriggerData {
 
 				BufferedImage image = null;
 				switch (triggerModelType) {
-					case MAP_TRANSITION:
-						Point exit = ((MapTransitionMatcher)entity).getExitLocation();
-						if (exit != null) {
-							BufferedImage exitImage = TriggerModel.getMapExitImage(mapMaker);
-							TileUtils.drawTileImage(g2d, exitImage, exit, mapLocation);
-						}
-						break;
 					case NPC:
 						NPCMatcher npc = (NPCMatcher) entity;
 						int imageIndex = MovableEntity.getTrainerSpriteIndex(npc.getSpriteIndex(), npc.getDirection());

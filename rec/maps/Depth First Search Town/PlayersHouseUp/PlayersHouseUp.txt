@@ -8,6 +8,15 @@
   ],
   "mapTransitions": [
     {
+      "exitName": "startTransition",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "Depth First Search Town",
+        "mapName": "PlayersHouseUp"
+      },
+      "nextEntrance": "GameStartLocation"
+    },
+    {
       "exitName": "GameStartLocation",
       "deathPortal": false,
       "location": [

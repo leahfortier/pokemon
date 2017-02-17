@@ -12,6 +12,7 @@ import main.Global;
 import map.AreaData;
 import map.Direction;
 import map.MapName;
+import pattern.SimpleMapTransition;
 import trainer.CharacterData;
 import util.GeneralUtils;
 
@@ -97,7 +98,7 @@ class FlyView extends View {
 
                 String flyEntrance = area.getFlyLocation();
 
-                player.setMap(mapName, flyEntrance);
+                player.setMap(new SimpleMapTransition(mapName, flyEntrance));
                 player.setDirection(Direction.DOWN);
                 player.setMapReset(true);
 

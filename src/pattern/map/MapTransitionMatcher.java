@@ -2,23 +2,23 @@ package pattern.map;
 
 import map.MapName;
 import map.PathDirection;
-import mapMaker.model.TriggerModel.TriggerModelType;
-import pattern.generic.SinglePointTriggerMatcher;
+import pattern.SimpleMapTransition;
 import util.Point;
 
-public class MapTransitionMatcher extends SinglePointTriggerMatcher {
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class MapTransitionMatcher extends SimpleMapTransition {
     private String exitName;
-    private MapName nextMap;
-    private String nextEntrance;
     private PathDirection direction;
     private boolean deathPortal;
 
     private MapName previousMap;
 
     public MapTransitionMatcher(String exitName, MapName nextMap, String nextEntrance, PathDirection direction, boolean deathPortal) {
+        super(nextMap, nextEntrance);
+
         this.exitName = exitName;
-        this.nextMap = nextMap;
-        this.nextEntrance = nextEntrance;
         this.direction = direction;
         this.deathPortal = deathPortal;
     }
@@ -31,25 +31,12 @@ public class MapTransitionMatcher extends SinglePointTriggerMatcher {
         return this.exitName;
     }
 
-    public MapName getNextMap() {
-        return this.nextMap;
-    }
-
-    public String getNextEntranceName() {
-        return this.nextEntrance;
-    }
-
     public PathDirection getDirection() {
         return this.direction;
     }
 
     public MapName getPreviousMap() {
-       return this.previousMap;
-    }
-
-    @Override
-    public TriggerModelType getTriggerModelType() {
-        return TriggerModelType.MAP_TRANSITION;
+        return this.previousMap;
     }
 
     @Override
@@ -57,12 +44,14 @@ public class MapTransitionMatcher extends SinglePointTriggerMatcher {
         return this.getExitName();
     }
 
-    public Point getExitLocation() {
+    public List<Point> getExitLocation() {
         if (this.direction == null) {
             return null;
         }
 
-        return Point.add(super.location, direction.getDeltaPoint());
+        return super.location.stream()
+                .map(point -> Point.add(point, direction.getDeltaPoint()))
+                .collect(Collectors.toList());
     }
 
     public boolean isDeathPortal() {

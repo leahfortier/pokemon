@@ -17,6 +17,7 @@ import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import pattern.GroupTriggerMatcher;
+import pattern.SimpleMapTransition;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PC;
@@ -53,7 +54,7 @@ public class CharacterData extends Trainer implements Serializable {
 
 	private boolean mapReset;
 	private MapName mapName;
-	private String mapEntranceName;
+	private SimpleMapTransition mapTransition;
 	private String areaName;
 	private Set<Entry<MapName, String>> flyLocations;
 
@@ -68,8 +69,7 @@ public class CharacterData extends Trainer implements Serializable {
 
 	private transient long timeSinceUpdate;
 
-	private MapName lastPCMap;
-	private String lastPCMapEntrance;
+	private SimpleMapTransition lastPCMapEntrance;
 
 	private Pokedex pokedex;
 	private PC pc;
@@ -170,9 +170,9 @@ public class CharacterData extends Trainer implements Serializable {
 		this.direction = direction;
 	}
 	
-	public void setMap(MapName name, String mapEntrance) {
-		mapName = name;
-		mapEntranceName = mapEntrance;
+	public void setMap(SimpleMapTransition mapTransitionMatcher) {
+		mapName = mapTransitionMatcher.getNextMap();
+		mapTransition = mapTransitionMatcher;
 	}
 
 	public void setArea(MapName mapName, AreaData area) {
@@ -267,21 +267,20 @@ public class CharacterData extends Trainer implements Serializable {
 		this.mapReset = mapReset;
 	}
 
-	public String getMapEntranceName() {
-		return mapEntranceName;
+	public SimpleMapTransition getMapTransition() {
+		return this.mapTransition;
 	}
 
 	public String getAreaName() {
 		return areaName;
 	}
 	
-	public void setPokeCenter(MapName mapName, String entranceName) {
-		lastPCMap = mapName;
+	public void setPokeCenter(SimpleMapTransition entranceName) {
 		lastPCMapEntrance = entranceName;
 	}
 	
 	public void teleportToPokeCenter() {
-		setMap(lastPCMap, lastPCMapEntrance);
+		setMap(lastPCMapEntrance);
 
 		direction = Direction.DOWN;
 		mapReset = true;
