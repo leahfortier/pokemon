@@ -3,9 +3,12 @@ package test.maps;
 import map.AreaData;
 import map.MapDataType;
 import map.WalkType;
+import map.WildEncounter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import pattern.map.FishingMatcher;
+import pattern.map.WildBattleMatcher;
 import util.FileIO;
 import util.Folder;
 import util.Point;
@@ -77,6 +80,32 @@ public class MapTest {
                 }
             }
         }
+    }
 
+    @Test
+    public void wildBattleProbabilityTest() {
+        for (TestMap map : this.maps) {
+            for (WildBattleMatcher wildBattleMatcher : map.getMatcher().getWildBattles()) {
+                WildEncounter[] wildEncounters = wildBattleMatcher.getWildEncounters();
+
+                int totalProbability = 0;
+                for (WildEncounter wildEncounter : wildEncounters) {
+                    totalProbability += wildEncounter.getProbability();
+                }
+
+                Assert.assertTrue(totalProbability == 100);
+            }
+
+            for (FishingMatcher fishingMatcher : map.getMatcher().getFishingSpots()) {
+                WildEncounter[] wildEncounters = fishingMatcher.getWildEncounters();
+
+                int totalProbability = 0;
+                for (WildEncounter wildEncounter : wildEncounters) {
+                    totalProbability += wildEncounter.getProbability();
+                }
+
+                Assert.assertTrue(totalProbability == 100);
+            }
+        }
     }
 }

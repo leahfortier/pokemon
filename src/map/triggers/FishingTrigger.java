@@ -1,6 +1,5 @@
 package map.triggers;
 
-import gui.view.ViewMode;
 import main.Global;
 import map.WildEncounter;
 import message.MessageUpdate;
@@ -10,7 +9,7 @@ import pattern.map.FishingMatcher;
 import util.JsonUtils;
 import util.RandomUtils;
 
-public class FishingTrigger extends Trigger {
+class FishingTrigger extends Trigger {
     private final WildEncounter[] wildEncounters;
 
     FishingTrigger(String matcherJson, String condition) {
@@ -18,16 +17,6 @@ public class FishingTrigger extends Trigger {
 
         FishingMatcher matcher = JsonUtils.deserialize(matcherJson, FishingMatcher.class);
         this.wildEncounters = matcher.getWildEncounters();
-
-        // TODO: Move to test
-        int totalProbability = 0;
-        for (WildEncounter wildEncounter : this.wildEncounters) {
-            totalProbability = totalProbability + wildEncounter.getProbability();
-        }
-
-        if (totalProbability != 100) {
-            Global.error("Wild battle trigger probabilities add up to " + totalProbability + ", not 100.");
-        }
     }
 
     protected void executeTrigger() {

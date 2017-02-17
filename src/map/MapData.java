@@ -40,7 +40,7 @@ public class MapData {
 	private final Dimension dimension;
 
 	private final Map<MapDataType, int[]> dataMap;
-	protected final AreaData[] areaData;
+	private final AreaData[] areaData;
 
 	private final List<Entity> entities;
 	private final MultiMap<Integer, String> triggers;

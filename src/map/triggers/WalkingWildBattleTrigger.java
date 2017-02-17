@@ -3,7 +3,6 @@ package map.triggers;
 import battle.effect.RepellingEffect;
 import item.Item;
 import main.Game;
-import main.Global;
 import map.EncounterRate;
 import map.WildEncounter;
 import message.MessageUpdate;
@@ -24,15 +23,6 @@ public class WalkingWildBattleTrigger extends Trigger {
         WildBattleMatcher matcher = JsonUtils.deserialize(matcherJson, WildBattleMatcher.class);
         this.wildEncounters = matcher.getWildEncounters();
         this.encounterRate = matcher.getEncounterRate();
-
-        int totalProbability = 0;
-        for (WildEncounter wildEncounter : this.wildEncounters) {
-            totalProbability = totalProbability + wildEncounter.getProbability();
-        }
-
-        if (totalProbability != 100) {
-            Global.error("Wild battle trigger probabilities add up to " + totalProbability + ", not 100.");
-        }
     }
 
     protected void executeTrigger() {
