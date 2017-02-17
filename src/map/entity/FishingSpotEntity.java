@@ -1,10 +1,5 @@
 package map.entity;
 
-import gui.TileSet;
-import gui.view.map.MapView;
-import main.Game;
-import map.Direction;
-import map.MapData;
 import map.WildEncounter;
 import map.entity.EntityAction.TriggerAction;
 import map.triggers.TriggerType;
@@ -12,7 +7,6 @@ import pattern.map.FishingMatcher;
 import util.JsonUtils;
 import util.Point;
 
-import java.awt.image.BufferedImage;
 import java.util.Collections;
 
 public class FishingSpotEntity extends Entity {
@@ -31,25 +25,6 @@ public class FishingSpotEntity extends Entity {
     public boolean isHighPriorityEntity() {
         return false;
     }
-
-    @Override
-    public void update(int dt, MapData currentMap, MapView view) {}
-
-    @Override
-    protected BufferedImage getFrame() {
-        return Game.getData().getTrainerTiles().getTile(TileSet.EMPTY_IMAGE);
-    }
-
-    @Override
-    protected boolean isTransitioning() {
-        return false;
-    }
-
-    @Override
-    public void getAttention(Direction direction) {}
-
-    @Override
-    public void reset() {}
 
     @Override
     public void addData() {

@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TileSet {
-	public static final int EMPTY_IMAGE = -1;
 	public static final int INVALID_RGB = -1000;
 
 	public static final BufferedImage POKEBALL = FileIO.readImage(Folder.IMAGES + "Pokeball.png");

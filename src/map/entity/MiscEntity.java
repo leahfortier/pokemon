@@ -1,13 +1,7 @@
 package map.entity;
 
-import gui.TileSet;
-import gui.view.map.MapView;
-import main.Game;
-import map.Direction;
-import map.MapData;
 import util.Point;
 
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class MiscEntity extends Entity {
@@ -22,22 +16,6 @@ public class MiscEntity extends Entity {
 	}
 
 	@Override
-	public void update(int dt, MapData currentMap, MapView view) {}
-
-	@Override
-	protected BufferedImage getFrame() {
-		return Game.getData().getTrainerTiles().getTile(TileSet.EMPTY_IMAGE);
-	}
-
-	@Override
-	protected boolean isTransitioning() {
-		return false;
-	}
-
-	@Override
-	public void getAttention(Direction direction) {}
-
-	@Override
 	public void addData() {
 		if (dataCreated) {
 			return;
@@ -46,7 +24,4 @@ public class MiscEntity extends Entity {
 		EntityAction.addActionGroupTrigger(this.getEntityName(), this.getTriggerSuffix(), this.getConditionString(), this.actions);
 		dataCreated = true;
 	}
-
-	@Override
-	public void reset() {}
 }

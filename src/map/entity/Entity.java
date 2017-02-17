@@ -60,21 +60,28 @@ public abstract class Entity {
 			return;
 		}
 
-		TileUtils.drawEntityTileImage(g, this.getFrame(), this.getCanvasCoordinates(drawLocation));
+		BufferedImage image = this.getFrame();
+		if (image != null) {
+			TileUtils.drawEntityTileImage(g, image, this.getCanvasCoordinates(drawLocation));
+		}
 	}
 
 	protected Point getCanvasCoordinates(Point drawLocation) {
 		return TileUtils.getDrawLocation(this.location, drawLocation);
 	}
 
-	public abstract void update(int dt, MapData currentMap, MapView view);
+	public void update(int dt, MapData currentMap, MapView view) {}
+	public void getAttention(Direction direction) {}
+	public void reset() {}
+	public void addData() {}
 
-	protected abstract BufferedImage getFrame();
-	protected abstract boolean isTransitioning();
+	protected BufferedImage getFrame() {
+		return null;
+	}
 
-	public abstract void getAttention(Direction direction);
-	public abstract void addData();
-	public abstract void reset();
+	protected boolean isTransitioning() {
+		return false;
+	}
 
 	public String getEntityName() {
 		return this.entityName;
