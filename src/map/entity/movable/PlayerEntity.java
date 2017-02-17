@@ -7,7 +7,7 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
-import map.WalkType;
+import map.overworld.WalkType;
 import map.entity.Entity;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;

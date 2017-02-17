@@ -1,6 +1,6 @@
 package mapMaker.dialogs;
 
-import map.WildEncounter;
+import map.overworld.WildEncounter;
 import pattern.map.FishingMatcher;
 import util.GUIUtils;
 

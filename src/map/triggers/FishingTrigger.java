@@ -1,6 +1,6 @@
 package map.triggers;
 
-import map.WildEncounter;
+import map.overworld.WildEncounter;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.GroupTriggerMatcher;

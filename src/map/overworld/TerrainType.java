@@ -1,4 +1,4 @@
-package map;
+package map.overworld;
 
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;

@@ -1,4 +1,4 @@
-package map;
+package map.overworld;
 
 public enum EncounterRate {
     VERY_COMMON(15),
