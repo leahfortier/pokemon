@@ -9,32 +9,36 @@
   "mapTransitions": [
     {
       "exitName": "FromFloor1",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Tomasulo Town",
         "mapName": "Tom_Town_Power_Plant_F1"
       },
       "nextEntrance": "FromFloor2",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 6,
-        "y": 11
-      },
+      "location": [
+        {
+          "x": 6,
+          "y": 11
+        }
+      ],
       "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor1_01"
     },
     {
       "exitName": "FromFloor3",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Tomasulo Town",
         "mapName": "Tom_Town_Power_Plant_F3"
       },
       "nextEntrance": "FromFloor2",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 6,
-        "y": 9
-      },
+      "location": [
+        {
+          "x": 6,
+          "y": 9
+        }
+      ],
       "triggerName": "Tom_Town_Power_Plant_F2_MapExit_FromFloor3_01"
     }
   ],

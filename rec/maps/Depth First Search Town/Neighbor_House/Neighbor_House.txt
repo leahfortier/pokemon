@@ -9,17 +9,19 @@
   "mapTransitions": [
     {
       "exitName": "DFS_Town",
+      "direction": "DOWN",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "DFS_Town"
       },
       "nextEntrance": "NeighborsHouse",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "location": {
-        "x": 3,
-        "y": 6
-      },
+      "location": [
+        {
+          "x": 3,
+          "y": 6
+        }
+      ],
       "triggerName": "Neighbor_House_MapExit_DFS_Town_01"
     }
   ],

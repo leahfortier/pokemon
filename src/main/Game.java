@@ -121,8 +121,8 @@ public class Game {
 		characterData = new CharacterData();
 		
 		MapName startingMap = new MapName("Depth First Search Town", "PlayersHouseUp");
-		String startingMapEntrance = "GameStartLocation";
-		characterData.setMap(startingMap, startingMapEntrance);
+		MapTransitionMatcher startTransition = this.data.getMap(startingMap).getEntrance("startTransition");
+		characterData.setMap(startTransition);
 		data.getMap(startingMap).setCharacterToEntrance();
 
 		characterData.setFileNum(index);

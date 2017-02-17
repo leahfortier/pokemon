@@ -18,108 +18,96 @@
   "mapTransitions": [
     {
       "exitName": "MaplesLab",
+      "direction": "UP",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "MaplesLab"
       },
       "nextEntrance": "DFS_Town",
-      "direction": "UP",
-      "deathPortal": false,
-      "location": {
-        "x": 74,
-        "y": 17
-      },
+      "location": [
+        {
+          "x": 74,
+          "y": 17
+        }
+      ],
       "triggerName": "DFS_Town_MapExit_MaplesLab_01"
     },
     {
       "exitName": "NeighborsHouse",
+      "direction": "UP",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Neighbor_House"
       },
       "nextEntrance": "DFS_Town",
-      "direction": "UP",
-      "deathPortal": false,
-      "location": {
-        "x": 74,
-        "y": 27
-      },
+      "location": [
+        {
+          "x": 74,
+          "y": 27
+        }
+      ],
       "triggerName": "DFS_Town_MapExit_NeighborsHouse_01"
     },
     {
       "exitName": "PlayersHouse",
+      "direction": "UP",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "PlayersHouseDown"
       },
       "nextEntrance": "DFS_Town",
-      "direction": "UP",
-      "deathPortal": false,
-      "location": {
-        "x": 85,
-        "y": 27
-      },
+      "location": [
+        {
+          "x": 85,
+          "y": 27
+        }
+      ],
       "triggerName": "DFS_Town_MapExit_PlayersHouse_01"
     },
     {
       "exitName": "RivalsHouse",
+      "direction": "UP",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Rival_House"
       },
       "nextEntrance": "DFS_Town",
-      "direction": "UP",
-      "deathPortal": false,
-      "location": {
-        "x": 85,
-        "y": 15
-      },
+      "location": [
+        {
+          "x": 85,
+          "y": 15
+        }
+      ],
       "triggerName": "DFS_Town_MapExit_RivalsHouse_01"
     },
     {
-      "exitName": "WestTransitionBuildingBottom",
+      "exitName": "WestTransitionBuilding",
+      "direction": "LEFT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
-      "nextEntrance": "EastDoorBottom",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 14,
-        "y": 21
-      },
-      "triggerName": "DFS_Town_MapExit_WestTransitionBuildingBottom_01"
-    },
-    {
-      "exitName": "WestTransitionBuildingMiddle",
-      "nextMap": {
-        "region": "Depth First Search Town",
-        "mapName": "Edge1_RSATown_TransitionBuilding"
-      },
-      "nextEntrance": "EastDoorMiddle",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 14,
-        "y": 20
-      },
-      "triggerName": "DFS_Town_MapExit_WestTransitionBuildingMiddle_01"
-    },
-    {
-      "exitName": "WestTransitionBuildingTop",
-      "nextMap": {
-        "region": "Depth First Search Town",
-        "mapName": "Edge1_RSATown_TransitionBuilding"
-      },
-      "nextEntrance": "EastDoorTop",
-      "direction": "LEFT",
-      "deathPortal": false,
-      "location": {
-        "x": 14,
-        "y": 19
-      },
-      "triggerName": "DFS_Town_MapExit_WestTransitionBuildingTop_01"
+      "nextEntrance": "EastDoor",
+      "location": [
+        {
+          "x": 14,
+          "y": 21
+        },
+        {
+          "x": 14,
+          "y": 20
+        },
+        {
+          "x": 14,
+          "y": 19
+        }
+      ],
+      "triggerName": "DFS_Town_MapExit_WestTransitionBuilding_01"
     }
   ],
   "NPCs": [

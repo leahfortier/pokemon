@@ -51,7 +51,6 @@ public class GameData {
 		File mapsDirectory = new File(Folder.MAPS);
 		for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
 			MapData mapData = new MapData(mapFolder);
-			System.out.println(mapData.getName());
 			maps.put(mapData.getName(), mapData);
 		}
 	}

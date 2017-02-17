@@ -46,6 +46,10 @@ public class AreaData {
 		this.musicConditions = musicConditions;
 	}
 
+	public boolean hasColor() {
+		return !this.color.equals(Color.BLACK);
+	}
+
 	public boolean isColor(Color color) {
 		return this.color.equals(color);
 	}

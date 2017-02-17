@@ -9,17 +9,19 @@
   "mapTransitions": [
     {
       "exitName": "FrontDoor",
+      "direction": "DOWN",
+      "deathPortal": true,
       "nextMap": {
         "region": "Tomasulo Town",
         "mapName": "Tom_Town"
       },
       "nextEntrance": "PokeCenter",
-      "direction": "DOWN",
-      "deathPortal": true,
-      "location": {
-        "x": 7,
-        "y": 8
-      },
+      "location": [
+        {
+          "x": 7,
+          "y": 8
+        }
+      ],
       "triggerName": "Tom_Town_PokeCenter_MapExit_FrontDoor_01"
     }
   ],

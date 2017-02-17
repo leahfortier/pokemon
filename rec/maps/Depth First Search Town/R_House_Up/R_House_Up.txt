@@ -9,17 +9,19 @@
   "mapTransitions": [
     {
       "exitName": "stairs",
+      "direction": "RIGHT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "Rival_House"
       },
       "nextEntrance": "stairs",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 4,
-        "y": 2
-      },
+      "location": [
+        {
+          "x": 4,
+          "y": 2
+        }
+      ],
       "triggerName": "R_House_Up_MapExit_stairs_01"
     }
   ],

@@ -23,7 +23,7 @@ public class MapTest {
         maps = new ArrayList<>();
 
         File mapsDirectory = new File(Folder.MAPS);
-        for (File mapFolder : FileIO.listDirectories(mapsDirectory)) {
+        for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
             maps.add(new TestMap(mapFolder));
         }
     }
@@ -46,19 +46,30 @@ public class MapTest {
     public void multipleAreaTest() {
         for (TestMap map : maps) {
             AreaData[] areas = map.getAreas();
+
+            // Make sure each map has at least one area
             Assert.assertTrue(areas.length > 0);
 
+            // Only testing maps with multiple areas
             if (areas.length == 1) {
                 continue;
             }
 
+            // Color is required for maps with multiple areas
+            for (AreaData area : areas) {
+                Assert.assertTrue(
+                        "Missing color for area " + area.getAreaName() + " in map " + map.getName(),
+                        area.hasColor()
+                );
+            }
+
+            // Confirm each walkable tile is not in the void area
             Dimension dimension = map.getDimension();
             for (int x = 0; x < dimension.width; x++) {
                 for (int y = 0; y < dimension.height; y++) {
                     int rgb = map.getRGB(x, y, MapDataType.MOVE);
                     WalkType walkType = WalkType.getWalkType(rgb);
                     if (walkType != WalkType.NOT_WALKABLE) {
-                        // Confirm each walkable tile is not in the void area
                         Assert.assertFalse(
                                 map.getName() + " " + x + " " + y,
                                 map.getArea(new Point(x, y)) == AreaData.VOID);

@@ -9,6 +9,7 @@ import map.entity.EntityAction;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
 import map.triggers.TriggerType;
+import pattern.SimpleMapTransition;
 import pattern.generic.EntityMatcher;
 import pattern.map.EventMatcher;
 import pattern.map.MapDataMatcher;
@@ -74,10 +75,10 @@ public class MapData {
 
 			mapEntrances.put(matcher.getExitName(), matcher);
 
-            Point exit = matcher.getExitLocation();
-			if (exit != null) {
+            List<Point> exits = matcher.getExitLocations();
+			if (exits != null) {
 				Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(JsonUtils.getJson(matcher), null);
-				triggers.put(getMapIndex(exit), trigger.getName());
+				exits.forEach(exit -> triggers.put(getMapIndex(exit), trigger.getName()));
 			}
         }
 
@@ -117,6 +118,10 @@ public class MapData {
 		return this.name;
 	}
 
+	public MapTransitionMatcher getEntrance(String entranceName) {
+		return this.mapEntrances.get(entranceName);
+	}
+
 	public boolean hasEntrance(String entranceName) {
 		return this.mapEntrances.containsKey(entranceName);
 	}
@@ -125,8 +130,16 @@ public class MapData {
 		return this.mapEntrances.get(entranceName).getDirection();
 	}
 
-	public Point getEntranceLocation(String entranceName) {
-		return this.mapEntrances.get(entranceName).getLocation();
+	public Point getEntranceLocation(SimpleMapTransition mapTransition) {
+		return getEntranceLocation(mapTransition.getNextEntranceName(), mapTransition.getTransitionIndex(), mapTransition.numExits());
+	}
+
+	public Point getEntranceLocation(String entranceName, int exitIndex, int numExits) {
+		MapTransitionMatcher entranceMatcher = this.mapEntrances.get(entranceName);
+		List<Point> entrances = entranceMatcher.getLocation();
+
+		int entranceIndex = (int)(((double)entrances.size()/numExits)*exitIndex);
+		return entrances.get(entranceIndex);
 	}
 
 	public Dimension getDimension() {
@@ -209,9 +222,9 @@ public class MapData {
 	
 	public boolean setCharacterToEntrance() {
 		CharacterData player = Game.getPlayer();
-		String entranceName = player.getMapEntranceName();
-        if (mapEntrances.containsKey(entranceName)) {
-			Point entranceLocation = getEntranceLocation(entranceName);
+		SimpleMapTransition mapTransition = player.getMapTransition();
+        if (mapEntrances.containsKey(mapTransition.getNextEntranceName())) {
+			Point entranceLocation = getEntranceLocation(mapTransition);
 			player.setLocation(entranceLocation);
 
 			return true;

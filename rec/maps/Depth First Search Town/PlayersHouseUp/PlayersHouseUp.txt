@@ -8,27 +8,40 @@
   ],
   "mapTransitions": [
     {
+      "exitName": "startTransition",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "Depth First Search Town",
+        "mapName": "PlayersHouseUp"
+      },
+      "nextEntrance": "GameStartLocation"
+    },
+    {
       "exitName": "GameStartLocation",
       "deathPortal": false,
-      "location": {
-        "x": 6,
-        "y": 5
-      },
+      "location": [
+        {
+          "x": 6,
+          "y": 5
+        }
+      ],
       "triggerName": "PlayersHouseUp_MapExit_GameStartLocation_01"
     },
     {
       "exitName": "stairs",
+      "direction": "RIGHT",
+      "deathPortal": false,
       "nextMap": {
         "region": "Depth First Search Town",
         "mapName": "PlayersHouseDown"
       },
       "nextEntrance": "stairs",
-      "direction": "RIGHT",
-      "deathPortal": false,
-      "location": {
-        "x": 8,
-        "y": 1
-      },
+      "location": [
+        {
+          "x": 8,
+          "y": 1
+        }
+      ],
       "triggerName": "PlayersHouseUp_MapExit_stairs_01"
     }
   ],

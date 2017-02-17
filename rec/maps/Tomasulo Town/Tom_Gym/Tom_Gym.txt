@@ -9,17 +9,19 @@
   "mapTransitions": [
     {
       "exitName": "Tom_Town",
+      "direction": "DOWN",
+      "deathPortal": false,
       "nextMap": {
         "region": "Tomasulo Town",
         "mapName": "Tom_Town"
       },
       "nextEntrance": "Gym",
-      "direction": "DOWN",
-      "deathPortal": false,
-      "location": {
-        "x": 9,
-        "y": 15
-      },
+      "location": [
+        {
+          "x": 9,
+          "y": 15
+        }
+      ],
       "triggerName": "Tom_Gym_MapExit_Tom_Town_01"
     }
   ],
