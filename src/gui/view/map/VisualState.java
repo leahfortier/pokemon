@@ -1,8 +1,11 @@
 package gui.view.map;
 
 import battle.Battle;
+import gui.view.ViewMode;
 import input.ControlKey;
 import input.InputControl;
+import main.Game;
+import map.overworld.OverworldTool;
 import map.overworld.TerrainType;
 
 import java.awt.Graphics;
@@ -19,6 +22,9 @@ enum VisualState {
             InputControl input = InputControl.instance();
             if (input.consumeIfDown(ControlKey.ESC)) {
                 mapView.setState(MENU);
+            }
+            else if (input.consumeIfDown(ControlKey.FLY) && Game.getPlayer().hasTool(OverworldTool.FLY)) {
+                Game.instance().setViewMode(ViewMode.FLY_VIEW);
             }
         }
     });
