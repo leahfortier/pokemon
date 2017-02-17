@@ -11,6 +11,7 @@ import map.AreaData;
 import map.Direction;
 import map.MapName;
 import map.entity.movable.PlayerEntity;
+import map.triggers.FishingTrigger;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import message.MessageUpdate;
@@ -243,8 +244,7 @@ public class CharacterData extends Trainer implements Serializable {
 	}
 
 	public boolean isFishing() {
-		// TODO
-		return false;
+		return this.globalsContain(FishingTrigger.FISHING_GLOBAL);
 	}
 
 	public boolean isUsingRepel() {

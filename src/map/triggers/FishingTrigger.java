@@ -1,6 +1,5 @@
 package map.triggers;
 
-import main.Global;
 import map.WildEncounter;
 import message.MessageUpdate;
 import message.Messages;
@@ -9,7 +8,9 @@ import pattern.map.FishingMatcher;
 import util.JsonUtils;
 import util.RandomUtils;
 
-class FishingTrigger extends Trigger {
+public class FishingTrigger extends Trigger {
+    public static final String FISHING_GLOBAL = "isFishing";
+
     private final WildEncounter[] wildEncounters;
 
     FishingTrigger(String matcherJson, String condition) {
@@ -22,10 +23,15 @@ class FishingTrigger extends Trigger {
     protected void executeTrigger() {
         if (RandomUtils.chanceTest(50)) {
             WildEncounter wildPokemon = WildEncounter.getWildEncounter(this.wildEncounters);
-            Trigger dialogue = TriggerType.DIALOGUE.createTrigger("Oh! A bite!", null);
-            Trigger wildBattle = TriggerType.WILD_BATTLE.createTrigger(JsonUtils.getJson(wildPokemon), null);
 
-            GroupTriggerMatcher matcher = new GroupTriggerMatcher("FishingBite", dialogue.getName(), wildBattle.getName());
+            GroupTriggerMatcher matcher = new GroupTriggerMatcher(
+                    "FishingBite",
+                    TriggerType.DIALOGUE.createTrigger("Oh! A bite!", null).getName(),
+                    TriggerType.GLOBAL.createTrigger(FISHING_GLOBAL, null).getName(),
+                    TriggerType.WILD_BATTLE.createTrigger(JsonUtils.getJson(wildPokemon), null).getName(),
+                    TriggerType.GLOBAL.createTrigger("!" + FISHING_GLOBAL, null).getName()
+            );
+
             Trigger group = TriggerType.GROUP.createTrigger(JsonUtils.getJson(matcher), null);
             Messages.add(new MessageUpdate().withTrigger(group.getName()));
         }

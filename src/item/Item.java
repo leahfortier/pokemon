@@ -3801,7 +3801,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	// TODO: Not sure yet if this will cover fishing
 	static class DiveBall extends Item implements BallItem {
 		private static final long serialVersionUID = 1L;
 

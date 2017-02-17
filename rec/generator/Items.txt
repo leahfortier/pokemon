@@ -1633,7 +1633,6 @@ Cherish Ball:
 Dive Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon that live underwater.
 	Price: 1000
-	Comments: // TODO: Not sure yet if this will cover fishing
 	CatchRateCondition: 3.5 b.getTerrainType() == TerrainType.WATER
 *
 Dusk Ball:

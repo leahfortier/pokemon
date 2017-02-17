@@ -82,8 +82,8 @@ public class MapView extends View {
 		return this.currentMessage;
 	}
 
-	TerrainType getTerrain() {
-		return this.currentArea.getTerrain();
+	TerrainType getBattleTerrain() {
+		return Game.getPlayer().isFishing() ? TerrainType.WATER : this.currentArea.getTerrain();
 	}
 
 	@Override
@@ -331,7 +331,7 @@ public class MapView extends View {
 
 	public void setBattle(Battle battle, boolean seenWild) {
 		this.setState(VisualState.BATTLE);
-		VisualState.setBattle(battle, seenWild, this.getTerrain());
+		VisualState.setBattle(battle, seenWild, this.getBattleTerrain());
 	}
 
 	@Override
