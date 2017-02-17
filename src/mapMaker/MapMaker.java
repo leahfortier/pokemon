@@ -626,11 +626,15 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 						}
 						// Trigger was created, move to single selection
 						else {
-							if (type == TriggerModelType.WILD_BATTLE || type == TriggerModelType.EVENT) {
-								this.setTool(ToolType.RECTANGLE);
-							}
-							else {
-                                this.setTool(ToolType.SINGLE_CLICK);
+							switch (type) {
+								case WILD_BATTLE:
+								case EVENT:
+								case FISHING:
+									this.setTool(ToolType.RECTANGLE);
+									break;
+								default:
+									this.setTool(ToolType.SINGLE_CLICK);
+									break;
 							}
 						}
 					}
