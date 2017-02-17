@@ -6,12 +6,14 @@ import main.Game;
 import main.Global;
 import map.entity.Entity;
 import map.entity.EntityAction;
+import map.entity.FishingSpotEntity;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
 import map.triggers.TriggerType;
 import pattern.SimpleMapTransition;
 import pattern.generic.EntityMatcher;
 import pattern.map.EventMatcher;
+import pattern.map.FishingMatcher;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import pattern.map.WildBattleMatcher;
@@ -97,9 +99,22 @@ public class MapData {
 		}
 
 		for (WildBattleMatcher matcher : mapDataMatcher.getWildBattles()) {
-			Trigger trigger = TriggerType.WILD_BATTLE.createTrigger(JsonUtils.getJson(matcher), null);
+			Trigger trigger = TriggerType.WALKING_WILD_BATTLE.createTrigger(JsonUtils.getJson(matcher), null);
 			for (Point point : matcher.getLocation()) {
 				triggers.put(getMapIndex(point), trigger.getName());
+			}
+		}
+
+		for (FishingMatcher matcher : mapDataMatcher.getFishingSpots()) {
+			for (Point location : matcher.getLocation()) {
+				FishingSpotEntity fishingSpotEntity = new FishingSpotEntity(
+						location,
+						matcher.getTriggerName(),
+						matcher.getCondition(),
+						matcher.getWildEncounters()
+				);
+
+				this.entities.add(fishingSpotEntity);
 			}
 		}
 	}
@@ -259,8 +274,16 @@ public class MapData {
 			return null;
 		}
 
-		if (entities.size() != 1) {
-			Global.error("Multiple entities present");
+		if (entities.size() > 1) {
+			List<Entity> highPriority = entities.stream()
+					.filter(Entity::isHighPriorityEntity)
+					.collect(Collectors.toList());
+
+			if (highPriority.size() != 1) {
+				Global.error("Multiple entities present");
+			}
+
+			return highPriority.get(0);
 		}
 
 		return entities.get(0);

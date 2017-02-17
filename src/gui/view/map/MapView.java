@@ -89,7 +89,6 @@ public class MapView extends View {
 	@Override
 	public void draw(Graphics g) {
 		DrawUtils.fillCanvas(g, Color.BLACK);
-
 		drawTiles(g);
 
 		if (currentArea != null) {

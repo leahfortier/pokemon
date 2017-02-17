@@ -26,6 +26,10 @@ public abstract class Entity {
 		this.condition = new Condition(condition);
 	}
 
+	public boolean isHighPriorityEntity() {
+		return true;
+	}
+
 	public Point getLocation() {
 		return this.location;
 	}
