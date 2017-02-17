@@ -23,12 +23,13 @@ public class FishingTrigger extends Trigger {
     protected void executeTrigger() {
         if (RandomUtils.chanceTest(50)) {
             WildEncounter wildPokemon = WildEncounter.getWildEncounter(this.wildEncounters);
+            String pokemonJson = JsonUtils.getJson(wildPokemon);
 
             GroupTriggerMatcher matcher = new GroupTriggerMatcher(
-                    "FishingBite",
+                    "FishingBite_" + pokemonJson,
                     TriggerType.DIALOGUE.createTrigger("Oh! A bite!", null).getName(),
                     TriggerType.GLOBAL.createTrigger(FISHING_GLOBAL, null).getName(),
-                    TriggerType.WILD_BATTLE.createTrigger(JsonUtils.getJson(wildPokemon), null).getName(),
+                    TriggerType.WILD_BATTLE.createTrigger(pokemonJson, null).getName(),
                     TriggerType.GLOBAL.createTrigger("!" + FISHING_GLOBAL, null).getName()
             );
 
