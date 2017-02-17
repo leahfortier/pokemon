@@ -1,7 +1,7 @@
 package map.overworld;
 
 public enum OverworldTool {
-    TELEPORT("canTeleport"),
+    FLY("canFly"),
     SURF("canSurf"),
     FISH("canFish");
 
