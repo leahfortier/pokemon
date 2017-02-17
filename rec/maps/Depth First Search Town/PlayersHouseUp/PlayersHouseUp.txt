@@ -10,7 +10,7 @@
     {
       "exitName": "GameStartLocation",
       "deathPortal": false,
-      "location2": [
+      "location": [
         {
           "x": 6,
           "y": 5
@@ -27,7 +27,7 @@
         "mapName": "PlayersHouseDown"
       },
       "nextEntrance": "stairs",
-      "location2": [
+      "location": [
         {
           "x": 8,
           "y": 1

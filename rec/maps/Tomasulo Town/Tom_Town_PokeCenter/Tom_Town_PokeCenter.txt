@@ -16,7 +16,7 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "PokeCenter",
-      "location2": [
+      "location": [
         {
           "x": 7,
           "y": 8

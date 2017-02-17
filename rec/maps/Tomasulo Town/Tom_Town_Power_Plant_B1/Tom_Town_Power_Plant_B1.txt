@@ -16,7 +16,7 @@
         "mapName": "Tom_Town_Power_Plant_F1"
       },
       "nextEntrance": "FromBasement1",
-      "location2": [
+      "location": [
         {
           "x": 6,
           "y": 9

@@ -16,7 +16,7 @@
         "mapName": "DFS_Town"
       },
       "nextEntrance": "PlayersHouse",
-      "location2": [
+      "location": [
         {
           "x": 6,
           "y": 8
@@ -33,7 +33,7 @@
         "mapName": "PlayersHouseUp"
       },
       "nextEntrance": "stairs",
-      "location2": [
+      "location": [
         {
           "x": 10,
           "y": 1

@@ -18,7 +18,7 @@
         "mapName": "RSATown_BFM_TransitionBuilding"
       },
       "nextEntrance": "WestDoorBottom",
-      "location2": [
+      "location": [
         {
           "x": 55,
           "y": 22
@@ -35,7 +35,7 @@
         "mapName": "RSATown_BFM_TransitionBuilding"
       },
       "nextEntrance": "WestDoorMiddle",
-      "location2": [
+      "location": [
         {
           "x": 55,
           "y": 21
@@ -52,7 +52,7 @@
         "mapName": "RSATown_BFM_TransitionBuilding"
       },
       "nextEntrance": "WestDoorTop",
-      "location2": [
+      "location": [
         {
           "x": 55,
           "y": 20
@@ -64,7 +64,7 @@
       "exitName": "FlyLocation",
       "direction": "WAIT",
       "deathPortal": false,
-      "location2": [
+      "location": [
         {
           "x": 31,
           "y": 17
@@ -81,7 +81,7 @@
         "mapName": "BFM_TomTown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorBottom",
-      "location2": [
+      "location": [
         {
           "x": 13,
           "y": 22
@@ -98,7 +98,7 @@
         "mapName": "BFM_TomTown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorMiddle",
-      "location2": [
+      "location": [
         {
           "x": 13,
           "y": 21
@@ -115,7 +115,7 @@
         "mapName": "BFM_TomTown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorTop",
-      "location2": [
+      "location": [
         {
           "x": 13,
           "y": 20

@@ -22,7 +22,7 @@
         "mapName": "Tom_Town_Power_Plant_F2"
       },
       "nextEntrance": "FromFloor3",
-      "location2": [
+      "location": [
         {
           "x": 2,
           "y": 8

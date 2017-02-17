@@ -15,7 +15,7 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "SouthTransitionBuildingLeft",
-      "location2": [
+      "location": [
         {
           "x": 5,
           "y": 2
@@ -32,7 +32,7 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "SouthTransitionBuildingMiddle",
-      "location2": [
+      "location": [
         {
           "x": 6,
           "y": 2
@@ -49,7 +49,7 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "SouthTransitionBuildingRight",
-      "location2": [
+      "location": [
         {
           "x": 7,
           "y": 2
@@ -66,7 +66,7 @@
         "mapName": "WindValley"
       },
       "nextEntrance": "NorthTransitionBuildingLeft",
-      "location2": [
+      "location": [
         {
           "x": 5,
           "y": 10
@@ -83,7 +83,7 @@
         "mapName": "WindValley"
       },
       "nextEntrance": "NorthTransitionBuildingMiddle",
-      "location2": [
+      "location": [
         {
           "x": 6,
           "y": 10
@@ -100,7 +100,7 @@
         "mapName": "WindValley"
       },
       "nextEntrance": "NorthTransitionBuildingRight",
-      "location2": [
+      "location": [
         {
           "x": 7,
           "y": 10

@@ -16,7 +16,7 @@
         "mapName": "Tom_Town_Power_Plant_B1"
       },
       "nextEntrance": "FromFloor1",
-      "location2": [
+      "location": [
         {
           "x": 2,
           "y": 9
@@ -33,7 +33,7 @@
         "mapName": "Tom_Town_Power_Plant_F2"
       },
       "nextEntrance": "FromFloor1",
-      "location2": [
+      "location": [
         {
           "x": 2,
           "y": 11
@@ -50,7 +50,7 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "TomTownPowerPlant",
-      "location2": [
+      "location": [
         {
           "x": 8,
           "y": 12

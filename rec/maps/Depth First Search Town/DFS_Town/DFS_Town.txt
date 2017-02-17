@@ -25,7 +25,7 @@
         "mapName": "MaplesLab"
       },
       "nextEntrance": "DFS_Town",
-      "location2": [
+      "location": [
         {
           "x": 74,
           "y": 17
@@ -42,7 +42,7 @@
         "mapName": "Neighbor_House"
       },
       "nextEntrance": "DFS_Town",
-      "location2": [
+      "location": [
         {
           "x": 74,
           "y": 27
@@ -59,7 +59,7 @@
         "mapName": "PlayersHouseDown"
       },
       "nextEntrance": "DFS_Town",
-      "location2": [
+      "location": [
         {
           "x": 85,
           "y": 27
@@ -76,7 +76,7 @@
         "mapName": "Rival_House"
       },
       "nextEntrance": "DFS_Town",
-      "location2": [
+      "location": [
         {
           "x": 85,
           "y": 15
@@ -93,7 +93,7 @@
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorBottom",
-      "location2": [
+      "location": [
         {
           "x": 14,
           "y": 21
@@ -110,7 +110,7 @@
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorMiddle",
-      "location2": [
+      "location": [
         {
           "x": 14,
           "y": 20
@@ -127,7 +127,7 @@
         "mapName": "Edge1_RSATown_TransitionBuilding"
       },
       "nextEntrance": "EastDoorTop",
-      "location2": [
+      "location": [
         {
           "x": 14,
           "y": 19

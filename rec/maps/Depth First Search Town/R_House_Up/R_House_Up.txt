@@ -16,7 +16,7 @@
         "mapName": "Rival_House"
       },
       "nextEntrance": "stairs",
-      "location2": [
+      "location": [
         {
           "x": 4,
           "y": 2

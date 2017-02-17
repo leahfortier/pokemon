@@ -16,7 +16,7 @@
         "mapName": "Tom_Town"
       },
       "nextEntrance": "Gym",
-      "location2": [
+      "location": [
         {
           "x": 9,
           "y": 15

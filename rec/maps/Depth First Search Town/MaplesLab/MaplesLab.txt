@@ -16,7 +16,7 @@
         "mapName": "DFS_Town"
       },
       "nextEntrance": "MaplesLab",
-      "location2": [
+      "location": [
         {
           "x": 10,
           "y": 15
