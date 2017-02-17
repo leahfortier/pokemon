@@ -191,7 +191,7 @@ public class MapData {
 	}
 
 	public boolean isPassable(Point location, Direction direction) {
-		return getPassValue(location).isPassable(direction);
+		return getPassValue(location).isPassable(direction) && (!hasEntity(location) || getEntity(location).isPassable());
 	}
 
 	public AreaData getArea(String areaName) {

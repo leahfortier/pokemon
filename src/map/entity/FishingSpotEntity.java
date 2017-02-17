@@ -27,6 +27,11 @@ public class FishingSpotEntity extends Entity {
     }
 
     @Override
+    public boolean isPassable() {
+        return true;
+    }
+
+    @Override
     public void addData() {
         if (dataCreated) {
             return;

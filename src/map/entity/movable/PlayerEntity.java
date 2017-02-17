@@ -7,6 +7,7 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import map.MapData;
+import map.WalkType;
 import map.entity.Entity;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
@@ -28,7 +29,7 @@ public class PlayerEntity extends MovableEntity {
 	private Entity currentInteractionEntity;
 
 	public PlayerEntity(Point location) {
-		super(location, null, null, 0);
+		super(location, null, null);
 
 		justMoved = true;
 		justCreated = true;
@@ -231,6 +232,16 @@ public class PlayerEntity extends MovableEntity {
 	@Override
 	public String getTriggerSuffix() {
 		return null;
+	}
+
+	@Override
+	protected int getSpriteIndex() {
+		// Surfing
+		if (Game.getData().getMap(Game.getPlayer().getMapName()).getPassValue(this.getLocation()) == WalkType.WATER) {
+			return 21;
+		}
+
+		return 0;
 	}
 
 	@Override
