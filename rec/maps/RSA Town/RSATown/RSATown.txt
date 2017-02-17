@@ -213,5 +213,6 @@
       "condition": "!RSATown_NPC_Rival_01$won"
     }
   ],
-  "wildBattles": []
+  "wildBattles": [],
+  "fishingSpots": []
 }

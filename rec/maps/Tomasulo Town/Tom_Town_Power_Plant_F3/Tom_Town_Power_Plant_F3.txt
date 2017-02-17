@@ -267,5 +267,6 @@
   "items": [],
   "miscEntities": [],
   "events": [],
-  "wildBattles": []
+  "wildBattles": [],
+  "fishingSpots": []
 }

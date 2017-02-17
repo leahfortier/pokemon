@@ -141,5 +141,6 @@
     }
   ],
   "events": [],
-  "wildBattles": []
+  "wildBattles": [],
+  "fishingSpots": []
 }

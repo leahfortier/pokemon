@@ -896,5 +896,6 @@
       ],
       "triggerName": "Bloom_Filter_Meadow_WildBattle_MeadowGrass_01"
     }
-  ]
+  ],
+  "fishingSpots": []
 }
