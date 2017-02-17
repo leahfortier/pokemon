@@ -4,6 +4,8 @@ import draw.TileUtils;
 import main.Global;
 import map.entity.movable.MovableEntity;
 import mapMaker.dialogs.EventTriggerDialog;
+import mapMaker.dialogs.FishingTriggerEditDialog;
+import mapMaker.dialogs.FishingTriggerOptionsDialog;
 import mapMaker.dialogs.ItemEntityDialog;
 import mapMaker.dialogs.MapTransitionDialog;
 import mapMaker.dialogs.MiscEntityDialog;
@@ -17,6 +19,7 @@ import pattern.generic.MultiPointTriggerMatcher;
 import pattern.generic.SinglePointTriggerMatcher;
 import pattern.map.AreaMatcher;
 import pattern.map.EventMatcher;
+import pattern.map.FishingMatcher;
 import pattern.map.ItemMatcher;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
@@ -113,7 +116,7 @@ public class MapMakerTriggerData {
 		// Loop until valid name is created
 		do {
 			uniqueEntityName = String.format("%s_%s_%s_%02d",
-					mapMaker.getCurrentMapName(), typeName, basicEntityName, number++);
+					mapMaker.getCurrentMapName().getMapName(), typeName, basicEntityName, number++);
 		} while (entityNames.contains(uniqueEntityName));
 
 		System.out.println(uniqueEntityName);
@@ -219,18 +222,32 @@ public class MapMakerTriggerData {
 				return new MiscEntityDialog((MiscEntityMatcher)oldTrigger).getMatcher(mapMaker);
 			case MAP_TRANSITION:
 				return new MapTransitionDialog((MapTransitionMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
+			case EVENT:
+				return new EventTriggerDialog((EventMatcher)oldTrigger).getMatcher(mapMaker);
 			case WILD_BATTLE:
 				if (oldTrigger == null) {
 					return new WildBattleTriggerOptionsDialog(this.getWildBattleTriggers()).getMatcher(mapMaker);
 				} else {
 					return new WildBattleTriggerEditDialog((WildBattleMatcher)oldTrigger, -1).getMatcher(mapMaker);
 				}
-			case EVENT:
-				return new EventTriggerDialog((EventMatcher)oldTrigger).getMatcher(mapMaker);
+			case FISHING:
+				if (oldTrigger == null) {
+					return new FishingTriggerOptionsDialog(this.getFishingTriggers()).getMatcher(mapMaker);
+				} else {
+					return new FishingTriggerEditDialog((FishingMatcher) oldTrigger, -1).getMatcher(mapMaker);
+				}
 			default:
 				Global.error("Unknown trigger model type " + triggerModelType);
 				return null;
 		}
+	}
+
+	private List<FishingMatcher> getFishingTriggers() {
+		return this.entities
+				.stream()
+				.filter(entity -> entity instanceof FishingMatcher)
+				.map(entity -> (FishingMatcher)entity)
+				.collect(Collectors.toList());
 	}
 
 	private List<WildBattleMatcher> getWildBattleTriggers() {

@@ -10,6 +10,7 @@ public enum TriggerType {
     CHANGE_VIEW(ChangeViewTrigger.class, ChangeViewTrigger::new),
     CHOICE(ChoiceTrigger.class, ChoiceTrigger::new),
     DIALOGUE(DialogueTrigger.class, DialogueTrigger::new),
+    FISHING(FishingTrigger.class, FishingTrigger::new),
     GIVE_ITEM(GiveItemTrigger.class, GiveItemTrigger::new),
     GIVE_POKEMON(GivePokemonTrigger.class, GivePokemonTrigger::new),
     GLOBAL(GlobalTrigger.class, GlobalTrigger::new),
@@ -23,6 +24,7 @@ public enum TriggerType {
     SOUND(SoundTrigger.class, SoundTrigger::new),
     TRAINER_BATTLE(TrainerBattleTrigger.class, TrainerBattleTrigger::new),
     UPDATE(UpdateTrigger.class, UpdateTrigger::new),
+    WALKING_WILD_BATTLE(WalkingWildBattleTrigger.class, WalkingWildBattleTrigger::new),
     WILD_BATTLE(WildBattleTrigger.class, WildBattleTrigger::new);
 
     private final TriggerPrefixGetter triggerPrefixGetter;

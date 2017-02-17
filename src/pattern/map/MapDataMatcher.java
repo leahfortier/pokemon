@@ -26,6 +26,7 @@ public class MapDataMatcher {
     private MiscEntityMatcher[] miscEntities = new MiscEntityMatcher[0];
     private EventMatcher[] events = new EventMatcher[0];
     private WildBattleMatcher[] wildBattles = new WildBattleMatcher[0];
+    private FishingMatcher[] fishingSpots = new FishingMatcher[0];
 
     public MapDataMatcher(Set<AreaMatcher> areaData,
                           List<LocationTriggerMatcher> entities) {
@@ -50,6 +51,7 @@ public class MapDataMatcher {
         this.miscEntities = fillTriggerArray(this.miscEntities, triggerMap.get(TriggerModelType.MISC_ENTITY), trigger -> (MiscEntityMatcher)trigger);
         this.events = fillTriggerArray(this.events, triggerMap.get(TriggerModelType.EVENT), trigger -> (EventMatcher)trigger);
         this.wildBattles = fillTriggerArray(this.wildBattles, triggerMap.get(TriggerModelType.WILD_BATTLE), trigger -> (WildBattleMatcher)trigger);
+        this.fishingSpots = fillTriggerArray(this.fishingSpots, triggerMap.get(TriggerModelType.FISHING), trigger -> (FishingMatcher)trigger);
     }
 
     private <T extends LocationTriggerMatcher> T[] fillTriggerArray(
@@ -94,6 +96,10 @@ public class MapDataMatcher {
         return Arrays.asList(this.wildBattles);
     }
 
+    public List<FishingMatcher> getFishingSpots() {
+        return Arrays.asList(this.fishingSpots);
+    }
+
     public List<LocationTriggerMatcher> getAllEntities() {
         List<LocationTriggerMatcher> entities = new ArrayList<>();
         entities.addAll(getMapTransitions());
@@ -102,6 +108,7 @@ public class MapDataMatcher {
         entities.addAll(getMiscEntities());
         entities.addAll(getEvents());
         entities.addAll(getWildBattles());
+        entities.addAll(getFishingSpots());
 
         return entities;
     }

@@ -255,5 +255,6 @@
     }
   ],
   "events": [],
-  "wildBattles": []
+  "wildBattles": [],
+  "fishingSpots": []
 }

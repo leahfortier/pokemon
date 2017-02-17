@@ -10,6 +10,7 @@ import input.InputControl;
 import item.ItemNamesies;
 import map.MapName;
 import message.Messages;
+import pattern.map.MapTransitionMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import trainer.CharacterData;

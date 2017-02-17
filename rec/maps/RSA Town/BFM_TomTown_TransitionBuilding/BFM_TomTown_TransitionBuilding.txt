@@ -88,5 +88,6 @@
     }
   ],
   "events": [],
-  "wildBattles": []
+  "wildBattles": [],
+  "fishingSpots": []
 }

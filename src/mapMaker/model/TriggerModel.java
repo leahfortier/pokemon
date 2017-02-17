@@ -23,7 +23,8 @@ public class TriggerModel extends MapMakerModel {
         MISC_ENTITY("Misc Entity", TileType.MAP_MAKER, 0x4),
         WILD_BATTLE("Wild Battle", TileType.MAP_MAKER, 0x3),
         MAP_TRANSITION("Map Exit", TileType.MAP_MAKER, 0x1),
-        EVENT("Event", TileType.MAP_MAKER, 0xc);
+        EVENT("Event", TileType.MAP_MAKER, 0xc),
+        FISHING("Fishing", TileType.MAP_MAKER, 0xe);
 
         private final String name;
 

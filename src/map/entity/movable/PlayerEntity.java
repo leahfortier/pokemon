@@ -280,10 +280,4 @@ public class PlayerEntity extends MovableEntity {
 		currentInteractionEntity = null;
 		this.unstall();
 	}
-
-	@Override
-	public void addData() {}
-
-	@Override
-	public void reset() {}
 }

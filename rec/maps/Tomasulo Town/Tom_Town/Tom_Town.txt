@@ -320,5 +320,6 @@
       "condition": "BadgeTrigger_0&!TomTownPowerPlantExplosionTriggered"
     }
   ],
-  "wildBattles": []
+  "wildBattles": [],
+  "fishingSpots": []
 }

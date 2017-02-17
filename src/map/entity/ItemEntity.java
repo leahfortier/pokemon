@@ -1,11 +1,9 @@
 package map.entity;
 
 import gui.GameData;
-import gui.view.map.MapView;
 import item.ItemNamesies;
 import main.Game;
 import map.Direction;
-import map.MapData;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.GroupTriggerMatcher;
@@ -30,9 +28,6 @@ public class ItemEntity extends Entity {
 	}
 
 	@Override
-	public void update(int dt, MapData currentMap, MapView view) {}
-
-	@Override
 	public boolean isVisible() {
 		return super.isVisible() && !hasTriggered;
 	}
@@ -41,11 +36,6 @@ public class ItemEntity extends Entity {
 	protected BufferedImage getFrame() {
 		// TODO: Needs constant
 		return Game.getData().getTrainerTiles().getTile(0);
-	}
-
-	@Override
-	protected boolean isTransitioning() {
-		return false;
 	}
 
 	@Override

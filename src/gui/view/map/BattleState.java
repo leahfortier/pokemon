@@ -130,7 +130,7 @@ class BattleState implements VisualStateHandler {
         GameData data = Game.getData();
 
         if (battle.isWildBattle()) {
-            battleImageSlideLeft = mapView.getTerrain().getOpponentCircleImage();
+            battleImageSlideLeft = mapView.getBattleTerrain().getOpponentCircleImage();
 
             ActivePokemon p = battle.getOpponent().front();
             battleImageSlideRight = data.getPokemonTilesLarge().getTile(p.getImageName());

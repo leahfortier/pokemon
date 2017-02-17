@@ -4101,5 +4101,6 @@
       ],
       "triggerName": "WindValley_WildBattle_ValleySand_01"
     }
-  ]
+  ],
+  "fishingSpots": []
 }

@@ -1315,5 +1315,6 @@
       ],
       "triggerName": "DFS_Town_WildBattle_Edge1Grass_01"
     }
-  ]
+  ],
+  "fishingSpots": []
 }
