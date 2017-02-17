@@ -116,7 +116,7 @@ public class MapMakerTriggerData {
 		// Loop until valid name is created
 		do {
 			uniqueEntityName = String.format("%s_%s_%s_%02d",
-					mapMaker.getCurrentMapName(), typeName, basicEntityName, number++);
+					mapMaker.getCurrentMapName().getMapName(), typeName, basicEntityName, number++);
 		} while (entityNames.contains(uniqueEntityName));
 
 		System.out.println(uniqueEntityName);
