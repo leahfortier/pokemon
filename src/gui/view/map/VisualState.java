@@ -4,10 +4,10 @@ import battle.Battle;
 import gui.view.ViewMode;
 import input.ControlKey;
 import input.InputControl;
-import map.weather.WeatherState;
 import main.Game;
 import map.overworld.OverworldTool;
 import map.overworld.TerrainType;
+import map.weather.WeatherState;
 
 import java.awt.Graphics;
 
