@@ -95,6 +95,7 @@ class StartView extends View {
 				player.setName(name.isEmpty() ? CharacterData.DEFAULT_NAME : name);
 
 				state = State.DEFAULT;
+				message = null;
 			}
 		}
 		

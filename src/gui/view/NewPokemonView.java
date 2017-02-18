@@ -169,7 +169,7 @@ class NewPokemonView extends View {
                 }
 
                 if (message == null) {
-                    Game.instance().popView();
+                    Game.instance().setViewMode(ViewMode.MAP_VIEW);
                 }
                 break;
         }
@@ -292,6 +292,7 @@ class NewPokemonView extends View {
 
     private void setState(State state) {
         this.displayInfo = false;
+        message = null;
         for (Button button : buttons) {
             button.setActive(false);
         }

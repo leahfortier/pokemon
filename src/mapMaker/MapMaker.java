@@ -274,36 +274,37 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
 	// TODO: Should this be checking if that name is already taken?
-	private void createNewMapDialog() {
+	private boolean createNewMapDialog() {
 		String[] regionList = getAvailableRegions();
 		String region = (String)JOptionPane.showInputDialog(this, "Select a region", "Load", JOptionPane.PLAIN_MESSAGE, null, regionList, regionList[0]);
 		if (StringUtils.isNullOrEmpty(region)) {
-			return;
+			return false;
 		}
 
 		String name = JOptionPane.showInputDialog(this, "Name the map");
 		if (StringUtils.isNullOrEmpty(name)) {
-			return;
+			return false;
 		}
 
 		this.mapData.createNewMap(this, new MapName(region, name));
+		return true;
 	}
 
-	private void loadPreviousMapDialog() {
+	private boolean loadPreviousMapDialog() {
 		String[] regionList = getAvailableRegions();
 		String region = (String)JOptionPane.showInputDialog(this, "Select a region", "Load", JOptionPane.PLAIN_MESSAGE, null, regionList, regionList[0]);
         if (StringUtils.isNullOrEmpty(region)) {
-			return;
+			return false;
 		}
 
 		String[] availableMaps = Arrays.stream(getAvailableMaps(region)).map(MapName::getMapName).collect(Collectors.toList()).toArray(new String[0]);
 		String map = (String)JOptionPane.showInputDialog(this, "Select a map", "Load", JOptionPane.PLAIN_MESSAGE, null, availableMaps, availableMaps[0]);
 		if (StringUtils.isNullOrEmpty(map)) {
-			return;
+			return false;
 		}
 
 		this.mapData.loadPreviousMap(this, new MapName(region, map));
-
+		return true;
 	}
 
 	public void actionPerformed(ActionEvent event) {
@@ -323,10 +324,14 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 				this.setTool(ToolType.MOVE);
 				
 				if (event.getSource() == newMenuItem) {
-					createNewMapDialog();
+					if (!createNewMapDialog()) {
+						return;
+					}
 				}
 				else {
-					loadPreviousMapDialog();
+					if (!loadPreviousMapDialog()) {
+						return;
+					}
 				}
 
 				mapNameLabel.setText(this.getCurrentMapName().toString());
