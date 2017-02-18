@@ -1,7 +1,6 @@
 package pokemon;
 
 import main.Game;
-import main.Global;
 import trainer.CharacterData;
 import trainer.Trainer;
 import util.GeneralUtils;
@@ -223,7 +222,7 @@ public class PC implements Serializable {
 	// should be handled by the publicly accessible versions.
 	private void insertIntoBox(BoxCoordinate coordinate, ActivePokemon p) {
 		if (coordinate == null) {
-			Global.error("Attempting to insert into box at invalid indices.");
+			return;
 		}
 		
 		currBox = coordinate.boxNum;

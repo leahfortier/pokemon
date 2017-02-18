@@ -12,19 +12,16 @@ import map.Direction;
 import map.MapName;
 import map.entity.movable.PlayerEntity;
 import map.triggers.FishingTrigger;
-import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
-import pattern.GroupTriggerMatcher;
 import pattern.SimpleMapTransition;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PC;
 import pokemon.evolution.BaseEvolution;
 import trainer.pokedex.Pokedex;
-import util.JsonUtils;
 import util.Point;
 import util.RandomUtils;
 import util.StringUtils;
@@ -230,12 +227,9 @@ public class CharacterData extends Trainer implements Serializable {
 				evolvingPokemon = p;
 				evolution = null;
 
-				Trigger dialogue = TriggerType.DIALOGUE.createTrigger("Huh?", null);
-				Trigger evolutionView = TriggerType.CHANGE_VIEW.createTrigger(ViewMode.EVOLUTION_VIEW.name(), null);
-
-				GroupTriggerMatcher matcher = new GroupTriggerMatcher("EggHatching", dialogue.getName(), evolutionView.getName());
-				Trigger group = TriggerType.GROUP.createTrigger(JsonUtils.getJson(matcher), null);
-				Messages.add(new MessageUpdate().withTrigger(group.getName()));
+				Messages.add(new MessageUpdate().withTrigger(
+						TriggerType.GROUP.getTriggerNameFromSuffix("EggHatching"))
+				);
 				
 				// Only one hatch per step
 				break;
@@ -426,7 +420,7 @@ public class CharacterData extends Trainer implements Serializable {
 			this.newPokemonBox = pc.getBoxNum() + 1;
 		}
 
-		if (!pokedex.isCaught(newPokemon)) {
+		if (!p.isEgg() && !pokedex.isCaught(newPokemon)) {
 			pokedex.setCaught(newPokemon.getPokemonInfo());
 			this.isFirstNewPokemon = true;
 		} else {
