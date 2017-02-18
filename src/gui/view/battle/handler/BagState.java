@@ -153,7 +153,13 @@ public class BagState implements VisualStateHandler {
             tabButton.outlineTab(g, i, selectedBagTab);
         }
 
-        DrawUtils.blackOutline(g, 30, 190, 357, 287);
+        // Black outline around the entire box
+        DrawUtils.blackOutline(g,
+                bagCategoryPanel.x,
+                bagTabButtons[0].y,
+                bagCategoryPanel.width,
+                bagCategoryPanel.bottomY() - bagTabButtons[0].y
+        );
 
         // Messages text
         String message = view.getMessage(VisualState.INVALID_BAG, "Choose an item!");
