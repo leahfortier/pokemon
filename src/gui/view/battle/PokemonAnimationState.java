@@ -222,7 +222,7 @@ class PokemonAnimationState {
 
     // TODO: lalala generalize this shit again I suck I suck I suck at everything
     // Might want to include a helper class that contains a generic method for different types of animations
-    private void catchAnimation(Graphics g, BufferedImage plyrImg, TileSet pkmTiles) {
+    private void catchAnimation(Graphics g, BufferedImage plyrImg) {
         Graphics2D g2d = (Graphics2D)g;
         float[] pokeyScales = { 1f, 1f, 1f, 1f };
         float[] pokeyOffsets = { 255f, 255f, 255f, 0f };
@@ -275,7 +275,7 @@ class PokemonAnimationState {
 
         animationCatch -= Global.MS_BETWEEN_FRAMES;
 
-        BufferedImage pkBall = TileSet.POKEBALL;
+        BufferedImage pkBall = Game.getData().getItemTilesLarge().getTile(Game.getPlayer().getPokeball().getImageName());
 
         int px = pokemonDrawLocation.x;
         int py = pokemonDrawLocation.y;
@@ -359,11 +359,11 @@ class PokemonAnimationState {
                     evolveAnimation(g, plyrImg, pkmTiles);
                 }
                 else if (animationCatch > 0) {
-                    catchAnimation(g, plyrImg, pkmTiles);
+                    catchAnimation(g, plyrImg);
                 }
                 else {
                     if (animationCatchDuration == -1) {
-                        plyrImg = TileSet.POKEBALL;
+                        plyrImg = data.getItemTilesLarge().getTile(Game.getPlayer().getPokeball().getImageName());
                     }
 
                     ImageUtils.drawBottomCenteredImage(g, plyrImg, pokemonDrawLocation);

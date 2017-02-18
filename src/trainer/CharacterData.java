@@ -472,7 +472,12 @@ public class CharacterData extends Trainer implements Serializable {
 				.filter(ActivePokemon::isEgg)
 				.count();
 	}
-	
+
+	private BallItem pokeball;
+	public BallItem getPokeball() {
+		return this.pokeball;
+	}
+
 	// OH MY GOD CATCH A POKEMON OH MY GOD
 	public boolean catchPokemon(Battle b, BallItem ball) {
 		if (!b.isWildBattle()) {
@@ -481,6 +486,7 @@ public class CharacterData extends Trainer implements Serializable {
 		}
 
 		Messages.add(new MessageUpdate(name + " threw the " + ((Item)ball).getName() + "!"));
+		this.pokeball = ball;
 		
 		ActivePokemon catchPokemon = b.getOtherPokemon(true);
 		int maxHP = catchPokemon.getMaxHP();

@@ -16,7 +16,8 @@ enum VisualState {
     MENU(new MenuState()),
     MESSAGE(new MessageState()),
     MAP(new VisualStateHandler() {
-        @Override public void draw(Graphics g, MapView mapView) {}
+        @Override
+        public void draw(Graphics g, MapView mapView) {}
 
         @Override
         public void update(int dt, MapView mapView) {
