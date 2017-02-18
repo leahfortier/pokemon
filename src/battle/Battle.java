@@ -31,6 +31,7 @@ import item.ItemNamesies;
 import main.Game;
 import main.Global;
 import map.TerrainType;
+import map.weather.WeatherState;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
@@ -59,7 +60,12 @@ public class Battle {
 	private final Opponent opponent; // SO OBJECT-ORIENTED
 
 	private List<BattleEffect> effects;
+
+	private WeatherState baseWeather;
 	private Weather weather;
+
+	private TerrainType baseTerrain;
+	private TerrainType currentTerrain;
 
 	private int turn;
 	private boolean firstAttacking;
@@ -67,9 +73,6 @@ public class Battle {
 	private int escapeAttempts;
 
 	private UpdateMatcher npcUpdateInteraction;
-
-	private TerrainType baseTerrain;
-	private TerrainType currentTerrain;
 	
 	public Battle(Opponent opponent) {
 		Messages.clearMessages(MessageState.FIGHTY_FIGHT);
@@ -86,7 +89,9 @@ public class Battle {
 		turn = 0;
 		escapeAttempts = 0;
 		firstAttacking = false;
-		weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
+
+		this.setBaseWeather(WeatherState.NORMAL);
+		this.setTerrainType(TerrainType.BUILDING, true);
 
 		this.player.enterBattle();
 		if (this.opponent instanceof Trainer) {
@@ -131,6 +136,11 @@ public class Battle {
 
 	public TerrainType getTerrainType() {
 		return currentTerrain;
+	}
+
+	public void setBaseWeather(WeatherState weatherState) {
+		this.baseWeather = weatherState;
+		this.addEffect((Weather)weatherState.getWeatherEffect().getEffect());
 	}
 
 	public void setTerrainType(TerrainType terrainType, boolean base) {
@@ -201,7 +211,7 @@ public class Battle {
 			System.out.println("B " + e);
 		}
 
-		if (weather.namesies() != EffectNamesies.CLEAR_SKIES) {
+		if (weather.namesies() != baseWeather.getWeatherEffect()) {
 			System.out.println("W " + weather);
 		}
 
@@ -419,7 +429,7 @@ public class Battle {
 	private void decrementWeather() {
 		if (!weather.isActive(this)) {
 			Messages.add(new MessageUpdate(weather.getSubsideMessage(player.front())));
-			weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
+			this.setBaseWeather(this.baseWeather);
 			return;
 		}
 

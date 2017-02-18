@@ -4,6 +4,7 @@ import battle.Battle;
 import input.ControlKey;
 import input.InputControl;
 import map.TerrainType;
+import map.weather.WeatherState;
 
 import java.awt.Graphics;
 
@@ -42,8 +43,8 @@ enum VisualState {
         this.handler.update(dt, mapView);
     }
 
-    public static void setBattle(Battle battle, boolean seenWild, TerrainType terrain) {
-        ((BattleState)BATTLE.handler).setBattle(battle, seenWild, terrain);
+    public static void setBattle(Battle battle, boolean seenWild, WeatherState weather, TerrainType terrain) {
+        ((BattleState)BATTLE.handler).setBattle(battle, seenWild, weather, terrain);
     }
 
     public static boolean hasBattle() {

@@ -8,6 +8,7 @@ import gui.view.map.VisualState.VisualStateHandler;
 import main.Game;
 import main.Global;
 import map.TerrainType;
+import map.weather.WeatherState;
 import pokemon.ActivePokemon;
 import sound.SoundPlayer;
 import sound.SoundTitle;
@@ -90,9 +91,10 @@ class BattleState implements VisualStateHandler {
         }
     }
 
-    void setBattle(Battle battle, boolean seenWild, TerrainType terrain) {
+    void setBattle(Battle battle, boolean seenWild, WeatherState weather, TerrainType terrain) {
         this.battle = battle;
         this.seenWild = seenWild;
+        this.battle.setBaseWeather(weather);
         this.battle.setTerrainType(terrain, true);
 
         battleAnimationTime = BATTLE_INTRO_ANIMATION_LIFESPAN;

@@ -331,7 +331,7 @@ public class MapView extends View {
 
 	public void setBattle(Battle battle, boolean seenWild) {
 		this.setState(VisualState.BATTLE);
-		VisualState.setBattle(battle, seenWild, this.getBattleTerrain());
+		VisualState.setBattle(battle, seenWild, this.currentArea.getWeather(), this.getBattleTerrain());
 	}
 
 	@Override
