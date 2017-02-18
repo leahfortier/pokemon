@@ -7,7 +7,7 @@ import battle.attack.MoveType;
 import battle.effect.status.StatusCondition;
 import item.Item;
 import main.Global;
-import map.TerrainType;
+import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;

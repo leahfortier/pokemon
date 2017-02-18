@@ -4,7 +4,7 @@ import draw.ImageUtils;
 import draw.TileUtils;
 import map.MapDataType;
 import map.MapName;
-import map.WalkType;
+import map.overworld.WalkType;
 import mapMaker.dialogs.AreaDialog;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.TileModel;

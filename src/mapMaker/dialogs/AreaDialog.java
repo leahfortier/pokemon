@@ -1,6 +1,6 @@
 package mapMaker.dialogs;
 
-import map.TerrainType;
+import map.overworld.TerrainType;
 import map.weather.WeatherState;
 import pattern.map.AreaMatcher;
 import sound.SoundTitle;

@@ -73,7 +73,7 @@ import item.use.PokemonUseItem;
 import item.use.TechnicalMachine;
 import item.use.UseItem;
 import main.Game;
-import map.TerrainType;
+import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
@@ -186,20 +186,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public boolean use() {
 			return false;
-		}
-	}
-
-	static class Jetpack extends Item implements PlayerUseItem {
-		private static final long serialVersionUID = 1L;
-
-		Jetpack() {
-			super(ItemNamesies.JETPACK, "Jetpacky. Fly.", BagCategory.KEY_ITEM);
-		}
-
-		public boolean use() {
-			// TODO: Shouldn't be able to jetpack inside a building and such
-			Messages.add(new MessageUpdate().withViewChange(ViewMode.FLY_VIEW));
-			return true;
 		}
 	}
 
