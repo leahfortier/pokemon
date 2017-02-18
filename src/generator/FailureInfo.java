@@ -35,10 +35,8 @@ class FailureInfo {
         }
     }
 
-    String writeFailure(Map<String, String> fields, String superClass) {
+    String writeFailure(ClassFields fields, String superClass, InputFormatter inputFormatter) {
         String failure = StringUtils.empty();
-
-        String className = fields.get("ClassName");
         boolean first = true;
 
         for (Map.Entry<String, String> entry : failureInfo) {
@@ -81,7 +79,7 @@ class FailureInfo {
                 continue;
             }
 
-            String[] fieldValues = new String[] {fieldValue};
+            String[] fieldValues = new String[] { fieldValue };
             if (list) {
                 fieldValues = fieldValue.split(",");
             }
@@ -91,7 +89,7 @@ class FailureInfo {
             for (String value : fieldValues) {
                 index = previousIndex;
 
-                Map.Entry<Integer, String> pair = PokeGen.getValue(split, value, index);
+                Map.Entry<Integer, String> pair = inputFormatter.getValue(split, value, index);
                 index = pair.getKey();
                 String pairValue = pair.getValue();
 
@@ -103,7 +101,7 @@ class FailureInfo {
                     space = true;
                 }
 
-                body = StuffGen.replaceBody(body, pairValue, className, superClass);
+                body = inputFormatter.replaceBody(body, pairValue, fields.getClassName(), superClass);
 
                 failure += (first ? "" : " || ")  + body;
                 first = false;

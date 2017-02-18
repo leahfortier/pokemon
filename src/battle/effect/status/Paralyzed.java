@@ -3,12 +3,12 @@ package battle.effect.status;
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
-import main.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import type.Type;
 import util.RandomUtils;
 
 class Paralyzed extends Status implements BeforeTurnEffect, StatChangingEffect {
@@ -19,8 +19,9 @@ class Paralyzed extends Status implements BeforeTurnEffect, StatChangingEffect {
     }
 
     // Electric-type Pokemon cannot be paralyzed
-    public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return super.applies(b, caster, victim) && !victim.isType(b, Type.ELECTRIC);
+    @Override
+    protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        return !victim.isType(b, Type.ELECTRIC);
     }
 
     public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
@@ -44,7 +45,7 @@ class Paralyzed extends Status implements BeforeTurnEffect, StatChangingEffect {
         return (int)(stat*(s == Stat.SPEED && !p.hasAbility(AbilityNamesies.QUICK_FEET) ? .25 : 1));
     }
 
-    public String getRemoveMessage(ActivePokemon victim) {
+    public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " is no longer paralyzed!";
     }
 

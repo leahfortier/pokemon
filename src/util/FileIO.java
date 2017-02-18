@@ -12,7 +12,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class FileIO {
 	private static final String FILE_SLASH = File.separator;
@@ -83,7 +89,7 @@ public class FileIO {
 			image = ImageIO.read(file);
 		}
 		catch (IOException exception) {
-			Global.error("Could not open image from following path: " + file.getName());
+			Global.error("Could not open image from following path: " + file.getAbsolutePath());
 		}
 		
 		return image;
@@ -160,7 +166,7 @@ public class FileIO {
 			return new BufferedReader(new FileReader(file));
 		}
 		catch (FileNotFoundException e) {
-			Global.error(file.getName() + " not found!");
+			Global.error(file.getAbsolutePath() + " not found!");
 			return null;
 		}
 	}
@@ -239,5 +245,25 @@ public class FileIO {
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 		return fileChooser;
+	}
+
+	public static Iterable<File> listSubdirectories(File parentDirectory) {
+		return listDirectories(parentDirectory).stream()
+				.map(FileIO::listDirectories)
+				.flatMap(List::stream)
+				.collect(Collectors.toList());
+	}
+
+	public static List<File> listDirectories(File parentDirectory) {
+		try {
+			return Files.walk(Paths.get(parentDirectory.getAbsolutePath()), 1)
+					.filter(Files::isDirectory)
+					.map(Path::toFile)
+					.filter(directory -> !directory.getAbsolutePath().equals(parentDirectory.getAbsolutePath()))
+					.collect(Collectors.toList());
+		} catch (IOException e) {
+			Global.error("IOException trying to list directories of " + parentDirectory.getAbsolutePath());
+			return new ArrayList<>();
+		}
 	}
 }

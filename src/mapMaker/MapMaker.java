@@ -1,7 +1,9 @@
 package mapMaker;
 
+import draw.TileUtils;
 import main.Global;
 import map.MapDataType;
+import map.MapName;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
@@ -10,7 +12,6 @@ import mapMaker.tools.Tool;
 import mapMaker.tools.Tool.ToolType;
 import mapMaker.tools.ToolRenderer;
 import pattern.generic.LocationTriggerMatcher;
-import util.DrawUtils;
 import util.FileIO;
 import util.Folder;
 import util.FontMetrics;
@@ -53,6 +54,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class MapMaker extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener, ListSelectionListener {
 	private static final long serialVersionUID = -1323397946555510794L;
@@ -272,20 +275,35 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 	// TODO: Should this be checking if that name is already taken?
 	private void createNewMapDialog() {
-		String name = JOptionPane.showInputDialog(this, "Name the map");
-		if (!StringUtils.isNullOrEmpty(name)) {
-            this.mapData.createNewMap(this, name);
-            this.resetMap();
+		String[] regionList = getAvailableRegions();
+		String region = (String)JOptionPane.showInputDialog(this, "Select a region", "Load", JOptionPane.PLAIN_MESSAGE, null, regionList, regionList[0]);
+		if (StringUtils.isNullOrEmpty(region)) {
+			return;
 		}
+
+		String name = JOptionPane.showInputDialog(this, "Name the map");
+		if (StringUtils.isNullOrEmpty(name)) {
+			return;
+		}
+
+		this.mapData.createNewMap(this, new MapName(region, name));
 	}
 
 	private void loadPreviousMapDialog() {
-		String[] mapList = getAvailableMaps();
-		String name = (String)JOptionPane.showInputDialog(this, "Select a map", "Load", JOptionPane.PLAIN_MESSAGE, null, mapList, mapList[0]);
-        if (!StringUtils.isNullOrEmpty(name)) {
-			this.mapData.loadPreviousMap(this, name);
-            this.resetMap();
+		String[] regionList = getAvailableRegions();
+		String region = (String)JOptionPane.showInputDialog(this, "Select a region", "Load", JOptionPane.PLAIN_MESSAGE, null, regionList, regionList[0]);
+        if (StringUtils.isNullOrEmpty(region)) {
+			return;
 		}
+
+		String[] availableMaps = Arrays.stream(getAvailableMaps(region)).map(MapName::getMapName).collect(Collectors.toList()).toArray(new String[0]);
+		String map = (String)JOptionPane.showInputDialog(this, "Select a map", "Load", JOptionPane.PLAIN_MESSAGE, null, availableMaps, availableMaps[0]);
+		if (StringUtils.isNullOrEmpty(map)) {
+			return;
+		}
+
+		this.mapData.loadPreviousMap(this, new MapName(region, map));
+
 	}
 
 	public void actionPerformed(ActionEvent event) {
@@ -311,7 +329,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 					loadPreviousMapDialog();
 				}
 
-				mapNameLabel.setText(this.getCurrentMapName());
+				mapNameLabel.setText(this.getCurrentMapName().toString());
 				draw();
 			}
 			else if (event.getSource() == cutMenuItem) {
@@ -335,11 +353,20 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		}
 	}
 
-	// TODO: This is likely not working anymore since I put the maps into subfolders
-	// TODO: Also need to be able to choose which subfolder this should go in and which to choose from
-	public String[] getAvailableMaps() {
-		File mapFolder = new File(getPathWithRoot(Folder.MAPS));
-		return mapFolder.list((dir, name) -> !dir.isHidden() && !name.contains("."));
+	public String[] getAvailableRegions() {
+		File mapsFolder = new File(getPathWithRoot(Folder.MAPS));
+		return FileIO.listDirectories(mapsFolder).stream()
+				.map(File::getName)
+				.collect(Collectors.toList())
+				.toArray(new String[0]);
+	}
+
+	public MapName[] getAvailableMaps(String region) {
+		File regionFolder = new File(FileIO.makeFolderPath(Folder.MAPS, region));
+		return FileIO.listDirectories(regionFolder).stream()
+				.map(file -> new MapName(region, file.getName()))
+				.collect(Collectors.toList())
+				.toArray(new MapName[0]);
 	}
 
 	// TODO: I still never figured out what root is doing
@@ -348,12 +375,12 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		return path;
 	}
 
-	public String getMapFolderPath(final String mapName) {
-		return getPathWithRoot(FileIO.makeFolderPath(Folder.MAPS, mapName));
+	public String getMapFolderPath(final MapName mapName) {
+		return getPathWithRoot(FileIO.makeFolderPath(Folder.MAPS, mapName.getRegionName(), mapName.getMapName()));
 	}
 
-	public String getMapTextFileName(final String mapName) {
-		return getMapFolderPath(mapName) + mapName + ".txt";
+	public String getMapTextFileName(final MapName mapName) {
+		return getMapFolderPath(mapName) + mapName.getMapName() + ".txt";
 	}
 
 	// TODO: Srsly what is going on with setting the root what the fuck
@@ -407,7 +434,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
 		for (int x = 0; x < canvas.getWidth(); x += Global.TILE_SIZE) {
 			for (int y = 0; y < canvas.getHeight(); y += Global.TILE_SIZE) {
-				DrawUtils.fillBlankTile(g2d, new Point(x, y));
+				TileUtils.fillBlankTile(g2d, new Point(x, y));
 			}
 		}
 
@@ -519,7 +546,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return this.mapData.hasMap();
     }
 
-    public String getCurrentMapName() {
+    public MapName getCurrentMapName() {
         return this.mapData.getMapName();
     }
 
@@ -599,11 +626,15 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 						}
 						// Trigger was created, move to single selection
 						else {
-							if (type == TriggerModelType.WILD_BATTLE) {
-								this.setTool(ToolType.RECTANGLE);
-							}
-							else {
-                                this.setTool(ToolType.SINGLE_CLICK);
+							switch (type) {
+								case WILD_BATTLE:
+								case EVENT:
+								case FISHING:
+									this.setTool(ToolType.RECTANGLE);
+									break;
+								default:
+									this.setTool(ToolType.SINGLE_CLICK);
+									break;
 							}
 						}
 					}

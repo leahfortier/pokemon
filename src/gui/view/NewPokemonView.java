@@ -1,19 +1,19 @@
 package gui.view;
 
+import draw.ImageUtils;
 import gui.TileSet;
-import gui.button.Button;
-import gui.panel.BasicPanels;
-import gui.panel.DrawPanel;
+import draw.button.Button;
+import draw.button.panel.BasicPanels;
+import draw.button.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
-import main.Type;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import trainer.CharacterData;
 import trainer.Trainer;
-import util.DrawUtils;
+import type.Type;
 import util.Point;
 import util.PokeString;
 import util.StringUtils;
@@ -60,7 +60,7 @@ class NewPokemonView extends View {
     }
 
     NewPokemonView() {
-        this.canvasPanel = new DrawPanel(0, 0, Global.GAME_SIZE)
+        this.canvasPanel = DrawPanel.fullGamePanel()
                 .withTransparentCount(2)
                 .withBorderPercentage(0);
 
@@ -169,7 +169,7 @@ class NewPokemonView extends View {
                 }
 
                 if (message == null) {
-                    Game.instance().setViewMode(ViewMode.MAP_VIEW);
+                    Game.instance().popView();
                 }
                 break;
         }
@@ -188,7 +188,7 @@ class NewPokemonView extends View {
             BasicPanels.drawFullMessagePanel(g, message);
         }
 
-        BufferedImage pokemonImage = Game.getData().getPokedexTilesLarge().getTile(newPokemon.getTinyImageIndex());
+        BufferedImage pokemonImage = Game.getData().getPokedexTilesLarge().getTile(newPokemon.getBaseImageName());
         if (displayInfo) {
             imagePanel.drawBackground(g);
             imagePanel.imageLabel(g, pokemonImage);
@@ -237,7 +237,7 @@ class NewPokemonView extends View {
             descriptionPanel.drawMessage(g, 22, pokemonInfo.getFlavorText());
         }
         else if (state != State.NICKNAME && state != State.END) {
-            DrawUtils.drawCenteredImage(g, pokemonImage, BasicPanels.canvasMessageCenter);
+            ImageUtils.drawCenteredImage(g, pokemonImage, BasicPanels.canvasMessageCenter);
         }
 
         switch (state) {
@@ -246,10 +246,10 @@ class NewPokemonView extends View {
                 drawButton(g, rightButton(), new Color(220, 20, 20), "No");
                 break;
             case NICKNAME:
-                BufferedImage spriteImage = Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageIndex());
+                BufferedImage spriteImage = Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageName());
                 String nickname = InputControl.instance().getInputCaptureString(ActivePokemon.MAX_NAME_LENGTH);
 
-                DrawUtils.drawCenteredImageLabel(g, spriteImage, nickname, BasicPanels.canvasMessageCenter);
+                ImageUtils.drawCenteredImageLabel(g, spriteImage, nickname, BasicPanels.canvasMessageCenter);
                 break;
             case LOCATION:
                 drawButton(g, leftButton(), new Color(35, 120, 220), "Party");
@@ -268,7 +268,7 @@ class NewPokemonView extends View {
 
                         Button pokemonButton = buttons[buttonIndex];
                         ActivePokemon partyPokemon = party.get(partyIndex);
-                        BufferedImage partyPokemonImage = partyTiles.getTile(partyPokemon.getTinyImageIndex());
+                        BufferedImage partyPokemonImage = partyTiles.getTile(partyPokemon.getTinyImageName());
 
                         DrawPanel pokemonPanel = new DrawPanel(pokemonButton)
                                 .withBackgroundColors(Type.getColors(partyPokemon))

@@ -5,6 +5,7 @@ import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
+import battle.effect.generic.EffectInterfaces.StatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import main.Global;
 import util.RandomUtils;
@@ -68,16 +69,26 @@ public enum Stat {
 	public static final int MAX_IV = 31;
 	
 	public static final Stat[] STATS;
+	public static final Stat[] BATTLE_STATS;
 	static {
 		STATS = new Stat[NUM_STATS];
-		int i = 0;
-		
+		BATTLE_STATS = new Stat[NUM_BATTLE_STATS];
+		int statIndex = 0;
+		int battleStatIndex = 0;
+
 		for (Stat stat : Stat.values()) {
-			if (stat.onlyBattle == InBattle.ONLY) {
-				continue;
+			switch (stat.onlyBattle) {
+				case BOTH:
+					STATS[statIndex++] = stat;
+					BATTLE_STATS[battleStatIndex++] = stat;
+					break;
+				case ONLY:
+					BATTLE_STATS[battleStatIndex++] = stat;
+					break;
+				case NEVER:
+					STATS[statIndex++] = stat;
+					break;
 			}
-			
-			STATS[i++] = stat;
 		}
 	}
 	
@@ -94,7 +105,7 @@ public enum Stat {
 	public static int getStat(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
 
 		// Effects that manipulate stats
-		s = StatSwitchingEffect.switchStat(b, p, opp, s);
+		s = StatSwitchingEffect.switchStat(b, p, s);
 		s = OpponentStatSwitchingEffect.switchStat(b, opp, s);
 
 		// Apply stage changes
@@ -112,8 +123,9 @@ public enum Stat {
 		}
 
 		// Applies stat changes to each for each item in list
+		stat *= StatModifyingEffect.getModifier(b, p, opp, s);
 		stat = StatChangingEffect.modifyStat(b, p, opp, s, stat);
-		
+
 //		System.out.println(p.getName() + " " + s.name + " Stat Change: " + temp + " -> " + stat);
 		
 		// Just to be safe
@@ -123,19 +135,19 @@ public enum Stat {
 	}
 
 	// TODO: Rename these pokemon names because they are srsly confusing the shit out of me
-	private static int getStage(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
+	public static int getStage(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
 
 		// Effects that completely ignore stage changes
 		if (OpponentIgnoreStageEffect.checkIgnoreStage(b, p, opp, s)) {
 			return 0;
 		}
 
-		int stage = p.getStage(s.index);
+		int stage = p.getStage(s);
 
 //		int temp = stage;
 
 		// Update the stage due to effects
-		stage = StageChangingEffect.updateStage(b, p, opp, s, stage);
+		stage += StageChangingEffect.getModifier(b, p, opp, s);
 
 //		int temp2 = stage;
 		
@@ -161,7 +173,7 @@ public enum Stat {
 		}
 		
 		Global.error("Incorrect stat index " + index);
-		return null;
+		return HP; // Because I'm sick of NPE warnings and the above line does a system exit
 	}
 
 	public static int getRandomIv() {

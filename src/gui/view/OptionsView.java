@@ -1,11 +1,11 @@
 package gui.view;
 
+import draw.TextUtils;
+import input.ControlKey;
+import input.InputControl;
 import main.Game;
 import main.Global;
 import sound.SoundPlayer;
-import util.DrawUtils;
-import input.InputControl;
-import input.ControlKey;
 import util.FontMetrics;
 
 import java.awt.Color;
@@ -30,7 +30,7 @@ class OptionsView extends View {
 		}
 		
 		if (input.consumeIfDown(ControlKey.ESC)) {
-			Game.instance().setViewMode(ViewMode.MAP_VIEW);
+			Game.instance().popView();
 		}
 	}
 
@@ -62,7 +62,7 @@ class OptionsView extends View {
 		
 		g.setColor(Color.WHITE);
 		FontMetrics.setFont(g, 150);
-		DrawUtils.drawCenteredWidthString(g, "VOLUME", d.width/2, d.height/4);
+		TextUtils.drawCenteredWidthString(g, "VOLUME", d.width/2, d.height/4);
 		
 		if (musicOn) {
 			g.setColor(Color.GREEN);

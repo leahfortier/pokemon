@@ -13,7 +13,7 @@ public class HaltTrigger extends Trigger {
         super(TriggerType.HALT, contents, condition);
 
         if (!StringUtils.isNullOrEmpty(contents)) {
-            Global.error("Contents should be empty for HaltTrigger");
+            Global.error("Contents should be empty for " + this.getClass().getSimpleName());
         }
     }
 

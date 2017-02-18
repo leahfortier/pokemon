@@ -5,11 +5,10 @@ import battle.attack.MoveType;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
-import battle.effect.generic.EffectNamesies;
-import main.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
+import type.Type;
 import util.RandomUtils;
 
 class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
@@ -19,11 +18,13 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
         super(StatusCondition.FROZEN);
     }
 
-    // Ice-type Pokemon cannot be frozen and no one can frozen while sunny
-    public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return super.applies(b, caster, victim) && !victim.isType(b, Type.ICE) && b.getWeather().namesies() != EffectNamesies.SUNNY;
+    // Ice-type Pokemon cannot be frozen
+    @Override
+    protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        return !victim.isType(b, Type.ICE);
     }
 
+    @Override
     public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
         // 20% chance to thaw out each turn
         if (RandomUtils.chanceTest(20) || p.getAttack().isMoveType(MoveType.DEFROST)) {
@@ -36,14 +37,17 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
         return false;
     }
 
+    @Override
     public String getCastMessage(ActivePokemon p) {
         return p.getName() + " was frozen!";
     }
 
+    @Override
     public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
         return abilify.getName() + "'s " + abilify.getAbility().getName() + " froze " + victim.getName() + "!";
     }
 
+    @Override
     public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
         // Fire-type moves defrost the user
         if (user.isAttackType(Type.FIRE)) {
@@ -51,10 +55,12 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
         }
     }
 
-    public String getRemoveMessage(ActivePokemon victim) {
+    @Override
+    public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " thawed out!";
     }
 
+    @Override
     public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
         return victim.getName() + "'s " + sourceName + " thawed it out!";
     }

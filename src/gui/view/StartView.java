@@ -2,7 +2,8 @@ package gui.view;
 
 import gui.GameData;
 import gui.TileSet;
-import gui.panel.BasicPanels;
+import draw.button.panel.BasicPanels;
+import gui.IndexTileSet;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -103,7 +104,7 @@ class StartView extends View {
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
 
-		TileSet trainerTiles = data.getTrainerTiles();
+		IndexTileSet trainerTiles = data.getTrainerTiles();
 		TileSet pokemonTiles = data.getPokemonTilesSmall();
 
 		BasicPanels.drawCanvasPanel(g);
@@ -115,7 +116,7 @@ class StartView extends View {
 			case DEFAULT:
 				g.drawImage(trainerTiles.getTile(0x58), 200, 200, null);
 				if (ditto) {
-					g.drawImage(pokemonTiles.getTile(PokemonInfo.getPokemonInfo(PokemonNamesies.DITTO).getImageNumber()), 270, 255, null);
+					g.drawImage(pokemonTiles.getTile(PokemonInfo.getPokemonInfo(PokemonNamesies.DITTO).getImageName()), 270, 255, null);
 				}
 				break;
 			case NAME:

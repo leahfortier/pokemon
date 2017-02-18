@@ -1,8 +1,9 @@
 package mapMaker.model;
 
+import draw.TileUtils;
 import main.Global;
 import mapMaker.MapMaker;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
@@ -23,7 +24,7 @@ import java.util.Scanner;
 
 public class TileModel extends MapMakerModel {
     private static final int BLANK_TILE_INDEX = Color.MAGENTA.getRGB(); // TODO: No I hate this
-    private static final BufferedImage BLANK_TILE_IMAGE = DrawUtils.createBlankTile();
+    private static final BufferedImage BLANK_TILE_IMAGE = TileUtils.createBlankTile();
     private static final ImageIcon BLANK_TILE_ICON = new ImageIcon(BLANK_TILE_IMAGE, "0"); // TODO: Is 0 still necessary?
 
     private final DefaultListModel<ImageIcon> tileListModel;
@@ -33,7 +34,6 @@ public class TileModel extends MapMakerModel {
     private boolean saved;
 
     public enum TileType {
-        ITEM(Folder.ITEM_TILES, FileName.ITEM_TILES_INDEX),
         MAP(Folder.MAP_TILES, FileName.MAP_TILES_INDEX),
         MAP_MAKER(Folder.MAP_MAKER_TILES, FileName.MAP_MAKER_TILES_INDEX),
         TRAINER(Folder.TRAINER_TILES, FileName.TRAINER_TILES_INDEX);
@@ -97,7 +97,7 @@ public class TileModel extends MapMakerModel {
                 String name = in.next();
                 int val = (int)Long.parseLong(in.next(), 16);
 
-                File imageFile = new File(tileType.tileFolderPath + name);
+                File imageFile = new File(tileType.tileFolderPath + name + ".png");
                 if (!imageFile.exists()) {
 //                    System.err.println("Could not find image " + imageFile.getName());
                     continue;

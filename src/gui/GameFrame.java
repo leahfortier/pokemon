@@ -6,6 +6,7 @@ import main.Game;
 import main.Global;
 import pokemon.PokemonInfo;
 import util.FontMetrics;
+import util.RandomUtils;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -41,6 +42,8 @@ public class GameFrame {
 	}
 	
 	private static void loadAllTheThings() {
+		System.out.println("Random Seed: " + RandomUtils.getSeed());
+
 		PokemonInfo.loadPokemonInfo();
 		FontMetrics.loadFontMetricsMap();
 	}

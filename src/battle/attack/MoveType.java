@@ -2,8 +2,6 @@ package battle.attack;
 
 public enum MoveType {
     AIRBORNE,
-    ALWAYS_CRIT,
-    ASLEEP_USER,
     ASSISTLESS,
     AURA_PULSE,
     BITING,
@@ -11,6 +9,7 @@ public enum MoveType {
     DEFROST,
     ENCORELESS,
     FIELD,
+    HEALING,
     METRONOMELESS,
     MIMICLESS,
     MIRRORLESS,
@@ -18,11 +17,8 @@ public enum MoveType {
     NON_SNATCHABLE,
     ONE_HIT_KO,
     PHYSICAL_CONTACT,
-    POWDER,
     PROTECT_PIERCING,
     PUNCHING,
-    SAP_75,
-    SAP_HEALTH,
     SLEEP_TALK_FAIL,
     SOUND_BASED,
     SUCCESSIVE_DECAY,

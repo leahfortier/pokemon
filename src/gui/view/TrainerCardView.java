@@ -4,7 +4,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import trainer.CharacterData;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 
 import java.awt.Color;
@@ -15,7 +15,7 @@ class TrainerCardView extends View {
 	@Override
 	public void update(int dt) {
 		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
-			Game.instance().setViewMode(ViewMode.MAP_VIEW);
+			Game.instance().popView();
 		}
 	}
 

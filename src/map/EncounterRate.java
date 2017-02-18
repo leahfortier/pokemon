@@ -7,7 +7,7 @@ public enum EncounterRate {
     RARE(4.995),
     VERY_RARE(1.875);
 
-    private double rate;
+    private final double rate;
 
     EncounterRate(double rate) {
         this.rate = rate;

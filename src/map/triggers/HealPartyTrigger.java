@@ -10,7 +10,7 @@ class HealPartyTrigger extends Trigger {
 		super(TriggerType.HEAL_PARTY, contents, condition);
 
 		if (!StringUtils.isNullOrEmpty(contents)) {
-			Global.error("Contents should be empty for HealPartyTrigger");
+			Global.error("Contents should be empty for " + this.getClass().getSimpleName());
 		}
 	}
 

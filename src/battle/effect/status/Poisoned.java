@@ -4,11 +4,11 @@ import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
-import main.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
+import type.Type;
 
 class Poisoned extends Status implements EndTurnEffect {
     private static final long serialVersionUID = 1L;
@@ -37,9 +37,10 @@ class Poisoned extends Status implements EndTurnEffect {
         victim.reduceHealthFraction(b, badPoison == null ? 1/8.0 : badPoison.getTurns()/16.0);
     }
 
-    // Poison-type Pokemon cannot be poisoned
-    public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return super.applies(b, caster, victim) && !victim.isType(b, Type.POISON);
+    // Poison-type and Steel-type Pokemon cannot be poisoned unless the caster has the Corrosion ability
+    @Override
+    protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        return (!victim.isType(b, Type.POISON) && !victim.isType(b, Type.STEEL) || caster.hasAbility(AbilityNamesies.CORROSION));
     }
 
     public String getCastMessage(ActivePokemon p) {
@@ -50,7 +51,7 @@ class Poisoned extends Status implements EndTurnEffect {
         return abilify.getName() + "'s " + abilify.getAbility().getName() + (victim.hasEffect(EffectNamesies.BAD_POISON) ? " badly " : " ") + "poisoned " + victim.getName() + "!";
     }
 
-    public String getRemoveMessage(ActivePokemon victim) {
+    public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " is no longer poisoned!";
     }
 

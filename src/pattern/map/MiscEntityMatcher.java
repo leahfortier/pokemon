@@ -4,9 +4,9 @@ import map.entity.Entity;
 import map.entity.EntityAction;
 import map.entity.MiscEntity;
 import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.action.ActionMatcher;
 import pattern.generic.EntityMatcher;
 import pattern.generic.SinglePointTriggerMatcher;
-import pattern.action.ActionMatcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;

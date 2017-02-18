@@ -7,7 +7,7 @@ enum PokedexStatus implements Serializable {
     SEEN(1),
     CAUGHT(2);
 
-    private int weight;
+    private final int weight;
 
     PokedexStatus(int weight) {
         this.weight = weight;

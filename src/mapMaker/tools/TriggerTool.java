@@ -1,10 +1,10 @@
 package mapMaker.tools;
 
-import mapMaker.MapMaker;
+import draw.TileUtils;
 import mapMaker.EditType;
+import mapMaker.MapMaker;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.LocationTriggerMatcher;
-import util.DrawUtils;
 import util.Point;
 
 import javax.swing.JMenuItem;
@@ -63,7 +63,7 @@ class TriggerTool extends Tool {
             return;
         }
 
-        Point location = DrawUtils.getLocation(clickLocation, mapMaker.getMapLocation());
+        Point location = TileUtils.getLocation(clickLocation, mapMaker.getMapLocation());
 
         System.out.println("Trigger click: " + clickLocation);
 
@@ -98,8 +98,8 @@ class TriggerTool extends Tool {
 
     @Override
     public void draw(Graphics g) {
-        Point mouseHoverLocation = DrawUtils.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
-        DrawUtils.outlineTile(g, mouseHoverLocation, mapMaker.getMapLocation(), Color.BLUE);
+        Point mouseHoverLocation = TileUtils.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
+        TileUtils.outlineTile(g, mouseHoverLocation, mapMaker.getMapLocation(), Color.BLUE);
     }
 
     public String toString() {

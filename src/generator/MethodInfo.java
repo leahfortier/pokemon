@@ -20,7 +20,6 @@ class MethodInfo {
 
     private String fullBody;
 
-    private boolean tryParse;
     private boolean required;
     private boolean defaultBody;
 
@@ -37,7 +36,6 @@ class MethodInfo {
 
         this.fullBody = "";
 
-        this.tryParse = false;
         this.required = true;
         this.defaultBody = false;
 
@@ -85,10 +83,6 @@ class MethodInfo {
                 case "Header":
                     this.header = value;
                     break;
-                case "Try":
-                    tryParse = true;
-                    this.body = value;
-                    break;
                 case "Default":
                     this.defaultBody = true;
                     this.body = value;
@@ -132,7 +126,7 @@ class MethodInfo {
         }
     }
 
-    private String writeFunction(String fieldValue, String className, String superClass) {
+    private String writeFunction(String fieldValue, String className, String superClass, InputFormatter inputFormatter) {
         if (this.header == null) {
             return StringUtils.empty();
         }
@@ -144,20 +138,12 @@ class MethodInfo {
             this.fullBody = this.body;
         }
 
-        if (this.tryParse) {
-            try {
-                Double.parseDouble(fieldValue);
-            } catch (NumberFormatException exception) {
-                this.fullBody = fieldValue;
-            }
-        }
-
         if (fieldValue.length() > 0 && this.defaultBody) {
             this.fullBody = fieldValue;
         }
 
         this.fullBody = this.begin + this.fullBody + this.end;
-        this.fullBody = StuffGen.replaceBody(this.fullBody, fieldValue, className, superClass);
+        this.fullBody = inputFormatter.replaceBody(this.fullBody, fieldValue, className, superClass);
 
         if (!this.required && !this.defaultBody && StringUtils.isNullOrEmpty(this.fullBody)) {
             return StringUtils.empty();
@@ -193,10 +179,16 @@ class MethodInfo {
     }
 
     // Interface name should be empty if it is an override
-    static boolean addMethodInfo(StringBuilder methods, List<Map.Entry<String, MethodInfo>> methodList, Map<String, String> fields, List<String> interfaces, String interfaceName, String superClass) {
+    static boolean addMethodInfo(StringBuilder methods,
+                                 List<Map.Entry<String, MethodInfo>> methodList,
+                                 ClassFields fields,
+                                 List<String> interfaces,
+                                 String interfaceName,
+                                 String superClass,
+                                 InputFormatter inputFormatter
+    ) {
         boolean added = false;
-
-        String className = fields.get("ClassName");
+        String className = fields.getClassName();
 
         for (Map.Entry<String, MethodInfo> pair : methodList) {
             String fieldName = pair.getKey();
@@ -217,14 +209,14 @@ class MethodInfo {
                 fieldValue = "";
             }
 
-            String implementation = methodInfo.writeFunction(fieldValue, className, superClass);
+            String implementation = methodInfo.writeFunction(fieldValue, className, superClass, inputFormatter);
             methods.append(implementation);
 
             interfaces.addAll(methodInfo.addInterfaces);
 
             for (Map.Entry<String, String> addField : methodInfo.addMapFields) {
                 String fieldKey = addField.getKey();
-                String addFieldValue = StuffGen.replaceBody(addField.getValue(), fieldValue, className, superClass);
+                String addFieldValue = inputFormatter.replaceBody(addField.getValue(), fieldValue, className, superClass);
 
                 String mapField = fields.get(fieldKey);
                 if (mapField == null) {
@@ -233,7 +225,10 @@ class MethodInfo {
                 else if (fieldKey.equals("MoveType")) {
                     mapField += ", " + addFieldValue;
                 }
-                else if (fieldKey.equals("Field")) {
+                else if (fieldKey.equals("Applies")) {
+                    mapField += " && " + addFieldValue;
+                }
+                else if (fieldKey.equals("Field") || fieldKey.equals("UniqueEffects")) {
                     mapField += addFieldValue;
                 }
 //				else {
@@ -241,7 +236,7 @@ class MethodInfo {
 //					System.out.println("Map Field (ClassName = " + className + "): " + mapField);
 //				}
 
-                fields.put(fieldKey, mapField);
+                fields.add(fieldKey, mapField);
             }
 
             fields.remove(fieldName);

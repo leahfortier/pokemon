@@ -1,13 +1,13 @@
 package main;
 
 import battle.attack.Attack;
-import battle.attack.MoveCategory;
-import pokemon.ability.AbilityNamesies;
 import battle.attack.AttackNamesies;
-import pokemon.PokemonNamesies;
 import pokemon.Nature;
 import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import pokemon.Stat;
+import pokemon.ability.AbilityNamesies;
+import type.Type;
 import util.FileIO;
 import util.StringUtils;
 
@@ -267,7 +267,7 @@ public class TeamPlanner {
 		
 		static void addCoverage(AttackTypeCoverage[] coverage, TeamMember member) {
 			for (Attack attack : member.moveList) {
-				if (attack.getCategory() != MoveCategory.STATUS) {
+				if (!attack.isStatusMove()) {
 					Type attackType = attack.getActualType();
 					coverage[attackType.getIndex()].moves.add(member.pokemonSpecies.getName() + " - " + attack.getName());
 				}
@@ -304,10 +304,7 @@ public class TeamPlanner {
 						int first = firstType.getIndex();
 						int second = secondType.getIndex();
 						
-						double firstAdvantage = Type.getBasicAdvantage(attackType, firstType);
-						double secondAdvantage = Type.getBasicAdvantage(attackType, secondType);
-						
-						double advantage = firstAdvantage*secondAdvantage;
+						double advantage = attackType.getAdvantage().getAdvantage(firstType, secondType);
 						
 						if (advantage > 1) {
 							coverageCount[first][second]++;
@@ -339,28 +336,33 @@ public class TeamPlanner {
 		public String toString() {
 			StringBuilder out = new StringBuilder();
 			
-			out.append(pokemonSpecies.getName() + ":");
+			out.append(pokemonSpecies.getName())
+					.append(":");
 			
 			Type[] type = pokemonSpecies.getType();
-			out.append("\n\tType: " + type[0].getName() + (type[1] == Type.NO_TYPE ? "" : "/" + type[1].getName()));
+			out.append("\n\tType: ")
+					.append(type[0].getName())
+					.append(type[1] == Type.NO_TYPE ? "" : "/" + type[1].getName());
 			
 			
 			out.append("\n\tStats:");
 			for (int i = 0; i < Stat.NUM_STATS; i++) {
-				out.append(" " + pokemonSpecies.getStat(i));
+				out.append(" ").append(pokemonSpecies.getStat(i));
 			}
 			
-			out.append("\n\tNature: " + nature);
-			out.append("\n\tAbility: " + ability);
+			out.append("\n\tNature: ").append(nature);
+			out.append("\n\tAbility: ").append(ability);
 			
 			if (item != null) {
-				out.append("\n\tItem: " + item);
+				out.append("\n\tItem: ").append(item);
 			}
 			
 			out.append("\n\tMoves:");
 			for (Attack attack : moveList) {
-				out.append("\n\t\t" + attack.getName() + " -- ");
-				List<String> learnMethods = new ArrayList<String>();
+				out.append("\n\t\t")
+						.append(attack.getName())
+						.append(" -- ");
+				List<String> learnMethods = new ArrayList<>();
 
 				AttackNamesies namesies = attack.namesies();
 				
@@ -382,7 +384,7 @@ public class TeamPlanner {
 				
 				boolean first = true;
 				for (String method : learnMethods) {
-					out.append((first ? "" : " or ") + method);
+					out.append(first ? "" : " or ").append(method);
 					first = false;
 				}
 			}

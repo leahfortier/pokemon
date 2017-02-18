@@ -20,16 +20,17 @@ public abstract class MovableEntity extends Entity {
 	protected int transitionTime;
 	private int waitTime;
 
-	private String tempPath;
 	private int pathIndex;
+	private String tempPath;
+	private boolean endedTempPath;
 	private EndPathListener endPathListener;
 
 	MovableEntity(Point location, String triggerName, String condition, int spriteIndex) {
 		super(location, triggerName, condition);
-		
+
 		this.transitionTime = 0;
 		this.runFrame = 0;
-		
+
 		this.spriteIndex = spriteIndex;
 	}
 
@@ -41,10 +42,6 @@ public abstract class MovableEntity extends Entity {
 
 	public abstract Direction getDirection();
 	protected abstract void setDirection(Direction direction);
-
-	public void setTempPath(String path) {
-		setTempPath(path, null);
-	}
 
 	public void setTempPath(String path, EndPathListener listener) {
 		this.tempPath = path;
@@ -76,9 +73,9 @@ public abstract class MovableEntity extends Entity {
 	@Override
 	public void update(int dt, MapData currentMap, MapView view) {
 		if (transitionTime != 0) {
-			transitionTime += dt;	
+			transitionTime += dt;
 		}
-		
+
 		if (transitionTime > getTransitionTime()) {
 			transitionTime = 0;
 			runFrame = (runFrame + 1)%2;
@@ -93,6 +90,16 @@ public abstract class MovableEntity extends Entity {
 			String path = this.tempPath;
 			if (tempPath == null) {
 				path = this.getPath();
+			} else if (endedTempPath) {
+				if (this.endPathListener != null) {
+					this.endPathListener.endPathCallback();
+				}
+
+				tempPath = null;
+				endedTempPath = false;
+				endPath();
+
+				path = null;
 			}
 
 			if (!StringUtils.isNullOrEmpty(path)) {
@@ -118,12 +125,7 @@ public abstract class MovableEntity extends Entity {
 
 				pathIndex %= path.length();
 				if (pathIndex == 0 && tempPath != null) {
-					if (this.endPathListener != null) {
-						this.endPathListener.endPathCallback();
-					}
-
-					tempPath = null;
-					endPath();
+					endedTempPath = true;
 				}
 			}
 		}
@@ -158,9 +160,7 @@ public abstract class MovableEntity extends Entity {
 	public Point getNewLocation(Point location, Direction direction, MapData currentMap) {
 		Point newLocation = Point.add(location, direction.getDeltaPoint());
 
-		WalkType curPassValue = currentMap.getPassValue(location);
 		WalkType passValue = currentMap.getPassValue(newLocation);
-
 		if (passValue.isPassable(direction) && !currentMap.hasEntity(newLocation)) {
 			return newLocation;
 		}

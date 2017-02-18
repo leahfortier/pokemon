@@ -19,33 +19,35 @@ ClearSkies:
 	CanHave: True
 	Int: Hidden-EndTurnEffect
 	ApplyEndTurn:
-	###
+		###
 *
 Raining:
 	WeatherElement: Water
 	Int: Hidden-EndTurnEffect
 	ApplyEndTurn:
-	Messages.add(new MessageUpdate("The rain continues to pour."));
-	###
+		Messages.add(new MessageUpdate("The rain continues to pour."));
+		###
 	CastMessage: "It started to rain!"
 	SubsideMessage: "The rain stopped."
 	WeatherStatChange: Water Fire
 *
 Sunny:
 	WeatherElement: Fire
-	Int: Hidden-EndTurnEffect
+	Int: Hidden-EndTurnEffect, StatusPreventionEffect
 	ApplyEndTurn:
-	Messages.add(new MessageUpdate("The sunlight is strong."));
-	###
+		Messages.add(new MessageUpdate("The sunlight is strong."));
+		###
 	CastMessage: "The sunlight turned harsh!"
 	SubsideMessage: "The sunlight faded."
 	WeatherStatChange: Fire Water
+	StatusPrevent: return status == StatusCondition.FROZEN;
+	StatusPreventMessage: "Too sunny to freeze!!"
 *
 Sandstorm:
 	WeatherElement: Rock
 	BuffetImmune: Type.ROCK, Type.GROUND, Type.STEEL
 	BuffetMessage: p.getName() + " is buffeted by the sandstorm!"
-	PreBuffetMessage: "The sandstorm rages"
+	PreBuffetMessage: "The sandstorm rages."
 	CastMessage: "A sandstorm kicked up!"
 	SubsideMessage: "The sandstorm subsided."
 	ToModify: Sp_Defense

@@ -1,6 +1,7 @@
 package battle.attack;
 
 import battle.attack.Attack.Absorb;
+import battle.attack.Attack.Accelerock;
 import battle.attack.Attack.Acid;
 import battle.attack.Attack.AcidArmor;
 import battle.attack.Attack.AcidSpray;
@@ -12,6 +13,7 @@ import battle.attack.Attack.Agility;
 import battle.attack.Attack.AirCutter;
 import battle.attack.Attack.AirSlash;
 import battle.attack.Attack.Amnesia;
+import battle.attack.Attack.AnchorShot;
 import battle.attack.Attack.AncientPower;
 import battle.attack.Attack.AquaJet;
 import battle.attack.Attack.AquaRing;
@@ -26,12 +28,15 @@ import battle.attack.Attack.AttackOrder;
 import battle.attack.Attack.Attract;
 import battle.attack.Attack.AuraSphere;
 import battle.attack.Attack.AuroraBeam;
+import battle.attack.Attack.AuroraVeil;
 import battle.attack.Attack.Autotomize;
 import battle.attack.Attack.Avalanche;
 import battle.attack.Attack.BabyDollEyes;
+import battle.attack.Attack.BanefulBunker;
 import battle.attack.Attack.Barrage;
 import battle.attack.Attack.Barrier;
 import battle.attack.Attack.BatonPass;
+import battle.attack.Attack.BeakBlast;
 import battle.attack.Attack.BeatUp;
 import battle.attack.Attack.Belch;
 import battle.attack.Attack.BellyDrum;
@@ -39,6 +44,7 @@ import battle.attack.Attack.Bestow;
 import battle.attack.Attack.Bide;
 import battle.attack.Attack.Bind;
 import battle.attack.Attack.Bite;
+import battle.attack.Attack.BlastBurn;
 import battle.attack.Attack.BlazeKick;
 import battle.attack.Attack.Blizzard;
 import battle.attack.Attack.Block;
@@ -53,6 +59,7 @@ import battle.attack.Attack.Bounce;
 import battle.attack.Attack.BraveBird;
 import battle.attack.Attack.BrickBreak;
 import battle.attack.Attack.Brine;
+import battle.attack.Attack.BrutalSwing;
 import battle.attack.Attack.Bubble;
 import battle.attack.Attack.BubbleBeam;
 import battle.attack.Attack.BugBite;
@@ -61,6 +68,7 @@ import battle.attack.Attack.BulkUp;
 import battle.attack.Attack.Bulldoze;
 import battle.attack.Attack.BulletPunch;
 import battle.attack.Attack.BulletSeed;
+import battle.attack.Attack.BurnUp;
 import battle.attack.Attack.CalmMind;
 import battle.attack.Attack.Camouflage;
 import battle.attack.Attack.Captivate;
@@ -71,6 +79,7 @@ import battle.attack.Attack.Chatter;
 import battle.attack.Attack.ChipAway;
 import battle.attack.Attack.CircleThrow;
 import battle.attack.Attack.Clamp;
+import battle.attack.Attack.ClangingScales;
 import battle.attack.Attack.ClearSmog;
 import battle.attack.Attack.CloseCombat;
 import battle.attack.Attack.Coil;
@@ -83,6 +92,7 @@ import battle.attack.Attack.Constrict;
 import battle.attack.Attack.Conversion;
 import battle.attack.Attack.Conversion2;
 import battle.attack.Attack.Copycat;
+import battle.attack.Attack.CoreEnforcer;
 import battle.attack.Attack.CosmicPower;
 import battle.attack.Attack.CottonGuard;
 import battle.attack.Attack.CottonSpore;
@@ -99,6 +109,7 @@ import battle.attack.Attack.Curse;
 import battle.attack.Attack.Cut;
 import battle.attack.Attack.DarkPulse;
 import battle.attack.Attack.DarkVoid;
+import battle.attack.Attack.DarkestLariat;
 import battle.attack.Attack.DazzlingGleam;
 import battle.attack.Attack.DefendOrder;
 import battle.attack.Attack.DefenseCurl;
@@ -123,6 +134,7 @@ import battle.attack.Attack.DragonAscent;
 import battle.attack.Attack.DragonBreath;
 import battle.attack.Attack.DragonClaw;
 import battle.attack.Attack.DragonDance;
+import battle.attack.Attack.DragonHammer;
 import battle.attack.Attack.DragonPulse;
 import battle.attack.Attack.DragonRage;
 import battle.attack.Attack.DragonRush;
@@ -168,8 +180,11 @@ import battle.attack.Attack.FieryDance;
 import battle.attack.Attack.FinalGambit;
 import battle.attack.Attack.FireBlast;
 import battle.attack.Attack.FireFang;
+import battle.attack.Attack.FireLash;
+import battle.attack.Attack.FirePledge;
 import battle.attack.Attack.FirePunch;
 import battle.attack.Attack.FireSpin;
+import battle.attack.Attack.FirstImpression;
 import battle.attack.Attack.Fissure;
 import battle.attack.Attack.Flail;
 import battle.attack.Attack.FlameBurst;
@@ -180,7 +195,9 @@ import battle.attack.Attack.FlareBlitz;
 import battle.attack.Attack.Flash;
 import battle.attack.Attack.FlashCannon;
 import battle.attack.Attack.Flatter;
+import battle.attack.Attack.FleurCannon;
 import battle.attack.Attack.Fling;
+import battle.attack.Attack.FloralHealing;
 import battle.attack.Attack.FlowerShield;
 import battle.attack.Attack.Fly;
 import battle.attack.Attack.FlyingPress;
@@ -193,6 +210,7 @@ import battle.attack.Attack.ForestsCurse;
 import battle.attack.Attack.FoulPlay;
 import battle.attack.Attack.FreezeDry;
 import battle.attack.Attack.FreezeShock;
+import battle.attack.Attack.FrenzyPlant;
 import battle.attack.Attack.FrostBreath;
 import battle.attack.Attack.FuryAttack;
 import battle.attack.Attack.FuryCutter;
@@ -202,12 +220,14 @@ import battle.attack.Attack.FusionFlare;
 import battle.attack.Attack.FutureSight;
 import battle.attack.Attack.GastroAcid;
 import battle.attack.Attack.GearGrind;
+import battle.attack.Attack.GearUp;
 import battle.attack.Attack.Geomancy;
 import battle.attack.Attack.GigaDrain;
 import battle.attack.Attack.GigaImpact;
 import battle.attack.Attack.Glaciate;
 import battle.attack.Attack.Glare;
 import battle.attack.Attack.GrassKnot;
+import battle.attack.Attack.GrassPledge;
 import battle.attack.Attack.GrassWhistle;
 import battle.attack.Attack.GrassyTerrain;
 import battle.attack.Attack.Gravity;
@@ -239,6 +259,7 @@ import battle.attack.Attack.HeatWave;
 import battle.attack.Attack.HeavySlam;
 import battle.attack.Attack.Hex;
 import battle.attack.Attack.HiddenPower;
+import battle.attack.Attack.HighHorsepower;
 import battle.attack.Attack.HighJumpKick;
 import battle.attack.Attack.HoneClaws;
 import battle.attack.Attack.HornAttack;
@@ -246,15 +267,18 @@ import battle.attack.Attack.HornDrill;
 import battle.attack.Attack.HornLeech;
 import battle.attack.Attack.Howl;
 import battle.attack.Attack.Hurricane;
+import battle.attack.Attack.HydroCannon;
 import battle.attack.Attack.HydroPump;
 import battle.attack.Attack.HyperBeam;
 import battle.attack.Attack.HyperFang;
 import battle.attack.Attack.HyperVoice;
+import battle.attack.Attack.HyperspaceHole;
 import battle.attack.Attack.Hypnosis;
 import battle.attack.Attack.IceBall;
 import battle.attack.Attack.IceBeam;
 import battle.attack.Attack.IceBurn;
 import battle.attack.Attack.IceFang;
+import battle.attack.Attack.IceHammer;
 import battle.attack.Attack.IcePunch;
 import battle.attack.Attack.IceShard;
 import battle.attack.Attack.IcicleCrash;
@@ -275,22 +299,26 @@ import battle.attack.Attack.Kinesis;
 import battle.attack.Attack.KingsShield;
 import battle.attack.Attack.KnockOff;
 import battle.attack.Attack.LandsWrath;
+import battle.attack.Attack.LaserFocus;
 import battle.attack.Attack.LastResort;
 import battle.attack.Attack.LavaPlume;
 import battle.attack.Attack.LeafBlade;
 import battle.attack.Attack.LeafStorm;
 import battle.attack.Attack.LeafTornado;
+import battle.attack.Attack.Leafage;
 import battle.attack.Attack.LeechLife;
 import battle.attack.Attack.LeechSeed;
 import battle.attack.Attack.Leer;
 import battle.attack.Attack.Lick;
 import battle.attack.Attack.LightScreen;
+import battle.attack.Attack.Liquidation;
 import battle.attack.Attack.LockOn;
 import battle.attack.Attack.LovelyKiss;
 import battle.attack.Attack.LowKick;
 import battle.attack.Attack.LowSweep;
 import battle.attack.Attack.LuckyChant;
 import battle.attack.Attack.LunarDance;
+import battle.attack.Attack.Lunge;
 import battle.attack.Attack.LusterPurge;
 import battle.attack.Attack.MachPunch;
 import battle.attack.Attack.MagicCoat;
@@ -327,6 +355,7 @@ import battle.attack.Attack.Mist;
 import battle.attack.Attack.MistBall;
 import battle.attack.Attack.MistyTerrain;
 import battle.attack.Attack.Moonblast;
+import battle.attack.Attack.MoongeistBeam;
 import battle.attack.Attack.Moonlight;
 import battle.attack.Attack.MorningSun;
 import battle.attack.Attack.MudBomb;
@@ -334,10 +363,12 @@ import battle.attack.Attack.MudShot;
 import battle.attack.Attack.MudSlap;
 import battle.attack.Attack.MudSport;
 import battle.attack.Attack.MuddyWater;
+import battle.attack.Attack.MultiAttack;
 import battle.attack.Attack.MysticalFire;
 import battle.attack.Attack.NastyPlot;
 import battle.attack.Attack.NaturalGift;
 import battle.attack.Attack.NaturePower;
+import battle.attack.Attack.NaturesMadness;
 import battle.attack.Attack.NeedleArm;
 import battle.attack.Attack.NightDaze;
 import battle.attack.Attack.NightShade;
@@ -372,6 +403,7 @@ import battle.attack.Attack.PoisonJab;
 import battle.attack.Attack.PoisonPowder;
 import battle.attack.Attack.PoisonSting;
 import battle.attack.Attack.PoisonTail;
+import battle.attack.Attack.PollenPuff;
 import battle.attack.Attack.Pound;
 import battle.attack.Attack.Powder;
 import battle.attack.Attack.PowderSnow;
@@ -379,14 +411,18 @@ import battle.attack.Attack.PowerGem;
 import battle.attack.Attack.PowerSplit;
 import battle.attack.Attack.PowerSwap;
 import battle.attack.Attack.PowerTrick;
+import battle.attack.Attack.PowerTrip;
 import battle.attack.Attack.PowerUpPunch;
 import battle.attack.Attack.PowerWhip;
 import battle.attack.Attack.PrecipiceBlades;
 import battle.attack.Attack.Present;
+import battle.attack.Attack.PrismaticLaser;
 import battle.attack.Attack.Protect;
 import battle.attack.Attack.Psybeam;
 import battle.attack.Attack.PsychUp;
 import battle.attack.Attack.Psychic;
+import battle.attack.Attack.PsychicFangs;
+import battle.attack.Attack.PsychicTerrain;
 import battle.attack.Attack.PsychoBoost;
 import battle.attack.Attack.PsychoCut;
 import battle.attack.Attack.PsychoShift;
@@ -394,6 +430,7 @@ import battle.attack.Attack.Psyshock;
 import battle.attack.Attack.Psystrike;
 import battle.attack.Attack.Psywave;
 import battle.attack.Attack.Punishment;
+import battle.attack.Attack.Purify;
 import battle.attack.Attack.Pursuit;
 import battle.attack.Attack.QuickAttack;
 import battle.attack.Attack.QuickGuard;
@@ -412,6 +449,7 @@ import battle.attack.Attack.Refresh;
 import battle.attack.Attack.RelicSong;
 import battle.attack.Attack.Rest;
 import battle.attack.Attack.Retaliate;
+import battle.attack.Attack.RevelationDance;
 import battle.attack.Attack.Revenge;
 import battle.attack.Attack.Reversal;
 import battle.attack.Attack.Roar;
@@ -448,6 +486,7 @@ import battle.attack.Attack.SeedFlare;
 import battle.attack.Attack.SeismicToss;
 import battle.attack.Attack.SelfDestruct;
 import battle.attack.Attack.ShadowBall;
+import battle.attack.Attack.ShadowBone;
 import battle.attack.Attack.ShadowClaw;
 import battle.attack.Attack.ShadowForce;
 import battle.attack.Attack.ShadowPunch;
@@ -455,8 +494,10 @@ import battle.attack.Attack.ShadowSneak;
 import battle.attack.Attack.Sharpen;
 import battle.attack.Attack.SheerCold;
 import battle.attack.Attack.ShellSmash;
+import battle.attack.Attack.ShellTrap;
 import battle.attack.Attack.ShiftGear;
 import battle.attack.Attack.ShockWave;
+import battle.attack.Attack.ShoreUp;
 import battle.attack.Attack.SignalBeam;
 import battle.attack.Attack.SilverWind;
 import battle.attack.Attack.SimpleBeam;
@@ -476,6 +517,7 @@ import battle.attack.Attack.Sludge;
 import battle.attack.Attack.SludgeBomb;
 import battle.attack.Attack.SludgeWave;
 import battle.attack.Attack.SmackDown;
+import battle.attack.Attack.SmartStrike;
 import battle.attack.Attack.SmellingSalts;
 import battle.attack.Attack.Smog;
 import battle.attack.Attack.Smokescreen;
@@ -485,27 +527,35 @@ import battle.attack.Attack.Snore;
 import battle.attack.Attack.Soak;
 import battle.attack.Attack.SoftBoiled;
 import battle.attack.Attack.SolarBeam;
+import battle.attack.Attack.SolarBlade;
 import battle.attack.Attack.SonicBoom;
 import battle.attack.Attack.SpacialRend;
 import battle.attack.Attack.Spark;
+import battle.attack.Attack.SparklingAria;
+import battle.attack.Attack.SpectralThief;
+import battle.attack.Attack.SpeedSwap;
 import battle.attack.Attack.SpiderWeb;
 import battle.attack.Attack.SpikeCannon;
 import battle.attack.Attack.Spikes;
 import battle.attack.Attack.SpikyShield;
+import battle.attack.Attack.SpiritShackle;
 import battle.attack.Attack.SpitUp;
 import battle.attack.Attack.Spite;
 import battle.attack.Attack.Splash;
 import battle.attack.Attack.Spore;
 import battle.attack.Attack.StealthRock;
+import battle.attack.Attack.SteamEruption;
 import battle.attack.Attack.Steamroller;
 import battle.attack.Attack.SteelWing;
 import battle.attack.Attack.StickyWeb;
 import battle.attack.Attack.Stockpile;
 import battle.attack.Attack.Stomp;
+import battle.attack.Attack.StompingTantrum;
 import battle.attack.Attack.StoneEdge;
 import battle.attack.Attack.StoredPower;
 import battle.attack.Attack.StormThrow;
 import battle.attack.Attack.Strength;
+import battle.attack.Attack.StrengthSap;
 import battle.attack.Attack.StringShot;
 import battle.attack.Attack.Struggle;
 import battle.attack.Attack.StruggleBug;
@@ -514,6 +564,7 @@ import battle.attack.Attack.Submission;
 import battle.attack.Attack.Substitute;
 import battle.attack.Attack.SuckerPunch;
 import battle.attack.Attack.SunnyDay;
+import battle.attack.Attack.SunsteelStrike;
 import battle.attack.Attack.SuperFang;
 import battle.attack.Attack.Superpower;
 import battle.attack.Attack.Supersonic;
@@ -534,12 +585,14 @@ import battle.attack.Attack.TailWhip;
 import battle.attack.Attack.Tailwind;
 import battle.attack.Attack.TakeDown;
 import battle.attack.Attack.Taunt;
+import battle.attack.Attack.TearfulLook;
 import battle.attack.Attack.TechnoBlast;
 import battle.attack.Attack.TeeterDance;
 import battle.attack.Attack.Telekinesis;
 import battle.attack.Attack.Teleport;
 import battle.attack.Attack.Thief;
 import battle.attack.Attack.Thrash;
+import battle.attack.Attack.ThroatChop;
 import battle.attack.Attack.Thunder;
 import battle.attack.Attack.ThunderFang;
 import battle.attack.Attack.ThunderPunch;
@@ -551,12 +604,14 @@ import battle.attack.Attack.TopsyTurvy;
 import battle.attack.Attack.Torment;
 import battle.attack.Attack.Toxic;
 import battle.attack.Attack.ToxicSpikes;
+import battle.attack.Attack.ToxicThread;
 import battle.attack.Attack.Transform;
 import battle.attack.Attack.TriAttack;
 import battle.attack.Attack.Trick;
 import battle.attack.Attack.TrickOrTreat;
 import battle.attack.Attack.TrickRoom;
 import battle.attack.Attack.TripleKick;
+import battle.attack.Attack.TropKick;
 import battle.attack.Attack.TrumpCard;
 import battle.attack.Attack.Twineedle;
 import battle.attack.Attack.Twister;
@@ -573,6 +628,7 @@ import battle.attack.Attack.VoltSwitch;
 import battle.attack.Attack.VoltTackle;
 import battle.attack.Attack.WakeUpSlap;
 import battle.attack.Attack.WaterGun;
+import battle.attack.Attack.WaterPledge;
 import battle.attack.Attack.WaterPulse;
 import battle.attack.Attack.WaterShuriken;
 import battle.attack.Attack.WaterSport;
@@ -596,6 +652,7 @@ import battle.attack.Attack.XScissor;
 import battle.attack.Attack.Yawn;
 import battle.attack.Attack.ZapCannon;
 import battle.attack.Attack.ZenHeadbutt;
+import battle.attack.Attack.ZingZap;
 import main.Global;
 import util.PokeString;
 
@@ -633,6 +690,7 @@ public enum AttackNamesies {
 	SLASH("Slash", Slash::new),
 	TAIL_WHIP("Tail Whip", TailWhip::new),
 	SOLAR_BEAM("Solar Beam", SolarBeam::new),
+	SOLAR_BLADE("Solar Blade", SolarBlade::new),
 	FLAMETHROWER("Flamethrower", Flamethrower::new),
 	FLY("Fly", Fly::new),
 	FIRE_SPIN("Fire Spin", FireSpin::new),
@@ -649,7 +707,9 @@ public enum AttackNamesies {
 	WATER_GUN("Water Gun", WaterGun::new),
 	RAPID_SPIN("Rapid Spin", RapidSpin::new),
 	REFLECT("Reflect", Reflect::new),
+	AURORA_VEIL("Aurora Veil", AuroraVeil::new),
 	SPIKY_SHIELD("Spiky Shield", SpikyShield::new),
+	BANEFUL_BUNKER("Baneful Bunker", BanefulBunker::new),
 	KINGS_SHIELD("King's Shield", KingsShield::new),
 	PROTECT("Protect", Protect::new),
 	DETECT("Detect", Detect::new),
@@ -669,6 +729,10 @@ public enum AttackNamesies {
 	PETAL_DANCE("Petal Dance", PetalDance::new),
 	THRASH("Thrash", Thrash::new),
 	HYPER_BEAM("Hyper Beam", HyperBeam::new),
+	FRENZY_PLANT("Frenzy Plant", FrenzyPlant::new),
+	BLAST_BURN("Blast Burn", BlastBurn::new),
+	HYDRO_CANNON("Hydro Cannon", HydroCannon::new),
+	PRISMATIC_LASER("Prismatic Laser", PrismaticLaser::new),
 	STRING_SHOT("String Shot", StringShot::new),
 	BUG_BITE("Bug Bite", BugBite::new),
 	HARDEN("Harden", Harden::new),
@@ -711,6 +775,7 @@ public enum AttackNamesies {
 	SUCKER_PUNCH("Sucker Punch", SuckerPunch::new),
 	CRUNCH("Crunch", Crunch::new),
 	SUPER_FANG("Super Fang", SuperFang::new),
+	NATURES_MADNESS("Nature's Madness", NaturesMadness::new),
 	SWORDS_DANCE("Swords Dance", SwordsDance::new),
 	PECK("Peck", Peck::new),
 	LEER("Leer", Leer::new),
@@ -771,6 +836,7 @@ public enum AttackNamesies {
 	GRAVITY("Gravity", Gravity::new),
 	MOONLIGHT("Moonlight", Moonlight::new),
 	STORED_POWER("Stored Power", StoredPower::new),
+	POWER_TRIP("Power Trip", PowerTrip::new),
 	MIMIC("Mimic", Mimic::new),
 	METEOR_MASH("Meteor Mash", MeteorMash::new),
 	IMPRISON("Imprison", Imprison::new),
@@ -942,6 +1008,7 @@ public enum AttackNamesies {
 	ROLLING_KICK("Rolling Kick", RollingKick::new),
 	JUMP_KICK("Jump Kick", JumpKick::new),
 	BRICK_BREAK("Brick Break", BrickBreak::new),
+	PSYCHIC_FANGS("Psychic Fangs", PsychicFangs::new),
 	HIGH_JUMP_KICK("High Jump Kick", HighJumpKick::new),
 	BLAZE_KICK("Blaze Kick", BlazeKick::new),
 	MEGA_KICK("Mega Kick", MegaKick::new),
@@ -955,12 +1022,15 @@ public enum AttackNamesies {
 	SKY_UPPERCUT("Sky Uppercut", SkyUppercut::new),
 	MEGA_PUNCH("Mega Punch", MegaPunch::new),
 	FOCUS_PUNCH("Focus Punch", FocusPunch::new),
+	SHELL_TRAP("Shell Trap", ShellTrap::new),
+	BEAK_BLAST("Beak Blast", BeakBlast::new),
 	ME_FIRST("Me First", MeFirst::new),
 	REFRESH("Refresh", Refresh::new),
 	POWER_WHIP("Power Whip", PowerWhip::new),
 	SMOG("Smog", Smog::new),
 	CLEAR_SMOG("Clear Smog", ClearSmog::new),
 	HAMMER_ARM("Hammer Arm", HammerArm::new),
+	ICE_HAMMER("Ice Hammer", IceHammer::new),
 	SOFT_BOILED("Soft-Boiled", SoftBoiled::new),
 	ANCIENT_POWER("Ancient Power", AncientPower::new),
 	TICKLE("Tickle", Tickle::new),
@@ -974,6 +1044,7 @@ public enum AttackNamesies {
 	MAGICAL_LEAF("Magical Leaf", MagicalLeaf::new),
 	POWER_SWAP("Power Swap", PowerSwap::new),
 	GUARD_SWAP("Guard Swap", GuardSwap::new),
+	SPEED_SWAP("Speed Swap", SpeedSwap::new),
 	COPYCAT("Copycat", Copycat::new),
 	TRANSFORM("Transform", Transform::new),
 	SUBSTITUTE("Substitute", Substitute::new),
@@ -1108,6 +1179,7 @@ public enum AttackNamesies {
 	BOLT_STRIKE("Bolt Strike", BoltStrike::new),
 	GLACIATE("Glaciate", Glaciate::new),
 	TECHNO_BLAST("Techno Blast", TechnoBlast::new),
+	MULTI_ATTACK("Multi-Attack", MultiAttack::new),
 	EXPLOSION("Explosion", Explosion::new),
 	SELF_DESTRUCT("Self-Destruct", SelfDestruct::new),
 	FLING("Fling", Fling::new),
@@ -1193,20 +1265,62 @@ public enum AttackNamesies {
 	BELCH("Belch", Belch::new),
 	VENOM_DRENCH("Venom Drench", VenomDrench::new),
 	ELECTRIC_TERRAIN("Electric Terrain", ElectricTerrain::new),
+	PSYCHIC_TERRAIN("Psychic Terrain", PsychicTerrain::new),
 	POWER_UP_PUNCH("Power-Up Punch", PowerUpPunch::new),
 	CONFIDE("Confide", Confide::new),
 	CUT("Cut", Cut::new),
 	DAZZLING_GLEAM("Dazzling Gleam", DazzlingGleam::new),
 	STRENGTH("Strength", Strength::new),
 	ORIGIN_PULSE("Origin Pulse", OriginPulse::new),
-	PRECIPICE_BLADES("Precipice Blades", PrecipiceBlades::new);
+	PRECIPICE_BLADES("Precipice Blades", PrecipiceBlades::new),
+	SHORE_UP("Shore Up", ShoreUp::new),
+	FLORAL_HEALING("Floral Healing", FloralHealing::new),
+	FIRST_IMPRESSION("First Impression", FirstImpression::new),
+	ANCHOR_SHOT("Anchor Shot", AnchorShot::new),
+	SPIRIT_SHACKLE("Spirit Shackle", SpiritShackle::new),
+	DARKEST_LARIAT("Darkest Lariat", DarkestLariat::new),
+	SPARKLING_ARIA("Sparkling Aria", SparklingAria::new),
+	HIGH_HORSEPOWER("High Horsepower", HighHorsepower::new),
+	STRENGTH_SAP("Strength Sap", StrengthSap::new),
+	LEAFAGE("Leafage", Leafage::new),
+	TOXIC_THREAD("Toxic Thread", ToxicThread::new),
+	LASER_FOCUS("Laser Focus", LaserFocus::new),
+	GEAR_UP("Gear Up", GearUp::new),
+	THROAT_CHOP("Throat Chop", ThroatChop::new),
+	POLLEN_PUFF("Pollen Puff", PollenPuff::new),
+	LUNGE("Lunge", Lunge::new),
+	FIRE_LASH("Fire Lash", FireLash::new),
+	BURN_UP("Burn Up", BurnUp::new),
+	SMART_STRIKE("Smart Strike", SmartStrike::new),
+	PURIFY("Purify", Purify::new),
+	REVELATION_DANCE("Revelation Dance", RevelationDance::new),
+	CORE_ENFORCER("Core Enforcer", CoreEnforcer::new),
+	TROP_KICK("Trop Kick", TropKick::new),
+	CLANGING_SCALES("Clanging Scales", ClangingScales::new),
+	DRAGON_HAMMER("Dragon Hammer", DragonHammer::new),
+	BRUTAL_SWING("Brutal Swing", BrutalSwing::new),
+	FLEUR_CANNON("Fleur Cannon", FleurCannon::new),
+	SHADOW_BONE("Shadow Bone", ShadowBone::new),
+	ACCELEROCK("Accelerock", Accelerock::new),
+	LIQUIDATION("Liquidation", Liquidation::new),
+	SPECTRAL_THIEF("Spectral Thief", SpectralThief::new),
+	SUNSTEEL_STRIKE("Sunsteel Strike", SunsteelStrike::new),
+	MOONGEIST_BEAM("Moongeist Beam", MoongeistBeam::new),
+	TEARFUL_LOOK("Tearful Look", TearfulLook::new),
+	ZING_ZAP("Zing Zap", ZingZap::new),
+	GRASS_PLEDGE("Grass Pledge", GrassPledge::new),
+	FIRE_PLEDGE("Fire Pledge", FirePledge::new),
+	WATER_PLEDGE("Water Pledge", WaterPledge::new),
+	STOMPING_TANTRUM("Stomping Tantrum", StompingTantrum::new),
+	HYPERSPACE_HOLE("Hyperspace Hole", HyperspaceHole::new),
+	STEAM_ERUPTION("Steam Eruption", SteamEruption::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
     private static final Map<AttackNamesies, Attack> attackMap = new EnumMap<>(AttackNamesies.class);
 
-	private String name;
-	private AttackCreator attackCreator;
+	private final String name;
+	private final AttackCreator attackCreator;
 
 	AttackNamesies(String name, AttackCreator attackCreator) {
 		this.name = name;

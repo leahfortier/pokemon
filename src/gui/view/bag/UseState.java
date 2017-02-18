@@ -1,11 +1,10 @@
 package gui.view.bag;
 
-import gui.button.Button;
+import draw.button.Button;
 import item.use.MoveUseItem;
-import item.use.TrainerUseItem;
+import item.use.PlayerUseItem;
 import main.Game;
 import pokemon.ActivePokemon;
-import trainer.CharacterData;
 
 import java.awt.Graphics;
 
@@ -99,9 +98,8 @@ enum UseState {
             otherState.clicked = false;
         }
 
-        if (this == UseState.USE && view.selectedItem.getItem() instanceof TrainerUseItem) {
-            CharacterData player = Game.getPlayer();
-            player.getBag().useItem(view.selectedItem, player);
+        if (this == UseState.USE && view.selectedItem.getItem() instanceof PlayerUseItem) {
+            Game.getPlayer().getBag().useItem(view.selectedItem);
         }
 
         view.updateActiveButtons();

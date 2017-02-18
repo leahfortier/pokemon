@@ -1,20 +1,21 @@
 package gui.view;
 
-import gui.button.Button;
-import gui.button.ButtonHoverAction;
+import draw.TextUtils;
 import gui.GameData;
 import gui.TileSet;
-import gui.panel.BasicPanels;
-import gui.panel.DrawPanel;
+import draw.button.Button;
+import draw.button.ButtonHoverAction;
+import draw.button.panel.BasicPanels;
+import draw.button.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
-import main.Type;
 import map.Direction;
 import pokemon.PC;
 import pokemon.PokemonInfo;
 import trainer.pokedex.Pokedex;
-import util.DrawUtils;
+import type.Type;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.PokeString;
 
@@ -25,7 +26,7 @@ import java.util.List;
 
 class PokedexView extends View {
 	private static final int PER_PAGE = PC.BOX_HEIGHT*PC.BOX_WIDTH;
-	private static final int NUM_PAGES = PokemonInfo.NUM_POKEMON/PER_PAGE;
+	private static final int NUM_PAGES = (int)Math.ceil((double)PokemonInfo.NUM_POKEMON/PER_PAGE);
 	
 	private static final int NUM_BUTTONS = PER_PAGE + 3;
 	private static final int RETURN = NUM_BUTTONS - 1;
@@ -50,11 +51,11 @@ class PokedexView extends View {
 	private int numSeen;
 	private int numCaught;
 	
-	private Button[] buttons;
-	private Button[][] pokemonButtons;
-	private Button leftButton;
-	private Button rightButton;
-	private Button returnButton;
+	private final Button[] buttons;
+	private final Button[][] pokemonButtons;
+	private final Button leftButton;
+	private final Button rightButton;
+	private final Button returnButton;
 	
 	PokedexView() {
 		pokedexPanel = new DrawPanel(40, 40, 350, 418)
@@ -166,11 +167,11 @@ class PokedexView extends View {
 		}
 				
 		if (returnButton.checkConsumePress()) {
-			Game.instance().setViewMode(ViewMode.MAP_VIEW);
+			Game.instance().popView();
 		}
 		
 		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
-			Game.instance().setViewMode(ViewMode.MAP_VIEW);
+			Game.instance().popView();
 		}
 	}
 
@@ -186,10 +187,15 @@ class PokedexView extends View {
 		pokedexPanel.drawBackground(g);
 		titlePanel.drawBackground(g);
 		titlePanel.label(g, 20, PokeString.POKEDEX);
-		
+
+		// TODO: Have unique constants for number of rows and columns
 		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
 			for (int j = 0; j < PC.BOX_WIDTH; j++) {
 				int number = getIndex(i, j) + 1;
+				if (number > PokemonInfo.NUM_POKEMON) {
+					continue;
+				}
+
 				PokemonInfo p = PokemonInfo.getPokemonInfo(number);
 				Button pokemonButton = pokemonButtons[j][i];
 
@@ -201,7 +207,7 @@ class PokedexView extends View {
 						pokemonButton.blackOutline(g);
 					}
 
-					pokemonButton.imageLabel(g, partyTiles.getTile(number));
+					pokemonButton.imageLabel(g, partyTiles.getTile(p.getTinyImageName()));
 
 					if (pokedex.isCaught(p.namesies())) {
 						BufferedImage pokeball = TileSet.TINY_POKEBALL;
@@ -219,7 +225,7 @@ class PokedexView extends View {
 		// Draw page numbers and arrows
 		g.setColor(Color.BLACK);
 		FontMetrics.setFont(g, 16);
-		DrawUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, pokedexPanel.centerX(), 433);
+		TextUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, pokedexPanel.centerX(), 433);
 
 		leftButton.drawArrow(g, Direction.LEFT);
 		rightButton.drawArrow(g, Direction.RIGHT);
@@ -251,7 +257,7 @@ class PokedexView extends View {
 			imagePanel.label(g, 80, "?");
 		}
 		else {
-			BufferedImage pkmImg = pokedexTiles.getTile(selected.getNumber());
+			BufferedImage pkmImg = pokedexTiles.getTile(selected.getBaseImageName());
 			pkmImg.setRGB(0, 0, 0);
 
 			imagePanel.imageLabel(g, pkmImg);
@@ -260,7 +266,7 @@ class PokedexView extends View {
 		g.setColor(Color.BLACK);
 		FontMetrics.setFont(g, 20);
 		g.drawString(notSeen ? "?????" : selected.getName(), 541, 82);
-		DrawUtils.drawRightAlignedString(g, "#" + String.format("%03d", selected.getNumber()), 740, 82);
+		TextUtils.drawRightAlignedString(g, "#" + String.format("%03d", selected.getNumber()), 740, 82);
 		
 		if (!notSeen) {
 			FontMetrics.setFont(g, 16);

@@ -1,9 +1,8 @@
 package battle.effect.generic;
 
 import battle.Battle;
-import battle.attack.MoveType;
 import battle.effect.TerrainEffect;
-import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
+import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
@@ -12,12 +11,12 @@ import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.status.StatusCondition;
-import main.Type;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
+import type.Type;
 
 public abstract class BattleEffect extends Effect {
 	private static final long serialVersionUID = 1L;
@@ -27,7 +26,7 @@ public abstract class BattleEffect extends Effect {
 
 	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 		if (printCast) {
-			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim)));
+			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim, source)));
 		}
 
 		b.addEffect(this);
@@ -39,7 +38,7 @@ public abstract class BattleEffect extends Effect {
 	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-	static class Gravity extends BattleEffect implements GroundedEffect, StageChangingEffect, BeforeTurnEffect {
+	static class Gravity extends BattleEffect implements GroundedEffect, StageChangingEffect {
 		private static final long serialVersionUID = 1L;
 
 		Gravity() {
@@ -56,7 +55,7 @@ public abstract class BattleEffect extends Effect {
 			removeLevitation(b, victim);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Gravity intensified!";
 		}
 
@@ -73,18 +72,8 @@ public abstract class BattleEffect extends Effect {
 			LevitationEffect.falllllllll(b, p);
 		}
 
-		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s, int stage) {
-			return s == Stat.EVASION ? stage - 2 : stage;
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			if (p.getAttack().isMoveType(MoveType.AIRBORNE)) {
-				b.printAttacking(p);
-				Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
-				return false;
-			}
-			
-			return true;
+		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
+			return s == Stat.EVASION ? -2 : 0;
 		}
 	}
 
@@ -103,7 +92,7 @@ public abstract class BattleEffect extends Effect {
 			return user.getAttackType() == Type.FIRE ? .33 : 1;
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Fire's power was weakened!";
 		}
 
@@ -127,7 +116,7 @@ public abstract class BattleEffect extends Effect {
 			return user.getAttackType() == Type.ELECTRIC ? .33 : 1;
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Electricity's power was weakened!";
 		}
 
@@ -162,7 +151,7 @@ public abstract class BattleEffect extends Effect {
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return user.getName() + " twisted the dimensions to switch defense and special defense!";
 		}
 
@@ -190,7 +179,7 @@ public abstract class BattleEffect extends Effect {
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return user.getName() + " twisted the dimensions to switch speeds!";
 		}
 
@@ -218,7 +207,7 @@ public abstract class BattleEffect extends Effect {
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return user.getName() + " twisted the dimensions to prevent using items!";
 		}
 
@@ -238,7 +227,7 @@ public abstract class BattleEffect extends Effect {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Mist swirled around the battlefield!";
 		}
 
@@ -291,7 +280,7 @@ public abstract class BattleEffect extends Effect {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Grass sprouted around the battlefield!";
 		}
 
@@ -342,7 +331,7 @@ public abstract class BattleEffect extends Effect {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Electricity crackled around the battlefield!";
 		}
 
@@ -380,6 +369,80 @@ public abstract class BattleEffect extends Effect {
 		public void subside(Battle b, ActivePokemon p) {
 			super.subside(b, p);
 			b.resetTerrain();
+		}
+	}
+
+	static class PsychicTerrain extends BattleEffect implements AttackBlocker, PowerChangeEffect, TerrainEffect {
+		private static final long serialVersionUID = 1L;
+
+		PsychicTerrain() {
+			super(EffectNamesies.PSYCHIC_TERRAIN, 5, 5, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(Effect.hasEffect(b.getEffects(), this.namesies));
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+			return "Psychic energy evelops the battlefield!!!";
+		}
+
+		public String getSubsideMessage(ActivePokemon victim) {
+			return "The psychic energy disappeared.";
+		}
+
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// Psychic terrain prevents increased priority moves from hitting
+			return b.getPriority(user, user.getAttack()) > 0 && !victim.isLevitating(b);
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// Psychic-type moves are 50% stronger with the psychic terrain
+			return user.getAttackType() == Type.PSYCHIC && !user.isLevitating(b) ? 1.5 : 1;
+		}
+
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+			// Remove all other Terrain Effects
+			for (int i = 0; i < b.getEffects().size(); i++) {
+				Effect effect = b.getEffects().get(i);
+				if (effect instanceof TerrainEffect) {
+					b.getEffects().remove(i);
+					i--;
+				}
+			}
+			
+			super.cast(b, caster, victim, source, printCast);
+			b.setTerrainType(TerrainType.PSYCHIC, false); // TODO: Need to send a terrain change message
+		}
+
+		public void subside(Battle b, ActivePokemon p) {
+			super.subside(b, p);
+			b.resetTerrain();
+		}
+	}
+
+	static class FieldUproar extends BattleEffect implements StatusPreventionEffect {
+		private static final long serialVersionUID = 1L;
+
+		FieldUproar() {
+			super(EffectNamesies.FIELD_UPROAR, -1, -1, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(Effect.hasEffect(b.getEffects(), this.namesies));
+		}
+
+		public boolean isActive(Battle b) {
+			// TODO: This should just be a super duper end turn effect and revert back to the old isActive system
+			return b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR);
+		}
+
+		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+			return status == StatusCondition.ASLEEP;
+		}
+
+		public String statusPreventionMessage(ActivePokemon victim) {
+			return "The uproar prevents sleep!!";
 		}
 	}
 }

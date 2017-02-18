@@ -119,7 +119,7 @@ public class PlayerEntity extends MovableEntity {
 				Entity newEntity = currentMap.getEntity(newLocation);
 				if (newEntity instanceof NPCEntity) {
 					NPCEntity npc = (NPCEntity) newEntity;
-					if (npc.canWalkToPlayer(this.getLocation())) {
+					if (npc.canWalkToPlayer()) {
 						this.stall();
 						npc.walkTowards(dist - 1, direction.getOpposite().getPathDirection());
 
@@ -163,6 +163,10 @@ public class PlayerEntity extends MovableEntity {
 	private boolean entityInteraction(Direction direction, MapData currentMap) {
 		Point newLocation = Point.add(this.getLocation(), direction.getDeltaPoint());
 		Entity entity = currentMap.getEntity(newLocation);
+
+		if (entity instanceof NPCEntity && ((NPCEntity)entity).hasTempPath()) {
+			return false;
+		}
 
 		if (entity != null && entity != currentInteractionEntity) {
 			entityDirection = direction;
@@ -239,12 +243,12 @@ public class PlayerEntity extends MovableEntity {
 		return null;
 	}
 
-	public void setPath(String path) {
-		super.setTempPath(path);
+	public void setPath(String path, EndPathListener listener) {
+		super.setTempPath(path, listener);
         this.stall();
 	}
 
-	public boolean isStalled() {
+	private boolean isStalled() {
         return this.stalled;
     }
 
@@ -276,10 +280,4 @@ public class PlayerEntity extends MovableEntity {
 		currentInteractionEntity = null;
 		this.unstall();
 	}
-
-	@Override
-	public void addData() {}
-
-	@Override
-	public void reset() {}
 }

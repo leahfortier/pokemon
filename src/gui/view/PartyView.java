@@ -2,23 +2,25 @@ package gui.view;
 
 import battle.attack.Attack;
 import battle.attack.Move;
-import gui.button.Button;
-import gui.button.ButtonHoverAction;
+import draw.ImageUtils;
+import draw.TextUtils;
 import gui.GameData;
 import gui.TileSet;
-import gui.panel.BasicPanels;
-import gui.panel.DrawPanel;
+import draw.button.Button;
+import draw.button.ButtonHoverAction;
+import draw.button.panel.BasicPanels;
+import draw.button.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
-import main.Type;
 import map.Direction;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import trainer.Trainer;
-import util.DrawUtils;
+import type.Type;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.Point;
 
@@ -84,7 +86,7 @@ class PartyView extends View {
 				.withBlackOutline();
 
 		basicInformationPanel = new DrawPanel(
-				imagePanel.x + imagePanel.width + spacing,
+				imagePanel.rightX() + spacing,
 				imagePanel.y,
 				pokemonPanel.width - 3*spacing - imagePanel.width,
 				imagePanel.height)
@@ -94,8 +96,8 @@ class PartyView extends View {
 		int barHeight = 15;
 		int expBarWidth = basicInformationPanel.width/3;
 		expBar = new DrawPanel(
-				basicInformationPanel.x + basicInformationPanel.width - expBarWidth,
-				basicInformationPanel.y + basicInformationPanel.height - DrawUtils.OUTLINE_SIZE,
+				basicInformationPanel.rightX() - expBarWidth,
+				basicInformationPanel.bottomY() - DrawUtils.OUTLINE_SIZE,
 				expBarWidth,
 				barHeight)
 				.withBlackOutline();
@@ -128,10 +130,10 @@ class PartyView extends View {
 				.withBlackOutline();
 
 		movesPanel = new DrawPanel(
-				abilityPanel.x + abilityPanel.width + spacing,
+				abilityPanel.rightX() + spacing,
 				abilityPanel.y,
 				halfPanelWidth,
-				statsPanel.y + statsPanel.height - abilityPanel.y)
+				statsPanel.bottomY() - abilityPanel.y)
 				.withFullTransparency()
 				.withBlackOutline();
 
@@ -203,7 +205,7 @@ class PartyView extends View {
 		}
 		
 		if (returnButton.checkConsumePress()) {
-			Game.instance().setViewMode(ViewMode.MAP_VIEW);
+			Game.instance().popView();
 		}
 		
 		if (switchButton.checkConsumePress()) {
@@ -212,7 +214,7 @@ class PartyView extends View {
 		}
 		
 		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
-			Game.instance().setViewMode(ViewMode.MAP_VIEW);
+			Game.instance().popView();
 		}
 	}
 
@@ -229,7 +231,7 @@ class PartyView extends View {
 		Type[] type = selectedPkm.getActualType();
 
 		// Draw type color polygons
-		pokemonPanel.withBackgroundColors(Type.getColors(selectedPkm));
+		pokemonPanel.withBackgroundColors(Type.getColors(selectedPkm), true);
 		if (!selectedPkm.canFight()) {
 			pokemonPanel.greyOut();
 		}
@@ -239,7 +241,7 @@ class PartyView extends View {
 		// Draw Pokemon Image
 		imagePanel.drawBackground(g);
 		TileSet pkmTiles = data.getPokemonTilesSmall();
-		BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageIndex());
+		BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageName());
 		imagePanel.imageLabel(g, pkmImg);
 
 		// Draw basic information panel
@@ -259,7 +261,7 @@ class PartyView extends View {
 			FontMetrics.setFont(g, 16);
 			
 			// Description
-			DrawUtils.drawWrappedText(g, selectedPkm.getEggMessage(),
+			TextUtils.drawWrappedText(g, selectedPkm.getEggMessage(),
 					basicInformationPanel.x + inset,
 					topLineY + inset + FontMetrics.getTextHeight(g),
 					basicInformationPanel.width - 2*inset);
@@ -279,24 +281,24 @@ class PartyView extends View {
 			int secondLineY = topLineY + inset + FontMetrics.getTextHeight(g);
 			int thirdLineY = secondLineY + inset + FontMetrics.getTextHeight(g);
 			int fourthLineY = thirdLineY + inset + FontMetrics.getTextHeight(g);
-			int rightAlignedX = basicInformationPanel.x + basicInformationPanel.width - inset;
+			int rightAlignedX = basicInformationPanel.rightX() - inset;
 
 			// Type Tiles
-			DrawUtils.drawTypeTiles(g, type, rightAlignedX, topLineY);
+			ImageUtils.drawTypeTiles(g, type, rightAlignedX, topLineY);
 			
 			// Nature
 			g.drawString(selectedPkm.getNature().getName() +" Nature", nameX, secondLineY);
 			
 			// Total EXP
 			g.drawString("EXP:", levelX, secondLineY);
-			DrawUtils.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), rightAlignedX, secondLineY);
+			TextUtils.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), rightAlignedX, secondLineY);
 			
 			// Characteristic
 			g.drawString(selectedPkm.getCharacteristic(), nameX, thirdLineY);
 			
 			// EXP To Next Level
 			g.drawString("To Next Lv:", levelX, thirdLineY);
-			DrawUtils.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), rightAlignedX, thirdLineY);
+			TextUtils.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), rightAlignedX, thirdLineY);
 			
 			// Held Item
 			g.drawString(selectedPkm.getActualHeldItem().getName(), nameX, fourthLineY);
@@ -343,9 +345,9 @@ class PartyView extends View {
 				}
 
 				int drawY = firstRowY + (i + 1)*spacing;
-				DrawUtils.drawRightAlignedString(g, statString, 285, drawY);
-				DrawUtils.drawRightAlignedString(g, "" + ivs[i], 327, drawY);
-				DrawUtils.drawRightAlignedString(g, "" + evs[i], 371, drawY);
+				TextUtils.drawRightAlignedString(g, statString, 285, drawY);
+				TextUtils.drawRightAlignedString(g, "" + ivs[i], 327, drawY);
+				TextUtils.drawRightAlignedString(g, "" + evs[i], 371, drawY);
 			}
 
 			// HP Bar
@@ -387,16 +389,16 @@ class PartyView extends View {
 					
 					// PP
 					g.drawString("PP:", middleX, firstY);
-					DrawUtils.drawRightAlignedString(g, move.getPP() + "/" + move.getMaxPP(), rightAlignedMiddleX, firstY);
+					TextUtils.drawRightAlignedString(g, move.getPP() + "/" + move.getMaxPP(), rightAlignedMiddleX, firstY);
 					
 					// Accuracy
 					FontMetrics.setFont(g, 12);
 					g.drawString("Accuracy:", moveInset, secondY);
-					DrawUtils.drawRightAlignedString(g, attack.getAccuracyString(), moveInset + 93, secondY);
+					TextUtils.drawRightAlignedString(g, attack.getAccuracyString(), moveInset + 93, secondY);
 					
 					// Power
 					g.drawString("Power:", middleX, secondY);
-					DrawUtils.drawRightAlignedString(g, attack.getPowerString(), rightAlignedMiddleX, secondY);
+					TextUtils.drawRightAlignedString(g, attack.getPowerString(), rightAlignedMiddleX, secondY);
 
 					BufferedImage typeImage = move.getAttack().getActualType().getImage();
 					int imageX = movePanel.width - moveInset - typeImage.getWidth();
@@ -433,12 +435,7 @@ class PartyView extends View {
 			Button tabButton = tabButtons[i];
 
 			// Color tab
-			int colorIndex = 0;
-			if (i == tabButtons.length - 1 && pkm.isDualTyped()) {
-				colorIndex = 1;
-			}
-
-			tabButton.fill(g, Type.getColors(pkm)[colorIndex]);
+			tabButton.fill(g, Type.getColors(pkm)[0]);
 
 			// Fade out fainted Pokemon
 			if (!pkm.canFight()) {
@@ -456,8 +453,8 @@ class PartyView extends View {
 			g.setColor(Color.BLACK);
 			g.drawString(pkm.getActualName(), 40, 34);
 			
-			pkmImg = partyTiles.getTile(pkm.getTinyImageIndex());
-			DrawUtils.drawCenteredImage(g, pkmImg, 19, 26);
+			pkmImg = partyTiles.getTile(pkm.getTinyImageName());
+			ImageUtils.drawCenteredImage(g, pkmImg, 19, 26);
 			
 			g.translate(-tabButton.x, -tabButton.y);
 		}

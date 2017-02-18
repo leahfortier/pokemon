@@ -1,0 +1,93 @@
+{
+  "areas": [
+    {
+      "terrain": "BUILDING",
+      "music": "TRANSITION_BUILDING"
+    }
+  ],
+  "mapTransitions": [
+    {
+      "exitName": "EastDoor",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "RSA Town",
+        "mapName": "Bloom_Filter_Meadow"
+      },
+      "nextEntrance": "WestTransitionBuilding",
+      "location": [
+        {
+          "x": 11,
+          "y": 4
+        },
+        {
+          "x": 11,
+          "y": 3
+        },
+        {
+          "x": 11,
+          "y": 2
+        }
+      ],
+      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoor_01"
+    },
+    {
+      "exitName": "WestDoor",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "Tomasulo Town",
+        "mapName": "Tom_Town"
+      },
+      "nextEntrance": "EastTransitionBuilding",
+      "location": [
+        {
+          "x": 1,
+          "y": 4
+        },
+        {
+          "x": 1,
+          "y": 3
+        },
+        {
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoor_01"
+    }
+  ],
+  "NPCs": [
+    {
+      "name": "Info_Guy",
+      "path": "w",
+      "spriteIndex": 10,
+      "direction": "DOWN",
+      "interactions": [],
+      "location": {
+        "x": 6,
+        "y": 1
+      },
+      "triggerName": "BFM_TomTown_TransitionBuilding_NPC_Info_Guy_01"
+    }
+  ],
+  "items": [],
+  "miscEntities": [
+    {
+      "name": "Info_Guy_Dialogue",
+      "actions": [
+        {
+          "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
+        }
+      ],
+      "location": {
+        "x": 6,
+        "y": 2
+      },
+      "triggerName": "BFM_TomTown_TransitionBuilding_TriggerEntity_Info_Guy_Dialogue_01"
+    }
+  ],
+  "events": [],
+  "wildBattles": [],
+  "fishingSpots": []
+}

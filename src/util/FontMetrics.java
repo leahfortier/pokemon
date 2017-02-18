@@ -40,7 +40,7 @@ public class FontMetrics {
         return (text.length() + 2)*fontMetrics.horizontalSpacing;
     }
 
-    static FontMetrics getFontMetrics(int fontSize) {
+    public static FontMetrics getFontMetrics(int fontSize) {
         if (fontMetricsMap == null) {
             loadFontMetricsMap();
         }
@@ -106,7 +106,7 @@ public class FontMetrics {
         return (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR);
     }
 
-    int getTextLength(String s) {
+    public int getTextLength(String s) {
         return s.length()*this.getHorizontalSpacing();
     }
 
@@ -114,7 +114,7 @@ public class FontMetrics {
         return this.horizontalSpacing;
     }
 
-    int getLetterHeight() {
+    public int getLetterHeight() {
         return this.letterHeight;
     }
 

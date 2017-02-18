@@ -1,11 +1,11 @@
 package map.entity;
 
+import draw.TileUtils;
 import gui.view.map.MapView;
 import map.Condition;
 import map.Direction;
 import map.MapData;
 import map.triggers.TriggerType;
-import util.DrawUtils;
 import util.Point;
 
 import java.awt.Graphics;
@@ -24,6 +24,10 @@ public abstract class Entity {
 
 		this.entityName = entityName;
 		this.condition = new Condition(condition);
+	}
+
+	public boolean isHighPriorityEntity() {
+		return true;
 	}
 
 	public Point getLocation() {
@@ -56,21 +60,28 @@ public abstract class Entity {
 			return;
 		}
 
-		DrawUtils.drawEntityTileImage(g, this.getFrame(), this.getCanvasCoordinates(drawLocation));
+		BufferedImage image = this.getFrame();
+		if (image != null) {
+			TileUtils.drawEntityTileImage(g, image, this.getCanvasCoordinates(drawLocation));
+		}
 	}
 
 	protected Point getCanvasCoordinates(Point drawLocation) {
-		return DrawUtils.getDrawLocation(this.location, drawLocation);
+		return TileUtils.getDrawLocation(this.location, drawLocation);
 	}
 
-	public abstract void update(int dt, MapData currentMap, MapView view);
+	public void update(int dt, MapData currentMap, MapView view) {}
+	public void getAttention(Direction direction) {}
+	public void reset() {}
+	public void addData() {}
 
-	protected abstract BufferedImage getFrame();
-	protected abstract boolean isTransitioning();
+	protected BufferedImage getFrame() {
+		return null;
+	}
 
-	public abstract void getAttention(Direction direction);
-	public abstract void addData();
-	public abstract void reset();
+	protected boolean isTransitioning() {
+		return false;
+	}
 
 	public String getEntityName() {
 		return this.entityName;

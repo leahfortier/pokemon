@@ -34,6 +34,8 @@ public class BattleAttributes implements Serializable {
 	private boolean firstTurn;
 	private boolean attacking;
 	private boolean used;
+	private boolean lastMoveSucceeded;
+	private Object castSource;
 	
 	public BattleAttributes() {
 		resetStages();
@@ -45,8 +47,18 @@ public class BattleAttributes implements Serializable {
 		damageTaken = 0;
 		firstTurn = true;
 		attacking = false;
+		lastMoveSucceeded = true;
+		castSource = null;
 	}
-	
+
+	public void setCastSource(Object castSource) {
+		this.castSource = castSource;
+	}
+
+	public Object getCastSource() {
+		return this.castSource;
+	}
+
 	public void setAttacking(boolean isAttacking) {
 		attacking = isAttacking;
 	}
@@ -54,8 +66,16 @@ public class BattleAttributes implements Serializable {
 	public boolean isAttacking() {
 		return attacking;
 	}
+
+	void setLastMoveSucceeded(boolean lastMoveSucceeded) {
+		this.lastMoveSucceeded = lastMoveSucceeded;
+	}
+
+	public boolean lastMoveSucceeded() {
+		return this.lastMoveSucceeded;
+	}
 	
-	public void setFirstTurn(boolean isFirstTurn) {
+	void setFirstTurn(boolean isFirstTurn) {
 		firstTurn = isFirstTurn;
 	}
 	
@@ -145,6 +165,10 @@ public class BattleAttributes implements Serializable {
 	public void addEffect(PokemonEffect e) {
 		effects.add(e);
 	}
+
+	public boolean removeEffect(PokemonEffect effect) {
+		return effects.remove(effect);
+	}
 	
 	public boolean removeEffect(EffectNamesies effect) {
 		return Effect.removeEffect(effects, effect);
@@ -158,17 +182,26 @@ public class BattleAttributes implements Serializable {
 	public boolean hasEffect(EffectNamesies effect) {
 		return Effect.hasEffect(effects, effect);
 	}
-	
-	public int getStage(int index) {
-		return stages[index];
+
+	public int getStage(Stat stat) {
+		return this.stages[stat.index()];
 	}
 	
-	public void setStage(int index, int val) {
+	public void setStage(Stat stat, int val) {
+		int index = stat.index();
 		stages[index] = val;
+
+		// Don't let it go out of bounds, yo!
+		stages[index] = Math.min(Stat.MAX_STAT_CHANGES, stages[index]);
+		stages[index] = Math.max(-1*Stat.MAX_STAT_CHANGES, stages[index]);
 	}
-	
+
+	public void incrementStage(Stat stat, int val) {
+		setStage(stat, getStage(stat) + val);
+	}
+
 	public void resetStage(Stat stat) {
-		stages[stat.index()] = 0;
+		setStage(stat, 0);
 	}
 	
 	public boolean modifyStage(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source) {
@@ -176,6 +209,7 @@ public class BattleAttributes implements Serializable {
 		
 		switch (source) {
 			case ATTACK:
+			case USE_ITEM:
 				message = victim.getName() + "'s {statName} was {change}!";
 				break;
 			case ABILITY:
@@ -184,8 +218,6 @@ public class BattleAttributes implements Serializable {
 			case HELD_ITEM:
 				message = caster.getName() + "'s " + caster.getHeldItem(b).getName() + " {change} {victimName} {statName}!";
 				break;
-			case USE_ITEM:
-				break; // Don't print anything for these, they will be handled manually
 			case EFFECT:
 				Global.error("Effect message should be handled manually using the other modifyStage method.");
 				break;
@@ -204,8 +236,7 @@ public class BattleAttributes implements Serializable {
 		if (victim.isFainted(b)) {
 			return false;
 		}
-		
-		int index = stat.index();
+
 		String statName = stat.getName();
 		boolean print = source == CastSource.ATTACK && caster.getAttack().canPrintFail(); 
 
@@ -229,7 +260,7 @@ public class BattleAttributes implements Serializable {
 		}
 		
 		// Too High
-		if (stages[index] == Stat.MAX_STAT_CHANGES && val > 0) {
+		if (getStage(stat) == Stat.MAX_STAT_CHANGES && val > 0) {
 			if (print) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + statName + " cannot be raised any higher!"));
 			}
@@ -238,7 +269,7 @@ public class BattleAttributes implements Serializable {
 		}
 		
 		// HOW LOW CAN YOU GO?!
-		if (stages[index] == -1*Stat.MAX_STAT_CHANGES && val < 0) {
+		if (getStage(stat) == -1*Stat.MAX_STAT_CHANGES && val < 0) {
 			// THIS LOW
 			if (print) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + statName + " cannot be lowered any further!"));
@@ -271,12 +302,8 @@ public class BattleAttributes implements Serializable {
 				.replace("{change}", change)
 				.replace("{victimName}", victimName);
 		Messages.add(new MessageUpdate(message));
-		
-		stages[index] += val;
-		
-		// Don't let it go out of bounds, yo!
-		stages[index] = Math.min(Stat.MAX_STAT_CHANGES, stages[index]);
-		stages[index] = Math.max(-1*Stat.MAX_STAT_CHANGES, stages[index]);
+
+		this.incrementStage(stat, val);
 		
 		// Defiant raises Attack stat by two when a stat is lowered by the opponent
 		if (val < 0 && caster != victim) {
@@ -288,12 +315,21 @@ public class BattleAttributes implements Serializable {
 	
 	public int totalStatIncreases() {
 		int sum = 0;
-		for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
-			if (stages[i] > 0) {
-				sum += stages[i];
+		for (Stat stat : Stat.BATTLE_STATS) {
+			int stage = getStage(stat);
+			if (stage > 0) {
+				sum += stage;
 			}
 		}
 		
 		return sum;
+	}
+
+	public void swapStages(Stat stat, ActivePokemon other) {
+		int userStat = this.getStage(stat);
+		int victimStat = other.getAttributes().getStage(stat);
+
+		this.setStage(stat, victimStat);
+		other.getAttributes().setStage(stat, userStat);
 	}
 }

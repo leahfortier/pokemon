@@ -1,10 +1,10 @@
 package pattern.map;
 
+import item.ItemNamesies;
 import map.Condition;
 import map.entity.Entity;
 import map.entity.ItemEntity;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import item.ItemNamesies;
 import pattern.generic.EntityMatcher;
 import pattern.generic.SinglePointTriggerMatcher;
 

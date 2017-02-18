@@ -3,11 +3,10 @@ package message;
 import battle.Battle;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
+import gui.view.ViewMode;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
-import gui.view.ViewMode;
 import main.Game;
-import main.Type;
 import message.Messages.MessageState;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
@@ -16,6 +15,7 @@ import pokemon.PokemonInfo;
 import pokemon.Stat;
 import sound.SoundPlayer;
 import sound.SoundTitle;
+import type.Type;
 import util.StringUtils;
 
 public class MessageUpdate {
@@ -131,7 +131,6 @@ public class MessageUpdate {
 	
 	// Show stat gains
 	public MessageUpdate withStatGains(int[] gains, int[] stats) {
-		maxHP = stats[Stat.HP.index()];
 		statGains = gains;
 		newStats = stats;
 		updateType = Update.STAT_GAIN;

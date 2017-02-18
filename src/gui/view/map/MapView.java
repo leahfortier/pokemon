@@ -1,8 +1,11 @@
 package gui.view.map;
 
 import battle.Battle;
+import draw.TextUtils;
+import draw.TileUtils;
 import gui.GameData;
 import gui.TileSet;
+import gui.IndexTileSet;
 import gui.view.View;
 import gui.view.ViewMode;
 import main.Game;
@@ -10,6 +13,7 @@ import main.Global;
 import map.AreaData;
 import map.Direction;
 import map.MapData;
+import map.MapName;
 import map.PathDirection;
 import map.TerrainType;
 import map.entity.Entity;
@@ -22,7 +26,7 @@ import message.Messages;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.Point;
 import util.StringUtils;
@@ -41,7 +45,7 @@ public class MapView extends View {
 			PathDirection.UP
     };
 
-	private String currentMapName;
+	private MapName currentMapName;
 	private AreaData currentArea;
 	private MapData currentMap;
 	private SoundTitle currentMusicTitle;
@@ -56,7 +60,7 @@ public class MapView extends View {
 	private MessageUpdate currentMessage;
 	
 	public MapView() {
-		currentMapName = StringUtils.empty();
+		currentMapName = null;
 		setState(VisualState.MAP);
 
 		areaDisplayTime = 0;
@@ -78,14 +82,13 @@ public class MapView extends View {
 		return this.currentMessage;
 	}
 
-	TerrainType getTerrain() {
-		return this.currentArea.getTerrain();
+	TerrainType getBattleTerrain() {
+		return Game.getPlayer().isFishing() ? TerrainType.WATER : this.currentArea.getTerrain();
 	}
 
 	@Override
 	public void draw(Graphics g) {
 		DrawUtils.fillCanvas(g, Color.BLACK);
-
 		drawTiles(g);
 
 		if (currentArea != null) {
@@ -102,7 +105,7 @@ public class MapView extends View {
 
 	private void drawTiles(Graphics g) {
 		GameData data = Game.getData();
-		TileSet mapTiles = data.getMapTiles();
+		IndexTileSet mapTiles = data.getMapTiles();
 
 		// Background
 		for (int y = start.y; y < end.y; y++) {
@@ -110,7 +113,7 @@ public class MapView extends View {
 				int bgTile = currentMap.getBgTile(x,y);
 				if (TileSet.isValidMapTile(bgTile)) {
 					BufferedImage img = mapTiles.getTile(bgTile);
-					DrawUtils.drawTileImage(g, img, x, y, draw);
+					TileUtils.drawTileImage(g, img, x, y, draw);
 				}
 			}
 		}
@@ -123,7 +126,7 @@ public class MapView extends View {
 				int fgTile = currentMap.getFgTile(x, y);
 				if (TileSet.isValidMapTile(fgTile)) {
 					BufferedImage img = mapTiles.getTile(fgTile);
-					DrawUtils.drawTileImage(g, img, x, y, draw);
+					TileUtils.drawTileImage(g, img, x, y, draw);
 				}
 
 				// Draw entities
@@ -158,9 +161,14 @@ public class MapView extends View {
 	}
 
 	private void drawAreaTransitionAnimation(Graphics g) {
+		String areaName = currentArea.getAreaName();
+		if (StringUtils.isNullOrEmpty(areaName)) {
+			return;
+		}
+
 		int fontSize = 30;
 		
-		int insideWidth = FontMetrics.getSuggestedWidth(currentArea.getAreaName(), fontSize);
+		int insideWidth = FontMetrics.getSuggestedWidth(areaName, fontSize);
 		int insideHeight = FontMetrics.getSuggestedHeight(fontSize);
 		
 		int borderSize = 2;
@@ -194,7 +202,7 @@ public class MapView extends View {
 
 		g.setColor(Color.BLACK);
 		FontMetrics.setFont(g, fontSize);
-		DrawUtils.drawCenteredString(g, currentArea.getAreaName(), 0, yValue, totalWidth, totalHeight);
+		TextUtils.drawCenteredString(g, currentArea.getAreaName(), 0, yValue, totalWidth, totalHeight);
 	}
 
 	@Override
@@ -219,7 +227,7 @@ public class MapView extends View {
 			areaDisplayTime = AREA_NAME_ANIMATION_LIFESPAN;
 		}
 
-		player.setAreaName(areaName);
+		player.setArea(currentMapName, area);
 		currentArea = area;
 
 		// Queue to play new area's music.
@@ -264,7 +272,7 @@ public class MapView extends View {
 		GameData data = Game.getData();
 		CharacterData player = Game.getPlayer();
 
-		if (!currentMapName.equals(player.getMapName()) || player.mapReset()) {
+		if (player.mapReset() || currentMapName == null || !currentMapName.equals(player.getMapName())) {
 			currentMapName = player.getMapName();
 			currentMap = data.getMap(currentMapName);
 
@@ -323,7 +331,7 @@ public class MapView extends View {
 
 	public void setBattle(Battle battle, boolean seenWild) {
 		this.setState(VisualState.BATTLE);
-		VisualState.setBattle(battle, seenWild, this.getTerrain());
+		VisualState.setBattle(battle, seenWild, this.getBattleTerrain());
 	}
 
 	@Override

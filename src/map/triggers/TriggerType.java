@@ -10,6 +10,7 @@ public enum TriggerType {
     CHANGE_VIEW(ChangeViewTrigger.class, ChangeViewTrigger::new),
     CHOICE(ChoiceTrigger.class, ChoiceTrigger::new),
     DIALOGUE(DialogueTrigger.class, DialogueTrigger::new),
+    FISHING(FishingTrigger.class, FishingTrigger::new),
     GIVE_ITEM(GiveItemTrigger.class, GiveItemTrigger::new),
     GIVE_POKEMON(GivePokemonTrigger.class, GivePokemonTrigger::new),
     GLOBAL(GlobalTrigger.class, GlobalTrigger::new),
@@ -19,9 +20,11 @@ public enum TriggerType {
     MAP_TRANSITION(MapTransitionTrigger.class, MapTransitionTrigger::new, MapTransitionTrigger::getTriggerSuffix),
     MOVE_NPC(MoveNPCTrigger.class, MoveNPCTrigger::new),
     MOVE_PLAYER(MovePlayerTrigger.class, MovePlayerTrigger::new),
+    RELOAD_MAP(ReloadMapTrigger.class, ReloadMapTrigger::new),
     SOUND(SoundTrigger.class, SoundTrigger::new),
     TRAINER_BATTLE(TrainerBattleTrigger.class, TrainerBattleTrigger::new),
     UPDATE(UpdateTrigger.class, UpdateTrigger::new),
+    WALKING_WILD_BATTLE(WalkingWildBattleTrigger.class, WalkingWildBattleTrigger::new),
     WILD_BATTLE(WildBattleTrigger.class, WildBattleTrigger::new);
 
     private final TriggerPrefixGetter triggerPrefixGetter;

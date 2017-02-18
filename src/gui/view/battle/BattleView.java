@@ -2,9 +2,10 @@ package gui.view.battle;
 
 import battle.Battle;
 import battle.attack.Move;
-import gui.button.Button;
-import gui.panel.BasicPanels;
-import gui.panel.DrawPanel;
+import draw.TextUtils;
+import draw.button.Button;
+import draw.button.panel.BasicPanels;
+import draw.button.panel.DrawPanel;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
@@ -16,7 +17,7 @@ import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import pokemon.ActivePokemon;
-import util.DrawUtils;
+import draw.DrawUtils;
 import util.FontMetrics;
 import util.StringUtils;
 
@@ -62,7 +63,7 @@ public class BattleView extends View {
 		largeMenuPanel = new DrawPanel(0, 160, 417, 440).withBorderPercentage(3).withBlackOutline();
 
 		// Back Button
-		backButton = new Button(750, 560, 35, 20, null);
+		backButton = new Button(750, 560, 35, 20);
 	}
 
 	public void drawLargeMenuPanel(Graphics g) {
@@ -309,7 +310,7 @@ public class BattleView extends View {
 		g.drawString(move.getAttack().getName(), 10, 26);
 
 		FontMetrics.setFont(g, 18);
-		DrawUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
+		TextUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
 
 		BufferedImage categoryImage = move.getAttack().getCategory().getImage();
 		g.drawImage(categoryImage, 12, 32, null);

@@ -1,7 +1,7 @@
 package map.triggers;
 
-import main.Game;
 import gui.view.ViewMode;
+import main.Game;
 import util.PokeString;
 
 class ChangeViewTrigger extends Trigger {

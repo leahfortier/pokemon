@@ -5,9 +5,8 @@ import battle.attack.AttackNamesies;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.status.StatusCondition;
 import main.Game;
-import main.Global;
-import main.Type;
 import pokemon.Stat;
+import type.Type;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -22,7 +21,8 @@ public enum TerrainType {
     SNOW(Type.ICE, AttackNamesies.FROST_BREATH, StatusCondition.FROZEN),
     ICE(Type.ICE, AttackNamesies.ICE_BEAM, StatusCondition.FROZEN),
     MISTY(Type.FAIRY, AttackNamesies.MOONBLAST, Stat.SP_ATTACK),
-    ELECTRIC(Type.ELECTRIC, AttackNamesies.THUNDERBOLT, StatusCondition.PARALYZED);
+    ELECTRIC(Type.ELECTRIC, AttackNamesies.THUNDERBOLT, StatusCondition.PARALYZED),
+    PSYCHIC(Type.PSYCHIC, AttackNamesies.PSYCHIC, Stat.SP_DEFENSE); // TODO: Don't have this information yet so I made this up
 
     private final Type type;
     private final Attack attack;
@@ -31,28 +31,32 @@ public enum TerrainType {
     private final int[] statChanges;
     private final List<EffectNamesies> effects;
 
-    TerrainType(Type type, AttackNamesies attack, Object effect) {
+    TerrainType(Type type, AttackNamesies attack, StatusCondition statusCondition) {
+        this(type, attack, statusCondition, null, null);
+    }
+
+    TerrainType(Type type, AttackNamesies attack, Stat toLower) {
+        this(type, attack, StatusCondition.NO_STATUS, toLower, null);
+    }
+
+    TerrainType(Type type, AttackNamesies attack, EffectNamesies effect) {
+        this(type, attack, StatusCondition.NO_STATUS, null, effect);
+    }
+
+    TerrainType(Type type, AttackNamesies attack, StatusCondition statusCondition, Stat toLower, EffectNamesies effect) {
         this.type = type;
         this.attack = attack.getAttack();
 
+        this.status = statusCondition;
         this.statChanges = new int[Stat.NUM_BATTLE_STATS];
         this.effects = new ArrayList<>();
 
-        if (effect instanceof StatusCondition) {
-            this.status = (StatusCondition)effect;
+        if (toLower != null) {
+            this.statChanges[toLower.index()] = -1;
         }
-        else {
-            this.status = StatusCondition.NO_STATUS;
 
-            if (effect instanceof Stat) {
-                this.statChanges[((Stat)effect).index()] = -1;
-            }
-            else if (effect instanceof EffectNamesies) {
-                this.effects.add((EffectNamesies) effect);
-            }
-            else {
-                Global.error("Invalid effect for terrain type " + this.name());
-            }
+        if (effect != null) {
+            this.effects.add(effect);
         }
     }
 

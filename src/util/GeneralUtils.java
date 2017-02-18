@@ -3,6 +3,10 @@ package util;
 import main.Global;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public final class GeneralUtils {
 
@@ -81,5 +85,29 @@ public final class GeneralUtils {
         }
 
         return (int)max;
+    }
+
+    public static int[] sixIntArray(Scanner in) {
+        int[] arr = new int[6];
+        for (int i = 0; i < 6; i++) {
+            arr[i] = in.nextInt();
+        }
+
+        return arr;
+    }
+
+    public static <T extends Enum<T>> List<T> arrayValueOf(Class<T> enumType, String[] contents) {
+        return Arrays.stream(contents)
+                .map(value -> Enum.valueOf(enumType, PokeString.getNamesiesString(value)))
+                .collect(Collectors.toList());
+    }
+
+    public static <T> Iterator<T> pageIterator(Iterable<T> list, int pageNum, int buttonsPerPage) {
+        Iterator<T> iterator = list.iterator();
+        for (int i = 0; i < pageNum*buttonsPerPage; i++) {
+            iterator.next();
+        }
+
+        return iterator;
     }
 }

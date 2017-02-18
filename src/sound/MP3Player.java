@@ -10,7 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 class MP3Player extends Thread {
-	private String mp3FileName;
+	private final String mp3FileName;
 	private Player player;
 	private boolean loop;
 	

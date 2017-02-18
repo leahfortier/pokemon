@@ -3,12 +3,12 @@ package battle.effect.status;
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
-import main.Type;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import type.Type;
 
 class Burned extends Status implements EndTurnEffect, StatChangingEffect {
     private static final long serialVersionUID = 1L;
@@ -27,8 +27,9 @@ class Burned extends Status implements EndTurnEffect, StatChangingEffect {
     }
 
     // Fire-type Pokemon cannot be burned
-    public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return super.applies(b, caster, victim) && !victim.isType(b, Type.FIRE);
+    @Override
+    protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        return !victim.isType(b, Type.FIRE);
     }
 
     public String getCastMessage(ActivePokemon p) {
@@ -43,7 +44,7 @@ class Burned extends Status implements EndTurnEffect, StatChangingEffect {
         return (int)(stat*(s == Stat.ATTACK && !p.hasAbility(AbilityNamesies.GUTS) ? .5 : 1));
     }
 
-    public String getRemoveMessage(ActivePokemon victim) {
+    public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " is no longer burned!";
     }
 

@@ -9,12 +9,12 @@ import util.FileName;
 import util.Folder;
 import util.StringUtils;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.PrintStream;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
@@ -26,16 +26,19 @@ public class StuffGen {
 		new StuffGen();
 
 //		pokemonInfoStuff();
-//		compareMoves();
 
 		System.out.println("GEN GEN GEN");
 	}
 
 	private StuffGen() {
-		new PokeGen();
+		this(new InputFormatter());
+	}
+
+	public StuffGen(InputFormatter inputFormatter) {
+		new PokeGen(inputFormatter);
 		new NamesiesGen(Folder.POKEMON, PokemonNamesies.class);
 		baseEvolutionGenerator();
-		
+
 		new InterfaceGen();
 
 		FontMetricsGen.writeFontMetrics();
@@ -59,60 +62,19 @@ public class StuffGen {
 		return out;
 	}
 	
-	static String replaceBody(String body, String fieldValue, String className, String superClass) {
-		body = body.replace("@ClassName", className);
-		body = body.replace("@SuperClass", superClass.toUpperCase());
-		
-		body = body.replace("{0}", fieldValue);
-		body = body.replace("{00}", fieldValue.toUpperCase());
-		
-		String[] mcSplit = fieldValue.split(" ");
-		for (int i = 0; i < mcSplit.length; i++) {
-			body = body.replace(String.format("{%d}", i + 1), mcSplit[i]);
-			body = body.replace(String.format("{%d%d}", i + 1, i + 1), mcSplit[i].toUpperCase());
-			body = body.replace(String.format("{%d_}", i + 1), mcSplit[i].replaceAll("_", " "));
-			
-			String pattern = String.format("{%d-}", i + 1);
-			if (body.contains(pattern)) {
-				if (i + 1 == 1) {
-					Global.error("Don't use {1-}, instead use {0} (ClassName = " + className + ")");
-				}
-				
-				String text = mcSplit[i];
-				for (int j = i + 1; j < mcSplit.length; j++) {
-					if (body.contains("{" + (j + 1))) {
-						Global.error(j + " Cannot have any more parameters once you split through. (ClassName = " + className + ")");
-					}
-					
-					text += " " + mcSplit[j];
-				}
-				
-				body = body.replace(pattern, text);
-			}
-		}
-		
-		return body;
-	}
-	
-	static Map<String, String> readFields(Scanner in, String className) {
-		Map<String, String> fields = new HashMap<>();
-		
+	static ClassFields readFields(Scanner in) {
+		ClassFields fields = new ClassFields();
 		while (in.hasNextLine()) {
 			String line = in.nextLine().trim();
 			if (line.equals("*")) {
 				break;
 			}
-			
+
 			Entry<String, String> pair = getFieldPair(in, line);
 			
 			String key = pair.getKey();
 			String value = pair.getValue();
-			
-			if (fields.containsKey(key)) {
-				Global.error("Repeated field " + key + " for " + className);
-			}
-
-			fields.put(key, value);
+			fields.addNew(key, value);
 		}
 		
 		return fields;
@@ -128,7 +90,7 @@ public class StuffGen {
 		String value = split[1].trim();
 		
 		if (value.isEmpty()) {
-			value = readFunction(in);
+			value = readMethod(in);
 		}
 		
 		return new SimpleEntry<>(key, value);
@@ -200,7 +162,7 @@ public class StuffGen {
 		return accessModifier + " " + classType + " " + className;
 	}
 	
-	private static String readFunction(Scanner in) {
+	private static String readMethod(Scanner in) {
 		StringBuilder method = new StringBuilder();
 		MethodFormatter formatter = new MethodFormatter(2);
 		
@@ -222,8 +184,10 @@ public class StuffGen {
 			set.add(PokemonInfo.getPokemonInfo(i).namesies());
 		}
 
-		set.remove(PokemonNamesies.MANAPHY);
 		set.remove(PokemonNamesies.SHEDINJA); // TODO
+		set.remove(PokemonNamesies.MANAPHY);
+		set.remove(PokemonNamesies.TYPE_NULL);
+		set.remove(PokemonNamesies.COSMOG);
 
 		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
 			PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
@@ -261,34 +225,30 @@ public class StuffGen {
 			out.println(in.nextLine()); // Base Stats
 			out.println(in.nextLine()); // Base Exp
 			out.println(in.nextLine()); // Growth Rate
-			out.println(in.nextLine()); // Type1 Type2
+			out.println(in.nextLine()); // Types
 			out.println(in.nextLine()); // Catch Rate
 			out.println(in.nextLine()); // EVs
-			readEvolution(in, out); // Evolution
-			readHoldItems(in, out); // Wild Items
+			readEvolution(in, out);     // Evolution
+			readHoldItems(in, out);     // Wild Items
 			out.println(in.nextLine()); // Male Ratio
-			out.println(in.nextLine()); // Ability 1
-			out.println(in.nextLine()); // Ability 2
+			out.println(in.nextLine()); // Abilities
 			out.println(in.nextLine()); // Classification
 			out.println(in.nextLine()); // Height Weight FlavorText
 			out.println(in.nextLine()); // Egg Steps
 			out.println(in.nextLine()); // Egg Groups
-			readMoves(in, out); // Level Up Moves
-			readMoves(in, out); // TM Moves
-			readMoves(in, out); // Egg Moves
-			readMoves(in, out); // Move Tutor Moves
-			
+			readMoves(in, out);    // Level Up Moves
+			readMoves(in, out); // Learnable Moves
 			out.println(in.nextLine()); // New Line
 		}
 	}
-	
+
 	private static void readMoves(Scanner in, PrintStream out) {
 		int numMoves = in.nextInt();
-		out.println(numMoves); // Number of Moves 
+		out.println(numMoves); // Number of Moves
 		in.nextLine();
-		
+
 		for (int i = 0; i < numMoves; i++) {
-			out.println(in.nextLine()); // Each move and level
+			out.println(in.nextLine()); // Each move
 		}
 	}
 	
@@ -311,40 +271,54 @@ public class StuffGen {
 		int num = in.nextInt();
 		out.println(num);
 		in.nextLine();
-		for (int i = 0; i < num; i++) 
+
+		for (int i = 0; i < num; i++) {
 			out.println(in.nextLine());
-	}
-	
-	private static void generatePokemonTileIndices() {
-		StringBuilder out = new StringBuilder();
-		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-			out.append(String.format("%03d.png %08x%n", i, i*4));
-			out.append(String.format("%03d-back.png %08x%n", i, i*4 + 1));
-			
-			if (i >= 650) {
-				out.append(String.format("%03d.png %08x%n", i, i*4 + 2));
-				out.append(String.format("%03d-back.png %08x%n", i, i*4 + 3));
-			}
-			else {
-				out.append(String.format("%03d-shiny.png %08x%n", i, i*4 + 2));
-				out.append(String.format("%03d-shiny-back.png %08x%n", i, i*4 + 3));				
-			}
 		}
-		
-		out.append("pokeball.png 00011111\n");
-		out.append("egg.png 00010000\n");
-		
-		FileIO.writeToFile(FileName.POKEMON_TILES_INDEX, out);
 	}
-	
-	private static void generatePokemonPartyTileIndices() {
-		StringBuilder out = new StringBuilder();
-		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-			out.append(String.format("%03d-small.png %08x%n", i, i));
+
+	private static void trimImages(String inputLocation, String outputLocation) {
+		File folder = new File(inputLocation);
+		for (File file : folder.listFiles()) {
+			if (file.isDirectory()) {
+				continue;
+			}
+
+			BufferedImage image = FileIO.readImage(file);
+			int empty = image.getRGB(0, 0); // This assumes the top right corner is blank just FYI...
+
+			int leftmost = image.getWidth();
+			int topmost = image.getHeight();
+			int rightmost = 0;
+			int bottommost = 0;
+
+			for (int i = 0; i < image.getWidth(); i++)  {
+				for (int j = 0; j < image.getHeight(); j++) {
+					if (image.getRGB(i, j) != empty) {
+						leftmost = Math.min(i, leftmost);
+						rightmost = Math.max(i, rightmost);
+						topmost = Math.min(j, topmost);
+						bottommost = Math.max(j, bottommost);
+					}
+				}
+			}
+
+
+			String oldName = file.getName();
+
+			// First three characters -- make sure it's an integer
+			String newName = Integer.parseInt(oldName.substring(0, 3)) + "";
+
+			if (oldName.contains("s")) {
+				newName += "-shiny";
+			}
+
+			if (oldName.contains("b")) {
+				newName += "-back";
+			}
+
+			File f = new File(outputLocation + "\\" + newName + ".png");
+			FileIO.writeImage(image.getSubimage(leftmost, topmost, rightmost - leftmost, bottommost - topmost), f);
 		}
-		
-		out.append("egg-small.png 00010000\n");
-		
-		FileIO.writeToFile(FileName.PARTY_TILES_INDEX, out);
 	}
 }

@@ -5,10 +5,9 @@ import battle.attack.Move;
 import item.Item;
 import item.ItemNamesies;
 import item.use.BallItem;
-import item.use.BattleUseItem;
 import item.use.MoveUseItem;
 import item.use.PokemonUseItem;
-import item.use.TrainerUseItem;
+import item.use.PlayerUseItem;
 import item.use.UseItem;
 import main.Game;
 import main.Global;
@@ -16,7 +15,6 @@ import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
-import trainer.Trainer;
 
 import java.io.Serializable;
 import java.util.EnumMap;
@@ -29,9 +27,11 @@ public class Bag implements Serializable {
 
 	private static final String DEFAULT_FAIL_MESSAGE = "It won't have any effect.";
 
-	private Map<ItemNamesies, Integer> items; // Item -> quantity
-	private Map<BagCategory, Set<ItemNamesies>> bag;
-	private Map<BattleBagCategory, Set<ItemNamesies>> battleBag;
+	private final Map<ItemNamesies, Integer> items; // Item -> quantity
+	private final Map<BagCategory, Set<ItemNamesies>> bag;
+	private final Map<BattleBagCategory, Set<ItemNamesies>> battleBag;
+
+	// TODO: This doesn't work for Pokemon Use Items -- it automatically selects the front Pokemon
 	private ItemNamesies lastUsedItem; // Only for battle
 	
 	public Bag() {
@@ -147,9 +147,9 @@ public class Bag implements Serializable {
 
 	}
 	
-	public boolean useItem(ItemNamesies item, Trainer trainer) {
+	public boolean useItem(ItemNamesies item) {
 		Item useItem = item.getItem();
-		if (useItem instanceof TrainerUseItem && ((TrainerUseItem)useItem).use(trainer)) {
+		if (useItem instanceof PlayerUseItem && ((PlayerUseItem) useItem).use()) {
 			removeItem(item);
 			return true;
 		}
@@ -177,12 +177,7 @@ public class Bag implements Serializable {
 
 		// Try to use the item
 		UseItem useItem = (UseItem) itemValue;
-		final boolean success;
-		if (move == null) {
-			success = ((PokemonUseItem)useItem).use(p);
-		} else {
-			success = ((MoveUseItem)useItem).use(p, move);
-		}
+		final boolean success = useItem.use(null, p, move);
 
 		// :(
 		if (!success) {
@@ -191,8 +186,7 @@ public class Bag implements Serializable {
 		}
 
 		// Item successfully used -- display success messages to the user and remove this item from the bag
-		Messages.add(new MessageUpdate(Game.getPlayer().getName() + " used the " + item.getName() + "!"));
-		Messages.add(new MessageUpdate(useItem.getSuccessMessage(p)));
+		Messages.addToFront(new MessageUpdate(Game.getPlayer().getName() + " used the " + item.getName() + "!"));
 		removeItem(item);
 		return true;
 	}
@@ -209,29 +203,20 @@ public class Bag implements Serializable {
 		CharacterData player = Game.getPlayer();
 
 		Item useItem = item.getItem();
-		final boolean used;
-		if (useItem instanceof BattleUseItem) {
-			used = ((BattleUseItem) useItem).use(activePokemon, battle);
-		} else if (useItem instanceof PokemonUseItem) {
-			used = ((PokemonUseItem) useItem).use(activePokemon);
-		} else if (useItem instanceof BallItem) {
+		boolean used = false;
+		if (useItem instanceof BallItem) {
 			used = player.catchPokemon(battle, (BallItem) useItem);
-		} else {
-			used = false;
+		}
+		else if (useItem.isUsable()) {
+			used = ((UseItem) useItem).use(battle, activePokemon, null);
+			if (used && player.front() == activePokemon) {
+				Messages.add(new MessageUpdate().updatePokemon(battle, activePokemon));
+			}
 		}
 
 		if (used) {
-			if (useItem instanceof UseItem) {
-				boolean front = player.front() == activePokemon;
+			Messages.addToFront(new MessageUpdate(Game.getPlayer().getName() + " used the " + item.getName() + "!"));
 
-				Messages.add(new MessageUpdate(player.getName() + " used " + useItem.getName() + "!"));
-				Messages.add(new MessageUpdate(((UseItem)useItem).getSuccessMessage(activePokemon)));
-				
-				if (front) {
-					Messages.add(new MessageUpdate().updatePokemon(battle, activePokemon));
-				}
-			}
-			
 			if (items.get(item) > 1) {
 				lastUsedItem = item;
 			}
@@ -241,7 +226,7 @@ public class Bag implements Serializable {
 			
 			removeItem(item);
 		}
-		else if (useItem instanceof UseItem) {
+		else if (useItem.isUsable()) {
 			Messages.add(new MessageUpdate(DEFAULT_FAIL_MESSAGE));
 		}
 

@@ -91,6 +91,10 @@ public class GUIUtils {
         return component;
     }
 
+    public static <T> JComboBox<T> createComboBox(T[] values) {
+        return createComboBox(values, null);
+    }
+
     public static <T> JComboBox<T> createComboBox(T[] values, ActionListener actionListener) {
         JComboBox<T> comboBox = new JComboBox<>();
         comboBox.setModel(new DefaultComboBoxModel<>(values));

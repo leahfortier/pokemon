@@ -2,6 +2,7 @@ package map.triggers;
 
 import main.Game;
 import map.PathDirection;
+import map.entity.movable.PlayerEntity;
 
 class MovePlayerTrigger extends Trigger {
     private final String path;
@@ -14,6 +15,7 @@ class MovePlayerTrigger extends Trigger {
 
     @Override
     protected void executeTrigger() {
-        Game.getPlayer().getEntity().setPath(this.path);
+        PlayerEntity playerEntity = Game.getPlayer().getEntity();
+        playerEntity.setPath(this.path, playerEntity::unstall);
     }
 }

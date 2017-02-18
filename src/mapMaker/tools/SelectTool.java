@@ -1,9 +1,9 @@
 package mapMaker.tools;
 
-import mapMaker.MapMaker;
+import draw.TileUtils;
 import mapMaker.EditType;
+import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
-import util.DrawUtils;
 import util.Point;
 
 import java.awt.Color;
@@ -35,7 +35,7 @@ public class SelectTool extends Tool {
             return;
         }
 
-        Point location = DrawUtils.getLocation(clickLocation, mapMaker.getMapLocation());
+        Point location = TileUtils.getLocation(clickLocation, mapMaker.getMapLocation());
         for (int currX = 0; currX < copiedTiles.getWidth(); currX++) {
             for (int currY = 0; currY < copiedTiles.getHeight(); currY++) {
                 int val = copiedTiles.getRGB(currX, currY);
@@ -56,7 +56,7 @@ public class SelectTool extends Tool {
         pressed = false;
         select();
 
-        Point mouseHoverLocation = DrawUtils.getLocation(releasedLocation, mapMaker.getMapLocation());
+        Point mouseHoverLocation = TileUtils.getLocation(releasedLocation, mapMaker.getMapLocation());
         this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.getCurrentMapSize());
     }
 
@@ -72,7 +72,7 @@ public class SelectTool extends Tool {
 //				return;
 //			}
 
-        this.startLocation = DrawUtils.getLocation(pressedLocation, mapMaker.getMapLocation());
+        this.startLocation = TileUtils.getLocation(pressedLocation, mapMaker.getMapLocation());
 
         pressed = true;
         deselect();
@@ -95,7 +95,7 @@ public class SelectTool extends Tool {
             return;
         }
 
-        Point mouseHoverLocation = DrawUtils.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
+        Point mouseHoverLocation = TileUtils.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
 
         if (!selected) {
             this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.getCurrentMapSize());
@@ -114,15 +114,15 @@ public class SelectTool extends Tool {
                     if (mapMaker.isEditType(EditType.BACKGROUND) || mapMaker.isEditType(EditType.FOREGROUND)) {
                         BufferedImage image = mapMaker.getTileFromSet(TileType.MAP, val);
                         if (image != null) {
-                            DrawUtils.drawTileImage(g, image, previewLocation, mapMaker.getMapLocation());
+                            TileUtils.drawTileImage(g, image, previewLocation, mapMaker.getMapLocation());
                         }
                     } else if (mapMaker.isEditType(EditType.MOVE_MAP) || mapMaker.isEditType(EditType.AREA_MAP)) {
-                        DrawUtils.outlineTile(g, previewLocation, mapMaker.getMapLocation(), new Color(val));
+                        TileUtils.outlineTile(g, previewLocation, mapMaker.getMapLocation(), new Color(val));
                     }
                 }
             }
 
-            DrawUtils.outlineTileRed(g, mouseHoverLocation, mapMaker.getMapLocation());
+            TileUtils.outlineTileRed(g, mouseHoverLocation, mapMaker.getMapLocation());
         }
     }
 

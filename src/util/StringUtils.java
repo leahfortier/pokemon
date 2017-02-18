@@ -22,13 +22,29 @@ public class StringUtils {
         return isNullOrWhiteSpace(s) ? null : s;
     }
 
+    // Adds a new line to the beginning of a non-empty string
+    public static String preNewLine(final String s) {
+        return isNullOrEmpty(s) ? empty() : "\n" + s;
+    }
+
+    // Adds a new line to a non-empty string
+    public static String addNewLine(final String s) {
+        return isNullOrEmpty(s) ? empty() : s + "\n";
+    }
+
     // Adds a space to a non-empty string
     public static String addSpace(final String s) {
         return isNullOrEmpty(s) ? empty() : s + " ";
     }
 
-    public static String addLeadingComma(final String s) {
-        return isNullOrEmpty(s) ? empty() : ", " + s;
+    public static void addCommaSeparatedValue(final StringBuilder builder, String newString) {
+        if (!isNullOrEmpty(newString)) {
+            if (builder.length() > 0) {
+                builder.append(", ");
+            }
+
+            builder.append(newString);
+        }
     }
 
     public static void appendLine(final StringBuilder builder, final String message) {
@@ -76,6 +92,15 @@ public class StringUtils {
         return builder.toString();
     }
 
+    public static String spaceSeparated(Object... values) {
+        StringBuilder builder = new StringBuilder();
+        for (Object value : values) {
+            builder.append(value).append(" ");
+        }
+
+        return builder.toString();
+    }
+
     // TODO: Look at this again and rewrite it
     public static String properCase(String string) {
         if (isNullOrEmpty(string)) {
@@ -106,7 +131,7 @@ public class StringUtils {
                 string = "";
             }
             else {
-                s.append(string.substring(0,index) + c);
+                s.append(string.substring(0, index)).append(c);
                 string = string.substring(index + 1, string.length());
             }
         }

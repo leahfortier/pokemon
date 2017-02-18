@@ -6,11 +6,11 @@ import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ActivePokemon;
-import pokemon.breeding.Breeding;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
+import pokemon.breeding.Breeding;
 import util.StringUtils;
 
 import java.util.Arrays;
@@ -274,10 +274,7 @@ public class BreedingTest extends Breeding {
     }
 
     private static ActivePokemon getParent(final PokemonNamesies pokemon, final Gender gender) {
-        ActivePokemon parent = new ActivePokemon(pokemon, 100, false, false);
-        parent.setGender(gender);
-
-        return parent;
+        return new TestPokemon(pokemon).withGender(gender);
     }
 
     private static ActivePokemon getParentWithItem(final PokemonNamesies pokemon, final Gender gender, final ItemNamesies item) {

@@ -16,11 +16,11 @@ public abstract class Effect implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected EffectNamesies namesies;
+	protected final EffectNamesies namesies;
 	protected boolean active;
 
 	protected int numTurns;
-	private boolean nextTurnSubside;
+	private final boolean nextTurnSubside;
 
 	public Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
 		// TODO: Should have a constant for -1
@@ -45,10 +45,10 @@ public abstract class Effect implements Serializable {
 	}
 	
 	// Returns the effect if it is in the list, otherwise returns null
-	public static Effect getEffect(List<? extends Effect> effects, EffectNamesies effect) {
-		for (Effect e : effects) {
-			if (e.namesies() == effect && e.isActive()) {
-				return e;
+	public static Effect getEffect(List<? extends Effect> effects, EffectNamesies effectNamesies) {
+		for (Effect effect : effects) {
+			if (effect.namesies() == effectNamesies) {
+				return effect;
 			}
 		}
 			
@@ -62,9 +62,9 @@ public abstract class Effect implements Serializable {
 	public static boolean removeEffect(List<? extends Effect> effects, EffectNamesies effectToRemove) {
 		return effects.removeIf(effect -> effect.namesies() == effectToRemove);
 	}
-	
-	public static boolean isInactiveEffect(Object object) {
-		return object instanceof Effect && !((Effect)object).isActive();
+
+	public static boolean isActiveEffect(Object object, Battle b) {
+		return !(object instanceof Effect) || ((Effect)object).isActive(b);
 	}
 	
 	public void deactivate() {
@@ -86,6 +86,15 @@ public abstract class Effect implements Serializable {
 			active = false;
 		}
 	}
+
+	public boolean apply(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+		if (this.applies(b, caster, victim, source)) {
+			this.cast(b, caster, victim, source, printCast);
+			return true;
+		}
+
+		return false;
+	}
 	
 	// Should be overriden by subclasses as deemed appropriate
 	public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
@@ -104,7 +113,7 @@ public abstract class Effect implements Serializable {
 	// TODO: Move this it's in a weird place and I'm a psycho for location
 	public abstract void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast);
 	
-	public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+	public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 		return StringUtils.empty();
 	}
 	
@@ -124,7 +133,7 @@ public abstract class Effect implements Serializable {
 		return namesies.getName();
 	}
 	
-	public boolean isActive() {
+	public boolean isActive(Battle b) {
 		return active;
 	}
 	

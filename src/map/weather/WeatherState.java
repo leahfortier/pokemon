@@ -1,6 +1,6 @@
 package map.weather;
 
-import util.DrawUtils;
+import draw.DrawUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;

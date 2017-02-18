@@ -1,8 +1,8 @@
 package mapMaker.tools;
 
-import util.DrawUtils;
-import util.Point;
+import draw.TileUtils;
 import mapMaker.MapMaker;
+import util.Point;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,7 +10,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class Rectangle {
-    private boolean inBoundsRequired;
+    private final boolean inBoundsRequired;
 
     private Point upperLeftRectangleCoordinate;
     private Dimension dimension;
@@ -33,12 +33,10 @@ public class Rectangle {
                 lowerRightRectangleCoordinate.x - this.upperLeftRectangleCoordinate.x + 1,
                 lowerRightRectangleCoordinate.y - this.upperLeftRectangleCoordinate.y + 1
         );
-
-        System.out.println("New rectangle with dimension " + this.dimension.width + " " + this.dimension.height);
     }
 
     void outlineRed(Graphics g, Point mapLocation) {
-        DrawUtils.outlineTiles(g, this.upperLeftRectangleCoordinate, mapLocation, Color.RED, this.dimension);
+        TileUtils.outlineTiles(g, this.upperLeftRectangleCoordinate, mapLocation, Color.RED, this.dimension);
     }
 
     BufferedImage getImage(BufferedImage currentImage) {

@@ -1,11 +1,15 @@
 package mapMaker;
 
+import draw.ImageUtils;
+import draw.TileUtils;
 import map.MapDataType;
+import map.MapName;
 import map.WalkType;
+import mapMaker.dialogs.AreaDialog;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.TileModel;
 import mapMaker.model.TileModel.TileType;
-import util.DrawUtils;
+import pattern.map.AreaMatcher;
 import util.FileIO;
 import util.Point;
 
@@ -16,7 +20,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -25,7 +28,7 @@ import java.util.Map.Entry;
 public class EditMapMetaData {
     private static final Dimension DEFAULT_MAP_SIZE = new Dimension(10, 10);
 
-    private String currentMapName;
+    private MapName currentMapName;
     private Dimension currentMapSize;
 
     private Map<MapDataType, BufferedImage> currentMap;
@@ -42,7 +45,7 @@ public class EditMapMetaData {
         this.saved = true;
     }
 
-    public String getMapName() {
+    public MapName getMapName() {
         return this.currentMapName;
     }
 
@@ -60,7 +63,7 @@ public class EditMapMetaData {
 
     private void resetMaps() {
         for (MapDataType dataType : MapDataType.values()) {
-            this.currentMap.put(dataType, DrawUtils.createNewImage(this.currentMapSize));
+            this.currentMap.put(dataType, ImageUtils.createNewImage(this.currentMapSize));
         }
 
         Graphics g = this.getMapImage(MapDataType.MOVE).getGraphics();
@@ -69,14 +72,17 @@ public class EditMapMetaData {
         g.dispose();
     }
 
-    public void createNewMap(MapMaker mapMaker, String mapName) {
+    public void createNewMap(MapMaker mapMaker, MapName mapName) {
         currentMapName = mapName;
 
         currentMapSize = DEFAULT_MAP_SIZE;
         this.resetMaps();
 
+        AreaMatcher defaultArea = new AreaDialog(null).getMatcher(mapMaker);
+
         // Create empty trigger data structure
-        triggerData = new MapMakerTriggerData(mapMaker);
+        triggerData = new MapMakerTriggerData(mapMaker, defaultArea);
+        MapMakerModel.getAreaModel().loadMap(this.triggerData);
 
         save(mapMaker);
     }
@@ -90,7 +96,7 @@ public class EditMapMetaData {
         FileIO.createFolder(mapFolderPath);
 
         for (MapDataType dataType : MapDataType.values()) {
-            String mapFileName = mapFolderPath + dataType.getImageName(this.currentMapName);
+            String mapFileName = mapFolderPath + dataType.getImageName(currentMapName.getMapName());
             FileIO.writeImage(this.getMapImage(dataType), mapFileName);
         }
 
@@ -100,19 +106,19 @@ public class EditMapMetaData {
         saved = true;
     }
 
-    public void loadPreviousMap(MapMaker mapMaker, String mapName) {
+    public void loadPreviousMap(MapMaker mapMaker, MapName mapName) {
         this.currentMapName = mapName;
 
-        final String mapFolderPath = mapMaker.getMapFolderPath(currentMapName);
-        this.currentMap = MapDataType.getImageMap(mapFolderPath, currentMapName);
-
-        MapMakerModel.getAreaModel().resetMap();
+        final String mapFolderPath = mapMaker.getMapFolderPath(mapName);
+        this.currentMap = MapDataType.getImageMap(mapFolderPath, currentMapName.getMapName());
 
         BufferedImage mapBackground = this.getMapImage(MapDataType.BACKGROUND);
         this.currentMapSize = new Dimension(mapBackground.getWidth(), mapBackground.getHeight());
 
-        String mapTextFileName = mapFolderPath + currentMapName + ".txt";
+        String mapTextFileName = mapFolderPath + mapName.getMapName() + ".txt";
         this.triggerData = new MapMakerTriggerData(mapMaker, mapTextFileName);
+        MapMakerModel.getAreaModel().loadMap(this.triggerData);
+
         this.saved = true;
     }
 
@@ -190,11 +196,11 @@ public class EditMapMetaData {
                 int val = getTile(location, type);
 
                 if (type == MapDataType.MOVE || type == MapDataType.AREA) {
-                    DrawUtils.fillTile(g2d, location, mapLocation, new Color(val, true));
+                    TileUtils.fillTile(g2d, location, mapLocation, new Color(val, true));
                 }
                 else if (type != null && tileModel.containsTile(TileType.MAP, val)) {
                     BufferedImage image = tileModel.getTile(TileType.MAP, val);
-                    DrawUtils.drawTileImage(g2d, image, location, mapLocation);
+                    TileUtils.drawTileImage(g2d, image, location, mapLocation);
                 }
             }
         }

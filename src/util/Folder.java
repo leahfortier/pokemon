@@ -25,13 +25,11 @@ public abstract class Folder {
     public static final String GENERATOR = FileIO.makeFolderPath(REC, "generator");
     public static final String SOUND = FileIO.makeFolderPath(REC, "snd");
 
-    // Image resources
-    public static final String TILES = FileIO.makeFolderPath(IMAGES, "tiles");
-    public static final String ATTACK_TILES = FileIO.makeFolderPath(IMAGES, "attackTiles");
-    public static final String TYPE_TILES = FileIO.makeFolderPath(IMAGES, "typeTiles");
-    public static final String BAG_TILES = FileIO.makeFolderPath(IMAGES, "bagTiles");
-
     // Tile set folders
+    public static final String TILES = FileIO.makeFolderPath(IMAGES, "tiles");
+    public static final String ATTACK_TILES = FileIO.makeFolderPath(TILES, "attackTiles");
+    public static final String TYPE_TILES = FileIO.makeFolderPath(TILES, "typeTiles");
+    public static final String BAG_TILES = FileIO.makeFolderPath(TILES, "bagTiles");
     public static final String TERRAIN_TILES = FileIO.makeFolderPath(TILES, "terrainTiles");
     public static final String POKEMON_TILES = FileIO.makeFolderPath(TILES, "pokemonTiles");
     public static final String POKEDEX_TILES = FileIO.makeFolderPath(TILES, "pokedexTiles");

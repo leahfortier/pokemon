@@ -1,13 +1,19 @@
 package battle.effect.status;
 
+import battle.Battle;
 import pokemon.ActivePokemon;
 import util.StringUtils;
 
 class NoStatus extends Status {
     private static final long serialVersionUID = 1L;
 
-    public NoStatus() {
+    NoStatus() {
         super(StatusCondition.NO_STATUS);
+    }
+
+    @Override
+    protected boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        return victim.getHP() > 0;
     }
 
     public String getCastMessage(ActivePokemon p) {
@@ -18,7 +24,7 @@ class NoStatus extends Status {
         return StringUtils.empty();
     }
 
-    public String getRemoveMessage(ActivePokemon victim) {
+    public String getGenericRemoveMessage(ActivePokemon victim) {
         return StringUtils.empty();
     }
 

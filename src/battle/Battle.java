@@ -1,13 +1,14 @@
 package battle;
 
+import battle.attack.Attack;
 import battle.attack.Move;
-import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.DefiniteEscape;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
+import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
@@ -20,6 +21,8 @@ import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
+import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
+import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
@@ -27,7 +30,6 @@ import battle.effect.generic.Weather;
 import item.ItemNamesies;
 import main.Game;
 import main.Global;
-import main.Type;
 import map.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -44,6 +46,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
+import type.TypeAdvantage;
 import util.PokeString;
 import util.RandomUtils;
 
@@ -52,11 +55,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class Battle {
-	private CharacterData player;
-	private Opponent opponent; // SO OBJECT-ORIENTED
+	private final CharacterData player;
+	private final Opponent opponent; // SO OBJECT-ORIENTED
 
-	private Weather weather;
 	private List<BattleEffect> effects;
+	private Weather weather;
 
 	private int turn;
 	private boolean firstAttacking;
@@ -68,35 +71,37 @@ public class Battle {
 	private TerrainType baseTerrain;
 	private TerrainType currentTerrain;
 	
-	public Battle(Opponent o) {
+	public Battle(Opponent opponent) {
 		Messages.clearMessages(MessageState.FIGHTY_FIGHT);
 		Messages.setMessageState(MessageState.FIGHTY_FIGHT);
 		Messages.add(new MessageUpdate().withUpdate(Update.ENTER_BATTLE));
 
-		player = Game.getPlayer();
-		opponent = o;
-		effects = new ArrayList<>();
-		player.resetEffects();
-		opponent.resetEffects();
+		this.player = Game.getPlayer();
+		this.opponent = opponent;
+
+		this.effects = new ArrayList<>();
+		this.player.resetEffects();
+		this.opponent.resetEffects();
+
 		turn = 0;
 		escapeAttempts = 0;
 		firstAttacking = false;
 		weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
-		player.enterBattle();
 
-		if (opponent instanceof Trainer) {
-			Trainer opponentTrainer = (Trainer) opponent;
+		this.player.enterBattle();
+		if (this.opponent instanceof Trainer) {
+			Trainer opponentTrainer = (Trainer) this.opponent;
 			opponentTrainer.enterBattle();
 			Messages.add(new MessageUpdate(opponentTrainer.getName() + " wants to fight!"));
 			opponentTrainer.setAction(Action.FIGHT);
-			enterBattle(opponent.front());
+			enterBattle(this.opponent.front());
 		}
 		else {
-			ActivePokemon wildPokemon = opponent.front();
+			ActivePokemon wildPokemon = this.opponent.front();
 			enterBattle(wildPokemon, "Wild " + wildPokemon.getName() + " appeared!");
 		}
 
-		enterBattle(player.front());
+		enterBattle(this.player.front());
 	}
 
 	public Battle(EnemyTrainer npcTrainer, UpdateMatcher npcUpdateInteraction) {
@@ -134,6 +139,9 @@ public class Battle {
 		}
 
 		this.currentTerrain = terrainType;
+
+		TerrainCastEffect.invokeTerrainCastEffect(this, player.front(), terrainType);
+		TerrainCastEffect.invokeTerrainCastEffect(this, opponent.front(), terrainType);
 	}
 
 	public void resetTerrain() {
@@ -148,18 +156,14 @@ public class Battle {
 		startTurn();
 
 		boolean playerFirst = speedPriority(player.front(), opponent.front());
-
-		final ActivePokemon attackFirst;
-		final ActivePokemon attackSecond;
-
 		if (playerFirst) {
-			attackFirst = player.front();
-			attackSecond = opponent.front();
+			fight(player.front(), opponent.front());
 		} else {
-			attackFirst = opponent.front();
-			attackSecond = player.front();
+			fight(opponent.front(), player.front());
 		}
+	}
 
+	protected void fight(ActivePokemon attackFirst, ActivePokemon attackSecond) {
 		// First turn
 		firstAttacking = true;
 		executionSolution(attackFirst, attackSecond);
@@ -170,13 +174,13 @@ public class Battle {
 
 		endTurn();
 
-		deadUser();
 		deadOpponent();
+		deadUser();
 
 		printShit();
 	}
 
-	private void printShit() {
+	protected void printShit() {
 		for (PokemonEffect e : player.front().getEffects()) {
 			System.out.println("P " + e);
 		}
@@ -201,13 +205,17 @@ public class Battle {
 			System.out.println("W " + weather);
 		}
 
-		for (int i = 0; i < 7; i++) {
-			System.out.print((i == 0 ? player.front().getActualName() + " " : "") + player.front().getStage(i) + (i == 6 ? "\n" : " "));
+		System.out.print(player.front().getActualName() + " ");
+		for (Stat stat : Stat.BATTLE_STATS) {
+			System.out.print(player.front().getStage(stat) + " ");
 		}
+		System.out.println();
 
-		for (int i = 0; i < 7; i++) {
-			System.out.print((i == 0 ? opponent.front().getActualName() + " " : "") + opponent.front().getStage(i) + (i == 6 ? "\n" : " "));
+		System.out.print(opponent.front().getActualName() + " ");
+		for (Stat stat : Stat.BATTLE_STATS) {
+			System.out.print(opponent.front().getStage(stat) + " ");
 		}
+		System.out.println();
 
 		System.out.println(player.front().getActualName() + " " + player.front().getAbility().getName() + " " + player.front().getHeldItem(this).getName());
 		System.out.println(opponent.front().getActualName() + " " + opponent.front().getAbility().getName() + " " + opponent.front().getHeldItem(this).getName());
@@ -261,6 +269,10 @@ public class Battle {
 		// Decrement Battle effects
 		decrementEffects(effects, null);
 		decrementWeather();
+
+		// The very, very end
+		while (SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, player.front())
+				|| SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, opponent.front()));
 	}
 
 	private void deadUser() {
@@ -327,15 +339,10 @@ public class Battle {
 			enterMessage = ((Trainer)opponent).getName() + " sent out " + enterer.getName() + "!";
 		}
 
-		enterBattle(enterer, enterMessage, true);
+		enterBattle(enterer, enterMessage);
 	}
 
-	public void enterBattle(ActivePokemon enterer, String enterMessage)
-	{
-		enterBattle(enterer, enterMessage, true);
-	}
-
-	public void enterBattle(ActivePokemon enterer, String enterMessage, boolean reset) {
+	public void enterBattle(ActivePokemon enterer, String enterMessage) {
 		if (enterer.isEgg()) {
 			Global.error("Eggs can't battle!!!");
 		}
@@ -345,9 +352,7 @@ public class Battle {
 			player.getPokedex().setSeen(enterer, isWildBattle());
 		}
 
-		if (reset) {
-			enterer.resetAttributes();
-		}
+		enterer.resetAttributes();
 
 		Messages.add(new MessageUpdate(enterMessage).withSwitch(this, enterer));
 
@@ -393,10 +398,10 @@ public class Battle {
 		for (int i = 0; i < effects.size(); i++) {
 			Effect effect = effects.get(i);
 
-			boolean inactive = !effect.isActive();
+			boolean inactive = !effect.isActive(this);
 			if (!inactive) {
 				effect.decrement(this, p);
-				inactive = !effect.isActive() && !effect.nextTurnSubside();
+				inactive = !effect.isActive(this) && !effect.nextTurnSubside();
 			}
 
 			if (inactive) {
@@ -412,7 +417,7 @@ public class Battle {
 	}
 
 	private void decrementWeather() {
-		if (!weather.isActive()) {
+		if (!weather.isActive(this)) {
 			Messages.add(new MessageUpdate(weather.getSubsideMessage(player.front())));
 			weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
 			return;
@@ -433,7 +438,7 @@ public class Battle {
 	
 	private void executionSolution(ActivePokemon me, ActivePokemon o) {
 		// Don't do anything if they're not actually attacking
-		if (!isFighting(me.isPlayer())) {
+		if (!isFighting(me.isPlayer()) || me != getTrainer(me).front()) {
 			return;
 		}
 
@@ -468,8 +473,11 @@ public class Battle {
 	
 	private void executeAttack(ActivePokemon me, ActivePokemon o) {
 		me.getAttributes().count();
-		me.getAttack().apply(me, o, this);
-		me.getMove().use();
+
+		boolean success = me.getAttack().apply(me, o, this);
+		me.getAttributes().setLastMoveSucceeded(success);
+
+		me.getMove().setUsed();
 		me.getAttributes().decay();
 	}
 	
@@ -481,10 +489,14 @@ public class Battle {
 			effects.add(effect);
 		}
 	}
-	
+
 	public List<BattleEffect> getEffects() {
 		return effects;
-	}	
+	}
+
+	public List<TeamEffect> getEffects(ActivePokemon teamMember) {
+		return getEffects(teamMember.isPlayer());
+	}
 	
 	public List<TeamEffect> getEffects(boolean isPlayer) {
 		return isPlayer ? player.getEffects() : opponent.getEffects();
@@ -495,15 +507,23 @@ public class Battle {
 		Collections.addAll(list, additionalItems);
 		
 		list.addAll(p.getAllEffects(this));
-		list.addAll(getEffects(p.isPlayer()));
+		list.addAll(getEffects(p));
 		list.addAll(getEffects());
 		list.add(weather);
 		
 		return list;
 	}
-	
+
+	public Team getTrainer(ActivePokemon pokemon) {
+		return getTrainer(pokemon.isPlayer());
+	}
+
 	public Team getTrainer(boolean isPlayer) {
 		return isPlayer ? player : opponent;
+	}
+
+	public ActivePokemon getOtherPokemon(ActivePokemon pokemon) {
+		return getOtherPokemon(pokemon.isPlayer());
 	}
 	
 	// Returns the current Pokemon that is out on the team opposite to the one passed in
@@ -522,34 +542,39 @@ public class Battle {
 		
 		final Stat attacking;
 		final Stat defending;
-		if (me.getAttack().getCategory() == MoveCategory.PHYSICAL) {
-			attacking = Stat.ATTACK;
-			defending = Stat.DEFENSE;
-		}
-		else {
-			attacking = Stat.SP_ATTACK;
-			defending = Stat.SP_DEFENSE;
+		switch (me.getAttack().getCategory()) {
+			case PHYSICAL:
+				attacking = Stat.ATTACK;
+				defending = Stat.DEFENSE;
+				break;
+			case SPECIAL:
+				attacking = Stat.SP_ATTACK;
+				defending = Stat.SP_DEFENSE;
+				break;
+			default:
+				Global.error("Invalid category " + me.getAttack().getCategory() + " for calculating damage");
+				return -1;
 		}
 		
 		int attackStat = Stat.getStat(attacking, me, o, this);
 		int defenseStat = Stat.getStat(defending, o, me, this);
 		
-		double stab = Type.getSTAB(this, me);
-		double adv = Type.getAdvantage(me, o, this);
+		double stab = TypeAdvantage.getSTAB(this, me);
+		double adv = TypeAdvantage.getAdvantage(me, o, this);
 		
 		int damage = (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
 		
-		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n",
-				me.getActualName(),
-				me.getAttack().getName(),
-				level,
-				power,
-				random,
-				attackStat,
-				defenseStat,
-				stab,
-				adv,
-				damage);
+//		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n",
+//				me.getActualName(),
+//				me.getAttack().getName(),
+//				level,
+//				power,
+//				random,
+//				attackStat,
+//				defenseStat,
+//				stab,
+//				adv,
+//				damage);
 		
 		damage *= getDamageModifier(me, o); 
 		damage *= criticalHit(me, o);
@@ -557,10 +582,10 @@ public class Battle {
 		return damage;
 	}
 
-	private double getDamageModifier(ActivePokemon me, ActivePokemon o) {
+	protected double getDamageModifier(ActivePokemon me, ActivePokemon o) {
 		double modifier = 1;
-		modifier = PowerChangeEffect.updateModifier(modifier, this, me, o);
-		modifier = OpponentPowerChangeEffect.updateModifier(modifier, this, me, o);
+		modifier *= PowerChangeEffect.getModifier(this, me, o);
+		modifier *= OpponentPowerChangeEffect.getModifier(this, me, o);
 		
 //		System.out.println(me.getName() + " Modifier: " + modifier);
 		return modifier;
@@ -576,26 +601,26 @@ public class Battle {
 		int stage = 1;
 		stage = CritStageEffect.updateCritStage(this, stage, me);
 		stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
-		
-		boolean crit = me.getAttack().isMoveType(MoveType.ALWAYS_CRIT) || RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
+
+		boolean crit = AlwaysCritEffect.defCritsies(this, me, o) || RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
 		
 		// Crit yo pants
 		if (crit) {
 			Messages.add(new MessageUpdate("It's a critical hit!!"));
 			if (o.hasAbility(AbilityNamesies.ANGER_POINT)) {
 				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!"));
-				o.getAttributes().setStage(Stat.ATTACK.index(), Stat.MAX_STAT_CHANGES);
+				o.getAttributes().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
 			}
 			
 			return me.hasAbility(AbilityNamesies.SNIPER) ? 3 : 2;
 		}
-		
+
 		return 1;
 	}
 	
-	private boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
+	protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
 		// Self-Target moves don't miss
-		if (me.getAttack().isSelfTarget() && me.getAttack().getCategory() == MoveCategory.STATUS) {
+		if (me.getAttack().isSelfTarget() && me.getAttack().isStatusMove()) {
 			return true;
 		}
 
@@ -627,7 +652,7 @@ public class Battle {
 	
 	// Returns true if the Pokemon is able to execute their turn by checking effects that have been casted upon them
 	// This is where BeforeTurnEffects are handled
-	private boolean ableToAttack(ActivePokemon p, ActivePokemon opp) {
+	protected boolean ableToAttack(ActivePokemon p, ActivePokemon opp) {
 		// Dead Pokemon can't attack and it's not nice to attack a deady
 		if (p.isFainted(this) || opp.isFainted(this)) {
 			return false;
@@ -653,17 +678,21 @@ public class Battle {
 		// WOOOOOOOOOO
 		return true;
 	}
+
+	public int getPriority(ActivePokemon p, Attack attack) {
+		int priority = attack.getPriority(this, p);
+		priority += PriorityChangeEffect.getModifier(this, p, attack);
+
+//		System.out.println(attack.getName() + " Priority: " + priority);
+
+		return priority;
+	}
 	
 	// Returns the priority of the current action the player is performing
 	private int getPriority(ActivePokemon p) {
 		// They are attacking -- return the priority of the attack
 		if (isFighting(p.isPlayer())) {
-			int priority = p.getAttack().getPriority(this, p);
-			priority = PriorityChangeEffect.updatePriority(this, p, priority);
-			
-//			System.out.println(p.getAttack().getName() + " Priority: " + priority);
-			
-			return priority;
+			return getPriority(p, p.getAttack());
 		}
 		
 		return ((Trainer)getTrainer(p.isPlayer())).getAction().getPriority();

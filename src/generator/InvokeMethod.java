@@ -1,6 +1,5 @@
 package generator;
 
-import main.Global;
 import util.StringUtils;
 
 import java.util.Scanner;
@@ -10,15 +9,12 @@ abstract class InvokeMethod {
     private String methodName;
 
     protected abstract String getReturnType(InterfaceMethod interfaceMethod);
-    protected abstract String getDefaultMethodName(final InterfaceMethod interfaceMethod);
-    protected abstract void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod);
+    protected abstract String getDefaultMethodName(InterfaceMethod interfaceMethod);
+    protected abstract String getInnerLoop(InterfaceMethod interfaceMethod);
     protected abstract String getPostLoop(InterfaceMethod interfaceMethod);
+    protected String getPreLoop() { return StringUtils.empty(); }
 
-    private InvokeMethod(final Scanner invokeInput) {
-        if (invokeInput != null && invokeInput.hasNext()) {
-            Global.error("Too much input for " + this.getClass().getSimpleName() + ": " + invokeInput);
-        }
-    }
+    private InvokeMethod() {}
 
     private String getMethodName(final InterfaceMethod interfaceMethod) {
         if (StringUtils.isNullOrEmpty(this.methodName)) {
@@ -39,22 +35,23 @@ abstract class InvokeMethod {
                 this.getInvokeParameters(interfaceMethod)
         );
 
-        StringBuilder body = new StringBuilder();
-        this.appendDeadsies(body, interfaceMethod);
-        this.declareMoldBreaker(body, interfaceMethod);
-        body.append(getDeclaration(interfaceMethod));
-        StringUtils.appendLine(body, "\nfor (Object invokee : invokees) {");
-        StringUtils.appendLine(body, "if (invokee instanceof " + interfaceMethod.getInterfaceName() + " && !Effect.isInactiveEffect(invokee)) {");
-        this.appendMoldBreaker(body, interfaceMethod);
-        StringUtils.appendLine(body, "");
-        this.appendInnerLoop(body, interfaceMethod);
-        this.appendDeadsies(body, interfaceMethod);
-        StringUtils.appendLine(body, "}");
-        StringUtils.appendLine(body, "}");
-        StringUtils.appendLine(body, "");
-        StringUtils.appendLine(body, this.getPostLoop(interfaceMethod));
+        String body =
+                StringUtils.addNewLine(getPreLoop()) +
+                StringUtils.addNewLine(getDeadsies(interfaceMethod)) +
+                StringUtils.addNewLine(getMoldBreakerDeclaration(interfaceMethod)) +
+                getDeclaration(interfaceMethod) + "\n" +
+                "for (Object invokee : invokees) {\n" +
+                "if (invokee instanceof " + interfaceMethod.getInterfaceName() +
+                        " && Effect.isActiveEffect(invokee, " + interfaceMethod.getBattleParameter() + ")) {\n" +
+                StringUtils.addNewLine(getMoldBreaker(interfaceMethod)) + "\n" +
+                getInnerLoop(interfaceMethod) + "\n" +
+                StringUtils.addNewLine(getDeadsies(interfaceMethod)) +
+                "}\n" +
+                "}\n" +
+                StringUtils.preNewLine(getPostLoop(interfaceMethod));
 
-        return new MethodInfo(header, body.toString().trim(), AccessModifier.PACKAGE_PRIVATE).writeFunction();
+
+        return new MethodInfo(header, body.trim(), AccessModifier.PACKAGE_PRIVATE).writeFunction();
     }
 
     protected String getAdditionalInvokeParameters() {
@@ -62,23 +59,16 @@ abstract class InvokeMethod {
     }
 
     private String getInvokeParameters(final InterfaceMethod interfaceMethod) {
-        String invokeParameters = interfaceMethod.getParameters();
-        if (!StringUtils.isNullOrEmpty(interfaceMethod.getAdditionalInvokeParameters())) {
-            invokeParameters = interfaceMethod.getAdditionalInvokeParameters() +
-                    StringUtils.addLeadingComma(invokeParameters);
-        }
-
-        if (!StringUtils.isNullOrEmpty(this.getAdditionalInvokeParameters())) {
-            invokeParameters = this.getAdditionalInvokeParameters() +
-                    StringUtils.addLeadingComma(invokeParameters);
-        }
-
+        StringBuilder invokeParameters = new StringBuilder();
         if (passInvokees(interfaceMethod)) {
-            invokeParameters = "List<?> invokees" +
-                    StringUtils.addLeadingComma(invokeParameters);
+            StringUtils.addCommaSeparatedValue(invokeParameters, "List<?> invokees");
         }
 
-        return invokeParameters;
+        StringUtils.addCommaSeparatedValue(invokeParameters, this.getAdditionalInvokeParameters());
+        StringUtils.addCommaSeparatedValue(invokeParameters, interfaceMethod.getAdditionalInvokeParameters());
+        StringUtils.addCommaSeparatedValue(invokeParameters, interfaceMethod.getParameters());
+
+        return invokeParameters.toString();
     }
 
     private String getDeclaration(final InterfaceMethod interfaceMethod) {
@@ -93,61 +83,67 @@ abstract class InvokeMethod {
         return StringUtils.isNullOrEmpty(interfaceMethod.getInvokeeDeclaration());
     }
 
-    private void declareMoldBreaker(final StringBuilder body, final InterfaceMethod interfaceMethod) {
+    private String getMoldBreakerDeclaration(final InterfaceMethod interfaceMethod) {
         if (!interfaceMethod.isMoldBreakNullCheck()) {
-            return;
+            return StringUtils.empty();
         }
 
-        StringUtils.appendLine(body, interfaceMethod.getMoldBreaker());
+        return "\n" + interfaceMethod.getMoldBreaker();
     }
 
-    private void appendMoldBreaker(final StringBuilder body, final InterfaceMethod interfaceMethod) {
+    private String getMoldBreaker(final InterfaceMethod interfaceMethod) {
         if (StringUtils.isNullOrEmpty(interfaceMethod.getMoldBreaker())) {
-            return;
+            return StringUtils.empty();
         }
 
-        StringUtils.appendLine(body, "\n// If this is an ability that is being affected by mold breaker, we don't want to do anything with it");
-        StringUtils.appendLine(body, "if (invokee instanceof Ability && " +
-                        (interfaceMethod.isMoldBreakNullCheck()
-                                ? "moldBreaker != null && moldBreaker"
-                                : interfaceMethod.getMoldBreaker()) +
-                        ".breaksTheMold()) {");
-        StringUtils.appendLine(body, "continue;");
-        StringUtils.appendLine(body, "}");
+        return "\n// If this is an ability that is being affected by mold breaker, we don't want to do anything with it\n" +
+                "if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && " +
+                (interfaceMethod.isMoldBreakNullCheck() || interfaceMethod.getMoldBreaker().equals("moldBreaker")
+                        ? "moldBreaker != null && moldBreaker"
+                        : interfaceMethod.getMoldBreaker()) +
+                ".breaksTheMold()) {\n" +
+                "continue;\n" +
+                "}";
     }
 
-    private void appendDeadsies(final StringBuilder body, final InterfaceMethod interfaceMethod) {
+    private String getDeadsies(final InterfaceMethod interfaceMethod) {
         final String postLoop = this.getPostLoop(interfaceMethod);
         final String returnStatement = StringUtils.isNullOrEmpty(postLoop) ? "return;" : postLoop;
-
         final String battleParameter = interfaceMethod.getBattleParameter();
+
+        final StringBuilder deadsies = new StringBuilder();
         for (final String activePokemonParameter : interfaceMethod.getDeadsies()) {
-            StringUtils.appendLine(body, "");
-            StringUtils.appendLine(body, String.format("if (%s.isFainted(%s)) {", activePokemonParameter, battleParameter));
-            StringUtils.appendLine(body, returnStatement);
-            StringUtils.appendLine(body, "}");
+            if (deadsies.length() > 0) {
+                deadsies.append("\n");
+            }
+
+            deadsies.append(String.format("\nif (%s.isFainted(%s)) {\n", activePokemonParameter, battleParameter))
+                    .append(returnStatement)
+                    .append("\n}");
         }
+
+        return deadsies.toString();
     }
 
     static class VoidInvoke extends InvokeMethod {
 
-        VoidInvoke(Scanner invokeInput) {
-            super(invokeInput);
-        }
-
+        @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return "void";
         }
 
+        @Override
         protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
             return "invoke" + interfaceMethod.getInterfaceName();
         }
 
-        protected void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
-            StringUtils.appendLine(body, interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;");
-            StringUtils.appendLine(body, "effect." + interfaceMethod.getMethodCall() + ";");
+        @Override
+        protected String getInnerLoop(InterfaceMethod interfaceMethod) {
+            return interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;\n" +
+                    "effect." + interfaceMethod.getMethodCall() + ";";
         }
 
+        @Override
         protected String getPostLoop(InterfaceMethod interfaceMethod) {
             return StringUtils.empty();
         }
@@ -155,22 +151,22 @@ abstract class InvokeMethod {
 
     static class ContainsInvoke extends InvokeMethod {
 
-        ContainsInvoke(Scanner invokeInput) {
-            super(invokeInput);
-        }
-
+        @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return "boolean";
         }
 
+        @Override
         protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
             return "contains" + interfaceMethod.getInterfaceName();
         }
 
-        protected void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
-            StringUtils.appendLine(body, "return true;");
+        @Override
+        protected String getInnerLoop(InterfaceMethod interfaceMethod) {
+            return "return true;";
         }
 
+        @Override
         protected String getPostLoop(InterfaceMethod interfaceMethod) {
             return "return false;";
         }
@@ -181,33 +177,34 @@ abstract class InvokeMethod {
         private final boolean check;
 
         CheckInvoke(final Scanner invokeInput) {
-            super(null);
+            super();
 
             this.check = invokeInput.nextBoolean();
-            if (invokeInput.hasNext()) {
-                Global.error("Too much input for " + this.getClass().getSimpleName() + ": " + invokeInput);
-            }
         }
 
+        @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return "boolean";
         }
 
+        @Override
         protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
             return "check" + interfaceMethod.getInterfaceName();
         }
 
-        protected void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
-            StringUtils.appendLine(body, interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;");
-            StringUtils.appendLine(body, String.format("if (%seffect.%s) {", check ? "" : "!", interfaceMethod.getMethodCall()));
-            StringUtils.appendLine(body, this.successfulCheck());
-            StringUtils.appendLine(body, "}");
+        @Override
+        protected String getInnerLoop(InterfaceMethod interfaceMethod) {
+            return interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;\n" +
+                    String.format("if (%seffect.%s) {\n", check ? "" : "!", interfaceMethod.getMethodCall()) +
+                    this.successfulCheck() + "\n"
+                    + "}";
         }
 
         protected String successfulCheck() {
             return "return true;";
         }
 
+        @Override
         protected String getPostLoop(InterfaceMethod interfaceMethod) {
             return "return false;";
         }
@@ -219,42 +216,63 @@ abstract class InvokeMethod {
             super(invokeInput);
         }
 
+        @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return interfaceMethod.getInterfaceName();
         }
 
+        @Override
         protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
             return "checkAndGet" + interfaceMethod.getInterfaceName();
         }
 
+        @Override
         protected String successfulCheck() {
             return "return effect;";
         }
 
+        @Override
         protected String getPostLoop(InterfaceMethod interfaceMethod) {
             return "return null;";
         }
     }
 
-    static class GetInvoke extends InvokeMethod {
+    static class CheckMessageInvoke extends CheckInvoke {
 
-        GetInvoke(Scanner invokeInput) {
+        private final String getMessageCall;
+
+        CheckMessageInvoke(Scanner invokeInput) {
             super(invokeInput);
+
+            this.getMessageCall = invokeInput.nextLine().trim();
         }
 
+        @Override
+        protected String successfulCheck() {
+            return "Messages.add(new MessageUpdate(effect." + this.getMessageCall + "));\n"
+                    + super.successfulCheck();
+        }
+    }
+
+    static class GetInvoke extends InvokeMethod {
+
+        @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return interfaceMethod.getReturnType();
         }
 
+        @Override
         protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
             return "get" + interfaceMethod.getInterfaceName();
         }
 
-        protected void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
-            StringUtils.appendLine(body, interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;");
-            StringUtils.appendLine(body, "return effect." + interfaceMethod.getMethodCall() + ";");
+        @Override
+        protected String getInnerLoop(InterfaceMethod interfaceMethod) {
+            return interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;\n" +
+                    "return effect." + interfaceMethod.getMethodCall() + ";";
         }
 
+        @Override
         protected String getPostLoop(InterfaceMethod interfaceMethod) {
             return "return null;";
         }
@@ -262,23 +280,23 @@ abstract class InvokeMethod {
 
     static class UpdateInvoke extends InvokeMethod {
 
-        UpdateInvoke(Scanner invokeInput) {
-            super(invokeInput);
-        }
-
+        @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return interfaceMethod.getReturnType();
         }
 
+        @Override
         protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
             return "update" + interfaceMethod.getInterfaceName();
         }
 
-        protected void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
-            StringUtils.appendLine(body, interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;");
-            StringUtils.appendLine(body, interfaceMethod.getUpdateField() + " = effect." + interfaceMethod.getMethodCall() + ";");
+        @Override
+        protected String getInnerLoop(InterfaceMethod interfaceMethod) {
+            return interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;\n" +
+                    interfaceMethod.getUpdateField() + " = effect." + interfaceMethod.getMethodCall() + ";";
         }
 
+        @Override
         protected String getPostLoop(InterfaceMethod interfaceMethod) {
             return "return " + interfaceMethod.getUpdateField() + ";";
         }
@@ -286,29 +304,59 @@ abstract class InvokeMethod {
 
     static class MultiplyInvoke extends InvokeMethod {
 
-        MultiplyInvoke(Scanner invokeInput) {
-            super(invokeInput);
-        }
-
+        @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return "double";
         }
 
+        @Override
         protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
-            return "updateModifier";
+            return "getModifier";
         }
 
-        protected void appendInnerLoop(StringBuilder body, InterfaceMethod interfaceMethod) {
-            StringUtils.appendLine(body, interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;");
-            StringUtils.appendLine(body, " modifier *= effect." + interfaceMethod.getMethodCall() + ";");
+        @Override
+        protected String getInnerLoop(InterfaceMethod interfaceMethod) {
+            return interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;\n" +
+                    "modifier *= effect." + interfaceMethod.getMethodCall() + ";";
         }
 
+        @Override
         protected String getPostLoop(InterfaceMethod interfaceMethod) {
             return "return modifier;";
         }
 
-        protected String getAdditionalInvokeParameters() {
-            return "double modifier";
+        @Override
+        protected String getPreLoop() {
+            return "double modifier = 1;";
+        }
+    }
+
+    static class AddInvoke extends InvokeMethod {
+
+        @Override
+        protected String getReturnType(InterfaceMethod interfaceMethod) {
+            return "int";
+        }
+
+        @Override
+        protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
+            return "getModifier";
+        }
+
+        @Override
+        protected String getInnerLoop(InterfaceMethod interfaceMethod) {
+            return interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;\n" +
+                    "modifier += effect." + interfaceMethod.getMethodCall() + ";";
+        }
+
+        @Override
+        protected String getPostLoop(InterfaceMethod interfaceMethod) {
+            return "return modifier;";
+        }
+
+        @Override
+        protected String getPreLoop() {
+            return "int modifier = 0;";
         }
     }
 }

@@ -1,0 +1,1111 @@
+Butterfree:
+	Gen 7 Only:
+		AIR_SLASH
+	EXP Yield:
+		173 -> 178
+
+Beedrill:
+	Gen 7 Only:
+		VENOSHOCK
+	EXP Yield:
+		173 -> 178
+
+Pidgeot:
+	EXP Yield:
+		211 -> 216
+
+Spearow:
+	Gen 7 Only:
+		FOCUS_ENERGY
+
+Fearow:
+	Gen 7 Only:
+		FOCUS_ENERGY
+
+Arbok:
+	Base Stats:
+		[60, 85, 69, 65, 79, 80] -> [60, 95, 69, 65, 79, 80]
+	EXP Yield:
+		153 -> 157
+
+Pikachu:
+	EXP Yield:
+		105 -> 112
+
+Raichu:
+	EXP Yield:
+		214 -> 218
+
+Nidoqueen:
+	EXP Yield:
+		223 -> 227
+
+Nidoking:
+	EXP Yield:
+		223 -> 227
+
+Clefable:
+	EXP Yield:
+		213 -> 217
+
+Jigglypuff:
+	Gen 7 Only:
+		SWALLOW
+		SPIT_UP
+		STOCKPILE
+
+Wigglytuff:
+	EXP Yield:
+		191 -> 196
+
+Zubat:
+	Gen 6 Only:
+		ACROBATICS
+	Gen 7 Only:
+		ABSORB
+
+Golbat:
+	Gen 6 Only:
+		ACROBATICS
+	Gen 7 Only:
+		ABSORB
+
+Oddish:
+	Gen 7 Only:
+		GROWTH
+
+Gloom:
+	Gen 7 Only:
+		GROWTH
+
+Vileplume:
+	EXP Yield:
+		216 -> 221
+
+Paras:
+	Gen 6 Only:
+		CROSS_POISON
+	Gen 7 Only:
+		ABSORB
+
+Parasect:
+	Gen 7 Only:
+		ABSORB
+
+Dugtrio:
+	Base Stats:
+		[35, 80, 50, 50, 70, 120] -> [35, 100, 50, 50, 70, 120]
+	EXP Yield:
+		142 -> 149
+
+Golduck:
+	Gen 7 Only:
+		ME_FIRST
+
+Mankey:
+	Gen 7 Only:
+		OUTRAGE
+		PURSUIT
+		STOMPING_TANTRUM
+
+Primeape:
+	Gen 7 Only:
+		OUTRAGE
+		PURSUIT
+		STOMPING_TANTRUM
+
+Poliwrath:
+	EXP Yield:
+		225 -> 230
+
+Alakazam:
+	EXP Yield:
+		221 -> 225
+
+Machamp:
+	Gen 7 Only:
+		STRENGTH
+
+Bellsprout:
+	Gen 7 Only:
+		POISON_JAB
+
+Weepinbell:
+	Gen 7 Only:
+		POISON_JAB
+
+Victreebel:
+	EXP Yield:
+		216 -> 221
+
+Golem:
+	EXP Yield:
+		218 -> 223
+
+Rapidash:
+	Gen 6 Only:
+		BLAZE_KICK
+
+Magnemite:
+	Gen 7 Only:
+		LIGHT_SCREEN
+
+Magneton:
+	Gen 7 Only:
+		LIGHT_SCREEN
+
+Farfetch'd:
+	Base Stats:
+		[52, 65, 55, 58, 62, 60] -> [52, 90, 55, 58, 62, 60]
+	EXP Yield:
+		123 -> 132
+
+Doduo:
+	Gen 7 Only:
+		JUMP_KICK
+		SWORDS_DANCE
+
+Dodrio:
+	Gen 7 Only:
+		DOUBLE_HIT
+		JUMP_KICK
+		SWORDS_DANCE
+	Base Stats:
+		[60, 110, 70, 60, 60, 100] -> [60, 110, 70, 60, 60, 110]
+	EXP Yield:
+		161 -> 165
+
+Shellder:
+	Gen 7 Only:
+		WATER_GUN
+
+Gengar:
+	Abilities:
+		[LEVITATE, NO_ABILITY] -> [CURSED_BODY, NO_ABILITY]
+
+Electrode:
+	Base Stats:
+		[60, 50, 70, 80, 80, 140] -> [60, 50, 70, 80, 80, 150]
+	EXP Yield:
+		168 -> 172
+
+Exeggutor:
+	Base Stats:
+		[95, 95, 85, 125, 65, 55] -> [95, 95, 85, 125, 75, 55]
+	EXP Yield:
+		182 -> 186
+
+Cubone:
+	Gen 7 Only:
+		STOMPING_TANTRUM
+
+Marowak:
+	Gen 7 Only:
+		STOMPING_TANTRUM
+
+Weezing:
+	Gen 7 Only:
+		GYRO_BALL
+
+Tauros:
+	EXP Yield:
+		211 -> 172
+
+Gyarados:
+	Gen 7 Only:
+		HURRICANE
+		SCARY_FACE
+
+Vaporeon:
+	Gen 7 Only:
+		BABY_DOLL_EYES
+
+Jolteon:
+	Gen 7 Only:
+		BABY_DOLL_EYES
+
+Flareon:
+	Gen 7 Only:
+		BABY_DOLL_EYES
+
+Snorlax:
+	Gen 7 Only:
+		HIGH_HORSEPOWER
+
+Zapdos:
+	Gen 7 Only:
+		MAGNETIC_FLUX
+
+Moltres:
+	Gen 7 Only:
+		BURN_UP
+
+Mewtwo:
+	Gen 7 Only:
+		LASER_FOCUS
+		PSYWAVE
+
+Cyndaquil:
+	Gen 7 Only:
+		BURN_UP
+
+Quilava:
+	Gen 7 Only:
+		BURN_UP
+
+Typhlosion:
+	Gen 7 Only:
+		BURN_UP
+
+Furret:
+	Gen 7 Only:
+		AGILITY
+		COIL
+
+Hoothoot:
+	Gen 7 Only:
+		MOONBLAST
+
+Noctowl:
+	Gen 7 Only:
+		MOONBLAST
+	Base Stats:
+		[100, 50, 50, 76, 96, 70] -> [100, 50, 50, 86, 96, 70]
+	EXP Yield:
+		155 -> 158
+
+Ledyba:
+	Gen 7 Only:
+		AIR_SLASH
+
+Ledian:
+	Gen 7 Only:
+		AIR_SLASH
+
+Spinarak:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		TOXIC_THREAD
+		ABSORB
+		INFESTATION
+
+Ariados:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		TOXIC_THREAD
+		ABSORB
+		INFESTATION
+		FOCUS_ENERGY
+		SWORDS_DANCE
+	Base Stats:
+		[70, 90, 70, 60, 60, 40] -> [70, 90, 70, 60, 70, 40]
+	EXP Yield:
+		137 -> 140
+
+Crobat:
+	Gen 6 Only:
+		ACROBATICS
+	Gen 7 Only:
+		ABSORB
+
+Ampharos:
+	EXP Yield:
+		225 -> 230
+
+Bellossom:
+	Gen 7 Only:
+		QUIVER_DANCE
+		PETAL_DANCE
+	EXP Yield:
+		216 -> 221
+
+Azumarill:
+	EXP Yield:
+		185 -> 189
+
+Sudowoodo:
+	Gen 7 Only:
+		HEAD_SMASH
+		TEARFUL_LOOK
+
+Jumpluff:
+	EXP Yield:
+		203 -> 207
+
+Espeon:
+	Gen 7 Only:
+		BABY_DOLL_EYES
+
+Umbreon:
+	Gen 7 Only:
+		BABY_DOLL_EYES
+
+Dunsparce:
+	Gen 7 Only:
+		BODY_SLAM
+		DRAGON_RUSH
+		AIR_SLASH
+
+Qwilfish:
+	Base Stats:
+		[65, 95, 75, 55, 55, 85] -> [65, 95, 85, 55, 55, 85]
+	EXP Yield:
+		86 -> 88
+
+Magcargo:
+	Base Stats:
+		[50, 50, 120, 80, 80, 30] -> [60, 50, 120, 90, 80, 30]
+	EXP Yield:
+		144 -> 151
+
+Corsola:
+	Base Stats:
+		[55, 55, 85, 65, 85, 35] -> [65, 55, 95, 65, 95, 35]
+	EXP Yield:
+		133 -> 144
+
+Delibird:
+	Gen 7 Only:
+		DRILL_PECK
+
+Mantine:
+	Gen 7 Only:
+		ROOST
+	Base Stats:
+		[65, 40, 70, 80, 140, 70] -> [85, 40, 70, 80, 140, 70]
+	EXP Yield:
+		163 -> 170
+
+Raikou:
+	Abilities:
+		[PRESSURE, VOLT_ABSORB] -> [PRESSURE, INNER_FOCUS]
+
+Entei:
+	Abilities:
+		[PRESSURE, FLASH_FIRE] -> [PRESSURE, INNER_FOCUS]
+
+Suicune:
+	Gen 7 Only:
+		SHEER_COLD
+	Abilities:
+		[PRESSURE, WATER_ABSORB] -> [PRESSURE, INNER_FOCUS]
+
+Poochyena:
+	Gen 7 Only:
+		PLAY_ROUGH
+		YAWN
+	EXP Yield:
+		44 -> 56
+
+Mightyena:
+	Gen 7 Only:
+		ICE_FANG
+		THUNDER_FANG
+		PLAY_ROUGH
+		YAWN
+		FIRE_FANG
+
+Zigzagoon:
+	EXP Yield:
+		48 -> 56
+
+Wurmple:
+	EXP Yield:
+		39 -> 56
+
+Beautifly:
+	EXP Yield:
+		173 -> 178
+
+Cascoon:
+	EXP Yield:
+		41 -> 72
+
+Dustox:
+	EXP Yield:
+		135 -> 173
+
+Taillow:
+	Gen 7 Only:
+		REVERSAL
+
+Swellow:
+	Gen 7 Only:
+		REVERSAL
+	Base Stats:
+		[60, 85, 60, 50, 50, 125] -> [60, 85, 60, 75, 50, 125]
+	EXP Yield:
+		151 -> 159
+
+Wingull:
+	Abilities:
+		[KEEN_EYE, RAIN_DISH] -> [KEEN_EYE, HYDRATION]
+
+Pelipper:
+	Abilities:
+		[KEEN_EYE, RAIN_DISH] -> [KEEN_EYE, DRIZZLE]
+	Base Stats:
+		[60, 50, 100, 85, 70, 65] -> [60, 50, 100, 95, 70, 65]
+	EXP Yield:
+		151 -> 154
+
+Masquerain:
+	Base Stats:
+		[70, 60, 62, 80, 82, 60] -> [70, 60, 62, 100, 82, 80]
+	EXP Yield:
+		145 -> 159
+
+Nincada:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		ABSORB
+
+Ninjask:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		ABSORB
+
+Shedinja:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		ABSORB
+
+Exploud:
+	EXP Yield:
+		216 -> 221
+
+Delcatty:
+	Base Stats:
+		[70, 65, 65, 55, 55, 70] -> [70, 65, 65, 55, 55, 90]
+	EXP Yield:
+		133 -> 140
+
+Volbeat:
+	Gen 7 Only:
+		INFESTATION
+	Base Stats:
+		[65, 73, 55, 47, 75, 85] -> [65, 73, 75, 47, 85, 85]
+	EXP Yield:
+		140 -> 151
+
+Illumise:
+	Gen 7 Only:
+		INFESTATION
+	Base Stats:
+		[65, 47, 55, 73, 75, 85] -> [65, 47, 75, 73, 85, 85]
+	EXP Yield:
+		140 -> 151
+
+Swalot:
+	Gen 7 Only:
+		VENOM_DRENCH
+
+Wailord:
+	Gen 7 Only:
+		SOAK
+		NOBLE_ROAR
+
+Torkoal:
+	Abilities:
+		[WHITE_SMOKE, SHELL_ARMOR] -> [WHITE_SMOKE, DROUGHT]
+
+Grumpig:
+	Gen 7 Only:
+		BELCH
+
+Flygon:
+	Gen 7 Only:
+		DRAGON_DANCE
+
+Seviper:
+	Gen 7 Only:
+		FEINT
+		SWORDS_DANCE
+
+Lunatone:
+	Gen 7 Only:
+		POWER_GEM
+		PSYSHOCK
+	Base Stats:
+		[70, 55, 65, 95, 85, 70] -> [90, 55, 65, 95, 85, 70]
+	EXP Yield:
+		154 -> 161
+
+Solrock:
+	Gen 7 Only:
+		FLARE_BLITZ
+	Base Stats:
+		[70, 95, 85, 55, 65, 70] -> [90, 95, 85, 55, 65, 70]
+	EXP Yield:
+		154 -> 161
+
+Whiscash:
+	Gen 7 Only:
+		THRASH
+		BELCH
+
+Chimecho:
+	Base Stats:
+		[65, 50, 70, 95, 80, 65] -> [75, 50, 80, 95, 90, 65]
+	EXP Yield:
+		149 -> 159
+
+Relicanth:
+	Gen 7 Only:
+		FLAIL
+
+Luvdisc:
+	Gen 7 Only:
+		SOAK
+		HEART_STAMP
+
+Kyogre:
+	Catch Rate:
+		5 -> 3
+
+Groudon:
+	Catch Rate:
+		5 -> 3
+
+Rayquaza:
+	Catch Rate:
+		3 -> 45
+
+Staraptor:
+	EXP Yield:
+		214 -> 218
+
+Bidoof:
+	Gen 7 Only:
+		CRUNCH
+		SWORDS_DANCE
+
+Bibarel:
+	Gen 7 Only:
+		CRUNCH
+		AQUA_JET
+		SWORDS_DANCE
+
+Kricketune:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		ABSORB
+
+Budew:
+	Gen 7 Only:
+		WORRY_SEED
+
+Roserade:
+	EXP Yield:
+		227 -> 232
+
+Wormadam:
+	Gen 7 Only:
+		QUIVER_DANCE
+		BUG_BUZZ
+		SUCKER_PUNCH
+
+Mothim:
+	Gen 7 Only:
+		LUNGE
+
+Ambipom:
+	Gen 7 Only:
+		DUAL_CHOP
+
+Lopunny:
+	Gen 7 Only:
+		BABY_DOLL_EYES
+
+Stunky:
+	Gen 7 Only:
+		SUCKER_PUNCH
+		BITE
+		VENOM_DRENCH
+
+Skuntank:
+	Gen 7 Only:
+		SUCKER_PUNCH
+		BITE
+		VENOM_DRENCH
+
+Bonsly:
+	Gen 7 Only:
+		TEARFUL_LOOK
+
+Lucario:
+	Gen 7 Only:
+		LASER_FOCUS
+		WORK_UP
+
+Magnezone:
+	Gen 7 Only:
+		LIGHT_SCREEN
+		TRI_ATTACK
+
+Leafeon:
+	Gen 7 Only:
+		BABY_DOLL_EYES
+	EXP Yield:
+		196 -> 184
+
+Glaceon:
+	Gen 7 Only:
+		BABY_DOLL_EYES
+	EXP Yield:
+		196 -> 184
+
+Mamoswine:
+	Gen 7 Only:
+		FURY_ATTACK
+	EXP Yield:
+		207 -> 239
+
+Gallade:
+	Gen 7 Only:
+		AERIAL_ACE
+
+Probopass:
+	Gen 7 Only:
+		TRI_ATTACK
+		MAGNETIC_FLUX
+
+Froslass:
+	Gen 7 Only:
+		WILL_O_WISP
+
+Rotom:
+	Base Stats:
+		[50, 65, 107, 105, 107, 86] -> [50, 50, 77, 95, 77, 91]
+
+Dialga:
+	Catch Rate:
+		30 -> 3
+
+Palkia:
+	Catch Rate:
+		30 -> 3
+
+Giratina:
+	Base Stats:
+		[150, 120, 100, 120, 100, 90] -> [150, 100, 120, 100, 120, 90]
+
+Snivy:
+	EXP Yield:
+		28 -> 62
+
+Tepig:
+	EXP Yield:
+		28 -> 62
+
+Oshawott:
+	EXP Yield:
+		28 -> 62
+
+Patrat:
+	Gen 7 Only:
+		NASTY_PLOT
+		FOCUS_ENERGY
+
+Watchog:
+	Gen 7 Only:
+		NASTY_PLOT
+		FOCUS_ENERGY
+
+Stoutland:
+	EXP Yield:
+		221 -> 225
+
+Musharna:
+	Gen 7 Only:
+		PSYCHIC_TERRAIN
+
+Unfezant:
+	EXP Yield:
+		215 -> 220
+
+Roggenrola:
+	Abilities:
+		[STURDY, SAND_FORCE] -> [STURDY, WEAK_ARMOR]
+
+Boldore:
+	Abilities:
+		[STURDY, SAND_FORCE] -> [STURDY, WEAK_ARMOR]
+
+Gigalith:
+	Abilities:
+		[STURDY, SAND_FORCE] -> [STURDY, SAND_STREAM]
+	EXP Yield:
+		227 -> 232
+
+Woobat:
+	Base Stats:
+		[55, 45, 43, 55, 43, 72] -> [65, 45, 43, 55, 43, 72]
+	EXP Yield:
+		63 -> 65
+
+Audino:
+	Gen 7 Only:
+		HYPER_VOICE
+
+Seismitoad:
+	EXP Yield:
+		225 -> 229
+
+Throh:
+	Gen 7 Only:
+		MAT_BLOCK
+
+Leavanny:
+	EXP Yield:
+		221 -> 225
+
+Scolipede:
+	Gen 7 Only:
+		IRON_DEFENSE
+	EXP Yield:
+		214 -> 218
+
+Basculin:
+	Gen 7 Only:
+		HEAD_SMASH
+
+Krookodile:
+	Gen 7 Only:
+		POWER_TRIP
+	EXP Yield:
+		229 -> 234
+
+Crustle:
+	Base Stats:
+		[70, 95, 125, 65, 75, 45] -> [70, 105, 125, 65, 75, 45]
+	EXP Yield:
+		166 -> 170
+
+Vanillite:
+	Abilities:
+		[ICE_BODY, WEAK_ARMOR] -> [ICE_BODY, SNOW_CLOAK]
+
+Vanillish:
+	Abilities:
+		[ICE_BODY, WEAK_ARMOR] -> [ICE_BODY, SNOW_CLOAK]
+
+Vanilluxe:
+	Abilities:
+		[ICE_BODY, WEAK_ARMOR] -> [ICE_BODY, SNOW_WARNING]
+
+Alomomola:
+	Gen 7 Only:
+		WHIRLPOOL
+		PLAY_NICE
+
+Joltik:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		ABSORB
+
+Galvantula:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		ABSORB
+
+Ferrothorn:
+	Abilities:
+		[IRON_BARBS, NO_ABILITY] -> [IRON_BARBS, ANTICIPATION]
+
+Klinklang:
+	Gen 7 Only:
+		GEAR_UP
+
+Beheeyem:
+	Gen 7 Only:
+		PSYCHIC_TERRAIN
+
+Cubchoo:
+	Abilities:
+		[SNOW_CLOAK, RATTLED] -> [SNOW_CLOAK, SLUSH_RUSH]
+
+Beartic:
+	Abilities:
+		[SNOW_CLOAK, SWIFT_SWIM] -> [SNOW_CLOAK, SLUSH_RUSH]
+	Base Stats:
+		[95, 110, 80, 70, 80, 50] -> [95, 130, 80, 70, 80, 50]
+	EXP Yield:
+		170 -> 177
+
+Cryogonal:
+	Gen 7 Only:
+		ANCIENT_POWER
+	Base Stats:
+		[70, 50, 30, 95, 135, 105] -> [80, 50, 50, 95, 135, 105]
+
+Shelmet:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		ABSORB
+
+Accelgor:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		ABSORB
+
+Golett:
+	Gen 7 Only:
+		STOMPING_TANTRUM
+
+Golurk:
+	Gen 7 Only:
+		STOMPING_TANTRUM
+		HIGH_HORSEPOWER
+
+Heatmor:
+	Gen 7 Only:
+		FIRE_LASH
+		FLARE_BLITZ
+
+Larvesta:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		ABSORB
+
+Volcarona:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		ABSORB
+
+Reshiram:
+	Catch Rate:
+		45 -> 3
+
+Zekrom:
+	Catch Rate:
+		45 -> 3
+
+Diggersby:
+	Gen 7 Only:
+		DOUBLE_SLAP
+	Catch Rate:
+		255 -> 127
+
+Fletchinder:
+	Catch Rate:
+		255 -> 120
+
+Talonflame:
+	Catch Rate:
+		255 -> 45
+
+Spewpa:
+	Catch Rate:
+		255 -> 120
+
+Vivillon:
+	Catch Rate:
+		255 -> 45
+
+Litleo:
+	Catch Rate:
+		200 -> 220
+
+Pyroar:
+	Catch Rate:
+		200 -> 65
+
+Flabebe:
+	Catch Rate:
+		255 -> 225
+
+Floette:
+	Catch Rate:
+		255 -> 120
+
+Florges:
+	Catch Rate:
+		255 -> 45
+
+Skiddo:
+	Catch Rate:
+		160 -> 200
+
+Gogoat:
+	Catch Rate:
+		160 -> 45
+
+Pancham:
+	Catch Rate:
+		128 -> 220
+
+Pangoro:
+	Gen 7 Only:
+		BULLET_PUNCH
+	Catch Rate:
+		128 -> 65
+
+Furfrou:
+	Catch Rate:
+		120 -> 160
+
+Espurr:
+	Catch Rate:
+		228 -> 190
+
+Meowstic:
+	Catch Rate:
+		228 -> 75
+
+Honedge:
+	Catch Rate:
+		222 -> 180
+
+Doublade:
+	Catch Rate:
+		222 -> 90
+
+Aegislash:
+	Catch Rate:
+		222 -> 45
+
+Aromatisse:
+	Catch Rate:
+		200 -> 140
+
+Slurpuff:
+	Catch Rate:
+		200 -> 140
+
+Inkay:
+	Catch Rate:
+		120 -> 190
+
+Malamar:
+	Catch Rate:
+		120 -> 80
+
+Binacle:
+	Catch Rate:
+		255 -> 120
+
+Barbaracle:
+	Catch Rate:
+		255 -> 45
+
+Dragalge:
+	Catch Rate:
+		225 -> 55
+
+Clauncher:
+	Catch Rate:
+		155 -> 225
+
+Clawitzer:
+	Catch Rate:
+		155 -> 55
+
+Helioptile:
+	Catch Rate:
+		90 -> 190
+
+Heliolisk:
+	Catch Rate:
+		90 -> 75
+
+Sylveon:
+	Gen 7 Only:
+		BABY_DOLL_EYES
+
+Hawlucha:
+	Catch Rate:
+		128 -> 100
+
+Dedenne:
+	Catch Rate:
+		200 -> 180
+
+Carbink:
+	Catch Rate:
+		30 -> 60
+
+Goomy:
+	Catch Rate:
+		20 -> 45
+
+Sliggoo:
+	Catch Rate:
+		20 -> 45
+
+Goodra:
+	Catch Rate:
+		20 -> 45
+
+Klefki:
+	Catch Rate:
+		60 -> 75
+
+Phantump:
+	Catch Rate:
+		150 -> 120
+
+Trevenant:
+	Catch Rate:
+		150 -> 60
+
+Pumpkaboo:
+	Catch Rate:
+		190 -> 120
+
+Gourgeist:
+	Catch Rate:
+		190 -> 60
+
+Bergmite:
+	Catch Rate:
+		255 -> 190
+
+Avalugg:
+	Gen 7 Only:
+		BODY_SLAM
+	Catch Rate:
+		255 -> 55
+
+Noibat:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		ABSORB
+	Catch Rate:
+		200 -> 190
+
+Noivern:
+	Gen 6 Only:
+		LEECH_LIFE
+	Gen 7 Only:
+		ABSORB
+	Catch Rate:
+		200 -> 45
+
+Xerneas:
+	Catch Rate:
+		70 -> 45
+
+Yveltal:
+	Catch Rate:
+		70 -> 45
+
+Diancie:
+	Gen 7 Only:
+		POWER_GEM
+	Egg Steps:
+		30720 -> 6400
+

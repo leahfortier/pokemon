@@ -2,10 +2,10 @@ package mapMaker.dialogs;
 
 import item.ItemNamesies;
 import main.Global;
-import mapMaker.MapMaker;
-import mapMaker.model.TileModel.TileType;
 import pattern.map.ItemMatcher;
 import util.ColorDocumentListener.ColorCondition;
+import util.FileIO;
+import util.Folder;
 import util.GUIUtils;
 
 import javax.swing.BorderFactory;
@@ -23,13 +23,9 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
 
 	private JTextField itemTextField;
 	private JLabel itemImageLabel;
-	private MapMaker mapMaker;
-	private JTextArea conditionTextArea;
-	
-	public ItemEntityDialog (ItemMatcher itemMatcher, MapMaker givenMapMaker) {
-		super("Item Editor");
 
-		mapMaker = givenMapMaker;
+	public ItemEntityDialog(ItemMatcher itemMatcher) {
+		super("Item Editor");
 
 		itemTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
 			@Override
@@ -40,8 +36,7 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
 			@Override
 			public void additionalValueChanged() {
 				if (greenCondition()) {
-					int index = getItemName().getItem().getImageIndex();
-					itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
+					itemImageLabel.setIcon(new ImageIcon(FileIO.readImage(Folder.ITEM_TILES + getItemName().getItem().getImageName())));
 				} else {
 					itemImageLabel.setIcon(null);
 				}
@@ -55,13 +50,13 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
 		itemImageLabel.setVerticalAlignment(JLabel.CENTER);
 		itemImageLabel.setMinimumSize(new Dimension(3*Global.TILE_SIZE/2, 3*Global.TILE_SIZE/2));
 
-		conditionTextArea = new JTextArea();
-
+		JTextArea conditionTextArea = new JTextArea();
 		JPanel itemImageAndNameComponent = GUIUtils.createHorizontalLayoutComponent(
 				itemImageLabel,
 				GUIUtils.createTextFieldComponent("Item Name", itemTextField)
 		);
 
+		// TODO: Not currently saving the condition I believe
 		GUIUtils.setVerticalLayout(
 				this,
 				itemImageAndNameComponent,
@@ -93,7 +88,6 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
 		ItemNamesies itemName = matcher.getItem();
 		itemTextField.setText(itemName.getName());
 
-		int index = itemName.getItem().getImageIndex();
-		itemImageLabel.setIcon(new ImageIcon(mapMaker.getTileFromSet(TileType.ITEM, index)));
+		itemImageLabel.setIcon(new ImageIcon(FileIO.readImage(Folder.ITEM_TILES + itemName.getItem().getImageName())));
 	}
 }

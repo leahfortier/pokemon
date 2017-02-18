@@ -1,5 +1,6 @@
 package item;
 
+
 import item.Item.AbilityCapsule;
 import item.Item.AbsorbBulb;
 import item.Item.AcrobaticsTM;
@@ -29,6 +30,7 @@ import item.Item.BlizzardTM;
 import item.Item.BrickBreakTM;
 import item.Item.BrightPowder;
 import item.Item.BugGem;
+import item.Item.BugMemory;
 import item.Item.BulkUpTM;
 import item.Item.BulldozeTM;
 import item.Item.BurnDrive;
@@ -59,6 +61,7 @@ import item.Item.CustapBerry;
 import item.Item.CutTM;
 import item.Item.DampRock;
 import item.Item.DarkGem;
+import item.Item.DarkMemory;
 import item.Item.DarkPulseTM;
 import item.Item.DawnStone;
 import item.Item.DazzlingGleamTM;
@@ -74,6 +77,7 @@ import item.Item.DracoPlate;
 import item.Item.DragonClawTM;
 import item.Item.DragonFang;
 import item.Item.DragonGem;
+import item.Item.DragonMemory;
 import item.Item.DragonScale;
 import item.Item.DragonTailTM;
 import item.Item.DreadPlate;
@@ -87,6 +91,8 @@ import item.Item.EchoedVoiceTM;
 import item.Item.EjectButton;
 import item.Item.Electirizer;
 import item.Item.ElectricGem;
+import item.Item.ElectricMemory;
+import item.Item.ElectricSeed;
 import item.Item.Elixir;
 import item.Item.EmbargoTM;
 import item.Item.EnergyBallTM;
@@ -100,11 +106,14 @@ import item.Item.ExpertBelt;
 import item.Item.ExplosionTM;
 import item.Item.FacadeTM;
 import item.Item.FairyGem;
+import item.Item.FairyMemory;
 import item.Item.FalseSwipeTM;
 import item.Item.FastBall;
 import item.Item.FightingGem;
+import item.Item.FightingMemory;
 import item.Item.FireBlastTM;
 import item.Item.FireGem;
+import item.Item.FireMemory;
 import item.Item.FireStone;
 import item.Item.FishingRod;
 import item.Item.FistPlate;
@@ -118,6 +127,7 @@ import item.Item.FlingTM;
 import item.Item.FloatStone;
 import item.Item.FlyTM;
 import item.Item.FlyingGem;
+import item.Item.FlyingMemory;
 import item.Item.FocusBand;
 import item.Item.FocusBlastTM;
 import item.Item.FocusSash;
@@ -129,14 +139,18 @@ import item.Item.FullRestore;
 import item.Item.GanlonBerry;
 import item.Item.GeniusWing;
 import item.Item.GhostGem;
+import item.Item.GhostMemory;
 import item.Item.GigaImpactTM;
 import item.Item.GrassGem;
 import item.Item.GrassKnotTM;
+import item.Item.GrassMemory;
+import item.Item.GrassySeed;
 import item.Item.GreatBall;
 import item.Item.GrepaBerry;
 import item.Item.GripClaw;
 import item.Item.GriseousOrb;
 import item.Item.GroundGem;
+import item.Item.GroundMemory;
 import item.Item.GuardSpec;
 import item.Item.GyroBallTM;
 import item.Item.HPUp;
@@ -157,6 +171,8 @@ import item.Item.HyperPotion;
 import item.Item.IceBeamTM;
 import item.Item.IceGem;
 import item.Item.IceHeal;
+import item.Item.IceMemory;
+import item.Item.IceStone;
 import item.Item.IciclePlate;
 import item.Item.IcyRock;
 import item.Item.IncinerateTM;
@@ -166,6 +182,7 @@ import item.Item.Iron;
 import item.Item.IronBall;
 import item.Item.IronPlate;
 import item.Item.JabocaBerry;
+import item.Item.Jetpack;
 import item.Item.KasibBerry;
 import item.Item.KebiaBerry;
 import item.Item.KeeBerry;
@@ -212,6 +229,7 @@ import item.Item.Metronome;
 import item.Item.MicleBerry;
 import item.Item.MindPlate;
 import item.Item.MiracleSeed;
+import item.Item.MistySeed;
 import item.Item.MoomooMilk;
 import item.Item.MoonBall;
 import item.Item.MoonStone;
@@ -244,6 +262,7 @@ import item.Item.PixiePlate;
 import item.Item.PoisonBarb;
 import item.Item.PoisonGem;
 import item.Item.PoisonJabTM;
+import item.Item.PoisonMemory;
 import item.Item.PokeBall;
 import item.Item.PomegBerry;
 import item.Item.Potion;
@@ -256,12 +275,15 @@ import item.Item.PowerLens;
 import item.Item.PowerUpPunchTM;
 import item.Item.PowerWeight;
 import item.Item.PremierBall;
+import item.Item.PrettyWing;
 import item.Item.PrismScale;
 import item.Item.ProtectTM;
 import item.Item.Protector;
 import item.Item.Protein;
 import item.Item.PsychUpTM;
 import item.Item.PsychicGem;
+import item.Item.PsychicMemory;
+import item.Item.PsychicSeed;
 import item.Item.PsychicTM;
 import item.Item.PsyshockTM;
 import item.Item.PureIncense;
@@ -291,6 +313,7 @@ import item.Item.RingTarget;
 import item.Item.RoarTM;
 import item.Item.RockGem;
 import item.Item.RockIncense;
+import item.Item.RockMemory;
 import item.Item.RockPolishTM;
 import item.Item.RockSlideTM;
 import item.Item.RockSmashTM;
@@ -343,6 +366,7 @@ import item.Item.StarPiece;
 import item.Item.Stardust;
 import item.Item.StarfBerry;
 import item.Item.SteelGem;
+import item.Item.SteelMemory;
 import item.Item.SteelWingTM;
 import item.Item.Stick;
 import item.Item.StickyBarb;
@@ -386,6 +410,7 @@ import item.Item.VenoshockTM;
 import item.Item.VoltSwitchTM;
 import item.Item.WacanBerry;
 import item.Item.WaterGem;
+import item.Item.WaterMemory;
 import item.Item.WaterStone;
 import item.Item.WaterfallTM;
 import item.Item.WaveIncense;
@@ -417,6 +442,7 @@ public enum ItemNamesies {
     // EVERYTHING BELOW IS GENERATED ###
 	NO_ITEM("No Item", NoItem::new),
 	SYRUP("Syrup", Syrup::new),
+	JETPACK("Jetpack", Jetpack::new),
 	BICYCLE("Bicycle", Bicycle::new),
 	SURFBOARD("Surfboard", Surfboard::new),
 	FISHING_ROD("Fishing Rod", FishingRod::new),
@@ -576,7 +602,9 @@ public enum ItemNamesies {
 	SHINY_STONE("Shiny Stone", ShinyStone::new),
 	SUN_STONE("Sun Stone", SunStone::new),
 	THUNDER_STONE("Thunder Stone", ThunderStone::new),
+	ICE_STONE("Ice Stone", IceStone::new),
 	UP_GRADE("Up-Grade", UpGrade::new),
+	PRETTY_WING("Pretty Wing", PrettyWing::new),
 	WATER_STONE("Water Stone", WaterStone::new),
 	WHIPPED_DREAM("Whipped Dream", WhippedDream::new),
 	ANTIDOTE("Antidote", Antidote::new),
@@ -720,6 +748,27 @@ public enum ItemNamesies {
 	ABILITY_CAPSULE("Ability Capsule", AbilityCapsule::new),
 	ASSAULT_VEST("Assault Vest", AssaultVest::new),
 	POWER_HERB("Power Herb", PowerHerb::new),
+	FIRE_MEMORY("Fire Memory", FireMemory::new),
+	WATER_MEMORY("Water Memory", WaterMemory::new),
+	ELECTRIC_MEMORY("Electric Memory", ElectricMemory::new),
+	GRASS_MEMORY("Grass Memory", GrassMemory::new),
+	ICE_MEMORY("Ice Memory", IceMemory::new),
+	FIGHTING_MEMORY("Fighting Memory", FightingMemory::new),
+	POISON_MEMORY("Poison Memory", PoisonMemory::new),
+	GROUND_MEMORY("Ground Memory", GroundMemory::new),
+	FLYING_MEMORY("Flying Memory", FlyingMemory::new),
+	PSYCHIC_MEMORY("Psychic Memory", PsychicMemory::new),
+	BUG_MEMORY("Bug Memory", BugMemory::new),
+	ROCK_MEMORY("Rock Memory", RockMemory::new),
+	GHOST_MEMORY("Ghost Memory", GhostMemory::new),
+	DRAGON_MEMORY("Dragon Memory", DragonMemory::new),
+	DARK_MEMORY("Dark Memory", DarkMemory::new),
+	STEEL_MEMORY("Steel Memory", SteelMemory::new),
+	FAIRY_MEMORY("Fairy Memory", FairyMemory::new),
+	ELECTRIC_SEED("Electric Seed", ElectricSeed::new),
+	GRASSY_SEED("Grassy Seed", GrassySeed::new),
+	MISTY_SEED("Misty Seed", MistySeed::new),
+	PSYCHIC_SEED("Psychic Seed", PsychicSeed::new),
 	HONE_CLAWS_TM("Hone Claws TM", HoneClawsTM::new),
 	DRAGON_CLAW_TM("Dragon Claw TM", DragonClawTM::new),
 	PSYSHOCK_TM("Psyshock TM", PsyshockTM::new),

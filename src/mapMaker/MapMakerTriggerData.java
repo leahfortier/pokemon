@@ -1,8 +1,11 @@
 package mapMaker;
 
+import draw.TileUtils;
 import main.Global;
 import map.entity.movable.MovableEntity;
 import mapMaker.dialogs.EventTriggerDialog;
+import mapMaker.dialogs.FishingTriggerEditDialog;
+import mapMaker.dialogs.FishingTriggerOptionsDialog;
 import mapMaker.dialogs.ItemEntityDialog;
 import mapMaker.dialogs.MapTransitionDialog;
 import mapMaker.dialogs.MiscEntityDialog;
@@ -10,20 +13,19 @@ import mapMaker.dialogs.NPCEntityDialog;
 import mapMaker.dialogs.WildBattleTriggerEditDialog;
 import mapMaker.dialogs.WildBattleTriggerOptionsDialog;
 import mapMaker.model.TileModel.TileType;
-import mapMaker.model.TriggerModel;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.LocationTriggerMatcher;
 import pattern.generic.MultiPointTriggerMatcher;
 import pattern.generic.SinglePointTriggerMatcher;
 import pattern.map.AreaMatcher;
 import pattern.map.EventMatcher;
+import pattern.map.FishingMatcher;
 import pattern.map.ItemMatcher;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import pattern.map.MiscEntityMatcher;
 import pattern.map.NPCMatcher;
 import pattern.map.WildBattleMatcher;
-import util.DrawUtils;
 import util.FileIO;
 import util.JsonUtils;
 import util.Point;
@@ -46,8 +48,9 @@ public class MapMakerTriggerData {
 	private boolean triggersSaved;
 
 	private MapMaker mapMaker;
+	private AreaMatcher defaultArea;
 
-	MapMakerTriggerData(MapMaker mapMaker) {
+	private MapMakerTriggerData(MapMaker mapMaker) {
 		this.mapMaker = mapMaker;
 
 		this.areaData = new HashSet<>();
@@ -57,10 +60,18 @@ public class MapMakerTriggerData {
 		triggersSaved = false;
 	}
 
+	MapMakerTriggerData(MapMaker mapMaker, AreaMatcher defaultArea) {
+		this(mapMaker);
+
+		this.defaultArea = defaultArea;
+		this.addArea(defaultArea);
+	}
+
 	MapMakerTriggerData(MapMaker mapMaker, String mapTriggerFileName) {
 		this(mapMaker);
 
 		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapTriggerFileName);
+		this.defaultArea = mapDataMatcher.getDefaultArea();
 		this.areaData.addAll(mapDataMatcher.getAreas());
 		this.entities.addAll(mapDataMatcher.getAllEntities());
 
@@ -86,10 +97,7 @@ public class MapMakerTriggerData {
 		Set<String> entityNames = new HashSet<>();
 		entityList.forEach(matcher -> getUniqueEntityName(matcher, entityNames));
 
-		MapDataMatcher mapDataMatcher = new MapDataMatcher(
-				areaData,
-				entityList
-		);
+		MapDataMatcher mapDataMatcher = new MapDataMatcher(areaData, entityList);
 
 		FileIO.createFile(mapFileName);
 		FileIO.overwriteFile(mapFileName, new StringBuilder(JsonUtils.getJson(mapDataMatcher)));
@@ -108,7 +116,7 @@ public class MapMakerTriggerData {
 		// Loop until valid name is created
 		do {
 			uniqueEntityName = String.format("%s_%s_%s_%02d",
-					mapMaker.getCurrentMapName(), typeName, basicEntityName, number++);
+					mapMaker.getCurrentMapName().getMapName(), typeName, basicEntityName, number++);
 		} while (entityNames.contains(uniqueEntityName));
 
 		System.out.println(uniqueEntityName);
@@ -145,13 +153,6 @@ public class MapMakerTriggerData {
 
 				BufferedImage image = null;
 				switch (triggerModelType) {
-					case MAP_TRANSITION:
-						Point exit = ((MapTransitionMatcher)entity).getExitLocation();
-						if (exit != null) {
-							BufferedImage exitImage = TriggerModel.getMapExitImage(mapMaker);
-							DrawUtils.drawTileImage(g2d, exitImage, exit, mapLocation);
-						}
-						break;
 					case NPC:
 						NPCMatcher npc = (NPCMatcher) entity;
 						int imageIndex = MovableEntity.getTrainerSpriteIndex(npc.getSpriteIndex(), npc.getDirection());
@@ -163,12 +164,12 @@ public class MapMakerTriggerData {
 					image = triggerModelType.getImage(mapMaker);
 				}
 
-				DrawUtils.drawTileImage(g2d, image, point, mapLocation);
+				TileUtils.drawTileImage(g2d, image, point, mapLocation);
 			} else if (entity instanceof MultiPointTriggerMatcher) {
 				List<Point> entityLocation = ((MultiPointTriggerMatcher) entity).getLocation();
 				for (Point point : entityLocation) {
 					BufferedImage image = triggerModelType.getImage(mapMaker);
-					DrawUtils.drawTileImage(g2d, image, point, mapLocation);
+					TileUtils.drawTileImage(g2d, image, point, mapLocation);
 				}
 			} else {
 				Global.error("Unknown entity matcher class " + entity.getClass().getSimpleName());
@@ -214,25 +215,39 @@ public class MapMakerTriggerData {
 	private LocationTriggerMatcher getTriggerFromDialog(TriggerModelType triggerModelType, LocationTriggerMatcher oldTrigger) {
 		switch (triggerModelType) {
 			case ITEM:
-				return new ItemEntityDialog((ItemMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
+				return new ItemEntityDialog((ItemMatcher)oldTrigger).getMatcher(mapMaker);
 			case NPC:
 				return new NPCEntityDialog((NPCMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
 			case MISC_ENTITY:
 				return new MiscEntityDialog((MiscEntityMatcher)oldTrigger).getMatcher(mapMaker);
 			case MAP_TRANSITION:
 				return new MapTransitionDialog((MapTransitionMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
+			case EVENT:
+				return new EventTriggerDialog((EventMatcher)oldTrigger).getMatcher(mapMaker);
 			case WILD_BATTLE:
 				if (oldTrigger == null) {
 					return new WildBattleTriggerOptionsDialog(this.getWildBattleTriggers()).getMatcher(mapMaker);
 				} else {
 					return new WildBattleTriggerEditDialog((WildBattleMatcher)oldTrigger, -1).getMatcher(mapMaker);
 				}
-			case EVENT:
-				return new EventTriggerDialog((EventMatcher)oldTrigger).getMatcher(mapMaker);
+			case FISHING:
+				if (oldTrigger == null) {
+					return new FishingTriggerOptionsDialog(this.getFishingTriggers()).getMatcher(mapMaker);
+				} else {
+					return new FishingTriggerEditDialog((FishingMatcher) oldTrigger, -1).getMatcher(mapMaker);
+				}
 			default:
 				Global.error("Unknown trigger model type " + triggerModelType);
 				return null;
 		}
+	}
+
+	private List<FishingMatcher> getFishingTriggers() {
+		return this.entities
+				.stream()
+				.filter(entity -> entity instanceof FishingMatcher)
+				.map(entity -> (FishingMatcher)entity)
+				.collect(Collectors.toList());
 	}
 
 	private List<WildBattleMatcher> getWildBattleTriggers() {
@@ -259,5 +274,18 @@ public class MapMakerTriggerData {
 	public void moveTrigger(LocationTriggerMatcher trigger) {
 		removeTrigger(trigger);
 		mapMaker.setPlaceableTrigger(trigger);
+	}
+
+	public void addArea(AreaMatcher newArea) {
+		this.areaData.add(newArea);
+		triggersSaved = false;
+	}
+
+	public AreaMatcher getDefaultArea() {
+		return this.defaultArea;
+	}
+
+	public Set<AreaMatcher> getAreaData() {
+		return this.areaData;
 	}
 }

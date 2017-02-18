@@ -3,11 +3,15 @@ package map;
 import map.weather.WeatherState;
 import sound.MusicCondition;
 import sound.SoundTitle;
+import util.StringUtils;
+
+import java.awt.Color;
 
 public class AreaData {
-	static final AreaData VOID = new AreaData(
+	public static final AreaData VOID = new AreaData(
 			"Void",
-			0,
+			Color.BLACK,
+			null,
 			TerrainType.CAVE,
 			WeatherState.NORMAL,
 			SoundTitle.DEFAULT_TUNE,
@@ -15,8 +19,9 @@ public class AreaData {
 	);
 
 	private final String name;
-	private final int color;
+	private final Color color;
 
+	private final String flyLocation;
 	private final TerrainType terrainType;
 	private final WeatherState weather;
 
@@ -24,7 +29,8 @@ public class AreaData {
 	private final MusicCondition[] musicConditions;
 
 	public AreaData(String name,
-					int color,
+					Color color,
+					String flyLocation,
 					TerrainType terrainType,
 					WeatherState weather,
 					SoundTitle music,
@@ -32,6 +38,7 @@ public class AreaData {
 		this.name = name;
 		this.color = color;
 
+		this.flyLocation = flyLocation;
 		this.terrainType = terrainType;
 		this.weather = weather;
 
@@ -39,8 +46,20 @@ public class AreaData {
 		this.musicConditions = musicConditions;
 	}
 
-	public boolean isColor(int color) {
-		return this.color == color;
+	public boolean hasColor() {
+		return !this.color.equals(Color.BLACK);
+	}
+
+	public boolean isColor(Color color) {
+		return this.color.equals(color);
+	}
+
+	public boolean isFlyLocation() {
+		return !StringUtils.isNullOrEmpty(flyLocation);
+	}
+
+	public String getFlyLocation() {
+		return flyLocation;
 	}
 
 	public WeatherState getWeather() {

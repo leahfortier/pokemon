@@ -19,7 +19,7 @@ public class Messages {
     public enum MessageState {
         FIGHTY_FIGHT,   // Battle View
         MAPPITY_MAP,    // Map View
-        BAGGIN_IT_UP;   // Bag View
+        BAGGIN_IT_UP    // Bag View
     }
 
     private static ArrayDeque<MessageUpdate> getQueue() {
@@ -48,6 +48,10 @@ public class Messages {
 
     public static boolean nextMessageEmpty() {
         return StringUtils.isNullOrEmpty(getQueue().peek().getMessage());
+    }
+
+    public static void add(String message) {
+        add(new MessageUpdate(message));
     }
 
     public static void add(MessageUpdate message) {

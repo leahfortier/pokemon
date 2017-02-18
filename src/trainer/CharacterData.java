@@ -7,14 +7,18 @@ import gui.view.ViewMode;
 import item.Item;
 import item.ItemNamesies;
 import item.use.BallItem;
+import map.AreaData;
 import map.Direction;
+import map.MapName;
 import map.entity.movable.PlayerEntity;
+import map.triggers.FishingTrigger;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import pattern.GroupTriggerMatcher;
+import pattern.SimpleMapTransition;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PC;
@@ -26,13 +30,16 @@ import util.RandomUtils;
 import util.StringUtils;
 
 import java.io.Serializable;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CharacterData extends Trainer implements Serializable {
 	private static final long serialVersionUID = 4283479774388652604L;
@@ -47,9 +54,10 @@ public class CharacterData extends Trainer implements Serializable {
 	private Direction direction;
 
 	private boolean mapReset;
-	private String mapName;
-	private String mapEntranceName;
+	private MapName mapName;
+	private SimpleMapTransition mapTransition;
 	private String areaName;
+	private Set<Entry<MapName, String>> flyLocations;
 
 	private transient PlayerEntity entity;
 
@@ -62,8 +70,7 @@ public class CharacterData extends Trainer implements Serializable {
 
 	private transient long timeSinceUpdate;
 
-	private String lastPCMap;
-	private String lastPCMapEntrance;
+	private SimpleMapTransition lastPCMapEntrance;
 
 	private Pokedex pokedex;
 	private PC pc;
@@ -98,6 +105,7 @@ public class CharacterData extends Trainer implements Serializable {
 		direction = Direction.DOWN;
 		areaName = StringUtils.empty();
 		mapReset = false;
+		flyLocations = new HashSet<>();
 	}
 
 	// Initializes the character with the current game -- used when recovering a save file as well as the generic constructor
@@ -163,13 +171,21 @@ public class CharacterData extends Trainer implements Serializable {
 		this.direction = direction;
 	}
 	
-	public void setMap(String name, String mapEntrance) {
-		mapName = name;
-		mapEntranceName = mapEntrance;
+	public void setMap(SimpleMapTransition mapTransitionMatcher) {
+		mapName = mapTransitionMatcher.getNextMap();
+		mapTransition = mapTransitionMatcher;
 	}
 
-	public void setAreaName(String areaName) {
-		this.areaName = areaName;
+	public void setArea(MapName mapName, AreaData area) {
+		this.areaName = area.getAreaName();
+
+		if (area.isFlyLocation()) {
+			this.flyLocations.add(new SimpleEntry<>(mapName, this.areaName));
+		}
+	}
+
+	public List<Entry<MapName, String>> getFlyLocations() {
+		return this.flyLocations.stream().collect(Collectors.toList());
 	}
 
 	public ActivePokemon getEvolvingPokemon() {
@@ -212,11 +228,12 @@ public class CharacterData extends Trainer implements Serializable {
 		for (ActivePokemon p : team) {
 			if (p.isEgg() && p.hatch()) {
 				evolvingPokemon = p;
+				evolution = null;
 
 				Trigger dialogue = TriggerType.DIALOGUE.createTrigger("Huh?", null);
 				Trigger evolutionView = TriggerType.CHANGE_VIEW.createTrigger(ViewMode.EVOLUTION_VIEW.name(), null);
 
-				GroupTriggerMatcher matcher = new GroupTriggerMatcher(dialogue.getName(), evolutionView.getName());
+				GroupTriggerMatcher matcher = new GroupTriggerMatcher("EggHatching", dialogue.getName(), evolutionView.getName());
 				Trigger group = TriggerType.GROUP.createTrigger(JsonUtils.getJson(matcher), null);
 				Messages.add(new MessageUpdate().withTrigger(group.getName()));
 				
@@ -225,7 +242,11 @@ public class CharacterData extends Trainer implements Serializable {
 			}
 		}
 	}
-	
+
+	public boolean isFishing() {
+		return this.globalsContain(FishingTrigger.FISHING_GLOBAL);
+	}
+
 	public boolean isUsingRepel() {
 		return repelSteps > 0;
 	}
@@ -234,7 +255,7 @@ public class CharacterData extends Trainer implements Serializable {
 		repelSteps += steps;
 	}
 
-	public String getMapName() {
+	public MapName getMapName() {
 		return this.mapName;
 	}
 
@@ -246,21 +267,20 @@ public class CharacterData extends Trainer implements Serializable {
 		this.mapReset = mapReset;
 	}
 
-	public String getMapEntranceName() {
-		return mapEntranceName;
+	public SimpleMapTransition getMapTransition() {
+		return this.mapTransition;
 	}
 
 	public String getAreaName() {
 		return areaName;
 	}
 	
-	public void setPokeCenter(String mapName, String entranceName) {
-		lastPCMap = mapName;
+	public void setPokeCenter(SimpleMapTransition entranceName) {
 		lastPCMapEntrance = entranceName;
 	}
 	
 	public void teleportToPokeCenter() {
-		setMap(lastPCMap, lastPCMapEntrance);
+		setMap(lastPCMapEntrance);
 
 		direction = Direction.DOWN;
 		mapReset = true;
@@ -381,11 +401,9 @@ public class CharacterData extends Trainer implements Serializable {
 	}
 
 	public void checkEvolution() {
-		for (ActivePokemon pokemon : team) {
-			if (pokemon.canFight()) {
-				pokemon.checkEvolution();
-			}
-		}
+		team.stream()
+				.filter(pokemon -> pokemon.canFight())
+				.forEach(pokemon -> pokemon.checkEvolution());
 	}
 	
 	public Pokedex getPokedex() {
@@ -459,9 +477,8 @@ public class CharacterData extends Trainer implements Serializable {
 		int catchRate = catchPokemon.getPokemonInfo().getCatchRate();
 		double statusMod = catchPokemon.getStatus().getType().getCatchModifier();
 
-		double[] ballInfo = ball.catchRate(front(), catchPokemon, b);
-		double ballMod = ballInfo[0];
-		double ballAdd = ballInfo[1];
+		double ballMod = ball.getModifier(front(), catchPokemon, b);
+		int ballAdd = ball.getAdditive(front(), catchPokemon, b);
 
 		double catchVal = (3*maxHP - 2*hp)*catchRate*ballMod*statusMod/(3*maxHP) + ballAdd;
 		int shakeVal = (int)Math.ceil(65536/Math.pow(255/catchVal, .25));
@@ -478,6 +495,7 @@ public class CharacterData extends Trainer implements Serializable {
 		Messages.add(new MessageUpdate("Gotcha! " + catchPokemon.getName() + " was caught!"));
 		gainEXP(catchPokemon, b);
 		addPokemon(catchPokemon);
+		ball.afterCaught(catchPokemon);
 
 		Messages.add(new MessageUpdate().withUpdate(Update.CATCH_POKEMON));
 		return true;
