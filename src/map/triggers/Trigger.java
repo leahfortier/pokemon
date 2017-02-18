@@ -1,7 +1,12 @@
 package map.triggers;
 
+import gui.view.ViewMode;
 import main.Game;
 import map.Condition;
+import pattern.GroupTriggerMatcher;
+import sound.SoundTitle;
+import util.JsonUtils;
+import util.PokeString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,4 +56,44 @@ public abstract class Trigger {
 	}
 
 	protected abstract void executeTrigger();
+
+	public static void createCommonTriggers() {
+
+		// PC Start Up
+		GroupTriggerMatcher loadPC = new GroupTriggerMatcher(
+				"LoadPC",
+				TriggerType.DIALOGUE.createTrigger("Starting up PC...", null).getName(),
+				TriggerType.CHANGE_VIEW.createTrigger(ViewMode.PC_VIEW.name(), null).getName()
+		);
+		TriggerType.GROUP.createTrigger(JsonUtils.getJson(loadPC), null);
+
+		// Mart Bro
+		GroupTriggerMatcher loadMart = new GroupTriggerMatcher(
+				"LoadMart",
+				TriggerType.DIALOGUE.createTrigger("Welcome to the " + PokeString.POKE + "Mart!", null).getName(),
+				TriggerType.CHANGE_VIEW.createTrigger(ViewMode.MART_VIEW.name(), null).getName()
+		);
+		TriggerType.GROUP.createTrigger(JsonUtils.getJson(loadMart), null);
+
+		// PokeCenter Healing
+		GroupTriggerMatcher pokeCenterHeal = new GroupTriggerMatcher(
+				"PokeCenterHeal",
+				TriggerType.DIALOGUE.createTrigger("Welcome to the " + PokeString.POKEMON + " Center!", null).getName(),
+				TriggerType.DIALOGUE.createTrigger("Let me heal your " + PokeString.POKEMON + " for you!", null).getName(),
+				TriggerType.SOUND.createTrigger(SoundTitle.POKE_CENTER_HEAL.name(), null).getName(),
+				TriggerType.DIALOGUE.createTrigger("Dun Dun Dun-Dun Dun!", null).getName(),
+				TriggerType.HEAL_PARTY.createTrigger(null, null).getName(),
+				TriggerType.DIALOGUE.createTrigger("Your " + PokeString.POKEMON + " have been healed!", null).getName(),
+				TriggerType.DIALOGUE.createTrigger("I hope to see you again soon!", null).getName()
+		);
+		TriggerType.GROUP.createTrigger(JsonUtils.getJson(pokeCenterHeal), null);
+
+		// Egg hatching
+		GroupTriggerMatcher eggHatching = new GroupTriggerMatcher(
+				"EggHatching",
+				TriggerType.DIALOGUE.createTrigger("Huh?", null).getName(),
+				TriggerType.CHANGE_VIEW.createTrigger(ViewMode.EVOLUTION_VIEW.name(), null).getName()
+		);
+		TriggerType.GROUP.createTrigger(JsonUtils.getJson(eggHatching), null);
+	}
 }

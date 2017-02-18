@@ -103,16 +103,7 @@
       "name": "PC",
       "actions": [
         {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Starting up PC..."
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "ChangeView",
-            "triggerContents": "PC_VIEW"
-          }
+          "groupTrigger": "LoadPC"
         }
       ],
       "location": {

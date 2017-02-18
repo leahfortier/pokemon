@@ -46,8 +46,9 @@ public class GameData {
 
 	private void loadMaps() {
 		triggers = new HashMap<>();
-		maps = new HashMap<>();
+		Trigger.createCommonTriggers();
 
+		maps = new HashMap<>();
 		File mapsDirectory = new File(Folder.MAPS);
 		for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
 			MapData mapData = new MapData(mapFolder);
