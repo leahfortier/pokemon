@@ -304,7 +304,7 @@ class NewPokemonView extends View {
         switch (state) {
             case POKEDEX:
                 if (player.isFirstNewPokemon()) {
-                    message = pokemonName + " was registered in the " + PokeString.POKEDEX + "!";
+                    message = newPokemon.getPokemonInfo().getName() + " was registered in the " + PokeString.POKEDEX + "!";
                 } else {
                     setState(State.NICKNAME_QUESTION);
                 }
@@ -324,7 +324,7 @@ class NewPokemonView extends View {
                 message = "What would you like to name " + pokemonName + "?";
                 break;
             case LOCATION:
-                if (player.fullParty()) {
+                if (player.fullParty() && !player.getTeam().contains(newPokemon)) {
                     for (int i = 0; i < buttons.length; i++) {
                         Button button = buttons[i];
                         button.setActive(button == leftButton() || button == rightButton());

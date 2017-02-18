@@ -428,6 +428,19 @@ public class CharacterData extends Trainer implements Serializable {
 		}
 	}
 
+	public void pokemonEvolved(ActivePokemon p) {
+		this.newPokemon = p;
+		Messages.add(new MessageUpdate().withViewChange(ViewMode.NEW_POKEMON_VIEW));
+
+		// Should already be in party if evolving/hatching
+		this.newPokemonBox = null;
+
+		// Show pokedex info if we don't already have this pokemon
+		isFirstNewPokemon = !pokedex.isCaught(p);
+		pokedex.setCaught(p);
+		p.setCaught();
+	}
+
 	public boolean fullParty() {
 		return this.team.size() == MAX_POKEMON;
 	}
