@@ -240,7 +240,7 @@ public class BattleView extends View {
 
 				if (newMessage.learnMove()) {
 					learnedMove = newMessage.getMove();
-					learnedPokemon = newMessage.getActivePokemon();
+					learnedPokemon = newMessage.getMoveLearner();
 				}
 
 				this.state.checkMessage(newMessage);
