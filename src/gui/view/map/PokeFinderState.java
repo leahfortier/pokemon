@@ -3,7 +3,6 @@ package gui.view.map;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.panel.DrawPanel;
-import gui.GameData;
 import gui.TileSet;
 import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
@@ -11,7 +10,6 @@ import input.InputControl;
 import main.Game;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
-import trainer.CharacterData;
 import trainer.pokedex.Pokedex;
 import util.FontMetrics;
 import util.Point;
@@ -31,6 +29,11 @@ class PokeFinderState implements VisualStateHandler {
 
     private final DrawPanel pokeFinderPanel;
 
+    private List<PokemonNamesies> availablePokemon;
+    private Pokedex pokedex;
+    private TileSet pokedexTiles;
+    private Set<PokemonNamesies> toRender;
+
     PokeFinderState() {
         pokeFinderPanel = DrawPanel.fullGamePanel().withBorderColor(new Color(219, 9, 46)).withBorderPercentage(5);
     }
@@ -38,14 +41,47 @@ class PokeFinderState implements VisualStateHandler {
 
     @Override
     public void draw(Graphics g, MapView mapView) {
-        List<PokemonNamesies> availablePokemon = mapView.getCurrentMap().getAvailableWildPokemon();
-        GameData data = Game.getData();
-        CharacterData player = Game.getPlayer();
-        Pokedex pokedex = player.getPokedex();
-
         pokeFinderPanel.drawBackground(g);
-        TileSet pokedexTiles = data.getPokedexTilesSmall();
-        Set<PokemonNamesies> toRender = new TreeSet<>();
+
+        Iterator<PokemonNamesies> iter = toRender.iterator();
+        for (int i = 0; i < toRender.size(); i++) {
+            PokemonNamesies namesies = iter.next();
+            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(namesies);
+
+            BufferedImage image = pokedexTiles.getTile(pokemonInfo.getImageName());
+            if (!pokedex.isCaught(namesies)) {
+                image = ImageUtils.silhouette(image);
+            }
+
+            Point point = Point.getPointAtIndex(i, NUM_COLUMNS);
+            int spacing = (pokeFinderPanel.width - pokeFinderPanel.getBorderSize())/NUM_COLUMNS;
+            ImageUtils.drawCenteredImage(g,
+                    image,
+                    pokeFinderPanel.x + pokeFinderPanel.getBorderSize() + spacing*point.x + spacing/2,
+                    72 + 124*point.y
+            );
+        }
+
+        FontMetrics.setFont(g, 24);
+        int numCaught = (int) availablePokemon.stream().filter(p -> pokedex.isCaught(p)).count();
+        TextUtils.drawCenteredString(g, numCaught + "/" + availablePokemon.size() + " Caught", pokeFinderPanel.centerX(), pokeFinderPanel.bottomY() - 52);
+    }
+
+    @Override
+    public void update(int dt, MapView mapView) {
+        InputControl input = InputControl.instance();
+        if (input.consumeIfDown(ControlKey.ESC) || input.consumeIfDown(ControlKey.POKEFINDER)) {
+            mapView.setState(VisualState.MAP);
+        }
+    }
+
+    @Override
+    public void set(MapView mapView) {
+        this.availablePokemon = mapView.getCurrentMap().getAvailableWildPokemon();
+        this.pokedex = Game.getPlayer().getPokedex();
+        this.pokedexTiles = Game.getData().getPokedexTilesSmall();
+
+        this.toRender = new TreeSet<>();
         for (PokemonNamesies namesies : availablePokemon) {
             if (toRender.size() == MAX_RENDER) {
                 break;
@@ -64,40 +100,6 @@ class PokeFinderState implements VisualStateHandler {
             if (pokedex.isCaught(namesies)) {
                 toRender.add(namesies);
             }
-        }
-
-        Iterator<PokemonNamesies> iter = toRender.iterator();
-        for (int i = 0; i < toRender.size(); i++) {
-            Point point = Point.getPointAtIndex(i, NUM_COLUMNS);
-            PokemonNamesies namesies = iter.next();
-            if (pokedex.isNotSeen(namesies)) {
-                continue;
-            }
-
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(namesies);
-            BufferedImage image = pokedexTiles.getTile(pokemonInfo.getImageName());
-            if (!pokedex.isCaught(namesies)) {
-                image = ImageUtils.silhouette(image);
-            }
-
-            int spacing = (pokeFinderPanel.width - pokeFinderPanel.getBorderSize())/NUM_COLUMNS;
-            ImageUtils.drawCenteredImage(g,
-                    image,
-                    pokeFinderPanel.x + pokeFinderPanel.getBorderSize() + spacing*point.x + spacing/2,
-                    72 + 124*point.y
-            );
-        }
-
-        FontMetrics.setFont(g, 24);
-        int numCaught = (int) availablePokemon.stream().filter(p -> player.getPokedex().isCaught(p)).count();
-        TextUtils.drawCenteredString(g, numCaught + "/" + availablePokemon.size() + " Caught", pokeFinderPanel.centerX(), pokeFinderPanel.bottomY() - 52);
-    }
-
-    @Override
-    public void update(int dt, MapView mapView) {
-        InputControl input = InputControl.instance();
-        if (input.consumeIfDown(ControlKey.ESC) || input.consumeIfDown(ControlKey.POKEFINDER)) {
-            mapView.setState(VisualState.MAP);
         }
     }
 }
