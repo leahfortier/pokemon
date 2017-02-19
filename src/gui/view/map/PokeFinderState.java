@@ -54,11 +54,11 @@ class PokeFinderState implements VisualStateHandler {
             }
 
             Point point = Point.getPointAtIndex(i, NUM_COLUMNS);
-            int spacing = (pokeFinderPanel.width - pokeFinderPanel.getBorderSize())/NUM_COLUMNS;
+            int spacing = (pokeFinderPanel.width - 2*pokeFinderPanel.getBorderSize())/NUM_COLUMNS;
             ImageUtils.drawCenteredImage(g,
                     image,
                     pokeFinderPanel.x + pokeFinderPanel.getBorderSize() + spacing*point.x + spacing/2,
-                    72 + 124*point.y
+                    72 + 124*point.y + pokeFinderPanel.getBorderSize()
             );
         }
 
