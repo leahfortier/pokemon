@@ -2,6 +2,7 @@ package mapMaker.tools;
 
 import draw.TileUtils;
 import mapMaker.MapMaker;
+import map.MapDataType;
 import util.Point;
 
 import java.awt.Color;
@@ -57,5 +58,25 @@ public class Rectangle {
                 this.upperLeftRectangleCoordinate = Point.add(this.upperLeftRectangleCoordinate, delta);
             }
         }
+    }
+
+    void drawTiles(MapMaker mapMaker, int[][] values) {
+        for (int x = 0; x < this.dimension.width; x++) {
+            for (int y = 0; y < this.dimension.height; y++) {
+                Point delta = mapMaker.setTile(Point.add(this.upperLeftRectangleCoordinate, x, y), values[y][x]);
+                this.upperLeftRectangleCoordinate = Point.add(this.upperLeftRectangleCoordinate, delta);
+            }
+        }
+    }
+
+    int[][] getValues(MapMaker mapMaker, MapDataType mapDataType) {
+        int[][] values = new int[dimension.height][dimension.width];
+        for (int x = 0; x < this.dimension.width; x++) {
+            for (int y = 0; y < this.dimension.height; y++) {
+                values[y][x] = mapMaker.getTile(Point.add(this.upperLeftRectangleCoordinate, x, y), mapDataType);
+            }
+        }
+
+        return values;
     }
 }

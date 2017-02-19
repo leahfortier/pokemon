@@ -173,6 +173,11 @@ public class SelectTool extends Tool {
         deselect();
     }
 
+    @Override
+    public void undo() {
+
+    }
+
     public String toString() {
         return "Select";
     }

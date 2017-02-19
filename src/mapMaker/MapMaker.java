@@ -75,7 +75,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	private JList<Tool> toolList;
 	public Canvas canvas;
 	private JMenuItem newMenuItem, loadMenuItem, setRootMenuItem;
-	public JMenuItem cutMenuItem, copyMenuItem, pasteMenuItem;
+	public JMenuItem cutMenuItem, copyMenuItem, pasteMenuItem, undoMenuItem;
 	private JLabel mapNameLabel;
 	private JMenuItem saveMenuItem;
 	private JLabel rootLabel;
@@ -154,8 +154,9 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         this.cutMenuItem = this.createEditMenuItem("Cut", KeyEvent.VK_X);
         this.copyMenuItem = this.createEditMenuItem("Copy", KeyEvent.VK_C);
         this.pasteMenuItem = this.createEditMenuItem("Paste", KeyEvent.VK_V);
-
-        return GUIUtils.createMenu("Edit", cutMenuItem, copyMenuItem, pasteMenuItem);
+        this.undoMenuItem = this.createEditMenuItem("Undo", KeyEvent.VK_Z);
+		undoMenuItem.setEnabled(true);
+        return GUIUtils.createMenu("Edit", cutMenuItem, copyMenuItem, pasteMenuItem, undoMenuItem);
     }
 
 	private JMenuBar createMenuBar() {
@@ -342,6 +343,10 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
                 this.setTool(ToolType.SELECT);
 				selectTool.paste();
 			}
+			else if (event.getSource() == undoMenuItem) {
+				Tool.undoLastTool();
+				draw();
+			}
 		}
 		else if (event.getSource() == setRootMenuItem) {
             JFileChooser directoryChooser = FileIO.getDirectoryChooser();
@@ -409,13 +414,17 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 
 	public Point setTile(Point location, int val) {
+		return setTile(location, val, editType);
+	}
+
+	public Point setTile(Point location, int val, EditType editType) {
 		Point delta = this.mapData.checkNewDimension(location);
 
 		Point start = Point.add(delta, location);
 		boolean clearSelection = this.mapData.setTile(editType, start, val);
-        if (clearSelection) {
-            tileList.clearSelection();
-        }
+		if (clearSelection) {
+			tileList.clearSelection();
+		}
 
 		return delta;
 	}

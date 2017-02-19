@@ -29,6 +29,9 @@ class MoveTool extends Tool {
         previousLocation = mapMaker.getMouseHoverLocation();
     }
 
+    @Override
+    public void undo() {}
+
     public String toString() {
         return "Move";
     }

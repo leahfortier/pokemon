@@ -3,19 +3,27 @@ package mapMaker.tools;
 import draw.TileUtils;
 import mapMaker.EditType;
 import mapMaker.MapMaker;
+import pattern.generic.LocationTriggerMatcher;
 import util.Point;
 
+import javax.xml.stream.Location;
 import java.awt.Graphics;
 
 class RectangleTool extends Tool {
     private Point startLocation;
     private Rectangle rectangle;
 
+    private Rectangle lastRectangle;
+    private int[][] lastValues;
+    private EditType lastEditType;
+    private LocationTriggerMatcher lastTrigger;
+
     private boolean pressed = false;
 
     RectangleTool(MapMaker mapMaker) {
         super(mapMaker);
         this.rectangle = new Rectangle(false);
+        this.lastRectangle = new Rectangle(false);
     }
 
     @Override
@@ -24,15 +32,25 @@ class RectangleTool extends Tool {
             return;
         }
 
+        Tool.lastUsedTool = this;
+
         Point mouseHoverLocation = TileUtils.getLocation(releasedLocation, mapMaker.getMapLocation());
         this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.getCurrentMapSize());
+        this.lastRectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.getCurrentMapSize());
 
         pressed = false;
+
+        if (!mapMaker.isEditType(EditType.TRIGGERS)) {
+            lastValues = this.rectangle.getValues(mapMaker, mapMaker.getEditType().getDataType());
+        }
+
+        lastEditType = mapMaker.getEditType();
 
         int val = mapMaker.getSelectedTile();
         this.rectangle.drawTiles(mapMaker, val);
 
         if (mapMaker.isEditType(EditType.TRIGGERS)) {
+            lastTrigger = mapMaker.getPlaceableTrigger();
             mapMaker.clearPlaceableTrigger();
             mapMaker.setTool(ToolType.TRIGGER);
         }
@@ -63,6 +81,20 @@ class RectangleTool extends Tool {
     @Override
     public void reset() {
         pressed = false;
+    }
+
+    @Override
+    public void undo() {
+        if (lastRectangle != null && lastEditType != null) {
+            if (lastEditType == EditType.TRIGGERS) {
+                mapMaker.getTriggerData().removeTrigger(lastTrigger);
+            } else {
+                lastRectangle.drawTiles(mapMaker, lastValues);
+            }
+            lastValues = null;
+            lastEditType = null;
+            lastTrigger = null;
+        }
     }
 
     public String toString() {

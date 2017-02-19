@@ -102,6 +102,11 @@ class TriggerTool extends Tool {
         TileUtils.outlineTile(g, mouseHoverLocation, mapMaker.getMapLocation(), Color.BLUE);
     }
 
+    @Override
+    public void undo() {
+
+    }
+
     public String toString() {
         return "Trigger";
     }

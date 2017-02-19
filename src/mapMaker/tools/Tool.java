@@ -8,6 +8,7 @@ import java.awt.Graphics;
 
 public abstract class Tool {
     final MapMaker mapMaker;
+    public static Tool lastUsedTool;
 
     Tool(final MapMaker mapMaker) {
         this.mapMaker = mapMaker;
@@ -20,6 +21,14 @@ public abstract class Tool {
     public void drag(Point dragLocation) {}
     public void draw(Graphics g) {}
     public void reset() {}
+
+    public static void undoLastTool() {
+        if (lastUsedTool != null) {
+            lastUsedTool.undo();
+        }
+    }
+
+    public abstract void undo();
 
     public static DefaultListModel<Tool> getToolListModel(MapMaker mapMaker) {
         DefaultListModel<Tool> toolListModel = new DefaultListModel<>();

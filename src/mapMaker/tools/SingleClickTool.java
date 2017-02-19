@@ -6,6 +6,7 @@ import mapMaker.EditType;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.generic.LocationTriggerMatcher;
 import pattern.map.NPCMatcher;
 import util.Point;
 
@@ -13,6 +14,11 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 class SingleClickTool extends Tool {
+    private Point lastLocation;
+    private int lastVal;
+    private EditType lastEditType;
+    private LocationTriggerMatcher lastTrigger;
+
     SingleClickTool(final MapMaker mapMaker) {
         super(mapMaker);
     }
@@ -23,13 +29,20 @@ class SingleClickTool extends Tool {
             return;
         }
 
+        Tool.lastUsedTool = this;
+
         Point location = TileUtils.getLocation(clickedLocation, mapMaker.getMapLocation());
+        lastLocation = location;
         System.out.println("click: " + clickedLocation);
 
+        lastVal = mapMaker.getTile(location, mapMaker.getEditType().getDataType());
         int val = mapMaker.getSelectedTile();
         mapMaker.setTile(location, val);
 
+        lastEditType = mapMaker.getEditType();
+
         if (mapMaker.isEditType(EditType.TRIGGERS)) {
+            lastTrigger = mapMaker.getPlaceableTrigger();
             mapMaker.clearPlaceableTrigger();
             mapMaker.setTool(ToolType.TRIGGER);
         }
@@ -69,6 +82,20 @@ class SingleClickTool extends Tool {
             if (image != null) {
                 TileUtils.drawTileImage(g, image, location, mapMaker.getMapLocation());
             }
+        }
+    }
+
+    @Override
+    public void undo() {
+        if (lastLocation != null && lastEditType != null) {
+            if (lastEditType == EditType.TRIGGERS) {
+                mapMaker.getTriggerData().removeTrigger(lastTrigger);
+            } else {
+                mapMaker.setTile(lastLocation, lastVal, lastEditType);
+            }
+            lastLocation = null;
+            lastEditType = null;
+            lastTrigger = null;
         }
     }
 
