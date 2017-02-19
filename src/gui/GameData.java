@@ -15,6 +15,8 @@ public class GameData {
 	private Map<MapName, MapData> maps;
 	private Map<String, Trigger> triggers;
 
+	private IndexTileSet mapTiles;
+	private IndexTileSet trainerTiles;
 	private TileSet partyTiles;
 	private TileSet pokemonTilesSmall;
 	private TileSet pokemonTilesMedium;
@@ -23,9 +25,8 @@ public class GameData {
 	private TileSet pokedexTilesLarge;
 	private TileSet itemTiles;
 	private TileSet itemTilesLarge;
-	private IndexTileSet mapTiles;
-	private IndexTileSet trainerTiles;
-	private IndexTileSet terrainTiles;
+	private TileSet opponentTerrainTiles;
+	private TileSet playerTerrainTiles;
 
 	public void loadData() {
 		loadTiles();
@@ -33,6 +34,8 @@ public class GameData {
 	}
 
 	private void loadTiles() {
+		mapTiles = new IndexTileSet(Folder.MAP_TILES);
+		trainerTiles = new IndexTileSet(Folder.TRAINER_TILES);
 		partyTiles = new TileSet(Folder.PARTY_TILES);
 		pokemonTilesSmall = new TileSet(Folder.POKEMON_TILES);
 		pokemonTilesMedium = new TileSet(Folder.POKEMON_TILES, 2.3f);
@@ -41,9 +44,8 @@ public class GameData {
 		pokedexTilesLarge = new TileSet(Folder.POKEDEX_TILES);
 		itemTiles = new TileSet(Folder.ITEM_TILES);
 		itemTilesLarge = new TileSet(Folder.ITEM_TILES, 2.9f);
-		mapTiles = new IndexTileSet(Folder.MAP_TILES);
-		trainerTiles = new IndexTileSet(Folder.TRAINER_TILES);
-		terrainTiles = new IndexTileSet(Folder.TERRAIN_TILES);
+		opponentTerrainTiles = new TileSet(Folder.TERRAIN_TILES, 2.4f);
+		playerTerrainTiles = new TileSet(Folder.TERRAIN_TILES, 3.1f);
 	}
 
 	private void loadMaps() {
@@ -82,8 +84,12 @@ public class GameData {
 		return mapTiles;
 	}
 
-	public IndexTileSet getTerrainTiles() {
-		return terrainTiles;
+	public TileSet getOpponentTerrainTiles() {
+		return opponentTerrainTiles;
+	}
+
+	public TileSet getPlayerTerrainTiles() {
+		return playerTerrainTiles;
 	}
 
 	public TileSet getItemTiles() {

@@ -264,10 +264,10 @@ public class BattleView extends View {
 		 
 		// Get background based on terrain type
 		TerrainType terrainType = currentBattle.getTerrainType();
-		g.drawImage(terrainType.getBackgroundImage(), 0, 0, null);
+		DrawUtils.fillCanvas(g, terrainType.getColor());
 
 		// Player's battle circle
-		g.drawImage(terrainType.getPlayerCircleImage(), 0, 331, null);
+		g.drawImage(terrainType.getPlayerCircleImage(), 0, 351, null);
 		
 		// Opponent battle circle
 		g.drawImage(terrainType.getOpponentCircleImage(), 450, 192, null);
