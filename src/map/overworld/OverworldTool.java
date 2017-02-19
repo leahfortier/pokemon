@@ -3,7 +3,8 @@ package map.overworld;
 public enum OverworldTool {
     FLY("canFly"),
     SURF("canSurf"),
-    FISH("canFish");
+    FISH("canFish"),
+    POKEFINDER("hasPokefinder");
 
     private final String globalName;
 

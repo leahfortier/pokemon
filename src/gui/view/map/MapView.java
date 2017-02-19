@@ -78,6 +78,10 @@ public class MapView extends View {
 		this.state = newState;
 	}
 
+	MapData getCurrentMap() {
+		return this.currentMap;
+	}
+
 	MessageUpdate getCurrentMessage() {
 		return this.currentMessage;
 	}

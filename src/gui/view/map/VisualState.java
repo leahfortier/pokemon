@@ -1,11 +1,6 @@
 package gui.view.map;
 
 import battle.Battle;
-import gui.view.ViewMode;
-import input.ControlKey;
-import input.InputControl;
-import main.Game;
-import map.overworld.OverworldTool;
 import map.overworld.TerrainType;
 import map.weather.WeatherState;
 
@@ -13,23 +8,10 @@ import java.awt.Graphics;
 
 enum VisualState {
     BATTLE(new BattleState()),
+    MAP(new MapState()),
     MENU(new MenuState()),
     MESSAGE(new MessageState()),
-    MAP(new VisualStateHandler() {
-        @Override
-        public void draw(Graphics g, MapView mapView) {}
-
-        @Override
-        public void update(int dt, MapView mapView) {
-            InputControl input = InputControl.instance();
-            if (input.consumeIfDown(ControlKey.ESC)) {
-                mapView.setState(MENU);
-            }
-            else if (input.consumeIfDown(ControlKey.FLY) && Game.getPlayer().hasTool(OverworldTool.FLY)) {
-                Game.instance().setViewMode(ViewMode.FLY_VIEW);
-            }
-        }
-    });
+    POKEFINDER(new PokeFinderState());
 
     private final VisualStateHandler handler;
 

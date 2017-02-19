@@ -17,7 +17,8 @@ public enum ControlKey {
     CONSOLE(KeyEvent.VK_BACK_QUOTE),
     ENTER(KeyEvent.VK_ENTER),
     LOG(KeyEvent.VK_L),
-    FLY(KeyEvent.VK_F);
+    FLY(KeyEvent.VK_F),
+    POKEFINDER(KeyEvent.VK_P);
 
     private static final Set<ControlKey> CONTROL_KEYS = EnumSet.allOf(ControlKey.class);
 

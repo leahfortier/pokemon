@@ -43,7 +43,6 @@ class MessageState implements VisualStateHandler {
     public void update(int dt, MapView mapView) {
         InputControl input = InputControl.instance();
         MessageUpdate currentMessage = mapView.getCurrentMessage();
-        PlayerEntity playerEntity = Game.getPlayer().getEntity();
 
         if (currentMessage.isChoice()) {
             if (input.consumeIfDown(ControlKey.DOWN)) {

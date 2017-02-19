@@ -65,7 +65,7 @@ class WildPokemonDataPanel extends JPanel {
 			return;
 		}
 
-		pokemonTextField.setText(wildEncounter.getPokemonName());
+		pokemonTextField.setText(wildEncounter.getPokemonName().getName());
 		probabilityFormattedTextField.setValue(wildEncounter.getProbability());
 		lowLevelFormattedTextField.setValue(wildEncounter.getMinLevel());
 		highLevelFormattedTextField.setValue(wildEncounter.getMaxLevel());

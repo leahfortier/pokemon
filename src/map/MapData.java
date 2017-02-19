@@ -8,6 +8,7 @@ import map.entity.Entity;
 import map.entity.EntityAction;
 import map.entity.FishingSpotEntity;
 import map.overworld.WalkType;
+import map.overworld.WildEncounter;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
 import map.triggers.TriggerType;
@@ -18,6 +19,7 @@ import pattern.map.FishingMatcher;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import pattern.map.WildBattleMatcher;
+import pokemon.PokemonNamesies;
 import trainer.CharacterData;
 import util.FileIO;
 import util.JsonUtils;
@@ -46,6 +48,7 @@ public class MapData {
 	private final List<Entity> entities;
 	private final MultiMap<Integer, String> triggers;
 	private final Map<String, MapTransitionMatcher> mapEntrances;
+	private final List<PokemonNamesies> availableWildPokemon;
 
 	public MapData(File mapFile) {
 		name = new MapName(mapFile.getParentFile().getName(), mapFile.getName());
@@ -65,6 +68,7 @@ public class MapData {
 		entities = new ArrayList<>();
 		triggers = new MultiMap<>();
 		mapEntrances = new HashMap<>();
+		availableWildPokemon = new ArrayList<>();
 
 		MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(beginFilePath + name.getMapName() + ".txt");
 		this.areaData = mapDataMatcher.getAreaData();
@@ -104,6 +108,10 @@ public class MapData {
 			for (Point point : matcher.getLocation()) {
 				triggers.put(getMapIndex(point), trigger.getName());
 			}
+
+			for (WildEncounter wildEncounter : matcher.getWildEncounters()) {
+				this.availableWildPokemon.add(wildEncounter.getPokemonName());
+			}
 		}
 
 		for (FishingMatcher matcher : mapDataMatcher.getFishingSpots()) {
@@ -124,6 +132,10 @@ public class MapData {
 		this.entities.addAll(entityMatchers.stream()
 				.map(EntityMatcher::createEntity)
 				.collect(Collectors.toList()));
+	}
+
+	public List<PokemonNamesies> getAvailableWildPokemon() {
+		return new ArrayList<>(this.availableWildPokemon);
 	}
 
 	private int getMapIndex(Point point) {

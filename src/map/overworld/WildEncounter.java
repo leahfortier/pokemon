@@ -39,8 +39,8 @@ public class WildEncounter {
         this.probability = probability;
     }
 
-    public String getPokemonName() {
-        return this.pokemon.getName();
+    public PokemonNamesies getPokemonName() {
+        return this.pokemon;
     }
 
     public int getMinLevel() {

@@ -22,7 +22,8 @@ class MenuState implements VisualStateHandler {
     MenuState() {
         int width = 273;
         menuPanel = new DrawPanel(Global.GAME_SIZE.width - width, 0, width, Global.GAME_SIZE.height)
-                .withBorderColor(new Color(53, 53, 129)).withBorderPercentage(5);
+                .withBorderColor(new Color(53, 53, 129))
+                .withBorderPercentage(5);
 
         selectedButton = 0;
         menuButtons = new Button[MenuChoice.values().length];
