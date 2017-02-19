@@ -7,6 +7,7 @@ import util.Point;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
@@ -63,6 +64,29 @@ public final class ImageUtils {
                 null);
     }
 
+    public static BufferedImage scaleImageCoordinates(BufferedImage img, int maxCoordinate) {
+        return scaleImage(img, (float) maxCoordinate/Math.max(img.getWidth(), img.getHeight()));
+    }
+
+    public static BufferedImage scaleImage(BufferedImage img, float scale) {
+        if (scale == 1.0f) {
+            return img;
+        }
+
+        Image tmp = img.getScaledInstance((int) (img.getWidth()*scale), (int) (img.getHeight()*scale), BufferedImage.SCALE_SMOOTH);
+        BufferedImage buffer = new BufferedImage((int) (img.getWidth()*scale), (int) (img.getHeight()*scale), BufferedImage.TYPE_INT_ARGB);
+
+        buffer.getGraphics().drawImage(tmp, 0, 0, null);
+
+        return buffer;
+    }
+
+    private static final float[] SILHOUETTE_SCALE = new float[] { 0, 0, 0, 255 };
+    private static final float[] SILHOUETTE_OFFSET = new float[] { 0, 0, 0, 0 };
+    public static BufferedImage silhouette(BufferedImage image) {
+        return colorImage(image, SILHOUETTE_SCALE, SILHOUETTE_OFFSET);
+    }
+
     public static BufferedImage colorImage(BufferedImage image, float[] scale, float[] offset) {
         ColorModel colorModel = image.getColorModel();
         boolean isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
@@ -71,26 +95,26 @@ public final class ImageUtils {
         image = new BufferedImage(colorModel, raster, isAlphaPremultiplied, null);
 
         int width = image.getWidth();
-int height = image.getHeight();
+        int height = image.getHeight();
 
-for (int x = 0; x < width; ++x) {
-for (int y = 0; y < height; ++y) {
-int[] pixels = raster.getPixel(x, y, (int[]) null);
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                int[] pixels = raster.getPixel(x, y, (int[]) null);
 
-for (int currComponent = 0; currComponent < pixels.length; ++currComponent) {
-                    pixels[currComponent] = Math.round(pixels[currComponent] * scale[currComponent] + offset[currComponent]);
-                    pixels[currComponent] = Math.min(Math.max(pixels[currComponent], 0), 255);
-}
+                for (int currComponent = 0; currComponent < pixels.length; ++currComponent) {
+                                    pixels[currComponent] = Math.round(pixels[currComponent] * scale[currComponent] + offset[currComponent]);
+                                    pixels[currComponent] = Math.min(Math.max(pixels[currComponent], 0), 255);
+                }
 
-if (pixels[3] == 0) {
+                if (pixels[3] == 0) {
                     pixels[0] = pixels[1] = pixels[2] = 0;
-}
+                }
 
-raster.setPixel(x, y, pixels);
-}
-}
-return image;
-}
+                raster.setPixel(x, y, pixels);
+            }
+        }
+        return image;
+    }
 
     public static int transformAnimation(
             Graphics g,

@@ -1,10 +1,10 @@
 package gui;
 
+import draw.ImageUtils;
 import util.FileIO;
 import util.Folder;
 
 import javax.imageio.ImageIO;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -33,19 +33,6 @@ public class TileSet {
 		this.map = new HashMap<>();
 	}
 
-	private BufferedImage scaleImage(BufferedImage img, float scale) {
-		if (scale == 1.0f) {
-			return img;	
-		}
-		
-		Image tmp = img.getScaledInstance((int) (img.getWidth()*scale), (int) (img.getHeight()*scale), BufferedImage.SCALE_SMOOTH);
-		BufferedImage buffer = new BufferedImage((int) (img.getWidth()*scale), (int) (img.getHeight()*scale), BufferedImage.TYPE_INT_ARGB);
-		
-		buffer.getGraphics().drawImage(tmp, 0, 0, null);
-		
-		return buffer;
-	}
-
 	// TODO: I still have no idea what the >> 24 shit means
 	public static boolean isValidMapTile(int val) {
 		return val != INVALID_RGB && (val >> 24) != 0;
@@ -56,7 +43,7 @@ public class TileSet {
 			File file = new File(this.folderPath + imageName + ".png");
 			try {
 				BufferedImage image = ImageIO.read(file);
-				image = scaleImage(image, scale);
+				image = ImageUtils.scaleImage(image, scale);
 				map.put(imageName, image);
 			}
 			catch (IOException exception) {
