@@ -1,7 +1,9 @@
 package gui.view.battle;
 
 import battle.Battle;
+import battle.attack.Attack;
 import battle.attack.Move;
+import draw.DrawUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.panel.BasicPanels;
@@ -17,7 +19,6 @@ import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import pokemon.ActivePokemon;
-import draw.DrawUtils;
 import util.FontMetrics;
 import util.StringUtils;
 
@@ -133,6 +134,10 @@ public class BattleView extends View {
 	public void setSelectedButton(Button[] buttons) {
 		int buttonIndex = Button.update(buttons, this.selectedButton);
 		this.setSelectedButton(buttonIndex);
+	}
+
+	public int getSelectedButton() {
+		return this.selectedButton;
 	}
 
 	public void setSelectedButton(int buttonIndex) {
@@ -293,6 +298,42 @@ public class BattleView extends View {
 		state.draw(this, g);
 	}
 
+	public void drawMovePanel(Graphics g, DrawPanel moveDetailsPanel, Attack move) {
+		moveDetailsPanel
+				.withTransparentBackground(move.getActualType().getColor())
+				.drawBackground(g);
+
+		FontMetrics.setFont(g, 24);
+		int spacing = 20;
+		int y = moveDetailsPanel.y + spacing + FontMetrics.getTextHeight(g);
+		g.drawString(move.getName(), moveDetailsPanel.x + spacing, y);
+
+		BufferedImage typeImage = move.getActualType().getImage();
+		int imageY = y - typeImage.getHeight();
+		int imageX = moveDetailsPanel.rightX() - spacing - typeImage.getWidth();
+		g.drawImage(typeImage, imageX, imageY, null);
+
+		BufferedImage categoryImage = move.getCategory().getImage();
+		imageX -= categoryImage.getWidth() + spacing;
+		g.drawImage(categoryImage, imageX, imageY, null);
+
+		y += FontMetrics.getDistanceBetweenRows(g);
+
+		FontMetrics.setFont(g, 18);
+		g.drawString("Power: " + move.getPowerString(), moveDetailsPanel.x + spacing, y);
+		TextUtils.drawRightAlignedString(g, "Acc: " + move.getAccuracyString(), moveDetailsPanel.rightX() - spacing, y);
+
+		y += FontMetrics.getDistanceBetweenRows(g) + 2;
+
+		FontMetrics.setFont(g, 16);
+		TextUtils.drawWrappedText(g,
+				move.getDescription(),
+				moveDetailsPanel.x + spacing,
+				y,
+				moveDetailsPanel.width - 2*spacing
+		);
+	}
+
 	public void drawMoveButton(Graphics g, Button moveButton, Move move) {
 		int dx = moveButton.x;
 		int dy = moveButton.y;
@@ -311,9 +352,6 @@ public class BattleView extends View {
 
 		FontMetrics.setFont(g, 18);
 		TextUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
-
-		BufferedImage categoryImage = move.getAttack().getCategory().getImage();
-		g.drawImage(categoryImage, 12, 32, null);
 
 		g.translate(-dx, -dy);
 
