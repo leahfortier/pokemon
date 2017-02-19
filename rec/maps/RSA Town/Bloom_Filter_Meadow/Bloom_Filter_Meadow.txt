@@ -217,7 +217,7 @@
           "pokemon": "JIGGLYPUFF",
           "minLevel": 4,
           "maxLevel": 6,
-          "probability": 15
+          "probability": 10
         },
         {
           "pokemon": "PARAS",
@@ -278,6 +278,12 @@
           "minLevel": 4,
           "maxLevel": 6,
           "probability": 10
+        },
+        {
+          "pokemon": "CUTIEFLY",
+          "minLevel": 4,
+          "maxLevel": 6,
+          "probability": 5
         }
       ],
       "location": [
