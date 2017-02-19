@@ -76,6 +76,7 @@ public class MapView extends View {
 
 	void setState(VisualState newState) {
 		this.state = newState;
+		this.state.set(this);
 	}
 
 	MapData getCurrentMap() {

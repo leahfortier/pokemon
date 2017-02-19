@@ -1,6 +1,5 @@
 package gui.view.map;
 
-import gui.view.ViewMode;
 import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
@@ -20,7 +19,7 @@ class MapState implements VisualStateHandler {
             mapView.setState(VisualState.MENU);
         }
         else if (input.consumeIfDown(ControlKey.FLY) && Game.getPlayer().hasTool(OverworldTool.FLY)) {
-            Game.instance().setViewMode(ViewMode.FLY_VIEW);
+            mapView.setState(VisualState.FLY);
         }
         else if (input.consumeIfDown(ControlKey.POKEFINDER) && Game.getPlayer().hasTool(OverworldTool.POKEFINDER)) {
             mapView.setState(VisualState.POKEFINDER);

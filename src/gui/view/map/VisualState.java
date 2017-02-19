@@ -8,6 +8,7 @@ import java.awt.Graphics;
 
 enum VisualState {
     BATTLE(new BattleState()),
+    FLY(new FlyState()),
     MAP(new MapState()),
     MENU(new MenuState()),
     MESSAGE(new MessageState()),
@@ -22,6 +23,7 @@ enum VisualState {
     interface VisualStateHandler {
         void draw(Graphics g, MapView mapView);
         void update(int dt, MapView mapView);
+        default void set(MapView mapView) {}
     }
 
     public void draw(Graphics g, MapView mapView) {
@@ -30,6 +32,10 @@ enum VisualState {
 
     public void update(int dt, MapView mapView) {
         this.handler.update(dt, mapView);
+    }
+
+    public void set(MapView mapView) {
+        this.handler.set(mapView);
     }
 
     public static void setBattle(Battle battle, boolean seenWild, WeatherState weather, TerrainType terrain) {

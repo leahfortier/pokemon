@@ -9,7 +9,6 @@ public enum ViewMode {
     BAG_VIEW(BagView::new),
     BATTLE_VIEW(BattleView::new),
     EVOLUTION_VIEW(EvolutionView::new),
-    FLY_VIEW(FlyView::new),
     MAIN_MENU_VIEW(MainMenuView::new),
     MAP_VIEW(MapView::new),
     MART_VIEW(MartView::new),
