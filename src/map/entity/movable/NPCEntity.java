@@ -21,6 +21,7 @@ public class NPCEntity extends MovableEntity {
 	private final Point defaultLocation;
 	private final Direction defaultDirection;
 	private final MoveAxis moveAxis;
+	private final int spriteIndex;
 
 	private final Map<String, NPCInteraction> interactions;
 	private final String startKey;
@@ -41,13 +42,14 @@ public class NPCEntity extends MovableEntity {
 			int spriteIndex,
 			Map<String, NPCInteraction> interactions,
 			String startKey) {
-		super(location, name, condition, spriteIndex);
+		super(location, name, condition);
 
 		this.path = path;
 
 		this.defaultLocation =  location;
 		this.defaultDirection = direction;
 		this.moveAxis = moveAxis;
+		this.spriteIndex = spriteIndex;
 
 		this.interactions = interactions;
 		this.startKey = startKey;
@@ -77,6 +79,11 @@ public class NPCEntity extends MovableEntity {
 
 	private String getTriggerSuffix(final String interactionName) {
 		return super.getTriggerSuffix() + "_" + interactionName;
+	}
+
+	@Override
+	protected int getSpriteIndex() {
+		return this.spriteIndex;
 	}
 
 	@Override

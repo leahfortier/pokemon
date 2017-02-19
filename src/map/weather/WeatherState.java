@@ -1,25 +1,32 @@
 package map.weather;
 
+import battle.effect.generic.EffectNamesies;
 import draw.DrawUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 public enum WeatherState {
-    NORMAL,
-    SUN(g -> DrawUtils.fillCanvas(g, new Color(255, 255, 255, 64))),
-    RAIN(new RainyState()),
-    FOG,    // TODO: These
-    SNOW;
+    NORMAL(EffectNamesies.CLEAR_SKIES),
+    SUN(EffectNamesies.SUNNY, g -> DrawUtils.fillCanvas(g, new Color(255, 255, 255, 64))),
+    RAIN(EffectNamesies.RAINING, new RainyState()),
+    FOG(EffectNamesies.CLEAR_SKIES),    // TODO: These
+    SNOW(EffectNamesies.HAILING);
 
+    private final EffectNamesies weatherEffect;
     private final WeatherDrawer weatherDrawer;
 
-    WeatherState() {
-        this(null);
+    WeatherState(EffectNamesies weatherEffect) {
+        this(weatherEffect, null);
     }
 
-    WeatherState(WeatherDrawer weatherDrawer) {
+    WeatherState(EffectNamesies weatherEffect, WeatherDrawer weatherDrawer) {
+        this.weatherEffect = weatherEffect;
         this.weatherDrawer = weatherDrawer;
+    }
+
+    public EffectNamesies getWeatherEffect() {
+        return this.weatherEffect;
     }
 
     public void draw(Graphics g) {
@@ -27,8 +34,8 @@ public enum WeatherState {
             this.weatherDrawer.draw(g);
         }
     }
-
     interface WeatherDrawer {
         void draw(Graphics g);
+
     }
 }

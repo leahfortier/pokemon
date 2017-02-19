@@ -1,4 +1,4 @@
-package map;
+package map.overworld;
 
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;

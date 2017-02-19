@@ -35,6 +35,10 @@ public class Pokedex implements Serializable {
 		return pokedex.get(namesies).isStatus(PokedexStatus.CAUGHT);
 	}
 
+	public void setCaught(ActivePokemon p) {
+		this.setCaught(p.getPokemonInfo());
+	}
+
 	public void setCaught(PokemonInfo pokemonInfo) {
 		setStatus(pokemonInfo.namesies(), PokedexStatus.CAUGHT, null);
 	}

@@ -549,8 +549,7 @@ public class ActivePokemon implements Serializable {
 
 		this.setAbility(Ability.evolutionAssign(this, evolutionInfo));
 		pokemon = evolutionInfo;
-		Game.getPlayer().getPokedex().setCaught(evolutionInfo);
-		
+
 		// Set name if it was not given a nickname
 		if (sameName) {
 			nickname = pokemon.getName();

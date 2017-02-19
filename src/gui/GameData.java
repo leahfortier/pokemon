@@ -15,6 +15,8 @@ public class GameData {
 	private Map<MapName, MapData> maps;
 	private Map<String, Trigger> triggers;
 
+	private IndexTileSet mapTiles;
+	private IndexTileSet trainerTiles;
 	private TileSet partyTiles;
 	private TileSet pokemonTilesSmall;
 	private TileSet pokemonTilesMedium;
@@ -22,9 +24,9 @@ public class GameData {
 	private TileSet pokedexTilesSmall;
 	private TileSet pokedexTilesLarge;
 	private TileSet itemTiles;
-	private IndexTileSet mapTiles;
-	private IndexTileSet trainerTiles;
-	private IndexTileSet terrainTiles;
+	private TileSet itemTilesLarge;
+	private TileSet opponentTerrainTiles;
+	private TileSet playerTerrainTiles;
 
 	public void loadData() {
 		loadTiles();
@@ -32,6 +34,8 @@ public class GameData {
 	}
 
 	private void loadTiles() {
+		mapTiles = new IndexTileSet(Folder.MAP_TILES);
+		trainerTiles = new IndexTileSet(Folder.TRAINER_TILES);
 		partyTiles = new TileSet(Folder.PARTY_TILES);
 		pokemonTilesSmall = new TileSet(Folder.POKEMON_TILES);
 		pokemonTilesMedium = new TileSet(Folder.POKEMON_TILES, 2.3f);
@@ -39,15 +43,16 @@ public class GameData {
 		pokedexTilesSmall = new TileSet(Folder.POKEDEX_TILES, .5f);
 		pokedexTilesLarge = new TileSet(Folder.POKEDEX_TILES);
 		itemTiles = new TileSet(Folder.ITEM_TILES);
-		mapTiles = new IndexTileSet(Folder.MAP_TILES);
-		trainerTiles = new IndexTileSet(Folder.TRAINER_TILES);
-		terrainTiles = new IndexTileSet(Folder.TERRAIN_TILES);
+		itemTilesLarge = new TileSet(Folder.ITEM_TILES, 2.9f);
+		opponentTerrainTiles = new TileSet(Folder.TERRAIN_TILES, 2.4f);
+		playerTerrainTiles = new TileSet(Folder.TERRAIN_TILES, 3.1f);
 	}
 
 	private void loadMaps() {
 		triggers = new HashMap<>();
-		maps = new HashMap<>();
+		Trigger.createCommonTriggers();
 
+		maps = new HashMap<>();
 		File mapsDirectory = new File(Folder.MAPS);
 		for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
 			MapData mapData = new MapData(mapFolder);
@@ -79,12 +84,20 @@ public class GameData {
 		return mapTiles;
 	}
 
-	public IndexTileSet getTerrainTiles() {
-		return terrainTiles;
+	public TileSet getOpponentTerrainTiles() {
+		return opponentTerrainTiles;
+	}
+
+	public TileSet getPlayerTerrainTiles() {
+		return playerTerrainTiles;
 	}
 
 	public TileSet getItemTiles() {
 		return itemTiles;
+	}
+
+	public TileSet getItemTilesLarge() {
+		return itemTilesLarge;
 	}
 
 	public TileSet getPokemonTilesLarge() {

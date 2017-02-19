@@ -1,21 +1,20 @@
 package gui.view;
 
+import draw.DrawUtils;
 import draw.TextUtils;
-import gui.GameData;
-import gui.TileSet;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.panel.BasicPanels;
 import draw.button.panel.DrawPanel;
+import gui.GameData;
+import gui.TileSet;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import map.Direction;
-import pokemon.PC;
 import pokemon.PokemonInfo;
 import trainer.pokedex.Pokedex;
 import type.Type;
-import draw.DrawUtils;
 import util.FontMetrics;
 import util.PokeString;
 
@@ -25,7 +24,10 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 class PokedexView extends View {
-	private static final int PER_PAGE = PC.BOX_HEIGHT*PC.BOX_WIDTH;
+	private static final int NUM_COLS = 6;
+	private static final int NUM_ROWS = 6;
+
+	private static final int PER_PAGE = NUM_ROWS * NUM_COLS;
 	private static final int NUM_PAGES = (int)Math.ceil((double)PokemonInfo.NUM_POKEMON/PER_PAGE);
 	
 	private static final int NUM_BUTTONS = PER_PAGE + 3;
@@ -114,22 +116,22 @@ class PokedexView extends View {
 		pageNum = 0;
 		
 		buttons = new Button[NUM_BUTTONS];
-		pokemonButtons = new Button[PC.BOX_HEIGHT][PC.BOX_WIDTH];
-		for (int i = 0, k = 0; i < PC.BOX_HEIGHT; i++) {
-			for (int j = 0; j < PC.BOX_WIDTH; j++, k++) {
+		pokemonButtons = new Button[NUM_ROWS][NUM_COLS];
+		for (int i = 0, k = 0; i < NUM_ROWS; i++) {
+			for (int j = 0; j < NUM_COLS; j++, k++) {
 				buttons[k] = pokemonButtons[i][j] = new Button(
 						60 + 54*j,
 						96 + 54*i,
 						40,
 						40,
 						ButtonHoverAction.BOX,
-						Button.getBasicTransitions(k, PC.BOX_HEIGHT, PC.BOX_WIDTH, 0, new int[] { RETURN, RIGHT_ARROW, -1, RIGHT_ARROW })
+						Button.getBasicTransitions(k, NUM_ROWS, NUM_COLS, 0, new int[] { RETURN, RIGHT_ARROW, -1, RIGHT_ARROW })
 				);
 			}
 		}
 		
-		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20, ButtonHoverAction.BOX, new int[] { RIGHT_ARROW, PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2 - 1, -1, 0 });
-		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20, ButtonHoverAction.BOX, new int[] { RETURN, PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2, LEFT_ARROW, 0 });
+		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20, ButtonHoverAction.BOX, new int[] { RIGHT_ARROW, NUM_COLS *(NUM_ROWS - 1) + NUM_COLS /2 - 1, -1, 0 });
+		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20, ButtonHoverAction.BOX, new int[] { RETURN, NUM_COLS *(NUM_ROWS - 1) + NUM_COLS /2, LEFT_ARROW, 0 });
 		
 		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, ButtonHoverAction.BOX, new int[] { 0, -1, RIGHT_ARROW, -1 });
 		
@@ -140,8 +142,8 @@ class PokedexView extends View {
 	public void update(int dt) {
 		selectedButton = Button.update(buttons, selectedButton);
 
-		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
-			for (int j = 0; j < PC.BOX_WIDTH; j++) {
+		for (int i = 0; i < NUM_ROWS; i++) {
+			for (int j = 0; j < NUM_COLS; j++) {
 				if (pokemonButtons[i][j].checkConsumePress()) {
 					selected = PokemonInfo.getPokemonInfo(getIndex(j, i) + 1);
 				}
@@ -188,9 +190,8 @@ class PokedexView extends View {
 		titlePanel.drawBackground(g);
 		titlePanel.label(g, 20, PokeString.POKEDEX);
 
-		// TODO: Have unique constants for number of rows and columns
-		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
-			for (int j = 0; j < PC.BOX_WIDTH; j++) {
+		for (int i = 0; i < NUM_ROWS; i++) {
+			for (int j = 0; j < NUM_COLS; j++) {
 				int number = getIndex(i, j) + 1;
 				if (number > PokemonInfo.NUM_POKEMON) {
 					continue;
@@ -305,7 +306,7 @@ class PokedexView extends View {
 	}
 	
 	private int getIndex(int i, int j) {
-		return PER_PAGE*pageNum + j*PC.BOX_WIDTH + i;
+		return PER_PAGE*pageNum + j* NUM_COLS + i;
 	}
 
 	@Override

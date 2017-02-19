@@ -8,15 +8,6 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "startTransition",
-      "deathPortal": false,
-      "nextMap": {
-        "region": "Depth First Search Town",
-        "mapName": "PlayersHouseUp"
-      },
-      "nextEntrance": "GameStartLocation"
-    },
-    {
       "exitName": "GameStartLocation",
       "deathPortal": false,
       "location": [
@@ -43,6 +34,16 @@
         }
       ],
       "triggerName": "PlayersHouseUp_MapExit_stairs_01"
+    },
+    {
+      "exitName": "startTransition",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "Depth First Search Town",
+        "mapName": "PlayersHouseUp"
+      },
+      "nextEntrance": "GameStartLocation",
+      "triggerName": "PlayersHouseUp_MapExit_startTransition_01"
     }
   ],
   "NPCs": [
@@ -102,16 +103,7 @@
       "name": "PC",
       "actions": [
         {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Starting up PC..."
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "ChangeView",
-            "triggerContents": "PC_VIEW"
-          }
+          "groupTrigger": "LoadPC"
         }
       ],
       "location": {
@@ -138,6 +130,38 @@
         "y": 6
       },
       "triggerName": "PlayersHouseUp_MiscEntity_PokePalooza_01"
+    },
+    {
+      "name": "TV",
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "DIALOGUE",
+            "triggerContents": "You see yourself."
+          }
+        }
+      ],
+      "location": {
+        "x": 5,
+        "y": 1
+      },
+      "triggerName": "PlayersHouseUp_MiscEntity_TV_01"
+    },
+    {
+      "name": "TV",
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "DIALOGUE",
+            "triggerContents": "The power's out..."
+          }
+        }
+      ],
+      "location": {
+        "x": 6,
+        "y": 1
+      },
+      "triggerName": "PlayersHouseUp_MiscEntity_TV_02"
     }
   ],
   "events": [],

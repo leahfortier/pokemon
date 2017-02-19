@@ -1,6 +1,6 @@
 package map.entity;
 
-import map.WildEncounter;
+import map.overworld.WildEncounter;
 import map.entity.EntityAction.TriggerAction;
 import map.triggers.TriggerType;
 import pattern.map.FishingMatcher;
@@ -24,6 +24,11 @@ public class FishingSpotEntity extends Entity {
     @Override
     public boolean isHighPriorityEntity() {
         return false;
+    }
+
+    @Override
+    public boolean isPassable() {
+        return true;
     }
 
     @Override

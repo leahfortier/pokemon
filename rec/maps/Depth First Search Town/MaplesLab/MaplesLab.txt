@@ -198,7 +198,21 @@
     }
   ],
   "items": [],
-  "miscEntities": [],
+  "miscEntities": [
+    {
+      "name": "PC",
+      "actions": [
+        {
+          "groupTrigger": "LoadPC"
+        }
+      ],
+      "location": {
+        "x": 16,
+        "y": 1
+      },
+      "triggerName": "MaplesLab_MiscEntity_PC_01"
+    }
+  ],
   "events": [],
   "wildBattles": [],
   "fishingSpots": []

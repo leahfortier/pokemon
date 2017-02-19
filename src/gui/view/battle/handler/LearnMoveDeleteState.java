@@ -1,8 +1,10 @@
 package gui.view.battle.handler;
 
+import battle.attack.Attack;
 import battle.attack.Move;
 import draw.TextUtils;
 import draw.button.Button;
+import draw.button.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import message.MessageUpdate;
@@ -20,7 +22,12 @@ public class LearnMoveDeleteState implements VisualStateHandler {
 
     private static final int NUM_COLS = 4;
 
+    private final DrawPanel moveDetailsPanel;
     private Button[] buttons;
+
+    public LearnMoveDeleteState() {
+        moveDetailsPanel = new DrawPanel(0, 440 - 161, 385, 161).withBorderPercentage(8).withBlackOutline().withTransparentCount(2);
+    }
 
     @Override
     public void set(BattleView view) {
@@ -42,12 +49,22 @@ public class LearnMoveDeleteState implements VisualStateHandler {
         view.drawFullMessagePanel(g, StringUtils.empty());
 
         List<Move> moves = view.getLearnedPokemon().getActualMoves();
+        int selectedButton = view.getSelectedButton();
+
+        Attack selected = null;
         for (int y = 0, moveIndex = 0; y < 2; y++) {
             for (int x = 0; x < Move.MAX_MOVES/2; x++, moveIndex++) {
                 int index = Point.getIndex(x, y, NUM_COLS);
-                view.drawMoveButton(g, buttons[index], moves.get(moveIndex));
+                Move move = moves.get(moveIndex);
+
+                view.drawMoveButton(g, buttons[index], move);
+                if (index == selectedButton) {
+                    selected = move.getAttack();
+                }
             }
         }
+
+        view.drawMovePanel(g, moveDetailsPanel, selected == null ? view.getLearnedMove().getAttack() : selected);
 
         Button newMoveButton = newMoveButton();
         view.drawMoveButton(g, newMoveButton, view.getLearnedMove());

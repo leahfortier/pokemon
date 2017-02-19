@@ -226,7 +226,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return map.get(index);
 	}
 
-	static PokemonNamesies getRandomBaseEvolution() {
+	public static PokemonNamesies getRandomBaseEvolution() {
 		if (baseEvolution == null) {
 			baseEvolution = new ArrayList<>();
 			Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.BASE_EVOLUTIONS, false));

@@ -11,18 +11,19 @@ import main.Global;
 import util.RandomUtils;
 
 public enum Stat {
-	HP(0, "HP", "HP", -1, InBattle.NEVER, true), 
-	ATTACK(1, "Attack", "Attack", 2, InBattle.BOTH, true),
-	DEFENSE(2, "Defense", "Defense", 2, InBattle.BOTH, false), 
-	SP_ATTACK(3, "Special Attack", "Sp. Attack", 2, InBattle.BOTH, true), 
-	SP_DEFENSE(4, "Special Defense", "Sp. Defense", 2, InBattle.BOTH, false), 
-	SPEED(5, "Speed", "Speed", 2, InBattle.BOTH, true), 
-	ACCURACY(0, "Accuracy", "Accuracy", 3, InBattle.ONLY, true), 
-	EVASION(6, "Evasion", "Evasion", 3, InBattle.ONLY, false);
+	HP(0, "HP", "HP", "HP", -1, InBattle.NEVER, true),
+	ATTACK(1, "Attack", "Attack", "Atk", 2, InBattle.BOTH, true),
+	DEFENSE(2, "Defense", "Defense", "Def", 2, InBattle.BOTH, false),
+	SP_ATTACK(3, "Special Attack", "Sp. Attack", "SpA", 2, InBattle.BOTH, true),
+	SP_DEFENSE(4, "Special Defense", "Sp. Defense", "SpD", 2, InBattle.BOTH, false),
+	SPEED(5, "Speed", "Speed", "Spd", 2, InBattle.BOTH, true),
+	ACCURACY(0, "Accuracy", "Accuracy", "Acc", 3, InBattle.ONLY, true),
+	EVASION(6, "Evasion", "Evasion", "Eva", 3, InBattle.ONLY, false);
 	
 	private final int index;
 	private final String name;
 	private final String shortName;
+	private final String shortestName;
 	private final double modifier;
 	private final InBattle onlyBattle;
 	private final boolean user;
@@ -36,10 +37,11 @@ public enum Stat {
 		ONLY,
 	}
 
-	Stat(int index, String name, String shortName, int modifier, InBattle onlyBattle, boolean user) {
+	Stat(int index, String name, String shortName, String shortestName, int modifier, InBattle onlyBattle, boolean user) {
 		this.index = index;
 		this.name = name;
 		this.shortName = shortName;
+		this.shortestName = shortestName;
 		this.modifier = modifier;
 		this.onlyBattle = onlyBattle;
 		this.user = user;
@@ -55,6 +57,10 @@ public enum Stat {
 	
 	public String getShortName() {
 		return shortName;
+	}
+
+	public String getShortestName() {
+		return this.shortestName;
 	}
 	
 	public boolean user() {

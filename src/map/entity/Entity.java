@@ -42,6 +42,10 @@ public abstract class Entity {
 		return this.condition.isTrue();
 	}
 
+	public boolean isPassable() {
+		return !this.isVisible();
+	}
+
 	public boolean isVisible() {
 		return this.visible;
 	}

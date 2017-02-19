@@ -3,17 +3,20 @@ package gui.view.battle.handler;
 import battle.Battle;
 import battle.attack.Move;
 import draw.button.Button;
+import draw.button.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
 import pokemon.ActivePokemon;
 import trainer.CharacterData;
 import trainer.Trainer.Action;
+import util.StringUtils;
 
 import java.awt.Graphics;
 import java.util.List;
 
 public class FightState implements VisualStateHandler {
+    private final DrawPanel moveDetailsPanel;
 
     private Button[] moveButtons;
 
@@ -21,6 +24,13 @@ public class FightState implements VisualStateHandler {
 
     // The last move that a Pokemon used
     private int lastMoveUsed;
+
+    public FightState() {
+        moveDetailsPanel = new DrawPanel(415, 440, 385, 161)
+                .withBorderPercentage(8)
+                .withBlackOutline()
+                .withTransparentCount(2);
+    }
 
     @Override
     public void reset() {
@@ -44,20 +54,23 @@ public class FightState implements VisualStateHandler {
 
     @Override
     public void draw(BattleView view, Graphics g) {
-
-        // TODO: I think it would be cool to have the selected move's information on the panel when there isn't a message instead of select a move -- same with bag items
-        String message = view.getMessage(VisualState.INVALID_FIGHT, "Select a move!");
-        view.drawMenuMessagePanel(g, message);
         view.drawButtonsPanel(g);
 
         ActivePokemon playerPokemon = Game.getPlayer().front();
-
         List<Move> moves = playerPokemon.getMoves(view.getCurrentBattle());
         for (int i = 0; i < moves.size(); i++) {
             view.drawMoveButton(g, this.moveButtons[i], moves.get(i));
         }
 
-        view.drawBackButton(g);
+        String message = view.getMessage(VisualState.INVALID_FIGHT, null);
+        if (StringUtils.isNullOrEmpty(message)) {
+            // Draw move details
+            view.drawMovePanel(g, moveDetailsPanel, moves.get(view.getSelectedButton()).getAttack());
+        }
+        else {
+            // Show unusable move message
+            view.drawMenuMessagePanel(g, message);
+        }
     }
 
     @Override

@@ -1,24 +1,30 @@
 package gui.view.battle.handler;
 
 import draw.TextUtils;
+import draw.button.panel.BasicPanels;
 import draw.button.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
 import input.InputControl;
+import map.Direction;
 import message.MessageUpdate;
 import pokemon.Stat;
 import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.EnumSet;
 
 public class MessageState implements VisualStateHandler {
 
     private final DrawPanel statsPanel;
 
     public MessageState() {
-        this.statsPanel = new DrawPanel(0, 280, 273, 161).withBlackOutline();
+        int height = 161;
+        int y = BasicPanels.getMessagePanelY() - height;
+        this.statsPanel = new DrawPanel(0, y, 273, height)
+                .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.DOWN)));
     }
 
     // Stat gains and corresponding new stat upgrades for leveling up/evolving

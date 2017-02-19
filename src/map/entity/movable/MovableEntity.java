@@ -6,7 +6,6 @@ import main.Global;
 import map.Direction;
 import map.MapData;
 import map.PathDirection;
-import map.WalkType;
 import map.entity.Entity;
 import util.Point;
 import util.StringUtils;
@@ -14,8 +13,6 @@ import util.StringUtils;
 import java.awt.image.BufferedImage;
 
 public abstract class MovableEntity extends Entity {
-	protected final int spriteIndex;
-
 	private int runFrame;
 	protected int transitionTime;
 	private int waitTime;
@@ -25,14 +22,14 @@ public abstract class MovableEntity extends Entity {
 	private boolean endedTempPath;
 	private EndPathListener endPathListener;
 
-	MovableEntity(Point location, String triggerName, String condition, int spriteIndex) {
+	MovableEntity(Point location, String triggerName, String condition) {
 		super(location, triggerName, condition);
 
 		this.transitionTime = 0;
 		this.runFrame = 0;
-
-		this.spriteIndex = spriteIndex;
 	}
+
+	protected abstract int getSpriteIndex();
 
 	public abstract int getTransitionTime();
 
@@ -111,8 +108,8 @@ public abstract class MovableEntity extends Entity {
 					pathIndex++;
 				}
 				else {
-					Point newLocation = Point.add(this.getLocation(), direction.getDeltaPoint());
-					if (currentMap.getPassValue(newLocation).isPassable(direction.getDirection()) && !currentMap.hasEntity(newLocation)) {
+					Point newLocation = getNewLocation(this.getLocation(), direction.getDirection(), currentMap);
+					if (newLocation != null) {
 						setLocation(newLocation);
 
 						transitionTime = 1;
@@ -133,7 +130,7 @@ public abstract class MovableEntity extends Entity {
 
 	@Override
 	protected BufferedImage getFrame() {
-		int trainerSpriteIndex = getTrainerSpriteIndex(spriteIndex, this.getDirection());
+		int trainerSpriteIndex = getTrainerSpriteIndex(this.getSpriteIndex(), this.getDirection());
 		if (transitionTime > 0) {
 			trainerSpriteIndex += 4*(1 + runFrame);
 		}
@@ -159,9 +156,7 @@ public abstract class MovableEntity extends Entity {
 
 	public Point getNewLocation(Point location, Direction direction, MapData currentMap) {
 		Point newLocation = Point.add(location, direction.getDeltaPoint());
-
-		WalkType passValue = currentMap.getPassValue(newLocation);
-		if (passValue.isPassable(direction) && !currentMap.hasEntity(newLocation)) {
+		if (currentMap.isPassable(newLocation, direction)) {
 			return newLocation;
 		}
 

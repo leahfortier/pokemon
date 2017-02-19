@@ -1,6 +1,6 @@
 package mapMaker.dialogs;
 
-import map.WildEncounter;
+import map.overworld.WildEncounter;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;

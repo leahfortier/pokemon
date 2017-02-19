@@ -55,45 +55,7 @@
       "name": "Heal",
       "actions": [
         {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Welcome to the Pokémon Center!"
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Let me heal your Pokémon for you!"
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "Sound",
-            "triggerContents": "POKE_CENTER_HEAL"
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Dun Dun Dun-Dun Dun!"
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "HealParty"
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Your Pokémon have been healed!"
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "I hope to see you again soon!"
-          }
+          "groupTrigger": "PokeCenterHeal"
         }
       ],
       "location": {
@@ -106,16 +68,7 @@
       "name": "Mart",
       "actions": [
         {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Welcome to the PokéMart!"
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "ChangeView",
-            "triggerContents": "MART_VIEW"
-          }
+          "groupTrigger": "LoadMart"
         }
       ],
       "location": {
@@ -128,16 +81,7 @@
       "name": "PC_View",
       "actions": [
         {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Starting up PC..."
-          }
-        },
-        {
-          "trigger": {
-            "triggerType": "ChangeView",
-            "triggerContents": "PC_VIEW"
-          }
+          "groupTrigger": "LoadPC"
         }
       ],
       "location": {

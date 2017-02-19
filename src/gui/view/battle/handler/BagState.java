@@ -1,12 +1,13 @@
 package gui.view.battle.handler;
 
 import battle.Battle;
+import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
-import gui.TileSet;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.panel.DrawPanel;
+import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import item.ItemNamesies;
@@ -17,8 +18,8 @@ import main.Game;
 import map.Direction;
 import trainer.CharacterData;
 import trainer.Trainer.Action;
-import draw.DrawUtils;
 import util.FontMetrics;
+import util.GeneralUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -153,7 +154,13 @@ public class BagState implements VisualStateHandler {
             tabButton.outlineTab(g, i, selectedBagTab);
         }
 
-        DrawUtils.blackOutline(g, 30, 190, 357, 287);
+        // Black outline around the entire box
+        DrawUtils.blackOutline(g,
+                bagCategoryPanel.x,
+                bagTabButtons[0].y,
+                bagCategoryPanel.width,
+                bagCategoryPanel.bottomY() - bagTabButtons[0].y
+        );
 
         // Messages text
         String message = view.getMessage(VisualState.INVALID_BAG, "Choose an item!");
@@ -164,15 +171,35 @@ public class BagState implements VisualStateHandler {
         Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
         TileSet itemTiles = Game.getData().getItemTiles();
 
+        int selectedButton = view.getSelectedButton();
+        ItemNamesies selected = null;
+
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 12);
-        Iterator<ItemNamesies> iter = toDraw.iterator();
-        for (int i = 0; i < bagPage*ITEMS_PER_PAGE; i++) {
-            iter.next();
+        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(toDraw, bagPage, ITEMS_PER_PAGE);
+        for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
+            ItemNamesies item = iter.next();
+            drawItemButton(g, itemTiles, bagButtons[ITEMS + i], item);
+
+            if (selectedButton == ITEMS + i) {
+                selected = item;
+            }
         }
 
-        for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
-            drawItemButton(g, itemTiles, bagButtons[ITEMS + i], iter.next());
+        // Show last item used if no item is selected
+        if (selected == null) {
+            // Last Item Used
+            ItemNamesies lastUsedItem = bag.getLastUsedItem();
+            lastItemPanel.drawLeftLabel(g, 16, "Last item used:");
+
+            // TODO: Should have a method to check if it is the empty item
+            if (lastUsedItem != ItemNamesies.NO_ITEM) {
+                drawItemButton(g, itemTiles, bagLastUsedBtn, lastUsedItem);
+            }
+        }
+        // Otherwise, draw selected item's information
+        else {
+            lastItemPanel.drawMessage(g, 12, selected.getItem().getDescription());
         }
 
         // Bag page number
@@ -182,15 +209,6 @@ public class BagState implements VisualStateHandler {
         // Left/Right Arrows
         bagLeftButton.drawArrow(g, Direction.LEFT);
         bagRightButton.drawArrow(g, Direction.RIGHT);
-
-        // Last Item Used
-        ItemNamesies lastUsedItem = bag.getLastUsedItem();
-        lastItemPanel.drawLeftLabel(g, 16, "Last item used:");
-
-        // TODO: Should have a method to check if it is the empty item
-        if (lastUsedItem != ItemNamesies.NO_ITEM) {
-            drawItemButton(g, itemTiles, bagLastUsedBtn, lastUsedItem);
-        }
 
         // Back Arrow
         view.drawBackButton(g);

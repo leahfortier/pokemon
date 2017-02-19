@@ -7,6 +7,7 @@ import main.Global;
 import map.entity.Entity;
 import map.entity.EntityAction;
 import map.entity.FishingSpotEntity;
+import map.overworld.WalkType;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
 import map.triggers.TriggerType;
@@ -191,7 +192,7 @@ public class MapData {
 	}
 
 	public boolean isPassable(Point location, Direction direction) {
-		return getPassValue(location).isPassable(direction);
+		return getPassValue(location).isPassable(direction) && (!hasEntity(location) || getEntity(location).isPassable());
 	}
 
 	public AreaData getArea(String areaName) {

@@ -227,4 +227,15 @@ DeadLockGruntManWalkingLeft2 000000fb
 DeadLockGruntManWalkingDown2 000000fc
 
 
-next 000000fd
+PlayerSurfingRight1 000000fd
+PlayerSurfingUp1 000000fe
+PlayerSurfingLeft1 000000ff
+PlayerSurfingDown1 00000100
+PlayerSurfingRight2 00000101
+PlayerSurfingUp2 00000102
+PlayerSurfingLeft2 00000103
+PlayerSurfingDown2 00000104
+PlayerSurfingRight1 00000105
+PlayerSurfingUp1 00000106
+PlayerSurfingLeft1 00000107
+PlayerSurfingDown1 00000108

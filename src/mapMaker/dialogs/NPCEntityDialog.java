@@ -138,7 +138,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 				break;
 			}
 
-			icons.add(new ImageIcon(image, spriteIndex +""));
+			icons.add(new ImageIcon(image, spriteIndex + ""));
 			spriteIndex++;
 		}
 

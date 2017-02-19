@@ -1,5 +1,6 @@
 package map;
 
+import map.overworld.TerrainType;
 import map.weather.WeatherState;
 import sound.MusicCondition;
 import sound.SoundTitle;

@@ -4,7 +4,7 @@ import draw.ImageUtils;
 import draw.TileUtils;
 import map.MapDataType;
 import map.MapName;
-import map.WalkType;
+import map.overworld.WalkType;
 import mapMaker.dialogs.AreaDialog;
 import mapMaker.model.MapMakerModel;
 import mapMaker.model.TileModel;
@@ -171,7 +171,10 @@ public class EditMapMetaData {
             return true;
         } else {
             // Not sure why I have to do new Color(val).getRGB() instead of just val, but it doesn't work like that so yeah
-            this.getMapImage(editType.getDataType()).setRGB(location.x, location.y, new Color(val).getRGB());
+            // If val is 0 then it's representing the null tile, so explicitly create the "null" Color
+            int colorValue = val == 0 ? new Color(0, 0, 0 ,0).getRGB() : new Color(val).getRGB();
+            this.getMapImage(editType.getDataType()).setRGB(location.x, location.y, colorValue);
+
             this.saved = false;
             return false;
         }

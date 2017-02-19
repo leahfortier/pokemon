@@ -87,7 +87,8 @@ class EvolutionView extends View {
 						message = new MessageUpdate("Your " + preEvolution.getName() + " evolved into " + StringUtils.articleString(postEvolution.getName()) + "!").withStatGains(gains, stats);
 					}
 
-					addToPokedex();
+					Game.getPlayer().pokemonEvolved(evolvingPokemon);
+
 				}
 				break;
 			case END:
@@ -194,10 +195,6 @@ class EvolutionView extends View {
 		else {
 			message = new MessageUpdate("Your " + preEvolution.getName() + " is evolving!");
 		}
-	}
-	
-	private void addToPokedex() {
-		Game.getPlayer().getPokedex().setCaught(isEgg ? preEvolution : postEvolution);
 	}
 
 	private void setCancelledMessage() {
