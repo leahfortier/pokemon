@@ -12,7 +12,6 @@ import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
-import pokemon.Stat;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import type.Type;
@@ -24,6 +23,7 @@ public class MessageUpdate {
 	private Integer maxHP;
 	private int[] statGains;
 	private int[] newStats;
+	private int[] stages;
 	private StatusCondition status;
 	private PokemonInfo pokemon;
 	private boolean shiny;
@@ -137,7 +137,13 @@ public class MessageUpdate {
 		isPlayer = true;
 		return this;
 	}
-	
+
+	public MessageUpdate withStages(int[] stages, boolean isPlayer) {
+		this.stages = stages;
+		this.isPlayer = isPlayer;
+		return this;
+	}
+
 	// OOOOHH SOMEONE'S GOT DAT STATUS CONDITION
 	public MessageUpdate withStatusCondition(StatusCondition status, boolean isPlayer) {
 		this.status = status;
@@ -157,7 +163,8 @@ public class MessageUpdate {
 				.withStatusCondition(pokemon.getStatus().getType(), isPlayer)
 				.withType(pokemon.getDisplayType(b), isPlayer)
 				.withNameChange(pokemon.getName(), isPlayer)
-				.withGender(pokemon.getGender(), isPlayer);
+				.withGender(pokemon.getGender(), isPlayer)
+				.withStages(pokemon.getAttributes().getStages(), isPlayer);
 	}
 	
 	// Pokemon image Update!
@@ -190,6 +197,7 @@ public class MessageUpdate {
 		this.level = active.getLevel();
 		this.gender = active.getGender();
 		this.expRatio = active.expRatio();
+		this.stages = active.getAttributes().getStages();
 		this.animation = false;
 		return this;
 	}
@@ -305,7 +313,15 @@ public class MessageUpdate {
 	public int[] getNewStats() {
 		return newStats;
 	}
-	
+
+	public boolean stageUpdate() {
+		return this.stages != null;
+	}
+
+	public int[] getStages() {
+		return this.stages;
+	}
+
 	public boolean statusUpdate() {
 		return status != null;
 	}

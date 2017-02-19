@@ -183,6 +183,10 @@ public class BattleAttributes implements Serializable {
 		return Effect.hasEffect(effects, effect);
 	}
 
+	public int[] getStages() {
+		return this.stages.clone();
+	}
+
 	public int getStage(Stat stat) {
 		return this.stages[stat.index()];
 	}
@@ -297,13 +301,14 @@ public class BattleAttributes implements Serializable {
 			Global.error("Cannot modify a stage by zero.");
 			return false;
 		}
-		
+
+		this.incrementStage(stat, val);
+
 		message = message.replace("{statName}", statName)
 				.replace("{change}", change)
 				.replace("{victimName}", victimName);
-		Messages.add(new MessageUpdate(message));
+		Messages.add(new MessageUpdate(message).withStages(this.getStages(), victim.isPlayer()));
 
-		this.incrementStage(stat, val);
 		
 		// Defiant raises Attack stat by two when a stat is lowered by the opponent
 		if (val < 0 && caster != victim) {

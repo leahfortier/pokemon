@@ -1,23 +1,24 @@
 package gui.view.battle;
 
 import battle.effect.status.StatusCondition;
+import draw.Alignment;
+import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
+import draw.button.panel.DrawPanel;
 import gui.GameData;
 import gui.TileSet;
-import draw.button.panel.DrawPanel;
 import main.Game;
 import main.Global;
 import message.MessageUpdate;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
+import pokemon.Stat;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
 import type.Type;
-import draw.Alignment;
-import draw.DrawUtils;
 import util.FontMetrics;
 import util.Point;
 import util.StringUtils;
@@ -66,10 +67,10 @@ class PokemonAnimationState {
         this.isPlayer = isPlayer;
 
         if (isPlayer) {
-            this.statusBox = new DrawPanel(463, 304, 295, 103);
+            this.statusBox = new DrawPanel(463, 284, 295, 123);
             this.pokemonDrawLocation = new Point(190, 412);
         } else {
-            this.statusBox = new DrawPanel(42, 52, 295, 90);
+            this.statusBox = new DrawPanel(42, 32, 295, 110);
             this.pokemonDrawLocation = new Point(607, 237);
         }
 
@@ -81,7 +82,7 @@ class PokemonAnimationState {
         int hpBarWidth = 200;
         this.hpBar = new DrawPanel(
                 statusBox.rightX() - STATUS_BOX_SPACING - hpBarWidth,
-                statusBox.y + 48,
+                statusBox.y + 68,
                 hpBarWidth,
                 19)
                 .withBlackOutline();
@@ -113,7 +114,8 @@ class PokemonAnimationState {
                 p.getMaxHP(),
                 p.getLevel(),
                 p.getGender(),
-                p.expRatio()
+                p.expRatio(),
+                p.getAttributes().getStages()
         );
     }
 
@@ -128,7 +130,8 @@ class PokemonAnimationState {
             int maxHP,
             int level,
             Gender gender,
-            float expRatio
+            float expRatio,
+            int[] stages
     ) {
         animationHP = 0;
         animationExp = 0;
@@ -136,6 +139,7 @@ class PokemonAnimationState {
 
         state.hp = oldState.hp = hp;
         state.status = oldState.status = status;
+        state.stages = oldState.stages = stages;
         state.type = type;
         state.shiny = shiny;
         state.imageName = pokemon.getImageName(state.shiny, !isPlayer);
@@ -161,6 +165,11 @@ class PokemonAnimationState {
         state.maxHp = newMax;
     }
 
+    public void setStages(int[] stages) {
+        oldState.stages = state.stages;
+        state.stages = stages;
+    }
+
     public void setStatus(StatusCondition newStatus) {
         oldState.status = state.status;
         state.status = newStatus;
@@ -173,7 +182,7 @@ class PokemonAnimationState {
     private void startPokemonUpdateAnimation(PokemonInfo newPokemon, boolean newShiny, boolean animate) {
         state.shiny = newShiny;
         if (!StringUtils.isNullOrEmpty(state.imageName)) {
-            oldState.imageName= state.imageName;
+            oldState.imageName = state.imageName;
             if (animate) {
                 animationEvolve = EVOLVE_ANIMATION_LIFESPAN;
             }
@@ -415,6 +424,24 @@ class PokemonAnimationState {
                 hpBar.centerY(),
                 Alignment.CENTER_Y);
 
+        // Stat modifiers
+        FontMetrics.setFont(g, 12);
+        for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
+            int stage = state.stages[i];
+            if (stage == 0) {
+                continue;
+            }
+
+            String message = "";
+            if (stage > 0) {
+                message += " ";
+            }
+
+            message += stage + "  ";
+            g.drawString(message, hpBar.x + FontMetrics.getTextWidth(g, message)*i, hpBar.y - 12);
+            g.drawString(Stat.getStat(i, true).getShortestName(), hpBar.x + FontMetrics.getTextWidth(g, message)*i + 2, hpBar.y - 4);
+        }
+
         // Show whether or not the wild Pokemon has already been caught
         if (!isPlayer && state.caught) {
             ImageUtils.drawCenteredImage(
@@ -438,7 +465,8 @@ class PokemonAnimationState {
                     newMessage.getMaxHP(),
                     newMessage.getLevel(),
                     newMessage.getGender(),
-                    newMessage.getEXPRatio());
+                    newMessage.getEXPRatio(),
+                    newMessage.getStages());
         }
         else {
             // TODO: Fuck this I hate this
@@ -452,6 +480,10 @@ class PokemonAnimationState {
 
             if (newMessage.statusUpdate()) {
                 setStatus(newMessage.getStatus());
+            }
+
+            if (newMessage.stageUpdate()) {
+                setStages(newMessage.getStages());
             }
 
             if (newMessage.typeUpdate()) {
@@ -498,9 +530,11 @@ class PokemonAnimationState {
         private boolean shiny;
         private boolean caught;
         private Gender gender;
+        private int[] stages;
 
         PokemonState() {
             type = new Type[2];
+            stages = new int[Stat.NUM_BATTLE_STATS];
         }
     }
 }
