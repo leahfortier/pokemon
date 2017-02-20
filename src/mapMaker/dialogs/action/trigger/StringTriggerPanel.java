@@ -4,10 +4,10 @@ import util.GUIUtils;
 
 import javax.swing.JTextField;
 
-public class StringTriggerAction extends TriggerContentsPanel {
-    private final JTextField textField;
+class StringTriggerPanel extends TriggerContentsPanel {
+    final JTextField textField;
 
-    public StringTriggerAction(String label) {
+    StringTriggerPanel(String label) {
         this.textField = GUIUtils.createTextField();
 
         GUIUtils.setVerticalLayout(this, GUIUtils.createTextFieldComponent(label, this.textField));

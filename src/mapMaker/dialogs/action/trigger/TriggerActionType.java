@@ -6,12 +6,13 @@ import sound.SoundTitle;
 import trainer.Badge;
 
 public enum TriggerActionType {
-    DIALOGUE(TriggerType.DIALOGUE, () -> new StringTriggerAction("Dialogue")),
-    GLOBAL(TriggerType.GLOBAL, () -> new StringTriggerAction("Global Name")),
-    GROUP(TriggerType.GROUP, () -> new StringTriggerAction("Group Trigger Name")),
-    CHANGE_VIEW(TriggerType.CHANGE_VIEW, () -> new EnumTriggerAction<>("View Mode", ViewMode.values())),
-    SOUND(TriggerType.SOUND, () -> new EnumTriggerAction<>("Sound Title", SoundTitle.values())),
-    BADGE(TriggerType.BADGE, () -> new EnumTriggerAction<>("Badge", Badge.values()));
+    BADGE(TriggerType.BADGE, () -> new EnumTriggerPanel<>("Badge", Badge.values())),
+    CHANGE_VIEW(TriggerType.CHANGE_VIEW, () -> new EnumTriggerPanel<>("View Mode", ViewMode.values())),
+    DIALOGUE(TriggerType.DIALOGUE, () -> new StringTriggerPanel("Dialogue")),
+    GIVE_ITEM(TriggerType.GIVE_ITEM, () -> new ItemTriggerPanel("Item Name")),
+    GLOBAL(TriggerType.GLOBAL, () -> new StringTriggerPanel("Global Name")),
+    GROUP(TriggerType.GROUP, () -> new StringTriggerPanel("Group Trigger Name")),
+    SOUND(TriggerType.SOUND, () -> new EnumTriggerPanel<>("Sound Title", SoundTitle.values()));
 
     private final TriggerType triggerType;
     private final TriggerPanelCreator panelCreator;

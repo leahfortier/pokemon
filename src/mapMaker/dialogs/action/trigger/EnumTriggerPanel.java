@@ -4,11 +4,11 @@ import util.GUIUtils;
 
 import javax.swing.JComboBox;
 
-public class EnumTriggerAction<T extends Enum> extends TriggerContentsPanel {
+class EnumTriggerPanel<T extends Enum> extends TriggerContentsPanel {
     private final JComboBox<T> combobBox; // Not a typo
     private final T[] values;
 
-    public EnumTriggerAction(String label, T[] values) {
+    EnumTriggerPanel(String label, T[] values) {
         this.combobBox = GUIUtils.createComboBox(values);
         this.values = values;
 

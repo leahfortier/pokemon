@@ -8,7 +8,7 @@ import java.awt.Color;
 public abstract class ColorDocumentListener implements DocumentListener {
     private final ColorCondition colorCondition;
 
-    ColorDocumentListener(ColorCondition colorCondition) {
+    public ColorDocumentListener(ColorCondition colorCondition) {
         this.colorCondition = colorCondition;
     }
 
