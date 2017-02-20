@@ -238,14 +238,14 @@ public class PlayerEntity extends MovableEntity {
 	protected int getSpriteIndex() {
 		CharacterData player = Game.getPlayer();
 
-		if (player.isBiking()) {
-			// Biking
-			return 22;
-		}
-		else if (Game.getData().getMap(player.getMapName()).getPassValue(this.getLocation()) == WalkType.WATER) {
-			// Surfing
-			return 21;
-		}
+        if (Game.getData().getMap(player.getMapName()).getPassValue(this.getLocation()) == WalkType.WATER) {
+            // Surfing
+            return 21;
+        }
+        else if (player.isBiking()) {
+            // Biking
+            return 22;
+        }
 		else {
 			// Walking
 			return 0;
