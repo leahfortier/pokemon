@@ -3,13 +3,15 @@ package mapMaker.dialogs.action.trigger;
 import gui.view.ViewMode;
 import map.triggers.TriggerType;
 import sound.SoundTitle;
+import trainer.Badge;
 
 public enum TriggerActionType {
     DIALOGUE(TriggerType.DIALOGUE, () -> new StringTriggerAction("Dialogue")),
     GLOBAL(TriggerType.GLOBAL, () -> new StringTriggerAction("Global Name")),
     GROUP(TriggerType.GROUP, () -> new StringTriggerAction("Group Trigger Name")),
     CHANGE_VIEW(TriggerType.CHANGE_VIEW, () -> new EnumTriggerAction<>("View Mode", ViewMode.values())),
-    SOUND(TriggerType.SOUND, () -> new EnumTriggerAction<>("Sound Title", SoundTitle.values()));
+    SOUND(TriggerType.SOUND, () -> new EnumTriggerAction<>("Sound Title", SoundTitle.values())),
+    BADGE(TriggerType.BADGE, () -> new EnumTriggerAction<>("Badge", Badge.values()));
 
     private final TriggerType triggerType;
     private final TriggerPanelCreator panelCreator;

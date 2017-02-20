@@ -4,7 +4,6 @@ import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectNamesies;
 import gui.view.ViewMode;
-import item.Item;
 import item.ItemNamesies;
 import item.use.BallItem;
 import map.AreaData;
@@ -30,7 +29,7 @@ import util.StringUtils;
 import java.io.Serializable;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,7 +41,6 @@ import java.util.stream.Collectors;
 public class CharacterData extends Trainer implements Serializable {
 	private static final long serialVersionUID = 4283479774388652604L;
 
-	public static final int NUM_BADGES = 12;
 	public static final int CATCH_SHAKES = 3;
 	public static final int MAX_NAME_LENGTH = 10;
 	public static final String DEFAULT_NAME = "Red";
@@ -66,7 +64,6 @@ public class CharacterData extends Trainer implements Serializable {
 
 	private int fileNum;
 	private long seconds;
-	private int numBadges;
 
 	private transient long timeSinceUpdate;
 
@@ -74,7 +71,7 @@ public class CharacterData extends Trainer implements Serializable {
 
 	private Pokedex pokedex;
 	private PC pc;
-	private boolean[] badges;
+	private Set<Badge> badges;
 	private int repelSteps;
 
 	private ActivePokemon evolvingPokemon;
@@ -96,8 +93,7 @@ public class CharacterData extends Trainer implements Serializable {
 		pokedex = new Pokedex();
 		pc = new PC();
 
-		badges = new boolean[NUM_BADGES];
-		Arrays.fill(badges, false);
+        badges = EnumSet.noneOf(Badge.class);
 
 		repelSteps = 0;
 		seconds = 0;
@@ -119,11 +115,8 @@ public class CharacterData extends Trainer implements Serializable {
 		this.name = playerName;
 	}
 
-	public void giveBadge(int badgeIndex) {
-		if (!badges[badgeIndex]) {
-			numBadges++;
-			badges[badgeIndex] = true;
-		}
+	public void giveBadge(Badge badge) {
+        this.badges.add(badge);
 	}
 
 	public PlayerEntity getEntity() {
@@ -144,7 +137,7 @@ public class CharacterData extends Trainer implements Serializable {
 	}
 
 	public int getNumBadges() {
-		return numBadges;
+		return this.badges.size();
 	}
 
 	public void updateTimePlayed() {
@@ -496,7 +489,7 @@ public class CharacterData extends Trainer implements Serializable {
 			return false;
 		}
 
-		Messages.add(new MessageUpdate(name + " threw the " + ((Item)ball).getName() + "!"));
+		Messages.add(new MessageUpdate(name + " threw the " + ball.getName() + "!"));
 		this.pokeball = ball;
 		
 		ActivePokemon catchPokemon = b.getOtherPokemon(true);
