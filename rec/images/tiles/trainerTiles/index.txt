@@ -239,3 +239,17 @@ PlayerSurfingRight1 00000105
 PlayerSurfingUp1 00000106
 PlayerSurfingLeft1 00000107
 PlayerSurfingDown1 00000108
+
+
+PlayerBikingRight1 00000109
+PlayerBikingUp1 0000010a
+PlayerBikingLeft1 0000010b
+PlayerBikingDown1 0000010c
+PlayerBikingRight2 0000010d
+PlayerBikingUp2 0000010e
+PlayerBikingLeft2 0000010f
+PlayerBikingDown2 00000110
+PlayerBikingRight3 00000111
+PlayerBikingUp3 00000112
+PlayerBikingLeft3 00000113
+PlayerBikingDown3 00000114
