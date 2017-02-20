@@ -1,6 +1,7 @@
 package test;
 
 import battle.Battle;
+import battle.attack.AttackNamesies;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import org.junit.Assert;
@@ -8,6 +9,8 @@ import org.junit.Test;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
+import pokemon.ability.AbilityNamesies;
+import type.Type;
 
 /*
 TODO:
@@ -54,5 +57,79 @@ public class StatusTest {
         uglyFace.removeStatus();
         int afterRemoved = Stat.getStat(stat, uglyFace, mahBoi, b);
         Assert.assertTrue(original == afterRemoved);
+    }
+
+    @Test
+    public void preventionTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        attacking.apply(true, AttackNamesies.TOXIC, battle);
+        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+
+        // Should fail because Charmander has a status condition
+        attacking.apply(false, AttackNamesies.TOXIC, battle);
+
+        battle.defendingFight(AttackNamesies.PURIFY);
+        Assert.assertFalse(defending.hasStatus());
+
+        // Cannot poison a pokemon with immunity
+        defending.withAbility(AbilityNamesies.IMMUNITY);
+        attacking.apply(false, AttackNamesies.TOXIC, battle);
+        Assert.assertFalse(defending.hasStatus());
+
+        // Unless you have Mold Breaker
+        attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
+        attacking.apply(true, AttackNamesies.TOXIC, battle);
+        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+
+        battle.defendingFight(AttackNamesies.REFRESH);
+        Assert.assertFalse(defending.hasStatus());
+
+        // When executing a full turn, Toxic should be successful and poison the target
+        // However, the end of the turn should restore its condition
+        battle.attackingFight(AttackNamesies.TOXIC);
+        Assert.assertFalse(defending.hasStatus());
+
+        // Suppressed ability -- should poison regardless of mold breaker
+        battle.attackingFight(AttackNamesies.GASTRO_ACID);
+        battle.attackingFight(AttackNamesies.TOXIC);
+        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+
+        battle.emptyHeal();
+        Assert.assertFalse(defending.hasStatus());
+
+        // Poison-type Pokemon cannot be poisoned
+        battle.defendingFight(AttackNamesies.REFLECT_TYPE);
+        Assert.assertTrue(defending.isType(battle, Type.POISON));
+        attacking.apply(false, AttackNamesies.TOXIC, battle);
+        Assert.assertFalse(defending.hasStatus());
+
+        // Unless you have Corrosion
+        attacking.withAbility(AbilityNamesies.CORROSION);
+        attacking.apply(true, AttackNamesies.TOXIC, battle);
+        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+
+        // Type should not heal at end of turn
+        battle.attackingFight(AttackNamesies.SPLASH);
+        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+
+        battle.emptyHeal();
+        Assert.assertFalse(defending.hasStatus());
+
+        // Remove Poison-typing
+        battle.attackingFight(AttackNamesies.SOAK);
+        Assert.assertFalse(defending.isType(battle, Type.POISON));
+        Assert.assertFalse(defending.hasStatus());
+
+        // Safeguard has nothing to do with ability
+        battle.defendingFight(AttackNamesies.SAFEGUARD);
+        attacking.apply(false, AttackNamesies.TOXIC, battle);
+        Assert.assertFalse(defending.hasStatus());
+
+        attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
+        attacking.apply(false, AttackNamesies.TOXIC, battle);
+        Assert.assertFalse(defending.hasStatus());
     }
 }

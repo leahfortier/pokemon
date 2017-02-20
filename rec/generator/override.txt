@@ -1174,6 +1174,21 @@ Override:
 			return status == StatusCondition.{11};
 			###
 		AddMapField: StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents {2}!"
+		AddMapField: Field:
+			private void removeStatus(Battle b, ActivePokemon victim) {
+				if (victim.hasStatus(StatusCondition.{11})) {
+					Status.removeStatus(b, victim, CastSource.ABILITY);
+				}
+			}
+			###
+		AddInterface: EntryEffect
+		AddInterface: EndTurnEffect
+		AddMapField: Enter: 
+			removeStatus(b, enterer);
+			###
+		AddMapField: ApplyEndTurn: 
+			removeStatus(b, victim);
+			###
 	*
 ***
 Override:
