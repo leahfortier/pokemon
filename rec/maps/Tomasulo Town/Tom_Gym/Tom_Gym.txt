@@ -178,7 +178,7 @@
             {
               "trigger": {
                 "triggerType": "Badge",
-                "triggerContents": "0"
+                "triggerContents": "ROUND"
               }
             }
           ]

@@ -96,7 +96,8 @@ class PokemonDataPanel extends JPanel {
 				namesies,
 				Integer.parseInt(levelFormattedTextField.getText().trim()),
 				shinyCheckBox.isSelected(),
-				customMoves
+				customMoves,
+				null // TODO: Should be able to give item
 		);
 	}
 

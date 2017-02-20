@@ -7,6 +7,16 @@ public class MoveNPCTriggerMatcher extends TriggerMatcher {
     private String endEntranceName;
     private boolean endLocationIsPlayer;
 
+    public MoveNPCTriggerMatcher(String npcEntityName, String endEntranceName, boolean endLocationIsPlayer) {
+        this.npcEntityName = npcEntityName;
+        this.endLocationIsPlayer = endLocationIsPlayer;
+
+        // Ending at the player and another entrance are mutually exclusive
+        if (!endLocationIsPlayer) {
+            this.endEntranceName = endEntranceName;
+        }
+    }
+
     public String getNpcEntityName() {
         return this.npcEntityName;
     }

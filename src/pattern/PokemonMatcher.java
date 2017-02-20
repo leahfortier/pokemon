@@ -22,7 +22,7 @@ public class PokemonMatcher {
     private Boolean isEgg;
     private ItemNamesies holdItem;
 
-    public PokemonMatcher(PokemonNamesies namesies, int level, boolean isShiny, AttackNamesies[] moves) {
+    public PokemonMatcher(PokemonNamesies namesies, int level, boolean isShiny, AttackNamesies[] moves, ItemNamesies holdItem) {
         if (namesies == null) {
             Global.error("Pokemon namesies cannot be null for a Pokemon Matcher");
         }
@@ -33,15 +33,30 @@ public class PokemonMatcher {
 
         this.namesies = namesies;
         this.level = level;
-
-        if (isShiny) {
-            this.isShiny = true;
-        }
+        this.isShiny = isShiny;
+        this.holdItem = holdItem;
 
         this.moves = Arrays.stream(moves).filter(move -> move != null).collect(Collectors.toList());
         if (this.moves.isEmpty()) {
             this.moves = null;
         }
+    }
+
+    private PokemonMatcher() {}
+
+    public static PokemonMatcher createRandomEggMatcher() {
+        PokemonMatcher matcher = new PokemonMatcher();
+        matcher.isRandomEgg = true;
+
+        return matcher;
+    }
+
+    public static PokemonMatcher createEggMatcher(PokemonNamesies eggy) {
+        PokemonMatcher matcher = new PokemonMatcher();
+        matcher.namesies = eggy;
+        matcher.isEgg = true;
+
+        return matcher;
     }
 
     public PokemonNamesies getNamesies() {
