@@ -43,6 +43,7 @@ public class MessageUpdate {
 	private String triggerName;
 	private ChoiceMatcher[] choices;
 	private ViewMode viewMode;
+	private Boolean showImage;
 	
 	public enum Update {
 		NO_UPDATE,
@@ -152,6 +153,12 @@ public class MessageUpdate {
 		return this;
 	}
 
+	public MessageUpdate withShowImage(boolean showImage, boolean isPlayer) {
+		this.showImage = showImage;
+		this.isPlayer = isPlayer;
+		return this;
+	}
+
 	public MessageUpdate withFrontPokemon(ActivePokemon frontPokemon, boolean isPlayer) {
 		this.frontPokemon = frontPokemon;
 		this.isPlayer = isPlayer;
@@ -172,7 +179,8 @@ public class MessageUpdate {
 				.withNameChange(pokemon.getName(), isPlayer)
 				.withGender(pokemon.getGender(), isPlayer)
 				.withStages(pokemon.getAttributes().getStages(), isPlayer)
-				.withFrontPokemon(pokemon, isPlayer);
+				.withFrontPokemon(pokemon, isPlayer)
+				.withShowImage(!pokemon.isSemiInvulnerable(), isPlayer);
 	}
 	
 	// Pokemon image Update!
@@ -207,6 +215,7 @@ public class MessageUpdate {
 		this.expRatio = active.expRatio();
 		this.stages = active.getAttributes().getStages();
 		this.frontPokemon = active;
+		this.showImage = true;
 		this.animation = false;
 		return this;
 	}
@@ -453,5 +462,13 @@ public class MessageUpdate {
 
 	public ActivePokemon getFrontPokemon() {
 		return this.frontPokemon;
+	}
+
+	public boolean showImageUpdate() {
+		return this.showImage != null;
+	}
+
+	public boolean getShowImage() {
+		return this.showImage;
 	}
 }

@@ -147,6 +147,7 @@ class PokemonAnimationState {
         state.type = type;
         state.shiny = shiny;
         state.imageName = pokemon.getImageName(state.shiny, !isPlayer);
+        state.showImage = true;
         state.caught = battleView.getCurrentBattle().isWildBattle() && Game.getPlayer().getPokedex().isCaught(pokemon.namesies());
         state.name = name;
         state.maxHp = oldState.maxHp = maxHP;
@@ -176,6 +177,10 @@ class PokemonAnimationState {
 
     public void setStatus(StatusCondition newStatus) {
         state.status = newStatus;
+    }
+
+    public void setShowImage(boolean showImage) {
+        state.showImage = showImage;
     }
 
     public void setType(Type[] newType) {
@@ -366,7 +371,7 @@ class PokemonAnimationState {
 
     private void drawPokemon(Graphics g, ActivePokemon pokemon) {
         // Draw the Pokemon image if applicable
-        if (!isEmpty() && !pokemon.isSemiInvulnerable()) {
+        if (!isEmpty() && state.showImage) {
             GameData data = Game.getData();
             TileSet pkmTiles = isPlayer ? data.getPokemonTilesLarge() : data.getPokemonTilesMedium();
 
@@ -519,6 +524,10 @@ class PokemonAnimationState {
                 setStatus(newMessage.getStatus());
             }
 
+            if (newMessage.showImageUpdate()) {
+                setShowImage(newMessage.getShowImage());
+            }
+
             if (newMessage.frontPokemonUpdate()) {
                 setFrontPokemon(newMessage.getFrontPokemon());
             }
@@ -573,10 +582,12 @@ class PokemonAnimationState {
         private Gender gender;
         private int[] stages;
         private ActivePokemon frontPokemon;
+        private boolean showImage;
 
         PokemonState() {
             type = new Type[2];
             stages = new int[Stat.NUM_BATTLE_STATS];
+            this.showImage = true;
         }
     }
 }
