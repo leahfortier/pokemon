@@ -274,7 +274,7 @@ public class DrawPanel {
             lastCharToShow = 0;
             finishedAnimating = false;
         } else {
-            messageTimeElapsed += Global.MS_BETWEEN_FRAMES;
+            messageTimeElapsed += 3*Global.MS_BETWEEN_FRAMES;
         }
 
         int charactersToShow = finishedAnimating ? text.length() : Math.min(text.length(), messageTimeElapsed / 50);
