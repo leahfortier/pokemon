@@ -19,6 +19,7 @@ public enum TriggerActionType {
     HEAL_PARTY(TriggerType.HEAL_PARTY, EmptyTriggerContentsPanel::new),
     MOVE_NPC(TriggerType.MOVE_NPC, MoveNPCTriggerPanel::new),
     MOVE_PLAYER(TriggerType.MOVE_PLAYER, MovePlayerTriggerPanel::new),
+    RELOAD_MAP(TriggerType.RELOAD_MAP, EmptyTriggerContentsPanel::new),
     SOUND(TriggerType.SOUND, () -> new EnumTriggerPanel<>("Sound Title", SoundTitle.values()));
 
     private final TriggerType triggerType;
