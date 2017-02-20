@@ -27,9 +27,6 @@ public final class Global {
 	// The size of each tile in the map
 	public static final int TILE_SIZE = 32;
 
-	// The time(ms) it takes for the character to move from one tile on the map to another
-	public static final int TIME_BETWEEN_TILES = 128;
-
 	public static final String MONEY_SYMBOL = "\u00A5";
 
 	public static void error(String errorMessage) {

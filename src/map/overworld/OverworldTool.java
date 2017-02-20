@@ -1,9 +1,10 @@
 package map.overworld;
 
 public enum OverworldTool {
+    BIKE("hasBicycle"),
+    FISH("canFish"),
     FLY("canFly"),
     SURF("canSurf"),
-    FISH("canFish"),
     POKEFINDER("hasPokefinder");
 
     private final String globalName;

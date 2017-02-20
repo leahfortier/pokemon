@@ -113,7 +113,7 @@ public abstract class MovableEntity extends Entity {
 						setLocation(newLocation);
 
 						transitionTime = 1;
-						waitTime = 5*Global.TIME_BETWEEN_TILES/4; // TODO: Why 5/4
+						waitTime = 5*this.getTimeBetweenTiles()/4; // TODO: Why 5/4
 						pathIndex++;
 					}
 
@@ -161,5 +161,10 @@ public abstract class MovableEntity extends Entity {
 		}
 
 		return null;
+	}
+
+	// The time(ms) it takes for the character to move from one tile on the map to another
+	protected int getTimeBetweenTiles() {
+		return 128;
 	}
 }

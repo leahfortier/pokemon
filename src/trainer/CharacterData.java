@@ -57,6 +57,8 @@ public class CharacterData extends Trainer implements Serializable {
 	private String areaName;
 	private Set<Entry<MapName, String>> flyLocations;
 
+	private boolean isBiking;
+
 	private transient PlayerEntity entity;
 
 	private Set<String> definedGlobals;
@@ -130,6 +132,15 @@ public class CharacterData extends Trainer implements Serializable {
 
 	public boolean hasTool(OverworldTool tool) {
 		return this.globalsContain(tool.getGlobalName());
+	}
+
+	public boolean isBiking() {
+		return this.isBiking;
+	}
+
+	public void toggleBicycle() {
+		this.isBiking = !this.isBiking && this.hasTool(OverworldTool.BIKE);
+
 	}
 
 	public int getNumBadges() {

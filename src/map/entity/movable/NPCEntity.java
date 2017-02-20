@@ -88,7 +88,7 @@ public class NPCEntity extends MovableEntity {
 
 	@Override
 	public int getTransitionTime() {
-		return Global.TIME_BETWEEN_TILES*2;
+		return this.getTimeBetweenTiles()*2;
 	}
 
 	@Override

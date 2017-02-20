@@ -212,7 +212,7 @@ public class PlayerEntity extends MovableEntity {
 	public Point getDrawLocation() {
 		float transitionLength = 0;
 		if (transitionTime > 0) {
-			transitionLength = Math.max(0f, (Global.TIME_BETWEEN_TILES - (float) transitionTime/*-dt*/) / Global.TIME_BETWEEN_TILES);
+			transitionLength = Math.max(0f, (this.getTimeBetweenTiles() - (float) transitionTime/*-dt*/) / this.getTimeBetweenTiles());
 		}
 
 		// Scale by the length of the transition in the current direction
@@ -236,17 +236,25 @@ public class PlayerEntity extends MovableEntity {
 
 	@Override
 	protected int getSpriteIndex() {
-		// Surfing
-		if (Game.getData().getMap(Game.getPlayer().getMapName()).getPassValue(this.getLocation()) == WalkType.WATER) {
+		CharacterData player = Game.getPlayer();
+
+		if (player.isBiking()) {
+			// Biking
+			return 22;
+		}
+		else if (Game.getData().getMap(player.getMapName()).getPassValue(this.getLocation()) == WalkType.WATER) {
+			// Surfing
 			return 21;
 		}
-
-		return 0;
+		else {
+			// Walking
+			return 0;
+		}
 	}
 
 	@Override
 	public int getTransitionTime() {
-		return Global.TIME_BETWEEN_TILES;
+		return this.getTimeBetweenTiles();
 	}
 
 	@Override
@@ -290,5 +298,10 @@ public class PlayerEntity extends MovableEntity {
 	public void resetCurrentInteractionEntity() {
 		currentInteractionEntity = null;
 		this.unstall();
+	}
+
+	// Double speed while biking
+	protected int getTimeBetweenTiles() {
+		return super.getTimeBetweenTiles()/(Game.getPlayer().isBiking() ? 2 : 1);
 	}
 }
