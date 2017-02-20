@@ -2,11 +2,16 @@ package map;
 
 import map.overworld.TerrainType;
 import map.weather.WeatherState;
+import pokemon.PokemonNamesies;
 import sound.MusicCondition;
 import sound.SoundTitle;
 import util.StringUtils;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class AreaData {
 	public static final AreaData VOID = new AreaData(
@@ -29,6 +34,8 @@ public class AreaData {
 	private final SoundTitle music;
 	private final MusicCondition[] musicConditions;
 
+	private final Set<PokemonNamesies> availableWildPokemon;
+
 	public AreaData(String name,
 					Color color,
 					String flyLocation,
@@ -45,6 +52,16 @@ public class AreaData {
 
 		this.music = music;
 		this.musicConditions = musicConditions;
+
+		this.availableWildPokemon = new TreeSet<>();
+	}
+
+	public List<PokemonNamesies> getAvailableWildPokemon() {
+		return new ArrayList<>(this.availableWildPokemon);
+	}
+
+	public void addPokemon(PokemonNamesies pokemon) {
+		this.availableWildPokemon.add(pokemon);
 	}
 
 	public boolean hasColor() {

@@ -10,6 +10,7 @@ import input.InputControl;
 import main.Game;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
+import trainer.CharacterData;
 import trainer.pokedex.Pokedex;
 import util.FontMetrics;
 import util.Point;
@@ -77,8 +78,15 @@ class PokeFinderState implements VisualStateHandler {
 
     @Override
     public void set(MapView mapView) {
-        this.availablePokemon = mapView.getCurrentMap().getAvailableWildPokemon();
-        this.pokedex = Game.getPlayer().getPokedex();
+        CharacterData player = Game.getPlayer();
+
+        this.availablePokemon = mapView.getCurrentMap().getArea(player.getLocation()).getAvailableWildPokemon();
+        if (this.availablePokemon.isEmpty()) {
+            mapView.setState(VisualState.MAP);
+            return;
+        }
+
+        this.pokedex = player.getPokedex();
         this.pokedexTiles = Game.getData().getPokedexTilesSmall();
 
         this.toRender = new TreeSet<>();
