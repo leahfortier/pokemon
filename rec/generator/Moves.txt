@@ -3,10 +3,10 @@
 
 Constructor:
 	Namesies Enum AttackNamesies
-	Desc String
-	PP Int
 	Type Enum Type
 	Cat Enum MoveCategory
+	PP Int
+	Desc String
 *
 Fields:
 	Pow Int power
