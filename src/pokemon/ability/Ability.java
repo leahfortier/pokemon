@@ -770,8 +770,13 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Limber extends Ability implements StatusPreventionEffect {
+	static class Limber extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
+		private void removeStatus(Battle b, ActivePokemon victim) {
+			if (victim.hasStatus(StatusCondition.PARALYZED)) {
+			Status.removeStatus(b, victim, CastSource.ABILITY);
+		}
+	}
 
 		Limber() {
 			super(AbilityNamesies.LIMBER, "The Pok\u00e9mon is protected from paralysis.");
@@ -783,6 +788,14 @@ public abstract class Ability implements Serializable {
 
 		public String statusPreventionMessage(ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " prevents paralysis!";
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			removeStatus(b, enterer);
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 	}
 
@@ -831,8 +844,13 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class VitalSpirit extends Ability implements StatusPreventionEffect {
+	static class VitalSpirit extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
+		private void removeStatus(Battle b, ActivePokemon victim) {
+			if (victim.hasStatus(StatusCondition.ASLEEP)) {
+			Status.removeStatus(b, victim, CastSource.ABILITY);
+		}
+	}
 
 		VitalSpirit() {
 			super(AbilityNamesies.VITAL_SPIRIT, "Prevents the Pok\u00e9mon from falling asleep.");
@@ -845,10 +863,23 @@ public abstract class Ability implements Serializable {
 		public String statusPreventionMessage(ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " prevents sleep!";
 		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			removeStatus(b, enterer);
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
+		}
 	}
 
-	static class Insomnia extends Ability implements StatusPreventionEffect {
+	static class Insomnia extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
+		private void removeStatus(Battle b, ActivePokemon victim) {
+			if (victim.hasStatus(StatusCondition.ASLEEP)) {
+			Status.removeStatus(b, victim, CastSource.ABILITY);
+		}
+	}
 
 		Insomnia() {
 			super(AbilityNamesies.INSOMNIA, "Prevents the Pok\u00e9mon from falling asleep.");
@@ -860,6 +891,14 @@ public abstract class Ability implements Serializable {
 
 		public String statusPreventionMessage(ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " prevents sleep!";
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			removeStatus(b, enterer);
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 	}
 
@@ -1302,8 +1341,13 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class WaterVeil extends Ability implements StatusPreventionEffect {
+	static class WaterVeil extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
+		private void removeStatus(Battle b, ActivePokemon victim) {
+			if (victim.hasStatus(StatusCondition.BURNED)) {
+			Status.removeStatus(b, victim, CastSource.ABILITY);
+		}
+	}
 
 		WaterVeil() {
 			super(AbilityNamesies.WATER_VEIL, "Prevents the Pok\u00e9mon from getting a burn.");
@@ -1315,6 +1359,14 @@ public abstract class Ability implements Serializable {
 
 		public String statusPreventionMessage(ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " prevents burns!";
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			removeStatus(b, enterer);
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 	}
 
@@ -1574,8 +1626,13 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Immunity extends Ability implements StatusPreventionEffect {
+	static class Immunity extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
+		private void removeStatus(Battle b, ActivePokemon victim) {
+			if (victim.hasStatus(StatusCondition.POISONED)) {
+			Status.removeStatus(b, victim, CastSource.ABILITY);
+		}
+	}
 
 		Immunity() {
 			super(AbilityNamesies.IMMUNITY, "Prevents the Pok\u00e9mon from getting poisoned.");
@@ -1587,6 +1644,14 @@ public abstract class Ability implements Serializable {
 
 		public String statusPreventionMessage(ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " prevents poison!";
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			removeStatus(b, enterer);
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 	}
 
@@ -1777,8 +1842,13 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class MagmaArmor extends Ability implements StatusPreventionEffect {
+	static class MagmaArmor extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
+		private void removeStatus(Battle b, ActivePokemon victim) {
+			if (victim.hasStatus(StatusCondition.FROZEN)) {
+			Status.removeStatus(b, victim, CastSource.ABILITY);
+		}
+	}
 
 		MagmaArmor() {
 			super(AbilityNamesies.MAGMA_ARMOR, "Prevents the Pok\u00e9mon from becoming frozen.");
@@ -1790,6 +1860,14 @@ public abstract class Ability implements Serializable {
 
 		public String statusPreventionMessage(ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " prevents freezing!";
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			removeStatus(b, enterer);
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 	}
 
@@ -2985,8 +3063,13 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class SweetVeil extends Ability implements StatusPreventionEffect {
+	static class SweetVeil extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
+		private void removeStatus(Battle b, ActivePokemon victim) {
+			if (victim.hasStatus(StatusCondition.ASLEEP)) {
+			Status.removeStatus(b, victim, CastSource.ABILITY);
+		}
+	}
 
 		SweetVeil() {
 			super(AbilityNamesies.SWEET_VEIL, "Prevents itself and ally Pok\u00e9mon from falling asleep.");
@@ -2998,6 +3081,14 @@ public abstract class Ability implements Serializable {
 
 		public String statusPreventionMessage(ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " prevents sleep!";
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			removeStatus(b, enterer);
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 	}
 
@@ -3402,8 +3493,13 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class WaterBubble extends Ability implements PowerChangeEffect, OpponentPowerChangeEffect, StatusPreventionEffect {
+	static class WaterBubble extends Ability implements PowerChangeEffect, OpponentPowerChangeEffect, StatusPreventionEffect, EntryEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
+		private void removeStatus(Battle b, ActivePokemon victim) {
+			if (victim.hasStatus(StatusCondition.BURNED)) {
+			Status.removeStatus(b, victim, CastSource.ABILITY);
+		}
+	}
 
 		WaterBubble() {
 			super(AbilityNamesies.WATER_BUBBLE, "Lowers the power of Fire-type moves done to the Pokémon and prevents the Pokémon from getting a burn.");
@@ -3423,6 +3519,14 @@ public abstract class Ability implements Serializable {
 
 		public String statusPreventionMessage(ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " prevents burns!";
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			removeStatus(b, enterer);
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 	}
 

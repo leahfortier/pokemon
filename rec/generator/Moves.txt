@@ -6449,12 +6449,13 @@ Throat Chop:
 	Effect: SoundBlock
 *
 Pollen Puff:
-	Desc: The user attacks the enemy with a pollen puff that explodes. If the target is an ally, it gives the ally a pollen puff that restores its HP instead.
+	Desc: The user attacks the enemy with a pollen puff that explodes.
 	Type: Bug
 	Cat: Special
 	PP: 15
 	Pow: 90
 	Acc: 100
+	Comments: // TODO: Had to remove the special effects of this move because double battle things, but would like to replace it with something else
 *
 Lunge:
 	Desc: The user makes a lunge at the target, attacking with full force. This also lowers the target's Attack stat.
