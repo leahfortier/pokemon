@@ -136,7 +136,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	}
 
 	public String getCapturedText() {
-		return capturedText.toString();
+		return capturedText == null ? StringUtils.empty() : capturedText.toString();
 	}
 
 	public String getCapturedText(int maxLength) {
@@ -145,7 +145,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	}
 
 	private void trimCapturedText(int maxLength) {
-		if (capturedText.length() > maxLength) {
+		if (capturedText != null && capturedText.length() > maxLength) {
 			capturedText.delete(maxLength, capturedText.length());
 		}
 	}

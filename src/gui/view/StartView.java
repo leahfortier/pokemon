@@ -71,7 +71,9 @@ class StartView extends View {
 				switch (dialogue[dialogueIndex].getUpdateType()) {
 					case ENTER_NAME:
 						state = State.NAME;
-						break;
+						// Return here so that there's time for the message displayed when entering a name
+						// to start animating before starting to capture input
+						return;
 					case SHOW_POKEMON:
 						ditto = true;
 						state = State.DEFAULT;
