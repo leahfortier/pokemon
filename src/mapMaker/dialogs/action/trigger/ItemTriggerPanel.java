@@ -8,8 +8,8 @@ import javax.swing.JComponent;
 
 public class ItemTriggerPanel extends StringTriggerPanel {
 
-    ItemTriggerPanel(String label) {
-        super(label);
+    ItemTriggerPanel() {
+        super("Item Name");
 
         ColorCondition colorCondition = () -> ItemNamesies.tryValueOf(textField.getText().trim()) != null;
         textField.getDocument().addDocumentListener(new ColorDocumentListener(colorCondition) {

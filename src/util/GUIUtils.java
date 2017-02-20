@@ -82,6 +82,13 @@ public class GUIUtils {
         return checkBox;
     }
 
+    public static JCheckBox createCheckBox(String text, ActionListener listener) {
+        JCheckBox checkBox = createCheckBox(text);
+        checkBox.addActionListener(listener);
+
+        return checkBox;
+    }
+
     public static JPanel createComboBoxComponent(String text, JComboBox comboBox) {
         JPanel component = new JPanel();
         JLabel label = createLabel(text);

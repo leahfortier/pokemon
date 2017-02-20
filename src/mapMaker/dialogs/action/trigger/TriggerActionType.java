@@ -9,7 +9,8 @@ public enum TriggerActionType {
     BADGE(TriggerType.BADGE, () -> new EnumTriggerPanel<>("Badge", Badge.values())),
     CHANGE_VIEW(TriggerType.CHANGE_VIEW, () -> new EnumTriggerPanel<>("View Mode", ViewMode.values())),
     DIALOGUE(TriggerType.DIALOGUE, () -> new StringTriggerPanel("Dialogue")),
-    GIVE_ITEM(TriggerType.GIVE_ITEM, () -> new ItemTriggerPanel("Item Name")),
+    GIVE_ITEM(TriggerType.GIVE_ITEM, ItemTriggerPanel::new),
+    GIVE_POKEMON(TriggerType.GIVE_POKEMON, PokemonTriggerPanel::new),
     GLOBAL(TriggerType.GLOBAL, () -> new StringTriggerPanel("Global Name")),
     GROUP(TriggerType.GROUP, () -> new StringTriggerPanel("Group Trigger Name")),
     SOUND(TriggerType.SOUND, () -> new EnumTriggerPanel<>("Sound Title", SoundTitle.values()));
