@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import java.util.EnumMap;
 import java.util.Map;
 
-class ActionDialog extends TriggerDialog<ActionMatcher> {
+public class ActionDialog extends TriggerDialog<ActionMatcher> {
     private final JPanel topComponent;
 
     private final Map<ActionType, ActionPanel> map;

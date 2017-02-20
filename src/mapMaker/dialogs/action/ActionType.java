@@ -3,7 +3,7 @@ package mapMaker.dialogs.action;
 import mapMaker.dialogs.action.trigger.TriggerActionPanel;
 
 public enum ActionType {
-    TRIGGER(dialog -> new TriggerActionPanel()),
+    TRIGGER(TriggerActionPanel::new),
     BATTLE(BattleActionPanel::new),
     CHOICE(dialog -> new ChoiceActionPanel()),
     UPDATE(dialog -> new BasicActionPanel("Update Name")),

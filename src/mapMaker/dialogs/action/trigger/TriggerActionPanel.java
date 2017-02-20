@@ -1,5 +1,6 @@
 package mapMaker.dialogs.action.trigger;
 
+import mapMaker.dialogs.action.ActionDialog;
 import mapMaker.dialogs.action.ActionPanel;
 import mapMaker.dialogs.action.ActionType;
 import pattern.action.ActionMatcher;
@@ -17,7 +18,10 @@ public class TriggerActionPanel extends ActionPanel {
     private final Map<TriggerActionType, TriggerContentsPanel> map;
     private final JComboBox<TriggerActionType> triggerTypeCombobBox; // Not a typo
 
-    public TriggerActionPanel() {
+    private final ActionDialog parentDialog;
+
+    public TriggerActionPanel(ActionDialog actionDialog) {
+        this.parentDialog = actionDialog;
         this.triggerTypeCombobBox = GUIUtils.createComboBox(TriggerActionType.values(), event -> renderDialog());
         this.topComponent = GUIUtils.createHorizontalLayoutComponent(GUIUtils.createComboBoxComponent("Trigger Type", triggerTypeCombobBox));
 
@@ -55,5 +59,6 @@ public class TriggerActionPanel extends ActionPanel {
 
         TriggerActionType selectedAction = (TriggerActionType) triggerTypeCombobBox.getSelectedItem();
         GUIUtils.setVerticalLayout(this, topComponent, map.get(selectedAction));
+        parentDialog.render();
     }
 }
