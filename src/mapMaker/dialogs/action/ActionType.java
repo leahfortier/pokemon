@@ -1,5 +1,7 @@
 package mapMaker.dialogs.action;
 
+import mapMaker.dialogs.action.trigger.TriggerActionPanel;
+
 public enum ActionType {
     TRIGGER(dialog -> new TriggerActionPanel()),
     BATTLE(BattleActionPanel::new),
