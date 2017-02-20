@@ -236,7 +236,22 @@ public class DrawPanel {
         return this.getBorderSize() + FontMetrics.getDistanceBetweenRows(g) - FontMetrics.getTextHeight(g);
     }
 
+    public static boolean animatingMessage;
+    private int messageTimeElapsed = 0;
+    private String drawingText;
+    private int lastCharToShow;
+    private int lastWordLength;
+
     public int drawMessage(Graphics g, int fontSize, String text) {
+        if (drawingText == null || !text.equals(drawingText)) {
+            messageTimeElapsed = 0;
+            drawingText = text;
+            lastWordLength = -1;
+            lastCharToShow = 0;
+        } else {
+            messageTimeElapsed += Global.MS_BETWEEN_FRAMES;
+        }
+
         g.setColor(Color.BLACK);
 
         FontMetrics.setFont(g, fontSize);
@@ -247,7 +262,20 @@ public class DrawPanel {
 
         int textWidth = width - 2*textSpace;
 
-        return TextUtils.drawWrappedText(g, text, startX, startY, textWidth);
+        int charactersToShow = Math.min(text.length(), messageTimeElapsed / 50);
+
+        // If we haven't already calculated the length of the last we're writing, calculate it
+        if (charactersToShow != 0 && lastWordLength == -1) {
+            lastWordLength = 0;
+            lastWordLength = text.substring(charactersToShow - 1).indexOf(' ');
+        }
+
+        // If the current character is a space, then reset lastWordLength
+        if (charactersToShow != 0 && text.charAt(charactersToShow - 1) == ' ') {
+            lastWordLength = -1;
+        }
+
+        return TextUtils.drawWrappedText(g, text.substring(0, charactersToShow), lastWordLength, startX, startY, textWidth);
     }
 
     public void drawLeftLabel(Graphics g, int fontSize, String label) {

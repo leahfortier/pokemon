@@ -20,6 +20,10 @@ public final class TextUtils {
     }
 
     public static int drawWrappedText(Graphics g, String str, int x, int y, int width) {
+        return drawWrappedText(g, str, -1, x, y, width);
+    }
+
+    public static int drawWrappedText(Graphics g, String str, int lastWordActualLength, int x, int y, int width) {
         int fontSize = g.getFont().getSize();
         FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
 
@@ -29,8 +33,12 @@ public final class TextUtils {
         int height = y;
         int distanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
 
-        for (String word : words) {
-            if ((word.length() + build.length() + 1)*fontMetrics.getHorizontalSpacing() > width) {
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            // If we're at the last word and we've specified a last word length, use that, otherwise use the
+            // actual length of the word
+            int wordLength = i == words.length - 1 && lastWordActualLength != -1 ? lastWordActualLength : word.length();
+            if ((wordLength + build.length() + 1)*fontMetrics.getHorizontalSpacing() > width) {
                 g.drawString(build.toString(), x, height);
 
                 height += distanceBetweenRows;
