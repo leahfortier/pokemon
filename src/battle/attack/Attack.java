@@ -7,6 +7,8 @@ import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove;
+import battle.effect.attack.MultiTurnMove.ChargingMove;
+import battle.effect.attack.MultiTurnMove.RechargingMove;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
@@ -206,8 +208,10 @@ public abstract class Attack implements Serializable {
 	
 	public boolean isMultiTurn(Battle b, ActivePokemon user) {
 		if (this instanceof MultiTurnMove) {
+			MultiTurnMove multiTurnMove = (MultiTurnMove) this;
+
 			// The Power Herb item allows multi-turn moves that charge first to skip the charge turn -- BUT ONLY ONCE
-			if (((MultiTurnMove)this).chargesFirst() && user.isHoldingItem(b, ItemNamesies.POWER_HERB)) {
+			if (multiTurnMove.chargesFirst() && !multiTurnMove.semiInvulnerability() && user.isHoldingItem(b, ItemNamesies.POWER_HERB)) {
 				user.consumeItem(b);
 				return false;
 			}
@@ -242,11 +246,26 @@ public abstract class Attack implements Serializable {
 		return true;
 	}
 
-	protected boolean shouldApplyDamage() {
-		return !this.isStatusMove();
+	protected boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+		// Status moves default to no damage
+		if (this.isStatusMove()) {
+			return false;
+		}
+
+		// Multi-turn moves default to no damage on the charging turn
+		if (this.isMultiTurn(b, user)) {
+			return !((MultiTurnMove)this).isCharging(user);
+		}
+
+		return true;
 	}
 
-	protected boolean shouldApplyEffects() {
+	protected boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+		// Multi-turn moves default to no effects on the attacking turn
+		if (this.isMultiTurn(b, user)) {
+			return ((MultiTurnMove)this).isCharging(user);
+		}
+
 		return true;
 	}
 
@@ -273,7 +292,7 @@ public abstract class Attack implements Serializable {
 		this.afterApplyCheck(b, me, target);
 		
 		// Physical and special attacks -- apply dat damage
-		if (shouldApplyDamage()) {
+		if (shouldApplyDamage(b, me)) {
 			applyDamage(me, o, b);
 		}
 		
@@ -312,7 +331,7 @@ public abstract class Attack implements Serializable {
 			return false;
 		}
 
-		return this.shouldApplyEffects();
+		return this.shouldApplyEffects(b, me);
 	}
 	
 	private boolean zeroAdvantage(Battle b, ActivePokemon p, ActivePokemon opp) {
@@ -839,7 +858,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class SolarBeam extends Attack implements MultiTurnMove {
+	static class SolarBeam extends Attack implements ChargingMove {
 		private static final long serialVersionUID = 1L;
 
 		SolarBeam() {
@@ -864,24 +883,18 @@ public abstract class Attack implements Serializable {
 			}
 		}
 
-		public boolean chargesFirst() {
-			return true;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
+		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " began taking in sunlight!";
+		}
+
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
-	static class SolarBlade extends Attack implements MultiTurnMove {
+	static class SolarBlade extends Attack implements ChargingMove {
 		private static final long serialVersionUID = 1L;
 
 		SolarBlade() {
@@ -896,20 +909,14 @@ public abstract class Attack implements Serializable {
 			return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
 		}
 
-		public boolean chargesFirst() {
-			return true;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
+		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " began taking in sunlight!";
+		}
+
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -925,7 +932,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Fly extends Attack implements MultiTurnMove {
+	static class Fly extends Attack implements ChargingMove {
 		private static final long serialVersionUID = 1L;
 
 		Fly() {
@@ -937,20 +944,18 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean chargesFirst() {
-			return true;
-		}
-
 		public boolean semiInvulnerability() {
 			return true;
 		}
 
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
+		public String getChargeMessage(ActivePokemon user) {
+			return user.getName() + " flew up high!";
 		}
 
-		private String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " flew up high!";
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -1291,7 +1296,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class SkullBash extends Attack implements MultiTurnMove {
+	static class SkullBash extends Attack implements ChargingMove {
 		private static final long serialVersionUID = 1L;
 
 		SkullBash() {
@@ -1299,24 +1304,19 @@ public abstract class Attack implements Serializable {
 			super.power = 130;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+			super.selfTarget = true;
+			super.statChanges[Stat.DEFENSE.index()] = 1;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean chargesFirst() {
-			return true;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-			user.getAttributes().modifyStage(user, user, 1, Stat.DEFENSE, b, CastSource.ATTACK);
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
+		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " lowered its head!";
+		}
+
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -1410,7 +1410,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class HyperBeam extends Attack implements MultiTurnMove {
+	static class HyperBeam extends Attack implements RechargingMove {
 		private static final long serialVersionUID = 1L;
 
 		HyperBeam() {
@@ -1420,24 +1420,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
-		public boolean chargesFirst() {
-			return false;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " must recharge!";
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
-	static class FrenzyPlant extends Attack implements MultiTurnMove {
+	static class FrenzyPlant extends Attack implements RechargingMove {
 		private static final long serialVersionUID = 1L;
 
 		FrenzyPlant() {
@@ -1447,24 +1437,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
-		public boolean chargesFirst() {
-			return false;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " must recharge!";
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
-	static class BlastBurn extends Attack implements MultiTurnMove {
+	static class BlastBurn extends Attack implements RechargingMove {
 		private static final long serialVersionUID = 1L;
 
 		BlastBurn() {
@@ -1474,24 +1454,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
-		public boolean chargesFirst() {
-			return false;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " must recharge!";
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
-	static class HydroCannon extends Attack implements MultiTurnMove {
+	static class HydroCannon extends Attack implements RechargingMove {
 		private static final long serialVersionUID = 1L;
 
 		HydroCannon() {
@@ -1501,24 +1471,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
-		public boolean chargesFirst() {
-			return false;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " must recharge!";
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
-	static class PrismaticLaser extends Attack implements MultiTurnMove {
+	static class PrismaticLaser extends Attack implements RechargingMove {
 		private static final long serialVersionUID = 1L;
 
 		PrismaticLaser() {
@@ -1528,20 +1488,10 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
-		public boolean chargesFirst() {
-			return false;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " must recharge!";
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -3773,7 +3723,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Dig extends Attack implements MultiTurnMove {
+	static class Dig extends Attack implements ChargingMove {
 		private static final long serialVersionUID = 1L;
 
 		Dig() {
@@ -3784,20 +3734,18 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean chargesFirst() {
-			return true;
-		}
-
 		public boolean semiInvulnerability() {
 			return true;
 		}
 
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
+		public String getChargeMessage(ActivePokemon user) {
+			return user.getName() + " went underground!";
 		}
 
-		private String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " went underground!";
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -4415,7 +4363,7 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.FUTURE_SIGHT);
 		}
 
-		public boolean shouldApplyDamage() {
+		public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
 			// Don't apply damage just yet!!
 			return false;
 		}
@@ -4435,7 +4383,7 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.DOOM_DESIRE);
 		}
 
-		public boolean shouldApplyDamage() {
+		public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
 			// Don't apply damage just yet!!
 			return false;
 		}
@@ -4775,7 +4723,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Bounce extends Attack implements MultiTurnMove {
+	static class Bounce extends Attack implements ChargingMove {
 		private static final long serialVersionUID = 1L;
 
 		Bounce() {
@@ -4789,20 +4737,18 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean chargesFirst() {
-			return true;
-		}
-
 		public boolean semiInvulnerability() {
 			return true;
 		}
 
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
+		public String getChargeMessage(ActivePokemon user) {
+			return user.getName() + " sprang up!";
 		}
 
-		private String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " sprang up!";
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -5108,7 +5054,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Dive extends Attack implements MultiTurnMove {
+	static class Dive extends Attack implements ChargingMove {
 		private static final long serialVersionUID = 1L;
 
 		Dive() {
@@ -5119,20 +5065,18 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean chargesFirst() {
-			return true;
-		}
-
 		public boolean semiInvulnerability() {
 			return true;
 		}
 
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
+		public String getChargeMessage(ActivePokemon user) {
+			return user.getName() + " hid underwater!";
 		}
 
-		private String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " hid underwater!";
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -6186,7 +6130,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean shouldApplyEffects() {
+		public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
 			// TODO: Test
 			return false;
 		}
@@ -6212,7 +6156,7 @@ public abstract class Attack implements Serializable {
 			super.priority = -3;
 		}
 
-		public boolean shouldApplyEffects() {
+		public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
 			// TODO: Test
 			return false;
 		}
@@ -6610,7 +6554,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class RazorWind extends Attack implements MultiTurnMove, CritStageEffect {
+	static class RazorWind extends Attack implements ChargingMove, CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		RazorWind() {
@@ -6620,24 +6564,18 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
-		public boolean chargesFirst() {
-			return true;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
+		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " whipped up a whirlwind!";
 		}
 
 		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
+		}
+
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -6751,7 +6689,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class GigaImpact extends Attack implements MultiTurnMove {
+	static class GigaImpact extends Attack implements RechargingMove {
 		private static final long serialVersionUID = 1L;
 
 		GigaImpact() {
@@ -6762,20 +6700,10 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean chargesFirst() {
-			return false;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " must recharge!";
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -7043,7 +6971,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class SkyAttack extends Attack implements MultiTurnMove, CritStageEffect {
+	static class SkyAttack extends Attack implements ChargingMove, CritStageEffect {
 		private static final long serialVersionUID = 1L;
 
 		SkyAttack() {
@@ -7055,24 +6983,18 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
-		public boolean chargesFirst() {
-			return true;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
+		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " started glowing!";
 		}
 
 		public int increaseCritStage(int stage, ActivePokemon p) {
 			return stage + 1;
+		}
+
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -7330,7 +7252,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean shouldApplyDamage() {
+		public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
 			return false;
 		}
 	}
@@ -7462,11 +7384,11 @@ public abstract class Attack implements Serializable {
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
 		}
 
-		public boolean shouldApplyDamage() {
+		public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
 			return this.applyDamage;
 		}
 
-		public boolean shouldApplyEffects() {
+		public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
 			return !this.applyDamage;
 		}
 
@@ -8141,7 +8063,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class RockWrecker extends Attack implements MultiTurnMove {
+	static class RockWrecker extends Attack implements RechargingMove {
 		private static final long serialVersionUID = 1L;
 
 		RockWrecker() {
@@ -8152,20 +8074,10 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
-		public boolean chargesFirst() {
-			return false;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " must recharge!";
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -8181,7 +8093,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class RoarOfTime extends Attack implements MultiTurnMove {
+	static class RoarOfTime extends Attack implements RechargingMove {
 		private static final long serialVersionUID = 1L;
 
 		RoarOfTime() {
@@ -8191,20 +8103,10 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
-		public boolean chargesFirst() {
-			return false;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " must recharge!";
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -8247,7 +8149,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class ShadowForce extends Attack implements MultiTurnMove {
+	static class ShadowForce extends Attack implements ChargingMove {
 		private static final long serialVersionUID = 1L;
 
 		ShadowForce() {
@@ -8259,20 +8161,18 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean chargesFirst() {
-			return true;
-		}
-
 		public boolean semiInvulnerability() {
 			return true;
 		}
 
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
+		public String getChargeMessage(ActivePokemon user) {
+			return user.getName() + " disappeared!";
 		}
 
-		private String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " disappeared!";
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -8858,7 +8758,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class FreezeShock extends Attack implements MultiTurnMove {
+	static class FreezeShock extends Attack implements ChargingMove {
 		private static final long serialVersionUID = 1L;
 
 		FreezeShock() {
@@ -8871,20 +8771,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
-		public boolean chargesFirst() {
-			return true;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
+		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " is charging!";
+		}
+
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -9589,7 +9483,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class IceBurn extends Attack implements MultiTurnMove {
+	static class IceBurn extends Attack implements ChargingMove {
 		private static final long serialVersionUID = 1L;
 
 		IceBurn() {
@@ -9602,20 +9496,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
-		public boolean chargesFirst() {
-			return true;
-		}
-
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
+		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " is charging!";
+		}
+
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -9713,7 +9601,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class PhantomForce extends Attack implements MultiTurnMove, AccuracyBypassEffect {
+	static class PhantomForce extends Attack implements ChargingMove, AccuracyBypassEffect {
 		private static final long serialVersionUID = 1L;
 
 		PhantomForce() {
@@ -9726,28 +9614,26 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
-		}
-
-		public boolean chargesFirst() {
-			return true;
-		}
-
 		public boolean semiInvulnerability() {
 			return true;
 		}
 
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
 		}
 
-		private String getChargeMessage(ActivePokemon user) {
+		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " vanished suddenly!";
 		}
 
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
+		}
+
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 
@@ -9765,7 +9651,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Geomancy extends Attack implements MultiTurnMove {
+	static class Geomancy extends Attack implements ChargingMove {
 		private static final long serialVersionUID = 1L;
 
 		Geomancy() {
@@ -9777,20 +9663,18 @@ public abstract class Attack implements Serializable {
 			super.statChanges[Stat.SPEED.index()] = 2;
 		}
 
-		public boolean chargesFirst() {
-			return true;
+		public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+			return !this.isCharging(user);
 		}
 
-		public boolean semiInvulnerability() {
-			return false;
-		}
-
-		public void charge(ActivePokemon user, Battle b) {
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-		}
-
-		private String getChargeMessage(ActivePokemon user) {
+		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " is absorbing power!";
+		}
+
+		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (this.isCharging(user)) {
+				Messages.add(this.getChargeMessage(user));
+			}
 		}
 	}
 

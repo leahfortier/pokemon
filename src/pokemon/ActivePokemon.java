@@ -849,7 +849,6 @@ public class ActivePokemon implements Serializable {
 	public boolean isSemiInvulnerable() {
 		final Move move = this.getMove();
 		return move != null && !move.isReady() && ((MultiTurnMove) getAttack()).semiInvulnerability();
-
 	}
 	
 	public boolean isSemiInvulnerableFlying() {
@@ -858,10 +857,6 @@ public class ActivePokemon implements Serializable {
 	
 	public boolean isSemiInvulnerableDigging() {
 		return isSemiInvulnerable() && getAttack().namesies() == AttackNamesies.DIG;
-	}
-	
-	public boolean isSemiInvulnerableDiving() {
-		return isSemiInvulnerable() && getAttack().namesies() == AttackNamesies.DIVE;
 	}
 	
 	private int totalEVs() {

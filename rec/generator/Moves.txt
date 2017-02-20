@@ -292,10 +292,8 @@ Solar Beam:
 	Acc: 100
 	Type: Grass
 	Cat: Special
-	Int: MultiTurnMove
-	ChargeMessage: user.getName() + " began taking in sunlight!"
-	SemiInv: false
-	ChargeFirst: true 
+	Int: ChargingMove
+	ChargingMove: user.getName() + " began taking in sunlight!"
 	GetPow: 
 		switch (b.getWeather().namesies()) {
 			case HAILING:
@@ -317,10 +315,8 @@ Solar Blade:
 	PP: 10
 	Type: Grass
 	Cat: Physical
-	Int: MultiTurnMove
-	ChargeMessage: user.getName() + " began taking in sunlight!"
-	SemiInv: false
-	ChargeFirst: true
+	Int: ChargingMove
+	ChargingMove: user.getName() + " began taking in sunlight!"
 	IsMultiTurn: 
 		return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
 		###
@@ -343,9 +339,8 @@ Fly:
 	Type: Flying
 	Cat: Physical
 	MoveType: Airborne
-	Int: MultiTurnMove
-	ChargeMessage: user.getName() + " flew up high!"
-	ChargeFirst: true
+	Int: ChargingMove
+	ChargingMove: user.getName() + " flew up high!"
 	SemiInv: true
 *
 Fire Spin:
@@ -584,13 +579,10 @@ Skull Bash:
 	Acc: 100
 	Type: Normal
 	Cat: Physical
-	Int: MultiTurnMove
-	ChargeMessage: user.getName() + " lowered its head!"
-	ChargeFirst: true
-	SemiInv: false
-	Charge: 
-		user.getAttributes().modifyStage(user, user, 1, Stat.DEFENSE, b, CastSource.ATTACK);
-		###
+	Int: ChargingMove
+	SelfTarget: True
+	StatChange: 1 Defense 1
+	ChargingMove: user.getName() + " lowered its head!"
 *
 Iron Defense:
 	Desc: The user hardens its body's surface like iron, sharply raising its Defense stat.
@@ -664,10 +656,8 @@ Hyper Beam:
 	Type: Normal
 	Acc: 90
 	Pow: 150
-	Int: MultiTurnMove
-	ChargeMessage: user.getName() + " must recharge!"
-	SemiInv: false
-	ChargeFirst: false
+	Int: RechargingMove
+	RechargingMove: True
 *
 Frenzy Plant:
 	Desc: The user slams the target with an enormous tree. The user can't move on the next turn.
@@ -676,10 +666,8 @@ Frenzy Plant:
 	Type: Grass
 	Acc: 90
 	Pow: 150
-	Int: MultiTurnMove
-	ChargeMessage: user.getName() + " must recharge!"
-	SemiInv: false
-	ChargeFirst: false
+	Int: RechargingMove
+	RechargingMove: True
 *
 Blast Burn:
 	Desc: The target is razed by a fiery explosion. The user can't move on the next turn.
@@ -688,10 +676,8 @@ Blast Burn:
 	Type: Fire
 	Acc: 90
 	Pow: 150
-	Int: MultiTurnMove
-	ChargeMessage: user.getName() + " must recharge!"
-	SemiInv: false
-	ChargeFirst: false
+	Int: RechargingMove
+	RechargingMove: True
 *
 Hydro Cannon:
 	Desc: The target is hit with a watery blast. The user must rest on the next turn, however.
@@ -700,10 +686,8 @@ Hydro Cannon:
 	Type: Water
 	Acc: 90
 	Pow: 150
-	Int: MultiTurnMove
-	ChargeMessage: user.getName() + " must recharge!"
-	SemiInv: false
-	ChargeFirst: false
+	Int: RechargingMove
+	RechargingMove: True
 *
 Prismatic Laser:
 	Desc: The user shoots powerful lasers using the power of a prism. The user can't move on the next turn.
@@ -712,10 +696,8 @@ Prismatic Laser:
 	Cat: Special
 	Acc: 100
 	Pow: 160
-	Int: MultiTurnMove
-	ChargeMessage: user.getName() + " must recharge!"
-	SemiInv: false
-	ChargeFirst: false
+	Int: RechargingMove
+	RechargingMove: True
 *
 String Shot:
 	Desc: The targets are bound with silk blown from the user's mouth. This silk reduces the targets' Speed stat.
@@ -2094,9 +2076,8 @@ Dig:
 	Cat: Physical
 	Acc: 100
 	Pow: 80
-	Int: MultiTurnMove
-	ChargeMessage: user.getName() + " went underground!" 
-	ChargeFirst: true
+	Int: ChargingMove
+	ChargingMove: user.getName() + " went underground!" 
 	SemiInv: true
 *
 Earthquake:
@@ -2732,10 +2713,9 @@ Flame Charge:
 *
 Bounce:
 	Desc: The user bounces up high, then drops on the target on the second turn. It may also leave the target with paralysis.
-	Int: MultiTurnMove
-	ChargeFirst: true
+	Int: ChargingMove
 	SemiInv: true
-	ChargeMessage: user.getName() + " sprang up!"
+	ChargingMove: user.getName() + " sprang up!"
 	Type: Flying
 	Cat: Physical
 	PP: 5
@@ -2957,10 +2937,9 @@ Dive:
 	Cat: Physical
 	Acc: 100
 	Type: Water
-	Int: MultiTurnMove
-	ChargeFirst: true
+	Int: ChargingMove
 	SemiInv: true
-	ChargeMessage: user.getName() + " hid underwater!"
+	ChargingMove: user.getName() + " hid underwater!"
 *
 Ice Beam:
 	Desc: The target is struck with an icy-cold beam of energy. It may also freeze the target solid.
@@ -3859,10 +3838,8 @@ Razor Wind:
 	Cat: Special
 	Acc: 100
 	Pow: 80
-	Int: MultiTurnMove, CritStageEffect
-	ChargeMessage: user.getName() + " whipped up a whirlwind!"
-	SemiInv: false
-	ChargeFirst: true
+	Int: ChargingMove, CritStageEffect
+	ChargingMove: user.getName() + " whipped up a whirlwind!"
 *
 Lovely Kiss:
 	Desc: With a scary face, the user tries to force a kiss on the target. If it succeeds, the target falls asleep.
@@ -3956,10 +3933,8 @@ Giga Impact:
 	Pow: 150
 	Acc: 90
 	Cat: Physical
-	Int: MultiTurnMove
-	ChargeFirst: false
-	SemiInv: false
-	ChargeMessage: user.getName() + " must recharge!"
+	Int: RechargingMove
+	RechargingMove: True
 	Type: Normal
 *
 Splash:
@@ -4183,10 +4158,8 @@ Sky Attack:
 	Cat: Physical
 	Effect: Flinch
 	EffChance: 30
-	Int: MultiTurnMove, CritStageEffect
-	ChargeFirst: true
-	SemiInv: false
-	ChargeMessage: user.getName() + " started glowing!"
+	Int: ChargingMove, CritStageEffect
+	ChargingMove: user.getName() + " started glowing!"
 	Type: Flying
 *
 Dragon Rush:
@@ -4904,10 +4877,8 @@ Rock Wrecker:
 	Cat: Physical
 	Acc: 90
 	Pow: 150
-	Int: MultiTurnMove
-	ChargeFirst: false
-	SemiInv: false
-	ChargeMessage: user.getName() + " must recharge!"
+	Int: RechargingMove
+	RechargingMove: True
 	PhysicalContact: False
 	MoveType: Bomb_Ball
 *
@@ -4926,10 +4897,8 @@ Roar Of Time:
 	Cat: Special
 	Acc: 90
 	Pow: 150
-	Int: MultiTurnMove
-	ChargeFirst: false
-	SemiInv: false
-	ChargeMessage: user.getName() + " must recharge!"
+	Int: RechargingMove
+	RechargingMove: True
 *
 Spacial Rend:
 	Desc: The user tears the target along with the space around it. Critical hits land more easily.
@@ -4964,10 +4933,9 @@ Shadow Force:
 	Cat: Physical
 	Acc: 100
 	Pow: 120
-	Int: MultiTurnMove
-	ChargeFirst: true
+	Int: ChargingMove
 	SemiInv: true
-	ChargeMessage: user.getName() + " disappeared!"
+	ChargingMove: user.getName() + " disappeared!"
 	MoveType: Protect_Piercing
 *
 Heart Swap:
@@ -5360,10 +5328,8 @@ Freeze Shock:
 	Status: Paralyzed
 	EffChance: 30
 	MoveType: Metronomeless
-	Int: MultiTurnMove
-	ChargeFirst: true
-	SemiInv: false
-	ChargeMessage: user.getName() + " is charging!"
+	Int: ChargingMove
+	ChargingMove: user.getName() + " is charging!"
 *
 Secret Power:
 	PhysicalContact: False
@@ -5824,10 +5790,8 @@ Ice Burn:
 	PP: 5
 	EffChance: 30
 	Status: Burned
-	Int: MultiTurnMove
-	ChargeFirst: true
-	SemiInv: false
-	ChargeMessage: user.getName() + " is charging!"
+	Int: ChargingMove
+	ChargingMove: user.getName() + " is charging!"
 *
 V-create:
 	Desc: With a hot flame on its forehead, the user hurls itself at its target. It lowers the user's Defense, Sp. Def, and Speed stats.
@@ -5909,9 +5873,8 @@ Phantom Force:
 	Acc: 100
 	HitMinimize: True
 	MoveType: Protect_Piercing, Assistless
-	Int: MultiTurnMove
-	ChargeMessage: user.getName() + " vanished suddenly!"
-	ChargeFirst: true
+	Int: ChargingMove
+	ChargingMove: user.getName() + " vanished suddenly!"
 	SemiInv: true
 *
 Oblivion Wing:
@@ -5931,10 +5894,11 @@ Geomancy:
 	Cat: Status
 	SelfTarget: True
 	StatChange: 3 Sp_Attack 2 Sp_Defense 2 Speed 2
-	Int: MultiTurnMove
-	ChargeMessage: user.getName() + " is absorbing power!"
-	ChargeFirst: true
-	SemiInv: false
+	Int: ChargingMove
+	ChargingMove: user.getName() + " is absorbing power!"
+	ShouldApplyEffects:
+		return !this.isCharging(user);
+		###
 *
 Boomburst:
 	Desc: The user attacks everything around it with the destructive power of a terrible, explosive sound.
