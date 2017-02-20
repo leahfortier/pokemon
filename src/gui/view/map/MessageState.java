@@ -41,6 +41,10 @@ class MessageState implements VisualStateHandler {
 
     @Override
     public void update(int dt, MapView mapView) {
+        if (BasicPanels.isAnimatingMessage()) {
+            return;
+        }
+
         InputControl input = InputControl.instance();
         MessageUpdate currentMessage = mapView.getCurrentMessage();
 

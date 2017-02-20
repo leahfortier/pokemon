@@ -90,6 +90,10 @@ class NewPokemonView extends View {
 
     @Override
     public void update(int dt) {
+        if (BasicPanels.isAnimatingMessage()) {
+            return;
+        }
+
         selectedButton = Button.update(buttons, selectedButton);
         InputControl input = InputControl.instance();
 

@@ -6,6 +6,8 @@ import draw.PolygonUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import input.ControlKey;
+import input.InputControl;
 import main.Global;
 import map.Direction;
 import util.FontMetrics;
@@ -38,6 +40,8 @@ public class DrawPanel {
 
     private boolean onlyTransparency;
     private int transparentCount;
+
+    private boolean animateMessage;
 
     public static DrawPanel fullGamePanel() {
         return new DrawPanel(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
@@ -114,6 +118,11 @@ public class DrawPanel {
 
     public DrawPanel withBlackOutline() {
         this.outlineDirections = Direction.values();
+        return this;
+    }
+
+    public DrawPanel withTextAnimation() {
+        this.animateMessage = true;
         return this;
     }
 
@@ -241,17 +250,9 @@ public class DrawPanel {
     private String drawingText;
     private int lastCharToShow;
     private int lastWordLength;
+    private boolean finishedAnimating;
 
     public int drawMessage(Graphics g, int fontSize, String text) {
-        if (drawingText == null || !text.equals(drawingText)) {
-            messageTimeElapsed = 0;
-            drawingText = text;
-            lastWordLength = -1;
-            lastCharToShow = 0;
-        } else {
-            messageTimeElapsed += Global.MS_BETWEEN_FRAMES;
-        }
-
         g.setColor(Color.BLACK);
 
         FontMetrics.setFont(g, fontSize);
@@ -262,7 +263,25 @@ public class DrawPanel {
 
         int textWidth = width - 2*textSpace;
 
-        int charactersToShow = Math.min(text.length(), messageTimeElapsed / 50);
+        if (!this.animateMessage) {
+            return TextUtils.drawWrappedText(g, text, startX, startY, textWidth);
+        }
+
+        if (drawingText == null || !text.equals(drawingText)) {
+            messageTimeElapsed = 0;
+            drawingText = text;
+            lastWordLength = -1;
+            lastCharToShow = 0;
+            finishedAnimating = false;
+        } else {
+            messageTimeElapsed += Global.MS_BETWEEN_FRAMES;
+        }
+
+        int charactersToShow = finishedAnimating ? text.length() : Math.min(text.length(), messageTimeElapsed / 50);
+        if (InputControl.instance().consumeIfDown(ControlKey.SPACE)) {
+            charactersToShow = text.length();
+        }
+        finishedAnimating = charactersToShow == text.length();
 
         // If we haven't already calculated the length of the last we're writing, calculate it
         if (charactersToShow != 0 && lastWordLength == -1) {
@@ -319,5 +338,9 @@ public class DrawPanel {
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, fontSize);
         TextUtils.drawCenteredString(g, text, x, y, width, height);
+    }
+
+    public boolean isAnimatingMessage() {
+        return !finishedAnimating && animateMessage;
     }
 }

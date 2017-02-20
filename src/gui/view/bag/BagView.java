@@ -209,6 +209,10 @@ public class BagView extends View {
 
 	@Override
 	public void update(int dt) {
+		if (BasicPanels.isAnimatingMessage()) {
+			return;
+		}
+
 		CharacterData player = Game.getPlayer();
 		InputControl input = InputControl.instance();
 

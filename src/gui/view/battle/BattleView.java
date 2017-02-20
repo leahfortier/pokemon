@@ -119,6 +119,10 @@ public class BattleView extends View {
 
 	@Override
 	public void update(int dt) {
+		if (BasicPanels.isAnimatingMessage()) {
+			return;
+		}
+
 		state.update(this);
 		update.performUpdate(this);
 	}

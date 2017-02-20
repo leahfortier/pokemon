@@ -53,6 +53,10 @@ class EvolutionView extends View {
 
 	@Override
 	public void update(int dt) {
+		if (BasicPanels.isAnimatingMessage()) {
+			return;
+		}
+
 		InputControl input = InputControl.instance();
 		switch (state) {
 			case START:
