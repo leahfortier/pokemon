@@ -474,6 +474,9 @@ public class Battle {
 		}
 		
 		me.endAttack(o, success, reduce);
+
+        Messages.add(new MessageUpdate().updatePokemon(this, me));
+        Messages.add(new MessageUpdate().updatePokemon(this, o));
 	}
 	
 	public void printAttacking(ActivePokemon p) {
@@ -682,6 +685,7 @@ public class Battle {
 		// Multi-turn Moves
 		if (!p.getMove().isReady()) {
 			((MultiTurnMove)p.getAttack()).charge(p, this);
+            Messages.add(new MessageUpdate().withShowImage(!p.isSemiInvulnerable(), p.isPlayer()));
 			return false;
 		}
 		

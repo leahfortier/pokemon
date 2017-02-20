@@ -36,12 +36,14 @@ public class MessageUpdate {
 	private Integer level;
 	private String name;
 	private Gender gender;
-	private ActivePokemon active;
+	private ActivePokemon moveLearner;
+	private ActivePokemon frontPokemon;
 	private Move move;
 	private Integer duration;
 	private String triggerName;
 	private ChoiceMatcher[] choices;
 	private ViewMode viewMode;
+	private Boolean showImage;
 	
 	public enum Update {
 		NO_UPDATE,
@@ -151,6 +153,18 @@ public class MessageUpdate {
 		return this;
 	}
 
+	public MessageUpdate withShowImage(boolean showImage, boolean isPlayer) {
+		this.showImage = showImage;
+		this.isPlayer = isPlayer;
+		return this;
+	}
+
+	public MessageUpdate withFrontPokemon(ActivePokemon frontPokemon, boolean isPlayer) {
+		this.frontPokemon = frontPokemon;
+		this.isPlayer = isPlayer;
+		return this;
+	}
+
 	// Updates all current display information of the given pokemon
 	// Hp, status condition, type, name, and gender
 	public MessageUpdate updatePokemon(Battle b, ActivePokemon pokemon) {
@@ -164,7 +178,9 @@ public class MessageUpdate {
 				.withType(pokemon.getDisplayType(b), isPlayer)
 				.withNameChange(pokemon.getName(), isPlayer)
 				.withGender(pokemon.getGender(), isPlayer)
-				.withStages(pokemon.getAttributes().getStages(), isPlayer);
+				.withStages(pokemon.getAttributes().getStages(), isPlayer)
+				.withFrontPokemon(pokemon, isPlayer)
+				.withShowImage(!pokemon.isSemiInvulnerable(), isPlayer);
 	}
 	
 	// Pokemon image Update!
@@ -198,6 +214,8 @@ public class MessageUpdate {
 		this.gender = active.getGender();
 		this.expRatio = active.expRatio();
 		this.stages = active.getAttributes().getStages();
+		this.frontPokemon = active;
+		this.showImage = true;
 		this.animation = false;
 		return this;
 	}
@@ -252,7 +270,7 @@ public class MessageUpdate {
 	
 	// Learn new move update
 	public MessageUpdate withLearnMove(ActivePokemon active, Move newMove) {
-		this.active = active;
+		this.moveLearner = active;
 		this.move = newMove;
 		this.updateType = Update.LEARN_MOVE;
 
@@ -398,8 +416,8 @@ public class MessageUpdate {
 		return duration;
 	}
 	
-	public ActivePokemon getActivePokemon() {
-		return active;
+	public ActivePokemon getMoveLearner() {
+		return moveLearner;
 	}
 	
 	public Move getMove() {
@@ -436,5 +454,21 @@ public class MessageUpdate {
 
 	public ChoiceMatcher[] getChoices() {
 		return this.choices;
+	}
+
+	public boolean frontPokemonUpdate() {
+		return this.frontPokemon != null;
+	}
+
+	public ActivePokemon getFrontPokemon() {
+		return this.frontPokemon;
+	}
+
+	public boolean showImageUpdate() {
+		return this.showImage != null;
+	}
+
+	public boolean getShowImage() {
+		return this.showImage;
 	}
 }

@@ -46,7 +46,7 @@ public class LearnMoveQuestionState implements VisualStateHandler {
 
     @Override
     public void draw(BattleView view, Graphics g) {
-        view.drawFullMessagePanel(g, "Delete a move in order to learn " + view.getLearnedMove().getAttack().getName() + "?");
+        view.drawFullMessagePanel(g, "Delete a move for " + view.getLearnedMove().getAttack().getName() + "?");
 
         drawButton(g, yesButton(), new Color(120, 200, 80), "Yes");
         drawButton(g, noButton(), new Color(220, 20, 20), "No");

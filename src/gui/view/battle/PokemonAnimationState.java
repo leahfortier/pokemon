@@ -18,6 +18,7 @@ import pokemon.Stat;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.CharacterData;
+import trainer.Trainer;
 import type.Type;
 import util.FontMetrics;
 import util.Point;
@@ -26,6 +27,7 @@ import util.StringUtils;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 // Handles animation and keeps track of the current state
 class PokemonAnimationState {
@@ -115,7 +117,8 @@ class PokemonAnimationState {
                 p.getLevel(),
                 p.getGender(),
                 p.expRatio(),
-                p.getAttributes().getStages()
+                p.getAttributes().getStages(),
+                p
         );
     }
 
@@ -131,24 +134,27 @@ class PokemonAnimationState {
             int level,
             Gender gender,
             float expRatio,
-            int[] stages
+            int[] stages,
+            ActivePokemon frontPokemon
     ) {
         animationHP = 0;
         animationExp = 0;
         animationCatchDuration = 0;
 
         state.hp = oldState.hp = hp;
-        state.status = oldState.status = status;
-        state.stages = oldState.stages = stages;
+        state.status = status;
+        state.stages = stages;
         state.type = type;
         state.shiny = shiny;
         state.imageName = pokemon.getImageName(state.shiny, !isPlayer);
+        state.showImage = true;
         state.caught = battleView.getCurrentBattle().isWildBattle() && Game.getPlayer().getPokedex().isCaught(pokemon.namesies());
         state.name = name;
         state.maxHp = oldState.maxHp = maxHP;
         state.level = level;
         state.gender = gender;
         state.expRatio = oldState.expRatio = expRatio;
+        state.frontPokemon = frontPokemon;
     }
 
     private void startHpAnimation(int newHp) {
@@ -166,17 +172,23 @@ class PokemonAnimationState {
     }
 
     public void setStages(int[] stages) {
-        oldState.stages = state.stages;
         state.stages = stages;
     }
 
     public void setStatus(StatusCondition newStatus) {
-        oldState.status = state.status;
         state.status = newStatus;
+    }
+
+    public void setShowImage(boolean showImage) {
+        state.showImage = showImage;
     }
 
     public void setType(Type[] newType) {
         state.type = newType;
+    }
+
+    public void setFrontPokemon(ActivePokemon pokemon) {
+        state.frontPokemon = pokemon;
     }
 
     private void startPokemonUpdateAnimation(PokemonInfo newPokemon, boolean newShiny, boolean animate) {
@@ -301,7 +313,8 @@ class PokemonAnimationState {
                 EVOLVE_ANIMATION_LIFESPAN,
                 plyrImg,
                 pkmTiles.getTile(oldState.imageName),
-                pokemonDrawLocation);
+                pokemonDrawLocation
+        );
     }
 
     private void drawHealthBar(Graphics g) {
@@ -358,7 +371,7 @@ class PokemonAnimationState {
 
     private void drawPokemon(Graphics g, ActivePokemon pokemon) {
         // Draw the Pokemon image if applicable
-        if (!isEmpty() && !pokemon.isSemiInvulnerable()) {
+        if (!isEmpty() && state.showImage) {
             GameData data = Game.getData();
             TileSet pkmTiles = isPlayer ? data.getPokemonTilesLarge() : data.getPokemonTilesMedium();
 
@@ -442,6 +455,13 @@ class PokemonAnimationState {
             g.drawString(Stat.getStat(i, true).getShortestName(), hpBar.x + FontMetrics.getTextWidth(g, message)*i + 2, hpBar.y - 4);
         }
 
+        if (isPlayer) {
+            drawTrainerPokeballs(g, expBar.rightX(), expBar.bottomY(), -1);
+        }
+        else if (!battleView.getCurrentBattle().isWildBattle()) {
+            drawTrainerPokeballs(g, statusBox.x, statusBox.y, 1);
+        }
+
         // Show whether or not the wild Pokemon has already been caught
         if (!isPlayer && state.caught) {
             ImageUtils.drawCenteredImage(
@@ -449,6 +469,27 @@ class PokemonAnimationState {
                     TileSet.TINY_POKEBALL,
                     hpBar.rightX() + (STATUS_BOX_SPACING - statusBox.getBorderSize())/2,
                     hpBar.centerY()
+            );
+        }
+    }
+
+    private void drawTrainerPokeballs(Graphics g, int cornerX, int cornerY, int direction) {
+        Trainer trainer = (Trainer)battleView.getCurrentBattle().getTrainer(isPlayer);
+        List<ActivePokemon> team = trainer.getTeam();
+        for (int i = 0; i < team.size(); i++) {
+            BufferedImage pokeball = TileSet.TINY_POKEBALL;
+            int index = isPlayer ? team.size() - i - 1 : i;
+            ActivePokemon pokemon = team.get(index);
+            boolean silhouette = pokemon == state.frontPokemon ? state.status == StatusCondition.FAINTED : !pokemon.canFight();
+            if (silhouette) {
+                pokeball = ImageUtils.silhouette(pokeball);
+            }
+
+            ImageUtils.drawCenteredImage(
+                    g,
+                    pokeball,
+                    cornerX + direction*pokeball.getWidth()*(2*i + 1),
+                    cornerY - direction*pokeball.getHeight()
             );
         }
     }
@@ -466,7 +507,8 @@ class PokemonAnimationState {
                     newMessage.getLevel(),
                     newMessage.getGender(),
                     newMessage.getEXPRatio(),
-                    newMessage.getStages());
+                    newMessage.getStages(),
+                    newMessage.getFrontPokemon());
         }
         else {
             // TODO: Fuck this I hate this
@@ -480,6 +522,14 @@ class PokemonAnimationState {
 
             if (newMessage.statusUpdate()) {
                 setStatus(newMessage.getStatus());
+            }
+
+            if (newMessage.showImageUpdate()) {
+                setShowImage(newMessage.getShowImage());
+            }
+
+            if (newMessage.frontPokemonUpdate()) {
+                setFrontPokemon(newMessage.getFrontPokemon());
             }
 
             if (newMessage.stageUpdate()) {
@@ -531,10 +581,13 @@ class PokemonAnimationState {
         private boolean caught;
         private Gender gender;
         private int[] stages;
+        private ActivePokemon frontPokemon;
+        private boolean showImage;
 
         PokemonState() {
             type = new Type[2];
             stages = new int[Stat.NUM_BATTLE_STATS];
+            this.showImage = true;
         }
     }
 }
