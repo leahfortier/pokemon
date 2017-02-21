@@ -549,7 +549,7 @@ public class Battle {
 	
 	public int calculateDamage(ActivePokemon me, ActivePokemon o) {
 		int level = me.getLevel();
-		int power = me.getAttackPower();
+		int power = me.getAttack().getPower(this, me, o);
 		int random = RandomUtils.getRandomInt(16) + 85;
 		
 		final Stat attacking;

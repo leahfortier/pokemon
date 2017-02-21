@@ -605,7 +605,7 @@ public class ActivePokemon implements Serializable {
 	
 	public void callNewMove(Battle b, ActivePokemon opp, Move m) {
 		Move temp = getMove();
-		m.setAttributes(b, this, opp);
+		m.setAttributes(b, this);
 		setMove(m);
 		b.printAttacking(this);
 		getAttack().apply(this, opp, b);
@@ -809,10 +809,6 @@ public class ActivePokemon implements Serializable {
 	
 	public Type getAttackType() {
 		return getMove().getType();
-	}
-	
-	public int getAttackPower() {
-		return getMove().getPower();
 	}
 	
 	// Returns whether or not this Pokemon knows this move already
@@ -1329,7 +1325,7 @@ public class ActivePokemon implements Serializable {
 	public void startAttack(Battle b, ActivePokemon opp) {
 		this.getAttributes().setAttacking(true);
 		this.getMove().switchReady(b, this); // TODO: I don't think this works right because this is happening before you check if they're able to attack and honestly they shouldn't really switch until the end of the turn
-		this.getMove().setAttributes(b, this, opp);
+		this.getMove().setAttributes(b, this);
 	}
 	
 	public void endAttack(ActivePokemon opp, boolean success, boolean reduce) {

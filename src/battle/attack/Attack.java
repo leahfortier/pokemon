@@ -17,6 +17,7 @@ import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
+import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
@@ -226,16 +227,17 @@ public abstract class Attack implements Serializable {
 	public Type getActualType() {
 		return this.type;
 	}
+
+	public Type getBattleType(Battle b, ActivePokemon user) {
+		// Check if there is an effect that changes the type of the user -- if not just returns the actual type (I promise)
+		return ChangeAttackTypeEffect.updateAttackType(b, user, this, this.getType(b, user));
+	}
 	
-	public Type setType(Battle b, ActivePokemon user) {
+	protected Type getType(Battle b, ActivePokemon user) {
 		return this.type;
 	}
-
-	public int getPower() {
-		return this.power;
-	}
 	
-	public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+	public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 		return this.power;
 	}
 	
@@ -2556,7 +2558,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.BOMB_BALL);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			double ratio = (double)Stat.getStat(Stat.SPEED, o, me, b)/Stat.getStat(Stat.SPEED, me, o, b);
 			if (ratio > .5) return 60;
 			if (ratio > .33) return 80;
@@ -2776,7 +2778,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			return (int)Math.min(150, 25.0*Stat.getStat(Stat.SPEED, o, me, b)/Stat.getStat(Stat.SPEED, me, o, b));
 		}
 	}
@@ -3453,7 +3455,7 @@ public abstract class Attack implements Serializable {
 			}
 		}
 
-		public Type setType(Battle b, ActivePokemon user) {
+		public Type getType(Battle b, ActivePokemon user) {
 			Item i = user.getHeldItem(b);
 			if (i instanceof Berry) {
 				return ((Berry)i).naturalGiftType();
@@ -3462,7 +3464,7 @@ public abstract class Attack implements Serializable {
 			return super.type;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			return ((Berry)me.getHeldItem(b)).naturalGiftPower();
 		}
 
@@ -3663,7 +3665,7 @@ public abstract class Attack implements Serializable {
 			return defending.isSemiInvulnerableDigging();
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			return POWERS[index];
 		}
 	}
@@ -3724,7 +3726,7 @@ public abstract class Attack implements Serializable {
 			return defending.isSemiInvulnerableDigging();
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			int power = 1;
 			
 			// Power is halved during Grassy Terrain
@@ -3997,7 +3999,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			double weight = o.getWeight(b);
 			if (weight < 22) return 20;
 			if (weight < 55) return 40;
@@ -4065,7 +4067,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			return Math.min(super.power + 20*o.getAttributes().totalStatIncreases(), 200);
 		}
 	}
@@ -4121,7 +4123,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			double ratio = me.getHPRatio();
 			if (ratio > .7) return 20;
 			if (ratio > .35) return 40;
@@ -4397,7 +4399,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			return (int)Math.min(1, (120*o.getHPRatio()));
 		}
 	}
@@ -4616,7 +4618,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			double ratio = o.getWeight(b)/me.getWeight(b);
 			if (ratio > .5) return 40;
 			if (ratio > .33) return 60;
@@ -5516,7 +5518,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			double ratio = me.getHPRatio();
 			if (ratio > .7) return 20;
 			if (ratio > .35) return 40;
@@ -6686,7 +6688,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			int pp = me.getMove().getPP();
 			
 			switch (pp) {
@@ -6974,7 +6976,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			return (int)Math.min(1, (150*me.getHPRatio()));
 		}
 	}
@@ -7126,7 +7128,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public Type setType(Battle b, ActivePokemon user) {
+		public Type getType(Battle b, ActivePokemon user) {
 			return user.computeHiddenPowerType();
 		}
 	}
@@ -7314,7 +7316,7 @@ public abstract class Attack implements Serializable {
 			return !this.applyDamage;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			double random = RandomUtils.getRandomInt(80);
 			if (random < 40) {
 				return 40;
@@ -7475,7 +7477,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.BOMB_BALL);
 		}
 
-		public Type setType(Battle b, ActivePokemon user) {
+		public Type getType(Battle b, ActivePokemon user) {
 			return b.getWeather().getElement();
 		}
 
@@ -7743,7 +7745,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			return (int)Math.min(1, (150*me.getHPRatio()));
 		}
 	}
@@ -8054,7 +8056,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			return (int)Math.min(1, (120*o.getHPRatio()));
 		}
 	}
@@ -8138,7 +8140,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.METRONOMELESS);
 		}
 
-		public Type setType(Battle b, ActivePokemon user) {
+		public Type getType(Battle b, ActivePokemon user) {
 			Item item = user.getHeldItem(b);
 			if (item instanceof PlateItem) {
 				return ((PlateItem)item).getType();
@@ -8201,7 +8203,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			double ratio = o.getWeight(b)/me.getWeight(b);
 			if (ratio > .5) return 40;
 			if (ratio > .33) return 60;
@@ -8220,7 +8222,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			double weight = o.getWeight(b);
 			if (weight < 22) return 20;
 			if (weight < 55) return 40;
@@ -8574,7 +8576,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.METRONOMELESS);
 		}
 
-		public Type setType(Battle b, ActivePokemon user) {
+		public Type getType(Battle b, ActivePokemon user) {
 			Item item = user.getHeldItem(b);
 			if (item instanceof DriveItem) {
 				return ((DriveItem)item).getType();
@@ -8595,7 +8597,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public Type setType(Battle b, ActivePokemon user) {
+		public Type getType(Battle b, ActivePokemon user) {
 			Item item = user.getHeldItem(b);
 			if (item instanceof MemoryItem) {
 				return ((MemoryItem)item).getType();
@@ -8647,7 +8649,7 @@ public abstract class Attack implements Serializable {
 			Messages.add(new MessageUpdate(user.getName() + " flung its " + user.getHeldItem(b).getName() + "!"));
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			return ((HoldItem)me.getHeldItem(b)).flingDamage();
 		}
 
@@ -9189,7 +9191,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			double ratio = (double)Stat.getStat(Stat.ATTACK, me, o, b)/Stat.getStat(Stat.ATTACK, o, me, b);
 			if (ratio > .5) return 60;
 			if (ratio > .33) return 80;
@@ -10432,7 +10434,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public Type setType(Battle b, ActivePokemon user) {
+		public Type getType(Battle b, ActivePokemon user) {
 			return user.getType(b)[0];
 		}
 	}

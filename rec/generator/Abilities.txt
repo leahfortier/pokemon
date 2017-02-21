@@ -255,7 +255,7 @@ Arena Trap:
 *
 Technician:
 	Desc: Powers up the Pok\u00e9mon's weaker moves.
-	PowerMultiplierCondition: 1.5 user.getAttackPower() <= 60
+	PowerMultiplierCondition: 1.5 user.getAttack().getPower(b, user, victim) <= 60
 *
 Limber:
 	Desc: The Pok\u00e9mon is protected from paralysis.
@@ -426,7 +426,7 @@ Forewarn:
 				continue;
 			}
 			
-			int power = move.getAttack().getPower();
+			int power = move.getAttack().getPower(b, other, enterer);
 			if (power > highestPower) {
 				highestPower = power;
 				besties = new ArrayList<>();

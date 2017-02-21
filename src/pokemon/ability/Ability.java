@@ -766,7 +766,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return user.getAttackPower() <= 60 ? 1.5 : 1;
+			return user.getAttack().getPower(b, user, victim) <= 60 ? 1.5 : 1;
 		}
 	}
 
@@ -1178,7 +1178,7 @@ public abstract class Ability implements Serializable {
 					continue;
 				}
 				
-				int power = move.getAttack().getPower();
+				int power = move.getAttack().getPower(b, other, enterer);
 				if (power > highestPower) {
 					highestPower = power;
 					besties = new ArrayList<>();

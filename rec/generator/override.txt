@@ -25,7 +25,7 @@ GetPriority:
 	Header: int getPriority(Battle b, ActivePokemon me)
 *
 GetType:
-	Header: Type setType(Battle b, ActivePokemon user)
+	Header: Type getType(Battle b, ActivePokemon user)
 *
 FullApplies:
 	Header: boolean applies(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1534,7 +1534,7 @@ SuperEffectiveAdvantageType:
 		###
 *
 GetPow:
-	Header: int setPower(Battle b, ActivePokemon me, ActivePokemon o)
+	Header: int getPower(Battle b, ActivePokemon me, ActivePokemon o)
 *
 ApplyDamage:
 	Header: void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)

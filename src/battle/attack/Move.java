@@ -3,7 +3,6 @@ package battle.attack;
 import battle.Battle;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
-import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import battle.effect.generic.EffectInterfaces.OpponentAttackSelectionEffect;
 import message.MessageUpdate;
@@ -29,7 +28,6 @@ public class Move implements Serializable {
 	private boolean used;
 
 	private Type type;
-	private int power;
 
 	public Move(AttackNamesies attackNamesies) {
 		this(attackNamesies.getAttack());
@@ -45,7 +43,6 @@ public class Move implements Serializable {
 		used = false;
 
 		type = attack.getActualType();
-		power = attack.getPower();
 	}
 	
 	public Move(Attack m, int startPP) {
@@ -74,20 +71,9 @@ public class Move implements Serializable {
 	public Type getType() {
 		return type;
 	}
-
-	public int getPower() {
-		return power;
-	}
 	
-	public void setAttributes(Battle b, ActivePokemon user, ActivePokemon victim) {
-		type = this.attack.setType(b, user);
-		
-		// Check if there is an effect that changes the type of the user -- if not just returns the actual type (I promise)
-		type = ChangeAttackTypeEffect.updateAttackType(b, user, attack, type);
-		
-//		System.out.println(user.getName() + " " + attack.getName() + " Type: " + type.getName());
-		
-		power = this.attack.setPower(b, user, victim);
+	public void setAttributes(Battle b, ActivePokemon user) {
+		type = this.attack.getBattleType(b, user);
 	}
 	
 	public Attack getAttack() {
