@@ -4,7 +4,6 @@ import battle.attack.Attack;
 import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.DefiniteEscape;
-import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
@@ -678,14 +677,6 @@ public class Battle {
 		
 		// Opponents effects that prevent you from attacking
 		if (OpponentBeforeTurnEffect.checkCannotAttack(p, opp, this)) {
-			return false;
-		}
-
-		// TODO: Make static method inside MultiTurnMove
-		// Multi-turn Moves
-		if (!p.getMove().isReady()) {
-			((MultiTurnMove)p.getAttack()).charge(p, this);
-            Messages.add(new MessageUpdate().withShowImage(!p.isSemiInvulnerable(), p.isPlayer()));
 			return false;
 		}
 		

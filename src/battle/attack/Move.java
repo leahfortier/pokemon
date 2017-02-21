@@ -163,18 +163,10 @@ public class Move implements Serializable {
 			return true;
 		}
 
-		// TODO: These should be static inside multi turn move
 		// Force second turn of a Multi-Turn Move
-		if (p.getMove() != null && p.getAttack() instanceof MultiTurnMove) {
+		if (p.getMove() != null && p.getAttack().isMultiTurn(b, p)) {
 			MultiTurnMove multiTurnMove = (MultiTurnMove)p.getAttack();
-			boolean chargesFirst = multiTurnMove.chargesFirst();
-			boolean isReady = p.getMove().isReady();
-			
-			if (chargesFirst && !isReady) {
-				return true;
-			}
-			
-			if (!chargesFirst && isReady) {
+			if (multiTurnMove.forceMove(p)) {
 				return true;
 			}
 		}

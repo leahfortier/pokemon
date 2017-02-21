@@ -20,12 +20,12 @@ Override:
 ***
 Override:
 	ShouldApplyDamage:
-		Header: boolean shouldApplyDamage()
+		Header: boolean shouldApplyDamage(Battle b, ActivePokemon user)
 	*
 ***
 Override:
 	ShouldApplyEffects:
-		Header: boolean shouldApplyEffects()
+		Header: boolean shouldApplyEffects(Battle b, ActivePokemon user)
 	*
 ***
 Override:
@@ -143,33 +143,38 @@ SelfHealingMove:
 		AddMapField: MoveType: Healing
 	*
 ***
-MultiTurnMove:
-	ChargeFirst:
-		Header: boolean chargesFirst()
-		Body: 
+ChargingMove:
+	ChargingMove:
+		AddInterface: Hidden-MultiTurnMove
+		AddMapField: MultiTurn: True
+		Header: String getChargeMessage(ActivePokemon user)
+		Body:
 			return {0};
 			###
 	*
+***
+RechargingMove:
+	RechargingMove:
+		AddInterface: Hidden-MultiTurnMove
+		AddMapField: MultiTurn: True
+	*
+***
+MultiTurnMove:
+	MultiTurn:
+		AddMapField: AfterApplyCheck:
+			if (this.isCharging(user)) {				
+				Messages.add(this.getChargeMessage(user));
+			}
+			###
+		AddMapField: MoveType: Sleep_Talk_Fail
+	*
+***
+Override:
 	SemiInv:
 		Header: boolean semiInvulnerability()
 		Body:
 			return {0};
 			###
-	*
-	Charge:
-		Header: void charge(ActivePokemon user, Battle b)
-		Optional: True
-		Begin:
-			Messages.add(new MessageUpdate(getChargeMessage(user)));
-			###
-	*
-	ChargeMessage:
-		Header: String getChargeMessage(ActivePokemon user)
-		AccessModifier: Private
-		Body:
-			return {0};
-			###
-		AddMapField: MoveType: Sleep_Talk_Fail
 	*
 ***
 Override:
