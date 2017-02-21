@@ -3,7 +3,9 @@ package gui.view.battle;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.Move;
+import battle.effect.generic.Weather;
 import draw.DrawUtils;
+import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.panel.BasicPanels;
@@ -50,6 +52,9 @@ public class BattleView extends View {
 
 	// All the different buttons!!
 	private final Button backButton;
+
+    // Displayable current weather
+    private Weather weather;
 
 	// Which Pokemon is trying to learn a new move, and which move
 	private ActivePokemon learnedPokemon;
@@ -247,6 +252,10 @@ public class BattleView extends View {
 					learnedPokemon = newMessage.getMoveLearner();
 				}
 
+				if (newMessage.weatherUpdate()) {
+                    weather = newMessage.getWeather();
+                }
+
 				this.state.checkMessage(newMessage);
 			}
 			
@@ -280,6 +289,9 @@ public class BattleView extends View {
 		
 		// Opponent battle circle
 		g.drawImage(terrainType.getOpponentCircleImage(), 450, 192, null);
+
+        BufferedImage image = Game.getData().getWeatherTiles().getTile(weather.getImageName());
+        ImageUtils.drawCenteredImage(g, image, Global.GAME_SIZE.width/2, image.getHeight());
 		
 		if (playerAnimation.isEmpty()) {
 			if (enemyAnimation.isEmpty()) {

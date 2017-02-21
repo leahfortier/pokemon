@@ -496,6 +496,7 @@ public class Battle {
 	public void addEffect(BattleEffect effect) {
 		if (effect instanceof Weather) {
 			weather = (Weather)effect;
+			Messages.add(new MessageUpdate().withWeather(weather));
 		}
 		else {
 			effects.add(effect);

@@ -19,10 +19,16 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	private static final long serialVersionUID = 1L;
 
 	private final Type weatherElement;
-	
+	private final String imageName;
+
 	public Weather(EffectNamesies namesies, Type weatherElement) {
 		super(namesies, -1, -1, true);
 		this.weatherElement = weatherElement;
+		this.imageName = this.getClass().getSimpleName().toLowerCase();
+	}
+
+	public String getImageName() {
+		return this.imageName;
 	}
 	
 	public Type getElement() {

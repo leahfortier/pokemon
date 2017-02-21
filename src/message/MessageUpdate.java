@@ -2,6 +2,7 @@ package message;
 
 import battle.Battle;
 import battle.attack.Move;
+import battle.effect.generic.Weather;
 import battle.effect.status.StatusCondition;
 import gui.view.ViewMode;
 import gui.view.battle.BattleView;
@@ -44,6 +45,7 @@ public class MessageUpdate {
 	private ChoiceMatcher[] choices;
 	private ViewMode viewMode;
 	private Boolean showImage;
+	private Weather weather;
 	
 	public enum Update {
 		NO_UPDATE,
@@ -219,7 +221,12 @@ public class MessageUpdate {
 		this.animation = false;
 		return this;
 	}
-	
+
+	public MessageUpdate withWeather(Weather weather) {
+		this.weather = weather;
+		return this;
+	}
+
 	// Special type of update
 	public MessageUpdate withUpdate(Update update) {
 		this.updateType = update;
@@ -470,5 +477,13 @@ public class MessageUpdate {
 
 	public boolean getShowImage() {
 		return this.showImage;
+	}
+
+	public boolean weatherUpdate() {
+		return this.weather != null;
+	}
+
+	public Weather getWeather() {
+		return this.weather;
 	}
 }

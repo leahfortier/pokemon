@@ -27,6 +27,7 @@ public class GameData {
 	private TileSet itemTilesLarge;
 	private TileSet opponentTerrainTiles;
 	private TileSet playerTerrainTiles;
+	private TileSet weatherTiles;
 
 	public void loadData() {
 		loadTiles();
@@ -46,6 +47,7 @@ public class GameData {
 		itemTilesLarge = new TileSet(Folder.ITEM_TILES, 2.9f);
 		opponentTerrainTiles = new TileSet(Folder.TERRAIN_TILES, 2.4f);
 		playerTerrainTiles = new TileSet(Folder.TERRAIN_TILES, 3.1f);
+		weatherTiles = new TileSet(Folder.WEATHER_TILES);
 	}
 
 	private void loadMaps() {
@@ -127,5 +129,9 @@ public class GameData {
 
 	public TileSet getPokedexTilesLarge() {
 		return pokedexTilesLarge;
+	}
+
+	public TileSet getWeatherTiles() {
+		return weatherTiles;
 	}
 }
