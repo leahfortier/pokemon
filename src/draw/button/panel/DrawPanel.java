@@ -286,7 +286,9 @@ public class DrawPanel {
         // If we haven't already calculated the length of the last we're writing, calculate it
         if (charactersToShow != 0 && lastWordLength == -1) {
             lastWordLength = 0;
-            lastWordLength = text.substring(charactersToShow - 1).indexOf(' ');
+            String substring = text.substring(charactersToShow - 1);
+            lastWordLength = substring.indexOf(' ');
+            lastWordLength = lastWordLength == -1 ? substring.length() : lastWordLength;
         }
 
         // If the current character is a space, then reset lastWordLength
