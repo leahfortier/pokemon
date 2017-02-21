@@ -104,7 +104,6 @@ RawSelfHealing:
 	AddMapField: MoveType: Healing
 *
 ChargingMove:
-	AddInterface: Hidden-MultiTurnMove
 	AddMapField: MultiTurn: True
 	Header: String getChargeMessage(ActivePokemon user)
 	Body:
@@ -112,7 +111,6 @@ ChargingMove:
 		###
 *
 RechargingMove:
-	AddInterface: Hidden-MultiTurnMove
 	AddMapField: MultiTurn: True
 *
 MultiTurn:
@@ -331,7 +329,6 @@ LightClay:
 	AddMapField: MaxTurns: 5
 *
 Barrier:
-	AddInterface: Hidden-DefogRelease
 	AddMapField: LightClay: True
 	AddMapField: ToModify: {1}
 	AddMapField: ModifyMultiplier: 2 !opp.hasAbility(AbilityNamesies.INFILTRATOR)
@@ -430,11 +427,9 @@ ApplyEndTurn:
 *
 CanAttack:
 	Header: boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-	Optional: True
 *
 OpponentCanAttack:
 	Header: boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-	Optional: True
 *
 ProtectingEffect:
 	AddInterface: ProtectingEffect
@@ -445,11 +440,9 @@ ProtectingEffect:
 *
 ProtectingCondition:
 	Header: boolean protectingCondition(Battle b, ActivePokemon attacking)
-	Optional: True
 *
 OnProtectingSuccess:
 	Header: void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp)
-	Optional: True
 *
 SuccessiveDecay:
 	AddMapField: Cast:
@@ -463,11 +456,6 @@ SuccessiveDecay:
 *
 Trapped:
 	Header: boolean trapped(Battle b, ActivePokemon escaper)
-	Optional: True
-	Default:
-		// Ghost-type Pokemon can always escape
-		return !escaper.isType(b, Type.GHOST);
-		###
 *
 TrappingMessage:
 	Header: String trappingMessage(ActivePokemon trapped)
@@ -643,8 +631,6 @@ UnusableMessage:
 		###
 *
 OpponentUsable:
-	Optional: True
-	AddInterface: Hidden-AttackSelectionEffect
 *
 ShouldSubside:
 	Header: boolean shouldSubside(Battle b, ActivePokemon victim)
@@ -802,10 +788,6 @@ GetStat:
 *
 IncreaseCritStage:
 	Header: int increaseCritStage(int stage, ActivePokemon p)
-	Optional: True
-	Default:
-		return stage + 1;
-		###
 *
 FallMessage:
 	Header: void fall(Battle b, ActivePokemon fallen)
@@ -814,19 +796,6 @@ FallMessage:
 		
 		// TODO: Fix this it's broken
 		// Effect.removeEffect(fallen.getEffects(), this.namesies());
-		###
-*
-RemoveLevitation:
-	Header: void removeLevitation(Battle b, ActivePokemon p)
-	AccessModifier: Private
-	Optional: True
-	Default:
-		if (p.isSemiInvulnerableFlying()) {
-			p.getMove().switchReady(b, p);
-			Messages.add(new MessageUpdate(p.getName() + " fell to the ground!"));
-		}
-		
-		LevitationEffect.falllllllll(b, p);
 		###
 *
 Terrain:
@@ -858,23 +827,18 @@ Contact:
 *
 SelfBlock:
 	Header: boolean block(Battle b, ActivePokemon user)
-	Optional: True
 *
 SelfAlternateEffect:
 	Header: void alternateEffect(Battle b, ActivePokemon user)
-	Optional: True
 *
 SelfBlockMessage:
 	Header: String getBlockMessage(Battle b, ActivePokemon user)
-	Optional: True
 *
 Block:
 	Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
-	Optional: True
 *
 AlternateEffect:
 	Header: void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim)
-	Optional: True
 *
 BlockMessage:
 	Header: String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1005,38 +969,30 @@ OpponentTakeDamage:
 	Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 Fling:
-	AddInterface: Hidden-HoldItem
 	AddMapField: FlingDamage:
 		return {0};
 		###
 *
 FlingDamage:
 	Header: int flingDamage()
-	Optional: True
 *
 FlingEffect:
 	Header: void flingEffect(Battle b, ActivePokemon pelted)
-	Optional: True
 *
 FullItemUse:
 	Header: boolean use(Battle b, ActivePokemon p, Move m)
-	Optional: True
 *
 PlayerUse:
 	Header: boolean use()
-	AddInterface: Hidden-UseItem
 *
 PokemonUse:
 	Header: boolean use(ActivePokemon p)
-	AddInterface: Hidden-UseItem
 *
 BattleUse:
 	Header: boolean use(ActivePokemon p, Battle b)
-	AddInterface: Hidden-UseItem
 *
 MoveUse:
 	Header: boolean use(ActivePokemon p, Move m)
-	AddInterface: Hidden-UseItem
 *
 IncreaseStat:
 	Header: Stat toIncrease()
@@ -1055,8 +1011,6 @@ TypeTakeDamageStatIncrease:
 	AddInterface: TakeDamageEffect
 *
 ConsumeItem:
-	Optional: True
-	AddInterface: Hidden-HoldItem
 *
 ChoiceItem:
 	AddMapField: ToModify: {0}
@@ -1113,7 +1067,6 @@ BuffetMessage:
 		###
 *
 PreBuffetMessage:
-	AddInterface: Hidden-EndTurnEffect
 	AddMapField: ApplyEndTurn:
 		Messages.add(new MessageUpdate({0}));
 				
@@ -1146,7 +1099,6 @@ WeatherType:
 *
 GetEVs:
 	Header: int[] getEVs(int[] vals)
-	AddInterface: Hidden-HoldItem
 *
 TargetSwap:
 	Header: boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent)
@@ -1170,7 +1122,6 @@ PowerStat:
 		###
 	AddMapField: ToModify: Speed
 	AddMapField: SimpleModifier: .5
-	AddInterface: Hidden-EVItem
 	AddMapField: GetEVs:
 		vals[powerStat().index()] += 4;
 		return vals;
@@ -1327,7 +1278,6 @@ FixedHealAmount:
 *
 GetAmountHealed:
 	Header: int getAmountHealed(ActivePokemon p)
-	Optional: True
 *
 HealAmt:
 	AddInterface: FixedHpHealer
@@ -1336,7 +1286,6 @@ HealAmt:
 		###
 	AddMapField: Cat: Medicine
 	AddMapField: BattleCat: HP_PP
-	AddInterface: Hidden-HoldItem
 *
 XStageIncrease:
 	AddMapField: Cat: Stat
@@ -1354,7 +1303,6 @@ EVIncrease:
 		###
 *
 EVIncreaseAmt:
-	AddInterface: Hidden-EvIncreaser
 	AddMapField: EVIncrease: {0}
 	AddMapField: Cat: Stat
 *
@@ -1377,15 +1325,12 @@ BallItem:
 *
 CatchRate:
 	Header: double getModifier(ActivePokemon me, ActivePokemon o, Battle b)
-	Optional: True
 *
 AdditiveCatch:
 	Header: int getAdditive(ActivePokemon me, ActivePokemon o, Battle b)
-	Optional: True
 *
 AfterCaught:
 	Header: void afterCaught(ActivePokemon p)
-	Optional: True
 *
 EVDecreaseBerry:
 	AddMapField: DecreaseEVs:
@@ -1395,7 +1340,6 @@ EVDecreaseBerry:
 *
 DecreaseEVs:
 	Header: Stat toDecrease()
-	AddInterface: Hidden-Berry
 *
 SuperEffectivePowerReduceBerry:
 	AddMapField: HiddenBerry: True 
@@ -1406,13 +1350,11 @@ SuperEffectivePowerReduceBerry:
 *
 SuperDuperEffectivePowerReduceBerry:
 	Header: Type getType()
-	AddInterface: Hidden-Berry
 *
 HealthTriggeredStageIncreaseBerryField:
 	Header: Stat getStat()
 *
 HealthTriggeredStageIncreaseBerry:
-	AddInterface: Hidden-Berry
 	AddInterface: HealthTriggeredStageIncreaseBerry
 	AddMapField: HealthTriggeredStageIncreaseBerryField: 
 		return Stat.{00};
@@ -1540,7 +1482,6 @@ StatSwapMove:
 	AddMapField: MoveType: No_Magic_Coat
 *
 StatusBerryGainEffect:
-	Optional: True
 	AddMapField: GainEffect:
 		return use(user, source);
 		###
@@ -1548,7 +1489,6 @@ StatusBerryGainEffect:
 *
 GainEffect:
 	Header: boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)
-	AddInterface: Hidden-Berry
 *
 FixedBerryHealthTrigger:
 	AddInterface: HealthTriggeredBerry
@@ -1557,7 +1497,6 @@ FixedBerryHealthTrigger:
 		###
 *
 HealthTriggerRatio:
-	AddInterface: Hidden-GainableEffectBerry
 	Header: double healthTriggerRatio()
 *
 NGPow:
@@ -1577,11 +1516,9 @@ HiddenBerry:
 *
 NaturalGiftPower:
 	Header: int naturalGiftPower()
-	Optional: True
 *
 NaturalGiftType:
 	Header: Type naturalGiftType()
-	Optional: True
 *
 RepelSteps:
 	Header: int repelSteps()
@@ -1590,10 +1527,6 @@ RepelSteps:
 *
 BlockCrits:
 	Header: boolean blockCrits()
-	Optional: True
-	Default:
-		return true;
-		###
 *
 PowderResist:
 	AddInterface: AttackBlocker
@@ -1752,20 +1685,15 @@ DamageTaken:
 *
 SapPercentage:
 	Header: double sapPercentage()
-	Optional: True
 *
 SapAmount:
 	Header: int getSapAmount(ActivePokemon victim, int damageAmount)
-	Optional: True
 *
 SapMessage:
 	Header: String getSapMessage(ActivePokemon victim)
-	Optional: True
 *
 ShouldCrit:
 	Header: boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending)
-	Optional: True
-	Default: return true;
 *
 IgnoreAbilityMove:
 	AddMapField: BeginAttack:
@@ -1790,16 +1718,6 @@ PriorityPrevention:
 		return b.getPriority(p, m.getAttack()) <= 0;
 		###
 	AddMapField: UnusableMessage: b.getOtherPokemon(p).getName() + "'s " + this.getName() + " prevents priority moves!!"
-*
-AttackSelectionSelfBlockerFail:
-	AddInterface: Hidden-AttackSelectionEffect
-	AddInterface: Hidden-SelfAttackBlocker
-	Optional: True
-*
-OpponentAttackSelectionBlockerFail:
-	AddInterface: Hidden-OpponentAttackSelectionEffect
-	AddInterface: Hidden-AttackBlocker
-	Optional: True
 *
 OpponentEndAttack:
 	Header: void endsies(Battle b, ActivePokemon attacking, Attack attack)

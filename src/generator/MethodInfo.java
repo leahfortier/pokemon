@@ -20,9 +20,6 @@ class MethodInfo {
 
     private String fullBody;
 
-    private boolean required;
-    private boolean defaultBody;
-
     private final List<String> addInterfaces;
     private final List<Map.Entry<String, String>> addMapFields;
 
@@ -35,9 +32,6 @@ class MethodInfo {
         this.end = "";
 
         this.fullBody = "";
-
-        this.required = true;
-        this.defaultBody = false;
 
         this.addInterfaces = new ArrayList<>();
         this.addMapFields = new ArrayList<>();
@@ -83,10 +77,6 @@ class MethodInfo {
                 case "Header":
                     this.header = value;
                     break;
-                case "Default":
-                    this.defaultBody = true;
-                    this.body = value;
-                    break;
                 case "Body":
                     this.body = value;
                     break;
@@ -103,12 +93,6 @@ class MethodInfo {
                 case "AddInterface":
                     addInterfaces.add(value);
                     break;
-                case "Optional":
-                    if (!value.equals("True")) {
-                        Global.error("True is the only valid optional value");
-                    }
-                    this.required = false;
-                    break;
                 case "AccessModifier":
                     this.accessModifier = AccessModifier.getAccessModifier(value);
                     break;
@@ -119,10 +103,6 @@ class MethodInfo {
 
         if (this.header == null && (this.body.length() > 0 || this.begin.length() > 0 || this.end.length() > 0)) {
             Global.error("Cannot have a body without a header.");
-        }
-
-        if (this.defaultBody && this.required) {
-            Global.error("Can only have a default body if the field is optional");
         }
     }
 
@@ -138,16 +118,8 @@ class MethodInfo {
             this.fullBody = this.body;
         }
 
-        if (fieldValue.length() > 0 && this.defaultBody) {
-            this.fullBody = fieldValue;
-        }
-
         this.fullBody = this.begin + this.fullBody + this.end;
         this.fullBody = inputFormatter.replaceBody(this.fullBody, fieldValue, className, superClass);
-
-        if (!this.required && !this.defaultBody && StringUtils.isNullOrEmpty(this.fullBody)) {
-            return StringUtils.empty();
-        }
 
         return this.writeFunction();
     }
@@ -200,10 +172,6 @@ class MethodInfo {
                 // Overrides are not required to contain the field value
                 if (interfaceName.isEmpty()) {
                     continue;
-                }
-
-                if (methodInfo.required) {
-                    Global.error("Missing required field " + fieldName + " to implement interface " + interfaceName + " for class " + className);
                 }
 
                 fieldValue = "";
