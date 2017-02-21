@@ -289,14 +289,14 @@ Solar Beam:
 	Type: Grass
 	Cat: Special
 	ChargingMove: user.getName() + " began taking in sunlight!"
-	GetPow: 
+	GetMultiplier: 
 		switch (b.getWeather().namesies()) {
 			case HAILING:
 			case RAINING:
 			case SANDSTORM:
-				return super.power/2;
+				return .5;
 			default:
-				return super.power;
+				return 1;
 		}
 		###
 	IsMultiTurn: 
@@ -897,9 +897,9 @@ Rage:
 	Acc: 100
 	Cat: Physical
 	Type: Normal
-	GetPow:
+	GetMultiplier:
 		// TODO: Update for Gen 5 -- Increase attack when hit while using Rage
-		return super.power*me.getAttributes().getCount();
+		return user.getAttributes().getCount();
 		###
 *
 Pursuit:
@@ -909,14 +909,13 @@ Pursuit:
 	Type: Dark
 	Acc: 100
 	Cat: Physical
-	GetPow:
-		// TODO: Once the Begin- shit is resolved, then this should be combined there
-		Team trainer = b.getTrainer(o);
+	GetMultiplier:
+		Team trainer = b.getTrainer(victim);
 		if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) {
-			return super.power*2;
+			return 2;
 		}
 		
-		return super.power;
+		return 1;
 		###
 	GetPriority: 
 		Team trainer = b.getTrainer(!me.isPlayer()); // TODO: Make switching occur at its priority
@@ -957,7 +956,7 @@ Assurance:
 	Cat: Physical
 	Pow: 60
 	Acc: 100
-	DoublePowerCondition: me.getAttributes().hasTakenDamage()
+	PowerMultiplierCondition: 2 user.getAttributes().hasTakenDamage()
 *
 Poison Jab:
 	Desc: The target is stabbed with a tentacle or arm steeped in poison. It may also poison the target.
@@ -1218,20 +1217,21 @@ Spit Up:
 	Type: Normal
 	Cat: Special
 	Acc: 100
+	Pow: 100
 	Applies: user.hasEffect(EffectNamesies.STOCKPILE)
 	EndAttack: 
 		// Stockpile ends after Spit up is used
 		user.getEffect(EffectNamesies.STOCKPILE).deactivate();
 		###
-	GetPow: 
-		PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
+	GetMultiplier: 
+		PokemonEffect stockpile = user.getEffect(EffectNamesies.STOCKPILE);
 		int turns = stockpile.getTurns();
 		if (turns <= 0) {
 			Global.error("Stockpile turns should never be nonpositive");
 		}
 		
 		// Max power is 300
-		return Math.min(turns, 3)*100;
+		return Math.min(turns, 3);
 		###
 *
 Swallow:
@@ -1436,9 +1436,9 @@ Rollout:
 	Acc: 90
 	Cat: Physical
 	Type: Rock
-	GetPow: 
+	GetMultiplier: 
 		// TODO: Combine these types of moves
-		return super.power*Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
+		return Math.min(user.getAttributes().getCount(), 5)*(user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
 		###
 *
 Fury Cutter:
@@ -1448,8 +1448,8 @@ Fury Cutter:
 	Cat: Physical
 	Type: Bug
 	Pow: 40
-	GetPow: 
-		return super.power*Math.min(5, me.getAttributes().getCount());
+	GetMultiplier: 
+		return Math.min(5, user.getAttributes().getCount());
 		###
 *
 Sand Tomb:
@@ -1699,8 +1699,8 @@ Stored Power:
 	Cat: Special
 	Acc: 100
 	PP: 10
-	GetPow: 
-		return super.power*me.getAttributes().totalStatIncreases();
+	GetMultiplier: 
+		return user.getAttributes().totalStatIncreases();
 		###
 *
 Power Trip:
@@ -1710,8 +1710,8 @@ Power Trip:
 	Cat: Physical
 	Acc: 100
 	PP: 10
-	GetPow: 
-		return super.power*me.getAttributes().totalStatIncreases();
+	GetMultiplier: 
+		return user.getAttributes().totalStatIncreases();
 		###
 *
 Mimic: 
@@ -1758,7 +1758,7 @@ Payback:
 	Pow: 50
 	Type: Dark
 	Cat: Physical
-	DoublePowerCondition: !b.isFirstAttack()
+	PowerMultiplierCondition: 2 !b.isFirstAttack()
 *
 Extrasensory:
 	Desc: The user attacks with an odd, unseeable power. It may also make the target flinch.
@@ -1864,7 +1864,7 @@ Acrobatics:
 	Acc: 100
 	Cat: Physical
 	Type: Flying
-	DoublePowerCondition: !me.isHoldingItem(b)
+	PowerMultiplierCondition: 2 !user.isHoldingItem(b)
 *
 Absorb:
 	Desc: A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.
@@ -2036,7 +2036,13 @@ Magnitude:
 		private int index;
 		###
 	PhysicalContact: False
-	HitDig: POWERS[index = GeneralUtils.getPercentageIndex(CHANCES)]
+	BeginAttack:
+		index = GeneralUtils.getPercentageIndex(CHANCES);
+		###
+	GetPow:
+		return POWERS[index];
+		###
+	HitDig: True
 	UniqueEffects: 
 		Messages.add(new MessageUpdate("Magnitude " + (index + 4) + "!"));
 		###
@@ -2050,10 +2056,8 @@ Bulldoze:
 	Type: Ground
 	StatChange: 1 Speed -1
 	PhysicalContact: False
-	GetPow:
-		// Power is halved during Grassy Terrain
-		return (int)(super.power*(b.hasEffect(EffectNamesies.GRASSY_TERRAIN) ? .5 : 1));
-		###
+	Comments: // Power is halved during Grassy Terrain
+	PowerMultiplierCondition: .5 b.hasEffect(EffectNamesies.GRASSY_TERRAIN)
 *
 Dig:
 	Desc: The user burrows, then attacks on the second turn. It can also be used to exit dungeons.
@@ -2073,7 +2077,7 @@ Earthquake:
 	Cat: Physical
 	Type: Ground
 	PhysicalContact: False
-	HitDig: super.power
+	HitDig: True
 *
 Fissure:
 	Desc: The user opens up a fissure in the ground and drops the target in. The target instantly faints if it hits.
@@ -2308,7 +2312,7 @@ Close Combat:
 	Acc: 100
 	Pow: 120
 	SelfTarget: True
-	StatChange: 2 Defense -1 Sp_defense -1
+	StatChange: 2 Defense -1 Sp_Defense -1
 *
 Dragon Ascent:
 	Desc: After soaring upward, the user attacks its target by dropping out of the sky at high speeds, although it lowers its own Defense and Sp. Def in the process.
@@ -2510,7 +2514,7 @@ Revenge:
 	Desc: An attack move that inflicts double the damage if the user has been hurt by the opponent in the same turn.
 	PP: 10
 	Type: Fighting
-	DoublePowerCondition: me.getAttributes().hasTakenDamage()
+	PowerMultiplierCondition: 2 user.getAttributes().hasTakenDamage()
 	Pow: 60
 	Acc: 100
 	Cat: Physical
@@ -2579,7 +2583,7 @@ Hex:
 	Acc: 100
 	Cat: Special
 	Type: Ghost
-	DoublePowerCondition: o.hasStatus()
+	PowerMultiplierCondition: 2 victim.hasStatus()
 *
 Sludge Wave:
 	Desc: It swamps the area around the user with a giant sludge wave. It may also poison those hit.
@@ -2909,7 +2913,7 @@ Brine:
 	Cat: Special
 	Acc: 100
 	Pow: 65
-	DoublePowerCondition: me.getHPRatio() < .5
+	PowerMultiplierCondition: 2 user.getHPRatio() < .5
 *
 Dive:
 	Desc: Diving on the first turn, the user floats up and attacks on the second turn. It can be used to dive deep in the ocean.
@@ -3510,9 +3514,9 @@ Sky Uppercut:
 	Acc: 90
 	Type: Fighting
 	HitFly: True
-	GetPow:
+	GetMultiplier:
 		// Does not deal double damage when opponent is flying
-		return super.power;
+		return 1;
 		###
 *
 Mega Punch:
@@ -3863,7 +3867,7 @@ Avalanche:
 	Acc: 100
 	Cat: Physical
 	Priority: -4
-	DoublePowerCondition: me.getAttributes().hasTakenDamage()
+	PowerMultiplierCondition: 2 user.getAttributes().hasTakenDamage()
 *
 Blizzard:
 	Desc: A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.
@@ -4184,8 +4188,8 @@ Charm:
 	StatChange: 1 Attack -2
 *
 Echoed Voice:
-	GetPow: 
-		return super.power*Math.min(5, me.getAttributes().getCount());
+	GetMultiplier: 
+		return Math.min(5, user.getAttributes().getCount());
 		###
 	Desc: The user attacks the target with an echoing voice. If this move is used every turn, it does greater damage.
 	PP: 15
@@ -4521,7 +4525,7 @@ Weather Ball:
 	GetType: 
 		return b.getWeather().getElement();
 		###
-	DoublePowerCondition: b.getWeather().namesies() != EffectNamesies.CLEAR_SKIES
+	PowerMultiplierCondition: 2 b.getWeather().namesies() != EffectNamesies.CLEAR_SKIES
 	Pow: 50
 	Acc: 100
 	Cat: Special
@@ -4724,7 +4728,7 @@ Venoshock:
 	Cat: Special
 	Acc: 100
 	Pow: 65
-	DoublePowerCondition: o.hasStatus(StatusCondition.POISONED)
+	PowerMultiplierCondition: 2 victim.hasStatus(StatusCondition.POISONED)
 *
 Snatch:
 	Priority: 4
@@ -4744,8 +4748,8 @@ Ice Ball:
 	Type: Ice
 	Acc: 90
 	MoveType: Bomb_Ball
-	GetPow: 
-		return super.power*Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
+	GetMultiplier: 
+		return Math.min(user.getAttributes().getCount(), 5)*(user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
 		###
 *
 Head Smash:
@@ -4793,7 +4797,7 @@ Facade:
 	PP: 20
 	Type: Normal
 	Pow: 70
-	DoublePowerCondition: me.hasStatus()
+	PowerMultiplierCondition: 2 user.hasStatus()
 	Comments: // TODO: Should not take the attack reduction from burn
 	Acc: 100
 	Cat: Physical
@@ -5181,7 +5185,7 @@ Fusion Flare:
 	Acc: 100
 	Cat: Special
 	Type: Fire
-	DoublePowerCondition: !b.isFirstAttack() && o.getAttack().namesies() == AttackNamesies.FUSION_BOLT
+	PowerMultiplierCondition: 2 !b.isFirstAttack() && victim.getAttack().namesies() == AttackNamesies.FUSION_BOLT
 	Comments: // TODO: Can combine power condition with Fusion Bolt
 	MoveType: Defrost
 *
@@ -5193,7 +5197,7 @@ Fusion Bolt:
 	PhysicalContact: False
 	Cat: Physical
 	Acc: 100
-	DoublePowerCondition: !b.isFirstAttack() && o.getAttack().namesies() == AttackNamesies.FUSION_FLARE
+	PowerMultiplierCondition: 2 !b.isFirstAttack() && victim.getAttack().namesies() == AttackNamesies.FUSION_FLARE
 *
 Blue Flare:
 	Desc: The user attacks by engulfing the target in an intense, yet beautiful, blue flame. It may leave the target with a burn.
@@ -5268,11 +5272,7 @@ Fling:
 	Acc: 100
 	Cat: Physical
 	GetPow:
-		if (me.isHoldingItem(b)) {
-			return ((HoldItem)me.getHeldItem(b)).flingDamage();
-		}
-		
-		return super.power;
+		return ((HoldItem)me.getHeldItem(b)).flingDamage();
 		###
 	Applies: user.isHoldingItem(b)
 	AfterApplyCheck:
@@ -5385,7 +5385,7 @@ Retaliate:
 	Acc: 100
 	Cat: Physical
 	Pow: 70
-	DoublePowerCondition: Effect.hasEffect(b.getEffects(me), EffectNamesies.DEAD_ALLY)
+	PowerMultiplierCondition: 2 Effect.hasEffect(b.getEffects(user), EffectNamesies.DEAD_ALLY)
 *
 Circle Throw:
 	Desc: The user throws the target and drags out another Pok\u00e9mon in its party. In the wild, the battle ends.
@@ -5437,9 +5437,7 @@ Knock Off:
 	Cat: Physical
 	Acc: 100
 	Pow: 65
-	GetPow: 
-		return (int)(super.power*(o.isHoldingItem(b) ? 1.5 : 1));
-		###
+	PowerMultiplierCondition: 1.5 victim.isHoldingItem(b)
 	UniqueEffects: 
 		if (user.canRemoveItem(b, victim)) {
 			Messages.add(new MessageUpdate(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!"));
@@ -6620,10 +6618,8 @@ Stomping Tantrum:
 	Cat: Physical
 	Acc: 100
 	PP: 10
-	GetPow:
-		// TODO: Test
-		return super.power*(me.getAttributes().lastMoveSucceeded() ? 1 : 2);
-		###
+	Comments: // TODO: Test
+	PowerMultiplierCondition: 2 user.getAttributes().lastMoveSucceeded()
 *
 Hyperspace Hole:
 	Desc: Using a hyperspace hole, the user appears right next to the target and strikes. This also hits a target using a move such as Protect or Detect.

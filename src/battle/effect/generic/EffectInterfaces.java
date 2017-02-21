@@ -1159,7 +1159,7 @@ public final class EffectInterfaces {
 		static double getModifier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			double modifier = 1;
 			
-			List<Object> invokees = b.getEffectsList(user);
+			List<Object> invokees = b.getEffectsList(user, user.getAttack());
 			for (Object invokee : invokees) {
 				if (invokee instanceof PowerChangeEffect && Effect.isActiveEffect(invokee, b)) {
 					

@@ -30,6 +30,7 @@ import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.PowderMove;
+import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.RecoilPercentageMove;
@@ -229,7 +230,7 @@ public abstract class Attack implements Serializable {
 	public Type setType(Battle b, ActivePokemon user) {
 		return this.type;
 	}
-	
+
 	public int getPower() {
 		return this.power;
 	}
@@ -850,7 +851,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class SolarBeam extends Attack implements ChargingMove {
+	static class SolarBeam extends Attack implements ChargingMove, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SolarBeam() {
@@ -868,14 +869,14 @@ public abstract class Attack implements Serializable {
 			return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			switch (b.getWeather().namesies()) {
 				case HAILING:
 				case RAINING:
 				case SANDSTORM:
-					return super.power/2;
+					return .5;
 				default:
-					return super.power;
+					return 1;
 			}
 		}
 
@@ -1536,7 +1537,8 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Gust extends Attack implements AccuracyBypassEffect {
+	// Twice as strong when the opponent is flying
+	static class Gust extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Gust() {
@@ -1550,9 +1552,8 @@ public abstract class Attack implements Serializable {
 			return defending.isSemiInvulnerableFlying();
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// Twice as strong when the opponent is flying
-			return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.isSemiInvulnerableFlying() ? 2 : 1;
 		}
 	}
 
@@ -1832,7 +1833,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Rage extends Attack {
+	static class Rage extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Rage() {
@@ -1842,13 +1843,13 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// TODO: Update for Gen 5 -- Increase attack when hit while using Rage
-			return super.power*me.getAttributes().getCount();
+			return user.getAttributes().getCount();
 		}
 	}
 
-	static class Pursuit extends Attack {
+	static class Pursuit extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Pursuit() {
@@ -1864,14 +1865,13 @@ public abstract class Attack implements Serializable {
 			return super.priority;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// TODO: Once the Begin- shit is resolved, then this should be combined there
-			Team trainer = b.getTrainer(o);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Team trainer = b.getTrainer(victim);
 			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) {
-				return super.power*2;
+				return 2;
 			}
 			
-			return super.power;
+			return 1;
 		}
 	}
 
@@ -1933,7 +1933,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Assurance extends Attack {
+	static class Assurance extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Assurance() {
@@ -1943,8 +1943,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(me.getAttributes().hasTakenDamage() ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().hasTakenDamage() ? 2 : 1;
 		}
 	}
 
@@ -2002,7 +2002,8 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Twister extends Attack implements AccuracyBypassEffect {
+	// Twice as strong when the opponent is flying
+	static class Twister extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Twister() {
@@ -2018,9 +2019,8 @@ public abstract class Attack implements Serializable {
 			return defending.isSemiInvulnerableFlying();
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// Twice as strong when the opponent is flying
-			return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.isSemiInvulnerableFlying() ? 2 : 1;
 		}
 	}
 
@@ -2117,7 +2117,8 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Hurricane extends Attack implements AccuracyBypassEffect {
+	// Twice as strong when the opponent is flying
+	static class Hurricane extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Hurricane() {
@@ -2133,9 +2134,8 @@ public abstract class Attack implements Serializable {
 			return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == EffectNamesies.RAINING && defending.isSemiInvulnerable());
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// Twice as strong when the opponent is flying
-			return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.isSemiInvulnerableFlying() ? 2 : 1;
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
@@ -2353,11 +2353,12 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class SpitUp extends Attack {
+	static class SpitUp extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SpitUp() {
 			super(AttackNamesies.SPIT_UP, Type.NORMAL, MoveCategory.SPECIAL, 10, "The power stored using the move Stockpile is released at once in an attack. The more power is stored, the greater the damage.");
+			super.power = 100;
 			super.accuracy = 100;
 		}
 
@@ -2366,15 +2367,15 @@ public abstract class Attack implements Serializable {
 			user.getEffect(EffectNamesies.STOCKPILE).deactivate();
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			PokemonEffect stockpile = me.getEffect(EffectNamesies.STOCKPILE);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			PokemonEffect stockpile = user.getEffect(EffectNamesies.STOCKPILE);
 			int turns = stockpile.getTurns();
 			if (turns <= 0) {
 				Global.error("Stockpile turns should never be nonpositive");
 			}
 			
 			// Max power is 300
-			return Math.min(turns, 3)*100;
+			return Math.min(turns, 3);
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -2633,7 +2634,8 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Thunder extends Attack implements AccuracyBypassEffect {
+	// Twice as strong when the opponent is flying
+	static class Thunder extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Thunder() {
@@ -2649,9 +2651,8 @@ public abstract class Attack implements Serializable {
 			return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == EffectNamesies.RAINING && defending.isSemiInvulnerable());
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// Twice as strong when the opponent is flying
-			return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.isSemiInvulnerableFlying() ? 2 : 1;
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
@@ -2723,7 +2724,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Rollout extends Attack {
+	static class Rollout extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Rollout() {
@@ -2733,13 +2734,13 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// TODO: Combine these types of moves
-			return super.power*Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
+			return Math.min(user.getAttributes().getCount(), 5)*(user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
 		}
 	}
 
-	static class FuryCutter extends Attack {
+	static class FuryCutter extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		FuryCutter() {
@@ -2749,8 +2750,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*Math.min(5, me.getAttributes().getCount());
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return Math.min(5, user.getAttributes().getCount());
 		}
 	}
 
@@ -2885,7 +2886,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class BodySlam extends Attack implements AccuracyBypassEffect {
+	static class BodySlam extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		BodySlam() {
@@ -2901,8 +2902,8 @@ public abstract class Attack implements Serializable {
 			return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1;
 		}
 	}
 
@@ -3061,7 +3062,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class WakeUpSlap extends Attack {
+	static class WakeUpSlap extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		WakeUpSlap() {
@@ -3071,8 +3072,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasStatus(StatusCondition.ASLEEP) ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasStatus(StatusCondition.ASLEEP) ? 2 : 1;
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -3176,7 +3177,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class StoredPower extends Attack {
+	static class StoredPower extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		StoredPower() {
@@ -3185,12 +3186,12 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*me.getAttributes().totalStatIncreases();
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().totalStatIncreases();
 		}
 	}
 
-	static class PowerTrip extends Attack {
+	static class PowerTrip extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		PowerTrip() {
@@ -3200,8 +3201,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*me.getAttributes().totalStatIncreases();
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().totalStatIncreases();
 		}
 	}
 
@@ -3256,7 +3257,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Payback extends Attack {
+	static class Payback extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Payback() {
@@ -3266,8 +3267,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(!b.isFirstAttack() ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !b.isFirstAttack() ? 2 : 1;
 		}
 	}
 
@@ -3402,7 +3403,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Acrobatics extends Attack {
+	static class Acrobatics extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Acrobatics() {
@@ -3412,8 +3413,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(!me.isHoldingItem(b) ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !user.isHoldingItem(b) ? 2 : 1;
 		}
 	}
 
@@ -3649,6 +3650,10 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
+		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			index = GeneralUtils.getPercentageIndex(CHANCES);
+		}
+
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Messages.add(new MessageUpdate("Magnitude " + (index + 4) + "!"));
 		}
@@ -3659,23 +3664,12 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			int power = POWERS[index = GeneralUtils.getPercentageIndex(CHANCES)];
-			
-			// Power is halved during Grassy Terrain
-			if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
-				power *= .5;
-			}
-			
-			// Power is doubled when the opponent is underground
-			if (o.isSemiInvulnerableDigging()) {
-				power *= 2;
-			}
-			
-			return power;
+			return POWERS[index];
 		}
 	}
 
-	static class Bulldoze extends Attack {
+	// Power is halved during Grassy Terrain
+	static class Bulldoze extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Bulldoze() {
@@ -3685,9 +3679,8 @@ public abstract class Attack implements Serializable {
 			super.statChanges[Stat.SPEED.index()] = -1;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// Power is halved during Grassy Terrain
-			return (int)(super.power*(b.hasEffect(EffectNamesies.GRASSY_TERRAIN) ? .5 : 1));
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return b.hasEffect(EffectNamesies.GRASSY_TERRAIN) ? .5 : 1;
 		}
 	}
 
@@ -3732,7 +3725,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			int power = super.power;
+			int power = 1;
 			
 			// Power is halved during Grassy Terrain
 			if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
@@ -4368,7 +4361,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Revenge extends Attack {
+	static class Revenge extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Revenge() {
@@ -4379,8 +4372,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(me.getAttributes().hasTakenDamage() ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().hasTakenDamage() ? 2 : 1;
 		}
 	}
 
@@ -4457,7 +4450,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Hex extends Attack {
+	static class Hex extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Hex() {
@@ -4466,8 +4459,8 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasStatus() ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasStatus() ? 2 : 1;
 		}
 	}
 
@@ -4552,7 +4545,8 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class SmackDown extends Attack implements AccuracyBypassEffect {
+	// Twice as strong when the opponent is flying
+	static class SmackDown extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SmackDown() {
@@ -4567,9 +4561,8 @@ public abstract class Attack implements Serializable {
 			return defending.isSemiInvulnerableFlying();
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// Twice as strong when the opponent is flying
-			return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.isSemiInvulnerableFlying() ? 2 : 1;
 		}
 	}
 
@@ -4593,7 +4586,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Steamroller extends Attack implements AccuracyBypassEffect {
+	static class Steamroller extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Steamroller() {
@@ -4609,8 +4602,8 @@ public abstract class Attack implements Serializable {
 			return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1;
 		}
 	}
 
@@ -4633,7 +4626,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Stomp extends Attack implements AccuracyBypassEffect {
+	static class Stomp extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Stomp() {
@@ -4649,8 +4642,8 @@ public abstract class Attack implements Serializable {
 			return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1;
 		}
 	}
 
@@ -4984,7 +4977,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Brine extends Attack {
+	static class Brine extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Brine() {
@@ -4993,8 +4986,8 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(me.getHPRatio() < .5 ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getHPRatio() < .5 ? 2 : 1;
 		}
 	}
 
@@ -6015,7 +6008,8 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class SkyUppercut extends Attack implements AccuracyBypassEffect {
+	// Twice as strong when the opponent is flying
+	static class SkyUppercut extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SkyUppercut() {
@@ -6031,9 +6025,9 @@ public abstract class Attack implements Serializable {
 			return defending.isSemiInvulnerableFlying();
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// Does not deal double damage when opponent is flying
-			return super.power;
+			return 1;
 		}
 	}
 
@@ -6556,7 +6550,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Avalanche extends Attack {
+	static class Avalanche extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Avalanche() {
@@ -6567,8 +6561,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(me.getAttributes().hasTakenDamage() ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().hasTakenDamage() ? 2 : 1;
 		}
 	}
 
@@ -6926,7 +6920,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class DragonRush extends Attack implements AccuracyBypassEffect {
+	static class DragonRush extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		DragonRush() {
@@ -6942,8 +6936,8 @@ public abstract class Attack implements Serializable {
 			return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1;
 		}
 	}
 
@@ -6995,7 +6989,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class EchoedVoice extends Attack {
+	static class EchoedVoice extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		EchoedVoice() {
@@ -7005,8 +6999,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SOUND_BASED);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*Math.min(5, me.getAttributes().getCount());
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return Math.min(5, user.getAttributes().getCount());
 		}
 	}
 
@@ -7471,7 +7465,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class WeatherBall extends Attack {
+	static class WeatherBall extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		WeatherBall() {
@@ -7485,8 +7479,8 @@ public abstract class Attack implements Serializable {
 			return b.getWeather().getElement();
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(b.getWeather().namesies() != EffectNamesies.CLEAR_SKIES ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return b.getWeather().namesies() != EffectNamesies.CLEAR_SKIES ? 2 : 1;
 		}
 	}
 
@@ -7633,7 +7627,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class SmellingSalts extends Attack {
+	static class SmellingSalts extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SmellingSalts() {
@@ -7643,8 +7637,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasStatus(StatusCondition.PARALYZED) ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasStatus(StatusCondition.PARALYZED) ? 2 : 1;
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -7777,7 +7771,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Venoshock extends Attack {
+	static class Venoshock extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Venoshock() {
@@ -7786,8 +7780,8 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasStatus(StatusCondition.POISONED) ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasStatus(StatusCondition.POISONED) ? 2 : 1;
 		}
 	}
 
@@ -7805,7 +7799,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class IceBall extends Attack {
+	static class IceBall extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		IceBall() {
@@ -7816,8 +7810,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*Math.min(me.getAttributes().getCount(), 5)*(me.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return Math.min(user.getAttributes().getCount(), 5)*(user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
 		}
 	}
 
@@ -7874,7 +7868,7 @@ public abstract class Attack implements Serializable {
 	}
 
 	// TODO: Should not take the attack reduction from burn
-	static class Facade extends Attack {
+	static class Facade extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Facade() {
@@ -7884,8 +7878,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(me.hasStatus() ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.hasStatus() ? 2 : 1;
 		}
 	}
 
@@ -8505,7 +8499,7 @@ public abstract class Attack implements Serializable {
 	}
 
 	// TODO: Can combine power condition with Fusion Bolt
-	static class FusionFlare extends Attack {
+	static class FusionFlare extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		FusionFlare() {
@@ -8515,12 +8509,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.DEFROST);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(!b.isFirstAttack() && o.getAttack().namesies() == AttackNamesies.FUSION_BOLT ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !b.isFirstAttack() && victim.getAttack().namesies() == AttackNamesies.FUSION_BOLT ? 2 : 1;
 		}
 	}
 
-	static class FusionBolt extends Attack {
+	static class FusionBolt extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		FusionBolt() {
@@ -8529,8 +8523,8 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(!b.isFirstAttack() && o.getAttack().namesies() == AttackNamesies.FUSION_FLARE ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return !b.isFirstAttack() && victim.getAttack().namesies() == AttackNamesies.FUSION_FLARE ? 2 : 1;
 		}
 	}
 
@@ -8654,11 +8648,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			if (me.isHoldingItem(b)) {
-				return ((HoldItem)me.getHeldItem(b)).flingDamage();
-			}
-			
-			return super.power;
+			return ((HoldItem)me.getHeldItem(b)).flingDamage();
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -8808,7 +8798,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Retaliate extends Attack {
+	static class Retaliate extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Retaliate() {
@@ -8818,8 +8808,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(Effect.hasEffect(b.getEffects(me), EffectNamesies.DEAD_ALLY) ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return Effect.hasEffect(b.getEffects(user), EffectNamesies.DEAD_ALLY) ? 2 : 1;
 		}
 	}
 
@@ -8895,7 +8885,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class KnockOff extends Attack {
+	static class KnockOff extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		KnockOff() {
@@ -8918,8 +8908,8 @@ public abstract class Attack implements Serializable {
 			}
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return (int)(super.power*(o.isHoldingItem(b) ? 1.5 : 1));
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.isHoldingItem(b) ? 1.5 : 1;
 		}
 	}
 
@@ -9509,7 +9499,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class PhantomForce extends Attack implements ChargingMove, AccuracyBypassEffect {
+	static class PhantomForce extends Attack implements ChargingMove, AccuracyBypassEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		PhantomForce() {
@@ -9534,8 +9524,8 @@ public abstract class Attack implements Serializable {
 			return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1;
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -10221,7 +10211,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class SparklingAria extends Attack {
+	static class SparklingAria extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SparklingAria() {
@@ -10230,8 +10220,8 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasStatus(StatusCondition.ASLEEP) ? 2 : 1);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.hasStatus(StatusCondition.ASLEEP) ? 2 : 1;
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -10672,7 +10662,8 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class StompingTantrum extends Attack {
+	// TODO: Test
+	static class StompingTantrum extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		StompingTantrum() {
@@ -10682,9 +10673,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// TODO: Test
-			return super.power*(me.getAttributes().lastMoveSucceeded() ? 1 : 2);
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttributes().lastMoveSucceeded() ? 2 : 1;
 		}
 	}
 

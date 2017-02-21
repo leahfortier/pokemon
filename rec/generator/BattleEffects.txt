@@ -56,60 +56,52 @@ MistyTerrain:
 	CastMessage: "Mist swirled around the battlefield!"
 	SubsideMessage: "The mist disappeared from the battlefield."
 	Terrain: Misty
-	Int: StatusPreventionEffect, PowerChangeEffect, TerrainEffect
+	Int: StatusPreventionEffect, TerrainEffect
 	StatusPrevent: 
 		// Levitating Pokemon are immune to the mist
 		return !victim.isLevitating(b);
 		###
 	StatusPreventMessage: "The protective mist prevents status conditions!"
-	GetMultiplier:
-		// Dragon type moves have halved power during the misty terrain
-		return user.getAttackType() == Type.DRAGON && !user.isLevitating(b) ? .5 : 1;
-		###
+	Comments: // Dragon type moves have halved power during the misty terrain
+	PowerMultiplierCondition: .5 user.getAttackType() == Type.DRAGON && !user.isLevitating(b)
 *
 GrassyTerrain:
 	CastMessage: "Grass sprouted around the battlefield!"
 	SubsideMessage: "The grass withered and died."
 	Terrain: Grass
-	Int: EndTurnEffect, PowerChangeEffect, TerrainEffect
+	Int: EndTurnEffect, TerrainEffect
 	ApplyEndTurn:
 		if (!victim.fullHealth() && !victim.isLevitating(b)) {
 			victim.healHealthFraction(1/16.0);
 			Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to the Grassy Terrain!").updatePokemon(b, victim));
 		}
 		###
-	GetMultiplier:
-		// Grass-type moves are 50% stronger with the grassy terrain
-		return user.getAttackType() == Type.GRASS && !user.isLevitating(b) ? 1.5 : 1;
-		###
+	Comments: // Grass-type moves are 50% stronger with the grassy terrain
+	PowerMultiplierCondition: 1.5 user.getAttackType() == Type.GRASS && !user.isLevitating(b)
 *
 ElectricTerrain:
 	CastMessage: "Electricity crackled around the battlefield!"
 	SubsideMessage: "The electricity dissipated."
 	Terrain: Electric
-	Int: StatusPreventionEffect, PowerChangeEffect, TerrainEffect
+	Int: StatusPreventionEffect, TerrainEffect
 	StatusPrevent:
 		return status == StatusCondition.ASLEEP && !victim.isLevitating(b);
 		###
 	StatusPreventMessage: "The electric terrain prevents sleep!"
-	GetMultiplier:
-		// Electric-type moves are 50% stronger with the electric terrain
-		return user.getAttackType() == Type.ELECTRIC && !user.isLevitating(b) ? 1.5 : 1;
-		###
+	Comments: // Electric-type moves are 50% stronger with the electric terrain
+	PowerMultiplierCondition: 1.5 user.getAttackType() == Type.ELECTRIC && !user.isLevitating(b)
 *
 PsychicTerrain:
 	CastMessage: "Psychic energy evelops the battlefield!!!"
 	SubsideMessage: "The psychic energy disappeared."
 	Terrain: Psychic
-	Int: AttackBlocker, PowerChangeEffect, TerrainEffect
+	Int: AttackBlocker, TerrainEffect
 	Block: 
 		// Psychic terrain prevents increased priority moves from hitting
 		return b.getPriority(user, user.getAttack()) > 0 && !victim.isLevitating(b);
 		###
-	GetMultiplier:
-		// Psychic-type moves are 50% stronger with the psychic terrain
-		return user.getAttackType() == Type.PSYCHIC && !user.isLevitating(b) ? 1.5 : 1;
-		###
+	Comments: // Psychic-type moves are 50% stronger with the psychic terrain
+	PowerMultiplierCondition: 1.5 user.getAttackType() == Type.PSYCHIC && !user.isLevitating(b)
 *
 FieldUproar:
 	Int: StatusPreventionEffect

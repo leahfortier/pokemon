@@ -499,6 +499,26 @@ public class AttackTest {
     }
 
     @Test
+    public void powerChangeTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Acrobatics has double power when not holding an item
+        attacking.setupMove(AttackNamesies.ACROBATICS, battle);
+        Assert.assertTrue(battle.getDamageModifier(attacking, defending) == 2);
+        attacking.giveItem(ItemNamesies.POTION);
+        Assert.assertTrue(battle.getDamageModifier(attacking, defending) == 1);
+
+        // Body Slam -- doubles when the opponent uses Minimize
+        attacking.setupMove(AttackNamesies.BODY_SLAM, battle);
+        Assert.assertTrue(battle.getDamageModifier(attacking, defending) == 1);
+        defending.apply(true, AttackNamesies.MINIMIZE, battle);
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.USED_MINIMIZE));
+        Assert.assertTrue(battle.getDamageModifier(attacking, defending) == 2);
+    }
+
+    @Test
     public void multiTurnMoveTest() {
         // TODO
     }

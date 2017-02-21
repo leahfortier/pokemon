@@ -25,10 +25,8 @@ Blaze:
 *
 Solar Power:
 	Desc: Boosts Sp. Atk, but lowers HP in sunshine.
-	Int: PowerChangeEffect, EndTurnEffect
-	GetMultiplier: 
-		return user.getAttack().getCategory() == MoveCategory.SPECIAL && b.getWeather().namesies() == EffectNamesies.SUNNY ? 1.5 : 1;
-		###
+	Int: EndTurnEffect
+	PowerMultiplierCondition: 1.5 user.getAttack().getCategory() == MoveCategory.SPECIAL && b.getWeather().namesies() == EffectNamesies.SUNNY
 	ApplyEndTurn: 
 		if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
 			Messages.add(new MessageUpdate(victim.getName() + " lost some of its HP due to its " + this.getName() + "!"));
@@ -68,10 +66,7 @@ Compoundeyes:
 *
 Tinted Lens:
 	Desc: Powers up \"not very effective\" moves.
-	Int: PowerChangeEffect
-	GetMultiplier: 
-		return TypeAdvantage.isNotVeryEffective(user, victim, b) ? 2 : 1;
-		###
+	PowerMultiplierCondition: 2 TypeAdvantage.isNotVeryEffective(user, victim, b)
 *
 Swarm:
 	Desc: Powers up Bug-type moves in a pinch.
@@ -137,12 +132,11 @@ Poison Point:
 *
 Rivalry:
 	Desc: Raises Attack if the foe is of the same gender.
-	Int: PowerChangeEffect
 	GetMultiplier: 
 		if (user.getGender() == Gender.GENDERLESS) return 1;
-		if (Gender.oppositeGenders(user, victim)) return .75;
-		if (user.getGender() == victim.getGender()) return 1.25;
-		return 1;
+		else if (Gender.oppositeGenders(user, victim)) return .75;
+		else if (user.getGender() == victim.getGender()) return 1.25;
+		else return 1;
 		###
 *
 Cute Charm:
@@ -176,7 +170,7 @@ Flash Fire:
 	AbilityIsActive:
 		return activated;
 		###
-	Int: AttackBlocker, PowerChangeEffect
+	Int: AttackBlocker
 	Block: 
 		return user.getAttackType() == Type.FIRE;
 		###
@@ -184,9 +178,7 @@ Flash Fire:
 	AlternateEffect: 
 		activated = true;
 		###
-	GetMultiplier: 
-		return activated && user.getAttackType() == Type.FIRE ? 1.5 : 1;
-		###
+	PowerMultiplierCondition: 1.5 activated && user.getAttackType() == Type.FIRE
 *
 Drought:
 	WeatherStarter: Sunny made the sunlight turn harsh
@@ -263,10 +255,7 @@ Arena Trap:
 *
 Technician:
 	Desc: Powers up the Pok\u00e9mon's weaker moves.
-	GetMultiplier: 
-		return user.getAttackPower() <= 60 ? 1.5 : 1;
-		###
-	Int: PowerChangeEffect
+	PowerMultiplierCondition: 1.5 user.getAttackPower() <= 60
 *
 Limber:
 	Desc: The Pok\u00e9mon is protected from paralysis.
@@ -472,17 +461,12 @@ Soundproof:
 *
 Reckless:
 	Desc: Powers up moves that have recoil damage.
-	Int: PowerChangeEffect
-	GetMultiplier: 
-		return user.getAttack() instanceof RecoilMove || user.getAttack() instanceof CrashDamageMove ? 1.2 : 1;
-		###
+	PowerMultiplierCondition: 1.2 user.getAttack() instanceof RecoilMove || user.getAttack() instanceof CrashDamageMove
 *
 Iron Fist:
 	Desc: Boosts the power of punching moves.
-	GetMultiplier: 
-		return user.getAttack().isMoveType(MoveType.PUNCHING) ? 1.2 : 1;
-		###
-	Int: PowerChangeEffect, EntryEffect
+	PowerMultiplierCondition: 1.2 user.getAttack().isMoveType(MoveType.PUNCHING)
+	Int: EntryEffect
 	Enter:
 		if (enterer.getPokemonInfo().namesies() == PokemonNamesies.PANGORO) {
 			Messages.add(new MessageUpdate(enterer.getName() + " does not break the mold!!!!!!!"));
@@ -671,10 +655,7 @@ Shadow Shield:
 *
 Sheer Force:
 	Desc: Attacks gain power, but lose their secondary effect.
-	Int: PowerChangeEffect
-	GetMultiplier: 
-		return user.getAttack().hasSecondaryEffects() ? 1.3 : 1;
-		###
+	PowerMultiplierCondition: 1.3 user.getAttack().hasSecondaryEffects()
 *
 Hustle:
 	Desc: Boosts the Attack stat, but lowers accuracy.
@@ -934,7 +915,7 @@ Heatproof:
 *
 Sand Force:
 	Desc: Boosts certain moves' power in a sandstorm.
-	Int: PowerChangeEffect, WeatherBlockerEffect
+	Int: WeatherBlockerEffect
 	GetMultiplier: 
 		Type type = user.getAttackType();
 		return (type == Type.ROCK || type == Type.STEEL || type == Type.GROUND) && b.getWeather().namesies() == EffectNamesies.SANDSTORM ? 1.3 : 1;
@@ -1061,10 +1042,7 @@ Mummy:
 *
 Defeatist:
 	Desc: Lowers stats when HP becomes half or less.
-	Int: PowerChangeEffect
-	GetMultiplier: 
-		return user.getHPRatio() < 1/2.0 ? .5 : 1;
-		###
+	PowerMultiplierCondition: .5 user.getHPRatio() < .5
 *
 Weak Armor:
 	Desc: Physical attacks lower Defense and raise Speed.
@@ -1174,10 +1152,7 @@ Illusion:
 *
 Analytic:
 	Desc: Boosts move power when the Pok\u00e9mon moves last.
-	Int: PowerChangeEffect
-	GetMultiplier: 
-		return !b.isFirstAttack() ? 1.3 : 1;
-		###
+	PowerMultiplierCondition: 1.3 !b.isFirstAttack()
 *
 Sap Sipper:
 	Desc: Boosts Attack when hit by a Grass-type move.
@@ -1332,24 +1307,15 @@ Cheek Pouch:
 *
 Strong Jaw:
 	Desc: The Pok\u00e9mon's strong jaw gives it tremendous biting power.
-	Int: PowerChangeEffect
-	GetMultiplier: 
-		return user.getAttack().isMoveType(MoveType.BITING) ? 1.5 : 1;
-		###
+	PowerMultiplierCondition: 1.5 user.getAttack().isMoveType(MoveType.BITING)
 *
 Mega Launcher:
 	Desc: Powers up aura and pulse moves.
-	Int: PowerChangeEffect
-	GetMultiplier: 
-		return user.getAttack().isMoveType(MoveType.AURA_PULSE) ? 1.5 : 1;
-		###
+	PowerMultiplierCondition: 1.5 user.getAttack().isMoveType(MoveType.AURA_PULSE)
 *
 Tough Claws:
 	Desc: Powers up moves that make direct contact.
-	Int: PowerChangeEffect
-	GetMultiplier: 
-		return user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) ? 1.33 : 1;
-		###
+	PowerMultiplierCondition: 1.33 user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)
 *
 Sweet Veil:
 	Desc: Prevents itself and ally Pok\u00e9mon from falling asleep.
@@ -1473,21 +1439,16 @@ Merciless:
 *
 Water Bubble:
 	Desc: Lowers the power of Fire-type moves done to the Pokémon and prevents the Pokémon from getting a burn.
-	Int: PowerChangeEffect, OpponentPowerChangeEffect
+	Int: OpponentPowerChangeEffect
 	StatusPreventAbility: Burned burns
-	GetMultiplier:
-		return user.isAttackType(Type.WATER) ? 2 : 1;
-		###
+	PowerMultiplierCondition: 2 user.isAttackType(Type.WATER)
 	GetOppMultiplier: 
 		return user.isAttackType(Type.FIRE) ? .5 : 1;
 		###
 *
 Steelworker:
 	Desc: Powers up Steel-type moves.
-	Int: PowerChangeEffect
-	GetMultiplier:
-		return user.isAttackType(Type.STEEL) ? 1.5 : 1;
-		###
+	PowerMultiplierCondition: 1.5 user.isAttackType(Type.STEEL)
 *
 Berserk:
 	Desc: Boosts the Pokémon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.
@@ -1546,10 +1507,7 @@ Disguise:
 *
 Stakeout:
 	Desc: Doubles the damage dealt to the target's replacement if the target switches out.
-	Int: PowerChangeEffect
-	GetMultiplier:
-		return !user.getAttributes().isFirstTurn() && victim.getAttributes().isFirstTurn() ? 2 : 1;
-		###
+	PowerMultiplierCondition: 2 !user.getAttributes().isFirstTurn() && victim.getAttributes().isFirstTurn()
 *
 Corrosion:
 	Desc: The Pokémon can poison the target even if it's a Steel or Poison type.

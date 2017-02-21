@@ -206,7 +206,8 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	static class MistyTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect, TerrainEffect {
+	// Dragon type moves have halved power during the misty terrain
+	static class MistyTerrain extends BattleEffect implements StatusPreventionEffect, TerrainEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		MistyTerrain() {
@@ -235,7 +236,6 @@ public abstract class BattleEffect extends Effect {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// Dragon type moves have halved power during the misty terrain
 			return user.getAttackType() == Type.DRAGON && !user.isLevitating(b) ? .5 : 1;
 		}
 
@@ -259,7 +259,8 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	static class GrassyTerrain extends BattleEffect implements EndTurnEffect, PowerChangeEffect, TerrainEffect {
+	// Grass-type moves are 50% stronger with the grassy terrain
+	static class GrassyTerrain extends BattleEffect implements EndTurnEffect, TerrainEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		GrassyTerrain() {
@@ -286,7 +287,6 @@ public abstract class BattleEffect extends Effect {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// Grass-type moves are 50% stronger with the grassy terrain
 			return user.getAttackType() == Type.GRASS && !user.isLevitating(b) ? 1.5 : 1;
 		}
 
@@ -310,7 +310,8 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	static class ElectricTerrain extends BattleEffect implements StatusPreventionEffect, PowerChangeEffect, TerrainEffect {
+	// Electric-type moves are 50% stronger with the electric terrain
+	static class ElectricTerrain extends BattleEffect implements StatusPreventionEffect, TerrainEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		ElectricTerrain() {
@@ -338,7 +339,6 @@ public abstract class BattleEffect extends Effect {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// Electric-type moves are 50% stronger with the electric terrain
 			return user.getAttackType() == Type.ELECTRIC && !user.isLevitating(b) ? 1.5 : 1;
 		}
 
@@ -362,7 +362,8 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	static class PsychicTerrain extends BattleEffect implements AttackBlocker, PowerChangeEffect, TerrainEffect {
+	// Psychic-type moves are 50% stronger with the psychic terrain
+	static class PsychicTerrain extends BattleEffect implements AttackBlocker, TerrainEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		PsychicTerrain() {
@@ -382,7 +383,6 @@ public abstract class BattleEffect extends Effect {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// Psychic-type moves are 50% stronger with the psychic terrain
 			return user.getAttackType() == Type.PSYCHIC && !user.isLevitating(b) ? 1.5 : 1;
 		}
 

@@ -590,6 +590,7 @@ PowerChangeEffect:
 		Header: double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		Invoke: Multiply
 		EffectList: user
+		InvokeAttack: user
 	*
 ***
 OpponentPowerChangeEffect:

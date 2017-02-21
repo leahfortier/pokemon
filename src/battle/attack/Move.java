@@ -27,7 +27,7 @@ public class Move implements Serializable {
 	
 	private boolean ready;
 	private boolean used;
-	
+
 	private Type type;
 	private int power;
 
@@ -43,7 +43,7 @@ public class Move implements Serializable {
 		
 		resetReady();
 		used = false;
-		
+
 		type = attack.getActualType();
 		power = attack.getPower();
 	}
@@ -70,11 +70,11 @@ public class Move implements Serializable {
 			ready = !ready;
 		}
 	}
-	
+
 	public Type getType() {
 		return type;
 	}
-	
+
 	public int getPower() {
 		return power;
 	}

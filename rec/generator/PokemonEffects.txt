@@ -766,10 +766,7 @@ Nightmare:
 *
 Charge:
 	NumTurns: 2
-	Int: PowerChangeEffect
-	GetMultiplier: 
-		return user.getAttackType() == Type.ELECTRIC ? 2 : 1;
-		###
+	PowerMultiplierCondition: 2 user.getAttackType() == Type.ELECTRIC
 *
 Focusing:
 	CastMessage: user.getName() + " began tightening its focus!"
@@ -799,7 +796,6 @@ BeakBlast:
 		###
 *
 FiddyPercentStronger:
-	Int: PowerChangeEffect
 	GetMultiplier: 
 		return 1.5;
 		###

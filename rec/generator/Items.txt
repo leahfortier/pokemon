@@ -223,14 +223,12 @@ Destiny Knot:
 	Fling: 10
 *
 Expert Belt:
-	Int: HoldItem, PowerChangeEffect
+	Int: HoldItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is a well-worn belt that slightly boosts the power of supereffective moves.
 	Price: 200
 	Fling: 10
-	GetMultiplier:
-		return TypeAdvantage.isSuperEffective(user, victim, b) ? 1.2 : 1;
-		###
+	PowerMultiplierCondition: 1.2 TypeAdvantage.isSuperEffective(user, victim, b)
 *
 Flame Orb:
 	Int: HoldItem, EndTurnEffect
@@ -331,7 +329,7 @@ Lagging Tail:
 	Fling: 10
 *
 Life Orb:
-	Int: HoldItem, PowerChangeEffect, ApplyDamageEffect
+	Int: HoldItem, ApplyDamageEffect
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It boosts the power of moves, but at the cost of some HP on each hit.
 	Price: 200
@@ -455,7 +453,7 @@ Metal Powder:
 	ModifyMultiplier: 1.5 p.isPokemon(PokemonNamesies.DITTO)
 *
 Metronome:
-	Int: HoldItem, PowerChangeEffect
+	Int: HoldItem
 	Cat: Misc
 	Desc: A Pok\u00e9mon held item that boosts a move used consecutively. Its effect is reset if another move is used.
 	Price: 200
@@ -464,14 +462,12 @@ Metronome:
 		###
 *
 Muscle Band:
-	Int: HoldItem, PowerChangeEffect
+	Int: HoldItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is a headband that slightly boosts the power of physical moves.
 	Price: 200
 	Fling: 10
-	GetMultiplier:
-		return user.getAttack().getCategory() == MoveCategory.PHYSICAL ? 1.1 : 1;
-		###
+	PowerMultiplierCondition: 1.1 user.getAttack().getCategory() == MoveCategory.PHYSICAL
 *
 Power Anklet:
 	Desc: A Pok\u00e9mon held item that promotes Speed gain on leveling, but reduces the Speed stat.

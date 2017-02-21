@@ -249,9 +249,7 @@ IgnoreStage:
 	Header: boolean ignoreStage(Stat s)
 *
 StatusCureMove:
-	AddMapField: GetPow: 
-		return super.power*(o.hasStatus(StatusCondition.{00}) ? 2 : 1);
-		###
+	AddMapField: PowerMultiplierCondition: 2 victim.hasStatus(StatusCondition.{00})
 	AddMapField: UniqueEffects:
 		if (victim.hasStatus(StatusCondition.{00})) {
 			Status.removeStatus(b, victim, CastSource.ATTACK);
@@ -278,10 +276,8 @@ HitFly:
 		// Always hit when the opponent is flying
 		return defending.isSemiInvulnerableFlying();
 		###
-	AddMapField: GetPow:
-		// Twice as strong when the opponent is flying
-		return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
-		###
+	AddMapField: Comments: // Twice as strong when the opponent is flying
+	AddMapField: PowerMultiplierCondition: 2 victim.isSemiInvulnerableFlying()
 *
 HitDig:
 	AddMapField: BypassAccuracy:
@@ -289,7 +285,7 @@ HitDig:
 		return defending.isSemiInvulnerableDigging();
 		###
 	AddMapField: GetPow:
-		int power = {0};
+		int power = 1;
 		
 		// Power is halved during Grassy Terrain
 		if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
@@ -361,9 +357,7 @@ HitMinimize:
 	AddMapField: BypassAccuracy:
 		return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
 		###
-	AddMapField: GetPow:
-		return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
-		###
+	AddMapField: PowerMultiplierCondition: 2 victim.hasEffect(EffectNamesies.USED_MINIMIZE)
 *
 BypassAccuracy:
 	AddInterface: AccuracyBypassEffect
@@ -638,11 +632,6 @@ OpponentUsable:
 ShouldSubside:
 	Header: boolean shouldSubside(Battle b, ActivePokemon victim)
 *
-DoublePowerCondition:
-	AddMapField: GetPow: 
-		return super.power*({0} ? 2 : 1);
-		###
-*
 Enter:
 	Header: void enter(Battle b, ActivePokemon enterer)
 *
@@ -676,7 +665,13 @@ StatusPreventMessage:
 		return {0};
 		###
 *
+PowerMultiplierCondition:
+	AddMapField: GetMultiplier:
+		return {2-} ? {1} : 1;
+		###
+*
 GetMultiplier:
+	AddInterface: PowerChangeEffect
 	Header: double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 GetOppMultiplier:
@@ -698,10 +693,7 @@ StatProtectMessage:
 	Header: String preventionMessage(ActivePokemon p, Stat s)
 *
 Sporty:
-	AddInterface: PowerChangeEffect
-	AddMapField: GetMultiplier: 
-		return user.getAttackType() == Type.{11} ? .33 : 1;
-		###
+	AddMapField: PowerMultiplierCondition: .33 user.getAttackType() == Type.{11}
 	AddMapField: CastMessage: "{2}'s power was weakened!"
 	AddMapField: MinTurns: 5
 	AddMapField: MaxTurns: 5
@@ -884,10 +876,7 @@ EndTurnStatusCure:
 		###
 *
 PinchAbility:
-	AddInterface: PowerChangeEffect
-	AddMapField: GetMultiplier: 
-		return user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.{00} ? 1.5 : 1;
-		###
+	AddMapField: PowerMultiplierCondition: 1.5 user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.{00}
 *
 StatusPreventAbility:
 	AddInterface: StatusPreventionEffect
@@ -1077,7 +1066,6 @@ PreBuffetMessage:
 		###
 *
 WeatherStatChange:
-	AddInterface: PowerChangeEffect
 	AddMapField: GetMultiplier:
 		if (user.isAttackType(Type.{11})) {
 			// {1} is fiddy percent stronger in tha weathz
@@ -1132,10 +1120,7 @@ PowerStat:
 	AddMapField: Cat: Misc
 *
 TypeEnhance:
-	AddInterface: PowerChangeEffect
-	AddMapField: GetMultiplier:
-		return user.isAttackType(Type.{00}) ? 1.2 : 1;
-		###
+	AddMapField: PowerMultiplierCondition: 1.2 user.isAttackType(Type.{00})
 	AddInterface: HoldItem
 	AddMapField: Cat: Misc
 *
@@ -1179,10 +1164,7 @@ TimeSpaceOrb:
 	AddMapField: Price: 10000
 	AddInterface: HoldItem
 	AddMapField: Cat: Misc
-	AddInterface: PowerChangeEffect
-	AddMapField: GetMultiplier:
-		return user.isPokemon(PokemonNamesies.{11}) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.{22})) ? 1.2 : 1;
-		###
+	AddMapField: PowerMultiplierCondition: 1.2 user.isPokemon(PokemonNamesies.{11}) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.{22}))
 *
 SpecialItemAbility:
 	AddInterface: ChangeTypeEffect
@@ -1561,7 +1543,6 @@ GetAccuracy:
 	Header: int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
 *
 Aura:
-	AddInterface: PowerChangeEffect
 	AddMapField: GetMultiplier:
 		if (user.getAttackType() == Type.{00}) {
 			return 1 + .33*(victim.hasAbility(AbilityNamesies.AURA_BREAK) ? -1 : 1);
@@ -1617,10 +1598,7 @@ NormalTypeChanger:
 	AddMapField: ApplyEndTurn:
 		this.activated = false;
 		###
-	AddInterface: PowerChangeEffect
-	AddMapField: GetMultiplier:
-		return activated ? 1.3 : 1;
-		###
+	AddMapField: PowerMultiplierCondition: 1.3 activated
 *
 NextLevel:
 	Header: void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)

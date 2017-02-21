@@ -254,7 +254,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class SolarPower extends Ability implements PowerChangeEffect, EndTurnEffect {
+	static class SolarPower extends Ability implements EndTurnEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SolarPower() {
@@ -552,9 +552,9 @@ public abstract class Ability implements Serializable {
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (user.getGender() == Gender.GENDERLESS) return 1;
-			if (Gender.oppositeGenders(user, victim)) return .75;
-			if (user.getGender() == victim.getGender()) return 1.25;
-			return 1;
+			else if (Gender.oppositeGenders(user, victim)) return .75;
+			else if (user.getGender() == victim.getGender()) return 1.25;
+			else return 1;
 		}
 	}
 
@@ -1245,7 +1245,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class IronFist extends Ability implements PowerChangeEffect, EntryEffect {
+	static class IronFist extends Ability implements EntryEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		IronFist() {
@@ -2265,7 +2265,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class SandForce extends Ability implements PowerChangeEffect, WeatherBlockerEffect {
+	static class SandForce extends Ability implements WeatherBlockerEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SandForce() {
@@ -2521,7 +2521,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return user.getHPRatio() < 1/2.0 ? .5 : 1;
+			return user.getHPRatio() < .5 ? .5 : 1;
 		}
 	}
 
@@ -3481,7 +3481,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class WaterBubble extends Ability implements PowerChangeEffect, OpponentPowerChangeEffect, StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class WaterBubble extends Ability implements OpponentPowerChangeEffect, PowerChangeEffect, StatusPreventionEffect, EntryEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.BURNED)) {

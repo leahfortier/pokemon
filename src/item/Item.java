@@ -795,7 +795,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class LifeOrb extends Item implements HoldItem, PowerChangeEffect, ApplyDamageEffect {
+	static class LifeOrb extends Item implements HoldItem, ApplyDamageEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		LifeOrb() {
@@ -1663,7 +1663,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class OddIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class OddIncense extends Item implements IncenseItem, HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		OddIncense() {
@@ -1697,7 +1697,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class RockIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class RockIncense extends Item implements IncenseItem, HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		RockIncense() {
@@ -1714,7 +1714,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class RoseIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class RoseIncense extends Item implements IncenseItem, HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		RoseIncense() {
@@ -1731,7 +1731,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class SeaIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class SeaIncense extends Item implements IncenseItem, HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SeaIncense() {
@@ -1748,7 +1748,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class WaveIncense extends Item implements IncenseItem, PowerChangeEffect, HoldItem {
+	static class WaveIncense extends Item implements IncenseItem, HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		WaveIncense() {
@@ -2294,7 +2294,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class BlackBelt extends Item implements PowerChangeEffect, HoldItem {
+	static class BlackBelt extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		BlackBelt() {
@@ -2307,7 +2307,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class BlackGlasses extends Item implements PowerChangeEffect, HoldItem {
+	static class BlackGlasses extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		BlackGlasses() {
@@ -2320,7 +2320,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class Charcoal extends Item implements PowerChangeEffect, HoldItem {
+	static class Charcoal extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Charcoal() {
@@ -2333,7 +2333,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class DragonFang extends Item implements PowerChangeEffect, HoldItem {
+	static class DragonFang extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		DragonFang() {
@@ -2350,7 +2350,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class HardStone extends Item implements PowerChangeEffect, HoldItem {
+	static class HardStone extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		HardStone() {
@@ -2367,7 +2367,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class Magnet extends Item implements PowerChangeEffect, HoldItem {
+	static class Magnet extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Magnet() {
@@ -2380,7 +2380,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class MetalCoat extends Item implements PowerChangeEffect, HoldItem, PokemonUseItem {
+	static class MetalCoat extends Item implements HoldItem, PokemonUseItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		MetalCoat() {
@@ -2397,7 +2397,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class MiracleSeed extends Item implements PowerChangeEffect, HoldItem {
+	static class MiracleSeed extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		MiracleSeed() {
@@ -2410,7 +2410,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class MysticWater extends Item implements PowerChangeEffect, HoldItem {
+	static class MysticWater extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		MysticWater() {
@@ -2423,7 +2423,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class NeverMeltIce extends Item implements PowerChangeEffect, HoldItem {
+	static class NeverMeltIce extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		NeverMeltIce() {
@@ -2436,7 +2436,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class PoisonBarb extends Item implements PowerChangeEffect, HoldItem {
+	static class PoisonBarb extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		PoisonBarb() {
@@ -2457,7 +2457,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class SharpBeak extends Item implements PowerChangeEffect, HoldItem {
+	static class SharpBeak extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SharpBeak() {
@@ -2474,7 +2474,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class SilkScarf extends Item implements PowerChangeEffect, HoldItem {
+	static class SilkScarf extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SilkScarf() {
@@ -2491,7 +2491,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class SilverPowder extends Item implements PowerChangeEffect, HoldItem {
+	static class SilverPowder extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SilverPowder() {
@@ -2508,7 +2508,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class SoftSand extends Item implements PowerChangeEffect, HoldItem {
+	static class SoftSand extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SoftSand() {
@@ -2525,7 +2525,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class SpellTag extends Item implements PowerChangeEffect, HoldItem {
+	static class SpellTag extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		SpellTag() {
@@ -2538,7 +2538,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class TwistedSpoon extends Item implements PowerChangeEffect, HoldItem {
+	static class TwistedSpoon extends Item implements HoldItem, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		TwistedSpoon() {
