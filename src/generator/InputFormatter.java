@@ -48,7 +48,6 @@ public class InputFormatter {
     }
 
     private List<Entry<String, MethodInfo>> overrideMethods;
-    private Map<String, List<Entry<String, MethodInfo>>> interfaceMethods;
 
     List<Entry<String, MethodInfo>> getOverrideMethods() {
         if (this.overrideMethods == null) {
@@ -58,61 +57,33 @@ public class InputFormatter {
         return overrideMethods;
     }
 
-    List<Entry<String, MethodInfo>> getInterfaceMethods(String interfaceName) {
-        if (this.interfaceMethods == null) {
-            this.readFormat();
-        }
-
-        return this.interfaceMethods.get(interfaceName);
-    }
-
     private void readFormat() {
         Scanner in = FileIO.openFile(FileName.OVERRIDE);
 
         overrideMethods = new ArrayList<>();
-        interfaceMethods = new HashMap<>();
 
         Set<String> fieldNames = new HashSet<>();
 
         while (in.hasNext()) {
             String line = in.nextLine().trim();
 
-            // Ignore comments and white space at beginning of file
+            // Ignore comments and white space
             if (line.isEmpty() || line.startsWith("#")) {
                 continue;
             }
 
-            String interfaceName = line.replace(":", "");
-            List<Entry<String, MethodInfo>> list = new ArrayList<>();
-
-            boolean isInterfaceMethod = !interfaceName.equals("Override");
-
-            while (in.hasNextLine()) {
-                line = in.nextLine().trim();
-                if (line.equals("***")) {
-                    break;
-                }
-
-                String fieldName = line.replace(":", "");
-                list.add(new SimpleEntry<>(fieldName, new MethodInfo(in, isInterfaceMethod)));
-
-                if (fieldNames.contains(fieldName)) {
-                    Global.error("Duplicate field name " + fieldName + " in override.txt");
-                }
-
-                fieldNames.add(fieldName);
+            if (line.equals("*")) {
+                continue;
             }
 
-            if (isInterfaceMethod) {
-                interfaceMethods.put(interfaceName, list);
+            String fieldName = line.replace(":", "");
+            if (fieldNames.contains(fieldName)) {
+                Global.error("Duplicate field name " + fieldName + " in override.txt");
             }
-            else {
-                if (list.size() != 1) {
-                    Global.error("Only interfaces can include multiple methods");
-                }
 
-                overrideMethods.add(list.get(0));
-            }
+            fieldNames.add(fieldName);
+
+            overrideMethods.add(new SimpleEntry<>(fieldName, new MethodInfo(in)));
         }
     }
 

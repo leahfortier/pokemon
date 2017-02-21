@@ -250,6 +250,17 @@ GroundedEffect:
 			return user.getAttack().isMoveType(MoveType.AIRBORNE);
 			###
 	*
+	Method:
+		Header: void removeLevitation(Battle b, ActivePokemon p)
+		Default:
+			if (p.isSemiInvulnerableFlying()) {
+				p.getMove().switchReady(b, p);
+				Messages.add(new MessageUpdate(p.getName() + " fell to the ground!"));
+			}
+			
+			LevitationEffect.falllllllll(b, p);
+			###
+	*
 ***
 AccuracyBypassEffect
 	Method:
@@ -304,6 +315,10 @@ TrappingEffect:
 	Comments: // Any effect that implements this will prevent a Pokemon with said effect from escaping battle
 	Method:
 		Header: boolean trapped(Battle b, ActivePokemon escaper)
+		Default:
+			// Ghost-type Pokemon can always escape
+			return !escaper.isType(b, Type.GHOST);
+			###
 		Invoke: CheckMessage true trappingMessage(escaper)
 		InvokeName: isTrapped
 		EffectList: escaper
@@ -364,6 +379,9 @@ TargetSwapperEffect:
 CritBlockerEffect:
 	Method:
 		Header: boolean blockCrits()
+		Default:
+			return true;
+			###
 		Invoke: Check true
 		InvokeName: checkBlocked
 		InvokeParameters: Battle b, ActivePokemon attacking, ActivePokemon defending
@@ -450,6 +468,9 @@ DifferentStatEffect
 CritStageEffect:
 	Method:
 		Header: int increaseCritStage(int stage, ActivePokemon p)
+		Default:
+			return stage + 1;
+			###
 		Invoke: Update
 		Update: stage
 		InvokeName: updateCritStage
@@ -604,6 +625,9 @@ DamageTakenEffect:
 AlwaysCritEffect:
 	Method:
 		Header: boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending)
+		Default:
+			return true;
+			###
 		Invoke: Check true
 		EffectList: attacking
 		InvokeAttack: attacking

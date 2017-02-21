@@ -38,7 +38,6 @@ import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
-import gui.view.ViewMode;
 import item.bag.BagCategory;
 import item.bag.BattleBagCategory;
 import item.berry.Berry;
@@ -253,6 +252,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
+		public void enter(Battle b, ActivePokemon enterer) {
+			Messages.add(new MessageUpdate(enterer.getName() + " floats with its " + this.name + "!"));
+		}
+
 		public void fall(Battle b, ActivePokemon fallen) {
 			Messages.add(new MessageUpdate(fallen.getName() + " is no longer floating with its " + this.name + "!"));
 			
@@ -263,10 +266,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " popped!"));
 			victim.consumeItem(b);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			Messages.add(new MessageUpdate(enterer.getName() + " floats with its " + this.name + "!"));
 		}
 
 		public int flingDamage() {
@@ -286,12 +285,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
 		}
 
-		public void enter(Battle b, ActivePokemon enterer) {
-			getDatCashMoneyGetDatCashMoneyCast(b, enterer);
-		}
-
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			getDatCashMoneyGetDatCashMoneyCast(b, victim);
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			getDatCashMoneyGetDatCashMoneyCast(b, enterer);
 		}
 	}
 
@@ -386,6 +385,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 100;
 		}
 
+		public boolean isModifyStat(Stat s) {
+			return s == Stat.ATTACK;
+		}
+
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			Move last = p.getAttributes().getLastMoveUsed();
 			return last == null || m == last;
@@ -395,16 +398,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
 		}
 
-		public boolean isModifyStat(Stat s) {
-			return s == Stat.ATTACK;
+		public int flingDamage() {
+			return 10;
 		}
 
 		public double getModifier() {
 			return 1.5;
-		}
-
-		public int flingDamage() {
-			return 10;
 		}
 	}
 
@@ -416,6 +415,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
+		public boolean isModifyStat(Stat s) {
+			return s == Stat.SPEED;
+		}
+
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			Move last = p.getAttributes().getLastMoveUsed();
 			return last == null || m == last;
@@ -425,16 +428,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
 		}
 
-		public boolean isModifyStat(Stat s) {
-			return s == Stat.SPEED;
+		public int flingDamage() {
+			return 10;
 		}
 
 		public double getModifier() {
 			return 1.5;
-		}
-
-		public int flingDamage() {
-			return 10;
 		}
 	}
 
@@ -446,6 +445,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
+		public boolean isModifyStat(Stat s) {
+			return s == Stat.SP_ATTACK;
+		}
+
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			Move last = p.getAttributes().getLastMoveUsed();
 			return last == null || m == last;
@@ -455,16 +458,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
 		}
 
-		public boolean isModifyStat(Stat s) {
-			return s == Stat.SP_ATTACK;
+		public int flingDamage() {
+			return 10;
 		}
 
 		public double getModifier() {
 			return 1.5;
-		}
-
-		public int flingDamage() {
-			return 10;
 		}
 	}
 
@@ -585,12 +584,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return TypeAdvantage.isSuperEffective(user, victim, b) ? 1.2 : 1;
+		}
+
+		public int flingDamage() {
+			return 10;
 		}
 	}
 
@@ -602,12 +601,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			Status.giveStatus(b, pelted, pelted, StatusCondition.BURNED, pelted.getName() + " was burned by the " + this.name + "!");
-		}
-
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			Status.giveStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.name + "!");
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted) {
+			Status.giveStatus(b, pelted, pelted, StatusCondition.BURNED, pelted.getName() + " was burned by the " + this.name + "!");
 		}
 	}
 
@@ -619,17 +618,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			// Badly poisons the pelted
-			applyEndTurn(pelted, b);
-		}
-
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			// Badly poisons the holder at the end of the turn
 			if (Status.applies(StatusCondition.POISONED, b, victim, victim)) {
 				victim.addEffect((PokemonEffect)EffectNamesies.BAD_POISON.getEffect());
 				Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
 			}
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted) {
+			// Badly poisons the pelted
+			applyEndTurn(pelted, b);
 		}
 	}
 
@@ -654,16 +653,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
 		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth) {
 			return RandomUtils.chanceTest(10);
 		}
 
 		public String braceMessage(ActivePokemon bracer) {
 			return bracer.getName() + " held on with its " + this.name + "!";
+		}
+
+		public int flingDamage() {
+			return 10;
 		}
 	}
 
@@ -778,15 +777,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			removeLevitation(b, pelted);
 		}
 
-		private void removeLevitation(Battle b, ActivePokemon p) {
-			if (p.isSemiInvulnerableFlying()) {
-				p.getMove().switchReady(b, p);
-				Messages.add(new MessageUpdate(p.getName() + " fell to the ground!"));
-			}
-			
-			LevitationEffect.falllllllll(b, p);
-		}
-
 		public double getModifier() {
 			return .5;
 		}
@@ -878,16 +868,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 10;
 		}
 
-		public int flingDamage() {
-			return 40;
-		}
-
 		public int increaseCritStage(int stage, ActivePokemon p) {
 			if (p.isPokemon(PokemonNamesies.CHANSEY)) {
 				return stage + 2;
 			}
 			
 			return stage;
+		}
+
+		public int flingDamage() {
+			return 40;
 		}
 	}
 
@@ -918,6 +908,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return s == Stat.SPEED;
 		}
 
+		public int flingDamage() {
+			return 60;
+		}
+
 		public int[] getEVs(int[] vals) {
 			for (int i = 0; i < vals.length; i++) {
 				vals[i] *= 2;
@@ -928,10 +922,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public double getModifier() {
 			return .5;
-		}
-
-		public int flingDamage() {
-			return 60;
 		}
 	}
 
@@ -954,17 +944,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 100;
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			if (pelted.hasEffect(EffectNamesies.INFATUATED)) {
-				pelted.getAttributes().removeEffect(EffectNamesies.INFATUATED);
-				Messages.add(new MessageUpdate(pelted.getName() + " is no longer infatuated to to the " + this.name + "!"));
-			}
-		}
-
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			boolean used = false;
 			for (int i = 0; i < effects.length; i++) {
@@ -978,6 +957,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			
 			if (used) {
 				victim.consumeItem(b);
+			}
+		}
+
+		public int flingDamage() {
+			return 10;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted) {
+			if (pelted.hasEffect(EffectNamesies.INFATUATED)) {
+				pelted.getAttributes().removeEffect(EffectNamesies.INFATUATED);
+				Messages.add(new MessageUpdate(pelted.getName() + " is no longer infatuated to to the " + this.name + "!"));
 			}
 		}
 	}
@@ -1028,12 +1018,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttack().getCategory() == MoveCategory.PHYSICAL ? 1.1 : 1;
+		}
+
+		public int flingDamage() {
+			return 10;
 		}
 	}
 
@@ -1053,6 +1043,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return s == Stat.SPEED;
 		}
 
+		public int flingDamage() {
+			return 70;
+		}
+
 		public int[] getEVs(int[] vals) {
 			vals[powerStat().index()] += 4;
 			return vals;
@@ -1060,10 +1054,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public double getModifier() {
 			return .5;
-		}
-
-		public int flingDamage() {
-			return 70;
 		}
 	}
 
@@ -1083,6 +1073,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return s == Stat.SPEED;
 		}
 
+		public int flingDamage() {
+			return 70;
+		}
+
 		public int[] getEVs(int[] vals) {
 			vals[powerStat().index()] += 4;
 			return vals;
@@ -1090,10 +1084,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public double getModifier() {
 			return .5;
-		}
-
-		public int flingDamage() {
-			return 70;
 		}
 	}
 
@@ -1113,6 +1103,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return s == Stat.SPEED;
 		}
 
+		public int flingDamage() {
+			return 70;
+		}
+
 		public int[] getEVs(int[] vals) {
 			vals[powerStat().index()] += 4;
 			return vals;
@@ -1120,10 +1114,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public double getModifier() {
 			return .5;
-		}
-
-		public int flingDamage() {
-			return 70;
 		}
 	}
 
@@ -1143,6 +1133,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return s == Stat.SPEED;
 		}
 
+		public int flingDamage() {
+			return 70;
+		}
+
 		public int[] getEVs(int[] vals) {
 			vals[powerStat().index()] += 4;
 			return vals;
@@ -1150,10 +1144,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public double getModifier() {
 			return .5;
-		}
-
-		public int flingDamage() {
-			return 70;
 		}
 	}
 
@@ -1173,6 +1163,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return s == Stat.SPEED;
 		}
 
+		public int flingDamage() {
+			return 70;
+		}
+
 		public int[] getEVs(int[] vals) {
 			vals[powerStat().index()] += 4;
 			return vals;
@@ -1180,10 +1174,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public double getModifier() {
 			return .5;
-		}
-
-		public int flingDamage() {
-			return 70;
 		}
 	}
 
@@ -1203,6 +1193,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return s == Stat.SPEED;
 		}
 
+		public int flingDamage() {
+			return 70;
+		}
+
 		public int[] getEVs(int[] vals) {
 			vals[powerStat().index()] += 4;
 			return vals;
@@ -1210,10 +1204,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public double getModifier() {
 			return .5;
-		}
-
-		public int flingDamage() {
-			return 70;
 		}
 	}
 
@@ -1263,14 +1253,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (user.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
 				victim.consumeItem(b);
 			}
+		}
+
+		public int flingDamage() {
+			return 10;
 		}
 	}
 
@@ -1299,13 +1289,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public int flingDamage() {
-			return 60;
-		}
-
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!"));
 			user.reduceHealthFraction(b, 1/8.0);
+		}
+
+		public int flingDamage() {
+			return 60;
 		}
 	}
 
@@ -1336,10 +1326,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		ScopeLens() {
 			super(ItemNamesies.SCOPE_LENS, "An item to be held by a Pok\u00e9mon. It is a lens that boosts the holder's critical-hit ratio.", BagCategory.MISC);
 			super.price = 200;
-		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
 		}
 	}
 
@@ -1428,16 +1414,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public int flingDamage() {
-			return 60;
-		}
-
 		public int increaseCritStage(int stage, ActivePokemon p) {
 			if (p.isPokemon(PokemonNamesies.FARFETCHD)) {
 				return stage + 2;
 			}
 			
 			return stage;
+		}
+
+		public int flingDamage() {
+			return 60;
 		}
 	}
 
@@ -1455,8 +1441,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public int flingDamage() {
-			return 80;
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+			return victim.getName() + "s " + this.getName() + " latched onto " + user.getName() + "!";
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
@@ -1472,8 +1458,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			victim.swapItems(b, user, this);
 		}
 
-		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
-			return victim.getName() + "s " + this.getName() + " latched onto " + user.getName() + "!";
+		public int flingDamage() {
+			return 80;
 		}
 	}
 
@@ -1526,6 +1512,15 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 100;
 		}
 
+		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
+			// NOTE: Works like Clear Body, since ain't nobody want to keep track of stats.
+			return true;
+		}
+
+		public String preventionMessage(ActivePokemon p, Stat s) {
+			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
+		}
+
 		public int flingDamage() {
 			return 10;
 		}
@@ -1539,15 +1534,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			}
 			
 			Messages.add(new MessageUpdate("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!"));
-		}
-
-		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
-			// NOTE: Works like Clear Body, since ain't nobody want to keep track of stats.
-			return true;
-		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
 		}
 	}
 
@@ -1660,20 +1646,20 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 9600;
 		}
 
-		private void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice) {
-			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
-		}
-
 		public PokemonNamesies getBaby() {
 			return PokemonNamesies.HAPPINY;
 		}
 
-		public void enter(Battle b, ActivePokemon enterer) {
-			getDatCashMoneyGetDatCashMoneyCast(b, enterer);
+		private void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice) {
+			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			getDatCashMoneyGetDatCashMoneyCast(b, victim);
+		}
+
+		public void enter(Battle b, ActivePokemon enterer) {
+			getDatCashMoneyGetDatCashMoneyCast(b, enterer);
 		}
 	}
 
@@ -2294,10 +2280,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public int flingDamage() {
-			return 10;
-		}
-
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 				return;
@@ -2305,6 +2287,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			
 			victim.healHealthFraction(1/16.0);
 			Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.name + "!").updatePokemon(b, victim));
+		}
+
+		public int flingDamage() {
+			return 10;
 		}
 	}
 
@@ -2462,12 +2448,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return 70;
 		}
 
-		public void flingEffect(Battle b, ActivePokemon pelted) {
-			Status.giveStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was poisoned by the " + this.name + "!");
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.isAttackType(Type.POISON) ? 1.2 : 1;
+		}
+
+		public void flingEffect(Battle b, ActivePokemon pelted) {
+			Status.giveStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was poisoned by the " + this.name + "!");
 		}
 	}
 
@@ -2721,10 +2707,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 100;
 		}
 
-		public boolean use(ActivePokemon p) {
-			return p.checkEvolution(this.namesies);
-		}
-
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (RandomUtils.chanceTest(10)) {
 				if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
@@ -2737,6 +2719,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
 				Messages.add(new MessageUpdate("The " + this.name + " caused " + pelted.getName() + " to flinch!"));
 			}
+		}
+
+		public boolean use(ActivePokemon p) {
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -2851,10 +2837,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return 80;
 		}
 
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
-
 		public boolean use(ActivePokemon p) {
 			return p.checkEvolution(this.namesies);
 		}
@@ -2866,10 +2848,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		RazorFang() {
 			super(ItemNamesies.RAZOR_FANG, "An item to be held by a Pok\u00e9mon. It may make foes and allies flinch when the holder inflicts damage.`", BagCategory.MISC);
 			super.price = 2100;
-		}
-
-		public boolean use(ActivePokemon p) {
-			return p.checkEvolution(this.namesies);
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -2884,6 +2862,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
 				Messages.add(new MessageUpdate("The " + this.name + " caused " + pelted.getName() + " to flinch!"));
 			}
+		}
+
+		public boolean use(ActivePokemon p) {
+			return p.checkEvolution(this.namesies);
 		}
 	}
 
@@ -3447,16 +3429,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
+		public boolean use(Battle b, ActivePokemon p, Move m) {
+			return b == null ? use() : use(p, b);
+		}
+
 		public boolean use() {
 			return this.use(Game.getPlayer());
 		}
 
 		public boolean use(ActivePokemon p, Battle b) {
 			return use((Trainer)b.getTrainer(p));
-		}
-
-		public boolean use(Battle b, ActivePokemon p, Move m) {
-			return b == null ? use() : use(p, b);
 		}
 	}
 
@@ -4110,20 +4092,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean shouldHeal(StatusCondition statusCondition) {
-			return statusCondition == StatusCondition.PARALYZED;
-		}
-
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return use(user, source);
-		}
-
-		public int naturalGiftPower() {
-			return 80;
-		}
-
 		public Type naturalGiftType() {
 			return Type.FIRE;
+		}
+
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.PARALYZED;
 		}
 	}
 
@@ -4136,20 +4110,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean shouldHeal(StatusCondition statusCondition) {
-			return statusCondition == StatusCondition.ASLEEP;
-		}
-
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return use(user, source);
-		}
-
-		public int naturalGiftPower() {
-			return 80;
-		}
-
 		public Type naturalGiftType() {
 			return Type.WATER;
+		}
+
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.ASLEEP;
 		}
 	}
 
@@ -4162,20 +4128,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean shouldHeal(StatusCondition statusCondition) {
-			return statusCondition == StatusCondition.POISONED;
-		}
-
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return use(user, source);
-		}
-
-		public int naturalGiftPower() {
-			return 80;
-		}
-
 		public Type naturalGiftType() {
 			return Type.ELECTRIC;
+		}
+
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.POISONED;
 		}
 	}
 
@@ -4188,20 +4146,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean shouldHeal(StatusCondition statusCondition) {
-			return statusCondition == StatusCondition.BURNED;
-		}
-
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return use(user, source);
-		}
-
-		public int naturalGiftPower() {
-			return 80;
-		}
-
 		public Type naturalGiftType() {
 			return Type.GRASS;
+		}
+
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.BURNED;
 		}
 	}
 
@@ -4214,20 +4164,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.battleBagCategories.add(BattleBagCategory.STATUS);
 		}
 
-		public boolean shouldHeal(StatusCondition statusCondition) {
-			return statusCondition == StatusCondition.FROZEN;
-		}
-
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return use(user, source);
-		}
-
-		public int naturalGiftPower() {
-			return 80;
-		}
-
 		public Type naturalGiftType() {
 			return Type.ICE;
+		}
+
+		public boolean shouldHeal(StatusCondition statusCondition) {
+			return statusCondition == StatusCondition.FROZEN;
 		}
 	}
 
@@ -4250,6 +4192,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			}
 		}
 
+		public int restoreAmount(Move toRestore) {
+			return 10;
+		}
+
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			Move lowestPPMove = null;
 			double lowestPPRatio = 1;
@@ -4269,10 +4215,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			
 			use(user, lowestPPMove);
 			return true;
-		}
-
-		public int restoreAmount(Move toRestore) {
-			return 10;
 		}
 
 		public int naturalGiftPower() {
@@ -4297,12 +4239,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return 10;
 		}
 
-		public double healthTriggerRatio() {
-			return 1/3.0;
-		}
-
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return use(user, source);
+		}
+
+		public double healthTriggerRatio() {
+			return 1/3.0;
 		}
 
 		public int naturalGiftPower() {
@@ -4336,14 +4278,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return use(p, CastSource.USE_ITEM);
 		}
 
-		public String getGenericMessage(ActivePokemon p) {
-			return p.getName() + " snapped out of its confusion!";
-		}
-
-		public String getSourceMessage(ActivePokemon p, String sourceName) {
-			return p.getName() + "'s " + this.getName() + " snapped it out of confusion!";
-		}
-
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return use(user, source);
 		}
@@ -4354,6 +4288,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public Type naturalGiftType() {
 			return Type.GROUND;
+		}
+
+		public String getGenericMessage(ActivePokemon p) {
+			return p.getName() + " snapped out of its confusion!";
+		}
+
+		public String getSourceMessage(ActivePokemon p, String sourceName) {
+			return p.getName() + "'s " + this.getName() + " snapped it out of confusion!";
 		}
 	}
 
@@ -4369,14 +4311,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		public boolean shouldHeal(StatusCondition statusCondition) {
 			// Does not apply to the healthy and the dead
 			return statusCondition != StatusCondition.NO_STATUS && statusCondition != StatusCondition.FAINTED;
-		}
-
-		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-			return use(user, source);
-		}
-
-		public int naturalGiftPower() {
-			return 80;
 		}
 
 		public Type naturalGiftType() {
@@ -4397,12 +4331,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return p.healHealthFraction(1/4.0);
 		}
 
-		public double healthTriggerRatio() {
-			return 1/2.0;
-		}
-
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			return use(user, source);
+		}
+
+		public double healthTriggerRatio() {
+			return 1/2.0;
 		}
 
 		public int naturalGiftPower() {
@@ -4999,14 +4933,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public int naturalGiftPower() {
-			return 100;
-		}
-
-		public Type naturalGiftType() {
-			return Type.BUG;
-		}
-
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (!victim.fullHealth() && TypeAdvantage.isSuperEffective(user, victim, b)) {
 				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " restored its health!"));
@@ -5014,6 +4940,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 				Messages.add(new MessageUpdate().updatePokemon(b, victim));
 				victim.consumeItem(b);
 			}
+		}
+
+		public int naturalGiftPower() {
+			return 100;
+		}
+
+		public Type naturalGiftType() {
+			return Type.BUG;
 		}
 	}
 
@@ -5025,13 +4959,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public double healthTriggerRatio() {
-			return 1/4.0;
-		}
-
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
 			return true;
+		}
+
+		public double healthTriggerRatio() {
+			return 1/4.0;
 		}
 
 		public int naturalGiftPower() {
@@ -5051,10 +4985,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 20;
 		}
 
-		public double healthTriggerRatio() {
-			return 1/4.0;
-		}
-
 		public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
 			int rand = RandomUtils.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
 			
@@ -5067,6 +4997,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			// Raise random battle stat
 			Stat stat = Stat.getStat(rand, true);
 			return user.getAttributes().modifyStage(user, user, 1, stat, b, source);
+		}
+
+		public double healthTriggerRatio() {
+			return 1/4.0;
 		}
 
 		public int naturalGiftPower() {
@@ -5296,16 +5230,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return s == Stat.SP_DEFENSE;
 		}
 
-		public int flingDamage() {
-			return 80;
-		}
-
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			return !m.getAttack().isStatusMove();
 		}
 
 		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return p.getName() + "'s " + this.name + " prevents the use of status moves!";
+		}
+
+		public int flingDamage() {
+			return 80;
 		}
 
 		public double getModifier() {

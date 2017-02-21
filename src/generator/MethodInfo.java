@@ -65,7 +65,7 @@ class MethodInfo {
         this.end = end;
     }
 
-    MethodInfo(final Scanner in, final boolean isInterfaceMethod) {
+    MethodInfo(final Scanner in) {
         this();
 
         while (in.hasNext()) {

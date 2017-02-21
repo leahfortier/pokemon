@@ -636,10 +636,6 @@ public abstract class Attack implements Serializable {
 			super.power = 55;
 			super.accuracy = 95;
 		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
 	}
 
 	static class SweetScent extends Attack {
@@ -842,10 +838,6 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
 	}
 
 	static class TailWhip extends Attack {
@@ -868,6 +860,10 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
 		}
 
+		public String getChargeMessage(ActivePokemon user) {
+			return user.getName() + " began taking in sunlight!";
+		}
+
 		public boolean isMultiTurn(Battle b, ActivePokemon user) {
 			return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
 		}
@@ -881,10 +877,6 @@ public abstract class Attack implements Serializable {
 				default:
 					return super.power;
 			}
-		}
-
-		public String getChargeMessage(ActivePokemon user) {
-			return user.getName() + " began taking in sunlight!";
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -905,12 +897,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean isMultiTurn(Battle b, ActivePokemon user) {
-			return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
-		}
-
 		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " began taking in sunlight!";
+		}
+
+		public boolean isMultiTurn(Battle b, ActivePokemon user) {
+			return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -944,12 +936,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean semiInvulnerability() {
-			return true;
-		}
-
 		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " flew up high!";
+		}
+
+		public boolean semiInvulnerability() {
+			return true;
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -1000,10 +992,6 @@ public abstract class Attack implements Serializable {
 			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
 		}
 	}
 
@@ -1268,10 +1256,6 @@ public abstract class Attack implements Serializable {
 		ConfusionDamage() {
 			super(AttackNamesies.CONFUSION_DAMAGE, Type.NO_TYPE, MoveCategory.PHYSICAL, 1, "None");
 			super.power = 40;
-		}
-
-		public boolean blockCrits() {
-			return true;
 		}
 	}
 
@@ -1561,14 +1545,14 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// Twice as strong when the opponent is flying
-			return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
-		}
-
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			// Always hit when the opponent is flying
 			return defending.isSemiInvulnerableFlying();
+		}
+
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			// Twice as strong when the opponent is flying
+			return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
 		}
 	}
 
@@ -1741,6 +1725,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -1759,14 +1751,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
 		}
 	}
 
@@ -1819,6 +1803,14 @@ public abstract class Attack implements Serializable {
 			super.status = StatusCondition.POISONED;
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 2;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -1837,14 +1829,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 2;
 		}
 	}
 
@@ -1910,6 +1894,14 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 95;
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -1928,14 +1920,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
 		}
 	}
 
@@ -2029,14 +2013,14 @@ public abstract class Attack implements Serializable {
 			super.effectChance = 20;
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// Twice as strong when the opponent is flying
-			return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
-		}
-
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			// Always hit when the opponent is flying
 			return defending.isSemiInvulnerableFlying();
+		}
+
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			// Twice as strong when the opponent is flying
+			return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
 		}
 	}
 
@@ -2144,6 +2128,11 @@ public abstract class Attack implements Serializable {
 			super.effectChance = 30;
 		}
 
+		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// Always hits when the opponent is flying or it is raining (unless they're non-flying semi-invulnerable)
+			return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == EffectNamesies.RAINING && defending.isSemiInvulnerable());
+		}
+
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			// Twice as strong when the opponent is flying
 			return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
@@ -2156,11 +2145,6 @@ public abstract class Attack implements Serializable {
 			}
 			
 			return super.accuracy;
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			// Always hits when the opponent is flying or it is raining (unless they're non-flying semi-invulnerable)
-			return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == EffectNamesies.RAINING && defending.isSemiInvulnerable());
 		}
 	}
 
@@ -2311,10 +2295,6 @@ public abstract class Attack implements Serializable {
 			super.power = 80;
 			super.accuracy = 95;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
 		}
 	}
 
@@ -2664,6 +2644,11 @@ public abstract class Attack implements Serializable {
 			super.status = StatusCondition.PARALYZED;
 		}
 
+		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// Always hits when the opponent is flying or it is raining (unless they're non-flying semi-invulnerable)
+			return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == EffectNamesies.RAINING && defending.isSemiInvulnerable());
+		}
+
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			// Twice as strong when the opponent is flying
 			return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
@@ -2676,11 +2661,6 @@ public abstract class Attack implements Serializable {
 			}
 			
 			return super.accuracy;
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			// Always hits when the opponent is flying or it is raining (unless they're non-flying semi-invulnerable)
-			return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == EffectNamesies.RAINING && defending.isSemiInvulnerable());
 		}
 	}
 
@@ -2714,6 +2694,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -2732,14 +2720,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
 		}
 	}
 
@@ -2823,6 +2803,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 2;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -2842,14 +2830,6 @@ public abstract class Attack implements Serializable {
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
 		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 2;
-		}
 	}
 
 	static class PoisonTail extends Attack implements CritStageEffect {
@@ -2862,10 +2842,6 @@ public abstract class Attack implements Serializable {
 			super.effectChance = 10;
 			super.status = StatusCondition.POISONED;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
 		}
 	}
 
@@ -2921,12 +2897,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
-		}
-
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
+		}
+
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
 		}
 	}
 
@@ -3035,6 +3011,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -3053,14 +3037,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
 		}
 	}
 
@@ -3415,10 +3391,6 @@ public abstract class Attack implements Serializable {
 			super.power = 60;
 			super.accuracy = 95;
 		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
 	}
 
 	static class MeanLook extends Attack {
@@ -3548,10 +3520,6 @@ public abstract class Attack implements Serializable {
 			super.effectChance = 10;
 			super.status = StatusCondition.POISONED;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
 		}
 	}
 
@@ -3685,6 +3653,11 @@ public abstract class Attack implements Serializable {
 			Messages.add(new MessageUpdate("Magnitude " + (index + 4) + "!"));
 		}
 
+		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// Always hit when the opponent is underground
+			return defending.isSemiInvulnerableDigging();
+		}
+
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			int power = POWERS[index = GeneralUtils.getPercentageIndex(CHANCES)];
 			
@@ -3699,11 +3672,6 @@ public abstract class Attack implements Serializable {
 			}
 			
 			return power;
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			// Always hit when the opponent is underground
-			return defending.isSemiInvulnerableDigging();
 		}
 	}
 
@@ -3734,12 +3702,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean semiInvulnerability() {
-			return true;
-		}
-
 		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " went underground!";
+		}
+
+		public boolean semiInvulnerability() {
+			return true;
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -3758,6 +3726,11 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
+		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// Always hit when the opponent is underground
+			return defending.isSemiInvulnerableDigging();
+		}
+
 		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
 			int power = super.power;
 			
@@ -3772,11 +3745,6 @@ public abstract class Attack implements Serializable {
 			}
 			
 			return power;
-		}
-
-		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			// Always hit when the opponent is underground
-			return defending.isSemiInvulnerableDigging();
 		}
 	}
 
@@ -3812,10 +3780,6 @@ public abstract class Attack implements Serializable {
 			super.power = 70;
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
 		}
 	}
 
@@ -4060,10 +4024,6 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
 	}
 
 	static class SeismicToss extends Attack {
@@ -4099,10 +4059,6 @@ public abstract class Attack implements Serializable {
 			super.power = 100;
 			super.accuracy = 80;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
 		}
 	}
 
@@ -4347,10 +4303,6 @@ public abstract class Attack implements Serializable {
 			super.power = 70;
 			super.accuracy = 100;
 		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
 	}
 
 	static class FutureSight extends Attack {
@@ -4490,10 +4442,6 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
 	}
 
 	static class Constrict extends Attack {
@@ -4575,6 +4523,14 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 90;
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -4594,14 +4550,6 @@ public abstract class Attack implements Serializable {
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
 		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
-		}
 	}
 
 	static class SmackDown extends Attack implements AccuracyBypassEffect {
@@ -4614,14 +4562,14 @@ public abstract class Attack implements Serializable {
 			super.effects.add(EffectNamesies.GROUNDED);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// Twice as strong when the opponent is flying
-			return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
-		}
-
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			// Always hit when the opponent is flying
 			return defending.isSemiInvulnerableFlying();
+		}
+
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			// Twice as strong when the opponent is flying
+			return super.power*(o.isSemiInvulnerableFlying() ? 2 : 1);
 		}
 	}
 
@@ -4643,10 +4591,6 @@ public abstract class Attack implements Serializable {
 			super.power = 100;
 			super.accuracy = 80;
 		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
 	}
 
 	static class Steamroller extends Attack implements AccuracyBypassEffect {
@@ -4661,12 +4605,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
-		}
-
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
+		}
+
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
 		}
 	}
 
@@ -4701,12 +4645,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
-		}
-
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
+		}
+
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
 		}
 	}
 
@@ -4737,12 +4681,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean semiInvulnerability() {
-			return true;
-		}
-
 		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " sprang up!";
+		}
+
+		public boolean semiInvulnerability() {
+			return true;
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -4967,6 +4911,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 2;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -4985,14 +4937,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 2;
 		}
 	}
 
@@ -5065,12 +5009,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean semiInvulnerability() {
-			return true;
-		}
-
 		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " hid underwater!";
+		}
+
+		public boolean semiInvulnerability() {
+			return true;
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -5170,6 +5114,14 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -5188,14 +5140,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
 		}
 	}
 
@@ -5258,6 +5202,14 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -5276,14 +5228,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
 		}
 	}
 
@@ -5568,10 +5512,6 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 90;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
 	}
 
 	static class Flail extends Attack {
@@ -5673,6 +5613,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.BOMB_BALL);
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -5691,14 +5639,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
 		}
 	}
 
@@ -5712,6 +5652,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.BOMB_BALL);
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -5730,14 +5678,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
 		}
 	}
 
@@ -5788,6 +5728,14 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 90;
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 2;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -5806,14 +5754,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 2;
 		}
 	}
 
@@ -5826,6 +5766,14 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 90;
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -5844,14 +5792,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
 		}
 	}
 
@@ -5943,10 +5883,6 @@ public abstract class Attack implements Serializable {
 			super.status = StatusCondition.BURNED;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
 	}
 
 	static class MegaKick extends Attack {
@@ -5971,6 +5907,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -5989,14 +5933,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
 		}
 	}
 
@@ -6090,14 +6026,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			// Does not deal double damage when opponent is flying
-			return super.power;
-		}
-
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			// Always hit when the opponent is flying
 			return defending.isSemiInvulnerableFlying();
+		}
+
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			// Does not deal double damage when opponent is flying
+			return super.power;
 		}
 	}
 
@@ -6568,10 +6504,6 @@ public abstract class Attack implements Serializable {
 			return user.getName() + " whipped up a whirlwind!";
 		}
 
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
-
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (this.isCharging(user)) {
 				Messages.add(this.getChargeMessage(user));
@@ -6987,10 +6919,6 @@ public abstract class Attack implements Serializable {
 			return user.getName() + " started glowing!";
 		}
 
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
-
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (this.isCharging(user)) {
 				Messages.add(this.getChargeMessage(user));
@@ -7010,12 +6938,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
-		}
-
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
+		}
+
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
 		}
 	}
 
@@ -7471,6 +7399,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
+		public int getMinHits() {
+			return 3;
+		}
+
+		public int getMaxHits() {
+			return 3;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -7489,14 +7425,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 3;
-		}
-
-		public int getMaxHits() {
-			return 3;
 		}
 	}
 
@@ -7569,10 +7497,6 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.AEROBLAST, Type.FLYING, MoveCategory.SPECIAL, 5, "A vortex of air is shot at the target to inflict damage. Critical hits land more easily.");
 			super.power = 100;
 			super.accuracy = 95;
-		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
 		}
 	}
 
@@ -7680,6 +7604,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -7698,14 +7630,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
 		}
 	}
 
@@ -8006,10 +7930,6 @@ public abstract class Attack implements Serializable {
 			super.power = 90;
 			super.accuracy = 100;
 		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
 	}
 
 	static class Chatter extends Attack {
@@ -8034,6 +7954,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 2;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -8052,14 +7980,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 2;
 		}
 	}
 
@@ -8118,10 +8038,6 @@ public abstract class Attack implements Serializable {
 			super.power = 100;
 			super.accuracy = 95;
 		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
 	}
 
 	static class MagmaStorm extends Attack {
@@ -8161,12 +8077,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean semiInvulnerability() {
-			return true;
-		}
-
 		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " disappeared!";
+		}
+
+		public boolean semiInvulnerability() {
+			return true;
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -8355,10 +8271,6 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
-
-		public boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
-		}
 	}
 
 	static class FrostBreath extends Attack implements AlwaysCritEffect {
@@ -8368,10 +8280,6 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.FROST_BREATH, Type.ICE, MoveCategory.SPECIAL, 10, "The user blows a cold breath on the target. This attack always results in a critical hit.");
 			super.power = 60;
 			super.accuracy = 90;
-		}
-
-		public boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
 		}
 	}
 
@@ -8423,6 +8331,14 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -8441,14 +8357,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
 		}
 	}
 
@@ -8497,6 +8405,14 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 85;
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 2;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -8515,14 +8431,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 2;
 		}
 	}
 
@@ -9614,20 +9522,20 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public boolean semiInvulnerability() {
-			return true;
-		}
-
-		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
-			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
-		}
-
 		public String getChargeMessage(ActivePokemon user) {
 			return user.getName() + " vanished suddenly!";
 		}
 
+		public boolean semiInvulnerability() {
+			return true;
+		}
+
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
+		}
+
+		public int setPower(Battle b, ActivePokemon me, ActivePokemon o) {
+			return super.power*(o.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1);
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -9967,6 +9875,14 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
+		public int getMinHits() {
+			return 2;
+		}
+
+		public int getMaxHits() {
+			return 5;
+		}
+
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			int hits = this.getNumHits(me);
 			
@@ -9985,14 +9901,6 @@ public abstract class Attack implements Serializable {
 			
 			// Print hits and gtfo
 			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
-		}
-
-		public int getMinHits() {
-			return 2;
-		}
-
-		public int getMaxHits() {
-			return 5;
 		}
 	}
 
@@ -10469,6 +10377,10 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 		}
 
+		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.isType(b, Type.FIRE);
+		}
+
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			Type[] type = victim.getType(b);
 			
@@ -10482,10 +10394,6 @@ public abstract class Attack implements Serializable {
 			}
 			
 			return null;
-		}
-
-		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return user.isType(b, Type.FIRE);
 		}
 	}
 

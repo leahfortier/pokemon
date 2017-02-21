@@ -905,7 +905,7 @@ Mist:
 	SubsideMessage: "The mist faded."
 	Defog: "The mist faded."
 	Int: StatProtectingEffect, DefogRelease
-	StatProtect: 
+	StatProtectingEffect:
 		return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
 		###
 	StatProtectMessage: 
@@ -1130,7 +1130,9 @@ ConsumedItem:
 	CanHave: True
 *
 FairyLock:
-	Int: OpponentTrappingEffect
+	OppTrappingMessage:
+		return escaper.getName() + " is trapped by the Fairy Lock!";
+		###
 	OppTrapped:
 		// TODO: This isn't right
 		return true;

@@ -71,16 +71,16 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			return !(b.getWeather().namesies() == this.namesies);
 		}
 
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			Messages.add(new MessageUpdate("The rain continues to pour."));
+		}
+
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "It started to rain!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim) {
 			return "The rain stopped.";
-		}
-
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			Messages.add(new MessageUpdate("The rain continues to pour."));
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -109,16 +109,16 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			return !(b.getWeather().namesies() == this.namesies);
 		}
 
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			Messages.add(new MessageUpdate("The sunlight is strong."));
+		}
+
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "The sunlight turned harsh!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim) {
 			return "The sunlight faded.";
-		}
-
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			Messages.add(new MessageUpdate("The sunlight is strong."));
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {

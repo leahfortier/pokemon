@@ -261,15 +261,15 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.SOLAR_POWER, "Boosts Sp. Atk, but lowers HP in sunshine.");
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return user.getAttack().getCategory() == MoveCategory.SPECIAL && b.getWeather().namesies() == EffectNamesies.SUNNY ? 1.5 : 1;
-		}
-
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
 				Messages.add(new MessageUpdate(victim.getName() + " lost some of its HP due to its " + this.getName() + "!"));
 				victim.reduceHealthFraction(b, 1/8.0);
 			}
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttack().getCategory() == MoveCategory.SPECIAL && b.getWeather().namesies() == EffectNamesies.SUNNY ? 1.5 : 1;
 		}
 	}
 
@@ -381,16 +381,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.KEEN_EYE, "Prevents the Pok\u00e9mon from losing accuracy.");
 		}
 
+		public boolean ignoreStage(Stat s) {
+			return s == Stat.EVASION;
+		}
+
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return stat == Stat.ACCURACY;
 		}
 
 		public String preventionMessage(ActivePokemon p, Stat s) {
 			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
-		}
-
-		public boolean ignoreStage(Stat s) {
-			return s == Stat.EVASION;
 		}
 	}
 
@@ -601,8 +601,8 @@ public abstract class Ability implements Serializable {
 			return activated;
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!";
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return activated && user.getAttackType() == Type.FIRE ? 1.5 : 1;
 		}
 
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -613,8 +613,8 @@ public abstract class Ability implements Serializable {
 			activated = true;
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return activated && user.getAttackType() == Type.FIRE ? 1.5 : 1;
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!";
 		}
 	}
 
@@ -782,20 +782,20 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.LIMBER, "The Pok\u00e9mon is protected from paralysis.");
 		}
 
-		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-			return status == StatusCondition.PARALYZED;
-		}
-
-		public String statusPreventionMessage(ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents paralysis!";
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			removeStatus(b, enterer);
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
+		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+			return status == StatusCondition.PARALYZED;
+		}
+
+		public String statusPreventionMessage(ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents paralysis!";
 		}
 	}
 
@@ -813,20 +813,20 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.DAMP, "Prevents combatants from self destructing.");
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return blockityMessage(user, victim);
-		}
-
-		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return checkeroo(user);
-		}
-
 		public boolean block(Battle b, ActivePokemon user) {
 			return checkeroo(user);
 		}
 
 		public String getBlockMessage(Battle b, ActivePokemon user) {
 			return blockityMessage(user, user);
+		}
+
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return checkeroo(user);
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return blockityMessage(user, victim);
 		}
 	}
 
@@ -856,20 +856,20 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.VITAL_SPIRIT, "Prevents the Pok\u00e9mon from falling asleep.");
 		}
 
-		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-			return status == StatusCondition.ASLEEP;
-		}
-
-		public String statusPreventionMessage(ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents sleep!";
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			removeStatus(b, enterer);
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
+		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+			return status == StatusCondition.ASLEEP;
+		}
+
+		public String statusPreventionMessage(ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents sleep!";
 		}
 	}
 
@@ -885,20 +885,20 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.INSOMNIA, "Prevents the Pok\u00e9mon from falling asleep.");
 		}
 
-		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-			return status == StatusCondition.ASLEEP;
-		}
-
-		public String statusPreventionMessage(ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents sleep!";
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			removeStatus(b, enterer);
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
+		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+			return status == StatusCondition.ASLEEP;
+		}
+
+		public String statusPreventionMessage(ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents sleep!";
 		}
 	}
 
@@ -976,17 +976,17 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.FULL_METAL_BODY, "Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats.");
 		}
 
-		public boolean unbreakableMold() {
-			// Ability is not ignored even when the opponent breaks the mold
-			return true;
-		}
-
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return true;
 		}
 
 		public String preventionMessage(ActivePokemon p, Stat s) {
 			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
+		}
+
+		public boolean unbreakableMold() {
+			// Ability is not ignored even when the opponent breaks the mold
+			return true;
 		}
 	}
 
@@ -1013,10 +1013,6 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.STURDY, "The Pok\u00e9mon is protected against 1-hit KO attacks.");
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents OHKO moves!";
-		}
-
 		public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth) {
 			return fullHealth;
 		}
@@ -1028,6 +1024,10 @@ public abstract class Ability implements Serializable {
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttack().isMoveType(MoveType.ONE_HIT_KO);
 		}
+
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents OHKO moves!";
+		}
 	}
 
 	static class Oblivious extends Ability implements AttackBlocker {
@@ -1037,12 +1037,12 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.OBLIVIOUS, "Prevents the Pok\u00e9mon from becoming infatuated.");
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!";
-		}
-
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttack().namesies() == AttackNamesies.CAPTIVATE;
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!";
 		}
 	}
 
@@ -1126,10 +1126,6 @@ public abstract class Ability implements Serializable {
 		ShellArmor() {
 			super(AbilityNamesies.SHELL_ARMOR, "The Pok\u00e9mon is protected against critical hits.");
 		}
-
-		public boolean blockCrits() {
-			return true;
-		}
 	}
 
 	static class BattleArmor extends Ability implements CritBlockerEffect {
@@ -1137,10 +1133,6 @@ public abstract class Ability implements Serializable {
 
 		BattleArmor() {
 			super(AbilityNamesies.BATTLE_ARMOR, "The Pok\u00e9mon is protected against critical hits.");
-		}
-
-		public boolean blockCrits() {
-			return true;
 		}
 	}
 
@@ -1232,12 +1224,12 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.SOUNDPROOF, "Gives full immunity to all sound-based moves.");
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents sound-based moves!";
-		}
-
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttack().isMoveType(MoveType.SOUND_BASED);
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents sound-based moves!";
 		}
 	}
 
@@ -1260,14 +1252,14 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.IRON_FIST, "Boosts the power of punching moves.");
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return user.getAttack().isMoveType(MoveType.PUNCHING) ? 1.2 : 1;
-		}
-
 		public void enter(Battle b, ActivePokemon enterer) {
 			if (enterer.getPokemonInfo().namesies() == PokemonNamesies.PANGORO) {
 				Messages.add(new MessageUpdate(enterer.getName() + " does not break the mold!!!!!!!"));
 			}
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttack().isMoveType(MoveType.PUNCHING) ? 1.2 : 1;
 		}
 	}
 
@@ -1353,20 +1345,20 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.WATER_VEIL, "Prevents the Pok\u00e9mon from getting a burn.");
 		}
 
-		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-			return status == StatusCondition.BURNED;
-		}
-
-		public String statusPreventionMessage(ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents burns!";
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			removeStatus(b, enterer);
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
+		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+			return status == StatusCondition.BURNED;
+		}
+
+		public String statusPreventionMessage(ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents burns!";
 		}
 	}
 
@@ -1389,13 +1381,13 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.PRISM_ARMOR, "Reduces the power of supereffective attacks taken.");
 		}
 
+		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return TypeAdvantage.isSuperEffective(user, victim, b) ? .75 : 1;
+		}
+
 		public boolean unbreakableMold() {
 			// Ability is not ignored even when the opponent breaks the mold
 			return true;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return TypeAdvantage.isSuperEffective(user, victim, b) ? .75 : 1;
 		}
 	}
 
@@ -1474,12 +1466,12 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.IMPOSTER, "It transforms itself into the Pok\u00e9mon it is facing.");
 		}
 
-		public boolean isStealable() {
-			return false;
-		}
-
 		public void enter(Battle b, ActivePokemon enterer) {
 			EffectNamesies.TRANSFORMED.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+		}
+
+		public boolean isStealable() {
+			return false;
 		}
 	}
 
@@ -1570,8 +1562,14 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.TRACE, "The Pok\u00e9mon copies the foe's ability.");
 		}
 
-		public boolean isStealable() {
-			return false;
+		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
+			Ability otherAbility = b.getOtherPokemon(victim).getAbility();
+			return otherAbility.namesies().getNewAbility();
+		}
+
+		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+			ActivePokemon other = b.getOtherPokemon(victim);
+			return victim.getName() + " traced " + other.getName() + "'s " + other.getAbility().getName() + "!";
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
@@ -1583,14 +1581,8 @@ public abstract class Ability implements Serializable {
 			EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, true);
 		}
 
-		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			Ability otherAbility = b.getOtherPokemon(victim).getAbility();
-			return otherAbility.namesies().getNewAbility();
-		}
-
-		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			ActivePokemon other = b.getOtherPokemon(victim);
-			return victim.getName() + " traced " + other.getName() + "'s " + other.getAbility().getName() + "!";
+		public boolean isStealable() {
+			return false;
 		}
 	}
 
@@ -1638,20 +1630,20 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.IMMUNITY, "Prevents the Pok\u00e9mon from getting poisoned.");
 		}
 
-		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-			return status == StatusCondition.POISONED;
-		}
-
-		public String statusPreventionMessage(ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents poison!";
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			removeStatus(b, enterer);
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
+		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+			return status == StatusCondition.POISONED;
+		}
+
+		public String statusPreventionMessage(ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents poison!";
 		}
 	}
 
@@ -1706,13 +1698,13 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.SHADOW_SHIELD, "Reduces the amount of damage the Pokémon takes while its HP is full.");
 		}
 
+		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.fullHealth() ? .5 : 1;
+		}
+
 		public boolean unbreakableMold() {
 			// Ability is not ignored even when the opponent breaks the mold
 			return true;
-		}
-
-		public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return victim.fullHealth() ? .5 : 1;
 		}
 	}
 
@@ -1800,10 +1792,6 @@ public abstract class Ability implements Serializable {
 		SuperLuck() {
 			super(AbilityNamesies.SUPER_LUCK, "Heightens the critical-hit ratios of moves.");
 		}
-
-		public int increaseCritStage(int stage, ActivePokemon p) {
-			return stage + 1;
-		}
 	}
 
 	static class ShadowTag extends Ability implements OpponentTrappingEffect {
@@ -1854,20 +1842,20 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.MAGMA_ARMOR, "Prevents the Pok\u00e9mon from becoming frozen.");
 		}
 
-		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-			return status == StatusCondition.FROZEN;
-		}
-
-		public String statusPreventionMessage(ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents freezing!";
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			removeStatus(b, enterer);
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
+		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+			return status == StatusCondition.FROZEN;
+		}
+
+		public String statusPreventionMessage(ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents freezing!";
 		}
 	}
 
@@ -1878,13 +1866,13 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.SUCTION_CUPS, "Negates all moves that force switching out.");
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents it from switching!";
-		}
-
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Attack attack = user.getAttack();
 			return attack instanceof SwapOpponentEffect && attack.isStatusMove();
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents it from switching!";
 		}
 	}
 
@@ -1966,6 +1954,11 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.WONDER_GUARD, "Only supereffective moves will hit.");
 		}
 
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// Status moves, super-effective moves, and None-type moves always hit
+			return !user.getAttack().isStatusMove() && !TypeAdvantage.isSuperEffective(user, victim, b) && !user.isAttackType(Type.NO_TYPE);
+		}
+
 		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return victim.getName() + "'s " + this.getName() + " makes it immune to " + user.getAttack().getName() + "!";
 		}
@@ -1976,11 +1969,6 @@ public abstract class Ability implements Serializable {
 
 		public boolean isStealable() {
 			return false;
-		}
-
-		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// Status moves, super-effective moves, and None-type moves always hit
-			return !user.getAttack().isStatusMove() && !TypeAdvantage.isSuperEffective(user, victim, b) && !user.isAttackType(Type.NO_TYPE);
 		}
 	}
 
@@ -2133,16 +2121,16 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.COLOR_CHANGE, "Changes the Pok\u00e9mon's type to the foe's move.");
 		}
 
+		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+			return new Type[] { type, Type.NO_TYPE };
+		}
+
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Type t = user.getAttackType();
 			if (!victim.isType(b, t)) {
 				type = t;
 				EffectNamesies.CHANGE_TYPE.getEffect().cast(b, victim, victim, CastSource.ABILITY, true);
 			}
-		}
-
-		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return new Type[] { type, Type.NO_TYPE };
 		}
 	}
 
@@ -2373,16 +2361,16 @@ public abstract class Ability implements Serializable {
 			this.count = 0;
 		}
 
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			count++;
+		}
+
 		public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
 			return count < 5;
 		}
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.ATTACK || s == Stat.SPEED;
-		}
-
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			count++;
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
@@ -2507,6 +2495,14 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.MUMMY, "Contact with this Pok\u00e9mon spreads this Ability.");
 		}
 
+		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
+			return AbilityNamesies.MUMMY.getNewAbility();
+		}
+
+		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+			return victim.getName() + "'s ability was changed to " + this.namesies().getName() + "!";
+		}
+
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (user.hasAbility(this.namesies) || !user.getAbility().isReplaceable()) {
 				return;
@@ -2514,14 +2510,6 @@ public abstract class Ability implements Serializable {
 			
 			// Cast the change ability effect onto the user
 			EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, victim, user, CastSource.ABILITY, true);
-		}
-
-		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return AbilityNamesies.MUMMY.getNewAbility();
-		}
-
-		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return victim.getName() + "'s ability was changed to " + this.namesies().getName() + "!";
 		}
 	}
 
@@ -2578,18 +2566,6 @@ public abstract class Ability implements Serializable {
 			this.activated = false;
 		}
 
-		public boolean isActive() {
-			return activated;
-		}
-
-		public void deactivate(Battle b, ActivePokemon victim) {
-			breakIllusion(b, victim);
-		}
-
-		public boolean isStealable() {
-			return false;
-		}
-
 		public void enter(Battle b, ActivePokemon enterer) {
 			// No Illusion today...
 			if (!activated) {
@@ -2599,14 +2575,6 @@ public abstract class Ability implements Serializable {
 			// Display the Illusion changes
 			Messages.add(new MessageUpdate().withNewPokemon(illusionSpecies, illusionShiny, false, enterer.isPlayer()));
 			Messages.add(new MessageUpdate().updatePokemon(b, enterer));
-		}
-
-		public void switchOut(ActivePokemon switchee) {
-			activated = false;
-		}
-
-		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			breakIllusion(b, victim);
 		}
 
 		public Type[] getType(Battle b, ActivePokemon p, boolean display) {
@@ -2656,6 +2624,26 @@ public abstract class Ability implements Serializable {
 			illusionType = illusion.getActualType();
 			illusionSpecies = illusion.getPokemonInfo();
 			illusionShiny = illusion.isShiny();
+		}
+
+		public boolean isActive() {
+			return activated;
+		}
+
+		public void deactivate(Battle b, ActivePokemon victim) {
+			breakIllusion(b, victim);
+		}
+
+		public void switchOut(ActivePokemon switchee) {
+			activated = false;
+		}
+
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			breakIllusion(b, victim);
+		}
+
+		public boolean isStealable() {
+			return false;
 		}
 	}
 
@@ -2795,15 +2783,15 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.PICKPOCKET, "Steals an item when hit by another Pok\u00e9mon.");
 		}
 
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+			return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
+		}
+
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// Steal from the Pokemon who made physical contact with you
 			if (!victim.isFainted(b) && victim.canStealItem(b, user)) {
 				victim.swapItems(b, user, this);
 			}
-		}
-
-		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
-			return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
 		}
 	}
 
@@ -2935,12 +2923,12 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.FORECAST, "Changes with the weather.");
 		}
 
-		public boolean isStealable() {
-			return false;
-		}
-
 		public Type[] getType(Battle b, ActivePokemon p, boolean display) {
 			return new Type[] { b.getWeather().getElement(), Type.NO_TYPE };
+		}
+
+		public boolean isStealable() {
+			return false;
 		}
 	}
 
@@ -2951,12 +2939,12 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.BULLETPROOF, "Protects the Pok\u00e9mon from some ball and bomb moves.");
 		}
 
-		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents bomb/ball moves!";
-		}
-
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttack().isMoveType(MoveType.BOMB_BALL);
+		}
+
+		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents bomb/ball moves!";
 		}
 	}
 
@@ -3007,15 +2995,15 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.MAGICIAN, "The Pok\u00e9mon steals the held item of a Pok\u00e9mon it hits with a move.");
 		}
 
+		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+			return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
+		}
+
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			// Steal the victim's item when damage is dealt
 			if (!user.isFainted(b) && user.canStealItem(b, victim)) {
 				user.swapItems(b, victim, this);
 			}
-		}
-
-		public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
-			return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
 		}
 	}
 
@@ -3075,20 +3063,20 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.SWEET_VEIL, "Prevents itself and ally Pok\u00e9mon from falling asleep.");
 		}
 
-		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-			return status == StatusCondition.ASLEEP;
-		}
-
-		public String statusPreventionMessage(ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents sleep!";
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			removeStatus(b, enterer);
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
+		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+			return status == StatusCondition.ASLEEP;
+		}
+
+		public String statusPreventionMessage(ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents sleep!";
 		}
 	}
 
@@ -3127,6 +3115,14 @@ public abstract class Ability implements Serializable {
 			return Type.FAIRY;
 		}
 
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			this.activated = false;
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return activated ? 1.3 : 1;
+		}
+
 		public Type changeAttackType(Attack attack, Type original) {
 			if (original == Type.NORMAL) {
 				this.activated = true;
@@ -3134,14 +3130,6 @@ public abstract class Ability implements Serializable {
 			}
 			
 			return original;
-		}
-
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			this.activated = false;
-		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return activated ? 1.3 : 1;
 		}
 	}
 
@@ -3158,6 +3146,14 @@ public abstract class Ability implements Serializable {
 			return Type.ICE;
 		}
 
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			this.activated = false;
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return activated ? 1.3 : 1;
+		}
+
 		public Type changeAttackType(Attack attack, Type original) {
 			if (original == Type.NORMAL) {
 				this.activated = true;
@@ -3165,14 +3161,6 @@ public abstract class Ability implements Serializable {
 			}
 			
 			return original;
-		}
-
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			this.activated = false;
-		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return activated ? 1.3 : 1;
 		}
 	}
 
@@ -3440,6 +3428,10 @@ public abstract class Ability implements Serializable {
 			super(AbilityNamesies.PROTEAN, "Changes the Pok\u00e9mon's type to the type of the move it's using.");
 		}
 
+		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+			return new Type[] { type, Type.NO_TYPE };
+		}
+
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			// Protean activates for all moves except for Struggle
 			if (p.getAttack().namesies() != AttackNamesies.STRUGGLE) {
@@ -3448,10 +3440,6 @@ public abstract class Ability implements Serializable {
 			}
 			
 			return true;
-		}
-
-		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			return new Type[] { type, Type.NO_TYPE };
 		}
 	}
 
@@ -3513,20 +3501,20 @@ public abstract class Ability implements Serializable {
 			return user.isAttackType(Type.FIRE) ? .5 : 1;
 		}
 
-		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-			return status == StatusCondition.BURNED;
-		}
-
-		public String statusPreventionMessage(ActivePokemon victim) {
-			return victim.getName() + "'s " + this.getName() + " prevents burns!";
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			removeStatus(b, victim);
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			removeStatus(b, enterer);
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
+		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+			return status == StatusCondition.BURNED;
+		}
+
+		public String statusPreventionMessage(ActivePokemon victim) {
+			return victim.getName() + "'s " + this.getName() + " prevents burns!";
 		}
 	}
 
@@ -3633,6 +3621,14 @@ public abstract class Ability implements Serializable {
 			return Type.ELECTRIC;
 		}
 
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			this.activated = false;
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return activated ? 1.3 : 1;
+		}
+
 		public Type changeAttackType(Attack attack, Type original) {
 			if (original == Type.NORMAL) {
 				this.activated = true;
@@ -3640,14 +3636,6 @@ public abstract class Ability implements Serializable {
 			}
 			
 			return original;
-		}
-
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			this.activated = false;
-		}
-
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return activated ? 1.3 : 1;
 		}
 	}
 
@@ -3660,14 +3648,6 @@ public abstract class Ability implements Serializable {
 			this.activated = false;
 		}
 
-		public boolean isReplaceable() {
-			return false;
-		}
-
-		public boolean isStealable() {
-			return false;
-		}
-
 		public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
 			if (!activated && b.getOtherPokemon(damageTaker).getAttributes().isAttacking()) {
 				Messages.add(new MessageUpdate(damageTaker.getName() + "'s disguise was busted!!"));
@@ -3675,6 +3655,14 @@ public abstract class Ability implements Serializable {
 				return true;
 			}
 			
+			return false;
+		}
+
+		public boolean isReplaceable() {
+			return false;
+		}
+
+		public boolean isStealable() {
 			return false;
 		}
 	}

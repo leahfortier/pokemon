@@ -259,10 +259,7 @@ Dry Skin:
 *
 Arena Trap:
 	Desc: Prevents the foe from fleeing.
-	Int: OpponentTrappingEffect
-	OppTrapped: 
-		return !escaper.isLevitating(b) && !escaper.isType(b, Type.GHOST);
-		###
+	OpponentTrappingAbility: !escaper.isLevitating(b) && !escaper.isType(b, Type.GHOST)
 *
 Technician:
 	Desc: Powers up the Pok\u00e9mon's weaker moves.
@@ -379,10 +376,7 @@ Oblivious:
 	BlockMessage: victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"
 *
 Magnet Pull:
-	Int: OpponentTrappingEffect
-	OppTrapped: 
-		return escaper.isType(b, Type.STEEL) && !escaper.isType(b, Type.GHOST);
-		###
+	OpponentTrappingAbility: escaper.isType(b, Type.STEEL) && !escaper.isType(b, Type.GHOST)
 	Desc: Prevents Steel-type Pok\u00e9mon from escaping.
 *
 Unaware:
@@ -720,10 +714,7 @@ Super Luck:
 *
 Shadow Tag:
 	Desc: Prevents the foe from escaping.
-	Int: OpponentTrappingEffect
-	OppTrapped:  
-		return !escaper.hasAbility(this.namesies) && !escaper.isType(b, Type.GHOST);
-		###
+	OpponentTrappingAbility: !escaper.hasAbility(this.namesies) && !escaper.isType(b, Type.GHOST)
 *
 Overcoat:
 	Desc: Protects the Pok\u00e9mon from damage from weather.

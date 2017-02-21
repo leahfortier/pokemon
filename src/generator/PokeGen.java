@@ -256,26 +256,7 @@ class PokeGen {
 					inputFormatter
 			);
 
-			for (String interfaceName : currentInterfaces) {
-				interfaces.add(interfaceName);
-
-				interfaceName = interfaceName.replace("Hidden-", "");
-
-				List<Entry<String, MethodInfo>> list = inputFormatter.getInterfaceMethods(interfaceName);
-				if (list == null) {
-					Global.error("Invalid interface name " + interfaceName + " for " + fields.getClassName());
-				}
-
-				moreFields |= MethodInfo.addMethodInfo(
-						methods,
-						list,
-						fields,
-						nextInterfaces,
-						interfaceName,
-						this.currentGen.getSuperClassName(),
-						inputFormatter
-				);
-			}
+			interfaces.addAll(currentInterfaces);
 			
 			currentInterfaces = nextInterfaces;
 			nextInterfaces = new ArrayList<>();

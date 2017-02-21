@@ -102,8 +102,25 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.isType(b, Type.GRASS) || victim.hasEffect(this.namesies));
 		}
 
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+				return;
+			}
+			
+			Messages.add(new MessageUpdate(this.getSapMessage(victim)));
+			this.sapHealth(b, b.getOtherPokemon(victim), victim, victim.reduceHealthFraction(b, 1/8.0), false);
+		}
+
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return victim.getName() + " was seeded!";
+		}
+
+		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
+			Messages.add(new MessageUpdate(releaser.getName() + " was released from leech seed!"));
+			
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			releaser.getEffects().remove(this);
+			b.getEffects(releaser).remove(this);
 		}
 
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -115,23 +132,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			}
 			
 			return super.getFailMessage(b, user, victim);
-		}
-
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				return;
-			}
-			
-			Messages.add(new MessageUpdate(this.getSapMessage(victim)));
-			this.sapHealth(b, b.getOtherPokemon(victim), victim, victim.reduceHealthFraction(b, 1/8.0), false);
-		}
-
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(new MessageUpdate(releaser.getName() + " was released from leech seed!"));
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
@@ -151,6 +151,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(!Status.applies(StatusCondition.POISONED, b, caster, victim));
 		}
 
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			turns++;
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
 			Status.giveStatus(b, caster, victim, StatusCondition.POISONED);
@@ -167,10 +171,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			return super.getFailMessage(b, user, victim);
 		}
-
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			turns++;
-		}
 	}
 
 	static class Flinch extends PokemonEffect implements BeforeTurnEffect {
@@ -184,6 +184,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !((victim.hasAbility(AbilityNamesies.INNER_FOCUS) && !caster.breaksTheMold()) || !b.isFirstAttack() || victim.hasEffect(this.namesies));
 		}
 
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+			return false;
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
 			if (victim.hasAbility(AbilityNamesies.STEADFAST)) {
@@ -193,10 +197,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return victim.getName() + " flinched!";
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			return false;
 		}
 	}
 
@@ -224,6 +224,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by fire spin.";
 		}
 
+		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
+			Messages.add(new MessageUpdate(releaser.getName() + " was released from fire spin!"));
+			
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			releaser.getEffects().remove(this);
+			b.getEffects(releaser).remove(this);
+		}
+
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
@@ -235,21 +243,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean trapped(Battle b, ActivePokemon escaper) {
-			// Ghost-type Pokemon can always escape
-			return !escaper.isType(b, Type.GHOST);
-		}
-
 		public String trappingMessage(ActivePokemon trapped) {
 			return trapped.getName() + " cannot be recalled due to fire spin!";
-		}
-
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(new MessageUpdate(releaser.getName() + " was released from fire spin!"));
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -277,6 +272,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by infestation.";
 		}
 
+		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
+			Messages.add(new MessageUpdate(releaser.getName() + " was released from infestation!"));
+			
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			releaser.getEffects().remove(this);
+			b.getEffects(releaser).remove(this);
+		}
+
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
@@ -288,21 +291,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean trapped(Battle b, ActivePokemon escaper) {
-			// Ghost-type Pokemon can always escape
-			return !escaper.isType(b, Type.GHOST);
-		}
-
 		public String trappingMessage(ActivePokemon trapped) {
 			return trapped.getName() + " cannot be recalled due to infestation!";
-		}
-
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(new MessageUpdate(releaser.getName() + " was released from infestation!"));
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -330,6 +320,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by magma storm.";
 		}
 
+		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
+			Messages.add(new MessageUpdate(releaser.getName() + " was released from magma storm!"));
+			
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			releaser.getEffects().remove(this);
+			b.getEffects(releaser).remove(this);
+		}
+
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
@@ -341,21 +339,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean trapped(Battle b, ActivePokemon escaper) {
-			// Ghost-type Pokemon can always escape
-			return !escaper.isType(b, Type.GHOST);
-		}
-
 		public String trappingMessage(ActivePokemon trapped) {
 			return trapped.getName() + " cannot be recalled due to magma storm!";
-		}
-
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(new MessageUpdate(releaser.getName() + " was released from magma storm!"));
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -383,6 +368,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by clamp.";
 		}
 
+		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
+			Messages.add(new MessageUpdate(releaser.getName() + " was released from clamp!"));
+			
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			releaser.getEffects().remove(this);
+			b.getEffects(releaser).remove(this);
+		}
+
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
@@ -394,21 +387,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean trapped(Battle b, ActivePokemon escaper) {
-			// Ghost-type Pokemon can always escape
-			return !escaper.isType(b, Type.GHOST);
-		}
-
 		public String trappingMessage(ActivePokemon trapped) {
 			return trapped.getName() + " cannot be recalled due to clamp!";
-		}
-
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(new MessageUpdate(releaser.getName() + " was released from clamp!"));
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -436,6 +416,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by whirlpool.";
 		}
 
+		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
+			Messages.add(new MessageUpdate(releaser.getName() + " was released from whirlpool!"));
+			
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			releaser.getEffects().remove(this);
+			b.getEffects(releaser).remove(this);
+		}
+
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
@@ -447,21 +435,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean trapped(Battle b, ActivePokemon escaper) {
-			// Ghost-type Pokemon can always escape
-			return !escaper.isType(b, Type.GHOST);
-		}
-
 		public String trappingMessage(ActivePokemon trapped) {
 			return trapped.getName() + " cannot be recalled due to whirlpool!";
-		}
-
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(new MessageUpdate(releaser.getName() + " was released from whirlpool!"));
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -489,6 +464,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by wrap.";
 		}
 
+		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
+			Messages.add(new MessageUpdate(releaser.getName() + " was released from wrap!"));
+			
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			releaser.getEffects().remove(this);
+			b.getEffects(releaser).remove(this);
+		}
+
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
@@ -500,21 +483,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean trapped(Battle b, ActivePokemon escaper) {
-			// Ghost-type Pokemon can always escape
-			return !escaper.isType(b, Type.GHOST);
-		}
-
 		public String trappingMessage(ActivePokemon trapped) {
 			return trapped.getName() + " cannot be recalled due to wrap!";
-		}
-
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(new MessageUpdate(releaser.getName() + " was released from wrap!"));
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -542,6 +512,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by bind.";
 		}
 
+		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
+			Messages.add(new MessageUpdate(releaser.getName() + " was released from bind!"));
+			
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			releaser.getEffects().remove(this);
+			b.getEffects(releaser).remove(this);
+		}
+
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
@@ -553,21 +531,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean trapped(Battle b, ActivePokemon escaper) {
-			// Ghost-type Pokemon can always escape
-			return !escaper.isType(b, Type.GHOST);
-		}
-
 		public String trappingMessage(ActivePokemon trapped) {
 			return trapped.getName() + " cannot be recalled due to bind!";
-		}
-
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(new MessageUpdate(releaser.getName() + " was released from bind!"));
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -595,6 +560,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by sand tomb.";
 		}
 
+		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
+			Messages.add(new MessageUpdate(releaser.getName() + " was released from sand tomb!"));
+			
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
+			releaser.getEffects().remove(this);
+			b.getEffects(releaser).remove(this);
+		}
+
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
@@ -606,21 +579,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
 		}
 
-		public boolean trapped(Battle b, ActivePokemon escaper) {
-			// Ghost-type Pokemon can always escape
-			return !escaper.isType(b, Type.GHOST);
-		}
-
 		public String trappingMessage(ActivePokemon trapped) {
 			return trapped.getName() + " cannot be recalled due to sand tomb!";
-		}
-
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(new MessageUpdate(releaser.getName() + " was released from sand tomb!"));
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
 		}
 	}
 
@@ -635,6 +595,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
+		public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
+			// Pokemon that make contact with the king's shield have their attack reduced
+			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
+				p.getAttributes().modifyStage(opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT, "The King's Shield {change} " + p.getName() + "'s attack!");
+			}
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
@@ -646,13 +613,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return victim.getName() + " protected itself!";
-		}
-
-		public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
-			// Pokemon that make contact with the king's shield have their attack reduced
-			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
-				p.getAttributes().modifyStage(opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT, "The King's Shield {change} " + p.getName() + "'s attack!");
-			}
 		}
 	}
 
@@ -667,6 +627,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
+		public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
+			// Pokemon that make contact with the spiky shield have their health reduced
+			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
+				Messages.add(new MessageUpdate(p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!"));
+				p.reduceHealthFraction(b, 1/8.0);
+			}
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
@@ -678,14 +646,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return victim.getName() + " protected itself!";
-		}
-
-		public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
-			// Pokemon that make contact with the spiky shield have their health reduced
-			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
-				Messages.add(new MessageUpdate(p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!"));
-				p.reduceHealthFraction(b, 1/8.0);
-			}
 		}
 	}
 
@@ -700,6 +660,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
+		public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
+			// Pokemon that make contact with the baneful bunker are become poisoned
+			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusCondition.POISONED, b, opp, p)) {
+				Status.giveStatus(b, opp, p, StatusCondition.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
+			}
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
@@ -711,13 +678,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return victim.getName() + " protected itself!";
-		}
-
-		public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
-			// Pokemon that make contact with the baneful bunker are become poisoned
-			if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusCondition.POISONED, b, opp, p)) {
-				Status.giveStatus(b, opp, p, StatusCondition.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
-			}
 		}
 	}
 
@@ -757,6 +717,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
+		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
+			return b.getPriority(attacking, attacking.getAttack()) > 0;
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
@@ -768,10 +732,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return victim.getName() + " protected itself!";
-		}
-
-		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-			return b.getPriority(attacking, attacking.getAttack()) > 0;
 		}
 	}
 
@@ -786,6 +746,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
+		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
+			return attacking.getAttack().isStatusMove();
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
@@ -797,10 +761,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return victim.getName() + " protected itself!";
-		}
-
-		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-			return attacking.getAttack().isStatusMove();
 		}
 	}
 
@@ -815,6 +775,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
+		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
+			return !attacking.getAttack().isStatusMove();
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			// No successive decay for this move
 			super.cast(b, caster, victim, source, printCast);
@@ -822,10 +786,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return victim.getName() + " protected itself!";
-		}
-
-		public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-			return !attacking.getAttack().isStatusMove();
 		}
 	}
 
@@ -875,30 +835,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !((victim.hasAbility(AbilityNamesies.OWN_TEMPO) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies));
 		}
 
-		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			super.cast(b, caster, victim, source, printCast);
-			if (victim.isHoldingItem(b, ItemNamesies.PERSIM_BERRY)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + ItemNamesies.PERSIM_BERRY.getName() + " snapped it out of confusion!"));
-				victim.getAttributes().removeEffect(this.namesies);
-				victim.consumeItem(b);
-			}
-		}
-
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-			return victim.getName() + " became confused!";
-		}
-
-		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.hasEffect(this.namesies)) {
-				return victim.getName() + " is already confused!";
-			}
-			else if (victim.hasAbility(AbilityNamesies.OWN_TEMPO)) {
-				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents confusion!";
-			}
-			
-			return super.getFailMessage(b, user, victim);
-		}
-
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			// Snap it out!
 			if (turns == 0) {
@@ -925,6 +861,30 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			return true;
 		}
+
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+			super.cast(b, caster, victim, source, printCast);
+			if (victim.isHoldingItem(b, ItemNamesies.PERSIM_BERRY)) {
+				Messages.add(new MessageUpdate(victim.getName() + "'s " + ItemNamesies.PERSIM_BERRY.getName() + " snapped it out of confusion!"));
+				victim.getAttributes().removeEffect(this.namesies);
+				victim.consumeItem(b);
+			}
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+			return victim.getName() + " became confused!";
+		}
+
+		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (victim.hasEffect(this.namesies)) {
+				return victim.getName() + " is already confused!";
+			}
+			else if (victim.hasAbility(AbilityNamesies.OWN_TEMPO)) {
+				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents confusion!";
+			}
+			
+			return super.getFailMessage(b, user, victim);
+		}
 	}
 
 	static class SelfConfusion extends PokemonEffect implements ForceMoveEffect {
@@ -944,16 +904,16 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			super.cast(b, caster, victim, source, printCast);
 		}
 
+		public Move getForcedMove() {
+			return move;
+		}
+
 		public void subside(Battle b, ActivePokemon p) {
 			Confusion c = new Confusion();
 			if (c.applies(b, p, p, CastSource.EFFECT)) {
 				Messages.add(new MessageUpdate(p.getName() + " became confused due to fatigue!"));
 				p.addEffect(c);
 			}
-		}
-
-		public Move getForcedMove() {
-			return move;
 		}
 	}
 
@@ -976,20 +936,20 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return "The effects of " + victim.getName() + "'s Safeguard faded.";
 		}
 
-		public void releaseDefog(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate("The effects of " + victim.getName() + "'s Safeguard faded."));
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
-			victim.getEffects().remove(this);
-			b.getEffects(victim).remove(this);
-		}
-
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
 			return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
 		}
 
 		public String statusPreventionMessage(ActivePokemon victim) {
 			return "Safeguard protects " + victim.getName() + " from status conditions!";
+		}
+
+		public void releaseDefog(Battle b, ActivePokemon victim) {
+			Messages.add(new MessageUpdate("The effects of " + victim.getName() + "'s Safeguard faded."));
+			
+			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
+			victim.getEffects().remove(this);
+			b.getEffects(victim).remove(this);
 		}
 	}
 
@@ -1033,6 +993,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0 || victim.getAttributes().getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS) || victim.hasEffect(this.namesies));
 		}
 
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			if (move.getPP() == 0) active = false; // If the move runs out of PP, Encore immediately ends
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			move = victim.getAttributes().getLastMoveUsed();
 			super.cast(b, caster, victim, source, printCast);
@@ -1046,20 +1010,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return "The effects of " + victim.getName() + "'s encore faded.";
 		}
 
-		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being encored!";
-			}
-			
-			return super.getFailMessage(b, user, victim);
-		}
-
 		public Move getForcedMove() {
 			return move;
-		}
-
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (move.getPP() == 0) active = false; // If the move runs out of PP, Encore immediately ends
 		}
 
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
@@ -1068,6 +1020,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return "Only " + move.getAttack().getName() + " can be used right now!";
+		}
+
+		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
+				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being encored!";
+			}
+			
+			return super.getFailMessage(b, user, victim);
 		}
 	}
 
@@ -1085,6 +1045,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0 || victim.hasEffect(this.namesies));
 		}
 
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+			// TODO: What is happening here?
+			turns--;
+			return true;
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			disabled = victim.getAttributes().getLastMoveUsed();
 			super.cast(b, caster, victim, source, printCast);
@@ -1096,6 +1062,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getSubsideMessage(ActivePokemon victim) {
 			return victim.getName() + "'s " + disabled.getAttack().getName() + " is no longer disabled!";
+		}
+
+		public boolean usable(Battle b, ActivePokemon p, Move m) {
+			return disabled.getAttack().namesies() != m.getAttack().namesies();
+		}
+
+		public String getUnusableMessage(Battle b, ActivePokemon p) {
+			return disabled.getAttack().getName() + " is disabled!";
 		}
 
 		public boolean shouldSubside(Battle b, ActivePokemon victim) {
@@ -1111,20 +1085,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			}
 			
 			return super.getFailMessage(b, user, victim);
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			// TODO: What is happening here?
-			turns--;
-			return true;
-		}
-
-		public boolean usable(Battle b, ActivePokemon p, Move m) {
-			return disabled.getAttack().namesies() != m.getAttack().namesies();
-		}
-
-		public String getUnusableMessage(Battle b, ActivePokemon p) {
-			return disabled.getAttack().getName() + " is disabled!";
 		}
 	}
 
@@ -1316,6 +1276,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			this.turns = 0;
 		}
 
+		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
+			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE ? turns : 0;
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!victim.hasEffect(this.namesies)) {
 				super.cast(b, caster, victim, source, printCast);
@@ -1338,10 +1302,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public int getTurns() {
 			return turns;
-		}
-
-		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
-			return s == Stat.DEFENSE || s == Stat.SP_DEFENSE ? turns : 0;
 		}
 	}
 
@@ -1469,17 +1429,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-			return victim.getName() + " can't escape!";
-		}
-
-		public boolean trapped(Battle b, ActivePokemon escaper) {
-			// Ghost-type Pokemon can always escape
-			return !escaper.isType(b, Type.GHOST);
-		}
-
 		public String trappingMessage(ActivePokemon trapped) {
 			return trapped.getName() + " cannot be recalled at this time!";
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+			return victim.getName() + " can't escape!";
 		}
 	}
 
@@ -1548,14 +1503,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return user.getName() + " tormented " + victim.getName() + "!";
 		}
 
-		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents torment!";
-			}
-			
-			return super.getFailMessage(b, user, victim);
-		}
-
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			Move lastMoveUsed = p.getAttributes().getLastMoveUsed();
 			return (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != m.getAttack().namesies());
@@ -1563,6 +1510,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return p.getName() + " cannot use the same move twice in a row!";
+		}
+
+		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
+				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents torment!";
+			}
+			
+			return super.getFailMessage(b, user, victim);
 		}
 	}
 
@@ -1601,20 +1556,20 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return "The effects of the taunt wore off.";
 		}
 
-		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (victim.hasAbility(AbilityNamesies.OBLIVIOUS) || victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being taunted!";
-			}
-			
-			return super.getFailMessage(b, user, victim);
-		}
-
 		public boolean usable(Battle b, ActivePokemon p, Move m) {
 			return !m.getAttack().isStatusMove();
 		}
 
 		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return "No!! Not while you're under the effects of taunt!!";
+		}
+
+		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			if (victim.hasAbility(AbilityNamesies.OBLIVIOUS) || victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
+				return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being taunted!";
+			}
+			
+			return super.getFailMessage(b, user, victim);
 		}
 	}
 
@@ -1632,10 +1587,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return user.getName() + " began focusing!";
 		}
-
-		public boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			return true;
-		}
 	}
 
 	static class LockOn extends PokemonEffect implements PassableEffect, AccuracyBypassEffect {
@@ -1649,12 +1600,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-			return user.getName() + " took aim!";
-		}
-
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			return true;
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+			return user.getName() + " took aim!";
 		}
 	}
 
@@ -1667,6 +1618,11 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
 			return !(victim.isGrounded(b) || victim.hasEffect(this.namesies));
+		}
+
+		public boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			// Opponent can always strike you unless they are using a OHKO move or you are semi-invulnerable
+			return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO) && !defending.isSemiInvulnerable();
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
@@ -1683,11 +1639,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			// TODO: Fix this it's broken
 			// Effect.removeEffect(fallen.getEffects(), this.namesies());
 		}
-
-		public boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			// Opponent can always strike you unless they are using a OHKO move or you are semi-invulnerable
-			return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO) && !defending.isSemiInvulnerable();
-		}
 	}
 
 	static class Ingrain extends PokemonEffect implements TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect {
@@ -1699,23 +1650,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
 			return !(victim.hasEffect(this.namesies));
-		}
-
-		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			super.cast(b, caster, victim, source, printCast);
-			removeLevitation(b, victim);
-		}
-
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-			return victim.getName() + " planted its roots!";
-		}
-
-		public boolean trapped(Battle b, ActivePokemon escaper) {
-			return true;
-		}
-
-		public String trappingMessage(ActivePokemon trapped) {
-			return trapped.getName() + " cannot be recalled due to ingrain!";
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
@@ -1731,13 +1665,21 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to ingrain!").updatePokemon(b, victim));
 		}
 
-		private void removeLevitation(Battle b, ActivePokemon p) {
-			if (p.isSemiInvulnerableFlying()) {
-				p.getMove().switchReady(b, p);
-				Messages.add(new MessageUpdate(p.getName() + " fell to the ground!"));
-			}
-			
-			LevitationEffect.falllllllll(b, p);
+		public boolean trapped(Battle b, ActivePokemon escaper) {
+			return true;
+		}
+
+		public String trappingMessage(ActivePokemon trapped) {
+			return trapped.getName() + " cannot be recalled due to ingrain!";
+		}
+
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+			super.cast(b, caster, victim, source, printCast);
+			removeLevitation(b, victim);
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+			return victim.getName() + " planted its roots!";
 		}
 	}
 
@@ -1756,15 +1698,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			super.cast(b, caster, victim, source, printCast);
 			removeLevitation(b, victim);
 		}
-
-		private void removeLevitation(Battle b, ActivePokemon p) {
-			if (p.isSemiInvulnerableFlying()) {
-				p.getMove().switchReady(b, p);
-				Messages.add(new MessageUpdate(p.getName() + " fell to the ground!"));
-			}
-			
-			LevitationEffect.falllllllll(b, p);
-		}
 	}
 
 	static class Curse extends PokemonEffect implements EndTurnEffect, PassableEffect {
@@ -1778,15 +1711,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			super.cast(b, caster, victim, source, printCast);
-			caster.reduceHealthFraction(b, 1/2.0);
-		}
-
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-			return user.getName() + " cut its own HP and put a curse on " + victim.getName() + "!";
-		}
-
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
@@ -1794,6 +1718,15 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			Messages.add(new MessageUpdate(victim.getName() + " was hurt by the curse!"));
 			victim.reduceHealthFraction(b, 1/4.0);
+		}
+
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+			super.cast(b, caster, victim, source, printCast);
+			caster.reduceHealthFraction(b, 1/2.0);
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+			return user.getName() + " cut its own HP and put a curse on " + victim.getName() + "!";
 		}
 	}
 
@@ -1863,6 +1796,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			// If uproar runs out of PP, the effect immediately ends
+			if (uproar.getPP() == 0) {
+				active = false;
+			}
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			uproar = victim.getMove();
 			super.cast(b, caster, victim, source, printCast);
@@ -1891,13 +1831,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public String getUnusableMessage(Battle b, ActivePokemon p) {
 			return "Only Uproar can be used right now!";
 		}
-
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			// If uproar runs out of PP, the effect immediately ends
-			if (uproar.getPP() == 0) {
-				active = false;
-			}
-		}
 	}
 
 	static class AquaRing extends PokemonEffect implements PassableEffect, EndTurnEffect {
@@ -1911,10 +1844,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-			return user.getName() + " surrounded itself with a veil of water!";
-		}
-
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) return;
 			int healAmount = victim.healHealthFraction(1/16.0);
@@ -1923,6 +1852,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			}
 			
 			Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to aqua ring!").updatePokemon(b, victim));
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+			return user.getName() + " surrounded itself with a veil of water!";
 		}
 	}
 
@@ -1937,14 +1870,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(!victim.hasStatus(StatusCondition.ASLEEP) || victim.hasEffect(this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-			return victim.getName() + " began having a nightmare!";
-		}
-
-		public boolean shouldSubside(Battle b, ActivePokemon victim) {
-			return !victim.hasStatus(StatusCondition.ASLEEP);
-		}
-
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
@@ -1952,6 +1877,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			
 			Messages.add(new MessageUpdate(victim.getName() + " was hurt by its nightmare!"));
 			victim.reduceHealthFraction(b, 1/4.0);
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+			return victim.getName() + " began having a nightmare!";
+		}
+
+		public boolean shouldSubside(Battle b, ActivePokemon victim) {
+			return !victim.hasStatus(StatusCondition.ASLEEP);
 		}
 	}
 
@@ -2100,16 +2033,16 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " transformed into " + b.getOtherPokemon(victim).getPokemonInfo().getName() + "!";
 		}
 
+		public Type[] getType(Battle b, ActivePokemon p, boolean display) {
+			return type;
+		}
+
 		public List<Move> getMoveList(List<Move> actualMoves) {
 			return Arrays.asList(moveList);
 		}
 
 		public Integer getStat(ActivePokemon user, Stat stat) {
 			return stats[stat.index()];
-		}
-
-		public Type[] getType(Battle b, ActivePokemon p, boolean display) {
-			return type;
 		}
 	}
 
@@ -2135,20 +2068,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " put in a substitute!";
 		}
 
-		public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
-			this.hp -= damageAmount;
-			if (this.hp <= 0) {
-				Messages.add(new MessageUpdate("The substitute broke!"));
-				damageTaker.getAttributes().removeEffect(this.namesies());
-			}
-			else {
-				Messages.add(new MessageUpdate("The substitute absorbed the hit!"));
-			}
-			
-			// Substitute always blocks damage
-			return true;
-		}
-
 		public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// Self-target and field moves are always successful
 			if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD)) {
@@ -2166,6 +2085,20 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			}
 			
 			return false;
+		}
+
+		public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
+			this.hp -= damageAmount;
+			if (this.hp <= 0) {
+				Messages.add(new MessageUpdate("The substitute broke!"));
+				damageTaker.getAttributes().removeEffect(this.namesies());
+			}
+			else {
+				Messages.add(new MessageUpdate("The substitute absorbed the hit!"));
+			}
+			
+			// Substitute always blocks damage
+			return true;
 		}
 	}
 
@@ -2243,6 +2176,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			this.damage = 0;
 		}
 
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			damage += victim.getAttributes().getDamageTaken();
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			Bide bidesies = (Bide)victim.getEffect(this.namesies);
 			
@@ -2279,16 +2216,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return user.getName() + " is storing energy!";
 		}
 
-		public int getTurns() {
-			return turns;
-		}
-
 		public Move getForcedMove() {
 			return move;
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			damage += victim.getAttributes().getDamageTaken();
+		public int getTurns() {
+			return turns;
 		}
 	}
 
@@ -2319,6 +2252,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			super(EffectNamesies.POWER_TRICK, -1, -1, false);
 		}
 
+		public Stat switchStat(Stat s) {
+			if (s == Stat.ATTACK) return Stat.DEFENSE;
+			if (s == Stat.DEFENSE) return Stat.ATTACK;
+			return s;
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			PokemonEffect thaPowah = victim.getEffect(this.namesies);
 			if (thaPowah == null) {
@@ -2332,12 +2271,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return user.getName() + "'s attack and defense were swapped!";
-		}
-
-		public Stat switchStat(Stat s) {
-			if (s == Stat.ATTACK) return Stat.DEFENSE;
-			if (s == Stat.DEFENSE) return Stat.ATTACK;
-			return s;
 		}
 	}
 
@@ -2437,6 +2370,16 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !((victim.hasAbility(AbilityNamesies.OBLIVIOUS) && !caster.breaksTheMold()) || (victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || !Gender.oppositeGenders(caster, victim) || victim.hasEffect(this.namesies));
 		}
 
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+			Messages.add(new MessageUpdate(p.getName() + " is in love with " + opp.getName() + "!"));
+			if (RandomUtils.chanceTest(50)) {
+				return true;
+			}
+			
+			Messages.add(new MessageUpdate(p.getName() + "'s infatuation kept it from attacking!"));
+			return false;
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
 			if (victim.isHoldingItem(b, ItemNamesies.DESTINY_KNOT) && this.applies(b, victim, caster, CastSource.HELD_ITEM)) {
@@ -2455,16 +2398,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			}
 			
 			return super.getFailMessage(b, user, victim);
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			Messages.add(new MessageUpdate(p.getName() + " is in love with " + opp.getName() + "!"));
-			if (RandomUtils.chanceTest(50)) {
-				return true;
-			}
-			
-			Messages.add(new MessageUpdate(p.getName() + "'s infatuation kept it from attacking!"));
-			return false;
 		}
 	}
 
@@ -2534,6 +2467,11 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
+		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+			p.removeEffect(this);
+			return true;
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
 				Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
@@ -2550,11 +2488,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
 			Messages.add(new MessageUpdate(dead.getName() + " took " + murderer.getName() + " down with it!"));
 			murderer.killKillKillMurderMurderMurder(b);
-		}
-
-		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-			p.removeEffect(this);
-			return true;
 		}
 
 		public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
@@ -2581,19 +2514,19 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !((victim.hasAbility(AbilityNamesies.SOUNDPROOF) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies));
 		}
 
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			Messages.add(new MessageUpdate(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!"));
+			if (super.numTurns == 1) {
+				victim.killKillKillMurderMurderMurder(b);
+			}
+		}
+
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (victim.hasAbility(AbilityNamesies.SOUNDPROOF)) {
 				return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
 			}
 			
 			return super.getFailMessage(b, user, victim);
-		}
-
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!"));
-			if (super.numTurns == 1) {
-				victim.killKillKillMurderMurderMurder(b);
-			}
 		}
 	}
 
@@ -2654,7 +2587,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper) {
-			return trapper.getName() + "'s " + this.getName() + " prevents " + escaper.getName() + " from escaping!";
+			return escaper.getName() + " is trapped by the Fairy Lock!";
 		}
 	}
 
@@ -2669,10 +2602,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return !(victim.hasEffect(this.namesies));
 		}
 
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-			return user.getName() + " sprinkled powder on " + victim.getName() + "!";
-		}
-
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
 			// Fire-type moves makes the user explode
 			if (p.getAttackType() == Type.FIRE) {
@@ -2682,6 +2611,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			}
 			
 			return true;
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+			return user.getName() + " sprinkled powder on " + victim.getName() + "!";
 		}
 	}
 
