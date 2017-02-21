@@ -40,8 +40,10 @@ ExtraApplies:
 *
 Recoil:
 	Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
+	AddInterface: RecoilMove
 *
 RecoilPercentage:
+	AddInterface: RecoilPercentageMove
 	Header: int getDamagePercentageDenominator()
 	Body:
 		return {0};
@@ -94,16 +96,17 @@ BasicHealing:
 		###
 *
 SelfHealing:
-	AddInterface: SelfHealingMove
 	AddMapField: RawSelfHealing: {0}
 	AddMapField: Applies: !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK)
 *
 RawSelfHealing:
+	AddInterface: SelfHealingMove
 	Header: double getHealFraction(Battle b, ActivePokemon victim)
 	AddMapField: SelfTarget: True
 	AddMapField: MoveType: Healing
 *
 ChargingMove:
+	AddInterface: ChargingMove
 	AddMapField: MultiTurn: True
 	Header: String getChargeMessage(ActivePokemon user)
 	Body:
@@ -111,6 +114,7 @@ ChargingMove:
 		###
 *
 RechargingMove:
+	AddInterface: RechargingMove
 	AddMapField: MultiTurn: True
 *
 MultiTurn:
@@ -163,10 +167,10 @@ GetMaxHits:
 	Body: return {0};
 *
 ChangeType:
+	AddInterface: ChangeTypeSource
 	Header: Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 *
 RemoveType:
-	AddInterface: ChangeTypeSource
 	AddMapField: ChangeType: 
 		Type[] type = victim.getType(b);
 				
@@ -270,7 +274,6 @@ StormyMove:
 	AddMapField: HitFly: True
 *
 HitFly:
-	AddInterface: AccuracyBypassEffect
 	AddMapField: BypassAccuracy:
 		// Always hit when the opponent is flying
 		return defending.isSemiInvulnerableFlying();
@@ -281,7 +284,6 @@ HitFly:
 		###
 *
 HitDig:
-	AddInterface: AccuracyBypassEffect
 	AddMapField: BypassAccuracy:
 		// Always hit when the opponent is underground
 		return defending.isSemiInvulnerableDigging();
@@ -356,7 +358,6 @@ SpecificAbilityChange:
 		###
 *
 HitMinimize:
-	AddInterface: AccuracyBypassEffect
 	AddMapField: BypassAccuracy:
 		return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
 		###
@@ -365,9 +366,11 @@ HitMinimize:
 		###
 *
 BypassAccuracy:
+	AddInterface: AccuracyBypassEffect
 	Header: boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
 *
 OpponentBypassAccuracy:
+AddInterface: OpponentAccuracyBypassEffect
 	Header: boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
 *
 AbilityChange:
@@ -1010,8 +1013,6 @@ TypeTakeDamageStatIncrease:
 	AddInterface: ConsumableItem
 	AddInterface: TakeDamageEffect
 *
-ConsumeItem:
-*
 ChoiceItem:
 	AddMapField: ToModify: {0}
 	AddMapField: SimpleModifier: 1.5
@@ -1413,7 +1414,6 @@ ForesightMove:
 	AddMapField: MoveType: Substitute_Piercing
 *
 AddTypeMove:
-	AddInterface: ChangeTypeSource
 	AddMapField: Effect: ChangeType
 	AddMapField: ChangeType:
 		Type primary = victim.getType(b)[0];
@@ -1480,12 +1480,6 @@ StatSwapMove:
 		Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
 		###
 	AddMapField: MoveType: No_Magic_Coat
-*
-StatusBerryGainEffect:
-	AddMapField: GainEffect:
-		return use(user, source);
-		###
-	AddMapField: NGPow: 80
 *
 GainEffect:
 	Header: boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source)

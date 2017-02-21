@@ -618,7 +618,7 @@ LaserFocus:
 LockOn:
 	NumTurns: 2
 	CastMessage: user.getName() + " took aim!"
-	Int: PassableEffect, AccuracyBypassEffect
+	Int: PassableEffect
 	BypassAccuracy:
 		return true;
 		###
@@ -628,7 +628,7 @@ Telekinesis:
 	CastMessage: victim.getName() + " was levitated due to " + user.getName() + "'s telekinesis!"
 	FailCondition: victim.isGrounded(b)
 	SubsideMessage: victim.getName() + " is no longer under the effects of telekinesis."
-	Int: LevitationEffect, OpponentAccuracyBypassEffect
+	Int: LevitationEffect
 	OpponentBypassAccuracy:
 		// Opponent can always strike you unless they are using a OHKO move or you are semi-invulnerable
 		return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO) && !defending.isSemiInvulnerable();

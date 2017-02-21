@@ -71,7 +71,6 @@ Toxic:
 	Effect: BadPoison
 	Cat: Status
 	Acc: 90
-	Int: AccuracyBypassEffect
 	BypassAccuracy:
 		// Poison-type Pokemon bypass accuracy
 		return attacking.isType(b, Type.POISON);
@@ -136,7 +135,6 @@ Take Down:
 	Type: Normal
 	Desc: A reckless, full-body charge attack for slamming into the target. It also damages the user a little.
 	RecoilPercentage: 4
-	Int: RecoilPercentageMove
 	Cat: Physical
 *
 Struggle:
@@ -150,7 +148,6 @@ Struggle:
 		user.reduceHealth(b, user.getMaxHP()/4, false);
 		###
 	MoveType: Encoreless, Mimicless, Assistless, Metronomeless
-	Int: RecoilMove
 *
 Razor Leaf:
 	Desc: Sharp-edged leaves are launched to slash at the opposing team. Critical hits land more easily.
@@ -198,7 +195,6 @@ Double-Edge:
 	Type: Normal
 	Cat: Physical
 	RecoilPercentage: 3
-	Int: RecoilPercentageMove
 *
 Seed Bomb:
 	Desc: The user slams a barrage of hard-shelled seeds down on the target from above.
@@ -292,7 +288,6 @@ Solar Beam:
 	Acc: 100
 	Type: Grass
 	Cat: Special
-	Int: ChargingMove
 	ChargingMove: user.getName() + " began taking in sunlight!"
 	GetPow: 
 		switch (b.getWeather().namesies()) {
@@ -315,7 +310,6 @@ Solar Blade:
 	PP: 10
 	Type: Grass
 	Cat: Physical
-	Int: ChargingMove
 	ChargingMove: user.getName() + " began taking in sunlight!"
 	IsMultiTurn: 
 		return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
@@ -339,7 +333,6 @@ Fly:
 	Type: Flying
 	Cat: Physical
 	MoveType: Airborne
-	Int: ChargingMove
 	ChargingMove: user.getName() + " flew up high!"
 	SemiInv: true
 *
@@ -409,7 +402,6 @@ Heat Wave:
 Flare Blitz:
 	Desc: The user cloaks itself in fire and charges at the target. The user sustains serious damage and may leave the target burned.
 	RecoilPercentage: 3
-	Int: RecoilPercentageMove
 	Status: Burned
 	EffChance: 10
 	Cat: Physical
@@ -579,7 +571,6 @@ Skull Bash:
 	Acc: 100
 	Type: Normal
 	Cat: Physical
-	Int: ChargingMove
 	SelfTarget: True
 	StatChange: 1 Defense 1
 	ChargingMove: user.getName() + " lowered its head!"
@@ -656,7 +647,6 @@ Hyper Beam:
 	Type: Normal
 	Acc: 90
 	Pow: 150
-	Int: RechargingMove
 	RechargingMove: True
 *
 Frenzy Plant:
@@ -666,7 +656,6 @@ Frenzy Plant:
 	Type: Grass
 	Acc: 90
 	Pow: 150
-	Int: RechargingMove
 	RechargingMove: True
 *
 Blast Burn:
@@ -676,7 +665,6 @@ Blast Burn:
 	Type: Fire
 	Acc: 90
 	Pow: 150
-	Int: RechargingMove
 	RechargingMove: True
 *
 Hydro Cannon:
@@ -686,7 +674,6 @@ Hydro Cannon:
 	Type: Water
 	Acc: 90
 	Pow: 150
-	Int: RechargingMove
 	RechargingMove: True
 *
 Prismatic Laser:
@@ -696,7 +683,6 @@ Prismatic Laser:
 	Cat: Special
 	Acc: 100
 	Pow: 160
-	Int: RechargingMove
 	RechargingMove: True
 *
 String Shot:
@@ -2076,7 +2062,6 @@ Dig:
 	Cat: Physical
 	Acc: 100
 	Pow: 80
-	Int: ChargingMove
 	ChargingMove: user.getName() + " went underground!" 
 	SemiInv: true
 *
@@ -2190,7 +2175,6 @@ Soak:
 	ChangeType: 
 		return new Type[] { Type.WATER, Type.NO_TYPE };
 		###
-	Int: ChangeTypeSource
 *
 Trick-or-Treat:
 	AddTypeMove: Ghost
@@ -2414,7 +2398,6 @@ Submission:
 	Pow: 80
 	Type: Fighting
 	RecoilPercentage: 4
-	Int: RecoilPercentageMove
 	Acc: 80
 	Cat: Physical
 *
@@ -2713,7 +2696,6 @@ Flame Charge:
 *
 Bounce:
 	Desc: The user bounces up high, then drops on the target on the second turn. It may also leave the target with paralysis.
-	Int: ChargingMove
 	SemiInv: true
 	ChargingMove: user.getName() + " sprang up!"
 	Type: Flying
@@ -2851,7 +2833,6 @@ Brave Bird:
 	Cat: Physical
 	Type: Flying
 	RecoilPercentage: 3
-	Int: RecoilPercentageMove
 *
 Uproar:
 	Desc: The user attacks in an uproar for three turns. Over that time, no one can fall asleep.
@@ -2937,7 +2918,6 @@ Dive:
 	Cat: Physical
 	Acc: 100
 	Type: Water
-	Int: ChargingMove
 	SemiInv: true
 	ChargingMove: user.getName() + " hid underwater!"
 *
@@ -3344,7 +3324,6 @@ Wood Hammer:
 	Type: Grass
 	Cat: Physical
 	RecoilPercentage: 3
-	Int: RecoilPercentageMove
 *
 Bone Club:
 	Desc: The user clubs the target with a bone. It may also make the target flinch.
@@ -3768,7 +3747,6 @@ Reflect Type:
 	Cat: Status
 	SelfTarget: True
 	Effect: ChangeType
-	Int: ChangeTypeSource
 	ChangeType: 
 		return b.getOtherPokemon(caster).getType(b).clone();
 		###
@@ -3838,7 +3816,7 @@ Razor Wind:
 	Cat: Special
 	Acc: 100
 	Pow: 80
-	Int: ChargingMove, CritStageEffect
+	Int: CritStageEffect
 	ChargingMove: user.getName() + " whipped up a whirlwind!"
 *
 Lovely Kiss:
@@ -3896,7 +3874,6 @@ Blizzard:
 	Cat: Special
 	Status: Frozen
 	EffChance: 10
-	Int: AccuracyBypassEffect
 	BypassAccuracy:
 		// Always hits when it's hailing unless the opponent is hiding (I think -- the hiding part is not specified on Bulbapedia)
 		return b.getWeather().namesies() == EffectNamesies.HAILING && !defending.isSemiInvulnerable();
@@ -3933,7 +3910,6 @@ Giga Impact:
 	Pow: 150
 	Acc: 90
 	Cat: Physical
-	Int: RechargingMove
 	RechargingMove: True
 	Type: Normal
 *
@@ -4026,7 +4002,6 @@ Conversion:
 			}
 		}
 		###
-	Int: ChangeTypeSource
 	ChangeType: 
 		return new Type[] { RandomUtils.getRandomValue(this.types), Type.NO_TYPE };
 		###
@@ -4039,7 +4014,6 @@ Conversion 2:
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
-	Int: ChangeTypeSource
 	Field:
 		private List<Type> types;
 		###
@@ -4158,7 +4132,7 @@ Sky Attack:
 	Cat: Physical
 	Effect: Flinch
 	EffChance: 30
-	Int: ChargingMove, CritStageEffect
+	Int: CritStageEffect
 	ChargingMove: user.getName() + " started glowing!"
 	Type: Flying
 *
@@ -4700,7 +4674,6 @@ Wild Charge:
 	Acc: 100
 	Pow: 90
 	RecoilPercentage: 4
-	Int: RecoilPercentageMove
 *
 Flash:
 	Desc: The user flashes a bright light that cuts the target's accuracy. It can also be used to illuminate caves.
@@ -4783,7 +4756,6 @@ Head Smash:
 	Acc: 80
 	Cat: Physical
 	RecoilPercentage: 2
-	Int: RecoilPercentageMove
 *
 Mist Ball:
 	Desc: A mistlike flurry of down envelops and damages the target. It may also lower the target's Sp. Atk.
@@ -4877,7 +4849,6 @@ Rock Wrecker:
 	Cat: Physical
 	Acc: 90
 	Pow: 150
-	Int: RechargingMove
 	RechargingMove: True
 	PhysicalContact: False
 	MoveType: Bomb_Ball
@@ -4897,7 +4868,6 @@ Roar Of Time:
 	Cat: Special
 	Acc: 90
 	Pow: 150
-	Int: RechargingMove
 	RechargingMove: True
 *
 Spacial Rend:
@@ -4933,7 +4903,6 @@ Shadow Force:
 	Cat: Physical
 	Acc: 100
 	Pow: 120
-	Int: ChargingMove
 	SemiInv: true
 	ChargingMove: user.getName() + " disappeared!"
 	MoveType: Protect_Piercing
@@ -5163,7 +5132,6 @@ Head Charge:
 	Desc: The user charges its head into its target, using its powerful guard hair. It also damages the user a little.
 	PP: 15
 	RecoilPercentage: 4
-	Int: RecoilPercentageMove
 	Pow: 120
 	Acc: 100
 	Cat: Physical
@@ -5328,7 +5296,6 @@ Freeze Shock:
 	Status: Paralyzed
 	EffChance: 30
 	MoveType: Metronomeless
-	Int: ChargingMove
 	ChargingMove: user.getName() + " is charging!"
 *
 Secret Power:
@@ -5561,7 +5528,6 @@ Camouflage:
 	Cat: Status
 	SelfTarget: True
 	Effect: ChangeType
-	Int: ChangeTypeSource
 	ChangeType: 
 		return new Type[] { b.getTerrainType().getType(), Type.NO_TYPE };
 		###
@@ -5790,7 +5756,6 @@ Ice Burn:
 	PP: 5
 	EffChance: 30
 	Status: Burned
-	Int: ChargingMove
 	ChargingMove: user.getName() + " is charging!"
 *
 V-create:
@@ -5822,7 +5787,6 @@ Volt Tackle:
 	Status: Paralyzed
 	EffChance: 10
 	RecoilPercentage: 3
-	Int: RecoilPercentageMove
 *
 Focus Blast:
 	Desc: The user heightens its mental focus and unleashes its power. It may also lower the target's Sp. Def.
@@ -5873,7 +5837,6 @@ Phantom Force:
 	Acc: 100
 	HitMinimize: True
 	MoveType: Protect_Piercing, Assistless
-	Int: ChargingMove
 	ChargingMove: user.getName() + " vanished suddenly!"
 	SemiInv: true
 *
@@ -5894,7 +5857,6 @@ Geomancy:
 	Cat: Status
 	SelfTarget: True
 	StatChange: 3 Sp_Attack 2 Sp_Defense 2 Speed 2
-	Int: ChargingMove
 	ChargingMove: user.getName() + " is absorbing power!"
 	ShouldApplyEffects:
 		return !this.isCharging(user);
@@ -6463,7 +6425,6 @@ Purify:
 	Type: Poison
 	Cat: Status
 	PP: 20
-	Int: SelfHealingMove
 	RawSelfHealing:
 		return .5;
 		###

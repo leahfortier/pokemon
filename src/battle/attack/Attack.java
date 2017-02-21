@@ -6490,7 +6490,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class RazorWind extends Attack implements ChargingMove, CritStageEffect {
+	static class RazorWind extends Attack implements CritStageEffect, ChargingMove {
 		private static final long serialVersionUID = 1L;
 
 		RazorWind() {
@@ -6903,7 +6903,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class SkyAttack extends Attack implements ChargingMove, CritStageEffect {
+	static class SkyAttack extends Attack implements CritStageEffect, ChargingMove {
 		private static final long serialVersionUID = 1L;
 
 		SkyAttack() {
