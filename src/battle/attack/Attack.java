@@ -380,15 +380,28 @@ public abstract class Attack implements Serializable {
 	// Physical and Special moves -- do dat damage!
 	public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 
+		// Deal damage
+		int damage = b.calculateDamage(me, o);
+		boolean critYoPants = b.criticalHit(me, o);
+		if (critYoPants) {
+			damage *= me.hasAbility(AbilityNamesies.SNIPER) ? 3 : 2;
+		}
+
+		damage = o.reduceHealth(b, damage);
+		if (critYoPants) {
+			Messages.add(new MessageUpdate("It's a critical hit!!"));
+			if (o.hasAbility(AbilityNamesies.ANGER_POINT)) {
+				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!"));
+				o.getAttributes().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
+			}
+		}
+
 		// Print Advantage
 		if (TypeAdvantage.isNotVeryEffective(me, o, b)) {
 			Messages.add(new MessageUpdate(TypeAdvantage.getNotVeryEffectiveMessage()));
 		} else if (TypeAdvantage.isSuperEffective(me, o, b)) {
 			Messages.add(new MessageUpdate(TypeAdvantage.getSuperEffectiveMessage()));
 		}
-		
-		// Deal damage
-		int damage = o.reduceHealth(b, b.calculateDamage(me, o));
 		
 		// Deadsies check
 		o.isFainted(b);

@@ -38,7 +38,6 @@ import message.Messages.MessageState;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
-import pokemon.ability.AbilityNamesies;
 import trainer.CharacterData;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
@@ -549,10 +548,6 @@ public class Battle {
 	}
 	
 	public int calculateDamage(ActivePokemon me, ActivePokemon o) {
-		int level = me.getLevel();
-		int power = me.getAttack().getPower(this, me, o);
-		int random = RandomUtils.getRandomInt(16) + 85;
-		
 		final Stat attacking;
 		final Stat defending;
 		switch (me.getAttack().getCategory()) {
@@ -568,16 +563,20 @@ public class Battle {
 				Global.error("Invalid category " + me.getAttack().getCategory() + " for calculating damage");
 				return -1;
 		}
+
+		int level = me.getLevel();
+		int random = RandomUtils.getRandomInt(16) + 85;
+
+		int power = me.getAttack().getPower(this, me, o);
+		power *= getDamageModifier(me, o);
 		
 		int attackStat = Stat.getStat(attacking, me, o, this);
 		int defenseStat = Stat.getStat(defending, o, me, this);
 		
 		double stab = TypeAdvantage.getSTAB(this, me);
 		double adv = TypeAdvantage.getAdvantage(me, o, this);
-		
-		int damage = (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
-		
-//		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n",
+
+		//		System.out.printf("%s %s %d %d %d %d %d %f %f %d%n",
 //				me.getActualName(),
 //				me.getAttack().getName(),
 //				level,
@@ -589,48 +588,32 @@ public class Battle {
 //				adv,
 //				damage);
 		
-		damage *= getDamageModifier(me, o); 
-		damage *= criticalHit(me, o);
-		
-		return damage;
+		return (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
 	}
 
-	protected double getDamageModifier(ActivePokemon me, ActivePokemon o) {
-		double modifier = 1;
-		modifier *= PowerChangeEffect.getModifier(this, me, o);
-		modifier *= OpponentPowerChangeEffect.getModifier(this, me, o);
-		
-//		System.out.println(me.getName() + " Modifier: " + modifier);
-		return modifier;
+	public double getDamageModifier(ActivePokemon me, ActivePokemon o) {
+		return PowerChangeEffect.getModifier(this, me, o)*OpponentPowerChangeEffect.getModifier(this, me, o);
 	}
-	
+
+	// Crit yo pants
 	private static final int[] CRITSICLES = { 16, 8, 4, 3, 2 };
-	private int criticalHit(ActivePokemon me, ActivePokemon o) {
+	public boolean criticalHit(ActivePokemon me, ActivePokemon o) {
 		if (CritBlockerEffect.checkBlocked(this, me, o)) {
-			return 1;
+			return false;
 		}
-		
+
+		if (AlwaysCritEffect.defCritsies(this, me, o)) {
+			return true;
+		}
+
 		// Increase crit stage and such
 		int stage = 1;
 		stage = CritStageEffect.updateCritStage(this, stage, me);
 		stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
 
-		boolean crit = AlwaysCritEffect.defCritsies(this, me, o) || RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
-		
-		// Crit yo pants
-		if (crit) {
-			Messages.add(new MessageUpdate("It's a critical hit!!"));
-			if (o.hasAbility(AbilityNamesies.ANGER_POINT)) {
-				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!"));
-				o.getAttributes().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
-			}
-			
-			return me.hasAbility(AbilityNamesies.SNIPER) ? 3 : 2;
-		}
-
-		return 1;
+		return RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
 	}
-	
+
 	protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
 		// Self-Target moves don't miss
 		if (me.getAttack().isSelfTarget() && me.getAttack().isStatusMove()) {
