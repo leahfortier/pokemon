@@ -429,6 +429,15 @@ public final class EffectInterfaces {
 			return user.getAttack().isMoveType(MoveType.AIRBORNE);
 		}
 
+		default void removeLevitation(Battle b, ActivePokemon p) {
+			if (p.isSemiInvulnerableFlying()) {
+				p.getMove().switchReady(b, p);
+				Messages.add(new MessageUpdate(p.getName() + " fell to the ground!"));
+			}
+			
+			LevitationEffect.falllllllll(b, p);
+		}
+
 		static boolean containsGroundedEffect(Battle b, ActivePokemon p) {
 			List<Object> invokees = b.getEffectsList(p);
 			for (Object invokee : invokees) {
@@ -546,7 +555,11 @@ public final class EffectInterfaces {
 
 	// Any effect that implements this will prevent a Pokemon with said effect from escaping battle
 	public interface TrappingEffect {
-		boolean trapped(Battle b, ActivePokemon escaper);
+
+		default boolean trapped(Battle b, ActivePokemon escaper) {
+			// Ghost-type Pokemon can always escape
+			return !escaper.isType(b, Type.GHOST);
+		}
 		String trappingMessage(ActivePokemon trapped);
 
 		static boolean isTrapped(Battle b, ActivePokemon escaper) {
@@ -713,7 +726,10 @@ public final class EffectInterfaces {
 	}
 
 	public interface CritBlockerEffect {
-		boolean blockCrits();
+
+		default boolean blockCrits() {
+			return true;
+		}
 
 		static boolean checkBlocked(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			List<Object> invokees = b.getEffectsList(defending, attacking.getAttack());
@@ -896,7 +912,10 @@ public final class EffectInterfaces {
 	}
 
 	public interface CritStageEffect {
-		int increaseCritStage(int stage, ActivePokemon p);
+
+		default int increaseCritStage(int stage, ActivePokemon p) {
+			return stage + 1;
+		}
 
 		static int updateCritStage(Battle b, int stage, ActivePokemon p) {
 			List<Object> invokees = b.getEffectsList(p);
@@ -1231,7 +1250,10 @@ public final class EffectInterfaces {
 	}
 
 	public interface AlwaysCritEffect {
-		boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending);
+
+		default boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+			return true;
+		}
 
 		static boolean defCritsies(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			List<Object> invokees = b.getEffectsList(attacking, attacking.getAttack());

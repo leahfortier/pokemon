@@ -1847,6 +1847,7 @@ Oran Berry:
 	NGType: Poison
 	NGPow: 80
 	FixedBerryHealthTrigger: 3
+	GainEffect: return use(user, source);
 	Int: FixedHpHealer
 	FixedHealAmount:
 		return 10;
@@ -1887,6 +1888,7 @@ Sitrus Berry:
 	NGPow: 80
 	FixedBerryHealthTrigger: 2
 	Int: HpHealer
+	GainEffect: return use(user, source);
 	GetAmountHealed: 
 		return p.healHealthFraction(1/4.0);
 		###

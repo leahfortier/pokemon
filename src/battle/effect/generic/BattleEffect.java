@@ -5,7 +5,6 @@ import battle.effect.TerrainEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
-import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
@@ -49,6 +48,10 @@ public abstract class BattleEffect extends Effect {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
+		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
+			return s == Stat.EVASION ? -2 : 0;
+		}
+
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
 			removeLevitation(b, caster);
@@ -61,19 +64,6 @@ public abstract class BattleEffect extends Effect {
 
 		public String getSubsideMessage(ActivePokemon victim) {
 			return "The gravity returned to normal.";
-		}
-
-		private void removeLevitation(Battle b, ActivePokemon p) {
-			if (p.isSemiInvulnerableFlying()) {
-				p.getMove().switchReady(b, p);
-				Messages.add(new MessageUpdate(p.getName() + " fell to the ground!"));
-			}
-			
-			LevitationEffect.falllllllll(b, p);
-		}
-
-		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
-			return s == Stat.EVASION ? -2 : 0;
 		}
 	}
 
@@ -88,16 +78,16 @@ public abstract class BattleEffect extends Effect {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return user.getAttackType() == Type.FIRE ? .33 : 1;
-		}
-
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Fire's power was weakened!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim) {
 			return "The effects of Water Sport wore off.";
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttackType() == Type.FIRE ? .33 : 1;
 		}
 	}
 
@@ -112,16 +102,16 @@ public abstract class BattleEffect extends Effect {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return user.getAttackType() == Type.ELECTRIC ? .33 : 1;
-		}
-
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Electricity's power was weakened!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim) {
 			return "The effects of Mud Sport wore off.";
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return user.getAttackType() == Type.ELECTRIC ? .33 : 1;
 		}
 	}
 
@@ -280,19 +270,19 @@ public abstract class BattleEffect extends Effect {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			if (!victim.fullHealth() && !victim.isLevitating(b)) {
+				victim.healHealthFraction(1/16.0);
+				Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to the Grassy Terrain!").updatePokemon(b, victim));
+			}
+		}
+
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return "Grass sprouted around the battlefield!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim) {
 			return "The grass withered and died.";
-		}
-
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (!victim.fullHealth() && !victim.isLevitating(b)) {
-				victim.healHealthFraction(1/16.0);
-				Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to the Grassy Terrain!").updatePokemon(b, victim));
-			}
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -391,14 +381,14 @@ public abstract class BattleEffect extends Effect {
 			return "The psychic energy disappeared.";
 		}
 
-		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// Psychic terrain prevents increased priority moves from hitting
-			return b.getPriority(user, user.getAttack()) > 0 && !victim.isLevitating(b);
-		}
-
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// Psychic-type moves are 50% stronger with the psychic terrain
 			return user.getAttackType() == Type.PSYCHIC && !user.isLevitating(b) ? 1.5 : 1;
+		}
+
+		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// Psychic terrain prevents increased priority moves from hitting
+			return b.getPriority(user, user.getAttack()) > 0 && !victim.isLevitating(b);
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
