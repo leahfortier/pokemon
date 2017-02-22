@@ -3695,7 +3695,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Comatose extends Ability implements EntryEffect, SuperDuperEndTurnEffect, SleepyFightsterEffect {
+	static class Comatose extends Ability implements EntryEffect, SleepyFightsterEffect, SuperDuperEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		
 		// NOTE: This does not work exactly the same as in game

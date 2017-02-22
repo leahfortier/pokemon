@@ -9,6 +9,7 @@ import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
+import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.status.StatusCondition;
 import map.overworld.TerrainType;
 import message.MessageUpdate;
@@ -411,7 +412,7 @@ public abstract class BattleEffect extends Effect {
 		}
 	}
 
-	static class FieldUproar extends BattleEffect implements StatusPreventionEffect {
+	static class FieldUproar extends BattleEffect implements StatusPreventionEffect, SuperDuperEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		FieldUproar() {
@@ -422,17 +423,21 @@ public abstract class BattleEffect extends Effect {
 			return !(Effect.hasEffect(b.getEffects(), this.namesies));
 		}
 
-		public boolean isActive(Battle b) {
-			// TODO: This should just be a super duper end turn effect and revert back to the old isActive system
-			return b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR);
-		}
-
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
 			return status == StatusCondition.ASLEEP;
 		}
 
 		public String statusPreventionMessage(ActivePokemon victim) {
 			return "The uproar prevents sleep!!";
+		}
+
+		public boolean theVeryVeryEnd(Battle b, ActivePokemon p) {
+			if (b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR)) {
+				return false;
+			}
+			
+			this.active = false;
+			return true;
 		}
 	}
 }

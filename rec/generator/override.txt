@@ -1679,6 +1679,7 @@ OppStatusReceived:
 	Header: void receiveStatus(Battle b, ActivePokemon victim, StatusCondition statusType)
 *
 TheVeryEnd:
+	AddInterface: SuperDuperEndTurnEffect
 	Header: boolean theVeryVeryEnd(Battle b, ActivePokemon p)
 *
 PriorityPrevention:

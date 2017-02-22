@@ -303,9 +303,8 @@ Synchronize:
 	Desc: Passes on a burn, poison, or paralysis to the foe.
 	Int: StatusReceivedEffect
 	StatusReceived:
-		// TODO: Test
 		// Only applies when the opponent gives the victim the condition
-		if (caster != victim) {
+		if (caster == victim) {
 			return;
 		}
 
@@ -1523,7 +1522,7 @@ Corrosion:
 *
 Comatose:
 	Desc: It's always drowsing and will never wake up. It can attack without waking up.
-	Int: EntryEffect, SuperDuperEndTurnEffect, SleepyFightsterEffect
+	Int: EntryEffect, SleepyFightsterEffect
 	Enter:
 		nightyNight(b, enterer);
 		###

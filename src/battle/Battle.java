@@ -409,10 +409,10 @@ public class Battle {
 		for (int i = 0; i < effects.size(); i++) {
 			Effect effect = effects.get(i);
 
-			boolean inactive = !effect.isActive(this);
+			boolean inactive = !effect.isActive();
 			if (!inactive) {
 				effect.decrement(this, p);
-				inactive = !effect.isActive(this) && !effect.nextTurnSubside();
+				inactive = !effect.isActive() && !effect.nextTurnSubside();
 			}
 
 			if (inactive) {
@@ -428,7 +428,7 @@ public class Battle {
 	}
 
 	private void decrementWeather() {
-		if (!weather.isActive(this)) {
+		if (!weather.isActive()) {
 			Messages.add(new MessageUpdate(weather.getSubsideMessage(player.front())));
 			this.setBaseWeather(this.baseWeather);
 			return;
