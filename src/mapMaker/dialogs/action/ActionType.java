@@ -5,7 +5,7 @@ import mapMaker.dialogs.action.trigger.TriggerActionPanel;
 public enum ActionType {
     TRIGGER(TriggerActionPanel::new),
     BATTLE(BattleActionPanel::new),
-    CHOICE(dialog -> new ChoiceActionPanel()),
+    CHOICE(ChoiceActionPanel::new),
     UPDATE(dialog -> new BasicActionPanel("Update Name")),
     GROUP_TRIGGER(dialog -> new BasicActionPanel("Trigger Name")),
     GLOBAL(dialog -> new BasicActionPanel("Global Name"));

@@ -1,9 +1,11 @@
 package gui.view.map;
 
 import draw.button.panel.BasicPanels;
+import draw.button.panel.DrawPanel;
 import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
+import main.Global;
 import map.entity.EntityAction;
 import map.triggers.HaltTrigger;
 import map.triggers.Trigger;
@@ -14,6 +16,7 @@ import sound.SoundPlayer;
 import util.FontMetrics;
 import util.StringUtils;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 class MessageState implements VisualStateHandler {
@@ -23,16 +26,40 @@ class MessageState implements VisualStateHandler {
     public void draw(Graphics g, MapView mapView) {
         MessageUpdate currentMessage = mapView.getCurrentMessage();
 
-        int height = BasicPanels.drawFullMessagePanel(g, currentMessage.getMessage());
+        BasicPanels.drawFullMessagePanel(g, currentMessage.getMessage());
         if (currentMessage.isChoice()) {
             ChoiceMatcher[] choices = currentMessage.getChoices();
+            String longestChoice = choices[0].getText();
+            for (int i = 1; i < choices.length; i++) {
+                if (choices[i].getText().length() > longestChoice.length()) {
+                    longestChoice = choices[i].getText();
+                }
+            }
+
+            int spacing = 20;
+            int circleRadius = 10;
+
+            int distanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
+            int textHeight = FontMetrics.getTextHeight(g);
+
+            int width = FontMetrics.getTextWidth(g, longestChoice) + spacing*3 + 2*circleRadius;
+            int height = (distanceBetweenRows + 1)*choices.length - textHeight + 2*spacing;
+            DrawPanel choicesPanel = new DrawPanel(
+                    Global.GAME_SIZE.width - width,
+                    BasicPanels.getMessagePanelY() - height,
+                    width,
+                    height
+            );
+            choicesPanel.drawBackground(g);
+
+            g.setColor(Color.BLACK);
             for (int i = 0; i < choices.length; i++) {
-                int y = height + i* FontMetrics.getDistanceBetweenRows(g);
+                int y = choicesPanel.y + spacing + i*distanceBetweenRows + textHeight;
                 if (i == dialogueSelection) {
-                    g.fillOval(50, y - FontMetrics.getTextHeight(g)/2 - 5, 10, 10);
+                    g.fillOval(choicesPanel.x + spacing, y - textHeight/2 - circleRadius/2, circleRadius, circleRadius);
                 }
 
-                g.drawString(choices[i].text, 80, y);
+                g.drawString(choices[i].getText(), choicesPanel.x + 2*spacing + 2*circleRadius, y);
             }
         }
     }

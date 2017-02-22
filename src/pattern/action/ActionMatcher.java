@@ -103,7 +103,6 @@ public class ActionMatcher {
     }
 
     public void setActionString(String contents, ActionType actionType) {
-
         switch (actionType) {
             case UPDATE:
                 this.update = contents;
@@ -120,5 +119,15 @@ public class ActionMatcher {
         }
 
         this.confirmFormat();
+    }
+
+    public void setChoice(ChoiceActionMatcher choice) {
+        this.choice = choice;
+
+        this.confirmFormat();
+    }
+
+    public ChoiceActionMatcher getChoice() {
+        return this.choice;
     }
 }

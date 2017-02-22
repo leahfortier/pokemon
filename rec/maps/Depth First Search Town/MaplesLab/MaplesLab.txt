@@ -113,6 +113,17 @@
                         }
                       }
                     ]
+                  },
+                  {
+                    "text": "thunda",
+                    "actions": [
+                      {
+                        "trigger": {
+                          "triggerType": "GIVE_ITEM",
+                          "triggerContents": "THUNDER_STONE"
+                        }
+                      }
+                    ]
                   }
                 ]
               }

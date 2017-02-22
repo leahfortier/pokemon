@@ -47,7 +47,7 @@ class StringTriggerPanel extends TriggerContentsPanel {
 
         @Override
         protected void load(String triggerContents) {
-            super.load(ItemNamesies.valueOf(triggerContents).getName());
+            super.load(ItemNamesies.getValueOf(triggerContents).getName());
         }
 
         @Override
