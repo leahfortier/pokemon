@@ -53,8 +53,9 @@ public class BattleView extends View {
 	// All the different buttons!!
 	private final Button backButton;
 
-    // Displayable current weather
+    // Displayable current weather and terrain
     private Weather weather;
+    private TerrainType terrain;
 
 	// Which Pokemon is trying to learn a new move, and which move
 	private ActivePokemon learnedPokemon;
@@ -256,6 +257,10 @@ public class BattleView extends View {
                     weather = newMessage.getWeather();
                 }
 
+                if (newMessage.terrainUpdate()) {
+					terrain = newMessage.getTerrain();
+				}
+
 				this.state.checkMessage(newMessage);
 			}
 			
@@ -281,14 +286,13 @@ public class BattleView extends View {
 		ActivePokemon opponent = currentBattle.getOpponent().front();
 		 
 		// Get background based on terrain type
-		TerrainType terrainType = currentBattle.getTerrainType();
-		DrawUtils.fillCanvas(g, terrainType.getColor());
+		DrawUtils.fillCanvas(g, terrain.getColor());
 
 		// Player's battle circle
-		g.drawImage(terrainType.getPlayerCircleImage(), 0, 351, null);
+		g.drawImage(terrain.getPlayerCircleImage(), 0, 351, null);
 		
 		// Opponent battle circle
-		g.drawImage(terrainType.getOpponentCircleImage(), 450, 192, null);
+		g.drawImage(terrain.getOpponentCircleImage(), 450, 192, null);
 
         BufferedImage image = Game.getData().getWeatherTiles().getTile(weather.getImageName());
         ImageUtils.drawCenteredImage(g, image, Global.GAME_SIZE.width/2, image.getHeight());

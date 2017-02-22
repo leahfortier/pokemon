@@ -3540,11 +3540,11 @@ Focus Punch:
 	Effect: Focusing
 	SelfTarget: True
 	StartTurn: 
+		// TODO: PP isn't being reduced when flinches
 		super.applyBasicEffects(b, me, me);
 		###
 	Applies: user.hasEffect(EffectNamesies.FOCUSING)
 	ShouldApplyEffects:
-		// TODO: Test
 		return false;
 		###
 *
@@ -3561,9 +3561,8 @@ Shell Trap:
 	StartTurn: 
 		super.applyBasicEffects(b, me, me);
 		###
-	Applies: user.hasEffect(EffectNamesies.SHELL_TRAP)
+	Applies: !user.hasEffect(EffectNamesies.SHELL_TRAP)
 	ShouldApplyEffects:
-		// TODO: Test
 		return false;
 		###
 *
@@ -3997,7 +3996,6 @@ Conversion:
 		private List<Type> types;
 		###
 	BeginAttack:
-		// TODO: Test
 		this.types = new ArrayList<>();
 		for (Move move : attacking.getMoves(b)) {
 			Type type = move.getAttack().getActualType();
@@ -4022,7 +4020,6 @@ Conversion 2:
 		private List<Type> types;
 		###
 	BeginAttack:
-		// TODO: Test
 		this.types = new ArrayList<>();
 		
 		Move lastMoveUsed = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
@@ -4207,7 +4204,6 @@ Psycho Shift:
 	Acc: 100
 	Applies: user.hasStatus() && Status.applies(user.getStatus().getType(), b, user, victim)
 	UniqueEffects: 
-		// TODO: Test
 		Status.giveStatus(b, user, victim, user.getStatus().getType(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
 		user.removeStatus();
 		Messages.add(new MessageUpdate().updatePokemon(b, user));
@@ -4447,17 +4443,15 @@ Present:
 	BeginAttack:
 		this.applyDamage = RandomUtils.chanceTest(80);
 		###
-	ShouldApplyEffects:
-		return !this.applyDamage;
-		###
 	ShouldApplyDamage:
 		return this.applyDamage;
 		###
 	Applies: this.applyDamage || (!victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK))
 	UniqueEffects: 
-		// TODO: Test
-		victim.healHealthFraction(1/4.0);
-		Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		if (!applyDamage) {
+			victim.healHealthFraction(1/4.0);
+			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+		}
 		###
 *
 Steel Wing:
@@ -5538,7 +5532,6 @@ Recycle:
 	SelfTarget: True
 	Applies: user.hasEffect(EffectNamesies.CONSUMED_ITEM) && !user.isHoldingItem(b)
 	UniqueEffects: 
-		// TODO: Test
 		Item restored = ((ItemHolder)victim.getEffect(EffectNamesies.CONSUMED_ITEM)).getItem();
 		victim.giveItem((HoldItem)restored);
 		Messages.add(new MessageUpdate(victim.getName() + "'s " + restored.getName() + " was restored!"));
@@ -6428,7 +6421,6 @@ Purify:
 		###
 	ExtraApplies: user.hasStatus()
 	UniqueEffects:
-		// TODO: Test
 		Status.removeStatus(b, user, CastSource.ATTACK);
 		if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 			this.heal(b, user);

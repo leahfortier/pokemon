@@ -150,6 +150,8 @@ public class Battle {
 
 		TerrainCastEffect.invokeTerrainCastEffect(this, player.front(), terrainType);
 		TerrainCastEffect.invokeTerrainCastEffect(this, opponent.front(), terrainType);
+
+		Messages.add(new MessageUpdate().withTerrain(currentTerrain));
 	}
 
 	public void resetTerrain() {

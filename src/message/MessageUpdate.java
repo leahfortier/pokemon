@@ -8,6 +8,7 @@ import gui.view.ViewMode;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
+import map.overworld.TerrainType;
 import message.Messages.MessageState;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
@@ -46,7 +47,8 @@ public class MessageUpdate {
 	private ViewMode viewMode;
 	private Boolean showImage;
 	private Weather weather;
-	
+	private TerrainType terrain;
+
 	public enum Update {
 		NO_UPDATE,
 		TRIGGER,
@@ -224,6 +226,11 @@ public class MessageUpdate {
 
 	public MessageUpdate withWeather(Weather weather) {
 		this.weather = weather;
+		return this;
+	}
+
+	public MessageUpdate withTerrain(TerrainType terrain) {
+		this.terrain = terrain;
 		return this;
 	}
 
@@ -485,5 +492,13 @@ public class MessageUpdate {
 
 	public Weather getWeather() {
 		return this.weather;
+	}
+
+	public boolean terrainUpdate() {
+		return this.terrain != null;
+	}
+
+	public TerrainType getTerrain() {
+		return this.terrain;
 	}
 }

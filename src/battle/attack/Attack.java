@@ -807,7 +807,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			// TODO: Test
 			super.status = StatusCondition.NO_STATUS;
 			super.effects.clear();
 			
@@ -2119,7 +2118,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			// TODO: Test
 			this.mirror = defending.getAttributes().getLastMoveUsed();
 		}
 
@@ -2520,7 +2518,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			// TODO: Test
 			super.status = StatusCondition.NO_STATUS;
 			super.effects.clear();
 			
@@ -2548,7 +2545,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			// TODO: Test
 			super.status = StatusCondition.NO_STATUS;
 			super.effects.clear();
 			
@@ -3560,7 +3556,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
 			victim.getAttributes().resetStage(Stat.EVASION);
 		}
 	}
@@ -3575,7 +3570,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
 			victim.getAttributes().resetStage(Stat.EVASION);
 		}
 	}
@@ -3590,7 +3584,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
 			victim.getAttributes().resetStage(Stat.EVASION);
 		}
 	}
@@ -6076,11 +6069,11 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
-			// TODO: Test
 			return false;
 		}
 
 		public void startTurn(Battle b, ActivePokemon me) {
+			// TODO: PP isn't being reduced when flinches
 			super.applyBasicEffects(b, me, me);
 		}
 
@@ -6102,7 +6095,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
-			// TODO: Test
 			return false;
 		}
 
@@ -6111,7 +6103,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return user.hasEffect(EffectNamesies.SHELL_TRAP);
+			return !user.hasEffect(EffectNamesies.SHELL_TRAP);
 		}
 	}
 
@@ -6461,7 +6453,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			// TODO: Test
 			this.mirror = defending.getAttributes().getLastMoveUsed();
 		}
 
@@ -6742,7 +6733,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			// TODO: Test
 			this.types = new ArrayList<>();
 			for (Move move : attacking.getMoves(b)) {
 				Type type = move.getAttack().getActualType();
@@ -6773,7 +6763,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			// TODO: Test
 			this.types = new ArrayList<>();
 			
 			Move lastMoveUsed = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
@@ -7029,7 +7018,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
 			Status.giveStatus(b, user, victim, user.getStatus().getType(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
 			user.removeStatus();
 			Messages.add(new MessageUpdate().updatePokemon(b, user));
@@ -7316,17 +7304,14 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
-			victim.healHealthFraction(1/4.0);
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+			if (!applyDamage) {
+				victim.healHealthFraction(1/4.0);
+				Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+			}
 		}
 
 		public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
 			return this.applyDamage;
-		}
-
-		public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
-			return !this.applyDamage;
 		}
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
@@ -9072,7 +9057,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
 			Item restored = ((ItemHolder)victim.getEffect(EffectNamesies.CONSUMED_ITEM)).getItem();
 			victim.giveItem((HoldItem)restored);
 			Messages.add(new MessageUpdate(victim.getName() + "'s " + restored.getName() + " was restored!"));
@@ -10422,7 +10406,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
 			Status.removeStatus(b, user, CastSource.ATTACK);
 			if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 				this.heal(b, user);

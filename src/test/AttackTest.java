@@ -519,6 +519,25 @@ public class AttackTest {
     }
 
     @Test
+    public void evasionRemovalTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        battle.fight(AttackNamesies.DOUBLE_TEAM, AttackNamesies.MINIMIZE);
+        Assert.assertTrue(attacking.getStage(Stat.EVASION) == 1);
+        Assert.assertTrue(defending.getStage(Stat.EVASION) == 2);
+
+        battle.attackingFight(AttackNamesies.FORESIGHT);
+        Assert.assertTrue(attacking.getStage(Stat.EVASION) == 1);
+        Assert.assertTrue(defending.getStage(Stat.EVASION) == 0);
+
+        battle.attackingFight(AttackNamesies.MIRACLE_EYE);
+        Assert.assertTrue(attacking.getStage(Stat.EVASION) == 0);
+        Assert.assertTrue(defending.getStage(Stat.EVASION) == 0);
+    }
+
+    @Test
     public void multiTurnMoveTest() {
         // TODO
     }

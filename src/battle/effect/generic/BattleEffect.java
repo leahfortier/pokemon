@@ -250,7 +250,7 @@ public abstract class BattleEffect extends Effect {
 			}
 			
 			super.cast(b, caster, victim, source, printCast);
-			b.setTerrainType(TerrainType.MISTY, false); // TODO: Need to send a terrain change message
+			b.setTerrainType(TerrainType.MISTY, false);
 		}
 
 		public void subside(Battle b, ActivePokemon p) {
@@ -301,7 +301,7 @@ public abstract class BattleEffect extends Effect {
 			}
 			
 			super.cast(b, caster, victim, source, printCast);
-			b.setTerrainType(TerrainType.GRASS, false); // TODO: Need to send a terrain change message
+			b.setTerrainType(TerrainType.GRASS, false);
 		}
 
 		public void subside(Battle b, ActivePokemon p) {
@@ -353,7 +353,7 @@ public abstract class BattleEffect extends Effect {
 			}
 			
 			super.cast(b, caster, victim, source, printCast);
-			b.setTerrainType(TerrainType.ELECTRIC, false); // TODO: Need to send a terrain change message
+			b.setTerrainType(TerrainType.ELECTRIC, false);
 		}
 
 		public void subside(Battle b, ActivePokemon p) {
@@ -402,7 +402,7 @@ public abstract class BattleEffect extends Effect {
 			}
 			
 			super.cast(b, caster, victim, source, printCast);
-			b.setTerrainType(TerrainType.PSYCHIC, false); // TODO: Need to send a terrain change message
+			b.setTerrainType(TerrainType.PSYCHIC, false);
 		}
 
 		public void subside(Battle b, ActivePokemon p) {
