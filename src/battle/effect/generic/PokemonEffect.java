@@ -45,6 +45,7 @@ import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
+import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.holder.AbilityHolder;
@@ -2665,6 +2666,31 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
 			return !(victim.hasEffect(this.namesies));
+		}
+	}
+
+	static class Raging extends PokemonEffect implements TakeDamageEffect {
+		private static final long serialVersionUID = 1L;
+
+		Raging() {
+			super(EffectNamesies.RAGING, -1, -1, false);
+		}
+
+		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+			return !(victim.hasEffect(this.namesies));
+		}
+
+		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+			Move lastMoveUsed = victim.getAttributes().getLastMoveUsed();
+			if (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != AttackNamesies.RAGE) {
+				victim.removeEffect(this);
+				return;
+			}
+			
+			victim.getAttributes().modifyStage(
+				victim, victim, 1, Stat.ATTACK, b, CastSource.EFFECT,
+				victim.getName() + "'s Rage increased its attack!"
+			);
 		}
 	}
 }

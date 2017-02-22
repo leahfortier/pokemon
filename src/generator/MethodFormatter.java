@@ -3,6 +3,7 @@ package generator;
 class MethodFormatter {
 
     private int tabs;
+    private int parenthesesBalance;
     private boolean inSwitch;
     private boolean inCases;
 
@@ -33,6 +34,16 @@ class MethodFormatter {
             inSwitch = false;
         }
 
+        int numOpen = (int)line.chars().filter(num -> num == '(').count();
+        int numClosed = (int)line.chars().filter(num -> num == ')').count();
+        boolean previouslyInParentheses = parenthesesBalance > 0;
+        parenthesesBalance += numOpen - numClosed;
+        boolean nowInParentheses = parenthesesBalance > 0;
+
+        if (previouslyInParentheses && !nowInParentheses) {
+            tabs--;
+        }
+
         // Add the tabs
         for (int i = 0; i < tabs; i++) {
             method.append("\t");
@@ -47,6 +58,10 @@ class MethodFormatter {
         }
 
         if (line.contains("{") && !line.contains("}")) {
+            tabs++;
+        }
+
+        if (!previouslyInParentheses && nowInParentheses) {
             tabs++;
         }
     }

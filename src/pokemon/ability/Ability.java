@@ -918,10 +918,18 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
-			if ((statusType == StatusCondition.BURNED || statusType == StatusCondition.POISONED || statusType == StatusCondition.PARALYZED)
-			&& caster.getAttributes().isAttacking()
-			&& Status.giveStatus(b, victim, caster, statusType, true)
-			&& victim.hasEffect(EffectNamesies.BAD_POISON)) {
+			// Only applies when the opponent gives the victim the condition
+			if (caster == victim) {
+				return;
+			}
+			
+			// Synchronize only applies to these three conditions
+			if (statusType != StatusCondition.BURNED && statusType != StatusCondition.POISONED && statusType != StatusCondition.PARALYZED) {
+				return;
+			}
+			
+			// Give status condition to the opponent
+			if (Status.giveStatus(b, victim, caster, statusType, true) && victim.hasEffect(EffectNamesies.BAD_POISON)) {
 				caster.addEffect((PokemonEffect)EffectNamesies.BAD_POISON.getEffect());
 			}
 		}

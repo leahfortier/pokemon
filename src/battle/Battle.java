@@ -156,6 +156,7 @@ public class Battle {
 
 	public void resetTerrain() {
 		this.currentTerrain = baseTerrain;
+		Messages.add(new MessageUpdate().withTerrain(currentTerrain));
 	}
 
 	public boolean hasEffect(EffectNamesies effect) {

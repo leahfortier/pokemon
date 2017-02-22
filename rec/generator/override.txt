@@ -54,7 +54,6 @@ StatusFang:
 	AddMapField: Effect: Flinch
 	AddMapField: MoveType: Biting
 	AddMapField: BeginAttack:
-		// TODO: Test
 		super.status = StatusCondition.NO_STATUS;
 		super.effects.clear();
 		
@@ -379,7 +378,6 @@ MirrorMove:
 		private Move mirror;
 		###
 	AddMapField: BeginAttack:
-		// TODO: Test
 		this.mirror = defending.getAttributes().getLastMoveUsed();
 		###
 	AddMapField: Applies: mirror != null && !mirror.getAttack().isMoveType(MoveType.MIRRORLESS)
@@ -805,7 +803,7 @@ Terrain:
 		}
 		
 		super.cast(b, caster, victim, source, printCast);
-		b.setTerrainType(TerrainType.{00}, false); // TODO: Need to send a terrain change message
+		b.setTerrainType(TerrainType.{00}, false);
 		###
 	AddMapField: Subside:
 		super.subside(b, p);
@@ -1390,7 +1388,6 @@ ForesightEffect:
 ForesightMove:
 	AddMapField: Effect: {0}
 	AddMapField: UniqueEffects: 
-		// TODO: Test
 		victim.getAttributes().resetStage(Stat.EVASION);
 		###
 	AddMapField: MoveType: Substitute_Piercing

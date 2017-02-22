@@ -1854,11 +1854,12 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.RAGE, Type.NORMAL, MoveCategory.PHYSICAL, 20, "As long as this move is in use, the power of rage raises the Attack stat each time the user is hit in battle.");
 			super.power = 20;
 			super.accuracy = 100;
+			super.effects.add(EffectNamesies.RAGING);
+			super.selfTarget = true;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Update for Gen 5 -- Increase attack when hit while using Rage
 			return user.getAttributes().getCount();
 		}
 	}

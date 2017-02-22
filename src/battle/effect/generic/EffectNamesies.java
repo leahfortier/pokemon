@@ -68,6 +68,7 @@ import battle.effect.generic.PokemonEffect.PowerSplit;
 import battle.effect.generic.PokemonEffect.PowerTrick;
 import battle.effect.generic.PokemonEffect.Protecting;
 import battle.effect.generic.PokemonEffect.QuickGuard;
+import battle.effect.generic.PokemonEffect.Raging;
 import battle.effect.generic.PokemonEffect.RaiseCrits;
 import battle.effect.generic.PokemonEffect.Safeguard;
 import battle.effect.generic.PokemonEffect.SandTomb;
@@ -193,6 +194,7 @@ public enum EffectNamesies {
 	ELECTRIFIED("Electrified", Electrified::new),
 	EATEN_BERRY("EatenBerry", EatenBerry::new),
 	BREAKS_THE_MOLD("BreaksTheMold", BreaksTheMold::new),
+	RAGING("Raging", Raging::new),
 	REFLECT("Reflect", Reflect::new),
 	LIGHT_SCREEN("LightScreen", LightScreen::new),
 	TAILWIND("Tailwind", Tailwind::new),

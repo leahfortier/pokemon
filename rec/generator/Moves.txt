@@ -897,8 +897,9 @@ Rage:
 	Acc: 100
 	Cat: Physical
 	Type: Normal
+	Effect: Raging
+	SelfTarget: True
 	GetMultiplier:
-		// TODO: Update for Gen 5 -- Increase attack when hit while using Rage
 		return user.getAttributes().getCount();
 		###
 *

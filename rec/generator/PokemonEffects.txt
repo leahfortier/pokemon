@@ -1164,3 +1164,18 @@ EatenBerry:
 BreaksTheMold:
 	NumTurns: 1
 *
+Raging:
+	Int: TakeDamageEffect
+	OnTakeDamage:
+		Move lastMoveUsed = victim.getAttributes().getLastMoveUsed();
+		if (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != AttackNamesies.RAGE) {
+			victim.removeEffect(this);
+			return;
+		}
+
+		victim.getAttributes().modifyStage(
+				victim, victim, 1, Stat.ATTACK, b, CastSource.EFFECT,
+				victim.getName() + "'s Rage increased its attack!"
+		);
+		###
+*
