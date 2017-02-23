@@ -18,10 +18,10 @@ class MultipleEvolution extends Evolution {
     }
 
     @Override
-    public Evolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
-        List<Evolution> list = new ArrayList<>();
+    public BaseEvolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
+        List<BaseEvolution> list = new ArrayList<>();
         for (Evolution ev : evolutions) {
-            Evolution lev = ev.getEvolution(type, p, use);
+            BaseEvolution lev = ev.getEvolution(type, p, use);
             if (lev != null) {
                 list.add(lev);
             }

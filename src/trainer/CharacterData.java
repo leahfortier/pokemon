@@ -415,16 +415,22 @@ public class CharacterData extends Trainer implements Serializable {
 
 	@Override
 	public void addPokemon(ActivePokemon p) {
+		this.addPokemon(p, true);
+	}
+
+	public void addPokemon(ActivePokemon p, boolean viewChange) {
 		this.newPokemon = p;
-		Messages.add(new MessageUpdate().withViewChange(ViewMode.NEW_POKEMON_VIEW));
+		if (viewChange) {
+			Messages.add(new MessageUpdate().withViewChange(ViewMode.NEW_POKEMON_VIEW));
+		}
 
 		p.setCaught();
 
 		if (team.size() < MAX_POKEMON) {
-            team.add(p);
+			team.add(p);
 			this.newPokemonBox = null;
-        }
-        else {
+		}
+		else {
 			pc.depositPokemon(p);
 			this.newPokemonBox = pc.getBoxNum() + 1;
 		}

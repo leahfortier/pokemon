@@ -15,7 +15,7 @@ class LevelUpEvolution extends BaseEvolution {
     }
 
     @Override
-    public Evolution getEvolution(ActivePokemon toEvolve, ItemNamesies useItem) {
+    public BaseEvolution getEvolution(ActivePokemon toEvolve, ItemNamesies useItem) {
         if (toEvolve.getLevel() >= level) {
             return this;
         }

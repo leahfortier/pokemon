@@ -14,7 +14,7 @@ public abstract class BaseEvolution extends Evolution {
 		this.evolutionNamesies = PokemonNamesies.valueOf(namesies);
 	}
 
-	protected abstract Evolution getEvolution(ActivePokemon toEvolve, ItemNamesies useItem);
+	protected abstract BaseEvolution getEvolution(ActivePokemon toEvolve, ItemNamesies useItem);
 
 	public final PokemonInfo getEvolution() {
 		return PokemonInfo.getPokemonInfo(evolutionNamesies);
@@ -26,7 +26,7 @@ public abstract class BaseEvolution extends Evolution {
 	}
 
 	@Override
-	public final Evolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
+	public final BaseEvolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
 		if (type != this.evolutionMethod) {
 			return null;
 		}

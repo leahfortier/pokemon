@@ -5,6 +5,7 @@ import java.util.Scanner;
 public enum EvolutionType {
     NONE(in -> new NoEvolution()),
     GENDER(in -> new GenderEvolution(in.next(), getBaseEvolution(in))),
+    EXTRA(in -> new ExtraEvolution(in.next(), in.next(), getBaseEvolution(in))),
     STAT(in -> new StatEvolution(in.next(), in.next(), in.next(), getBaseEvolution(in))),
     LEVEL(in -> new LevelUpEvolution(in.next(), in.nextInt())),
     ITEM(in -> new ItemEvolution(in.next(), in.next())),

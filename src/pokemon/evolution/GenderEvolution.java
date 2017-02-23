@@ -21,7 +21,7 @@ class GenderEvolution extends Evolution {
     }
 
     @Override
-    public Evolution getEvolution(EvolutionMethod type, ActivePokemon pokemon, ItemNamesies use) {
+    public BaseEvolution getEvolution(EvolutionMethod type, ActivePokemon pokemon, ItemNamesies use) {
         if (pokemon.getGender() == this.gender) {
             return this.evolution.getEvolution(type, pokemon, use);
         }

@@ -17,7 +17,7 @@ class MoveEvolution extends BaseEvolution {
     }
 
     @Override
-    public Evolution getEvolution(ActivePokemon toEvolve, ItemNamesies useItem) {
+    public BaseEvolution getEvolution(ActivePokemon toEvolve, ItemNamesies useItem) {
         for (Move move : toEvolve.getActualMoves()) {
             if (move.getAttack().namesies() == this.move) {
                 return this;
