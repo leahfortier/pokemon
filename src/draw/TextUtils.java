@@ -64,11 +64,15 @@ public final class TextUtils {
     }
 
     public static void drawCenteredHeightString(Graphics g, String s, int x, int centerY) {
+        drawCenteredHeightString(g, s, x, centerY, Alignment.LEFT);
+    }
+
+    public static void drawCenteredHeightString(Graphics g, String s, int x, int centerY, Alignment alignment) {
         int fontSize = g.getFont().getSize();
         FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
 
         int bottomY = centerY(centerY, fontMetrics);
-        g.drawString(s, x, bottomY);
+        alignment.drawString(g, s, x, bottomY);
     }
 
     public static void drawRightAlignedString(Graphics g, String s, int rightX, int y) {

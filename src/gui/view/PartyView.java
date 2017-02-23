@@ -2,14 +2,16 @@ package gui.view;
 
 import battle.attack.Attack;
 import battle.attack.Move;
+import draw.Alignment;
+import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
-import gui.GameData;
-import gui.TileSet;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.panel.BasicPanels;
 import draw.button.panel.DrawPanel;
+import gui.GameData;
+import gui.TileSet;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -20,7 +22,6 @@ import pokemon.Stat;
 import pokemon.ability.Ability;
 import trainer.Trainer;
 import type.Type;
-import draw.DrawUtils;
 import util.FontMetrics;
 import util.Point;
 
@@ -152,7 +153,7 @@ class PartyView extends View {
 				halfPanelWidth,
 				buttonHeight,
 				ButtonHoverAction.BOX,
-				new int[] { SWITCH, 0, SWITCH, 0 }
+				new int[] { SWITCH, MOVES + Move.MAX_MOVES - 1, SWITCH, 0 }
 		);
 
 		tabButtons = new Button[Trainer.MAX_POKEMON];
@@ -164,15 +165,11 @@ class PartyView extends View {
 					pokemonPanel.width,
 					tabHeight,
 					tabButtons.length,
-					new int[] {
-							i == Trainer.MAX_POKEMON - 1 ? 0 : i + 1, // Right
-							i < Trainer.MAX_POKEMON ? SWITCH : RETURN, // Up
-							i == 0 ? Trainer.MAX_POKEMON - 1 : i - 1, // Left
-							MOVES // Down
-					});
+					Button.getBasicTransitions(i, 1, Trainer.MAX_POKEMON, 0, new int[] { -1, RETURN, -1, MOVES })
+			);
 		}
 
-		moveButtons = movesPanel.getButtons(10, Move.MAX_MOVES, 1);
+		moveButtons = movesPanel.getButtons(10, Move.MAX_MOVES, 1, MOVES, new int[] { -1, 0, -1, RETURN });
 
 		buttons = new Button[NUM_BUTTONS];
 
@@ -313,102 +310,37 @@ class PartyView extends View {
 			
 			FontMetrics.setFont(g, 16);
 			g.setColor(Color.BLACK);
-			
-			// Stats Box
-			statsPanel.drawBackground(g);
 
-			int spacing = statsPanel.height/(Stat.NUM_STATS + 1);
-			int firstRowY = statsPanel.y + spacing - 2;
+			List<Move> moves = selectedPkm.getActualMoves();
 
-			g.drawString("Stat", 250, firstRowY);
-			g.drawString("IV", 310, firstRowY);
-			g.drawString("EV", 355, firstRowY);
-			
-			for (int i = 0; i < Stat.NUM_STATS; i++) {
-				g.setColor(selectedPkm.getNature().getColor(i));
-				g.drawString(Stat.getStat(i, false).getName(), statsPanel.x + 10, firstRowY + (i + 1)*spacing);
+			// Stats Box or Move description
+			if (selectedButton >= MOVES && selectedButton < MOVES + Move.MAX_MOVES) {
+				drawMoveDescriptionPanel(g, statsPanel, moves.get(selectedButton - MOVES).getAttack());
 			}
-			
-			int[] stats = selectedPkm.getStats();
-			int[] ivs = selectedPkm.getIVs();
-			int[] evs = selectedPkm.getEVs();
-
-			FontMetrics.setFont(g, 14);
-			g.setColor(Color.BLACK);
-
-			for (int i = 0; i < Stat.NUM_STATS; i++) {
-				final String statString;
-				if (i == Stat.HP.index()) {
-					statString = selectedPkm.getHP() + "/" + stats[i];
-				} else {
-					statString = "" + stats[i];
-				}
-
-				int drawY = firstRowY + (i + 1)*spacing;
-				TextUtils.drawRightAlignedString(g, statString, 285, drawY);
-				TextUtils.drawRightAlignedString(g, "" + ivs[i], 327, drawY);
-				TextUtils.drawRightAlignedString(g, "" + evs[i], 371, drawY);
+			else {
+				drawStatBox(g, selectedPkm);
 			}
 
-			// HP Bar
-			hpBar.fillBar(g, selectedPkm.getHPColor(), selectedPkm.getHPRatio());
-			
 			// Move Box
 			movesPanel.drawBackground(g);
-			List<Move> moves = selectedPkm.getActualMoves();
 			for (int i = 0; i < moves.size(); i++) {
 				Move move = moves.get(i);
 				Attack attack = move.getAttack();
 				Button moveButton = moveButtons[i];
 
-				g.translate(moveButton.x, moveButton.y);
-
-				DrawPanel movePanel = new DrawPanel(0, 0, moveButton.width, moveButton.height)
+				DrawPanel movePanel = new DrawPanel(moveButton)
 						.withTransparentBackground(attack.getActualType().getColor())
 						.withTransparentCount(2)
-						.withBorderPercentage(15)
+						.withBorderPercentage(20)
 						.withBlackOutline();
 				movePanel.drawBackground(g);
 
 				g.setColor(Color.BLACK);
-				if (selectedButton == MOVES + i) {
-					movePanel.drawMessage(g, 10, attack.getDescription());
-				}
-				else {
-					FontMetrics.setFont(g, 14);
+				FontMetrics.setFont(g, 18);
 
-					int moveInset = movePanel.getBorderSize() + 4;
-					int firstY = moveInset + FontMetrics.getTextHeight(g);
-					int secondY = movePanel.height - moveInset;
-
-					int middleX = movePanel.width/2;
-					int rightAlignedMiddleX = middleX + 72;
-
-					// Attack name
-					g.drawString(attack.getName(), moveInset, firstY);
-					
-					// PP
-					g.drawString("PP:", middleX, firstY);
-					TextUtils.drawRightAlignedString(g, move.getPP() + "/" + move.getMaxPP(), rightAlignedMiddleX, firstY);
-					
-					// Accuracy
-					FontMetrics.setFont(g, 12);
-					g.drawString("Accuracy:", moveInset, secondY);
-					TextUtils.drawRightAlignedString(g, attack.getAccuracyString(), moveInset + 93, secondY);
-					
-					// Power
-					g.drawString("Power:", middleX, secondY);
-					TextUtils.drawRightAlignedString(g, attack.getPowerString(), rightAlignedMiddleX, secondY);
-
-					BufferedImage typeImage = move.getAttack().getActualType().getImage();
-					int imageX = movePanel.width - moveInset - typeImage.getWidth();
-					g.drawImage(typeImage, imageX, firstY - typeImage.getHeight() + 2, null);
-
-					BufferedImage categoryImage = move.getAttack().getCategory().getImage();
-					g.drawImage(categoryImage, imageX, secondY - categoryImage.getHeight() + 2, null);
-				}
-
-				g.translate(-moveButton.x, -moveButton.y);
+				int moveInset = movePanel.getBorderSize() + 10;
+				TextUtils.drawCenteredHeightString(g, attack.getName(), movePanel.x + moveInset, movePanel.centerY());
+				TextUtils.drawCenteredHeightString(g, String.format("PP: %d/%d", move.getPP(), move.getMaxPP()), movePanel.rightX() - moveInset, movePanel.centerY(), Alignment.RIGHT);
 			}
 		}
 		
@@ -463,7 +395,83 @@ class PartyView extends View {
 			button.draw(g);
 		}
 	}
-	
+
+	public void drawStatBox(Graphics g, ActivePokemon selectedPkm) {
+		statsPanel.drawBackground(g);
+
+		int spacing = statsPanel.height/(Stat.NUM_STATS + 1);
+		int firstRowY = statsPanel.y + spacing - 2;
+
+		g.drawString("Stat", 250, firstRowY);
+		g.drawString("IV", 310, firstRowY);
+		g.drawString("EV", 355, firstRowY);
+
+		for (int i = 0; i < Stat.NUM_STATS; i++) {
+			g.setColor(selectedPkm.getNature().getColor(i));
+			g.drawString(Stat.getStat(i, false).getName(), statsPanel.x + 10, firstRowY + (i + 1)*spacing);
+		}
+
+		int[] stats = selectedPkm.getStats();
+		int[] ivs = selectedPkm.getIVs();
+		int[] evs = selectedPkm.getEVs();
+
+		FontMetrics.setFont(g, 14);
+		g.setColor(Color.BLACK);
+
+		for (int i = 0; i < Stat.NUM_STATS; i++) {
+			final String statString;
+			if (i == Stat.HP.index()) {
+				statString = selectedPkm.getHP() + "/" + stats[i];
+			} else {
+				statString = "" + stats[i];
+			}
+
+			int drawY = firstRowY + (i + 1)*spacing;
+			TextUtils.drawRightAlignedString(g, statString, 285, drawY);
+			TextUtils.drawRightAlignedString(g, "" + ivs[i], 327, drawY);
+			TextUtils.drawRightAlignedString(g, "" + evs[i], 371, drawY);
+		}
+
+		// HP Bar
+		hpBar.fillBar(g, selectedPkm.getHPColor(), selectedPkm.getHPRatio());
+	}
+
+	public void drawMoveDescriptionPanel(Graphics g, DrawPanel moveDetailsPanel, Attack move) {
+		moveDetailsPanel
+				.withTransparentBackground(move.getActualType().getColor())
+				.drawBackground(g);
+
+		FontMetrics.setFont(g, 20);
+		int spacing = 15;
+		int y = moveDetailsPanel.y + spacing + FontMetrics.getTextHeight(g);
+		g.drawString(move.getName(), moveDetailsPanel.x + spacing, y);
+
+		BufferedImage typeImage = move.getActualType().getImage();
+		int imageY = y - typeImage.getHeight();
+		int imageX = moveDetailsPanel.rightX() - spacing - typeImage.getWidth();
+		g.drawImage(typeImage, imageX, imageY, null);
+
+		BufferedImage categoryImage = move.getCategory().getImage();
+		imageX -= categoryImage.getWidth() + spacing;
+		g.drawImage(categoryImage, imageX, imageY, null);
+
+		y += FontMetrics.getDistanceBetweenRows(g);
+
+		FontMetrics.setFont(g, 18);
+		g.drawString("Power: " + move.getPowerString(), moveDetailsPanel.x + spacing, y);
+		TextUtils.drawRightAlignedString(g, "Acc: " + move.getAccuracyString(), moveDetailsPanel.rightX() - spacing, y);
+
+		y += FontMetrics.getDistanceBetweenRows(g) + 2;
+
+		FontMetrics.setFont(g, 16);
+		TextUtils.drawWrappedText(g,
+				move.getDescription(),
+				moveDetailsPanel.x + spacing,
+				y,
+				moveDetailsPanel.width - 2*spacing
+		);
+	}
+
 	private void updateActiveButtons() {
 		List<ActivePokemon> team = Game.getPlayer().getTeam();
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
