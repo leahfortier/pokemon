@@ -68,14 +68,13 @@ Toxic:
 	PP: 10
 	Type: Poison
 	Desc: A move that leaves the target badly poisoned. Its poison damage worsens every turn.
-	Effect: BadPoison
 	Cat: Status
 	Acc: 90
+	Status: Badly_Poisoned
 	BypassAccuracy:
 		// Poison-type Pokemon bypass accuracy
 		return attacking.isType(b, Type.POISON);
 		###
-	Applies: EffectNamesies.BAD_POISON.getEffect().applies(b, user, victim, CastSource.ATTACK)
 *
 Ember:
 	Acc: 100
@@ -1521,7 +1520,7 @@ Poison Fang:
 	Cat: Physical
 	Type: Poison
 	MoveType: Biting
-	Effect: BadPoison
+	Status: Badly_Poisoned
 	EffChance: 50
 *
 Chip Away:

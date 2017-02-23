@@ -529,16 +529,12 @@ public abstract class Attack implements Serializable {
 		Toxic() {
 			super(AttackNamesies.TOXIC, Type.POISON, MoveCategory.STATUS, 10, "A move that leaves the target badly poisoned. Its poison damage worsens every turn.");
 			super.accuracy = 90;
-			super.effects.add(EffectNamesies.BAD_POISON);
+			super.status = StatusCondition.BADLY_POISONED;
 		}
 
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			// Poison-type Pokemon bypass accuracy
 			return attacking.isType(b, Type.POISON);
-		}
-
-		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return EffectNamesies.BAD_POISON.getEffect().applies(b, user, victim, CastSource.ATTACK);
 		}
 	}
 
@@ -2876,8 +2872,8 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.POISON_FANG, Type.POISON, MoveCategory.PHYSICAL, 15, "The user bites the target with toxic fangs. It may also leave the target badly poisoned.");
 			super.power = 50;
 			super.accuracy = 100;
-			super.effects.add(EffectNamesies.BAD_POISON);
 			super.effectChance = 50;
+			super.status = StatusCondition.BADLY_POISONED;
 			super.moveTypes.add(MoveType.BITING);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}

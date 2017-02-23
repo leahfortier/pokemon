@@ -620,10 +620,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			// Badly poisons the holder at the end of the turn
-			if (Status.applies(StatusCondition.POISONED, b, victim, victim)) {
-				victim.addEffect((PokemonEffect)EffectNamesies.BAD_POISON.getEffect());
-				Status.giveStatus(b, victim, victim, StatusCondition.POISONED, victim.getName() + " was badly poisoned by its " + this.name + "!");
-			}
+			Status.giveStatus(
+				b, victim, victim, StatusCondition.BADLY_POISONED,
+				victim.getName() + " was badly poisoned by its " + this.name + "!"
+			);
 		}
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
@@ -3104,7 +3104,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public boolean use(ActivePokemon p) {
 			// Essentially Full Restore is just a combined Max Potion and Full Heal
-			return new MaxPotion().use(p) || new FullHeal().use(p);
+			boolean maxPotion = new MaxPotion().use(p);
+			boolean fullHeal = new FullHeal().use(p);
+			return maxPotion || fullHeal;
 		}
 	}
 

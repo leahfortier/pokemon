@@ -12,7 +12,6 @@ import battle.effect.generic.BattleEffect.TrickRoom;
 import battle.effect.generic.BattleEffect.WaterSport;
 import battle.effect.generic.BattleEffect.WonderRoom;
 import battle.effect.generic.PokemonEffect.AquaRing;
-import battle.effect.generic.PokemonEffect.BadPoison;
 import battle.effect.generic.PokemonEffect.BanefulBunker;
 import battle.effect.generic.PokemonEffect.BeakBlast;
 import battle.effect.generic.PokemonEffect.Bide;
@@ -117,7 +116,6 @@ import util.PokeString;
 public enum EffectNamesies {
     // EVERYTHING BELOW IS GENERATED ###
 	LEECH_SEED("LeechSeed", LeechSeed::new),
-	BAD_POISON("BadPoison", BadPoison::new),
 	FLINCH("Flinch", Flinch::new),
 	FIRE_SPIN("FireSpin", FireSpin::new),
 	INFESTATION("Infestation", Infestation::new),

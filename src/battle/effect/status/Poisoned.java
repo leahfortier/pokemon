@@ -3,7 +3,6 @@ package battle.effect.status;
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectNamesies;
-import battle.effect.generic.PokemonEffect;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
@@ -17,6 +16,12 @@ class Poisoned extends Status implements EndTurnEffect {
         super(StatusCondition.POISONED);
     }
 
+    @Override
+    public boolean isType(StatusCondition statusCondition) {
+        return statusCondition == StatusCondition.POISONED || statusCondition == StatusCondition.BADLY_POISONED;
+    }
+
+    @Override
     public void applyEndTurn(ActivePokemon victim, Battle b) {
         if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
             return;
@@ -32,9 +37,13 @@ class Poisoned extends Status implements EndTurnEffect {
             return;
         }
 
-        PokemonEffect badPoison = victim.getEffect(EffectNamesies.BAD_POISON);
         Messages.add(new MessageUpdate(victim.getName() + " was hurt by its poison!"));
-        victim.reduceHealthFraction(b, badPoison == null ? 1/8.0 : badPoison.getTurns()/16.0);
+        victim.reduceHealthFraction(b, this.getTurns()/16.0);
+    }
+
+    // Regular poison reduces 2/16 = 1/8 hp
+    protected int getTurns() {
+        return 2;
     }
 
     // Poison-type and Steel-type Pokemon cannot be poisoned unless the caster has the Corrosion ability
@@ -43,18 +52,22 @@ class Poisoned extends Status implements EndTurnEffect {
         return (!victim.isType(b, Type.POISON) && !victim.isType(b, Type.STEEL) || caster.hasAbility(AbilityNamesies.CORROSION));
     }
 
+    @Override
     public String getCastMessage(ActivePokemon p) {
-        return p.getName() + " was " + (p.hasEffect(EffectNamesies.BAD_POISON) ? "badly " : "") + "poisoned!";
+        return p.getName() + " was poisoned!";
     }
 
+    @Override
     public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
-        return abilify.getName() + "'s " + abilify.getAbility().getName() + (victim.hasEffect(EffectNamesies.BAD_POISON) ? " badly " : " ") + "poisoned " + victim.getName() + "!";
+        return abilify.getName() + "'s " + abilify.getAbility().getName() + " poisoned " + victim.getName() + "!";
     }
 
+    @Override
     public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " is no longer poisoned!";
     }
 
+    @Override
     public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
         return victim.getName() + "'s " + sourceName + " cured it of its poison!";
     }

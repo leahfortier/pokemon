@@ -97,6 +97,10 @@ public abstract class Status implements Serializable {
 		return statusCondition;
 	}
 
+	public boolean isType(StatusCondition statusCondition) {
+		return this.getType() == statusCondition;
+	}
+
 	public void setTurns(int turns) {}
 
 	// Returns true if a status was successfully given, and false if it failed for any reason
@@ -125,10 +129,6 @@ public abstract class Status implements Serializable {
 
 	public static void removeStatus(ActivePokemon p) {
 		p.setStatus(new NoStatus());
-
-		// TODO: There should be a way for effects to be tied to status conditions so that they don't have to be hardcoded here
-		p.getAttributes().removeEffect(EffectNamesies.NIGHTMARE);
-		p.getAttributes().removeEffect(EffectNamesies.BAD_POISON);
 	}
 
 	public static void die(Battle b, ActivePokemon murderer, ActivePokemon deady) {

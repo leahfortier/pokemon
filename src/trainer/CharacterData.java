@@ -489,7 +489,7 @@ public class CharacterData extends Trainer implements Serializable {
 			return false;
 		}
 
-		Messages.add(new MessageUpdate(name + " threw the " + ball.getName() + "!"));
+		Messages.add(name + " threw the " + ball.getName() + "!");
 		this.pokeball = ball;
 		
 		ActivePokemon catchPokemon = b.getOtherPokemon(true);
@@ -508,13 +508,13 @@ public class CharacterData extends Trainer implements Serializable {
 		for (int i = 0; i < CATCH_SHAKES + 1; i++) {
 			if (!RandomUtils.chanceTest(shakeVal, 65536)) {
 				Messages.add(new MessageUpdate().withCatchPokemon(i));
-				Messages.add(new MessageUpdate("Oh no! " + catchPokemon.getName() + " broke free!"));
+				Messages.add("Oh no! " + catchPokemon.getName() + " broke free!");
 				return true;
 			}
 		}
 
 		Messages.add(new MessageUpdate().withCatchPokemon(-1));
-		Messages.add(new MessageUpdate("Gotcha! " + catchPokemon.getName() + " was caught!"));
+		Messages.add("Gotcha! " + catchPokemon.getName() + " was caught!");
 		gainEXP(catchPokemon, b);
 		addPokemon(catchPokemon);
 		ball.afterCaught(catchPokemon);

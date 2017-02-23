@@ -44,29 +44,6 @@ LeechSeed:
 		// Need to override this to not sap health when applying damage
 		###
 *
-BadPoison:
-	Field: 
-		private int turns;
-		###
-	GetTurns: 
-		return turns;
-		###
-	FailCondition: !Status.applies(StatusCondition.POISONED, b, caster, victim)
-	CanHave: True
-	Cast: 
-		super.cast(b, caster, victim, source, printCast);
-		Status.giveStatus(b, caster, victim, StatusCondition.POISONED);
-		###
-	Int: EndTurnEffect
-	ApplyEndTurn: 
-		turns++;
-		###
-	FailMessage:
-		if (!Status.applies(StatusCondition.POISONED, b, user, victim)) {
-			return Status.getFailMessage(b, user, victim, StatusCondition.POISONED);
-		}
-		###
-*
 Flinch:
 	Int: BeforeTurnEffect
 	FailAbility: Inner Focus
@@ -752,6 +729,11 @@ Nightmare:
 	FailCondition: !victim.hasStatus(StatusCondition.ASLEEP)
 	Int: EndTurnEffect
 	ApplyEndTurn: 
+		if (!victim.hasStatus(StatusCondition.ASLEEP)) {
+			this.active = false;
+			return;
+		}
+		
 		if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 			return;
 		}

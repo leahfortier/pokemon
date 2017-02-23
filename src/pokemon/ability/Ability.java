@@ -90,7 +90,9 @@ import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Ability implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -912,6 +914,12 @@ public abstract class Ability implements Serializable {
 
 	static class Synchronize extends Ability implements StatusReceivedEffect {
 		private static final long serialVersionUID = 1L;
+		private static final Set<StatusCondition> PASSABLE_STATUSES = EnumSet.of(
+			StatusCondition.BURNED,
+			StatusCondition.PARALYZED,
+			StatusCondition.POISONED,
+			StatusCondition.BADLY_POISONED
+		);
 
 		Synchronize() {
 			super(AbilityNamesies.SYNCHRONIZE, "Passes on a burn, poison, or paralysis to the foe.");
@@ -923,15 +931,13 @@ public abstract class Ability implements Serializable {
 				return;
 			}
 			
-			// Synchronize only applies to these three conditions
-			if (statusType != StatusCondition.BURNED && statusType != StatusCondition.POISONED && statusType != StatusCondition.PARALYZED) {
+			// Synchronize doesn't apply to every condition
+			if (PASSABLE_STATUSES.contains(statusType)) {
 				return;
 			}
 			
 			// Give status condition to the opponent
-			if (Status.giveStatus(b, victim, caster, statusType, true) && victim.hasEffect(EffectNamesies.BAD_POISON)) {
-				caster.addEffect((PokemonEffect)EffectNamesies.BAD_POISON.getEffect());
-			}
+			Status.giveStatus(b, victim, caster, statusType, true);
 		}
 	}
 

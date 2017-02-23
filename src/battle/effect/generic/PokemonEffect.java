@@ -140,40 +140,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class BadPoison extends PokemonEffect implements EndTurnEffect {
-		private static final long serialVersionUID = 1L;
-		private int turns;
-
-		BadPoison() {
-			super(EffectNamesies.BAD_POISON, -1, -1, false);
-		}
-
-		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(!Status.applies(StatusCondition.POISONED, b, caster, victim));
-		}
-
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			turns++;
-		}
-
-		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			super.cast(b, caster, victim, source, printCast);
-			Status.giveStatus(b, caster, victim, StatusCondition.POISONED);
-		}
-
-		public int getTurns() {
-			return turns;
-		}
-
-		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (!Status.applies(StatusCondition.POISONED, b, user, victim)) {
-				return Status.getFailMessage(b, user, victim, StatusCondition.POISONED);
-			}
-			
-			return super.getFailMessage(b, user, victim);
-		}
-	}
-
 	static class Flinch extends PokemonEffect implements BeforeTurnEffect {
 		private static final long serialVersionUID = 1L;
 
@@ -1872,6 +1838,11 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			if (!victim.hasStatus(StatusCondition.ASLEEP)) {
+				this.active = false;
+				return;
+			}
+			
 			if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 				return;
 			}

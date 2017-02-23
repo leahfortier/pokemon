@@ -338,14 +338,8 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			}
 			
 			ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer);
-			if (Status.applies(StatusCondition.POISONED, b, theOtherPokemon, enterer)) {
-				if (layers >= 2) {
-					EffectNamesies.BAD_POISON.getEffect().cast(b, theOtherPokemon, enterer, CastSource.EFFECT, false);
-				}
-				else {
-					Status.giveStatus(b, theOtherPokemon, enterer, StatusCondition.POISONED);
-				}
-			}
+			StatusCondition poisonCondition = layers >= 2 ? StatusCondition.BADLY_POISONED : StatusCondition.POISONED;
+			Status.giveStatus(b, theOtherPokemon, enterer, poisonCondition);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {

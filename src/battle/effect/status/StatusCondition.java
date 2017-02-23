@@ -7,6 +7,7 @@ public enum StatusCondition implements Serializable {
     FAINTED("FNT", 1, Fainted::new),
     PARALYZED("PRZ", 1.5, Paralyzed::new),
     POISONED("PSN", 1.5, Poisoned::new),
+    BADLY_POISONED("PSN", 1.5, BadlyPoisoned::new),
     BURNED("BRN", 1.5, Burned::new),
     ASLEEP("SLP", 2.5, Asleep::new),
     FROZEN("FRZ", 2.5, Frozen::new);

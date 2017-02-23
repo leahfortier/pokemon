@@ -65,18 +65,18 @@ public class StatusTest {
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
-        attacking.apply(true, AttackNamesies.TOXIC, battle);
+        Assert.assertFalse(defending.hasStatus());
+        Assert.assertFalse(defending.hasStatus(StatusCondition.POISONED));
+        battle.attackingFight(AttackNamesies.TOXIC);
         Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
-
-        // Should fail because Charmander has a status condition
-        attacking.apply(false, AttackNamesies.TOXIC, battle);
+        Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
 
         battle.defendingFight(AttackNamesies.PURIFY);
         Assert.assertFalse(defending.hasStatus());
 
         // Cannot poison a pokemon with immunity
         defending.withAbility(AbilityNamesies.IMMUNITY);
-        attacking.apply(false, AttackNamesies.TOXIC, battle);
+        battle.attackingFight(AttackNamesies.TOXIC);
         Assert.assertFalse(defending.hasStatus());
 
         // Unless you have Mold Breaker
@@ -103,12 +103,12 @@ public class StatusTest {
         // Poison-type Pokemon cannot be poisoned
         battle.defendingFight(AttackNamesies.REFLECT_TYPE);
         Assert.assertTrue(defending.isType(battle, Type.POISON));
-        attacking.apply(false, AttackNamesies.TOXIC, battle);
+        battle.attackingFight(AttackNamesies.TOXIC);
         Assert.assertFalse(defending.hasStatus());
 
         // Unless you have Corrosion
         attacking.withAbility(AbilityNamesies.CORROSION);
-        attacking.apply(true, AttackNamesies.TOXIC, battle);
+        battle.attackingFight(AttackNamesies.TOXIC);
         Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
 
         // Type should not heal at end of turn
@@ -125,11 +125,11 @@ public class StatusTest {
 
         // Safeguard has nothing to do with ability
         battle.defendingFight(AttackNamesies.SAFEGUARD);
-        attacking.apply(false, AttackNamesies.TOXIC, battle);
+        battle.attackingFight(AttackNamesies.TOXIC);
         Assert.assertFalse(defending.hasStatus());
 
         attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
-        attacking.apply(false, AttackNamesies.TOXIC, battle);
+        battle.attackingFight(AttackNamesies.TOXIC);
         Assert.assertFalse(defending.hasStatus());
     }
 }

@@ -302,21 +302,27 @@ Anger Point:
 Synchronize:
 	Desc: Passes on a burn, poison, or paralysis to the foe.
 	Int: StatusReceivedEffect
+	Field:
+		private static final Set<StatusCondition> PASSABLE_STATUSES = EnumSet.of(
+				StatusCondition.BURNED,
+				StatusCondition.PARALYZED,
+				StatusCondition.POISONED,
+				StatusCondition.BADLY_POISONED
+		);
+		###
 	StatusReceived:
 		// Only applies when the opponent gives the victim the condition
 		if (caster == victim) {
 			return;
 		}
 
-		// Synchronize only applies to these three conditions
-		if (statusType != StatusCondition.BURNED && statusType != StatusCondition.POISONED && statusType != StatusCondition.PARALYZED) {
+		// Synchronize doesn't apply to every condition
+		if (PASSABLE_STATUSES.contains(statusType)) {
 			return;
 		}
 
 		// Give status condition to the opponent
-		if (Status.giveStatus(b, victim, caster, statusType, true) && victim.hasEffect(EffectNamesies.BAD_POISON)) {
-			caster.addEffect((PokemonEffect)EffectNamesies.BAD_POISON.getEffect());
-		}
+		Status.giveStatus(b, victim, caster, statusType, true);
 		###
 *
 No Guard:

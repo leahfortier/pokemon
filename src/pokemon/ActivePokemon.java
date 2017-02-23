@@ -1075,11 +1075,11 @@ public class ActivePokemon implements Serializable {
 	
 	// Returns whether or not the Pokemon is afflicted with a status condition
 	public boolean hasStatus() {
-		return status.getType() != StatusCondition.NO_STATUS;
+		return !this.hasStatus(StatusCondition.NO_STATUS);
 	}
 	
 	public boolean hasStatus(StatusCondition type) {
-		return status.getType() == type;
+		return status.isType(type);
 	}
 	
 	// Sets the Pokemon's status condition to be None

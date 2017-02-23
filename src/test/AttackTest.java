@@ -346,7 +346,7 @@ public class AttackTest {
 
         battle.attackingFight(AttackNamesies.TOXIC);
         Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
-        Assert.assertTrue(defending.hasEffect(EffectNamesies.BAD_POISON));
+        Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
 
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
@@ -355,27 +355,24 @@ public class AttackTest {
 
         battle.attackingFight(AttackNamesies.REFRESH);
         Assert.assertFalse(attacking.hasStatus());
-        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
-        Assert.assertTrue(defending.hasEffect(EffectNamesies.BAD_POISON));
+        Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
 
-        // TODO: Should transfer bad poison as well but doesn't but I'm gonna rewrite how that works so do it after that
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
         Assert.assertTrue(attacking.hasStatus(StatusCondition.POISONED));
-//        Assert.assertTrue(attacking.hasEffect(EffectNamesies.BAD_POISON));
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.BADLY_POISONED));
         Assert.assertFalse(defending.hasStatus());
-        Assert.assertFalse(defending.hasEffect(EffectNamesies.BAD_POISON));
 
         attacking.withAbility(AbilityNamesies.PROTEAN);
         Assert.assertTrue(attacking.isType(battle, Type.WATER));
         battle.attackingFight(AttackNamesies.CLEAR_SMOG);
         Assert.assertTrue(attacking.isType(battle, Type.POISON));
         Assert.assertTrue(attacking.hasStatus(StatusCondition.POISONED));
-//        Assert.assertTrue(attacking.hasEffect(EffectNamesies.BAD_POISON));
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.BADLY_POISONED));
         battle.attackingFight(AttackNamesies.PSYCHO_SHIFT);
         Assert.assertFalse(attacking.hasStatus());
         Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
-//        Assert.assertTrue(defending.hasEffect(EffectNamesies.BAD_POISON));
+        Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
         Assert.assertTrue(attacking.isType(battle, Type.PSYCHIC));
         battle.attackingFight(AttackNamesies.ACID_ARMOR);
         Assert.assertTrue(attacking.isType(battle, Type.POISON));
@@ -532,7 +529,7 @@ public class AttackTest {
         Assert.assertTrue(attacking.getStage(Stat.EVASION) == 1);
         Assert.assertTrue(defending.getStage(Stat.EVASION) == 0);
 
-        battle.attackingFight(AttackNamesies.MIRACLE_EYE);
+        battle.defendingFight(AttackNamesies.MIRACLE_EYE);
         Assert.assertTrue(attacking.getStage(Stat.EVASION) == 0);
         Assert.assertTrue(defending.getStage(Stat.EVASION) == 0);
     }
