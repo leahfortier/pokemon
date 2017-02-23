@@ -26,7 +26,7 @@ import message.MessageUpdate.Update;
 import message.Messages;
 import sound.SoundPlayer;
 import sound.SoundTitle;
-import trainer.CharacterData;
+import trainer.Player;
 import util.FontMetrics;
 import util.Point;
 import util.StringUtils;
@@ -212,7 +212,7 @@ public class MapView extends View {
 
 	@Override
 	public void update(int dt) {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		PlayerEntity playerEntity = player.getEntity();
 
 		boolean showMessage = !this.isState(VisualState.BATTLE);
@@ -275,7 +275,7 @@ public class MapView extends View {
 
 	private void checkMapReset() {
 		GameData data = Game.getData();
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 
 		if (player.mapReset() || currentMapName == null || !currentMapName.equals(player.getMapName())) {
 			currentMapName = player.getMapName();

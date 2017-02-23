@@ -1,7 +1,7 @@
 package map;
 
 import main.Game;
-import trainer.CharacterData;
+import trainer.Player;
 import util.StringUtils;
 
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public class Condition {
 	}
 
 	public boolean isTrue() {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 
 		Stack<Boolean> stack = new Stack<>();
 		for (String s: condition) {

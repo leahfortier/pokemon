@@ -14,7 +14,7 @@ import main.Global;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
-import trainer.CharacterData;
+import trainer.Player;
 
 import java.io.Serializable;
 import java.util.EnumMap;
@@ -200,7 +200,7 @@ public class Bag implements Serializable {
 	}
 
 	public boolean battleUseItem(ItemNamesies item, ActivePokemon activePokemon, Battle battle) {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 
 		Item useItem = item.getItem();
 		boolean used = false;

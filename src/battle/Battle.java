@@ -38,7 +38,7 @@ import message.Messages.MessageState;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
-import trainer.CharacterData;
+import trainer.Player;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.Team;
@@ -54,7 +54,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Battle {
-	private final CharacterData player;
+	private final Player player;
 	private final Opponent opponent; // SO OBJECT-ORIENTED
 
 	private List<BattleEffect> effects;
@@ -112,7 +112,7 @@ public class Battle {
 		this.npcUpdateInteraction = npcUpdateInteraction;
 	}
 
-	public CharacterData getPlayer() {
+	public Player getPlayer() {
 		return player;
 	}
 

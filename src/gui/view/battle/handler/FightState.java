@@ -8,7 +8,7 @@ import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
 import pokemon.ActivePokemon;
-import trainer.CharacterData;
+import trainer.Player;
 import trainer.Trainer.Action;
 import util.StringUtils;
 
@@ -78,7 +78,7 @@ public class FightState implements VisualStateHandler {
         // Update move buttons and the back button
         view.setSelectedButton(moveButtons);
 
-        CharacterData player = Game.getPlayer();
+        Player player = Game.getPlayer();
         Battle currentBattle = view.getCurrentBattle();
 
         // Get the Pokemon that is attacking and their corresponding move list

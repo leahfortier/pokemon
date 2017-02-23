@@ -11,7 +11,7 @@ import main.Game;
 import main.Global;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
-import trainer.CharacterData;
+import trainer.Player;
 import trainer.Trainer;
 import type.Type;
 import util.Point;
@@ -148,7 +148,7 @@ class NewPokemonView extends View {
                     setState(State.END);
                 }
 
-                CharacterData player = Game.getPlayer();
+                Player player = Game.getPlayer();
                 List<ActivePokemon> party = player.getTeam();
                 for (int row = 0; row < 2; row++) {
                     for (int col = 0; col < Trainer.MAX_POKEMON/2; col++) {
@@ -301,7 +301,7 @@ class NewPokemonView extends View {
             button.setActive(false);
         }
 
-        CharacterData player = Game.getPlayer();
+        Player player = Game.getPlayer();
         String pokemonName = newPokemon.getActualName();
 
         this.state = state;
@@ -363,7 +363,7 @@ class NewPokemonView extends View {
 
     @Override
     public void movedToFront() {
-        CharacterData player = Game.getPlayer();
+        Player player = Game.getPlayer();
         this.newPokemon = player.getNewPokemon();
         this.boxNum = player.getNewPokemonBox();
 

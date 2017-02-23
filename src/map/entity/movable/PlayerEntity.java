@@ -13,7 +13,7 @@ import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import sound.SoundPlayer;
 import sound.SoundTitle;
-import trainer.CharacterData;
+import trainer.Player;
 import util.FloatPoint;
 import util.Point;
 
@@ -134,7 +134,7 @@ public class PlayerEntity extends MovableEntity {
 	}
 
 	private void checkMovement(MapData currentMap) {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 
 		// TODO: Add support for multiple pressed keys. Weird things happen when you hold one key and press another.
 		Direction inputDirection = Direction.checkInputDirection();
@@ -236,7 +236,7 @@ public class PlayerEntity extends MovableEntity {
 
 	@Override
 	protected int getSpriteIndex() {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 
         if (Game.getData().getMap(player.getMapName()).getPassValue(this.getLocation()) == WalkType.WATER) {
             // Surfing

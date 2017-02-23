@@ -5,7 +5,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import map.overworld.OverworldTool;
-import trainer.CharacterData;
+import trainer.Player;
 
 import java.awt.Graphics;
 
@@ -16,7 +16,7 @@ class MapState implements VisualStateHandler {
     @Override
     public void update(int dt, MapView mapView) {
         InputControl input = InputControl.instance();
-        CharacterData player = Game.getPlayer();
+        Player player = Game.getPlayer();
 
         if (input.consumeIfDown(ControlKey.ESC)) {
             mapView.setState(VisualState.MENU);

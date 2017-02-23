@@ -15,7 +15,7 @@ import map.AreaData;
 import map.Direction;
 import map.MapName;
 import pattern.SimpleMapTransition;
-import trainer.CharacterData;
+import trainer.Player;
 import util.GeneralUtils;
 
 import java.awt.Graphics;
@@ -120,7 +120,7 @@ class FlyState implements VisualStateHandler {
 
         if (this.buttons[selectedButton].checkConsumePress()) {
             if (selectedButton < NUM_AREA_BUTTONS) {
-                CharacterData player = Game.getPlayer();
+                Player player = Game.getPlayer();
                 Entry<MapName, String> entry = this.flyLocations.get(selectedButton + pageNum*NUM_AREA_BUTTONS);
 
                 MapName mapName = entry.getKey();

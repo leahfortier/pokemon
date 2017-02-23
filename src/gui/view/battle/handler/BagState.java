@@ -16,7 +16,7 @@ import item.bag.BattleBagCategory;
 import item.use.PokemonUseItem;
 import main.Game;
 import map.Direction;
-import trainer.CharacterData;
+import trainer.Player;
 import trainer.Trainer.Action;
 import util.FontMetrics;
 import util.GeneralUtils;
@@ -256,7 +256,7 @@ public class BagState implements VisualStateHandler {
         }
 
         Battle currentBattle = view.getCurrentBattle();
-        CharacterData player = Game.getPlayer();
+        Player player = Game.getPlayer();
         Bag bag = player.getBag();
         Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
         Iterator<ItemNamesies> iter = toDraw.iterator();

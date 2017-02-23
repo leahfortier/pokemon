@@ -1,7 +1,7 @@
 package pokemon;
 
 import main.Game;
-import trainer.CharacterData;
+import trainer.Player;
 import trainer.Trainer;
 import util.GeneralUtils;
 import util.RandomUtils;
@@ -113,7 +113,7 @@ public class PC implements Serializable {
 		}
 		
 		// Make sure they have space
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		if (player.getTeam().size() < Trainer.MAX_POKEMON) {
 			player.getTeam().add(coordinate.getPokemon());
 			coordinate.setPokemon(null);
@@ -122,7 +122,7 @@ public class PC implements Serializable {
 
 	// Removes the Pokemon from the trainer and adds it to the box
 	public void depositPokemonFromPlayer(ActivePokemon p) {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		if (!player.canDeposit(p)) {
 			return;
 		}
@@ -133,7 +133,7 @@ public class PC implements Serializable {
 
 	// Removes the Pokemon from the trainer and adds it to the box at a specific location, fails if another Pokemon is already in this location
 	private void depositPokemonFromPlayer(ActivePokemon p, BoxCoordinate coordinate) {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		if (!player.canDeposit(p) || coordinate == null || coordinate.getPokemon() != null) {
 			return;
 		}
@@ -148,7 +148,7 @@ public class PC implements Serializable {
 	
 	// Switching two Pokemon, where the second Pokemon is inside the box
 	public void switchPokemon(ActivePokemon p, int i, int j) {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		int index = player.getTeam().indexOf(p);
 		
 		// The first Pokemon to be switched is in the user's party
@@ -172,7 +172,7 @@ public class PC implements Serializable {
 	
 	// Switching two Pokemon, where the second Pokemon is in the player's party
 	public void switchPokemon(ActivePokemon p, int i) {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		int index = player.getTeam().indexOf(p);
 		
 		// The first Pokemon to be switched is also in the user's party
@@ -190,7 +190,7 @@ public class PC implements Serializable {
 			return;
 		}
 
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 
 		ActivePokemon boxPokemon = coordinate.getPokemon();
 		ActivePokemon partyPokemon = player.getTeam().get(partyIndex);
@@ -240,7 +240,7 @@ public class PC implements Serializable {
 	
 	// Release a Pokemon forevers
 	public void releasePokemon(ActivePokemon p) {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		if (player.getTeam().contains(p)) {
 			player.getTeam().remove(p);
 			return;

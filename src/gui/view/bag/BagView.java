@@ -26,7 +26,7 @@ import message.MessageUpdate;
 import message.Messages;
 import message.Messages.MessageState;
 import pokemon.ActivePokemon;
-import trainer.CharacterData;
+import trainer.Player;
 import trainer.Trainer;
 import type.Type;
 import draw.DrawUtils;
@@ -213,7 +213,7 @@ public class BagView extends View {
 			return;
 		}
 
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		InputControl input = InputControl.instance();
 
 		if (message != null) {
@@ -307,7 +307,7 @@ public class BagView extends View {
     @Override
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 
 		TileSet itemTiles = data.getItemTiles();
 		TileSet partyTiles = data.getPartyTiles();
@@ -557,7 +557,7 @@ public class BagView extends View {
 	}
 	
 	void updateActiveButtons() {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 
 		List<ActivePokemon> team = player.getTeam();
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {

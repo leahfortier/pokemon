@@ -4,7 +4,7 @@ import gui.view.mainmenu.Theme;
 import main.Game;
 import main.Global;
 import sound.SoundPlayer;
-import trainer.CharacterData;
+import trainer.Player;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,7 +36,7 @@ public final class Save {
 	}
 	
 	public static void save() {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		player.updateTimePlayed();
 
 		FileIO.createFolder(Folder.SAVES);
@@ -59,13 +59,13 @@ public final class Save {
 		}
 	}
 	
-	public static CharacterData load(int fileNum) {
-		CharacterData loadChar = null;
+	public static Player load(int fileNum) {
+		Player loadChar = null;
 		try {
 			FileInputStream fin = new FileInputStream(getSavePath(fileNum));
 			ObjectInputStream in = new ObjectInputStream(fin);
 			
-			loadChar = (CharacterData) in.readObject();
+			loadChar = (Player) in.readObject();
 			loadChar.initialize();
 			
 			in.close();

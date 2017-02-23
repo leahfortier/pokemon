@@ -1,9 +1,9 @@
 package test;
 
 import pokemon.ActivePokemon;
-import trainer.CharacterData;
+import trainer.Player;
 
-class TestCharacter extends CharacterData {
+class TestCharacter extends Player {
     TestCharacter(ActivePokemon mahBoiiiiiii) {
         super();
         GameTest.setPlayer(this);

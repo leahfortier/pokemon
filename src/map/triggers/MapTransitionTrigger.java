@@ -3,7 +3,7 @@ package map.triggers;
 import main.Game;
 import map.PathDirection;
 import pattern.map.MapTransitionMatcher;
-import trainer.CharacterData;
+import trainer.Player;
 import util.JsonUtils;
 
 class MapTransitionTrigger extends Trigger {
@@ -21,7 +21,7 @@ class MapTransitionTrigger extends Trigger {
 	}
 	
 	protected void executeTrigger() {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		player.setMap(mapTransitionMatcher);
 		mapTransitionMatcher.setTransitionIndex();
 

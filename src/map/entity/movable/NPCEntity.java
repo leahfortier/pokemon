@@ -1,12 +1,11 @@
 package map.entity.movable;
 
 import main.Game;
-import main.Global;
 import map.Direction;
 import map.PathDirection;
 import map.entity.EntityAction;
 import map.entity.EntityAction.BattleAction;
-import trainer.CharacterData;
+import trainer.Player;
 import util.Point;
 import util.StringUtils;
 
@@ -64,7 +63,7 @@ public class NPCEntity extends MovableEntity {
 	}
 
 	private String getCurrentInteractionKey() {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		if (player.hasNpcInteraction(this.getEntityName())) {
 			return player.getNpcInteractionName(this.getEntityName());
 		}

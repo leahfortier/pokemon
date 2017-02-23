@@ -13,7 +13,7 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import sound.SoundPlayer;
 import sound.SoundTitle;
-import trainer.CharacterData;
+import trainer.Player;
 import util.FontMetrics;
 import util.PokeString;
 
@@ -49,7 +49,7 @@ class StartView extends View {
 			return;
 		}
 
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		InputControl input = InputControl.instance();
 
 		if (message != null) {
@@ -97,8 +97,8 @@ class StartView extends View {
 			if (input.consumeIfDown(ControlKey.ENTER)) {
 				input.stopTextCapture();
 
-				String name = input.getCapturedText(CharacterData.MAX_NAME_LENGTH);
-				player.setName(name.isEmpty() ? CharacterData.DEFAULT_NAME : name);
+				String name = input.getCapturedText(Player.MAX_NAME_LENGTH);
+				player.setName(name.isEmpty() ? Player.DEFAULT_NAME : name);
 
 				state = State.DEFAULT;
 				message = null;
@@ -128,7 +128,7 @@ class StartView extends View {
 				break;
 			case NAME:
 				g.drawImage(trainerTiles.getTile(0x4), 200, 230, null);
-				g.drawString(InputControl.instance().getInputCaptureString(CharacterData.MAX_NAME_LENGTH), 300, 260);
+				g.drawString(InputControl.instance().getInputCaptureString(Player.MAX_NAME_LENGTH), 300, 260);
 				break;
 		}
 		

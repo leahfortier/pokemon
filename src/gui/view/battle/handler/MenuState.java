@@ -9,7 +9,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import pokemon.ActivePokemon;
-import trainer.CharacterData;
+import trainer.Player;
 import trainer.Trainer.Action;
 
 import java.awt.Color;
@@ -66,7 +66,7 @@ public class MenuState implements VisualStateHandler {
     @Override
     public void update(BattleView view) {
         Battle currentBattle = view.getCurrentBattle();
-        CharacterData player = Game.getPlayer();
+        Player player = Game.getPlayer();
 
         // Update menu buttons
         view.setSelectedButton(menuButtons);

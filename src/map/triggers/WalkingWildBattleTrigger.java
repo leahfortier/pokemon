@@ -9,7 +9,7 @@ import message.MessageUpdate;
 import message.Messages;
 import pattern.map.WildBattleMatcher;
 import pokemon.PokemonNamesies;
-import trainer.CharacterData;
+import trainer.Player;
 import util.JsonUtils;
 import util.RandomUtils;
 
@@ -59,7 +59,7 @@ public class WalkingWildBattleTrigger extends Trigger {
     }
 
     private boolean repelCheck(WildEncounter wildPokemon) {
-        CharacterData player = Game.getPlayer();
+        Player player = Game.getPlayer();
 
         // Maybe you won't actually fight this Pokemon after all (due to repel, cleanse tag, etc.)
         if (player.front().getLevel() >= wildPokemon.getLevel()) {

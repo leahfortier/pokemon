@@ -3,7 +3,7 @@ package gui.view;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
-import trainer.CharacterData;
+import trainer.Player;
 import draw.DrawUtils;
 import util.FontMetrics;
 
@@ -21,7 +21,7 @@ class TrainerCardView extends View {
 
 	@Override
 	public void draw(Graphics g) {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 
 		DrawUtils.fillCanvas(g, Color.BLACK);
 

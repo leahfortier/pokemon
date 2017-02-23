@@ -1,12 +1,12 @@
 package test;
 
 import main.Game;
-import trainer.CharacterData;
+import trainer.Player;
 
 class GameTest extends Game {
-    static void setPlayer(CharacterData characterData) {
+    static void setPlayer(Player player) {
         GameTest newGame = new GameTest();
-        newGame.setCharacterData(characterData);
+        newGame.setPlayer(player);
         newGame.setGameData(Game.getData());
 
         newInstance(newGame);

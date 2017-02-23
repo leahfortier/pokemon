@@ -42,7 +42,7 @@ class PokemonAnimationState {
     private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
     private static final int CATCH_SHAKE_ANIMATION_LIFESPAN = 1000;
     private static final int CATCH_TRANSFORM_ANIMATION_LIFESPAN = 2000;
-    private static final int CATCH_ANIMATION_LIFESPAN = CATCH_SHAKE_ANIMATION_LIFESPAN*CharacterData.CATCH_SHAKES + CATCH_TRANSFORM_ANIMATION_LIFESPAN;
+    private static final int CATCH_ANIMATION_LIFESPAN = CATCH_SHAKE_ANIMATION_LIFESPAN* Player.CATCH_SHAKES + CATCH_TRANSFORM_ANIMATION_LIFESPAN;
 
     private final BattleView battleView;
     private final boolean isPlayer;

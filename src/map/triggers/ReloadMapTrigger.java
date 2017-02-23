@@ -3,7 +3,7 @@ package map.triggers;
 import main.Game;
 import main.Global;
 import map.MapData;
-import trainer.CharacterData;
+import trainer.Player;
 import util.StringUtils;
 
 class ReloadMapTrigger extends Trigger {
@@ -17,7 +17,7 @@ class ReloadMapTrigger extends Trigger {
 
     @Override
     protected void executeTrigger() {
-        CharacterData player = Game.getPlayer();
+        Player player = Game.getPlayer();
         MapData currentMap = Game.getData().getMap(player.getMapName());
 
         // Repopulate the entities of the current map

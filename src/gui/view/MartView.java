@@ -16,7 +16,7 @@ import item.ItemNamesies;
 import main.Game;
 import main.Global;
 import map.Direction;
-import trainer.CharacterData;
+import trainer.Player;
 import draw.DrawUtils;
 import util.FontMetrics;
 import util.GeneralUtils;
@@ -202,7 +202,7 @@ class MartView extends View {
 
 	@Override
 	public void update(int dt) {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		selectedButton = Button.update(buttons, selectedButton);
 
 		Iterator<ItemNamesies> iter = forSaleItems.iterator();
@@ -271,7 +271,7 @@ class MartView extends View {
 	@Override
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 
 		TileSet itemTiles = data.getItemTiles();
 		

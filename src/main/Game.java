@@ -9,11 +9,12 @@ import gui.view.map.MapView;
 import input.InputControl;
 import item.ItemNamesies;
 import map.MapName;
+import map.overworld.OverworldTool;
 import message.Messages;
 import pattern.map.MapTransitionMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
-import trainer.CharacterData;
+import trainer.Player;
 import util.Save;
 
 import java.awt.Graphics;
@@ -37,17 +38,17 @@ public class Game {
 		return instance().data;
 	}
 
-	public static CharacterData getPlayer() {
-		return instance().characterData;
+	public static Player getPlayer() {
+		return instance().player;
 	}
 
 	private GameData data;
 	private final Map<ViewMode, View> viewMap;
-	
-	private CharacterData characterData;
+
+	private Player player;
 	private ViewMode currentViewMode;
 	private ArrayDeque<View> currentView;
-	
+
 	protected Game() {
 		viewMap = new EnumMap<>(ViewMode.class);
 		addView(ViewMode.MAIN_MENU_VIEW);
@@ -114,19 +115,19 @@ public class Game {
 	}
 
 	public void loadSave(int index) {
-		characterData = Save.load(index);
+		player = Save.load(index);
 		setViews();
 	}
 	
 	public void newSave(int index) {
-		characterData = new CharacterData();
+		player = new Player();
 		
 		MapName startingMap = new MapName("Depth First Search Town", "PlayersHouseUp");
 		MapTransitionMatcher startTransition = this.data.getMap(startingMap).getEntrance("startTransition");
-		characterData.setMap(startTransition);
+		player.setMap(startTransition);
 		data.getMap(startingMap).setCharacterToEntrance();
 
-		characterData.setFileNum(index);
+		player.setFileNum(index);
 		setupCharacter();
 		setViews();
 
@@ -151,8 +152,8 @@ public class Game {
 		instance = newGame;
 	}
 
-	protected void setCharacterData(CharacterData characterData) {
-		this.characterData = characterData;
+	protected void setPlayer(Player player) {
+		this.player = player;
 	}
 
 	protected void setGameData(GameData data) {

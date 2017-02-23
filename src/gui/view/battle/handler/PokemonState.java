@@ -13,7 +13,7 @@ import main.Game;
 import map.Direction;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
-import trainer.CharacterData;
+import trainer.Player;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import type.Type;
@@ -314,7 +314,7 @@ public class PokemonState implements VisualStateHandler {
         view.setSelectedButton(pokemonButtons);
 
         Battle currentBattle = view.getCurrentBattle();
-        CharacterData player = Game.getPlayer();
+        Player player = Game.getPlayer();
         List<ActivePokemon> list = player.getTeam();
         for (int i = 0; i < list.size(); i++) {
             if (pokemonTabButtons[i].checkConsumePress()) {

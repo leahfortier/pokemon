@@ -16,7 +16,7 @@ import map.Direction;
 import pokemon.ActivePokemon;
 import pokemon.PC;
 import pokemon.Stat;
-import trainer.CharacterData;
+import trainer.Player;
 import trainer.Trainer;
 import type.Type;
 import draw.DrawUtils;
@@ -439,7 +439,7 @@ class PCView extends View {
 			}
 		}
 
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		List<ActivePokemon> team = player.getTeam();
 
 		party = false;

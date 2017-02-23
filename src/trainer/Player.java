@@ -38,7 +38,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class CharacterData extends Trainer implements Serializable {
+public class Player extends Trainer implements Serializable {
 	private static final long serialVersionUID = 4283479774388652604L;
 
 	public static final int CATCH_SHAKES = 3;
@@ -83,7 +83,7 @@ public class CharacterData extends Trainer implements Serializable {
 
 	private transient List<String> logMessages;
 
-	public CharacterData() {
+	public Player() {
 		super(DEFAULT_NAME, START_MONEY);
 		this.initialize();
 

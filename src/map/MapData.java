@@ -19,7 +19,7 @@ import pattern.map.FishingMatcher;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import pattern.map.WildBattleMatcher;
-import trainer.CharacterData;
+import trainer.Player;
 import util.FileIO;
 import util.JsonUtils;
 import util.MultiMap;
@@ -241,7 +241,7 @@ public class MapData {
 	}
 	
 	public boolean setCharacterToEntrance() {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		SimpleMapTransition mapTransition = player.getMapTransition();
         if (mapEntrances.containsKey(mapTransition.getNextEntranceName())) {
 			Point entranceLocation = getEntranceLocation(mapTransition);
@@ -254,7 +254,7 @@ public class MapData {
 	}
 
 	public Entity getEntity(Point location) {
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 		if (location.equals(player.getLocation())) {
 			return player.getEntity();
 		}

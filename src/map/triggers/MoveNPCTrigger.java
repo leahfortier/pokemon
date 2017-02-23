@@ -8,7 +8,7 @@ import map.PathDirection;
 import map.entity.movable.NPCEntity;
 import map.entity.movable.PlayerEntity;
 import pattern.MoveNPCTriggerMatcher;
-import trainer.CharacterData;
+import trainer.Player;
 import util.JsonUtils;
 import util.Point;
 
@@ -27,7 +27,7 @@ class MoveNPCTrigger extends Trigger {
 
     @Override
     protected void executeTrigger() {
-        CharacterData player = Game.getPlayer();
+        Player player = Game.getPlayer();
         PlayerEntity playerEntity = player.getEntity();
         playerEntity.stall();
 

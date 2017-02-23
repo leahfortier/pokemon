@@ -15,7 +15,7 @@ import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import pokemon.evolution.BaseEvolution;
-import trainer.CharacterData;
+import trainer.Player;
 import util.FontMetrics;
 import util.Point;
 import util.StringUtils;
@@ -209,7 +209,7 @@ class EvolutionView extends View {
 	public void movedToFront() {
 		state = State.START;
 
-		CharacterData player = Game.getPlayer();
+		Player player = Game.getPlayer();
 
 		setPokemon(player.getEvolvingPokemon(), player.getEvolution());
 		setInitialMessage();
