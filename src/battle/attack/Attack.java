@@ -9315,11 +9315,13 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Set CastSource shit instead
-			ability = user.getAbility();
+			Ability userAbility = user.getAbility();
+			Ability victimAbility = victim.getAbility();
+			
+			ability = userAbility;
 			EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
 			
-			ability = victim.getAbility();
+			ability = victimAbility;
 			EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, user, CastSource.ATTACK, super.printCast);
 		}
 

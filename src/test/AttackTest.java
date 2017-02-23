@@ -535,7 +535,45 @@ public class AttackTest {
     }
 
     @Test
-    public void multiTurnMoveTest() {
-        // TODO
+    public void changeAbilityTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.OVERGROW);
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.BLAZE);
+
+        battle.attackingFight(AttackNamesies.SKILL_SWAP);
+        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.BLAZE));
+        Assert.assertTrue(defending.hasAbility(AbilityNamesies.OVERGROW));
+
+        battle.attackingFight(AttackNamesies.WORRY_SEED);
+        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.BLAZE));
+        Assert.assertTrue(defending.hasAbility(AbilityNamesies.INSOMNIA));
+
+        battle.defendingFight(AttackNamesies.SKILL_SWAP);
+        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.INSOMNIA));
+        Assert.assertTrue(defending.hasAbility(AbilityNamesies.BLAZE));
+
+        battle.attackingFight(AttackNamesies.ENTRAINMENT);
+        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.INSOMNIA));
+        Assert.assertTrue(defending.hasAbility(AbilityNamesies.INSOMNIA));
+
+        battle.attackingFight(AttackNamesies.SIMPLE_BEAM);
+        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.INSOMNIA));
+        Assert.assertTrue(defending.hasAbility(AbilityNamesies.SIMPLE));
+
+        battle.attackingFight(AttackNamesies.SKILL_SWAP);
+        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.SIMPLE));
+        Assert.assertTrue(defending.hasAbility(AbilityNamesies.INSOMNIA));
+
+        battle.defendingFight(AttackNamesies.ROLE_PLAY);
+        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.SIMPLE));
+        Assert.assertTrue(defending.hasAbility(AbilityNamesies.SIMPLE));
+
+        battle.defendingFight(AttackNamesies.GASTRO_ACID);
+        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.NO_ABILITY));
+        Assert.assertTrue(defending.hasAbility(AbilityNamesies.SIMPLE));
+
+        battle.defendingFight(AttackNamesies.SKILL_SWAP);
+        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.SIMPLE));
+        Assert.assertTrue(defending.hasAbility(AbilityNamesies.NO_ABILITY));
     }
 }
