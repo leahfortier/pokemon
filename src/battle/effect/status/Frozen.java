@@ -5,7 +5,6 @@ import battle.attack.MoveType;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
-import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import type.Type;
@@ -33,7 +32,7 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
             return true;
         }
 
-        Messages.add(new MessageUpdate(p.getName() + " is frozen solid!"));
+        Messages.add(p.getName() + " is frozen solid!");
         return false;
     }
 

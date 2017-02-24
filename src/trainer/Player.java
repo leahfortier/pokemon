@@ -223,7 +223,7 @@ public class Player extends Trainer implements Serializable {
 			if (repelSteps == 0) {
 				// TODO: Give choice if you want to use another. 
 				// Game variable needed
-				Messages.add(new MessageUpdate("The effects of repel have worn off."));
+				Messages.add("The effects of repel have worn off.");
 			}
 		}
 		else {
@@ -385,7 +385,7 @@ public class Player extends Trainer implements Serializable {
 			
 			// I've decided that the next line of code is the best line in this entire codebase
 			int datCash = opp.getDatCashMoney()*(hasEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE) ? 2 : 1);
-			Messages.add(new MessageUpdate(getName() + " received " + datCash + " pokedollars for winning! Woo!"));
+			Messages.add(getName() + " received " + datCash + " pokedollars for winning! Woo!");
 			getDatCashMoney(datCash);
 		}
 		else {
@@ -491,7 +491,7 @@ public class Player extends Trainer implements Serializable {
 	// OH MY GOD CATCH A POKEMON OH MY GOD
 	public boolean catchPokemon(Battle b, BallItem ball) {
 		if (!b.isWildBattle()) {
-			Messages.add(new MessageUpdate("You can't try and catch a trainer's Pokemon! That's just rude!!!"));
+			Messages.add("You can't try and catch a trainer's Pokemon! That's just rude!!!");
 			return false;
 		}
 

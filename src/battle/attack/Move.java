@@ -5,7 +5,6 @@ import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import battle.effect.generic.EffectInterfaces.OpponentAttackSelectionEffect;
-import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import type.Type;
@@ -178,7 +177,7 @@ public class Move implements Serializable {
 		// Invalid if PP is zero
 		if (m.getPP() == 0) {
 			if (selecting) {
-				Messages.add(new MessageUpdate(p.getName() + " is out of PP for " + m.attack.getName() + "!"));
+				Messages.add(p.getName() + " is out of PP for " + m.attack.getName() + "!");
 			}
 			
 			return false;
@@ -192,7 +191,7 @@ public class Move implements Serializable {
 
 		if (unusable != null) {
 			if (selecting) {
-				Messages.add(new MessageUpdate(unusable.getUnusableMessage(b, p)));
+				Messages.add(unusable.getUnusableMessage(b, p));
 			}
 			
 			// THAT'S WHAT

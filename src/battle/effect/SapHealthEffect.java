@@ -32,11 +32,11 @@ public interface SapHealthEffect extends ApplyDamageEffect {
 
         // Sap message
         if (print) {
-            Messages.add(new MessageUpdate(this.getSapMessage(victim)));
+            Messages.add(this.getSapMessage(victim));
         }
 
         if (victim.hasAbility(AbilityNamesies.LIQUID_OOZE)) {
-            Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + user.getName() + " to lose health instead!"));
+            Messages.add(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + user.getName() + " to lose health instead!");
             user.reduceHealth(b, damageAmount);
             return;
         }

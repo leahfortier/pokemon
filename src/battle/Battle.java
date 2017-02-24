@@ -95,7 +95,7 @@ public class Battle {
 		if (this.opponent instanceof Trainer) {
 			Trainer opponentTrainer = (Trainer) this.opponent;
 			opponentTrainer.enterBattle();
-			Messages.add(new MessageUpdate(opponentTrainer.getName() + " wants to fight!"));
+			Messages.add(opponentTrainer.getName() + " wants to fight!");
 			opponentTrainer.setAction(Action.FIGHT);
 			enterBattle(this.opponent.front());
 		}
@@ -299,13 +299,13 @@ public class Battle {
 		}
 
 		// Blackout -- you're fucked
-		Messages.add(new MessageUpdate(player.getName() + " is out of usable " + PokeString.POKEMON + "! " + player.getName() + " blacked out!"));
+		Messages.add(player.getName() + " is out of usable " + PokeString.POKEMON + "! " + player.getName() + " blacked out!");
 
 		// Sucks to suck
 		if (opponent instanceof Trainer) {
 			Trainer opp = (Trainer)opponent;
 			int cashMoney = player.sucksToSuck(opp.getDatCashMoney());
-			Messages.add(new MessageUpdate(opp.getName() + " rummaged through the pockets of your passed out body and stole " + cashMoney + " pokedollars!!!"));
+			Messages.add(opp.getName() + " rummaged through the pockets of your passed out body and stole " + cashMoney + " pokedollars!!!");
 		}
 
 		player.healAll();
@@ -377,7 +377,7 @@ public class Battle {
 		escapeAttempts++;
 
 		if (opponent instanceof Trainer) {
-			Messages.add(new MessageUpdate("There's no running from a trainer battle!"));
+			Messages.add("There's no running from a trainer battle!");
 			return false;
 		}
 
@@ -395,12 +395,12 @@ public class Battle {
 		if (RandomUtils.chanceTest(val, 256) ||
 				plyr.getAbility() instanceof DefiniteEscape || // TODO: This is wrong and should be able to escape even with mean look and such
 				plyr.getHeldItem(this) instanceof DefiniteEscape) {
-			Messages.add(new MessageUpdate("Got away safely!"));
+			Messages.add("Got away safely!");
 			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
 			return true;
 		}
 
-		Messages.add(new MessageUpdate("Can't escape!"));
+		Messages.add("Can't escape!");
 		player.performAction(this, Action.RUN);
 		return false;
 	}
@@ -429,7 +429,7 @@ public class Battle {
 
 	private void decrementWeather() {
 		if (!weather.isActive()) {
-			Messages.add(new MessageUpdate(weather.getSubsideMessage(player.front())));
+			Messages.add(weather.getSubsideMessage(player.front()));
 			this.setBaseWeather(this.baseWeather);
 			return;
 		}
@@ -456,7 +456,7 @@ public class Battle {
 		boolean success = false;
 		reduce = false;
 		
-		me.startAttack(this, o);
+		me.startAttack(this);
 		
 		// HOLD IT RIGHT THERE! YOU MAY NOT BE ABLE TO ATTACK!
 		if (ableToAttack(me, o)) {
@@ -469,7 +469,7 @@ public class Battle {
 				success = true;
 			}
 			else {
-				Messages.add(new MessageUpdate(me.getName() + "'s attack missed!"));
+				Messages.add(me.getName() + "'s attack missed!");
 				CrashDamageMove.invokeCrashDamageMove(this, me);
 			}			
 		}
@@ -481,7 +481,7 @@ public class Battle {
 	}
 	
 	public void printAttacking(ActivePokemon p) {
-		Messages.add(new MessageUpdate((p.isPlayer() ? "" : "Enemy ") + p.getName() + " used " + p.getAttack().getName() + "!"));
+		Messages.add((p.isPlayer() ? "" : "Enemy ") + p.getName() + " used " + p.getAttack().getName() + "!");
 		reduce = true;
 	}
 	
@@ -706,11 +706,11 @@ public class Battle {
 		boolean pQuick = plyr.isHoldingItem(this, ItemNamesies.QUICK_CLAW);
 		boolean oQuick = opp.isHoldingItem(this, ItemNamesies.QUICK_CLAW);
 		if (pQuick && !oQuick && RandomUtils.chanceTest(20)) {
-			Messages.add(new MessageUpdate(plyr.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!"));
+			Messages.add(plyr.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!");
 			return true;
 		}
 		if (oQuick && !pQuick && RandomUtils.chanceTest(20)) {
-			Messages.add(new MessageUpdate(opp.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!"));
+			Messages.add(opp.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!");
 			return false;
 		}		
 		

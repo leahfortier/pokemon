@@ -142,7 +142,7 @@ MultiStrike:
 		
 		int hit = 1;
 		for (; hit <= hits; hit++) {
-			Messages.add(new MessageUpdate("Hit " + hit + "!"));
+			Messages.add("Hit " + hit + "!");
 			super.applyDamage(me, o, b);
 			
 			// Stop attacking the dead
@@ -154,7 +154,7 @@ MultiStrike:
 		hit--;
 		
 		// Print hits and gtfo
-		Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+		Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		###
 *
 GetMinHits:
@@ -209,7 +209,7 @@ OHKO:
 	AddMapField: ApplyDamage:
 		// Certain death
 		o.reduceHealth(b, o.getHP());
-		Messages.add(new MessageUpdate("It's a One-Hit KO!"));
+		Messages.add("It's a One-Hit KO!");
 		###
 	AddMapField: MoveType: One_Hit_KO
 	AddMapField: GetAccuracy:
@@ -225,7 +225,7 @@ OppSwitchStat:
 CrashDamage:
 	Header: void crash(Battle b, ActivePokemon user)
 	Body:
-		Messages.add(new MessageUpdate(user.getName() + " kept going and crashed!"));
+		Messages.add(user.getName() + " kept going and crashed!");
 		user.reduceHealth(b, user.getMaxHP()/{0});
 		###
 *
@@ -337,7 +337,7 @@ Barrier:
 BreakBarrier:
 	Header: void breakBarrier(Battle b, ActivePokemon breaker)
 	Body:
-		Messages.add(new MessageUpdate(breaker.getName() + " broke the {0} barrier!"));
+		Messages.add(breaker.getName() + " broke the {0} barrier!");
 		b.getEffects(!breaker.isPlayer()).remove(this);
 		###
 *
@@ -442,7 +442,7 @@ OnProtectingSuccess:
 SuccessiveDecay:
 	AddMapField: Cast:
 		if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
-			Messages.add(new MessageUpdate(this.getFailMessage(b, caster, victim)));
+			Messages.add(this.getFailMessage(b, caster, victim));
 			return;
 		}
 
@@ -493,7 +493,7 @@ PartialTrap:
 			return;
 		}
 		
-		Messages.add(new MessageUpdate(victim.getName() + " is hurt by {1_}!"));
+		Messages.add(victim.getName() + " is hurt by {1_}!");
 		
 		// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
 		victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
@@ -569,7 +569,7 @@ StatRatio:
 RapidSpin:
 	Header: void releaseRapidSpin(Battle b, ActivePokemon releaser)
 	Body:
-		Messages.add(new MessageUpdate({0}));
+		Messages.add({0});
 		
 		// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 		releaser.getEffects().remove(this);
@@ -711,7 +711,7 @@ SpecialRoom:
 		}
 	
 		// Remove the effect if it's already in play
-		Messages.add(new MessageUpdate(roomsies.getSubsideMessage(caster)));
+		Messages.add(roomsies.getSubsideMessage(caster));
 		Effect.removeEffect(b.getEffects(), this.namesies);
 		###
 *
@@ -751,7 +751,7 @@ FailMessage:
 Defog:
 	Header: void releaseDefog(Battle b, ActivePokemon victim)
 	Body:
-		Messages.add(new MessageUpdate({0}));
+		Messages.add({0});
 		
 		// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 		victim.getEffects().remove(this);
@@ -785,7 +785,7 @@ IncreaseCritStage:
 FallMessage:
 	Header: void fall(Battle b, ActivePokemon fallen)
 	Body:
-		Messages.add(new MessageUpdate({0}));
+		Messages.add({0});
 		
 		// TODO: Fix this it's broken
 		// Effect.removeEffect(fallen.getEffects(), this.namesies());
@@ -914,7 +914,7 @@ WeatherStarter:
 	AddInterface: EntryEffect
 	AddMapField: Enter: 
 		b.addEffect((Weather)EffectNamesies.{11}.getEffect());
-		Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " {2-}!"));
+		Messages.add(enterer.getName() + "'s " + this.getName() + " {2-}!");
 		###
 *
 WeatherEvasion:
@@ -928,7 +928,7 @@ WeatherEliminate:
 	AddMapField: Enter: 
 		// TODO: I think this isn't the intended effect of this ability
 		b.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
-		Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " eliminated the weather!"));
+		Messages.add(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
 		###
 *
 HalfAmount:
@@ -1049,14 +1049,14 @@ BuffetMessage:
 			}
 
 			// Buffety buffety buffet
-			Messages.add(new MessageUpdate({0}));
+			Messages.add({0});
 			p.reduceHealthFraction(b, 1/16.0);
 		}
 		###
 *
 PreBuffetMessage:
 	AddMapField: ApplyEndTurn:
-		Messages.add(new MessageUpdate({0}));
+		Messages.add({0});
 				
 		ActivePokemon other = b.getOtherPokemon(victim);
 		buffet(b, victim);
@@ -1095,7 +1095,7 @@ MagicReflection:
 	AddMapField: TargetSwap:
 		Attack attack = user.getAttack();
 		if (!attack.isSelfTarget() && attack.isStatusMove() && !attack.isMoveType(MoveType.NO_MAGIC_COAT)) {
-			Messages.add(new MessageUpdate(opponent.getName() + "'s " + {0} + " reflected " + user.getName() + "'s move!"));
+			Messages.add(opponent.getName() + "'s " + {0} + " reflected " + user.getName() + "'s move!");
 			return true;
 		}
 		
@@ -1357,7 +1357,7 @@ CategoryDamagerBerry:
 	AddInterface: OpponentApplyDamageEffect
 	AddMapField: OpponentApplyDamage:
 		if (user.getAttack().getCategory() == MoveCategory.{00}) {
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!"));
+			Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 			user.reduceHealthFraction(b, 1/8.0);
 			victim.consumeItem(b);
 		}
@@ -1422,7 +1422,7 @@ FutureAttackEffect:
 		private ActivePokemon theSeeer;
 		###
 	AddMapField: Subside: 
-		Messages.add(new MessageUpdate(p.getName() + " took " + theSeeer.getName() + "'s attack!"));
+		Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			
 		Attack attack = AttackNamesies.{00}.getAttack();
 		
@@ -1444,7 +1444,7 @@ EliminateStatChanges:
 	AddMapField: UniqueEffects: 
 		user.getAttributes().resetStages();
 		victim.getAttributes().resetStages();
-		Messages.add(new MessageUpdate("All stat changes were eliminated!"));
+		Messages.add("All stat changes were eliminated!");
 		###
 *
 StatSwapMove:
@@ -1456,7 +1456,7 @@ StatSwapMove:
 			user.getAttributes().swapStages(s, victim);
 		}
 		
-		Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
+		Messages.add(user.getName() + " swapped its stats with " + victim.getName() + "!");
 		###
 	AddMapField: MoveType: No_Magic_Coat
 *
@@ -1606,13 +1606,13 @@ NextLevel:
 FlinchItem:
 	AddMapField: FlingEffect:
 		if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
-			Messages.add(new MessageUpdate("The " + this.name + " caused " + pelted.getName() + " to flinch!"));
+			Messages.add("The " + this.name + " caused " + pelted.getName() + " to flinch!");
 		}
 		###
 	AddMapField: OpponentTakeDamage:
 		if (RandomUtils.chanceTest(10)) {
 			if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
-				Messages.add(new MessageUpdate(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!"));
+				Messages.add(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
 			}
 		}
 		###
@@ -1695,7 +1695,7 @@ OpponentEndAttack:
 TerrainStarter:
 	AddInterface: EntryEffect
 	AddMapField: Enter:
-		Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " changed the field to {0} Terrain!"));
+		Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to {0} Terrain!");
 		EffectNamesies.{00}_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
 		###
 *
@@ -1775,23 +1775,23 @@ EndTurnFormChange:
 	AddMapField: Enter:
 		if (formCheck(enterer)) {
 			{1} = true;
-			Messages.add(new MessageUpdate(enterer.getName() + " changed into {10} Forme!"));
+			Messages.add(enterer.getName() + " changed into {10} Forme!");
 		}
 		else {
 			{1} = false;
-			Messages.add(new MessageUpdate(enterer.getName() + " changed into {3} Forme!"));
+			Messages.add(enterer.getName() + " changed into {3} Forme!");
 		}
 		###
 	AddMapField: ApplyEndTurn:
 		if (formCheck(victim)) {
 			if (!{1}) {
 				{1} = true;
-				Messages.add(new MessageUpdate(victim.getName() + " changed into {10} Forme!"));	
+				Messages.add(victim.getName() + " changed into {10} Forme!");	
 			}
 		}
 		else if ({1}){
 			{1} = false;
-			Messages.add(new MessageUpdate(victim.getName() + " changed into {3} Forme!"));
+			Messages.add(victim.getName() + " changed into {3} Forme!");
 		}
 		###
 *

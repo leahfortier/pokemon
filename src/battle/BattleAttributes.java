@@ -24,6 +24,8 @@ import java.util.List;
 public class BattleAttributes implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private final ActivePokemon attributesHolder;
+
 	private Move selected;
 	private Move lastMoveUsed;
 	private List<PokemonEffect> effects;
@@ -37,7 +39,9 @@ public class BattleAttributes implements Serializable {
 	private boolean lastMoveSucceeded;
 	private Object castSource;
 	
-	public BattleAttributes() {
+	public BattleAttributes(ActivePokemon attributesHolder) {
+		this.attributesHolder = attributesHolder;
+
 		resetStages();
 		used = false;
 		effects = new ArrayList<>();
@@ -198,6 +202,8 @@ public class BattleAttributes implements Serializable {
 		// Don't let it go out of bounds, yo!
 		stages[index] = Math.min(Stat.MAX_STAT_CHANGES, stages[index]);
 		stages[index] = Math.max(-1*Stat.MAX_STAT_CHANGES, stages[index]);
+
+		Messages.add(new MessageUpdate().withStages(this.getStages(), attributesHolder.isPlayer()));
 	}
 
 	public void incrementStage(Stat stat, int val) {
@@ -256,7 +262,7 @@ public class BattleAttributes implements Serializable {
 			StatProtectingEffect prevent = StatProtectingEffect.getPreventEffect(b, caster, victim, stat);
 			if (prevent != null) {
 				if (print) {
-					Messages.add(new MessageUpdate(prevent.preventionMessage(victim, stat)));
+					Messages.add(prevent.preventionMessage(victim, stat));
 				}
 
 				return false;
@@ -266,7 +272,7 @@ public class BattleAttributes implements Serializable {
 		// Too High
 		if (getStage(stat) == Stat.MAX_STAT_CHANGES && val > 0) {
 			if (print) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + statName + " cannot be raised any higher!"));
+				Messages.add(victim.getName() + "'s " + statName + " cannot be raised any higher!");
 			}
 
 			return false;
@@ -276,7 +282,7 @@ public class BattleAttributes implements Serializable {
 		if (getStage(stat) == -1*Stat.MAX_STAT_CHANGES && val < 0) {
 			// THIS LOW
 			if (print) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + statName + " cannot be lowered any further!"));
+				Messages.add(victim.getName() + "'s " + statName + " cannot be lowered any further!");
 			}
 
 			return false;
@@ -302,13 +308,12 @@ public class BattleAttributes implements Serializable {
 			return false;
 		}
 
-		this.incrementStage(stat, val);
-
 		message = message.replace("{statName}", statName)
 				.replace("{change}", change)
 				.replace("{victimName}", victimName);
-		Messages.add(new MessageUpdate(message).withStages(this.getStages(), victim.isPlayer()));
+		Messages.add(message);
 
+		this.incrementStage(stat, val);
 		
 		// Defiant raises Attack stat by two when a stat is lowered by the opponent
 		if (val < 0 && caster != victim) {

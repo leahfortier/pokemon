@@ -249,7 +249,7 @@ abstract class InvokeMethod {
 
         @Override
         protected String successfulCheck() {
-            return "Messages.add(new MessageUpdate(effect." + this.getMessageCall + "));\n"
+            return "Messages.add(effect." + this.getMessageCall + ");\n"
                     + super.successfulCheck();
         }
     }

@@ -78,7 +78,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			Messages.add(new MessageUpdate("The rain continues to pour."));
+			Messages.add("The rain continues to pour.");
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
@@ -116,7 +116,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			Messages.add(new MessageUpdate("The sunlight is strong."));
+			Messages.add("The sunlight is strong.");
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
@@ -167,7 +167,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			}
 			
 			// Buffety buffety buffet
-			Messages.add(new MessageUpdate(p.getName() + " is buffeted by the sandstorm!"));
+			Messages.add(p.getName() + " is buffeted by the sandstorm!");
 			p.reduceHealthFraction(b, 1/16.0);
 		}
 
@@ -196,7 +196,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			Messages.add(new MessageUpdate("The sandstorm rages."));
+			Messages.add("The sandstorm rages.");
 			
 			ActivePokemon other = b.getOtherPokemon(victim);
 			buffet(b, victim);
@@ -225,7 +225,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 			}
 			
 			// Buffety buffety buffet
-			Messages.add(new MessageUpdate(p.getName() + " is buffeted by the hail!"));
+			Messages.add(p.getName() + " is buffeted by the hail!");
 			p.reduceHealthFraction(b, 1/16.0);
 		}
 
@@ -246,7 +246,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			Messages.add(new MessageUpdate("The hail continues to fall."));
+			Messages.add("The hail continues to fall.");
 			
 			ActivePokemon other = b.getOtherPokemon(victim);
 			buffet(b, victim);

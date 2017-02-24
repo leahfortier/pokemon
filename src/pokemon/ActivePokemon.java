@@ -112,7 +112,7 @@ public class ActivePokemon implements Serializable {
 		this.setIVs();
 
 		this.isPlayer = isPlayer;
-		this.attributes = new BattleAttributes();
+		this.attributes = new BattleAttributes(this);
 		this.shiny = (isPlayer || isWild) && RandomUtils.chanceTest(1, 8192);
 
 		this.setMoves();
@@ -970,7 +970,7 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public void resetAttributes() {
-		attributes = new BattleAttributes();
+		attributes = new BattleAttributes(this);
 		moves.forEach(Move::resetReady);
 		ability = ability.namesies().getNewAbility();
 	}
@@ -1322,7 +1322,7 @@ public class ActivePokemon implements Serializable {
 		return this.pokemon.getWeight()/Math.pow(2, halfAmount);
 	}
 	
-	public void startAttack(Battle b, ActivePokemon opp) {
+	public void startAttack(Battle b) {
 		this.getAttributes().setAttacking(true);
 		this.getMove().switchReady(b, this); // TODO: I don't think this works right because this is happening before you check if they're able to attack and honestly they shouldn't really switch until the end of the turn
 		this.getMove().setAttributes(b, this);

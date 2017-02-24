@@ -58,7 +58,7 @@ StealthRock:
 			return;
 		}
 		
-		Messages.add(new MessageUpdate(enterer.getName() + " was hurt by stealth rock!"));
+		Messages.add(enterer.getName() + " was hurt by stealth rock!");
 		enterer.reduceHealthFraction(b, Type.ROCK.getAdvantage().getAdvantage(enterer, b)/8.0);
 		###
 	CastMessage: "Floating rocks were scattered all around!"
@@ -79,7 +79,7 @@ ToxicSpikes:
 		}
 		
 		if (enterer.isType(b, Type.POISON)) {
-			Messages.add(new MessageUpdate(enterer.getName() + " absorbed the Toxic Spikes!"));
+			Messages.add(enterer.getName() + " absorbed the Toxic Spikes!");
 			super.active = false;
 			return;
 		}
@@ -116,7 +116,7 @@ Spikes:
 			return;
 		}
 		
-		Messages.add(new MessageUpdate(enterer.getName() + " was hurt by spikes!"));
+		Messages.add(enterer.getName() + " was hurt by spikes!");
 		
 		// TODO: Generalize this type of statement
 		if (layers == 1) enterer.reduceHealthFraction(b, 1/8.0);
@@ -209,7 +209,7 @@ PayDay:
 	CastMessage: "Coins scattered everywhere!"
 	CanHave: True
 	EndBattle: 
-		Messages.add(new MessageUpdate(player.getName() + " picked up " + coins + " pokedollars!"));
+		Messages.add(player.getName() + " picked up " + coins + " pokedollars!");
 		player.getDatCashMoney(coins);
 		###
 *

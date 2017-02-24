@@ -75,7 +75,7 @@ RecoilPercentageMove:
                 return;
             }
 
-            Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
+            Messages.add(user.getName() + " was hurt by recoil!");
             user.reduceHealth(b, (int)Math.ceil((double)damage/getDamagePercentageDenominator()), false);
 			###
 	*
@@ -255,7 +255,7 @@ GroundedEffect:
 		Default:
 			if (p.isSemiInvulnerableFlying()) {
 				p.getMove().switchReady(b, p);
-				Messages.add(new MessageUpdate(p.getName() + " fell to the ground!"));
+				Messages.add(p.getName() + " fell to the ground!");
 			}
 			
 			LevitationEffect.falllllllll(b, p);

@@ -288,7 +288,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		if (!applies(b, me, o)) {
-			Messages.add(new MessageUpdate(Effect.DEFAULT_FAIL_MESSAGE));
+			Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
 			return false;
 		}
 
@@ -339,7 +339,7 @@ public abstract class Attack implements Serializable {
 	
 	private boolean zeroAdvantage(Battle b, ActivePokemon p, ActivePokemon opp) {
 		if (TypeAdvantage.doesNotEffect(p, opp, b)) {
-			Messages.add(new MessageUpdate(TypeAdvantage.getDoesNotEffectMessage(opp)));
+			Messages.add(TypeAdvantage.getDoesNotEffectMessage(opp));
 			CrashDamageMove.invokeCrashDamageMove(b, p);
 
 			return true;
@@ -362,13 +362,13 @@ public abstract class Attack implements Serializable {
 
 		SelfAttackBlocker selfAttackBlocker = SelfAttackBlocker.checkBlocked(b, me);
 		if (selfAttackBlocker != null) {
-			Messages.add(new MessageUpdate(selfAttackBlocker.getBlockMessage(b, me)));
+			Messages.add(selfAttackBlocker.getBlockMessage(b, me));
 			return false;
 		}
 
 		AttackBlocker attackBlocker = AttackBlocker.checkBlocked(b, me, o);
 		if (attackBlocker != null) {
-			Messages.add(new MessageUpdate(attackBlocker.getBlockMessage(b, me, o)));
+			Messages.add(attackBlocker.getBlockMessage(b, me, o));
 			attackBlocker.alternateEffect(b, me, o);
 			return false;
 		}
@@ -389,18 +389,18 @@ public abstract class Attack implements Serializable {
 
 		damage = o.reduceHealth(b, damage);
 		if (critYoPants) {
-			Messages.add(new MessageUpdate("It's a critical hit!!"));
+			Messages.add("It's a critical hit!!");
 			if (o.hasAbility(AbilityNamesies.ANGER_POINT)) {
-				Messages.add(new MessageUpdate(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!"));
+				Messages.add(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!");
 				o.getAttributes().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
 			}
 		}
 
 		// Print Advantage
 		if (TypeAdvantage.isNotVeryEffective(me, o, b)) {
-			Messages.add(new MessageUpdate(TypeAdvantage.getNotVeryEffectiveMessage()));
+			Messages.add(TypeAdvantage.getNotVeryEffectiveMessage());
 		} else if (TypeAdvantage.isSuperEffective(me, o, b)) {
-			Messages.add(new MessageUpdate(TypeAdvantage.getSuperEffectiveMessage()));
+			Messages.add(TypeAdvantage.getSuperEffectiveMessage());
 		}
 		
 		// Deadsies check
@@ -437,7 +437,7 @@ public abstract class Attack implements Serializable {
 		if (status != StatusCondition.NO_STATUS) {
 			boolean success = Status.giveStatus(b, user, victim, status);
 			if (!success && canPrintFail()) {
-				Messages.add(new MessageUpdate(Status.getFailMessage(b, user, victim, status)));
+				Messages.add(Status.getFailMessage(b, user, victim, status));
 			}
 		}
 		
@@ -449,7 +449,7 @@ public abstract class Attack implements Serializable {
 			Effect effect = effectNamesies.getEffect();
 			boolean applies = effect.apply(b, user, victim, CastSource.ATTACK, canPrintCast());
 			if (!applies && canPrintFail()) {
-				Messages.add(new MessageUpdate(effect.getFailMessage(b, user, victim)));
+				Messages.add(effect.getFailMessage(b, user, victim));
 			}
 		}
 	}
@@ -635,7 +635,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
+			Messages.add(user.getName() + " was hurt by recoil!");
 			user.reduceHealth(b, user.getMaxHP()/4, false);
 		}
 	}
@@ -1749,7 +1749,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -1761,7 +1761,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -1827,7 +1827,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -1839,7 +1839,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -1918,7 +1918,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -1930,7 +1930,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -2473,7 +2473,7 @@ public abstract class Attack implements Serializable {
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			user.getAttributes().resetStages();
 			victim.getAttributes().resetStages();
-			Messages.add(new MessageUpdate("All stat changes were eliminated!"));
+			Messages.add("All stat changes were eliminated!");
 		}
 	}
 
@@ -2716,7 +2716,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -2728,7 +2728,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -2825,7 +2825,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -2837,7 +2837,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -2965,7 +2965,7 @@ public abstract class Attack implements Serializable {
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			// Certain death
 			o.reduceHealth(b, o.getHP());
-			Messages.add(new MessageUpdate("It's a One-Hit KO!"));
+			Messages.add("It's a One-Hit KO!");
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
@@ -3033,7 +3033,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -3045,7 +3045,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -3660,7 +3660,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Messages.add(new MessageUpdate("Magnitude " + (index + 4) + "!"));
+			Messages.add("Magnitude " + (index + 4) + "!");
 		}
 
 		public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
@@ -3758,7 +3758,7 @@ public abstract class Attack implements Serializable {
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			// Certain death
 			o.reduceHealth(b, o.getHP());
-			Messages.add(new MessageUpdate("It's a One-Hit KO!"));
+			Messages.add("It's a One-Hit KO!");
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
@@ -3933,7 +3933,7 @@ public abstract class Attack implements Serializable {
 				user.getAttributes().setStage(stat, victim.getStage(stat));
 			}
 			
-			Messages.add(new MessageUpdate(user.getName() + " copied " + victim.getName() + "'s stat changes!"));
+			Messages.add(user.getName() + " copied " + victim.getName() + "'s stat changes!");
 		}
 	}
 
@@ -4192,7 +4192,7 @@ public abstract class Attack implements Serializable {
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// Maximization station
-			Messages.add(new MessageUpdate(user.getName() + " cut its own HP and maximized its attack!"));
+			Messages.add(user.getName() + " cut its own HP and maximized its attack!");
 			user.reduceHealthFraction(b, 1/2.0);
 			user.getAttributes().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
 		}
@@ -4534,7 +4534,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -4546,7 +4546,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -4922,7 +4922,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -4934,7 +4934,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -5046,7 +5046,7 @@ public abstract class Attack implements Serializable {
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			// Certain death
 			o.reduceHealth(b, o.getHP());
-			Messages.add(new MessageUpdate("It's a One-Hit KO!"));
+			Messages.add("It's a One-Hit KO!");
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
@@ -5125,7 +5125,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -5137,7 +5137,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -5213,7 +5213,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -5225,7 +5225,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -5275,7 +5275,7 @@ public abstract class Attack implements Serializable {
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Move last = victim.getAttributes().getLastMoveUsed();
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!"));
+			Messages.add(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!");
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -5489,7 +5489,7 @@ public abstract class Attack implements Serializable {
 		public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
 			// Certain death
 			o.reduceHealth(b, o.getHP());
-			Messages.add(new MessageUpdate("It's a One-Hit KO!"));
+			Messages.add("It's a One-Hit KO!");
 		}
 
 		public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
@@ -5624,7 +5624,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -5636,7 +5636,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -5663,7 +5663,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -5675,7 +5675,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -5739,7 +5739,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -5751,7 +5751,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -5777,7 +5777,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -5789,7 +5789,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -5818,7 +5818,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void crash(Battle b, ActivePokemon user) {
-			Messages.add(new MessageUpdate(user.getName() + " kept going and crashed!"));
+			Messages.add(user.getName() + " kept going and crashed!");
 			user.reduceHealth(b, user.getMaxHP()/3);
 		}
 	}
@@ -5865,7 +5865,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void crash(Battle b, ActivePokemon user) {
-			Messages.add(new MessageUpdate(user.getName() + " kept going and crashed!"));
+			Messages.add(user.getName() + " kept going and crashed!");
 			user.reduceHealth(b, user.getMaxHP()/2);
 		}
 	}
@@ -5918,7 +5918,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -5930,7 +5930,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -6202,7 +6202,7 @@ public abstract class Attack implements Serializable {
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			user.getAttributes().resetStages();
 			victim.getAttributes().resetStages();
-			Messages.add(new MessageUpdate("All stat changes were eliminated!"));
+			Messages.add("All stat changes were eliminated!");
 		}
 	}
 
@@ -6398,7 +6398,7 @@ public abstract class Attack implements Serializable {
 				user.getAttributes().swapStages(s, victim);
 			}
 			
-			Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
+			Messages.add(user.getName() + " swapped its stats with " + victim.getName() + "!");
 		}
 	}
 
@@ -6416,7 +6416,7 @@ public abstract class Attack implements Serializable {
 				user.getAttributes().swapStages(s, victim);
 			}
 			
-			Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
+			Messages.add(user.getName() + " swapped its stats with " + victim.getName() + "!");
 		}
 	}
 
@@ -6431,7 +6431,7 @@ public abstract class Attack implements Serializable {
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			// NOTE: Looks like this is supposed to actually swap the stats and not just the stages but I don't really care it should do the same thing as power and guard swap because that makes more sense sue me
 			user.getAttributes().swapStages(Stat.SPEED, victim);
-			Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
+			Messages.add(user.getName() + " swapped its stats with " + victim.getName() + "!");
 		}
 	}
 
@@ -6646,7 +6646,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Messages.add(new MessageUpdate("But nothing happened..."));
+			Messages.add("But nothing happened...");
 		}
 	}
 
@@ -7267,7 +7267,7 @@ public abstract class Attack implements Serializable {
 				
 				Move temp = p.getMove();
 				p.setMove(new Move(super.namesies.getAttack()));
-				Messages.add(new MessageUpdate(p.getName() + "'s attack!"));
+				Messages.add(p.getName() + "'s attack!");
 				super.applyDamage(p, o, b);
 				p.setMove(temp);
 			}
@@ -7369,7 +7369,7 @@ public abstract class Attack implements Serializable {
 				if (moves.get(i).getAttack().namesies() == super.namesies) {
 					moves.add(i, new Move(this.copy.getAttack()));
 					moves.remove(i + 1);
-					Messages.add(new MessageUpdate(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!"));
+					Messages.add(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
 					break;
 				}
 			}
@@ -7403,7 +7403,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -7415,7 +7415,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -7608,7 +7608,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -7620,7 +7620,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -7958,7 +7958,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -7970,7 +7970,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -8099,7 +8099,7 @@ public abstract class Attack implements Serializable {
 				victim.getAttributes().setStage(stat, temp);
 			}
 			
-			Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
+			Messages.add(user.getName() + " swapped its stats with " + victim.getName() + "!");
 		}
 	}
 
@@ -8171,7 +8171,7 @@ public abstract class Attack implements Serializable {
 			// TODO: Sticky Hold
 			Item heldItem = victim.getHeldItem(b);
 			if (heldItem instanceof Berry || heldItem instanceof GemItem) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + heldItem.getName() + " was burned!"));
+				Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
 				victim.consumeItem(b);
 			}
 		}
@@ -8335,7 +8335,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -8347,7 +8347,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -8409,7 +8409,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -8421,7 +8421,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 
@@ -8641,7 +8641,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(user.getName() + " flung its " + user.getHeldItem(b).getName() + "!"));
+			Messages.add(user.getName() + " flung its " + user.getHeldItem(b).getName() + "!");
 		}
 
 		public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
@@ -8845,7 +8845,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(user.getName() + " teleported out of battle!"));
+			Messages.add(user.getName() + " teleported out of battle!");
 			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
 		}
 
@@ -8894,7 +8894,7 @@ public abstract class Attack implements Serializable {
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (user.canRemoveItem(b, victim)) {
-				Messages.add(new MessageUpdate(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!"));
+				Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
 				if (b.isWildBattle()) {
 					victim.removeItem();
 				}
@@ -9056,7 +9056,7 @@ public abstract class Attack implements Serializable {
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Item restored = ((ItemHolder)victim.getEffect(EffectNamesies.CONSUMED_ITEM)).getItem();
 			victim.giveItem((HoldItem)restored);
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + restored.getName() + " was restored!"));
+			Messages.add(victim.getName() + "'s " + restored.getName() + " was restored!");
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -9076,7 +9076,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(user.getName() + " called " + victim.getName() + " a chump!!"));
+			Messages.add(user.getName() + " called " + victim.getName() + " a chump!!");
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -9143,7 +9143,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Messages.add(new MessageUpdate("All Pokemon hearing this song will faint in three turns!"));
+			Messages.add("All Pokemon hearing this song will faint in three turns!");
 			
 			// TODO: Test and also this used to check if they didn't have the effect before casting just in case that's relevant later
 			EffectNamesies.PERISH_SONG.getEffect().apply(b, user, victim, CastSource.ATTACK, false);
@@ -9720,7 +9720,7 @@ public abstract class Attack implements Serializable {
 				victim.getAttributes().setStage(stat, -victim.getStage(stat));
 			}
 			
-			Messages.add(new MessageUpdate(victim.getName() + "'s stat changes were all reversed!"));
+			Messages.add(victim.getName() + "'s stat changes were all reversed!");
 		}
 	}
 
@@ -9876,7 +9876,7 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add(new MessageUpdate("Hit " + hit + "!"));
+				Messages.add("Hit " + hit + "!");
 				super.applyDamage(me, o, b);
 				
 				// Stop attacking the dead
@@ -9888,7 +9888,7 @@ public abstract class Attack implements Serializable {
 			hit--;
 			
 			// Print hits and gtfo
-			Messages.add(new MessageUpdate("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!"));
+			Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
 		}
 	}
 

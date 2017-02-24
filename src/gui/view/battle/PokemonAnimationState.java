@@ -17,7 +17,7 @@ import pokemon.PokemonInfo;
 import pokemon.Stat;
 import sound.SoundPlayer;
 import sound.SoundTitle;
-import trainer.CharacterData;
+import trainer.Player;
 import trainer.Trainer;
 import type.Type;
 import util.FontMetrics;

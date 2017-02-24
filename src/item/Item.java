@@ -253,18 +253,18 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			Messages.add(new MessageUpdate(enterer.getName() + " floats with its " + this.name + "!"));
+			Messages.add(enterer.getName() + " floats with its " + this.name + "!");
 		}
 
 		public void fall(Battle b, ActivePokemon fallen) {
-			Messages.add(new MessageUpdate(fallen.getName() + " is no longer floating with its " + this.name + "!"));
+			Messages.add(fallen.getName() + " is no longer floating with its " + this.name + "!");
 			
 			// TODO: Fix this it's broken
 			// Effect.removeEffect(fallen.getEffects(), this.namesies());
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " popped!"));
+			Messages.add(victim.getName() + "'s " + this.name + " popped!");
 			victim.consumeItem(b);
 		}
 
@@ -335,7 +335,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 				Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.name + "!").updatePokemon(b, victim));
 			}
 			else if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				Messages.add(new MessageUpdate(victim.getName() + " lost some of its HP due to its " + this.name + "!"));
+				Messages.add(victim.getName() + " lost some of its HP due to its " + this.name + "!");
 				victim.reduceHealthFraction(b, 1/8.0);
 			}
 		}
@@ -812,7 +812,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 				return;
 			}
 			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by its " + this.name + "!"));
+			Messages.add(user.getName() + " was hurt by its " + this.name + "!");
 			user.reduceHealthFraction(b, .1);
 		}
 	}
@@ -951,7 +951,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 				if (victim.hasEffect(s)) {
 					used = true;
 					victim.getAttributes().removeEffect(s);
-					Messages.add(new MessageUpdate(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!"));
+					Messages.add(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
 				}
 			}
 			
@@ -967,7 +967,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 			if (pelted.hasEffect(EffectNamesies.INFATUATED)) {
 				pelted.getAttributes().removeEffect(EffectNamesies.INFATUATED);
-				Messages.add(new MessageUpdate(pelted.getName() + " is no longer infatuated to to the " + this.name + "!"));
+				Messages.add(pelted.getName() + " is no longer infatuated to to the " + this.name + "!");
 			}
 		}
 	}
@@ -1290,7 +1290,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!"));
+			Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 			user.reduceHealthFraction(b, 1/8.0);
 		}
 
@@ -1431,7 +1431,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		private static final long serialVersionUID = 1L;
 		private void stickyPoke(Battle b, ActivePokemon victim, String possession) {
 			if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				Messages.add(new MessageUpdate(victim.getName() + " was hurt by " + possession + " " + this.getName() + "!"));
+				Messages.add(victim.getName() + " was hurt by " + possession + " " + this.getName() + "!");
 				victim.reduceHealthFraction(b, 1/8.0);
 			}
 		}
@@ -1533,7 +1533,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 				}
 			}
 			
-			Messages.add(new MessageUpdate("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!"));
+			Messages.add("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!");
 		}
 	}
 
@@ -2710,14 +2710,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (RandomUtils.chanceTest(10)) {
 				if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!"));
+					Messages.add(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
 				}
 			}
 		}
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 			if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
-				Messages.add(new MessageUpdate("The " + this.name + " caused " + pelted.getName() + " to flinch!"));
+				Messages.add("The " + this.name + " caused " + pelted.getName() + " to flinch!");
 			}
 		}
 
@@ -2853,14 +2853,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (RandomUtils.chanceTest(10)) {
 				if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
-					Messages.add(new MessageUpdate(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!"));
+					Messages.add(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
 				}
 			}
 		}
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
 			if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
-				Messages.add(new MessageUpdate("The " + this.name + " caused " + pelted.getName() + " to flinch!"));
+				Messages.add("The " + this.name + " caused " + pelted.getName() + " to flinch!");
 			}
 		}
 
@@ -3419,7 +3419,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			}
 			
 			if (healed) {
-				Messages.add(new MessageUpdate("All fainted Pok\u00e9mon were fully revived!"));
+				Messages.add("All fainted Pok\u00e9mon were fully revived!");
 			}
 			
 			return healed;
@@ -4869,7 +4869,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
-				Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!"));
+				Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 				user.reduceHealthFraction(b, 1/8.0);
 				victim.consumeItem(b);
 			}
@@ -4894,7 +4894,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
 			if (user.getAttack().getCategory() == MoveCategory.SPECIAL) {
-				Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!"));
+				Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 				user.reduceHealthFraction(b, 1/8.0);
 				victim.consumeItem(b);
 			}
@@ -4937,7 +4937,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (!victim.fullHealth() && TypeAdvantage.isSuperEffective(user, victim, b)) {
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " restored its health!"));
+				Messages.add(victim.getName() + "'s " + this.name + " restored its health!");
 				victim.healHealthFraction(.25);
 				Messages.add(new MessageUpdate().updatePokemon(b, victim));
 				victim.consumeItem(b);

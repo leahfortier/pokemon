@@ -34,7 +34,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 	
 	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 		if (printCast) {
-			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim, source)));
+			Messages.add(getCastMessage(b, caster, victim, source));
 		}
 
 		b.getTrainer(victim.isPlayer()).addEffect(this);
@@ -58,7 +58,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void breakBarrier(Battle b, ActivePokemon breaker) {
-			Messages.add(new MessageUpdate(breaker.getName() + " broke the reflect barrier!"));
+			Messages.add(breaker.getName() + " broke the reflect barrier!");
 			b.getEffects(!breaker.isPlayer()).remove(this);
 		}
 
@@ -79,7 +79,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate("The effects of reflect faded."));
+			Messages.add("The effects of reflect faded.");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
@@ -110,7 +110,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void breakBarrier(Battle b, ActivePokemon breaker) {
-			Messages.add(new MessageUpdate(breaker.getName() + " broke the light screen barrier!"));
+			Messages.add(breaker.getName() + " broke the light screen barrier!");
 			b.getEffects(!breaker.isPlayer()).remove(this);
 		}
 
@@ -131,7 +131,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate("The effects of light screen faded."));
+			Messages.add("The effects of light screen faded.");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
@@ -229,7 +229,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(new MessageUpdate("The sticky web spun away!"));
+			Messages.add("The sticky web spun away!");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
@@ -245,7 +245,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate("The sticky web dispersed!"));
+			Messages.add("The sticky web dispersed!");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
@@ -269,7 +269,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(new MessageUpdate("The floating rocks spun away!"));
+			Messages.add("The floating rocks spun away!");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
@@ -281,12 +281,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
 				return;
 			}
 			
-			Messages.add(new MessageUpdate(enterer.getName() + " was hurt by stealth rock!"));
+			Messages.add(enterer.getName() + " was hurt by stealth rock!");
 			enterer.reduceHealthFraction(b, Type.ROCK.getAdvantage().getAdvantage(enterer, b)/8.0);
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate("The floating rocks dispersed!"));
+			Messages.add("The floating rocks dispersed!");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
@@ -319,7 +319,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(new MessageUpdate("The toxic spikes dispersed!"));
+			Messages.add("The toxic spikes dispersed!");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
@@ -332,7 +332,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			}
 			
 			if (enterer.isType(b, Type.POISON)) {
-				Messages.add(new MessageUpdate(enterer.getName() + " absorbed the Toxic Spikes!"));
+				Messages.add(enterer.getName() + " absorbed the Toxic Spikes!");
 				super.active = false;
 				return;
 			}
@@ -343,7 +343,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate("The toxic spikes dispersed!"));
+			Messages.add("The toxic spikes dispersed!");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
@@ -376,7 +376,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(new MessageUpdate("The spikes dispersed!"));
+			Messages.add("The spikes dispersed!");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
 			releaser.getEffects().remove(this);
@@ -388,7 +388,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 				return;
 			}
 			
-			Messages.add(new MessageUpdate(enterer.getName() + " was hurt by spikes!"));
+			Messages.add(enterer.getName() + " was hurt by spikes!");
 			
 			// TODO: Generalize this type of statement
 			if (layers == 1) enterer.reduceHealthFraction(b, 1/8.0);
@@ -397,7 +397,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
-			Messages.add(new MessageUpdate("The spikes dispersed!"));
+			Messages.add("The spikes dispersed!");
 			
 			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
 			victim.getEffects().remove(this);
@@ -474,7 +474,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void subside(Battle b, ActivePokemon p) {
-			Messages.add(new MessageUpdate(p.getName() + " took " + theSeeer.getName() + "'s attack!"));
+			Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			
 			Attack attack = AttackNamesies.FUTURE_SIGHT.getAttack();
 			
@@ -510,7 +510,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void subside(Battle b, ActivePokemon p) {
-			Messages.add(new MessageUpdate(p.getName() + " took " + theSeeer.getName() + "'s attack!"));
+			Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 			
 			Attack attack = AttackNamesies.DOOM_DESIRE.getAttack();
 			
@@ -588,7 +588,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
-			Messages.add(new MessageUpdate(player.getName() + " picked up " + coins + " pokedollars!"));
+			Messages.add(player.getName() + " picked up " + coins + " pokedollars!");
 			player.getDatCashMoney(coins);
 		}
 	}

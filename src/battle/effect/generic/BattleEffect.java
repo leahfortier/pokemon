@@ -26,7 +26,7 @@ public abstract class BattleEffect extends Effect {
 
 	public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 		if (printCast) {
-			Messages.add(new MessageUpdate(getCastMessage(b, caster, victim, source)));
+			Messages.add(getCastMessage(b, caster, victim, source));
 		}
 
 		b.addEffect(this);
@@ -138,7 +138,7 @@ public abstract class BattleEffect extends Effect {
 			}
 			
 			// Remove the effect if it's already in play
-			Messages.add(new MessageUpdate(roomsies.getSubsideMessage(caster)));
+			Messages.add(roomsies.getSubsideMessage(caster));
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
@@ -166,7 +166,7 @@ public abstract class BattleEffect extends Effect {
 			}
 			
 			// Remove the effect if it's already in play
-			Messages.add(new MessageUpdate(roomsies.getSubsideMessage(caster)));
+			Messages.add(roomsies.getSubsideMessage(caster));
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 
@@ -194,7 +194,7 @@ public abstract class BattleEffect extends Effect {
 			}
 			
 			// Remove the effect if it's already in play
-			Messages.add(new MessageUpdate(roomsies.getSubsideMessage(caster)));
+			Messages.add(roomsies.getSubsideMessage(caster));
 			Effect.removeEffect(b.getEffects(), this.namesies);
 		}
 

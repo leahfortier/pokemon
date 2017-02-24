@@ -22,7 +22,7 @@ class Burned extends Status implements EndTurnEffect, StatChangingEffect {
             return;
         }
 
-        Messages.add(new MessageUpdate(victim.getName() + " was hurt by its burn!"));
+        Messages.add(victim.getName() + " was hurt by its burn!");
         victim.reduceHealthFraction(b, victim.hasAbility(AbilityNamesies.HEATPROOF) ? 1/16.0 : 1/8.0);
     }
 

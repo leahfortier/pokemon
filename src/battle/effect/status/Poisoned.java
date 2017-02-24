@@ -37,7 +37,7 @@ class Poisoned extends Status implements EndTurnEffect {
             return;
         }
 
-        Messages.add(new MessageUpdate(victim.getName() + " was hurt by its poison!"));
+        Messages.add(victim.getName() + " was hurt by its poison!");
         victim.reduceHealthFraction(b, this.getTurns()/16.0);
     }
 

@@ -2,7 +2,6 @@ package battle.effect.generic;
 
 import battle.Battle;
 import main.Global;
-import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import util.RandomUtils;
@@ -106,7 +105,7 @@ public abstract class Effect implements Serializable {
 	}
 	
 	public void subside(Battle b, ActivePokemon p) {
-		Messages.add(new MessageUpdate(getSubsideMessage(p)));
+		Messages.add(getSubsideMessage(p));
 		active = false; // Unnecessary, but just to be safe
 	}
 

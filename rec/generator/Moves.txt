@@ -143,7 +143,7 @@ Struggle:
 	Desc: An attack that is used in desperation only if the user has no PP. It also hurts the user slightly.
 	Cat: Physical
 	Recoil:
-		Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
+		Messages.add(user.getName() + " was hurt by recoil!");
 		user.reduceHealth(b, user.getMaxHP()/4, false);
 		###
 	MoveType: Encoreless, Mimicless, Assistless, Metronomeless
@@ -2044,7 +2044,7 @@ Magnitude:
 		###
 	HitDig: True
 	UniqueEffects: 
-		Messages.add(new MessageUpdate("Magnitude " + (index + 4) + "!"));
+		Messages.add("Magnitude " + (index + 4) + "!");
 		###
 *
 Bulldoze:
@@ -2206,7 +2206,7 @@ Psych Up:
 			user.getAttributes().setStage(stat, victim.getStage(stat));
 		}
 		
-		Messages.add(new MessageUpdate(user.getName() + " copied " + victim.getName() + "'s stat changes!"));
+		Messages.add(user.getName() + " copied " + victim.getName() + "'s stat changes!");
 		###
 	MoveType: No_Magic_Coat, Protect_Piercing, Substitute_Piercing
 *
@@ -2391,7 +2391,7 @@ Belly Drum:
 		###
 	UniqueEffects:
 		// Maximization station
-		Messages.add(new MessageUpdate(user.getName() + " cut its own HP and maximized its attack!"));
+		Messages.add(user.getName() + " cut its own HP and maximized its attack!");
 		user.reduceHealthFraction(b, 1/2.0);
 		user.getAttributes().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
 		###
@@ -3080,7 +3080,7 @@ Spite:
 		###
 	UniqueEffects: 
 		Move last = victim.getAttributes().getLastMoveUsed();
-		Messages.add(new MessageUpdate(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!"));
+		Messages.add(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!");
 		###
 *
 Night Shade:
@@ -3785,7 +3785,7 @@ Speed Swap:
 	UniqueEffects:
 		// NOTE: Looks like this is supposed to actually swap the stats and not just the stages but I don't really care it should do the same thing as power and guard swap because that makes more sense sue me
 		user.getAttributes().swapStages(Stat.SPEED, victim);
-		Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
+		Messages.add(user.getName() + " swapped its stats with " + victim.getName() + "!");
 		###
 *
 Copycat:
@@ -3923,7 +3923,7 @@ Splash:
 	Cat: Status
 	SelfTarget: True
 	UniqueEffects:
-		Messages.add(new MessageUpdate("But nothing happened..."));
+		Messages.add("But nothing happened...");
 		###
 	MoveType: Airborne
 *
@@ -4399,7 +4399,7 @@ Beat Up:
 			
 			Move temp = p.getMove();
 			p.setMove(new Move(super.namesies.getAttack()));
-			Messages.add(new MessageUpdate(p.getName() + "'s attack!"));
+			Messages.add(p.getName() + "'s attack!");
 			super.applyDamage(p, o, b);
 			p.setMove(temp);
 		}
@@ -4485,7 +4485,7 @@ Sketch:
 			if (moves.get(i).getAttack().namesies() == super.namesies) {
 				moves.add(i, new Move(this.copy.getAttack()));
 				moves.remove(i + 1);
-				Messages.add(new MessageUpdate(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!"));
+				Messages.add(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
 				break;
 			}
 		}
@@ -4918,7 +4918,7 @@ Heart Swap:
 			victim.getAttributes().setStage(stat, temp);
 		}
 		
-		Messages.add(new MessageUpdate(user.getName() + " swapped its stats with " + victim.getName() + "!"));
+		Messages.add(user.getName() + " swapped its stats with " + victim.getName() + "!");
 		###
 *	
 Dark Void:
@@ -4969,7 +4969,7 @@ Incinerate:
 		// TODO: Sticky Hold
 		Item heldItem = victim.getHeldItem(b);
 		if (heldItem instanceof Berry || heldItem instanceof GemItem) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + heldItem.getName() + " was burned!"));
+			Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
 			victim.consumeItem(b);
 		}
 		###
@@ -5270,7 +5270,7 @@ Fling:
 		###
 	Applies: user.isHoldingItem(b)
 	AfterApplyCheck:
-		Messages.add(new MessageUpdate(user.getName() + " flung its " + user.getHeldItem(b).getName() + "!"));
+		Messages.add(user.getName() + " flung its " + user.getHeldItem(b).getName() + "!");
 		###
 	UniqueEffects:
 		((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
@@ -5400,7 +5400,7 @@ Teleport:
 	SelfTarget: True
 	Applies: b.isWildBattle()
 	UniqueEffects:
-		Messages.add(new MessageUpdate(user.getName() + " teleported out of battle!"));
+		Messages.add(user.getName() + " teleported out of battle!");
 		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
 		###
 *
@@ -5434,7 +5434,7 @@ Knock Off:
 	PowerMultiplierCondition: 1.5 victim.isHoldingItem(b)
 	UniqueEffects: 
 		if (user.canRemoveItem(b, victim)) {
-			Messages.add(new MessageUpdate(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!"));
+			Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
 			if (b.isWildBattle()) {
 				victim.removeItem();
 			} 
@@ -5534,7 +5534,7 @@ Recycle:
 	UniqueEffects: 
 		Item restored = ((ItemHolder)victim.getEffect(EffectNamesies.CONSUMED_ITEM)).getItem();
 		victim.giveItem((HoldItem)restored);
-		Messages.add(new MessageUpdate(victim.getName() + "'s " + restored.getName() + " was restored!"));
+		Messages.add(victim.getName() + "'s " + restored.getName() + " was restored!");
 		###
 *
 Parting Shot:
@@ -5547,7 +5547,7 @@ Parting Shot:
 	SelfSwitching: True
 	MoveType: Sound_Based
 	AfterApplyCheck:
-		Messages.add(new MessageUpdate(user.getName() + " called " + victim.getName() + " a chump!!"));
+		Messages.add(user.getName() + " called " + victim.getName() + " a chump!!");
 		###
 *
 U-turn:
@@ -5594,7 +5594,7 @@ Perish Song:
 	Type: Normal
 	Cat: Status
 	UniqueEffects:
-		Messages.add(new MessageUpdate("All Pokemon hearing this song will faint in three turns!"));
+		Messages.add("All Pokemon hearing this song will faint in three turns!");
 
 		// TODO: Test and also this used to check if they didn't have the effect before casting just in case that's relevant later
 		EffectNamesies.PERISH_SONG.getEffect().apply(b, user, victim, CastSource.ATTACK, false);
@@ -5959,7 +5959,7 @@ Topsy-Turvy:
 			victim.getAttributes().setStage(stat, -victim.getStage(stat));
 		}
 		
-		Messages.add(new MessageUpdate(victim.getName() + "'s stat changes were all reversed!"));
+		Messages.add(victim.getName() + "'s stat changes were all reversed!");
 		###
 *
 Play Nice:

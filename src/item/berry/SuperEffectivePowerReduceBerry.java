@@ -2,7 +2,6 @@ package item.berry;
 
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
-import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import type.Type;
@@ -13,7 +12,7 @@ public interface SuperEffectivePowerReduceBerry extends Berry, OpponentPowerChan
 
     default double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
         if (user.getAttackType() == this.getType() && TypeAdvantage.isSuperEffective(user, victim, b)) {
-            Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " decreased " + user.getName() + "'s attack!"));
+            Messages.add(victim.getName() + "'s " + this.getName() + " decreased " + user.getName() + "'s attack!");
             victim.consumeItem(b);
             return .5;
         }

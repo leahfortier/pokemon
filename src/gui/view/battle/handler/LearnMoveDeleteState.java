@@ -7,7 +7,6 @@ import draw.button.Button;
 import draw.button.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
-import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import util.FontMetrics;
@@ -96,8 +95,8 @@ public class LearnMoveDeleteState implements VisualStateHandler {
 
                     learner.addMove(learnMove, moveIndex, true);
 
-                    Messages.addToFront(new MessageUpdate("...and " + learnerName + " learned " + learnMoveName + "!"));
-                    Messages.addToFront(new MessageUpdate(learnerName + " forgot how to use " + deleteMoveName + "..."));
+                    Messages.addToFront("...and " + learnerName + " learned " + learnMoveName + "!");
+                    Messages.addToFront(learnerName + " forgot how to use " + deleteMoveName + "...");
 
                     view.setVisualState(VisualState.MESSAGE);
                     view.cycleMessage(false);
@@ -109,7 +108,7 @@ public class LearnMoveDeleteState implements VisualStateHandler {
             ActivePokemon learner = view.getLearnedPokemon();
             Move move = view.getLearnedMove();
 
-            Messages.addToFront(new MessageUpdate(learner.getActualName() + " did not learn " + move.getAttack().getName() + "."));
+            Messages.addToFront(learner.getActualName() + " did not learn " + move.getAttack().getName() + ".");
 
             view.setVisualState(VisualState.MESSAGE);
             view.cycleMessage(false);

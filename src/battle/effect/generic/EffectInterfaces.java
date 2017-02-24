@@ -149,7 +149,7 @@ public final class EffectInterfaces {
 				return;
 			}
 			
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by recoil!"));
+			Messages.add(user.getName() + " was hurt by recoil!");
 			user.reduceHealth(b, (int)Math.ceil((double)damage/getDamagePercentageDenominator()), false);
 		}
 	}
@@ -432,7 +432,7 @@ public final class EffectInterfaces {
 		default void removeLevitation(Battle b, ActivePokemon p) {
 			if (p.isSemiInvulnerableFlying()) {
 				p.getMove().switchReady(b, p);
-				Messages.add(new MessageUpdate(p.getName() + " fell to the ground!"));
+				Messages.add(p.getName() + " fell to the ground!");
 			}
 			
 			LevitationEffect.falllllllll(b, p);
@@ -569,7 +569,7 @@ public final class EffectInterfaces {
 					
 					TrappingEffect effect = (TrappingEffect)invokee;
 					if (effect.trapped(b, escaper)) {
-						Messages.add(new MessageUpdate(effect.trappingMessage(escaper)));
+						Messages.add(effect.trappingMessage(escaper));
 						return true;
 					}
 				}
@@ -590,7 +590,7 @@ public final class EffectInterfaces {
 					
 					OpponentTrappingEffect effect = (OpponentTrappingEffect)invokee;
 					if (effect.trapOpponent(b, escaper, trapper)) {
-						Messages.add(new MessageUpdate(effect.opponentTrappingMessage(escaper, trapper)));
+						Messages.add(effect.opponentTrappingMessage(escaper, trapper));
 						return true;
 					}
 				}

@@ -11,7 +11,7 @@ interface PokemonManipulator {
     void manipulate(TestBattle battle, TestPokemon attacking, TestPokemon defending);
 
     static void startAttack(Battle battle, ActivePokemon attacking, ActivePokemon defending) {
-        attacking.startAttack(battle, defending);
+        attacking.startAttack(battle);
     }
 
     static void giveEffect(EffectNamesies effectNamesies, Battle battle, ActivePokemon attacking, ActivePokemon defending, boolean attackingTarget) {
@@ -46,10 +46,6 @@ interface PokemonManipulator {
                 manipulator.manipulate(battle, attacking, defending);
             }
         };
-    }
-
-    static PokemonManipulator giveBattleEffect(EffectNamesies effectNamesies) {
-        return giveAttackingEffect(effectNamesies);
     }
 
     static PokemonManipulator giveAttackingEffect(EffectNamesies effectNamesies) {

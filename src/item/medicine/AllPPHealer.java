@@ -5,10 +5,8 @@ import battle.attack.Move;
 import item.hold.HoldItem;
 import item.use.BattleUseItem;
 import item.use.PokemonUseItem;
-import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
-import trainer.Trainer;
 
 import java.util.List;
 
@@ -22,7 +20,7 @@ public interface AllPPHealer extends PokemonUseItem, BattleUseItem, HoldItem {
         }
 
         if (changed) {
-            Messages.add(new MessageUpdate(p.getName() + "'s PP was restored!"));
+            Messages.add(p.getName() + "'s PP was restored!");
         }
 
         return changed;

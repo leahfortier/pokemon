@@ -84,10 +84,10 @@ Air Balloon:
 	Fling: 10
 	FallMessage: fallen.getName() + " is no longer floating with its " + this.name + "!"
 	Enter:
-		Messages.add(new MessageUpdate(enterer.getName() + " floats with its " + this.name + "!"));
+		Messages.add(enterer.getName() + " floats with its " + this.name + "!");
 		###
 	OnTakeDamage:
-		Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " popped!"));
+		Messages.add(victim.getName() + "'s " + this.name + " popped!");
 		victim.consumeItem(b);
 		###
 *
@@ -127,7 +127,7 @@ Black Sludge:
 			Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.name + "!").updatePokemon(b, victim));
 		}
 		else if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-			Messages.add(new MessageUpdate(victim.getName() + " lost some of its HP due to its " + this.name + "!"));
+			Messages.add(victim.getName() + " lost some of its HP due to its " + this.name + "!");
 			victim.reduceHealthFraction(b, 1/8.0);
 		}
 		###
@@ -341,7 +341,7 @@ Life Orb:
 			return;
 		}
 		
-		Messages.add(new MessageUpdate(user.getName() + " was hurt by its " + this.name + "!"));
+		Messages.add(user.getName() + " was hurt by its " + this.name + "!");
 		user.reduceHealthFraction(b, .1);
 		###
 *
@@ -428,7 +428,7 @@ Mental Herb:
 			if (victim.hasEffect(s)) {
 				used = true;
 				victim.getAttributes().removeEffect(s);
-				Messages.add(new MessageUpdate(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!"));
+				Messages.add(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
 			}
 		}
 		
@@ -439,7 +439,7 @@ Mental Herb:
 	FlingEffect:
 		if (pelted.hasEffect(EffectNamesies.INFATUATED)) {
 			pelted.getAttributes().removeEffect(EffectNamesies.INFATUATED);
-			Messages.add(new MessageUpdate(pelted.getName() + " is no longer infatuated to to the " + this.name + "!"));
+			Messages.add(pelted.getName() + " is no longer infatuated to to the " + this.name + "!");
 		}
 		###
 *
@@ -542,7 +542,7 @@ Rocky Helmet:
 	Price: 200
 	Fling: 60
 	Contact:
-		Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!"));
+		Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
 		user.reduceHealthFraction(b, 1/8.0);
 		###
 *
@@ -627,7 +627,7 @@ Sticky Barb:
 	Field:
 		private void stickyPoke(Battle b, ActivePokemon victim, String possession) {
 			if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-				Messages.add(new MessageUpdate(victim.getName() + " was hurt by " + possession + " " + this.getName() + "!"));
+				Messages.add(victim.getName() + " was hurt by " + possession + " " + this.getName() + "!");
 				victim.reduceHealthFraction(b, 1/8.0);
 			}
 		}
@@ -684,7 +684,7 @@ White Herb:
 			}
 		}
 		
-		Messages.add(new MessageUpdate("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!"));
+		Messages.add("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!");
 		###
 *
 Wide Lens:
@@ -1480,7 +1480,7 @@ Sacred Ash:
 			}
 			
 			if (healed) {
-				Messages.add(new MessageUpdate("All fainted Pok\u00e9mon were fully revived!"));
+				Messages.add("All fainted Pok\u00e9mon were fully revived!");
 			}
 			
 			return healed;
@@ -2071,7 +2071,7 @@ Enigma Berry:
 	Int: Berry, TakeDamageEffect
 	OnTakeDamage:
 		if (!victim.fullHealth() && TypeAdvantage.isSuperEffective(user, victim, b)) {
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.name + " restored its health!"));
+			Messages.add(victim.getName() + "'s " + this.name + " restored its health!");
 			victim.healHealthFraction(.25);
 			Messages.add(new MessageUpdate().updatePokemon(b, victim));
 			victim.consumeItem(b);

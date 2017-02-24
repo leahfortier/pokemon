@@ -6,7 +6,7 @@ import trainer.Player;
 class TestCharacter extends Player {
     TestCharacter(ActivePokemon mahBoiiiiiii) {
         super();
-        GameTest.setPlayer(this);
+        GameTest.setNewPlayer(this);
         this.addPokemon(mahBoiiiiiii);
     }
 }

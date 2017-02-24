@@ -2,7 +2,6 @@ package battle.effect;
 
 import battle.Battle;
 import battle.effect.generic.CastSource;
-import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 
@@ -25,6 +24,6 @@ public interface MessageGetter extends Serializable {
     }
 
     default void addMessage(ActivePokemon p, CastSource source) {
-        Messages.add(new MessageUpdate(this.getMessage(p, source)));
+        Messages.add(this.getMessage(p, source));
     }
 }

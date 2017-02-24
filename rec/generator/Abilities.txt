@@ -29,7 +29,7 @@ Solar Power:
 	PowerMultiplierCondition: 1.5 user.getAttack().getCategory() == MoveCategory.SPECIAL && b.getWeather().namesies() == EffectNamesies.SUNNY
 	ApplyEndTurn: 
 		if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
-			Messages.add(new MessageUpdate(victim.getName() + " lost some of its HP due to its " + this.getName() + "!"));
+			Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
 			victim.reduceHealthFraction(b, 1/8.0);
 		}
 		###
@@ -147,7 +147,7 @@ Cute Charm:
 			PokemonEffect infatuated = (PokemonEffect)EffectNamesies.INFATUATED.getEffect();
 			if (infatuated.applies(b, victim, user, CastSource.ABILITY)) {
 				user.addEffect(infatuated);
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!"));
+				Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
 			}
 		}
 		###
@@ -189,7 +189,9 @@ Frisk:
 	Int: EntryEffect
 	Enter: 
 		ActivePokemon other = b.getOtherPokemon(enterer);
-		if (other.isHoldingItem(b)) Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!"));
+		if (other.isHoldingItem(b)) {
+			Messages.add(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!");
+		}
 		###
 *
 Inner Focus:
@@ -204,7 +206,7 @@ Stench:
 	OpponentTakeDamage: 
 		if (RandomUtils.chanceTest(10)) {
 			if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.ABILITY, false)) {
-				Messages.add(new MessageUpdate(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!"));
+				Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
 			}
 		}
 		###
@@ -236,7 +238,7 @@ Dry Skin:
 	Int: EndTurnEffect, OpponentPowerChangeEffect
 	ApplyEndTurn: 
 		if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
-			Messages.add(new MessageUpdate(victim.getName() + " lost some of its HP due to its " + this.getName() + "!"));
+			Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
 			victim.reduceHealthFraction(b, 1/8.0);
 		}
 		else if (b.getWeather().namesies() == EffectNamesies.RAINING && !victim.fullHealth()) {
@@ -459,7 +461,7 @@ Forewarn:
 			warn = RandomUtils.getRandomValue(besties);
 		}
 		
-		Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn.getName() + "!"));
+		Messages.add(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + warn.getName() + "!");
 		###
 *
 Hyper Cutter:
@@ -483,7 +485,7 @@ Iron Fist:
 	Int: EntryEffect
 	Enter:
 		if (enterer.getPokemonInfo().namesies() == PokemonNamesies.PANGORO) {
-			Messages.add(new MessageUpdate(enterer.getName() + " does not break the mold!!!!!!!"));
+			Messages.add(enterer.getName() + " does not break the mold!!!!!!!");
 		}
 		###
 *
@@ -636,7 +638,7 @@ Pressure:
 	Desc: The Pok\u00e9mon raises the foe's PP usage.
 	Int: EntryEffect
 	Enter: 
-		Messages.add(new MessageUpdate(enterer.getName() + " is exerting pressure!"));
+		Messages.add(enterer.getName() + " is exerting pressure!");
 		###
 *
 Immunity:
@@ -769,7 +771,7 @@ Truant:
 		###
 	CanAttack: 
 		if (lazyface) {
-			Messages.add(new MessageUpdate(p.getName() + " is loafing around!"));
+			Messages.add(p.getName() + " is loafing around!");
 			return false;
 		}
 		
@@ -807,7 +809,7 @@ Rough Skin:
 	Desc: Inflicts damage to the foe on contact.
 	Int: PhysicalContactEffect
 	Contact: 
-		Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
+		Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 		user.reduceHealthFraction(b, 1/8.0);
 		###
 *
@@ -839,7 +841,7 @@ Anticipation:
 			Attack attack = m.getAttack();
 			if (attack.getActualType().getAdvantage().isSuperEffective(enterer, b) || attack.isMoveType(MoveType.ONE_HIT_KO)) {
 				// TODO: Shouldn't this be for a random move?
-				Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made it shudder!"));
+				Messages.add(enterer.getName() + "'s " + this.getName() + " made it shudder!");
 				break;
 			}
 		}
@@ -915,7 +917,7 @@ Aftermath:
 		// TODO: Pretty sure this doesn't work anymore
 		// TODO: Doesn't work on Damp
 		if (victim.isFainted(b)) {
-			Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
+			Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 			user.reduceHealthFraction(b, 1/4.0);
 		}
 		###
@@ -965,7 +967,7 @@ Cursed Body:
 			PokemonEffect disable = (PokemonEffect)EffectNamesies.DISABLE.getEffect();
 			if (disable.applies(b, victim, user, CastSource.ABILITY)) {
 				disable.cast(b, victim, user, CastSource.ABILITY, false);
-				Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName()));
+				Messages.add(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
 			}
 		}
 		###
@@ -994,7 +996,7 @@ Bad Dreams:
 	ApplyEndTurn: 
 		ActivePokemon other = b.getOtherPokemon(victim);
 		if (other.hasStatus(StatusCondition.ASLEEP)) {
-			Messages.add(new MessageUpdate(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
+			Messages.add(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 			other.reduceHealthFraction(b, 1/8.0);
 		}
 		###
@@ -1085,7 +1087,7 @@ Illusion:
 			}
 			
 			activated = false;
-			Messages.add(new MessageUpdate(victim.getName() + "'s Illusion was broken!"));
+			Messages.add(victim.getName() + "'s Illusion was broken!");
 			
 			Messages.add(new MessageUpdate().withNewPokemon(victim.getPokemonInfo(), victim.isShiny(), true, victim.isPlayer()));
 			Messages.add(new MessageUpdate().updatePokemon(b, victim));
@@ -1177,7 +1179,7 @@ Iron Barbs:
 	Desc: Inflicts damage to the Pok\u00e9mon on contact.
 	Int: PhysicalContactEffect
 	Contact: 
-		Messages.add(new MessageUpdate(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!"));
+		Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 		user.reduceHealthFraction(b, 1/8.0);
 		###
 *
@@ -1185,21 +1187,21 @@ Mold Breaker:
 	Desc: Moves can be used regardless of Abilities.
 	Int: EntryEffect
 	Enter: 
-		Messages.add(new MessageUpdate(enterer.getName() + " breaks the mold!"));
+		Messages.add(enterer.getName() + " breaks the mold!");
 		###
 *
 Teravolt:
 	Desc: Moves can be used regardless of Abilities.
 	Int: EntryEffect
 	Enter: 
-		Messages.add(new MessageUpdate(enterer.getName() + " is radiating a bursting aura!"));
+		Messages.add(enterer.getName() + " is radiating a bursting aura!");
 		###
 *
 Turboblaze:
 	Desc: Moves can be used regardless of Abilities.
 	Int: EntryEffect
 	Enter: 
-		Messages.add(new MessageUpdate(enterer.getName() + " is radiating a blazing aura!"));
+		Messages.add(enterer.getName() + " is radiating a blazing aura!");
 		###
 *
 Run Away:
@@ -1240,7 +1242,7 @@ Harvest:
 		Item restored = ((ItemHolder)consumed).getItem();
 		if (restored instanceof Berry && (b.getWeather().namesies() == EffectNamesies.SUNNY || RandomUtils.chanceTest(50))) {
 			victim.giveItem((HoldItem)restored);
-			Messages.add(new MessageUpdate(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!"));
+			Messages.add(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!");
 		}
 		###
 *
@@ -1258,7 +1260,7 @@ Unnerve:
 	Desc: Makes the foe nervous and unable to eat Berries.
 	Int: EntryEffect
 	Enter: 
-		Messages.add(new MessageUpdate(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer).getName() + " too nervous to eat berries!"));
+		Messages.add(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer).getName() + " too nervous to eat berries!");
 		###
 *
 Honey Gather:
@@ -1365,17 +1367,17 @@ Stance Change:
 	CanAttack:
 		if (shieldForm && !p.getAttack().isStatusMove()) {
 			shieldForm = false;
-			Messages.add(new MessageUpdate(p.getName() + " changed into Blade Forme!"));
+			Messages.add(p.getName() + " changed into Blade Forme!");
 		}
 		else if (!shieldForm && p.getAttack().namesies() == AttackNamesies.KINGS_SHIELD) {
 			shieldForm = true;
-			Messages.add(new MessageUpdate(p.getName() + " changed into Shield Forme!"));
+			Messages.add(p.getName() + " changed into Shield Forme!");
 		}
 		
 		return true;
 		###
 	Enter:
-		Messages.add(new MessageUpdate(enterer.getName() + " is in Shield Forme!"));
+		Messages.add(enterer.getName() + " is in Shield Forme!");
 		shieldForm = true;
 		###
 *
@@ -1511,7 +1513,7 @@ Disguise:
 	Int: AbsorbDamageEffect
 	AbsorbDamage:
 		if (!activated && b.getOtherPokemon(damageTaker).getAttributes().isAttacking()) {
-			Messages.add(new MessageUpdate(damageTaker.getName() + "'s disguise was busted!!"));
+			Messages.add(damageTaker.getName() + "'s disguise was busted!!");
 			activated = true;
 			return true;
 		}
@@ -1576,7 +1578,7 @@ Dancer:
 		if (attack.getName().contains("Dance") && (!attacking.hasAbility(this.namesies) || !attacking.getAbility().isActive())) {
 			activated = true;
 			ActivePokemon abilify = this.getOtherPokemon(b, attacking);
-			Messages.add(new MessageUpdate(abilify.getName() + "'s " + this.getName() + " allowed it to join in the dance!"));
+			Messages.add(abilify.getName() + "'s " + this.getName() + " allowed it to join in the dance!");
 			abilify.callNewMove(b, attacking, new Move(attack));
 			activated = false;
 		}
@@ -1594,7 +1596,7 @@ Dancer:
 Innards Out:
 	Desc: Damages the attacker landing the finishing hit by the amount equal to its last HP.
 	DeathWish:
-		Messages.add(new MessageUpdate(murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!"));
+		Messages.add(murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!");
 		murderer.reduceHealth(b, dead.getAttributes().getDamageTaken());
 		###
 *
