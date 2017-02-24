@@ -7,8 +7,6 @@ import gui.view.ViewMode;
 import gui.view.map.VisualState.VisualStateHandler;
 import main.Game;
 import main.Global;
-import map.overworld.TerrainType;
-import map.weather.WeatherState;
 import pokemon.ActivePokemon;
 import sound.SoundPlayer;
 import sound.SoundTitle;
@@ -91,11 +89,9 @@ class BattleState implements VisualStateHandler {
         }
     }
 
-    void setBattle(Battle battle, boolean seenWild, WeatherState weather, TerrainType terrain) {
+    void setBattle(Battle battle, boolean seenWild) {
         this.battle = battle;
         this.seenWild = seenWild;
-        this.battle.setBaseWeather(weather);
-        this.battle.setTerrainType(terrain, true);
 
         battleAnimationTime = BATTLE_INTRO_ANIMATION_LIFESPAN;
         battleImageSlideLeft = null;
@@ -132,7 +128,7 @@ class BattleState implements VisualStateHandler {
         GameData data = Game.getData();
 
         if (battle.isWildBattle()) {
-            battleImageSlideLeft = mapView.getBattleTerrain().getOpponentCircleImage();
+            battleImageSlideLeft = mapView.getCurrentArea().getBattleTerrain().getOpponentCircleImage();
 
             ActivePokemon p = battle.getOpponent().front();
             battleImageSlideRight = data.getPokemonTilesLarge().getTile(p.getImageName());

@@ -29,6 +29,7 @@ import battle.effect.generic.Weather;
 import item.ItemNamesies;
 import main.Game;
 import main.Global;
+import map.AreaData;
 import map.overworld.TerrainType;
 import map.weather.WeatherState;
 import message.MessageUpdate;
@@ -88,8 +89,9 @@ public class Battle {
 		escapeAttempts = 0;
 		firstAttacking = false;
 
-		this.setBaseWeather(WeatherState.NORMAL);
-		this.setTerrainType(TerrainType.BUILDING, true);
+		AreaData area = Game.getData().getMap(player.getMapName()).getArea(player.getLocation());
+		this.setBaseWeather(area.getWeather());
+		this.setTerrainType(area.getBattleTerrain(), true);
 
 		this.player.enterBattle();
 		if (this.opponent instanceof Trainer) {

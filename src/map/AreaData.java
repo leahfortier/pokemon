@@ -1,5 +1,6 @@
 package map;
 
+import main.Game;
 import map.overworld.TerrainType;
 import map.weather.WeatherState;
 import pokemon.PokemonNamesies;
@@ -86,6 +87,10 @@ public class AreaData {
 
 	public TerrainType getTerrain() {
 		return terrainType;
+	}
+
+	public TerrainType getBattleTerrain() {
+		return Game.getPlayer().isFishing() ? TerrainType.WATER : this.getTerrain();
 	}
 
 	public String getAreaName() {

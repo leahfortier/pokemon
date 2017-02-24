@@ -19,7 +19,6 @@ import map.PathDirection;
 import map.entity.Entity;
 import map.entity.movable.MovableEntity;
 import map.entity.movable.PlayerEntity;
-import map.overworld.TerrainType;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -83,12 +82,12 @@ public class MapView extends View {
 		return this.currentMap;
 	}
 
-	MessageUpdate getCurrentMessage() {
-		return this.currentMessage;
+	AreaData getCurrentArea() {
+		return this.currentArea;
 	}
 
-	TerrainType getBattleTerrain() {
-		return Game.getPlayer().isFishing() ? TerrainType.WATER : this.currentArea.getTerrain();
+	MessageUpdate getCurrentMessage() {
+		return this.currentMessage;
 	}
 
 	@Override
@@ -336,7 +335,7 @@ public class MapView extends View {
 
 	public void setBattle(Battle battle, boolean seenWild) {
 		this.setState(VisualState.BATTLE);
-		VisualState.setBattle(battle, seenWild, this.currentArea.getWeather(), this.getBattleTerrain());
+		VisualState.setBattle(battle, seenWild);
 	}
 
 	@Override

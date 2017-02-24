@@ -1,8 +1,6 @@
 package gui.view.map;
 
 import battle.Battle;
-import map.overworld.TerrainType;
-import map.weather.WeatherState;
 
 import java.awt.Graphics;
 
@@ -38,8 +36,8 @@ enum VisualState {
         this.handler.set(mapView);
     }
 
-    public static void setBattle(Battle battle, boolean seenWild, WeatherState weather, TerrainType terrain) {
-        ((BattleState)BATTLE.handler).setBattle(battle, seenWild, weather, terrain);
+    public static void setBattle(Battle battle, boolean seenWild) {
+        ((BattleState)BATTLE.handler).setBattle(battle, seenWild);
     }
 
     public static boolean hasBattle() {
