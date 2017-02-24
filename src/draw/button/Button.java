@@ -304,6 +304,10 @@ public class Button {
 		ImageUtils.drawCenteredImage(g, image, centerX(), centerY());
 	}
 
+	public int rightX() {
+		return x + width;
+	}
+
 	public int centerX() {
 		return x + width/2;
 	}

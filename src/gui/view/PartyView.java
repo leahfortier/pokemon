@@ -16,10 +16,10 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
-import map.Direction;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.Ability;
+import trainer.Player;
 import trainer.Trainer;
 import type.Type;
 import util.FontMetrics;
@@ -28,14 +28,15 @@ import util.Point;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.EnumSet;
 import java.util.List;
 
 class PartyView extends View {
-	private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + Move.MAX_MOVES + 2;
+	private static final int NUM_BOTTOM_BUTTONS = 3;
+	private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + Move.MAX_MOVES + NUM_BOTTOM_BUTTONS;
 	private static final int MOVES = Trainer.MAX_POKEMON;
 	private static final int RETURN = NUM_BUTTONS - 1;
 	private static final int SWITCH = NUM_BUTTONS - 2;
+	private static final int NICKNAME = NUM_BUTTONS - 3;
 
 	private final DrawPanel pokemonPanel;
 	private final DrawPanel imagePanel;
@@ -43,6 +44,7 @@ class PartyView extends View {
 	private final DrawPanel abilityPanel;
 	private final DrawPanel statsPanel;
 	private final DrawPanel movesPanel;
+	private final DrawPanel nicknamePanel;
 
 	private final DrawPanel hpBar;
 	private final DrawPanel expBar;
@@ -51,12 +53,14 @@ class PartyView extends View {
 	private final Button[] tabButtons;
 	private final Button[] moveButtons;
 
+	private final Button nicknameButton;
 	private final Button switchButton;
 	private final Button returnButton;
 	
 	private int selectedTab;
 	private int selectedButton;
 	private int switchTabIndex;
+	private boolean nicknameView;
 	
 	PartyView() {
 		selectedTab = 0;
@@ -75,8 +79,7 @@ class PartyView extends View {
 				)
 				.withTransparentBackground()
 				.withBorderPercentage(0)
-				.withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP))
-		);
+				.withBlackOutline();
 
 		imagePanel = new DrawPanel(
 				pokemonPanel.x + spacing,
@@ -138,22 +141,32 @@ class PartyView extends View {
 				.withFullTransparency()
 				.withBlackOutline();
 
-		switchButton = new Button(
-				statsPanel.x,
-				statsPanel.y + statsPanel.height + spacing,
-				halfPanelWidth,
+		int buttonWidth = (basicInformationPanel.rightX() - imagePanel.x - (NUM_BOTTOM_BUTTONS - 1)*spacing)/NUM_BOTTOM_BUTTONS;
+		nicknameButton = new Button(
+				imagePanel.x,
+				statsPanel.bottomY() + spacing,
+				buttonWidth,
 				buttonHeight,
 				ButtonHoverAction.BOX,
-				new int[] { RETURN, 0, RETURN, 0 }
+				new int[] { SWITCH, 0, RETURN, 0 }
+		);
+
+		switchButton = new Button(
+				nicknameButton.rightX() + spacing,
+				nicknameButton.y,
+				buttonWidth,
+				buttonHeight,
+				ButtonHoverAction.BOX,
+				new int[] { RETURN, 0, NICKNAME, 0 }
 		);
 
 		returnButton = new Button(
-				movesPanel.x,
+				switchButton.rightX() + spacing,
 				switchButton.y,
-				halfPanelWidth,
+				buttonWidth,
 				buttonHeight,
 				ButtonHoverAction.BOX,
-				new int[] { SWITCH, MOVES + Move.MAX_MOVES - 1, SWITCH, 0 }
+				new int[] { NICKNAME, MOVES + Move.MAX_MOVES - 1, SWITCH, 0 }
 		);
 
 		tabButtons = new Button[Trainer.MAX_POKEMON];
@@ -169,6 +182,15 @@ class PartyView extends View {
 			);
 		}
 
+		nicknamePanel = new DrawPanel(
+				pokemonPanel.x,
+				tabButtons[0].y,
+				pokemonPanel.width,
+				tabButtons[0].height + pokemonPanel.height)
+				.withTransparentBackground()
+				.withBorderPercentage(0)
+				.withBlackOutline();
+
 		moveButtons = movesPanel.getButtons(10, Move.MAX_MOVES, 1, MOVES, new int[] { -1, 0, -1, RETURN });
 
 		buttons = new Button[NUM_BUTTONS];
@@ -176,6 +198,7 @@ class PartyView extends View {
 		System.arraycopy(tabButtons, 0, buttons, 0, tabButtons.length);
 		System.arraycopy(moveButtons, 0, buttons, MOVES, moveButtons.length);
 
+		buttons[NICKNAME] = nicknameButton;
 		buttons[SWITCH] = switchButton;
 		buttons[RETURN] = returnButton;
 
@@ -184,49 +207,153 @@ class PartyView extends View {
 
 	@Override
 	public void update(int dt) {
+		Player player = Game.getPlayer();
+		InputControl input = InputControl.instance();
+
 		selectedButton = Button.update(buttons, selectedButton);
-		
-		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-			if (tabButtons[i].checkConsumePress()) {
-				if (switchTabIndex != -1) {
-					Game.getPlayer().swapPokemon(i, switchTabIndex);
-					selectedTab = i;
-					switchTabIndex = -1;
-				}
-				else {
-					selectedTab = i;
-				}
-				
+
+		if (nicknameView) {
+			if (!input.isCapturingText()) {
+				input.startTextCapture();
+			}
+
+			if (input.consumeIfDown(ControlKey.ENTER)) {
+				String nickname = input.stopAndResetCapturedText();
+				player.getTeam().get(selectedTab).setNickname(nickname);
+
+				nicknameView = false;
 				updateActiveButtons();
 			}
 		}
-		
-		if (returnButton.checkConsumePress()) {
-			Game.instance().popView();
-		}
-		
-		if (switchButton.checkConsumePress()) {
-			switchTabIndex = switchTabIndex == -1 ? selectedTab : -1;
-			updateActiveButtons();
-		}
-		
-		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
-			Game.instance().popView();
+		else {
+			for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
+				if (tabButtons[i].checkConsumePress()) {
+					if (switchTabIndex != -1) {
+						player.swapPokemon(i, switchTabIndex);
+						selectedTab = i;
+						switchTabIndex = -1;
+					} else {
+						selectedTab = i;
+					}
+
+					updateActiveButtons();
+				}
+			}
+
+			if (nicknameButton.checkConsumePress()) {
+				nicknameView = true;
+				updateActiveButtons();
+			}
+
+			if (returnButton.checkConsumePress()) {
+				Game.instance().popView();
+			}
+
+			if (switchButton.checkConsumePress()) {
+				switchTabIndex = switchTabIndex == -1 ? selectedTab : -1;
+				updateActiveButtons();
+			}
+
+			if (input.consumeIfDown(ControlKey.ESC)) {
+				Game.instance().popView();
+			}
 		}
 	}
 
 	@Override
 	public void draw(Graphics g) {
 		GameData data = Game.getData();
+		Player player = Game.getPlayer();
 
 		// Background
 		BasicPanels.drawCanvasPanel(g);
 		
-		List<ActivePokemon> list = Game.getPlayer().getTeam();
+		List<ActivePokemon> list = player.getTeam();
 		ActivePokemon selectedPkm = list.get(selectedTab);
-		
-		Type[] type = selectedPkm.getActualType();
 
+		TileSet pkmTiles = data.getPokemonTilesSmall();
+		BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageName());
+
+		if (nicknameView) {
+			nicknamePanel.withBackgroundColors(Type.getColors(selectedPkm), true);
+			nicknamePanel.drawBackground(g);
+
+			FontMetrics.setFont(g, 30);
+
+			String nickname = InputControl.instance().getInputCaptureString(ActivePokemon.MAX_NAME_LENGTH);
+			ImageUtils.drawCenteredImageLabel(g, pkmImg, nickname, Global.GAME_SIZE.width/2, Global.GAME_SIZE.height/2);
+		}
+		else {
+			// Pokemon info
+			drawPokemonInfo(g, pkmImg, selectedPkm);
+
+			// Tabs
+			drawTabs(g, data, list);
+
+			// Nickname button
+			if (!nicknameButton.isActive()) {
+				nicknameButton.greyOut(g);
+			}
+
+			nicknameButton.fillTransparent(g);
+			nicknameButton.blackOutline(g);
+			nicknameButton.label(g, 20, "Nickname!!");
+
+			// Switch Box
+			if (!switchButton.isActive()) {
+				switchButton.greyOut(g);
+			}
+
+			switchButton.fillTransparent(g);
+			switchButton.blackOutline(g);
+			switchButton.label(g, 20, "Switch!");
+
+			// Return Box
+			returnButton.fillTransparent(g);
+			returnButton.blackOutline(g);
+			returnButton.label(g, 20, "Return");
+		}
+		
+		for (Button button: buttons) {
+			button.draw(g);
+		}
+	}
+
+	private void drawTabs(Graphics g, GameData data, List<ActivePokemon> list) {
+		TileSet partyTiles = data.getPartyTiles();
+		FontMetrics.setFont(g, 14);
+
+		for (int i = 0; i < list.size(); i++) {
+			ActivePokemon pkm = list.get(i);
+			Button tabButton = tabButtons[i];
+
+			// Color tab
+			tabButton.fill(g, Type.getColors(pkm)[0]);
+
+			// Fade out fainted Pokemon
+			if (!pkm.canFight()) {
+				tabButton.greyOut(g);
+			}
+
+			// Transparenty
+			tabButton.fillTransparent(g);
+
+			// Outline in black
+			tabButton.outlineTab(g, i, selectedTab);
+
+			g.translate(tabButton.x, tabButton.y);
+
+			g.setColor(Color.BLACK);
+			g.drawString(pkm.getActualName(), 40, 34);
+
+			BufferedImage pkmImg = partyTiles.getTile(pkm.getTinyImageName());
+			ImageUtils.drawCenteredImage(g, pkmImg, 19, 26);
+
+			g.translate(-tabButton.x, -tabButton.y);
+		}
+	}
+
+	private void drawPokemonInfo(Graphics g, BufferedImage pkmImg, ActivePokemon selectedPkm) {
 		// Draw type color polygons
 		pokemonPanel.withBackgroundColors(Type.getColors(selectedPkm), true);
 		if (!selectedPkm.canFight()) {
@@ -234,11 +361,9 @@ class PartyView extends View {
 		}
 
 		pokemonPanel.drawBackground(g);
-		
+
 		// Draw Pokemon Image
 		imagePanel.drawBackground(g);
-		TileSet pkmTiles = data.getPokemonTilesSmall();
-		BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageName());
 		imagePanel.imageLabel(g, pkmImg);
 
 		// Draw basic information panel
@@ -256,7 +381,7 @@ class PartyView extends View {
 
 		if (selectedPkm.isEgg()) {
 			FontMetrics.setFont(g, 16);
-			
+
 			// Description
 			TextUtils.drawWrappedText(g, selectedPkm.getEggMessage(),
 					basicInformationPanel.x + inset,
@@ -266,14 +391,14 @@ class PartyView extends View {
 		else {
 			// Number
 			g.drawString("#" + String.format("%03d", selectedPkm.getPokemonInfo().getNumber()), 378, topLineY);
-			
+
 			// Status Condition
 			g.drawString(selectedPkm.getStatus().getType().getName(), 459, topLineY);
-			
+
 			// Level
 			int levelX = 525;
 			g.drawString("Lv" + selectedPkm.getLevel(), levelX, topLineY);
-			
+
 			FontMetrics.setFont(g, 16);
 			int secondLineY = topLineY + inset + FontMetrics.getTextHeight(g);
 			int thirdLineY = secondLineY + inset + FontMetrics.getTextHeight(g);
@@ -281,33 +406,33 @@ class PartyView extends View {
 			int rightAlignedX = basicInformationPanel.rightX() - inset;
 
 			// Type Tiles
-			ImageUtils.drawTypeTiles(g, type, rightAlignedX, topLineY);
-			
+			ImageUtils.drawTypeTiles(g, selectedPkm.getActualType(), rightAlignedX, topLineY);
+
 			// Nature
 			g.drawString(selectedPkm.getNature().getName() +" Nature", nameX, secondLineY);
-			
+
 			// Total EXP
 			g.drawString("EXP:", levelX, secondLineY);
 			TextUtils.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), rightAlignedX, secondLineY);
-			
+
 			// Characteristic
 			g.drawString(selectedPkm.getCharacteristic(), nameX, thirdLineY);
-			
+
 			// EXP To Next Level
 			g.drawString("To Next Lv:", levelX, thirdLineY);
 			TextUtils.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), rightAlignedX, thirdLineY);
-			
+
 			// Held Item
 			g.drawString(selectedPkm.getActualHeldItem().getName(), nameX, fourthLineY);
-			
+
 			// Ability with description
 			Ability ability = selectedPkm.getActualAbility();
 			abilityPanel.drawBackground(g);
 			abilityPanel.drawMessage(g, 16, ability.getName() + " - " + ability.getDescription());
-			
+
 			// EXP Bar
 			expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, selectedPkm.expRatio());
-			
+
 			FontMetrics.setFont(g, 16);
 			g.setColor(Color.BLACK);
 
@@ -343,60 +468,9 @@ class PartyView extends View {
 				TextUtils.drawCenteredHeightString(g, String.format("PP: %d/%d", move.getPP(), move.getMaxPP()), movePanel.rightX() - moveInset, movePanel.centerY(), Alignment.RIGHT);
 			}
 		}
-		
-		// Switch Box
-		if (switchTabIndex != -1 || list.size() == 1) {
-			switchButton.greyOut(g);
-		}
-
-		switchButton.fillTransparent(g);
-		switchButton.blackOutline(g);
-		switchButton.label(g, 20, "Switch!");
-		
-		// Return Box
-		returnButton.fillTransparent(g);
-		returnButton.blackOutline(g);
-		returnButton.label(g, 20, "Return");
-		
-		TileSet partyTiles = data.getPartyTiles();
-		FontMetrics.setFont(g, 14);
-		
-		// Tabs
-		for (int i = 0; i < list.size(); i++) {
-			ActivePokemon pkm = list.get(i);
-			Button tabButton = tabButtons[i];
-
-			// Color tab
-			tabButton.fill(g, Type.getColors(pkm)[0]);
-
-			// Fade out fainted Pokemon
-			if (!pkm.canFight()) {
-				tabButton.greyOut(g);
-			}
-
-			// Transparenty
-			tabButton.fillTransparent(g);
-
-			// Outline in black
-			tabButton.outlineTab(g, i, selectedTab);
-
-			g.translate(tabButton.x, tabButton.y);
-			
-			g.setColor(Color.BLACK);
-			g.drawString(pkm.getActualName(), 40, 34);
-			
-			pkmImg = partyTiles.getTile(pkm.getTinyImageName());
-			ImageUtils.drawCenteredImage(g, pkmImg, 19, 26);
-			
-			g.translate(-tabButton.x, -tabButton.y);
-		}
-		
-		for (Button button: buttons) {
-			button.draw(g);
-		}
 	}
 
-	public void drawStatBox(Graphics g, ActivePokemon selectedPkm) {
+	private void drawStatBox(Graphics g, ActivePokemon selectedPkm) {
 		statsPanel.drawBackground(g);
 
 		int spacing = statsPanel.height/(Stat.NUM_STATS + 1);
@@ -436,7 +510,7 @@ class PartyView extends View {
 		hpBar.fillBar(g, selectedPkm.getHPColor(), selectedPkm.getHPRatio());
 	}
 
-	public void drawMoveDescriptionPanel(Graphics g, DrawPanel moveDetailsPanel, Attack move) {
+	private void drawMoveDescriptionPanel(Graphics g, DrawPanel moveDetailsPanel, Attack move) {
 		moveDetailsPanel
 				.withTransparentBackground(move.getActualType().getColor())
 				.drawBackground(g);
@@ -473,18 +547,27 @@ class PartyView extends View {
 	}
 
 	private void updateActiveButtons() {
-		List<ActivePokemon> team = Game.getPlayer().getTeam();
-		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-			tabButtons[i].setActive(i < team.size());
+		if (nicknameView) {
+			for (Button button : buttons) {
+				button.setActive(false);
+			}
 		}
-		
-		ActivePokemon pkm = team.get(selectedTab);
-		List<Move> moves = pkm.getActualMoves();
-		for (int i = 0; i < Move.MAX_MOVES; i++) {
-			moveButtons[i].setActive(!pkm.isEgg() && i < moves.size());
+		else {
+			List<ActivePokemon> team = Game.getPlayer().getTeam();
+			for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
+				tabButtons[i].setActive(i < team.size());
+			}
+
+			ActivePokemon pkm = team.get(selectedTab);
+			List<Move> moves = pkm.getActualMoves();
+			for (int i = 0; i < Move.MAX_MOVES; i++) {
+				moveButtons[i].setActive(!pkm.isEgg() && i < moves.size());
+			}
+
+			nicknameButton.setActive(!pkm.isEgg());
+			switchButton.setActive(team.size() > 1);
+			returnButton.setActive(true);
 		}
-		
-		switchButton.setActive(team.size() > 1);
 	}
 
 	@Override
@@ -497,6 +580,7 @@ class PartyView extends View {
 		selectedTab = 0;
 		selectedButton = 0;
 		switchTabIndex = -1;
+		nicknameView = false;
 		updateActiveButtons();
 	}
 }

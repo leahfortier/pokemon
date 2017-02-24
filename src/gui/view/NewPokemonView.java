@@ -126,8 +126,7 @@ class NewPokemonView extends View {
                 }
 
                 if (input.consumeIfDown(ControlKey.ENTER)) {
-                    String nickname = input.stopTextCapture();
-                    input.resetCapturedText();
+                    String nickname = input.stopAndResetCapturedText();
                     newPokemon.setNickname(nickname);
 
                     setState(State.LOCATION);
