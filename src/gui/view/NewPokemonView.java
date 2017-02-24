@@ -1,10 +1,10 @@
 package gui.view;
 
 import draw.ImageUtils;
-import gui.TileSet;
 import draw.button.Button;
 import draw.button.panel.BasicPanels;
 import draw.button.panel.DrawPanel;
+import gui.TileSet;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;

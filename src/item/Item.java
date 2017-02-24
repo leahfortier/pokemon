@@ -35,7 +35,6 @@ import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.EffectNamesies;
-import battle.effect.generic.PokemonEffect;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.bag.BagCategory;

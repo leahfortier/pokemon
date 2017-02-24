@@ -1,14 +1,15 @@
 package gui.view;
 
+import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.PolygonUtils;
 import draw.TextUtils;
-import gui.GameData;
-import gui.TileSet;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.panel.BasicPanels;
 import draw.button.panel.DrawPanel;
+import gui.GameData;
+import gui.TileSet;
 import input.ControlKey;
 import input.InputControl;
 import item.Item;
@@ -17,7 +18,6 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import trainer.Player;
-import draw.DrawUtils;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.Point;

@@ -1,7 +1,7 @@
 package map.entity;
 
-import map.overworld.WildEncounter;
 import map.entity.EntityAction.TriggerAction;
+import map.overworld.WildEncounter;
 import map.triggers.TriggerType;
 import pattern.map.FishingMatcher;
 import util.JsonUtils;

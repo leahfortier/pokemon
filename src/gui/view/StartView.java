@@ -1,9 +1,9 @@
 package gui.view;
 
-import gui.GameData;
-import gui.TileSet;
 import draw.button.panel.BasicPanels;
+import gui.GameData;
 import gui.IndexTileSet;
+import gui.TileSet;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;

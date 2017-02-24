@@ -2,11 +2,12 @@ package gui.view.battle.handler;
 
 import battle.Battle;
 import battle.attack.Move;
+import draw.DrawUtils;
 import draw.TextUtils;
-import gui.TileSet;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.panel.DrawPanel;
+import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
@@ -17,7 +18,6 @@ import trainer.Player;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import type.Type;
-import draw.DrawUtils;
 import util.FontMetrics;
 import util.PokeString;
 

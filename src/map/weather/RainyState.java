@@ -1,8 +1,8 @@
 package map.weather;
 
+import draw.DrawUtils;
 import main.Global;
 import map.weather.WeatherState.WeatherDrawer;
-import draw.DrawUtils;
 import util.RandomUtils;
 
 import java.awt.Color;

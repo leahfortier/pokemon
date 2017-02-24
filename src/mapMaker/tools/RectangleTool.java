@@ -6,7 +6,6 @@ import mapMaker.MapMaker;
 import pattern.generic.LocationTriggerMatcher;
 import util.Point;
 
-import javax.xml.stream.Location;
 import java.awt.Graphics;
 
 class RectangleTool extends Tool {

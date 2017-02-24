@@ -7,7 +7,6 @@ import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.OpponentStatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
-import battle.effect.generic.EffectNamesies;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;

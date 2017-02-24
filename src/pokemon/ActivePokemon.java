@@ -30,6 +30,7 @@ import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
+import draw.DrawUtils;
 import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
@@ -52,7 +53,6 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.WildPokemon;
 import type.Type;
-import draw.DrawUtils;
 import util.RandomUtils;
 import util.StringUtils;
 

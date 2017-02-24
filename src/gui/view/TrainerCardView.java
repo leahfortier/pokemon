@@ -1,10 +1,10 @@
 package gui.view;
 
+import draw.DrawUtils;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import trainer.Player;
-import draw.DrawUtils;
 import util.FontMetrics;
 
 import java.awt.Color;

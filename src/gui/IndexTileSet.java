@@ -1,6 +1,5 @@
 package gui;
 
-import gui.TileSet;
 import util.FileIO;
 import util.FileName;
 

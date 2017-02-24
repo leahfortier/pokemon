@@ -1,9 +1,9 @@
 package mapMaker.model;
 
+import draw.DrawUtils;
 import draw.TileUtils;
 import main.Global;
 import mapMaker.MapMaker;
-import draw.DrawUtils;
 import util.FileIO;
 import util.FileName;
 import util.Folder;

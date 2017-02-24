@@ -1,8 +1,8 @@
 package mapMaker.tools;
 
 import draw.TileUtils;
-import mapMaker.MapMaker;
 import map.MapDataType;
+import mapMaker.MapMaker;
 import util.Point;
 
 import java.awt.Color;

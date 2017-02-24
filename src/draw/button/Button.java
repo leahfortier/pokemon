@@ -1,5 +1,6 @@
 package draw.button;
 
+import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.PolygonUtils;
 import draw.TextUtils;
@@ -7,7 +8,6 @@ import draw.button.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import map.Direction;
-import draw.DrawUtils;
 import util.FontMetrics;
 import util.Point;
 
