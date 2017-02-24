@@ -181,6 +181,10 @@ public class ActivePokemon implements Serializable {
 		}
 		else {
 			pokemon = new ActivePokemon(namesies, pokemonMatcher.getLevel(), false, user);
+			String nickname = pokemonMatcher.getNickname();
+			if (!StringUtils.isNullOrEmpty(nickname)) {
+				pokemon.setNickname(nickname);
+			}
 		}
 
 		if (pokemonMatcher.isShiny()) {
@@ -533,7 +537,7 @@ public class ActivePokemon implements Serializable {
 			return false;
 		}
 
-		BaseEvolution evolution = (BaseEvolution)pokemon.getEvolution().getEvolution(method, this, itemNamesies);
+		BaseEvolution evolution = pokemon.getEvolution().getEvolution(method, this, itemNamesies);
 		if (evolution != null) {
 			Game.getPlayer().setEvolution(this, evolution);
 			return true;

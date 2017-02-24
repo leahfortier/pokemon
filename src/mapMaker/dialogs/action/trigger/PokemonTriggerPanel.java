@@ -100,6 +100,7 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
         else {
             matcher = new PokemonMatcher(
                     PokemonNamesies.getValueOf(pokemonNameField.getText()),
+                    null,
                     Integer.parseInt(levelField.getText().trim()),
                     shinyCheckBox.isSelected(),
                     new AttackNamesies[0],

@@ -237,7 +237,9 @@
                 "pokemon": [
                   {
                     "namesies": "SENTRET",
-                    "level": 4
+                    "nickname": "Rattata",
+                    "level": 4,
+                    "isShiny": false
                   }
                 ],
                 "update": "won"
@@ -276,7 +278,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Dialogue",
+                "triggerType": "DIALOGUE",
                 "triggerContents": "Someone freed the pointer to my Rattata! Was it you?"
               }
             },
@@ -287,7 +289,9 @@
                 "pokemon": [
                   {
                     "namesies": "BIDOOF",
-                    "level": 4
+                    "nickname": "Rattata",
+                    "level": 4,
+                    "isShiny": false
                   }
                 ],
                 "update": "won"
@@ -337,7 +341,9 @@
                 "pokemon": [
                   {
                     "namesies": "PIDGEY",
-                    "level": 4
+                    "nickname": "Rattata",
+                    "level": 4,
+                    "isShiny": false
                   }
                 ],
                 "update": "won"

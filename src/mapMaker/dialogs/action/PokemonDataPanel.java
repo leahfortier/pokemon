@@ -21,6 +21,7 @@ class PokemonDataPanel extends JPanel {
 	private static final long serialVersionUID = 2679616277402077123L;
 
 	private final JTextField nameTextField;
+	private final JTextField nicknameTextField;
 	private final JTextField moveTextField;
 	private final JCheckBox shinyCheckBox;
 	private JComboBox<String> moveComboBox;
@@ -40,6 +41,7 @@ class PokemonDataPanel extends JPanel {
 				return PokemonNamesies.tryValueOf(nameTextField.getText().trim()) != null;
 			}
 		});
+		nicknameTextField = GUIUtils.createTextField(); // Restrict to max length characters
 		levelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, ActivePokemon.MAX_LEVEL);
 		shinyCheckBox = GUIUtils.createCheckBox();
 		moveCheckBox = GUIUtils.createCheckBox();
@@ -76,6 +78,7 @@ class PokemonDataPanel extends JPanel {
 				this,
 				selectedCheckBox,
 				nameTextField,
+				nicknameTextField,
 				levelFormattedTextField,
 				shinyCheckBox,
 				moveCheckBox,
@@ -94,6 +97,7 @@ class PokemonDataPanel extends JPanel {
 
 		return new PokemonMatcher(
 				namesies,
+				nicknameTextField.getText(),
 				Integer.parseInt(levelFormattedTextField.getText().trim()),
 				shinyCheckBox.isSelected(),
 				customMoves,
@@ -122,6 +126,7 @@ class PokemonDataPanel extends JPanel {
 		}
 
 		this.nameTextField.setText(matcher.getNamesies().getName());
+		this.nicknameTextField.setText(matcher.getNickname());
 		this.levelFormattedTextField.setValue(Integer.parseInt(matcher.getLevel() + ""));
 
 		if (matcher.isShiny()) {

@@ -82,6 +82,7 @@ class BattleActionPanel extends ActionPanel {
 				tippityTop,
 				GUIUtils.createLabel("            " +
 						"Pokemon Name                      " +
+						"Nickname                      " +
 						"Level             " +
 						"Shiny  " +
 						"Custom Moves                                       " +

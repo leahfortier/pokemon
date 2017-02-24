@@ -7,6 +7,7 @@ import main.Global;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import util.GeneralUtils;
+import util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 public class PokemonMatcher {
     private PokemonNamesies namesies;
+    private String nickname;
     private Integer level;
     private Boolean isRandomEgg;
     private Boolean isShiny;
@@ -22,7 +24,7 @@ public class PokemonMatcher {
     private Boolean isEgg;
     private ItemNamesies holdItem;
 
-    public PokemonMatcher(PokemonNamesies namesies, int level, boolean isShiny, AttackNamesies[] moves, ItemNamesies holdItem) {
+    public PokemonMatcher(PokemonNamesies namesies, String nickname, int level, boolean isShiny, AttackNamesies[] moves, ItemNamesies holdItem) {
         if (namesies == null) {
             Global.error("Pokemon namesies cannot be null for a Pokemon Matcher");
         }
@@ -32,6 +34,7 @@ public class PokemonMatcher {
         }
 
         this.namesies = namesies;
+        this.nickname = nickname;
         this.level = level;
         this.isShiny = isShiny;
         this.holdItem = holdItem;
@@ -61,6 +64,10 @@ public class PokemonMatcher {
 
     public PokemonNamesies getNamesies() {
         return this.namesies;
+    }
+
+    public String getNickname() {
+        return this.nickname == null ? StringUtils.empty() : this.nickname;
     }
 
     public int getLevel() {
