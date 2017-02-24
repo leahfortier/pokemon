@@ -135,6 +135,10 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		return getCapturedText();
 	}
 
+	public void resetCapturedText() {
+		capturedText = null;
+	}
+
 	public String getCapturedText() {
 		return capturedText == null ? StringUtils.empty() : capturedText.toString();
 	}

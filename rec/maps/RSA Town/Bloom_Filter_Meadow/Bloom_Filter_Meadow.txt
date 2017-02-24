@@ -36,7 +36,6 @@
     },
     {
       "exitName": "FlyLocation",
-      "direction": "WAIT",
       "deathPortal": false,
       "location": [
         {

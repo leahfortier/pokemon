@@ -126,9 +126,8 @@ class NewPokemonView extends View {
                 }
 
                 if (input.consumeIfDown(ControlKey.ENTER)) {
-                    input.stopTextCapture();
-
-                    String nickname = input.getCapturedText(ActivePokemon.MAX_NAME_LENGTH);
+                    String nickname = input.stopTextCapture();
+                    input.resetCapturedText();
                     newPokemon.setNickname(nickname);
 
                     setState(State.LOCATION);
