@@ -102,8 +102,8 @@ public class DayCareCenter implements Serializable {
             return;
         }
 
-        if (this.first == null) {
-            this.first = toDeposit;
+        if (first == null) {
+            first = toDeposit;
         }
         else if (second == null) {
             second = toDeposit;
@@ -113,6 +113,7 @@ public class DayCareCenter implements Serializable {
         }
 
         Messages.add("Okay, we'll look after your " + toDeposit.getName() + " for a while.");
+        player.getTeam().remove(toDeposit);
     }
 
     public void withdraw(boolean isFirstPokemon) {
