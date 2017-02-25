@@ -37,7 +37,7 @@ public class DayCareCenter implements Serializable {
         ChoiceMatcher[] choices = new ChoiceMatcher[team.size()];
         for (int i = 0; i < choices.length; i++) {
             ActionMatcher actionMatcher = new ActionMatcher();
-            actionMatcher.setTrigger(new TriggerActionMatcher(TriggerActionType.BREEDING_DEPOSIT, i + ""));
+            actionMatcher.setTrigger(new TriggerActionMatcher(TriggerActionType.DAY_CARE_DEPOSIT, i + ""));
 
             ActivePokemon pokemon = team.get(i);
             choices[i] = new ChoiceMatcher(
@@ -62,9 +62,9 @@ public class DayCareCenter implements Serializable {
 
         // Only one pokemon here
         if (first == null) {
-            return TriggerType.BREEDING_WITHDRAW.createTrigger("false");
+            return TriggerType.DAY_CARE_WITHDRAW.createTrigger("false");
         } else if (second == null) {
-            return TriggerType.BREEDING_WITHDRAW.createTrigger("true");
+            return TriggerType.DAY_CARE_WITHDRAW.createTrigger("true");
         }
 
         // Two Pokemon in center -- choice option
@@ -81,7 +81,7 @@ public class DayCareCenter implements Serializable {
 
     private ChoiceMatcher getChoice(boolean isFirst) {
         ActionMatcher actionMatcher = new ActionMatcher();
-        actionMatcher.setTrigger(new TriggerActionMatcher(TriggerActionType.BREEDING_WITHDRAW, isFirst + ""));
+        actionMatcher.setTrigger(new TriggerActionMatcher(TriggerActionType.DAY_CARE_WITHDRAW, isFirst + ""));
 
         ActivePokemon pokemon = isFirst ? first : second;
         return new ChoiceMatcher(

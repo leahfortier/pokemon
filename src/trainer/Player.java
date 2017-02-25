@@ -11,7 +11,7 @@ import map.Direction;
 import map.MapName;
 import map.entity.movable.PlayerEntity;
 import map.overworld.OverworldTool;
-import map.triggers.FishingTrigger;
+import map.triggers.battle.FishingTrigger;
 import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;

@@ -1,13 +1,15 @@
-package map.triggers;
+package map.triggers.map;
 
 import main.Game;
 import map.PathDirection;
 import map.entity.movable.PlayerEntity;
+import map.triggers.Trigger;
+import map.triggers.TriggerType;
 
-class MovePlayerTrigger extends Trigger {
+public class MovePlayerTrigger extends Trigger {
     private final String path;
 
-    MovePlayerTrigger(String contents, String condition)	{
+    public MovePlayerTrigger(String contents, String condition)	{
         super(TriggerType.MOVE_PLAYER, contents, condition);
 
         this.path = PathDirection.defaultPath() + contents;
