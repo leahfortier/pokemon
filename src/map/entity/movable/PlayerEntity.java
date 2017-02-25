@@ -48,6 +48,11 @@ public class PlayerEntity extends MovableEntity {
 	}
 
 	@Override
+	public boolean isPassable() {
+		return false;
+	}
+
+	@Override
 	public Direction getDirection() {
 		return Game.getPlayer().getDirection();
 	}
