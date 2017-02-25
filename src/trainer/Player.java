@@ -253,6 +253,9 @@ public class Player extends Trainer implements Serializable {
 				break;
 			}
 		}
+
+		// Check day care eggs
+		dayCareCenter.step();
 	}
 
 	public boolean isFishing() {

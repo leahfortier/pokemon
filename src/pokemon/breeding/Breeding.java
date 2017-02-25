@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Breeding {
-	protected static ActivePokemon breed(ActivePokemon aPokes, ActivePokemon bPokes) {
+	public static ActivePokemon breed(ActivePokemon aPokes, ActivePokemon bPokes) {
 		if (!canBreed(aPokes, bPokes)) {
 			return null;
 		}

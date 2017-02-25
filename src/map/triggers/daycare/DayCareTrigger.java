@@ -24,6 +24,11 @@ public class DayCareTrigger extends Trigger {
         Player player = Game.getPlayer();
         DayCareCenter dayCare = player.getDayCareCenter();
 
+        if (dayCare.hasEggy()) {
+            dayCare.giveEggy();
+            return;
+        }
+
         Messages.add("Welcome to the " + PokeString.POKEMON + " Brothel, err... Day Care Center. We totes not creeps!");
         Messages.add(dayCare.getPokemonPresentMessage());
         Messages.add(dayCare.getCompatibilityMessage());
@@ -42,6 +47,14 @@ public class DayCareTrigger extends Trigger {
                 new ActionMatcher[] { depositAction }
         );
 
-        Messages.add(new MessageUpdate("What would you like to do?").withChoices(new ChoiceMatcher[] { withdrawChoice, depositChoice }));
+        ActionMatcher cancelAction = new ActionMatcher();
+        cancelAction.setTrigger(new TriggerActionMatcher(TriggerActionType.DIALOGUE, StringUtils.empty()));
+        ChoiceMatcher cancelChoice = new ChoiceMatcher(
+                "Cancel",
+                new ActionMatcher[] { cancelAction }
+        );
+
+        Messages.add(new MessageUpdate("What would you like to do?")
+                .withChoices(new ChoiceMatcher[] { withdrawChoice, depositChoice, cancelChoice }));
     }
 }

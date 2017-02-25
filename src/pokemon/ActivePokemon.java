@@ -142,7 +142,7 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public ActivePokemon(ActivePokemon daddy, ActivePokemon mommy, PokemonNamesies pokemonNamesies) {
-		this(pokemonNamesies, 1, false, true);
+		this(pokemonNamesies);
 		
 		moves = Breeding.getBabyMoves(daddy, mommy, pokemonNamesies);
 		this.setNature(Breeding.getBabyNature(daddy, mommy));

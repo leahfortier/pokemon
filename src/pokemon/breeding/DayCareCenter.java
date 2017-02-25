@@ -23,6 +23,31 @@ public class DayCareCenter implements Serializable {
     private ActivePokemon first;
     private ActivePokemon second;
 
+    private Compatibility compatibility;
+    private ActivePokemon eggy;
+    private int steps;
+
+    public DayCareCenter() {
+        this.reset();
+    }
+
+    public void giveEggy() {
+        Messages.add("Eggy! You want? Yee. Here go.");
+        Game.getPlayer().addPokemon(this.eggy);
+        this.reset();
+    }
+
+    public boolean hasEggy() {
+        return eggy != null;
+    }
+
+    public void step() {
+        steps++;
+        if (!hasEggy() && steps%256 == 0 && compatibility.eggChanceTest()) {
+            eggy = Breeding.breed(first, second);
+        }
+    }
+
     public String getPokemonPresentMessage() {
         if (first == null && second == null) {
             return StringUtils.empty();
@@ -36,19 +61,7 @@ public class DayCareCenter implements Serializable {
     }
 
     public String getCompatibilityMessage() {
-        if (first == null || second == null) {
-            return StringUtils.empty();
-        }
-
-        if (!Breeding.canBreed(first, second)) {
-            return "They prefer to play with other " + PokeString.POKEMON + " rather than each other.";
-        }
-
-        if (first.getPokemonInfo().namesies() == second.getPokemonInfo().namesies()) {
-            return "Those two seem to get along like a house on fire!!!!!";
-        }
-
-        return "I guess they're okay with each other I guess.";
+        return compatibility.getMessage();
     }
 
     public Trigger getDepositTrigger() {
@@ -63,8 +76,8 @@ public class DayCareCenter implements Serializable {
         List<ActivePokemon> team = player.getTeam();
 
         // Two Pokemon in center -- choice option
-        ChoiceMatcher[] choices = new ChoiceMatcher[team.size()];
-        for (int i = 0; i < choices.length; i++) {
+        ChoiceMatcher[] choices = new ChoiceMatcher[team.size() + 1];
+        for (int i = 0; i < team.size(); i++) {
             ActionMatcher actionMatcher = new ActionMatcher();
             actionMatcher.setTrigger(new TriggerActionMatcher(TriggerActionType.DAY_CARE_DEPOSIT, i + ""));
 
@@ -75,6 +88,10 @@ public class DayCareCenter implements Serializable {
             );
         }
 
+        ActionMatcher cancelAction = new ActionMatcher();
+        cancelAction.setTrigger(new TriggerActionMatcher(TriggerActionType.DIALOGUE, StringUtils.empty()));
+        choices[team.size()] = new ChoiceMatcher("Cancel", new ActionMatcher[] { cancelAction });
+
         ChoiceActionMatcher choice = new ChoiceActionMatcher(
                 "Which " + PokeString.POKEMON + " would you like to deposit?",
                 choices
@@ -82,6 +99,7 @@ public class DayCareCenter implements Serializable {
 
         return TriggerType.CHOICE.createTrigger(JsonUtils.getJson(choice));
     }
+
 
     public Trigger getWithdrawTrigger() {
         // Both are null -- display invalid message
@@ -100,9 +118,13 @@ public class DayCareCenter implements Serializable {
         ChoiceMatcher chooseFirst = getChoice(true);
         ChoiceMatcher chooseSecond = getChoice(false);
 
+        ActionMatcher cancelAction = new ActionMatcher();
+        cancelAction.setTrigger(new TriggerActionMatcher(TriggerActionType.DIALOGUE, StringUtils.empty()));
+        ChoiceMatcher chooseCancel = new ChoiceMatcher("Cancel", new ActionMatcher[] { cancelAction });
+
         ChoiceActionMatcher choice = new ChoiceActionMatcher(
                 "Which " + PokeString.POKEMON + " would you like to take back?",
-                new ChoiceMatcher[] { chooseFirst, chooseSecond }
+                new ChoiceMatcher[] { chooseFirst, chooseSecond, chooseCancel }
         );
 
         return TriggerType.CHOICE.createTrigger(JsonUtils.getJson(choice));
@@ -143,6 +165,15 @@ public class DayCareCenter implements Serializable {
 
         Messages.add("Okay, we'll look after your " + toDeposit.getName() + " for a while.");
         player.getTeam().remove(toDeposit);
+        toDeposit.fullyHeal();
+
+        this.reset();
+    }
+
+    private void reset() {
+        compatibility = Compatibility.getCompatibility(first, second);
+        steps = 0;
+        eggy = null;
     }
 
     public void withdraw(boolean isFirstPokemon) {
@@ -160,6 +191,8 @@ public class DayCareCenter implements Serializable {
         player.sucksToSuck(500); // TODO: Would like this to be a function of the number of eggs
 
         Messages.add("Took back " + withdrawPokemon.getName() + " back for 500 " + PokeString.POKEDOLLARS + ".");
+
+        this.reset();
     }
 
 }
