@@ -302,6 +302,8 @@ class PartyView extends View {
 			// Switch Box
 			if (!switchButton.isActive()) {
 				switchButton.greyOut(g);
+			} else if (switchTabIndex != -1) {
+				switchButton.greyOut(g, false);
 			}
 
 			switchButton.fillTransparent(g);

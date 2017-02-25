@@ -274,7 +274,7 @@ public class DrawPanel {
             lastCharToShow = 0;
             finishedAnimating = false;
         } else {
-            messageTimeElapsed += 3*Global.MS_BETWEEN_FRAMES;
+            messageTimeElapsed += 3 * Global.MS_BETWEEN_FRAMES;
         }
 
         int charactersToShow = finishedAnimating ? text.length() : Math.min(text.length(), messageTimeElapsed / 50);
@@ -283,16 +283,17 @@ public class DrawPanel {
         }
         finishedAnimating = charactersToShow == text.length();
 
-        // If we haven't already calculated the length of the last we're writing, calculate it
-        if (charactersToShow != 0 && lastWordLength == -1) {
-            lastWordLength = 0;
-            String substring = text.substring(charactersToShow - 1);
-            lastWordLength = substring.indexOf(' ');
-            lastWordLength = lastWordLength == -1 ? substring.length() : lastWordLength;
-        }
+        if (charactersToShow != 0 && text.charAt(charactersToShow - 1) != ' '){
+            String startString = text.substring(0, charactersToShow);
+            int start = startString.lastIndexOf(' ') + 1;
+            start = start == -1 ? 0 : start;
 
-        // If the current character is a space, then reset lastWordLength
-        if (charactersToShow != 0 && text.charAt(charactersToShow - 1) == ' ') {
+            String endString = text.substring(charactersToShow - 1);
+            int end = endString.indexOf(' ');
+            end = end == -1 ? endString.length() - 1 : end;
+
+            lastWordLength = end - start + charactersToShow - 1;
+        } else {
             lastWordLength = -1;
         }
 

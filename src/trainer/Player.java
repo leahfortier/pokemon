@@ -478,13 +478,19 @@ public class Player extends Trainer implements Serializable {
 			return false;
 		}
 		
-		// Eggs can always be deposited
-		if (p.isEgg()) {
+		// Eggs and deadies can always be deposited
+		if (!p.canFight()) {
 			return true;
 		}
-		
-		// Otherwise you can if you have at least one other Pokemon that is not an egg
-		return team.size() - totalEggs() > 1;
+
+		// Otherwise you can if you have at least one other Pokemon that is not dead or an egg
+		for (ActivePokemon pokemon : team) {
+			if (pokemon != p && pokemon.canFight()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 	
 	public int totalEggs() {
