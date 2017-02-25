@@ -7,6 +7,8 @@ import util.StringUtils;
 
 public enum TriggerType {
     BADGE(BadgeTrigger.class, BadgeTrigger::new),
+    BREEDING_WITHDRAW(BreedingWithdrawTrigger.class, BreedingWithdrawTrigger::new),
+    BREEDING_DEPOSIT(BreedingDepositTrigger.class, BreedingDepositTrigger::new),
     CHANGE_VIEW(ChangeViewTrigger.class, ChangeViewTrigger::new),
     CHOICE(ChoiceTrigger.class, ChoiceTrigger::new),
     DIALOGUE(DialogueTrigger.class, DialogueTrigger::new),
@@ -60,6 +62,10 @@ public enum TriggerType {
     public String getTriggerNameFromSuffix(String suffix) {
         final String prefix = this.triggerPrefixGetter.getTriggerPrefix();
         return prefix + (StringUtils.isNullOrEmpty(suffix) ? StringUtils.empty() : "_" + suffix);
+    }
+
+    public Trigger createTrigger(final String contents) {
+        return this.createTrigger(contents, null);
     }
 
     public Trigger createTrigger(final String contents, final String condition) {

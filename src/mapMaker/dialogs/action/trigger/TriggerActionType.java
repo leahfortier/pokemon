@@ -10,6 +10,8 @@ import trainer.Badge;
 
 public enum TriggerActionType {
     BADGE(TriggerType.BADGE, () -> new EnumTriggerPanel<>("Badge", Badge.values())),
+    BREEDING_DEPOSIT(TriggerType.BREEDING_DEPOSIT, EmptyTriggerContentsPanel::new),
+    BREEDING_WITHDRAW(TriggerType.BREEDING_WITHDRAW, EmptyTriggerContentsPanel::new),
     CHANGE_VIEW(TriggerType.CHANGE_VIEW, () -> new EnumTriggerPanel<>("View Mode", ViewMode.values())),
     DIALOGUE(TriggerType.DIALOGUE, () -> new StringTriggerPanel("Dialogue")),
     GIVE_ITEM(TriggerType.GIVE_ITEM, ItemTriggerPanel::new),

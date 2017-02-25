@@ -20,6 +20,7 @@ import pattern.SimpleMapTransition;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PC;
+import pokemon.breeding.DayCareCenter;
 import pokemon.evolution.BaseEvolution;
 import trainer.pokedex.Pokedex;
 import util.Point;
@@ -74,6 +75,8 @@ public class Player extends Trainer implements Serializable {
 	private Set<Badge> badges;
 	private int repelSteps;
 
+	private DayCareCenter dayCareCenter;
+
 	private ActivePokemon evolvingPokemon;
 	private BaseEvolution evolution;
 
@@ -102,6 +105,8 @@ public class Player extends Trainer implements Serializable {
 		areaName = StringUtils.empty();
 		mapReset = false;
 		flyLocations = new HashSet<>();
+
+		dayCareCenter = new DayCareCenter();
 	}
 
 	// Initializes the character with the current game -- used when recovering a save file as well as the generic constructor
@@ -125,6 +130,10 @@ public class Player extends Trainer implements Serializable {
 
 	public boolean hasTool(OverworldTool tool) {
 		return this.globalsContain(tool.getGlobalName());
+	}
+
+	public DayCareCenter getDayCareCenter() {
+		return this.dayCareCenter;
 	}
 
 	public boolean isBiking() {
@@ -459,7 +468,8 @@ public class Player extends Trainer implements Serializable {
 	public boolean fullParty() {
 		return this.team.size() == MAX_POKEMON;
 	}
-	
+
+	// TODO: this looks like you can deposit your last not fainted pokemon
 	// Determines whether or not a Pokemon can be deposited
 	public boolean canDeposit(ActivePokemon p) {
 

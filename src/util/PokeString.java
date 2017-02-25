@@ -5,6 +5,7 @@ public class PokeString {
 	public static final String POKE = "Pok\u00E9";
 	public static final String POKEMON = POKE + "mon";
 	public static final String POKEDEX = POKE + "dex";
+	public static final String POKEDOLLARS = POKE + "dollars";
 
 	// Converts special characters to a simple version (example: poke e -> e) 
 	public static String removeSpecialCharacters(String input) {

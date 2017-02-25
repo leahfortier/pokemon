@@ -32,7 +32,56 @@
       "triggerName": "WindValley_MapExit_NorthTransitionBuilding_01"
     }
   ],
-  "NPCs": [],
+  "NPCs": [
+    {
+      "name": "DayCareBro",
+      "path": "w",
+      "spriteIndex": 1,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "DayCare",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "choice": {
+                "question": "What would you like to do?",
+                "choices": [
+                  {
+                    "text": "Withdraw",
+                    "actions": [
+                      {
+                        "trigger": {
+                          "triggerType": "BREEDING_WITHDRAW",
+                          "triggerContents": ""
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "text": "Deposit",
+                    "actions": [
+                      {
+                        "trigger": {
+                          "triggerType": "BREEDING_DEPOSIT",
+                          "triggerContents": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 40,
+        "y": 54
+      },
+      "triggerName": "WindValley_NPC_DayCareBro_01"
+    }
+  ],
   "items": [],
   "miscEntities": [],
   "events": [],

@@ -49,7 +49,7 @@ class MessageState implements VisualStateHandler {
                     BasicPanels.getMessagePanelY() - height,
                     width,
                     height
-            );
+            ).withBlackOutline();
             choicesPanel.drawBackground(g);
 
             g.setColor(Color.BLACK);
