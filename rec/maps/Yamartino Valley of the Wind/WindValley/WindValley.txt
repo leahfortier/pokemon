@@ -2,10 +2,22 @@
   "areas": [
     {
       "displayName": "Yamartino Valley of the Wind",
+      "flyLocation": "FlyLocation",
       "terrain": "GRASS"
     }
   ],
   "mapTransitions": [
+    {
+      "exitName": "FlyLocation",
+      "deathPortal": false,
+      "location": [
+        {
+          "x": 35,
+          "y": 54
+        }
+      ],
+      "triggerName": "WindValley_MapExit_FlyLocation_01"
+    },
     {
       "exitName": "NorthTransitionBuilding",
       "direction": "UP",
@@ -44,32 +56,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "choice": {
-                "question": "What would you like to do?",
-                "choices": [
-                  {
-                    "text": "Withdraw",
-                    "actions": [
-                      {
-                        "trigger": {
-                          "triggerType": "BREEDING_WITHDRAW",
-                          "triggerContents": ""
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "text": "Deposit",
-                    "actions": [
-                      {
-                        "trigger": {
-                          "triggerType": "BREEDING_DEPOSIT",
-                          "triggerContents": ""
-                        }
-                      }
-                    ]
-                  }
-                ]
+              "trigger": {
+                "triggerType": "DAY_CARE",
+                "triggerContents": ""
               }
             }
           ]

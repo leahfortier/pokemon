@@ -14,6 +14,7 @@ import pokemon.ActivePokemon;
 import trainer.Player;
 import util.JsonUtils;
 import util.PokeString;
+import util.StringUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -21,6 +22,34 @@ import java.util.List;
 public class DayCareCenter implements Serializable {
     private ActivePokemon first;
     private ActivePokemon second;
+
+    public String getPokemonPresentMessage() {
+        if (first == null && second == null) {
+            return StringUtils.empty();
+        }
+
+        if (first != null && second != null) {
+            return "Your " + first.getName() + " and your " + second.getName() + " are doing just fine.";
+        }
+
+        return "Your " + (first == null ? second : first).getName() + " is doing just fine.";
+    }
+
+    public String getCompatibilityMessage() {
+        if (first == null || second == null) {
+            return StringUtils.empty();
+        }
+
+        if (!Breeding.canBreed(first, second)) {
+            return "They prefer to play with other " + PokeString.POKEMON + " rather than each other.";
+        }
+
+        if (first.getPokemonInfo().namesies() == second.getPokemonInfo().namesies()) {
+            return "Those two seem to get along like a house on fire!!!!!";
+        }
+
+        return "I guess they're okay with each other I guess.";
+    }
 
     public Trigger getDepositTrigger() {
         // Center is full -- display invalid message

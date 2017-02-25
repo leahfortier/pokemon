@@ -10,6 +10,7 @@ import trainer.Badge;
 
 public enum TriggerActionType {
     BADGE(TriggerType.BADGE, () -> new EnumTriggerPanel<>("Badge", Badge.values())),
+    DAY_CARE(TriggerType.DAY_CARE, EmptyTriggerContentsPanel::new),
     DAY_CARE_DEPOSIT(TriggerType.DAY_CARE_DEPOSIT, EmptyTriggerContentsPanel::new),
     DAY_CARE_WITHDRAW(TriggerType.DAY_CARE_WITHDRAW, EmptyTriggerContentsPanel::new),
     CHANGE_VIEW(TriggerType.CHANGE_VIEW, () -> new EnumTriggerPanel<>("View Mode", ViewMode.values())),
