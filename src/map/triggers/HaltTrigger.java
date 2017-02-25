@@ -26,13 +26,13 @@ public class HaltTrigger extends Trigger {
         }
     }
 
-    static void addHaltTrigger() {
+    public static void addHaltTrigger() {
         halted = true;
         Trigger trigger = TriggerType.HALT.createTrigger(null, null);
         Messages.addToFront(new MessageUpdate().withTrigger(trigger.getName()));
     }
 
-    static void resume() {
+    public static void resume() {
         halted = false;
     }
 

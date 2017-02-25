@@ -1,13 +1,15 @@
-package map.triggers;
+package map.triggers.map;
 
 import main.Game;
 import main.Global;
 import map.MapData;
+import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import trainer.Player;
 import util.StringUtils;
 
-class ReloadMapTrigger extends Trigger {
-    ReloadMapTrigger(String contents, String condition) {
+public class ReloadMapTrigger extends Trigger {
+    public ReloadMapTrigger(String contents, String condition) {
         super(TriggerType.RELOAD_MAP, contents, condition);
 
         if (!StringUtils.isNullOrEmpty(contents)) {

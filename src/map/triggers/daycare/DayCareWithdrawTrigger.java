@@ -1,16 +1,18 @@
-package map.triggers;
+package map.triggers.daycare;
 
 import main.Game;
+import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.breeding.DayCareCenter;
 import util.StringUtils;
 
-public class BreedingWithdrawTrigger extends Trigger {
+public class DayCareWithdrawTrigger extends Trigger {
     private final Boolean isFirstPokemon;
 
-    public BreedingWithdrawTrigger(String contents, String condition) {
-        super(TriggerType.BREEDING_WITHDRAW, contents, condition);
+    public DayCareWithdrawTrigger(String contents, String condition) {
+        super(TriggerType.DAY_CARE_WITHDRAW, contents, condition);
 
         if (StringUtils.isNullOrEmpty(contents)) {
             this.isFirstPokemon = null;

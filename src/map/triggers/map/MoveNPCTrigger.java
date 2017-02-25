@@ -1,4 +1,4 @@
-package map.triggers;
+package map.triggers.map;
 
 import main.Game;
 import main.Global;
@@ -7,6 +7,9 @@ import map.MapData;
 import map.PathDirection;
 import map.entity.movable.NPCEntity;
 import map.entity.movable.PlayerEntity;
+import map.triggers.HaltTrigger;
+import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import pattern.MoveNPCTriggerMatcher;
 import trainer.Player;
 import util.JsonUtils;
@@ -17,10 +20,10 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
 
-class MoveNPCTrigger extends Trigger {
+public class MoveNPCTrigger extends Trigger {
     private final MoveNPCTriggerMatcher matcher;
 
-    MoveNPCTrigger(String contents, String condition) {
+    public MoveNPCTrigger(String contents, String condition) {
         super(TriggerType.MOVE_NPC, contents, condition);
         this.matcher = JsonUtils.deserialize(contents, MoveNPCTriggerMatcher.class);
     }

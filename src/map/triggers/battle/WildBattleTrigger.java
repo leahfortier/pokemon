@@ -1,16 +1,18 @@
-package map.triggers;
+package map.triggers.battle;
 
 import battle.Battle;
 import main.Game;
 import map.overworld.WildEncounter;
+import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import trainer.WildPokemon;
 import util.JsonUtils;
 
-class WildBattleTrigger extends Trigger {
+public class WildBattleTrigger extends Trigger {
 
 	private final WildEncounter wildEncounter;
 
-	WildBattleTrigger(String matcherJson, String condition) {
+	public WildBattleTrigger(String matcherJson, String condition) {
 		super(TriggerType.WILD_BATTLE, matcherJson, condition);
 
 		this.wildEncounter = JsonUtils.deserialize(matcherJson, WildEncounter.class);

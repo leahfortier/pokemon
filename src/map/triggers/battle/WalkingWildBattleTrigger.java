@@ -1,10 +1,12 @@
-package map.triggers;
+package map.triggers.battle;
 
 import battle.effect.RepellingEffect;
 import item.Item;
 import main.Game;
 import map.overworld.EncounterRate;
 import map.overworld.WildEncounter;
+import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.map.WildBattleMatcher;
@@ -17,7 +19,7 @@ public class WalkingWildBattleTrigger extends Trigger {
     private final WildEncounter[] wildEncounters;
     private final EncounterRate encounterRate;
 
-    WalkingWildBattleTrigger(String matcherJson, String condition) {
+    public WalkingWildBattleTrigger(String matcherJson, String condition) {
         super(TriggerType.WALKING_WILD_BATTLE, matcherJson, condition);
 
         WildBattleMatcher matcher = JsonUtils.deserialize(matcherJson, WildBattleMatcher.class);

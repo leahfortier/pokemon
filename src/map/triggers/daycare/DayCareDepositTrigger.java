@@ -1,17 +1,19 @@
-package map.triggers;
+package map.triggers.daycare;
 
 import main.Game;
+import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.breeding.DayCareCenter;
 import trainer.Player;
 import util.StringUtils;
 
-public class BreedingDepositTrigger extends Trigger {
+public class DayCareDepositTrigger extends Trigger {
     private final Integer teamIndex;
 
-    public BreedingDepositTrigger(String contents, String condition) {
-        super(TriggerType.BREEDING_DEPOSIT, contents, condition);
+    public DayCareDepositTrigger(String contents, String condition) {
+        super(TriggerType.DAY_CARE_DEPOSIT, contents, condition);
 
         if (StringUtils.isNullOrEmpty(contents)) {
             teamIndex = null;

@@ -1,8 +1,10 @@
-package map.triggers;
+package map.triggers.battle;
 
 import map.Condition;
 import map.overworld.OverworldTool;
 import map.overworld.WildEncounter;
+import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.GroupTriggerMatcher;
@@ -15,7 +17,7 @@ public class FishingTrigger extends Trigger {
 
     private final WildEncounter[] wildEncounters;
 
-    FishingTrigger(String matcherJson, String condition) {
+    public FishingTrigger(String matcherJson, String condition) {
         super(TriggerType.FISHING, matcherJson, Condition.and(condition, OverworldTool.FISH.getGlobalName()));
 
         FishingMatcher matcher = JsonUtils.deserialize(matcherJson, FishingMatcher.class);

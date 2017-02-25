@@ -1,20 +1,22 @@
-package map.triggers;
+package map.triggers.map;
 
 import main.Game;
 import map.PathDirection;
+import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import pattern.map.MapTransitionMatcher;
 import trainer.Player;
 import util.JsonUtils;
 
-class MapTransitionTrigger extends Trigger {
+public class MapTransitionTrigger extends Trigger {
 	private final MapTransitionMatcher mapTransitionMatcher;
 
-	static String getTriggerSuffix(String contents) {
+	public static String getTriggerSuffix(String contents) {
 		MapTransitionMatcher matcher = JsonUtils.deserialize(contents, MapTransitionMatcher.class);
 		return matcher.getPreviousMap() + "_" + matcher.getNextMap() + "_" + matcher.getNextEntranceName();
 	}
 
-	MapTransitionTrigger(String contents, String condition) {
+	public MapTransitionTrigger(String contents, String condition) {
 		super(TriggerType.MAP_TRANSITION, contents, condition);
 
 		this.mapTransitionMatcher = JsonUtils.deserialize(contents, MapTransitionMatcher.class);

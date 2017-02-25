@@ -1,8 +1,10 @@
-package map.triggers;
+package map.triggers.battle;
 
 import battle.Battle;
 import main.Game;
 import map.entity.EntityAction.BattleAction;
+import map.triggers.Trigger;
+import map.triggers.TriggerType;
 import pattern.PokemonMatcher;
 import pattern.action.BattleMatcher;
 import pattern.action.UpdateMatcher;
@@ -10,11 +12,11 @@ import pokemon.ActivePokemon;
 import trainer.EnemyTrainer;
 import util.JsonUtils;
 
-class TrainerBattleTrigger extends Trigger {
+public class TrainerBattleTrigger extends Trigger {
 	private final EnemyTrainer trainer;
 	private final UpdateMatcher npcUpdateInteraction;
 
-	TrainerBattleTrigger(String contents, String condition) {
+	public TrainerBattleTrigger(String contents, String condition) {
 		super(TriggerType.TRAINER_BATTLE, contents, condition);
 
 		BattleAction battleAction = JsonUtils.deserialize(contents, BattleAction.class);
