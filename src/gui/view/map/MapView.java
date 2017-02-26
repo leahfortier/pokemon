@@ -16,9 +16,11 @@ import map.Direction;
 import map.MapData;
 import map.MapName;
 import map.PathDirection;
+import map.daynight.DayCycle;
 import map.entity.Entity;
 import map.entity.movable.MovableEntity;
 import map.entity.movable.PlayerEntity;
+import map.overworld.TerrainType;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -97,6 +99,10 @@ public class MapView extends View {
 
 		if (currentArea != null) {
 			currentArea.getWeather().draw(g);
+
+			if (currentArea.getTerrain() != TerrainType.BUILDING) {
+				DayCycle.getTimeOfDay().draw(g);
+			}
 		}
 
 		// Area Transition

@@ -1,0 +1,40 @@
+package map.daynight;
+
+import draw.DrawUtils;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.Calendar;
+
+public enum DayCycle {
+    DAWN(5, new Color(248, 150, 63, 128)),
+    DAY(8, null),
+    DUSK(17, new Color(199, 159, 255, 128)),
+    NIGHT(20, new Color(18, 20, 100, 128));
+
+    private final int startHour;
+    private final Color filter;
+
+    DayCycle(int startHour, Color filter) {
+        this.startHour = startHour;
+        this.filter = filter;
+    }
+
+    public void draw(Graphics g) {
+        if (this.filter != null) {
+            DrawUtils.fillCanvas(g, filter);
+        }
+    }
+
+    public static DayCycle getTimeOfDay() {
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        DayCycle[] values = DayCycle.values();
+        for (int i = values.length - 1; i >= 0; i--) {
+            if (hour >= values[i].startHour) {
+                return values[i];
+            }
+        }
+
+        return values[values.length - 1];
+    }
+}
