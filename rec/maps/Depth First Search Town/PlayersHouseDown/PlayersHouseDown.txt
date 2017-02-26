@@ -81,10 +81,12 @@
           }
         }
       ],
-      "location": {
-        "x": 5,
-        "y": 1
-      },
+      "location2": [
+        {
+          "x": 5,
+          "y": 1
+        }
+      ],
       "triggerName": "PlayersHouseDown_TriggerEntity_fridge_01"
     }
   ],

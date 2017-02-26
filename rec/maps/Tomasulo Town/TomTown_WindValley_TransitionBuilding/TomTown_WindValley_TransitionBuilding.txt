@@ -247,10 +247,12 @@
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
         }
       ],
-      "location": {
-        "x": 8,
-        "y": 6
-      },
+      "location2": [
+        {
+          "x": 8,
+          "y": 6
+        }
+      ],
       "triggerName": "TomTown_WindValley_TransitionBuilding_TriggerEntity_Info_Guy_Dialogue_01"
     }
   ],

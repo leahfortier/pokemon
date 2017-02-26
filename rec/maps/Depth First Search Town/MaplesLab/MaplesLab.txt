@@ -217,10 +217,12 @@
           "groupTrigger": "LoadPC"
         }
       ],
-      "location": {
-        "x": 16,
-        "y": 1
-      },
+      "location2": [
+        {
+          "x": 16,
+          "y": 1
+        }
+      ],
       "triggerName": "MaplesLab_MiscEntity_PC_01"
     }
   ],
