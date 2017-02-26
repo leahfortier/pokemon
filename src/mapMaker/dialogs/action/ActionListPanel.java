@@ -46,11 +46,9 @@ public class ActionListPanel extends JPanel {
             final int index = i;
             final ActionMatcher actionMatcher = actionList.get(index);
 
-
             JButton actionButton = GUIUtils.createButton(
                     actionMatcher == null ? "EMPTY" : actionMatcher.getActionType().name(),
                     event -> {
-
                         ActionMatcher newActionMatcher = new ActionDialog(actionMatcher).getMatcher(parent);
                         if (newActionMatcher != null) {
                             actionList.set(index, newActionMatcher);
@@ -59,12 +57,20 @@ public class ActionListPanel extends JPanel {
                     }
             );
 
-            components.add(actionButton);
+            JButton deleteButton = GUIUtils.createButton(
+                    "Delete",
+                    event -> {
+                        actionList.remove(index);
+                        render();
+                    }
+            );
+
+            components.add(GUIUtils.createHorizontalLayoutComponent(actionButton, deleteButton));
         }
 
         components.add(newActionButton);
 
-        GUIUtils.setHorizontalLayout(this, components.toArray(new JComponent[0]));
+        GUIUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
 
         parent.render();
     }

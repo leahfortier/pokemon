@@ -125,10 +125,18 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 							}
 					);
 
-			interactionComponents.add(interactionButton);
+			JButton deleteButton = GUIUtils.createButton(
+					"Delete",
+					event -> {
+						interactions.remove(index);
+						render();
+					}
+			);
+
+			interactionComponents.add(GUIUtils.createHorizontalLayoutComponent(interactionButton, deleteButton));
 		}
 
-		JPanel interactionComponent = GUIUtils.createHorizontalLayoutComponent(interactionComponents.toArray(new JComponent[0]));
+		JPanel interactionComponent = GUIUtils.createVerticalLayoutComponent(interactionComponents.toArray(new JComponent[0]));
 		GUIUtils.setVerticalLayout(this, topComponent, interactionComponent, addInteractionButton);
 	}
 	
