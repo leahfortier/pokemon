@@ -1,10 +1,10 @@
 package map.daynight;
 
 import draw.DrawUtils;
+import util.TimeUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Calendar;
 
 public enum DayCycle {
     DAWN(5, new Color(248, 150, 63, 128)),
@@ -27,7 +27,7 @@ public enum DayCycle {
     }
 
     public static DayCycle getTimeOfDay() {
-        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        int hour = TimeUtils.getHourOfDay();
         DayCycle[] values = DayCycle.values();
         for (int i = values.length - 1; i >= 0; i--) {
             if (hour >= values[i].startHour) {

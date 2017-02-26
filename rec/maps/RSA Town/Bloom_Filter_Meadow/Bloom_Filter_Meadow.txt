@@ -73,6 +73,32 @@
   ],
   "NPCs": [
     {
+      "name": "LittleGirl",
+      "path": "w",
+      "spriteIndex": 4,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "Interaction0",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "I'm not allowed out after dark."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 40,
+        "y": 17
+      },
+      "triggerName": "Bloom_Filter_Meadow_NPC_LittleGirl_01",
+      "condition": ":time_of_day:DAY:"
+    },
+    {
       "name": "Meadow_Trainer",
       "path": "w",
       "spriteIndex": 1,
