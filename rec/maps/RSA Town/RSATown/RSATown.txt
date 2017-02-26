@@ -164,7 +164,7 @@
         "y": 19
       },
       "triggerName": "RSATown_NPC_Rival_01",
-      "condition": "!RSATown_NPC_Rival_01$won"
+      "condition": ":npc_interaction:!RSATown_NPC_Rival_01$won:"
     }
   ],
   "items": [],
@@ -210,7 +210,7 @@
         }
       ],
       "triggerName": "RSATown_Event_Rival_Battle_01",
-      "condition": "!RSATown_NPC_Rival_01$won"
+      "condition": ":npc_interaction:!RSATown_NPC_Rival_01$won:"
     }
   ],
   "wildBattles": [],
