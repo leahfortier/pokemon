@@ -7,6 +7,7 @@ import main.Global;
 import map.entity.Entity;
 import map.entity.EntityAction;
 import map.entity.FishingSpotEntity;
+import map.entity.MiscEntity;
 import map.overworld.WalkType;
 import map.overworld.WildEncounter;
 import map.triggers.Trigger;
@@ -18,6 +19,7 @@ import pattern.map.EventMatcher;
 import pattern.map.FishingMatcher;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
+import pattern.map.MiscEntityMatcher;
 import pattern.map.WildBattleMatcher;
 import trainer.Player;
 import util.FileIO;
@@ -72,7 +74,19 @@ public class MapData {
 
 		addEntities(mapDataMatcher.getNPCs());
 		addEntities(mapDataMatcher.getItems());
-		addEntities(mapDataMatcher.getMiscEntities());
+
+		for (MiscEntityMatcher matcher : mapDataMatcher.getMiscEntities()) {
+			for (Point location : matcher.getLocation()) {
+				MiscEntity miscEntity = new MiscEntity(
+						matcher.getTriggerName(),
+						location,
+						matcher.getCondition(),
+						matcher.getActions()
+				);
+
+				this.entities.add(miscEntity);
+			}
+		}
 
 		for (MapTransitionMatcher matcher : mapDataMatcher.getMapTransitions()) {
             matcher.setMapName(this.name);
