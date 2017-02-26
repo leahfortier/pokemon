@@ -101,7 +101,7 @@ public class MapData {
 		}
 
 		for (WildBattleMatcher matcher : mapDataMatcher.getWildBattles()) {
-			Trigger trigger = TriggerType.WALKING_WILD_BATTLE.createTrigger(JsonUtils.getJson(matcher), null);
+			Trigger trigger = TriggerType.WALKING_WILD_BATTLE.createTrigger(JsonUtils.getJson(matcher), matcher.getCondition());
 			for (Point point : matcher.getLocation()) {
 				triggers.put(getMapIndex(point), trigger.getName());
 				for (WildEncounter wildEncounter : matcher.getWildEncounters()) {
