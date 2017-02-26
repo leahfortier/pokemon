@@ -3,16 +3,19 @@ package map;
 import main.Game;
 import trainer.Player;
 import util.StringUtils;
+import util.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Condition {
-	private static final Pattern functionPattern = Pattern.compile("([\\w$]+)|([()&|!])");
-	
+	private static final Pattern functionPattern = Pattern.compile("([\\w$:]+)|([()&|!])");
+	private static final Pattern keyValuePattern = Pattern.compile(":([^:]+):([^:]+):");
+
 	/*
 	 * postfixed boolean function
 	 */
@@ -101,11 +104,11 @@ public class Condition {
 					stack.push(false);
 					break;
 				default:
-					if (s.contains("$")) {
-						int index = s.indexOf('$');
-						String npcEntityName = s.substring(0, index);
-						String interactionName = s.substring(index + 1);
-						stack.push(player.isNpcInteraction(npcEntityName, interactionName));
+					Matcher matcher = keyValuePattern.matcher(s);
+					if (matcher.matches()) {
+						String key = matcher.group(1);
+						String value = matcher.group(2);
+						stack.push(getConditionKeyValuePattern(key, value));
 					} else {
 						stack.push(player.globalsContain(s));
 					}
@@ -114,6 +117,24 @@ public class Condition {
 		}
 
 		return stack.pop();
+	}
+
+	private boolean getConditionKeyValuePattern(String key, String value) {
+		int index;
+		switch (key) {
+			case "time_of_day":
+				index = value.indexOf('-');
+				int startHour = Integer.parseInt(value.substring(0, index));
+				int endHour = Integer.parseInt(value.substring(index + 1));
+				return TimeUtils.currentHourWithinInterval(startHour, endHour);
+			case "npc_interaction":
+				index = value.indexOf('$');
+				String npcEntityName = value.substring(0, index);
+				String interactionName = value.substring(index + 1);
+				return Game.getPlayer().isNpcInteraction(npcEntityName, interactionName);
+		}
+
+		return true;
 	}
 
 	public static String and(final String firstCondition, final String secondCondition) {
