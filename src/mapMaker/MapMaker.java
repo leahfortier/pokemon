@@ -644,6 +644,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 								case WILD_BATTLE:
 								case EVENT:
 								case FISHING:
+								case MISC_ENTITY:
 									this.setTool(ToolType.RECTANGLE);
 									break;
 								default:
