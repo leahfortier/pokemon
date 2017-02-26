@@ -141,7 +141,7 @@
         {
           "trigger": {
             "triggerType": "DIALOGUE",
-            "triggerContents": "You see yourself."
+            "triggerContents": "The power's out..."
           }
         }
       ],
@@ -149,27 +149,13 @@
         {
           "x": 5,
           "y": 1
-        }
-      ],
-      "triggerName": "PlayersHouseUp_MiscEntity_TV_01"
-    },
-    {
-      "name": "TV",
-      "actions": [
-        {
-          "trigger": {
-            "triggerType": "DIALOGUE",
-            "triggerContents": "The power's out..."
-          }
-        }
-      ],
-      "location": [
+        },
         {
           "x": 6,
           "y": 1
         }
       ],
-      "triggerName": "PlayersHouseUp_MiscEntity_TV_02"
+      "triggerName": "PlayersHouseUp_MiscEntity_TV_01"
     }
   ],
   "events": [],
