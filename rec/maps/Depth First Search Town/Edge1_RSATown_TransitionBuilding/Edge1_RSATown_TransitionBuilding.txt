@@ -80,7 +80,7 @@
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
         }
       ],
-      "location2": [
+      "location": [
         {
           "x": 6,
           "y": 2

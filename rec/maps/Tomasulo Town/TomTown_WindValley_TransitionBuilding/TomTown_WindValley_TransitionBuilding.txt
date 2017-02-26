@@ -247,7 +247,7 @@
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
         }
       ],
-      "location2": [
+      "location": [
         {
           "x": 8,
           "y": 6

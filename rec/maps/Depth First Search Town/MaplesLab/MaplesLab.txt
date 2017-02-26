@@ -217,7 +217,7 @@
           "groupTrigger": "LoadPC"
         }
       ],
-      "location2": [
+      "location": [
         {
           "x": 16,
           "y": 1

@@ -58,7 +58,7 @@
           "groupTrigger": "PokeCenterHeal"
         }
       ],
-      "location2": [
+      "location": [
         {
           "x": 7,
           "y": 3
@@ -73,7 +73,7 @@
           "groupTrigger": "LoadMart"
         }
       ],
-      "location2": [
+      "location": [
         {
           "x": 3,
           "y": 7
@@ -88,7 +88,7 @@
           "groupTrigger": "LoadPC"
         }
       ],
-      "location2": [
+      "location": [
         {
           "x": 11,
           "y": 1

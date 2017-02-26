@@ -106,7 +106,7 @@
           "groupTrigger": "LoadPC"
         }
       ],
-      "location2": [
+      "location": [
         {
           "x": 3,
           "y": 1
@@ -127,7 +127,7 @@
           }
         }
       ],
-      "location2": [
+      "location": [
         {
           "x": 3,
           "y": 6
@@ -145,7 +145,7 @@
           }
         }
       ],
-      "location2": [
+      "location": [
         {
           "x": 5,
           "y": 1
@@ -163,7 +163,7 @@
           }
         }
       ],
-      "location2": [
+      "location": [
         {
           "x": 6,
           "y": 1

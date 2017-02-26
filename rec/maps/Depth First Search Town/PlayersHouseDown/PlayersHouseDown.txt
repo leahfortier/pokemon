@@ -81,7 +81,7 @@
           }
         }
       ],
-      "location2": [
+      "location": [
         {
           "x": 5,
           "y": 1
