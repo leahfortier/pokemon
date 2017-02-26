@@ -1,6 +1,7 @@
 package map;
 
 import main.Game;
+import map.daynight.DayCycle;
 import trainer.Player;
 import util.StringUtils;
 import util.TimeUtils;
@@ -123,6 +124,8 @@ public class Condition {
 		int index;
 		switch (key) {
 			case "time_of_day":
+				return DayCycle.getTimeOfDay() == DayCycle.valueOf(value);
+			case "hour_of_day":
 				index = value.indexOf('-');
 				int startHour = Integer.parseInt(value.substring(0, index));
 				int endHour = Integer.parseInt(value.substring(index + 1));
