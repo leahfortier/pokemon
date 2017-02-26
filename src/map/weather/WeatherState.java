@@ -36,6 +36,5 @@ public enum WeatherState {
     }
     interface WeatherDrawer {
         void draw(Graphics g);
-
     }
 }
