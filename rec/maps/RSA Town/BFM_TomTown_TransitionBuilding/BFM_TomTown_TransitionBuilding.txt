@@ -80,10 +80,12 @@
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
         }
       ],
-      "location": {
-        "x": 6,
-        "y": 2
-      },
+      "location": [
+        {
+          "x": 6,
+          "y": 2
+        }
+      ],
       "triggerName": "BFM_TomTown_TransitionBuilding_TriggerEntity_Info_Guy_Dialogue_01"
     }
   ],

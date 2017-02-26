@@ -106,10 +106,12 @@
           "groupTrigger": "LoadPC"
         }
       ],
-      "location": {
-        "x": 3,
-        "y": 1
-      },
+      "location": [
+        {
+          "x": 3,
+          "y": 1
+        }
+      ],
       "triggerName": "PlayersHouseUp_MiscEntity_PC_01"
     },
     {
@@ -125,27 +127,13 @@
           }
         }
       ],
-      "location": {
-        "x": 3,
-        "y": 6
-      },
-      "triggerName": "PlayersHouseUp_MiscEntity_PokePalooza_01"
-    },
-    {
-      "name": "TV",
-      "actions": [
+      "location": [
         {
-          "trigger": {
-            "triggerType": "DIALOGUE",
-            "triggerContents": "You see yourself."
-          }
+          "x": 3,
+          "y": 6
         }
       ],
-      "location": {
-        "x": 5,
-        "y": 1
-      },
-      "triggerName": "PlayersHouseUp_MiscEntity_TV_01"
+      "triggerName": "PlayersHouseUp_MiscEntity_PokePalooza_01"
     },
     {
       "name": "TV",
@@ -157,11 +145,17 @@
           }
         }
       ],
-      "location": {
-        "x": 6,
-        "y": 1
-      },
-      "triggerName": "PlayersHouseUp_MiscEntity_TV_02"
+      "location": [
+        {
+          "x": 5,
+          "y": 1
+        },
+        {
+          "x": 6,
+          "y": 1
+        }
+      ],
+      "triggerName": "PlayersHouseUp_MiscEntity_TV_01"
     }
   ],
   "events": [],

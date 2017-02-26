@@ -58,10 +58,12 @@
           "groupTrigger": "PokeCenterHeal"
         }
       ],
-      "location": {
-        "x": 7,
-        "y": 3
-      },
+      "location": [
+        {
+          "x": 7,
+          "y": 3
+        }
+      ],
       "triggerName": "RSATown_PokeCenter_TriggerEntity_Heal_01"
     },
     {
@@ -71,10 +73,12 @@
           "groupTrigger": "LoadMart"
         }
       ],
-      "location": {
-        "x": 3,
-        "y": 7
-      },
+      "location": [
+        {
+          "x": 3,
+          "y": 7
+        }
+      ],
       "triggerName": "RSATown_PokeCenter_TriggerEntity_Mart_01"
     },
     {
@@ -84,10 +88,12 @@
           "groupTrigger": "LoadPC"
         }
       ],
-      "location": {
-        "x": 11,
-        "y": 1
-      },
+      "location": [
+        {
+          "x": 11,
+          "y": 1
+        }
+      ],
       "triggerName": "RSATown_PokeCenter_TriggerEntity_PC_View_01"
     }
   ],

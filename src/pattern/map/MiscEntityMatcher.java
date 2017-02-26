@@ -1,20 +1,19 @@
 package pattern.map;
 
-import map.entity.Entity;
 import map.entity.EntityAction;
-import map.entity.MiscEntity;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionMatcher;
-import pattern.generic.EntityMatcher;
-import pattern.generic.SinglePointTriggerMatcher;
+import pattern.generic.MultiPointTriggerMatcher;
+import util.Point;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MiscEntityMatcher extends SinglePointTriggerMatcher implements EntityMatcher {
+public class MiscEntityMatcher extends MultiPointTriggerMatcher {
     private String name;
     private ActionMatcher[] actions;
+    public List<Point> location2;
 
     public MiscEntityMatcher(String name, String condition, ActionMatcher[] actions) {
         this.name = name;
@@ -44,15 +43,5 @@ public class MiscEntityMatcher extends SinglePointTriggerMatcher implements Enti
         }
 
         return entityActions;
-    }
-
-    @Override
-    public Entity createEntity() {
-        return new MiscEntity(
-                this.getTriggerName(),
-                this.getLocation(),
-                this.getCondition(),
-                this.getActions()
-        );
     }
 }
