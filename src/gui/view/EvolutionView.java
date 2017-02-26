@@ -16,6 +16,7 @@ import pokemon.PokemonInfo;
 import pokemon.Stat;
 import pokemon.evolution.BaseEvolution;
 import trainer.Player;
+import type.Type;
 import util.FontMetrics;
 import util.Point;
 import util.StringUtils;
@@ -28,6 +29,7 @@ class EvolutionView extends View {
 	private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
 	private static final Point POKEMON_DRAW_LOCATION = Point.scaleDown(Global.GAME_SIZE, 2);
 
+	private final DrawPanel canvasPanel;
 	private final DrawPanel statsPanel;
 
 	private int animationEvolve;
@@ -48,6 +50,10 @@ class EvolutionView extends View {
 	}
 
 	EvolutionView() {
+		this.canvasPanel = DrawPanel.fullGamePanel()
+				.withTransparentCount(2)
+				.withBorderPercentage(0);
+
 		this.statsPanel = new DrawPanel(0, 280, 273, 161).withBlackOutline();
 	}
 
@@ -117,13 +123,27 @@ class EvolutionView extends View {
 	public void draw(Graphics g) {
 		final GameData data = Game.getData();
 
+		if (state != State.END) {
+			if (isEgg) {
+				canvasPanel.withBackgroundColor(Type.NORMAL.getColor());
+			} else {
+				canvasPanel.withBackgroundColors(Type.getColors(preEvolution.getType()));
+			}
+		} else {
+			if (isEgg) {
+				canvasPanel.withBackgroundColors(Type.getColors(preEvolution.getType()));
+			} else {
+				canvasPanel.withBackgroundColors(Type.getColors(evolvingPokemon));
+			}
+		}
+
+		canvasPanel.drawBackground(g);
+
 		TileSet pokemonTiles = data.getPokemonTilesMedium();
 
-		BasicPanels.drawCanvasPanel(g);
-		
 		FontMetrics.setFont(g, 30);
 		g.setColor(Color.BLACK);
-		
+
 		String preIndex = isEgg ? ActivePokemon.SPRITE_EGG_IMAGE_NAME : preEvolution.getImageName(evolvingPokemon.isShiny());
 		String postIndex = isEgg ? preEvolution.getImageName(evolvingPokemon.isShiny()) : postEvolution.getImageName(evolvingPokemon.isShiny());
 		
