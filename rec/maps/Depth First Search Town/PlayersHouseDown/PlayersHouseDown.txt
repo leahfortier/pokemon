@@ -72,6 +72,36 @@
   "items": [],
   "miscEntities": [
     {
+      "name": "TV",
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "DIALOGUE",
+            "triggerContents": "The power's not out...?"
+          }
+        }
+      ],
+      "location": [
+        {
+          "x": 6,
+          "y": 2
+        },
+        {
+          "x": 6,
+          "y": 3
+        },
+        {
+          "x": 7,
+          "y": 2
+        },
+        {
+          "x": 7,
+          "y": 3
+        }
+      ],
+      "triggerName": "PlayersHouseDown_MiscEntity_TV_01"
+    },
+    {
       "name": "fridge",
       "actions": [
         {
@@ -87,7 +117,7 @@
           "y": 1
         }
       ],
-      "triggerName": "PlayersHouseDown_TriggerEntity_fridge_01"
+      "triggerName": "PlayersHouseDown_MiscEntity_fridge_01"
     }
   ],
   "events": [],
