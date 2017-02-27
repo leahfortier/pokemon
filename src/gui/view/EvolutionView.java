@@ -139,7 +139,7 @@ class EvolutionView extends View {
 
 		canvasPanel.drawBackground(g);
 
-		TileSet pokemonTiles = data.getPokemonTilesMedium();
+		TileSet pokemonTiles = data.getPokemonTilesLarge();
 
 		FontMetrics.setFont(g, 30);
 		g.setColor(Color.BLACK);
