@@ -124,6 +124,10 @@ public class Player extends Trainer implements Serializable {
         this.badges.add(badge);
 	}
 
+	public boolean hasBadge(Badge badge) {
+		return this.badges.contains(badge);
+	}
+
 	public PlayerEntity getEntity() {
 		return this.entity;
 	}

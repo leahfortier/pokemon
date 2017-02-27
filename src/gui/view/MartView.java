@@ -17,6 +17,7 @@ import item.ItemNamesies;
 import main.Game;
 import main.Global;
 import map.Direction;
+import trainer.Badge;
 import trainer.Player;
 import util.FontMetrics;
 import util.GeneralUtils;
@@ -33,17 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 
 class MartView extends View {
-
-	// TODO: Need to eventually make this dynamic
-	private static final ItemNamesies[] FOR_SALE_NAMES = new ItemNamesies[] {
-			ItemNamesies.POTION,
-			ItemNamesies.POKE_BALL,
-			ItemNamesies.ANTIDOTE,
-			ItemNamesies.PARALYZE_HEAL,
-			ItemNamesies.BURN_HEAL
-	};
-
-	private static List<ItemNamesies> forSaleItems;
+	private List<ItemNamesies> forSaleItems;
 	
 	private static final Color BACKGROUND_COLOR = new Color (68, 123, 184);
 	
@@ -191,11 +182,7 @@ class MartView extends View {
 		buttons[AMOUNT_RIGHT_ARROW] = amountRightButton;
 		buttons[RETURN] = returnButton;
 
-		if (forSaleItems == null) {
-			forSaleItems = new ArrayList<>();
-			Collections.addAll(forSaleItems, FOR_SALE_NAMES);
-		}
-		
+		resetForSaleItems();
 		setSelectedItem(forSaleItems.get(0));
 		updateActiveButtons();
 	}
@@ -205,11 +192,7 @@ class MartView extends View {
 		Player player = Game.getPlayer();
 		selectedButton = Button.update(buttons, selectedButton);
 
-		Iterator<ItemNamesies> iter = forSaleItems.iterator();
-		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
-			iter.next();
-		}
-
+		Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(forSaleItems, pageNum, ITEMS_PER_PAGE);
 		for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
 			if (itemButtons[i].checkConsumePress()) {
 				setSelectedItem(iter.next());
@@ -319,11 +302,7 @@ class MartView extends View {
 		
 		// Draw each items in category
 		itemsPanel.drawBackground(g);
-		Iterator<ItemNamesies> iter = forSaleItems.iterator();
-		for (int i = 0; i < pageNum*ITEMS_PER_PAGE; i++) {
-			iter.next();
-		}
-
+		Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(forSaleItems, pageNum, ITEMS_PER_PAGE);
 		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
 			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
 				ItemNamesies item = iter.next();
@@ -392,8 +371,86 @@ class MartView extends View {
 		return ViewMode.MART_VIEW;
 	}
 
+	private void resetForSaleItems() {
+		Player player = Game.getPlayer();
+
+		this.forSaleItems = new ArrayList<>();
+		Collections.addAll(forSaleItems,
+				ItemNamesies.POTION,
+				ItemNamesies.POKE_BALL,
+				ItemNamesies.ANTIDOTE,
+				ItemNamesies.PARALYZE_HEAL,
+				ItemNamesies.BURN_HEAL,
+				ItemNamesies.AWAKENING,
+				ItemNamesies.ICE_HEAL
+		);
+
+		if (player.hasBadge(Badge.ROUND)) {
+			Collections.addAll(forSaleItems,
+					ItemNamesies.GREAT_BALL,
+					ItemNamesies.SUPER_POTION,
+					ItemNamesies.REPEL
+			);
+		}
+
+		if (player.hasBadge(Badge.SECOND)) {
+			Collections.addAll(forSaleItems,
+					ItemNamesies.REVIVE
+			);
+		}
+
+		if (player.hasBadge(Badge.THIRD)) {
+			Collections.addAll(forSaleItems,
+					ItemNamesies.SUPER_REPEL
+			);
+		}
+
+		if (player.hasBadge(Badge.FOURTH)) {
+			Collections.addAll(forSaleItems,
+					ItemNamesies.ULTRA_BALL,
+					ItemNamesies.HYPER_POTION
+			);
+		}
+
+		if (player.hasBadge(Badge.FIFTH)) {
+			Collections.addAll(forSaleItems,
+					ItemNamesies.FULL_HEAL,
+					ItemNamesies.MAX_REPEL
+			);
+		}
+
+		if (player.hasBadge(Badge.SIXTH)) {
+			Collections.addAll(forSaleItems,
+					ItemNamesies.MAX_POTION
+			);
+		}
+
+		if (player.hasBadge(Badge.SEVENTH)) {
+			Collections.addAll(forSaleItems,
+					ItemNamesies.FULL_RESTORE
+			);
+		}
+
+		this.forSaleItems.sort((firstItemName, secondItemName) -> {
+            Item firstItem = firstItemName.getItem();
+            Item secondItem = secondItemName.getItem();
+
+            if (firstItem.getBagCategory() != secondItem.getBagCategory()) {
+                return firstItem.getBagCategory().ordinal() - secondItem.getBagCategory().ordinal();
+            }
+
+            if (firstItem.getPrice() != secondItem.getPrice()) {
+                return firstItem.getPrice() - secondItem.getPrice();
+            }
+
+            return firstItem.getName().compareTo(secondItem.getName());
+        });
+	}
+
 	@Override
-	public void movedToFront() {}
+	public void movedToFront() {
+		this.resetForSaleItems();
+	}
 
 	private void updateItemAmount(int delta) {
 		this.itemAmount = GeneralUtils.wrapIncrement(this.itemAmount, delta, 1, this.maxPurchaseAmount());
