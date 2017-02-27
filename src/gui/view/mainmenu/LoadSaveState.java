@@ -6,7 +6,7 @@ import gui.view.ViewMode;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 import main.Game;
 import map.Direction;
-import util.Save;
+import util.save.Save;
 
 import java.awt.Graphics;
 

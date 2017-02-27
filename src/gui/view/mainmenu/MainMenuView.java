@@ -11,8 +11,8 @@ import sound.SoundPlayer;
 import util.FileIO;
 import util.Folder;
 import util.FontMetrics;
-import util.Save;
-import util.Save.SavePreviewInfo;
+import util.save.Save;
+import util.save.SavePreviewInfo;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -140,7 +140,7 @@ public class MainMenuView extends View {
 	
 	void drawSaveInformation(Graphics g, Button b, int index, String emptyText) {
 		g.setColor(Color.BLACK);
-		Save.SavePreviewInfo info = saveInfo[index];
+		SavePreviewInfo info = saveInfo[index];
 
 		if (info != null) {
 			g.translate(b.x, b.y);

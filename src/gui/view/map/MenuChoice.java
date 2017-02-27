@@ -5,7 +5,7 @@ import main.Game;
 import message.Messages;
 import message.Messages.MessageState;
 import util.PokeString;
-import util.Save;
+import util.save.Save;
 
 enum MenuChoice {
     POKEDEX(() -> PokeString.POKEDEX, ViewMode.POKEDEX_VIEW),
