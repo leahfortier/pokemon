@@ -49,6 +49,7 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.Breeding;
 import pokemon.evolution.BaseEvolution;
 import pokemon.evolution.EvolutionMethod;
+import sound.SoundTitle;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.WildPokemon;
@@ -79,7 +80,7 @@ public class ActivePokemon implements Serializable {
 		 {"Scatters things often",   "Likes to fight",          "Good endurance",         "Often lost in thought", "Hates to lose",     "Somewhat of a clown"},
 		 {"Likes to relax",          "Quick tempered",          "Good perseverance",      "Very finicky",          "Somewhat stubborn", "Quick to flee"}};
 	
-	private PokemonInfo pokemon;
+	private PokemonNamesies pokemon;
 	private String nickname;
 	private int[] stats;
 	private int[] IVs;
@@ -102,7 +103,9 @@ public class ActivePokemon implements Serializable {
 
 	// General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
 	public ActivePokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer) {
-		this.pokemon = PokemonInfo.getPokemonInfo(pokemonNamesies);
+		this.pokemon = pokemonNamesies;
+		PokemonInfo pokemon = this.getPokemonInfo();
+
 		this.nickname = this.pokemon.getName();
 		this.level = level;
 
@@ -117,10 +120,10 @@ public class ActivePokemon implements Serializable {
 
 		this.setMoves();
 		this.setGender(Gender.getGender(pokemon.getMaleRatio()));
-		this.setAbility(Ability.assign(this.pokemon));
+		this.setAbility(Ability.assign(pokemon));
 		
 		this.heldItem = isWild
-				? WildHoldItem.getWildHoldItem(this.pokemon.getWildItems())
+				? WildHoldItem.getWildHoldItem(pokemon.getWildItems())
 				: (HoldItem)ItemNamesies.NO_ITEM.getItem();
 		
 		this.isEgg = false;
@@ -137,7 +140,7 @@ public class ActivePokemon implements Serializable {
 		this(pokemonNamesies, 1, false, true);
 
 		this.isEgg = true;
-		this.eggSteps = this.pokemon.getEggSteps();
+		this.eggSteps = this.getPokemonInfo().getEggSteps();
 		this.nickname = "Egg";
 	}
 	
@@ -217,12 +220,12 @@ public class ActivePokemon implements Serializable {
 	
 	// Does not include shiny -- this is for the small party tiles
 	public String getTinyImageName() {
-		return this.isEgg ? TINY_EGG_IMAGE_NAME : this.pokemon.getTinyImageName();
+		return this.isEgg ? TINY_EGG_IMAGE_NAME : this.getPokemonInfo().getTinyImageName();
 	}
 
 	// Does not include shiny -- this is for the small party tiles
 	public String getBaseImageName() {
-		return this.isEgg ? BASE_EGG_IMAGE_NAME : this.pokemon.getBaseImageName();
+		return this.isEgg ? BASE_EGG_IMAGE_NAME : this.getPokemonInfo().getBaseImageName();
 	}
 
 	public String getImageName() {
@@ -231,7 +234,7 @@ public class ActivePokemon implements Serializable {
 
 	// Larger image index
 	public String getImageName(boolean front) {
-		return this.isEgg() ? SPRITE_EGG_IMAGE_NAME : this.pokemon.getImageName(this.isShiny(), front);
+		return this.isEgg() ? SPRITE_EGG_IMAGE_NAME : this.getPokemonInfo().getImageName(this.isShiny(), front);
 	}
 	
 	public boolean isEgg() {
@@ -273,7 +276,7 @@ public class ActivePokemon implements Serializable {
 	
 	private void setMoves() {
 		moves = new ArrayList<>();
-		Map<Integer, List<AttackNamesies>> map = pokemon.getLevelUpMoves();
+		Map<Integer, List<AttackNamesies>> map = this.getPokemonInfo().getLevelUpMoves();
 		for (Integer levelLearned : map.keySet()) {
 			if (levelLearned > level) {
 				continue;
@@ -329,6 +332,7 @@ public class ActivePokemon implements Serializable {
 	
 	private void setStats() {
 		int prevHP = stats[Stat.HP.index()];
+		PokemonInfo pokemon = this.getPokemonInfo();
 		
 		stats = new int[Stat.NUM_STATS];
 		for (int i = 0; i < stats.length; i++) {
@@ -435,7 +439,7 @@ public class ActivePokemon implements Serializable {
 			return 0;	
 		}
 		
-		return pokemon.getGrowthRate().getEXP(level + 1) - totalEXP;
+		return this.getPokemonInfo().getGrowthRate().getEXP(level + 1) - totalEXP;
 	}
 	
 	// TODO: Test this to make sure it still works (espesh level 100)
@@ -443,7 +447,9 @@ public class ActivePokemon implements Serializable {
 		if (level == MAX_LEVEL) {
 			return 0;
 		}
-		
+
+		PokemonInfo pokemon = this.getPokemonInfo();
+
 		int totalNextLevel = pokemon.getGrowthRate().getEXP(level + 1);
 		int totalCurrentLevel = pokemon.getGrowthRate().getEXP(level);
 		
@@ -462,7 +468,7 @@ public class ActivePokemon implements Serializable {
 		if (front) {
 			Messages.add(new MessageUpdate().withExpGain(b, this, Math.min(1, expRatio()), false));
 		}
-		
+
 		// Add EVs
 		Item item = getHeldItem(b);
 		int[] vals = dead.getPokemonInfo().getGivenEVs();
@@ -473,7 +479,7 @@ public class ActivePokemon implements Serializable {
 		addEVs(vals);
 		
 		// Level up if applicable
-		while (totalEXP >= pokemon.getGrowthRate().getEXP(level + 1)) {
+		while (totalEXP >= this.getPokemonInfo().getGrowthRate().getEXP(level + 1)) {
 			levelUp(b);
 		}
 	}
@@ -491,7 +497,10 @@ public class ActivePokemon implements Serializable {
 		Messages.add(getActualName() + " grew to level " + level + "!");
 
 		if (front) {
-			Messages.add(new MessageUpdate().withExpGain(b, this, Math.min(1, expRatio()), true));
+			Messages.add(new MessageUpdate()
+					.withExpGain(b, this, Math.min(1, expRatio()), true)
+					.withSoundEffect(SoundTitle.LEVEL_UP)
+			);
 		}
 		
 		// Change stats -- keep track of the gains
@@ -509,7 +518,7 @@ public class ActivePokemon implements Serializable {
 		Messages.add(new MessageUpdate().withStatGains(gain, stats));
 
 		// Learn new moves
-		pokemon.getMoves(level).forEach(attackNamesies -> learnMove(attackNamesies, inBattle));
+		this.getPokemonInfo().getMoves(level).forEach(attackNamesies -> learnMove(attackNamesies, inBattle));
 		
 		// Maybe you'll evolve?!
 		// Can only evolve outside of battle
@@ -537,7 +546,7 @@ public class ActivePokemon implements Serializable {
 			return false;
 		}
 
-		BaseEvolution evolution = pokemon.getEvolution().getEvolution(method, this, itemNamesies);
+		BaseEvolution evolution = this.getPokemonInfo().getEvolution().getEvolution(method, this, itemNamesies);
 		if (evolution != null) {
 			Game.getPlayer().setEvolution(this, evolution);
 			return true;
@@ -552,7 +561,7 @@ public class ActivePokemon implements Serializable {
 		PokemonInfo evolutionInfo = evolution.getEvolution();
 
 		this.setAbility(Ability.evolutionAssign(this, evolutionInfo));
-		pokemon = evolutionInfo;
+		pokemon = evolutionInfo.namesies();
 
 		// Set name if it was not given a nickname
 		if (sameName) {
@@ -569,7 +578,7 @@ public class ActivePokemon implements Serializable {
 		}
 
 		// Learn new moves
-		List<AttackNamesies> levelMoves = pokemon.getMoves(level);
+		List<AttackNamesies> levelMoves = this.getPokemonInfo().getMoves(level);
 		levelMoves.forEach(attack -> learnMove(attack, false));
 
 		return gain;
@@ -901,7 +910,7 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public Type[] getActualType() {
-		return pokemon.getType();
+		return this.getPokemonInfo().getType();
 	}
 	
 	public Type[] getDisplayType(Battle b) {
@@ -1312,18 +1321,18 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public PokemonInfo getPokemonInfo() {
-		return pokemon;
+		return PokemonInfo.getPokemonInfo(pokemon);
 	}
 	
 	public boolean isPokemon(PokemonNamesies name) {
-		return pokemon.namesies() == name;
+		return pokemon == name;
 	}
 	
 	public double getWeight(Battle b) {
 		int halfAmount = 0;
 		halfAmount = HalfWeightEffect.updateHalfAmount(b, this, halfAmount);
 
-		return this.pokemon.getWeight()/Math.pow(2, halfAmount);
+		return this.getPokemonInfo().getWeight()/Math.pow(2, halfAmount);
 	}
 	
 	public void startAttack(Battle b) {
@@ -1348,6 +1357,6 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public boolean canBreed() {
-		return !isEgg && pokemon.canBreed();
+		return !isEgg && this.getPokemonInfo().canBreed();
 	}
 }
