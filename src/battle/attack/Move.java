@@ -19,7 +19,7 @@ public class Move implements Serializable {
 
 	public static final int MAX_MOVES = 4;
 	
-	private Attack attack;
+	private AttackNamesies attack;
 	private int maxPP;
 	private int pp;
 	
@@ -33,7 +33,7 @@ public class Move implements Serializable {
 	}
 	
 	public Move(Attack attack) {
-		this.attack = attack;
+		this.attack = attack.namesies();
 		
 		maxPP = attack.getPP();
 		pp = maxPP;
@@ -54,6 +54,7 @@ public class Move implements Serializable {
 	}
 	
 	public void resetReady() {
+		Attack attack = this.getAttack();
 		ready = !(attack instanceof MultiTurnMove) || ((MultiTurnMove) attack).chargesFirst();
 	}
 	
@@ -62,7 +63,7 @@ public class Move implements Serializable {
 	}
 	
 	public void switchReady(Battle b, ActivePokemon user) {
-		if (attack.isMultiTurn(b, user)) {
+		if (this.getAttack().isMultiTurn(b, user)) {
 			ready = !ready;
 		}
 	}
@@ -72,11 +73,11 @@ public class Move implements Serializable {
 	}
 	
 	public void setAttributes(Battle b, ActivePokemon user) {
-		type = this.attack.getBattleType(b, user);
+		type = this.getAttack().getBattleType(b, user);
 	}
 	
 	public Attack getAttack() {
-		return attack;
+		return attack.getAttack();
 	}
 	
 	public void setUsed() {
@@ -109,6 +110,7 @@ public class Move implements Serializable {
 	}
 	
 	public boolean increaseMaxPP(int n) {
+		Attack attack = getAttack();
 		int trueMax = attack.getPP() + 3*attack.getPP()/5;
 		
 		if (maxPP == trueMax) {
