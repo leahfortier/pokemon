@@ -9,7 +9,7 @@ import message.MessageUpdate;
 import message.Messages;
 import pattern.GroupTriggerMatcher;
 import pattern.map.FishingMatcher;
-import util.JsonUtils;
+import util.SerializationUtils;
 import util.RandomUtils;
 
 public class FishingTrigger extends Trigger {
@@ -20,14 +20,14 @@ public class FishingTrigger extends Trigger {
     public FishingTrigger(String matcherJson, String condition) {
         super(TriggerType.FISHING, matcherJson, Condition.and(condition, OverworldTool.FISH.getGlobalName()));
 
-        FishingMatcher matcher = JsonUtils.deserialize(matcherJson, FishingMatcher.class);
+        FishingMatcher matcher = SerializationUtils.deserializeJson(matcherJson, FishingMatcher.class);
         this.wildEncounters = matcher.getWildEncounters();
     }
 
     protected void executeTrigger() {
         if (RandomUtils.chanceTest(50)) {
             WildEncounter wildPokemon = WildEncounter.getWildEncounter(this.wildEncounters);
-            String pokemonJson = JsonUtils.getJson(wildPokemon);
+            String pokemonJson = SerializationUtils.getJson(wildPokemon);
 
             GroupTriggerMatcher matcher = new GroupTriggerMatcher(
                     "FishingBite_" + pokemonJson,
@@ -37,7 +37,7 @@ public class FishingTrigger extends Trigger {
                     TriggerType.GLOBAL.createTrigger("!" + FISHING_GLOBAL, null).getName()
             );
 
-            Trigger group = TriggerType.GROUP.createTrigger(JsonUtils.getJson(matcher), null);
+            Trigger group = TriggerType.GROUP.createTrigger(SerializationUtils.getJson(matcher), null);
             Messages.add(new MessageUpdate().withTrigger(group.getName()));
         }
         else {

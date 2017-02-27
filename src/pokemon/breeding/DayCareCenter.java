@@ -12,7 +12,7 @@ import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pattern.action.TriggerActionMatcher;
 import pokemon.ActivePokemon;
 import trainer.Player;
-import util.JsonUtils;
+import util.SerializationUtils;
 import util.PokeString;
 import util.StringUtils;
 
@@ -97,7 +97,7 @@ public class DayCareCenter implements Serializable {
                 choices
         );
 
-        return TriggerType.CHOICE.createTrigger(JsonUtils.getJson(choice));
+        return TriggerType.CHOICE.createTrigger(SerializationUtils.getJson(choice));
     }
 
 
@@ -127,7 +127,7 @@ public class DayCareCenter implements Serializable {
                 new ChoiceMatcher[] { chooseFirst, chooseSecond, chooseCancel }
         );
 
-        return TriggerType.CHOICE.createTrigger(JsonUtils.getJson(choice));
+        return TriggerType.CHOICE.createTrigger(SerializationUtils.getJson(choice));
     }
 
     private ChoiceMatcher getChoice(boolean isFirst) {

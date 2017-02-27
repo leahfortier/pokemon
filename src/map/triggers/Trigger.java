@@ -5,7 +5,7 @@ import main.Game;
 import map.Condition;
 import pattern.GroupTriggerMatcher;
 import sound.SoundTitle;
-import util.JsonUtils;
+import util.SerializationUtils;
 import util.PokeString;
 
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public abstract class Trigger {
 				TriggerType.DIALOGUE.createTrigger("Starting up PC...", null).getName(),
 				TriggerType.CHANGE_VIEW.createTrigger(ViewMode.PC_VIEW.name(), null).getName()
 		);
-		TriggerType.GROUP.createTrigger(JsonUtils.getJson(loadPC), null);
+		TriggerType.GROUP.createTrigger(SerializationUtils.getJson(loadPC), null);
 
 		// Mart Bro
 		GroupTriggerMatcher loadMart = new GroupTriggerMatcher(
@@ -73,7 +73,7 @@ public abstract class Trigger {
 				TriggerType.DIALOGUE.createTrigger("Welcome to the " + PokeString.POKE + "Mart!", null).getName(),
 				TriggerType.CHANGE_VIEW.createTrigger(ViewMode.MART_VIEW.name(), null).getName()
 		);
-		TriggerType.GROUP.createTrigger(JsonUtils.getJson(loadMart), null);
+		TriggerType.GROUP.createTrigger(SerializationUtils.getJson(loadMart), null);
 
 		// PokeCenter Healing
 		GroupTriggerMatcher pokeCenterHeal = new GroupTriggerMatcher(
@@ -86,7 +86,7 @@ public abstract class Trigger {
 				TriggerType.DIALOGUE.createTrigger("Your " + PokeString.POKEMON + " have been healed!", null).getName(),
 				TriggerType.DIALOGUE.createTrigger("I hope to see you again soon!", null).getName()
 		);
-		TriggerType.GROUP.createTrigger(JsonUtils.getJson(pokeCenterHeal), null);
+		TriggerType.GROUP.createTrigger(SerializationUtils.getJson(pokeCenterHeal), null);
 
 		// Egg hatching
 		GroupTriggerMatcher eggHatching = new GroupTriggerMatcher(
@@ -94,6 +94,6 @@ public abstract class Trigger {
 				TriggerType.DIALOGUE.createTrigger("Huh?", null).getName(),
 				TriggerType.CHANGE_VIEW.createTrigger(ViewMode.EVOLUTION_VIEW.name(), null).getName()
 		);
-		TriggerType.GROUP.createTrigger(JsonUtils.getJson(eggHatching), null);
+		TriggerType.GROUP.createTrigger(SerializationUtils.getJson(eggHatching), null);
 	}
 }

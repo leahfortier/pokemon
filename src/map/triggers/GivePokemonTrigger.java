@@ -3,7 +3,7 @@ package map.triggers;
 import main.Game;
 import pattern.PokemonMatcher;
 import pokemon.ActivePokemon;
-import util.JsonUtils;
+import util.SerializationUtils;
 
 class GivePokemonTrigger extends Trigger {
     private final PokemonMatcher pokemonMatcher;
@@ -11,7 +11,7 @@ class GivePokemonTrigger extends Trigger {
     GivePokemonTrigger(String pokemonDescription, String condition) {
         super(TriggerType.GIVE_POKEMON, pokemonDescription, condition);
 
-        this.pokemonMatcher = JsonUtils.deserialize(pokemonDescription, PokemonMatcher.class);
+        this.pokemonMatcher = SerializationUtils.deserializeJson(pokemonDescription, PokemonMatcher.class);
     }
 
     protected void executeTrigger() {

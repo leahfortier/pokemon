@@ -23,7 +23,7 @@ import pattern.map.MiscEntityMatcher;
 import pattern.map.WildBattleMatcher;
 import trainer.Player;
 import util.FileIO;
-import util.JsonUtils;
+import util.SerializationUtils;
 import util.MultiMap;
 import util.Point;
 
@@ -95,7 +95,7 @@ public class MapData {
 
             List<Point> exits = matcher.getExitLocations();
 			if (exits != null) {
-				Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(JsonUtils.getJson(matcher), null);
+				Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(SerializationUtils.getJson(matcher), null);
 				exits.forEach(exit -> triggers.put(getMapIndex(exit), trigger.getName()));
 			}
         }
@@ -115,7 +115,7 @@ public class MapData {
 		}
 
 		for (WildBattleMatcher matcher : mapDataMatcher.getWildBattles()) {
-			Trigger trigger = TriggerType.WALKING_WILD_BATTLE.createTrigger(JsonUtils.getJson(matcher), matcher.getCondition());
+			Trigger trigger = TriggerType.WALKING_WILD_BATTLE.createTrigger(SerializationUtils.getJson(matcher), matcher.getCondition());
 			for (Point point : matcher.getLocation()) {
 				triggers.put(getMapIndex(point), trigger.getName());
 				for (WildEncounter wildEncounter : matcher.getWildEncounters()) {

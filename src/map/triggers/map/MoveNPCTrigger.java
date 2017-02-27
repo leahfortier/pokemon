@@ -12,7 +12,7 @@ import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.MoveNPCTriggerMatcher;
 import trainer.Player;
-import util.JsonUtils;
+import util.SerializationUtils;
 import util.Point;
 
 import java.util.ArrayDeque;
@@ -25,7 +25,7 @@ public class MoveNPCTrigger extends Trigger {
 
     public MoveNPCTrigger(String contents, String condition) {
         super(TriggerType.MOVE_NPC, contents, condition);
-        this.matcher = JsonUtils.deserialize(contents, MoveNPCTriggerMatcher.class);
+        this.matcher = SerializationUtils.deserializeJson(contents, MoveNPCTriggerMatcher.class);
     }
 
     @Override

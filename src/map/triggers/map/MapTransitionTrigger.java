@@ -6,20 +6,20 @@ import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.map.MapTransitionMatcher;
 import trainer.Player;
-import util.JsonUtils;
+import util.SerializationUtils;
 
 public class MapTransitionTrigger extends Trigger {
 	private final MapTransitionMatcher mapTransitionMatcher;
 
 	public static String getTriggerSuffix(String contents) {
-		MapTransitionMatcher matcher = JsonUtils.deserialize(contents, MapTransitionMatcher.class);
+		MapTransitionMatcher matcher = SerializationUtils.deserializeJson(contents, MapTransitionMatcher.class);
 		return matcher.getPreviousMap() + "_" + matcher.getNextMap() + "_" + matcher.getNextEntranceName();
 	}
 
 	public MapTransitionTrigger(String contents, String condition) {
 		super(TriggerType.MAP_TRANSITION, contents, condition);
 
-		this.mapTransitionMatcher = JsonUtils.deserialize(contents, MapTransitionMatcher.class);
+		this.mapTransitionMatcher = SerializationUtils.deserializeJson(contents, MapTransitionMatcher.class);
 	}
 	
 	protected void executeTrigger() {

@@ -6,7 +6,7 @@ import map.AreaData;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.LocationTriggerMatcher;
 import util.FileIO;
-import util.JsonUtils;
+import util.SerializationUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -125,17 +125,17 @@ public class MapDataMatcher {
     public static MapDataMatcher matchArea(String areaDescriptionFileName) {
         String areaDescription = FileIO.readEntireFileWithReplacements(areaDescriptionFileName, false);
 
-        MapDataMatcher areaData = JsonUtils.deserialize(areaDescription, MapDataMatcher.class);
-        JsonObject mappity = JsonUtils.deserialize(areaDescription, JsonObject.class);
+        MapDataMatcher areaData = SerializationUtils.deserializeJson(areaDescription, MapDataMatcher.class);
+        JsonObject mappity = SerializationUtils.deserializeJson(areaDescription, JsonObject.class);
 
-        String areaDataJson = JsonUtils.getJson(areaData);
-        String mapJson = JsonUtils.getJson(mappity);
+        String areaDataJson = SerializationUtils.getJson(areaData);
+        String mapJson = SerializationUtils.getJson(mappity);
 
         if (!areaDataJson.equals(mapJson)) {
             Global.error("No dice");
         }
 
-        areaDataJson = JsonUtils.getJson(areaData);
+        areaDataJson = SerializationUtils.getJson(areaData);
 
         FileIO.overwriteFile(areaDescriptionFileName, new StringBuilder(areaDataJson));
 

@@ -2,7 +2,7 @@ package map.triggers;
 
 import main.Game;
 import pattern.action.UpdateMatcher;
-import util.JsonUtils;
+import util.SerializationUtils;
 
 class UpdateTrigger extends Trigger {
 
@@ -12,7 +12,7 @@ class UpdateTrigger extends Trigger {
     UpdateTrigger(String matcherJson, String condition) {
         super(TriggerType.UPDATE, matcherJson, condition);
 
-        UpdateMatcher matcher = JsonUtils.deserialize(matcherJson, UpdateMatcher.class);
+        UpdateMatcher matcher = SerializationUtils.deserializeJson(matcherJson, UpdateMatcher.class);
         this.npcEntityName = matcher.getNpcEntityName();
         this.newInteractionName = matcher.getInteractionName();
     }

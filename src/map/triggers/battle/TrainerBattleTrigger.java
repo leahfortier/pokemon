@@ -10,7 +10,7 @@ import pattern.action.BattleMatcher;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import trainer.EnemyTrainer;
-import util.JsonUtils;
+import util.SerializationUtils;
 
 public class TrainerBattleTrigger extends Trigger {
 	private final EnemyTrainer trainer;
@@ -19,7 +19,7 @@ public class TrainerBattleTrigger extends Trigger {
 	public TrainerBattleTrigger(String contents, String condition) {
 		super(TriggerType.TRAINER_BATTLE, contents, condition);
 
-		BattleAction battleAction = JsonUtils.deserialize(contents, BattleAction.class);
+		BattleAction battleAction = SerializationUtils.deserializeJson(contents, BattleAction.class);
 		BattleMatcher battleMatcher = battleAction.getBattleMatcher();
 
 		String trainerName = battleMatcher.getName();

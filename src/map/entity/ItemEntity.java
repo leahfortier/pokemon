@@ -7,7 +7,7 @@ import map.Direction;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.GroupTriggerMatcher;
-import util.JsonUtils;
+import util.SerializationUtils;
 import util.Point;
 import util.StringUtils;
 
@@ -66,14 +66,14 @@ public class ItemEntity extends Entity {
 			Trigger giveItem = TriggerType.GIVE_ITEM.createTrigger(this.itemName.getName(), null);
 
 			GroupTriggerMatcher groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue.getName(), giveItem.getName());
-			TriggerType.GROUP.createTrigger(JsonUtils.getJson(groupTriggerMatcher), null);
+			TriggerType.GROUP.createTrigger(SerializationUtils.getJson(groupTriggerMatcher), null);
 		}
 
 		// This trigger will only call the item trigger when the conditions apply
 		GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), itemTriggerName);
 		matcher.addGlobals("has" + this.getEntityName());
 
-		TriggerType.GROUP.createTrigger(JsonUtils.getJson(matcher), null);
+		TriggerType.GROUP.createTrigger(SerializationUtils.getJson(matcher), null);
 
 		dataCreated = true;
 	}

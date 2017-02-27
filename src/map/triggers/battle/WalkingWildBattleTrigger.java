@@ -12,7 +12,7 @@ import message.Messages;
 import pattern.map.WildBattleMatcher;
 import pokemon.PokemonNamesies;
 import trainer.Player;
-import util.JsonUtils;
+import util.SerializationUtils;
 import util.RandomUtils;
 
 public class WalkingWildBattleTrigger extends Trigger {
@@ -22,7 +22,7 @@ public class WalkingWildBattleTrigger extends Trigger {
     public WalkingWildBattleTrigger(String matcherJson, String condition) {
         super(TriggerType.WALKING_WILD_BATTLE, matcherJson, condition);
 
-        WildBattleMatcher matcher = JsonUtils.deserialize(matcherJson, WildBattleMatcher.class);
+        WildBattleMatcher matcher = SerializationUtils.deserializeJson(matcherJson, WildBattleMatcher.class);
         this.wildEncounters = matcher.getWildEncounters();
         this.encounterRate = matcher.getEncounterRate();
     }
@@ -37,7 +37,7 @@ public class WalkingWildBattleTrigger extends Trigger {
                 return;
             }
 
-            Trigger wildBattle = TriggerType.WILD_BATTLE.createTrigger(JsonUtils.getJson(wildPokemon), null);
+            Trigger wildBattle = TriggerType.WILD_BATTLE.createTrigger(SerializationUtils.getJson(wildPokemon), null);
             Messages.add(new MessageUpdate().withTrigger(wildBattle.getName()));
         }
     }

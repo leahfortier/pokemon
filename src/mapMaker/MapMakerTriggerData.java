@@ -27,7 +27,7 @@ import pattern.map.MiscEntityMatcher;
 import pattern.map.NPCMatcher;
 import pattern.map.WildBattleMatcher;
 import util.FileIO;
-import util.JsonUtils;
+import util.SerializationUtils;
 import util.Point;
 import util.PokeString;
 import util.StringUtils;
@@ -100,7 +100,7 @@ public class MapMakerTriggerData {
 		MapDataMatcher mapDataMatcher = new MapDataMatcher(areaData, entityList);
 
 		FileIO.createFile(mapFileName);
-		FileIO.overwriteFile(mapFileName, new StringBuilder(JsonUtils.getJson(mapDataMatcher)));
+		FileIO.overwriteFile(mapFileName, new StringBuilder(SerializationUtils.getJson(mapDataMatcher)));
 	}
 
 	private String getUniqueEntityName(LocationTriggerMatcher matcher, Set<String> entityNames) {

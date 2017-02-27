@@ -7,7 +7,7 @@ import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GUIUtils;
-import util.JsonUtils;
+import util.SerializationUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
@@ -67,7 +67,7 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
 
     @Override
     protected void load(String triggerContents) {
-        PokemonMatcher matcher = JsonUtils.deserialize(triggerContents, PokemonMatcher.class);
+        PokemonMatcher matcher = SerializationUtils.deserializeJson(triggerContents, PokemonMatcher.class);
 
         if (!matcher.isRandomEgg()) {
             this.pokemonNameField.setText(matcher.getNamesies().getName());
@@ -108,6 +108,6 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
             );
         }
 
-        return JsonUtils.getJson(matcher);
+        return SerializationUtils.getJson(matcher);
     }
 }

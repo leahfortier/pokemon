@@ -5,7 +5,7 @@ import map.Condition;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.GroupTriggerMatcher;
-import util.JsonUtils;
+import util.SerializationUtils;
 import util.StringUtils;
 
 import java.util.List;
@@ -14,7 +14,7 @@ class GroupTrigger extends Trigger {
 	public final List<String> triggers;
 
 	static String getTriggerSuffix(String contents) {
-		GroupTriggerMatcher matcher = JsonUtils.deserialize(contents, GroupTriggerMatcher.class);
+		GroupTriggerMatcher matcher = SerializationUtils.deserializeJson(contents, GroupTriggerMatcher.class);
 		if (!StringUtils.isNullOrEmpty(matcher.getSuffix())) {
 			return matcher.getSuffix();
 		}
@@ -23,7 +23,7 @@ class GroupTrigger extends Trigger {
 	}
 
 	GroupTrigger(String contents, String condition) {
-		this(contents, condition, JsonUtils.deserialize(contents, GroupTriggerMatcher.class));
+		this(contents, condition, SerializationUtils.deserializeJson(contents, GroupTriggerMatcher.class));
 	}
 
 	private GroupTrigger(String contents, String condition, GroupTriggerMatcher matcher) {

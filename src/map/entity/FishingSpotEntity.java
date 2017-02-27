@@ -4,7 +4,7 @@ import map.entity.EntityAction.TriggerAction;
 import map.overworld.WildEncounter;
 import map.triggers.TriggerType;
 import pattern.map.FishingMatcher;
-import util.JsonUtils;
+import util.SerializationUtils;
 import util.Point;
 
 import java.util.Collections;
@@ -39,7 +39,7 @@ public class FishingSpotEntity extends Entity {
 
         // TODO: condition -- need fishing rod
         FishingMatcher fishingMatcher = new FishingMatcher(this.getEntityName(), wildEncounters);
-        EntityAction entityAction = new TriggerAction(TriggerType.FISHING, JsonUtils.getJson(fishingMatcher), null);
+        EntityAction entityAction = new TriggerAction(TriggerType.FISHING, SerializationUtils.getJson(fishingMatcher), null);
 
         EntityAction.addActionGroupTrigger(
                 this.getEntityName(),

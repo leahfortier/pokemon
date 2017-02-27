@@ -4,7 +4,7 @@ import message.MessageUpdate;
 import message.Messages;
 import pattern.action.ChoiceActionMatcher;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
-import util.JsonUtils;
+import util.SerializationUtils;
 
 class ChoiceTrigger extends Trigger {
     private final String question;
@@ -13,7 +13,7 @@ class ChoiceTrigger extends Trigger {
     ChoiceTrigger(String choices, String condition) {
         super(TriggerType.CHOICE, choices, condition);
 
-        ChoiceActionMatcher matcher = JsonUtils.deserialize(choices, ChoiceActionMatcher.class);
+        ChoiceActionMatcher matcher = SerializationUtils.deserializeJson(choices, ChoiceActionMatcher.class);
         this.question = matcher.getQuestion();
         this.choices = matcher.getChoices();
     }

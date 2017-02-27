@@ -6,7 +6,7 @@ import pattern.GroupTriggerMatcher;
 import pattern.action.BattleMatcher;
 import pattern.action.ChoiceActionMatcher;
 import pattern.action.UpdateMatcher;
-import util.JsonUtils;
+import util.SerializationUtils;
 import util.StringUtils;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public abstract class EntityAction {
         }
 
         GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerSuffix, actionTriggerNames);
-        final String groupContents = JsonUtils.getJson(matcher);
+        final String groupContents = SerializationUtils.getJson(matcher);
 
         return TriggerType.GROUP.createTrigger(groupContents, condition);
     }
@@ -81,7 +81,7 @@ public abstract class EntityAction {
         @Override
         protected String getTriggerContents(String entityName) {
             this.entityName = entityName;
-            return JsonUtils.getJson(this);
+            return SerializationUtils.getJson(this);
         }
 
         public BattleMatcher getBattleMatcher() {
@@ -108,7 +108,7 @@ public abstract class EntityAction {
         @Override
         protected String getTriggerContents(String entityName) {
             UpdateMatcher matcher = new UpdateMatcher(entityName, interactionName);
-            return JsonUtils.getJson(matcher);
+            return SerializationUtils.getJson(matcher);
         }
     }
 
@@ -127,7 +127,7 @@ public abstract class EntityAction {
         @Override
         protected String getTriggerContents(String entityName) {
             GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerName);
-            return JsonUtils.getJson(matcher);
+            return SerializationUtils.getJson(matcher);
         }
     }
 
@@ -162,7 +162,7 @@ public abstract class EntityAction {
 
         @Override
         protected String getTriggerContents(String entityName) {
-            return JsonUtils.getJson(matcher);
+            return SerializationUtils.getJson(matcher);
         }
     }
 }

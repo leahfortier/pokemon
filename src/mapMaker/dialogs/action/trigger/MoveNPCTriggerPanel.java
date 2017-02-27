@@ -2,7 +2,7 @@ package mapMaker.dialogs.action.trigger;
 
 import pattern.MoveNPCTriggerMatcher;
 import util.GUIUtils;
-import util.JsonUtils;
+import util.SerializationUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JTextField;
@@ -31,7 +31,7 @@ class MoveNPCTriggerPanel extends TriggerContentsPanel {
 
     @Override
     protected void load(String triggerContents) {
-        MoveNPCTriggerMatcher matcher = JsonUtils.deserialize(triggerContents, MoveNPCTriggerMatcher.class);
+        MoveNPCTriggerMatcher matcher = SerializationUtils.deserializeJson(triggerContents, MoveNPCTriggerMatcher.class);
 
         this.entityNameField.setText(matcher.getNpcEntityName());
         this.endEntranceField.setText(matcher.getEndEntranceName());
@@ -48,6 +48,6 @@ class MoveNPCTriggerPanel extends TriggerContentsPanel {
                 this.endPlayerCheckbox.isSelected()
         );
 
-        return JsonUtils.getJson(matcher);
+        return SerializationUtils.getJson(matcher);
     }
 }
