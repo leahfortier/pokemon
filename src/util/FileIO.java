@@ -199,6 +199,10 @@ public class FileIO {
 
 		return false;
 	}
+
+	public static void writeToFile(String fileName, String out) {
+		writeToFile(fileName, new StringBuilder(out));
+	}
 	
 	public static void writeToFile(String fileName, StringBuilder out) {
 		try {

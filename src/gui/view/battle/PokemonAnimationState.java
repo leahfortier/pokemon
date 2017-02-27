@@ -16,7 +16,6 @@ import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import sound.SoundPlayer;
-import sound.SoundTitle;
 import trainer.Player;
 import trainer.Trainer;
 import type.Type;
@@ -108,16 +107,12 @@ class PokemonAnimationState {
     private void resetVals(ActivePokemon p) {
         resetVals(
                 p.getHP(),
-                p.getStatus().getType(),
                 p.getDisplayType(battleView.getCurrentBattle()),
                 p.isShiny(),
                 p.getPokemonInfo(),
                 p.getName(),
-                p.getMaxHP(),
-                p.getLevel(),
                 p.getGender(),
                 p.expRatio(),
-                p.getAttributes().getStages(),
                 p
         );
     }
@@ -125,16 +120,12 @@ class PokemonAnimationState {
     // Resets all the values in a state
     private void resetVals(
             int hp,
-            StatusCondition status,
             Type[] type,
             boolean shiny,
             PokemonInfo pokemon,
             String name,
-            int maxHP,
-            int level,
             Gender gender,
             float expRatio,
-            int[] stages,
             ActivePokemon frontPokemon
     ) {
         animationHP = 0;
@@ -142,16 +133,11 @@ class PokemonAnimationState {
         animationCatchDuration = 0;
 
         state.hp = oldState.hp = hp;
-        state.status = status;
-        state.stages = stages;
         state.type = type;
         state.shiny = shiny;
         state.imageName = pokemon.getImageName(state.shiny, !isPlayer);
-        state.showImage = true;
         state.caught = battleView.getCurrentBattle().isWildBattle() && Game.getPlayer().getPokedex().isCaught(pokemon.namesies());
         state.name = name;
-        state.maxHp = oldState.maxHp = maxHP;
-        state.level = level;
         state.gender = gender;
         state.expRatio = oldState.expRatio = expRatio;
         state.frontPokemon = frontPokemon;
@@ -167,28 +153,8 @@ class PokemonAnimationState {
         animationHP = Math.abs(oldState.hp - state.hp)*FRAMES_PER_HP_LOSS;
     }
 
-    private void setMaxHP(int newMax) {
-        state.maxHp = newMax;
-    }
-
-    public void setStages(int[] stages) {
-        state.stages = stages;
-    }
-
-    public void setStatus(StatusCondition newStatus) {
-        state.status = newStatus;
-    }
-
-    public void setShowImage(boolean showImage) {
-        state.showImage = showImage;
-    }
-
     public void setType(Type[] newType) {
         state.type = newType;
-    }
-
-    public void setFrontPokemon(ActivePokemon pokemon) {
-        state.frontPokemon = pokemon;
     }
 
     private void startPokemonUpdateAnimation(PokemonInfo newPokemon, boolean newShiny, boolean animate) {
@@ -219,10 +185,6 @@ class PokemonAnimationState {
         oldState.expRatio = levelUp ? 0 : state.expRatio;
         state.expRatio = newExpRatio;
         animationExp = (int)(100*Math.abs(oldState.expRatio - state.expRatio)*FRAMES_PER_HP_LOSS);
-    }
-
-    public void setLevel(int newLevel) {
-        state.level = newLevel;
     }
 
     public void setName(String newName) {
@@ -319,17 +281,19 @@ class PokemonAnimationState {
 
     private void drawHealthBar(Graphics g) {
 
+        int maxHp = state.frontPokemon.getMaxHP();
+
         // Get the ratio based off of the possible animation
-        float ratio = state.hp/(float)state.maxHp;
-        String hpStr = state.hp + "/" + state.maxHp;
+        float ratio = state.hp/(float)maxHp;
+        String hpStr = state.hp + "/" + maxHp;
 
         if (animationHP > 0) {
-            animationHP -= HP_LOSS_RATIO*state.maxHp + 1;
+            animationHP -= HP_LOSS_RATIO*maxHp + 1;
             float originalTime = Math.abs(state.hp - oldState.hp)*FRAMES_PER_HP_LOSS;
             float numerator = (state.hp + (oldState.hp - state.hp)*(animationHP/originalTime));
 
-            ratio = numerator/state.maxHp;
-            hpStr = (int)numerator + "/" + state.maxHp;
+            ratio = numerator/maxHp;
+            hpStr = (int)numerator + "/" + maxHp;
         }
         else {
             animationHP = 0;
@@ -369,9 +333,11 @@ class PokemonAnimationState {
         expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, expRatio);
     }
 
-    private void drawPokemon(Graphics g, ActivePokemon pokemon) {
+    private void drawPokemon(Graphics g) {
+
+
         // Draw the Pokemon image if applicable
-        if (!isEmpty() && state.showImage) {
+        if (!isEmpty() && state.showImage()) {
             GameData data = Game.getData();
             TileSet pkmTiles = isPlayer ? data.getPokemonTilesLarge() : data.getPokemonTilesMedium();
 
@@ -398,9 +364,9 @@ class PokemonAnimationState {
     }
 
     // Draws the status box, not including the text
-    void drawStatusBox(Graphics g, ActivePokemon pokemon) {
+    void drawStatusBox(Graphics g) {
 
-        drawPokemon(g, pokemon);
+        drawPokemon(g);
 
         // Draw the colored type polygons
         this.statusBox.withBackgroundColors(Type.getColors(state.type)).drawBackground(g);
@@ -423,7 +389,7 @@ class PokemonAnimationState {
         // Level in top right
         TextUtils.drawShadowText(
                 g,
-                "Lv" + state.level,
+                "Lv" + state.getLevel(),
                 statusBox.rightX() - STATUS_BOX_SPACING,
                 statusBox.y + STATUS_BOX_SPACING + FontMetrics.getTextHeight(g),
                 Alignment.RIGHT);
@@ -432,7 +398,7 @@ class PokemonAnimationState {
         FontMetrics.setFont(g, 24);
         TextUtils.drawShadowText(
                 g,
-                state.status.getName(),
+                state.getStatus().getName(),
                 statusBox.x + STATUS_BOX_SPACING,
                 hpBar.centerY(),
                 Alignment.CENTER_Y);
@@ -440,7 +406,7 @@ class PokemonAnimationState {
         // Stat modifiers
         FontMetrics.setFont(g, 12);
         for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
-            int stage = state.stages[i];
+            int stage = state.getStage(i);
             if (stage == 0) {
                 continue;
             }
@@ -480,7 +446,7 @@ class PokemonAnimationState {
             BufferedImage pokeball = TileSet.TINY_POKEBALL;
             int index = isPlayer ? team.size() - i - 1 : i;
             ActivePokemon pokemon = team.get(index);
-            boolean silhouette = pokemon == state.frontPokemon ? state.status == StatusCondition.FAINTED : !pokemon.canFight();
+            boolean silhouette = pokemon == state.frontPokemon ? state.getStatus() == StatusCondition.FAINTED : !pokemon.canFight();
             if (silhouette) {
                 pokeball = ImageUtils.silhouette(pokeball);
             }
@@ -496,44 +462,23 @@ class PokemonAnimationState {
 
     void checkMessage(MessageUpdate newMessage) {
         if (newMessage.switchUpdate()) {
+            ActivePokemon front = newMessage.getFrontPokemon();
             resetVals(
-                    newMessage.getHP(),
-                    newMessage.getStatus(),
+                    front.getHP(),
                     newMessage.getType(),
                     newMessage.getShiny(),
                     newMessage.getPokemon(),
                     newMessage.getName(),
-                    newMessage.getMaxHP(),
-                    newMessage.getLevel(),
                     newMessage.getGender(),
-                    newMessage.getEXPRatio(),
-                    newMessage.getStages(),
-                    newMessage.getFrontPokemon());
+                    front.expRatio(),
+                    newMessage.getFrontPokemon()
+            );
         }
         else {
-            // TODO: Fuck this I hate this
-            if (newMessage.healthUpdate()) {
-                startHpAnimation(newMessage.getHP());
-            }
-
-            if (newMessage.maxHealthUpdate()) {
-                setMaxHP(newMessage.getMaxHP());
-            }
-
-            if (newMessage.statusUpdate()) {
-                setStatus(newMessage.getStatus());
-            }
-
-            if (newMessage.showImageUpdate()) {
-                setShowImage(newMessage.getShowImage());
-            }
-
             if (newMessage.frontPokemonUpdate()) {
-                setFrontPokemon(newMessage.getFrontPokemon());
-            }
-
-            if (newMessage.stageUpdate()) {
-                setStages(newMessage.getStages());
+                ActivePokemon pokemon = newMessage.getFrontPokemon();
+                state.frontPokemon = pokemon;
+                startHpAnimation(pokemon.getHP());
             }
 
             if (newMessage.typeUpdate()) {
@@ -552,9 +497,8 @@ class PokemonAnimationState {
                 startExpAnimation(newMessage.getEXPRatio(), newMessage.levelUpdate());
             }
 
-            if (newMessage.levelUpdate()) {
-                SoundPlayer.soundPlayer.playSoundEffect(SoundTitle.LEVEL_UP);
-                setLevel(newMessage.getLevel());
+            if  (newMessage.soundEffectUpdate()) {
+                SoundPlayer.soundPlayer.playSoundEffect(newMessage.getSoundEffect());
             }
 
             if (newMessage.nameUpdate()) {
@@ -569,25 +513,34 @@ class PokemonAnimationState {
 
     // A class to hold the state of a Pokemon
     private static class PokemonState {
-        private int maxHp;
         private int hp;
         private String imageName;
-        private int level;
         private String name;
-        private StatusCondition status;
         private Type[] type;
         private float expRatio;
         private boolean shiny;
         private boolean caught;
         private Gender gender;
-        private int[] stages;
         private ActivePokemon frontPokemon;
-        private boolean showImage;
 
         PokemonState() {
             type = new Type[2];
-            stages = new int[Stat.NUM_BATTLE_STATS];
-            this.showImage = true;
+        }
+
+        public StatusCondition getStatus() {
+            return this.frontPokemon == null ? StatusCondition.NO_STATUS : this.frontPokemon.getStatus().getType();
+        }
+
+        public int getStage(int index) {
+            return this.frontPokemon == null ? 0 : this.frontPokemon.getAttributes().getStage(Stat.getStat(index, true));
+        }
+
+        public int getLevel() {
+            return this.frontPokemon.getLevel();
+        }
+
+        public boolean showImage() {
+            return this.frontPokemon != null && !this.frontPokemon.isSemiInvulnerable();
         }
     }
 }

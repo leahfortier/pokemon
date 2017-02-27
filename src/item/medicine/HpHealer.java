@@ -33,7 +33,7 @@ public interface HpHealer extends MessageGetter, PokemonUseItem, HoldItem {
             return false;
         }
 
-        Messages.add(new MessageUpdate(this.getMessage(p, source)).withHp(p.getHP(), p.isPlayer()));
+        Messages.add(new MessageUpdate(this.getMessage(p, source)).withPokemon(p));
 
         return true;
     }

@@ -281,9 +281,6 @@ public class BattleView extends View {
 	@Override
 	public void draw(Graphics g) {
 		DrawUtils.fillCanvas(g, Color.BLACK);
-		
-		ActivePokemon player = currentBattle.getPlayer().front();
-		ActivePokemon opponent = currentBattle.getOpponent().front();
 		 
 		// Get background based on terrain type
 		DrawUtils.fillCanvas(g, terrain.getColor());
@@ -310,8 +307,8 @@ public class BattleView extends View {
 		}
 		
 		// Draw Status Box Backgrounds
-		playerAnimation.drawStatusBox(g, player);
-		enemyAnimation.drawStatusBox(g, opponent);
+		playerAnimation.drawStatusBox(g);
+		enemyAnimation.drawStatusBox(g);
 		
 		g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		

@@ -24,7 +24,7 @@ import java.util.List;
 public class BattleAttributes implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private final ActivePokemon attributesHolder;
+	private final transient ActivePokemon attributesHolder;
 
 	private Move selected;
 	private Move lastMoveUsed;
@@ -203,7 +203,7 @@ public class BattleAttributes implements Serializable {
 		stages[index] = Math.min(Stat.MAX_STAT_CHANGES, stages[index]);
 		stages[index] = Math.max(-1*Stat.MAX_STAT_CHANGES, stages[index]);
 
-		Messages.add(new MessageUpdate().withStages(this.getStages(), attributesHolder.isPlayer()));
+		Messages.add(new MessageUpdate().withPokemon(attributesHolder));
 	}
 
 	public void incrementStage(Stat stat, int val) {

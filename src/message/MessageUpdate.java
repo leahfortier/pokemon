@@ -3,7 +3,6 @@ package message;
 import battle.Battle;
 import battle.attack.Move;
 import battle.effect.generic.Weather;
-import battle.effect.status.StatusCondition;
 import gui.view.ViewMode;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -17,16 +16,13 @@ import pokemon.PokemonInfo;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import type.Type;
+import util.SerializationUtils;
 import util.StringUtils;
 
 public class MessageUpdate {
 	private String message;
-	private Integer hp;
-	private Integer maxHP;
 	private int[] statGains;
 	private int[] newStats;
-	private int[] stages;
-	private StatusCondition status;
 	private PokemonInfo pokemon;
 	private boolean shiny;
 	private boolean animation;
@@ -35,19 +31,19 @@ public class MessageUpdate {
 	private boolean switchPokemon;
 	private Float expRatio;
 	private Update updateType;
-	private Integer level;
+	private boolean levelUp;
 	private String name;
 	private Gender gender;
 	private ActivePokemon moveLearner;
-	private ActivePokemon frontPokemon;
+	private String frontPokemonJson;
 	private Move move;
 	private Integer duration;
 	private String triggerName;
 	private ChoiceMatcher[] choices;
 	private ViewMode viewMode;
-	private Boolean showImage;
 	private Weather weather;
 	private TerrainType terrain;
+	private SoundTitle soundEffect;
 
 	public enum Update {
 		NO_UPDATE,
@@ -121,19 +117,6 @@ public class MessageUpdate {
 	public MessageUpdate() {
 		this(StringUtils.empty());
 	}
-
-	// YEAH THAT'S RIGHT HEALTH UPDATE
-	public MessageUpdate withHp(int hp, boolean isPlayer) {
-		this.hp = hp;
-		this.isPlayer = isPlayer;
-		return this;
-	}
-
-	// Update to maximum HP
-	public MessageUpdate withMaxHp(int hp, int maxHp, boolean isPlayer) {
-		this.maxHP = maxHp;
-		return this.withHp(hp, isPlayer);
-	}
 	
 	// Show stat gains
 	public MessageUpdate withStatGains(int[] gains, int[] stats) {
@@ -144,29 +127,19 @@ public class MessageUpdate {
 		return this;
 	}
 
-	public MessageUpdate withStages(int[] stages, boolean isPlayer) {
-		this.stages = stages;
-		this.isPlayer = isPlayer;
+	public MessageUpdate withFrontPokemon(ActivePokemon frontPokemon) {
+		this.frontPokemonJson = SerializationUtils.serialize(frontPokemon);
+		this.isPlayer = frontPokemon.isPlayer();
 		return this;
 	}
 
-	// OOOOHH SOMEONE'S GOT DAT STATUS CONDITION
-	public MessageUpdate withStatusCondition(StatusCondition status, boolean isPlayer) {
-		this.status = status;
-		this.isPlayer = isPlayer;
+	public MessageUpdate withSoundEffect(SoundTitle soundEffect) {
+		this.soundEffect = soundEffect;
 		return this;
 	}
 
-	public MessageUpdate withShowImage(boolean showImage, boolean isPlayer) {
-		this.showImage = showImage;
-		this.isPlayer = isPlayer;
-		return this;
-	}
-
-	public MessageUpdate withFrontPokemon(ActivePokemon frontPokemon, boolean isPlayer) {
-		this.frontPokemon = frontPokemon;
-		this.isPlayer = isPlayer;
-		return this;
+	public MessageUpdate withPokemon(ActivePokemon pokemon) {
+		return this.withFrontPokemon(pokemon);
 	}
 
 	// Updates all current display information of the given pokemon
@@ -177,14 +150,10 @@ public class MessageUpdate {
 		}
 
 		boolean isPlayer = pokemon.isPlayer();
-		return this.withMaxHp(pokemon.getHP(), pokemon.getMaxHP(), isPlayer)
-				.withStatusCondition(pokemon.getStatus().getType(), isPlayer)
-				.withType(pokemon.getDisplayType(b), isPlayer)
+		return this.withType(pokemon.getDisplayType(b), isPlayer)
 				.withNameChange(pokemon.getName(), isPlayer)
 				.withGender(pokemon.getGender(), isPlayer)
-				.withStages(pokemon.getAttributes().getStages(), isPlayer)
-				.withFrontPokemon(pokemon, isPlayer)
-				.withShowImage(!pokemon.isSemiInvulnerable(), isPlayer);
+				.withFrontPokemon(pokemon);
 	}
 	
 	// Pokemon image Update!
@@ -205,23 +174,14 @@ public class MessageUpdate {
 	
 	// Switch update!
 	public MessageUpdate withSwitch(Battle battle, ActivePokemon active) {
-		this.isPlayer = active.isPlayer();
 		this.switchPokemon = true;
-		this.hp = active.getHP();
-		this.status = active.getStatus().getType();
 		this.type = active.getDisplayType(battle);
 		this.shiny = active.isShiny();
 		this.pokemon = active.getPokemonInfo();
 		this.name = active.getName();
-		this.maxHP = active.getMaxHP();
-		this.level = active.getLevel();
 		this.gender = active.getGender();
-		this.expRatio = active.expRatio();
-		this.stages = active.getAttributes().getStages();
-		this.frontPokemon = active;
-		this.showImage = true;
 		this.animation = false;
-		return this;
+		return this.withFrontPokemon(active);
 	}
 
 	public MessageUpdate withWeather(Weather weather) {
@@ -251,17 +211,14 @@ public class MessageUpdate {
 		this.choices = choices;
 		return this;
 	}
-	
+
 	// EXP Gain update
 	public MessageUpdate withExpGain(Battle battle, ActivePokemon gainer, float ratio, boolean levelUp) {
 		this.updatePokemon(battle, gainer);
 
 		this.isPlayer = true;
 		this.expRatio = ratio;
-		
-		if (levelUp) {
-			level = gainer.getLevel();
-		}
+		this.levelUp = levelUp;
 
 		return this;
 	}
@@ -318,22 +275,6 @@ public class MessageUpdate {
 		return isPlayer;
 	}
 	
-	public boolean healthUpdate() {
-		return hp != null;
-	}
-	
-	public int getHP() {
-		return hp;
-	}
-	
-	public boolean maxHealthUpdate() {
-		return maxHP != null;
-	}
-	
-	public int getMaxHP() {
-		return maxHP;
-	}
-	
 	public boolean gainUpdate() {
 		return statGains != null;
 	}
@@ -344,22 +285,6 @@ public class MessageUpdate {
 	
 	public int[] getNewStats() {
 		return newStats;
-	}
-
-	public boolean stageUpdate() {
-		return this.stages != null;
-	}
-
-	public int[] getStages() {
-		return this.stages;
-	}
-
-	public boolean statusUpdate() {
-		return status != null;
-	}
-	
-	public StatusCondition getStatus() {
-		return status;
 	}
 	
 	public boolean pokemonUpdate() {
@@ -389,21 +314,17 @@ public class MessageUpdate {
 	public boolean switchUpdate() {
 		return switchPokemon;
 	}
-	
+
 	public boolean expUpdate() {
 		return expRatio != null;
 	}
-	
+
 	public float getEXPRatio() {
 		return expRatio;
 	}
-	
+
 	public boolean levelUpdate() {
-		return level != null;
-	}
-	
-	public int getLevel() {
-		return level;
+		return levelUp;
 	}
 	
 	public boolean nameUpdate() {
@@ -471,19 +392,11 @@ public class MessageUpdate {
 	}
 
 	public boolean frontPokemonUpdate() {
-		return this.frontPokemon != null;
+		return !StringUtils.isNullOrEmpty(this.frontPokemonJson);
 	}
 
 	public ActivePokemon getFrontPokemon() {
-		return this.frontPokemon;
-	}
-
-	public boolean showImageUpdate() {
-		return this.showImage != null;
-	}
-
-	public boolean getShowImage() {
-		return this.showImage;
+		return (ActivePokemon)SerializationUtils.deserialize(this.frontPokemonJson);
 	}
 
 	public boolean weatherUpdate() {
@@ -500,5 +413,13 @@ public class MessageUpdate {
 
 	public TerrainType getTerrain() {
 		return this.terrain;
+	}
+
+	public boolean soundEffectUpdate() {
+		return this.soundEffect != null;
+	}
+
+	public SoundTitle getSoundEffect() {
+		return this.soundEffect;
 	}
 }
