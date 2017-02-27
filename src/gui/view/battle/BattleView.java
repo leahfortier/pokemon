@@ -115,10 +115,15 @@ public class BattleView extends View {
 
 		learnedMove = null;
 		learnedPokemon = null;
-		
+
+		// Reset each state
+		for (VisualState state : VisualState.values()) {
+			this.state = state;
+			state.reset();
+		}
+
 		setVisualState(VisualState.MESSAGE);
 		update = Update.NO_UPDATE;
-		state.reset();
 
 		Game.getPlayer().clearLogMessages();
 	}
