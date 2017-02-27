@@ -1282,6 +1282,13 @@ Pretty Wing:
 	Desc: Though this feather is beautiful, it's just a regular feather and has no effect on Pok\u00e9mon.
 	Price: 200
 *
+Ruby:
+	Int: HoldItem
+	EvolutionItem: True
+	Cat: Misc
+	Desc: A peculiar jewel that makes certain species of Pok\u00e9mon evolve.
+	Price: 2100
+*
 Water Stone:
 	Int: HoldItem
 	EvolutionItem: True

@@ -2980,6 +2980,19 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
+	static class Ruby extends Item implements HoldItem, PokemonUseItem {
+		private static final long serialVersionUID = 1L;
+
+		Ruby() {
+			super(ItemNamesies.RUBY, "A peculiar jewel that makes certain species of Pok\u00e9mon evolve.", BagCategory.MISC);
+			super.price = 2100;
+		}
+
+		public boolean use(ActivePokemon p) {
+			return p.checkEvolution(this.namesies);
+		}
+	}
+
 	static class WaterStone extends Item implements HoldItem, PokemonUseItem {
 		private static final long serialVersionUID = 1L;
 

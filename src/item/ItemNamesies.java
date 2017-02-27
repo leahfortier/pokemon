@@ -323,6 +323,7 @@ import item.Item.RoseIncense;
 import item.Item.RoseliBerry;
 import item.Item.RoundTM;
 import item.Item.RowapBerry;
+import item.Item.Ruby;
 import item.Item.Sachet;
 import item.Item.SacredAsh;
 import item.Item.SafariBall;
@@ -603,6 +604,7 @@ public enum ItemNamesies {
 	ICE_STONE("Ice Stone", IceStone::new),
 	UP_GRADE("Up-Grade", UpGrade::new),
 	PRETTY_WING("Pretty Wing", PrettyWing::new),
+	RUBY("Ruby", Ruby::new),
 	WATER_STONE("Water Stone", WaterStone::new),
 	WHIPPED_DREAM("Whipped Dream", WhippedDream::new),
 	ANTIDOTE("Antidote", Antidote::new),
