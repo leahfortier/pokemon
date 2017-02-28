@@ -434,7 +434,7 @@
       "name": "Edge 1 Grass",
       "wildBattles": [
         {
-          "name": "Wild Trigger Matcher 1",
+          "name": "day",
           "encounterRate": "VERY_COMMON",
           "wildPokemon": [
             {
@@ -467,7 +467,39 @@
               "maxLevel": 4,
               "probability": 10
             }
-          ]
+          ],
+          "condition": ":time_of_day:DAWN:|:time_of_day:DAY:|:time_of_day:DUSK:"
+        },
+        {
+          "name": "night",
+          "encounterRate": "VERY_COMMON",
+          "wildPokemon": [
+            {
+              "pokemon": "HOOTHOOT",
+              "minLevel": 2,
+              "maxLevel": 4,
+              "probability": 35
+            },
+            {
+              "pokemon": "BIDOOF",
+              "minLevel": 2,
+              "maxLevel": 4,
+              "probability": 25
+            },
+            {
+              "pokemon": "SENTRET",
+              "minLevel": 2,
+              "maxLevel": 4,
+              "probability": 30
+            },
+            {
+              "pokemon": "LILLIPUP",
+              "minLevel": 2,
+              "maxLevel": 4,
+              "probability": 10
+            }
+          ],
+          "condition": ":time_of_day:NIGHT:"
         }
       ],
       "location": [

@@ -6,6 +6,7 @@ import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
 import util.GUIUtils;
 import util.SerializationUtils;
+import util.StringUtils;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -38,6 +39,7 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
                     if (this.wildBattleTriggers.size() > 0) {
                         oldMatcher = SerializationUtils.deserializeJson(SerializationUtils.getJson(this.wildBattleTriggers.get(0)), WildBattleMatcher.class);
                         oldMatcher.setName("Wild Trigger Matcher " + wildBattleTriggers.size());
+                        oldMatcher.setCondition(StringUtils.empty());
                     }
 
                     WildBattleMatcher matcher = editWildBattleTrigger(oldMatcher);

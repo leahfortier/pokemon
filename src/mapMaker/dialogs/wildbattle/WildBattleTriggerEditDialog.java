@@ -123,7 +123,8 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 		}
 
 		nameTextField.setText(matcher.getName());
-
+		encounterRateComboBox.setSelectedItem(matcher.getEncounterRate());
+		conditionTextField.setText(matcher.getCondition());
 
 		for (WildEncounter wildEncounter : matcher.getWildEncounters()) {
 			addPokemonPanel(wildEncounter);
