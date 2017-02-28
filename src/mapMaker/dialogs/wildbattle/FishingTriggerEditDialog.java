@@ -25,7 +25,7 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
     private final int index;
 
     public FishingTriggerEditDialog(FishingMatcher fishingMatcher, int index) {
-        super("Fshing Trigger Editor");
+        super("Fishing Trigger Editor");
 
         this.index = index;
 
