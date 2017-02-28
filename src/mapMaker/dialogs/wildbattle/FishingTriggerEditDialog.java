@@ -1,6 +1,7 @@
-package mapMaker.dialogs;
+package mapMaker.dialogs.wildbattle;
 
 import map.overworld.WildEncounter;
+import mapMaker.dialogs.TriggerDialog;
 import pattern.map.FishingMatcher;
 import util.GUIUtils;
 
@@ -24,7 +25,7 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
     private final int index;
 
     public FishingTriggerEditDialog(FishingMatcher fishingMatcher, int index) {
-        super("Fshing Trigger Editor");
+        super("Fishing Trigger Editor");
 
         this.index = index;
 

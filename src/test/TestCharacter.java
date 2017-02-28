@@ -1,5 +1,7 @@
 package test;
 
+import map.MapName;
+import pattern.SimpleMapTransition;
 import pokemon.ActivePokemon;
 import trainer.Player;
 
@@ -8,5 +10,6 @@ class TestCharacter extends Player {
         super();
         GameTest.setNewPlayer(this);
         this.addPokemon(mahBoiiiiiii);
+        this.setMap(new SimpleMapTransition(new MapName("Depth First Search Town", "PlayersHouseUp"), "GameStartLocation"));
     }
 }

@@ -16,7 +16,8 @@ public abstract class TriggerMatcher {
     public String getCondition() {
         return this.condition;
     }
-    protected void setCondition(String condition) {
+
+    public void setCondition(String condition) {
         this.condition = StringUtils.nullWhiteSpace(condition);
     }
 }

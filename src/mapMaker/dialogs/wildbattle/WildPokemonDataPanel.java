@@ -1,4 +1,4 @@
-package mapMaker.dialogs;
+package mapMaker.dialogs.wildbattle;
 
 import map.overworld.WildEncounter;
 import pokemon.ActivePokemon;
