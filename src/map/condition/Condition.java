@@ -1,11 +1,8 @@
 package map.condition;
 
 import main.Game;
-import map.daynight.DayCycle;
-import trainer.Badge;
 import trainer.Player;
 import util.StringUtils;
-import util.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +12,6 @@ import java.util.regex.Pattern;
 
 public class Condition {
 	private static final Pattern functionPattern = Pattern.compile("([\\w$:]+)|([()&|!])");
-	private static final Pattern keyValuePattern = Pattern.compile(":([^:]+):([^:]+):");
 
 	/*
 	 * postfixed boolean function
@@ -105,11 +101,8 @@ public class Condition {
 					stack.push(false);
 					break;
 				default:
-					Matcher matcher = keyValuePattern.matcher(s);
-					if (matcher.matches()) {
-						String key = matcher.group(1);
-						String value = matcher.group(2);
-						stack.push(getConditionKeyValuePattern(key, value));
+					if (ConditionKey.matches(s)) {
+						stack.push(ConditionKey.getConditionValue(s));
 					} else {
 						stack.push(player.globalsContain(s));
 					}
@@ -118,29 +111,6 @@ public class Condition {
 		}
 
 		return stack.pop();
-	}
-
-	private boolean getConditionKeyValuePattern(String key, String value) {
-		Player player = Game.getPlayer();
-		int index;
-		switch (key) {
-			case "badge":
-				return player.hasBadge(Badge.valueOf(value));
-			case "time_of_day":
-				return DayCycle.getTimeOfDay() == DayCycle.valueOf(value);
-			case "hour_of_day":
-				index = value.indexOf('-');
-				int startHour = Integer.parseInt(value.substring(0, index));
-				int endHour = Integer.parseInt(value.substring(index + 1));
-				return TimeUtils.currentHourWithinInterval(startHour, endHour);
-			case "npc_interaction":
-				index = value.indexOf('$');
-				String npcEntityName = value.substring(0, index);
-				String interactionName = value.substring(index + 1);
-				return player.isNpcInteraction(npcEntityName, interactionName);
-		}
-
-		return true;
 	}
 
 	public static String and(final String firstCondition, final String secondCondition) {

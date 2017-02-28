@@ -1,5 +1,6 @@
 package mapMaker.dialogs;
 
+import map.condition.ConditionKey;
 import map.daynight.DayCycle;
 import util.GUIUtils;
 import util.StringUtils;
@@ -49,7 +50,7 @@ public class TimeOfDayPanel extends JPanel {
                     condition.append("|");
                 }
 
-                condition.append(String.format(":time_of_day:%s:", DayCycle.values()[i]));
+                condition.append(ConditionKey.TIME_OF_DAY.getConditionString(DayCycle.values()[i].name()));
                 first = false;
             }
         }
