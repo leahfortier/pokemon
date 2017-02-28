@@ -2260,9 +2260,7 @@ public abstract class Ability implements Serializable {
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Pretty sure this doesn't work anymore
-			// TODO: Doesn't work on Damp
-			if (victim.isFainted(b)) {
+			if (victim.isFainted(b) && !user.hasAbility(AbilityNamesies.DAMP)) {
 				Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 				user.reduceHealthFraction(b, 1/4.0);
 			}
