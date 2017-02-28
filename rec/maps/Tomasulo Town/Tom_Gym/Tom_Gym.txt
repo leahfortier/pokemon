@@ -180,6 +180,9 @@
                 "triggerType": "Badge",
                 "triggerContents": "ROUND"
               }
+            },
+            {
+              "update": "won"
             }
           ]
         },

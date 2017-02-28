@@ -2,12 +2,12 @@ package map;
 
 import main.Game;
 import map.daynight.DayCycle;
+import trainer.Badge;
 import trainer.Player;
 import util.StringUtils;
 import util.TimeUtils;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -121,8 +121,11 @@ public class Condition {
 	}
 
 	private boolean getConditionKeyValuePattern(String key, String value) {
+		Player player = Game.getPlayer();
 		int index;
 		switch (key) {
+			case "badge":
+				return player.hasBadge(Badge.valueOf(value));
 			case "time_of_day":
 				return DayCycle.getTimeOfDay() == DayCycle.valueOf(value);
 			case "hour_of_day":
@@ -134,7 +137,7 @@ public class Condition {
 				index = value.indexOf('$');
 				String npcEntityName = value.substring(0, index);
 				String interactionName = value.substring(index + 1);
-				return Game.getPlayer().isNpcInteraction(npcEntityName, interactionName);
+				return player.isNpcInteraction(npcEntityName, interactionName);
 		}
 
 		return true;

@@ -135,7 +135,7 @@
         "y": 23
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Citizen_01_01",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
     },
     {
       "name": "Tom_Town_NPC_Citizen_02",
@@ -161,7 +161,7 @@
         "y": 22
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Citizen_02_01",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
     },
     {
       "name": "Tom_Town_NPC_Scientist_01",
@@ -187,7 +187,7 @@
         "y": 16
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_01_01",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
     },
     {
       "name": "Tom_Town_NPC_Scientist_02",
@@ -213,7 +213,7 @@
         "y": 14
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_02_01",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
     },
     {
       "name": "Tom_Town_NPC_Scientist_03",
@@ -239,7 +239,7 @@
         "y": 15
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_03_01",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
     },
     {
       "name": "Tom_Town_NPC_TomTownPoliceOfficer01_01",
@@ -265,7 +265,7 @@
         "y": 15
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_TomTownPoliceOfficer01_01_01",
-      "condition": "BadgeTrigger_0&!VisitedTomTownPowerPlant"
+      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
     }
   ],
   "items": [],
@@ -287,7 +287,7 @@
         }
       ],
       "triggerName": "Tom_Town_TriggerEntity_LockedDoor_01",
-      "condition": "!BadgeTrigger_0"
+      "condition": "!:badge:ROUND:"
     }
   ],
   "events": [
@@ -319,7 +319,7 @@
         }
       ],
       "triggerName": "Tom_Town_Event_Rumbles_01",
-      "condition": "BadgeTrigger_0&!TomTownPowerPlantExplosionTriggered"
+      "condition": ":badge:ROUND:&!TomTownPowerPlantExplosionTriggered"
     }
   ],
   "wildBattles": [],
