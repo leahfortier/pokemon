@@ -232,7 +232,7 @@
       "name": "Meadow Grass",
       "wildBattles": [
         {
-			"name": "day",
+          "name": "day",
           "encounterRate": "VERY_COMMON",
           "wildPokemon": [
             {
