@@ -1,6 +1,7 @@
-package mapMaker.dialogs;
+package mapMaker.dialogs.wildbattle;
 
 import main.Global;
+import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
 import util.GUIUtils;

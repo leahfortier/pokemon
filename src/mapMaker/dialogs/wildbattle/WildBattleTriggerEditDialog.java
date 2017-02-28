@@ -1,8 +1,10 @@
-package mapMaker.dialogs;
+package mapMaker.dialogs.wildbattle;
 
 import map.Condition;
 import map.overworld.EncounterRate;
 import map.overworld.WildEncounter;
+import mapMaker.dialogs.TimeOfDayPanel;
+import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleMatcher;
 import util.GUIUtils;
 
