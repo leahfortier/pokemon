@@ -1,5 +1,6 @@
 package mapMaker.dialogs;
 
+import map.Condition;
 import map.overworld.EncounterRate;
 import map.overworld.WildEncounter;
 import pattern.map.WildBattleMatcher;
@@ -15,18 +16,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher> {
-	private static final long serialVersionUID = -3454589908432207758L;
-
 	private final JPanel topComponent;
 	private final JPanel bottomComponent;
 
 	private final JTextField nameTextField;
-	private final JComboBox<EncounterRate> rateComboBox;
+	private final JComboBox<EncounterRate> encounterRateComboBox;
+
+	private final TimeOfDayPanel timeOfDayPanel;
+	private final JTextField conditionTextField;
 
 	private final List<WildPokemonDataPanel> wildPokemonPanels;
 
 	private final int index;
-	
+
 	public WildBattleTriggerEditDialog(WildBattleMatcher wildBattleMatcher, int index) {
 		super("Wild Battle Trigger Editor");
 
@@ -35,7 +37,10 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 		wildPokemonPanels = new ArrayList<>();
 		
 		nameTextField = GUIUtils.createTextField(this.getDefaultName());
-		rateComboBox = GUIUtils.createComboBox(EncounterRate.values(), null);
+		encounterRateComboBox = GUIUtils.createComboBox(EncounterRate.values());
+
+		timeOfDayPanel = new TimeOfDayPanel();
+		conditionTextField = GUIUtils.createTextField();
 
 		JButton addPokemonButton = GUIUtils.createButton("Add Pokemon", event -> addPokemonPanel(null));
 		JButton removeSelectedButton = GUIUtils.createButton(
@@ -46,10 +51,17 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 				}
 		);
 
-		this.topComponent = GUIUtils.createHorizontalLayoutComponent(
-				GUIUtils.createTextFieldComponent("Name", nameTextField),
-				GUIUtils.createComboBoxComponent("Encounter Rate", rateComboBox)
+		this.topComponent = GUIUtils.createVerticalLayoutComponent(
+				GUIUtils.createHorizontalLayoutComponent(
+						GUIUtils.createTextFieldComponent("Name", nameTextField),
+						GUIUtils.createComboBoxComponent("Encounter Rate", encounterRateComboBox)
+				),
+				GUIUtils.createHorizontalLayoutComponent(
+						timeOfDayPanel,
+						GUIUtils.createTextFieldComponent("Condition", conditionTextField)
+				)
 		);
+
 
 		this.bottomComponent = GUIUtils.createHorizontalLayoutComponent(
 				addPokemonButton,
@@ -90,13 +102,17 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 		}
 
 		String name = this.getNameField(nameTextField, this.getDefaultName());
-		EncounterRate encounterRate = (EncounterRate)rateComboBox.getSelectedItem();
+		EncounterRate encounterRate = (EncounterRate)encounterRateComboBox.getSelectedItem();
 		List<WildEncounter> wildEncounters = wildPokemonPanels
 				.stream()
 				.map(WildPokemonDataPanel::getWildEncounter)
 				.collect(Collectors.toList());
+		String condition = Condition.and(timeOfDayPanel.getCondition(), conditionTextField.getText());
 
-		return new WildBattleMatcher(name, encounterRate, wildEncounters);
+		WildBattleMatcher matcher = new WildBattleMatcher(name, encounterRate, wildEncounters);;
+		matcher.setCondition(condition);
+
+		return matcher;
 	}
 
 	private void load(WildBattleMatcher matcher) {
@@ -104,8 +120,8 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 			return;
 		}
 
-		nameTextField.setText(matcher.getBasicName());
-		rateComboBox.setSelectedItem(matcher.getEncounterRate());
+		nameTextField.setText(matcher.getName());
+
 
 		for (WildEncounter wildEncounter : matcher.getWildEncounters()) {
 			addPokemonPanel(wildEncounter);

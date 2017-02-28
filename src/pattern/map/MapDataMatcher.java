@@ -25,7 +25,7 @@ public class MapDataMatcher {
     private ItemMatcher[] items = new ItemMatcher[0];
     private MiscEntityMatcher[] miscEntities = new MiscEntityMatcher[0];
     private EventMatcher[] events = new EventMatcher[0];
-    private WildBattleMatcher[] wildBattles = new WildBattleMatcher[0];
+    private WildBattleAreaMatcher[] wildBattles = new WildBattleAreaMatcher[0];
     private FishingMatcher[] fishingSpots = new FishingMatcher[0];
 
     public MapDataMatcher(Set<AreaMatcher> areaData,
@@ -50,7 +50,7 @@ public class MapDataMatcher {
         this.items = fillTriggerArray(this.items, triggerMap.get(TriggerModelType.ITEM), trigger -> (ItemMatcher)trigger);
         this.miscEntities = fillTriggerArray(this.miscEntities, triggerMap.get(TriggerModelType.MISC_ENTITY), trigger -> (MiscEntityMatcher)trigger);
         this.events = fillTriggerArray(this.events, triggerMap.get(TriggerModelType.EVENT), trigger -> (EventMatcher)trigger);
-        this.wildBattles = fillTriggerArray(this.wildBattles, triggerMap.get(TriggerModelType.WILD_BATTLE), trigger -> (WildBattleMatcher)trigger);
+        this.wildBattles = fillTriggerArray(this.wildBattles, triggerMap.get(TriggerModelType.WILD_BATTLE), trigger -> (WildBattleAreaMatcher)trigger);
         this.fishingSpots = fillTriggerArray(this.fishingSpots, triggerMap.get(TriggerModelType.FISHING), trigger -> (FishingMatcher)trigger);
     }
 
@@ -92,7 +92,7 @@ public class MapDataMatcher {
         return Arrays.asList(this.events);
     }
 
-    public List<WildBattleMatcher> getWildBattles() {
+    public List<WildBattleAreaMatcher> getWildBattles() {
         return Arrays.asList(this.wildBattles);
     }
 
@@ -130,6 +130,9 @@ public class MapDataMatcher {
 
         String areaDataJson = SerializationUtils.getJson(areaData);
         String mapJson = SerializationUtils.getJson(mappity);
+
+        FileIO.writeToFile("out.txt", areaDataJson);
+        FileIO.writeToFile("out2.txt", mapJson);
 
         if (!areaDataJson.equals(mapJson)) {
             Global.error("No dice");

@@ -38,11 +38,8 @@ public class EditMapMetaData {
     private Composite alphaComposite;
     private Composite defaultComposite;
 
-    public boolean saved;
-
     public EditMapMetaData() {
         this.currentMap = new EnumMap<>(MapDataType.class);
-        this.saved = true;
     }
 
     public MapName getMapName() {
@@ -51,10 +48,6 @@ public class EditMapMetaData {
 
     public Dimension getDimension() {
         return this.currentMapSize;
-    }
-
-    public boolean isSaved() {
-        return saved && (triggerData == null || triggerData.isSaved());
     }
 
     public BufferedImage getMapImage(MapDataType dataType) {
@@ -102,8 +95,6 @@ public class EditMapMetaData {
 
         // Save all triggers
         triggerData.saveTriggers(mapMaker.getMapTextFileName(currentMapName));
-
-        saved = true;
     }
 
     public void loadPreviousMap(MapMaker mapMaker, MapName mapName) {
@@ -118,8 +109,6 @@ public class EditMapMetaData {
         String mapTextFileName = mapFolderPath + mapName.getMapName() + ".txt";
         this.triggerData = new MapMakerTriggerData(mapMaker, mapTextFileName);
         MapMakerModel.getAreaModel().loadMap(this.triggerData);
-
-        this.saved = true;
     }
 
     // Checks if the current map needs to be resized based on the input location
@@ -175,7 +164,6 @@ public class EditMapMetaData {
             int colorValue = val == 0 ? new Color(0, 0, 0 ,0).getRGB() : new Color(val).getRGB();
             this.getMapImage(editType.getDataType()).setRGB(location.x, location.y, colorValue);
 
-            this.saved = false;
             return false;
         }
     }

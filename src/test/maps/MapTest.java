@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import pattern.map.FishingMatcher;
+import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
 import util.FileIO;
 import util.Folder;
@@ -85,15 +86,17 @@ public class MapTest {
     @Test
     public void wildBattleProbabilityTest() {
         for (TestMap map : this.maps) {
-            for (WildBattleMatcher wildBattleMatcher : map.getMatcher().getWildBattles()) {
-                WildEncounter[] wildEncounters = wildBattleMatcher.getWildEncounters();
+            for (WildBattleAreaMatcher areaMatcher : map.getMatcher().getWildBattles()) {
+                for (WildBattleMatcher wildBattleMatcher : areaMatcher.getWildBattles()) {
+                    WildEncounter[] wildEncounters = wildBattleMatcher.getWildEncounters();
 
-                int totalProbability = 0;
-                for (WildEncounter wildEncounter : wildEncounters) {
-                    totalProbability += wildEncounter.getProbability();
+                    int totalProbability = 0;
+                    for (WildEncounter wildEncounter : wildEncounters) {
+                        totalProbability += wildEncounter.getProbability();
+                    }
+
+                    Assert.assertTrue(totalProbability == 100);
                 }
-
-                Assert.assertTrue(totalProbability == 100);
             }
 
             for (FishingMatcher fishingMatcher : map.getMatcher().getFishingSpots()) {

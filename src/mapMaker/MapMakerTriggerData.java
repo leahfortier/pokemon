@@ -10,7 +10,7 @@ import mapMaker.dialogs.ItemEntityDialog;
 import mapMaker.dialogs.MapTransitionDialog;
 import mapMaker.dialogs.MiscEntityDialog;
 import mapMaker.dialogs.NPCEntityDialog;
-import mapMaker.dialogs.WildBattleTriggerEditDialog;
+import mapMaker.dialogs.WildBattleAreaDialog;
 import mapMaker.dialogs.WildBattleTriggerOptionsDialog;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
@@ -25,11 +25,11 @@ import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import pattern.map.MiscEntityMatcher;
 import pattern.map.NPCMatcher;
-import pattern.map.WildBattleMatcher;
+import pattern.map.WildBattleAreaMatcher;
 import util.FileIO;
-import util.SerializationUtils;
 import util.Point;
 import util.PokeString;
+import util.SerializationUtils;
 import util.StringUtils;
 
 import java.awt.Graphics2D;
@@ -44,9 +44,6 @@ public class MapMakerTriggerData {
 	private final Set<AreaMatcher> areaData;
 	private final Set<LocationTriggerMatcher> entities;
 
-	// Have the triggers been saved or have they been edited?
-	private boolean triggersSaved;
-
 	private MapMaker mapMaker;
 	private AreaMatcher defaultArea;
 
@@ -55,9 +52,6 @@ public class MapMakerTriggerData {
 
 		this.areaData = new HashSet<>();
 		this.entities = new HashSet<>();
-
-		// Force creation of mapName.txt file
-		triggersSaved = false;
 	}
 
 	MapMakerTriggerData(MapMaker mapMaker, AreaMatcher defaultArea) {
@@ -74,21 +68,9 @@ public class MapMakerTriggerData {
 		this.defaultArea = mapDataMatcher.getDefaultArea();
 		this.areaData.addAll(mapDataMatcher.getAreas());
 		this.entities.addAll(mapDataMatcher.getAllEntities());
-
-		triggersSaved = true;
-	}
-
-	boolean isSaved() {
-		return triggersSaved;
 	}
 
 	void saveTriggers(String mapFileName) {
-		if (triggersSaved) {
-			return;
-		}
-
-		triggersSaved = true;
-
 		// Collect and sort all the entities in a list
 		List<LocationTriggerMatcher> entityList = entities.stream()
 				.sorted(LocationTriggerMatcher.COMPARATOR)
@@ -140,8 +122,6 @@ public class MapMakerTriggerData {
 		for (LocationTriggerMatcher matcher : this.entities) {
 			matcher.addDelta(delta);
 		}
-
-		triggersSaved = false;
 	}
 
 	void drawTriggers(Graphics2D g2d, Point mapLocation) {
@@ -184,8 +164,6 @@ public class MapMakerTriggerData {
 		placeableTrigger.addPoint(location);
 		this.entities.add(placeableTrigger);
 		System.out.println("Entity placed at (" + location.x + ", " + location.y + ").");
-
-		triggersSaved = false;
 	}
 
 	boolean createTrigger(TriggerModelType type) {
@@ -207,8 +185,6 @@ public class MapMakerTriggerData {
 			this.entities.add(newTrigger);
 
 			newTrigger.setLocation(trigger);
-
-			triggersSaved = false;
 		}
 	}
 
@@ -226,9 +202,9 @@ public class MapMakerTriggerData {
 				return new EventTriggerDialog((EventMatcher)oldTrigger).getMatcher(mapMaker);
 			case WILD_BATTLE:
 				if (oldTrigger == null) {
-					return new WildBattleTriggerOptionsDialog(this.getWildBattleTriggers()).getMatcher(mapMaker);
+					return new WildBattleTriggerOptionsDialog(this.getWildBattleAreas()).getMatcher(mapMaker);
 				} else {
-					return new WildBattleTriggerEditDialog((WildBattleMatcher)oldTrigger, -1).getMatcher(mapMaker);
+					return new WildBattleAreaDialog((WildBattleAreaMatcher)oldTrigger).getMatcher(mapMaker);
 				}
 			case FISHING:
 				if (oldTrigger == null) {
@@ -250,11 +226,11 @@ public class MapMakerTriggerData {
 				.collect(Collectors.toList());
 	}
 
-	private List<WildBattleMatcher> getWildBattleTriggers() {
+	private List<WildBattleAreaMatcher> getWildBattleAreas() {
 		return this.entities
 				.stream()
-				.filter(entity -> entity instanceof WildBattleMatcher)
-				.map(entity -> (WildBattleMatcher)entity)
+				.filter(entity -> entity instanceof WildBattleAreaMatcher)
+				.map(entity -> (WildBattleAreaMatcher)entity)
 				.collect(Collectors.toList());
 	}
 
@@ -267,8 +243,6 @@ public class MapMakerTriggerData {
 
 	public void removeTrigger(LocationTriggerMatcher trigger) {
 		this.entities.removeIf(matcher -> trigger == matcher);
-
-		triggersSaved = false;
 	}
 
 	public void moveTrigger(LocationTriggerMatcher trigger) {
@@ -278,7 +252,6 @@ public class MapMakerTriggerData {
 
 	public void addArea(AreaMatcher newArea) {
 		this.areaData.add(newArea);
-		triggersSaved = false;
 	}
 
 	public AreaMatcher getDefaultArea() {

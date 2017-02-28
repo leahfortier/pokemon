@@ -256,17 +256,12 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	// Called when trying to exit, shows a confirm dialog asking to save first if there are any unsaved changes
 	// Returns whether or not the exit will actually occur
 	private boolean checkSaveOnExit() {
-		if (!this.mapData.isSaved()) {
-			int val = JOptionPane.showConfirmDialog(this, "Save current file first?", "Unsaved changes", JOptionPane.YES_NO_CANCEL_OPTION);
-			if (val == JOptionPane.YES_OPTION) {
-				saveMap();
-			}
-
-			return val != JOptionPane.CANCEL_OPTION;
+		int val = JOptionPane.showConfirmDialog(this, "Save current file first?", "Unsaved changes", JOptionPane.YES_NO_CANCEL_OPTION);
+		if (val == JOptionPane.YES_OPTION) {
+			saveMap();
 		}
 
-		// Nothing to save, just exit
-		return true;
+		return val != JOptionPane.CANCEL_OPTION;
 	}
 
 	private void resetMap() {

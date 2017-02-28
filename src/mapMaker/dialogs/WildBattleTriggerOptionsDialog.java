@@ -1,7 +1,7 @@
 package mapMaker.dialogs;
 
 import main.Global;
-import pattern.map.WildBattleMatcher;
+import pattern.map.WildBattleAreaMatcher;
 import util.GUIUtils;
 
 import javax.swing.JButton;
@@ -9,31 +9,29 @@ import javax.swing.JComboBox;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WildBattleTriggerOptionsDialog extends TriggerDialog<WildBattleMatcher> {
-	private static final long serialVersionUID = -7378035463487486331L;
-	
-	private JComboBox<String> comboBox;
+public class WildBattleTriggerOptionsDialog extends TriggerDialog<WildBattleAreaMatcher> {
+	private final JComboBox<String> comboBox;
 
-	private JButton createButton;
-	private JButton editButton;
-	private List<WildBattleMatcher> wildBattleTriggers;
-	
-	public WildBattleTriggerOptionsDialog(List<WildBattleMatcher> wildBattleMatchers) {
+	private final JButton createButton;
+	private final JButton editButton;
+	private final List<WildBattleAreaMatcher> wildBattleAreas;
+
+	public WildBattleTriggerOptionsDialog(List<WildBattleAreaMatcher> wildBattleMatchers) {
 		super("Wild Battle Trigger Options");
 
-		this.wildBattleTriggers = new ArrayList<>();
+		this.wildBattleAreas = new ArrayList<>();
 
 		comboBox = GUIUtils.createComboBox(new String[0], null);
 
 		createButton = GUIUtils.createButton(
 				"Create New",
 				event -> {
-					WildBattleMatcher matcher = editWildBattleTrigger(null);
+					WildBattleAreaMatcher matcher = editWildBattleArea(null);
 					if (matcher == null) {
 						return;
 					}
 
-					this.addWildBattleTrigger(matcher);
+					this.addWildBattleArea(matcher);
 					comboBox.setSelectedItem(matcher.getBasicName());
 				}
 		);
@@ -41,17 +39,17 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<WildBattleMatc
 		editButton = GUIUtils.createButton(
 				"Edit",
 				event -> {
-					WildBattleMatcher oldMatcher = this.getSelectedTriggerMatcher();
-					WildBattleMatcher newMatcher = editWildBattleTrigger(oldMatcher);
+					WildBattleAreaMatcher oldMatcher = this.getSelectedTriggerMatcher();
+					WildBattleAreaMatcher newMatcher = editWildBattleArea(oldMatcher);
 					if (newMatcher == null) {
 						return;
 					}
 
 					if (oldMatcher != null) {
-						wildBattleTriggers.remove(oldMatcher);
+						wildBattleAreas.remove(oldMatcher);
 					}
 
-					addWildBattleTrigger(newMatcher);
+					addWildBattleArea(newMatcher);
 				}
 		);
 		editButton.setEnabled(false);
@@ -59,9 +57,9 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<WildBattleMatc
 		this.load(wildBattleMatchers);
 	}
 
-	private WildBattleMatcher getSelectedTriggerMatcher() {
+	private WildBattleAreaMatcher  getSelectedTriggerMatcher() {
 		String wildBattleName = (String)comboBox.getSelectedItem();
-		for (WildBattleMatcher matcher : wildBattleTriggers) {
+		for (WildBattleAreaMatcher matcher : wildBattleAreas) {
 			if (wildBattleName.equals(matcher.getBasicName())) {
 				return matcher;
 			}
@@ -71,16 +69,16 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<WildBattleMatc
 		return null;
 	}
 
-	private WildBattleMatcher editWildBattleTrigger(WildBattleMatcher wildBattleMatcher) {
-		return new WildBattleTriggerEditDialog(wildBattleMatcher, wildBattleTriggers.size()).getMatcher(this);
+	private WildBattleAreaMatcher editWildBattleArea(WildBattleAreaMatcher wildBattleMatcher) {
+		return new WildBattleAreaDialog(wildBattleMatcher).getMatcher(this);
 	}
 
 	@Override
 	protected void renderDialog() {
 		comboBox.removeAllItems();
-		this.wildBattleTriggers.forEach(matcher -> comboBox.addItem(matcher.getBasicName()));
+		this.wildBattleAreas.forEach(matcher -> comboBox.addItem(matcher.getBasicName()));
 
-		editButton.setEnabled(!wildBattleTriggers.isEmpty());
+		editButton.setEnabled(!wildBattleAreas.isEmpty());
 
 		GUIUtils.setVerticalLayout(
 				this,
@@ -90,25 +88,25 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<WildBattleMatc
 	}
 
 
-	private void addWildBattleTrigger(WildBattleMatcher newMatcher) {
-		wildBattleTriggers.add(newMatcher);
+	private void addWildBattleArea(WildBattleAreaMatcher newMatcher) {
+		wildBattleAreas.add(newMatcher);
 		render();
 	}
 
 	@Override
-	protected WildBattleMatcher getMatcher() {
-		if (this.wildBattleTriggers.isEmpty()) {
+	protected WildBattleAreaMatcher getMatcher() {
+		if (this.wildBattleAreas.isEmpty()) {
 			return null;
 		}
 
-		return wildBattleTriggers.get(this.comboBox.getSelectedIndex());
+		return wildBattleAreas.get(this.comboBox.getSelectedIndex());
 	}
 
-	private void load(List<WildBattleMatcher> matchers) {
+	private void load(List<WildBattleAreaMatcher> matchers) {
 		if (matchers == null) {
 			return;
 		}
 
-		matchers.forEach(this::addWildBattleTrigger);
+		matchers.forEach(this::addWildBattleArea);
 	}
 }

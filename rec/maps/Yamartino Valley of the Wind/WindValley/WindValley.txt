@@ -77,67 +77,72 @@
   "wildBattles": [
     {
       "name": "Valley Grass",
-      "encounterRate": "VERY_COMMON",
-      "wildPokemon": [
+      "wildBattles": [
         {
-          "pokemon": "MAREEP",
-          "minLevel": 6,
-          "maxLevel": 10,
-          "probability": 10
-        },
-        {
-          "pokemon": "COTTONEE",
-          "minLevel": 6,
-          "maxLevel": 10,
-          "probability": 10
-        },
-        {
-          "pokemon": "BUDEW",
-          "minLevel": 6,
-          "maxLevel": 10,
-          "probability": 10
-        },
-        {
-          "pokemon": "HOPPIP",
-          "minLevel": 6,
-          "maxLevel": 10,
-          "probability": 10
-        },
-        {
-          "pokemon": "SKIDDO",
-          "minLevel": 6,
-          "maxLevel": 10,
-          "probability": 10
-        },
-        {
-          "pokemon": "SUNKERN",
-          "minLevel": 6,
-          "maxLevel": 10,
-          "probability": 10
-        },
-        {
-          "pokemon": "DRIFLOON",
-          "minLevel": 6,
-          "maxLevel": 10,
-          "probability": 10
-        },
-        {
-          "pokemon": "SEWADDLE",
-          "minLevel": 6,
-          "maxLevel": 10,
-          "probability": 10
-        },
-        {
-          "pokemon": "PETILIL",
-          "minLevel": 6,
-          "maxLevel": 10,
-          "probability": 10
-        },
-        {
-          "pokemon": "CHERUBI",
-          "minLevel": 6,
-          "maxLevel": 10,
-          "probability": 10
+          "name": "day",
+          "encounterRate": "VERY_COMMON",
+          "wildPokemon": [
+            {
+              "pokemon": "MAREEP",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "COTTONEE",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "BUDEW",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "HOPPIP",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "SKIDDO",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "SUNKERN",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "DRIFLOON",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "SEWADDLE",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "PETILIL",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "CHERUBI",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            }
+          ]
         }
       ],
       "location": [
@@ -2450,61 +2455,66 @@
     },
     {
       "name": "Valley Sand",
-      "encounterRate": "COMMON",
-      "wildPokemon": [
+      "wildBattles": [
         {
-          "pokemon": "SANDSHREW",
-          "minLevel": 7,
-          "maxLevel": 11,
-          "probability": 20
-        },
-        {
-          "pokemon": "SPEAROW",
-          "minLevel": 7,
-          "maxLevel": 11,
-          "probability": 15
-        },
-        {
-          "pokemon": "DODUO",
-          "minLevel": 7,
-          "maxLevel": 11,
-          "probability": 15
-        },
-        {
-          "pokemon": "DWEBBLE",
-          "minLevel": 7,
-          "maxLevel": 11,
-          "probability": 12
-        },
-        {
-          "pokemon": "BONSLY",
-          "minLevel": 7,
-          "maxLevel": 11,
-          "probability": 12
-        },
-        {
-          "pokemon": "DRIFLOON",
-          "minLevel": 7,
-          "maxLevel": 11,
-          "probability": 10
-        },
-        {
-          "pokemon": "CUBONE",
-          "minLevel": 7,
-          "maxLevel": 11,
-          "probability": 10
-        },
-        {
-          "pokemon": "LARVITAR",
-          "minLevel": 7,
-          "maxLevel": 11,
-          "probability": 1
-        },
-        {
-          "pokemon": "RUFFLET",
-          "minLevel": 7,
-          "maxLevel": 11,
-          "probability": 5
+          "name": "day",
+          "encounterRate": "COMMON",
+          "wildPokemon": [
+            {
+              "pokemon": "SANDSHREW",
+              "minLevel": 7,
+              "maxLevel": 11,
+              "probability": 20
+            },
+            {
+              "pokemon": "SPEAROW",
+              "minLevel": 7,
+              "maxLevel": 11,
+              "probability": 15
+            },
+            {
+              "pokemon": "DODUO",
+              "minLevel": 7,
+              "maxLevel": 11,
+              "probability": 15
+            },
+            {
+              "pokemon": "DWEBBLE",
+              "minLevel": 7,
+              "maxLevel": 11,
+              "probability": 12
+            },
+            {
+              "pokemon": "BONSLY",
+              "minLevel": 7,
+              "maxLevel": 11,
+              "probability": 12
+            },
+            {
+              "pokemon": "DRIFLOON",
+              "minLevel": 7,
+              "maxLevel": 11,
+              "probability": 10
+            },
+            {
+              "pokemon": "CUBONE",
+              "minLevel": 7,
+              "maxLevel": 11,
+              "probability": 10
+            },
+            {
+              "pokemon": "LARVITAR",
+              "minLevel": 7,
+              "maxLevel": 11,
+              "probability": 1
+            },
+            {
+              "pokemon": "RUFFLET",
+              "minLevel": 7,
+              "maxLevel": 11,
+              "probability": 5
+            }
+          ]
         }
       ],
       "location": [

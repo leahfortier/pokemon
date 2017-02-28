@@ -20,6 +20,7 @@ import pattern.map.FishingMatcher;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import pattern.map.MiscEntityMatcher;
+import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
 import trainer.Player;
 import util.FileIO;
@@ -114,12 +115,14 @@ public class MapData {
 			}
 		}
 
-		for (WildBattleMatcher matcher : mapDataMatcher.getWildBattles()) {
-			Trigger trigger = TriggerType.WALKING_WILD_BATTLE.createTrigger(SerializationUtils.getJson(matcher), matcher.getCondition());
+		for (WildBattleAreaMatcher matcher : mapDataMatcher.getWildBattles()) {
 			for (Point point : matcher.getLocation()) {
-				triggers.put(getMapIndex(point), trigger.getName());
-				for (WildEncounter wildEncounter : matcher.getWildEncounters()) {
-					this.getArea(point).addPokemon(wildEncounter.getPokemonName());
+				for (WildBattleMatcher wildBattleMatcher : matcher.getWildBattles()) {
+					Trigger trigger = TriggerType.WALKING_WILD_BATTLE.createTrigger(SerializationUtils.getJson(wildBattleMatcher), wildBattleMatcher.getCondition());
+					triggers.put(getMapIndex(point), trigger.getName());
+					for (WildEncounter wildEncounter : wildBattleMatcher.getWildEncounters()) {
+						this.getArea(point).addPokemon(wildEncounter.getPokemonName());
+					}
 				}
 			}
 		}
