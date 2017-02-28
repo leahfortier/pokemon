@@ -1,6 +1,6 @@
 package mapMaker.dialogs.wildbattle;
 
-import map.Condition;
+import map.condition.Condition;
 import map.overworld.EncounterRate;
 import map.overworld.WildEncounter;
 import mapMaker.dialogs.TimeOfDayPanel;

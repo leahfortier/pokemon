@@ -1,7 +1,7 @@
 package map.triggers;
 
 import main.Game;
-import map.Condition;
+import map.condition.Condition;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.GroupTriggerMatcher;

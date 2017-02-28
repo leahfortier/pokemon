@@ -1,4 +1,4 @@
-package map;
+package map.condition;
 
 import main.Game;
 import map.daynight.DayCycle;

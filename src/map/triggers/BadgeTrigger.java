@@ -1,7 +1,7 @@
 package map.triggers;
 
 import main.Game;
-import map.Condition;
+import map.condition.Condition;
 import trainer.Badge;
 
 class BadgeTrigger extends Trigger {

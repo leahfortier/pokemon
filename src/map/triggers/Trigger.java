@@ -2,7 +2,7 @@ package map.triggers;
 
 import gui.view.ViewMode;
 import main.Game;
-import map.Condition;
+import map.condition.Condition;
 import pattern.GroupTriggerMatcher;
 import sound.SoundTitle;
 import util.SerializationUtils;

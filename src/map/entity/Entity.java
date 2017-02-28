@@ -2,7 +2,7 @@ package map.entity;
 
 import draw.TileUtils;
 import gui.view.map.MapView;
-import map.Condition;
+import map.condition.Condition;
 import map.Direction;
 import map.MapData;
 import map.triggers.TriggerType;

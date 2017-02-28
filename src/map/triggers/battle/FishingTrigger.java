@@ -1,6 +1,6 @@
 package map.triggers.battle;
 
-import map.Condition;
+import map.condition.Condition;
 import map.overworld.OverworldTool;
 import map.overworld.WildEncounter;
 import map.triggers.Trigger;

@@ -1,6 +1,6 @@
 package mapMaker.dialogs;
 
-import map.Condition;
+import map.condition.Condition;
 import map.Direction;
 import map.entity.movable.MovableEntity;
 import mapMaker.MapMaker;

@@ -1,7 +1,7 @@
 package pattern.map;
 
 import item.ItemNamesies;
-import map.Condition;
+import map.condition.Condition;
 import map.entity.Entity;
 import map.entity.ItemEntity;
 import mapMaker.model.TriggerModel.TriggerModelType;
