@@ -1,3 +1,5 @@
 package trainer;
 
-public interface Opponent extends Team {}
+public interface Opponent extends Team {
+    int maxPokemonAllowed();
+}

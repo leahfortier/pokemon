@@ -50,4 +50,9 @@ public class WildPokemon implements Opponent {
 	public boolean blackout() {
 		return !wildPokemon.canFight();
 	}
+
+	@Override
+	public int maxPokemonAllowed() {
+		return Trainer.MAX_POKEMON;
+	}
 }

@@ -5,13 +5,16 @@ import pokemon.ActivePokemon;
 
 public class EnemyTrainer extends Trainer implements Opponent {
 	private static final long serialVersionUID = 1L;
-	
-	public EnemyTrainer(String name, int cashMoney) {
+
+	private final int maxPokemonAllowed;
+
+	public EnemyTrainer(String name, int cashMoney, int maxPokemonAllowed) {
 		super(name, cashMoney);
+		this.maxPokemonAllowed = maxPokemonAllowed;
 	}
 
-	public EnemyTrainer(String name, int cashMoney, ActivePokemon... team) {
-		this(name, cashMoney);
+	public EnemyTrainer(String name, int cashMoney, int maxPokemonAllowed, ActivePokemon... team) {
+		this(name, cashMoney, maxPokemonAllowed);
 		for (ActivePokemon pokemon : team) {
 			addPokemon(pokemon);
 		}
@@ -25,5 +28,10 @@ public class EnemyTrainer extends Trainer implements Opponent {
 		else {
 			Global.error("Trainers cannot have more than six Pokemon");
 		}
+	}
+
+	@Override
+	public int maxPokemonAllowed() {
+		return this.maxPokemonAllowed;
 	}
 }

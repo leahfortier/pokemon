@@ -24,8 +24,9 @@ public class TrainerBattleTrigger extends Trigger {
 
 		String trainerName = battleMatcher.getName();
 		int cash = battleMatcher.getDatCashMoney();
+		int maxPokemonAllowed = battleMatcher.getMaxPokemonAllowed();
 
-		this.trainer = new EnemyTrainer(trainerName, cash);
+		this.trainer = new EnemyTrainer(trainerName, cash, maxPokemonAllowed);
 
 		for (PokemonMatcher matcher : battleMatcher.getPokemon()) {
 			trainer.addPokemon(ActivePokemon.createActivePokemon(matcher, false));

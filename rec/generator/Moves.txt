@@ -5566,7 +5566,7 @@ Baton Pass:
 	Type: Normal
 	FullApplies:
 		Team team = b.getTrainer(user);
-		return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon();
+		return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon(b);
 		###
 	UniqueEffects: 
 		// TODO: Hardcore test this shit not in the mood right now but this is one of the most complicated moves so lots of tests tests tests
@@ -5578,11 +5578,7 @@ Baton Pass:
 			next.getAttributes().setStage(stat, user.getStage(stat));
 		}
 		
-		for (PokemonEffect effect : user.getEffects()) {
-			if (effect instanceof PassableEffect) {
-				next.addEffect(effect);
-			}
-		}
+		user.getEffects().stream().filter(effect -> effect instanceof PassableEffect).forEach(next::addEffect);
 		###
 	SelfTarget: True
 	MoveType: Non_Snatchable

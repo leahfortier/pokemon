@@ -36,6 +36,7 @@ public class BattleAttributes implements Serializable {
 	private boolean firstTurn;
 	private boolean attacking;
 	private boolean used;
+	private boolean battleUsed;
 	private boolean lastMoveSucceeded;
 	private Object castSource;
 	
@@ -44,6 +45,7 @@ public class BattleAttributes implements Serializable {
 
 		resetStages();
 		used = false;
+		battleUsed = false;
 		effects = new ArrayList<>();
 		successionDecayRate = 1;
 		lastMoveUsed = null;
@@ -85,10 +87,17 @@ public class BattleAttributes implements Serializable {
 	
 	public void setUsed(boolean u) {
 		used = u;
+		if (used) {
+			battleUsed = true;
+		}
 	}
 	
 	public boolean isUsed() {
 		return used;
+	}
+
+	public boolean isBattleUsed() {
+		return this.battleUsed;
 	}
 	
 	public boolean isFirstTurn() {

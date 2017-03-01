@@ -56,6 +56,7 @@ public abstract class Trainer implements Team, Serializable {
 		team = new ArrayList<>();
 		effects = new ArrayList<>();
 		frontIndex = 0;
+
 		this.name = name; 
 		this.cashMoney = cashMoney;
 		
@@ -167,10 +168,12 @@ public abstract class Trainer implements Team, Serializable {
 		team.forEach(ActivePokemon::fullyHeal);
 	}
 	
-	public void switchToRandom() {
+	public void switchToRandom(Battle b) {
+
+		boolean maxUsed = maxPokemonUsed(b);
 		List<Integer> valid = new ArrayList<>();
 		for (int i = 0; i < team.size(); i++) {
-			if (i == frontIndex || !team.get(i).canFight()) {
+			if (i == frontIndex || !team.get(i).canFight() || (maxUsed && !team.get(i).getAttributes().isBattleUsed())) {
 				continue;
 			}
 
@@ -194,11 +197,17 @@ public abstract class Trainer implements Team, Serializable {
 		ActivePokemon curr = front();
 		ActivePokemon toSwitch = team.get(switchIndex);
 		
-		// Cannot switch to a fainted Pokemon, and if current Pokemon is dead then you must switch!
+		// Cannot switch to a fainted Pokemon
 		if (!toSwitch.canFight()) {
 			return false;
 		}
 
+		// Cannot switch to an unused Pokemon if you have already used the maximum number of Pokemon
+		if (maxPokemonUsed(b) && !toSwitch.getAttributes().isBattleUsed()) {
+			return false;
+		}
+
+		// If current Pokemon is dead then you must switch!
 		if (curr.hasStatus(StatusCondition.FAINTED)) {
 			return true;
 		}
@@ -206,15 +215,24 @@ public abstract class Trainer implements Team, Serializable {
 		// Front Pokemon is alive -- Check if they are able to switch out, if not, display the appropriate message
 		return curr.canEscape(b);
 	}
+
+	private boolean maxPokemonUsed(Battle b) {
+		return numPokemonUsed() == b.getOpponent().maxPokemonAllowed();
+	}
+
+	private int numPokemonUsed() {
+		return (int)team.stream().filter(p -> p.getAttributes().isBattleUsed()).count();
+	}
 	
 	// Returns true if the trainer has Pokemon (other than the one that is currently fighting) that is able to fight
-	public boolean hasRemainingPokemon() {
+	public boolean hasRemainingPokemon(Battle b) {
+		boolean maxUsed = maxPokemonUsed(b);
 		for (int i = 0; i < team.size(); i++) {
 			if (i == frontIndex) {
 				continue;
 			}
 			
-			if (team.get(i).canFight()) {
+			if (team.get(i).canFight() && (!maxUsed || team.get(i).getAttributes().isBattleUsed())) {
 				return true;
 			}
 		}

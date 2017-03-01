@@ -7,6 +7,7 @@ import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
+import trainer.Trainer;
 import trainer.Trainer.Action;
 import trainer.WildPokemon;
 
@@ -75,7 +76,7 @@ class TestBattle extends Battle {
     static TestBattle createTrainerBattle(TestPokemon mahBoiiiiiii, TestPokemon nahMahBoi) {
         new TestCharacter(mahBoiiiiiii);
 
-        EnemyTrainer enemy = new EnemyTrainer("MUTANT ENEMY", 93, nahMahBoi);
+        EnemyTrainer enemy = new EnemyTrainer("MUTANT ENEMY", 93, Trainer.MAX_POKEMON, nahMahBoi);
         TestBattle testBattle = new TestBattle(enemy);
 
         mahBoiiiiiii.setupMove(AttackNamesies.SPLASH, testBattle);

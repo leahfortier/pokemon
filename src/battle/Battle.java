@@ -93,6 +93,10 @@ public class Battle {
 		this.setBaseWeather(area.getWeather());
 		this.setTerrainType(area.getBattleTerrain(), true);
 
+		if (opponent.maxPokemonAllowed() < Trainer.MAX_POKEMON) {
+			Messages.add("At most " + opponent.maxPokemonAllowed() + " " + PokeString.POKEMON + " are allowed for this battle!!");
+		}
+
 		this.player.enterBattle();
 		if (this.opponent instanceof Trainer) {
 			Trainer opponentTrainer = (Trainer) this.opponent;
@@ -337,7 +341,7 @@ public class Battle {
 		Trainer opp = (Trainer)opponent;
 
 		// They still have some Pokes left
-		opp.switchToRandom();
+		opp.switchToRandom(this);
 		enterBattle(opp.front());
 	}
 
@@ -448,10 +452,14 @@ public class Battle {
 		// No longer the first turn anymore
 		me.getAttributes().setFirstTurn(false);
 	}
-	
+
+	private boolean isFront(ActivePokemon p) {
+		return p == getTrainer(p).front();
+	}
+
 	private void executionSolution(ActivePokemon me, ActivePokemon o) {
 		// Don't do anything if they're not actually attacking
-		if (!isFighting(me.isPlayer()) || me != getTrainer(me).front()) {
+		if (!isFighting(me.isPlayer()) || !isFront(me)) {
 			return;
 		}
 
@@ -478,8 +486,9 @@ public class Battle {
 		
 		me.endAttack(o, success, reduce);
 
-        Messages.add(new MessageUpdate().updatePokemon(this, me));
-        Messages.add(new MessageUpdate().updatePokemon(this, o));
+		// Can't use me and o in case there was a switch mid-turn
+        Messages.add(new MessageUpdate().updatePokemon(this, player.front()));
+        Messages.add(new MessageUpdate().updatePokemon(this, opponent.front()));
 	}
 	
 	public void printAttacking(ActivePokemon p) {

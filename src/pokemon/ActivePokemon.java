@@ -686,7 +686,7 @@ public class ActivePokemon implements Serializable {
 		else {
 			// Fails against trainers on their last Pokemon
 			Trainer trainer = (Trainer)opponent;
-			return trainer.hasRemainingPokemon();
+			return trainer.hasRemainingPokemon(b);
 		}
 	}
 
@@ -706,7 +706,7 @@ public class ActivePokemon implements Serializable {
 			Trainer trainer = (Trainer)opponent;
 
 			// Swap to a random Pokemon!
-			trainer.switchToRandom();
+			trainer.switchToRandom(b);
 			victim = trainer.front();
 			b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
 		}
@@ -736,7 +736,7 @@ public class ActivePokemon implements Serializable {
 		}
 
 		Trainer trainer = (Trainer)team;
-		if (!trainer.hasRemainingPokemon()) {
+		if (!trainer.hasRemainingPokemon(b)) {
 			// Don't switch if no one to switch to
 			return false;
 		}
@@ -754,7 +754,7 @@ public class ActivePokemon implements Serializable {
 		// TODO: Prompt a legit switch fo user
 		// TODO: Once this happens, this should take in a random parameter since this is still correct for Red Card, I believe and should have the message "name was sent out!"
 		// TODO: Check if trainer action needs to be set to Switch
-		trainer.switchToRandom();
+		trainer.switchToRandom(b);
 		ActivePokemon front = trainer.front();
 		b.enterBattle(front, trainer.getName() + " sent out " + front.getName() + "!");
 

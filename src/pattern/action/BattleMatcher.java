@@ -1,10 +1,12 @@
 package pattern.action;
 
 import pattern.PokemonMatcher;
+import trainer.Trainer;
 
 public class BattleMatcher {
     private String name;
     private int cashMoney;
+    private Integer maxPokemonAllowed;
     private PokemonMatcher[] pokemon;
     private String update;
 
@@ -29,5 +31,9 @@ public class BattleMatcher {
 
     public String getUpdateInteraction() {
         return this.update;
+    }
+
+    public int getMaxPokemonAllowed() {
+        return this.maxPokemonAllowed == null ? Trainer.MAX_POKEMON : this.maxPokemonAllowed;
     }
 }

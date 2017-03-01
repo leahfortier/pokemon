@@ -9117,17 +9117,13 @@ public abstract class Attack implements Serializable {
 			for (Stat stat : Stat.BATTLE_STATS) {
 				next.getAttributes().setStage(stat, user.getStage(stat));
 			}
-			
-			for (PokemonEffect effect : user.getEffects()) {
-				if (effect instanceof PassableEffect) {
-					next.addEffect(effect);
-				}
-			}
+
+			user.getEffects().stream().filter(effect -> effect instanceof PassableEffect).forEach(next::addEffect);
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Team team = b.getTrainer(user);
-			return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon();
+			return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon(b);
 		}
 	}
 
