@@ -2,7 +2,7 @@ package test;
 
 import battle.attack.AttackNamesies;
 import item.ItemNamesies;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;

@@ -9117,7 +9117,7 @@ public abstract class Attack implements Serializable {
 			for (Stat stat : Stat.BATTLE_STATS) {
 				next.getAttributes().setStage(stat, user.getStage(stat));
 			}
-
+			
 			user.getEffects().stream().filter(effect -> effect instanceof PassableEffect).forEach(next::addEffect);
 		}
 
