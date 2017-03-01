@@ -5,8 +5,10 @@ import pattern.action.ActionMatcher;
 import pattern.action.BattleMatcher;
 import trainer.Trainer;
 import util.GUIUtils;
+import util.PokeString;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
@@ -23,6 +25,7 @@ class BattleActionPanel extends ActionPanel {
 
 	private final JTextField nameTextField;
 	private final JFormattedTextField cashFormattedTextField;
+	private final JCheckBox maxPokemonLimitCheckBox;
 	private final JTextField updateInteractionTextField;
 	private final JButton addPokemonButton;
 
@@ -37,6 +40,7 @@ class BattleActionPanel extends ActionPanel {
 
 		nameTextField = new JTextField();
 		cashFormattedTextField = GUIUtils.createIntegerTextField(100, 0, Integer.MAX_VALUE);
+		maxPokemonLimitCheckBox = GUIUtils.createCheckBox("Limit Max " + PokeString.POKEMON);
 		updateInteractionTextField = new JTextField("won");
 		addPokemonButton = GUIUtils.createButton("Add Pokemon", event -> addPokemonPanel(null));
 
@@ -75,6 +79,7 @@ class BattleActionPanel extends ActionPanel {
 		JPanel tippityTop = GUIUtils.createHorizontalLayoutComponent(
 				GUIUtils.createTextFieldComponent("Trainer Name", nameTextField),
 				GUIUtils.createTextFieldComponent("Cash Money", cashFormattedTextField),
+				maxPokemonLimitCheckBox,
 				GUIUtils.createTextFieldComponent("Update Interaction", updateInteractionTextField)
 		);
 
@@ -130,6 +135,7 @@ class BattleActionPanel extends ActionPanel {
 
 		nameTextField.setText(battleMatcher.getName());
 		cashFormattedTextField.setValue(battleMatcher.getDatCashMoney());
+		maxPokemonLimitCheckBox.setSelected(battleMatcher.isMaxPokemonLimit());
 		updateInteractionTextField.setText(battleMatcher.getUpdateInteraction());
 
 		pokemonPanels.clear();
@@ -142,6 +148,7 @@ class BattleActionPanel extends ActionPanel {
 	public ActionMatcher getActionMatcher(ActionType actionType) {
 		String name = nameTextField.getText().trim();
 		int cashMoney = Integer.parseInt(cashFormattedTextField.getValue().toString());
+		boolean isMaxLimit = maxPokemonLimitCheckBox.isSelected();
 		PokemonMatcher[] pokemon = new PokemonMatcher[pokemonPanels.size()];
 		for (int i = 0; i < pokemon.length; i++) {
 			PokemonMatcher pokemonData = pokemonPanels.get(i).getMatcher();
@@ -152,7 +159,7 @@ class BattleActionPanel extends ActionPanel {
 
 		String update = updateInteractionTextField.getText().trim();
 
-		BattleMatcher battleMatcher = new BattleMatcher(name, cashMoney, pokemon, update);
+		BattleMatcher battleMatcher = new BattleMatcher(name, cashMoney, isMaxLimit, pokemon, update);
 		ActionMatcher actionMatcher = new ActionMatcher();
 		actionMatcher.setBattle(battleMatcher);
 

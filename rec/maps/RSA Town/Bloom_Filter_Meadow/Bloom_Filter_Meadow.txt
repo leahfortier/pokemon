@@ -118,6 +118,7 @@
               "battle": {
                 "name": "Bug Catcher",
                 "cashMoney": 100,
+                "maxPokemonLimit": false,
                 "pokemon": [
                   {
                     "namesies": "CATERPIE",
@@ -172,6 +173,7 @@
               "battle": {
                 "name": "Meadow Lady",
                 "cashMoney": 100,
+                "maxPokemonLimit": false,
                 "pokemon": [
                   {
                     "namesies": "BUDEW",

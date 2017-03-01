@@ -66,6 +66,7 @@
               "battle": {
                 "name": "Mom",
                 "cashMoney": 500,
+                "maxPokemonLimit": false,
                 "pokemon": [
                   {
                     "namesies": "CHARMANDER",

@@ -122,6 +122,7 @@
               "battle": {
                 "name": "Blue",
                 "cashMoney": 230,
+                "maxPokemonLimit": false,
                 "pokemon": [
                   {
                     "namesies": "RIOLU",

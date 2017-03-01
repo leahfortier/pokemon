@@ -6,13 +6,14 @@ import trainer.Trainer;
 public class BattleMatcher {
     private String name;
     private int cashMoney;
-    private Integer maxPokemonAllowed;
+    private boolean maxPokemonLimit;
     private PokemonMatcher[] pokemon;
     private String update;
 
-    public BattleMatcher(String name, int cashMoney, PokemonMatcher[] pokemon, String update) {
+    public BattleMatcher(String name, int cashMoney, boolean maxPokemonLimit, PokemonMatcher[] pokemon, String update) {
         this.name = name;
         this.cashMoney = cashMoney;
+        this.maxPokemonLimit = maxPokemonLimit;
         this.pokemon = pokemon;
         this.update = update;
     }
@@ -33,7 +34,11 @@ public class BattleMatcher {
         return this.update;
     }
 
+    public boolean isMaxPokemonLimit() {
+        return this.maxPokemonLimit;
+    }
+
     public int getMaxPokemonAllowed() {
-        return this.maxPokemonAllowed == null ? Trainer.MAX_POKEMON : this.maxPokemonAllowed;
+        return this.maxPokemonLimit ? this.pokemon.length : Trainer.MAX_POKEMON;
     }
 }

@@ -58,6 +58,7 @@
               "battle": {
                 "name": "Team Deadlock Grunt",
                 "cashMoney": 100,
+                "maxPokemonLimit": false,
                 "pokemon": [
                   {
                     "namesies": "VENONAT",
@@ -115,6 +116,7 @@
               "battle": {
                 "name": "Team Deadlock Grunt",
                 "cashMoney": 100,
+                "maxPokemonLimit": false,
                 "pokemon": [
                   {
                     "namesies": "BUTTERFREE",
@@ -177,6 +179,7 @@
               "battle": {
                 "name": "Team Deadlock Grunt",
                 "cashMoney": 100,
+                "maxPokemonLimit": false,
                 "pokemon": [
                   {
                     "namesies": "VENIPEDE",

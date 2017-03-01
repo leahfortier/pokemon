@@ -46,6 +46,7 @@
               "battle": {
                 "name": "Gym Trainer",
                 "cashMoney": 100,
+                "maxPokemonLimit": false,
                 "pokemon": [
                   {
                     "namesies": "BLITZLE",
@@ -96,6 +97,7 @@
               "battle": {
                 "name": "Gym Trainer",
                 "cashMoney": 100,
+                "maxPokemonLimit": false,
                 "pokemon": [
                   {
                     "namesies": "JOLTIK",
@@ -146,18 +148,25 @@
               "battle": {
                 "name": "Leader Moore",
                 "cashMoney": 1000,
+                "maxPokemonLimit": true,
                 "pokemon": [
                   {
                     "namesies": "MAGNEMITE",
-                    "level": 11
+                    "nickname": "",
+                    "level": 11,
+                    "isShiny": false
                   },
                   {
                     "namesies": "ELEKID",
-                    "level": 11
+                    "nickname": "",
+                    "level": 11,
+                    "isShiny": false
                   },
                   {
                     "namesies": "PIKACHU",
-                    "level": 14
+                    "nickname": "",
+                    "level": 14,
+                    "isShiny": false
                   }
                 ],
                 "update": "badge"
