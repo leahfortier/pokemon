@@ -164,12 +164,12 @@ public class ActivePokemon implements Serializable {
 	public static ActivePokemon createActivePokemon(PokemonMatcher pokemonMatcher, boolean user) {
 		
 		// Random Egg
-		if (pokemonMatcher.isRandomEgg()) {
+		if (pokemonMatcher.isStartEgg()) {
 			if (!user) {
 				Global.error("Trainers cannot have eggs.");
 			}
 
-			return new ActivePokemon(PokemonInfo.getRandomBaseEvolution());
+			return new ActivePokemon(PokemonMatcher.getRandomStartEggPokemon());
 		}
 
 		final PokemonNamesies namesies = pokemonMatcher.getNamesies();

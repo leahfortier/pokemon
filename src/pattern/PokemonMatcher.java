@@ -7,6 +7,7 @@ import main.Global;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import util.GeneralUtils;
+import util.RandomUtils;
 import util.StringUtils;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class PokemonMatcher {
     private PokemonNamesies namesies;
     private String nickname;
     private Integer level;
-    private Boolean isRandomEgg;
+    private Boolean isStartEgg;
     private Boolean isShiny;
     private List<AttackNamesies> moves;
     private Boolean isEgg;
@@ -47,13 +48,6 @@ public class PokemonMatcher {
 
     private PokemonMatcher() {}
 
-    public static PokemonMatcher createRandomEggMatcher() {
-        PokemonMatcher matcher = new PokemonMatcher();
-        matcher.isRandomEgg = true;
-
-        return matcher;
-    }
-
     public static PokemonMatcher createEggMatcher(PokemonNamesies eggy) {
         PokemonMatcher matcher = new PokemonMatcher();
         matcher.namesies = eggy;
@@ -74,8 +68,8 @@ public class PokemonMatcher {
         return GeneralUtils.getIntegerValue(this.level);
     }
 
-    public boolean isRandomEgg() {
-        return GeneralUtils.getBooleanValue(this.isRandomEgg);
+    public boolean isStartEgg() {
+        return GeneralUtils.getBooleanValue(this.isStartEgg);
     }
 
     public boolean isShiny() {
@@ -110,4 +104,51 @@ public class PokemonMatcher {
     public ItemNamesies getHoldItem() {
         return this.holdItem;
     }
+
+    public static PokemonNamesies getRandomStartEggPokemon() {
+        return RandomUtils.getRandomValue(startEggPotentials);
+    }
+
+    // All starters and baby Pokemon
+    private static final PokemonNamesies[] startEggPotentials = new PokemonNamesies[] {
+            PokemonNamesies.BULBASAUR,
+            PokemonNamesies.CHARMANDER,
+            PokemonNamesies.SQUIRTLE,
+            PokemonNamesies.CHIKORITA,
+            PokemonNamesies.CYNDAQUIL,
+            PokemonNamesies.TOTODILE,
+            PokemonNamesies.TREECKO,
+            PokemonNamesies.TORCHIC,
+            PokemonNamesies.MUDKIP,
+            PokemonNamesies.TURTWIG,
+            PokemonNamesies.CHIMCHAR,
+            PokemonNamesies.PIPLUP,
+            PokemonNamesies.SNIVY,
+            PokemonNamesies.TEPIG,
+            PokemonNamesies.OSHAWOTT,
+            PokemonNamesies.CHESPIN,
+            PokemonNamesies.FENNEKIN,
+            PokemonNamesies.FROAKIE,
+            PokemonNamesies.ROWLET,
+            PokemonNamesies.LITTEN,
+            PokemonNamesies.POPPLIO,
+            PokemonNamesies.PICHU,
+            PokemonNamesies.CLEFFA,
+            PokemonNamesies.IGGLYBUFF,
+            PokemonNamesies.TOGEPI,
+            PokemonNamesies.TYROGUE,
+            PokemonNamesies.SMOOCHUM,
+            PokemonNamesies.ELEKID,
+            PokemonNamesies.MAGBY,
+            PokemonNamesies.AZURILL,
+            PokemonNamesies.WYNAUT,
+            PokemonNamesies.BUDEW,
+            PokemonNamesies.CHINGLING,
+            PokemonNamesies.BONSLY,
+            PokemonNamesies.MIME_JR,
+            PokemonNamesies.HAPPINY,
+            PokemonNamesies.MUNCHLAX,
+            PokemonNamesies.RIOLU,
+            PokemonNamesies.MANTYKE
+    };
 }

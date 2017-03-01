@@ -17,7 +17,6 @@ import javax.swing.JTextField;
 class PokemonTriggerPanel extends TriggerContentsPanel {
     private final JTextField pokemonNameField;
     private final JFormattedTextField levelField;
-    private final JCheckBox randomEggCheckBox;
     private final JCheckBox isEggCheckBox;
     private final JCheckBox shinyCheckBox;
     private final JTextField itemNameField;
@@ -31,7 +30,6 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
         });
 
         this.levelField = GUIUtils.createIntegerTextField(1, 1, ActivePokemon.MAX_LEVEL);
-        this.randomEggCheckBox = GUIUtils.createCheckBox("Random Egg", action -> setEnabled());
         this.isEggCheckBox = GUIUtils.createCheckBox("Is Egg", action -> setEnabled());
         this.shinyCheckBox = GUIUtils.createCheckBox("Shiny");
 
@@ -43,7 +41,6 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
         });
 
         JPanel checkBoxComponent = GUIUtils.createHorizontalLayoutComponent(
-                this.randomEggCheckBox,
                 this.isEggCheckBox,
                 this.shinyCheckBox
         );
@@ -58,8 +55,7 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
     }
 
     private void setEnabled() {
-        boolean isEggy = randomEggCheckBox.isSelected() || isEggCheckBox.isSelected();
-        pokemonNameField.setEnabled(!randomEggCheckBox.isSelected());
+        boolean isEggy = isEggCheckBox.isSelected();
         levelField.setEnabled(!isEggy);
         shinyCheckBox.setEnabled(!isEggy);
         itemNameField.setEnabled(!isEggy);
@@ -69,7 +65,7 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
     protected void load(String triggerContents) {
         PokemonMatcher matcher = SerializationUtils.deserializeJson(triggerContents, PokemonMatcher.class);
 
-        if (!matcher.isRandomEgg()) {
+        if (!matcher.isStartEgg()) {
             this.pokemonNameField.setText(matcher.getNamesies().getName());
 
             if (!matcher.isEgg()) {
@@ -82,7 +78,6 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
             }
         }
 
-        this.randomEggCheckBox.setSelected(matcher.isRandomEgg());
         this.isEggCheckBox.setSelected(matcher.isEgg());
 
         setEnabled();
@@ -91,10 +86,7 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
     @Override
     protected String getTriggerContents() {
         PokemonMatcher matcher;
-        if (randomEggCheckBox.isSelected()) {
-            matcher = PokemonMatcher.createRandomEggMatcher();
-        }
-        else if (isEggCheckBox.isSelected()) {
+        if (isEggCheckBox.isSelected()) {
             matcher = PokemonMatcher.createEggMatcher(PokemonNamesies.getValueOf(pokemonNameField.getText()));
         }
         else {

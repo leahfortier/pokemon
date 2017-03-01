@@ -32,7 +32,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	public static final int NUM_POKEMON = 815;
 
 	private static Map<Integer, PokemonInfo> map;
-	private static List<PokemonNamesies> baseEvolution;
 	private static Set<PokemonNamesies> incenseBabies;
 
 	private final int number;
@@ -224,21 +223,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		}
 
 		return map.get(index);
-	}
-
-	public static PokemonNamesies getRandomBaseEvolution() {
-		if (baseEvolution == null) {
-			baseEvolution = new ArrayList<>();
-			Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.BASE_EVOLUTIONS, false));
-			while (in.hasNext()) {
-				PokemonNamesies namesies = PokemonNamesies.getValueOf(in.nextLine().trim());
-				baseEvolution.add(namesies);
-			}
-
-			in.close();
-		}
-
-		return RandomUtils.getRandomValue(baseEvolution);
 	}
 
 	public int compareTo(PokemonInfo p) {

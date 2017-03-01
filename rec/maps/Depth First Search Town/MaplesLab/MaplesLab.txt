@@ -75,7 +75,7 @@
               "trigger": {
                 "triggerType": "GivePokemon",
                 "triggerContents": "{
-  \"isRandomEgg\": true
+  \"isStartEgg\": true
 }"
               }
             },

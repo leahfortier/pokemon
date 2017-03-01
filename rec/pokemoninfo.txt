@@ -57171,7 +57171,7 @@ LEVEL QUILLADIN 16
 87
 OVERGROW BULLETPROOF
 Spiky Nut
-16 19.8 Such a thick shell of wood covers its head and back that even a direct hit from a truck wouldn't faze it.
+16 19.8 Such a thick shell of wood covers its head and back that even a direct hit from a truck wouldn't phase it.
 5120
 FIELD NONE
 14
