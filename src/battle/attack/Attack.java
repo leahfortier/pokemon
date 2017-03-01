@@ -6070,8 +6070,8 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void startTurn(Battle b, ActivePokemon me) {
-			// TODO: PP isn't being reduced when flinches
 			super.applyBasicEffects(b, me, me);
+			me.getAttributes().setReducePP(true);
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {

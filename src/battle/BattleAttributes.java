@@ -35,6 +35,7 @@ public class BattleAttributes implements Serializable {
 	private double successionDecayRate;
 	private boolean firstTurn;
 	private boolean attacking;
+	private boolean reducePP;
 	private boolean used;
 	private boolean battleUsed;
 	private boolean lastMoveSucceeded;
@@ -55,6 +56,15 @@ public class BattleAttributes implements Serializable {
 		attacking = false;
 		lastMoveSucceeded = true;
 		castSource = null;
+		reducePP = false;
+	}
+
+	public void setReducePP(boolean reduce) {
+		reducePP = reduce;
+	}
+
+	public boolean shouldReducePP() {
+		return reducePP;
 	}
 
 	public void setCastSource(Object castSource) {
@@ -119,8 +129,13 @@ public class BattleAttributes implements Serializable {
 	public boolean hasTakenDamage() {
 		return damageTaken > 0;
 	}
-	
-	public void resetDamageTaken() {
+
+	public void resetTurn() {
+		resetDamageTaken();
+		setReducePP(false);
+	}
+
+	private void resetDamageTaken() {
 		damageTaken = 0;
 	}
 	
@@ -194,10 +209,6 @@ public class BattleAttributes implements Serializable {
 	
 	public boolean hasEffect(EffectNamesies effect) {
 		return Effect.hasEffect(effects, effect);
-	}
-
-	public int[] getStages() {
-		return this.stages.clone();
 	}
 
 	public int getStage(Stat stat) {

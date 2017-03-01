@@ -3540,8 +3540,8 @@ Focus Punch:
 	Effect: Focusing
 	SelfTarget: True
 	StartTurn: 
-		// TODO: PP isn't being reduced when flinches
 		super.applyBasicEffects(b, me, me);
+		me.getAttributes().setReducePP(true);
 		###
 	Applies: user.hasEffect(EffectNamesies.FOCUSING)
 	ShouldApplyEffects:

@@ -68,7 +68,6 @@ public class Battle {
 
 	private int turn;
 	private boolean firstAttacking;
-	private boolean reduce;
 	private int escapeAttempts;
 
 	private UpdateMatcher npcUpdateInteraction;
@@ -253,8 +252,8 @@ public class Battle {
 		opp.setMove(Move.selectOpponentMove(this, opp));
 
 		turn++;
-		plyr.getAttributes().resetDamageTaken();
-		opp.getAttributes().resetDamageTaken();
+		plyr.getAttributes().resetTurn();
+		opp.getAttributes().resetTurn();
 
 		// Fucking focus punch
 		if (isFighting(true)) {
@@ -471,7 +470,6 @@ public class Battle {
 		}
 
 		boolean success = false;
-		reduce = false;
 		
 		me.startAttack(this);
 		
@@ -491,7 +489,7 @@ public class Battle {
 			}			
 		}
 		
-		me.endAttack(o, success, reduce);
+		me.endAttack(o, success);
 
 		// Can't use me and o in case there was a switch mid-turn
         Messages.add(new MessageUpdate().updatePokemon(this, player.front()));
@@ -500,7 +498,7 @@ public class Battle {
 	
 	public void printAttacking(ActivePokemon p) {
 		Messages.add((p.isPlayer() ? "" : "Enemy ") + p.getName() + " used " + p.getAttack().getName() + "!");
-		reduce = true;
+		p.getAttributes().setReducePP(true);
 	}
 	
 	private void executeAttack(ActivePokemon me, ActivePokemon o) {

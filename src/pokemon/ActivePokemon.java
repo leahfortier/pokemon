@@ -1341,7 +1341,7 @@ public class ActivePokemon implements Serializable {
 		this.getMove().setAttributes(b, this);
 	}
 	
-	public void endAttack(ActivePokemon opp, boolean success, boolean reduce) {
+	public void endAttack(ActivePokemon opp, boolean success) {
 		if (!success) {
 			this.getAttributes().removeEffect(EffectNamesies.SELF_CONFUSION);
 			this.getAttributes().resetCount();
@@ -1349,7 +1349,7 @@ public class ActivePokemon implements Serializable {
 		
 		this.getAttributes().setLastMoveUsed();
 		
-		if (reduce) {
+		if (this.getAttributes().shouldReducePP()) {
 			this.getMove().reducePP(opp.hasAbility(AbilityNamesies.PRESSURE) ? 2 : 1);
 		}
 		
