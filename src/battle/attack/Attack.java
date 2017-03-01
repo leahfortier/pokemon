@@ -264,9 +264,9 @@ public abstract class Attack implements Serializable {
 	}
 
 	protected boolean shouldApplyEffects(Battle b, ActivePokemon user) {
-		// Multi-turn moves default to no effects on the attacking turn
+		// Multi-turn moves default to no effects on the charging turn
 		if (this.isMultiTurn(b, user)) {
-			return ((MultiTurnMove)this).isCharging(user);
+			return !((MultiTurnMove)this).isCharging(user);
 		}
 
 		return true;
@@ -1302,6 +1302,10 @@ public abstract class Attack implements Serializable {
 			super.selfTarget = true;
 			super.statChanges[Stat.DEFENSE.index()] = 1;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+			return this.isCharging(user);
 		}
 
 		public String getChargeMessage(ActivePokemon user) {
@@ -9553,10 +9557,6 @@ public abstract class Attack implements Serializable {
 			super.statChanges[Stat.SP_ATTACK.index()] = 2;
 			super.statChanges[Stat.SP_DEFENSE.index()] = 2;
 			super.statChanges[Stat.SPEED.index()] = 2;
-		}
-
-		public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
-			return !this.isCharging(user);
 		}
 
 		public String getChargeMessage(ActivePokemon user) {

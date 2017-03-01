@@ -573,6 +573,9 @@ Skull Bash:
 	SelfTarget: True
 	StatChange: 1 Defense 1
 	ChargingMove: user.getName() + " lowered its head!"
+	ShouldApplyEffects:
+		return this.isCharging(user);
+		###
 *
 Iron Defense:
 	Desc: The user hardens its body's surface like iron, sharply raising its Defense stat.
@@ -5847,9 +5850,6 @@ Geomancy:
 	SelfTarget: True
 	StatChange: 3 Sp_Attack 2 Sp_Defense 2 Speed 2
 	ChargingMove: user.getName() + " is absorbing power!"
-	ShouldApplyEffects:
-		return !this.isCharging(user);
-		###
 *
 Boomburst:
 	Desc: The user attacks everything around it with the destructive power of a terrible, explosive sound.
