@@ -62,7 +62,7 @@ public enum ConditionKey {
 
         for (ConditionKey conditionKey : values()) {
             if (conditionKey.keyName.equals(key)) {
-                conditionKey.conditionParser.parseCondition(value);
+                return conditionKey.conditionParser.parseCondition(value);
             }
         }
 
