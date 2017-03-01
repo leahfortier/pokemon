@@ -93,8 +93,15 @@ public class Battle {
 		this.setBaseWeather(area.getWeather());
 		this.setTerrainType(area.getBattleTerrain(), true);
 
-		if (opponent.maxPokemonAllowed() < Trainer.MAX_POKEMON) {
-			Messages.add("At most " + opponent.maxPokemonAllowed() + " " + PokeString.POKEMON + " are allowed for this battle!!");
+		int maxPokemonAllowed = opponent.maxPokemonAllowed();
+		if (maxPokemonAllowed < Trainer.MAX_POKEMON) {
+			boolean onlyOne = maxPokemonAllowed == 1;
+			Messages.add(String.format("%s %d %s %s allowed for this battle!!",
+					onlyOne ? "Only" : "At most",
+					maxPokemonAllowed,
+					PokeString.POKEMON,
+					onlyOne ? "is" : "are"
+			));
 		}
 
 		this.player.enterBattle();
