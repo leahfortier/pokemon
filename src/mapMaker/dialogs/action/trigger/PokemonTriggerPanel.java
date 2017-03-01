@@ -65,7 +65,7 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
     protected void load(String triggerContents) {
         PokemonMatcher matcher = SerializationUtils.deserializeJson(triggerContents, PokemonMatcher.class);
 
-        if (!matcher.isStartEgg()) {
+        if (!matcher.isStarterEgg()) {
             this.pokemonNameField.setText(matcher.getNamesies().getName());
 
             if (!matcher.isEgg()) {

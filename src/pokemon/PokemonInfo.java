@@ -444,4 +444,33 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	public boolean canLearnByBreeding(AttackNamesies attack) {
 		return this.learnableMoves.contains(attack);
 	}
+
+	public static PokemonNamesies getRandomStarterPokemon() {
+		return RandomUtils.getRandomValue(starterPokemon);
+	}
+
+	// All starters
+	private static final PokemonNamesies[] starterPokemon = new PokemonNamesies[] {
+			PokemonNamesies.BULBASAUR,
+			PokemonNamesies.CHARMANDER,
+			PokemonNamesies.SQUIRTLE,
+			PokemonNamesies.CHIKORITA,
+			PokemonNamesies.CYNDAQUIL,
+			PokemonNamesies.TOTODILE,
+			PokemonNamesies.TREECKO,
+			PokemonNamesies.TORCHIC,
+			PokemonNamesies.MUDKIP,
+			PokemonNamesies.TURTWIG,
+			PokemonNamesies.CHIMCHAR,
+			PokemonNamesies.PIPLUP,
+			PokemonNamesies.SNIVY,
+			PokemonNamesies.TEPIG,
+			PokemonNamesies.OSHAWOTT,
+			PokemonNamesies.CHESPIN,
+			PokemonNamesies.FENNEKIN,
+			PokemonNamesies.FROAKIE,
+			PokemonNamesies.ROWLET,
+			PokemonNamesies.LITTEN,
+			PokemonNamesies.POPPLIO
+	};
 }
