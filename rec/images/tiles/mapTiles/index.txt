@@ -80,6 +80,7 @@ Flowers05 -716540
 Flowers06 -71653f
 Flowers15 -716530
 Mailbox03 -6b91fe
+BedRight.png -999901
 RedRugR -25a5c0
 GrassPathU -6f2190
 RedRugB -30b5d1

@@ -86,7 +86,7 @@
           "y": 2
         }
       ],
-      "triggerName": "BFM_TomTown_TransitionBuilding_TriggerEntity_Info_Guy_Dialogue_01"
+      "triggerName": "BFM_TomTown_TransitionBuilding_MiscEntity_Info_Guy_Dialogue_01"
     }
   ],
   "events": [],

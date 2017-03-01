@@ -30,7 +30,7 @@ public abstract class MultiPointTriggerMatcher extends LocationTriggerMatcher {
 
     @Override
     public boolean isAtLocation(Point location) {
-        return this.location.contains(location);
+        return this.location != null && this.location.contains(location);
     }
 
     @Override

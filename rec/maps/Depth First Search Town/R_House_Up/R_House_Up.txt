@@ -27,7 +27,29 @@
   ],
   "NPCs": [],
   "items": [],
-  "miscEntities": [],
+  "miscEntities": [
+    {
+      "name": "PC",
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "DIALOGUE",
+            "triggerContents": "*hack hack hack*"
+          }
+        },
+        {
+          "groupTrigger": "LoadPC"
+        }
+      ],
+      "location": [
+        {
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "triggerName": "R_House_Up_MiscEntity_PC_01"
+    }
+  ],
   "events": [],
   "wildBattles": [],
   "fishingSpots": []
