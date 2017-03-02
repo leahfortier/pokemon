@@ -55,7 +55,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Dialogue",
+                "triggerType": "DIALOGUE",
                 "triggerContents": "It's nice when you come to visit, but please get a job."
               }
             }
@@ -66,7 +66,37 @@
         "x": 4,
         "y": 4
       },
-      "triggerName": "PlayersHouseDown_NPC_Madre_01"
+      "triggerName": "PlayersHouseDown_NPC_Madre_01",
+      "condition": "FirstMadreTalk"
+    },
+    {
+      "name": "Madre",
+      "path": "w",
+      "spriteIndex": 13,
+      "direction": "LEFT",
+      "interactions": [
+        {
+          "name": "talk",
+          "walkToPlayer": true,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "SRSLYGTFOOFMYHOUSEANDGETAJOB."
+              }
+            },
+            {
+              "global": "FirstMadreTalk"
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 11,
+        "y": 1
+      },
+      "triggerName": "PlayersHouseDown_NPC_Madre_02",
+      "condition": "!FirstMadreTalk"
     }
   ],
   "items": [],
