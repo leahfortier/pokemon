@@ -117,7 +117,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	}
 
 	public boolean consumeIfMouseDown(ControlKey controlKey) {
-		return consumeIfMouseDown() || consumeIfDown(controlKey);
+		return consumeIfDown(controlKey)|| consumeIfMouseDown();
 	}
 
 	public boolean consumeIfMouseDown() {

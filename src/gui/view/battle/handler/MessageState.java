@@ -57,11 +57,7 @@ public class MessageState implements VisualStateHandler {
         InputControl input = InputControl.instance();
 
         // Consume input for mouse clicks and spacebars
-        if (input.consumeIfMouseDown()) {
-            pressed = true;
-        }
-
-        if (input.consumeIfDown(ControlKey.SPACE)) {
+        if (input.consumeIfMouseDown(ControlKey.SPACE)) {
             pressed = true;
         }
 

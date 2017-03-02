@@ -275,9 +275,10 @@ public class DrawPanel {
         }
 
         int charactersToShow = finishedAnimating ? text.length() : Math.min(text.length(), messageTimeElapsed / 50);
-        if (InputControl.instance().consumeIfDown(ControlKey.SPACE)) {
+        if (InputControl.instance().consumeIfMouseDown(ControlKey.SPACE)) {
             charactersToShow = text.length();
         }
+
         finishedAnimating = charactersToShow == text.length();
 
         if (charactersToShow != 0 && text.charAt(charactersToShow - 1) != ' '){

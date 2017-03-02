@@ -24,7 +24,7 @@ class OptionsView extends View {
 	@Override
 	public void update(int dt) {
 		InputControl input = InputControl.instance();
-		if (input.consumeIfMouseDown()) {
+		if (input.consumeIfMouseDown(ControlKey.SPACE)) {
 			musicOn = !musicOn;
 			SoundPlayer.soundPlayer.toggleMusic();
 		}

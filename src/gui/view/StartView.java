@@ -52,14 +52,8 @@ class StartView extends View {
 		Player player = Game.getPlayer();
 		InputControl input = InputControl.instance();
 
-		if (message != null) {
-			if (input.consumeIfMouseDown()) {
-				message = null;
-			}
-
-			if (input.consumeIfDown(ControlKey.SPACE)) {
-				message = null;
-			}
+		if (message != null && input.consumeIfMouseDown(ControlKey.SPACE)) {
+			message = null;
 		}
 
 		if (message == null) {

@@ -222,7 +222,8 @@ class EvolutionView extends View {
 							MessageUpdate message = Messages.getNextMessage();
 
 							learnedMove = message.getMove();
-							messages.add(new MessageUpdate(evolvingPokemon.getName() + " is trying to learn " + learnedMove.getAttack().getName() + "...")
+							messages.add(new MessageUpdate(
+									evolvingPokemon.getName() + " is trying to learn " + learnedMove.getAttack().getName() + "...")
 									.withUpdate(Update.LEARN_MOVE)
 									.withLearnMove(evolvingPokemon, learnedMove));
 							messages.add(new MessageUpdate("Delete a move in order to learn " + learnedMove.getAttack().getName() + "?"));

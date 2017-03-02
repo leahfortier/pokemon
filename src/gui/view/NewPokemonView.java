@@ -99,7 +99,7 @@ class NewPokemonView extends View {
 
         switch (state) {
             case POKEDEX:
-                if (input.consumeIfDown(ControlKey.SPACE)) {
+                if (input.consumeIfMouseDown(ControlKey.SPACE)) {
                     if (!displayInfo) {
                         displayInfo = true;
                     } else {
@@ -166,7 +166,7 @@ class NewPokemonView extends View {
                 }
                 break;
             case END:
-                if (input.consumeIfDown(ControlKey.SPACE)) {
+                if (input.consumeIfMouseDown(ControlKey.SPACE)) {
                     message = null;
                 }
 
