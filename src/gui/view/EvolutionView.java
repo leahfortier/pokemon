@@ -14,6 +14,7 @@ import input.InputControl;
 import main.Game;
 import main.Global;
 import message.MessageUpdate;
+import message.MessageUpdate.Update;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
@@ -28,6 +29,7 @@ import util.StringUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayDeque;
 import java.util.List;
 
 class EvolutionView extends View {
@@ -51,15 +53,15 @@ class EvolutionView extends View {
 	private boolean isEgg;
 	
 	private State state;
-	private MessageUpdate message;
+	private ArrayDeque<MessageUpdate> messages;
 		
 	private enum State {
 		START,
 		EVOLVE,
+		CANCELED,
 		LEARN_MOVE_QUESTION,
 		LEARN_MOVE_DELETE,
-		END,
-		CANCELED
+		END
 	}
 
 	EvolutionView() {
@@ -131,13 +133,9 @@ class EvolutionView extends View {
 		InputControl input = InputControl.instance();
 		switch (state) {
 			case START:
-				if (message != null) {
-					if (input.consumeIfMouseDown()) {
-						message = null;
-					}
-
-					if (input.consumeIfDown(ControlKey.SPACE)) {
-						message = null;
+				if (!messages.isEmpty()) {
+					if (input.consumeIfMouseDown(ControlKey.SPACE)) {
+						messages.pop();
 					}
 				}
 				else {
@@ -154,14 +152,14 @@ class EvolutionView extends View {
 					state = State.END;
 
 					if (isEgg) {
-						message = new MessageUpdate("Your egg hatched into " + StringUtils.articleString(preEvolution.getName()) + "!");
+						messages.add(new MessageUpdate("Your egg hatched into " + StringUtils.articleString(preEvolution.getName()) + "!"));
 					} else {
 						int[] gains = evolvingPokemon.evolve(Game.getPlayer().getEvolution());
 						int[] stats = evolvingPokemon.getStats();
 
-						message = new MessageUpdate(
+						messages.add(new MessageUpdate(
 								"Your " + preEvolution.getName() + " evolved into " + StringUtils.articleString(postEvolution.getName()) + "!")
-								.withStatGains(gains, stats);
+								.withStatGains(gains, stats));
 					}
 
 					Game.getPlayer().pokemonEvolved(evolvingPokemon);
@@ -171,12 +169,14 @@ class EvolutionView extends View {
 			case LEARN_MOVE_QUESTION:
 				if (noButton().checkConsumePress()) {
 					state = State.END;
+					messages.pop();
+					messages.addFirst(new MessageUpdate(evolvingPokemon.getActualName() + " did not learn " + learnedMove.getAttack().getName() + "."));
 					updateActiveButtons();
 				}
 
 				if (yesButton().checkConsumePress()) {
 					state = State.LEARN_MOVE_DELETE;
-					message = new MessageUpdate();
+					messages.pop();
 					updateActiveButtons();
 				}
 				break;
@@ -194,8 +194,10 @@ class EvolutionView extends View {
 
 							learner.addMove(learnMove, moveIndex, true);
 
-							message = new MessageUpdate(learnerName + " forgot how to use " + deleteMoveName + "..." +
-									"...and " + learnerName + " learned " + learnMoveName + "!");
+							messages.pop();
+							messages.addFirst(new MessageUpdate("...and " + learnerName + " learned " + learnMoveName + "!"));
+							messages.addFirst(new MessageUpdate(learnerName + " forgot how to use " + deleteMoveName + "..."));
+
 							state = State.END;
 							updateActiveButtons();
 						}
@@ -206,25 +208,34 @@ class EvolutionView extends View {
 					ActivePokemon learner = evolvingPokemon;
 					Move move = learnedMove;
 
-					message = new MessageUpdate(learner.getActualName() + " did not learn " + move.getAttack().getName() + ".");
+					messages.pop();
+					messages.addFirst(new MessageUpdate(learner.getActualName() + " did not learn " + move.getAttack().getName() + "."));
 					state = State.END;
 					updateActiveButtons();
 				}
 				break;
 			case END:
 			case CANCELED:
-				if (message != null) {
-					if (input.consumeIfDown(ControlKey.SPACE) || input.consumeIfMouseDown() ) {
+				if (!messages.isEmpty()) {
+					if (input.consumeIfMouseDown(ControlKey.SPACE)) {
 						if (Messages.peek().learnMove()) {
-							message = Messages.getNextMessage();
+							MessageUpdate message = Messages.getNextMessage();
 
-							state = State.LEARN_MOVE_QUESTION;
 							learnedMove = message.getMove();
-							message = new MessageUpdate("Delete a move in order to learn " + learnedMove.getAttack().getName() + "?");
+							messages.add(new MessageUpdate(evolvingPokemon.getName() + " is trying to learn " + learnedMove.getAttack().getName() + "...")
+									.withUpdate(Update.LEARN_MOVE)
+									.withLearnMove(evolvingPokemon, learnedMove));
+							messages.add(new MessageUpdate("Delete a move in order to learn " + learnedMove.getAttack().getName() + "?"));
+							messages.add(new MessageUpdate());
 							updateActiveButtons();
 						}
 						else {
-							message = null;
+							MessageUpdate message = messages.pop();
+							if (message.learnMove()) {
+								state = State.LEARN_MOVE_QUESTION;
+								learnedMove = message.getMove();
+								updateActiveButtons();
+							}
 						}
 					}
 				}
@@ -238,8 +249,9 @@ class EvolutionView extends View {
 	@Override
 	public void draw(Graphics g) {
 		final GameData data = Game.getData();
+		final boolean endState = state == State.END || state == State.LEARN_MOVE_DELETE || state == State.LEARN_MOVE_QUESTION;
 
-		if (state != State.END) {
+		if (!endState) {
 			if (isEgg) {
 				canvasPanel.withBackgroundColor(Type.NORMAL.getColor());
 			} else {
@@ -255,7 +267,8 @@ class EvolutionView extends View {
 
 		canvasPanel.drawBackground(g);
 
-		if (message != null) {
+		if (!messages.isEmpty()) {
+			MessageUpdate message = messages.peek();
 			BasicPanels.drawFullMessagePanel(g, message.getMessage());
 			if (message.gainUpdate()) {
 				statsPanel.drawBackground(g);
@@ -284,7 +297,11 @@ class EvolutionView extends View {
 		
 		BufferedImage currEvolution = pokemonTiles.getTile(preIndex);
 		BufferedImage nextEvolution = pokemonTiles.getTile(postIndex);
-		
+
+		if (endState) {
+			ImageUtils.drawBottomCenteredImage(g, nextEvolution, POKEMON_DRAW_LOCATION);
+		}
+
 		switch (state) {
 			case START:
 			case CANCELED:
@@ -292,9 +309,6 @@ class EvolutionView extends View {
 				break;
 			case EVOLVE:
 				evolveAnimation(g, currEvolution, nextEvolution);
-				break;
-			case END:
-				ImageUtils.drawBottomCenteredImage(g, nextEvolution, POKEMON_DRAW_LOCATION);
 				break;
 			case LEARN_MOVE_QUESTION:
 				drawButton(g, yesButton(), new Color(120, 200, 80), "Yes");
@@ -362,20 +376,21 @@ class EvolutionView extends View {
 	
 	private void setInitialMessage() {
 		if (isEgg) {
-			message = new MessageUpdate("Your egg is hatching!");
+			messages.add(new MessageUpdate("Your egg is hatching!"));
 		}
 		else {
-			message = new MessageUpdate("Your " + preEvolution.getName() + " is evolving!");
+			messages.add(new MessageUpdate("Your " + preEvolution.getName() + " is evolving!"));
 		}
 	}
 
 	private void setCancelledMessage() {
-		message = new MessageUpdate("Whattt!?!?!??!! " + preEvolution.getName() + " stopped evolving!!!!");
+		messages.add(new MessageUpdate("Whattt!?!?!??!! " + preEvolution.getName() + " stopped evolving!!!!"));
 	}
 
 	@Override
 	public void movedToFront() {
 		state = State.START;
+		messages = new ArrayDeque<>();
 
 		Player player = Game.getPlayer();
 
