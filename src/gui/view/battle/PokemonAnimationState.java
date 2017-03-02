@@ -1,5 +1,6 @@
 package gui.view.battle;
 
+import battle.Battle;
 import battle.effect.status.StatusCondition;
 import draw.Alignment;
 import draw.DrawUtils;
@@ -440,13 +441,20 @@ class PokemonAnimationState {
     }
 
     private void drawTrainerPokeballs(Graphics g, int cornerX, int cornerY, int direction) {
-        Trainer trainer = (Trainer)battleView.getCurrentBattle().getTrainer(isPlayer);
+        Battle battle = battleView.getCurrentBattle();
+        Trainer trainer = (Trainer)battle.getTrainer(isPlayer);
         List<ActivePokemon> team = trainer.getTeam();
+        boolean usedMaxPokemon = trainer.maxPokemonUsed(battle);
+
         for (int i = 0; i < team.size(); i++) {
-            BufferedImage pokeball = TileSet.TINY_POKEBALL;
             int index = isPlayer ? team.size() - i - 1 : i;
             ActivePokemon pokemon = team.get(index);
-            boolean silhouette = pokemon == state.frontPokemon ? state.getStatus() == StatusCondition.FAINTED : !pokemon.canFight();
+
+            boolean silhouette = pokemon == state.frontPokemon
+                    ? state.getStatus() == StatusCondition.FAINTED
+                    : !pokemon.canFight() || (usedMaxPokemon && !pokemon.getAttributes().isBattleUsed());
+
+            BufferedImage pokeball = TileSet.TINY_POKEBALL;
             if (silhouette) {
                 pokeball = ImageUtils.silhouette(pokeball);
             }

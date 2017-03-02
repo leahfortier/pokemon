@@ -216,7 +216,7 @@ public abstract class Trainer implements Team, Serializable {
 		return curr.canEscape(b);
 	}
 
-	private boolean maxPokemonUsed(Battle b) {
+	public boolean maxPokemonUsed(Battle b) {
 		return numPokemonUsed() == b.getOpponent().maxPokemonAllowed();
 	}
 
