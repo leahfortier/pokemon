@@ -59,13 +59,13 @@ public class FightState implements VisualStateHandler {
         ActivePokemon playerPokemon = Game.getPlayer().front();
         List<Move> moves = playerPokemon.getMoves(view.getCurrentBattle());
         for (int i = 0; i < moves.size(); i++) {
-            view.drawMoveButton(g, this.moveButtons[i], moves.get(i));
+            this.moveButtons[i].drawMoveButton(g, moves.get(i));
         }
 
         String message = view.getMessage(VisualState.INVALID_FIGHT, null);
         if (StringUtils.isNullOrEmpty(message)) {
             // Draw move details
-            view.drawMovePanel(g, moveDetailsPanel, moves.get(view.getSelectedButton()).getAttack());
+            moveDetailsPanel.drawMovePanel(g, moves.get(view.getSelectedButton()).getAttack());
         }
         else {
             // Show unusable move message

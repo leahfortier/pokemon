@@ -98,7 +98,7 @@ public class AbilityTest {
     @Test
     public void testColorChange() {
         TestBattle battle = TestBattle.create(PokemonNamesies.HAPPINY, PokemonNamesies.KECLEON);
-        TestPokemon defending = battle.getDefending();
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.COLOR_CHANGE);
 
         Assert.assertTrue(defending.hasAbility(AbilityNamesies.COLOR_CHANGE));
         Assert.assertTrue(defending.isType(battle, Type.NORMAL));

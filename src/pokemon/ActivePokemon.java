@@ -578,7 +578,10 @@ public class ActivePokemon implements Serializable {
 		}
 
 		// Learn new moves
-		List<AttackNamesies> levelMoves = this.getPokemonInfo().getMoves(level);
+		List<AttackNamesies> levelMoves = this.getPokemonInfo().getMoves(PokemonInfo.EVOLUTION_LEVEL_LEARNED);
+		levelMoves.forEach(attack -> learnMove(attack, false));
+
+		levelMoves = this.getPokemonInfo().getMoves(level);
 		levelMoves.forEach(attack -> learnMove(attack, false));
 
 		return gain;

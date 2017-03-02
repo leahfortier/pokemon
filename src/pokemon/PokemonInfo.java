@@ -30,6 +30,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private static final long serialVersionUID = 1L;
 
 	public static final int NUM_POKEMON = 815;
+	public static final int EVOLUTION_LEVEL_LEARNED = -1;
 
 	private static Map<Integer, PokemonInfo> map;
 	private static Set<PokemonNamesies> incenseBabies;
@@ -422,9 +423,9 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 
 		return incenseBabies.contains(namesies);
 	}
-	
+
 	// Returns what level the Pokemon will learn the given attack, returns -1 if they cannot learn it by level up
-	public int levelLearned(AttackNamesies attack) {
+	public Integer levelLearned(AttackNamesies attack) {
 		for (Integer level : getLevelUpMoves().keySet()) {
 			for (AttackNamesies levelUpMove : getLevelUpMoves().get(level)) {
 				if (attack == levelUpMove) {
@@ -433,12 +434,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			}
 		}
 
-		// TODO: -1 is valid now for evolution
-		return -1;
+		return null;
 	}
-	
+
 	public boolean canLearnMove(AttackNamesies attack) {
-		return levelLearned(attack) != -1 || canLearnByBreeding(attack);
+		return levelLearned(attack) != null || canLearnByBreeding(attack);
 	}
 
 	public boolean canLearnByBreeding(AttackNamesies attack) {

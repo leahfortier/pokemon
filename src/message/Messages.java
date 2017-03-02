@@ -46,6 +46,10 @@ public class Messages {
         return getQueue().poll();
     }
 
+    public static MessageUpdate peek() {
+        return getQueue().peek();
+    }
+
     public static boolean nextMessageEmpty() {
         return StringUtils.isNullOrEmpty(getQueue().peek().getMessage());
     }

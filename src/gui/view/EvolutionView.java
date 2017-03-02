@@ -1,7 +1,10 @@
 package gui.view;
 
+import battle.attack.Attack;
+import battle.attack.Move;
 import draw.ImageUtils;
 import draw.TextUtils;
+import draw.button.Button;
 import draw.button.panel.BasicPanels;
 import draw.button.panel.DrawPanel;
 import gui.GameData;
@@ -11,6 +14,7 @@ import input.InputControl;
 import main.Game;
 import main.Global;
 import message.MessageUpdate;
+import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
@@ -24,13 +28,20 @@ import util.StringUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 class EvolutionView extends View {
 	private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
 	private static final Point POKEMON_DRAW_LOCATION = Point.scaleDown(Global.GAME_SIZE, 2);
+	private static final int NUM_COLS = 4;
 
 	private final DrawPanel canvasPanel;
 	private final DrawPanel statsPanel;
+
+	private final DrawPanel moveDetailsPanel;
+	private final Button[] buttons;
+	private Move learnedMove;
+	private int selectedButton;
 
 	private int animationEvolve;
 
@@ -45,6 +56,8 @@ class EvolutionView extends View {
 	private enum State {
 		START,
 		EVOLVE,
+		LEARN_MOVE_QUESTION,
+		LEARN_MOVE_DELETE,
 		END,
 		CANCELED
 	}
@@ -55,6 +68,56 @@ class EvolutionView extends View {
 				.withBorderPercentage(0);
 
 		this.statsPanel = new DrawPanel(0, 280, 273, 161).withBlackOutline();
+
+		moveDetailsPanel = new DrawPanel(0, 440 - 161, 385, 161).withBorderPercentage(8).withBlackOutline().withTransparentCount(2);
+
+		// Create a button for each known move and then one for the new move and one for not learning
+		buttons = BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS);
+	}
+
+	private void updateActiveButtons() {
+		switch (state) {
+			case LEARN_MOVE_QUESTION:
+				for (int i = 0; i < buttons.length; i++) {
+					Button button = buttons[i];
+					button.setActive(button == yesButton() || button == noButton());
+					if (button == yesButton()) {
+						selectedButton = i;
+					}
+				}
+				break;
+			case LEARN_MOVE_DELETE:
+				for (int y = 0; y < 2; y++) {
+					for (int x = 0; x < NUM_COLS; x++) {
+						int index = Point.getIndex(x, y, NUM_COLS);
+						buttons[index].setActive(x < Move.MAX_MOVES/2 || buttons[index] == newMoveButton());
+						if (buttons[index] == newMoveButton()) {
+							selectedButton = index;
+						}
+					}
+				}
+				break;
+			default:
+				for (Button button : buttons) {
+					button.setActive(false);
+				}
+				break;
+		}
+
+	}
+
+	// Bottom center left
+	private Button yesButton() {
+		return buttons[NUM_COLS + 1];
+	}
+
+	// Bottom center right
+	private Button noButton() {
+		return buttons[NUM_COLS + 2];
+	}
+
+	private Button newMoveButton() {
+		return this.buttons[buttons.length - 2];
 	}
 
 	@Override
@@ -62,6 +125,8 @@ class EvolutionView extends View {
 		if (BasicPanels.isAnimatingMessage()) {
 			return;
 		}
+
+		selectedButton = Button.update(buttons, selectedButton);
 
 		InputControl input = InputControl.instance();
 		switch (state) {
@@ -94,22 +159,73 @@ class EvolutionView extends View {
 						int[] gains = evolvingPokemon.evolve(Game.getPlayer().getEvolution());
 						int[] stats = evolvingPokemon.getStats();
 
-						message = new MessageUpdate("Your " + preEvolution.getName() + " evolved into " + StringUtils.articleString(postEvolution.getName()) + "!").withStatGains(gains, stats);
+						message = new MessageUpdate(
+								"Your " + preEvolution.getName() + " evolved into " + StringUtils.articleString(postEvolution.getName()) + "!")
+								.withStatGains(gains, stats);
 					}
 
 					Game.getPlayer().pokemonEvolved(evolvingPokemon);
 
 				}
 				break;
+			case LEARN_MOVE_QUESTION:
+				if (noButton().checkConsumePress()) {
+					state = State.END;
+					updateActiveButtons();
+				}
+
+				if (yesButton().checkConsumePress()) {
+					state = State.LEARN_MOVE_DELETE;
+					message = new MessageUpdate();
+					updateActiveButtons();
+				}
+				break;
+			case LEARN_MOVE_DELETE:
+				for (int y = 0, moveIndex = 0; y < 2; y++) {
+					for (int x = 0; x < Move.MAX_MOVES/2; x++, moveIndex++) {
+						int index = Point.getIndex(x, y, NUM_COLS);
+						if (buttons[index].checkConsumePress()) {
+							ActivePokemon learner = evolvingPokemon;
+							String learnerName = learner.getActualName();
+
+							Move learnMove = learnedMove;
+							String learnMoveName = learnMove.getAttack().getName();
+							String deleteMoveName = learner.getActualMoves().get(moveIndex).getAttack().getName();
+
+							learner.addMove(learnMove, moveIndex, true);
+
+							message = new MessageUpdate(learnerName + " forgot how to use " + deleteMoveName + "..." +
+									"...and " + learnerName + " learned " + learnMoveName + "!");
+							state = State.END;
+							updateActiveButtons();
+						}
+					}
+				}
+
+				if (newMoveButton().checkConsumePress()) {
+					ActivePokemon learner = evolvingPokemon;
+					Move move = learnedMove;
+
+					message = new MessageUpdate(learner.getActualName() + " did not learn " + move.getAttack().getName() + ".");
+					state = State.END;
+					updateActiveButtons();
+				}
+				break;
 			case END:
 			case CANCELED:
 				if (message != null) {
-					if (input.consumeIfMouseDown()) {
-						message = null;
-					}
+					if (input.consumeIfDown(ControlKey.SPACE) || input.consumeIfMouseDown() ) {
+						if (Messages.peek().learnMove()) {
+							message = Messages.getNextMessage();
 
-					if (input.consumeIfDown(ControlKey.SPACE)) {
-						message = null;
+							state = State.LEARN_MOVE_QUESTION;
+							learnedMove = message.getMove();
+							message = new MessageUpdate("Delete a move in order to learn " + learnedMove.getAttack().getName() + "?");
+							updateActiveButtons();
+						}
+						else {
+							message = null;
+						}
 					}
 				}
 				else {
@@ -139,6 +255,25 @@ class EvolutionView extends View {
 
 		canvasPanel.drawBackground(g);
 
+		if (message != null) {
+			BasicPanels.drawFullMessagePanel(g, message.getMessage());
+			if (message.gainUpdate()) {
+				statsPanel.drawBackground(g);
+
+				int[] statGains = message.getGain();
+				int[] newStats = message.getNewStats();
+
+				g.setColor(Color.BLACK);
+				for (int i = 0; i < Stat.NUM_STATS; i++) {
+					FontMetrics.setFont(g, 16);
+					g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
+
+					TextUtils.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
+					TextUtils.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
+				}
+			}
+		}
+
 		TileSet pokemonTiles = data.getPokemonTilesLarge();
 
 		FontMetrics.setFont(g, 30);
@@ -161,26 +296,39 @@ class EvolutionView extends View {
 			case END:
 				ImageUtils.drawBottomCenteredImage(g, nextEvolution, POKEMON_DRAW_LOCATION);
 				break;
-		}
-		
-		if (message != null) {
-			BasicPanels.drawFullMessagePanel(g, message.getMessage());
-			if (message.gainUpdate()) {
-				statsPanel.drawBackground(g);
+			case LEARN_MOVE_QUESTION:
+				drawButton(g, yesButton(), new Color(120, 200, 80), "Yes");
+				drawButton(g, noButton(), new Color(220, 20, 20), "No");
+				break;
+			case LEARN_MOVE_DELETE:
+				List<Move> moves = evolvingPokemon.getActualMoves();
+				Attack selected = null;
+				for (int y = 0, moveIndex = 0; y < 2; y++) {
+					for (int x = 0; x < Move.MAX_MOVES/2; x++, moveIndex++) {
+						int index = Point.getIndex(x, y, NUM_COLS);
+						Move move = moves.get(moveIndex);
 
-				int[] statGains = message.getGain();
-				int[] newStats = message.getNewStats();
-
-				g.setColor(Color.BLACK);
-				for (int i = 0; i < Stat.NUM_STATS; i++) {
-					FontMetrics.setFont(g, 16);
-					g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
-
-					TextUtils.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
-					TextUtils.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
+						buttons[index].drawMoveButton(g, move);
+						if (index == selectedButton) {
+							selected = move.getAttack();
+						}
+					}
 				}
-			}
+
+				moveDetailsPanel.drawMovePanel(g, selected == null ? learnedMove.getAttack() : selected);
+				newMoveButton().drawMoveButton(g, learnedMove);
+				break;
 		}
+
+		for (Button button : buttons) {
+			button.draw(g);
+		}
+	}
+
+	private void drawButton(Graphics g, Button button, Color color, String label) {
+		button.fillBordered(g, color);
+		button.blackOutline(g);
+		button.label(g, 30, label);
 	}
 	
 	private void evolveAnimation(Graphics g, BufferedImage currEvolution, BufferedImage nextEvolution) {
@@ -238,5 +386,7 @@ class EvolutionView extends View {
 		
 		// TODO: Save current sound for when transitioning to the bag view.
 		//Global.soundPlayer.playMusic(SoundTitle.EVOLUTION_VIEW);
+
+		updateActiveButtons();
 	}
 }

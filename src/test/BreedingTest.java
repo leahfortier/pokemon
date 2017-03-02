@@ -318,9 +318,9 @@ public class BreedingTest extends Breeding {
             final AttackNamesies namesies = move.getAttack().namesies();
 
             if (!babyInfo.canLearnByBreeding(namesies)) {
-                int levelLearned = babyInfo.levelLearned(namesies);
+                Integer levelLearned = babyInfo.levelLearned(namesies);
                 Assert.assertTrue(getFailMessage("Baby should not be able to learn the move " + namesies.getName(), mommy, daddy, baby),
-                        levelLearned != -1 && levelLearned <= baby.getLevel());
+                        levelLearned != null && levelLearned <= baby.getLevel());
             }
         }
 

@@ -56,17 +56,17 @@ public class LearnMoveDeleteState implements VisualStateHandler {
                 int index = Point.getIndex(x, y, NUM_COLS);
                 Move move = moves.get(moveIndex);
 
-                view.drawMoveButton(g, buttons[index], move);
+                buttons[index].drawMoveButton(g, move);
                 if (index == selectedButton) {
                     selected = move.getAttack();
                 }
             }
         }
 
-        view.drawMovePanel(g, moveDetailsPanel, selected == null ? view.getLearnedMove().getAttack() : selected);
+        moveDetailsPanel.drawMovePanel(g, selected == null ? view.getLearnedMove().getAttack() : selected);
 
         Button newMoveButton = newMoveButton();
-        view.drawMoveButton(g, newMoveButton, view.getLearnedMove());
+        newMoveButton.drawMoveButton(g, view.getLearnedMove());
 
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 25);

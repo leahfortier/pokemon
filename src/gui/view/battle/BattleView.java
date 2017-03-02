@@ -1,12 +1,10 @@
 package gui.view.battle;
 
 import battle.Battle;
-import battle.attack.Attack;
 import battle.attack.Move;
 import battle.effect.generic.Weather;
 import draw.DrawUtils;
 import draw.ImageUtils;
-import draw.TextUtils;
 import draw.button.Button;
 import draw.button.panel.BasicPanels;
 import draw.button.panel.DrawPanel;
@@ -21,7 +19,6 @@ import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import pokemon.ActivePokemon;
-import util.FontMetrics;
 import util.StringUtils;
 
 import java.awt.Color;
@@ -318,66 +315,6 @@ public class BattleView extends View {
 		g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 		
 		state.draw(this, g);
-	}
-
-	public void drawMovePanel(Graphics g, DrawPanel moveDetailsPanel, Attack move) {
-		moveDetailsPanel
-				.withTransparentBackground(move.getActualType().getColor())
-				.drawBackground(g);
-
-		FontMetrics.setFont(g, 24);
-		int spacing = 20;
-		int y = moveDetailsPanel.y + spacing + FontMetrics.getTextHeight(g);
-		g.drawString(move.getName(), moveDetailsPanel.x + spacing, y);
-
-		BufferedImage typeImage = move.getActualType().getImage();
-		int imageY = y - typeImage.getHeight();
-		int imageX = moveDetailsPanel.rightX() - spacing - typeImage.getWidth();
-		g.drawImage(typeImage, imageX, imageY, null);
-
-		BufferedImage categoryImage = move.getCategory().getImage();
-		imageX -= categoryImage.getWidth() + spacing;
-		g.drawImage(categoryImage, imageX, imageY, null);
-
-		y += FontMetrics.getDistanceBetweenRows(g);
-
-		FontMetrics.setFont(g, 18);
-		g.drawString("Power: " + move.getPowerString(), moveDetailsPanel.x + spacing, y);
-		TextUtils.drawRightAlignedString(g, "Acc: " + move.getAccuracyString(), moveDetailsPanel.rightX() - spacing, y);
-
-		y += FontMetrics.getDistanceBetweenRows(g) + 2;
-
-		FontMetrics.setFont(g, 16);
-		TextUtils.drawWrappedText(g,
-				move.getDescription(),
-				moveDetailsPanel.x + spacing,
-				y,
-				moveDetailsPanel.width - 2*spacing
-		);
-	}
-
-	public void drawMoveButton(Graphics g, Button moveButton, Move move) {
-		int dx = moveButton.x;
-		int dy = moveButton.y;
-
-		g.translate(dx, dy);
-
-		new DrawPanel(0, 0, moveButton.width, moveButton.height)
-				.withTransparentBackground(move.getAttack().getActualType().getColor())
-				.withBorderPercentage(15)
-				.withBlackOutline()
-				.drawBackground(g);
-
-		g.setColor(Color.BLACK);
-		FontMetrics.setFont(g, 22);
-		g.drawString(move.getAttack().getName(), 10, 26);
-
-		FontMetrics.setFont(g, 18);
-		TextUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
-
-		g.translate(-dx, -dy);
-
-		moveButton.draw(g);
 	}
 
 	@Override

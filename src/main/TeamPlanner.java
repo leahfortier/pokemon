@@ -366,12 +366,17 @@ public class TeamPlanner {
 
 				AttackNamesies namesies = attack.namesies();
 				
-				int levelLearned = pokemonSpecies.levelLearned(namesies);
-				if (levelLearned == 0) {
-					learnMethods.add("Heart Scale");
-				}
-				else if (levelLearned != -1) {
-					learnMethods.add("Level " + levelLearned);
+				Integer levelLearned = pokemonSpecies.levelLearned(namesies);
+				if (levelLearned != null) {
+					if (levelLearned == 0) {
+						learnMethods.add("Heart Scale");
+					}
+					else if (levelLearned == PokemonInfo.EVOLUTION_LEVEL_LEARNED) {
+						learnMethods.add("Evolve");
+					}
+					else {
+						learnMethods.add("Level " + levelLearned);
+					}
 				}
 				
 				if (pokemonSpecies.canLearnByBreeding(namesies)) {

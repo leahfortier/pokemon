@@ -1,5 +1,6 @@
 package draw.button.panel;
 
+import battle.attack.Attack;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.PolygonUtils;
@@ -245,11 +246,8 @@ public class DrawPanel {
         return this.getBorderSize() + FontMetrics.getDistanceBetweenRows(g) - FontMetrics.getTextHeight(g);
     }
 
-    public static boolean animatingMessage;
     private int messageTimeElapsed = 0;
     private String drawingText;
-    private int lastCharToShow;
-    private int lastWordLength;
     private boolean finishedAnimating;
 
     public int drawMessage(Graphics g, int fontSize, String text) {
@@ -267,11 +265,10 @@ public class DrawPanel {
             return TextUtils.drawWrappedText(g, text, startX, startY, textWidth);
         }
 
+        int lastWordLength;
         if (drawingText == null || !text.equals(drawingText)) {
             messageTimeElapsed = 0;
             drawingText = text;
-            lastWordLength = -1;
-            lastCharToShow = 0;
             finishedAnimating = false;
         } else {
             messageTimeElapsed += 3 * Global.MS_BETWEEN_FRAMES;
@@ -345,5 +342,40 @@ public class DrawPanel {
 
     public boolean isAnimatingMessage() {
         return !finishedAnimating && animateMessage;
+    }
+
+    public void drawMovePanel(Graphics g, Attack move) {
+        this.withTransparentBackground(move.getActualType().getColor())
+                .drawBackground(g);
+
+        FontMetrics.setFont(g, 24);
+        int spacing = 20;
+        int y = this.y + spacing + FontMetrics.getTextHeight(g);
+        g.drawString(move.getName(), this.x + spacing, y);
+
+        BufferedImage typeImage = move.getActualType().getImage();
+        int imageY = y - typeImage.getHeight();
+        int imageX = this.rightX() - spacing - typeImage.getWidth();
+        g.drawImage(typeImage, imageX, imageY, null);
+
+        BufferedImage categoryImage = move.getCategory().getImage();
+        imageX -= categoryImage.getWidth() + spacing;
+        g.drawImage(categoryImage, imageX, imageY, null);
+
+        y += FontMetrics.getDistanceBetweenRows(g);
+
+        FontMetrics.setFont(g, 18);
+        g.drawString("Power: " + move.getPowerString(), this.x + spacing, y);
+        TextUtils.drawRightAlignedString(g, "Acc: " + move.getAccuracyString(), this.rightX() - spacing, y);
+
+        y += FontMetrics.getDistanceBetweenRows(g) + 2;
+
+        FontMetrics.setFont(g, 16);
+        TextUtils.drawWrappedText(g,
+                move.getDescription(),
+                this.x + spacing,
+                y,
+                this.width - 2*spacing
+        );
     }
 }

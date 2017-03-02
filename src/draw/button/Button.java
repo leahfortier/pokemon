@@ -1,5 +1,6 @@
 package draw.button;
 
+import battle.attack.Move;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.PolygonUtils;
@@ -318,5 +319,26 @@ public class Button {
 
 	public void drawArrow(Graphics g, Direction direction) {
 		PolygonUtils.drawArrow(g, x, y, width, height, direction);
+	}
+
+	public void drawMoveButton(Graphics g, Move move) {
+		g.translate(x, y);
+
+		new DrawPanel(0, 0, width, height)
+				.withTransparentBackground(move.getAttack().getActualType().getColor())
+				.withBorderPercentage(15)
+				.withBlackOutline()
+				.drawBackground(g);
+
+		g.setColor(Color.BLACK);
+		FontMetrics.setFont(g, 22);
+		g.drawString(move.getAttack().getName(), 10, 26);
+
+		FontMetrics.setFont(g, 18);
+		TextUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
+
+		g.translate(-x, -y);
+
+		this.draw(g);
 	}
 }
