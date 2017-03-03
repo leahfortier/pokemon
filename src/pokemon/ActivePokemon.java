@@ -43,7 +43,6 @@ import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import pattern.PokemonMatcher;
-import pokemon.PokemonInfo.WildHoldItem;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.Breeding;
