@@ -96,7 +96,17 @@
       "condition": "VisitedTomTownPowerPlant"
     }
   ],
-  "items": [],
+  "items": [
+    {
+      "item": "Oran Berry",
+      "isHidden": true,
+      "location": {
+        "x": 2,
+        "y": 6
+      },
+      "triggerName": "Tom_Town_Power_Plant_F2_HiddenItem_OranBerry_01"
+    }
+  ],
   "miscEntities": [],
   "events": [],
   "wildBattles": [],

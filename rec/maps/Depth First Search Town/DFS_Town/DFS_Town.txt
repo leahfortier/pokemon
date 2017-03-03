@@ -431,6 +431,15 @@
       "triggerName": "DFS_Town_Item_Paralyze_Heal_01"
     },
     {
+      "item": "Cheri Berry",
+      "isHidden": true,
+      "location": {
+        "x": 28,
+        "y": 16
+      },
+      "triggerName": "DFS_Town_HiddenItem_CheriBerry_01"
+    },
+    {
       "item": "Oran Berry",
       "isHidden": true,
       "location": {
@@ -440,7 +449,26 @@
       "triggerName": "DFS_Town_HiddenItem_OranBerry_01"
     }
   ],
-  "miscEntities": [],
+  "miscEntities": [
+    {
+      "name": "Flag",
+      "actions": [
+        {
+          "trigger": {
+            "triggerType": "DIALOGUE",
+            "triggerContents": "Praise Canada!"
+          }
+        }
+      ],
+      "location": [
+        {
+          "x": 81,
+          "y": 20
+        }
+      ],
+      "triggerName": "DFS_Town_MiscEntity_Flag_01"
+    }
+  ],
   "events": [],
   "wildBattles": [
     {

@@ -53,7 +53,17 @@
       "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
     }
   ],
-  "items": [],
+  "items": [
+    {
+      "item": "Potion",
+      "isHidden": true,
+      "location": {
+        "x": 11,
+        "y": 10
+      },
+      "triggerName": "Tom_Town_Power_Plant_B1_HiddenItem_Potion_01"
+    }
+  ],
   "miscEntities": [],
   "events": [],
   "wildBattles": [],

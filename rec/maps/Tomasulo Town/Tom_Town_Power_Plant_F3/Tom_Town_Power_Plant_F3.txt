@@ -267,7 +267,17 @@
       "condition": ":npc_interaction:VisitedTomTownPowerPlant&!Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01$:"
     }
   ],
-  "items": [],
+  "items": [
+    {
+      "item": "Repel",
+      "isHidden": true,
+      "location": {
+        "x": 15,
+        "y": 7
+      },
+      "triggerName": "Tom_Town_Power_Plant_F3_HiddenItem_Repel_01"
+    }
+  ],
   "miscEntities": [],
   "events": [],
   "wildBattles": [],

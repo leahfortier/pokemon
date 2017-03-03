@@ -227,6 +227,15 @@
         "y": 26
       },
       "triggerName": "Bloom_Filter_Meadow_Item_Pecha_Berry_01"
+    },
+    {
+      "item": "Sitrus Berry",
+      "isHidden": true,
+      "location": {
+        "x": 34,
+        "y": 16
+      },
+      "triggerName": "Bloom_Filter_Meadow_HiddenItem_SitrusBerry_01"
     }
   ],
   "miscEntities": [],
