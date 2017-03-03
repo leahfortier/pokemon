@@ -4,6 +4,7 @@ import battle.attack.AttackNamesies;
 import item.Item;
 import item.ItemNamesies;
 import item.hold.IncenseItem;
+import map.overworld.WildHoldItem;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.EggGroup;
 import pokemon.evolution.Evolution;

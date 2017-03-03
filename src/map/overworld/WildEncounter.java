@@ -3,7 +3,6 @@ package map.overworld;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
-import pokemon.WildHoldItem;
 import trainer.WildPokemon;
 import util.GeneralUtils;
 import util.RandomUtils;

@@ -1,4 +1,4 @@
-package pokemon;
+package map.overworld;
 
 import item.ItemNamesies;
 import item.hold.HoldItem;

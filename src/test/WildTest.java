@@ -3,7 +3,7 @@ package test;
 import item.ItemNamesies;
 import main.Game;
 import map.overworld.WildEncounter;
-import pokemon.WildHoldItem;
+import map.overworld.WildHoldItem;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ActivePokemon;
