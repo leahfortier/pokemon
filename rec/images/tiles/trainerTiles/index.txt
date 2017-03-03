@@ -4,7 +4,6 @@ Empty FFFFFFF7
 Empty FFFFFFF8
 
 Empty FFFFFFFF
-Item 00000000
 
 TrainerStandingRight1 00000001
 TrainerStandingUp1 00000002

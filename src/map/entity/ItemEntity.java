@@ -1,7 +1,9 @@
 package map.entity;
 
 import gui.GameData;
+import gui.TileSet;
 import item.ItemNamesies;
+import item.use.TechnicalMachine;
 import main.Game;
 import map.Direction;
 import map.triggers.Trigger;
@@ -16,6 +18,7 @@ import java.awt.image.BufferedImage;
 public class ItemEntity extends Entity {
 	private final ItemNamesies itemName;
 	private final boolean isHidden;
+	private final boolean isTM;
 
 	private boolean hasTriggered;
 	private boolean dataCreated;
@@ -24,6 +27,7 @@ public class ItemEntity extends Entity {
 		super(location, name, condition);
 		this.itemName = item;
 		this.isHidden = isHidden;
+		this.isTM = this.itemName.getItem() instanceof TechnicalMachine;
 
 		this.hasTriggered = false;
 		this.dataCreated = false;
@@ -50,8 +54,7 @@ public class ItemEntity extends Entity {
 
 	@Override
 	protected BufferedImage getFrame() {
-		// TODO: Needs constant
-		return this.isHidden ? null : Game.getData().getTrainerTiles().getTile(0);
+		return this.isHidden ? null : (isTM ? TileSet.TM_ITEM_POKEBALL : TileSet.ITEM_POKEBALL);
 	}
 
 	@Override
@@ -76,7 +79,13 @@ public class ItemEntity extends Entity {
 
 		// Create a universal trigger for this item
 		if (!data.hasTrigger(itemTriggerName)) {
-			String itemDialogue = "You found " + StringUtils.articleString(this.itemName.getName()) + "!";
+			String itemDialogue =
+					"You found " +
+					(isTM
+						? "the " + this.itemName.getName()
+						: StringUtils.articleString(this.itemName.getName())
+					) +
+					"!";
 
 			Trigger dialogue = TriggerType.DIALOGUE.createTrigger(itemDialogue, null);
 			Trigger giveItem = TriggerType.GIVE_ITEM.createTrigger(this.itemName.getName(), null);
