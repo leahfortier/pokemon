@@ -70,7 +70,7 @@ public class WildEncounter {
         ActivePokemon wildPokemon = new ActivePokemon(this.pokemon, this.getLevel(), true, false);
 
         wildPokemon.giveItem(WildHoldItem.getWildHoldItem(attacking, PokemonInfo.getPokemonInfo(pokemon).getWildItems()));
-        WildEncounterAlterer.invokeWildEncounterAlterer(attacking, wildPokemon);
+        WildEncounterAlterer.invokeWildEncounterAlterer(attacking, wildPokemon, this);
 
         return new WildPokemon(wildPokemon);
     }

@@ -1727,8 +1727,11 @@ DropBelowHalfHealth:
 		###
 *
 WildPokemonAlterer:
-	Header: void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon)
+	Header: void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData)
 	AddInterface: WildEncounterAlterer
+*
+MaxLevelWildEncounterEffect:
+	AddInterface: MaxLevelWildEncounterEffect
 *
 NewTerrain:
 	Header: void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain)

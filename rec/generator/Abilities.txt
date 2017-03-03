@@ -301,6 +301,7 @@ Cloud Nine:
 Vital Spirit:
 	Desc: Prevents the Pok\u00e9mon from falling asleep.
 	StatusPreventAbility: Asleep sleep
+	MaxLevelWildEncounterEffect: True
 *
 Insomnia:
 	Desc: Prevents the Pok\u00e9mon from falling asleep.
@@ -648,6 +649,7 @@ Pressure:
 	Enter: 
 		Messages.add(enterer.getName() + " is exerting pressure!");
 		###
+	MaxLevelWildEncounterEffect: True
 *
 Immunity:
 	Desc: Prevents the Pok\u00e9mon from getting poisoned.
@@ -695,6 +697,7 @@ Hustle:
 			return 1;
 		}
 		###
+	MaxLevelWildEncounterEffect: True
 *
 Huge Power:
 	Desc: Raises the Pok\u00e9mon's Attack stat.

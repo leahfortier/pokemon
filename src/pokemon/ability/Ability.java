@@ -34,6 +34,7 @@ import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
+import battle.effect.generic.EffectInterfaces.MaxLevelWildEncounterEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
@@ -78,6 +79,7 @@ import item.hold.HoldItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
 import main.Global;
+import map.overworld.WildEncounter;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
@@ -584,7 +586,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			}
 		}
 
-		public void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon) {
+		public void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
 			if (RandomUtils.chanceTest(2, 3)) {
 				Gender opposite = attacking.getGender().getOppositeGender();
 				if (opposite.genderApplies(wildPokemon.getPokemonInfo())) {
@@ -864,7 +866,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class VitalSpirit extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class VitalSpirit extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect, MaxLevelWildEncounterEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.ASLEEP)) {
@@ -1638,7 +1640,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Pressure extends Ability implements EntryEffect {
+	static class Pressure extends Ability implements EntryEffect, MaxLevelWildEncounterEffect {
 		private static final long serialVersionUID = 1L;
 
 		Pressure() {
@@ -1752,7 +1754,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Hustle extends Ability implements StatModifyingEffect {
+	static class Hustle extends Ability implements StatModifyingEffect, MaxLevelWildEncounterEffect {
 		private static final long serialVersionUID = 1L;
 
 		Hustle() {

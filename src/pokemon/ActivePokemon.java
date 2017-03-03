@@ -301,6 +301,10 @@ public class ActivePokemon implements Serializable {
 	public void setShiny() {
 		shiny = true;
 	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
 	
 	// Random value between 0 and 31
 	private void setIVs() {

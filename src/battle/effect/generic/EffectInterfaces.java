@@ -4,11 +4,11 @@ import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.Move;
 import battle.attack.MoveType;
-import battle.effect.holder.AbilityHolder;
 import battle.effect.status.StatusCondition;
 import item.Item;
 import main.Global;
 import map.overworld.TerrainType;
+import map.overworld.WildEncounter;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
@@ -17,6 +17,7 @@ import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import trainer.Trainer;
 import type.Type;
+import util.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1452,9 +1453,9 @@ public final class EffectInterfaces {
 	}
 
 	public interface WildEncounterAlterer {
-		void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon);
+		void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData);
 
-		static void invokeWildEncounterAlterer(ActivePokemon attacking, ActivePokemon wildPokemon) {
+		static void invokeWildEncounterAlterer(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
 			List<Object> invokees = new ArrayList<>();
 			invokees.add(attacking.getAbility());
 			invokees.add(attacking.getActualHeldItem());
@@ -1463,8 +1464,17 @@ public final class EffectInterfaces {
 				if (invokee instanceof WildEncounterAlterer && Effect.isActiveEffect(invokee)) {
 					
 					WildEncounterAlterer effect = (WildEncounterAlterer)invokee;
-					effect.alterWildPokemon(attacking, wildPokemon);
+					effect.alterWildPokemon(attacking, wildPokemon, encounterData);
 				}
+			}
+		}
+	}
+
+	public interface MaxLevelWildEncounterEffect extends WildEncounterAlterer {
+
+		default void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
+			if (RandomUtils.chanceTest(50)) {
+				wildPokemon.setLevel(encounterData.getMaxLevel());
 			}
 		}
 	}
