@@ -1900,7 +1900,7 @@ Sitrus Berry:
 *
 Razz Berry:
 	Int: Berry
-	Desc: A very valuable berry. Useful for aquiring value.
+	Desc: A very valuable berry. Useful for acquiring value.
 	Price: 60000
 	NGType: Steel
 	NGPow: 80

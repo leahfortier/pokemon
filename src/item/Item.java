@@ -4366,7 +4366,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		private static final long serialVersionUID = 1L;
 
 		RazzBerry() {
-			super(ItemNamesies.RAZZ_BERRY, "A very valuable berry. Useful for aquiring value.", BagCategory.BERRY);
+			super(ItemNamesies.RAZZ_BERRY, "A very valuable berry. Useful for acquiring value.", BagCategory.BERRY);
 			super.price = 60000;
 		}
 
