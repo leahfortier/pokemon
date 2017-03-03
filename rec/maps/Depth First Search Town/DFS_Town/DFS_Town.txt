@@ -423,6 +423,7 @@
   "items": [
     {
       "item": "Paralyze_Heal",
+      "isHidden": false,
       "location": {
         "x": 31,
         "y": 16

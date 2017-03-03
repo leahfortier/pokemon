@@ -98,7 +98,17 @@
       "triggerName": "PlayersHouseUp_NPC_TestMomBattle_01"
     }
   ],
-  "items": [],
+  "items": [
+    {
+      "item": "Water Stone",
+      "isHidden": true,
+      "location": {
+        "x": 3,
+        "y": 2
+      },
+      "triggerName": "PlayersHouseUp_HiddenItem_WaterStone_01"
+    }
+  ],
   "miscEntities": [
     {
       "name": "PC",

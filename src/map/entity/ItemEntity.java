@@ -15,16 +15,28 @@ import java.awt.image.BufferedImage;
 
 public class ItemEntity extends Entity {
 	private final ItemNamesies itemName;
+	private final boolean isHidden;
 
 	private boolean hasTriggered;
 	private boolean dataCreated;
 
-	public ItemEntity(String name, Point location, String condition, ItemNamesies item) {
+	public ItemEntity(String name, Point location, String condition, ItemNamesies item, boolean isHidden) {
 		super(location, name, condition);
 		this.itemName = item;
+		this.isHidden = isHidden;
 
 		this.hasTriggered = false;
 		this.dataCreated = false;
+	}
+
+	@Override
+	public boolean isPassable() {
+		return this.isHidden;
+	}
+
+	@Override
+	public boolean isHighPriorityEntity() {
+		return !this.isHidden;
 	}
 
 	@Override
@@ -35,7 +47,7 @@ public class ItemEntity extends Entity {
 	@Override
 	protected BufferedImage getFrame() {
 		// TODO: Needs constant
-		return Game.getData().getTrainerTiles().getTile(0);
+		return this.isHidden ? null : Game.getData().getTrainerTiles().getTile(0);
 	}
 
 	@Override

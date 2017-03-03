@@ -158,7 +158,6 @@ public class MapMakerTriggerData {
 	}
 
 	void placeTrigger(Point location) {
-
 		// TODO: Ask user if they would like to place over
 		LocationTriggerMatcher placeableTrigger = mapMaker.getPlaceableTrigger();
 		placeableTrigger.addPoint(location);
@@ -192,6 +191,8 @@ public class MapMakerTriggerData {
 		switch (triggerModelType) {
 			case ITEM:
 				return new ItemEntityDialog((ItemMatcher)oldTrigger).getMatcher(mapMaker);
+			case HIDDEN_ITEM:
+				return new ItemEntityDialog((ItemMatcher)oldTrigger).getMatcher(mapMaker).setHidden();
 			case NPC:
 				return new NPCEntityDialog((NPCMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
 			case MISC_ENTITY:

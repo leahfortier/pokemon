@@ -2,6 +2,7 @@ package util;
 
 import main.Global;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -109,5 +110,13 @@ public final class GeneralUtils {
         }
 
         return iterator;
+    }
+
+    public static <T> List<T> combine(List<T> firstList, List<T> secondList) {
+        List<T> list = new ArrayList<T>();
+        list.addAll(firstList);
+        list.addAll(secondList);
+
+        return list;
     }
 }

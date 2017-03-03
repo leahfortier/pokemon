@@ -212,6 +212,7 @@
   "items": [
     {
       "item": "Meadow_Plate",
+      "isHidden": false,
       "location": {
         "x": 44,
         "y": 14
@@ -220,6 +221,7 @@
     },
     {
       "item": "Pecha_Berry",
+      "isHidden": false,
       "location": {
         "x": 21,
         "y": 26
