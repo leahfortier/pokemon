@@ -7,6 +7,7 @@ import main.Global;
 import map.entity.Entity;
 import map.entity.EntityAction;
 import map.entity.FishingSpotEntity;
+import map.entity.ItemEntity;
 import map.entity.MiscEntity;
 import map.overworld.WalkType;
 import map.overworld.WildEncounter;
@@ -24,9 +25,9 @@ import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
 import trainer.Player;
 import util.FileIO;
-import util.SerializationUtils;
 import util.MultiMap;
 import util.Point;
+import util.SerializationUtils;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -268,6 +269,14 @@ public class MapData {
 		}
 
 		return false;
+	}
+
+	public List<ItemEntity> getHiddenItems() {
+		return entities.stream()
+				.filter(entity -> entity.isVisible() && entity instanceof ItemEntity)
+				.map(entity -> (ItemEntity)entity)
+				.filter(ItemEntity::isHiddenItem)
+				.collect(Collectors.toList());
 	}
 
 	public Entity getEntity(Point location) {

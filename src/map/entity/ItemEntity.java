@@ -29,6 +29,10 @@ public class ItemEntity extends Entity {
 		this.dataCreated = false;
 	}
 
+	public boolean isHiddenItem() {
+		return this.isHidden;
+	}
+
 	@Override
 	public boolean isPassable() {
 		return this.isHidden;

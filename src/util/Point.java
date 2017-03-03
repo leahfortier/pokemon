@@ -160,6 +160,11 @@ public class Point implements Serializable {
         );
     }
 
+    public static int distance(Point start, Point end) {
+        Point difference = Point.subtract(start, end);
+        return Math.abs(difference.x) + Math.abs(difference.y);
+    }
+
     public int getIndex(int width) {
         return getIndex(this.x, this.y, width);
     }
