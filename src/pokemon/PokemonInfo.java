@@ -185,7 +185,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return evolution;
 	}
 
-	List<WildHoldItem> getWildItems() {
+	public List<WildHoldItem> getWildItems() {
 		return wildHoldItems;
 	}
 
@@ -405,7 +405,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return this.learnableMoves.contains(attack);
 	}
 
-	public static PokemonNamesies getRandomStarterPokemon() {
+	static PokemonNamesies getRandomStarterPokemon() {
 		return RandomUtils.getRandomValue(starterPokemon);
 	}
 

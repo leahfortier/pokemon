@@ -1,14 +1,15 @@
 package map.overworld;
 
 import pokemon.ActivePokemon;
+import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
+import pokemon.WildHoldItem;
 import trainer.WildPokemon;
 import util.GeneralUtils;
 import util.RandomUtils;
 
 import java.util.Arrays;
 
-// TODO: Not exactly sure if this is the best location for this class
 public class WildEncounter {
     private PokemonNamesies pokemon;
 
@@ -64,7 +65,10 @@ public class WildEncounter {
     }
 
     public WildPokemon getWildPokemon() {
-        return new WildPokemon(new ActivePokemon(this.pokemon, this.getLevel(), true, false));
+        ActivePokemon wildPokemon = new ActivePokemon(this.pokemon, this.getLevel(), true, false);
+        wildPokemon.giveItem(WildHoldItem.getWildHoldItem(PokemonInfo.getPokemonInfo(pokemon).getWildItems()));
+
+        return new WildPokemon(wildPokemon);
     }
 
     public static WildEncounter getWildEncounter(WildEncounter[] wildEncounters) {

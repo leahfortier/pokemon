@@ -121,9 +121,7 @@ public class ActivePokemon implements Serializable {
 		this.setGender(Gender.getGender(pokemon.getMaleRatio()));
 		this.setAbility(Ability.assign(pokemon));
 		
-		this.heldItem = isWild
-				? WildHoldItem.getWildHoldItem(pokemon.getWildItems())
-				: (HoldItem)ItemNamesies.NO_ITEM.getItem();
+		this.heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();
 		
 		this.isEgg = false;
 		this.eggSteps = 0;
