@@ -20,6 +20,7 @@ import pattern.SimpleMapTransition;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PC;
+import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.DayCareCenter;
 import pokemon.evolution.BaseEvolution;
 import trainer.pokedex.Pokedex;
@@ -244,8 +245,9 @@ public class Player extends Trainer implements Serializable {
 		}
 		
 		// Hatch eggs
+        boolean doubleHatch = front().hasAbility(AbilityNamesies.FLAME_BODY) || front().hasAbility(AbilityNamesies.MAGMA_ARMOR);
 		for (ActivePokemon p : team) {
-			if (p.isEgg() && p.hatch()) {
+			if (p.isEgg() && (p.hatch() || (doubleHatch && p.hatch()))) {
 				evolvingPokemon = p;
 				evolution = null;
 
