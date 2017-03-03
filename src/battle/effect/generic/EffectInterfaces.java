@@ -4,6 +4,7 @@ import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.Move;
 import battle.attack.MoveType;
+import battle.effect.holder.AbilityHolder;
 import battle.effect.status.StatusCondition;
 import item.Item;
 import main.Global;
@@ -1447,6 +1448,24 @@ public final class EffectInterfaces {
 		default boolean block(Battle b, ActivePokemon user) {
 			// Powder moves don't work against Grass-type Pokemon
 			return b.getOtherPokemon(user).isType(b, Type.GRASS);
+		}
+	}
+
+	public interface WildEncounterAlterer {
+		void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon);
+
+		static void invokeWildEncounterAlterer(ActivePokemon attacking, ActivePokemon wildPokemon) {
+			List<Object> invokees = new ArrayList<>();
+			invokees.add(attacking.getAbility());
+			invokees.add(attacking.getActualHeldItem());
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof WildEncounterAlterer && Effect.isActiveEffect(invokee)) {
+					
+					WildEncounterAlterer effect = (WildEncounterAlterer)invokee;
+					effect.alterWildPokemon(attacking, wildPokemon);
+				}
+			}
 		}
 	}
 }

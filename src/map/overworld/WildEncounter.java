@@ -1,5 +1,7 @@
 package map.overworld;
 
+import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
+import main.Game;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
@@ -64,8 +66,11 @@ public class WildEncounter {
     }
 
     public WildPokemon getWildPokemon() {
+        ActivePokemon attacking = Game.getPlayer().front();
         ActivePokemon wildPokemon = new ActivePokemon(this.pokemon, this.getLevel(), true, false);
-        wildPokemon.giveItem(WildHoldItem.getWildHoldItem(PokemonInfo.getPokemonInfo(pokemon).getWildItems()));
+
+        wildPokemon.giveItem(WildHoldItem.getWildHoldItem(attacking, PokemonInfo.getPokemonInfo(pokemon).getWildItems()));
+        WildEncounterAlterer.invokeWildEncounterAlterer(attacking, wildPokemon);
 
         return new WildPokemon(wildPokemon);
     }

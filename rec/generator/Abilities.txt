@@ -151,6 +151,14 @@ Cute Charm:
 			}
 		}
 		###
+	WildPokemonAlterer:
+		if (RandomUtils.chanceTest(2, 3)) {
+			Gender opposite = attacking.getGender().getOppositeGender();
+			if (opposite.genderApplies(wildPokemon.getPokemonInfo())) {
+				wildPokemon.setGender(opposite);
+			}
+		}
+		###
 *
 Magic Guard:
 	Desc: The Pok\u00e9mon only takes damage from attacks.

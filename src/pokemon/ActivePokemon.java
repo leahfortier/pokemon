@@ -202,7 +202,7 @@ public class ActivePokemon implements Serializable {
 		return pokemon;
 	}
 	
-	protected void setGender(Gender gender) {
+	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
 

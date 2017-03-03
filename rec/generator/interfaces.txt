@@ -776,3 +776,14 @@ PowderMove:
 			###
 	*
 ***
+WildEncounterAlterer:
+	Method:
+		Header: void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon)
+		Invoke: Void
+		SetInvokees:
+			List<Object> invokees = new ArrayList<>();
+			invokees.add(attacking.getAbility());
+			invokees.add(attacking.getActualHeldItem());
+			###
+	*
+***

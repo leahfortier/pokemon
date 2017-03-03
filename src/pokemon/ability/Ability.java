@@ -63,9 +63,11 @@ import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
+import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.Weather;
+import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
@@ -94,7 +96,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class Ability implements Serializable {
+public abstract class Ability implements Serializable, AbilityHolder {
 	private static final long serialVersionUID = 1L;
 
 	protected final AbilityNamesies namesies;
@@ -104,7 +106,12 @@ public abstract class Ability implements Serializable {
 		this.namesies = namesies;
 		this.description = description;
 	}
-	
+
+	@Override
+	public Ability getAbility() {
+		return this;
+	}
+
 	public AbilityNamesies namesies() {
 		return this.namesies;
 	}
@@ -560,7 +567,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class CuteCharm extends Ability implements PhysicalContactEffect {
+	static class CuteCharm extends Ability implements PhysicalContactEffect, WildEncounterAlterer {
 		private static final long serialVersionUID = 1L;
 
 		CuteCharm() {
@@ -573,6 +580,15 @@ public abstract class Ability implements Serializable {
 				if (infatuated.applies(b, victim, user, CastSource.ABILITY)) {
 					user.addEffect(infatuated);
 					Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
+				}
+			}
+		}
+
+		public void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon) {
+			if (RandomUtils.chanceTest(2, 3)) {
+				Gender opposite = attacking.getGender().getOppositeGender();
+				if (opposite.genderApplies(wildPokemon.getPokemonInfo())) {
+					wildPokemon.setGender(opposite);
 				}
 			}
 		}

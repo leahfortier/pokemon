@@ -2,8 +2,8 @@ package map.overworld;
 
 import item.ItemNamesies;
 import item.hold.HoldItem;
-import main.Game;
 import main.Global;
+import pokemon.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 import util.RandomUtils;
 
@@ -67,8 +67,8 @@ public class WildHoldItem implements Serializable {
         return list;
     }
 
-    static HoldItem getWildHoldItem(List<WildHoldItem> list) {
-        boolean compoundEyes = Game.getPlayer().front().hasAbility(AbilityNamesies.COMPOUNDEYES);
+    static HoldItem getWildHoldItem(ActivePokemon attacking, List<WildHoldItem> list) {
+        boolean compoundEyes = attacking.hasAbility(AbilityNamesies.COMPOUNDEYES);
         int random = RandomUtils.getRandomInt(100);
         int sum = 0;
 
