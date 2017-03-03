@@ -429,6 +429,15 @@
         "y": 16
       },
       "triggerName": "DFS_Town_Item_Paralyze_Heal_01"
+    },
+    {
+      "item": "Oran Berry",
+      "isHidden": true,
+      "location": {
+        "x": 38,
+        "y": 22
+      },
+      "triggerName": "DFS_Town_HiddenItem_OranBerry_01"
     }
   ],
   "miscEntities": [],
