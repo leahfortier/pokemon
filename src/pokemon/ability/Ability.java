@@ -370,11 +370,16 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Swarm extends Ability implements PowerChangeEffect {
+	// Guessed on the encounter rate multiplier
+	static class Swarm extends Ability implements EncounterRateMultiplier, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Swarm() {
 			super(AbilityNamesies.SWARM, "Powers up Bug-type moves in a pinch.");
+		}
+
+		public double getMultiplier() {
+			return 1.5;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {

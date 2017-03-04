@@ -71,6 +71,8 @@ Tinted Lens:
 Swarm:
 	Desc: Powers up Bug-type moves in a pinch.
 	PinchAbility: Bug
+	EncounterRateMultiplier: 1.5
+	Comments: // Guessed on the encounter rate multiplier
 *
 Sniper:
 	Desc: Powers up moves if they become critical hits.
