@@ -1036,6 +1036,16 @@ TypedWildEncounterSelector:
 		return Type.{00};
 		###
 *
+EncounterRateMultiplier:
+	AddInterface: EncounterRateMultiplier
+	Header: double getMultiplier()
+	Body:
+		return {0};
+		###
+*
+WeatherEncounterRateDecreaser:
+	AddMapField: EncounterRateMultiplier: Game.getPlayer().getArea().getWeather() == WeatherState.{00} ? .5 : 1
+*
 BuffetImmune:
 	AddMapField: Field:
 		private static final Type[] immunees = new Type[] { {0} };

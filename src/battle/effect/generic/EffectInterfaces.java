@@ -1550,4 +1550,26 @@ public final class EffectInterfaces {
 			return null;
 		}
 	}
+
+	public interface EncounterRateMultiplier {
+		double getMultiplier();
+
+		static double getModifier(ActivePokemon front) {
+			double modifier = 1;
+			
+			List<Object> invokees = new ArrayList<>();
+			invokees.add(front.getAbility());
+			invokees.add(front.getActualHeldItem());
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof EncounterRateMultiplier && Effect.isActiveEffect(invokee)) {
+					
+					EncounterRateMultiplier effect = (EncounterRateMultiplier)invokee;
+					modifier *= effect.getMultiplier();
+				}
+			}
+			
+			return modifier;
+		}
+	}
 }

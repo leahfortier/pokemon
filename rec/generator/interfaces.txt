@@ -844,3 +844,11 @@ TypedWildEncounterSelector:
 			###
 	*
 ***
+EncounterRateMultiplier:
+	Method:
+		Header: double getMultiplier()
+		Invoke: Multiply
+		InvokeParameters: ActivePokemon front
+		NonBattleEffects: front
+	*
+***

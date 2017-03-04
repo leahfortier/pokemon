@@ -118,6 +118,7 @@ Lightningrod:
 Sand Veil:
 	Desc: Raises the Pok\u00e9mon's evasion during a sandstorm by one level.
 	WeatherEvasion: Sandstorm
+	WeatherEncounterRateDecreaser: Sandstorm
 *
 Sand Rush:
 	Desc: Speed rises in a Sandstorm.
@@ -219,6 +220,7 @@ Stench:
 			}
 		}
 		###
+	EncounterRateMultiplier: .5
 *
 Effect Spore:
 	Desc: Contact may paralyze, poison, or cause sleep.
@@ -263,6 +265,7 @@ Dry Skin:
 Arena Trap:
 	Desc: Prevents the foe from fleeing.
 	OpponentTrappingAbility: !escaper.isLevitating(b) && !escaper.isType(b, Type.GHOST)
+	EncounterRateMultiplier: 2
 *
 Technician:
 	Desc: Powers up the Pok\u00e9mon's weaker moves.
@@ -347,6 +350,7 @@ No Guard:
 		// Moves always hit unless they are OHKO moves
 		return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO);
 		###
+	EncounterRateMultiplier: 1.5
 *
 Own Tempo:
 	Desc: Prevents the Pok\u00e9mon from becoming confused.
@@ -608,6 +612,7 @@ Quick Feet:
 	Desc: Boosts Speed if there is a status problem.
 	ToModify: Speed
 	ModifyMultiplier: 1.5 p.hasStatus()
+	EncounterRateMultiplier: .5
 *
 Trace:
 	Desc: The Pok\u00e9mon copies the foe's ability.
@@ -659,6 +664,7 @@ Immunity:
 Snow Cloak:
 	Desc: Raises the Pok\u00e9mon's evasion during a hailstorm by one level.
 	WeatherEvasion: Hailing
+	WeatherEncounterRateDecreaser: Snow
 *
 Marvel Scale:
 	Desc: Boosts Defense if there is a status problem.
@@ -837,6 +843,7 @@ White Smoke:
 	StatProtect: 
 		return true;
 		###
+	EncounterRateMultiplier: .5
 *
 Toxic Boost:
 	Desc: Powers up physical attacks when poisoned.

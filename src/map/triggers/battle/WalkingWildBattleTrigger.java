@@ -1,7 +1,7 @@
 package map.triggers.battle;
 
-import battle.effect.RepellingEffect;
-import item.Item;
+import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
+import battle.effect.generic.EffectInterfaces.RepellingEffect;
 import main.Game;
 import map.overworld.EncounterRate;
 import map.overworld.WildEncounter;
@@ -10,10 +10,11 @@ import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.map.WildBattleMatcher;
+import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import trainer.Player;
-import util.SerializationUtils;
 import util.RandomUtils;
+import util.SerializationUtils;
 
 public class WalkingWildBattleTrigger extends Trigger {
     private final WildEncounter[] wildEncounters;
@@ -28,12 +29,17 @@ public class WalkingWildBattleTrigger extends Trigger {
     }
 
     protected void executeTrigger() {
-        // TODO: What's going on with this random stuff also maybe this formula should be in the EncounterRate class
-        double rand = Math.random()*187.5/encounterRate.getRate();
+        Player player = Game.getPlayer();
+        ActivePokemon front = player.front();
 
+        // TODO: What's going on with this random stuff also maybe this formula should be in the EncounterRate class
+        double rand = Math.random()*187.5/encounterRate.getRate()*EncounterRateMultiplier.getModifier(front);
         if (rand < 1) {
             WildEncounter wildPokemon = getWildEncounter();
-            if (repelCheck(wildPokemon)) {
+
+            // Maybe you won't actually fight this Pokemon after all (due to repel, cleanse tag, etc.)
+            if ((wildPokemon.getLevel() <= front.getLevel() && player.isUsingRepel())
+                    || RepellingEffect.checkRepellingEffect(front, wildPokemon)) {
                 return;
             }
 
@@ -58,24 +64,5 @@ public class WalkingWildBattleTrigger extends Trigger {
         }
 
         return null;
-    }
-
-    private boolean repelCheck(WildEncounter wildPokemon) {
-        Player player = Game.getPlayer();
-
-        // Maybe you won't actually fight this Pokemon after all (due to repel, cleanse tag, etc.)
-        if (player.front().getLevel() >= wildPokemon.getLevel()) {
-            if (player.isUsingRepel()) {
-                return true;
-            }
-
-            // TODO: Make the chance method return an int instead of a double
-            Item item = player.front().getActualHeldItem();
-            if (item instanceof RepellingEffect && RandomUtils.chanceTest((int)(100*((RepellingEffect)item).chance()))) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -6,6 +6,7 @@ import battle.effect.generic.EffectNamesies;
 import gui.view.ViewMode;
 import item.ItemNamesies;
 import item.use.BallItem;
+import main.Game;
 import map.AreaData;
 import map.Direction;
 import map.MapName;
@@ -290,6 +291,10 @@ public class Player extends Trainer implements Serializable {
 
 	public SimpleMapTransition getMapTransition() {
 		return this.mapTransition;
+	}
+
+	public AreaData getArea() {
+		return Game.getData().getMap(this.getMapName()).getArea(this.getAreaName());
 	}
 
 	public String getAreaName() {
