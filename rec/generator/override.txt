@@ -1022,10 +1022,11 @@ Vitamin:
 	AddMapField: Price: 9800
 	AddInterface: Vitamin
 *
-RepelChance:
-	Header: double chance()
+RepelEffectItem:
+	AddInterface: RepellingEffect
+	Header: boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon)
 	Body:
-		return {0};
+		return RandomUtils.chanceTest(1, 3) && wildPokemon.getLevel() <= attacking.getLevel();
 		###
 *
 BuffetImmune:
@@ -1729,9 +1730,6 @@ DropBelowHalfHealth:
 WildPokemonAlterer:
 	Header: void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData)
 	AddInterface: WildEncounterAlterer
-*
-MaxLevelWildEncounterEffect:
-	AddInterface: MaxLevelWildEncounterEffect
 *
 NewTerrain:
 	Header: void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain)

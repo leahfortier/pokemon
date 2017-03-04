@@ -51,6 +51,7 @@ import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
+import battle.effect.generic.EffectInterfaces.RepelLowLevelEncounterEffect;
 import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
@@ -385,7 +386,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class KeenEye extends Ability implements StatProtectingEffect, OpponentIgnoreStageEffect {
+	static class KeenEye extends Ability implements StatProtectingEffect, OpponentIgnoreStageEffect, RepelLowLevelEncounterEffect {
 		private static final long serialVersionUID = 1L;
 
 		KeenEye() {
@@ -437,7 +438,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Intimidate extends Ability implements EntryEffect {
+	static class Intimidate extends Ability implements EntryEffect, RepelLowLevelEncounterEffect {
 		private static final long serialVersionUID = 1L;
 
 		Intimidate() {
@@ -866,7 +867,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class VitalSpirit extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect, MaxLevelWildEncounterEffect {
+	static class VitalSpirit extends Ability implements MaxLevelWildEncounterEffect, StatusPreventionEffect, EntryEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.ASLEEP)) {

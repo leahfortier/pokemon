@@ -77,7 +77,7 @@ Sniper:
 *
 Keen Eye:
 	Desc: Prevents the Pok\u00e9mon from losing accuracy.
-	Int: StatProtectingEffect, OpponentIgnoreStageEffect
+	Int: StatProtectingEffect, OpponentIgnoreStageEffect, RepelLowLevelEncounterEffect
 	StatProtect: 
 		return stat == Stat.ACCURACY;
 		###
@@ -99,7 +99,7 @@ Guts:
 *
 Intimidate:
 	Desc: Lowers the foe's Attack stat.
-	Int: EntryEffect
+	Int: EntryEffect, RepelLowLevelEncounterEffect
 	Enter: 
 		ActivePokemon other = b.getOtherPokemon(enterer);
 		other.getAttributes().modifyStage(enterer, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
@@ -301,7 +301,7 @@ Cloud Nine:
 Vital Spirit:
 	Desc: Prevents the Pok\u00e9mon from falling asleep.
 	StatusPreventAbility: Asleep sleep
-	MaxLevelWildEncounterEffect: True
+	Int: MaxLevelWildEncounterEffect
 *
 Insomnia:
 	Desc: Prevents the Pok\u00e9mon from falling asleep.
@@ -645,11 +645,10 @@ Download:
 *
 Pressure:
 	Desc: The Pok\u00e9mon raises the foe's PP usage.
-	Int: EntryEffect
+	Int: EntryEffect, MaxLevelWildEncounterEffect
 	Enter: 
 		Messages.add(enterer.getName() + " is exerting pressure!");
 		###
-	MaxLevelWildEncounterEffect: True
 *
 Immunity:
 	Desc: Prevents the Pok\u00e9mon from getting poisoned.
@@ -685,7 +684,7 @@ Sheer Force:
 *
 Hustle:
 	Desc: Boosts the Attack stat, but lowers accuracy.
-	Int: StatModifyingEffect
+	Int: StatModifyingEffect, MaxLevelWildEncounterEffect
 	ModifyStat: 
 		if (s == Stat.ATTACK) {
 			return 1.5;
@@ -697,7 +696,6 @@ Hustle:
 			return 1;
 		}
 		###
-	MaxLevelWildEncounterEffect: True
 *
 Huge Power:
 	Desc: Raises the Pok\u00e9mon's Attack stat.

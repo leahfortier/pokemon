@@ -798,3 +798,23 @@ MaxLevelWildEncounterEffect:
 			###
 	*
 ***
+RepellingEffect:
+	Method:
+		Header: boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon)
+		Invoke: Check true
+		SetInvokees:
+			List<Object> invokees = new ArrayList<>();
+			invokees.add(attacking.getAbility());
+			invokees.add(attacking.getActualHeldItem());
+			###
+	*
+***
+RepelLowLevelEncounterEffect:
+	Extends: RepellingEffect
+	Method:
+		Header: boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon)
+		Default:
+			return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= attacking.getLevel();
+			###
+	*
+***

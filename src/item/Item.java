@@ -7,7 +7,6 @@ import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.effect.DefiniteEscape;
 import battle.effect.MessageGetter;
-import battle.effect.RepellingEffect;
 import battle.effect.SimpleStatModifyingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.WeatherExtendingEffect;
@@ -30,6 +29,7 @@ import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
+import battle.effect.generic.EffectInterfaces.RepellingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
@@ -72,6 +72,7 @@ import item.use.TechnicalMachine;
 import item.use.UseItem;
 import main.Game;
 import map.overworld.TerrainType;
+import map.overworld.WildEncounter;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
@@ -474,8 +475,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 200;
 		}
 
-		public double chance() {
-			return .33;
+		public boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon) {
+			return RandomUtils.chanceTest(1, 3) && wildPokemon.getLevel() <= attacking.getLevel();
 		}
 	}
 
@@ -1679,7 +1680,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class PureIncense extends Item implements RepellingEffect, IncenseItem {
+	static class PureIncense extends Item implements IncenseItem, RepellingEffect {
 		private static final long serialVersionUID = 1L;
 
 		PureIncense() {
@@ -1687,8 +1688,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			super.price = 9600;
 		}
 
-		public double chance() {
-			return .33;
+		public boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon) {
+			return RandomUtils.chanceTest(1, 3) && wildPokemon.getLevel() <= attacking.getLevel();
 		}
 
 		public PokemonNamesies getBaby() {

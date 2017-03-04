@@ -1478,4 +1478,33 @@ public final class EffectInterfaces {
 			}
 		}
 	}
+
+	public interface RepellingEffect {
+		boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon);
+
+		static boolean checkRepellingEffect(ActivePokemon attacking, WildEncounter wildPokemon) {
+			List<Object> invokees = new ArrayList<>();
+			invokees.add(attacking.getAbility());
+			invokees.add(attacking.getActualHeldItem());
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof RepellingEffect && Effect.isActiveEffect(invokee)) {
+					
+					RepellingEffect effect = (RepellingEffect)invokee;
+					if (effect.shouldRepel(attacking, wildPokemon)) {
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		}
+	}
+
+	public interface RepelLowLevelEncounterEffect extends RepellingEffect {
+
+		default boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon) {
+			return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= attacking.getLevel();
+		}
+	}
 }
