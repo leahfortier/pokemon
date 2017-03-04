@@ -210,7 +210,7 @@ public class ActivePokemon implements Serializable {
 		this.ability = ability.getNewAbility();
 	}
 
-	protected void setNature(Nature nature) {
+	public void setNature(Nature nature) {
 		this.nature = nature;
 		this.setStats();
 	}

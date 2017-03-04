@@ -953,7 +953,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Synchronize extends Ability implements StatusReceivedEffect {
+	static class Synchronize extends Ability implements StatusReceivedEffect, WildEncounterAlterer {
 		private static final long serialVersionUID = 1L;
 		private static final Set<StatusCondition> PASSABLE_STATUSES = EnumSet.of(
 			StatusCondition.BURNED,
@@ -979,6 +979,12 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			
 			// Give status condition to the opponent
 			Status.giveStatus(b, victim, caster, statusType, true);
+		}
+
+		public void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
+			if (RandomUtils.chanceTest(50)) {
+				wildPokemon.setNature(attacking.getNature());
+			}
 		}
 	}
 

@@ -339,6 +339,11 @@ Synchronize:
 		// Give status condition to the opponent
 		Status.giveStatus(b, victim, caster, statusType, true);
 		###
+	WildPokemonAlterer:
+		if (RandomUtils.chanceTest(50)) {
+			wildPokemon.setNature(attacking.getNature());
+		}
+		###
 *
 No Guard:
 	Desc: Ensures the Pok\u00e9mon and its foe's attacks land.
