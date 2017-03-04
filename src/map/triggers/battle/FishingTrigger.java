@@ -1,5 +1,6 @@
 package map.triggers.battle;
 
+import main.Game;
 import map.condition.Condition;
 import map.overworld.OverworldTool;
 import map.overworld.WildEncounter;
@@ -9,6 +10,8 @@ import message.MessageUpdate;
 import message.Messages;
 import pattern.GroupTriggerMatcher;
 import pattern.map.FishingMatcher;
+import pokemon.ActivePokemon;
+import pokemon.ability.AbilityNamesies;
 import util.SerializationUtils;
 import util.RandomUtils;
 
@@ -25,7 +28,12 @@ public class FishingTrigger extends Trigger {
     }
 
     protected void executeTrigger() {
-        if (RandomUtils.chanceTest(50)) {
+        ActivePokemon front = Game.getPlayer().front();
+        int chance = front.hasAbility(AbilityNamesies.SUCTION_CUPS) || front.hasAbility(AbilityNamesies.STICKY_HOLD)
+                ? 75 // I made up this number since I couldn't find it
+                : 50;
+
+        if (RandomUtils.chanceTest(chance)) {
             WildEncounter wildPokemon = WildEncounter.getWildEncounter(this.wildEncounters);
             String pokemonJson = SerializationUtils.getJson(wildPokemon);
 
