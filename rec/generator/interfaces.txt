@@ -780,11 +780,7 @@ WildEncounterAlterer:
 	Method:
 		Header: void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData)
 		Invoke: Void
-		SetInvokees:
-			List<Object> invokees = new ArrayList<>();
-			invokees.add(attacking.getAbility());
-			invokees.add(attacking.getActualHeldItem());
-			###
+		NonBattleEffects: attacking
 	*
 ***
 MaxLevelWildEncounterEffect:
@@ -802,11 +798,7 @@ RepellingEffect:
 	Method:
 		Header: boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon)
 		Invoke: Check true
-		SetInvokees:
-			List<Object> invokees = new ArrayList<>();
-			invokees.add(attacking.getAbility());
-			invokees.add(attacking.getActualHeldItem());
-			###
+		NonBattleEffects: attacking
 	*
 ***
 RepelLowLevelEncounterEffect:
@@ -815,6 +807,40 @@ RepelLowLevelEncounterEffect:
 		Header: boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon)
 		Default:
 			return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= attacking.getLevel();
+			###
+	*
+***
+WildEncounterSelector:
+	Method:
+		Header: WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters)
+		Invoke: Get
+		NonBattleEffects: front
+		InvokeName: getForcedWildEncounter
+	*
+***
+TypedWildEncounterSelector:
+	Extends: WildEncounterSelector
+	Method:
+		Header: Type getType()
+	*
+	Method:
+		Header: WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters)
+		Default:
+			if (RandomUtils.chanceTest(50)) {
+				List<WildEncounter> typedList = new ArrayList<>();
+				for (WildEncounter wildEncounter : wildEncounters) {
+					PokemonInfo pokemon = PokemonInfo.getPokemonInfo(wildEncounter.getPokemonName());
+					if (pokemon.isType(this.getType())) {
+						typedList.add(wildEncounter);
+					}
+				}
+
+				if (!typedList.isEmpty()) {
+					return RandomUtils.getRandomValue(typedList);
+				}
+			}
+
+			return null;
 			###
 	*
 ***

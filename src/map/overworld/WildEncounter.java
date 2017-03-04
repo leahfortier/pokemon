@@ -1,6 +1,7 @@
 package map.overworld;
 
 import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
+import battle.effect.generic.EffectInterfaces.WildEncounterSelector;
 import main.Game;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
@@ -76,6 +77,12 @@ public class WildEncounter {
     }
 
     public static WildEncounter getWildEncounter(WildEncounter[] wildEncounters) {
+        ActivePokemon front = Game.getPlayer().front();
+        WildEncounter forcedEncounter = WildEncounterSelector.getForcedWildEncounter(front, wildEncounters);
+        if (forcedEncounter != null) {
+            return forcedEncounter;
+        }
+
         return wildEncounters[getRandomEncounterIndex(wildEncounters)];
     }
 

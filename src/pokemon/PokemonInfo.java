@@ -102,6 +102,10 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		this.eggGroups = eggGroups.toArray(new EggGroup[0]);
 	}
 
+	public boolean isType(Type type) {
+		return this.type[0] == type || this.type[1] == type;
+	}
+
 	public Type[] getType() {
 		return type;
 	}

@@ -108,6 +108,7 @@ Intimidate:
 Static:
 	Desc: Contact with the Pok\u00e9mon may cause paralysis.
 	StatusContact: Paralyzed
+	TypedWildEncounterSelector: Electric
 *
 Lightningrod:
 	Desc: The Pok\u00e9mon draws in all Electric-type moves.
@@ -391,6 +392,7 @@ Oblivious:
 Magnet Pull:
 	OpponentTrappingAbility: escaper.isType(b, Type.STEEL) && !escaper.isType(b, Type.GHOST)
 	Desc: Prevents Steel-type Pok\u00e9mon from escaping.
+	TypedWildEncounterSelector: Steel
 *
 Unaware:
 	Desc: Ignores any change in ability by the foe.

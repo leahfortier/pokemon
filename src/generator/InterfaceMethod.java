@@ -63,6 +63,7 @@ class InterfaceMethod {
     private static final String INVOKE = "Invoke";
     private static final String INVOKE_NAME = "InvokeName";
     private static final String EFFECT_LIST = "EffectList";
+    private static final String NON_BATTLE_EFFECTS = "NonBattleEffects";
     private static final String EFFECT_PRIORITY = "EffectPriority";
     private static final String INVOKE_ATTACK = "InvokeAttack";
     private static final String STAT_INVOKE_ATTACK = "StatInvokeAttack";
@@ -206,6 +207,15 @@ class InterfaceMethod {
                     "if (!s.user()) {\n" +
                     "invokees.add(" + statInvokeAttack + ".getAttack());\n" +
                     "}\n"
+            );
+        }
+
+        final String nonBattleInvokees = fields.getAndRemoveTrimmed(NON_BATTLE_EFFECTS);
+        if (nonBattleInvokees != null) {
+            setInvokeeDeclaration(
+                    "List<Object> invokees = new ArrayList<>();\n" +
+                    "invokees.add(" + nonBattleInvokees + ".getAbility());\n" +
+                    "invokees.add(" + nonBattleInvokees + ".getActualHeldItem());\n"
             );
         }
 

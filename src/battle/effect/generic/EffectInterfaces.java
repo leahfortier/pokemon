@@ -12,6 +12,7 @@ import map.overworld.WildEncounter;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
+import pokemon.PokemonInfo;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
@@ -1505,6 +1506,48 @@ public final class EffectInterfaces {
 
 		default boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon) {
 			return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= attacking.getLevel();
+		}
+	}
+
+	public interface WildEncounterSelector {
+		WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters);
+
+		static WildEncounter getForcedWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters) {
+			List<Object> invokees = new ArrayList<>();
+			invokees.add(front.getAbility());
+			invokees.add(front.getActualHeldItem());
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof WildEncounterSelector && Effect.isActiveEffect(invokee)) {
+					
+					WildEncounterSelector effect = (WildEncounterSelector)invokee;
+					return effect.getWildEncounter(front, wildEncounters);
+				}
+			}
+			
+			return null;
+		}
+	}
+
+	public interface TypedWildEncounterSelector extends WildEncounterSelector {
+		Type getType();
+
+		default WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters) {
+			if (RandomUtils.chanceTest(50)) {
+				List<WildEncounter> typedList = new ArrayList<>();
+				for (WildEncounter wildEncounter : wildEncounters) {
+					PokemonInfo pokemon = PokemonInfo.getPokemonInfo(wildEncounter.getPokemonName());
+					if (pokemon.isType(this.getType())) {
+						typedList.add(wildEncounter);
+					}
+				}
+				
+				if (!typedList.isEmpty()) {
+					return RandomUtils.getRandomValue(typedList);
+				}
+			}
+			
+			return null;
 		}
 	}
 }

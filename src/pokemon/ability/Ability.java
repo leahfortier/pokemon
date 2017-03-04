@@ -64,6 +64,7 @@ import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
+import battle.effect.generic.EffectInterfaces.TypedWildEncounterSelector;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
 import battle.effect.generic.EffectNamesies;
@@ -451,11 +452,15 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Static extends Ability implements PhysicalContactEffect {
+	static class Static extends Ability implements PhysicalContactEffect, TypedWildEncounterSelector {
 		private static final long serialVersionUID = 1L;
 
 		Static() {
 			super(AbilityNamesies.STATIC, "Contact with the Pok\u00e9mon may cause paralysis.");
+		}
+
+		public Type getType() {
+			return Type.ELECTRIC;
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -1081,7 +1086,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class MagnetPull extends Ability implements OpponentTrappingEffect {
+	static class MagnetPull extends Ability implements OpponentTrappingEffect, TypedWildEncounterSelector {
 		private static final long serialVersionUID = 1L;
 
 		MagnetPull() {
@@ -1094,6 +1099,10 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper) {
 			return trapper.getName() + "'s " + this.getName() + " prevents " + escaper.getName() + " from escaping!";
+		}
+
+		public Type getType() {
+			return Type.STEEL;
 		}
 	}
 

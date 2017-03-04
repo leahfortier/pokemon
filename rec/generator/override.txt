@@ -1029,6 +1029,13 @@ RepelEffectItem:
 		return RandomUtils.chanceTest(1, 3) && wildPokemon.getLevel() <= attacking.getLevel();
 		###
 *
+TypedWildEncounterSelector:
+	AddInterface: TypedWildEncounterSelector
+	Header: Type getType()
+	Body:
+		return Type.{00};
+		###
+*
 BuffetImmune:
 	AddMapField: Field:
 		private static final Type[] immunees = new Type[] { {0} };
