@@ -19,7 +19,8 @@ public enum ControlKey {
     LOG(KeyEvent.VK_L),
     FLY(KeyEvent.VK_F),
     POKEFINDER(KeyEvent.VK_P),
-    BIKE(KeyEvent.VK_B) ;
+    ITEM_FINDER(KeyEvent.VK_I),
+    BIKE(KeyEvent.VK_B);
 
     private static final Set<ControlKey> CONTROL_KEYS = EnumSet.allOf(ControlKey.class);
 
