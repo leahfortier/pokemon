@@ -776,3 +776,79 @@ PowderMove:
 			###
 	*
 ***
+WildEncounterAlterer:
+	Method:
+		Header: void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData)
+		Invoke: Void
+		NonBattleEffects: attacking
+	*
+***
+MaxLevelWildEncounterEffect:
+	Extends: WildEncounterAlterer
+	Method:
+		Header: void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData)
+		Default:
+			if (RandomUtils.chanceTest(50)) {
+				wildPokemon.setLevel(encounterData.getMaxLevel());
+			}
+			###
+	*
+***
+RepellingEffect:
+	Method:
+		Header: boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon)
+		Invoke: Check true
+		NonBattleEffects: attacking
+	*
+***
+RepelLowLevelEncounterEffect:
+	Extends: RepellingEffect
+	Method:
+		Header: boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon)
+		Default:
+			return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= attacking.getLevel();
+			###
+	*
+***
+WildEncounterSelector:
+	Method:
+		Header: WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters)
+		Invoke: Get
+		NonBattleEffects: front
+		InvokeName: getForcedWildEncounter
+	*
+***
+TypedWildEncounterSelector:
+	Extends: WildEncounterSelector
+	Method:
+		Header: Type getType()
+	*
+	Method:
+		Header: WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters)
+		Default:
+			if (RandomUtils.chanceTest(50)) {
+				List<WildEncounter> typedList = new ArrayList<>();
+				for (WildEncounter wildEncounter : wildEncounters) {
+					PokemonInfo pokemon = PokemonInfo.getPokemonInfo(wildEncounter.getPokemonName());
+					if (pokemon.isType(this.getType())) {
+						typedList.add(wildEncounter);
+					}
+				}
+
+				if (!typedList.isEmpty()) {
+					return RandomUtils.getRandomValue(typedList);
+				}
+			}
+
+			return null;
+			###
+	*
+***
+EncounterRateMultiplier:
+	Method:
+		Header: double getMultiplier()
+		Invoke: Multiply
+		InvokeParameters: ActivePokemon front
+		NonBattleEffects: front
+	*
+***

@@ -8,14 +8,17 @@ import battle.effect.status.StatusCondition;
 import item.Item;
 import main.Global;
 import map.overworld.TerrainType;
+import map.overworld.WildEncounter;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
+import pokemon.PokemonInfo;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import trainer.Trainer;
 import type.Type;
+import util.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1447,6 +1450,126 @@ public final class EffectInterfaces {
 		default boolean block(Battle b, ActivePokemon user) {
 			// Powder moves don't work against Grass-type Pokemon
 			return b.getOtherPokemon(user).isType(b, Type.GRASS);
+		}
+	}
+
+	public interface WildEncounterAlterer {
+		void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData);
+
+		static void invokeWildEncounterAlterer(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
+			List<Object> invokees = new ArrayList<>();
+			invokees.add(attacking.getAbility());
+			invokees.add(attacking.getActualHeldItem());
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof WildEncounterAlterer && Effect.isActiveEffect(invokee)) {
+					
+					WildEncounterAlterer effect = (WildEncounterAlterer)invokee;
+					effect.alterWildPokemon(attacking, wildPokemon, encounterData);
+				}
+			}
+		}
+	}
+
+	public interface MaxLevelWildEncounterEffect extends WildEncounterAlterer {
+
+		default void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
+			if (RandomUtils.chanceTest(50)) {
+				wildPokemon.setLevel(encounterData.getMaxLevel());
+			}
+		}
+	}
+
+	public interface RepellingEffect {
+		boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon);
+
+		static boolean checkRepellingEffect(ActivePokemon attacking, WildEncounter wildPokemon) {
+			List<Object> invokees = new ArrayList<>();
+			invokees.add(attacking.getAbility());
+			invokees.add(attacking.getActualHeldItem());
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof RepellingEffect && Effect.isActiveEffect(invokee)) {
+					
+					RepellingEffect effect = (RepellingEffect)invokee;
+					if (effect.shouldRepel(attacking, wildPokemon)) {
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		}
+	}
+
+	public interface RepelLowLevelEncounterEffect extends RepellingEffect {
+
+		default boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon) {
+			return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= attacking.getLevel();
+		}
+	}
+
+	public interface WildEncounterSelector {
+		WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters);
+
+		static WildEncounter getForcedWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters) {
+			List<Object> invokees = new ArrayList<>();
+			invokees.add(front.getAbility());
+			invokees.add(front.getActualHeldItem());
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof WildEncounterSelector && Effect.isActiveEffect(invokee)) {
+					
+					WildEncounterSelector effect = (WildEncounterSelector)invokee;
+					return effect.getWildEncounter(front, wildEncounters);
+				}
+			}
+			
+			return null;
+		}
+	}
+
+	public interface TypedWildEncounterSelector extends WildEncounterSelector {
+		Type getType();
+
+		default WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters) {
+			if (RandomUtils.chanceTest(50)) {
+				List<WildEncounter> typedList = new ArrayList<>();
+				for (WildEncounter wildEncounter : wildEncounters) {
+					PokemonInfo pokemon = PokemonInfo.getPokemonInfo(wildEncounter.getPokemonName());
+					if (pokemon.isType(this.getType())) {
+						typedList.add(wildEncounter);
+					}
+				}
+				
+				if (!typedList.isEmpty()) {
+					return RandomUtils.getRandomValue(typedList);
+				}
+			}
+			
+			return null;
+		}
+	}
+
+	public interface EncounterRateMultiplier {
+		double getMultiplier();
+
+		static double getModifier(ActivePokemon front) {
+			double modifier = 1;
+			
+			List<Object> invokees = new ArrayList<>();
+			invokees.add(front.getAbility());
+			invokees.add(front.getActualHeldItem());
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof EncounterRateMultiplier && Effect.isActiveEffect(invokee)) {
+					
+					EncounterRateMultiplier effect = (EncounterRateMultiplier)invokee;
+					modifier *= effect.getMultiplier();
+				}
+			}
+			
+			return modifier;
 		}
 	}
 }

@@ -1,6 +1,10 @@
 package map.overworld;
 
+import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
+import battle.effect.generic.EffectInterfaces.WildEncounterSelector;
+import main.Game;
 import pokemon.ActivePokemon;
+import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import trainer.WildPokemon;
 import util.GeneralUtils;
@@ -8,7 +12,6 @@ import util.RandomUtils;
 
 import java.util.Arrays;
 
-// TODO: Not exactly sure if this is the best location for this class
 public class WildEncounter {
     private PokemonNamesies pokemon;
 
@@ -64,10 +67,22 @@ public class WildEncounter {
     }
 
     public WildPokemon getWildPokemon() {
-        return new WildPokemon(new ActivePokemon(this.pokemon, this.getLevel(), true, false));
+        ActivePokemon attacking = Game.getPlayer().front();
+        ActivePokemon wildPokemon = new ActivePokemon(this.pokemon, this.getLevel(), true, false);
+
+        wildPokemon.giveItem(WildHoldItem.getWildHoldItem(attacking, PokemonInfo.getPokemonInfo(pokemon).getWildItems()));
+        WildEncounterAlterer.invokeWildEncounterAlterer(attacking, wildPokemon, this);
+
+        return new WildPokemon(wildPokemon);
     }
 
     public static WildEncounter getWildEncounter(WildEncounter[] wildEncounters) {
+        ActivePokemon front = Game.getPlayer().front();
+        WildEncounter forcedEncounter = WildEncounterSelector.getForcedWildEncounter(front, wildEncounters);
+        if (forcedEncounter != null) {
+            return forcedEncounter;
+        }
+
         return wildEncounters[getRandomEncounterIndex(wildEncounters)];
     }
 

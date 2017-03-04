@@ -6,6 +6,7 @@ import battle.effect.generic.EffectNamesies;
 import gui.view.ViewMode;
 import item.ItemNamesies;
 import item.use.BallItem;
+import main.Game;
 import map.AreaData;
 import map.Direction;
 import map.MapName;
@@ -20,6 +21,7 @@ import pattern.SimpleMapTransition;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PC;
+import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.DayCareCenter;
 import pokemon.evolution.BaseEvolution;
 import trainer.pokedex.Pokedex;
@@ -244,8 +246,9 @@ public class Player extends Trainer implements Serializable {
 		}
 		
 		// Hatch eggs
+        boolean doubleHatch = front().hasAbility(AbilityNamesies.FLAME_BODY) || front().hasAbility(AbilityNamesies.MAGMA_ARMOR);
 		for (ActivePokemon p : team) {
-			if (p.isEgg() && p.hatch()) {
+			if (p.isEgg() && (p.hatch() || (doubleHatch && p.hatch()))) {
 				evolvingPokemon = p;
 				evolution = null;
 
@@ -288,6 +291,10 @@ public class Player extends Trainer implements Serializable {
 
 	public SimpleMapTransition getMapTransition() {
 		return this.mapTransition;
+	}
+
+	public AreaData getArea() {
+		return Game.getData().getMap(this.getMapName()).getArea(this.getAreaName());
 	}
 
 	public String getAreaName() {

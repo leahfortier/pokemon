@@ -1022,11 +1022,29 @@ Vitamin:
 	AddMapField: Price: 9800
 	AddInterface: Vitamin
 *
-RepelChance:
-	Header: double chance()
+RepelEffectItem:
+	AddInterface: RepellingEffect
+	Header: boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon)
+	Body:
+		return RandomUtils.chanceTest(1, 3) && wildPokemon.getLevel() <= attacking.getLevel();
+		###
+*
+TypedWildEncounterSelector:
+	AddInterface: TypedWildEncounterSelector
+	Header: Type getType()
+	Body:
+		return Type.{00};
+		###
+*
+EncounterRateMultiplier:
+	AddInterface: EncounterRateMultiplier
+	Header: double getMultiplier()
 	Body:
 		return {0};
 		###
+*
+WeatherEncounterRateDecreaser:
+	AddMapField: EncounterRateMultiplier: Game.getPlayer().getArea().getWeather() == WeatherState.{00} ? .5 : 1
 *
 BuffetImmune:
 	AddMapField: Field:
@@ -1725,6 +1743,10 @@ DropBelowHalfHealth:
 			{0}
 		}
 		###
+*
+WildPokemonAlterer:
+	Header: void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData)
+	AddInterface: WildEncounterAlterer
 *
 NewTerrain:
 	Header: void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain)

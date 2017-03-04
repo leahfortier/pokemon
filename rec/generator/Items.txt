@@ -166,11 +166,11 @@ Choice Specs:
 	ChoiceItem: Sp_Attack
 *
 Cleanse Tag:
-	Int: HoldItem, RepellingEffect
+	Int: HoldItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.
 	Price: 200
-	RepelChance: .33
+	RepelEffectItem: True
 *
 Damp Rock:
 	Int: HoldItem, WeatherExtendingEffect
@@ -747,11 +747,11 @@ Odd Incense:
 	Baby: Mime_Jr
 *
 Pure Incense:
-	Int: RepellingEffect, IncenseItem
+	Int: IncenseItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the first one in the party.
 	Price: 9600
-	RepelChance: .33
+	RepelEffectItem: True
 	Baby: Chingling
 *
 Rock Incense:

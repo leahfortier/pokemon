@@ -43,7 +43,6 @@ import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
 import pattern.PokemonMatcher;
-import pokemon.PokemonInfo.WildHoldItem;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.Breeding;
@@ -122,9 +121,7 @@ public class ActivePokemon implements Serializable {
 		this.setGender(Gender.getGender(pokemon.getMaleRatio()));
 		this.setAbility(Ability.assign(pokemon));
 		
-		this.heldItem = isWild
-				? WildHoldItem.getWildHoldItem(pokemon.getWildItems())
-				: (HoldItem)ItemNamesies.NO_ITEM.getItem();
+		this.heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();
 		
 		this.isEgg = false;
 		this.eggSteps = 0;
@@ -205,7 +202,7 @@ public class ActivePokemon implements Serializable {
 		return pokemon;
 	}
 	
-	protected void setGender(Gender gender) {
+	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
 
@@ -213,7 +210,7 @@ public class ActivePokemon implements Serializable {
 		this.ability = ability.getNewAbility();
 	}
 
-	protected void setNature(Nature nature) {
+	public void setNature(Nature nature) {
 		this.nature = nature;
 		this.setStats();
 	}
@@ -303,6 +300,10 @@ public class ActivePokemon implements Serializable {
 	
 	public void setShiny() {
 		shiny = true;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 	
 	// Random value between 0 and 31

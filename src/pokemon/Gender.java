@@ -6,16 +6,20 @@ import java.awt.Color;
 import java.io.Serializable;
 
 public enum Gender implements Serializable {
-	MALE("\u2642", new Color(55, 125, 220)), 
-	FEMALE("\u2640", new Color(220, 50, 70)), 
-	GENDERLESS(" ", Color.WHITE);
+	MALE("\u2642", new Color(55, 125, 220), ratio -> ratio != Gender.GENDERLESS_CONSTANT && ratio != 0),
+	FEMALE("\u2640", new Color(220, 50, 70), ratio -> ratio != Gender.GENDERLESS_CONSTANT && ratio != 100),
+	GENDERLESS(" ", Color.WHITE, ratio -> ratio == Gender.GENDERLESS_CONSTANT);
+
+	private static final int GENDERLESS_CONSTANT = -1;
 
 	private final String character;
 	private final Color color;
+	private final GenderChecker genderChecker;
 
-	Gender(String character, Color color) {
+	Gender(String character, Color color, GenderChecker genderChecker) {
 		this.character = character;
 		this.color = color;
+		this.genderChecker = genderChecker;
 	}
 
 	public String getCharacter() {
@@ -25,7 +29,23 @@ public enum Gender implements Serializable {
 	public Color getColor() {
 		return color;
 	}
-	
+
+	public boolean genderApplies(PokemonInfo pokemon) {
+		return this.genderChecker.canHaveGender(pokemon.getMaleRatio());
+	}
+
+	public Gender getOppositeGender() {
+		switch (this) {
+			case MALE:
+				return FEMALE;
+			case FEMALE:
+				return MALE;
+			case GENDERLESS:
+			default:
+				return GENDERLESS;
+		}
+	}
+
 	public static Gender getGender(int ratio) {
 		if (ratio == -1) {
 			return GENDERLESS;
@@ -33,16 +53,14 @@ public enum Gender implements Serializable {
 
 		return RandomUtils.chanceTest(ratio) ? MALE : FEMALE;
 	}
-	
+
 	public static boolean oppositeGenders(ActivePokemon me, ActivePokemon o) {
-		if (me.getGender() == MALE) {
-			return o.getGender() == FEMALE;
-		}
-		else if (me.getGender() == FEMALE) {
-			return o.getGender() == MALE;
-		}
-		else {
-			return false;
-		}
+		Gender gender = me.getGender();
+		return gender != GENDERLESS && gender == o.getGender().getOppositeGender();
+
+	}
+
+	private interface GenderChecker {
+		boolean canHaveGender(int maleRatio);
 	}
 }

@@ -3,8 +3,8 @@ package pokemon;
 import battle.attack.AttackNamesies;
 import item.Item;
 import item.ItemNamesies;
-import item.hold.HoldItem;
 import item.hold.IncenseItem;
+import map.overworld.WildHoldItem;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.EggGroup;
 import pokemon.evolution.Evolution;
@@ -102,6 +102,10 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		this.eggGroups = eggGroups.toArray(new EggGroup[0]);
 	}
 
+	public boolean isType(Type type) {
+		return this.type[0] == type || this.type[1] == type;
+	}
+
 	public Type[] getType() {
 		return type;
 	}
@@ -186,7 +190,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return evolution;
 	}
 
-	List<WildHoldItem> getWildItems() {
+	public List<WildHoldItem> getWildItems() {
 		return wildHoldItems;
 	}
 
@@ -327,45 +331,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return eggGroups[0] != EggGroup.UNDISCOVERED;
 	}
 
-	// TODO: new file
-	static class WildHoldItem implements Serializable {
-		private static final long serialVersionUID = 1L;
-
-		private final HoldItem item;
-		private final int chance;
-		
-		WildHoldItem(int chance, ItemNamesies itemName) {
-			item = (HoldItem) itemName.getItem();
-			this.chance = chance;
-		}
-		
-		static List<WildHoldItem> createList(Scanner in) {
-			List<WildHoldItem> list = new ArrayList<>();
-			int num = in.nextInt();
-			in.nextLine();
-
-			for (int i = 0; i < num; i++) {
-				list.add(new WildHoldItem(in.nextInt(), ItemNamesies.getValueOf(in.nextLine().trim())));
-			}
-
-			return list;
-		}
-		
-		static HoldItem getWildHoldItem(List<WildHoldItem> list) {
-			int random = RandomUtils.getRandomInt(100);
-			int sum = 0;
-
-			for (WildHoldItem i : list) {
-				sum += i.chance;
-				if (random < sum) {
-					return i.item;
-				}
-			}
-			
-			return (HoldItem)ItemNamesies.NO_ITEM.getItem();
-		}
-	}
-	
 	public PokemonInfo getBaseEvolution() {
 		return getBaseEvolution(this);
 	}
@@ -445,7 +410,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return this.learnableMoves.contains(attack);
 	}
 
-	public static PokemonNamesies getRandomStarterPokemon() {
+	static PokemonNamesies getRandomStarterPokemon() {
 		return RandomUtils.getRandomValue(starterPokemon);
 	}
 

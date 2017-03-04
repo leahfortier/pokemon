@@ -28,12 +28,14 @@ import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
+import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
+import battle.effect.generic.EffectInterfaces.MaxLevelWildEncounterEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
@@ -50,6 +52,7 @@ import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
+import battle.effect.generic.EffectInterfaces.RepelLowLevelEncounterEffect;
 import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
@@ -62,10 +65,13 @@ import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
+import battle.effect.generic.EffectInterfaces.TypedWildEncounterSelector;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
+import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.Weather;
+import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
@@ -75,7 +81,10 @@ import item.berry.Berry;
 import item.hold.HoldItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
+import main.Game;
 import main.Global;
+import map.overworld.WildEncounter;
+import map.weather.WeatherState;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
@@ -94,7 +103,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class Ability implements Serializable {
+public abstract class Ability implements Serializable, AbilityHolder {
 	private static final long serialVersionUID = 1L;
 
 	protected final AbilityNamesies namesies;
@@ -104,7 +113,12 @@ public abstract class Ability implements Serializable {
 		this.namesies = namesies;
 		this.description = description;
 	}
-	
+
+	@Override
+	public Ability getAbility() {
+		return this;
+	}
+
 	public AbilityNamesies namesies() {
 		return this.namesies;
 	}
@@ -356,11 +370,16 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Swarm extends Ability implements PowerChangeEffect {
+	// Guessed on the encounter rate multiplier
+	static class Swarm extends Ability implements EncounterRateMultiplier, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
 		Swarm() {
 			super(AbilityNamesies.SWARM, "Powers up Bug-type moves in a pinch.");
+		}
+
+		public double getMultiplier() {
+			return 1.5;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -376,7 +395,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class KeenEye extends Ability implements StatProtectingEffect, OpponentIgnoreStageEffect {
+	static class KeenEye extends Ability implements StatProtectingEffect, OpponentIgnoreStageEffect, RepelLowLevelEncounterEffect {
 		private static final long serialVersionUID = 1L;
 
 		KeenEye() {
@@ -428,7 +447,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Intimidate extends Ability implements EntryEffect {
+	static class Intimidate extends Ability implements EntryEffect, RepelLowLevelEncounterEffect {
 		private static final long serialVersionUID = 1L;
 
 		Intimidate() {
@@ -441,11 +460,15 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Static extends Ability implements PhysicalContactEffect {
+	static class Static extends Ability implements PhysicalContactEffect, TypedWildEncounterSelector {
 		private static final long serialVersionUID = 1L;
 
 		Static() {
 			super(AbilityNamesies.STATIC, "Contact with the Pok\u00e9mon may cause paralysis.");
+		}
+
+		public Type getType() {
+			return Type.ELECTRIC;
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -479,7 +502,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class SandVeil extends Ability implements StageChangingEffect {
+	static class SandVeil extends Ability implements StageChangingEffect, EncounterRateMultiplier {
 		private static final long serialVersionUID = 1L;
 
 		SandVeil() {
@@ -488,6 +511,10 @@ public abstract class Ability implements Serializable {
 
 		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
 			return s == Stat.EVASION && b.getWeather().namesies() == EffectNamesies.SANDSTORM ? 1 : 0;
+		}
+
+		public double getMultiplier() {
+			return Game.getPlayer().getArea().getWeather() == WeatherState.SANDSTORM ? .5 : 1;
 		}
 	}
 
@@ -560,7 +587,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class CuteCharm extends Ability implements PhysicalContactEffect {
+	static class CuteCharm extends Ability implements PhysicalContactEffect, WildEncounterAlterer {
 		private static final long serialVersionUID = 1L;
 
 		CuteCharm() {
@@ -573,6 +600,15 @@ public abstract class Ability implements Serializable {
 				if (infatuated.applies(b, victim, user, CastSource.ABILITY)) {
 					user.addEffect(infatuated);
 					Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
+				}
+			}
+		}
+
+		public void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
+			if (RandomUtils.chanceTest(2, 3)) {
+				Gender opposite = attacking.getGender().getOppositeGender();
+				if (opposite.genderApplies(wildPokemon.getPokemonInfo())) {
+					wildPokemon.setGender(opposite);
 				}
 			}
 		}
@@ -664,7 +700,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Stench extends Ability implements OpponentTakeDamageEffect {
+	static class Stench extends Ability implements OpponentTakeDamageEffect, EncounterRateMultiplier {
 		private static final long serialVersionUID = 1L;
 
 		Stench() {
@@ -677,6 +713,10 @@ public abstract class Ability implements Serializable {
 					Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
 				}
 			}
+		}
+
+		public double getMultiplier() {
+			return .5;
 		}
 	}
 
@@ -746,7 +786,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class ArenaTrap extends Ability implements OpponentTrappingEffect {
+	static class ArenaTrap extends Ability implements OpponentTrappingEffect, EncounterRateMultiplier {
 		private static final long serialVersionUID = 1L;
 
 		ArenaTrap() {
@@ -759,6 +799,10 @@ public abstract class Ability implements Serializable {
 
 		public String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper) {
 			return trapper.getName() + "'s " + this.getName() + " prevents " + escaper.getName() + " from escaping!";
+		}
+
+		public double getMultiplier() {
+			return 2;
 		}
 	}
 
@@ -848,7 +892,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class VitalSpirit extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class VitalSpirit extends Ability implements MaxLevelWildEncounterEffect, StatusPreventionEffect, EntryEffect, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.ASLEEP)) {
@@ -914,7 +958,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Synchronize extends Ability implements StatusReceivedEffect {
+	static class Synchronize extends Ability implements StatusReceivedEffect, WildEncounterAlterer {
 		private static final long serialVersionUID = 1L;
 		private static final Set<StatusCondition> PASSABLE_STATUSES = EnumSet.of(
 			StatusCondition.BURNED,
@@ -941,9 +985,15 @@ public abstract class Ability implements Serializable {
 			// Give status condition to the opponent
 			Status.giveStatus(b, victim, caster, statusType, true);
 		}
+
+		public void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
+			if (RandomUtils.chanceTest(50)) {
+				wildPokemon.setNature(attacking.getNature());
+			}
+		}
 	}
 
-	static class NoGuard extends Ability implements AccuracyBypassEffect, OpponentAccuracyBypassEffect {
+	static class NoGuard extends Ability implements AccuracyBypassEffect, OpponentAccuracyBypassEffect, EncounterRateMultiplier {
 		private static final long serialVersionUID = 1L;
 
 		NoGuard() {
@@ -958,6 +1008,10 @@ public abstract class Ability implements Serializable {
 		public boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
 			// Moves always hit unless they are OHKO moves
 			return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO);
+		}
+
+		public double getMultiplier() {
+			return 1.5;
 		}
 	}
 
@@ -1062,7 +1116,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class MagnetPull extends Ability implements OpponentTrappingEffect {
+	static class MagnetPull extends Ability implements OpponentTrappingEffect, TypedWildEncounterSelector {
 		private static final long serialVersionUID = 1L;
 
 		MagnetPull() {
@@ -1075,6 +1129,10 @@ public abstract class Ability implements Serializable {
 
 		public String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper) {
 			return trapper.getName() + "'s " + this.getName() + " prevents " + escaper.getName() + " from escaping!";
+		}
+
+		public Type getType() {
+			return Type.STEEL;
 		}
 	}
 
@@ -1551,7 +1609,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class QuickFeet extends Ability implements SimpleStatModifyingEffect {
+	static class QuickFeet extends Ability implements EncounterRateMultiplier, SimpleStatModifyingEffect {
 		private static final long serialVersionUID = 1L;
 
 		QuickFeet() {
@@ -1564,6 +1622,10 @@ public abstract class Ability implements Serializable {
 
 		public boolean isModifyStat(Stat s) {
 			return s == Stat.SPEED;
+		}
+
+		public double getMultiplier() {
+			return .5;
 		}
 
 		public double getModifier() {
@@ -1622,7 +1684,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Pressure extends Ability implements EntryEffect {
+	static class Pressure extends Ability implements EntryEffect, MaxLevelWildEncounterEffect {
 		private static final long serialVersionUID = 1L;
 
 		Pressure() {
@@ -1663,7 +1725,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class SnowCloak extends Ability implements StageChangingEffect {
+	static class SnowCloak extends Ability implements StageChangingEffect, EncounterRateMultiplier {
 		private static final long serialVersionUID = 1L;
 
 		SnowCloak() {
@@ -1672,6 +1734,10 @@ public abstract class Ability implements Serializable {
 
 		public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
 			return s == Stat.EVASION && b.getWeather().namesies() == EffectNamesies.HAILING ? 1 : 0;
+		}
+
+		public double getMultiplier() {
+			return Game.getPlayer().getArea().getWeather() == WeatherState.SNOW ? .5 : 1;
 		}
 	}
 
@@ -1736,7 +1802,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class Hustle extends Ability implements StatModifyingEffect {
+	static class Hustle extends Ability implements StatModifyingEffect, MaxLevelWildEncounterEffect {
 		private static final long serialVersionUID = 1L;
 
 		Hustle() {
@@ -2049,7 +2115,7 @@ public abstract class Ability implements Serializable {
 		}
 	}
 
-	static class WhiteSmoke extends Ability implements StatProtectingEffect {
+	static class WhiteSmoke extends Ability implements StatProtectingEffect, EncounterRateMultiplier {
 		private static final long serialVersionUID = 1L;
 
 		WhiteSmoke() {
@@ -2062,6 +2128,10 @@ public abstract class Ability implements Serializable {
 
 		public String preventionMessage(ActivePokemon p, Stat s) {
 			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
+		}
+
+		public double getMultiplier() {
+			return .5;
 		}
 	}
 

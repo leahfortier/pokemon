@@ -71,13 +71,15 @@ Tinted Lens:
 Swarm:
 	Desc: Powers up Bug-type moves in a pinch.
 	PinchAbility: Bug
+	EncounterRateMultiplier: 1.5
+	Comments: // Guessed on the encounter rate multiplier
 *
 Sniper:
 	Desc: Powers up moves if they become critical hits.
 *
 Keen Eye:
 	Desc: Prevents the Pok\u00e9mon from losing accuracy.
-	Int: StatProtectingEffect, OpponentIgnoreStageEffect
+	Int: StatProtectingEffect, OpponentIgnoreStageEffect, RepelLowLevelEncounterEffect
 	StatProtect: 
 		return stat == Stat.ACCURACY;
 		###
@@ -99,7 +101,7 @@ Guts:
 *
 Intimidate:
 	Desc: Lowers the foe's Attack stat.
-	Int: EntryEffect
+	Int: EntryEffect, RepelLowLevelEncounterEffect
 	Enter: 
 		ActivePokemon other = b.getOtherPokemon(enterer);
 		other.getAttributes().modifyStage(enterer, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
@@ -108,6 +110,7 @@ Intimidate:
 Static:
 	Desc: Contact with the Pok\u00e9mon may cause paralysis.
 	StatusContact: Paralyzed
+	TypedWildEncounterSelector: Electric
 *
 Lightningrod:
 	Desc: The Pok\u00e9mon draws in all Electric-type moves.
@@ -117,6 +120,7 @@ Lightningrod:
 Sand Veil:
 	Desc: Raises the Pok\u00e9mon's evasion during a sandstorm by one level.
 	WeatherEvasion: Sandstorm
+	WeatherEncounterRateDecreaser: Sandstorm
 *
 Sand Rush:
 	Desc: Speed rises in a Sandstorm.
@@ -148,6 +152,14 @@ Cute Charm:
 			if (infatuated.applies(b, victim, user, CastSource.ABILITY)) {
 				user.addEffect(infatuated);
 				Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
+			}
+		}
+		###
+	WildPokemonAlterer:
+		if (RandomUtils.chanceTest(2, 3)) {
+			Gender opposite = attacking.getGender().getOppositeGender();
+			if (opposite.genderApplies(wildPokemon.getPokemonInfo())) {
+				wildPokemon.setGender(opposite);
 			}
 		}
 		###
@@ -210,6 +222,7 @@ Stench:
 			}
 		}
 		###
+	EncounterRateMultiplier: .5
 *
 Effect Spore:
 	Desc: Contact may paralyze, poison, or cause sleep.
@@ -254,6 +267,7 @@ Dry Skin:
 Arena Trap:
 	Desc: Prevents the foe from fleeing.
 	OpponentTrappingAbility: !escaper.isLevitating(b) && !escaper.isType(b, Type.GHOST)
+	EncounterRateMultiplier: 2
 *
 Technician:
 	Desc: Powers up the Pok\u00e9mon's weaker moves.
@@ -293,6 +307,7 @@ Cloud Nine:
 Vital Spirit:
 	Desc: Prevents the Pok\u00e9mon from falling asleep.
 	StatusPreventAbility: Asleep sleep
+	Int: MaxLevelWildEncounterEffect
 *
 Insomnia:
 	Desc: Prevents the Pok\u00e9mon from falling asleep.
@@ -326,6 +341,11 @@ Synchronize:
 		// Give status condition to the opponent
 		Status.giveStatus(b, victim, caster, statusType, true);
 		###
+	WildPokemonAlterer:
+		if (RandomUtils.chanceTest(50)) {
+			wildPokemon.setNature(attacking.getNature());
+		}
+		###
 *
 No Guard:
 	Desc: Ensures the Pok\u00e9mon and its foe's attacks land.
@@ -337,6 +357,7 @@ No Guard:
 		// Moves always hit unless they are OHKO moves
 		return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO);
 		###
+	EncounterRateMultiplier: 1.5
 *
 Own Tempo:
 	Desc: Prevents the Pok\u00e9mon from becoming confused.
@@ -382,6 +403,7 @@ Oblivious:
 Magnet Pull:
 	OpponentTrappingAbility: escaper.isType(b, Type.STEEL) && !escaper.isType(b, Type.GHOST)
 	Desc: Prevents Steel-type Pok\u00e9mon from escaping.
+	TypedWildEncounterSelector: Steel
 *
 Unaware:
 	Desc: Ignores any change in ability by the foe.
@@ -597,6 +619,7 @@ Quick Feet:
 	Desc: Boosts Speed if there is a status problem.
 	ToModify: Speed
 	ModifyMultiplier: 1.5 p.hasStatus()
+	EncounterRateMultiplier: .5
 *
 Trace:
 	Desc: The Pok\u00e9mon copies the foe's ability.
@@ -636,7 +659,7 @@ Download:
 *
 Pressure:
 	Desc: The Pok\u00e9mon raises the foe's PP usage.
-	Int: EntryEffect
+	Int: EntryEffect, MaxLevelWildEncounterEffect
 	Enter: 
 		Messages.add(enterer.getName() + " is exerting pressure!");
 		###
@@ -648,6 +671,7 @@ Immunity:
 Snow Cloak:
 	Desc: Raises the Pok\u00e9mon's evasion during a hailstorm by one level.
 	WeatherEvasion: Hailing
+	WeatherEncounterRateDecreaser: Snow
 *
 Marvel Scale:
 	Desc: Boosts Defense if there is a status problem.
@@ -675,7 +699,7 @@ Sheer Force:
 *
 Hustle:
 	Desc: Boosts the Attack stat, but lowers accuracy.
-	Int: StatModifyingEffect
+	Int: StatModifyingEffect, MaxLevelWildEncounterEffect
 	ModifyStat: 
 		if (s == Stat.ATTACK) {
 			return 1.5;
@@ -826,6 +850,7 @@ White Smoke:
 	StatProtect: 
 		return true;
 		###
+	EncounterRateMultiplier: .5
 *
 Toxic Boost:
 	Desc: Powers up physical attacks when poisoned.
