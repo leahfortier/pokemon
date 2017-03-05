@@ -9,11 +9,12 @@ import util.FileName;
 import util.Folder;
 import util.StringUtils;
 
+import javax.rmi.CORBA.Tie;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.EnumMap;
@@ -27,11 +28,12 @@ public class TileModel extends MapMakerModel {
     private static final BufferedImage BLANK_TILE_IMAGE = TileUtils.createBlankTile();
     private static final ImageIcon BLANK_TILE_ICON = new ImageIcon(BLANK_TILE_IMAGE, "0"); // TODO: Is 0 still necessary?
 
-    private final DefaultListModel<ImageIcon> tileListModel;
+    private final Map<MapMaker.TileCategory, DefaultListModel<ImageIcon>> tileListModel;
     private final Map<TileType, Map<Integer, BufferedImage>> tileMap;
     private final Map<Integer, String> indexMap;
 
     private boolean saved;
+    private MapMaker.TileCategory selectedTileCategory;
 
     public enum TileType {
         MAP(Folder.MAP_TILES, FileName.MAP_TILES_INDEX),
@@ -50,7 +52,12 @@ public class TileModel extends MapMakerModel {
     TileModel() {
         super(BLANK_TILE_INDEX);
 
-        this.tileListModel = new DefaultListModel<>();
+        this.selectedTileCategory = MapMaker.TileCategory.GROUND;
+
+        this.tileListModel = new HashMap<>();
+        for (MapMaker.TileCategory tileCategory : MapMaker.TileCategory.values()) {
+            this.tileListModel.put(tileCategory, new DefaultListModel<>());
+        }
 
         this.indexMap = new HashMap<>();
         this.saved = true;
@@ -61,9 +68,13 @@ public class TileModel extends MapMakerModel {
         }
     }
 
-    @Override
+    public void setSelectedTileCategory(MapMaker.TileCategory tileCategory) {
+        this.selectedTileCategory = tileCategory;
+    }
+
+                                        @Override
     public DefaultListModel<ImageIcon> getListModel() {
-        return this.tileListModel;
+        return this.tileListModel.get(selectedTileCategory);
     }
 
     @Override
@@ -73,7 +84,10 @@ public class TileModel extends MapMakerModel {
         }
 
         this.indexMap.put(BLANK_TILE_INDEX, "BlankImage");
-        this.tileListModel.add(0, BLANK_TILE_ICON);
+
+        for (MapMaker.TileCategory tileCategory : MapMaker.TileCategory.values()) {
+            this.tileListModel.get(tileCategory).add(0, BLANK_TILE_ICON);
+        }
     }
 
     @Override
@@ -96,6 +110,7 @@ public class TileModel extends MapMakerModel {
             while (in.hasNext()) {
                 String name = in.next();
                 int val = (int)Long.parseLong(in.next(), 16);
+                MapMaker.TileCategory tileCategory = MapMaker.TileCategory.valueOf(in.next());
 
                 File imageFile = new File(tileType.tileFolderPath + name + ".png");
                 if (!imageFile.exists()) {
@@ -113,7 +128,7 @@ public class TileModel extends MapMakerModel {
                     );
 
                     this.indexMap.put(val, name);
-                    this.tileListModel.addElement(new ImageIcon(resizedImage, val + ""));
+                    this.tileListModel.get(tileCategory).addElement(new ImageIcon(resizedImage, val + ""));
                 }
 
                 tileMap.put(val, image);
@@ -152,7 +167,7 @@ public class TileModel extends MapMakerModel {
                 this.tileMap.get(TileType.MAP).put(color.getRGB(), img);
                 indexMap.put(color.getRGB(), imageFile.getName());
 
-                tileListModel.addElement(new ImageIcon(img, color.getRGB() + ""));
+                tileListModel.get(selectedTileCategory).addElement(new ImageIcon(img, color.getRGB() + ""));
                 saved = false;
             }
         }
