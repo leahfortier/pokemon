@@ -22,6 +22,11 @@ public class IndexTileSet extends TileSet {
             String fileName = in.next();
             int mapping = (int) Long.parseLong(in.next(), 16);
             indexMap.put(mapping, fileName);
+
+            // Ignore the rest of the line -- only interested in the index value
+            if (in.hasNext()) {
+                in.nextLine();
+            }
         }
 
         in.close();
