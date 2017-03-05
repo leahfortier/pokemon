@@ -1,396 +1,395 @@
-GrassTile01 -99009a
-Flowers02 -132c16
-BookCaseBack01 -a698ae
-StoneBrickPathLU -726864
-StoneBrickPathRD -726867
-StoneBrickPathUL -726868
-StoneBrickPathRU -726865
-StoneBrickPathLD -726866
-StoneBrickPathDL -72686b
-StoneBrickPathD -72686c
-StoneBrickPathUR -726869
-StoneBrickPathDR -72686a
-StoneBrickPathC -72686f
-StoneBrickPathU -726870
-StoneBrickPathR -72686d
-StoneBrickPathL -72686e
-Mailbox08 -b4dc99
-TallGrass01 -8c44b5
-Mailbox09 -e2e8a6
-Mailbox06 -9de900
-MapleMachine2 -83c0e8
-MapleMachine1 -83c0e7
-PC -f4a065
-ElectricMachine -1930d9
-WaterTile01 -cccc01
-CounterOrangeD -1f7900
-CounterOrangeDLE -1f78ff
-RedRugT -26acc8
-CounterOrangeDM -1f78fe
-CounterOrangeDRE -1f78fd
-CounterOrangeL -1f78fc
-CounterOrangeLD -1f78fb
-CounterOrangeLDE -1f78fa
-CounterOrangeLM -1f78f9
-CounterOrangeLU -1f78f8
-WallRed -7a8c94
-CounterOrangeLUE -1f78f7
-CounterOrangeR -1f78f6
-CounterOrangeRD -1f78f5
-CounterOrangeRDE -1f78f4
-CounterOrangeRM -1f78f3
-CounterOrangeRU -1f78f2
-Tree07 -21a4cf
-CounterOrangeRUE -1f78f1
-LedgeRD -69849a
-LedgeLUEnd -698499
-LedgeDR -69849c
-LedgeR -69849b
-LedgeLD -69849e
-LedgeD -69849d
-LedgeDL -6984a0
-LedgeL -69849f
-LedgeRUEnd -698494
-LedgeDREnd -698496
-LedgeRDEnd -698495
-LedgeLDEnd -698498
-LedgeDLEnd -698497
-MagnemiteInductorBuilding -100
-GrassTile02 -a215a3
-GrassTile03 -b529b6
-GrassTile04 -c83dc9
-PokemonStatue -574942
-TallFlowerGrass02 -e479df
-TallFlowerGrass01 -e479e0
-Flowers04 -716532
-Flowers14 -716531
-Flowers12 -716534
-Flowers13 -716533
-Flowers10 -716536
-Flowers11 -716535
-Flowers0d -716538
-Flowers0e -716537
-Flowers0b -71653a
-Flowers0c -716539
-Flowers09 -71653c
-Flowers0a -71653b
-Flowers07 -71653e
-Flowers08 -71653d
-Flowers05 -716540
-Flowers06 -71653f
-Flowers15 -716530
-Mailbox03 -6b91fe
-BedRight.png -999901
-RedRugR -25a5c0
-GrassPathU -6f2190
-RedRugB -30b5d1
-GrassPathUL -6f218f
-GrassPathL -6f218e
-GrassPathUR -6f218d
-GrassPathC -6f218c
-GrassPathR -6f218b
-GrassPathDL -6f218a
-GrassPathD -6f2189
-GrassPathDR -6f2188
-GrassPathLU -6f2187
-GrassPathRU -6f2186
-GrassPathLD -6f2185
-GrassPathRD -6f2184
-ConcreteRD -948565
-ConcreteLD -948566
-ConcreteRU -948567
-ConcreteLU -948568
-ConcreteC -948564
-ConcreteR -94856d
-RedRugBR -32b1cb
-ConcreteUR -94856e
-ConcreteU -94856f
-ConcreteUL -948570
-ConcreteL -948569
-ConcreteDL -94856a
-RedRugTR -3eadc4
-ConcreteD -94856b
-ConcreteDR -94856c
-CounterGreenRD -e436e5
-CounterGreenR -e436e6
-CounterGreenLUE -e436e7
-CounterGreenLU -e436e8
-CounterGreenRUE -e436e1
-CounterGreenRU -e436e2
-CounterGreenRM -e436e3
-CounterGreenRDE -e436e4
-CounterGreenDRE -e436ed
-CounterGreenDM -e436ee
-CounterGreenDLE -e436ef
-CounterGreenD -e436f0
-CounterGreenLM -e436e9
-CounterGreenLDE -e436ea
-CounterGreenLD -e436eb
-CounterGreenL -e436ec
-Stairs01StairsUpRightTop -5a527b
-Stairs01StairsUpRightCenter -5a527c
-Stairs01StairsUpLeftCenter -5a527f
-Stairs01StairsUpLeftBottom -5a5280
-Stairs01StairsUpRightBottom -5a527d
-Stairs01StairsUpLeftTop -5a527e
-Tree18 -92a2bb
-TreeSprite02 -ff66cd
-TV -e5d2a5
-SmallRock -b6c6e7
-DirtPathL -9226a
-DirtPathU -92269
-DirtPathD -9226c
-DirtPathDL -9226b
-DirtPathR -9226e
-DirtPathDR -9226d
-DirtPathC -92270
-DirtPathUR -9226f
-DirtPathRU -92264
-DirtPathLD -92266
-DirtPathLU -92265
-DirtPathUL -92268
-DirtPathRD -92267
-StairsUpL -99daee
-StairsUpR -99daed
-StairsDownL -99daf0
-StairsDownR -99daef
-TransitionBuildingV -6a2213
-Mailbox04 -ffaa88
-SmallWaterRock01 -4e3a31
-House11 -769af7
-House10 -769af8
-House13 -769af5
-House12 -769af6
-House15 -769af3
-House14 -769af4
-MaplesHouseB3 -2856ae
-House19 -769af1
-MaplesHouseB2 -2856af
-House16 -769af2
-MaplesHouseB1 -2856b0
-House3 -769aff
-House2 -769b00
-House6 -769afd
-House5 -769afe
-House7 -769afb
-House4 -769afc
-House9 -769af9
-House8 -769afa
-House28 -769ae7
-Mailbox02 -6fb700
-House26 -769ae8
-House29 -769ae5
-House27 -769ae6
-House30 -769ae3
-House31 -769ae4
-House33 -769ae1
-House32 -769ae2
-RedRugTL -2ea2ba
-House18 -769aef
-House17 -769af0
-House21 -769aed
-House20 -769aee
-House23 -769aeb
-House22 -769aec
-House25 -769ae9
-House24 -769aea
-House43 -769ad7
-House42 -769ad8
-House45 -769ad5
-House44 -769ad6
-House47 -769ad3
-House46 -769ad4
-House49 -769ad1
-House48 -769ad2
-House35 -769adf
-House34 -769ae0
-House37 -769add
-House36 -769ade
-House39 -769adb
-House38 -769adc
-House41 -769ad9
-House40 -769ada
-Flooring04 -6382cd
-House58 -769ac8
-House50 -769acf
-House51 -769ad0
-House53 -769acd
-House52 -769ace
-House55 -769acb
-House54 -769acc
-House57 -769ac9
-House56 -769aca
-House0 -769ab6
-Flooring01 -6e8ebf
-Flooring08 -6286bc
-CounterBlueD -ffa620
-CounterBlueDLE -ffa61f
-CounterBlueDM -ffa61e
-CounterBlueDRE -ffa61d
-CounterBlueL -ffa61c
-SmallWaterRock02 -5686b4
-CounterBlueLD -ffa61b
-CounterBlueLDE -ffa61a
-CounterBlueLM -ffa619
-Flooring02 -507ab9
-CounterBlueLU -ffa618
-CounterBlueLUE -ffa617
-CounterBlueR -ffa616
-CounterBlueRD -ffa615
-CounterBlueRDE -ffa614
-CounterBlueRM -ffa613
-CounterBlueRU -ffa612
-Flag -104300
-CounterBlueRUE -ffa611
-GrassTile05 -df4be0
-Flowers01 -270f28
-WallGray -575758
-BlankImage -ff01
-FloorYellowBrick01 -df4bdf
-TomGymRightWall -df4bde
-TomGymLeftWall -df4bdd
-FloorYellowBrick02 -df4bdc
-YellowLedge01 -df4bdb
-YellowLedge02 -df4bda
-YellowStair01 -df4bd9
-YellowStair02 -df4bd8
-YellowStair03 -df4bd7
-YellowStair04 -df4bd6
-GlassTable -a1301
-Poles01C -272740
-Table02 -afafb8
-Poles01L -27273f
-Poles01R -27273e
-StoneBrickPath2UL -674f48
-WallPC -f0f30
-StoneBrickPath2RD -674f47
-StoneBrickPath2LD -674f46
-StoneBrickPath2RU -674f45
-Mailbox01 -ff87dd
-StoneBrickPath2LU -674f44
-StoneBrickPath2U -674f50
-TVPC -70f30
-StoneBrickPath2L -674f4f
-StoneBrickPath2C -674f4e
-StoneBrickPath2D -674f4d
-StoneBrickPath2R -674f4c
-StoneBrickPath2UR -674f4b
-StoneBrickPath2DR -674f4a
-StoneBrickPath2DL -674f49
-BedLeft -3334
-CounterKitchen -48577d
-BookShelfPC2 -272720
-InsideTree01 -2f9f68
-ShelfBack02 -d88f97
-ShelfBack01 -c6bf97
-Sink -87d7d8
-TransitionBuildingH -5f1708
-Bed -176750
-FloorTileGray01 -473f30
-FloorTileTan01 -71f70
-FloorTileGray02 -473f2f
-FloorTileTan02 -71f6f
-Sign -efc7a0
-SmallBox01 -71f78
-Mailbox05 -c3c3be
-Flowers03 -176f98
-MaplesHouseF -1f4fa0
-RedRugL -31a7bf
-FloorTilePC -73798
-LaptopDesk -efaf80
-RedRugC -279fb8
-Window02 -5fa7c9
-Window01 -5fa7c8
-Shelf01 -8f7718
-Table03 -72fa0
-LabMachine6 -f7a770
-MartCounter01 -a78740
-TableWide -72f9f
-TableSmall01 -72f9e
-TableSmall02 -72f9d
-TableSmall03 -72f9c
-House1 -b1572d
-PokeCenter -5fe000
-Stool03 -717a8
-LabMachine5 -173fb8
-MartCounter02 -8f3730
-BookCase01 -2f2f88
-Crate01 -3f5f98
-RedRug2C -3f9790
-RedRug2UL -3f978f
-RedRug2UR -3f978e
-RedRug2DL -3f978d
-RedRug2DR -3f978c
-RedRug2U -3f978b
-RedRug2L -3f978a
-RedRug2R -3f9789
-Item -6fcfd8
-Flooring07 -2f4f98
-WallOrange -767c0
-RedRug2D -3f9788
-Entrance -fbfd0
-Shelf02 -b74f78
-BookShelfPC3 -bf5780
-Stool04 -d74718
-EntranceH -fbfcf
-EntranceV -fbfce
-Fountain -5f6798
-Fridge -877750
-Stool02 -777d0
-Crate02 -e76730
-BlockingDoor -6f7fa8
-Tree09 -532ba0
-TreeBFM-Left -532b9f
-TreeBFM-Right -532b9e
-Mailbox07 -62ffb1
-GymB -1477cd
-LabMachine7 -f57d8
-GymY -1477ce
-GymR -1477cf
-GymP -1477d0
-GymRAINBOW -1477ca
-GymW -1477cb
-GymK -1477cc
-Apartment01 -7f77a0
-CounterRedD -1fd000
-CounterRedDLE -1fcfff
-CounterRedDM -1fcffe
-CounterRedDRE -1fcffd
-CounterRedL -1fcffc
-CounterRedLD -1fcffb
-CounterRedLDE -1fcffa
-CounterRedLM -1fcff9
-CounterRedLU -1fcff8
-CounterRedLUE -1fcff7
-CounterRedR -1fcff6
-CounterRedRD -1fcff5
-CounterRedRDE -1fcff4
-Flooring06 -5373bf
-CounterRedRM -1fcff3
-CounterRedRU -1fcff2
-Flooring05 -4363ad
-CounterRedRUE -1fcff1
-Tree04 -532ba4
-Flooring03 -5f7fb0
-BookShelfPC1 -a71758
-MachinePC -f6000
-CounterPC01 -100000
-Tree02 -532ba3
-LabMachine1 -f5fff
-Tree01 -532ba2
-LabMachine2 -f5ffe
-LabMachine3 -f5ffd
-Tree08 -532ba8
-LabMachine4 -f5ffc
-RedRugBL -3bb7d0
-Tree06 -532ba7
-Tree05 -532ba6
-Tree03 -532ba5
-Tree13 -532bac
-Tree12 -532bab
-Tree11 -532baa
-Tree10 -532ba9
-Tree17 -532bb0
-Tree16 -532baf
-Tree15 -532bae
-Tree14 -532bad
+GrassTile01 -99009a GROUND
+Flowers02 -132c16 GRASSY
+BookCaseBack01 -a698ae OBJECT
+StoneBrickPathLU -726864 GROUND
+StoneBrickPathRD -726867 GROUND
+StoneBrickPathUL -726868 GROUND
+StoneBrickPathRU -726865 GROUND
+StoneBrickPathLD -726866 GROUND
+StoneBrickPathDL -72686b GROUND
+StoneBrickPathD -72686c GROUND
+StoneBrickPathUR -726869 GROUND
+StoneBrickPathDR -72686a GROUND
+StoneBrickPathC -72686f GROUND
+StoneBrickPathU -726870 GROUND
+StoneBrickPathR -72686d GROUND
+StoneBrickPathL -72686e GROUND
+Mailbox08 -b4dc99 OBJECT
+TallGrass01 -8c44b5 GRASSY
+Mailbox09 -e2e8a6 OBJECT
+Mailbox06 -9de900 OBJECT
+MapleMachine2 -83c0e8 OBJECT
+MapleMachine1 -83c0e7 OBJECT
+PC -f4a065 OBJECT
+ElectricMachine -1930d9 OBJECT
+WaterTile01 -cccc01 GROUND
+CounterOrangeD -1f7900 COUNTER
+CounterOrangeDLE -1f78ff COUNTER
+RedRugT -26acc8 OBJECT
+CounterOrangeDM -1f78fe COUNTER
+CounterOrangeDRE -1f78fd COUNTER
+CounterOrangeL -1f78fc COUNTER
+CounterOrangeLD -1f78fb COUNTER
+CounterOrangeLDE -1f78fa COUNTER
+CounterOrangeLM -1f78f9 COUNTER
+CounterOrangeLU -1f78f8 COUNTER
+WallRed -7a8c94 WALL
+CounterOrangeLUE -1f78f7 COUNTER
+CounterOrangeR -1f78f6 COUNTER
+CounterOrangeRD -1f78f5 COUNTER
+CounterOrangeRDE -1f78f4 COUNTER
+CounterOrangeRM -1f78f3 COUNTER
+CounterOrangeRU -1f78f2 COUNTER
+Tree07 -21a4cf TREE
+CounterOrangeRUE -1f78f1 COUNTER
+LedgeRD -69849a LEDGE
+LedgeLUEnd -698499 LEDGE
+LedgeDR -69849c LEDGE
+LedgeR -69849b LEDGE
+LedgeLD -69849e LEDGE
+LedgeD -69849d LEDGE
+LedgeDL -6984a0 LEDGE
+LedgeL -69849f LEDGE
+LedgeRUEnd -698494 LEDGE
+LedgeDREnd -698496 LEDGE
+LedgeRDEnd -698495 LEDGE
+LedgeLDEnd -698498 LEDGE
+LedgeDLEnd -698497 LEDGE
+MagnemiteInductorBuilding -100 BUILDING
+GrassTile02 -a215a3 GROUND
+GrassTile03 -b529b6 GROUND
+GrassTile04 -c83dc9 GROUND
+PokemonStatue -574942 OBJECT
+TallFlowerGrass02 -e479df GRASSY
+TallFlowerGrass01 -e479e0 GRASSY
+Flowers04 -716532 GRASSY
+Flowers14 -716531 GRASSY
+Flowers12 -716534 GRASSY
+Flowers13 -716533 GRASSY
+Flowers10 -716536 GRASSY
+Flowers11 -716535 GRASSY
+Flowers0d -716538 GRASSY
+Flowers0e -716537 GRASSY
+Flowers0b -71653a GRASSY
+Flowers0c -716539 GRASSY
+Flowers09 -71653c GRASSY
+Flowers0a -71653b GRASSY
+Flowers07 -71653e GRASSY
+Flowers08 -71653d GRASSY
+Flowers05 -716540 GRASSY
+Flowers06 -71653f GRASSY
+Flowers15 -716530 GRASSY
+Mailbox03 -6b91fe OBJECT
+BedRight.png -999901 OBJECT
+RedRugR -25a5c0 OBJECT
+RedRugB -30b5d1 OBJECT
+RedRugBR -32b1cb OBJECT
+RedRugTR -3eadc4 OBJECT
+GrassPathU -6f2190 GROUND
+GrassPathUL -6f218f GROUND
+GrassPathL -6f218e GROUND
+GrassPathUR -6f218d GROUND
+GrassPathC -6f218c GROUND
+GrassPathR -6f218b GROUND
+GrassPathDL -6f218a GROUND
+GrassPathD -6f2189 GROUND
+GrassPathDR -6f2188 GROUND
+GrassPathLU -6f2187 GROUND
+GrassPathRU -6f2186 GROUND
+GrassPathLD -6f2185 GROUND
+GrassPathRD -6f2184 GROUND
+ConcreteRD -948565 GROUND
+ConcreteLD -948566 GROUND
+ConcreteRU -948567 GROUND
+ConcreteLU -948568 GROUND
+ConcreteC -948564 GROUND
+ConcreteR -94856d GROUND
+ConcreteUR -94856e GROUND
+ConcreteU -94856f GROUND
+ConcreteUL -948570 GROUND
+ConcreteL -948569 GROUND
+ConcreteDL -94856a GROUND
+ConcreteD -94856b GROUND
+ConcreteDR -94856c GROUND
+CounterGreenRD -e436e5 COUNTER
+CounterGreenR -e436e6 COUNTER
+CounterGreenLUE -e436e7 COUNTER
+CounterGreenLU -e436e8 COUNTER
+CounterGreenRUE -e436e1 COUNTER
+CounterGreenRU -e436e2 COUNTER
+CounterGreenRM -e436e3 COUNTER
+CounterGreenRDE -e436e4 COUNTER
+CounterGreenDRE -e436ed COUNTER
+CounterGreenDM -e436ee COUNTER
+CounterGreenDLE -e436ef COUNTER
+CounterGreenD -e436f0 COUNTER
+CounterGreenLM -e436e9 COUNTER
+CounterGreenLDE -e436ea COUNTER
+CounterGreenLD -e436eb COUNTER
+CounterGreenL -e436ec COUNTER
+Stairs01StairsUpRightTop -5a527b STAIRS
+Stairs01StairsUpRightCenter -5a527c STAIRS
+Stairs01StairsUpLeftCenter -5a527f STAIRS
+Stairs01StairsUpLeftBottom -5a5280 STAIRS
+Stairs01StairsUpRightBottom -5a527d STAIRS
+Stairs01StairsUpLeftTop -5a527e STAIRS
+Tree18 -92a2bb TREE
+TreeSprite02 -ff66cd TREE
+TV -e5d2a5 OBJECT
+SmallRock -b6c6e7 ROCK
+DirtPathL -9226a GROUND
+DirtPathU -92269 GROUND
+DirtPathD -9226c GROUND
+DirtPathDL -9226b GROUND
+DirtPathR -9226e GROUND
+DirtPathDR -9226d GROUND
+DirtPathC -92270 GROUND
+DirtPathUR -9226f GROUND
+DirtPathRU -92264 GROUND
+DirtPathLD -92266 GROUND
+DirtPathLU -92265 GROUND
+DirtPathUL -92268 GROUND
+DirtPathRD -92267 GROUND
+StairsUpL -99daee STAIRS
+StairsUpR -99daed STAIRS
+StairsDownL -99daf0 STAIRS
+StairsDownR -99daef STAIRS
+TransitionBuildingV -6a2213 BUILDING
+Mailbox04 -ffaa88 OBJECT
+SmallWaterRock01 -4e3a31 ROCK
+House11 -769af7 BUILDING
+House10 -769af8 BUILDING
+House13 -769af5 BUILDING
+House12 -769af6 BUILDING
+House15 -769af3 BUILDING
+House14 -769af4 BUILDING
+MaplesHouseB3 -2856ae BUILDING
+House19 -769af1 BUILDING
+MaplesHouseB2 -2856af BUILDING
+House16 -769af2 BUILDING
+MaplesHouseB1 -2856b0 BUILDING
+House3 -769aff BUILDING
+House2 -769b00 BUILDING
+House6 -769afd BUILDING
+House5 -769afe BUILDING
+House7 -769afb BUILDING
+House4 -769afc BUILDING
+House9 -769af9 BUILDING
+House8 -769afa BUILDING
+House28 -769ae7 BUILDING
+Mailbox02 -6fb700 OBJECT
+House26 -769ae8 BUILDING
+House29 -769ae5 BUILDING
+House27 -769ae6 BUILDING
+House30 -769ae3 BUILDING
+House31 -769ae4 BUILDING
+House33 -769ae1 BUILDING
+House32 -769ae2 BUILDING
+RedRugTL -2ea2ba OBJECT
+House18 -769aef BUILDING
+House17 -769af0 BUILDING
+House21 -769aed BUILDING
+House20 -769aee BUILDING
+House23 -769aeb BUILDING
+House22 -769aec BUILDING
+House25 -769ae9 BUILDING
+House24 -769aea BUILDING
+House43 -769ad7 BUILDING
+House42 -769ad8 BUILDING
+House45 -769ad5 BUILDING
+House44 -769ad6 BUILDING
+House47 -769ad3 BUILDING
+House46 -769ad4 BUILDING
+House49 -769ad1 BUILDING
+House48 -769ad2 BUILDING
+House35 -769adf BUILDING
+House34 -769ae0 BUILDING
+House37 -769add BUILDING
+House36 -769ade BUILDING
+House39 -769adb BUILDING
+House38 -769adc BUILDING
+House41 -769ad9 BUILDING
+House40 -769ada BUILDING
+Flooring04 -6382cd FLOOR
+House58 -769ac8 BUILDING
+House50 -769acf BUILDING
+House51 -769ad0 BUILDING
+House53 -769acd BUILDING
+House52 -769ace BUILDING
+House55 -769acb BUILDING
+House54 -769acc BUILDING
+House57 -769ac9 BUILDING
+House56 -769aca BUILDING
+House0 -769ab6 BUILDING
+Flooring01 -6e8ebf FLOOR
+Flooring08 -6286bc FLOOR
+CounterBlueD -ffa620 COUNTER
+CounterBlueDLE -ffa61f COUNTER
+CounterBlueDM -ffa61e COUNTER
+CounterBlueDRE -ffa61d COUNTER
+CounterBlueL -ffa61c COUNTER
+SmallWaterRock02 -5686b4 ROCK
+CounterBlueLD -ffa61b COUNTER
+CounterBlueLDE -ffa61a COUNTER
+CounterBlueLM -ffa619 COUNTER
+Flooring02 -507ab9 FLOOR
+CounterBlueLU -ffa618 COUNTER
+CounterBlueLUE -ffa617 COUNTER
+CounterBlueR -ffa616 COUNTER
+CounterBlueRD -ffa615 COUNTER
+CounterBlueRDE -ffa614 COUNTER
+CounterBlueRM -ffa613 COUNTER
+CounterBlueRU -ffa612 COUNTER
+Flag -104300 OBJECT
+CounterBlueRUE -ffa611 COUNTER
+GrassTile05 -df4be0 GROUND
+Flowers01 -270f28 GRASSY
+WallGray -575758 WALL
+FloorYellowBrick01 -df4bdf FLOOR
+TomGymRightWall -df4bde WALL
+TomGymLeftWall -df4bdd WALL
+FloorYellowBrick02 -df4bdc FLOOR
+YellowLedge01 -df4bdb LEDGE
+YellowLedge02 -df4bda LEDGE
+YellowStair01 -df4bd9 STAIRS
+YellowStair02 -df4bd8 STAIRS
+YellowStair03 -df4bd7 STAIRS
+YellowStair04 -df4bd6 STAIRS
+GlassTable -a1301 OBJECT
+Poles01C -272740 OBJECT
+Table02 -afafb8 OBJECT
+Poles01L -27273f OBJECT
+Poles01R -27273e OBJECT
+StoneBrickPath2UL -674f48 GROUND
+WallPC -f0f30 OBJECT
+StoneBrickPath2RD -674f47 GROUND
+StoneBrickPath2LD -674f46 GROUND
+StoneBrickPath2RU -674f45 GROUND
+Mailbox01 -ff87dd OBJECT
+StoneBrickPath2LU -674f44 GROUND
+StoneBrickPath2U -674f50 GROUND
+TVPC -70f30 OBJECT
+StoneBrickPath2L -674f4f GROUND
+StoneBrickPath2C -674f4e GROUND
+StoneBrickPath2D -674f4d GROUND
+StoneBrickPath2R -674f4c GROUND
+StoneBrickPath2UR -674f4b GROUND
+StoneBrickPath2DR -674f4a GROUND
+StoneBrickPath2DL -674f49 GROUND
+BedLeft -3334 OBJECT
+CounterKitchen -48577d COUNTER
+BookShelfPC2 -272720 OBJECT
+InsideTree01 -2f9f68 OBJECT
+ShelfBack02 -d88f97 OBJECT
+ShelfBack01 -c6bf97 OBJECT
+Sink -87d7d8 OBJECT
+TransitionBuildingH -5f1708 BUILDING
+Bed -176750 OBJECT
+FloorTileGray01 -473f30 FLOOR
+FloorTileTan01 -71f70 FLOOR
+FloorTileGray02 -473f2f FLOOR
+FloorTileTan02 -71f6f FLOOR
+Sign -efc7a0 OBJECT
+SmallBox01 -71f78 OBJECT
+Mailbox05 -c3c3be OBJECT
+Flowers03 -176f98 GRASSY
+MaplesHouseF -1f4fa0 BUILDING
+RedRugL -31a7bf OBJECT
+FloorTilePC -73798 FLOOR
+LaptopDesk -efaf80 OBJECT
+RedRugC -279fb8 OBJECT
+Window02 -5fa7c9 WALL
+Window01 -5fa7c8 WALL
+Shelf01 -8f7718 OBJECT
+Table03 -72fa0 OBJECT
+LabMachine6 -f7a770 OBJECT
+MartCounter01 -a78740 COUNTER
+TableWide -72f9f OBJECT
+TableSmall01 -72f9e OBJECT
+TableSmall02 -72f9d OBJECT
+TableSmall03 -72f9c OBJECT
+House1 -b1572d BUILDING
+PokeCenter -5fe000 BUILDING
+Stool03 -717a8 OBJECT
+LabMachine5 -173fb8 OBJECT
+MartCounter02 -8f3730 COUNTER
+BookCase01 -2f2f88 OBJECT
+Crate01 -3f5f98 OBJECT
+RedRug2C -3f9790 OBJECT
+RedRug2UL -3f978f OBJECT
+RedRug2UR -3f978e OBJECT
+RedRug2DL -3f978d OBJECT
+RedRug2DR -3f978c OBJECT
+RedRug2U -3f978b OBJECT
+RedRug2L -3f978a OBJECT
+RedRug2R -3f9789 OBJECT
+Item -6fcfd8 OBJECT
+Flooring07 -2f4f98 FLOOR
+WallOrange -767c0 WALL
+RedRug2D -3f9788 OBJECT
+Entrance -fbfd0 ENTRANCE
+Shelf02 -b74f78 OBJECT
+BookShelfPC3 -bf5780 OBJECT
+Stool04 -d74718 OBJECT
+EntranceH -fbfcf ENTRANCE
+EntranceV -fbfce ENTRANCE
+Fountain -5f6798 OBJECT
+Fridge -877750 OBJECT
+Stool02 -777d0 OBJECT
+Crate02 -e76730 OBJECT
+BlockingDoor -6f7fa8 OBJECT
+Tree09 -532ba0 TREE
+TreeBFM-Left -532b9f TREE
+TreeBFM-Right -532b9e TREE
+Mailbox07 -62ffb1 OBJECT
+GymB -1477cd BUILDING
+LabMachine7 -f57d8 OBJECT
+GymY -1477ce BUILDING
+GymR -1477cf BUILDING
+GymP -1477d0 BUILDING
+GymRAINBOW -1477ca BUILDING
+GymW -1477cb BUILDING
+GymK -1477cc BUILDING
+Apartment01 -7f77a0 BUILDING
+CounterRedD -1fd000 COUNTER
+CounterRedDLE -1fcfff COUNTER
+CounterRedDM -1fcffe COUNTER
+CounterRedDRE -1fcffd COUNTER
+CounterRedL -1fcffc COUNTER
+CounterRedLD -1fcffb COUNTER
+CounterRedLDE -1fcffa COUNTER
+CounterRedLM -1fcff9 COUNTER
+CounterRedLU -1fcff8 COUNTER
+CounterRedLUE -1fcff7 COUNTER
+CounterRedR -1fcff6 COUNTER
+CounterRedRD -1fcff5 COUNTER
+CounterRedRDE -1fcff4 COUNTER
+Flooring06 -5373bf FLOOR
+CounterRedRM -1fcff3 COUNTER
+CounterRedRU -1fcff2 COUNTER
+Flooring05 -4363ad FLOOR
+CounterRedRUE -1fcff1 COUNTER
+Tree04 -532ba4 TREE
+Flooring03 -5f7fb0 FLOOR
+BookShelfPC1 -a71758 OBJECT
+MachinePC -f6000 OBJECT
+CounterPC01 -100000 COUNTER
+Tree02 -532ba3 TREE
+LabMachine1 -f5fff OBJECT
+Tree01 -532ba2 TREE
+LabMachine2 -f5ffe OBJECT
+LabMachine3 -f5ffd OBJECT
+Tree08 -532ba8 TREE
+LabMachine4 -f5ffc OBJECT
+RedRugBL -3bb7d0 OBJECT
+Tree06 -532ba7 TREE
+Tree05 -532ba6 TREE
+Tree03 -532ba5 TREE
+Tree13 -532bac TREE
+Tree12 -532bab TREE
+Tree11 -532baa TREE
+Tree10 -532ba9 TREE
+Tree17 -532bb0 TREE
+Tree16 -532baf TREE
+Tree15 -532bae TREE
+Tree14 -532bad TREE
