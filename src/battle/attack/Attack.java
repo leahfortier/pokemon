@@ -1753,13 +1753,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -1831,13 +1831,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -1922,13 +1922,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -2720,13 +2720,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -2829,13 +2829,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -3037,13 +3037,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -4538,13 +4538,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -4926,13 +4926,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5129,13 +5129,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5217,13 +5217,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5628,13 +5628,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5667,13 +5667,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5743,13 +5743,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5781,13 +5781,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5922,13 +5922,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -7407,13 +7407,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -7612,13 +7612,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -7962,13 +7962,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -8339,13 +8339,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -8413,13 +8413,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -9872,13 +9872,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
