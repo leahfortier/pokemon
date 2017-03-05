@@ -1068,10 +1068,10 @@ public class ActivePokemon implements Serializable {
 
 	public List<Object> getAllEffects(final Battle b) {
 		List<Object> list = new ArrayList<>();
-		list.addAll(this.getEffects());
 		list.add(this.getStatus());
 		list.add(this.getAbility());
 		list.add(this.getHeldItem(b));
+		list.addAll(this.getEffects());
 
 		return list;
 	}
