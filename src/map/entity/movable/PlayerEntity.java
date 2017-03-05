@@ -123,7 +123,7 @@ public class PlayerEntity extends MovableEntity {
 				}
 
 				Entity newEntity = currentMap.getEntity(newLocation);
-				if (newEntity instanceof NPCEntity) {
+				if (newEntity instanceof NPCEntity && newEntity != currentInteractionEntity) {
 					NPCEntity npc = (NPCEntity) newEntity;
 					if (npc.canWalkToPlayer()) {
 						this.stall();
