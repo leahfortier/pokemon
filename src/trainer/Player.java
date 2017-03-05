@@ -7,7 +7,7 @@ import gui.view.ViewMode;
 import item.ItemNamesies;
 import item.use.BallItem;
 import main.Game;
-import map.AreaData;
+import map.area.AreaData;
 import map.Direction;
 import map.MapName;
 import map.entity.movable.PlayerEntity;

@@ -1,10 +1,9 @@
-package map;
+package map.area;
 
 import main.Game;
 import map.overworld.TerrainType;
 import map.weather.WeatherState;
 import pokemon.PokemonNamesies;
-import sound.MusicCondition;
 import sound.SoundTitle;
 import util.StringUtils;
 
@@ -30,6 +29,7 @@ public class AreaData {
 
 	private final String flyLocation;
 	private final TerrainType terrainType;
+
 	private final WeatherState weather;
 
 	private final SoundTitle music;

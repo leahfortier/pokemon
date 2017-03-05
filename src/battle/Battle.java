@@ -29,7 +29,7 @@ import battle.effect.generic.Weather;
 import item.ItemNamesies;
 import main.Game;
 import main.Global;
-import map.AreaData;
+import map.area.AreaData;
 import map.overworld.TerrainType;
 import map.weather.WeatherState;
 import message.MessageUpdate;

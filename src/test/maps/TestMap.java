@@ -1,6 +1,6 @@
 package test.maps;
 
-import map.AreaData;
+import map.area.AreaData;
 import map.MapData;
 import pattern.map.MapDataMatcher;
 import util.FileIO;

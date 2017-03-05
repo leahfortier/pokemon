@@ -11,7 +11,7 @@ import gui.view.View;
 import gui.view.ViewMode;
 import main.Game;
 import main.Global;
-import map.AreaData;
+import map.area.AreaData;
 import map.Direction;
 import map.MapData;
 import map.MapName;

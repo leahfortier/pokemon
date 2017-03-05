@@ -1,6 +1,6 @@
 package test.maps;
 
-import map.AreaData;
+import map.area.AreaData;
 import map.MapDataType;
 import map.overworld.WalkType;
 import map.overworld.WildEncounter;

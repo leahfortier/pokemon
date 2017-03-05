@@ -11,7 +11,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
-import map.AreaData;
+import map.area.AreaData;
 import map.Direction;
 import map.MapName;
 import pattern.SimpleMapTransition;

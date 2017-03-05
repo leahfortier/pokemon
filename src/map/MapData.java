@@ -4,6 +4,7 @@ import gui.TileSet;
 import gui.view.map.MapView;
 import main.Game;
 import main.Global;
+import map.area.AreaData;
 import map.entity.Entity;
 import map.entity.EntityAction;
 import map.entity.FishingSpotEntity;

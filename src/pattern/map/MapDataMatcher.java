@@ -2,7 +2,7 @@ package pattern.map;
 
 import com.google.gson.JsonObject;
 import main.Global;
-import map.AreaData;
+import map.area.AreaData;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.LocationTriggerMatcher;
 import util.FileIO;

@@ -1,6 +1,7 @@
-package sound;
+package map.area;
 
 import map.condition.Condition;
+import sound.SoundTitle;
 
 public class MusicCondition {
     private final SoundTitle music;
