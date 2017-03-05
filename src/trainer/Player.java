@@ -483,7 +483,6 @@ public class Player extends Trainer implements Serializable {
 		return this.team.size() == MAX_POKEMON;
 	}
 
-	// TODO: this looks like you can deposit your last not fainted pokemon
 	// Determines whether or not a Pokemon can be deposited
 	public boolean canDeposit(ActivePokemon p) {
 

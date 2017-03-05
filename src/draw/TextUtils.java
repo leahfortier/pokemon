@@ -1,6 +1,7 @@
 package draw;
 
 import util.FontMetrics;
+import util.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -45,9 +46,7 @@ public final class TextUtils {
                 build = new StringBuilder();
             }
 
-            // TODO: StringUtil method
-            build.append(build.length() == 0 ? "" : " ")
-                    .append(word);
+            StringUtils.appendSpaceSeparatedWord(build, word);
         }
 
         g.drawString(build.toString(), x, height);

@@ -177,7 +177,6 @@ public enum TypeAdvantage {
         return advantage == 0;
     }
 
-    // TODO: Constant
     public static String getSuperEffectiveMessage() {
         return "It's super effective!";
     }
