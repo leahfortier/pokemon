@@ -66,29 +66,13 @@
       "interactions": [],
       "location": {
         "x": 6,
-        "y": 1
+        "y": 0
       },
       "triggerName": "Edge1_RSATown_TransitionBuilding_NPC_Info_Guy_01"
     }
   ],
   "items": [],
-  "miscEntities": [
-    {
-      "name": "Info_Guy_Dialogue",
-      "actions": [
-        {
-          "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
-        }
-      ],
-      "location": [
-        {
-          "x": 6,
-          "y": 2
-        }
-      ],
-      "triggerName": "Edge1_RSATown_TransitionBuilding_TriggerEntity_Info_Guy_Dialogue_01"
-    }
-  ],
+  "miscEntities": [],
   "events": [],
   "wildBattles": [],
   "fishingSpots": []
