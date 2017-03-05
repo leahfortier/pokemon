@@ -62,9 +62,19 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	private static final long serialVersionUID = -1323397946555510794L;
 
 	public enum TileCategory {
+		ALL,
 		GROUND,
-		FLOWERS,
 		OBJECT,
+		GRASSY,
+		WALL,
+		COUNTER,
+		BUILDING,
+		ROCK,
+		TREE,
+		LEDGE,
+		STAIRS,
+		FLOOR,
+		ENTRANCE,
 	}
 
 	public static void main(String[] args) {
@@ -197,7 +207,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 					MapMakerModel model = this.getModel();
 					tileList.setModel(model.getListModel());
 					newTileButton.setEnabled(model.newTileButtonEnabled());
-					tileCategoriesComboBox.setEnabled(model.newTileButtonEnabled());
+					tileCategoriesComboBox.setEnabled(model instanceof TileModel);
 
 					if (pasteMenuItem != null && selectTool != null) {
 						pasteMenuItem.setEnabled(selectTool.canPaste());
@@ -227,6 +237,9 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 		tileCategoriesComboBox = GUIUtils.createComboBox(
 				TileCategory.values(),
 				event -> {
+					if (!tileCategoriesComboBox.isEnabled()) {
+						return;
+					}
 					TileCategory tileCategory = (TileCategory) tileCategoriesComboBox.getSelectedItem();
 					TileModel tileModel = (TileModel)this.getModel();
 					tileModel.setSelectedTileCategory(tileCategory);

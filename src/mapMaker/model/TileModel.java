@@ -52,7 +52,7 @@ public class TileModel extends MapMakerModel {
     TileModel() {
         super(BLANK_TILE_INDEX);
 
-        this.selectedTileCategory = MapMaker.TileCategory.GROUND;
+        this.selectedTileCategory = MapMaker.TileCategory.ALL;
 
         this.tileListModel = new HashMap<>();
         for (MapMaker.TileCategory tileCategory : MapMaker.TileCategory.values()) {
@@ -103,6 +103,9 @@ public class TileModel extends MapMakerModel {
         if (tileType == TileType.MAP) {
             this.indexMap.clear();
             this.tileListModel.clear();
+            for (MapMaker.TileCategory tileCategory : MapMaker.TileCategory.values()) {
+                this.tileListModel.put(tileCategory, new DefaultListModel<>());
+            }
         }
 
         if (indexFile.exists()) {
@@ -110,7 +113,11 @@ public class TileModel extends MapMakerModel {
             while (in.hasNext()) {
                 String name = in.next();
                 int val = (int)Long.parseLong(in.next(), 16);
-                MapMaker.TileCategory tileCategory = MapMaker.TileCategory.valueOf(in.next());
+
+                MapMaker.TileCategory tileCategory = MapMaker.TileCategory.ALL;
+                if (tileType == TileType.MAP) {
+                    tileCategory = MapMaker.TileCategory.valueOf(in.next());
+                }
 
                 File imageFile = new File(tileType.tileFolderPath + name + ".png");
                 if (!imageFile.exists()) {
@@ -128,7 +135,11 @@ public class TileModel extends MapMakerModel {
                     );
 
                     this.indexMap.put(val, name);
-                    this.tileListModel.get(tileCategory).addElement(new ImageIcon(resizedImage, val + ""));
+                    ImageIcon imageIcon = new ImageIcon(resizedImage, val + "");
+                    this.tileListModel.get(tileCategory).addElement(imageIcon);
+                    if (tileCategory != MapMaker.TileCategory.ALL) {
+                        this.tileListModel.get(MapMaker.TileCategory.ALL).addElement(imageIcon);
+                    }
                 }
 
                 tileMap.put(val, image);
