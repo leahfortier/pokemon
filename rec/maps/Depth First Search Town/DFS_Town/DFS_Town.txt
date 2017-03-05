@@ -201,8 +201,8 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "You can use Pokéballs to catch new Pokémon!"
+                "triggerType": "DIALOGUE",
+                "triggerContents": "You can use Pokéballs to capture Poké!"
               }
             }
           ]
