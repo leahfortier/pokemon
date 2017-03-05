@@ -98,4 +98,9 @@ public enum TerrainType {
     public BufferedImage getOpponentCircleImage() {
         return Game.getData().getOpponentTerrainTiles().getTile(this.imageName);
     }
+
+    public boolean isInterior() {
+        // Make this a field
+        return this == BUILDING;
+    }
 }
