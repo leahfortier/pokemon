@@ -170,7 +170,7 @@ class EvolutionView extends View {
 				if (noButton().checkConsumePress()) {
 					state = State.END;
 					messages.pop();
-					messages.addFirst(new MessageUpdate(evolvingPokemon.getActualName() + " did not learn " + learnedMove.getAttack().getName() + "."));
+					messages.add(new MessageUpdate(evolvingPokemon.getActualName() + " did not learn " + learnedMove.getAttack().getName() + "."));
 					updateActiveButtons();
 				}
 
@@ -194,7 +194,6 @@ class EvolutionView extends View {
 
 							learner.addMove(learnMove, moveIndex, true);
 
-							messages.pop();
 							messages.addFirst(new MessageUpdate("...and " + learnerName + " learned " + learnMoveName + "!"));
 							messages.addFirst(new MessageUpdate(learnerName + " forgot how to use " + deleteMoveName + "..."));
 
@@ -220,6 +219,7 @@ class EvolutionView extends View {
 					if (input.consumeIfMouseDown(ControlKey.SPACE)) {
 						if (Messages.peek().learnMove()) {
 							MessageUpdate message = Messages.getNextMessage();
+							messages.pop();
 
 							learnedMove = message.getMove();
 							messages.add(new MessageUpdate(
@@ -227,7 +227,6 @@ class EvolutionView extends View {
 									.withUpdate(Update.LEARN_MOVE)
 									.withLearnMove(evolvingPokemon, learnedMove));
 							messages.add(new MessageUpdate("Delete a move in order to learn " + learnedMove.getAttack().getName() + "?"));
-							messages.add(new MessageUpdate());
 							updateActiveButtons();
 						}
 						else {
@@ -286,6 +285,8 @@ class EvolutionView extends View {
 					TextUtils.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
 				}
 			}
+		} else if (state == State.LEARN_MOVE_DELETE) {
+			BasicPanels.drawFullMessagePanel(g, StringUtils.empty());
 		}
 
 		TileSet pokemonTiles = data.getPokemonTilesLarge();
