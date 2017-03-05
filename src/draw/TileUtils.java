@@ -32,16 +32,6 @@ public final class TileUtils {
         return getDrawLocation(location.x, location.y, mapLocation);
     }
 
-    public static void drawEntityTileImage(Graphics g, BufferedImage image, Point drawLocation) {
-        Point imageDrawLocation = Point.add(
-                drawLocation,
-                Global.TILE_SIZE/2 - image.getWidth()/2,
-                Global.TILE_SIZE/2 - image.getHeight()
-        );
-
-        g.drawImage(image, imageDrawLocation.x, imageDrawLocation.y, null);
-    }
-
     public static void drawTileImage(Graphics g, BufferedImage image, Point drawLocation) {
         Point imageDrawLocation = Point.add(
                 drawLocation,

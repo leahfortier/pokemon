@@ -66,7 +66,7 @@ public abstract class Entity {
 
 		BufferedImage image = this.getFrame();
 		if (image != null) {
-			TileUtils.drawEntityTileImage(g, image, this.getCanvasCoordinates(drawLocation));
+			TileUtils.drawTileImage(g, image, this.getCanvasCoordinates(drawLocation));
 		}
 	}
 
