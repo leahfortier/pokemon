@@ -169,11 +169,25 @@ ChangeType:
 	AddInterface: ChangeTypeSource
 	Header: Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 *
+SpecialDefenseMove:
+	AddInterface: OpponentStatSwitchingEffect
+	AddMapField: OppSwitchStat:
+		return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
+		###
+	AddMapField: Cat: Special
+*
+IgnoreStageMove:
+	AddInterface: OpponentIgnoreStageEffect
+	AddMapField: IgnoreStage:
+		return !s.user();
+		###
+*
+FusionMove:
+	AddMapField: PowerMultiplierCondition: 2 !b.isFirstAttack() && victim.getAttack().namesies() == AttackNamesies.{00}
+*
 RemoveType:
 	AddMapField: ChangeType: 
 		Type[] type = victim.getType(b);
-				
-		// TODO: Rewrite this because it looks stupid
 		if (type[0] == Type.{00}) {
 			return new Type[] { type[1], Type.NO_TYPE };
 		}

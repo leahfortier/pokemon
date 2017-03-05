@@ -1114,7 +1114,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
 			RapidSpinRelease.release(b, user);
 		}
 	}
@@ -2074,8 +2073,6 @@ public abstract class Attack implements Serializable {
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			Type[] type = victim.getType(b);
-			
-			// TODO: Rewrite this because it looks stupid
 			if (type[0] == Type.FLYING) {
 				return new Type[] { type[1], Type.NO_TYPE };
 			}
@@ -3340,8 +3337,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
-			victim.getStatus().setTurns(3);
+			victim.getStatus().setTurns(2);
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -8172,9 +8168,8 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Sticky Hold
 			Item heldItem = victim.getHeldItem(b);
-			if (heldItem instanceof Berry || heldItem instanceof GemItem) {
+			if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
 				Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
 				victim.consumeItem(b);
 			}
@@ -8494,12 +8489,10 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Stat switchStat(Stat s) {
-			// TODO: Can combine this with Psystrike
 			return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
 		}
 	}
 
-	// TODO: Can combine power condition with Fusion Bolt
 	static class FusionFlare extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
@@ -10367,8 +10360,6 @@ public abstract class Attack implements Serializable {
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			Type[] type = victim.getType(b);
-			
-			// TODO: Rewrite this because it looks stupid
 			if (type[0] == Type.FIRE) {
 				return new Type[] { type[1], Type.NO_TYPE };
 			}

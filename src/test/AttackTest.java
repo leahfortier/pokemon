@@ -11,6 +11,7 @@ import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import trainer.Team;
 import type.Type;
 
 import java.util.Arrays;
@@ -575,5 +576,83 @@ public class AttackTest {
         battle.defendingFight(AttackNamesies.SKILL_SWAP);
         Assert.assertTrue(attacking.hasAbility(AbilityNamesies.SIMPLE));
         Assert.assertTrue(defending.hasAbility(AbilityNamesies.NO_ABILITY));
+    }
+
+    @Test
+    public void rapidSpinTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        Team defendingTeam = battle.getOpponent();
+        TestPokemon defending = battle.getDefending();
+
+        battle.attackingFight(AttackNamesies.STEALTH_ROCK);
+        battle.attackingFight(AttackNamesies.TOXIC_SPIKES);
+        battle.attackingFight(AttackNamesies.SPIKES);
+        battle.attackingFight(AttackNamesies.LEECH_SEED);
+        battle.attackingFight(AttackNamesies.WRAP);
+
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.STEALTH_ROCK));
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.TOXIC_SPIKES));
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.SPIKES));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.LEECH_SEED));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.WRAPPED));
+
+        battle.emptyHeal();
+        battle.defendingFight(AttackNamesies.CONSTRICT);
+
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.STEALTH_ROCK));
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.TOXIC_SPIKES));
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.SPIKES));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.LEECH_SEED));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.WRAPPED));
+
+        battle.defendingFight(AttackNamesies.RAPID_SPIN);
+
+        Assert.assertFalse(defendingTeam.hasEffect(EffectNamesies.STEALTH_ROCK));
+        Assert.assertFalse(defendingTeam.hasEffect(EffectNamesies.TOXIC_SPIKES));
+        Assert.assertFalse(defendingTeam.hasEffect(EffectNamesies.SPIKES));
+        Assert.assertFalse(defending.hasEffect(EffectNamesies.LEECH_SEED));
+        Assert.assertFalse(defending.hasEffect(EffectNamesies.WRAPPED));
+
+        battle.emptyHeal();
+
+        battle.attackingFight(AttackNamesies.STEALTH_ROCK);
+        battle.attackingFight(AttackNamesies.TOXIC_SPIKES);
+        battle.attackingFight(AttackNamesies.SPIKES);
+        battle.attackingFight(AttackNamesies.LEECH_SEED);
+        battle.attackingFight(AttackNamesies.WRAP);
+
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.STEALTH_ROCK));
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.TOXIC_SPIKES));
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.SPIKES));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.LEECH_SEED));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.WRAPPED));
+    }
+
+    @Test
+    public void restTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking();
+
+        battle.defendingFight(AttackNamesies.FALSE_SWIPE);
+        battle.defendingFight(AttackNamesies.TOXIC);
+
+        Assert.assertFalse(attacking.fullHealth());
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.BADLY_POISONED));
+
+        battle.attackingFight(AttackNamesies.REST);
+        Assert.assertTrue(attacking.fullHealth());
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
+
+        battle.attackingFight(AttackNamesies.SPLASH);
+        Assert.assertTrue(attacking.fullHealth());
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
+
+        battle.attackingFight(AttackNamesies.SPLASH);
+        Assert.assertTrue(attacking.fullHealth());
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
+
+        battle.attackingFight(AttackNamesies.SPLASH);
+        Assert.assertTrue(attacking.fullHealth());
+        Assert.assertFalse(attacking.hasStatus());
     }
 }
