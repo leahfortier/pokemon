@@ -270,4 +270,13 @@ public class FileIO {
 			return new ArrayList<>();
 		}
 	}
+
+	public static File[] listFiles(String fileName) {
+		File[] files = new File(fileName).listFiles();
+		if (files == null) {
+			return new File[0];
+		}
+
+		return files;
+	}
 }

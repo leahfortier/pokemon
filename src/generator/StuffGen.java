@@ -9,8 +9,6 @@ import util.FileName;
 import util.Folder;
 import util.StringUtils;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.PrintStream;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashSet;
@@ -48,7 +46,7 @@ public class StuffGen {
 	static StringBuilder startGen(final String fileName) {
 		Scanner original = FileIO.openFile(fileName);
 		StringBuilder out = new StringBuilder();
-		
+
 		while (original.hasNext()) {
 			String line = original.nextLine();
 			StringUtils.appendLine(out, line);
@@ -57,11 +55,11 @@ public class StuffGen {
 				break;
 			}
 		}
-		
+
 		original.close();
 		return out;
 	}
-	
+
 	static ClassFields readFields(Scanner in) {
 		ClassFields fields = new ClassFields();
 		while (in.hasNextLine()) {
@@ -71,31 +69,31 @@ public class StuffGen {
 			}
 
 			Entry<String, String> pair = getFieldPair(in, line);
-			
+
 			String key = pair.getKey();
 			String value = pair.getValue();
 			fields.addNew(key, value);
 		}
-		
+
 		return fields;
 	}
-	
+
 	static Entry<String, String> getFieldPair(Scanner in, String line) {
 		String[] split = line.split(":", 2);
 		if (split.length != 2) {
 			Global.error("Field key and value must be separated by a colon " + line);
 		}
-		
+
 		String key = split[0].trim();
 		String value = split[1].trim();
-		
+
 		if (value.isEmpty()) {
 			value = readMethod(in);
 		}
-		
+
 		return new SimpleEntry<>(key, value);
 	}
-	
+
 	static String createClass(
 			String classComments,
 			String className,
@@ -111,10 +109,10 @@ public class StuffGen {
 		if (!StringUtils.isNullOrEmpty(classComments)) {
 			StringUtils.appendLine(classBuilder, "\t" + classComments);
 		}
-		
+
 		classBuilder.append("\t").
 				append(defineClass(className, isInterface));
-		
+
 		if (!StringUtils.isNullOrEmpty(superClass)) {
 			classBuilder.append(" extends ")
 					.append(superClass);
@@ -123,11 +121,11 @@ public class StuffGen {
 			classBuilder.append(" ")
 					.append(interfaces);
 		}
-		
+
 		classBuilder.append(" {\n");
-		
+
 		if (!isInterface) {
-			classBuilder.append("\t\tprivate static final long serialVersionUID = 1L;\n");	
+			classBuilder.append("\t\tprivate static final long serialVersionUID = 1L;\n");
 		}
 
 		if (!StringUtils.isNullOrEmpty(extraFields)) {
@@ -141,16 +139,16 @@ public class StuffGen {
 		if (!StringUtils.isNullOrEmpty(additional)) {
 			classBuilder.append(additional);
 		}
-		
+
 		classBuilder.append("\t}\n");
-		
+
 		return classBuilder.toString();
 	}
-	
+
 	private static String defineClass(final String className, final boolean isInterface) {
 		final String accessModifier;
 		final String classType;
-		
+
 		if (isInterface) {
 			accessModifier = "public";
 			classType = "interface";
@@ -158,23 +156,23 @@ public class StuffGen {
 			accessModifier = "static";
 			classType = "class";
 		}
-		
+
 		return accessModifier + " " + classType + " " + className;
 	}
-	
+
 	private static String readMethod(Scanner in) {
 		StringBuilder method = new StringBuilder();
 		MethodFormatter formatter = new MethodFormatter(2);
-		
+
 		while (in.hasNext()) {
 			String line = in.nextLine().trim();
 			if (line.equals("###")) {
 				break;
 			}
-			
+
 			formatter.appendLine(line, method);
 		}
-		
+
 		return method.toString();
 	}
 
@@ -184,7 +182,7 @@ public class StuffGen {
 			set.add(PokemonInfo.getPokemonInfo(i).namesies());
 		}
 
-		set.remove(PokemonNamesies.SHEDINJA); // TODO
+		set.remove(PokemonNamesies.SHEDINJA);
 		set.remove(PokemonNamesies.MANAPHY);
 		set.remove(PokemonNamesies.TYPE_NULL);
 		set.remove(PokemonNamesies.COSMOG);
@@ -236,8 +234,8 @@ public class StuffGen {
 			out.println(in.nextLine()); // Height Weight FlavorText
 			out.println(in.nextLine()); // Egg Steps
 			out.println(in.nextLine()); // Egg Groups
-			readMoves(in, out);    // Level Up Moves
-			readMoves(in, out); // Learnable Moves
+			readMoves(in, out);    		// Level Up Moves
+			readMoves(in, out);			// Learnable Moves
 			out.println(in.nextLine()); // New Line
 		}
 	}
@@ -251,7 +249,7 @@ public class StuffGen {
 			out.println(in.nextLine()); // Each move
 		}
 	}
-	
+
 	private static void readEvolution(Scanner in, PrintStream out) {
 		String type = in.next();
 		if (type.equals(EvolutionType.MULTI.name())) {
@@ -260,13 +258,13 @@ public class StuffGen {
 			for (int i = 0; i < x; i++) {
 				readEvolution(in, out);
 			}
-			
+
 			return;
 		}
-		
+
 		out.println(type + in.nextLine());
 	}
-	
+
 	private static void readHoldItems(Scanner in, PrintStream out) {
 		int num = in.nextInt();
 		out.println(num);
@@ -274,51 +272,6 @@ public class StuffGen {
 
 		for (int i = 0; i < num; i++) {
 			out.println(in.nextLine());
-		}
-	}
-
-	private static void trimImages(String inputLocation, String outputLocation) {
-		File folder = new File(inputLocation);
-		for (File file : folder.listFiles()) {
-			if (file.isDirectory()) {
-				continue;
-			}
-
-			BufferedImage image = FileIO.readImage(file);
-			int empty = image.getRGB(0, 0); // This assumes the top right corner is blank just FYI...
-
-			int leftmost = image.getWidth();
-			int topmost = image.getHeight();
-			int rightmost = 0;
-			int bottommost = 0;
-
-			for (int i = 0; i < image.getWidth(); i++)  {
-				for (int j = 0; j < image.getHeight(); j++) {
-					if (image.getRGB(i, j) != empty) {
-						leftmost = Math.min(i, leftmost);
-						rightmost = Math.max(i, rightmost);
-						topmost = Math.min(j, topmost);
-						bottommost = Math.max(j, bottommost);
-					}
-				}
-			}
-
-
-			String oldName = file.getName();
-
-			// First three characters -- make sure it's an integer
-			String newName = Integer.parseInt(oldName.substring(0, 3)) + "";
-
-			if (oldName.contains("s")) {
-				newName += "-shiny";
-			}
-
-			if (oldName.contains("b")) {
-				newName += "-back";
-			}
-
-			File f = new File(outputLocation + "\\" + newName + ".png");
-			FileIO.writeImage(image.getSubimage(leftmost, topmost, rightmost - leftmost, bottommost - topmost), f);
 		}
 	}
 }

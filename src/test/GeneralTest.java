@@ -4,8 +4,17 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
+import util.StringUtils;
 
 public class GeneralTest {
+    @Test
+    public void properCaseTest() {
+        Assert.assertEquals(StringUtils.properCase("red"), "Red");
+        Assert.assertEquals(StringUtils.properCase("water stone"), "Water Stone");
+        Assert.assertEquals(StringUtils.properCase("x-scissor"), "X-Scissor");
+        Assert.assertEquals(StringUtils.properCase("DFS town"), "DFS Town");
+    }
+
     @Test
     public void oppositeGenderTest() {
         Assert.assertTrue(Gender.MALE.getOppositeGender() == Gender.FEMALE);
