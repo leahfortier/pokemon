@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Condition {
-	private static final Pattern functionPattern = Pattern.compile("([\\w$:]+)|([()&|!])");
+	private static final Pattern functionPattern = Pattern.compile("([\\w$:#]+)|([()&|!])");
 
 	/*
 	 * postfixed boolean function
