@@ -50,11 +50,12 @@ import type.TypeAdvantage;
 import util.PokeString;
 import util.RandomUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Battle {
+public class Battle implements Serializable {
 	private final Player player;
 	private final Opponent opponent; // SO OBJECT-ORIENTED
 
@@ -249,8 +250,6 @@ public class Battle {
 		ActivePokemon plyr = player.front();
 		ActivePokemon opp = opponent.front();
 
-		opp.setMove(Move.selectOpponentMove(this, opp));
-
 		turn++;
 		plyr.getAttributes().resetTurn();
 		opp.getAttributes().resetTurn();
@@ -298,16 +297,16 @@ public class Battle {
 				|| SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, opponent.front()));
 	}
 
-	private void deadUser() {
+	public boolean deadUser() {
 		// Front Pokemon is still functioning
 		if (!player.front().isFainted(this)) {
-			return;
+			return false;
 		}
 
 		// Dead Front Pokemon, but you still have others to spare -- force a switch
 		if (!player.blackout()) {
 			Messages.add(new MessageUpdate("What Pokemon would you like to switch to?").withUpdate(Update.FORCE_SWITCH));
-			return;
+			return false;
 		}
 
 		// Blackout -- you're fucked
@@ -324,14 +323,16 @@ public class Battle {
 		player.teleportToPokeCenter();
 		Messages.clearMessages(MessageState.MAPPITY_MAP);
 		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+
+		return true;
 	}
 
-	private void deadOpponent() {
+	public boolean deadOpponent() {
 		ActivePokemon dead = opponent.front();
 
 		// YOU'RE FINE
 		if (!dead.isFainted(this)) {
-			return;
+			return false;
 		}
 
 		// Gain dat EXP
@@ -340,7 +341,7 @@ public class Battle {
 		// You have achieved total victory
 		if (opponent.blackout()) {
 			player.winBattle(this, opponent);
-			return;
+			return true;
 		}
 
 		// We know this is not a wild battle anymore and I don't feel like casting so much
@@ -349,6 +350,8 @@ public class Battle {
 		// They still have some Pokes left
 		opp.switchToRandom(this);
 		enterBattle(opp.front());
+
+		return false;
 	}
 
 	public void enterBattle(ActivePokemon enterer) {
