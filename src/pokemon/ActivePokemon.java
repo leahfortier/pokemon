@@ -66,7 +66,7 @@ public class ActivePokemon implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	public static final int MAX_LEVEL = 100;
-	public static final int MAX_NAME_LENGTH = 10; // TODO: Look this up
+	public static final int MAX_NAME_LENGTH = 12;
 
 	private static final String TINY_EGG_IMAGE_NAME = "egg-small";
 	private static final String BASE_EGG_IMAGE_NAME = "egg";
@@ -443,7 +443,6 @@ public class ActivePokemon implements Serializable {
 		return this.getPokemonInfo().getGrowthRate().getEXP(level + 1) - totalEXP;
 	}
 	
-	// TODO: Test this to make sure it still works (espesh level 100)
 	public float expRatio() {
 		if (level == MAX_LEVEL) {
 			return 0;

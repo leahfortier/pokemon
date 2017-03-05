@@ -281,7 +281,6 @@ class PokemonAnimationState {
     }
 
     private void drawHealthBar(Graphics g) {
-
         int maxHp = state.frontPokemon.getMaxHP();
 
         // Get the ratio based off of the possible animation
@@ -289,7 +288,7 @@ class PokemonAnimationState {
         String hpStr = state.hp + "/" + maxHp;
 
         if (animationHP > 0) {
-            animationHP -= HP_LOSS_RATIO*maxHp + 1;
+            animationHP -= Math.max(0, HP_LOSS_RATIO*maxHp + 1);
             float originalTime = Math.abs(state.hp - oldState.hp)*FRAMES_PER_HP_LOSS;
             float numerator = (state.hp + (oldState.hp - state.hp)*(animationHP/originalTime));
 
@@ -335,8 +334,6 @@ class PokemonAnimationState {
     }
 
     private void drawPokemon(Graphics g) {
-
-
         // Draw the Pokemon image if applicable
         if (!isEmpty() && state.showImage()) {
             GameData data = Game.getData();
@@ -366,7 +363,6 @@ class PokemonAnimationState {
 
     // Draws the status box, not including the text
     void drawStatusBox(Graphics g) {
-
         drawPokemon(g);
 
         // Draw the colored type polygons

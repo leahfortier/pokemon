@@ -32,16 +32,6 @@ public final class TileUtils {
         return getDrawLocation(location.x, location.y, mapLocation);
     }
 
-    public static void drawEntityTileImage(Graphics g, BufferedImage image, Point drawLocation) {
-        Point imageDrawLocation = Point.add(
-                drawLocation,
-                Global.TILE_SIZE/2 - image.getWidth()/2,
-                Global.TILE_SIZE/2 - image.getHeight()
-        );
-
-        g.drawImage(image, imageDrawLocation.x, imageDrawLocation.y, null);
-    }
-
     public static void drawTileImage(Graphics g, BufferedImage image, Point drawLocation) {
         Point imageDrawLocation = Point.add(
                 drawLocation,
@@ -113,16 +103,14 @@ public final class TileUtils {
     }
 
     public static BufferedImage blankImageWithText(String text) {
-        int extra = TextUtils.getTextWidth(text + " ", 14);
+        int extra = TextUtils.getTextWidth(text + " ", 14) + 3;
 
         BufferedImage image = new BufferedImage(Global.TILE_SIZE + extra, Global.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
         Graphics g = image.getGraphics();
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 14);
 
-        // TODO: If we're starting the string 3 pixels after the image, then shouldn't we add three to the extra?
-        // TODO: I think the y value here is a guess - can maybe use draw metrics to figure out where to start
-        g.drawString(text, Global.TILE_SIZE + 3, Global.TILE_SIZE*2/3);
+        TextUtils.drawCenteredHeightString(g, text, Global.TILE_SIZE + 3, Global.TILE_SIZE / 2);
 
         g.dispose();
 

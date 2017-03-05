@@ -140,29 +140,19 @@ public enum Stat {
 		return stat;
 	}
 
-	// TODO: Rename these pokemon names because they are srsly confusing the shit out of me
-	public static int getStage(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
-
+	public static int getStage(Stat s, ActivePokemon stagePokemon, ActivePokemon otherPokemon, Battle b) {
 		// Effects that completely ignore stage changes
-		if (OpponentIgnoreStageEffect.checkIgnoreStage(b, p, opp, s)) {
+		if (OpponentIgnoreStageEffect.checkIgnoreStage(b, stagePokemon, otherPokemon, s)) {
 			return 0;
 		}
 
-		int stage = p.getStage(s);
-
-//		int temp = stage;
+		int stage = stagePokemon.getStage(s);
 
 		// Update the stage due to effects
-		stage += StageChangingEffect.getModifier(b, p, opp, s);
+		stage += StageChangingEffect.getModifier(b, stagePokemon, otherPokemon, s);
 
-//		int temp2 = stage;
-		
 		// Let's keep everything in bounds, okay!
-		stage = Math.max(-1*MAX_STAT_CHANGES, Math.min(stage, MAX_STAT_CHANGES));
-		
-//		System.out.println(p.getName() + " " + s.getName() + " Stage: " + temp + " -> " + temp2 + " -> " + stage);
-		
-		return stage;
+		return Math.max(-1*MAX_STAT_CHANGES, Math.min(stage, MAX_STAT_CHANGES));
 	}
 	
 	// Returns the corresponding Stat based on the index passed in
