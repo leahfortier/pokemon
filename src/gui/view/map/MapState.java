@@ -79,7 +79,7 @@ class MapState implements VisualStateHandler {
         else if (input.consumeIfDown(ControlKey.BIKE)) {
             player.toggleBicycle();
         }
-        else if (input.consumeIfDown(ControlKey.ITEM_FINDER)) {
+        else if (input.consumeIfDown(ControlKey.ITEM_FINDER) && player.hasTool(OverworldTool.ITEM_FINDER)) {
             showItemFinder = !showItemFinder;
         }
     }
