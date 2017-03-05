@@ -374,5 +374,9 @@ class NewPokemonView extends View {
         } else {
             setState(State.POKEDEX);
         }
+
+        if (state == State.END) {
+            Game.instance().popView();
+        }
     }
 }
