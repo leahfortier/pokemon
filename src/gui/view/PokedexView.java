@@ -15,6 +15,7 @@ import main.Game;
 import map.Direction;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
+import pokemon.Stat;
 import trainer.pokedex.Pokedex;
 import type.Type;
 import util.FontMetrics;
@@ -52,8 +53,8 @@ class PokedexView extends View {
 
 	private PokemonInfo selected;
 	private int selectedButton;
-	private int selectedTab;
 	private int pageNum;
+	private TabInfo selectedTab;
 
 	private int numSeen;
 	private int numCaught;
@@ -68,9 +69,9 @@ class PokedexView extends View {
 	private enum TabInfo {
 		MAIN,
 		STATS,
+		LOCATION,
 		MOVES,
-		EVOLUTION,
-		LOCATION;
+		EVOLUTION;
 
 		private final String label;
 
@@ -116,7 +117,7 @@ class PokedexView extends View {
 
 		this.pokedex = Game.getPlayer().getPokedex();
 		selectedButton = 0;
-		selectedTab = TabInfo.MAIN.ordinal();
+		selectedTab = TabInfo.LOCATION;
 		pageNum = 0;
 
 		buttons = new Button[NUM_BUTTONS];
@@ -170,7 +171,7 @@ class PokedexView extends View {
 
 		for (int i = 0; i < tabButtons.length; i++) {
 			if (tabButtons[i].checkConsumePress()) {
-				selectedTab = i;
+				selectedTab = TabInfo.values()[i];
 			}
 		}
 		
@@ -282,7 +283,7 @@ class PokedexView extends View {
 				toOutline.add(Direction.LEFT);
 			}
 
-			if (i != selectedTab) {
+			if (i != selectedTab.ordinal()) {
 				toOutline.add(Direction.UP);
 			}
 
@@ -342,36 +343,61 @@ class PokedexView extends View {
 			textY += FontMetrics.getDistanceBetweenRows(g);
 			g.drawString("Weight: " + (!caught ? "???.?" : selected.getWeight()) + " lbs", leftX, textY);
 
+			if (selectedTab == TabInfo.LOCATION) {
+				leftX = imagePanel.x;
+				textY = basicInfoPanel.bottomY() + FontMetrics.getTextHeight(g) + spacing;
+
+				g.drawString("Locations:", leftX, textY);
+				List<String> locations = pokedex.getLocations(selected.namesies());
+				for (int i = 0; i < locations.size(); i++) {
+					g.drawString(locations.get(i), leftX + 2*spacing, textY + (i + 1)*FontMetrics.getDistanceBetweenRows(g));
+				}
+			}
+
 			if (caught) {
 				textY = imagePanel.bottomY() + FontMetrics.getTextHeight(g) + spacing;
 				infoPanel.drawMessage(g, selected.getFlavorText(), textY);
 
 				leftX = imagePanel.x;
 				textY = basicInfoPanel.bottomY() + FontMetrics.getTextHeight(g) + spacing;
-				g.drawString("Abilities: " + selected.getAbilitiesString(), leftX, textY);
+				if (selectedTab == TabInfo.MAIN) {
+					g.drawString("Abilities: " + selected.getAbilitiesString(), leftX, textY);
 
-				textY += FontMetrics.getTextHeight(g) + spacing;
-				g.drawString("Gender Ratio: " + Gender.getGenderString(selected), leftX, textY);
-
-				textY += FontMetrics.getTextHeight(g) + spacing;
-				g.drawString("Capture Rate: " + selected.getCatchRate(), leftX, textY);
-
-				textY += FontMetrics.getTextHeight(g) + spacing;
-				g.drawString("Base EXP Yield: " + selected.getBaseEXP(), leftX, textY);
-
-				if (selected.canBreed()) {
 					textY += FontMetrics.getTextHeight(g) + spacing;
-					g.drawString("Egg Steps: " + selected.getEggSteps(), leftX, textY);
+					g.drawString("Gender Ratio: " + Gender.getGenderString(selected), leftX, textY);
+
+					textY += FontMetrics.getTextHeight(g) + spacing;
+					g.drawString("Capture Rate: " + selected.getCatchRate(), leftX, textY);
+
+					textY += FontMetrics.getTextHeight(g) + spacing;
+					g.drawString("Base EXP Yield: " + selected.getBaseEXP(), leftX, textY);
+
+					if (selected.canBreed()) {
+						textY += FontMetrics.getTextHeight(g) + spacing;
+						g.drawString("Egg Steps: " + selected.getEggSteps(), leftX, textY);
+					}
+				}
+				else if (selectedTab == TabInfo.STATS) {
+
+					String label = "Given EVs";
+					int evRightX = infoPanel.rightX() - spacing - FontMetrics.getTextWidth(g, label)/2;
+					g.drawString(label, evRightX - FontMetrics.getTextWidth(g, label)/2, textY);
+					evRightX += FontMetrics.getTextWidth(g, " ");
+
+					int baseStatRightX = evRightX - FontMetrics.getTextWidth(g, label)/2 - 2*spacing;
+					label = "Base Stat";
+					baseStatRightX -= FontMetrics.getTextWidth(g, label)/2;
+					g.drawString(label, baseStatRightX - FontMetrics.getTextWidth(g, label)/2, textY);
+					baseStatRightX += FontMetrics.getTextWidth(g, " ");
+
+					for (int i = 0; i < Stat.NUM_STATS; i++) {
+						int y = textY + (i + 1)*(FontMetrics.getTextHeight(g) + spacing);
+						g.drawString(Stat.getStat(i, false).getName(), leftX, y);
+						TextUtils.drawRightAlignedString(g, selected.getStat(i) + "", baseStatRightX, y);
+						TextUtils.drawRightAlignedString(g, selected.getGivenEV(i) + "", evRightX, y);
+					}
 				}
 			}
-
-
-//			int locationX = locationPanel.x + locationPanel.getTextSpace(g);
-//			g.drawString("Locations:", locationX, locationPanel.y + FontMetrics.getDistanceBetweenRows(g));
-//			List<String> locations = pokedex.getLocations(selected.namesies());
-//			for (int i = 0; i < locations.size(); i++) {
-//				g.drawString(locations.get(i), locationX, locationPanel.y + (i + 2)*FontMetrics.getDistanceBetweenRows(g));
-//			}
 		}
 		
 		// Return button

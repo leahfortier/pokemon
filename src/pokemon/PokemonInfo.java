@@ -149,7 +149,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return baseExp;
 	}
 
-	int[] getGivenEVs() {
+	public int getGivenEV(int index) {
+		return givenEVs[index];
+	}
+
+	public int[] getGivenEVs() {
 		return givenEVs;
 	}
 
