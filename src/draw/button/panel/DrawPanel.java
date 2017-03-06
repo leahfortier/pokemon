@@ -251,14 +251,20 @@ public class DrawPanel {
     private boolean finishedAnimating;
 
     public int drawMessage(Graphics g, int fontSize, String text) {
+        FontMetrics.setFont(g, fontSize);
+        return drawMessage(g, text);
+    }
+
+    public int drawMessage(Graphics g, String text) {
+        int startY = y + this.getTextSpace(g) + FontMetrics.getTextHeight(g);
+        return drawMessage(g, text, startY);
+    }
+
+    public int drawMessage(Graphics g, String text, int startY) {
         g.setColor(Color.BLACK);
 
-        FontMetrics.setFont(g, fontSize);
         int textSpace = this.getTextSpace(g);
-
         int startX = x + textSpace;
-        int startY = y + textSpace + FontMetrics.getTextHeight(g);
-
         int textWidth = width - 2*textSpace;
 
         if (!this.animateMessage) {

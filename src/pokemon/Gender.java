@@ -60,6 +60,15 @@ public enum Gender implements Serializable {
 
 	}
 
+	public static String getGenderString(PokemonInfo pokemon) {
+		int maleRatio = pokemon.getMaleRatio();
+		if (maleRatio == GENDERLESS_CONSTANT) {
+			return "Genderless";
+		}
+
+		return String.format("%d%% Male, %d%% Female", maleRatio, 100 - maleRatio);
+	}
+
 	private interface GenderChecker {
 		boolean canHaveGender(int maleRatio);
 	}

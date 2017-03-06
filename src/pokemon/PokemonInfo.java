@@ -14,6 +14,7 @@ import util.FileIO;
 import util.FileName;
 import util.GeneralUtils;
 import util.RandomUtils;
+import util.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -122,8 +123,14 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return growthRate;
 	}
 
-	int getEggSteps() {
+	public int getEggSteps() {
 		return eggSteps;
+	}
+
+	public String getAbilitiesString() {
+		return abilities[0].getName() + (abilities[1] == AbilityNamesies.NO_ABILITY
+						? StringUtils.empty()
+						: ", " + abilities[1].getName());
 	}
 
 	public AbilityNamesies[] getAbilities() {
