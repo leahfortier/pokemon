@@ -1,5 +1,6 @@
 package gui.view;
 
+import battle.attack.AttackNamesies;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
@@ -27,6 +28,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 class PokedexView extends View {
 	private static final int NUM_COLS = 6;
@@ -67,16 +69,18 @@ class PokedexView extends View {
 	private final Button returnButton;
 
 	private enum TabInfo {
-		MAIN,
-		STATS,
-		LOCATION,
-		MOVES,
-		EVOLUTION;
+		MAIN(true),
+		STATS(true),
+		LOCATION(true),
+		MOVES(false),
+		EVOLUTION(true);
 
 		private final String label;
+		private final boolean drawBasicInformationPanel;
 
-		TabInfo() {
+		TabInfo(boolean drawBasicInformationPanel) {
 			this.label = StringUtils.properCase(this.name().toLowerCase());
+			this.drawBasicInformationPanel = drawBasicInformationPanel;
 		}
 	}
 
@@ -117,7 +121,7 @@ class PokedexView extends View {
 
 		this.pokedex = Game.getPlayer().getPokedex();
 		selectedButton = 0;
-		selectedTab = TabInfo.LOCATION;
+		selectedTab = TabInfo.MOVES;
 		pageNum = 0;
 
 		buttons = new Button[NUM_BUTTONS];
@@ -273,7 +277,6 @@ class PokedexView extends View {
 
 		infoPanel.withBackgroundColors(typeColors)
 				.drawBackground(g);
-		basicInfoPanel.drawBackground(g);
 
 		for (int i = 0; i < tabButtons.length; i++) {
 			List<Direction> toOutline = new ArrayList<>();
@@ -292,109 +295,147 @@ class PokedexView extends View {
 			tab.label(g, 12, TabInfo.values()[i].label);
 		}
 
-		// Image
-		imagePanel.drawBackground(g);
-		if (notSeen) {
-			imagePanel.label(g, 80, "?");
-		}
-		else {
-			BufferedImage pkmImg = pokedexTiles.getTile(selected.getBaseImageName());
-			pkmImg.setRGB(0, 0, 0);
-
-			imagePanel.imageLabel(g, pkmImg);
-		}
-
-		g.setColor(Color.BLACK);
 		int spacing = 15;
+		int leftX, textY;
 
-		// Name
-		FontMetrics.setFont(g, 20);
-		int leftX = imagePanel.rightX() + spacing;
-		int textY = imagePanel.y + FontMetrics.getTextHeight(g) + spacing;
-		g.drawString(notSeen ? "?????" : selected.getName(), leftX, textY);
+		if (selectedTab.drawBasicInformationPanel) {
+			basicInfoPanel.drawBackground(g);
 
-		// Number
-		int numberSpacing = 10;
-		FontMetrics.setFont(g, 18);
-		TextUtils.drawRightAlignedString(
-				g,
-				"#" + String.format("%03d", selected.getNumber()),
-				infoPanel.rightX() - numberSpacing,
-				infoPanel.y + FontMetrics.getTextHeight(g) + numberSpacing
-		);
+			// Image
+			imagePanel.drawBackground(g);
+			if (notSeen) {
+				imagePanel.label(g, 80, "?");
+			} else {
+				BufferedImage pkmImg = pokedexTiles.getTile(selected.getBaseImageName());
+				pkmImg.setRGB(0, 0, 0);
 
-		if (!notSeen) {
-			// Type tiles
-			ImageUtils.drawTypeTiles(g, type, infoPanel.rightX() - spacing, textY);
-
-			textY += FontMetrics.getDistanceBetweenRows(g);
-
-			// Classification
-			FontMetrics.setFont(g, 16);
-			g.drawString(
-					(!caught ? "???" : selected.getClassification()) + " " + PokeString.POKEMON,
-					leftX,
-					textY
-			);
-
-			textY += FontMetrics.getDistanceBetweenRows(g);
-			g.drawString("Height: " + (!caught ? "???'??\"" : selected.getHeightString()), leftX, textY);
-
-			textY += FontMetrics.getDistanceBetweenRows(g);
-			g.drawString("Weight: " + (!caught ? "???.?" : selected.getWeight()) + " lbs", leftX, textY);
-
-			if (selectedTab == TabInfo.LOCATION) {
-				leftX = imagePanel.x;
-				textY = basicInfoPanel.bottomY() + FontMetrics.getTextHeight(g) + spacing;
-
-				g.drawString("Locations:", leftX, textY);
-				List<String> locations = pokedex.getLocations(selected.namesies());
-				for (int i = 0; i < locations.size(); i++) {
-					g.drawString(locations.get(i), leftX + 2*spacing, textY + (i + 1)*FontMetrics.getDistanceBetweenRows(g));
-				}
+				imagePanel.imageLabel(g, pkmImg);
 			}
 
-			if (caught) {
-				textY = imagePanel.bottomY() + FontMetrics.getTextHeight(g) + spacing;
-				infoPanel.drawMessage(g, selected.getFlavorText(), textY);
+			g.setColor(Color.BLACK);
 
-				leftX = imagePanel.x;
-				textY = basicInfoPanel.bottomY() + FontMetrics.getTextHeight(g) + spacing;
-				if (selectedTab == TabInfo.MAIN) {
-					g.drawString("Abilities: " + selected.getAbilitiesString(), leftX, textY);
+			// Name
+			FontMetrics.setFont(g, 20);
+			leftX = imagePanel.rightX() + spacing;
+			textY = imagePanel.y + FontMetrics.getTextHeight(g) + spacing;
+			g.drawString(notSeen ? "?????" : selected.getName(), leftX, textY);
 
-					textY += FontMetrics.getTextHeight(g) + spacing;
-					g.drawString("Gender Ratio: " + Gender.getGenderString(selected), leftX, textY);
+			// Number
+			int numberSpacing = 10;
+			FontMetrics.setFont(g, 18);
+			TextUtils.drawRightAlignedString(
+					g,
+					"#" + String.format("%03d", selected.getNumber()),
+					infoPanel.rightX() - numberSpacing,
+					infoPanel.y + FontMetrics.getTextHeight(g) + numberSpacing
+			);
 
-					textY += FontMetrics.getTextHeight(g) + spacing;
-					g.drawString("Capture Rate: " + selected.getCatchRate(), leftX, textY);
+			if (!notSeen) {
+				// Type tiles
+				ImageUtils.drawTypeTiles(g, type, infoPanel.rightX() - spacing, textY);
 
-					textY += FontMetrics.getTextHeight(g) + spacing;
-					g.drawString("Base EXP Yield: " + selected.getBaseEXP(), leftX, textY);
+				textY += FontMetrics.getDistanceBetweenRows(g);
 
-					if (selected.canBreed()) {
-						textY += FontMetrics.getTextHeight(g) + spacing;
-						g.drawString("Egg Steps: " + selected.getEggSteps(), leftX, textY);
-					}
+				// Classification
+				FontMetrics.setFont(g, 16);
+				g.drawString(
+						(!caught ? "???" : selected.getClassification()) + " " + PokeString.POKEMON,
+						leftX,
+						textY
+				);
+
+				textY += FontMetrics.getDistanceBetweenRows(g);
+				g.drawString("Height: " + (!caught ? "???'??\"" : selected.getHeightString()), leftX, textY);
+
+				textY += FontMetrics.getDistanceBetweenRows(g);
+				g.drawString("Weight: " + (!caught ? "???.?" : selected.getWeight()) + " lbs", leftX, textY);
+
+				if (caught) {
+					textY = imagePanel.bottomY() + FontMetrics.getTextHeight(g) + spacing;
+					infoPanel.drawMessage(g, selected.getFlavorText(), textY);
 				}
-				else if (selectedTab == TabInfo.STATS) {
+			}
+		}
 
-					String label = "Given EVs";
-					int evRightX = infoPanel.rightX() - spacing - FontMetrics.getTextWidth(g, label)/2;
-					g.drawString(label, evRightX - FontMetrics.getTextWidth(g, label)/2, textY);
-					evRightX += FontMetrics.getTextWidth(g, " ");
+		leftX = imagePanel.x;
+		textY = basicInfoPanel.bottomY() + FontMetrics.getTextHeight(g) + spacing;
 
-					int baseStatRightX = evRightX - FontMetrics.getTextWidth(g, label)/2 - 2*spacing;
-					label = "Base Stat";
-					baseStatRightX -= FontMetrics.getTextWidth(g, label)/2;
-					g.drawString(label, baseStatRightX - FontMetrics.getTextWidth(g, label)/2, textY);
-					baseStatRightX += FontMetrics.getTextWidth(g, " ");
+		if (selectedTab == TabInfo.MAIN && caught) {
+			g.drawString("Abilities: " + selected.getAbilitiesString(), leftX, textY);
 
-					for (int i = 0; i < Stat.NUM_STATS; i++) {
-						int y = textY + (i + 1)*(FontMetrics.getTextHeight(g) + spacing);
-						g.drawString(Stat.getStat(i, false).getName(), leftX, y);
-						TextUtils.drawRightAlignedString(g, selected.getStat(i) + "", baseStatRightX, y);
-						TextUtils.drawRightAlignedString(g, selected.getGivenEV(i) + "", evRightX, y);
+			textY += FontMetrics.getTextHeight(g) + spacing;
+			g.drawString("Gender Ratio: " + Gender.getGenderString(selected), leftX, textY);
+
+			textY += FontMetrics.getTextHeight(g) + spacing;
+			g.drawString("Capture Rate: " + selected.getCatchRate(), leftX, textY);
+
+			textY += FontMetrics.getTextHeight(g) + spacing;
+			g.drawString("Base EXP Yield: " + selected.getBaseEXP(), leftX, textY);
+
+			if (selected.canBreed()) {
+				textY += FontMetrics.getTextHeight(g) + spacing;
+				g.drawString("Egg Steps: " + selected.getEggSteps(), leftX, textY);
+			}
+		}
+
+		if (selectedTab == TabInfo.STATS && caught) {
+			String label = "Given EVs";
+			int evRightX = infoPanel.rightX() - spacing - FontMetrics.getTextWidth(g, label)/2;
+			g.drawString(label, evRightX - FontMetrics.getTextWidth(g, label)/2, textY);
+			evRightX += FontMetrics.getTextWidth(g, " ");
+
+			int baseStatRightX = evRightX - FontMetrics.getTextWidth(g, label)/2 - 2*spacing;
+			label = "Base Stat";
+			baseStatRightX -= FontMetrics.getTextWidth(g, label)/2;
+			g.drawString(label, baseStatRightX - FontMetrics.getTextWidth(g, label)/2, textY);
+			baseStatRightX += FontMetrics.getTextWidth(g, " ");
+
+			for (int i = 0; i < Stat.NUM_STATS; i++) {
+				int y = textY + (i + 1)*(FontMetrics.getTextHeight(g) + spacing);
+				g.drawString(Stat.getStat(i, false).getName(), leftX, y);
+				TextUtils.drawRightAlignedString(g, selected.getStat(i) + "", baseStatRightX, y);
+				TextUtils.drawRightAlignedString(g, selected.getGivenEV(i) + "", evRightX, y);
+			}
+		}
+
+		if (selectedTab == TabInfo.LOCATION) {
+			g.drawString("Locations:", leftX, textY);
+			List<String> locations = pokedex.getLocations(selected.namesies());
+			for (int i = 0; i < locations.size(); i++) {
+				g.drawString(locations.get(i), leftX + 2*spacing, textY + (i + 1)*FontMetrics.getDistanceBetweenRows(g));
+			}
+		}
+
+		if (selectedTab == TabInfo.MOVES) {
+			FontMetrics.setFont(g, 16);
+
+			textY = infoPanel.y + FontMetrics.getTextHeight(g) + spacing;
+			g.drawString("Moves:", leftX, textY);
+			if (!caught) {
+				g.drawString("???", leftX + 2*spacing, textY + FontMetrics.getDistanceBetweenRows(g));
+			}
+			else {
+				FontMetrics.setFont(g, 14);
+
+				Map<Integer, List<AttackNamesies>> levelUpMoves = selected.getLevelUpMoves();
+				int lineNumber = 1;
+
+				for (int level : levelUpMoves.keySet()) {
+					final String levelString;
+					if (level == PokemonInfo.EVOLUTION_LEVEL_LEARNED) {
+						levelString = " Ev";
+					}
+					else if (level <= 1) {
+						levelString = " --";
+					}
+					else {
+						levelString = String.format("%3d", level);
+					}
+
+					List<AttackNamesies> levelAttacks = levelUpMoves.get(level);
+					for (AttackNamesies attack : levelAttacks) {
+						g.drawString(levelString + " "  + attack.getName(), leftX + 2*spacing, textY + lineNumber*FontMetrics.getDistanceBetweenRows(g));
+						lineNumber++;
 					}
 				}
 			}

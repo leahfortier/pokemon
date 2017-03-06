@@ -111,7 +111,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return type;
 	}
 
-	Map<Integer, List<AttackNamesies>> getLevelUpMoves() {
+	public Map<Integer, List<AttackNamesies>> getLevelUpMoves() {
 		return levelUpMoves;
 	}
 
