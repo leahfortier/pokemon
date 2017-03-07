@@ -17,6 +17,9 @@ import map.Direction;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
+import pokemon.evolution.Evolution;
+import pokemon.evolution.MultipleEvolution;
+import pokemon.evolution.NoEvolution;
 import trainer.pokedex.Pokedex;
 import type.Type;
 import util.FontMetrics;
@@ -72,8 +75,8 @@ class PokedexView extends View {
 		MAIN(true),
 		STATS(true),
 		LOCATION(true),
-		MOVES(false),
-		EVOLUTION(true);
+		EVOLUTION(true),
+		MOVES(false);
 
 		private final String label;
 		private final boolean drawBasicInformationPanel;
@@ -114,14 +117,14 @@ class PokedexView extends View {
 				.withFullTransparency()
 				.withBlackOutline();
 
-		basicInfoPanel = new DrawPanel(infoPanel.x, infoPanel.y, infoPanel.width, 200)
+		basicInfoPanel = new DrawPanel(infoPanel.x, infoPanel.y, infoPanel.width, 230)
 				.withBackgroundColor(null)
 				.withBorderPercentage(0)
 				.withBlackOutline();
 
 		this.pokedex = Game.getPlayer().getPokedex();
 		selectedButton = 0;
-		selectedTab = TabInfo.MOVES;
+		selectedTab = TabInfo.MAIN;
 		pageNum = 0;
 
 		buttons = new Button[NUM_BUTTONS];
@@ -437,6 +440,41 @@ class PokedexView extends View {
 						g.drawString(levelString + " "  + attack.getName(), leftX + 2*spacing, textY + lineNumber*FontMetrics.getDistanceBetweenRows(g));
 						lineNumber++;
 					}
+				}
+			}
+		}
+
+		if (selectedTab == TabInfo.EVOLUTION) {
+			g.drawString("Evolutions:", leftX, textY);
+
+			leftX += 2*spacing;
+			textY += FontMetrics.getDistanceBetweenRows(g);
+
+			if (!caught) {
+				g.drawString("???", leftX, textY);
+			} else {
+				Evolution evolution = selected.getEvolution();
+				if (evolution instanceof MultipleEvolution) {
+					Evolution[] allEvolutions = ((MultipleEvolution) evolution).getFullEvolutions();
+					for (Evolution eachEvolution : allEvolutions) {
+						textY = TextUtils.drawWrappedText(g,
+								eachEvolution.getEvolutions()[0].getName() + ": " + eachEvolution.getString(),
+								leftX,
+								textY,
+								infoPanel.width - 3*spacing
+						);
+					}
+				}
+				else if (evolution instanceof NoEvolution) {
+					g.drawString(selected.getName() + " does not evolve", leftX, textY);
+				}
+				else {
+					TextUtils.drawWrappedText(g,
+							evolution.getEvolutions()[0].getName() + ": " + evolution.getString(),
+							leftX,
+							textY,
+							infoPanel.width - 3*spacing
+					);
 				}
 			}
 		}

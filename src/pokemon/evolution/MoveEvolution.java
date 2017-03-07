@@ -31,4 +31,9 @@ class MoveEvolution extends BaseEvolution {
     public String toString() {
         return EvolutionType.MOVE + " " + super.getEvolution().namesies() + " " + this.move;
     }
+
+    @Override
+    public String getString() {
+        return "Learn " + move.getName();
+    }
 }

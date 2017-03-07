@@ -352,6 +352,10 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			return PokemonInfo.getPokemonInfo(PokemonNamesies.PHIONE);
 		}
 
+		if (targetPokes.namesies() == PokemonNamesies.SHEDINJA) {
+			return PokemonInfo.getPokemonInfo(PokemonNamesies.NINCADA);
+		}
+
 		Set<PokemonNamesies> allPokes = EnumSet.complementOf(EnumSet.of(PokemonNamesies.NONE));
 
 		while (true) {

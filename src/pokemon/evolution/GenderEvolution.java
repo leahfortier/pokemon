@@ -5,6 +5,7 @@ import main.Global;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
+import util.StringUtils;
 
 class GenderEvolution extends Evolution {
     private static final long serialVersionUID = 1L;
@@ -32,6 +33,11 @@ class GenderEvolution extends Evolution {
     @Override
     public PokemonNamesies[] getEvolutions() {
         return this.evolution.getEvolutions();
+    }
+
+    @Override
+    public String getString() {
+        return this.evolution.getString() + ", " + StringUtils.properCase(this.gender.name().toLowerCase()) + " only";
     }
 
     @Override

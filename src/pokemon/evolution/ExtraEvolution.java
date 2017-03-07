@@ -37,6 +37,11 @@ public class ExtraEvolution extends Evolution {
     }
 
     @Override
+    public String getString() {
+        return this.evolution.getString();
+    }
+
+    @Override
     public String toString() {
         return EvolutionType.EXTRA + " " + extraPokemon.name() + " " + evolution.toString();
     }

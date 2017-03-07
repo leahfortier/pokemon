@@ -4,7 +4,7 @@ import item.ItemNamesies;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 
-class NoEvolution extends Evolution {
+public class NoEvolution extends Evolution {
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -20,6 +20,11 @@ class NoEvolution extends Evolution {
     @Override
     public PokemonNamesies[] getEvolutions() {
         return new PokemonNamesies[0];
+    }
+
+    @Override
+    public String getString() {
+        return "Does not evolve";
     }
 
     @Override

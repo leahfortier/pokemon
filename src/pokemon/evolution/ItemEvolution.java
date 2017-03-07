@@ -27,4 +27,9 @@ class ItemEvolution extends BaseEvolution {
     public String toString() {
         return EvolutionType.ITEM + " " + super.getEvolution().namesies() + " " + this.item;
     }
+
+    @Override
+    public String getString() {
+        return "Use " + item.getName();
+    }
 }
