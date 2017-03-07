@@ -9,8 +9,8 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import pokemon.ActivePokemon;
-import trainer.player.Player;
 import trainer.Trainer.Action;
+import trainer.player.Player;
 
 import java.awt.Color;
 import java.awt.Graphics;

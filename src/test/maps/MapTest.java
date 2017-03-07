@@ -1,7 +1,7 @@
 package test.maps;
 
-import map.area.AreaData;
 import map.MapDataType;
+import map.area.AreaData;
 import map.overworld.WalkType;
 import map.overworld.WildEncounter;
 import org.junit.Assert;

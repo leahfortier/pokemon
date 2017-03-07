@@ -16,8 +16,8 @@ import item.bag.BattleBagCategory;
 import item.use.PokemonUseItem;
 import main.Game;
 import map.Direction;
-import trainer.player.Player;
 import trainer.Trainer.Action;
+import trainer.player.Player;
 import util.FontMetrics;
 import util.GeneralUtils;
 

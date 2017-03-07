@@ -15,10 +15,10 @@ import input.InputControl;
 import main.Game;
 import map.Direction;
 import pokemon.ActivePokemon;
-import trainer.player.PC;
 import pokemon.Stat;
-import trainer.player.Player;
 import trainer.Trainer;
+import trainer.player.PC;
+import trainer.player.Player;
 import type.Type;
 import util.FontMetrics;
 

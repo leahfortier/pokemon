@@ -1,7 +1,7 @@
 package test.maps;
 
-import map.area.AreaData;
 import map.MapData;
+import map.area.AreaData;
 import pattern.map.MapDataMatcher;
 import util.FileIO;
 

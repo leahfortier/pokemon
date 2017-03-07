@@ -12,8 +12,8 @@ import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pattern.action.TriggerActionMatcher;
 import pokemon.ActivePokemon;
 import trainer.player.Player;
-import util.SerializationUtils;
 import util.PokeString;
+import util.SerializationUtils;
 import util.StringUtils;
 
 import java.io.Serializable;

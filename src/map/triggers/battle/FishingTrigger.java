@@ -12,8 +12,8 @@ import pattern.GroupTriggerMatcher;
 import pattern.map.FishingMatcher;
 import pokemon.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
-import util.SerializationUtils;
 import util.RandomUtils;
+import util.SerializationUtils;
 
 public class FishingTrigger extends Trigger {
     public static final String FISHING_GLOBAL = "isFishing";

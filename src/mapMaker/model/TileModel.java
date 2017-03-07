@@ -9,12 +9,11 @@ import util.FileName;
 import util.Folder;
 import util.StringUtils;
 
-import javax.rmi.CORBA.Tie;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.EnumMap;

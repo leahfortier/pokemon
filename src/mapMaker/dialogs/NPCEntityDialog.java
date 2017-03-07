@@ -1,7 +1,7 @@
 package mapMaker.dialogs;
 
-import map.condition.Condition;
 import map.Direction;
+import map.condition.Condition;
 import map.entity.movable.MovableEntity;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;

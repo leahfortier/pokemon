@@ -8,8 +8,8 @@ import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
 import pokemon.ActivePokemon;
-import trainer.player.Player;
 import trainer.Trainer.Action;
+import trainer.player.Player;
 import util.StringUtils;
 
 import java.awt.Graphics;
