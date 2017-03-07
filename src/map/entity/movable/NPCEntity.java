@@ -5,7 +5,7 @@ import map.Direction;
 import map.PathDirection;
 import map.entity.EntityAction;
 import map.entity.EntityAction.BattleAction;
-import trainer.Player;
+import trainer.player.Player;
 import util.Point;
 import util.StringUtils;
 

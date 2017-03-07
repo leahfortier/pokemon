@@ -13,7 +13,7 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import sound.SoundPlayer;
 import sound.SoundTitle;
-import trainer.Player;
+import trainer.player.Player;
 import util.FontMetrics;
 import util.PokeString;
 

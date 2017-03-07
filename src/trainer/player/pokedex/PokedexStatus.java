@@ -1,4 +1,4 @@
-package trainer.pokedex;
+package trainer.player.pokedex;
 
 import java.io.Serializable;
 

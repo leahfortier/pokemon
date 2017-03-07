@@ -5,7 +5,7 @@ import map.PathDirection;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.map.MapTransitionMatcher;
-import trainer.Player;
+import trainer.player.Player;
 import util.SerializationUtils;
 
 public class MapTransitionTrigger extends Trigger {

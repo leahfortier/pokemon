@@ -8,7 +8,7 @@ import main.Game;
 import main.Global;
 import map.entity.ItemEntity;
 import map.overworld.OverworldTool;
-import trainer.Player;
+import trainer.player.Player;
 import util.Point;
 
 import java.awt.Color;

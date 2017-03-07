@@ -3,7 +3,7 @@ package test;
 import map.MapName;
 import pattern.SimpleMapTransition;
 import pokemon.ActivePokemon;
-import trainer.Player;
+import trainer.player.Player;
 
 class TestCharacter extends Player {
     TestCharacter(ActivePokemon mahBoiiiiiii) {

@@ -10,7 +10,7 @@ import pattern.action.ActionMatcher;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pattern.action.TriggerActionMatcher;
 import pokemon.breeding.DayCareCenter;
-import trainer.Player;
+import trainer.player.Player;
 import util.PokeString;
 import util.StringUtils;
 

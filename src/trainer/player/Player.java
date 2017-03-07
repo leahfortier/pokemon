@@ -1,4 +1,4 @@
-package trainer;
+package trainer.player;
 
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
@@ -20,11 +20,13 @@ import message.Messages;
 import pattern.SimpleMapTransition;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
-import pokemon.PC;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.DayCareCenter;
 import pokemon.evolution.BaseEvolution;
-import trainer.pokedex.Pokedex;
+import trainer.Badge;
+import trainer.Opponent;
+import trainer.Trainer;
+import trainer.player.pokedex.Pokedex;
 import util.Point;
 import util.RandomUtils;
 import util.StringUtils;

@@ -12,7 +12,7 @@ import message.Messages;
 import pattern.map.WildBattleMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
-import trainer.Player;
+import trainer.player.Player;
 import util.RandomUtils;
 import util.SerializationUtils;
 

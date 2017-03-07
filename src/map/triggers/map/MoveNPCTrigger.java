@@ -11,7 +11,7 @@ import map.triggers.HaltTrigger;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.MoveNPCTriggerMatcher;
-import trainer.Player;
+import trainer.player.Player;
 import util.SerializationUtils;
 import util.Point;
 

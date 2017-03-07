@@ -1,7 +1,7 @@
 package map.condition;
 
 import main.Game;
-import trainer.Player;
+import trainer.player.Player;
 import util.StringUtils;
 
 import java.util.ArrayList;

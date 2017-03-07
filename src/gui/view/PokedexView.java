@@ -20,7 +20,7 @@ import pokemon.Stat;
 import pokemon.evolution.Evolution;
 import pokemon.evolution.MultipleEvolution;
 import pokemon.evolution.NoEvolution;
-import trainer.pokedex.Pokedex;
+import trainer.player.pokedex.Pokedex;
 import type.Type;
 import util.FontMetrics;
 import util.PokeString;

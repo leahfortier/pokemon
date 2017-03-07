@@ -1,7 +1,7 @@
 package test;
 
 import main.Game;
-import trainer.Player;
+import trainer.player.Player;
 
 class GameTest extends Game {
     static void setNewPlayer(Player player) {

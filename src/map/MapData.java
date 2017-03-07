@@ -24,7 +24,7 @@ import pattern.map.MapTransitionMatcher;
 import pattern.map.MiscEntityMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
-import trainer.Player;
+import trainer.player.Player;
 import util.FileIO;
 import util.MultiMap;
 import util.Point;

@@ -20,7 +20,7 @@ import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import pokemon.evolution.BaseEvolution;
-import trainer.Player;
+import trainer.player.Player;
 import type.Type;
 import util.FontMetrics;
 import util.Point;

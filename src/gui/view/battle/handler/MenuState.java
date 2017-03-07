@@ -9,7 +9,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import pokemon.ActivePokemon;
-import trainer.Player;
+import trainer.player.Player;
 import trainer.Trainer.Action;
 
 import java.awt.Color;

@@ -28,7 +28,7 @@ import message.MessageUpdate.Update;
 import message.Messages;
 import sound.SoundPlayer;
 import sound.SoundTitle;
-import trainer.Player;
+import trainer.player.Player;
 import util.FontMetrics;
 import util.Point;
 import util.StringUtils;

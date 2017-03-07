@@ -14,7 +14,7 @@ import main.Game;
 import map.Direction;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
-import trainer.Player;
+import trainer.player.Player;
 import trainer.Trainer;
 import trainer.Trainer.Action;
 import type.Type;

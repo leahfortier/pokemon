@@ -10,8 +10,8 @@ import input.InputControl;
 import main.Game;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
-import trainer.Player;
-import trainer.pokedex.Pokedex;
+import trainer.player.Player;
+import trainer.player.pokedex.Pokedex;
 import util.FontMetrics;
 import util.Point;
 

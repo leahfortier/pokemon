@@ -18,7 +18,7 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import trainer.Badge;
-import trainer.Player;
+import trainer.player.Player;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.Point;

@@ -4,7 +4,7 @@ import item.hold.HoldItem;
 import item.use.PlayerUseItem;
 import main.Game;
 import message.Messages;
-import trainer.Player;
+import trainer.player.Player;
 
 public interface Repelling extends HoldItem, PlayerUseItem {
     int repelSteps();

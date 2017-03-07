@@ -15,7 +15,7 @@ import map.area.AreaData;
 import map.Direction;
 import map.MapName;
 import pattern.SimpleMapTransition;
-import trainer.Player;
+import trainer.player.Player;
 import util.GeneralUtils;
 
 import java.awt.Graphics;

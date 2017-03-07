@@ -27,7 +27,7 @@ import message.MessageUpdate;
 import message.Messages;
 import message.Messages.MessageState;
 import pokemon.ActivePokemon;
-import trainer.Player;
+import trainer.player.Player;
 import trainer.Trainer;
 import type.Type;
 import util.FontMetrics;

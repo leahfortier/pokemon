@@ -13,7 +13,7 @@ import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import sound.SoundPlayer;
 import sound.SoundTitle;
-import trainer.Player;
+import trainer.player.Player;
 import util.FloatPoint;
 import util.Point;
 

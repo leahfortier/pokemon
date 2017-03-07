@@ -41,7 +41,7 @@ import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
-import trainer.Player;
+import trainer.player.Player;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.Trainer.Action;

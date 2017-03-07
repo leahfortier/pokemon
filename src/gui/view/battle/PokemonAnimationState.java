@@ -17,7 +17,7 @@ import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import sound.SoundPlayer;
-import trainer.Player;
+import trainer.player.Player;
 import trainer.Trainer;
 import type.Type;
 import util.FontMetrics;
