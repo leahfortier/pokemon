@@ -364,7 +364,13 @@ class PokedexView extends View {
 		textY = basicInfoPanel.bottomY() + FontMetrics.getTextHeight(g) + spacing;
 
 		if (selectedTab == TabInfo.MAIN && caught) {
-			g.drawString("Abilities: " + selected.getAbilitiesString(), leftX, textY);
+			textY = TextUtils.drawWrappedText(
+					g,
+					"Abilities: " + selected.getAbilitiesString(),
+					leftX,
+					textY,
+					infoPanel.width - 2*(leftX - infoPanel.x)
+			);
 
 			textY += FontMetrics.getTextHeight(g) + spacing;
 			g.drawString("Gender Ratio: " + Gender.getGenderString(selected), leftX, textY);
