@@ -38,6 +38,7 @@ public enum TriggerType {
     SOUND(SoundTrigger.class, SoundTrigger::new),
     TRAINER_BATTLE(TrainerBattleTrigger.class, TrainerBattleTrigger::new),
     UPDATE(UpdateTrigger.class, UpdateTrigger::new),
+    USE_ITEM(UseItemTrigger.class, UseItemTrigger::new),
     WALKING_WILD_BATTLE(WalkingWildBattleTrigger.class, WalkingWildBattleTrigger::new),
     WILD_BATTLE(WildBattleTrigger.class, WildBattleTrigger::new);
 
