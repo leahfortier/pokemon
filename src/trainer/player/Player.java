@@ -73,14 +73,14 @@ public class Player extends Trainer implements Serializable {
 
 	private SimpleMapTransition lastPCMapEntrance;
 
+	private Set<Badge> badges;
 	private Pokedex pokedex;
 	private PC pc;
-	private Set<Badge> badges;
-	private int repelSteps;
-
 	private DayCareCenter dayCareCenter;
+
 	private EvolutionInfo evolutionInfo;
 	private NewPokemonInfo newPokemonInfo;
+	private RepelInfo repelInfo;
 
 	private transient List<String> logMessages;
 
@@ -96,7 +96,6 @@ public class Player extends Trainer implements Serializable {
 
         badges = EnumSet.noneOf(Badge.class);
 
-		repelSteps = 0;
 		seconds = 0;
 
 		direction = Direction.DOWN;
@@ -107,6 +106,7 @@ public class Player extends Trainer implements Serializable {
 		dayCareCenter = new DayCareCenter();
 		evolutionInfo = new EvolutionInfo();
 		newPokemonInfo = new NewPokemonInfo();
+		repelInfo = new RepelInfo();
 	}
 
 	// Initializes the character with the current game -- used when recovering a save file as well as the generic constructor
@@ -219,18 +219,11 @@ public class Player extends Trainer implements Serializable {
 	public void step() {
 
 		// Decrease repel steps
-		if (repelSteps > 0) {
-			repelSteps--;
-			if (repelSteps == 0) {
-				// TODO: Give choice if you want to use another. 
-				// Game variable needed
-				Messages.add("The effects of repel have worn off.");
-			}
-		}
-		else {
-			repelSteps = 0;
-		}
-		
+		repelInfo.step();
+
+		// Check day care eggs
+		dayCareCenter.step();
+
 		// Hatch eggs
         boolean doubleHatch = front().hasAbility(AbilityNamesies.FLAME_BODY) || front().hasAbility(AbilityNamesies.MAGMA_ARMOR);
 		for (ActivePokemon p : team) {
@@ -245,21 +238,14 @@ public class Player extends Trainer implements Serializable {
 				break;
 			}
 		}
-
-		// Check day care eggs
-		dayCareCenter.step();
 	}
 
 	public boolean isFishing() {
 		return this.globalsContain(FishingTrigger.FISHING_GLOBAL);
 	}
 
-	public boolean isUsingRepel() {
-		return repelSteps > 0;
-	}
-	
-	public void addRepelSteps(int steps) {
-		repelSteps += steps;
+	public RepelInfo getRepelInfo() {
+		return this.repelInfo;
 	}
 
 	public MapName getMapName() {
