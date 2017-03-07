@@ -497,7 +497,7 @@ class PokedexView extends View {
 	}
 	
 	private int getIndex(int i, int j) {
-		return PER_PAGE*pageNum + j* NUM_COLS + i;
+		return PER_PAGE*pageNum + j*NUM_COLS + i;
 	}
 
 	@Override

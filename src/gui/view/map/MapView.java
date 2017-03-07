@@ -11,6 +11,7 @@ import gui.view.View;
 import gui.view.ViewMode;
 import main.Game;
 import main.Global;
+import map.MapDataType;
 import map.area.AreaData;
 import map.Direction;
 import map.MapData;
@@ -120,9 +121,22 @@ public class MapView extends View {
 		// Background
 		for (int y = start.y; y < end.y; y++) {
 			for (int x = start.x; x < end.x; x++) {
-				int bgTile = currentMap.getBgTile(x,y);
+				int bgTile = currentMap.getRGB(x,y, MapDataType.BACKGROUND);
 				if (TileSet.isValidMapTile(bgTile)) {
 					BufferedImage img = mapTiles.getTile(bgTile);
+					TileUtils.drawTileImage(g, img, x, y, draw);
+				}
+			}
+		}
+
+		// Back-foreground
+		for (int y = start.y; y < end.y; y++) {
+			for (int x = start.x; x < end.x; x++) {
+
+				// Draw foreground tiles
+				int fgTile = currentMap.getRGB(x, y, MapDataType.BACK_FOREGROUND);
+				if (TileSet.isValidMapTile(fgTile)) {
+					BufferedImage img = mapTiles.getTile(fgTile);
 					TileUtils.drawTileImage(g, img, x, y, draw);
 				}
 			}
@@ -133,7 +147,7 @@ public class MapView extends View {
 			for (int x = start.x; x < end.x; x++) {
 
 				// Draw foreground tiles
-				int fgTile = currentMap.getFgTile(x, y);
+				int fgTile = currentMap.getRGB(x, y, MapDataType.FOREGROUND);
 				if (TileSet.isValidMapTile(fgTile)) {
 					BufferedImage img = mapTiles.getTile(fgTile);
 					TileUtils.drawTileImage(g, img, x, y, draw);
@@ -165,6 +179,19 @@ public class MapView extends View {
 
 					// TODO: Checking zero logic seems like it can be simplified
 					newPointEntity.draw(g, draw, !delta.isZero());
+				}
+			}
+		}
+
+		// Front-foreground
+		for (int y = start.y; y < end.y; y++) {
+			for (int x = start.x; x < end.x; x++) {
+
+				// Draw foreground tiles
+				int fgTile = currentMap.getRGB(x, y, MapDataType.LAYER_3D);
+				if (TileSet.isValidMapTile(fgTile)) {
+					BufferedImage img = mapTiles.getTile(fgTile);
+					TileUtils.drawTileImage(g, img, x, y, draw);
 				}
 			}
 		}

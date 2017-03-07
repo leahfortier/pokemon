@@ -9,7 +9,9 @@ import java.util.Map;
 
 public enum MapDataType {
     BACKGROUND("_bg"),
+    BACK_FOREGROUND("_bfg"),
     FOREGROUND("_fg"),
+    LAYER_3D("_3dl"),
     MOVE("_move"),
     AREA("_area");
 

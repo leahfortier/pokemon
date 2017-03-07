@@ -197,14 +197,6 @@ public class MapData {
 		return this.dataMap.get(dataType)[Point.getIndex(x, y, dimension.width)];
 	}
 
-	public int getBgTile(int x, int y) {
-		return getRGB(x, y, MapDataType.BACKGROUND);
-	}
-
-	public int getFgTile(int x, int y) {
-		return getRGB(x, y, MapDataType.FOREGROUND);
-	}
-
 	public WalkType getPassValue(Point location) {
 		int rgb = getRGB(location, MapDataType.MOVE);
 		if (rgb == TileSet.INVALID_RGB) {

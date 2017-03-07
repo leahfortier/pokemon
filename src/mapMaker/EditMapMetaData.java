@@ -210,16 +210,34 @@ public class EditMapMetaData {
             case MOVE_MAP:
                 drawTiles(g2d, mapLocation, editType.getDataType(), defaultComposite);
                 drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, alphaComposite);
+                drawTiles(g2d, mapLocation, MapDataType.BACK_FOREGROUND, alphaComposite);
                 drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, alphaComposite);
+                drawTiles(g2d, mapLocation, MapDataType.LAYER_3D, alphaComposite);
                 break;
             case TRIGGERS:
             case BACKGROUND:
                 drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, defaultComposite);
+                drawTiles(g2d, mapLocation, MapDataType.BACK_FOREGROUND, alphaComposite);
                 drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, alphaComposite);
+                drawTiles(g2d, mapLocation, MapDataType.LAYER_3D, alphaComposite);
+                break;
+            case BACK_FOREGROUND:
+                drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, alphaComposite);
+                drawTiles(g2d, mapLocation, MapDataType.BACK_FOREGROUND, defaultComposite);
+                drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, alphaComposite);
+                drawTiles(g2d, mapLocation, MapDataType.LAYER_3D, alphaComposite);
                 break;
             case FOREGROUND:
                 drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, alphaComposite);
+                drawTiles(g2d, mapLocation, MapDataType.BACK_FOREGROUND, alphaComposite);
                 drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, defaultComposite);
+                drawTiles(g2d, mapLocation, MapDataType.LAYER_3D, alphaComposite);
+                break;
+            case LAYER_3D:
+                drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, alphaComposite);
+                drawTiles(g2d, mapLocation, MapDataType.BACK_FOREGROUND, alphaComposite);
+                drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, alphaComposite);
+                drawTiles(g2d, mapLocation, MapDataType.LAYER_3D, defaultComposite);
                 break;
         }
 
