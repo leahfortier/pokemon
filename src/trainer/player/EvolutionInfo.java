@@ -6,7 +6,9 @@ import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.evolution.BaseEvolution;
 
-public class EvolutionInfo {
+import java.io.Serializable;
+
+public class EvolutionInfo implements Serializable {
     private ActivePokemon evolvingPokemon;
     private BaseEvolution evolution;
 

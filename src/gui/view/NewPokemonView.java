@@ -11,6 +11,7 @@ import main.Game;
 import main.Global;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
+import trainer.player.NewPokemonInfo;
 import trainer.player.Player;
 import trainer.Trainer;
 import type.Type;
@@ -300,12 +301,13 @@ class NewPokemonView extends View {
         }
 
         Player player = Game.getPlayer();
+        NewPokemonInfo newPokemonInfo = player.getNewPokemonInfo();
         String pokemonName = newPokemon.getActualName();
 
         this.state = state;
         switch (state) {
             case POKEDEX:
-                if (player.isFirstNewPokemon()) {
+                if (newPokemonInfo.isFirstNewPokemon()) {
                     message = newPokemon.getPokemonInfo().getName() + " was registered in the " + PokeString.POKEDEX + "!";
                 } else {
                     setState(State.NICKNAME_QUESTION);
@@ -361,9 +363,9 @@ class NewPokemonView extends View {
 
     @Override
     public void movedToFront() {
-        Player player = Game.getPlayer();
-        this.newPokemon = player.getNewPokemon();
-        this.boxNum = player.getNewPokemonBox();
+        NewPokemonInfo newPokemonInfo = Game.getPlayer().getNewPokemonInfo();
+        this.newPokemon = newPokemonInfo.getNewPokemon();
+        this.boxNum = newPokemonInfo.getNewPokemonBox();
 
         this.selectedButton = 0;
 

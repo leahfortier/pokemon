@@ -80,10 +80,7 @@ public class Player extends Trainer implements Serializable {
 
 	private DayCareCenter dayCareCenter;
 	private EvolutionInfo evolutionInfo;
-
-	private ActivePokemon newPokemon;
-	private Integer newPokemonBox;
-	private boolean isFirstNewPokemon;
+	private NewPokemonInfo newPokemonInfo;
 
 	private transient List<String> logMessages;
 
@@ -109,6 +106,7 @@ public class Player extends Trainer implements Serializable {
 
 		dayCareCenter = new DayCareCenter();
 		evolutionInfo = new EvolutionInfo();
+		newPokemonInfo = new NewPokemonInfo();
 	}
 
 	// Initializes the character with the current game -- used when recovering a save file as well as the generic constructor
@@ -213,16 +211,8 @@ public class Player extends Trainer implements Serializable {
 		return this.evolutionInfo;
 	}
 
-	public ActivePokemon getNewPokemon() {
-		return this.newPokemon;
-	}
-
-	public Integer getNewPokemonBox() {
-		return this.newPokemonBox;
-	}
-
-	public boolean isFirstNewPokemon() {
-		return this.isFirstNewPokemon;
+	public NewPokemonInfo getNewPokemonInfo() {
+		return this.newPokemonInfo;
 	}
 
 	// Called when a character steps once in any given direction
@@ -437,7 +427,7 @@ public class Player extends Trainer implements Serializable {
 	}
 
 	public void addPokemon(ActivePokemon p, boolean viewChange) {
-		this.newPokemon = p;
+		this.newPokemonInfo.setNewPokemon(p);
 		if (viewChange) {
 			Messages.add(new MessageUpdate().withViewChange(ViewMode.NEW_POKEMON_VIEW));
 		}
@@ -446,30 +436,30 @@ public class Player extends Trainer implements Serializable {
 
 		if (team.size() < MAX_POKEMON) {
 			team.add(p);
-			this.newPokemonBox = null;
+			newPokemonInfo.inTeam();
 		}
 		else {
 			pc.depositPokemon(p);
-			this.newPokemonBox = pc.getBoxNum() + 1;
+			newPokemonInfo.inBox(pc.getBoxNum() + 1);
 		}
 
-		if (!p.isEgg() && !pokedex.isCaught(newPokemon)) {
-			pokedex.setCaught(newPokemon.getPokemonInfo());
-			this.isFirstNewPokemon = true;
-		} else {
-			this.isFirstNewPokemon = false;
+		boolean addToPokedex = !p.isEgg() && !pokedex.isCaught(p);
+		if (addToPokedex) {
+			pokedex.setCaught(p.getPokemonInfo());
 		}
+
+		newPokemonInfo.setFirstNewPokemon(addToPokedex);
 	}
 
 	public void pokemonEvolved(ActivePokemon p) {
-		this.newPokemon = p;
+		newPokemonInfo.setNewPokemon(p);
 		Messages.add(new MessageUpdate().withViewChange(ViewMode.NEW_POKEMON_VIEW));
 
 		// Should already be in party if evolving/hatching
-		this.newPokemonBox = null;
+		newPokemonInfo.inTeam();
 
 		// Show pokedex info if we don't already have this pokemon
-		isFirstNewPokemon = !pokedex.isCaught(p);
+		newPokemonInfo.setFirstNewPokemon(!pokedex.isCaught(p));
 		pokedex.setCaught(p);
 		p.setCaught();
 	}
