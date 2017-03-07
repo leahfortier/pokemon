@@ -548,7 +548,7 @@ public class ActivePokemon implements Serializable {
 
 		BaseEvolution evolution = this.getPokemonInfo().getEvolution().getEvolution(method, this, itemNamesies);
 		if (evolution != null) {
-			Game.getPlayer().setEvolution(this, evolution);
+			Game.getPlayer().getEvolutionInfo().setEvolution(this, evolution);
 			return true;
 		}
 

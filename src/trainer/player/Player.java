@@ -7,13 +7,13 @@ import gui.view.ViewMode;
 import item.ItemNamesies;
 import item.use.BallItem;
 import main.Game;
-import map.area.AreaData;
 import map.Direction;
 import map.MapName;
+import map.area.AreaData;
 import map.entity.movable.PlayerEntity;
 import map.overworld.OverworldTool;
-import map.triggers.battle.FishingTrigger;
 import map.triggers.TriggerType;
+import map.triggers.battle.FishingTrigger;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
@@ -22,7 +22,6 @@ import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.DayCareCenter;
-import pokemon.evolution.BaseEvolution;
 import trainer.Badge;
 import trainer.Opponent;
 import trainer.Trainer;
@@ -80,9 +79,7 @@ public class Player extends Trainer implements Serializable {
 	private int repelSteps;
 
 	private DayCareCenter dayCareCenter;
-
-	private ActivePokemon evolvingPokemon;
-	private BaseEvolution evolution;
+	private EvolutionInfo evolutionInfo;
 
 	private ActivePokemon newPokemon;
 	private Integer newPokemonBox;
@@ -111,6 +108,7 @@ public class Player extends Trainer implements Serializable {
 		flyLocations = new HashSet<>();
 
 		dayCareCenter = new DayCareCenter();
+		evolutionInfo = new EvolutionInfo();
 	}
 
 	// Initializes the character with the current game -- used when recovering a save file as well as the generic constructor
@@ -211,12 +209,8 @@ public class Player extends Trainer implements Serializable {
 		return this.flyLocations.stream().collect(Collectors.toList());
 	}
 
-	public ActivePokemon getEvolvingPokemon() {
-		return evolvingPokemon;
-	}
-
-	public BaseEvolution getEvolution() {
-		return evolution;
+	public EvolutionInfo getEvolutionInfo() {
+		return this.evolutionInfo;
 	}
 
 	public ActivePokemon getNewPokemon() {
@@ -251,8 +245,7 @@ public class Player extends Trainer implements Serializable {
         boolean doubleHatch = front().hasAbility(AbilityNamesies.FLAME_BODY) || front().hasAbility(AbilityNamesies.MAGMA_ARMOR);
 		for (ActivePokemon p : team) {
 			if (p.isEgg() && (p.hatch() || (doubleHatch && p.hatch()))) {
-				evolvingPokemon = p;
-				evolution = null;
+				this.evolutionInfo.setEgg(p);
 
 				Messages.add(new MessageUpdate().withTrigger(
 						TriggerType.GROUP.getTriggerNameFromSuffix("EggHatching"))
@@ -558,13 +551,6 @@ public class Player extends Trainer implements Serializable {
 
 		Messages.add(new MessageUpdate().withUpdate(Update.CATCH_POKEMON));
 		return true;
-	}
-	
-	public void setEvolution(ActivePokemon pokemon, BaseEvolution evolution) {
-		this.evolvingPokemon = pokemon;
-		this.evolution = evolution;
-
-		Messages.add(new MessageUpdate().withViewChange(ViewMode.EVOLUTION_VIEW));
 	}
 	
 	public void addLogMessage(MessageUpdate messageUpdate) {

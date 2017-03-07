@@ -20,7 +20,7 @@ import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import pokemon.evolution.BaseEvolution;
-import trainer.player.Player;
+import trainer.player.EvolutionInfo;
 import type.Type;
 import util.FontMetrics;
 import util.Point;
@@ -154,7 +154,7 @@ class EvolutionView extends View {
 					if (isEgg) {
 						messages.add(new MessageUpdate("Your egg hatched into " + StringUtils.articleString(preEvolution.getName()) + "!"));
 					} else {
-						int[] gains = evolvingPokemon.evolve(Game.getPlayer().getEvolution());
+						int[] gains = evolvingPokemon.evolve(Game.getPlayer().getEvolutionInfo().getEvolution());
 						int[] stats = evolvingPokemon.getStats();
 
 						messages.add(new MessageUpdate(
@@ -394,9 +394,9 @@ class EvolutionView extends View {
 		state = State.START;
 		messages = new ArrayDeque<>();
 
-		Player player = Game.getPlayer();
+		EvolutionInfo evolutionInfo = Game.getPlayer().getEvolutionInfo();
 
-		setPokemon(player.getEvolvingPokemon(), player.getEvolution());
+		setPokemon(evolutionInfo.getEvolvingPokemon(), evolutionInfo.getEvolution());
 		setInitialMessage();
 		
 		animationEvolve = EVOLVE_ANIMATION_LIFESPAN;
