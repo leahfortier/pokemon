@@ -852,3 +852,13 @@ EncounterRateMultiplier:
 		NonBattleEffects: front
 	*
 ***
+ModifyStageValueEffect:
+	Method:
+		Header: int modifyStageValue(int modVal)
+		Invoke: Update
+		Update: modVal
+		InvokeParameters: Battle b, ActivePokemon caster, ActivePokemon victim
+		MoldBreakerNullCheck: caster == victim ? null : caster
+		EffectList: victim
+	*
+***

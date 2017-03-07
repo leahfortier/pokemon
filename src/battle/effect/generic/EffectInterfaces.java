@@ -1572,4 +1572,28 @@ public final class EffectInterfaces {
 			return modifier;
 		}
 	}
+
+	public interface ModifyStageValueEffect {
+		int modifyStageValue(int modVal);
+
+		static int updateModifyStageValueEffect(Battle b, ActivePokemon caster, ActivePokemon victim, int modVal) {
+			ActivePokemon moldBreaker = caster == victim ? null : caster;
+			
+			List<Object> invokees = b.getEffectsList(victim);
+			for (Object invokee : invokees) {
+				if (invokee instanceof ModifyStageValueEffect && Effect.isActiveEffect(invokee)) {
+					
+					// If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+					if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && moldBreaker != null && moldBreaker.breaksTheMold()) {
+						continue;
+					}
+					
+					ModifyStageValueEffect effect = (ModifyStageValueEffect)invokee;
+					modVal = effect.modifyStageValue(modVal);
+				}
+			}
+			
+			return modVal;
+		}
+	}
 }

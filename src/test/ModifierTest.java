@@ -211,6 +211,20 @@ public class ModifierTest {
 
     @Test
     public void stageChangeTest() {
+
+        stageChangeTest(1, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.NO_ABILITY).defendingFight(AttackNamesies.DEFENSE_CURL));
+        stageChangeTest(2, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.SIMPLE).defendingFight(AttackNamesies.DEFENSE_CURL));
+        stageChangeTest(1, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.CONTRARY).defendingFight(AttackNamesies.DEFENSE_CURL));
+
+        stageChangeTest(-1, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.NO_ABILITY).attackingFight(AttackNamesies.TAIL_WHIP));
+        stageChangeTest(-2, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.SIMPLE).attackingFight(AttackNamesies.TAIL_WHIP));
+        stageChangeTest(1, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.CONTRARY).attackingFight(AttackNamesies.TAIL_WHIP));
+
+        // Contrary even works against self-inflicted negative stat changes
+        stageChangeTest(-1, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.NO_ABILITY).attackingFight(AttackNamesies.HAMMER_ARM));
+        stageChangeTest(-2, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.SIMPLE).attackingFight(AttackNamesies.HAMMER_ARM));
+        stageChangeTest(1, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.CONTRARY).attackingFight(AttackNamesies.HAMMER_ARM));
+
         stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.TANGLED_FEET, EffectNamesies.CONFUSION));
         stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.TANGLED_FEET).attackingFight(AttackNamesies.CONFUSE_RAY));
         stageChangeTest(0, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.TANGLED_FEET, EffectNamesies.CONFUSION));

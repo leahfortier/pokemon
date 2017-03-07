@@ -541,7 +541,6 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			// TODO: This should be passes in the generator instead of being hardcoded
 			wish = caster.getAttack().namesies() == AttackNamesies.LUNAR_DANCE ? "lunar dance" : "healing wish";
 			super.cast(b, caster, victim, source, printCast);
 		}
