@@ -43,7 +43,7 @@ import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.Team;
 import trainer.Trainer;
-import trainer.Trainer.Action;
+import trainer.TrainerAction;
 import trainer.WildPokemon;
 import trainer.player.Player;
 import type.TypeAdvantage;
@@ -108,7 +108,7 @@ public class Battle {
 			Trainer opponentTrainer = (Trainer) this.opponent;
 			opponentTrainer.enterBattle();
 			Messages.add(opponentTrainer.getName() + " wants to fight!");
-			opponentTrainer.setAction(Action.FIGHT);
+			opponentTrainer.setAction(TrainerAction.FIGHT);
 			enterBattle(this.opponent.front());
 		}
 		else {
@@ -273,7 +273,7 @@ public class Battle {
 	// It will return false if the trainer tried to run, switched Pokemon, or used an item
 	private boolean isFighting(boolean team) {
 		Team trainer = getTrainer(team);
-		return trainer instanceof WildPokemon || ((Trainer)trainer).getAction() == Action.FIGHT;
+		return trainer instanceof WildPokemon || ((Trainer)trainer).getAction() == TrainerAction.FIGHT;
 	}
 
 	private void endTurn() {
@@ -414,7 +414,7 @@ public class Battle {
 		}
 
 		Messages.add("Can't escape!");
-		player.performAction(this, Action.RUN);
+		player.performAction(this, TrainerAction.RUN);
 		return false;
 	}
 

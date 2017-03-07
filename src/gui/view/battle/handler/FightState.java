@@ -8,7 +8,7 @@ import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
 import pokemon.ActivePokemon;
-import trainer.Trainer.Action;
+import trainer.TrainerAction;
 import trainer.player.Player;
 import util.StringUtils;
 
@@ -90,7 +90,7 @@ public class FightState implements VisualStateHandler {
 
                 // Execute the move if valid
                 if (Move.validMove(currentBattle, front, selectedMoveList.get(i), true)) {
-                    player.performAction(currentBattle, Action.FIGHT);
+                    player.performAction(currentBattle, TrainerAction.FIGHT);
                     view.setVisualState(VisualState.MESSAGE);
                     view.cycleMessage(false);
                 }

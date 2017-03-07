@@ -66,7 +66,7 @@ import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import trainer.Team;
 import trainer.Trainer;
-import trainer.Trainer.Action;
+import trainer.TrainerAction;
 import type.Type;
 import type.TypeAdvantage;
 import util.GeneralUtils;
@@ -1875,13 +1875,16 @@ public abstract class Attack implements Serializable {
 
 		public int getPriority(Battle b, ActivePokemon me) {
 			Team trainer = b.getTrainer(!me.isPlayer()); // TODO: Make switching occur at its priority
-			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) return 7;
+			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
+				return 7;
+			}
+			
 			return super.priority;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Team trainer = b.getTrainer(victim);
-			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) {
+			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
 				return 2;
 			}
 			

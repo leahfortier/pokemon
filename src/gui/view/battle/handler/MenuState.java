@@ -9,7 +9,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import pokemon.ActivePokemon;
-import trainer.Trainer.Action;
+import trainer.TrainerAction;
 import trainer.player.Player;
 
 import java.awt.Color;
@@ -91,7 +91,7 @@ public class MenuState implements VisualStateHandler {
 
             // Move is forced -- don't show menu, but execute the move
             if (Move.forceMove(currentBattle, player.front())) {
-                player.performAction(currentBattle, Action.FIGHT);
+                player.performAction(currentBattle, TrainerAction.FIGHT);
                 view.setVisualState(VisualState.MESSAGE);
                 view.cycleMessage(false);
             }

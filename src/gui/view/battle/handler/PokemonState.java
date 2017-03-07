@@ -15,7 +15,7 @@ import map.Direction;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.Trainer;
-import trainer.Trainer.Action;
+import trainer.TrainerAction;
 import trainer.player.Player;
 import type.Type;
 import util.FontMetrics;
@@ -331,7 +331,7 @@ public class PokemonState implements VisualStateHandler {
             if (view.isState(VisualState.USE_ITEM)) {
                 // Valid item
                 if (player.getBag().battleUseItem(VisualState.getSelectedItem(), selectedPkm, currentBattle)) {
-                    player.performAction(currentBattle, Action.ITEM);
+                    player.performAction(currentBattle, TrainerAction.ITEM);
                     view.setVisualState(VisualState.MENU);
                     view.cycleMessage(false);
                 }
@@ -348,7 +348,7 @@ public class PokemonState implements VisualStateHandler {
                     currentBattle.enterBattle(player.front());
 
                     if (!switchForced) {
-                        player.performAction(currentBattle, Action.SWITCH);
+                        player.performAction(currentBattle, TrainerAction.SWITCH);
                     }
 
                     view.cycleMessage(false);

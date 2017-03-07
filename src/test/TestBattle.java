@@ -8,7 +8,7 @@ import pokemon.PokemonNamesies;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.Trainer;
-import trainer.Trainer.Action;
+import trainer.TrainerAction;
 import trainer.WildPokemon;
 
 class TestBattle extends Battle {
@@ -53,7 +53,7 @@ class TestBattle extends Battle {
     }
 
     void fight(AttackNamesies attackingMove, AttackNamesies defendingMove) {
-        getPlayer().setAction(Action.FIGHT);
+        getPlayer().setAction(TrainerAction.FIGHT);
 
         getAttacking().setupMove(attackingMove, this);
         getDefending().setupMove(defendingMove, this);
