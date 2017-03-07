@@ -27,4 +27,9 @@ class LevelUpEvolution extends BaseEvolution {
     public String toString() {
         return EvolutionType.LEVEL + " " + super.getEvolution().namesies() + " " + this.level;
     }
+
+    @Override
+    public String getString() {
+        return "Level " + level;
+    }
 }

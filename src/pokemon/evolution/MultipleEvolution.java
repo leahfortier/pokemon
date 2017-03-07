@@ -8,7 +8,7 @@ import util.RandomUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-class MultipleEvolution extends Evolution {
+public class MultipleEvolution extends Evolution {
     private static final long serialVersionUID = 1L;
 
     private Evolution[] evolutions;
@@ -43,6 +43,15 @@ class MultipleEvolution extends Evolution {
         }
 
         return namesies;
+    }
+
+    public Evolution[] getFullEvolutions() {
+        return this.evolutions;
+    }
+
+    @Override
+    public String getString() {
+        return null;
     }
 
     @Override

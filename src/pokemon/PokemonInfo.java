@@ -14,6 +14,7 @@ import util.FileIO;
 import util.FileName;
 import util.GeneralUtils;
 import util.RandomUtils;
+import util.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -110,7 +111,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return type;
 	}
 
-	Map<Integer, List<AttackNamesies>> getLevelUpMoves() {
+	public Map<Integer, List<AttackNamesies>> getLevelUpMoves() {
 		return levelUpMoves;
 	}
 
@@ -122,8 +123,14 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return growthRate;
 	}
 
-	int getEggSteps() {
+	public int getEggSteps() {
 		return eggSteps;
+	}
+
+	public String getAbilitiesString() {
+		return abilities[0].getName() + (abilities[1] == AbilityNamesies.NO_ABILITY
+						? StringUtils.empty()
+						: ", " + abilities[1].getName());
 	}
 
 	public AbilityNamesies[] getAbilities() {
@@ -142,7 +149,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return baseExp;
 	}
 
-	int[] getGivenEVs() {
+	public int getGivenEV(int index) {
+		return givenEVs[index];
+	}
+
+	public int[] getGivenEVs() {
 		return givenEVs;
 	}
 
@@ -339,6 +350,10 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private static PokemonInfo getBaseEvolution(PokemonInfo targetPokes) {
 		if (targetPokes.namesies() == PokemonNamesies.MANAPHY) {
 			return PokemonInfo.getPokemonInfo(PokemonNamesies.PHIONE);
+		}
+
+		if (targetPokes.namesies() == PokemonNamesies.SHEDINJA) {
+			return PokemonInfo.getPokemonInfo(PokemonNamesies.NINCADA);
 		}
 
 		Set<PokemonNamesies> allPokes = EnumSet.complementOf(EnumSet.of(PokemonNamesies.NONE));

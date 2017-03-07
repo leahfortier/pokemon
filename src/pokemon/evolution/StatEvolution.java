@@ -44,6 +44,11 @@ class StatEvolution extends Evolution {
     }
 
     @Override
+    public String getString() {
+        return this.evolution.getString() + ", " + lower.getName() + " " + (equals ? "=" : "<") + " " + higher.getName();
+    }
+
+    @Override
     public String toString() {
         return EvolutionType.STAT + " " + (equals ? "Equal" : "Higher") + " " + higher + " " + lower + " " + evolution;
     }
