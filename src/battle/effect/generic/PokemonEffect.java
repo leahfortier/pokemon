@@ -2033,7 +2033,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			hp = victim.reduceHealthFraction(b, .25) + 1;
 			super.cast(b, caster, victim, source, printCast);
-			Messages.add(new MessageUpdate().updatePokemon(b, victim));
+			
+			String imageName = "substitute" + (victim.isPlayer() ? "-back" : "");
+			Messages.add(new MessageUpdate().updatePokemon(b, victim).withImageName(imageName, victim.isPlayer()));
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
@@ -2062,7 +2064,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
 			this.hp -= damageAmount;
 			if (this.hp <= 0) {
-				Messages.add("The substitute broke!");
+				Messages.add(new MessageUpdate("The substitute broke!").withNewPokemon(damageTaker.getPokemonInfo(), damageTaker.isShiny(), true, damageTaker.isPlayer()));
 				damageTaker.getAttributes().removeEffect(this.namesies());
 			}
 			else {
