@@ -1800,35 +1800,26 @@ FormChange:
 		###
 *
 EndTurnFormChange:
-	Header: boolean formCheck(ActivePokemon formsie)
+	Header: void changeForm(ActivePokemon formsie)
 	AccessModifier: Private
 	Body:
-		return {17-};
+		if (this.{1} != {17-}) {
+			this.{1} = !{1};
+			Messages.add(
+					new MessageUpdate(formsie.getName() + " changed into " + ({1} ? "{10}" : "{3}") + " Forme!")
+							.withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), {1}), formsie.isPlayer())
+			);
+		}
 		###
 	AddMapField: FormChange: {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16}
 	AddInterface: EndTurnEffect
 	AddInterface: EntryEffect
 	AddMapField: Enter:
-		if (formCheck(enterer)) {
-			{1} = true;
-			Messages.add(enterer.getName() + " changed into {10} Forme!");
-		}
-		else {
-			{1} = false;
-			Messages.add(enterer.getName() + " changed into {3} Forme!");
-		}
+		{1} = false;
+		changeForm(enterer);
 		###
 	AddMapField: ApplyEndTurn:
-		if (formCheck(victim)) {
-			if (!{1}) {
-				{1} = true;
-				Messages.add(victim.getName() + " changed into {10} Forme!");	
-			}
-		}
-		else if ({1}){
-			{1} = false;
-			Messages.add(victim.getName() + " changed into {3} Forme!");
-		}
+		changeForm(victim);
 		###
 *
 GET_DAT_CASH_MONEY_TWICE_ITEM:

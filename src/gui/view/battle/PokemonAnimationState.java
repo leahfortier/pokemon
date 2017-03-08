@@ -135,8 +135,7 @@ class PokemonAnimationState {
 
         state.hp = oldState.hp = hp;
         state.type = type;
-        state.shiny = shiny;
-        state.imageName = pokemon.getImageName(state.shiny, !isPlayer);
+        state.imageName = pokemon.getImageName(shiny, !isPlayer);
         state.caught = battleView.getCurrentBattle().isWildBattle() && Game.getPlayer().getPokedex().isCaught(pokemon.namesies());
         state.name = name;
         state.gender = gender;
@@ -158,8 +157,7 @@ class PokemonAnimationState {
         state.type = newType;
     }
 
-    private void startPokemonUpdateAnimation(PokemonInfo newPokemon, boolean newShiny, boolean animate) {
-        state.shiny = newShiny;
+    private void startPokemonUpdateAnimation(String imageName, boolean animate) {
         if (!StringUtils.isNullOrEmpty(state.imageName)) {
             oldState.imageName = state.imageName;
             if (animate) {
@@ -167,8 +165,12 @@ class PokemonAnimationState {
             }
         }
 
-        state.imageName = newPokemon.getImageName(state.shiny, !isPlayer);
+        state.imageName = imageName;
         animationCatchDuration = 0;
+    }
+
+    private void startPokemonUpdateAnimation(PokemonInfo newPokemon, boolean newShiny, boolean animate) {
+        startPokemonUpdateAnimation(newPokemon.getImageName(newShiny, !isPlayer), animate);
     }
 
     private void startCatchAnimation(int duration) {
@@ -493,6 +495,10 @@ class PokemonAnimationState {
                 startCatchAnimation(newMessage.getDuration());
             }
 
+            if (newMessage.imageUpdate()) {
+                startPokemonUpdateAnimation(newMessage.getImageName(), newMessage.isAnimate());
+            }
+
             if (newMessage.pokemonUpdate()) {
                 startPokemonUpdateAnimation(newMessage.getPokemon(), newMessage.getShiny(), newMessage.isAnimate());
             }
@@ -522,7 +528,6 @@ class PokemonAnimationState {
         private String name;
         private Type[] type;
         private float expRatio;
-        private boolean shiny;
         private boolean caught;
         private Gender gender;
         private ActivePokemon frontPokemon;

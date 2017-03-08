@@ -214,11 +214,18 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	}
 
 	public String getImageName(boolean shiny, boolean front) {
-		return getImageName(this, shiny, front);
+		return getImageName(this, shiny, front, false);
 	}
 
-	private static String getImageName(PokemonInfo pokemonInfo, boolean shiny, boolean front) {
+	public String getImageName(boolean shiny, boolean front, boolean form) {
+		return getImageName(this, shiny, front, form);
+	}
+
+	private static String getImageName(PokemonInfo pokemonInfo, boolean shiny, boolean front, boolean form) {
 		String imageName = pokemonInfo.getBaseImageName();
+		if (form) {
+			imageName += "b";
+		}
 		if (shiny) {
 			imageName += "-shiny";
 		}
