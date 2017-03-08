@@ -970,21 +970,34 @@ public final class EffectInterfaces {
 		}
 	}
 
-	public interface NoAdvantageChanger {
+	public interface AttackingNoAdvantageChanger {
 		boolean negateNoAdvantage(Type attackingType, Type defendingType);
 
-		static boolean checkNoAdvantageChanger(Battle b, ActivePokemon attacking, ActivePokemon defending, Type attackingType, Type defendingType) {
-			// TODO: I really hate it when the invokee list takes from the attacker and the defender -- need to rewrite all of this
-			// Check the defending Pokemon's effects and held item as well as the attacking Pokemon's ability for advantage changes
-			List<Object> invokees = new ArrayList<>();
-			invokees.addAll(defending.getEffects());
-			invokees.add(defending.getHeldItem(b));
-			invokees.add(attacking.getAbility());
-			
+		static boolean checkAttackingNoAdvantageChanger(Battle b, ActivePokemon attacking, Type attackingType, Type defendingType) {
+			List<Object> invokees = b.getEffectsList(attacking);
 			for (Object invokee : invokees) {
-				if (invokee instanceof NoAdvantageChanger && Effect.isActiveEffect(invokee)) {
+				if (invokee instanceof AttackingNoAdvantageChanger && Effect.isActiveEffect(invokee)) {
 					
-					NoAdvantageChanger effect = (NoAdvantageChanger)invokee;
+					AttackingNoAdvantageChanger effect = (AttackingNoAdvantageChanger)invokee;
+					if (effect.negateNoAdvantage(attackingType, defendingType)) {
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		}
+	}
+
+	public interface DefendingNoAdvantageChanger {
+		boolean negateNoAdvantage(Type attackingType, Type defendingType);
+
+		static boolean checkDefendingNoAdvantageChanger(Battle b, ActivePokemon defending, Type attackingType, Type defendingType) {
+			List<Object> invokees = b.getEffectsList(defending);
+			for (Object invokee : invokees) {
+				if (invokee instanceof DefendingNoAdvantageChanger && Effect.isActiveEffect(invokee)) {
+					
+					DefendingNoAdvantageChanger effect = (DefendingNoAdvantageChanger)invokee;
 					if (effect.negateNoAdvantage(attackingType, defendingType)) {
 						return true;
 					}

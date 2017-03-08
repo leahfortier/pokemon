@@ -920,7 +920,8 @@ Pursuit:
 		return 1;
 		###
 	GetPriority: 
-		Team trainer = b.getTrainer(!me.isPlayer()); // TODO: Make switching occur at its priority
+		// TODO: Make switching occur at its priority
+		Team trainer = b.getTrainer(!me.isPlayer());
 		if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
 			return 7;
 		}
@@ -4789,7 +4790,6 @@ Facade:
 	Type: Normal
 	Pow: 70
 	PowerMultiplierCondition: 2 user.hasStatus()
-	Comments: // TODO: Should not take the attack reduction from burn
 	Acc: 100
 	Cat: Physical
 *
@@ -5401,7 +5401,6 @@ Role Play:
 	Int: ChangeAbilityMove
 	Effect: ChangeAbility
 	AbilityChange: 
-		// TODO: Combine with Trace
 		Ability otherAbility = b.getOtherPokemon(victim).getAbility();
 		return otherAbility.namesies().getNewAbility();
 		###

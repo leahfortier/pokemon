@@ -23,6 +23,7 @@ import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
 import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
+import battle.effect.generic.EffectInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
@@ -31,7 +32,6 @@ import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
-import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
@@ -1405,7 +1405,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class Foresight extends PokemonEffect implements NoAdvantageChanger {
+	static class Foresight extends PokemonEffect implements DefendingNoAdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		Foresight() {
@@ -1430,7 +1430,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 	}
 
-	static class MiracleEye extends PokemonEffect implements NoAdvantageChanger {
+	static class MiracleEye extends PokemonEffect implements DefendingNoAdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		MiracleEye() {

@@ -496,19 +496,20 @@ ChangeAttackTypeEffect:
 		InvokeName: updateAttackType
 	*
 ***
-NoAdvantageChanger:
+AttackingNoAdvantageChanger:
 	Method:
 		Header: boolean negateNoAdvantage(Type attackingType, Type defendingType)
 		Invoke: Check true
-		InvokeParameters: Battle b, ActivePokemon attacking, ActivePokemon defending
-		SetInvokees:
-			// TODO: I really hate it when the invokee list takes from the attacker and the defender -- need to rewrite all of this
-			// Check the defending Pokemon's effects and held item as well as the attacking Pokemon's ability for advantage changes 
-			List<Object> invokees = new ArrayList<>();
-			invokees.addAll(defending.getEffects());
-			invokees.add(defending.getHeldItem(b));
-			invokees.add(attacking.getAbility());
-			###
+		InvokeParameters: Battle b, ActivePokemon attacking
+		EffectList: attacking
+	*
+***
+DefendingNoAdvantageChanger:
+	Method:
+		Header: boolean negateNoAdvantage(Type attackingType, Type defendingType)
+		Invoke: Check true
+		InvokeParameters: Battle b, ActivePokemon defending
+		EffectList: defending
 	*
 ***
 ChangeMoveListEffect:

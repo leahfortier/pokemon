@@ -534,6 +534,7 @@ Leaf Guard:
 Scrappy:
 	Desc: Enables moves to hit Ghost-type foes.
 	RemoveAdvantageType: Ghost attacking == Type.NORMAL || attacking == Type.FIGHTING
+	Int: AttackingNoAdvantageChanger
 *
 Swift Swim:
 	Desc: Boosts the Pok\u00e9mon's Speed in rain.

@@ -1874,7 +1874,8 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int getPriority(Battle b, ActivePokemon me) {
-			Team trainer = b.getTrainer(!me.isPlayer()); // TODO: Make switching occur at its priority
+			// TODO: Make switching occur at its priority
+			Team trainer = b.getTrainer(!me.isPlayer());
 			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
 				return 7;
 			}
@@ -7867,7 +7868,6 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	// TODO: Should not take the attack reduction from burn
 	static class Facade extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
@@ -8867,7 +8867,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			// TODO: Combine with Trace
 			Ability otherAbility = b.getOtherPokemon(victim).getAbility();
 			return otherAbility.namesies().getNewAbility();
 		}

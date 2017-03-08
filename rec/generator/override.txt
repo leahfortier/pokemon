@@ -1408,13 +1408,13 @@ HealPartyStatus:
 	AddMapField: SelfTarget: True
 *
 RemoveAdvantageType:
-	AddInterface: NoAdvantageChanger
 	AddMapField: NegateNoAdvantage: defending == Type.{11} && ({2-})
 *
 ForesightEffect:
 	AddMapField: CastMessage: user.getName() + " identified " + victim.getName() + "!"
 	AddMapField: CanHave: True
 	AddMapField: UsedProof: True
+	AddInterface: DefendingNoAdvantageChanger
 	AddMapField: RemoveAdvantageType: {0}
 *
 ForesightMove:

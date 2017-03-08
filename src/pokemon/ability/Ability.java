@@ -18,6 +18,7 @@ import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
+import battle.effect.generic.EffectInterfaces.AttackingNoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
@@ -38,7 +39,6 @@ import battle.effect.generic.EffectInterfaces.MaxLevelWildEncounterEffect;
 import battle.effect.generic.EffectInterfaces.ModifyStageValueEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
-import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentAttackSelectionBlockerEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
@@ -1375,7 +1375,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Scrappy extends Ability implements NoAdvantageChanger {
+	static class Scrappy extends Ability implements AttackingNoAdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		Scrappy() {
