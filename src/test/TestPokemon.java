@@ -8,24 +8,25 @@ import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
+import test.battle.TestBattle;
 import util.StringUtils;
 
-class TestPokemon extends ActivePokemon {
-    TestPokemon(final PokemonNamesies pokemon) {
+public class TestPokemon extends ActivePokemon {
+    public TestPokemon(final PokemonNamesies pokemon) {
         super(pokemon, 100, false, false);
     }
 
-    TestPokemon withGender(Gender gender) {
+    public TestPokemon withGender(Gender gender) {
         super.setGender(gender);
         return this;
     }
 
-    TestPokemon withAbility(AbilityNamesies ability) {
+    public TestPokemon withAbility(AbilityNamesies ability) {
         super.setAbility(ability);
         return this;
     }
 
-    TestPokemon withMoves(AttackNamesies... moves) {
+    public TestPokemon withMoves(AttackNamesies... moves) {
         // TODO: This shouldn't work I hate this it should be immutable
         this.getActualMoves().clear();
 
@@ -37,12 +38,12 @@ class TestPokemon extends ActivePokemon {
         return this;
     }
 
-    void setupMove(AttackNamesies attackNamesies, Battle battle) {
+    public void setupMove(AttackNamesies attackNamesies, Battle battle) {
         this.setMove(new Move(attackNamesies));
         this.startAttack(battle);
     }
 
-    void apply(boolean assertion, AttackNamesies attack, TestBattle battle) {
+    public void apply(boolean assertion, AttackNamesies attack, TestBattle battle) {
         ActivePokemon other = battle.getOtherPokemon(this);
 
         this.setupMove(attack, battle);

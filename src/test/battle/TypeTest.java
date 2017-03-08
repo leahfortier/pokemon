@@ -1,4 +1,4 @@
-package test;
+package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
+import test.TestPokemon;
 import type.Type;
 import type.TypeAdvantage;
 import util.StringUtils;

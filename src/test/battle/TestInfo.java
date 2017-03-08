@@ -1,4 +1,4 @@
-package test;
+package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.effect.generic.EffectNamesies;

@@ -1,4 +1,4 @@
-package test;
+package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.effect.generic.EffectNamesies;
@@ -8,6 +8,7 @@ import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import test.TestPokemon;
 import util.StringUtils;
 
 public class ModifierTest {

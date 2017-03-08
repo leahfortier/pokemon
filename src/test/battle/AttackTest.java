@@ -1,7 +1,9 @@
-package test;
+package test.battle;
 
+import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.attack.MoveType;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
@@ -11,6 +13,8 @@ import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import test.GeneralTest;
+import test.TestPokemon;
 import trainer.Team;
 import type.Type;
 
@@ -19,6 +23,15 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class AttackTest {
+    @Test
+    public void testPhysicalContact() {
+        for (AttackNamesies attackNamesies : AttackNamesies.values()) {
+            Attack attack = attackNamesies.getAttack();
+            Assert.assertFalse("Status moves cannot have physical contact. Move: " + attack.getName(),
+                    attack.isStatusMove() && attack.isMoveType(MoveType.PHYSICAL_CONTACT));
+        }
+    }
+
     @Test
     public void recoilTest() {
         TestBattle battle = TestBattle.create();
@@ -179,8 +192,8 @@ public class AttackTest {
         Assert.assertTrue(attacking.getAttributes().getStage(Stat.SPEED) == -1);
         Assert.assertFalse(attacking.hasEffect(EffectNamesies.CURSE));
         Assert.assertTrue(defending.hasEffect(EffectNamesies.CURSE));
-        Assert.assertTrue(TestUtil.healthRatioMatch(attacking, .5));
-        Assert.assertTrue(TestUtil.healthRatioMatch(defending, .75));
+        Assert.assertTrue(GeneralTest.healthRatioMatch(attacking, .5));
+        Assert.assertTrue(GeneralTest.healthRatioMatch(defending, .75));
     }
 
     // Used for attacks that have a random element to them -- like Tri-Attack and Acupressure -- required running several times

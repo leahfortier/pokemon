@@ -16,6 +16,8 @@ import java.util.Set;
 
 public class InputFormatter {
 
+    protected void validate(ClassFields fields) {}
+
     protected String replaceBody(String body, String original, String remaining, int parameterIndex, int numParameters) {
         for (ReplaceType replaceType : ReplaceType.values()) {
             body = replaceType.replaceBody(body, original, remaining, parameterIndex, numParameters);

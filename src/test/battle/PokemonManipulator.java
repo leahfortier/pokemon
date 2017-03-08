@@ -1,4 +1,4 @@
-package test;
+package test.battle;
 
 import battle.Battle;
 import battle.effect.generic.CastSource;
@@ -6,6 +6,7 @@ import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
 import pokemon.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
+import test.TestPokemon;
 
 interface PokemonManipulator {
     void manipulate(TestBattle battle, TestPokemon attacking, TestPokemon defending);

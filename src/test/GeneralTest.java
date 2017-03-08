@@ -42,4 +42,8 @@ public class GeneralTest {
         Assert.assertTrue(second.getGender() == Gender.MALE);
         Assert.assertFalse(Gender.oppositeGenders(first, second));
     }
+
+    public static boolean healthRatioMatch(TestPokemon pokemon, double fraction) {
+        return (int)(Math.ceil(fraction*pokemon.getMaxHP())) == pokemon.getHP();
+    }
 }

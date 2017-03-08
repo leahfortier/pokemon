@@ -1,4 +1,4 @@
-package test;
+package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import test.TestPokemon;
 import type.Type;
 
 public class EffectTest {

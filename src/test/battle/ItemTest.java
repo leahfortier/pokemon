@@ -1,4 +1,4 @@
-package test;
+package test.battle;
 
 import battle.attack.AttackNamesies;
 import item.ItemNamesies;
@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
+import test.TestPokemon;
 
 public class ItemTest {
     @Test

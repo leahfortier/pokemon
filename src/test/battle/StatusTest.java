@@ -1,4 +1,4 @@
-package test;
+package test.battle;
 
 import battle.Battle;
 import battle.attack.AttackNamesies;
@@ -10,6 +10,7 @@ import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import test.TestPokemon;
 import type.Type;
 
 /*

@@ -1,17 +1,18 @@
-package test;
+package test.battle;
 
 import battle.Battle;
 import battle.attack.AttackNamesies;
-import org.junit.Test;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
+import test.TestCharacter;
+import test.TestPokemon;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.WildPokemon;
 
-class TestBattle extends Battle {
+public class TestBattle extends Battle {
     private TestBattle(Opponent opponent) {
        super(opponent);
     }
@@ -101,10 +102,5 @@ class TestBattle extends Battle {
         nahMahBoi.setupMove(AttackNamesies.SPLASH, testBattle);
 
         return testBattle;
-    }
-
-    @Test
-    public void criticalHitTest() {
-        // TODO
     }
 }
