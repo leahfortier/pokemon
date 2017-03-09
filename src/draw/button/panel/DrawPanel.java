@@ -1,6 +1,7 @@
 package draw.button.panel;
 
 import battle.attack.Attack;
+import draw.Alignment;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.PolygonUtils;
@@ -310,6 +311,14 @@ public class DrawPanel {
 
         FontMetrics.setFont(g, fontSize);
         TextUtils.drawCenteredHeightString(g, label, startX, centerY);
+    }
+
+    public void drawRightLabel(Graphics g, int fontSize, String label) {
+        int startX = rightX() - this.getTextSpace(g);
+        int centerY = centerY();
+
+        FontMetrics.setFont(g, fontSize);
+        TextUtils.drawCenteredHeightString(g, label, startX, centerY, Alignment.RIGHT);
     }
 
     public void imageLabel(Graphics g, BufferedImage image) {

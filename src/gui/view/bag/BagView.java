@@ -1,6 +1,7 @@
 package gui.view.bag;
 
 import battle.attack.Attack;
+import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import draw.DrawUtils;
@@ -20,6 +21,7 @@ import item.Item;
 import item.ItemNamesies;
 import item.bag.Bag;
 import item.bag.BagCategory;
+import item.use.TechnicalMachine;
 import main.Game;
 import main.Global;
 import map.Direction;
@@ -64,8 +66,8 @@ public class BagView extends View {
 	private final DrawPanel selectedPanel;
 
 	private int pageNum;
-	private int selectedTab;
 	private int selectedButton;
+	private BagCategory selectedTab;
 	private MessageUpdate message;
 
 	BagState state;
@@ -129,7 +131,7 @@ public class BagView extends View {
 				.withFullTransparency()
 				.withBlackOutline();
 
-		selectedTab = 0;
+		selectedTab = CATEGORIES[0];
 		selectedButton = 0;
 		selectedItem = ItemNamesies.NO_ITEM;
 		
@@ -173,7 +175,7 @@ public class BagView extends View {
 					useStates.length,
 					new int[] {
 							tabIndex == lastIndex ? PARTY : useStates[tabIndex + 1].buttonIndex, // Right
-							selectedTab, // Up
+							selectedTab.ordinal(), // Up
 							tabIndex == 0 ? PARTY : useStates[tabIndex - 1].buttonIndex, // Left
 							tabIndex <= useStates.length/2 ? ITEMS : ITEMS + 1 // Down
 					}
@@ -253,7 +255,7 @@ public class BagView extends View {
 			}
 		}
 
-		Set<ItemNamesies> list = player.getBag().getCategory(CATEGORIES[selectedTab]);
+		Set<ItemNamesies> list = player.getBag().getCategory(selectedTab);
 		Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(list, pageNum, ITEMS_PER_PAGE);
 
 		for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
@@ -313,7 +315,7 @@ public class BagView extends View {
 		BasicPanels.drawCanvasPanel(g);
 		
 		// Info Boxes
-		bagPanel.withBackgroundColor(CATEGORIES[selectedTab].getColor())
+		bagPanel.withBackgroundColor(selectedTab.getColor())
 				.drawBackground(g);
 
 		// Draw Use State buttons
@@ -360,7 +362,7 @@ public class BagView extends View {
 		
 		// Draw each items in category
 		itemsPanel.drawBackground(g);
-		Set<ItemNamesies> list = bag.getCategory(CATEGORIES[selectedTab]);
+		Set<ItemNamesies> list = bag.getCategory(selectedTab);
 		Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(list, pageNum, ITEMS_PER_PAGE);
 		
 		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
@@ -445,7 +447,7 @@ public class BagView extends View {
 
 
 				BufferedImage img = partyTiles.getTile(p.getTinyImageName());
-				ImageUtils.drawCenteredImage(g, img, 30, 30); // TODO: This looks slightly off
+				ImageUtils.drawCenteredImage(g, img, 30, pokemonPanel.centerY());
 				
 				g.setColor(Color.BLACK);
 				FontMetrics.setFont(g, 14);
@@ -454,29 +456,47 @@ public class BagView extends View {
 				g.drawString(p.getActualName() + " " + p.getGenderString(), 50, 22);
 
 				if (!p.isEgg()) {
-					// Level
-					g.drawString("Lv" + p.getLevel(), 153, 22);
-					
-					// Status condition
-					TextUtils.drawRightAlignedString(g, p.getStatus().getType().getName(), 293, 22);
-					
-					// Draw HP Box
-					g.fillRect(50, 26, 244, 11);
-					g.setColor(Color.WHITE);
-					g.fillRect(52, 28, 240, 7);
-					g.setColor(p.getHPColor());
-					g.fillRect(52, 28, (int)(p.getHPRatio()*240), 7);
-					
-					g.setColor(Color.BLACK);
-					FontMetrics.setFont(g, 12);
-					
-					g.drawString(p.getActualHeldItem().getName(), 50, 47);
-					TextUtils.drawRightAlignedString(g, p.getHP() + "/" + p.getMaxHP(), 293, 47);
-					
-					if (p.hasStatus(StatusCondition.FAINTED)) {
-						// TODO: Look if this color appears in multiple place and see if it should be a constant
-						pokemonButton.fillTranslated(g, new Color(0, 0, 0, 128));
-					}	
+					if (selectedTab == BagCategory.TM && selectedItem != ItemNamesies.NO_ITEM) {
+						AttackNamesies tm = ((TechnicalMachine)selectedItem.getItem()).getAttack();
+
+						final String message;
+						if (p.hasActualMove(tm)) {
+							message = "Learned.";
+						}
+						else if (p.getPokemonInfo().canLearnMove(tm)) {
+							message = "Able!";
+						}
+						else {
+							message = "Unable...";
+						}
+
+						pokemonPanel.drawRightLabel(g, 18, message);
+					}
+					else {
+						// Level
+						g.drawString("Lv" + p.getLevel(), 153, 22);
+
+						// Status condition
+						TextUtils.drawRightAlignedString(g, p.getStatus().getType().getName(), 293, 22);
+
+						// Draw HP Box
+						g.fillRect(50, 26, 244, 11);
+						g.setColor(Color.WHITE);
+						g.fillRect(52, 28, 240, 7);
+						g.setColor(p.getHPColor());
+						g.fillRect(52, 28, (int)(p.getHPRatio()*240), 7);
+
+						g.setColor(Color.BLACK);
+						FontMetrics.setFont(g, 12);
+
+						g.drawString(p.getActualHeldItem().getName(), 50, 47);
+						TextUtils.drawRightAlignedString(g, p.getHP() + "/" + p.getMaxHP(), 293, 47);
+
+						if (p.hasStatus(StatusCondition.FAINTED)) {
+							// TODO: Look if this color appears in multiple place and see if it should be a constant
+							pokemonButton.fillTranslated(g, new Color(0, 0, 0, 128));
+						}
+					}
 				}
 				
 				g.translate(-pokemonButton.x, -pokemonButton.y);
@@ -491,7 +511,7 @@ public class BagView extends View {
 		for (int i = 0; i < CATEGORIES.length; i++) {
 			Button tabButton = tabButtons[i];
 			tabButton.fillTransparent(g, CATEGORIES[i].getColor());
-			tabButton.outlineTab(g, i, selectedTab);
+			tabButton.outlineTab(g, i, selectedTab.ordinal());
 
 			g.translate(tabButton.x, tabButton.y);
 
@@ -524,18 +544,18 @@ public class BagView extends View {
 	}
 
 	void updateCategory() {
-		changeCategory(this.selectedTab);
+		changeCategory(this.selectedTab.ordinal());
 	}
 
 	private void changeCategory(int index) {
-		if (selectedTab != index) {
+		if (selectedTab.ordinal() != index) {
 			pageNum = 0;
 		}
 		
-		selectedTab = index;
+		selectedTab = CATEGORIES[index];
 		state = BagState.ITEM_SELECT;
 
-		Set<ItemNamesies> list = Game.getPlayer().getBag().getCategory(CATEGORIES[selectedTab]);
+		Set<ItemNamesies> list = Game.getPlayer().getBag().getCategory(selectedTab);
 		selectedItem = list.size() > 0 ? list.iterator().next() : ItemNamesies.NO_ITEM;
 		
 		updateActiveButtons();
@@ -558,7 +578,7 @@ public class BagView extends View {
 			partyButtons[i].setActive(state == BagState.POKEMON_SELECT && i < team.size());
 		}
 		
-		int displayed = player.getBag().getCategory(CATEGORIES[selectedTab]).size();
+		int displayed = player.getBag().getCategory(selectedTab).size();
 		for (int i = 0; i < ITEMS_PER_PAGE; i++) {
 			itemButtons[i].setActive(state == BagState.ITEM_SELECT && i < displayed - pageNum*ITEMS_PER_PAGE);
 		}
