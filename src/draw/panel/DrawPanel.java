@@ -1,4 +1,4 @@
-package draw.button.panel;
+package draw.panel;
 
 import battle.attack.Attack;
 import draw.Alignment;

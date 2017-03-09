@@ -40,6 +40,8 @@ public class SelectTool extends Tool {
             for (int currY = 0; currY < copiedTiles.getHeight(); currY++) {
                 int val = copiedTiles.getRGB(currX, currY);
                 Point delta = mapMaker.setTile(Point.add(location, currX, currY), val);
+
+                // Add the delta in case the map was resized in the paste
                 location = Point.add(location, delta);
             }
         }

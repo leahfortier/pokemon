@@ -1,6 +1,6 @@
 package gui.view;
 
-import draw.button.panel.BasicPanels;
+import draw.panel.BasicPanels;
 import gui.GameData;
 import gui.IndexTileSet;
 import gui.TileSet;

@@ -1,4 +1,4 @@
-package draw.button.panel;
+package draw.panel;
 
 import draw.button.Button;
 import main.Global;

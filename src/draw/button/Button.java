@@ -5,7 +5,7 @@ import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.PolygonUtils;
 import draw.TextUtils;
-import draw.button.panel.DrawPanel;
+import draw.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import map.Direction;

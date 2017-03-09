@@ -4,7 +4,7 @@ import battle.attack.Attack;
 import battle.attack.Move;
 import draw.TextUtils;
 import draw.button.Button;
-import draw.button.panel.DrawPanel;
+import draw.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import message.Messages;

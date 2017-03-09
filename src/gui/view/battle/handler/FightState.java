@@ -3,7 +3,7 @@ package gui.view.battle.handler;
 import battle.Battle;
 import battle.attack.Move;
 import draw.button.Button;
-import draw.button.panel.DrawPanel;
+import draw.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;

@@ -1,6 +1,6 @@
 package gui.view.map;
 
-import draw.button.panel.DrawPanel;
+import draw.panel.DrawPanel;
 import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;

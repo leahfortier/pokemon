@@ -1,8 +1,8 @@
 package gui.view.battle.handler;
 
 import draw.TextUtils;
-import draw.button.panel.BasicPanels;
-import draw.button.panel.DrawPanel;
+import draw.panel.BasicPanels;
+import draw.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;

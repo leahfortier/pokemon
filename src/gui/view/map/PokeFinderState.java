@@ -2,7 +2,7 @@ package gui.view.map;
 
 import draw.ImageUtils;
 import draw.TextUtils;
-import draw.button.panel.DrawPanel;
+import draw.panel.DrawPanel;
 import gui.TileSet;
 import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;

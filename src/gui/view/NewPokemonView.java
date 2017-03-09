@@ -2,8 +2,8 @@ package gui.view;
 
 import draw.ImageUtils;
 import draw.button.Button;
-import draw.button.panel.BasicPanels;
-import draw.button.panel.DrawPanel;
+import draw.panel.BasicPanels;
+import draw.panel.DrawPanel;
 import gui.TileSet;
 import input.ControlKey;
 import input.InputControl;
