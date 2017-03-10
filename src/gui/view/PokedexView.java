@@ -205,8 +205,8 @@ class PokedexView extends View {
 		int arrowWidth = 35;
 		int arrowHeight = 20;
 
-		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, arrowWidth, arrowHeight, ButtonHoverAction.BOX, new int[] { RIGHT_ARROW, NUM_COLS *(NUM_ROWS - 1) + NUM_COLS /2 - 1, -1, 0 });
-		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, arrowWidth, arrowHeight, ButtonHoverAction.BOX, new int[] { RETURN, NUM_COLS *(NUM_ROWS - 1) + NUM_COLS /2, LEFT_ARROW, 0 });
+		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, arrowWidth, arrowHeight, ButtonHoverAction.BOX, new int[] { RIGHT_ARROW, NUM_COLS *(NUM_ROWS - 1) + NUM_COLS /2 - 1, TAB_START + NUM_TAB_BUTTONS - 1, 0 });
+		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, arrowWidth, arrowHeight, ButtonHoverAction.BOX, new int[] { TAB_START, NUM_COLS *(NUM_ROWS - 1) + NUM_COLS /2, LEFT_ARROW, 0 });
 
 		buttons[MOVES_LEFT_ARROW] = movesLeftButton = new Button(
 				infoPanel.centerX() - arrowWidth*3,
@@ -633,10 +633,14 @@ class PokedexView extends View {
 	}
 
 	private void updateActiveButtons() {
+		boolean movesView = selectedTab == TabInfo.MOVES;
 		int displayed = selected.getLevelUpMoves().size() - movePageNum*MOVES_PER_PAGE;
 		for (int i = 0; i < MOVES_PER_PAGE; i++) {
-			moveButtons[i].setActive(selectedTab == TabInfo.MOVES && i < displayed);
+			moveButtons[i].setActive(movesView && i < displayed);
 		}
+
+		movesLeftButton.setActive(movesView);
+		movesRightButton.setActive(movesView);
 	}
 
 	@Override
@@ -649,6 +653,6 @@ class PokedexView extends View {
 		selected = PokemonInfo.getPokemonInfo(1);
 		numSeen = pokedex.numSeen();
 		numCaught = pokedex.numCaught();
-		changeTab(TabInfo.MOVES);
+		changeTab(TabInfo.MAIN);
 	}
 }
