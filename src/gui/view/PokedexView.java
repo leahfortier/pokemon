@@ -252,10 +252,12 @@ class PokedexView extends View {
 		
 		if (leftButton.checkConsumePress()) {
 			pageNum = GeneralUtils.wrapIncrement(pageNum, -1, NUM_PAGES);
+			updateActiveButtons();
 		}
 		
 		if (rightButton.checkConsumePress()) {
 			pageNum = GeneralUtils.wrapIncrement(pageNum, 1, NUM_PAGES);
+			updateActiveButtons();
 		}
 
 		if (movesLeftButton.checkConsumePress()) {
@@ -633,10 +635,17 @@ class PokedexView extends View {
 	}
 
 	private void updateActiveButtons() {
+		int pokemonDisplayed = PokemonInfo.NUM_POKEMON - pageNum*PER_PAGE;
+		for (int i = 0, k = 0; i < NUM_ROWS; i++) {
+			for (int j = 0; j < NUM_COLS; j++, k++) {
+				pokemonButtons[i][j].setActive(k < pokemonDisplayed);
+			}
+		}
+
 		boolean movesView = selectedTab == TabInfo.MOVES;
-		int displayed = selected.getLevelUpMoves().size() - movePageNum*MOVES_PER_PAGE;
+		int movesDisplayed = selected.getLevelUpMoves().size() - movePageNum*MOVES_PER_PAGE;
 		for (int i = 0; i < MOVES_PER_PAGE; i++) {
-			moveButtons[i].setActive(movesView && i < displayed);
+			moveButtons[i].setActive(movesView && i < movesDisplayed);
 		}
 
 		movesLeftButton.setActive(movesView);
