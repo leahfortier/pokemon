@@ -180,18 +180,12 @@ public class MapView extends View {
 					// TODO: Checking zero logic seems like it can be simplified
 					newPointEntity.draw(g, draw, !delta.isZero());
 				}
-			}
-		}
 
-		// Front-foreground
-		for (int y = start.y; y < end.y; y++) {
-			for (int x = start.x; x < end.x; x++) {
-
-				// Draw foreground tiles
-				int fgTile = currentMap.getRGB(x, y, MapDataType.LAYER_3D);
-				if (TileSet.isValidMapTile(fgTile)) {
-					BufferedImage img = mapTiles.getTile(fgTile);
-					TileUtils.drawTileImage(g, img, x, y, draw);
+				// Draw grass tiles
+				int grassTile = currentMap.getRGB(x, y, MapDataType.TALL_GRASS);
+				if (TileSet.isValidMapTile(grassTile)) {
+					BufferedImage img = mapTiles.getTile(grassTile);
+					TileUtils.drawGrassTile(g, img, x, y, draw);
 				}
 			}
 		}

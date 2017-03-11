@@ -8,7 +8,7 @@ public enum EditType {
     BACKGROUND(MapDataType.BACKGROUND, TileModelType.TILE),
     BACK_FOREGROUND(MapDataType.BACK_FOREGROUND, TileModelType.TILE),
     FOREGROUND(MapDataType.FOREGROUND, TileModelType.TILE),
-    LAYER_3D(MapDataType.LAYER_3D, TileModelType.TILE),
+    TALL_GRASS(MapDataType.TALL_GRASS, TileModelType.TILE),
     MOVE_MAP(MapDataType.MOVE, TileModelType.MOVE),
     AREA_MAP(MapDataType.AREA, TileModelType.AREA),
     TRIGGERS(null, TileModelType.TRIGGER);

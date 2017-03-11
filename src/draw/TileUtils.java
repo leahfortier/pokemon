@@ -42,6 +42,20 @@ public final class TileUtils {
         g.drawImage(image, imageDrawLocation.x, imageDrawLocation.y, null);
     }
 
+    public static void drawGrassTile(Graphics g, BufferedImage image, Point drawLocation) {
+        Point imageDrawLocation = Point.add(
+                drawLocation,
+                Global.TILE_SIZE - image.getWidth(),
+                Global.TILE_SIZE - 2 * image.getHeight() / 3
+        );
+
+        g.drawImage(image, imageDrawLocation.x, imageDrawLocation.y, null);
+    }
+
+    public static void drawGrassTile(Graphics g, BufferedImage image, int x, int y, Point mapLocation) {
+        drawGrassTile(g, image, getDrawLocation(x, y, mapLocation));
+    }
+
     public static void drawTileImage(Graphics g, BufferedImage image, int x, int y, Point mapLocation) {
         drawTileImage(g, image, getDrawLocation(x, y, mapLocation));
     }
