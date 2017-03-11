@@ -60,7 +60,7 @@ import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 
 public class ActivePokemon implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -273,23 +273,19 @@ public class ActivePokemon implements Serializable {
 	
 	private void setMoves() {
 		moves = new ArrayList<>();
-		Map<Integer, List<AttackNamesies>> map = this.getPokemonInfo().getLevelUpMoves();
-		for (Integer levelLearned : map.keySet()) {
-			if (levelLearned > level) {
+		List<Entry<Integer, AttackNamesies>> levelUpMoves = this.getPokemonInfo().getLevelUpMoves();
+		for (Entry<Integer, AttackNamesies> entry : levelUpMoves) {
+			int levelLearned = entry.getKey();
+			AttackNamesies attackNamesies = entry.getValue();
+			if (levelLearned > level || this.hasActualMove(attackNamesies)) {
 				continue;
 			}
-			
-			for (AttackNamesies attackNamesies : map.get(levelLearned)) {
-				if (hasActualMove(attackNamesies)) {
-					continue;
-				}
-				
-				moves.add(new Move(attackNamesies.getAttack()));
-				
-				// This can be an 'if' statement, but just to be safe...
-				while (moves.size() > Move.MAX_MOVES) {
-					moves.remove(0);
-				}
+
+			moves.add(new Move(attackNamesies.getAttack()));
+
+			// This can be an 'if' statement, but just to be safe...
+			while (moves.size() > Move.MAX_MOVES) {
+				moves.remove(0);
 			}
 		}
 	}
