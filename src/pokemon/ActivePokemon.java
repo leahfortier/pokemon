@@ -490,13 +490,10 @@ public class ActivePokemon implements Serializable {
 		
 		// Grow to the next level
 		level++;
-		Messages.add(getActualName() + " grew to level " + level + "!");
+		Messages.add(new MessageUpdate(getActualName() + " grew to level " + level + "!").withSoundEffect(SoundTitle.LEVEL_UP));
 
 		if (front) {
-			Messages.add(new MessageUpdate()
-					.withExpGain(b, this, Math.min(1, expRatio()), true)
-					.withSoundEffect(SoundTitle.LEVEL_UP)
-			);
+			Messages.add(new MessageUpdate().withExpGain(b, this, Math.min(1, expRatio()), true));
 		}
 		
 		// Change stats -- keep track of the gains
@@ -593,7 +590,8 @@ public class ActivePokemon implements Serializable {
 		if (moves.size() < Move.MAX_MOVES) {
 			addMove(move, moves.size() - 1, inBattle);
 		} else {
-			Messages.add(new MessageUpdate().withLearnMove(this, move));
+			// Need a non-empty message so that it doesn't get absorbed
+			Messages.add(new MessageUpdate(" ").withLearnMove(this, move));
 		}
 	}
 

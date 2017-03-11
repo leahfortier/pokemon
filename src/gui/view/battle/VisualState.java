@@ -2,8 +2,7 @@ package gui.view.battle;
 
 import gui.view.battle.handler.BagState;
 import gui.view.battle.handler.FightState;
-import gui.view.battle.handler.LearnMoveDeleteState;
-import gui.view.battle.handler.LearnMoveQuestionState;
+import gui.view.battle.handler.LearnMoveState;
 import gui.view.battle.handler.LogState;
 import gui.view.battle.handler.MenuState;
 import gui.view.battle.handler.MessageState;
@@ -24,8 +23,7 @@ public enum VisualState {
     POKEMON(new PokemonState()),
     INVALID_POKEMON(POKEMON.visualStateHandler),
     MENU(new MenuState()),
-    LEARN_MOVE_QUESTION(new LearnMoveQuestionState()),
-    LEARN_MOVE_DELETE(new LearnMoveDeleteState()),
+    LEARN_MOVE(new LearnMoveState()),
     USE_ITEM(POKEMON.visualStateHandler),
     STAT_GAIN(MESSAGE.visualStateHandler),
     LOG_VIEW(new LogState());
