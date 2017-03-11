@@ -101,7 +101,6 @@ public class LearnMovePanel {
             if (newMoveButton().checkConsumePress()) {
                 state = State.END;
 
-                messages.pop();
                 messages.addFirst(new MessageUpdate(learning.getActualName() + " did not learn " + toLearn.getAttack().getName() + "."));
                 updateActiveButtons();
             }
