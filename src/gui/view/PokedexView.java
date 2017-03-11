@@ -240,6 +240,7 @@ class PokedexView extends View {
 			for (int j = 0; j < NUM_COLS; j++) {
 				if (pokemonButtons[i][j].checkConsumePress()) {
 					selected = PokemonInfo.getPokemonInfo(getIndex(j, i) + 1);
+					updateActiveButtons();
 				}
 			}
 		}
@@ -642,7 +643,7 @@ class PokedexView extends View {
 			}
 		}
 
-		boolean movesView = selectedTab == TabInfo.MOVES;
+		boolean movesView = selectedTab == TabInfo.MOVES && pokedex.isCaught(selected.namesies());
 		int movesDisplayed = selected.getLevelUpMoves().size() - movePageNum*MOVES_PER_PAGE;
 		for (int i = 0; i < MOVES_PER_PAGE; i++) {
 			moveButtons[i].setActive(movesView && i < movesDisplayed);
