@@ -11,6 +11,7 @@ import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.LearnMovePanel;
 import gui.GameData;
 import gui.TileSet;
 import gui.view.View;
@@ -69,6 +70,7 @@ public class BagView extends View {
 	private int selectedButton;
 	private BagCategory selectedTab;
 	private MessageUpdate message;
+	private LearnMovePanel learnMovePanel;
 
 	BagState state;
 	ItemNamesies selectedItem;
@@ -218,80 +220,93 @@ public class BagView extends View {
 		Player player = Game.getPlayer();
 		InputControl input = InputControl.instance();
 
-		if (message != null && input.consumeIfMouseDown(ControlKey.SPACE)) {
-			message = null;
-		}
-
-		while ((message == null || StringUtils.isNullOrWhiteSpace(message.getMessage()))
-				&& Messages.hasMessages()) {
-			message = Messages.getNextMessage();
-
-			if (message.isViewChange()) {
-				Game.instance().setViewMode(message.getViewMode());
-			}
-        }
-
-		selectedButton = Button.update(buttons, selectedButton);
-
-		for (int i = 0; i < CATEGORIES.length; i++) {
-			if (tabButtons[i].checkConsumePress()) {
-				changeCategory(i);
+		if (learnMovePanel != null) {
+			learnMovePanel.update();
+			if (learnMovePanel.isFinished()) {
+				learnMovePanel = null;
 			}
 		}
-
-		for (int i = 0; i < Move.MAX_MOVES; ++i) {
-			if (moveButtons[i].checkConsumePress()) {
-				Move m = selectedPokemon.getActualMoves().get(i);
-				player.getBag().useMoveItem(selectedItem, selectedPokemon, m);
-				updateActiveButtons();
+		else {
+			if (message != null && input.consumeIfMouseDown(ControlKey.SPACE)) {
+				message = null;
 			}
-		}
-		
-		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-			if (partyButtons[i].checkConsumePress()) {
-				for (UseState useState : UseState.values()) {
-					useState.use(this, player.getTeam().get(i));
+
+			while ((message == null || StringUtils.isNullOrWhiteSpace(message.getMessage()))
+					&& Messages.hasMessages()) {
+				message = Messages.getNextMessage();
+
+				if (message.isViewChange()) {
+					Game.instance().setViewMode(message.getViewMode());
+				}
+
+				if (message.learnMove()) {
+					this.learnMovePanel = new LearnMovePanel(message.getMoveLearner(), message.getMove());
+					break;
 				}
 			}
-		}
 
-		Set<ItemNamesies> list = player.getBag().getCategory(selectedTab);
-		Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(list, pageNum, ITEMS_PER_PAGE);
+			selectedButton = Button.update(buttons, selectedButton);
 
-		for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
-			ItemNamesies item = iter.next();
-			if (itemButtons[i].checkConsumePress()) {
-				selectedItem = item;
+			for (int i = 0; i < CATEGORIES.length; i++) {
+				if (tabButtons[i].checkConsumePress()) {
+					changeCategory(i);
+				}
+			}
+
+			for (int i = 0; i < Move.MAX_MOVES; ++i) {
+				if (moveButtons[i].checkConsumePress()) {
+					Move m = selectedPokemon.getActualMoves().get(i);
+					player.getBag().useMoveItem(selectedItem, selectedPokemon, m);
+					updateActiveButtons();
+				}
+			}
+
+			for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
+				if (partyButtons[i].checkConsumePress()) {
+					for (UseState useState : UseState.values()) {
+						useState.use(this, player.getTeam().get(i));
+					}
+				}
+			}
+
+			Set<ItemNamesies> list = player.getBag().getCategory(selectedTab);
+			Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(list, pageNum, ITEMS_PER_PAGE);
+
+			for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
+				ItemNamesies item = iter.next();
+				if (itemButtons[i].checkConsumePress()) {
+					selectedItem = item;
+					updateActiveButtons();
+				}
+			}
+
+			// Check the use buttons
+			for (UseState useState : UseState.values()) {
+				if (buttons[useState.buttonIndex].checkConsumePress()) {
+					useState.update(this);
+				}
+			}
+
+			if (buttons[LEFT_ARROW].checkConsumePress()) {
+				pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages(list.size()));
 				updateActiveButtons();
 			}
-		}
-		
-		// Check the use buttons
-		for (UseState useState : UseState.values()) {
-			if (buttons[useState.buttonIndex].checkConsumePress()) {
-				useState.update(this);
+
+			if (buttons[RIGHT_ARROW].checkConsumePress()) {
+				pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages(list.size()));
+				updateActiveButtons();
 			}
-		}
 
-		if (buttons[LEFT_ARROW].checkConsumePress()) {
-			pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages(list.size()));
+			if (buttons[RETURN].checkConsumePress()) {
+				returnToMap();
+			}
+
+			if (input.consumeIfDown(ControlKey.ESC)) {
+				returnToMap();
+			}
+
 			updateActiveButtons();
 		}
-		
-		if (buttons[RIGHT_ARROW].checkConsumePress()) {
-			pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages(list.size()));
-			updateActiveButtons();
-		}
-		
-		if (buttons[RETURN].checkConsumePress()) {
-			returnToMap();
-		}
-
-		if (input.consumeIfDown(ControlKey.ESC)) {
-			returnToMap();
-		}
-
-		updateActiveButtons();
 	}
 
 	private void returnToMap() {
@@ -523,8 +538,11 @@ public class BagView extends View {
 			
 			g.translate(-tabButton.x, -tabButton.y);
 		}
-		
-		if (message != null && !StringUtils.isNullOrWhiteSpace(message.getMessage())) {
+
+		if (learnMovePanel != null) {
+			learnMovePanel.draw(g);
+		}
+		else if (message != null && !StringUtils.isNullOrWhiteSpace(message.getMessage())) {
 			BasicPanels.drawFullMessagePanel(g, message.getMessage());
 		}
 		else {
