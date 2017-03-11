@@ -107,37 +107,36 @@ class EvolutionView extends View {
 			}
 		}
 
+		boolean finishedLearningMove = false;
 		if (state == State.LEARN_MOVE) {
 			learnMovePanel.update();
 			if (learnMovePanel.isFinished()) {
 				state = State.END;
+				finishedLearningMove = true;
 			}
 		}
 
 		if (state == State.END || state == State.CANCELED) {
 			if (!messages.isEmpty()) {
-				if (input.consumeIfMouseDown(ControlKey.SPACE)) {
-					if (Messages.peek().learnMove()) {
-						if (state != State.LEARN_MOVE) {
-							MessageUpdate message = Messages.getNextMessage();
-							messages.pop();
-
-							messages.add(new MessageUpdate()
-									.withUpdate(Update.LEARN_MOVE)
-									.withLearnMove(evolvingPokemon, message.getMove())
-							);
-						}
+				if (input.consumeIfMouseDown(ControlKey.SPACE) || finishedLearningMove) {
+					while (Messages.peek().learnMove()) {
+						MessageUpdate message = Messages.getNextMessage();
+						messages.add(new MessageUpdate()
+								.withUpdate(Update.LEARN_MOVE)
+								.withLearnMove(evolvingPokemon, message.getMove())
+						);
 					}
-					else {
+
+					while (!messages.isEmpty()) {
 						MessageUpdate message = messages.pop();
 						if (message.learnMove()) {
-							if (state == State.LEARN_MOVE) {
-								messages.addFirst(message);
-							}
-							else {
-								this.learnMovePanel = new LearnMovePanel(evolvingPokemon, message.getMove());
-								state = State.LEARN_MOVE;
-							}
+							this.learnMovePanel = new LearnMovePanel(evolvingPokemon, message.getMove());
+							state = State.LEARN_MOVE;
+							break;
+						}
+
+						if (!StringUtils.isNullOrEmpty(messages.peek().getMessage())) {
+							break;
 						}
 					}
 				}

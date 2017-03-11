@@ -72,6 +72,7 @@ public class LearnMovePanel {
             }
 
             if (yesButton().checkConsumePress()) {
+                messages.pop();
                 state = State.DELETE;
                 updateActiveButtons();
             }
