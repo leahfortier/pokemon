@@ -20,6 +20,7 @@ import map.area.AreaData;
 import map.daynight.DayCycle;
 import map.entity.Entity;
 import map.entity.movable.MovableEntity;
+import map.entity.movable.NPCEntity;
 import map.entity.movable.PlayerEntity;
 import map.overworld.TerrainType;
 import map.triggers.Trigger;
@@ -177,8 +178,14 @@ public class MapView extends View {
 						continue;
 					}
 
-					// TODO: Checking zero logic seems like it can be simplified
-					newPointEntity.draw(g, draw, !delta.isZero());
+					// TODO: Supes Haxorus plz fix
+					if (newPointEntity instanceof NPCEntity && newPointEntity.getEntityName().equals("MaplesLab_NPC_Prof_Mapes_01")) {
+						newPointEntity.draw(g, new Point(draw.x + Global.TILE_SIZE/2, draw.y), !delta.isZero());
+					}
+					else {
+						// TODO: Checking zero logic seems like it can be simplified
+						newPointEntity.draw(g, draw, !delta.isZero());
+					}
 				}
 
 				// Draw grass tiles
