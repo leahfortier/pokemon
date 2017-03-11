@@ -55,7 +55,7 @@ public class MessageUpdate {
 		APPEND_TO_NAME,
 		SHOW_POKEMON,
 		PROMPT_SWITCH(VisualState.POKEMON),
-		LEARN_MOVE(VisualState.LEARN_MOVE_QUESTION),
+		LEARN_MOVE(VisualState.LEARN_MOVE),
 		STAT_GAIN(VisualState.STAT_GAIN),
 		EXIT_BATTLE(battleView -> exitBattle(battleView, ViewMode.MAP_VIEW)),
 		CATCH_POKEMON(battleView -> exitBattle(battleView, ViewMode.NEW_POKEMON_VIEW)),
