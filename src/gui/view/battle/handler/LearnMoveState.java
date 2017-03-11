@@ -2,7 +2,6 @@ package gui.view.battle.handler;
 
 import draw.panel.LearnMovePanel;
 import gui.view.battle.BattleView;
-import gui.view.battle.VisualState;
 
 import java.awt.Graphics;
 
@@ -23,7 +22,7 @@ public class LearnMoveState implements VisualStateHandler {
     public void update(BattleView view) {
         this.learnMovePanel.update();
         if (this.learnMovePanel.isFinished()) {
-            view.setVisualState(VisualState.MESSAGE);
+            view.cycleMessage(false);
         }
     }
 }
