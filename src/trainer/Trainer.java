@@ -222,11 +222,6 @@ public abstract class Trainer implements Team, Serializable {
 		return false;
 	}
 	
-	public void performAction(Battle b, TrainerAction a) {
-		setAction(a);
-		b.fight();
-	}
-	
 	public void setAction(TrainerAction a) {
 		action = a;
 	}

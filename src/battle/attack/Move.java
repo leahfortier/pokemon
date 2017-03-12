@@ -1,6 +1,7 @@
 package battle.attack;
 
 import battle.Battle;
+import battle.ai.MonteCarlo;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
@@ -8,7 +9,6 @@ import battle.effect.generic.EffectInterfaces.OpponentAttackSelectionEffect;
 import message.Messages;
 import pokemon.ActivePokemon;
 import type.Type;
-import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -136,7 +136,7 @@ public class Move implements Serializable {
 			return new Move(AttackNamesies.STRUGGLE.getAttack());
 		}
 		
-		return chooseMove(usable);
+		return chooseMove(b, usable);
 	}
 	
 	// Returns true if a move should be forced (move will already be selected for the Pokemon), and false if not 
@@ -209,7 +209,8 @@ public class Move implements Serializable {
 	}
 
 	// TODO: AI Stuffffff
-	private static Move chooseMove(List<Move> usable) {
-		return RandomUtils.getRandomValue(usable);
+	private static Move chooseMove(Battle b, List<Move> usable) {
+		return new MonteCarlo().next(b);
+//		return RandomUtils.getRandomValue(usable);
 	}
 }

@@ -1,6 +1,7 @@
 package trainer.player;
 
 import battle.Battle;
+import battle.attack.Move;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectNamesies;
 import gui.view.ViewMode;
@@ -25,6 +26,7 @@ import pokemon.breeding.DayCareCenter;
 import trainer.Badge;
 import trainer.Opponent;
 import trainer.Trainer;
+import trainer.TrainerAction;
 import trainer.player.pokedex.Pokedex;
 import util.Point;
 import util.RandomUtils;
@@ -544,5 +546,19 @@ public class Player extends Trainer implements Serializable {
 	
 	public List<String> getLogMessages() {
 		return logMessages;
+	}
+
+	public void performAction(Battle b, TrainerAction action) {
+		setAction(action);
+
+		Opponent opponent = b.getOpponent();
+		ActivePokemon opponentPokemon = opponent.front();
+		opponentPokemon.setMove(Move.selectOpponentMove(b, opponentPokemon));
+
+		if (opponent instanceof Trainer) {
+			((Trainer) opponent).setAction(TrainerAction.FIGHT);
+		}
+
+		b.fight();
 	}
 }

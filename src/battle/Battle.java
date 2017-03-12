@@ -1,7 +1,6 @@
 package battle;
 
 import battle.attack.Attack;
-import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.DefiniteEscape;
 import battle.effect.generic.BattleEffect;
@@ -71,7 +70,7 @@ public class Battle implements Serializable {
 	private boolean firstAttacking;
 	private int escapeAttempts;
 
-	private UpdateMatcher npcUpdateInteraction;
+	private transient UpdateMatcher npcUpdateInteraction;
 	
 	public Battle(Opponent opponent) {
 		Messages.clearMessages(MessageState.FIGHTY_FIGHT);
@@ -205,6 +204,10 @@ public class Battle implements Serializable {
 	}
 
 	protected void printShit() {
+		if (Messages.isMessageState(MessageState.SIMULATION_STATION)) {
+			return;
+		}
+
 		for (PokemonEffect e : player.front().getEffects()) {
 			System.out.println("P " + e);
 		}

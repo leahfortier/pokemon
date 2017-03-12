@@ -5,10 +5,11 @@ import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import pokemon.ActivePokemon;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WildPokemon implements Opponent {
+public class WildPokemon implements Opponent, Serializable {
 	private final ActivePokemon wildPokemon;
 	private List<TeamEffect> effects;
 	

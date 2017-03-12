@@ -23,7 +23,7 @@ import java.util.List;
 public class BattleAttributes implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private final transient ActivePokemon attributesHolder;
+	private transient ActivePokemon attributesHolder;
 
 	private Move selected;
 	private Move lastMoveUsed;
@@ -56,6 +56,10 @@ public class BattleAttributes implements Serializable {
 		lastMoveSucceeded = true;
 		castSource = null;
 		reducePP = false;
+	}
+
+	public void setAttributesHolder(ActivePokemon attributesHolder) {
+		this.attributesHolder = attributesHolder;
 	}
 
 	public void setReducePP(boolean reduce) {
