@@ -135,7 +135,7 @@ class EvolutionView extends View {
 							break;
 						}
 
-						if (!StringUtils.isNullOrWhiteSpace(messages.peek().getMessage())) {
+						if (!messages.isEmpty() && !StringUtils.isNullOrWhiteSpace(messages.peek().getMessage())) {
 							break;
 						}
 					}
