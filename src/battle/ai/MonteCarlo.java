@@ -20,7 +20,7 @@ public class MonteCarlo {
     private static final int ROLLOUT_TURNS = 5;
 
     // TODO: Comment this with whatever Bryan just said but didn't necessarily hear correctly
-    private static final double CONFIDENCE_BOUND_SIZE = 2;
+    private static final double CONFIDENCE_BOUND_SIZE = 1;
 
     public Move next(Battle battle) {
         Messages.clearMessages(MessageState.SIMULATION_STATION);
@@ -40,13 +40,13 @@ public class MonteCarlo {
 
                 for (Node child : current.children) {
                     if (current.isOpp) {
-                        if (child.ucb > bestUtil) {
+                        if ((child.ucb > bestUtil) || (child.ucb == bestUtil && RandomUtils.chanceTest(50))) {
                             bestChild = child;
                             bestUtil = child.ucb;
                         }
                     }
                     else {
-                        if (child.lcb < bestUtil) {
+                        if ((child.lcb < bestUtil) || (child.lcb == bestUtil && RandomUtils.chanceTest(50))) {
                             bestChild = child;
                             bestUtil = child.lcb;
                         }
@@ -77,6 +77,12 @@ public class MonteCarlo {
 
             current = RandomUtils.getRandomValue(current.children);
             traversed.add(current);
+
+            System.out.print("Traversed: ");
+            for(int j = 1; j < traversed.size(); j++){
+                System.out.print(traversed.get(j).path.get((traversed.get(j).path.size() - 1)).getAttack().getName() + " " + traversed.get(j).ucb + " ");
+            }
+            System.out.println();
 
             List<Move> playerRolloutMoves = new ArrayList<>();
             List<Move> opponentRolloutMoves = new ArrayList<>();
@@ -115,7 +121,7 @@ public class MonteCarlo {
                 oppWon = simulated.getTrainer(false).front().getHPRatio() > simulated.getTrainer(true).front().getHPRatio();
             }
 
-            for(int j = 1; j < traversed.size(); j++) {
+            for (int j = 1; j < traversed.size(); j++) {
                 Node prev = traversed.get(j - 1);
                 Node curr = traversed.get(j);
 
@@ -126,12 +132,10 @@ public class MonteCarlo {
 
                 double expectedUtility = (double)curr.totalWins/curr.visitedCount;
                 double confidenceIntervalSize = Math.sqrt(CONFIDENCE_BOUND_SIZE*Math.log(prev.visitedCount)/curr.visitedCount);
-                if(confidenceIntervalSize > 0) {
-                    curr.ucb = expectedUtility + confidenceIntervalSize;
-                    curr.lcb = expectedUtility - confidenceIntervalSize;
+                if (confidenceIntervalSize > 0) {
+                    curr.ucb = Math.min(1, expectedUtility + confidenceIntervalSize);
+                    curr.lcb = Math.max(0, expectedUtility - confidenceIntervalSize);
                 }
-                curr.ucb = Math.min(1, curr.ucb);
-                curr.lcb = Math.max(0, curr.lcb);
             }
         }
 
