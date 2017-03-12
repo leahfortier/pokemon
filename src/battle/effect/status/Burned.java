@@ -1,6 +1,7 @@
 package battle.effect.status;
 
 import battle.Battle;
+import battle.attack.AttackNamesies;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import message.Messages;
@@ -40,7 +41,7 @@ class Burned extends Status implements EndTurnEffect, StatChangingEffect {
     }
 
     public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-        return (int)(stat*(s == Stat.ATTACK && !p.hasAbility(AbilityNamesies.GUTS) ? .5 : 1));
+        return (int)(stat*(s == Stat.ATTACK && !p.hasAbility(AbilityNamesies.GUTS) && p.getAttack().namesies() != AttackNamesies.FACADE ? .5 : 1));
     }
 
     public String getGenericRemoveMessage(ActivePokemon victim) {

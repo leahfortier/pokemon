@@ -18,10 +18,6 @@
       "location": [
         {
           "x": 11,
-          "y": 6
-        },
-        {
-          "x": 11,
           "y": 5
         },
         {
@@ -41,10 +37,6 @@
       },
       "nextEntrance": "EastTransitionBuilding",
       "location": [
-        {
-          "x": 1,
-          "y": 6
-        },
         {
           "x": 1,
           "y": 5
@@ -78,8 +70,8 @@
         }
       ],
       "location": {
-        "x": 2,
-        "y": 4
+        "x": 3,
+        "y": 3
       },
       "triggerName": "RSATown_BFM_TransitionBuilding_NPC_BFM_Guy_01"
     },
@@ -91,29 +83,13 @@
       "interactions": [],
       "location": {
         "x": 6,
-        "y": 3
+        "y": 2
       },
       "triggerName": "RSATown_BFM_TransitionBuilding_NPC_Info_Guy_01"
     }
   ],
   "items": [],
-  "miscEntities": [
-    {
-      "name": "Info_Guy_Dialogue",
-      "actions": [
-        {
-          "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
-        }
-      ],
-      "location": [
-        {
-          "x": 6,
-          "y": 4
-        }
-      ],
-      "triggerName": "RSATown_BFM_TransitionBuilding_TriggerEntity_Info_Guy_Dialogue_01"
-    }
-  ],
+  "miscEntities": [],
   "events": [],
   "wildBattles": [],
   "fishingSpots": []

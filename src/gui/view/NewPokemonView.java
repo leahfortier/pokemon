@@ -2,8 +2,8 @@ package gui.view;
 
 import draw.ImageUtils;
 import draw.button.Button;
-import draw.button.panel.BasicPanels;
-import draw.button.panel.DrawPanel;
+import draw.panel.BasicPanels;
+import draw.panel.DrawPanel;
 import gui.TileSet;
 import input.ControlKey;
 import input.InputControl;
@@ -11,8 +11,9 @@ import main.Game;
 import main.Global;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
-import trainer.Player;
 import trainer.Trainer;
+import trainer.player.NewPokemonInfo;
+import trainer.player.Player;
 import type.Type;
 import util.Point;
 import util.PokeString;
@@ -300,12 +301,13 @@ class NewPokemonView extends View {
         }
 
         Player player = Game.getPlayer();
+        NewPokemonInfo newPokemonInfo = player.getNewPokemonInfo();
         String pokemonName = newPokemon.getActualName();
 
         this.state = state;
         switch (state) {
             case POKEDEX:
-                if (player.isFirstNewPokemon()) {
+                if (newPokemonInfo.isFirstNewPokemon()) {
                     message = newPokemon.getPokemonInfo().getName() + " was registered in the " + PokeString.POKEDEX + "!";
                 } else {
                     setState(State.NICKNAME_QUESTION);
@@ -361,9 +363,9 @@ class NewPokemonView extends View {
 
     @Override
     public void movedToFront() {
-        Player player = Game.getPlayer();
-        this.newPokemon = player.getNewPokemon();
-        this.boxNum = player.getNewPokemonBox();
+        NewPokemonInfo newPokemonInfo = Game.getPlayer().getNewPokemonInfo();
+        this.newPokemon = newPokemonInfo.getNewPokemon();
+        this.boxNum = newPokemonInfo.getNewPokemonBox();
 
         this.selectedButton = 0;
 
@@ -373,6 +375,10 @@ class NewPokemonView extends View {
             setState(State.LOCATION);
         } else {
             setState(State.POKEDEX);
+        }
+
+        if (state == State.END) {
+            Game.instance().popView();
         }
     }
 }

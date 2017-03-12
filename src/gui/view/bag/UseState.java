@@ -8,7 +8,6 @@ import pokemon.ActivePokemon;
 
 import java.awt.Graphics;
 
-// TODO: There is a really annoying bug that sometimes happens where two buttons have hoverAction at the same time -- mainly one of the useButtons and generally the first Pokemon in the party, but the useButton is the active one and the party one just looks active and is really confusing
 enum UseState {
     GIVE("Give", BagView.GIVE, (state, bagView, p) -> {
         Game.getPlayer().getBag().giveItem(p, bagView.selectedItem);

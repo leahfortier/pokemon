@@ -142,13 +142,13 @@ MultiStrike:
 		
 		int hit = 1;
 		for (; hit <= hits; hit++) {
-			Messages.add("Hit " + hit + "!");
-			super.applyDamage(me, o, b);
-			
 			// Stop attacking the dead
 			if (o.isFainted(b)) {
 				break;
 			}
+		
+			Messages.add("Hit " + hit + "!");
+			super.applyDamage(me, o, b);
 		}
 		
 		hit--;
@@ -169,11 +169,25 @@ ChangeType:
 	AddInterface: ChangeTypeSource
 	Header: Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 *
+SpecialDefenseMove:
+	AddInterface: OpponentStatSwitchingEffect
+	AddMapField: OppSwitchStat:
+		return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
+		###
+	AddMapField: Cat: Special
+*
+IgnoreStageMove:
+	AddInterface: OpponentIgnoreStageEffect
+	AddMapField: IgnoreStage:
+		return !s.user();
+		###
+*
+FusionMove:
+	AddMapField: PowerMultiplierCondition: 2 !b.isFirstAttack() && victim.getAttack().namesies() == AttackNamesies.{00}
+*
 RemoveType:
 	AddMapField: ChangeType: 
 		Type[] type = victim.getType(b);
-				
-		// TODO: Rewrite this because it looks stupid
 		if (type[0] == Type.{00}) {
 			return new Type[] { type[1], Type.NO_TYPE };
 		}
@@ -1394,13 +1408,13 @@ HealPartyStatus:
 	AddMapField: SelfTarget: True
 *
 RemoveAdvantageType:
-	AddInterface: NoAdvantageChanger
 	AddMapField: NegateNoAdvantage: defending == Type.{11} && ({2-})
 *
 ForesightEffect:
 	AddMapField: CastMessage: user.getName() + " identified " + victim.getName() + "!"
 	AddMapField: CanHave: True
 	AddMapField: UsedProof: True
+	AddInterface: DefendingNoAdvantageChanger
 	AddMapField: RemoveAdvantageType: {0}
 *
 ForesightMove:
@@ -1786,35 +1800,26 @@ FormChange:
 		###
 *
 EndTurnFormChange:
-	Header: boolean formCheck(ActivePokemon formsie)
+	Header: void changeForm(ActivePokemon formsie)
 	AccessModifier: Private
 	Body:
-		return {17-};
+		if (this.{1} != {17-}) {
+			this.{1} = !{1};
+			Messages.add(
+					new MessageUpdate(formsie.getName() + " changed into " + ({1} ? "{10}" : "{3}") + " Forme!")
+							.withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), {1}), formsie.isPlayer())
+			);
+		}
 		###
 	AddMapField: FormChange: {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16}
 	AddInterface: EndTurnEffect
 	AddInterface: EntryEffect
 	AddMapField: Enter:
-		if (formCheck(enterer)) {
-			{1} = true;
-			Messages.add(enterer.getName() + " changed into {10} Forme!");
-		}
-		else {
-			{1} = false;
-			Messages.add(enterer.getName() + " changed into {3} Forme!");
-		}
+		{1} = false;
+		changeForm(enterer);
 		###
 	AddMapField: ApplyEndTurn:
-		if (formCheck(victim)) {
-			if (!{1}) {
-				{1} = true;
-				Messages.add(victim.getName() + " changed into {10} Forme!");	
-			}
-		}
-		else if ({1}){
-			{1} = false;
-			Messages.add(victim.getName() + " changed into {3} Forme!");
-		}
+		changeForm(victim);
 		###
 *
 GET_DAT_CASH_MONEY_TWICE_ITEM:

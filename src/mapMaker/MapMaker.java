@@ -5,6 +5,7 @@ import main.Global;
 import map.MapDataType;
 import map.MapName;
 import mapMaker.model.MapMakerModel;
+import mapMaker.model.TileModel;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import mapMaker.tools.SelectTool;
@@ -60,6 +61,22 @@ import java.util.stream.Collectors;
 public class MapMaker extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener, ListSelectionListener {
 	private static final long serialVersionUID = -1323397946555510794L;
 
+	public enum TileCategory {
+		ALL,
+		GROUND,
+		OBJECT,
+		GRASSY,
+		WALL,
+		COUNTER,
+		BUILDING,
+		ROCK,
+		TREE,
+		LEDGE,
+		STAIRS,
+		FLOOR,
+		ENTRANCE,
+	}
+
 	public static void main(String[] args) {
 		MapMaker mapMaker = new MapMaker();
 
@@ -71,6 +88,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 	}
 
 	private JButton newTileButton;
+	private JComboBox<TileCategory> tileCategoriesComboBox;
 	private JList<ImageIcon> tileList;
 	private JList<Tool> toolList;
 	public Canvas canvas;
@@ -189,6 +207,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 					MapMakerModel model = this.getModel();
 					tileList.setModel(model.getListModel());
 					newTileButton.setEnabled(model.newTileButtonEnabled());
+					tileCategoriesComboBox.setEnabled(model instanceof TileModel);
 
 					if (pasteMenuItem != null && selectTool != null) {
 						pasteMenuItem.setEnabled(selectTool.canPaste());
@@ -209,8 +228,27 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         tilePanel.setBorder(new LineBorder(Color.BLACK));
         tilePanel.setLayout(new BorderLayout());
 
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
         newTileButton = GUIUtils.createButton("New Tile", this);
-        tilePanel.add(newTileButton, BorderLayout.NORTH);
+        panel.add(newTileButton, BorderLayout.NORTH);
+
+		tileCategoriesComboBox = GUIUtils.createComboBox(
+				TileCategory.values(),
+				event -> {
+					if (!tileCategoriesComboBox.isEnabled()) {
+						return;
+					}
+					TileCategory tileCategory = (TileCategory) tileCategoriesComboBox.getSelectedItem();
+					TileModel tileModel = (TileModel)this.getModel();
+					tileModel.setSelectedTileCategory(tileCategory);
+					tileList.setModel(tileModel.getListModel());
+					draw();
+				}
+		);
+		panel.add(tileCategoriesComboBox, BorderLayout.SOUTH);
+		tilePanel.add(panel, BorderLayout.NORTH);
 
         tileList = new JList<>();
         tileList.setModel(this.getModel().getListModel());

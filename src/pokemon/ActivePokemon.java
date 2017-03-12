@@ -60,13 +60,13 @@ import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 
 public class ActivePokemon implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	public static final int MAX_LEVEL = 100;
-	public static final int MAX_NAME_LENGTH = 10; // TODO: Look this up
+	public static final int MAX_NAME_LENGTH = 12;
 
 	private static final String TINY_EGG_IMAGE_NAME = "egg-small";
 	private static final String BASE_EGG_IMAGE_NAME = "egg";
@@ -273,23 +273,19 @@ public class ActivePokemon implements Serializable {
 	
 	private void setMoves() {
 		moves = new ArrayList<>();
-		Map<Integer, List<AttackNamesies>> map = this.getPokemonInfo().getLevelUpMoves();
-		for (Integer levelLearned : map.keySet()) {
-			if (levelLearned > level) {
+		List<Entry<Integer, AttackNamesies>> levelUpMoves = this.getPokemonInfo().getLevelUpMoves();
+		for (Entry<Integer, AttackNamesies> entry : levelUpMoves) {
+			int levelLearned = entry.getKey();
+			AttackNamesies attackNamesies = entry.getValue();
+			if (levelLearned > level || this.hasActualMove(attackNamesies)) {
 				continue;
 			}
-			
-			for (AttackNamesies attackNamesies : map.get(levelLearned)) {
-				if (hasActualMove(attackNamesies)) {
-					continue;
-				}
-				
-				moves.add(new Move(attackNamesies.getAttack()));
-				
-				// This can be an 'if' statement, but just to be safe...
-				while (moves.size() > Move.MAX_MOVES) {
-					moves.remove(0);
-				}
+
+			moves.add(new Move(attackNamesies.getAttack()));
+
+			// This can be an 'if' statement, but just to be safe...
+			while (moves.size() > Move.MAX_MOVES) {
+				moves.remove(0);
 			}
 		}
 	}
@@ -443,7 +439,6 @@ public class ActivePokemon implements Serializable {
 		return this.getPokemonInfo().getGrowthRate().getEXP(level + 1) - totalEXP;
 	}
 	
-	// TODO: Test this to make sure it still works (espesh level 100)
 	public float expRatio() {
 		if (level == MAX_LEVEL) {
 			return 0;
@@ -495,13 +490,10 @@ public class ActivePokemon implements Serializable {
 		
 		// Grow to the next level
 		level++;
-		Messages.add(getActualName() + " grew to level " + level + "!");
+		Messages.add(new MessageUpdate(getActualName() + " grew to level " + level + "!").withSoundEffect(SoundTitle.LEVEL_UP));
 
 		if (front) {
-			Messages.add(new MessageUpdate()
-					.withExpGain(b, this, Math.min(1, expRatio()), true)
-					.withSoundEffect(SoundTitle.LEVEL_UP)
-			);
+			Messages.add(new MessageUpdate().withExpGain(b, this, Math.min(1, expRatio()), true));
 		}
 		
 		// Change stats -- keep track of the gains
@@ -549,7 +541,7 @@ public class ActivePokemon implements Serializable {
 
 		BaseEvolution evolution = this.getPokemonInfo().getEvolution().getEvolution(method, this, itemNamesies);
 		if (evolution != null) {
-			Game.getPlayer().setEvolution(this, evolution);
+			Game.getPlayer().getEvolutionInfo().setEvolution(this, evolution);
 			return true;
 		}
 
@@ -598,7 +590,8 @@ public class ActivePokemon implements Serializable {
 		if (moves.size() < Move.MAX_MOVES) {
 			addMove(move, moves.size() - 1, inBattle);
 		} else {
-			Messages.add(new MessageUpdate().withLearnMove(this, move));
+			// Need a non-empty message so that it doesn't get absorbed
+			Messages.add(new MessageUpdate(" ").withLearnMove(this, move));
 		}
 	}
 
@@ -1068,10 +1061,10 @@ public class ActivePokemon implements Serializable {
 
 	public List<Object> getAllEffects(final Battle b) {
 		List<Object> list = new ArrayList<>();
-		list.addAll(this.getEffects());
 		list.add(this.getStatus());
 		list.add(this.getAbility());
 		list.add(this.getHeldItem(b));
+		list.addAll(this.getEffects());
 
 		return list;
 	}

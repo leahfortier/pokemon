@@ -18054,11 +18054,9 @@ Bagworm
 47 277.3 It is encased in a steel shell. Its peering eyes are all that can be seen of its mysterious innards.
 5120
 BUG NONE
-27
+25
 -1 MIRROR_SHOT
 -1 AUTOTOMIZE
-0 MIRROR_SHOT
-0 AUTOTOMIZE
 0 HEAVY_SLAM
 0 ZAP_CANNON
 0 MAGNET_RISE
@@ -24740,8 +24738,8 @@ PSYCHIC FAIRY
 120
 0 0 0 2 0 0 
 MULTI 2
-LEVEL GARDEVOIR 30
-GENDER MALE ITEM GALLADE DAWN_STONE
+GENDER FEMALE LEVEL GARDEVOIR 30
+GENDER MALE LEVEL GALLADE 30
 0
 50
 SYNCHRONIZE TRACE
@@ -24846,7 +24844,7 @@ PSYCHIC FAIRY
 0 0 0 3 0 0 
 NONE
 0
-50
+0
 SYNCHRONIZE TRACE
 Embrace 
 63 106.7 To protect its Trainer, it will expend all its psychic power to create a small black hole.
@@ -40663,7 +40661,7 @@ Magnet Area
 47 396.8 A group tried to use scientific means to make Magnezone evolve, but their efforts ended in failure.
 5120
 MINERAL NONE
-26
+25
 -1 TRI_ATTACK
 0 ZAP_CANNON
 0 MAGNETIC_FLUX
@@ -40673,7 +40671,6 @@ MINERAL NONE
 0 TACKLE
 0 SUPERSONIC
 0 THUNDER_SHOCK
-0 MAGNET_BOMB
 5 THUNDER_SHOCK
 7 MAGNET_BOMB
 11 THUNDER_WAVE
@@ -66630,7 +66627,7 @@ Synthetic
 91 221.6 Its trust in its partner is what awakens it. This Pok\u00e9mon is capable of changing its type, a flexibility that is well displayed in battle.
 30720
 UNDISCOVERED NONE
-26
+25
 -1 MULTI_ATTACK
 0 HEAL_BLOCK
 0 IMPRISON
@@ -66639,7 +66636,6 @@ UNDISCOVERED NONE
 0 FIRE_FANG
 0 ICE_FANG
 0 THUNDER_FANG
-0 TACKLE
 5 RAGE
 10 PURSUIT
 15 BITE
@@ -68914,7 +68910,7 @@ Disaster
 47 103.6 When this Pok\u00e9mon whips the winglike fur on its back as though beating its wings, it sends an intimidating aura flying at its opponents.
 6400
 FIELD NONE
-26
+25
 -1 PLAY_ROUGH
 0 MOONLIGHT
 0 WING_ATTACK
@@ -68923,7 +68919,6 @@ FIELD NONE
 0 FUTURE_SIGHT
 0 SCRATCH
 0 FEINT
-0 LEER
 0 QUICK_ATTACK
 4 LEER
 7 QUICK_ATTACK

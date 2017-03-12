@@ -14,17 +14,20 @@ import util.FileIO;
 import util.FileName;
 import util.GeneralUtils;
 import util.RandomUtils;
+import util.StringUtils;
 
 import java.io.Serializable;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private static final long serialVersionUID = 1L;
@@ -42,7 +45,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private final int baseExp;
 	private final GrowthRate growthRate;
 	private final Type[] type;
-	private final Map<Integer, List<AttackNamesies>> levelUpMoves;
+	private final List<Entry<Integer, AttackNamesies>> levelUpMoves;
 	private final Set<AttackNamesies> learnableMoves;
 	private final int catchRate;
 	private final int[] givenEVs;
@@ -76,7 +79,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			String flavorText,
 			int eggSteps,
 			List<EggGroup> eggGroups,
-			Map<Integer, List<AttackNamesies>> levelUpMoves,
+			List<Entry<Integer, AttackNamesies>> levelUpMoves,
 			Set<AttackNamesies> learnableMoves
 	) {
 		this.number = number;
@@ -110,7 +113,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return type;
 	}
 
-	Map<Integer, List<AttackNamesies>> getLevelUpMoves() {
+	public List<Entry<Integer, AttackNamesies>> getLevelUpMoves() {
 		return levelUpMoves;
 	}
 
@@ -122,8 +125,14 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return growthRate;
 	}
 
-	int getEggSteps() {
+	public int getEggSteps() {
 		return eggSteps;
+	}
+
+	public String getAbilitiesString() {
+		return abilities[0].getName() + (abilities[1] == AbilityNamesies.NO_ABILITY
+						? StringUtils.empty()
+						: ", " + abilities[1].getName());
 	}
 
 	public AbilityNamesies[] getAbilities() {
@@ -142,7 +151,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return baseExp;
 	}
 
-	int[] getGivenEVs() {
+	public int getGivenEV(int index) {
+		return givenEVs[index];
+	}
+
+	public int[] getGivenEVs() {
 		return givenEVs;
 	}
 
@@ -203,11 +216,18 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	}
 
 	public String getImageName(boolean shiny, boolean front) {
-		return getImageName(this, shiny, front);
+		return getImageName(this, shiny, front, false);
 	}
 
-	private static String getImageName(PokemonInfo pokemonInfo, boolean shiny, boolean front) {
+	public String getImageName(boolean shiny, boolean front, boolean form) {
+		return getImageName(this, shiny, front, form);
+	}
+
+	private static String getImageName(PokemonInfo pokemonInfo, boolean shiny, boolean front, boolean form) {
 		String imageName = pokemonInfo.getBaseImageName();
+		if (form) {
+			imageName += "b";
+		}
 		if (shiny) {
 			imageName += "-shiny";
 		}
@@ -277,25 +297,19 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return GeneralUtils.arrayValueOf(enumType, in.nextLine().trim().split(" "));
 	}
 
-	private static Map<Integer, List<AttackNamesies>> createLevelUpMoves(Scanner in) {
-		Map<Integer, List<AttackNamesies>> levelUpMoves = new TreeMap<>();
+	private static List<Entry<Integer, AttackNamesies>> createLevelUpMoves(Scanner in) {
+		List<Entry<Integer, AttackNamesies>> levelUpMoves = new ArrayList<>();
 		int numMoves = in.nextInt();
 
 		for (int i = 0; i < numMoves; i++) {
 			int level = in.nextInt();
-			if (!levelUpMoves.containsKey(level)) {
-				levelUpMoves.put(level, new ArrayList<>());
-			}
-
-			List<AttackNamesies> levelMoves = levelUpMoves.get(level);
 			String attackName = in.nextLine().trim();
 			AttackNamesies namesies = AttackNamesies.valueOf(attackName);
 
-			if (!levelMoves.contains(namesies)) {
-				levelMoves.add(namesies);
-			}
+			levelUpMoves.add(new SimpleEntry<>(level, namesies));
 
 			// TODO: Test case for this but include -1 for evolution level
+			// TODO: Test that these are always in numerical order
 //			if (level < 0 || level > ActivePokemon.MAX_LEVEL) {
 //				Global.error("Invalid level " + level + " (Move: " + attackName + ")");
 //			}
@@ -320,11 +334,10 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	}
 
 	public List<AttackNamesies> getMoves(int level) {
-		if (levelUpMoves.containsKey(level)) {
-			return levelUpMoves.get(level);
-		}
-
-		return new ArrayList<>();
+		return levelUpMoves.stream()
+				.filter(entry -> entry.getKey() == level)
+				.map(Entry::getValue)
+				.collect(Collectors.toList());
 	}
 
 	public boolean canBreed() {
@@ -339,6 +352,10 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private static PokemonInfo getBaseEvolution(PokemonInfo targetPokes) {
 		if (targetPokes.namesies() == PokemonNamesies.MANAPHY) {
 			return PokemonInfo.getPokemonInfo(PokemonNamesies.PHIONE);
+		}
+
+		if (targetPokes.namesies() == PokemonNamesies.SHEDINJA) {
+			return PokemonInfo.getPokemonInfo(PokemonNamesies.NINCADA);
 		}
 
 		Set<PokemonNamesies> allPokes = EnumSet.complementOf(EnumSet.of(PokemonNamesies.NONE));
@@ -389,13 +406,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return incenseBabies.contains(namesies);
 	}
 
-	// Returns what level the Pokemon will learn the given attack, returns -1 if they cannot learn it by level up
+	// Returns what level the Pokemon will learn the given attack, returns null if they cannot learn it by level up
 	public Integer levelLearned(AttackNamesies attack) {
-		for (Integer level : getLevelUpMoves().keySet()) {
-			for (AttackNamesies levelUpMove : getLevelUpMoves().get(level)) {
-				if (attack == levelUpMove) {
-					return level;
-				}
+		for (Entry<Integer, AttackNamesies> entry : this.levelUpMoves) {
+			if (entry.getValue() == attack) {
+				return entry.getKey();
 			}
 		}
 

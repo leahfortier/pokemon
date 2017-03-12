@@ -37,6 +37,14 @@ public class StringUtils {
         return isNullOrEmpty(s) ? empty() : s + " ";
     }
 
+    public static void appendSpaceSeparatedWord(final StringBuilder s, String word) {
+        if (s.length() > 0) {
+            s.append(" ");
+        }
+
+        s.append(word);
+    }
+
     public static void addCommaSeparatedValue(final StringBuilder builder, String newString) {
         if (!isNullOrEmpty(newString)) {
             if (builder.length() > 0) {
@@ -101,7 +109,11 @@ public class StringUtils {
         return builder.toString();
     }
 
-    // TODO: Look at this again and rewrite it
+    // Examples:
+    // red -> Red
+    // water stone -> Water Stone
+    // x-scissor -> X-Scissor
+    // For all upper-case words first do toLowercase
     public static String properCase(String string) {
         if (isNullOrEmpty(string)) {
             return empty();

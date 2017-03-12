@@ -3,10 +3,10 @@ package test;
 import map.MapName;
 import pattern.SimpleMapTransition;
 import pokemon.ActivePokemon;
-import trainer.Player;
+import trainer.player.Player;
 
-class TestCharacter extends Player {
-    TestCharacter(ActivePokemon mahBoiiiiiii) {
+public class TestCharacter extends Player {
+    public TestCharacter(ActivePokemon mahBoiiiiiii) {
         super();
         GameTest.setNewPlayer(this);
         this.addPokemon(mahBoiiiiiii);

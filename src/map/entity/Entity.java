@@ -2,9 +2,9 @@ package map.entity;
 
 import draw.TileUtils;
 import gui.view.map.MapView;
-import map.condition.Condition;
 import map.Direction;
 import map.MapData;
+import map.condition.Condition;
 import map.triggers.TriggerType;
 import util.Point;
 
@@ -66,7 +66,7 @@ public abstract class Entity {
 
 		BufferedImage image = this.getFrame();
 		if (image != null) {
-			TileUtils.drawEntityTileImage(g, image, this.getCanvasCoordinates(drawLocation));
+			TileUtils.drawTileImage(g, image, this.getCanvasCoordinates(drawLocation));
 		}
 	}
 

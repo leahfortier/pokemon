@@ -1,9 +1,9 @@
 package pattern.map;
 
-import map.AreaData;
+import map.area.AreaData;
+import map.area.MusicCondition;
 import map.overworld.TerrainType;
 import map.weather.WeatherState;
-import sound.MusicCondition;
 import sound.SoundTitle;
 
 import java.awt.Color;

@@ -5,7 +5,7 @@ import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.PolygonUtils;
 import draw.TextUtils;
-import draw.button.panel.DrawPanel;
+import draw.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import map.Direction;
@@ -130,7 +130,7 @@ public class Button {
 
 	public static int update(Button[] buttons, int selected) {
 		if (!buttons[selected].forceHover) {
-			buttons[selected].setForceHover(true);
+			setForceHover(buttons, selected);
 		}
 
 		Direction inputDirection = Direction.consumeInputDirection();
@@ -142,14 +142,18 @@ public class Button {
 			buttons[i].update(i == selected);
 			
 			if (buttons[i].hover) {
-				buttons[selected].setForceHover(false);
-				
 				selected = i;
-				buttons[selected].setForceHover(true);
+				setForceHover(buttons, selected);
 			}
 		}
 		
 		return selected;
+	}
+
+	private static void setForceHover(Button[] buttons, int selected) {
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i].setForceHover(selected == i && buttons[i].isActive());
+		}
 	}
 
 	private static int transition(Button[] buttons, int index, Direction direction) {
@@ -161,9 +165,8 @@ public class Button {
 		if (next == NO_TRANSITION) {
 			return index;
 		}
-		
-		buttons[index].setForceHover(false);
-		buttons[next].setForceHover(true);
+
+		setForceHover(buttons, next);
 		
 		return next;
 	}

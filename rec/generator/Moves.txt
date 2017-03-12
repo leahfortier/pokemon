@@ -454,7 +454,6 @@ Rapid Spin:
 	Type: Normal
 	Cat: Physical
 	UniqueEffects: 
-		// TODO: Test
 		RapidSpinRelease.release(b, user);
 		###
 *
@@ -914,15 +913,19 @@ Pursuit:
 	Cat: Physical
 	GetMultiplier:
 		Team trainer = b.getTrainer(victim);
-		if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) {
+		if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
 			return 2;
 		}
 		
 		return 1;
 		###
 	GetPriority: 
-		Team trainer = b.getTrainer(!me.isPlayer()); // TODO: Make switching occur at its priority
-		if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) return 7;
+		// TODO: Make switching occur at its priority
+		Team trainer = b.getTrainer(!me.isPlayer());
+		if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
+			return 7;
+		}
+		
 		return super.priority;
 		###
 *
@@ -1532,10 +1535,7 @@ Chip Away:
 	Pow: 70
 	Cat: Physical
 	Type: Normal
-	Int: OpponentIgnoreStageEffect
-	IgnoreStage:
-		return !s.user();
-		###
+	IgnoreStageMove: True
 	Acc: 100
 *
 Body Slam:
@@ -1812,8 +1812,7 @@ Rest:
 		victim.removeStatus();
 		###
 	EndAttack: 
-		// TODO: Test
-		victim.getStatus().setTurns(3);
+		victim.getStatus().setTurns(2);
 		###
 *
 Hyper Voice:
@@ -4163,13 +4162,9 @@ Psystrike:
 	Desc: The user materializes an odd psychic wave to attack the target. This attack does physical damage.
 	PP: 10
 	Pow: 100
-	Cat: Special
 	Type: Psychic
 	Acc: 100
-	Int: OpponentStatSwitchingEffect
-	OppSwitchStat: 
-		return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
-		###
+	SpecialDefenseMove: True
 *
 Eruption:
 	Desc: The user attacks the opposing team with explosive fury. The lower the user's HP, the less powerful this attack becomes.
@@ -4795,7 +4790,6 @@ Facade:
 	Type: Normal
 	Pow: 70
 	PowerMultiplierCondition: 2 user.hasStatus()
-	Comments: // TODO: Should not take the attack reduction from burn
 	Acc: 100
 	Cat: Physical
 *
@@ -4969,9 +4963,8 @@ Incinerate:
 	Acc: 100
 	Pow: 60
 	UniqueEffects: 
-		// TODO: Sticky Hold
 		Item heldItem = victim.getHeldItem(b);
-		if (heldItem instanceof Berry || heldItem instanceof GemItem) {
+		if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
 			Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
 			victim.consumeItem(b);
 		}
@@ -5156,24 +5149,16 @@ Sacred Sword:
 	Acc: 100
 	Cat: Physical
 	Type: Fighting
-	Int: OpponentIgnoreStageEffect
-	IgnoreStage:
-		return !s.user();
-		###
+	IgnoreStageMove: True
 *
 Secret Sword:
 	MoveType: Metronomeless
 	Desc: The user cuts with its long horn. The odd power contained in the horn does physical damage to the target.
 	PP: 10
 	Type: Fighting
-	Cat: Special
 	Acc: 100
 	Pow: 85
-	Int: OpponentStatSwitchingEffect
-	OppSwitchStat:
-		// TODO: Can combine this with Psystrike
-		return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
-		###
+	SpecialDefenseMove: True
 *
 Fusion Flare:
 	Desc: The user brings down a giant flame. This attack does greater damage when influenced by an enormous thunderbolt.
@@ -5182,8 +5167,7 @@ Fusion Flare:
 	Acc: 100
 	Cat: Special
 	Type: Fire
-	PowerMultiplierCondition: 2 !b.isFirstAttack() && victim.getAttack().namesies() == AttackNamesies.FUSION_BOLT
-	Comments: // TODO: Can combine power condition with Fusion Bolt
+	FusionMove: FUSION_BOLT
 	MoveType: Defrost
 *
 Fusion Bolt:
@@ -5194,7 +5178,7 @@ Fusion Bolt:
 	PhysicalContact: False
 	Cat: Physical
 	Acc: 100
-	PowerMultiplierCondition: 2 !b.isFirstAttack() && victim.getAttack().namesies() == AttackNamesies.FUSION_FLARE
+	FusionMove: FUSION_FLARE
 *
 Blue Flare:
 	Desc: The user attacks by engulfing the target in an intense, yet beautiful, blue flame. It may leave the target with a burn.
@@ -5417,7 +5401,6 @@ Role Play:
 	Int: ChangeAbilityMove
 	Effect: ChangeAbility
 	AbilityChange: 
-		// TODO: Combine with Trace
 		Ability otherAbility = b.getOtherPokemon(victim).getAbility();
 		return otherAbility.namesies().getNewAbility();
 		###
@@ -6279,10 +6262,7 @@ Darkest Lariat:
 	Acc: 100
 	PP: 10
 	Cat: Physical
-	Int: OpponentIgnoreStageEffect
-	IgnoreStage:
-		return !s.user();
-		###
+	IgnoreStageMove: True
 *
 Sparkling Aria:
 	Desc: The user bursts into song, emitting many bubbles. Any Pokémon suffering from a burn will be healed by the touch of these bubbles.

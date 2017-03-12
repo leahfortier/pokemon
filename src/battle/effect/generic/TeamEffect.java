@@ -389,11 +389,15 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			}
 			
 			Messages.add(enterer.getName() + " was hurt by spikes!");
-			
-			// TODO: Generalize this type of statement
-			if (layers == 1) enterer.reduceHealthFraction(b, 1/8.0);
-			else if (layers == 2) enterer.reduceHealthFraction(b, 1/6.0);
-			else enterer.reduceHealthFraction(b, 1/4.0);
+			if (layers == 1) {
+				enterer.reduceHealthFraction(b, 1/8.0);
+			}
+			else if (layers == 2) {
+				enterer.reduceHealthFraction(b, 1/6.0);
+			}
+			else {
+				enterer.reduceHealthFraction(b, 1/4.0);
+			}
 		}
 
 		public void releaseDefog(Battle b, ActivePokemon victim) {
@@ -537,7 +541,6 @@ public abstract class TeamEffect extends Effect implements Serializable {
 		}
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-			// TODO: This should be passes in the generator instead of being hardcoded
 			wish = caster.getAttack().namesies() == AttackNamesies.LUNAR_DANCE ? "lunar dance" : "healing wish";
 			super.cast(b, caster, victim, source, printCast);
 		}

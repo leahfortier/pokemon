@@ -7,7 +7,6 @@ import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.DefiniteEscape;
-import battle.effect.ModifyStageValueEffect;
 import battle.effect.SimpleStatModifyingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.SwitchOutEffect;
@@ -19,6 +18,7 @@ import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
+import battle.effect.generic.EffectInterfaces.AttackingNoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
@@ -36,9 +36,9 @@ import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MaxLevelWildEncounterEffect;
+import battle.effect.generic.EffectInterfaces.ModifyStageValueEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
-import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentAttackSelectionBlockerEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
@@ -1375,7 +1375,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Scrappy extends Ability implements NoAdvantageChanger {
+	static class Scrappy extends Ability implements AttackingNoAdvantageChanger {
 		private static final long serialVersionUID = 1L;
 
 		Scrappy() {
@@ -3263,32 +3263,23 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			this.schoolForm = false;
 		}
 
-		private boolean formCheck(ActivePokemon formsie) {
-			return formsie.getHPRatio() >= .25 && formsie.getLevel() >= 20;
+		private void changeForm(ActivePokemon formsie) {
+			if (this.schoolForm != formsie.getHPRatio() >= .25 && formsie.getLevel() >= 20) {
+				this.schoolForm = !schoolForm;
+				Messages.add(
+					new MessageUpdate(formsie.getName() + " changed into " + (schoolForm ? "School" : "Solo") + " Forme!")
+					.withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), schoolForm), formsie.isPlayer())
+				);
+			}
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (formCheck(victim)) {
-				if (!schoolForm) {
-					schoolForm = true;
-					Messages.add(victim.getName() + " changed into School Forme!");
-				}
-			}
-			else if (schoolForm){
-				schoolForm = false;
-				Messages.add(victim.getName() + " changed into Solo Forme!");
-			}
+			changeForm(victim);
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			if (formCheck(enterer)) {
-				schoolForm = true;
-				Messages.add(enterer.getName() + " changed into School Forme!");
-			}
-			else {
-				schoolForm = false;
-				Messages.add(enterer.getName() + " changed into Solo Forme!");
-			}
+			schoolForm = false;
+			changeForm(enterer);
 		}
 
 		public Integer getStat(ActivePokemon user, Stat stat) {
@@ -3321,32 +3312,23 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			this.coreForm = false;
 		}
 
-		private boolean formCheck(ActivePokemon formsie) {
-			return formsie.getHPRatio() < .5;
+		private void changeForm(ActivePokemon formsie) {
+			if (this.coreForm != formsie.getHPRatio() < .5) {
+				this.coreForm = !coreForm;
+				Messages.add(
+					new MessageUpdate(formsie.getName() + " changed into " + (coreForm ? "Core" : "Meteor") + " Forme!")
+					.withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), coreForm), formsie.isPlayer())
+				);
+			}
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			if (formCheck(victim)) {
-				if (!coreForm) {
-					coreForm = true;
-					Messages.add(victim.getName() + " changed into Core Forme!");
-				}
-			}
-			else if (coreForm){
-				coreForm = false;
-				Messages.add(victim.getName() + " changed into Meteor Forme!");
-			}
+			changeForm(victim);
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			if (formCheck(enterer)) {
-				coreForm = true;
-				Messages.add(enterer.getName() + " changed into Core Forme!");
-			}
-			else {
-				coreForm = false;
-				Messages.add(enterer.getName() + " changed into Meteor Forme!");
-			}
+			coreForm = false;
+			changeForm(enterer);
 		}
 
 		public Integer getStat(ActivePokemon user, Stat stat) {
@@ -3380,6 +3362,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 
 		public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+			// TODO: Change image once I can find Aegislash Shield Form sprites
 			if (shieldForm && !p.getAttack().isStatusMove()) {
 				shieldForm = false;
 				Messages.add(p.getName() + " changed into Blade Forme!");

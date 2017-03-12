@@ -10,7 +10,7 @@ import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
-import trainer.Player;
+import trainer.player.Player;
 
 import java.util.HashSet;
 import java.util.Set;

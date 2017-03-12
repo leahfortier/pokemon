@@ -12,7 +12,7 @@ import message.Messages;
 import pattern.map.WildBattleMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
-import trainer.Player;
+import trainer.player.Player;
 import util.RandomUtils;
 import util.SerializationUtils;
 
@@ -38,7 +38,7 @@ public class WalkingWildBattleTrigger extends Trigger {
             WildEncounter wildPokemon = getWildEncounter();
 
             // Maybe you won't actually fight this Pokemon after all (due to repel, cleanse tag, etc.)
-            if ((wildPokemon.getLevel() <= front.getLevel() && player.isUsingRepel())
+            if ((wildPokemon.getLevel() <= front.getLevel() && player.getRepelInfo().isUsingRepel())
                     || RepellingEffect.checkRepellingEffect(front, wildPokemon)) {
                 return;
             }

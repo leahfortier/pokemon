@@ -19,28 +19,10 @@ import java.util.List;
 public abstract class Trainer implements Team, Serializable {
 	private static final long serialVersionUID = -7797121866082399148L;
 
-	// TODO: Rename to trainer action and move to a new file
-	public enum Action implements Serializable {
-		FIGHT(0),
-		SWITCH(6),
-		ITEM(6),
-		RUN(6);
-		
-		private final int priority;
-		
-		Action(int p) {
-			priority = p;
-		}
-		
-		public int getPriority() {
-			return priority;
-		}
-	}
-	
 	public static final int MAX_POKEMON = 6;
 
 	protected String name;
-	protected Action action;
+	protected TrainerAction action;
 	protected int cashMoney;
 
 	protected List<ActivePokemon> team;
@@ -240,16 +222,16 @@ public abstract class Trainer implements Team, Serializable {
 		return false;
 	}
 	
-	public void performAction(Battle b, Action a) {
+	public void performAction(Battle b, TrainerAction a) {
 		setAction(a);
 		b.fight();
 	}
 	
-	public void setAction(Action a) {
+	public void setAction(TrainerAction a) {
 		action = a;
 	}
 	
-	public Action getAction() {
+	public TrainerAction getAction() {
 		return action;
 	}
 	

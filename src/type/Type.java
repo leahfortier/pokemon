@@ -28,7 +28,7 @@ public enum Type implements Serializable {
 	DARK(15, "Dark", () -> TypeAdvantage.DARK, new Color(116, 90, 73), 15),
 	STEEL(16, "Steel", () -> TypeAdvantage.STEEL, new Color(173, 173, 199), 7),
 	FAIRY(17, "Fairy", () -> TypeAdvantage.FAIRY, new Color(248, 179, 249), -1),
-	NO_TYPE(18, "Unknown", () -> TypeAdvantage.NO_TYPE, new Color(255, 255, 255, 0), -1); // TODO: TYPE: NULL MUTHAFUCKA
+	NO_TYPE(18, "Unknown", () -> TypeAdvantage.NO_TYPE, new Color(255, 255, 255, 0), -1);
 
 	private final int index;
 	private final String name;

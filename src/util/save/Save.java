@@ -4,7 +4,7 @@ import gui.view.mainmenu.Theme;
 import main.Game;
 import main.Global;
 import sound.SoundPlayer;
-import trainer.Player;
+import trainer.player.Player;
 import util.FileIO;
 import util.FileName;
 import util.Folder;

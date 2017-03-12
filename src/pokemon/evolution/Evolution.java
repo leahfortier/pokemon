@@ -11,6 +11,7 @@ public abstract class Evolution implements Serializable {
 
 	public abstract BaseEvolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use);
 	public abstract PokemonNamesies[] getEvolutions();
+	public abstract String getString();
 
 	public boolean canEvolve() {
 		return true;

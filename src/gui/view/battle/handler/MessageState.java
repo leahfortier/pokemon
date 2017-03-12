@@ -1,8 +1,8 @@
 package gui.view.battle.handler;
 
 import draw.TextUtils;
-import draw.button.panel.BasicPanels;
-import draw.button.panel.DrawPanel;
+import draw.panel.BasicPanels;
+import draw.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
@@ -63,7 +63,10 @@ public class MessageState implements VisualStateHandler {
 
         // Don't go to the next message if an animation is playing
         if (pressed && view.hasMessage() && !view.isPlayingAnimation()) {
-            if (view.isState(VisualState.STAT_GAIN)) view.setVisualState(VisualState.MESSAGE);
+            if (view.isState(VisualState.STAT_GAIN)) {
+                view.setVisualState(VisualState.MESSAGE);
+            }
+
             view.cycleMessage(false);
         }
     }

@@ -534,6 +534,7 @@ Leaf Guard:
 Scrappy:
 	Desc: Enables moves to hit Ghost-type foes.
 	RemoveAdvantageType: Ghost attacking == Type.NORMAL || attacking == Type.FIGHTING
+	Int: AttackingNoAdvantageChanger
 *
 Swift Swim:
 	Desc: Boosts the Pok\u00e9mon's Speed in rain.
@@ -1388,6 +1389,7 @@ Stance Change:
 	FormChange: shieldForm true Blade 60 150 50 150 50 60 Shield 60 50 150 50 150 60
 	Int: BeforeTurnEffect, EntryEffect
 	CanAttack:
+		// TODO: Change image once I can find Aegislash Shield Form sprites
 		if (shieldForm && !p.getAttack().isStatusMove()) {
 			shieldForm = false;
 			Messages.add(p.getName() + " changed into Blade Forme!");

@@ -528,7 +528,7 @@ Red Card:
 		###
 *
 Ring Target:
-	Int: HoldItem, NoAdvantageChanger
+	Int: HoldItem, DefendingNoAdvantageChanger
 	Cat: Misc
 	Desc: Moves that would otherwise have no effect will land on the Pok\u00e9mon that holds it.
 	Price: 200

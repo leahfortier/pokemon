@@ -44,6 +44,7 @@ public class MessageUpdate {
 	private Weather weather;
 	private TerrainType terrain;
 	private SoundTitle soundEffect;
+	private String imageName;
 
 	public enum Update {
 		NO_UPDATE,
@@ -54,7 +55,7 @@ public class MessageUpdate {
 		APPEND_TO_NAME,
 		SHOW_POKEMON,
 		PROMPT_SWITCH(VisualState.POKEMON),
-		LEARN_MOVE(VisualState.LEARN_MOVE_QUESTION),
+		LEARN_MOVE(VisualState.LEARN_MOVE),
 		STAT_GAIN(VisualState.STAT_GAIN),
 		EXIT_BATTLE(battleView -> exitBattle(battleView, ViewMode.MAP_VIEW)),
 		CATCH_POKEMON(battleView -> exitBattle(battleView, ViewMode.NEW_POKEMON_VIEW)),
@@ -135,6 +136,13 @@ public class MessageUpdate {
 
 	public MessageUpdate withSoundEffect(SoundTitle soundEffect) {
 		this.soundEffect = soundEffect;
+		return this;
+	}
+
+	public MessageUpdate withImageName(String imageName, boolean isPlayer) {
+		this.imageName = imageName;
+		this.animation = true;
+		this.isPlayer = isPlayer;
 		return this;
 	}
 
@@ -421,5 +429,13 @@ public class MessageUpdate {
 
 	public SoundTitle getSoundEffect() {
 		return this.soundEffect;
+	}
+
+	public boolean imageUpdate() {
+		return !StringUtils.isNullOrEmpty(this.imageName);
+	}
+
+	public String getImageName() {
+		return this.imageName;
 	}
 }

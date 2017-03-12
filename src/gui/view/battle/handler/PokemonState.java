@@ -6,7 +6,7 @@ import draw.DrawUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
-import draw.button.panel.DrawPanel;
+import draw.panel.DrawPanel;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -14,9 +14,9 @@ import main.Game;
 import map.Direction;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
-import trainer.Player;
 import trainer.Trainer;
-import trainer.Trainer.Action;
+import trainer.TrainerAction;
+import trainer.player.Player;
 import type.Type;
 import util.FontMetrics;
 import util.PokeString;
@@ -331,7 +331,7 @@ public class PokemonState implements VisualStateHandler {
             if (view.isState(VisualState.USE_ITEM)) {
                 // Valid item
                 if (player.getBag().battleUseItem(VisualState.getSelectedItem(), selectedPkm, currentBattle)) {
-                    player.performAction(currentBattle, Action.ITEM);
+                    player.performAction(currentBattle, TrainerAction.ITEM);
                     view.setVisualState(VisualState.MENU);
                     view.cycleMessage(false);
                 }
@@ -348,7 +348,7 @@ public class PokemonState implements VisualStateHandler {
                     currentBattle.enterBattle(player.front());
 
                     if (!switchForced) {
-                        player.performAction(currentBattle, Action.SWITCH);
+                        player.performAction(currentBattle, TrainerAction.SWITCH);
                     }
 
                     view.cycleMessage(false);

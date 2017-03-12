@@ -13,7 +13,7 @@ import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import sound.SoundPlayer;
 import sound.SoundTitle;
-import trainer.Player;
+import trainer.player.Player;
 import util.FloatPoint;
 import util.Point;
 
@@ -123,7 +123,7 @@ public class PlayerEntity extends MovableEntity {
 				}
 
 				Entity newEntity = currentMap.getEntity(newLocation);
-				if (newEntity instanceof NPCEntity) {
+				if (newEntity instanceof NPCEntity && newEntity != currentInteractionEntity) {
 					NPCEntity npc = (NPCEntity) newEntity;
 					if (npc.canWalkToPlayer()) {
 						this.stall();

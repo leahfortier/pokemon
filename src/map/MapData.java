@@ -4,6 +4,7 @@ import gui.TileSet;
 import gui.view.map.MapView;
 import main.Game;
 import main.Global;
+import map.area.AreaData;
 import map.entity.Entity;
 import map.entity.EntityAction;
 import map.entity.FishingSpotEntity;
@@ -23,7 +24,7 @@ import pattern.map.MapTransitionMatcher;
 import pattern.map.MiscEntityMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
-import trainer.Player;
+import trainer.player.Player;
 import util.FileIO;
 import util.MultiMap;
 import util.Point;
@@ -194,14 +195,6 @@ public class MapData {
 		}
 
 		return this.dataMap.get(dataType)[Point.getIndex(x, y, dimension.width)];
-	}
-
-	public int getBgTile(int x, int y) {
-		return getRGB(x, y, MapDataType.BACKGROUND);
-	}
-
-	public int getFgTile(int x, int y) {
-		return getRGB(x, y, MapDataType.FOREGROUND);
 	}
 
 	public WalkType getPassValue(Point location) {

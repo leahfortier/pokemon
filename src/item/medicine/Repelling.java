@@ -4,19 +4,19 @@ import item.hold.HoldItem;
 import item.use.PlayerUseItem;
 import main.Game;
 import message.Messages;
-import trainer.Player;
+import trainer.player.RepelInfo;
 
 public interface Repelling extends HoldItem, PlayerUseItem {
     int repelSteps();
 
     default boolean use() {
-        Player player = Game.getPlayer();
-        if (player.isUsingRepel()) {
+        RepelInfo repelInfo = Game.getPlayer().getRepelInfo();
+        if (repelInfo.isUsingRepel()) {
             return false;
         }
 
         int repelSteps = repelSteps();
-        player.addRepelSteps(repelSteps);
+        repelInfo.useItem(this.namesies(), repelSteps);
         Messages.add("Weak wild Pok\u00e9mon will not appear for " + repelSteps + " steps!");
 
         return true;

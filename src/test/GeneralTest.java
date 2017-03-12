@@ -4,8 +4,17 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
+import util.StringUtils;
 
 public class GeneralTest {
+    @Test
+    public void properCaseTest() {
+        Assert.assertEquals(StringUtils.properCase("red"), "Red");
+        Assert.assertEquals(StringUtils.properCase("water stone"), "Water Stone");
+        Assert.assertEquals(StringUtils.properCase("x-scissor"), "X-Scissor");
+        Assert.assertEquals(StringUtils.properCase("DFS town"), "DFS Town");
+    }
+
     @Test
     public void oppositeGenderTest() {
         Assert.assertTrue(Gender.MALE.getOppositeGender() == Gender.FEMALE);
@@ -32,5 +41,9 @@ public class GeneralTest {
         Assert.assertTrue(first.getGender() == Gender.MALE);
         Assert.assertTrue(second.getGender() == Gender.MALE);
         Assert.assertFalse(Gender.oppositeGenders(first, second));
+    }
+
+    public static boolean healthRatioMatch(TestPokemon pokemon, double fraction) {
+        return (int)(Math.ceil(fraction*pokemon.getMaxHP())) == pokemon.getHP();
     }
 }

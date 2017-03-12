@@ -14,7 +14,7 @@ import main.Global;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
-import trainer.Player;
+import trainer.player.Player;
 
 import java.io.Serializable;
 import java.util.EnumMap;

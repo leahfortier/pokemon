@@ -2,6 +2,7 @@ package draw;
 
 import main.Global;
 import type.Type;
+import util.FileIO;
 import util.FontMetrics;
 import util.Point;
 
@@ -11,6 +12,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
+import java.io.File;
 
 public final class ImageUtils {
     public static void drawTypeTiles(Graphics g, Type[] type, int rightX, int textY) {
@@ -157,5 +159,37 @@ public final class ImageUtils {
 
     public static BufferedImage createNewImage(Dimension dimension) {
         return new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
+    }
+
+    public static void trimImages(String inputLocation, String outputLocation) {
+        for (File imageFile : FileIO.listFiles(inputLocation)) {
+            if (imageFile.isDirectory()) {
+                continue;
+            }
+
+            BufferedImage image = FileIO.readImage(imageFile);
+            int empty = image.getRGB(0, 0); // This assumes the top left corner is blank just FYI...
+
+            int leftmost = image.getWidth();
+            int topmost = image.getHeight();
+            int rightmost = 0;
+            int bottommost = 0;
+
+            for (int i = 0; i < image.getWidth(); i++)  {
+                for (int j = 0; j < image.getHeight(); j++) {
+                    if (image.getRGB(i, j) != empty) {
+                        leftmost = Math.min(i, leftmost);
+                        rightmost = Math.max(i, rightmost);
+                        topmost = Math.min(j, topmost);
+                        bottommost = Math.max(j, bottommost);
+                    }
+                }
+            }
+
+            String newName = imageFile.getName();
+
+            File file = new File(outputLocation + "\\" + newName);
+            FileIO.writeImage(image.getSubimage(leftmost, topmost, rightmost - leftmost + 1, bottommost - topmost + 1), file);
+        }
     }
 }

@@ -9,8 +9,8 @@ import map.Direction;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.GroupTriggerMatcher;
-import util.SerializationUtils;
 import util.Point;
+import util.SerializationUtils;
 import util.StringUtils;
 
 import java.awt.image.BufferedImage;

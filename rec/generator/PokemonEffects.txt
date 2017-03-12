@@ -842,7 +842,9 @@ Substitute:
 	Cast: 
 		hp = victim.reduceHealthFraction(b, .25) + 1;
 		super.cast(b, caster, victim, source, printCast);
-		Messages.add(new MessageUpdate().updatePokemon(b, victim));
+		
+		String imageName = "substitute" + (victim.isPlayer() ? "-back" : "");
+		Messages.add(new MessageUpdate().updatePokemon(b, victim).withImageName(imageName, victim.isPlayer()));
 		###
 	FailCondition: victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3
 	ValidMove: 
@@ -866,7 +868,7 @@ Substitute:
 	AbsorbDamage:
 		this.hp -= damageAmount;
 		if (this.hp <= 0) {
-			Messages.add("The substitute broke!");
+			Messages.add(new MessageUpdate("The substitute broke!").withNewPokemon(damageTaker.getPokemonInfo(), damageTaker.isShiny(), true, damageTaker.isPlayer()));
 			damageTaker.getAttributes().removeEffect(this.namesies());
 		}
 		else {

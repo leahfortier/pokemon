@@ -2,9 +2,9 @@ package battle;
 
 import battle.attack.Move;
 import battle.attack.MoveType;
-import battle.effect.ModifyStageValueEffect;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
+import battle.effect.generic.EffectInterfaces.ModifyStageValueEffect;
 import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectNamesies;
@@ -14,7 +14,6 @@ import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
-import pokemon.ability.Ability;
 import util.StringUtils;
 
 import java.io.Serializable;
@@ -270,12 +269,8 @@ public class BattleAttributes implements Serializable {
 		String statName = stat.getName();
 		boolean print = source == CastSource.ATTACK && caster.getAttack().canPrintFail(); 
 
-		// TODO: this shouldn't just be ability -- also should only check mold breaker when caster != victim
-		// Apply abilities that effect the value of the modifier
-		Ability ability = victim.getAbility(); 
-		if (ability instanceof ModifyStageValueEffect && !caster.breaksTheMold()) {
-			val = ((ModifyStageValueEffect)ability).modifyStageValue(val);
-		}
+		// Effects that change the value of the modifier
+		val = ModifyStageValueEffect.updateModifyStageValueEffect(b, caster, victim, val);
 		
 		// Effects that prevent stat reductions caused by the opponent
 		if (val < 0 && caster != victim) {

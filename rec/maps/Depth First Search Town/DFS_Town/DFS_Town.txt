@@ -96,10 +96,6 @@
       "location": [
         {
           "x": 14,
-          "y": 21
-        },
-        {
-          "x": 14,
           "y": 20
         },
         {
@@ -201,8 +197,8 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "You can use Pokéballs to catch new Pokémon!"
+                "triggerType": "DIALOGUE",
+                "triggerContents": "You can use Pokéballs to capture Poké!"
               }
             }
           ]

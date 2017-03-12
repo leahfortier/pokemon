@@ -102,6 +102,8 @@ class PokeGen {
 	
 	private ClassFields readFields(Scanner in, String name, String className, int index) {
 		ClassFields fields = StuffGen.readFields(in);
+		inputFormatter.validate(fields);
+
 		fields.setClassName(className);
 
 		fields.add("Namesies", name);

@@ -4,7 +4,7 @@ import draw.DrawUtils;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
-import trainer.Player;
+import trainer.player.Player;
 import util.FontMetrics;
 
 import java.awt.Color;

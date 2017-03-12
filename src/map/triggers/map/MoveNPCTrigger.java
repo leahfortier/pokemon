@@ -11,9 +11,9 @@ import map.triggers.HaltTrigger;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.MoveNPCTriggerMatcher;
-import trainer.Player;
-import util.SerializationUtils;
+import trainer.player.Player;
 import util.Point;
+import util.SerializationUtils;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;

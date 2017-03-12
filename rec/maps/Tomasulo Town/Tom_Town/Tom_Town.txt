@@ -20,10 +20,6 @@
       "location": [
         {
           "x": 52,
-          "y": 27
-        },
-        {
-          "x": 52,
           "y": 26
         },
         {
@@ -286,7 +282,7 @@
           "y": 13
         }
       ],
-      "triggerName": "Tom_Town_TriggerEntity_LockedDoor_01",
+      "triggerName": "Tom_Town_MiscEntity_LockedDoor_01",
       "condition": "!:badge:ROUND:"
     }
   ],

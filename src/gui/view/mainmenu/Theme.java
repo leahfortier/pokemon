@@ -1,6 +1,6 @@
 package gui.view.mainmenu;
 
-import draw.button.panel.DrawPanel;
+import draw.panel.DrawPanel;
 import util.FileIO;
 import util.Folder;
 

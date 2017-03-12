@@ -5,8 +5,8 @@ import main.Game;
 import map.condition.Condition;
 import pattern.GroupTriggerMatcher;
 import sound.SoundTitle;
-import util.SerializationUtils;
 import util.PokeString;
+import util.SerializationUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -66,7 +66,7 @@ import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import trainer.Team;
 import trainer.Trainer;
-import trainer.Trainer.Action;
+import trainer.TrainerAction;
 import type.Type;
 import type.TypeAdvantage;
 import util.GeneralUtils;
@@ -1114,7 +1114,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
 			RapidSpinRelease.release(b, user);
 		}
 	}
@@ -1753,13 +1752,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -1831,13 +1830,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -1875,14 +1874,18 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int getPriority(Battle b, ActivePokemon me) {
-			Team trainer = b.getTrainer(!me.isPlayer()); // TODO: Make switching occur at its priority
-			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) return 7;
+			// TODO: Make switching occur at its priority
+			Team trainer = b.getTrainer(!me.isPlayer());
+			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
+				return 7;
+			}
+			
 			return super.priority;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Team trainer = b.getTrainer(victim);
-			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == Action.SWITCH) {
+			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
 				return 2;
 			}
 			
@@ -1922,13 +1925,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -2074,8 +2077,6 @@ public abstract class Attack implements Serializable {
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			Type[] type = victim.getType(b);
-			
-			// TODO: Rewrite this because it looks stupid
 			if (type[0] == Type.FLYING) {
 				return new Type[] { type[1], Type.NO_TYPE };
 			}
@@ -2720,13 +2721,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -2829,13 +2830,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -3037,13 +3038,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -3340,8 +3341,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
-			victim.getStatus().setTurns(3);
+			victim.getStatus().setTurns(2);
 		}
 
 		public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -4538,13 +4538,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -4926,13 +4926,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5129,13 +5129,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5217,13 +5217,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5628,13 +5628,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5667,13 +5667,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5743,13 +5743,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5781,13 +5781,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -5922,13 +5922,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -7407,13 +7407,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -7612,13 +7612,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -7868,7 +7868,6 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	// TODO: Should not take the attack reduction from burn
 	static class Facade extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
@@ -7962,13 +7961,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -8172,9 +8171,8 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Sticky Hold
 			Item heldItem = victim.getHeldItem(b);
-			if (heldItem instanceof Berry || heldItem instanceof GemItem) {
+			if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
 				Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
 				victim.consumeItem(b);
 			}
@@ -8339,13 +8337,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -8413,13 +8411,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -8494,12 +8492,10 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Stat switchStat(Stat s) {
-			// TODO: Can combine this with Psystrike
 			return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
 		}
 	}
 
-	// TODO: Can combine power condition with Fusion Bolt
 	static class FusionFlare extends Attack implements PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
 
@@ -8871,7 +8867,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-			// TODO: Combine with Trace
 			Ability otherAbility = b.getOtherPokemon(victim).getAbility();
 			return otherAbility.namesies().getNewAbility();
 		}
@@ -9872,13 +9867,13 @@ public abstract class Attack implements Serializable {
 			
 			int hit = 1;
 			for (; hit <= hits; hit++) {
-				Messages.add("Hit " + hit + "!");
-				super.applyDamage(me, o, b);
-				
 				// Stop attacking the dead
 				if (o.isFainted(b)) {
 					break;
 				}
+				
+				Messages.add("Hit " + hit + "!");
+				super.applyDamage(me, o, b);
 			}
 			
 			hit--;
@@ -10367,8 +10362,6 @@ public abstract class Attack implements Serializable {
 
 		public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
 			Type[] type = victim.getType(b);
-			
-			// TODO: Rewrite this because it looks stupid
 			if (type[0] == Type.FIRE) {
 				return new Type[] { type[1], Type.NO_TYPE };
 			}

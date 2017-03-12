@@ -59,7 +59,7 @@
       "isHidden": true,
       "location": {
         "x": 11,
-        "y": 10
+        "y": 11
       },
       "triggerName": "Tom_Town_Power_Plant_B1_HiddenItem_Potion_01"
     }

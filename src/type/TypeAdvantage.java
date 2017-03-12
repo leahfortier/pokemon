@@ -2,7 +2,8 @@ package type;
 
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
-import battle.effect.generic.EffectInterfaces.NoAdvantageChanger;
+import battle.effect.generic.EffectInterfaces.AttackingNoAdvantageChanger;
+import battle.effect.generic.EffectInterfaces.DefendingNoAdvantageChanger;
 import pokemon.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 
@@ -140,9 +141,12 @@ public enum TypeAdvantage {
         // Go through each defending type and multiply its advantage
         for (Type defendingType : defendingTypes) {
             // For moves that are completely uneffective, check if there is an effect which negates this and don't multiply if so
-            if (typeAdvantage.doesNotEffect(defendingType)
-                    && NoAdvantageChanger.checkNoAdvantageChanger(b, attacking, defending, attackingType, defendingType)) {
-                continue;
+            if (typeAdvantage.doesNotEffect(defendingType)) {
+                boolean attackingNegate = AttackingNoAdvantageChanger.checkAttackingNoAdvantageChanger(b, attacking, attackingType, defendingType);
+                boolean defendingNegate = DefendingNoAdvantageChanger.checkDefendingNoAdvantageChanger(b, defending, attackingType, defendingType);
+                if (attackingNegate || defendingNegate) {
+                    continue;
+                }
             }
 
             advantage *= typeAdvantage.getAdvantage(defendingType);
@@ -177,7 +181,6 @@ public enum TypeAdvantage {
         return advantage == 0;
     }
 
-    // TODO: Constant
     public static String getSuperEffectiveMessage() {
         return "It's super effective!";
     }

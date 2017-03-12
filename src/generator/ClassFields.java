@@ -6,7 +6,7 @@ import util.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-class ClassFields {
+public class ClassFields {
     private final Map<String, String> fields;
     private String className;
 
@@ -34,8 +34,12 @@ class ClassFields {
         fields.put(fieldName, value);
     }
 
-    String get(String fieldName) {
-        if (fields.containsKey(fieldName)) {
+    public boolean contains(String fieldName) {
+        return fields.containsKey(fieldName);
+    }
+
+    public String get(String fieldName) {
+        if (this.contains(fieldName)) {
             return fields.get(fieldName);
         }
 
@@ -47,7 +51,7 @@ class ClassFields {
     }
 
     void addNew(String fieldName, String value) {
-        if (fields.containsKey(fieldName)) {
+        if (this.contains(fieldName)) {
             Global.error("Repeated field " + fieldName + " for " + this.className);
         }
 
@@ -55,7 +59,7 @@ class ClassFields {
     }
 
     String getRequired(String fieldName) {
-        if (!fields.containsKey(fieldName)) {
+        if (!this.contains(fieldName)) {
             Global.error("Missing required field " + fieldName);
         }
 
@@ -63,7 +67,7 @@ class ClassFields {
     }
 
     String getAndRemove(String fieldName) {
-        if (fields.containsKey(fieldName)) {
+        if (this.contains(fieldName)) {
             String value = fields.get(fieldName);
             fields.remove(fieldName);
             return value;
@@ -82,7 +86,7 @@ class ClassFields {
     }
 
     boolean getPerformAndRemove(String fieldName, ActionPerformer action) {
-        if (fields.containsKey(fieldName)) {
+        if (this.contains(fieldName)) {
             action.performAction(fields.get(fieldName));
 
             fields.remove(fieldName);

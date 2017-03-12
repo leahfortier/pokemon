@@ -96,9 +96,7 @@ public class PokeString {
 		return enumName.toUpperCase();
 	}
 
-	// TODO: New file
-	// TODO: Before the special chars were O for the genders, wtf is that about
-	public enum SpecialCharacter {
+	private enum SpecialCharacter {
 		POKE_E("\\\\u00e9", "\u00e9", "e"),
 		FEMALE("\\\\u2640", "\u2640", "F"),
 		MALE("\\\\u2642", "\u2642", "M");

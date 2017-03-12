@@ -22,12 +22,6 @@ public abstract class Effect implements Serializable {
 	private final boolean nextTurnSubside;
 
 	public Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
-		// TODO: Should have a constant for -1
-        // TODO: Move to test
-		if ((minTurns == -1 && maxTurns != -1) || (minTurns != -1 && maxTurns == -1)) {
-			Global.error("Incorrect min/max turns for effect " + name);
-		}
-		
 		this.namesies = name;
 		this.nextTurnSubside = nextTurnSubside;
 
@@ -37,10 +31,6 @@ public abstract class Effect implements Serializable {
 	
 	public boolean nextTurnSubside() {
 		return nextTurnSubside;
-	}
-
-	public static Effect getEffect(EffectNamesies effect) {
-		return effect.getEffect();
 	}
 	
 	// Returns the effect if it is in the list, otherwise returns null
@@ -109,7 +99,6 @@ public abstract class Effect implements Serializable {
 		active = false; // Unnecessary, but just to be safe
 	}
 
-	// TODO: Move this it's in a weird place and I'm a psycho for location
 	public abstract void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast);
 	
 	public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {

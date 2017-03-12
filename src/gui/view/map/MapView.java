@@ -11,14 +11,16 @@ import gui.view.View;
 import gui.view.ViewMode;
 import main.Game;
 import main.Global;
-import map.AreaData;
 import map.Direction;
 import map.MapData;
+import map.MapDataType;
 import map.MapName;
 import map.PathDirection;
+import map.area.AreaData;
 import map.daynight.DayCycle;
 import map.entity.Entity;
 import map.entity.movable.MovableEntity;
+import map.entity.movable.NPCEntity;
 import map.entity.movable.PlayerEntity;
 import map.overworld.TerrainType;
 import map.triggers.Trigger;
@@ -27,7 +29,7 @@ import message.MessageUpdate.Update;
 import message.Messages;
 import sound.SoundPlayer;
 import sound.SoundTitle;
-import trainer.Player;
+import trainer.player.Player;
 import util.FontMetrics;
 import util.Point;
 import util.StringUtils;
@@ -120,9 +122,22 @@ public class MapView extends View {
 		// Background
 		for (int y = start.y; y < end.y; y++) {
 			for (int x = start.x; x < end.x; x++) {
-				int bgTile = currentMap.getBgTile(x,y);
+				int bgTile = currentMap.getRGB(x,y, MapDataType.BACKGROUND);
 				if (TileSet.isValidMapTile(bgTile)) {
 					BufferedImage img = mapTiles.getTile(bgTile);
+					TileUtils.drawTileImage(g, img, x, y, draw);
+				}
+			}
+		}
+
+		// Back-foreground
+		for (int y = start.y; y < end.y; y++) {
+			for (int x = start.x; x < end.x; x++) {
+
+				// Draw foreground tiles
+				int fgTile = currentMap.getRGB(x, y, MapDataType.BACK_FOREGROUND);
+				if (TileSet.isValidMapTile(fgTile)) {
+					BufferedImage img = mapTiles.getTile(fgTile);
 					TileUtils.drawTileImage(g, img, x, y, draw);
 				}
 			}
@@ -133,7 +148,7 @@ public class MapView extends View {
 			for (int x = start.x; x < end.x; x++) {
 
 				// Draw foreground tiles
-				int fgTile = currentMap.getFgTile(x, y);
+				int fgTile = currentMap.getRGB(x, y, MapDataType.FOREGROUND);
 				if (TileSet.isValidMapTile(fgTile)) {
 					BufferedImage img = mapTiles.getTile(fgTile);
 					TileUtils.drawTileImage(g, img, x, y, draw);
@@ -163,8 +178,21 @@ public class MapView extends View {
 						continue;
 					}
 
-					// TODO: Checking zero logic seems like it can be simplified
-					newPointEntity.draw(g, draw, !delta.isZero());
+					// TODO: Supes Haxorus plz fix
+					if (newPointEntity instanceof NPCEntity && newPointEntity.getEntityName().equals("MaplesLab_NPC_Prof_Mapes_01")) {
+						newPointEntity.draw(g, new Point(draw.x + Global.TILE_SIZE/2, draw.y), !delta.isZero());
+					}
+					else {
+						// TODO: Checking zero logic seems like it can be simplified
+						newPointEntity.draw(g, draw, !delta.isZero());
+					}
+				}
+
+				// Draw grass tiles
+				int grassTile = currentMap.getRGB(x, y, MapDataType.TALL_GRASS);
+				if (TileSet.isValidMapTile(grassTile)) {
+					BufferedImage img = mapTiles.getTile(grassTile);
+					TileUtils.drawGrassTile(g, img, x, y, draw);
 				}
 			}
 		}

@@ -6,14 +6,15 @@ import battle.effect.generic.Weather;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.button.Button;
-import draw.button.panel.BasicPanels;
-import draw.button.panel.DrawPanel;
+import draw.panel.BasicPanels;
+import draw.panel.DrawPanel;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
 import main.Game;
 import main.Global;
 import map.Direction;
+import map.daynight.DayCycle;
 import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
@@ -293,7 +294,11 @@ public class BattleView extends View {
 		// Opponent battle circle
 		g.drawImage(terrain.getOpponentCircleImage(), 450, 192, null);
 
-        BufferedImage image = Game.getData().getWeatherTiles().getTile(weather.getImageName());
+		if (!terrain.isInterior()) {
+			DayCycle.getTimeOfDay().draw(g);
+		}
+
+		BufferedImage image = Game.getData().getWeatherTiles().getTile(weather.getImageName());
         ImageUtils.drawCenteredImage(g, image, Global.GAME_SIZE.width/2, image.getHeight());
 		
 		if (playerAnimation.isEmpty()) {
@@ -307,7 +312,7 @@ public class BattleView extends View {
 		else if (enemyAnimation.isEmpty()) {
 			g.setClip(0, 250, Global.GAME_SIZE.width, 440);
 		}
-		
+
 		// Draw Status Box Backgrounds
 		playerAnimation.drawStatusBox(g);
 		enemyAnimation.drawStatusBox(g);

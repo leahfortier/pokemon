@@ -6,7 +6,7 @@ import draw.Alignment;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
-import draw.button.panel.DrawPanel;
+import draw.panel.DrawPanel;
 import gui.GameData;
 import gui.TileSet;
 import main.Game;
@@ -17,8 +17,8 @@ import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import sound.SoundPlayer;
-import trainer.Player;
 import trainer.Trainer;
+import trainer.player.Player;
 import type.Type;
 import util.FontMetrics;
 import util.Point;
@@ -135,8 +135,7 @@ class PokemonAnimationState {
 
         state.hp = oldState.hp = hp;
         state.type = type;
-        state.shiny = shiny;
-        state.imageName = pokemon.getImageName(state.shiny, !isPlayer);
+        state.imageName = pokemon.getImageName(shiny, !isPlayer);
         state.caught = battleView.getCurrentBattle().isWildBattle() && Game.getPlayer().getPokedex().isCaught(pokemon.namesies());
         state.name = name;
         state.gender = gender;
@@ -158,8 +157,7 @@ class PokemonAnimationState {
         state.type = newType;
     }
 
-    private void startPokemonUpdateAnimation(PokemonInfo newPokemon, boolean newShiny, boolean animate) {
-        state.shiny = newShiny;
+    private void startPokemonUpdateAnimation(String imageName, boolean animate) {
         if (!StringUtils.isNullOrEmpty(state.imageName)) {
             oldState.imageName = state.imageName;
             if (animate) {
@@ -167,8 +165,12 @@ class PokemonAnimationState {
             }
         }
 
-        state.imageName = newPokemon.getImageName(state.shiny, !isPlayer);
+        state.imageName = imageName;
         animationCatchDuration = 0;
+    }
+
+    private void startPokemonUpdateAnimation(PokemonInfo newPokemon, boolean newShiny, boolean animate) {
+        startPokemonUpdateAnimation(newPokemon.getImageName(newShiny, !isPlayer), animate);
     }
 
     private void startCatchAnimation(int duration) {
@@ -281,7 +283,6 @@ class PokemonAnimationState {
     }
 
     private void drawHealthBar(Graphics g) {
-
         int maxHp = state.frontPokemon.getMaxHP();
 
         // Get the ratio based off of the possible animation
@@ -289,7 +290,7 @@ class PokemonAnimationState {
         String hpStr = state.hp + "/" + maxHp;
 
         if (animationHP > 0) {
-            animationHP -= HP_LOSS_RATIO*maxHp + 1;
+            animationHP -= Math.max(0, HP_LOSS_RATIO*maxHp + 1);
             float originalTime = Math.abs(state.hp - oldState.hp)*FRAMES_PER_HP_LOSS;
             float numerator = (state.hp + (oldState.hp - state.hp)*(animationHP/originalTime));
 
@@ -335,8 +336,6 @@ class PokemonAnimationState {
     }
 
     private void drawPokemon(Graphics g) {
-
-
         // Draw the Pokemon image if applicable
         if (!isEmpty() && state.showImage()) {
             GameData data = Game.getData();
@@ -366,7 +365,6 @@ class PokemonAnimationState {
 
     // Draws the status box, not including the text
     void drawStatusBox(Graphics g) {
-
         drawPokemon(g);
 
         // Draw the colored type polygons
@@ -497,6 +495,10 @@ class PokemonAnimationState {
                 startCatchAnimation(newMessage.getDuration());
             }
 
+            if (newMessage.imageUpdate()) {
+                startPokemonUpdateAnimation(newMessage.getImageName(), newMessage.isAnimate());
+            }
+
             if (newMessage.pokemonUpdate()) {
                 startPokemonUpdateAnimation(newMessage.getPokemon(), newMessage.getShiny(), newMessage.isAnimate());
             }
@@ -526,7 +528,6 @@ class PokemonAnimationState {
         private String name;
         private Type[] type;
         private float expRatio;
-        private boolean shiny;
         private boolean caught;
         private Gender gender;
         private ActivePokemon frontPokemon;

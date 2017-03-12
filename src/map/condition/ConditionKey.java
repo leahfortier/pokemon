@@ -4,6 +4,7 @@ import main.Game;
 import main.Global;
 import map.daynight.DayCycle;
 import trainer.Badge;
+import util.StringUtils;
 import util.TimeUtils;
 
 import java.util.regex.Matcher;
@@ -26,7 +27,16 @@ public enum ConditionKey {
         int index = value.indexOf('$');
         String npcEntityName = value.substring(0, index);
         String interactionName = value.substring(index + 1);
-        return Game.getPlayer().isNpcInteraction(npcEntityName, interactionName);
+
+        System.out.println(npcEntityName + " " + interactionName);
+
+        if (!StringUtils.isNullOrEmpty(npcEntityName) && npcEntityName.startsWith("#")) {
+            return !Game.getPlayer().isNpcInteraction(npcEntityName.substring(1), interactionName);
+        }
+        else {
+            return Game.getPlayer().isNpcInteraction(npcEntityName, interactionName);
+        }
+
     });
 
     private static final Pattern keyValuePattern = Pattern.compile(":([^:]+):([^:]+):");

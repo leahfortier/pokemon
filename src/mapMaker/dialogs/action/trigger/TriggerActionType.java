@@ -10,10 +10,10 @@ import trainer.Badge;
 
 public enum TriggerActionType {
     BADGE(TriggerType.BADGE, () -> new EnumTriggerPanel<>("Badge", Badge.values())),
+    CHANGE_VIEW(TriggerType.CHANGE_VIEW, () -> new EnumTriggerPanel<>("View Mode", ViewMode.values())),
     DAY_CARE(TriggerType.DAY_CARE, EmptyTriggerContentsPanel::new),
     DAY_CARE_DEPOSIT(TriggerType.DAY_CARE_DEPOSIT, EmptyTriggerContentsPanel::new),
     DAY_CARE_WITHDRAW(TriggerType.DAY_CARE_WITHDRAW, EmptyTriggerContentsPanel::new),
-    CHANGE_VIEW(TriggerType.CHANGE_VIEW, () -> new EnumTriggerPanel<>("View Mode", ViewMode.values())),
     DIALOGUE(TriggerType.DIALOGUE, () -> new StringTriggerPanel("Dialogue")),
     GIVE_ITEM(TriggerType.GIVE_ITEM, ItemTriggerPanel::new),
     GIVE_POKEMON(TriggerType.GIVE_POKEMON, PokemonTriggerPanel::new),
@@ -23,7 +23,8 @@ public enum TriggerActionType {
     MOVE_NPC(TriggerType.MOVE_NPC, MoveNPCTriggerPanel::new),
     MOVE_PLAYER(TriggerType.MOVE_PLAYER, MovePlayerTriggerPanel::new),
     RELOAD_MAP(TriggerType.RELOAD_MAP, EmptyTriggerContentsPanel::new),
-    SOUND(TriggerType.SOUND, () -> new EnumTriggerPanel<>("Sound Title", SoundTitle.values()));
+    SOUND(TriggerType.SOUND, () -> new EnumTriggerPanel<>("Sound Title", SoundTitle.values())),
+    USE_ITEM(TriggerType.USE_ITEM, ItemTriggerPanel::new);
 
     private final TriggerType triggerType;
     private final TriggerPanelCreator panelCreator;

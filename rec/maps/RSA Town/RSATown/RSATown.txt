@@ -20,10 +20,6 @@
       "location": [
         {
           "x": 43,
-          "y": 21
-        },
-        {
-          "x": 43,
           "y": 20
         },
         {
@@ -60,10 +56,6 @@
       },
       "nextEntrance": "EastDoor",
       "location": [
-        {
-          "x": 16,
-          "y": 21
-        },
         {
           "x": 16,
           "y": 20
@@ -165,7 +157,7 @@
         "y": 19
       },
       "triggerName": "RSATown_NPC_Rival_01",
-      "condition": ":npc_interaction:!RSATown_NPC_Rival_01$won:"
+      "condition": ":npc_interaction:#RSATown_NPC_Rival_01$won:"
     }
   ],
   "items": [],
@@ -211,7 +203,7 @@
         }
       ],
       "triggerName": "RSATown_Event_Rival_Battle_01",
-      "condition": ":npc_interaction:!RSATown_NPC_Rival_01$won:"
+      "condition": ":npc_interaction:#RSATown_NPC_Rival_01$won:"
     }
   ],
   "wildBattles": [],

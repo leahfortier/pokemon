@@ -6,7 +6,7 @@ import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
-import draw.button.panel.DrawPanel;
+import draw.panel.DrawPanel;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -16,8 +16,8 @@ import item.bag.BattleBagCategory;
 import item.use.PokemonUseItem;
 import main.Game;
 import map.Direction;
-import trainer.Player;
-import trainer.Trainer.Action;
+import trainer.TrainerAction;
+import trainer.player.Player;
 import util.FontMetrics;
 import util.GeneralUtils;
 
@@ -278,7 +278,7 @@ public class BagState implements VisualStateHandler {
                 }
                 // Otherwise, just use it on the battle if successful
                 else if (bag.battleUseItem(item, player.front(), currentBattle)) {
-                    player.performAction(currentBattle, Action.ITEM);
+                    player.performAction(currentBattle, TrainerAction.ITEM);
                     view.setVisualState(VisualState.MENU);
                     view.cycleMessage(false);
                     break;
@@ -295,7 +295,7 @@ public class BagState implements VisualStateHandler {
         if (bagLastUsedBtn.checkConsumePress()) {
             ItemNamesies lastItemUsed = bag.getLastUsedItem();
             if (lastItemUsed != ItemNamesies.NO_ITEM && bag.battleUseItem(lastItemUsed, player.front(), currentBattle)) {
-                player.performAction(currentBattle, Action.ITEM);
+                player.performAction(currentBattle, TrainerAction.ITEM);
                 view.setVisualState(VisualState.MENU);
                 view.cycleMessage(false);
             }

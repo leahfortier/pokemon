@@ -6,7 +6,7 @@ import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.breeding.DayCareCenter;
-import trainer.Player;
+import trainer.player.Player;
 import util.StringUtils;
 
 public class DayCareDepositTrigger extends Trigger {

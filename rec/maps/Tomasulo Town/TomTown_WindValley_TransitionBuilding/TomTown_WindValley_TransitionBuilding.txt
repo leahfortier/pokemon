@@ -253,7 +253,7 @@
           "y": 6
         }
       ],
-      "triggerName": "TomTown_WindValley_TransitionBuilding_TriggerEntity_Info_Guy_Dialogue_01"
+      "triggerName": "TomTown_WindValley_TransitionBuilding_MiscEntity_Info_Guy_Dialogue_01"
     }
   ],
   "events": [],

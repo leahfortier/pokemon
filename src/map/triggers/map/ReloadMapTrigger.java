@@ -5,7 +5,7 @@ import main.Global;
 import map.MapData;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
-import trainer.Player;
+import trainer.player.Player;
 import util.StringUtils;
 
 public class ReloadMapTrigger extends Trigger {
