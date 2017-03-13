@@ -235,4 +235,8 @@ public abstract class Trainer implements Team, Serializable {
 		team.set(i, team.get(j));
 		team.set(j, tmp);
 	}
+
+	public void replaceFront(ActivePokemon newFront) {
+		this.team.set(this.frontIndex, newFront);
+	}
 }

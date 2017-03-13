@@ -55,7 +55,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Battle implements Serializable {
-	private final Player player;
+	private transient Player player;
 	private final Opponent opponent; // SO OBJECT-ORIENTED
 
 	private List<BattleEffect> effects;
@@ -122,6 +122,10 @@ public class Battle implements Serializable {
 	public Battle(EnemyTrainer npcTrainer, UpdateMatcher npcUpdateInteraction) {
 		this(npcTrainer);
 		this.npcUpdateInteraction = npcUpdateInteraction;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 
 	public Player getPlayer() {

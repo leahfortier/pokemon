@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MonteCarlo {
-    private static final int BUDGET = 100;
+    private static final int BUDGET = 50;
     private static final int ROLLOUT_TURNS = 5;
 
     // TODO: Comment this with whatever Bryan just said but didn't necessarily hear correctly
@@ -26,8 +26,11 @@ public class MonteCarlo {
         Messages.clearMessages(MessageState.SIMULATION_STATION);
         Messages.setMessageState(MessageState.SIMULATION_STATION);
 
+        Player player = (Player) SerializationUtils.getSerializedCopy(battle.getPlayer());
+
         Node root = new Node(new ArrayList<>(), true);
         for (int i = 0; i < BUDGET; i++) {
+
             Node current = root;
             current.visitedCount++;
 
@@ -57,12 +60,13 @@ public class MonteCarlo {
                 traversed.add(current);
             }
 
-            Battle simulated = (Battle)SerializationUtils.deserialize(SerializationUtils.serialize(battle));
+            Battle simulated = (Battle) SerializationUtils.getSerializedCopy(battle);
 
-            Player player = simulated.getPlayer();
+            ActivePokemon playerPokemon = (ActivePokemon) SerializationUtils.getSerializedCopy(battle.getPlayer().front());
+            player.replaceFront(playerPokemon);
+            simulated.setPlayer(player);
+
             Opponent opponent = simulated.getOpponent();
-
-            ActivePokemon playerPokemon = player.front();
             ActivePokemon opponentPokemon = opponent.front();
 
             // Need to set these manually since this field has to be transient because ActivePokemon and BattleAttributes store each other
@@ -77,12 +81,6 @@ public class MonteCarlo {
 
             current = RandomUtils.getRandomValue(current.children);
             traversed.add(current);
-
-            System.out.print("Traversed: ");
-            for(int j = 1; j < traversed.size(); j++){
-                System.out.print(traversed.get(j).path.get((traversed.get(j).path.size() - 1)).getAttack().getName() + " " + traversed.get(j).ucb + " ");
-            }
-            System.out.println();
 
             List<Move> playerRolloutMoves = new ArrayList<>();
             List<Move> opponentRolloutMoves = new ArrayList<>();
@@ -107,18 +105,18 @@ public class MonteCarlo {
 
                 simulated.fight();
 
-                if (simulated.deadUser()) {
+                if (playerPokemon.isFainted(simulated)) {
                     oppWon = true;
                     break;
                 }
-                else if (simulated.deadOpponent()) {
+                else if (opponentPokemon.isFainted(simulated)) {
                     oppWon = false;
                     break;
                 }
             }
 
             if (oppWon == null) {
-                oppWon = simulated.getTrainer(false).front().getHPRatio() > simulated.getTrainer(true).front().getHPRatio();
+                oppWon = opponentPokemon.getHPRatio() > playerPokemon.getHPRatio();
             }
 
             for (int j = 1; j < traversed.size(); j++) {
