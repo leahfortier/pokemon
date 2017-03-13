@@ -35707,7 +35707,7 @@ Luxray
 80 120 79 95 79 70 
 235
 MEDIUM_SLOW
-ELECTRIC NO_TYPE
+ELECTRIC DARK
 45
 0 3 0 0 0 0 
 NONE
@@ -35718,7 +35718,8 @@ Gleam Eyes
 55 92.6 It can see clearly through walls to track down its prey and seek its lost young.
 5120
 FIELD NONE
-16
+17
+-1 FOUL_PLAY
 0 ELECTRIC_TERRAIN
 0 TACKLE
 0 LEER
