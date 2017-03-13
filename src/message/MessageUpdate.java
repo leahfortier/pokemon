@@ -36,6 +36,7 @@ public class MessageUpdate {
 	private Gender gender;
 	private ActivePokemon moveLearner;
 	private String frontPokemonJson;
+	private Integer teamIndex;
 	private Move move;
 	private Integer duration;
 	private String triggerName;
@@ -128,10 +129,15 @@ public class MessageUpdate {
 		return this;
 	}
 
-	public MessageUpdate withFrontPokemon(ActivePokemon frontPokemon) {
+	public MessageUpdate withPokemon(ActivePokemon frontPokemon) {
 		this.frontPokemonJson = SerializationUtils.serialize(frontPokemon);
 		this.isPlayer = frontPokemon.isPlayer();
 		return this;
+	}
+
+	public MessageUpdate withFrontPokemon(Battle b, ActivePokemon frontPokemon) {
+		this.teamIndex = b.getTrainer(frontPokemon).getTeamIndex(frontPokemon);
+		return this.withPokemon(frontPokemon);
 	}
 
 	public MessageUpdate withSoundEffect(SoundTitle soundEffect) {
@@ -146,10 +152,6 @@ public class MessageUpdate {
 		return this;
 	}
 
-	public MessageUpdate withPokemon(ActivePokemon pokemon) {
-		return this.withFrontPokemon(pokemon);
-	}
-
 	// Updates all current display information of the given pokemon
 	// Hp, status condition, type, name, and gender
 	public MessageUpdate updatePokemon(Battle b, ActivePokemon pokemon) {
@@ -161,7 +163,7 @@ public class MessageUpdate {
 		return this.withType(pokemon.getDisplayType(b), isPlayer)
 				.withNameChange(pokemon.getName(), isPlayer)
 				.withGender(pokemon.getGender(), isPlayer)
-				.withFrontPokemon(pokemon);
+				.withFrontPokemon(b, pokemon);
 	}
 	
 	// Pokemon image Update!
@@ -189,7 +191,7 @@ public class MessageUpdate {
 		this.name = active.getName();
 		this.gender = active.getGender();
 		this.animation = false;
-		return this.withFrontPokemon(active);
+		return this.withFrontPokemon(battle, active);
 	}
 
 	public MessageUpdate withWeather(Weather weather) {
@@ -405,6 +407,10 @@ public class MessageUpdate {
 
 	public ActivePokemon getFrontPokemon() {
 		return (ActivePokemon)SerializationUtils.deserialize(this.frontPokemonJson);
+	}
+
+	public int getTeamIndex() {
+		return this.teamIndex;
 	}
 
 	public boolean weatherUpdate() {

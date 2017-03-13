@@ -106,15 +106,17 @@ class PokemonAnimationState {
     }
 
     private void resetVals(ActivePokemon p) {
+        Battle b = battleView.getCurrentBattle();
         resetVals(
                 p.getHP(),
-                p.getDisplayType(battleView.getCurrentBattle()),
+                p.getDisplayType(b),
                 p.isShiny(),
                 p.getPokemonInfo(),
                 p.getName(),
                 p.getGender(),
                 p.expRatio(),
-                p
+                p,
+                b.getTrainer(p).getTeamIndex(p)
         );
     }
 
@@ -127,7 +129,8 @@ class PokemonAnimationState {
             String name,
             Gender gender,
             float expRatio,
-            ActivePokemon frontPokemon
+            ActivePokemon frontPokemon,
+            int teamIndex
     ) {
         animationHP = 0;
         animationExp = 0;
@@ -141,6 +144,7 @@ class PokemonAnimationState {
         state.gender = gender;
         state.expRatio = oldState.expRatio = expRatio;
         state.frontPokemon = frontPokemon;
+        state.teamIndex = teamIndex;
     }
 
     private void startHpAnimation(int newHp) {
@@ -448,7 +452,7 @@ class PokemonAnimationState {
             int index = isPlayer ? team.size() - i - 1 : i;
             ActivePokemon pokemon = team.get(index);
 
-            boolean silhouette = pokemon == state.frontPokemon
+            boolean silhouette = i == state.teamIndex
                     ? state.getStatus() == StatusCondition.FAINTED
                     : !pokemon.canFight() || (usedMaxPokemon && !pokemon.getAttributes().isBattleUsed());
 
@@ -477,7 +481,8 @@ class PokemonAnimationState {
                     newMessage.getName(),
                     newMessage.getGender(),
                     front.expRatio(),
-                    newMessage.getFrontPokemon()
+                    newMessage.getFrontPokemon(),
+                    newMessage.getTeamIndex()
             );
         }
         else {
@@ -531,6 +536,7 @@ class PokemonAnimationState {
         private boolean caught;
         private Gender gender;
         private ActivePokemon frontPokemon;
+        private int teamIndex;
 
         PokemonState() {
             type = new Type[2];

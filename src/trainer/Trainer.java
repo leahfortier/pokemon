@@ -44,19 +44,35 @@ public abstract class Trainer implements Team, Serializable {
 		
 		bag = new Bag();
 	}
-	
+
+	@Override
 	public ActivePokemon front() {
 		return team.get(frontIndex);
 	}
-	
+
+	@Override
+	public int getTeamIndex(ActivePokemon teamMember) {
+		for (int i = 0; i < team.size(); i++) {
+			if (teamMember == team.get(i)) {
+				return i;
+			}
+		}
+
+		Global.error("Team member is not apart of team.");
+		return -1;
+	}
+
+	@Override
 	public List<ActivePokemon> getTeam() {
 		return team;
 	}
-	
+
+	@Override
 	public List<TeamEffect> getEffects() {
 		return effects;
 	}
-	
+
+	@Override
 	public void resetEffects() {
 		effects = new ArrayList<>();
 	}
@@ -95,7 +111,8 @@ public abstract class Trainer implements Team, Serializable {
 		team.forEach(ActivePokemon::resetAttributes);
 		setFront();
 	}
-	
+
+	@Override
 	public void resetUsed() {
 		for (int i = 0; i < team.size(); i++) {
 			team.get(i).getAttributes().setUsed(i == frontIndex);
@@ -128,14 +145,17 @@ public abstract class Trainer implements Team, Serializable {
 		return prev - cashMoney;
 	}
 
+	@Override
 	public boolean hasEffect(EffectNamesies effect) {
 		return Effect.hasEffect(effects, effect);
 	}
-	
+
+	@Override
 	public void addEffect(TeamEffect e) {
 		effects.add(e);
 	}
-	
+
+	@Override
 	public boolean blackout() {
 		for (ActivePokemon p : team) {
 			if (p.canFight()) {
