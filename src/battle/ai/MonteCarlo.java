@@ -94,6 +94,8 @@ public class MonteCarlo {
             }
 
             Boolean oppWon = null;
+            double discountFactor = .1;
+            double utility = 0;
             for (int j = 0; j < playerRolloutMoves.size() && j < opponentRolloutMoves.size(); j++) {
                 player.setAction(TrainerAction.FIGHT);
                 if (opponent instanceof Trainer) {
@@ -105,6 +107,14 @@ public class MonteCarlo {
 
                 simulated.fight();
 
+                double factor = opponentPokemon.getHPRatio() - playerPokemon.getHPRatio();
+
+                System.out.println(i + " " + opponentRolloutMoves.get(j).getAttack().getName() + " " + factor);
+//                factor += 1;
+//                factor /= 2;
+
+                utility += Math.pow(discountFactor, j)*factor;
+
                 if (playerPokemon.isFainted(simulated)) {
                     oppWon = true;
                     break;
@@ -115,6 +125,8 @@ public class MonteCarlo {
                 }
             }
 
+            System.out.println(opponentRolloutMoves.get(0).getAttack().getName() + " " + utility);
+
             if (oppWon == null) {
                 oppWon = opponentPokemon.getHPRatio() > playerPokemon.getHPRatio();
             }
@@ -124,28 +136,29 @@ public class MonteCarlo {
                 Node curr = traversed.get(j);
 
                 curr.visitedCount++;
-                if (oppWon) {
-                    curr.totalWins++;
-                }
+//                if (oppWon) {
+//                    curr.totalWins++;
+//                }
+                curr.totalWins += utility;
 
                 double expectedUtility = (double)curr.totalWins/curr.visitedCount;
                 double confidenceIntervalSize = Math.sqrt(CONFIDENCE_BOUND_SIZE*Math.log(prev.visitedCount)/curr.visitedCount);
                 if (confidenceIntervalSize > 0) {
-                    curr.ucb = Math.min(1, expectedUtility + confidenceIntervalSize);
-                    curr.lcb = Math.max(0, expectedUtility - confidenceIntervalSize);
+                    curr.ucb = expectedUtility + confidenceIntervalSize;
+                    curr.lcb = expectedUtility - confidenceIntervalSize;
                 }
             }
         }
 
         Move bestMove = null;
-        double bestVal = 0;
+        double bestVal = -Integer.MAX_VALUE;
         for (int i  = 0; i < root.children.size(); i++) {
             Node child = root.children.get(i);
             System.out.println(i + " " + child.path.get(0).getAttack().getName() + " " + child.totalWins + " " + child.visitedCount + " " + child.lcb);
 
-            if (child.lcb >= bestVal) {
+            if (child.totalWins >= bestVal) {
                 bestMove = child.path.get(0);
-                bestVal = child.lcb;
+                bestVal = child.totalWins;
             }
         }
 
@@ -162,7 +175,7 @@ public class MonteCarlo {
         private double lcb;
 
         int visitedCount;
-        int totalWins;
+        double totalWins;
 
         List<Node> children;
 
