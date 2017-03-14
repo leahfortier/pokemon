@@ -1,6 +1,7 @@
 package battle.ai;
 
 import battle.Battle;
+import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import message.Messages;
 import message.Messages.MessageState;
@@ -82,34 +83,31 @@ public class MonteCarlo {
             current = RandomUtils.getRandomValue(current.children);
             traversed.add(current);
 
-            List<Move> playerRolloutMoves = new ArrayList<>();
-            List<Move> opponentRolloutMoves = new ArrayList<>();
-
-            (current.isOpp ? opponentRolloutMoves : playerRolloutMoves).addAll(current.path);
-
-            for (int j = 0; j < ROLLOUT_TURNS; j++) {
+            List<Move> rolloutMoves = new ArrayList<>(current.path);
+            boolean isOpp = !current.isOpp;
+            for (int j = 0; j < ROLLOUT_TURNS || rolloutMoves.size()%2 != 0; j++) {
                 // TODO: This should really be only the usable moves
-                playerRolloutMoves.add(RandomUtils.getRandomValue(playerPokemon.getMoves(simulated)));
-                opponentRolloutMoves.add(RandomUtils.getRandomValue(opponentPokemon.getMoves(simulated)));
+                rolloutMoves.add(RandomUtils.getRandomValue(simulated.getTrainer(!isOpp).front().getMoves(simulated)));
+                isOpp = !isOpp;
             }
 
             Boolean oppWon = null;
             double discountFactor = .1;
             double utility = 0;
-            for (int j = 0; j < playerRolloutMoves.size() && j < opponentRolloutMoves.size(); j++) {
+            for (int j = 0; j < rolloutMoves.size(); j += 2) {
                 player.setAction(TrainerAction.FIGHT);
                 if (opponent instanceof Trainer) {
                     ((Trainer) opponent).setAction(TrainerAction.FIGHT);
                 }
 
-                playerPokemon.setMove(playerRolloutMoves.get(j));
-                opponentPokemon.setMove(opponentRolloutMoves.get(j));
+                simulated.getTrainer(false).front().setMove(rolloutMoves.get(j));
+                simulated.getTrainer(true).front().setMove(rolloutMoves.get(j + 1));
 
                 simulated.fight();
 
                 double factor = opponentPokemon.getHPRatio() - playerPokemon.getHPRatio();
 
-                System.out.println(i + " " + opponentRolloutMoves.get(j).getAttack().getName() + " " + factor);
+                System.out.println(i + " " + rolloutMoves.get(j).getAttack().getName() + " " + factor);
 //                factor += 1;
 //                factor /= 2;
 
@@ -125,7 +123,11 @@ public class MonteCarlo {
                 }
             }
 
-            System.out.println(opponentRolloutMoves.get(0).getAttack().getName() + " " + utility);
+            System.out.println(rolloutMoves.get(0).getAttack().getName() + " " + utility);
+
+            if(rolloutMoves.get(0).getAttack().namesies() == AttackNamesies.QUICK_ATTACK){
+                System.out.println("QUICK ATTACK: " + root.children.get(1).visitedCount + " " + root.children.get(1).totalWins);
+            }
 
             if (oppWon == null) {
                 oppWon = opponentPokemon.getHPRatio() > playerPokemon.getHPRatio();
@@ -154,11 +156,11 @@ public class MonteCarlo {
         double bestVal = -Integer.MAX_VALUE;
         for (int i  = 0; i < root.children.size(); i++) {
             Node child = root.children.get(i);
-            System.out.println(i + " " + child.path.get(0).getAttack().getName() + " " + child.totalWins + " " + child.visitedCount + " " + child.lcb);
+            System.out.println(i + " " + child.path.get(0).getAttack().getName() + " " + child.visitedCount + " " + child.totalWins/child.visitedCount);
 
-            if (child.totalWins >= bestVal) {
+            if (child.totalWins/child.visitedCount >= bestVal) {
                 bestMove = child.path.get(0);
-                bestVal = child.totalWins;
+                bestVal = child.totalWins/child.visitedCount;
             }
         }
 
