@@ -4,6 +4,8 @@ import battle.Battle;
 import pokemon.ActivePokemon;
 import type.Type;
 
-public interface ChangeTypeSource {
+import java.io.Serializable;
+
+public interface ChangeTypeSource extends Serializable {
 	Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim);
 }

@@ -2548,7 +2548,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 
 		public int changePriority(Battle b, ActivePokemon user, Attack attack) {
-			return attack.isStatusMove() ? 1 : 0;
+			return attack.isStatusMove() && !b.getOtherPokemon(user).isType(b, Type.DARK) ? 1 : 0;
 		}
 	}
 

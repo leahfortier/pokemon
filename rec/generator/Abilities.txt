@@ -1055,7 +1055,7 @@ Poison Touch:
 *
 Prankster:
 	Desc: Gives priority to a status move.
-	ChangePriorityAbility: attack.isStatusMove()
+	ChangePriorityAbility: attack.isStatusMove() && !b.getOtherPokemon(user).isType(b, Type.DARK)
 *
 Wonder Skin:
 	Desc: Makes status-changing moves more likely to miss.

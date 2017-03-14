@@ -1,6 +1,8 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
+import battle.effect.attack.ChangeTypeSource;
+import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
@@ -8,7 +10,9 @@ import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import test.GeneralTest;
 import test.TestPokemon;
+import type.Type;
 import util.StringUtils;
 
 public class ModifierTest {
@@ -72,12 +76,13 @@ public class ModifierTest {
         int afterStat = Stat.getStat(stat, statPokemon, otherPokemon, battle);
         int otherAfterStat = Stat.getStat(stat, otherPokemon, statPokemon, battle);
 
-        Assert.assertTrue(
+        GeneralTest.assertEquals(
                 StringUtils.spaceSeparated(beforeStat, afterStat, expectedChange, testInfo.toString()),
-                (int)(beforeStat*expectedChange) == afterStat
+                (int)(beforeStat*expectedChange),
+                afterStat
         );
 
-        Assert.assertTrue((int)(otherBeforeStat*otherExpectedChange) == otherAfterStat);
+        GeneralTest.assertEquals((int)(otherBeforeStat*otherExpectedChange), otherAfterStat);
     }
 
     @Test
@@ -204,9 +209,10 @@ public class ModifierTest {
         testInfo.manipulator.manipulate(battle, attacking, defending);
         double afterModifier = battle.getDamageModifier(attacking, defending);
 
-        Assert.assertTrue(
+        GeneralTest.assertEquals(
                 StringUtils.spaceSeparated(beforeModifier, afterModifier, expectedChange, testInfo.toString()),
-                expectedChange*beforeModifier == afterModifier
+                expectedChange*beforeModifier,
+                afterModifier
         );
     }
 
@@ -305,14 +311,15 @@ public class ModifierTest {
 
         attacking.setupMove(testInfo.attackName, battle);
         int beforeStage = Stat.getStage(stat, statPokemon, otherPokemon, battle);
-        Assert.assertTrue(beforeStage == 0);
+        Assert.assertEquals(0, beforeStage);
 
         testInfo.manipulator.manipulate(battle, attacking, defending);
         int afterStage = Stat.getStage(stat, statPokemon, otherPokemon, battle);
 
-        Assert.assertTrue(
+        Assert.assertEquals(
                 StringUtils.spaceSeparated(afterStage, expectedStage, stat, testInfo.toString()),
-                afterStage == expectedStage
+                expectedStage,
+                afterStage
         );
     }
 
@@ -340,15 +347,57 @@ public class ModifierTest {
 
         attacking.setupMove(AttackNamesies.EMBER, battle);
         double unactivatedFire = battle.getDamageModifier(attacking, defending);
-        Assert.assertTrue(unactivatedFire + "", unactivatedFire == 1);
+        GeneralTest.assertEquals(1, unactivatedFire);
 
         battle.defendingFight(AttackNamesies.EMBER);
         attacking.setupMove(AttackNamesies.SURF, battle);
         double activatedNonFire = battle.getDamageModifier(attacking, defending);
-        Assert.assertTrue(activatedNonFire + "", activatedNonFire == 1);
+        GeneralTest.assertEquals(1, activatedNonFire);
 
         attacking.setupMove(AttackNamesies.EMBER, battle);
         double activatedFire = battle.getDamageModifier(attacking, defending);
-        Assert.assertTrue(activatedFire + "", activatedFire == 1.5);
+        GeneralTest.assertEquals(1.5, activatedFire);
+    }
+
+    @Test
+    public void priorityChangeTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        Assert.assertEquals(0, battle.getPriority(attacking, AttackNamesies.TACKLE.getAttack()));
+        Assert.assertEquals(1, battle.getPriority(attacking, AttackNamesies.QUICK_ATTACK.getAttack()));
+        Assert.assertEquals(0, battle.getPriority(attacking, AttackNamesies.NASTY_PLOT.getAttack()));
+        Assert.assertEquals(0, battle.getPriority(attacking, AttackNamesies.PECK.getAttack()));
+        Assert.assertEquals(0, battle.getPriority(attacking, AttackNamesies.RECOVER.getAttack()));
+
+        // Prankster increases priority of status moves
+        attacking.withAbility(AbilityNamesies.PRANKSTER);
+        Assert.assertEquals(0, battle.getPriority(attacking, AttackNamesies.TACKLE.getAttack()));
+        Assert.assertEquals(1, battle.getPriority(attacking, AttackNamesies.QUICK_ATTACK.getAttack()));
+        Assert.assertEquals(1, battle.getPriority(attacking, AttackNamesies.NASTY_PLOT.getAttack()));
+        Assert.assertEquals(1, battle.getPriority(attacking, AttackNamesies.THUNDER_WAVE.getAttack()));
+
+        // Unless the opponent is dark type
+        Assert.assertFalse(defending.isType(battle, Type.DARK));
+        defending.getAttributes().setCastSource((ChangeTypeSource) (b, caster, victim) -> new Type[] { Type.DARK, Type.NO_TYPE });
+        Assert.assertFalse(defending.isType(battle, Type.DARK));
+        EffectNamesies.CHANGE_TYPE.getEffect().cast(battle, defending, defending, CastSource.CAST_SOURCE, false);
+        Assert.assertTrue(defending.isType(battle, Type.DARK));
+        Assert.assertEquals(0, battle.getPriority(attacking, AttackNamesies.NASTY_PLOT.getAttack()));
+
+        // Gale Wings increases the priority of Flying type moves
+        attacking.withAbility(AbilityNamesies.GALE_WINGS);
+        Assert.assertEquals(0, battle.getPriority(attacking, AttackNamesies.TACKLE.getAttack()));
+        Assert.assertEquals(1, battle.getPriority(attacking, AttackNamesies.QUICK_ATTACK.getAttack()));
+        Assert.assertEquals(0, battle.getPriority(attacking, AttackNamesies.NASTY_PLOT.getAttack()));
+        Assert.assertEquals(1, battle.getPriority(attacking, AttackNamesies.PECK.getAttack()));
+
+        // Triage increases the priority of healing moves
+        attacking.withAbility(AbilityNamesies.TRIAGE);
+        Assert.assertEquals(0, battle.getPriority(attacking, AttackNamesies.TACKLE.getAttack()));
+        Assert.assertEquals(1, battle.getPriority(attacking, AttackNamesies.QUICK_ATTACK.getAttack()));
+        Assert.assertEquals(0, battle.getPriority(attacking, AttackNamesies.NASTY_PLOT.getAttack()));
+        Assert.assertEquals(1, battle.getPriority(attacking, AttackNamesies.RECOVER.getAttack()));
     }
 }
