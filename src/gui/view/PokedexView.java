@@ -210,7 +210,7 @@ class PokedexView extends View {
 
 		buttons[MOVES_LEFT_ARROW] = movesLeftButton = new Button(
 				infoPanel.centerX() - arrowWidth*3,
-				(moveButtons[MOVES_PER_PAGE - 1].y + tabButtons[0].y)/2,
+				(moveButtons[MOVES_PER_PAGE - 1].bottomY() + tabButtons[0].y)/2 - arrowHeight/2,
 				arrowWidth,
 				arrowHeight,
 				ButtonHoverAction.BOX,
@@ -574,7 +574,7 @@ class PokedexView extends View {
 				movesLeftButton.drawArrow(g, Direction.LEFT);
 				movesRightButton.drawArrow(g, Direction.RIGHT);
 
-				TextUtils.drawCenteredWidthString(g, (movePageNum + 1) + "/" + maxMovePages(), infoPanel.centerX(), 433);
+				TextUtils.drawCenteredString(g, (movePageNum + 1) + "/" + maxMovePages(), infoPanel.centerX(), movesLeftButton.centerY());
 			}
 		}
 

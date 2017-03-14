@@ -312,6 +312,10 @@ public class Button {
 		return x + width;
 	}
 
+	public int bottomY() {
+		return y + height;
+	}
+
 	public int centerX() {
 		return x + width/2;
 	}
