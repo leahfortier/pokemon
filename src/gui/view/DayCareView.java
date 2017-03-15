@@ -57,6 +57,7 @@ class DayCareView extends View {
     private ActivePokemon selected;
     private boolean party;
     private int selectedButton;
+    private String message;
 
     DayCareView() {
         int spacing = 40;
@@ -179,22 +180,33 @@ class DayCareView extends View {
                 (infoPanel.width - spacing/2)/2,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { 0, RETURN, 0, RETURN }
+                new int[] { RETURN, -1, 0, -1 }
         );
 
-        buttons[RETURN] = returnButton = new Button(
+        returnButton = buttons[RETURN] = new Button(
                 infoPanel.rightX() - depositWithdrawButton.width,
                 depositWithdrawButton.y,
                 depositWithdrawButton.width,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { 0, DEPOSIT_WITHDRAW, Trainer.MAX_POKEMON - 1, DEPOSIT_WITHDRAW }
+                new int[] { 0, -1, DEPOSIT_WITHDRAW, -1 }
         );
     }
 
     @Override
     public void update(int dt) {
+        if (BasicPanels.isAnimatingMessage()) {
+            return;
+        }
+
         InputControl input = InputControl.instance();
+        if (message != null) {
+            if (input.consumeIfMouseDown(ControlKey.SPACE)) {
+                message = null;
+            }
+
+            return;
+        }
 
         selectedButton = Button.update(buttons, selectedButton);
 
@@ -218,10 +230,10 @@ class DayCareView extends View {
 
         if (depositWithdrawButton.checkConsumePress()) {
             if (party) {
-                dayCareCenter.deposit(selected);
+                message = dayCareCenter.deposit(selected);
             }
             else {
-                dayCareCenter.withdraw(selected);
+                message = dayCareCenter.withdraw(selected);
             }
 
             updateActiveButtons();
@@ -276,10 +288,6 @@ class DayCareView extends View {
         Type[] type = selected.getActualType();
         infoPanel.withBackgroundColors(Type.getColors(selected))
                 .drawBackground(g);
-
-        if (!depositWithdrawButton.isActive()) {
-            depositWithdrawButton.greyOut(g, true);
-        }
 
         basicInfoPanel.drawBackground(g);
         movesPanel.drawBackground(g);
@@ -368,16 +376,24 @@ class DayCareView extends View {
         }
 
         // Buttons
-        drawTextButton(g, depositWithdrawButton, party ? "Deposit" : "Withdraw", Color.GREEN);
+        drawTextButton(g, depositWithdrawButton, party ? "Deposit" : "Withdraw", new Color(123, 213, 74));
         drawTextButton(g, returnButton, "Return", Color.YELLOW);
 
         for (Button b : buttons) {
             b.draw(g);
         }
+
+        if (message != null) {
+            BasicPanels.drawFullMessagePanel(g, message);
+        }
     }
 
     private void drawTextButton(Graphics g, Button button, String text, Color color) {
         button.fillTransparent(g, color);
+        if (!button.isActive()) {
+            button.greyOut(g);
+        }
+
         button.blackOutline(g);
         button.label(g, 20, text);
     }

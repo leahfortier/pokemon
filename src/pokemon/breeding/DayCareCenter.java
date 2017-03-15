@@ -141,16 +141,11 @@ public class DayCareCenter implements Serializable {
         );
     }
 
-    public void deposit(ActivePokemon toDeposit) {
+    public String deposit(ActivePokemon toDeposit) {
         Player player = Game.getPlayer();
-        if (toDeposit.isEgg()) {
-            Messages.add("We don't actually take eggs... Sorry.");
-            return;
-        }
-
-        if (!player.canDeposit(toDeposit)) {
-            Messages.add("Can't deposit " + toDeposit.getName() + " at this time.");
-            return;
+        if (!this.canDeposit(toDeposit)) {
+            Global.error("Invalid deposit Pokemon.");
+            return null;
         }
 
         if (first == null) {
@@ -163,11 +158,12 @@ public class DayCareCenter implements Serializable {
             Global.error("Cannot deposit a Pokemon into a full Day Care center.");
         }
 
-        Messages.add("Okay, we'll look after your " + toDeposit.getName() + " for a while.");
         player.getTeam().remove(toDeposit);
         toDeposit.fullyHeal();
 
         this.reset();
+
+        return "Okay, we'll look after your " + toDeposit.getName() + " for a while.";
     }
 
     private void reset() {
@@ -176,19 +172,20 @@ public class DayCareCenter implements Serializable {
         eggy = null;
     }
 
-    public void withdraw(ActivePokemon pokemon) {
+    public String withdraw(ActivePokemon pokemon) {
         if (pokemon == first) {
-            withdraw(true);
+            return withdraw(true);
         }
         else if (pokemon == second) {
-            withdraw(false);
+            return withdraw(false);
         }
         else {
             Global.error("Cannot withdraw a Pokemon that is not in the day care center...");
+            return null;
         }
     }
 
-    public void withdraw(boolean isFirstPokemon) {
+    public String withdraw(boolean isFirstPokemon) {
         final ActivePokemon withdrawPokemon;
         if (isFirstPokemon) {
             withdrawPokemon = first;
@@ -202,9 +199,9 @@ public class DayCareCenter implements Serializable {
         player.addPokemon(withdrawPokemon, false);
         player.sucksToSuck(500); // TODO: Would like this to be a function of the number of eggs
 
-        Messages.add("Took back " + withdrawPokemon.getName() + " back for 500 " + PokeString.POKEDOLLARS + ".");
-
         this.reset();
+
+        return "Took back " + withdrawPokemon.getName() + " back for 500 " + PokeString.POKEDOLLARS + ".";
     }
 
     public boolean canDeposit(ActivePokemon pokemon) {
