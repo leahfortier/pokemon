@@ -41,17 +41,29 @@ public final class ImageUtils {
                 null);
     }
 
-    public static void drawCenteredImageLabel(Graphics g, BufferedImage image, String text, Point center) {
-        drawCenteredImageLabel(g, image, text, center.x, center.y);
+    public static void drawCenteredHeightImage(Graphics g, BufferedImage image, int x, int centerY) {
+        g.drawImage(image, x, centerY - image.getHeight()/2, null);
+    }
+
+    public static void drawCenteredHeightImageLabel(Graphics g, BufferedImage image, String text, int x, int centerY) {
+        int imageWidth = image.getWidth();
+        int spacing = FontMetrics.getTextWidth(g, "  ");
+
+        drawCenteredHeightImage(g, image, x, centerY);
+        TextUtils.drawCenteredHeightString(g, text, x + imageWidth + spacing, centerY);
     }
 
     public static void drawCenteredImageLabel(Graphics g, BufferedImage image, String text, int x, int y) {
         int imageWidth = image.getWidth();
-        int textWidth = FontMetrics.getSuggestedWidth(text, g.getFont().getSize());
+        int textWidth = FontMetrics.getSuggestedWidth(text, g);
         int halfSize = (imageWidth + textWidth)/2;
 
         drawCenteredImage(g, image, x - halfSize + imageWidth/2, y);
         TextUtils.drawCenteredString(g, text, x - halfSize + imageWidth + textWidth/2, y);
+    }
+
+    public static void drawCenteredImageLabel(Graphics g, BufferedImage image, String text, Point center) {
+        drawCenteredImageLabel(g, image, text, center.x, center.y);
     }
 
     public static void drawCenteredImage(Graphics g, BufferedImage image, Point center) {

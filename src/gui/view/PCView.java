@@ -93,7 +93,7 @@ class PCView extends View {
 		int statsPanelHeight = 148;
 		statsPanel = new DrawPanel(
 				infoPanel.x,
-				infoPanel.y + infoPanel.height - buttonHeight - statsPanelHeight,
+				infoPanel.bottomY() - buttonHeight - statsPanelHeight,
 				infoPanel.width,
 				statsPanelHeight + DrawUtils.OUTLINE_SIZE)
 				.withFullTransparency()
@@ -431,10 +431,8 @@ class PCView extends View {
 
 	private void updateActiveButtons() {
 		ActivePokemon[][] box = pc.getBoxPokemon();
-		for (int i = 0; i < PC.BOX_HEIGHT; i++)
-		{
-			for (int j = 0; j < PC.BOX_WIDTH; j++)
-			{
+		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
+			for (int j = 0; j < PC.BOX_WIDTH; j++) {
 				boxButtons[i][j].setActive((party && depositClicked) || switchClicked || box[i][j] != null);
 			}
 		}
@@ -457,6 +455,6 @@ class PCView extends View {
 			depositWithdrawButton.setActive(team.size() < Trainer.MAX_POKEMON);
 		}
 		
-		releaseButton.setActive(!party || team.size() > 1);
+		releaseButton.setActive(!party || player.canDeposit(selected));
 	}
 }

@@ -8,6 +8,7 @@ import gui.view.map.MapView;
 public enum ViewMode {
     BAG_VIEW(BagView::new),
     BATTLE_VIEW(BattleView::new),
+    DAY_CARE_VIEW(DayCareView::new),
     EVOLUTION_VIEW(EvolutionView::new),
     MAIN_MENU_VIEW(MainMenuView::new),
     MAP_VIEW(MapView::new),

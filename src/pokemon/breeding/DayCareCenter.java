@@ -160,7 +160,7 @@ public class DayCareCenter implements Serializable {
             second = toDeposit;
         }
         else {
-            Global.error("Cannot deposit a Pokemon into a full Breeding center.");
+            Global.error("Cannot deposit a Pokemon into a full Day Care center.");
         }
 
         Messages.add("Okay, we'll look after your " + toDeposit.getName() + " for a while.");
@@ -174,6 +174,18 @@ public class DayCareCenter implements Serializable {
         compatibility = Compatibility.getCompatibility(first, second);
         steps = 0;
         eggy = null;
+    }
+
+    public void withdraw(ActivePokemon pokemon) {
+        if (pokemon == first) {
+            withdraw(true);
+        }
+        else if (pokemon == second) {
+            withdraw(false);
+        }
+        else {
+            Global.error("Cannot withdraw a Pokemon that is not in the day care center...");
+        }
     }
 
     public void withdraw(boolean isFirstPokemon) {
@@ -195,4 +207,15 @@ public class DayCareCenter implements Serializable {
         this.reset();
     }
 
+    public boolean canDeposit(ActivePokemon pokemon) {
+        return (first == null || second == null) && !pokemon.isEgg() && Game.getPlayer().canDeposit(pokemon);
+    }
+
+    public ActivePokemon getFirstPokemon() {
+        return this.first;
+    }
+
+    public ActivePokemon getSecondPokemon() {
+        return this.second;
+    }
 }
