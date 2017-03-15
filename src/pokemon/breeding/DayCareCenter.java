@@ -2,22 +2,13 @@ package pokemon.breeding;
 
 import main.Game;
 import main.Global;
-import map.triggers.Trigger;
-import map.triggers.TriggerType;
-import mapMaker.dialogs.action.trigger.TriggerActionType;
 import message.Messages;
-import pattern.action.ActionMatcher;
-import pattern.action.ChoiceActionMatcher;
-import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
-import pattern.action.TriggerActionMatcher;
 import pokemon.ActivePokemon;
 import trainer.player.Player;
 import util.PokeString;
-import util.SerializationUtils;
 import util.StringUtils;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class DayCareCenter implements Serializable {
     private ActivePokemon first;
@@ -62,83 +53,6 @@ public class DayCareCenter implements Serializable {
 
     public String getCompatibilityMessage() {
         return compatibility.getMessage();
-    }
-
-    public Trigger getDepositTrigger() {
-        // Center is full -- display invalid message
-        if (first != null && second != null) {
-            return TriggerType.DIALOGUE.createTrigger(
-                    "Center is already full. Withdraw a " + PokeString.POKEMON + " first to deposit."
-            );
-        }
-
-        Player player = Game.getPlayer();
-        List<ActivePokemon> team = player.getTeam();
-
-        // Two Pokemon in center -- choice option
-        ChoiceMatcher[] choices = new ChoiceMatcher[team.size() + 1];
-        for (int i = 0; i < team.size(); i++) {
-            ActionMatcher actionMatcher = new ActionMatcher();
-            actionMatcher.setTrigger(new TriggerActionMatcher(TriggerActionType.DAY_CARE_DEPOSIT, i + ""));
-
-            ActivePokemon pokemon = team.get(i);
-            choices[i] = new ChoiceMatcher(
-                    pokemon.getName() + " " + pokemon.getGenderString(),
-                    new ActionMatcher[] { actionMatcher }
-            );
-        }
-
-        ActionMatcher cancelAction = new ActionMatcher();
-        cancelAction.setTrigger(new TriggerActionMatcher(TriggerActionType.DIALOGUE, StringUtils.empty()));
-        choices[team.size()] = new ChoiceMatcher("Cancel", new ActionMatcher[] { cancelAction });
-
-        ChoiceActionMatcher choice = new ChoiceActionMatcher(
-                "Which " + PokeString.POKEMON + " would you like to deposit?",
-                choices
-        );
-
-        return TriggerType.CHOICE.createTrigger(SerializationUtils.getJson(choice));
-    }
-
-
-    public Trigger getWithdrawTrigger() {
-        // Both are null -- display invalid message
-        if (first == null && second == null) {
-            return TriggerType.DIALOGUE.createTrigger("No " + PokeString.POKEMON + " to withdraw.");
-        }
-
-        // Only one pokemon here
-        if (first == null) {
-            return TriggerType.DAY_CARE_WITHDRAW.createTrigger("false");
-        } else if (second == null) {
-            return TriggerType.DAY_CARE_WITHDRAW.createTrigger("true");
-        }
-
-        // Two Pokemon in center -- choice option
-        ChoiceMatcher chooseFirst = getChoice(true);
-        ChoiceMatcher chooseSecond = getChoice(false);
-
-        ActionMatcher cancelAction = new ActionMatcher();
-        cancelAction.setTrigger(new TriggerActionMatcher(TriggerActionType.DIALOGUE, StringUtils.empty()));
-        ChoiceMatcher chooseCancel = new ChoiceMatcher("Cancel", new ActionMatcher[] { cancelAction });
-
-        ChoiceActionMatcher choice = new ChoiceActionMatcher(
-                "Which " + PokeString.POKEMON + " would you like to take back?",
-                new ChoiceMatcher[] { chooseFirst, chooseSecond, chooseCancel }
-        );
-
-        return TriggerType.CHOICE.createTrigger(SerializationUtils.getJson(choice));
-    }
-
-    private ChoiceMatcher getChoice(boolean isFirst) {
-        ActionMatcher actionMatcher = new ActionMatcher();
-        actionMatcher.setTrigger(new TriggerActionMatcher(TriggerActionType.DAY_CARE_WITHDRAW, isFirst + ""));
-
-        ActivePokemon pokemon = isFirst ? first : second;
-        return new ChoiceMatcher(
-                pokemon.getName() + " " + pokemon.getGenderString(),
-                new ActionMatcher[] { actionMatcher }
-        );
     }
 
     public String deposit(ActivePokemon toDeposit) {

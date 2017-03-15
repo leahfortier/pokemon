@@ -1,4 +1,4 @@
-package map.triggers.daycare;
+package map.triggers;
 
 import gui.view.ViewMode;
 import main.Game;
