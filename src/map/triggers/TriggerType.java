@@ -6,9 +6,6 @@ import map.triggers.battle.FishingTrigger;
 import map.triggers.battle.TrainerBattleTrigger;
 import map.triggers.battle.WalkingWildBattleTrigger;
 import map.triggers.battle.WildBattleTrigger;
-import map.triggers.daycare.DayCareDepositTrigger;
-import map.triggers.daycare.DayCareTrigger;
-import map.triggers.daycare.DayCareWithdrawTrigger;
 import map.triggers.map.MapTransitionTrigger;
 import map.triggers.map.MoveNPCTrigger;
 import map.triggers.map.MovePlayerTrigger;
@@ -21,8 +18,6 @@ public enum TriggerType {
     CHANGE_VIEW(ChangeViewTrigger.class, ChangeViewTrigger::new),
     CHOICE(ChoiceTrigger.class, ChoiceTrigger::new),
     DAY_CARE(DayCareTrigger.class, DayCareTrigger::new),
-    DAY_CARE_DEPOSIT(DayCareDepositTrigger.class, DayCareDepositTrigger::new),
-    DAY_CARE_WITHDRAW(DayCareWithdrawTrigger.class, DayCareWithdrawTrigger::new),
     DIALOGUE(DialogueTrigger.class, DialogueTrigger::new),
     FISHING(FishingTrigger.class, FishingTrigger::new),
     GIVE_ITEM(GiveItemTrigger.class, GiveItemTrigger::new),

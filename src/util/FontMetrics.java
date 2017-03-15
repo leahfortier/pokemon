@@ -35,6 +35,10 @@ public class FontMetrics {
         return fontMetrics.getTextLength(text);
     }
 
+    public static int getSuggestedWidth(String text, Graphics g) {
+        return getSuggestedWidth(text, g.getFont().getSize());
+    }
+
     public static int getSuggestedWidth(String text, int fontSize) {
         FontMetrics fontMetrics = getFontMetrics(fontSize);
         return (text.length() + 2)*fontMetrics.horizontalSpacing;
@@ -84,6 +88,10 @@ public class FontMetrics {
 
     public static void setFont(Graphics g, int fontSize) {
         g.setFont(getFont(fontSize));
+    }
+
+    public static int getSuggestedHeight(Graphics g) {
+        return getSuggestedHeight(g.getFont().getSize());
     }
 
     public static int getSuggestedHeight(int fontSize) {
