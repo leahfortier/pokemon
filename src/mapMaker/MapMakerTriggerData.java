@@ -13,6 +13,7 @@ import mapMaker.dialogs.wildbattle.FishingTriggerOptionsDialog;
 import mapMaker.dialogs.wildbattle.WildBattleAreaDialog;
 import mapMaker.dialogs.wildbattle.WildBattleTriggerOptionsDialog;
 import mapMaker.model.TileModel.TileType;
+import mapMaker.model.TriggerModel;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.LocationTriggerMatcher;
 import pattern.generic.MultiPointTriggerMatcher;
@@ -150,6 +151,13 @@ public class MapMakerTriggerData {
 				for (Point point : entityLocation) {
 					BufferedImage image = triggerModelType.getImage(mapMaker);
 					TileUtils.drawTileImage(g2d, image, point, mapLocation);
+
+					if (entity instanceof MapTransitionMatcher) {
+						BufferedImage exitImage = TriggerModel.getMapExitImage(mapMaker);
+						Point newLocation = Point.add(point, ((MapTransitionMatcher) entity).getDirection().getDeltaPoint());
+
+						TileUtils.drawTileImage(g2d, exitImage, newLocation, mapLocation);
+					}
 				}
 			} else {
 				Global.error("Unknown entity matcher class " + entity.getClass().getSimpleName());
