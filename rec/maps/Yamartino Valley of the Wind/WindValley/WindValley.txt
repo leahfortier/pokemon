@@ -69,6 +69,34 @@
         "y": 54
       },
       "triggerName": "WindValley_NPC_DayCareBro_01"
+    },
+    {
+      "name": "Trader",
+      "path": "w",
+      "spriteIndex": 17,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "Interaction0",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "TRADE_POKEMON_QUESTION",
+                "triggerContents": "{
+  \"requested\": \"VULPIX\",
+  \"tradePokemon\": \"YUKIKON\"
+}"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 45,
+        "y": 54
+      },
+      "triggerName": "WindValley_NPC_Trader_01"
     }
   ],
   "items": [],

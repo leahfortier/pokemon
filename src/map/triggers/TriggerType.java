@@ -31,6 +31,8 @@ public enum TriggerType {
     MOVE_PLAYER(MovePlayerTrigger.class, MovePlayerTrigger::new),
     RELOAD_MAP(ReloadMapTrigger.class, ReloadMapTrigger::new),
     SOUND(SoundTrigger.class, SoundTrigger::new),
+    TRADE_POKEMON_QUESTION(TradePokemonQuestionTrigger.class, TradePokemonQuestionTrigger::new),
+    TRADE_POKEMON_ACTION(TradePokemonActionTrigger.class, TradePokemonActionTrigger::new),
     TRAINER_BATTLE(TrainerBattleTrigger.class, TrainerBattleTrigger::new),
     UPDATE(UpdateTrigger.class, UpdateTrigger::new),
     USE_ITEM(UseItemTrigger.class, UseItemTrigger::new),

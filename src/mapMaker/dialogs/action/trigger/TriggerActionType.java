@@ -22,6 +22,8 @@ public enum TriggerActionType {
     MOVE_PLAYER(TriggerType.MOVE_PLAYER, MovePlayerTriggerPanel::new),
     RELOAD_MAP(TriggerType.RELOAD_MAP, EmptyTriggerContentsPanel::new),
     SOUND(TriggerType.SOUND, () -> new EnumTriggerPanel<>("Sound Title", SoundTitle.values())),
+    TRADE_POKEMON_QUESTION(TriggerType.TRADE_POKEMON_QUESTION, TradePokemonTriggerPanel::new),
+    TRADE_POKEMON_ACTION(TriggerType.TRADE_POKEMON_ACTION, EmptyTriggerContentsPanel::new),
     USE_ITEM(TriggerType.USE_ITEM, ItemTriggerPanel::new);
 
     private final TriggerType triggerType;
