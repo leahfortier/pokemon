@@ -304,20 +304,20 @@ class PokedexView extends View {
 					continue;
 				}
 
-				PokemonInfo p = PokemonInfo.getPokemonInfo(number);
+				PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(number);
 				Button pokemonButton = pokemonButtons[j][i];
 
-				if (pokedex.isNotSeen(p.namesies())) {
+				if (pokedex.isNotSeen(pokemonInfo)) {
 					pokemonButton.label(g, 20, new Color(0, 0, 0, 64), String.format("%03d", number));
 				}
 				else {
-					if (p == selected) {
+					if (pokemonInfo == selected) {
 						pokemonButton.blackOutline(g);
 					}
 
-					pokemonButton.imageLabel(g, partyTiles.getTile(p.getTinyImageName()));
+					pokemonButton.imageLabel(g, partyTiles.getTile(pokemonInfo.getTinyImageName()));
 
-					if (pokedex.isCaught(p.namesies())) {
+					if (pokedex.isCaught(pokemonInfo)) {
 						BufferedImage pokeball = TileSet.TINY_POKEBALL;
 						g.drawImage(
 								pokeball,
@@ -346,8 +346,8 @@ class PokedexView extends View {
 		Type[] type = selected.getType();
 		Color[] typeColors = Type.getColors(type);
 
-		boolean notSeen = pokedex.isNotSeen(selected.namesies());
-		boolean caught = pokedex.isCaught(selected.namesies());
+		boolean notSeen = pokedex.isNotSeen(selected);
+		boolean caught = pokedex.isCaught(selected);
 
 		if (notSeen) {
 			typeColors = new Color[] { Color.BLACK, Color.BLACK };	
@@ -643,7 +643,7 @@ class PokedexView extends View {
 			}
 		}
 
-		boolean movesView = selectedTab == TabInfo.MOVES && pokedex.isCaught(selected.namesies());
+		boolean movesView = selectedTab == TabInfo.MOVES && pokedex.isCaught(selected);
 		int movesDisplayed = selected.getLevelUpMoves().size() - movePageNum*MOVES_PER_PAGE;
 		for (int i = 0; i < MOVES_PER_PAGE; i++) {
 			moveButtons[i].setActive(movesView && i < movesDisplayed);

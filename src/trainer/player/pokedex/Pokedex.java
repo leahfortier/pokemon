@@ -23,12 +23,24 @@ public class Pokedex implements Serializable {
 		}
 	}
 
+	public boolean isNotSeen(ActivePokemon pokemon) {
+		return isNotSeen(pokemon.getPokemonInfo());
+	}
+
+	public boolean isNotSeen(PokemonInfo pokemon) {
+		return isNotSeen(pokemon.namesies());
+	}
+
 	public boolean isNotSeen(PokemonNamesies namesies) {
 		return pokedex.get(namesies).isStatus(PokedexStatus.NOT_SEEN);
 	}
 
 	public boolean isCaught(ActivePokemon pokemon) {
-		return isCaught(pokemon.getPokemonInfo().namesies());
+		return isCaught(pokemon.getPokemonInfo());
+	}
+
+	public boolean isCaught(PokemonInfo pokemon) {
+		return isCaught(pokemon.namesies());
 	}
 
 	public boolean isCaught(PokemonNamesies namesies) {

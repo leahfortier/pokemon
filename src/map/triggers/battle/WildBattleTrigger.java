@@ -21,7 +21,7 @@ public class WildBattleTrigger extends Trigger {
 	protected void executeTrigger() {
 		WildPokemon wildPokemon = this.wildEncounter.getWildPokemon();
 
-		boolean seenWildPokemon = Game.getPlayer().getPokedex().isNotSeen(wildPokemon.front().getPokemonInfo().namesies());
+		boolean seenWildPokemon = Game.getPlayer().getPokedex().isNotSeen(wildPokemon.front());
 
 		// Let the battle begin!!
 		Battle battle = new Battle(wildPokemon);

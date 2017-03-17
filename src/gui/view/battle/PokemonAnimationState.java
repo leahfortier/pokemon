@@ -139,7 +139,7 @@ class PokemonAnimationState {
         state.hp = oldState.hp = hp;
         state.type = type;
         state.imageName = pokemon.getImageName(shiny, !isPlayer);
-        state.caught = battleView.getCurrentBattle().isWildBattle() && Game.getPlayer().getPokedex().isCaught(pokemon.namesies());
+        state.caught = battleView.getCurrentBattle().isWildBattle() && Game.getPlayer().getPokedex().isCaught(pokemon);
         state.name = name;
         state.gender = gender;
         state.expRatio = oldState.expRatio = expRatio;
