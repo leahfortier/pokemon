@@ -1,6 +1,7 @@
 package gui.view.map;
 
 import battle.Battle;
+import draw.DrawUtils;
 import draw.ImageUtils;
 import gui.GameData;
 import gui.view.ViewMode;
@@ -53,17 +54,15 @@ class BattleState implements VisualStateHandler {
         else {
             drawHeightRight = drawHeightLeft = Global.GAME_SIZE.height/2;
             drawHeightLeft -= battleImageSlideLeft.getHeight();
-            //drawHeightRight -= battleImageSlideRight.getHeight();
 
             moveInAnimationPercentage = 0.4f;
         }
 
-
         // Images slide in from sides
-        if (battleAnimationTime > BATTLE_INTRO_ANIMATION_LIFESPAN*(1-moveInAnimationPercentage)) {
-            float normalizedTime = (battleAnimationTime - BATTLE_INTRO_ANIMATION_LIFESPAN*(1-moveInAnimationPercentage))/ (BATTLE_INTRO_ANIMATION_LIFESPAN*moveInAnimationPercentage);
+        if (battleAnimationTime > BATTLE_INTRO_ANIMATION_LIFESPAN*(1 - moveInAnimationPercentage)) {
+            float normalizedTime = (battleAnimationTime - BATTLE_INTRO_ANIMATION_LIFESPAN*(1 - moveInAnimationPercentage))/(BATTLE_INTRO_ANIMATION_LIFESPAN*moveInAnimationPercentage);
 
-            int dist = -battleImageSlideRight.getWidth()/2 -drawWidth;
+            int dist = -battleImageSlideRight.getWidth()/2 - drawWidth;
             dist = (int)(dist * normalizedTime);
 
             g.drawImage(battleImageSlideLeft, drawWidth - battleImageSlideLeft.getWidth()/2 + dist, drawHeightLeft, null);
@@ -78,13 +77,11 @@ class BattleState implements VisualStateHandler {
             g.drawImage(battleImageSlideLeft, drawWidth - battleImageSlideLeft.getWidth()/2, drawHeightLeft, null);
             g.drawImage(battleImageSlideRight, drawWidth - battleImageSlideRight.getWidth()/2, drawHeightRight, null);
 
-            //Fade to black before battle appears.
-            if (battleAnimationTime < BATTLE_INTRO_ANIMATION_LIFESPAN*fadeOutPercentage)
-            {
-                int f = Math.min(255, (int)((BATTLE_INTRO_ANIMATION_LIFESPAN*fadeOutPercentage - battleAnimationTime)/ (BATTLE_INTRO_ANIMATION_LIFESPAN*fadeOutPercentage) *255));
-
-                g.setColor(new Color(0, 0, 0, f));
-                g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+            // Fade to black before battle appears.
+            float fadeOutLifespan = BATTLE_INTRO_ANIMATION_LIFESPAN*fadeOutPercentage;
+            if (battleAnimationTime < fadeOutLifespan) {
+                int f = Math.min(255, (int)((fadeOutLifespan - battleAnimationTime)/(fadeOutLifespan)*255));
+                DrawUtils.fillCanvas(g, new Color(0, 0, 0, f));
             }
         }
     }
@@ -125,16 +122,15 @@ class BattleState implements VisualStateHandler {
     }
 
     private void loadBattleImages(MapView mapView) {
-        GameData data = Game.getData();
-
         if (battle.isWildBattle()) {
+            GameData data = Game.getData();
+            ActivePokemon p = battle.getOpponent().front();
+
+            battleImageSlideRight = data.getPokemonTilesLarge().getTile(p.getImageName());
             battleImageSlideLeft = mapView.getCurrentArea().getBattleTerrain().getOpponentCircleImage();
 
-            ActivePokemon p = battle.getOpponent().front();
-            battleImageSlideRight = data.getPokemonTilesLarge().getTile(p.getImageName());
-
             if (seenWild) {
-                battleImageSlideRight = ImageUtils.colorImage(battleImageSlideRight, new float[] { 0, 0, 0, 1 }, new float[] { 0, 0, 0, 0 });
+                battleImageSlideRight = ImageUtils.silhouette(battleImageSlideRight);
             }
         }
         else {

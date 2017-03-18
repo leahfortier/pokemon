@@ -392,7 +392,16 @@ class PartyView extends View {
 		}
 		else {
 			// Number
-			g.drawString("#" + String.format("%03d", selectedPkm.getPokemonInfo().getNumber()), 378, topLineY);
+			int numberX = 378;
+			String numberString = String.format("#%03d", selectedPkm.getPokemonInfo().getNumber());
+			g.drawString(numberString, numberX, topLineY);
+
+			// Shiny sprite
+			if (selectedPkm.isShiny()) {
+				int imageX = numberX + FontMetrics.getTextWidth(g, numberString + " ");
+				BufferedImage starSprite = TileSet.STAR_SPRITE;
+				g.drawImage(starSprite, imageX, topLineY - starSprite.getHeight(), null);
+			}
 
 			// Status Condition
 			g.drawString(selectedPkm.getStatus().getType().getName(), 459, topLineY);

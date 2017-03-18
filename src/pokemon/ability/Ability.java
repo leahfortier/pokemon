@@ -2548,7 +2548,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 
 		public int changePriority(Battle b, ActivePokemon user, Attack attack) {
-			return attack.isStatusMove() ? 1 : 0;
+			return attack.isStatusMove() && !b.getOtherPokemon(user).isType(b, Type.DARK) ? 1 : 0;
 		}
 	}
 
@@ -3717,7 +3717,14 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
 			if (!activated && b.getOtherPokemon(damageTaker).getAttributes().isAttacking()) {
-				Messages.add(damageTaker.getName() + "'s disguise was busted!!");
+				boolean isPlayer = damageTaker.isPlayer();
+				boolean shiny = damageTaker.isShiny();
+				boolean front = !isPlayer;
+				
+				Messages.add(new MessageUpdate(damageTaker.getName() + "'s disguise was busted!!")
+					.withImageName(damageTaker.getPokemonInfo().getImageName(shiny, front, true), isPlayer)
+				);
+				
 				activated = true;
 				return true;
 			}

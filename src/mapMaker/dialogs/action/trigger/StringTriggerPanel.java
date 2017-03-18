@@ -30,11 +30,8 @@ class StringTriggerPanel extends TriggerContentsPanel {
     }
 
     static class ItemTriggerPanel extends StringTriggerPanel {
-
         ItemTriggerPanel() {
             super("Item Name");
-
-
 
             ColorCondition colorCondition = () -> ItemNamesies.tryValueOf(textField.getText().trim()) != null;
             textField.getDocument().addDocumentListener(new ColorDocumentListener(colorCondition) {

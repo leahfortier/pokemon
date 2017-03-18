@@ -7,6 +7,20 @@ import pokemon.PokemonNamesies;
 import util.StringUtils;
 
 public class GeneralTest {
+    private static final double DELTA = 1e-15;
+
+    public static boolean healthRatioMatch(TestPokemon pokemon, double fraction) {
+        return (int)(Math.ceil(fraction*pokemon.getMaxHP())) == pokemon.getHP();
+    }
+
+    public static void assertEquals(String message, double expected, double actual) {
+        Assert.assertEquals(message, expected, actual, DELTA);
+    }
+
+    public static void assertEquals(double expected, double actual) {
+        Assert.assertEquals(expected, actual, DELTA);
+    }
+
     @Test
     public void properCaseTest() {
         Assert.assertEquals(StringUtils.properCase("red"), "Red");
@@ -41,9 +55,5 @@ public class GeneralTest {
         Assert.assertTrue(first.getGender() == Gender.MALE);
         Assert.assertTrue(second.getGender() == Gender.MALE);
         Assert.assertFalse(Gender.oppositeGenders(first, second));
-    }
-
-    public static boolean healthRatioMatch(TestPokemon pokemon, double fraction) {
-        return (int)(Math.ceil(fraction*pokemon.getMaxHP())) == pokemon.getHP();
     }
 }

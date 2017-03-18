@@ -38,7 +38,7 @@ public class BattleAttributes implements Serializable {
 	private boolean used;
 	private boolean battleUsed;
 	private boolean lastMoveSucceeded;
-	private Object castSource;
+	private Serializable castSource;
 	
 	public BattleAttributes(ActivePokemon attributesHolder) {
 		this.attributesHolder = attributesHolder;
@@ -70,7 +70,7 @@ public class BattleAttributes implements Serializable {
 		return reducePP;
 	}
 
-	public void setCastSource(Object castSource) {
+	public void setCastSource(Serializable castSource) {
 		this.castSource = castSource;
 	}
 

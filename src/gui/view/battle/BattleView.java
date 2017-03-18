@@ -54,6 +54,7 @@ public class BattleView extends View {
     // Displayable current weather and terrain
     private Weather weather;
     private TerrainType terrain;
+	private Boolean isInterior;
 
 	// Which Pokemon is trying to learn a new move, and which move
 	private ActivePokemon learnedPokemon;
@@ -94,10 +95,6 @@ public class BattleView extends View {
 
 	public Button[] createPanelButtons() {
 		return createPanelButtons(buttonsPanel, 2, 2);
-	}
-
-	public Button[] createMessagePanelButtons(int numRows, int numCols) {
-		return BasicPanels.getFullMessagePanelButtons(BUTTON_WIDTH, BUTTON_HEIGHT, numRows, numCols);
 	}
 
 	private Button[] createPanelButtons(DrawPanel buttonsPanel, int numRows, int numCols) {
@@ -262,6 +259,9 @@ public class BattleView extends View {
 
                 if (newMessage.terrainUpdate()) {
 					terrain = newMessage.getTerrain();
+					if (isInterior != null) {
+						isInterior = terrain.isInterior();
+					}
 				}
 
 				this.state.checkMessage(newMessage);
@@ -294,7 +294,7 @@ public class BattleView extends View {
 		// Opponent battle circle
 		g.drawImage(terrain.getOpponentCircleImage(), 450, 192, null);
 
-		if (!terrain.isInterior()) {
+		if (isInterior != null && !isInterior) {
 			DayCycle.getTimeOfDay().draw(g);
 		}
 

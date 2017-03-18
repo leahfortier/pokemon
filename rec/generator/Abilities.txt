@@ -1055,7 +1055,7 @@ Poison Touch:
 *
 Prankster:
 	Desc: Gives priority to a status move.
-	ChangePriorityAbility: attack.isStatusMove()
+	ChangePriorityAbility: attack.isStatusMove() && !b.getOtherPokemon(user).isType(b, Type.DARK)
 *
 Wonder Skin:
 	Desc: Makes status-changing moves more likely to miss.
@@ -1538,7 +1538,14 @@ Disguise:
 	Int: AbsorbDamageEffect
 	AbsorbDamage:
 		if (!activated && b.getOtherPokemon(damageTaker).getAttributes().isAttacking()) {
-			Messages.add(damageTaker.getName() + "'s disguise was busted!!");
+			boolean isPlayer = damageTaker.isPlayer();
+			boolean shiny = damageTaker.isShiny();
+			boolean front = !isPlayer;
+
+			Messages.add(new MessageUpdate(damageTaker.getName() + "'s disguise was busted!!")
+				.withImageName(damageTaker.getPokemonInfo().getImageName(shiny, front, true), isPlayer)
+			);
+
 			activated = true;
 			return true;
 		}

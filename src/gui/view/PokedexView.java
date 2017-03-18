@@ -210,7 +210,7 @@ class PokedexView extends View {
 
 		buttons[MOVES_LEFT_ARROW] = movesLeftButton = new Button(
 				infoPanel.centerX() - arrowWidth*3,
-				(moveButtons[MOVES_PER_PAGE - 1].y + tabButtons[0].y)/2,
+				(moveButtons[MOVES_PER_PAGE - 1].bottomY() + tabButtons[0].y)/2 - arrowHeight/2,
 				arrowWidth,
 				arrowHeight,
 				ButtonHoverAction.BOX,
@@ -304,20 +304,20 @@ class PokedexView extends View {
 					continue;
 				}
 
-				PokemonInfo p = PokemonInfo.getPokemonInfo(number);
+				PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(number);
 				Button pokemonButton = pokemonButtons[j][i];
 
-				if (pokedex.isNotSeen(p.namesies())) {
+				if (pokedex.isNotSeen(pokemonInfo)) {
 					pokemonButton.label(g, 20, new Color(0, 0, 0, 64), String.format("%03d", number));
 				}
 				else {
-					if (p == selected) {
+					if (pokemonInfo == selected) {
 						pokemonButton.blackOutline(g);
 					}
 
-					pokemonButton.imageLabel(g, partyTiles.getTile(p.getTinyImageName()));
+					pokemonButton.imageLabel(g, partyTiles.getTile(pokemonInfo.getTinyImageName()));
 
-					if (pokedex.isCaught(p.namesies())) {
+					if (pokedex.isCaught(pokemonInfo)) {
 						BufferedImage pokeball = TileSet.TINY_POKEBALL;
 						g.drawImage(
 								pokeball,
@@ -346,8 +346,8 @@ class PokedexView extends View {
 		Type[] type = selected.getType();
 		Color[] typeColors = Type.getColors(type);
 
-		boolean notSeen = pokedex.isNotSeen(selected.namesies());
-		boolean caught = pokedex.isCaught(selected.namesies());
+		boolean notSeen = pokedex.isNotSeen(selected);
+		boolean caught = pokedex.isCaught(selected);
 
 		if (notSeen) {
 			typeColors = new Color[] { Color.BLACK, Color.BLACK };	
@@ -574,7 +574,7 @@ class PokedexView extends View {
 				movesLeftButton.drawArrow(g, Direction.LEFT);
 				movesRightButton.drawArrow(g, Direction.RIGHT);
 
-				TextUtils.drawCenteredWidthString(g, (movePageNum + 1) + "/" + maxMovePages(), infoPanel.centerX(), 433);
+				TextUtils.drawCenteredString(g, (movePageNum + 1) + "/" + maxMovePages(), infoPanel.centerX(), movesLeftButton.centerY());
 			}
 		}
 
@@ -643,7 +643,7 @@ class PokedexView extends View {
 			}
 		}
 
-		boolean movesView = selectedTab == TabInfo.MOVES && pokedex.isCaught(selected.namesies());
+		boolean movesView = selectedTab == TabInfo.MOVES && pokedex.isCaught(selected);
 		int movesDisplayed = selected.getLevelUpMoves().size() - movePageNum*MOVES_PER_PAGE;
 		for (int i = 0; i < MOVES_PER_PAGE; i++) {
 			moveButtons[i].setActive(movesView && i < movesDisplayed);
