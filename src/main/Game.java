@@ -96,6 +96,10 @@ public class Game {
 		checkViewSwitch();
 	}
 
+	public MapView getMapView() {
+		return (MapView)viewMap.get(ViewMode.MAP_VIEW);
+	}
+
 	public void setBattleViews(final Battle battle, final boolean seenWildPokemon) {
 		((BattleView)viewMap.get((ViewMode.BATTLE_VIEW))).setBattle(battle);
 		((MapView)viewMap.get(ViewMode.MAP_VIEW)).setBattle(battle, seenWildPokemon);
