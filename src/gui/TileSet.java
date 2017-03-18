@@ -17,6 +17,7 @@ public class TileSet {
 	public static final BufferedImage TINY_POKEBALL = FileIO.readImage(Folder.IMAGES + "TinyPokeball.png");
 	public static final BufferedImage ITEM_POKEBALL = FileIO.readImage(Folder.IMAGES + "ItemPokeball.png");
 	public static final BufferedImage TM_ITEM_POKEBALL = FileIO.readImage(Folder.IMAGES + "TMItemPokeball.png");
+	public static final BufferedImage STAR_SPRITE = FileIO.readImage(Folder.IMAGES + "starsies.png");
 
 	protected static final BufferedImage IMAGE_NOT_FOUND = FileIO.readImage(Folder.IMAGES + "imageNotFound.png");
 
