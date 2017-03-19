@@ -93,6 +93,12 @@
                 "triggerType": "MOVE_PLAYER",
                 "triggerContents": "ddd"
               }
+            },
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "*pure rage*"
+              }
             }
           ]
         }

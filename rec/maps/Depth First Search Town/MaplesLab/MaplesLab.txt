@@ -39,7 +39,13 @@
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "'Ey there {playerName}! I was just gonna make some breakfast and smother it with my homemade Canadian maple syrup™! You want any? "
+                "triggerContents": "'Ey there {playerName}!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I was just gonna make some breakfast and smother it with my homemade Canadian maple syrup™! You want any?"
               }
             },
             {
@@ -57,7 +63,31 @@
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "Oh, and also take this egg. No idea what Pokémon is in it, but I'm sure you'll take good care of it."
+                "triggerContents": "Alright, what brings you here?"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "You got kicked out, eh?"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "How about becoming a Pokemon master? It's the main fad these days... Everyone does it!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "C'mon... It'll be cool!!!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I'll even give you this egg to start with!!"
               }
             },
             {

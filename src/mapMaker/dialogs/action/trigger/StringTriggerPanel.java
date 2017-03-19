@@ -1,8 +1,6 @@
 package mapMaker.dialogs.action.trigger;
 
 import item.ItemNamesies;
-import main.Global;
-import map.PathDirection;
 import util.ColorDocumentListener;
 import util.ColorDocumentListener.ColorCondition;
 import util.GUIUtils;
@@ -50,25 +48,6 @@ class StringTriggerPanel extends TriggerContentsPanel {
         @Override
         protected String getTriggerContents() {
             return ItemNamesies.getValueOf(super.getTriggerContents()).name();
-        }
-    }
-
-    static class MovePlayerTriggerPanel extends StringTriggerPanel {
-
-        MovePlayerTriggerPanel() {
-            super("Player move path");
-        }
-
-        @Override
-        protected String getTriggerContents() {
-            String triggerContents = super.getTriggerContents();
-            for (char c : triggerContents.toCharArray()) {
-                if (PathDirection.getDirection(c) == null) {
-                    Global.error("Invalid path " + triggerContents);
-                }
-            }
-
-            return triggerContents;
         }
     }
 }

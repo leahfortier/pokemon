@@ -62,7 +62,12 @@ public class MoveNPCTrigger extends Trigger {
             PathState currentState = queue.poll();
 
             if (!matcher.endLocationIsPlayer() && end.equals(currentState.location)) {
-                return currentState.path + map.getExitDirection(matcher.getEndEntranceName()).getCharacter();
+                PathDirection pathDirection = map.getExitDirection(matcher.getEndEntranceName());
+                if (pathDirection != null) {
+                    return currentState.path + pathDirection.getCharacter();
+                }
+
+                return currentState.path;
             }
 
             for (Direction direction : Direction.values()) {
