@@ -44,7 +44,7 @@ public enum PathDirection {
     }
 
     public static PathDirection getDirection(char directionCharacter) {
-        return characterDirectionMap.get(directionCharacter);
+        return characterDirectionMap.get(Character.toLowerCase(directionCharacter));
     }
 
     public static String defaultPath() {
