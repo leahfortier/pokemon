@@ -107,7 +107,25 @@
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "My Riolu is going to punch the normal off your Eevee!"
+                "triggerContents": "You actually had the balls to leave town? What are you up to then?"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Huh?"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "You're actually trying to become a Pokemon master??"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Let's battle then!!!"
               }
             },
             {
@@ -127,7 +145,31 @@
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "..."
+                "triggerContents": "You just got lucky, noob!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "What? Of course you get money for winning battles. That's how it works."
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Becoming a Pokemon master comes with a lot of perks and royalties -- it has money written all over it!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I don't care about any of that though."
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Might as well make use of that Eevee you've had all your life... Smell ya later!!"
               }
             },
             {

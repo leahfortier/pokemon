@@ -132,7 +132,13 @@
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "Hey, you should go talk to Professor Maple first before leaving town."
+                "triggerContents": "Hey! Are you leaving town? You sure you're ready for that?"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "How about going to Professor Maple's Lab and asking for some life advice first?"
               }
             },
             {
