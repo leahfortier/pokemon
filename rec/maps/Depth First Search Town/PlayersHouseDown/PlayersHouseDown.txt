@@ -82,11 +82,17 @@
             {
               "trigger": {
                 "triggerType": "DIALOGUE",
-                "triggerContents": "SRSLYGTFOOFMYHOUSEANDGETAJOB."
+                "triggerContents": "It’s great that you’re here and all and imma let you finish, but get a job and make the greatest hits of all time. ALL TIME!!! "
               }
             },
             {
               "global": "FirstMadreTalk"
+            },
+            {
+              "trigger": {
+                "triggerType": "MOVE_PLAYER",
+                "triggerContents": "ddd"
+              }
             }
           ]
         }

@@ -19,7 +19,7 @@
       "location": [
         {
           "x": 15,
-          "y": 10
+          "y": 14
         }
       ],
       "triggerName": "Rival_House_MapExit_DFS_Town_01"
@@ -36,7 +36,7 @@
       "location": [
         {
           "x": 20,
-          "y": 6
+          "y": 10
         }
       ],
       "triggerName": "Rival_House_MapExit_stairs_01"
