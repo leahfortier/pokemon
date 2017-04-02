@@ -8,18 +8,10 @@ import pattern.TradePokemonMatcher;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import trainer.player.Player;
-import util.SerializationUtils;
 
-public class TradePokemonActionTrigger extends Trigger {
-    private final TradePokemonMatcher tradePokemonMatcher;
+public class TradePokemonActionTrigger {
+    private TradePokemonMatcher tradePokemonMatcher;
 
-    TradePokemonActionTrigger(String contents, String condition) {
-        super(TriggerType.TRADE_POKEMON_ACTION, contents, condition);
-
-        tradePokemonMatcher = SerializationUtils.deserializeJson(contents, TradePokemonMatcher.class);
-    }
-
-    @Override
     protected void executeTrigger() {
         if (tradePokemonMatcher.isCancelled()) {
             return;

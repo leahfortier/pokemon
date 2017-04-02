@@ -2,8 +2,6 @@ package map.triggers;
 
 import gui.view.ViewMode;
 import main.Game;
-import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.breeding.DayCareCenter;
@@ -29,6 +27,6 @@ public class DayCareTrigger extends Trigger {
         Messages.add(dayCare.getPokemonPresentMessage());
         Messages.add(dayCare.getCompatibilityMessage());
 
-        Messages.add(new MessageUpdate().withTrigger(TriggerType.CHANGE_VIEW.createTrigger(ViewMode.DAY_CARE_VIEW.name()).getName()));
+        ChangeViewTrigger.addChangeViewTriggerMessage(ViewMode.DAY_CARE_VIEW);
     }
 }
