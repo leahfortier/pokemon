@@ -6,6 +6,7 @@ import main.Game;
 import main.Global;
 import pokemon.PokemonInfo;
 import util.FontMetrics;
+import util.PokeString;
 import util.RandomUtils;
 
 import javax.swing.JFrame;
@@ -96,7 +97,7 @@ public class GameFrame {
 					
 					if (fpsTime > 1000) {
 						fpsTime %= 1000;
-						frame.setTitle("Pokemon++          FPS:" + frameCount);
+						frame.setTitle(PokeString.POKEMON + "++          FPS:" + frameCount);
 						frameCount = 1;
 					}
 					else {

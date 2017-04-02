@@ -2,7 +2,7 @@ package util;
 
 public class PokeString {
 
-	public static final String POKE = "Pok\u00E9";
+	public static final String POKE = "Pok" + SpecialCharacter.POKE_E.specialCharacter;
 	public static final String POKEMON = POKE + "mon";
 	public static final String POKEDEX = POKE + "dex";
 	public static final String POKEDOLLARS = POKE + "dollars";
@@ -44,12 +44,12 @@ public class PokeString {
 	public static String writeClassName(String name) {
 		name = removeSpecialCharacters(name);
 		
-		String className = "";
+		StringBuilder className = new StringBuilder();
 		for (int i = 0; i < name.length(); i++) {
 			if (name.charAt(i) == '-') {
 				if (StringUtils.isLower(name.charAt(i + 1))) {
 					char c = (char)(name.charAt(i + 1) - 'a' + 'A');
-					className += c;
+					className.append(c);
 					i++;
 					continue;
 				}
@@ -61,10 +61,10 @@ public class PokeString {
 				continue;
 			}
 			
-			className += name.charAt(i);
+			className.append(name.charAt(i));
 		}
 		
-		return className;
+		return className.toString();
 	}
 	
 	public static String getNamesiesString(String name) {
@@ -76,24 +76,24 @@ public class PokeString {
 		name = removeSpecialCharacters(name).replace(" ", "");
 
 		char[] nameChar = name.toCharArray();
-		String enumName = nameChar[0] + "";
+		StringBuilder enumName = new StringBuilder(nameChar[0] + "");
 		
 		for (int i = 1; i < nameChar.length; i++) {
 			if (((StringUtils.isUpper(nameChar[i]) &&
 					!StringUtils.isUpper(nameChar[i - 1])) || nameChar[i] == '-') &&
 					nameChar[i - 1] != '_' &&
 					enumName.charAt(enumName.length() - 1) != '_') {
-				enumName += "_";
+				enumName.append("_");
 			}
 			
 			if (StringUtils.isSpecial(nameChar[i])) {
 				continue;
 			}
 			
-			enumName += nameChar[i];
+			enumName.append(nameChar[i]);
 		}
 		
-		return enumName.toUpperCase();
+		return enumName.toString().toUpperCase();
 	}
 
 	private enum SpecialCharacter {

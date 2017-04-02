@@ -75,7 +75,7 @@
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "How about becoming a Pokemon master? It's the main fad these days... Everyone does it!"
+                "triggerContents": "How about becoming a Pokémon master? It's the main fad these days... Everyone does it!"
               }
             },
             {

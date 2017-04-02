@@ -119,7 +119,7 @@
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "You're actually trying to become a Pokemon master??"
+                "triggerContents": "You're actually trying to become a Pokémon master??"
               }
             },
             {
@@ -157,7 +157,7 @@
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "Becoming a Pokemon master comes with a lot of perks and royalties -- it has money written all over it!"
+                "triggerContents": "Becoming a Pokémon master comes with a lot of perks and royalties -- it has money written all over it!"
               }
             },
             {

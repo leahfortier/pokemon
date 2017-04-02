@@ -90,7 +90,7 @@
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "My Pokemon and I communicate over PCI express!"
+                "triggerContents": "My Pokémon and I communicate over PCI express!"
               }
             },
             {
@@ -141,7 +141,7 @@
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "My Pokemon pack enough electricity to power the Cray Titan!"
+                "triggerContents": "My Pokémon pack enough electricity to power the Cray Titan!"
               }
             },
             {

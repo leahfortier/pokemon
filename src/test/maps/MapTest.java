@@ -4,10 +4,18 @@ import map.MapDataType;
 import map.area.AreaData;
 import map.overworld.WalkType;
 import map.overworld.WildEncounter;
+import mapMaker.dialogs.action.ActionType;
+import mapMaker.dialogs.action.trigger.TriggerActionType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import pattern.action.ActionMatcher;
+import pattern.action.NPCInteractionMatcher;
+import pattern.action.TriggerActionMatcher;
+import pattern.map.EventMatcher;
 import pattern.map.FishingMatcher;
+import pattern.map.MiscEntityMatcher;
+import pattern.map.NPCMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
 import util.FileIO;
@@ -108,6 +116,38 @@ public class MapTest {
                 }
 
                 Assert.assertTrue(totalProbability == 100);
+            }
+        }
+    }
+
+    @Test
+    public void dialogueTest() {
+        // Make sure all input dialogue triggers don't include the string 'Poke' instead of 'Poké'
+        for (TestMap map : this.maps) {
+            for (NPCMatcher npc : map.getMatcher().getNPCs()) {
+                for (NPCInteractionMatcher interaction : npc.getInteractionMatcherList()) {
+                    testDialogue(map, interaction.getActionMatcherList());
+                }
+            }
+
+            for (MiscEntityMatcher miscEntity : map.getMatcher().getMiscEntities()) {
+                testDialogue(map, miscEntity.getActionMatcherList());
+            }
+
+            for (EventMatcher event : map.getMatcher().getEvents()) {
+                testDialogue(map, event.getActionMatcherList());
+            }
+        }
+    }
+
+    private void testDialogue(TestMap map, List<ActionMatcher> actions) {
+        for (ActionMatcher action : actions) {
+            if (action.getActionType() == ActionType.TRIGGER) {
+                TriggerActionMatcher trigger = action.getTrigger();
+                if (trigger.getTriggerActionType() == TriggerActionType.DIALOGUE) {
+                    String dialogue = trigger.getTriggerContents();
+                    Assert.assertFalse(map.getName() + " " + dialogue, dialogue.contains("Poke"));
+                }
             }
         }
     }
