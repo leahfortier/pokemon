@@ -24,16 +24,20 @@ public class GameFrame {
 
 	private static final JFrame frame = new JFrame();
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		Canvas gui = new Canvas();
 		gui.setSize(Global.GAME_SIZE);
+
+		frame.getContentPane().add(gui);
 
 		frame.setTitle(Global.TITLE);
 		frame.setIconImage(Global.FRAME_ICON);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-		frame.getContentPane().add(gui);
+
+		Thread.sleep(1100);
 		frame.pack();
+
 		frame.setVisible(true);
 
 		Thread gameThread = new Thread(new GameLoop(gui));

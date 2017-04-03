@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Player extends Trainer implements Serializable {
 	private static final long serialVersionUID = 4283479774388652604L;
@@ -204,7 +203,7 @@ public class Player extends Trainer implements Serializable {
 	}
 
 	public List<Entry<MapName, String>> getFlyLocations() {
-		return this.flyLocations.stream().collect(Collectors.toList());
+		return new ArrayList<>(this.flyLocations);
 	}
 
 	public EvolutionInfo getEvolutionInfo() {

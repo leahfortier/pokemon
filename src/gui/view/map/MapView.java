@@ -27,7 +27,6 @@ import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
 import message.Messages;
-import pokemon.ActivePokemon;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.player.Player;
@@ -366,11 +365,6 @@ public class MapView extends View {
 		}
 
 		SoundPlayer.soundPlayer.playMusic(music);
-	}
-
-	public void setTrade(ActivePokemon myPokes, ActivePokemon theirPokes) {
-		this.setState(VisualState.TRADE);
-		VisualState.setTrade(myPokes, theirPokes);
 	}
 
 	public void setBattle(Battle battle, boolean seenWild) {

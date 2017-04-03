@@ -1,7 +1,6 @@
 package map.triggers;
 
 import gui.view.map.MapView;
-import gui.view.map.VisualState;
 import main.Game;
 import message.Messages;
 import pattern.TradePokemonMatcher;
@@ -39,7 +38,7 @@ public class TradePokemonActionTrigger {
 //        Messages.add("Please take good care of my " + npcTradePokemon.getName() + "...");
 
         MapView mapView = Game.instance().getMapView();
-        mapView.setTrade(playerTradePokemon, npcTradePokemon);
-        mapView.setState(VisualState.TRADE);
+        //mapView.setTrade(playerTradePokemon, npcTradePokemon);
+        //mapView.setState(VisualState.TRADE);
     }
 }

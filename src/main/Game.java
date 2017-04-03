@@ -2,6 +2,7 @@ package main;
 
 import battle.Battle;
 import gui.GameData;
+import gui.view.TradeView;
 import gui.view.View;
 import gui.view.ViewMode;
 import gui.view.battle.BattleView;
@@ -98,6 +99,10 @@ public class Game {
 
 	public MapView getMapView() {
 		return (MapView)viewMap.get(ViewMode.MAP_VIEW);
+	}
+
+	public TradeView getTradeView() {
+		return (TradeView) viewMap.get(ViewMode.TRADE_VIEW);
 	}
 
 	public void setBattleViews(final Battle battle, final boolean seenWildPokemon) {
