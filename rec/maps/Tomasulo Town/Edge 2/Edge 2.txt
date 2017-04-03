@@ -1,0 +1,323 @@
+{
+  "areas": [
+    {
+      "displayName": "Edge 2",
+      "flyLocation": "",
+      "terrain": "GRASS",
+      "weather": "NORMAL",
+      "music": "DEFAULT_TUNE"
+    }
+  ],
+  "mapTransitions": [
+    {
+      "exitName": "Tommy",
+      "direction": "UP",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "Tomasulo Town",
+        "mapName": "TomTown_WindValley_TransitionBuilding"
+      },
+      "nextEntrance": "SouthDoor",
+      "location": [
+        {
+          "x": 9,
+          "y": 4
+        },
+        {
+          "x": 10,
+          "y": 4
+        },
+        {
+          "x": 11,
+          "y": 4
+        }
+      ],
+      "triggerName": "Edge 2_MapExit_Tommy_01"
+    }
+  ],
+  "NPCs": [],
+  "items": [],
+  "miscEntities": [],
+  "events": [],
+  "wildBattles": [
+    {
+      "name": "Grassy",
+      "wildBattles": [
+        {
+          "name": "Sk",
+          "encounterRate": "VERY_COMMON",
+          "wildPokemon": [
+            {
+              "pokemon": "CHIKORITA",
+              "minLevel": 10,
+              "maxLevel": 10,
+              "probability": 6
+            },
+            {
+              "pokemon": "TURTWIG",
+              "minLevel": 10,
+              "maxLevel": 10,
+              "probability": 6
+            },
+            {
+              "pokemon": "TREECKO",
+              "minLevel": 10,
+              "maxLevel": 10,
+              "probability": 6
+            },
+            {
+              "pokemon": "SNIVY",
+              "minLevel": 10,
+              "maxLevel": 10,
+              "probability": 6
+            },
+            {
+              "pokemon": "CHESPIN",
+              "minLevel": 10,
+              "maxLevel": 10,
+              "probability": 6
+            },
+            {
+              "pokemon": "ROWLET",
+              "minLevel": 10,
+              "maxLevel": 10,
+              "probability": 6
+            },
+            {
+              "pokemon": "DEERLING",
+              "minLevel": 10,
+              "maxLevel": 10,
+              "probability": 6
+            },
+            {
+              "pokemon": "SKIDDO",
+              "minLevel": 10,
+              "maxLevel": 30,
+              "probability": 6
+            }
+          ]
+        }
+      ],
+      "location": [
+        {
+          "x": 6,
+          "y": 5
+        },
+        {
+          "x": 6,
+          "y": 6
+        },
+        {
+          "x": 6,
+          "y": 7
+        },
+        {
+          "x": 6,
+          "y": 8
+        },
+        {
+          "x": 6,
+          "y": 9
+        },
+        {
+          "x": 6,
+          "y": 10
+        },
+        {
+          "x": 6,
+          "y": 11
+        },
+        {
+          "x": 6,
+          "y": 12
+        },
+        {
+          "x": 6,
+          "y": 13
+        },
+        {
+          "x": 7,
+          "y": 5
+        },
+        {
+          "x": 7,
+          "y": 6
+        },
+        {
+          "x": 7,
+          "y": 7
+        },
+        {
+          "x": 7,
+          "y": 8
+        },
+        {
+          "x": 7,
+          "y": 9
+        },
+        {
+          "x": 7,
+          "y": 10
+        },
+        {
+          "x": 7,
+          "y": 11
+        },
+        {
+          "x": 7,
+          "y": 12
+        },
+        {
+          "x": 7,
+          "y": 13
+        },
+        {
+          "x": 8,
+          "y": 5
+        },
+        {
+          "x": 8,
+          "y": 6
+        },
+        {
+          "x": 8,
+          "y": 7
+        },
+        {
+          "x": 8,
+          "y": 8
+        },
+        {
+          "x": 8,
+          "y": 9
+        },
+        {
+          "x": 8,
+          "y": 10
+        },
+        {
+          "x": 8,
+          "y": 11
+        },
+        {
+          "x": 8,
+          "y": 12
+        },
+        {
+          "x": 8,
+          "y": 13
+        },
+        {
+          "x": 12,
+          "y": 5
+        },
+        {
+          "x": 12,
+          "y": 6
+        },
+        {
+          "x": 12,
+          "y": 7
+        },
+        {
+          "x": 12,
+          "y": 8
+        },
+        {
+          "x": 12,
+          "y": 9
+        },
+        {
+          "x": 12,
+          "y": 10
+        },
+        {
+          "x": 12,
+          "y": 11
+        },
+        {
+          "x": 12,
+          "y": 12
+        },
+        {
+          "x": 12,
+          "y": 13
+        },
+        {
+          "x": 13,
+          "y": 5
+        },
+        {
+          "x": 13,
+          "y": 6
+        },
+        {
+          "x": 13,
+          "y": 7
+        },
+        {
+          "x": 13,
+          "y": 8
+        },
+        {
+          "x": 13,
+          "y": 9
+        },
+        {
+          "x": 13,
+          "y": 10
+        },
+        {
+          "x": 13,
+          "y": 11
+        },
+        {
+          "x": 13,
+          "y": 12
+        },
+        {
+          "x": 13,
+          "y": 13
+        },
+        {
+          "x": 14,
+          "y": 5
+        },
+        {
+          "x": 14,
+          "y": 6
+        },
+        {
+          "x": 14,
+          "y": 7
+        },
+        {
+          "x": 14,
+          "y": 8
+        },
+        {
+          "x": 14,
+          "y": 9
+        },
+        {
+          "x": 14,
+          "y": 10
+        },
+        {
+          "x": 14,
+          "y": 11
+        },
+        {
+          "x": 14,
+          "y": 12
+        },
+        {
+          "x": 14,
+          "y": 13
+        }
+      ],
+      "triggerName": "Edge 2_WildBattle_Grassy_01"
+    }
+  ],
+  "fishingSpots": []
+}
