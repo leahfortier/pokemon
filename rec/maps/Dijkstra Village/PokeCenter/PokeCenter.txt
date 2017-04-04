@@ -1,0 +1,103 @@
+{
+  "areas": [
+    {
+      "displayName": "Dijkstra Village",
+      "terrain": "BUILDING",
+      "music": "POKE_CENTER"
+    }
+  ],
+  "mapTransitions": [
+    {
+      "exitName": "FrontDoor",
+      "direction": "DOWN",
+      "deathPortal": true,
+      "nextMap": {
+        "region": "Dijkstra Village",
+        "mapName": "Dijkstra Village"
+      },
+      "nextEntrance": "PokeCenter",
+      "location": [
+        {
+          "x": 7,
+          "y": 8
+        }
+      ],
+      "triggerName": "PokeCenter_MapExit_FrontDoor_01"
+    }
+  ],
+  "NPCs": [
+    {
+      "name": "Mart_Guy",
+      "spriteIndex": 9,
+      "direction": "RIGHT",
+      "interactions": [],
+      "location": {
+        "x": 2,
+        "y": 7
+      },
+      "triggerName": "PokeCenter_NPC_Mart_Guy_01"
+    },
+    {
+      "name": "Nurse_Joy",
+      "spriteIndex": 8,
+      "direction": "DOWN",
+      "interactions": [],
+      "location": {
+        "x": 7,
+        "y": 2
+      },
+      "triggerName": "PokeCenter_NPC_Nurse_Joy_01"
+    }
+  ],
+  "items": [],
+  "miscEntities": [
+    {
+      "name": "Heal",
+      "actions": [
+        {
+          "groupTrigger": "PokeCenterHeal"
+        }
+      ],
+      "location": [
+        {
+          "x": 7,
+          "y": 3
+        }
+      ],
+      "triggerName": "PokeCenter_MiscEntity_Heal_01"
+    },
+    {
+      "name": "Mart",
+      "actions": [
+        {
+          "groupTrigger": "LoadMart"
+        }
+      ],
+      "location": [
+        {
+          "x": 3,
+          "y": 7
+        }
+      ],
+      "triggerName": "PokeCenter_MiscEntity_Mart_01"
+    },
+    {
+      "name": "PC_View",
+      "actions": [
+        {
+          "groupTrigger": "LoadPC"
+        }
+      ],
+      "location": [
+        {
+          "x": 11,
+          "y": 1
+        }
+      ],
+      "triggerName": "PokeCenter_MiscEntity_PC_View_01"
+    }
+  ],
+  "events": [],
+  "wildBattles": [],
+  "fishingSpots": []
+}
