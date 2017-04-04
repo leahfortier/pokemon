@@ -2,7 +2,6 @@ package map.triggers;
 
 import gui.view.ViewMode;
 import main.Game;
-import message.MessageUpdate;
 import message.Messages;
 import pokemon.breeding.DayCareCenter;
 import trainer.player.Player;

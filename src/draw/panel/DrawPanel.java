@@ -12,7 +12,6 @@ import input.ControlKey;
 import input.InputControl;
 import main.Global;
 import map.Direction;
-import type.Type;
 import util.FontMetrics;
 import util.Point;
 
