@@ -82,7 +82,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "TRADE_POKEMON_QUESTION",
+                "triggerType": "TRADE_POKEMON",
                 "triggerContents": "{
   \"requested\": \"VULPIX\",
   \"tradePokemon\": \"YUKIKON\"

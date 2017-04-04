@@ -19,6 +19,7 @@ public enum ViewMode {
     PC_VIEW(PCView::new),
     POKEDEX_VIEW(PokedexView::new),
     START_VIEW(StartView::new),
+    TRADE_VIEW(TradeView::new),
     TRAINER_CARD_VIEW(TrainerCardView::new);
 
     private final ViewCreator viewCreator;

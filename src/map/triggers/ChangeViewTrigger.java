@@ -2,6 +2,8 @@ package map.triggers;
 
 import gui.view.ViewMode;
 import main.Game;
+import message.MessageUpdate;
+import message.Messages;
 import util.PokeString;
 
 class ChangeViewTrigger extends Trigger {
@@ -15,5 +17,9 @@ class ChangeViewTrigger extends Trigger {
 
 	protected void executeTrigger() {
 		Game.instance().setViewMode(this.view);
+	}
+
+	public static void addChangeViewTriggerMessage(ViewMode viewMode) {
+		Messages.add(new MessageUpdate().withTrigger(TriggerType.CHANGE_VIEW.createTrigger(viewMode.name()).getName()));
 	}
 }

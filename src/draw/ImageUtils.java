@@ -54,12 +54,14 @@ public final class ImageUtils {
     }
 
     public static void drawCenteredImageLabel(Graphics g, BufferedImage image, String text, int x, int y) {
+        text = " " + text;
+
         int imageWidth = image.getWidth();
-        int textWidth = FontMetrics.getSuggestedWidth(text, g);
+        int textWidth = FontMetrics.getTextWidth(g, text);
         int halfSize = (imageWidth + textWidth)/2;
 
-        drawCenteredImage(g, image, x - halfSize + imageWidth/2, y);
-        TextUtils.drawCenteredString(g, text, x - halfSize + imageWidth + textWidth/2, y);
+        drawCenteredHeightImage(g, image, x - halfSize, y);
+        TextUtils.drawCenteredHeightString(g, text, x - halfSize + imageWidth, y);
     }
 
     public static void drawCenteredImageLabel(Graphics g, BufferedImage image, String text, Point center) {
