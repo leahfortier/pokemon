@@ -1,5 +1,7 @@
 package gui.view;
 
+import draw.ImageUtils;
+import draw.TextUtils;
 import draw.button.Button;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
@@ -13,6 +15,7 @@ import pokemon.PokemonInfo;
 import trainer.Trainer;
 import trainer.player.Player;
 import type.Type;
+import util.FontMetrics;
 import util.StringUtils;
 
 import java.awt.Color;
@@ -47,9 +50,6 @@ public class TradeView extends View {
     private BufferedImage myPokesBackImage;
     private BufferedImage myPokesFrontImage;
 
-    private ActivePokemon myPokes;
-    private ActivePokemon theirPokes;
-
     private List<ActivePokemon> team;
 
     public TradeView() {
@@ -60,7 +60,7 @@ public class TradeView extends View {
         int panelWidth = 183;
         int spacing = 20;
 
-        this.offeringPanel = new DrawPanel(spacing, spacing, panelWidth, 110)
+        this.offeringPanel = new DrawPanel(spacing, spacing, panelWidth, 90)
                 .withTransparentCount(2)
                 .withBlackOutline();
 
@@ -90,21 +90,20 @@ public class TradeView extends View {
             for (int i = 0; i < team.size(); i++) {
                 Button button = buttons[i + i / NUM_TEAM_COLS];
                 if (button.checkConsumePress()) {
-                    ActivePokemon pokemon = team.get(i);
-                    if (pokemon.getPokemonInfo().namesies() == requested.namesies()) {
-                        this.myPokes = pokemon;
-                        this.theirPokes = new ActivePokemon(
+                    ActivePokemon myPokes = team.get(i);
+                    if (myPokes.getPokemonInfo().namesies() == requested.namesies()) {
+                        ActivePokemon theirPokes = new ActivePokemon(
                                 offering.namesies(),
-                                pokemon.getLevel(),
+                                myPokes.getLevel(),
                                 false,
                                 true
                         );
 
-                        this.myPokesFrontImage = pokemonTiles.getTile(this.myPokes.getImageName());
-                        this.theirPokesFrontImage = pokemonTiles.getTile(this.theirPokes.getImageName());
+                        this.myPokesFrontImage = pokemonTiles.getTile(myPokes.getImageName());
+                        this.theirPokesFrontImage = pokemonTiles.getTile(theirPokes.getImageName());
 
-                        this.myPokesBackImage = pokemonTiles.getTile(this.myPokes.getImageName(false));
-                        this.theirPokesBackImage = pokemonTiles.getTile(this.theirPokes.getImageName(false));
+                        this.myPokesBackImage = pokemonTiles.getTile(myPokes.getImageName(false));
+                        this.theirPokesBackImage = pokemonTiles.getTile(theirPokes.getImageName(false));
 
                         tradeAnimationTime = TRADE_ANIMATION_LIFESPAN;
                     } else {
@@ -119,27 +118,28 @@ public class TradeView extends View {
         }
     }
 
+    private void drawPanel(Graphics g, String label, DrawPanel panel, PokemonInfo pokemon) {
+        FontMetrics.setFont(g, 22);
+
+        TextUtils.drawCenteredHeightString(g, label, panel.x + panel.getBorderSize() + 10, panel.y + panel.height/3);
+        ImageUtils.drawCenteredImageLabel(g, partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getName(), panel.centerX(), panel.y + 2 * panel.height / 3);
+    }
+
     @Override
     public void draw(Graphics g) {
         canvasPanel.drawBackground(g);
 
         if (tradeAnimationTime > 0) {
-            if (
-                    myPokesFrontImage == null ||
-                            theirPokesFrontImage == null ||
-                            myPokesBackImage == null ||
-                            theirPokesBackImage == null
-                    ) {
+            if (myPokesFrontImage == null ||
+                    theirPokesFrontImage == null ||
+                    myPokesBackImage == null ||
+                    theirPokesBackImage == null) {
                 return;
             }
 
-            //int pokesWidth = //100;// myPokesFrontImage.getWidth() + theirPokesFrontImage.getWidth();
-            int drawWidth = Global.GAME_SIZE.width;// + pokesWidth;
-            int drawHeightLeft;
-            int drawHeightRight;
-
-            drawHeightRight = drawHeightLeft = Global.GAME_SIZE.height / 2;
-            drawHeightRight -= myPokesFrontImage.getHeight();
+            int drawWidth = Global.GAME_SIZE.width;
+            int drawHeightLeft = Global.GAME_SIZE.height / 2;
+            int drawHeightRight = drawHeightLeft - myPokesFrontImage.getHeight();
 
             BufferedImage a = myPokesBackImage;
             BufferedImage b = theirPokesFrontImage;
@@ -171,6 +171,9 @@ public class TradeView extends View {
             requestedPanel.drawBackground(g);
             offeringPanel.drawBackground(g);
 
+            drawPanel(g, "Offering:", offeringPanel, offering);
+            drawPanel(g, "Requested:", requestedPanel, requested);
+
             BasicPanels.drawFullMessagePanel(g, StringUtils.empty());
             for (int i = 0; i < team.size(); i++) {
                 Button button = buttons[i + i/NUM_TEAM_COLS];
@@ -191,10 +194,10 @@ public class TradeView extends View {
                     .withBlackOutline();
             cancelPanel.drawBackground(g);
             cancelPanel.label(g, 22, "Cancel");
-        }
 
-        for (Button button : buttons) {
-            button.draw(g);
+            for (Button button : buttons) {
+                button.draw(g);
+            }
         }
     }
 
