@@ -21,7 +21,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class FileIO {
-	private static final String FILE_SLASH = File.separator;
+	public static final String FILE_SLASH = File.separator;
 	
 	public static void deleteFile(String fileName) {
 		File file = new File(fileName);

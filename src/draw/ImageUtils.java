@@ -34,10 +34,14 @@ public final class ImageUtils {
     }
 
     public static void drawBottomCenteredImage(Graphics g, BufferedImage image, Point center) {
+        drawBottomCenteredImage(g, image, center.x, center.y);
+    }
+
+    public static void drawBottomCenteredImage(Graphics g, BufferedImage image, int x, int y) {
         g.drawImage(
                 image,
-                center.x - image.getWidth()/2,
-                center.y - image.getHeight(),
+                x - image.getWidth()/2,
+                y - image.getHeight(),
                 null);
     }
 
@@ -181,6 +185,10 @@ public final class ImageUtils {
                 continue;
             }
 
+            if (imageFile.getName().contains("index.txt")) {
+                continue;
+            }
+
             BufferedImage image = FileIO.readImage(imageFile);
             int empty = image.getRGB(0, 0); // This assumes the top left corner is blank just FYI...
 
@@ -202,7 +210,7 @@ public final class ImageUtils {
 
             String newName = imageFile.getName();
 
-            File file = new File(outputLocation + "\\" + newName);
+            File file = new File(outputLocation + FileIO.FILE_SLASH + newName);
             FileIO.writeImage(image.getSubimage(leftmost, topmost, rightmost - leftmost + 1, bottommost - topmost + 1), file);
         }
     }

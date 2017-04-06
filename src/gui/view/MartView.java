@@ -194,8 +194,9 @@ class MartView extends View {
 
 		Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(forSaleItems, pageNum, ITEMS_PER_PAGE);
 		for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
+			ItemNamesies nextItem = iter.next();
 			if (itemButtons[i].checkConsumePress()) {
-				setSelectedItem(iter.next());
+				setSelectedItem(nextItem);
 				updateActiveButtons();
 			}
 		}
@@ -272,18 +273,30 @@ class MartView extends View {
 		// Item Display
 		selectedPanel.drawBackground(g);
 		if (selectedItem != null) {
+			int spacing = 8;
+
 			Item selectedItemValue = selectedItem.getItem();
+
+			g.setColor(Color.BLACK);
+			FontMetrics.setFont(g, 20);
+
+			int startY = selectedPanel.y + FontMetrics.getDistanceBetweenRows(g);
+			int nameX = selectedPanel.x + 2*spacing + Global.TILE_SIZE; // TODO: Why are we using Tile Size in the bag view
 
 			// Draw item image
 			BufferedImage img = itemTiles.getTile(selectedItemValue.getImageName());
-			ImageUtils.drawCenteredImage(g, img, 430, 132);
-			
-			g.setColor(Color.BLACK);
-			FontMetrics.setFont(g, 20);
-			g.drawString(selectedItem.getName(), 448, 138);
-			
+			ImageUtils.drawBottomCenteredImage(g, img, selectedPanel.x + (nameX - selectedPanel.x)/2, startY);
+
+			g.drawString(selectedItem.getName(), nameX, startY);
+
 			FontMetrics.setFont(g, 14);
-			TextUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - amountLeftButton.x);
+			TextUtils.drawWrappedText(
+					g,
+					selectedItemValue.getDescription(),
+					selectedPanel.x + spacing,
+					startY + FontMetrics.getDistanceBetweenRows(g),
+					selectedPanel.width - 2*spacing
+			);
 
 			amountPanel.drawBackground(g);
 			amountPanel.label(g, 20, itemAmount + "");
