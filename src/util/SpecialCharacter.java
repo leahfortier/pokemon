@@ -3,7 +3,7 @@ package util;
 /**
  * Created by leahfortier on 4/5/17.
  */
-enum SpecialCharacter {
+public enum SpecialCharacter {
     POKE_E("\\\\u00e9", "\u00e9", "e"),
     FEMALE("\\\\u2640", "\u2640", "F"),
     MALE("\\\\u2642", "\u2642", "M");
