@@ -63,25 +63,7 @@ Things to test:
 		if (this instanceof Ability && caster.breaksTheMold()) return false;
 		
 	Test fixed damage moves or basically anything that takes advantage of the new tryDamage method
-
-Should probably just let Nidoran be 100% male again
-
-Pokemon that go out of bounds:
-	Xerneas
-	Aurorus
 	
-	We need to do whatever thing we did for levitating Pokemon before so it doesn't look like they're sitting on the ground... Wait actually we never did that -- that needs to happens srsly
-	
-Change Machoke's method of evolution to a belt
-
-Make comments available for generator
-Private generator methods
-Disallow interfaces from input files
-remove Override/interface fields
-add optional fields
-allow hidden interfaces -- AddHiddenField (should add the field but not add the interfaces associated with that field)
-allow manually adding to the beginning or end of a method
-
 Find a way to have multiple fields that are multiple words long:
 	Combine switchItem and switchItemMessage
 	combine abilityChange and AbilityMessage
@@ -96,10 +78,100 @@ Find a way to have multiple fields that are multiple words long:
 make sure default methods still work properly like critstage and groundedEffect
 same with interfaces with no methods
 
-Options menu
-Trainer card
-Fix opponent gets extra turn after poke faints
-Info guy dialogue
-Gary come up to you
-PC box controls (weird movement and withdraw button preselected)
+Options menu:
+	- Sound
+	- Text Speed
+	- Animation Speed
 generalize catch animation again
+invoke methods that need to call another method immediately after (boolean and void generally or boolean and String just for message)
+connect interface gen with override input
+create some sort of silph surboard for Silph Surfer evolution
+self switching moves require input -- currently just switching to random
+BERRIES
+npc trading view
+green hat sprites
+move player trigger should be able to just set direction
+
+Storyline:
+	Professor Maple is no longer introduced except for through the bitchface who is optional -- maybe want to alter Mom's message to be more plot-focused and mention visiting the lab?
+
+Pokemon that go out of bounds:
+	Xerneas
+	Aurorus
+	Kokonatsu
+	
+	We need to do whatever thing we did for levitating Pokemon before so it doesn't look like they're sitting on the ground... Wait actually we never did that -- that needs to happens srsly
+
+Names that go out of bounds:
+	Crabominable
+	Disarming Voice
+	Silph Surfer
+	
+Sprites that should eventually be replaced since they're fuzzy:
+	Rowlet
+	Dartrix
+	Litten
+	Pikipek
+	Grubbin
+	Charjabug
+	Rockruff
+	Wishiwashi
+	Dewpider
+	Salandit
+	Stufful
+	Jangmo-o
+	Cosmog
+	
+Missing Pokemon Sprites:
+	755 Morelull
+	758 Salazzle
+	765 Oranguru
+	773 Silvally
+	795 Pheromosa
+	796 Xurkitree
+	798 Kartana
+	
+Other forms to include:
+	803. Mega Charizard
+		- definitely LIZARDON
+		- Fire/Dragon
+		- Tough Claws
+		- branch evolution from Charmeleon -- likely an item
+		- maybe make physical, stronger, but slower?
+		- Charizard: 		78	 84	 78	109	85	100
+		- Mega Charizard: 	78	130	111	130	85	100
+		- Lizardon: 		78	119  85  84 78   90
+	804. Mega Mawile
+		- Kuchiito
+		- Keep Mega stats, but don't give Huge Power ability
+	805. Mega Absol
+		- Asbel
+		- Dark/Flying :)
+		- MAGIC BOUNCE!!!
+		- Asbel will have Absol's stats with +20 speed
+		- Decrease Absol's attack to 100
+	806. Mega Sableye
+		- Yamirami
+		- Keep as is
+	807. Alolan Raichu
+		- Silph Surfer
+	808. Alolan Sandshrew
+		- SNOWshrew GET IT?????
+	809. Alolan Sandslash
+		- snowSLASH
+	810. Alolan Vulpix
+		- YUKIKON<33333 cuuuuttteeeeeeee
+	811. Alolan Ninetales
+		- Kyukon!
+	812. Alolan Grimer
+		- Sleima
+	813. Alolan Muk
+		- Sleimok
+	814. Alolan Exeggutor
+		- KOKONATSU
+	815. Alolan Marowak
+		- GaraGara
+	816: Mega Bannette
+		- Jupetta
+	817: Midnight Lycanroc
+		- Lougaroc
