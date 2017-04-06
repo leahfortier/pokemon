@@ -18,7 +18,6 @@ import pokemon.ability.AbilityNamesies;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
-import util.PokeString;
 import util.StringUtils;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -164,7 +163,7 @@ class PokeGen {
 			
 			// Get the name
 			String name = line.replace(":", "");
-			String className = PokeString.writeClassName(name);
+			String className = StringUtils.getClassName(name);
 			
 			// Read in all of the fields
 			ClassFields fields = readFields(in, name, className, index);
@@ -279,7 +278,7 @@ class PokeGen {
 		Scanner in = FileIO.openFile(FileName.TM_LIST);
 		while (in.hasNext()) {
 			String attackName = in.nextLine().trim();
-			String className = PokeString.writeClassName(attackName);
+			String className = StringUtils.getClassName(attackName);
 
 			AttackNamesies namesies = AttackNamesies.getValueOf(attackName);
 			Attack attack = namesies.getAttack();

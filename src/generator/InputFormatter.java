@@ -3,7 +3,6 @@ package generator;
 import main.Global;
 import util.FileIO;
 import util.FileName;
-import util.PokeString;
 import util.StringUtils;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -111,7 +110,7 @@ public class InputFormatter {
                 String enumType = splitInfo[index++];
 
                 if (enumType.endsWith("Namesies")) {
-                    value = PokeString.getNamesiesString(fieldValue);
+                    value = StringUtils.getNamesiesString(fieldValue);
                 }
                 else {
                     value = fieldValue.toUpperCase();

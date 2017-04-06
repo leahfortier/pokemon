@@ -1,7 +1,7 @@
 package pokemon;
 
 import main.Global;
-import util.PokeString;
+import util.StringUtils;
 
 public enum PokemonNamesies {
 	NONE(""), // Mostly so the index matches up
@@ -838,7 +838,7 @@ public enum PokemonNamesies {
 
     public static PokemonNamesies tryValueOf(String name) {
 		try {
-			return PokemonNamesies.valueOf(PokeString.getNamesiesString(name));
+			return PokemonNamesies.valueOf(StringUtils.getNamesiesString(name));
 		} catch (IllegalArgumentException exception) {
 			return null;
 		}

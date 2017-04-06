@@ -150,4 +150,60 @@ public class StringUtils {
 
         return s.toString();
     }
+
+    public static String getNamesiesString(String name) {
+        if (isNullOrWhiteSpace(name)) {
+            return empty();
+        }
+
+        // Remove special characters and spaces
+        name = SpecialCharacter.removeSpecialCharacters(name).replace(" ", "");
+
+        char[] nameChar = name.toCharArray();
+        StringBuilder enumName = new StringBuilder(nameChar[0] + "");
+
+        for (int i = 1; i < nameChar.length; i++) {
+            if (((isUpper(nameChar[i]) &&
+                    !isUpper(nameChar[i - 1])) || nameChar[i] == '-') &&
+                    nameChar[i - 1] != '_' &&
+                    enumName.charAt(enumName.length() - 1) != '_') {
+                enumName.append("_");
+            }
+
+            if (isSpecial(nameChar[i])) {
+                continue;
+            }
+
+            enumName.append(nameChar[i]);
+        }
+
+        return enumName.toString().toUpperCase();
+    }
+
+    // Creates the className from the name
+    public static String getClassName(String name) {
+        name = SpecialCharacter.removeSpecialCharacters(name);
+
+        StringBuilder className = new StringBuilder();
+        for (int i = 0; i < name.length(); i++) {
+            if (name.charAt(i) == '-') {
+                if (isLower(name.charAt(i + 1))) {
+                    char c = (char)(name.charAt(i + 1) - 'a' + 'A');
+                    className.append(c);
+                    i++;
+                    continue;
+                }
+
+                continue;
+            }
+
+            if (isSpecial(name.charAt(i))) {
+                continue;
+            }
+
+            className.append(name.charAt(i));
+        }
+
+        return className.toString();
+    }
 }
