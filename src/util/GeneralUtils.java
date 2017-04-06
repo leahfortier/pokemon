@@ -99,7 +99,7 @@ public final class GeneralUtils {
 
     public static <T extends Enum<T>> List<T> arrayValueOf(Class<T> enumType, String[] contents) {
         return Arrays.stream(contents)
-                .map(value -> Enum.valueOf(enumType, PokeString.getNamesiesString(value)))
+                .map(value -> Enum.valueOf(enumType, StringUtils.getNamesiesString(value)))
                 .collect(Collectors.toList());
     }
 

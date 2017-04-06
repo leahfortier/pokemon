@@ -433,7 +433,7 @@ import item.Item.ZapPlate;
 import item.Item.Zinc;
 import item.Item.ZoomLens;
 import main.Global;
-import util.PokeString;
+import util.StringUtils;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -902,7 +902,7 @@ public enum ItemNamesies {
 
 	public static ItemNamesies tryValueOf(String name) {
 		try {
-			return ItemNamesies.valueOf(PokeString.getNamesiesString(name));
+			return ItemNamesies.valueOf(StringUtils.getNamesiesString(name));
 		} catch (IllegalArgumentException exception) {
 			return null;
 		}

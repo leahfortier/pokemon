@@ -116,7 +116,7 @@ public class FileIO {
 	// Reads the whole file ignoring commented lines starting with # when ignoreComments is true
 	public static String readEntireFileWithReplacements(File file, boolean ignoreComments) {
 		String fileText = readEntireFileWithoutReplacements(file, ignoreComments);
-		return PokeString.restoreSpecialFromUnicode(fileText);
+		return SpecialCharacter.restoreSpecialFromUnicode(fileText);
 	}
 
 	public static String readEntireFileWithoutReplacements(final String fileName, final boolean ignoreComments) {

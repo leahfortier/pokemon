@@ -4,7 +4,6 @@ import main.Global;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import util.FileIO;
-import util.PokeString;
 import util.StringUtils;
 
 import java.util.Scanner;
@@ -71,7 +70,7 @@ class NamesiesGen {
 	}
 	
 	void createNamesies(String name, String className) {
-		String enumName = PokeString.getNamesiesString(name);
+		String enumName = StringUtils.getNamesiesString(name);
 		namesies.append(firstNamesies ? "" : ",\n")
 				.append("\t")
 				.append(enumName)

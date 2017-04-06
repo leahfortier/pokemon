@@ -469,7 +469,7 @@
             {
               "trigger": {
                 "triggerType": "DIALOGUE",
-                "triggerContents": "I’m in the Pokemon Master business now baby, I’ll take the world by storm."
+                "triggerContents": "I’m in the Pokémon Master business now baby, I’ll take the world by storm."
               }
             },
             {

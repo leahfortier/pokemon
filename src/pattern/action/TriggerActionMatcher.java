@@ -2,7 +2,7 @@ package pattern.action;
 
 import map.triggers.TriggerType;
 import mapMaker.dialogs.action.trigger.TriggerActionType;
-import util.PokeString;
+import util.StringUtils;
 
 public class TriggerActionMatcher {
     private String triggerType;
@@ -18,7 +18,7 @@ public class TriggerActionMatcher {
     }
 
     public TriggerActionType getTriggerActionType() {
-        return TriggerActionType.valueOf(PokeString.getNamesiesString(triggerType));
+        return TriggerActionType.valueOf(StringUtils.getNamesiesString(triggerType));
     }
 
     public String getTriggerContents() {

@@ -10,7 +10,6 @@ import map.triggers.map.MapTransitionTrigger;
 import map.triggers.map.MoveNPCTrigger;
 import map.triggers.map.MovePlayerTrigger;
 import map.triggers.map.ReloadMapTrigger;
-import util.PokeString;
 import util.StringUtils;
 
 public enum TriggerType {
@@ -91,6 +90,6 @@ public enum TriggerType {
     }
 
     public static TriggerType getTriggerType(final String type) {
-        return TriggerType.valueOf(PokeString.getNamesiesString(type));
+        return TriggerType.valueOf(StringUtils.getNamesiesString(type));
     }
 }

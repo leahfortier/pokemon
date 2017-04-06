@@ -30,8 +30,8 @@ import pattern.map.NPCMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import util.FileIO;
 import util.Point;
-import util.PokeString;
 import util.SerializationUtils;
+import util.SpecialCharacter;
 import util.StringUtils;
 
 import java.awt.Graphics2D;
@@ -103,7 +103,7 @@ public class MapMakerTriggerData {
 		} while (entityNames.contains(uniqueEntityName));
 
 		System.out.println(uniqueEntityName);
-		
+
 		matcher.setTriggerName(uniqueEntityName);
 		entityNames.add(uniqueEntityName);
 
@@ -116,7 +116,7 @@ public class MapMakerTriggerData {
 		}
 
 		baseName = baseName.replaceAll("\\s", "");
-		baseName = PokeString.removeSpecialSymbols(baseName);
+		baseName = SpecialCharacter.removeSpecialSymbols(baseName);
 		return baseName;
 	}
 
