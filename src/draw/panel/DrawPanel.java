@@ -21,7 +21,6 @@ import java.awt.image.BufferedImage;
 import java.util.Collection;
 
 public class DrawPanel {
-
     public final int x;
     public final int y;
     public final int width;

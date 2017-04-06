@@ -450,6 +450,42 @@
             },
             {
               "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "What're you still doing dawdling in these parts?"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "You're 22 for god's sake!!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Me? I'm heading to the next town to get my first gym badge!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "I’m in the Pokemon Master business now baby, I’ll take the world by storm."
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "What are you going to do? Be a bum all your life?"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Anyway, smell ya later!"
+              }
+            },
+            {
+              "trigger": {
                 "triggerType": "MOVE_NPC",
                 "triggerContents": "{
   \"npcEntityName\": \"DFS_Town_NPC_Rivalchan_01\",
