@@ -345,17 +345,17 @@ public class BagView extends View {
 
 			Item selectedItemValue = selectedItem.getItem();
 
-			// Draw item image
-			BufferedImage img = itemTiles.getTile(selectedItemValue.getImageName());
-			g.drawImage(img, selectedPanel.x + 5, selectedPanel.y, null);
-			
 			g.setColor(Color.BLACK);
 			FontMetrics.setFont(g, 20);
 
 			int startY = selectedPanel.y + FontMetrics.getDistanceBetweenRows(g);
+			int nameX = selectedPanel.x + 2*spacing + Global.TILE_SIZE; // TODO: Why are we using Tile Size in the bag view
 
-			// TODO: Why are we using Tile Size in the bag view
-			g.drawString(selectedItem.getName(), selectedPanel.x + 2*spacing + Global.TILE_SIZE, startY);
+			// Draw item image
+			BufferedImage img = itemTiles.getTile(selectedItemValue.getImageName());
+			ImageUtils.drawBottomCenteredImage(g, img, selectedPanel.x + (nameX - selectedPanel.x)/2, startY);
+
+			g.drawString(selectedItem.getName(), nameX, startY);
 			
 			if (selectedItemValue.hasQuantity()) {
 				String quantityString = "x" + bag.getQuantity(selectedItem);
