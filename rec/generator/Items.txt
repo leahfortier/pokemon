@@ -574,12 +574,11 @@ Shell Bell:
 	Desc: An item to be held by a Pok\u00e9mon. The holder's HP is restored a little every time it inflicts damage.
 	Price: 200
 	OnApplyDamage:
-		if (user.fullHealth()) {
+		if (user.fullHealth() || user.getAttack().isMoveType(MoveType.USER_FAINTS)) {
 			return;
 		}
 
 		user.heal((int)Math.ceil(damage/8.0));
-		// TODO: This looks really bad when paired with Explosion
 		Messages.add(new MessageUpdate(user.getName() + " restored some HP due to its " + this.name + "!").updatePokemon(b, user));
 		###
 *

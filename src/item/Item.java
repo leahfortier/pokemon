@@ -5,13 +5,13 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
+import battle.attack.MoveType;
 import battle.effect.DefiniteEscape;
 import battle.effect.MessageGetter;
 import battle.effect.SimpleStatModifyingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.CastSource;
-import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
@@ -1345,12 +1345,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-			if (user.fullHealth()) {
+			if (user.fullHealth() || user.getAttack().isMoveType(MoveType.USER_FAINTS)) {
 				return;
 			}
 			
 			user.heal((int)Math.ceil(damage/8.0));
-			// TODO: This looks really bad when paired with Explosion
 			Messages.add(new MessageUpdate(user.getName() + " restored some HP due to its " + this.name + "!").updatePokemon(b, user));
 		}
 	}

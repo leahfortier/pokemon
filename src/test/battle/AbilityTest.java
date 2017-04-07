@@ -34,7 +34,6 @@ public class AbilityTest {
         // Unless the user has mold breaker
         attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
         Assert.assertFalse(TypeAdvantage.doesNotEffect(attacking, defending, battle));
-
         defending.removeItem();
         Assert.assertFalse(TypeAdvantage.doesNotEffect(attacking, defending, battle));
 
