@@ -9,7 +9,7 @@ ApplyDamageEffect:
 			// b: The current battle
 			// user: The user of that attack, the one who is probably implementing this effect
 			// victim: The Pokemon that received the attack
-			// damage: The amount of damage that was dealt to victim by the user 
+			// damage: The amount of damage that was dealt to victim by the user
 			###
 		Invoke: Void
 		EffectList: user
@@ -25,7 +25,7 @@ OpponentApplyDamageEffect:
 			// b: The current battle
 			// user: The user of that attack
 			// victim: The Pokemon that received the attack, the one who is probably implementing this effect
-			// damage: The amount of damage that was dealt to victim by the user 
+			// damage: The amount of damage that was dealt to victim by the user
 			###
 		Invoke: Void
 		EffectList: victim
@@ -97,7 +97,7 @@ SelfHealingMove:
 ***
 PhysicalContactEffect:
 	Method:
-		Comments: 
+		Comments:
 			// b: The current battle
 			// user: The user of the attack that caused the physical contact
 			// victim: The Pokemon that received the physical contact attack
@@ -214,6 +214,7 @@ LevitationEffect:
 		Invoke: Void
 		EffectList: fallen
 		InvokeName: falllllllll
+		Default: Empty
 	*
 	Method:
 		Parameters: Battle b, ActivePokemon p, ActivePokemon moldBreaker
@@ -224,7 +225,7 @@ LevitationEffect:
 ***
 MurderEffect:
 	Comments: // KILL KILL KILL MURDER MURDER MURDER
-	Method: 
+	Method:
 		Header: void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer)
 		Invoke: Void
 		InvokeName: killKillKillMurderMurderMurder
@@ -246,7 +247,7 @@ GroundedEffect:
 	Extends: SelfAttackBlocker
 	Method:
 		Header: boolean block(Battle b, ActivePokemon user)
-		Default: 
+		Default:
 			return user.getAttack().isMoveType(MoveType.AIRBORNE);
 			###
 	*
@@ -257,7 +258,7 @@ GroundedEffect:
 				p.getMove().switchReady(b, p);
 				Messages.add(p.getName() + " fell to the ground!");
 			}
-			
+
 			LevitationEffect.falllllllll(b, p);
 			###
 	*
@@ -476,7 +477,7 @@ CritStageEffect:
 		InvokeName: updateCritStage
 		InvokeParameters: Battle b
 		EffectList: p
-	*	
+	*
 ***
 PriorityChangeEffect:
 	Method:

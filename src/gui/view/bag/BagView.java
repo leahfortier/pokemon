@@ -430,7 +430,6 @@ public class BagView extends View {
 						.withBlackOutline();
 				movePanel.drawBackground(g);
 
-
 				g.drawImage(attack.getActualType().getImage(), 254, 14, null);
 				g.drawImage(attack.getCategory().getImage(), 254, 33, null);
 				
@@ -459,7 +458,6 @@ public class BagView extends View {
 						.withBorderPercentage(15)
 						.withBlackOutline();
 				pokemonPanel.drawBackground(g);
-
 
 				BufferedImage img = partyTiles.getTile(p.getTinyImageName());
 				ImageUtils.drawCenteredImage(g, img, 30, pokemonPanel.centerY());

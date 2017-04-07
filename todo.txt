@@ -96,4 +96,3 @@ Missing Pokemon Sprites:
 	BERRIES
 	npc trading view
 	green hat sprites
-	move player trigger should be able to just set direction

@@ -1224,13 +1224,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		Levitate() {
 			super(AbilityNamesies.LEVITATE, "Gives full immunity to all Ground-type moves.");
 		}
-
-		public void fall(Battle b, ActivePokemon fallen) {
-			Messages.add(fallen.getName() + " is no longer levitating!");
-			
-			// TODO: Fix this it's broken
-			// Effect.removeEffect(fallen.getEffects(), this.namesies());
-		}
 	}
 
 	static class Forewarn extends Ability implements EntryEffect {

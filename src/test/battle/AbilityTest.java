@@ -37,6 +37,12 @@ public class AbilityTest {
 
         defending.removeItem();
         Assert.assertFalse(TypeAdvantage.doesNotEffect(attacking, defending, battle));
+
+        // Or Gravity is in effect
+        attacking.withAbility(AbilityNamesies.NO_ABILITY);
+        Assert.assertTrue(TypeAdvantage.doesNotEffect(attacking, defending, battle));
+        battle.defendingFight(AttackNamesies.GRAVITY);
+        Assert.assertFalse(TypeAdvantage.doesNotEffect(attacking, defending, battle));
     }
 
     @Test

@@ -11,6 +11,7 @@ import battle.effect.SimpleStatModifyingEffect;
 import battle.effect.StallingEffect;
 import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.CastSource;
+import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
@@ -254,13 +255,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			Messages.add(enterer.getName() + " floats with its " + this.name + "!");
-		}
-
-		public void fall(Battle b, ActivePokemon fallen) {
-			Messages.add(fallen.getName() + " is no longer floating with its " + this.name + "!");
-			
-			// TODO: Fix this it's broken
-			// Effect.removeEffect(fallen.getEffects(), this.namesies());
 		}
 
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {

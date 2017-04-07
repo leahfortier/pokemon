@@ -365,7 +365,7 @@ public final class EffectInterfaces {
 	}
 
 	public interface LevitationEffect {
-		void fall(Battle b, ActivePokemon fallen);
+		default void fall(Battle b, ActivePokemon fallen) {}
 
 		static void falllllllll(Battle b, ActivePokemon fallen) {
 			List<Object> invokees = b.getEffectsList(fallen);
