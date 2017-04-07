@@ -926,8 +926,8 @@ SpeedWeather:
 WeatherStarter:
 	AddInterface: EntryEffect
 	AddMapField: Enter:
-		b.addEffect((Weather)EffectNamesies.{11}.getEffect());
 		Messages.add(enterer.getName() + "'s " + this.getName() + " {2-}!");
+		b.addEffect((Weather)EffectNamesies.{11}.getEffect());
 		###
 *
 WeatherEvasion:
@@ -937,11 +937,10 @@ WeatherEvasion:
 		###
 *
 WeatherEliminate:
-	AddInterface: EntryEffect
-	AddMapField: Enter:
-		// TODO: I think this isn't the intended effect of this ability
-		b.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
-		Messages.add(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
+	Header: String getEliminateMessage(ActivePokemon eliminator)
+	AddInterface: WeatherEliminatingEffect
+	Body:
+		return eliminator.getName() + "'s " + this.getName() + " eliminated the weather!";
 		###
 *
 HalfAmount:

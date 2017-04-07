@@ -864,3 +864,31 @@ ModifyStageValueEffect:
 		EffectList: victim
 	*
 ***
+WeatherEliminatingEffect:
+	Method:
+		Header: String getEliminateMessage(ActivePokemon eliminator)
+	*
+	Method:
+		Header: boolean eliminateWeather(Weather weather)
+		Default:
+			return weather.namesies() != EffectNamesies.CLEAR_SKIES;
+			###
+		InvokeParameters: Battle b, ActivePokemon eliminator
+		Invoke: CheckMessage true getEliminateMessage(eliminator)
+		EffectList: eliminator
+		InvokeName: shouldEliminateWeather
+	*
+	Extends: EntryEffect, EndTurnEffect
+	Method:
+		Header: void applyEndTurn(ActivePokemon victim, Battle b)
+		Default:
+			b.addEffect(b.getWeather());
+			###
+	*
+	Method:
+		Header: void enter(Battle b, ActivePokemon enterer)
+		Default:
+			b.addEffect(b.getWeather());
+			###
+	*
+***

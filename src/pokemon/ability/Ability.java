@@ -67,6 +67,7 @@ import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.TypedWildEncounterSelector;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
+import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
@@ -664,8 +665,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect((Weather)EffectNamesies.SUNNY.getEffect());
 			Messages.add(enterer.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
+			b.addEffect((Weather)EffectNamesies.SUNNY.getEffect());
 		}
 	}
 
@@ -878,17 +879,15 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class CloudNine extends Ability implements EntryEffect {
+	static class CloudNine extends Ability implements WeatherEliminatingEffect {
 		private static final long serialVersionUID = 1L;
 
 		CloudNine() {
 			super(AbilityNamesies.CLOUD_NINE, "Eliminates the effects of weather.");
 		}
 
-		public void enter(Battle b, ActivePokemon enterer) {
-			// TODO: I think this isn't the intended effect of this ability
-			b.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
-			Messages.add(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
+		public String getEliminateMessage(ActivePokemon eliminator) {
+			return eliminator.getName() + "'s " + this.getName() + " eliminated the weather!";
 		}
 	}
 
@@ -1967,8 +1966,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect((Weather)EffectNamesies.SANDSTORM.getEffect());
 			Messages.add(enterer.getName() + "'s " + this.getName() + " whipped up a sandstorm!");
+			b.addEffect((Weather)EffectNamesies.SANDSTORM.getEffect());
 		}
 	}
 
@@ -2252,22 +2251,20 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect((Weather)EffectNamesies.RAINING.getEffect());
 			Messages.add(enterer.getName() + "'s " + this.getName() + " started a downpour!");
+			b.addEffect((Weather)EffectNamesies.RAINING.getEffect());
 		}
 	}
 
-	static class AirLock extends Ability implements EntryEffect {
+	static class AirLock extends Ability implements WeatherEliminatingEffect {
 		private static final long serialVersionUID = 1L;
 
 		AirLock() {
 			super(AbilityNamesies.AIR_LOCK, "Eliminates the effects of weather.");
 		}
 
-		public void enter(Battle b, ActivePokemon enterer) {
-			// TODO: I think this isn't the intended effect of this ability
-			b.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
-			Messages.add(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
+		public String getEliminateMessage(ActivePokemon eliminator) {
+			return eliminator.getName() + "'s " + this.getName() + " eliminated the weather!";
 		}
 	}
 
@@ -2367,8 +2364,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect((Weather)EffectNamesies.HAILING.getEffect());
 			Messages.add(enterer.getName() + "'s " + this.getName() + " caused it to hail!");
+			b.addEffect((Weather)EffectNamesies.HAILING.getEffect());
 		}
 	}
 
