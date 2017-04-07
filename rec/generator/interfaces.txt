@@ -878,17 +878,29 @@ WeatherEliminatingEffect:
 		EffectList: eliminator
 		InvokeName: shouldEliminateWeather
 	*
+	Extends: EntryEndTurnEffect
+	Method:
+		Header: void applyEffect(Battle b, ActivePokemon p)
+		Default:
+			b.addEffect(b.getWeather());
+			###
+	*
+***
+EntryEndTurnEffect:
 	Extends: EntryEffect, EndTurnEffect
+	Method:
+		Header: void applyEffect(Battle b, ActivePokemon p)
+	*
 	Method:
 		Header: void applyEndTurn(ActivePokemon victim, Battle b)
 		Default:
-			b.addEffect(b.getWeather());
+			applyEffect(b, victim);
 			###
 	*
 	Method:
 		Header: void enter(Battle b, ActivePokemon enterer)
 		Default:
-			b.addEffect(b.getWeather());
+			applyEffect(b, enterer);
 			###
 	*
 ***

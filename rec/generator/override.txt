@@ -902,13 +902,8 @@ StatusPreventAbility:
 			}
 		}
 		###
-	AddInterface: EntryEffect
-	AddInterface: EndTurnEffect
-	AddMapField: Enter:
-		removeStatus(b, enterer);
-		###
-	AddMapField: ApplyEndTurn:
-		removeStatus(b, victim);
+	AddMapField: EntryEndTurn:
+		removeStatus(b, p);
 		###
 *
 StatusContact:
@@ -1820,18 +1815,18 @@ EndTurnFormChange:
 		changeForm(victim);
 		###
 *
+EntryEndTurn:
+	AddInterface: EntryEndTurnEffect
+	Header: void applyEffect(Battle b, ActivePokemon p)
+*
 GET_DAT_CASH_MONEY_TWICE_ITEM:
 	Header: void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice)
 	AccessModifier: Private
 	Body:
 		EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
 		###
-	AddInterface: EntryEffect
-	AddMapField: Enter:
-		getDatCashMoneyGetDatCashMoneyCast(b, enterer);
-		###
-	AddInterface: EndTurnEffect
-	AddMapField: ApplyEndTurn:
-		getDatCashMoneyGetDatCashMoneyCast(b, victim);
+	AddMapField: EntryEndTurn:
+		// This is named too fantastically to just be applyEffect
+		getDatCashMoneyGetDatCashMoneyCast(b, p);
 		###
 *

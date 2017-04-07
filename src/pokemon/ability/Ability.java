@@ -32,6 +32,7 @@ import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
+import battle.effect.generic.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
@@ -819,7 +820,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Limber extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class Limber extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.PARALYZED)) {
@@ -831,12 +832,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.LIMBER, "The Pok\u00e9mon is protected from paralysis.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -891,7 +888,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class VitalSpirit extends Ability implements MaxLevelWildEncounterEffect, StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class VitalSpirit extends Ability implements MaxLevelWildEncounterEffect, StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.ASLEEP)) {
@@ -903,12 +900,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.VITAL_SPIRIT, "Prevents the Pok\u00e9mon from falling asleep.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -920,7 +913,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Insomnia extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class Insomnia extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.ASLEEP)) {
@@ -932,12 +925,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.INSOMNIA, "Prevents the Pok\u00e9mon from falling asleep.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -1399,7 +1388,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class WaterVeil extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class WaterVeil extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.BURNED)) {
@@ -1411,12 +1400,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.WATER_VEIL, "Prevents the Pok\u00e9mon from getting a burn.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -1688,7 +1673,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Immunity extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class Immunity extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.POISONED)) {
@@ -1700,12 +1685,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.IMMUNITY, "Prevents the Pok\u00e9mon from getting poisoned.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -1904,7 +1885,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class MagmaArmor extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class MagmaArmor extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.FROZEN)) {
@@ -1916,12 +1897,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.MAGMA_ARMOR, "Prevents the Pok\u00e9mon from becoming frozen.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -3125,7 +3102,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class SweetVeil extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class SweetVeil extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.ASLEEP)) {
@@ -3137,12 +3114,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.SWEET_VEIL, "Prevents itself and ally Pok\u00e9mon from falling asleep.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -3538,7 +3511,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class WaterBubble extends Ability implements OpponentPowerChangeEffect, PowerChangeEffect, StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class WaterBubble extends Ability implements OpponentPowerChangeEffect, PowerChangeEffect, StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.BURNED)) {
@@ -3558,12 +3531,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			return user.isAttackType(Type.FIRE) ? .5 : 1;
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {

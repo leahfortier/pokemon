@@ -1610,18 +1610,14 @@ public final class EffectInterfaces {
 		}
 	}
 
-	public interface WeatherEliminatingEffect extends EntryEffect, EndTurnEffect {
+	public interface WeatherEliminatingEffect extends EntryEndTurnEffect {
 		String getEliminateMessage(ActivePokemon eliminator);
 
 		default boolean eliminateWeather(Weather weather) {
 			return weather.namesies() != EffectNamesies.CLEAR_SKIES;
 		}
 
-		default void applyEndTurn(ActivePokemon victim, Battle b) {
-			b.addEffect(b.getWeather());
-		}
-
-		default void enter(Battle b, ActivePokemon enterer) {
+		default void applyEffect(Battle b, ActivePokemon p) {
 			b.addEffect(b.getWeather());
 		}
 
@@ -1639,6 +1635,18 @@ public final class EffectInterfaces {
 			}
 			
 			return false;
+		}
+	}
+
+	public interface EntryEndTurnEffect extends EntryEffect, EndTurnEffect {
+		void applyEffect(Battle b, ActivePokemon p);
+
+		default void applyEndTurn(ActivePokemon victim, Battle b) {
+			applyEffect(b, victim);
+		}
+
+		default void enter(Battle b, ActivePokemon enterer) {
+			applyEffect(b, enterer);
 		}
 	}
 }

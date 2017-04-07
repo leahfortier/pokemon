@@ -20,6 +20,7 @@ import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
+import battle.effect.generic.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
@@ -267,7 +268,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class AmuletCoin extends Item implements HoldItem, EntryEffect, EndTurnEffect {
+	static class AmuletCoin extends Item implements HoldItem, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		AmuletCoin() {
@@ -279,12 +280,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			getDatCashMoneyGetDatCashMoneyCast(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			getDatCashMoneyGetDatCashMoneyCast(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			// This is named too fantastically to just be applyEffect
+			getDatCashMoneyGetDatCashMoneyCast(b, p);
 		}
 	}
 
@@ -1638,7 +1636,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class LuckIncense extends Item implements IncenseItem, EntryEffect, EndTurnEffect {
+	static class LuckIncense extends Item implements IncenseItem, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		LuckIncense() {
@@ -1654,12 +1652,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			getDatCashMoneyGetDatCashMoneyCast(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			getDatCashMoneyGetDatCashMoneyCast(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			// This is named too fantastically to just be applyEffect
+			getDatCashMoneyGetDatCashMoneyCast(b, p);
 		}
 	}
 
