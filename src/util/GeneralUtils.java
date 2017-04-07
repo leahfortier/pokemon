@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,7 @@ public final class GeneralUtils {
 
     public static boolean hasOnlyOneNonEmpty(Object... objects) {
         return Arrays.stream(objects)
-                .filter(object -> object != null)
+                .filter(Objects::nonNull)
                 .count() == 1;
     }
 

@@ -98,6 +98,7 @@ import trainer.Trainer;
 import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
+import util.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -2136,7 +2137,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			for (Move m : other.getMoves(b)) {
 				Attack attack = m.getAttack();
 				if (attack.getActualType().getAdvantage().isSuperEffective(enterer, b) || attack.isMoveType(MoveType.ONE_HIT_KO)) {
-					// TODO: Shouldn't this be for a random move?
 					Messages.add(enterer.getName() + "'s " + this.getName() + " made it shudder!");
 					break;
 				}
@@ -2869,6 +2869,56 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 	static class Pickup extends Ability implements EndBattleEffect {
 		private static final long serialVersionUID = 1L;
+		private static final List<ItemNamesies> items = new ArrayList<>();
+		static {
+			addItem(ItemNamesies.POTION, 30);
+			addItem(ItemNamesies.ANTIDOTE, 20);
+			addItem(ItemNamesies.SUPER_POTION, 20);
+			addItem(ItemNamesies.GREAT_BALL, 20);
+			addItem(ItemNamesies.REPEL, 20);
+			addItem(ItemNamesies.FULL_HEAL, 15);
+			addItem(ItemNamesies.ETHER, 15);
+			addItem(ItemNamesies.ULTRA_BALL, 15);
+			addItem(ItemNamesies.HYPER_POTION, 10);
+			addItem(ItemNamesies.REVIVE, 10);
+			addItem(ItemNamesies.RARE_CANDY, 10);
+			addItem(ItemNamesies.HEART_SCALE, 10);
+			addItem(ItemNamesies.ELIXIR, 10);
+			addItem(ItemNamesies.SUN_STONE, 5);
+			addItem(ItemNamesies.MOON_STONE, 5);
+			addItem(ItemNamesies.DAWN_STONE, 5);
+			addItem(ItemNamesies.DUSK_STONE, 5);
+			addItem(ItemNamesies.FIRE_STONE, 5);
+			addItem(ItemNamesies.WATER_STONE, 5);
+			addItem(ItemNamesies.LEAF_STONE, 5);
+			addItem(ItemNamesies.ICE_STONE, 5);
+			addItem(ItemNamesies.THUNDER_STONE, 5);
+			addItem(ItemNamesies.SHINY_STONE, 5);
+			addItem(ItemNamesies.KINGS_ROCK, 5);
+			addItem(ItemNamesies.MAX_REVIVE, 5);
+			addItem(ItemNamesies.NUGGET, 5);
+			addItem(ItemNamesies.PRISM_SCALE, 5);
+			addItem(ItemNamesies.DESTINY_KNOT, 5);
+			addItem(ItemNamesies.FULL_RESTORE, 5);
+			addItem(ItemNamesies.PPUP, 5);
+			addItem(ItemNamesies.LEFTOVERS, 5);
+			addItem(ItemNamesies.MAX_ELIXIR, 5);
+			addItem(ItemNamesies.BIG_NUGGET, 1);
+			addItem(ItemNamesies.BALM_MUSHROOM, 1);
+			addItem(ItemNamesies.HPUP, 1);
+			addItem(ItemNamesies.PROTEIN, 1);
+			addItem(ItemNamesies.IRON, 1);
+			addItem(ItemNamesies.CALCIUM, 1);
+			addItem(ItemNamesies.CARBOS, 1);
+			addItem(ItemNamesies.ZINC, 1);
+			addItem(ItemNamesies.RARE_BONE, 1);
+		}
+		
+		private static void addItem(ItemNamesies item, int quantity) {
+			for (int i = 0; i < quantity; i++) {
+				items.add(item);
+			}
+		}
 
 		Pickup() {
 			super(AbilityNamesies.PICKUP, "The Pok\u00e9mon may pick up items.");
@@ -2876,8 +2926,9 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
 			if (!p.isHoldingItem(b) && RandomUtils.chanceTest(10)) {
-				// TODO: THIS SHOULDN'T JUST BE LEFTOVERS IT SHOULD BE MORE FUN STUFF
-				p.giveItem(ItemNamesies.LEFTOVERS);
+				ItemNamesies item = RandomUtils.getRandomValue(items);
+				p.giveItem(item);
+				Messages.add(p.getName() + " picked up " + StringUtils.articleString(item.getName()) + "!");
 			}
 		}
 	}
