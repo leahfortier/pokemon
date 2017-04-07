@@ -1,9 +1,11 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
+import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
+import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import test.TestPokemon;
@@ -122,5 +124,28 @@ public class ItemTest {
         battle.emptyHeal();
         Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.STICKY_BARB));
         Assert.assertFalse(defending.isHoldingItem(battle));
+    }
+
+    @Test
+    public void mentalHerbTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking().withGender(Gender.FEMALE);
+        TestPokemon defending = battle.getDefending().withGender(Gender.MALE);
+
+        battle.attackingFight(AttackNamesies.ATTRACT);
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.INFATUATED));
+
+        attacking.giveItem(ItemNamesies.MENTAL_HERB);
+        battle.attackingFight(AttackNamesies.FLING);
+        Assert.assertFalse(defending.hasEffect(EffectNamesies.INFATUATED));
+        Assert.assertFalse(attacking.isHoldingItem(battle));
+
+        battle.defendingFight(AttackNamesies.CONFUSE_RAY);
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.CONFUSION));
+
+        // Mental Herb cures at the end of the turn
+        attacking.giveItem(ItemNamesies.MENTAL_HERB);
+        battle.attackingFight(AttackNamesies.SPLASH);
+        Assert.assertFalse(attacking.hasEffect(EffectNamesies.CONFUSION));
     }
 }

@@ -408,38 +408,45 @@ Mental Herb:
 	Price: 100
 	Fling: 10
 	Field:
-		// TODO: This should be an object array
-		EffectNamesies[] effects = {
-				EffectNamesies.INFATUATED,
-				EffectNamesies.DISABLE,
-				EffectNamesies.TAUNT,
-				EffectNamesies.ENCORE,
-				EffectNamesies.TORMENT,
-				EffectNamesies.CONFUSION,
-				EffectNamesies.HEAL_BLOCK
-		};
-		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused", "under the effects of heal block"};
-		###
-	ApplyEndTurn:
-		boolean used = false;
-		for (int i = 0; i < effects.length; i++) {
-			EffectNamesies s = effects[i];
-			if (victim.hasEffect(s)) {
-				used = true;
-				victim.getAttributes().removeEffect(s);
-				Messages.add(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
+		private enum RemovableEffect {
+			INFATUATED(EffectNamesies.INFATUATED, "infatuated"),
+			DISABLE(EffectNamesies.DISABLE, "disabled"),
+			TAUNT(EffectNamesies.TAUNT, "under the effects of taunt"),
+			ENCORE(EffectNamesies.ENCORE, "under the effects of encore"),
+			TORMENT(EffectNamesies.TORMENT, "under the effects of torment"),
+			CONFUSION(EffectNamesies.CONFUSION, "confused"),
+			HEAL_BLOCK(EffectNamesies.HEAL_BLOCK, "under the effects of heal block");
+
+			private final EffectNamesies effect;
+			private final String message;
+
+			RemovableEffect(EffectNamesies effect, String message) {
+				this.effect = effect;
+				this.message = message;
 			}
 		}
 
-		if (used) {
+		private boolean usesies(Battle b, ActivePokemon user) {
+			boolean used = false;
+			for (RemovableEffect removableEffect : RemovableEffect.values()) {
+				EffectNamesies effect = removableEffect.effect;
+				if (user.hasEffect(effect)) {
+					used = true;
+					user.getAttributes().removeEffect(effect);
+					Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.name + "!");
+				}
+			}
+
+			return used;
+		}
+		###
+	ApplyEndTurn:
+		if (usesies(b, victim)) {
 			victim.consumeItem(b);
 		}
 		###
 	FlingEffect:
-		if (pelted.hasEffect(EffectNamesies.INFATUATED)) {
-			pelted.getAttributes().removeEffect(EffectNamesies.INFATUATED);
-			Messages.add(pelted.getName() + " is no longer infatuated to to the " + this.name + "!");
-		}
+		usesies(b, pelted);
 		###
 *
 Metal Powder:
@@ -2185,7 +2192,7 @@ Honey:
 	Cat: Misc
 	Desc: A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in grass, caves, or on special trees.
 	Price: 100
-	Comments: // TODO: We need this item to do something (not in the fling effect, that's only there so I can put this todo in from le generator)
+	Comments: // TODO: We need this item to do something
 *
 Eviolite:
 	Int: HoldItem

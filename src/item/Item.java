@@ -921,17 +921,37 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 	static class MentalHerb extends Item implements HoldItem, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
-		// TODO: This should be an object array
-		EffectNamesies[] effects = {
-			EffectNamesies.INFATUATED,
-			EffectNamesies.DISABLE,
-			EffectNamesies.TAUNT,
-			EffectNamesies.ENCORE,
-			EffectNamesies.TORMENT,
-			EffectNamesies.CONFUSION,
-			EffectNamesies.HEAL_BLOCK
-		};
-		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused", "under the effects of heal block"};
+		private enum RemovableEffect {
+			INFATUATED(EffectNamesies.INFATUATED, "infatuated"),
+			DISABLE(EffectNamesies.DISABLE, "disabled"),
+			TAUNT(EffectNamesies.TAUNT, "under the effects of taunt"),
+			ENCORE(EffectNamesies.ENCORE, "under the effects of encore"),
+			TORMENT(EffectNamesies.TORMENT, "under the effects of torment"),
+			CONFUSION(EffectNamesies.CONFUSION, "confused"),
+			HEAL_BLOCK(EffectNamesies.HEAL_BLOCK, "under the effects of heal block");
+			
+			private final EffectNamesies effect;
+			private final String message;
+			
+			RemovableEffect(EffectNamesies effect, String message) {
+				this.effect = effect;
+				this.message = message;
+			}
+		}
+		
+		private boolean usesies(Battle b, ActivePokemon user) {
+			boolean used = false;
+			for (RemovableEffect removableEffect : RemovableEffect.values()) {
+				EffectNamesies effect = removableEffect.effect;
+				if (user.hasEffect(effect)) {
+					used = true;
+					user.getAttributes().removeEffect(effect);
+					Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.name + "!");
+				}
+			}
+			
+			return used;
+		}
 
 		MentalHerb() {
 			super(ItemNamesies.MENTAL_HERB, "An item to be held by a Pok\u00e9mon. It snaps the holder out of infatuation. It can be used only once.", BagCategory.MISC);
@@ -939,17 +959,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			boolean used = false;
-			for (int i = 0; i < effects.length; i++) {
-				EffectNamesies s = effects[i];
-				if (victim.hasEffect(s)) {
-					used = true;
-					victim.getAttributes().removeEffect(s);
-					Messages.add(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
-				}
-			}
-			
-			if (used) {
+			if (usesies(b, victim)) {
 				victim.consumeItem(b);
 			}
 		}
@@ -959,10 +969,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
-			if (pelted.hasEffect(EffectNamesies.INFATUATED)) {
-				pelted.getAttributes().removeEffect(EffectNamesies.INFATUATED);
-				Messages.add(pelted.getName() + " is no longer infatuated to to the " + this.name + "!");
-			}
+			usesies(b, pelted);
 		}
 	}
 
@@ -5123,7 +5130,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	// TODO: We need this item to do something (not in the fling effect, that's only there so I can put this todo in from le generator)
+	// TODO: We need this item to do something
 	static class Honey extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 
