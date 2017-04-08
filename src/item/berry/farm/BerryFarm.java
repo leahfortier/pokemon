@@ -17,13 +17,21 @@ public class BerryFarm implements Serializable {
         this.berries = new ArrayList<>();
     }
 
+    public BerryStats getBerry(int index) {
+        if (index < 0 || index >= this.berries.size()) {
+            return null;
+        }
+
+        return this.berries.get(index);
+    }
+
     public String harvest(ItemNamesies selected) {
         Bag bag = Game.getPlayer().getBag();
 
         // Break at the first berry that can be harvested
         for (BerryStats berry : berries) {
             if (berry.isFinished()) {
-                ItemNamesies berryKind = berry.getBerryKind();
+                ItemNamesies berryKind = berry.getBerry().namesies();
                 int harvestAmount = berry.getHarvestAmount();
 
                 bag.addItem(berryKind, harvestAmount);

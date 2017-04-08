@@ -16,6 +16,7 @@ import item.ItemNamesies;
 import item.bag.Bag;
 import item.bag.BagCategory;
 import item.berry.farm.BerryFarm;
+import item.berry.farm.BerryStats;
 import main.Game;
 import main.Global;
 import map.Direction;
@@ -91,7 +92,6 @@ public class BerryView extends View {
         int buttonHeight = 38;
         int selectedHeight = 82;
         int halfPanelWidth = (farmPanel.width - 3*spacing)/2;
-
         berryPanel = new DrawPanel(
                 farmPanel.x + spacing,
                 farmPanel.y + spacing,
@@ -187,8 +187,12 @@ public class BerryView extends View {
 
         selectedButton = Button.update(buttons, selectedButton);
 
-        if (message != null && input.consumeIfMouseDown(ControlKey.SPACE)) {
-            message = null;
+        if (message != null) {
+            if (input.consumeIfMouseDown(ControlKey.SPACE)) {
+                message = null;
+            }
+
+            return;
         }
 
         Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(berries, pageNum, ITEMS_PER_PAGE);
@@ -310,8 +314,26 @@ public class BerryView extends View {
 
         // Berry Panel
         berryPanel.drawBackground(g);
-        for (DrawPanel panel : berryPanels) {
+        for (int i = 0; i < berryPanels.length; i++) {
+            DrawPanel panel = berryPanels[i];
             panel.drawBackground(g);
+
+            BerryStats berry = berryFarm.getBerry(i);
+            if (berry != null) {
+                ImageUtils.drawCenteredImage(
+                        g,
+                        itemTiles.getTile(berry.getBerry().getImageName()),
+                        panel.centerX(),
+                        panel.y + panel.height / 3
+                );
+
+                TextUtils.drawCenteredString(
+                        g,
+                        berry.getTimeLeftString(),
+                        panel.centerX(),
+                        panel.y + 3* panel.height/4
+                );
+            }
         }
 
         // Welcome to the Hellmouth
@@ -351,22 +373,21 @@ public class BerryView extends View {
     @Override
     public void movedToFront() {
         this.berryFarm = Game.getPlayer().getBerryFarm();
+        this.message = null;
+        this.selectedItem = ItemNamesies.NO_ITEM;
 
         updateActiveButtons();
     }
 
     private void updateActiveButtons() {
         Set<ItemNamesies> berries = Game.getPlayer().getBag().getCategory(BagCategory.BERRY);
-        selectedItem = berries.isEmpty() ? ItemNamesies.NO_ITEM : berries.iterator().next();
+        if (selectedItem == ItemNamesies.NO_ITEM) {
+            selectedItem = berries.isEmpty() ? ItemNamesies.NO_ITEM : berries.iterator().next();
+        }
 
         int displayed = berries.size();
         for (int i = 0; i < ITEMS_PER_PAGE; i++) {
             itemButtons[i].setActive(i < displayed - pageNum*ITEMS_PER_PAGE);
         }
-
-        buttons[HARVEST].setActive(true);
-        buttons[LEFT_ARROW].setActive(true);
-        buttons[RIGHT_ARROW].setActive(true);
-        buttons[RETURN].setActive(true);
     }
 }

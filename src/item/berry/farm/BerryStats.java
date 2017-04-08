@@ -4,7 +4,9 @@ import item.ItemNamesies;
 import item.berry.Berry;
 import util.TimeUtils;
 
-public class BerryStats {
+import java.io.Serializable;
+
+public class BerryStats implements Serializable {
     private final Berry berry;
     private long timestamp;
 
@@ -13,17 +15,22 @@ public class BerryStats {
         this.timestamp = TimeUtils.getCurrentTimestamp();
     }
 
-    ItemNamesies getBerryKind() {
-        return berry.namesies();
+    public Berry getBerry() {
+        return berry;
     }
 
     boolean isFinished() {
-        // TODO: Make this dependent on the berry :D
-        return TimeUtils.numDaysPassed(this.timestamp) > 1;
+        return TimeUtils.numDaysPassed(this.timestamp) > berry.getHarvestHours();
     }
 
     int getHarvestAmount() {
-        // TODO: Make this dependent on the berry :D
-        return 3;
+        return berry.getHarvestAmount();
+    }
+
+    public String getTimeLeftString() {
+        int totalMinutes = (int)(berry.getHarvestHours()*TimeUtils.MINUTES_IN_DAY);
+        int minutesPassed = TimeUtils.numMinutesPassed(this.timestamp);
+        int minutesLeft = totalMinutes - minutesPassed;
+        return String.format("%02d:%02d", minutesLeft/60, minutesLeft%60);
     }
 }
