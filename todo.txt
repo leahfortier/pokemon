@@ -94,5 +94,7 @@ Missing Pokemon Sprites:
 	create some sort of silph surboard for Silph Surfer evolution
 	self switching moves require input -- currently just switching to random
 	BERRIES
-	npc trading view
 	green hat sprites
+	Riding up on bike on foreground tiles causes tiles to flash
+	animating message tends to break save files when going directly to menus
+	trade view -- won't advance animating text when clicking on the message bar?
