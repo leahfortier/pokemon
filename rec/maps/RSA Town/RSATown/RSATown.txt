@@ -82,7 +82,7 @@
             {
               "trigger": {
                 "triggerType": "DIALOGUE",
-                "triggerContents": "L'p vr orvw."
+                "triggerContents": "E's cu mucd."
               }
             }
           ]
@@ -107,7 +107,7 @@
             {
               "trigger": {
                 "triggerType": "DIALOGUE",
-                "triggerContents": "Zhofrph wr UVD Wrzq! Wkdw’v lw iurp ph."
+                "triggerContents": "Famlusa du NCY Dufh! Dryd’c ed vnus sa."
               }
             }
           ]
@@ -132,7 +132,7 @@
             {
               "trigger": {
                 "triggerType": "DIALOGUE",
-                "triggerContents": "Wklv wrzq lv nlqg ri suhwhqwlrxv, ehvw qrw erwkhu wublqj wr xqghuvwdqg wkh fxowxuh."
+                "triggerContents": "Drec dufh ec geht uv bnadahdeuic, pacd hud pudran dnoehk du ihtancdyht dra limdina."
               }
             }
           ]
@@ -264,7 +264,7 @@
             {
               "trigger": {
                 "triggerType": "DIALOGUE",
-                "triggerContents": "GLVWXUE QRW WKH KDUPRQB RI ILUH, LFH, DQG OLJKWQLQJ."
+                "triggerContents": "TECDINP HUD DRA RYNSUHO UV VENA, ELA, YHT MEKRDHEHK."
               }
             }
           ]
