@@ -185,15 +185,12 @@ public class BerryView extends View {
         InputControl input = InputControl.instance();
         Set<ItemNamesies> berries = Game.getPlayer().getBag().getCategory(BagCategory.BERRY);
 
-        selectedButton = Button.update(buttons, selectedButton);
-
-        if (message != null) {
-            if (input.consumeIfMouseDown(ControlKey.SPACE)) {
-                message = null;
-            }
-
+        if (message != null && input.consumeIfMouseDown(ControlKey.SPACE)) {
+            message = null;
             return;
         }
+
+        selectedButton = Button.update(buttons, selectedButton);
 
         Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(berries, pageNum, ITEMS_PER_PAGE);
         for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
