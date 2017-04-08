@@ -16,7 +16,7 @@ import item.ItemNamesies;
 import item.bag.Bag;
 import item.bag.BagCategory;
 import item.berry.farm.BerryFarm;
-import item.berry.farm.BerryStats;
+import item.berry.farm.PlantedBerry;
 import main.Game;
 import main.Global;
 import map.Direction;
@@ -318,7 +318,7 @@ public class BerryView extends View {
             DrawPanel panel = berryPanels[i];
             panel.drawBackground(g);
 
-            BerryStats berry = berryFarm.getBerry(i);
+            PlantedBerry berry = berryFarm.getBerry(i);
             if (berry != null) {
                 ImageUtils.drawCenteredImage(
                         g,

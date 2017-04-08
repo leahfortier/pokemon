@@ -11,13 +11,13 @@ import java.util.List;
 public class BerryFarm implements Serializable {
     public static final int MAX_BERRIES = 24;
 
-    private final List<BerryStats> berries;
+    private final List<PlantedBerry> berries;
 
     public BerryFarm() {
         this.berries = new ArrayList<>();
     }
 
-    public BerryStats getBerry(int index) {
+    public PlantedBerry getBerry(int index) {
         if (index < 0 || index >= this.berries.size()) {
             return null;
         }
@@ -29,7 +29,7 @@ public class BerryFarm implements Serializable {
         Bag bag = Game.getPlayer().getBag();
 
         // Break at the first berry that can be harvested
-        for (BerryStats berry : berries) {
+        for (PlantedBerry berry : berries) {
             if (berry.isFinished()) {
                 ItemNamesies berryKind = berry.getBerry().namesies();
                 int harvestAmount = berry.getHarvestAmount();
@@ -51,7 +51,7 @@ public class BerryFarm implements Serializable {
             return "No berries to plant!!";
         }
 
-        berries.add(new BerryStats(selected));
+        berries.add(new PlantedBerry(selected));
         bag.removeItem(selected);
 
         return "Planted a " + selected.getName() + "!";
