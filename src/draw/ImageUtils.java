@@ -179,6 +179,28 @@ public final class ImageUtils {
         return new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
     }
 
+    public static BufferedImage trimImage(BufferedImage image) {
+        int empty = image.getRGB(0, 0); // This assumes the top left corner is blank just FYI...
+
+        int leftmost = image.getWidth();
+        int topmost = image.getHeight();
+        int rightmost = 0;
+        int bottommost = 0;
+
+        for (int i = 0; i < image.getWidth(); i++)  {
+            for (int j = 0; j < image.getHeight(); j++) {
+                if (image.getRGB(i, j) != empty) {
+                    leftmost = Math.min(i, leftmost);
+                    rightmost = Math.max(i, rightmost);
+                    topmost = Math.min(j, topmost);
+                    bottommost = Math.max(j, bottommost);
+                }
+            }
+        }
+
+        return image.getSubimage(leftmost, topmost, rightmost - leftmost + 1, bottommost - topmost + 1);
+    }
+
     public static void trimImages(String inputLocation, String outputLocation) {
         for (File imageFile : FileIO.listFiles(inputLocation)) {
             if (imageFile.isDirectory()) {
@@ -190,28 +212,11 @@ public final class ImageUtils {
             }
 
             BufferedImage image = FileIO.readImage(imageFile);
-            int empty = image.getRGB(0, 0); // This assumes the top left corner is blank just FYI...
-
-            int leftmost = image.getWidth();
-            int topmost = image.getHeight();
-            int rightmost = 0;
-            int bottommost = 0;
-
-            for (int i = 0; i < image.getWidth(); i++)  {
-                for (int j = 0; j < image.getHeight(); j++) {
-                    if (image.getRGB(i, j) != empty) {
-                        leftmost = Math.min(i, leftmost);
-                        rightmost = Math.max(i, rightmost);
-                        topmost = Math.min(j, topmost);
-                        bottommost = Math.max(j, bottommost);
-                    }
-                }
-            }
+            BufferedImage trimmed = trimImage(image);
 
             String newName = imageFile.getName();
-
             File file = new File(outputLocation + FileIO.FILE_SLASH + newName);
-            FileIO.writeImage(image.getSubimage(leftmost, topmost, rightmost - leftmost + 1, bottommost - topmost + 1), file);
+            FileIO.writeImage(trimmed, file);
         }
     }
 }

@@ -81,8 +81,8 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure."
+                "triggerType": "DIALOGUE",
+                "triggerContents": "L'p vr orvw."
               }
             }
           ]
@@ -93,6 +93,56 @@
         "y": 15
       },
       "triggerName": "RSATown_NPC_Guy_01"
+    },
+    {
+      "name": "Nameless",
+      "path": "w",
+      "spriteIndex": 4,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "Interaction0",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Zhofrph wr UVD Wrzq! Wkdw’v lw iurp ph."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 41,
+        "y": 18
+      },
+      "triggerName": "RSATown_NPC_Nameless_01"
+    },
+    {
+      "name": "PretentiousFuck",
+      "path": "wrwrlrwrrlwwwllwrlwwwl",
+      "spriteIndex": 2,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "Interaction0",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Wklv wrzq lv nlqg ri suhwhqwlrxv, ehvw qrw erwkhu wublqj wr xqghuvwdqg wkh fxowxuh."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 26,
+        "y": 23
+      },
+      "triggerName": "RSATown_NPC_PretentiousFuck_01"
     },
     {
       "name": "Rival",
@@ -200,6 +250,31 @@
       },
       "triggerName": "RSATown_NPC_Rival_01",
       "condition": ":npc_interaction:#RSATown_NPC_Rival_01$won:"
+    },
+    {
+      "name": "Slowking",
+      "path": "w",
+      "spriteIndex": 23,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "Interaction0",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "GLVWXUE QRW WKH KDUPRQB RI ILUH, LFH, DQG OLJKWQLQJ."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 33,
+        "y": 29
+      },
+      "triggerName": "RSATown_NPC_Slowking_01"
     }
   ],
   "items": [],

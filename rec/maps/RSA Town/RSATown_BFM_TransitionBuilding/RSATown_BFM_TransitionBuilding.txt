@@ -62,8 +62,8 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I don't suggest going out there. It's way too buggy!"
+                "triggerType": "DIALOGUE",
+                "triggerContents": "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure."
               }
             }
           ]

@@ -252,3 +252,8 @@ PlayerBikingRight3 00000111
 PlayerBikingUp3 00000112
 PlayerBikingLeft3 00000113
 PlayerBikingDown3 00000114
+
+SlowkingRight 00000115
+SlowkingUp 00000116
+SlowkingLeft 00000117
+SlowkingDown 00000118
