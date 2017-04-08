@@ -248,7 +248,7 @@ public class DrawPanel {
 
     private int messageTimeElapsed = 0;
     private String drawingText;
-    private boolean finishedAnimating;
+    private boolean finishedAnimating = true;
 
     public int drawMessage(Graphics g, int fontSize, String text) {
         FontMetrics.setFont(g, fontSize);

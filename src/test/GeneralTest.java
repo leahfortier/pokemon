@@ -5,13 +5,10 @@ import org.junit.Test;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import util.StringUtils;
+import util.TimeUtils;
 
 public class GeneralTest {
     private static final double DELTA = 1e-15;
-
-    public static boolean healthRatioMatch(TestPokemon pokemon, double fraction) {
-        return (int)(Math.ceil(fraction*pokemon.getMaxHP())) == pokemon.getHP();
-    }
 
     public static void assertEquals(String message, double expected, double actual) {
         Assert.assertEquals(message, expected, actual, DELTA);
@@ -19,6 +16,10 @@ public class GeneralTest {
 
     public static void assertEquals(double expected, double actual) {
         Assert.assertEquals(expected, actual, DELTA);
+    }
+
+    public static boolean healthRatioMatch(TestPokemon pokemon, double fraction) {
+        return (int)(Math.ceil(fraction*pokemon.getMaxHP())) == pokemon.getHP();
     }
 
     @Test
@@ -55,5 +56,13 @@ public class GeneralTest {
         Assert.assertTrue(first.getGender() == Gender.MALE);
         Assert.assertTrue(second.getGender() == Gender.MALE);
         Assert.assertFalse(Gender.oppositeGenders(first, second));
+    }
+
+    @Test
+    public void timeTest() {
+        assertEquals(1000*60*60*24, TimeUtils.MILLSECONDS_IN_DAY);
+        assertEquals(1, TimeUtils.numDaysPassed(TimeUtils.getCurrentTimestamp() - TimeUtils.MILLSECONDS_IN_DAY));
+        assertEquals(1.5, TimeUtils.numDaysPassed(TimeUtils.getCurrentTimestamp() - (long)(1.5*TimeUtils.MILLSECONDS_IN_DAY)));
+        assertEquals(15, TimeUtils.numDaysPassed(TimeUtils.getCurrentTimestamp() - 15*TimeUtils.MILLSECONDS_IN_DAY));
     }
 }

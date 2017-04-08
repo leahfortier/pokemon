@@ -116,7 +116,7 @@ public class Bag implements Serializable {
 		return battleBag.get(category);
 	}
 	
-	private void removeItem(ItemNamesies item) {
+	public void removeItem(ItemNamesies item) {
 		// Trying to remove nonexistent items -- bad news
 		if (!items.containsKey(item) || items.get(item) <= 0) {
 			Global.error("You can't remove an item you don't have! (" + item.getName() + ")");

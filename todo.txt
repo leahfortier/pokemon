@@ -93,6 +93,5 @@ Missing Pokemon Sprites:
 	connect interface gen with override input
 	create some sort of silph surboard for Silph Surfer evolution
 	self switching moves require input -- currently just switching to random
-	BERRIES
-	npc trading view
 	green hat sprites
+	Riding up on bike on foreground tiles causes tiles to flash

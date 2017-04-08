@@ -46,9 +46,40 @@
   ],
   "NPCs": [
     {
-      "name": "DayCareBro",
+      "name": "BerryBro",
       "path": "w",
       "spriteIndex": 1,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "Interaction0",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Berry time! Fuck yeah!!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "CHANGE_VIEW",
+                "triggerContents": "BERRY_VIEW"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 42,
+        "y": 54
+      },
+      "triggerName": "WindValley_NPC_BerryBro_01"
+    },
+    {
+      "name": "DayCareBro",
+      "path": "w",
+      "spriteIndex": 11,
       "direction": "DOWN",
       "interactions": [
         {
