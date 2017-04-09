@@ -25,6 +25,8 @@ public class GameFrame {
 	private static final JFrame frame = new JFrame();
 
 	public static void main(String[] args) throws InterruptedException {
+		frame.setVisible(true);
+
 		Canvas gui = new Canvas();
 		gui.setSize(Global.GAME_SIZE);
 
@@ -34,11 +36,7 @@ public class GameFrame {
 		frame.setIconImage(Global.FRAME_ICON);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-
-		Thread.sleep(1500);
 		frame.pack();
-
-		frame.setVisible(true);
 
 		Thread gameThread = new Thread(new GameLoop(gui));
 		gameThread.start();
