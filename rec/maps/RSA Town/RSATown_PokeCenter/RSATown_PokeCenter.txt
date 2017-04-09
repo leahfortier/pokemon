@@ -55,7 +55,46 @@
       "name": "Heal",
       "actions": [
         {
-          "groupTrigger": "PokeCenterHeal"
+          "trigger": {
+            "triggerType": "DIALOGUE",
+            "triggerContents": "Famlusa du dra Bugésuh Lahdan!"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "DIALOGUE",
+            "triggerContents": "Mad sa raym ouin Bugésuh vun oui!"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "SOUND",
+            "triggerContents": "POKE_CENTER_HEAL"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "DIALOGUE",
+            "triggerContents": "Tih Tih Tih-Tih Tih!"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "HEAL_PARTY",
+            "triggerContents": ""
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "DIALOGUE",
+            "triggerContents": "Ouin Bugésuh ryja paah raymat!"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "DIALOGUE",
+            "triggerContents": "E ruba du caa oui ykyeh cuuh!"
+          }
         }
       ],
       "location": [
@@ -64,13 +103,22 @@
           "y": 3
         }
       ],
-      "triggerName": "RSATown_PokeCenter_TriggerEntity_Heal_01"
+      "triggerName": "RSATown_PokeCenter_MiscEntity_Heal_01"
     },
     {
       "name": "Mart",
       "actions": [
         {
-          "groupTrigger": "LoadMart"
+          "trigger": {
+            "triggerType": "DIALOGUE",
+            "triggerContents": "Famlusa du dra BugéSynd!"
+          }
+        },
+        {
+          "trigger": {
+            "triggerType": "CHANGE_VIEW",
+            "triggerContents": "MART_VIEW"
+          }
         }
       ],
       "location": [
@@ -79,7 +127,7 @@
           "y": 7
         }
       ],
-      "triggerName": "RSATown_PokeCenter_TriggerEntity_Mart_01"
+      "triggerName": "RSATown_PokeCenter_MiscEntity_Mart_01"
     },
     {
       "name": "PC_View",
@@ -94,7 +142,7 @@
           "y": 1
         }
       ],
-      "triggerName": "RSATown_PokeCenter_TriggerEntity_PC_View_01"
+      "triggerName": "RSATown_PokeCenter_MiscEntity_PC_View_01"
     }
   ],
   "events": [],
