@@ -48,6 +48,18 @@
   ],
   "NPCs": [
     {
+      "name": "Nameless",
+      "path": "wruldruldruldduu",
+      "spriteIndex": 24,
+      "direction": "DOWN",
+      "interactions": [],
+      "location": {
+        "x": 5,
+        "y": 3
+      },
+      "triggerName": "PlayersHouseUp_NPC_Nameless_01"
+    },
+    {
       "name": "TestMomBattle",
       "spriteIndex": 13,
       "direction": "DOWN",

@@ -253,7 +253,750 @@ PlayerBikingUp3 00000112
 PlayerBikingLeft3 00000113
 PlayerBikingDown3 00000114
 
+
 SlowkingRight 00000115
 SlowkingUp 00000116
 SlowkingLeft 00000117
 SlowkingDown 00000118
+
+
+1StandingRight1 00000121
+1StandingUp1 00000122
+1StandingLeft1 00000123
+1StandingDown1 00000124
+1WalkingRight1 00000125
+1WalkingUp1 00000126
+1WalkingLeft1 00000127
+1WalkingDown1 00000128
+1WalkingRight2 00000129
+1WalkingUp2 0000012a
+1WalkingLeft2 0000012b
+1WalkingDown2 0000012c
+
+
+2StandingRight1 0000012d
+2StandingUp1 0000012e
+2StandingLeft1 0000012f
+2StandingDown1 00000130
+2WalkingRight1 00000131
+2WalkingUp1 00000132
+2WalkingLeft1 00000133
+2WalkingDown1 00000134
+2WalkingRight2 00000135
+2WalkingUp2 00000136
+2WalkingLeft2 00000137
+2WalkingDown2 00000138
+
+
+3StandingRight1 00000139
+3StandingUp1 0000013a
+3StandingLeft1 0000013b
+3StandingDown1 0000013c
+3WalkingRight1 0000013d
+3WalkingUp1 0000013e
+3WalkingLeft1 0000013f
+3WalkingDown1 00000140
+3WalkingRight2 00000141
+3WalkingUp2 00000142
+3WalkingLeft2 00000143
+3WalkingDown2 00000144
+
+
+4StandingRight1 00000145
+4StandingUp1 00000146
+4StandingLeft1 00000147
+4StandingDown1 00000148
+4WalkingRight1 00000149
+4WalkingUp1 0000014a
+4WalkingLeft1 0000014b
+4WalkingDown1 0000014c
+4WalkingRight2 0000014d
+4WalkingUp2 0000014e
+4WalkingLeft2 0000014f
+4WalkingDown2 00000150
+
+
+5StandingRight1 00000151
+5StandingUp1 00000152
+5StandingLeft1 00000153
+5StandingDown1 00000154
+5WalkingRight1 00000155
+5WalkingUp1 00000156
+5WalkingLeft1 00000157
+5WalkingDown1 00000158
+5WalkingRight2 00000159
+5WalkingUp2 0000015a
+5WalkingLeft2 0000015b
+5WalkingDown2 0000015c
+
+
+6StandingRight1 0000015d
+6StandingUp1 0000015e
+6StandingLeft1 0000015f
+6StandingDown1 00000160
+6WalkingRight1 00000161
+6WalkingUp1 00000162
+6WalkingLeft1 00000163
+6WalkingDown1 00000164
+6WalkingRight2 00000165
+6WalkingUp2 00000166
+6WalkingLeft2 00000167
+6WalkingDown2 00000168
+
+
+7StandingRight1 00000169
+7StandingUp1 0000016a
+7StandingLeft1 0000016b
+7StandingDown1 0000016c
+7WalkingRight1 0000016d
+7WalkingUp1 0000016e
+7WalkingLeft1 0000016f
+7WalkingDown1 00000170
+7WalkingRight2 00000171
+7WalkingUp2 00000172
+7WalkingLeft2 00000173
+7WalkingDown2 00000174
+
+
+8StandingRight1 00000175
+8StandingUp1 00000176
+8StandingLeft1 00000177
+8StandingDown1 00000178
+8WalkingRight1 00000179
+8WalkingUp1 0000017a
+8WalkingLeft1 0000017b
+8WalkingDown1 0000017c
+8WalkingRight2 0000017d
+8WalkingUp2 0000017e
+8WalkingLeft2 0000017f
+8WalkingDown2 00000180
+
+
+9StandingRight1 00000181
+9StandingUp1 00000182
+9StandingLeft1 00000183
+9StandingDown1 00000184
+9WalkingRight1 00000185
+9WalkingUp1 00000186
+9WalkingLeft1 00000187
+9WalkingDown1 00000188
+9WalkingRight2 00000189
+9WalkingUp2 0000018a
+9WalkingLeft2 0000018b
+9WalkingDown2 0000018c
+
+
+10StandingRight1 0000018d
+10StandingUp1 0000018e
+10StandingLeft1 0000018f
+10StandingDown1 00000190
+10WalkingRight1 00000191
+10WalkingUp1 00000192
+10WalkingLeft1 00000193
+10WalkingDown1 00000194
+10WalkingRight2 00000195
+10WalkingUp2 00000196
+10WalkingLeft2 00000197
+10WalkingDown2 00000198
+
+
+11StandingRight1 00000199
+11StandingUp1 0000019a
+11StandingLeft1 0000019b
+11StandingDown1 0000019c
+11WalkingRight1 0000019d
+11WalkingUp1 0000019e
+11WalkingLeft1 0000019f
+11WalkingDown1 000001a0
+11WalkingRight2 000001a1
+11WalkingUp2 000001a2
+11WalkingLeft2 000001a3
+11WalkingDown2 000001a4
+
+
+12StandingRight1 000001a5
+12StandingUp1 000001a6
+12StandingLeft1 000001a7
+12StandingDown1 000001a8
+12WalkingRight1 000001a9
+12WalkingUp1 000001aa
+12WalkingLeft1 000001ab
+12WalkingDown1 000001ac
+12WalkingRight2 000001ad
+12WalkingUp2 000001ae
+12WalkingLeft2 000001af
+12WalkingDown2 000001b0
+
+
+13StandingRight1 000001b1
+13StandingUp1 000001b2
+13StandingLeft1 000001b3
+13StandingDown1 000001b4
+13WalkingRight1 000001b5
+13WalkingUp1 000001b6
+13WalkingLeft1 000001b7
+13WalkingDown1 000001b8
+13WalkingRight2 000001b9
+13WalkingUp2 000001ba
+13WalkingLeft2 000001bb
+13WalkingDown2 000001bc
+
+
+14StandingRight1 000001bd
+14StandingUp1 000001be
+14StandingLeft1 000001bf
+14StandingDown1 000001c0
+14WalkingRight1 000001c1
+14WalkingUp1 000001c2
+14WalkingLeft1 000001c3
+14WalkingDown1 000001c4
+14WalkingRight2 000001c5
+14WalkingUp2 000001c6
+14WalkingLeft2 000001c7
+14WalkingDown2 000001c8
+
+
+15StandingRight1 000001c9
+15StandingUp1 000001ca
+15StandingLeft1 000001cb
+15StandingDown1 000001cc
+15WalkingRight1 000001cd
+15WalkingUp1 000001ce
+15WalkingLeft1 000001cf
+15WalkingDown1 000001d0
+15WalkingRight2 000001d1
+15WalkingUp2 000001d2
+15WalkingLeft2 000001d3
+15WalkingDown2 000001d4
+
+
+16StandingRight1 000001d5
+16StandingUp1 000001d6
+16StandingLeft1 000001d7
+16StandingDown1 000001d8
+16WalkingRight1 000001d9
+16WalkingUp1 000001da
+16WalkingLeft1 000001db
+16WalkingDown1 000001dc
+16WalkingRight2 000001dd
+16WalkingUp2 000001de
+16WalkingLeft2 000001df
+16WalkingDown2 000001e0
+
+
+17StandingRight1 000001e1
+17StandingUp1 000001e2
+17StandingLeft1 000001e3
+17StandingDown1 000001e4
+17WalkingRight1 000001e5
+17WalkingUp1 000001e6
+17WalkingLeft1 000001e7
+17WalkingDown1 000001e8
+17WalkingRight2 000001e9
+17WalkingUp2 000001ea
+17WalkingLeft2 000001eb
+17WalkingDown2 000001ec
+
+
+18StandingRight1 000001ed
+18StandingUp1 000001ee
+18StandingLeft1 000001ef
+18StandingDown1 000001f0
+18WalkingRight1 000001f1
+18WalkingUp1 000001f2
+18WalkingLeft1 000001f3
+18WalkingDown1 000001f4
+18WalkingRight2 000001f5
+18WalkingUp2 000001f6
+18WalkingLeft2 000001f7
+18WalkingDown2 000001f8
+
+
+19StandingRight1 000001f9
+19StandingUp1 000001fa
+19StandingLeft1 000001fb
+19StandingDown1 000001fc
+19WalkingRight1 000001fd
+19WalkingUp1 000001fe
+19WalkingLeft1 000001ff
+19WalkingDown1 00000200
+19WalkingRight2 00000201
+19WalkingUp2 00000202
+19WalkingLeft2 00000203
+19WalkingDown2 00000204
+
+
+20StandingRight1 00000205
+20StandingUp1 00000206
+20StandingLeft1 00000207
+20StandingDown1 00000208
+20WalkingRight1 00000209
+20WalkingUp1 0000020a
+20WalkingLeft1 0000020b
+20WalkingDown1 0000020c
+20WalkingRight2 0000020d
+20WalkingUp2 0000020e
+20WalkingLeft2 0000020f
+20WalkingDown2 00000210
+
+
+21StandingRight1 00000211
+21StandingUp1 00000212
+21StandingLeft1 00000213
+21StandingDown1 00000214
+21WalkingRight1 00000215
+21WalkingUp1 00000216
+21WalkingLeft1 00000217
+21WalkingDown1 00000218
+21WalkingRight2 00000219
+21WalkingUp2 0000021a
+21WalkingLeft2 0000021b
+21WalkingDown2 0000021c
+
+
+22StandingRight1 0000021d
+22StandingUp1 0000021e
+22StandingLeft1 0000021f
+22StandingDown1 00000220
+22WalkingRight1 00000221
+22WalkingUp1 00000222
+22WalkingLeft1 00000223
+22WalkingDown1 00000224
+22WalkingRight2 00000225
+22WalkingUp2 00000226
+22WalkingLeft2 00000227
+22WalkingDown2 00000228
+
+
+23StandingRight1 00000229
+23StandingUp1 0000022a
+23StandingLeft1 0000022b
+23StandingDown1 0000022c
+23WalkingRight1 0000022d
+23WalkingUp1 0000022e
+23WalkingLeft1 0000022f
+23WalkingDown1 00000230
+23WalkingRight2 00000231
+23WalkingUp2 00000232
+23WalkingLeft2 00000233
+23WalkingDown2 00000234
+
+
+24StandingRight1 00000235
+24StandingUp1 00000236
+24StandingLeft1 00000237
+24StandingDown1 00000238
+24WalkingRight1 00000239
+24WalkingUp1 0000023a
+24WalkingLeft1 0000023b
+24WalkingDown1 0000023c
+24WalkingRight2 0000023d
+24WalkingUp2 0000023e
+24WalkingLeft2 0000023f
+24WalkingDown2 00000240
+
+
+25StandingRight1 00000241
+25StandingUp1 00000242
+25StandingLeft1 00000243
+25StandingDown1 00000244
+25WalkingRight1 00000245
+25WalkingUp1 00000246
+25WalkingLeft1 00000247
+25WalkingDown1 00000248
+25WalkingRight2 00000249
+25WalkingUp2 0000024a
+25WalkingLeft2 0000024b
+25WalkingDown2 0000024c
+
+
+26StandingRight1 0000024d
+26StandingUp1 0000024e
+26StandingLeft1 0000024f
+26StandingDown1 00000250
+26WalkingRight1 00000251
+26WalkingUp1 00000252
+26WalkingLeft1 00000253
+26WalkingDown1 00000254
+26WalkingRight2 00000255
+26WalkingUp2 00000256
+26WalkingLeft2 00000257
+26WalkingDown2 00000258
+
+
+27StandingRight1 00000259
+27StandingUp1 0000025a
+27StandingLeft1 0000025b
+27StandingDown1 0000025c
+27WalkingRight1 0000025d
+27WalkingUp1 0000025e
+27WalkingLeft1 0000025f
+27WalkingDown1 00000260
+27WalkingRight2 00000261
+27WalkingUp2 00000262
+27WalkingLeft2 00000263
+27WalkingDown2 00000264
+
+
+28StandingRight1 00000265
+28StandingUp1 00000266
+28StandingLeft1 00000267
+28StandingDown1 00000268
+28WalkingRight1 00000269
+28WalkingUp1 0000026a
+28WalkingLeft1 0000026b
+28WalkingDown1 0000026c
+28WalkingRight2 0000026d
+28WalkingUp2 0000026e
+28WalkingLeft2 0000026f
+28WalkingDown2 00000270
+
+
+29StandingRight1 00000271
+29StandingUp1 00000272
+29StandingLeft1 00000273
+29StandingDown1 00000274
+29WalkingRight1 00000275
+29WalkingUp1 00000276
+29WalkingLeft1 00000277
+29WalkingDown1 00000278
+29WalkingRight2 00000279
+29WalkingUp2 0000027a
+29WalkingLeft2 0000027b
+29WalkingDown2 0000027c
+
+
+30StandingRight1 0000027d
+30StandingUp1 0000027e
+30StandingLeft1 0000027f
+30StandingDown1 00000280
+30WalkingRight1 00000281
+30WalkingUp1 00000282
+30WalkingLeft1 00000283
+30WalkingDown1 00000284
+30WalkingRight2 00000285
+30WalkingUp2 00000286
+30WalkingLeft2 00000287
+30WalkingDown2 00000288
+
+
+31StandingRight1 00000289
+31StandingUp1 0000028a
+31StandingLeft1 0000028b
+31StandingDown1 0000028c
+31WalkingRight1 0000028d
+31WalkingUp1 0000028e
+31WalkingLeft1 0000028f
+31WalkingDown1 00000290
+31WalkingRight2 00000291
+31WalkingUp2 00000292
+31WalkingLeft2 00000293
+31WalkingDown2 00000294
+
+
+32StandingRight1 00000295
+32StandingUp1 00000296
+32StandingLeft1 00000297
+32StandingDown1 00000298
+32WalkingRight1 00000299
+32WalkingUp1 0000029a
+32WalkingLeft1 0000029b
+32WalkingDown1 0000029c
+32WalkingRight2 0000029d
+32WalkingUp2 0000029e
+32WalkingLeft2 0000029f
+32WalkingDown2 000002a0
+
+
+33StandingRight1 000002a1
+33StandingUp1 000002a2
+33StandingLeft1 000002a3
+33StandingDown1 000002a4
+33WalkingRight1 000002a5
+33WalkingUp1 000002a6
+33WalkingLeft1 000002a7
+33WalkingDown1 000002a8
+33WalkingRight2 000002a9
+33WalkingUp2 000002aa
+33WalkingLeft2 000002ab
+33WalkingDown2 000002ac
+
+
+34StandingRight1 000002ad
+34StandingUp1 000002ae
+34StandingLeft1 000002af
+34StandingDown1 000002b0
+34WalkingRight1 000002b1
+34WalkingUp1 000002b2
+34WalkingLeft1 000002b3
+34WalkingDown1 000002b4
+34WalkingRight2 000002b5
+34WalkingUp2 000002b6
+34WalkingLeft2 000002b7
+34WalkingDown2 000002b8
+
+
+35StandingRight1 000002b9
+35StandingUp1 000002ba
+35StandingLeft1 000002bb
+35StandingDown1 000002bc
+35WalkingRight1 000002bd
+35WalkingUp1 000002be
+35WalkingLeft1 000002bf
+35WalkingDown1 000002c0
+35WalkingRight2 000002c1
+35WalkingUp2 000002c2
+35WalkingLeft2 000002c3
+35WalkingDown2 000002c4
+
+
+36StandingRight1 000002c5
+36StandingUp1 000002c6
+36StandingLeft1 000002c7
+36StandingDown1 000002c8
+36WalkingRight1 000002c9
+36WalkingUp1 000002ca
+36WalkingLeft1 000002cb
+36WalkingDown1 000002cc
+36WalkingRight2 000002cd
+36WalkingUp2 000002ce
+36WalkingLeft2 000002cf
+36WalkingDown2 000002d0
+
+
+37StandingRight1 000002d1
+37StandingUp1 000002d2
+37StandingLeft1 000002d3
+37StandingDown1 000002d4
+37WalkingRight1 000002d5
+37WalkingUp1 000002d6
+37WalkingLeft1 000002d7
+37WalkingDown1 000002d8
+37WalkingRight2 000002d9
+37WalkingUp2 000002da
+37WalkingLeft2 000002db
+37WalkingDown2 000002dc
+
+
+38StandingRight1 000002dd
+38StandingUp1 000002de
+38StandingLeft1 000002df
+38StandingDown1 000002e0
+38WalkingRight1 000002e1
+38WalkingUp1 000002e2
+38WalkingLeft1 000002e3
+38WalkingDown1 000002e4
+38WalkingRight2 000002e5
+38WalkingUp2 000002e6
+38WalkingLeft2 000002e7
+38WalkingDown2 000002e8
+
+
+39StandingRight1 000002e9
+39StandingUp1 000002ea
+39StandingLeft1 000002eb
+39StandingDown1 000002ec
+39WalkingRight1 000002ed
+39WalkingUp1 000002ee
+39WalkingLeft1 000002ef
+39WalkingDown1 000002f0
+39WalkingRight2 000002f1
+39WalkingUp2 000002f2
+39WalkingLeft2 000002f3
+39WalkingDown2 000002f4
+
+
+40StandingRight1 000002f5
+40StandingUp1 000002f6
+40StandingLeft1 000002f7
+40StandingDown1 000002f8
+40WalkingRight1 000002f9
+40WalkingUp1 000002fa
+40WalkingLeft1 000002fb
+40WalkingDown1 000002fc
+40WalkingRight2 000002fd
+40WalkingUp2 000002fe
+40WalkingLeft2 000002ff
+40WalkingDown2 00000300
+
+
+41StandingRight1 00000301
+41StandingUp1 00000302
+41StandingLeft1 00000303
+41StandingDown1 00000304
+41WalkingRight1 00000305
+41WalkingUp1 00000306
+41WalkingLeft1 00000307
+41WalkingDown1 00000308
+41WalkingRight2 00000309
+41WalkingUp2 0000030a
+41WalkingLeft2 0000030b
+41WalkingDown2 0000030c
+
+
+42StandingRight1 0000030d
+42StandingUp1 0000030e
+42StandingLeft1 0000030f
+42StandingDown1 00000310
+42WalkingRight1 00000311
+42WalkingUp1 00000312
+42WalkingLeft1 00000313
+42WalkingDown1 00000314
+42WalkingRight2 00000315
+42WalkingUp2 00000316
+42WalkingLeft2 00000317
+42WalkingDown2 00000318
+
+
+43StandingRight1 00000319
+43StandingUp1 0000031a
+43StandingLeft1 0000031b
+43StandingDown1 0000031c
+43WalkingRight1 0000031d
+43WalkingUp1 0000031e
+43WalkingLeft1 0000031f
+43WalkingDown1 00000320
+43WalkingRight2 00000321
+43WalkingUp2 00000322
+43WalkingLeft2 00000323
+43WalkingDown2 00000324
+
+
+44StandingRight1 00000325
+44StandingUp1 00000326
+44StandingLeft1 00000327
+44StandingDown1 00000328
+44WalkingRight1 00000329
+44WalkingUp1 0000032a
+44WalkingLeft1 0000032b
+44WalkingDown1 0000032c
+44WalkingRight2 0000032d
+44WalkingUp2 0000032e
+44WalkingLeft2 0000032f
+44WalkingDown2 00000330
+
+
+45StandingRight1 00000331
+45StandingUp1 00000332
+45StandingLeft1 00000333
+45StandingDown1 00000334
+45WalkingRight1 00000335
+45WalkingUp1 00000336
+45WalkingLeft1 00000337
+45WalkingDown1 00000338
+45WalkingRight2 00000339
+45WalkingUp2 0000033a
+45WalkingLeft2 0000033b
+45WalkingDown2 0000033c
+
+
+46StandingRight1 0000033d
+46StandingUp1 0000033e
+46StandingLeft1 0000033f
+46StandingDown1 00000340
+46WalkingRight1 00000341
+46WalkingUp1 00000342
+46WalkingLeft1 00000343
+46WalkingDown1 00000344
+46WalkingRight2 00000345
+46WalkingUp2 00000346
+46WalkingLeft2 00000347
+46WalkingDown2 00000348
+
+
+47StandingRight1 00000349
+47StandingUp1 0000034a
+47StandingLeft1 0000034b
+47StandingDown1 0000034c
+47WalkingRight1 0000034d
+47WalkingUp1 0000034e
+47WalkingLeft1 0000034f
+47WalkingDown1 00000350
+47WalkingRight2 00000351
+47WalkingUp2 00000352
+47WalkingLeft2 00000353
+47WalkingDown2 00000354
+
+
+48StandingRight1 00000355
+48StandingUp1 00000356
+48StandingLeft1 00000357
+48StandingDown1 00000358
+48WalkingRight1 00000359
+48WalkingUp1 0000035a
+48WalkingLeft1 0000035b
+48WalkingDown1 0000035c
+48WalkingRight2 0000035d
+48WalkingUp2 0000035e
+48WalkingLeft2 0000035f
+48WalkingDown2 00000360
+
+
+49StandingRight1 00000361
+49StandingUp1 00000362
+49StandingLeft1 00000363
+49StandingDown1 00000364
+49WalkingRight1 00000365
+49WalkingUp1 00000366
+49WalkingLeft1 00000367
+49WalkingDown1 00000368
+49WalkingRight2 00000369
+49WalkingUp2 0000036a
+49WalkingLeft2 0000036b
+49WalkingDown2 0000036c
+
+
+50StandingRight1 0000036d
+50StandingUp1 0000036e
+50StandingLeft1 0000036f
+50StandingDown1 00000370
+50WalkingRight1 00000371
+50WalkingUp1 00000372
+50WalkingLeft1 00000373
+50WalkingDown1 00000374
+50WalkingRight2 00000375
+50WalkingUp2 00000376
+50WalkingLeft2 00000377
+50WalkingDown2 00000378
+
+
+51StandingRight1 00000379
+51StandingUp1 0000037a
+51StandingLeft1 0000037b
+51StandingDown1 0000037c
+51WalkingRight1 0000037d
+51WalkingUp1 0000037e
+51WalkingLeft1 0000037f
+51WalkingDown1 00000380
+51WalkingRight2 00000381
+51WalkingUp2 00000382
+51WalkingLeft2 00000383
+51WalkingDown2 00000384
+
+
+52StandingRight1 00000385
+52StandingUp1 00000386
+52StandingLeft1 00000387
+52StandingDown1 00000388
+52WalkingRight1 00000389
+52WalkingUp1 0000038a
+52WalkingLeft1 0000038b
+52WalkingDown1 0000038c
+52WalkingRight2 0000038d
+52WalkingUp2 0000038e
+52WalkingLeft2 0000038f
+52WalkingDown2 00000390
+
+
+53StandingRight1 00000391
+53StandingUp1 00000392
+53StandingLeft1 00000393
+53StandingDown1 00000394
+53WalkingRight1 00000395
+53WalkingUp1 00000396
+53WalkingLeft1 00000397
+53WalkingDown1 00000398
+53WalkingRight2 00000399
+53WalkingUp2 0000039a
+53WalkingLeft2 0000039b
+53WalkingDown2 0000039c
