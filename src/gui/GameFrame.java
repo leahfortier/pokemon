@@ -35,7 +35,7 @@ public class GameFrame {
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 
-		Thread.sleep(1100);
+		Thread.sleep(1500);
 		frame.pack();
 
 		frame.setVisible(true);
