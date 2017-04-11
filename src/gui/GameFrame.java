@@ -1,5 +1,7 @@
 package gui;
 
+import com.apple.eawt.Application;
+import draw.DrawUtils;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -34,6 +36,8 @@ public class GameFrame {
 
 		frame.setTitle(Global.TITLE);
 		frame.setIconImage(Global.FRAME_ICON);
+		Application.getApplication().setDockIconImage(Global.FRAME_ICON);
+
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.pack();
@@ -73,8 +77,7 @@ public class GameFrame {
 			strategy = gui.getBufferStrategy();
 
 			Graphics g = strategy.getDrawGraphics();
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+			DrawUtils.fillCanvas(g, Color.BLACK);
 			
 			g.setColor(Color.WHITE);
 			FontMetrics.setFont(g, 72);
