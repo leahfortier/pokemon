@@ -11,7 +11,6 @@ import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
 import gui.TileSet;
-import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import map.Direction;
@@ -160,13 +159,17 @@ class PokedexView extends View {
 		pokemonButtons = new Button[NUM_ROWS][NUM_COLS];
 		for (int i = 0, k = 0; i < NUM_ROWS; i++) {
 			for (int j = 0; j < NUM_COLS; j++, k++) {
+				final int row = i;
+				final int col = j;
+
 				buttons[k] = pokemonButtons[i][j] = new Button(
 						60 + 54*j,
 						96 + 54*i,
 						40,
 						40,
 						ButtonHoverAction.BOX,
-						Button.getBasicTransitions(k, NUM_ROWS, NUM_COLS, 0, new int[] { RETURN, RIGHT_ARROW, -1, RIGHT_ARROW })
+						Button.getBasicTransitions(k, NUM_ROWS, NUM_COLS, 0, new int[] { RETURN, RIGHT_ARROW, -1, RIGHT_ARROW }),
+						() -> selected = PokemonInfo.getPokemonInfo(getIndex(row, col) + 1)
 				);
 			}
 		}
@@ -174,6 +177,7 @@ class PokedexView extends View {
 		int buttonHeight = 38;
 		tabButtons = new Button[NUM_TAB_BUTTONS];
 		for (int i = 0; i < tabButtons.length; i++) {
+			final int index = i;
 			buttons[TAB_START + i] = tabButtons[i] = Button.createTabButton(
 					i,
 					infoPanel.x,
@@ -181,7 +185,8 @@ class PokedexView extends View {
 					infoPanel.width,
 					buttonHeight,
 					NUM_TAB_BUTTONS,
-					Button.getBasicTransitions(i, 1, tabButtons.length, TAB_START, new int[] { LEFT_ARROW, MOVES_RIGHT_ARROW, RIGHT_ARROW, RETURN })
+					Button.getBasicTransitions(i, 1, tabButtons.length, TAB_START, new int[] { LEFT_ARROW, MOVES_RIGHT_ARROW, RIGHT_ARROW, RETURN }),
+					() -> changeTab(TabInfo.values()[index])
 			);
 		}
 
@@ -205,8 +210,17 @@ class PokedexView extends View {
 		int arrowWidth = 35;
 		int arrowHeight = 20;
 
-		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, arrowWidth, arrowHeight, ButtonHoverAction.BOX, new int[] { RIGHT_ARROW, NUM_COLS *(NUM_ROWS - 1) + NUM_COLS /2 - 1, TAB_START + NUM_TAB_BUTTONS - 1, 0 });
-		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, arrowWidth, arrowHeight, ButtonHoverAction.BOX, new int[] { TAB_START, NUM_COLS *(NUM_ROWS - 1) + NUM_COLS /2, LEFT_ARROW, 0 });
+		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, arrowWidth, arrowHeight,
+				ButtonHoverAction.BOX,
+				new int[] { RIGHT_ARROW, NUM_COLS *(NUM_ROWS - 1) + NUM_COLS /2 - 1, TAB_START + NUM_TAB_BUTTONS - 1, 0 },
+				() -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, NUM_PAGES)
+		);
+
+		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, arrowWidth, arrowHeight,
+				ButtonHoverAction.BOX,
+				new int[] { TAB_START, NUM_COLS *(NUM_ROWS - 1) + NUM_COLS /2, LEFT_ARROW, 0 },
+				() -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, NUM_PAGES)
+		);
 
 		buttons[MOVES_LEFT_ARROW] = movesLeftButton = new Button(
 				infoPanel.centerX() - arrowWidth*3,
@@ -214,7 +228,8 @@ class PokedexView extends View {
 				arrowWidth,
 				arrowHeight,
 				ButtonHoverAction.BOX,
-				new int[] { MOVES_RIGHT_ARROW, MOVE_START + MOVES_PER_PAGE - 1, RIGHT_ARROW, RETURN }
+				new int[] { MOVES_RIGHT_ARROW, MOVE_START + MOVES_PER_PAGE - 1, RIGHT_ARROW, RETURN },
+				() -> movePageNum = GeneralUtils.wrapIncrement(movePageNum, -1, maxMovePages())
 		);
 
 		buttons[MOVES_RIGHT_ARROW] = movesRightButton = new Button(
@@ -223,10 +238,11 @@ class PokedexView extends View {
 				arrowWidth,
 				arrowHeight,
 				ButtonHoverAction.BOX,
-				new int[] { LEFT_ARROW, MOVE_START + MOVES_PER_PAGE - 1, MOVES_LEFT_ARROW, RETURN }
+				new int[] { LEFT_ARROW, MOVE_START + MOVES_PER_PAGE - 1, MOVES_LEFT_ARROW, RETURN },
+				() -> movePageNum = GeneralUtils.wrapIncrement(movePageNum, 1, maxMovePages())
 		);
 
-		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, ButtonHoverAction.BOX, new int[] { 0, PER_PAGE, RIGHT_ARROW, PER_PAGE });
+		buttons[RETURN] = returnButton = Button.createExitButton(410, 522, 350, 38, ButtonHoverAction.BOX, new int[] { 0, PER_PAGE, RIGHT_ARROW, PER_PAGE });
 
 		selected = PokemonInfo.getPokemonInfo(1);
 		changeTab(TabInfo.MAIN);
@@ -235,49 +251,11 @@ class PokedexView extends View {
 	@Override
 	public void update(int dt) {
 		selectedButton = Button.update(buttons, selectedButton);
-
-		for (int i = 0; i < NUM_ROWS; i++) {
-			for (int j = 0; j < NUM_COLS; j++) {
-				if (pokemonButtons[i][j].checkConsumePress()) {
-					selected = PokemonInfo.getPokemonInfo(getIndex(j, i) + 1);
-					updateActiveButtons();
-				}
-			}
-		}
-
-		for (int i = 0; i < tabButtons.length; i++) {
-			if (tabButtons[i].checkConsumePress()) {
-				changeTab(TabInfo.values()[i]);
-			}
-		}
-		
-		if (leftButton.checkConsumePress()) {
-			pageNum = GeneralUtils.wrapIncrement(pageNum, -1, NUM_PAGES);
-			updateActiveButtons();
-		}
-		
-		if (rightButton.checkConsumePress()) {
-			pageNum = GeneralUtils.wrapIncrement(pageNum, 1, NUM_PAGES);
+		if (buttons[selectedButton].checkConsumePress()) {
 			updateActiveButtons();
 		}
 
-		if (movesLeftButton.checkConsumePress()) {
-			movePageNum = GeneralUtils.wrapIncrement(movePageNum, -1, maxMovePages());
-			updateActiveButtons();
-		}
-
-		if (movesRightButton.checkConsumePress()) {
-			movePageNum = GeneralUtils.wrapIncrement(movePageNum, 1, maxMovePages());
-			updateActiveButtons();
-		}
-				
-		if (returnButton.checkConsumePress()) {
-			Game.instance().popView();
-		}
-		
-		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
-			Game.instance().popView();
-		}
+		InputControl.instance().popViewIfEscaped();
 	}
 
 	private int maxMovePages() {
@@ -305,7 +283,7 @@ class PokedexView extends View {
 				}
 
 				PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(number);
-				Button pokemonButton = pokemonButtons[j][i];
+				Button pokemonButton = pokemonButtons[i][j];
 
 				if (pokedex.isNotSeen(pokemonInfo)) {
 					pokemonButton.label(g, 20, new Color(0, 0, 0, 64), String.format("%03d", number));
@@ -625,7 +603,7 @@ class PokedexView extends View {
 	}
 	
 	private int getIndex(int i, int j) {
-		return PER_PAGE*pageNum + j*NUM_COLS + i;
+		return PER_PAGE*pageNum + i*NUM_COLS + j;
 	}
 
 	private void changeTab(TabInfo tab) {
