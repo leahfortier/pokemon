@@ -4,6 +4,10 @@ import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import gui.GameData;
+import gui.TileSet;
+import item.ItemNamesies;
+import item.bag.Bag;
 import main.Game;
 import main.Global;
 import map.Direction;
@@ -11,6 +15,7 @@ import pokemon.ActivePokemon;
 import trainer.Trainer;
 import trainer.player.Player;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
@@ -35,9 +40,14 @@ public class MoveRelearnerView extends View {
     private final Button movesRightButton;
     private final Button movesLeftButton;
 
+    private TileSet itemTiles;
+    private TileSet partyTiles;
+
     private List<ActivePokemon> team;
+    private Bag bag;
 
     private int selectedIndex;
+    private int selectedPokemon;
 
     MoveRelearnerView() {
         int spacing = 20;
@@ -57,6 +67,7 @@ public class MoveRelearnerView extends View {
                 movesPanel.width,
                 buttonHeight)
                 .withBlackOutline()
+                .withBackgroundColor(new Color(248, 179, 249))
                 .withFullTransparency();
 
         descriptionPanel = new DrawPanel(
@@ -76,7 +87,7 @@ public class MoveRelearnerView extends View {
                 .withFullTransparency();
 
         moveButtons = movesPanel.getButtons(10, MOVES_PER_PAGE + 1, 1, MOVES_PER_PAGE, 1, 0, new int[] {MOVES_PER_PAGE, RETURN, MOVES_PER_PAGE, RETURN});
-        pokemonButtons = partyPanel.getButtons(10, Trainer.MAX_POKEMON, 1, MOVES_PER_PAGE, new int[] { 0, RETURN, 0, RETURN });
+        pokemonButtons = partyPanel.getButtons(15, Trainer.MAX_POKEMON, 1, MOVES_PER_PAGE, new int[] { 0, RETURN, 0, RETURN });
 
         learnMoveButton = new Button(
                 partyPanel.x,
@@ -129,6 +140,13 @@ public class MoveRelearnerView extends View {
     @Override
     public void update(int dt) {
         selectedIndex = Button.update(buttons, selectedIndex);
+
+        for (int i = 0; i < pokemonButtons.length; i++) {
+            Button pokemonButton = pokemonButtons[i];
+            if (pokemonButton.checkConsumePress()) {
+                selectedPokemon = i;
+            }
+        }
     }
 
     @Override
@@ -137,6 +155,8 @@ public class MoveRelearnerView extends View {
 
         movesPanel.drawBackground(g);
         heartScalePanel.drawBackground(g);
+        heartScalePanel.label(g, 24, "Heart Scales: " + bag.getQuantity(ItemNamesies.HEART_SCALE));
+
         descriptionPanel.drawBackground(g);
         partyPanel.drawBackground(g);
 
@@ -144,8 +164,31 @@ public class MoveRelearnerView extends View {
             button.blackOutline(g);
         }
 
-        for (Button button : pokemonButtons) {
-            button.blackOutline(g);
+        for (int i = 0; i < team.size(); i++) {
+            ActivePokemon pokemon = team.get(i);
+            Button pokemonButton = pokemonButtons[i];
+
+            DrawPanel buttonPanel = new DrawPanel(pokemonButton)
+                    .withTypeColors(pokemon)
+                    .withBlackOutline()
+                    .withTransparentCount(2)
+                    .withBorderPercentage(15);
+
+            // Highlight selected
+            if (i == selectedPokemon) {
+                int spacing = 5;
+                new DrawPanel(
+                        buttonPanel.x - spacing,
+                        buttonPanel.y - spacing,
+                        buttonPanel.width + 2*spacing,
+                        buttonPanel.height + 2*spacing)
+                        .withBlackOutline()
+                        .withFullTransparency()
+                        .drawBackground(g);
+            }
+
+            buttonPanel.drawBackground(g);
+            buttonPanel.imageLabel(g, 22, partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getName());
         }
 
         learnMoveButton.blackOutline(g);
@@ -167,7 +210,12 @@ public class MoveRelearnerView extends View {
     @Override
     public void movedToFront() {
         Player player = Game.getPlayer();
+        GameData data = Game.getData();
+
+        this.itemTiles = data.getItemTiles();
+        this.partyTiles = data.getPartyTiles();
 
         this.team = player.getTeam();
+        this.bag = player.getBag();
     }
 }

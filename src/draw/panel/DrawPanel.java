@@ -12,6 +12,8 @@ import input.ControlKey;
 import input.InputControl;
 import main.Global;
 import map.Direction;
+import pokemon.ActivePokemon;
+import type.Type;
 import util.FontMetrics;
 import util.Point;
 
@@ -91,6 +93,10 @@ public class DrawPanel {
         this.secondBackgroundColor = backgroundColors[1];
         this.swapDualColoredDimensions = swapDualColoredDimensions;
         return this;
+    }
+
+    public DrawPanel withTypeColors(ActivePokemon pokemon) {
+        return this.withBackgroundColors(Type.getColors(pokemon));
     }
 
     public DrawPanel withTransparentCount(int transparentCount) {
