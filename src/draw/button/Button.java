@@ -70,6 +70,10 @@ public class Button {
 	}
 
 	public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, int[] transitions) {
+		return createTabButton(tabIndex, panelX, panelY, panelWidth, tabHeight, numButtons, transitions, null);
+	}
+
+	public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, int[] transitions, ButtonPressAction buttonPressAction) {
 		int tabWidth = panelWidth/numButtons;
 		int remainder = panelWidth%numButtons;
 
@@ -79,7 +83,8 @@ public class Button {
 				tabWidth + (tabIndex < remainder ? 1 : 0),
 				tabHeight,
 				ButtonHoverAction.BOX,
-				transitions
+				transitions,
+				buttonPressAction
 		);
 	}
 
