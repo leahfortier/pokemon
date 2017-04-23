@@ -148,7 +148,8 @@ class DayCareView extends View {
                 dayCarePanel.width - 2*buttonSpacing,
                 pokemonButtonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { DEPOSIT_WITHDRAW, Trainer.MAX_POKEMON - 1, DEPOSIT_WITHDRAW, SECOND_DAY_CARE_POKEMON_BUTTON }
+                new int[] { DEPOSIT_WITHDRAW, Trainer.MAX_POKEMON - 1, DEPOSIT_WITHDRAW, SECOND_DAY_CARE_POKEMON_BUTTON },
+                () -> selected = dayCareCenter.getFirstPokemon()
         );
 
         secondDayCarePokemonButton = buttons[SECOND_DAY_CARE_POKEMON_BUTTON] = new Button(
@@ -157,12 +158,14 @@ class DayCareView extends View {
                 firstDayCarePokemonButton.width,
                 firstDayCarePokemonButton.height,
                 ButtonHoverAction.BOX,
-                new int[] { DEPOSIT_WITHDRAW, FIRST_DAY_CARE_POKEMON_BUTTON, DEPOSIT_WITHDRAW, 0 }
+                new int[] { DEPOSIT_WITHDRAW, FIRST_DAY_CARE_POKEMON_BUTTON, DEPOSIT_WITHDRAW, 0 },
+                () -> selected = dayCareCenter.getSecondPokemon()
         );
 
         pokemonButtonHeight = (partyPanel.height - (Trainer.MAX_POKEMON + 2)*buttonSpacing)/(Trainer.MAX_POKEMON + 1);
         partyButtons = new Button[Trainer.MAX_POKEMON];
         for (int i = 0; i < partyButtons.length; i++) {
+            final int index = i; // Silly Java, Trix are for kids
             partyButtons[i] = buttons[i] = new Button(
                     firstDayCarePokemonButton.x,
                     partyPanel.y + (i + 1)*pokemonButtonHeight + (i + 2)*buttonSpacing,
@@ -170,7 +173,8 @@ class DayCareView extends View {
                     pokemonButtonHeight,
                     ButtonHoverAction.BOX,
                     Button.getBasicTransitions(i, Trainer.MAX_POKEMON, 1, 0,
-                            new int[] { DEPOSIT_WITHDRAW, SECOND_DAY_CARE_POKEMON_BUTTON, DEPOSIT_WITHDRAW, FIRST_DAY_CARE_POKEMON_BUTTON })
+                            new int[] { DEPOSIT_WITHDRAW, SECOND_DAY_CARE_POKEMON_BUTTON, DEPOSIT_WITHDRAW, FIRST_DAY_CARE_POKEMON_BUTTON }),
+                    () -> selected = team.get(index)
             );
         }
 
@@ -180,10 +184,18 @@ class DayCareView extends View {
                 (infoPanel.width - spacing/2)/2,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { RETURN, -1, 0, -1 }
+                new int[] { RETURN, -1, 0, -1 },
+                () -> {
+                    if (party) {
+                        message = dayCareCenter.deposit(selected);
+                    }
+                    else {
+                        message = dayCareCenter.withdraw(selected);
+                    }
+                }
         );
 
-        returnButton = buttons[RETURN] = new Button(
+        returnButton = buttons[RETURN] = Button.createExitButton(
                 infoPanel.rightX() - depositWithdrawButton.width,
                 depositWithdrawButton.y,
                 depositWithdrawButton.width,
@@ -209,39 +221,11 @@ class DayCareView extends View {
         }
 
         selectedButton = Button.update(buttons, selectedButton);
-
-        if (firstDayCarePokemonButton.checkConsumePress()) {
-            selected = dayCareCenter.getFirstPokemon();
+        if (buttons[selectedButton].checkConsumePress()) {
             updateActiveButtons();
         }
 
-        if (secondDayCarePokemonButton.checkConsumePress()) {
-            selected = dayCareCenter.getSecondPokemon();
-            updateActiveButtons();
-        }
-
-        for (int i = 0; i < team.size(); i++) {
-            if (partyButtons[i].checkConsumePress()) {
-                selected = team.get(i);
-                updateActiveButtons();
-                break;
-            }
-        }
-
-        if (depositWithdrawButton.checkConsumePress()) {
-            if (party) {
-                message = dayCareCenter.deposit(selected);
-            }
-            else {
-                message = dayCareCenter.withdraw(selected);
-            }
-
-            updateActiveButtons();
-        }
-
-        if (returnButton.checkConsumePress() || input.consumeIfDown(ControlKey.ESC)) {
-            Game.instance().popView();
-        }
+        input.popViewIfEscaped();
     }
 
     private void drawPokemonButton(Graphics g, Button button, ActivePokemon pokemon) {

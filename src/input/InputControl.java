@@ -1,5 +1,6 @@
 package input;
 
+import main.Game;
 import util.Point;
 import util.RandomUtils;
 import util.StringUtils;
@@ -69,6 +70,12 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 		
 		lock = INVALID_LOCK;
 		return true;
+	}
+
+	public void popViewIfEscaped() {
+		if (consumeIfDown(ControlKey.ESC)) {
+			Game.instance().popView();
+		}
 	}
 
 	public boolean consumeIfDown(ControlKey controlKey) {

@@ -108,7 +108,7 @@ public class BerryView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        Button returnButton = new Button(
+        Button returnButton = Button.createExitButton(
                 selectedPanel.x,
                 farmPanel.bottomY() - spacing - buttonHeight,
                 halfPanelWidth,
@@ -143,17 +143,16 @@ public class BerryView extends View {
                 new int[] { -1, HARVEST, -1, RIGHT_ARROW }
         );
 
-        buttons = new Button[NUM_BUTTONS];
-        System.arraycopy(itemButtons, 0, buttons, 0, ITEMS_PER_PAGE);
-
         Button harvestButton = new Button(
                 selectedPanel.x,
                 selectedPanel.bottomY() - DrawUtils.OUTLINE_SIZE,
                 selectedPanel.width,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { -1, RETURN, -1, 0 }
+                new int[] { -1, RETURN, -1, 0 },
+                () -> message = berryFarm.harvest(selectedItem)
         );
+
 
         int arrowHeight = 20;
         Button leftArrow  = new Button(
@@ -162,7 +161,8 @@ public class BerryView extends View {
                 35,
                 arrowHeight,
                 ButtonHoverAction.BOX,
-                new int[] { RIGHT_ARROW, ITEMS_PER_PAGE - 2, RIGHT_ARROW, RETURN }
+                new int[] { RIGHT_ARROW, ITEMS_PER_PAGE - 2, RIGHT_ARROW, RETURN },
+                () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         );
 
         Button rightArrow = new Button(
@@ -171,9 +171,12 @@ public class BerryView extends View {
                 leftArrow.width,
                 leftArrow.height,
                 ButtonHoverAction.BOX,
-                new int[] { LEFT_ARROW, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN }
+                new int[] { LEFT_ARROW, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN },
+                () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 
+        buttons = new Button[NUM_BUTTONS];
+        System.arraycopy(itemButtons, 0, buttons, 0, ITEMS_PER_PAGE);
         buttons[HARVEST] = harvestButton;
         buttons[LEFT_ARROW] = leftArrow;
         buttons[RIGHT_ARROW] = rightArrow;
@@ -183,8 +186,6 @@ public class BerryView extends View {
     @Override
     public void update(int dt) {
         InputControl input = InputControl.instance();
-        Set<ItemNamesies> berries = Game.getPlayer().getBag().getCategory(BagCategory.BERRY);
-
         if (message != null && input.consumeIfMouseDown(ControlKey.SPACE)) {
             message = null;
             return;
@@ -192,7 +193,7 @@ public class BerryView extends View {
 
         selectedButton = Button.update(buttons, selectedButton);
 
-        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(berries, pageNum, ITEMS_PER_PAGE);
+        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(Game.getPlayer().getBag().getCategory(BagCategory.BERRY), pageNum, ITEMS_PER_PAGE);
         for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
             ItemNamesies item = iter.next();
             if (itemButtons[i].checkConsumePress()) {
@@ -201,25 +202,11 @@ public class BerryView extends View {
             }
         }
 
-        if (buttons[HARVEST].checkConsumePress()) {
-            message = berryFarm.harvest(selectedItem);
+        if (buttons[selectedButton].checkConsumePress()) {
             updateActiveButtons();
         }
 
-        if (buttons[LEFT_ARROW].checkConsumePress()) {
-            pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages(berries.size()));
-            updateActiveButtons();
-        }
-
-        if (buttons[RIGHT_ARROW].checkConsumePress()) {
-            pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages(berries.size()));
-            updateActiveButtons();
-        }
-
-        if (buttons[RETURN].checkConsumePress()
-                || input.consumeIfDown(ControlKey.ESC)) {
-            Game.instance().popView();
-        }
+        input.popViewIfEscaped();
     }
 
     @Override
@@ -303,7 +290,7 @@ public class BerryView extends View {
 
         // Draw page numbers
         FontMetrics.setFont(g, 16);
-        TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(berries.size()), itemsPanel.centerX(), buttons[RIGHT_ARROW].centerY());
+        TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(), itemsPanel.centerX(), buttons[RIGHT_ARROW].centerY());
 
         // Left and Right arrows
         buttons[LEFT_ARROW].drawArrow(g, Direction.LEFT);
@@ -358,7 +345,8 @@ public class BerryView extends View {
         }
     }
 
-    private int totalPages(int size) {
+    private int totalPages() {
+        int size = Game.getPlayer().getBag().getCategory(BagCategory.BERRY).size();
         return size/ITEMS_PER_PAGE + (size == 0 || size%ITEMS_PER_PAGE != 0 ? 1 : 0);
     }
 

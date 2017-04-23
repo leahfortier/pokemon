@@ -148,7 +148,8 @@ class PartyView extends View {
 				buttonWidth,
 				buttonHeight,
 				ButtonHoverAction.BOX,
-				new int[] { SWITCH, 0, RETURN, 0 }
+				new int[] { SWITCH, 0, RETURN, 0 },
+				() -> nicknameView = true
 		);
 
 		switchButton = new Button(
@@ -157,10 +158,11 @@ class PartyView extends View {
 				buttonWidth,
 				buttonHeight,
 				ButtonHoverAction.BOX,
-				new int[] { RETURN, 0, NICKNAME, 0 }
+				new int[] { RETURN, 0, NICKNAME, 0 },
+				() -> switchTabIndex = switchTabIndex == -1 ? selectedTab : -1
 		);
 
-		returnButton = new Button(
+		returnButton = Button.createExitButton(
 				switchButton.rightX() + spacing,
 				switchButton.y,
 				buttonWidth,
@@ -171,6 +173,7 @@ class PartyView extends View {
 
 		tabButtons = new Button[Trainer.MAX_POKEMON];
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
+			final int index = i;
 			tabButtons[i] = Button.createTabButton(
 					i,
 					pokemonPanel.x,
@@ -178,7 +181,15 @@ class PartyView extends View {
 					pokemonPanel.width,
 					tabHeight,
 					tabButtons.length,
-					Button.getBasicTransitions(i, 1, Trainer.MAX_POKEMON, 0, new int[] { -1, RETURN, -1, MOVES })
+					Button.getBasicTransitions(i, 1, Trainer.MAX_POKEMON, 0, new int[] { -1, RETURN, -1, MOVES }),
+					() -> {
+						if (switchTabIndex != -1) {
+							Game.getPlayer().swapPokemon(index, switchTabIndex);
+							switchTabIndex = -1;
+						}
+
+						selectedTab = index;
+					}
 			);
 		}
 
@@ -194,10 +205,8 @@ class PartyView extends View {
 		moveButtons = movesPanel.getButtons(10, Move.MAX_MOVES, 1, MOVES, new int[] { -1, 0, -1, RETURN });
 
 		buttons = new Button[NUM_BUTTONS];
-
 		System.arraycopy(tabButtons, 0, buttons, 0, tabButtons.length);
 		System.arraycopy(moveButtons, 0, buttons, MOVES, moveButtons.length);
-
 		buttons[NICKNAME] = nicknameButton;
 		buttons[SWITCH] = switchButton;
 		buttons[RETURN] = returnButton;
@@ -226,37 +235,11 @@ class PartyView extends View {
 			}
 		}
 		else {
-			for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-				if (tabButtons[i].checkConsumePress()) {
-					if (switchTabIndex != -1) {
-						player.swapPokemon(i, switchTabIndex);
-						selectedTab = i;
-						switchTabIndex = -1;
-					} else {
-						selectedTab = i;
-					}
-
-					updateActiveButtons();
-				}
-			}
-
-			if (nicknameButton.checkConsumePress()) {
-				nicknameView = true;
+			if (buttons[selectedButton].checkConsumePress()) {
 				updateActiveButtons();
 			}
 
-			if (returnButton.checkConsumePress()) {
-				Game.instance().popView();
-			}
-
-			if (switchButton.checkConsumePress()) {
-				switchTabIndex = switchTabIndex == -1 ? selectedTab : -1;
-				updateActiveButtons();
-			}
-
-			if (input.consumeIfDown(ControlKey.ESC)) {
-				Game.instance().popView();
-			}
+			input.popViewIfEscaped();
 		}
 	}
 
