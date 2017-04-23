@@ -10,7 +10,6 @@ import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
 import gui.TileSet;
-import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import map.Direction;
@@ -123,31 +122,107 @@ class PCView extends View {
 		boxButtons = new Button[PC.BOX_HEIGHT][PC.BOX_WIDTH];
 		for (int i = 0, k = 0; i < PC.BOX_HEIGHT; i++) {
 			for (int j = 0; j < PC.BOX_WIDTH; j++, k++) {
+				final int row = i;
+				final int col = j;
+
 				buttons[k] = boxButtons[i][j] = new Button(60 + 54*j, 96 + 54*i, 40, 40, ButtonHoverAction.BOX,
 						new int[] {j == PC.BOX_WIDTH - 1 ? SWITCH : k + 1, // Right 
 								i == 0 ? PARTY + j : k - PC.BOX_WIDTH, // Up
 								j == 0 ? RELEASE : k - 1, // Left
-								i == PC.BOX_HEIGHT - 1 ? (j < PC.BOX_WIDTH/2 ? LEFT_ARROW : RIGHT_ARROW) : k + PC.BOX_WIDTH}); // Down
+								i == PC.BOX_HEIGHT - 1 ? (j < PC.BOX_WIDTH/2 ? LEFT_ARROW : RIGHT_ARROW) : k + PC.BOX_WIDTH}, // Down
+						() -> {
+							if (party && depositClicked) {
+								pc.depositPokemonFromPlayer(selected, row, col);
+								depositClicked = false;
+							}
+							else if (switchClicked) {
+								pc.switchPokemon(selected, row, col);
+								switchClicked = false;
+							}
+							else {
+								selected = pc.getBoxPokemon()[row][col];
+								party = false;
+							}
+						}
+				);
 			}
 		}
 		
 		partyButtons = new Button[Trainer.MAX_POKEMON];
 		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
+			final int index = i;
 			buttons[PARTY + i] = partyButtons[i] = new Button(60 + 54*i, 499, 40, 40, ButtonHoverAction.BOX,
 					new int[] {i == Trainer.MAX_POKEMON - 1 ? RETURN : PARTY + i + 1, // Right
 							i < PC.BOX_WIDTH/2 ? LEFT_ARROW : RIGHT_ARROW, // Up
 							i == 0 ? RETURN : PARTY + i - 1, // Left
-							i}); // Down
+							i}, // Down
+					() -> {
+						if (party && depositClicked) {
+							depositClicked = false;
+						}
+						else if (switchClicked) {
+							pc.switchPokemon(selected, index);
+							switchClicked = false;
+						}
+						else {
+							selected = Game.getPlayer().getTeam().get(index);
+							party = true;
+						}
+					}
+			);
 		}
 		
-		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20, ButtonHoverAction.BOX, new int[] {RIGHT_ARROW, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2 - 1, -1, PARTY});
-		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20, ButtonHoverAction.BOX, new int[] {SWITCH, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2, LEFT_ARROW, PARTY});
+		buttons[LEFT_ARROW] = leftButton = new Button(140, 418, 35, 20,
+				ButtonHoverAction.BOX,
+				new int[] {RIGHT_ARROW, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2 - 1, -1, PARTY},
+				() -> {
+					pc.incrementBox(-1);
+					movedToFront();
+				}
+		);
+
+		buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20,
+				ButtonHoverAction.BOX,
+				new int[] {SWITCH, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2, LEFT_ARROW, PARTY},
+				() -> {
+					pc.incrementBox(1);
+					movedToFront();
+				}
+		);
 		
-		buttons[SWITCH] = switchButton = new Button(410, 464, 118, 38, ButtonHoverAction.BOX, new int[] {DEPOSIT_WITHDRAW, -1, RIGHT_ARROW, RETURN});
-		buttons[DEPOSIT_WITHDRAW] = depositWithdrawButton = new Button(526, 464, 118, 38, ButtonHoverAction.BOX, new int[] {RELEASE, -1, SWITCH, RETURN});
-		buttons[RELEASE] = releaseButton = new Button(642, 464, 118, 38, ButtonHoverAction.BOX, new int[] {0, -1, DEPOSIT_WITHDRAW, RETURN});
+		buttons[SWITCH] = switchButton = new Button(410, 464, 118, 38,
+				ButtonHoverAction.BOX,
+				new int[] {DEPOSIT_WITHDRAW, -1, RIGHT_ARROW, RETURN},
+				() -> switchClicked = !switchClicked
+		);
+
+		buttons[DEPOSIT_WITHDRAW] = depositWithdrawButton = new Button(526, 464, 118, 38,
+				ButtonHoverAction.BOX,
+				new int[] {RELEASE, -1, SWITCH, RETURN},
+				() -> {
+					if (party) { // Deposit
+						if (depositClicked) {
+							pc.depositPokemonFromPlayer(selected);
+						}
+
+						depositClicked = !depositClicked;
+					}
+					else { // Withdraw
+						pc.withdrawPokemon(selected);
+					}
+				}
+		);
+
+		buttons[RELEASE] = releaseButton = new Button(642, 464, 118, 38,
+				ButtonHoverAction.BOX,
+				new int[] {0, -1, DEPOSIT_WITHDRAW, RETURN},
+				() -> {
+					pc.releasePokemon(selected);
+					movedToFront();
+				}
+		);
 		
-		buttons[RETURN] = returnButton = new Button(410, 522, 350, 38, ButtonHoverAction.BOX, new int[] {0, SWITCH, PARTY + Trainer.MAX_POKEMON - 1, -1});
+		buttons[RETURN] = returnButton = Button.createExitButton(410, 522, 350, 38, ButtonHoverAction.BOX, new int[] {0, SWITCH, PARTY + Trainer.MAX_POKEMON - 1, -1});
 		
 		party = true;
 		selected = Game.getPlayer().front();
@@ -156,86 +231,11 @@ class PCView extends View {
 	@Override
 	public void update(int dt) {
 		selectedButton = Button.update(buttons, selectedButton);
-
-		for (int i = 0; i < PC.BOX_HEIGHT; i++) {
-			for (int j = 0; j < PC.BOX_WIDTH; j++) {
-				if (boxButtons[i][j].checkConsumePress()) {
-					if (party && depositClicked) {
-						pc.depositPokemonFromPlayer(selected, i, j);
-						depositClicked = false;
-					}
-					else if (switchClicked) {
-						pc.switchPokemon(selected, i, j);
-						switchClicked = false;
-					}
-					else {
-						selected = pc.getBoxPokemon()[i][j];
-						party = false;
-					}
-					updateActiveButtons();
-				}
-			}
-		}
-		
-		for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-			if (partyButtons[i].checkConsumePress()) {
-				if (party && depositClicked) {
-					depositClicked = false;
-				}
-				else if (switchClicked) {
-					pc.switchPokemon(selected, i);
-					switchClicked = false;
-				}
-				else {
-					selected = Game.getPlayer().getTeam().get(i);
-					party = true;					
-				}
-				updateActiveButtons();
-			}
-		}
-		
-		if (leftButton.checkConsumePress()) {
-			pc.incrementBox(-1);
-			movedToFront();
-		}
-		
-		if (rightButton.checkConsumePress()) {
-			pc.incrementBox(1);
-			movedToFront();
-		}
-		
-		if (switchButton.checkConsumePress()) {
-			switchClicked = !switchClicked;
+		if (buttons[selectedButton].checkConsumePress()) {
 			updateActiveButtons();
 		}
 		
-		if (depositWithdrawButton.checkConsumePress()) {
-			if (party) { // Deposit
-				if (depositClicked) {
-					pc.depositPokemonFromPlayer(selected);
-				}
-
-				depositClicked = !depositClicked;
-			}
-			else { // Withdraw
-				pc.withdrawPokemon(selected);
-			}
-
-			updateActiveButtons();
-		}
-		
-		if (releaseButton.checkConsumePress()) {
-			pc.releasePokemon(selected);
-			movedToFront();
-		}
-		
-		if (returnButton.checkConsumePress()) {
-			Game.instance().popView();
-		}
-		
-		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
-			Game.instance().popView();
-		}
+		InputControl.instance().popViewIfEscaped();
 	}
 
 	private void drawPokemonButton(Graphics g, Button button, ActivePokemon pokemon) {
