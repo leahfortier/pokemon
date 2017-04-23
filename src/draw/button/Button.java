@@ -8,6 +8,7 @@ import draw.TextUtils;
 import draw.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
+import main.Game;
 import map.Direction;
 import util.FontMetrics;
 import util.Point;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Button {
-	private static final int NO_TRANSITION = -1;
+	public static final int NO_TRANSITION = -1;
 
 	public final int x;
 	public final int y;
@@ -27,6 +28,7 @@ public class Button {
 	public final int height;
 	
 	private final ButtonHoverAction hoverAction;
+	private final ButtonPressAction pressAction;
 	private final int[] transition;
 	
 	private boolean hover;
@@ -35,16 +37,21 @@ public class Button {
 	private boolean active;
 
 	public Button(int x, int y, int width, int height) {
-		this(x, y, width, height, null, null);
+		this(x, y, width, height, null, null, null);
 	}
 
 	public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition) {
+		this(x, y, width, height, hoverAction, transition, null);
+	}
+
+	public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition, ButtonPressAction pressAction) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		
 		this.hoverAction = hoverAction;
+		this.pressAction = pressAction == null ? () -> {} : pressAction;
 
 		if (transition == null) {
 			this.transition = new int[] { NO_TRANSITION, NO_TRANSITION, NO_TRANSITION, NO_TRANSITION };
@@ -56,6 +63,10 @@ public class Button {
 		this.press = false;
 		this.forceHover = false;
 		this.active = true;
+	}
+
+	public static Button createExitButton(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition) {
+		return new Button(x, y, width, height, hoverAction, transition, () -> Game.instance().popView());
 	}
 
 	public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, int[] transitions) {
@@ -212,6 +223,7 @@ public class Button {
 	public boolean checkConsumePress() {
 		if (press) {
 			press = false;
+			pressAction.buttonPressed();
 			return true;
 		}
 
