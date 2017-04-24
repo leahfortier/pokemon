@@ -14,6 +14,7 @@ public enum ViewMode {
     MAIN_MENU_VIEW(MainMenuView::new),
     MAP_VIEW(MapView::new),
     MART_VIEW(MartView::new),
+    MOVE_RELEARNER_VIEW(MoveRelearnerView::new),
     NEW_POKEMON_VIEW(NewPokemonView::new),
     OPTIONS_VIEW(OptionsView::new),
     PARTY_VIEW(PartyView::new),

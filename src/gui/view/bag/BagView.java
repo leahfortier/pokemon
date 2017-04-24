@@ -123,7 +123,9 @@ public class BagView extends View {
 				halfPanelWidth,
 				buttonHeight,
 				ButtonHoverAction.BOX,
-				new int[] { PARTY, RIGHT_ARROW, PARTY, 0 });
+				new int[] { PARTY, RIGHT_ARROW, PARTY, 0 },
+				this::returnToMap
+		);
 
 		itemsPanel = new DrawPanel(
 				selectedPanel.x,
@@ -139,6 +141,7 @@ public class BagView extends View {
 		
 		tabButtons = new Button[CATEGORIES.length];
 		for (int i = 0; i < CATEGORIES.length; i++) {
+			final int index = i;
 			tabButtons[i] = Button.createTabButton(
 					i,
 					bagPanel.x,
@@ -151,12 +154,42 @@ public class BagView extends View {
 						 	RETURN, // Up
 							Button.basicTransition(i, 1, CATEGORIES.length, Direction.LEFT),
 						 	USE // Down
-					});
+					},
+					() -> changeCategory(index));
 		}
 
-		partyButtons = pokemonPanel.getButtons(10, Trainer.MAX_POKEMON, 1, PARTY, new int[] { GIVE, 0, MOVES, 0 });
-		moveButtons = pokemonPanel.getButtons(10, Trainer.MAX_POKEMON, 1, MOVES, new int[] { PARTY, 0, GIVE, 0 });
-		itemButtons = itemsPanel.getButtons(5, ITEMS_PER_PAGE/2 + 1, 2, ITEMS_PER_PAGE/2, 2, ITEMS, new int[] { -1, USE, -1, RIGHT_ARROW });
+		partyButtons = pokemonPanel.getButtons(
+				10,
+				Trainer.MAX_POKEMON,
+				1,
+				PARTY,
+				new int[] { GIVE, 0, MOVES, 0 },
+				index -> {
+					for (UseState useState : UseState.values()) {
+						useState.use(this, Game.getPlayer().getTeam().get(index));
+					}
+				}
+		);
+
+		moveButtons = pokemonPanel.getButtons(
+				10,
+				Trainer.MAX_POKEMON,
+				1,
+				MOVES,
+				new int[] { PARTY, 0, GIVE, 0 },
+				index -> Game.getPlayer().getBag().useMoveItem(selectedItem, selectedPokemon, selectedPokemon.getActualMoves().get(index))
+		);
+
+		itemButtons = itemsPanel.getButtons(
+				5,
+				ITEMS_PER_PAGE/2 + 1,
+				2,
+				ITEMS_PER_PAGE/2,
+				2,
+				ITEMS,
+				new int[] { -1, USE, -1, RIGHT_ARROW },
+				index -> selectedItem = GeneralUtils.getPageValue(Game.getPlayer().getBag().getCategory(selectedTab), pageNum, ITEMS_PER_PAGE, index)
+		);
 
 		buttons = new Button[NUM_BUTTONS];
 		System.arraycopy(tabButtons, 0, buttons, 0, CATEGORIES.length);
@@ -180,7 +213,8 @@ public class BagView extends View {
 							selectedTab.ordinal(), // Up
 							tabIndex == 0 ? PARTY : useStates[tabIndex - 1].buttonIndex, // Left
 							tabIndex <= useStates.length/2 ? ITEMS : ITEMS + 1 // Down
-					}
+					},
+					() -> useState.update(this)
 			);
 		}
 
@@ -191,7 +225,8 @@ public class BagView extends View {
 				35,
 				arrowHeight,
 				ButtonHoverAction.BOX,
-				new int[] { RIGHT_ARROW, ITEMS + ITEMS_PER_PAGE - 2, RIGHT_ARROW, RETURN }
+				new int[] { RIGHT_ARROW, ITEMS + ITEMS_PER_PAGE - 2, RIGHT_ARROW, RETURN },
+				() -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
 		);
 
 		Button rightArrow = new Button(
@@ -200,7 +235,8 @@ public class BagView extends View {
 				leftArrow.width,
 				leftArrow.height,
 				ButtonHoverAction.BOX,
-				new int[] { LEFT_ARROW, ITEMS + ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN }
+				new int[] { LEFT_ARROW, ITEMS + ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN },
+				() -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
 		);
 
 		buttons[LEFT_ARROW] = leftArrow;
@@ -217,7 +253,6 @@ public class BagView extends View {
 			return;
 		}
 
-		Player player = Game.getPlayer();
 		InputControl input = InputControl.instance();
 
 		if (learnMovePanel != null) {
@@ -246,66 +281,13 @@ public class BagView extends View {
 			}
 
 			selectedButton = Button.update(buttons, selectedButton);
-
-			for (int i = 0; i < CATEGORIES.length; i++) {
-				if (tabButtons[i].checkConsumePress()) {
-					changeCategory(i);
-				}
-			}
-
-			for (int i = 0; i < Move.MAX_MOVES; ++i) {
-				if (moveButtons[i].checkConsumePress()) {
-					Move m = selectedPokemon.getActualMoves().get(i);
-					player.getBag().useMoveItem(selectedItem, selectedPokemon, m);
-					updateActiveButtons();
-				}
-			}
-
-			for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-				if (partyButtons[i].checkConsumePress()) {
-					for (UseState useState : UseState.values()) {
-						useState.use(this, player.getTeam().get(i));
-					}
-				}
-			}
-
-			Set<ItemNamesies> list = player.getBag().getCategory(selectedTab);
-			Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(list, pageNum, ITEMS_PER_PAGE);
-
-			for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
-				ItemNamesies item = iter.next();
-				if (itemButtons[i].checkConsumePress()) {
-					selectedItem = item;
-					updateActiveButtons();
-				}
-			}
-
-			// Check the use buttons
-			for (UseState useState : UseState.values()) {
-				if (buttons[useState.buttonIndex].checkConsumePress()) {
-					useState.update(this);
-				}
-			}
-
-			if (buttons[LEFT_ARROW].checkConsumePress()) {
-				pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages(list.size()));
+			if (buttons[selectedButton].checkConsumePress()) {
 				updateActiveButtons();
-			}
-
-			if (buttons[RIGHT_ARROW].checkConsumePress()) {
-				pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages(list.size()));
-				updateActiveButtons();
-			}
-
-			if (buttons[RETURN].checkConsumePress()) {
-				returnToMap();
 			}
 
 			if (input.consumeIfDown(ControlKey.ESC)) {
 				returnToMap();
 			}
-
-			updateActiveButtons();
 		}
 	}
 
@@ -379,7 +361,6 @@ public class BagView extends View {
 		itemsPanel.drawBackground(g);
 		Set<ItemNamesies> list = bag.getCategory(selectedTab);
 		Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(list, pageNum, ITEMS_PER_PAGE);
-		
 		for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
 			for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
 				ItemNamesies item = iter.next();
@@ -405,7 +386,7 @@ public class BagView extends View {
 		
 		// Draw page numbers
 		FontMetrics.setFont(g, 16);
-		TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(list.size()), itemsPanel.centerX(), buttons[RIGHT_ARROW].centerY());
+		TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(), itemsPanel.centerX(), buttons[RIGHT_ARROW].centerY());
 		
 		// Left and Right arrows
 		buttons[LEFT_ARROW].drawArrow(g, Direction.LEFT);
@@ -582,7 +563,8 @@ public class BagView extends View {
 		changeCategory(0);
 	}
 	
-	private int totalPages(int size) {
+	private int totalPages() {
+		int size = Game.getPlayer().getBag().getCategory(selectedTab).size();
 		return size/ITEMS_PER_PAGE + (size == 0 || size%ITEMS_PER_PAGE != 0 ? 1 : 0);
 	}
 	

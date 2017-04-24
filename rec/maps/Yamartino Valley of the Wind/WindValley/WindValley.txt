@@ -102,6 +102,37 @@
       "triggerName": "WindValley_NPC_DayCareBro_01"
     },
     {
+      "name": "MoveRelearnerShmo",
+      "path": "w",
+      "spriteIndex": 26,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "Learn Move View",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Heart scales sure are tasty treats..."
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "CHANGE_VIEW",
+                "triggerContents": "MOVE_RELEARNER_VIEW"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 47,
+        "y": 54
+      },
+      "triggerName": "WindValley_NPC_MoveRelearnerShmo_01"
+    },
+    {
       "name": "Trader",
       "path": "w",
       "spriteIndex": 17,

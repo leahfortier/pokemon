@@ -22,7 +22,7 @@ public class PlantedBerry implements Serializable {
     public String getTimeLeftString() {
         int totalMinutes = (int)(berry.getHarvestHours()*TimeUtils.MINUTES_IN_DAY);
         int minutesPassed = TimeUtils.numMinutesPassed(this.timestamp);
-        int minutesLeft = totalMinutes - minutesPassed;
+        int minutesLeft = Math.max(0, totalMinutes - minutesPassed);
         return String.format("%02d:%02d", minutesLeft/60, minutesLeft%60);
     }
 

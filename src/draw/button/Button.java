@@ -282,6 +282,12 @@ public class Button {
 				.drawBackground(g);
 	}
 
+	public void fillBorderLabel(Graphics g, Color color, int fontSize, String label) {
+		fillTransparent(g, color);
+		blackOutline(g);
+		label(g, fontSize, label);
+	}
+
 	public void fillTransparent(Graphics g, Color color) {
 		fill(g, color);
 		fillTransparent(g);
