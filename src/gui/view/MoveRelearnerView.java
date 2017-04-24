@@ -46,8 +46,9 @@ public class MoveRelearnerView extends View {
     private List<ActivePokemon> team;
     private Bag bag;
 
-    private int selectedIndex;
+    private int selectedButton;
     private int selectedPokemon;
+    private int selectedMove;
 
     MoveRelearnerView() {
         int spacing = 20;
@@ -86,8 +87,24 @@ public class MoveRelearnerView extends View {
                 .withBlackOutline()
                 .withFullTransparency();
 
-        moveButtons = movesPanel.getButtons(10, MOVES_PER_PAGE + 1, 1, MOVES_PER_PAGE, 1, 0, new int[] {MOVES_PER_PAGE, RETURN, MOVES_PER_PAGE, RETURN});
-        pokemonButtons = partyPanel.getButtons(15, Trainer.MAX_POKEMON, 1, MOVES_PER_PAGE, new int[] { 0, RETURN, 0, RETURN });
+        moveButtons = movesPanel.getButtons(
+                10,
+                MOVES_PER_PAGE + 1,
+                1, MOVES_PER_PAGE,
+                1,
+                0,
+                new int[] { MOVES_PER_PAGE, RETURN, MOVES_PER_PAGE, RETURN },
+                index -> selectedMove = index
+        );
+
+        pokemonButtons = partyPanel.getButtons(
+                15,
+                Trainer.MAX_POKEMON,
+                1,
+                MOVES_PER_PAGE,
+                new int[] { 0, RETURN, 0, RETURN },
+                index -> selectedPokemon = index
+        );
 
         learnMoveButton = new Button(
                 partyPanel.x,
@@ -98,7 +115,7 @@ public class MoveRelearnerView extends View {
                 new int[] { RETURN, MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1, RETURN, MOVES_PER_PAGE}
         );
 
-        returnButton = new Button(
+        returnButton = Button.createExitButton(
                 learnMoveButton.rightX() + spacing,
                 learnMoveButton.y,
                 learnMoveButton.width,
@@ -139,14 +156,14 @@ public class MoveRelearnerView extends View {
 
     @Override
     public void update(int dt) {
-        selectedIndex = Button.update(buttons, selectedIndex);
-
-        for (int i = 0; i < pokemonButtons.length; i++) {
-            Button pokemonButton = pokemonButtons[i];
-            if (pokemonButton.checkConsumePress()) {
-                selectedPokemon = i;
-            }
+        selectedButton = Button.update(buttons, selectedButton);
+        if (buttons[selectedButton].checkConsumePress()) {
+            updateActiveButtons();
         }
+    }
+
+    private void updateActiveButtons() {
+
     }
 
     @Override

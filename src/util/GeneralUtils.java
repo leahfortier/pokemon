@@ -104,6 +104,15 @@ public final class GeneralUtils {
                 .collect(Collectors.toList());
     }
 
+    public static <T> T getPageValue(Iterable<T> list, int pageNum, int buttonsPerPage, int index) {
+        Iterator<T> iterator = pageIterator(list, pageNum, buttonsPerPage);
+        for (int i = 0; i < index; i++) {
+            iterator.next();
+        }
+
+        return iterator.next();
+    }
+
     public static <T> Iterator<T> pageIterator(Iterable<T> list, int pageNum, int buttonsPerPage) {
         Iterator<T> iterator = list.iterator();
         for (int i = 0; i < pageNum*buttonsPerPage; i++) {

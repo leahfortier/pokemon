@@ -200,29 +200,43 @@ public class DrawPanel {
     }
 
     public Button[] getButtons(int spacing, int numRows, int numCols) {
-        return this.getButtons(spacing, numRows, numCols, 0, null);
+        return this.getButtons(spacing, numRows, numCols, 0, null, null);
     }
 
     public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, int[] defaultTransitions) {
-        return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions);
+        return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions, null);
     }
 
-    public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex, int[] defaultTransitions) {
+    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, int[] defaultTransitions, ButtonIndexAction indexAction) {
+        return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions, indexAction);
+    }
+
+    public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex, int[] defaultTransitions, ButtonIndexAction indexAction) {
         int buttonWidth = (this.width - (numSpaceCols + 1)*spacing)/numSpaceCols;
         int buttonHeight = (this.height - (numSpaceRows + 1)*spacing)/numSpaceRows;
 
-        return this.getButtons(buttonWidth, buttonHeight, numSpaceRows, numSpaceCols, numButtonRows, numButtonCols, startIndex, defaultTransitions);
+        return this.getButtons(buttonWidth, buttonHeight, numSpaceRows, numSpaceCols, numButtonRows, numButtonCols, startIndex, defaultTransitions, indexAction);
+    }
+
+    public Button[] getButtons(int buttonWidth, int buttonHeight, int numRows, int numCols, ButtonIndexAction indexAction) {
+        return this.getButtons(buttonWidth, buttonHeight, numRows, numCols, numRows, numCols, 0, null, indexAction);
     }
 
     public Button[] getButtons(int buttonWidth, int buttonHeight, int numRows, int numCols) {
-        return this.getButtons(buttonWidth, buttonHeight, numRows, numCols, numRows, numCols, 0, null);
+        return this.getButtons(buttonWidth, buttonHeight, numRows, numCols, numRows, numCols, 0, null, null);
+    }
+
+    public interface ButtonIndexAction {
+        void pressButton(int index);
     }
 
     public Button[] getButtons(
             int buttonWidth, int buttonHeight,
             int numSpaceRows, int numSpaceCols,
             int numButtonRows, int numButtonCols,
-            int startValue, int[] defaultTransitions) {
+            int startValue,
+            int[] defaultTransitions,
+            ButtonIndexAction indexAction) {
         int borderSize = this.getBorderSize();
 
         int horizontalSpacing = this.width - 2*borderSize - numSpaceCols*buttonWidth;
@@ -234,13 +248,16 @@ public class DrawPanel {
         Button[] buttons = new Button[numButtonRows*numButtonCols];
         for (int row = 0, index = 0; row < numButtonRows; row++) {
             for (int col = 0; col < numButtonCols; col++, index++) {
+                final int finalIndex = index;
+
                 buttons[index] = new Button(
                         this.x + borderSize + xSpacing*(col + 1) + buttonWidth*col,
                         this.y + borderSize + ySpacing*(row + 1) + buttonHeight*row,
                         buttonWidth,
                         buttonHeight,
                         ButtonHoverAction.BOX,
-                        Button.getBasicTransitions(index, numButtonRows, numButtonCols, startValue, defaultTransitions)
+                        Button.getBasicTransitions(index, numButtonRows, numButtonCols, startValue, defaultTransitions),
+                        indexAction == null ? () -> {} : () -> indexAction.pressButton(finalIndex)
                 );
             }
         }

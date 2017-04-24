@@ -187,7 +187,15 @@ class MartView extends View {
 
 		buttons = new Button[NUM_BUTTONS];
 
-		itemButtons = itemsPanel.getButtons(5, ITEMS_PER_PAGE/2 + 1, 2, ITEMS_PER_PAGE/2, 2, 0, new int[] { -1, AMOUNT_RIGHT_ARROW, -1, SHOP_RIGHT_ARROW });
+		itemButtons = itemsPanel.getButtons(
+				5,
+				ITEMS_PER_PAGE/2 + 1,
+				2,
+				ITEMS_PER_PAGE/2,
+				2,
+				0,
+				new int[] { -1, AMOUNT_RIGHT_ARROW, -1, SHOP_RIGHT_ARROW },
+				index -> setSelectedItem(GeneralUtils.getPageValue(forSaleItems, pageNum, ITEMS_PER_PAGE, index)));
 		System.arraycopy(itemButtons, 0, buttons, 0, ITEMS_PER_PAGE);
 		
 		buttons[SHOP_LEFT_ARROW] = shopLeftButton = new Button(
@@ -224,16 +232,6 @@ class MartView extends View {
 	@Override
 	public void update(int dt) {
 		selectedButton = Button.update(buttons, selectedButton);
-
-		Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(forSaleItems, pageNum, ITEMS_PER_PAGE);
-		for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
-			ItemNamesies nextItem = iter.next();
-			if (itemButtons[i].checkConsumePress()) {
-				setSelectedItem(nextItem);
-				updateActiveButtons();
-			}
-		}
-
 		if (buttons[selectedButton].checkConsumePress()) {
 			updateActiveButtons();
 		}

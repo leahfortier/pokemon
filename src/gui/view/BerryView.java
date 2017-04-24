@@ -140,7 +140,8 @@ public class BerryView extends View {
                 ITEMS_PER_PAGE/2,
                 2,
                 0,
-                new int[] { -1, HARVEST, -1, RIGHT_ARROW }
+                new int[] { -1, HARVEST, -1, RIGHT_ARROW },
+                index -> selectedItem = GeneralUtils.getPageValue(Game.getPlayer().getBag().getCategory(BagCategory.BERRY), pageNum, ITEMS_PER_PAGE, index)
         );
 
         Button harvestButton = new Button(
@@ -192,16 +193,6 @@ public class BerryView extends View {
         }
 
         selectedButton = Button.update(buttons, selectedButton);
-
-        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(Game.getPlayer().getBag().getCategory(BagCategory.BERRY), pageNum, ITEMS_PER_PAGE);
-        for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
-            ItemNamesies item = iter.next();
-            if (itemButtons[i].checkConsumePress()) {
-                selectedItem = item;
-                updateActiveButtons();
-            }
-        }
-
         if (buttons[selectedButton].checkConsumePress()) {
             updateActiveButtons();
         }
