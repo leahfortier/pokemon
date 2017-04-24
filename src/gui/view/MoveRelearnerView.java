@@ -325,7 +325,7 @@ public class MoveRelearnerView extends View {
 
     @Override
     public ViewMode getViewModel() {
-        return ViewMode.POKEDEX_VIEW;
+        return ViewMode.MOVE_RELEARNER_VIEW;
     }
 
     @Override
