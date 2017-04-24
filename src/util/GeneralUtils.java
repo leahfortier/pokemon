@@ -115,7 +115,7 @@ public final class GeneralUtils {
 
     public static <T> Iterator<T> pageIterator(Iterable<T> list, int pageNum, int buttonsPerPage) {
         Iterator<T> iterator = list.iterator();
-        for (int i = 0; i < pageNum*buttonsPerPage; i++) {
+        for (int i = 0; i < pageNum*buttonsPerPage && iterator.hasNext(); i++) {
             iterator.next();
         }
 

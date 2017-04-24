@@ -270,6 +270,23 @@ public class ActivePokemon implements Serializable {
 			return "It's making sounds inside! It's going to hatch soon!";
 		}
 	}
+
+	// Returns the moves this Pokemon could have learned up to its current level
+	public List<AttackNamesies> getLearnableMoves() {
+		List<AttackNamesies> moves = new ArrayList<>();
+		List<Entry<Integer, AttackNamesies>> levelUpMoves = this.getPokemonInfo().getLevelUpMoves();
+		for (Entry<Integer, AttackNamesies> entry : levelUpMoves) {
+			if (entry.getKey() > level) {
+				break;
+			}
+
+			if (!this.hasActualMove(entry.getValue())) {
+				moves.add(entry.getValue());
+			}
+		}
+
+		return moves;
+	}
 	
 	private void setMoves() {
 		moves = new ArrayList<>();

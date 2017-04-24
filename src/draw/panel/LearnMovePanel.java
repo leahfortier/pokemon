@@ -27,6 +27,8 @@ public class LearnMovePanel {
     private final ActivePokemon learning;
     private final Move toLearn;
 
+    private boolean learnedMove;
+
     private State state;
     private int selectedButton;
 
@@ -46,6 +48,7 @@ public class LearnMovePanel {
         // Create a button for each known move and then one for the new move and one for not learning
         buttons = BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS);
 
+        learnedMove = false;
         state = State.MESSAGE;
 
         messages = new ArrayDeque<>();
@@ -88,6 +91,7 @@ public class LearnMovePanel {
                         String learnMoveName = toLearn.getAttack().getName();
                         String deleteMoveName = learning.getActualMoves().get(moveIndex).getAttack().getName();
 
+                        learnedMove = true;
                         learning.addMove(toLearn, moveIndex, true);
 
                         messages.addFirst(new MessageUpdate("...and " + learnerName + " learned " + learnMoveName + "!"));
@@ -182,6 +186,10 @@ public class LearnMovePanel {
         button.fillBordered(g, color);
         button.blackOutline(g);
         button.label(g, 30, label);
+    }
+
+    public boolean learnedMove() {
+        return this.learnedMove;
     }
 
     public boolean isFinished() {
