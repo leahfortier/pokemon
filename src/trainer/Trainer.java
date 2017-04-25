@@ -57,8 +57,7 @@ public abstract class Trainer implements Team, Serializable {
 				return i;
 			}
 		}
-
-		Global.error("Team member is not apart of team.");
+		
 		return -1;
 	}
 
