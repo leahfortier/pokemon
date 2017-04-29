@@ -200,10 +200,12 @@ public class PC implements Serializable {
 			depositPokemonFromPlayer(partyPokemon, coordinate);
 		}
 		else {
+			// TODO: Should this also be checking fainted Pokemon?
 			int eggs = player.totalEggs();
 			if (boxPokemon.isEgg()) {
 				eggs++;
 			}
+
 			if (partyPokemon.isEgg()) {
 				eggs--;
 			}

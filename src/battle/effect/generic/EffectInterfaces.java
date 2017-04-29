@@ -1649,4 +1649,20 @@ public final class EffectInterfaces {
 			applyEffect(b, enterer);
 		}
 	}
+
+	public interface SwitchOutEffect {
+		void switchOut(ActivePokemon switchee);
+
+		static void invokeSwitchOutEffect(ActivePokemon switchee) {
+			List<Object> invokees = switchee.getAllEffects(null);
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof SwitchOutEffect && Effect.isActiveEffect(invokee)) {
+					
+					SwitchOutEffect effect = (SwitchOutEffect)invokee;
+					effect.switchOut(switchee);
+				}
+			}
+		}
+	}
 }

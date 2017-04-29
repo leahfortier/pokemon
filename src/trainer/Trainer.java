@@ -1,8 +1,8 @@
 package trainer;
 
 import battle.Battle;
-import battle.effect.SwitchOutEffect;
 import battle.effect.generic.Effect;
+import battle.effect.generic.EffectInterfaces.SwitchOutEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import battle.effect.status.StatusCondition;
@@ -84,12 +84,10 @@ public abstract class Trainer implements Team, Serializable {
 		if (frontIndex == index) {
 			return;
 		}
-		
+
 		// Apply any effects that take place when switching out
-		if (front().getAbility() instanceof SwitchOutEffect) {
-			((SwitchOutEffect)front().getAbility()).switchOut(front());
-		}
-		
+		SwitchOutEffect.invokeSwitchOutEffect(front());
+
 		frontIndex = index;
 	}
 	

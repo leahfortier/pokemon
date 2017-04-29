@@ -904,3 +904,12 @@ EntryEndTurnEffect:
 			###
 	*
 ***
+SwitchOutEffect:
+	Method:
+		Header: void switchOut(ActivePokemon switchee)
+		Invoke: Void
+		SetInvokees:
+			List<Object> invokees = switchee.getAllEffects(null);
+			###
+	*
+***
