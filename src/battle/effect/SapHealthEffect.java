@@ -19,16 +19,12 @@ public interface SapHealthEffect extends ApplyDamageEffect {
         return .5;
     }
 
-    default int getSapAmount(ActivePokemon victim, int damageAmount) {
-        return (int)Math.ceil(damageAmount*this.sapPercentage());
-    }
-
     default String getSapMessage(ActivePokemon victim) {
         return victim.getName() + "'s health was sapped!";
     }
 
     default void sapHealth(Battle b, ActivePokemon user, ActivePokemon victim, int damageAmount, boolean print) {
-        int sapAmount = this.getSapAmount(victim, damageAmount);
+        int sapAmount = (int)Math.ceil(damageAmount*this.sapPercentage());
 
         // Sap message
         if (print) {

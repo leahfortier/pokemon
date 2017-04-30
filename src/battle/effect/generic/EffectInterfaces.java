@@ -284,7 +284,23 @@ public final class EffectInterfaces {
 	}
 
 	public interface RapidSpinRelease {
-		void releaseRapidSpin(Battle b, ActivePokemon releaser);
+		String getReleaseMessage(ActivePokemon releaser);
+
+		default void releaseRapidSpin(Battle b, ActivePokemon releaser) {
+			Messages.add(this.getReleaseMessage(releaser));
+			
+			if (this instanceof PokemonEffect) {
+				PokemonEffect effect = (PokemonEffect)this;
+				releaser.getEffects().remove(effect);
+			}
+			else if (this instanceof TeamEffect) {
+				TeamEffect effect = (TeamEffect)this;
+				b.getEffects(releaser).remove(effect);
+			}
+			else {
+				Global.error("Invalid rapid spin release object " + this.getClass().getSimpleName());
+			}
+		}
 
 		static void release(Battle b, ActivePokemon releaser) {
 			List<Object> invokees = b.getEffectsList(releaser);

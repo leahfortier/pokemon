@@ -490,7 +490,9 @@ OppTrappingMessage:
 PartialTrap:
 	AddMapField: Cast:
 		super.cast(b, caster, victim, source, printCast);
-		if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) setTurns(5);
+		if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
+			setTurns(5);
+		}
 		###
 	AddInterface: EndTurnEffect
 	AddInterface: TrappingEffect
@@ -581,13 +583,9 @@ StatRatio:
 		###
 *
 RapidSpin:
-	Header: void releaseRapidSpin(Battle b, ActivePokemon releaser)
+	Header: String getReleaseMessage(ActivePokemon releaser)
 	Body:
-		Messages.add({0});
-
-		// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-		releaser.getEffects().remove(this);
-		b.getEffects(releaser).remove(this);
+		return {0};
 		###
 *
 ChangeStat:

@@ -167,10 +167,28 @@ DefogRelease:
 ***
 RapidSpinRelease:
 	Method:
+		Header: String getReleaseMessage(ActivePokemon releaser)
+	*
+	Method:
 		Header: void releaseRapidSpin(Battle b, ActivePokemon releaser)
 		Invoke: Void
 		EffectList: releaser
 		InvokeName: release
+		Default:
+			Messages.add(this.getReleaseMessage(releaser));
+
+			if (this instanceof PokemonEffect) {
+				PokemonEffect effect = (PokemonEffect)this;
+				releaser.getEffects().remove(effect);
+			}
+			else if (this instanceof TeamEffect) {
+				TeamEffect effect = (TeamEffect)this;
+				b.getEffects(releaser).remove(effect);
+			}
+			else {
+				Global.error("Invalid rapid spin release object " + this.getClass().getSimpleName());
+			}
+			###
 	*
 ***
 NameChanger:

@@ -116,12 +116,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " was seeded!";
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(releaser.getName() + " was released from leech seed!");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
+		public String getReleaseMessage(ActivePokemon releaser) {
+			return releaser.getName() + " was released from leech seed!";
 		}
 
 		public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -180,7 +176,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) setTurns(5);
+			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
+				setTurns(5);
+			}
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
@@ -191,12 +189,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by fire spin.";
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(releaser.getName() + " was released from fire spin!");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
+		public String getReleaseMessage(ActivePokemon releaser) {
+			return releaser.getName() + " was released from fire spin!";
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
@@ -228,7 +222,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) setTurns(5);
+			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
+				setTurns(5);
+			}
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
@@ -239,12 +235,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by infestation.";
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(releaser.getName() + " was released from infestation!");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
+		public String getReleaseMessage(ActivePokemon releaser) {
+			return releaser.getName() + " was released from infestation!";
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
@@ -276,7 +268,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) setTurns(5);
+			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
+				setTurns(5);
+			}
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
@@ -287,12 +281,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by magma storm.";
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(releaser.getName() + " was released from magma storm!");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
+		public String getReleaseMessage(ActivePokemon releaser) {
+			return releaser.getName() + " was released from magma storm!";
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
@@ -324,7 +314,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) setTurns(5);
+			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
+				setTurns(5);
+			}
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
@@ -335,12 +327,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by clamp.";
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(releaser.getName() + " was released from clamp!");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
+		public String getReleaseMessage(ActivePokemon releaser) {
+			return releaser.getName() + " was released from clamp!";
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
@@ -372,7 +360,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) setTurns(5);
+			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
+				setTurns(5);
+			}
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
@@ -383,12 +373,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by whirlpool.";
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(releaser.getName() + " was released from whirlpool!");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
+		public String getReleaseMessage(ActivePokemon releaser) {
+			return releaser.getName() + " was released from whirlpool!";
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
@@ -420,7 +406,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) setTurns(5);
+			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
+				setTurns(5);
+			}
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
@@ -431,12 +419,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by wrap.";
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(releaser.getName() + " was released from wrap!");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
+		public String getReleaseMessage(ActivePokemon releaser) {
+			return releaser.getName() + " was released from wrap!";
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
@@ -468,7 +452,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) setTurns(5);
+			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
+				setTurns(5);
+			}
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
@@ -479,12 +465,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by bind.";
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(releaser.getName() + " was released from bind!");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
+		public String getReleaseMessage(ActivePokemon releaser) {
+			return releaser.getName() + " was released from bind!";
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
@@ -516,7 +498,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) setTurns(5);
+			if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
+				setTurns(5);
+			}
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
@@ -527,12 +511,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by sand tomb.";
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(releaser.getName() + " was released from sand tomb!");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
+		public String getReleaseMessage(ActivePokemon releaser) {
+			return releaser.getName() + " was released from sand tomb!";
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
