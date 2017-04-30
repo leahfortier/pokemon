@@ -1103,12 +1103,6 @@ WeatherStatChange:
 		}
 		###
 *
-WeatherType:
-	Header: EffectNamesies getWeatherType()
-	Body:
-		return EffectNamesies.{00};
-		###
-*
 GetEVs:
 	Header: int[] getEVs(int[] vals)
 *
@@ -1818,6 +1812,18 @@ EndTurnFormChange:
 EntryEndTurn:
 	AddInterface: EntryEndTurnEffect
 	Header: void applyEffect(Battle b, ActivePokemon p)
+*
+WeatherExtendingItem:
+	AddMapField: WeatherExtendingEffect:
+		return weatherType == EffectNamesies.{00} ? 3 : 0;
+		###
+	AddInterface: HoldItem
+	AddMapField: Cat: Misc
+	AddMapField: Price: 200
+*
+WeatherExtendingEffect:
+	Header: int getExtensionTurns(EffectNamesies weatherType)
+	AddInterface: WeatherExtendingEffect
 *
 GET_DAT_CASH_MONEY_TWICE_ITEM:
 	Header: void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice)

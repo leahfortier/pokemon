@@ -172,36 +172,24 @@ Cleanse Tag:
 	RepelEffectItem: True
 *
 Damp Rock:
-	Int: HoldItem, WeatherExtendingEffect
-	Cat: Misc
 	Desc: A Pok\u00e9mon held item that extends the duration of the move Rain Dance used by the holder.
-	Price: 200
 	Fling: 60
-	WeatherType: Raining
+	WeatherExtendingItem: Raining
 *
 Heat Rock:
-	Int: HoldItem, WeatherExtendingEffect
-	Cat: Misc
 	Desc: A Pok\u00e9mon held item that extends the duration of the move Sunny Day used by the holder.
-	Price: 200
 	Fling: 60
-	WeatherType: Sunny
+	WeatherExtendingItem: Sunny
 *
 Icy Rock:
-	Int: HoldItem, WeatherExtendingEffect
-	Cat: Misc
 	Desc: A Pok\u00e9mon held item that extends the duration of the move Hail used by the holder.
-	Price: 200
 	Fling: 40
-	WeatherType: Hailing
+	WeatherExtendingItem: Hailing
 *
 Smooth Rock:
-	Int: HoldItem, WeatherExtendingEffect
-	Cat: Misc
 	Desc: A Pok\u00e9mon held item that extends the duration of the move Sandstorm used by the holder.
-	Price: 200
 	Fling: 10
-	WeatherType: Sandstorm
+	WeatherExtendingItem: Sandstorm
 *
 Eject Button:
 	Int: HoldItem, TakeDamageEffect

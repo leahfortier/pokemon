@@ -10,7 +10,6 @@ import battle.effect.DefiniteEscape;
 import battle.effect.MessageGetter;
 import battle.effect.SimpleStatModifyingEffect;
 import battle.effect.StallingEffect;
-import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
@@ -36,6 +35,7 @@ import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
+import battle.effect.generic.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
@@ -484,8 +484,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return 60;
 		}
 
-		public EffectNamesies getWeatherType() {
-			return EffectNamesies.RAINING;
+		public int getExtensionTurns(EffectNamesies weatherType) {
+			return weatherType == EffectNamesies.RAINING ? 3 : 0;
 		}
 	}
 
@@ -501,8 +501,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return 60;
 		}
 
-		public EffectNamesies getWeatherType() {
-			return EffectNamesies.SUNNY;
+		public int getExtensionTurns(EffectNamesies weatherType) {
+			return weatherType == EffectNamesies.SUNNY ? 3 : 0;
 		}
 	}
 
@@ -518,8 +518,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return 40;
 		}
 
-		public EffectNamesies getWeatherType() {
-			return EffectNamesies.HAILING;
+		public int getExtensionTurns(EffectNamesies weatherType) {
+			return weatherType == EffectNamesies.HAILING ? 3 : 0;
 		}
 	}
 
@@ -535,8 +535,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return 10;
 		}
 
-		public EffectNamesies getWeatherType() {
-			return EffectNamesies.SANDSTORM;
+		public int getExtensionTurns(EffectNamesies weatherType) {
+			return weatherType == EffectNamesies.SANDSTORM ? 3 : 0;
 		}
 	}
 

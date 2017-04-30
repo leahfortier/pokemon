@@ -2,13 +2,12 @@ package battle.effect.generic;
 
 import battle.Battle;
 import battle.effect.SimpleStatModifyingEffect;
-import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
+import battle.effect.generic.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.status.StatusCondition;
-import item.Item;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
@@ -17,6 +16,8 @@ import type.Type;
 
 public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	private static final long serialVersionUID = 1L;
+
+	private static final int DEFAULT_TURNS = 5;
 
 	private final Type weatherElement;
 	private final String imageName;
@@ -44,12 +45,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 	}
 	
 	private int getTurns(Battle b, ActivePokemon caster) {
-		Item item = caster.getHeldItem(b);
-		if (item instanceof WeatherExtendingEffect && this.namesies == ((WeatherExtendingEffect)item).getWeatherType()) {
-			return 8;
-		}
-		
-		return 5;
+		return DEFAULT_TURNS + WeatherExtendingEffect.getModifier(b, caster, this.namesies);
 	}
 	
 	// EVERYTHING BELOW IS GENERATED ###

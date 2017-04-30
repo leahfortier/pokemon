@@ -913,3 +913,11 @@ SwitchOutEffect:
 			###
 	*
 ***
+WeatherExtendingEffect:
+	Method:
+		Header: int getExtensionTurns(EffectNamesies weatherType)
+		Invoke: Add
+		InvokeParameters: Battle b, ActivePokemon p
+		EffectList: p
+	*
+***

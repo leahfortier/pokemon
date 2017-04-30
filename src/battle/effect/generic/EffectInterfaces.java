@@ -1665,4 +1665,23 @@ public final class EffectInterfaces {
 			}
 		}
 	}
+
+	public interface WeatherExtendingEffect {
+		int getExtensionTurns(EffectNamesies weatherType);
+
+		static int getModifier(Battle b, ActivePokemon p, EffectNamesies weatherType) {
+			int modifier = 0;
+			
+			List<Object> invokees = b.getEffectsList(p);
+			for (Object invokee : invokees) {
+				if (invokee instanceof WeatherExtendingEffect && Effect.isActiveEffect(invokee)) {
+					
+					WeatherExtendingEffect effect = (WeatherExtendingEffect)invokee;
+					modifier += effect.getExtensionTurns(weatherType);
+				}
+			}
+			
+			return modifier;
+		}
+	}
 }
