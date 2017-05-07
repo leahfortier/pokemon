@@ -488,16 +488,12 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.LIGHTNINGROD, "The Pok\u00e9mon draws in all Electric-type moves.");
 		}
 
-		private Stat toIncrease() {
-			return Stat.SP_ATTACK;
-		}
-
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.ELECTRIC;
 		}
 
 		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
-			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+			victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
 		}
 
 		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -598,12 +594,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (RandomUtils.chanceTest(30)) {
-				PokemonEffect infatuated = (PokemonEffect)EffectNamesies.INFATUATED.getEffect();
-				if (infatuated.applies(b, victim, user, CastSource.ABILITY)) {
-					user.addEffect(infatuated);
-					Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
-				}
+			if (RandomUtils.chanceTest(30) && EffectNamesies.INFATUATED.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
+				Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
 			}
 		}
 
@@ -2151,16 +2143,12 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.STORM_DRAIN, "Draws in all Water-type moves to up Sp. Attack.");
 		}
 
-		private Stat toIncrease() {
-			return Stat.SP_ATTACK;
-		}
-
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.WATER;
 		}
 
 		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
-			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+			victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
 		}
 
 		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -2353,16 +2341,12 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.MOTOR_DRIVE, "Raises Speed if hit by an Electric-type move.");
 		}
 
-		private Stat toIncrease() {
-			return Stat.SPEED;
-		}
-
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.ELECTRIC;
 		}
 
 		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
-			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+			victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
 		}
 
 		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -2394,9 +2378,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (RandomUtils.chanceTest(30)) {
 				user.getAttributes().setLastMoveUsed();
-				PokemonEffect disable = (PokemonEffect)EffectNamesies.DISABLE.getEffect();
-				if (disable.applies(b, victim, user, CastSource.ABILITY)) {
-					disable.cast(b, victim, user, CastSource.ABILITY, false);
+				if (EffectNamesies.DISABLE.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
 					Messages.add(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
 				}
 			}
@@ -2717,16 +2699,12 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.SAP_SIPPER, "Boosts Attack when hit by a Grass-type move.");
 		}
 
-		private Stat toIncrease() {
-			return Stat.ATTACK;
-		}
-
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.GRASS;
 		}
 
 		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
-			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+			victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
 		}
 
 		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {

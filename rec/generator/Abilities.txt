@@ -114,8 +114,7 @@ Static:
 *
 Lightningrod:
 	Desc: The Pok\u00e9mon draws in all Electric-type moves.
-	BlockType: Electric
-	IncreaseStat: Sp_Attack
+	BlockType: Electric Sp_Attack
 *
 Sand Veil:
 	Desc: Raises the Pok\u00e9mon's evasion during a sandstorm by one level.
@@ -147,12 +146,8 @@ Cute Charm:
 	Desc: Contact with the Pok\u00e9mon may cause infatuation.
 	Int: PhysicalContactEffect
 	Contact:
-		if (RandomUtils.chanceTest(30)) {
-			PokemonEffect infatuated = (PokemonEffect)EffectNamesies.INFATUATED.getEffect();
-			if (infatuated.applies(b, victim, user, CastSource.ABILITY)) {
-				user.addEffect(infatuated);
-				Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
-			}
+		if (RandomUtils.chanceTest(30) && EffectNamesies.INFATUATED.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
+			Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
 		}
 		###
 	WildPokemonAlterer:
@@ -873,8 +868,7 @@ Anticipation:
 *
 Storm Drain:
 	Desc: Draws in all Water-type moves to up Sp. Attack.
-	BlockType: Water
-	IncreaseStat: Sp_Attack
+	BlockType: Water Sp_Attack
 *
 Color Change:
 	Int: TakeDamageEffect
@@ -967,8 +961,7 @@ Snow Warning:
 	WeatherStarter: Hailing caused it to hail
 *
 Motor Drive:
-	BlockType: Electric
-	IncreaseStat: Speed
+	BlockType: Electric Speed
 	Desc: Raises Speed if hit by an Electric-type move.
 *
 Justified:
@@ -986,9 +979,7 @@ Cursed Body:
 	Contact:
 		if (RandomUtils.chanceTest(30)) {
 			user.getAttributes().setLastMoveUsed();
-			PokemonEffect disable = (PokemonEffect)EffectNamesies.DISABLE.getEffect();
-			if (disable.applies(b, victim, user, CastSource.ABILITY)) {
-				disable.cast(b, victim, user, CastSource.ABILITY, false);
+			if (EffectNamesies.DISABLE.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
 				Messages.add(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
 			}
 		}
@@ -1194,8 +1185,7 @@ Analytic:
 *
 Sap Sipper:
 	Desc: Boosts Attack when hit by a Grass-type move.
-	BlockType: Grass
-	IncreaseStat: Attack
+	BlockType: Grass Attack
 *
 Iron Barbs:
 	Desc: Inflicts damage to the Pok\u00e9mon on contact.

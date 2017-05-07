@@ -856,10 +856,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 		}
 
 		public void subside(Battle b, ActivePokemon p) {
-			Confusion c = new Confusion();
-			if (c.applies(b, p, p, CastSource.EFFECT)) {
+			if (EffectNamesies.CONFUSION.getEffect().apply(b, p, p, CastSource.EFFECT, false)) {
 				Messages.add(p.getName() + " became confused due to fatigue!");
-				p.addEffect(c);
 			}
 		}
 	}
@@ -2334,8 +2332,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			super.cast(b, caster, victim, source, printCast);
-			if (victim.isHoldingItem(b, ItemNamesies.DESTINY_KNOT) && this.applies(b, victim, caster, CastSource.HELD_ITEM)) {
-				super.cast(b, victim, caster, CastSource.HELD_ITEM, false);
+			if (victim.isHoldingItem(b, ItemNamesies.DESTINY_KNOT) && this.namesies.getEffect().apply(b, victim, caster, CastSource.HELD_ITEM, false)) {
 				Messages.add(victim.getName() + "'s " + ItemNamesies.DESTINY_KNOT.getName() + " caused " + caster.getName() + " to fall in love!");
 			}
 		}

@@ -853,11 +853,11 @@ BlockMessage:
 BlockType:
 	AddInterface: AttackBlocker
 	AddMapField: Block:
-		return user.getAttackType() == Type.{00};
+		return user.getAttackType() == Type.{11};
 		###
-	AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " type moves!"
+	AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{11}.getName() + " type moves!"
 	AddMapField: AlternateEffect:
-		victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+		victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.ABILITY);
 		###
 *
 AbsorbType:
@@ -988,13 +988,6 @@ BattleUse:
 *
 MoveUse:
 	Header: boolean use(ActivePokemon p, Move m)
-*
-IncreaseStat:
-	Header: Stat toIncrease()
-	AccessModifier: Private
-	Body:
-		return Stat.{00};
-		###
 *
 TypeTakeDamageStatIncrease:
 	AddMapField: OnTakeDamage:
