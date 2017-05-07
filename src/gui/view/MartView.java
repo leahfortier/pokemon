@@ -450,6 +450,7 @@ class MartView extends View {
 	@Override
 	public void movedToFront() {
 		this.resetForSaleItems();
+		this.updateActiveButtons();
 	}
 
 	private void updateItemAmount(int delta) {

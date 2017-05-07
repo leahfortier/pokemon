@@ -60,7 +60,67 @@
       "triggerName": "Edge 2_MapExit_Tommy_01"
     }
   ],
-  "NPCs": [],
+  "NPCs": [
+    {
+      "name": "HippityHop",
+      "path": "w",
+      "spriteIndex": 60,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "Interaction0",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Yo yo yo, I'm so hip and happenin' yo!!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Hip and Happening Youngster",
+                "cashMoney": 100,
+                "maxPokemonLimit": false,
+                "pokemon": [
+                  {
+                    "namesies": "PIKACHU",
+                    "nickname": "",
+                    "level": 10,
+                    "isShiny": false
+                  },
+                  {
+                    "namesies": "MAREEP",
+                    "nickname": "",
+                    "level": 10,
+                    "isShiny": false
+                  }
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Guess you're too hip for me, hahahahahahaha :("
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 7,
+        "y": 6
+      },
+      "triggerName": "Edge 2_NPC_HippityHop_01"
+    }
+  ],
   "items": [],
   "miscEntities": [],
   "events": [],

@@ -54,6 +54,23 @@
         }
       ],
       "triggerName": "Dijkstra Village_MapExit_PokeCenter_01"
+    },
+    {
+      "exitName": "gym",
+      "direction": "UP",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "Dijkstra Village",
+        "mapName": "Gym"
+      },
+      "nextEntrance": "village",
+      "location": [
+        {
+          "x": 9,
+          "y": 12
+        }
+      ],
+      "triggerName": "Dijkstra Village_MapExit_gym_01"
     }
   ],
   "NPCs": [],
