@@ -4,6 +4,7 @@ import draw.DrawUtils;
 import draw.TileUtils;
 import main.Global;
 import mapMaker.MapMaker;
+import mapMaker.TileCategory;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
@@ -27,12 +28,12 @@ public class TileModel extends MapMakerModel {
     private static final BufferedImage BLANK_TILE_IMAGE = TileUtils.createBlankTile();
     private static final ImageIcon BLANK_TILE_ICON = new ImageIcon(BLANK_TILE_IMAGE, "0"); // TODO: Is 0 still necessary?
 
-    private final Map<MapMaker.TileCategory, DefaultListModel<ImageIcon>> tileListModel;
+    private final Map<TileCategory, DefaultListModel<ImageIcon>> tileListModel;
     private final Map<TileType, Map<Integer, BufferedImage>> tileMap;
     private final Map<Integer, String> indexMap;
 
     private boolean saved;
-    private MapMaker.TileCategory selectedTileCategory;
+    private TileCategory selectedTileCategory;
 
     public enum TileType {
         MAP(Folder.MAP_TILES, FileName.MAP_TILES_INDEX),
@@ -51,10 +52,10 @@ public class TileModel extends MapMakerModel {
     TileModel() {
         super(BLANK_TILE_INDEX);
 
-        this.selectedTileCategory = MapMaker.TileCategory.ALL;
+        this.selectedTileCategory = TileCategory.ALL;
 
         this.tileListModel = new HashMap<>();
-        for (MapMaker.TileCategory tileCategory : MapMaker.TileCategory.values()) {
+        for (TileCategory tileCategory : TileCategory.values()) {
             this.tileListModel.put(tileCategory, new DefaultListModel<>());
         }
 
@@ -67,7 +68,7 @@ public class TileModel extends MapMakerModel {
         }
     }
 
-    public void setSelectedTileCategory(MapMaker.TileCategory tileCategory) {
+    public void setSelectedTileCategory(TileCategory tileCategory) {
         this.selectedTileCategory = tileCategory;
     }
 
@@ -84,7 +85,7 @@ public class TileModel extends MapMakerModel {
 
         this.indexMap.put(BLANK_TILE_INDEX, "BlankImage");
 
-        for (MapMaker.TileCategory tileCategory : MapMaker.TileCategory.values()) {
+        for (TileCategory tileCategory : TileCategory.values()) {
             this.tileListModel.get(tileCategory).add(0, BLANK_TILE_ICON);
         }
     }
@@ -102,7 +103,7 @@ public class TileModel extends MapMakerModel {
         if (tileType == TileType.MAP) {
             this.indexMap.clear();
             this.tileListModel.clear();
-            for (MapMaker.TileCategory tileCategory : MapMaker.TileCategory.values()) {
+            for (TileCategory tileCategory : TileCategory.values()) {
                 this.tileListModel.put(tileCategory, new DefaultListModel<>());
             }
         }
@@ -113,9 +114,9 @@ public class TileModel extends MapMakerModel {
                 String name = in.next();
                 int val = (int)Long.parseLong(in.next(), 16);
 
-                MapMaker.TileCategory tileCategory = MapMaker.TileCategory.ALL;
+                TileCategory tileCategory = TileCategory.ALL;
                 if (tileType == TileType.MAP) {
-                    tileCategory = MapMaker.TileCategory.valueOf(in.next());
+                    tileCategory = TileCategory.valueOf(in.next());
                 }
 
                 File imageFile = new File(tileType.tileFolderPath + name + ".png");
@@ -136,8 +137,8 @@ public class TileModel extends MapMakerModel {
                     this.indexMap.put(val, name);
                     ImageIcon imageIcon = new ImageIcon(resizedImage, val + "");
                     this.tileListModel.get(tileCategory).addElement(imageIcon);
-                    if (tileCategory != MapMaker.TileCategory.ALL) {
-                        this.tileListModel.get(MapMaker.TileCategory.ALL).addElement(imageIcon);
+                    if (tileCategory != TileCategory.ALL) {
+                        this.tileListModel.get(TileCategory.ALL).addElement(imageIcon);
                     }
                 }
 
