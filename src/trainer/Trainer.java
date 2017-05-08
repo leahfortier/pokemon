@@ -153,9 +153,10 @@ public abstract class Trainer implements Team, Serializable {
 	}
 
 	@Override
-	public boolean blackout() {
+	public boolean blackout(Battle b) {
+		boolean maxUsed = maxPokemonUsed(b);
 		for (ActivePokemon p : team) {
-			if (p.canFight()) {
+			if (p.canFight() && (!maxUsed || p.getAttributes().isBattleUsed())) {
 				return false;
 			}
 		}
@@ -172,7 +173,8 @@ public abstract class Trainer implements Team, Serializable {
 		boolean maxUsed = maxPokemonUsed(b);
 		List<Integer> valid = new ArrayList<>();
 		for (int i = 0; i < team.size(); i++) {
-			if (i == frontIndex || !team.get(i).canFight() || (maxUsed && !team.get(i).getAttributes().isBattleUsed())) {
+			ActivePokemon p = team.get(i);
+			if (i == frontIndex || !p.canFight() || (maxUsed && !p.getAttributes().isBattleUsed())) {
 				continue;
 			}
 

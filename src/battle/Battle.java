@@ -306,7 +306,7 @@ public class Battle {
 		}
 
 		// Dead Front Pokemon, but you still have others to spare -- force a switch
-		if (!player.blackout()) {
+		if (!player.blackout(this)) {
 			Messages.add(new MessageUpdate("What Pokemon would you like to switch to?").withUpdate(Update.FORCE_SWITCH));
 			return;
 		}
@@ -339,7 +339,7 @@ public class Battle {
 		player.gainEXP(dead, this);
 
 		// You have achieved total victory
-		if (opponent.blackout()) {
+		if (opponent.blackout(this)) {
 			player.winBattle(this, opponent);
 			return;
 		}
