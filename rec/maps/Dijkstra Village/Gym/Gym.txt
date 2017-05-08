@@ -1,0 +1,126 @@
+{
+  "areas": [
+    {
+      "displayName": "",
+      "flyLocation": "",
+      "terrain": "BUILDING",
+      "weather": "NORMAL",
+      "music": "POKE_GYM"
+    }
+  ],
+  "mapTransitions": [
+    {
+      "exitName": "village",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "Dijkstra Village",
+        "mapName": "Dijkstra Village"
+      },
+      "nextEntrance": "gym",
+      "location": [
+        {
+          "x": 8,
+          "y": 8
+        },
+        {
+          "x": 7,
+          "y": 8
+        },
+        {
+          "x": 8,
+          "y": 8
+        },
+        {
+          "x": 9,
+          "y": 8
+        }
+      ],
+      "triggerName": "Gym_MapExit_village_01"
+    }
+  ],
+  "NPCs": [
+    {
+      "name": "Gym Leader",
+      "path": "w",
+      "spriteIndex": 1,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "Interaction0",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "..."
+              }
+            },
+            {
+              "battle": {
+                "name": "Leader Rhododendron",
+                "cashMoney": 1000,
+                "maxPokemonLimit": true,
+                "pokemon": [
+                  {
+                    "namesies": "BULBASAUR",
+                    "nickname": "Bulby",
+                    "level": 15,
+                    "isShiny": true
+                  },
+                  {
+                    "namesies": "EXEGGCUTE",
+                    "nickname": "",
+                    "level": 14,
+                    "isShiny": false
+                  },
+                  {
+                    "namesies": "FERROSEED",
+                    "nickname": "",
+                    "level": 14,
+                    "isShiny": false
+                  },
+                  {
+                    "namesies": "PARASECT",
+                    "nickname": "",
+                    "level": 18,
+                    "isShiny": false
+                  }
+                ],
+                "update": "won"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "BADGE",
+                "triggerContents": "SECOND"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "..."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 8,
+        "y": 2
+      },
+      "triggerName": "Gym_NPC_GymLeader_01"
+    }
+  ],
+  "items": [],
+  "miscEntities": [],
+  "events": [],
+  "wildBattles": [],
+  "fishingSpots": []
+}

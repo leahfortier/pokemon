@@ -10,7 +10,6 @@ import map.triggers.map.MapTransitionTrigger;
 import map.triggers.map.MoveNPCTrigger;
 import map.triggers.map.MovePlayerTrigger;
 import map.triggers.map.ReloadMapTrigger;
-import util.PokeString;
 import util.StringUtils;
 
 public enum TriggerType {
@@ -31,8 +30,7 @@ public enum TriggerType {
     MOVE_PLAYER(MovePlayerTrigger.class, MovePlayerTrigger::new),
     RELOAD_MAP(ReloadMapTrigger.class, ReloadMapTrigger::new),
     SOUND(SoundTrigger.class, SoundTrigger::new),
-    TRADE_POKEMON_QUESTION(TradePokemonQuestionTrigger.class, TradePokemonQuestionTrigger::new),
-    TRADE_POKEMON_ACTION(TradePokemonActionTrigger.class, TradePokemonActionTrigger::new),
+    TRADE_POKEMON(TradePokemonTrigger.class, TradePokemonTrigger::new),
     TRAINER_BATTLE(TrainerBattleTrigger.class, TrainerBattleTrigger::new),
     UPDATE(UpdateTrigger.class, UpdateTrigger::new),
     USE_ITEM(UseItemTrigger.class, UseItemTrigger::new),
@@ -92,6 +90,6 @@ public enum TriggerType {
     }
 
     public static TriggerType getTriggerType(final String type) {
-        return TriggerType.valueOf(PokeString.getNamesiesString(type));
+        return TriggerType.valueOf(StringUtils.getNamesiesString(type));
     }
 }

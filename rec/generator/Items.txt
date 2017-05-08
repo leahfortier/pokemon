@@ -8,7 +8,7 @@
 #	ApplyEndTurn:
 #		Function ending in "###" on a new line
 # * // End this item
-# // Any field not on the same line as its declarer (i.e. Apply) is considered a function	
+# // Any field not on the same line as its declarer (i.e. Apply) is considered a function
 # // TODO:
 # // Not implemented: Casteliacone, Heal Powder, Lava Cookie
 
@@ -82,7 +82,6 @@ Air Balloon:
 	Desc: When held by a Pok\u00e9mon, the Pok\u00e9mon will float into the air. When the holder is attacked, this item will burst.
 	Price: 200
 	Fling: 10
-	FallMessage: fallen.getName() + " is no longer floating with its " + this.name + "!"
 	Enter:
 		Messages.add(enterer.getName() + " floats with its " + this.name + "!");
 		###
@@ -122,7 +121,7 @@ Black Sludge:
 			if (victim.fullHealth()) {
 				return;
 			}
-			
+
 			victim.healHealthFraction(1/16.0);
 			Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.name + "!").updatePokemon(b, victim));
 		}
@@ -139,7 +138,7 @@ Bright Powder:
 	Price: 100
 	Fling: 10
 	ToModify: Evasion
-	SimpleModifier: 1.1 
+	SimpleModifier: 1.1
 *
 Cell Battery:
 	Cat: Misc
@@ -173,36 +172,24 @@ Cleanse Tag:
 	RepelEffectItem: True
 *
 Damp Rock:
-	Int: HoldItem, WeatherExtendingEffect
-	Cat: Misc
 	Desc: A Pok\u00e9mon held item that extends the duration of the move Rain Dance used by the holder.
-	Price: 200
 	Fling: 60
-	WeatherType: Raining
+	WeatherExtendingItem: Raining
 *
 Heat Rock:
-	Int: HoldItem, WeatherExtendingEffect
-	Cat: Misc
 	Desc: A Pok\u00e9mon held item that extends the duration of the move Sunny Day used by the holder.
-	Price: 200
 	Fling: 60
-	WeatherType: Sunny
+	WeatherExtendingItem: Sunny
 *
 Icy Rock:
-	Int: HoldItem, WeatherExtendingEffect
-	Cat: Misc
 	Desc: A Pok\u00e9mon held item that extends the duration of the move Hail used by the holder.
-	Price: 200
 	Fling: 40
-	WeatherType: Hailing
+	WeatherExtendingItem: Hailing
 *
 Smooth Rock:
-	Int: HoldItem, WeatherExtendingEffect
-	Cat: Misc
 	Desc: A Pok\u00e9mon held item that extends the duration of the move Sandstorm used by the holder.
-	Price: 200
 	Fling: 10
-	WeatherType: Sandstorm
+	WeatherExtendingItem: Sandstorm
 *
 Eject Button:
 	Int: HoldItem, TakeDamageEffect
@@ -284,7 +271,7 @@ Focus Sash:
 			bracer.consumeItem(b);
 			return true;
 		}
-		
+
 		return false;
 		###
 	BraceMessage: bracer.getName() + " held on with its " + this.name + "!"
@@ -315,7 +302,7 @@ Iron Ball:
 	Price: 200
 	Fling: 130
 	ToModify: Speed
-	SimpleModifier: .5 
+	SimpleModifier: .5
 	FlingEffect:
 		// Technically the Iron Ball doesn't do this as a fling effect, but it almost makes sense so I'm doing it
 		removeLevitation(b, pelted);
@@ -340,7 +327,7 @@ Life Orb:
 		if (user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 			return;
 		}
-		
+
 		Messages.add(user.getName() + " was hurt by its " + this.name + "!");
 		user.reduceHealthFraction(b, .1);
 		###
@@ -376,7 +363,7 @@ Lucky Punch:
 		if (p.isPokemon(PokemonNamesies.CHANSEY)) {
 			return stage + 2;
 		}
-		
+
 		return stage;
 		###
 *
@@ -396,11 +383,11 @@ Macho Brace:
 		for (int i = 0; i < vals.length; i++) {
 			vals[i] *= 2;
 		}
-		
+
 		return vals;
 		###
 	ToModify: Speed
-	SimpleModifier: .5 
+	SimpleModifier: .5
 *
 Mental Herb:
 	Int: HoldItem, EndTurnEffect
@@ -409,38 +396,45 @@ Mental Herb:
 	Price: 100
 	Fling: 10
 	Field:
-		// TODO: This should be an object array
-		EffectNamesies[] effects = {
-				EffectNamesies.INFATUATED, 
-				EffectNamesies.DISABLE, 
-				EffectNamesies.TAUNT, 
-				EffectNamesies.ENCORE, 
-				EffectNamesies.TORMENT, 
-				EffectNamesies.CONFUSION, 
-				EffectNamesies.HEAL_BLOCK
-		};
-		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused", "under the effects of heal block"};
-		###
-	ApplyEndTurn:
-		boolean used = false;
-		for (int i = 0; i < effects.length; i++) {
-			EffectNamesies s = effects[i];
-			if (victim.hasEffect(s)) {
-				used = true;
-				victim.getAttributes().removeEffect(s);
-				Messages.add(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
+		private enum RemovableEffect {
+			INFATUATED(EffectNamesies.INFATUATED, "infatuated"),
+			DISABLE(EffectNamesies.DISABLE, "disabled"),
+			TAUNT(EffectNamesies.TAUNT, "under the effects of taunt"),
+			ENCORE(EffectNamesies.ENCORE, "under the effects of encore"),
+			TORMENT(EffectNamesies.TORMENT, "under the effects of torment"),
+			CONFUSION(EffectNamesies.CONFUSION, "confused"),
+			HEAL_BLOCK(EffectNamesies.HEAL_BLOCK, "under the effects of heal block");
+
+			private final EffectNamesies effect;
+			private final String message;
+
+			RemovableEffect(EffectNamesies effect, String message) {
+				this.effect = effect;
+				this.message = message;
 			}
 		}
-		
-		if (used) {
+
+		private boolean usesies(Battle b, ActivePokemon user) {
+			boolean used = false;
+			for (RemovableEffect removableEffect : RemovableEffect.values()) {
+				EffectNamesies effect = removableEffect.effect;
+				if (user.hasEffect(effect)) {
+					used = true;
+					user.getAttributes().removeEffect(effect);
+					Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.name + "!");
+				}
+			}
+
+			return used;
+		}
+		###
+	ApplyEndTurn:
+		if (usesies(b, victim)) {
 			victim.consumeItem(b);
 		}
 		###
 	FlingEffect:
-		if (pelted.hasEffect(EffectNamesies.INFATUATED)) {
-			pelted.getAttributes().removeEffect(EffectNamesies.INFATUATED);
-			Messages.add(pelted.getName() + " is no longer infatuated to to the " + this.name + "!");
-		}
+		usesies(b, pelted);
 		###
 *
 Metal Powder:
@@ -551,7 +545,7 @@ Safety Goggles:
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. These goggles protect the holder from both weather-related damage and powder.
 	Price: 200
-	WeatherBlock: 
+	WeatherBlock:
 		return true;
 		###
 	PowderResist: True
@@ -575,12 +569,11 @@ Shell Bell:
 	Desc: An item to be held by a Pok\u00e9mon. The holder's HP is restored a little every time it inflicts damage.
 	Price: 200
 	OnApplyDamage:
-		if (user.fullHealth()) {
+		if (user.fullHealth() || user.getAttack().isMoveType(MoveType.USER_FAINTS)) {
 			return;
 		}
-		
+
 		user.heal((int)Math.ceil(damage/8.0));
-		// TODO: This looks really bad when paired with Explosion
 		Messages.add(new MessageUpdate(user.getName() + " restored some HP due to its " + this.name + "!").updatePokemon(b, user));
 		###
 *
@@ -614,7 +607,7 @@ Stick:
 		if (p.isPokemon(PokemonNamesies.FARFETCHD)) {
 			return stage + 2;
 		}
-		
+
 		return stage;
 		###
 *
@@ -683,7 +676,7 @@ White Herb:
 				pelted.getAttributes().setStage(stat, 0);
 			}
 		}
-		
+
 		Messages.add("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!");
 		###
 *
@@ -694,7 +687,7 @@ Wide Lens:
 	Price: 200
 	Fling: 10
 	ToModify: Accuracy
-	SimpleModifier: 1.1 
+	SimpleModifier: 1.1
 *
 Wise Glasses:
 	Int: HoldItem
@@ -703,7 +696,7 @@ Wise Glasses:
 	Price: 200
 	Fling: 10
 	ToModify: Sp_Attack
-	SimpleModifier: 1.1 
+	SimpleModifier: 1.1
 *
 Zoom Lens:
 	Int: HoldItem
@@ -728,7 +721,7 @@ Lax Incense:
 	Price: 9600
 	ToModify: Evasion
 	Baby: Wynaut
-	SimpleModifier: 1.1 
+	SimpleModifier: 1.1
 *
 Luck Incense:
 	Int: IncenseItem
@@ -985,7 +978,7 @@ Leftovers:
 		if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
 			return;
 		}
-		
+
 		victim.healHealthFraction(1/16.0);
 		Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.name + "!").updatePokemon(b, victim));
 		###
@@ -1450,7 +1443,7 @@ Max Potion:
 	Desc: A spray-type medicine for wounds. It completely restores the HP of a single Pok\u00e9mon.
 	Price: 2500
 	Int: HpHealer
-	GetAmountHealed: 
+	GetAmountHealed:
 		return p.healHealthFraction(1);
 		###
 *
@@ -1485,11 +1478,11 @@ Sacred Ash:
 					p.healHealthFraction(1);
 				}
 			}
-			
+
 			if (healed) {
 				Messages.add("All fainted Pok\u00e9mon were fully revived!");
 			}
-			
+
 			return healed;
 		}
 		###
@@ -1507,7 +1500,7 @@ Dire Hit:
 	BattleCat: Battle
 	Desc: It raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.
 	Price: 650
-	BattleUse: 
+	BattleUse:
 		return EffectNamesies.RAISE_CRITS.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
 		###
 *
@@ -1517,7 +1510,7 @@ Guard Spec.:
 	BattleCat: Battle
 	Desc: An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after use.
 	Price: 700
-	BattleUse: 
+	BattleUse:
 		return EffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
 		###
 *
@@ -1828,7 +1821,7 @@ Leppa Berry:
 	GainEffect:
 		Move lowestPPMove = null;
 		double lowestPPRatio = 1;
-		
+
 		for (Move m : user.getMoves(b)) {
 			double ratio = (double)m.getPP()/m.getMaxPP();
 			if (ratio < lowestPPRatio) {
@@ -1836,12 +1829,12 @@ Leppa Berry:
 				lowestPPMove = m;
 			}
 		}
-		
+
 		// All moves have full PP
 		if (lowestPPMove == null) {
 			return false;
 		}
-		
+
 		use(user, lowestPPMove);
 		return true;
 		###
@@ -1871,7 +1864,7 @@ Persim Berry:
 				this.addMessage(p, source);
 				return true;
 			}
-			
+
 			return false;
 		}
 		###
@@ -1894,7 +1887,7 @@ Sitrus Berry:
 	FixedBerryHealthTrigger: 2
 	Int: HpHealer
 	GainEffect: return use(user, source);
-	GetAmountHealed: 
+	GetAmountHealed:
 		return p.healHealthFraction(1/4.0);
 		###
 *
@@ -2058,16 +2051,16 @@ Rowap Berry:
 	CategoryDamagerBerry: Special
 *
 Custap Berry:
-	Desc: If held by a Pok\u00e9mon, it gets to move first just once in a pinch.	
+	Desc: If held by a Pok\u00e9mon, it gets to move first just once in a pinch.
 	NGType: Ghost
 	NGPow: 100
 	Int: Berry, PriorityChangeEffect
-	ChangePriority: 
+	ChangePriority:
 		if (user.getHPRatio() < 1/3.0) {
 			user.consumeItem(b);
 			return 1;
 		}
-		
+
 		return 0;
 		###
 *
@@ -2084,7 +2077,7 @@ Enigma Berry:
 			victim.consumeItem(b);
 		}
 		###
-*	
+*
 Lansat Berry:
 	Desc: If held by a Pok\u00e9mon, it raises its critical-hit ratio in a pinch.
 	NGType: Flying
@@ -2102,13 +2095,13 @@ Starf Berry:
 	FixedBerryHealthTrigger: 4
 	GainEffect:
 		int rand = RandomUtils.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
-		
+
 		// Raise crit
 		if (rand == Stat.NUM_BATTLE_STATS) {
 			EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
 			return true;
 		}
-		
+
 		// Raise random battle stat
 		Stat stat = Stat.getStat(rand, true);
 		return user.getAttributes().modifyStage(user, user, 1, stat, b, source);
@@ -2150,7 +2143,7 @@ Big Nugget:
 	Cat: Misc
 	Desc: A big nugget of pure gold that gives off a lustrous gleam. A maniac will buy it for a high price.
 	Price: 60000
-*	
+*
 Pearl:
 	Int: HoldItem
 	Cat: Misc
@@ -2187,7 +2180,7 @@ Honey:
 	Cat: Misc
 	Desc: A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in grass, caves, or on special trees.
 	Price: 100
-	Comments: // TODO: We need this item to do something (not in the fling effect, that's only there so I can put this todo in from le generator)
+	Comments: // TODO: We need this item to do something
 *
 Eviolite:
 	Int: HoldItem
@@ -2232,7 +2225,7 @@ Ability Capsule:
 		if (other == AbilityNamesies.NO_ABILITY) {
 			return false;
 		}
-		
+
 		p.setAbility(other);
 		Messages.add(p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!")	;
 		return true;
@@ -2244,7 +2237,7 @@ Assault Vest:
 	Cat: Misc
 	Int: HoldItem, AttackSelectionEffect
 	ToModify: Sp_Defense
-	SimpleModifier: 1.5 
+	SimpleModifier: 1.5
 	Usable:
 		return !m.getAttack().isStatusMove();
 		###

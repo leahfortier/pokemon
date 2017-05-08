@@ -1,5 +1,6 @@
 package trainer;
 
+import battle.Battle;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
@@ -66,7 +67,7 @@ public class WildPokemon implements Opponent, Serializable {
 	}
 
 	@Override
-	public boolean blackout() {
+	public boolean blackout(Battle b) {
 		return !wildPokemon.canFight();
 	}
 

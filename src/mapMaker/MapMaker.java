@@ -61,22 +61,6 @@ import java.util.stream.Collectors;
 public class MapMaker extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener, ListSelectionListener {
 	private static final long serialVersionUID = -1323397946555510794L;
 
-	public enum TileCategory {
-		ALL,
-		GROUND,
-		OBJECT,
-		GRASSY,
-		WALL,
-		COUNTER,
-		BUILDING,
-		ROCK,
-		TREE,
-		LEDGE,
-		STAIRS,
-		FLOOR,
-		ENTRANCE,
-	}
-
 	public static void main(String[] args) {
 		MapMaker mapMaker = new MapMaker();
 

@@ -38,7 +38,7 @@ public abstract class Entity {
 		this.location = newLocation;
 	}
 
-	protected boolean isPresent() {
+	private boolean isPresent() {
 		return this.condition.isTrue();
 	}
 

@@ -46,9 +46,40 @@
   ],
   "NPCs": [
     {
-      "name": "DayCareBro",
+      "name": "BerryBro",
       "path": "w",
       "spriteIndex": 1,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "Interaction0",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Berry time! Fuck yeah!!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "CHANGE_VIEW",
+                "triggerContents": "BERRY_VIEW"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 42,
+        "y": 54
+      },
+      "triggerName": "WindValley_NPC_BerryBro_01"
+    },
+    {
+      "name": "DayCareBro",
+      "path": "w",
+      "spriteIndex": 11,
       "direction": "DOWN",
       "interactions": [
         {
@@ -71,6 +102,37 @@
       "triggerName": "WindValley_NPC_DayCareBro_01"
     },
     {
+      "name": "MoveRelearnerShmo",
+      "path": "w",
+      "spriteIndex": 26,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "Learn Move View",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Heart scales sure are tasty treats..."
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "CHANGE_VIEW",
+                "triggerContents": "MOVE_RELEARNER_VIEW"
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 47,
+        "y": 54
+      },
+      "triggerName": "WindValley_NPC_MoveRelearnerShmo_01"
+    },
+    {
       "name": "Trader",
       "path": "w",
       "spriteIndex": 17,
@@ -82,7 +144,7 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "TRADE_POKEMON_QUESTION",
+                "triggerType": "TRADE_POKEMON",
                 "triggerContents": "{
   \"requested\": \"VULPIX\",
   \"tradePokemon\": \"YUKIKON\"

@@ -34,10 +34,14 @@ public final class ImageUtils {
     }
 
     public static void drawBottomCenteredImage(Graphics g, BufferedImage image, Point center) {
+        drawBottomCenteredImage(g, image, center.x, center.y);
+    }
+
+    public static void drawBottomCenteredImage(Graphics g, BufferedImage image, int x, int y) {
         g.drawImage(
                 image,
-                center.x - image.getWidth()/2,
-                center.y - image.getHeight(),
+                x - image.getWidth()/2,
+                y - image.getHeight(),
                 null);
     }
 
@@ -54,12 +58,14 @@ public final class ImageUtils {
     }
 
     public static void drawCenteredImageLabel(Graphics g, BufferedImage image, String text, int x, int y) {
+        text = " " + text;
+
         int imageWidth = image.getWidth();
-        int textWidth = FontMetrics.getSuggestedWidth(text, g);
+        int textWidth = FontMetrics.getTextWidth(g, text);
         int halfSize = (imageWidth + textWidth)/2;
 
-        drawCenteredImage(g, image, x - halfSize + imageWidth/2, y);
-        TextUtils.drawCenteredString(g, text, x - halfSize + imageWidth + textWidth/2, y);
+        drawCenteredHeightImage(g, image, x - halfSize, y);
+        TextUtils.drawCenteredHeightString(g, text, x - halfSize + imageWidth, y);
     }
 
     public static void drawCenteredImageLabel(Graphics g, BufferedImage image, String text, Point center) {
@@ -173,35 +179,44 @@ public final class ImageUtils {
         return new BufferedImage(dimension.width, dimension.height, BufferedImage.TYPE_INT_ARGB);
     }
 
+    public static BufferedImage trimImage(BufferedImage image) {
+        int empty = image.getRGB(0, 0); // This assumes the top left corner is blank just FYI...
+
+        int leftmost = image.getWidth();
+        int topmost = image.getHeight();
+        int rightmost = 0;
+        int bottommost = 0;
+
+        for (int i = 0; i < image.getWidth(); i++)  {
+            for (int j = 0; j < image.getHeight(); j++) {
+                if (image.getRGB(i, j) != empty) {
+                    leftmost = Math.min(i, leftmost);
+                    rightmost = Math.max(i, rightmost);
+                    topmost = Math.min(j, topmost);
+                    bottommost = Math.max(j, bottommost);
+                }
+            }
+        }
+
+        return image.getSubimage(leftmost, topmost, rightmost - leftmost + 1, bottommost - topmost + 1);
+    }
+
     public static void trimImages(String inputLocation, String outputLocation) {
         for (File imageFile : FileIO.listFiles(inputLocation)) {
             if (imageFile.isDirectory()) {
                 continue;
             }
 
-            BufferedImage image = FileIO.readImage(imageFile);
-            int empty = image.getRGB(0, 0); // This assumes the top left corner is blank just FYI...
-
-            int leftmost = image.getWidth();
-            int topmost = image.getHeight();
-            int rightmost = 0;
-            int bottommost = 0;
-
-            for (int i = 0; i < image.getWidth(); i++)  {
-                for (int j = 0; j < image.getHeight(); j++) {
-                    if (image.getRGB(i, j) != empty) {
-                        leftmost = Math.min(i, leftmost);
-                        rightmost = Math.max(i, rightmost);
-                        topmost = Math.min(j, topmost);
-                        bottommost = Math.max(j, bottommost);
-                    }
-                }
+            if (imageFile.getName().contains("index.txt")) {
+                continue;
             }
 
-            String newName = imageFile.getName();
+            BufferedImage image = FileIO.readImage(imageFile);
+            BufferedImage trimmed = trimImage(image);
 
-            File file = new File(outputLocation + "\\" + newName);
-            FileIO.writeImage(image.getSubimage(leftmost, topmost, rightmost - leftmost + 1, bottommost - topmost + 1), file);
+            String newName = imageFile.getName();
+            File file = new File(outputLocation + FileIO.FILE_SLASH + newName);
+            FileIO.writeImage(trimmed, file);
         }
     }
 }

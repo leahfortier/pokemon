@@ -10,7 +10,6 @@ import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
 import gui.TileSet;
-import input.ControlKey;
 import input.InputControl;
 import item.Item;
 import item.ItemNamesies;
@@ -122,8 +121,22 @@ class MartView extends View {
 		playerMoneyPanel = new DrawPanel(fakeButtons[0]).withBlackOutline();
 		inBagPanel = new DrawPanel(fakeButtons[1]).withBlackOutline();
 		itemAmountPanel = new DrawPanel(fakeButtons[4]).withBlackOutline();
-		buyButton = new Button(fakeButtons[5].x, fakeButtons[5].y, fakeButtons[5].width, fakeButtons[5].height,
-				ButtonHoverAction.BOX, new int[] { RETURN, BUY, RETURN, BUY });
+
+		buyButton = new Button(
+				fakeButtons[5].x,
+				fakeButtons[5].y,
+				fakeButtons[5].width,
+				fakeButtons[5].height,
+				ButtonHoverAction.BOX,
+				new int[] { RETURN, BUY, RETURN, BUY },
+				() -> {
+					Player player = Game.getPlayer();
+					player.sucksToSuck(itemAmount*selectedItem.getItem().getPrice());
+					player.getBag().addItem(selectedItem, itemAmount);
+
+					setSelectedItem(selectedItem);
+				}
+		);
 
 		amountLeftButton = new Button(
 				selectedPanel.x,
@@ -131,7 +144,9 @@ class MartView extends View {
 				selectedPanel.width/3,
 				buttonHeight,
 				ButtonHoverAction.BOX,
-				new int[] { AMOUNT_RIGHT_ARROW, RETURN, BUY, 0 });
+				new int[] { AMOUNT_RIGHT_ARROW, RETURN, BUY, 0 },
+				() -> this.updateItemAmount(-1)
+		);
 
 		amountRightButton = new Button(
 				selectedPanel.rightX() - amountLeftButton.width,
@@ -139,7 +154,9 @@ class MartView extends View {
 				amountLeftButton.width,
 				amountLeftButton.height,
 				ButtonHoverAction.BOX,
-				new int[] { AMOUNT_LEFT_ARROW, RETURN, AMOUNT_LEFT_ARROW, 1 });
+				new int[] { AMOUNT_LEFT_ARROW, RETURN, AMOUNT_LEFT_ARROW, 1 },
+				() -> this.updateItemAmount(1)
+		);
 
 		amountPanel = new DrawPanel(
 				amountLeftButton.x + amountLeftButton.width - DrawUtils.OUTLINE_SIZE,
@@ -149,7 +166,7 @@ class MartView extends View {
 				.withFullTransparency()
 				.withBlackOutline();
 
-		returnButton = new Button(
+		returnButton = Button.createExitButton(
 				selectedPanel.x,
 				shopPanel.y + shopPanel.height - spacing - buttonHeight,
 				halfPanelWidth,
@@ -170,11 +187,36 @@ class MartView extends View {
 
 		buttons = new Button[NUM_BUTTONS];
 
-		itemButtons = itemsPanel.getButtons(5, ITEMS_PER_PAGE/2 + 1, 2, ITEMS_PER_PAGE/2, 2, 0, new int[] { -1, AMOUNT_RIGHT_ARROW, -1, SHOP_RIGHT_ARROW });
+		itemButtons = itemsPanel.getButtons(
+				5,
+				ITEMS_PER_PAGE/2 + 1,
+				2,
+				ITEMS_PER_PAGE/2,
+				2,
+				0,
+				new int[] { -1, AMOUNT_RIGHT_ARROW, -1, SHOP_RIGHT_ARROW },
+				index -> setSelectedItem(GeneralUtils.getPageValue(forSaleItems, pageNum, ITEMS_PER_PAGE, index)));
 		System.arraycopy(itemButtons, 0, buttons, 0, ITEMS_PER_PAGE);
 		
-		buttons[SHOP_LEFT_ARROW] = shopLeftButton = new Button(498, 451, 35, 20, ButtonHoverAction.BOX, new int[] { SHOP_RIGHT_ARROW, ITEMS_PER_PAGE - 2, SHOP_RIGHT_ARROW, RETURN });
-		buttons[SHOP_RIGHT_ARROW] = shopRightButton = new Button(613, 451, 35, 20, ButtonHoverAction.BOX, new int[] { SHOP_LEFT_ARROW, ITEMS_PER_PAGE - 1, SHOP_LEFT_ARROW, RETURN });
+		buttons[SHOP_LEFT_ARROW] = shopLeftButton = new Button(
+				498,
+				451,
+				35,
+				20,
+				ButtonHoverAction.BOX,
+				new int[] { SHOP_RIGHT_ARROW, ITEMS_PER_PAGE - 2, SHOP_RIGHT_ARROW, RETURN },
+				() -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
+		);
+
+		buttons[SHOP_RIGHT_ARROW] = shopRightButton = new Button(
+				613,
+				451,
+				35,
+				20,
+				ButtonHoverAction.BOX,
+				new int[] { SHOP_LEFT_ARROW, ITEMS_PER_PAGE - 1, SHOP_LEFT_ARROW, RETURN },
+				() -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
+		);
 
 		buttons[BUY] = buyButton;
 
@@ -189,66 +231,12 @@ class MartView extends View {
 
 	@Override
 	public void update(int dt) {
-		Player player = Game.getPlayer();
 		selectedButton = Button.update(buttons, selectedButton);
-
-		Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(forSaleItems, pageNum, ITEMS_PER_PAGE);
-		for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
-			if (itemButtons[i].checkConsumePress()) {
-				setSelectedItem(iter.next());
-				updateActiveButtons();
-			}
+		if (buttons[selectedButton].checkConsumePress()) {
+			updateActiveButtons();
 		}
 
-		Item selectedItemValue = selectedItem.getItem();
-
-		if (amountLeftButton.checkConsumePress()) {
-			this.updateItemAmount(-1);
-			updateActiveButtons();
-		}
-		
-		if (amountRightButton.checkConsumePress()) {
-			this.updateItemAmount(1);
-			updateActiveButtons();
-		}		
-		
-		if (buyButton.checkConsumePress()) {
-			player.sucksToSuck(itemAmount*selectedItemValue.getPrice());
-			player.getBag().addItem(selectedItem, itemAmount);
-			
-			setSelectedItem(selectedItem);
-			updateActiveButtons();
-		}
-		
-		if (shopLeftButton.checkConsumePress()) {
-			if (pageNum == 0) {
-				pageNum = totalPages() - 1;
-			}
-			else {
-				pageNum--;
-			}
-			
-			updateActiveButtons();
-		}
-		
-		if (shopRightButton.checkConsumePress()) {
-			if (pageNum == totalPages() - 1) {
-				pageNum = 0;
-			}
-			else {
-				pageNum++;
-			}
-			
-			updateActiveButtons();
-		}
-		
-		if (returnButton.checkConsumePress()) {
-			Game.instance().popView();
-		}
-
-		if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {
-			Game.instance().popView();
-		}
+		InputControl.instance().popViewIfEscaped();
 	}
 
 	@Override
@@ -272,18 +260,30 @@ class MartView extends View {
 		// Item Display
 		selectedPanel.drawBackground(g);
 		if (selectedItem != null) {
+			int spacing = 8;
+
 			Item selectedItemValue = selectedItem.getItem();
+
+			g.setColor(Color.BLACK);
+			FontMetrics.setFont(g, 20);
+
+			int startY = selectedPanel.y + FontMetrics.getDistanceBetweenRows(g);
+			int nameX = selectedPanel.x + 2*spacing + Global.TILE_SIZE; // TODO: Why are we using Tile Size in the bag view
 
 			// Draw item image
 			BufferedImage img = itemTiles.getTile(selectedItemValue.getImageName());
-			ImageUtils.drawCenteredImage(g, img, 430, 132);
-			
-			g.setColor(Color.BLACK);
-			FontMetrics.setFont(g, 20);
-			g.drawString(selectedItem.getName(), 448, 138);
-			
+			ImageUtils.drawBottomCenteredImage(g, img, selectedPanel.x + (nameX - selectedPanel.x)/2, startY);
+
+			g.drawString(selectedItem.getName(), nameX, startY);
+
 			FontMetrics.setFont(g, 14);
-			TextUtils.drawWrappedText(g, selectedItemValue.getDescription(), 418, 156, 726 - amountLeftButton.x);
+			TextUtils.drawWrappedText(
+					g,
+					selectedItemValue.getDescription(),
+					selectedPanel.x + spacing,
+					startY + FontMetrics.getDistanceBetweenRows(g),
+					selectedPanel.width - 2*spacing
+			);
 
 			amountPanel.drawBackground(g);
 			amountPanel.label(g, 20, itemAmount + "");
@@ -450,6 +450,7 @@ class MartView extends View {
 	@Override
 	public void movedToFront() {
 		this.resetForSaleItems();
+		this.updateActiveButtons();
 	}
 
 	private void updateItemAmount(int delta) {

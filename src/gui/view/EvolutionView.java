@@ -169,6 +169,7 @@ class EvolutionView extends View {
 		canvasPanel.drawBackground(g);
 
 		if (state == State.LEARN_MOVE) {
+			// TODO: Why are we drawing this twice? Can this just be a state != LEARN_MOVE?
 			this.learnMovePanel.draw(g);
 		}
 		else if (!messages.isEmpty()) {

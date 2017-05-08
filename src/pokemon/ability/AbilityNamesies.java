@@ -213,7 +213,7 @@ import pokemon.ability.Ability.WhiteSmoke;
 import pokemon.ability.Ability.WimpOut;
 import pokemon.ability.Ability.WonderGuard;
 import pokemon.ability.Ability.WonderSkin;
-import util.PokeString;
+import util.StringUtils;
 
 public enum AbilityNamesies {
     // EVERYTHING BELOW IS GENERATED ###
@@ -454,7 +454,7 @@ public enum AbilityNamesies {
 
 	public static AbilityNamesies getValueOf(String name) {
 		try {
-			return AbilityNamesies.valueOf(PokeString.getNamesiesString(name));
+			return AbilityNamesies.valueOf(StringUtils.getNamesiesString(name));
 		} catch (IllegalArgumentException exception) {
 			Global.error(name + " does not have a valid AbilityNamesies value");
 			return null;

@@ -1,7 +1,6 @@
 package gui.view.map;
 
 import battle.Battle;
-import pokemon.ActivePokemon;
 
 import java.awt.Graphics;
 
@@ -11,8 +10,7 @@ public enum VisualState {
     MAP(new MapState()),
     MENU(new MenuState()),
     MESSAGE(new MessageState()),
-    POKEFINDER(new PokeFinderState()),
-    TRADE(new TradeState());
+    POKEFINDER(new PokeFinderState());
 
     private final VisualStateHandler handler;
 
@@ -36,10 +34,6 @@ public enum VisualState {
 
     public void set(MapView mapView) {
         this.handler.set(mapView);
-    }
-
-    public static void setTrade(ActivePokemon myPokes, ActivePokemon theirPokes) {
-        ((TradeState)TRADE.handler).setTrade(myPokes, theirPokes);
     }
 
     public static void setBattle(Battle battle, boolean seenWild) {

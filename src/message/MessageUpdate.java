@@ -20,7 +20,9 @@ import util.SerializationUtils;
 import util.StringUtils;
 
 public class MessageUpdate {
-	private String message;
+	public static final String PLAYER_NAME = "{playerName}";
+
+	private final String message;
 	private int[] statGains;
 	private int[] newStats;
 	private PokemonInfo pokemon;
@@ -112,7 +114,7 @@ public class MessageUpdate {
 	}
 
 	public MessageUpdate(String message) {
-		this.message = message;
+		this.message = message.replace(PLAYER_NAME, Game.getPlayer().getName());
 		this.updateType = Update.NO_UPDATE;
 	}
 

@@ -21,6 +21,7 @@ import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
+import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
@@ -311,7 +312,7 @@ public class Battle implements Serializable {
 		}
 
 		// Dead Front Pokemon, but you still have others to spare -- force a switch
-		if (!player.blackout()) {
+		if (!player.blackout(this)) {
 			Messages.add(new MessageUpdate("What Pokemon would you like to switch to?").withUpdate(Update.FORCE_SWITCH));
 			return false;
 		}
@@ -346,7 +347,7 @@ public class Battle implements Serializable {
 		player.gainEXP(dead, this);
 
 		// You have achieved total victory
-		if (opponent.blackout()) {
+		if (opponent.blackout(this)) {
 			player.winBattle(this, opponent);
 			return true;
 		}
@@ -526,6 +527,12 @@ public class Battle implements Serializable {
 		if (effect instanceof Weather) {
 			weather = (Weather)effect;
 			Messages.add(new MessageUpdate().withWeather(weather));
+
+			if (WeatherEliminatingEffect.shouldEliminateWeather(this, player.front(), weather)
+					|| WeatherEliminatingEffect.shouldEliminateWeather(this, opponent.front(), weather)) {
+				weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
+				Messages.add(new MessageUpdate().withWeather(weather));
+			}
 		}
 		else {
 			effects.add(effect);

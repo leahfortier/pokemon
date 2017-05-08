@@ -1,5 +1,6 @@
 package trainer;
 
+import battle.Battle;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import pokemon.ActivePokemon;
@@ -14,7 +15,7 @@ public interface Team {
 	boolean hasEffect(EffectNamesies effect);
 	void addEffect(TeamEffect e);
 	List<ActivePokemon> getTeam();
-	boolean blackout();
+	boolean blackout(Battle b);
 	void resetEffects();
 	void resetUsed();
 }

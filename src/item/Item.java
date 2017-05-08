@@ -5,11 +5,11 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
+import battle.attack.MoveType;
 import battle.effect.DefiniteEscape;
 import battle.effect.MessageGetter;
 import battle.effect.SimpleStatModifyingEffect;
 import battle.effect.StallingEffect;
-import battle.effect.WeatherExtendingEffect;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
@@ -19,6 +19,7 @@ import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
+import battle.effect.generic.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
@@ -34,6 +35,7 @@ import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
+import battle.effect.generic.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
@@ -256,13 +258,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			Messages.add(enterer.getName() + " floats with its " + this.name + "!");
 		}
 
-		public void fall(Battle b, ActivePokemon fallen) {
-			Messages.add(fallen.getName() + " is no longer floating with its " + this.name + "!");
-			
-			// TODO: Fix this it's broken
-			// Effect.removeEffect(fallen.getEffects(), this.namesies());
-		}
-
 		public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
 			Messages.add(victim.getName() + "'s " + this.name + " popped!");
 			victim.consumeItem(b);
@@ -273,7 +268,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class AmuletCoin extends Item implements HoldItem, EntryEffect, EndTurnEffect {
+	static class AmuletCoin extends Item implements HoldItem, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		AmuletCoin() {
@@ -285,12 +280,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			getDatCashMoneyGetDatCashMoneyCast(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			getDatCashMoneyGetDatCashMoneyCast(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			// This is named too fantastically to just be applyEffect
+			getDatCashMoneyGetDatCashMoneyCast(b, p);
 		}
 	}
 
@@ -492,8 +484,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return 60;
 		}
 
-		public EffectNamesies getWeatherType() {
-			return EffectNamesies.RAINING;
+		public int getExtensionTurns(EffectNamesies weatherType) {
+			return weatherType == EffectNamesies.RAINING ? 3 : 0;
 		}
 	}
 
@@ -509,8 +501,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return 60;
 		}
 
-		public EffectNamesies getWeatherType() {
-			return EffectNamesies.SUNNY;
+		public int getExtensionTurns(EffectNamesies weatherType) {
+			return weatherType == EffectNamesies.SUNNY ? 3 : 0;
 		}
 	}
 
@@ -526,8 +518,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return 40;
 		}
 
-		public EffectNamesies getWeatherType() {
-			return EffectNamesies.HAILING;
+		public int getExtensionTurns(EffectNamesies weatherType) {
+			return weatherType == EffectNamesies.HAILING ? 3 : 0;
 		}
 	}
 
@@ -543,8 +535,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return 10;
 		}
 
-		public EffectNamesies getWeatherType() {
-			return EffectNamesies.SANDSTORM;
+		public int getExtensionTurns(EffectNamesies weatherType) {
+			return weatherType == EffectNamesies.SANDSTORM ? 3 : 0;
 		}
 	}
 
@@ -927,17 +919,37 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
 	static class MentalHerb extends Item implements HoldItem, EndTurnEffect {
 		private static final long serialVersionUID = 1L;
-		// TODO: This should be an object array
-		EffectNamesies[] effects = {
-			EffectNamesies.INFATUATED,
-			EffectNamesies.DISABLE,
-			EffectNamesies.TAUNT,
-			EffectNamesies.ENCORE,
-			EffectNamesies.TORMENT,
-			EffectNamesies.CONFUSION,
-			EffectNamesies.HEAL_BLOCK
-		};
-		String[] messages = {"infatuated", "disabled", "under the effects of taunt", "under the effects of encore", "under the effects of torment", "confused", "under the effects of heal block"};
+		private enum RemovableEffect {
+			INFATUATED(EffectNamesies.INFATUATED, "infatuated"),
+			DISABLE(EffectNamesies.DISABLE, "disabled"),
+			TAUNT(EffectNamesies.TAUNT, "under the effects of taunt"),
+			ENCORE(EffectNamesies.ENCORE, "under the effects of encore"),
+			TORMENT(EffectNamesies.TORMENT, "under the effects of torment"),
+			CONFUSION(EffectNamesies.CONFUSION, "confused"),
+			HEAL_BLOCK(EffectNamesies.HEAL_BLOCK, "under the effects of heal block");
+			
+			private final EffectNamesies effect;
+			private final String message;
+			
+			RemovableEffect(EffectNamesies effect, String message) {
+				this.effect = effect;
+				this.message = message;
+			}
+		}
+		
+		private boolean usesies(Battle b, ActivePokemon user) {
+			boolean used = false;
+			for (RemovableEffect removableEffect : RemovableEffect.values()) {
+				EffectNamesies effect = removableEffect.effect;
+				if (user.hasEffect(effect)) {
+					used = true;
+					user.getAttributes().removeEffect(effect);
+					Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.name + "!");
+				}
+			}
+			
+			return used;
+		}
 
 		MentalHerb() {
 			super(ItemNamesies.MENTAL_HERB, "An item to be held by a Pok\u00e9mon. It snaps the holder out of infatuation. It can be used only once.", BagCategory.MISC);
@@ -945,17 +957,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			boolean used = false;
-			for (int i = 0; i < effects.length; i++) {
-				EffectNamesies s = effects[i];
-				if (victim.hasEffect(s)) {
-					used = true;
-					victim.getAttributes().removeEffect(s);
-					Messages.add(victim.getName() + " is no longer " + messages[i] + " due to its " + this.name + "!");
-				}
-			}
-			
-			if (used) {
+			if (usesies(b, victim)) {
 				victim.consumeItem(b);
 			}
 		}
@@ -965,10 +967,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public void flingEffect(Battle b, ActivePokemon pelted) {
-			if (pelted.hasEffect(EffectNamesies.INFATUATED)) {
-				pelted.getAttributes().removeEffect(EffectNamesies.INFATUATED);
-				Messages.add(pelted.getName() + " is no longer infatuated to to the " + this.name + "!");
-			}
+			usesies(b, pelted);
 		}
 	}
 
@@ -1351,12 +1350,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-			if (user.fullHealth()) {
+			if (user.fullHealth() || user.getAttack().isMoveType(MoveType.USER_FAINTS)) {
 				return;
 			}
 			
 			user.heal((int)Math.ceil(damage/8.0));
-			// TODO: This looks really bad when paired with Explosion
 			Messages.add(new MessageUpdate(user.getName() + " restored some HP due to its " + this.name + "!").updatePokemon(b, user));
 		}
 	}
@@ -1638,7 +1636,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	static class LuckIncense extends Item implements IncenseItem, EntryEffect, EndTurnEffect {
+	static class LuckIncense extends Item implements IncenseItem, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 
 		LuckIncense() {
@@ -1654,12 +1652,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			getDatCashMoneyGetDatCashMoneyCast(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			getDatCashMoneyGetDatCashMoneyCast(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			// This is named too fantastically to just be applyEffect
+			getDatCashMoneyGetDatCashMoneyCast(b, p);
 		}
 	}
 
@@ -5130,7 +5125,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 	}
 
-	// TODO: We need this item to do something (not in the fling effect, that's only there so I can put this todo in from le generator)
+	// TODO: We need this item to do something
 	static class Honey extends Item implements HoldItem {
 		private static final long serialVersionUID = 1L;
 

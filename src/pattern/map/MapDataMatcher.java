@@ -134,8 +134,8 @@ public class MapDataMatcher {
         String areaDataJson = SerializationUtils.getJson(areaData);
         String mapJson = SerializationUtils.getJson(mappity);
 
-        FileIO.writeToFile("out.txt", areaDataJson);
-        FileIO.writeToFile("out2.txt", mapJson);
+//        FileIO.writeToFile("out.txt", areaDataJson);
+//        FileIO.writeToFile("out2.txt", mapJson);
 
         if (!areaDataJson.equals(mapJson)) {
             Global.error("No dice");

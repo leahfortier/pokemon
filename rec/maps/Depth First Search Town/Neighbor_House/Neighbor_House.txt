@@ -41,6 +41,12 @@
                 "triggerType": "Dialogue",
                 "triggerContents": "R U A WIZARD 'ARRY"
               }
+            },
+            {
+              "trigger": {
+                "triggerType": "MOVE_PLAYER",
+                "triggerContents": "RULDRULD"
+              }
             }
           ]
         }

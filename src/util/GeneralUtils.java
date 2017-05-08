@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,7 @@ public final class GeneralUtils {
 
     public static boolean hasOnlyOneNonEmpty(Object... objects) {
         return Arrays.stream(objects)
-                .filter(object -> object != null)
+                .filter(Objects::nonNull)
                 .count() == 1;
     }
 
@@ -99,13 +100,22 @@ public final class GeneralUtils {
 
     public static <T extends Enum<T>> List<T> arrayValueOf(Class<T> enumType, String[] contents) {
         return Arrays.stream(contents)
-                .map(value -> Enum.valueOf(enumType, PokeString.getNamesiesString(value)))
+                .map(value -> Enum.valueOf(enumType, StringUtils.getNamesiesString(value)))
                 .collect(Collectors.toList());
+    }
+
+    public static <T> T getPageValue(Iterable<T> list, int pageNum, int buttonsPerPage, int index) {
+        Iterator<T> iterator = pageIterator(list, pageNum, buttonsPerPage);
+        for (int i = 0; i < index; i++) {
+            iterator.next();
+        }
+
+        return iterator.next();
     }
 
     public static <T> Iterator<T> pageIterator(Iterable<T> list, int pageNum, int buttonsPerPage) {
         Iterator<T> iterator = list.iterator();
-        for (int i = 0; i < pageNum*buttonsPerPage; i++) {
+        for (int i = 0; i < pageNum*buttonsPerPage && iterator.hasNext(); i++) {
             iterator.next();
         }
 

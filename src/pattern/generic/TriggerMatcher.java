@@ -9,6 +9,7 @@ public abstract class TriggerMatcher {
     public String getTriggerName() {
         return this.triggerName;
     }
+
     public void setTriggerName(String triggerName) {
         this.triggerName = triggerName;
     }

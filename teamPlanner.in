@@ -1,61 +1,46 @@
-Ninetales:
-	Nature: Modest
-	Item: Shell Bell
+Weavile:
 	Moves:
-		Flamethrower
-		Energy Ball
-		Dark Pulse
-		Psyshock
-	*
-***
-Lanturn:
-	Ability: Volt Absorb
-	Nature: Modest
-	Item: Expert Belt
-	Moves:
-		Surf
-		Thunderbolt
-		Dazzling Gleam
-		Signal Beam
-	*
-***
-Breloom:
-	Nature: Jolly
-	Ability: Poison Heal
-	Item: Toxic Orb
-	Moves:
-		Seed Bomb
-		Drain Punch
-		Thunder Punch
-		Stone Edge
-	*
-***
-Togekiss:
-	Nature: Timid
-	Ability: Serene Grace
-	Item: King's Rock
-	Moves:
-		Dazzling Gleam
-		Air Slash
-		Aura Sphere
-		Flamethrower
-	*
-***
-Leavanny:
-	Item: Scope Lens
-	Moves:
-		X-Scissor
-		Leaf Blade
-		Shadow Claw
+		Throat Chop
+		Ice Punch
+		Brick Break
 		Poison Jab
 	*
 ***
-Aurorus:
-	Item: Quick Claw
+Torterra:
+	Nature: Jolly
 	Moves:
-		Ice Beam
-		Earth Power
-		Flash Cannon
-		Thunderbolt
+		Earthquake
+		Seed Bomb
+		Crunch
+		Stone Edge
+	*
+***
+Mimikyu:
+	Nature: Adamant
+	Moves:
+		Play Rough
+		Shadow Claw
+Yanmega:
+	Moves:
+		Bug Buzz
+		Air Slash
+		Psychic
+		Ancient Power
+	*
+***
+Gyarados: 
+	Moves:
+		Aqua Tail
+		Ice Fang
+		Earthquake
+		Crunch
+	*
+***
+Electivire:
+	Moves:
+		Thunder Punch
+		Fire Punch
+		Earthquake
+		Brick Break
 	*
 ***

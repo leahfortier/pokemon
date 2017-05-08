@@ -2,7 +2,6 @@ package map.triggers;
 
 import sound.SoundPlayer;
 import sound.SoundTitle;
-import util.PokeString;
 
 class SoundTrigger extends Trigger {
 	private final SoundTitle soundTitle;
@@ -10,9 +9,9 @@ class SoundTrigger extends Trigger {
 	SoundTrigger(String contents, String condition) {
 		super(TriggerType.SOUND, contents, condition);
 
-		this.soundTitle = SoundTitle.valueOf(PokeString.getNamesiesString(contents));
+		this.soundTitle = SoundTitle.valueOf(contents);
 	}
-	
+
 	protected void executeTrigger() {
 		SoundPlayer.soundPlayer.playSound(soundTitle);
 	}

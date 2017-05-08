@@ -274,4 +274,28 @@ public class StuffGen {
 			out.println(in.nextLine());
 		}
 	}
+
+	private static final char[] AL_BHED_PRIMER = {
+			'Y', 'P', 'L', 'T', 'A', 'V', 'K', 'R',
+			'E', 'Z', 'G', 'M', 'S', 'H', 'U', 'B',
+			'X', 'N', 'C', 'D', 'I', 'J', 'F', 'Q',
+			'O', 'W'
+	};
+
+	private static String translateAlBhed(String nonShubby) {
+		StringBuilder shubs = new StringBuilder();
+		for (char c : nonShubby.toCharArray()) {
+			if (StringUtils.isLower(c)) {
+				shubs.append((char)(AL_BHED_PRIMER[c - 'a'] - 'A' + 'a'));
+			}
+			else if (StringUtils.isUpper(c)) {
+				shubs.append(AL_BHED_PRIMER[c - 'A']);
+			}
+			else {
+				shubs.append(c);
+			}
+		}
+
+		return shubs.toString();
+	}
 }

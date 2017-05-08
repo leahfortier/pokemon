@@ -1,0 +1,408 @@
+{
+  "areas": [
+    {
+      "displayName": "Edge 2",
+      "flyLocation": "",
+      "terrain": "GRASS",
+      "weather": "NORMAL",
+      "music": "DEFAULT_TUNE"
+    }
+  ],
+  "mapTransitions": [
+    {
+      "exitName": "South",
+      "direction": "DOWN",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "Dijkstra Village",
+        "mapName": "Dijkstra Village"
+      },
+      "nextEntrance": "Edge 2",
+      "location": [
+        {
+          "x": 9,
+          "y": 14
+        },
+        {
+          "x": 10,
+          "y": 14
+        },
+        {
+          "x": 11,
+          "y": 14
+        }
+      ],
+      "triggerName": "Edge 2_MapExit_South_01"
+    },
+    {
+      "exitName": "Tommy",
+      "direction": "UP",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "Tomasulo Town",
+        "mapName": "TomTown_WindValley_TransitionBuilding"
+      },
+      "nextEntrance": "SouthDoor",
+      "location": [
+        {
+          "x": 9,
+          "y": 4
+        },
+        {
+          "x": 10,
+          "y": 4
+        },
+        {
+          "x": 11,
+          "y": 4
+        }
+      ],
+      "triggerName": "Edge 2_MapExit_Tommy_01"
+    }
+  ],
+  "NPCs": [
+    {
+      "name": "HippityHop",
+      "path": "w",
+      "spriteIndex": 60,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "Interaction0",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Yo yo yo, I'm so hip and happenin' yo!!"
+              }
+            },
+            {
+              "battle": {
+                "name": "Hip and Happening Youngster",
+                "cashMoney": 100,
+                "maxPokemonLimit": false,
+                "pokemon": [
+                  {
+                    "namesies": "PIKACHU",
+                    "nickname": "",
+                    "level": 10,
+                    "isShiny": false
+                  },
+                  {
+                    "namesies": "MAREEP",
+                    "nickname": "",
+                    "level": 10,
+                    "isShiny": false
+                  }
+                ],
+                "update": "won"
+              }
+            }
+          ]
+        },
+        {
+          "name": "won",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Guess you're too hip for me, hahahahahahaha :("
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 7,
+        "y": 6
+      },
+      "triggerName": "Edge 2_NPC_HippityHop_01"
+    }
+  ],
+  "items": [],
+  "miscEntities": [],
+  "events": [],
+  "wildBattles": [
+    {
+      "name": "Grassy",
+      "wildBattles": [
+        {
+          "name": "Grassy",
+          "encounterRate": "VERY_COMMON",
+          "wildPokemon": [
+            {
+              "pokemon": "CHIKORITA",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "TURTWIG",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "TREECKO",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "SNIVY",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "CHESPIN",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "ROWLET",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "DEERLING",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
+            },
+            {
+              "pokemon": "SKIDDO",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 30
+            }
+          ]
+        }
+      ],
+      "location": [
+        {
+          "x": 6,
+          "y": 5
+        },
+        {
+          "x": 6,
+          "y": 6
+        },
+        {
+          "x": 6,
+          "y": 7
+        },
+        {
+          "x": 6,
+          "y": 8
+        },
+        {
+          "x": 6,
+          "y": 9
+        },
+        {
+          "x": 6,
+          "y": 10
+        },
+        {
+          "x": 6,
+          "y": 11
+        },
+        {
+          "x": 6,
+          "y": 12
+        },
+        {
+          "x": 6,
+          "y": 13
+        },
+        {
+          "x": 7,
+          "y": 5
+        },
+        {
+          "x": 7,
+          "y": 6
+        },
+        {
+          "x": 7,
+          "y": 7
+        },
+        {
+          "x": 7,
+          "y": 8
+        },
+        {
+          "x": 7,
+          "y": 9
+        },
+        {
+          "x": 7,
+          "y": 10
+        },
+        {
+          "x": 7,
+          "y": 11
+        },
+        {
+          "x": 7,
+          "y": 12
+        },
+        {
+          "x": 7,
+          "y": 13
+        },
+        {
+          "x": 8,
+          "y": 5
+        },
+        {
+          "x": 8,
+          "y": 6
+        },
+        {
+          "x": 8,
+          "y": 7
+        },
+        {
+          "x": 8,
+          "y": 8
+        },
+        {
+          "x": 8,
+          "y": 9
+        },
+        {
+          "x": 8,
+          "y": 10
+        },
+        {
+          "x": 8,
+          "y": 11
+        },
+        {
+          "x": 8,
+          "y": 12
+        },
+        {
+          "x": 8,
+          "y": 13
+        },
+        {
+          "x": 12,
+          "y": 5
+        },
+        {
+          "x": 12,
+          "y": 6
+        },
+        {
+          "x": 12,
+          "y": 7
+        },
+        {
+          "x": 12,
+          "y": 8
+        },
+        {
+          "x": 12,
+          "y": 9
+        },
+        {
+          "x": 12,
+          "y": 10
+        },
+        {
+          "x": 12,
+          "y": 11
+        },
+        {
+          "x": 12,
+          "y": 12
+        },
+        {
+          "x": 12,
+          "y": 13
+        },
+        {
+          "x": 13,
+          "y": 5
+        },
+        {
+          "x": 13,
+          "y": 6
+        },
+        {
+          "x": 13,
+          "y": 7
+        },
+        {
+          "x": 13,
+          "y": 8
+        },
+        {
+          "x": 13,
+          "y": 9
+        },
+        {
+          "x": 13,
+          "y": 10
+        },
+        {
+          "x": 13,
+          "y": 11
+        },
+        {
+          "x": 13,
+          "y": 12
+        },
+        {
+          "x": 13,
+          "y": 13
+        },
+        {
+          "x": 14,
+          "y": 5
+        },
+        {
+          "x": 14,
+          "y": 6
+        },
+        {
+          "x": 14,
+          "y": 7
+        },
+        {
+          "x": 14,
+          "y": 8
+        },
+        {
+          "x": 14,
+          "y": 9
+        },
+        {
+          "x": 14,
+          "y": 10
+        },
+        {
+          "x": 14,
+          "y": 11
+        },
+        {
+          "x": 14,
+          "y": 12
+        },
+        {
+          "x": 14,
+          "y": 13
+        }
+      ],
+      "triggerName": "Edge 2_WildBattle_Grassy_01"
+    }
+  ],
+  "fishingSpots": []
+}

@@ -1,0 +1,82 @@
+{
+  "areas": [
+    {
+      "displayName": "Dijkstra Village",
+      "flyLocation": "PokeCenter",
+      "terrain": "GRASS",
+      "weather": "NORMAL",
+      "music": "DEFAULT_TUNE"
+    }
+  ],
+  "mapTransitions": [
+    {
+      "exitName": "Edge 2",
+      "direction": "UP",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "Tomasulo Town",
+        "mapName": "Edge 2"
+      },
+      "nextEntrance": "South",
+      "location": [
+        {
+          "x": 16,
+          "y": 1
+        },
+        {
+          "x": 14,
+          "y": 1
+        },
+        {
+          "x": 15,
+          "y": 1
+        },
+        {
+          "x": 16,
+          "y": 1
+        }
+      ],
+      "triggerName": "Dijkstra Village_MapExit_Edge2_01"
+    },
+    {
+      "exitName": "PokeCenter",
+      "direction": "UP",
+      "deathPortal": true,
+      "nextMap": {
+        "region": "Dijkstra Village",
+        "mapName": "PokeCenter"
+      },
+      "nextEntrance": "FrontDoor",
+      "location": [
+        {
+          "x": 21,
+          "y": 5
+        }
+      ],
+      "triggerName": "Dijkstra Village_MapExit_PokeCenter_01"
+    },
+    {
+      "exitName": "gym",
+      "direction": "UP",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "Dijkstra Village",
+        "mapName": "Gym"
+      },
+      "nextEntrance": "village",
+      "location": [
+        {
+          "x": 9,
+          "y": 12
+        }
+      ],
+      "triggerName": "Dijkstra Village_MapExit_gym_01"
+    }
+  ],
+  "NPCs": [],
+  "items": [],
+  "miscEntities": [],
+  "events": [],
+  "wildBattles": [],
+  "fishingSpots": []
+}

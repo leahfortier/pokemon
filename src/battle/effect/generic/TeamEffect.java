@@ -228,12 +228,8 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "Sticky web covers everything!";
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add("The sticky web spun away!");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
+		public String getReleaseMessage(ActivePokemon releaser) {
+			return "The sticky web spun away!";
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
@@ -268,12 +264,8 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "Floating rocks were scattered all around!";
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add("The floating rocks spun away!");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
+		public String getReleaseMessage(ActivePokemon releaser) {
+			return "The floating rocks spun away!";
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
@@ -318,12 +310,8 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "Toxic spikes were scattered all around!";
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add("The toxic spikes dispersed!");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
+		public String getReleaseMessage(ActivePokemon releaser) {
+			return "The toxic spikes dispersed!";
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
@@ -375,12 +363,8 @@ public abstract class TeamEffect extends Effect implements Serializable {
 			return "Spikes were scattered all around!";
 		}
 
-		public void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add("The spikes dispersed!");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both list
-			releaser.getEffects().remove(this);
-			b.getEffects(releaser).remove(this);
+		public String getReleaseMessage(ActivePokemon releaser) {
+			return "The spikes dispersed!";
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {

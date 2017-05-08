@@ -284,7 +284,23 @@ public final class EffectInterfaces {
 	}
 
 	public interface RapidSpinRelease {
-		void releaseRapidSpin(Battle b, ActivePokemon releaser);
+		String getReleaseMessage(ActivePokemon releaser);
+
+		default void releaseRapidSpin(Battle b, ActivePokemon releaser) {
+			Messages.add(this.getReleaseMessage(releaser));
+			
+			if (this instanceof PokemonEffect) {
+				PokemonEffect effect = (PokemonEffect)this;
+				releaser.getEffects().remove(effect);
+			}
+			else if (this instanceof TeamEffect) {
+				TeamEffect effect = (TeamEffect)this;
+				b.getEffects(releaser).remove(effect);
+			}
+			else {
+				Global.error("Invalid rapid spin release object " + this.getClass().getSimpleName());
+			}
+		}
 
 		static void release(Battle b, ActivePokemon releaser) {
 			List<Object> invokees = b.getEffectsList(releaser);
@@ -365,7 +381,7 @@ public final class EffectInterfaces {
 	}
 
 	public interface LevitationEffect {
-		void fall(Battle b, ActivePokemon fallen);
+		default void fall(Battle b, ActivePokemon fallen) {}
 
 		static void falllllllll(Battle b, ActivePokemon fallen) {
 			List<Object> invokees = b.getEffectsList(fallen);
@@ -1607,6 +1623,81 @@ public final class EffectInterfaces {
 			}
 			
 			return modVal;
+		}
+	}
+
+	public interface WeatherEliminatingEffect extends EntryEndTurnEffect {
+		String getEliminateMessage(ActivePokemon eliminator);
+
+		default boolean eliminateWeather(Weather weather) {
+			return weather.namesies() != EffectNamesies.CLEAR_SKIES;
+		}
+
+		default void applyEffect(Battle b, ActivePokemon p) {
+			b.addEffect(b.getWeather());
+		}
+
+		static boolean shouldEliminateWeather(Battle b, ActivePokemon eliminator, Weather weather) {
+			List<Object> invokees = b.getEffectsList(eliminator);
+			for (Object invokee : invokees) {
+				if (invokee instanceof WeatherEliminatingEffect && Effect.isActiveEffect(invokee)) {
+					
+					WeatherEliminatingEffect effect = (WeatherEliminatingEffect)invokee;
+					if (effect.eliminateWeather(weather)) {
+						Messages.add(effect.getEliminateMessage(eliminator));
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		}
+	}
+
+	public interface EntryEndTurnEffect extends EntryEffect, EndTurnEffect {
+		void applyEffect(Battle b, ActivePokemon p);
+
+		default void applyEndTurn(ActivePokemon victim, Battle b) {
+			applyEffect(b, victim);
+		}
+
+		default void enter(Battle b, ActivePokemon enterer) {
+			applyEffect(b, enterer);
+		}
+	}
+
+	public interface SwitchOutEffect {
+		void switchOut(ActivePokemon switchee);
+
+		static void invokeSwitchOutEffect(ActivePokemon switchee) {
+			List<Object> invokees = switchee.getAllEffects(null);
+			
+			for (Object invokee : invokees) {
+				if (invokee instanceof SwitchOutEffect && Effect.isActiveEffect(invokee)) {
+					
+					SwitchOutEffect effect = (SwitchOutEffect)invokee;
+					effect.switchOut(switchee);
+				}
+			}
+		}
+	}
+
+	public interface WeatherExtendingEffect {
+		int getExtensionTurns(EffectNamesies weatherType);
+
+		static int getModifier(Battle b, ActivePokemon p, EffectNamesies weatherType) {
+			int modifier = 0;
+			
+			List<Object> invokees = b.getEffectsList(p);
+			for (Object invokee : invokees) {
+				if (invokee instanceof WeatherExtendingEffect && Effect.isActiveEffect(invokee)) {
+					
+					WeatherExtendingEffect effect = (WeatherExtendingEffect)invokee;
+					modifier += effect.getExtensionTurns(weatherType);
+				}
+			}
+			
+			return modifier;
 		}
 	}
 }

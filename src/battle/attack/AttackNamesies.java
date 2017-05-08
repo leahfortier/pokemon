@@ -654,7 +654,7 @@ import battle.attack.Attack.ZapCannon;
 import battle.attack.Attack.ZenHeadbutt;
 import battle.attack.Attack.ZingZap;
 import main.Global;
-import util.PokeString;
+import util.StringUtils;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -1345,7 +1345,7 @@ public enum AttackNamesies {
 
 	public static AttackNamesies tryValueOf(String name) {
 		try {
-			return AttackNamesies.valueOf(PokeString.getNamesiesString(name));
+			return AttackNamesies.valueOf(StringUtils.getNamesiesString(name));
 		} catch (IllegalArgumentException exception) {
 			return null;
 		}

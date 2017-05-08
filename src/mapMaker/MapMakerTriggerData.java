@@ -2,6 +2,7 @@ package mapMaker;
 
 import draw.TileUtils;
 import main.Global;
+import map.PathDirection;
 import map.entity.movable.MovableEntity;
 import mapMaker.dialogs.EventTriggerDialog;
 import mapMaker.dialogs.ItemEntityDialog;
@@ -29,8 +30,8 @@ import pattern.map.NPCMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import util.FileIO;
 import util.Point;
-import util.PokeString;
 import util.SerializationUtils;
+import util.SpecialCharacter;
 import util.StringUtils;
 
 import java.awt.Graphics2D;
@@ -41,7 +42,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MapMakerTriggerData {
-
 	private final Set<AreaMatcher> areaData;
 	private final Set<LocationTriggerMatcher> entities;
 
@@ -103,6 +103,7 @@ public class MapMakerTriggerData {
 		} while (entityNames.contains(uniqueEntityName));
 
 		System.out.println(uniqueEntityName);
+
 		matcher.setTriggerName(uniqueEntityName);
 		entityNames.add(uniqueEntityName);
 
@@ -115,7 +116,7 @@ public class MapMakerTriggerData {
 		}
 
 		baseName = baseName.replaceAll("\\s", "");
-		baseName = PokeString.removeSpecialSymbols(baseName);
+		baseName = SpecialCharacter.removeSpecialSymbols(baseName);
 		return baseName;
 	}
 
@@ -154,9 +155,11 @@ public class MapMakerTriggerData {
 
 					if (entity instanceof MapTransitionMatcher) {
 						BufferedImage exitImage = TriggerModel.getMapExitImage(mapMaker);
-						Point newLocation = Point.add(point, ((MapTransitionMatcher) entity).getDirection().getDeltaPoint());
-
-						TileUtils.drawTileImage(g2d, exitImage, newLocation, mapLocation);
+						PathDirection direction = ((MapTransitionMatcher) entity).getDirection();
+						if (direction != null) {
+							Point newLocation = Point.add(point, direction.getDeltaPoint());
+							TileUtils.drawTileImage(g2d, exitImage, newLocation, mapLocation);
+						}
 					}
 				}
 			} else {

@@ -100,7 +100,6 @@ public abstract class MovableEntity extends Entity {
 			}
 
 			if (!StringUtils.isNullOrEmpty(path)) {
-
 				// Find the direction that corresponds to the character
 				PathDirection direction = PathDirection.getDirection(path.charAt(pathIndex));
 				if (direction == PathDirection.WAIT) {
@@ -108,16 +107,23 @@ public abstract class MovableEntity extends Entity {
 					pathIndex++;
 				}
 				else {
-					Point newLocation = getNewLocation(this.getLocation(), direction.getDirection(), currentMap);
-					if (newLocation != null) {
-						setLocation(newLocation);
-
-						transitionTime = 1;
-						waitTime = 5*this.getTimeBetweenTiles()/4; // TODO: Why 5/4
+					if (Character.isUpperCase(path.charAt(pathIndex))) {
+						this.setDirection(direction.getDirection());
+						waitTime = 5 * this.getTimeBetweenTiles() / 4; // TODO: Why 5/4
 						pathIndex++;
 					}
+					else {
+						Point newLocation = getNewLocation(this.getLocation(), direction.getDirection(), currentMap);
+						if (newLocation != null) {
+							setLocation(newLocation);
 
-					this.setDirection(direction.getDirection());
+							transitionTime = 1;
+							waitTime = 5 * this.getTimeBetweenTiles() / 4; // TODO: Why 5/4
+							pathIndex++;
+						}
+
+						this.setDirection(direction.getDirection());
+					}
 				}
 
 				pathIndex %= path.length();

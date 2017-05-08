@@ -6,6 +6,7 @@ import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectNamesies;
 import gui.view.ViewMode;
 import item.ItemNamesies;
+import item.berry.farm.BerryFarm;
 import item.use.BallItem;
 import main.Game;
 import map.Direction;
@@ -42,7 +43,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Player extends Trainer implements Serializable {
 	private static final long serialVersionUID = 4283479774388652604L;
@@ -78,7 +78,9 @@ public class Player extends Trainer implements Serializable {
 	private Set<Badge> badges;
 	private Pokedex pokedex;
 	private PC pc;
+
 	private DayCareCenter dayCareCenter;
+	private BerryFarm berryFarm;
 
 	private EvolutionInfo evolutionInfo;
 	private NewPokemonInfo newPokemonInfo;
@@ -106,6 +108,8 @@ public class Player extends Trainer implements Serializable {
 		flyLocations = new HashSet<>();
 
 		dayCareCenter = new DayCareCenter();
+		berryFarm = new BerryFarm();
+
 		evolutionInfo = new EvolutionInfo();
 		newPokemonInfo = new NewPokemonInfo();
 		repelInfo = new RepelInfo();
@@ -140,6 +144,10 @@ public class Player extends Trainer implements Serializable {
 
 	public DayCareCenter getDayCareCenter() {
 		return this.dayCareCenter;
+	}
+
+	public BerryFarm getBerryFarm() {
+		return this.berryFarm;
 	}
 
 	public boolean isBiking() {
@@ -206,7 +214,7 @@ public class Player extends Trainer implements Serializable {
 	}
 
 	public List<Entry<MapName, String>> getFlyLocations() {
-		return this.flyLocations.stream().collect(Collectors.toList());
+		return new ArrayList<>(this.flyLocations);
 	}
 
 	public EvolutionInfo getEvolutionInfo() {

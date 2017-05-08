@@ -1,11 +1,14 @@
 package gui;
 
+import com.apple.eawt.Application;
+import draw.DrawUtils;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
 import pokemon.PokemonInfo;
 import util.FontMetrics;
+import util.PokeString;
 import util.RandomUtils;
 
 import javax.swing.JFrame;
@@ -23,17 +26,21 @@ public class GameFrame {
 
 	private static final JFrame frame = new JFrame();
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
+		frame.setVisible(true);
+
 		Canvas gui = new Canvas();
 		gui.setSize(Global.GAME_SIZE);
 
+		frame.getContentPane().add(gui);
+
 		frame.setTitle(Global.TITLE);
 		frame.setIconImage(Global.FRAME_ICON);
+		Application.getApplication().setDockIconImage(Global.FRAME_ICON);
+
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-		frame.getContentPane().add(gui);
 		frame.pack();
-		frame.setVisible(true);
 
 		Thread gameThread = new Thread(new GameLoop(gui));
 		gameThread.start();
@@ -70,8 +77,7 @@ public class GameFrame {
 			strategy = gui.getBufferStrategy();
 
 			Graphics g = strategy.getDrawGraphics();
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+			DrawUtils.fillCanvas(g, Color.BLACK);
 			
 			g.setColor(Color.WHITE);
 			FontMetrics.setFont(g, 72);
@@ -96,7 +102,7 @@ public class GameFrame {
 					
 					if (fpsTime > 1000) {
 						fpsTime %= 1000;
-						frame.setTitle("Pokemon++          FPS:" + frameCount);
+						frame.setTitle(PokeString.POKEMON + "++          FPS:" + frameCount);
 						frameCount = 1;
 					}
 					else {

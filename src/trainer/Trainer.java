@@ -1,8 +1,8 @@
 package trainer;
 
 import battle.Battle;
-import battle.effect.SwitchOutEffect;
 import battle.effect.generic.Effect;
+import battle.effect.generic.EffectInterfaces.SwitchOutEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import battle.effect.status.StatusCondition;
@@ -57,8 +57,7 @@ public abstract class Trainer implements Team, Serializable {
 				return i;
 			}
 		}
-
-		Global.error("Team member is not apart of team.");
+		
 		return -1;
 	}
 
@@ -85,12 +84,10 @@ public abstract class Trainer implements Team, Serializable {
 		if (frontIndex == index) {
 			return;
 		}
-		
+
 		// Apply any effects that take place when switching out
-		if (front().getAbility() instanceof SwitchOutEffect) {
-			((SwitchOutEffect)front().getAbility()).switchOut(front());
-		}
-		
+		SwitchOutEffect.invokeSwitchOutEffect(front());
+
 		frontIndex = index;
 	}
 	
@@ -156,9 +153,10 @@ public abstract class Trainer implements Team, Serializable {
 	}
 
 	@Override
-	public boolean blackout() {
+	public boolean blackout(Battle b) {
+		boolean maxUsed = maxPokemonUsed(b);
 		for (ActivePokemon p : team) {
-			if (p.canFight()) {
+			if (p.canFight() && (!maxUsed || p.getAttributes().isBattleUsed())) {
 				return false;
 			}
 		}
@@ -175,7 +173,8 @@ public abstract class Trainer implements Team, Serializable {
 		boolean maxUsed = maxPokemonUsed(b);
 		List<Integer> valid = new ArrayList<>();
 		for (int i = 0; i < team.size(); i++) {
-			if (i == frontIndex || !team.get(i).canFight() || (maxUsed && !team.get(i).getAttributes().isBattleUsed())) {
+			ActivePokemon p = team.get(i);
+			if (i == frontIndex || !p.canFight() || (maxUsed && !p.getAttributes().isBattleUsed())) {
 				continue;
 			}
 

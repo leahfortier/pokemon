@@ -111,7 +111,7 @@ import battle.effect.generic.Weather.Raining;
 import battle.effect.generic.Weather.Sandstorm;
 import battle.effect.generic.Weather.Sunny;
 import main.Global;
-import util.PokeString;
+import util.StringUtils;
 
 public enum EffectNamesies {
     // EVERYTHING BELOW IS GENERATED ###
@@ -250,7 +250,7 @@ public enum EffectNamesies {
 
 	public static EffectNamesies getValueOf(String name) {
 		try {
-			return EffectNamesies.valueOf(PokeString.getNamesiesString(name));
+			return EffectNamesies.valueOf(StringUtils.getNamesiesString(name));
 		} catch (IllegalArgumentException exception) {
 			Global.error(name + " does not have a valid EffectNamesies value");
 			return null;

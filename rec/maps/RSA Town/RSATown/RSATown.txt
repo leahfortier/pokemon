@@ -81,8 +81,8 @@
           "npcActions": [
             {
               "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure."
+                "triggerType": "DIALOGUE",
+                "triggerContents": "E's cu mucd."
               }
             }
           ]
@@ -93,6 +93,56 @@
         "y": 15
       },
       "triggerName": "RSATown_NPC_Guy_01"
+    },
+    {
+      "name": "Nameless",
+      "path": "w",
+      "spriteIndex": 4,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "Interaction0",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Famlusa du NCY Dufh! Dryd’c ed vnus sa."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 41,
+        "y": 18
+      },
+      "triggerName": "RSATown_NPC_Nameless_01"
+    },
+    {
+      "name": "PretentiousFuck",
+      "path": "wrwrlrwrrlwwwllwrlwwwl",
+      "spriteIndex": 2,
+      "direction": "RIGHT",
+      "interactions": [
+        {
+          "name": "Interaction0",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "Drec dufh ec geht uv bnadahdeuic, pacd hud pudran dnoehk du ihtancdyht dra limdina."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 26,
+        "y": 23
+      },
+      "triggerName": "RSATown_NPC_PretentiousFuck_01"
     },
     {
       "name": "Rival",
@@ -107,7 +157,25 @@
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "My Riolu is going to punch the normal off your Eevee!"
+                "triggerContents": "You actually had the balls to leave town? What are you up to then?"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Huh?"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "You're actually trying to become a Pokémon master??"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Let's battle then!!!"
               }
             },
             {
@@ -127,7 +195,31 @@
             {
               "trigger": {
                 "triggerType": "Dialogue",
-                "triggerContents": "..."
+                "triggerContents": "You just got lucky, noob!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "What? Of course you get money for winning battles. That's how it works."
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Becoming a Pokémon master comes with a lot of perks and royalties -- it has money written all over it!"
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "I don't care about any of that though."
+              }
+            },
+            {
+              "trigger": {
+                "triggerType": "Dialogue",
+                "triggerContents": "Might as well make use of that Eevee you've had all your life... Smell ya later!!"
               }
             },
             {
@@ -158,6 +250,31 @@
       },
       "triggerName": "RSATown_NPC_Rival_01",
       "condition": ":npc_interaction:#RSATown_NPC_Rival_01$won:"
+    },
+    {
+      "name": "Slowking",
+      "path": "w",
+      "spriteIndex": 23,
+      "direction": "DOWN",
+      "interactions": [
+        {
+          "name": "Interaction0",
+          "walkToPlayer": false,
+          "npcActions": [
+            {
+              "trigger": {
+                "triggerType": "DIALOGUE",
+                "triggerContents": "TECDINP HUD DRA RYNSUHO UV VENA, ELA, YHT MEKRDHEHK."
+              }
+            }
+          ]
+        }
+      ],
+      "location": {
+        "x": 33,
+        "y": 29
+      },
+      "triggerName": "RSATown_NPC_Slowking_01"
     }
   ],
   "items": [],

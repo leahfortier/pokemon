@@ -9,7 +9,6 @@ import battle.attack.MoveType;
 import battle.effect.DefiniteEscape;
 import battle.effect.SimpleStatModifyingEffect;
 import battle.effect.StallingEffect;
-import battle.effect.SwitchOutEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.CastSource;
@@ -32,6 +31,7 @@ import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
+import battle.effect.generic.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
@@ -63,10 +63,12 @@ import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
+import battle.effect.generic.EffectInterfaces.SwitchOutEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.TypedWildEncounterSelector;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
+import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
@@ -96,6 +98,7 @@ import trainer.Trainer;
 import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
+import util.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -485,16 +488,12 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.LIGHTNINGROD, "The Pok\u00e9mon draws in all Electric-type moves.");
 		}
 
-		private Stat toIncrease() {
-			return Stat.SP_ATTACK;
-		}
-
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.ELECTRIC;
 		}
 
 		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
-			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+			victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
 		}
 
 		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -595,12 +594,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-			if (RandomUtils.chanceTest(30)) {
-				PokemonEffect infatuated = (PokemonEffect)EffectNamesies.INFATUATED.getEffect();
-				if (infatuated.applies(b, victim, user, CastSource.ABILITY)) {
-					user.addEffect(infatuated);
-					Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
-				}
+			if (RandomUtils.chanceTest(30) && EffectNamesies.INFATUATED.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
+				Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
 			}
 		}
 
@@ -664,8 +659,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect((Weather)EffectNamesies.SUNNY.getEffect());
 			Messages.add(enterer.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
+			b.addEffect((Weather)EffectNamesies.SUNNY.getEffect());
 		}
 	}
 
@@ -818,7 +813,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Limber extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class Limber extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.PARALYZED)) {
@@ -830,12 +825,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.LIMBER, "The Pok\u00e9mon is protected from paralysis.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -878,21 +869,19 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class CloudNine extends Ability implements EntryEffect {
+	static class CloudNine extends Ability implements WeatherEliminatingEffect {
 		private static final long serialVersionUID = 1L;
 
 		CloudNine() {
 			super(AbilityNamesies.CLOUD_NINE, "Eliminates the effects of weather.");
 		}
 
-		public void enter(Battle b, ActivePokemon enterer) {
-			// TODO: I think this isn't the intended effect of this ability
-			b.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
-			Messages.add(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
+		public String getEliminateMessage(ActivePokemon eliminator) {
+			return eliminator.getName() + "'s " + this.getName() + " eliminated the weather!";
 		}
 	}
 
-	static class VitalSpirit extends Ability implements MaxLevelWildEncounterEffect, StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class VitalSpirit extends Ability implements MaxLevelWildEncounterEffect, StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.ASLEEP)) {
@@ -904,12 +893,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.VITAL_SPIRIT, "Prevents the Pok\u00e9mon from falling asleep.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -921,7 +906,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Insomnia extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class Insomnia extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.ASLEEP)) {
@@ -933,12 +918,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.INSOMNIA, "Prevents the Pok\u00e9mon from falling asleep.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -1224,13 +1205,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		Levitate() {
 			super(AbilityNamesies.LEVITATE, "Gives full immunity to all Ground-type moves.");
 		}
-
-		public void fall(Battle b, ActivePokemon fallen) {
-			Messages.add(fallen.getName() + " is no longer levitating!");
-			
-			// TODO: Fix this it's broken
-			// Effect.removeEffect(fallen.getEffects(), this.namesies());
-		}
 	}
 
 	static class Forewarn extends Ability implements EntryEffect {
@@ -1407,7 +1381,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class WaterVeil extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class WaterVeil extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.BURNED)) {
@@ -1419,12 +1393,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.WATER_VEIL, "Prevents the Pok\u00e9mon from getting a burn.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -1696,7 +1666,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Immunity extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class Immunity extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.POISONED)) {
@@ -1708,12 +1678,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.IMMUNITY, "Prevents the Pok\u00e9mon from getting poisoned.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -1912,7 +1878,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class MagmaArmor extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class MagmaArmor extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.FROZEN)) {
@@ -1924,12 +1890,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.MAGMA_ARMOR, "Prevents the Pok\u00e9mon from becoming frozen.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -1974,8 +1936,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect((Weather)EffectNamesies.SANDSTORM.getEffect());
 			Messages.add(enterer.getName() + "'s " + this.getName() + " whipped up a sandstorm!");
+			b.addEffect((Weather)EffectNamesies.SANDSTORM.getEffect());
 		}
 	}
 
@@ -2167,7 +2129,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			for (Move m : other.getMoves(b)) {
 				Attack attack = m.getAttack();
 				if (attack.getActualType().getAdvantage().isSuperEffective(enterer, b) || attack.isMoveType(MoveType.ONE_HIT_KO)) {
-					// TODO: Shouldn't this be for a random move?
 					Messages.add(enterer.getName() + "'s " + this.getName() + " made it shudder!");
 					break;
 				}
@@ -2182,16 +2143,12 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.STORM_DRAIN, "Draws in all Water-type moves to up Sp. Attack.");
 		}
 
-		private Stat toIncrease() {
-			return Stat.SP_ATTACK;
-		}
-
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.WATER;
 		}
 
 		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
-			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+			victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
 		}
 
 		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -2259,22 +2216,20 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect((Weather)EffectNamesies.RAINING.getEffect());
 			Messages.add(enterer.getName() + "'s " + this.getName() + " started a downpour!");
+			b.addEffect((Weather)EffectNamesies.RAINING.getEffect());
 		}
 	}
 
-	static class AirLock extends Ability implements EntryEffect {
+	static class AirLock extends Ability implements WeatherEliminatingEffect {
 		private static final long serialVersionUID = 1L;
 
 		AirLock() {
 			super(AbilityNamesies.AIR_LOCK, "Eliminates the effects of weather.");
 		}
 
-		public void enter(Battle b, ActivePokemon enterer) {
-			// TODO: I think this isn't the intended effect of this ability
-			b.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
-			Messages.add(enterer.getName() + "'s " + this.getName() + " eliminated the weather!");
+		public String getEliminateMessage(ActivePokemon eliminator) {
+			return eliminator.getName() + "'s " + this.getName() + " eliminated the weather!";
 		}
 	}
 
@@ -2374,8 +2329,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 
 		public void enter(Battle b, ActivePokemon enterer) {
-			b.addEffect((Weather)EffectNamesies.HAILING.getEffect());
 			Messages.add(enterer.getName() + "'s " + this.getName() + " caused it to hail!");
+			b.addEffect((Weather)EffectNamesies.HAILING.getEffect());
 		}
 	}
 
@@ -2386,16 +2341,12 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.MOTOR_DRIVE, "Raises Speed if hit by an Electric-type move.");
 		}
 
-		private Stat toIncrease() {
-			return Stat.SPEED;
-		}
-
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.ELECTRIC;
 		}
 
 		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
-			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+			victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
 		}
 
 		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -2427,9 +2378,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
 			if (RandomUtils.chanceTest(30)) {
 				user.getAttributes().setLastMoveUsed();
-				PokemonEffect disable = (PokemonEffect)EffectNamesies.DISABLE.getEffect();
-				if (disable.applies(b, victim, user, CastSource.ABILITY)) {
-					disable.cast(b, victim, user, CastSource.ABILITY, false);
+				if (EffectNamesies.DISABLE.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
 					Messages.add(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
 				}
 			}
@@ -2750,16 +2699,12 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.SAP_SIPPER, "Boosts Attack when hit by a Grass-type move.");
 		}
 
-		private Stat toIncrease() {
-			return Stat.ATTACK;
-		}
-
 		public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
 			return user.getAttackType() == Type.GRASS;
 		}
 
 		public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
-			victim.getAttributes().modifyStage(victim, victim, 1, toIncrease(), b, CastSource.ABILITY);
+			victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
 		}
 
 		public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -2902,6 +2847,56 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 	static class Pickup extends Ability implements EndBattleEffect {
 		private static final long serialVersionUID = 1L;
+		private static final List<ItemNamesies> items = new ArrayList<>();
+		static {
+			addItem(ItemNamesies.POTION, 30);
+			addItem(ItemNamesies.ANTIDOTE, 20);
+			addItem(ItemNamesies.SUPER_POTION, 20);
+			addItem(ItemNamesies.GREAT_BALL, 20);
+			addItem(ItemNamesies.REPEL, 20);
+			addItem(ItemNamesies.FULL_HEAL, 15);
+			addItem(ItemNamesies.ETHER, 15);
+			addItem(ItemNamesies.ULTRA_BALL, 15);
+			addItem(ItemNamesies.HYPER_POTION, 10);
+			addItem(ItemNamesies.REVIVE, 10);
+			addItem(ItemNamesies.RARE_CANDY, 10);
+			addItem(ItemNamesies.HEART_SCALE, 10);
+			addItem(ItemNamesies.ELIXIR, 10);
+			addItem(ItemNamesies.SUN_STONE, 5);
+			addItem(ItemNamesies.MOON_STONE, 5);
+			addItem(ItemNamesies.DAWN_STONE, 5);
+			addItem(ItemNamesies.DUSK_STONE, 5);
+			addItem(ItemNamesies.FIRE_STONE, 5);
+			addItem(ItemNamesies.WATER_STONE, 5);
+			addItem(ItemNamesies.LEAF_STONE, 5);
+			addItem(ItemNamesies.ICE_STONE, 5);
+			addItem(ItemNamesies.THUNDER_STONE, 5);
+			addItem(ItemNamesies.SHINY_STONE, 5);
+			addItem(ItemNamesies.KINGS_ROCK, 5);
+			addItem(ItemNamesies.MAX_REVIVE, 5);
+			addItem(ItemNamesies.NUGGET, 5);
+			addItem(ItemNamesies.PRISM_SCALE, 5);
+			addItem(ItemNamesies.DESTINY_KNOT, 5);
+			addItem(ItemNamesies.FULL_RESTORE, 5);
+			addItem(ItemNamesies.PPUP, 5);
+			addItem(ItemNamesies.LEFTOVERS, 5);
+			addItem(ItemNamesies.MAX_ELIXIR, 5);
+			addItem(ItemNamesies.BIG_NUGGET, 1);
+			addItem(ItemNamesies.BALM_MUSHROOM, 1);
+			addItem(ItemNamesies.HPUP, 1);
+			addItem(ItemNamesies.PROTEIN, 1);
+			addItem(ItemNamesies.IRON, 1);
+			addItem(ItemNamesies.CALCIUM, 1);
+			addItem(ItemNamesies.CARBOS, 1);
+			addItem(ItemNamesies.ZINC, 1);
+			addItem(ItemNamesies.RARE_BONE, 1);
+		}
+		
+		private static void addItem(ItemNamesies item, int quantity) {
+			for (int i = 0; i < quantity; i++) {
+				items.add(item);
+			}
+		}
 
 		Pickup() {
 			super(AbilityNamesies.PICKUP, "The Pok\u00e9mon may pick up items.");
@@ -2909,8 +2904,9 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
 			if (!p.isHoldingItem(b) && RandomUtils.chanceTest(10)) {
-				// TODO: THIS SHOULDN'T JUST BE LEFTOVERS IT SHOULD BE MORE FUN STUFF
-				p.giveItem(ItemNamesies.LEFTOVERS);
+				ItemNamesies item = RandomUtils.getRandomValue(items);
+				p.giveItem(item);
+				Messages.add(p.getName() + " picked up " + StringUtils.articleString(item.getName()) + "!");
 			}
 		}
 	}
@@ -3135,7 +3131,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class SweetVeil extends Ability implements StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class SweetVeil extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.ASLEEP)) {
@@ -3147,12 +3143,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			super(AbilityNamesies.SWEET_VEIL, "Prevents itself and ally Pok\u00e9mon from falling asleep.");
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
@@ -3548,7 +3540,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class WaterBubble extends Ability implements OpponentPowerChangeEffect, PowerChangeEffect, StatusPreventionEffect, EntryEffect, EndTurnEffect {
+	static class WaterBubble extends Ability implements OpponentPowerChangeEffect, PowerChangeEffect, StatusPreventionEffect, EntryEndTurnEffect {
 		private static final long serialVersionUID = 1L;
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusCondition.BURNED)) {
@@ -3568,12 +3560,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			return user.isAttackType(Type.FIRE) ? .5 : 1;
 		}
 
-		public void applyEndTurn(ActivePokemon victim, Battle b) {
-			removeStatus(b, victim);
-		}
-
-		public void enter(Battle b, ActivePokemon enterer) {
-			removeStatus(b, enterer);
+		public void applyEffect(Battle b, ActivePokemon p) {
+			removeStatus(b, p);
 		}
 
 		public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {

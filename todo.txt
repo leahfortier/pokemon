@@ -9,7 +9,7 @@ STUFF DAT MUST HAPPEN:
 	Graphics 'n stuff (Josh/Jeb)
 	Save files (Jessica/Josh)
 	Item things (Max)
-	Eggs/Breeding 
+	Eggs/Breeding
 	LOTS OF UI DESIGN INCLUDING BUT NOT LIMITED TO: BATTLE, POKEDEX, BAG, START MENU, POKEMON MENU, TRAINER CARD, YADA YADA YADA
 	All dem UMLs (Jeb)
 	Syrup (Leah/Max/Jessica/Josh/Jeb/Tyler)
@@ -26,80 +26,72 @@ STUFF DAT MUST HAPPEN:
 	Failure Messages for moves (Leah)
 	Strategy Guide (Leah)
 	PC (Max)
-	
+
 OTHER THINGS
-	TYLER - Switching Pokemon/Using an item needs to be able to send messages to the BattleView, 
+	TYLER - Switching Pokemon/Using an item needs to be able to send messages to the BattleView,
 	right now you can do these things, but the health/status isn't updated, and there's no message
 	saying that something happened. Also, we need small pokemonTiles.
-	
+
 	The player should turn in the direction you press, even if the tile is not passable.
 	Can triggers take into account orientation (i.e. only trigger the water dialog when the user is facing the water)?
-	
+
 Am I allowed to edit this to? (Josh) - YES
 MAP TILES
 	Tyler - I have not seen the map editor yet, but when I was suggesting having multiple
-	grass tiles, the editor should be the one to pick at random which tile to use. Also, going 
-	with your idea of having a two layered tile set, the only thing I can think of that would 
-	go on the background set would be grass tiles. Unless someone else comes up with another 
-	tile that would go in the background set, you could just render the default grass tile for 
-	the map in all locations and then draw the map as usual. Then again, to avoid all of the 
-	unnecessary rendering, I could just get Jeb to add grass tiles to the bottom of all tree tiles. 
+	grass tiles, the editor should be the one to pick at random which tile to use. Also, going
+	with your idea of having a two layered tile set, the only thing I can think of that would
+	go on the background set would be grass tiles. Unless someone else comes up with another
+	tile that would go in the background set, you could just render the default grass tile for
+	the map in all locations and then draw the map as usual. Then again, to avoid all of the
+	unnecessary rendering, I could just get Jeb to add grass tiles to the bottom of all tree tiles.
 
-There is a bug with the buttons in bag view particularly the give and take ones
-
-Diancie needs a base exp yield and a capture rate whenever that gets updated
-
-Things to test:
-	EffectBlockerEffect
-	EndBattleEffect
-	EndTurnEffect
-	StatusPreventionEffect
-	WeatherBlockerEffect
-	TrappingEffect
-	OpponentTrappingEffect
-	EntryEffect
-	
-	StatProtectingEffect:
-		if (this instanceof Ability && caster.breaksTheMold()) return false;
-		
-	Test fixed damage moves or basically anything that takes advantage of the new tryDamage method
-
-Should probably just let Nidoran be 100% male again
+Storyline:
+	Professor Maple is no longer introduced except for through the bitchface who is optional -- maybe want to alter Mom's message to be more plot-focused and mention visiting the lab?
 
 Pokemon that go out of bounds:
 	Xerneas
 	Aurorus
-	
+	Kokonatsu
+
 	We need to do whatever thing we did for levitating Pokemon before so it doesn't look like they're sitting on the ground... Wait actually we never did that -- that needs to happens srsly
-	
-Change Machoke's method of evolution to a belt
 
-Make comments available for generator
-Private generator methods
-Disallow interfaces from input files
-remove Override/interface fields
-add optional fields
-allow hidden interfaces -- AddHiddenField (should add the field but not add the interfaces associated with that field)
-allow manually adding to the beginning or end of a method
+Names that go out of bounds:
+	Crabominable
+	Disarming Voice
+	Silph Surfer
 
-Find a way to have multiple fields that are multiple words long:
-	Combine switchItem and switchItemMessage
-	combine abilityChange and AbilityMessage
-	combine opptrappingeffect and message
-	combine attackselection and message
-	name change set and get
-	status prevent and message
-	stat protect and message
-	bracing and message
-	damage blocker and alternate effect
-	
-make sure default methods still work properly like critstage and groundedEffect
-same with interfaces with no methods
+Sprites that should eventually be replaced since they're fuzzy:
+	Rowlet
+	Dartrix
+	Litten
+	Pikipek
+	Grubbin
+	Charjabug
+	Rockruff
+	Wishiwashi
+	Dewpider
+	Salandit
+	Stufful
+	Jangmo-o
+	Cosmog
 
-Options menu
-Trainer card
-Fix opponent gets extra turn after poke faints
-Info guy dialogue
-Gary come up to you
-PC box controls (weird movement and withdraw button preselected)
-generalize catch animation again
+Missing Pokemon Sprites:
+	755 Morelull
+	758 Salazzle
+	765 Oranguru
+	773 Silvally
+	795 Pheromosa
+	796 Xurkitree
+	798 Kartana
+
+	Options menu:
+		- Sound
+		- Text Speed
+		- Animation Speed
+	generalize catch animation again
+	invoke methods that need to call another method immediately after (boolean and void generally or boolean and String just for message)
+	connect interface gen with override input
+	create some sort of silph surboard for Silph Surfer evolution
+	self switching moves require input -- currently just switching to random
+	green hat sprites
+	Riding up on bike on foreground tiles causes tiles to flash
