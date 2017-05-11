@@ -15,19 +15,30 @@ import java.util.List;
 public class DecisionTree {
     private static final int TREE_DEPTH = 2;
 
-    private Player player;
-    private int playerStartHealth;
-    private int opponentStartHealth;
+    private final Battle battle;
+    private final List<Move> usable;
 
-    public Move next(Battle b, List<Move> usable) {
+    private final Player player;
+
+    private final int playerStartHealth;
+    private final int opponentStartHealth;
+
+    public DecisionTree(Battle battle, List<Move> usable) {
+        this.battle = battle;
+        this.usable = usable;
+
+        player = (Player) SerializationUtils.getSerializedCopy(battle.getPlayer());
+
+        playerStartHealth = player.front().getHP();
+        opponentStartHealth = battle.getOpponent().front().getHP();
+    }
+
+    public Move next() {
         Messages.clearMessages(MessageState.SIMULATION_STATION);
         Messages.setMessageState(MessageState.SIMULATION_STATION);
 
-        player = (Player) SerializationUtils.getSerializedCopy(b.getPlayer());
-        playerStartHealth = player.front().getHP();
-        opponentStartHealth = b.getOpponent().front().getHP();
-
-        BestMove best = go(0, b, usable, b.getPlayer().front().getMoves(b));
+        List<Move> playerMoves = battle.getPlayer().front().getMoves(battle);
+        BestMove best = go(0, battle, usable, playerMoves);
 
         Messages.setMessageState(MessageState.FIGHTY_FIGHT);
 
@@ -44,56 +55,70 @@ public class DecisionTree {
         }
     }
 
+    private boolean isBattleDone(Battle b) {
+        return b.getOpponent().front().isFainted(b) || b.getPlayer().front().isFainted(b);
+    }
+
+    private long evaluate(Battle b) {
+        long points = 0;
+        ActivePokemon playerPoke = b.getPlayer().front();
+        ActivePokemon opponentPoke = b.getOpponent().front();
+
+        if (playerPoke.isFainted(b)) {
+            points += 1000;
+        } else {
+            points += 2 * (playerStartHealth - playerPoke.getHP());
+        }
+
+        if (opponentPoke.isFainted(b)) {
+            points -= 500;
+        } else {
+            points -= opponentStartHealth - opponentPoke.getHP();
+        }
+
+        return points;
+    }
+
+    private Battle simulateTurn(Battle b, Move opponentMove, Move playerMove) {
+        Battle simulated = (Battle) SerializationUtils.getSerializedCopy(b);
+        simulated.setPlayer(player);
+
+        ActivePokemon playerPokemon = (ActivePokemon) SerializationUtils.getSerializedCopy(player.front());
+        player.replaceFront(playerPokemon);
+
+        EnemyTrainer opponent = (EnemyTrainer)simulated.getOpponent();
+        ActivePokemon opponentPokemon = (ActivePokemon) SerializationUtils.getSerializedCopy(opponent.front());
+        opponent.replaceFront(opponentPokemon);
+
+        // Need to set these manually since this field has to be transient because ActivePokemon and BattleAttributes store each other
+        playerPokemon.getAttributes().setAttributesHolder(playerPokemon);
+        opponentPokemon.getAttributes().setAttributesHolder(opponentPokemon);
+
+        player.setAction(TrainerAction.FIGHT);
+        opponent.setAction(TrainerAction.FIGHT);
+
+        playerPokemon.setMove(new Move(playerMove.getAttack()));
+        opponentPokemon.setMove(new Move(opponentMove.getAttack()));
+
+        simulated.fight();
+
+        return simulated;
+    }
+
     private BestMove go(int level, Battle b, List<Move> opponentUsable, List<Move> playerUsable) {
         if (level == TREE_DEPTH || isBattleDone(b)) {
-            long points = 0;
-            ActivePokemon playerPoke = b.getPlayer().front();
-            ActivePokemon opponentPoke = b.getOpponent().front();
-
-            if (playerPoke.isFainted(b)) {
-                points += 1000;
-            } else {
-                points += 2 * (playerStartHealth - playerPoke.getHP());
-            }
-
-            if (opponentPoke.isFainted(b)) {
-                points -= 500;
-            } else {
-                points -= opponentStartHealth - opponentPoke.getHP();
-            }
-
-            return new BestMove(null, points);
+            return new BestMove(null, evaluate(b));
         }
 
         BestMove bestMove = new BestMove(opponentUsable.get(0), Integer.MIN_VALUE);
         for (Move opponentMove : opponentUsable) {
             BestMove current = new BestMove(playerUsable.get(0), Integer.MAX_VALUE);
-            // simulate battle
             for (Move playerMove : playerUsable) {
-                Battle simulated = (Battle) SerializationUtils.getSerializedCopy(b);
-                simulated.setPlayer(player);
-
-                ActivePokemon playerPokemon = (ActivePokemon) SerializationUtils.getSerializedCopy(player.front());
-                player.replaceFront(playerPokemon);
-
-                EnemyTrainer opponent = (EnemyTrainer)simulated.getOpponent();
-                ActivePokemon opponentPokemon = (ActivePokemon) SerializationUtils.getSerializedCopy(opponent.front());
-                opponent.replaceFront(opponentPokemon);
-
-                // Need to set these manually since this field has to be transient because ActivePokemon and BattleAttributes store each other
-                playerPokemon.getAttributes().setAttributesHolder(playerPokemon);
-                opponentPokemon.getAttributes().setAttributesHolder(opponentPokemon);
-
-                player.setAction(TrainerAction.FIGHT);
-                opponent.setAction(TrainerAction.FIGHT);
-
-                playerPokemon.setMove(new Move(playerMove.getAttack()));
-                opponentPokemon.setMove(new Move(opponentMove.getAttack()));
-
-                simulated.fight();
-
+                Battle simulated = simulateTurn(b, opponentMove, playerMove);
                 BestMove currentBest = go(level + 1, simulated, opponentUsable, playerUsable);
+
                 System.out.println(opponentMove.getAttack().getName() + " " + playerMove.getAttack().getName() + " " +  currentBest.value);
+
                 if (currentBest.value < current.value) {
                     current = new BestMove(opponentMove, currentBest.value);
                 }
@@ -109,9 +134,5 @@ public class DecisionTree {
         System.out.println();
 
         return bestMove;
-    }
-
-    private boolean isBattleDone(Battle b) {
-        return b.getOpponent().front().isFainted(b) || b.getPlayer().front().isFainted(b);
     }
 }

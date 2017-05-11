@@ -214,7 +214,7 @@ public class Move implements Serializable {
 		if (b.isWildBattle()) {
 			return RandomUtils.getRandomValue(usable);
 		} else {
-			return new DecisionTree().next(b, usable);
+			return new DecisionTree(b, usable).next();
 		}
 	}
 }
