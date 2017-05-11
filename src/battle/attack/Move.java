@@ -1,7 +1,7 @@
 package battle.attack;
 
 import battle.Battle;
-import battle.ai.MonteCarlo;
+import battle.ai.DecisionTree;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
@@ -9,6 +9,7 @@ import battle.effect.generic.EffectInterfaces.OpponentAttackSelectionEffect;
 import message.Messages;
 import pokemon.ActivePokemon;
 import type.Type;
+import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -208,9 +209,12 @@ public class Move implements Serializable {
 		return true;
 	}
 
-	// TODO: AI Stuffffff
 	private static Move chooseMove(Battle b, List<Move> usable) {
-		return new MonteCarlo().next(b);
-//		return RandomUtils.getRandomValue(usable);
+		// Wild pokemon attack randomly
+		if (b.isWildBattle()) {
+			return RandomUtils.getRandomValue(usable);
+		} else {
+			return new DecisionTree().next(b, usable);
+		}
 	}
 }
