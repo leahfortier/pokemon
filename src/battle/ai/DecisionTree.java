@@ -5,7 +5,7 @@ import battle.attack.Move;
 import message.Messages;
 import message.Messages.MessageState;
 import pokemon.ActivePokemon;
-import trainer.EnemyTrainer;
+import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.player.Player;
 import util.SerializationUtils;
@@ -79,26 +79,23 @@ public class DecisionTree {
         return points;
     }
 
+    private void setupTrainer(Trainer trainer, Move move) {
+        ActivePokemon front = (ActivePokemon) SerializationUtils.getSerializedCopy(trainer.front());
+        trainer.replaceFront(front);
+
+        // Need to set these manually since this field has to be transient because ActivePokemon and BattleAttributes store each other
+        front.getAttributes().setAttributesHolder(front);
+
+        trainer.setAction(TrainerAction.FIGHT);
+        front.setMove(new Move(move.getAttack()));
+    }
+
     private Battle simulateTurn(Battle b, Move opponentMove, Move playerMove) {
         Battle simulated = (Battle) SerializationUtils.getSerializedCopy(b);
         simulated.setPlayer(player);
 
-        ActivePokemon playerPokemon = (ActivePokemon) SerializationUtils.getSerializedCopy(player.front());
-        player.replaceFront(playerPokemon);
-
-        EnemyTrainer opponent = (EnemyTrainer)simulated.getOpponent();
-        ActivePokemon opponentPokemon = (ActivePokemon) SerializationUtils.getSerializedCopy(opponent.front());
-        opponent.replaceFront(opponentPokemon);
-
-        // Need to set these manually since this field has to be transient because ActivePokemon and BattleAttributes store each other
-        playerPokemon.getAttributes().setAttributesHolder(playerPokemon);
-        opponentPokemon.getAttributes().setAttributesHolder(opponentPokemon);
-
-        player.setAction(TrainerAction.FIGHT);
-        opponent.setAction(TrainerAction.FIGHT);
-
-        playerPokemon.setMove(new Move(playerMove.getAttack()));
-        opponentPokemon.setMove(new Move(opponentMove.getAttack()));
+        setupTrainer(player, playerMove);
+        setupTrainer((Trainer)simulated.getOpponent(), opponentMove);
 
         simulated.fight();
 
