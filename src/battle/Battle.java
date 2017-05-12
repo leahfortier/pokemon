@@ -56,7 +56,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Battle implements Serializable {
-	private transient Player player;
+	private Player player;
 	private final Opponent opponent; // SO OBJECT-ORIENTED
 
 	private List<BattleEffect> effects;
@@ -202,8 +202,10 @@ public class Battle implements Serializable {
 
 		endTurn();
 
-		deadOpponent();
-		deadUser();
+		if (!Messages.isMessageState(MessageState.SIMULATION_STATION)) {
+			deadOpponent();
+			deadUser();
+		}
 
 		printShit();
 	}
