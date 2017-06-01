@@ -41,6 +41,7 @@ import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
+import trainer.PlayerTrainer;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.TrainerAction;
@@ -56,7 +57,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Battle implements Serializable {
-	private Player player;
+	private PlayerTrainer player;
 	private final Opponent opponent; // SO OBJECT-ORIENTED
 
 	private List<BattleEffect> effects;
@@ -78,7 +79,8 @@ public class Battle implements Serializable {
 		Messages.setMessageState(MessageState.FIGHTY_FIGHT);
 		Messages.add(new MessageUpdate().withUpdate(Update.ENTER_BATTLE));
 
-		this.player = Game.getPlayer();
+		Player player = Game.getPlayer();
+		this.player = player;
 		this.opponent = opponent;
 
 		this.effects = new ArrayList<>();
@@ -125,11 +127,19 @@ public class Battle implements Serializable {
 		this.npcUpdateInteraction = npcUpdateInteraction;
 	}
 
-	public void setPlayer(Player player) {
+	public void setPlayer(PlayerTrainer player) {
 		this.player = player;
 	}
 
-	public Player getPlayer() {
+	public Player getDaRealPlayer() {
+		if (this.isSimulating()) {
+			return Game.getPlayer();
+		}
+
+		return (Player)player;
+	}
+
+	public PlayerTrainer getPlayer() {
 		return player;
 	}
 
@@ -202,7 +212,7 @@ public class Battle implements Serializable {
 
 		endTurn();
 
-		if (!Messages.isMessageState(MessageState.SIMULATION_STATION)) {
+		if (!isSimulating()) {
 			deadOpponent();
 			deadUser();
 		}
@@ -210,8 +220,12 @@ public class Battle implements Serializable {
 		printShit();
 	}
 
+	private boolean isSimulating() {
+		return !(this.player instanceof Player);
+	}
+
 	protected void printShit() {
-		if (Messages.isMessageState(MessageState.SIMULATION_STATION)) {
+		if (!this.isSimulating()) {
 			return;
 		}
 
@@ -330,7 +344,8 @@ public class Battle implements Serializable {
 		}
 
 		player.healAll();
-		player.teleportToPokeCenter();
+		((Player)player).teleportToPokeCenter();
+
 		Messages.clearMessages(MessageState.MAPPITY_MAP);
 		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
 
@@ -339,6 +354,7 @@ public class Battle implements Serializable {
 
 	public boolean deadOpponent() {
 		ActivePokemon dead = opponent.front();
+		Player player = (Player)this.player;
 
 		// YOU'RE FINE
 		if (!dead.isFainted(this)) {
@@ -384,8 +400,8 @@ public class Battle implements Serializable {
 		}
 
 		// Document sighting in the Pokedex
-		if (!enterer.isPlayer()) {
-			player.getPokedex().setSeen(enterer, isWildBattle());
+		if (!enterer.isPlayer() && !isSimulating()) {
+			((Player)player).getPokedex().setSeen(enterer, isWildBattle());
 		}
 
 		enterer.resetAttributes();
@@ -427,7 +443,7 @@ public class Battle implements Serializable {
 		}
 
 		Messages.add("Can't escape!");
-		player.performAction(this, TrainerAction.RUN);
+		((Player)player).performAction(this, TrainerAction.RUN);
 		return false;
 	}
 

@@ -239,7 +239,7 @@ public class BattleView extends View {
 			}
 			
 			MessageUpdate newMessage = Messages.getNextMessage();
-			currentBattle.getPlayer().addLogMessage(newMessage);
+			currentBattle.getDaRealPlayer().addLogMessage(newMessage);
 			
 			PokemonAnimationState state = newMessage.isPlayer() ? playerAnimation : enemyAnimation;
 			state.checkMessage(newMessage);

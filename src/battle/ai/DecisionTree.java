@@ -1,13 +1,15 @@
 package battle.ai;
 
 import battle.Battle;
+import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import message.Messages;
 import message.Messages.MessageState;
 import pokemon.ActivePokemon;
+import trainer.PlayerTrainer;
+import trainer.SimulatedPlayer;
 import trainer.Trainer;
 import trainer.TrainerAction;
-import trainer.player.Player;
 import util.SerializationUtils;
 
 import java.util.List;
@@ -18,8 +20,6 @@ public class DecisionTree {
     private final Battle battle;
     private final List<Move> usable;
 
-    private final Player player;
-
     private final int playerStartHealth;
     private final int opponentStartHealth;
 
@@ -27,9 +27,7 @@ public class DecisionTree {
         this.battle = battle;
         this.usable = usable;
 
-        player = (Player) SerializationUtils.getSerializedCopy(battle.getPlayer());
-
-        playerStartHealth = player.front().getHP();
+        playerStartHealth = battle.getPlayer().front().getHP();
         opponentStartHealth = battle.getOpponent().front().getHP();
     }
 
@@ -91,10 +89,13 @@ public class DecisionTree {
     }
 
     private Battle simulateTurn(Battle b, Move opponentMove, Move playerMove) {
+        // Mock the player object for serialization and set back afterwards
+        PlayerTrainer playerTrainer = b.getPlayer();
+        b.setPlayer(new SimulatedPlayer(b.getPlayer()));
         Battle simulated = (Battle) SerializationUtils.getSerializedCopy(b);
-        simulated.setPlayer(player);
+        b.setPlayer(playerTrainer);
 
-        setupTrainer(player, playerMove);
+        setupTrainer(simulated.getPlayer(), playerMove);
         setupTrainer((Trainer)simulated.getOpponent(), opponentMove);
 
         simulated.fight();
@@ -114,7 +115,7 @@ public class DecisionTree {
                 Battle simulated = simulateTurn(b, opponentMove, playerMove);
                 BestMove currentBest = go(level + 1, simulated, opponentUsable, playerUsable);
 
-                System.out.println(opponentMove.getAttack().getName() + " " + playerMove.getAttack().getName() + " " +  currentBest.value);
+                System.out.println(level + " " + opponentMove.getAttack().getName() + " " + playerMove.getAttack().getName() + " " +  currentBest.value);
 
                 if (currentBest.value < current.value) {
                     current = new BestMove(opponentMove, currentBest.value);

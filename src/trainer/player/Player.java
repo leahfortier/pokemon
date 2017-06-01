@@ -26,6 +26,7 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.DayCareCenter;
 import trainer.Badge;
 import trainer.Opponent;
+import trainer.PlayerTrainer;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.player.pokedex.Pokedex;
@@ -44,7 +45,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class Player extends Trainer implements Serializable {
+public class Player extends PlayerTrainer implements Serializable {
 	private static final long serialVersionUID = 4283479774388652604L;
 
 	public static final int CATCH_SHAKES = 3;
