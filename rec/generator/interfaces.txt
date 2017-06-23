@@ -418,7 +418,13 @@ StatProtectingEffect:
 		MoldBreaker: caster
 	*
 	Method:
+		Header: String getName()
+	*
+	Method:
 		Header: String preventionMessage(ActivePokemon p, Stat s)
+		Default:
+			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
+			###
 	*
 ***
 StatusPreventionEffect:

@@ -692,9 +692,6 @@ ValidMove:
 *
 StatProtect:
 	AddMapField: StatProtectingEffect: {0}
-	AddMapField: StatProtectMessage:
-		return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
-		###
 *
 StatProtectingEffect:
 	Header: boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat)

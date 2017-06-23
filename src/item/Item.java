@@ -1515,10 +1515,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 			return true;
 		}
 
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
-		}
-
 		public int flingDamage() {
 			return 10;
 		}

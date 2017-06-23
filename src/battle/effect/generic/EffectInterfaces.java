@@ -773,7 +773,11 @@ public final class EffectInterfaces {
 
 	public interface StatProtectingEffect {
 		boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat);
-		String preventionMessage(ActivePokemon p, Stat s);
+		String getName();
+
+		default String preventionMessage(ActivePokemon p, Stat s) {
+			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
+		}
 
 		static StatProtectingEffect getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			List<Object> invokees = b.getEffectsList(victim);
