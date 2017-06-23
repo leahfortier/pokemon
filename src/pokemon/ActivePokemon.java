@@ -1041,7 +1041,6 @@ public class ActivePokemon implements Serializable {
 		return false;
 	}
 	
-	// Returns the empty string if the Pokemon can switch, and the appropriate fail message if they cannot
 	public boolean canEscape(Battle b) {
 		// Shed Shell always allows escape
 		if (isHoldingItem(b, ItemNamesies.SHED_SHELL)) {
