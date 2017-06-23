@@ -69,8 +69,6 @@ StatusFang:
 WeatherHeal:
 	AddMapField: BasicHealing:
 		switch (b.getWeather().namesies()) {
-			case CLEAR_SKIES:
-				return 1/2.0;
 			case SUNNY:
 				return 2/3.0;
 			case HAILING:
@@ -78,8 +76,7 @@ WeatherHeal:
 			case SANDSTORM:
 				return 1/4.0;
 			default:
-				Global.error("Funky weather problems!!!!");
-				return -1;
+				return 1/2.0;
 		}
 		###
 *
