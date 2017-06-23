@@ -496,6 +496,28 @@ public class Player extends Trainer implements Serializable {
 		return this.pokeball;
 	}
 
+	private double getCriticalCaptureModifier() {
+		int numPokemonCaught = this.getPokedex().numCaught();
+		if (numPokemonCaught > 600) {
+			return 2.5;
+		}
+		else if (numPokemonCaught > 450) {
+			return 2;
+		}
+		else if (numPokemonCaught > 300) {
+			return 1.5;
+		}
+		else if (numPokemonCaught > 150) {
+			return 1;
+		}
+		else if (numPokemonCaught > 30) {
+			return .5;
+		}
+		else {
+			return 0;
+		}
+	}
+
 	// OH MY GOD CATCH A POKEMON OH MY GOD
 	public boolean catchPokemon(Battle b, BallItem ball) {
 		if (!b.isWildBattle()) {
@@ -517,13 +539,24 @@ public class Player extends Trainer implements Serializable {
 		int ballAdd = ball.getAdditive(front(), catchPokemon, b);
 
 		double catchVal = (3*maxHP - 2*hp)*catchRate*ballMod*statusMod/(3*maxHP) + ballAdd;
-		int shakeVal = (int)Math.ceil(65536/Math.pow(255/catchVal, .25));
+		int shakeVal = (int)Math.ceil(65536/Math.pow(255/catchVal, .1875));
+
+		int criticalCaptureVal = (int)(catchVal*this.getCriticalCaptureModifier()/6);
+		boolean criticalCapture = RandomUtils.chanceTest(criticalCaptureVal, 255);
+		if (criticalCapture) {
+			Messages.add("It's a critical capture!!!");
+		}
 				
 		for (int i = 0; i < CATCH_SHAKES + 1; i++) {
 			if (!RandomUtils.chanceTest(shakeVal, 65536)) {
 				Messages.add(new MessageUpdate().withCatchPokemon(i));
 				Messages.add("Oh no! " + catchPokemon.getName() + " broke free!");
 				return true;
+			}
+
+			// Critical captures only have to pass one test
+			if (criticalCapture) {
+				break;
 			}
 		}
 
