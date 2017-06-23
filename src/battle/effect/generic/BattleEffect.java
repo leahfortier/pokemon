@@ -1,7 +1,6 @@
 package battle.effect.generic;
 
 import battle.Battle;
-import battle.effect.TerrainEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
@@ -10,6 +9,7 @@ import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
+import battle.effect.generic.EffectInterfaces.TerrainEffect;
 import battle.effect.status.StatusCondition;
 import map.overworld.TerrainType;
 import message.MessageUpdate;
@@ -376,7 +376,7 @@ public abstract class BattleEffect extends Effect {
 		}
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-			return "Psychic energy evelops the battlefield!!!";
+			return "Psychic energy envelops the battlefield!!!";
 		}
 
 		public String getSubsideMessage(ActivePokemon victim) {

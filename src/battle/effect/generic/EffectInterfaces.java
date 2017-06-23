@@ -6,6 +6,7 @@ import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.status.StatusCondition;
 import item.Item;
+import item.ItemNamesies;
 import main.Global;
 import map.overworld.TerrainType;
 import map.overworld.WildEncounter;
@@ -1158,6 +1159,23 @@ public final class EffectInterfaces {
 		}
 	}
 
+	public interface SimpleStatModifyingEffect extends StatModifyingEffect {
+		boolean isModifyStat(Stat s);
+		double getModifier();
+
+		default boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+			return true;
+		}
+
+		default double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
+				return getModifier();
+			}
+			
+			return 1;
+		}
+	}
+
 	public interface StatChangingEffect {
 
 		// b: The current battle
@@ -1703,5 +1721,60 @@ public final class EffectInterfaces {
 			
 			return modifier;
 		}
+	}
+
+	public interface SapHealthEffect extends ApplyDamageEffect {
+
+		default double sapPercentage() {
+			return .5;
+		}
+
+		default String getSapMessage(ActivePokemon victim) {
+			return victim.getName() + "'s health was sapped!";
+		}
+
+		default void sapHealth(Battle b, ActivePokemon user, ActivePokemon victim, int damageAmount, boolean print) {
+			int sapAmount = (int)Math.ceil(damageAmount*this.sapPercentage());
+			
+			// Sap message
+			if (print) {
+				Messages.add(this.getSapMessage(victim));
+			}
+			
+			if (victim.hasAbility(AbilityNamesies.LIQUID_OOZE)) {
+				Messages.add(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + user.getName() + " to lose health instead!");
+				user.reduceHealth(b, damageAmount);
+				return;
+			}
+			
+			// Big Root heals an additional 30%
+			if (user.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
+				sapAmount *= 1.3;
+			}
+			
+			// Healers gon' heal
+			if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+				user.heal(sapAmount);
+			}
+			
+			Messages.add(new MessageUpdate().updatePokemon(b, victim));
+			Messages.add(new MessageUpdate().updatePokemon(b, user));
+		}
+
+		default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+			this.sapHealth(b, user, victim, damage, true);
+		}
+	}
+
+	public interface PassableEffect {
+	}
+
+	public interface DefiniteEscape {
+	}
+
+	public interface StallingEffect {
+	}
+
+	public interface TerrainEffect {
 	}
 }
