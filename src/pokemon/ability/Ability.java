@@ -412,10 +412,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return stat == Stat.ACCURACY;
 		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
-		}
 	}
 
 	static class TangledFeet extends Ability implements StageChangingEffect {
@@ -1014,10 +1010,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return true;
 		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
-		}
 	}
 
 	static class FullMetalBody extends Ability implements StatProtectingEffect {
@@ -1029,10 +1021,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return true;
-		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
 		}
 
 		public boolean unbreakableMold() {
@@ -1258,10 +1246,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return stat == Stat.ATTACK;
-		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
 		}
 	}
 
@@ -2088,10 +2072,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			return true;
 		}
 
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
-		}
-
 		public double getMultiplier() {
 			return .5;
 		}
@@ -2468,10 +2448,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return stat == Stat.DEFENSE;
-		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
 		}
 	}
 
@@ -3460,10 +3436,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return victim.isType(b, Type.GRASS);
-		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
 		}
 	}
 
