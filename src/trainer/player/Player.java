@@ -364,7 +364,8 @@ public class Player extends Trainer implements Serializable {
 		}
 		
 		double wild = b.isWildBattle() ? 1 : 1.5;
-		int lev = dead.getLevel(), base = dead.getPokemonInfo().getBaseEXP();
+		int lev = dead.getLevel();
+		int base = dead.getPokemonInfo().getBaseEXP();
 		for (ActivePokemon p : team) {
 			if (p.canFight() && p.getAttributes().isUsed()) {
 				double gain = wild * base * lev * Math.pow(2 * lev + 10, 2.5);
@@ -406,9 +407,11 @@ public class Player extends Trainer implements Serializable {
 	}
 
 	public void checkEvolution() {
-		team.stream()
-				.filter(pokemon -> pokemon.canFight())
-				.forEach(pokemon -> pokemon.checkEvolution());
+		for (ActivePokemon p : team) {
+			if (p.canFight() && p.checkEvolution()) {
+				break;
+			}
+		}
 	}
 	
 	public Pokedex getPokedex() {
