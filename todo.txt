@@ -95,3 +95,4 @@ Missing Pokemon Sprites:
 	self switching moves require input -- currently just switching to random
 	green hat sprites
 	Riding up on bike on foreground tiles causes tiles to flash
+	critical capture

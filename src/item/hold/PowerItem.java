@@ -1,6 +1,6 @@
 package item.hold;
 
-import battle.effect.SimpleStatModifyingEffect;
+import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;
 import pokemon.Stat;
 
 public interface PowerItem extends EVItem, SimpleStatModifyingEffect {
