@@ -1,7 +1,6 @@
 package battle.ai;
 
 import battle.Battle;
-import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import message.Messages;
 import message.Messages.MessageState;
@@ -115,21 +114,15 @@ public class DecisionTree {
                 Battle simulated = simulateTurn(b, opponentMove, playerMove);
                 BestMove currentBest = go(level + 1, simulated, opponentUsable, playerUsable);
 
-                System.out.println(level + " " + opponentMove.getAttack().getName() + " " + playerMove.getAttack().getName() + " " +  currentBest.value);
-
                 if (currentBest.value < current.value) {
                     current = new BestMove(opponentMove, currentBest.value);
                 }
             }
-            System.out.println();
 
             if (current.value > bestMove.value) {
                 bestMove = new BestMove(opponentMove, current.value);
             }
         }
-
-        System.out.println();
-        System.out.println();
 
         return bestMove;
     }
