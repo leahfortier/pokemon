@@ -198,8 +198,8 @@ public class Battle {
 
 		endTurn();
 
-		deadOpponent();
 		deadUser();
+		deadOpponent();
 
 		printShit();
 	}
