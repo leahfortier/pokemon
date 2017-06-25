@@ -13,7 +13,7 @@ public final class RandomUtils {
     private RandomUtils() {}
 
     private static final Random RANDOM = new Random();
-    private static long SEED = RANDOM.nextLong();
+    private static final long SEED = RANDOM.nextLong();
     static {
         RANDOM.setSeed(SEED);
     }

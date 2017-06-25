@@ -13,8 +13,6 @@ import trainer.EnemyTrainer;
 import util.RandomUtils;
 import util.SerializationUtils;
 
-import java.util.Arrays;
-
 public class TrainerBattleTrigger extends Trigger {
 	private final EnemyTrainer trainer;
 	private final UpdateMatcher npcUpdateInteraction;
@@ -33,10 +31,7 @@ public class TrainerBattleTrigger extends Trigger {
 
 		RandomUtils.setTempRandomSeed(contents.hashCode());
 		for (PokemonMatcher matcher : battleMatcher.getPokemon()) {
-			ActivePokemon poke = ActivePokemon.createActivePokemon(matcher, false);
-			trainer.addPokemon(poke);
-			System.out.println(poke.getActualName() + " " + Arrays.toString(poke.getIVs()));
-
+			trainer.addPokemon(ActivePokemon.createActivePokemon(matcher, false));
 		}
 		RandomUtils.resetRandomSeedToInitial();
 
