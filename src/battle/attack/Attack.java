@@ -1,8 +1,6 @@
 package battle.attack;
 
 import battle.Battle;
-import battle.effect.PassableEffect;
-import battle.effect.SapHealthEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.attack.MultiStrikeMove;
@@ -30,11 +28,13 @@ import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTakeDamageEffect;
+import battle.effect.generic.EffectInterfaces.PassableEffect;
 import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.RecoilPercentageMove;
+import battle.effect.generic.EffectInterfaces.SapHealthEffect;
 import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
 import battle.effect.generic.EffectInterfaces.SelfHealingMove;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
@@ -721,8 +721,6 @@ public abstract class Attack implements Serializable {
 
 		public double getHealFraction(Battle b, ActivePokemon victim) {
 			switch (b.getWeather().namesies()) {
-				case CLEAR_SKIES:
-					return 1/2.0;
 				case SUNNY:
 					return 2/3.0;
 				case HAILING:
@@ -730,8 +728,7 @@ public abstract class Attack implements Serializable {
 				case SANDSTORM:
 					return 1/4.0;
 				default:
-					Global.error("Funky weather problems!!!!");
-					return -1;
+					return 1/2.0;
 			}
 		}
 
@@ -1633,8 +1630,6 @@ public abstract class Attack implements Serializable {
 
 		public double getHealFraction(Battle b, ActivePokemon victim) {
 			switch (b.getWeather().namesies()) {
-				case CLEAR_SKIES:
-					return 1/2.0;
 				case SUNNY:
 					return 2/3.0;
 				case HAILING:
@@ -1642,8 +1637,7 @@ public abstract class Attack implements Serializable {
 				case SANDSTORM:
 					return 1/4.0;
 				default:
-					Global.error("Funky weather problems!!!!");
-					return -1;
+					return 1/2.0;
 			}
 		}
 
@@ -3167,8 +3161,6 @@ public abstract class Attack implements Serializable {
 
 		public double getHealFraction(Battle b, ActivePokemon victim) {
 			switch (b.getWeather().namesies()) {
-				case CLEAR_SKIES:
-					return 1/2.0;
 				case SUNNY:
 					return 2/3.0;
 				case HAILING:
@@ -3176,8 +3168,7 @@ public abstract class Attack implements Serializable {
 				case SANDSTORM:
 					return 1/4.0;
 				default:
-					Global.error("Funky weather problems!!!!");
-					return -1;
+					return 1/2.0;
 			}
 		}
 

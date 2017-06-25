@@ -2,7 +2,6 @@ package battle;
 
 import battle.attack.Attack;
 import battle.attack.MoveType;
-import battle.effect.DefiniteEscape;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
@@ -11,6 +10,7 @@ import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
+import battle.effect.generic.EffectInterfaces.DefiniteEscape;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;

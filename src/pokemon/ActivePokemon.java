@@ -5,7 +5,6 @@ import battle.BattleAttributes;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import battle.effect.StallingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
@@ -21,6 +20,7 @@ import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
+import battle.effect.generic.EffectInterfaces.StallingEffect;
 import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.generic.EffectNamesies;
@@ -1041,7 +1041,6 @@ public class ActivePokemon implements Serializable {
 		return false;
 	}
 	
-	// Returns the empty string if the Pokemon can switch, and the appropriate fail message if they cannot
 	public boolean canEscape(Battle b) {
 		// Shed Shell always allows escape
 		if (isHoldingItem(b, ItemNamesies.SHED_SHELL)) {

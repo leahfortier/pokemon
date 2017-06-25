@@ -19,11 +19,11 @@ Failure:
 Gravity:
 	NumTurns: 5
 	Int: GroundedEffect, StageChangingEffect
-	StageChange: 
+	StageChange:
 		return s == Stat.EVASION ? -2 : 0;
 		###
 	CastMessage: "Gravity intensified!"
-	Cast: 
+	Cast:
 		super.cast(b, caster, victim, source, printCast);
 		removeLevitation(b, caster);
 		removeLevitation(b, victim);
@@ -38,7 +38,7 @@ MudSport:
 *
 WonderRoom:
 	Int: StatSwitchingEffect
-	SwitchStat: 
+	SwitchStat:
 		// Defense and Special Defense are swapped
 		if (s == Stat.DEFENSE) return Stat.SP_DEFENSE;
 		if (s == Stat.SP_DEFENSE) return Stat.DEFENSE;
@@ -57,7 +57,7 @@ MistyTerrain:
 	SubsideMessage: "The mist disappeared from the battlefield."
 	Terrain: Misty
 	Int: StatusPreventionEffect, TerrainEffect
-	StatusPrevent: 
+	StatusPrevent:
 		// Levitating Pokemon are immune to the mist
 		return !victim.isLevitating(b);
 		###
@@ -92,11 +92,11 @@ ElectricTerrain:
 	PowerMultiplierCondition: 1.5 user.getAttackType() == Type.ELECTRIC && !user.isLevitating(b)
 *
 PsychicTerrain:
-	CastMessage: "Psychic energy evelops the battlefield!!!"
+	CastMessage: "Psychic energy envelops the battlefield!!!"
 	SubsideMessage: "The psychic energy disappeared."
 	Terrain: Psychic
 	Int: AttackBlocker, TerrainEffect
-	Block: 
+	Block:
 		// Psychic terrain prevents increased priority moves from hitting
 		return b.getPriority(user, user.getAttack()) > 0 && !victim.isLevitating(b);
 		###

@@ -6,10 +6,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
-import battle.effect.DefiniteEscape;
 import battle.effect.MessageGetter;
-import battle.effect.SimpleStatModifyingEffect;
-import battle.effect.StallingEffect;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
@@ -17,6 +14,7 @@ import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DefendingNoAdvantageChanger;
+import battle.effect.generic.EffectInterfaces.DefiniteEscape;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.EntryEndTurnEffect;
@@ -31,6 +29,8 @@ import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RepellingEffect;
+import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;
+import battle.effect.generic.EffectInterfaces.StallingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
@@ -1513,10 +1513,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			// NOTE: Works like Clear Body, since ain't nobody want to keep track of stats.
 			return true;
-		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
 		}
 
 		public int flingDamage() {

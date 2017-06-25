@@ -6,9 +6,6 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
-import battle.effect.DefiniteEscape;
-import battle.effect.SimpleStatModifyingEffect;
-import battle.effect.StallingEffect;
 import battle.effect.attack.ChangeAbilityMove;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.CastSource;
@@ -25,6 +22,7 @@ import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
+import battle.effect.generic.EffectInterfaces.DefiniteEscape;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
@@ -54,8 +52,10 @@ import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.RepelLowLevelEncounterEffect;
 import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
+import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
+import battle.effect.generic.EffectInterfaces.StallingEffect;
 import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
 import battle.effect.generic.EffectInterfaces.StatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
@@ -411,10 +411,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return stat == Stat.ACCURACY;
-		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
 		}
 	}
 
@@ -1014,10 +1010,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return true;
 		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
-		}
 	}
 
 	static class FullMetalBody extends Ability implements StatProtectingEffect {
@@ -1029,10 +1021,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return true;
-		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
 		}
 
 		public boolean unbreakableMold() {
@@ -1258,10 +1246,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return stat == Stat.ATTACK;
-		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
 		}
 	}
 
@@ -2088,10 +2072,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			return true;
 		}
 
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
-		}
-
 		public double getMultiplier() {
 			return .5;
 		}
@@ -2468,10 +2448,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return stat == Stat.DEFENSE;
-		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
 		}
 	}
 
@@ -3460,10 +3436,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
 			return victim.isType(b, Type.GRASS);
-		}
-
-		public String preventionMessage(ActivePokemon p, Stat s) {
-			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
 		}
 	}
 

@@ -418,7 +418,13 @@ StatProtectingEffect:
 		MoldBreaker: caster
 	*
 	Method:
+		Header: String getName()
+	*
+	Method:
 		Header: String preventionMessage(ActivePokemon p, Stat s)
+		Default:
+			return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
+			###
 	*
 ***
 StatusPreventionEffect:
@@ -585,6 +591,31 @@ StatModifyingEffect:
 		Invoke: Multiply
 		EffectList: p
 		MoldBreakerNullCheck: s.user() ? null : opp
+	*
+***
+SimpleStatModifyingEffect:
+	Extends: StatModifyingEffect
+	Method:
+		Header: boolean isModifyStat(Stat s)
+	*
+	Method:
+		Header: double getModifier()
+	*
+	Method:
+		Header: boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp)
+		Default:
+			return true;
+			###
+	*
+	Method:
+		Header: double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
+		Default:
+			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
+					return getModifier();
+			}
+
+			return 1;
+			###
 	*
 ***
 StatChangingEffect:
@@ -938,4 +969,63 @@ WeatherExtendingEffect:
 		InvokeParameters: Battle b, ActivePokemon p
 		EffectList: p
 	*
+***
+SapHealthEffect:
+	Extends: ApplyDamageEffect
+	Method:
+		Header: double sapPercentage()
+		Default:
+			return .5;
+			###
+	*
+	Method:
+		Header: String getSapMessage(ActivePokemon victim)
+		Default:
+			return victim.getName() + "'s health was sapped!";
+			###
+	*
+	Method:
+		Header: void sapHealth(Battle b, ActivePokemon user, ActivePokemon victim, int damageAmount, boolean print)
+		Default:
+			int sapAmount = (int)Math.ceil(damageAmount*this.sapPercentage());
+
+			// Sap message
+			if (print) {
+					Messages.add(this.getSapMessage(victim));
+			}
+
+			if (victim.hasAbility(AbilityNamesies.LIQUID_OOZE)) {
+					Messages.add(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + user.getName() + " to lose health instead!");
+					user.reduceHealth(b, damageAmount);
+					return;
+			}
+
+			// Big Root heals an additional 30%
+			if (user.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
+					sapAmount *= 1.3;
+			}
+
+			// Healers gon' heal
+			if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+					user.heal(sapAmount);
+			}
+
+			Messages.add(new MessageUpdate().updatePokemon(b, victim));
+			Messages.add(new MessageUpdate().updatePokemon(b, user));
+			###
+	*
+	Method:
+		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
+		Default:
+			this.sapHealth(b, user, victim, damage, true);
+			###
+	*
+***
+PassableEffect:
+***
+DefiniteEscape:
+***
+StallingEffect:
+***
+TerrainEffect:
 ***
