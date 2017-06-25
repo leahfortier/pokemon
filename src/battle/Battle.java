@@ -213,8 +213,8 @@ public class Battle implements Serializable {
 		endTurn();
 
 		if (!isSimulating()) {
-			deadOpponent();
 			deadUser();
+			deadOpponent();
 		}
 
 		printShit();

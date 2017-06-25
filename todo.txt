@@ -96,7 +96,11 @@ Missing Pokemon Sprites:
 	green hat sprites
 	Riding up on bike on foreground tiles causes tiles to flash
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Mirror move executes multi-turn moves in a single turn
+=======
+	critical capture
+>>>>>>> master
 =======
 	critical capture
 >>>>>>> master
