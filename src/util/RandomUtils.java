@@ -13,7 +13,7 @@ public final class RandomUtils {
     private RandomUtils() {}
 
     private static final Random RANDOM = new Random();
-    private static final long SEED = RANDOM.nextLong();
+    private static long SEED = RANDOM.nextLong();
     static {
         RANDOM.setSeed(SEED);
     }
@@ -21,6 +21,12 @@ public final class RandomUtils {
     public static long getSeed() {
         return SEED;
     }
+
+    public static void setTempRandomSeed(long tempRandomSeed) {
+        RANDOM.setSeed(tempRandomSeed);
+    }
+
+    public static void resetRandomSeedToInitial() { RANDOM.setSeed(SEED); }
 
     public static boolean chanceTest(final int chance) {
         return chanceTest(chance, 100);
