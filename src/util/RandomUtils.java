@@ -22,6 +22,12 @@ public final class RandomUtils {
         return SEED;
     }
 
+    public static void setTempRandomSeed(long tempRandomSeed) {
+        RANDOM.setSeed(tempRandomSeed);
+    }
+
+    public static void resetRandomSeedToInitial() { RANDOM.setSeed(SEED); }
+
     public static boolean chanceTest(final int chance) {
         return chanceTest(chance, 100);
     }
