@@ -104,4 +104,8 @@ public class SerializationUtils {
             return StringUtils.empty();
         }
     }
+
+    public static Object getSerializedCopy(Serializable serializable) {
+        return deserialize(serialize(serializable));
+    }
 }

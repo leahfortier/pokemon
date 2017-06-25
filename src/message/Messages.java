@@ -17,13 +17,18 @@ public class Messages {
     private static MessageState messageState = MessageState.MAPPITY_MAP;
 
     public enum MessageState {
-        FIGHTY_FIGHT,   // Battle View
-        MAPPITY_MAP,    // Map View
-        BAGGIN_IT_UP    // Bag View
+        FIGHTY_FIGHT,       // Battle View
+        MAPPITY_MAP,        // Map View
+        BAGGIN_IT_UP,       // Bag View
+        SIMULATION_STATION  // AI Simulation
     }
 
     private static ArrayDeque<MessageUpdate> getQueue() {
         return messageMap.get(messageState);
+    }
+
+    public static boolean isMessageState(MessageState checkMessageState) {
+        return messageState == checkMessageState;
     }
 
     public static void setMessageState(MessageState newMessageState) {

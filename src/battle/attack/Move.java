@@ -1,6 +1,7 @@
 package battle.attack;
 
 import battle.Battle;
+import battle.ai.DecisionTree;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
@@ -136,7 +137,7 @@ public class Move implements Serializable {
 			return new Move(AttackNamesies.STRUGGLE.getAttack());
 		}
 		
-		return chooseMove(usable);
+		return chooseMove(b, usable);
 	}
 	
 	// Returns true if a move should be forced (move will already be selected for the Pokemon), and false if not 
@@ -208,8 +209,12 @@ public class Move implements Serializable {
 		return true;
 	}
 
-	// TODO: AI Stuffffff
-	private static Move chooseMove(List<Move> usable) {
-		return RandomUtils.getRandomValue(usable);
+	private static Move chooseMove(Battle b, List<Move> usable) {
+		// Wild pokemon attack randomly
+		if (b.isWildBattle()) {
+			return RandomUtils.getRandomValue(usable);
+		} else {
+			return new DecisionTree(b, usable).next();
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package trainer.player;
 
 import battle.Battle;
+import battle.attack.Move;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectNamesies;
 import gui.view.ViewMode;
@@ -25,7 +26,9 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.DayCareCenter;
 import trainer.Badge;
 import trainer.Opponent;
+import trainer.PlayerTrainer;
 import trainer.Trainer;
+import trainer.TrainerAction;
 import trainer.player.pokedex.Pokedex;
 import util.Point;
 import util.RandomUtils;
@@ -42,7 +45,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class Player extends Trainer implements Serializable {
+public class Player extends PlayerTrainer implements Serializable {
 	private static final long serialVersionUID = 4283479774388652604L;
 
 	public static final int CATCH_SHAKES = 3;
@@ -588,5 +591,19 @@ public class Player extends Trainer implements Serializable {
 	
 	public List<String> getLogMessages() {
 		return logMessages;
+	}
+
+	public void performAction(Battle b, TrainerAction action) {
+		setAction(action);
+
+		Opponent opponent = b.getOpponent();
+		ActivePokemon opponentPokemon = opponent.front();
+		opponentPokemon.setMove(Move.selectOpponentMove(b, opponentPokemon));
+
+		if (opponent instanceof Trainer) {
+			((Trainer) opponent).setAction(TrainerAction.FIGHT);
+		}
+
+		b.fight();
 	}
 }

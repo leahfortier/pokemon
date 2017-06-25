@@ -4044,7 +4044,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		}
 
 		public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
-			return b.getPlayer().getPokedex().isCaught(o) ? 3 : 1;
+			return b.getDaRealPlayer().getPokedex().isCaught(o) ? 3 : 1;
 		}
 	}
 

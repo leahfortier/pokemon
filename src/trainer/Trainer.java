@@ -241,11 +241,6 @@ public abstract class Trainer implements Team, Serializable {
 		return false;
 	}
 	
-	public void performAction(Battle b, TrainerAction a) {
-		setAction(a);
-		b.fight();
-	}
-	
 	public void setAction(TrainerAction a) {
 		action = a;
 	}
@@ -258,5 +253,9 @@ public abstract class Trainer implements Team, Serializable {
 		ActivePokemon tmp = team.get(i);
 		team.set(i, team.get(j));
 		team.set(j, tmp);
+	}
+
+	public void replaceFront(ActivePokemon newFront) {
+		this.team.set(this.frontIndex, newFront);
 	}
 }

@@ -37,7 +37,7 @@ public class MessageUpdate {
 	private String name;
 	private Gender gender;
 	private ActivePokemon moveLearner;
-	private String frontPokemonJson;
+	private String frontPokemonSerialized;
 	private Integer teamIndex;
 	private Move move;
 	private Integer duration;
@@ -132,7 +132,7 @@ public class MessageUpdate {
 	}
 
 	public MessageUpdate withPokemon(ActivePokemon frontPokemon) {
-		this.frontPokemonJson = SerializationUtils.serialize(frontPokemon);
+		this.frontPokemonSerialized = SerializationUtils.serialize(frontPokemon);
 		this.isPlayer = frontPokemon.isPlayer();
 		return this;
 	}
@@ -404,11 +404,11 @@ public class MessageUpdate {
 	}
 
 	public boolean frontPokemonUpdate() {
-		return !StringUtils.isNullOrEmpty(this.frontPokemonJson);
+		return !StringUtils.isNullOrEmpty(this.frontPokemonSerialized);
 	}
 
 	public ActivePokemon getFrontPokemon() {
-		return (ActivePokemon)SerializationUtils.deserialize(this.frontPokemonJson);
+		return (ActivePokemon)SerializationUtils.deserialize(this.frontPokemonSerialized);
 	}
 
 	public int getTeamIndex() {

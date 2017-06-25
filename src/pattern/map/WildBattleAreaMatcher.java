@@ -8,7 +8,7 @@ import java.util.List;
 public class WildBattleAreaMatcher extends MultiPointTriggerMatcher {
 
     private String name;
-    public List<WildBattleMatcher> wildBattles;
+    private List<WildBattleMatcher> wildBattles;
 
     public WildBattleAreaMatcher(String name, List<WildBattleMatcher> wildBattles) {
         this.name = name;

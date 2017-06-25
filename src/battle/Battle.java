@@ -1,7 +1,6 @@
 package battle;
 
 import battle.attack.Attack;
-import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.Effect;
@@ -42,6 +41,7 @@ import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
+import trainer.PlayerTrainer;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.TrainerAction;
@@ -51,12 +51,13 @@ import type.TypeAdvantage;
 import util.PokeString;
 import util.RandomUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Battle {
-	private final Player player;
+public class Battle implements Serializable {
+	private PlayerTrainer player;
 	private final Opponent opponent; // SO OBJECT-ORIENTED
 
 	private List<BattleEffect> effects;
@@ -71,14 +72,15 @@ public class Battle {
 	private boolean firstAttacking;
 	private int escapeAttempts;
 
-	private UpdateMatcher npcUpdateInteraction;
+	private transient UpdateMatcher npcUpdateInteraction;
 	
 	public Battle(Opponent opponent) {
 		Messages.clearMessages(MessageState.FIGHTY_FIGHT);
 		Messages.setMessageState(MessageState.FIGHTY_FIGHT);
 		Messages.add(new MessageUpdate().withUpdate(Update.ENTER_BATTLE));
 
-		this.player = Game.getPlayer();
+		Player player = Game.getPlayer();
+		this.player = player;
 		this.opponent = opponent;
 
 		this.effects = new ArrayList<>();
@@ -125,7 +127,19 @@ public class Battle {
 		this.npcUpdateInteraction = npcUpdateInteraction;
 	}
 
-	public Player getPlayer() {
+	public void setPlayer(PlayerTrainer player) {
+		this.player = player;
+	}
+
+	public Player getDaRealPlayer() {
+		if (this.isSimulating()) {
+			return Game.getPlayer();
+		}
+
+		return (Player)player;
+	}
+
+	public PlayerTrainer getPlayer() {
 		return player;
 	}
 
@@ -198,13 +212,23 @@ public class Battle {
 
 		endTurn();
 
-		deadUser();
-		deadOpponent();
+		if (!isSimulating()) {
+			deadUser();
+			deadOpponent();
+		}
 
 		printShit();
 	}
 
+	private boolean isSimulating() {
+		return !(this.player instanceof Player);
+	}
+
 	protected void printShit() {
+		if (!this.isSimulating()) {
+			return;
+		}
+
 		for (PokemonEffect e : player.front().getEffects()) {
 			System.out.println("P " + e);
 		}
@@ -249,8 +273,6 @@ public class Battle {
 	private void startTurn() {
 		ActivePokemon plyr = player.front();
 		ActivePokemon opp = opponent.front();
-
-		opp.setMove(Move.selectOpponentMove(this, opp));
 
 		turn++;
 		plyr.getAttributes().resetTurn();
@@ -299,16 +321,16 @@ public class Battle {
 				|| SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, opponent.front()));
 	}
 
-	private void deadUser() {
+	public boolean deadUser() {
 		// Front Pokemon is still functioning
 		if (!player.front().isFainted(this)) {
-			return;
+			return false;
 		}
 
 		// Dead Front Pokemon, but you still have others to spare -- force a switch
 		if (!player.blackout(this)) {
 			Messages.add(new MessageUpdate("What Pokemon would you like to switch to?").withUpdate(Update.FORCE_SWITCH));
-			return;
+			return false;
 		}
 
 		// Blackout -- you're fucked
@@ -322,17 +344,21 @@ public class Battle {
 		}
 
 		player.healAll();
-		player.teleportToPokeCenter();
+		((Player)player).teleportToPokeCenter();
+
 		Messages.clearMessages(MessageState.MAPPITY_MAP);
 		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+
+		return true;
 	}
 
-	private void deadOpponent() {
+	public boolean deadOpponent() {
 		ActivePokemon dead = opponent.front();
+		Player player = (Player)this.player;
 
 		// YOU'RE FINE
 		if (!dead.isFainted(this)) {
-			return;
+			return false;
 		}
 
 		// Gain dat EXP
@@ -341,7 +367,7 @@ public class Battle {
 		// You have achieved total victory
 		if (opponent.blackout(this)) {
 			player.winBattle(this, opponent);
-			return;
+			return true;
 		}
 
 		// We know this is not a wild battle anymore and I don't feel like casting so much
@@ -350,6 +376,8 @@ public class Battle {
 		// They still have some Pokes left
 		opp.switchToRandom(this);
 		enterBattle(opp.front());
+
+		return false;
 	}
 
 	public void enterBattle(ActivePokemon enterer) {
@@ -372,8 +400,8 @@ public class Battle {
 		}
 
 		// Document sighting in the Pokedex
-		if (!enterer.isPlayer()) {
-			player.getPokedex().setSeen(enterer, isWildBattle());
+		if (!enterer.isPlayer() && !isSimulating()) {
+			((Player)player).getPokedex().setSeen(enterer, isWildBattle());
 		}
 
 		enterer.resetAttributes();
@@ -415,7 +443,7 @@ public class Battle {
 		}
 
 		Messages.add("Can't escape!");
-		player.performAction(this, TrainerAction.RUN);
+		((Player)player).performAction(this, TrainerAction.RUN);
 		return false;
 	}
 
