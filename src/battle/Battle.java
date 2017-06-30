@@ -745,7 +745,7 @@ public class Battle implements Serializable {
 	// Returns true if the player will be attacking first, and false if the opponent will be 
 	private boolean speedPriority(ActivePokemon plyr, ActivePokemon opp) {
 
-		// Higher priority always goes first -- Prankster increases the priority of status moves by one
+		// Higher priority always goes first
 		int pPriority = getPriority(plyr);
 		int oPriority = getPriority(opp);
 
