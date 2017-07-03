@@ -4,9 +4,9 @@ import main.Game;
 
 public class MedalCounter {
     private long count;
-    private MedalThreshold[] medals;
+    private Medal[] medals;
 
-    MedalCounter(MedalThreshold... medals) {
+    MedalCounter(Medal... medals) {
         this.count = 0;
         this.medals = medals;
     }
@@ -14,9 +14,9 @@ public class MedalCounter {
     void increase(int amount) {
         this.count += amount;
 
-        for (MedalThreshold threshold : medals) {
-            if (this.count > threshold.getThreshold()) {
-                Game.getPlayer().getMedalCase().earnMedal(threshold.getMedal());
+        for (Medal medal : medals) {
+            if (this.count > medal.getThreshold()) {
+                Game.getPlayer().getMedalCase().earnMedal(medal);
             }
         }
     }

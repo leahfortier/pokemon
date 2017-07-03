@@ -40,18 +40,18 @@ public class MedalCase implements Serializable {
     private int pokecenterHeals;
 
     private MedalCounter stepsWalked = new MedalCounter(
-            new MedalThreshold(Medal.LIGHT_WALKER, 5000),
-            new MedalThreshold(Medal.MIDDLE_WALKER, 10000),
-            new MedalThreshold(Medal.HEAVY_WALKER, 25000),
-            new MedalThreshold(Medal.HONORED_FOOTPRINTS, 100000)
+            Medal.LIGHT_WALKER,
+            Medal.MIDDLE_WALKER,
+            Medal.HEAVY_WALKER,
+            Medal.HONORED_FOOTPRINTS
     );
 
     private MedalCounter medalsCollected = new MedalCounter(
-            new MedalThreshold(Medal.ROOKIE_MEDALIST, 50),
-            new MedalThreshold(Medal.ELITE_MEDALIST, 100),
-            new MedalThreshold(Medal.MASTER_MEDALIST, 150),
-            new MedalThreshold(Medal.LEGEND_MEDALIST, 200),
-            new MedalThreshold(Medal.TOP_MEDALIST, Medal.values().length - 1)
+             Medal.ROOKIE_MEDALIST,
+             Medal.ELITE_MEDALIST,
+             Medal.MASTER_MEDALIST,
+             Medal.LEGEND_MEDALIST,
+             Medal.TOP_MEDALIST
     );
 
     public MedalCase() {
