@@ -36,14 +36,20 @@ public class MedalCase implements Serializable {
     private int eggsHatched;
     private int fishReeledIn;
     private int hiddenItemsFound;
-    private int timesSaved;
     private int pokecenterHeals;
 
-    private MedalCounter stepsWalked = new MedalCounter(
+    public final MedalCounter stepsWalked = new MedalCounter(
             Medal.LIGHT_WALKER,
             Medal.MIDDLE_WALKER,
             Medal.HEAVY_WALKER,
             Medal.HONORED_FOOTPRINTS
+    );
+
+    public final MedalCounter timesSaved = new MedalCounter(
+            Medal.STEP_BY_STEP_SAVER,
+            Medal.BUSY_SAVER,
+            Medal.EXPERIENCED_SAVER,
+            Medal.WONDER_WRITER
     );
 
     private MedalCounter medalsCollected = new MedalCounter(
@@ -63,15 +69,17 @@ public class MedalCase implements Serializable {
         }
     }
 
-    public boolean hasMedal(Medal medal) {
+    private boolean hasMedal(Medal medal) {
         return medalsEarned.contains(medal);
     }
 
-    public void earnMedal(Medal medal) {
+    void earnMedal(Medal medal) {
         if (!this.hasMedal(medal)) {
             // TODO: Animation
             medalsEarned.add(medal);
             System.out.println("Medal Earned: " + medal.getMedalName() + "!");
+
+            this.medalsCollected.update(this.medalsEarned.size());
         }
     }
 
@@ -87,10 +95,6 @@ public class MedalCase implements Serializable {
         if (encountered.isShiny()) {
             totalShiniesSeen++;
         }
-    }
-
-    public void step() {
-        stepsWalked.increase(1);
     }
 
     public void hatch() {

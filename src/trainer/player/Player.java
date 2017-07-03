@@ -239,7 +239,7 @@ public class Player extends PlayerTrainer implements Serializable {
 		dayCareCenter.step();
 
 		// Gotta get dat gold
-		medalCase.step();
+		medalCase.stepsWalked.increase(1);
 
 		// Hatch eggs
         boolean doubleHatch = front().hasAbility(AbilityNamesies.FLAME_BODY) || front().hasAbility(AbilityNamesies.MAGMA_ARMOR);
