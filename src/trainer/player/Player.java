@@ -30,6 +30,7 @@ import trainer.PlayerTrainer;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.player.pokedex.Pokedex;
+import trainer.player.medal.MedalCase;
 import util.Point;
 import util.RandomUtils;
 import util.StringUtils;
@@ -79,6 +80,7 @@ public class Player extends PlayerTrainer implements Serializable {
 	private Set<Badge> badges;
 	private Pokedex pokedex;
 	private PC pc;
+	private MedalCase medalCase;
 
 	private DayCareCenter dayCareCenter;
 	private BerryFarm berryFarm;
@@ -98,6 +100,7 @@ public class Player extends PlayerTrainer implements Serializable {
 
 		pokedex = new Pokedex();
 		pc = new PC();
+		medalCase = new MedalCase();
 
         badges = EnumSet.noneOf(Badge.class);
 
@@ -235,15 +238,17 @@ public class Player extends PlayerTrainer implements Serializable {
 		// Check day care eggs
 		dayCareCenter.step();
 
+		// Gotta get dat gold
+		medalCase.step();
+
 		// Hatch eggs
         boolean doubleHatch = front().hasAbility(AbilityNamesies.FLAME_BODY) || front().hasAbility(AbilityNamesies.MAGMA_ARMOR);
 		for (ActivePokemon p : team) {
 			if (p.isEgg() && (p.hatch() || (doubleHatch && p.hatch()))) {
 				this.evolutionInfo.setEgg(p);
+				this.medalCase.hatch();
 
-				Messages.add(new MessageUpdate().withTrigger(
-						TriggerType.GROUP.getTriggerNameFromSuffix("EggHatching"))
-				);
+				Messages.add(new MessageUpdate().withTrigger(TriggerType.GROUP.getTriggerNameFromSuffix("EggHatching")));
 				
 				// Only one hatch per step
 				break;
@@ -343,6 +348,17 @@ public class Player extends PlayerTrainer implements Serializable {
 	public PC getPC() {
 		return pc;
 	}
+
+	public MedalCase getMedalCase() {
+		return this.medalCase;
+	}
+
+	@Override
+	public int sucksToSuck(int datCash) {
+		this.medalCase.livinLarge(datCash);
+
+		return super.sucksToSuck(datCash);
+	}
 	
 	// Gives EXP to all Pokemon who participated in battle
 	public void gainEXP(ActivePokemon dead, Battle b) {
@@ -430,6 +446,7 @@ public class Player extends PlayerTrainer implements Serializable {
 		this.newPokemonInfo.setNewPokemon(p);
 		if (viewChange) {
 			Messages.add(new MessageUpdate().withViewChange(ViewMode.NEW_POKEMON_VIEW));
+			this.medalCase.catchNewPokemon(p);
 		}
 
 		p.setCaught();
@@ -490,7 +507,7 @@ public class Player extends PlayerTrainer implements Serializable {
 
 		return false;
 	}
-	
+
 	public int totalEggs() {
 		return (int)team.stream()
 				.filter(ActivePokemon::isEgg)

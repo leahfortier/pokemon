@@ -54,6 +54,7 @@ import item.hold.SpecialTypeItem.DriveItem;
 import item.hold.SpecialTypeItem.GemItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
+import main.Game;
 import main.Global;
 import map.overworld.TerrainType;
 import message.MessageUpdate;
@@ -397,9 +398,11 @@ public abstract class Attack implements Serializable {
 		}
 
 		// Print Advantage
-		if (TypeAdvantage.isNotVeryEffective(me, o, b)) {
+		double advantage = TypeAdvantage.getAdvantage(me, o, b);
+		Game.getPlayer().getMedalCase().moveAdvantage(advantage);
+		if (TypeAdvantage.isNotVeryEffective(advantage)) {
 			Messages.add(TypeAdvantage.getNotVeryEffectiveMessage());
-		} else if (TypeAdvantage.isSuperEffective(me, o, b)) {
+		} else if (TypeAdvantage.isSuperEffective(advantage)) {
 			Messages.add(TypeAdvantage.getSuperEffectiveMessage());
 		}
 		

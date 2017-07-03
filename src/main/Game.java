@@ -10,7 +10,6 @@ import gui.view.map.MapView;
 import input.InputControl;
 import item.ItemNamesies;
 import map.MapName;
-import map.overworld.OverworldTool;
 import message.Messages;
 import pattern.map.MapTransitionMatcher;
 import pokemon.ActivePokemon;

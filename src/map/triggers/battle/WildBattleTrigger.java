@@ -6,6 +6,7 @@ import map.overworld.WildEncounter;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import trainer.WildPokemon;
+import trainer.player.Player;
 import util.SerializationUtils;
 
 public class WildBattleTrigger extends Trigger {
@@ -21,7 +22,10 @@ public class WildBattleTrigger extends Trigger {
 	protected void executeTrigger() {
 		WildPokemon wildPokemon = this.wildEncounter.getWildPokemon();
 
-		boolean seenWildPokemon = Game.getPlayer().getPokedex().isNotSeen(wildPokemon.front());
+		Player player = Game.getPlayer();
+		player.getMedalCase().encounterPokemon(wildPokemon.front());
+
+		boolean seenWildPokemon = player.getPokedex().isNotSeen(wildPokemon.front());
 
 		// Let the battle begin!!
 		Battle battle = new Battle(wildPokemon);

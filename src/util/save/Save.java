@@ -88,7 +88,7 @@ public final class Save {
 			
 			// Is muted
 			if (in.nextInt() == 1) {
-				SoundPlayer.soundPlayer.toggleMusic();
+				SoundPlayer.soundPlayer.setMuted(true);
 			}
 		}
 		else {
