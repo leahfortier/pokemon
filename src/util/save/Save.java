@@ -5,6 +5,7 @@ import main.Game;
 import main.Global;
 import sound.SoundPlayer;
 import trainer.player.Player;
+import trainer.player.medal.MedalTheme;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
@@ -36,7 +37,7 @@ public final class Save {
 	public static void save() {
 		Player player = Game.getPlayer();
 		player.updateTimePlayed();
-		player.getMedalCase().timesSaved.increase();
+		player.getMedalCase().increase(MedalTheme.TIMES_SAVED);
 
 		FileIO.createFolder(Folder.SAVES);
 		SerializationUtils.serializeToFile(getSavePath(player.getFileNum()), player);

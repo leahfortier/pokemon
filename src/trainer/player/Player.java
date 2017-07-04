@@ -29,6 +29,7 @@ import trainer.Opponent;
 import trainer.PlayerTrainer;
 import trainer.Trainer;
 import trainer.TrainerAction;
+import trainer.player.medal.MedalTheme;
 import trainer.player.pokedex.Pokedex;
 import trainer.player.medal.MedalCase;
 import util.Point;
@@ -162,7 +163,7 @@ public class Player extends PlayerTrainer implements Serializable {
 		this.isBiking = !this.isBiking && this.hasTool(OverworldTool.BIKE);
 
 		if (this.isBiking) {
-			this.medalCase.bicycleCount.increase();
+			this.medalCase.increase(MedalTheme.BICYCLE_COUNT);
 		}
 	}
 
@@ -242,14 +243,14 @@ public class Player extends PlayerTrainer implements Serializable {
 		dayCareCenter.step();
 
 		// Gotta get dat gold
-		medalCase.stepsWalked.increase();
+		medalCase.increase(MedalTheme.STEPS_WALKED);
 
 		// Hatch eggs
         boolean doubleHatch = front().hasAbility(AbilityNamesies.FLAME_BODY) || front().hasAbility(AbilityNamesies.MAGMA_ARMOR);
 		for (ActivePokemon p : team) {
 			if (p.isEgg() && (p.hatch() || (doubleHatch && p.hatch()))) {
 				this.evolutionInfo.setEgg(p);
-				this.medalCase.hatch();
+				this.medalCase.increase(MedalTheme.EGGS_HATCHED);
 
 				Messages.add(new MessageUpdate().withTrigger(TriggerType.GROUP.getTriggerNameFromSuffix("EggHatching")));
 				
@@ -358,7 +359,7 @@ public class Player extends PlayerTrainer implements Serializable {
 
 	@Override
 	public int sucksToSuck(int datCash) {
-		this.medalCase.livinLarge(datCash);
+		this.medalCase.increase(MedalTheme.CASH_MONEY_SPENT, datCash);
 
 		return super.sucksToSuck(datCash);
 	}

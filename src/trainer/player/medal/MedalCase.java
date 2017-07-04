@@ -24,108 +24,18 @@ import java.util.Set;
 public class MedalCase implements Serializable {
     private final Set<Medal> medalsEarned;
 
+    private final Map<MedalTheme, Integer> themeCounters;
+
     private int totalPokemonCaught;
     private Map<Type, Integer> totalPokemonCaughtTypeMap;
 
-    public final MedalCounter stepsWalked = new MedalCounter(
-            Medal.LIGHT_WALKER,
-            Medal.MIDDLE_WALKER,
-            Medal.HEAVY_WALKER,
-            Medal.HONORED_FOOTPRINTS
-    );
-
-    public final MedalCounter timesSaved = new MedalCounter(
-            Medal.STEP_BY_STEP_SAVER,
-            Medal.BUSY_SAVER,
-            Medal.EXPERIENCED_SAVER,
-            Medal.WONDER_WRITER
-    );
-
-    // TODO
-    public final MedalCounter pokecenterHeals = new MedalCounter(
-            Medal.POKEMON_CENTER_FAN,
-            Medal.POKEMON_CENTER_SUPER_FAN
-    );
-
-    public final MedalCounter bicycleCount = new MedalCounter(
-            Medal.STARTER_CYCLING,
-            Medal.EASY_CYCLING,
-            Medal.HARD_CYCLING,
-            Medal.PEDALING_LEGEND
-    );
-
-    public final MedalCounter fishReeledIn = new MedalCounter(
-            Medal.OLD_ROD_FISHERMAN,
-            Medal.GOOD_ROD_FISHERMAN,
-            Medal.SUPER_ROD_FISHERMAN,
-            Medal.MIGHTY_FISHER
-    );
-
-    public final MedalCounter eggsHatched = new MedalCounter(
-            Medal.EGG_BEGINNER,
-            Medal.EGG_BREEDER,
-            Medal.EGG_ELITE,
-            Medal.HATCHING_AFICIONADO
-    );
-
-    public final MedalCounter dayCareDeposited = new MedalCounter(
-            Medal.DAY_CARE_FAITHFUL,
-            Medal.DAY_CARE_SUPER_FAITHFUL,
-            Medal.DAY_CARE_EXTRAORDINARY_FAITHFUL
-    );
-
-    // TODO
-    public final MedalCounter hiddenItemsFound = new MedalCounter(
-            Medal.DOWSING_BEGINNER,
-            Medal.DOWSING_SPECIALIST,
-            Medal.DOWSING_COLLECTOR,
-            Medal.DOWSING_WIZARD
-    );
-
-    public final MedalCounter itemsBought = new MedalCounter(
-            Medal.REGULAR_CUSTOMER
-    );
-
-    public final MedalCounter cashMoneySpent = new MedalCounter(
-            Medal.MODERATE_CUSTOMER,
-            Medal.GREAT_CUSTOMER,
-            Medal.INDULGENT_CUSTOMER,
-            Medal.SUPER_RICH
-    );
-
-    public final MedalCounter pokemonEvolved = new MedalCounter(
-            Medal.EVOLUTION_HOPEFUL,
-            Medal.EVOLUTION_TECH,
-            Medal.EVOLUTION_EXPERT,
-            Medal.EVOLUTION_AUTHORITY
-    );
-
-    // TODO
-    public final MedalCounter nicknamesGiven = new MedalCounter(
-            Medal.NAMING_CHAMP
-    );
-
-    public final MedalCounter superEffectiveMovesUsed = new MedalCounter(
-            Medal.SUPEREFFECTIVE_SAVANT
-    );
-
-    public final MedalCounter shiniesFound = new MedalCounter(
-            Medal.LUCKY_COLOR,
-            Medal.LUCKIER_COLOR,
-            Medal.LUCKIEST_COLOR,
-            Medal.SUPER_DUPER_LUCKIEST_COLOR
-    );
-
-    private final MedalCounter medalsCollected = new MedalCounter(
-             Medal.ROOKIE_MEDALIST,
-             Medal.ELITE_MEDALIST,
-             Medal.MASTER_MEDALIST,
-             Medal.LEGEND_MEDALIST,
-             Medal.TOP_MEDALIST
-    );
-
     public MedalCase() {
         this.medalsEarned = EnumSet.noneOf(Medal.class);
+
+        this.themeCounters = new EnumMap<>(MedalTheme.class);
+        for (MedalTheme theme : MedalTheme.values()) {
+            this.themeCounters.put(theme, 0);
+        }
 
         this.totalPokemonCaughtTypeMap = new EnumMap<>(Type.class);
         for (Type type : Type.values()) {
@@ -143,7 +53,7 @@ public class MedalCase implements Serializable {
             medalsEarned.add(medal);
             System.out.println("Medal Earned: " + medal.getMedalName() + "!");
 
-            this.medalsCollected.update(this.medalsEarned.size());
+            this.update(MedalTheme.MEDALS_COLLECTED, this.medalsEarned.size());
         }
     }
 
@@ -157,12 +67,8 @@ public class MedalCase implements Serializable {
 
     public void encounterPokemon(ActivePokemon encountered) {
         if (encountered.isShiny()) {
-            shiniesFound.increase();
+            this.increase(MedalTheme.SHINIES_FOUND);
         }
-    }
-
-    public void hatch() {
-        eggsHatched.increase();
     }
 
     public void useMove(AttackNamesies attack, double advantage) {
@@ -174,14 +80,28 @@ public class MedalCase implements Serializable {
         }
 
         if (TypeAdvantage.isSuperEffective(advantage)) {
-            superEffectiveMovesUsed.increase();
+            this.increase(MedalTheme.SUPER_EFFECTIVE_MOVES_USED);
         }
         else if (TypeAdvantage.isNotVeryEffective(advantage)) {
             earnMedal(Medal.NONEFFECTIVE_ARTIST);
         }
     }
 
-    public void livinLarge(int datCash) {
-        this.cashMoneySpent.increase(datCash);
+    private void checkThreshold(MedalTheme theme) {
+        theme.checkThreshold(themeCounters.get(theme));
+    }
+
+    public void update(MedalTheme theme, int count) {
+        this.themeCounters.put(theme, count);
+        this.checkThreshold(theme);
+    }
+
+    public void increase(MedalTheme theme) {
+        this.increase(theme, 1);
+    }
+
+    public void increase(MedalTheme theme, int amount) {
+        this.themeCounters.put(theme, this.themeCounters.get(theme) + amount);
+        this.checkThreshold(theme);
     }
 }
