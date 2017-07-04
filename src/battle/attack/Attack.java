@@ -405,7 +405,9 @@ public abstract class Attack implements Serializable {
 			Messages.add(TypeAdvantage.getSuperEffectiveMessage());
 		}
 
-		Game.getPlayer().getMedalCase().useMove(this.namesies, advantage);
+		if (me.isPlayer() && !b.isSimulating()) {
+			Game.getPlayer().getMedalCase().checkAdvantage(advantage);
+		}
 
 		// Deadsies check
 		o.isFainted(b);

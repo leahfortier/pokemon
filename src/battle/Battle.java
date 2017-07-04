@@ -223,7 +223,7 @@ public class Battle implements Serializable {
 		printShit();
 	}
 
-	private boolean isSimulating() {
+	public boolean isSimulating() {
 		return !(this.player instanceof Player);
 	}
 
@@ -535,6 +535,10 @@ public class Battle implements Serializable {
 	}
 	
 	private void executeAttack(ActivePokemon me, ActivePokemon o) {
+		if (me.isPlayer() && !this.isSimulating()) {
+			Game.getPlayer().getMedalCase().useMove(me.getAttack().namesies());
+		}
+
 		me.getAttributes().count();
 
 		boolean success = me.getAttack().apply(me, o, this);

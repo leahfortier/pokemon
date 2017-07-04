@@ -1,6 +1,7 @@
 package trainer.player.medal;
 
 import battle.attack.AttackNamesies;
+import message.Messages;
 import pokemon.ActivePokemon;
 import type.Type;
 import type.TypeAdvantage;
@@ -49,8 +50,8 @@ public class MedalCase implements Serializable {
 
     public void earnMedal(Medal medal) {
         if (!this.hasMedal(medal)) {
-            // TODO: Animation
             medalsEarned.add(medal);
+            Messages.add("Medal Earned: " + medal.getMedalName() + "!");
             System.out.println("Medal Earned: " + medal.getMedalName() + "!");
 
             this.update(MedalTheme.MEDALS_COLLECTED, this.medalsEarned.size());
@@ -71,14 +72,16 @@ public class MedalCase implements Serializable {
         }
     }
 
-    public void useMove(AttackNamesies attack, double advantage) {
+    public void useMove(AttackNamesies attack) {
         if (attack == AttackNamesies.SPLASH) {
             earnMedal(Medal.MAGIKARP_AWARD);
         }
         else if (attack == AttackNamesies.STRUGGLE) {
             earnMedal(Medal.NEVER_GIVE_UP);
         }
+    }
 
+    public void checkAdvantage(double advantage) {
         if (TypeAdvantage.isSuperEffective(advantage)) {
             this.increase(MedalTheme.SUPER_EFFECTIVE_MOVES_USED);
         }
