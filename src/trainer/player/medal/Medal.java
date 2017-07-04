@@ -68,6 +68,12 @@ public enum Medal {
     DOWSING_COLLECTOR(3, 50, "Dowsing Collector", "A Medal to praise sharp-eyed Trainers who found 50 hidden items."),
     DOWSING_WIZARD(4, 150, "Dowsing Wizard", "A Medal to praise peerlessly sharp-eyed Trainers who found 150 hidden items."),
 
+    // Battles battled
+    BATTLE_LEARNER(1, 100, "Battle Learner", "A Medal for courageous young Trainers who went through 100 battles."),
+    BATTLE_TEACHER(2, 200, "Battle Teacher", "A Medal for ferociously courageous Trainers who went through 200 battles."),
+    BATTLE_VETERAN(3, 400, "Battle Veteran", "A Medal for tremendously courageous Trainers who went through 400 battles."),
+    BATTLE_VIRTUOSO(4, 2000, "Battle Virtuoso", "A Medal for peerlessly courageous Trainers who went through 2,000 battles."),
+
     // Misc Medals
     MAGIKARP_AWARD(3, "Magikarp Award", "A Medal to praise the guts of Trainers who kept using Splash no matter what."),
     NEVER_GIVE_UP(3, "Never Give Up", "A Medal for those who don't know when to quit even when there's nothing they can do."),

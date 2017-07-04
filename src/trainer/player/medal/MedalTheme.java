@@ -78,6 +78,12 @@ public enum MedalTheme {
             Medal.LUCKIEST_COLOR,
             Medal.SUPER_DUPER_LUCKIEST_COLOR
     ),
+    BATTLES_BATTLED(
+            Medal.BATTLE_LEARNER,
+            Medal.BATTLE_TEACHER,
+            Medal.BATTLE_VETERAN,
+            Medal.BATTLE_VIRTUOSO
+    ),
     MEDALS_COLLECTED(
             Medal.ROOKIE_MEDALIST,
             Medal.ELITE_MEDALIST,

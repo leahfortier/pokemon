@@ -47,6 +47,7 @@ import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.WildPokemon;
 import trainer.player.Player;
+import trainer.player.medal.MedalTheme;
 import type.TypeAdvantage;
 import util.PokeString;
 import util.RandomUtils;
@@ -80,6 +81,8 @@ public class Battle implements Serializable {
 		Messages.add(new MessageUpdate().withUpdate(Update.ENTER_BATTLE));
 
 		Player player = Game.getPlayer();
+		player.getMedalCase().increase(MedalTheme.BATTLES_BATTLED);
+
 		this.player = player;
 		this.opponent = opponent;
 
