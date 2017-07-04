@@ -161,6 +161,9 @@ public class Player extends PlayerTrainer implements Serializable {
 	public void toggleBicycle() {
 		this.isBiking = !this.isBiking && this.hasTool(OverworldTool.BIKE);
 
+		if (this.isBiking) {
+			this.medalCase.bicycleCount.increase();
+		}
 	}
 
 	public int getNumBadges() {
@@ -239,7 +242,7 @@ public class Player extends PlayerTrainer implements Serializable {
 		dayCareCenter.step();
 
 		// Gotta get dat gold
-		medalCase.stepsWalked.increase(1);
+		medalCase.stepsWalked.increase();
 
 		// Hatch eggs
         boolean doubleHatch = front().hasAbility(AbilityNamesies.FLAME_BODY) || front().hasAbility(AbilityNamesies.MAGMA_ARMOR);

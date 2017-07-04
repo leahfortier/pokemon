@@ -34,9 +34,7 @@ public class MedalCase implements Serializable {
     private int totalShiniesSeen;
     private int totalPokemonEvolved;
     private int eggsHatched;
-    private int fishReeledIn;
     private int hiddenItemsFound;
-    private int pokecenterHeals;
 
     public final MedalCounter stepsWalked = new MedalCounter(
             Medal.LIGHT_WALKER,
@@ -52,7 +50,27 @@ public class MedalCase implements Serializable {
             Medal.WONDER_WRITER
     );
 
-    private MedalCounter medalsCollected = new MedalCounter(
+    // TODO
+    public final MedalCounter pokecenterHeals = new MedalCounter(
+            Medal.POKEMON_CENTER_FAN,
+            Medal.POKEMON_CENTER_SUPER_FAN
+    );
+
+    public final MedalCounter bicycleCount = new MedalCounter(
+            Medal.STARTER_CYCLING,
+            Medal.EASY_CYCLING,
+            Medal.HARD_CYCLING,
+            Medal.PEDALING_LEGEND
+    );
+
+    public final MedalCounter fishReeledIn = new MedalCounter(
+            Medal.OLD_ROD_FISHERMAN,
+            Medal.GOOD_ROD_FISHERMAN,
+            Medal.SUPER_ROD_FISHERMAN,
+            Medal.MIGHTY_FISHER
+    );
+
+    private final MedalCounter medalsCollected = new MedalCounter(
              Medal.ROOKIE_MEDALIST,
              Medal.ELITE_MEDALIST,
              Medal.MASTER_MEDALIST,

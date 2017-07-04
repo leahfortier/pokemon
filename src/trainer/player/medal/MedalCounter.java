@@ -15,7 +15,7 @@ public class MedalCounter implements Serializable {
 
     private void checkThreshold() {
         for (Medal medal : medals) {
-            if (this.count > medal.getThreshold()) {
+            if (this.count >= medal.getThreshold()) {
                 Game.getPlayer().getMedalCase().earnMedal(medal);
             }
         }
@@ -24,6 +24,10 @@ public class MedalCounter implements Serializable {
     public void update(int count) {
         this.count = count;
         this.checkThreshold();
+    }
+
+    public void increase() {
+        this.increase(1);
     }
 
     public void increase(int amount) {

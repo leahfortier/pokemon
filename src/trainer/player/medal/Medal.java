@@ -13,6 +13,22 @@ public enum Medal {
     EXPERIENCED_SAVER(50, "Experienced Saver", "A Medal to recognize a smooth journey that has been recorded 50 times."),
     WONDER_WRITER(100, "Wonder Writer", "A Medal to recognize an astonishing journey that has been recorded 100 times"),
 
+    // Pokecenter visits
+    POKEMON_CENTER_FAN(10, "Pokémon Center Fan", "A Medal given to kind Trainers who let their Pokémon rest at Pokémon Centers 10 times."),
+    POKEMON_CENTER_SUPER_FAN(100, "Pokémon Center Super Fan", "A Medal given to kind Trainers who let their Pokémon rest at Pokémon Centers 100 times."),
+
+    // Bicycling riding
+    STARTER_CYCLING(1, "Starter Cycling", "A Medal given to beginning cyclists who rode a Bicycle for the first time."),
+    EASY_CYCLING(30, "Easy Cycling", "A Medal given to casual cyclists who have ridden a Bicycle 30 times."),
+    HARD_CYCLING(100, "Hard Cycling", "A Medal given to outstanding cyclists who have ridden a Bicycle 100 times."),
+    PEDALING_LEGEND(500, "Pedaling Legend", "A Medal given to earthshaking cyclists who have ridden a Bicycle 500 times."),
+
+    // Fishing
+    OLD_ROD_FISHERMAN(1, "Old Rod Fisherman", "A Medal given to beginning fishers who reeled in a Pokémon for the first time."),
+    GOOD_ROD_FISHERMAN(10, "Good Rod Fisherman", "A Medal given to leisure fishers who reeled in 10 Pokémon."),
+    SUPER_ROD_FISHERMAN(50, "Super Rod Fisherman", "A Medal given to very experienced fishers who reeled in 50 Pokémon."),
+    MIGHTY_FISHER(100, "Mighty Fisher", "A Medal given to legendary fishers who reeled in 100 Pokémon."),
+
     // Medals Collected
     ROOKIE_MEDALIST(50, "Rookie Medalist", "A Medal commemorating the advance to the Rookie Rank as the result of constant efforts in the Medal Rally."),
     ELITE_MEDALIST(100, "Elite Medalist", "A Medal commemorating the advance to the Elite Rank as the result of constant efforts in the Medal Rally."),

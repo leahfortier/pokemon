@@ -36,7 +36,7 @@ public final class Save {
 	public static void save() {
 		Player player = Game.getPlayer();
 		player.updateTimePlayed();
-		player.getMedalCase().timesSaved.increase(1);
+		player.getMedalCase().timesSaved.increase();
 
 		FileIO.createFolder(Folder.SAVES);
 		SerializationUtils.serializeToFile(getSavePath(player.getFileNum()), player);
