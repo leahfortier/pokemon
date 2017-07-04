@@ -76,6 +76,7 @@ public class DayCareCenter implements Serializable {
         toDeposit.fullyHeal();
 
         this.reset();
+        player.getMedalCase().dayCareDeposited.increase();
 
         return "Okay, we'll look after your " + toDeposit.getName() + " for a while.";
     }

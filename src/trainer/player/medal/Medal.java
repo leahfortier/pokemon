@@ -29,6 +29,17 @@ public enum Medal {
     SUPER_ROD_FISHERMAN(50, "Super Rod Fisherman", "A Medal given to very experienced fishers who reeled in 50 Pokémon."),
     MIGHTY_FISHER(100, "Mighty Fisher", "A Medal given to legendary fishers who reeled in 100 Pokémon."),
 
+    // Eggs Hatched
+    EGG_BEGINNER(1, "Egg Beginner", "A Medal to prove the fresh parental instincts of people who hatched a Pokémon Egg for the first time."),
+    EGG_BREEDER(10, "Egg Breeder", "A Medal to prove the decent parental instincts of people who hatched 10 Pokémon Eggs."),
+    EGG_ELITE(50, "Egg Elite", "A Medal to prove the outstanding parental instincts of people who hatched 50 Pokémon Eggs."),
+    HATCHING_AFICIONADO(100, "Hatching Aficionado", "A Medal to prove the endless parental instincts of people who hatched 100 Pokémon Eggs."),
+
+    // Pokemon Deposited at Day Care
+    DAY_CARE_FAITHFUL(10, "Day-Care Faithful", "A Medal for those who love to raise Pokémon and left 10 Pokémon at the Pokémon Day Care."),
+    DAY_CARE_SUPER_FAITHFUL(50, "Day-Care Super Faithful", "A Medal for those who love to raise Pokémon and left 50 Pokémon at the Pokémon Day Care."),
+    DAY_CARE_EXTRAORDINARY_FAITHFUL(100, "Day-Care Extraordinary Faithful", "A Medal for those who love to raise Pokémon and left 100 Pokémon at the Pokémon Day Care."),
+
     // Medals Collected
     ROOKIE_MEDALIST(50, "Rookie Medalist", "A Medal commemorating the advance to the Rookie Rank as the result of constant efforts in the Medal Rally."),
     ELITE_MEDALIST(100, "Elite Medalist", "A Medal commemorating the advance to the Elite Rank as the result of constant efforts in the Medal Rally."),

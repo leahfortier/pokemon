@@ -33,7 +33,6 @@ public class MedalCase implements Serializable {
 
     private int totalShiniesSeen;
     private int totalPokemonEvolved;
-    private int eggsHatched;
     private int hiddenItemsFound;
 
     public final MedalCounter stepsWalked = new MedalCounter(
@@ -68,6 +67,19 @@ public class MedalCase implements Serializable {
             Medal.GOOD_ROD_FISHERMAN,
             Medal.SUPER_ROD_FISHERMAN,
             Medal.MIGHTY_FISHER
+    );
+
+    public final MedalCounter eggsHatched = new MedalCounter(
+            Medal.EGG_BEGINNER,
+            Medal.EGG_BREEDER,
+            Medal.EGG_ELITE,
+            Medal.HATCHING_AFICIONADO
+    );
+
+    public final MedalCounter dayCareDeposited = new MedalCounter(
+            Medal.DAY_CARE_FAITHFUL,
+            Medal.DAY_CARE_SUPER_FAITHFUL,
+            Medal.DAY_CARE_EXTRAORDINARY_FAITHFUL
     );
 
     private final MedalCounter medalsCollected = new MedalCounter(
@@ -116,7 +128,7 @@ public class MedalCase implements Serializable {
     }
 
     public void hatch() {
-        eggsHatched++;
+        eggsHatched.increase();
     }
 
     public void moveAdvantage(double advantage) {
