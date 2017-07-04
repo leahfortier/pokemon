@@ -1,5 +1,7 @@
 package trainer.player.medal;
 
+import main.Global;
+
 public enum Medal {
     // Steps Taken
     LIGHT_WALKER(5000, "Light Walker", "A Medal to praise light walkers who took 5,000 steps."),
@@ -42,10 +44,10 @@ public enum Medal {
 
     // Spend Dat Cash Money
     REGULAR_CUSTOMER(100, "Regular Customer", "A Medal for Trainers who kept going to various shops and became regular customers.	Make 100 purchases at shops"),
-    MODERATE_CUSTOMER(10000, "Moderate Customer", "A Medal for rich people who spent PokémonDollar.png10,000 at various shops."),
-    GREAT_CUSTOMER(100000, "Great Customer", "A Medal for rich people who spent PokémonDollar.png100,000 at various shops."),
-    INDULGENT_CUSTOMER(1000000, "Indulgent Customer", "A Medal for rich people who spent PokémonDollar.png1,000,000 at various shops."),
-    SUPER_RICH(10000000, "Super Rich", "A Medal for super-rich people who spent PokémonDollar.png10,000,000 at various shops."),
+    MODERATE_CUSTOMER(10000, "Moderate Customer", "A Medal for rich people who spent " + Global.MONEY_SYMBOL + "10,000 at various shops."),
+    GREAT_CUSTOMER(100000, "Great Customer", "A Medal for rich people who spent " + Global.MONEY_SYMBOL + "100,000 at various shops."),
+    INDULGENT_CUSTOMER(1000000, "Indulgent Customer", "A Medal for rich people who spent " + Global.MONEY_SYMBOL + "1,000,000 at various shops."),
+    SUPER_RICH(10000000, "Super Rich", "A Medal for super-rich people who spent " + Global.MONEY_SYMBOL + "10,000,000 at various shops."),
 
     // Misc Medals
     MAGIKARP_AWARD("Magikarp Award", "A Medal to praise the guts of Trainers who kept using Splash no matter what."),

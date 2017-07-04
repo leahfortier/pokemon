@@ -20,16 +20,12 @@ import java.util.Set;
         Arceus plates
         Catch legendary trios
         trades
-        hidden items
  */
 public class MedalCase implements Serializable {
     private final Set<Medal> medalsEarned;
 
     private int totalPokemonCaught;
     private Map<Type, Integer> totalPokemonCaughtTypeMap;
-
-    private int totalShiniesSeen;
-    private int totalPokemonEvolved;
 
     public final MedalCounter stepsWalked = new MedalCounter(
             Medal.LIGHT_WALKER,
@@ -78,6 +74,7 @@ public class MedalCase implements Serializable {
             Medal.DAY_CARE_EXTRAORDINARY_FAITHFUL
     );
 
+    // TODO
     public final MedalCounter itemsBought = new MedalCounter(
             Medal.REGULAR_CUSTOMER
     );
@@ -134,7 +131,7 @@ public class MedalCase implements Serializable {
 
     public void encounterPokemon(ActivePokemon encountered) {
         if (encountered.isShiny()) {
-            totalShiniesSeen++;
+//            totalShiniesSeen++;
         }
     }
 
