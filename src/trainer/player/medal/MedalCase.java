@@ -75,6 +75,13 @@ public class MedalCase implements Serializable {
     );
 
     // TODO
+    public final MedalCounter hiddenItemsFound = new MedalCounter(
+            Medal.DOWSING_BEGINNER,
+            Medal.DOWSING_SPECIALIST,
+            Medal.DOWSING_COLLECTOR,
+            Medal.DOWSING_WIZARD
+    );
+
     public final MedalCounter itemsBought = new MedalCounter(
             Medal.REGULAR_CUSTOMER
     );
@@ -91,6 +98,11 @@ public class MedalCase implements Serializable {
             Medal.EVOLUTION_TECH,
             Medal.EVOLUTION_EXPERT,
             Medal.EVOLUTION_AUTHORITY
+    );
+
+    // TODO
+    public final MedalCounter nicknamesGiven = new MedalCounter(
+            Medal.NAMING_CHAMP
     );
 
     public final MedalCounter superEffectiveMovesUsed = new MedalCounter(
@@ -118,7 +130,7 @@ public class MedalCase implements Serializable {
         return medalsEarned.contains(medal);
     }
 
-    void earnMedal(Medal medal) {
+    public void earnMedal(Medal medal) {
         if (!this.hasMedal(medal)) {
             // TODO: Animation
             medalsEarned.add(medal);

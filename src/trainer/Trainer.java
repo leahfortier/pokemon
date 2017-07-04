@@ -6,7 +6,6 @@ import battle.effect.generic.EffectInterfaces.SwitchOutEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import battle.effect.status.StatusCondition;
-import item.ItemNamesies;
 import item.bag.Bag;
 import main.Global;
 import pokemon.ActivePokemon;
@@ -117,10 +116,6 @@ public abstract class Trainer implements Team, Serializable {
 	}
 	
 	public abstract void addPokemon(ActivePokemon p);
-
-	public void addItem(ItemNamesies item, int amount) {
-		bag.addItem(item, amount);
-	}
 	
 	public Bag getBag() {
 		return bag;

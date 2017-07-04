@@ -15,6 +15,6 @@ class GiveItemTrigger extends Trigger {
     }
 
     protected void executeTrigger() {
-        Game.getPlayer().addItem(this.item, quantity);
+        Game.getPlayer().getBag().addItem(this.item, quantity);
     }
 }
