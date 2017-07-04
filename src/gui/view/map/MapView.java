@@ -2,7 +2,6 @@ package gui.view.map;
 
 import battle.Battle;
 import draw.DrawUtils;
-import draw.TextUtils;
 import draw.TileUtils;
 import gui.GameData;
 import gui.IndexTileSet;
@@ -30,7 +29,6 @@ import message.Messages;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.player.Player;
-import util.FontMetrics;
 import util.Point;
 import util.StringUtils;
 
@@ -39,8 +37,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class MapView extends View {
-
-	private static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
 
     private static final PathDirection[] deltaDirections = {
 			PathDirection.WAIT,
@@ -199,48 +195,7 @@ public class MapView extends View {
 	}
 
 	private void drawAreaTransitionAnimation(Graphics g) {
-		String areaName = currentArea.getAreaName();
-		if (StringUtils.isNullOrEmpty(areaName)) {
-			return;
-		}
-
-		int fontSize = 30;
-		
-		int insideWidth = FontMetrics.getSuggestedWidth(areaName, fontSize);
-		int insideHeight = FontMetrics.getSuggestedHeight(fontSize);
-		
-		int borderSize = 2;
-		int graySize = 10;
-		
-		int totalWidth = borderSize*2 + graySize*2 + insideWidth;
-		int totalHeight = borderSize*2 + graySize*2 + insideHeight;
-		
-		int yValue = 0;
-		
-		// Calculate exit location
-		if (areaDisplayTime/(double)AREA_NAME_ANIMATION_LIFESPAN < .2) {
-			yValue = -1*(int)(((AREA_NAME_ANIMATION_LIFESPAN - areaDisplayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0) * 5 * (insideHeight + (2*graySize)));
-		}
-		// Calculate entrance location
-		else if (areaDisplayTime/(double)AREA_NAME_ANIMATION_LIFESPAN > .8) {
-			yValue = -1*(int)(((areaDisplayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0) * 5 * (insideHeight + 2*graySize));
-		}
-		
-		// Black border
-		g.setColor(Color.BLACK);
-		g.fillRect(0, yValue, totalWidth, totalHeight);
-
-		// Light grey border
-		g.setColor(new Color(195, 195, 195));
-		g.fillRect(borderSize, yValue + borderSize, insideWidth + 2*graySize, insideHeight + 2*graySize);
-
-		// White inside
-		g.setColor(Color.WHITE);
-		g.fillRect(borderSize + graySize, yValue + graySize + borderSize, insideWidth, insideHeight);
-
-		g.setColor(Color.BLACK);
-		FontMetrics.setFont(g, fontSize);
-		TextUtils.drawCenteredString(g, currentArea.getAreaName(), 0, yValue, totalWidth, totalHeight);
+		DrawUtils.drawAreaTransitionAnimation(g, currentArea.getAreaName(), areaDisplayTime);
 	}
 
 	@Override
@@ -262,7 +217,7 @@ public class MapView extends View {
 
 		// If new area has a new name, display the area name animation
 		if (currentArea != null && !StringUtils.isNullOrEmpty(areaName) && !areaName.equals(currentArea.getAreaName())) {
-			areaDisplayTime = AREA_NAME_ANIMATION_LIFESPAN;
+			areaDisplayTime = DrawUtils.AREA_NAME_ANIMATION_LIFESPAN;
 		}
 
 		player.setArea(currentMapName, area);
