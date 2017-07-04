@@ -49,6 +49,12 @@ public enum Medal {
     INDULGENT_CUSTOMER(1000000, "Indulgent Customer", "A Medal for rich people who spent " + Global.MONEY_SYMBOL + "1,000,000 at various shops."),
     SUPER_RICH(10000000, "Super Rich", "A Medal for super-rich people who spent " + Global.MONEY_SYMBOL + "10,000,000 at various shops."),
 
+    // Evolution Solution
+    EVOLUTION_HOPEFUL(1, "Evolution Hopeful", "A Medal for promising Trainers who evolved a Pokémon for the first time."),
+    EVOLUTION_TECH(10, "Evolution Tech", "A Medal for skilled Trainers who evolved Pokémon 10 times."),
+    EVOLUTION_EXPERT(50, "Evolution Expert", "A Medal for great Trainers who evolved Pokémon 50 times."),
+    EVOLUTION_AUTHORITY(100, "Evolution Authority", "A Medal for exceptional Trainers who evolved Pokémon 100 times."),
+
     // Misc Medals
     MAGIKARP_AWARD("Magikarp Award", "A Medal to praise the guts of Trainers who kept using Splash no matter what."),
     NEVER_GIVE_UP("Never Give Up", "A Medal for those who don't know when to quit even when there's nothing they can do."),

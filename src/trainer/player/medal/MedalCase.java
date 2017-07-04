@@ -86,6 +86,13 @@ public class MedalCase implements Serializable {
             Medal.SUPER_RICH
     );
 
+    public final MedalCounter pokemonEvolved = new MedalCounter(
+            Medal.EVOLUTION_HOPEFUL,
+            Medal.EVOLUTION_TECH,
+            Medal.EVOLUTION_EXPERT,
+            Medal.EVOLUTION_AUTHORITY
+    );
+
     public final MedalCounter superEffectiveMovesUsed = new MedalCounter(
             Medal.SUPEREFFECTIVE_SAVANT
     );

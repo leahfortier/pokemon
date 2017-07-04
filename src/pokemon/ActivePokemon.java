@@ -567,6 +567,8 @@ public class ActivePokemon implements Serializable {
 
 	// Returns stat gains
 	public int[] evolve(BaseEvolution evolution) {
+		Game.getPlayer().getMedalCase().pokemonEvolved.increase();
+
 		boolean sameName = nickname.equals(pokemon.getName());
 		PokemonInfo evolutionInfo = evolution.getEvolution();
 
