@@ -109,6 +109,13 @@ public class MedalCase implements Serializable {
             Medal.SUPEREFFECTIVE_SAVANT
     );
 
+    public final MedalCounter shiniesFound = new MedalCounter(
+            Medal.LUCKY_COLOR,
+            Medal.LUCKIER_COLOR,
+            Medal.LUCKIEST_COLOR,
+            Medal.SUPER_DUPER_LUCKIEST_COLOR
+    );
+
     private final MedalCounter medalsCollected = new MedalCounter(
              Medal.ROOKIE_MEDALIST,
              Medal.ELITE_MEDALIST,
@@ -150,7 +157,7 @@ public class MedalCase implements Serializable {
 
     public void encounterPokemon(ActivePokemon encountered) {
         if (encountered.isShiny()) {
-//            totalShiniesSeen++;
+            shiniesFound.increase();
         }
     }
 

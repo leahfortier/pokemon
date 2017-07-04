@@ -56,6 +56,12 @@ public enum Medal {
     EVOLUTION_EXPERT(3, 50, "Evolution Expert", "A Medal for great Trainers who evolved Pokémon 50 times."),
     EVOLUTION_AUTHORITY(4, 100, "Evolution Authority", "A Medal for exceptional Trainers who evolved Pokémon 100 times."),
 
+    // Shiiiiinnnnnnnnyyyyyyyy :)
+    LUCKY_COLOR(1, 1, "Lucky Color", "A Medal to praise the luck of people who have befriended a Shiny Pokémon."),
+    LUCKIER_COLOR(2, 3, "Luckier Color", "A Medal to praise the luck of people who have befriended a Shiny Pokémon."),
+    LUCKIEST_COLOR(3, 5, "Luckiest Color", "A Medal to praise the luck of people who have befriended a Shiny Pokémon."),
+    SUPER_DUPER_LUCKIEST_COLOR(4, 10, "Super Duper Luckiest Color", "A Medal to praise the luck of people who have befriended a Shiny Pokémon."),
+
     // Hidden Items Found
     DOWSING_BEGINNER(1, 1, "Dowsing Beginner", "A Medal to praise sharp-eyed Trainers who found a hidden item for the first time."),
     DOWSING_SPECIALIST(2, 10, "Dowsing Specialist", "A Medal to praise sharp-eyed Trainers who found 10 hidden items."),
