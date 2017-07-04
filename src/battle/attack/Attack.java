@@ -399,13 +399,14 @@ public abstract class Attack implements Serializable {
 
 		// Print Advantage
 		double advantage = TypeAdvantage.getAdvantage(me, o, b);
-		Game.getPlayer().getMedalCase().moveAdvantage(advantage);
 		if (TypeAdvantage.isNotVeryEffective(advantage)) {
 			Messages.add(TypeAdvantage.getNotVeryEffectiveMessage());
 		} else if (TypeAdvantage.isSuperEffective(advantage)) {
 			Messages.add(TypeAdvantage.getSuperEffectiveMessage());
 		}
-		
+
+		Game.getPlayer().getMedalCase().useMove(this.namesies, advantage);
+
 		// Deadsies check
 		o.isFainted(b);
 		me.isFainted(b);

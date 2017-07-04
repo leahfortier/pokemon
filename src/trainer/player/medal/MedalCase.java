@@ -1,5 +1,6 @@
 package trainer.player.medal;
 
+import battle.attack.AttackNamesies;
 import pokemon.ActivePokemon;
 import type.Type;
 import type.TypeAdvantage;
@@ -19,21 +20,16 @@ import java.util.Set;
         Arceus plates
         Catch legendary trios
         trades
+        hidden items
  */
 public class MedalCase implements Serializable {
     private final Set<Medal> medalsEarned;
-
-    private long cashMoneySpent;
-
-    private int superEffectiveMovesUsed;
-    private boolean notVeryEffectiveMoveUsed;
 
     private int totalPokemonCaught;
     private Map<Type, Integer> totalPokemonCaughtTypeMap;
 
     private int totalShiniesSeen;
     private int totalPokemonEvolved;
-    private int hiddenItemsFound;
 
     public final MedalCounter stepsWalked = new MedalCounter(
             Medal.LIGHT_WALKER,
@@ -80,6 +76,21 @@ public class MedalCase implements Serializable {
             Medal.DAY_CARE_FAITHFUL,
             Medal.DAY_CARE_SUPER_FAITHFUL,
             Medal.DAY_CARE_EXTRAORDINARY_FAITHFUL
+    );
+
+    public final MedalCounter itemsBought = new MedalCounter(
+            Medal.REGULAR_CUSTOMER
+    );
+
+    public final MedalCounter cashMoneySpent = new MedalCounter(
+            Medal.MODERATE_CUSTOMER,
+            Medal.GREAT_CUSTOMER,
+            Medal.INDULGENT_CUSTOMER,
+            Medal.SUPER_RICH
+    );
+
+    public final MedalCounter superEffectiveMovesUsed = new MedalCounter(
+            Medal.SUPEREFFECTIVE_SAVANT
     );
 
     private final MedalCounter medalsCollected = new MedalCounter(
@@ -131,17 +142,23 @@ public class MedalCase implements Serializable {
         eggsHatched.increase();
     }
 
-    public void moveAdvantage(double advantage) {
-        if (TypeAdvantage.isSuperEffective(advantage)) {
-            superEffectiveMovesUsed++;
+    public void useMove(AttackNamesies attack, double advantage) {
+        if (attack == AttackNamesies.SPLASH) {
+            earnMedal(Medal.MAGIKARP_AWARD);
+        }
+        else if (attack == AttackNamesies.STRUGGLE) {
+            earnMedal(Medal.NEVER_GIVE_UP);
         }
 
-        if (TypeAdvantage.isNotVeryEffective(advantage)) {
-            notVeryEffectiveMoveUsed = true;
+        if (TypeAdvantage.isSuperEffective(advantage)) {
+            superEffectiveMovesUsed.increase();
+        }
+        else if (TypeAdvantage.isNotVeryEffective(advantage)) {
+            earnMedal(Medal.NONEFFECTIVE_ARTIST);
         }
     }
 
     public void livinLarge(int datCash) {
-        this.cashMoneySpent += datCash;
+        this.cashMoneySpent.increase(datCash);
     }
 }

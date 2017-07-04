@@ -40,6 +40,19 @@ public enum Medal {
     DAY_CARE_SUPER_FAITHFUL(50, "Day-Care Super Faithful", "A Medal for those who love to raise Pokémon and left 50 Pokémon at the Pokémon Day Care."),
     DAY_CARE_EXTRAORDINARY_FAITHFUL(100, "Day-Care Extraordinary Faithful", "A Medal for those who love to raise Pokémon and left 100 Pokémon at the Pokémon Day Care."),
 
+    // Spend Dat Cash Money
+    REGULAR_CUSTOMER(100, "Regular Customer", "A Medal for Trainers who kept going to various shops and became regular customers.	Make 100 purchases at shops"),
+    MODERATE_CUSTOMER(10000, "Moderate Customer", "A Medal for rich people who spent PokémonDollar.png10,000 at various shops."),
+    GREAT_CUSTOMER(100000, "Great Customer", "A Medal for rich people who spent PokémonDollar.png100,000 at various shops."),
+    INDULGENT_CUSTOMER(1000000, "Indulgent Customer", "A Medal for rich people who spent PokémonDollar.png1,000,000 at various shops."),
+    SUPER_RICH(10000000, "Super Rich", "A Medal for super-rich people who spent PokémonDollar.png10,000,000 at various shops."),
+
+    // Misc Medals
+    MAGIKARP_AWARD("Magikarp Award", "A Medal to praise the guts of Trainers who kept using Splash no matter what."),
+    NEVER_GIVE_UP("Never Give Up", "A Medal for those who don't know when to quit even when there's nothing they can do."),
+    NONEFFECTIVE_ARTIST("Noneffective Artist", "A consolation Medal for Trainers who made the cute mistake of using noneffective moves."),
+    SUPEREFFECTIVE_SAVANT(1000, "Supereffective Savant", "A Medal for Trainers who saw through many foes' weak points and battle to their best advantage."),
+
     // Medals Collected
     ROOKIE_MEDALIST(50, "Rookie Medalist", "A Medal commemorating the advance to the Rookie Rank as the result of constant efforts in the Medal Rally."),
     ELITE_MEDALIST(100, "Elite Medalist", "A Medal commemorating the advance to the Elite Rank as the result of constant efforts in the Medal Rally."),
