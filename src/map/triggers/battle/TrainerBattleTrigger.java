@@ -10,6 +10,7 @@ import pattern.action.BattleMatcher;
 import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import trainer.EnemyTrainer;
+import util.RandomUtils;
 import util.SerializationUtils;
 
 public class TrainerBattleTrigger extends Trigger {
@@ -28,9 +29,11 @@ public class TrainerBattleTrigger extends Trigger {
 
 		this.trainer = new EnemyTrainer(trainerName, cash, maxPokemonAllowed);
 
+		RandomUtils.setTempRandomSeed(contents.hashCode());
 		for (PokemonMatcher matcher : battleMatcher.getPokemon()) {
 			trainer.addPokemon(ActivePokemon.createActivePokemon(matcher, false));
 		}
+		RandomUtils.resetRandomSeedToInitial();
 
 		this.npcUpdateInteraction = new UpdateMatcher(battleAction.getEntityName(), battleMatcher.getUpdateInteraction());
 	}
