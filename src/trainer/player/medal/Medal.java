@@ -13,7 +13,7 @@ public enum Medal {
     STEP_BY_STEP_SAVER(1, 10, "Step-by-Step Saver", "A Medal to recognize a newly started journey that has been recorded 10 times."),
     BUSY_SAVER(2, 20, "Busy Saver", "A Medal to recognize an energetic journey that has been recorded 20 times."),
     EXPERIENCED_SAVER(3, 50, "Experienced Saver", "A Medal to recognize a smooth journey that has been recorded 50 times."),
-    WONDER_WRITER(4, 100, "Wonder Writer", "A Medal to recognize an astonishing journey that has been recorded 100 times"),
+    WONDER_WRITER(4, 100, "Wonder Writer", "A Medal to recognize an astonishing journey that has been recorded 100 times."),
 
     // Pokecenter visits
     POKEMON_CENTER_FAN(1, 10, "Pokémon Center Fan", "A Medal given to kind Trainers who let their Pokémon rest at Pokémon Centers 10 times."),
@@ -43,7 +43,7 @@ public enum Medal {
     DAY_CARE_EXTRAORDINARY_FAITHFUL(4, 100, "Day-Care Extraordinary Faithful", "A Medal for those who love to raise Pokémon and left 100 Pokémon at the Pokémon Day Care."),
 
     // Spend Dat Cash Money
-    REGULAR_CUSTOMER(3, 100, "Regular Customer", "A Medal for Trainers who kept going to various shops and became regular customers.	Make 100 purchases at shops"),
+    REGULAR_CUSTOMER(3, 100, "Regular Customer", "A Medal for Trainers who kept going to various shops and became regular customers."),
     SMART_SHOPPER(1, "Smart Shopper", "A Medal for thrifty shoppers who made bulk purchases and got bonus Premier Balls."),
     MODERATE_CUSTOMER(1, 10000, "Moderate Customer", "A Medal for rich people who spent " + Global.MONEY_SYMBOL + "10,000 at various shops."),
     GREAT_CUSTOMER(2, 100000, "Great Customer", "A Medal for rich people who spent " + Global.MONEY_SYMBOL + "100,000 at various shops."),
@@ -116,11 +116,23 @@ public enum Medal {
         return this.description;
     }
 
+    public boolean hasThreshold() {
+        return this.threshold > 0;
+    }
+
     public int getThreshold() {
         return this.threshold;
     }
 
     public String getImageName() {
+        return getImageName(this.imageIndex);
+    }
+
+    private static String getImageName(int imageIndex) {
         return "medal" + imageIndex;
+    }
+
+    public static String getUnknownMedalImageName() {
+        return getImageName(0);
     }
 }

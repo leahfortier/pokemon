@@ -82,5 +82,8 @@ class MapState implements VisualStateHandler {
         else if (input.consumeIfDown(ControlKey.ITEM_FINDER) && player.hasTool(OverworldTool.ITEM_FINDER)) {
             showItemFinder = !showItemFinder;
         }
+        else if (input.consumeIfDown(ControlKey.MEDAL_CASE)) {
+            mapView.setState(VisualState.MEDAL_CASE);
+        }
     }
 }

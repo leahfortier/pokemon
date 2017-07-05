@@ -2,6 +2,9 @@ package trainer.player.medal;
 
 import main.Game;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 public enum MedalTheme {
     STEPS_WALKED(
             Medal.LIGHT_WALKER,
@@ -92,6 +95,17 @@ public enum MedalTheme {
             Medal.TOP_MEDALIST
     );
 
+    private static final Map<Medal, MedalTheme> MEDAL_THEME_MAP;
+    static {
+        MEDAL_THEME_MAP = new EnumMap<>(Medal.class);
+        for (MedalTheme medalTheme : MedalTheme.values()) {
+            for (Medal medal : medalTheme.medals) {
+                // TODO: Test for this -- make sure this is for all thresholds exactly once
+                MEDAL_THEME_MAP.put(medal, medalTheme);
+            }
+        }
+    }
+
     private Medal[] medals;
 
     MedalTheme(Medal... medals) {
@@ -104,5 +118,9 @@ public enum MedalTheme {
                 Game.getPlayer().getMedalCase().earnMedal(medal);
             }
         }
+    }
+
+    public static MedalTheme getMedalTheme(Medal medal) {
+        return MEDAL_THEME_MAP.get(medal);
     }
 }

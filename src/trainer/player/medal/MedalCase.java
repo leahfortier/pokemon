@@ -44,7 +44,11 @@ public class MedalCase implements Serializable {
         }
     }
 
-    private boolean hasMedal(Medal medal) {
+    public long getCount(Medal medal) {
+        return themeCounters.get(MedalTheme.getMedalTheme(medal));
+    }
+
+    public boolean hasMedal(Medal medal) {
         return medalsEarned.contains(medal);
     }
 

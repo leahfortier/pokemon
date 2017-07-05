@@ -39,7 +39,6 @@ class PokeFinderState implements VisualStateHandler {
         pokeFinderPanel = DrawPanel.fullGamePanel().withBorderColor(new Color(219, 9, 46)).withBorderPercentage(5);
     }
 
-
     @Override
     public void draw(Graphics g, MapView mapView) {
         pokeFinderPanel.drawBackground(g);
