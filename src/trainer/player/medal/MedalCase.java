@@ -3,6 +3,8 @@ package trainer.player.medal;
 import battle.attack.AttackNamesies;
 import message.Messages;
 import pokemon.ActivePokemon;
+import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import type.Type;
 import type.TypeAdvantage;
 
@@ -17,7 +19,6 @@ import java.util.Set;
         Berry harvests
         Nicknames given
         Critical captures
-        Hatch all babies
         Arceus plates
         Catch legendary trios
         trades
@@ -26,6 +27,9 @@ public class MedalCase implements Serializable {
     private final Set<Medal> medalsEarned;
 
     private final Map<MedalTheme, Integer> themeCounters;
+
+    // Start with all baby Pokemon and remove as we go, earn medal when empty
+    private final Set<PokemonNamesies> babyPokemonUnhatched = PokemonInfo.getAllBabyPokemon();
 
     private int totalPokemonCaught;
     private Map<Type, Integer> totalPokemonCaughtTypeMap;
@@ -73,6 +77,14 @@ public class MedalCase implements Serializable {
     public void encounterPokemon(ActivePokemon encountered) {
         if (encountered.isShiny()) {
             this.increase(MedalTheme.SHINIES_FOUND);
+        }
+    }
+
+    public void hatch(ActivePokemon hatched) {
+        this.increase(MedalTheme.EGGS_HATCHED);
+        this.babyPokemonUnhatched.remove(hatched.getPokemonInfo().namesies());
+        if (this.babyPokemonUnhatched.isEmpty()) {
+            earnMedal(Medal.BABY_CAKES);
         }
     }
 

@@ -19,6 +19,7 @@ import util.StringUtils;
 import java.io.Serializable;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -429,6 +430,14 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return RandomUtils.getRandomValue(starterPokemon);
 	}
 
+	public static int getNumBabyPokemon() {
+		return babyPokemon.length;
+	}
+
+	public static Set<PokemonNamesies> getAllBabyPokemon() {
+		return Arrays.stream(babyPokemon).collect(Collectors.toSet());
+	}
+
 	// All starters
 	private static final PokemonNamesies[] starterPokemon = new PokemonNamesies[] {
 			PokemonNamesies.BULBASAUR,
@@ -452,5 +461,26 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			PokemonNamesies.ROWLET,
 			PokemonNamesies.LITTEN,
 			PokemonNamesies.POPPLIO
+	};
+
+	private static final PokemonNamesies[] babyPokemon = new PokemonNamesies[] {
+			PokemonNamesies.PICHU,
+			PokemonNamesies.CLEFFA,
+			PokemonNamesies.IGGLYBUFF,
+			PokemonNamesies.TOGEPI,
+			PokemonNamesies.TYROGUE,
+			PokemonNamesies.SMOOCHUM,
+			PokemonNamesies.ELEKID,
+			PokemonNamesies.MAGBY,
+			PokemonNamesies.AZURILL,
+			PokemonNamesies.WYNAUT,
+			PokemonNamesies.BUDEW,
+			PokemonNamesies.CHINGLING,
+			PokemonNamesies.BONSLY,
+			PokemonNamesies.MIME_JR,
+			PokemonNamesies.HAPPINY,
+			PokemonNamesies.MUNCHLAX,
+			PokemonNamesies.RIOLU,
+			PokemonNamesies.MANTYKE
 	};
 }

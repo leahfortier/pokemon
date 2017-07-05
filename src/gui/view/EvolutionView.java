@@ -93,6 +93,7 @@ class EvolutionView extends View {
 
 				if (isEgg) {
 					messages.add(new MessageUpdate("Your egg hatched into " + StringUtils.articleString(preEvolution.getName()) + "!"));
+					Game.getPlayer().getMedalCase().hatch(evolvingPokemon);
 				} else {
 					int[] gains = evolvingPokemon.evolve(Game.getPlayer().getEvolutionInfo().getEvolution());
 					int[] stats = evolvingPokemon.getStats();

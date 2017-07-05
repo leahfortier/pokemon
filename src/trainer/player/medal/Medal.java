@@ -1,6 +1,7 @@
 package trainer.player.medal;
 
 import main.Global;
+import util.PokeString;
 
 public enum Medal {
     // Steps Taken
@@ -31,13 +32,14 @@ public enum Medal {
     SUPER_ROD_FISHERMAN(3, 50, "Super Rod Fisherman", "A Medal given to very experienced fishers who reeled in 50 Pokémon."),
     MIGHTY_FISHER(4, 100, "Mighty Fisher", "A Medal given to legendary fishers who reeled in 100 Pokémon."),
 
-    // Eggs Hatched
+    // Eggy
+    BABY_CAKES(3, "Baby Cakes", "A Medal to prove the parental instincts of people who hatched every single baby " + PokeString.POKEMON + "."),
     EGG_BEGINNER(1, 1, "Egg Beginner", "A Medal to prove the fresh parental instincts of people who hatched a Pokémon Egg for the first time."),
     EGG_BREEDER(2, 10, "Egg Breeder", "A Medal to prove the decent parental instincts of people who hatched 10 Pokémon Eggs."),
     EGG_ELITE(3, 50, "Egg Elite", "A Medal to prove the outstanding parental instincts of people who hatched 50 Pokémon Eggs."),
     HATCHING_AFICIONADO(4, 100, "Hatching Aficionado", "A Medal to prove the endless parental instincts of people who hatched 100 Pokémon Eggs."),
 
-    // Pokemon Deposited at Day Care
+    // Day Care
     DAY_CARE_FAITHFUL(1, 10, "Day-Care Faithful", "A Medal for those who love to raise Pokémon and left 10 Pokémon at the Pokémon Day Care."),
     DAY_CARE_SUPER_FAITHFUL(2, 50, "Day-Care Super Faithful", "A Medal for those who love to raise Pokémon and left 50 Pokémon at the Pokémon Day Care."),
     DAY_CARE_EXTRAORDINARY_FAITHFUL(4, 100, "Day-Care Extraordinary Faithful", "A Medal for those who love to raise Pokémon and left 100 Pokémon at the Pokémon Day Care."),
