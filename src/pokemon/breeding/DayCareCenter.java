@@ -5,6 +5,7 @@ import main.Global;
 import message.Messages;
 import pokemon.ActivePokemon;
 import trainer.player.Player;
+import trainer.player.medal.MedalTheme;
 import util.PokeString;
 import util.StringUtils;
 
@@ -76,6 +77,7 @@ public class DayCareCenter implements Serializable {
         toDeposit.fullyHeal();
 
         this.reset();
+        player.getMedalCase().increase(MedalTheme.DAY_CARE_DEPOSITED);
 
         return "Okay, we'll look after your " + toDeposit.getName() + " for a while.";
     }

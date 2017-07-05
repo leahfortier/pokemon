@@ -18,8 +18,12 @@ import java.util.Scanner;
 public class TeamPlanner {
 	private static Type[] types = Type.values();
 	private static double[] coverageValues = { 4, 2, .5, 0 };
-	
-	public TeamPlanner() {
+
+	public static void main(String[] args) {
+		new TeamPlanner();
+	}
+
+	private TeamPlanner() {
 		List<TeamMember> team = readTeam();
 		
 		OffensiveCoverage offensiveCoverage = new OffensiveCoverage();
@@ -40,8 +44,8 @@ public class TeamPlanner {
 		AttackTypeCoverage.printCoverage(coverage);
 		offensiveCoverage.printTableAndList();
 		
-//		moveMatching("Flamethrower", "Signal Beam");
-//		moveMatching("Ice Beam", Type.GRASS);
+//		moveMatching("Surf", "Thunderbolt");
+//		moveMatching("Flamethrower", Type.WATER);
 		
 		TeamMember.printTeam(team);
 	}

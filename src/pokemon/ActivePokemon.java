@@ -52,6 +52,7 @@ import sound.SoundTitle;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.WildPokemon;
+import trainer.player.medal.MedalTheme;
 import type.Type;
 import util.RandomUtils;
 import util.StringUtils;
@@ -567,6 +568,8 @@ public class ActivePokemon implements Serializable {
 
 	// Returns stat gains
 	public int[] evolve(BaseEvolution evolution) {
+		Game.getPlayer().getMedalCase().increase(MedalTheme.POKEMON_EVOLVED);
+
 		boolean sameName = nickname.equals(pokemon.getName());
 		PokemonInfo evolutionInfo = evolution.getEvolution();
 

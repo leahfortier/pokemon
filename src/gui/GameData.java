@@ -28,6 +28,7 @@ public class GameData {
 	private TileSet opponentTerrainTiles;
 	private TileSet playerTerrainTiles;
 	private TileSet weatherTiles;
+	private TileSet medalTiles;
 
 	public void loadData() {
 		loadTiles();
@@ -48,6 +49,7 @@ public class GameData {
 		opponentTerrainTiles = new TileSet(Folder.TERRAIN_TILES, 2.4f);
 		playerTerrainTiles = new TileSet(Folder.TERRAIN_TILES, 3.1f);
 		weatherTiles = new TileSet(Folder.WEATHER_TILES);
+		medalTiles = new TileSet(Folder.MEDAL_TILES, .65f);
 	}
 
 	private void loadMaps() {
@@ -133,5 +135,9 @@ public class GameData {
 
 	public TileSet getWeatherTiles() {
 		return weatherTiles;
+	}
+
+	public TileSet getMedalTiles() {
+		return medalTiles;
 	}
 }

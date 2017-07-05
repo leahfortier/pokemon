@@ -10,7 +10,8 @@ public enum VisualState {
     MAP(new MapState()),
     MENU(new MenuState()),
     MESSAGE(new MessageState()),
-    POKEFINDER(new PokeFinderState());
+    POKEFINDER(new PokeFinderState()),
+    MEDAL_CASE(new MedalCaseState());
 
     private final VisualStateHandler handler;
 

@@ -47,6 +47,7 @@ import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.WildPokemon;
 import trainer.player.Player;
+import trainer.player.medal.MedalTheme;
 import type.TypeAdvantage;
 import util.PokeString;
 import util.RandomUtils;
@@ -80,6 +81,8 @@ public class Battle implements Serializable {
 		Messages.add(new MessageUpdate().withUpdate(Update.ENTER_BATTLE));
 
 		Player player = Game.getPlayer();
+		player.getMedalCase().increase(MedalTheme.BATTLES_BATTLED);
+
 		this.player = player;
 		this.opponent = opponent;
 
@@ -220,7 +223,7 @@ public class Battle implements Serializable {
 		printShit();
 	}
 
-	private boolean isSimulating() {
+	public boolean isSimulating() {
 		return !(this.player instanceof Player);
 	}
 
@@ -532,6 +535,10 @@ public class Battle implements Serializable {
 	}
 	
 	private void executeAttack(ActivePokemon me, ActivePokemon o) {
+		if (me.isPlayer() && !this.isSimulating()) {
+			Game.getPlayer().getMedalCase().useMove(me.getAttack().namesies());
+		}
+
 		me.getAttributes().count();
 
 		boolean success = me.getAttack().apply(me, o, this);
@@ -745,7 +752,7 @@ public class Battle implements Serializable {
 	// Returns true if the player will be attacking first, and false if the opponent will be 
 	private boolean speedPriority(ActivePokemon plyr, ActivePokemon opp) {
 
-		// Higher priority always goes first -- Prankster increases the priority of status moves by one
+		// Higher priority always goes first
 		int pPriority = getPriority(plyr);
 		int oPriority = getPriority(opp);
 

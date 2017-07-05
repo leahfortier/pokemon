@@ -18,6 +18,8 @@ import main.Global;
 import map.Direction;
 import trainer.Badge;
 import trainer.player.Player;
+import trainer.player.medal.Medal;
+import trainer.player.medal.MedalTheme;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.Point;
@@ -133,6 +135,12 @@ class MartView extends View {
 					Player player = Game.getPlayer();
 					player.sucksToSuck(itemAmount*selectedItem.getItem().getPrice());
 					player.getBag().addItem(selectedItem, itemAmount);
+					player.getMedalCase().increase(MedalTheme.ITEMS_BOUGHT, itemAmount);
+
+					if (selectedItem == ItemNamesies.POKE_BALL && itemAmount >= 10) {
+						player.getBag().addItem(ItemNamesies.PREMIER_BALL);
+						player.getMedalCase().earnMedal(Medal.SMART_SHOPPER);
+					}
 
 					setSelectedItem(selectedItem);
 				}

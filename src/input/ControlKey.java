@@ -20,7 +20,8 @@ public enum ControlKey {
     FLY(KeyEvent.VK_F),
     POKEFINDER(KeyEvent.VK_P),
     ITEM_FINDER(KeyEvent.VK_I),
-    BIKE(KeyEvent.VK_B);
+    BIKE(KeyEvent.VK_B),
+    MEDAL_CASE(KeyEvent.VK_M);
 
     private static final Set<ControlKey> CONTROL_KEYS = EnumSet.allOf(ControlKey.class);
 

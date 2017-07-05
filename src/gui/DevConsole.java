@@ -176,7 +176,7 @@ class DevConsole {
 					amount = Integer.parseInt(in.next());
 				}
 				
-				Game.getPlayer().addItem(ItemNamesies.getValueOf(itemName), amount);
+				Game.getPlayer().getBag().addItem(ItemNamesies.getValueOf(itemName), amount);
 				break;
 		}
 	}
