@@ -35,6 +35,9 @@ public enum MedalTheme {
             Medal.SUPER_ROD_FISHERMAN,
             Medal.MIGHTY_FISHER
     ),
+    BABIES_HATCHED(
+            Medal.BABY_CAKES
+    ),
     EGGS_HATCHED(
             Medal.EGG_BEGINNER,
             Medal.EGG_BREEDER,

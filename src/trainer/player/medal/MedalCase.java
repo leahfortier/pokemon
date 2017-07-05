@@ -83,9 +83,7 @@ public class MedalCase implements Serializable {
     public void hatch(ActivePokemon hatched) {
         this.increase(MedalTheme.EGGS_HATCHED);
         this.babyPokemonUnhatched.remove(hatched.getPokemonInfo().namesies());
-        if (this.babyPokemonUnhatched.isEmpty()) {
-            earnMedal(Medal.BABY_CAKES);
-        }
+        this.update(MedalTheme.BABIES_HATCHED, PokemonInfo.getNumBabyPokemon() - this.babyPokemonUnhatched.size());
     }
 
     public void useMove(AttackNamesies attack) {

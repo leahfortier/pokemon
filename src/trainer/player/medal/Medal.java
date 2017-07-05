@@ -1,6 +1,7 @@
 package trainer.player.medal;
 
 import main.Global;
+import pokemon.PokemonInfo;
 import util.PokeString;
 
 public enum Medal {
@@ -33,7 +34,7 @@ public enum Medal {
     MIGHTY_FISHER(4, 100, "Mighty Fisher", "A Medal given to legendary fishers who reeled in 100 Pokémon."),
 
     // Eggy
-    BABY_CAKES(3, "Baby Cakes", "A Medal to prove the parental instincts of people who hatched every single baby " + PokeString.POKEMON + "."),
+    BABY_CAKES(3, PokemonInfo.getNumBabyPokemon(), "Baby Cakes", "A Medal to prove the parental instincts of people who hatched every single baby " + PokeString.POKEMON + "."),
     EGG_BEGINNER(1, 1, "Egg Beginner", "A Medal to prove the fresh parental instincts of people who hatched a Pokémon Egg for the first time."),
     EGG_BREEDER(2, 10, "Egg Breeder", "A Medal to prove the decent parental instincts of people who hatched 10 Pokémon Eggs."),
     EGG_ELITE(3, 50, "Egg Elite", "A Medal to prove the outstanding parental instincts of people who hatched 50 Pokémon Eggs."),

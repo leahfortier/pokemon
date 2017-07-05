@@ -250,8 +250,6 @@ public class Player extends PlayerTrainer implements Serializable {
 		for (ActivePokemon p : team) {
 			if (p.isEgg() && (p.hatch() || (doubleHatch && p.hatch()))) {
 				this.evolutionInfo.setEgg(p);
-				this.medalCase.increase(MedalTheme.EGGS_HATCHED);
-
 				Messages.add(new MessageUpdate().withTrigger(TriggerType.GROUP.getTriggerNameFromSuffix("EggHatching")));
 				
 				// Only one hatch per step

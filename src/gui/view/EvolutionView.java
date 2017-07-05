@@ -155,7 +155,7 @@ class EvolutionView extends View {
 
 		if (!endState) {
 			if (isEgg) {
-				canvasPanel.withBackgroundColor(Type.NORMAL.getColor());
+				canvasPanel.withBackgroundColors(new Color[] { Type.NORMAL.getColor(), Type.NORMAL.getColor() });
 			} else {
 				canvasPanel.withBackgroundColors(Type.getColors(preEvolution.getType()));
 			}
