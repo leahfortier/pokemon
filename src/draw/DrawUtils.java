@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import java.util.Map;
 
 public final class DrawUtils {
+	// TODO: Rename this
 	public static final int AREA_NAME_ANIMATION_LIFESPAN = 2000;
 
 	public static final Color EXP_BAR_COLOR = new Color(51, 102, 204);

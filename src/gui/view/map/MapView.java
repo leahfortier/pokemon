@@ -29,6 +29,7 @@ import message.Messages;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.player.Player;
+import trainer.player.medal.Medal;
 import util.Point;
 import util.StringUtils;
 
@@ -55,6 +56,9 @@ public class MapView extends View {
 	
 	private int areaDisplayTime;
 
+	private int medalDisplayTime;
+	private Medal displayMedal;
+
 	private VisualState state;
 	private MessageUpdate currentMessage;
 	
@@ -63,6 +67,7 @@ public class MapView extends View {
 		setState(VisualState.MAP);
 
 		areaDisplayTime = 0;
+		medalDisplayTime = 0;
 
 		start = new Point();
 		end = new Point();
@@ -101,11 +106,15 @@ public class MapView extends View {
 			if (currentArea.getTerrain() != TerrainType.BUILDING) {
 				DayCycle.getTimeOfDay().draw(g);
 			}
+
+			// Area Transition
+			if (areaDisplayTime > 0) {
+				DrawUtils.drawAreaTransitionAnimation(g, currentArea.getAreaName(), areaDisplayTime);
+			}
 		}
 
-		// Area Transition
-		if (areaDisplayTime > 0) {
-			drawAreaTransitionAnimation(g);
+		if (medalDisplayTime > 0) {
+			DrawUtils.drawAreaTransitionAnimation(g, "Medal Earned: " + displayMedal.getMedalName() + "!", medalDisplayTime);
 		}
 
 		state.draw(g, this);
@@ -194,10 +203,6 @@ public class MapView extends View {
 		}
 	}
 
-	private void drawAreaTransitionAnimation(Graphics g) {
-		DrawUtils.drawAreaTransitionAnimation(g, currentArea.getAreaName(), areaDisplayTime);
-	}
-
 	@Override
 	public void update(int dt) {
 		Player player = Game.getPlayer();
@@ -210,6 +215,9 @@ public class MapView extends View {
 		if (areaDisplayTime > 0) {
 			areaDisplayTime -= dt;
 		}
+		else if (medalDisplayTime > 0) {
+			medalDisplayTime -= dt;
+		}
 		
 		// New area
 		AreaData area = currentMap.getArea(player.getLocation());
@@ -218,6 +226,10 @@ public class MapView extends View {
 		// If new area has a new name, display the area name animation
 		if (currentArea != null && !StringUtils.isNullOrEmpty(areaName) && !areaName.equals(currentArea.getAreaName())) {
 			areaDisplayTime = DrawUtils.AREA_NAME_ANIMATION_LIFESPAN;
+		}
+		else if (areaDisplayTime <= 0 && medalDisplayTime <= 0 && player.getMedalCase().isThereMedalToShow()) {
+			displayMedal = player.getMedalCase().getNextMedalToShow();
+			medalDisplayTime = DrawUtils.AREA_NAME_ANIMATION_LIFESPAN;
 		}
 
 		player.setArea(currentMapName, area);

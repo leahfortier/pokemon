@@ -1,7 +1,6 @@
 package trainer.player.medal;
 
 import battle.attack.AttackNamesies;
-import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
@@ -10,6 +9,7 @@ import type.Type;
 import type.TypeAdvantage;
 
 import java.io.Serializable;
+import java.util.ArrayDeque;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
@@ -35,6 +35,7 @@ public class MedalCase implements Serializable {
     private int totalPokemonCaught;
     private Map<Type, Integer> totalPokemonCaughtTypeMap;
     private Map<Type, Set<PokemonNamesies>> uncaughtPokemonTypeMap;
+    private ArrayDeque<Medal> medalsToShow;
 
     public MedalCase() {
         this.medalsEarned = EnumSet.noneOf(Medal.class);
@@ -59,6 +60,7 @@ public class MedalCase implements Serializable {
         }
 
         this.babyPokemonUnhatched = PokemonInfo.getAllBabyPokemon();
+        this.medalsToShow = new ArrayDeque<>();
     }
 
     public long getCount(Medal medal) {
@@ -72,11 +74,17 @@ public class MedalCase implements Serializable {
     public void earnMedal(Medal medal) {
         if (!this.hasMedal(medal)) {
             medalsEarned.add(medal);
-            Messages.add("Medal Earned: " + medal.getMedalName() + "!");
-            System.out.println("Medal Earned: " + medal.getMedalName() + "!");
-
+            medalsToShow.add(medal);
             this.update(MedalTheme.MEDALS_COLLECTED, this.medalsEarned.size());
         }
+    }
+
+    public boolean isThereMedalToShow() {
+        return !this.medalsToShow.isEmpty();
+    }
+
+    public Medal getNextMedalToShow() {
+        return this.medalsToShow.pop();
     }
 
     public void catchNewPokemon(ActivePokemon caught) {
