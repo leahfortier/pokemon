@@ -5,6 +5,7 @@ import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
+import trainer.player.pokedex.Pokedex;
 import type.Type;
 import type.TypeAdvantage;
 
@@ -29,10 +30,11 @@ public class MedalCase implements Serializable {
     private final Map<MedalTheme, Integer> themeCounters;
 
     // Start with all baby Pokemon and remove as we go, earn medal when empty
-    private final Set<PokemonNamesies> babyPokemonUnhatched = PokemonInfo.getAllBabyPokemon();
+    private final Set<PokemonNamesies> babyPokemonUnhatched;
 
     private int totalPokemonCaught;
     private Map<Type, Integer> totalPokemonCaughtTypeMap;
+    private Map<Type, Set<PokemonNamesies>> uncaughtPokemonTypeMap;
 
     public MedalCase() {
         this.medalsEarned = EnumSet.noneOf(Medal.class);
@@ -43,9 +45,20 @@ public class MedalCase implements Serializable {
         }
 
         this.totalPokemonCaughtTypeMap = new EnumMap<>(Type.class);
+        this.uncaughtPokemonTypeMap = new EnumMap<>(Type.class);
         for (Type type : Type.values()) {
             this.totalPokemonCaughtTypeMap.put(type, 0);
+            this.uncaughtPokemonTypeMap.put(type, EnumSet.noneOf(PokemonNamesies.class));
         }
+
+        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
+            PokemonInfo pokemon = PokemonInfo.getPokemonInfo(i);
+            for (Type type : pokemon.getType()) {
+                this.uncaughtPokemonTypeMap.get(type).add(pokemon.namesies());
+            }
+        }
+
+        this.babyPokemonUnhatched = PokemonInfo.getAllBabyPokemon();
     }
 
     public long getCount(Medal medal) {
@@ -101,6 +114,25 @@ public class MedalCase implements Serializable {
         }
         else if (TypeAdvantage.isNotVeryEffective(advantage)) {
             earnMedal(Medal.NONEFFECTIVE_ARTIST);
+        }
+    }
+
+    public void updatePokedex(Pokedex pokedex, PokemonNamesies updated) {
+        this.update(MedalTheme.POKEMON_SEEN, pokedex.numSeen());
+        this.update(MedalTheme.POKEMON_CAUGHT, pokedex.numCaught());
+
+        // If you've seen Mew, then Mew're the Winner
+        if (updated == PokemonNamesies.MEW && !pokedex.isNotSeen(updated)) {
+            this.earnMedal(Medal.MEWRE_THE_WINNER);
+        }
+
+        if (pokedex.isCaught(updated)) {
+            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(updated);
+            for (Type type : pokemonInfo.getType()) {
+                this.uncaughtPokemonTypeMap.get(type).remove(updated);
+                // TODO: Test case for this in case it changes names -- I don't like that this is hardcoded
+                this.update(MedalTheme.valueOf(type.name() + "_CATCHER"), PokemonInfo.getNumTypedPokemon(type) - this.uncaughtPokemonTypeMap.get(type).size());
+            }
         }
     }
 

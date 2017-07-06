@@ -71,6 +71,8 @@ public class Pokedex implements Serializable {
 		info.addLocation(wildLocation);
 		info.setStatus(status);
 		pokedex.put(pokemon, info);
+
+		Game.getPlayer().getMedalCase().updatePokedex(this, pokemon);
 	}
 
 	// Num seen includes both caught and seen

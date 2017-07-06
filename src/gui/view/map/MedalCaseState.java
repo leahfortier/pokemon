@@ -30,7 +30,7 @@ public class MedalCaseState implements VisualStateHandler {
     private static final List<Medal> MEDALS = Arrays.stream(Medal.values()).collect(Collectors.toList());
 
     private static final int NUM_MEDAL_PANELS = 5;
-    private static final int NUM_PAGES = MEDALS.size()/NUM_MEDAL_PANELS;
+    private static final int NUM_PAGES = (int)Math.ceil((double)MEDALS.size()/NUM_MEDAL_PANELS);
 
     private static final int NUM_BUTTONS = 2;
     private static final int RIGHT_ARROW = NUM_BUTTONS - 1;

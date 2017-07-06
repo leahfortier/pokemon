@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -483,4 +484,26 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			PokemonNamesies.RIOLU,
 			PokemonNamesies.MANTYKE
 	};
+
+	private static final Map<Type, Set<PokemonNamesies>> pokemonTypeMap = new EnumMap<>(Type.class);
+	static {
+		for (Type type : Type.values()) {
+			pokemonTypeMap.put(type, EnumSet.noneOf(PokemonNamesies.class));
+		}
+
+		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
+			PokemonInfo pokemon = PokemonInfo.getPokemonInfo(i);
+			for (Type type : pokemon.getType()) {
+				pokemonTypeMap.get(type).add(pokemon.namesies());
+			}
+		}
+	}
+
+	public static Set<PokemonNamesies> getAllTypedPokemon(Type type) {
+		return EnumSet.copyOf(pokemonTypeMap.get(type));
+	}
+
+	public static int getNumTypedPokemon(Type type) {
+		return pokemonTypeMap.get(type).size();
+	}
 }
