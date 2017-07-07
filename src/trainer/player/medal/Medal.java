@@ -78,6 +78,12 @@ public enum Medal {
     BATTLE_VETERAN(3, 400, "Battle Veteran", "A Medal for tremendously courageous Trainers who went through 400 battles."),
     BATTLE_VIRTUOSO(4, 2000, "Battle Virtuoso", "A Medal for peerlessly courageous Trainers who went through 2,000 battles."),
 
+    // Pokemon murdered
+    RILEY(1, 17, "Riley", "A Medal for whiny, insecure Trainers who only killed 17 demons."),
+    KENDRA(2, 100, "Kendra", "A Medal for skilled Trainers with bad accents who killed 100 demons."),
+    FAITH(3, 500, "Faith", "A Medal for psycho-killer Trainers who killed 500 demons for pleasure."),
+    BUFFY(4, 5000, "Buffy", "A Medal for Trainers who killed 5000 demons and are now recognized as the Chosen One."),
+
     // Pokedexter
     GWENDOLYN_POST(1, 151, "Gwendolyn Post", "A Medal for Trainers who have encountered 151 different species of " + PokeString.POKEMON + "."),
     MERRICK(2, 386, "Merrick", "A Medal for Trainers who have encountered 386 different species of " + PokeString.POKEMON + "."),

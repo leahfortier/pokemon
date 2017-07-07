@@ -1039,7 +1039,11 @@ public class ActivePokemon implements Serializable {
 			}
 			
 			b.getEffects(isPlayer).add((TeamEffect)EffectNamesies.DEAD_ALLY.getEffect());
-			
+
+			if (!isPlayer() && (isType(b, Type.DARK) || isType(b, Type.GHOST))) {
+				Game.getPlayer().getMedalCase().increase(MedalTheme.DEMON_POKEMON_DEFEATED);
+			}
+
 			return true;	
 		}
 		

@@ -48,7 +48,6 @@ public enum MedalTheme {
             Medal.DAY_CARE_SUPER_FAITHFUL,
             Medal.DAY_CARE_EXTRAORDINARY_FAITHFUL
     ),
-    // TODO
     HIDDEN_ITEMS_FOUND(
             Medal.DOWSING_BEGINNER,
             Medal.DOWSING_SPECIALIST,
@@ -70,7 +69,6 @@ public enum MedalTheme {
             Medal.EVOLUTION_EXPERT,
             Medal.EVOLUTION_AUTHORITY
     ),
-    // TODO
     NICKNAMES_GIVEN(
             Medal.NAMING_CHAMP
     ),
@@ -88,6 +86,12 @@ public enum MedalTheme {
             Medal.BATTLE_TEACHER,
             Medal.BATTLE_VETERAN,
             Medal.BATTLE_VIRTUOSO
+    ),
+    DEMON_POKEMON_DEFEATED(
+            Medal.RILEY,
+            Medal.KENDRA,
+            Medal.FAITH,
+            Medal.BUFFY
     ),
     POKEMON_SEEN(
             Medal.GWENDOLYN_POST,
