@@ -977,8 +977,11 @@ public class ActivePokemon implements Serializable {
 	}
 
 	public void setNickname(String nickname) {
-		if (!StringUtils.isNullOrEmpty(nickname)) {
+		if (!StringUtils.isNullOrEmpty(nickname) && !nickname.equals(this.nickname)) {
 			this.nickname = nickname;
+			if (this.isPlayer()) {
+				Game.getPlayer().getMedalCase().increase(MedalTheme.NICKNAMES_GIVEN);
+			}
 		}
 	}
 	

@@ -96,7 +96,6 @@ public class ItemEntity extends Entity {
 			if (this.isHidden) {
 				Trigger medalTrigger = TriggerType.MEDAL_COUNT.createTrigger(MedalTheme.HIDDEN_ITEMS_FOUND.name(), null);
 				groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue.getName(), giveItem.getName(), medalTrigger.getName());
-
 			} else {
 				groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue.getName(), giveItem.getName());
 			}
