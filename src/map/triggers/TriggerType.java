@@ -26,6 +26,7 @@ public enum TriggerType {
     HALT(HaltTrigger.class, HaltTrigger::new),
     HEAL_PARTY(HealPartyTrigger.class, HealPartyTrigger::new),
     MAP_TRANSITION(MapTransitionTrigger.class, MapTransitionTrigger::new, MapTransitionTrigger::getTriggerSuffix),
+    MEDAL_COUNT(MedalCountTrigger.class, MedalCountTrigger::new),
     MOVE_NPC(MoveNPCTrigger.class, MoveNPCTrigger::new),
     MOVE_PLAYER(MovePlayerTrigger.class, MovePlayerTrigger::new),
     RELOAD_MAP(ReloadMapTrigger.class, ReloadMapTrigger::new),

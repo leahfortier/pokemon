@@ -5,6 +5,7 @@ import main.Game;
 import map.condition.Condition;
 import pattern.GroupTriggerMatcher;
 import sound.SoundTitle;
+import trainer.player.medal.MedalTheme;
 import util.PokeString;
 import util.SerializationUtils;
 
@@ -76,6 +77,7 @@ public abstract class Trigger {
 		TriggerType.GROUP.createTrigger(SerializationUtils.getJson(loadMart), null);
 
 		// PokeCenter Healing
+		// NOTE: If this is changed in any way, please also change the RSA Town Pokecenter trigger manually
 		GroupTriggerMatcher pokeCenterHeal = new GroupTriggerMatcher(
 				"PokeCenterHeal",
 				TriggerType.DIALOGUE.createTrigger("Welcome to the " + PokeString.POKEMON + " Center!", null).getName(),
@@ -84,7 +86,8 @@ public abstract class Trigger {
 				TriggerType.DIALOGUE.createTrigger("Dun Dun Dun-Dun Dun!", null).getName(),
 				TriggerType.HEAL_PARTY.createTrigger(null, null).getName(),
 				TriggerType.DIALOGUE.createTrigger("Your " + PokeString.POKEMON + " have been healed!", null).getName(),
-				TriggerType.DIALOGUE.createTrigger("I hope to see you again soon!", null).getName()
+				TriggerType.DIALOGUE.createTrigger("I hope to see you again soon!", null).getName(),
+				TriggerType.MEDAL_COUNT.createTrigger(MedalTheme.POKE_CENTER_HEALS.name(), null).getName()
 		);
 		TriggerType.GROUP.createTrigger(SerializationUtils.getJson(pokeCenterHeal), null);
 

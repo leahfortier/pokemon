@@ -95,6 +95,12 @@
             "triggerType": "DIALOGUE",
             "triggerContents": "E ruba du caa oui ykyeh cuuh!"
           }
+        },
+        {
+          "trigger": {
+            "triggerType": "MEDAL_COUNT",
+            "triggerContents": "POKE_CENTER_HEALS"
+          }
         }
       ],
       "location": [

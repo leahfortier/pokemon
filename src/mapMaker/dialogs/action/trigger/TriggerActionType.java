@@ -6,6 +6,7 @@ import mapMaker.dialogs.action.trigger.StringTriggerPanel.ItemTriggerPanel;
 import mapMaker.dialogs.action.trigger.TriggerContentsPanel.EmptyTriggerContentsPanel;
 import sound.SoundTitle;
 import trainer.Badge;
+import trainer.player.medal.MedalTheme;
 
 public enum TriggerActionType {
     BADGE(TriggerType.BADGE, () -> new EnumTriggerPanel<>("Badge", Badge.values())),
@@ -17,6 +18,7 @@ public enum TriggerActionType {
     GLOBAL(TriggerType.GLOBAL, () -> new StringTriggerPanel("Global Name")),
     GROUP(TriggerType.GROUP, () -> new StringTriggerPanel("Group Trigger Name")),
     HEAL_PARTY(TriggerType.HEAL_PARTY, EmptyTriggerContentsPanel::new),
+    MEDAL_COUNT(TriggerType.MEDAL_COUNT, () -> new EnumTriggerPanel<>("Medal", MedalTheme.values())),
     MOVE_NPC(TriggerType.MOVE_NPC, MoveNPCTriggerPanel::new),
     MOVE_PLAYER(TriggerType.MOVE_PLAYER, () -> new StringTriggerPanel("Player Move Path")),
     RELOAD_MAP(TriggerType.RELOAD_MAP, EmptyTriggerContentsPanel::new),

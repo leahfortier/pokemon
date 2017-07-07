@@ -18,7 +18,6 @@ public enum MedalTheme {
             Medal.EXPERIENCED_SAVER,
             Medal.WONDER_WRITER
     ),
-    // TODO
     POKE_CENTER_HEALS(
             Medal.POKEMON_CENTER_FAN,
             Medal.POKEMON_CENTER_SUPER_FAN
