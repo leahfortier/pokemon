@@ -9,6 +9,7 @@ import map.Direction;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.GroupTriggerMatcher;
+import trainer.player.medal.MedalTheme;
 import util.Point;
 import util.SerializationUtils;
 import util.StringUtils;
@@ -90,7 +91,15 @@ public class ItemEntity extends Entity {
 			Trigger dialogue = TriggerType.DIALOGUE.createTrigger(itemDialogue, null);
 			Trigger giveItem = TriggerType.GIVE_ITEM.createTrigger(this.itemName.getName(), null);
 
-			GroupTriggerMatcher groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue.getName(), giveItem.getName());
+
+			GroupTriggerMatcher groupTriggerMatcher;
+			if (this.isHidden) {
+				Trigger medalTrigger = TriggerType.MEDAL_COUNT.createTrigger(MedalTheme.HIDDEN_ITEMS_FOUND.name(), null);
+				groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue.getName(), giveItem.getName(), medalTrigger.getName());
+
+			} else {
+				groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue.getName(), giveItem.getName());
+			}
 			TriggerType.GROUP.createTrigger(SerializationUtils.getJson(groupTriggerMatcher), null);
 		}
 
