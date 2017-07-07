@@ -168,6 +168,11 @@ public enum Medal {
     FAIRY_TYPE_COLLECTOR(3, 3*PokemonInfo.getNumTypedPokemon(Type.FAIRY)/4, "Fairy-Type Collector", "A Medal in commemoration of catching three-quarters of all the Fairy-type Pokémon."),
     FAIRY_TYPE_MASTERFUL_WIZARD(4, PokemonInfo.getNumTypedPokemon(Type.FAIRY), "Fairy-Type Masterful Wizard", "A Medal in commemoration of catching all the Fairy-type Pokémon."),
 
+    // Grindy
+    THREE_WHOLE_DIGITS(1, 1, "Three Whole Digits", "A Medal for Trainers who leveled a Pokémon up to level 100."),
+    I_LIKE_TO_GRIND(2, 10, "I Like to Grind", "A Medal for Trainers who leveled 10 Pokémon up to level 100."),
+    GRINDING_EXTRAORDINAIRE(4, 100, "Grinding Extraordinaire", "A Medal for Trainers who leveled 100 Pokémon up to level 100."),
+
     // Misc Medals
     MAGIKARP_AWARD(3, "Magikarp Award", "A Medal to praise the guts of Trainers who kept using Splash no matter what."),
     NEVER_GIVE_UP(3, "Never Give Up", "A Medal for those who don't know when to quit even when there's nothing they can do."),

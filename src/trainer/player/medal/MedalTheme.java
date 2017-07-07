@@ -81,6 +81,11 @@ public enum MedalTheme {
             Medal.LUCKIEST_COLOR,
             Medal.SUPER_DUPER_LUCKIEST_COLOR
     ),
+    LEVEL_100_POKEMON(
+            Medal.THREE_WHOLE_DIGITS,
+            Medal.I_LIKE_TO_GRIND,
+            Medal.GRINDING_EXTRAORDINAIRE
+    ),
     BATTLES_BATTLED(
             Medal.BATTLE_LEARNER,
             Medal.BATTLE_TEACHER,

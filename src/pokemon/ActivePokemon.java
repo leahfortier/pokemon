@@ -515,6 +515,10 @@ public class ActivePokemon implements Serializable {
 		if (front) {
 			Messages.add(new MessageUpdate().withExpGain(b, this, Math.min(1, expRatio()), true));
 		}
+
+		if (level == MAX_LEVEL) {
+			Game.getPlayer().getMedalCase().increase(MedalTheme.LEVEL_100_POKEMON);
+		}
 		
 		// Change stats -- keep track of the gains
 		int[] prevStats = stats.clone();
