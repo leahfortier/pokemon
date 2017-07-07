@@ -228,7 +228,7 @@ public class Battle implements Serializable {
 	}
 
 	protected void printShit() {
-		if (!this.isSimulating()) {
+		if (this.isSimulating()) {
 			return;
 		}
 

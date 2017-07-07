@@ -35,13 +35,12 @@ public enum Medal {
     MIGHTY_FISHER(4, 100, "Mighty Fisher", "A Medal given to legendary fishers who reeled in 100 " + PokeString.POKEMON + "."),
 
     // Eggy
-    BABY_CAKES(3, PokemonInfo.getNumBabyPokemon(), "Baby Cakes", "A Medal to prove the parental instincts of people who hatched every single baby " + PokeString.POKEMON + "."),
+    BABY_CAKES(4, PokemonInfo.getNumBabyPokemon(), "Baby Cakes", "A Medal to prove the parental instincts of people who hatched every single baby " + PokeString.POKEMON + "."),
+    CHAMPION_OF_GENETICS(4, "Champion of Genetics", "A Medal for patient trainers who crave only the best of the best."),
     EGG_BEGINNER(1, 1, "Egg Beginner", "A Medal to prove the fresh parental instincts of people who hatched a " + PokeString.POKEMON + " Egg for the first time."),
     EGG_BREEDER(2, 10, "Egg Breeder", "A Medal to prove the decent parental instincts of people who hatched 10 " + PokeString.POKEMON + " Eggs."),
     EGG_ELITE(3, 50, "Egg Elite", "A Medal to prove the outstanding parental instincts of people who hatched 50 " + PokeString.POKEMON + " Eggs."),
     HATCHING_AFICIONADO(4, 100, "Hatching Aficionado", "A Medal to prove the endless parental instincts of people who hatched 100 " + PokeString.POKEMON + " Eggs."),
-
-    // Day Care
     DAY_CARE_FAITHFUL(1, 10, "Day-Care Faithful", "A Medal for those who love to raise " + PokeString.POKEMON + " and left 10 " + PokeString.POKEMON + " at the " + PokeString.POKEMON + " Day Care."),
     DAY_CARE_SUPER_FAITHFUL(2, 50, "Day-Care Super Faithful", "A Medal for those who love to raise " + PokeString.POKEMON + " and left 50 " + PokeString.POKEMON + " at the " + PokeString.POKEMON + " Day Care."),
     DAY_CARE_EXTRAORDINARY_FAITHFUL(4, 100, "Day-Care Extraordinary Faithful", "A Medal for those who love to raise Pokémon and left 100 " + PokeString.POKEMON + " at the " + PokeString.POKEMON + " Day Care."),
@@ -175,6 +174,7 @@ public enum Medal {
     NONEFFECTIVE_ARTIST(3, "Noneffective Artist", "A consolation Medal for Trainers who made the cute mistake of using noneffective moves."),
     SUPEREFFECTIVE_SAVANT(4, 1000, "Supereffective Savant", "A Medal for Trainers who saw through many foes' weak points and battle to their best advantage."),
     NAMING_CHAMP(1, 10, "Naming Champ", "A Medal given to those who gave many nicknames to " + PokeString.POKEMON + "."),
+    TRAINED_TO_MAX_POTENTIAL(3, "Trained to Maximum Potential", "A Medal for diligent trainers who have trained a " + PokeString.POKEMON + " to their limits."),
 
     // Medals Collected
     ROOKIE_MEDALIST(1, 50, "Rookie Medalist", "A Medal commemorating the advance to the Rookie Rank as the result of constant efforts in the Medal Rally."),

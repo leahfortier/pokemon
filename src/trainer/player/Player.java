@@ -448,7 +448,6 @@ public class Player extends PlayerTrainer implements Serializable {
 		this.newPokemonInfo.setNewPokemon(p);
 		if (viewChange) {
 			Messages.add(new MessageUpdate().withViewChange(ViewMode.NEW_POKEMON_VIEW));
-			this.medalCase.catchNewPokemon(p);
 		}
 
 		p.setCaught();

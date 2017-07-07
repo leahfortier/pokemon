@@ -4,6 +4,7 @@ import battle.attack.AttackNamesies;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
+import pokemon.Stat;
 import trainer.player.pokedex.Pokedex;
 import type.Type;
 import type.TypeAdvantage;
@@ -18,7 +19,6 @@ import java.util.Set;
 /*
     TODO:
         Berry harvests
-        Nicknames given
         Critical captures
         Arceus plates
         Catch legendary trios
@@ -26,16 +26,13 @@ import java.util.Set;
  */
 public class MedalCase implements Serializable {
     private final Set<Medal> medalsEarned;
+    private ArrayDeque<Medal> medalsToShow;
 
     private final Map<MedalTheme, Integer> themeCounters;
 
     // Start with all baby Pokemon and remove as we go, earn medal when empty
     private final Set<PokemonNamesies> babyPokemonUnhatched;
-
-    private int totalPokemonCaught;
-    private Map<Type, Integer> totalPokemonCaughtTypeMap;
     private Map<Type, Set<PokemonNamesies>> uncaughtPokemonTypeMap;
-    private ArrayDeque<Medal> medalsToShow;
 
     public MedalCase() {
         this.medalsEarned = EnumSet.noneOf(Medal.class);
@@ -45,10 +42,8 @@ public class MedalCase implements Serializable {
             this.themeCounters.put(theme, 0);
         }
 
-        this.totalPokemonCaughtTypeMap = new EnumMap<>(Type.class);
         this.uncaughtPokemonTypeMap = new EnumMap<>(Type.class);
         for (Type type : Type.values()) {
-            this.totalPokemonCaughtTypeMap.put(type, 0);
             this.uncaughtPokemonTypeMap.put(type, EnumSet.noneOf(PokemonNamesies.class));
         }
 
@@ -87,14 +82,6 @@ public class MedalCase implements Serializable {
         return this.medalsToShow.pop();
     }
 
-    public void catchNewPokemon(ActivePokemon caught) {
-        totalPokemonCaught++;
-
-        for (Type type : caught.getActualType()) {
-            totalPokemonCaughtTypeMap.put(type, totalPokemonCaughtTypeMap.get(type) + 1);
-        }
-    }
-
     public void encounterPokemon(ActivePokemon encountered) {
         if (encountered.isShiny()) {
             this.increase(MedalTheme.SHINIES_FOUND);
@@ -103,8 +90,20 @@ public class MedalCase implements Serializable {
 
     public void hatch(ActivePokemon hatched) {
         this.increase(MedalTheme.EGGS_HATCHED);
+
         this.babyPokemonUnhatched.remove(hatched.getPokemonInfo().namesies());
         this.update(MedalTheme.BABIES_HATCHED, PokemonInfo.getNumBabyPokemon() - this.babyPokemonUnhatched.size());
+
+        int perfectIVs = 0;
+        for (Stat stat : Stat.STATS) {
+            if (hatched.getIV(stat.index()) == Stat.MAX_IV) {
+                perfectIVs++;
+            }
+        }
+
+        if (perfectIVs >= Stat.NUM_STATS - 1) {
+            earnMedal(Medal.CHAMPION_OF_GENETICS);
+        }
     }
 
     public void useMove(AttackNamesies attack) {

@@ -52,6 +52,8 @@ import sound.SoundTitle;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.WildPokemon;
+import trainer.player.medal.Medal;
+import trainer.player.medal.MedalCase;
 import trainer.player.medal.MedalTheme;
 import type.Type;
 import util.RandomUtils;
@@ -908,7 +910,7 @@ public class ActivePokemon implements Serializable {
 				
 				// Don't exceed total EV amount
 				if (totalEVs() > Stat.MAX_EVS) {
-					EVs[i] -= (Stat.MAX_EVS - totalEVs());
+					EVs[i] -= (totalEVs() - Stat.MAX_EVS);
 					break;
 				}
 			}
@@ -917,8 +919,15 @@ public class ActivePokemon implements Serializable {
 				EVs[i] = Math.max(0, EVs[i] + vals[i]); // Don't drop below zero
 			}
 		}
-		
-		setStats();
+
+		if (added) {
+			setStats();
+			if (totalEVs() == Stat.MAX_EVS) {
+				MedalCase medalCase = Game.getPlayer().getMedalCase();
+				medalCase.earnMedal(Medal.TRAINED_TO_MAX_POTENTIAL);
+			}
+		}
+
 		return added;
 	}
 
@@ -1040,6 +1049,7 @@ public class ActivePokemon implements Serializable {
 			
 			b.getEffects(isPlayer).add((TeamEffect)EffectNamesies.DEAD_ALLY.getEffect());
 
+			// If the player slayed a Dark or Ghost type Pokemon, then they are on their way to becoming the Chosen One
 			if (!isPlayer() && (isType(b, Type.DARK) || isType(b, Type.GHOST))) {
 				Game.getPlayer().getMedalCase().increase(MedalTheme.DEMON_POKEMON_DEFEATED);
 			}
