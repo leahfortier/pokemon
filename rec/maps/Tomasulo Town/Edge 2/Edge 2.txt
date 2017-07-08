@@ -180,7 +180,9 @@
               "maxLevel": 10,
               "probability": 30
             }
-          ]
+          ],
+          "minLevel": 6,
+          "maxLevel": 10
         }
       ],
       "location": [

@@ -3,10 +3,12 @@ package mapMaker.dialogs.wildbattle;
 import map.overworld.WildEncounter;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.FishingMatcher;
+import pokemon.ActivePokemon;
 import util.GUIUtils;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.util.ArrayList;
@@ -20,6 +22,8 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
     private final JPanel bottomComponent;
 
     private final JTextField nameTextField;
+    private final JFormattedTextField lowLevelFormattedTextField;
+    private final JFormattedTextField highLevelFormattedTextField;
     private final List<WildPokemonDataPanel> wildPokemonPanels;
 
     private final int index;
@@ -33,6 +37,9 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
 
         nameTextField = GUIUtils.createTextField(this.getDefaultName());
 
+        lowLevelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, ActivePokemon.MAX_LEVEL);
+        highLevelFormattedTextField = GUIUtils.createIntegerTextField(ActivePokemon.MAX_LEVEL, 1, ActivePokemon.MAX_LEVEL);
+
         JButton addPokemonButton = GUIUtils.createButton("Add Pokemon", event -> addPokemonPanel(null));
         JButton removeSelectedButton = GUIUtils.createButton(
                 "Remove Selected",
@@ -43,7 +50,9 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
         );
 
         this.topComponent = GUIUtils.createHorizontalLayoutComponent(
-                GUIUtils.createTextFieldComponent("Name", nameTextField)
+                GUIUtils.createTextFieldComponent("Name", nameTextField),
+                lowLevelFormattedTextField,
+                highLevelFormattedTextField
         );
 
         this.bottomComponent = GUIUtils.createHorizontalLayoutComponent(
@@ -66,7 +75,7 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
         List<JComponent> components = new ArrayList<>();
         components.add(topComponent);
         if (!wildPokemonPanels.isEmpty()) {
-            components.add(GUIUtils.createLabel("     Pokemon Name     Probability       Min Level        Max Level"));
+            components.add(GUIUtils.createLabel("     Pokemon Name                   Probability"));
         }
         components.addAll(wildPokemonPanels);
         components.add(bottomComponent);
@@ -85,12 +94,15 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
         }
 
         String name = this.getNameField(nameTextField, this.getDefaultName());
+        int minLevel = Integer.parseInt(lowLevelFormattedTextField.getText());
+        int maxLevel = Integer.parseInt(highLevelFormattedTextField.getText());
+        this.updatePokemonPanelsWithLevels(minLevel, maxLevel);
         List<WildEncounter> wildEncounters = wildPokemonPanels
                 .stream()
                 .map(WildPokemonDataPanel::getWildEncounter)
                 .collect(Collectors.toList());
 
-        return new FishingMatcher(name, wildEncounters);
+        return new FishingMatcher(name, minLevel, maxLevel, wildEncounters);
     }
 
     private void load(FishingMatcher matcher) {
@@ -99,8 +111,16 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
         }
 
         nameTextField.setText(matcher.getBasicName());
+        lowLevelFormattedTextField.setValue(matcher.getMinLevel());
+        highLevelFormattedTextField.setValue(matcher.getMaxLevel());
         for (WildEncounter wildEncounter : matcher.getWildEncounters()) {
             addPokemonPanel(wildEncounter);
+        }
+    }
+
+    private void updatePokemonPanelsWithLevels(int minLevel, int maxLevel) {
+        for (WildPokemonDataPanel wildPokemonDataPanel : this.wildPokemonPanels) {
+            wildPokemonDataPanel.setMinAndMaxLevel(minLevel, maxLevel);
         }
     }
 }

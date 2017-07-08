@@ -97,4 +97,3 @@ Missing Pokemon Sprites:
 	Riding up on bike on foreground tiles causes tiles to flash
 	Mirror move executes multi-turn moves in a single turn
 	Choose/give a TM for beating gym leaders
-	Premier balls

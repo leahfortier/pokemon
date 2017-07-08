@@ -6,11 +6,13 @@ import map.overworld.WildEncounter;
 import mapMaker.dialogs.TimeOfDayPanel;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleMatcher;
+import pokemon.ActivePokemon;
 import util.GUIUtils;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.util.ArrayList;
@@ -23,6 +25,9 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 
 	private final JTextField nameTextField;
 	private final JComboBox<EncounterRate> encounterRateComboBox;
+
+	private final JFormattedTextField lowLevelFormattedTextField;
+	private final JFormattedTextField highLevelFormattedTextField;
 
 	private final TimeOfDayPanel timeOfDayPanel;
 	private final JTextField conditionTextField;
@@ -41,6 +46,9 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 		nameTextField = GUIUtils.createTextField(this.getDefaultName());
 		encounterRateComboBox = GUIUtils.createComboBox(EncounterRate.values());
 
+		lowLevelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, ActivePokemon.MAX_LEVEL);
+		highLevelFormattedTextField = GUIUtils.createIntegerTextField(ActivePokemon.MAX_LEVEL, 1, ActivePokemon.MAX_LEVEL);
+
 		timeOfDayPanel = new TimeOfDayPanel();
 		conditionTextField = GUIUtils.createTextField();
 
@@ -56,7 +64,9 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 		this.topComponent = GUIUtils.createVerticalLayoutComponent(
 				GUIUtils.createHorizontalLayoutComponent(
 						GUIUtils.createTextFieldComponent("Name", nameTextField),
-						GUIUtils.createComboBoxComponent("Encounter Rate", encounterRateComboBox)
+						GUIUtils.createComboBoxComponent("Encounter Rate", encounterRateComboBox),
+						lowLevelFormattedTextField,
+						highLevelFormattedTextField
 				),
 				GUIUtils.createHorizontalLayoutComponent(
 						timeOfDayPanel,
@@ -85,7 +95,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 		List<JComponent> components = new ArrayList<>();
 		components.add(topComponent);
 		if (!wildPokemonPanels.isEmpty()) {
-			components.add(GUIUtils.createLabel("     Pokemon Name     Probability       Min Level        Max Level"));
+			components.add(GUIUtils.createLabel("     Pokemon Name                 	  Probability"));
 		}
 		components.addAll(wildPokemonPanels);
 		components.add(bottomComponent);
@@ -105,13 +115,22 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 
 		String name = this.getNameField(nameTextField, this.getDefaultName());
 		EncounterRate encounterRate = (EncounterRate)encounterRateComboBox.getSelectedItem();
+		int minLevel = Integer.parseInt(lowLevelFormattedTextField.getText());
+		int maxLevel = Integer.parseInt(highLevelFormattedTextField.getText());
+		this.updatePokemonPanelsWithLevels(minLevel, maxLevel);
 		List<WildEncounter> wildEncounters = wildPokemonPanels
 				.stream()
 				.map(WildPokemonDataPanel::getWildEncounter)
 				.collect(Collectors.toList());
 		String condition = Condition.and(timeOfDayPanel.getCondition(), conditionTextField.getText());
 
-		WildBattleMatcher matcher = new WildBattleMatcher(name, encounterRate, wildEncounters);;
+		WildBattleMatcher matcher = new WildBattleMatcher(
+				name,
+				encounterRate,
+				minLevel,
+				maxLevel,
+				wildEncounters
+		);
 		matcher.setCondition(condition);
 
 		return matcher;
@@ -125,9 +144,17 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 		nameTextField.setText(matcher.getName());
 		encounterRateComboBox.setSelectedItem(matcher.getEncounterRate());
 		conditionTextField.setText(matcher.getCondition());
+		lowLevelFormattedTextField.setValue(matcher.getMinLevel());
+		highLevelFormattedTextField.setValue(matcher.getMaxLevel());
 
 		for (WildEncounter wildEncounter : matcher.getWildEncounters()) {
 			addPokemonPanel(wildEncounter);
+		}
+	}
+
+	private void updatePokemonPanelsWithLevels(int minLevel, int maxLevel) {
+		for (WildPokemonDataPanel wildPokemonDataPanel : this.wildPokemonPanels) {
+			wildPokemonDataPanel.setMinAndMaxLevel(minLevel, maxLevel);
 		}
 	}
 }

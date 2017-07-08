@@ -22,11 +22,11 @@ public class WildEncounter {
 
     private Integer level;
 
-    public WildEncounter(String pokemon, String minLevel, String maxLevel, String probability) {
+    public WildEncounter(String pokemon, int minLevel, int maxLevel, String probability) {
         this(
                 PokemonNamesies.getValueOf(pokemon),
-                Integer.parseInt(minLevel),
-                Integer.parseInt(maxLevel),
+                minLevel,
+                maxLevel,
                 Integer.parseInt(probability)
         );
     }

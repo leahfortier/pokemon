@@ -327,17 +327,19 @@
   "fishingSpots": [
     {
       "name": "Fishing Spot 0",
+      "minLevel": 5,
+      "maxLevel": 10,
       "wildPokemon": [
         {
           "pokemon": "CHINCHOU",
           "minLevel": 5,
-          "maxLevel": 5,
+          "maxLevel": 10,
           "probability": 20
         },
         {
           "pokemon": "MAGIKARP",
           "minLevel": 5,
-          "maxLevel": 5,
+          "maxLevel": 10,
           "probability": 80
         }
       ],
