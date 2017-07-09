@@ -9,8 +9,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 class WildPokemonDataPanel extends JPanel {
+	private PokemonProbabilityListener probabilityListener;
 	
 	private static final long serialVersionUID = -7408589859784929623L;
 
@@ -20,6 +23,7 @@ class WildPokemonDataPanel extends JPanel {
 
 	private int minLevel;
 	private int maxLevel;
+	private int probability;
 	
 	WildPokemonDataPanel(WildEncounter wildEncounter) {
 		selectedCheckBox = GUIUtils.createCheckBox();
@@ -30,7 +34,22 @@ class WildPokemonDataPanel extends JPanel {
 			}
 		});
 		
-		probabilityFormattedTextField = GUIUtils.createIntegerTextField(100, 1, 100);
+		probabilityFormattedTextField = GUIUtils.createIntegerTextField(
+				wildEncounter.getProbability(),
+				1,
+				100
+		);
+		probabilityFormattedTextField.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				updateProbability();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				updateProbability();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				updateProbability();
+			}
+		});
 
 		GUIUtils.setHorizontalLayout(
 				this,
@@ -40,6 +59,18 @@ class WildPokemonDataPanel extends JPanel {
 		);
 
 		this.load(wildEncounter);
+	}
+
+	private void updateProbability() {
+		int oldProbability = probability;
+		probability = (int)probabilityFormattedTextField.getValue();
+		if (probabilityListener != null) {
+			probabilityListener.updatePokemonProbability(oldProbability, probability);
+		}
+	}
+
+	public void setProbabilityListener(PokemonProbabilityListener listener) {
+		this.probabilityListener = listener;
 	}
 
 	public void setMinAndMaxLevel(int minLevel, int maxLevel) {

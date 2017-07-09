@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher> {
+public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher> implements PokemonProbabilityListener {
 	private static final int POKES_PER_PAGE = 5;
 
 	private final JPanel topComponent;
@@ -37,16 +37,19 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 	private final TimeOfDayPanel timeOfDayPanel;
 	private final JTextField conditionTextField;
 
+	private final JLabel pokemonProbabilitySumLabel;
 	private final List<WildPokemonDataPanel> wildPokemonPanels;
 
 	private final JLabel pageNumLabel;
 	private int pageNum;
 	private final int index;
+	private int probabilitySum;
 
 	public WildBattleTriggerEditDialog(WildBattleMatcher wildBattleMatcher, int index) {
 		super("Wild Battle Trigger Editor");
 
 		this.index = index;
+		this.probabilitySum = 0;
 
 		wildPokemonPanels = new ArrayList<>();
 		
@@ -78,6 +81,8 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 			renderDialog();
 		});
 
+		pokemonProbabilitySumLabel = GUIUtils.createLabel("0");
+
 		this.topComponent = GUIUtils.createVerticalLayoutComponent(
 				GUIUtils.createHorizontalLayoutComponent(
 						GUIUtils.createTextFieldComponent("Name", nameTextField),
@@ -88,6 +93,10 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 				GUIUtils.createHorizontalLayoutComponent(
 						timeOfDayPanel,
 						GUIUtils.createTextFieldComponent("Condition", conditionTextField)
+				),
+				GUIUtils.createHorizontalLayoutComponent(
+						GUIUtils.createLabel("Probability:"),
+						pokemonProbabilitySumLabel
 				)
 		);
 
@@ -109,7 +118,9 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 	}
 
 	private void addPokemonPanel(WildEncounter wildEncounter) {
-		wildPokemonPanels.add(new WildPokemonDataPanel(wildEncounter));
+		WildPokemonDataPanel panel = new WildPokemonDataPanel(wildEncounter);
+		panel.setProbabilityListener(this);
+		wildPokemonPanels.add(panel);
 		render();
 	}
 
@@ -184,13 +195,21 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 		highLevelFormattedTextField.setValue(matcher.getMaxLevel());
 
 		for (WildEncounter wildEncounter : matcher.getWildEncounters()) {
+			probabilitySum += wildEncounter.getProbability();
 			addPokemonPanel(wildEncounter);
 		}
+
+		this.pokemonProbabilitySumLabel.setText(String.valueOf(probabilitySum));
 	}
 
 	private void updatePokemonPanelsWithLevels(int minLevel, int maxLevel) {
 		for (WildPokemonDataPanel wildPokemonDataPanel : this.wildPokemonPanels) {
 			wildPokemonDataPanel.setMinAndMaxLevel(minLevel, maxLevel);
 		}
+	}
+
+	public void updatePokemonProbability(int oldProbability, int newProbability) {
+		probabilitySum += (newProbability - oldProbability);
+		this.pokemonProbabilitySumLabel.setText(String.valueOf(probabilitySum));
 	}
 }
