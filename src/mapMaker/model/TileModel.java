@@ -31,6 +31,7 @@ public class TileModel extends MapMakerModel {
     private final Map<TileCategory, DefaultListModel<ImageIcon>> tileListModel;
     private final Map<TileType, Map<Integer, BufferedImage>> tileMap;
     private final Map<Integer, String> indexMap;
+    private final Map<Integer, TileCategory> indexToTileCategoryMap;
 
     private boolean saved;
     private TileCategory selectedTileCategory;
@@ -60,6 +61,7 @@ public class TileModel extends MapMakerModel {
         }
 
         this.indexMap = new HashMap<>();
+        this.indexToTileCategoryMap = new HashMap<>();
         this.saved = true;
 
         this.tileMap = new EnumMap<>(TileType.class);
@@ -84,6 +86,7 @@ public class TileModel extends MapMakerModel {
         }
 
         this.indexMap.put(BLANK_TILE_INDEX, "BlankImage");
+        this.indexToTileCategoryMap.put(BLANK_TILE_INDEX, TileCategory.ALL);
 
         for (TileCategory tileCategory : TileCategory.values()) {
             this.tileListModel.get(tileCategory).add(0, BLANK_TILE_ICON);
@@ -103,6 +106,7 @@ public class TileModel extends MapMakerModel {
         if (tileType == TileType.MAP) {
             this.indexMap.clear();
             this.tileListModel.clear();
+            this.indexToTileCategoryMap.clear();
             for (TileCategory tileCategory : TileCategory.values()) {
                 this.tileListModel.put(tileCategory, new DefaultListModel<>());
             }
@@ -135,6 +139,7 @@ public class TileModel extends MapMakerModel {
                     );
 
                     this.indexMap.put(val, name);
+                    this.indexToTileCategoryMap.put(val, tileCategory);
                     ImageIcon imageIcon = new ImageIcon(resizedImage, val + "");
                     this.tileListModel.get(tileCategory).addElement(imageIcon);
                     if (tileCategory != TileCategory.ALL) {
@@ -176,7 +181,9 @@ public class TileModel extends MapMakerModel {
                 color = DrawUtils.permuteColor(color, indexMap);
                 BufferedImage img = FileIO.readImage(imageFile);
                 this.tileMap.get(TileType.MAP).put(color.getRGB(), img);
-                indexMap.put(color.getRGB(), imageFile.getName());
+                String fileName = imageFile.getName().substring(0, imageFile.getName().indexOf('.'));
+                indexMap.put(color.getRGB(), fileName);
+                indexToTileCategoryMap.put(color.getRGB(), selectedTileCategory);
 
                 tileListModel.get(selectedTileCategory).addElement(new ImageIcon(img, color.getRGB() + ""));
                 saved = false;
@@ -195,8 +202,9 @@ public class TileModel extends MapMakerModel {
         for (final Entry<Integer, String> entry : indexMap.entrySet()) {
             final String imageIndex = Integer.toString(entry.getKey(), 16);
             final String imageName = entry.getValue();
+            final TileCategory tileCategory = indexToTileCategoryMap.get(entry.getKey());
 
-            StringUtils.appendLine(indexFile, imageName + " " + imageIndex);
+            StringUtils.appendLine(indexFile, imageName + " " + imageIndex + " " + tileCategory.toString());
         }
 
         FileIO.writeToFile(mapMaker.getPathWithRoot(FileName.MAP_TILES_INDEX), indexFile);
