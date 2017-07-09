@@ -103,7 +103,9 @@ public class MapTest {
                         totalProbability += wildEncounter.getProbability();
                     }
 
-                    Assert.assertTrue(totalProbability == 100);
+                    Assert.assertTrue(
+                            map.getName().getMapName() + " " + totalProbability,
+                            totalProbability == 100);
                 }
             }
 

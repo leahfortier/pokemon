@@ -23,6 +23,7 @@ MapleMachine1 -83c0e7 OBJECT
 PC -f4a065 OBJECT
 ElectricMachine -1930d9 OBJECT
 WaterTile01 -cccc01 GROUND
+Entrance_copy -cccd ENTRANCE
 CounterOrangeD -1f7900 COUNTER
 CounterOrangeDLE -1f78ff COUNTER
 RedRugT -26acc8 OBJECT
@@ -83,8 +84,6 @@ Mailbox03 -6b91fe OBJECT
 BedRight -999901 OBJECT
 RedRugR -25a5c0 OBJECT
 RedRugB -30b5d1 OBJECT
-RedRugBR -32b1cb OBJECT
-RedRugTR -3eadc4 OBJECT
 GrassPathU -6f2190 GROUND
 GrassPathUL -6f218f GROUND
 GrassPathL -6f218e GROUND
@@ -103,11 +102,13 @@ ConcreteLD -948566 GROUND
 ConcreteRU -948567 GROUND
 ConcreteLU -948568 GROUND
 ConcreteC -948564 GROUND
+RedRugBR -32b1cb OBJECT
 ConcreteR -94856d GROUND
 ConcreteUR -94856e GROUND
 ConcreteU -94856f GROUND
 ConcreteUL -948570 GROUND
 ConcreteL -948569 GROUND
+RedRugTR -3eadc4 OBJECT
 ConcreteDL -94856a GROUND
 ConcreteD -94856b GROUND
 ConcreteDR -94856c GROUND
@@ -245,6 +246,7 @@ CounterBlueRUE -ffa611 COUNTER
 GrassTile05 -df4be0 GROUND
 Flowers01 -270f28 GRASSY
 WallGray -575758 WALL
+BlankImage -ff01 ALL
 FloorYellowBrick01 -df4bdf FLOOR
 TomGymRightWall -df4bde WALL
 TomGymLeftWall -df4bdd WALL
@@ -393,3 +395,4 @@ Tree17 -532bb0 TREE
 Tree16 -532baf TREE
 Tree15 -532bae TREE
 Tree14 -532bad TREE
+

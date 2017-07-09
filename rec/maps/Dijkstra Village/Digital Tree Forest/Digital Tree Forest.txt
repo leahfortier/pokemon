@@ -44,72 +44,220 @@
       "name": "Grassy",
       "wildBattles": [
         {
-          "name": "grassy",
+          "name": "day",
           "encounterRate": "VERY_COMMON",
           "wildPokemon": [
             {
               "pokemon": "PIKACHU",
               "minLevel": 10,
               "maxLevel": 14,
-              "probability": 100
+              "probability": 10
             },
             {
               "pokemon": "ELEKID",
               "minLevel": 10,
               "maxLevel": 14,
-              "probability": 100
+              "probability": 6
             },
             {
               "pokemon": "DEERLING",
               "minLevel": 10,
               "maxLevel": 14,
-              "probability": 100
+              "probability": 6
             },
             {
               "pokemon": "METAPOD",
               "minLevel": 10,
               "maxLevel": 14,
-              "probability": 100
+              "probability": 10
             },
             {
               "pokemon": "BUTTERFREE",
               "minLevel": 10,
               "maxLevel": 14,
-              "probability": 100
+              "probability": 5
             },
             {
               "pokemon": "EXEGGCUTE",
               "minLevel": 10,
               "maxLevel": 14,
-              "probability": 100
+              "probability": 6
             },
             {
               "pokemon": "BONSLY",
               "minLevel": 10,
               "maxLevel": 14,
-              "probability": 100
+              "probability": 5
             },
             {
               "pokemon": "SLAKOTH",
               "minLevel": 10,
               "maxLevel": 14,
-              "probability": 100
+              "probability": 5
             },
             {
               "pokemon": "SEEDOT",
               "minLevel": 10,
               "maxLevel": 14,
-              "probability": 100
+              "probability": 5
             },
             {
               "pokemon": "GRUBBIN",
               "minLevel": 10,
               "maxLevel": 14,
-              "probability": 100
+              "probability": 10
+            },
+            {
+              "pokemon": "TREECKO",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 5
+            },
+            {
+              "pokemon": "WURMPLE",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 10
+            },
+            {
+              "pokemon": "SHROOMISH",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 6
+            },
+            {
+              "pokemon": "NINCADA",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 5
+            },
+            {
+              "pokemon": "PINECO",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 5
+            },
+            {
+              "pokemon": "CELEBI",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 1
             }
           ],
           "minLevel": 10,
-          "maxLevel": 14
+          "maxLevel": 14,
+          "condition": ":time_of_day:DAWN:|:time_of_day:DAY:|:time_of_day:DUSK:"
+        },
+        {
+          "name": "night",
+          "encounterRate": "VERY_COMMON",
+          "wildPokemon": [
+            {
+              "pokemon": "HOOTHOOT",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 10
+            },
+            {
+              "pokemon": "ELEKID",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 6
+            },
+            {
+              "pokemon": "DEERLING",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 6
+            },
+            {
+              "pokemon": "METAPOD",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 5
+            },
+            {
+              "pokemon": "EXEGGCUTE",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 5
+            },
+            {
+              "pokemon": "BONSLY",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 5
+            },
+            {
+              "pokemon": "SLAKOTH",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 5
+            },
+            {
+              "pokemon": "SEEDOT",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 5
+            },
+            {
+              "pokemon": "GRUBBIN",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 10
+            },
+            {
+              "pokemon": "TREECKO",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 5
+            },
+            {
+              "pokemon": "WURMPLE",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 6
+            },
+            {
+              "pokemon": "SHROOMISH",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 5
+            },
+            {
+              "pokemon": "NINCADA",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 5
+            },
+            {
+              "pokemon": "PINECO",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 5
+            },
+            {
+              "pokemon": "CELEBI",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 1
+            },
+            {
+              "pokemon": "BELLSPROUT",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 6
+            },
+            {
+              "pokemon": "ROWLET",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 10
+            }
+          ],
+          "minLevel": 10,
+          "maxLevel": 14,
+          "condition": ":time_of_day:NIGHT:"
         }
       ],
       "location": [
