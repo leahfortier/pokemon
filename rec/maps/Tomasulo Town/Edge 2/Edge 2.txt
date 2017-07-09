@@ -178,7 +178,13 @@
               "pokemon": "SKIDDO",
               "minLevel": 6,
               "maxLevel": 10,
-              "probability": 30
+              "probability": 20
+            },
+            {
+              "pokemon": "BULBASAUR",
+              "minLevel": 6,
+              "maxLevel": 10,
+              "probability": 10
             }
           ],
           "minLevel": 6,

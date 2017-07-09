@@ -1,0 +1,287 @@
+{
+  "areas": [
+    {
+      "displayName": "Digital Tree Forest",
+      "flyLocation": "",
+      "terrain": "GRASS",
+      "weather": "NORMAL",
+      "music": "DEFAULT_TUNE"
+    }
+  ],
+  "mapTransitions": [],
+  "NPCs": [],
+  "items": [],
+  "miscEntities": [],
+  "events": [],
+  "wildBattles": [
+    {
+      "name": "Grassy",
+      "wildBattles": [
+        {
+          "name": "grassy",
+          "encounterRate": "VERY_COMMON",
+          "wildPokemon": [
+            {
+              "pokemon": "PIKACHU",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 100
+            },
+            {
+              "pokemon": "ELEKID",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 100
+            },
+            {
+              "pokemon": "DEERLING",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 100
+            },
+            {
+              "pokemon": "METAPOD",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 100
+            },
+            {
+              "pokemon": "BUTTERFREE",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 100
+            },
+            {
+              "pokemon": "EXEGGCUTE",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 100
+            },
+            {
+              "pokemon": "BONSLY",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 100
+            },
+            {
+              "pokemon": "SLAKOTH",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 100
+            },
+            {
+              "pokemon": "SEEDOT",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 100
+            },
+            {
+              "pokemon": "GRUBBIN",
+              "minLevel": 10,
+              "maxLevel": 14,
+              "probability": 100
+            }
+          ],
+          "minLevel": 10,
+          "maxLevel": 14
+        }
+      ],
+      "location": [
+        {
+          "x": 1,
+          "y": 6
+        },
+        {
+          "x": 1,
+          "y": 7
+        },
+        {
+          "x": 1,
+          "y": 8
+        },
+        {
+          "x": 1,
+          "y": 9
+        },
+        {
+          "x": 2,
+          "y": 6
+        },
+        {
+          "x": 2,
+          "y": 7
+        },
+        {
+          "x": 2,
+          "y": 8
+        },
+        {
+          "x": 2,
+          "y": 9
+        },
+        {
+          "x": 3,
+          "y": 6
+        },
+        {
+          "x": 3,
+          "y": 7
+        },
+        {
+          "x": 3,
+          "y": 8
+        },
+        {
+          "x": 3,
+          "y": 9
+        },
+        {
+          "x": 4,
+          "y": 6
+        },
+        {
+          "x": 4,
+          "y": 7
+        },
+        {
+          "x": 4,
+          "y": 8
+        },
+        {
+          "x": 4,
+          "y": 9
+        },
+        {
+          "x": 5,
+          "y": 6
+        },
+        {
+          "x": 5,
+          "y": 7
+        },
+        {
+          "x": 5,
+          "y": 8
+        },
+        {
+          "x": 5,
+          "y": 9
+        },
+        {
+          "x": 6,
+          "y": 6
+        },
+        {
+          "x": 6,
+          "y": 7
+        },
+        {
+          "x": 6,
+          "y": 8
+        },
+        {
+          "x": 6,
+          "y": 9
+        },
+        {
+          "x": 7,
+          "y": 6
+        },
+        {
+          "x": 7,
+          "y": 7
+        },
+        {
+          "x": 7,
+          "y": 8
+        },
+        {
+          "x": 7,
+          "y": 9
+        },
+        {
+          "x": 8,
+          "y": 6
+        },
+        {
+          "x": 8,
+          "y": 7
+        },
+        {
+          "x": 8,
+          "y": 8
+        },
+        {
+          "x": 8,
+          "y": 9
+        },
+        {
+          "x": 9,
+          "y": 6
+        },
+        {
+          "x": 9,
+          "y": 7
+        },
+        {
+          "x": 9,
+          "y": 8
+        },
+        {
+          "x": 9,
+          "y": 9
+        },
+        {
+          "x": 10,
+          "y": 6
+        },
+        {
+          "x": 10,
+          "y": 7
+        },
+        {
+          "x": 10,
+          "y": 8
+        },
+        {
+          "x": 10,
+          "y": 9
+        },
+        {
+          "x": 11,
+          "y": 6
+        },
+        {
+          "x": 11,
+          "y": 7
+        },
+        {
+          "x": 11,
+          "y": 8
+        },
+        {
+          "x": 11,
+          "y": 9
+        },
+        {
+          "x": 12,
+          "y": 6
+        },
+        {
+          "x": 12,
+          "y": 7
+        },
+        {
+          "x": 12,
+          "y": 8
+        },
+        {
+          "x": 12,
+          "y": 9
+        }
+      ],
+      "triggerName": "Digital Tree Forest_WildBattle_Grassy_01"
+    }
+  ],
+  "fishingSpots": []
+}
