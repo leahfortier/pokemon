@@ -10,6 +10,31 @@
   ],
   "mapTransitions": [
     {
+      "exitName": "DTF",
+      "direction": "LEFT",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "Dijkstra Village",
+        "mapName": "Digital Tree Forest"
+      },
+      "nextEntrance": "Village",
+      "location": [
+        {
+          "x": 3,
+          "y": 6
+        },
+        {
+          "x": 3,
+          "y": 7
+        },
+        {
+          "x": 3,
+          "y": 8
+        }
+      ],
+      "triggerName": "Dijkstra Village_MapExit_DTF_01"
+    },
+    {
       "exitName": "Edge 2",
       "direction": "UP",
       "deathPortal": false,

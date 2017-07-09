@@ -69,7 +69,7 @@ public class ActivePokemon implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	public static final int MAX_LEVEL = 100;
-	public static final int MAX_NAME_LENGTH = 12;
+	public static final int MAX_NAME_LENGTH = 10;
 
 	private static final String TINY_EGG_IMAGE_NAME = "egg-small";
 	private static final String BASE_EGG_IMAGE_NAME = "egg";

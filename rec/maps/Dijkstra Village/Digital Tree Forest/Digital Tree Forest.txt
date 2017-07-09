@@ -8,7 +8,33 @@
       "music": "DEFAULT_TUNE"
     }
   ],
-  "mapTransitions": [],
+  "mapTransitions": [
+    {
+      "exitName": "Village",
+      "direction": "RIGHT",
+      "deathPortal": false,
+      "nextMap": {
+        "region": "Dijkstra Village",
+        "mapName": "Dijkstra Village"
+      },
+      "nextEntrance": "DTF",
+      "location": [
+        {
+          "x": 12,
+          "y": 7
+        },
+        {
+          "x": 12,
+          "y": 8
+        },
+        {
+          "x": 12,
+          "y": 9
+        }
+      ],
+      "triggerName": "Digital Tree Forest_MapExit_Village_01"
+    }
+  ],
   "NPCs": [],
   "items": [],
   "miscEntities": [],
