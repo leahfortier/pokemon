@@ -5,7 +5,6 @@ import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.SwitchOutEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
-import battle.effect.status.StatusCondition;
 import item.bag.Bag;
 import main.Global;
 import pokemon.ActivePokemon;
@@ -27,6 +26,7 @@ public abstract class Trainer implements Team, Serializable {
 	protected List<ActivePokemon> team;
 	protected List<TeamEffect> effects;
 	private int frontIndex;
+	private int switchIndex;
 
 //	protected boolean isBeTryingToSwitchRunOrUseItem;
 //	protected boolean isBTTSROUI;
@@ -208,12 +208,20 @@ public abstract class Trainer implements Team, Serializable {
 		}
 
 		// If current Pokemon is dead then you must switch!
-		if (curr.hasStatus(StatusCondition.FAINTED)) {
+		if (curr.isFainted(b)) {
 			return true;
 		}
 		
 		// Front Pokemon is alive -- Check if they are able to switch out, if not, display the appropriate message
 		return curr.canEscape(b);
+	}
+
+	public int getSwitchIndex() {
+		return this.switchIndex;
+	}
+
+	public void setSwitchIndex(int switchIndex) {
+		this.switchIndex = switchIndex;
 	}
 
 	public boolean maxPokemonUsed(Battle b) {

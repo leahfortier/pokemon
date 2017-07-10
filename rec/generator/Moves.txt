@@ -37,7 +37,7 @@ Leech Seed:
 	Desc: A seed is planted on the target. It steals some HP from the target every turn.
 	PP: 10
 	Effect: LeechSeed
-*	
+*
 Thunder Wave:
 	Acc: 90
 	Type: Electric
@@ -45,7 +45,7 @@ Thunder Wave:
 	Desc: A weak electric charge is launched at the target. It causes paralysis if it hits.
 	PP: 20
 	Status: Paralyzed
-*	
+*
 Poison Powder:
 	Acc: 75
 	Desc: The user scatters a cloud of poisonous dust on the target. It may poison the target.
@@ -84,7 +84,7 @@ Ember:
 	Status: Burned
 	EffChance: 10
 	Pow: 40
-	PP: 25	
+	PP: 25
 *
 Growl:
 	Acc: 100
@@ -176,7 +176,7 @@ Growth:
 		super.statChanges = new int[Stat.NUM_BATTLE_STATS];
 		super.statChanges[Stat.ATTACK.index()] = 1;
 		super.statChanges[Stat.SP_ATTACK.index()] = 1;
-	
+
 		// Doubles stat changes in the sunlight
 		if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
 			for (int i = 0; i < super.statChanges.length; i++) {
@@ -201,7 +201,7 @@ Seed Bomb:
 	Pow: 80
 	Acc: 100
 	Type: Grass
-	Cat: Physical	
+	Cat: Physical
 	PhysicalContact: False
 	MoveType: Bomb_Ball
 *
@@ -288,7 +288,7 @@ Solar Beam:
 	Type: Grass
 	Cat: Special
 	ChargingMove: user.getName() + " began taking in sunlight!"
-	GetMultiplier: 
+	GetMultiplier:
 		switch (b.getWeather().namesies()) {
 			case HAILING:
 			case RAINING:
@@ -298,7 +298,7 @@ Solar Beam:
 				return 1;
 		}
 		###
-	IsMultiTurn: 
+	IsMultiTurn:
 		return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
 		###
 *
@@ -310,7 +310,7 @@ Solar Blade:
 	Type: Grass
 	Cat: Physical
 	ChargingMove: user.getName() + " began taking in sunlight!"
-	IsMultiTurn: 
+	IsMultiTurn:
 		return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
 		###
 *
@@ -453,7 +453,7 @@ Rapid Spin:
 	Desc: A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.
 	Type: Normal
 	Cat: Physical
-	UniqueEffects: 
+	UniqueEffects:
 		RapidSpinRelease.release(b, user);
 		###
 *
@@ -856,7 +856,7 @@ False Swipe:
 	Cat: Physical
 	Acc: 100
 	Type: Normal
-	ApplyDamage: 
+	ApplyDamage:
 		o.addEffect((PokemonEffect)EffectNamesies.BRACING.getEffect());
 		super.applyDamage(me, o, b);
 		o.getAttributes().removeEffect(EffectNamesies.BRACING);
@@ -916,16 +916,15 @@ Pursuit:
 		if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
 			return 2;
 		}
-		
+
 		return 1;
 		###
-	GetPriority: 
-		// TODO: Make switching occur at its priority
+	GetPriority:
 		Team trainer = b.getTrainer(!me.isPlayer());
 		if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
 			return 7;
 		}
-		
+
 		return super.priority;
 		###
 *
@@ -1027,12 +1026,12 @@ Roost:
 	Cat: Status
 	PrintCast: False
 	RemoveType: Flying
-	SelfHealing: 
+	SelfHealing:
 		return .5;
 		###
 	UniqueEffects:
 		this.heal(b, victim);
-		
+
 		if (getType(b, user, victim) != null) {
 			EffectNamesies.CHANGE_TYPE.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
 			user.getEffect(EffectNamesies.CHANGE_TYPE).setTurns(1);
@@ -1225,17 +1224,17 @@ Spit Up:
 	Acc: 100
 	Pow: 100
 	Applies: user.hasEffect(EffectNamesies.STOCKPILE)
-	EndAttack: 
+	EndAttack:
 		// Stockpile ends after Spit up is used
 		user.getEffect(EffectNamesies.STOCKPILE).deactivate();
 		###
-	GetMultiplier: 
+	GetMultiplier:
 		PokemonEffect stockpile = user.getEffect(EffectNamesies.STOCKPILE);
 		int turns = stockpile.getTurns();
 		if (turns <= 0) {
 			Global.error("Stockpile turns should never be nonpositive");
 		}
-		
+
 		// Max power is 300
 		return Math.min(turns, 3);
 		###
@@ -1245,7 +1244,7 @@ Swallow:
 	PP: 10
 	Cat: Status
 	ExtraApplies: user.hasEffect(EffectNamesies.STOCKPILE)
-	BasicHealing: 
+	BasicHealing:
 		PokemonEffect stockpile = victim.getEffect(EffectNamesies.STOCKPILE);
 		int turns = stockpile.getTurns();
 		if (turns <= 0) {
@@ -1442,7 +1441,7 @@ Rollout:
 	Acc: 90
 	Cat: Physical
 	Type: Rock
-	GetMultiplier: 
+	GetMultiplier:
 		// TODO: Combine these types of moves
 		return Math.min(user.getAttributes().getCount(), 5)*(user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
 		###
@@ -1454,7 +1453,7 @@ Fury Cutter:
 	Cat: Physical
 	Type: Bug
 	Pow: 40
-	GetMultiplier: 
+	GetMultiplier:
 		return Math.min(5, user.getAttributes().getCount());
 		###
 *
@@ -1475,7 +1474,7 @@ Gyro Ball:
 	Cat: Physical
 	Type: Steel
 	MoveType: Bomb_Ball
-	GetPow: 
+	GetPow:
 		return (int)Math.min(150, 25.0*Stat.getStat(Stat.SPEED, o, me, b)/Stat.getStat(Stat.SPEED, me, o, b));
 		###
 *
@@ -1668,7 +1667,7 @@ Metronome:
 		###
 	BeginAttack:
 		AttackNamesies[] attackNames = AttackNamesies.values();
-		
+
 		int index;
 		do {
 			index = RandomUtils.getRandomIndex(attackNames);
@@ -1702,7 +1701,7 @@ Stored Power:
 	Cat: Special
 	Acc: 100
 	PP: 10
-	GetMultiplier: 
+	GetMultiplier:
 		return user.getAttributes().totalStatIncreases();
 		###
 *
@@ -1713,11 +1712,11 @@ Power Trip:
 	Cat: Physical
 	Acc: 100
 	PP: 10
-	GetMultiplier: 
+	GetMultiplier:
 		return user.getAttributes().totalStatIncreases();
 		###
 *
-Mimic: 
+Mimic:
 	Desc: The user copies the target's last move. The move can be used during battle until the Pok\u00e9mon is switched out.
 	PP: 10
 	Type: Normal
@@ -1811,7 +1810,7 @@ Rest:
 	AfterApplyCheck:
 		victim.removeStatus();
 		###
-	EndAttack: 
+	EndAttack:
 		victim.getStatus().setTurns(2);
 		###
 *
@@ -1888,15 +1887,15 @@ Mega Drain:
 *
 Natural Gift:
 	PP: 15
-	GetPow: 
+	GetPow:
 		return ((Berry)me.getHeldItem(b)).naturalGiftPower();
 		###
-	GetType: 
+	GetType:
 		Item i = user.getHeldItem(b);
 		if (i instanceof Berry) {
 			return ((Berry)i).naturalGiftType();
 		}
-		
+
 		return super.type;
 		###
 	Desc: The user draws power to attack by using its held Berry. The Berry determines its type and power.
@@ -1904,7 +1903,7 @@ Natural Gift:
 	PhysicalContact: False
 	Type: Normal
 	Acc: 100
-	UniqueEffects: 
+	UniqueEffects:
 		// This is so fucking stupid that it consumes the Berry upon use, like srsly what the fuck is the fucking point of this move
 		if (user.getHeldItem(b) instanceof Berry) {
 			user.consumeItem(b);
@@ -2031,10 +2030,10 @@ Magnitude:
 	Type: Ground
 	Cat: Physical
 	Acc: 100
-	Field: 
+	Field:
 		private static final int[] CHANCES = { 5, 10, 20, 30, 20, 10, 5 };
 		private static final int[] POWERS = { 10, 30, 50, 70, 90, 110, 150 };
-		
+
 		private int index;
 		###
 	PhysicalContact: False
@@ -2045,7 +2044,7 @@ Magnitude:
 		return POWERS[index];
 		###
 	HitDig: True
-	UniqueEffects: 
+	UniqueEffects:
 		Messages.add("Magnitude " + (index + 4) + "!");
 		###
 *
@@ -2068,7 +2067,7 @@ Dig:
 	Cat: Physical
 	Acc: 100
 	Pow: 80
-	ChargingMove: user.getName() + " went underground!" 
+	ChargingMove: user.getName() + " went underground!"
 	SemiInv: true
 *
 Earthquake:
@@ -2110,7 +2109,7 @@ Tri Attack:
 		super.status = RandomUtils.getRandomValue(statusConditions);
 		###
 	Type: Normal
-	Field: 
+	Field:
 		private static final StatusCondition[] statusConditions = {
 				StatusCondition.PARALYZED,
 				StatusCondition.BURNED,
@@ -2178,7 +2177,7 @@ Soak:
 	Type: Water
 	Cat: Status
 	Effect: ChangeType
-	ChangeType: 
+	ChangeType:
 		return new Type[] { Type.WATER, Type.NO_TYPE };
 		###
 *
@@ -2203,11 +2202,11 @@ Psych Up:
 	PP: 10
 	Cat: Status
 	Type: Normal
-	UniqueEffects: 
+	UniqueEffects:
 		for (Stat stat : Stat.BATTLE_STATS)  {
 			user.getAttributes().setStage(stat, victim.getStage(stat));
 		}
-		
+
 		Messages.add(user.getName() + " copied " + victim.getName() + "'s stat changes!");
 		###
 	MoveType: No_Magic_Coat, Protect_Piercing, Substitute_Piercing
@@ -2240,7 +2239,7 @@ Covet:
 	Pow: 60
 	MoveType: Assistless, Metronomeless
 	Acc: 100
-	PP: 25 	
+	PP: 25
 	Type: Normal
 	Cat: Physical
 	Desc: The user endearingly approaches the target, then steals the target's held item.
@@ -2299,7 +2298,7 @@ Punishment:
 	Desc: This attack's power increases the more the target has powered up with stat changes.
 	PP: 5
 	Pow: 60
-	GetPow: 
+	GetPow:
 		return Math.min(super.power + 20*o.getAttributes().totalStatIncreases(), 200);
 		###
 	Type: Dark
@@ -2387,7 +2386,7 @@ Belly Drum:
 	Cat: Status
 	Type: Normal
 	SelfTarget: True
-	FullApplies: 
+	FullApplies:
 		// Fails if attack is already maxed or if you have less than half your health to give up
 		return user.getStage(Stat.ATTACK) < Stat.MAX_STAT_CHANGES && user.getHPRatio() > .5;
 		###
@@ -2713,7 +2712,7 @@ Bounce:
 	Status: Paralyzed
 	EffChance: 30
 *
-Curse:	
+Curse:
 	Desc: A move that works differently for the Ghost type than for all other types.
 	PP: 10
 	Cat: Status
@@ -2767,10 +2766,10 @@ Heal Pulse:
 	Cat: Status
 	MoveType: Aura_Pulse, Healing
 	Applies: !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK)
-	UniqueEffects: 
+	UniqueEffects:
 		// Heal by 50% unless the user has Mega Launcher -- then heal by 75%
 		double fraction = user.hasAbility(AbilityNamesies.MEGA_LAUNCHER) ? .75 : .5;
-		
+
 		victim.healHealthFraction(fraction);
 		Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
 		###
@@ -2793,7 +2792,7 @@ Spark:
 	Pow: 65
 	Status: Paralyzed
 	EffChance: 30
-*	
+*
 Magnet Bomb:
 	Desc: The user launches steel bombs that stick to the target. This attack will not miss.
 	PP: 20
@@ -3037,7 +3036,7 @@ Spike Cannon:
 	Acc: 100
 	PhysicalContact: False
 	Pow: 20
-	MultiStrike: 2 5 
+	MultiStrike: 2 5
 *
 Spikes:
 	Desc: The user lays a trap of spikes at the opposing team's feet. The trap hurts Pok\u00e9mon that switch into battle.
@@ -3075,12 +3074,12 @@ Spite:
 	Cat: Status
 	MoveType: Substitute_Piercing
 	Type: Ghost
-	FullApplies: 
+	FullApplies:
 		// Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
 		Move last = victim.getAttributes().getLastMoveUsed();
 		return last != null && last.getPP() > 0 && victim.hasMove(b, last.getAttack().namesies());
 		###
-	UniqueEffects: 
+	UniqueEffects:
 		Move last = victim.getAttributes().getLastMoveUsed();
 		Messages.add(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!");
 		###
@@ -3211,7 +3210,7 @@ Psyshock:
 	Acc: 100
 	Pow: 80
 	Int: OpponentStatSwitchingEffect
-	OppSwitchStat: 
+	OppSwitchStat:
 		return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
 		###
 *
@@ -3390,7 +3389,7 @@ Brick Break:
 	Pow: 75
 	Acc: 100
 	Cat: Physical
-	UniqueEffects: 
+	UniqueEffects:
 		BarrierEffect.breakBarriers(b, user);
 		###
 *
@@ -3401,7 +3400,7 @@ Psychic Fangs:
 	Cat: Physical
 	Acc: 100
 	Pow: 85
-	UniqueEffects: 
+	UniqueEffects:
 		BarrierEffect.breakBarriers(b, user);
 		###
 *
@@ -3541,7 +3540,7 @@ Focus Punch:
 	Type: Fighting
 	Effect: Focusing
 	SelfTarget: True
-	StartTurn: 
+	StartTurn:
 		super.applyBasicEffects(b, me, me);
 		me.getAttributes().setReducePP(true);
 		###
@@ -3560,7 +3559,7 @@ Shell Trap:
 	PP: 5
 	Effect: ShellTrap
 	SelfTarget: True
-	StartTurn: 
+	StartTurn:
 		super.applyBasicEffects(b, me, me);
 		###
 	Applies: !user.hasEffect(EffectNamesies.SHELL_TRAP)
@@ -3578,7 +3577,7 @@ Beak Blast:
 	Priority: -3
 	Effect: BeakBlast
 	SelfTarget: True
-	StartTurn: 
+	StartTurn:
 		super.applyBasicEffects(b, me, me);
 		###
 *
@@ -3609,7 +3608,7 @@ Refresh:
 	SelfTarget: True
 	MoveType: Healing
 	Applies: user.hasStatus()
-	UniqueEffects: 
+	UniqueEffects:
 		Status.removeStatus(b, user, CastSource.ATTACK);
 		###
 *
@@ -3696,7 +3695,7 @@ Dizzy Punch:
 	Pow: 70
 	Type: Normal
 	Effect: Confusion
-	EffChance: 20	
+	EffChance: 20
 *
 Outrage:
 	Desc: The user rampages and attacks for two to three turns. It then becomes confused, however.
@@ -3752,7 +3751,7 @@ Reflect Type:
 	Cat: Status
 	SelfTarget: True
 	Effect: ChangeType
-	ChangeType: 
+	ChangeType:
 		return b.getOtherPokemon(caster).getType(b).clone();
 		###
 	MoveType: Non_Snatchable
@@ -3950,7 +3949,7 @@ Last Resort:
 				return false;
 			}
 		}
-		
+
 		return true;
 		###
 *
@@ -3960,9 +3959,9 @@ Trump Card:
 	Type: Normal
 	PhysicalContact: True
 	Cat: Special
-	GetPow: 
+	GetPow:
 		int pp = me.getMove().getPP();
-		
+
 		switch (pp) {
 			case 1:
 				return 190;
@@ -4006,7 +4005,7 @@ Conversion:
 			}
 		}
 		###
-	ChangeType: 
+	ChangeType:
 		return new Type[] { RandomUtils.getRandomValue(this.types), Type.NO_TYPE };
 		###
 	Effect: ChangeType
@@ -4023,7 +4022,7 @@ Conversion 2:
 		###
 	BeginAttack:
 		this.types = new ArrayList<>();
-		
+
 		Move lastMoveUsed = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
 		if (lastMoveUsed != null) {
 			Type attackingType = lastMoveUsed.getType();
@@ -4036,7 +4035,7 @@ Conversion 2:
 		###
 	Applies: this.types.size() > 0
 	Effect: ChangeType
-	ChangeType: 
+	ChangeType:
 		return new Type[] { RandomUtils.getRandomValue(this.types), Type.NO_TYPE };
 		###
 *
@@ -4109,7 +4108,7 @@ Sleep Talk:
 	Cat: Status
 	Int: SleepyFightsterEffect
 	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Assistless, Metronomeless
-	Field:	
+	Field:
 		private List<Move> moves;
 		###
 	BeginAttack:
@@ -4174,7 +4173,7 @@ Eruption:
 	Type: Fire
 	HPRatioMove: 150 me
 *
-Charm: 
+Charm:
 	Desc: The user gazes at the target rather charmingly, making it less wary. The target's Attack is harshly lowered.
 	PP: 20
 	Type: Fairy
@@ -4183,7 +4182,7 @@ Charm:
 	StatChange: 1 Attack -2
 *
 Echoed Voice:
-	GetMultiplier: 
+	GetMultiplier:
 		return Math.min(5, user.getAttributes().getCount());
 		###
 	Desc: The user attacks the target with an echoing voice. If this move is used every turn, it does greater damage.
@@ -4201,13 +4200,13 @@ Psycho Shift:
 	Cat: Status
 	Acc: 100
 	Applies: user.hasStatus() && Status.applies(user.getStatus().getType(), b, user, victim)
-	UniqueEffects: 
+	UniqueEffects:
 		Status.giveStatus(b, user, victim, user.getStatus().getType(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
 		user.removeStatus();
 		Messages.add(new MessageUpdate().updatePokemon(b, user));
 		###
 	MoveType: No_Magic_Coat
-*	
+*
 Shadow Sneak:
 	Desc: The user extends its shadow and attacks the target from behind. This move always goes first.
 	PP: 30
@@ -4284,7 +4283,7 @@ Hidden Power:
 	Type: Normal
 	Cat: Special
 	Acc: 100
-	GetType: 
+	GetType:
 		return user.computeHiddenPowerType();
 		###
 	Pow: 60
@@ -4302,11 +4301,11 @@ Pain Split:
 	PP: 20
 	Type: Normal
 	Cat: Status
-	UniqueEffects: 
+	UniqueEffects:
 		int share = (user.getHP() + victim.getHP())/2;
 		user.setHP(share);
 		victim.setHP(share);
-		
+
 		Messages.add(new MessageUpdate(user.getName() + " and " + victim.getName() + " split their pain!").updatePokemon(b, user));
 		Messages.add(new MessageUpdate().updatePokemon(b, victim));
 		###
@@ -4383,18 +4382,18 @@ Beat Up:
 	Acc: 100
 	Cat: Physical
 	Type: Dark
-	ApplyDamage: 
+	ApplyDamage:
 		for (ActivePokemon p : b.getTrainer(me).getTeam()) {
 			// Only healthy Pokemon get to attack
 			if (!p.canFight() || p.hasStatus()) {
 				continue;
 			}
-			
+
 			// Stop killing the dead
 			if (o.isFainted(b)) {
 				break;
 			}
-			
+
 			Move temp = p.getMove();
 			p.setMove(new Move(super.namesies.getAttack()));
 			Messages.add(p.getName() + "'s attack!");
@@ -4423,7 +4422,7 @@ Present:
 	Cat: Physical
 	Acc: 90
 	PhysicalContact: False
-	GetPow: 
+	GetPow:
 		double random = RandomUtils.getRandomInt(80);
 		if (random < 40) {
 			return 40;
@@ -4445,7 +4444,7 @@ Present:
 		return this.applyDamage;
 		###
 	Applies: this.applyDamage || (!victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK))
-	UniqueEffects: 
+	UniqueEffects:
 		if (!applyDamage) {
 			victim.healHealthFraction(1/4.0);
 			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
@@ -4477,7 +4476,7 @@ Sketch:
 		this.copy = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
 		###
 	Applies: copy != null && copy.getAttack().namesies() != AttackNamesies.STRUGGLE && !user.hasEffect(EffectNamesies.TRANSFORMED)
-	UniqueEffects: 
+	UniqueEffects:
 		List<Move> moves = user.getMoves(b);
 		for (int i = 0; i < moves.size(); i++) {
 			if (moves.get(i).getAttack().namesies() == super.namesies) {
@@ -4514,7 +4513,7 @@ Heal Bell:
 	MoveType: Sound_Based, Healing
 *
 Weather Ball:
-	GetType: 
+	GetType:
 		return b.getWeather().getElement();
 		###
 	PowerMultiplierCondition: 2 b.getWeather().namesies() != EffectNamesies.CLEAR_SKIES
@@ -4740,7 +4739,7 @@ Ice Ball:
 	Type: Ice
 	Acc: 90
 	MoveType: Bomb_Ball
-	GetMultiplier: 
+	GetMultiplier:
 		return Math.min(user.getAttributes().getCount(), 5)*(user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
 		###
 *
@@ -4908,16 +4907,16 @@ Heart Swap:
 	Type: Psychic
 	Cat: Status
 	MoveType: Substitute_Piercing, No_Magic_Coat
-	UniqueEffects: 
+	UniqueEffects:
 		for (Stat stat : Stat.BATTLE_STATS) {
 			int temp = user.getAttributes().getStage(stat);
 			user.getAttributes().setStage(stat, victim.getAttributes().getStage(stat));
 			victim.getAttributes().setStage(stat, temp);
 		}
-		
+
 		Messages.add(user.getName() + " swapped its stats with " + victim.getName() + "!");
 		###
-*	
+*
 Dark Void:
 	Desc: Opposing Pok\u00e9mon are dragged into a world of total darkness that makes them sleep.
 	PP: 10
@@ -4962,7 +4961,7 @@ Incinerate:
 	Cat: Special
 	Acc: 100
 	Pow: 60
-	UniqueEffects: 
+	UniqueEffects:
 		Item heldItem = victim.getHeldItem(b);
 		if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
 			Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
@@ -5262,7 +5261,7 @@ Fling:
 	UniqueEffects:
 		((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
 		###
-	EndAttack: 
+	EndAttack:
 		user.consumeItem(b);
 		###
 *
@@ -5290,7 +5289,7 @@ Secret Power:
 	BeginAttack:
 		// TODO: Test
 		TerrainType terrain = b.getTerrainType();
-		
+
 		super.status = terrain.getStatusCondition();
 		super.statChanges = terrain.getStatChanges();
 		super.effects = terrain.getEffects();
@@ -5311,14 +5310,14 @@ Gastro Acid:
 	Desc: The user hurls up its stomach acids on the target. The fluid eliminates the effect of the target's Ability.
 	Int: ChangeAbilityMove
 	Effect: ChangeAbility
-	AbilityChange: 
+	AbilityChange:
 		return AbilityNamesies.NO_ABILITY.getNewAbility();
 		###
 	PP: 10
 	Type: Poison
 	Cat: Status
 	Acc: 100
-	AbilityMessage: 
+	AbilityMessage:
 		return caster.getName() + " suppressed " + victim.getName() + "'s ability!";
 		###
 	Applies: victim.getAbility().isReplaceable()
@@ -5400,11 +5399,11 @@ Role Play:
 	SelfTarget: True
 	Int: ChangeAbilityMove
 	Effect: ChangeAbility
-	AbilityChange: 
+	AbilityChange:
 		Ability otherAbility = b.getOtherPokemon(victim).getAbility();
 		return otherAbility.namesies().getNewAbility();
 		###
-	AbilityMessage: 
+	AbilityMessage:
 		ActivePokemon other = b.getOtherPokemon(victim);
 		return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
 		###
@@ -5418,12 +5417,12 @@ Knock Off:
 	Acc: 100
 	Pow: 65
 	PowerMultiplierCondition: 1.5 victim.isHoldingItem(b)
-	UniqueEffects: 
+	UniqueEffects:
 		if (user.canRemoveItem(b, victim)) {
 			Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
 			if (b.isWildBattle()) {
 				victim.removeItem();
-			} 
+			}
 			else {
 				user.getAttributes().setCastSource(ItemNamesies.NO_ITEM.getItem());
 				EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
@@ -5461,12 +5460,12 @@ Switcheroo:
 	Acc: 100
 	Int: ItemSwapperEffect
 	Applies: user.canSwapItems(b, victim)
-	UniqueEffects: 
+	UniqueEffects:
 		user.swapItems(b, victim, this);
 		###
 	SwitchItemMessage: user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!"
 	MoveType: Assistless, Metronomeless, No_Magic_Coat
-*	
+*
 Trick:
 	Desc: The user catches the target off guard and swaps its held item with its own.
 	PP: 10
@@ -5475,7 +5474,7 @@ Trick:
 	Cat: Status
 	Int: ItemSwapperEffect
 	Applies: user.canSwapItems(b, victim)
-	UniqueEffects: 
+	UniqueEffects:
 		user.swapItems(b, victim, this);
 		###
 	SwitchItemMessage: user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!"
@@ -5506,7 +5505,7 @@ Camouflage:
 	Cat: Status
 	SelfTarget: True
 	Effect: ChangeType
-	ChangeType: 
+	ChangeType:
 		return new Type[] { b.getTerrainType().getType(), Type.NO_TYPE };
 		###
 *
@@ -5517,7 +5516,7 @@ Recycle:
 	Cat: Status
 	SelfTarget: True
 	Applies: user.hasEffect(EffectNamesies.CONSUMED_ITEM) && !user.isHoldingItem(b)
-	UniqueEffects: 
+	UniqueEffects:
 		Item restored = ((ItemHolder)victim.getEffect(EffectNamesies.CONSUMED_ITEM)).getItem();
 		victim.giveItem((HoldItem)restored);
 		Messages.add(victim.getName() + "'s " + restored.getName() + " was restored!");
@@ -5554,16 +5553,16 @@ Baton Pass:
 		Team team = b.getTrainer(user);
 		return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon(b);
 		###
-	UniqueEffects: 
+	UniqueEffects:
 		// TODO: Hardcore test this shit not in the mood right now but this is one of the most complicated moves so lots of tests tests tests
 		user.switcheroo(b, user, CastSource.ATTACK, true);
-				
+
 		ActivePokemon next = b.getTrainer(user).front();
 		next.resetAttributes();
 		for (Stat stat : Stat.BATTLE_STATS) {
 			next.getAttributes().setStage(stat, user.getStage(stat));
 		}
-		
+
 		user.getEffects().stream().filter(effect -> effect instanceof PassableEffect).forEach(next::addEffect);
 		###
 	SelfTarget: True
@@ -5616,7 +5615,7 @@ Nature Power:
 	Type: Normal
 	MoveType: Assistless, Metronomeless, No_Magic_Coat
 	CallNewMove: new Move(b.getTerrainType().getAttack())
-	GetAccuracy: 
+	GetAccuracy:
 		return b.getTerrainType().getAttack().getAccuracy(b, me, o);
 		###
 *
@@ -5631,7 +5630,7 @@ Entrainment:
 	AbilityChange:
 		return caster.getAbility().namesies().getNewAbility();
 		###
-	AbilityMessage: 
+	AbilityMessage:
 		return victim.getName() + " copied " + caster.getName() + "'s " + caster.getAbility().getName() + "!";
 		###
 	Applies: victim.getAbility().isReplaceable() && user.getAbility().isStealable()
@@ -5666,15 +5665,15 @@ Skill Swap:
 	Cat: Status
 	MoveType: Substitute_Piercing, No_Magic_Coat
 	Int: ChangeAbilityMove
-	AbilityChange: 
+	AbilityChange:
 		return ability;
 		###
-	AbilityMessage: 
+	AbilityMessage:
 		return victim.getName() + "'s ability was changed to " + ability.getName() + "!";
 		###
 	Field:
 		private Ability ability;
-		
+
 		private static boolean canSkillSwap(ActivePokemon p) {
 			return p.getAbility().isReplaceable() && p.getAbility().isStealable();
 		}
@@ -5750,7 +5749,7 @@ Surf:
 	Type: Water
 	Pow: 90
 	Acc: 100
-	Cat: Special	
+	Cat: Special
 *
 Volt Tackle:
 	Desc: The user electrifies itself, then charges. It causes considerable damage to the user and may leave the target with paralysis.
@@ -5937,7 +5936,7 @@ Topsy-Turvy:
 		for (Stat stat : Stat.BATTLE_STATS) {
 			victim.getAttributes().setStage(stat, -victim.getStage(stat));
 		}
-		
+
 		Messages.add(victim.getName() + "'s stat changes were all reversed!");
 		###
 *
@@ -6212,7 +6211,7 @@ Shore Up:
 	Type: Ground
 	Cat: Status
 	PP: 10
-	BasicHealing: 
+	BasicHealing:
 		// Fully heals in a sandstorm
 		return b.getWeather().namesies() == EffectNamesies.SANDSTORM ? 1 : .5;
 		###
@@ -6222,7 +6221,7 @@ Floral Healing:
 	Type: Fairy
 	Cat: Status
 	PP: 10
-	BasicHealing: 
+	BasicHealing:
 		// Fully heals in Grassy Terrain
 		return b.hasEffect(EffectNamesies.GRASSY_TERRAIN) ? 1 : .5;
 		###
@@ -6423,7 +6422,7 @@ Core Enforcer:
 	Cat: Special
 	Pow: 100
 	Acc: 100
-	BeginAttack: 
+	BeginAttack:
 		// TODO: Test
 		if (!b.isFirstAttack()) {
 			EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);

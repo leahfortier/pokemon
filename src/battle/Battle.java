@@ -302,6 +302,11 @@ public class Battle implements Serializable {
 		return trainer instanceof WildPokemon || ((Trainer)trainer).getAction() == TrainerAction.FIGHT;
 	}
 
+	private boolean isSwitching(boolean team) {
+		Team trainer = getTrainer(team);
+		return !(trainer instanceof WildPokemon) && ((Trainer)trainer).getAction() == TrainerAction.SWITCH;
+	}
+
 	private void endTurn() {
 		// Apply Effects
 		endTurnPokemonEffects(player.front());
@@ -497,6 +502,13 @@ public class Battle implements Serializable {
 	}
 
 	private void executionSolution(ActivePokemon me, ActivePokemon o) {
+		if (isSwitching(me.isPlayer())) {
+			Trainer trainer = (Trainer)getTrainer(me);
+			trainer.setFront(trainer.getSwitchIndex());
+			this.enterBattle(trainer.front());
+			return;
+		}
+
 		// Don't do anything if they're not actually attacking
 		if (!isFighting(me.isPlayer()) || !isFront(me)) {
 			return;

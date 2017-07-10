@@ -344,8 +344,7 @@ public class PokemonState implements VisualStateHandler {
             // Actual switcheroo
             else {
                 if (player.canSwitch(currentBattle, selectedPokemonTab)) {
-                    player.setFront(selectedPokemonTab);
-                    currentBattle.enterBattle(player.front());
+                    player.setSwitchIndex(selectedPokemonTab);
 
                     if (!switchForced) {
                         player.performAction(currentBattle, TrainerAction.SWITCH);

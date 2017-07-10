@@ -1874,7 +1874,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public int getPriority(Battle b, ActivePokemon me) {
-			// TODO: Make switching occur at its priority
 			Team trainer = b.getTrainer(!me.isPlayer());
 			if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
 				return 7;
