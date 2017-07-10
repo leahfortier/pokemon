@@ -24,6 +24,7 @@ PC -f4a065 OBJECT
 ElectricMachine -1930d9 OBJECT
 WaterTile01 -cccc01 GROUND
 Entrance_copy -cccd ENTRANCE
+Tree18yellow -cd TREE
 CounterOrangeD -1f7900 COUNTER
 CounterOrangeDLE -1f78ff COUNTER
 RedRugT -26acc8 OBJECT

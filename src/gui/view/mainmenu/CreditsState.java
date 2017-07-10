@@ -14,10 +14,18 @@ import java.awt.Graphics;
 class CreditsState implements VisualStateHandler {
 
     private static final String creditsHoz = "TEAM ROCKET    TEAM ROCKET";
-    private static final String[] creditsText = { "", "Team Rocket", "", "Lead Programmers", "Leah Fortier", "Tyler Brazill", "Maxwell Miller", "",
-            "", "Graphic Designers", "Josh Linge", "Jeb Ralston", "Jessica May", "", "Writers", "Jeb Ralston", "Jessica May", "",
-            "UML MASTER", "Jeb Ralston", "", "Nintendo", "", "Game Freak", "", "credits", "credits", "credits" };
-
+    private static final String[] creditsText = { "",
+            "Team Rocket", "",
+            "Lead Programmers", "Leah Fortier", "Tyler Brazill", "Maxwell Miller", "",
+            "Graphic Designers", "Josh Linge", "Jeb Ralston", "Jessica May", "",
+            "Writers", "Jeb Ralston", "Jessica May", "",
+            "UML MASTER", "Jeb Ralston", "",
+            "Nintendo", "",
+            "Game Freak", "",
+            "X/Y Sprite Project", "",
+            "Sun/Moon Sprite Project", "",
+            "credits", "credits", "credits"
+    };
 
     private int creditsTime1;
     private int creditsTime2;
