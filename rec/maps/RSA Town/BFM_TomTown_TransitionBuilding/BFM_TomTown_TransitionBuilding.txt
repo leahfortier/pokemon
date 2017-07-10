@@ -23,6 +23,18 @@
         {
           "x": 11,
           "y": 2
+        },
+        {
+          "x": 11,
+          "y": 2
+        },
+        {
+          "x": 11,
+          "y": 3
+        },
+        {
+          "x": 11,
+          "y": 4
         }
       ],
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_EastDoor_01"
@@ -44,6 +56,18 @@
         {
           "x": 1,
           "y": 2
+        },
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 3
+        },
+        {
+          "x": 1,
+          "y": 4
         }
       ],
       "triggerName": "BFM_TomTown_TransitionBuilding_MapExit_WestDoor_01"

@@ -452,7 +452,7 @@ class PokemonAnimationState {
             int index = isPlayer ? team.size() - i - 1 : i;
             ActivePokemon pokemon = team.get(index);
 
-            boolean silhouette = i == (isPlayer ? team.size() - state.teamIndex - 1 : state.teamIndex)
+            boolean silhouette = index == state.teamIndex
                     ? state.getStatus() == StatusCondition.FAINTED
                     : !pokemon.canFight() || (usedMaxPokemon && !pokemon.getAttributes().isBattleUsed());
 
