@@ -3,7 +3,7 @@ package map.condition;
 import main.Game;
 import main.Global;
 import map.daynight.DayCycle;
-import trainer.Badge;
+import trainer.player.Badge;
 import util.StringUtils;
 import util.TimeUtils;
 

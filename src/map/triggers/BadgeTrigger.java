@@ -3,7 +3,7 @@ package map.triggers;
 import main.Game;
 import map.condition.Condition;
 import map.condition.ConditionKey;
-import trainer.Badge;
+import trainer.player.Badge;
 
 class BadgeTrigger extends Trigger {
 	private final Badge badge;

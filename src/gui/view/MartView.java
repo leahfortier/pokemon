@@ -16,7 +16,7 @@ import item.ItemNamesies;
 import main.Game;
 import main.Global;
 import map.Direction;
-import trainer.Badge;
+import trainer.player.Badge;
 import trainer.player.Player;
 import trainer.player.medal.Medal;
 import trainer.player.medal.MedalTheme;

@@ -1,4 +1,4 @@
-package trainer;
+package trainer.player;
 
 // TODO: Rename these also there should be 12
 public enum Badge {

@@ -5,7 +5,7 @@ import map.triggers.TriggerType;
 import mapMaker.dialogs.action.trigger.StringTriggerPanel.ItemTriggerPanel;
 import mapMaker.dialogs.action.trigger.TriggerContentsPanel.EmptyTriggerContentsPanel;
 import sound.SoundTitle;
-import trainer.Badge;
+import trainer.player.Badge;
 import trainer.player.medal.MedalTheme;
 
 public enum TriggerActionType {

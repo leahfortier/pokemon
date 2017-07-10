@@ -24,7 +24,6 @@ import pattern.action.UpdateMatcher;
 import pokemon.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.DayCareCenter;
-import trainer.Badge;
 import trainer.Opponent;
 import trainer.PlayerTrainer;
 import trainer.Trainer;
