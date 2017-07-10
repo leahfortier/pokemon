@@ -78,6 +78,10 @@ public abstract class Trainer implements Team, Serializable {
 	public String getName() {
 		return name;
 	}
+
+	public int getFrontIndex() {
+		return this.frontIndex;
+	}
 	
 	public void setFront(int index) {
 		if (frontIndex == index) {

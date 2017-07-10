@@ -10,6 +10,8 @@ public class SimulatedPlayer extends PlayerTrainer {
         for (ActivePokemon poke : player.getTeam()) {
             this.addPokemon((ActivePokemon)SerializationUtils.getSerializedCopy(poke));
         }
+
+        this.setFront(player.getFrontIndex());
     }
 
     @Override
