@@ -1766,6 +1766,14 @@ public final class EffectInterfaces {
 		}
 	}
 
+	public interface PowerCountMove extends PowerChangeEffect {
+		boolean doubleDefenseCurled();
+
+		default double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return Math.min(user.getAttributes().getCount(), 5)*(this.doubleDefenseCurled() && user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
+		}
+	}
+
 	public interface PassableEffect {
 	}
 

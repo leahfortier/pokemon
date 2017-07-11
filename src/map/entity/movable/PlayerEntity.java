@@ -140,8 +140,6 @@ public class PlayerEntity extends MovableEntity {
 
 	private void checkMovement(MapData currentMap) {
 		Player player = Game.getPlayer();
-
-		// TODO: Add support for multiple pressed keys. Weird things happen when you hold one key and press another.
 		Direction inputDirection = Direction.checkInputDirection();
 		if (inputDirection != null && !isTransitioning() && !this.isStalled()) {
 

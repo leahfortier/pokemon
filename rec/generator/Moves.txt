@@ -1441,10 +1441,7 @@ Rollout:
 	Acc: 90
 	Cat: Physical
 	Type: Rock
-	GetMultiplier:
-		// TODO: Combine these types of moves
-		return Math.min(user.getAttributes().getCount(), 5)*(user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
-		###
+	PowerCountMove: true
 *
 Fury Cutter:
 	Desc: The target is slashed with scythes or claws. Its power increases if it hits in succession.
@@ -1453,9 +1450,7 @@ Fury Cutter:
 	Cat: Physical
 	Type: Bug
 	Pow: 40
-	GetMultiplier:
-		return Math.min(5, user.getAttributes().getCount());
-		###
+	PowerCountMove: false
 *
 Sand Tomb:
 	Desc: The user traps the target inside a harshly raging sandstorm for four to five turns.
@@ -4182,9 +4177,7 @@ Charm:
 	StatChange: 1 Attack -2
 *
 Echoed Voice:
-	GetMultiplier:
-		return Math.min(5, user.getAttributes().getCount());
-		###
+	PowerCountMove: false
 	Desc: The user attacks the target with an echoing voice. If this move is used every turn, it does greater damage.
 	PP: 15
 	Type: Normal
@@ -4739,9 +4732,7 @@ Ice Ball:
 	Type: Ice
 	Acc: 90
 	MoveType: Bomb_Ball
-	GetMultiplier:
-		return Math.min(user.getAttributes().getCount(), 5)*(user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
-		###
+	PowerCountMove: true
 *
 Head Smash:
 	Desc: The user attacks the target with a hazardous, full-power headbutt. The user also takes terrible damage.

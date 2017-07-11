@@ -20,7 +20,6 @@ public class MonteCarlo {
     private static final int BUDGET = 50;
     private static final int ROLLOUT_TURNS = 5;
 
-    // TODO: Comment this with whatever Bryan just said but didn't necessarily hear correctly
     private static final double CONFIDENCE_BOUND_SIZE = 1;
 
     public Move next(Battle battle) {

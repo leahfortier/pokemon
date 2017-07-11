@@ -31,6 +31,7 @@ import battle.effect.generic.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.PassableEffect;
 import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
+import battle.effect.generic.EffectInterfaces.PowerCountMove;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.RecoilPercentageMove;
@@ -2736,7 +2737,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Rollout extends Attack implements PowerChangeEffect {
+	static class Rollout extends Attack implements PowerCountMove {
 		private static final long serialVersionUID = 1L;
 
 		Rollout() {
@@ -2746,13 +2747,12 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Combine these types of moves
-			return Math.min(user.getAttributes().getCount(), 5)*(user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
+		public boolean doubleDefenseCurled() {
+			return true;
 		}
 	}
 
-	static class FuryCutter extends Attack implements PowerChangeEffect {
+	static class FuryCutter extends Attack implements PowerCountMove {
 		private static final long serialVersionUID = 1L;
 
 		FuryCutter() {
@@ -2762,8 +2762,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return Math.min(5, user.getAttributes().getCount());
+		public boolean doubleDefenseCurled() {
+			return false;
 		}
 	}
 
@@ -6990,7 +6990,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class EchoedVoice extends Attack implements PowerChangeEffect {
+	static class EchoedVoice extends Attack implements PowerCountMove {
 		private static final long serialVersionUID = 1L;
 
 		EchoedVoice() {
@@ -7000,8 +7000,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.SOUND_BASED);
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return Math.min(5, user.getAttributes().getCount());
+		public boolean doubleDefenseCurled() {
+			return false;
 		}
 	}
 
@@ -7796,7 +7796,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class IceBall extends Attack implements PowerChangeEffect {
+	static class IceBall extends Attack implements PowerCountMove {
 		private static final long serialVersionUID = 1L;
 
 		IceBall() {
@@ -7807,8 +7807,8 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return Math.min(user.getAttributes().getCount(), 5)*(user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
+		public boolean doubleDefenseCurled() {
+			return true;
 		}
 	}
 

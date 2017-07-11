@@ -1810,6 +1810,13 @@ WeatherExtendingEffect:
 	Header: int getExtensionTurns(EffectNamesies weatherType)
 	AddInterface: WeatherExtendingEffect
 *
+PowerCountMove:
+	AddInterface: PowerCountMove
+	Header: boolean doubleDefenseCurled()
+	Body:
+		return {0};
+		###
+*
 GET_DAT_CASH_MONEY_TWICE_ITEM:
 	Header: void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice)
 	AccessModifier: Private
