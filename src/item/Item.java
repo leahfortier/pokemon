@@ -162,6 +162,10 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 		return this;
 	}
 
+	public static boolean isItem(String itemName) {
+		return ItemNamesies.tryValueOf(itemName) != null;
+	}
+
 	// EVERYTHING BELOW IS GENERATED ###
 	/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 

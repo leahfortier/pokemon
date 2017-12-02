@@ -535,7 +535,7 @@ public final class EffectInterfaces {
 
 	public interface OpponentAttackSelectionEffect extends AttackSelectionEffect {
 
-		// TODO: Need to not include this method again since it already extends AttackSelectionEffect, but still need the invoke method
+		// Don't need to include this method again since it already extends AttackSelectionEffect, but still need the invoke method
 		boolean usable(Battle b, ActivePokemon p, Move m);
 
 		static OpponentAttackSelectionEffect getUnusableEffect(Battle b, ActivePokemon p, Move m) {

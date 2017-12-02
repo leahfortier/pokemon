@@ -444,7 +444,7 @@ public class Battle implements Serializable {
 		int val = (int)((pSpeed*32.0)/(oSpeed/4.0) + 30.0*escapeAttempts);
 		if (RandomUtils.chanceTest(val, 256) ||
 				plyr.getAbility() instanceof DefiniteEscape || // TODO: This is wrong and should be able to escape even with mean look and such
-				plyr.getHeldItem(this) instanceof DefiniteEscape) {
+				plyr.getHeldItem(this) instanceof DefiniteEscape) { // TODO: Why is this only checking ability and hold item
 			Messages.add("Got away safely!");
 			Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
 			return true;

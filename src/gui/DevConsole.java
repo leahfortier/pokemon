@@ -5,20 +5,29 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import input.ControlKey;
 import input.InputControl;
+import item.Item;
 import item.ItemNamesies;
 import main.Game;
 import main.Global;
+import map.area.AreaData;
+import map.overworld.OverworldTool;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
+import test.maps.TestMap;
+import trainer.player.Player;
+import util.FileIO;
+import util.Folder;
 import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
-class DevConsole {
+public class DevConsole {
 	private int key;
 	private String currText;
 	private boolean show;
@@ -64,125 +73,22 @@ class DevConsole {
 		}
 	}
 
-	private void execute(String command) {
-		Scanner in = new Scanner(command);
-		in.useDelimiter("\\s+");
+	// Tear down, release locks, etc... This needs to be the only way to get out of here, or bad things can happen!
+	private void tearDown() {
+		InputControl input = InputControl.instance();
 
-		if (!in.hasNext()) {
-			in.close();
-			return;
-		}
-
-		String curr = in.next();
-		switch (curr.toLowerCase()) {
-			case "give":
-				give(in);
-				break;
-			case "global":
-				global(in);
-				break;
-			default:
-				break;
-		}
-		
-		in.close();
-	}
-	
-	private void global(Scanner in) {
-		if (Game.getPlayer() == null) {
-			Global.error("Can't give before loading a player!");
-		}
-
-		if (!in.hasNext()) {
-			Global.error("Add what global????");
-		}
-
-		String global = in.next();
-		System.out.println("Adding global \"" + global + "\".");
-		Game.getPlayer().addGlobal(global);
+		show = false;
+		input.stopTextCapture();
+		input.releaseLock(key);
+		currText = "";
 	}
 
-	private void give(Scanner in) {
-		if (!in.hasNext()) {
-			Global.error("Give what???");
-		}
-
-		if (Game.getPlayer() == null) {
-			Global.error("Can't give before loading a player!");
-		}
-
-		String curr = in.next();
-		switch (curr.toLowerCase()) {
-			case "pokemon":
-				PokemonNamesies namesies = PokemonNamesies.getValueOf(in.next());
-
-				// Default values
-				int level = ActivePokemon.MAX_LEVEL;
-				List<Move> moves = null;
-				boolean shiny = false;
-
-				boolean valid = true;
-				while (in.hasNext() && valid) {
-					String token = in.next();
-
-					switch (token.toLowerCase()) {
-						case "level:":
-							level = Integer.parseInt(in.next());
-							break;
-						case "shiny":
-							shiny = true;
-							break;
-						case "moves:":
-							moves = new ArrayList<>();
-							in.useDelimiter(",");
-							for (int i = 0; i < Move.MAX_MOVES; ++i) {
-								String s = in.next().trim();
-								if (!Attack.isAttack(s)) {
-									Global.error("Invalid move: " + s);
-								}
-								
-								// TODO: 'None' isn't a valid attack so can this if statement be deleted?
-								if (!"none".equals(s.toLowerCase())) {
-									moves.add(new Move(AttackNamesies.getValueOf(s).getAttack()));
-								}
-							}
-							
-							in.useDelimiter("\\s+");
-							break;
-						default:
-							valid = false;
-							Global.error("error on token " + token);
-							break;
-					}
-				}
-
-				System.out.println("adding " + namesies.getName() + " " + (shiny ? " shiny " : "") + (moves == null ? " " : moves.toString()));
-
-				ActivePokemon pokemon = new ActivePokemon(namesies, level, false, true);
-				if (moves != null) {
-					pokemon.setMoves(moves);
-				}
-
-				if (shiny) {
-					pokemon.setShiny();
-				}
-
-				Game.getPlayer().addPokemon(pokemon);
-				break;
-			case "item":
-				String itemName = in.next().replaceAll("_", " ");
-				int amount = 1;
-				if (in.hasNext()) {
-					amount = Integer.parseInt(in.next());
-				}
-				
-				Game.getPlayer().getBag().addItem(ItemNamesies.getValueOf(itemName), amount);
-				break;
-		}
+	boolean isShown() {
+		return show;
 	}
 
 	public void draw(Graphics g) {
-		if (!show) {
+		if (!isShown()) {
 			return; // Fixes a minor graphical stutter when tearing down
 		}
 
@@ -201,23 +107,180 @@ class DevConsole {
 		g.translate(0, -Global.GAME_SIZE.height + 20);
 	}
 
-	public void show() {
-		show = true;
+	private void execute(String command) {
+		Scanner in = new Scanner(command);
+		in.useDelimiter("\\s+");
+
+		if (!in.hasNext()) {
+			in.close();
+			return;
+		}
+
+		String curr = in.next();
+		switch (curr.toLowerCase()) {
+			case "give":
+				give(in);
+				break;
+			case "global":
+				global(in);
+				break;
+			default:
+				Global.info("Invalid command " + curr);
+				break;
+		}
+
+		if (in.hasNext()) {
+			Global.info("Unused end of command " + in.nextLine());
+		}
+		
+		in.close();
+	}
+	
+	private void global(Scanner in) {
+		if (!in.hasNext()) {
+			Global.info("Add what global????");
+			return;
+		}
+
+		Player player = Game.getPlayer();
+		if (player == null) {
+			Global.info("Can't give before loading a player!");
+			return;
+		}
+
+		String global = in.next();
+		System.out.println("Adding global \"" + global + "\".");
+		player.addGlobal(global);
 	}
 
-	// Tear down, release locks, etc... This needs to be the only way to get out
-	// of here, or bad things can happen!
-	private void tearDown() {
-		InputControl input = InputControl.instance();
+	private void give(Scanner in) {
+		if (!in.hasNext()) {
+			Global.info("Give what???");
+			return;
+		}
 
-		show = false;
-		input.stopTextCapture();
-		input.releaseLock(key);
-		currText = "";
+		Player player = Game.getPlayer();
+		if (player == null) {
+			Global.info("Can't give before loading a player!");
+			return;
+		}
+
+		String curr = in.next();
+		switch (curr.toLowerCase()) {
+			case "pokemon":
+				givePokemon(in, player);
+				break;
+			case "item":
+				giveItem(in, player);
+				break;
+			case "fly":
+				giveFlyLocations(player);
+				break;
+			case "tools":
+				giveTools(player);
+				break;
+			default:
+				Global.info("Invalid token " + curr);
+				break;
+		}
 	}
 
-	boolean isShown() {
-		return show;
+	private void givePokemon(Scanner in, Player player) {
+		PokemonNamesies namesies = PokemonNamesies.getValueOf(in.next());
+
+		// Default values
+		int level = ActivePokemon.MAX_LEVEL;
+		List<Move> moves = null;
+		boolean shiny = false;
+
+		while (in.hasNext()) {
+			String token = in.next();
+			switch (token.toLowerCase()) {
+				case "level:":
+					String levelInput = in.next();
+					try {
+						level = Integer.parseInt(levelInput);
+					} catch (NumberFormatException exception) {
+						Global.info("Invalid level " + levelInput);
+						return;
+					}
+					break;
+				case "shiny":
+					shiny = true;
+					break;
+				case "moves:":
+					moves = new ArrayList<>();
+					Pattern oldDelimiter = in.delimiter();
+					in.useDelimiter(",");
+					for (int i = 0; i < Move.MAX_MOVES; ++i) {
+						String s = in.next().trim();
+						if (!Attack.isAttack(s)) {
+							Global.info("Invalid move: " + s);
+							return;
+						} else {
+							moves.add(new Move(AttackNamesies.getValueOf(s).getAttack()));
+						}
+					}
+					in.useDelimiter(oldDelimiter);
+					break;
+				default:
+					Global.info("Invalid pokemon token " + token);
+					return;
+			}
+		}
+
+		System.out.println("adding " + namesies.getName() + " "
+				+ (shiny ? " shiny " : "")
+				+ (moves == null ? " " : moves.toString()));
+
+		ActivePokemon pokemon = new ActivePokemon(namesies, level, false, true);
+		if (moves != null) {
+			pokemon.setMoves(moves);
+		}
+
+		if (shiny) {
+			pokemon.setShiny();
+		}
+
+		player.addPokemon(pokemon);
 	}
 
+	private void giveItem(Scanner in, Player player) {
+		String itemName = in.next().replaceAll("_", " ");
+		int amount = 1;
+		if (in.hasNext()) {
+			String amountToken = in.next();
+			try {
+				amount = Integer.parseInt(amountToken);
+			} catch (NumberFormatException exception) {
+				Global.info("Invalid amount " + amountToken);
+				return;
+			}
+		}
+
+		if (!Item.isItem(itemName)) {
+			Global.info("Invalid item name " + itemName);
+			return;
+		}
+
+		player.getBag().addItem(ItemNamesies.getValueOf(itemName), amount);
+	}
+
+	public static void giveFlyLocations(Player player) {
+		File mapsDirectory = new File(Folder.MAPS);
+		for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
+			TestMap map = new TestMap(mapFolder);
+			for (AreaData area : map.getAreas()) {
+				if (area.isFlyLocation()) {
+					player.setArea(map.getName(), area);
+				}
+			}
+		}
+	}
+
+	public static void giveTools(Player player) {
+		for (OverworldTool tool : OverworldTool.values()) {
+			player.addGlobal(tool.getGlobalName());
+		}
+	}
 }

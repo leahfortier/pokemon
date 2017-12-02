@@ -238,7 +238,7 @@ public class MapData {
 			}
 		}
 
-		Global.error("No area found with color " + areaRgb + " for map " + this.name, false);
+		Global.info("No area found with color " + areaRgb + " for map " + this.name);
 		return AreaData.VOID;
 	}
 

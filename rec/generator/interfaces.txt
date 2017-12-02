@@ -317,7 +317,7 @@ OpponentAttackSelectionEffect:
 		Invoke: CheckGet false
 		InvokeName: getUnusableEffect
 		EffectList: b.getOtherPokemon(p)
-		Comments: // TODO: Need to not include this method again since it already extends AttackSelectionEffect, but still need the invoke method
+		Comments: // Don't need to include this method again since it already extends AttackSelectionEffect, but still need the invoke method
 	*
 	Extends: AttackSelectionEffect
 ***
