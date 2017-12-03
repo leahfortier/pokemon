@@ -1,0 +1,729 @@
+001 Bulbasaur:
+	Level Up Removed Moves:
+		39 SOLAR_BEAM
+	
+015 Beedrill:
+	Level Up Removed Moves:
+		0 TWINEEDLE
+	Level Up Added Moves:
+		-1 TWINEEDLE
+	
+028 Sandslash:
+	Level Up Removed Moves:
+		-1 CRUSH_CLAW
+	Level Up Added Moves:
+		0 CRUSH_CLAW
+	
+035 Clefairy:
+	Level Up Removed Moves:
+		0 HEALING_WISH
+	
+036 Clefable:
+	Level Up Added Moves:
+		0 WISH
+	
+042 Golbat:
+	Level Up Removed Moves:
+		0 ACROBATICS
+	
+078 Rapidash:
+	Level Up Removed Moves:
+		0 BLAZE_KICK
+	
+081 Magnemite:
+	Level Up Removed Moves:
+		11 THUNDER_WAVE
+		7 MAGNET_BOMB
+	Level Up Added Moves:
+		11 MAGNET_BOMB
+		7 THUNDER_WAVE
+	
+082 Magneton:
+	Level Up Removed Moves:
+		0 MAGNET_BOMB
+		11 THUNDER_WAVE
+		7 MAGNET_BOMB
+	Level Up Added Moves:
+		0 THUNDER_WAVE
+		11 MAGNET_BOMB
+		7 THUNDER_WAVE
+	
+096 Drowzee:
+	Level Up Removed Moves:
+		29 HEADBUTT
+	Level Up Added Moves:
+		29 WAKE_UP_SLAP
+	
+097 Hypno:
+	Level Up Removed Moves:
+		29 HEADBUTT
+	Level Up Added Moves:
+		29 WAKE_UP_SLAP
+	
+113 Chansey:
+	Level Up Removed Moves:
+		34 FLING
+		38 HEAL_PULSE
+		42 EGG_BOMB
+		46 LIGHT_SCREEN
+		50 HEALING_WISH
+		54 DOUBLE_EDGE
+	Level Up Added Moves:
+		35 FLING
+		39 HEAL_PULSE
+		44 EGG_BOMB
+		50 LIGHT_SCREEN
+		57 HEALING_WISH
+		65 DOUBLE_EDGE
+	
+121 Starmie:
+	Level Up Added Moves:
+		0 COSMIC_POWER
+	
+122 Mr. Mime:
+	Level Up Added Moves:
+		0 POUND
+	
+128 Tauros:
+	Level Up Removed Moves:
+		35 ZEN_HEADBUTT
+		41 TAKE_DOWN
+		50 THRASH
+		63 GIGA_IMPACT
+	Level Up Added Moves:
+		35 TAKE_DOWN
+		41 ZEN_HEADBUTT
+		55 THRASH
+		63 DOUBLE_EDGE
+		71 GIGA_IMPACT
+	
+171 Lanturn:
+	Level Up Removed Moves:
+		0 SPIT_UP
+		0 SWALLOW
+	
+187 Hoppip:
+	Level Up Added Moves:
+		0 ABSORB
+	
+188 Skiploom:
+	Level Up Removed Moves:
+		0 TACKLE
+	Level Up Added Moves:
+		0 ABSORB
+	
+189 Jumpluff:
+	Level Up Removed Moves:
+		0 TACKLE
+	Level Up Added Moves:
+		0 ABSORB
+	
+206 Dunsparce:
+	Level Up Removed Moves:
+		13 YAWN
+		16 ANCIENT_POWER
+		18 BODY_SLAM
+		21 DRILL_RUN
+		23 ROOST
+		26 TAKE_DOWN
+		28 COIL
+		31 DIG
+		33 GLARE
+		36 DOUBLE_EDGE
+		38 ENDEAVOR
+		41 AIR_SLASH
+		43 DRAGON_RUSH
+		46 ENDURE
+		48 FLAIL
+	Level Up Added Moves:
+		13 MUD_SLAP
+		16 YAWN
+		18 ANCIENT_POWER
+		21 BODY_SLAM
+		23 DRILL_RUN
+		26 ROOST
+		28 TAKE_DOWN
+		31 COIL
+		33 DIG
+		36 GLARE
+		38 DOUBLE_EDGE
+		41 ENDEAVOR
+		43 AIR_SLASH
+		46 DRAGON_RUSH
+		48 ENDURE
+		51 FLAIL
+	
+242 Blissey:
+	Level Up Removed Moves:
+		38 HEAL_PULSE
+		42 EGG_BOMB
+		46 LIGHT_SCREEN
+		50 HEALING_WISH
+		54 DOUBLE_EDGE
+	Level Up Added Moves:
+		39 HEAL_PULSE
+		44 EGG_BOMB
+		50 LIGHT_SCREEN
+		57 HEALING_WISH
+		65 DOUBLE_EDGE
+	
+263 Zigzagoon:
+	Classification:
+		Tiny Raccoon -> Tiny Racoon
+	
+266 Silcoon:
+	Male Ratio:
+		0 -> 50
+	
+267 Beautifly:
+	Male Ratio:
+		0 -> 50
+	
+268 Cascoon:
+	Male Ratio:
+		100 -> 50
+	
+269 Dustox:
+	Male Ratio:
+		100 -> 50
+	
+271 Lombre:
+	Level Up Removed Moves:
+		-1 ASTONISH
+	Level Up Added Moves:
+		0 ASTONISH
+	
+274 Nuzleaf:
+	Level Up Removed Moves:
+		0 RAZOR_LEAF
+	Level Up Added Moves:
+		-1 RAZOR_LEAF
+	
+282 Gardevoir:
+	Male Ratio:
+		0 -> 50
+	
+291 Ninjask:
+	Level Up Removed Moves:
+		0 DOUBLE_TEAM
+		0 FURY_CUTTER
+		0 SCREECH
+	
+348 Armaldo:
+	Level Up Removed Moves:
+		25 SLASH
+	Level Up Added Moves:
+		25 BUG_BITE
+	
+356 Dusclops:
+	Level Up Removed Moves:
+		0 PHANTOM_FORCE
+	
+359 Absol:
+	Stats:
+		65 100 60 75 60 75 -> 65 130 60 75 60 75
+	
+362 Glalie:
+	Male Ratio:
+		100 -> 50
+	
+375 Metang:
+	Level Up Removed Moves:
+		0 CONFUSION
+		0 METAL_CLAW
+	
+382 Kyogre:
+	Catch Rate:
+		5 -> 3
+	
+383 Groudon:
+	Catch Rate:
+		5 -> 3
+	
+384 Rayquaza:
+	Catch Rate:
+		3 -> 45
+	
+385 Jirachi:
+	Level Up Removed Moves:
+		30 REST
+	Level Up Added Moves:
+		30 LUCKY_CHANT
+	
+405 Luxray:
+	Level Up Removed Moves:
+		-1 FOUL_PLAY
+	
+406 Budew:
+	Level Up Removed Moves:
+		16 LEECH_SEED
+		19 WORRY_SEED
+	Level Up Added Moves:
+		16 WORRY_SEED
+	
+428 Lopunny:
+	Level Up Removed Moves:
+		0 CAPTIVATE
+	Level Up Added Moves:
+		-1 CAPTIVATE
+	
+439 Mime Jr.:
+	Level Up Added Moves:
+		0 POUND
+	
+462 Magnezone:
+	Level Up Removed Moves:
+		-1 TRI_ATTACK
+		11 THUNDER_WAVE
+		7 MAGNET_BOMB
+	Level Up Added Moves:
+		0 THUNDER_WAVE
+		0 TRI_ATTACK
+		11 MAGNET_BOMB
+		7 THUNDER_WAVE
+	
+464 Rhyperior:
+	Level Up Removed Moves:
+		-1 HAMMER_ARM
+	Level Up Added Moves:
+		0 HAMMER_ARM
+	
+476 Probopass:
+	Level Up Removed Moves:
+		0 TRI_ATTACK
+	Level Up Added Moves:
+		-1 TRI_ATTACK
+	
+477 Dusknoir:
+	Level Up Removed Moves:
+		-1 SHADOW_PUNCH
+		0 PHANTOM_FORCE
+	Level Up Added Moves:
+		0 SHADOW_PUNCH
+	
+479 Rotom:
+	Stats:
+		50 65 107 105 107 86 -> 50 50 77 95 77 91
+	
+483 Dialga:
+	Catch Rate:
+		30 -> 3
+	
+484 Palkia:
+	Catch Rate:
+		30 -> 3
+	Level Up Removed Moves:
+		24 AQUA_TAIL
+	Level Up Added Moves:
+		24 AQUA_RING
+	
+487 Giratina:
+	Stats:
+		150 120 100 120 100 90 -> 150 100 120 100 120 90
+	
+526 Gigalith:
+	Level Up Removed Moves:
+		-1 POWER_GEM
+	Level Up Added Moves:
+		0 POWER_GEM
+	
+543 Venipede:
+	Level Up Removed Moves:
+		38 VENOSHOCK
+	Level Up Added Moves:
+		38 VENOM_DRENCH
+	
+598 Ferrothorn:
+	Abilities:
+		IRON_BARBS NO_ABILITY -> IRON_BARBS ANTICIPATION
+	
+599 Klink:
+	Abilities:
+		CLEAR_BODY NO_ABILITY -> PLUS NO_ABILITY
+	
+600 Klang:
+	Abilities:
+		CLEAR_BODY NO_ABILITY -> PLUS NO_ABILITY
+	
+601 Klinklang:
+	Abilities:
+		CLEAR_BODY NO_ABILITY -> PLUS NO_ABILITY
+	
+603 Eelektrik:
+	Level Up Removed Moves:
+		0 CRUNCH
+	Level Up Added Moves:
+		-1 CRUNCH
+	
+604 Eelektross:
+	Level Up Removed Moves:
+		-1 CRUNCH
+	Level Up Added Moves:
+		0 CRUNCH
+	
+615 Cryogonal:
+	Base EXP:
+		170 -> 180
+	
+621 Druddigon:
+	Base EXP:
+		173 -> 170
+	
+628 Braviary:
+	Level Up Removed Moves:
+		0 SUPERPOWER
+	
+630 Mandibuzz:
+	Level Up Removed Moves:
+		0 BONE_RUSH
+	
+637 Volcarona:
+	Level Up Removed Moves:
+		0 QUIVER_DANCE
+	
+643 Reshiram:
+	Catch Rate:
+		45 -> 3
+	Level Up Removed Moves:
+		64 IMPRISON
+	Level Up Added Moves:
+		64 NOBLE_ROAR
+	
+644 Zekrom:
+	Catch Rate:
+		45 -> 3
+	Level Up Removed Moves:
+		64 IMPRISON
+	Level Up Added Moves:
+		64 NOBLE_ROAR
+	
+646 Kyurem:
+	Level Up Removed Moves:
+		64 IMPRISON
+	Level Up Added Moves:
+		64 NOBLE_ROAR
+	
+650 Chespin:
+	Level Up Removed Moves:
+		0 TACKLE
+	Level Up Added Moves:
+		0 VINE_WHIP
+	
+651 Quilladin:
+	Level Up Removed Moves:
+		0 TACKLE
+	Level Up Added Moves:
+		0 VINE_WHIP
+	
+660 Diggersby:
+	Catch Rate:
+		255 -> 127
+	
+662 Fletchinder:
+	Catch Rate:
+		255 -> 120
+	
+663 Talonflame:
+	Catch Rate:
+		255 -> 45
+	
+665 Spewpa:
+	Catch Rate:
+		255 -> 120
+	
+666 Vivillon:
+	Catch Rate:
+		255 -> 45
+	
+667 Litleo:
+	Catch Rate:
+		200 -> 220
+	Male Ratio:
+		25 -> 11
+	
+668 Pyroar:
+	Catch Rate:
+		200 -> 65
+	Male Ratio:
+		25 -> 11
+	
+669 Flabebe:
+	Catch Rate:
+		255 -> 225
+	
+670 Floette:
+	Catch Rate:
+		255 -> 120
+	
+671 Florges:
+	Catch Rate:
+		255 -> 45
+	
+672 Skiddo:
+	Catch Rate:
+		160 -> 200
+	
+673 Gogoat:
+	Catch Rate:
+		160 -> 45
+	
+674 Pancham:
+	Catch Rate:
+		128 -> 220
+	
+675 Pangoro:
+	Catch Rate:
+		128 -> 65
+	
+676 Furfrou:
+	Catch Rate:
+		120 -> 160
+	
+677 Espurr:
+	Catch Rate:
+		228 -> 190
+	
+678 Meowstic:
+	Catch Rate:
+		228 -> 75
+	
+679 Honedge:
+	Catch Rate:
+		222 -> 180
+	
+680 Doublade:
+	Catch Rate:
+		222 -> 90
+	
+681 Aegislash:
+	Catch Rate:
+		222 -> 45
+	
+683 Aromatisse:
+	Catch Rate:
+		200 -> 140
+	
+685 Slurpuff:
+	Catch Rate:
+		200 -> 140
+	
+686 Inkay:
+	Catch Rate:
+		120 -> 190
+	
+687 Malamar:
+	Catch Rate:
+		120 -> 80
+	
+688 Binacle:
+	Catch Rate:
+		255 -> 120
+	
+689 Barbaracle:
+	Catch Rate:
+		255 -> 45
+	
+691 Dragalge:
+	Catch Rate:
+		225 -> 55
+	
+692 Clauncher:
+	Catch Rate:
+		155 -> 225
+	
+693 Clawitzer:
+	Catch Rate:
+		155 -> 55
+	
+694 Helioptile:
+	Catch Rate:
+		90 -> 190
+	
+695 Heliolisk:
+	Catch Rate:
+		90 -> 75
+	
+701 Hawlucha:
+	Catch Rate:
+		128 -> 100
+	
+702 Dedenne:
+	Catch Rate:
+		200 -> 180
+	
+703 Carbink:
+	Catch Rate:
+		30 -> 60
+	
+704 Goomy:
+	Catch Rate:
+		20 -> 45
+	
+705 Sliggoo:
+	Catch Rate:
+		20 -> 45
+	
+706 Goodra:
+	Catch Rate:
+		20 -> 45
+	
+707 Klefki:
+	Catch Rate:
+		60 -> 75
+	
+708 Phantump:
+	Catch Rate:
+		150 -> 120
+	
+709 Trevenant:
+	Catch Rate:
+		150 -> 60
+	
+710 Pumpkaboo:
+	Catch Rate:
+		190 -> 120
+	Height:
+		31 -> 16
+	Weight:
+		33.1 -> 11.0
+	
+711 Gourgeist:
+	Catch Rate:
+		190 -> 60
+	Height:
+		67 -> 35
+	Weight:
+		86.0 -> 27.6
+	
+712 Bergmite:
+	Catch Rate:
+		255 -> 190
+	
+713 Avalugg:
+	Catch Rate:
+		255 -> 55
+	Level Up Added Moves:
+		0 MIST
+	
+714 Noibat:
+	Catch Rate:
+		200 -> 190
+	
+715 Noivern:
+	Catch Rate:
+		200 -> 45
+	
+716 Xerneas:
+	Catch Rate:
+		70 -> 45
+	
+717 Yveltal:
+	Catch Rate:
+		70 -> 45
+	
+718 Zygarde:
+	Weight:
+		627.4 -> 672.4
+	Level Up Removed Moves:
+		0 DRAGON_DANCE
+		0 EXTREME_SPEED
+	
+719 Diancie:
+	Egg Steps:
+		30720 -> 6400
+	
+722 Rowlet:
+	Level Up Removed Moves:
+		15 RAZOR_LEAF
+	Level Up Added Moves:
+		14 RAZOR_LEAF
+		16 OMINOUS_WIND
+	
+723 Dartrix:
+	Level Up Removed Moves:
+		15 RAZOR_LEAF
+	Level Up Added Moves:
+		14 RAZOR_LEAF
+		16 OMINOUS_WIND
+	
+724 Decidueye:
+	Level Up Removed Moves:
+		15 RAZOR_LEAF
+	Level Up Added Moves:
+		0 LEAF_STORM
+		0 PHANTOM_FORCE
+		0 SHADOW_SNEAK
+		14 RAZOR_LEAF
+		16 OMINOUS_WIND
+	
+725 Litten:
+	Level Up Removed Moves:
+		15 FIRE_FANG
+	Level Up Added Moves:
+		14 FIRE_FANG
+		16 DOUBLE_KICK
+	
+726 Torracat:
+	Level Up Removed Moves:
+		15 FIRE_FANG
+	Level Up Added Moves:
+		14 FIRE_FANG
+		16 DOUBLE_KICK
+	
+727 Incineroar:
+	Level Up Removed Moves:
+		15 FIRE_FANG
+	Level Up Added Moves:
+		14 FIRE_FANG
+		16 DOUBLE_KICK
+	
+728 Popplio:
+	Level Up Removed Moves:
+		15 AQUA_JET
+	Level Up Added Moves:
+		14 AQUA_JET
+		16 ICY_WIND
+	
+729 Brionne:
+	Level Up Removed Moves:
+		15 AQUA_JET
+	Level Up Added Moves:
+		14 AQUA_JET
+		16 ICY_WIND
+	
+730 Primarina:
+	Level Up Removed Moves:
+		15 AQUA_JET
+	Level Up Added Moves:
+		14 AQUA_JET
+		16 ICY_WIND
+	
+754 Lurantis:
+	Level Up Added Moves:
+		0 NIGHT_SLASH
+	
+763 Tsareena:
+	Level Up Added Moves:
+		0 PUNISHMENT
+		53 POWER_WHIP
+	
+773 Silvally:
+	Level Up Added Moves:
+		0 TACKLE
+	
+783 Hakamo-o:
+	Level Up Added Moves:
+		63 CLOSE_COMBAT
+	
+784 Kommo-o:
+	Level Up Added Moves:
+		75 CLOSE_COMBAT
+	
+800 Necrozma:
+	Level Up Added Moves:
+		50 PHOTON_GEYSER
+	
+801 Magearna:
+	Level Up Added Moves:
+		0 LIGHT_SCREEN
+	

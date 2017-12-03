@@ -247,9 +247,25 @@ public class StuffGen {
 
 	// If the two lines are different, appends "diffName: line1 -> line2" to the diffs builder
 	private static void diff(String line1, String line2, String diffName, StringBuilder diffs) {
-		if (!line1.equals(line2)) {
+		if (!line1.equals(line2) && !ignoreDiff(line1, line2, diffName)) {
 			diffs.append(diffName).append(":\n\t").append(line1).append(" -> ").append(line2).append("\n");
 		}
+	}
+
+	private static boolean ignoreDiff(String line1, String line2, String diffName) {
+		switch (diffName) {
+			case "Male Ratio":
+				switch (line1) {
+					case "87":
+						return line2.equals("88");
+					case "25":
+						return line2.equals("24");
+					case "75":
+						return line2.equals("76");
+				}
+		}
+
+		return false;
 	}
 
 	// Compares the pokemon info to info in a new file and outputs the differences
@@ -261,7 +277,9 @@ public class StuffGen {
 		PrintStream out = FileIO.openOutputFile("out.txt");
 		while (in2.hasNext()) {
 			StringBuilder diffs = new StringBuilder();
-			diff(in1, in2, "Num", diffs);
+
+			int num = in1.nextInt(); in1.nextLine();
+			diff(num + "", in2.nextLine(), "Num", diffs);
 
 			String name = in1.nextLine();
 			diff(name, in2.nextLine(), "Name", diffs);
@@ -286,7 +304,7 @@ public class StuffGen {
 			movesDiff(in1, in2, "Learnable", new StringBuilder()); // Ignore for now
 
 			if (diffs.length() > 0) {
-				out.println(name + ":\n\t" + diffs.toString().replace("\n", "\n\t"));
+				out.printf("%03d %s:\n\t%s\n", num, name, diffs.toString().replace("\n", "\n\t"));
 			}
 		}
 	}
