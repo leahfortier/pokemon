@@ -896,7 +896,6 @@ public enum ItemNamesies {
 		if (!itemMap.containsKey(this)) {
 			itemMap.put(this, this.itemCreator.createItem());
 		}
-
 		return itemMap.get(this);
 	}
 
@@ -913,7 +912,6 @@ public enum ItemNamesies {
 		if (itemNamesies == null) {
 			Global.error(name + " does not have a valid ItemNamesies value");
 		}
-
 		return itemNamesies;
 	}
 }

@@ -74,7 +74,7 @@ class MapState implements VisualStateHandler {
             mapView.setState(VisualState.FLY);
         }
         else if (input.consumeIfDown(ControlKey.POKEFINDER) && player.hasTool(OverworldTool.POKEFINDER)) {
-            mapView.setState(VisualState.POKEFINDER);
+            mapView.setState(VisualState.POKE_FINDER);
         }
         else if (input.consumeIfDown(ControlKey.BIKE)) {
             player.toggleBicycle();

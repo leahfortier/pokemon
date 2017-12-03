@@ -42,8 +42,9 @@ public class MedalCaseState implements VisualStateHandler {
     private final Button leftButton;
     private final Button rightButton;
 
-    private final MedalCase medalCase;
     private final TileSet medalTiles;
+
+    private MedalCase medalCase;
 
     private int pageNum;
     private int selectedButton;
@@ -89,7 +90,6 @@ public class MedalCaseState implements VisualStateHandler {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, NUM_PAGES)
         );
 
-        this.medalCase = Game.getPlayer().getMedalCase();
         this.medalTiles = Game.getData().getMedalTiles();
     }
 
@@ -109,7 +109,6 @@ public class MedalCaseState implements VisualStateHandler {
                 medalPanel.withBackgroundColor(Color.WHITE).withBorderColor(Color.LIGHT_GRAY);
             }
             medalPanel.drawBackground(g);
-
 
             int spacing = 10;
             int imageX = medalPanel.x + medalPanel.getBorderSize() + spacing;
@@ -155,5 +154,11 @@ public class MedalCaseState implements VisualStateHandler {
         if (input.consumeIfDown(ControlKey.ESC) || input.consumeIfDown(ControlKey.MEDAL_CASE)) {
             mapView.setState(VisualState.MAP);
         }
+    }
+
+    @Override
+    public void set(MapView mapView) {
+        this.medalCase = Game.getPlayer().getMedalCase();
+        this.pageNum = 0;
     }
 }
