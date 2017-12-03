@@ -7,6 +7,7 @@ import pokemon.evolution.EvolutionType;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
+import util.GeneralUtils;
 import util.StringUtils;
 
 import java.io.PrintStream;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class StuffGen {
@@ -102,8 +104,7 @@ public class StuffGen {
 			String extraFields,
 			String constructor,
 			String additional,
-			boolean isInterface
-	) {
+			boolean isInterface) {
 		StringBuilder classBuilder = new StringBuilder("\n");
 
 		if (!StringUtils.isNullOrEmpty(classComments)) {
@@ -212,6 +213,84 @@ public class StuffGen {
 		FileIO.overwriteFile(FileName.BASE_EVOLUTIONS, out);
 	}
 
+	private static Set<String> getMoves(Scanner in) {
+		int numMoves = in.nextInt(); in.nextLine();
+
+		Set<String> moves = new TreeSet<>();
+		for (int i = 0; i < numMoves; i++) {
+			moves.add(in.nextLine());
+		}
+
+		return moves;
+	}
+
+	private static void addMovesDiff(List<String> moves, String diffName, StringBuilder diffs) {
+		if (!moves.isEmpty()) {
+			diffs.append(diffName).append(":\n\t").append(String.join("\n\t", moves)).append("\n");
+		}
+	}
+
+	private static void movesDiff(Scanner in1, Scanner in2, String diffName, StringBuilder diffs) {
+		Set<String> moves1 = getMoves(in1);
+		Set<String> moves2 = getMoves(in2);
+
+		List<String> removedMoves = GeneralUtils.inFirstNotSecond(moves1, moves2);
+		List<String> addedMoves = GeneralUtils.inFirstNotSecond(moves2, moves1);
+
+		addMovesDiff(removedMoves, diffName + " Removed Moves", diffs);
+		addMovesDiff(addedMoves, diffName + " Added Moves", diffs);
+	}
+
+	private static void diff(Scanner in1, Scanner in2, String diffName, StringBuilder diffs) {
+		diff(in1.nextLine(), in2.nextLine(), diffName, diffs);
+	}
+
+	// If the two lines are different, appends "diffName: line1 -> line2" to the diffs builder
+	private static void diff(String line1, String line2, String diffName, StringBuilder diffs) {
+		if (!line1.equals(line2)) {
+			diffs.append(diffName).append(":\n\t").append(line1).append(" -> ").append(line2).append("\n");
+		}
+	}
+
+	// Compares the pokemon info to info in a new file and outputs the differences
+	// Ignores evolution, wild hold items, and flavor text
+	private static void newPokemonInfoCompare() {
+		Scanner in1 = new Scanner(FileIO.readEntireFileWithReplacements(FileName.POKEMON_INFO, false));
+		Scanner in2 = new Scanner(FileIO.readEntireFileWithReplacements("temp.txt", false));
+
+		PrintStream out = FileIO.openOutputFile("out.txt");
+		while (in2.hasNext()) {
+			StringBuilder diffs = new StringBuilder();
+			diff(in1, in2, "Num", diffs);
+
+			String name = in1.nextLine();
+			diff(name, in2.nextLine(), "Name", diffs);
+
+			diff(in1, in2, "Stats", diffs);
+			diff(in1, in2, "Base EXP", diffs);
+			diff(in1, in2, "Growth Rate", diffs);
+			diff(in1, in2, "Types", diffs);
+			diff(in1, in2, "Catch Rate", diffs);
+			diff(in1, in2, "EVs", diffs);
+			readEvolution(in1); readEvolution(in2); // Don't compare these
+			readHoldItems(in1); readHoldItems(in2); // Don't compare these either
+			diff(in1, in2, "Male Ratio", diffs);
+			diff(in1, in2, "Abilities", diffs);
+			diff(in1, in2, "Classification", diffs);
+			diff(in1.nextInt() + "", in2.nextInt() + "", "Height", diffs);
+			diff(in1.nextDouble() + "", in2.nextDouble() + "", "Weight", diffs);
+			in1.nextLine(); in2.nextLine(); // Flavor Text -- don't compare
+			diff(in1, in2, "Egg Steps", diffs);
+			diff(in1, in2, "Egg Groups", diffs);
+			movesDiff(in1, in2, "Level Up", diffs);
+			movesDiff(in1, in2, "Learnable", new StringBuilder()); // Ignore for now
+
+			if (diffs.length() > 0) {
+				out.println(name + ":\n\t" + diffs.toString().replace("\n", "\n\t"));
+			}
+		}
+	}
+
 	// Used for editing pokemoninfo.txt
 	private static void pokemonInfoStuff() {
 		Scanner in = FileIO.openFile(FileName.POKEMON_INFO);
@@ -241,9 +320,8 @@ public class StuffGen {
 	}
 
 	private static void readMoves(Scanner in, PrintStream out) {
-		int numMoves = in.nextInt();
+		int numMoves = in.nextInt(); in.nextLine();
 		out.println(numMoves); // Number of Moves
-		in.nextLine();
 
 		for (int i = 0; i < numMoves; i++) {
 			out.println(in.nextLine()); // Each move
@@ -251,28 +329,36 @@ public class StuffGen {
 	}
 
 	private static void readEvolution(Scanner in, PrintStream out) {
+		out.print(readEvolution(in));
+	}
+
+	private static String readEvolution(Scanner in) {
 		String type = in.next();
 		if (type.equals(EvolutionType.MULTI.name())) {
-			int x = in.nextInt();
-			out.println(type + " " + x);
+			int x = in.nextInt(); in.nextLine();
+			StringBuilder evolution = new StringBuilder(type + " " + x + "\n");
 			for (int i = 0; i < x; i++) {
-				readEvolution(in, out);
+				evolution.append(readEvolution(in));
 			}
-
-			return;
+			return evolution.toString();
+		} else {
+			return type + in.nextLine() + "\n";
 		}
-
-		out.println(type + in.nextLine());
 	}
 
 	private static void readHoldItems(Scanner in, PrintStream out) {
-		int num = in.nextInt();
-		out.println(num);
-		in.nextLine();
+		out.print(readHoldItems(in));
+	}
 
+	private static String readHoldItems(Scanner in) {
+		int num = in.nextInt(); in.nextLine();
+
+		StringBuilder holdItems = new StringBuilder(num + "\n");
 		for (int i = 0; i < num; i++) {
-			out.println(in.nextLine());
+			holdItems.append(in.nextLine()).append("\n");
 		}
+
+		return holdItems.toString();
 	}
 
 	private static final char[] AL_BHED_PRIMER = {
@@ -295,7 +381,6 @@ public class StuffGen {
 				shubs.append(c);
 			}
 		}
-
 		return shubs.toString();
 	}
 }

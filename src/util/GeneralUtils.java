@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class GeneralUtils {
@@ -128,5 +129,15 @@ public final class GeneralUtils {
         list.addAll(secondList);
 
         return list;
+    }
+
+    public static List<String> inFirstNotSecond(Set<String> first, Set<String> second) {
+        List<String> missing = new ArrayList<>();
+        for (String value : first) {
+            if (!second.contains(value)) {
+                missing.add(value);
+            }
+        }
+        return missing;
     }
 }

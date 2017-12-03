@@ -149,6 +149,10 @@ public class FileIO {
 		return build.toString();
 	}
 
+	public static boolean fileEquals(String firstFileName, String secondFileName) {
+		return readEntireFile(firstFileName).equals(readEntireFile(secondFileName));
+	}
+
 	public static String readEntireFile(String fileName) {
 		final Scanner in = openFile(fileName);
 		final StringBuilder out = new StringBuilder();

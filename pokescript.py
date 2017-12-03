@@ -8,30 +8,46 @@ global infoTable
 def namesies(stringsies):
     return stringsies.replace(' ', '_').replace('-', '_').upper()
 
+def getElementText(element):
+    text = element.text
+    if not text is None:
+        return text
+    return element.text_content()
+
+def getQueryText(query):
+    for querychild in query:
+        text = getElementText(querychild)
+        if not text is None:
+            return text
+        for child in querychild.getchildren():
+            text = getElementText(child)
+            if not text is None:
+                return text
+
+def checkQueries(*queries):
+    global infoTable
+    
+    for queryString in queries:
+        query = infoTable.xpath(queryString)
+        text = getQueryText(query)
+        if not text is None:
+            return text
+
 def checkHeader(header, headerIndex):
     global infoTable
     
     if infoTable.tag == 'table':
-        query = infoTable.xpath('tr[1]/td/b')
-        if len(query) > 0:
-            text = query[0].text
-        else:
-            query = infoTable.xpath('tr[1]/td')
-            if len(query) > 0:
-                text = query[0].text
-            else:
-                text = infoTable.xpath('thead/tr[1]/td')[0].text
-
-            if text is None:
-                text = infoTable.xpath('tr[1]/td/font')[0].text
-
+        text = checkQueries('tr[1]/td/b', 'tr[1]/td', 'thead/tr[1]/td')
         if not text is None and text[headerIndex:] == header:
             return True
 
     return False
 
-def updateTable(header):
-    return updateTableIndex(header, 0)
+def updateTable(*headers):
+    for header in headers:
+        if updateTableIndex(header, 0):
+            return True
+    return False
 
 def updateTableIndex(header, headerIndex):
     global infoTable
@@ -89,7 +105,7 @@ def updateTableIndex(header, headerIndex):
 
 with open ("temp.txt", "w") as f:
     for num in range(1, 802):
-#    for num in [11]:
+#    for num in [1]:
         page = requests.get('http://www.serebii.net/pokedex-sm/' + str(num).zfill(3) + '.shtml')
         tree = html.fromstring(page.text)
         mainDiv = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/div[2]/div')[0];
@@ -148,7 +164,7 @@ with open ("temp.txt", "w") as f:
         elif num == 26:
             type1 = 'Electric'
             type2 = 'No_Type'
-        # Sandshrew and Sandslash and Diglett and Dugtrio
+        # Sandshrew and Sandslash and Diglett and Dugtrio and Marowak
         elif num == 27 or num == 28 or num == 50 or num == 51 or num == 105:
             type1 = 'Ground'
             type2 = 'No_Type'
@@ -176,6 +192,10 @@ with open ("temp.txt", "w") as f:
         elif num == 720:
             type1 = 'Psychic'
             type2 = 'Ghost'
+        # Necrozma
+        elif num == 800:
+            type1 = 'Psychic'
+            type2 = 'No_Type'
         else:
             types = infoTable.xpath('tr[2]/td[6]/a/img')
             type1 = types[0].attrib["src"]
@@ -240,8 +260,6 @@ with open ("temp.txt", "w") as f:
     
         growthRate = infoTable.xpath('tr[4]/td[1]')[0].text_content()
         growthRate = growthRate[growthRate.find("Points") + 6 : ]
-        growthRate = namesies(growthRate)
-
         print("Growth Rate: " + growthRate)
 
         # Not in the mood to deal with Deoxys's multiple forms and effort yields
@@ -348,7 +366,9 @@ with open ("temp.txt", "w") as f:
             flavorText = infoTable.xpath('tr[2]/td[2]')[0].text
             if flavorText == 'Sun':
                 flavorText = infoTable.xpath('tr[2]/td[3]')[0].text
-
+            if flavorText is None:
+                # infoTable.xpath('td[3]')[0].text == 'Ultra Sun' for this case
+                flavorText = infoTable.xpath('td[4]')[0].text
         else:
             flavorText = 'None'
         
@@ -361,22 +381,23 @@ with open ("temp.txt", "w") as f:
         flavorText = flavorText.replace(poke, "\u00e9").replace('  ', ' ').replace(rightTick, "'").replace(dashy, "--").replace(leftQuote, "\"").replace(rightQuote, "\"")
         print("Flavor Text: " + flavorText)
 
-        if not updateTable('Sun/Moon Level Up'):
-            updateTable('Standard Level Up')
+        print("Attacks:")
+        if updateTable('Ultra Sun/Ultra Moon Level Up', 
+                       'Sun/Moon Level Up', 
+                       'Standard Level Up',
+                       'Generation VII Level Up'):
+            attacks = []
+            for i in range(2, len(infoTable) - 1, 2):
+                level = infoTable[i][0].text
 
-        attacks = []
-        for i in range(2, len(infoTable) - 1, 2):
-            level = infoTable[i][0].text
-            
-            if type(level) == unicode:
-                level = 0
-                
-            if level == 'Evolve':
-                level = -1
-                
-            attack = infoTable[i][1][0].text
-            attacks.append(str(level) + " " + attack)
-            print(str(level) + " " + attack)
+                if level == 'Evolve':
+                    level = -1
+                elif level == dashy:
+                    level = 0
+                    
+                attack = infoTable[i][1][0].text
+                attacks.append(str(level) + " " + namesies(attack))
+                print(str(int(level)) + " " + attack)
 
         print("TMS:")
         tms = []
@@ -417,14 +438,22 @@ with open ("temp.txt", "w") as f:
                 
                 tutorMoves.append(attack)
                 print(attack)
+        if updateTable('Ultra Sun/Ultra Moon Move Tutor Attacks'):
+            table = infoTable.xpath('thead/tr')
+            for i in range(2, len(table) - 1, 2):
+                attack = table[i][0][0].text
+
+                if attack in ["Helping Hand", "After You"]:
+                    continue
+                
+                tutorMoves.append(attack)
+                print(attack)
 
         # Stats
         stats = [0]*6
         updateTable('Stats')
-
         for i in range(0, len(stats)):
             stats[i] = int(infoTable.xpath('tr[3]/td[' + str(2 + i) + ']')[0].text)
-
         print("Stats: " + str(stats))
 
         # Diancie's base experience is currently unknown
@@ -454,33 +483,31 @@ with open ("temp.txt", "w") as f:
         f.write(str(num) + '\n')
         f.write(str(name) + '\n')
 
-        for stat in stats:
-            f.write(str(stat) + ' ')
-        f.write('\n')
+        stats = [str(stat) for stat in stats]
+        f.write(' '.join(stats) + '\n')
 
         if len(str(baseExp)) == 1:
             f.write("BASE EXP: ")
-        
+
         f.write(str(baseExp) + '\n')
-        f.write(str(growthRate) + '\n')
-        f.write(str(type1) + ' ')
-        f.write(str(type2) + '\n')
+        f.write(namesies(growthRate) + '\n')
+        f.write(namesies(type1) + ' ')
+        f.write(namesies(type2) + '\n')
         
         f.write(str(captureRate) + '\n')
 
-        for ev in evs:
-            f.write(str(ev) + ' ')
-        f.write('\n')
+        evs = [str(ev) for ev in evs]
+        f.write(' '.join(evs) + '\n')
 
         # TODO: Evolutions
-        f.write('None\n')
+        f.write('NONE\n')
         
         # TODO: Wild Hold Items
         f.write('0\n')
 
         f.write(str(maleRatio) + '\n')
-        f.write(str(ability1) + '\n')
-        f.write(str(ability2) + '\n')
+        f.write(namesies(ability1) + ' ')
+        f.write(namesies(ability2) + '\n')
         f.write(str(classification) + '\n')
         f.write(str(height) + ' ')
         f.write(str(weight) + ' ')
@@ -491,18 +518,14 @@ with open ("temp.txt", "w") as f:
         
         f.write(str(len(attacks)) + '\n')
         for attack in attacks:
-            f.write(str(attack) + '\n')
+            f.write(attack + '\n')
 
-        f.write(str(len(tms)) + '\n')
+        f.write(str(len(tms) + len(eggMoves) + len(tutorMoves)) + '\n')
         for attack in tms:
-            f.write(str(attack) + '\n')
-
-        f.write(str(len(eggMoves)) + '\n')
+            f.write(namesies(attack) + '\n')
         for attack in eggMoves:
-            f.write(str(attack) + '\n')
-
-        f.write(str(len(tutorMoves)) + '\n')
+            f.write(namesies(attack) + '\n')
         for attack in tutorMoves:
-            f.write(str(attack) + '\n')
+            f.write(namesies(attack) + '\n')
 
         f.write('\n')
