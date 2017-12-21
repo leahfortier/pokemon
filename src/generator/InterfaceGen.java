@@ -1,5 +1,6 @@
 package generator;
 
+import battle.effect.generic.EffectInterfaces;
 import main.Global;
 import util.FileIO;
 import util.FileName;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 
 class InterfaceGen {
-	private static final String INTERFACE_PATH = Folder.GENERIC_EFFECT + "EffectInterfaces.java";
+	private static final String INTERFACE_PATH = Folder.GENERIC_EFFECT + EffectInterfaces.class.getSimpleName() + ".java";
 	
 	InterfaceGen() {
 		gen();
@@ -43,7 +44,6 @@ class InterfaceGen {
 	}
 	
 	private static class Interface {
-		
 		private static final String COMMENTS = "Comments";
 		private static final String METHOD = "Method";
 		private static final String EXTENDS = "Extends";
@@ -95,7 +95,7 @@ class InterfaceGen {
 		}
 
 		private String getSingleLineInput(String key, String[] split) {
-			if (split.length == 1) {
+			if (split.length != 2) {
 				Global.error(key + " for " + this.interfaceName + " must be on a single line.");
 			}
 

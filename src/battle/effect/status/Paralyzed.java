@@ -2,7 +2,7 @@ package battle.effect.status;
 
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
-import battle.effect.generic.EffectInterfaces.StatChangingEffect;
+import battle.effect.generic.EffectInterfaces.StatModifyingEffect;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
@@ -10,7 +10,7 @@ import pokemon.ability.AbilityNamesies;
 import type.Type;
 import util.RandomUtils;
 
-class Paralyzed extends Status implements BeforeTurnEffect, StatChangingEffect {
+class Paralyzed extends Status implements BeforeTurnEffect, StatModifyingEffect {
     private static final long serialVersionUID = 1L;
 
     public Paralyzed() {
@@ -40,15 +40,17 @@ class Paralyzed extends Status implements BeforeTurnEffect, StatChangingEffect {
         return abilify.getName() + "'s " + abilify.getAbility().getName() + " paralyzed " + victim.getName() + "!";
     }
 
-    public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-        return (int)(stat*(s == Stat.SPEED && !p.hasAbility(AbilityNamesies.QUICK_FEET) ? .25 : 1));
-    }
-
     public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " is no longer paralyzed!";
     }
 
     public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
         return victim.getName() + "'s " + sourceName + " cured it of its paralysis!";
+    }
+
+    // Paralysis reduces speed by 75%
+    @Override
+    public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
+        return s == Stat.SPEED && !p.hasAbility(AbilityNamesies.QUICK_FEET) ? .25 : 1;
     }
 }

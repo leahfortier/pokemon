@@ -8,13 +8,9 @@ public class EnemyTrainer extends Trainer implements Opponent {
 
 	private final int maxPokemonAllowed;
 
-	public EnemyTrainer(String name, int cashMoney, int maxPokemonAllowed) {
+	public EnemyTrainer(String name, int cashMoney, int maxPokemonAllowed, ActivePokemon... team) {
 		super(name, cashMoney);
 		this.maxPokemonAllowed = maxPokemonAllowed;
-	}
-
-	public EnemyTrainer(String name, int cashMoney, int maxPokemonAllowed, ActivePokemon... team) {
-		this(name, cashMoney, maxPokemonAllowed);
 		for (ActivePokemon pokemon : team) {
 			addPokemon(pokemon);
 		}
@@ -22,11 +18,15 @@ public class EnemyTrainer extends Trainer implements Opponent {
 
 	@Override
 	public void addPokemon(ActivePokemon p) {
+		if (p.isPlayer()) {
+			Global.error("Enemy trainer pokemon cannot be player's...");
+		}
+
 		if (team.size() < MAX_POKEMON) {
 			team.add(p);
 		}
 		else {
-			Global.error("Trainers cannot have more than six Pokemon");
+			Global.error("Trainers cannot have more than six Pokemon!");
 		}
 	}
 

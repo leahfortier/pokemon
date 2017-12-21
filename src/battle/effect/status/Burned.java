@@ -3,14 +3,14 @@ package battle.effect.status;
 import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
-import battle.effect.generic.EffectInterfaces.StatChangingEffect;
+import battle.effect.generic.EffectInterfaces.StatModifyingEffect;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import type.Type;
 
-class Burned extends Status implements EndTurnEffect, StatChangingEffect {
+class Burned extends Status implements EndTurnEffect, StatModifyingEffect {
     private static final long serialVersionUID = 1L;
 
     public Burned() {
@@ -40,15 +40,17 @@ class Burned extends Status implements EndTurnEffect, StatChangingEffect {
         return abilify.getName() + "'s " + abilify.getAbility().getName() + " burned " + victim.getName() + "!";
     }
 
-    public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-        return (int)(stat*(s == Stat.ATTACK && !p.hasAbility(AbilityNamesies.GUTS) && p.getAttack().namesies() != AttackNamesies.FACADE ? .5 : 1));
-    }
-
     public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " is no longer burned!";
     }
 
     public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
         return victim.getName() + "'s " + sourceName + " cured it of its burn!";
+    }
+
+    // Burn decreases attack by 50%
+    @Override
+    public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
+        return s == Stat.ATTACK && !p.hasAbility(AbilityNamesies.GUTS) && p.getAttack().namesies() != AttackNamesies.FACADE ? .5 : 1;
     }
 }

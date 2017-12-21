@@ -1047,15 +1047,15 @@ public final class EffectInterfaces {
 	}
 
 	public interface StatSwitchingEffect {
-		Stat switchStat(Stat s);
+		Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s);
 
 		static Stat switchStat(Battle b, ActivePokemon statPokemon, Stat s) {
-			List<Object> invokees = b.getEffectsList(statPokemon);
+			List<Object> invokees = b.getEffectsList(statPokemon, statPokemon.getAttack());
 			for (Object invokee : invokees) {
 				if (invokee instanceof StatSwitchingEffect && Effect.isActiveEffect(invokee)) {
 					
 					StatSwitchingEffect effect = (StatSwitchingEffect)invokee;
-					s = effect.switchStat(s);
+					s = effect.getSwitchStat(b, statPokemon, s);
 				}
 			}
 			
@@ -1064,7 +1064,7 @@ public final class EffectInterfaces {
 	}
 
 	public interface OpponentStatSwitchingEffect {
-		Stat switchStat(Stat s);
+		Stat getSwitchStat(Stat s);
 
 		static Stat switchStat(Battle b, ActivePokemon other, Stat s) {
 			// Only add the attack when checking a defensive stat -- this means the other pokemon is the one currently attacking
@@ -1077,7 +1077,7 @@ public final class EffectInterfaces {
 				if (invokee instanceof OpponentStatSwitchingEffect && Effect.isActiveEffect(invokee)) {
 					
 					OpponentStatSwitchingEffect effect = (OpponentStatSwitchingEffect)invokee;
-					s = effect.switchStat(s);
+					s = effect.getSwitchStat(s);
 				}
 			}
 			

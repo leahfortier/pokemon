@@ -156,6 +156,7 @@ public class EffectTest {
         Assert.assertTrue(attacking.isType(battle, Type.STEEL));
         Assert.assertFalse(attacking.canEscape(battle));
         battle.attackingFight(AttackNamesies.HAZE);
+        Assert.assertFalse(attacking.isType(battle, Type.STEEL));
         Assert.assertTrue(attacking.canEscape(battle));
 
         // Partial trapping moves trap

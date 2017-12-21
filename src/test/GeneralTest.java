@@ -18,10 +18,6 @@ public class GeneralTest {
         Assert.assertEquals(expected, actual, DELTA);
     }
 
-    public static boolean healthRatioMatch(TestPokemon pokemon, double fraction) {
-        return (int)(Math.ceil(fraction*pokemon.getMaxHP())) == pokemon.getHP();
-    }
-
     @Test
     public void properCaseTest() {
         Assert.assertEquals(StringUtils.properCase("red"), "Red");

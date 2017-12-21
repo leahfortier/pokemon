@@ -393,6 +393,7 @@ import battle.attack.Attack.PerishSong;
 import battle.attack.Attack.PetalBlizzard;
 import battle.attack.Attack.PetalDance;
 import battle.attack.Attack.PhantomForce;
+import battle.attack.Attack.PhotonGeyser;
 import battle.attack.Attack.PinMissile;
 import battle.attack.Attack.PlayNice;
 import battle.attack.Attack.PlayRough;
@@ -1313,7 +1314,8 @@ public enum AttackNamesies {
 	WATER_PLEDGE("Water Pledge", WaterPledge::new),
 	STOMPING_TANTRUM("Stomping Tantrum", StompingTantrum::new),
 	HYPERSPACE_HOLE("Hyperspace Hole", HyperspaceHole::new),
-	STEAM_ERUPTION("Steam Eruption", SteamEruption::new);
+	STEAM_ERUPTION("Steam Eruption", SteamEruption::new),
+	PHOTON_GEYSER("Photon Geyser", PhotonGeyser::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
