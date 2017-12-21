@@ -105,7 +105,6 @@ public class StringUtils {
         for (Object value : values) {
             builder.append(value).append(" ");
         }
-
         return builder.toString();
     }
 
@@ -139,7 +138,7 @@ public class StringUtils {
             }
 
             if (index == -1) {
-                s.append(string.substring(0,string.length()));
+                s.append(string.substring(0, string.length()));
                 string = "";
             }
             else {

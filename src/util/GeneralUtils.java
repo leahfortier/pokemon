@@ -140,4 +140,10 @@ public final class GeneralUtils {
         }
         return missing;
     }
+
+    public static <T> List<T> newList(T... initialArgs) {
+        List<T> list = new ArrayList<T>();
+        Collections.addAll(list, initialArgs);
+        return list;
+    }
 }

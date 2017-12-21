@@ -5,15 +5,12 @@ import pokemon.ActivePokemon;
 public class BadlyPoisoned extends Poisoned {
     private int turns;
 
+    // TODO: Confirm that it's okay that the type is POISONED instead of BADLY_POISONED
     public BadlyPoisoned() {
         this.turns = 1;
     }
 
-    @Override
-    public boolean isType(StatusCondition statusCondition) {
-        return statusCondition == StatusCondition.POISONED || statusCondition == StatusCondition.BADLY_POISONED;
-    }
-
+    // TODO: Confirm that this works -- I don't see where it is getting incremented??
     @Override
     protected int getTurns() {
         return this.turns;

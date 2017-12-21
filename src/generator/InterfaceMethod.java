@@ -190,7 +190,6 @@ class InterfaceMethod {
                 this.invokeeDeclaration += ", " + effectPriority;
             }
 
-
             final String invokeAttack = fields.getAndRemoveTrimmed(INVOKE_ATTACK);
             if (invokeAttack != null) {
                 this.invokeeDeclaration += ", " + invokeAttack + ".getAttack()";

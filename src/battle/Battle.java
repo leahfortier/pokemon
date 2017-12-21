@@ -665,7 +665,7 @@ public class Battle implements Serializable {
 		return (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
 	}
 
-	public double getDamageModifier(ActivePokemon me, ActivePokemon o) {
+	protected double getDamageModifier(ActivePokemon me, ActivePokemon o) {
 		return PowerChangeEffect.getModifier(this, me, o)*OpponentPowerChangeEffect.getModifier(this, me, o);
 	}
 

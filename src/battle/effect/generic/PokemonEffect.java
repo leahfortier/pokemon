@@ -2202,7 +2202,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			super(EffectNamesies.POWER_TRICK, -1, -1, false);
 		}
 
-		public Stat switchStat(Stat s) {
+		public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
 			if (s == Stat.ATTACK) return Stat.DEFENSE;
 			if (s == Stat.DEFENSE) return Stat.ATTACK;
 			return s;

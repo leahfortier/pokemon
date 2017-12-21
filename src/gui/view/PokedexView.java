@@ -1,7 +1,6 @@
 package gui.view;
 
 import battle.attack.Attack;
-import battle.attack.AttackNamesies;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
@@ -15,6 +14,7 @@ import input.InputControl;
 import main.Game;
 import map.Direction;
 import pokemon.Gender;
+import pokemon.LevelUpMove;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import pokemon.evolution.Evolution;
@@ -33,7 +33,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 
 class PokedexView extends View {
 	private static final int NUM_COLS = 6;
@@ -476,14 +475,14 @@ class PokedexView extends View {
 			else {
 				FontMetrics.setFont(g, 14);
 
-				List<Entry<Integer, AttackNamesies>> levelUpMoves = selected.getLevelUpMoves();
-				Iterator<Entry<Integer, AttackNamesies>> movesIterator = GeneralUtils.pageIterator(levelUpMoves, movePageNum, MOVES_PER_PAGE);
+				List<LevelUpMove> levelUpMoves = selected.getLevelUpMoves();
+				Iterator<LevelUpMove> movesIterator = GeneralUtils.pageIterator(levelUpMoves, movePageNum, MOVES_PER_PAGE);
 
 				for (int i = 0; i < MOVES_PER_PAGE && movesIterator.hasNext(); i++) {
-					Entry<Integer, AttackNamesies> entry = movesIterator.next();
+					LevelUpMove levelUpMove = movesIterator.next();
 
-					int level = entry.getKey();
-					Attack attack = entry.getValue().getAttack();
+					int level = levelUpMove.getLevel();
+					Attack attack = levelUpMove.getMove().getAttack();
 
 					final String levelString;
 					if (level == PokemonInfo.EVOLUTION_LEVEL_LEARNED) {

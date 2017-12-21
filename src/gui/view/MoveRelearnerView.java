@@ -340,6 +340,7 @@ public class MoveRelearnerView extends View {
         this.setSelectedPokemon(0);
     }
 
+    // TODO: Look at the logic again here -- why is the same index being used for the team and the moves??
     private void setSelectedPokemon(int index) {
         this.selectedPokemon = index;
         this.learnableMoves = this.team.get(index).getLearnableMoves();

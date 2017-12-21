@@ -13,7 +13,6 @@ import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
-import test.GeneralTest;
 import test.TestPokemon;
 import trainer.Team;
 import type.Type;
@@ -90,7 +89,7 @@ public class AttackTest {
         TestBattle battle = TestBattle.create(PokemonNamesies.MAGIKARP, PokemonNamesies.DRAGONITE);
         TestPokemon defending = battle.getDefending();
 
-        // Ground type should not effect
+        // Ground type should not effect Flying type
         battle.attackingFight(AttackNamesies.FISSURE);
         Assert.assertTrue(defending.fullHealth());
 
@@ -108,6 +107,7 @@ public class AttackTest {
         battle.attackingFight(AttackNamesies.SHEER_COLD);
         Assert.assertTrue(defending.isFainted(battle));
 
+        // Sheer Cold doesn't work against Ice types
         defending = new TestPokemon(PokemonNamesies.GLACEON);
         battle.attackingFight(AttackNamesies.SHEER_COLD);
         Assert.assertTrue(defending.fullHealth());
@@ -173,6 +173,7 @@ public class AttackTest {
 
         // Non-Ghost type curse -- apply stat changes
         battle.attackingFight(AttackNamesies.CURSE);
+        Assert.assertFalse(attacking.isType(battle, Type.GHOST));
         Assert.assertTrue(attacking.getAttributes().getStage(Stat.ATTACK) == 1);
         Assert.assertTrue(attacking.getAttributes().getStage(Stat.DEFENSE) == 1);
         Assert.assertTrue(attacking.getAttributes().getStage(Stat.SPEED) == -1);
@@ -192,8 +193,8 @@ public class AttackTest {
         Assert.assertTrue(attacking.getAttributes().getStage(Stat.SPEED) == -1);
         Assert.assertFalse(attacking.hasEffect(EffectNamesies.CURSE));
         Assert.assertTrue(defending.hasEffect(EffectNamesies.CURSE));
-        Assert.assertTrue(GeneralTest.healthRatioMatch(attacking, .5));
-        Assert.assertTrue(GeneralTest.healthRatioMatch(defending, .75));
+        Assert.assertTrue(attacking.healthRatioMatch(.5));
+        Assert.assertTrue(defending.healthRatioMatch(.75));
     }
 
     // Used for attacks that have a random element to them -- like Tri-Attack and Acupressure -- required running several times
@@ -257,6 +258,8 @@ public class AttackTest {
                     foundDefending = true;
                 }
             }
+            Assert.assertTrue(foundAttacking);
+            Assert.assertTrue(foundDefending);
         }
 
         Assert.assertFalse(triAttackAlwaysSame);

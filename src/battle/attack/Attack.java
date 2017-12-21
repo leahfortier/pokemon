@@ -39,6 +39,7 @@ import battle.effect.generic.EffectInterfaces.SapHealthEffect;
 import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
 import battle.effect.generic.EffectInterfaces.SelfHealingMove;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
+import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
@@ -5447,7 +5448,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public Stat switchStat(Stat s) {
+		public Stat getSwitchStat(Stat s) {
 			return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
 		}
 	}
@@ -6962,7 +6963,7 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 100;
 		}
 
-		public Stat switchStat(Stat s) {
+		public Stat getSwitchStat(Stat s) {
 			return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
 		}
 	}
@@ -8487,7 +8488,7 @@ public abstract class Attack implements Serializable {
 			super.moveTypes.add(MoveType.METRONOMELESS);
 		}
 
-		public Stat switchStat(Stat s) {
+		public Stat getSwitchStat(Stat s) {
 			return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
 		}
 	}
@@ -10679,6 +10680,24 @@ public abstract class Attack implements Serializable {
 			super.accuracy = 95;
 			super.effectChance = 30;
 			super.status = StatusCondition.BURNED;
+		}
+	}
+
+	static class PhotonGeyser extends Attack implements StatSwitchingEffect {
+		private static final long serialVersionUID = 1L;
+
+		PhotonGeyser() {
+			super(AttackNamesies.PHOTON_GEYSER, Type.PSYCHIC, MoveCategory.SPECIAL, 5, "The user attacks a target with a pillar of light. This move inflicts Attack or Sp. Atk damage -- whichever stat is higher for the user.");
+			super.power = 100;
+			super.accuracy = 100;
+		}
+
+		public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
+			// If attack stat is higher, use that instead
+			if (s == Stat.SP_ATTACK && statPokemon.getStat(b, Stat.ATTACK) > statPokemon.getStat(b, Stat.SP_ATTACK)) {
+				return Stat.ATTACK;
+			}
+			return s;
 		}
 	}
 }

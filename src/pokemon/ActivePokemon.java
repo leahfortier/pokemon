@@ -63,7 +63,6 @@ import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class ActivePokemon implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -277,14 +276,14 @@ public class ActivePokemon implements Serializable {
 	// Returns the moves this Pokemon could have learned up to its current level
 	public List<AttackNamesies> getLearnableMoves() {
 		List<AttackNamesies> moves = new ArrayList<>();
-		List<Entry<Integer, AttackNamesies>> levelUpMoves = this.getPokemonInfo().getLevelUpMoves();
-		for (Entry<Integer, AttackNamesies> entry : levelUpMoves) {
-			if (entry.getKey() > level) {
+		List<LevelUpMove> levelUpMoves = this.getPokemonInfo().getLevelUpMoves();
+		for (LevelUpMove levelUpMove : levelUpMoves) {
+			if (levelUpMove.getLevel() > level) {
 				break;
 			}
 
-			if (!this.hasActualMove(entry.getValue())) {
-				moves.add(entry.getValue());
+			if (!this.hasActualMove(levelUpMove.getMove())) {
+				moves.add(levelUpMove.getMove());
 			}
 		}
 
@@ -293,15 +292,18 @@ public class ActivePokemon implements Serializable {
 	
 	private void setMoves() {
 		moves = new ArrayList<>();
-		List<Entry<Integer, AttackNamesies>> levelUpMoves = this.getPokemonInfo().getLevelUpMoves();
-		for (Entry<Integer, AttackNamesies> entry : levelUpMoves) {
-			int levelLearned = entry.getKey();
-			AttackNamesies attackNamesies = entry.getValue();
-			if (levelLearned > level || this.hasActualMove(attackNamesies)) {
+		List<LevelUpMove> levelUpMoves = this.getPokemonInfo().getLevelUpMoves();
+		for (LevelUpMove levelUpMove : levelUpMoves) {
+			AttackNamesies attackNamesies = levelUpMove.getMove();
+			if (levelUpMove.getLevel() > level) {
+				break;
+			}
+
+			if (this.hasActualMove(attackNamesies)) {
 				continue;
 			}
 
-			moves.add(new Move(attackNamesies.getAttack()));
+			moves.add(new Move(attackNamesies));
 
 			// This can be an 'if' statement, but just to be safe...
 			while (moves.size() > Move.MAX_MOVES) {

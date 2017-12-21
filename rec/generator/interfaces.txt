@@ -548,17 +548,17 @@ ChangeMoveListEffect:
 ***
 StatSwitchingEffect:
 	Method:
-		Header: Stat switchStat(Stat s)
+		Header: Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s)
 		Invoke: Update
 		Update: s
-		InvokeParameters: Battle b, ActivePokemon statPokemon
 		EffectList: statPokemon
+		InvokeAttack: statPokemon
 		InvokeName: switchStat
 	*
 ***
 OpponentStatSwitchingEffect:
 	Method:
-		Header: Stat switchStat(Stat s)
+		Header: Stat getSwitchStat(Stat s)
 		Invoke: Update
 		Update: s
 		InvokeParameters: Battle b, ActivePokemon other

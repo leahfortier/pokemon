@@ -6599,3 +6599,19 @@ Steam Eruption:
 	EffChance: 30
 	Cat: Special
 *
+Photon Geyser:
+	Desc: The user attacks a target with a pillar of light. This move inflicts Attack or Sp. Atk damage -- whichever stat is higher for the user.
+	Type: Psychic
+	PP: 5
+	Pow: 100
+	Acc: 100
+	Cat: Special
+	SwitchStat:
+		// If attack stat is higher, use that instead
+		if (s == Stat.SP_ATTACK && statPokemon.getStat(b, Stat.ATTACK) > statPokemon.getStat(b, Stat.SP_ATTACK)) {
+			return Stat.ATTACK;
+		}
+		return s;
+		###
+	Int: StatSwitchingEffect
+*

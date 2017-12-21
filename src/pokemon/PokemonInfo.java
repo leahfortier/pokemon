@@ -17,7 +17,6 @@ import util.RandomUtils;
 import util.StringUtils;
 
 import java.io.Serializable;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -26,7 +25,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,7 +45,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private final int baseExp;
 	private final GrowthRate growthRate;
 	private final Type[] type;
-	private final List<Entry<Integer, AttackNamesies>> levelUpMoves;
+	private final List<LevelUpMove> levelUpMoves;
 	private final Set<AttackNamesies> learnableMoves;
 	private final int catchRate;
 	private final int[] givenEVs;
@@ -81,7 +79,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			String flavorText,
 			int eggSteps,
 			List<EggGroup> eggGroups,
-			List<Entry<Integer, AttackNamesies>> levelUpMoves,
+			List<LevelUpMove> levelUpMoves,
 			Set<AttackNamesies> learnableMoves
 	) {
 		this.number = number;
@@ -115,7 +113,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return type;
 	}
 
-	public List<Entry<Integer, AttackNamesies>> getLevelUpMoves() {
+	public List<LevelUpMove> getLevelUpMoves() {
 		return levelUpMoves;
 	}
 
@@ -299,8 +297,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return GeneralUtils.arrayValueOf(enumType, in.nextLine().trim().split(" "));
 	}
 
-	private static List<Entry<Integer, AttackNamesies>> createLevelUpMoves(Scanner in) {
-		List<Entry<Integer, AttackNamesies>> levelUpMoves = new ArrayList<>();
+	private static List<LevelUpMove> createLevelUpMoves(Scanner in) {
+		List<LevelUpMove> levelUpMoves = new ArrayList<>();
 		int numMoves = in.nextInt();
 
 		for (int i = 0; i < numMoves; i++) {
@@ -308,13 +306,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			String attackName = in.nextLine().trim();
 			AttackNamesies namesies = AttackNamesies.valueOf(attackName);
 
-			levelUpMoves.add(new SimpleEntry<>(level, namesies));
-
-			// TODO: Test case for this but include -1 for evolution level
-			// TODO: Test that these are always in numerical order
-//			if (level < 0 || level > ActivePokemon.MAX_LEVEL) {
-//				Global.error("Invalid level " + level + " (Move: " + attackName + ")");
-//			}
+			levelUpMoves.add(new LevelUpMove(level, namesies));
 		}
 
 		return levelUpMoves;
@@ -337,8 +329,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 
 	public List<AttackNamesies> getMoves(int level) {
 		return levelUpMoves.stream()
-				.filter(entry -> entry.getKey() == level)
-				.map(Entry::getValue)
+				.filter(entry -> entry.getLevel() == level)
+				.map(LevelUpMove::getMove)
 				.collect(Collectors.toList());
 	}
 
@@ -410,9 +402,9 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 
 	// Returns what level the Pokemon will learn the given attack, returns null if they cannot learn it by level up
 	public Integer levelLearned(AttackNamesies attack) {
-		for (Entry<Integer, AttackNamesies> entry : this.levelUpMoves) {
-			if (entry.getValue() == attack) {
-				return entry.getKey();
+		for (LevelUpMove entry : this.levelUpMoves) {
+			if (entry.getMove() == attack) {
+				return entry.getLevel();
 			}
 		}
 

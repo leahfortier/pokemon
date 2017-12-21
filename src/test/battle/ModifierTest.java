@@ -159,6 +159,7 @@ public class ModifierTest {
     public void powerModifierTest() {
         // Adamant Orb boosts dragon and steel type moves but only for Dialga
         powerModifierTest(1.2, new TestInfo().attacking(PokemonNamesies.DIALGA, ItemNamesies.ADAMANT_ORB).with(AttackNamesies.OUTRAGE));
+        powerModifierTest(1.2, new TestInfo().attacking(PokemonNamesies.DIALGA, ItemNamesies.ADAMANT_ORB).with(AttackNamesies.IRON_HEAD));
         powerModifierTest(1, new TestInfo().attacking(PokemonNamesies.DIALGA, ItemNamesies.ADAMANT_ORB).with(AttackNamesies.TACKLE));
         powerModifierTest(1, new TestInfo().attacking(PokemonNamesies.DRAGONAIR, ItemNamesies.ADAMANT_ORB).with(AttackNamesies.OUTRAGE));
 

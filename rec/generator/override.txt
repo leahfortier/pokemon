@@ -228,10 +228,10 @@ OHKO:
 		###
 *
 SwitchStat:
-	Header: Stat switchStat(Stat s)
+	Header: Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s)
 *
 OppSwitchStat:
-	Header: Stat switchStat(Stat s)
+	Header: Stat getSwitchStat(Stat s)
 *
 CrashDamage:
 	Header: void crash(Battle b, ActivePokemon user)

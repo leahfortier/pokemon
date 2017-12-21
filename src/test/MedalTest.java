@@ -13,7 +13,7 @@ public class MedalTest {
 
     @Test
     public void evsTest() {
-        GameTest.setNewPlayer(new Player());
+        TestGame.setNewPlayer(new Player());
         Player player = Game.getPlayer();
 
         ActivePokemon bulby = new ActivePokemon(PokemonNamesies.BULBASAUR, 5, false, true);

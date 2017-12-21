@@ -123,7 +123,7 @@ public abstract class BattleEffect extends Effect {
 			super(EffectNamesies.WONDER_ROOM, 5, 5, false);
 		}
 
-		public Stat switchStat(Stat s) {
+		public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
 			// Defense and Special Defense are swapped
 			if (s == Stat.DEFENSE) return Stat.SP_DEFENSE;
 			if (s == Stat.SP_DEFENSE) return Stat.DEFENSE;
