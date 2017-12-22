@@ -14813,14 +14813,12 @@ Light
 47 49.6 Lanturn's light can shine up from great depths. It is nicknamed "The Deep-Sea Star."
 5120
 WATER_2 NONE
-25
+23
 -1 STOCKPILE
 -1 SWALLOW
 -1 SPIT_UP
-0 STOCKPILE
-0 SWALLOW
-0 SPIT_UP
 0 EERIE_IMPULSE
+0 SOAK
 0 BUBBLE
 0 SUPERSONIC
 0 THUNDER_WAVE

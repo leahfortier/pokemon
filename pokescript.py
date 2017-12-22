@@ -177,9 +177,9 @@ def attackSubstitution(num, attack):
         # Starmie
         elif num == 121:
             return 'Cosmic Power'
-        # Lanturn -- manually include Spit Up/Swallow
+        # Lanturn
         elif num == 171:
-            return 'Stockpile'
+            return 'Soak'
         # Clefairy/Clefable
         elif num == 35 or num == 36:
             return 'Wish'
