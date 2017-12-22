@@ -51737,7 +51737,7 @@ NONE
 1
 5 STICKY_BARB
 50
-IRON_BARBS NO_ABILITY
+IRON_BARBS ANTICIPATION
 Thorn Pod
 39 242.5 It fights by swinging around its three spiky feelers. A hit from these steel spikes can reduce a boulder to rubble.
 5120
@@ -53086,7 +53086,7 @@ THROAT_CHOP
 615
 Cryogonal
 80 50 50 95 135 105
-170
+180
 MEDIUM_FAST
 ICE NO_TYPE
 25
@@ -53585,7 +53585,7 @@ LASER_FOCUS
 621
 Druddigon
 77 120 90 60 90 48
-173
+170
 MEDIUM_FAST
 DRAGON NO_TYPE
 45
@@ -57469,7 +57469,7 @@ FIRE NORMAL
 0 0 0 1 0 0
 LEVEL PYROAR 35
 0
-25
+13
 RIVALRY UNNERVE
 Lion Cub
 24 29.8 They set off on their own from their pride and live by themselves to become stronger. These hot-blooded Pok\u00e9mon are quick to fight.
@@ -57544,7 +57544,7 @@ FIRE NORMAL
 0 0 0 2 0 0
 NONE
 0
-25
+13
 RIVALRY UNNERVE
 Royal
 59 179.7 With fiery breath of more than 10,000 degrees Fahrenheit, they viciously threaten any challenger. The females protect the pride's cubs.
@@ -60993,7 +60993,7 @@ ITEM GOURGEIST MIRACLE_SEED
 50
 PICKUP FRISK
 Pumpkin
-31 33.1 It is said to carry wandering spirits to the place where they belong so they can move on.
+16 11.0 It is said to carry wandering spirits to the place where they belong so they can move on.
 5120
 AMORPHOUS NONE
 15
@@ -61078,7 +61078,7 @@ NONE
 50
 PICKUP FRISK
 Pumpkin
-67 86.0 It enwraps its prey in its hairlike arms. It sings joyfully as it observes the suffering of its prey.
+35 27.6 It enwraps its prey in its hairlike arms. It sings joyfully as it observes the suffering of its prey.
 5120
 AMORPHOUS NONE
 21
@@ -61674,7 +61674,7 @@ NONE
 -1
 AURA_BREAK NO_ABILITY
 Order
-197 627.4 It's hypothesized that it's monitoring those who destroy the ecosystem from deep in the cave where it lives.
+197 672.4 It's hypothesized that it's monitoring those who destroy the ecosystem from deep in the cave where it lives.
 30720
 UNDISCOVERED NONE
 16
