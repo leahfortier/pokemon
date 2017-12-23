@@ -2,6 +2,7 @@
 
 from lxml import html
 import requests
+import math
 
 global infoTable
 
@@ -177,9 +178,9 @@ def attackSubstitution(num, attack):
         # Starmie
         elif num == 121:
             return 'Cosmic Power'
-        # Lanturn -- manually include Spit Up/Swallow
+        # Lanturn
         elif num == 171:
-            return 'Stockpile'
+            return 'Soak'
         # Clefairy/Clefable
         elif num == 35 or num == 36:
             return 'Wish'
@@ -287,8 +288,11 @@ def abilitySubstitution(num, ability):
         if num == 718:
             return 'No_Ability'
     elif ability == 'Plus':
+        # Klink line
+        if num >= 599 and num <= 601:
+            return 'Clear Body'
         # Mareep line
-        if num >= 179 and num <= 181:
+        elif num >= 179 and num <= 181:
             return 'No_Ability'
         # Plusle
         elif num == 311:
@@ -403,6 +407,41 @@ def namesies(stringsies):
         stringsies = 'RKSSYSTEM'
     return stringsies
 
+def getSchemaIndex(schema, columnName):
+    for index, column in enumerate(schema.getchildren()):
+        if column.text == columnName:
+            return index
+    
+def hasNormalForm(row, formIndex, num):
+    # No form index implies there is only the normal form
+    if formIndex is None:
+        return True
+    
+    for form in row[formIndex][0][0].getchildren():
+        if checkNormalForm(form[0], num):
+            return True
+        
+    return False
+
+def hasNormalFormFromTable(table, num):
+    hasImage = False
+    for form in table.getchildren():
+        if form.tag != "img":
+            continue
+        
+        hasImage = True
+        if checkNormalForm(form, num):
+            return True
+
+    # If you didn't find any image tags, then there are not multiple forms
+    # So the only form is the normal form        
+    return not hasImage
+
+def checkNormalForm(form, num):
+    imageName = form.attrib["src"]
+    if imageName.endswith('/' + str(num).zfill(3) + '.png'):
+        return True
+
 def getElementText(element):
     text = element.text
     if not text is None:
@@ -498,6 +537,10 @@ def updateTableIndex(header, headerIndex):
 
                     infoTable = infoTable[0].getnext()
 
+def assertEquals(first, second):
+    if first != second:
+        raise Exception()
+
 with open ("temp.txt", "w") as f:
     for num in range(1, 802):
 #    for num in [1]:
@@ -532,7 +575,22 @@ with open ("temp.txt", "w") as f:
         if maleRatio.text != None:
             maleRatio = -1
         else:
-            maleRatio = int(float(maleRatio.xpath('table/tr[1]/td[2]')[0].text[:-1]))                                 
+            # Remove the % from the end and convert to float
+            maleRatio = float(maleRatio.xpath('table/tr[1]/td[2]')[0].text[:-1])
+            if maleRatio > 50:
+                maleRatio = math.floor(maleRatio)
+            else:
+                maleRatio = math.ceil(maleRatio)
+
+        # Silcoon/Beautifly, Gardevoir are 100% female now
+        if num in [266, 267, 282]:
+            assertEquals(maleRatio, 50)
+            maleRatio = 0
+        # Cascoon/Dustox, Glalie are 100% male now
+        elif num in [268, 269, 362]:
+            assertEquals(maleRatio, 50)
+            maleRatio = 100
+                                
         print("Male Ratio: " + str(maleRatio))
 
         types = getTypes(num)
@@ -755,27 +813,57 @@ with open ("temp.txt", "w") as f:
 
         print("TMS:")
         tms = []
-        if updateTable('TM & HM Attacks'):        
+        if updateTable('TM & HM Attacks'):    
+            schema = infoTable[1]
+            attackIndex = getSchemaIndex(schema, "Attack Name")
+            formIndex = getSchemaIndex(schema, "Form")
+            
             for i in range(2, len(infoTable) - 1, 2):
-                attack = infoTable[i][1][0].text
-
-                if attack == "Frustration" or attack == "Return" or attack == "Quash":
+                row = infoTable[i]
+                
+                attack = row[attackIndex][0].text
+                if attack in ["Frustration", "Return", "Quash"]:
+                    continue
+                
+                if not hasNormalForm(row, formIndex, num):
                     continue
                 
                 tms.append(attack)
                 print(attack)
+        # Manually add Fly for:
+        # Butterfree, Beedrill, Venomoth, Scyther, Dragonair, Ledyba line, 
+        # Natu, Yanma, Gligar, Beautifly, Dustox, Masquerain, Ninjask, 
+        # Shedinja, Volbeat, Illumise, Mothim, Vespiquen, Garchomp, Yanmega, 
+        # Gliscor, Emolga, Vivillon, Rowlet line, Vikavolt, Cutiefly line
+        if num in [12, 15, 49, 123, 148, 165, 166, 
+                   177, 193, 207, 267, 269, 284, 291, 
+                   292, 313, 314, 414, 416, 445, 469, 
+                   472, 587, 666, 722, 723, 724, 738, 742, 743]:
+            attack = "Fly"
+            tms.append(attack)
+            print(attack)
 
         print("Egg Moves:")
         eggMoves = []
         if updateTable('Egg Moves '):
+            schema = infoTable[1]
+            attackIndex = getSchemaIndex(schema, "Attack Name")
+            
             for i in range(2, len(infoTable) - 1, 2):
-                attack = infoTable[i][0][0].text
-
-                if attack in ["Helping Hand", "Ally Switch", "After You", "Wide Guard", "Quash", "Rage Powder", "Follow Me"]:
-                    continue
-
+                row = infoTable[i]
+                
+                attack = row[attackIndex][0].text
                 if attack == "Ion Deluge":
                     attack = "Electrify"
+                elif attack in ["Helping Hand", "Ally Switch", "After You", "Wide Guard", "Quash", "Rage Powder", "Follow Me", "Spotlight"]:
+                    continue
+                    
+                # This column does not have a name in the schema
+                # It is always present since it additionally contains the details
+                # For Pokemon with multiple forms, these will additionally be included here
+                detailsCol = row[-1]
+                if not hasNormalFormFromTable(detailsCol, num):
+                    continue
                 
                 eggMoves.append(attack)
                 print(attack)
@@ -784,24 +872,62 @@ with open ("temp.txt", "w") as f:
         tutorMoves = []
         if updateTable('Move Tutor Attacks'):
             table = infoTable.xpath('thead/tr')
+            
+            schema = table[1]
+            attackIndex = getSchemaIndex(schema, "Attack Name")
+            formIndex = getSchemaIndex(schema, "Form")
+            
             for i in range(2, len(table) - 1, 2):
-                attack = table[i][0][0].text
-
-                if attack in ["Helping Hand", "After You"]:
+                row = table[i]
+                
+                attack = row[attackIndex][0].text
+                if attack in ["Helping Hand", "After You", "Ally Switch"]:
+                    continue
+                
+                if not hasNormalForm(row, formIndex, num):
                     continue
                 
                 tutorMoves.append(attack)
                 print(attack)
         if updateTable('Ultra Sun/Ultra Moon Move Tutor Attacks'):
             table = infoTable.xpath('thead/tr')
+            
+            schema = table[1]
+            attackIndex = getSchemaIndex(schema, "Attack Name")
+            formIndex = getSchemaIndex(schema, "Form")
+            
             for i in range(2, len(table) - 1, 2):
-                attack = table[i][0][0].text
-
-                if attack in ["Helping Hand", "After You"]:
+                row = table[i]
+                
+                attack = row[attackIndex][0].text
+                if attack in ["Helping Hand", "After You", "Ally Switch"]:
+                    continue
+                
+                if not hasNormalForm(row, formIndex, num):
                     continue
                 
                 tutorMoves.append(attack)
                 print(attack)
+
+#        print("Transfer Moves:")
+#        if updateTable('Transfer Only Moves '):
+#            schema = infoTable[1]
+#            attackIndex = getSchemaIndex(schema, "Attack Name")
+#            methodIndex = getSchemaIndex(schema, "Method")
+#            
+#            startIndex = 2
+#            if infoTable[2][0].tag == "th":
+#                startIndex = 3
+#                
+#            for i in range(startIndex, len(infoTable) - 1, 2):
+#                row = infoTable[i]
+#                
+#                attack = row[attackIndex][0].text
+#                method = row[methodIndex].text
+#                
+#                if "Gen VI" in method:
+#                    tms.append(attack)
+#                    print(attack)
 
         # Stats
         stats = [0]*6

@@ -12,12 +12,12 @@ import util.StringUtils;
 
 import java.io.PrintStream;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class StuffGen {
@@ -25,6 +25,7 @@ public class StuffGen {
 	public static void main(String[] args) {
 		new StuffGen();
 
+//		newPokemonInfoCompare();
 //		pokemonInfoStuff();
 
 		System.out.println("GEN GEN GEN");
@@ -213,10 +214,10 @@ public class StuffGen {
 		FileIO.overwriteFile(FileName.BASE_EVOLUTIONS, out);
 	}
 
-	private static Set<String> getMoves(Scanner in) {
+	private static List<String> getMoves(Scanner in) {
 		int numMoves = in.nextInt(); in.nextLine();
 
-		Set<String> moves = new TreeSet<>();
+		List<String> moves = new ArrayList<>();
 		for (int i = 0; i < numMoves; i++) {
 			moves.add(in.nextLine());
 		}
@@ -231,8 +232,8 @@ public class StuffGen {
 	}
 
 	private static void movesDiff(Scanner in1, Scanner in2, String diffName, StringBuilder diffs) {
-		Set<String> moves1 = getMoves(in1);
-		Set<String> moves2 = getMoves(in2);
+		List<String> moves1 = getMoves(in1);
+		List<String> moves2 = getMoves(in2);
 
 		List<String> removedMoves = GeneralUtils.inFirstNotSecond(moves1, moves2);
 		List<String> addedMoves = GeneralUtils.inFirstNotSecond(moves2, moves1);
@@ -262,6 +263,8 @@ public class StuffGen {
 						return line2.equals("24");
 					case "75":
 						return line2.equals("76");
+					case "13":
+						return line2.equals("12");
 				}
 		}
 
@@ -274,7 +277,7 @@ public class StuffGen {
 		Scanner in1 = new Scanner(FileIO.readEntireFileWithReplacements(FileName.POKEMON_INFO, false));
 		Scanner in2 = new Scanner(FileIO.readEntireFileWithReplacements("temp.txt", false));
 
-		PrintStream out = FileIO.openOutputFile("out.txt");
+		PrintStream out = FileIO.openOutputFile("temp2.txt");
 		while (in2.hasNext()) {
 			StringBuilder diffs = new StringBuilder();
 
@@ -301,7 +304,7 @@ public class StuffGen {
 			diff(in1, in2, "Egg Steps", diffs);
 			diff(in1, in2, "Egg Groups", diffs);
 			movesDiff(in1, in2, "Level Up", diffs);
-			movesDiff(in1, in2, "Learnable", new StringBuilder()); // Ignore for now
+			movesDiff(in1, in2, "Learnable", diffs);
 
 			if (diffs.length() > 0) {
 				out.printf("%03d %s:\n\t%s\n", num, name, diffs.toString().replace("\n", "\n\t"));

@@ -159,7 +159,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return givenEVs;
 	}
 
-	int getMaleRatio() {
+	public int getMaleRatio() {
 		return maleRatio;
 	}
 
