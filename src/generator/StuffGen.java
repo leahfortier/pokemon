@@ -263,6 +263,8 @@ public class StuffGen {
 						return line2.equals("24");
 					case "75":
 						return line2.equals("76");
+					case "13":
+						return line2.equals("12");
 				}
 		}
 

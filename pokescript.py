@@ -2,6 +2,7 @@
 
 from lxml import html
 import requests
+import math
 
 global infoTable
 
@@ -536,6 +537,10 @@ def updateTableIndex(header, headerIndex):
 
                     infoTable = infoTable[0].getnext()
 
+def assertEquals(first, second):
+    if first != second:
+        raise Exception()
+
 with open ("temp.txt", "w") as f:
     for num in range(1, 802):
 #    for num in [1]:
@@ -570,7 +575,22 @@ with open ("temp.txt", "w") as f:
         if maleRatio.text != None:
             maleRatio = -1
         else:
-            maleRatio = int(float(maleRatio.xpath('table/tr[1]/td[2]')[0].text[:-1]))                                 
+            # Remove the % from the end and convert to float
+            maleRatio = float(maleRatio.xpath('table/tr[1]/td[2]')[0].text[:-1])
+            if maleRatio > 50:
+                maleRatio = math.floor(maleRatio)
+            else:
+                maleRatio = math.ceil(maleRatio)
+
+        # Silcoon/Beautifly, Gardevoir are 100% female now
+        if num in [266, 267, 282]:
+            assertEquals(maleRatio, 50)
+            maleRatio = 0
+        # Cascoon/Dustox, Glalie are 100% male now
+        elif num in [268, 269, 362]:
+            assertEquals(maleRatio, 50)
+            maleRatio = 100
+                                
         print("Male Ratio: " + str(maleRatio))
 
         types = getTypes(num)
