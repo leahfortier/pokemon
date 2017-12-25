@@ -4,6 +4,7 @@ from lxml import html
 import requests
 import math
 import re
+import time
 
 global infoTable
 
@@ -332,73 +333,38 @@ def abilitySubstitution(num, ability):
     
     return ability
 
-def getTypes(num):
-    # My personal type changes
+# My personal type changes
+def typeSubstitution(num, types):
     # Psyduck/Golduck are now Psychic type
     if num == 54 or num == 55:
+        assert types == ['Water', 'No_Type']
         return ['Water', 'Psychic']
     # Horsea/Seadra are now Dragon type
     elif num == 116 or num == 117:
+        assert types == ['Water', 'No_Type']
         return ['Water', 'Dragon']
     # Gyarados is now Water/Dragon instead of Water/Flying
     elif num == 130:
+        assert types == ['Water', 'Flying']
         return ['Water', 'Dragon']
     # Noctowl is now Psychic/Flying
     elif num == 164:
+        assert types == ['Normal', 'Flying']
         return ['Psychic', 'Flying']
     # Luxray is now Dark type
     elif num == 405:
+        assert types == ['Electric', 'No_Type']
         return ['Electric', 'Dark']
     # Flabebe line is now Grass type
     elif num >= 669 and num <= 671:
+        assert types == ['Fairy', 'No_Type']
         return ['Fairy', 'Grass']
     # Goomy line is now Water type
     elif num >= 704 and num <= 706:
+        assert types == ['Dragon', 'No_Type']
         return ['Dragon', 'Water']
     
-    # Manual types because hard to parse Pokemon with multiple forms
-    # Wormadam is stupid
-    if num == 413:
-        return ['Bug', 'Grass']
-    # Rotom
-    elif num == 479:
-        return ['Electric', 'Ghost']
-    # Shaymin
-    elif num == 492:
-        return ['Grass', 'No_Type']
-    # Darmanitan and Vulpix/Ninetales
-    elif num == 555 or num == 37 or num == 38:
-        return ['Fire', 'No_Type']
-    # GROSS SHIT and Meowth/Persian
-    elif num == 19 or num == 20 or num == 52 or num == 53:
-        return ['Normal', 'No_Type']
-    # Raichu
-    elif num == 26:
-        return ['Electric', 'No_Type']
-    # Sandshrew/Sandslash and Diglett/Dugtrio and Marowak
-    elif num == 27 or num == 28 or num == 50 or num == 51 or num == 105:
-        return ['Ground', 'No_Type']
-    # Geodude line
-    elif num == 74 or num == 75 or num == 76:
-        return ['Rock', 'Ground']
-    # Grimer/Muk
-    elif num == 88 or num == 89:
-        return ['Poison', 'No_Type']
-    # Exeggutor
-    elif num == 103:
-        return ['Grass', 'Psychic']
-    # Meloetta
-    elif num == 648:
-        return ['Normal', 'Psychic']
-    # Stupid dancing bird
-    elif num == 741:
-        return ['Fire', 'Flying']
-    # Hoopa
-    elif num == 720:
-        return ['Psychic', 'Ghost']
-    # Necrozma
-    elif num == 800:
-        return ['Psychic', 'No_Type']
+    return types
 
 def namesies(stringsies):
     stringsies = stringsies.strip().replace(' ', '_').replace('-', '_').replace('\'', '').upper()
@@ -427,6 +393,24 @@ def getSchemaIndex(schema, columnName):
         if column.text == columnName:
             return index
     
+# types should be an array that points to img elements
+def getTypes(types):
+    type1 = types[0].attrib["src"]
+    type1 = type1[type1.find("type") + 5 : -4].capitalize()
+
+    # Check for a second type
+    if len(types) == 2:
+        type2 = types[1].attrib["src"]
+        type2 = type2[type2.find("type") + 5 : -4].capitalize()
+    else:
+        type2 = "No_Type"
+        
+    return [type1, type2]
+    
+# Removes the form/forme suffix from the end
+def normalizeForm(form):
+    return re.sub(" Forme?$", "", form).strip()
+
 def hasNormalForm(row, formIndex, num):
     # No form index implies there is only the normal form
     if formIndex is None:
@@ -552,29 +536,54 @@ def updateTableIndex(header, headerIndex):
 
                     infoTable = infoTable[0].getnext()
 
-with open ("temp.txt", "w") as f:
+def getFormName(num):
+    # Pokemon with Alolan forms
+    if num in [19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105]:
+        return "Normal"
+    # Kyurem, Greninja, Zygarde, Rockruff
+    elif num in [646, 658, 718, 744]:
+        return "Standard"
+    # Wormadam is stupid
+    elif num == 413:
+        return "Plant Cloak"
+    # Rotom
+    elif num == 479:
+        return "Rotom"
+    # Giratina
+    elif num == 487:
+        return "Altered"
+    # Shaymin
+    elif num == 492:
+        return "Land"
+    # Darmanitan
+    elif num == 555:
+        return "Normal"
+    # Tornadus/Thundurus/Landorus
+    elif num in [641, 642, 645]:
+        return "Incarnate"
+    # Meloetta
+    elif num == 648:
+        return "Aria"
+    # Hoopa
+    elif num == 720:
+        return "Hoopa Confined"
+    # Stupid dancing bird
+    elif num == 741:
+        return "Baile Style"
+    # Lycanroc
+    elif num == 745:
+        return "Midday"
+    # Necrozma
+    elif num == 800:
+        return "Normal"
+
+with open ("../temp.txt", "w") as f:
+    startTime = time.time()
+    
     for num in range(1, 802):
 #    for num in [1]:
-        formName = None
+        formName = getFormName(num)
         normalForm = True
-        # Pokemon with Alolan forms
-        if num in [19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105]:
-            formName = "Normal"
-        # Kyurem, Greninja, Zygarde, Rockruff
-        elif num in [646, 658, 718, 744]:
-            formName = "Standard"
-        # Giratina
-        elif num == 487:
-            formName = "Altered"
-        # Shaymin
-        elif num == 492:
-            formName = "Land"
-        # Tornadus/Thundurus/Landorus
-        elif num in [641, 642, 645]:
-            formName = "Incarnate"
-        # Lycanroc
-        elif num == 745:
-            formName = "Midday"
             
         # Basculin, Meowstic, Magearna (fucking Soul-Heart has a dash)
         useAbilitiesList = num in [550, 678, 801]
@@ -628,21 +637,22 @@ with open ("temp.txt", "w") as f:
                                 
         print("Male Ratio: " + str(maleRatio))
 
-        types = getTypes(num)
-        if not types is None:
-            type1 = types[0]
-            type2 = types[1]
+        types = infoTable.xpath('tr[2]/td[6]/a/img')
+        if len(types) > 0:
+            types = getTypes(types)
+        # Multiple forms
         else:
-            types = infoTable.xpath('tr[2]/td[6]/a/img')
-            type1 = types[0].attrib["src"]
-            type1 = type1[type1.find("type") + 5 : -4].capitalize()
-
-            # Check for a second type
-            if len(types) == 2:
-                type2 = types[1].attrib["src"]
-                type2 = type2[type2.find("type") + 5 : -4].capitalize()
-            else:
-                type2 = "No_Type"
+            types = None
+            forms = infoTable.xpath('tr[2]/td[6]/table[1]/tr')
+            for form in forms:
+                typeFormName = normalizeForm(form[0].text)
+                if typeFormName == formName:
+                    types = getTypes(form[1].xpath('a/img'))
+                    break
+                    
+        types = typeSubstitution(num, types)
+        type1 = types[0]
+        type2 = types[1]
                 
         print("Type1: " + type1)
         print("Type2: " + type2)
@@ -785,7 +795,7 @@ with open ("temp.txt", "w") as f:
                 else:
                     assert len(allAbilities) > 1
                     form = formAbilities[formIndex + 1:].strip()
-                    form = re.sub(" Forme?$", "", form).strip()
+                    form = normalizeForm(form)
                     if formName != form:
                         continue
                     formAbilities = formAbilities[:formIndex]
@@ -1079,3 +1089,9 @@ with open ("temp.txt", "w") as f:
             f.write(namesies(attack) + '\n')
 
         f.write('\n')
+        
+    endTime = time.time()
+    totalSeconds = int(endTime - startTime)
+    minutes = totalSeconds // 60
+    seconds = totalSeconds % 60
+    print(str(minutes) + " Minutes, " + str(seconds) + " Seconds")
