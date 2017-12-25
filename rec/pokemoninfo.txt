@@ -42633,7 +42633,7 @@ NONE
 1
 100 LUM_BERRY
 -1
-NATURAL_CURE SERENE_GRACE
+NATURAL_CURE NO_ABILITY
 Gratitude
 8 4.6 The flowers all over its body burst into bloom if it is lovingly hugged and senses gratitude.
 30720
@@ -55727,7 +55727,7 @@ DRAGON ICE
 NONE
 0
 -1
-PRESSURE TERAVOLT
+PRESSURE NO_ABILITY
 Boundary
 118 716.5 It generates a powerful, freezing energy inside itself, but its body became frozen when the energy leaked out.
 30720

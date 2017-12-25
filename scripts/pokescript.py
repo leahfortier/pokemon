@@ -3,6 +3,7 @@
 from lxml import html
 import requests
 import math
+import re
 
 global infoTable
 
@@ -407,6 +408,20 @@ def namesies(stringsies):
         stringsies = 'RKSSYSTEM'
     return stringsies
 
+def removePrefix(string, prefix):
+    assert string.startswith(prefix)
+    return string[len(prefix):]
+
+# Listsies should be a list of strings 
+# This will remove all empty and whitespace characters from the list and return it
+def removeEmpty(listsies):
+    temp = []
+    for string in listsies:
+        if string.strip() == "":
+            temp.append(string)
+    for empty in temp:
+        listsies.remove(empty)
+
 def getSchemaIndex(schema, columnName):
     for index, column in enumerate(schema.getchildren()):
         if column.text == columnName:
@@ -537,13 +552,33 @@ def updateTableIndex(header, headerIndex):
 
                     infoTable = infoTable[0].getnext()
 
-def assertEquals(first, second):
-    if first != second:
-        raise Exception()
-
 with open ("temp.txt", "w") as f:
     for num in range(1, 802):
 #    for num in [1]:
+        formName = None
+        normalForm = True
+        # Pokemon with Alolan forms
+        if num in [19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105]:
+            formName = "Normal"
+        # Kyurem, Greninja, Zygarde, Rockruff
+        elif num in [646, 658, 718, 744]:
+            formName = "Standard"
+        # Giratina
+        elif num == 487:
+            formName = "Altered"
+        # Shaymin
+        elif num == 492:
+            formName = "Land"
+        # Tornadus/Thundurus/Landorus
+        elif num in [641, 642, 645]:
+            formName = "Incarnate"
+        # Lycanroc
+        elif num == 745:
+            formName = "Midday"
+            
+        # Basculin, Meowstic, Magearna (fucking Soul-Heart has a dash)
+        useAbilitiesList = num in [550, 678, 801]
+        
         page = requests.get('http://www.serebii.net/pokedex-sm/' + str(num).zfill(3) + '.shtml')
         tree = html.fromstring(page.text)
         mainDiv = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/div[2]/div')[0];
@@ -584,11 +619,11 @@ with open ("temp.txt", "w") as f:
 
         # Silcoon/Beautifly, Gardevoir are 100% female now
         if num in [266, 267, 282]:
-            assertEquals(maleRatio, 50)
+            assert maleRatio == 50
             maleRatio = 0
         # Cascoon/Dustox, Glalie are 100% male now
         elif num in [268, 269, 362]:
-            assertEquals(maleRatio, 50)
+            assert maleRatio == 50
             maleRatio = 100
                                 
         print("Male Ratio: " + str(maleRatio))
@@ -656,8 +691,7 @@ with open ("temp.txt", "w") as f:
             infoTable = infoTable.getnext()
         else:
             index = 3
-            infoTable = mainDiv.xpath('table[3]')[0]
-            
+            infoTable = mainDiv.xpath('table[3]')[0]    
     
         growthRate = infoTable.xpath('tr[4]/td[1]')[0].text_content()
         growthRate = growthRate[growthRate.find("Points") + 6 : ]
@@ -723,14 +757,50 @@ with open ("temp.txt", "w") as f:
                     evs[5] = value
 
         print("Effort Values: " + str(evs))
+        
         updateTable('Abilities')
-        abilities = infoTable.xpath('tr[2]/td/a/b')
-        ability1 = abilities[0].text
-
-        if len(abilities) >= 2:
-            ability2 = abilities[1].text
+        ability1 = None
+        ability2 = None
+        if useAbilitiesList:
+            abilities = infoTable.xpath('tr[2]/td/a/b')
+            ability1 = abilities[0].text
+    
+            if len(abilities) >= 2:
+                ability2 = abilities[1].text
+            else:
+                ability2 = "No_Ability"
         else:
-            ability2 = "No_Ability"
+            allAbilities = infoTable.xpath('tr[1]/td')[0].text_content()
+            allAbilities = removePrefix(allAbilities, "Abilities: ")
+            allAbilities = allAbilities.replace("(Hidden)", "")
+            allAbilities = allAbilities.replace("(Hidden Ability)", "")
+            allAbilities = re.split("\)", allAbilities)
+            removeEmpty(allAbilities)
+            for formAbilities in allAbilities:
+                formIndex = formAbilities.rfind("(")
+                if formIndex == -1:
+                    # No form specified -- there should only be the normal form
+                    assert len(allAbilities) == 1
+                    assert normalForm
+                else:
+                    assert len(allAbilities) > 1
+                    form = formAbilities[formIndex + 1:].strip()
+                    form = re.sub(" Forme?$", "", form).strip()
+                    if formName != form:
+                        continue
+                    formAbilities = formAbilities[:formIndex]
+                formAbilities = formAbilities.strip()
+                abilities = re.split("-", formAbilities)
+                if abilities[0].strip() == "":
+                    abilities = abilities[1:]
+                ability1 = abilities[0].strip()
+                if len(abilities) > 1:
+                    ability2 = abilities[1].strip()
+                else:
+                    ability2 = "No_Ability"
+                break
+        assert not ability1 is None
+        assert not ability2 is None
             
         ability1 = abilitySubstitution(num, ability1)
         ability2 = abilitySubstitution(num, ability2)
