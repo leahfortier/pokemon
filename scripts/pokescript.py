@@ -5,6 +5,7 @@ import requests
 import math
 import re
 import time
+from types import SimpleNamespace
 
 global infoTable
 
@@ -536,57 +537,74 @@ def updateTableIndex(header, headerIndex):
 
                     infoTable = infoTable[0].getnext()
 
-def getFormName(num):
+def getFormConfig(num):
+    formConfig = SimpleNamespace()
+    
+    formConfig.formName = None
+    formConfig.normalForm = True
+    
     # Pokemon with Alolan forms
     if num in [19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105]:
-        return "Normal"
+        formConfig.formName = "Normal"
     # Kyurem, Greninja, Zygarde, Rockruff
     elif num in [646, 658, 718, 744]:
-        return "Standard"
+        formConfig.formName = "Standard"
+    # Deoxys
+    elif num == 386:
+        formConfig.formName = "Normal"
     # Wormadam is stupid
     elif num == 413:
-        return "Plant Cloak"
+        formConfig.formName = "Plant Cloak"
     # Rotom
     elif num == 479:
-        return "Rotom"
+        formConfig.formName = "Rotom"
     # Giratina
     elif num == 487:
-        return "Altered"
+        formConfig.formName = "Altered"
     # Shaymin
     elif num == 492:
-        return "Land"
+        formConfig.formName = "Land"
     # Darmanitan
     elif num == 555:
-        return "Normal"
+        formConfig.formName = "Normal"
     # Tornadus/Thundurus/Landorus
     elif num in [641, 642, 645]:
-        return "Incarnate"
+        formConfig.formName = "Incarnate"
     # Meloetta
     elif num == 648:
-        return "Aria"
+        formConfig.formName = "Aria"
     # Hoopa
     elif num == 720:
-        return "Hoopa Confined"
+        formConfig.formName = "Hoopa Confined"
     # Stupid dancing bird
     elif num == 741:
-        return "Baile Style"
+        formConfig.formName = "Baile Style"
     # Lycanroc
     elif num == 745:
-        return "Midday"
+        formConfig.formName = "Midday"
     # Necrozma
     elif num == 800:
-        return "Normal"
+        formConfig.formName = "Normal"
+        
+    formConfig.evFormName = formConfig.formName
+    # Darminatan
+    if num == 555:
+        formConfig.evFormName = "Standard"
+    # Kyurem
+    elif num == 646:
+        formConfig.evFormName = "Kyurem"
+    
+    # Basculin, Meowstic, Magearna (fucking Soul-Heart has a dash)
+    formConfig.useAbilitiesList = num in [550, 678, 801]
+    
+    return formConfig
 
 with open ("../temp.txt", "w") as f:
     startTime = time.time()
     
     for num in range(1, 802):
 #    for num in [1]:
-        formName = getFormName(num)
-        normalForm = True
-            
-        # Basculin, Meowstic, Magearna (fucking Soul-Heart has a dash)
-        useAbilitiesList = num in [550, 678, 801]
+        formConfig = getFormConfig(num)
         
         page = requests.get('http://www.serebii.net/pokedex-sm/' + str(num).zfill(3) + '.shtml')
         tree = html.fromstring(page.text)
@@ -646,7 +664,7 @@ with open ("../temp.txt", "w") as f:
             forms = infoTable.xpath('tr[2]/td[6]/table[1]/tr')
             for form in forms:
                 typeFormName = normalizeForm(form[0].text)
-                if typeFormName == formName:
+                if typeFormName == formConfig.formName:
                     types = getTypes(form[1].xpath('a/img'))
                     break
                     
@@ -707,71 +725,56 @@ with open ("../temp.txt", "w") as f:
         growthRate = growthRate[growthRate.find("Points") + 6 : ]
         print("Growth Rate: " + growthRate)
 
-        # Not in the mood to deal with Deoxys's multiple forms and effort yields
-        # Attack, Sp. Attack, and Speed
-        if num == 386:
-            evs = [0, 1, 0, 1, 0, 1]
-        # Same with Wormadam
-        # 2 Sp. Def
-        elif num == 413:
-            evs = [0, 0, 0, 0, 2, 0]
-        # And Shaymin
-        # 3 HP
-        elif num == 492:
-            evs = [3, 0, 0, 0, 0, 0]
-        # And Darmanitan
-        # 2 Attack
-        elif num == 555:
-            evs = [0, 2, 0, 0, 0, 0]
-        # And Tornadus and Thundurus and Landorus Note: Landorus actually has sp.attack but that's stupid its attack is higher
-        # 3 Attack
-        elif num == 641 or num == 642 or num == 645:
-            evs = [0, 3, 0, 0, 0, 0]
-        # And Kyurem
-        # HP, Attack, and Sp. Attack
-        elif num == 646:
-            evs = [1, 1, 0, 1, 0, 0]
-        # And Meloetta
-        # Sp Attack, Sp. Defense, and Speed
-        elif num == 648:
-            evs = [0, 0, 0, 1, 1, 1]
+        evStrings = infoTable.xpath('tr[4]/td[3]')[0].itertext()
+        
+        # If no form is specified, use this in the mapping
+        defaultForm = "FormNotSpecified"
+        form = defaultForm
+        evMap = {}
+        evMap[form] = [0]*6
+        for evString in evStrings:
+            evIndex = evString.find(" Point(s)")
+            
+            # String doesn't contain EV info -- new form name
+            if evIndex == -1:
+                form = normalizeForm(evString)
+                assert not form in evMap
+                evMap[form] = [0]*6
+                continue
+            
+            ev = evString[:evIndex]
+            evs = evMap[form]
+            
+            stat = ev[2:]
+            value = int(ev[0])
+            
+            if stat == "HP":
+                evs[0] = value
+            elif stat == "Attack":
+                evs[1] = value
+            elif stat == "Defense":
+                evs[2] = value
+            elif stat == "Sp. Attack":
+                evs[3] = value
+            elif stat == "Sp. Defense":
+                evs[4] = value
+            elif stat == "Speed":
+                evs[5] = value
+
+        if formConfig.evFormName is None:
+            evs = evMap[defaultForm]
+        if formConfig.evFormName not in evMap:
+            assert formConfig.normalForm
+            evs = evMap[defaultForm]
         else:
-            evs = [0]*6
-            evString = infoTable.xpath('tr[4]/td[3]')[0].text_content()
-
-            while True:
-                evIndex = evString.find("Point(s)")
-                if evIndex == -1:
-                    break
-                
-                ev = evString[: evIndex - 1]
-                evString = evString[evIndex + 8 :]
-                
-                if "Alola Form" in ev:
-                    break
-                
-                stat = ev[2:]
-                value = int(ev[0])
-                
-                if stat == "HP":
-                    evs[0] = value
-                elif stat == "Attack":
-                    evs[1] = value
-                elif stat == "Defense":
-                    evs[2] = value
-                elif stat == "Sp. Attack":
-                    evs[3] = value
-                elif stat == "Sp. Defense":
-                    evs[4] = value
-                elif stat == "Speed":
-                    evs[5] = value
-
+            evs = evMap[formConfig.evFormName]
+        
         print("Effort Values: " + str(evs))
         
         updateTable('Abilities')
         ability1 = None
         ability2 = None
-        if useAbilitiesList:
+        if formConfig.useAbilitiesList:
             abilities = infoTable.xpath('tr[2]/td/a/b')
             ability1 = abilities[0].text
     
@@ -791,12 +794,12 @@ with open ("../temp.txt", "w") as f:
                 if formIndex == -1:
                     # No form specified -- there should only be the normal form
                     assert len(allAbilities) == 1
-                    assert normalForm
+                    assert formConfig.normalForm
                 else:
                     assert len(allAbilities) > 1
                     form = formAbilities[formIndex + 1:].strip()
                     form = normalizeForm(form)
-                    if formName != form:
+                    if formConfig.formName != form:
                         continue
                     formAbilities = formAbilities[:formIndex]
                 formAbilities = formAbilities.strip()
