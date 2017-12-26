@@ -6,6 +6,26 @@ import math
 import re
 import time
 from types import SimpleNamespace
+from enum import Enum, auto
+
+# Original Pokes require an enum since their number is subject to change
+class AddedPokes(Enum):
+    MEGA_CHARIZARD = 803
+    MEGA_MAWILE = auto()
+    MEGA_ABSOL = auto()
+    MEGA_SABLEYE = auto()
+    ALOLAN_RAICHU = auto()
+    ALOLAN_SANDSHREW = auto()
+    ALOLAN_SANDSLASH = auto()
+    ALOLAN_VULPIX = auto()
+    ALOLAN_NINETALES = auto()
+    ALOLAN_GRIMER = auto()
+    ALOLAN_MUK = auto()
+    ALOLAN_EXEGGUTOR = auto()
+    ALOLAN_MAROWAK = auto()
+    MEGA_BANNETTE = auto()
+    MIDNIGHT_LYCANROC = auto()
+    DUSK_LYCANROC = auto()
 
 global infoTable
 
@@ -372,6 +392,9 @@ def getFormConfig(num):
     
     formConfig.formName = None
     formConfig.normalForm = True
+    formConfig.lookupNum = num
+    formConfig.name = None
+    formConfig.formIndex = 0
     
     # Pokemon with Alolan forms
     if num in [19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105]:
@@ -416,6 +439,15 @@ def getFormConfig(num):
     elif num == 800:
         formConfig.formName = "Normal"
         
+    elif num == AddedPokes.DUSK_LYCANROC.value:
+        formConfig.formName = "Dusk"
+        formConfig.normalForm = False
+        formConfig.lookupNum = 745
+        formConfig.name = "Lugarugan"
+        formConfig.formIndex = 2
+        imageSuffix = "-d"
+    
+    # Fucking special cases because Serebii can be super inconsistent
     formConfig.evFormName = formConfig.formName
     # Darminatan
     if num == 555:
@@ -426,6 +458,10 @@ def getFormConfig(num):
     
     # Basculin, Meowstic, Magearna (fucking Soul-Heart has a dash)
     formConfig.useAbilitiesList = num in [550, 678, 801]
+    
+    formConfig.formImageName = str(formConfig.lookupNum).zfill(3)
+    if not imageSuffix is None:
+        formConfig.formImageName += imageSuffix
     
     return formConfig
 
@@ -474,34 +510,34 @@ def getTypes(types):
 def normalizeForm(form):
     return re.sub(" Forme?$", "", form).strip()
 
-def hasNormalForm(row, formIndex, num):
-    # No form index implies there is only the normal form
+def hasForm(row, formIndex, formConfig):
+    # No form index implies there is only the normal form or all forms are treated the same
     if formIndex is None:
         return True
     
     for form in row[formIndex][0][0].getchildren():
-        if checkNormalForm(form[0], num):
+        if checkForm(form[0], formConfig):
             return True
         
     return False
 
-def hasNormalFormFromTable(table, num):
+def hasFormFromTable(table, formConfig):
     hasImage = False
     for form in table.getchildren():
         if form.tag != "img":
             continue
         
         hasImage = True
-        if checkNormalForm(form, num):
+        if checkForm(form, formConfig):
             return True
 
     # If you didn't find any image tags, then there are not multiple forms
     # So the only form is the normal form        
     return not hasImage
 
-def checkNormalForm(form, num):
+def checkForm(form, formConfig):
     imageName = form.attrib["src"]
-    if imageName.endswith('/' + str(num).zfill(3) + '.png'):
+    if imageName.endswith('/' + formConfig.formImageName + '.png'):
         return True
 
 def getElementText(element):
@@ -604,9 +640,10 @@ with open ("../temp.txt", "w") as f:
     
     for num in range(1, 802):
 #    for num in [1]:
+#    for num in [AddedPokes.DUSK_LYCANROC.value]:
         formConfig = getFormConfig(num)
         
-        page = requests.get('http://www.serebii.net/pokedex-sm/' + str(num).zfill(3) + '.shtml')
+        page = requests.get('http://www.serebii.net/pokedex-sm/' + str(formConfig.lookupNum).zfill(3) + '.shtml')
         tree = html.fromstring(page.text)
         mainDiv = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/div[2]/div')[0];
 
@@ -628,6 +665,11 @@ with open ("../temp.txt", "w") as f:
             name = "Nidoran F"
         elif num == 32:
             name = "Nidoran M"
+            
+        formConfig.lookupName = name
+        if formConfig.name is None:
+            formConfig.name = name
+        name = formConfig.name
 
         print("Name: " + name)
 
@@ -685,14 +727,23 @@ with open ("../temp.txt", "w") as f:
 
         # Height is specified in ft'in'' format -- convert to inches
         height = infoTable.xpath('tr[4]/td[2]')[0].text
-        height = height.split("/")[0]
+        height = height.split("/")
+        heightIndex = formConfig.formIndex
+        if len(height) <= heightIndex:
+            heightIndex = 0
+        height = height[heightIndex].strip()
         height = height.split("'")
+        assert len(height) == 2
         height = int(height[0])*12 + int(height[1].replace('"', ''))
         print("Height: " + str(height))
 
         # Remove the lbs from the end of weight
         weight = infoTable.xpath('tr[4]/td[3]')[0].text
-        weight = weight.split("/")[0].replace(' ', '')
+        weight = weight.split("/")
+        weightIndex = formConfig.formIndex
+        if len(weight) <= weightIndex:
+            weightIndex = 0
+        weight = weight[weightIndex].replace(' ', '')
         weight = weight[:-3]
         weight = float(weight)
         print("Weight: " + str(weight))
@@ -872,10 +923,22 @@ with open ("../temp.txt", "w") as f:
         print("Flavor Text: " + flavorText)
 
         print("Attacks:")
-        if updateTable('Ultra Sun/Ultra Moon Level Up', 
-                       'Sun/Moon Level Up', 
-                       'Standard Level Up',
-                       'Generation VII Level Up'):
+        if formConfig.normalForm:
+            levelUpTables = ['Ultra Sun/Ultra Moon Level Up', 
+                             'Ultra Sun / Ultra Moon Level Up', 
+                             'Sun/Moon Level Up', 
+                             'Sun / Moon Level Up', 
+                             'Standard Level Up',
+                             'Generation VII Level Up']
+        else:
+            suffix = " - " + formConfig.formName + " Form"
+            levelUpTables = ['Ultra Sun/Ultra Moon Level Up' + suffix,
+                             'Ultra Sun / Ultra Moon Level Up' + suffix,
+                             'Sun/Moon Level Up' + suffix,
+                             'Sun / Moon Level Up' + suffix,
+                             formConfig.formName + " Form Level Up"]
+        
+        if updateTable(*levelUpTables):
             attacks = []
             for i in range(2, len(infoTable) - 1, 2):
                 level = infoTable[i][0].text
@@ -887,7 +950,8 @@ with open ("../temp.txt", "w") as f:
                     
                 attack = infoTable[i][1][0].text
                 attack = attackSubstitution(num, attack)
-                if attack is None and level == 0:
+                if attack is None:
+                    assert level == 0
                     continue
                 
                 attacks.append(str(level) + " " + namesies(attack))
@@ -907,7 +971,7 @@ with open ("../temp.txt", "w") as f:
                 if attack in ["Frustration", "Return", "Quash"]:
                     continue
                 
-                if not hasNormalForm(row, formIndex, num):
+                if not hasForm(row, formIndex, formConfig):
                     continue
                 
                 tms.append(attack)
@@ -944,7 +1008,7 @@ with open ("../temp.txt", "w") as f:
                 # It is always present since it additionally contains the details
                 # For Pokemon with multiple forms, these will additionally be included here
                 detailsCol = row[-1]
-                if not hasNormalFormFromTable(detailsCol, num):
+                if not hasFormFromTable(detailsCol, formConfig):
                     continue
                 
                 eggMoves.append(attack)
@@ -966,7 +1030,7 @@ with open ("../temp.txt", "w") as f:
                 if attack in ["Helping Hand", "After You", "Ally Switch"]:
                     continue
                 
-                if not hasNormalForm(row, formIndex, num):
+                if not hasForm(row, formIndex, formConfig):
                     continue
                 
                 tutorMoves.append(attack)
@@ -985,7 +1049,7 @@ with open ("../temp.txt", "w") as f:
                 if attack in ["Helping Hand", "After You", "Ally Switch"]:
                     continue
                 
-                if not hasNormalForm(row, formIndex, num):
+                if not hasForm(row, formIndex, formConfig):
                     continue
                 
                 tutorMoves.append(attack)
@@ -1013,7 +1077,11 @@ with open ("../temp.txt", "w") as f:
 
         # Stats
         stats = [0]*6
-        updateTable('Stats')
+        statsTables = []
+        if not formConfig.normalForm:
+            statsTables.append("Stats - " + formConfig.formName + " Form")
+        statsTables.append("Stats")
+        updateTable(*statsTables)
         for i in range(0, len(stats)):
             stats[i] = int(infoTable.xpath('tr[3]/td[' + str(2 + i) + ']')[0].text)
         print("Stats: " + str(stats))
@@ -1025,7 +1093,7 @@ with open ("../temp.txt", "w") as f:
         elif num == 29 or num == 32:
             baseExp = 55
         else:
-            page = requests.get('http://bulbapedia.bulbagarden.net/wiki/' + name)
+            page = requests.get('http://bulbapedia.bulbagarden.net/wiki/' + formConfig.lookupName)
 #            //*[@id="mw-content-text"]/table[2]/tbody/tr[9]/td[1]/table/tbody/tr/td[2]
             tree = html.fromstring(page.text)
 
