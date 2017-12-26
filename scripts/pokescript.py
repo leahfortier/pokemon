@@ -6,7 +6,7 @@ import math
 import re
 import time
 from substitutions import attackSubstitution, abilitySubstitution, typeSubstitution
-from forms import AddedPokes, FormConfig
+import forms
 from parser import Parser
 
 def namesies(stringsies):
@@ -47,14 +47,36 @@ def getTypes(typeImages):
 def normalizeForm(form):
     return re.sub(" Forme?$", "", form).strip()
 
+def getBaseExpMap():
+    page = requests.get('https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield')
+    tree = html.fromstring(page.text)
+
+    table = tree.xpath('//*[@id="mw-content-text"]/table[1]/tr')
+    baseExpMap = {}
+    for i, row in enumerate(table):
+        # Schema
+        if i == 0:
+            continue
+
+        num = row[0].text_content().strip()
+        baseExp = int(row[3].text_content().replace("*", "").strip())
+        
+        # First one is likely the base form
+        if num in baseExpMap:
+            continue
+        
+        baseExpMap[num] = baseExp
+    
+    return baseExpMap
+
 with open ("../temp.txt", "w") as f:
     startTime = time.time()
     
+    baseExpMap = getBaseExpMap()    
     for num in range(1, 802):
 #    for num in [1]:
-#    for num in [AddedPokes.DUSK_LYCANROC.value]:
-        formConfig = FormConfig(num)
-        
+#    for num in [forms.AddedPokes.DUSK_LYCANROC.value]:
+        formConfig = forms.FormConfig(num)
         parser = Parser(formConfig.lookupNum)
             
         name = parser.infoTable.xpath('tr[2]/td[2]')[0].text
@@ -487,28 +509,7 @@ with open ("../temp.txt", "w") as f:
             stats[i] = int(parser.infoTable.xpath('tr[3]/td[' + str(2 + i) + ']')[0].text)
         print("Stats: " + str(stats))
 
-        # Diancie's base experience is currently unknown
-        baseExp = -1
-        if num == 719:
-            baseExp = 270
-        elif num == 29 or num == 32:
-            baseExp = 55
-        else:
-            page = requests.get('http://bulbapedia.bulbagarden.net/wiki/' + formConfig.lookupName)
-#            //*[@id="mw-content-text"]/table[2]/tbody/tr[9]/td[1]/table/tbody/tr/td[2]
-            tree = html.fromstring(page.text)
-
-            index = 9
-
-            # Pokemon that do not have hidden abilities have a stupid motherfucking format and I'm really fucking pissed
-#            if num == 676 or num == 679 or num == 680 or num == 681 or num == 692 or num == 693 or num == 716 or num == 717 or num == 718:
-#                index = 8
-            
-#            baseExp = int(tree.xpath('//*[@id="mw-content-text"]/table[3]/tr[' + str(index) + ']/td[1]/table/tr/td[3]')[0].text)
-            baseExp = int(tree.xpath('//*[@id="mw-content-text"]/table[2]/tr[' + str(index) + ']/td[1]/table/tr/td[3]')[0].text)
-            if baseExp < 4:
-                index = 8
-                baseExp = int(tree.xpath('//*[@id="mw-content-text"]/table[2]/tr[' + str(index) + ']/td[1]/table/tr/td[3]')[0].text)
+        baseExp = baseExpMap[formConfig.baseExpName]
         print("Base EXP: " + str(baseExp))
 
         f.write(str(num) + '\n')

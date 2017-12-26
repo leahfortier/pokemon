@@ -30,6 +30,7 @@ class FormConfig:
         self.name = None
         self.formIndex = 0
         imageSuffix = ""
+        baseExpSuffix = ""
         
         # Pokemon with Alolan forms
         if num in [19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105]:
@@ -95,6 +96,7 @@ class FormConfig:
         self.useAbilitiesList = num in [550, 678, 801]
         
         self.formImageName = str(self.lookupNum).zfill(3) + imageSuffix
+        self.baseExpName = str(self.lookupNum).zfill(3) + baseExpSuffix
         
     def hasForm(self, row, formIndex):
         # No form index implies there is only the normal form or all forms are treated the same
