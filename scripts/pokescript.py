@@ -367,6 +367,68 @@ def typeSubstitution(num, types):
     
     return types
 
+def getFormConfig(num):
+    formConfig = SimpleNamespace()
+    
+    formConfig.formName = None
+    formConfig.normalForm = True
+    
+    # Pokemon with Alolan forms
+    if num in [19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105]:
+        formConfig.formName = "Normal"
+    # Kyurem, Greninja, Zygarde, Rockruff
+    elif num in [646, 658, 718, 744]:
+        formConfig.formName = "Standard"
+    # Deoxys
+    elif num == 386:
+        formConfig.formName = "Normal"
+    # Wormadam is stupid
+    elif num == 413:
+        formConfig.formName = "Plant Cloak"
+    # Rotom
+    elif num == 479:
+        formConfig.formName = "Rotom"
+    # Giratina
+    elif num == 487:
+        formConfig.formName = "Altered"
+    # Shaymin
+    elif num == 492:
+        formConfig.formName = "Land"
+    # Darmanitan
+    elif num == 555:
+        formConfig.formName = "Normal"
+    # Tornadus/Thundurus/Landorus
+    elif num in [641, 642, 645]:
+        formConfig.formName = "Incarnate"
+    # Meloetta
+    elif num == 648:
+        formConfig.formName = "Aria"
+    # Hoopa
+    elif num == 720:
+        formConfig.formName = "Hoopa Confined"
+    # Stupid dancing bird
+    elif num == 741:
+        formConfig.formName = "Baile Style"
+    # Lycanroc
+    elif num == 745:
+        formConfig.formName = "Midday"
+    # Necrozma
+    elif num == 800:
+        formConfig.formName = "Normal"
+        
+    formConfig.evFormName = formConfig.formName
+    # Darminatan
+    if num == 555:
+        formConfig.evFormName = "Standard"
+    # Kyurem
+    elif num == 646:
+        formConfig.evFormName = "Kyurem"
+    
+    # Basculin, Meowstic, Magearna (fucking Soul-Heart has a dash)
+    formConfig.useAbilitiesList = num in [550, 678, 801]
+    
+    return formConfig
+
 def namesies(stringsies):
     stringsies = stringsies.strip().replace(' ', '_').replace('-', '_').replace('\'', '').upper()
     if stringsies == 'CONVERSION_2':
@@ -537,68 +599,6 @@ def updateTableIndex(header, headerIndex):
 
                     infoTable = infoTable[0].getnext()
 
-def getFormConfig(num):
-    formConfig = SimpleNamespace()
-    
-    formConfig.formName = None
-    formConfig.normalForm = True
-    
-    # Pokemon with Alolan forms
-    if num in [19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105]:
-        formConfig.formName = "Normal"
-    # Kyurem, Greninja, Zygarde, Rockruff
-    elif num in [646, 658, 718, 744]:
-        formConfig.formName = "Standard"
-    # Deoxys
-    elif num == 386:
-        formConfig.formName = "Normal"
-    # Wormadam is stupid
-    elif num == 413:
-        formConfig.formName = "Plant Cloak"
-    # Rotom
-    elif num == 479:
-        formConfig.formName = "Rotom"
-    # Giratina
-    elif num == 487:
-        formConfig.formName = "Altered"
-    # Shaymin
-    elif num == 492:
-        formConfig.formName = "Land"
-    # Darmanitan
-    elif num == 555:
-        formConfig.formName = "Normal"
-    # Tornadus/Thundurus/Landorus
-    elif num in [641, 642, 645]:
-        formConfig.formName = "Incarnate"
-    # Meloetta
-    elif num == 648:
-        formConfig.formName = "Aria"
-    # Hoopa
-    elif num == 720:
-        formConfig.formName = "Hoopa Confined"
-    # Stupid dancing bird
-    elif num == 741:
-        formConfig.formName = "Baile Style"
-    # Lycanroc
-    elif num == 745:
-        formConfig.formName = "Midday"
-    # Necrozma
-    elif num == 800:
-        formConfig.formName = "Normal"
-        
-    formConfig.evFormName = formConfig.formName
-    # Darminatan
-    if num == 555:
-        formConfig.evFormName = "Standard"
-    # Kyurem
-    elif num == 646:
-        formConfig.evFormName = "Kyurem"
-    
-    # Basculin, Meowstic, Magearna (fucking Soul-Heart has a dash)
-    formConfig.useAbilitiesList = num in [550, 678, 801]
-    
-    return formConfig
-
 with open ("../temp.txt", "w") as f:
     startTime = time.time()
     
@@ -721,8 +721,7 @@ with open ("../temp.txt", "w") as f:
             index = 3
             infoTable = mainDiv.xpath('table[3]')[0]    
     
-        growthRate = infoTable.xpath('tr[4]/td[1]')[0].text_content()
-        growthRate = growthRate[growthRate.find("Points") + 6 : ]
+        growthRate = list(infoTable.xpath('tr[4]/td[1]')[0].itertext())[1]
         print("Growth Rate: " + growthRate)
 
         evStrings = infoTable.xpath('tr[4]/td[3]')[0].itertext()
@@ -764,7 +763,7 @@ with open ("../temp.txt", "w") as f:
         if formConfig.evFormName is None:
             evs = evMap[defaultForm]
         if formConfig.evFormName not in evMap:
-            assert formConfig.normalForm
+            assert formConfig.normalForm or len(evMap) == 1
             evs = evMap[defaultForm]
         else:
             evs = evMap[formConfig.evFormName]
