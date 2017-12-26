@@ -47,36 +47,6 @@ def getTypes(typeImages):
 def normalizeForm(form):
     return re.sub(" Forme?$", "", form).strip()
 
-def hasForm(row, formIndex, formConfig):
-    # No form index implies there is only the normal form or all forms are treated the same
-    if formIndex is None:
-        return True
-    
-    for form in row[formIndex][0][0].getchildren():
-        if checkForm(form[0], formConfig):
-            return True
-        
-    return False
-
-def hasFormFromTable(table, formConfig):
-    hasImage = False
-    for form in table.getchildren():
-        if form.tag != "img":
-            continue
-        
-        hasImage = True
-        if checkForm(form, formConfig):
-            return True
-
-    # If you didn't find any image tags, then there are not multiple forms
-    # So the only form is the normal form        
-    return not hasImage
-
-def checkForm(form, formConfig):
-    imageName = form.attrib["src"]
-    if imageName.endswith('/' + formConfig.formImageName + '.png'):
-        return True
-
 with open ("../temp.txt", "w") as f:
     startTime = time.time()
     
@@ -402,7 +372,7 @@ with open ("../temp.txt", "w") as f:
                 if attack in ["Frustration", "Return", "Quash"]:
                     continue
                 
-                if not hasForm(row, formIndex, formConfig):
+                if not formConfig.hasForm(row, formIndex):
                     continue
                 
                 tms.append(attack)
@@ -439,7 +409,7 @@ with open ("../temp.txt", "w") as f:
                 # It is always present since it additionally contains the details
                 # For Pokemon with multiple forms, these will additionally be included here
                 detailsCol = row[-1]
-                if not hasFormFromTable(detailsCol, formConfig):
+                if not formConfig.hasFormFromTable(detailsCol):
                     continue
                 
                 eggMoves.append(attack)
@@ -461,7 +431,7 @@ with open ("../temp.txt", "w") as f:
                 if attack in ["Helping Hand", "After You", "Ally Switch"]:
                     continue
                 
-                if not hasForm(row, formIndex, formConfig):
+                if not formConfig.hasForm(row, formIndex):
                     continue
                 
                 tutorMoves.append(attack)
@@ -480,7 +450,7 @@ with open ("../temp.txt", "w") as f:
                 if attack in ["Helping Hand", "After You", "Ally Switch"]:
                     continue
                 
-                if not hasForm(row, formIndex, formConfig):
+                if not formConfig.hasForm(row, formIndex):
                     continue
                 
                 tutorMoves.append(attack)

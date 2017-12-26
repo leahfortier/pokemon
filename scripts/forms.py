@@ -95,3 +95,33 @@ class FormConfig:
         self.useAbilitiesList = num in [550, 678, 801]
         
         self.formImageName = str(self.lookupNum).zfill(3) + imageSuffix
+        
+    def hasForm(self, row, formIndex):
+        # No form index implies there is only the normal form or all forms are treated the same
+        if formIndex is None:
+            return True
+        
+        for form in row[formIndex][0][0].getchildren():
+            if self.checkForm(form[0]):
+                return True
+            
+        return False
+    
+    def hasFormFromTable(self, table):
+        hasImage = False
+        for form in table.getchildren():
+            if form.tag != "img":
+                continue
+            
+            hasImage = True
+            if self.checkForm(form):
+                return True
+    
+        # If you didn't find any image tags, then there are not multiple forms
+        # So the only form is the normal form        
+        return not hasImage
+    
+    def checkForm(self, form):
+        imageName = form.attrib["src"]
+        if imageName.endswith('/' + self.formImageName + '.png'):
+            return True
