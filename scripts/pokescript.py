@@ -7,8 +7,7 @@ import re
 import time
 from substitutions import attackSubstitution, abilitySubstitution, typeSubstitution
 from forms import AddedPokes, FormConfig
-
-global infoTable
+from parser import Parser
 
 def namesies(stringsies):
     stringsies = stringsies.strip().replace(' ', '_').replace('-', '_').replace('\'', '').upper()
@@ -31,11 +30,6 @@ def removeEmpty(listsies):
             temp.append(string)
     for empty in temp:
         listsies.remove(empty)
-
-def getSchemaIndex(schema, columnName):
-    for index, column in enumerate(schema.getchildren()):
-        if column.text == columnName:
-            return index
     
 # types should be an array that points to img elements
 def getTypes(typeImages):
@@ -83,101 +77,6 @@ def checkForm(form, formConfig):
     if imageName.endswith('/' + formConfig.formImageName + '.png'):
         return True
 
-def getElementText(element):
-    text = element.text
-    if not text is None:
-        return text
-    return element.text_content()
-
-def getQueryText(query):
-    for querychild in query:
-        text = getElementText(querychild)
-        if not text is None:
-            return text
-        for child in querychild.getchildren():
-            text = getElementText(child)
-            if not text is None:
-                return text
-
-def checkQueries(*queries):
-    global infoTable
-    
-    for queryString in queries:
-        query = infoTable.xpath(queryString)
-        text = getQueryText(query)
-        if not text is None:
-            return text
-
-def checkHeader(header, headerIndex):
-    global infoTable
-    
-    if infoTable.tag == 'table':
-        text = checkQueries('tr[1]/td/b', 'tr[1]/td', 'thead/tr[1]/td')
-        if not text is None and text[headerIndex:] == header:
-            return True
-
-    return False
-
-def updateTable(*headers):
-    for header in headers:
-        if updateTableIndex(header, 0):
-            return True
-    return False
-
-def updateTableIndex(header, headerIndex):
-    global infoTable
-    global num
-    global index
-    global mainDiv
-    global tableCheck
-
-    tempIndex = index
-    tempTableCheck = tableCheck
-    tempInfoTable = infoTable
-
-    while True:
-        if checkHeader(header, headerIndex):
-            return True
-
-        if num < 650:
-            infoTable = infoTable.getnext()
-                
-            if infoTable == None:
-                index += 1
-                infoTable = mainDiv.xpath('p[' + str(index) + ']')
-
-                if len(infoTable) == 0:
-                    index = tempIndex;
-                    infoTable = tempInfoTable
-                    return False
-
-                infoTable = infoTable[0].getnext()
-        else:
-            if tableCheck:                
-                index += 1
-                infoTable = mainDiv.xpath('table[' + str(index) + ']')
-
-                if len(infoTable) == 0:
-                    index = 1
-                    tableCheck = False
-                    infoTable = mainDiv.xpath('p[1]')[0].getnext()
-                else:
-                    infoTable = infoTable[0]
-            else:
-                infoTable = infoTable.getnext()
-
-                if infoTable == None:
-                    index += 1
-                    infoTable = mainDiv.xpath('p[' + str(index) + ']')
-
-                    if len(infoTable) == 0:
-                        index = tempIndex;
-                        tableCheck = tempTableCheck
-                        infoTable = tempInfoTable
-                        return False
-
-                    infoTable = infoTable[0].getnext()
-
 with open ("../temp.txt", "w") as f:
     startTime = time.time()
     
@@ -186,20 +85,9 @@ with open ("../temp.txt", "w") as f:
 #    for num in [AddedPokes.DUSK_LYCANROC.value]:
         formConfig = FormConfig(num)
         
-        page = requests.get('http://www.serebii.net/pokedex-sm/' + str(formConfig.lookupNum).zfill(3) + '.shtml')
-        tree = html.fromstring(page.text)
-        mainDiv = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/div[2]/div')[0];
-
-        tableCheck = True
-
-        if num < 722:
-            index = 1
-            infoTable = mainDiv.xpath('p[1]')[0].getnext()
-        else:
-            index = 2
-            infoTable = mainDiv.xpath('table[2]')[0]
+        parser = Parser(formConfig.lookupNum)
             
-        name = infoTable.xpath('tr[2]/td[2]')[0].text
+        name = parser.infoTable.xpath('tr[2]/td[2]')[0].text
 
         # Flabebe has a stupid name with stupid special characters
         if num == 669:
@@ -216,7 +104,7 @@ with open ("../temp.txt", "w") as f:
 
         print("Name: " + name)
 
-        maleRatio = infoTable.xpath('tr[2]/td[5]')[0]
+        maleRatio = parser.infoTable.xpath('tr[2]/td[5]')[0]
 
         # Genderless Pokemon
         if maleRatio.text != None:
@@ -240,13 +128,13 @@ with open ("../temp.txt", "w") as f:
                                 
         print("Male Ratio: " + str(maleRatio))
 
-        types = infoTable.xpath('tr[2]/td[6]/a/img')
+        types = parser.infoTable.xpath('tr[2]/td[6]/a/img')
         if len(types) > 0:
             types = getTypes(types)
         # Multiple forms
         else:
             types = None
-            forms = infoTable.xpath('tr[2]/td[6]/table[1]/tr')
+            forms = parser.infoTable.xpath('tr[2]/td[6]/table[1]/tr')
             for form in forms:
                 typeFormName = normalizeForm(form[0].text)
                 if typeFormName == formConfig.formName:
@@ -265,11 +153,11 @@ with open ("../temp.txt", "w") as f:
             classification = 'Mischief'
         # Remove the Pokemon text from the end of classification
         else:
-            classification = infoTable.xpath('tr[4]/td[1]')[0].text[:-8]
+            classification = parser.infoTable.xpath('tr[4]/td[1]')[0].text[:-8]
         print("Classification: " + classification)
 
         # Height is specified in ft'in'' format -- convert to inches
-        height = infoTable.xpath('tr[4]/td[2]')[0].text
+        height = parser.infoTable.xpath('tr[4]/td[2]')[0].text
         height = height.split("/")
         heightIndex = formConfig.formIndex
         if len(height) <= heightIndex:
@@ -281,7 +169,7 @@ with open ("../temp.txt", "w") as f:
         print("Height: " + str(height))
 
         # Remove the lbs from the end of weight
-        weight = infoTable.xpath('tr[4]/td[3]')[0].text
+        weight = parser.infoTable.xpath('tr[4]/td[3]')[0].text
         weight = weight.split("/")
         weightIndex = formConfig.formIndex
         if len(weight) <= weightIndex:
@@ -295,11 +183,11 @@ with open ("../temp.txt", "w") as f:
         if num == 774:
             captureRate = 30
         else:
-            captureRate = int(infoTable.xpath('tr[4]/td[4]')[0].text)
+            captureRate = int(parser.infoTable.xpath('tr[4]/td[4]')[0].text)
 
         print("Capture Rate: " + str(captureRate))
 
-        eggSteps = infoTable.xpath('tr[4]/td[5]')[0].text.replace(",", "")
+        eggSteps = parser.infoTable.xpath('tr[4]/td[5]')[0].text.replace(",", "")
         eggSteps = eggSteps.strip()
 
         # Apparently this is a pretty universal base egg step value for legendaries/Pokemon that cannot breed...?
@@ -309,16 +197,16 @@ with open ("../temp.txt", "w") as f:
         print("Egg Steps: " + str(eggSteps))
 
         # Next table -- the one with the abilities and such
-        if num < 722:
-            infoTable = infoTable.getnext()
+        if parser.lookupNum < 722:
+            parser.infoTable = parser.infoTable.getnext()
         else:
             index = 3
-            infoTable = mainDiv.xpath('table[3]')[0]    
+            parser.infoTable = parser.mainDiv.xpath('table[3]')[0]    
     
-        growthRate = list(infoTable.xpath('tr[4]/td[1]')[0].itertext())[1]
+        growthRate = list(parser.infoTable.xpath('tr[4]/td[1]')[0].itertext())[1]
         print("Growth Rate: " + growthRate)
 
-        evStrings = infoTable.xpath('tr[4]/td[3]')[0].itertext()
+        evStrings = parser.infoTable.xpath('tr[4]/td[3]')[0].itertext()
         
         # If no form is specified, use this in the mapping
         defaultForm = "FormNotSpecified"
@@ -364,11 +252,11 @@ with open ("../temp.txt", "w") as f:
         
         print("Effort Values: " + str(evs))
         
-        updateTable('Abilities')
+        parser.updateTable('Abilities')
         ability1 = None
         ability2 = None
         if formConfig.useAbilitiesList:
-            abilities = infoTable.xpath('tr[2]/td/a/b')
+            abilities = parser.infoTable.xpath('tr[2]/td/a/b')
             ability1 = abilities[0].text
     
             if len(abilities) >= 2:
@@ -376,7 +264,7 @@ with open ("../temp.txt", "w") as f:
             else:
                 ability2 = "No_Ability"
         else:
-            allAbilities = infoTable.xpath('tr[1]/td')[0].text_content()
+            allAbilities = parser.infoTable.xpath('tr[1]/td')[0].text_content()
             allAbilities = removePrefix(allAbilities, "Abilities: ")
             allAbilities = allAbilities.replace("(Hidden)", "")
             allAbilities = allAbilities.replace("(Hidden Ability)", "")
@@ -419,15 +307,15 @@ with open ("../temp.txt", "w") as f:
         print("Ability2: " + ability2)
 
         # Egg Group table
-        if num < 722:
-            infoTable = infoTable.getnext().getnext()
+        if formConfig.lookupNum < 722:
+            parser.infoTable = parser.infoTable.getnext().getnext()
         else:
 #            updateTable('Egg Groups')
-            index = 5
-            infoTable = mainDiv.xpath('table[5]')[0]
+            parser.index = 5
+            parser.infoTable = parser.mainDiv.xpath('table[5]')[0]
 #        if not updateTable('Egg Groups'):
 #            print('FAIL')
-        eggGroup = infoTable.xpath('tr[2]/td[2]')[0]
+        eggGroup = parser.infoTable.xpath('tr[2]/td[2]')[0]
         if eggGroup.text != None:
             eggGroup1 = "Undiscovered"
             eggGroup2 = "None"
@@ -446,13 +334,13 @@ with open ("../temp.txt", "w") as f:
         print("Egg Group1: " + eggGroup1)
         print("Egg Group2: " + eggGroup2)
 
-        if updateTable('Flavor Text'):
-            flavorText = infoTable.xpath('tr[2]/td[2]')[0].text
+        if parser.updateTable('Flavor Text'):
+            flavorText = parser.infoTable.xpath('tr[2]/td[2]')[0].text
             if flavorText == 'Sun':
-                flavorText = infoTable.xpath('tr[2]/td[3]')[0].text
+                flavorText = parser.infoTable.xpath('tr[2]/td[3]')[0].text
             if flavorText is None:
                 # infoTable.xpath('td[3]')[0].text == 'Ultra Sun' for this case
-                flavorText = infoTable.xpath('td[4]')[0].text
+                flavorText = parser.infoTable.xpath('td[4]')[0].text
         else:
             flavorText = 'None'
         
@@ -481,17 +369,17 @@ with open ("../temp.txt", "w") as f:
                              'Sun / Moon Level Up' + suffix,
                              formConfig.formName + " Form Level Up"]
         
-        if updateTable(*levelUpTables):
+        if parser.updateTable(*levelUpTables):
             attacks = []
-            for i in range(2, len(infoTable) - 1, 2):
-                level = infoTable[i][0].text
+            for i in range(2, len(parser.infoTable) - 1, 2):
+                level = parser.infoTable[i][0].text
 
                 if level == 'Evolve':
                     level = -1
                 elif level == dashy:
                     level = 0
                     
-                attack = infoTable[i][1][0].text
+                attack = parser.infoTable[i][1][0].text
                 attack = attackSubstitution(num, attack)
                 if attack is None:
                     assert level == 0
@@ -502,13 +390,13 @@ with open ("../temp.txt", "w") as f:
 
         print("TMS:")
         tms = []
-        if updateTable('TM & HM Attacks'):    
-            schema = infoTable[1]
-            attackIndex = getSchemaIndex(schema, "Attack Name")
-            formIndex = getSchemaIndex(schema, "Form")
+        if parser.updateTable('TM & HM Attacks'):    
+            schema = parser.infoTable[1]
+            attackIndex = parser.getSchemaIndex(schema, "Attack Name")
+            formIndex = parser.getSchemaIndex(schema, "Form")
             
-            for i in range(2, len(infoTable) - 1, 2):
-                row = infoTable[i]
+            for i in range(2, len(parser.infoTable) - 1, 2):
+                row = parser.infoTable[i]
                 
                 attack = row[attackIndex][0].text
                 if attack in ["Frustration", "Return", "Quash"]:
@@ -534,12 +422,12 @@ with open ("../temp.txt", "w") as f:
 
         print("Egg Moves:")
         eggMoves = []
-        if updateTable('Egg Moves '):
-            schema = infoTable[1]
-            attackIndex = getSchemaIndex(schema, "Attack Name")
+        if parser.updateTable('Egg Moves '):
+            schema = parser.infoTable[1]
+            attackIndex = parser.getSchemaIndex(schema, "Attack Name")
             
-            for i in range(2, len(infoTable) - 1, 2):
-                row = infoTable[i]
+            for i in range(2, len(parser.infoTable) - 1, 2):
+                row = parser.infoTable[i]
                 
                 attack = row[attackIndex][0].text
                 if attack == "Ion Deluge":
@@ -559,12 +447,12 @@ with open ("../temp.txt", "w") as f:
 
         print("Move Tutor Moves:")
         tutorMoves = []
-        if updateTable('Move Tutor Attacks'):
-            table = infoTable.xpath('thead/tr')
+        if parser.updateTable('Move Tutor Attacks'):
+            table = parser.infoTable.xpath('thead/tr')
             
             schema = table[1]
-            attackIndex = getSchemaIndex(schema, "Attack Name")
-            formIndex = getSchemaIndex(schema, "Form")
+            attackIndex = parser.getSchemaIndex(schema, "Attack Name")
+            formIndex = parser.getSchemaIndex(schema, "Form")
             
             for i in range(2, len(table) - 1, 2):
                 row = table[i]
@@ -578,12 +466,12 @@ with open ("../temp.txt", "w") as f:
                 
                 tutorMoves.append(attack)
                 print(attack)
-        if updateTable('Ultra Sun/Ultra Moon Move Tutor Attacks'):
-            table = infoTable.xpath('thead/tr')
+        if parser.updateTable('Ultra Sun/Ultra Moon Move Tutor Attacks'):
+            table = parser.infoTable.xpath('thead/tr')
             
             schema = table[1]
-            attackIndex = getSchemaIndex(schema, "Attack Name")
-            formIndex = getSchemaIndex(schema, "Form")
+            attackIndex = parser.getSchemaIndex(schema, "Attack Name")
+            formIndex = parser.getSchemaIndex(schema, "Form")
             
             for i in range(2, len(table) - 1, 2):
                 row = table[i]
@@ -619,14 +507,14 @@ with open ("../temp.txt", "w") as f:
 #                    print(attack)
 
         # Stats
-        stats = [0]*6
         statsTables = []
         if not formConfig.normalForm:
             statsTables.append("Stats - " + formConfig.formName + " Form")
         statsTables.append("Stats")
-        updateTable(*statsTables)
+        parser.updateTable(*statsTables)
+        stats = [0]*6
         for i in range(0, len(stats)):
-            stats[i] = int(infoTable.xpath('tr[3]/td[' + str(2 + i) + ']')[0].text)
+            stats[i] = int(parser.infoTable.xpath('tr[3]/td[' + str(2 + i) + ']')[0].text)
         print("Stats: " + str(stats))
 
         # Diancie's base experience is currently unknown
