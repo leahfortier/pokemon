@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	private static final long serialVersionUID = 1L;
 
-	public static final int NUM_POKEMON = 817;
+	public static final int NUM_POKEMON = 818;
 	public static final int EVOLUTION_LEVEL_LEARNED = -1;
 
 	private static Map<Integer, PokemonInfo> map;

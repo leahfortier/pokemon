@@ -822,7 +822,8 @@ public enum PokemonNamesies {
 	KOKONATSU("Kokonatsu"),
 	GARA_GARA("GaraGara"),
 	JUPETTA("Jupetta"),
-	LOUGAROC("Lougaroc");
+	LOUGAROC("Lougaroc"),
+	LUGARUGAN("Lugarugan");
 
     // EVERYTHING ABOVE IS GENERATED ###
 

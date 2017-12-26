@@ -41,3 +41,5 @@
   - Jupetta
 817: Midnight Lycanroc
   - Lougaroc
+818: Dusk Lycanroc
+  - Lugarugan
