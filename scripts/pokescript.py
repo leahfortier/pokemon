@@ -6,7 +6,7 @@ import math
 import re
 import time
 from substitutions import attackSubstitution, abilitySubstitution, typeSubstitution
-from forms import AddedPokes, getFormConfig
+from forms import AddedPokes, FormConfig
 
 global infoTable
 
@@ -184,7 +184,7 @@ with open ("../temp.txt", "w") as f:
     for num in range(1, 802):
 #    for num in [1]:
 #    for num in [AddedPokes.DUSK_LYCANROC.value]:
-        formConfig = getFormConfig(num)
+        formConfig = FormConfig(num)
         
         page = requests.get('http://www.serebii.net/pokedex-sm/' + str(formConfig.lookupNum).zfill(3) + '.shtml')
         tree = html.fromstring(page.text)
