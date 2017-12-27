@@ -143,7 +143,7 @@ def attackSubstitution(num, attack):
             return 'Light Screen'
     elif attack == 'Quash':
         # Sableye
-        if num == 302:
+        if num == 302 or num == AddedPokes.MEGA_SABLEYE.value:
             return 'Night Slash'
         # Oranguru
         elif num == 765:
@@ -358,10 +358,10 @@ def typeSubstitution(num, types):
     elif num >= 704 and num <= 706:
         assert types == ['Dragon', 'No_Type']
         return ['Dragon', 'Water']
-    # Mega Absol (Asbel) is Flying type :)
+    # Mega Absol (Asbel) is Fairy type :)
     elif num == AddedPokes.MEGA_ABSOL.value:
         assert types == ['Dark', 'No_Type']
-        return ['Dark', 'Flying']
+        return ['Dark', 'Fairy']
     
     return types
 

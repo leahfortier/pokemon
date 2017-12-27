@@ -6,7 +6,7 @@ import math
 import re
 import time
 from substitutions import attackSubstitution, abilitySubstitution, typeSubstitution
-from forms import AddedPokes, FormConfig
+from forms import Stat, AddedPokes, FormConfig
 from parser import Parser
 
 def namesies(stringsies):
@@ -31,6 +31,11 @@ def removeEmpty(listsies):
     for empty in temp:
         listsies.remove(empty)
     
+def indexSwap(arr, i, j):
+    temp = arr[i]
+    arr[i] = arr[j]
+    arr[j] = temp
+
 # types should be an array that points to img elements
 def getTypes(typeImages):
     assert len(typeImages) == 1 or len(typeImages) == 2
@@ -73,7 +78,7 @@ with open ("../temp.txt", "w") as f:
     startTime = time.time()
     
     baseExpMap = getBaseExpMap()    
-    for num in range(1, 802):
+    for num in range(1, list(AddedPokes)[-1].value + 1):
 #    for num in [1]:
 #    for num in [AddedPokes.MEGA_CHARIZARD.value]:
         formConfig = FormConfig(num)
@@ -88,8 +93,9 @@ with open ("../temp.txt", "w") as f:
         # Picture, Name, Other Names, No., Gender Ratio, Type
         row = parser.infoTable.xpath('tr[' + str(infoIndex) +  ']')[0]
             
+        formConfig.lookupName = row.xpath('td[2]')[0].text
         if formConfig.name is None:
-            formConfig.name = row.xpath('td[2]')[0].text
+            formConfig.name = formConfig.lookupName
         name = formConfig.name
         print("#" + str(num).zfill(3) + " Name: " + name)
 
@@ -127,7 +133,7 @@ with open ("../temp.txt", "w") as f:
             forms = typesCell.xpath('table[1]/tr')
             for form in forms:
                 typeFormName = normalizeForm(form[0].text)
-                if typeFormName == formConfig.formName:
+                if typeFormName == formConfig.typeFormName:
                     types = getTypes(form[1].xpath('a/img'))
                     break
                     
@@ -187,6 +193,9 @@ with open ("../temp.txt", "w") as f:
             eggSteps = 30720            
         eggSteps = int(eggSteps)
         print("Egg Steps: " + str(eggSteps))
+
+        if formConfig.isMega and not formConfig.useMegaAbilities:
+            parser.restoreBackup()
 
         assert parser.updateTable('Abilities')
         ability1 = None
@@ -276,17 +285,19 @@ with open ("../temp.txt", "w") as f:
             value = int(ev[0])
             
             if stat == "HP":
-                evs[0] = value
+                evs[Stat.HP.value] = value
             elif stat == "Attack":
-                evs[1] = value
+                evs[Stat.ATTACK.value] = value
             elif stat == "Defense":
-                evs[2] = value
+                evs[Stat.DEFENSE.value] = value
             elif stat == "Sp. Attack":
-                evs[3] = value
+                evs[Stat.SP_ATTACK.value] = value
             elif stat == "Sp. Defense":
-                evs[4] = value
+                evs[Stat.SP_DEFENSE.value] = value
             elif stat == "Speed":
-                evs[5] = value
+                evs[Stat.SPEED.value] = value
+            else:
+                raise Exception(stat)
 
         if formConfig.evFormName is None:
             evs = evMap[defaultForm]
@@ -295,6 +306,13 @@ with open ("../temp.txt", "w") as f:
             evs = evMap[defaultForm]
         else:
             evs = evMap[formConfig.evFormName]
+            
+        # Swap Attack and Sp. Attack for Rizardon
+        if num == AddedPokes.MEGA_CHARIZARD.value:
+            indexSwap(evs, Stat.ATTACK.value, Stat.SP_ATTACK.value)
+
+        # Add diffs
+        evs = [sum(x) for x in zip(evs, formConfig.evDiffs)]
         
         print("Effort Values: " + str(evs))
         
@@ -356,24 +374,24 @@ with open ("../temp.txt", "w") as f:
                              'Sun / Moon Level Up' + suffix,
                              formConfig.formName + " Form Level Up"]
         
-        if parser.updateTable(*levelUpTables):
-            attacks = []
-            for i in range(2, len(parser.infoTable) - 1, 2):
-                level = parser.infoTable[i][0].text
+        assert parser.updateTable(*levelUpTables)
+        attacks = []
+        for i in range(2, len(parser.infoTable) - 1, 2):
+            level = parser.infoTable[i][0].text
 
-                if level == 'Evolve':
-                    level = -1
-                elif level == dashy:
-                    level = 0
-                    
-                attack = parser.infoTable[i][1][0].text
-                attack = attackSubstitution(num, attack)
-                if attack is None:
-                    assert level == 0
-                    continue
+            if level == 'Evolve':
+                level = -1
+            elif level == dashy:
+                level = 0
                 
-                attacks.append(str(level) + " " + namesies(attack))
-                print(str(int(level)) + " " + attack)
+            attack = parser.infoTable[i][1][0].text
+            attack = attackSubstitution(num, attack)
+            if attack is None:
+                assert level == 0
+                continue
+            
+            attacks.append(str(level) + " " + namesies(attack))
+            print(str(int(level)) + " " + attack)
 
         print("TMS:")
         tms = []
@@ -494,17 +512,44 @@ with open ("../temp.txt", "w") as f:
 #                    print(attack)
 
         # Stats
-        statsTables = []
-        if not formConfig.normalForm:
-            statsTables.append("Stats - " + formConfig.formName + " Form")
-        statsTables.append("Stats")
-        parser.updateTable(*statsTables)
+        if formConfig.useMegaStats:
+            # Not sure this will work for all cases -- particularly for multiple megas
+            statsTables = ["Stats - Mega Evolution"]
+        elif formConfig.isAlolan:
+            statsTables = ["Stats - Alolan " + formConfig.lookupName]
+        elif not formConfig.normalForm:
+            statsTables = ["Stats - " + formConfig.formName + " Form", "Stats"]
+        else:
+            statsTables = ["Stats"]
+        assert parser.updateTable(*statsTables)
+        
         stats = [0]*6
         for i in range(0, len(stats)):
             stats[i] = int(parser.infoTable.xpath('tr[3]/td[' + str(2 + i) + ']')[0].text)
+
+        # Decrease Absol's attack since it has an evolution now
+        if num == 359:
+            stats[Stat.ATTACK.value] -= 30
+        # Use Charizard's stats with modifications
+        if num == AddedPokes.MEGA_CHARIZARD.value:
+            indexSwap(stats, Stat.ATTACK.value, Stat.SP_ATTACK.value)
+            indexSwap(stats, Stat.DEFENSE.value, Stat.SP_DEFENSE.value)
+            stats[Stat.ATTACK.value] += 10
+            stats[Stat.SPEED.value] -= 10
+        # Use Absol's stats with increase speed
+        if num == AddedPokes.MEGA_ABSOL.value:
+            stats[Stat.SPEED.value] += 20
+        # Decrease mega attack stats
+        if num == AddedPokes.MEGA_BANNETTE.value:
+            stats[Stat.ATTACK.value] -= 35
+            stats[Stat.SP_ATTACK.value] -= 10
+            
         print("Stats: " + str(stats))
 
         baseExp = baseExpMap[formConfig.baseExpName]
+        if formConfig.isAlolan and formConfig.baseExpName + "A" in baseExpMap:
+            baseExp = baseExpMap[formConfig.baseExpName + "A"]
+        
         print("Base EXP: " + str(baseExp))
 
         f.write(str(num) + '\n')

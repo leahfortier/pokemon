@@ -3,6 +3,14 @@
 
 from enum import Enum, auto
 
+class Stat(Enum):
+    HP = 0
+    ATTACK = 1
+    DEFENSE = 2
+    SP_ATTACK = 3
+    SP_DEFENSE = 4
+    SPEED = 5
+
 # Original Pokes require an enum since their number is subject to change
 class AddedPokes(Enum):
     MEGA_CHARIZARD = 803
@@ -25,13 +33,19 @@ class AddedPokes(Enum):
 class FormConfig:
     def __init__(self, num):
         self.formName = None
+        self.evFormName = None
+        self.typeFormName = None
         self.normalForm = True
         self.lookupNum = num
         self.name = None
         self.formIndex = 0
         self.isMega = False
+        self.useMegaStats = False
+        self.useMegaAbilities = True
+        self.evDiffs = [0]*6
+        self.isAlolan = False
+        baseExpSuffix = None
         imageSuffix = ""
-        baseExpSuffix = ""
         megaSuffix = ""
         
         # Flabebe has a stupid name with stupid special characters
@@ -45,9 +59,6 @@ class FormConfig:
         # Pokemon with Alolan forms
         if num in [19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105]:
             self.formName = "Normal"
-        # Kyurem, Greninja, Zygarde, Rockruff
-        elif num in [646, 658, 718, 744]:
-            self.formName = "Standard"
         # Deoxys
         elif num == 386:
             self.formName = "Normal"
@@ -66,18 +77,32 @@ class FormConfig:
         # Darmanitan
         elif num == 555:
             self.formName = "Normal"
+            self.evFormName = "Standard"
         # Tornadus/Thundurus/Landorus
         elif num in [641, 642, 645]:
             self.formName = "Incarnate"
+        # Kyurem
+        elif num == 646:
+            self.formName = "Standard"
+            self.evFormName = "Kyurem"
         # Meloetta
         elif num == 648:
             self.formName = "Aria"
+        # Greninja
+        elif num == 658:
+            self.formName = "Standard"
+        # Zygarde
+        elif num == 718:
+            self.formName = "Standard"
         # Hoopa
         elif num == 720:
             self.formName = "Hoopa Confined"
         # Stupid dancing bird
         elif num == 741:
             self.formName = "Baile Style"
+        # Rockruff
+        elif num == 744:
+            self.formName = "Standard"
         # Lycanroc
         elif num == 745:
             self.formName = "Midday"
@@ -90,14 +115,76 @@ class FormConfig:
             self.isMega = True
             self.name = "Rizardon"
             megaSuffix = " X"
+            baseExpSuffix = "" # Use the same base exp as Charizard
         elif num == AddedPokes.MEGA_MAWILE.value:
             self.lookupNum = 303
             self.isMega = True
             self.name = "Kuchiito"
+            self.useMegaStats = True
+            self.useMegaAbilities = False
+            self.evDiffs[Stat.DEFENSE.value] += 1
         elif num == AddedPokes.MEGA_ABSOL.value:
             self.lookupNum = 359
             self.isMega = True
             self.name = "Asbel"
+            self.evDiffs[Stat.ATTACK.value] += 1
+        elif num == AddedPokes.MEGA_SABLEYE.value:
+            self.lookupNum = 302
+            self.isMega = True
+            self.name = "Yamirami"
+            self.useMegaStats = True
+            self.evDiffs[Stat.ATTACK.value] -= 1
+            self.evDiffs[Stat.DEFENSE.value] += 1
+            self.evDiffs[Stat.SP_DEFENSE.value] += 1
+        elif num == AddedPokes.ALOLAN_RAICHU.value:
+            self.lookupNum = 26
+            self.name = "Silph Surfer"
+            self.isAlolan = True
+        elif num == AddedPokes.ALOLAN_SANDSHREW.value:
+            self.lookupNum = 27
+            self.name = "Snowshrew"
+            self.isAlolan = True
+        elif num == AddedPokes.ALOLAN_SANDSLASH.value:
+            self.lookupNum = 28
+            self.name = "Snowslash"
+            self.isAlolan = True
+        elif num == AddedPokes.ALOLAN_VULPIX.value:
+            self.lookupNum = 37
+            self.name = "Yukikon"
+            self.isAlolan = True
+        elif num == AddedPokes.ALOLAN_NINETALES.value:
+            self.lookupNum = 38
+            self.name = "Kyukon"
+            self.isAlolan = True
+        elif num == AddedPokes.ALOLAN_GRIMER.value:
+            self.lookupNum = 88
+            self.name = "Sleima"
+            self.isAlolan = True
+        elif num == AddedPokes.ALOLAN_MUK.value:
+            self.lookupNum = 89
+            self.name = "Sleimok"
+            self.isAlolan = True
+        elif num == AddedPokes.ALOLAN_EXEGGUTOR.value:
+            self.lookupNum = 103
+            self.name = "Kokonatsu"
+            self.isAlolan = True
+        elif num == AddedPokes.ALOLAN_MAROWAK.value:
+            self.lookupNum = 105
+            self.name = "GaraGara"
+            self.isAlolan = True
+        elif num == AddedPokes.MEGA_BANNETTE.value:
+            self.lookupNum = 354
+            self.name = "Jupetta"
+            self.isMega = True
+            self.useMegaStats = True
+            self.evDiffs[Stat.ATTACK.value] += 1
+        elif num == AddedPokes.MIDNIGHT_LYCANROC.value:
+            self.formName = "Midnight"
+            self.normalForm = False
+            self.lookupNum = 745
+            self.name = "Lougaroc"
+            self.formIndex = 1
+            imageSuffix = "-m"
         elif num == AddedPokes.DUSK_LYCANROC.value:
             self.formName = "Dusk"
             self.normalForm = False
@@ -106,25 +193,35 @@ class FormConfig:
             self.formIndex = 2
             imageSuffix = "-d"
         
-        # Fucking special cases because Serebii can be super inconsistent
-        self.evFormName = self.formName
-        # Darminatan
-        if num == 555:
-            self.evFormName = "Standard"
-        # Kyurem
-        elif num == 646:
-            self.evFormName = "Kyurem"
+        if self.isAlolan:
+            self.formName = "Alola"
+            self.normalForm = False
+            self.typeFormName = "Alolan"
+            self.formIndex = 1
+            imageSuffix = "-a"
         
         # Basculin, Meowstic, Magearna (fucking Soul-Heart has a dash)
         self.useAbilitiesList = num in [550, 678, 801]
         
+        if self.isMega:
+            self.megaName = "Mega Evolution" + megaSuffix
+            if baseExpSuffix == None:
+                baseExpSuffix = "M"
+        else:
+            assert not self.useMegaStats
+            assert megaSuffix == ""
+        
+        if baseExpSuffix == None:
+            baseExpSuffix = ""
+        
         self.formImageName = str(self.lookupNum).zfill(3) + imageSuffix
         self.baseExpName = str(self.lookupNum).zfill(3) + baseExpSuffix
         
-        if self.isMega:
-            self.megaName = "Mega Evolution" + megaSuffix
-        else:
-            assert megaSuffix == ""
+        if self.evFormName is None:
+            self.evFormName = self.formName
+        if self.typeFormName is None:
+            self.typeFormName = self.formName
+        
         
     def hasForm(self, row, formIndex):
         # No form index implies there is only the normal form or all forms are treated the same

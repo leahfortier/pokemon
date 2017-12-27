@@ -20,9 +20,10 @@ public class PokemonInfoTest {
             PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
             PokemonNamesies pokemonNamesies = PokemonNamesies.values()[i];
 
-            Assert.assertTrue(pokemonInfo.namesies() == pokemonNamesies);
-            Assert.assertTrue(pokemonInfo.getName().equals(pokemonNamesies.getName()));
-            Assert.assertTrue(pokemonInfo.getNumber() == i);
+            Assert.assertEquals(pokemonInfo.namesies(), pokemonNamesies);
+            Assert.assertEquals(pokemonInfo.getName(), pokemonNamesies.getName());
+            Assert.assertEquals(pokemonInfo.getNumber(), pokemonNamesies.ordinal());
+            Assert.assertEquals(pokemonInfo.getNumber(), i);
         }
     }
 

@@ -12,7 +12,7 @@
   - Keep Mega stats, but don't give Huge Power ability
 805. Mega Absol
   - Asbel
-  - Dark/Flying :)
+  - Dark/Fairy :)
   - MAGIC BOUNCE!!!
   - Asbel will have Absol's stats with +20 speed
   - Decrease Absol's attack to 100
@@ -39,6 +39,7 @@
   - GaraGara
 816: Mega Bannette
   - Jupetta
+  - Decrease mega attack stats
 817: Midnight Lycanroc
   - Lougaroc
 818: Dusk Lycanroc

@@ -5,6 +5,7 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.evolution.EvolutionType;
 import util.FileIO;
+import util.FileIO.NullOutputStream;
 import util.FileName;
 import util.Folder;
 import util.GeneralUtils;
@@ -271,13 +272,20 @@ public class StuffGen {
 		return false;
 	}
 
+	// TODO: WHY IS 'new Scanner(FileIO.readEntireFileWithReplacements("temp.txt", false));' DIFFERENT THAN 'FileIO.openFile("temp.txt");'
 	// Compares the pokemon info to info in a new file and outputs the differences
 	// Ignores evolution, wild hold items, and flavor text
 	private static void newPokemonInfoCompare() {
-		Scanner in1 = new Scanner(FileIO.readEntireFileWithReplacements(FileName.POKEMON_INFO, false));
+		Scanner in1 = FileIO.openFile(FileName.POKEMON_INFO);
 		Scanner in2 = new Scanner(FileIO.readEntireFileWithReplacements("temp.txt", false));
 
 		PrintStream out = FileIO.openOutputFile("temp2.txt");
+		PrintStream nullOut = new PrintStream(new NullOutputStream());
+
+		for (int i = 1; i < PokemonNamesies.BULBASAUR.ordinal(); i++) {
+			outputSinglePokemon(in1, nullOut);
+		}
+
 		while (in2.hasNext()) {
 			StringBuilder diffs = new StringBuilder();
 
@@ -312,31 +320,35 @@ public class StuffGen {
 		}
 	}
 
+	private static void outputSinglePokemon(Scanner in, PrintStream out) {
+		out.println(in.nextLine()); // Num
+		out.println(in.nextLine()); // Name
+		out.println(in.nextLine()); // Base Stats
+		out.println(in.nextLine()); // Base Exp
+		out.println(in.nextLine()); // Growth Rate
+		out.println(in.nextLine()); // Types
+		out.println(in.nextLine()); // Catch Rate
+		out.println(in.nextLine()); // EVs
+		readEvolution(in, out);     // Evolution
+		readHoldItems(in, out);     // Wild Items
+		out.println(in.nextLine()); // Male Ratio
+		out.println(in.nextLine()); // Abilities
+		out.println(in.nextLine()); // Classification
+		out.println(in.nextLine()); // Height Weight FlavorText
+		out.println(in.nextLine()); // Egg Steps
+		out.println(in.nextLine()); // Egg Groups
+		readMoves(in, out);    		// Level Up Moves
+		readMoves(in, out);			// Learnable Moves
+		out.println(in.nextLine()); // New Line
+	}
+
 	// Used for editing pokemoninfo.txt
 	private static void pokemonInfoStuff() {
 		Scanner in = FileIO.openFile(FileName.POKEMON_INFO);
 		PrintStream out = FileIO.openOutputFile("out.txt");
 
 		while (in.hasNext()) {
-			out.println(in.nextLine()); // Num
-			out.println(in.nextLine()); // Name
-			out.println(in.nextLine()); // Base Stats
-			out.println(in.nextLine()); // Base Exp
-			out.println(in.nextLine()); // Growth Rate
-			out.println(in.nextLine()); // Types
-			out.println(in.nextLine()); // Catch Rate
-			out.println(in.nextLine()); // EVs
-			readEvolution(in, out);     // Evolution
-			readHoldItems(in, out);     // Wild Items
-			out.println(in.nextLine()); // Male Ratio
-			out.println(in.nextLine()); // Abilities
-			out.println(in.nextLine()); // Classification
-			out.println(in.nextLine()); // Height Weight FlavorText
-			out.println(in.nextLine()); // Egg Steps
-			out.println(in.nextLine()); // Egg Groups
-			readMoves(in, out);    		// Level Up Moves
-			readMoves(in, out);			// Learnable Moves
-			out.println(in.nextLine()); // New Line
+			outputSinglePokemon(in, out);
 		}
 	}
 
