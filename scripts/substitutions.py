@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from forms import AddedPokes
+
 def attackSubstitution(num, attack):
     if attack is None:
         raise Exception()
@@ -356,6 +358,10 @@ def typeSubstitution(num, types):
     elif num >= 704 and num <= 706:
         assert types == ['Dragon', 'No_Type']
         return ['Dragon', 'Water']
+    # Mega Absol (Asbel) is Flying type :)
+    elif num == AddedPokes.MEGA_ABSOL.value:
+        assert types == ['Dark', 'No_Type']
+        return ['Dark', 'Flying']
     
     return types
 

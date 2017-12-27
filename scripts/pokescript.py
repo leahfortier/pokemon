@@ -6,7 +6,7 @@ import math
 import re
 import time
 from substitutions import attackSubstitution, abilitySubstitution, typeSubstitution
-import forms
+from forms import AddedPokes, FormConfig
 from parser import Parser
 
 def namesies(stringsies):
@@ -75,28 +75,25 @@ with open ("../temp.txt", "w") as f:
     baseExpMap = getBaseExpMap()    
     for num in range(1, 802):
 #    for num in [1]:
-#    for num in [forms.AddedPokes.DUSK_LYCANROC.value]:
-        formConfig = forms.FormConfig(num)
+#    for num in [AddedPokes.MEGA_CHARIZARD.value]:
+        formConfig = FormConfig(num)
         parser = Parser(formConfig.lookupNum)
+        
+        infoIndex = 2
+        if formConfig.isMega:
+            # First row is Mega Evolution title
+            infoIndex += 1
+            assert parser.updateTable(formConfig.megaName)
             
-        name = parser.infoTable.xpath('tr[2]/td[2]')[0].text
-
-        # Flabebe has a stupid name with stupid special characters
-        if num == 669:
-            name = "Flabebe"
-        elif num == 29:
-            name = "Nidoran F"
-        elif num == 32:
-            name = "Nidoran M"
+        # Picture, Name, Other Names, No., Gender Ratio, Type
+        row = parser.infoTable.xpath('tr[' + str(infoIndex) +  ']')[0]
             
-        formConfig.lookupName = name
         if formConfig.name is None:
-            formConfig.name = name
+            formConfig.name = row.xpath('td[2]')[0].text
         name = formConfig.name
+        print("#" + str(num).zfill(3) + " Name: " + name)
 
-        print("Name: " + name)
-
-        maleRatio = parser.infoTable.xpath('tr[2]/td[5]')[0]
+        maleRatio = row.xpath('td[5]')[0]
 
         # Genderless Pokemon
         if maleRatio.text != None:
@@ -120,13 +117,14 @@ with open ("../temp.txt", "w") as f:
                                 
         print("Male Ratio: " + str(maleRatio))
 
-        types = parser.infoTable.xpath('tr[2]/td[6]/a/img')
+        typesCell = row.xpath('td[6]')[0]
+        types = typesCell.xpath('a/img')
         if len(types) > 0:
             types = getTypes(types)
         # Multiple forms
         else:
             types = None
-            forms = parser.infoTable.xpath('tr[2]/td[6]/table[1]/tr')
+            forms = typesCell.xpath('table[1]/tr')
             for form in forms:
                 typeFormName = normalizeForm(form[0].text)
                 if typeFormName == formConfig.formName:
@@ -139,17 +137,22 @@ with open ("../temp.txt", "w") as f:
                 
         print("Type1: " + type1)
         print("Type2: " + type2)
+        
+        # Next row of the info table (skip two for the schema of the row)
+        # Classification, Height, Weight, Capture Rate, Base Egg Steps
+        infoIndex += 2
+        row = parser.infoTable.xpath('tr[' + str(infoIndex) +  ']')[0]
 
         # Hoopa apparently has a different classification for its different forms
         if num == 720:
             classification = 'Mischief'
         # Remove the Pokemon text from the end of classification
         else:
-            classification = parser.infoTable.xpath('tr[4]/td[1]')[0].text[:-8]
+            classification = row.xpath('td[1]')[0].text[:-8]
         print("Classification: " + classification)
 
         # Height is specified in ft'in'' format -- convert to inches
-        height = parser.infoTable.xpath('tr[4]/td[2]')[0].text
+        height = row.xpath('td[2]')[0].text
         height = height.split("/")
         heightIndex = formConfig.formIndex
         if len(height) <= heightIndex:
@@ -161,7 +164,7 @@ with open ("../temp.txt", "w") as f:
         print("Height: " + str(height))
 
         # Remove the lbs from the end of weight
-        weight = parser.infoTable.xpath('tr[4]/td[3]')[0].text
+        weight = row.xpath('td[3]')[0].text
         weight = weight.split("/")
         weightIndex = formConfig.formIndex
         if len(weight) <= weightIndex:
@@ -175,76 +178,17 @@ with open ("../temp.txt", "w") as f:
         if num == 774:
             captureRate = 30
         else:
-            captureRate = int(parser.infoTable.xpath('tr[4]/td[4]')[0].text)
-
+            captureRate = int(row.xpath('td[4]')[0].text)
         print("Capture Rate: " + str(captureRate))
 
-        eggSteps = parser.infoTable.xpath('tr[4]/td[5]')[0].text.replace(",", "")
-        eggSteps = eggSteps.strip()
-
-        # Apparently this is a pretty universal base egg step value for legendaries/Pokemon that cannot breed...?
-        if len(eggSteps) == 0:
-            eggSteps = 30720
-
+        eggSteps = row.xpath('td[5]')[0].text.replace(",", "").strip()
+        if eggSteps == "":
+            # Apparently this is a pretty universal base egg step value for legendaries/Pokemon that cannot breed...?
+            eggSteps = 30720            
+        eggSteps = int(eggSteps)
         print("Egg Steps: " + str(eggSteps))
 
-        # Next table -- the one with the abilities and such
-        if parser.lookupNum < 722:
-            parser.infoTable = parser.infoTable.getnext()
-        else:
-            index = 3
-            parser.infoTable = parser.mainDiv.xpath('table[3]')[0]    
-    
-        growthRate = list(parser.infoTable.xpath('tr[4]/td[1]')[0].itertext())[1]
-        print("Growth Rate: " + growthRate)
-
-        evStrings = parser.infoTable.xpath('tr[4]/td[3]')[0].itertext()
-        
-        # If no form is specified, use this in the mapping
-        defaultForm = "FormNotSpecified"
-        form = defaultForm
-        evMap = {}
-        evMap[form] = [0]*6
-        for evString in evStrings:
-            evIndex = evString.find(" Point(s)")
-            
-            # String doesn't contain EV info -- new form name
-            if evIndex == -1:
-                form = normalizeForm(evString)
-                assert not form in evMap
-                evMap[form] = [0]*6
-                continue
-            
-            ev = evString[:evIndex]
-            evs = evMap[form]
-            
-            stat = ev[2:]
-            value = int(ev[0])
-            
-            if stat == "HP":
-                evs[0] = value
-            elif stat == "Attack":
-                evs[1] = value
-            elif stat == "Defense":
-                evs[2] = value
-            elif stat == "Sp. Attack":
-                evs[3] = value
-            elif stat == "Sp. Defense":
-                evs[4] = value
-            elif stat == "Speed":
-                evs[5] = value
-
-        if formConfig.evFormName is None:
-            evs = evMap[defaultForm]
-        if formConfig.evFormName not in evMap:
-            assert formConfig.normalForm or len(evMap) == 1
-            evs = evMap[defaultForm]
-        else:
-            evs = evMap[formConfig.evFormName]
-        
-        print("Effort Values: " + str(evs))
-        
-        parser.updateTable('Abilities')
+        assert parser.updateTable('Abilities')
         ability1 = None
         ability2 = None
         if formConfig.useAbilitiesList:
@@ -298,15 +242,66 @@ with open ("../temp.txt", "w") as f:
         print("Ability1: " + ability1)    
         print("Ability2: " + ability2)
 
-        # Egg Group table
-        if formConfig.lookupNum < 722:
-            parser.infoTable = parser.infoTable.getnext().getnext()
+        # Next table -- the one with the abilities and such
+        parser.restoreBackup()
+        parser.nextTable()
+        
+        # Experience Growth, Base Happiness, Effort Values Earned, S.O.S. Calling
+        row = parser.infoTable.xpath('tr[4]')[0]
+    
+        growthRate = list(row.xpath('td[1]')[0].itertext())[1]
+        print("Growth Rate: " + growthRate)
+
+        evStrings = row.xpath('td[3]')[0].itertext()
+        
+        # If no form is specified, use this in the mapping
+        defaultForm = "FormNotSpecified"
+        form = defaultForm
+        evMap = {}
+        evMap[form] = [0]*6
+        for evString in evStrings:
+            evIndex = evString.find(" Point(s)")
+            
+            # String doesn't contain EV info -- new form name
+            if evIndex == -1:
+                form = normalizeForm(evString)
+                assert not form in evMap
+                evMap[form] = [0]*6
+                continue
+            
+            ev = evString[:evIndex]
+            evs = evMap[form]
+            
+            stat = ev[2:]
+            value = int(ev[0])
+            
+            if stat == "HP":
+                evs[0] = value
+            elif stat == "Attack":
+                evs[1] = value
+            elif stat == "Defense":
+                evs[2] = value
+            elif stat == "Sp. Attack":
+                evs[3] = value
+            elif stat == "Sp. Defense":
+                evs[4] = value
+            elif stat == "Speed":
+                evs[5] = value
+
+        if formConfig.evFormName is None:
+            evs = evMap[defaultForm]
+        if formConfig.evFormName not in evMap:
+            assert formConfig.normalForm or len(evMap) == 1
+            evs = evMap[defaultForm]
         else:
-#            updateTable('Egg Groups')
-            parser.index = 5
-            parser.infoTable = parser.mainDiv.xpath('table[5]')[0]
-#        if not updateTable('Egg Groups'):
-#            print('FAIL')
+            evs = evMap[formConfig.evFormName]
+        
+        print("Effort Values: " + str(evs))
+        
+        # Egg Group table
+        parser.nextTable()
+        parser.nextTable()
+        
         eggGroup = parser.infoTable.xpath('tr[2]/td[2]')[0]
         if eggGroup.text != None:
             eggGroup1 = "Undiscovered"

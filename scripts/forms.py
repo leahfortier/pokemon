@@ -29,8 +29,18 @@ class FormConfig:
         self.lookupNum = num
         self.name = None
         self.formIndex = 0
+        self.isMega = False
         imageSuffix = ""
         baseExpSuffix = ""
+        megaSuffix = ""
+        
+        # Flabebe has a stupid name with stupid special characters
+        if num == 669:
+            self.name = "Flabebe"
+        elif num == 29:
+            self.name = "Nidoran F"
+        elif num == 32:
+            self.name = "Nidoran M"
         
         # Pokemon with Alolan forms
         if num in [19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105]:
@@ -75,6 +85,19 @@ class FormConfig:
         elif num == 800:
             self.formName = "Normal"
             
+        elif num == AddedPokes.MEGA_CHARIZARD.value:
+            self.lookupNum = 6
+            self.isMega = True
+            self.name = "Rizardon"
+            megaSuffix = " X"
+        elif num == AddedPokes.MEGA_MAWILE.value:
+            self.lookupNum = 303
+            self.isMega = True
+            self.name = "Kuchiito"
+        elif num == AddedPokes.MEGA_ABSOL.value:
+            self.lookupNum = 359
+            self.isMega = True
+            self.name = "Asbel"
         elif num == AddedPokes.DUSK_LYCANROC.value:
             self.formName = "Dusk"
             self.normalForm = False
@@ -97,6 +120,11 @@ class FormConfig:
         
         self.formImageName = str(self.lookupNum).zfill(3) + imageSuffix
         self.baseExpName = str(self.lookupNum).zfill(3) + baseExpSuffix
+        
+        if self.isMega:
+            self.megaName = "Mega Evolution" + megaSuffix
+        else:
+            assert megaSuffix == ""
         
     def hasForm(self, row, formIndex):
         # No form index implies there is only the normal form or all forms are treated the same

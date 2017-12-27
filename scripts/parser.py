@@ -19,6 +19,8 @@ class Parser:
         else:
             self.index = 2
             self.infoTable = self.mainDiv.xpath('table[2]')[0]
+            
+        self.backup()
     
     def updateTable(self, *headers):
         for header in headers:
@@ -74,6 +76,14 @@ class Parser:
     
                         self.infoTable = self.infoTable[0].getnext()
 
+    # I don't think this works in all scenarios but this shit is way too complicated to understand
+    def nextTable(self):
+        if self.lookupNum < 722:
+            self.infoTable = self.infoTable.getnext()
+        else:
+            self.index += 1
+            self.infoTable = self.mainDiv.xpath('table[' + str(self.index) + ']')[0]    
+
     def getSchemaIndex(self, schema, columnName):
         for index, column in enumerate(schema.getchildren()):
             if column.text == columnName:
@@ -109,3 +119,11 @@ class Parser:
                 return True
     
         return False
+    
+    def backup(self):
+        self.backupTable = self.infoTable
+        self.backupIndex = self.index
+        
+    def restoreBackup(self):
+        self.infoTable = self.backupTable
+        self.index = self.backupIndex
