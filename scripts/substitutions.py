@@ -110,12 +110,12 @@ def attackSubstitution(num, attack):
         # Leavanny
         elif num == 542:
             return 'Me First'
-        # Alomomola
-        elif num == 594:
-            return 'Refresh'
         # Nidoran line
         elif num >= 29 and num <= 33:
             return 'Poison Tail'
+        # Alomomola
+        elif num == 594:
+            return 'Refresh'
         # Terrakion
         elif num == 639:
             return 'Stealth Rock'
@@ -135,7 +135,8 @@ def attackSubstitution(num, attack):
         elif num == 746:
             return 'Water Sport'
         # Eeveelutions all start with this
-        elif num >= 133 and num <= 136 or num == 196 or num == 197 or num == 470 or num == 471 or num == 700:
+        # Also Poipole and Naganadel -- TODO: too lazy to come up with an alternative right now
+        elif num in [133, 134, 135, 136, 196, 197, 470, 471, 700, 803, 804]:
             return None
     elif attack == 'Instruct':
         # Oranguru
@@ -212,15 +213,12 @@ def attackSubstitution(num, attack):
         # Regigagas
         elif num == 486:
             return 'Mega Punch'
-        # Avalugg
-        elif num == 713:
+        # Alomomola and Avalugg
+        elif num == 594 or num == 713:
             return 'Mist'
         # Solgaleo
         elif num == 791:
             return 'Reflect'
-        # Alomomola
-        elif num == 594:
-            return 'Mist'
         # Gallade
         elif num == 475:
             return 'Sacred Sword'
@@ -230,6 +228,9 @@ def attackSubstitution(num, attack):
         # Araquanid
         elif num == 752:
             return 'Sticky Web'
+        # Stakataka
+        elif num == 805:
+            return 'Stone Edge'
         # Machamp
         elif num == 68:
             return 'Superpower'

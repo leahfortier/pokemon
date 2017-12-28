@@ -80,7 +80,6 @@ with open ("../temp.txt", "w") as f:
     baseExpMap = getBaseExpMap()    
     for num in range(1, list(AddedPokes)[-1].value + 1):
 #    for num in [1]:
-#    for num in [AddedPokes.MEGA_CHARIZARD.value]:
         formConfig = FormConfig(num)
         parser = Parser(formConfig.lookupNum)
         

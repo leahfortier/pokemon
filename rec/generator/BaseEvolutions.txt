@@ -344,6 +344,7 @@ Bruxish
 Drampa
 Dhelmise
 Jangmo-o
+Poipole
 Snowshrew
 Yukikon
 Sleima

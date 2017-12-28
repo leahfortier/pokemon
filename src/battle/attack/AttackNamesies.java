@@ -345,6 +345,7 @@ import battle.attack.Attack.MeteorMash;
 import battle.attack.Attack.Metronome;
 import battle.attack.Attack.MilkDrink;
 import battle.attack.Attack.Mimic;
+import battle.attack.Attack.MindBlown;
 import battle.attack.Attack.MindReader;
 import battle.attack.Attack.Minimize;
 import battle.attack.Attack.MiracleEye;
@@ -395,6 +396,7 @@ import battle.attack.Attack.PetalDance;
 import battle.attack.Attack.PhantomForce;
 import battle.attack.Attack.PhotonGeyser;
 import battle.attack.Attack.PinMissile;
+import battle.attack.Attack.PlasmaFists;
 import battle.attack.Attack.PlayNice;
 import battle.attack.Attack.PlayRough;
 import battle.attack.Attack.Pluck;
@@ -1315,7 +1317,9 @@ public enum AttackNamesies {
 	STOMPING_TANTRUM("Stomping Tantrum", StompingTantrum::new),
 	HYPERSPACE_HOLE("Hyperspace Hole", HyperspaceHole::new),
 	STEAM_ERUPTION("Steam Eruption", SteamEruption::new),
-	PHOTON_GEYSER("Photon Geyser", PhotonGeyser::new);
+	PHOTON_GEYSER("Photon Geyser", PhotonGeyser::new),
+	MIND_BLOWN("Mind Blown", MindBlown::new),
+	PLASMA_FISTS("Plasma Fists", PlasmaFists::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

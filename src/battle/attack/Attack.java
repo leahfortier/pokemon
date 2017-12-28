@@ -10700,4 +10700,35 @@ public abstract class Attack implements Serializable {
 			return s;
 		}
 	}
+
+	static class MindBlown extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		MindBlown() {
+			super(AttackNamesies.MIND_BLOWN, Type.FIRE, MoveCategory.SPECIAL, 5, "The user attacks everything around it by causing its own head to explode. This also damages the user.");
+			super.power = 150;
+			super.accuracy = 100;
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Test this
+			Messages.add(user.getName() + " blew its mind!!!");
+			user.reduceHealthFraction(b, 1/2.0);
+		}
+	}
+
+	static class PlasmaFists extends Attack {
+		private static final long serialVersionUID = 1L;
+
+		PlasmaFists() {
+			super(AttackNamesies.PLASMA_FISTS, Type.ELECTRIC, MoveCategory.PHYSICAL, 15, "The user attacks with electrically charged fists. This move changes Normal-type moves to Electric-type moves.");
+			super.power = 100;
+			super.accuracy = 100;
+			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+		}
+
+		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+			// TODO: Make target's normal type moves to be electric type
+		}
+	}
 }

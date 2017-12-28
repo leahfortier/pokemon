@@ -6615,3 +6615,27 @@ Photon Geyser:
 		###
 	Int: StatSwitchingEffect
 *
+Mind Blown:
+	Desc: The user attacks everything around it by causing its own head to explode. This also damages the user.
+	Type: Fire
+	PP: 5
+	Pow: 150
+	Acc: 100
+	Cat: Special
+	UniqueEffects:
+		// TODO: Test this
+		Messages.add(user.getName() + " blew its mind!!!");
+		user.reduceHealthFraction(b, 1/2.0);
+		###
+*
+Plasma Fists:
+	Desc: The user attacks with electrically charged fists. This move changes Normal-type moves to Electric-type moves.
+	Type: Electric
+	PP: 15
+	Cat: Physical
+	Pow: 100
+	Acc: 100
+	UniqueEffects:
+		// TODO: Make target's normal type moves to be electric type
+		###
+*
