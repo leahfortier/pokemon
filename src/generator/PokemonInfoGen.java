@@ -1,12 +1,17 @@
 package generator;
 
+import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.evolution.EvolutionType;
 import util.FileIO;
 import util.FileIO.NullOutputStream;
 import util.FileName;
+import util.Folder;
 import util.GeneralUtils;
+import util.StringUtils;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +27,83 @@ class PokemonInfoGen {
 
     private PokemonInfoGen() {
         newPokemonInfoCompare();
-//		pokemonInfoStuff();
+//        pokemonInfoStuff();
+//        updateNum();
+    }
+
+    private static File getImageFile(int num, String suffix, String folderPath) {
+        return new File(folderPath + num + suffix + ".png");
+    }
+
+    private static void updateImage(int num, int newNum, String imageSuffix, String folderPath) {
+        File imageFile = getImageFile(num, imageSuffix, folderPath);
+        if (imageFile.exists()) {
+            BufferedImage image = FileIO.readImage(imageFile);
+            FileIO.writeImage(image, getImageFile(newNum, imageSuffix, folderPath));
+            FileIO.deleteFile(imageFile);
+        }
+    }
+
+    // Used if new Pokemon need to be added -- need to update the numbers of all of the added Pokemon
+    // BE VERY CAREFUL TO ONLY RUN THIS ONCE OR IT WILL FUCK UP ALL THE IMAGES
+    private static void updateNum() {
+        int startNum = PokemonInfo.getPokemonInfo(PokemonNamesies.RIZARDON).getNumber();
+        int newStartNum = 808;
+
+        for (int num = PokemonInfo.NUM_POKEMON; num >= startNum; num--) {
+            int newNum = num + (newStartNum - startNum);
+            updateImage(num, newNum, "", Folder.POKEMON_TILES);
+            updateImage(num, newNum, "-back", Folder.POKEMON_TILES);
+            updateImage(num, newNum, "-shiny", Folder.POKEMON_TILES);
+            updateImage(num, newNum, "-shiny-back", Folder.POKEMON_TILES);
+            updateImage(num, newNum, "-small", Folder.PARTY_TILES);
+            updateImage(num, newNum, "", Folder.POKEDEX_TILES);
+        }
+
+        Scanner in = FileIO.openFile(FileName.POKEMON_INFO);
+        PrintStream out = FileIO.openOutputFile("out.txt");
+
+        for (int i = 1; i < startNum; i++) {
+            outputSinglePokemon(in, out);
+        }
+
+        while (in.hasNext()) {
+            int num = in.nextInt(); in.nextLine();
+            int newNum = num + (newStartNum - startNum);
+            out.println(newNum); // Num
+            out.println(in.nextLine()); // Name
+            out.println(in.nextLine()); // Base Stats
+            out.println(in.nextLine()); // Base Exp
+            out.println(in.nextLine()); // Growth Rate
+            out.println(in.nextLine()); // Types
+            out.println(in.nextLine()); // Catch Rate
+            out.println(in.nextLine()); // EVs
+            readEvolution(in, out);     // Evolution
+            readHoldItems(in, out);     // Wild Items
+            out.println(in.nextLine()); // Male Ratio
+            out.println(in.nextLine()); // Abilities
+            out.println(in.nextLine()); // Classification
+            out.println(in.nextLine()); // Height Weight FlavorText
+            out.println(in.nextLine()); // Egg Steps
+            out.println(in.nextLine()); // Egg Groups
+            readMoves(in, out);    		// Level Up Moves
+            readMoves(in, out);			// Learnable Moves
+            out.println(in.nextLine()); // New Line
+        }
+
+        Scanner in2 = FileIO.openFile("addedpokes.txt");
+        StringBuilder out2 = new StringBuilder();
+        int num = startNum;
+        while (in2.hasNext()) {
+            String line = in2.nextLine();
+            if (line.startsWith(num + ".")) {
+                int newNum = num + (newStartNum - startNum);
+                line = line.replaceFirst(num + ".", newNum + ".");
+                num++;
+            }
+            StringUtils.appendLine(out2, line);
+        }
+        FileIO.overwriteFile("addedpokes.txt", out2);
     }
 
     private static List<String> getMoves(Scanner in) {

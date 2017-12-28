@@ -23,9 +23,12 @@ import java.util.stream.Collectors;
 
 public class FileIO {
 	public static final String FILE_SLASH = File.separator;
-	
+
 	public static void deleteFile(String fileName) {
-		File file = new File(fileName);
+		deleteFile(new File(fileName));
+	}
+
+	public static void deleteFile(File file) {
 		if (!file.exists()) {
 			Global.error("Could not find file " + file.getName() + " -- unable to delete");
 		}
@@ -59,6 +62,10 @@ public class FileIO {
 	}
 
 	public static void writeImage(BufferedImage image, String fileName) {
+		if (!fileName.endsWith(".png")) {
+			fileName += ".png";
+		}
+
 		writeImage(image, new File(fileName));
 	}
 
