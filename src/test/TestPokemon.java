@@ -54,7 +54,7 @@ public class TestPokemon extends ActivePokemon {
         );
     }
 
-    public boolean healthRatioMatch(double fraction) {
-        return (int)(Math.ceil(fraction*this.getMaxHP())) == this.getHP();
+    public void assertHealthRatio(double fraction) {
+        Assert.assertEquals((int)(Math.ceil(fraction*this.getMaxHP())), this.getHP());
     }
 }

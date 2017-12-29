@@ -6073,7 +6073,14 @@ Electrify:
 	PP: 20
 	Type: Electric
 	Cat: Status
-	Effect: Electrified
+	Effect: ChangeAttackType
+	Int: ChangeAttackTypeSource
+	GetAttackType:
+		return Type.ELECTRIC;
+		###
+	AttackTypeMessage: 
+		return caster.getName() + " electrified " + victim.getName() + "!";
+		###
 	Priority: 1
 	MoveType: No_Magic_Coat
 *
@@ -6623,9 +6630,10 @@ Mind Blown:
 	Acc: 100
 	Cat: Special
 	UniqueEffects:
-		// TODO: Test this
 		Messages.add(user.getName() + " blew its mind!!!");
-		user.reduceHealthFraction(b, 1/2.0);
+		if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+			user.reduceHealthFraction(b, 1/2.0);
+		}
 		###
 *
 Plasma Fists:
@@ -6635,7 +6643,16 @@ Plasma Fists:
 	Cat: Physical
 	Pow: 100
 	Acc: 100
-	UniqueEffects:
-		// TODO: Make target's normal type moves to be electric type
+	Effect: ChangeAttackType
+	Int: ChangeAttackTypeSource
+	GetAttackType:
+		if (original == Type.NORMAL) {
+			return Type.ELECTRIC;
+		}
+		
+		return original;
+		###
+	AttackTypeMessage: 
+		return caster.getName() + " electrified " + victim.getName() + "!";
 		###
 *

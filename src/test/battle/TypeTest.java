@@ -1,12 +1,10 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
-import battle.attack.Move;
 import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import test.TestPokemon;
@@ -63,19 +61,23 @@ public class TypeTest {
     @Test
     public void changeEffectivenessTest() {
         // Foresight
-        changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.TACKLE, PokemonManipulator.giveDefendingEffect(EffectNamesies.FORESIGHT));
-        changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.KARATE_CHOP, PokemonManipulator.giveDefendingEffect(EffectNamesies.FORESIGHT));
+        PokemonManipulator foresight = PokemonManipulator.giveDefendingEffect(EffectNamesies.FORESIGHT);
+        changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.TACKLE, foresight);
+        changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.KARATE_CHOP, foresight);
 
         // Miracle Eye
-        changeEffectivenessTest(PokemonNamesies.UMBREON, AttackNamesies.PSYCHIC, PokemonManipulator.giveDefendingEffect(EffectNamesies.MIRACLE_EYE));
+        PokemonManipulator miracleEye = PokemonManipulator.giveDefendingEffect(EffectNamesies.MIRACLE_EYE);
+        changeEffectivenessTest(PokemonNamesies.UMBREON, AttackNamesies.PSYCHIC, miracleEye);
 
         // Ring Target
-        changeEffectivenessTest(PokemonNamesies.PIDGEY, AttackNamesies.EARTHQUAKE, PokemonManipulator.giveDefendingItem(ItemNamesies.RING_TARGET));
-        changeEffectivenessTest(PokemonNamesies.SANDSHREW, AttackNamesies.THUNDER_PUNCH, PokemonManipulator.giveDefendingItem(ItemNamesies.RING_TARGET));
+        PokemonManipulator ringTarget = PokemonManipulator.giveDefendingItem(ItemNamesies.RING_TARGET);
+        changeEffectivenessTest(PokemonNamesies.PIDGEY, AttackNamesies.EARTHQUAKE, ringTarget);
+        changeEffectivenessTest(PokemonNamesies.SANDSHREW, AttackNamesies.THUNDER_PUNCH, ringTarget);
 
         // Scrappy
-        changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.TACKLE, PokemonManipulator.giveAttackingAbility(AbilityNamesies.SCRAPPY));
-        changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.KARATE_CHOP, PokemonManipulator.giveAttackingAbility(AbilityNamesies.SCRAPPY));
+        PokemonManipulator scrappy = PokemonManipulator.giveAttackingAbility(AbilityNamesies.SCRAPPY);
+        changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.TACKLE, scrappy);
+        changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.KARATE_CHOP, scrappy);
     }
 
     private void changeEffectivenessTest(PokemonNamesies defendingPokemon, AttackNamesies attack, PokemonManipulator manipulator) {
@@ -85,7 +87,7 @@ public class TypeTest {
         TestBattle battle = TestBattle.create(attacking, defending);
 
         // Make sure attack is unsuccessful without the effect
-        attacking.setMove(new Move(attack));
+        attacking.setupMove(attack, battle);
         Assert.assertTrue(TypeAdvantage.doesNotEffect(attacking, defending, battle));
 
         // Cast the effect and make sure the move hits
@@ -104,19 +106,11 @@ public class TypeTest {
         advantageChecker(1, freezeDry, PokemonNamesies.LAPRAS);
 
         // Super effective against a non-water type Pokemon that has been soaked
-        advantageChecker(
-                2,
-                freezeDry,
-                (battle, attacking, defending) -> attacking.callNewMove(battle, defending, new Move(AttackNamesies.SOAK)),
-                PokemonNamesies.PIDGEY
-        );
+        advantageChecker(2, freezeDry, PokemonManipulator.attackingAttack(AttackNamesies.SOAK), PokemonNamesies.PIDGEY);
     }
 
     @Test
     public void flyingPressTest() {
-        ActivePokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
-        attacking.setMove(new Move(AttackNamesies.FLYING_PRESS));
-
         PokemonNamesies[] superDuperEffective = {
                 PokemonNamesies.ABOMASNOW,
                 PokemonNamesies.DEERLING,
@@ -218,7 +212,7 @@ public class TypeTest {
         advantageChecker(0, flyingPress, noEffect);
 
         // Electrify should make the attack Electric/Flying
-        PokemonManipulator electrify = PokemonManipulator.giveAttackingEffect(EffectNamesies.ELECTRIFIED);
+        PokemonManipulator electrify = PokemonManipulator.defendingAttack(AttackNamesies.ELECTRIFY);
         advantageChecker(4, flyingPress, electrify, PokemonNamesies.HAWLUCHA, PokemonNamesies.BUTTERFREE);
         advantageChecker(2, flyingPress, electrify, PokemonNamesies.CATERPIE, PokemonNamesies.LARVESTA);
         advantageChecker(1, flyingPress, electrify, PokemonNamesies.ALAKAZAM, PokemonNamesies.AERODACTYL);
@@ -244,19 +238,98 @@ public class TypeTest {
     }
 
     private void advantageChecker(double expectedAdvantage, AttackNamesies attack, PokemonManipulator manipulator, PokemonNamesies... defendingPokemon) {
-        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
+        advantageChecker(null, expectedAdvantage, attack, manipulator, defendingPokemon);
+    }
+
+    private void advantageChecker(Double beforeExpected, double afterExpected, AttackNamesies attack, PokemonManipulator manipulator, PokemonNamesies... defendingPokemon) {
+        advantageChecker(beforeExpected, afterExpected, PokemonNamesies.BULBASAUR, attack, manipulator, defendingPokemon);
+    }
+
+    private void advantageChecker(Double beforeExpected, double afterExpected, PokemonNamesies attackingPokemon, AttackNamesies attack, PokemonManipulator manipulator, PokemonNamesies... defendingPokemon) {
+        TestPokemon attacking = new TestPokemon(attackingPokemon);
         for (PokemonNamesies pokemonNamesies : defendingPokemon) {
             TestPokemon defending = new TestPokemon(pokemonNamesies);
             TestBattle battle = TestBattle.create(attacking, defending);
 
-            attacking.setMove(new Move(attack));
-            manipulator.manipulate(battle, attacking, defending);
+            if (beforeExpected != null) {
+                attacking.setupMove(attack, battle);
+                double beforeActual = TypeAdvantage.getAdvantage(attacking, defending, battle);
+                Assert.assertTrue(
+                        StringUtils.spaceSeparated(attack, pokemonNamesies, beforeExpected, beforeActual),
+                        beforeActual == beforeExpected
+                );
+            }
 
-            double actualAdvantage = TypeAdvantage.getAdvantage(attacking, defending, battle);
+            manipulator.manipulate(battle, attacking, defending);
+            attacking.setupMove(attack, battle);
+
+            double afterActual = TypeAdvantage.getAdvantage(attacking, defending, battle);
             Assert.assertTrue(
-                    StringUtils.spaceSeparated(attack, pokemonNamesies, expectedAdvantage, actualAdvantage),
-                    actualAdvantage == expectedAdvantage
+                    StringUtils.spaceSeparated(attack, pokemonNamesies, afterExpected, afterActual),
+                    afterActual == afterExpected
             );
         }
+    }
+
+    @Test
+    public void changeAttackTypeTest() {
+        PokemonManipulator electrify = PokemonManipulator.defendingAttack(AttackNamesies.ELECTRIFY);
+        advantageChecker(2.0, 1, AttackNamesies.SURF, electrify, PokemonNamesies.GROWLITHE);
+        advantageChecker(.5, 2, AttackNamesies.SURF, electrify, PokemonNamesies.SQUIRTLE);
+        advantageChecker(2.0, 2, AttackNamesies.FREEZE_DRY, electrify, PokemonNamesies.SQUIRTLE);
+        advantageChecker(0.0, 1, AttackNamesies.TACKLE, electrify, PokemonNamesies.GASTLY);
+
+        // Electrify affects Ground-type Pokemon
+        advantageChecker(1.0, 0, PokemonNamesies.SANDSHREW, AttackNamesies.TACKLE, electrify, PokemonNamesies.SANDSHREW);
+
+        // Electrify only works for the current turn
+        advantageChecker(2.0, 2, AttackNamesies.SURF, (battle, attacking, defending) -> battle.defendingFight(AttackNamesies.ELECTRIFY), PokemonNamesies.GROWLITHE);
+
+        // Plasma Fists only affects Normal-type moves
+        PokemonManipulator plasmaFists = PokemonManipulator.defendingAttack(AttackNamesies.PLASMA_FISTS);
+        advantageChecker(2.0, 2, AttackNamesies.SURF, plasmaFists, PokemonNamesies.GROWLITHE);
+        advantageChecker(.5, .5, AttackNamesies.SURF, plasmaFists, PokemonNamesies.SQUIRTLE);
+        advantageChecker(2.0, 2, AttackNamesies.FREEZE_DRY, plasmaFists, PokemonNamesies.SQUIRTLE);
+        advantageChecker(0.0, 1, AttackNamesies.TACKLE, plasmaFists, PokemonNamesies.GASTLY);
+        advantageChecker(1.0, 0, AttackNamesies.TACKLE, plasmaFists, PokemonNamesies.SANDSHREW);
+        advantageChecker(.5, 0, AttackNamesies.SWIFT, plasmaFists, PokemonNamesies.GEODUDE);
+
+        // Plasma Fists doesn't affect Sandshrew so the effect shouldn't go through
+        advantageChecker(1.0, 1, PokemonNamesies.SANDSHREW, AttackNamesies.TACKLE, plasmaFists, PokemonNamesies.SANDSHREW);
+
+        // Plasma Fists also only works for the current turn
+        advantageChecker(0.0, 0, AttackNamesies.TACKLE, (battle, attacking, defending) -> battle.defendingFight(AttackNamesies.PLASMA_FISTS), PokemonNamesies.GASTLY);
+
+        // Galvanize changes normal type moves to electric type
+        PokemonManipulator galvanize = PokemonManipulator.giveAttackingAbility(AbilityNamesies.GALVANIZE);
+        advantageChecker(2.0, 2, AttackNamesies.SURF, galvanize, PokemonNamesies.GROWLITHE);
+        advantageChecker(.5, .5, AttackNamesies.SURF, galvanize, PokemonNamesies.SQUIRTLE);
+        advantageChecker(2.0, 2, AttackNamesies.FREEZE_DRY, galvanize, PokemonNamesies.SQUIRTLE);
+        advantageChecker(0.0, 1, AttackNamesies.TACKLE, galvanize, PokemonNamesies.GASTLY);
+        advantageChecker(1.0, 0, AttackNamesies.TACKLE, galvanize, PokemonNamesies.SANDSHREW);
+        advantageChecker(.5, 0, AttackNamesies.SWIFT, galvanize, PokemonNamesies.GEODUDE);
+
+        // TODO: Electrify + Normalize
+        // TODO: Normalize + Thunder Wave
+        // Normalize changes all moves to Normal-type
+        PokemonManipulator normalize = PokemonManipulator.giveAttackingAbility(AbilityNamesies.NORMALIZE);
+        advantageChecker(2.0, 1, AttackNamesies.SURF, normalize, PokemonNamesies.GROWLITHE);
+        advantageChecker(.5, 1, AttackNamesies.SURF, normalize, PokemonNamesies.SQUIRTLE);
+        advantageChecker(2.0, 2, AttackNamesies.FREEZE_DRY, normalize, PokemonNamesies.SQUIRTLE);
+        advantageChecker(1.0, 1, AttackNamesies.WATER_GUN, normalize, PokemonNamesies.GLACEON);
+        advantageChecker(0.0, 0, AttackNamesies.TACKLE, normalize, PokemonNamesies.GASTLY);
+        advantageChecker(0.0, 0, AttackNamesies.KARATE_CHOP, normalize, PokemonNamesies.GASTLY);
+        advantageChecker(.5, .5, AttackNamesies.SWIFT, normalize, PokemonNamesies.GEODUDE);
+
+        // Liquid voice changes all sound-based moves to Water-type
+        PokemonManipulator liquidVoice = PokemonManipulator.giveAttackingAbility(AbilityNamesies.LIQUID_VOICE);
+        advantageChecker(2.0, 2, AttackNamesies.SURF, liquidVoice, PokemonNamesies.GROWLITHE);
+        advantageChecker(.5, .5, AttackNamesies.SWIFT, liquidVoice, PokemonNamesies.GEODUDE);
+        advantageChecker(2.0, 2, AttackNamesies.FREEZE_DRY, liquidVoice, PokemonNamesies.SQUIRTLE);
+        advantageChecker(0.0, 0, AttackNamesies.TACKLE, liquidVoice, PokemonNamesies.GASTLY);
+        advantageChecker(0.0, 0, AttackNamesies.KARATE_CHOP, liquidVoice, PokemonNamesies.GASTLY);
+        advantageChecker(0.0, 1, AttackNamesies.BOOMBURST, liquidVoice, PokemonNamesies.GASTLY);
+        advantageChecker(2.0, 1, AttackNamesies.BUG_BUZZ, liquidVoice, PokemonNamesies.ALAKAZAM);
+        advantageChecker(.5, 2, AttackNamesies.BUG_BUZZ, liquidVoice, PokemonNamesies.GROWLITHE);
     }
 }

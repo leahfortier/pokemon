@@ -7,6 +7,7 @@ import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.MessageGetter;
 import battle.effect.attack.AbilityChanger;
+import battle.effect.attack.ChangeAttackTypeSource;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.BattleEffect.FieldUproar;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
@@ -1127,6 +1128,28 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public Item getItem() {
 			return item;
+		}
+	}
+
+	static class ChangeAttackType extends PokemonEffect implements ChangeAttackTypeEffect {
+		private static final long serialVersionUID = 1L;
+		private ChangeAttackTypeSource typeSource;
+
+		ChangeAttackType() {
+			super(EffectNamesies.CHANGE_ATTACK_TYPE, 1, 1, false);
+		}
+
+		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+			typeSource = (ChangeAttackTypeSource)source.getSource(b, caster);
+			super.cast(b, caster, victim, source, printCast);
+		}
+
+		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+			return typeSource.getMessage(b, user, victim);
+		}
+
+		public Type changeAttackType(Attack attack, Type original) {
+			return typeSource.getAttackType(original);
 		}
 	}
 
@@ -2564,26 +2587,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
 		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
 			return user.getName() + " sprinkled powder on " + victim.getName() + "!";
-		}
-	}
-
-	static class Electrified extends PokemonEffect implements ChangeAttackTypeEffect {
-		private static final long serialVersionUID = 1L;
-
-		Electrified() {
-			super(EffectNamesies.ELECTRIFIED, 1, 1, false);
-		}
-
-		public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-			return !(victim.hasEffect(this.namesies));
-		}
-
-		public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-			return user.getName() + " electrified " + victim.getName() + "!";
-		}
-
-		public Type changeAttackType(Attack attack, Type original) {
-			return Type.ELECTRIC;
 		}
 	}
 

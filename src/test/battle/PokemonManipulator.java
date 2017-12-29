@@ -1,6 +1,8 @@
 package test.battle;
 
 import battle.Battle;
+import battle.attack.AttackNamesies;
+import battle.attack.Move;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
@@ -13,6 +15,10 @@ interface PokemonManipulator {
 
     static void startAttack(Battle battle, ActivePokemon attacking, ActivePokemon defending) {
         attacking.startAttack(battle);
+    }
+
+    static void useAttack(AttackNamesies attackNamesies, TestBattle battle, TestPokemon attacking, TestPokemon defending) {
+        attacking.callNewMove(battle, defending, new Move(attackNamesies));
     }
 
     static void giveEffect(EffectNamesies effectNamesies, Battle battle, ActivePokemon attacking, ActivePokemon defending, boolean attackingTarget) {
@@ -47,6 +53,14 @@ interface PokemonManipulator {
                 manipulator.manipulate(battle, attacking, defending);
             }
         };
+    }
+
+    static PokemonManipulator attackingAttack(AttackNamesies attackNamesies) {
+        return (battle, attacking, defending) -> useAttack(attackNamesies, battle, attacking, defending);
+    }
+
+    static PokemonManipulator defendingAttack(AttackNamesies attackNamesies) {
+        return (battle, attacking, defending) -> useAttack(attackNamesies, battle, defending, attacking);
     }
 
     static PokemonManipulator giveAttackingEffect(EffectNamesies effectNamesies) {

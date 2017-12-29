@@ -2,6 +2,7 @@ package battle.attack;
 
 import battle.Battle;
 import battle.effect.attack.AbilityChanger;
+import battle.effect.attack.ChangeAttackTypeSource;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove;
@@ -9918,14 +9919,22 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Electrify extends Attack {
+	static class Electrify extends Attack implements ChangeAttackTypeSource {
 		private static final long serialVersionUID = 1L;
 
 		Electrify() {
 			super(AttackNamesies.ELECTRIFY, Type.ELECTRIC, MoveCategory.STATUS, 20, "If the target is electrified before it uses a move during that turn, the target's move becomes Electric type.");
-			super.effects.add(EffectNamesies.ELECTRIFIED);
+			super.effects.add(EffectNamesies.CHANGE_ATTACK_TYPE);
 			super.moveTypes.add(MoveType.NO_MAGIC_COAT);
 			super.priority = 1;
+		}
+
+		public Type getAttackType(Type original) {
+			return Type.ELECTRIC;
+		}
+
+		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+			return caster.getName() + " electrified " + victim.getName() + "!";
 		}
 	}
 
@@ -10711,24 +10720,34 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test this
 			Messages.add(user.getName() + " blew its mind!!!");
-			user.reduceHealthFraction(b, 1/2.0);
+			if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+				user.reduceHealthFraction(b, 1/2.0);
+			}
 		}
 	}
 
-	static class PlasmaFists extends Attack {
+	static class PlasmaFists extends Attack implements ChangeAttackTypeSource {
 		private static final long serialVersionUID = 1L;
 
 		PlasmaFists() {
 			super(AttackNamesies.PLASMA_FISTS, Type.ELECTRIC, MoveCategory.PHYSICAL, 15, "The user attacks with electrically charged fists. This move changes Normal-type moves to Electric-type moves.");
 			super.power = 100;
 			super.accuracy = 100;
+			super.effects.add(EffectNamesies.CHANGE_ATTACK_TYPE);
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
-		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Make target's normal type moves to be electric type
+		public Type getAttackType(Type original) {
+			if (original == Type.NORMAL) {
+				return Type.ELECTRIC;
+			}
+			
+			return original;
+		}
+
+		public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+			return caster.getName() + " electrified " + victim.getName() + "!";
 		}
 	}
 }

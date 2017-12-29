@@ -810,10 +810,24 @@ Wonder Guard:
 *
 Normalize:
 	Desc: All the Pok\u00e9mon's moves become the Normal type.
-	Int: ChangeAttackTypeEffect
+	Int: ChangeAttackTypeEffect, EndTurnEffect
 	ChangeAttackType:
+		if (original != Type.NORMAL) {
+			this.activated = true;
+		}
+	
 		return Type.NORMAL;
 		###
+	Field:
+		private boolean activated;
+		###
+	Activate:
+		this.activated = false;
+		###
+	ApplyEndTurn:
+		this.activated = false;
+		###
+	PowerMultiplierCondition: 1.2 activated
 *
 Stall:
 	Desc: The Pok\u00e9mon moves after even slower foes.

@@ -2000,14 +2000,28 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Normalize extends Ability implements ChangeAttackTypeEffect {
+	static class Normalize extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
 		private static final long serialVersionUID = 1L;
+		private boolean activated;
 
 		Normalize() {
 			super(AbilityNamesies.NORMALIZE, "All the Pok\u00e9mon's moves become the Normal type.");
+			this.activated = false;
+		}
+
+		public void applyEndTurn(ActivePokemon victim, Battle b) {
+			this.activated = false;
+		}
+
+		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+			return activated ? 1.2 : 1;
 		}
 
 		public Type changeAttackType(Attack attack, Type original) {
+			if (original != Type.NORMAL) {
+				this.activated = true;
+			}
+			
 			return Type.NORMAL;
 		}
 	}
@@ -3163,22 +3177,18 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			this.activated = false;
 		}
 
-		public Type getType() {
-			return Type.FAIRY;
-		}
-
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			this.activated = false;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return activated ? 1.3 : 1;
+			return activated ? 1.2 : 1;
 		}
 
 		public Type changeAttackType(Attack attack, Type original) {
 			if (original == Type.NORMAL) {
 				this.activated = true;
-				return getType();
+				return Type.FAIRY;
 			}
 			
 			return original;
@@ -3194,22 +3204,18 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			this.activated = false;
 		}
 
-		public Type getType() {
-			return Type.ICE;
-		}
-
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			this.activated = false;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return activated ? 1.3 : 1;
+			return activated ? 1.2 : 1;
 		}
 
 		public Type changeAttackType(Attack attack, Type original) {
 			if (original == Type.NORMAL) {
 				this.activated = true;
-				return getType();
+				return Type.ICE;
 			}
 			
 			return original;
@@ -3644,22 +3650,18 @@ public abstract class Ability implements Serializable, AbilityHolder {
 			this.activated = false;
 		}
 
-		public Type getType() {
-			return Type.ELECTRIC;
-		}
-
 		public void applyEndTurn(ActivePokemon victim, Battle b) {
 			this.activated = false;
 		}
 
 		public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return activated ? 1.3 : 1;
+			return activated ? 1.2 : 1;
 		}
 
 		public Type changeAttackType(Attack attack, Type original) {
 			if (original == Type.NORMAL) {
 				this.activated = true;
-				return getType();
+				return Type.ELECTRIC;
 			}
 			
 			return original;

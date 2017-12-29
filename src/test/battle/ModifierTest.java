@@ -175,6 +175,16 @@ public class ModifierTest {
         // Muscle band boosts Physical moves
         powerModifierTest(1.1, new TestInfo().attacking(ItemNamesies.MUSCLE_BAND).with(AttackNamesies.VINE_WHIP));
         powerModifierTest(1, new TestInfo().attacking(ItemNamesies.MUSCLE_BAND).with(AttackNamesies.ENERGY_BALL));
+
+        // Galvanize boosts normal-type moves that have been changed electric type
+        powerModifierTest(1.2, new TestInfo().attacking(AbilityNamesies.GALVANIZE).with(AttackNamesies.SWIFT));
+        powerModifierTest(1, new TestInfo().attacking(AbilityNamesies.GALVANIZE).with(AttackNamesies.THUNDERBOLT));
+        powerModifierTest(1, new TestInfo().attacking(AbilityNamesies.GALVANIZE).with(AttackNamesies.VINE_WHIP));
+
+        // Normalize boosts non-normal-type moves that have been changed to normal type
+        powerModifierTest(1, new TestInfo().attacking(AbilityNamesies.NORMALIZE).with(AttackNamesies.SWIFT));
+        powerModifierTest(1.2, new TestInfo().attacking(AbilityNamesies.NORMALIZE).with(AttackNamesies.THUNDERBOLT));
+        powerModifierTest(1.2, new TestInfo().attacking(AbilityNamesies.NORMALIZE).with(AttackNamesies.VINE_WHIP));
     }
 
     @Test

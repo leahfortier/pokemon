@@ -1,7 +1,6 @@
 package main;
 
 import battle.Battle;
-import gui.DevConsole;
 import gui.GameData;
 import gui.view.TradeView;
 import gui.view.View;
@@ -14,7 +13,6 @@ import map.MapName;
 import message.Messages;
 import pattern.map.MapTransitionMatcher;
 import pokemon.ActivePokemon;
-import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import trainer.player.Player;
 import util.save.Save;
@@ -62,17 +60,8 @@ public class Game {
 	}
 	
 	private void setupCharacter() {
-//		player.addPokemon(new ActivePokemon(PokemonNamesies.EEVEE, 1, false, true));
-		player.addPokemon(new ActivePokemon(PokemonNamesies.BULBASAUR, 5, false, true));
+		player.addPokemon(new ActivePokemon(PokemonNamesies.EEVEE, 1, false, true));
 		player.front().giveItem(ItemNamesies.ORAN_BERRY);
-
-		for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-			PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
-//			player.addPokemon(new ActivePokemon(pokemonInfo.namesies(), 5, false, true));
-		}
-
-		DevConsole.giveTools(player);
-		DevConsole.giveFlyLocations(player);
 	}
 	
 	private void checkViewSwitch() {
@@ -144,6 +133,7 @@ public class Game {
 		MapName startingMap = new MapName("Depth First Search Town", "PlayersHouseUp");
 		MapTransitionMatcher startTransition = this.data.getMap(startingMap).getEntrance("startTransition");
 		player.setMap(startTransition);
+		player.setPokeCenter(startTransition);
 		data.getMap(startingMap).setCharacterToEntrance();
 
 		player.setFileNum(index);

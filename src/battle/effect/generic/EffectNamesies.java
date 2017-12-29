@@ -19,6 +19,7 @@ import battle.effect.generic.PokemonEffect.Binded;
 import battle.effect.generic.PokemonEffect.Bracing;
 import battle.effect.generic.PokemonEffect.BreaksTheMold;
 import battle.effect.generic.PokemonEffect.ChangeAbility;
+import battle.effect.generic.PokemonEffect.ChangeAttackType;
 import battle.effect.generic.PokemonEffect.ChangeItem;
 import battle.effect.generic.PokemonEffect.ChangeType;
 import battle.effect.generic.PokemonEffect.Charge;
@@ -30,7 +31,6 @@ import battle.effect.generic.PokemonEffect.Curse;
 import battle.effect.generic.PokemonEffect.DestinyBond;
 import battle.effect.generic.PokemonEffect.Disable;
 import battle.effect.generic.PokemonEffect.EatenBerry;
-import battle.effect.generic.PokemonEffect.Electrified;
 import battle.effect.generic.PokemonEffect.Embargo;
 import battle.effect.generic.PokemonEffect.Encore;
 import battle.effect.generic.PokemonEffect.FairyLock;
@@ -141,6 +141,7 @@ public enum EffectNamesies {
 	DISABLE("Disable", Disable::new),
 	RAISE_CRITS("RaiseCrits", RaiseCrits::new),
 	CHANGE_ITEM("ChangeItem", ChangeItem::new),
+	CHANGE_ATTACK_TYPE("ChangeAttackType", ChangeAttackType::new),
 	CHANGE_TYPE("ChangeType", ChangeType::new),
 	CHANGE_ABILITY("ChangeAbility", ChangeAbility::new),
 	STOCKPILE("Stockpile", Stockpile::new),
@@ -189,7 +190,6 @@ public enum EffectNamesies {
 	CONSUMED_ITEM("ConsumedItem", ConsumedItem::new),
 	FAIRY_LOCK("FairyLock", FairyLock::new),
 	POWDER("Powder", Powder::new),
-	ELECTRIFIED("Electrified", Electrified::new),
 	EATEN_BERRY("EatenBerry", EatenBerry::new),
 	BREAKS_THE_MOLD("BreaksTheMold", BreaksTheMold::new),
 	RAGING("Raging", Raging::new),

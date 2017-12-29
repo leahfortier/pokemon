@@ -375,6 +375,22 @@ ChangeItem:
 		###
 	CanHave: True
 *
+ChangeAttackType:
+	NumTurns: 1
+	CastMessage: typeSource.getMessage(b, user, victim)
+	Field:
+		private ChangeAttackTypeSource typeSource;
+		###
+	Int: ChangeAttackTypeEffect
+	ChangeAttackType:
+		return typeSource.getAttackType(original);
+		###
+	CanHave: True
+	Cast:
+		typeSource = (ChangeAttackTypeSource)source.getSource(b, caster);
+		super.cast(b, caster, victim, source, printCast);
+		###
+*
 ChangeType:
 	Int: ChangeTypeEffect
 	Field:
@@ -1128,14 +1144,6 @@ Powder:
 		}
 
 		return true;
-		###
-*
-Electrified:
-	NumTurns: 1
-	CastMessage: user.getName() + " electrified " + victim.getName() + "!"
-	Int: ChangeAttackTypeEffect
-	ChangeAttackType:
-		return Type.ELECTRIC;
 		###
 *
 EatenBerry:

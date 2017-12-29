@@ -13,6 +13,7 @@ import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import test.GeneralTest;
 import test.TestPokemon;
 import trainer.Team;
 import type.Type;
@@ -61,7 +62,7 @@ public class AttackTest {
         attacking.fullyHeal();
         battle.attackingFight(AttackNamesies.STRUGGLE);
         Assert.assertTrue(attacking.hasAbility(AbilityNamesies.ROCK_HEAD));
-        Assert.assertFalse(attacking.fullHealth());
+        attacking.assertHealthRatio(.75);
     }
 
     @Test
@@ -193,8 +194,8 @@ public class AttackTest {
         Assert.assertTrue(attacking.getAttributes().getStage(Stat.SPEED) == -1);
         Assert.assertFalse(attacking.hasEffect(EffectNamesies.CURSE));
         Assert.assertTrue(defending.hasEffect(EffectNamesies.CURSE));
-        Assert.assertTrue(attacking.healthRatioMatch(.5));
-        Assert.assertTrue(defending.healthRatioMatch(.75));
+        attacking.assertHealthRatio(.5);
+        defending.assertHealthRatio(.75);
     }
 
     // Used for attacks that have a random element to them -- like Tri-Attack and Acupressure -- required running several times
@@ -520,16 +521,16 @@ public class AttackTest {
 
         // Acrobatics has double power when not holding an item
         attacking.setupMove(AttackNamesies.ACROBATICS, battle);
-        Assert.assertTrue(battle.getDamageModifier(attacking, defending) == 2);
+        GeneralTest.assertEquals(2, battle.getDamageModifier(attacking, defending));
         attacking.giveItem(ItemNamesies.POTION);
-        Assert.assertTrue(battle.getDamageModifier(attacking, defending) == 1);
+        GeneralTest.assertEquals(1, battle.getDamageModifier(attacking, defending));
 
         // Body Slam -- doubles when the opponent uses Minimize
         attacking.setupMove(AttackNamesies.BODY_SLAM, battle);
-        Assert.assertTrue(battle.getDamageModifier(attacking, defending) == 1);
+        GeneralTest.assertEquals(1, battle.getDamageModifier(attacking, defending));
         defending.apply(true, AttackNamesies.MINIMIZE, battle);
         Assert.assertTrue(defending.hasEffect(EffectNamesies.USED_MINIMIZE));
-        Assert.assertTrue(battle.getDamageModifier(attacking, defending) == 2);
+        GeneralTest.assertEquals(2, battle.getDamageModifier(attacking, defending));
     }
 
     @Test
@@ -539,16 +540,16 @@ public class AttackTest {
         TestPokemon defending = battle.getDefending();
 
         battle.fight(AttackNamesies.DOUBLE_TEAM, AttackNamesies.MINIMIZE);
-        Assert.assertTrue(attacking.getStage(Stat.EVASION) == 1);
-        Assert.assertTrue(defending.getStage(Stat.EVASION) == 2);
+        Assert.assertEquals(1, attacking.getStage(Stat.EVASION));
+        Assert.assertEquals(2, defending.getStage(Stat.EVASION));
 
         battle.attackingFight(AttackNamesies.FORESIGHT);
-        Assert.assertTrue(attacking.getStage(Stat.EVASION) == 1);
-        Assert.assertTrue(defending.getStage(Stat.EVASION) == 0);
+        Assert.assertEquals(1, attacking.getStage(Stat.EVASION));
+        Assert.assertEquals(0, defending.getStage(Stat.EVASION));
 
         battle.defendingFight(AttackNamesies.MIRACLE_EYE);
-        Assert.assertTrue(attacking.getStage(Stat.EVASION) == 0);
-        Assert.assertTrue(defending.getStage(Stat.EVASION) == 0);
+        Assert.assertEquals(0, attacking.getStage(Stat.EVASION));
+        Assert.assertEquals(0, defending.getStage(Stat.EVASION));
     }
 
     @Test
@@ -670,5 +671,23 @@ public class AttackTest {
         battle.attackingFight(AttackNamesies.SPLASH);
         Assert.assertTrue(attacking.fullHealth());
         Assert.assertFalse(attacking.hasStatus());
+    }
+
+    @Test
+    public void mindBlownTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        battle.attackingFight(AttackNamesies.MIND_BLOWN);
+        Assert.assertFalse(defending.fullHealth());
+        attacking.assertHealthRatio(.5);
+
+        battle.emptyHeal();
+
+        attacking.withAbility(AbilityNamesies.MAGIC_GUARD);
+        battle.attackingFight(AttackNamesies.MIND_BLOWN);
+        Assert.assertFalse(defending.fullHealth());
+        Assert.assertTrue(attacking.fullHealth());
     }
 }

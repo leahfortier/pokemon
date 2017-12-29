@@ -353,7 +353,7 @@ BreakBarrier:
 		###
 *
 SpecificAbilityChange:
-	AddInterface: ChangeAbilityMove
+	AddInterface: AbilityChanger
 	AddMapField: Applies: victim.getAbility().isReplaceable()
 	AddMapField: Effect: ChangeAbility
 	AddMapField: AbilityChange:
@@ -1575,16 +1575,18 @@ SourceMessage:
 ChangeAttackType:
 	Header: Type changeAttackType(Attack attack, Type original)
 *
+GetAttackType:
+	Header: Type getAttackType(Type original)
+*
+AttackTypeMessage:
+	Header: String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
+*
 NormalTypeChanger:
-	Header: Type getType()
-	Body:
-		return Type.{00};
-		###
 	AddInterface: ChangeAttackTypeEffect
 	AddMapField: ChangeAttackType:
 		if (original == Type.NORMAL) {
 			this.activated = true;
-			return getType();
+			return Type.{00};
 		}
 
 		return original;
@@ -1599,7 +1601,7 @@ NormalTypeChanger:
 	AddMapField: ApplyEndTurn:
 		this.activated = false;
 		###
-	AddMapField: PowerMultiplierCondition: 1.3 activated
+	AddMapField: PowerMultiplierCondition: 1.2 activated
 *
 NextLevel:
 	Header: void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)
