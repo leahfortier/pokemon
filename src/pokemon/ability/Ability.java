@@ -6,7 +6,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
-import battle.effect.attack.ChangeAbilityMove;
+import battle.effect.attack.AbilityChanger;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
@@ -1587,7 +1587,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Trace extends Ability implements EntryEffect, ChangeAbilityMove {
+	static class Trace extends Ability implements EntryEffect, AbilityChanger {
 		private static final long serialVersionUID = 1L;
 
 		Trace() {
@@ -2497,7 +2497,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 		}
 	}
 
-	static class Mummy extends Ability implements PhysicalContactEffect, ChangeAbilityMove {
+	static class Mummy extends Ability implements PhysicalContactEffect, AbilityChanger {
 		private static final long serialVersionUID = 1L;
 
 		Mummy() {

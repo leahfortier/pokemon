@@ -6,7 +6,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.MessageGetter;
-import battle.effect.attack.ChangeAbilityMove;
+import battle.effect.attack.AbilityChanger;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.BattleEffect.FieldUproar;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
@@ -1194,7 +1194,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			Ability oldAbility = victim.getAbility();
 			oldAbility.deactivate(b, victim);
 			
-			ChangeAbilityMove changey = (ChangeAbilityMove)source.getSource(b, caster);
+			AbilityChanger changey = (AbilityChanger)source.getSource(b, caster);
 			ability = changey.getAbility(b, caster, victim);
 			message = changey.getMessage(b, caster, victim);
 			

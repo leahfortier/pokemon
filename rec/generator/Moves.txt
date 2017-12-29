@@ -5299,7 +5299,7 @@ Final Gambit:
 *
 Gastro Acid:
 	Desc: The user hurls up its stomach acids on the target. The fluid eliminates the effect of the target's Ability.
-	Int: ChangeAbilityMove
+	Int: AbilityChanger
 	Effect: ChangeAbility
 	AbilityChange:
 		return AbilityNamesies.NO_ABILITY.getNewAbility();
@@ -5388,7 +5388,7 @@ Role Play:
 	Type: Psychic
 	Cat: Status
 	SelfTarget: True
-	Int: ChangeAbilityMove
+	Int: AbilityChanger
 	Effect: ChangeAbility
 	AbilityChange:
 		Ability otherAbility = b.getOtherPokemon(victim).getAbility();
@@ -5616,7 +5616,7 @@ Entrainment:
 	Type: Normal
 	Acc: 100
 	Cat: Status
-	Int: ChangeAbilityMove
+	Int: AbilityChanger
 	Effect: ChangeAbility
 	AbilityChange:
 		return caster.getAbility().namesies().getNewAbility();
@@ -5655,7 +5655,7 @@ Skill Swap:
 	Type: Psychic
 	Cat: Status
 	MoveType: Substitute_Piercing, No_Magic_Coat
-	Int: ChangeAbilityMove
+	Int: AbilityChanger
 	AbilityChange:
 		return ability;
 		###

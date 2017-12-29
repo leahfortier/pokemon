@@ -1,7 +1,7 @@
 package battle.attack;
 
 import battle.Battle;
-import battle.effect.attack.ChangeAbilityMove;
+import battle.effect.attack.AbilityChanger;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove;
@@ -8709,7 +8709,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class GastroAcid extends Attack implements ChangeAbilityMove {
+	static class GastroAcid extends Attack implements AbilityChanger {
 		private static final long serialVersionUID = 1L;
 
 		GastroAcid() {
@@ -8851,7 +8851,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class RolePlay extends Attack implements ChangeAbilityMove {
+	static class RolePlay extends Attack implements AbilityChanger {
 		private static final long serialVersionUID = 1L;
 
 		RolePlay() {
@@ -9215,7 +9215,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class Entrainment extends Attack implements ChangeAbilityMove {
+	static class Entrainment extends Attack implements AbilityChanger {
 		private static final long serialVersionUID = 1L;
 
 		Entrainment() {
@@ -9248,7 +9248,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class WorrySeed extends Attack implements ChangeAbilityMove {
+	static class WorrySeed extends Attack implements AbilityChanger {
 		private static final long serialVersionUID = 1L;
 
 		WorrySeed() {
@@ -9270,7 +9270,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class SimpleBeam extends Attack implements ChangeAbilityMove {
+	static class SimpleBeam extends Attack implements AbilityChanger {
 		private static final long serialVersionUID = 1L;
 
 		SimpleBeam() {
@@ -9292,7 +9292,7 @@ public abstract class Attack implements Serializable {
 		}
 	}
 
-	static class SkillSwap extends Attack implements ChangeAbilityMove {
+	static class SkillSwap extends Attack implements AbilityChanger {
 		private static final long serialVersionUID = 1L;
 		private Ability ability;
 		

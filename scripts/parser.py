@@ -18,6 +18,7 @@ class Parser:
             self.infoTable = self.mainDiv.xpath('p[1]')[0].getnext()
         else:
             self.index = 2
+            # Zeraora -- "This Pokédex entry is for a Pokémon that has yet to be officially revealed or released. Proceed with caution."
             if self.lookupNum == 807:
                 self.index += 1
             self.infoTable = self.mainDiv.xpath('table[' + str(self.index) + ']')[0]
