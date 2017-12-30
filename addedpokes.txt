@@ -37,11 +37,11 @@
   - KOKONATSU
 820. Alolan Marowak
   - GaraGara
-816: Mega Bannette
+821: Mega Bannette
   - Jupetta
   - Decrease mega attack stats
-817: Midnight Lycanroc
+822: Midnight Lycanroc
   - Lougaroc
-818: Dusk Lycanroc
+823: Dusk Lycanroc
   - Lugarugan
 
