@@ -70,8 +70,8 @@ public class ActivePokemon implements Serializable {
 	public static final int MAX_LEVEL = 100;
 	public static final int MAX_NAME_LENGTH = 10;
 
-	private static final String TINY_EGG_IMAGE_NAME = "egg-small";
-	private static final String BASE_EGG_IMAGE_NAME = "egg";
+	public static final String TINY_EGG_IMAGE_NAME = "egg-small";
+	public static final String BASE_EGG_IMAGE_NAME = "egg";
 	public static final String SPRITE_EGG_IMAGE_NAME = "EggSprite";
 
 	private static final String[][] characteristics =

@@ -38,7 +38,7 @@ class PokemonInfoGen {
         final int maxHeight = 190;
 
         for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
-            File imageFile = getImageFile(num, "", Folder.POKEDEX_TILES);
+            File imageFile = FileIO.getImageFile(num, "", Folder.POKEDEX_TILES);
             BufferedImage image = FileIO.readImage(imageFile);
             int width = image.getWidth();
             int height = image.getHeight();
@@ -68,15 +68,11 @@ class PokemonInfoGen {
         return "(" + width + ", " + height + ")";
     }
 
-    private static File getImageFile(int num, String suffix, String folderPath) {
-        return new File(folderPath + String.format("%03d", num) + suffix + ".png");
-    }
-
     private static void updateImageNum(int num, int newNum, String imageSuffix, String folderPath) {
-        File imageFile = getImageFile(num, imageSuffix, folderPath);
+        File imageFile = FileIO.getImageFile(num, imageSuffix, folderPath);
         if (imageFile.exists()) {
             BufferedImage image = FileIO.readImage(imageFile);
-            FileIO.writeImage(image, getImageFile(newNum, imageSuffix, folderPath));
+            FileIO.writeImage(image, FileIO.getImageFile(newNum, imageSuffix, folderPath));
             FileIO.deleteFile(imageFile);
         }
     }

@@ -86,10 +86,10 @@ public class FileIO {
 		File file = new File(fileName);
 		return readImage(file);
 	}
-	
+
 	public static BufferedImage readImage(File file) {
 		if (!file.exists()) {
-			System.out.println("File does not exist");
+			Global.error("File does not exist: " + file.getPath());
 		}
 
 		BufferedImage image = null;
@@ -99,21 +99,25 @@ public class FileIO {
 		catch (IOException exception) {
 			Global.error("Could not open image from following path: " + file.getAbsolutePath());
 		}
-		
+
 		return image;
 	}
 
-	public static String makeFolderPath(String... path) {
-		String folderPath = StringUtils.empty();
-		for (String folder : path) {
-			folderPath += folder;
+	public static File getImageFile(int num, String suffix, String folderPath) {
+		return new File(folderPath + String.format("%03d", num) + suffix + ".png");
+	}
 
-			if (!folderPath.endsWith(FileIO.FILE_SLASH)) {
-				folderPath += FileIO.FILE_SLASH;
+	public static String makeFolderPath(String... path) {
+		StringBuilder folderPath = new StringBuilder();
+		for (String folder : path) {
+			folderPath.append(folder);
+
+			if (!folderPath.toString().endsWith(FileIO.FILE_SLASH)) {
+				folderPath.append(FileIO.FILE_SLASH);
 			}
 		}
 		
-		return folderPath;
+		return folderPath.toString();
 	}
 
 	// Reads the whole file ignoring commented lines starting with # when ignoreComments is true
