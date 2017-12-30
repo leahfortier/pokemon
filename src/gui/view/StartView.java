@@ -9,7 +9,6 @@ import input.InputControl;
 import main.Game;
 import message.MessageUpdate;
 import message.MessageUpdate.Update;
-import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import sound.SoundPlayer;
 import sound.SoundTitle;
@@ -117,7 +116,7 @@ class StartView extends View {
 			case DEFAULT:
 				g.drawImage(trainerTiles.getTile(0x58), 200, 200, null);
 				if (ditto) {
-					g.drawImage(pokemonTiles.getTile(PokemonInfo.getPokemonInfo(PokemonNamesies.DITTO).getImageName()), 270, 255, null);
+					g.drawImage(pokemonTiles.getTile(PokemonNamesies.DITTO.getInfo().getImageName()), 270, 255, null);
 				}
 				break;
 			case NAME:

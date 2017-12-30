@@ -44,22 +44,22 @@ public class Breeding {
 	}
 	
 	private static PokemonInfo getBabyInfo(ActivePokemon daddy, ActivePokemon mommy) {
-		PokemonInfo babyInfo = mommy.getPokemonInfo().getBaseEvolution();
+		PokemonInfo babyInfo = mommy.getPokemonInfo().getBaseEvolution().getInfo();
 		if (babyInfo.isIncenseBaby()) {
-			Item daddysItem = daddy.getActualHeldItem();
-			Item mommysItem = mommy.getActualHeldItem();
-			
 			boolean incenseItemHeld = false;
-			if (daddysItem instanceof IncenseItem) {
-				incenseItemHeld |= babyInfo.namesies() == ((IncenseItem)daddysItem).getBaby();
-			}
-			if (mommysItem instanceof IncenseItem) {
-				incenseItemHeld |= babyInfo.namesies() == ((IncenseItem)mommysItem).getBaby();
+			Item[] holdItems = { daddy.getActualHeldItem(), mommy.getActualHeldItem() };
+			for (Item holdItem : holdItems) {
+				if (holdItem instanceof IncenseItem) {
+					IncenseItem incenseItem = (IncenseItem)holdItem;
+					if (babyInfo.namesies() == incenseItem.getBaby()) {
+						incenseItemHeld = true;
+					}
+				}
 			}
 			
 			if (!incenseItemHeld) {
 				PokemonNamesies[] evolutions = babyInfo.getEvolution().getEvolutions();
-				babyInfo = PokemonInfo.getPokemonInfo(RandomUtils.getRandomValue(evolutions));
+				babyInfo = RandomUtils.getRandomValue(evolutions).getInfo();
 			}
 		}
 		
@@ -168,8 +168,7 @@ public class Breeding {
 	}
 	
 	public static List<Move> getBabyMoves(ActivePokemon daddy, ActivePokemon mommy, PokemonNamesies babyNamesies) {
-
-		PokemonInfo babyInfo = PokemonInfo.getPokemonInfo(babyNamesies);
+		PokemonInfo babyInfo = babyNamesies.getInfo();
 		List<AttackNamesies> babyMovesNamesies = new ArrayList<>();
 
 		// Get moves that the pokemon learns at level 1

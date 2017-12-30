@@ -1360,7 +1360,7 @@ public class ActivePokemon implements Serializable {
 	}
 	
 	public PokemonInfo getPokemonInfo() {
-		return PokemonInfo.getPokemonInfo(pokemon);
+		return pokemon.getInfo();
 	}
 	
 	public boolean isPokemon(PokemonNamesies name) {

@@ -7,7 +7,6 @@ import map.overworld.WildHoldItem;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ActivePokemon;
-import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import trainer.player.Player;
@@ -30,8 +29,7 @@ public class WildTest {
         Player player = new TestCharacter(new TestPokemon(PokemonNamesies.BULBASAUR));
         Assert.assertTrue(Game.getPlayer() == player);
 
-        Set<ItemNamesies> wildHoldItems = PokemonInfo.getPokemonInfo(pokemonNamesies)
-                .getWildItems()
+        Set<ItemNamesies> wildHoldItems = pokemonNamesies.getInfo().getWildItems()
                 .stream()
                 .map(WildHoldItem::getItem)
                 .collect(Collectors.toSet());

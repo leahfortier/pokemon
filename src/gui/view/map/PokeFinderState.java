@@ -46,7 +46,7 @@ class PokeFinderState implements VisualStateHandler {
         Iterator<PokemonNamesies> iter = toRender.iterator();
         for (int i = 0; i < toRender.size(); i++) {
             PokemonNamesies namesies = iter.next();
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(namesies);
+            PokemonInfo pokemonInfo = namesies.getInfo();
 
             BufferedImage image = pokedexTiles.getTile(pokemonInfo.getImageName());
             if (!pokedex.isCaught(namesies)) {

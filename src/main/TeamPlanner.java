@@ -58,7 +58,7 @@ public class TeamPlanner {
 		
 		while (in.hasNextLine()) {
 			String pokemonName = in.nextLine().trim();
-			PokemonInfo pokemon = PokemonInfo.getPokemonInfo(PokemonNamesies.getValueOf(pokemonName));
+			PokemonInfo pokemon = PokemonNamesies.getValueOf(pokemonName).getInfo();
 			
 			String ability = null;
 			String nature = null;
@@ -289,7 +289,7 @@ public class TeamPlanner {
 		private final int[][] coverageCount;
 		
 		TeamMember(String pokemonName, String nature, String ability, String item, List<String> moves) {
-			this.pokemonSpecies = PokemonInfo.getPokemonInfo(PokemonNamesies.getValueOf(pokemonName));
+			this.pokemonSpecies = PokemonNamesies.getValueOf(pokemonName).getInfo();
 			this.nature = nature;
 			this.ability = ability;
 			this.item = item;

@@ -1587,7 +1587,7 @@ public final class EffectInterfaces {
 			if (RandomUtils.chanceTest(50)) {
 				List<WildEncounter> typedList = new ArrayList<>();
 				for (WildEncounter wildEncounter : wildEncounters) {
-					PokemonInfo pokemon = PokemonInfo.getPokemonInfo(wildEncounter.getPokemonName());
+					PokemonInfo pokemon = wildEncounter.getPokemonName().getInfo();
 					if (pokemon.isType(this.getType())) {
 						typedList.add(wildEncounter);
 					}

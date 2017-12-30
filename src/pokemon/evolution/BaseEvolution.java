@@ -17,7 +17,7 @@ public abstract class BaseEvolution extends Evolution {
 	protected abstract BaseEvolution getEvolution(ActivePokemon toEvolve, ItemNamesies useItem);
 
 	public final PokemonInfo getEvolution() {
-		return PokemonInfo.getPokemonInfo(evolutionNamesies);
+		return evolutionNamesies.getInfo();
 	}
 
 	@Override

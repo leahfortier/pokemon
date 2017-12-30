@@ -260,8 +260,8 @@ public class TradeView extends View {
     }
 
     public void setTrade(TradePokemonMatcher tradePokemonMatcher) {
-        offering = PokemonInfo.getPokemonInfo(tradePokemonMatcher.getTradePokemon());
-        requested = PokemonInfo.getPokemonInfo(tradePokemonMatcher.getRequested());
+        offering = tradePokemonMatcher.getTradePokemon().getInfo();
+        requested = tradePokemonMatcher.getRequested().getInfo();
 
         this.canvasPanel.withBackgroundColors(new Color[] {
                 requested.getType()[0].getColor(),

@@ -134,7 +134,7 @@ public class MedalCase implements Serializable {
         }
 
         if (pokedex.isCaught(updated)) {
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(updated);
+            PokemonInfo pokemonInfo = updated.getInfo();
             for (Type type : pokemonInfo.getType()) {
                 this.uncaughtPokemonTypeMap.get(type).remove(updated);
                 // TODO: Test case for this in case it changes names -- I don't like that this is hardcoded

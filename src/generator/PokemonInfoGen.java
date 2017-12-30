@@ -80,7 +80,7 @@ class PokemonInfoGen {
     // Used if new Pokemon need to be added -- need to update the numbers of all of the added Pokemon
     // BE VERY CAREFUL TO ONLY RUN THIS ONCE OR IT WILL FUCK UP ALL THE IMAGES
     private static void updateNum() {
-        int startNum = PokemonInfo.getPokemonInfo(PokemonNamesies.RIZARDON).getNumber();
+        int startNum = PokemonNamesies.RIZARDON.getInfo().getNumber();
         int newStartNum = 808;
 
         for (int num = PokemonInfo.NUM_POKEMON; num >= startNum; num--) {

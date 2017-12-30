@@ -238,10 +238,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return imageName;
 	}
 
-	public static PokemonInfo getPokemonInfo(PokemonNamesies pokemon) {
-		return getPokemonInfo(pokemon.ordinal());
-	}
-
 	public static PokemonInfo getPokemonInfo(int index) {
 		if (map == null) {
 			loadPokemonInfo();
@@ -338,18 +334,18 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		return eggGroups[0] != EggGroup.UNDISCOVERED;
 	}
 
-	public PokemonInfo getBaseEvolution() {
+	public PokemonNamesies getBaseEvolution() {
 		return getBaseEvolution(this);
 	}
 
 	// TODO: Instead of generating this on the fly should just be added to the text file and stored
-	private static PokemonInfo getBaseEvolution(PokemonInfo targetPokes) {
+	private static PokemonNamesies getBaseEvolution(PokemonInfo targetPokes) {
 		if (targetPokes.namesies() == PokemonNamesies.MANAPHY) {
-			return PokemonInfo.getPokemonInfo(PokemonNamesies.PHIONE);
+			return PokemonNamesies.PHIONE;
 		}
 
 		if (targetPokes.namesies() == PokemonNamesies.SHEDINJA) {
-			return PokemonInfo.getPokemonInfo(PokemonNamesies.NINCADA);
+			return PokemonNamesies.NINCADA;
 		}
 
 		Set<PokemonNamesies> allPokes = EnumSet.complementOf(EnumSet.of(PokemonNamesies.NONE));
@@ -373,7 +369,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 			}
 			
 			if (!changed) {
-				return targetPokes;
+				return targetPokes.namesies();
 			}
 		}
 	}

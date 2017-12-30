@@ -842,6 +842,10 @@ public enum PokemonNamesies {
         return this.name;
     }
 
+    public PokemonInfo getInfo() {
+    	return PokemonInfo.getPokemonInfo(this.ordinal());
+	}
+
     public static PokemonNamesies tryValueOf(String name) {
 		try {
 			return PokemonNamesies.valueOf(StringUtils.getNamesiesString(name));

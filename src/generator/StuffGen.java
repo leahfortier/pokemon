@@ -195,7 +195,7 @@ public class StuffGen {
 		}
 
 		List<PokemonInfo> baseEvolutions = set.stream()
-				.map(PokemonInfo::getPokemonInfo)
+				.map(PokemonNamesies::getInfo)
 				.sorted()
 				.collect(Collectors.toList());
 

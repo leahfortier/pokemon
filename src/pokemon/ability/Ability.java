@@ -1627,7 +1627,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
 		public void enter(Battle b, ActivePokemon enterer) {
 			ActivePokemon other = b.getOtherPokemon(enterer);
-			PokemonInfo otherInfo = PokemonInfo.getPokemonInfo(other.getPokemonInfo().namesies());
+			PokemonInfo otherInfo = other.getPokemonInfo();
 			
 			int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
 			int baseSpecialDefense = otherInfo.getStat(Stat.SP_DEFENSE.index());
