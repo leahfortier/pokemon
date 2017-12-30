@@ -84,8 +84,12 @@ public final class ImageUtils {
                 null);
     }
 
-    public static BufferedImage scaleImageCoordinates(BufferedImage img, int maxCoordinate) {
-        return scaleImage(img, (float) maxCoordinate/Math.max(img.getWidth(), img.getHeight()));
+    public static BufferedImage scaleImageByHeight(BufferedImage img, int maxHeight) {
+        return scaleImage(img, (float)maxHeight/img.getHeight());
+    }
+
+    public static BufferedImage scaleImageByWidth(BufferedImage img, int maxWidth) {
+        return scaleImage(img, (float)maxWidth/img.getWidth());
     }
 
     public static BufferedImage scaleImage(BufferedImage img, float scale) {

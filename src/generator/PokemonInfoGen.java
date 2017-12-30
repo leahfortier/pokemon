@@ -1,5 +1,6 @@
 package generator;
 
+import draw.ImageUtils;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.evolution.EvolutionType;
@@ -29,13 +30,49 @@ class PokemonInfoGen {
         newPokemonInfoCompare();
 //        pokemonInfoStuff();
 //        updateNum();
+//        resizePokedexImages();
+    }
+
+    private static void resizePokedexImages() {
+        final int maxWidth = 140;
+        final int maxHeight = 190;
+
+        for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
+            File imageFile = getImageFile(num, "", Folder.POKEDEX_TILES);
+            BufferedImage image = FileIO.readImage(imageFile);
+            int width = image.getWidth();
+            int height = image.getHeight();
+
+            boolean rescaled = false;
+            if (width > maxWidth) {
+                image = ImageUtils.scaleImageByWidth(image, maxWidth);
+                rescaled = true;
+            }
+            if (height > maxHeight) {
+                image = ImageUtils.scaleImageByHeight(image, maxHeight);
+                rescaled = true;
+            }
+
+            if (rescaled) {
+                System.out.println("Rescaling image " + imageFile.getPath() + " from " + getCoordinatesString(width, height) + " to " + getCoordinatesString(image));
+                FileIO.writeImage(image, imageFile);
+            }
+        }
+    }
+
+    private static String getCoordinatesString(BufferedImage image) {
+        return getCoordinatesString(image.getWidth(), image.getHeight());
+    }
+
+    private static String getCoordinatesString(int width, int height) {
+        return "(" + width + ", " + height + ")";
     }
 
     private static File getImageFile(int num, String suffix, String folderPath) {
-        return new File(folderPath + num + suffix + ".png");
+        return new File(folderPath + String.format("%03d", num) + suffix + ".png");
     }
 
-    private static void updateImage(int num, int newNum, String imageSuffix, String folderPath) {
+    private static void updateImageNum(int num, int newNum, String imageSuffix, String folderPath) {
         File imageFile = getImageFile(num, imageSuffix, folderPath);
         if (imageFile.exists()) {
             BufferedImage image = FileIO.readImage(imageFile);
@@ -52,12 +89,12 @@ class PokemonInfoGen {
 
         for (int num = PokemonInfo.NUM_POKEMON; num >= startNum; num--) {
             int newNum = num + (newStartNum - startNum);
-            updateImage(num, newNum, "", Folder.POKEMON_TILES);
-            updateImage(num, newNum, "-back", Folder.POKEMON_TILES);
-            updateImage(num, newNum, "-shiny", Folder.POKEMON_TILES);
-            updateImage(num, newNum, "-shiny-back", Folder.POKEMON_TILES);
-            updateImage(num, newNum, "-small", Folder.PARTY_TILES);
-            updateImage(num, newNum, "", Folder.POKEDEX_TILES);
+            updateImageNum(num, newNum, "", Folder.POKEMON_TILES);
+            updateImageNum(num, newNum, "-back", Folder.POKEMON_TILES);
+            updateImageNum(num, newNum, "-shiny", Folder.POKEMON_TILES);
+            updateImageNum(num, newNum, "-shiny-back", Folder.POKEMON_TILES);
+            updateImageNum(num, newNum, "-small", Folder.PARTY_TILES);
+            updateImageNum(num, newNum, "", Folder.POKEDEX_TILES);
         }
 
         Scanner in = FileIO.openFile(FileName.POKEMON_INFO);
