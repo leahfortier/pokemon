@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Scanner;
 
 // For when pokemoninfo.txt needs to be edited
-class PokemonInfoGen {
+public class PokemonInfoGen {
     public static void main(String[] args) {
         new PokemonInfoGen();
 
@@ -30,41 +30,43 @@ class PokemonInfoGen {
         newPokemonInfoCompare();
 //        pokemonInfoStuff();
 //        updateNum();
-//        resizePokedexImages();
+//        resizeImages();
     }
 
-    private static void resizePokedexImages() {
-        final int maxWidth = 140;
-        final int maxHeight = 190;
-
+    private static void resizeImages() {
         for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
-            File imageFile = FileIO.getImageFile(num, "", Folder.POKEDEX_TILES);
-            BufferedImage image = FileIO.readImage(imageFile);
-            int width = image.getWidth();
-            int height = image.getHeight();
-
-            boolean rescaled = false;
-            if (width > maxWidth) {
-                image = ImageUtils.scaleImageByWidth(image, maxWidth);
-                rescaled = true;
-            }
-            if (height > maxHeight) {
-                image = ImageUtils.scaleImageByHeight(image, maxHeight);
-                rescaled = true;
-            }
-
-            if (rescaled) {
-                System.out.println("Rescaling image " + imageFile.getPath() + " from " + getCoordinatesString(width, height) + " to " + getCoordinatesString(image));
-                FileIO.writeImage(image, imageFile);
-            }
+            resizeImage(num, "", Folder.POKEDEX_TILES, 140, 190);
+            resizeImage(num, "-small", Folder.PARTY_TILES, 32, 32);
         }
     }
 
-    private static String getCoordinatesString(BufferedImage image) {
+    private static void resizeImage(int num, String suffix, String folderPath, int maxWidth, int maxHeight) {
+        File imageFile = FileIO.getImageFile(num, suffix, folderPath);
+        BufferedImage image = FileIO.readImage(imageFile);
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        boolean rescaled = false;
+        if (width > maxWidth) {
+            image = ImageUtils.scaleImageByWidth(image, maxWidth);
+            rescaled = true;
+        }
+        if (height > maxHeight) {
+            image = ImageUtils.scaleImageByHeight(image, maxHeight);
+            rescaled = true;
+        }
+
+        if (rescaled) {
+            System.out.println("Rescaling image " + imageFile.getPath() + " from " + getCoordinatesString(width, height) + " to " + getCoordinatesString(image));
+            FileIO.writeImage(image, imageFile);
+        }
+    }
+
+    public static String getCoordinatesString(BufferedImage image) {
         return getCoordinatesString(image.getWidth(), image.getHeight());
     }
 
-    private static String getCoordinatesString(int width, int height) {
+    public static String getCoordinatesString(int width, int height) {
         return "(" + width + ", " + height + ")";
     }
 

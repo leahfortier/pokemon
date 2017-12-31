@@ -45,7 +45,7 @@ class FormConfig:
         self.evDiffs = [0]*6
         self.isAlolan = False
         baseExpSuffix = None
-        imageSuffix = ""
+        imageSuffix = None
         megaSuffix = ""
         
         # Flabebe has a stupid name with stupid special characters
@@ -115,6 +115,7 @@ class FormConfig:
             self.isMega = True
             self.name = "Rizardon"
             megaSuffix = " X"
+            imageSuffix = "-mx"
             baseExpSuffix = "" # Use the same base exp as Charizard
         elif num == AddedPokes.MEGA_MAWILE.value:
             self.lookupNum = 303
@@ -207,15 +208,20 @@ class FormConfig:
             self.megaName = "Mega Evolution" + megaSuffix
             if baseExpSuffix == None:
                 baseExpSuffix = "M"
+            if imageSuffix == None:
+                imageSuffix = "-m"
         else:
             assert not self.useMegaStats
             assert megaSuffix == ""
-        
+            
         if baseExpSuffix == None:
-            baseExpSuffix = ""
-        
+            baseExpSuffix = ""        
+        if imageSuffix == None:
+            imageSuffix = ""
+            
+        self.baseExpName = str(self.lookupNum).zfill(3) + baseExpSuffix        
         self.formImageName = str(self.lookupNum).zfill(3) + imageSuffix
-        self.baseExpName = str(self.lookupNum).zfill(3) + baseExpSuffix
+        self.pokedexImageName = str(self.lookupNum) + imageSuffix
         
         if self.evFormName is None:
             self.evFormName = self.formName

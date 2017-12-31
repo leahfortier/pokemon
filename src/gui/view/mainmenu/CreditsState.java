@@ -22,8 +22,8 @@ class CreditsState implements VisualStateHandler {
             "UML MASTER", "Jeb Ralston", "",
             "Nintendo", "",
             "Game Freak", "",
-            "X/Y Sprite Project", "",
-            "Sun/Moon Sprite Project", "",
+            "Smogon XY Sprite Project", "",
+            "Smogon Sun/Moon Sprite Project", "",
             "credits", "credits", "credits"
     };
 

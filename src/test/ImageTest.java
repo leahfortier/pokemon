@@ -4,6 +4,7 @@ import battle.attack.MoveCategory;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.Weather;
+import generator.PokemonInfoGen;
 import item.Item;
 import item.ItemNamesies;
 import item.bag.BagCategory;
@@ -18,6 +19,7 @@ import util.FileIO;
 import util.Folder;
 import util.StringUtils;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class ImageTest {
@@ -97,6 +99,103 @@ public class ImageTest {
             } else {
                 System.err.println(message);
             }
+        }
+    }
+
+    @Test
+    public void sizeTest() {
+        for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
+            checkMaxSize(num, "", Folder.POKEDEX_TILES, new DimensionChecker(140, 190).singleDimensionEquals(2));
+            checkMaxSize(num, "-small", Folder.PARTY_TILES, new DimensionChecker(32, 32).singleDimensionEquals(0));
+
+            String[] spriteSuffixes = { "", "-back", "-shiny", "-shiny-back" };
+            for (String suffix : spriteSuffixes) {
+                checkMaxSize(num, suffix, Folder.POKEMON_TILES, new DimensionChecker(96, 96));
+            }
+        }
+    }
+
+    private void checkMaxSize(int num, String suffix, String folderPath, DimensionChecker dimensionChecker) {
+        checkMaxSize(FileIO.getImageFile(num, suffix, folderPath), dimensionChecker);
+    }
+
+    private void checkMaxSize(String folderPath, String imageName, DimensionChecker dimensionChecker) {
+        if (!imageName.endsWith(".png")) {
+            imageName += ".png";
+        }
+
+        checkMaxSize(new File(folderPath + imageName), dimensionChecker);
+    }
+
+    private void checkMaxSize(File imageFile, DimensionChecker dimensionChecker) {
+        dimensionChecker.assertMatch(imageFile);
+    }
+
+    private static class DimensionChecker {
+        private final int maxWidth;
+        private final int maxHeight;
+
+        private int minWidth;
+        private int minHeight;
+
+        private boolean mustEqual;
+        private boolean singleDimensionEquals;
+        private int delta;
+
+        DimensionChecker(int maxWidth, int maxHeight) {
+            this.maxWidth = maxWidth;
+            this.maxHeight = maxHeight;
+        }
+
+        DimensionChecker withMin(int minWidth, int minHeight) {
+            this.minWidth = minWidth;
+            this.minHeight = minHeight;
+            return this;
+        }
+
+        DimensionChecker mustEquals(int delta) {
+            this.mustEqual = true;
+            this.delta = delta;
+            return this;
+        }
+
+        DimensionChecker singleDimensionEquals(int delta) {
+            this.singleDimensionEquals = true;
+            this.delta = delta;
+            return this;
+        }
+
+        void assertMatch(File imageFile) {
+            if (imageFile.exists()) {
+                BufferedImage image = FileIO.readImage(imageFile);
+
+                String message = getFailMessage(imageFile, image, ">");
+                Assert.assertTrue(message, image.getWidth() <= maxWidth);
+                Assert.assertTrue(message, image.getHeight() <= maxHeight);
+
+                message = getFailMessage(imageFile, image, "<");
+                Assert.assertTrue(message, image.getWidth() >= minWidth);
+                Assert.assertTrue(message, image.getHeight() >= minHeight);
+
+                if (mustEqual) {
+                    message = getFailMessage(imageFile, image, "!=");
+                    Assert.assertTrue(message, image.getWidth() >= maxWidth - delta);
+                    Assert.assertTrue(message, image.getHeight() >= maxHeight - delta);
+                }
+
+                if (singleDimensionEquals) {
+                    message = getFailMessage(imageFile, image, "!=");
+                    Assert.assertTrue(message, image.getWidth() >= maxWidth - delta || image.getHeight() >= maxHeight - delta);
+                }
+            }
+        }
+
+        private String getFailMessage(File imageFile, BufferedImage image, String operator) {
+            return imageFile.getPath() + ": "
+                    + PokemonInfoGen.getCoordinatesString(image)
+                    + " " + operator + " "
+                    + PokemonInfoGen.getCoordinatesString(maxWidth, maxHeight)
+                    + (delta == 0 ? "" : ", Delta: " + delta);
         }
     }
 }
