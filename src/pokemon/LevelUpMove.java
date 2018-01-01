@@ -18,4 +18,12 @@ public class LevelUpMove {
     public AttackNamesies getMove() {
         return this.move;
     }
+
+    public boolean isDefaultLevel() {
+        return isDefaultLevel(this.level);
+    }
+
+    public static boolean isDefaultLevel(int level) {
+        return level == 0 || level == PokemonInfo.EVOLUTION_LEVEL_LEARNED;
+    }
 }

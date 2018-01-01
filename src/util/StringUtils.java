@@ -3,6 +3,9 @@ package util;
 
 import main.Global;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class StringUtils {
 
     // Utility class -- should not be instantiated
@@ -101,17 +104,14 @@ public class StringUtils {
     }
 
     public static String spaceSeparated(Object... values) {
-        StringBuilder builder = new StringBuilder();
-        for (Object value : values) {
-            builder.append(value).append(" ");
-        }
-        return builder.toString();
+        // Convert to list of strings and join by a space
+        return String.join(" ", Arrays.stream(values).map(Object::toString).collect(Collectors.toList()));
     }
 
     // Examples:
-    // red -> Red
-    // water stone -> Water Stone
-    // x-scissor -> X-Scissor
+    //   red -> Red
+    //   water stone -> Water Stone
+    //   x-scissor -> X-Scissor
     // For all upper-case words first do toLowercase
     public static String properCase(String string) {
         if (isNullOrEmpty(string)) {

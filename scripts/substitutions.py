@@ -65,9 +65,6 @@ def attackSubstitution(num, attack):
         # Jirachi
         elif num == 385:
             return 'Calm Mind'
-        # Oricorio
-        elif num == 741:
-            return 'Captivate'
         # Sentret/Furret
         elif num == 161 or num == 162:
             return 'Charm'
@@ -125,8 +122,8 @@ def attackSubstitution(num, attack):
         # Virizion
         elif num == 640:
             return 'Synthesis'
-        # Latias/Latios and Cottonee
-        elif num == 380 or num == 381 or num == 546:
+        # Latias/Latios and Cottonee and Oricorio
+        elif num in [380, 381, 546, 741]:
             return 'Tailwind'
         # Cherubi/Cherrim and Pykumuku
         elif num == 420 or num == 421 or num == 771:

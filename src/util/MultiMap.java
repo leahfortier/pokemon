@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class MultiMap<K, V> {
     private final Map<K, List<V>> map;
@@ -26,5 +28,9 @@ public class MultiMap<K, V> {
 
     public List<V> get(K key) {
         return map.get(key);
+    }
+
+    public Set<Entry<K, List<V>>> entrySet() {
+        return map.entrySet();
     }
 }
