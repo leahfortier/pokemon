@@ -88,9 +88,9 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 		this.baseStats = baseStats;
 		this.baseExp = baseExp;
 		this.growthRate = GrowthRate.valueOf(growthRate);
-		this.type = type.toArray(new Type[0]); // TODO: Test size == 2
+		this.type = type.toArray(new Type[0]);
 		this.levelUpMoves = levelUpMoves;
-		this.learnableMoves = new HashSet<>(learnableMoves);
+		this.learnableMoves = EnumSet.copyOf(learnableMoves);
 		this.catchRate = catchRate;
 		this.givenEVs = givenEVs;
 		this.evolution = evolution;
@@ -309,18 +309,17 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 	}
 
 	private static Set<AttackNamesies> createMovesSet(Scanner in) {
-		Set<AttackNamesies> tmMoves = new HashSet<>();
+		Set<AttackNamesies> learnableMoves = EnumSet.noneOf(AttackNamesies.class);
 		int numMoves = in.nextInt();
 		in.nextLine();
 
 		for (int i = 0; i < numMoves; i++) {
 			String attackName = in.nextLine().trim();
-
 			AttackNamesies namesies = AttackNamesies.valueOf(attackName);
-			tmMoves.add(namesies);
+			learnableMoves.add(namesies);
 		}
 
-		return tmMoves;
+		return learnableMoves;
 	}
 
 	public List<AttackNamesies> getMoves(int level) {

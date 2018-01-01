@@ -8,12 +8,16 @@ import pokemon.LevelUpMove;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
+import pokemon.ability.AbilityNamesies;
+import type.Type;
 import util.MultiMap;
 import util.StringUtils;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 public class PokemonInfoTest {
     @Test
@@ -223,5 +227,47 @@ public class PokemonInfoTest {
         }
 
         return total;
+    }
+
+    @Test
+    public void abilityTest() {
+        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
+            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+            AbilityNamesies[] abilities = pokemonInfo.getAbilities();
+
+            // Must be size 2
+            Assert.assertEquals(2, abilities.length);
+
+            // No-Ability can only be the second ability
+            Assert.assertNotEquals(AbilityNamesies.NO_ABILITY, abilities[0]);
+
+            // Make sure no duplicate abilities
+            Set<AbilityNamesies> seen = EnumSet.noneOf(AbilityNamesies.class);
+            for (AbilityNamesies ability : abilities) {
+                Assert.assertFalse(seen.contains(ability));
+                seen.add(ability);
+            }
+        }
+    }
+
+    @Test
+    public void typeTest() {
+        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
+            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+            Type[] types = pokemonInfo.getType();
+
+            // Must be size 2
+            Assert.assertEquals(2, types.length);
+
+            // No-Type can only be the second type
+            Assert.assertNotEquals(Type.NO_TYPE, types[0]);
+
+            // Make sure no duplicate types
+            Set<Type> seen = EnumSet.noneOf(Type.class);
+            for (Type type : types) {
+                Assert.assertFalse(seen.contains(type));
+                seen.add(type);
+            }
+        }
     }
 }
