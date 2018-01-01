@@ -18,6 +18,16 @@ public class GeneralTest {
         Assert.assertEquals(expected, actual, DELTA);
     }
 
+    public static void semiAssertTrue(String message, boolean fullAssert, boolean assertion) {
+        if (!assertion) {
+            if (fullAssert) {
+                Assert.fail(message);
+            } else {
+                System.err.println(message);
+            }
+        }
+    }
+
     @Test
     public void properCaseTest() {
         Assert.assertEquals(StringUtils.properCase("red"), "Red");

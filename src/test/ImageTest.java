@@ -92,14 +92,7 @@ public class ImageTest {
     }
 
     private void checkExists(File imageFile, boolean required) {
-        if (!imageFile.exists()) {
-            String message = imageFile.getPath() + " does not exist.";
-            if (required) {
-                Assert.fail(message);
-            } else {
-                System.err.println(message);
-            }
-        }
+        GeneralTest.semiAssertTrue(imageFile.getPath() + " does not exist.", required, imageFile.exists());
     }
 
     @Test
@@ -196,6 +189,37 @@ public class ImageTest {
                     + " " + operator + " "
                     + PokemonInfoGen.getCoordinatesString(maxWidth, maxHeight)
                     + (delta == 0 ? "" : ", Delta: " + delta);
+        }
+    }
+
+    @Test
+    public void spriteTest() {
+        for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
+            File frontImageFile = FileIO.getImageFile(num, "", Folder.POKEMON_TILES);
+            File backImageFile = FileIO.getImageFile(num, "-back", Folder.POKEMON_TILES);
+            File shinyFrontImageFile = FileIO.getImageFile(num, "-shiny", Folder.POKEMON_TILES);
+            File shinyBackImageFile = FileIO.getImageFile(num, "-shiny-back", Folder.POKEMON_TILES);
+
+            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(num);
+            String message = num + " " + pokemonInfo.getName();
+
+            // Front and back images should always exist together
+            Assert.assertEquals(message, frontImageFile.exists(), backImageFile.exists());
+            Assert.assertEquals(message, shinyFrontImageFile.exists(), shinyBackImageFile.exists());
+
+            // Same direction images should be the same size
+            assertSameSize(message + " Front", frontImageFile, shinyFrontImageFile);
+            assertSameSize(message + " Back", backImageFile, shinyBackImageFile);
+        }
+    }
+
+    private void assertSameSize(String message, File firstImageFile, File secondImageFile) {
+        if (firstImageFile.exists() && secondImageFile.exists()) {
+            BufferedImage firstImage = FileIO.readImage(firstImageFile);
+            BufferedImage secondImage = FileIO.readImage(secondImageFile);
+
+            Assert.assertEquals(message, firstImage.getWidth(), secondImage.getWidth());
+            Assert.assertEquals(message, firstImage.getHeight(), secondImage.getHeight());
         }
     }
 }
