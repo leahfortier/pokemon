@@ -328,8 +328,12 @@ def abilitySubstitution(num, ability):
 
 # My personal type changes
 def typeSubstitution(num, types):
+    # Ninetales is now Psychic type
+    if num == 38:
+        assert types == ['Fire', 'No_Type']
+        return ['Fire', 'Psychic']
     # Psyduck/Golduck are now Psychic type
-    if num == 54 or num == 55:
+    elif num == 54 or num == 55:
         assert types == ['Water', 'No_Type']
         return ['Water', 'Psychic']
     # Horsea/Seadra are now Dragon type
