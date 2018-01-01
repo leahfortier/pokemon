@@ -2,7 +2,6 @@ package draw;
 
 import main.Global;
 import type.Type;
-import util.FileIO;
 import util.FontMetrics;
 import util.Point;
 
@@ -12,7 +11,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
-import java.io.File;
 
 public final class ImageUtils {
     public static void drawTypeTiles(Graphics g, Type[] type, int rightX, int textY) {
@@ -203,24 +201,5 @@ public final class ImageUtils {
         }
 
         return image.getSubimage(leftmost, topmost, rightmost - leftmost + 1, bottommost - topmost + 1);
-    }
-
-    public static void trimImages(String inputLocation, String outputLocation) {
-        for (File imageFile : FileIO.listFiles(inputLocation)) {
-            if (imageFile.isDirectory()) {
-                continue;
-            }
-
-            if (imageFile.getName().contains("index.txt")) {
-                continue;
-            }
-
-            BufferedImage image = FileIO.readImage(imageFile);
-            BufferedImage trimmed = trimImage(image);
-
-            String newName = imageFile.getName();
-            File file = new File(outputLocation + FileIO.FILE_SLASH + newName);
-            FileIO.writeImage(trimmed, file);
-        }
     }
 }

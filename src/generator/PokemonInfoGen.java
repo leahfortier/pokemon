@@ -31,6 +31,27 @@ public class PokemonInfoGen {
 //        pokemonInfoStuff();
 //        updateNum();
 //        resizeImages();
+//        trimImages();
+    }
+
+    private static void trimImages() {
+        String inputLocation = "../Downloads/sunmoonsprites";
+        String outputLocation = Folder.POKEMON_TILES;
+
+        for (File imageFile : FileIO.listFiles(inputLocation)) {
+            if (imageFile.isDirectory() || imageFile.isHidden()) {
+                continue;
+            }
+
+            BufferedImage image = FileIO.readImage(imageFile);
+            BufferedImage trimmed = ImageUtils.trimImage(image);
+
+            String newName = imageFile.getName();
+            File file = new File(outputLocation + FileIO.FILE_SLASH + newName);
+            FileIO.writeImage(trimmed, file);
+
+            System.out.println("Writing trimmed image to " + file.getPath());
+        }
     }
 
     private static void resizeImages() {
