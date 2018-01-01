@@ -105,9 +105,8 @@ public class MoveRelearnerView extends View {
 
         moveButtons = movesPanel.getButtons(
                 10,
-                MOVES_PER_PAGE + 1,
-                1, MOVES_PER_PAGE,
-                1,
+                MOVES_PER_PAGE + 1, 1,
+                MOVES_PER_PAGE, 1,
                 0,
                 new int[] { MOVES_PER_PAGE, MOVES_LEFT_ARROW, MOVES_PER_PAGE, MOVES_RIGHT_ARROW },
                 index -> selectedMove = learnableMoves.isEmpty() ? null : GeneralUtils.getPageValue(learnableMoves, pageNum, MOVES_PER_PAGE, index).getAttack()
@@ -263,6 +262,10 @@ public class MoveRelearnerView extends View {
         }
 
         learnMoveButton.fillBorderLabel(g, new Color(123, 213, 74), 22, "Learn!");
+        if (!learnMoveButton.isActive()) {
+            learnMoveButton.greyOut(g);
+        }
+
         returnButton.fillBorderLabel(g, Color.YELLOW, 22, "Return");
 
         movesLeftButton.drawArrow(g, Direction.LEFT);
@@ -340,10 +343,10 @@ public class MoveRelearnerView extends View {
         this.setSelectedPokemon(0);
     }
 
-    // TODO: Look at the logic again here -- why is the same index being used for the team and the moves??
     private void setSelectedPokemon(int index) {
         this.selectedPokemon = index;
         this.learnableMoves = this.team.get(index).getLearnableMoves();
-        this.selectedMove =  this.learnableMoves.isEmpty() ? null : this.learnableMoves.get(index).getAttack();
+        this.selectedMove =  this.learnableMoves.isEmpty() ? null : this.learnableMoves.get(0).getAttack();
+        this.pageNum = 0;
     }
 }
