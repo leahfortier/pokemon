@@ -1116,11 +1116,12 @@ public abstract class Attack implements Serializable {
 			super(AttackNamesies.RAPID_SPIN, Type.NORMAL, MoveCategory.PHYSICAL, 40, "A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.");
 			super.power = 20;
 			super.accuracy = 100;
+			super.selfTarget = true;
 			super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			RapidSpinRelease.release(b, user);
+			RapidSpinRelease.release(b, victim);
 		}
 	}
 
@@ -7361,7 +7362,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-			// TODO: Test
 			this.copy = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
 		}
 
@@ -7369,8 +7369,7 @@ public abstract class Attack implements Serializable {
 			List<Move> moves = user.getMoves(b);
 			for (int i = 0; i < moves.size(); i++) {
 				if (moves.get(i).getAttack().namesies() == super.namesies) {
-					moves.add(i, new Move(this.copy.getAttack()));
-					moves.remove(i + 1);
+					moves.set(i, new Move(this.copy.getAttack()));
 					Messages.add(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
 					break;
 				}
@@ -7378,7 +7377,7 @@ public abstract class Attack implements Serializable {
 		}
 
 		public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-			return copy != null && copy.getAttack().namesies() != AttackNamesies.STRUGGLE && !user.hasEffect(EffectNamesies.TRANSFORMED);
+			return copy != null && copy.getAttack().namesies() != AttackNamesies.STRUGGLE && user.hasActualMove(this.namesies()) && !user.hasEffect(EffectNamesies.TRANSFORMED);
 		}
 	}
 
@@ -8360,7 +8359,6 @@ public abstract class Attack implements Serializable {
 		}
 
 		public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-			// TODO: Test
 			DefogRelease.release(b, victim);
 		}
 	}

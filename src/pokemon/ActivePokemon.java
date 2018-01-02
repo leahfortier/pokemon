@@ -334,7 +334,7 @@ public class ActivePokemon implements Serializable {
 		this.setIVs(IVs);
 	}
 
-	// Random value between 0 and 31
+	// Values between 0 and 31
 	private void setIVs(int[] IVs) {
 		this.IVs = IVs;
 

@@ -38,29 +38,29 @@ public class GeneralTest {
 
     @Test
     public void oppositeGenderTest() {
-        Assert.assertTrue(Gender.MALE.getOppositeGender() == Gender.FEMALE);
-        Assert.assertTrue(Gender.FEMALE.getOppositeGender() == Gender.MALE);
-        Assert.assertTrue(Gender.GENDERLESS.getOppositeGender() == Gender.GENDERLESS);
+        Assert.assertEquals(Gender.FEMALE, Gender.MALE.getOppositeGender());
+        Assert.assertEquals(Gender.MALE, Gender.FEMALE.getOppositeGender());
+        Assert.assertEquals(Gender.GENDERLESS, Gender.GENDERLESS.getOppositeGender());
 
         TestPokemon first = new TestPokemon(PokemonNamesies.MAGNEMITE);
         TestPokemon second = new TestPokemon(PokemonNamesies.VOLTORB);
 
-        Assert.assertTrue(first.getGender() == Gender.GENDERLESS);
-        Assert.assertTrue(second.getGender() == Gender.GENDERLESS);
+        Assert.assertEquals(Gender.GENDERLESS, first.getGender());
+        Assert.assertEquals(Gender.GENDERLESS, second.getGender());
         Assert.assertFalse(Gender.oppositeGenders(first, second));
 
         first = new TestPokemon(PokemonNamesies.HITMONCHAN);
         second = new TestPokemon(PokemonNamesies.JYNX);
 
-        Assert.assertTrue(first.getGender() == Gender.MALE);
-        Assert.assertTrue(second.getGender() == Gender.FEMALE);
+        Assert.assertEquals(Gender.MALE, first.getGender());
+        Assert.assertEquals(Gender.FEMALE, second.getGender());
         Assert.assertTrue(Gender.oppositeGenders(first, second));
 
         first = new TestPokemon(PokemonNamesies.HITMONCHAN);
         second = new TestPokemon(PokemonNamesies.HITMONLEE);
 
-        Assert.assertTrue(first.getGender() == Gender.MALE);
-        Assert.assertTrue(second.getGender() == Gender.MALE);
+        Assert.assertEquals(Gender.MALE, first.getGender());
+        Assert.assertEquals(Gender.MALE, second.getGender());
         Assert.assertFalse(Gender.oppositeGenders(first, second));
     }
 

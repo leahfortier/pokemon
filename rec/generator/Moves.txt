@@ -453,8 +453,9 @@ Rapid Spin:
 	Desc: A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.
 	Type: Normal
 	Cat: Physical
+	SelfTarget: True
 	UniqueEffects:
-		RapidSpinRelease.release(b, user);
+		RapidSpinRelease.release(b, victim);
 		###
 *
 Reflect:
@@ -4465,16 +4466,14 @@ Sketch:
 		private Move copy;
 		###
 	BeginAttack:
-		// TODO: Test
 		this.copy = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
 		###
-	Applies: copy != null && copy.getAttack().namesies() != AttackNamesies.STRUGGLE && !user.hasEffect(EffectNamesies.TRANSFORMED)
+	Applies: copy != null && copy.getAttack().namesies() != AttackNamesies.STRUGGLE && user.hasActualMove(this.namesies()) && !user.hasEffect(EffectNamesies.TRANSFORMED)
 	UniqueEffects:
 		List<Move> moves = user.getMoves(b);
 		for (int i = 0; i < moves.size(); i++) {
 			if (moves.get(i).getAttack().namesies() == super.namesies) {
-				moves.add(i, new Move(this.copy.getAttack()));
-				moves.remove(i + 1);
+				moves.set(i, new Move(this.copy.getAttack()));
 				Messages.add(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
 				break;
 			}
@@ -5072,7 +5071,6 @@ Defog:
 	Cat: Status
 	StatChange: 1 Evasion -1
 	UniqueEffects:
-		// TODO: Test
 		DefogRelease.release(b, victim);
 		###
 *

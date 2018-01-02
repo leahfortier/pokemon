@@ -456,9 +456,8 @@ public class Battle implements Serializable {
 	}
 
 	private void decrementEffects(List<? extends Effect> effects, ActivePokemon p) {
-		for (int i = 0; i < effects.size(); i++) {
-			Effect effect = effects.get(i);
-
+		List<Effect> toRemove = new ArrayList<>();
+		for (Effect effect : effects) {
 			boolean inactive = !effect.isActive();
 			if (!inactive) {
 				effect.decrement(this, p);
@@ -466,7 +465,7 @@ public class Battle implements Serializable {
 			}
 
 			if (inactive) {
-				effects.remove(i--);
+				toRemove.add(effect);
 				effect.subside(this, p);
 
 				// I think this is pretty much just for Future Sight...
@@ -475,6 +474,7 @@ public class Battle implements Serializable {
 				}
 			}
 		}
+		effects.removeIf(toRemove::contains);
 	}
 
 	private void decrementWeather() {

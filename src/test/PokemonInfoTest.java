@@ -270,4 +270,33 @@ public class PokemonInfoTest {
             }
         }
     }
+
+    @Test
+    public void ivsTest() {
+        boolean[] hasIv = new boolean[Stat.MAX_IV + 1];
+        boolean diffIvs = false;
+        for (int i = 0; i < 1000; i++) {
+            TestPokemon pokemon = new TestPokemon(PokemonNamesies.BULBASAUR);
+
+            for (int j = 0; j < Stat.NUM_STATS; j++) {
+                Stat stat = Stat.getStat(j, false);
+                int iv = pokemon.getIV(j);
+                String message = stat.getName() + " " + iv;
+
+                // Make sure all IVs are in range
+                Assert.assertTrue(message, iv >= 0 && iv <= Stat.MAX_IV);
+                hasIv[iv] = true;
+
+                // Make sure not every IV is the same
+                if (j > 0 && iv != pokemon.getIV(j - 1)) {
+                    diffIvs = true;
+                }
+            }
+        }
+
+        Assert.assertTrue(diffIvs);
+        for (int i = 0; i < hasIv.length; i++) {
+            Assert.assertTrue(i + "", hasIv[i]);
+        }
+    }
 }

@@ -221,7 +221,7 @@ SelfConfusion:
 		###
 *
 Safeguard:
-	Defog: "The effects of " + victim.getName() + "'s Safeguard faded."
+	Defog: "The effects of " + released.getName() + "'s Safeguard faded."
 	Int: DefogRelease
 	SafeguardEffect: Safeguard
 *

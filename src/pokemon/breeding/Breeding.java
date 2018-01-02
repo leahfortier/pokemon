@@ -70,9 +70,10 @@ public class Breeding {
 		List<Stat> remainingStats = new ArrayList<>();
 		Collections.addAll(remainingStats, Stat.STATS);
 
-		List<Item> parentItems = new ArrayList<>();
-		parentItems.add(daddy.getActualHeldItem());
-		parentItems.add(mommy.getActualHeldItem());
+		List<Item> parentItems = Arrays.asList(
+				daddy.getActualHeldItem(),
+				mommy.getActualHeldItem()
+		);
 
 		// Inherit 5 stats instead of 3 when a parent holds Destiny Knot
 		int remainingIVsToInherit =

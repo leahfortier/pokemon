@@ -159,15 +159,33 @@ BarrierEffect:
 ***
 DefogRelease:
 	Method:
-		Header: void releaseDefog(Battle b, ActivePokemon victim)
+		Header: String getDefogReleaseMessage(ActivePokemon released)
+	*
+	Method:
+		Header: void releaseDefog(Battle b, ActivePokemon released)
 		Invoke: Void
-		EffectList: victim
+		EffectList: released
 		InvokeName: release
+		Default:
+		Messages.add(this.getDefogReleaseMessage(released));
+		
+		if (this instanceof PokemonEffect) {
+			PokemonEffect effect = (PokemonEffect)this;
+			released.getEffects().remove(effect);
+		}
+		else if (this instanceof TeamEffect) {
+			TeamEffect effect = (TeamEffect)this;
+			b.getEffects(released).remove(effect);
+		}
+		else {
+			Global.error("Invalid defog release object " + this.getClass().getSimpleName());
+		}
+			###
 	*
 ***
 RapidSpinRelease:
 	Method:
-		Header: String getReleaseMessage(ActivePokemon releaser)
+		Header: String getRapidSpinReleaseMessage(ActivePokemon releaser)
 	*
 	Method:
 		Header: void releaseRapidSpin(Battle b, ActivePokemon releaser)
@@ -175,7 +193,7 @@ RapidSpinRelease:
 		EffectList: releaser
 		InvokeName: release
 		Default:
-			Messages.add(this.getReleaseMessage(releaser));
+			Messages.add(this.getRapidSpinReleaseMessage(releaser));
 
 			if (this instanceof PokemonEffect) {
 				PokemonEffect effect = (PokemonEffect)this;

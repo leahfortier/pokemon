@@ -117,7 +117,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " was seeded!";
 		}
 
-		public String getReleaseMessage(ActivePokemon releaser) {
+		public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
 			return releaser.getName() + " was released from leech seed!";
 		}
 
@@ -190,7 +190,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by fire spin.";
 		}
 
-		public String getReleaseMessage(ActivePokemon releaser) {
+		public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
 			return releaser.getName() + " was released from fire spin!";
 		}
 
@@ -236,7 +236,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by infestation.";
 		}
 
-		public String getReleaseMessage(ActivePokemon releaser) {
+		public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
 			return releaser.getName() + " was released from infestation!";
 		}
 
@@ -282,7 +282,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by magma storm.";
 		}
 
-		public String getReleaseMessage(ActivePokemon releaser) {
+		public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
 			return releaser.getName() + " was released from magma storm!";
 		}
 
@@ -328,7 +328,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by clamp.";
 		}
 
-		public String getReleaseMessage(ActivePokemon releaser) {
+		public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
 			return releaser.getName() + " was released from clamp!";
 		}
 
@@ -374,7 +374,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by whirlpool.";
 		}
 
-		public String getReleaseMessage(ActivePokemon releaser) {
+		public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
 			return releaser.getName() + " was released from whirlpool!";
 		}
 
@@ -420,7 +420,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by wrap.";
 		}
 
-		public String getReleaseMessage(ActivePokemon releaser) {
+		public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
 			return releaser.getName() + " was released from wrap!";
 		}
 
@@ -466,7 +466,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by bind.";
 		}
 
-		public String getReleaseMessage(ActivePokemon releaser) {
+		public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
 			return releaser.getName() + " was released from bind!";
 		}
 
@@ -512,7 +512,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return victim.getName() + " is no longer trapped by sand tomb.";
 		}
 
-		public String getReleaseMessage(ActivePokemon releaser) {
+		public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
 			return releaser.getName() + " was released from sand tomb!";
 		}
 
@@ -890,12 +890,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return "Safeguard protects " + victim.getName() + " from status conditions!";
 		}
 
-		public void releaseDefog(Battle b, ActivePokemon victim) {
-			Messages.add("The effects of " + victim.getName() + "'s Safeguard faded.");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
-			victim.getEffects().remove(this);
-			b.getEffects(victim).remove(this);
+		public String getDefogReleaseMessage(ActivePokemon released) {
+			return "The effects of " + released.getName() + "'s Safeguard faded.";
 		}
 	}
 
@@ -2102,12 +2098,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 			return "The mist prevents stat reductions!";
 		}
 
-		public void releaseDefog(Battle b, ActivePokemon victim) {
-			Messages.add("The mist faded.");
-			
-			// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
-			victim.getEffects().remove(this);
-			b.getEffects(victim).remove(this);
+		public String getDefogReleaseMessage(ActivePokemon released) {
+			return "The mist faded.";
 		}
 	}
 

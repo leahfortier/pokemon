@@ -24,7 +24,7 @@ public enum TerrainType {
     ICE(Type.ICE, new Color(228, 249, 240), AttackNamesies.ICE_BEAM, StatusCondition.FROZEN),
     MISTY(Type.FAIRY, new Color(255, 231, 233), AttackNamesies.MOONBLAST, Stat.SP_ATTACK),
     ELECTRIC(Type.ELECTRIC, new Color(250, 250, 210), AttackNamesies.THUNDERBOLT, StatusCondition.PARALYZED),
-    PSYCHIC(Type.PSYCHIC, new Color(216, 191, 216), AttackNamesies.PSYCHIC, Stat.SP_DEFENSE); // TODO: Don't have this information yet so I made this up
+    PSYCHIC(Type.PSYCHIC, new Color(216, 191, 216), AttackNamesies.PSYCHIC, Stat.SPEED);
 
     private final Type type;
     private final Color color;

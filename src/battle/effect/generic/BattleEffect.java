@@ -242,13 +242,7 @@ public abstract class BattleEffect extends Effect {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			// Remove all other Terrain Effects
-			for (int i = 0; i < b.getEffects().size(); i++) {
-				Effect effect = b.getEffects().get(i);
-				if (effect instanceof TerrainEffect) {
-					b.getEffects().remove(i);
-					i--;
-				}
-			}
+			b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
 			
 			super.cast(b, caster, victim, source, printCast);
 			b.setTerrainType(TerrainType.MISTY, false);
@@ -293,13 +287,7 @@ public abstract class BattleEffect extends Effect {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			// Remove all other Terrain Effects
-			for (int i = 0; i < b.getEffects().size(); i++) {
-				Effect effect = b.getEffects().get(i);
-				if (effect instanceof TerrainEffect) {
-					b.getEffects().remove(i);
-					i--;
-				}
-			}
+			b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
 			
 			super.cast(b, caster, victim, source, printCast);
 			b.setTerrainType(TerrainType.GRASS, false);
@@ -345,13 +333,7 @@ public abstract class BattleEffect extends Effect {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			// Remove all other Terrain Effects
-			for (int i = 0; i < b.getEffects().size(); i++) {
-				Effect effect = b.getEffects().get(i);
-				if (effect instanceof TerrainEffect) {
-					b.getEffects().remove(i);
-					i--;
-				}
-			}
+			b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
 			
 			super.cast(b, caster, victim, source, printCast);
 			b.setTerrainType(TerrainType.ELECTRIC, false);
@@ -394,13 +376,7 @@ public abstract class BattleEffect extends Effect {
 
 		public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
 			// Remove all other Terrain Effects
-			for (int i = 0; i < b.getEffects().size(); i++) {
-				Effect effect = b.getEffects().get(i);
-				if (effect instanceof TerrainEffect) {
-					b.getEffects().remove(i);
-					i--;
-				}
-			}
+			b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
 			
 			super.cast(b, caster, victim, source, printCast);
 			b.setTerrainType(TerrainType.PSYCHIC, false);

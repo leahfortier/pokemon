@@ -580,7 +580,7 @@ StatRatio:
 		###
 *
 RapidSpin:
-	Header: String getReleaseMessage(ActivePokemon releaser)
+	Header: String getRapidSpinReleaseMessage(ActivePokemon releaser)
 	Body:
 		return {0};
 		###
@@ -755,13 +755,9 @@ FailMessage:
 		###
 *
 Defog:
-	Header: void releaseDefog(Battle b, ActivePokemon victim)
+	Header: String getDefogReleaseMessage(ActivePokemon released)
 	Body:
-		Messages.add({0});
-
-		// This is a little hacky and I'm not a super fan but I don't feel like distinguishing in the generator if this a PokemonEffect or a TeamEffect, so just try to remove from both lists
-		victim.getEffects().remove(this);
-		b.getEffects(victim).remove(this);
+		return {0};
 		###
 *
 GetAbility:
@@ -799,13 +795,7 @@ FallMessage:
 Terrain:
 	AddMapField: Cast:
 		// Remove all other Terrain Effects
-		for (int i = 0; i < b.getEffects().size(); i++) {
-			Effect effect = b.getEffects().get(i);
-			if (effect instanceof TerrainEffect) {
-				b.getEffects().remove(i);
-				i--;
-			}
-		}
+		b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
 
 		super.cast(b, caster, victim, source, printCast);
 		b.setTerrainType(TerrainType.{00}, false);

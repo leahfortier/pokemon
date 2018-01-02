@@ -270,25 +270,41 @@ public final class EffectInterfaces {
 	}
 
 	public interface DefogRelease {
-		void releaseDefog(Battle b, ActivePokemon victim);
+		String getDefogReleaseMessage(ActivePokemon released);
 
-		static void release(Battle b, ActivePokemon victim) {
-			List<Object> invokees = b.getEffectsList(victim);
+		default void releaseDefog(Battle b, ActivePokemon released) {
+			Messages.add(this.getDefogReleaseMessage(released));
+			
+			if (this instanceof PokemonEffect) {
+				PokemonEffect effect = (PokemonEffect)this;
+				released.getEffects().remove(effect);
+			}
+			else if (this instanceof TeamEffect) {
+				TeamEffect effect = (TeamEffect)this;
+				b.getEffects(released).remove(effect);
+			}
+			else {
+				Global.error("Invalid defog release object " + this.getClass().getSimpleName());
+			}
+		}
+
+		static void release(Battle b, ActivePokemon released) {
+			List<Object> invokees = b.getEffectsList(released);
 			for (Object invokee : invokees) {
 				if (invokee instanceof DefogRelease && Effect.isActiveEffect(invokee)) {
 					
 					DefogRelease effect = (DefogRelease)invokee;
-					effect.releaseDefog(b, victim);
+					effect.releaseDefog(b, released);
 				}
 			}
 		}
 	}
 
 	public interface RapidSpinRelease {
-		String getReleaseMessage(ActivePokemon releaser);
+		String getRapidSpinReleaseMessage(ActivePokemon releaser);
 
 		default void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-			Messages.add(this.getReleaseMessage(releaser));
+			Messages.add(this.getRapidSpinReleaseMessage(releaser));
 			
 			if (this instanceof PokemonEffect) {
 				PokemonEffect effect = (PokemonEffect)this;

@@ -596,51 +596,83 @@ public class AttackTest {
     }
 
     @Test
-    public void rapidSpinTest() {
+    public void rapidSpinDefogTest() {
         TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
-        Team defendingTeam = battle.getOpponent();
+        TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
+        Team defendingTeam = battle.getOpponent();
 
+        attacking.giveItem(ItemNamesies.GRIP_CLAW);
+        defending.withAbility(AbilityNamesies.MAGIC_GUARD).giveItem(ItemNamesies.LIGHT_CLAY);
+
+        // Add effects
         battle.attackingFight(AttackNamesies.STEALTH_ROCK);
         battle.attackingFight(AttackNamesies.TOXIC_SPIKES);
         battle.attackingFight(AttackNamesies.SPIKES);
-        battle.attackingFight(AttackNamesies.LEECH_SEED);
-        battle.attackingFight(AttackNamesies.WRAP);
-
+        battle.attackingFight(AttackNamesies.LEECH_SEED); // Rapid Spin only
+        battle.attackingFight(AttackNamesies.WRAP); // Rapid Spin only
+        battle.defendingFight(AttackNamesies.LIGHT_SCREEN); // Defog only
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.LIGHT_SCREEN));
         Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.STEALTH_ROCK));
         Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.TOXIC_SPIKES));
         Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.SPIKES));
         Assert.assertTrue(defending.hasEffect(EffectNamesies.LEECH_SEED));
         Assert.assertTrue(defending.hasEffect(EffectNamesies.WRAPPED));
 
+        // Make sure effects persist
         battle.emptyHeal();
         battle.defendingFight(AttackNamesies.CONSTRICT);
-
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.LIGHT_SCREEN));
         Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.STEALTH_ROCK));
         Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.TOXIC_SPIKES));
         Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.SPIKES));
         Assert.assertTrue(defending.hasEffect(EffectNamesies.LEECH_SEED));
         Assert.assertTrue(defending.hasEffect(EffectNamesies.WRAPPED));
 
+        // Use Rapid Spin -- should remove the appropriate effects
         battle.defendingFight(AttackNamesies.RAPID_SPIN);
-
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.LIGHT_SCREEN));
         Assert.assertFalse(defendingTeam.hasEffect(EffectNamesies.STEALTH_ROCK));
         Assert.assertFalse(defendingTeam.hasEffect(EffectNamesies.TOXIC_SPIKES));
         Assert.assertFalse(defendingTeam.hasEffect(EffectNamesies.SPIKES));
         Assert.assertFalse(defending.hasEffect(EffectNamesies.LEECH_SEED));
         Assert.assertFalse(defending.hasEffect(EffectNamesies.WRAPPED));
 
+        // Add effects back
         battle.emptyHeal();
-
         battle.attackingFight(AttackNamesies.STEALTH_ROCK);
         battle.attackingFight(AttackNamesies.TOXIC_SPIKES);
         battle.attackingFight(AttackNamesies.SPIKES);
         battle.attackingFight(AttackNamesies.LEECH_SEED);
         battle.attackingFight(AttackNamesies.WRAP);
-
+        battle.defendingFight(AttackNamesies.LIGHT_SCREEN);
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.LIGHT_SCREEN));
         Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.STEALTH_ROCK));
         Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.TOXIC_SPIKES));
         Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.SPIKES));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.LEECH_SEED));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.WRAPPED));
+
+        // Wrong attacker -- effects shouldn't change
+        battle.attackingFight(AttackNamesies.RAPID_SPIN);
+        battle.defendingFight(AttackNamesies.DEFOG);
+        Assert.assertEquals(-1, attacking.getStage(Stat.EVASION));
+        Assert.assertEquals(0, defending.getStage(Stat.EVASION));
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.LIGHT_SCREEN));
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.STEALTH_ROCK));
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.TOXIC_SPIKES));
+        Assert.assertTrue(defendingTeam.hasEffect(EffectNamesies.SPIKES));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.LEECH_SEED));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.WRAPPED));
+
+        // Correct defog attacker -- should only remove the appropriate effects
+        battle.attackingFight(AttackNamesies.DEFOG);
+        Assert.assertEquals(-1, attacking.getStage(Stat.EVASION));
+        Assert.assertEquals(-1, defending.getStage(Stat.EVASION));
+        Assert.assertFalse(defendingTeam.hasEffect(EffectNamesies.LIGHT_SCREEN));
+        Assert.assertFalse(defendingTeam.hasEffect(EffectNamesies.STEALTH_ROCK));
+        Assert.assertFalse(defendingTeam.hasEffect(EffectNamesies.TOXIC_SPIKES));
+        Assert.assertFalse(defendingTeam.hasEffect(EffectNamesies.SPIKES));
         Assert.assertTrue(defending.hasEffect(EffectNamesies.LEECH_SEED));
         Assert.assertTrue(defending.hasEffect(EffectNamesies.WRAPPED));
     }
@@ -689,5 +721,31 @@ public class AttackTest {
         battle.attackingFight(AttackNamesies.MIND_BLOWN);
         Assert.assertFalse(defending.fullHealth());
         Assert.assertTrue(attacking.fullHealth());
+    }
+
+    @Test
+    public void sketchTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+
+        // Should originally fail since no move to copy
+        attacking.apply(false, AttackNamesies.SKETCH, battle);
+        attacking.withMoves(AttackNamesies.SKETCH);
+        Assert.assertTrue(attacking.hasActualMove(AttackNamesies.SKETCH));
+        attacking.apply(false, AttackNamesies.SKETCH, battle);
+
+        battle.defendingFight(AttackNamesies.SPLASH);
+        Assert.assertTrue(attacking.hasActualMove(AttackNamesies.SKETCH));
+        attacking.apply(true, AttackNamesies.SKETCH, battle);
+        Assert.assertFalse(attacking.hasActualMove(AttackNamesies.SKETCH));
+        Assert.assertTrue(attacking.hasActualMove(AttackNamesies.SPLASH));
+
+        // Should fail since the user doesn't actual know Sketch
+        battle.defendingFight(AttackNamesies.SWORDS_DANCE);
+        Assert.assertFalse(attacking.hasActualMove(AttackNamesies.SKETCH));
+        attacking.apply(false, AttackNamesies.SKETCH, battle);
+        Assert.assertFalse(attacking.hasActualMove(AttackNamesies.SKETCH));
+        Assert.assertFalse(attacking.hasActualMove(AttackNamesies.SWORDS_DANCE));
+        Assert.assertTrue(attacking.hasActualMove(AttackNamesies.SPLASH));
     }
 }
