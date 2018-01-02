@@ -1,10 +1,12 @@
 package util;
 
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class TimeUtils {
-    public static final int MINUTES_IN_DAY = 24*60;
-    public static final int MILLSECONDS_IN_DAY = 1000*60*MINUTES_IN_DAY;
+    public static long getCurrentTimestamp() {
+        return System.currentTimeMillis();
+    }
 
     public static int getHourOfDay() {
         return Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
@@ -15,16 +17,23 @@ public class TimeUtils {
         return hour >= startHour && hour < endHour;
     }
 
-    public static long getCurrentTimestamp() {
-        return System.currentTimeMillis();
+    public static long hoursSince(long timestamp) {
+        return TimeUnit.MILLISECONDS.toHours(getCurrentTimestamp() - timestamp);
     }
 
-    public static double numDaysPassed(long timestamp) {
-        long currentTimestamp = getCurrentTimestamp();
-        return (currentTimestamp - timestamp)/(double)MILLSECONDS_IN_DAY;
+    public static long minutesSince(long timestamp) {
+        return TimeUnit.MILLISECONDS.toMinutes(getCurrentTimestamp() - timestamp);
     }
 
-    public static int numMinutesPassed(long timestamp) {
-        return (int)(numDaysPassed(timestamp)*MINUTES_IN_DAY);
+    public static long secondsSince(long timestamp) {
+        return TimeUnit.MILLISECONDS.toSeconds(getCurrentTimestamp() - timestamp);
+    }
+
+    public static String formatSeconds(long numSeconds) {
+        return formatMinutes(TimeUnit.SECONDS.toMinutes(numSeconds));
+    }
+
+    public static String formatMinutes(long numMinutes) {
+        return String.format("%d:%02d", numMinutes/60, numMinutes%60);
     }
 }

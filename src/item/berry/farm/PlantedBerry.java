@@ -5,12 +5,13 @@ import item.berry.Berry;
 import util.TimeUtils;
 
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 public class PlantedBerry implements Serializable {
     private final Berry berry;
-    private long timestamp;
+    private final long timestamp;
 
-    PlantedBerry(final ItemNamesies berry) {
+    public PlantedBerry(final ItemNamesies berry) {
         this.berry = (Berry)berry.getItem();
         this.timestamp = TimeUtils.getCurrentTimestamp();
     }
@@ -20,14 +21,14 @@ public class PlantedBerry implements Serializable {
     }
 
     public String getTimeLeftString() {
-        int totalMinutes = (int)(berry.getHarvestHours()*TimeUtils.MINUTES_IN_DAY);
-        int minutesPassed = TimeUtils.numMinutesPassed(this.timestamp);
-        int minutesLeft = Math.max(0, totalMinutes - minutesPassed);
-        return String.format("%02d:%02d", minutesLeft/60, minutesLeft%60);
+        long totalMinutes = TimeUnit.HOURS.toMinutes(berry.getHarvestHours());
+        long minutesPassed = TimeUtils.minutesSince(this.timestamp);
+        long minutesLeft = Math.max(0, totalMinutes - minutesPassed);
+        return TimeUtils.formatMinutes(minutesLeft);
     }
 
     boolean isFinished() {
-        return TimeUtils.numDaysPassed(this.timestamp) > berry.getHarvestHours();
+        return TimeUtils.hoursSince(this.timestamp) > berry.getHarvestHours();
     }
 
     int getHarvestAmount() {

@@ -7,8 +7,8 @@ public interface Berry extends ConsumableItem {
 	Type naturalGiftType();
 	int naturalGiftPower();
 
-	default double getHarvestHours() {
-		return 1;
+	default int getHarvestHours() {
+		return 24;
 	}
 
 	default int getHarvestAmount() {

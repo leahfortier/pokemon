@@ -16,16 +16,12 @@ import java.util.Scanner;
 
 public final class Save {
 	public static final int NUM_SAVES = 3;
-	
+
 	// Utility class -- should not be instantiated
 	private Save() {
 		Global.error("Save class cannot be instantiated.");
 	}
-	
-	public static String formatTime(long l) {
-		return String.format("%d:%02d", l/3600, (l%3600)/60);
-	}
-	
+
 	private static String getSavePath(int fileNum) {
 		return Folder.SAVES + "File " + (fileNum + 1) + ".ser";
 	}

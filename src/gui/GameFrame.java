@@ -10,6 +10,7 @@ import pokemon.PokemonInfo;
 import util.FontMetrics;
 import util.PokeString;
 import util.RandomUtils;
+import util.TimeUtils;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -89,12 +90,12 @@ public class GameFrame {
 			loadAllTheThings();
 
 			Timer fpsTimer = new Timer((int) Global.MS_BETWEEN_FRAMES, new ActionListener() {
-				int frameCount = 0;
-				long fpsTime = 0;
-				long prevTime = System.currentTimeMillis();
+				private int frameCount = 0;
+				private long fpsTime = 0;
+				private long prevTime = TimeUtils.getCurrentTimestamp();
 
 				public void actionPerformed(ActionEvent event) {
-					long time = System.currentTimeMillis();
+					long time = TimeUtils.getCurrentTimestamp();
 					long dt = time - prevTime;
 					
 					fpsTime += dt;

@@ -41,63 +41,35 @@ public class SerializationUtils {
     }
 
     public static Object deserializeFromFile(String fileName) {
-        try {
-            FileInputStream fin = new FileInputStream(fileName);
-            ObjectInputStream in = new ObjectInputStream(fin);
-
-            Object object = in.readObject();
-
-            in.close();
-            fin.close();
-
-            return object;
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
+            return in.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            Global.error("Error deserializing from file " + fileName);
+            Global.error("Error deserializing from file " + fileName + ": " + e.getMessage());
             return fileName;
         }
     }
 
     public static void serializeToFile(String fileName, Serializable serializable) {
-        try {
-            FileOutputStream fout = new FileOutputStream(fileName);
-            ObjectOutputStream out = new ObjectOutputStream(fout);
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
             out.writeObject(serializable);
-
-            out.close();
-            fout.close();
         } catch (IOException exception) {
-            Global.error("IOException occurred while writing object to " + fileName + ".");
+            Global.error("IOException occurred while writing object to " + fileName + ": " + exception.getMessage());
         }
     }
 
     public static Object deserialize(String serialized) {
-        try {
-            byte[] data = Base64.getDecoder().decode(serialized);
-            ByteArrayInputStream sin = new ByteArrayInputStream(data);
-            ObjectInputStream in = new ObjectInputStream(sin);
-
-            Object object = in.readObject();
-
-            in.close();
-            sin.close();
-
-            return object;
+        byte[] data = Base64.getDecoder().decode(serialized);
+        try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(data))) {
+            return in.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            Global.error("Error deserializing from string " + serialized);
+            Global.error("Error deserializing from string " + serialized + ": " + e.getMessage());
             return StringUtils.empty();
         }
     }
 
     public static String serialize(Serializable serializable) {
-        try {
-            ByteArrayOutputStream sout = new ByteArrayOutputStream();
-            ObjectOutputStream out = new ObjectOutputStream(sout);
-
+        try (ByteArrayOutputStream sout = new ByteArrayOutputStream(); ObjectOutputStream out = new ObjectOutputStream(sout)) {
             out.writeObject(serializable);
-
-            out.close();
-            sout.close();
-
             return Base64.getEncoder().encodeToString(sout.toByteArray());
         } catch (IOException exception) {
             Global.error("IOException occurred while serializing object" + serializable.toString());

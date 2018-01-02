@@ -391,7 +391,7 @@ public class ModifierTest {
 
         // Unless the opponent is dark type
         Assert.assertFalse(defending.isType(battle, Type.DARK));
-        defending.getAttributes().setCastSource((ChangeTypeSource) (b, caster, victim) -> new Type[] { Type.DARK, Type.NO_TYPE });
+        defending.getAttributes().setCastSource((ChangeTypeSource)(b, caster, victim) -> new Type[] { Type.DARK, Type.NO_TYPE });
         Assert.assertFalse(defending.isType(battle, Type.DARK));
         EffectNamesies.CHANGE_TYPE.getEffect().cast(battle, defending, defending, CastSource.CAST_SOURCE, false);
         Assert.assertTrue(defending.isType(battle, Type.DARK));

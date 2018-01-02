@@ -1,11 +1,15 @@
 package test;
 
+import item.ItemNamesies;
+import item.berry.farm.PlantedBerry;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import util.StringUtils;
 import util.TimeUtils;
+
+import java.util.concurrent.TimeUnit;
 
 public class GeneralTest {
     private static final double DELTA = 1e-15;
@@ -66,9 +70,35 @@ public class GeneralTest {
 
     @Test
     public void timeTest() {
-        assertEquals(1000*60*60*24, TimeUtils.MILLSECONDS_IN_DAY);
-        assertEquals(1, TimeUtils.numDaysPassed(TimeUtils.getCurrentTimestamp() - TimeUtils.MILLSECONDS_IN_DAY));
-        assertEquals(1.5, TimeUtils.numDaysPassed(TimeUtils.getCurrentTimestamp() - (long)(1.5*TimeUtils.MILLSECONDS_IN_DAY)));
-        assertEquals(15, TimeUtils.numDaysPassed(TimeUtils.getCurrentTimestamp() - 15*TimeUtils.MILLSECONDS_IN_DAY));
+        long millsecondsInHour = TimeUnit.HOURS.toMillis(1);
+        assertEquals(1000*60*60, millsecondsInHour);
+        assertEquals(1, TimeUtils.hoursSince(TimeUtils.getCurrentTimestamp() - millsecondsInHour));
+        assertEquals(1, TimeUtils.hoursSince(TimeUtils.getCurrentTimestamp() - (long)(1.5*millsecondsInHour)));
+        assertEquals(15, TimeUtils.hoursSince(TimeUtils.getCurrentTimestamp() - 15*millsecondsInHour));
+
+        long millsecondsInMinute = TimeUnit.MINUTES.toMillis(1);
+        assertEquals(1000*60, millsecondsInMinute);
+        assertEquals(1, TimeUtils.minutesSince(TimeUtils.getCurrentTimestamp() - millsecondsInMinute));
+        assertEquals(1, TimeUtils.minutesSince(TimeUtils.getCurrentTimestamp() - (long)(1.5*millsecondsInMinute)));
+        assertEquals(15, TimeUtils.minutesSince(TimeUtils.getCurrentTimestamp() - 15*millsecondsInMinute));
+
+        long millsecondsInSecond = TimeUnit.SECONDS.toMillis(1);
+        assertEquals(1000, millsecondsInSecond);
+        assertEquals(1, TimeUtils.secondsSince(TimeUtils.getCurrentTimestamp() - millsecondsInSecond));
+        assertEquals(1, TimeUtils.secondsSince(TimeUtils.getCurrentTimestamp() - (long)(1.5*millsecondsInSecond)));
+        assertEquals(15, TimeUtils.secondsSince(TimeUtils.getCurrentTimestamp() - 15*millsecondsInSecond));
+
+        Assert.assertEquals("0:59", TimeUtils.formatMinutes(59));
+        Assert.assertEquals("1:00", TimeUtils.formatMinutes(60));
+        Assert.assertEquals("1:01", TimeUtils.formatMinutes(61));
+        Assert.assertEquals("1:39", TimeUtils.formatMinutes(99));
+        Assert.assertEquals("0:01", TimeUtils.formatMinutes(1));
+        Assert.assertEquals("0:01", TimeUtils.formatSeconds(60));
+        Assert.assertEquals("0:01", TimeUtils.formatSeconds(80));
+        Assert.assertEquals("0:00", TimeUtils.formatSeconds(59));
+        Assert.assertEquals("1234:56", TimeUtils.formatMinutes(TimeUnit.HOURS.toMinutes(1234) + 56));
+
+        // TODO: This should be moved if there are more berry tests later
+        Assert.assertEquals("24:00", new PlantedBerry(ItemNamesies.ORAN_BERRY).getTimeLeftString());
     }
 }

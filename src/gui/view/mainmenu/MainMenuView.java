@@ -11,6 +11,7 @@ import sound.SoundPlayer;
 import util.FileIO;
 import util.Folder;
 import util.FontMetrics;
+import util.TimeUtils;
 import util.save.Save;
 import util.save.SavePreviewInfo;
 
@@ -151,7 +152,7 @@ public class MainMenuView extends View {
 			TextUtils.drawRightAlignedString(g, info.getName(), 189, 28);
 
 			g.drawString("Time:", 210, 28);
-			TextUtils.drawRightAlignedString(g, "" + Save.formatTime(info.getTime()), 383, 28);
+			TextUtils.drawRightAlignedString(g, "" + TimeUtils.formatSeconds(info.getSeconds()), 383, 28);
 
 			g.drawString("Badges:", 16, 58);
 			TextUtils.drawRightAlignedString(g, "" + info.getBadges(), 189, 58);

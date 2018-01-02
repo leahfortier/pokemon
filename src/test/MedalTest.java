@@ -8,6 +8,7 @@ import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import trainer.player.Player;
 import trainer.player.medal.Medal;
+import util.save.Save;
 
 public class MedalTest {
 
@@ -27,5 +28,20 @@ public class MedalTest {
 
         bulby.addEVs(new int[] { Stat.MAX_EVS, Stat.MAX_EVS, Stat.MAX_EVS, Stat.MAX_EVS, Stat.MAX_EVS, Stat.MAX_EVS });
         Assert.assertTrue(player.getMedalCase().hasMedal(Medal.TRAINED_TO_MAX_POTENTIAL));
+    }
+
+    @Test
+    public void saveTest() {
+        TestGame.setNewPlayer(new Player());
+        Player player = Game.getPlayer();
+        player.setFileNum(-1);
+
+        for (int i = 0; i < 10; i++) {
+            // The real test is to make sure this doesn't crash because of serialization problems
+            Save.save();
+        }
+
+        Assert.assertTrue(player.getMedalCase().hasMedal(Medal.STEP_BY_STEP_SAVER));
+        Save.deleteSave(-1);
     }
 }

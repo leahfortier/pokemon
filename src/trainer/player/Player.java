@@ -12,6 +12,7 @@ import main.Game;
 import map.Direction;
 import map.MapName;
 import map.area.AreaData;
+import map.area.FlyLocation;
 import map.entity.movable.PlayerEntity;
 import map.overworld.OverworldTool;
 import map.triggers.TriggerType;
@@ -28,30 +29,29 @@ import trainer.Opponent;
 import trainer.PlayerTrainer;
 import trainer.Trainer;
 import trainer.TrainerAction;
+import trainer.player.medal.MedalCase;
 import trainer.player.medal.MedalTheme;
 import trainer.player.pokedex.Pokedex;
-import trainer.player.medal.MedalCase;
 import util.Point;
 import util.RandomUtils;
 import util.StringUtils;
+import util.TimeUtils;
 
 import java.io.Serializable;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 public class Player extends PlayerTrainer implements Serializable {
 	private static final long serialVersionUID = 4283479774388652604L;
 
-	public static final int CATCH_SHAKES = 3;
-	public static final int MAX_NAME_LENGTH = 10;
 	public static final String DEFAULT_NAME = "Red";
+	public static final int MAX_NAME_LENGTH = 10;
+	public static final int CATCH_SHAKES = 3;
 	private static final int START_MONEY = 3000;
 
 	private Point location;
@@ -61,7 +61,7 @@ public class Player extends PlayerTrainer implements Serializable {
 	private MapName mapName;
 	private SimpleMapTransition mapTransition;
 	private String areaName;
-	private Set<Entry<MapName, String>> flyLocations;
+	private Set<FlyLocation> flyLocations;
 
 	private boolean isBiking;
 
@@ -122,7 +122,7 @@ public class Player extends PlayerTrainer implements Serializable {
 	// Initializes the character with the current game -- used when recovering a save file as well as the generic constructor
 	public void initialize() {
 		this.logMessages = new ArrayList<>();
-		this.timeSinceUpdate = System.currentTimeMillis();
+		this.timeSinceUpdate = TimeUtils.getCurrentTimestamp();
 		this.entity = new PlayerEntity(this.location);
 	}
 
@@ -171,12 +171,12 @@ public class Player extends PlayerTrainer implements Serializable {
 	}
 
 	public void updateTimePlayed() {
-		seconds += (System.currentTimeMillis() - timeSinceUpdate)/1000;
-		timeSinceUpdate = System.currentTimeMillis();
+		seconds += TimeUtils.secondsSince(timeSinceUpdate);
+		timeSinceUpdate = TimeUtils.getCurrentTimestamp();
 	}
 
 	public long getTimePlayed() {
-		return seconds + (System.currentTimeMillis() - timeSinceUpdate)/1000;
+		return seconds + TimeUtils.secondsSince(timeSinceUpdate);
 	}
 
 	public long getSeconds() {
@@ -216,11 +216,11 @@ public class Player extends PlayerTrainer implements Serializable {
 		this.areaName = area.getAreaName();
 
 		if (area.isFlyLocation()) {
-			this.flyLocations.add(new SimpleEntry<>(mapName, this.areaName));
+			this.flyLocations.add(new FlyLocation(mapName, this.areaName));
 		}
 	}
 
-	public List<Entry<MapName, String>> getFlyLocations() {
+	public List<FlyLocation> getFlyLocations() {
 		return new ArrayList<>(this.flyLocations);
 	}
 

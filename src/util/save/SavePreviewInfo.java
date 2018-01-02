@@ -4,13 +4,13 @@ import java.util.Scanner;
 
 public class SavePreviewInfo {
     private final String name;
-    private final long time;
+    private final long seconds;
     private final int badges;
     private final int pokemonSeen;
 
     SavePreviewInfo(Scanner in) {
         this.name = in.next();
-        this.time = in.nextLong();
+        this.seconds = in.nextLong();
         this.badges = in.nextInt();
         this.pokemonSeen = in.nextInt();
     }
@@ -19,8 +19,8 @@ public class SavePreviewInfo {
         return this.name;
     }
 
-    public long getTime() {
-        return this.time;
+    public long getSeconds() {
+        return this.seconds;
     }
 
     public int getBadges() {

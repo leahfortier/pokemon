@@ -8,12 +8,13 @@ import sound.SoundTitle;
 import util.StringUtils;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class AreaData {
+public class AreaData implements Serializable {
 	public static final AreaData VOID = new AreaData(
 			"Void",
 			Color.BLACK,

@@ -29,18 +29,24 @@ public class BerryFarm implements Serializable {
         Bag bag = Game.getPlayer().getBag();
 
         // Break at the first berry that can be harvested
+        PlantedBerry toHarvest = null;
         for (PlantedBerry berry : berries) {
             if (berry.isFinished()) {
-                ItemNamesies berryKind = berry.getBerry().namesies();
-                int harvestAmount = berry.getHarvestAmount();
-
-                bag.addItem(berryKind, harvestAmount);
-                berries.remove(berry);
-
-                // TODO: Make plural for > 1
-                return "Harvested " + harvestAmount + " " + berryKind.getName() + "!";
+                toHarvest = berry;
+                break;
             }
         }
+
+        if (toHarvest != null) {
+            berries.remove(toHarvest);
+
+            ItemNamesies berryKind = toHarvest.getBerry().namesies();
+            int harvestAmount = toHarvest.getHarvestAmount();
+
+            bag.addItem(berryKind, harvestAmount);
+            return "Harvested " + harvestAmount + " " + berryKind.getName() + "!";
+        }
+
 
         // No berries to harvest, plant the selected berry
         if (berries.size() >= MAX_BERRIES) {

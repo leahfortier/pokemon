@@ -356,7 +356,12 @@ public class BerryView extends View {
     }
 
     private void updateActiveButtons() {
-        Set<ItemNamesies> berries = Game.getPlayer().getBag().getCategory(BagCategory.BERRY);
+        Bag bag = Game.getPlayer().getBag();
+        if (selectedItem != ItemNamesies.NO_ITEM && !bag.hasItem(selectedItem)) {
+            selectedItem = ItemNamesies.NO_ITEM;
+        }
+
+        Set<ItemNamesies> berries = bag.getCategory(BagCategory.BERRY);
         if (selectedItem == ItemNamesies.NO_ITEM) {
             selectedItem = berries.isEmpty() ? ItemNamesies.NO_ITEM : berries.iterator().next();
         }

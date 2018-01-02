@@ -5,23 +5,18 @@ import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
-import gui.view.ViewMode;
 import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
 import map.Direction;
-import map.MapName;
-import map.area.AreaData;
-import pattern.SimpleMapTransition;
-import trainer.player.Player;
+import map.area.FlyLocation;
 import util.GeneralUtils;
 
 import java.awt.Graphics;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 
 class FlyState implements VisualStateHandler {
     private static final int NUM_AREA_BUTTONS = 3;
@@ -33,7 +28,7 @@ class FlyState implements VisualStateHandler {
     private final DrawPanel titlePanel;
     private final Button[] buttons;
 
-    private List<Entry<MapName, String>> flyLocations;
+    private List<FlyLocation> flyLocations;
 
     private int selectedButton;
     private int pageNum;
@@ -86,14 +81,14 @@ class FlyState implements VisualStateHandler {
         titlePanel.drawBackground(g);
         titlePanel.label(g, 32, "Where to fly?");
 
-        Iterator<Entry<MapName, String>> iter = GeneralUtils.pageIterator(flyLocations, pageNum, NUM_AREA_BUTTONS);
+        Iterator<FlyLocation> iter = GeneralUtils.pageIterator(flyLocations, pageNum, NUM_AREA_BUTTONS);
         for (int i = 0; i < NUM_AREA_BUTTONS && iter.hasNext(); i++) {
-            Entry<MapName, String> entry = iter.next();
+            FlyLocation flyLocation = iter.next();
 
             Button locationButton = this.buttons[i];
             locationButton.fillTransparent(g);
             locationButton.blackOutline(g);
-            locationButton.label(g, 30, entry.getValue());
+            locationButton.label(g, 30, flyLocation.getAreaName());
         }
 
         Button leftButton = this.buttons[LEFT_BUTTON];
@@ -120,24 +115,10 @@ class FlyState implements VisualStateHandler {
 
         if (this.buttons[selectedButton].checkConsumePress()) {
             if (selectedButton < NUM_AREA_BUTTONS) {
-                Player player = Game.getPlayer();
-                Entry<MapName, String> entry = this.flyLocations.get(selectedButton + pageNum*NUM_AREA_BUTTONS);
+                FlyLocation flyLocation = this.flyLocations.get(selectedButton + pageNum*NUM_AREA_BUTTONS);
 
-                MapName mapName = entry.getKey();
-                String areaName = entry.getValue();
-
-                AreaData area = Game.getData().getMap(mapName).getArea(areaName);
-                if (!area.isFlyLocation()) {
-                    Global.error(mapName + " is not a valid fly location.");
-                }
-
-                String flyEntrance = area.getFlyLocation();
-
-                player.setMap(new SimpleMapTransition(mapName, flyEntrance));
-                player.setDirection(Direction.DOWN);
-                player.setMapReset(true);
-
-                Game.instance().setViewMode(ViewMode.MAP_VIEW);
+                // Note: Changes view mode to map view
+                flyLocation.fly();
             }
             else if (selectedButton == LEFT_BUTTON) {
                 pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages());

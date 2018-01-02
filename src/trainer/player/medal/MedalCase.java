@@ -143,21 +143,16 @@ public class MedalCase implements Serializable {
         }
     }
 
-    private void checkThreshold(MedalTheme theme) {
+    public void update(MedalTheme theme, int count) {
+        this.themeCounters.put(theme, count);
         theme.checkThreshold(themeCounters.get(theme));
     }
 
-    public void update(MedalTheme theme, int count) {
-        this.themeCounters.put(theme, count);
-        this.checkThreshold(theme);
+    public void increase(MedalTheme theme, int amount) {
+        this.update(theme, this.themeCounters.get(theme) + amount);
     }
 
     public void increase(MedalTheme theme) {
         this.increase(theme, 1);
-    }
-
-    public void increase(MedalTheme theme, int amount) {
-        this.themeCounters.put(theme, this.themeCounters.get(theme) + amount);
-        this.checkThreshold(theme);
     }
 }

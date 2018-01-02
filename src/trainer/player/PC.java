@@ -81,16 +81,16 @@ public class PC implements Serializable {
 		if (loc == null) {
 			addBox();
 			addPokemon(p);
+		} else {
+			insertIntoBox(loc, p);
 		}
-		
-		insertIntoBox(loc, p);
 	}
 	
 	public void depositPokemon(ActivePokemon p) {
 		addPokemon(p);
 	}
 
-	// Returns the coordinates of the Pokemon in the pc as {boxNum, x, y}, returns {-1, -1, -1} if the Pokemon is not in the box
+	// Returns the coordinates of the Pokemon in the pc as {boxNum, x, y}, returns null if the Pokemon is not in the box
 	private BoxCoordinate findPokemon(ActivePokemon p) {
 		for (int boxNum = currBox, n = 0; n < boxes.size(); boxNum++, n++) {
 			ActivePokemon[][] box = getBoxPokemon(boxNum);
@@ -116,7 +116,7 @@ public class PC implements Serializable {
 		Player player = Game.getPlayer();
 		if (player.getTeam().size() < Trainer.MAX_POKEMON) {
 			player.getTeam().add(coordinate.getPokemon());
-			coordinate.setPokemon(null);
+			coordinate.removePokemon();
 		}
 	}
 
@@ -230,14 +230,8 @@ public class PC implements Serializable {
 		currBox = coordinate.boxNum;
 		p.fullyHeal();
 		coordinate.setPokemon(p);
-		++numPokemon;
+		numPokemon++;
 		expandBoxes();
-	}
-	
-	// Removes a Pokemon forevers from the box 
-	private void removePokemon(BoxCoordinate coordinate) {
-		coordinate.setPokemon(null);
-		--numPokemon;
 	}
 	
 	// Release a Pokemon forevers
@@ -249,7 +243,7 @@ public class PC implements Serializable {
 		}
 		
 		BoxCoordinate coordinate = findPokemon(p);
-		removePokemon(coordinate);
+		coordinate.removePokemon();
 	}
 	
 	public void incrementBox(int delta) {
@@ -273,6 +267,12 @@ public class PC implements Serializable {
 
 		private void setPokemon(ActivePokemon pokemon) {
 			boxes.get(boxNum).pokemon[x][y] = pokemon;
+		}
+
+		// Removes a Pokemon forevers from the box
+		private void removePokemon() {
+			this.setPokemon(null);
+			numPokemon--;
 		}
 	}
 

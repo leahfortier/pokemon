@@ -149,7 +149,7 @@ public class Bag implements Serializable {
 	
 	public boolean useItem(ItemNamesies item) {
 		Item useItem = item.getItem();
-		if (useItem instanceof PlayerUseItem && ((PlayerUseItem) useItem).use()) {
+		if (useItem instanceof PlayerUseItem && ((PlayerUseItem)useItem).use()) {
 			removeItem(item);
 			return true;
 		}
