@@ -7,6 +7,7 @@ import util.StringUtils;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
@@ -86,74 +87,40 @@ public class InputFormatter {
         }
     }
 
-    Entry<Integer, String> getValue(String[] splitInfo, String fieldValue, int index) {
-        String type = splitInfo[index - 1];
-        String value;
-
-        String[] mcSplit = fieldValue.split(" ");
-
-        switch (type) {
+    String getValue(SplitScanner split, String fieldValue, String fieldType) {
+        switch (fieldType) {
+            case "StraightUp":
+                return fieldValue;
             case "String":
-                value = "\"" + fieldValue + "\"";
-                break;
+                return "\"" + fieldValue + "\"";
             case "Int":
-                value = fieldValue;
-                break;
+                return Integer.parseInt(fieldValue) + "";
             case "Boolean":
-                value = fieldValue.toLowerCase();
-                if (!value.equals("false") && !value.equals("true")) {
-                    Global.error("Invalid boolean type " + value);
+                String booleanValue = fieldValue.toLowerCase();
+                if (!Arrays.asList("true", "false").contains(booleanValue)) {
+                    Global.error("Invalid boolean type " + booleanValue);
                 }
-
-                break;
+                return booleanValue;
             case "Enum":
-                String enumType = splitInfo[index++];
-
+                String enumType = split.next();
+                final String enumValue;
                 if (enumType.endsWith("Namesies")) {
-                    value = StringUtils.getNamesiesString(fieldValue);
+                    enumValue = StringUtils.getNamesiesString(fieldValue);
                 }
                 else {
-                    value = fieldValue.toUpperCase();
+                    enumValue = fieldValue.toUpperCase();
                 }
-
-                value = enumType + "." + value;
-
-                break;
-            case "Function":
-                String functionName = splitInfo[index++];
-                int numParameters = Integer.parseInt(splitInfo[index++]);
-
-                value = functionName + "(";
-                boolean first = true;
-
-                for (int i = 0; i < numParameters; i++) {
-                    int mcSplitDex = Integer.parseInt(splitInfo[index++]);
-                    String parameter;
-
-                    Entry<Integer, String> entry = getValue(splitInfo, mcSplit[mcSplitDex], index + 1);
-                    index = entry.getKey();
-                    parameter = entry.getValue();
-
-                    value += (first ? "" : ", ") + parameter;
-                    first = false;
-                }
-
-                value += ")";
-                break;
+                return enumType + "." + enumValue;
             default:
-                Global.error("Invalid variable type " + type);
-                value = StringUtils.empty();
-                break;
+                Global.error("Invalid variable type " + fieldType);
+                return StringUtils.empty();
         }
-
-        return new SimpleEntry<>(index, value);
     }
 
     String getAssignment(String assignmentInfo, String fieldValue) {
-        int index = 0;
-        String[] split = assignmentInfo.split(" ");
+        SplitScanner split = new SplitScanner(assignmentInfo);
 
-        String type = split[index++];
+        String type = split.next();
         if (type.equals("Multiple")) {
             StringBuilder assignments = new StringBuilder();
             assignmentInfo = assignmentInfo.substring("Multiple".length() + 1);
@@ -168,15 +135,13 @@ public class InputFormatter {
             return assignments.toString();
         }
 
-        Entry<Integer, String> entry = getValue(split, fieldValue, index);
-        index = entry.getKey();
-        String value = entry.getValue();
+        String value = getValue(split, fieldValue, type);
 
-        String fieldName = split[index++];
+        String fieldName = split.next();
         String assignment = "super." + fieldName;
 
-        if (split.length > index) {
-            String assignmentType = split[index++];
+        if (split.hasNext()) {
+            String assignmentType = split.next();
             switch (assignmentType) {
                 case "List":
                     assignment += ".add(" + value + ");";
@@ -192,31 +157,22 @@ public class InputFormatter {
     }
 
     String getImplementsString(List<String> interfaces) {
-        boolean implemented = false;
-        String implementsString = "";
-
-        for (String interfaceName : interfaces) {
-            if (interfaceName.contains("Hidden-")) {
-                continue;
-            }
-
-            implementsString += (implemented ? ", " : "implements ") + interfaceName;
-            implemented = true;
+        if (interfaces.isEmpty()) {
+            return StringUtils.empty();
         }
 
-        return implementsString;
+        return "implements " + String.join(", ", interfaces);
     }
 
     String getConstructorValue(Entry<String, String> pair, ClassFields fields) {
-        int index = 0;
-        String[] split = pair.getValue().split(" ");
-        String type = split[index++];
+        SplitScanner split = new SplitScanner(pair.getValue());
 
+        String type = split.next();
         String fieldValue = null;
 
         if (type.equals("Default")) {
-            fieldValue = split[index++];
-            type = split[index++];
+            fieldValue = split.next();
+            type = split.next();
         }
 
         String key = pair.getKey();
@@ -225,10 +181,10 @@ public class InputFormatter {
         if (value != null) {
             fieldValue = value;
         }
-        else if (fieldValue == null) {
+        else if (StringUtils.isNullOrEmpty(fieldValue)) {
             Global.error("Missing required constructor field " + key + " for " + fields.getClassName());
         }
 
-        return getValue(split, fieldValue, index).getValue();
+        return getValue(split, fieldValue, type);
     }
 }

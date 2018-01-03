@@ -17,13 +17,11 @@ Failure:
 ClearSkies:
 	WeatherElement: Normal
 	CanHave: True
-	Int: Hidden-EndTurnEffect
 	ApplyEndTurn:
 		###
 *
 Raining:
 	WeatherElement: Water
-	Int: Hidden-EndTurnEffect
 	ApplyEndTurn:
 		Messages.add("The rain continues to pour.");
 		###
@@ -33,7 +31,7 @@ Raining:
 *
 Sunny:
 	WeatherElement: Fire
-	Int: Hidden-EndTurnEffect, StatusPreventionEffect
+	Int: StatusPreventionEffect
 	ApplyEndTurn:
 		Messages.add("The sunlight is strong.");
 		###

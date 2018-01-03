@@ -43,27 +43,26 @@ class FailureInfo {
             String fieldName = entry.getKey();
             String fieldInfo = entry.getValue();
 
-            int index = 0;
-            String[] split = fieldInfo.split(" ");
+            SplitScanner split = new SplitScanner(fieldInfo);
 
             boolean not = false;
             boolean list = false;
 
-            String fieldType = split[index++];
+            String fieldType = split.next();
             if (fieldType.equals("List")) {
                 list = true;
-                fieldType = split[index++];
+                fieldType = split.next();
             }
 
             if (fieldType.equals("Not")) {
                 not = true;
-                fieldType = split[index++];
+                fieldType = split.next();
             }
 
-            String defaultValue = "";
+            String defaultValue = StringUtils.empty();
             if (fieldType.equals("Default")) {
-                defaultValue = split[index++];
-                fieldType = split[index++];
+                defaultValue = split.next();
+                fieldType = split.next();
             }
 
             String fieldValue = fields.get(fieldName);
@@ -79,28 +78,20 @@ class FailureInfo {
                 continue;
             }
 
-            String[] fieldValues = new String[] { fieldValue };
+            final String[] fieldValues;
             if (list) {
                 fieldValues = fieldValue.split(",");
+            } else {
+                fieldValues = new String[] { fieldValue };
             }
 
-            int previousIndex = index;
-
+            split.setTempIndex();
             for (String value : fieldValues) {
-                index = previousIndex;
+                split.restoreTempIndex();
 
-                Map.Entry<Integer, String> pair = inputFormatter.getValue(split, value, index);
-                index = pair.getKey();
-                String pairValue = pair.getValue();
+                String pairValue = inputFormatter.getValue(split, value, fieldType);
 
-                String body = "";
-                boolean space = false;
-
-                for (; index < split.length; index++) {
-                    body += (space ? " " : "") + split[index];
-                    space = true;
-                }
-
+                String body = split.getRemaining();
                 body = inputFormatter.replaceBody(body, pairValue, fields.getClassName(), superClass);
 
                 failure += (first ? "" : " || ")  + body;

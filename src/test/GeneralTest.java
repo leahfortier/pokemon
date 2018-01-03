@@ -1,11 +1,15 @@
 package test;
 
+import generator.SplitScanner;
 import item.ItemNamesies;
 import item.berry.farm.PlantedBerry;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
+import util.Action;
 import util.StringUtils;
 import util.TimeUtils;
 
@@ -13,6 +17,15 @@ import java.util.concurrent.TimeUnit;
 
 public class GeneralTest {
     private static final double DELTA = 1e-15;
+
+    @Rule
+    public final ExpectedException expectedException = ExpectedException.none();
+
+    public void assertException(Class<? extends Exception> exceptionClass, Action action) {
+        expectedException.expect(exceptionClass);
+        action.performAction();
+        Assert.fail("Action did not throw a " + exceptionClass.getSimpleName() + " as expected.");
+    }
 
     public static void assertEquals(String message, double expected, double actual) {
         Assert.assertEquals(message, expected, actual, DELTA);
@@ -119,5 +132,33 @@ public class GeneralTest {
 
         // TODO: This should be moved if there are more berry tests later
         Assert.assertEquals("24:00", new PlantedBerry(ItemNamesies.ORAN_BERRY).getTimeLeftString());
+    }
+
+    @Test
+    public void splitScannerTest() {
+        String testString = "This is my test string";
+        SplitScanner split = new SplitScanner(testString);
+        Assert.assertTrue(split.hasNext());
+        Assert.assertEquals("This", split.next());
+        Assert.assertEquals("is my test string", split.getRemaining());
+
+        Assert.assertTrue(split.hasNext());
+        Assert.assertEquals("is", split.next());
+        Assert.assertEquals("my test string", split.getRemaining());
+
+        Assert.assertTrue(split.hasNext());
+        Assert.assertEquals("my", split.next());
+        Assert.assertEquals("test string", split.getRemaining());
+
+        Assert.assertTrue(split.hasNext());
+        Assert.assertEquals("test", split.next());
+        Assert.assertEquals("string", split.getRemaining());
+
+        Assert.assertTrue(split.hasNext());
+        Assert.assertEquals("string", split.next());
+        Assert.assertEquals("", split.getRemaining());
+
+        Assert.assertFalse(split.hasNext());
+        assertException(IndexOutOfBoundsException.class, split::next);
     }
 }

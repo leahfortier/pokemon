@@ -1317,14 +1317,12 @@ DecreaseEVs:
 	Header: Stat toDecrease()
 *
 SuperEffectivePowerReduceBerry:
-	AddMapField: HiddenBerry: True
-	AddInterface: SuperEffectivePowerReduceBerry
-	AddMapField: SuperDuperEffectivePowerReduceBerry:
+	Header: Type getType()
+	Body:
 		return Type.{00};
 		###
-*
-SuperDuperEffectivePowerReduceBerry:
-	Header: Type getType()
+	AddMapField: HiddenBerry: True
+	AddInterface: SuperEffectivePowerReduceBerry
 *
 HealthTriggeredStageIncreaseBerryField:
 	Header: Stat getStat()

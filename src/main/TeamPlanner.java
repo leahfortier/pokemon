@@ -78,28 +78,29 @@ public class TeamPlanner {
 				
 				switch (key) {
 					case "Ability":
-						if (ability != null) Global.error("Ability already defined for " + pokemonName);
-						
+						if (ability != null) {
+							Global.error("Ability already defined for " + pokemonName);
+						}
 						ability = value;
 						break;
 					case "Nature":
-						if (nature != null) Global.error("Nature already defined for " + pokemonName);
-						
+						if (nature != null) {
+							Global.error("Nature already defined for " + pokemonName);
+						}
 						nature = value;
 						break;
 					case "Item":
-						if (item != null) Global.error("Item already defined for " + pokemonName);
-						
+						if (item != null) {
+							Global.error("Item already defined for " + pokemonName);
+						}
 						item = value;
 						break;	
 					case "Moves":
 						while (true) {
 							String move = in.nextLine().trim();
-							
 							if (move.equals("*")) {
 								break;
 							}
-							
 							moves.add(move);
 						}
 						break;
