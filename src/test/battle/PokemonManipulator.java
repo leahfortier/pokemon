@@ -6,6 +6,9 @@ import battle.attack.Move;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
+import item.bag.Bag;
+import main.Game;
+import org.junit.Assert;
 import pokemon.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 import test.TestPokemon;
@@ -85,5 +88,18 @@ interface PokemonManipulator {
 
     static PokemonManipulator giveDefendingItem(ItemNamesies itemNamesies) {
         return (battle, attacking, defending) -> giveItem(itemNamesies, battle, attacking, defending, false);
+    }
+
+    static PokemonManipulator useItem(ItemNamesies itemNamesies) {
+        return useItem(itemNamesies, true);
+    }
+
+    static PokemonManipulator useItem(ItemNamesies itemNamesies, boolean assertion) {
+        return (battle, attacking, defending) -> {
+            Bag bag = Game.getPlayer().getBag();
+            bag.addItem(itemNamesies);
+
+            Assert.assertTrue(bag.battleUseItem(itemNamesies, attacking, battle) == assertion);
+        };
     }
 }

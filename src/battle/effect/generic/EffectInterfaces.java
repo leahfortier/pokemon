@@ -434,7 +434,7 @@ public final class EffectInterfaces {
 		void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer);
 
 		static void killKillKillMurderMurderMurder(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-			List<Object> invokees = b.getEffectsList(murderer);
+			List<Object> invokees = b.getEffectsList(murderer, murderer.getAttack());
 			for (Object invokee : invokees) {
 				if (invokee instanceof MurderEffect && Effect.isActiveEffect(invokee)) {
 					
@@ -958,7 +958,7 @@ public final class EffectInterfaces {
 		}
 
 		static int updateCritStage(Battle b, int stage, ActivePokemon p) {
-			List<Object> invokees = b.getEffectsList(p);
+			List<Object> invokees = b.getEffectsList(p, p.getAttack());
 			for (Object invokee : invokees) {
 				if (invokee instanceof CritStageEffect && Effect.isActiveEffect(invokee)) {
 					

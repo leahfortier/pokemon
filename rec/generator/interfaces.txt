@@ -266,6 +266,7 @@ MurderEffect:
 		Invoke: Void
 		InvokeName: killKillKillMurderMurderMurder
 		EffectList: murderer
+		InvokeAttack: murderer
 	*
 ***
 EndBattleEffect:
@@ -519,6 +520,7 @@ CritStageEffect:
 		InvokeName: updateCritStage
 		InvokeParameters: Battle b
 		EffectList: p
+		InvokeAttack: p
 	*
 ***
 PriorityChangeEffect:

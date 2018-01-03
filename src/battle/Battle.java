@@ -681,11 +681,16 @@ public class Battle implements Serializable {
 		}
 
 		// Increase crit stage and such
+		int stage = getCritStage(me);
+
+		return RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
+	}
+
+	public int getCritStage(ActivePokemon me) {
 		int stage = 1;
 		stage = CritStageEffect.updateCritStage(this, stage, me);
 		stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
-
-		return RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
+		return stage;
 	}
 
 	protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {

@@ -748,4 +748,23 @@ public class AttackTest {
         Assert.assertFalse(attacking.hasActualMove(AttackNamesies.SWORDS_DANCE));
         Assert.assertTrue(attacking.hasActualMove(AttackNamesies.SPLASH));
     }
+
+    @Test
+    public void fellStingerTest() {
+        TestBattle battle = TestBattle.create(new TestPokemon(PokemonNamesies.KARTANA, 100), new TestPokemon(PokemonNamesies.HAPPINY, 1));
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.NO_ABILITY);
+        TestPokemon defending = battle.getDefending();
+
+        // Stage should not change without MURDER
+        Assert.assertEquals(0, defending.getStage(Stat.ATTACK));
+        battle.defendingFight(AttackNamesies.FELL_STINGER);
+        Assert.assertFalse(attacking.isFainted(battle));
+        Assert.assertEquals(0, defending.getStage(Stat.ATTACK));
+
+        // Kill kill kill MURDER MURDER MURDER
+        Assert.assertEquals(0, attacking.getStage(Stat.ATTACK));
+        battle.attackingFight(AttackNamesies.FELL_STINGER);
+        Assert.assertTrue(defending.isFainted(battle));
+        Assert.assertEquals(2, attacking.getStage(Stat.ATTACK));
+    }
 }

@@ -13,7 +13,11 @@ import util.StringUtils;
 
 public class TestPokemon extends ActivePokemon {
     public TestPokemon(final PokemonNamesies pokemon) {
-        super(pokemon, 100, false, false);
+        this(pokemon, 100);
+    }
+
+    public TestPokemon(final PokemonNamesies pokemon, final int level) {
+        super(pokemon, level, false, false);
     }
 
     public TestPokemon withGender(Gender gender) {

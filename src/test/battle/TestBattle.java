@@ -41,11 +41,6 @@ public class TestBattle extends Battle {
         return (TestPokemon)super.getOtherPokemon(pokemon);
     }
 
-    boolean ableToAttack(AttackNamesies attack, TestPokemon attacking, ActivePokemon defending) {
-        attacking.setupMove(attack, this);
-        return super.ableToAttack(attacking, defending);
-    }
-
     void emptyHeal() {
         getAttacking().fullyHeal();
         getDefending().fullyHeal();
@@ -69,7 +64,16 @@ public class TestBattle extends Battle {
         fight(AttackNamesies.SPLASH, attackNamesies);
     }
 
-    // Moves always hit in tests`
+    void falseSwipePalooza() {
+        TestPokemon attacking = getAttacking();
+        TestPokemon defending = getDefending();
+        while (attacking.getHP() > 1) {
+            defending.apply(true, AttackNamesies.FALSE_SWIPE, this);
+        }
+    }
+
+    // Moves always hit in tests
+    @Override
     protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
         return true;
     }

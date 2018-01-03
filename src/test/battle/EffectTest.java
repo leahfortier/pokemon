@@ -2,10 +2,12 @@ package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.effect.generic.CastSource;
 import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
+import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import test.TestPokemon;
@@ -182,5 +184,129 @@ public class EffectTest {
         // TODO: This is not supposed to block Ghosts from escaping
         battle.defendingFight(AttackNamesies.FAIRY_LOCK);
         Assert.assertFalse(attacking.canEscape(battle));
+    }
+
+    @Test
+    public void critStageTest() {
+        checkCritStage(1, new TestInfo().with(AttackNamesies.TACKLE));
+
+        // +1 crit stage when using -- but no effect when used previously
+        checkCritStage(2, new TestInfo().with(AttackNamesies.RAZOR_LEAF));
+        checkCritStage(1, new TestInfo().attackingFight(AttackNamesies.RAZOR_LEAF));
+
+        // +1 crit stage when used, but not when using (I guess it's a status move so it technically doesn't have a stage but whatever)
+        checkCritStage(2, new TestInfo().attackingFight(AttackNamesies.FOCUS_ENERGY));
+        checkCritStage(1, new TestInfo().with(AttackNamesies.FOCUS_ENERGY));
+
+        // +1 after using Dire Hit (can only use once -- should fail if used again)
+        checkCritStage(2, new TestInfo().with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT)));
+        checkCritStage(2, new TestInfo()
+                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true))
+                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, false))
+        );
+
+        // +1 from Lansat Berry when health is below 1/4
+        checkCritStage(1, new TestInfo().attacking(ItemNamesies.LANSAT_BERRY));
+        checkCritStage(1, new TestInfo()
+                .attacking(ItemNamesies.LANSAT_BERRY)
+                .with((battle, attacking, defending) -> {
+                    // Not enough
+                    battle.attackingFight(AttackNamesies.BELLY_DRUM);
+                    attacking.assertHealthRatio(.5);
+                })
+        );
+        checkCritStage(2, new TestInfo()
+                .attacking(PokemonNamesies.BULBASAUR, ItemNamesies.LANSAT_BERRY)
+                .with((battle, attacking, defending) -> battle.falseSwipePalooza())
+        );
+
+        // Razor Claw and Scope Lens increase by 1
+        checkCritStage(2, new TestInfo().attacking(ItemNamesies.RAZOR_CLAW));
+        checkCritStage(2, new TestInfo().attacking(ItemNamesies.SCOPE_LENS));
+
+        // Lucky Punch increases by 2 but only for Chansey (Night Slash is also +1 when using)
+        checkCritStage(2, new TestInfo().attacking(PokemonNamesies.CHANSEY).with(AttackNamesies.NIGHT_SLASH));
+        checkCritStage(4, new TestInfo().attacking(PokemonNamesies.CHANSEY, ItemNamesies.LUCKY_PUNCH).with(AttackNamesies.NIGHT_SLASH));
+        checkCritStage(2, new TestInfo().attacking(PokemonNamesies.FARFETCHD, ItemNamesies.LUCKY_PUNCH).with(AttackNamesies.NIGHT_SLASH));
+
+        // Stick increases by 2 but only for Farfetch'd
+        checkCritStage(3, new TestInfo().attacking(PokemonNamesies.FARFETCHD, ItemNamesies.STICK));
+        checkCritStage(1, new TestInfo().attacking(PokemonNamesies.CHANSEY, ItemNamesies.STICK));
+
+        // Super Luck increases by 1 (unaffected by Mold Breaker)
+        checkCritStage(2, new TestInfo().attacking(AbilityNamesies.SUPER_LUCK));
+        checkCritStage(2, new TestInfo().attacking(AbilityNamesies.SUPER_LUCK).defending(AbilityNamesies.MOLD_BREAKER));
+
+        // Effects should stack
+        checkCritStage(5, new TestInfo()
+                .attacking(PokemonNamesies.CHANSEY, ItemNamesies.LUCKY_PUNCH)
+                .attacking(AbilityNamesies.SUPER_LUCK)
+                .with(AttackNamesies.NIGHT_SLASH)
+        );
+
+        checkCritStage(3, new TestInfo()
+                .attackingFight(AttackNamesies.FOCUS_ENERGY)
+                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT))
+        );
+
+        checkCritStage(4, new TestInfo()
+                .attackingFight(AttackNamesies.FOCUS_ENERGY)
+                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT))
+                .attacking(ItemNamesies.LANSAT_BERRY).with((battle, attacking, defending) -> battle.falseSwipePalooza())
+        );
+
+        // Can't go over the max
+        checkCritStage(5, new TestInfo()
+                .attacking(PokemonNamesies.CHANSEY, ItemNamesies.LUCKY_PUNCH)
+                .attacking(AbilityNamesies.SUPER_LUCK)
+                .with(AttackNamesies.NIGHT_SLASH)
+                .attackingFight(AttackNamesies.FOCUS_ENERGY)
+                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT))
+        );
+    }
+
+    private void checkCritStage(int expectedStage, TestInfo testInfo) {
+        TestBattle battle = TestBattle.create(testInfo.attackingName, testInfo.defendingName);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        int beforeStage = battle.getCritStage(attacking);
+        Assert.assertEquals(1, beforeStage);
+
+        testInfo.manipulator.manipulate(battle, attacking, defending);
+        attacking.setupMove(testInfo.attackName, battle);
+
+        int afterStage = battle.getCritStage(attacking);
+        Assert.assertEquals(expectedStage, afterStage);
+    }
+
+    // TODO: I don't know if EffectTest makes sense for this but whatever
+    @Test
+    public void sourceTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        attacking.withAbility(AbilityNamesies.OVERGROW);
+        attacking.giveItem(ItemNamesies.ORAN_BERRY);
+        attacking.setupMove(AttackNamesies.SWITCHEROO, battle);
+        attacking.getAttributes().setCastSource(ItemNamesies.NO_ITEM.getItem());
+
+        for (CastSource source : CastSource.values()) {
+            String sourceName = source.getSourceName(battle, attacking);
+            if (source.hasSourceName()) {
+                // Important since these values are hard-coded in another method
+                Assert.assertTrue(source == CastSource.ABILITY || source == CastSource.HELD_ITEM);
+                Assert.assertNotNull(sourceName);
+            } else {
+                Assert.assertNull(sourceName);
+            }
+        }
+
+        Assert.assertEquals(AbilityNamesies.OVERGROW.getName(), CastSource.ABILITY.getSourceName(battle, attacking));
+        Assert.assertEquals(ItemNamesies.ORAN_BERRY.getName(), CastSource.HELD_ITEM.getSourceName(battle, attacking));
+
+        Assert.assertTrue(attacking.getAbility() == CastSource.ABILITY.getSource(battle, attacking));
+        Assert.assertTrue(attacking.getHeldItem(battle) == CastSource.HELD_ITEM.getSource(battle, attacking));
+        Assert.assertTrue(attacking.getAttack() == CastSource.ATTACK.getSource(battle, attacking));
+        Assert.assertTrue(attacking.getAttributes().getCastSource() == CastSource.CAST_SOURCE.getSource(battle, attacking));
     }
 }

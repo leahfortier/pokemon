@@ -2,13 +2,12 @@ package item.use;
 
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import item.ItemInterface;
 import main.Global;
 import pokemon.ActivePokemon;
 
 import java.util.List;
 
-public interface TechnicalMachine extends MoveUseItem, ItemInterface {
+public interface TechnicalMachine extends MoveUseItem {
     AttackNamesies getAttack();
 
     default boolean use(ActivePokemon p, Move m) {

@@ -139,4 +139,11 @@ public final class GeneralUtils {
         }
         return missing;
     }
+
+    @SafeVarargs
+    public static <T> T[] append(T[] base, T... extraArgs) {
+        T[] array = Arrays.copyOf(base, base.length + extraArgs.length);
+        System.arraycopy(extraArgs, 0, array, base.length, array.length - base.length);
+        return array;
+    }
 }
