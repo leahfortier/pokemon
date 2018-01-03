@@ -18,10 +18,12 @@ public enum ReplaceType {
         this.inputReplacer = inputReplacer;
     }
 
+    @FunctionalInterface
     private interface SuffixGetter {
         String getSuffix(int index, int size);
     }
 
+    @FunctionalInterface
     private interface InputReplacer {
         String replaceInput(String original, String remaining);
     }

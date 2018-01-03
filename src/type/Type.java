@@ -92,6 +92,7 @@ public enum Type implements Serializable {
 		return null;
 	}
 
+	@FunctionalInterface
 	private interface AdvantageGetter {
 		TypeAdvantage getAdvantage();
 	}

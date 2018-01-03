@@ -30,6 +30,7 @@ public enum ViewMode {
         this.viewCreator = viewCreator;
     }
 
+    @FunctionalInterface
     private interface ViewCreator {
         View createView();
     }

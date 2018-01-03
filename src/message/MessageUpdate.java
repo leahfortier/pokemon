@@ -97,7 +97,8 @@ public class MessageUpdate {
 		public void performUpdate(BattleView battleView) {
 			this.performUpdate.performUpdate(battleView);
 		}
-		
+
+		@FunctionalInterface
 		private interface PerformUpdate {
 			void performUpdate(BattleView battleView);
 		}

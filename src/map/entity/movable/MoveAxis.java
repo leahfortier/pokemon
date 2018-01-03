@@ -29,6 +29,7 @@ public enum MoveAxis {
         this.checker = checker;
     }
 
+    @FunctionalInterface
     private interface AxisChecker {
         boolean checkAxis(Point thisLocation, Direction thisDirection, Point otherLocation);
     }

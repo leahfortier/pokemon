@@ -884,6 +884,7 @@ public enum ItemNamesies {
 		this.itemCreator = itemCreator;
     }
 
+    @FunctionalInterface
     private interface ItemCreator {
 		Item createItem();
 	}

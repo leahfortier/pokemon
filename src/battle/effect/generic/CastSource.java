@@ -26,6 +26,7 @@ public enum CastSource {
         this.sourceGetter = sourceGetter;
     }
 
+    @FunctionalInterface
     private interface SourceGetter {
         Object getSource(Battle b, ActivePokemon caster);
     }

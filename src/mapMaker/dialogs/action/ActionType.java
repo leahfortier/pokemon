@@ -16,6 +16,7 @@ public enum ActionType {
         this.actionDataCreator = actionDataCreator;
     }
 
+    @FunctionalInterface
     private interface ActionDataCreator {
         ActionPanel createData(ActionDialog actionDialog);
     }

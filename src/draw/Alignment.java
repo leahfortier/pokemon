@@ -19,6 +19,7 @@ public enum Alignment {
         this.drawAlignment.drawString(g, text, x, y);
     }
 
+    @FunctionalInterface
     private interface DrawAlignment {
         void drawString(Graphics g, String text, int x, int y);
     }

@@ -25,6 +25,7 @@ public enum Theme {
         this.draw = draw;
     }
 
+    @FunctionalInterface
     private interface ThemeDrawer {
         void draw(Graphics g, int bgTime, int bgIndex);
     }

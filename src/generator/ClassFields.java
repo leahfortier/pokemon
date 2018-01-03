@@ -102,6 +102,7 @@ public class ClassFields {
         }
     }
 
+    @FunctionalInterface
     interface ActionPerformer {
         void performAction(String value);
     }

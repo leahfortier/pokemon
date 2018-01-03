@@ -52,6 +52,7 @@ enum UseState {
         bagView.updateActiveButtons();
     }
 
+    @FunctionalInterface
     private interface UseButton {
         void useButton(UseState state, BagView bagView, ActivePokemon p);
     }

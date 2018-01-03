@@ -34,6 +34,7 @@ public enum TriggerActionType {
         this.panelCreator = panelCreator;
     }
 
+    @FunctionalInterface
     private interface TriggerPanelCreator {
         TriggerContentsPanel createPanel();
     }

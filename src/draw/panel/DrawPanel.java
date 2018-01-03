@@ -226,6 +226,7 @@ public class DrawPanel {
         return this.getButtons(buttonWidth, buttonHeight, numRows, numCols, numRows, numCols, 0, null, null);
     }
 
+    @FunctionalInterface
     public interface ButtonIndexAction {
         void pressButton(int index);
     }

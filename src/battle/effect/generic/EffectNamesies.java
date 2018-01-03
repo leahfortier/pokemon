@@ -236,6 +236,7 @@ public enum EffectNamesies {
 		this.effectCreator = effectCreator;
     }
 
+    @FunctionalInterface
     private interface EffectCreator {
 		Effect createEffect();
 	}

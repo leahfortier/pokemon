@@ -53,6 +53,7 @@ public enum ConditionKey {
         return String.format(":%s:%s:", this.keyName, value);
     }
 
+    @FunctionalInterface
     private interface ConditionParser {
         boolean parseCondition(String value);
     }

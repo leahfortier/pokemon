@@ -31,6 +31,7 @@ public enum EvolutionType {
         return this.evolutionReader.readEvolution(in);
     }
 
+    @FunctionalInterface
     private interface EvolutionReader {
         Evolution readEvolution(Scanner in);
     }

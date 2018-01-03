@@ -38,10 +38,12 @@ enum MenuChoice {
         this.stateChanger = stateChanger;
     }
 
+    @FunctionalInterface
     private interface DisplayNameGetter {
         String getDisplayName();
     }
 
+    @FunctionalInterface
     private interface StateChanger {
         void execute(MapView mapView);
     }

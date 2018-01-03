@@ -70,6 +70,7 @@ public abstract class MapMakerModel {
             this.modelCreator = modelCreator;
         }
 
+        @FunctionalInterface
         private interface ModelCreator {
             MapMakerModel createModel();
         }

@@ -1333,6 +1333,7 @@ public enum AttackNamesies {
 		this.attackCreator = attackCreator;
 	}
 
+	@FunctionalInterface
 	private interface AttackCreator {
 		Attack createAttack();
 	}

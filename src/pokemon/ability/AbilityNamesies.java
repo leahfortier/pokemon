@@ -440,6 +440,7 @@ public enum AbilityNamesies {
 		this.abilityCreator = abilityCreator;
     }
 
+    @FunctionalInterface
     private interface AbilityCreator {
 		Ability createAbility();
 	}

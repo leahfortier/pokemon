@@ -47,19 +47,22 @@ public enum TriggerType {
     }
 
     TriggerType(Class<? extends Trigger> triggerClass, TriggerCreator triggerCreator, TriggerSuffixGetter triggerSuffixGetter) {
-        this.triggerPrefixGetter = triggerClass::getSimpleName;
+        this.triggerPrefixGetter = triggerClass::getSimpleName; // TODO: Can't this just be a string?
         this.triggerSuffixGetter = triggerSuffixGetter;
         this.triggerCreator = triggerCreator;
     }
 
+    @FunctionalInterface
     private interface TriggerSuffixGetter {
         String getTriggerSuffix(final String contents);
     }
 
+    @FunctionalInterface
     private interface TriggerPrefixGetter {
         String getTriggerPrefix();
     }
 
+    @FunctionalInterface
     private interface TriggerCreator {
         Trigger createTrigger(final String contents, final String condition);
     }

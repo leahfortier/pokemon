@@ -34,6 +34,8 @@ public enum WeatherState {
             this.weatherDrawer.draw(g);
         }
     }
+
+    @FunctionalInterface
     interface WeatherDrawer {
         void draw(Graphics g);
     }

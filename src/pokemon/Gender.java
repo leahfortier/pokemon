@@ -69,6 +69,7 @@ public enum Gender implements Serializable {
 		return String.format("%d%% Male, %d%% Female", maleRatio, 100 - maleRatio);
 	}
 
+	@FunctionalInterface
 	private interface GenderChecker {
 		boolean canHaveGender(int maleRatio);
 	}

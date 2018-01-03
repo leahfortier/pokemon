@@ -40,6 +40,7 @@ class InterfaceMethod {
             this.getInvokeMethod = getInvokeMethod;
         }
 
+        @FunctionalInterface
         private interface GetInvokeMethod {
             InvokeMethod getInvokeMethod(Scanner invokeInput);
         }

@@ -52,6 +52,7 @@ public abstract class Tool {
             this.toolCreator = toolCreator;
         }
 
+        @FunctionalInterface
         private interface ToolCreator {
             Tool createTool(MapMaker mapMaker);
         }

@@ -34,6 +34,7 @@ public enum StatusCondition implements Serializable {
         return this.getStatus.getStatus();
     }
 
+    @FunctionalInterface
     private interface GetStatus {
         Status getStatus();
     }
