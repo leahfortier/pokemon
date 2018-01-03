@@ -10,8 +10,7 @@ import trainer.player.Player;
 import trainer.player.medal.Medal;
 import util.save.Save;
 
-public class MedalTest {
-
+public class MedalTest extends BaseTest {
     @Test
     public void evsTest() {
         TestGame.setNewPlayer(new Player());

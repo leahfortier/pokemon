@@ -36,7 +36,7 @@ public class DayCareCenter implements Serializable {
     public void step() {
         steps++;
         if (!hasEggy() && steps%256 == 0 && compatibility.eggChanceTest()) {
-            eggy = Breeding.breed(first, second);
+            eggy = Breeding.instance().breed(first, second);
         }
     }
 

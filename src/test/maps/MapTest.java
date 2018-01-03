@@ -7,7 +7,7 @@ import map.overworld.WildEncounter;
 import mapMaker.dialogs.action.ActionType;
 import mapMaker.dialogs.action.trigger.TriggerActionType;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import pattern.action.ActionMatcher;
 import pattern.action.NPCInteractionMatcher;
@@ -18,6 +18,7 @@ import pattern.map.MiscEntityMatcher;
 import pattern.map.NPCMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
+import test.BaseTest;
 import util.FileIO;
 import util.Folder;
 import util.Point;
@@ -27,11 +28,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapTest {
-    private List<TestMap> maps;
+public class MapTest extends BaseTest{
+    private static List<TestMap> maps;
 
-    @Before
-    public void loadMaps() {
+    @BeforeClass
+    public static void loadMaps() {
         maps = new ArrayList<>();
 
         File mapsDirectory = new File(Folder.MAPS);

@@ -10,12 +10,13 @@ import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import test.BaseTest;
 import test.GeneralTest;
 import test.TestPokemon;
 import type.Type;
 import util.StringUtils;
 
-public class ModifierTest {
+public class ModifierTest extends BaseTest {
     @Test
     public void statChangeTest() {
         statModifierTest(1.5, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.HUSTLE));

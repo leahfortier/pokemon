@@ -13,6 +13,7 @@ import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import test.BaseTest;
 import test.GeneralTest;
 import test.TestPokemon;
 import trainer.Team;
@@ -22,7 +23,7 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class AttackTest {
+public class AttackTest extends BaseTest {
     @Test
     public void testPhysicalContact() {
         for (AttackNamesies attackNamesies : AttackNamesies.values()) {

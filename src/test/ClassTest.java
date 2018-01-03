@@ -92,6 +92,7 @@ import item.ItemNamesies;
 import item.hold.HoldItem;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.ability.Ability;
@@ -100,13 +101,14 @@ import trainer.Opponent;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.WildPokemon;
-import trainer.player.Player;
 import type.Type;
 import util.GeneralUtils;
 import util.save.Save;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -114,7 +116,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ClassTest {
+public class ClassTest extends BaseTest {
     private static final List<Class<?>> effectListWithAttackClasses = Arrays.asList(
             ApplyDamageEffect.class,
             MurderEffect.class,
@@ -130,14 +132,12 @@ public class ClassTest {
             CritStageEffect.class
     );
 
-    private List<Class<?>> classes;
+    private static List<Class<?>> classes;
 
-    @Before
-    public void setClasses() {
-        TestGame.setNewPlayer(new Player());
-
+    @BeforeClass
+    public static void setClasses() {
         try {
-            this.classes = getClasses();
+            classes = getClasses();
         } catch (ClassNotFoundException | IOException e) {
             Assert.fail(e.getMessage());
         }
@@ -209,10 +209,10 @@ public class ClassTest {
         );
 
         for (Class checkeroo : toCheck) {
-            Assert.assertTrue(checkeroo.getSimpleName(), this.classes.contains(checkeroo));
+            Assert.assertTrue(checkeroo.getSimpleName(), classes.contains(checkeroo));
         }
 
-        Assert.assertFalse(this.classes.contains(List.class));
+        Assert.assertFalse(classes.contains(List.class));
     }
 
     @Test
@@ -221,7 +221,7 @@ public class ClassTest {
         Class<?>[] pokemonEffectList = { Ability.class, HoldItem.class, Status.class, PokemonEffect.class };
         Class<?>[] effectListSourcesNoAttack = GeneralUtils.append(pokemonEffectList, TeamEffect.class, BattleEffect.class);
         Class<?>[] effectListSourcesWithAttack = GeneralUtils.append(effectListSourcesNoAttack, Attack.class);
-        for (Class<?> classy : this.classes) {
+        for (Class<?> classy : classes) {
             checkInstance(classy, ItemInterface.class, Item.class);
             checkInstance(classy, NameChanger.class, Ability.class);
             checkInstance(classy, SwitchOutEffect.class, pokemonEffectList);
@@ -320,20 +320,13 @@ public class ClassTest {
 
         // Only check for class implementations
         if (!toCheck.isInterface() && assigned.isAssignableFrom(toCheck)) {
-            boolean isClass = false;
-            for (Class<?> implied : implies) {
-                if (implied.isAssignableFrom(toCheck)) {
-                    isClass = true;
-                    break;
-                }
-            }
             String message = String.format(
                     "%s is an instance of %s but not in %s.",
                     toCheck.getSimpleName(),
                     assigned.getSimpleName(),
                     Arrays.stream(implies).map(Class::getSimpleName).collect(Collectors.toList())
             );
-            Assert.assertTrue(message, isClass);
+            Assert.assertTrue(message, isAnyInstance(toCheck, implies));
         }
     }
 
@@ -351,7 +344,7 @@ public class ClassTest {
         Assert.assertTrue(assigned.isInterface());
 
         boolean contains = false;
-        for (Class<?> classy : this.classes) {
+        for (Class<?> classy : classes) {
             if (assigned.isAssignableFrom(classy) && mustContain.isAssignableFrom(classy)) {
                 contains = true;
                 break;
@@ -364,5 +357,53 @@ public class ClassTest {
                 mustContain.getSimpleName()
         );
         Assert.assertTrue(message, contains);
+    }
+
+    @Test
+    public void annotationTest() {
+        for (Class<?> classy : classes) {
+            // All tests should inherit from BaseTest
+            annotationImpliesInstance(classy, Test.class, BaseTest.class);
+
+            // Should pretty much always be using @BeforeClass instead
+            Assert.assertFalse(hasAnnotation(classy, Before.class));
+        }
+    }
+
+    // If a class has the annotationClass on any method, then it must be an instance of at least one instances
+    private void annotationImpliesInstance(Class<?> toCheck, Class<? extends Annotation> annotationClass, Class<?>... instances) {
+        if (hasAnnotation(toCheck, annotationClass)) {
+            String message = String.format(
+                    "%s has %s annotation but is not in %s.",
+                    toCheck.getSimpleName(),
+                    annotationClass.getSimpleName(),
+                    Arrays.stream(instances).map(Class::getSimpleName).collect(Collectors.toList())
+            );
+            Assert.assertTrue(message, isAnyInstance(toCheck, instances));
+        }
+    }
+
+    // Returns true if toCheck has the annotationClass annotation on ANY of its methods
+    private boolean hasAnnotation(Class<?> toCheck, Class<? extends Annotation> annotationClass) {
+        Method[] methods = toCheck.getMethods();
+        for (Method method : methods) {
+            Annotation[] annotations = method.getAnnotations();
+            for (Annotation annotation : annotations) {
+                if (annotation.annotationType().equals(annotationClass)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Returns true if toCheck is an instance of at least one of instances
+    private boolean isAnyInstance(Class<?> toCheck, Class<?>... instances) {
+        for (Class<?> instance : instances) {
+            if (instance.isAssignableFrom(toCheck)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

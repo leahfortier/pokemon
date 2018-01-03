@@ -1,5 +1,6 @@
 package generator;
 
+import main.Global;
 import util.StringUtils;
 
 public class SplitScanner {
@@ -21,6 +22,10 @@ public class SplitScanner {
     }
 
     public String next() {
+        if (!hasNext()) {
+            Global.error("No more elements to get. Original: " + this.original);
+        }
+
         return split[index++];
     }
 

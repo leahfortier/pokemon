@@ -22,7 +22,7 @@ import util.StringUtils;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-public class ImageTest {
+public class ImageTest extends BaseTest {
     @Test
     public void missingTest() {
         for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {

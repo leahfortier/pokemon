@@ -7,12 +7,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
+import test.BaseTest;
 import test.TestPokemon;
 import type.Type;
 import type.TypeAdvantage;
 import util.StringUtils;
 
-public class TypeTest {
+public class TypeTest extends BaseTest {
     private static final double typeAdvantage[][] = {
             {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, .5,  0,  1,  1, .5,  1, 1}, // Normal
             {1, .5, .5,  1,  2,  2,  1,  1,  1,  1,  1,  2, .5,  1, .5,  1,  2,  1, 1}, // Fire

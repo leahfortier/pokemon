@@ -10,10 +10,11 @@ import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import test.BaseTest;
 import test.TestPokemon;
 import type.Type;
 
-public class EffectTest {
+public class EffectTest extends BaseTest {
     @Test
     public void protectTest() {
         // Block moves

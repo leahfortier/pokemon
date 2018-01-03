@@ -32,7 +32,7 @@ enum Compatibility {
             return Compatibility.SINGLE;
         }
 
-        if (!Breeding.canBreed(first, second)) {
+        if (!Breeding.instance().canBreed(first, second)) {
             return Compatibility.NO_DICE;
         }
 

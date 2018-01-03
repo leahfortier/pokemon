@@ -4,28 +4,16 @@ import generator.SplitScanner;
 import item.ItemNamesies;
 import item.berry.farm.PlantedBerry;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
-import util.Action;
 import util.StringUtils;
 import util.TimeUtils;
 
 import java.util.concurrent.TimeUnit;
 
-public class GeneralTest {
+public class GeneralTest extends BaseTest {
     private static final double DELTA = 1e-15;
-
-    @Rule
-    public final ExpectedException expectedException = ExpectedException.none();
-
-    public void assertException(Class<? extends Exception> exceptionClass, Action action) {
-        expectedException.expect(exceptionClass);
-        action.performAction();
-        Assert.fail("Action did not throw a " + exceptionClass.getSimpleName() + " as expected.");
-    }
 
     public static void assertEquals(String message, double expected, double actual) {
         Assert.assertEquals(message, expected, actual, DELTA);
@@ -159,6 +147,5 @@ public class GeneralTest {
         Assert.assertEquals("", split.getRemaining());
 
         Assert.assertFalse(split.hasNext());
-        assertException(IndexOutOfBoundsException.class, split::next);
     }
 }

@@ -4,6 +4,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import item.ItemNamesies;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
@@ -17,7 +18,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BreedingTest extends Breeding {
+public class BreedingTest extends BaseTest {
+    private static Breeding breeding;
+
+    @BeforeClass
+    public static void setup() {
+        breeding = Breeding.instance();
+    }
 
     @Test
     public void testCanBreed() {
@@ -27,11 +34,11 @@ public class BreedingTest extends Breeding {
         ActivePokemon ditto = getParent(PokemonNamesies.DITTO, Gender.GENDERLESS);
         ActivePokemon magnemite = getParent(PokemonNamesies.MAGNEMITE, Gender.GENDERLESS);
 
-        Assert.assertTrue(Breeding.canBreed(maleRapidash, femaleRapidash)); // Same species, opposite gender
-        Assert.assertTrue(Breeding.canBreed(maleRapidash, femaleNinetales)); // Same egg group, opposite gender
-        Assert.assertTrue(Breeding.canBreed(maleRapidash, ditto)); // Male and ditto
-        Assert.assertTrue(Breeding.canBreed(femaleRapidash, ditto)); // Female and ditto
-        Assert.assertTrue(Breeding.canBreed(magnemite, ditto)); // Genderless and ditto
+        Assert.assertTrue(breeding.canBreed(maleRapidash, femaleRapidash)); // Same species, opposite gender
+        Assert.assertTrue(breeding.canBreed(maleRapidash, femaleNinetales)); // Same egg group, opposite gender
+        Assert.assertTrue(breeding.canBreed(maleRapidash, ditto)); // Male and ditto
+        Assert.assertTrue(breeding.canBreed(femaleRapidash, ditto)); // Female and ditto
+        Assert.assertTrue(breeding.canBreed(magnemite, ditto)); // Genderless and ditto
     }
 
     @Test
@@ -46,15 +53,15 @@ public class BreedingTest extends Breeding {
         ActivePokemon exeggcute = getParent(PokemonNamesies.EXEGGCUTE, Gender.MALE);
         ActivePokemon eggy = new ActivePokemon(PokemonNamesies.EXEGGCUTE);
 
-        Assert.assertFalse(Breeding.canBreed(maleRapidash, maleRapidash)); // Same species, same gender
-        Assert.assertFalse(Breeding.canBreed(magnemite, magnemite)); // Same species, both genderless
-        Assert.assertFalse(Breeding.canBreed(ditto, ditto)); // Two dittos
-        Assert.assertFalse(Breeding.canBreed(mew, ditto)); // Legendary and ditto
-        Assert.assertFalse(Breeding.canBreed(maleRapidash, femaleDragonair)); // Different egg group, opposite gender
-        Assert.assertFalse(Breeding.canBreed(togepi, togetic)); // Same egg group and baby pokemon
-        Assert.assertFalse(Breeding.canBreed(togepi, ditto)); // Baby pokemon and ditto
-        Assert.assertFalse(Breeding.canBreed(ditto, eggy)); // Egg and ditto
-        Assert.assertFalse(Breeding.canBreed(exeggcute, eggy)); // Same species and egg
+        Assert.assertFalse(breeding.canBreed(maleRapidash, maleRapidash)); // Same species, same gender
+        Assert.assertFalse(breeding.canBreed(magnemite, magnemite)); // Same species, both genderless
+        Assert.assertFalse(breeding.canBreed(ditto, ditto)); // Two dittos
+        Assert.assertFalse(breeding.canBreed(mew, ditto)); // Legendary and ditto
+        Assert.assertFalse(breeding.canBreed(maleRapidash, femaleDragonair)); // Different egg group, opposite gender
+        Assert.assertFalse(breeding.canBreed(togepi, togetic)); // Same egg group and baby pokemon
+        Assert.assertFalse(breeding.canBreed(togepi, ditto)); // Baby pokemon and ditto
+        Assert.assertFalse(breeding.canBreed(ditto, eggy)); // Egg and ditto
+        Assert.assertFalse(breeding.canBreed(exeggcute, eggy)); // Same species and egg
     }
 
     @Test
@@ -295,7 +302,7 @@ public class BreedingTest extends Breeding {
     }
 
     private static ActivePokemon getBaby(ActivePokemon mommy, ActivePokemon daddy) {
-        ActivePokemon baby = Breeding.breed(mommy, daddy);
+        ActivePokemon baby = breeding.breed(mommy, daddy);
 
         Assert.assertNotNull(getFailMessage(mommy, daddy, baby), baby);
         Assert.assertEquals(getFailMessage(mommy, daddy, baby), 1, baby.getLevel());

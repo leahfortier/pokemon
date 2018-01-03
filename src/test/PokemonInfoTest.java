@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class PokemonInfoTest {
+public class PokemonInfoTest extends BaseTest {
     @Test
     public void totalPokemonTest() {
         // Add one to account for the empty pokemon at the beginning

@@ -5,9 +5,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
+import test.BaseTest;
 import test.TestPokemon;
 
-public class StatTest {
+public class StatTest extends BaseTest {
     @Test
     public void equalStatsTest() {
         TestBattle battle = TestBattle.create();

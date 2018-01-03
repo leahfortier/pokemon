@@ -10,6 +10,7 @@ import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import test.BaseTest;
 import test.TestPokemon;
 import type.Type;
 
@@ -29,7 +30,7 @@ TODO:
     damage works correctly -- assert hp change is in range or deadsies
     deadsies -- set hp to 1, then murder -- make sure its's dead
  */
-public class StatusTest {
+public class StatusTest extends BaseTest {
     @Test
     public void testGiveStatus() {
         ActivePokemon uglyFace = new TestPokemon(PokemonNamesies.RATICATE);

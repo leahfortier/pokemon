@@ -8,9 +8,10 @@ import org.junit.Test;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
+import test.BaseTest;
 import test.TestPokemon;
 
-public class ItemTest {
+public class ItemTest extends BaseTest {
     @Test
     public void swapItemsTest() {
         // Swapping items works differently for wild battles vs trainer battles

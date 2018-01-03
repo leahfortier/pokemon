@@ -20,7 +20,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class Breeding {
-	public static ActivePokemon breed(ActivePokemon aPokes, ActivePokemon bPokes) {
+	private static Breeding instance;
+	public static Breeding instance() {
+		if (instance == null) {
+			instance = new Breeding();
+		}
+		return instance;
+	}
+
+	private Breeding() {}
+
+	public ActivePokemon breed(ActivePokemon aPokes, ActivePokemon bPokes) {
 		if (!canBreed(aPokes, bPokes)) {
 			return null;
 		}
@@ -31,7 +41,7 @@ public class Breeding {
 		return baby;
 	}
 	
-	private static ActivePokemon getMommy(ActivePokemon aPokes, ActivePokemon bPokes) {
+	private ActivePokemon getMommy(ActivePokemon aPokes, ActivePokemon bPokes) {
 		if (isDitto(aPokes)) {
 			return bPokes;
 		}
@@ -43,7 +53,7 @@ public class Breeding {
 		}
 	}
 	
-	private static PokemonInfo getBabyInfo(ActivePokemon daddy, ActivePokemon mommy) {
+	private PokemonInfo getBabyInfo(ActivePokemon daddy, ActivePokemon mommy) {
 		PokemonInfo babyInfo = mommy.getPokemonInfo().getBaseEvolution().getInfo();
 		if (babyInfo.isIncenseBaby()) {
 			boolean incenseItemHeld = false;
@@ -66,7 +76,7 @@ public class Breeding {
 		return babyInfo;
 	}
 
-	public static int[] getBabyIVs(ActivePokemon daddy, ActivePokemon mommy) {
+	public int[] getBabyIVs(ActivePokemon daddy, ActivePokemon mommy) {
 		List<Stat> remainingStats = new ArrayList<>();
 		Collections.addAll(remainingStats, Stat.STATS);
 
@@ -112,7 +122,7 @@ public class Breeding {
 		return IVs;
 	}
 
-	protected static boolean canBreed(ActivePokemon aPokes, ActivePokemon bPokes) {
+	public boolean canBreed(ActivePokemon aPokes, ActivePokemon bPokes) {
 
 		// If either pokemon cannot breed, then they can't breed together
 		if (!aPokes.canBreed() || !bPokes.canBreed()) {
@@ -142,15 +152,15 @@ public class Breeding {
 		return false;
 	}
 
-	private static boolean isDitto(ActivePokemon pokes) {
+	private boolean isDitto(ActivePokemon pokes) {
 		return pokes.isPokemon(PokemonNamesies.DITTO);
 	}
 
-	private static ActivePokemon getRandomParent(final ActivePokemon daddy, final ActivePokemon mommy) {
+	private ActivePokemon getRandomParent(final ActivePokemon daddy, final ActivePokemon mommy) {
 		return RandomUtils.getRandomValue(new ActivePokemon[] { daddy, mommy });
 	}
 
-	public static Nature getBabyNature(ActivePokemon daddy, ActivePokemon mommy) {
+	public Nature getBabyNature(ActivePokemon daddy, ActivePokemon mommy) {
 		Item daddysItem = daddy.getActualHeldItem();
 		Item mommysItem = mommy.getActualHeldItem();
 		
@@ -168,7 +178,7 @@ public class Breeding {
 		}
 	}
 	
-	public static List<Move> getBabyMoves(ActivePokemon daddy, ActivePokemon mommy, PokemonNamesies babyNamesies) {
+	public List<Move> getBabyMoves(ActivePokemon daddy, ActivePokemon mommy, PokemonNamesies babyNamesies) {
 		PokemonInfo babyInfo = babyNamesies.getInfo();
 		List<AttackNamesies> babyMovesNamesies = new ArrayList<>();
 

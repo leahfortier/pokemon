@@ -6,17 +6,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
+import test.BaseTest;
 import test.TestPokemon;
 import type.Type;
 import type.TypeAdvantage;
-import util.RandomUtils;
 
-public class AbilityTest {
-    @Test
-    public void printSeed() {
-        System.out.println("Random Seed: " + RandomUtils.getSeed());
-    }
-
+public class AbilityTest extends BaseTest {
     @Test
     public void testLevitate() {
         TestBattle battle = TestBattle.create();
