@@ -108,7 +108,7 @@ public class FileIO {
 	}
 
 	public static String makeFolderPath(String... path) {
-		StringBuilder folderPath = new StringBuilder();
+		StringAppender folderPath = new StringAppender();
 		for (String folder : path) {
 			folderPath.append(folder);
 
@@ -135,7 +135,7 @@ public class FileIO {
 		return readEntireFileWithoutReplacements(new File(fileName), ignoreComments);
 	}
 
-	// TODO: I think there might be a bug in this that is eliminating white space or new lines or something
+	// TODO: I think there might be a bug in this that is eliminating white space or new lines or something -- probably because of the line.length() > 0
 	public static String readEntireFileWithoutReplacements(File file, boolean ignoreComments) {
 		BufferedReader in = openFileBuffered(file);
 		if (in == null) {
@@ -143,14 +143,12 @@ public class FileIO {
 			return null;
 		}
 
-		StringBuilder build = new StringBuilder();
-		String line;
-		
+		StringAppender build = new StringAppender();
 		try {
+			String line;
 			while ((line = in.readLine()) != null) {
 				if (line.length() > 0 && (line.charAt(0) != '#' || ignoreComments)) {
-					build.append(line)
-							.append("\n");
+					build.appendLine(line);
 				}
 			}
 		}
@@ -167,11 +165,10 @@ public class FileIO {
 
 	public static String readEntireFile(String fileName) {
 		final Scanner in = openFile(fileName);
-		final StringBuilder out = new StringBuilder();
+		final StringAppender out = new StringAppender();
 
 		while (in.hasNextLine()) {
-			out.append(in.nextLine())
-					.append("\n");
+			out.appendLine(in.nextLine());
 		}
 
 		return out.toString();
@@ -202,13 +199,11 @@ public class FileIO {
 	}
 
 	// Overwrites the given file name with the content of out only if there is a difference
-	public static boolean overwriteFile(final String fileName, final StringBuilder out) {
+	public static boolean overwriteFile(final String fileName, final String newFile) {
 		final String previousFile = readEntireFile(fileName);
-		final String newFile = out.toString();
-
 		if (StringUtils.isNullOrEmpty(previousFile) ||
 				!newFile.equals(previousFile.substring(0, previousFile.length() - 1))) {
-			writeToFile(fileName, out);
+			writeToFile(fileName, newFile);
 			System.out.println(fileName + " overwritten.");
 			return true;
 		}
@@ -217,10 +212,6 @@ public class FileIO {
 	}
 
 	public static void writeToFile(String fileName, String out) {
-		writeToFile(fileName, new StringBuilder(out));
-	}
-	
-	public static void writeToFile(String fileName, StringBuilder out) {
 		try {
 			PrintStream printStream = new PrintStream(new File(fileName));
 			printStream.println(out);

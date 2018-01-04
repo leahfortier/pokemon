@@ -7,9 +7,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
+import util.StringAppender;
 import util.StringUtils;
 import util.TimeUtils;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 public class GeneralTest extends BaseTest {
@@ -147,5 +149,59 @@ public class GeneralTest extends BaseTest {
         Assert.assertEquals("", split.getRemaining());
 
         Assert.assertFalse(split.hasNext());
+    }
+
+    @Test
+    public void stringAppenderTest() {
+        StringAppender stringAppender = new StringAppender();
+        Assert.assertTrue(stringAppender.isEmpty());
+        Assert.assertEquals(StringUtils.empty(), stringAppender.toString());
+        Assert.assertEquals(0, stringAppender.length());
+        checkStringAppender("", stringAppender);
+        checkStringAppender("a", stringAppender.append("a"));
+        checkStringAppender("ab", stringAppender.append("b"));
+        checkStringAppender("", stringAppender.clear());
+        checkStringAppender("a", stringAppender.appendDelimiter(", ", "a"));
+        checkStringAppender("a, b", stringAppender.appendDelimiter(", ", "b"));
+        checkStringAppender("a, b1 2 3", stringAppender.appendJoin(" ", 3, i -> (i + 1) + ""));
+        checkStringAppender("a, b1 2 37.:.v.:.true.:.4.3", stringAppender.appendJoin(".:.", Arrays.asList(7, "v", true, 4.3)));
+        checkStringAppender("", stringAppender.clear());
+        checkStringAppender("3-5; 7-9; 2-4", stringAppender.appendJoin("; ", Arrays.asList(4, 8, 3), index -> (index - 1) + "-" + (index + 1)));
+        Assert.assertFalse(stringAppender.isEmpty());
+        stringAppender.clear();
+        Assert.assertTrue(stringAppender.isEmpty());
+        checkStringAppender("003 + 2.20", stringAppender.appendFormat("%03d + %.2f", 3, 2.2));
+        checkStringAppender("003", stringAppender.setLength(3));
+        checkStringAppender("-003", stringAppender.appendPrefix("-"));
+        checkStringAppender("-003", stringAppender.appendIf(false, "x"));
+        checkStringAppender("-003x", stringAppender.appendIf(true, "x"));
+        Assert.assertEquals(5, stringAppender.length());
+        checkStringAppender("-003x55555", stringAppender.appendRepeat("5", 5));
+        checkStringAppender("-1003x55555", stringAppender.insert(1, "1"));
+        Assert.assertEquals('1', stringAppender.charAt(1));
+        checkStringAppender("", stringAppender.clear());
+        checkStringAppender("a", stringAppender.append('a'));
+        checkStringAppender("a", stringAppender.append(null));
+        checkStringAppender("a", stringAppender.appendLine(null));
+        checkStringAppender("a", stringAppender.appendLineIf(true, null));
+        checkStringAppender("a\n", stringAppender.appendLine());
+        checkStringAppender("a\nb\n", stringAppender.appendLine("b"));
+        checkStringAppender("a\nb\n", stringAppender.appendDelimiter(";", ""));
+        checkStringAppender("a\nb\n; ", stringAppender.appendDelimiter(";", " "));
+        checkStringAppender("", stringAppender.clear());
+        checkStringAppender(" ", stringAppender.append(" "));
+        checkStringAppender("abc;123", new StringAppender("abc;123"));
+
+        Assert.assertEquals("111", StringUtils.repeat("1", 3));
+        Assert.assertEquals("1 a 1.3", StringUtils.spaceSeparated(1, "a", 1.3));
+    }
+
+    private void checkStringAppender(String equals, StringAppender appender) {
+        Assert.assertEquals(equals, appender.toString());
+        Assert.assertEquals(equals.length(), appender.length());
+        Assert.assertEquals(StringUtils.isNullOrEmpty(equals), appender.isEmpty());
+        for (int i = 0; i < equals.length(); i++) {
+            Assert.assertEquals(equals.charAt(i), appender.charAt(i));
+        }
     }
 }

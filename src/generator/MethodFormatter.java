@@ -1,5 +1,7 @@
 package generator;
 
+import util.StringAppender;
+
 class MethodFormatter {
 
     private int tabs;
@@ -14,7 +16,7 @@ class MethodFormatter {
         this.inCases = false;
     }
 
-    void appendLine(String line, StringBuilder method) {
+    void appendLine(String line, StringAppender method) {
 
         if (line.startsWith("switch (")) {
             inSwitch = true;
@@ -45,13 +47,10 @@ class MethodFormatter {
         }
 
         // Add the tabs
-        for (int i = 0; i < tabs; i++) {
-            method.append("\t");
-        }
+        method.appendRepeat("\t", tabs);
 
         // Actually write the line
-        method.append(line)
-                .append("\n");
+        method.appendLine(line);
 
         if (inSwitch && (line.equals("break;") || line.startsWith("return ") || line.equals("return;"))) {
             tabs--;

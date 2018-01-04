@@ -1,5 +1,6 @@
 package generator;
 
+import util.StringAppender;
 import util.StringUtils;
 
 import java.util.Scanner;
@@ -54,19 +55,19 @@ abstract class InvokeMethod {
         return new MethodInfo(header, body.trim(), AccessModifier.PACKAGE_PRIVATE).writeFunction();
     }
 
-    protected String getAdditionalInvokeParameters() {
+    private String getAdditionalInvokeParameters() {
         return StringUtils.empty();
     }
 
     private String getInvokeParameters(final InterfaceMethod interfaceMethod) {
-        StringBuilder invokeParameters = new StringBuilder();
+        StringAppender invokeParameters = new StringAppender();
         if (passInvokees(interfaceMethod)) {
-            StringUtils.addCommaSeparatedValue(invokeParameters, "List<?> invokees");
+            invokeParameters.appendDelimiter(", ", "List<?> invokees");
         }
 
-        StringUtils.addCommaSeparatedValue(invokeParameters, this.getAdditionalInvokeParameters());
-        StringUtils.addCommaSeparatedValue(invokeParameters, interfaceMethod.getAdditionalInvokeParameters());
-        StringUtils.addCommaSeparatedValue(invokeParameters, interfaceMethod.getParameters());
+        invokeParameters.appendDelimiter(", ", this.getAdditionalInvokeParameters());
+        invokeParameters.appendDelimiter(", ", interfaceMethod.getAdditionalInvokeParameters());
+        invokeParameters.appendDelimiter(", ", interfaceMethod.getParameters());
 
         return invokeParameters.toString();
     }
@@ -111,15 +112,12 @@ abstract class InvokeMethod {
         final String returnStatement = StringUtils.isNullOrEmpty(postLoop) ? "return;" : postLoop;
         final String battleParameter = interfaceMethod.getBattleParameter();
 
-        final StringBuilder deadsies = new StringBuilder();
+        final StringAppender deadsies = new StringAppender();
         for (final String activePokemonParameter : interfaceMethod.getDeadsies()) {
-            if (deadsies.length() > 0) {
-                deadsies.append("\n");
-            }
-
-            deadsies.append(String.format("\nif (%s.isFainted(%s)) {\n", activePokemonParameter, battleParameter))
-                    .append(returnStatement)
-                    .append("\n}");
+            deadsies.appendDelimiter("\n", String.format(
+                    "\nif (%s.isFainted(%s)) {\n%s\n}",
+                    activePokemonParameter, battleParameter, returnStatement
+            ));
         }
 
         return deadsies.toString();

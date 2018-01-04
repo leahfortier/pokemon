@@ -11,6 +11,7 @@ import util.SerializationUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class MapDataMatcher {
                           List<LocationTriggerMatcher> entities) {
 
         this.areas = areaData.stream()
-                .sorted((first, second) -> first.getAreaData().getAreaName().compareTo(second.getAreaData().getAreaName()))
+                .sorted(Comparator.comparing(areaMatcher -> areaMatcher.getAreaData().getAreaName()))
                 .collect(Collectors.toList())
                 .toArray(new AreaMatcher[0]);
 
@@ -143,7 +144,7 @@ public class MapDataMatcher {
 
         areaDataJson = SerializationUtils.getJson(areaData);
 
-        FileIO.overwriteFile(areaDescriptionFileName, new StringBuilder(areaDataJson));
+        FileIO.overwriteFile(areaDescriptionFileName, areaDataJson);
 
         return areaData;
     }

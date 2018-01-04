@@ -3,6 +3,7 @@ package generator;
 import main.Global;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
+import util.StringAppender;
 import util.FileIO;
 import util.StringUtils;
 
@@ -12,16 +13,13 @@ class NamesiesGen {
 
 	private final String namesiesFolder;
 	private final String namesiesClassName;
-	private final StringBuilder namesies;
-
-	private boolean firstNamesies;
+	private final StringAppender namesies;
 	
 	NamesiesGen(final String namesiesFolder, final Class namesiesClass) {
 		this.namesiesFolder = namesiesFolder;
 		this.namesiesClassName = namesiesClass.getSimpleName();
 
-		this.namesies = new StringBuilder();
-		this.firstNamesies = true;
+		this.namesies = new StringAppender();
 
 		if (namesiesClass.equals(PokemonNamesies.class)) {
 			pokemonNamesies();
@@ -33,7 +31,7 @@ class NamesiesGen {
 		final String fileName = this.namesiesFolder + this.namesiesClassName + ".java";
 
 		Scanner original = FileIO.openFile(fileName);
-		StringBuilder out = new StringBuilder();
+		StringAppender out = new StringAppender();
 		
 		boolean canPrint = true;
 		boolean outputNamesies = false;
@@ -50,7 +48,7 @@ class NamesiesGen {
 			}
 			
 			if (canPrint) {
-				StringUtils.appendLine(out, line);
+				out.appendLine(line);
 			}
 			
 			if (line.contains("// EVERYTHING BELOW IS GENERATED ###")) {
@@ -58,28 +56,24 @@ class NamesiesGen {
 					Global.error("Everything generated line should not be repeated.");
 				}
 				
-				out.append(namesies);
-				out.append(";\n\n");
+				out.appendLine(namesies + ";\n");
 				
 				outputNamesies = true;
 				canPrint = false;
 			}
 		}
 
-		FileIO.overwriteFile(fileName, out);
+		FileIO.overwriteFile(fileName, out.toString());
 	}
 	
 	void createNamesies(String name, String className) {
 		String enumName = StringUtils.getNamesiesString(name);
-		namesies.append(firstNamesies ? "" : ",\n")
-				.append("\t")
-				.append(enumName)
-				.append("(\"")
-				.append(name)
-				.append("\"")
-				.append(StringUtils.isNullOrEmpty(className) ? "" : ", " + className + "::new")
-				.append(")");
-		firstNamesies = false;
+		namesies.appendDelimiter(",\n", String.format(
+				"\t%s(\"%s\"%s)",
+				enumName,
+				name,
+				StringUtils.isNullOrEmpty(className) ? "" : ", " + className + "::new")
+		);
 	}
 
 	private void pokemonNamesies() {

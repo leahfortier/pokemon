@@ -4,7 +4,7 @@ import main.Global;
 import util.FileIO;
 import util.FileName;
 import util.FontMetrics;
-import util.StringUtils;
+import util.StringAppender;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -37,17 +37,17 @@ class FontMetricsGen extends JPanel {
 
         g = canvas.createGraphics();
 
-        StringBuilder sb = new StringBuilder();
+        StringAppender appender = new StringAppender();
 
         for (int fontSize = SMALLEST_FONT_SIZE; fontSize <= LARGEST_FONT_SIZE; fontSize++) {
             reset(fontSize);
 
             FontMetrics fontMetrics = getMetrics(fontSize);
             checkMatch(fontSize, fontMetrics.getHorizontalSpacing());
-            StringUtils.appendLine(sb, fontMetrics.toString());
+            appender.appendLine(fontMetrics.toString());
         }
 
-        FileIO.writeToFile(FileName.FONT_METRICS, sb);
+        FileIO.writeToFile(FileName.FONT_METRICS, appender.toString());
     }
 
     private void reset(int fontSize) {

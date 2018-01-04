@@ -5,6 +5,7 @@ import main.Global;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
+import util.StringAppender;
 import util.StringUtils;
 
 import java.util.LinkedList;
@@ -20,7 +21,7 @@ class InterfaceGen {
 	
 	private static void gen() {
 		final Scanner in = FileIO.openFile(FileName.INTERFACES);
-		final StringBuilder out = StuffGen.startGen(INTERFACE_PATH);
+		final StringAppender out = StuffGen.startGen(INTERFACE_PATH);
 		
 		// Go through the entire file
 		while (in.hasNext()) {
@@ -40,7 +41,7 @@ class InterfaceGen {
 
 		out.append("}");
 		
-		FileIO.overwriteFile(INTERFACE_PATH, out);
+		FileIO.overwriteFile(INTERFACE_PATH, out.toString());
 	}
 	
 	private static class Interface {
@@ -110,27 +111,24 @@ class InterfaceGen {
 		String writeInterface() {
 			final String superClass = this.extendsInterfaces;
 			final String interfaces = null;
-			
-			final StringBuilder extraFields = new StringBuilder();
-			for (InterfaceMethod method : this.methods) {
-				extraFields.append(method.writeInterfaceMethod());
-			}
-			
+			final String extraFields = new StringAppender()
+					.appendJoin(StringUtils.empty(), this.methods, InterfaceMethod::writeInterfaceMethod)
+					.toString();
 			final String constructor = null;
-			final StringBuilder additional = new StringBuilder();
-			for (InterfaceMethod method : this.methods) {
-				additional.append(method.writeInvokeMethod());
-			}
+			final String additional = new StringAppender()
+					.appendJoin(StringUtils.empty(), this.methods, InterfaceMethod::writeInvokeMethod)
+					.toString();
+			final boolean isInterface = true;
 
 			return StuffGen.createClass(
 					this.headerComments,
 					this.interfaceName,
 					superClass,
 					interfaces,
-					extraFields.toString(),
+					extraFields,
 					constructor,
-					additional.toString(),
-					true);
+					additional,
+					isInterface);
 		}
 	}
 }

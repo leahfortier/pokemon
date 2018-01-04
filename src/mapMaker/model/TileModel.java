@@ -8,7 +8,7 @@ import mapMaker.TileCategory;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
-import util.StringUtils;
+import util.StringAppender;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -198,15 +198,15 @@ public class TileModel extends MapMakerModel {
 
         saved = true;
 
-        final StringBuilder indexFile = new StringBuilder();
+        final StringAppender indexFile = new StringAppender();
         for (final Entry<Integer, String> entry : indexMap.entrySet()) {
             final String imageIndex = Integer.toString(entry.getKey(), 16);
             final String imageName = entry.getValue();
             final TileCategory tileCategory = indexToTileCategoryMap.get(entry.getKey());
 
-            StringUtils.appendLine(indexFile, imageName + " " + imageIndex + " " + tileCategory.toString());
+            indexFile.appendLine(imageName + " " + imageIndex + " " + tileCategory.toString());
         }
 
-        FileIO.writeToFile(mapMaker.getPathWithRoot(FileName.MAP_TILES_INDEX), indexFile);
+        FileIO.writeToFile(mapMaker.getPathWithRoot(FileName.MAP_TILES_INDEX), indexFile.toString());
     }
 }

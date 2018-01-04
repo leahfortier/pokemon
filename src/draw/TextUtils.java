@@ -1,7 +1,7 @@
 package draw;
 
 import util.FontMetrics;
-import util.StringUtils;
+import util.StringAppender;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -29,7 +29,7 @@ public final class TextUtils {
         FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
 
         String[] words = str.split("[ ]+");
-        StringBuilder build = new StringBuilder();
+        StringAppender appender = new StringAppender();
 
         int height = y;
         int distanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
@@ -39,17 +39,17 @@ public final class TextUtils {
             // If we're at the last word and we've specified a last word length, use that, otherwise use the
             // actual length of the word
             int wordLength = i == words.length - 1 && lastWordActualLength != -1 ? lastWordActualLength : word.length();
-            if ((wordLength + build.length() + 1)*fontMetrics.getHorizontalSpacing() > width) {
-                g.drawString(build.toString(), x, height);
+            if ((wordLength + appender.length() + 1)*fontMetrics.getHorizontalSpacing() > width) {
+                g.drawString(appender.toString(), x, height);
 
                 height += distanceBetweenRows;
-                build = new StringBuilder();
+                appender.clear();
             }
 
-            StringUtils.appendSpaceSeparatedWord(build, word);
+            appender.appendDelimiter(" ", word);
         }
 
-        g.drawString(build.toString(), x, height);
+        g.drawString(appender.toString(), x, height);
 
         return height + distanceBetweenRows;
     }

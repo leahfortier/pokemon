@@ -6,6 +6,7 @@ import pokemon.PokemonNamesies;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
+import util.StringAppender;
 import util.StringUtils;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -39,13 +40,13 @@ public class StuffGen {
 	}
 
 	// Opens the original file and appends the beginning until the key to generate
-	static StringBuilder startGen(final String fileName) {
+	static StringAppender startGen(final String fileName) {
 		Scanner original = FileIO.openFile(fileName);
-		StringBuilder out = new StringBuilder();
+		StringAppender out = new StringAppender();
 
 		while (original.hasNext()) {
 			String line = original.nextLine();
-			StringUtils.appendLine(out, line);
+			out.appendLine(line);
 
 			if (line.contains("// EVERYTHING BELOW IS GENERATED ###")) {
 				break;
@@ -99,45 +100,18 @@ public class StuffGen {
 			String constructor,
 			String additional,
 			boolean isInterface) {
-		StringBuilder classBuilder = new StringBuilder("\n");
-
-		if (!StringUtils.isNullOrEmpty(classComments)) {
-			StringUtils.appendLine(classBuilder, "\t" + classComments);
-		}
-
-		classBuilder.append("\t").
-				append(defineClass(className, isInterface));
-
-		if (!StringUtils.isNullOrEmpty(superClass)) {
-			classBuilder.append(" extends ")
-					.append(superClass);
-		}
-		if (!StringUtils.isNullOrEmpty(interfaces)) {
-			classBuilder.append(" ")
-					.append(interfaces);
-		}
-
-		classBuilder.append(" {\n");
-
-		if (!isInterface) {
-			classBuilder.append("\t\tprivate static final long serialVersionUID = 1L;\n");
-		}
-
-		if (!StringUtils.isNullOrEmpty(extraFields)) {
-			classBuilder.append(extraFields);
-		}
-
-		if (!StringUtils.isNullOrEmpty(constructor)) {
-			classBuilder.append(constructor);
-		}
-
-		if (!StringUtils.isNullOrEmpty(additional)) {
-			classBuilder.append(additional);
-		}
-
-		classBuilder.append("\t}\n");
-
-		return classBuilder.toString();
+		return new StringAppender("\n")
+				.appendLineIf(!StringUtils.isNullOrEmpty(classComments), "\t" + classComments)
+				.append("\t" + defineClass(className, isInterface))
+				.appendDelimiter(" extends ", superClass)
+				.appendDelimiter(" ", interfaces)
+				.appendLine(" {")
+				.appendLineIf(!isInterface, "\t\tprivate static final long serialVersionUID = 1L;")
+				.append(extraFields)
+				.append(constructor)
+				.append(additional)
+				.appendLine("\t}")
+				.toString();
 	}
 
 	private static String defineClass(final String className, final boolean isInterface) {
@@ -156,7 +130,7 @@ public class StuffGen {
 	}
 
 	private static String readMethod(Scanner in) {
-		StringBuilder method = new StringBuilder();
+		StringAppender method = new StringAppender();
 		MethodFormatter formatter = new MethodFormatter(2);
 
 		while (in.hasNext()) {
@@ -199,12 +173,12 @@ public class StuffGen {
 				.sorted()
 				.collect(Collectors.toList());
 
-		StringBuilder out = new StringBuilder();
+		StringAppender out = new StringAppender();
 		for (PokemonInfo info : baseEvolutions) {
-			StringUtils.appendLine(out, info.getName());
+			out.appendLine(info.getName());
 		}
 
-		FileIO.overwriteFile(FileName.BASE_EVOLUTIONS, out);
+		FileIO.overwriteFile(FileName.BASE_EVOLUTIONS, out.toString());
 	}
 
 	private static final char[] AL_BHED_PRIMER = {
@@ -215,7 +189,7 @@ public class StuffGen {
 	};
 
 	private static String translateAlBhed(String nonShubby) {
-		StringBuilder shubs = new StringBuilder();
+		StringAppender shubs = new StringAppender();
 		for (char c : nonShubby.toCharArray()) {
 			if (StringUtils.isLower(c)) {
 				shubs.append((char)(AL_BHED_PRIMER[c - 'a'] - 'A' + 'a'));

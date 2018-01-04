@@ -3,6 +3,7 @@ package mapMaker.dialogs;
 import map.condition.ConditionKey;
 import map.daynight.DayCycle;
 import util.GUIUtils;
+import util.StringAppender;
 import util.StringUtils;
 
 import javax.swing.JCheckBox;
@@ -42,16 +43,10 @@ public class TimeOfDayPanel extends JPanel {
             return StringUtils.empty();
         }
 
-        boolean first = true;
-        StringBuilder condition = new StringBuilder();
+        StringAppender condition = new StringAppender();
         for (int i = 0; i < timeCheckBoxes.length; i++) {
             if (timeCheckBoxes[i].isSelected()) {
-                if (!first) {
-                    condition.append("|");
-                }
-
-                condition.append(ConditionKey.TIME_OF_DAY.getConditionString(DayCycle.values()[i].name()));
-                first = false;
+                condition.appendDelimiter("|", ConditionKey.TIME_OF_DAY.getConditionString(DayCycle.values()[i].name()));
             }
         }
 

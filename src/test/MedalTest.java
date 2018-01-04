@@ -13,7 +13,6 @@ import util.save.Save;
 public class MedalTest extends BaseTest {
     @Test
     public void evsTest() {
-        TestGame.setNewPlayer(new Player());
         Player player = Game.getPlayer();
 
         ActivePokemon bulby = new ActivePokemon(PokemonNamesies.BULBASAUR, 5, false, true);
@@ -31,7 +30,6 @@ public class MedalTest extends BaseTest {
 
     @Test
     public void saveTest() {
-        TestGame.setNewPlayer(new Player());
         Player player = Game.getPlayer();
         player.setFileNum(-1);
 

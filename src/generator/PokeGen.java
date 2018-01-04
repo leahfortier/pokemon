@@ -18,6 +18,7 @@ import pokemon.ability.AbilityNamesies;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
+import util.StringAppender;
 import util.StringUtils;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -144,12 +145,13 @@ class PokeGen {
 	}
 	
 	private void superGen() {
-		StringBuilder out = StuffGen.startGen(this.currentGen.getOutputPath());
-		out.append("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/\n"); // DON'T DO IT
+		StringAppender out = StuffGen.startGen(this.currentGen.getOutputPath());
+		out.appendLine("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/"); // DON'T DO IT
 
 		Scanner in = FileIO.openFile(this.currentGen.getInputPath());
 		readFileFormat(in);
-		
+
+		// TODO: Do we still use this?
 		// The image index file for the item generator
 		int index = 0;
 		
@@ -178,7 +180,7 @@ class PokeGen {
 
 		out.append("}");
 
-		FileIO.overwriteFile(this.currentGen.getOutputPath(), out);
+		FileIO.overwriteFile(this.currentGen.getOutputPath(), out.toString());
 	}
 	
 	private static void readFileFormat(Scanner in) {
@@ -236,7 +238,7 @@ class PokeGen {
 	
 	private String getAdditionalMethods(ClassFields fields, List<String> interfaces) {
 
-		StringBuilder methods = new StringBuilder();
+		StringAppender methods = new StringAppender();
 		
 		// Add all the interfaces to the interface list
 		List<String> currentInterfaces = new ArrayList<>();
@@ -264,13 +266,13 @@ class PokeGen {
 		}
 		
 		if (failureInfo != null) {
-			methods.insert(0, failureInfo.writeFailure(fields, this.currentGen.getSuperClassName(), inputFormatter));
+			methods.appendPrefix(failureInfo.writeFailure(fields, this.currentGen.getSuperClassName(), inputFormatter));
 		}
 		
 		return methods.toString();
 	}
 	
-	private void addTMs(StringBuilder classes) {
+	private void addTMs(StringAppender classes) {
 		if (this.currentGen != Generator.ITEM_GEN) {
 			Global.error("Can only add TMs for the Item class");
 		}
@@ -317,10 +319,10 @@ class PokeGen {
 	// (It's what's inside the super parentheses)
 	// Example: 'AttackNamesies.ATTACK_NAME, "Attack Description", 35, Type.NORMAL, MoveCategory.PHYSICAL'
 	private String getInternalConstructorValues(ClassFields fields) {
-		StringBuilder superValues = new StringBuilder();
+		StringAppender superValues = new StringAppender();
 		for (Entry<String, String> pair : constructorKeys) {
 			String value = inputFormatter.getConstructorValue(pair, fields);
-			StringUtils.addCommaSeparatedValue(superValues, value);
+			superValues.appendDelimiter(", ", value);
 		}
 
 		return superValues.toString();
@@ -328,17 +330,15 @@ class PokeGen {
 
 	private String getConstructor(ClassFields fields) {
 		boolean physicalContact = getPhysicalContact(fields);
-		
-		StringBuilder constructor = new StringBuilder();
-		constructor.append("super(")
-				.append(getInternalConstructorValues(fields))
-				.append(");\n");
+
+		StringAppender constructor = new StringAppender();
+		constructor.appendLine("super(" + getInternalConstructorValues(fields) + ");");
 		
 		for (Entry<String, String> pair : fieldKeys) {
 			String fieldKey = pair.getKey();
 			fields.getPerformAndRemove(
 					fieldKey,
-					value -> StringUtils.appendLine(constructor, inputFormatter.getAssignment(pair.getValue(), value))
+					value -> constructor.appendLine(inputFormatter.getAssignment(pair.getValue(), value))
 			);
 		}
 
@@ -354,11 +354,11 @@ class PokeGen {
         });
 
 		if (physicalContact) {
-			constructor.append("super.moveTypes.add(")
-					.append(MoveType.class.getSimpleName())
-					.append(".")
-					.append(MoveType.PHYSICAL_CONTACT)
-					.append(");\n");
+			constructor.appendFormat(
+					"super.moveTypes.add(%s.%s);\n",
+					MoveType.class.getSimpleName(),
+					MoveType.PHYSICAL_CONTACT
+			);
 		}
 
 		fields.getPerformAndRemove("Activate", constructor::append);

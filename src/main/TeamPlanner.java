@@ -9,6 +9,7 @@ import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import type.Type;
 import util.FileIO;
+import util.StringAppender;
 import util.StringUtils;
 
 import java.util.ArrayList;
@@ -330,45 +331,33 @@ public class TeamPlanner {
 		}
 		
 		static void printTeam(List<TeamMember> team) {
-			StringBuilder out = new StringBuilder();
-			for (TeamMember member : team) {
-				out.append(member.toString());
-			}
-			
-			FileIO.writeToFile("teamPlanner.out", out);
+			StringAppender out = new StringAppender();
+			out.appendJoin(StringUtils.empty(), team);
+
+			FileIO.overwriteFile("teamPlanner.out", out.toString());
 		}
 		
 		public String toString() {
-			StringBuilder out = new StringBuilder();
+			StringAppender out = new StringAppender();
 			
-			out.append(pokemonSpecies.getName())
-					.append(":");
+			out.append(pokemonSpecies.getName() + ":");
 			
 			Type[] type = pokemonSpecies.getType();
-			out.append("\n\tType: ")
-					.append(type[0].getName())
-					.append(type[1] == Type.NO_TYPE ? "" : "/" + type[1].getName());
+			out.append("\n\tType: " + type[0].getName())
+					.appendIf(type[1] != Type.NO_TYPE, "/" + type[1].getName());
+
+			out.append("\n\tStats: ")
+					.appendJoin(" ", Stat.NUM_STATS, i -> pokemonSpecies.getStat(i) + "");
 			
-			
-			out.append("\n\tStats:");
-			for (int i = 0; i < Stat.NUM_STATS; i++) {
-				out.append(" ").append(pokemonSpecies.getStat(i));
-			}
-			
-			out.append("\n\tNature: ").append(nature);
-			out.append("\n\tAbility: ").append(ability);
-			
-			if (item != null) {
-				out.append("\n\tItem: ").append(item);
-			}
+			out.append("\n\tNature: " + nature);
+			out.append("\n\tAbility: " + ability);
+			out.appendIf(item != null, "\n\tItem: " + item);
 			
 			out.append("\n\tMoves:");
 			for (Attack attack : moveList) {
-				out.append("\n\t\t")
-						.append(attack.getName())
-						.append(" -- ");
-				List<String> learnMethods = new ArrayList<>();
+				out.append("\n\t\t" + attack.getName() + " -- ");
 
+				List<String> learnMethods = new ArrayList<>();
 				AttackNamesies namesies = attack.namesies();
 				
 				Integer levelLearned = pokemonSpecies.levelLearned(namesies);
@@ -388,19 +377,15 @@ public class TeamPlanner {
 					learnMethods.add("Egg Move/TM move/Move Tutor");
 				}
 				
-				if (learnMethods.size() == 0) {
+				if (learnMethods.isEmpty()) {
 					learnMethods.add("???");
 				}
-				
-				boolean first = true;
-				for (String method : learnMethods) {
-					out.append(first ? "" : " or ").append(method);
-					first = false;
-				}
+
+				out.appendJoin(" or ", learnMethods);
 			}
 			
 			out.append("\n\n");
-			
+
 			return out.toString();
 		}
 	}

@@ -3,6 +3,7 @@ package generator;
 import main.Global;
 import util.FileIO;
 import util.FileName;
+import util.StringAppender;
 import util.StringUtils;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -122,14 +123,11 @@ public class InputFormatter {
 
         String type = split.next();
         if (type.equals("Multiple")) {
-            StringBuilder assignments = new StringBuilder();
-            assignmentInfo = assignmentInfo.substring("Multiple".length() + 1);
+            StringAppender assignments = new StringAppender();
+            assignmentInfo = split.getRemaining();
 
-            boolean first = true;
             for (String value : fieldValue.split(",")) {
-                assignments.append(first ? "" : "\n")
-                        .append(getAssignment(assignmentInfo, value.trim()));
-                first = false;
+                assignments.appendDelimiter("\n", getAssignment(assignmentInfo, value.trim()));
             }
 
             return assignments.toString();

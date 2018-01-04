@@ -9,6 +9,7 @@ import util.FileIO.NullOutputStream;
 import util.FileName;
 import util.Folder;
 import util.GeneralUtils;
+import util.StringAppender;
 import util.StringUtils;
 
 import java.awt.image.BufferedImage;
@@ -148,7 +149,7 @@ public class PokemonInfoGen {
         }
 
         Scanner in2 = FileIO.openFile("addedpokes.txt");
-        StringBuilder out2 = new StringBuilder();
+        StringAppender out2 = new StringAppender();
         int num = startNum;
         while (in2.hasNext()) {
             String line = in2.nextLine();
@@ -157,9 +158,9 @@ public class PokemonInfoGen {
                 line = line.replaceFirst(num + ".", newNum + ".");
                 num++;
             }
-            StringUtils.appendLine(out2, line);
+            out2.appendLine(line);
         }
-        FileIO.overwriteFile("addedpokes.txt", out2);
+        FileIO.overwriteFile("addedpokes.txt", out2.toString());
     }
 
     private static List<String> getMoves(Scanner in) {
@@ -173,13 +174,13 @@ public class PokemonInfoGen {
         return moves;
     }
 
-    private static void addMovesDiff(List<String> moves, String diffName, StringBuilder diffs) {
+    private static void addMovesDiff(List<String> moves, String diffName, StringAppender diffs) {
         if (!moves.isEmpty()) {
-            diffs.append(diffName).append(":\n\t").append(String.join("\n\t", moves)).append("\n");
+            diffs.appendLine(diffName + ":\n\t" + String.join("\n\t", moves));
         }
     }
 
-    private static void movesDiff(Scanner in1, Scanner in2, String diffName, StringBuilder diffs) {
+    private static void movesDiff(Scanner in1, Scanner in2, String diffName, StringAppender diffs) {
         List<String> moves1 = getMoves(in1);
         List<String> moves2 = getMoves(in2);
 
@@ -190,14 +191,14 @@ public class PokemonInfoGen {
         addMovesDiff(addedMoves, diffName + " Added Moves", diffs);
     }
 
-    private static void diff(Scanner in1, Scanner in2, String diffName, StringBuilder diffs) {
+    private static void diff(Scanner in1, Scanner in2, String diffName, StringAppender diffs) {
         diff(in1.nextLine(), in2.nextLine(), diffName, diffs);
     }
 
     // If the two lines are different, appends "diffName: line1 -> line2" to the diffs builder
-    private static void diff(String line1, String line2, String diffName, StringBuilder diffs) {
+    private static void diff(String line1, String line2, String diffName, StringAppender diffs) {
         if (!line1.equals(line2) && !ignoreDiff(line1, line2, diffName)) {
-            diffs.append(diffName).append(":\n\t").append(line1).append(" -> ").append(line2).append("\n");
+            diffs.appendLine(diffName + ":\n\t" + line1 + " -> " + line2);
         }
     }
 
@@ -234,7 +235,7 @@ public class PokemonInfoGen {
         }
 
         while (in2.hasNext()) {
-            StringBuilder diffs = new StringBuilder();
+            StringAppender diffs = new StringAppender();
 
             int num = in1.nextInt(); in1.nextLine();
             diff(num + "", in2.nextLine(), "Num", diffs);
@@ -261,7 +262,7 @@ public class PokemonInfoGen {
             movesDiff(in1, in2, "Level Up", diffs);
             movesDiff(in1, in2, "Learnable", diffs);
 
-            if (diffs.length() > 0) {
+            if (!diffs.isEmpty()) {
                 out.printf("%03d %s:\n\t%s\n", num, name, diffs.toString().replace("\n", "\n\t"));
             }
         }
@@ -315,12 +316,11 @@ public class PokemonInfoGen {
     private static String readEvolution(Scanner in) {
         String type = in.next();
         if (type.equals(EvolutionType.MULTI.name())) {
-            int x = in.nextInt(); in.nextLine();
-            StringBuilder evolution = new StringBuilder(type + " " + x + "\n");
-            for (int i = 0; i < x; i++) {
-                evolution.append(readEvolution(in));
-            }
-            return evolution.toString();
+            int numEvolutions = in.nextInt(); in.nextLine();
+            return new StringAppender(type + " " + numEvolutions)
+                    .appendLine()
+                    .appendJoin(StringUtils.empty(), numEvolutions, index -> readEvolution(in))
+                    .toString();
         } else {
             return type + in.nextLine() + "\n";
         }
@@ -332,12 +332,8 @@ public class PokemonInfoGen {
 
     private static String readHoldItems(Scanner in) {
         int num = in.nextInt(); in.nextLine();
-
-        StringBuilder holdItems = new StringBuilder(num + "\n");
-        for (int i = 0; i < num; i++) {
-            holdItems.append(in.nextLine()).append("\n");
-        }
-
-        return holdItems.toString();
+        return new StringAppender(num + "\n")
+                .appendJoin(StringUtils.empty(), num, index -> in.nextLine().trim() + "\n")
+                .toString();
     }
 }

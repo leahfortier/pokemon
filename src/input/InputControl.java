@@ -3,6 +3,7 @@ package input;
 import main.Game;
 import util.Point;
 import util.RandomUtils;
+import util.StringAppender;
 import util.StringUtils;
 
 import java.awt.event.KeyEvent;
@@ -40,7 +41,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	private boolean mouseDown;
 	private boolean isMouseInput;
 
-	private StringBuilder capturedText;
+	private StringAppender capturedText;
 	private boolean isCaptureText;
 
 	private int lock;
@@ -137,7 +138,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	}
 
 	public void startTextCapture() {
-		capturedText = new StringBuilder();
+		capturedText = new StringAppender();
 		isCaptureText = true;
 	}
 
@@ -163,7 +164,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 
 	private void trimCapturedText(int maxLength) {
 		if (capturedText != null && capturedText.length() > maxLength) {
-			capturedText.delete(maxLength, capturedText.length());
+			capturedText.setLength(maxLength);
 		}
 	}
 
@@ -254,10 +255,10 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 	}
 
 	public String getInputCaptureString(int maxLength) {
-		StringBuilder display = new StringBuilder(this.getCapturedText(maxLength));
-		StringUtils.appendRepeat(display, "_", maxLength - display.length());
+		StringAppender display = new StringAppender(this.getCapturedText(maxLength));
+		display.appendRepeat("_", maxLength - display.length());
 		for (int i = 0; i < maxLength; i++) {
-			display.insert(2*i + 1, ' ');
+			display.insert(2*i + 1, " ");
 		}
 
 		return display.toString();

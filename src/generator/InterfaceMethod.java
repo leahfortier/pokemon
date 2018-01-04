@@ -12,6 +12,7 @@ import generator.InvokeMethod.UpdateInvoke;
 import generator.InvokeMethod.VoidInvoke;
 import main.Global;
 import pattern.MatchType;
+import util.StringAppender;
 import util.StringUtils;
 
 import java.util.ArrayList;
@@ -310,19 +311,19 @@ class InterfaceMethod {
             return StringUtils.empty();
         }
 
-        final StringBuilder interfaceMethod = new StringBuilder();
+        final StringAppender interfaceMethod = new StringAppender();
         if (!StringUtils.isNullOrEmpty(this.comments)) {
-            StringUtils.appendLine(interfaceMethod, "\n\t\t" + this.comments);
+            interfaceMethod.appendLine("\n\t\t" + this.comments);
         }
 
         if (!StringUtils.isNullOrEmpty(this.defaultMethod)) {
             if (this.defaultMethod.equals("Empty")) {
-                StringUtils.appendLine(interfaceMethod, String.format("\t\tdefault %s {}", this.getHeader()));
+                interfaceMethod.appendFormat("\t\tdefault %s {}\n", this.getHeader());
             } else {
                 interfaceMethod.append(new MethodInfo(this.getHeader(), this.defaultMethod, AccessModifier.DEFAULT).writeFunction());
             }
         } else {
-            StringUtils.appendLine(interfaceMethod, String.format("\t\t%s;", this.getHeader()));
+            interfaceMethod.appendFormat("\t\t%s;\n", this.getHeader());
         }
 
         return interfaceMethod.toString();

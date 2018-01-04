@@ -1,6 +1,7 @@
 package generator;
 
 import main.Global;
+import util.StringAppender;
 import util.StringUtils;
 
 import java.util.AbstractMap;
@@ -127,13 +128,11 @@ class MethodInfo {
     String writeFunction() {
         final String body = StringUtils.isNullOrEmpty(this.fullBody) ? this.body : this.fullBody;
 
-        StringBuilder method = new StringBuilder();
-        StringUtils.appendLine(
-                method,
-                "\n\t\t" +
-                    StringUtils.addSpace(this.accessModifier.getModifierName()) +
-                    this.header.trim() +
-                    " {"
+        StringAppender method = new StringAppender();
+        method.appendLine("\n\t\t"
+                + StringUtils.addSpace(this.accessModifier.getModifierName())
+                + this.header.trim()
+                + " {"
         );
 
         MethodFormatter formatter = new MethodFormatter(3);
@@ -144,14 +143,14 @@ class MethodInfo {
             formatter.appendLine(line, method);
         }
 
-        method.append("\t\t}\n");
+        method.appendLine("\t\t}");
 
         in.close();
         return method.toString();
     }
 
     // Interface name should be empty if it is an override
-    static boolean addMethodInfo(StringBuilder methods,
+    static boolean addMethodInfo(StringAppender methods,
                                  List<Map.Entry<String, MethodInfo>> methodList,
                                  ClassFields fields,
                                  List<String> interfaces,

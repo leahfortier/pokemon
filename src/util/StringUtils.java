@@ -4,7 +4,6 @@ package util;
 import main.Global;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class StringUtils {
 
@@ -40,28 +39,6 @@ public class StringUtils {
         return isNullOrEmpty(s) ? empty() : s + " ";
     }
 
-    public static void appendSpaceSeparatedWord(final StringBuilder s, String word) {
-        if (s.length() > 0) {
-            s.append(" ");
-        }
-
-        s.append(word);
-    }
-
-    public static void addCommaSeparatedValue(final StringBuilder builder, String newString) {
-        if (!isNullOrEmpty(newString)) {
-            if (builder.length() > 0) {
-                builder.append(", ");
-            }
-
-            builder.append(newString);
-        }
-    }
-
-    public static void appendLine(final StringBuilder builder, final String message) {
-        builder.append(message).append("\n");
-    }
-
     public static String empty() {
         return "";
     }
@@ -91,21 +68,17 @@ public class StringUtils {
         return "a" + (vowelStart ? "n" : "") + " " + s;
     }
 
-    public static void appendRepeat(StringBuilder builder, String repeat, int numTimes) {
-        while (numTimes --> 0) {
-            builder.append(repeat);
-        }
-    }
-
     public static String repeat(String repeat, int numTimes) {
-        StringBuilder builder = new StringBuilder();
-        appendRepeat(builder, repeat, numTimes);
-        return builder.toString();
+        return new StringAppender()
+                .appendRepeat(repeat, numTimes)
+                .toString();
     }
 
+    // Convert to list of strings and join by a space
     public static String spaceSeparated(Object... values) {
-        // Convert to list of strings and join by a space
-        return String.join(" ", Arrays.stream(values).map(Object::toString).collect(Collectors.toList()));
+        return new StringAppender()
+                .appendJoin(" ", Arrays.asList(values))
+                .toString();
     }
 
     // Examples:
@@ -114,13 +87,12 @@ public class StringUtils {
     //   x-scissor -> X-Scissor
     // For all upper-case words first do toLowercase
     public static String properCase(String string) {
+        string = string.trim();
         if (isNullOrEmpty(string)) {
             return empty();
         }
 
-        StringBuilder s = new StringBuilder();
-        string = string.trim();
-
+        StringAppender s = new StringAppender();
         while (!string.isEmpty()) {
             s.append(string.substring(0, 1).toUpperCase());
             string = string.substring(1, string.length());
@@ -155,11 +127,12 @@ public class StringUtils {
             return empty();
         }
 
+        // TODO: Look at this again -- why are we removing spaces?
         // Remove special characters and spaces
         name = SpecialCharacter.removeSpecialCharacters(name).replace(" ", "");
 
         char[] nameChar = name.toCharArray();
-        StringBuilder enumName = new StringBuilder(nameChar[0] + "");
+        StringAppender enumName = new StringAppender(nameChar[0] + "");
 
         for (int i = 1; i < nameChar.length; i++) {
             if (((isUpper(nameChar[i]) &&
@@ -183,7 +156,7 @@ public class StringUtils {
     public static String getClassName(String name) {
         name = SpecialCharacter.removeSpecialCharacters(name);
 
-        StringBuilder className = new StringBuilder();
+        StringAppender className = new StringAppender();
         for (int i = 0; i < name.length(); i++) {
             if (name.charAt(i) == '-') {
                 if (isLower(name.charAt(i + 1))) {
