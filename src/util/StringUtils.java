@@ -24,21 +24,6 @@ public class StringUtils {
         return isNullOrWhiteSpace(s) ? null : s;
     }
 
-    // Adds a new line to the beginning of a non-empty string
-    public static String preNewLine(final String s) {
-        return isNullOrEmpty(s) ? empty() : "\n" + s;
-    }
-
-    // Adds a new line to a non-empty string
-    public static String addNewLine(final String s) {
-        return isNullOrEmpty(s) ? empty() : s + "\n";
-    }
-
-    // Adds a space to a non-empty string
-    public static String addSpace(final String s) {
-        return isNullOrEmpty(s) ? empty() : s + " ";
-    }
-
     public static String empty() {
         return "";
     }

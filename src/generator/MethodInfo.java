@@ -129,11 +129,9 @@ class MethodInfo {
         final String body = StringUtils.isNullOrEmpty(this.fullBody) ? this.body : this.fullBody;
 
         StringAppender method = new StringAppender();
-        method.appendLine("\n\t\t"
-                + StringUtils.addSpace(this.accessModifier.getModifierName())
-                + this.header.trim()
-                + " {"
-        );
+        method.append("\n\t\t")
+                .appendPostDelimiter(" ", this.accessModifier.getModifierName())
+                .appendLine(this.header.trim() + " {");
 
         MethodFormatter formatter = new MethodFormatter(3);
 

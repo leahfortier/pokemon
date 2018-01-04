@@ -36,20 +36,21 @@ abstract class InvokeMethod {
                 this.getInvokeParameters(interfaceMethod)
         );
 
-        String body =
-                StringUtils.addNewLine(getPreLoop()) +
-                StringUtils.addNewLine(getDeadsies(interfaceMethod)) +
-                StringUtils.addNewLine(getMoldBreakerDeclaration(interfaceMethod)) +
-                getDeclaration(interfaceMethod) + "\n" +
-                "for (Object invokee : invokees) {\n" +
-                "if (invokee instanceof " + interfaceMethod.getInterfaceName() +
-                        " && Effect.isActiveEffect(invokee)) {\n" +
-                StringUtils.addNewLine(getMoldBreaker(interfaceMethod)) + "\n" +
-                getInnerLoop(interfaceMethod) + "\n" +
-                StringUtils.addNewLine(getDeadsies(interfaceMethod)) +
-                "}\n" +
-                "}\n" +
-                StringUtils.preNewLine(getPostLoop(interfaceMethod));
+        String body = new StringAppender()
+                .appendPostDelimiter("\n", getPreLoop())
+                .appendPostDelimiter("\n", getDeadsies(interfaceMethod))
+                .appendPostDelimiter("\n", getMoldBreakerDeclaration(interfaceMethod))
+                .appendLine(getDeclaration(interfaceMethod))
+                .appendLine("for (Object invokee : invokees) {")
+                .appendLine("if (invokee instanceof " + interfaceMethod.getInterfaceName() + " && Effect.isActiveEffect(invokee)) {")
+                .appendPostDelimiter("\n", getMoldBreaker(interfaceMethod))
+                .appendLine()
+                .appendLine(getInnerLoop(interfaceMethod))
+                .appendPostDelimiter("\n", getDeadsies(interfaceMethod))
+                .appendLine("}")
+                .appendLine("}")
+                .appendDelimiter("\n", getPostLoop(interfaceMethod))
+                .toString();
 
 
         return new MethodInfo(header, body.trim(), AccessModifier.PACKAGE_PRIVATE).writeFunction();

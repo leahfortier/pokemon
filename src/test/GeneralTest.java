@@ -190,8 +190,10 @@ public class GeneralTest extends BaseTest {
         checkStringAppender("a\nb\n; ", stringAppender.appendDelimiter(";", " "));
         checkStringAppender("", stringAppender.clear());
         checkStringAppender(" ", stringAppender.append(" "));
-        checkStringAppender("abc;123", new StringAppender("abc;123"));
+        checkStringAppender(" ", stringAppender.appendPostDelimiter(" ", ""));
+        checkStringAppender(" a ", stringAppender.appendPostDelimiter(" ", "a"));
 
+        checkStringAppender("abc;123", new StringAppender("abc;123"));
         Assert.assertEquals("111", StringUtils.repeat("1", 3));
         Assert.assertEquals("1 a 1.3", StringUtils.spaceSeparated(1, "a", 1.3));
     }

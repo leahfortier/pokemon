@@ -46,6 +46,19 @@ public class StringAppender {
         return this.append(s);
     }
 
+    // Appends the delimiter after s when s is nonempty
+    public StringAppender appendPostDelimiter(String delimiter, String s) {
+        if (StringUtils.isNullOrEmpty(s)) {
+            return this;
+        }
+
+        if (delimiter == null) {
+            delimiter = StringUtils.empty();
+        }
+
+        return this.append(s + delimiter);
+    }
+
     public StringAppender appendIf(boolean condition, String s) {
         if (condition) {
             this.append(s);
