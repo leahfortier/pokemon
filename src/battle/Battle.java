@@ -60,44 +60,44 @@ import java.util.List;
 public class Battle implements Serializable {
     private PlayerTrainer player;
     private final Opponent opponent; // SO OBJECT-ORIENTED
-
+    
     private List<BattleEffect> effects;
-
+    
     private WeatherState baseWeather;
     private Weather weather;
-
+    
     private TerrainType baseTerrain;
     private TerrainType currentTerrain;
-
+    
     private int turn;
     private boolean firstAttacking;
     private int escapeAttempts;
-
+    
     private transient UpdateMatcher npcUpdateInteraction;
     
     public Battle(Opponent opponent) {
         Messages.clearMessages(MessageState.FIGHTY_FIGHT);
         Messages.setMessageState(MessageState.FIGHTY_FIGHT);
         Messages.add(new MessageUpdate().withUpdate(Update.ENTER_BATTLE));
-
+        
         Player player = Game.getPlayer();
         player.getMedalCase().increase(MedalTheme.BATTLES_BATTLED);
-
+        
         this.player = player;
         this.opponent = opponent;
-
+        
         this.effects = new ArrayList<>();
         this.player.resetEffects();
         this.opponent.resetEffects();
-
+        
         turn = 0;
         escapeAttempts = 0;
         firstAttacking = false;
-
+        
         AreaData area = Game.getData().getMap(player.getMapName()).getArea(player.getLocation());
         this.setBaseWeather(area.getWeather());
         this.setTerrainType(area.getBattleTerrain(), true);
-
+        
         int maxPokemonAllowed = opponent.maxPokemonAllowed();
         if (maxPokemonAllowed < Trainer.MAX_POKEMON) {
             boolean onlyOne = maxPokemonAllowed == 1;
@@ -108,7 +108,7 @@ public class Battle implements Serializable {
                     onlyOne ? "is" : "are"
             ));
         }
-
+        
         this.player.enterBattle();
         if (this.opponent instanceof Trainer) {
             Trainer opponentTrainer = (Trainer) this.opponent;
@@ -121,81 +121,81 @@ public class Battle implements Serializable {
             ActivePokemon wildPokemon = this.opponent.front();
             enterBattle(wildPokemon, "Wild " + wildPokemon.getName() + " appeared!");
         }
-
+        
         enterBattle(this.player.front());
     }
-
+    
     public Battle(EnemyTrainer npcTrainer, UpdateMatcher npcUpdateInteraction) {
         this(npcTrainer);
         this.npcUpdateInteraction = npcUpdateInteraction;
     }
-
+    
     public void setPlayer(PlayerTrainer player) {
         this.player = player;
     }
-
+    
     public Player getDaRealPlayer() {
         if (this.isSimulating()) {
             return Game.getPlayer();
         }
-
+        
         return (Player)player;
     }
-
+    
     public PlayerTrainer getPlayer() {
         return player;
     }
-
+    
     public Opponent getOpponent() {
         return opponent;
     }
-
+    
     public Weather getWeather() {
         return weather;
     }
-
+    
     public int getTurn() {
         return turn;
     }
-
+    
     public UpdateMatcher getNpcUpdateInteraction() {
         return this.npcUpdateInteraction;
     }
-
+    
     public TerrainType getTerrainType() {
         return currentTerrain;
     }
-
+    
     public void setBaseWeather(WeatherState weatherState) {
         this.baseWeather = weatherState;
         this.addEffect((Weather)weatherState.getWeatherEffect().getEffect());
     }
-
+    
     public void setTerrainType(TerrainType terrainType, boolean base) {
         if (base) {
             this.baseTerrain = terrainType;
         }
-
+        
         this.currentTerrain = terrainType;
-
+        
         TerrainCastEffect.invokeTerrainCastEffect(this, player.front(), terrainType);
         TerrainCastEffect.invokeTerrainCastEffect(this, opponent.front(), terrainType);
-
+        
         Messages.add(new MessageUpdate().withTerrain(currentTerrain));
     }
-
+    
     public void resetTerrain() {
         this.currentTerrain = baseTerrain;
         Messages.add(new MessageUpdate().withTerrain(currentTerrain));
     }
-
+    
     public boolean hasEffect(EffectNamesies effect) {
         return Effect.hasEffect(effects, effect);
     }
-
+    
     public void fight() {
         startTurn();
-
+        
         boolean playerFirst = speedPriority(player.front(), opponent.front());
         if (playerFirst) {
             fight(player.front(), opponent.front());
@@ -203,194 +203,194 @@ public class Battle implements Serializable {
             fight(opponent.front(), player.front());
         }
     }
-
+    
     protected void fight(ActivePokemon attackFirst, ActivePokemon attackSecond) {
         // First turn
         firstAttacking = true;
         executionSolution(attackFirst, attackSecond);
-
+        
         // Second turn
         firstAttacking = false;
         executionSolution(attackSecond, attackFirst);
-
+        
         endTurn();
-
+        
         if (!isSimulating()) {
             deadUser();
             deadOpponent();
         }
-
+        
         printShit();
     }
-
+    
     public boolean isSimulating() {
         return !(this.player instanceof Player);
     }
-
+    
     protected void printShit() {
         if (this.isSimulating()) {
             return;
         }
-
+        
         for (PokemonEffect e : player.front().getEffects()) {
             System.out.println("P " + e);
         }
-
+        
         for (PokemonEffect e : opponent.front().getEffects()) {
             System.out.println("O " + e);
         }
-
+        
         for (TeamEffect e : player.getEffects()) {
             System.out.println("P " + e);
         }
-
+        
         for (TeamEffect e : opponent.getEffects()) {
             System.out.println("O " + e);
         }
-
+        
         for (BattleEffect e : getEffects()) {
             System.out.println("B " + e);
         }
-
+        
         if (weather.namesies() != baseWeather.getWeatherEffect()) {
             System.out.println("W " + weather);
         }
-
+        
         System.out.print(player.front().getActualName() + " ");
         for (Stat stat : Stat.BATTLE_STATS) {
             System.out.print(player.front().getStage(stat) + " ");
         }
         System.out.println();
-
+        
         System.out.print(opponent.front().getActualName() + " ");
         for (Stat stat : Stat.BATTLE_STATS) {
             System.out.print(opponent.front().getStage(stat) + " ");
         }
         System.out.println();
-
+        
         System.out.println(player.front().getActualName() + " " + player.front().getAbility().getName() + " " + player.front().getHeldItem(this).getName());
         System.out.println(opponent.front().getActualName() + " " + opponent.front().getAbility().getName() + " " + opponent.front().getHeldItem(this).getName());
     }
-
+    
     // Handles events that occur at the beginning of each turn. Returns the two Pokemon currently in battle
     private void startTurn() {
         ActivePokemon plyr = player.front();
         ActivePokemon opp = opponent.front();
-
+        
         turn++;
         plyr.getAttributes().resetTurn();
         opp.getAttributes().resetTurn();
-
+        
         // Fucking focus punch
         if (isFighting(true)) {
             plyr.getAttack().startTurn(this, plyr);
         }
-
+        
         if (isFighting(false)) {
             opp.getAttack().startTurn(this, opp);
         }
     }
-
+    
     public boolean isFirstAttack() {
         return firstAttacking;
     }
-
+    
     // If the trainer selected an attack, this will return true - Wild Pokemon will always return true
     // It will return false if the trainer tried to run, switched Pokemon, or used an item
     private boolean isFighting(boolean team) {
         Team trainer = getTrainer(team);
         return trainer instanceof WildPokemon || ((Trainer)trainer).getAction() == TrainerAction.FIGHT;
     }
-
+    
     private boolean isSwitching(boolean team) {
         Team trainer = getTrainer(team);
         return !(trainer instanceof WildPokemon) && ((Trainer)trainer).getAction() == TrainerAction.SWITCH;
     }
-
+    
     private void endTurn() {
         // Apply Effects
         endTurnPokemonEffects(player.front());
         endTurnPokemonEffects(opponent.front());
-
+        
         // Decrement Pokemon effects
         decrementEffects(player.front().getEffects(), player.front());
         decrementEffects(opponent.front().getEffects(), opponent.front());
-
+        
         // Decrement Team effects
         decrementEffects(player.getEffects(), player.front());
         decrementEffects(opponent.getEffects(), opponent.front());
-
+        
         // Decrement Battle effects
         decrementEffects(effects, null);
         decrementWeather();
-
+        
         // The very, very end
         while (SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, player.front())
                 || SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, opponent.front()));
     }
-
+    
     public boolean deadUser() {
         // Front Pokemon is still functioning
         if (!player.front().isFainted(this)) {
             return false;
         }
-
+        
         // Dead Front Pokemon, but you still have others to spare -- force a switch
         if (!player.blackout(this)) {
             Messages.add(new MessageUpdate("What Pokemon would you like to switch to?").withUpdate(Update.FORCE_SWITCH));
             return false;
         }
-
+        
         // Blackout -- you're fucked
         Messages.add(player.getName() + " is out of usable " + PokeString.POKEMON + "! " + player.getName() + " blacked out!");
-
+        
         // Sucks to suck
         if (opponent instanceof Trainer) {
             Trainer opp = (Trainer)opponent;
             int cashMoney = player.sucksToSuck(opp.getDatCashMoney());
             Messages.add(opp.getName() + " rummaged through the pockets of your passed out body and stole " + cashMoney + " pokedollars!!!");
         }
-
+        
         player.healAll();
         ((Player)player).teleportToPokeCenter();
-
+        
         Messages.clearMessages(MessageState.MAPPITY_MAP);
         Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-
+        
         return true;
     }
-
+    
     public boolean deadOpponent() {
         ActivePokemon dead = opponent.front();
         Player player = (Player)this.player;
-
+        
         // YOU'RE FINE
         if (!dead.isFainted(this)) {
             return false;
         }
-
+        
         // Gain dat EXP
         player.gainEXP(dead, this);
-
+        
         // You have achieved total victory
         if (opponent.blackout(this)) {
             player.winBattle(this, opponent);
             return true;
         }
-
+        
         // We know this is not a wild battle anymore and I don't feel like casting so much
         Trainer opp = (Trainer)opponent;
-
+        
         // They still have some Pokes left
         opp.switchToRandom(this);
         enterBattle(opp.front());
-
+        
         return false;
     }
-
+    
     public void enterBattle(ActivePokemon enterer) {
         NameChanger.setNameChanges(this, enterer);
-
+        
         String enterMessage = "";
         if (enterer.isPlayer()) {
             enterMessage = "Go! " + enterer.getName() + "!";
@@ -398,49 +398,49 @@ public class Battle implements Serializable {
         else if (opponent instanceof Trainer) {
             enterMessage = ((Trainer)opponent).getName() + " sent out " + enterer.getName() + "!";
         }
-
+        
         enterBattle(enterer, enterMessage);
     }
-
+    
     public void enterBattle(ActivePokemon enterer, String enterMessage) {
         if (enterer.isEgg()) {
             Global.error("Eggs can't battle!!!");
         }
-
+        
         // Document sighting in the Pokedex
         if (!enterer.isPlayer() && !isSimulating()) {
             ((Player)player).getPokedex().setSeen(enterer, isWildBattle());
         }
-
+        
         enterer.resetAttributes();
         NameChanger.setNameChanges(this, enterer);
-
+        
         Messages.add(new MessageUpdate(enterMessage).withSwitch(this, enterer));
-
+        
         enterer.getAttributes().setUsed(true);
         EntryEffect.invokeEntryEffect(this, enterer);
-
+        
         getTrainer(!enterer.isPlayer()).resetUsed();
     }
-
+    
     public boolean runAway() {
         escapeAttempts++;
-
+        
         if (opponent instanceof Trainer) {
             Messages.add("There's no running from a trainer battle!");
             return false;
         }
-
+        
         ActivePokemon plyr = player.front();
         ActivePokemon opp = opponent.front();
-
+        
         if (!plyr.canEscape(this)) {
             return false;
         }
-
+        
         int pSpeed = Stat.getStat(Stat.SPEED, plyr, opp, this);
         int oSpeed = Stat.getStat(Stat.SPEED, opp, plyr, this);
-
+        
         int val = (int)((pSpeed*32.0)/(oSpeed/4.0) + 30.0*escapeAttempts);
         if (RandomUtils.chanceTest(val, 256) ||
                 plyr.getAbility() instanceof DefiniteEscape || // TODO: This is wrong and should be able to escape even with mean look and such
@@ -449,12 +449,12 @@ public class Battle implements Serializable {
             Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
             return true;
         }
-
+        
         Messages.add("Can't escape!");
         ((Player)player).performAction(this, TrainerAction.RUN);
         return false;
     }
-
+    
     private void decrementEffects(List<? extends Effect> effects, ActivePokemon p) {
         List<Effect> toRemove = new ArrayList<>();
         for (Effect effect : effects) {
@@ -463,11 +463,11 @@ public class Battle implements Serializable {
                 effect.decrement(this, p);
                 inactive = !effect.isActive() && !effect.nextTurnSubside();
             }
-
+            
             if (inactive) {
                 toRemove.add(effect);
                 effect.subside(this, p);
-
+                
                 // I think this is pretty much just for Future Sight...
                 if (p != null && p.isFainted(this)) {
                     return;
@@ -476,14 +476,14 @@ public class Battle implements Serializable {
         }
         effects.removeIf(toRemove::contains);
     }
-
+    
     private void decrementWeather() {
         if (!weather.isActive()) {
             Messages.add(weather.getSubsideMessage(player.front()));
             this.setBaseWeather(this.baseWeather);
             return;
         }
-
+        
         weather.applyEndTurn(player.front(), this);
         weather.decrement(this, player.front());
     }
@@ -496,11 +496,11 @@ public class Battle implements Serializable {
         // No longer the first turn anymore
         me.getAttributes().setFirstTurn(false);
     }
-
+    
     private boolean isFront(ActivePokemon p) {
         return p == getTrainer(p).front();
     }
-
+    
     private void executionSolution(ActivePokemon me, ActivePokemon o) {
         if (isSwitching(me.isPlayer())) {
             Trainer trainer = (Trainer)getTrainer(me);
@@ -508,12 +508,12 @@ public class Battle implements Serializable {
             this.enterBattle(trainer.front());
             return;
         }
-
+        
         // Don't do anything if they're not actually attacking
         if (!isFighting(me.isPlayer()) || !isFront(me)) {
             return;
         }
-
+        
         boolean success = false;
         
         me.startAttack(this);
@@ -531,11 +531,11 @@ public class Battle implements Serializable {
             else {
                 Messages.add(me.getName() + "'s attack missed!");
                 CrashDamageMove.invokeCrashDamageMove(this, me);
-            }            
+            }
         }
         
         me.endAttack(o, success);
-
+        
         // Can't use me and o in case there was a switch mid-turn
         Messages.add(new MessageUpdate().updatePokemon(this, player.front()));
         Messages.add(new MessageUpdate().updatePokemon(this, opponent.front()));
@@ -550,12 +550,12 @@ public class Battle implements Serializable {
         if (me.isPlayer() && !this.isSimulating()) {
             Game.getPlayer().getMedalCase().useMove(me.getAttack().namesies());
         }
-
+        
         me.getAttributes().count();
-
+        
         boolean success = me.getAttack().apply(me, o, this);
         me.getAttributes().setLastMoveSucceeded(success);
-
+        
         me.getMove().setUsed();
         me.getAttributes().decay();
     }
@@ -564,7 +564,7 @@ public class Battle implements Serializable {
         if (effect instanceof Weather) {
             weather = (Weather)effect;
             Messages.add(new MessageUpdate().withWeather(weather));
-
+            
             if (WeatherEliminatingEffect.shouldEliminateWeather(this, player.front(), weather)
                     || WeatherEliminatingEffect.shouldEliminateWeather(this, opponent.front(), weather)) {
                 weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
@@ -575,11 +575,11 @@ public class Battle implements Serializable {
             effects.add(effect);
         }
     }
-
+    
     public List<BattleEffect> getEffects() {
         return effects;
     }
-
+    
     public List<TeamEffect> getEffects(ActivePokemon teamMember) {
         return getEffects(teamMember.isPlayer());
     }
@@ -599,15 +599,15 @@ public class Battle implements Serializable {
         
         return list;
     }
-
+    
     public Team getTrainer(ActivePokemon pokemon) {
         return getTrainer(pokemon.isPlayer());
     }
-
+    
     public Team getTrainer(boolean isPlayer) {
         return isPlayer ? player : opponent;
     }
-
+    
     public ActivePokemon getOtherPokemon(ActivePokemon pokemon) {
         return getOtherPokemon(pokemon.isPlayer());
     }
@@ -637,10 +637,10 @@ public class Battle implements Serializable {
                 Global.error("Invalid category " + me.getAttack().getCategory() + " for calculating damage");
                 return -1;
         }
-
+        
         int level = me.getLevel();
         int random = RandomUtils.getRandomInt(16) + 85;
-
+        
         int power = me.getAttack().getPower(this, me, o);
         power *= getDamageModifier(me, o);
         
@@ -649,7 +649,7 @@ public class Battle implements Serializable {
         
         double stab = TypeAdvantage.getSTAB(this, me);
         double adv = TypeAdvantage.getAdvantage(me, o, this);
-
+        
         //        System.out.printf("%s %s %d %d %d %d %d %f %f %d%n",
 //                me.getActualName(),
 //                me.getAttack().getName(),
@@ -661,44 +661,44 @@ public class Battle implements Serializable {
 //                stab,
 //                adv,
 //                damage);
-        
+
         return (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
     }
-
+    
     protected double getDamageModifier(ActivePokemon me, ActivePokemon o) {
         return PowerChangeEffect.getModifier(this, me, o)*OpponentPowerChangeEffect.getModifier(this, me, o);
     }
-
+    
     // Crit yo pants
     private static final int[] CRITSICLES = { 16, 8, 4, 3, 2 };
     public boolean criticalHit(ActivePokemon me, ActivePokemon o) {
         if (CritBlockerEffect.checkBlocked(this, me, o)) {
             return false;
         }
-
+        
         if (AlwaysCritEffect.defCritsies(this, me, o)) {
             return true;
         }
-
+        
         // Increase crit stage and such
         int stage = getCritStage(me);
-
+        
         return RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
     }
-
+    
     public int getCritStage(ActivePokemon me) {
         int stage = 1;
         stage = CritStageEffect.updateCritStage(this, stage, me);
         stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
         return stage;
     }
-
+    
     protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
         // Self-Target moves don't miss
         if (me.getAttack().isSelfTarget() && me.getAttack().isStatusMove()) {
             return true;
         }
-
+        
         if (me.getAttack().isMoveType(MoveType.FIELD)) {
             return true;
         }
@@ -746,11 +746,11 @@ public class Battle implements Serializable {
         // WOOOOOOOOOO
         return true;
     }
-
+    
     public int getPriority(ActivePokemon p, Attack attack) {
         int priority = attack.getPriority(this, p);
         priority += PriorityChangeEffect.getModifier(this, p, attack);
-
+        
 //        System.out.println(attack.getName() + " Priority: " + priority);
 
         return priority;
@@ -766,17 +766,17 @@ public class Battle implements Serializable {
         return ((Trainer)getTrainer(p.isPlayer())).getAction().getPriority();
     }
     
-    // Returns true if the player will be attacking first, and false if the opponent will be 
+    // Returns true if the player will be attacking first, and false if the opponent will be
     private boolean speedPriority(ActivePokemon plyr, ActivePokemon opp) {
-
+    
         // Higher priority always goes first
         int pPriority = getPriority(plyr);
         int oPriority = getPriority(opp);
-
+        
         if (pPriority != oPriority) {
             return pPriority > oPriority;
         }
-
+        
         // TODO: Rewrite this shit it looks like ass
         // Quick Claw gives holder a 20% chance of striking first within its priority bracket
         boolean pQuick = plyr.isHoldingItem(this, ItemNamesies.QUICK_CLAW);
@@ -788,7 +788,7 @@ public class Battle implements Serializable {
         if (oQuick && !pQuick && RandomUtils.chanceTest(20)) {
             Messages.add(opp.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!");
             return false;
-        }        
+        }
         
         // Trick Room makes the slower Pokemon go first
         boolean reverse = hasEffect(EffectNamesies.TRICK_ROOM);
@@ -796,7 +796,7 @@ public class Battle implements Serializable {
         // Pokemon that are stalling go last, if both are stalling, the slower one goes first
         boolean pStall = plyr.isStalling(this);
         boolean oStall = opp.isStalling(this);
-
+        
         if (pStall && oStall) {
             reverse = true;
         }

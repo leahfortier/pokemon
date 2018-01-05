@@ -21,7 +21,7 @@ import java.util.List;
 
 public class Button {
     public static final int NO_TRANSITION = -1;
-
+    
     public final int x;
     public final int y;
     public final int width;
@@ -35,15 +35,15 @@ public class Button {
     private boolean press;
     private boolean forceHover;
     private boolean active;
-
+    
     public Button(int x, int y, int width, int height) {
         this(x, y, width, height, null, null, null);
     }
-
+    
     public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition) {
         this(x, y, width, height, hoverAction, transition, null);
     }
-
+    
     public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition, ButtonPressAction pressAction) {
         this.x = x;
         this.y = y;
@@ -52,31 +52,31 @@ public class Button {
         
         this.hoverAction = hoverAction;
         this.pressAction = pressAction == null ? () -> {} : pressAction;
-
+        
         if (transition == null) {
             this.transition = new int[] { NO_TRANSITION, NO_TRANSITION, NO_TRANSITION, NO_TRANSITION };
         } else {
             this.transition = transition;
         }
-
+        
         this.hover = false;
         this.press = false;
         this.forceHover = false;
         this.active = true;
     }
-
+    
     public static Button createExitButton(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition) {
         return new Button(x, y, width, height, hoverAction, transition, () -> Game.instance().popView());
     }
-
+    
     public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, int[] transitions) {
         return createTabButton(tabIndex, panelX, panelY, panelWidth, tabHeight, numButtons, transitions, null);
     }
-
+    
     public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, int[] transitions, ButtonPressAction buttonPressAction) {
         int tabWidth = panelWidth/numButtons;
         int remainder = panelWidth%numButtons;
-
+        
         return new Button(
                 panelX + tabIndex*tabWidth + Math.min(tabIndex, remainder),
                 panelY - tabHeight + DrawUtils.OUTLINE_SIZE,
@@ -87,13 +87,13 @@ public class Button {
                 buttonPressAction
         );
     }
-
+    
     public void draw(Graphics g) {
         if ((hover || forceHover) && active && hoverAction != null) {
             hoverAction.draw(g, this);
         }
     }
-
+    
     // Works for all grid buttons
     public static int[] getBasicTransitions(int currentIndex, int numRows, int numCols) {
         int[] transitions = new int[Direction.values().length];
@@ -101,21 +101,21 @@ public class Button {
             Direction direction = Direction.values()[i];
             transitions[i] = basicTransition(currentIndex, numRows, numCols, direction);
         }
-
+        
         return transitions;
     }
-
+    
     // Works for all grid buttons
     public static int[] getBasicTransitions(int currentIndex, int numRows, int numCols, int startValue, int[] defaultTransitions) {
         // Get the corresponding grid index
         Point location = Point.getPointAtIndex(currentIndex, numCols);
-
+        
         int[] transitions = new int[Direction.values().length];
         for (int i = 0; i < transitions.length; i++) {
             Direction direction = Direction.values()[i];
             Point newLocation = Point.add(location, direction.getDeltaPoint());
             boolean inBounds = newLocation.inBounds(numCols, numRows);
-
+            
             // Default value specified and out of bounds -- use default value instead of wrapping
             if (defaultTransitions != null
                     && i < defaultTransitions.length
@@ -126,34 +126,34 @@ public class Button {
                 transitions[i] = basicTransition(currentIndex, numRows, numCols, direction) + startValue;
             }
         }
-
+        
         return transitions;
     }
-
+    
     public static int basicTransition(int currentIndex, int numRows, int numCols, Direction direction) {
         // Get the corresponding grid index
         Point location = Point.getPointAtIndex(currentIndex, numCols);
-
+        
         // Move in the given direction
         location = Point.move(location, direction);
-
+        
         // Keep in bounds of the grid
         location = Point.modInBounds(location, numRows, numCols);
-
+        
         // Convert back to single dimension index
         return location.getIndex(numCols);
     }
-
+    
     public static int update(Button[] buttons, int selected) {
         if (!buttons[selected].forceHover) {
             setForceHover(buttons, selected);
         }
-
+        
         Direction inputDirection = Direction.consumeInputDirection();
         if (inputDirection != null) {
             selected = Button.transition(buttons, selected, inputDirection);
         }
-
+        
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].update(i == selected);
             
@@ -165,40 +165,40 @@ public class Button {
         
         return selected;
     }
-
+    
     private static void setForceHover(Button[] buttons, int selected) {
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setForceHover(selected == i && buttons[i].isActive());
         }
     }
-
+    
     private static int transition(Button[] buttons, int index, Direction direction) {
         int next = index;
         do {
             next = buttons[next].transition[direction.ordinal()];
         } while (next != NO_TRANSITION && !buttons[next].isActive());
-
+        
         if (next == NO_TRANSITION) {
             return index;
         }
-
+        
         setForceHover(buttons, next);
         
         return next;
     }
-
+    
     public void update(boolean isSelected, ControlKey... optionalKeys) {
         if (!active) {
             return;
         }
-
+        
         hover = false;
         press = false;
-
+        
         InputControl input = InputControl.instance();
         if (input.isMouseInput()) {
             Point mouseLocation = input.getMouseLocation();
-
+            
             int mx = mouseLocation.x;
             int my = mouseLocation.y;
             
@@ -209,40 +209,40 @@ public class Button {
                 }
             }
         }
-
+        
         if (isSelected && input.consumeIfDown(ControlKey.SPACE)) {
             press = true;
         }
-
+        
         for (ControlKey c : optionalKeys) {
             if (input.consumeIfDown(c)) {
                 press = true;
             }
         }
     }
-
+    
     public void update() {
         update(false);
     }
-
+    
     public boolean checkConsumePress() {
         if (press) {
             press = false;
             pressAction.buttonPressed();
             return true;
         }
-
+        
         return false;
     }
-
+    
     public boolean isActive() {
         return active;
     }
-
+    
     public void setForceHover(boolean set) {
         forceHover = set;
     }
-
+    
     public void setActive(boolean set) {
         active = set;
         if (!active) {
@@ -255,24 +255,24 @@ public class Button {
         fill(g, totesBlacks ? Color.BLACK : temp.darker());
         g.setColor(temp);
     }
-
+    
     public void greyOut(Graphics g) {
         DrawUtils.greyOut(g, x, y, width, height);
     }
-
+    
     public void fillTranslated(Graphics g, Color color) {
         fill(g, color, 0, 0);
     }
-
+    
     public void fill(Graphics g, Color color) {
         fill(g, color, x, y);
     }
-
+    
     private void fill(Graphics g, Color color, int x, int y) {
         g.setColor(color);
         g.fillRect(x, y, width, height);
     }
-
+    
     public void fillBordered(Graphics g, Color color) {
         new DrawPanel(x, y, width, height)
                 .withTransparentBackground(color)
@@ -281,94 +281,94 @@ public class Button {
                 .withBlackOutline()
                 .drawBackground(g);
     }
-
+    
     public void fillBorderLabel(Graphics g, Color color, int fontSize, String label) {
         fillTransparent(g, color);
         blackOutline(g);
         label(g, fontSize, label);
     }
-
+    
     public void fillTransparent(Graphics g, Color color) {
         fill(g, color);
         fillTransparent(g);
     }
-
+    
     public void fillTransparent(Graphics g) {
         DrawUtils.fillTransparent(g, x, y, width, height);
     }
-
+    
     public void blackOutline(Graphics g) {
         DrawUtils.blackOutline(g, x, y, width, height);
     }
-
+    
     public void outlineTab(Graphics g, int index, int selectedIndex) {
         List<Direction> toOutline = new ArrayList<>();
         toOutline.add(Direction.UP);
         toOutline.add(Direction.RIGHT);
-
+        
         if (index == 0) {
             toOutline.add(Direction.LEFT);
         }
-
+        
         if (index != selectedIndex) {
             toOutline.add(Direction.DOWN);
         }
-
+        
         DrawUtils.blackOutline(g, x, y, width, height, toOutline.toArray(new Direction[0]));
     }
-
+    
     public void label(Graphics g, int fontSize, String text) {
         label(g, fontSize, Color.BLACK, text);
     }
-
+    
     public void label(Graphics g, int fontSize, Color color, String text) {
         g.setColor(color);
         FontMetrics.setFont(g, fontSize);
         TextUtils.drawCenteredString(g, text, x, y, width, height);
     }
-
+    
     public void imageLabel(Graphics g, BufferedImage image) {
         ImageUtils.drawCenteredImage(g, image, centerX(), centerY());
     }
-
+    
     public int rightX() {
         return x + width;
     }
-
+    
     public int bottomY() {
         return y + height;
     }
-
+    
     public int centerX() {
         return x + width/2;
     }
-
+    
     public int centerY() {
         return y + height/2;
     }
-
+    
     public void drawArrow(Graphics g, Direction direction) {
         PolygonUtils.drawArrow(g, x, y, width, height, direction);
     }
-
+    
     public void drawMoveButton(Graphics g, Move move) {
         g.translate(x, y);
-
+        
         new DrawPanel(0, 0, width, height)
                 .withTransparentBackground(move.getAttack().getActualType().getColor())
                 .withBorderPercentage(15)
                 .withBlackOutline()
                 .drawBackground(g);
-
+                
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 22);
         g.drawString(move.getAttack().getName(), 10, 26);
-
+        
         FontMetrics.setFont(g, 18);
         TextUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
-
+        
         g.translate(-x, -y);
-
+        
         this.draw(g);
     }
 }

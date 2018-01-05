@@ -31,7 +31,7 @@ public final class EffectInterfaces {
     private EffectInterfaces() {
         Global.error("EffectInterfaces class cannot be instantiated.");
     }
-
+    
     // EVERYTHING BELOW IS GENERATED ###
     
     // This is used when the user applies direct damage to an opponent, and has special effects associated with the user

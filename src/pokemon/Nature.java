@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class Nature implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    
     private static final String[][] natures = {
             { "", "",       "",       "",        "",        ""        },
             { "", "Hardy",  "Lonely", "Adamant", "Naughty", "Brave"   },
@@ -69,13 +69,13 @@ public class Nature implements Serializable {
             return Color.BLACK;
         }
     }
-
+    
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Nature)) {
             return false;
         }
-
+        
         Nature that = (Nature)other;
         return this.getName().equals(that.getName());
     }

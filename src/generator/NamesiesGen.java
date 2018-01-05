@@ -18,9 +18,9 @@ class NamesiesGen {
     NamesiesGen(final String namesiesFolder, final Class namesiesClass) {
         this.namesiesFolder = namesiesFolder;
         this.namesiesClassName = namesiesClass.getSimpleName();
-
+        
         this.namesies = new StringAppender();
-
+        
         if (namesiesClass.equals(PokemonNamesies.class)) {
             pokemonNamesies();
             writeNamesies();
@@ -29,7 +29,7 @@ class NamesiesGen {
     
     void writeNamesies() {
         final String fileName = this.namesiesFolder + this.namesiesClassName + ".java";
-
+        
         Scanner original = FileIO.openFile(fileName);
         StringAppender out = new StringAppender();
         
@@ -62,7 +62,7 @@ class NamesiesGen {
                 canPrint = false;
             }
         }
-
+        
         FileIO.overwriteFile(fileName, out.toString());
     }
     
@@ -75,7 +75,7 @@ class NamesiesGen {
                 StringUtils.isNullOrEmpty(className) ? "" : ", " + className + "::new")
         );
     }
-
+    
     private void pokemonNamesies() {
         // Add the Pokemon to namesies
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {

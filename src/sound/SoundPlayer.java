@@ -2,7 +2,7 @@ package sound;
 
 public class SoundPlayer {
     public static final SoundPlayer soundPlayer = new SoundPlayer();
-
+    
     private boolean muted;
     private SoundTitle music;
     private    MP3Player musicPlayer;
@@ -21,7 +21,7 @@ public class SoundPlayer {
     public void setMuted(boolean muted) {
         this.muted = muted;
     }
-
+    
     public void playSound(SoundTitle sound) {
         if (sound.isMusic()) {
             this.playMusic(sound);
@@ -31,7 +31,7 @@ public class SoundPlayer {
     }
     
     public void playMusic(SoundTitle newMusic) {
-
+    
         // If we're trying to play the same song that's already playing don't do anything.
         if (music == newMusic) {
             return;
@@ -102,10 +102,10 @@ public class SoundPlayer {
         if (soundEffectPlayer != null) {
             soundEffectPlayer.close();
         }
-
+        
         // SRSLY
         if (!muted) {
-            createPlayer(soundEffect);    
+            createPlayer(soundEffect);
         }
     }
     

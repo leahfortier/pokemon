@@ -29,26 +29,26 @@ public class MapDataMatcher {
     private EventMatcher[] events = new EventMatcher[0];
     private WildBattleAreaMatcher[] wildBattles = new WildBattleAreaMatcher[0];
     private FishingMatcher[] fishingSpots = new FishingMatcher[0];
-
+    
     public MapDataMatcher(Set<AreaMatcher> areaData,
                           List<LocationTriggerMatcher> entities) {
-
+                          
         this.areas = areaData.stream()
                 .sorted(Comparator.comparing(areaMatcher -> areaMatcher.getAreaData().getAreaName()))
                 .collect(Collectors.toList())
                 .toArray(new AreaMatcher[0]);
-
+                
         Map<TriggerModelType, List<LocationTriggerMatcher>> triggerMap = new EnumMap<>(TriggerModelType.class);
         for (TriggerModelType triggerModelType : TriggerModelType.values()) {
             triggerMap.put(triggerModelType, new ArrayList<>());
         }
-
+        
         for (LocationTriggerMatcher entity : entities) {
             triggerMap.get(entity.getTriggerModelType()).add(entity);
         }
-
-
-
+        
+        
+        
         this.mapTransitions = fillTriggerArray(this.mapTransitions, triggerMap.get(TriggerModelType.MAP_TRANSITION), trigger -> (MapTransitionMatcher)trigger);
         this.NPCs = fillTriggerArray(this.NPCs, triggerMap.get(TriggerModelType.NPC), trigger -> (NPCMatcher)trigger);
         this.items = fillTriggerArray(this.items, GeneralUtils.combine(triggerMap.get(TriggerModelType.ITEM),triggerMap.get(TriggerModelType.HIDDEN_ITEM)), trigger -> (ItemMatcher)trigger);
@@ -57,7 +57,7 @@ public class MapDataMatcher {
         this.wildBattles = fillTriggerArray(this.wildBattles, triggerMap.get(TriggerModelType.WILD_BATTLE), trigger -> (WildBattleAreaMatcher)trigger);
         this.fishingSpots = fillTriggerArray(this.fishingSpots, triggerMap.get(TriggerModelType.FISHING), trigger -> (FishingMatcher)trigger);
     }
-
+    
     private <T extends LocationTriggerMatcher> T[] fillTriggerArray(
             T[] array,
             List<LocationTriggerMatcher> triggerList,
@@ -67,43 +67,43 @@ public class MapDataMatcher {
                 .collect(Collectors.toList())
                 .toArray(array);
     }
-
+    
     public AreaMatcher getDefaultArea() {
         return this.areas[0];
     }
-
+    
     public List<AreaMatcher> getAreas() {
         return Arrays.asList(this.areas);
     }
-
+    
     public List<NPCMatcher> getNPCs() {
         return Arrays.asList(this.NPCs);
     }
-
+    
     public List<ItemMatcher> getItems() {
         return Arrays.asList(this.items);
     }
-
+    
     public List<MapTransitionMatcher> getMapTransitions() {
         return Arrays.asList(this.mapTransitions);
     }
-
+    
     public List<MiscEntityMatcher> getMiscEntities() {
         return Arrays.asList(this.miscEntities);
     }
-
+    
     public List<EventMatcher> getEvents() {
         return Arrays.asList(this.events);
     }
-
+    
     public List<WildBattleAreaMatcher> getWildBattles() {
         return Arrays.asList(this.wildBattles);
     }
-
+    
     public List<FishingMatcher> getFishingSpots() {
         return Arrays.asList(this.fishingSpots);
     }
-
+    
     public List<LocationTriggerMatcher> getAllEntities() {
         List<LocationTriggerMatcher> entities = new ArrayList<>();
         entities.addAll(getMapTransitions());
@@ -113,39 +113,39 @@ public class MapDataMatcher {
         entities.addAll(getEvents());
         entities.addAll(getWildBattles());
         entities.addAll(getFishingSpots());
-
+        
         return entities;
     }
-
+    
     public AreaData[] getAreaData() {
         AreaData[] areaData = new AreaData[this.areas.length];
         for (int i = 0; i < this.areas.length; i++) {
             areaData[i] = this.areas[i].getAreaData();
         }
-
+        
         return areaData;
     }
-
+    
     public static MapDataMatcher matchArea(String areaDescriptionFileName) {
         String areaDescription = FileIO.readEntireFileWithReplacements(areaDescriptionFileName, false);
-
+        
         MapDataMatcher areaData = SerializationUtils.deserializeJson(areaDescription, MapDataMatcher.class);
         JsonObject mappity = SerializationUtils.deserializeJson(areaDescription, JsonObject.class);
-
+        
         String areaDataJson = SerializationUtils.getJson(areaData);
         String mapJson = SerializationUtils.getJson(mappity);
-
+        
 //        FileIO.writeToFile("out.txt", areaDataJson);
 //        FileIO.writeToFile("out2.txt", mapJson);
 
         if (!areaDataJson.equals(mapJson)) {
             Global.error("No dice");
         }
-
+        
         areaDataJson = SerializationUtils.getJson(areaData);
-
+        
         FileIO.overwriteFile(areaDescriptionFileName, areaDataJson);
-
+        
         return areaData;
     }
 }

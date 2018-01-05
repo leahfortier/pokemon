@@ -16,39 +16,39 @@ import java.util.List;
 
 public abstract class Trainer implements Team, Serializable {
     private static final long serialVersionUID = -7797121866082399148L;
-
+    
     public static final int MAX_POKEMON = 6;
-
+    
     protected String name;
     protected TrainerAction action;
     protected int cashMoney;
-
+    
     protected List<ActivePokemon> team;
     protected List<TeamEffect> effects;
     private int frontIndex;
     private int switchIndex;
-
+    
 //    protected boolean isBeTryingToSwitchRunOrUseItem;
 //    protected boolean isBTTSROUI;
-    
+
     protected Bag bag;
     
     public Trainer(String name, int cashMoney) {
         team = new ArrayList<>();
         effects = new ArrayList<>();
         frontIndex = 0;
-
-        this.name = name; 
+        
+        this.name = name;
         this.cashMoney = cashMoney;
         
         bag = new Bag();
     }
-
+    
     @Override
     public ActivePokemon front() {
         return team.get(frontIndex);
     }
-
+    
     @Override
     public int getTeamIndex(ActivePokemon teamMember) {
         for (int i = 0; i < team.size(); i++) {
@@ -59,17 +59,17 @@ public abstract class Trainer implements Team, Serializable {
         
         return -1;
     }
-
+    
     @Override
     public List<ActivePokemon> getTeam() {
         return team;
     }
-
+    
     @Override
     public List<TeamEffect> getEffects() {
         return effects;
     }
-
+    
     @Override
     public void resetEffects() {
         effects = new ArrayList<>();
@@ -78,7 +78,7 @@ public abstract class Trainer implements Team, Serializable {
     public String getName() {
         return name;
     }
-
+    
     public int getFrontIndex() {
         return this.frontIndex;
     }
@@ -87,10 +87,10 @@ public abstract class Trainer implements Team, Serializable {
         if (frontIndex == index) {
             return;
         }
-
+        
         // Apply any effects that take place when switching out
         SwitchOutEffect.invokeSwitchOutEffect(front());
-
+        
         frontIndex = index;
     }
     
@@ -102,7 +102,7 @@ public abstract class Trainer implements Team, Serializable {
                 return;
             }
         }
-
+        
         Global.error("None of your Pokemon are capable of battling!");
     }
     
@@ -111,7 +111,7 @@ public abstract class Trainer implements Team, Serializable {
         team.forEach(ActivePokemon::resetAttributes);
         setFront();
     }
-
+    
     @Override
     public void resetUsed() {
         for (int i = 0; i < team.size(); i++) {
@@ -140,17 +140,17 @@ public abstract class Trainer implements Team, Serializable {
         cashMoney = Math.max(0, cashMoney - datCash);
         return prev - cashMoney;
     }
-
+    
     @Override
     public boolean hasEffect(EffectNamesies effect) {
         return Effect.hasEffect(effects, effect);
     }
-
+    
     @Override
     public void addEffect(TeamEffect e) {
         effects.add(e);
     }
-
+    
     @Override
     public boolean blackout(Battle b) {
         boolean maxUsed = maxPokemonUsed(b);
@@ -159,7 +159,7 @@ public abstract class Trainer implements Team, Serializable {
                 return false;
             }
         }
-
+        
         return true;
     }
     
@@ -168,7 +168,7 @@ public abstract class Trainer implements Team, Serializable {
     }
     
     public void switchToRandom(Battle b) {
-
+    
         boolean maxUsed = maxPokemonUsed(b);
         List<Integer> valid = new ArrayList<>();
         for (int i = 0; i < team.size(); i++) {
@@ -176,19 +176,19 @@ public abstract class Trainer implements Team, Serializable {
             if (i == frontIndex || !p.canFight() || (maxUsed && !p.getAttributes().isBattleUsed())) {
                 continue;
             }
-
+            
             valid.add(i);
         }
         
         if (valid.size() == 0) {
             Global.error("You shouldn't be switching when you have nothing to switch to!");
         }
-
+        
         setFront(RandomUtils.getRandomValue(valid));
     }
     
     public boolean canSwitch(Battle b, int switchIndex) {
-
+    
         // This Pokemon is already out!!
         if (switchIndex == frontIndex) {
             return false;
@@ -201,12 +201,12 @@ public abstract class Trainer implements Team, Serializable {
         if (!toSwitch.canFight()) {
             return false;
         }
-
+        
         // Cannot switch to an unused Pokemon if you have already used the maximum number of Pokemon
         if (maxPokemonUsed(b) && !toSwitch.getAttributes().isBattleUsed()) {
             return false;
         }
-
+        
         // If current Pokemon is dead then you must switch!
         if (curr.isFainted(b)) {
             return true;
@@ -215,19 +215,19 @@ public abstract class Trainer implements Team, Serializable {
         // Front Pokemon is alive -- Check if they are able to switch out, if not, display the appropriate message
         return curr.canEscape(b);
     }
-
+    
     public int getSwitchIndex() {
         return this.switchIndex;
     }
-
+    
     public void setSwitchIndex(int switchIndex) {
         this.switchIndex = switchIndex;
     }
-
+    
     public boolean maxPokemonUsed(Battle b) {
         return numPokemonUsed() == b.getOpponent().maxPokemonAllowed();
     }
-
+    
     private int numPokemonUsed() {
         return (int)team.stream().filter(p -> p.getAttributes().isBattleUsed()).count();
     }
@@ -261,7 +261,7 @@ public abstract class Trainer implements Team, Serializable {
         team.set(i, team.get(j));
         team.set(j, tmp);
     }
-
+    
     public void replaceFront(ActivePokemon newFront) {
         this.team.set(this.frontIndex, newFront);
     }

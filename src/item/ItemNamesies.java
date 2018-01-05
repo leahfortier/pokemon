@@ -873,33 +873,33 @@ public enum ItemNamesies {
     WATERFALL_TM("Waterfall TM", WaterfallTM::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
-
+    
     private static final Map<ItemNamesies, Item> itemMap = new EnumMap<>(ItemNamesies.class);
-
+    
     private final String name;
     private final ItemCreator itemCreator;
-
+    
     ItemNamesies(String name, ItemCreator itemCreator) {
         this.name = name;
         this.itemCreator = itemCreator;
     }
-
+    
     @FunctionalInterface
     private interface ItemCreator {
         Item createItem();
     }
-
+    
     public String getName() {
         return this.name;
     }
-
+    
     public Item getItem() {
         if (!itemMap.containsKey(this)) {
             itemMap.put(this, this.itemCreator.createItem());
         }
         return itemMap.get(this);
     }
-
+    
     public static ItemNamesies tryValueOf(String name) {
         try {
             return ItemNamesies.valueOf(StringUtils.getNamesiesString(name));
@@ -907,7 +907,7 @@ public enum ItemNamesies {
             return null;
         }
     }
-
+    
     public static ItemNamesies getValueOf(String name) {
         ItemNamesies itemNamesies = tryValueOf(name);
         if (itemNamesies == null) {

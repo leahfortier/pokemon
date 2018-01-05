@@ -44,7 +44,7 @@ enum GrowthRate implements Serializable {
     public int getEXP(int level) {
         return Math.max(0, this.expGetter.getEXP(level));
     }
-
+    
     @FunctionalInterface
     private interface ExperienceGetter {
         int getEXP(int level);

@@ -95,77 +95,77 @@ import java.util.List;
 
 public abstract class Item implements Comparable<Item>, Serializable, ItemInterface {
     private static final long serialVersionUID = 1L;
-
+    
     protected ItemNamesies namesies;
     protected String name;
     private String description;
     private BagCategory bagCategory;
     private List<BattleBagCategory> battleBagCategories;
     private int price;
-
+    
     public Item(ItemNamesies name, String description, BagCategory category) {
         this.namesies = name;
         this.name = name.getName();
         this.description = description;
         this.bagCategory = category;
-
+        
         this.battleBagCategories = new ArrayList<>();
         this.price = -1;
     }
-
+    
     public int compareTo(Item o) {
         return this.name.compareTo(o.name);
     }
-
+    
     public boolean isUsable() {
         return this instanceof UseItem;
     }
-
+    
     public boolean isHoldable() {
         return this instanceof HoldItem;
     }
-
+    
     public boolean hasQuantity() {
         return bagCategory != BagCategory.TM && bagCategory != BagCategory.KEY_ITEM;
     }
-
+    
     public ItemNamesies namesies() {
         return this.namesies;
     }
-
+    
     public String getName() {
         return this.name;
     }
-
+    
     public String getDescription() {
         return this.description;
     }
-
+    
     public int getPrice() {
         return this.price;
     }
-
+    
     public BagCategory getBagCategory() {
         return this.bagCategory;
     }
-
+    
     public Iterable<BattleBagCategory> getBattleBagCategories() {
         return this.battleBagCategories;
     }
-
+    
     public int hashCode() {
         return name.hashCode();
     }
-
+    
     @Override
     public Item getItem() {
         return this;
     }
-
+    
     public static boolean isItem(String itemName) {
         return ItemNamesies.tryValueOf(itemName) != null;
     }
-
+    
     // EVERYTHING BELOW IS GENERATED ###
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
     

@@ -8,17 +8,17 @@ enum AccessModifier {
     PROTECTED("protected"),
     PACKAGE_PRIVATE(""),
     DEFAULT("default"); // Technically not an access modifier, but works here all the same yeah yeah yeah I suck
-
+    
     private final String modifierName;
-
+    
     AccessModifier(final String modifierName) {
         this.modifierName = modifierName;
     }
-
+    
     String getModifierName() {
         return this.modifierName;
     }
-
+    
     static AccessModifier getAccessModifier(final String modifierName) {
         switch (modifierName.toLowerCase()) {
             case "public":

@@ -18,45 +18,45 @@ class SingleClickTool extends Tool {
     private int lastVal;
     private EditType lastEditType;
     private LocationTriggerMatcher lastTrigger;
-
+    
     SingleClickTool(final MapMaker mapMaker) {
         super(mapMaker);
     }
-
+    
     @Override
     public void click(Point clickedLocation) {
         if (mapMaker.isTileSelectionEmpty()) {
             return;
         }
-
+        
         Tool.lastUsedTool = this;
-
+        
         Point location = TileUtils.getLocation(clickedLocation, mapMaker.getMapLocation());
         lastLocation = location;
         System.out.println("click: " + clickedLocation);
-
+        
         lastVal = mapMaker.getTile(location, mapMaker.getEditType().getDataType());
         int val = mapMaker.getSelectedTile();
         mapMaker.setTile(location, val);
-
+        
         lastEditType = mapMaker.getEditType();
-
+        
         if (mapMaker.isEditType(EditType.TRIGGERS)) {
             lastTrigger = mapMaker.getPlaceableTrigger();
             mapMaker.clearPlaceableTrigger();
             mapMaker.setTool(ToolType.TRIGGER);
         }
     }
-
+    
     @Override
     public void draw(Graphics g) {
         Point location = TileUtils.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
         TileUtils.outlineTileRed(g, location, mapMaker.getMapLocation());
-
+        
         if (mapMaker.isTileSelectionEmpty()) {
             return;
         }
-
+        
         // Show preview image for normal map tiles
         if (mapMaker.isEditType(EditType.BACKGROUND) || mapMaker.isEditType(EditType.FOREGROUND)) {
             int val = mapMaker.getSelectedTile();
@@ -67,9 +67,9 @@ class SingleClickTool extends Tool {
         }
         // Show preview image for current trigger
         else if (mapMaker.isEditType(EditType.TRIGGERS)) {
-
+        
             TriggerModelType type = TriggerModelType.getModelTypeFromIndex(mapMaker.getSelectedTileIndex());
-
+            
             BufferedImage image;
             if (type == TriggerModelType.NPC) {
                 NPCMatcher npc = (NPCMatcher) mapMaker.getPlaceableTrigger();
@@ -78,13 +78,13 @@ class SingleClickTool extends Tool {
             else {
                 image = type.getImage(mapMaker);
             }
-
+            
             if (image != null) {
                 TileUtils.drawTileImage(g, image, location, mapMaker.getMapLocation());
             }
         }
     }
-
+    
     @Override
     public void undo() {
         if (lastLocation != null && lastEditType != null) {
@@ -98,7 +98,7 @@ class SingleClickTool extends Tool {
             lastTrigger = null;
         }
     }
-
+    
     public String toString() {
         return "Single";
     }

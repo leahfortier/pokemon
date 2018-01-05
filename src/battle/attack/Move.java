@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class Move implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    
     public static final int MAX_MOVES = 4;
     
     private AttackNamesies attack;
@@ -26,9 +26,9 @@ public class Move implements Serializable {
     
     private boolean ready;
     private boolean used;
-
+    
     private Type type;
-
+    
     public Move(AttackNamesies attackNamesies) {
         this(attackNamesies.getAttack());
     }
@@ -41,7 +41,7 @@ public class Move implements Serializable {
         
         resetReady();
         used = false;
-
+        
         type = attack.getActualType();
     }
     
@@ -68,7 +68,7 @@ public class Move implements Serializable {
             ready = !ready;
         }
     }
-
+    
     public Type getType() {
         return type;
     }
@@ -123,7 +123,7 @@ public class Move implements Serializable {
         if (maxPP > trueMax) {
             maxPP = trueMax;
         }
-
+        
         return true;
     }
     
@@ -140,9 +140,9 @@ public class Move implements Serializable {
         return chooseMove(b, usable);
     }
     
-    // Returns true if a move should be forced (move will already be selected for the Pokemon), and false if not 
+    // Returns true if a move should be forced (move will already be selected for the Pokemon), and false if not
     public static boolean forceMove(Battle b, ActivePokemon p) {
-
+    
         // TODO: Why are most of the forced move effects also attack selection effects? if the move if being forced, then the attack selection menu should not appear -- check if this is working
         // Forced moves
         Move forcedMove = ForceMoveEffect.getForcedMove(b, p);
@@ -150,7 +150,7 @@ public class Move implements Serializable {
             p.setMove(forcedMove);
             return true;
         }
-
+        
         // Force second turn of a Multi-Turn Move
         if (p.getMove() != null && p.getAttack().isMultiTurn(b, p)) {
             MultiTurnMove multiTurnMove = (MultiTurnMove)p.getAttack();
@@ -158,7 +158,7 @@ public class Move implements Serializable {
                 return true;
             }
         }
-
+        
         if (p.isPlayer() && getUsableMoves(b, p).size() == 0) {
             p.setMove(new Move(AttackNamesies.STRUGGLE.getAttack()));
             return true;
@@ -191,7 +191,7 @@ public class Move implements Serializable {
         if (unusable == null) {
             unusable = OpponentAttackSelectionEffect.getUnusableEffect(b, p, m);
         }
-
+        
         if (unusable != null) {
             if (selecting) {
                 Messages.add(unusable.getUnusableMessage(b, p));
@@ -208,7 +208,7 @@ public class Move implements Serializable {
         
         return true;
     }
-
+    
     private static Move chooseMove(Battle b, List<Move> usable) {
         // Wild pokemon attack randomly
         if (b.isWildBattle()) {

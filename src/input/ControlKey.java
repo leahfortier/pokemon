@@ -22,34 +22,34 @@ public enum ControlKey {
     ITEM_FINDER(KeyEvent.VK_I),
     BIKE(KeyEvent.VK_B),
     MEDAL_CASE(KeyEvent.VK_M);
-
+    
     private static final Set<ControlKey> CONTROL_KEYS = EnumSet.allOf(ControlKey.class);
-
+    
     private final Key key;
-
+    
     ControlKey(int... keyIds) {
         this.key = new Key(keyIds);
     }
-
+    
     Key getKey() {
         return this.key;
     }
-
+    
     static List<Key> getKeys(KeyEvent keyEvent) {
         return getKeys(CONTROL_KEYS, keyEvent);
     }
-
+    
     static List<Key> getKeys(Set<ControlKey> controlKeys, KeyEvent keyEvent) {
         return controlKeys.stream()
                 .map(ControlKey::getKey)
                 .filter(key -> key.isKey(keyEvent.getKeyCode()))
                 .collect(Collectors.toList());
     }
-
+    
     static void resetAll() {
         CONTROL_KEYS.forEach(controlKey -> controlKey.getKey().reset());
     }
-
+    
     static void consumeAll() {
         CONTROL_KEYS.forEach(controlKey -> controlKey.getKey().consume());
     }

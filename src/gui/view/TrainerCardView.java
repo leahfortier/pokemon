@@ -18,13 +18,13 @@ class TrainerCardView extends View {
             Game.instance().popView();
         }
     }
-
+    
     @Override
     public void draw(Graphics g) {
         Player player = Game.getPlayer();
-
+        
         DrawUtils.fillCanvas(g, Color.BLACK);
-
+        
         g.setColor(Color.WHITE);
         
         int x = 50, y = 50;
@@ -43,12 +43,12 @@ class TrainerCardView extends View {
     private String formatTime(long l) {
         return (l/(3600) + " hours " + ((l%3600)/60) + " minutes");
     }
-
+    
     @Override
     public ViewMode getViewModel() {
         return ViewMode.TRAINER_CARD_VIEW;
     }
-
+    
     @Override
     public void movedToFront() {}
 }

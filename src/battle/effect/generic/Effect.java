@@ -17,14 +17,14 @@ public abstract class Effect implements Serializable {
     
     protected final EffectNamesies namesies;
     protected boolean active;
-
+    
     protected int numTurns;
     private final boolean nextTurnSubside;
-
+    
     public Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
         this.namesies = name;
         this.nextTurnSubside = nextTurnSubside;
-
+        
         this.numTurns = minTurns == -1 ? -1 : RandomUtils.getRandomInt(minTurns, maxTurns);
         this.active = true;
     }
@@ -40,7 +40,7 @@ public abstract class Effect implements Serializable {
                 return effect;
             }
         }
-            
+        
         return null;
     }
     
@@ -51,7 +51,7 @@ public abstract class Effect implements Serializable {
     public static boolean removeEffect(List<? extends Effect> effects, EffectNamesies effectToRemove) {
         return effects.removeIf(effect -> effect.namesies() == effectToRemove);
     }
-
+    
     public static boolean isActiveEffect(Object object) {
         return !(object instanceof Effect) || ((Effect)object).isActive();
     }
@@ -75,13 +75,13 @@ public abstract class Effect implements Serializable {
             active = false;
         }
     }
-
+    
     public boolean apply(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
         if (this.applies(b, caster, victim, source)) {
             this.cast(b, caster, victim, source, printCast);
             return true;
         }
-
+        
         return false;
     }
     
@@ -98,7 +98,7 @@ public abstract class Effect implements Serializable {
         Messages.add(getSubsideMessage(p));
         active = false; // Unnecessary, but just to be safe
     }
-
+    
     public abstract void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast);
     
     public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {

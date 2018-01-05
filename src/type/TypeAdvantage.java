@@ -73,71 +73,71 @@ public enum TypeAdvantage {
             .strong(Type.FIGHTING, Type.DRAGON, Type.DARK)
             .weak(Type.FIRE, Type.POISON, Type.STEEL)),
     NO_TYPE(new Builder());
-
+    
     private final Map<Type, Double> advantageMap;
-
+    
     TypeAdvantage(Builder builder) {
         this.advantageMap = builder.advantageMap;
     }
-
+    
     public double getAdvantage(Type defending) {
         return advantageMap.get(defending);
     }
-
+    
     public double getAdvantage(Type[] defending) {
         return this.getAdvantage(defending[0], defending[1]);
     }
-
+    
     public double getAdvantage(Type firstType, Type secondType) {
         return getAdvantage(firstType)*getAdvantage(secondType);
     }
-
+    
     public double getAdvantage(ActivePokemon defending, Battle b) {
         return getAdvantage(defending.getType(b));
     }
-
+    
     public boolean isSuperEffective(ActivePokemon defending, Battle b) {
         return isSuperEffective(this.getAdvantage(defending, b));
     }
-
+    
     public boolean isSuperEffective(Type defending) {
         return isSuperEffective(this.getAdvantage(defending));
     }
-
+    
     public boolean isNotVeryEffective(Type defending) {
         return isNotVeryEffective(this.getAdvantage(defending));
     }
-
+    
     public boolean doesNotEffect(Type defending) {
         return doesNotEffect(this.getAdvantage(defending));
     }
-
+    
     public static boolean isSuperEffective(ActivePokemon attacking, ActivePokemon defending, Battle b) {
         return isSuperEffective(getAdvantage(attacking, defending, b));
     }
-
+    
     public static boolean isNotVeryEffective(ActivePokemon attacking, ActivePokemon defending, Battle b) {
         return isNotVeryEffective(getAdvantage(attacking, defending, b));
     }
-
+    
     public static boolean doesNotEffect(ActivePokemon attacking, ActivePokemon defending, Battle b) {
         return doesNotEffect(getAdvantage(attacking, defending, b));
     }
-
+    
     public static double getAdvantage(ActivePokemon attacking, ActivePokemon defending, Battle b) {
         Type attackingType = attacking.getAttackType();
         TypeAdvantage typeAdvantage = attackingType.getAdvantage();
-
+        
         Type[] defendingTypes = defending.getType(b);
-
+        
         // Do special case check stupid things for fucking levitation which fucks everything up
         // Pokemon that are levitating cannot be hit by ground type moves
         if (attackingType == Type.GROUND && defending.isLevitatingWithoutTypeCheck(b, attacking)) {
             return 0;
         }
-
+        
         double advantage = 1;
-
+        
         // Go through each defending type and multiply its advantage
         for (Type defendingType : defendingTypes) {
             // For moves that are completely uneffective, check if there is an effect which negates this and don't multiply if so
@@ -148,76 +148,76 @@ public enum TypeAdvantage {
                     continue;
                 }
             }
-
+            
             advantage *= typeAdvantage.getAdvantage(defendingType);
         }
-
+        
         // Apply any multiplier that may come from the attack
         advantage *= AdvantageMultiplierMove.getModifier(attacking, attackingType, defendingTypes);
-
+        
         return advantage;
     }
-
+    
     public static double getSTAB(Battle b, ActivePokemon p) {
         // Same type -- STAB
         if (p.isType(b, p.getAttackType())) {
             // The adaptability ability increases stab
             return p.hasAbility(AbilityNamesies.ADAPTABILITY) ? 2 : 1.5;
         }
-
+        
         return 1;
     }
-
+    
     public static boolean isSuperEffective(double advantage) {
         return advantage > 1;
     }
-
+    
     // Also includes moves that do not effect at all
     public static boolean isNotVeryEffective(double advantage) {
         return advantage < 1;
     }
-
+    
     public static boolean doesNotEffect(double advantage) {
         return advantage == 0;
     }
-
+    
     public static String getSuperEffectiveMessage() {
         return "It's super effective!";
     }
-
+    
     public static String getNotVeryEffectiveMessage() {
         return "It's not very effective...";
     }
-
+    
     public static String getDoesNotEffectMessage(ActivePokemon opp) {
         return "It doesn't affect " + opp.getName() + "!";
     }
-
+    
     private static class Builder {
         private final Map<Type, Double> advantageMap;
-
+        
         Builder() {
             this.advantageMap = new EnumMap<>(Type.class);
             setAdvantage(1, Type.values());
         }
-
+        
         Builder strong(Type... values) {
             return setAdvantage(2, values);
         }
-
+        
         Builder weak(Type... values) {
             return setAdvantage(.5, values);
         }
-
+        
         Builder ineffective(Type... values) {
             return setAdvantage(0, values);
         }
-
+        
         private Builder setAdvantage(double advantage, Type... values) {
             for (Type type : values) {
                 this.advantageMap.put(type, advantage);
             }
-
+            
             return this;
         }
     }

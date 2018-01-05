@@ -19,11 +19,11 @@ import java.util.Scanner;
 public class TeamPlanner {
     private static Type[] types = Type.values();
     private static double[] coverageValues = { 4, 2, .5, 0 };
-
+    
     public static void main(String[] args) {
         new TeamPlanner();
     }
-
+    
     private TeamPlanner() {
         List<TeamMember> team = readTeam();
         
@@ -47,7 +47,7 @@ public class TeamPlanner {
         
 //        moveMatching("Surf", "Thunderbolt");
 //        moveMatching("Flamethrower", Type.WATER);
-        
+
         TeamMember.printTeam(team);
     }
     
@@ -95,7 +95,7 @@ public class TeamPlanner {
                             Global.error("Item already defined for " + pokemonName);
                         }
                         item = value;
-                        break;    
+                        break;
                     case "Moves":
                         while (true) {
                             String move = in.nextLine().trim();
@@ -152,7 +152,7 @@ public class TeamPlanner {
     
     private static void moveMatching(String firstMoveName, String secondMoveName) {
         System.out.println("\nThe following Pokemon can learn " + firstMoveName + " and " + secondMoveName);
-
+        
         AttackNamesies firstMove = AttackNamesies.getValueOf(firstMoveName);
         AttackNamesies secondMove = AttackNamesies.getValueOf(secondMoveName);
         
@@ -333,7 +333,7 @@ public class TeamPlanner {
         static void printTeam(List<TeamMember> team) {
             StringAppender out = new StringAppender();
             out.appendJoin(StringUtils.empty(), team);
-
+            
             FileIO.overwriteFile("teamPlanner.out", out.toString());
         }
         
@@ -345,10 +345,10 @@ public class TeamPlanner {
             Type[] type = pokemonSpecies.getType();
             out.append("\n\tType: " + type[0].getName())
                     .appendIf(type[1] != Type.NO_TYPE, "/" + type[1].getName());
-
+                    
             out.append("\n\tStats: ")
                     .appendJoin(" ", Stat.NUM_STATS, i -> pokemonSpecies.getStat(i) + "");
-            
+                    
             out.append("\n\tNature: " + nature);
             out.append("\n\tAbility: " + ability);
             out.appendIf(item != null, "\n\tItem: " + item);
@@ -356,7 +356,7 @@ public class TeamPlanner {
             out.append("\n\tMoves:");
             for (Attack attack : moveList) {
                 out.append("\n\t\t" + attack.getName() + " -- ");
-
+                
                 List<String> learnMethods = new ArrayList<>();
                 AttackNamesies namesies = attack.namesies();
                 
@@ -380,12 +380,12 @@ public class TeamPlanner {
                 if (learnMethods.isEmpty()) {
                     learnMethods.add("???");
                 }
-
+                
                 out.appendJoin(" or ", learnMethods);
             }
             
             out.append("\n\n");
-
+            
             return out.toString();
         }
     }

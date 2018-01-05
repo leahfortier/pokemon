@@ -25,7 +25,7 @@ class MP3Player extends Thread {
             Global.error("OMG MP3 FAIIILLLUURRREEEEE");
         }
     }
-        
+    
     public void setLoop(boolean loop) {
         this.loop = loop;
     }
@@ -34,7 +34,7 @@ class MP3Player extends Thread {
         do {
             try {
                 player.play();
-
+                
                 if (this.loop) {
                     player = new Player(loadMP3File(mp3FileName));
                 }

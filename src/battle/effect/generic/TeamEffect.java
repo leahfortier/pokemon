@@ -27,7 +27,7 @@ import java.io.Serializable;
 // Class to handle effects that are specific to one side of the battle
 public abstract class TeamEffect extends Effect implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    
     public TeamEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
         super(name, minTurns, maxTurns, nextTurnSubside);
     }
@@ -36,13 +36,13 @@ public abstract class TeamEffect extends Effect implements Serializable {
         if (printCast) {
             Messages.add(getCastMessage(b, caster, victim, source));
         }
-
+        
         b.getTrainer(victim.isPlayer()).addEffect(this);
         
         Messages.add(new MessageUpdate().updatePokemon(b, caster));
         Messages.add(new MessageUpdate().updatePokemon(b, victim));
     }
-
+    
     // EVERYTHING BELOW IS GENERATED ###
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
     

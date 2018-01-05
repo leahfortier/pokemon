@@ -15,25 +15,25 @@ public enum MoveAxis {
         if (!BOTH.checker.checkAxis(thisLocation, thisDirection, otherLocation)) {
             return false;
         }
-
+        
         // Get the direction that would be facing the other location
         Point deltaDirection = Point.getDeltaDirection(otherLocation, thisLocation);
-
+        
         // Check if these are the same direction
         return thisDirection.getDeltaPoint().equals(deltaDirection);
     });
-
+    
     private final AxisChecker checker;
-
+    
     MoveAxis(AxisChecker checker) {
         this.checker = checker;
     }
-
+    
     @FunctionalInterface
     private interface AxisChecker {
         boolean checkAxis(Point thisLocation, Direction thisDirection, Point otherLocation);
     }
-
+    
     public boolean checkAxis(Point thisLocation, Direction thisDirection, Point otherLocation) {
         return this.checker.checkAxis(thisLocation, thisDirection, otherLocation);
     }

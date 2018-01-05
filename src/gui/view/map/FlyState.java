@@ -22,25 +22,25 @@ class FlyState implements VisualStateHandler {
     private static final int NUM_AREA_BUTTONS = 3;
     private static final int RIGHT_BUTTON = NUM_AREA_BUTTONS;
     private static final int LEFT_BUTTON = RIGHT_BUTTON + 1;
-
+    
     private static final int BUTTON_PADDING = 20;
-
+    
     private final DrawPanel titlePanel;
     private final Button[] buttons;
-
+    
     private List<FlyLocation> flyLocations;
-
+    
     private int selectedButton;
     private int pageNum;
-
+    
     FlyState() {
         this.titlePanel = new DrawPanel(BUTTON_PADDING, BUTTON_PADDING, 350, 60)
                 .withBackgroundColor(null)
                 .withBlackOutline();
-
+                
         // Arrows and area buttons
         this.buttons = new Button[NUM_AREA_BUTTONS + 2];
-
+        
         int buttonHeight = (Global.GAME_SIZE.height - titlePanel.height - (NUM_AREA_BUTTONS + 2)*BUTTON_PADDING)/(NUM_AREA_BUTTONS + 1);
         for (int i = 0; i < NUM_AREA_BUTTONS; i++) {
             this.buttons[i] = new Button(
@@ -52,7 +52,7 @@ class FlyState implements VisualStateHandler {
                     Button.getBasicTransitions(i, NUM_AREA_BUTTONS, 1, 0, new int[] { LEFT_BUTTON, LEFT_BUTTON, RIGHT_BUTTON, -1 })
             );
         }
-
+        
         this.buttons[LEFT_BUTTON] = new Button(
                 500,
                 BUTTON_PADDING,
@@ -61,7 +61,7 @@ class FlyState implements VisualStateHandler {
                 ButtonHoverAction.BOX,
                 new int[] { RIGHT_BUTTON, NUM_AREA_BUTTONS - 1, 0, 0 }
         );
-
+        
         this.buttons[RIGHT_BUTTON] = new Button(
                 650,
                 BUTTON_PADDING,
@@ -70,27 +70,27 @@ class FlyState implements VisualStateHandler {
                 ButtonHoverAction.BOX,
                 new int[] { 0, NUM_AREA_BUTTONS - 1, LEFT_BUTTON, 0 }
         );
-
+        
         this.pageNum = 0;
     }
-
+    
     @Override
     public void draw(Graphics g, MapView mapView) {
         BasicPanels.drawCanvasPanel(g);
-
+        
         titlePanel.drawBackground(g);
         titlePanel.label(g, 32, "Where to fly?");
-
+        
         Iterator<FlyLocation> iter = GeneralUtils.pageIterator(flyLocations, pageNum, NUM_AREA_BUTTONS);
         for (int i = 0; i < NUM_AREA_BUTTONS && iter.hasNext(); i++) {
             FlyLocation flyLocation = iter.next();
-
+            
             Button locationButton = this.buttons[i];
             locationButton.fillTransparent(g);
             locationButton.blackOutline(g);
             locationButton.label(g, 30, flyLocation.getAreaName());
         }
-
+        
         Button leftButton = this.buttons[LEFT_BUTTON];
         Button rightButton = this.buttons[RIGHT_BUTTON];
         leftButton.drawArrow(g, Direction.LEFT);
@@ -101,22 +101,22 @@ class FlyState implements VisualStateHandler {
                 (leftButton.centerX() + rightButton.centerX())/2,
                 (leftButton.centerY() + rightButton.centerY())/2
         );
-
+        
         for (Button button : buttons) {
             button.draw(g);
         }
     }
-
+    
     @Override
     public void update(int dt, MapView mapView) {
         InputControl input = InputControl.instance();
-
+        
         selectedButton = Button.update(this.buttons, selectedButton);
-
+        
         if (this.buttons[selectedButton].checkConsumePress()) {
             if (selectedButton < NUM_AREA_BUTTONS) {
                 FlyLocation flyLocation = this.flyLocations.get(selectedButton + pageNum*NUM_AREA_BUTTONS);
-
+                
                 // Note: Changes view mode to map view
                 flyLocation.fly();
             }
@@ -126,27 +126,27 @@ class FlyState implements VisualStateHandler {
             else if (selectedButton == RIGHT_BUTTON) {
                 pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages());
             }
-
+            
             updateActiveButtons();
         }
-
+        
         if (input.consumeIfDown(ControlKey.ESC) || input.consumeIfDown(ControlKey.FLY)) {
             mapView.setState(VisualState.MAP);
         }
     }
-
+    
     @Override
     public void set(MapView mapView) {
         this.flyLocations = Game.getPlayer().getFlyLocations();
         this.updateActiveButtons();
     }
-
+    
     private void updateActiveButtons() {
         for (int i = 0; i < NUM_AREA_BUTTONS; i++) {
             buttons[i].setActive(i + pageNum*NUM_AREA_BUTTONS < this.flyLocations.size());
         }
     }
-
+    
     private int totalPages() {
         return this.flyLocations.size()/NUM_AREA_BUTTONS + 1;
     }

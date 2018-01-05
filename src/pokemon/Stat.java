@@ -36,7 +36,7 @@ public enum Stat {
         BOTH,
         ONLY,
     }
-
+    
     Stat(int index, String name, String shortName, String shortestName, int modifier, InBattle onlyBattle, boolean user) {
         this.index = index;
         this.name = name;
@@ -58,7 +58,7 @@ public enum Stat {
     public String getShortName() {
         return shortName;
     }
-
+    
     public String getShortestName() {
         return this.shortestName;
     }
@@ -81,7 +81,7 @@ public enum Stat {
         BATTLE_STATS = new Stat[NUM_BATTLE_STATS];
         int statIndex = 0;
         int battleStatIndex = 0;
-
+        
         for (Stat stat : Stat.values()) {
             switch (stat.onlyBattle) {
                 case BOTH:
@@ -109,17 +109,17 @@ public enum Stat {
     
     // Gets the stat of a Pokemon during battle
     public static int getStat(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
-
+    
         // Effects that manipulate stats
         s = StatSwitchingEffect.switchStat(b, p, s);
         s = OpponentStatSwitchingEffect.switchStat(b, opp, s);
-
+        
         // Apply stage changes
         int stage = getStage(s, p, opp, b);
         int stat = s == EVASION || s == ACCURACY ? 100 : p.getStat(b, s);
         
 //        int temp = stat;
-        
+
         // Modify stat based off stage
         if (stage > 0) {
             stat *= ((s.modifier + stage)/s.modifier);
@@ -127,30 +127,30 @@ public enum Stat {
         else if (stage < 0) {
             stat *= (s.modifier/(s.modifier - stage));
         }
-
+        
         // Applies stat changes to each for each item in list
         stat *= StatModifyingEffect.getModifier(b, p, opp, s);
         stat = StatChangingEffect.modifyStat(b, p, opp, s, stat);
-
-//        System.out.println(p.getName() + " " + s.name + " Stat Change: " + temp + " -> " + stat);
         
+//        System.out.println(p.getName() + " " + s.name + " Stat Change: " + temp + " -> " + stat);
+
         // Just to be safe
         stat = Math.max(1, stat);
         
         return stat;
     }
-
+    
     public static int getStage(Stat s, ActivePokemon stagePokemon, ActivePokemon otherPokemon, Battle b) {
         // Effects that completely ignore stage changes
         if (OpponentIgnoreStageEffect.checkIgnoreStage(b, stagePokemon, otherPokemon, s)) {
             return 0;
         }
-
+        
         int stage = stagePokemon.getStage(s);
-
+        
         // Update the stage due to effects
         stage += StageChangingEffect.getModifier(b, stagePokemon, otherPokemon, s);
-
+        
         // Let's keep everything in bounds, okay!
         return Math.max(-1*MAX_STAT_CHANGES, Math.min(stage, MAX_STAT_CHANGES));
     }
@@ -171,7 +171,7 @@ public enum Stat {
         Global.error("Incorrect stat index " + index);
         return HP; // Because I'm sick of NPE warnings and the above line does a system exit
     }
-
+    
     public static int getRandomIv() {
         return RandomUtils.getRandomInt(MAX_IV + 1);
     }

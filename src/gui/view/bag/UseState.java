@@ -27,59 +27,59 @@ enum UseState {
         Game.getPlayer().getBag().takeItem(p);
         state.deactivate(bagView);
     });
-
+    
     private final String displayName;
     final int buttonIndex;
     private final UseButton useButton;
-
+    
     private boolean clicked;
-
+    
     UseState(String displayName, int buttonIndex, UseButton useButton) {
         this.displayName = displayName;
         this.buttonIndex = buttonIndex;
         this.useButton = useButton;
     }
-
+    
     private void deactivate(BagView bagView) {
         this.clicked = false;
         bagView.setSelectedButton(this);
         bagView.state = BagState.ITEM_SELECT;
-
+        
         if (!Game.getPlayer().getBag().hasItem(bagView.selectedItem)) {
             bagView.updateCategory();
         }
-
+        
         bagView.updateActiveButtons();
     }
-
+    
     @FunctionalInterface
     private interface UseButton {
         void useButton(UseState state, BagView bagView, ActivePokemon p);
     }
-
+    
     void draw(Graphics g, Button button) {
         // Grey out selected buttons
         if (clicked) {
             button.greyOut(g, false);
         }
-
+        
         // Grey out inactive buttons
         if (!button.isActive()) {
             button.greyOut(g, true);
         }
-
+        
         button.fillTransparent(g);
         button.outlineTab(g, this.ordinal(), -1);
         button.label(g, 20, displayName);
     }
-
+    
     void use(BagView bagView, ActivePokemon p) {
         if (this.clicked) {
             this.useButton.useButton(this, bagView, p);
             bagView.updateActiveButtons();
         }
     }
-
+    
     void update(BagView view) {
         if (!clicked) {
             view.state = BagState.POKEMON_SELECT;
@@ -87,21 +87,21 @@ enum UseState {
         else {
             view.state = BagState.ITEM_SELECT;
         }
-
+        
         clicked = !clicked;
-
+        
         for (UseState otherState : UseState.values()) {
             if (this == otherState) {
                 continue;
             }
-
+            
             otherState.clicked = false;
         }
-
+        
         if (this == UseState.USE && view.selectedItem.getItem() instanceof PlayerUseItem) {
             Game.getPlayer().getBag().useItem(view.selectedItem);
         }
-
+        
         view.updateActiveButtons();
     }
 }

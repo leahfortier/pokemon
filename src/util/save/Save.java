@@ -16,12 +16,12 @@ import java.util.Scanner;
 
 public final class Save {
     public static final int NUM_SAVES = 3;
-
+    
     // Utility class -- should not be instantiated
     private Save() {
         Global.error("Save class cannot be instantiated.");
     }
-
+    
     private static String getSavePath(int fileNum) {
         return Folder.SAVES + "File " + (fileNum + 1) + ".ser";
     }
@@ -34,10 +34,10 @@ public final class Save {
         Player player = Game.getPlayer();
         player.updateTimePlayed();
         player.getMedalCase().increase(MedalTheme.TIMES_SAVED);
-
+        
         FileIO.createFolder(Folder.SAVES);
         SerializationUtils.serializeToFile(getSavePath(player.getFileNum()), player);
-
+        
         // For the preview of the saves on the main menu -- output the player's name, time, number of badges, and number of pokemon seen
         String preview = player.getName() + " " + player.getSeconds() + " " + player.getNumBadges() + " " + player.getPokedex().numSeen();
         FileIO.writeToFile(getPreviewPath(player.getFileNum()), preview);
@@ -49,12 +49,12 @@ public final class Save {
         
         return loadedPlayer;
     }
-
+    
     public static void deleteSave(int index) {
         FileIO.deleteFile(getSavePath(index));
         FileIO.deleteFile(getPreviewPath(index));
     }
-
+    
     public static SavePreviewInfo[] updateSaveData() {
         SavePreviewInfo[] saveInfo = new SavePreviewInfo[NUM_SAVES];
         for (int i = 0; i < NUM_SAVES; i++) {
@@ -68,7 +68,7 @@ public final class Save {
         
         return saveInfo;
     }
-
+    
     public static void saveSettings(Theme theme) {
         String settings = theme.ordinal() + " " + (SoundPlayer.soundPlayer.isMuted() ? 1 : 0);
         FileIO.writeToFile(FileName.SAVE_SETTINGS, settings);
@@ -76,7 +76,7 @@ public final class Save {
     
     public static Theme loadSettings() {
         Theme theme;
-
+        
         FileIO.createFolder(Folder.SAVES);
         
         File file = new File(FileName.SAVE_SETTINGS);

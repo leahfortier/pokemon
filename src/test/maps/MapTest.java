@@ -30,17 +30,17 @@ import java.util.List;
 
 public class MapTest extends BaseTest{
     private static List<TestMap> maps;
-
+    
     @BeforeClass
     public static void loadMaps() {
         maps = new ArrayList<>();
-
+        
         File mapsDirectory = new File(Folder.MAPS);
         for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
             maps.add(new TestMap(mapFolder));
         }
     }
-
+    
     @Test
     public void flyLocationTest() {
         for (TestMap map : maps) {
@@ -54,20 +54,20 @@ public class MapTest extends BaseTest{
             }
         }
     }
-
+    
     @Test
     public void multipleAreaTest() {
         for (TestMap map : maps) {
             AreaData[] areas = map.getAreas();
-
+            
             // Make sure each map has at least one area
             Assert.assertTrue(areas.length > 0);
-
+            
             // Only testing maps with multiple areas
             if (areas.length == 1) {
                 continue;
             }
-
+            
             // Color is required for maps with multiple areas
             for (AreaData area : areas) {
                 Assert.assertTrue(
@@ -75,7 +75,7 @@ public class MapTest extends BaseTest{
                         area.hasColor()
                 );
             }
-
+            
             // Confirm each walkable tile is not in the void area
             Dimension dimension = map.getDimension();
             for (int x = 0; x < dimension.width; x++) {
@@ -91,38 +91,38 @@ public class MapTest extends BaseTest{
             }
         }
     }
-
+    
     @Test
     public void wildBattleProbabilityTest() {
         for (TestMap map : this.maps) {
             for (WildBattleAreaMatcher areaMatcher : map.getMatcher().getWildBattles()) {
                 for (WildBattleMatcher wildBattleMatcher : areaMatcher.getWildBattles()) {
                     WildEncounter[] wildEncounters = wildBattleMatcher.getWildEncounters();
-
+                    
                     int totalProbability = 0;
                     for (WildEncounter wildEncounter : wildEncounters) {
                         totalProbability += wildEncounter.getProbability();
                     }
-
+                    
                     Assert.assertTrue(
                             map.getName().getMapName() + " " + totalProbability,
                             totalProbability == 100);
                 }
             }
-
+            
             for (FishingMatcher fishingMatcher : map.getMatcher().getFishingSpots()) {
                 WildEncounter[] wildEncounters = fishingMatcher.getWildEncounters();
-
+                
                 int totalProbability = 0;
                 for (WildEncounter wildEncounter : wildEncounters) {
                     totalProbability += wildEncounter.getProbability();
                 }
-
+                
                 Assert.assertTrue(totalProbability == 100);
             }
         }
     }
-
+    
     @Test
     public void dialogueTest() {
         // Make sure all input dialogue triggers don't include the string 'Poke' instead of 'Poké'
@@ -132,17 +132,17 @@ public class MapTest extends BaseTest{
                     testDialogue(map, interaction.getActionMatcherList());
                 }
             }
-
+            
             for (MiscEntityMatcher miscEntity : map.getMatcher().getMiscEntities()) {
                 testDialogue(map, miscEntity.getActionMatcherList());
             }
-
+            
             for (EventMatcher event : map.getMatcher().getEvents()) {
                 testDialogue(map, event.getActionMatcherList());
             }
         }
     }
-
+    
     private void testDialogue(TestMap map, List<ActionMatcher> actions) {
         for (ActionMatcher action : actions) {
             if (action.getActionType() == ActionType.TRIGGER) {

@@ -13,19 +13,19 @@ import java.util.List;
 
 public class PC implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    
     public static final int BOX_WIDTH = 6;
     public static final int BOX_HEIGHT = 6;
     private static final int DEFAULT_BOXES = 10;
-
+    
     private final List<Box> boxes;
     private int currBox;
     private int numPokemon;
-
+    
     public PC() {
         boxes = new ArrayList<>(DEFAULT_BOXES);
         addBoxes(DEFAULT_BOXES);
-
+        
         currBox = 0;
         numPokemon = 0;
     }
@@ -89,7 +89,7 @@ public class PC implements Serializable {
     public void depositPokemon(ActivePokemon p) {
         addPokemon(p);
     }
-
+    
     // Returns the coordinates of the Pokemon in the pc as {boxNum, x, y}, returns null if the Pokemon is not in the box
     private BoxCoordinate findPokemon(ActivePokemon p) {
         for (int boxNum = currBox, n = 0; n < boxes.size(); boxNum++, n++) {
@@ -100,7 +100,7 @@ public class PC implements Serializable {
                         return new BoxCoordinate(boxNum, i, j);
                     }
                 }
-            }            
+            }
         }
         
         return null;
@@ -119,7 +119,7 @@ public class PC implements Serializable {
             coordinate.removePokemon();
         }
     }
-
+    
     // Removes the Pokemon from the trainer and adds it to the box
     public void depositPokemonFromPlayer(ActivePokemon p) {
         Player player = Game.getPlayer();
@@ -130,14 +130,14 @@ public class PC implements Serializable {
         addPokemon(p);
         player.getTeam().remove(p);
     }
-
+    
     // Removes the Pokemon from the trainer and adds it to the box at a specific location, fails if another Pokemon is already in this location
     private void depositPokemonFromPlayer(ActivePokemon p, BoxCoordinate coordinate) {
         Player player = Game.getPlayer();
         if (!player.canDeposit(p) || coordinate == null || coordinate.getPokemon() != null) {
             return;
         }
-    
+        
         insertIntoBox(coordinate, p);
         player.getTeam().remove(p);
     }
@@ -189,9 +189,9 @@ public class PC implements Serializable {
         if (coordinate == null) {
             return;
         }
-
+        
         Player player = Game.getPlayer();
-
+        
         ActivePokemon boxPokemon = coordinate.getPokemon();
         ActivePokemon partyPokemon = player.getTeam().get(partyIndex);
         
@@ -205,7 +205,7 @@ public class PC implements Serializable {
             if (boxPokemon.isEgg()) {
                 eggs++;
             }
-
+            
             if (partyPokemon.isEgg()) {
                 eggs--;
             }
@@ -214,7 +214,7 @@ public class PC implements Serializable {
             if (eggs == player.getTeam().size()) {
                 return;
             }
-
+            
             coordinate.setPokemon(partyPokemon);
             player.getTeam().set(partyIndex, boxPokemon);
         }
@@ -249,33 +249,33 @@ public class PC implements Serializable {
     public void incrementBox(int delta) {
         this.currBox = GeneralUtils.wrapIncrement(this.currBox, delta, boxes.size());
     }
-
+    
     private class BoxCoordinate {
         private int boxNum;
         private int x;
         private int y;
-
+        
         BoxCoordinate(int boxNum, int x, int y) {
             this.boxNum = boxNum;
             this.x = x;
             this.y = y;
         }
-
+        
         private ActivePokemon getPokemon() {
             return getBoxPokemon(boxNum)[x][y];
         }
-
+        
         private void setPokemon(ActivePokemon pokemon) {
             boxes.get(boxNum).pokemon[x][y] = pokemon;
         }
-
+        
         // Removes a Pokemon forevers from the box
         private void removePokemon() {
             this.setPokemon(null);
             numPokemon--;
         }
     }
-
+    
     private static class Box implements Serializable {
         private static final long serialVersionUID = 1L;
         

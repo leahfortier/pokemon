@@ -25,7 +25,7 @@ class InterfaceGen {
         
         // Go through the entire file
         while (in.hasNext()) {
-            
+        
             String line = in.nextLine().trim();
             
             // Ignore comments and white space at beginning of file
@@ -38,7 +38,7 @@ class InterfaceGen {
             
             out.append(effectInterface.writeInterface());
         }
-
+        
         out.append("}");
         
         FileIO.overwriteFile(INTERFACE_PATH, out.toString());
@@ -48,7 +48,7 @@ class InterfaceGen {
         private static final String COMMENTS = "Comments";
         private static final String METHOD = "Method";
         private static final String EXTENDS = "Extends";
-
+        
         private final String interfaceName;
         
         private String headerComments;
@@ -94,17 +94,17 @@ class InterfaceGen {
                 }
             }
         }
-
+        
         private String getSingleLineInput(String key, String[] split) {
             if (split.length != 2) {
                 Global.error(key + " for " + this.interfaceName + " must be on a single line.");
             }
-
+            
             final String fieldValue = split[1].trim();
             if (fieldValue.isEmpty()) {
                 Global.error(key + " for " + this.interfaceName + " is empty.");
             }
-
+            
             return fieldValue;
         }
         
@@ -119,7 +119,7 @@ class InterfaceGen {
                     .appendJoin(StringUtils.empty(), this.methods, InterfaceMethod::writeInvokeMethod)
                     .toString();
             final boolean isInterface = true;
-
+            
             return StuffGen.createClass(
                     this.headerComments,
                     this.interfaceName,

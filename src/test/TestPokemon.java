@@ -15,41 +15,41 @@ public class TestPokemon extends ActivePokemon {
     public TestPokemon(final PokemonNamesies pokemon) {
         this(pokemon, 100);
     }
-
+    
     public TestPokemon(final PokemonNamesies pokemon, final int level) {
         super(pokemon, level, false, false);
     }
-
+    
     public TestPokemon withGender(Gender gender) {
         super.setGender(gender);
         return this;
     }
-
+    
     public TestPokemon withAbility(AbilityNamesies ability) {
         super.setAbility(ability);
         return this;
     }
-
+    
     public TestPokemon withMoves(AttackNamesies... moves) {
         // TODO: This shouldn't work I hate this it should be immutable
         this.getActualMoves().clear();
-
+        
         Assert.assertTrue(moves.length <= Move.MAX_MOVES);
         for (AttackNamesies move : moves) {
             this.getActualMoves().add(new Move(move));
         }
-
+        
         return this;
     }
-
+    
     public void setupMove(AttackNamesies attackNamesies, Battle battle) {
         this.setMove(new Move(attackNamesies));
         this.startAttack(battle);
     }
-
+    
     public void apply(boolean assertion, AttackNamesies attack, TestBattle battle) {
         ActivePokemon other = battle.getOtherPokemon(this);
-
+        
         this.setupMove(attack, battle);
         boolean success = this.getAttack().apply(this, other, battle);
         Assert.assertTrue(
@@ -57,7 +57,7 @@ public class TestPokemon extends ActivePokemon {
                 success == assertion
         );
     }
-
+    
     public void assertHealthRatio(double fraction) {
         Assert.assertEquals((int)(Math.ceil(fraction*this.getMaxHP())), this.getHP());
     }

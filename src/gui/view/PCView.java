@@ -35,7 +35,7 @@ class PCView extends View {
     private static final int RIGHT_ARROW = NUM_BUTTONS - 5;
     private static final int LEFT_ARROW = NUM_BUTTONS - 6;
     private static final int PARTY = PC.BOX_HEIGHT*PC.BOX_WIDTH;
-
+    
     private final DrawPanel boxPanel;
     private final DrawPanel boxNamePanel;
     private final DrawPanel partyPanel;
@@ -44,7 +44,7 @@ class PCView extends View {
     private final DrawPanel basicInfoPanel;
     private final DrawPanel movesPanel;
     private final DrawPanel statsPanel;
-
+    
     private final Button[] buttons;
     private final Button[][] boxButtons;
     private final Button[] partyButtons;
@@ -54,7 +54,7 @@ class PCView extends View {
     private final Button depositWithdrawButton;
     private final Button releaseButton;
     private final Button returnButton;
-
+    
     private final PC pc;
     
     private ActivePokemon selected;
@@ -68,27 +68,27 @@ class PCView extends View {
                 .withTransparentCount(2)
                 .withBorderPercentage(0)
                 .withBlackOutline();
-
+                
         boxNamePanel = new DrawPanel(boxPanel.x, boxPanel.y, boxPanel.width, 37)
                 .withBackgroundColor(null)
                 .withBlackOutline();
-
+                
         partyPanel = new DrawPanel(boxPanel.x, 478, boxPanel.width, 82)
                 .withBackgroundColor(Color.RED)
                 .withTransparentCount(2)
                 .withBorderPercentage(0)
                 .withBlackOutline();
-
+                
         infoPanel = new DrawPanel(410, boxPanel.y, boxPanel.width, 462)
                 .withTransparentBackground()
                 .withBorderPercentage(0)
                 .withBlackOutline();
-
+                
         int buttonHeight = 38;
         basicInfoPanel = new DrawPanel(infoPanel.x, infoPanel.y, infoPanel.width, 190)
                 .withFullTransparency()
                 .withBlackOutline();
-
+                
         int statsPanelHeight = 148;
         statsPanel = new DrawPanel(
                 infoPanel.x,
@@ -97,7 +97,7 @@ class PCView extends View {
                 statsPanelHeight + DrawUtils.OUTLINE_SIZE)
                 .withFullTransparency()
                 .withBlackOutline();
-
+                
         movesPanel = new DrawPanel(
                 infoPanel.x,
                 basicInfoPanel.y + basicInfoPanel.height - DrawUtils.OUTLINE_SIZE,
@@ -105,7 +105,7 @@ class PCView extends View {
                 infoPanel.height - basicInfoPanel.height - statsPanel.height - buttonHeight + 3*DrawUtils.OUTLINE_SIZE)
                 .withFullTransparency()
                 .withBlackOutline();
-
+                
         imagePanel = new DrawPanel(
                 infoPanel.x + 18,
                 infoPanel.y + 18,
@@ -113,7 +113,7 @@ class PCView extends View {
                 104)
                 .withFullTransparency()
                 .withBlackOutline();
-
+                
         pc = Game.getPlayer().getPC();
         
         selectedButton = PARTY;
@@ -124,9 +124,9 @@ class PCView extends View {
             for (int j = 0; j < PC.BOX_WIDTH; j++, k++) {
                 final int row = i;
                 final int col = j;
-
+                
                 buttons[k] = boxButtons[i][j] = new Button(60 + 54*j, 96 + 54*i, 40, 40, ButtonHoverAction.BOX,
-                        new int[] {j == PC.BOX_WIDTH - 1 ? SWITCH : k + 1, // Right 
+                        new int[] {j == PC.BOX_WIDTH - 1 ? SWITCH : k + 1, // Right
                                 i == 0 ? PARTY + j : k - PC.BOX_WIDTH, // Up
                                 j == 0 ? RELEASE : k - 1, // Left
                                 i == PC.BOX_HEIGHT - 1 ? (j < PC.BOX_WIDTH/2 ? LEFT_ARROW : RIGHT_ARROW) : k + PC.BOX_WIDTH}, // Down
@@ -180,7 +180,7 @@ class PCView extends View {
                     movedToFront();
                 }
         );
-
+        
         buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, 35, 20,
                 ButtonHoverAction.BOX,
                 new int[] {SWITCH, PC.BOX_WIDTH*(PC.BOX_HEIGHT-1) + PC.BOX_WIDTH/2, LEFT_ARROW, PARTY},
@@ -195,7 +195,7 @@ class PCView extends View {
                 new int[] {DEPOSIT_WITHDRAW, -1, RIGHT_ARROW, RETURN},
                 () -> switchClicked = !switchClicked
         );
-
+        
         buttons[DEPOSIT_WITHDRAW] = depositWithdrawButton = new Button(526, 464, 118, 38,
                 ButtonHoverAction.BOX,
                 new int[] {RELEASE, -1, SWITCH, RETURN},
@@ -204,7 +204,7 @@ class PCView extends View {
                         if (depositClicked) {
                             pc.depositPokemonFromPlayer(selected);
                         }
-
+                        
                         depositClicked = !depositClicked;
                     }
                     else { // Withdraw
@@ -212,7 +212,7 @@ class PCView extends View {
                     }
                 }
         );
-
+        
         buttons[RELEASE] = releaseButton = new Button(642, 464, 118, 38,
                 ButtonHoverAction.BOX,
                 new int[] {0, -1, DEPOSIT_WITHDRAW, RETURN},
@@ -227,7 +227,7 @@ class PCView extends View {
         party = true;
         selected = Game.getPlayer().front();
     }
-
+    
     @Override
     public void update(int dt) {
         selectedButton = Button.update(buttons, selectedButton);
@@ -237,32 +237,32 @@ class PCView extends View {
         
         InputControl.instance().popViewIfEscaped();
     }
-
+    
     private void drawPokemonButton(Graphics g, Button button, ActivePokemon pokemon) {
         if (pokemon == null) {
             return;
         }
-
+        
         if (pokemon == selected) {
             button.blackOutline(g);
         }
-
+        
         button.imageLabel(g, Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()));
     }
-
+    
     @Override
     public void draw(Graphics g) {
         GameData data = Game.getData();
         TileSet pokemonTiles = data.getPokemonTilesSmall();
-
+        
         ActivePokemon[][] box = pc.getBoxPokemon();
         
         // Box
         BasicPanels.drawCanvasPanel(g);
-
+        
         boxPanel.withBackgroundColor(pc.getBoxColor())
                 .drawBackground(g);
-        
+                
         // Draw Box number
         boxNamePanel.drawBackground(g);
         boxNamePanel.label(g, 20, "Box " + (pc.getBoxNum() + 1));
@@ -275,13 +275,13 @@ class PCView extends View {
         
         FontMetrics.setFont(g, 16);
         TextUtils.drawCenteredWidthString(g, (pc.getBoxNum() + 1) + "/" + pc.getNumBoxes(), 215, 433);
-
+        
         leftButton.drawArrow(g, Direction.LEFT);
         rightButton.drawArrow(g, Direction.RIGHT);
         
         // Party
         partyPanel.drawBackground(g);
-
+        
         List<ActivePokemon> team = Game.getPlayer().getTeam();
         for (int i = 0; i < team.size(); i++) {
             drawPokemonButton(g, partyButtons[i], team.get(i));
@@ -291,34 +291,34 @@ class PCView extends View {
         Type[] type = selected.getActualType();
         infoPanel.withBackgroundColors(Type.getColors(selected))
                 .drawBackground(g);
-        
+                
         if (switchClicked) {
             switchButton.greyOut(g, false);
         }
-
+        
         if (!releaseButton.isActive()) {
             releaseButton.greyOut(g, true);
         }
-
+        
         if (!depositWithdrawButton.isActive()) {
             depositWithdrawButton.greyOut(g, true);
         }
         else if (party && depositClicked) {
             depositWithdrawButton.greyOut(g, false);
         }
-
+        
         basicInfoPanel.drawBackground(g);
         movesPanel.drawBackground(g);
         statsPanel.drawBackground(g);
-
+        
         BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageName());
         imagePanel.drawBackground(g);
         imagePanel.imageLabel(g, pkmImg);
-
+        
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 20);
         g.drawString(selected.getActualName() + " " + selected.getGenderString(), 541, 82);
-
+        
         if (selected.isEgg()) {
             FontMetrics.setFont(g, 16);
             TextUtils.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
@@ -361,15 +361,15 @@ class PCView extends View {
             for (int i = 0; i < moves.size(); i++) {
                 int x = i%2 == 0 ? 421 : 590;
                 int y = i/2 == 0 ? 238 : 277;
-
+                
                 Attack attack = moves.get(i).getAttack();
-
+                
                 DrawPanel movePanel = new DrawPanel(x, y, 159, 31)
                         .withBackgroundColor(attack.getActualType().getColor())
                         .withTransparentCount(2)
                         .withBorderPercentage(20)
                         .withBlackOutline();
-
+                        
                 movePanel.drawBackground(g);
                 movePanel.label(g, 16, attack.getName());
             }
@@ -410,25 +410,25 @@ class PCView extends View {
             b.draw(g);
         }
     }
-
+    
     private void drawTextButton(Graphics g, Button button, String text) {
         button.fillTransparent(g);
         button.blackOutline(g);
         button.label(g, 20, text);
     }
-
+    
     @Override
     public ViewMode getViewModel() {
         return ViewMode.PC_VIEW;
     }
-
+    
     @Override
     public void movedToFront() {
         party = true;
         selected = Game.getPlayer().front();
         updateActiveButtons();
     }
-
+    
     private void updateActiveButtons() {
         ActivePokemon[][] box = pc.getBoxPokemon();
         for (int i = 0; i < PC.BOX_HEIGHT; i++) {
@@ -436,10 +436,10 @@ class PCView extends View {
                 boxButtons[i][j].setActive((party && depositClicked) || switchClicked || box[i][j] != null);
             }
         }
-
+        
         Player player = Game.getPlayer();
         List<ActivePokemon> team = player.getTeam();
-
+        
         party = false;
         for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
             partyButtons[i].setActive(i < team.size());

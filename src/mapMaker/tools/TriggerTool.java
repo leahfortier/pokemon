@@ -17,26 +17,26 @@ import java.util.List;
 class TriggerTool extends Tool {
     private JPopupMenu triggerListPopup;
     private JPopupMenu triggerOptionsPopup;
-
+    
     private List<LocationTriggerMatcher> triggers;
     private LocationTriggerMatcher selectedTrigger;
-
+    
     TriggerTool(MapMaker mapMaker) {
         super(mapMaker);
-
+        
         selectedTrigger = null;
-
+        
         triggerListPopup = new JPopupMenu();
         triggerListPopup.setLightWeightPopupEnabled(false);
-
+        
         triggerOptionsPopup = new JPopupMenu();
         triggerOptionsPopup.setLightWeightPopupEnabled(false);
-
+        
         JMenuItem editItem = new JMenuItem("Edit");
         triggerOptionsPopup.add(editItem);
-
+        
         editItem.addActionListener(event -> mapMaker.getTriggerData().editTrigger(selectedTrigger));
-
+        
         JMenuItem moveItem = new JMenuItem("Move");
         triggerOptionsPopup.add(moveItem);
         moveItem.addActionListener(event -> {
@@ -44,32 +44,32 @@ class TriggerTool extends Tool {
             TriggerModelType triggerModelType = selectedTrigger.getTriggerModelType();
             if (triggerModelType != null) {
                 mapMaker.setEditType(EditType.TRIGGERS);
-
+                
                 mapMaker.getTriggerData().moveTrigger(selectedTrigger);
                 mapMaker.triggerToolMoveSelected = true;
-
+                
                 mapMaker.setSelectedTileIndex(triggerModelType.ordinal());
             }
         });
-
+        
         JMenuItem removeItem = new JMenuItem("Remove");
         triggerOptionsPopup.add(removeItem);
         removeItem.addActionListener(event -> mapMaker.getTriggerData().removeTrigger(selectedTrigger));
     }
-
+    
     @Override
     public void click(Point clickLocation) {
         if (!mapMaker.hasMap()) {
             return;
         }
-
+        
         Point location = TileUtils.getLocation(clickLocation, mapMaker.getMapLocation());
-
+        
         System.out.println("Trigger click: " + clickLocation);
-
+        
         triggers = mapMaker.getTriggerData().getEntitiesAtLocation(location);
         triggerListPopup.removeAll();
-
+        
         for (LocationTriggerMatcher trigger : triggers) {
             JMenuItem menuItem = new JMenuItem(trigger.getBasicName() + " (" + trigger.getTriggerModelType() + ")");
             triggerListPopup.add(menuItem);
@@ -87,26 +87,26 @@ class TriggerTool extends Tool {
                         }
                     }
                 }
-
+                
                 //triggerListPopup.removeAll();
                 triggerOptionsPopup.show(mapMaker.canvas, clickLocation.x, clickLocation.y);
             });
         }
-
+        
         triggerListPopup.show(mapMaker.canvas, clickLocation.x, clickLocation.y);
     }
-
+    
     @Override
     public void draw(Graphics g) {
         Point mouseHoverLocation = TileUtils.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
         TileUtils.outlineTile(g, mouseHoverLocation, mapMaker.getMapLocation(), Color.BLUE);
     }
-
+    
     @Override
     public void undo() {
-
+    
     }
-
+    
     public String toString() {
         return "Trigger";
     }

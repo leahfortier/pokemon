@@ -23,18 +23,18 @@ public abstract class BattleEffect extends Effect {
     public BattleEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
         super(name, minTurns, maxTurns, nextTurnSubside);
     }
-
+    
     public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
         if (printCast) {
             Messages.add(getCastMessage(b, caster, victim, source));
         }
-
+        
         b.addEffect(this);
-
+        
         Messages.add(new MessageUpdate().updatePokemon(b, caster));
         Messages.add(new MessageUpdate().updatePokemon(b, victim));
     }
-
+    
     // EVERYTHING BELOW IS GENERATED ###
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
     

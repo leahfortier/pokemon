@@ -226,7 +226,7 @@ public enum MedalTheme {
             Medal.LEGEND_MEDALIST,
             Medal.TOP_MEDALIST
     );
-
+    
     private static final Map<Medal, MedalTheme> MEDAL_THEME_MAP;
     static {
         MEDAL_THEME_MAP = new EnumMap<>(Medal.class);
@@ -237,13 +237,13 @@ public enum MedalTheme {
             }
         }
     }
-
+    
     private Medal[] medals;
-
+    
     MedalTheme(Medal... medals) {
         this.medals = medals;
     }
-
+    
     public void checkThreshold(int count) {
         for (Medal medal : medals) {
             if (count >= medal.getThreshold()) {
@@ -251,7 +251,7 @@ public enum MedalTheme {
             }
         }
     }
-
+    
     public static MedalTheme getMedalTheme(Medal medal) {
         return MEDAL_THEME_MAP.get(medal);
     }

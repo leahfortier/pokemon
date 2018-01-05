@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class Condition {
     private static final Pattern functionPattern = Pattern.compile("([\\w$:#]+)|([()&|!])");
-
+    
     /*
      * postfixed boolean function
      */
@@ -20,10 +20,10 @@ public class Condition {
     private String originalConditionString;
     
     public Condition(String conditionString) {
-
+    
         originalConditionString = StringUtils.empty();
         condition = new ArrayList<>();
-
+        
         if (StringUtils.isNullOrEmpty(conditionString)) {
             condition.add("true");
         } else {
@@ -33,7 +33,7 @@ public class Condition {
             while (m.find()) {
                 String s = m.group();
                 originalConditionString += s;
-
+                
                 switch (s) {
                     case "(":
                         stack.push(s);
@@ -41,19 +41,19 @@ public class Condition {
                     case ")":
                         while (!stack.peek().equals("("))
                             condition.add(stack.pop());
-
+                            
                         stack.pop();
                         break;
                     case "&":
                         while (!stack.isEmpty() && stack.peek().equals("!"))
                             condition.add(stack.pop());
-
+                            
                         stack.push(s);
                         break;
                     case "|":
                         while (!stack.isEmpty() && (stack.peek().equals("&") || stack.peek().equals("!")))
                             condition.add(stack.pop());
-
+                            
                         stack.push(s);
                         break;
                     case "!":
@@ -70,24 +70,24 @@ public class Condition {
             }
         }
     }
-
+    
     public boolean isTrue() {
         Player player = Game.getPlayer();
-
+        
         Stack<Boolean> stack = new Stack<>();
         for (String s: condition) {
             switch (s) {
                 case "&": {
                     boolean v1 = stack.pop();
                     boolean v2 = stack.pop();
-
+                    
                     stack.push(v1 && v2);
                     break;
                 }
                 case "|": {
                     boolean v1 = stack.pop();
                     boolean v2 = stack.pop();
-
+                    
                     stack.push(v1 || v2);
                     break;
                 }
@@ -109,23 +109,23 @@ public class Condition {
                     break;
             }
         }
-
+        
         return stack.pop();
     }
-
+    
     public static String and(final String firstCondition, final String secondCondition) {
         if (StringUtils.isNullOrEmpty(firstCondition)) {
             if (StringUtils.isNullOrEmpty(secondCondition)) {
                 return StringUtils.empty();
             }
-
+            
             return secondCondition;
         } else if (StringUtils.isNullOrEmpty(secondCondition)) {
             return firstCondition;
         } else {
             return String.format("(%s)&(%s)", firstCondition, secondCondition);
         }
-
+        
     }
     
     public boolean add(String global, char op) {
@@ -165,7 +165,7 @@ public class Condition {
     public String toString() {
         return condition.toString();
     }
-
+    
     public String getOriginalConditionString() {
         return this.originalConditionString;
     }

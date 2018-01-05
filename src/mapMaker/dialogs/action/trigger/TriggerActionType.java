@@ -25,24 +25,24 @@ public enum TriggerActionType {
     SOUND(TriggerType.SOUND, () -> new EnumTriggerPanel<>("Sound Title", SoundTitle.values())),
     TRADE_POKEMON(TriggerType.TRADE_POKEMON, TradePokemonTriggerPanel::new),
     USE_ITEM(TriggerType.USE_ITEM, ItemTriggerPanel::new);
-
+    
     private final TriggerType triggerType;
     private final TriggerPanelCreator panelCreator;
-
+    
     TriggerActionType(TriggerType triggerType, TriggerPanelCreator panelCreator) {
         this.triggerType = triggerType;
         this.panelCreator = panelCreator;
     }
-
+    
     @FunctionalInterface
     private interface TriggerPanelCreator {
         TriggerContentsPanel createPanel();
     }
-
+    
     public TriggerContentsPanel createPanel() {
         return this.panelCreator.createPanel();
     }
-
+    
     public TriggerType getTriggerType() {
         return this.triggerType;
     }

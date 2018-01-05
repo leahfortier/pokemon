@@ -10,12 +10,12 @@ import pokemon.ActivePokemon;
 
 public interface PPHealer extends MoveUseItem, HoldItem {
     int restoreAmount(Move toRestore);
-
+    
     // TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
     default boolean use(ActivePokemon p, Move m) {
         return this.use(p, m, CastSource.USE_ITEM);
     }
-
+    
     default boolean use(ActivePokemon p, Move m, CastSource source) {
         if (m.increasePP(this.restoreAmount(m))) {
             switch (source) {
@@ -29,10 +29,10 @@ public interface PPHealer extends MoveUseItem, HoldItem {
                     Global.error("Invalid source " + source);
                     break;
             }
-
+            
             return true;
         }
-
+        
         return false;
     }
 }

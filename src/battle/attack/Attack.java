@@ -100,7 +100,7 @@ public abstract class Attack implements Serializable {
     private int priority;
     private int[] statChanges;
     private boolean printCast;
-
+    
     public Attack(AttackNamesies namesies, Type type, MoveCategory category, int pp, String description) {
         this.namesies = namesies;
         this.name = namesies.getName();
@@ -119,7 +119,7 @@ public abstract class Attack implements Serializable {
         this.effectChance = 100;
         this.printCast = true;
     }
-
+    
     public int getPriority(Battle b, ActivePokemon me) {
         return this.priority;
     }
@@ -131,7 +131,7 @@ public abstract class Attack implements Serializable {
     // Returns true if an attack has secondary effects -- this only applies to physical and special moves
     // Secondary effects include status conditions, confusing, flinching, and stat changes (unless the stat changes are negative for the user)
     public boolean hasSecondaryEffects() {
-
+    
         // Effects are primary for status moves
         if (category == MoveCategory.STATUS) {
             return false;
@@ -183,11 +183,11 @@ public abstract class Attack implements Serializable {
         
         return this.accuracy + "";
     }
-
+    
     public boolean isStatusMove() {
         return this.getCategory() == MoveCategory.STATUS;
     }
-
+    
     public MoveCategory getCategory() {
         return this.category;
     }
@@ -215,7 +215,7 @@ public abstract class Attack implements Serializable {
     public boolean isMultiTurn(Battle b, ActivePokemon user) {
         if (this instanceof MultiTurnMove) {
             MultiTurnMove multiTurnMove = (MultiTurnMove) this;
-
+            
             // The Power Herb item allows multi-turn moves that charge first to skip the charge turn -- BUT ONLY ONCE
             if (multiTurnMove.chargesFirst() && !multiTurnMove.semiInvulnerability() && user.isHoldingItem(b, ItemNamesies.POWER_HERB)) {
                 user.consumeItem(b);
@@ -231,7 +231,7 @@ public abstract class Attack implements Serializable {
     public Type getActualType() {
         return this.type;
     }
-
+    
     public Type getBattleType(Battle b, ActivePokemon user) {
         // Check if there is an effect that changes the type of the user -- if not just returns the actual type (I promise)
         return ChangeAttackTypeEffect.updateAttackType(b, user, this, this.getType(b, user));
@@ -248,54 +248,54 @@ public abstract class Attack implements Serializable {
     public String getPowerString() {
         return this.power == 0 ? "--" : this.power + "";
     }
-
+    
     public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
         return true;
     }
-
+    
     protected boolean shouldApplyDamage(Battle b, ActivePokemon user) {
         // Status moves default to no damage
         if (this.isStatusMove()) {
             return false;
         }
-
+        
         // Multi-turn moves default to no damage on the charging turn
         if (this.isMultiTurn(b, user)) {
             return !((MultiTurnMove)this).isCharging(user);
         }
-
+        
         return true;
     }
-
+    
     protected boolean shouldApplyEffects(Battle b, ActivePokemon user) {
         // Multi-turn moves default to no effects on the charging turn
         if (this.isMultiTurn(b, user)) {
             return !((MultiTurnMove)this).isCharging(user);
         }
-
+        
         return true;
     }
-
+    
     protected void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
     protected void afterApplyCheck(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
     protected void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {}
     protected void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {}
-
+    
     public final boolean apply(ActivePokemon me, ActivePokemon o, Battle b) {
         this.beginAttack(b, me, o);
-
+        
         ActivePokemon target = getTarget(b, me, o);
         
         // Don't do anything for moves that are uneffective
         if (!effective(b, me, target)) {
             return false;
         }
-
+        
         if (!applies(b, me, o)) {
             Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
             return false;
         }
-
+        
         this.afterApplyCheck(b, me, target);
         
         // Physical and special attacks -- apply dat damage
@@ -307,10 +307,10 @@ public abstract class Attack implements Serializable {
         if (canApplyEffects(b, me, target)) {
             applyBasicEffects(b, me, target);
         }
-
+        
         this.applyUniqueEffects(b, me, target);
         this.endAttack(b, me, target);
-
+        
         return true;
     }
     
@@ -327,17 +327,17 @@ public abstract class Attack implements Serializable {
         if (!RandomUtils.chanceTest(chance)) {
             return false;
         }
-
+        
         // Check the opponents effects and see if it will prevent effects from occurring
         if (EffectBlockerEffect.checkBlocked(b, me, o)) {
             return false;
         }
-
+        
         // Sheer Force prevents the user from having secondary effects for its moves
         if (me.hasAbility(AbilityNamesies.SHEER_FORCE) && me.getAttack().hasSecondaryEffects()) {
             return false;
         }
-
+        
         return this.shouldApplyEffects(b, me);
     }
     
@@ -345,10 +345,10 @@ public abstract class Attack implements Serializable {
         if (TypeAdvantage.doesNotEffect(p, opp, b)) {
             Messages.add(TypeAdvantage.getDoesNotEffectMessage(opp));
             CrashDamageMove.invokeCrashDamageMove(b, p);
-
+            
             return true;
         }
-
+        
         return false;
     }
     
@@ -358,18 +358,18 @@ public abstract class Attack implements Serializable {
         if (this.isSelfTarget() || this.isMoveType(MoveType.FIELD)) {
             return true;
         }
-
+        
         // Non-status moves (AND FUCKING THUNDER WAVE) -- need to check the type chart
         if ((!isStatusMove() || this.namesies == AttackNamesies.THUNDER_WAVE) && this.zeroAdvantage(b, me, o)) {
             return false;
         }
-
+        
         SelfAttackBlocker selfAttackBlocker = SelfAttackBlocker.checkBlocked(b, me);
         if (selfAttackBlocker != null) {
             Messages.add(selfAttackBlocker.getBlockMessage(b, me));
             return false;
         }
-
+        
         AttackBlocker attackBlocker = AttackBlocker.checkBlocked(b, me, o);
         if (attackBlocker != null) {
             Messages.add(attackBlocker.getBlockMessage(b, me, o));
@@ -383,14 +383,14 @@ public abstract class Attack implements Serializable {
     
     // Physical and Special moves -- do dat damage!
     public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-
+    
         // Deal damage
         int damage = b.calculateDamage(me, o);
         boolean critYoPants = b.criticalHit(me, o);
         if (critYoPants) {
             damage *= me.hasAbility(AbilityNamesies.SNIPER) ? 3 : 2;
         }
-
+        
         damage = o.reduceHealth(b, damage);
         if (critYoPants) {
             Messages.add("It's a critical hit!!");
@@ -399,7 +399,7 @@ public abstract class Attack implements Serializable {
                 o.getAttributes().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
             }
         }
-
+        
         // Print Advantage
         double advantage = TypeAdvantage.getAdvantage(me, o, b);
         if (TypeAdvantage.isNotVeryEffective(advantage)) {
@@ -407,11 +407,11 @@ public abstract class Attack implements Serializable {
         } else if (TypeAdvantage.isSuperEffective(advantage)) {
             Messages.add(TypeAdvantage.getSuperEffectiveMessage());
         }
-
+        
         if (me.isPlayer() && !b.isSimulating()) {
             Game.getPlayer().getMedalCase().checkAdvantage(advantage);
         }
-
+        
         // Deadsies check
         o.isFainted(b);
         me.isFainted(b);
@@ -419,23 +419,23 @@ public abstract class Attack implements Serializable {
         // Apply a damage effect
         ApplyDamageEffect.invokeApplyDamageEffect(b, me, o, damage);
         OpponentApplyDamageEffect.invokeOpponentApplyDamageEffect(b, me, o, damage);
-
+        
         // Effects that apply to the opponent when they take damage
         TakeDamageEffect.invokeTakeDamageEffect(b, me, o);
         OpponentTakeDamageEffect.invokeOpponentTakeDamageEffect(b, me, o);
     }
-
+    
     private void applyUniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
         // Kill yourself!!
         if (isMoveType(MoveType.USER_FAINTS)) {
             user.killKillKillMurderMurderMurder(b);
         }
-
+        
         this.uniqueEffects(b, user, victim);
-
+        
         OpponentEndAttackEffect.invokeOpponentEndAttackEffect(b, user, this);
     }
-
+    
     private void applyBasicEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
         // Don't apply effects to a fainted Pokemon
         if (victim.isFainted(b)) {
@@ -473,11 +473,11 @@ public abstract class Attack implements Serializable {
     
     // To be overridden if necessary
     public void startTurn(Battle b, ActivePokemon me) {}
-
+    
     public static boolean isAttack(String name) {
         return AttackNamesies.tryValueOf(name) != null;
     }
-
+    
     // EVERYTHING BELOW IS GENERATED ###
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
     

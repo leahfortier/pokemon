@@ -16,22 +16,22 @@ public class AreaDialog extends TriggerDialog<AreaMatcher> {
     private final JComboBox<TerrainType> terrainComboBox;
     private final JComboBox<WeatherState> weatherComboBox;
     private final JComboBox<SoundTitle> musicComboBox;
-
+    
     public AreaDialog(AreaMatcher areaMatcher) {
         super("Area Editor");
-
+        
         displayNameTextField = GUIUtils.createTextField();
         flyLocationTextField = GUIUtils.createTextField();
-
+        
         terrainComboBox = GUIUtils.createComboBox(TerrainType.values());
         terrainComboBox.setSelectedItem(TerrainType.BUILDING);
-
+        
         weatherComboBox = GUIUtils.createComboBox(WeatherState.values());
         weatherComboBox.setSelectedItem(WeatherState.NORMAL);
-
+        
         musicComboBox = GUIUtils.createComboBox(SoundTitle.values());
         musicComboBox.setSelectedItem(SoundTitle.DEFAULT_TUNE);
-
+        
         GUIUtils.setVerticalLayout(
                 this,
                 GUIUtils.createTextFieldComponent("Display Name", displayNameTextField),
@@ -40,10 +40,10 @@ public class AreaDialog extends TriggerDialog<AreaMatcher> {
                 GUIUtils.createComboBoxComponent("Weather", weatherComboBox),
                 GUIUtils.createComboBoxComponent("Music", musicComboBox)
         );
-
+        
         this.load(areaMatcher);
     }
-
+    
     @Override
     protected AreaMatcher getMatcher() {
         return new AreaMatcher(
@@ -55,12 +55,12 @@ public class AreaDialog extends TriggerDialog<AreaMatcher> {
                 null // TODO: Music conditions
         );
     }
-
+    
     private void load(AreaMatcher matcher) {
         if (matcher == null) {
             return;
         }
-
+        
         displayNameTextField.setText(matcher.getDisplayName());
         flyLocationTextField.setText(matcher.getFlyLocation());
         terrainComboBox.setSelectedItem(matcher.getTerrain());

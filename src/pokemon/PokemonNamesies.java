@@ -831,21 +831,21 @@ public enum PokemonNamesies {
     LUGARUGAN("Lugarugan");
 
     // EVERYTHING ABOVE IS GENERATED ###
-
+    
     private final String name;
-
+    
     PokemonNamesies(String name) {
         this.name = name;
     }
-
+    
     public String getName() {
         return this.name;
     }
-
+    
     public PokemonInfo getInfo() {
         return PokemonInfo.getPokemonInfo(this.ordinal());
     }
-
+    
     public static PokemonNamesies tryValueOf(String name) {
         try {
             return PokemonNamesies.valueOf(StringUtils.getNamesiesString(name));
@@ -853,13 +853,13 @@ public enum PokemonNamesies {
             return null;
         }
     }
-
+    
     public static PokemonNamesies getValueOf(String name) {
         PokemonNamesies namesies = tryValueOf(name);
         if (namesies == null) {
             Global.error(name + " does not have a valid PokemonNamesies value");
         }
-
+        
         return namesies;
     }
 }

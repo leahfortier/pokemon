@@ -7,13 +7,13 @@ public enum TrainerAction implements Serializable {
     SWITCH(6),
     ITEM(6),
     RUN(6);
-
+    
     private final int priority;
-
+    
     TrainerAction(int p) {
         priority = p;
     }
-
+    
     public int getPriority() {
         return priority;
     }

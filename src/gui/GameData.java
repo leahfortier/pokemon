@@ -14,7 +14,7 @@ import java.util.Map;
 public class GameData {
     private Map<MapName, MapData> maps;
     private Map<String, Trigger> triggers;
-
+    
     private IndexTileSet mapTiles;
     private IndexTileSet trainerTiles;
     private TileSet partyTiles;
@@ -29,12 +29,12 @@ public class GameData {
     private TileSet playerTerrainTiles;
     private TileSet weatherTiles;
     private TileSet medalTiles;
-
+    
     public void loadData() {
         loadTiles();
         loadMaps();
     }
-
+    
     private void loadTiles() {
         mapTiles = new IndexTileSet(Folder.MAP_TILES);
         trainerTiles = new IndexTileSet(Folder.TRAINER_TILES);
@@ -51,11 +51,11 @@ public class GameData {
         weatherTiles = new TileSet(Folder.WEATHER_TILES);
         medalTiles = new TileSet(Folder.MEDAL_TILES, .65f);
     }
-
+    
     private void loadMaps() {
         triggers = new HashMap<>();
         Trigger.createCommonTriggers();
-
+        
         maps = new HashMap<>();
         File mapsDirectory = new File(Folder.MAPS);
         for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
@@ -63,80 +63,80 @@ public class GameData {
             maps.put(mapData.getName(), mapData);
         }
     }
-
+    
     public MapData getMap(MapName name) {
         if (!maps.containsKey(name)) {
             Global.error("Cannot find map with name " + name);
         }
-
+        
         return maps.get(name);
     }
-
+    
     public boolean hasTrigger(String triggerName) {
         return triggers.containsKey(triggerName);
     }
-
+    
     public Trigger getTrigger(String name) {
         return triggers.get(name);
     }
-
+    
     public void addTrigger(Trigger trigger) {
         triggers.put(trigger.getName(), trigger);
     }
-
+    
     public IndexTileSet getMapTiles() {
         return mapTiles;
     }
-
+    
     public TileSet getOpponentTerrainTiles() {
         return opponentTerrainTiles;
     }
-
+    
     public TileSet getPlayerTerrainTiles() {
         return playerTerrainTiles;
     }
-
+    
     public TileSet getItemTiles() {
         return itemTiles;
     }
-
+    
     public TileSet getItemTilesLarge() {
         return itemTilesLarge;
     }
-
+    
     public TileSet getPokemonTilesLarge() {
         return pokemonTilesLarge;
     }
-
+    
     public TileSet getPokemonTilesMedium() {
         return pokemonTilesMedium;
     }
-
+    
     public TileSet getPokemonTilesSmall() {
         return pokemonTilesSmall;
     }
-
+    
     // TODO: Eventually might want this to not be indexed and have an enum or something so it can be referenced easily
     public IndexTileSet getTrainerTiles() {
         return trainerTiles;
     }
-
+    
     public TileSet getPartyTiles() {
         return partyTiles;
     }
-
+    
     public TileSet getPokedexTilesSmall() {
         return pokedexTilesSmall;
     }
-
+    
     public TileSet getPokedexTilesLarge() {
         return pokedexTilesLarge;
     }
-
+    
     public TileSet getWeatherTiles() {
         return weatherTiles;
     }
-
+    
     public TileSet getMedalTiles() {
         return medalTiles;
     }

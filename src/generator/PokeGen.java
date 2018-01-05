@@ -57,11 +57,11 @@ class PokeGen {
         public String getInputPath() {
             return this.inputPath;
         }
-
+        
         public String getOutputPath() {
             return this.outputPath;
         }
-
+        
         public String getOutputFolder() {
             return this.outputFolder;
         }
@@ -69,43 +69,43 @@ class PokeGen {
         public String getSuperClassName() {
             return this.superClassName;
         }
-
+        
         public Class getNamesiesClass() {
             return this.namesiesClass;
         }
     }
-
+    
     private final InputFormatter inputFormatter;
     private NamesiesGen namesiesGen;
     private Generator currentGen;
     
     PokeGen(InputFormatter inputFormatter) {
         this.inputFormatter = inputFormatter;
-
+        
         final Map<Class, NamesiesGen> namesiesMap = new HashMap<>();
-
+        
         // Go through each PokeGen and generate
         for (Generator generator : Generator.values()) {
             this.currentGen = generator;
-
+            
             final Class namesiesClass = generator.getNamesiesClass();
             if (!namesiesMap.containsKey(namesiesClass)) {
                 namesiesMap.put(namesiesClass, new NamesiesGen(generator.getOutputFolder(), namesiesClass));
             }
-
+            
             this.namesiesGen = namesiesMap.get(namesiesClass);
             this.superGen();
         }
-
+        
         namesiesMap.values().forEach(NamesiesGen::writeNamesies);
     }
     
     private ClassFields readFields(Scanner in, String name, String className, int index) {
         ClassFields fields = StuffGen.readFields(in);
         inputFormatter.validate(fields);
-
+        
         fields.setClassName(className);
-
+        
         fields.add("Namesies", name);
         fields.add("Index", index + "");
         
@@ -114,24 +114,24 @@ class PokeGen {
             fields.addNew("MinTurns", numTurns);
             fields.addNew("MaxTurns", numTurns);
         });
-
+        
         return fields;
     }
     
     private String createClass(String name, String className, ClassFields fields) {
         this.namesiesGen.createNamesies(name, className);
-
+        
         List<String> interfaces = new ArrayList<>();
         String additionalMethods = getAdditionalMethods(fields, interfaces);
         String constructor = getConstructor(fields);
         String implementsString = inputFormatter.getImplementsString(interfaces);
         String extraFields = fields.getAndRemove("Field");
         String headerComments = fields.getAndRemove("Comments");
-
+        
         fields.remove("Index");
-
+        
         fields.confirmEmpty();
-
+        
         return StuffGen.createClass(
                 headerComments,
                 className,
@@ -147,10 +147,10 @@ class PokeGen {
     private void superGen() {
         StringAppender out = StuffGen.startGen(this.currentGen.getOutputPath());
         out.appendLine("\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/"); // DON'T DO IT
-
+        
         Scanner in = FileIO.openFile(this.currentGen.getInputPath());
         readFileFormat(in);
-
+        
         // TODO: Do we still use this?
         // The image index file for the item generator
         int index = 0;
@@ -169,17 +169,17 @@ class PokeGen {
             
             // Read in all of the fields
             ClassFields fields = readFields(in, name, className, index);
-
+            
             // Create class and append
             out.append(createClass(name, className, fields));
         }
-
+        
         if (this.currentGen == Generator.ITEM_GEN) {
             addTMs(out);
         }
-
+        
         out.append("}");
-
+        
         FileIO.overwriteFile(this.currentGen.getOutputPath(), out.toString());
     }
     
@@ -228,7 +228,7 @@ class PokeGen {
                     default:
                         Global.error("Invalid format type " + formatType);
                 }
-            }    
+            }
         }
     }
     
@@ -237,7 +237,7 @@ class PokeGen {
     private static FailureInfo failureInfo;
     
     private String getAdditionalMethods(ClassFields fields, List<String> interfaces) {
-
+    
         StringAppender methods = new StringAppender();
         
         // Add all the interfaces to the interface list
@@ -258,7 +258,7 @@ class PokeGen {
                     this.currentGen.getSuperClassName(),
                     inputFormatter
             );
-
+            
             interfaces.addAll(currentInterfaces);
             
             currentInterfaces = nextInterfaces;
@@ -276,45 +276,45 @@ class PokeGen {
         if (this.currentGen != Generator.ITEM_GEN) {
             Global.error("Can only add TMs for the Item class");
         }
-
+        
         Scanner in = FileIO.openFile(FileName.TM_LIST);
         while (in.hasNext()) {
             String attackName = in.nextLine().trim();
             String className = StringUtils.getClassName(attackName);
-
+            
             AttackNamesies namesies = AttackNamesies.getValueOf(attackName);
             Attack attack = namesies.getAttack();
-
+            
             String itemName = attackName + " TM";
             className += "TM";
-
+            
             ClassFields fields = new ClassFields();
             fields.setClassName(className);
             fields.add("Namesies", attackName + "_TM");
             fields.add("Desc", attack.getDescription());
-
+            
             fields.add("Int", TechnicalMachine.class.getSimpleName());
             fields.add("TM", namesies.name());
-
+            
             classes.append(createClass(itemName, className, fields));
         }
     }
-
+    
     private boolean getPhysicalContact(ClassFields fields) {
         boolean physicalContact = false;
         if (this.currentGen == Generator.ATTACK_GEN) {
             String category = fields.getRequired("Cat");
             physicalContact = category.toUpperCase().equals(MoveCategory.PHYSICAL.name());
-
+            
             String physicalContactField = fields.getAndRemove("PhysicalContact");
             if (physicalContactField != null) {
                 physicalContact = Boolean.parseBoolean(physicalContactField);
             }
         }
-
+        
         return physicalContact;
     }
-
+    
     // For the super call inside the class constructor, returns the comma-separated field values
     // (It's what's inside the super parentheses)
     // Example: 'AttackNamesies.ATTACK_NAME, "Attack Description", 35, Type.NORMAL, MoveCategory.PHYSICAL'
@@ -324,13 +324,13 @@ class PokeGen {
             String value = inputFormatter.getConstructorValue(pair, fields);
             superValues.appendDelimiter(", ", value);
         }
-
+        
         return superValues.toString();
     }
-
+    
     private String getConstructor(ClassFields fields) {
         boolean physicalContact = getPhysicalContact(fields);
-
+        
         StringAppender constructor = new StringAppender();
         constructor.appendLine("super(" + getInternalConstructorValues(fields) + ");");
         
@@ -341,7 +341,7 @@ class PokeGen {
                     value -> constructor.appendLine(inputFormatter.getAssignment(pair.getValue(), value))
             );
         }
-
+        
         fields.getPerformAndRemove("StatChange", value -> {
             String[] mcSplit = value.split(" ");
             for (int i = 0, index = 1; i < Integer.parseInt(mcSplit[0]); i++) {
@@ -352,7 +352,7 @@ class PokeGen {
                         .append(";\n");
             }
         });
-
+        
         if (physicalContact) {
             constructor.appendFormat(
                     "super.moveTypes.add(%s.%s);\n",
@@ -360,9 +360,9 @@ class PokeGen {
                     MoveType.PHYSICAL_CONTACT
             );
         }
-
+        
         fields.getPerformAndRemove("Activate", constructor::append);
-
+        
         return new MethodInfo(
                         fields.getClassName() + "()",
                         constructor.toString(),

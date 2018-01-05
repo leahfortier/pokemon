@@ -11,29 +11,29 @@ public enum StatusCondition implements Serializable {
     BURNED("BRN", 1.5, Burned::new),
     ASLEEP("SLP", 2.5, Asleep::new),
     FROZEN("FRZ", 2.5, Frozen::new);
-
+    
     private final String name;
     private final double catchModifier;
     private final GetStatus getStatus;
-
+    
     StatusCondition(String name, double catchModifier, GetStatus getStatus) {
         this.name = name;
         this.catchModifier = catchModifier;
         this.getStatus = getStatus;
     }
-
+    
     public String getName() {
         return name;
     }
-
+    
     public double getCatchModifier() {
         return catchModifier;
     }
-
+    
     public Status getStatus() {
         return this.getStatus.getStatus();
     }
-
+    
     @FunctionalInterface
     private interface GetStatus {
         Status getStatus();

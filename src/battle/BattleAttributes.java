@@ -22,9 +22,9 @@ import java.util.List;
 
 public class BattleAttributes implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    
     private transient ActivePokemon attributesHolder;
-
+    
     private Move selected;
     private Move lastMoveUsed;
     private List<PokemonEffect> effects;
@@ -42,7 +42,7 @@ public class BattleAttributes implements Serializable {
     
     public BattleAttributes(ActivePokemon attributesHolder) {
         this.attributesHolder = attributesHolder;
-
+        
         resetStages();
         used = false;
         battleUsed = false;
@@ -57,27 +57,27 @@ public class BattleAttributes implements Serializable {
         castSource = null;
         reducePP = false;
     }
-
+    
     public void setAttributesHolder(ActivePokemon attributesHolder) {
         this.attributesHolder = attributesHolder;
     }
-
+    
     public void setReducePP(boolean reduce) {
         reducePP = reduce;
     }
-
+    
     public boolean shouldReducePP() {
         return reducePP;
     }
-
+    
     public void setCastSource(Serializable castSource) {
         this.castSource = castSource;
     }
-
+    
     public Object getCastSource() {
         return this.castSource;
     }
-
+    
     public void setAttacking(boolean isAttacking) {
         attacking = isAttacking;
     }
@@ -85,11 +85,11 @@ public class BattleAttributes implements Serializable {
     public boolean isAttacking() {
         return attacking;
     }
-
+    
     void setLastMoveSucceeded(boolean lastMoveSucceeded) {
         this.lastMoveSucceeded = lastMoveSucceeded;
     }
-
+    
     public boolean lastMoveSucceeded() {
         return this.lastMoveSucceeded;
     }
@@ -108,7 +108,7 @@ public class BattleAttributes implements Serializable {
     public boolean isUsed() {
         return used;
     }
-
+    
     public boolean isBattleUsed() {
         return this.battleUsed;
     }
@@ -132,12 +132,12 @@ public class BattleAttributes implements Serializable {
     public boolean hasTakenDamage() {
         return damageTaken > 0;
     }
-
+    
     public void resetTurn() {
         resetDamageTaken();
         setReducePP(false);
     }
-
+    
     private void resetDamageTaken() {
         damageTaken = 0;
     }
@@ -196,7 +196,7 @@ public class BattleAttributes implements Serializable {
     public void addEffect(PokemonEffect e) {
         effects.add(e);
     }
-
+    
     public boolean removeEffect(PokemonEffect effect) {
         return effects.remove(effect);
     }
@@ -213,7 +213,7 @@ public class BattleAttributes implements Serializable {
     public boolean hasEffect(EffectNamesies effect) {
         return Effect.hasEffect(effects, effect);
     }
-
+    
     public int getStage(Stat stat) {
         return this.stages[stat.index()];
     }
@@ -221,18 +221,18 @@ public class BattleAttributes implements Serializable {
     public void setStage(Stat stat, int val) {
         int index = stat.index();
         stages[index] = val;
-
+        
         // Don't let it go out of bounds, yo!
         stages[index] = Math.min(Stat.MAX_STAT_CHANGES, stages[index]);
         stages[index] = Math.max(-1*Stat.MAX_STAT_CHANGES, stages[index]);
-
+        
         Messages.add(new MessageUpdate().withPokemon(attributesHolder));
     }
-
+    
     public void incrementStage(Stat stat, int val) {
         setStage(stat, getStage(stat) + val);
     }
-
+    
     public void resetStage(Stat stat) {
         setStage(stat, 0);
     }
@@ -264,15 +264,15 @@ public class BattleAttributes implements Serializable {
     
     // Modifies a stat for a Pokemon and prints appropriate messages and stuff
     public boolean modifyStage(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source, String message) {
-
+    
         // Don't modify the stages of a dead Pokemon
         if (victim.isFainted(b)) {
             return false;
         }
-
+        
         String statName = stat.getName();
-        boolean print = source == CastSource.ATTACK && caster.getAttack().canPrintFail(); 
-
+        boolean print = source == CastSource.ATTACK && caster.getAttack().canPrintFail();
+        
         // Effects that change the value of the modifier
         val = ModifyStageValueEffect.updateModifyStageValueEffect(b, caster, victim, val);
         
@@ -283,7 +283,7 @@ public class BattleAttributes implements Serializable {
                 if (print) {
                     Messages.add(prevent.preventionMessage(victim, stat));
                 }
-
+                
                 return false;
             }
         }
@@ -293,7 +293,7 @@ public class BattleAttributes implements Serializable {
             if (print) {
                 Messages.add(victim.getName() + "'s " + statName + " cannot be raised any higher!");
             }
-
+            
             return false;
         }
         
@@ -303,13 +303,13 @@ public class BattleAttributes implements Serializable {
             if (print) {
                 Messages.add(victim.getName() + "'s " + statName + " cannot be lowered any further!");
             }
-
+            
             return false;
-        }        
+        }
         
         String change;
         String victimName = caster == victim ? "its" : victim.getName() + "'s";
-
+        
         if (val >= 2) {
             change =  "sharply raised";
         }
@@ -326,12 +326,12 @@ public class BattleAttributes implements Serializable {
             Global.error("Cannot modify a stage by zero.");
             return false;
         }
-
+        
         message = message.replace("{statName}", statName)
                 .replace("{change}", change)
                 .replace("{victimName}", victimName);
         Messages.add(message);
-
+        
         this.incrementStage(stat, val);
         
         // Defiant raises Attack stat by two when a stat is lowered by the opponent
@@ -353,11 +353,11 @@ public class BattleAttributes implements Serializable {
         
         return sum;
     }
-
+    
     public void swapStages(Stat stat, ActivePokemon other) {
         int userStat = this.getStage(stat);
         int victimStat = other.getAttributes().getStage(stat);
-
+        
         this.setStage(stat, victimStat);
         other.getAttributes().setStage(stat, userStat);
     }

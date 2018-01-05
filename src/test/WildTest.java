@@ -22,28 +22,28 @@ public class WildTest extends BaseTest {
         compoundEyesTest(PokemonNamesies.LINOONE, false, true);
         compoundEyesTest(PokemonNamesies.CLEFAIRY, false, false);
     }
-
+    
     private void compoundEyesTest(PokemonNamesies pokemonNamesies, boolean alwaysItem, boolean compoundEyesAlwaysItem) {
         WildEncounter wildEncounter = new WildEncounter(pokemonNamesies, 5);
-
+        
         Player player = new TestCharacter(new TestPokemon(PokemonNamesies.BULBASAUR));
         Assert.assertTrue(Game.getPlayer() == player);
-
+        
         Set<ItemNamesies> wildHoldItems = pokemonNamesies.getInfo().getWildItems()
                 .stream()
                 .map(WildHoldItem::getItem)
                 .collect(Collectors.toSet());
-
+                
         Set<ItemNamesies> noAbilitySet = new HashSet<>(wildHoldItems);
         if (!alwaysItem) {
             noAbilitySet.add(ItemNamesies.NO_ITEM);
         }
-
+        
         Set<ItemNamesies> compoundEyesSet = new HashSet<>(wildHoldItems);
         if (!compoundEyesAlwaysItem) {
             compoundEyesSet.add(ItemNamesies.NO_ITEM);
         }
-
+        
         for (int i = 0; i < 1000; i++) {
             player.front().setAbility(AbilityNamesies.NO_ABILITY);
             ActivePokemon wildPokemon = wildEncounter.getWildPokemon().front();
@@ -53,7 +53,7 @@ public class WildTest extends BaseTest {
                     holdItem.name(),
                     wildHoldItems.contains(holdItem) || (!alwaysItem && holdItem == ItemNamesies.NO_ITEM)
             );
-
+            
             player.front().setAbility(AbilityNamesies.COMPOUNDEYES);
             wildPokemon = wildEncounter.getWildPokemon().front();
             holdItem = wildPokemon.getActualHeldItem().namesies();
@@ -63,7 +63,7 @@ public class WildTest extends BaseTest {
                     wildHoldItems.contains(holdItem) || (!compoundEyesAlwaysItem && holdItem == ItemNamesies.NO_ITEM)
             );
         }
-
+        
         Assert.assertTrue(noAbilitySet.toString(), noAbilitySet.isEmpty());
         Assert.assertTrue(compoundEyesSet.toString(), compoundEyesSet.isEmpty());
     }

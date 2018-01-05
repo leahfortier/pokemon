@@ -108,7 +108,7 @@ import java.util.Set;
 
 public abstract class Ability implements Serializable, AbilityHolder {
     private static final long serialVersionUID = 1L;
-
+    
     protected final AbilityNamesies namesies;
     private final String description;
     
@@ -116,12 +116,12 @@ public abstract class Ability implements Serializable, AbilityHolder {
         this.namesies = namesies;
         this.description = description;
     }
-
+    
     @Override
     public Ability getAbility() {
         return this;
     }
-
+    
     public AbilityNamesies namesies() {
         return this.namesies;
     }
@@ -133,22 +133,22 @@ public abstract class Ability implements Serializable, AbilityHolder {
     public String getDescription() {
         return description;
     }
-
+    
     public boolean isActive() {
         return true;
     }
-
+    
     // False if ability is ignored when the opponent breaks the mold
     public boolean unbreakableMold() {
         return false;
     }
-
+    
     // True if Pokemon with this ability can have it replaced by another
     public boolean isReplaceable() {
         return true;
     }
-
-
+    
+    
     // True if Pokemon can steal this ability when it is not their default
     public boolean isStealable() {
         return true;
@@ -156,13 +156,13 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     // Called when this ability is going to changed to a different ability -- can be overridden as necessary
     public void deactivate(Battle b, ActivePokemon victim) {}
-
+    
     protected ActivePokemon getOtherPokemon(Battle b, ActivePokemon p) {
         ActivePokemon other = b.getOtherPokemon(p);
         if (other.getAbility() != this) {
             Global.error(this.getName() + " invokee is not the opposite Pokemon.");
         }
-
+        
         return other;
     }
     
@@ -177,25 +177,25 @@ public abstract class Ability implements Serializable, AbilityHolder {
         if (abilities[1] == AbilityNamesies.NO_ABILITY) {
             return abilities[0];
         }
-
+        
         // Has two abilities -- return a random one
         return RandomUtils.getRandomValue(abilities);
     }
     
     public static AbilityNamesies evolutionAssign(ActivePokemon p, PokemonInfo ev) {
         AbilityNamesies prev = p.getAbility().namesies();
-
+        
         // Evolution has current ability
         if (ev.hasAbility(prev)) {
             return p.getAbility().namesies();
         }
-
+        
         // Evolution only has a single ability
         AbilityNamesies[] abilities = ev.getAbilities();
         if (abilities[1] == AbilityNamesies.NO_ABILITY) {
             return abilities[0];
         }
-
+        
         // Evolution has the alternative
         AbilityNamesies other = getOtherAbility(p.getPokemonInfo(), prev);
         if (ev.hasAbility(other)) {
@@ -213,7 +213,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         if (!p.hasAbility(ability)) {
             Global.error("Incorrect ability " + ability + " for " + p.getName() + ".");
         }
-
+        
         AbilityNamesies[] abilities = p.getAbilities();
         return abilities[0] == ability ? abilities[1] : abilities[0];
     }
