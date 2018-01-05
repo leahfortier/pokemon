@@ -100,7 +100,7 @@ public class StuffGen {
             String constructor,
             String additional,
             boolean isInterface) {
-        return new StringAppender("\n")
+        return new StringAppender("\t\n")
                 .appendLineIf(!StringUtils.isNullOrEmpty(classComments), "\t" + classComments)
                 .append("\t" + defineClass(className, isInterface))
                 .appendDelimiter(" extends ", superClass)
