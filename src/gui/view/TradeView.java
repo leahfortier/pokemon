@@ -61,32 +61,34 @@ public class TradeView extends View {
     
     public TradeView() {
         this.canvasPanel = DrawPanel.fullGamePanel()
-                .withTransparentCount(2)
-                .withBorderPercentage(0);
-                
+                                    .withTransparentCount(2)
+                                    .withBorderPercentage(0);
+
         int panelWidth = 183;
         int spacing = 20;
         
         this.offeringPanel = new DrawPanel(spacing, spacing, panelWidth, 90)
                 .withTransparentCount(2)
                 .withBlackOutline();
-                
+
         this.requestedPanel = new DrawPanel(
                 Global.GAME_SIZE.width - spacing - panelWidth,
                 BasicPanels.getMessagePanelY() - spacing - this.offeringPanel.height,
                 panelWidth,
-                this.offeringPanel.height)
+                this.offeringPanel.height
+        )
                 .withTransparentCount(2)
                 .withBlackOutline();
-                
+
         int messagePanelHeight = 80;
         this.messagePanel = new DrawPanel(
                 0,
                 BasicPanels.getMessagePanelY() - messagePanelHeight + DrawUtils.OUTLINE_SIZE,
                 Global.GAME_SIZE.width/2,
-                messagePanelHeight)
+                messagePanelHeight
+        )
                 .withBlackOutline();
-                
+
         this.buttons = BasicPanels.getFullMessagePanelButtons(panelWidth, 55, 2, NUM_COLS);
         this.cancelButton = buttons[buttons.length - 1];
         
@@ -94,7 +96,7 @@ public class TradeView extends View {
                 .withBackgroundColor(Type.NORMAL.getColor())
                 .withTransparentCount(2)
                 .withBlackOutline();
-                
+
         GameData data = Game.getData();
         this.partyTiles = data.getPartyTiles();
         this.pokemonTiles = data.getPokemonTilesLarge();
@@ -154,7 +156,7 @@ public class TradeView extends View {
         FontMetrics.setFont(g, 22);
         
         TextUtils.drawCenteredHeightString(g, label, panel.x + panel.getBorderSize() + 10, panel.y + panel.height/3);
-        ImageUtils.drawCenteredImageLabel(g, partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getName(), panel.centerX(), panel.y + 2 * panel.height / 3);
+        ImageUtils.drawCenteredImageLabel(g, partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getName(), panel.centerX(), panel.y + 2*panel.height/3);
     }
     
     private void drawTradeAnimation(Graphics g) {
@@ -166,7 +168,7 @@ public class TradeView extends View {
         }
         
         int drawWidth = Global.GAME_SIZE.width;
-        int drawHeightLeft = Global.GAME_SIZE.height / 2;
+        int drawHeightLeft = Global.GAME_SIZE.height/2;
         int drawHeightRight = drawHeightLeft - myPokesFrontImage.getHeight();
         
         BufferedImage a = myPokesBackImage;
@@ -175,14 +177,14 @@ public class TradeView extends View {
         boolean swap = false;
         
         // Images slide in from sides
-        if (tradeAnimationTime < TRADE_ANIMATION_LIFESPAN / 2.0f) {
+        if (tradeAnimationTime < TRADE_ANIMATION_LIFESPAN/2.0f) {
             a = theirPokesBackImage;
             b = myPokesFrontImage;
             timesies = TRADE_ANIMATION_LIFESPAN - timesies;
             swap = true;
         }
         
-        float yomama = TRADE_ANIMATION_LIFESPAN / 2.0f;
+        float yomama = TRADE_ANIMATION_LIFESPAN/2.0f;
         float normalizedTime = 1 - (timesies - yomama)/(yomama);
         int drawWidthA = drawWidth + a.getWidth();
         int drawWidthB = drawWidth + b.getWidth();
@@ -222,7 +224,7 @@ public class TradeView extends View {
                         .withBackgroundColors(Type.getColors(pokemon.getActualType()))
                         .withTransparentCount(2)
                         .withBlackOutline();
-                        
+
                 buttonPanel.drawBackground(g);
                 buttonPanel.imageLabel(g, 22, partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getActualName());
             }
@@ -237,7 +239,7 @@ public class TradeView extends View {
     }
     
     private void updateActiveButtons() {
-        for (int i  = 0; i < Trainer.MAX_POKEMON; i++) {
+        for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
             getTeamButton(i).setActive(i < team.size());
         }
         

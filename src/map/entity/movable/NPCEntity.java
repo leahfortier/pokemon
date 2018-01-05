@@ -45,7 +45,7 @@ public class NPCEntity extends MovableEntity {
         
         this.path = path;
         
-        this.defaultLocation =  location;
+        this.defaultLocation = location;
         this.defaultDirection = direction;
         this.moveAxis = moveAxis;
         this.spriteIndex = spriteIndex;

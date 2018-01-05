@@ -234,7 +234,7 @@ public class Player extends PlayerTrainer implements Serializable {
     
     // Called when a character steps once in any given direction
     public void step() {
-    
+        
         // Decrease repel steps
         repelInfo.step();
         
@@ -388,18 +388,18 @@ public class Player extends PlayerTrainer implements Serializable {
         int base = dead.getPokemonInfo().getBaseEXP();
         for (ActivePokemon p : team) {
             if (p.canFight() && p.getAttributes().isUsed()) {
-                double gain = wild * base * lev * Math.pow(2 * lev + 10, 2.5);
-                gain /= 5 * Math.pow(lev + p.getLevel() + 10, 2.5);
+                double gain = wild*base*lev*Math.pow(2*lev + 10, 2.5);
+                gain /= 5*Math.pow(lev + p.getLevel() + 10, 2.5);
                 gain++;
                 gain *= p.isHoldingItem(b, ItemNamesies.LUCKY_EGG) ? 1.5 : 1;
                 
-                p.gainEXP(b, (int) Math.max(1, gain / numUsed), dead);
+                p.gainEXP(b, (int)Math.max(1, gain/numUsed), dead);
             }
         }
     }
     
     public void winBattle(Battle b, Opponent opponent) {
-    
+        
         // Trainers pay up!
         if (opponent instanceof Trainer) {
             Trainer opp = (Trainer)opponent;
@@ -410,8 +410,7 @@ public class Player extends PlayerTrainer implements Serializable {
             int datCash = opp.getDatCashMoney()*(hasEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE) ? 2 : 1);
             Messages.add(getName() + " received " + datCash + " pokedollars for winning! Woo!");
             getDatCashMoney(datCash);
-        }
-        else {
+        } else {
             Messages.add(new MessageUpdate().withUpdate(Update.WIN_BATTLE));
         }
         
@@ -454,8 +453,7 @@ public class Player extends PlayerTrainer implements Serializable {
         if (team.size() < MAX_POKEMON) {
             team.add(p);
             newPokemonInfo.inTeam();
-        }
-        else {
+        } else {
             pc.depositPokemon(p);
             newPokemonInfo.inBox(pc.getBoxNum() + 1);
         }
@@ -487,7 +485,7 @@ public class Player extends PlayerTrainer implements Serializable {
     
     // Determines whether or not a Pokemon can be deposited
     public boolean canDeposit(ActivePokemon p) {
-    
+        
         // You can't deposit a Pokemon that you don't have
         if (!team.contains(p)) {
             return false;
@@ -510,11 +508,12 @@ public class Player extends PlayerTrainer implements Serializable {
     
     public int totalEggs() {
         return (int)team.stream()
-                .filter(ActivePokemon::isEgg)
-                .count();
+                        .filter(ActivePokemon::isEgg)
+                        .count();
     }
     
     private BallItem pokeball;
+    
     public BallItem getPokeball() {
         return this.pokeball;
     }
@@ -523,20 +522,15 @@ public class Player extends PlayerTrainer implements Serializable {
         int numPokemonCaught = this.getPokedex().numCaught();
         if (numPokemonCaught > 600) {
             return 2.5;
-        }
-        else if (numPokemonCaught > 450) {
+        } else if (numPokemonCaught > 450) {
             return 2;
-        }
-        else if (numPokemonCaught > 300) {
+        } else if (numPokemonCaught > 300) {
             return 1.5;
-        }
-        else if (numPokemonCaught > 150) {
+        } else if (numPokemonCaught > 150) {
             return 1;
-        }
-        else if (numPokemonCaught > 30) {
+        } else if (numPokemonCaught > 30) {
             return .5;
-        }
-        else {
+        } else {
             return 0;
         }
     }
@@ -618,7 +612,7 @@ public class Player extends PlayerTrainer implements Serializable {
         opponentPokemon.setMove(Move.selectOpponentMove(b, opponentPokemon));
         
         if (opponent instanceof Trainer) {
-            ((Trainer) opponent).setAction(TrainerAction.FIGHT);
+            ((Trainer)opponent).setAction(TrainerAction.FIGHT);
         }
         
         b.fight();

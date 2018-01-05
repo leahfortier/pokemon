@@ -27,10 +27,10 @@ public abstract class Trainer implements Team, Serializable {
     protected List<TeamEffect> effects;
     private int frontIndex;
     private int switchIndex;
-    
+
 //    protected boolean isBeTryingToSwitchRunOrUseItem;
 //    protected boolean isBTTSROUI;
-
+    
     protected Bag bag;
     
     public Trainer(String name, int cashMoney) {
@@ -168,7 +168,7 @@ public abstract class Trainer implements Team, Serializable {
     }
     
     public void switchToRandom(Battle b) {
-    
+        
         boolean maxUsed = maxPokemonUsed(b);
         List<Integer> valid = new ArrayList<>();
         for (int i = 0; i < team.size(); i++) {
@@ -188,7 +188,7 @@ public abstract class Trainer implements Team, Serializable {
     }
     
     public boolean canSwitch(Battle b, int switchIndex) {
-    
+        
         // This Pokemon is already out!!
         if (switchIndex == frontIndex) {
             return false;

@@ -53,7 +53,7 @@ class OptionsView extends View {
     @Override
     public void draw(Graphics g) {
         Dimension d = Global.GAME_SIZE;
-        
+
 //        g.setColor(Color.BLACK);
         g.setColor(color);
         setNextColor();
@@ -74,8 +74,7 @@ class OptionsView extends View {
             g.setColor(Color.BLACK);
             FontMetrics.setFont(g, 100);
             g.drawString("OFF", d.width/2 - 180, d.height/2 + 32);
-        }
-        else {
+        } else {
             g.setColor(Color.DARK_GRAY);
             g.fillRect(d.width/2, d.height/2 - 50, 200, 100);
             
@@ -86,8 +85,6 @@ class OptionsView extends View {
             FontMetrics.setFont(g, 100);
             g.drawString("ON", d.width/2 + 40, d.height/2 + 32);
         }
-        
-        
     }
     
     @Override

@@ -67,52 +67,57 @@ class DayCareView extends View {
                 spacing,
                 spacing,
                 (Global.GAME_SIZE.width - 2*spacing - spacing/2)/2,
-                3*(Global.GAME_SIZE.height - 2*spacing - spacing/2)/(Trainer.MAX_POKEMON + 1 + 3))
+                3*(Global.GAME_SIZE.height - 2*spacing - spacing/2)/(Trainer.MAX_POKEMON + 1 + 3)
+        )
                 .withBackgroundColor(Color.BLUE)
                 .withTransparentCount(2)
                 .withBorderPercentage(0)
                 .withBlackOutline();
-                
+        
         partyPanel = new DrawPanel(
                 dayCarePanel.x,
                 dayCarePanel.bottomY() + spacing/2,
                 dayCarePanel.width,
-                Global.GAME_SIZE.height - dayCarePanel.height - 2*spacing - spacing/2)
+                Global.GAME_SIZE.height - dayCarePanel.height - 2*spacing - spacing/2
+        )
                 .withBackgroundColor(Color.RED)
                 .withTransparentCount(2)
                 .withBorderPercentage(0)
                 .withBlackOutline();
-                
+        
         infoPanel = new DrawPanel(
                 dayCarePanel.rightX() + spacing/2,
                 dayCarePanel.y,
                 dayCarePanel.width,
-                Global.GAME_SIZE.height - buttonHeight - 2*spacing - spacing/2)
+                Global.GAME_SIZE.height - buttonHeight - 2*spacing - spacing/2
+        )
                 .withTransparentBackground()
                 .withBorderPercentage(0)
                 .withBlackOutline();
-                
+        
         basicInfoPanel = new DrawPanel(infoPanel.x, infoPanel.y, infoPanel.width, 190)
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         int statsPanelHeight = 148;
         statsPanel = new DrawPanel(
                 infoPanel.x,
                 infoPanel.bottomY() - statsPanelHeight,
                 infoPanel.width,
-                statsPanelHeight)
+                statsPanelHeight
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         movesPanel = new DrawPanel(
                 infoPanel.x,
                 basicInfoPanel.bottomY() - DrawUtils.OUTLINE_SIZE,
                 infoPanel.width,
-                infoPanel.height - basicInfoPanel.height - statsPanel.height + 2*DrawUtils.OUTLINE_SIZE)
+                infoPanel.height - basicInfoPanel.height - statsPanel.height + 2*DrawUtils.OUTLINE_SIZE
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         int moveSpacing = 10;
         int movePanelWidth = (movesPanel.width - 3*moveSpacing)/2;
         int movePanelHeight = (movesPanel.height - 3*moveSpacing)/2;
@@ -122,7 +127,8 @@ class DayCareView extends View {
                     movesPanel.x + (i%2 + 1)*moveSpacing + (i%2)*movePanelWidth,
                     movesPanel.y + (i/2 + 1)*moveSpacing + (i/2)*movePanelHeight,
                     movePanelWidth,
-                    movePanelHeight)
+                    movePanelHeight
+            )
                     .withTransparentCount(2)
                     .withBorderPercentage(20)
                     .withBlackOutline();
@@ -132,10 +138,11 @@ class DayCareView extends View {
                 infoPanel.x + 18,
                 infoPanel.y + 18,
                 104,
-                104)
+                104
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         selectedButton = DEPOSIT_WITHDRAW;
         
         buttons = new Button[NUM_BUTTONS];
@@ -148,7 +155,12 @@ class DayCareView extends View {
                 dayCarePanel.width - 2*buttonSpacing,
                 pokemonButtonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { DEPOSIT_WITHDRAW, Trainer.MAX_POKEMON - 1, DEPOSIT_WITHDRAW, SECOND_DAY_CARE_POKEMON_BUTTON },
+                new int[] {
+                        DEPOSIT_WITHDRAW,
+                        Trainer.MAX_POKEMON - 1,
+                        DEPOSIT_WITHDRAW,
+                        SECOND_DAY_CARE_POKEMON_BUTTON
+                },
                 () -> selected = dayCareCenter.getFirstPokemon()
         );
         
@@ -173,7 +185,13 @@ class DayCareView extends View {
                     pokemonButtonHeight,
                     ButtonHoverAction.BOX,
                     Button.getBasicTransitions(i, Trainer.MAX_POKEMON, 1, 0,
-                            new int[] { DEPOSIT_WITHDRAW, SECOND_DAY_CARE_POKEMON_BUTTON, DEPOSIT_WITHDRAW, FIRST_DAY_CARE_POKEMON_BUTTON }),
+                                               new int[] {
+                                                       DEPOSIT_WITHDRAW,
+                                                       SECOND_DAY_CARE_POKEMON_BUTTON,
+                                                       DEPOSIT_WITHDRAW,
+                                                       FIRST_DAY_CARE_POKEMON_BUTTON
+                                               }
+                    ),
                     () -> selected = team.get(index)
             );
         }
@@ -188,8 +206,7 @@ class DayCareView extends View {
                 () -> {
                     if (party) {
                         message = dayCareCenter.deposit(selected);
-                    }
-                    else {
+                    } else {
                         message = dayCareCenter.withdraw(selected);
                     }
                 }
@@ -271,8 +288,8 @@ class DayCareView extends View {
         // Description
         Type[] type = selected.getActualType();
         infoPanel.withBackgroundColors(Type.getColors(selected))
-                .drawBackground(g);
-                
+                 .drawBackground(g);
+        
         basicInfoPanel.drawBackground(g);
         movesPanel.drawBackground(g);
         statsPanel.drawBackground(g);
@@ -288,8 +305,7 @@ class DayCareView extends View {
         if (selected.isEgg()) {
             FontMetrics.setFont(g, 16);
             TextUtils.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
-        }
-        else {
+        } else {
             TextUtils.drawRightAlignedString(g, "Lv" + selected.getLevel(), 740, 82);
             g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 541, 110);
             

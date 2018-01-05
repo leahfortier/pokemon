@@ -1,7 +1,7 @@
 package util;
 
 public abstract class Folder {
-
+    
     // Main folder
     public static final String SRC = FileIO.makeFolderPath("src");
     public static final String REC = FileIO.makeFolderPath("rec");

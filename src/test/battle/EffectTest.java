@@ -49,25 +49,30 @@ public class EffectTest extends BaseTest {
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.DRAGON_DANCE);
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.MIST);
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.CONFUSE_RAY,
-                (battle, attacking, defending) -> {
-                    defending.setAbility(AbilityNamesies.PRANKSTER);
-                    attacking.callNewMove(battle, defending, new Move(AttackNamesies.QUICK_GUARD));
-                    defending.setupMove(AttackNamesies.CONFUSE_RAY, battle);
-                    Assert.assertFalse(defending.getAttack().apply(defending, attacking, battle));
-                });
-                
+                     (battle, attacking, defending) -> {
+                         defending.setAbility(AbilityNamesies.PRANKSTER);
+                         attacking.callNewMove(battle, defending, new Move(AttackNamesies.QUICK_GUARD));
+                         defending.setupMove(AttackNamesies.CONFUSE_RAY, battle);
+                         Assert.assertFalse(defending.getAttack().apply(defending, attacking, battle));
+                     }
+        );
+        
         // Baneful Bunker poisons when contact is made
         checkProtect(true, AttackNamesies.BANEFUL_BUNKER, AttackNamesies.TACKLE,
-                (battle, attacking, defending) -> Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED)));
+                     (battle, attacking, defending) -> Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED))
+        );
         checkProtect(true, AttackNamesies.BANEFUL_BUNKER, AttackNamesies.WATER_GUN,
-                (battle, attacking, defending) -> Assert.assertFalse(defending.hasStatus(StatusCondition.POISONED)));
-                
+                     (battle, attacking, defending) -> Assert.assertFalse(defending.hasStatus(StatusCondition.POISONED))
+        );
+        
         // King's Shield lowers attack when contact was made
         checkProtect(true, AttackNamesies.KINGS_SHIELD, AttackNamesies.TACKLE,
-                (battle, attacking, defending) -> Assert.assertTrue(defending.getStage(Stat.ATTACK) == -2));
+                     (battle, attacking, defending) -> Assert.assertTrue(defending.getStage(Stat.ATTACK) == -2)
+        );
         checkProtect(true, AttackNamesies.KINGS_SHIELD, AttackNamesies.WATER_GUN,
-                (battle, attacking, defending) -> Assert.assertTrue(defending.getStage(Stat.ATTACK) == 0));
-                
+                     (battle, attacking, defending) -> Assert.assertTrue(defending.getStage(Stat.ATTACK) == 0)
+        );
+        
         TestBattle battle = TestBattle.create();
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();

@@ -20,7 +20,7 @@ public class Condition {
     private String originalConditionString;
     
     public Condition(String conditionString) {
-    
+        
         originalConditionString = StringUtils.empty();
         condition = new ArrayList<>();
         
@@ -39,21 +39,24 @@ public class Condition {
                         stack.push(s);
                         break;
                     case ")":
-                        while (!stack.peek().equals("("))
+                        while (!stack.peek().equals("(")) {
                             condition.add(stack.pop());
-                            
+                        }
+                        
                         stack.pop();
                         break;
                     case "&":
-                        while (!stack.isEmpty() && stack.peek().equals("!"))
+                        while (!stack.isEmpty() && stack.peek().equals("!")) {
                             condition.add(stack.pop());
-                            
+                        }
+                        
                         stack.push(s);
                         break;
                     case "|":
-                        while (!stack.isEmpty() && (stack.peek().equals("&") || stack.peek().equals("!")))
+                        while (!stack.isEmpty() && (stack.peek().equals("&") || stack.peek().equals("!"))) {
                             condition.add(stack.pop());
-                            
+                        }
+                        
                         stack.push(s);
                         break;
                     case "!":
@@ -75,7 +78,7 @@ public class Condition {
         Player player = Game.getPlayer();
         
         Stack<Boolean> stack = new Stack<>();
-        for (String s: condition) {
+        for (String s : condition) {
             switch (s) {
                 case "&": {
                     boolean v1 = stack.pop();
@@ -125,7 +128,6 @@ public class Condition {
         } else {
             return String.format("(%s)&(%s)", firstCondition, secondCondition);
         }
-        
     }
     
     public boolean add(String global, char op) {

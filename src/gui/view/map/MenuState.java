@@ -24,7 +24,7 @@ class MenuState implements VisualStateHandler {
         menuPanel = new DrawPanel(Global.GAME_SIZE.width - width, 0, width, Global.GAME_SIZE.height)
                 .withBorderColor(new Color(53, 53, 129))
                 .withBorderPercentage(5);
-                
+        
         selectedButton = 0;
         menuButtons = new Button[MenuChoice.values().length];
         
@@ -33,7 +33,8 @@ class MenuState implements VisualStateHandler {
                     558, 72*i + 10,
                     240, 70,
                     ButtonHoverAction.ARROW,
-                    Button.getBasicTransitions(i, menuButtons.length, 1));
+                    Button.getBasicTransitions(i, menuButtons.length, 1)
+            );
         }
     }
     
@@ -48,7 +49,7 @@ class MenuState implements VisualStateHandler {
             g.drawString(menuChoice.getDisplayName(), 558, 59 + 72*menuChoice.ordinal());
         }
         
-        for (Button button: menuButtons) {
+        for (Button button : menuButtons) {
             button.draw(g);
         }
     }

@@ -60,28 +60,26 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     private final int eggSteps;
     private final EggGroup[] eggGroups;
     
-    public PokemonInfo(
-            int number,
-            String name,
-            int[] baseStats,
-            int baseExp,
-            String growthRate,
-            List<Type> type,
-            int catchRate,
-            int[] givenEVs,
-            Evolution evolution,
-            List<WildHoldItem> wildHoldItems,
-            int genderRatio,
-            List<AbilityNamesies> abilities,
-            String classification,
-            int height,
-            double weight,
-            String flavorText,
-            int eggSteps,
-            List<EggGroup> eggGroups,
-            List<LevelUpMove> levelUpMoves,
-            Set<AttackNamesies> learnableMoves
-    ) {
+    public PokemonInfo(int number,
+                       String name,
+                       int[] baseStats,
+                       int baseExp,
+                       String growthRate,
+                       List<Type> type,
+                       int catchRate,
+                       int[] givenEVs,
+                       Evolution evolution,
+                       List<WildHoldItem> wildHoldItems,
+                       int genderRatio,
+                       List<AbilityNamesies> abilities,
+                       String classification,
+                       int height,
+                       double weight,
+                       String flavorText,
+                       int eggSteps,
+                       List<EggGroup> eggGroups,
+                       List<LevelUpMove> levelUpMoves,
+                       Set<AttackNamesies> learnableMoves) {
         this.number = number;
         this.name = name;
         this.namesies = PokemonNamesies.getValueOf(this.name);
@@ -130,9 +128,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     }
     
     public String getAbilitiesString() {
-        return abilities[0].getName() + (abilities[1] == AbilityNamesies.NO_ABILITY
+        return abilities[0].getName() +
+                (abilities[1] == AbilityNamesies.NO_ABILITY
                         ? StringUtils.empty()
-                        : ", " + abilities[1].getName());
+                        : ", " + abilities[1].getName()
+                );
     }
     
     public AbilityNamesies[] getAbilities() {
@@ -324,9 +324,9 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     
     public List<AttackNamesies> getMoves(int level) {
         return levelUpMoves.stream()
-                .filter(entry -> entry.getLevel() == level)
-                .map(LevelUpMove::getMove)
-                .collect(Collectors.toList());
+                           .filter(entry -> entry.getLevel() == level)
+                           .map(LevelUpMove::getMove)
+                           .collect(Collectors.toList());
     }
     
     public boolean canBreed() {
@@ -473,6 +473,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     };
     
     private static final Map<Type, Set<PokemonNamesies>> pokemonTypeMap = new EnumMap<>(Type.class);
+    
     static {
         for (Type type : Type.values()) {
             pokemonTypeMap.put(type, EnumSet.noneOf(PokemonNamesies.class));

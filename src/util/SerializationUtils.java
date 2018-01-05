@@ -18,7 +18,7 @@ import java.util.Base64;
 
 public class SerializationUtils {
     private static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Double.class, (JsonSerializer<Double>) (source, sourceType, context) -> {
+            .registerTypeAdapter(Double.class, (JsonSerializer<Double>)(source, sourceType, context) -> {
                 if (source == source.longValue()) {
                     return new JsonPrimitive(source.longValue());
                 } else {
@@ -29,15 +29,15 @@ public class SerializationUtils {
             .disableHtmlEscaping()
             .setLenient()
             .create();
-            
+    
     public static <T> T deserializeJson(String jsonString, Class<T> tClass) {
         return gson.fromJson(jsonString, tClass);
     }
     
     public static String getJson(final Object jsonObject) {
         return gson.toJson(jsonObject)
-                .replaceAll("\\\\n", "\n")
-                .replaceAll("\\\\t", "\t");
+                   .replaceAll("\\\\n", "\n")
+                   .replaceAll("\\\\t", "\t");
     }
     
     public static Object deserializeFromFile(String fileName) {
@@ -68,7 +68,8 @@ public class SerializationUtils {
     }
     
     public static String serialize(Serializable serializable) {
-        try (ByteArrayOutputStream sout = new ByteArrayOutputStream(); ObjectOutputStream out = new ObjectOutputStream(sout)) {
+        try (ByteArrayOutputStream sout = new ByteArrayOutputStream();
+             ObjectOutputStream out = new ObjectOutputStream(sout)) {
             out.writeObject(serializable);
             return Base64.getEncoder().encodeToString(sout.toByteArray());
         } catch (IOException exception) {

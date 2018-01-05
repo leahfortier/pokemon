@@ -21,7 +21,7 @@ public class Rectangle {
     }
     
     void setCoordinates(Point startLocation, Point endLocation, Dimension dimension) {
-    
+
         this.upperLeftRectangleCoordinate = Point.min(startLocation, endLocation);
         Point lowerRightRectangleCoordinate = Point.max(startLocation, endLocation);
         

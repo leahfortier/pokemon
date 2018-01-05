@@ -67,15 +67,14 @@ class SingleClickTool extends Tool {
         }
         // Show preview image for current trigger
         else if (mapMaker.isEditType(EditType.TRIGGERS)) {
-        
+
             TriggerModelType type = TriggerModelType.getModelTypeFromIndex(mapMaker.getSelectedTileIndex());
             
             BufferedImage image;
             if (type == TriggerModelType.NPC) {
-                NPCMatcher npc = (NPCMatcher) mapMaker.getPlaceableTrigger();
+                NPCMatcher npc = (NPCMatcher)mapMaker.getPlaceableTrigger();
                 image = mapMaker.getTileFromSet(TileType.TRAINER, MovableEntity.getTrainerSpriteIndex(npc.getSpriteIndex(), npc.getDirection()));
-            }
-            else {
+            } else {
                 image = type.getImage(mapMaker);
             }
             

@@ -12,7 +12,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public abstract class Entity {
-
+    
     private final String entityName;
     private final Condition condition;
     
@@ -75,8 +75,11 @@ public abstract class Entity {
     }
     
     public void update(int dt, MapData currentMap, MapView view) {}
+    
     public void getAttention(Direction direction) {}
+    
     public void reset() {}
+    
     public void addData() {}
     
     protected BufferedImage getFrame() {

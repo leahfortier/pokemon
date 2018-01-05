@@ -20,6 +20,7 @@ import type.Type;
 
 public abstract class BattleEffect extends Effect {
     private static final long serialVersionUID = 1L;
+    
     public BattleEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
         super(name, minTurns, maxTurns, nextTurnSubside);
     }

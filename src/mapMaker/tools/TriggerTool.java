@@ -77,7 +77,7 @@ class TriggerTool extends Tool {
                 Component[] components = triggerListPopup.getComponents();
                 // TODO: If someone reads this, please suggest a better way to find the index of the selected item...
                 for (Component component : components) {
-                    if (((JMenuItem) component).getText().equals(event.getActionCommand())) {
+                    if (((JMenuItem)component).getText().equals(event.getActionCommand())) {
                         for (LocationTriggerMatcher trigger1 : triggers) {
                             if (event.getActionCommand().equals(trigger1.getBasicName() + " (" + trigger1.getTriggerModelType() + ")")) {
                                 //System.out.println("Clicked " + e.getActionCommand());
@@ -103,9 +103,7 @@ class TriggerTool extends Tool {
     }
     
     @Override
-    public void undo() {
-    
-    }
+    public void undo() {}
     
     public String toString() {
         return "Trigger";

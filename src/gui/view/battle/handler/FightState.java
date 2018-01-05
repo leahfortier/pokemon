@@ -66,8 +66,7 @@ public class FightState implements VisualStateHandler {
         if (StringUtils.isNullOrEmpty(message)) {
             // Draw move details
             moveDetailsPanel.drawMovePanel(g, moves.get(view.getSelectedButton()).getAttack());
-        }
-        else {
+        } else {
             // Show unusable move message
             view.drawMenuMessagePanel(g, message);
         }

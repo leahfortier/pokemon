@@ -8,7 +8,7 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 public final class Global {
-
+    
     // Title of the window
     public static final String TITLE = "Pok\u00e9mon++";
     
@@ -22,7 +22,7 @@ public final class Global {
     public static final int FRAME_RATE = 30;
     
     // The time(ms) between each frame.
-    public static final long MS_BETWEEN_FRAMES = 1000 / FRAME_RATE;
+    public static final long MS_BETWEEN_FRAMES = 1000/FRAME_RATE;
     
     // The size of each tile in the map
     public static final int TILE_SIZE = 32;

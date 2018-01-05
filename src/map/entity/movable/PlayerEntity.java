@@ -20,7 +20,7 @@ import util.Point;
 import java.util.List;
 
 public class PlayerEntity extends MovableEntity {
-
+    
     private boolean justCreated;
     private boolean justMoved;
     private boolean stalled;
@@ -89,8 +89,7 @@ public class PlayerEntity extends MovableEntity {
         if (!this.isTransitioning() && !justMoved) {
             if (input.consumeIfDown(ControlKey.SPACE)) {
                 spacePressed = true;
-            }
-            else {
+            } else {
                 checkMovement(currentMap);
             }
             
@@ -124,7 +123,7 @@ public class PlayerEntity extends MovableEntity {
                 
                 Entity newEntity = currentMap.getEntity(newLocation);
                 if (newEntity instanceof NPCEntity && newEntity != currentInteractionEntity) {
-                    NPCEntity npc = (NPCEntity) newEntity;
+                    NPCEntity npc = (NPCEntity)newEntity;
                     if (npc.canWalkToPlayer()) {
                         this.stall();
                         npc.walkTowards(dist - 1, direction.getOpposite().getPathDirection());
@@ -142,7 +141,7 @@ public class PlayerEntity extends MovableEntity {
         Player player = Game.getPlayer();
         Direction inputDirection = Direction.checkInputDirection();
         if (inputDirection != null && !isTransitioning() && !this.isStalled()) {
-        
+            
             // If not facing the input direction, transition this way
             if (this.getDirection() != inputDirection) {
                 this.setDirection(inputDirection);
@@ -158,7 +157,6 @@ public class PlayerEntity extends MovableEntity {
                     transitionTime = 1;
                 }
             }
-            
         }
     }
     
@@ -182,7 +180,7 @@ public class PlayerEntity extends MovableEntity {
     }
     
     private void triggerCheck(MapData map) {
-    
+        
         // Entity
         if (entityDirection != null) {
             if (currentInteractionEntity.isVisible()) {
@@ -215,7 +213,7 @@ public class PlayerEntity extends MovableEntity {
     public Point getDrawLocation() {
         float transitionLength = 0;
         if (transitionTime > 0) {
-            transitionLength = Math.max(0f, (this.getTimeBetweenTiles() - (float) transitionTime/*-dt*/) / this.getTimeBetweenTiles());
+            transitionLength = Math.max(0f, (this.getTimeBetweenTiles() - (float)transitionTime/*-dt*/)/this.getTimeBetweenTiles());
         }
         
         // Scale by the length of the transition in the current direction
@@ -244,12 +242,10 @@ public class PlayerEntity extends MovableEntity {
         if (Game.getData().getMap(player.getMapName()).getPassValue(this.getLocation()) == WalkType.WATER) {
             // Surfing
             return 21;
-        }
-        else if (player.isBiking()) {
+        } else if (player.isBiking()) {
             // Biking
             return 22;
-        }
-        else {
+        } else {
             // Walking
             return 0;
         }

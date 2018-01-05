@@ -14,7 +14,7 @@ import trainer.WildPokemon;
 
 public class TestBattle extends Battle {
     private TestBattle(Opponent opponent) {
-       super(opponent);
+        super(opponent);
     }
     
     private TestBattle(ActivePokemon nahMahBoi) {

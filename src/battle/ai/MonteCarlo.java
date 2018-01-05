@@ -26,11 +26,11 @@ public class MonteCarlo {
         Messages.clearMessages(MessageState.SIMULATION_STATION);
         Messages.setMessageState(MessageState.SIMULATION_STATION);
         
-        Player player = (Player) SerializationUtils.getSerializedCopy(battle.getPlayer());
+        Player player = (Player)SerializationUtils.getSerializedCopy(battle.getPlayer());
         
         Node root = new Node(new ArrayList<>(), true);
         for (int i = 0; i < BUDGET; i++) {
-        
+            
             Node current = root;
             current.visitedCount++;
             
@@ -47,8 +47,7 @@ public class MonteCarlo {
                             bestChild = child;
                             bestUtil = child.ucb;
                         }
-                    }
-                    else {
+                    } else {
                         if ((child.lcb < bestUtil) || (child.lcb == bestUtil && RandomUtils.chanceTest(50))) {
                             bestChild = child;
                             bestUtil = child.lcb;
@@ -60,9 +59,9 @@ public class MonteCarlo {
                 traversed.add(current);
             }
             
-            Battle simulated = (Battle) SerializationUtils.getSerializedCopy(battle);
+            Battle simulated = (Battle)SerializationUtils.getSerializedCopy(battle);
             
-            ActivePokemon playerPokemon = (ActivePokemon) SerializationUtils.getSerializedCopy(battle.getPlayer().front());
+            ActivePokemon playerPokemon = (ActivePokemon)SerializationUtils.getSerializedCopy(battle.getPlayer().front());
             player.replaceFront(playerPokemon);
             simulated.setPlayer(player);
             
@@ -96,7 +95,7 @@ public class MonteCarlo {
             for (int j = 0; j < rolloutMoves.size(); j += 2) {
                 player.setAction(TrainerAction.FIGHT);
                 if (opponent instanceof Trainer) {
-                    ((Trainer) opponent).setAction(TrainerAction.FIGHT);
+                    ((Trainer)opponent).setAction(TrainerAction.FIGHT);
                 }
                 
                 simulated.getTrainer(false).front().setMove(rolloutMoves.get(j));
@@ -109,14 +108,13 @@ public class MonteCarlo {
                 System.out.println(i + " " + rolloutMoves.get(j).getAttack().getName() + " " + factor);
 //                factor += 1;
 //                factor /= 2;
-
+                
                 utility += Math.pow(discountFactor, j)*factor;
                 
                 if (playerPokemon.isFainted(simulated)) {
                     oppWon = true;
                     break;
-                }
-                else if (opponentPokemon.isFainted(simulated)) {
+                } else if (opponentPokemon.isFainted(simulated)) {
                     oppWon = false;
                     break;
                 }
@@ -124,7 +122,7 @@ public class MonteCarlo {
             
             System.out.println(rolloutMoves.get(0).getAttack().getName() + " " + utility);
             
-            if(rolloutMoves.get(0).getAttack().namesies() == AttackNamesies.QUICK_ATTACK){
+            if (rolloutMoves.get(0).getAttack().namesies() == AttackNamesies.QUICK_ATTACK) {
                 System.out.println("QUICK ATTACK: " + root.children.get(1).visitedCount + " " + root.children.get(1).totalWins);
             }
             
@@ -153,7 +151,7 @@ public class MonteCarlo {
         
         Move bestMove = null;
         double bestVal = -Integer.MAX_VALUE;
-        for (int i  = 0; i < root.children.size(); i++) {
+        for (int i = 0; i < root.children.size(); i++) {
             Node child = root.children.get(i);
             System.out.println(i + " " + child.path.get(0).getAttack().getName() + " " + child.visitedCount + " " + child.totalWins/child.visitedCount);
             

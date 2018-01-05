@@ -79,10 +79,9 @@ public class LearnMovePanel {
                 state = State.DELETE;
                 updateActiveButtons();
             }
-        }
-        else if (state == State.DELETE) {
+        } else if (state == State.DELETE) {
             for (int y = 0, moveIndex = 0; y < 2; y++) {
-                for (int x = 0; x < Move.MAX_MOVES / 2; x++, moveIndex++) {
+                for (int x = 0; x < Move.MAX_MOVES/2; x++, moveIndex++) {
                     int index = Point.getIndex(x, y, NUM_COLS);
                     if (buttons[index].checkConsumePress()) {
                         state = State.END;
@@ -108,8 +107,7 @@ public class LearnMovePanel {
                 messages.addFirst(new MessageUpdate(learning.getActualName() + " did not learn " + toLearn.getAttack().getName() + "."));
                 updateActiveButtons();
             }
-        }
-        else {
+        } else {
             if (!messages.isEmpty() && input.consumeIfMouseDown(ControlKey.SPACE)) {
                 MessageUpdate message = messages.pop();
                 if (message.learnMove()) {
@@ -133,8 +131,7 @@ public class LearnMovePanel {
                     selectedButton = i;
                 }
             }
-        }
-        else if (state == State.DELETE){
+        } else if (state == State.DELETE) {
             for (int y = 0; y < 2; y++) {
                 for (int x = 0; x < NUM_COLS; x++) {
                     int index = Point.getIndex(x, y, NUM_COLS);
@@ -148,7 +145,8 @@ public class LearnMovePanel {
     }
     
     public void draw(Graphics g) {
-        BasicPanels.drawFullMessagePanel(g,
+        BasicPanels.drawFullMessagePanel(
+                g,
                 messages.isEmpty() || state == State.DELETE
                         ? StringUtils.empty()
                         : messages.peek().getMessage()
@@ -157,12 +155,11 @@ public class LearnMovePanel {
         if (state == State.QUESTION) {
             drawButton(g, yesButton(), new Color(120, 200, 80), "Yes");
             drawButton(g, noButton(), new Color(220, 20, 20), "No");
-        }
-        else if (state == State.DELETE) {
+        } else if (state == State.DELETE) {
             List<Move> moves = learning.getActualMoves();
             Attack selected = null;
             for (int y = 0, moveIndex = 0; y < 2; y++) {
-                for (int x = 0; x < Move.MAX_MOVES / 2; x++, moveIndex++) {
+                for (int x = 0; x < Move.MAX_MOVES/2; x++, moveIndex++) {
                     int index = Point.getIndex(x, y, NUM_COLS);
                     Move move = moves.get(moveIndex);
                     

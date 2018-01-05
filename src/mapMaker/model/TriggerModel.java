@@ -31,6 +31,7 @@ public class TriggerModel extends MapMakerModel {
         
         private final TileType tileType;
         private final int imageIndex;
+
         TriggerModelType(String name, TileType tileType, int imageIndex) {
             this.name = name;
             this.tileType = tileType;

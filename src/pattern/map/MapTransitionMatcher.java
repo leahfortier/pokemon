@@ -62,8 +62,8 @@ public class MapTransitionMatcher extends SimpleMapTransition {
         }
         
         return super.location.stream()
-                .map(point -> Point.add(point, direction.getDeltaPoint()))
-                .collect(Collectors.toList());
+                             .map(point -> Point.add(point, direction.getDeltaPoint()))
+                             .collect(Collectors.toList());
     }
     
     public boolean isDeathPortal() {

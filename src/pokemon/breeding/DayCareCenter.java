@@ -65,11 +65,9 @@ public class DayCareCenter implements Serializable {
         
         if (first == null) {
             first = toDeposit;
-        }
-        else if (second == null) {
+        } else if (second == null) {
             second = toDeposit;
-        }
-        else {
+        } else {
             Global.error("Cannot deposit a Pokemon into a full Day Care center.");
         }
         
@@ -91,11 +89,9 @@ public class DayCareCenter implements Serializable {
     public String withdraw(ActivePokemon pokemon) {
         if (pokemon == first) {
             return withdraw(true);
-        }
-        else if (pokemon == second) {
+        } else if (pokemon == second) {
             return withdraw(false);
-        }
-        else {
+        } else {
             Global.error("Cannot withdraw a Pokemon that is not in the day care center...");
             return null;
         }

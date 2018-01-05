@@ -85,13 +85,15 @@ class BattleActionPanel extends ActionPanel {
         
         this.topComponent = GUIUtils.createVerticalLayoutComponent(
                 tippityTop,
-                GUIUtils.createLabel("            " +
-                        "Pokemon Name                      " +
-                        "Nickname                      " +
-                        "Level             " +
-                        "Shiny  " +
-                        "Custom Moves                                       " +
-                        "Move Name")
+                GUIUtils.createLabel(
+                        "            " +
+                                "Pokemon Name                      " +
+                                "Nickname                      " +
+                                "Level             " +
+                                "Shiny  " +
+                                "Custom Moves                                       " +
+                                "Move Name"
+                )
         );
         
         this.bottomComponent = GUIUtils.createHorizontalLayoutComponent(

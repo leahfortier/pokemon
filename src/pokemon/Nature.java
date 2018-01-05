@@ -43,14 +43,11 @@ public class Nature implements Serializable {
     public double getNatureVal(int stat) {
         if (beneficial == hindering) {
             return 1;
-        }
-        else if (beneficial == stat) {
+        } else if (beneficial == stat) {
             return 1.1;
-        }
-        else if (hindering == stat) {
+        } else if (hindering == stat) {
             return .9;
-        }
-        else {
+        } else {
             return 1;
         }
     }
@@ -58,14 +55,11 @@ public class Nature implements Serializable {
     public Color getColor(int statIndex) {
         if (beneficial == hindering) {
             return Color.BLACK;
-        }
-        else if (beneficial == statIndex) {
+        } else if (beneficial == statIndex) {
             return new Color(0, 190, 0);
-        }
-        else if (hindering == statIndex) {
+        } else if (hindering == statIndex) {
             return new Color(200, 0, 0);
-        }
-        else {
+        } else {
             return Color.BLACK;
         }
     }

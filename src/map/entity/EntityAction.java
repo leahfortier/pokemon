@@ -12,7 +12,7 @@ import util.StringUtils;
 import java.util.List;
 
 public abstract class EntityAction {
-
+    
     public static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, String condition, List<EntityAction> actions) {
         final String[] actionTriggerNames = new String[actions.size()];
         for (int i = 0; i < actions.size(); i++) {
@@ -28,14 +28,15 @@ public abstract class EntityAction {
     
     private Trigger getTrigger(String entityName) {
         return this.getTriggerType()
-                .createTrigger(
-                        this.getTriggerContents(entityName),
-                        this.getCondition()
-                );
+                   .createTrigger(
+                           this.getTriggerContents(entityName),
+                           this.getCondition()
+                   );
     }
     
     protected abstract TriggerType getTriggerType();
     protected abstract String getTriggerContents(String entityName);
+    
     protected String getCondition() { return null; }
     
     public static class TriggerAction extends EntityAction {
@@ -151,6 +152,7 @@ public abstract class EntityAction {
     
     public static class ChoiceAction extends EntityAction {
         private final ChoiceActionMatcher matcher;
+        
         public ChoiceAction(final ChoiceActionMatcher matcher) {
             this.matcher = matcher;
         }

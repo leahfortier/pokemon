@@ -76,6 +76,7 @@ public enum Stat {
     
     public static final Stat[] STATS;
     public static final Stat[] BATTLE_STATS;
+    
     static {
         STATS = new Stat[NUM_STATS];
         BATTLE_STATS = new Stat[NUM_BATTLE_STATS];
@@ -109,7 +110,7 @@ public enum Stat {
     
     // Gets the stat of a Pokemon during battle
     public static int getStat(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
-    
+        
         // Effects that manipulate stats
         s = StatSwitchingEffect.switchStat(b, p, s);
         s = OpponentStatSwitchingEffect.switchStat(b, opp, s);
@@ -117,23 +118,22 @@ public enum Stat {
         // Apply stage changes
         int stage = getStage(s, p, opp, b);
         int stat = s == EVASION || s == ACCURACY ? 100 : p.getStat(b, s);
-        
-//        int temp = stat;
 
+//        int temp = stat;
+        
         // Modify stat based off stage
         if (stage > 0) {
             stat *= ((s.modifier + stage)/s.modifier);
-        }
-        else if (stage < 0) {
+        } else if (stage < 0) {
             stat *= (s.modifier/(s.modifier - stage));
         }
         
         // Applies stat changes to each for each item in list
         stat *= StatModifyingEffect.getModifier(b, p, opp, s);
         stat = StatChangingEffect.modifyStat(b, p, opp, s, stat);
-        
-//        System.out.println(p.getName() + " " + s.name + " Stat Change: " + temp + " -> " + stat);
 
+//        System.out.println(p.getName() + " " + s.name + " Stat Change: " + temp + " -> " + stat);
+        
         // Just to be safe
         stat = Math.max(1, stat);
         

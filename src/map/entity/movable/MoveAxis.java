@@ -7,8 +7,8 @@ public enum MoveAxis {
     X_ONLY((thisLocation, thisDirection, otherLocation) -> thisLocation.x == otherLocation.x),
     Y_ONLY((thisLocation, thisDirection, otherLocation) -> thisLocation.y == otherLocation.y),
     BOTH((thisLocation, thisDirection, otherLocation) ->
-            X_ONLY.checker.checkAxis(thisLocation, thisDirection, otherLocation)
-                    || Y_ONLY.checker.checkAxis(thisLocation, thisDirection, otherLocation)
+                 X_ONLY.checker.checkAxis(thisLocation, thisDirection, otherLocation)
+                         || Y_ONLY.checker.checkAxis(thisLocation, thisDirection, otherLocation)
     ),
     FACING((thisLocation, thisDirection, otherLocation) -> {
         // Not in the same row or the same column

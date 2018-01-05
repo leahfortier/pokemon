@@ -28,7 +28,7 @@ public class ItemTest extends BaseTest {
         TestBattle battle = trainerBattle
                 ? TestBattle.createTrainerBattle(attacking, defending)
                 : TestBattle.create(attacking, defending);
-                
+        
         defending.giveItem(ItemNamesies.WATER_STONE);
         
         // Thief -- confirm stolen item
@@ -92,7 +92,7 @@ public class ItemTest extends BaseTest {
         TestBattle battle = trainerBattle
                 ? TestBattle.createTrainerBattle(attacking, defending)
                 : TestBattle.create(attacking, defending);
-                
+        
         // So I don't have to worry about dying from Sticky Barb's end turn effect
         attacking.withAbility(AbilityNamesies.MAGIC_GUARD);
         defending.withAbility(AbilityNamesies.MAGIC_GUARD);

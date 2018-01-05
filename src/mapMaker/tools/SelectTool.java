@@ -67,7 +67,7 @@ public class SelectTool extends Tool {
         if (mapMaker.isEditType(EditType.TRIGGERS) || paste) {
             return;
         }
-        
+
 //            if (controlKeyDown && selected) {
 //                cut();
 //                controlClick = true;
@@ -109,7 +109,7 @@ public class SelectTool extends Tool {
             // Show preview image for all pasting tiles.
             for (int currX = 0; currX < copiedTiles.getWidth(); currX++) {
                 for (int currY = 0; currY < copiedTiles.getHeight(); currY++) {
-                
+
                     int val = copiedTiles.getRGB(currX, currY);
                     Point previewLocation = new Point(mouseHoverLocation.x + currX, mouseHoverLocation.y + currY);
                     
@@ -176,9 +176,7 @@ public class SelectTool extends Tool {
     }
     
     @Override
-    public void undo() {
-    
-    }
+    public void undo() {}
     
     public String toString() {
         return "Select";

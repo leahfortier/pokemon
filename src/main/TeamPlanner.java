@@ -44,7 +44,7 @@ public class TeamPlanner {
         
         AttackTypeCoverage.printCoverage(coverage);
         offensiveCoverage.printTableAndList();
-        
+
 //        moveMatching("Surf", "Thunderbolt");
 //        moveMatching("Flamethrower", Type.WATER);
 
@@ -205,11 +205,9 @@ public class TeamPlanner {
             }
             System.out.println();
             
-            for (int i = 0; i < coverageCount.length; i++)
-            {
+            for (int i = 0; i < coverageCount.length; i++) {
                 System.out.printf("%10s ", types[i].getName());
-                for (int j = 0; j < coverageCount[i].length; j++)
-                {
+                for (int j = 0; j < coverageCount[i].length; j++) {
                     System.out.printf("%5d%5s ", coverageCount[i][j], "");
                     this.addFrequency(coverageCount[i][j], types[i], types[j]);
                 }
@@ -344,11 +342,11 @@ public class TeamPlanner {
             
             Type[] type = pokemonSpecies.getType();
             out.append("\n\tType: " + type[0].getName())
-                    .appendIf(type[1] != Type.NO_TYPE, "/" + type[1].getName());
-                    
+               .appendIf(type[1] != Type.NO_TYPE, "/" + type[1].getName());
+
             out.append("\n\tStats: ")
-                    .appendJoin(" ", Stat.NUM_STATS, i -> pokemonSpecies.getStat(i) + "");
-                    
+               .appendJoin(" ", Stat.NUM_STATS, i -> pokemonSpecies.getStat(i) + "");
+
             out.append("\n\tNature: " + nature);
             out.append("\n\tAbility: " + ability);
             out.appendIf(item != null, "\n\tItem: " + item);
@@ -364,11 +362,9 @@ public class TeamPlanner {
                 if (levelLearned != null) {
                     if (levelLearned == 0) {
                         learnMethods.add("Heart Scale");
-                    }
-                    else if (levelLearned == PokemonInfo.EVOLUTION_LEVEL_LEARNED) {
+                    } else if (levelLearned == PokemonInfo.EVOLUTION_LEVEL_LEARNED) {
                         learnMethods.add("Evolve");
-                    }
-                    else {
+                    } else {
                         learnMethods.add("Level " + levelLearned);
                     }
                 }

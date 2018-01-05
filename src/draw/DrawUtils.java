@@ -19,11 +19,9 @@ public final class DrawUtils {
     public static Color getHPColor(double ratio) {
         if (ratio < 0.25) {
             return new Color(220, 20, 20);
-        }
-        else if (ratio < 0.5) {
+        } else if (ratio < 0.5) {
             return new Color(255, 227, 85);
-        }
-        else {
+        } else {
             return new Color(35, 238, 91);
         }
     }
@@ -82,7 +80,7 @@ public final class DrawUtils {
         g.fillRect(x, y, width, height);
     }
     
-    public static Color permuteColor(Color color, Map<Integer,String> indexMap) {
+    public static Color permuteColor(Color color, Map<Integer, String> indexMap) {
         int dr = color.getRed() < 128 ? 1 : -1;
         int dg = color.getGreen() < 128 ? 1 : -1;
         int db = color.getBlue() < 128 ? 1 : -1;
@@ -118,11 +116,11 @@ public final class DrawUtils {
         
         // Calculate exit location
         if (displayTime/(double)AREA_NAME_ANIMATION_LIFESPAN < .2) {
-            yValue = -1*(int)(((AREA_NAME_ANIMATION_LIFESPAN - displayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0) * 5 * (insideHeight + (2*graySize)));
+            yValue = -1*(int)(((AREA_NAME_ANIMATION_LIFESPAN - displayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0)*5*(insideHeight + (2*graySize)));
         }
         // Calculate entrance location
         else if (displayTime/(double)AREA_NAME_ANIMATION_LIFESPAN > .8) {
-            yValue = -1*(int)(((displayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0) * 5 * (insideHeight + 2*graySize));
+            yValue = -1*(int)(((displayTime)/(double)AREA_NAME_ANIMATION_LIFESPAN - 4/5.0)*5*(insideHeight + 2*graySize));
         }
         
         // Black border

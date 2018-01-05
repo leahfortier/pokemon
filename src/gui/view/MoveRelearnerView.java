@@ -70,39 +70,43 @@ public class MoveRelearnerView extends View {
                 spacing,
                 spacing,
                 (Global.GAME_SIZE.width - 3*spacing)/2,
-                Global.GAME_SIZE.height - 3*spacing - buttonHeight)
+                Global.GAME_SIZE.height - 3*spacing - buttonHeight
+        )
                 .withBlackOutline()
                 .withTransparentCount(2)
                 .withBorderPercentage(0);
-                
+        
         heartScalePanel = new DrawPanel(
                 movesPanel.x,
                 movesPanel.bottomY() + spacing,
                 movesPanel.width,
-                buttonHeight)
+                buttonHeight
+        )
                 .withBlackOutline()
                 .withBackgroundColor(new Color(248, 179, 249))
                 .withTransparentBackground()
                 .withBorderPercentage(0);
-                
+        
         descriptionPanel = new DrawPanel(
                 movesPanel.rightX() + spacing,
                 movesPanel.y,
                 movesPanel.width,
-                (Global.GAME_SIZE.height - 4*spacing - buttonHeight)/3)
+                (Global.GAME_SIZE.height - 4*spacing - buttonHeight)/3
+        )
                 .withBlackOutline()
                 .withTransparentCount(2)
                 .withBorderPercentage(0);
-                
+        
         partyPanel = new DrawPanel(
                 descriptionPanel.x,
                 descriptionPanel.bottomY() + spacing,
                 descriptionPanel.width,
-                Global.GAME_SIZE.height - 4*spacing - buttonHeight - descriptionPanel.height)
+                Global.GAME_SIZE.height - 4*spacing - buttonHeight - descriptionPanel.height
+        )
                 .withBlackOutline()
                 .withTransparentCount(2)
                 .withBorderPercentage(0);
-                
+        
         moveButtons = movesPanel.getButtons(
                 10,
                 MOVES_PER_PAGE + 1, 1,
@@ -137,7 +141,7 @@ public class MoveRelearnerView extends View {
                 learnMoveButton.width,
                 learnMoveButton.height,
                 ButtonHoverAction.BOX,
-                new int[] { LEARN_MOVE, MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1, LEARN_MOVE, MOVES_PER_PAGE}
+                new int[] { LEARN_MOVE, MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1, LEARN_MOVE, MOVES_PER_PAGE }
         );
         
         int arrowWidth = 35;
@@ -225,7 +229,7 @@ public class MoveRelearnerView extends View {
                     .withBlackOutline()
                     .withTransparentCount(2)
                     .withBorderPercentage(15);
-                    
+            
             // Highlight selected
             if (i == selectedPokemon) {
                 int spacing = 5;
@@ -233,7 +237,8 @@ public class MoveRelearnerView extends View {
                         buttonPanel.x - spacing,
                         buttonPanel.y - spacing,
                         buttonPanel.width + 2*spacing,
-                        buttonPanel.height + 2*spacing)
+                        buttonPanel.height + 2*spacing
+                )
                         .withBlackOutline()
                         .withFullTransparency()
                         .drawBackground(g);
@@ -311,7 +316,6 @@ public class MoveRelearnerView extends View {
             
             returnButton.setActive(true);
         }
-        
     }
     
     private int totalPages() {
@@ -346,7 +350,7 @@ public class MoveRelearnerView extends View {
     private void setSelectedPokemon(int index) {
         this.selectedPokemon = index;
         this.learnableMoves = this.team.get(index).getLearnableMoves();
-        this.selectedMove =  this.learnableMoves.isEmpty() ? null : this.learnableMoves.get(0).getAttack();
+        this.selectedMove = this.learnableMoves.isEmpty() ? null : this.learnableMoves.get(0).getAttack();
         this.pageNum = 0;
     }
 }

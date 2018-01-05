@@ -49,9 +49,9 @@ public class AreaDialog extends TriggerDialog<AreaMatcher> {
         return new AreaMatcher(
                 displayNameTextField.getText(),
                 flyLocationTextField.getText(),
-                (TerrainType) terrainComboBox.getSelectedItem(),
-                (WeatherState) weatherComboBox.getSelectedItem(),
-                (SoundTitle) musicComboBox.getSelectedItem(),
+                (TerrainType)terrainComboBox.getSelectedItem(),
+                (WeatherState)weatherComboBox.getSelectedItem(),
+                (SoundTitle)musicComboBox.getSelectedItem(),
                 null // TODO: Music conditions
         );
     }

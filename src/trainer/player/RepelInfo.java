@@ -58,8 +58,7 @@ public class RepelInfo implements Serializable {
                     Messages.add(new MessageUpdate().withTrigger(choiceTrigger.getName()));
                 }
             }
-        }
-        else {
+        } else {
             repelSteps = 0;
         }
     }

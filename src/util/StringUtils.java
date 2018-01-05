@@ -6,7 +6,7 @@ import main.Global;
 import java.util.Arrays;
 
 public class StringUtils {
-
+    
     // Utility class -- should not be instantiated
     private StringUtils() {
         Global.error("Save class cannot be instantiated.");
@@ -97,8 +97,7 @@ public class StringUtils {
             if (index == -1) {
                 s.append(string.substring(0, string.length()));
                 string = "";
-            }
-            else {
+            } else {
                 s.append(string.substring(0, index)).append(c);
                 string = string.substring(index + 1, string.length());
             }

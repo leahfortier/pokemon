@@ -25,7 +25,7 @@ class InterfaceGen {
         
         // Go through the entire file
         while (in.hasNext()) {
-        
+            
             String line = in.nextLine().trim();
             
             // Ignore comments and white space at beginning of file
@@ -128,7 +128,8 @@ class InterfaceGen {
                     extraFields,
                     constructor,
                     additional,
-                    isInterface);
+                    isInterface
+            );
         }
     }
 }

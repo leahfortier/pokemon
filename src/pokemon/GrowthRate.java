@@ -10,25 +10,20 @@ enum GrowthRate implements Serializable {
     ERRATIC("Erratic", level -> {
         if (level <= 50) {
             return (int)(.02*Math.pow(level, 3)*(100 - level));
-        }
-        else if (level <= 68) {
+        } else if (level <= 68) {
             return (int)(.01*Math.pow(level, 3)*(150 - level));
-        }
-        else if (level <= 98) {
+        } else if (level <= 98) {
             return (int)(Math.pow(level, 3)*((1911 - 10*level)/3.0));
-        }
-        else {
+        } else {
             return (int)(.01*Math.pow(level, 3)*(160 - level));
         }
     }),
     FLUCTUATING("Fluctuating", level -> {
         if (level <= 15) {
             return (int)(.02*Math.pow(level, 3)*(((level + 1)/3.0) + 24));
-        }
-        else if (level <= 36) {
+        } else if (level <= 36) {
             return (int)(.02*Math.pow(level, 3)*(level + 14));
-        }
-        else {
+        } else {
             return (int)(.02*Math.pow(level, 3)*(level/2.0 + 32));
         }
     });

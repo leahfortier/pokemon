@@ -33,7 +33,7 @@ class PokemonDataPanel extends JPanel {
     private final AttackNamesies[] customMoves = new AttackNamesies[Move.MAX_MOVES];
     
     PokemonDataPanel(PokemonMatcher pokemonMatcher) {
-    
+
         selectedCheckBox = GUIUtils.createCheckBox();
         nameTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
             @Override

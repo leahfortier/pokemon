@@ -12,10 +12,10 @@ public enum ButtonHoverAction {
         private int time = 0;
         
         public void draw(Graphics g, Button button) {
-            time = (time + 1) % 80;
+            time = (time + 1)%80;
             
-            g.setColor(new Color(0, 0, 0, 55 + 150 * (Math.abs(time - 40)) / 40));
-            Graphics2D g2d = (Graphics2D) g;
+            g.setColor(new Color(0, 0, 0, 55 + 150*(Math.abs(time - 40))/40));
+            Graphics2D g2d = (Graphics2D)g;
             Stroke oldStroke = g2d.getStroke();
             g2d.setStroke(lineStroke);
             g.drawRect(button.x - 2, button.y - 2, button.width + 3, button.height + 4);
@@ -28,10 +28,10 @@ public enum ButtonHoverAction {
         private int time = 0;
         
         public void draw(Graphics g, Button button) {
-            time = (time + 1) % 80;
+            time = (time + 1)%80;
             
             int x = button.x - 10;
-            int y = button.y + button.height / 2 - 12;
+            int y = button.y + button.height/2 - 12;
             
             g.translate(x, y);
             

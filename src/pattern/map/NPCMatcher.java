@@ -64,7 +64,6 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
     public String getStartKey() {
         if (interactions.length == 0) {
             return NO_INTERACTIONS_KEY;
-            
         } else {
             return interactions[0].getName();
         }

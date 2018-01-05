@@ -56,7 +56,7 @@ public class Move implements Serializable {
     
     public void resetReady() {
         Attack attack = this.getAttack();
-        ready = !(attack instanceof MultiTurnMove) || ((MultiTurnMove) attack).chargesFirst();
+        ready = !(attack instanceof MultiTurnMove) || ((MultiTurnMove)attack).chargesFirst();
     }
     
     public boolean isReady() {
@@ -142,7 +142,7 @@ public class Move implements Serializable {
     
     // Returns true if a move should be forced (move will already be selected for the Pokemon), and false if not
     public static boolean forceMove(Battle b, ActivePokemon p) {
-    
+        
         // TODO: Why are most of the forced move effects also attack selection effects? if the move if being forced, then the attack selection menu should not appear -- check if this is working
         // Forced moves
         Move forcedMove = ForceMoveEffect.getForcedMove(b, p);

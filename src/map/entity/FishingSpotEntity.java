@@ -10,7 +10,7 @@ import util.SerializationUtils;
 import java.util.Collections;
 
 public class FishingSpotEntity extends Entity {
-
+    
     private final WildEncounter[] wildEncounters;
     private boolean dataCreated;
     

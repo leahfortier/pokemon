@@ -97,8 +97,7 @@ public class Bag implements Serializable {
         // Increment the items by the amount
         if (items.containsKey(item)) {
             items.put(item, items.get(item) + amount);
-        }
-        else {
+        } else {
             items.put(item, amount);
             Item itemValue = item.getItem();
             this.getCategory(itemValue.getBagCategory()).add(item);
@@ -144,7 +143,6 @@ public class Bag implements Serializable {
                 this.getCategory(category).remove(item);
             }
         }
-        
     }
     
     public boolean useItem(ItemNamesies item) {
@@ -160,7 +158,7 @@ public class Bag implements Serializable {
     // Checks conditions, add messages, and executes the UseItem
     // Move should be null for PokemonUseItem and nonnull for MoveUseItem
     private boolean useItem(ItemNamesies item, ActivePokemon p, Move move) {
-    
+        
         // Eggs can't do shit
         if (p.isEgg()) {
             Messages.add(DEFAULT_FAIL_MESSAGE);
@@ -176,7 +174,7 @@ public class Bag implements Serializable {
         }
         
         // Try to use the item
-        UseItem useItem = (UseItem) itemValue;
+        UseItem useItem = (UseItem)itemValue;
         final boolean success = useItem.use(null, p, move);
         
         // :(
@@ -205,10 +203,9 @@ public class Bag implements Serializable {
         Item useItem = item.getItem();
         boolean used = false;
         if (useItem instanceof BallItem) {
-            used = player.catchPokemon(battle, (BallItem) useItem);
-        }
-        else if (useItem.isUsable()) {
-            used = ((UseItem) useItem).use(battle, activePokemon, null);
+            used = player.catchPokemon(battle, (BallItem)useItem);
+        } else if (useItem.isUsable()) {
+            used = ((UseItem)useItem).use(battle, activePokemon, null);
             if (used && player.front() == activePokemon) {
                 Messages.add(new MessageUpdate().updatePokemon(battle, activePokemon));
             }
@@ -219,14 +216,12 @@ public class Bag implements Serializable {
             
             if (items.get(item) > 1) {
                 lastUsedItem = item;
-            }
-            else {
+            } else {
                 lastUsedItem = ItemNamesies.NO_ITEM;
             }
             
             removeItem(item);
-        }
-        else if (useItem.isUsable()) {
+        } else if (useItem.isUsable()) {
             Messages.add(DEFAULT_FAIL_MESSAGE);
         }
         

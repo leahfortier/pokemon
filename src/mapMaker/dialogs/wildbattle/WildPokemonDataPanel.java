@@ -43,9 +43,11 @@ class WildPokemonDataPanel extends JPanel {
             public void changedUpdate(DocumentEvent e) {
                 updateProbability();
             }
+
             public void removeUpdate(DocumentEvent e) {
                 updateProbability();
             }
+
             public void insertUpdate(DocumentEvent e) {
                 updateProbability();
             }

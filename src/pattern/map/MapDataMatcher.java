@@ -20,7 +20,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class MapDataMatcher {
-
+    
     private AreaMatcher[] areas = new AreaMatcher[0];
     private MapTransitionMatcher[] mapTransitions = new MapTransitionMatcher[0];
     private NPCMatcher[] NPCs = new NPCMatcher[0];
@@ -30,14 +30,12 @@ public class MapDataMatcher {
     private WildBattleAreaMatcher[] wildBattles = new WildBattleAreaMatcher[0];
     private FishingMatcher[] fishingSpots = new FishingMatcher[0];
     
-    public MapDataMatcher(Set<AreaMatcher> areaData,
-                          List<LocationTriggerMatcher> entities) {
-                          
+    public MapDataMatcher(Set<AreaMatcher> areaData, List<LocationTriggerMatcher> entities) {
         this.areas = areaData.stream()
-                .sorted(Comparator.comparing(areaMatcher -> areaMatcher.getAreaData().getAreaName()))
-                .collect(Collectors.toList())
-                .toArray(new AreaMatcher[0]);
-                
+                             .sorted(Comparator.comparing(areaMatcher -> areaMatcher.getAreaData().getAreaName()))
+                             .collect(Collectors.toList())
+                             .toArray(new AreaMatcher[0]);
+        
         Map<TriggerModelType, List<LocationTriggerMatcher>> triggerMap = new EnumMap<>(TriggerModelType.class);
         for (TriggerModelType triggerModelType : TriggerModelType.values()) {
             triggerMap.put(triggerModelType, new ArrayList<>());
@@ -48,10 +46,9 @@ public class MapDataMatcher {
         }
         
         
-        
         this.mapTransitions = fillTriggerArray(this.mapTransitions, triggerMap.get(TriggerModelType.MAP_TRANSITION), trigger -> (MapTransitionMatcher)trigger);
         this.NPCs = fillTriggerArray(this.NPCs, triggerMap.get(TriggerModelType.NPC), trigger -> (NPCMatcher)trigger);
-        this.items = fillTriggerArray(this.items, GeneralUtils.combine(triggerMap.get(TriggerModelType.ITEM),triggerMap.get(TriggerModelType.HIDDEN_ITEM)), trigger -> (ItemMatcher)trigger);
+        this.items = fillTriggerArray(this.items, GeneralUtils.combine(triggerMap.get(TriggerModelType.ITEM), triggerMap.get(TriggerModelType.HIDDEN_ITEM)), trigger -> (ItemMatcher)trigger);
         this.miscEntities = fillTriggerArray(this.miscEntities, triggerMap.get(TriggerModelType.MISC_ENTITY), trigger -> (MiscEntityMatcher)trigger);
         this.events = fillTriggerArray(this.events, triggerMap.get(TriggerModelType.EVENT), trigger -> (EventMatcher)trigger);
         this.wildBattles = fillTriggerArray(this.wildBattles, triggerMap.get(TriggerModelType.WILD_BATTLE), trigger -> (WildBattleAreaMatcher)trigger);
@@ -63,9 +60,9 @@ public class MapDataMatcher {
             List<LocationTriggerMatcher> triggerList,
             Function<LocationTriggerMatcher, T> mapper) {
         return triggerList.stream()
-                .map(mapper)
-                .collect(Collectors.toList())
-                .toArray(array);
+                          .map(mapper)
+                          .collect(Collectors.toList())
+                          .toArray(array);
     }
     
     public AreaMatcher getDefaultArea() {
@@ -134,10 +131,10 @@ public class MapDataMatcher {
         
         String areaDataJson = SerializationUtils.getJson(areaData);
         String mapJson = SerializationUtils.getJson(mappity);
-        
+
 //        FileIO.writeToFile("out.txt", areaDataJson);
 //        FileIO.writeToFile("out2.txt", mapJson);
-
+        
         if (!areaDataJson.equals(mapJson)) {
             Global.error("No dice");
         }

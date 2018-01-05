@@ -23,6 +23,7 @@ import java.util.Set;
  */
 public class InputControl implements MouseListener, KeyListener, MouseMotionListener {
     private static final InputControl instance = new InputControl();
+    
     public static InputControl instance() {
         return instance;
     }
@@ -125,7 +126,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
     }
     
     public boolean consumeIfMouseDown(ControlKey controlKey) {
-        return consumeIfDown(controlKey)|| consumeIfMouseDown();
+        return consumeIfDown(controlKey) || consumeIfMouseDown();
     }
     
     public boolean consumeIfMouseDown() {
@@ -172,9 +173,14 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
         return isCaptureText;
     }
     
-    @Override public void mouseClicked(MouseEvent mouseEvent) {}
-    @Override public void mouseEntered(MouseEvent mouseEvent) {}
-    @Override public void mouseExited(MouseEvent mouseEvent) {}
+    @Override
+    public void mouseClicked(MouseEvent mouseEvent) {}
+    
+    @Override
+    public void mouseEntered(MouseEvent mouseEvent) {}
+    
+    @Override
+    public void mouseExited(MouseEvent mouseEvent) {}
     
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
@@ -213,7 +219,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
     @Override
     public void keyTyped(KeyEvent keyEvent) {
         if (isCaptureText) {
-        
+            
             // Append the character if it's not ignored
             if (Character.isDefined(keyEvent.getKeyChar()) && !isIgnored(keyEvent)) {
                 capturedText.append(keyEvent.getKeyChar());
@@ -228,9 +234,9 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
     
     private boolean isIgnored(KeyEvent keyEvent) {
         return IGNORED_INPUT_KEYS.stream()
-                .map(ControlKey::getKey)
-                .filter(key -> key.isKey(keyEvent.getKeyChar()))
-                .count() > 0;
+                                 .map(ControlKey::getKey)
+                                 .filter(key -> key.isKey(keyEvent.getKeyChar()))
+                                 .count() > 0;
     }
     
     @Override

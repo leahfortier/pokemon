@@ -76,25 +76,24 @@ class PokemonAnimationState {
             this.pokemonDrawLocation = new Point(607, 237);
         }
         
-        this.statusBox
-                .withBorderPercentage(13)
-                .withTransparentCount(2)
-                .withBlackOutline();
-                
+        this.statusBox.withBorderPercentage(13)
+                      .withTransparentCount(2)
+                      .withBlackOutline();
+        
         int hpBarWidth = 200;
         this.hpBar = new DrawPanel(
                 statusBox.rightX() - STATUS_BOX_SPACING - hpBarWidth,
                 statusBox.y + 68,
                 hpBarWidth,
-                19)
-                .withBlackOutline();
-                
+                19
+        ).withBlackOutline();
+        
         this.expBar = new DrawPanel(
                 statusBox.x,
                 statusBox.bottomY() - DrawUtils.OUTLINE_SIZE,
                 statusBox.width,
-                12)
-                .withBlackOutline();
+                12
+        ).withBlackOutline();
     }
     
     void resetBattle(ActivePokemon p) {
@@ -130,8 +129,7 @@ class PokemonAnimationState {
             Gender gender,
             float expRatio,
             ActivePokemon frontPokemon,
-            int teamIndex
-    ) {
+            int teamIndex) {
         animationHP = 0;
         animationExp = 0;
         animationCatchDuration = 0;
@@ -181,8 +179,7 @@ class PokemonAnimationState {
         if (duration == -1) { // TODO: There should be a constant for this
             animationCatch = CATCH_ANIMATION_LIFESPAN;
             animationCatchDuration = -1;
-        }
-        else {
+        } else {
             animationCatch = duration*CATCH_SHAKE_ANIMATION_LIFESPAN + 2*CATCH_TRANSFORM_ANIMATION_LIFESPAN;
             animationCatchDuration = animationCatch;
         }
@@ -300,8 +297,7 @@ class PokemonAnimationState {
             
             ratio = numerator/maxHp;
             hpStr = (int)numerator + "/" + maxHp;
-        }
-        else {
+        } else {
             animationHP = 0;
         }
         
@@ -320,7 +316,8 @@ class PokemonAnimationState {
                     hpStr,
                     statusBox.rightX() - STATUS_BOX_SPACING,
                     hpBar.bottomY() + FontMetrics.getTextHeight(g) + 5,
-                    Alignment.RIGHT);
+                    Alignment.RIGHT
+            );
         }
     }
     
@@ -331,8 +328,7 @@ class PokemonAnimationState {
             animationExp -= EXP_LOSS_RATIO;
             int originalTime = (int)(100*Math.abs(state.expRatio - oldState.expRatio)*FRAMES_PER_HP_LOSS);
             expRatio = (state.expRatio + (oldState.expRatio - state.expRatio)*(animationExp/(float)originalTime));
-        }
-        else {
+        } else {
             animationExp = 0;
         }
         
@@ -349,11 +345,9 @@ class PokemonAnimationState {
             if (plyrImg != null) {
                 if (animationEvolve > 0) {
                     evolveAnimation(g, plyrImg, pkmTiles);
-                }
-                else if (animationCatch > 0) {
+                } else if (animationCatch > 0) {
                     catchAnimation(g, plyrImg);
-                }
-                else {
+                } else {
                     if (animationCatchDuration == -1) {
                         plyrImg = data.getItemTilesLarge().getTile(Game.getPlayer().getPokeball().getImageName());
                     }
@@ -387,16 +381,18 @@ class PokemonAnimationState {
                 state.name + " " + state.gender.getCharacter(),
                 statusBox.x + STATUS_BOX_SPACING,
                 statusBox.y + STATUS_BOX_SPACING + FontMetrics.getTextHeight(g),
-                Alignment.LEFT);
-                
+                Alignment.LEFT
+        );
+        
         // Level in top right
         TextUtils.drawShadowText(
                 g,
                 "Lv" + state.getLevel(),
                 statusBox.rightX() - STATUS_BOX_SPACING,
                 statusBox.y + STATUS_BOX_SPACING + FontMetrics.getTextHeight(g),
-                Alignment.RIGHT);
-                
+                Alignment.RIGHT
+        );
+        
         // Status to the left of the hp bar
         FontMetrics.setFont(g, 24);
         TextUtils.drawShadowText(
@@ -404,8 +400,9 @@ class PokemonAnimationState {
                 state.getStatus().getName(),
                 statusBox.x + STATUS_BOX_SPACING,
                 hpBar.centerY(),
-                Alignment.CENTER_Y);
-                
+                Alignment.CENTER_Y
+        );
+        
         // Stat modifiers
         FontMetrics.setFont(g, 12);
         for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
@@ -426,8 +423,7 @@ class PokemonAnimationState {
         
         if (isPlayer) {
             drawTrainerPokeballs(g, expBar.rightX(), expBar.bottomY(), -1);
-        }
-        else if (!battleView.getCurrentBattle().isWildBattle()) {
+        } else if (!battleView.getCurrentBattle().isWildBattle()) {
             drawTrainerPokeballs(g, statusBox.x, statusBox.y, 1);
         }
         
@@ -455,7 +451,7 @@ class PokemonAnimationState {
             boolean silhouette = index == state.teamIndex
                     ? state.getStatus() == StatusCondition.FAINTED
                     : !pokemon.canFight() || (usedMaxPokemon && !pokemon.getAttributes().isBattleUsed());
-                    
+            
             BufferedImage pokeball = TileSet.TINY_POKEBALL;
             if (silhouette) {
                 pokeball = ImageUtils.silhouette(pokeball);
@@ -484,8 +480,7 @@ class PokemonAnimationState {
                     newMessage.getFrontPokemon(),
                     newMessage.getTeamIndex()
             );
-        }
-        else {
+        } else {
             if (newMessage.frontPokemonUpdate()) {
                 ActivePokemon pokemon = newMessage.getFrontPokemon();
                 state.frontPokemon = pokemon;
@@ -512,7 +507,7 @@ class PokemonAnimationState {
                 startExpAnimation(newMessage.getEXPRatio(), newMessage.levelUpdate());
             }
             
-            if  (newMessage.soundEffectUpdate()) {
+            if (newMessage.soundEffectUpdate()) {
                 SoundPlayer.soundPlayer.playSoundEffect(newMessage.getSoundEffect());
             }
             

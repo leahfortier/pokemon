@@ -237,7 +237,7 @@ class PokeGen {
     private static FailureInfo failureInfo;
     
     private String getAdditionalMethods(ClassFields fields, List<String> interfaces) {
-    
+        
         StringAppender methods = new StringAppender();
         
         // Add all the interfaces to the interface list
@@ -346,10 +346,10 @@ class PokeGen {
             String[] mcSplit = value.split(" ");
             for (int i = 0, index = 1; i < Integer.parseInt(mcSplit[0]); i++) {
                 constructor.append("super.statChanges[Stat.")
-                        .append(mcSplit[index++].toUpperCase())
-                        .append(".index()] = ")
-                        .append(mcSplit[index++])
-                        .append(";\n");
+                           .append(mcSplit[index++].toUpperCase())
+                           .append(".index()] = ")
+                           .append(mcSplit[index++])
+                           .append(";\n");
             }
         });
         
@@ -364,9 +364,9 @@ class PokeGen {
         fields.getPerformAndRemove("Activate", constructor::append);
         
         return new MethodInfo(
-                        fields.getClassName() + "()",
-                        constructor.toString(),
-                        AccessModifier.PACKAGE_PRIVATE
-                ).writeFunction();
+                fields.getClassName() + "()",
+                constructor.toString(),
+                AccessModifier.PACKAGE_PRIVATE
+        ).writeFunction();
     }
 }

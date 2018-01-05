@@ -114,7 +114,7 @@ public class EditMapMetaData {
     // Checks if the current map needs to be resized based on the input location
     // If so, will return the delta to the new current location
     public Point checkNewDimension(Point location) {
-    
+
         // In bounds -- no need to resize
         if (location.inBounds(currentMapSize)) {
             return new Point();
@@ -161,7 +161,7 @@ public class EditMapMetaData {
         } else {
             // Not sure why I have to do new Color(val).getRGB() instead of just val, but it doesn't work like that so yeah
             // If val is 0 then it's representing the null tile, so explicitly create the "null" Color
-            int colorValue = val == 0 ? new Color(0, 0, 0 ,0).getRGB() : new Color(val).getRGB();
+            int colorValue = val == 0 ? new Color(0, 0, 0, 0).getRGB() : new Color(val).getRGB();
             this.getMapImage(editType.getDataType()).setRGB(location.x, location.y, colorValue);
             
             return false;
@@ -188,8 +188,7 @@ public class EditMapMetaData {
                 
                 if (type == MapDataType.MOVE || type == MapDataType.AREA) {
                     TileUtils.fillTile(g2d, location, mapLocation, new Color(val, true));
-                }
-                else if (type != null && tileModel.containsTile(TileType.MAP, val)) {
+                } else if (type != null && tileModel.containsTile(TileType.MAP, val)) {
                     BufferedImage image = tileModel.getTile(TileType.MAP, val);
                     TileUtils.drawTileImage(g2d, image, location, mapLocation);
                 }
@@ -245,8 +244,7 @@ public class EditMapMetaData {
         if (editType != EditType.TRIGGERS) {
             // Draw all trigger items at half transparency.
             g2d.setComposite(alphaComposite);
-        }
-        else {
+        } else {
             g2d.setComposite(defaultComposite);
         }
         

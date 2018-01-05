@@ -26,7 +26,7 @@ public class LogState implements VisualStateHandler {
         logButtons = new Button[2];
         for (int i = 0; i < logButtons.length; i++) {
             logButtons[i] = new Button(
-                    150 +50*i,
+                    150 + 50*i,
                     550,
                     35,
                     20,
@@ -45,8 +45,7 @@ public class LogState implements VisualStateHandler {
             view.setSelectedButton(LOG_RIGHT_BUTTON);
             logButtons[LOG_RIGHT_BUTTON].setActive(true);
             view.setSelectedButton(logButtons);
-        }
-        else {
+        } else {
             logButtons[LOG_RIGHT_BUTTON].setActive(false);
         }
         
@@ -103,8 +102,7 @@ public class LogState implements VisualStateHandler {
         
         if (logPage == 0 && maxLogPage > 0) {
             view.setSelectedButton(LOG_RIGHT_BUTTON);
-        }
-        else if (logPage == maxLogPage) {
+        } else if (logPage == maxLogPage) {
             view.setSelectedButton(LOG_LEFT_BUTTON);
         }
         

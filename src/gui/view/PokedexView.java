@@ -38,7 +38,7 @@ class PokedexView extends View {
     private static final int NUM_COLS = 6;
     private static final int NUM_ROWS = 6;
     
-    private static final int PER_PAGE = NUM_ROWS * NUM_COLS;
+    private static final int PER_PAGE = NUM_ROWS*NUM_COLS;
     private static final int NUM_PAGES = (int)Math.ceil((double)PokemonInfo.NUM_POKEMON/PER_PAGE);
     private static final int NUM_TAB_BUTTONS = TabInfo.values().length;
     private static final int MOVES_PER_PAGE = 4;
@@ -111,45 +111,46 @@ class PokedexView extends View {
                 .withTransparentCount(2)
                 .withBorderPercentage(0)
                 .withBlackOutline();
-                
+        
         titlePanel = new DrawPanel(pokedexPanel.x, pokedexPanel.y, pokedexPanel.width, 37)
                 .withBackgroundColor(null)
                 .withBlackOutline();
-                
+        
         countPanel = new DrawPanel(pokedexPanel.x, 478, pokedexPanel.width, 82)
                 .withBackgroundColor(Color.RED)
                 .withTransparentCount(2)
                 .withBorderPercentage(0)
                 .withBlackOutline();
-                
+        
         infoPanel = new DrawPanel(410, pokedexPanel.y, pokedexPanel.width, 462)
                 .withTransparentCount(2)
                 .withBorderPercentage(0)
                 .withBlackOutline();
-                
+        
         imagePanel = new DrawPanel(
                 infoPanel.x + 18,
                 infoPanel.y + 18,
                 104,
-                104)
+                104
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         basicInfoPanel = new DrawPanel(infoPanel.x, infoPanel.y, infoPanel.width, 230)
                 .withBackgroundColor(null)
                 .withBorderPercentage(0)
                 .withBlackOutline();
-                
+        
         int spacing = 20;
         int moveButtonHeight = 38;
         moveDescriptionPanel = new DrawPanel(
-                    infoPanel.x + spacing,
-                    infoPanel.y + spacing,
-                    infoPanel.width - 2*spacing,
-                    moveButtonHeight*3
-                )
+                infoPanel.x + spacing,
+                infoPanel.y + spacing,
+                infoPanel.width - 2*spacing,
+                moveButtonHeight*3
+        )
                 .withBlackOutline();
-                
+        
         this.pokedex = Game.getPlayer().getPokedex();
         selectedButton = 0;
         pageNum = 0;
@@ -167,7 +168,10 @@ class PokedexView extends View {
                         40,
                         40,
                         ButtonHoverAction.BOX,
-                        Button.getBasicTransitions(k, NUM_ROWS, NUM_COLS, 0, new int[] { RETURN, RIGHT_ARROW, -1, RIGHT_ARROW }),
+                        Button.getBasicTransitions(
+                                k, NUM_ROWS, NUM_COLS, 0,
+                                new int[] { RETURN, RIGHT_ARROW, -1, RIGHT_ARROW }
+                        ),
                         () -> selected = PokemonInfo.getPokemonInfo(getIndex(row, col) + 1)
                 );
             }
@@ -184,7 +188,10 @@ class PokedexView extends View {
                     infoPanel.width,
                     buttonHeight,
                     NUM_TAB_BUTTONS,
-                    Button.getBasicTransitions(i, 1, tabButtons.length, TAB_START, new int[] { LEFT_ARROW, MOVES_RIGHT_ARROW, RIGHT_ARROW, RETURN }),
+                    Button.getBasicTransitions(
+                            i, 1, tabButtons.length, TAB_START,
+                            new int[] { LEFT_ARROW, MOVES_RIGHT_ARROW, RIGHT_ARROW, RETURN }
+                    ),
                     () -> changeTab(TabInfo.values()[index])
             );
         }
@@ -197,27 +204,27 @@ class PokedexView extends View {
                     moveDescriptionPanel.width,
                     moveButtonHeight,
                     ButtonHoverAction.BOX,
-                    Button.getBasicTransitions(i, MOVES_PER_PAGE, 1, MOVE_START, new int[] {
-                            MOVES_RIGHT_ARROW,
-                            RETURN,
-                            MOVES_LEFT_ARROW,
-                            MOVES_RIGHT_ARROW
-                    })
+                    Button.getBasicTransitions(
+                            i, MOVES_PER_PAGE, 1, MOVE_START,
+                            new int[] { MOVES_RIGHT_ARROW, RETURN, MOVES_LEFT_ARROW, MOVES_RIGHT_ARROW }
+                    )
             );
         }
         
         int arrowWidth = 35;
         int arrowHeight = 20;
         
-        buttons[LEFT_ARROW] = leftButton = new Button(140, 418, arrowWidth, arrowHeight,
+        buttons[LEFT_ARROW] = leftButton = new Button(
+                140, 418, arrowWidth, arrowHeight,
                 ButtonHoverAction.BOX,
-                new int[] { RIGHT_ARROW, NUM_COLS *(NUM_ROWS - 1) + NUM_COLS /2 - 1, TAB_START + NUM_TAB_BUTTONS - 1, 0 },
+                new int[] { RIGHT_ARROW, NUM_COLS*(NUM_ROWS - 1) + NUM_COLS/2 - 1, TAB_START + NUM_TAB_BUTTONS - 1, 0 },
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, NUM_PAGES)
         );
         
-        buttons[RIGHT_ARROW] = rightButton = new Button(255, 418, arrowWidth, arrowHeight,
+        buttons[RIGHT_ARROW] = rightButton = new Button(
+                255, 418, arrowWidth, arrowHeight,
                 ButtonHoverAction.BOX,
-                new int[] { TAB_START, NUM_COLS *(NUM_ROWS - 1) + NUM_COLS /2, LEFT_ARROW, 0 },
+                new int[] { TAB_START, NUM_COLS*(NUM_ROWS - 1) + NUM_COLS/2, LEFT_ARROW, 0 },
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, NUM_PAGES)
         );
         
@@ -241,7 +248,10 @@ class PokedexView extends View {
                 () -> movePageNum = GeneralUtils.wrapIncrement(movePageNum, 1, maxMovePages())
         );
         
-        buttons[RETURN] = returnButton = Button.createExitButton(410, 522, 350, 38, ButtonHoverAction.BOX, new int[] { 0, PER_PAGE, RIGHT_ARROW, PER_PAGE });
+        buttons[RETURN] = returnButton = Button.createExitButton(
+                410, 522, 350, 38, ButtonHoverAction.BOX,
+                new int[] { 0, PER_PAGE, RIGHT_ARROW, PER_PAGE }
+        );
         
         selected = PokemonInfo.getPokemonInfo(1);
         changeTab(TabInfo.MAIN);
@@ -286,8 +296,7 @@ class PokedexView extends View {
                 
                 if (pokedex.isNotSeen(pokemonInfo)) {
                     pokemonButton.label(g, 20, new Color(0, 0, 0, 64), String.format("%03d", number));
-                }
-                else {
+                } else {
                     if (pokemonInfo == selected) {
                         pokemonButton.blackOutline(g);
                     }
@@ -331,8 +340,8 @@ class PokedexView extends View {
         }
         
         infoPanel.withBackgroundColors(typeColors)
-                .drawBackground(g);
-                
+                 .drawBackground(g);
+        
         for (int i = 0; i < tabButtons.length; i++) {
             List<Direction> toOutline = new ArrayList<>();
             toOutline.add(Direction.RIGHT);
@@ -471,8 +480,7 @@ class PokedexView extends View {
             if (!caught) {
                 g.drawString("Moves:", leftX, textY);
                 g.drawString("???", leftX + 2*spacing, textY + FontMetrics.getDistanceBetweenRows(g));
-            }
-            else {
+            } else {
                 FontMetrics.setFont(g, 14);
                 
                 List<LevelUpMove> levelUpMoves = selected.getLevelUpMoves();
@@ -487,18 +495,16 @@ class PokedexView extends View {
                     final String levelString;
                     if (level == PokemonInfo.EVOLUTION_LEVEL_LEARNED) {
                         levelString = " Ev";
-                    }
-                    else if (level <= 1) {
+                    } else if (level <= 1) {
                         levelString = " --";
-                    }
-                    else {
+                    } else {
                         levelString = String.format("%3d", level);
                     }
                     
                     if (i == 0 || selectedButton == MOVE_START + i) {
                         moveDescriptionPanel.withTransparentBackground(attack.getActualType().getColor())
-                                .drawBackground(g);
-                                
+                                            .drawBackground(g);
+                        
                         FontMetrics.setFont(g, 18);
                         int moveSpacing = 15;
                         int moveX = moveDescriptionPanel.x + moveSpacing;
@@ -525,7 +531,8 @@ class PokedexView extends View {
                         y += FontMetrics.getDistanceBetweenRows(g) + 2;
                         
                         FontMetrics.setFont(g, 12);
-                        TextUtils.drawWrappedText(g,
+                        TextUtils.drawWrappedText(
+                                g,
                                 attack.getDescription(),
                                 moveX,
                                 y,
@@ -535,7 +542,7 @@ class PokedexView extends View {
                     
                     Button moveButton = moveButtons[i];
                     moveButton.blackOutline(g);
-                    new DrawPanel(moveButton).drawLeftLabel(g, 18, levelString + " "  + attack.getName());
+                    new DrawPanel(moveButton).drawLeftLabel(g, 18, levelString + " " + attack.getName());
                     
                     int moveImageSpacing = 20;
                     BufferedImage typeImage = attack.getActualType().getImage();
@@ -566,21 +573,21 @@ class PokedexView extends View {
             } else {
                 Evolution evolution = selected.getEvolution();
                 if (evolution instanceof MultipleEvolution) {
-                    Evolution[] allEvolutions = ((MultipleEvolution) evolution).getFullEvolutions();
+                    Evolution[] allEvolutions = ((MultipleEvolution)evolution).getFullEvolutions();
                     for (Evolution eachEvolution : allEvolutions) {
-                        textY = TextUtils.drawWrappedText(g,
+                        textY = TextUtils.drawWrappedText(
+                                g,
                                 eachEvolution.getEvolutions()[0].getName() + ": " + eachEvolution.getString(),
                                 leftX,
                                 textY,
                                 infoPanel.width - 3*spacing
                         );
                     }
-                }
-                else if (evolution instanceof NoEvolution) {
+                } else if (evolution instanceof NoEvolution) {
                     g.drawString(selected.getName() + " does not evolve", leftX, textY);
-                }
-                else {
-                    TextUtils.drawWrappedText(g,
+                } else {
+                    TextUtils.drawWrappedText(
+                            g,
                             evolution.getEvolutions()[0].getName() + ": " + evolution.getString(),
                             leftX,
                             textY,

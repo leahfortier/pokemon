@@ -32,12 +32,12 @@ class NewPokemonView extends View {
             - BasicPanels.getLabelPanel(0, 0, 30, TEXT_SPACING, StringUtils.empty()).height
             - BasicPanels.getLabelPanel(0, 0, 24, TEXT_SPACING, StringUtils.empty()).height
             - 5*BasicPanels.getLabelPanel(0, 0, 22, TEXT_SPACING, StringUtils.empty()).height)/6;
-            
+    
     private static final int IMAGE_PANEL_LENGTH = 3*BOX_SPACING
             + BasicPanels.getLabelPanel(0, 0, 30, TEXT_SPACING, StringUtils.empty()).height
             + BasicPanels.getLabelPanel(0, 0, 24, TEXT_SPACING, StringUtils.empty()).height
             + 2*BasicPanels.getLabelPanel(0, 0, 22, TEXT_SPACING, StringUtils.empty()).height;
-            
+    
     private final DrawPanel canvasPanel;
     private final DrawPanel imagePanel;
     
@@ -62,17 +62,18 @@ class NewPokemonView extends View {
     
     NewPokemonView() {
         this.canvasPanel = DrawPanel.fullGamePanel()
-                .withTransparentCount(2)
-                .withBorderPercentage(0);
-                
+                                    .withTransparentCount(2)
+                                    .withBorderPercentage(0);
+        
         this.imagePanel = new DrawPanel(
                 Global.GAME_SIZE.width - BOX_SPACING - IMAGE_PANEL_LENGTH,
                 BOX_SPACING,
                 IMAGE_PANEL_LENGTH,
-                IMAGE_PANEL_LENGTH)
+                IMAGE_PANEL_LENGTH
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         this.buttons = BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS);
         for (Button button : buttons) {
             button.setActive(false);
@@ -203,43 +204,47 @@ class NewPokemonView extends View {
                     BOX_SPACING,
                     30,
                     TEXT_SPACING,
-                    String.format("%-10s   #%03d", pokemonInfo.getName(), pokemonInfo.getNumber()));
-                    
+                    String.format("%-10s   #%03d", pokemonInfo.getName(), pokemonInfo.getNumber())
+            );
+            
             DrawPanel classificationPanel = BasicPanels.drawLabelPanel(
                     g,
                     namePanel.x,
                     namePanel.bottomY() + BOX_SPACING,
                     24,
                     TEXT_SPACING,
-                    pokemonInfo.getClassification() + " " + PokeString.POKEMON);
-                    
+                    pokemonInfo.getClassification() + " " + PokeString.POKEMON
+            );
+            
             DrawPanel heightPanel = BasicPanels.drawLabelPanel(
                     g,
                     classificationPanel.x,
                     classificationPanel.bottomY() + BOX_SPACING,
                     22,
                     TEXT_SPACING,
-                    "Height: " + pokemonInfo.getHeightString());
-                    
+                    "Height: " + pokemonInfo.getHeightString()
+            );
+            
             DrawPanel weightPanel = BasicPanels.drawLabelPanel(
                     g,
                     heightPanel.x,
                     heightPanel.bottomY() + BOX_SPACING,
                     22,
                     TEXT_SPACING,
-                    "Weight: " + pokemonInfo.getWeight() + "lbs");
-                    
+                    "Weight: " + pokemonInfo.getWeight() + "lbs"
+            );
+            
             DrawPanel descriptionPanel = new DrawPanel(
                     weightPanel.x,
                     weightPanel.bottomY() + BOX_SPACING,
                     Global.GAME_SIZE.width - 2*BOX_SPACING,
-                    3*weightPanel.height)
+                    3*weightPanel.height
+            )
                     .withFullTransparency()
                     .withBlackOutline();
             descriptionPanel.drawBackground(g);
             descriptionPanel.drawMessage(g, 22, pokemonInfo.getFlavorText());
-        }
-        else if (state != State.NICKNAME && state != State.END) {
+        } else if (state != State.NICKNAME && state != State.END) {
             ImageUtils.drawCenteredImage(g, pokemonImage, BasicPanels.canvasMessageCenter);
         }
         

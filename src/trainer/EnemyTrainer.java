@@ -24,8 +24,7 @@ public class EnemyTrainer extends Trainer implements Opponent {
         
         if (team.size() < MAX_POKEMON) {
             team.add(p);
-        }
-        else {
+        } else {
             Global.error("Trainers cannot have more than six Pokemon!");
         }
     }

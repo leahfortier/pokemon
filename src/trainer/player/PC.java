@@ -198,8 +198,7 @@ public class PC implements Serializable {
         // Swapping with an empty space -- same as depositing
         if (boxPokemon == null) {
             depositPokemonFromPlayer(partyPokemon, coordinate);
-        }
-        else {
+        } else {
             // TODO: Should this also be checking fainted Pokemon?
             int eggs = player.totalEggs();
             if (boxPokemon.isEgg()) {

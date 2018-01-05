@@ -34,8 +34,7 @@ public abstract class ColorDocumentListener implements DocumentListener {
         
         if (colorCondition.greenCondition()) {
             colorComponent().setBackground(new Color(0x90EE90));
-        }
-        else {
+        } else {
             colorComponent().setBackground(new Color(0xFF9494));
         }
     }

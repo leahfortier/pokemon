@@ -24,6 +24,7 @@ import java.util.Map;
 
 public class Game {
     private static Game instance;
+    
     public static Game instance() {
         if (instance == null) {
             instance = new Game();
@@ -101,7 +102,7 @@ public class Game {
     }
     
     public TradeView getTradeView() {
-        return (TradeView) viewMap.get(ViewMode.TRADE_VIEW);
+        return (TradeView)viewMap.get(ViewMode.TRADE_VIEW);
     }
     
     public void setBattleViews(final Battle battle, final boolean seenWildPokemon) {

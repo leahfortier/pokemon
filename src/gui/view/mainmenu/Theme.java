@@ -40,23 +40,23 @@ public enum Theme {
     
     private static void drawBasicTheme(Graphics g) {
         DrawPanel.fullGamePanel()
-                .withTransparentBackground(new Color(68, 123, 184))
-                .withTransparentCount(2)
-                .withBorderPercentage(3)
-                .drawBackground(g);
+                 .withTransparentBackground(new Color(68, 123, 184))
+                 .withTransparentCount(2)
+                 .withBorderPercentage(3)
+                 .drawBackground(g);
     }
     
     private static void drawScenicTheme(Graphics g, int bgTime, int bgIndex) {
-        float locRatio = 1.0f - (float) bgTime / (float) MainMenuView.bgt[(bgIndex + 1)%MainMenuView.bgt.length];
-        int xLoc = (int) (bgx[bgIndex]*locRatio + (1.0f - locRatio)*bgx[(bgIndex + 1)%MainMenuView.bgt.length]);
-        int yLoc = (int) (bgy[bgIndex]*locRatio + (1.0f - locRatio)*bgy[(bgIndex + 1)%MainMenuView.bgt.length]);
+        float locRatio = 1.0f - (float)bgTime/(float)MainMenuView.bgt[(bgIndex + 1)%MainMenuView.bgt.length];
+        int xLoc = (int)(bgx[bgIndex]*locRatio + (1.0f - locRatio)*bgx[(bgIndex + 1)%MainMenuView.bgt.length]);
+        int yLoc = (int)(bgy[bgIndex]*locRatio + (1.0f - locRatio)*bgy[(bgIndex + 1)%MainMenuView.bgt.length]);
         
         g.drawImage(DFS_TOWN_BG, xLoc, yLoc, null);
         
         DrawPanel.fullGamePanel()
-                .withBackgroundColor(null)
-                .withBorderColor(new Color(255, 255, 255, 200))
-                .withBorderPercentage(3)
-                .drawBackground(g);
+                 .withBackgroundColor(null)
+                 .withBorderColor(new Color(255, 255, 255, 200))
+                 .withBorderPercentage(3)
+                 .drawBackground(g);
     }
 }

@@ -162,7 +162,7 @@ public class ActivePokemon implements Serializable {
      */
     // Constructor for triggers
     public static ActivePokemon createActivePokemon(PokemonMatcher pokemonMatcher, boolean user) {
-    
+        
         // Random Starter Egg
         if (pokemonMatcher.isStarterEgg()) {
             if (!user) {
@@ -176,13 +176,12 @@ public class ActivePokemon implements Serializable {
         
         ActivePokemon pokemon;
         if (pokemonMatcher.isEgg()) {
-            if(!user) {
+            if (!user) {
                 Global.error("Trainers cannot have eggs.");
             }
             
             pokemon = new ActivePokemon(namesies);
-        }
-        else {
+        } else {
             pokemon = new ActivePokemon(namesies, pokemonMatcher.getLevel(), false, user);
             String nickname = pokemonMatcher.getNickname();
             if (!StringUtils.isNullOrEmpty(nickname)) {
@@ -265,11 +264,9 @@ public class ActivePokemon implements Serializable {
         
         if (eggSteps > 10*255) {
             return "Wonder what's inside? It needs more time though.";
-        }
-        else if (eggSteps > 5*255) {
+        } else if (eggSteps > 5*255) {
             return "It moves around inside sometimes. It must be close to hatching.";
-        }
-        else {
+        } else {
             return "It's making sounds inside! It's going to hatch soon!";
         }
     }
@@ -365,12 +362,12 @@ public class ActivePokemon implements Serializable {
     public Type computeHiddenPowerType() {
         return Type.getHiddenType(((
                 IVs[Stat.HP.index()]%2 +
-                2*(IVs[Stat.ATTACK.index()]%2) +
-                4*(IVs[Stat.DEFENSE.index()]%2) +
-                8*(IVs[Stat.SPEED.index()]%2) +
-                16*(IVs[Stat.SP_ATTACK.index()]%2) +
-                32*(IVs[Stat.SP_DEFENSE.index()]%2)
-            )*15)/63);
+                        2*(IVs[Stat.ATTACK.index()]%2) +
+                        4*(IVs[Stat.DEFENSE.index()]%2) +
+                        8*(IVs[Stat.SPEED.index()]%2) +
+                        16*(IVs[Stat.SP_ATTACK.index()]%2) +
+                        32*(IVs[Stat.SP_DEFENSE.index()]%2)
+        )*15)/63);
     }
     
     public String getCharacteristic() {
@@ -406,7 +403,7 @@ public class ActivePokemon implements Serializable {
     }
     
     public Ability getAbility() {
-    
+        
         // Check if the Pokemon has had its ability changed during the battle
         PokemonEffect effect = getEffect(EffectNamesies.CHANGE_ABILITY);
         if (effect != null) {
@@ -628,8 +625,7 @@ public class ActivePokemon implements Serializable {
         Messages.add(getActualName() + " learned " + m.getAttack().getName() + "!");
         if (moves.size() < Move.MAX_MOVES) {
             moves.add(m);
-        }
-        else {
+        } else {
             moves.set(index, m);
         }
         
@@ -708,8 +704,7 @@ public class ActivePokemon implements Serializable {
         if (opponent instanceof WildPokemon) {
             // Fails against wild Pokemon of higher levels
             return victim.getLevel() <= this.getLevel();
-        }
-        else {
+        } else {
             // Fails against trainers on their last Pokemon
             Trainer trainer = (Trainer)opponent;
             return trainer.hasRemainingPokemon(b);
@@ -727,8 +722,7 @@ public class ActivePokemon implements Serializable {
         if (opponent instanceof WildPokemon) {
             // End the battle against a wild Pokemon
             Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
-        }
-        else {
+        } else {
             Trainer trainer = (Trainer)opponent;
             
             // Swap to a random Pokemon!
@@ -883,7 +877,7 @@ public class ActivePokemon implements Serializable {
     
     public boolean isSemiInvulnerable() {
         final Move move = this.getMove();
-        return move != null && !move.isReady() && ((MultiTurnMove) getAttack()).semiInvulnerability();
+        return move != null && !move.isReady() && ((MultiTurnMove)getAttack()).semiInvulnerability();
     }
     
     public boolean isSemiInvulnerableFlying() {
@@ -920,8 +914,7 @@ public class ActivePokemon implements Serializable {
                     EVs[i] -= (totalEVs() - Stat.MAX_EVS);
                     break;
                 }
-            }
-            else if (vals[i] < 0 && EVs[i] > 0) {
+            } else if (vals[i] < 0 && EVs[i] > 0) {
                 added = true;
                 EVs[i] = Math.max(0, EVs[i] + vals[i]); // Don't drop below zero
             }
@@ -1151,7 +1144,7 @@ public class ActivePokemon implements Serializable {
     
     // Reduces hp by amount, returns the actual amount of hp that was reduced
     public int reduceHealth(Battle b, int amount, boolean checkEffects) {
-    
+        
         // Not actually reducing health...
         if (amount == 0) {
             return 0;
@@ -1196,7 +1189,7 @@ public class ActivePokemon implements Serializable {
     
     // Restores hp by amount, returns the actual amount of hp that was restored
     public int heal(int amount) {
-    
+        
         // Dead Pokemon can't heal
         if (hasStatus(StatusCondition.FAINTED)) {
             return 0;
@@ -1258,7 +1251,6 @@ public class ActivePokemon implements Serializable {
     // Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker. -- NOT ANYMORE NOW WE HAVE Battle.hasInvoke FUCK YES YOU GO GLENN COCO
     public boolean isLevitatingWithoutTypeCheck(Battle b, ActivePokemon moldBreaker) {
         return !isGrounded(b) && LevitationEffect.containsLevitationEffect(b, this, moldBreaker);
-        
     }
     
     public void giveItem(ItemNamesies itemName) {

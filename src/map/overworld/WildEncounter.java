@@ -88,9 +88,9 @@ public class WildEncounter {
     private static int getRandomEncounterIndex(WildEncounter[] wildEncounters) {
         return GeneralUtils.getPercentageIndex(
                 Arrays.stream(wildEncounters)
-                        .map(WildEncounter::getProbability)
-                        .mapToInt(Integer::intValue)
-                        .toArray()
+                      .map(WildEncounter::getProbability)
+                      .mapToInt(Integer::intValue)
+                      .toArray()
         );
     }
 }

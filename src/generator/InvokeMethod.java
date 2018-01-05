@@ -6,13 +6,14 @@ import util.StringUtils;
 import java.util.Scanner;
 
 abstract class InvokeMethod {
-
+    
     private String methodName;
     
     protected abstract String getReturnType(InterfaceMethod interfaceMethod);
     protected abstract String getDefaultMethodName(InterfaceMethod interfaceMethod);
     protected abstract String getInnerLoop(InterfaceMethod interfaceMethod);
     protected abstract String getPostLoop(InterfaceMethod interfaceMethod);
+    
     protected String getPreLoop() { return StringUtils.empty(); }
     
     private InvokeMethod() {}
@@ -51,8 +52,8 @@ abstract class InvokeMethod {
                 .appendLine("}")
                 .appendDelimiter("\n", getPostLoop(interfaceMethod))
                 .toString();
-                
-                
+        
+        
         return new MethodInfo(header, body.trim(), AccessModifier.PACKAGE_PRIVATE).writeFunction();
     }
     
@@ -125,7 +126,7 @@ abstract class InvokeMethod {
     }
     
     static class VoidInvoke extends InvokeMethod {
-    
+        
         @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return "void";
@@ -149,7 +150,7 @@ abstract class InvokeMethod {
     }
     
     static class ContainsInvoke extends InvokeMethod {
-    
+        
         @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return "boolean";
@@ -172,7 +173,7 @@ abstract class InvokeMethod {
     }
     
     static class CheckInvoke extends InvokeMethod {
-    
+        
         private final boolean check;
         
         CheckInvoke(final Scanner invokeInput) {
@@ -210,7 +211,7 @@ abstract class InvokeMethod {
     }
     
     static class CheckGetInvoke extends CheckInvoke {
-    
+        
         CheckGetInvoke(Scanner invokeInput) {
             super(invokeInput);
         }
@@ -237,7 +238,7 @@ abstract class InvokeMethod {
     }
     
     static class CheckMessageInvoke extends CheckInvoke {
-    
+        
         private final String getMessageCall;
         
         CheckMessageInvoke(Scanner invokeInput) {
@@ -254,7 +255,7 @@ abstract class InvokeMethod {
     }
     
     static class GetInvoke extends InvokeMethod {
-    
+        
         @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return interfaceMethod.getReturnType();
@@ -278,7 +279,7 @@ abstract class InvokeMethod {
     }
     
     static class UpdateInvoke extends InvokeMethod {
-    
+        
         @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return interfaceMethod.getReturnType();
@@ -302,7 +303,7 @@ abstract class InvokeMethod {
     }
     
     static class MultiplyInvoke extends InvokeMethod {
-    
+        
         @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return "double";
@@ -331,7 +332,7 @@ abstract class InvokeMethod {
     }
     
     static class AddInvoke extends InvokeMethod {
-    
+        
         @Override
         protected String getReturnType(InterfaceMethod interfaceMethod) {
             return "int";

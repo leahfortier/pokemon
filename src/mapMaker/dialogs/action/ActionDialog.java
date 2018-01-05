@@ -33,7 +33,7 @@ public class ActionDialog extends TriggerDialog<ActionMatcher> {
     
     @Override
     protected ActionMatcher getMatcher() {
-        ActionType actionType = (ActionType) actionComboBox.getSelectedItem();
+        ActionType actionType = (ActionType)actionComboBox.getSelectedItem();
         return this.map.get(actionType).getActionMatcher(actionType);
     }
     
@@ -51,7 +51,7 @@ public class ActionDialog extends TriggerDialog<ActionMatcher> {
     protected void renderDialog() {
         removeAll();
         
-        ActionType selectedAction = (ActionType) actionComboBox.getSelectedItem();
+        ActionType selectedAction = (ActionType)actionComboBox.getSelectedItem();
         GUIUtils.setVerticalLayout(this, topComponent, map.get(selectedAction));
     }
 }

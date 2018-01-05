@@ -10,7 +10,7 @@ import util.StringUtils;
 import java.util.Scanner;
 
 class NamesiesGen {
-
+    
     private final String namesiesFolder;
     private final String namesiesClassName;
     private final StringAppender namesies;
@@ -72,8 +72,8 @@ class NamesiesGen {
                 "\t%s(\"%s\"%s)",
                 enumName,
                 name,
-                StringUtils.isNullOrEmpty(className) ? "" : ", " + className + "::new")
-        );
+                StringUtils.isNullOrEmpty(className) ? "" : ", " + className + "::new"
+        ));
     }
     
     private void pokemonNamesies() {

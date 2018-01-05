@@ -188,7 +188,7 @@ public class DrawPanel {
         
         int borderSize = this.getBorderSize();
         if (transparentBackground) {
-        
+            
             for (int i = 0; i < transparentCount; i++) {
                 DrawUtils.fillTransparent(g, x + borderSize, y + borderSize, width - 2*borderSize, height - 2*borderSize);
             }
@@ -301,17 +301,17 @@ public class DrawPanel {
             drawingText = text;
             finishedAnimating = false;
         } else {
-            messageTimeElapsed += 3 * Global.MS_BETWEEN_FRAMES;
+            messageTimeElapsed += 3*Global.MS_BETWEEN_FRAMES;
         }
         
-        int charactersToShow = finishedAnimating ? text.length() : Math.min(text.length(), messageTimeElapsed / 50);
+        int charactersToShow = finishedAnimating ? text.length() : Math.min(text.length(), messageTimeElapsed/50);
         if (InputControl.instance().consumeIfMouseDown(ControlKey.SPACE)) {
             charactersToShow = text.length();
         }
         
         finishedAnimating = charactersToShow == text.length();
         
-        if (charactersToShow != 0 && text.charAt(charactersToShow - 1) != ' '){
+        if (charactersToShow != 0 && text.charAt(charactersToShow - 1) != ' ') {
             String startString = text.substring(0, charactersToShow);
             int start = startString.lastIndexOf(' ') + 1;
             start = start == -1 ? 0 : start;
@@ -385,8 +385,8 @@ public class DrawPanel {
     
     public void drawMovePanel(Graphics g, Attack move) {
         this.withTransparentBackground(move.getActualType().getColor())
-                .drawBackground(g);
-                
+            .drawBackground(g);
+        
         FontMetrics.setFont(g, 24);
         int spacing = 20;
         int y = this.y + spacing + FontMetrics.getTextHeight(g);
@@ -410,7 +410,8 @@ public class DrawPanel {
         y += FontMetrics.getDistanceBetweenRows(g) + 2;
         
         FontMetrics.setFont(g, 16);
-        TextUtils.drawWrappedText(g,
+        TextUtils.drawWrappedText(
+                g,
                 move.getDescription(),
                 this.x + spacing,
                 y,

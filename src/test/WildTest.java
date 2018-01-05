@@ -29,11 +29,13 @@ public class WildTest extends BaseTest {
         Player player = new TestCharacter(new TestPokemon(PokemonNamesies.BULBASAUR));
         Assert.assertTrue(Game.getPlayer() == player);
         
-        Set<ItemNamesies> wildHoldItems = pokemonNamesies.getInfo().getWildItems()
+        Set<ItemNamesies> wildHoldItems = pokemonNamesies
+                .getInfo()
+                .getWildItems()
                 .stream()
                 .map(WildHoldItem::getItem)
                 .collect(Collectors.toSet());
-                
+        
         Set<ItemNamesies> noAbilitySet = new HashSet<>(wildHoldItems);
         if (!alwaysItem) {
             noAbilitySet.add(ItemNamesies.NO_ITEM);

@@ -29,7 +29,7 @@ public class TimeOfDayPanel extends JPanel {
             }
         });
         
-        JComponent timeCheckBoxesPanel = GUIUtils.createHorizontalLayoutComponent((JComponent[]) this.timeCheckBoxes);
+        JComponent timeCheckBoxesPanel = GUIUtils.createHorizontalLayoutComponent((JComponent[])this.timeCheckBoxes);
         GUIUtils.setVerticalLayout(
                 this,
                 GUIUtils.createLabel("Time of Day:"),

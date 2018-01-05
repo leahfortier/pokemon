@@ -85,7 +85,6 @@ public abstract class Status implements Serializable {
     private boolean appliesWithoutStatusCheck(Battle b, ActivePokemon caster, ActivePokemon victim) {
         return this.statusApplies(b, caster, victim) &&
                 StatusPreventionEffect.getPreventEffect(b, caster, victim, this.statusCondition) == null;
-                
     }
     
     protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {

@@ -37,7 +37,7 @@ import java.util.List;
 class MartView extends View {
     private List<ItemNamesies> forSaleItems;
     
-    private static final Color BACKGROUND_COLOR = new Color (68, 123, 184);
+    private static final Color BACKGROUND_COLOR = new Color(68, 123, 184);
     
     private static final int ITEMS_PER_PAGE = 10;
     
@@ -81,24 +81,28 @@ class MartView extends View {
         shopPanel = new DrawPanel(
                 spacing,
                 spacing + tabHeight,
-                Point.subtract(Global.GAME_SIZE,
+                Point.subtract(
+                        Global.GAME_SIZE,
                         2*spacing,
-                        2*spacing + tabHeight))
+                        2*spacing + tabHeight
+                )
+        )
                 .withBackgroundColor(BACKGROUND_COLOR)
                 .withTransparentBackground()
                 .withBorderPercentage(0)
                 .withBlackOutline();
-                
+        
         tabPanel = new DrawPanel(
                 shopPanel.x + shopPanel.width/6,
                 shopPanel.y - tabHeight + DrawUtils.OUTLINE_SIZE,
                 shopPanel.width/6,
-                tabHeight)
+                tabHeight
+        )
                 .withBackgroundColor(BACKGROUND_COLOR)
                 .withTransparentBackground()
                 .withBorderPercentage(0)
                 .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.DOWN)));
-                
+        
         int buttonHeight = 38;
         int selectedHeight = 82;
         int halfPanelWidth = (shopPanel.width - 3*spacing)/2;
@@ -107,18 +111,20 @@ class MartView extends View {
                 shopPanel.x + spacing,
                 shopPanel.y + spacing,
                 halfPanelWidth,
-                shopPanel.height - 2*spacing)
+                shopPanel.height - 2*spacing
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         selectedPanel = new DrawPanel(
                 moneyPanel.x + moneyPanel.width + spacing,
                 shopPanel.y + spacing,
                 halfPanelWidth,
-                selectedHeight)
+                selectedHeight
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         Button[] fakeButtons = moneyPanel.getButtons(10, 6, 1);
         playerMoneyPanel = new DrawPanel(fakeButtons[0]).withBlackOutline();
         inBagPanel = new DrawPanel(fakeButtons[1]).withBlackOutline();
@@ -170,26 +176,29 @@ class MartView extends View {
                 amountLeftButton.x + amountLeftButton.width - DrawUtils.OUTLINE_SIZE,
                 amountLeftButton.y,
                 selectedPanel.width - amountLeftButton.width - amountRightButton.width + 2*DrawUtils.OUTLINE_SIZE,
-                amountLeftButton.height)
+                amountLeftButton.height
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         returnButton = Button.createExitButton(
                 selectedPanel.x,
                 shopPanel.y + shopPanel.height - spacing - buttonHeight,
                 halfPanelWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { BUY, SHOP_LEFT_ARROW, BUY, AMOUNT_LEFT_ARROW });
-                
+                new int[] { BUY, SHOP_LEFT_ARROW, BUY, AMOUNT_LEFT_ARROW }
+        );
+        
         itemsPanel = new DrawPanel(
                 selectedPanel.x,
                 selectedPanel.y + selectedPanel.height + buttonHeight + spacing,
                 halfPanelWidth,
-                moneyPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing)
+                moneyPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         selectedButton = 0;
         itemAmount = 1;
         
@@ -203,7 +212,8 @@ class MartView extends View {
                 2,
                 0,
                 new int[] { -1, AMOUNT_RIGHT_ARROW, -1, SHOP_RIGHT_ARROW },
-                index -> setSelectedItem(GeneralUtils.getPageValue(forSaleItems, pageNum, ITEMS_PER_PAGE, index)));
+                index -> setSelectedItem(GeneralUtils.getPageValue(forSaleItems, pageNum, ITEMS_PER_PAGE, index))
+        );
         System.arraycopy(itemButtons, 0, buttons, 0, ITEMS_PER_PAGE);
         
         buttons[SHOP_LEFT_ARROW] = shopLeftButton = new Button(
@@ -383,7 +393,8 @@ class MartView extends View {
         Player player = Game.getPlayer();
         
         this.forSaleItems = new ArrayList<>();
-        Collections.addAll(forSaleItems,
+        Collections.addAll(
+                forSaleItems,
                 ItemNamesies.POTION,
                 ItemNamesies.POKE_BALL,
                 ItemNamesies.ANTIDOTE,
@@ -394,7 +405,8 @@ class MartView extends View {
         );
         
         if (player.hasBadge(Badge.ROUND)) {
-            Collections.addAll(forSaleItems,
+            Collections.addAll(
+                    forSaleItems,
                     ItemNamesies.GREAT_BALL,
                     ItemNamesies.SUPER_POTION,
                     ItemNamesies.REPEL
@@ -402,39 +414,45 @@ class MartView extends View {
         }
         
         if (player.hasBadge(Badge.SECOND)) {
-            Collections.addAll(forSaleItems,
+            Collections.addAll(
+                    forSaleItems,
                     ItemNamesies.REVIVE
             );
         }
         
         if (player.hasBadge(Badge.THIRD)) {
-            Collections.addAll(forSaleItems,
+            Collections.addAll(
+                    forSaleItems,
                     ItemNamesies.SUPER_REPEL
             );
         }
         
         if (player.hasBadge(Badge.FOURTH)) {
-            Collections.addAll(forSaleItems,
+            Collections.addAll(
+                    forSaleItems,
                     ItemNamesies.ULTRA_BALL,
                     ItemNamesies.HYPER_POTION
             );
         }
         
         if (player.hasBadge(Badge.FIFTH)) {
-            Collections.addAll(forSaleItems,
+            Collections.addAll(
+                    forSaleItems,
                     ItemNamesies.FULL_HEAL,
                     ItemNamesies.MAX_REPEL
             );
         }
         
         if (player.hasBadge(Badge.SIXTH)) {
-            Collections.addAll(forSaleItems,
+            Collections.addAll(
+                    forSaleItems,
                     ItemNamesies.MAX_POTION
             );
         }
         
         if (player.hasBadge(Badge.SEVENTH)) {
-            Collections.addAll(forSaleItems,
+            Collections.addAll(
+                    forSaleItems,
                     ItemNamesies.FULL_RESTORE
             );
         }

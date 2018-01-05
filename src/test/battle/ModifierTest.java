@@ -230,7 +230,7 @@ public class ModifierTest extends BaseTest {
     
     @Test
     public void stageChangeTest() {
-    
+        
         stageChangeTest(1, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.NO_ABILITY).defendingFight(AttackNamesies.DEFENSE_CURL));
         stageChangeTest(2, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.SIMPLE).defendingFight(AttackNamesies.DEFENSE_CURL));
         stageChangeTest(1, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.CONTRARY).defendingFight(AttackNamesies.DEFENSE_CURL));
@@ -340,11 +340,11 @@ public class ModifierTest extends BaseTest {
         stageChangeTest(1, Stat.SP_ATTACK, new TestInfo()
                 .attacking(AbilityNamesies.LIGHTNINGROD)
                 .defendingFight(AttackNamesies.THUNDER_PUNCH));
-                
+        
         stageChangeTest(0, Stat.SP_ATTACK, new TestInfo()
                 .defending(AbilityNamesies.LIGHTNINGROD)
                 .defendingFight(AttackNamesies.THUNDER_PUNCH));
-                
+        
         stageChangeTest(0, Stat.SP_ATTACK, new TestInfo()
                 .attacking(AbilityNamesies.LIGHTNINGROD)
                 .defendingFight(AttackNamesies.TACKLE));
@@ -392,7 +392,9 @@ public class ModifierTest extends BaseTest {
         
         // Unless the opponent is dark type
         Assert.assertFalse(defending.isType(battle, Type.DARK));
-        defending.getAttributes().setCastSource((ChangeTypeSource)(b, caster, victim) -> new Type[] { Type.DARK, Type.NO_TYPE });
+        defending.getAttributes().setCastSource(
+                (ChangeTypeSource)(b, caster, victim) -> new Type[] { Type.DARK, Type.NO_TYPE }
+        );
         Assert.assertFalse(defending.isType(battle, Type.DARK));
         EffectNamesies.CHANGE_TYPE.getEffect().cast(battle, defending, defending, CastSource.CAST_SOURCE, false);
         Assert.assertTrue(defending.isType(battle, Type.DARK));

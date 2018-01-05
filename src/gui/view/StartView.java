@@ -20,16 +20,16 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 class StartView extends View {
-
+    
     private static final MessageUpdate[] dialogue = new MessageUpdate[] {
-                new MessageUpdate("Welcome to the world of " + PokeString.POKEMON + "!"),
-                new MessageUpdate("It's filled with many unique creatures, such as this Ditto.").withUpdate(Update.SHOW_POKEMON),
-                new MessageUpdate("The people of the Hash Map region befriend, travel, and battle with their " + PokeString.POKEMON + "."),
-                new MessageUpdate("Oh, have you seen any syrup aboot? Well, never mind..."),
-                new MessageUpdate("I can see quite clearly that you're a boy, so what's your name, eh?").withUpdate(Update.ENTER_NAME),
-                new MessageUpdate(", are you ready to start your epic adventure? Well, off you go! I'll be seeing you soon!").withUpdate(Update.APPEND_TO_NAME)
-            };
-            
+            new MessageUpdate("Welcome to the world of " + PokeString.POKEMON + "!"),
+            new MessageUpdate("It's filled with many unique creatures, such as this Ditto.").withUpdate(Update.SHOW_POKEMON),
+            new MessageUpdate("The people of the Hash Map region befriend, travel, and battle with their " + PokeString.POKEMON + "."),
+            new MessageUpdate("Oh, have you seen any syrup aboot? Well, never mind..."),
+            new MessageUpdate("I can see quite clearly that you're a boy, so what's your name, eh?").withUpdate(Update.ENTER_NAME),
+            new MessageUpdate(", are you ready to start your epic adventure? Well, off you go! I'll be seeing you soon!").withUpdate(Update.APPEND_TO_NAME)
+    };
+    
     private State state;
     
     private int dialogueIndex;
@@ -97,7 +97,6 @@ class StartView extends View {
                 message = null;
             }
         }
-        
     }
     
     @Override

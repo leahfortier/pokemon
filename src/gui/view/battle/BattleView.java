@@ -269,14 +269,12 @@ public class BattleView extends View {
             
             if (newMessage.getMessage().isEmpty()) {
                 cycleMessage(updated);
-            }
-            else {
+            } else {
                 message = newMessage.getMessage();
                 setVisualState(VisualState.MESSAGE);
                 cycleMessage(true);
             }
-        }
-        else if (!updated) {
+        } else if (!updated) {
             message = null;
         }
     }
@@ -304,12 +302,10 @@ public class BattleView extends View {
         if (playerAnimation.isEmpty()) {
             if (enemyAnimation.isEmpty()) {
                 g.setClip(0, 440, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
-            }
-            else {
+            } else {
                 g.setClip(0, 0, Global.GAME_SIZE.width, 250);
             }
-        }
-        else if (enemyAnimation.isEmpty()) {
+        } else if (enemyAnimation.isEmpty()) {
             g.setClip(0, 250, Global.GAME_SIZE.width, 440);
         }
         

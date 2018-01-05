@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class InterfaceMethod {
-
+    
     private enum InvokeType {
         VOID(input -> new VoidInvoke()),
         CONTAINS(input -> new ContainsInvoke()),
@@ -113,11 +113,12 @@ class InterfaceMethod {
     
     private static final Pattern HEADER_PATTERN = Pattern.compile(
             MatchType.VARIABLE_TYPE.group() + " " + // Group 1: return type
-            MatchType.WORD.group() +                // Group 2: method name
-            "\\((.*)\\)"                            // Group 3: method parameters
+                    MatchType.WORD.group() +        // Group 2: method name
+                    "\\((.*)\\)"                    // Group 3: method parameters
     );
-    private void readFields(ClassFields fields) {
     
+    private void readFields(ClassFields fields) {
+        
         final String header = fields.getAndRemoveTrimmed(HEADER);
         if (header != null) {
             Matcher matcher = HEADER_PATTERN.matcher(header);
@@ -134,14 +135,14 @@ class InterfaceMethod {
         if (returnType != null) {
             if (!StringUtils.isNullOrEmpty(this.returnType) || !StringUtils.isNullOrEmpty(this.methodName)) {
                 Global.error("Cannot set the return type manually if it has already be set via the header field. " +
-                        "Header Return Type: " + this.returnType + ", Header Method Name: " + this.methodName +
-                        "New Return Type: " + returnType + ", Interface Name: " + this.interfaceName);
+                                     "Header Return Type: " + this.returnType + ", Header Method Name: " + this.methodName +
+                                     "New Return Type: " + returnType + ", Interface Name: " + this.interfaceName);
             }
             
             final String methodName = fields.getAndRemoveTrimmed(METHOD_NAME);
             if (methodName == null) {
                 Global.error("Return type and method name must be specified together. " +
-                        "Return Type: " + returnType + ", Interface Name: " + this.interfaceName);
+                                     "Return Type: " + returnType + ", Interface Name: " + this.interfaceName);
             }
             
             this.returnType = returnType;
@@ -154,7 +155,7 @@ class InterfaceMethod {
         }
         
         final String invokeParameters = fields.getAndRemoveTrimmed(INVOKE_PARAMETERS);
-        if (invokeParameters != null){
+        if (invokeParameters != null) {
             this.additionalInvokeParameters = invokeParameters;
             this.setParameters(this.additionalInvokeParameters, false);
         }
@@ -184,9 +185,11 @@ class InterfaceMethod {
         // TODO: Clean all this shit up and put all the invoke declaration nonsense in a separate method
         final String effectListParameter = fields.getAndRemoveTrimmed(EFFECT_LIST);
         if (effectListParameter != null) {
-            this.invokeeDeclaration = String.format("List<Object> invokees = %s.getEffectsList(%s",
-                    this.battleParameter, effectListParameter);
-                    
+            this.invokeeDeclaration = String.format(
+                    "List<Object> invokees = %s.getEffectsList(%s",
+                    this.battleParameter, effectListParameter
+            );
+            
             final String effectPriority = fields.getAndRemoveTrimmed(EFFECT_PRIORITY);
             if (effectPriority != null) {
                 this.invokeeDeclaration += ", " + effectPriority;
@@ -204,10 +207,10 @@ class InterfaceMethod {
         if (statInvokeAttack != null) {
             setInvokeeDeclaration(
                     "// Only add the attack when checking a defensive stat -- this means the other pokemon is the one currently attacking\n" +
-                    "List<Object> invokees = " + this.battleParameter + ".getEffectsList(" + statInvokeAttack + ");\n" +
-                    "if (!s.user()) {\n" +
-                    "invokees.add(" + statInvokeAttack + ".getAttack());\n" +
-                    "}\n"
+                            "List<Object> invokees = " + this.battleParameter + ".getEffectsList(" + statInvokeAttack + ");\n" +
+                            "if (!s.user()) {\n" +
+                            "invokees.add(" + statInvokeAttack + ".getAttack());\n" +
+                            "}\n"
             );
         }
         
@@ -215,8 +218,8 @@ class InterfaceMethod {
         if (nonBattleInvokees != null) {
             setInvokeeDeclaration(
                     "List<Object> invokees = new ArrayList<>();\n" +
-                    "invokees.add(" + nonBattleInvokees + ".getAbility());\n" +
-                    "invokees.add(" + nonBattleInvokees + ".getActualHeldItem());\n"
+                            "invokees.add(" + nonBattleInvokees + ".getAbility());\n" +
+                            "invokees.add(" + nonBattleInvokees + ".getActualHeldItem());\n"
             );
         }
         
@@ -382,6 +385,6 @@ class InterfaceMethod {
     }
     
     Iterable<String> getDeadsies() {
-       return this.deadsies;
+        return this.deadsies;
     }
 }

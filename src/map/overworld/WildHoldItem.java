@@ -47,7 +47,7 @@ public class WildHoldItem implements Serializable {
     private final Chance chance;
     
     private WildHoldItem(int chance, ItemNamesies itemName) {
-        this.item = (HoldItem) itemName.getItem();
+        this.item = (HoldItem)itemName.getItem();
         this.chance = Chance.getChance(chance);
     }
     

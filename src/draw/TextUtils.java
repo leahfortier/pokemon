@@ -17,7 +17,7 @@ public final class TextUtils {
     }
     
     static int getTextWidth(final String text, final int fontSize) {
-        return text.length()* FontMetrics.getFontMetrics(fontSize).getHorizontalSpacing();
+        return text.length()*FontMetrics.getFontMetrics(fontSize).getHorizontalSpacing();
     }
     
     public static int drawWrappedText(Graphics g, String str, int x, int y, int width) {

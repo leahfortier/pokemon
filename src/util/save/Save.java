@@ -44,7 +44,7 @@ public final class Save {
     }
     
     public static Player load(int fileNum) {
-        Player loadedPlayer = (Player) SerializationUtils.deserializeFromFile(getSavePath(fileNum));
+        Player loadedPlayer = (Player)SerializationUtils.deserializeFromFile(getSavePath(fileNum));
         loadedPlayer.initialize();
         
         return loadedPlayer;
@@ -88,8 +88,7 @@ public final class Save {
             if (in.nextInt() == 1) {
                 SoundPlayer.soundPlayer.setMuted(true);
             }
-        }
-        else {
+        } else {
             // Set to basic if no settings are currently saved
             theme = Theme.BASIC;
             Save.saveSettings(theme);

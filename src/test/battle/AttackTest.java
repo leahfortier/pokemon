@@ -28,8 +28,10 @@ public class AttackTest extends BaseTest {
     public void testPhysicalContact() {
         for (AttackNamesies attackNamesies : AttackNamesies.values()) {
             Attack attack = attackNamesies.getAttack();
-            Assert.assertFalse("Status moves cannot have physical contact. Move: " + attack.getName(),
-                    attack.isStatusMove() && attack.isMoveType(MoveType.PHYSICAL_CONTACT));
+            Assert.assertFalse(
+                    "Status moves cannot have physical contact. Move: " + attack.getName(),
+                    attack.isStatusMove() && attack.isMoveType(MoveType.PHYSICAL_CONTACT)
+            );
         }
     }
     

@@ -228,6 +228,7 @@ public enum MedalTheme {
     );
     
     private static final Map<Medal, MedalTheme> MEDAL_THEME_MAP;
+    
     static {
         MEDAL_THEME_MAP = new EnumMap<>(Medal.class);
         for (MedalTheme medalTheme : MedalTheme.values()) {

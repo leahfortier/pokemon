@@ -15,7 +15,7 @@ public final class TileUtils {
     
     public static Point getLocation(Point drawLocation, Point mapLocation) {
         return new Point(
-                (drawLocation.x - mapLocation.x)/ Global.TILE_SIZE,
+                (drawLocation.x - mapLocation.x)/Global.TILE_SIZE,
                 (drawLocation.y - mapLocation.y)/Global.TILE_SIZE
         );
     }
@@ -46,7 +46,7 @@ public final class TileUtils {
         Point imageDrawLocation = Point.add(
                 drawLocation,
                 Global.TILE_SIZE - image.getWidth(),
-                Global.TILE_SIZE - 2 * image.getHeight() / 3
+                Global.TILE_SIZE - 2*image.getHeight()/3
         );
         
         g.drawImage(image, imageDrawLocation.x, imageDrawLocation.y, null);
@@ -124,7 +124,7 @@ public final class TileUtils {
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 14);
         
-        TextUtils.drawCenteredHeightString(g, text, Global.TILE_SIZE + 3, Global.TILE_SIZE / 2);
+        TextUtils.drawCenteredHeightString(g, text, Global.TILE_SIZE + 3, Global.TILE_SIZE/2);
         
         g.dispose();
         

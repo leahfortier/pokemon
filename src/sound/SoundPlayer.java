@@ -5,7 +5,7 @@ public class SoundPlayer {
     
     private boolean muted;
     private SoundTitle music;
-    private    MP3Player musicPlayer;
+    private MP3Player musicPlayer;
     private MP3Player soundEffectPlayer;
     
     public SoundPlayer() {
@@ -31,7 +31,7 @@ public class SoundPlayer {
     }
     
     public void playMusic(SoundTitle newMusic) {
-    
+
         // If we're trying to play the same song that's already playing don't do anything.
         if (music == newMusic) {
             return;
@@ -62,8 +62,7 @@ public class SoundPlayer {
         
         if (music.isMusic()) {
             musicPlayer = player;
-        }
-        else {
+        } else {
             soundEffectPlayer = player;
         }
     }
@@ -82,8 +81,7 @@ public class SoundPlayer {
     public void toggleMusic() {
         if (muted) {
             resumeMusic();
-        }
-        else {
+        } else {
             pauseMusic();
         }
         

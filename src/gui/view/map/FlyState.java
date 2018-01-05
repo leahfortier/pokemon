@@ -37,7 +37,7 @@ class FlyState implements VisualStateHandler {
         this.titlePanel = new DrawPanel(BUTTON_PADDING, BUTTON_PADDING, 350, 60)
                 .withBackgroundColor(null)
                 .withBlackOutline();
-                
+        
         // Arrows and area buttons
         this.buttons = new Button[NUM_AREA_BUTTONS + 2];
         
@@ -49,7 +49,12 @@ class FlyState implements VisualStateHandler {
                     400,
                     buttonHeight,
                     ButtonHoverAction.BOX,
-                    Button.getBasicTransitions(i, NUM_AREA_BUTTONS, 1, 0, new int[] { LEFT_BUTTON, LEFT_BUTTON, RIGHT_BUTTON, -1 })
+                    Button.getBasicTransitions(i, NUM_AREA_BUTTONS, 1, 0, new int[] {
+                            LEFT_BUTTON,
+                            LEFT_BUTTON,
+                            RIGHT_BUTTON,
+                            -1
+                    })
             );
         }
         
@@ -119,11 +124,9 @@ class FlyState implements VisualStateHandler {
                 
                 // Note: Changes view mode to map view
                 flyLocation.fly();
-            }
-            else if (selectedButton == LEFT_BUTTON) {
+            } else if (selectedButton == LEFT_BUTTON) {
                 pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages());
-            }
-            else if (selectedButton == RIGHT_BUTTON) {
+            } else if (selectedButton == RIGHT_BUTTON) {
                 pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages());
             }
             

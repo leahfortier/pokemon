@@ -109,8 +109,7 @@ public class MedalCase implements Serializable {
     public void useMove(AttackNamesies attack) {
         if (attack == AttackNamesies.SPLASH) {
             earnMedal(Medal.MAGIKARP_AWARD);
-        }
-        else if (attack == AttackNamesies.STRUGGLE) {
+        } else if (attack == AttackNamesies.STRUGGLE) {
             earnMedal(Medal.NEVER_GIVE_UP);
         }
     }
@@ -118,8 +117,7 @@ public class MedalCase implements Serializable {
     public void checkAdvantage(double advantage) {
         if (TypeAdvantage.isSuperEffective(advantage)) {
             this.increase(MedalTheme.SUPER_EFFECTIVE_MOVES_USED);
-        }
-        else if (TypeAdvantage.isNotVeryEffective(advantage)) {
+        } else if (TypeAdvantage.isNotVeryEffective(advantage)) {
             earnMedal(Medal.NONEFFECTIVE_ARTIST);
         }
     }

@@ -20,8 +20,7 @@ class MP3Player extends Thread {
         
         try {
             player = new Player(loadMP3File(mp3FileName));
-        }
-        catch (JavaLayerException exception) {
+        } catch (JavaLayerException exception) {
             Global.error("OMG MP3 FAIIILLLUURRREEEEE");
         }
     }
@@ -38,11 +37,10 @@ class MP3Player extends Thread {
                 if (this.loop) {
                     player = new Player(loadMP3File(mp3FileName));
                 }
-            }
-            catch (JavaLayerException e) {
+            } catch (JavaLayerException e) {
                 break;
             }
-        } while(this.loop);
+        } while (this.loop);
     }
     
     private BufferedInputStream loadMP3File(String fileName) {
@@ -52,8 +50,7 @@ class MP3Player extends Thread {
         try {
             FileInputStream fis = new FileInputStream(Folder.SOUND + fileName);
             mp3 = new BufferedInputStream(fis);
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             Global.error("Failed to load " + fileName + ":\n" + e);
         }
         

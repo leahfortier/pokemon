@@ -82,12 +82,12 @@ public class ItemEntity extends Entity {
         if (!data.hasTrigger(itemTriggerName)) {
             String itemDialogue =
                     "You found " +
-                    (isTM
-                        ? "the " + this.itemName.getName()
-                        : StringUtils.articleString(this.itemName.getName())
-                    ) +
-                    "!";
-                    
+                            (isTM
+                                    ? "the " + this.itemName.getName()
+                                    : StringUtils.articleString(this.itemName.getName())
+                            ) +
+                            "!";
+            
             Trigger dialogue = TriggerType.DIALOGUE.createTrigger(itemDialogue, null);
             Trigger giveItem = TriggerType.GIVE_ITEM.createTrigger(this.itemName.getName(), null);
             

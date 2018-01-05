@@ -101,7 +101,8 @@ public class Battle implements Serializable {
         int maxPokemonAllowed = opponent.maxPokemonAllowed();
         if (maxPokemonAllowed < Trainer.MAX_POKEMON) {
             boolean onlyOne = maxPokemonAllowed == 1;
-            Messages.add(String.format("%s %d %s %s allowed for this battle!!",
+            Messages.add(String.format(
+                    "%s %d %s %s allowed for this battle!!",
                     onlyOne ? "Only" : "At most",
                     maxPokemonAllowed,
                     PokeString.POKEMON,
@@ -111,13 +112,12 @@ public class Battle implements Serializable {
         
         this.player.enterBattle();
         if (this.opponent instanceof Trainer) {
-            Trainer opponentTrainer = (Trainer) this.opponent;
+            Trainer opponentTrainer = (Trainer)this.opponent;
             opponentTrainer.enterBattle();
             Messages.add(opponentTrainer.getName() + " wants to fight!");
             opponentTrainer.setAction(TrainerAction.FIGHT);
             enterBattle(this.opponent.front());
-        }
-        else {
+        } else {
             ActivePokemon wildPokemon = this.opponent.front();
             enterBattle(wildPokemon, "Wild " + wildPokemon.getName() + " appeared!");
         }
@@ -326,7 +326,7 @@ public class Battle implements Serializable {
         
         // The very, very end
         while (SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, player.front())
-                || SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, opponent.front()));
+                || SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, opponent.front())) {}
     }
     
     public boolean deadUser() {
@@ -394,8 +394,7 @@ public class Battle implements Serializable {
         String enterMessage = "";
         if (enterer.isPlayer()) {
             enterMessage = "Go! " + enterer.getName() + "!";
-        }
-        else if (opponent instanceof Trainer) {
+        } else if (opponent instanceof Trainer) {
             enterMessage = ((Trainer)opponent).getName() + " sent out " + enterer.getName() + "!";
         }
         
@@ -527,8 +526,7 @@ public class Battle implements Serializable {
             if (accuracyCheck(me, o)) {
                 executeAttack(me, o);
                 success = true;
-            }
-            else {
+            } else {
                 Messages.add(me.getName() + "'s attack missed!");
                 CrashDamageMove.invokeCrashDamageMove(this, me);
             }
@@ -570,8 +568,7 @@ public class Battle implements Serializable {
                 weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
                 Messages.add(new MessageUpdate().withWeather(weather));
             }
-        }
-        else {
+        } else {
             effects.add(effect);
         }
     }
@@ -661,7 +658,7 @@ public class Battle implements Serializable {
 //                stab,
 //                adv,
 //                damage);
-
+        
         return (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
     }
     
@@ -671,6 +668,7 @@ public class Battle implements Serializable {
     
     // Crit yo pants
     private static final int[] CRITSICLES = { 16, 8, 4, 3, 2 };
+    
     public boolean criticalHit(ActivePokemon me, ActivePokemon o) {
         if (CritBlockerEffect.checkBlocked(this, me, o)) {
             return false;
@@ -750,9 +748,9 @@ public class Battle implements Serializable {
     public int getPriority(ActivePokemon p, Attack attack) {
         int priority = attack.getPriority(this, p);
         priority += PriorityChangeEffect.getModifier(this, p, attack);
-        
-//        System.out.println(attack.getName() + " Priority: " + priority);
 
+//        System.out.println(attack.getName() + " Priority: " + priority);
+        
         return priority;
     }
     
@@ -768,7 +766,7 @@ public class Battle implements Serializable {
     
     // Returns true if the player will be attacking first, and false if the opponent will be
     private boolean speedPriority(ActivePokemon plyr, ActivePokemon opp) {
-    
+        
         // Higher priority always goes first
         int pPriority = getPriority(plyr);
         int oPriority = getPriority(opp);
@@ -799,11 +797,9 @@ public class Battle implements Serializable {
         
         if (pStall && oStall) {
             reverse = true;
-        }
-        else if (pStall) {
+        } else if (pStall) {
             return false;
-        }
-        else if (oStall) {
+        } else if (oStall) {
             return true;
         }
         

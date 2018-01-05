@@ -58,9 +58,9 @@ class EvolutionView extends View {
     
     EvolutionView() {
         this.canvasPanel = DrawPanel.fullGamePanel()
-                .withTransparentCount(2)
-                .withBorderPercentage(0);
-                
+                                    .withTransparentCount(2)
+                                    .withBorderPercentage(0);
+        
         this.statsPanel = new DrawPanel(0, 280, 273, 161).withBlackOutline();
     }
     
@@ -76,8 +76,7 @@ class EvolutionView extends View {
                 if (input.consumeIfMouseDown(ControlKey.SPACE)) {
                     messages.pop();
                 }
-            }
-            else {
+            } else {
                 state = State.EVOLVE;
             }
         }
@@ -100,11 +99,10 @@ class EvolutionView extends View {
                     
                     messages.add(new MessageUpdate(
                             "Your " + preEvolution.getName() + " evolved into " + StringUtils.articleString(postEvolution.getName()) + "!")
-                            .withStatGains(gains, stats));
+                                         .withStatGains(gains, stats));
                 }
                 
                 Game.getPlayer().pokemonEvolved(evolvingPokemon);
-                
             }
         }
         
@@ -123,8 +121,8 @@ class EvolutionView extends View {
                     while (Messages.peek().learnMove()) {
                         MessageUpdate message = Messages.getNextMessage();
                         messages.add(new MessageUpdate()
-                                .withUpdate(Update.LEARN_MOVE)
-                                .withLearnMove(evolvingPokemon, message.getMove())
+                                             .withUpdate(Update.LEARN_MOVE)
+                                             .withLearnMove(evolvingPokemon, message.getMove())
                         );
                     }
                     
@@ -141,8 +139,7 @@ class EvolutionView extends View {
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 Game.instance().popView();
             }
         }
@@ -172,8 +169,7 @@ class EvolutionView extends View {
         if (state == State.LEARN_MOVE) {
             // TODO: Why are we drawing this twice? Can this just be a state != LEARN_MOVE?
             this.learnMovePanel.draw(g);
-        }
-        else if (!messages.isEmpty()) {
+        } else if (!messages.isEmpty()) {
             MessageUpdate message = messages.peek();
             BasicPanels.drawFullMessagePanel(g, message.getMessage());
             if (message.gainUpdate()) {
@@ -244,8 +240,7 @@ class EvolutionView extends View {
         
         if (evolve == null) {
             isEgg = true;
-        }
-        else {
+        } else {
             isEgg = false;
             postEvolution = evolve.getEvolution();
         }
@@ -254,8 +249,7 @@ class EvolutionView extends View {
     private void setInitialMessage() {
         if (isEgg) {
             messages.add(new MessageUpdate("Your egg is hatching!"));
-        }
-        else {
+        } else {
             messages.add(new MessageUpdate("Your " + preEvolution.getName() + " is evolving!"));
         }
     }

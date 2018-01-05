@@ -59,9 +59,7 @@ public class Pokedex implements Serializable {
         this.setStatus(
                 pokemon.getPokemonInfo().namesies(),
                 PokedexStatus.SEEN,
-                isWildBattle
-                        ? Game.getPlayer().getAreaName()
-                        : StringUtils.empty()
+                isWildBattle ? Game.getPlayer().getAreaName() : StringUtils.empty()
         );
     }
     
@@ -77,19 +75,20 @@ public class Pokedex implements Serializable {
     
     // Num seen includes both caught and seen
     public int numSeen() {
-        return (int)pokedex.entrySet().stream()
-                .filter(pair -> !pair.getValue().isStatus(PokedexStatus.NOT_SEEN))
-                .count();
+        return (int)pokedex.entrySet()
+                           .stream()
+                           .filter(pair -> !pair.getValue().isStatus(PokedexStatus.NOT_SEEN))
+                           .count();
     }
     
     public int numCaught() {
-        return (int)pokedex.entrySet().stream()
-                .filter(pair -> pair.getValue().isStatus(PokedexStatus.CAUGHT))
-                .count();
+        return (int)pokedex.entrySet()
+                           .stream()
+                           .filter(pair -> pair.getValue().isStatus(PokedexStatus.CAUGHT))
+                           .count();
     }
     
     public List<String> getLocations(PokemonNamesies pokemon) {
         return pokedex.get(pokemon).getLocations();
     }
-    
 }

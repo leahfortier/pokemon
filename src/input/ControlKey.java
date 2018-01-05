@@ -41,9 +41,9 @@ public enum ControlKey {
     
     static List<Key> getKeys(Set<ControlKey> controlKeys, KeyEvent keyEvent) {
         return controlKeys.stream()
-                .map(ControlKey::getKey)
-                .filter(key -> key.isKey(keyEvent.getKeyCode()))
-                .collect(Collectors.toList());
+                          .map(ControlKey::getKey)
+                          .filter(key -> key.isKey(keyEvent.getKeyCode()))
+                          .collect(Collectors.toList());
     }
     
     static void resetAll() {

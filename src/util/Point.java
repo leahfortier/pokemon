@@ -27,7 +27,7 @@ public class Point implements Serializable {
             return false;
         }
         
-        Point point = (Point) other;
+        Point point = (Point)other;
         return this.x == point.x && this.y == point.y;
     }
     
@@ -133,8 +133,8 @@ public class Point implements Serializable {
     
     public static Point upperBound(Point point, Dimension dimension) {
         return new Point(
-                (int) Math.min(point.x, dimension.getWidth() - 1),
-                (int) Math.min(point.y, dimension.getHeight() - 1)
+                (int)Math.min(point.x, dimension.getWidth() - 1),
+                (int)Math.min(point.y, dimension.getHeight() - 1)
         );
     }
     

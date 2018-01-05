@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StuffGen {
-
+    
     public static void main(String[] args) {
         new StuffGen();
         
@@ -168,11 +168,12 @@ public class StuffGen {
             }
         }
         
-        List<PokemonInfo> baseEvolutions = set.stream()
+        List<PokemonInfo> baseEvolutions = set
+                .stream()
                 .map(PokemonNamesies::getInfo)
                 .sorted()
                 .collect(Collectors.toList());
-                
+        
         StringAppender out = new StringAppender();
         for (PokemonInfo info : baseEvolutions) {
             out.appendLine(info.getName());
@@ -193,11 +194,9 @@ public class StuffGen {
         for (char c : nonShubby.toCharArray()) {
             if (StringUtils.isLower(c)) {
                 shubs.append((char)(AL_BHED_PRIMER[c - 'a'] - 'A' + 'a'));
-            }
-            else if (StringUtils.isUpper(c)) {
+            } else if (StringUtils.isUpper(c)) {
                 shubs.append(AL_BHED_PRIMER[c - 'A']);
-            }
-            else {
+            } else {
                 shubs.append(c);
             }
         }

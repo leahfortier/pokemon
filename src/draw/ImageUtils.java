@@ -21,8 +21,7 @@ public final class ImageUtils {
         
         if (type[1] == Type.NO_TYPE) {
             g.drawImage(firstType, drawX, drawY, null);
-        }
-        else {
+        } else {
             BufferedImage secondType = type[1].getImage();
             int leftDrawX = drawX - firstType.getWidth() - 8;
             
@@ -40,7 +39,8 @@ public final class ImageUtils {
                 image,
                 x - image.getWidth()/2,
                 y - image.getHeight(),
-                null);
+                null
+        );
     }
     
     public static void drawCenteredHeightImage(Graphics g, BufferedImage image, int x, int centerY) {
@@ -79,7 +79,8 @@ public final class ImageUtils {
                 image,
                 x - image.getWidth()/2,
                 y - image.getHeight()/2,
-                null);
+                null
+        );
     }
     
     public static BufferedImage scaleImageByHeight(BufferedImage img, int maxHeight) {
@@ -95,8 +96,8 @@ public final class ImageUtils {
             return img;
         }
         
-        Image tmp = img.getScaledInstance((int) (img.getWidth()*scale), (int) (img.getHeight()*scale), BufferedImage.SCALE_SMOOTH);
-        BufferedImage buffer = new BufferedImage((int) (img.getWidth()*scale), (int) (img.getHeight()*scale), BufferedImage.TYPE_INT_ARGB);
+        Image tmp = img.getScaledInstance((int)(img.getWidth()*scale), (int)(img.getHeight()*scale), BufferedImage.SCALE_SMOOTH);
+        BufferedImage buffer = new BufferedImage((int)(img.getWidth()*scale), (int)(img.getHeight()*scale), BufferedImage.TYPE_INT_ARGB);
         
         buffer.getGraphics().drawImage(tmp, 0, 0, null);
         
@@ -105,6 +106,7 @@ public final class ImageUtils {
     
     private static final float[] SILHOUETTE_SCALE = new float[] { 0, 0, 0, 255 };
     private static final float[] SILHOUETTE_OFFSET = new float[] { 0, 0, 0, 0 };
+    
     public static BufferedImage silhouette(BufferedImage image) {
         return colorImage(image, SILHOUETTE_SCALE, SILHOUETTE_OFFSET);
     }
@@ -121,11 +123,11 @@ public final class ImageUtils {
         
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
-                int[] pixels = raster.getPixel(x, y, (int[]) null);
+                int[] pixels = raster.getPixel(x, y, (int[])null);
                 
                 for (int currComponent = 0; currComponent < pixels.length; ++currComponent) {
-                                    pixels[currComponent] = Math.round(pixels[currComponent] * scale[currComponent] + offset[currComponent]);
-                                    pixels[currComponent] = Math.min(Math.max(pixels[currComponent], 0), 255);
+                    pixels[currComponent] = Math.round(pixels[currComponent]*scale[currComponent] + offset[currComponent]);
+                    pixels[currComponent] = Math.min(Math.max(pixels[currComponent], 0), 255);
                 }
                 
                 if (pixels[3] == 0) {
@@ -145,7 +147,7 @@ public final class ImageUtils {
             BufferedImage first,
             BufferedImage second,
             Point drawLocation) {
-            
+        
         float[] firstScales = { 1f, 1f, 1f, 1f };
         float[] firstOffsets = { 255f, 255f, 255f, 0f };
         float[] secondScales = { 1f, 1f, 1f, 1f };
@@ -166,7 +168,7 @@ public final class ImageUtils {
         // Restore color
         else {
             firstScales[3] = 0;
-            secondOffsets[0] = secondOffsets[1] = secondOffsets[2] = 255*(animationValue)/(animationLifespan*(1-0.7f));
+            secondOffsets[0] = secondOffsets[1] = secondOffsets[2] = 255*(animationValue)/(animationLifespan*(1 - 0.7f));
         }
         
         animationValue -= Global.MS_BETWEEN_FRAMES;
@@ -189,7 +191,7 @@ public final class ImageUtils {
         int rightmost = 0;
         int bottommost = 0;
         
-        for (int i = 0; i < image.getWidth(); i++)  {
+        for (int i = 0; i < image.getWidth(); i++) {
             for (int j = 0; j < image.getHeight(); j++) {
                 if (image.getRGB(i, j) != empty) {
                     leftmost = Math.min(i, leftmost);

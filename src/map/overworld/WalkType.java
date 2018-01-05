@@ -63,8 +63,7 @@ public enum WalkType {
         if (direction == Direction.LEFT) {
             if (next == WalkType.STAIRS_UP_LEFT) {
                 return PathDirection.UP;
-            }
-            else if (next == WalkType.STAIRS_UP_RIGHT) {
+            } else if (next == WalkType.STAIRS_UP_RIGHT) {
                 return PathDirection.DOWN;
             }
         }
@@ -72,8 +71,7 @@ public enum WalkType {
         if (direction == Direction.RIGHT) {
             if (prev == WalkType.STAIRS_UP_LEFT) {
                 return PathDirection.DOWN;
-            }
-            else if (prev == WalkType.STAIRS_UP_RIGHT) {
+            } else if (prev == WalkType.STAIRS_UP_RIGHT) {
                 return PathDirection.UP;
             }
         }
@@ -82,7 +80,7 @@ public enum WalkType {
     }
     
     public static WalkType getWalkType(int value) {
-        value &= (1<<24) - 1;
+        value &= (1 << 24) - 1;
         if (valueMap.containsKey(value)) {
             return valueMap.get(value);
         }

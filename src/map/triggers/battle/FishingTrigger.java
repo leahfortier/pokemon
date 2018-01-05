@@ -36,7 +36,7 @@ public class FishingTrigger extends Trigger {
         int chance = front.hasAbility(AbilityNamesies.SUCTION_CUPS) || front.hasAbility(AbilityNamesies.STICKY_HOLD)
                 ? 75 // I made up this number since I couldn't find it
                 : 50;
-                
+        
         if (RandomUtils.chanceTest(chance)) {
             WildEncounter wildPokemon = WildEncounter.getWildEncounter(this.wildEncounters);
             String pokemonJson = SerializationUtils.getJson(wildPokemon);
@@ -53,8 +53,7 @@ public class FishingTrigger extends Trigger {
             Messages.add(new MessageUpdate().withTrigger(group.getName()));
             
             player.getMedalCase().increase(MedalTheme.FISH_REELED_IN);
-        }
-        else {
+        } else {
             Messages.add(new MessageUpdate().withTrigger(TriggerType.DIALOGUE.createTrigger("No dice.", null).getName()));
         }
     }

@@ -44,7 +44,7 @@ public class TriggerActionPanel extends ActionPanel {
     
     @Override
     public ActionMatcher getActionMatcher(ActionType actionType) {
-        TriggerActionType triggerType = (TriggerActionType) triggerTypeCombobBox.getSelectedItem();
+        TriggerActionType triggerType = (TriggerActionType)triggerTypeCombobBox.getSelectedItem();
         String triggerContents = this.map.get(triggerType).getTriggerContents();
         TriggerActionMatcher triggerActionMatcher = new TriggerActionMatcher(triggerType, triggerContents);
         
@@ -57,7 +57,7 @@ public class TriggerActionPanel extends ActionPanel {
     protected void renderDialog() {
         removeAll();
         
-        TriggerActionType selectedAction = (TriggerActionType) triggerTypeCombobBox.getSelectedItem();
+        TriggerActionType selectedAction = (TriggerActionType)triggerTypeCombobBox.getSelectedItem();
         GUIUtils.setVerticalLayout(this, topComponent, map.get(selectedAction));
         parentDialog.render();
     }

@@ -28,7 +28,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class PokemonState implements VisualStateHandler {
-
+    
     // Switch Button in Pokemon View Button Index
     private static final int POKEMON_SWITCH_BUTTON = Trainer.MAX_POKEMON;
     
@@ -56,23 +56,24 @@ public class PokemonState implements VisualStateHandler {
                 .withTransparentBackground()
                 .withBorderPercentage(0)
                 .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP)));
-                
+        
         int sidePanelWidth = 141;
         int spacing = (pokemonPanel.width - 2*sidePanelWidth)/3;
         
         basicInformationPanel = new DrawPanel(pokemonPanel.x + spacing, pokemonPanel.y + spacing, pokemonPanel.width - 2*spacing, 64)
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         int movesPanelHeight = 193;
         movesPanel = new DrawPanel(
                 pokemonPanel.rightX() - spacing - sidePanelWidth,
                 pokemonPanel.bottomY() - spacing - movesPanelHeight,
                 sidePanelWidth,
-                movesPanelHeight)
+                movesPanelHeight
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         fakeMoveButtons = movesPanel.getButtons(125, 40, Move.MAX_MOVES, 1);
         
         int switchButtonHeight = 36;
@@ -92,20 +93,22 @@ public class PokemonState implements VisualStateHandler {
                 basicInformationPanel.x,
                 basicInformationPanel.y + basicInformationPanel.height + statsPanelSpacing + barHeight,
                 sidePanelWidth,
-                statsPanelHeight)
+                statsPanelHeight
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         expBar = new DrawPanel(
                 basicInformationPanel.rightX() - sidePanelWidth,
                 basicInformationPanel.bottomY() - DrawUtils.OUTLINE_SIZE,
                 sidePanelWidth,
-                barHeight)
+                barHeight
+        )
                 .withBlackOutline();
-                
+        
         hpBar = new DrawPanel(statsPanel.x, statsPanel.y - barHeight + DrawUtils.OUTLINE_SIZE, statsPanel.width, barHeight)
                 .withBlackOutline();
-                
+        
         // Pokemon Switch View Buttons
         pokemonButtons = new Button[Trainer.MAX_POKEMON + 1];
         
@@ -118,7 +121,8 @@ public class PokemonState implements VisualStateHandler {
                             POKEMON_SWITCH_BUTTON, // Up
                             Button.basicTransition(i, 1, pokemonTabButtons.length, Direction.LEFT),
                             POKEMON_SWITCH_BUTTON // Down
-                    });
+                    }
+            );
         }
         
         pokemonButtons[POKEMON_SWITCH_BUTTON] = pokemonSwitchButton;
@@ -139,7 +143,7 @@ public class PokemonState implements VisualStateHandler {
         
         pokemonSwitchButton.setActive(view.isState(VisualState.USE_ITEM) || list.get(selectedPokemonTab).canFight());
         
-        for (Button button: pokemonButtons) {
+        for (Button button : pokemonButtons) {
             button.setForceHover(false);
         }
         
@@ -208,8 +212,7 @@ public class PokemonState implements VisualStateHandler {
             // Description
             FontMetrics.setFont(g, 14);
             TextUtils.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
-        }
-        else {
+        } else {
             // Status Condition
             String statusStr = selectedPkm.getStatus().getType().getName();
             g.drawString(statusStr, 179, 269);
@@ -222,8 +225,7 @@ public class PokemonState implements VisualStateHandler {
             Type[] type = selectedPkm.getActualType();
             if (type[1] == Type.NO_TYPE) {
                 g.drawImage(type[0].getImage(), 322, 255, null);
-            }
-            else {
+            } else {
                 g.drawImage(type[0].getImage(), 285, 255, null);
                 g.drawImage(type[1].getImage(), 322, 255, null);
             }
@@ -353,8 +355,7 @@ public class PokemonState implements VisualStateHandler {
                     view.cycleMessage(false);
                     switchForced = false;
                     VisualState.resetLastMoveUsed();
-                }
-                else {
+                } else {
                     view.cycleMessage(false);
                     view.setVisualState(VisualState.INVALID_POKEMON);
                 }

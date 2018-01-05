@@ -73,10 +73,11 @@ public class MapMakerTriggerData {
     
     void saveTriggers(String mapFileName) {
         // Collect and sort all the entities in a list
-        List<LocationTriggerMatcher> entityList = entities.stream()
+        List<LocationTriggerMatcher> entityList = entities
+                .stream()
                 .sorted(LocationTriggerMatcher.COMPARATOR)
                 .collect(Collectors.toList());
-                
+        
         Set<String> entityNames = new HashSet<>();
         entityList.forEach(matcher -> getUniqueEntityName(matcher, entityNames));
         
@@ -98,8 +99,10 @@ public class MapMakerTriggerData {
         
         // Loop until valid name is created
         do {
-            uniqueEntityName = String.format("%s_%s_%s_%02d",
-                    mapMaker.getCurrentMapName().getMapName(), typeName, basicEntityName, number++);
+            uniqueEntityName = String.format(
+                    "%s_%s_%s_%02d",
+                    mapMaker.getCurrentMapName().getMapName(), typeName, basicEntityName, number++
+            );
         } while (entityNames.contains(uniqueEntityName));
         
         System.out.println(uniqueEntityName);
@@ -136,7 +139,7 @@ public class MapMakerTriggerData {
                 BufferedImage image = null;
                 switch (triggerModelType) {
                     case NPC:
-                        NPCMatcher npc = (NPCMatcher) entity;
+                        NPCMatcher npc = (NPCMatcher)entity;
                         int imageIndex = MovableEntity.getTrainerSpriteIndex(npc.getSpriteIndex(), npc.getDirection());
                         image = mapMaker.getTileFromSet(TileType.TRAINER, imageIndex);
                         break;
@@ -148,14 +151,14 @@ public class MapMakerTriggerData {
                 
                 TileUtils.drawTileImage(g2d, image, point, mapLocation);
             } else if (entity instanceof MultiPointTriggerMatcher) {
-                List<Point> entityLocation = ((MultiPointTriggerMatcher) entity).getLocation();
+                List<Point> entityLocation = ((MultiPointTriggerMatcher)entity).getLocation();
                 for (Point point : entityLocation) {
                     BufferedImage image = triggerModelType.getImage(mapMaker);
                     TileUtils.drawTileImage(g2d, image, point, mapLocation);
                     
                     if (entity instanceof MapTransitionMatcher) {
                         BufferedImage exitImage = TriggerModel.getMapExitImage(mapMaker);
-                        PathDirection direction = ((MapTransitionMatcher) entity).getDirection();
+                        PathDirection direction = ((MapTransitionMatcher)entity).getDirection();
                         if (direction != null) {
                             Point newLocation = Point.add(point, direction.getDeltaPoint());
                             TileUtils.drawTileImage(g2d, exitImage, newLocation, mapLocation);
@@ -222,7 +225,7 @@ public class MapMakerTriggerData {
                 if (oldTrigger == null) {
                     return new FishingTriggerOptionsDialog(this.getFishingTriggers()).getMatcher(mapMaker);
                 } else {
-                    return new FishingTriggerEditDialog((FishingMatcher) oldTrigger, -1).getMatcher(mapMaker);
+                    return new FishingTriggerEditDialog((FishingMatcher)oldTrigger, -1).getMatcher(mapMaker);
                 }
             default:
                 Global.error("Unknown trigger model type " + triggerModelType);

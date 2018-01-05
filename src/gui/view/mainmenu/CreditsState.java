@@ -12,9 +12,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 class CreditsState implements VisualStateHandler {
-
+    
     private static final String creditsHoz = "TEAM ROCKET    TEAM ROCKET";
-    private static final String[] creditsText = { "",
+    private static final String[] creditsText = {
+            "",
             "Team Rocket", "",
             "Lead Programmers", "Leah Fortier", "Tyler Brazill", "Maxwell Miller", "",
             "Graphic Designers", "Josh Linge", "Jeb Ralston", "Jessica May", "",
@@ -51,8 +52,7 @@ class CreditsState implements VisualStateHandler {
             if (creditsText[i - 1].isEmpty()) {
                 FontMetrics.setFont(g, 40);
                 TextUtils.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
-            }
-            else {
+            } else {
                 FontMetrics.setFont(g, 30);
                 TextUtils.drawCenteredWidthString(g, creditsText[i], d.width/2, i*40 + d.height - creditsTime1/5);
             }

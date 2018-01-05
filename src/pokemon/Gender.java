@@ -57,7 +57,6 @@ public enum Gender implements Serializable {
     public static boolean oppositeGenders(ActivePokemon me, ActivePokemon o) {
         Gender gender = me.getGender();
         return gender != GENDERLESS && gender == o.getGender().getOppositeGender();
-        
     }
     
     public static String getGenderString(PokemonInfo pokemon) {

@@ -71,24 +71,28 @@ public class BerryView extends View {
         farmPanel = new DrawPanel(
                 spacing,
                 spacing + tabHeight,
-                Point.subtract(Global.GAME_SIZE,
+                Point.subtract(
+                        Global.GAME_SIZE,
                         2*spacing,
-                        2*spacing + tabHeight))
+                        2*spacing + tabHeight
+                )
+        )
                 .withTransparentBackground()
                 .withBorderPercentage(0)
                 .withBackgroundColor(BACKGROUND_COLOR)
                 .withBlackOutline();
-                
+        
         tabPanel = new DrawPanel(
                 farmPanel.x + 2*farmPanel.width/3,
                 farmPanel.y - tabHeight + DrawUtils.OUTLINE_SIZE,
                 farmPanel.width/6,
-                tabHeight)
+                tabHeight
+        )
                 .withBackgroundColor(BACKGROUND_COLOR)
                 .withTransparentBackground()
                 .withBorderPercentage(0)
                 .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.DOWN)));
-                
+        
         int buttonHeight = 38;
         int selectedHeight = 82;
         int halfPanelWidth = (farmPanel.width - 3*spacing)/2;
@@ -96,34 +100,38 @@ public class BerryView extends View {
                 farmPanel.x + spacing,
                 farmPanel.y + spacing,
                 halfPanelWidth,
-                farmPanel.height - 2*spacing)
+                farmPanel.height - 2*spacing
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         selectedPanel = new DrawPanel(
                 berryPanel.rightX() + spacing,
                 farmPanel.y + spacing,
                 halfPanelWidth,
-                selectedHeight)
+                selectedHeight
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         Button returnButton = Button.createExitButton(
                 selectedPanel.x,
                 farmPanel.bottomY() - spacing - buttonHeight,
                 halfPanelWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { -1, RIGHT_ARROW, -1, RIGHT_ARROW });
-                
+                new int[] { -1, RIGHT_ARROW, -1, RIGHT_ARROW }
+        );
+        
         itemsPanel = new DrawPanel(
                 selectedPanel.x,
                 selectedPanel.bottomY() + buttonHeight + spacing,
                 halfPanelWidth,
-                berryPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing)
+                berryPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         Button[] berryButtons = berryPanel.getButtons(10, NUM_ROWS, NUM_COLS);
         berryPanels = new DrawPanel[NUM_ROWS*NUM_COLS];
         for (int i = 0; i < berryPanels.length; i++) {
@@ -156,7 +164,7 @@ public class BerryView extends View {
         
         
         int arrowHeight = 20;
-        Button leftArrow  = new Button(
+        Button leftArrow = new Button(
                 itemsPanel.x + itemsPanel.width/4,
                 itemButtons[itemButtons.length - 1].centerY() + (itemButtons[2].y - itemButtons[0].y) - arrowHeight/2,
                 35,
@@ -299,14 +307,14 @@ public class BerryView extends View {
                         g,
                         itemTiles.getTile(berry.getBerry().getImageName()),
                         panel.centerX(),
-                        panel.y + panel.height / 3
+                        panel.y + panel.height/3
                 );
                 
                 TextUtils.drawCenteredString(
                         g,
                         berry.getTimeLeftString(),
                         panel.centerX(),
-                        panel.y + 3* panel.height/4
+                        panel.y + 3*panel.height/4
                 );
             }
         }
@@ -328,8 +336,7 @@ public class BerryView extends View {
         
         if (!StringUtils.isNullOrWhiteSpace(message)) {
             BasicPanels.drawFullMessagePanel(g, message);
-        }
-        else {
+        } else {
             for (Button button : buttons) {
                 button.draw(g);
             }

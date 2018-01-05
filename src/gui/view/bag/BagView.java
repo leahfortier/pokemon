@@ -90,13 +90,16 @@ public class BagView extends View {
         bagPanel = new DrawPanel(
                 spacing,
                 spacing + tabHeight,
-                Point.subtract(Global.GAME_SIZE,
+                Point.subtract(
+                        Global.GAME_SIZE,
                         2*spacing,
-                        2*spacing + tabHeight))
+                        2*spacing + tabHeight
+                )
+        )
                 .withTransparentBackground()
                 .withBorderPercentage(0)
                 .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP)));
-                
+        
         int buttonHeight = 38;
         int selectedHeight = 82;
         int halfPanelWidth = (bagPanel.width - 3*spacing)/2;
@@ -105,18 +108,20 @@ public class BagView extends View {
                 bagPanel.x + spacing,
                 bagPanel.y + spacing,
                 halfPanelWidth,
-                bagPanel.height - 2*spacing)
+                bagPanel.height - 2*spacing
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         selectedPanel = new DrawPanel(
                 pokemonPanel.rightX() + spacing,
                 bagPanel.y + spacing,
                 halfPanelWidth,
-                selectedHeight)
+                selectedHeight
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         Button returnButton = new Button(
                 selectedPanel.x,
                 bagPanel.bottomY() - spacing - buttonHeight,
@@ -131,10 +136,11 @@ public class BagView extends View {
                 selectedPanel.x,
                 selectedPanel.bottomY() + buttonHeight + spacing,
                 halfPanelWidth,
-                pokemonPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing)
+                pokemonPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         selectedTab = CATEGORIES[0];
         selectedButton = 0;
         selectedItem = ItemNamesies.NO_ITEM;
@@ -151,11 +157,12 @@ public class BagView extends View {
                     tabButtons.length,
                     new int[] {
                             Button.basicTransition(i, 1, CATEGORIES.length, Direction.RIGHT),
-                             RETURN, // Up
+                            RETURN, // Up
                             Button.basicTransition(i, 1, CATEGORIES.length, Direction.LEFT),
-                             USE // Down
+                            USE // Down
                     },
-                    () -> changeCategory(index));
+                    () -> changeCategory(index)
+            );
         }
         
         partyButtons = pokemonPanel.getButtons(
@@ -219,7 +226,7 @@ public class BagView extends View {
         }
         
         int arrowHeight = 20;
-        Button leftArrow  = new Button(
+        Button leftArrow = new Button(
                 itemsPanel.x + itemsPanel.width/4,
                 itemButtons[itemButtons.length - 1].centerY() + (itemButtons[2].y - itemButtons[0].y) - arrowHeight/2,
                 35,
@@ -260,8 +267,7 @@ public class BagView extends View {
             if (learnMovePanel.isFinished()) {
                 learnMovePanel = null;
             }
-        }
-        else {
+        } else {
             if (message != null && input.consumeIfMouseDown(ControlKey.SPACE)) {
                 message = null;
             }
@@ -314,7 +320,7 @@ public class BagView extends View {
         // Info Boxes
         bagPanel.withBackgroundColor(selectedTab.getColor())
                 .drawBackground(g);
-                
+        
         // Draw Use State buttons
         for (UseState useState : UseState.values()) {
             useState.draw(g, buttons[useState.buttonIndex]);
@@ -456,17 +462,14 @@ public class BagView extends View {
                         final String message;
                         if (p.hasActualMove(tm)) {
                             message = "Learned.";
-                        }
-                        else if (p.getPokemonInfo().canLearnMove(tm)) {
+                        } else if (p.getPokemonInfo().canLearnMove(tm)) {
                             message = "Able!";
-                        }
-                        else {
+                        } else {
                             message = "Unable...";
                         }
                         
                         pokemonPanel.drawRightLabel(g, 18, message);
-                    }
-                    else {
+                    } else {
                         // Level
                         g.drawString("Lv" + p.getLevel(), 153, 22);
                         
@@ -520,11 +523,9 @@ public class BagView extends View {
         
         if (learnMovePanel != null) {
             learnMovePanel.draw(g);
-        }
-        else if (message != null && !StringUtils.isNullOrWhiteSpace(message.getMessage())) {
+        } else if (message != null && !StringUtils.isNullOrWhiteSpace(message.getMessage())) {
             BasicPanels.drawFullMessagePanel(g, message.getMessage());
-        }
-        else {
+        } else {
             for (Button button : buttons) {
                 button.draw(g);
             }

@@ -9,7 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 class RainyState implements WeatherDrawer {
-
+    
     private int[] rainHeight;
     private int lightningFrame;
     
@@ -22,7 +22,7 @@ class RainyState implements WeatherDrawer {
     public void draw(Graphics g) {
         DrawUtils.fillCanvas(g, new Color(0, 0, 0, 64));
         
-        g.setColor(new Color(50,50,255, 128));
+        g.setColor(new Color(50, 50, 255, 128));
         
         for (int i = 0; i < rainHeight.length; i++) {
             if (rainHeight[i] != 0) {
@@ -37,7 +37,7 @@ class RainyState implements WeatherDrawer {
         
         for (int i = 0; i < 50; i++) {
             int x = RandomUtils.getRandomInt(rainHeight.length);
-            if (rainHeight[x] == 0){
+            if (rainHeight[x] == 0) {
                 rainHeight[x] = 1 + RandomUtils.getRandomInt(40);
             }
         }

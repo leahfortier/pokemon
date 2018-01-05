@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 class MethodInfo {
-
+    
     private String header;
     private AccessModifier accessModifier;
     
@@ -114,8 +114,7 @@ class MethodInfo {
         
         if (this.body.isEmpty()) {
             this.fullBody = fieldValue;
-        }
-        else {
+        } else {
             this.fullBody = this.body;
         }
         
@@ -130,9 +129,9 @@ class MethodInfo {
         
         StringAppender method = new StringAppender();
         method.append("\t\t\n\t\t")
-                .appendPostDelimiter(" ", this.accessModifier.getModifierName())
-                .appendLine(this.header.trim() + " {");
-                
+              .appendPostDelimiter(" ", this.accessModifier.getModifierName())
+              .appendLine(this.header.trim() + " {");
+        
         MethodFormatter formatter = new MethodFormatter(3);
         
         Scanner in = new Scanner(body);
@@ -186,21 +185,18 @@ class MethodInfo {
                 String mapField = fields.get(fieldKey);
                 if (mapField == null) {
                     mapField = addFieldValue;
-                }
-                else if (fieldKey.equals("MoveType")) {
+                } else if (fieldKey.equals("MoveType")) {
                     mapField += ", " + addFieldValue;
-                }
-                else if (fieldKey.equals("Applies")) {
+                } else if (fieldKey.equals("Applies")) {
                     mapField += " && " + addFieldValue;
-                }
-                else if (fieldKey.equals("Field") || fieldKey.equals("UniqueEffects")) {
+                } else if (fieldKey.equals("Field") || fieldKey.equals("UniqueEffects")) {
                     mapField += addFieldValue;
                 }
 //                else {
 //                    // Leave the map field as is -- including in the original fields overrides the override file
 //                    System.out.println("Map Field (ClassName = " + className + "): " + mapField);
 //                }
-
+                
                 fields.add(fieldKey, mapField);
             }
             

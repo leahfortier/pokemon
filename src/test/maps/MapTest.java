@@ -28,7 +28,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapTest extends BaseTest{
+public class MapTest extends BaseTest {
     private static List<TestMap> maps;
     
     @BeforeClass
@@ -85,7 +85,8 @@ public class MapTest extends BaseTest{
                     if (walkType != WalkType.NOT_WALKABLE) {
                         Assert.assertFalse(
                                 map.getName() + " " + x + " " + y,
-                                map.getArea(new Point(x, y)) == AreaData.VOID);
+                                map.getArea(new Point(x, y)) == AreaData.VOID
+                        );
                     }
                 }
             }
@@ -106,7 +107,8 @@ public class MapTest extends BaseTest{
                     
                     Assert.assertTrue(
                             map.getName().getMapName() + " " + totalProbability,
-                            totalProbability == 100);
+                            totalProbability == 100
+                    );
                 }
             }
             

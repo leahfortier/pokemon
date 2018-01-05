@@ -88,8 +88,7 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
         PokemonMatcher matcher;
         if (isEggCheckBox.isSelected()) {
             matcher = PokemonMatcher.createEggMatcher(PokemonNamesies.getValueOf(pokemonNameField.getText()));
-        }
-        else {
+        } else {
             matcher = new PokemonMatcher(
                     PokemonNamesies.getValueOf(pokemonNameField.getText()),
                     null,

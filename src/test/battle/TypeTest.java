@@ -46,7 +46,7 @@ public class TypeTest extends BaseTest {
                 
                 Assert.assertTrue(
                         StringUtils.spaceSeparated(attacking, defending, chartAdv, classAdv),
-                        chartAdv  == classAdv
+                        chartAdv == classAdv
                 );
             }
         }
@@ -182,7 +182,7 @@ public class TypeTest extends BaseTest {
                 PokemonNamesies.MARILL,
                 PokemonNamesies.CHARIZARD,
                 PokemonNamesies.VICTINI,
-                PokemonNamesies.CARBINK,
+                PokemonNamesies.CARBINK
         };
         
         PokemonNamesies[] superNotVeryEffective = {

@@ -7,7 +7,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public final class PolygonUtils {
-
+    
     public static void drawCenteredArrow(Graphics g, int centerX, int centerY, int width, int height, Direction direction) {
         drawArrow(g, centerX - width/2, centerY - height/2, width, height, direction);
     }
@@ -30,7 +30,7 @@ public final class PolygonUtils {
         g.translate(x, y);
         
         int[] xValues = new int[] { 0, arrowMidpoint, arrowMidpoint, xMax, xMax, arrowMidpoint, arrowMidpoint };
-        int[] yValues = new int[] { yMax/2, 0, arrowLineTop, arrowLineTop, arrowLineBottom, arrowLineBottom, yMax};
+        int[] yValues = new int[] { yMax/2, 0, arrowLineTop, arrowLineTop, arrowLineBottom, arrowLineBottom, yMax };
         
         if (yAxis) {
             GeneralUtils.swapArrays(xValues, yValues);
@@ -87,7 +87,7 @@ public final class PolygonUtils {
         
         // (width, 0) -> (large, 0) -> (small, height) -> (width, height)
         int[] rightXValues = new int[] { largeDimension, largeLength, smallLength, largeDimension };
-        int[] rightYValues = new int[] { 0, 0, smallDimension, smallDimension};
+        int[] rightYValues = new int[] { 0, 0, smallDimension, smallDimension };
         
         if (width < height || swapDimensions) {
             GeneralUtils.swapArrays(rightXValues, rightYValues);

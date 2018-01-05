@@ -16,10 +16,15 @@ public abstract class Tool {
     
     // Can be overridden as necessary by subclasses
     public void click(Point clickLocation) {}
+
     public void released(Point releasedLocation) {}
+
     public void pressed(Point pressedLocation) {}
+
     public void drag(Point dragLocation) {}
+
     public void draw(Graphics g) {}
+
     public void reset() {}
     
     public static void undoLastTool() {

@@ -39,20 +39,15 @@ class MapState implements VisualStateHandler {
             final Color finderColor;
             if (minDistance == 0) {
                 finderColor = new Color(255, 113, 166);
-            }
-            else if (minDistance == 1) {
+            } else if (minDistance == 1) {
                 finderColor = new Color(250, 81, 37);
-            }
-            else if (minDistance <= 3) {
+            } else if (minDistance <= 3) {
                 finderColor = new Color(255, 199, 8);
-            }
-            else if (minDistance <= 5) {
+            } else if (minDistance <= 5) {
                 finderColor = new Color(123, 213, 74);
-            }
-            else if (minDistance <= 10){
+            } else if (minDistance <= 10) {
                 finderColor = new Color(48, 158, 255);
-            }
-            else {
+            } else {
                 finderColor = Color.WHITE;
             }
             
@@ -69,20 +64,15 @@ class MapState implements VisualStateHandler {
         
         if (input.consumeIfDown(ControlKey.ESC)) {
             mapView.setState(VisualState.MENU);
-        }
-        else if (input.consumeIfDown(ControlKey.FLY) && player.hasTool(OverworldTool.FLY)) {
+        } else if (input.consumeIfDown(ControlKey.FLY) && player.hasTool(OverworldTool.FLY)) {
             mapView.setState(VisualState.FLY);
-        }
-        else if (input.consumeIfDown(ControlKey.POKEFINDER) && player.hasTool(OverworldTool.POKEFINDER)) {
+        } else if (input.consumeIfDown(ControlKey.POKEFINDER) && player.hasTool(OverworldTool.POKEFINDER)) {
             mapView.setState(VisualState.POKE_FINDER);
-        }
-        else if (input.consumeIfDown(ControlKey.BIKE)) {
+        } else if (input.consumeIfDown(ControlKey.BIKE)) {
             player.toggleBicycle();
-        }
-        else if (input.consumeIfDown(ControlKey.ITEM_FINDER) && player.hasTool(OverworldTool.ITEM_FINDER)) {
+        } else if (input.consumeIfDown(ControlKey.ITEM_FINDER) && player.hasTool(OverworldTool.ITEM_FINDER)) {
             showItemFinder = !showItemFinder;
-        }
-        else if (input.consumeIfDown(ControlKey.MEDAL_CASE)) {
+        } else if (input.consumeIfDown(ControlKey.MEDAL_CASE)) {
             mapView.setState(VisualState.MEDAL_CASE);
         }
     }

@@ -44,13 +44,11 @@ public enum SoundTitle {
         this.isMusic = isMusic;
     }
     
-    public String getSoundTitle()
-    {
+    public String getSoundTitle() {
         return this.soundTitle;
     }
     
-    public boolean isMusic()
-    {
+    public boolean isMusic() {
         return isMusic;
     }
 }

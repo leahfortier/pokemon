@@ -71,23 +71,20 @@ public class BreedingTest extends BaseTest {
         ActivePokemon baby = getBaby(mommy, daddy);
         
         // Mommy and daddy Rapidash -> baby Ponyta
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby),
-                baby.isPokemon(PokemonNamesies.PONYTA));
-                
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.PONYTA));
+        
         mommy = getParent(PokemonNamesies.NINETALES, Gender.FEMALE);
         baby = getBaby(mommy, daddy);
         
         // Mommy Ninetales and daddy Rapidash -> baby Vulpix
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby),
-                baby.isPokemon(PokemonNamesies.VULPIX));
-                
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.VULPIX));
+        
         mommy = getParent(PokemonNamesies.MANAPHY, Gender.GENDERLESS);
         daddy = getParent(PokemonNamesies.DITTO, Gender.GENDERLESS);
         baby = getBaby(mommy, daddy);
         
         // Manaphy + Ditto -> Phione
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby),
-                baby.isPokemon(PokemonNamesies.PHIONE));
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.PHIONE));
     }
     
     // TODO: Add more cases
@@ -95,12 +92,14 @@ public class BreedingTest extends BaseTest {
     public void testEggMoves() {
         ActivePokemon mommy = getParentWithMoves(PokemonNamesies.RAPIDASH, Gender.FEMALE, AttackNamesies.MORNING_SUN);
         ActivePokemon daddy = getParentWithMoves(PokemonNamesies.NINETALES, Gender.MALE,
-                AttackNamesies.HYPNOSIS,
-                AttackNamesies.SOLAR_BEAM,
-                AttackNamesies.FLAMETHROWER);
+                                                 AttackNamesies.HYPNOSIS,
+                                                 AttackNamesies.SOLAR_BEAM,
+                                                 AttackNamesies.FLAMETHROWER
+        );
         ActivePokemon baby = getBaby(mommy, daddy);
         
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby),
+        Assert.assertTrue(
+                getFailMessage(mommy, daddy, baby),
                 baby.hasActualMove(AttackNamesies.MORNING_SUN) &&
                         baby.hasActualMove(AttackNamesies.HYPNOSIS) &&
                         baby.hasActualMove(AttackNamesies.SOLAR_BEAM) &&
@@ -115,30 +114,26 @@ public class BreedingTest extends BaseTest {
         ActivePokemon baby = getBaby(mommy, daddy);
         
         // Wobby mom with incense + daddy wobby = wynaut baby
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby),
-                baby.isPokemon(PokemonNamesies.WYNAUT));
-                
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.WYNAUT));
+        
         mommy.removeItem();
         baby = getBaby(mommy, daddy);
         
         // Without holding the incense should be a wobby baby
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby),
-                baby.isPokemon(PokemonNamesies.WOBBUFFET));
-                
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.WOBBUFFET));
+        
         mommy.giveItem(ItemNamesies.SEA_INCENSE);
         daddy.giveItem(ItemNamesies.ROSE_INCENSE);
         baby = getBaby(mommy, daddy);
         
         // Holding incorrect incense should be a wobby baby
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby),
-                baby.isPokemon(PokemonNamesies.WOBBUFFET));
-                
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.WOBBUFFET));
+        
         mommy = getParentWithItem(PokemonNamesies.DITTO, Gender.GENDERLESS, ItemNamesies.LAX_INCENSE);
         baby = getBaby(mommy, daddy);
         
         // Ditto mom with incense + daddy wobby = wynaut baby
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby),
-                baby.isPokemon(PokemonNamesies.WYNAUT));
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.WYNAUT));
     }
     
     @Test
@@ -147,8 +142,7 @@ public class BreedingTest extends BaseTest {
         final ActivePokemon daddy = getParentWithItem(PokemonNamesies.RAPIDASH, Gender.MALE, ItemNamesies.EVERSTONE);
         final ActivePokemon baby = getBaby(mommy, daddy);
         
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby),
-                baby.getNature().equals(daddy.getNature()));
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.getNature().equals(daddy.getNature()));
     }
     
     @Test
@@ -226,8 +220,7 @@ public class BreedingTest extends BaseTest {
                     numMatches++;
                     hasMommy = true;
                     matchType = MatchType.MOMMY;
-                }
-                else if (babyIVs[j] == daddyIVs[j]) {
+                } else if (babyIVs[j] == daddyIVs[j]) {
                     numMatches++;
                     hasDaddy = true;
                     matchType = MatchType.DADDY;
@@ -242,11 +235,12 @@ public class BreedingTest extends BaseTest {
                 hasExactInheritance = true;
             }
             
-            Assert.assertTrue(getFailMessage("Num stats to inherit: " + numStatsToInherit, mommy, daddy, baby),
-                    numMatches >= numStatsToInherit);
-                    
-            Assert.assertTrue(getFailMessage(mommy, daddy, baby),
-                    rules.assertTrueCondition(mommy, daddy, baby));
+            Assert.assertTrue(
+                    getFailMessage("Num stats to inherit: " + numStatsToInherit, mommy, daddy, baby),
+                    numMatches >= numStatsToInherit
+            );
+            
+            Assert.assertTrue(getFailMessage(mommy, daddy, baby), rules.assertTrueCondition(mommy, daddy, baby));
         }
         
         Assert.assertTrue("Does not have exactly " + numStatsToInherit + " IV matches.", hasExactInheritance);
@@ -268,11 +262,10 @@ public class BreedingTest extends BaseTest {
             for (int i = 0; i < hasParent.length; i++) {
                 for (int j = 0; j < hasParent[i].length; j++) {
                     final MatchType matchType = MatchType.values()[i];
-                    final String failMessage =
-                            matchType.frequency +
-                                    " inherits " + matchType.source +
-                                    " for stat " + Stat.getStat(j, false);
-                                    
+                    final String failMessage = matchType.frequency +
+                            " inherits " + matchType.source +
+                            " for stat " + Stat.getStat(j, false);
+                    
                     Assert.assertTrue(failMessage, hasParent[i][j]);
                 }
             }
@@ -294,8 +287,8 @@ public class BreedingTest extends BaseTest {
         ActivePokemon parent = getParent(pokemon, gender);
         parent.setMoves(
                 Arrays.stream(moves)
-                .map(move -> new Move(move.getAttack()))
-                .collect(Collectors.toList())
+                      .map(move -> new Move(move.getAttack()))
+                      .collect(Collectors.toList())
         );
         
         return parent;
@@ -312,17 +305,21 @@ public class BreedingTest extends BaseTest {
         }
         
         final List<Move> babyMoves = baby.getActualMoves();
-        Assert.assertFalse(getFailMessage("Invalid move list size " + babyMoves.size(), mommy, daddy, baby),
-                babyMoves.isEmpty() || babyMoves.size() > Move.MAX_MOVES);
-                
+        Assert.assertFalse(
+                getFailMessage("Invalid move list size " + babyMoves.size(), mommy, daddy, baby),
+                babyMoves.isEmpty() || babyMoves.size() > Move.MAX_MOVES
+        );
+        
         for (Move move : babyMoves) {
             final PokemonInfo babyInfo = baby.getPokemonInfo();
             final AttackNamesies namesies = move.getAttack().namesies();
             
             if (!babyInfo.canLearnByBreeding(namesies)) {
                 Integer levelLearned = babyInfo.levelLearned(namesies);
-                Assert.assertTrue(getFailMessage("Baby should not be able to learn the move " + namesies.getName(), mommy, daddy, baby),
-                        levelLearned != null && levelLearned <= baby.getLevel());
+                Assert.assertTrue(
+                        getFailMessage("Baby should not be able to learn the move " + namesies.getName(), mommy, daddy, baby),
+                        levelLearned != null && levelLearned <= baby.getLevel()
+                );
             }
         }
         
@@ -350,16 +347,17 @@ public class BreedingTest extends BaseTest {
             return "null";
         }
         
-        return String.format("%s %s IVs: %s Item: %s Nature: %s Moves: %s",
+        return String.format(
+                "%s %s IVs: %s Item: %s Nature: %s Moves: %s",
                 isBaby ? "Baby" : StringUtils.properCase(activePokemon.getGender().name().toLowerCase()),
                 activePokemon.getName(),
                 Arrays.toString(activePokemon.getIVs()),
                 activePokemon.getActualHeldItem().getName(),
                 activePokemon.getNature().getName(),
-                activePokemon.getActualMoves().stream()
-                        .map(move -> move.getAttack().getName())
-                        .collect(Collectors.joining(", ")
-                )
+                activePokemon.getActualMoves()
+                             .stream()
+                             .map(move -> move.getAttack().getName())
+                             .collect(Collectors.joining(", "))
         );
     }
     

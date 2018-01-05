@@ -89,7 +89,7 @@ public class GameFrame {
             Game.instance();
             loadAllTheThings();
             
-            Timer fpsTimer = new Timer((int) Global.MS_BETWEEN_FRAMES, new ActionListener() {
+            Timer fpsTimer = new Timer((int)Global.MS_BETWEEN_FRAMES, new ActionListener() {
                 private int frameCount = 0;
                 private long fpsTime = 0;
                 private long prevTime = TimeUtils.getCurrentTimestamp();
@@ -105,12 +105,11 @@ public class GameFrame {
                         fpsTime %= 1000;
                         frame.setTitle(PokeString.POKEMON + "++          FPS:" + frameCount);
                         frameCount = 1;
-                    }
-                    else {
+                    } else {
                         frameCount++;
                     }
                     
-                    drawFrame((int) dt);
+                    drawFrame((int)dt);
                 }
             });
             

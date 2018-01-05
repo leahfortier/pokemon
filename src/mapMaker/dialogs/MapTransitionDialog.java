@@ -32,9 +32,9 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
         MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapFileName);
         
         return mapDataMatcher.getMapTransitions()
-                .stream()
-                .map(MapTransitionMatcher::getExitName)
-                .collect(Collectors.toSet());
+                             .stream()
+                             .map(MapTransitionMatcher::getExitName)
+                             .collect(Collectors.toSet());
     }
     
     public MapTransitionDialog(MapTransitionMatcher mapTransitionMatcher, MapMaker givenMapMaker) {
@@ -68,7 +68,7 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
                     
                     // Fill entranceComboBox with available entrances.
                     if (entranceComboBox.isEnabled()) {
-                        MapName destinationMap = (MapName) destinationComboBox.getSelectedItem();
+                        MapName destinationMap = (MapName)destinationComboBox.getSelectedItem();
                         getMapEntrancesForMap(givenMapMaker, destinationMap)
                                 .forEach(entranceComboBox::addItem);
                     }

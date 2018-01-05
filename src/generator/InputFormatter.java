@@ -16,7 +16,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class InputFormatter {
-
+    
     protected void validate(ClassFields fields) {}
     
     protected String replaceBody(String body, String original, String remaining, int parameterIndex, int numParameters) {
@@ -107,8 +107,7 @@ public class InputFormatter {
                 final String enumValue;
                 if (enumType.endsWith("Namesies")) {
                     enumValue = StringUtils.getNamesiesString(fieldValue);
-                }
-                else {
+                } else {
                     enumValue = fieldValue.toUpperCase();
                 }
                 return enumType + "." + enumValue;
@@ -178,8 +177,7 @@ public class InputFormatter {
         
         if (value != null) {
             fieldValue = value;
-        }
-        else if (StringUtils.isNullOrEmpty(fieldValue)) {
+        } else if (StringUtils.isNullOrEmpty(fieldValue)) {
             Global.error("Missing required constructor field " + key + " for " + fields.getClassName());
         }
         

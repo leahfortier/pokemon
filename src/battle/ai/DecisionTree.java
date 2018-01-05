@@ -64,7 +64,7 @@ public class DecisionTree {
         if (playerPoke.isFainted(b)) {
             points += 1000;
         } else {
-            points += 2 * (playerStartHealth - playerPoke.getHP());
+            points += 2*(playerStartHealth - playerPoke.getHP());
         }
         
         if (opponentPoke.isFainted(b)) {
@@ -77,7 +77,7 @@ public class DecisionTree {
     }
     
     private void setupTrainer(Trainer trainer, Move move) {
-        ActivePokemon front = (ActivePokemon) SerializationUtils.getSerializedCopy(trainer.front());
+        ActivePokemon front = (ActivePokemon)SerializationUtils.getSerializedCopy(trainer.front());
         trainer.replaceFront(front);
         
         // Need to set these manually since this field has to be transient because ActivePokemon and BattleAttributes store each other
@@ -91,7 +91,7 @@ public class DecisionTree {
         // Mock the player object for serialization and set back afterwards
         PlayerTrainer playerTrainer = b.getPlayer();
         b.setPlayer(new SimulatedPlayer(b.getPlayer()));
-        Battle simulated = (Battle) SerializationUtils.getSerializedCopy(b);
+        Battle simulated = (Battle)SerializationUtils.getSerializedCopy(b);
         b.setPlayer(playerTrainer);
         
         setupTrainer(simulated.getPlayer(), playerMove);

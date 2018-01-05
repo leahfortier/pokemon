@@ -11,7 +11,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 class TrainerCardView extends View {
-
+    
     @Override
     public void update(int dt) {
         if (InputControl.instance().consumeIfDown(ControlKey.ESC)) {

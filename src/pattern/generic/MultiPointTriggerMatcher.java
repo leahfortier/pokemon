@@ -36,15 +36,15 @@ public abstract class MultiPointTriggerMatcher extends LocationTriggerMatcher {
     @Override
     public void addDelta(Point delta) {
         this.location = this.getLocation()
-                .stream()
-                .map(point -> Point.add(point, delta))
-                .collect(Collectors.toList());
+                            .stream()
+                            .map(point -> Point.add(point, delta))
+                            .collect(Collectors.toList());
     }
     
     @Override
     public void setLocation(LocationTriggerMatcher oldMatcher) {
         if (oldMatcher instanceof MultiPointTriggerMatcher) {
-            this.location = ((MultiPointTriggerMatcher) oldMatcher).getLocation();
+            this.location = ((MultiPointTriggerMatcher)oldMatcher).getLocation();
         } else {
             Global.error("Cannot convert single point matcher to multi point matcher.");
         }

@@ -51,9 +51,9 @@ public enum CastSource {
         
         Object source = this.sourceGetter.getSource(b, caster);
         if (source instanceof Item) {
-            return ((Item) source).getName();
+            return ((Item)source).getName();
         } else if (source instanceof Ability) {
-            return ((Ability) source).getName();
+            return ((Ability)source).getName();
         } else {
             return null;
         }

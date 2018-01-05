@@ -359,7 +359,7 @@ public class Button {
                 .withBorderPercentage(15)
                 .withBlackOutline()
                 .drawBackground(g);
-                
+        
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 22);
         g.drawString(move.getAttack().getName(), 10, 26);

@@ -3,7 +3,7 @@ package generator;
 import util.StringAppender;
 
 class MethodFormatter {
-
+    
     private int tabs;
     private int parenthesesBalance;
     private boolean inSwitch;
@@ -17,7 +17,7 @@ class MethodFormatter {
     }
     
     void appendLine(String line, StringAppender method) {
-    
+        
         if (line.startsWith("switch (")) {
             inSwitch = true;
         }

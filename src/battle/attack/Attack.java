@@ -131,7 +131,7 @@ public abstract class Attack implements Serializable {
     // Returns true if an attack has secondary effects -- this only applies to physical and special moves
     // Secondary effects include status conditions, confusing, flinching, and stat changes (unless the stat changes are negative for the user)
     public boolean hasSecondaryEffects() {
-    
+        
         // Effects are primary for status moves
         if (category == MoveCategory.STATUS) {
             return false;
@@ -214,7 +214,7 @@ public abstract class Attack implements Serializable {
     
     public boolean isMultiTurn(Battle b, ActivePokemon user) {
         if (this instanceof MultiTurnMove) {
-            MultiTurnMove multiTurnMove = (MultiTurnMove) this;
+            MultiTurnMove multiTurnMove = (MultiTurnMove)this;
             
             // The Power Herb item allows multi-turn moves that charge first to skip the charge turn -- BUT ONLY ONCE
             if (multiTurnMove.chargesFirst() && !multiTurnMove.semiInvulnerability() && user.isHoldingItem(b, ItemNamesies.POWER_HERB)) {
@@ -277,8 +277,11 @@ public abstract class Attack implements Serializable {
     }
     
     protected void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
+    
     protected void afterApplyCheck(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
+    
     protected void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {}
+    
     protected void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {}
     
     public final boolean apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -383,7 +386,7 @@ public abstract class Attack implements Serializable {
     
     // Physical and Special moves -- do dat damage!
     public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-    
+        
         // Deal damage
         int damage = b.calculateDamage(me, o);
         boolean critYoPants = b.criticalHit(me, o);

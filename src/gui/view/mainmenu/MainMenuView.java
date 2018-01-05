@@ -61,7 +61,8 @@ public class MainMenuView extends View {
                 BUTTON_WIDTH,
                 75,
                 ButtonHoverAction.BOX,
-                transitions);
+                transitions
+        );
     }
     
     void toggleTheme() {
@@ -161,8 +162,7 @@ public class MainMenuView extends View {
             TextUtils.drawRightAlignedString(g, "" + info.getPokemonSeen(), 383, 58);
             
             g.translate(-b.x, -b.y);
-        }
-        else {
+        } else {
             b.label(g, 30, emptyText);
         }
     }
@@ -177,5 +177,4 @@ public class MainMenuView extends View {
         setVisualState(VisualState.MAIN);
         saveInfo = Save.updateSaveData();
     }
-    
 }

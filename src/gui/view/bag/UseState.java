@@ -83,8 +83,7 @@ enum UseState {
     void update(BagView view) {
         if (!clicked) {
             view.state = BagState.POKEMON_SELECT;
-        }
-        else {
+        } else {
             view.state = BagState.ITEM_SELECT;
         }
         

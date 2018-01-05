@@ -104,8 +104,7 @@ public class MedalCaseState implements VisualStateHandler {
             DrawPanel medalPanel = medalPanels[i];
             if (medalCase.hasMedal(medal)) {
                 medalPanel.withBackgroundColor(new Color(255, 215, 0)).withBorderColor(new Color(218, 165, 32));
-            }
-            else {
+            } else {
                 medalPanel.withBackgroundColor(Color.WHITE).withBorderColor(Color.LIGHT_GRAY);
             }
             medalPanel.drawBackground(g);
@@ -132,7 +131,8 @@ public class MedalCaseState implements VisualStateHandler {
                     medal.getDescription(),
                     leftX,
                     medalPanel.bottomY() - medalPanel.getBorderSize() - 2*spacing,
-                    medalPanel.rightX() - leftX - medalPanel.getBorderSize() - spacing);
+                    medalPanel.rightX() - leftX - medalPanel.getBorderSize() - spacing
+            );
         }
         
         FontMetrics.setFont(g, 30);

@@ -45,13 +45,12 @@ class BattleState implements VisualStateHandler {
         float fadeOutPercentage = 0.2f;
         
         if (battle.isWildBattle()) {
-            drawHeightRight = drawHeightLeft = Global.GAME_SIZE.height * 5 / 8;
+            drawHeightRight = drawHeightLeft = Global.GAME_SIZE.height*5/8;
             drawHeightLeft -= battleImageSlideLeft.getHeight()/2;
             drawHeightRight -= battleImageSlideRight.getHeight();
             
             moveInAnimationPercentage = 0.5f;
-        }
-        else {
+        } else {
             drawHeightRight = drawHeightLeft = Global.GAME_SIZE.height/2;
             drawHeightLeft -= battleImageSlideLeft.getHeight();
             
@@ -63,12 +62,12 @@ class BattleState implements VisualStateHandler {
             float normalizedTime = (battleAnimationTime - BATTLE_INTRO_ANIMATION_LIFESPAN*(1 - moveInAnimationPercentage))/(BATTLE_INTRO_ANIMATION_LIFESPAN*moveInAnimationPercentage);
             
             int dist = -battleImageSlideRight.getWidth()/2 - drawWidth;
-            dist = (int)(dist * normalizedTime);
+            dist = (int)(dist*normalizedTime);
             
             g.drawImage(battleImageSlideLeft, drawWidth - battleImageSlideLeft.getWidth()/2 + dist, drawHeightLeft, null);
             
             dist = Global.GAME_SIZE.width;
-            dist = (int)(dist * normalizedTime);
+            dist = (int)(dist*normalizedTime);
             
             g.drawImage(battleImageSlideRight, drawWidth - battleImageSlideRight.getWidth()/2 + dist, drawHeightRight, null);
         }
@@ -96,8 +95,7 @@ class BattleState implements VisualStateHandler {
         
         if (battle.isWildBattle()) {
             SoundPlayer.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_BATTLE);
-        }
-        else {
+        } else {
             SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_BATTLE);
         }
     }
@@ -132,8 +130,7 @@ class BattleState implements VisualStateHandler {
             if (seenWild) {
                 battleImageSlideRight = ImageUtils.silhouette(battleImageSlideRight);
             }
-        }
-        else {
+        } else {
             battleImageSlideRight = LOWER_POKEBALL_IMAGE;
             battleImageSlideLeft = UPPER_POKEBALL_IMAGE;
         }

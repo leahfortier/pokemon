@@ -9,7 +9,7 @@ import util.StringUtils;
 public class HaltTrigger extends Trigger {
     private static boolean halted = false;
     
-    HaltTrigger(String contents, String condition)    {
+    HaltTrigger(String contents, String condition) {
         super(TriggerType.HALT, contents, condition);
         
         if (!StringUtils.isNullOrEmpty(contents)) {

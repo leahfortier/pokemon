@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Trigger {
-
+    
     protected final String name;
     protected final Condition condition;
     private final List<String> globals;
@@ -44,11 +44,10 @@ public abstract class Trigger {
     }
     
     public final void execute() {
-        for (String global: globals) {
+        for (String global : globals) {
             if (global.startsWith("!")) {
                 Game.getPlayer().removeGlobal(global.substring(1));
-            }
-            else {
+            } else {
                 Game.getPlayer().addGlobal(global);
             }
         }
@@ -59,7 +58,7 @@ public abstract class Trigger {
     protected abstract void executeTrigger();
     
     public static void createCommonTriggers() {
-    
+        
         // PC Start Up
         GroupTriggerMatcher loadPC = new GroupTriggerMatcher(
                 "LoadPC",

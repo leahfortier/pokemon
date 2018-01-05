@@ -11,7 +11,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public final class GeneralUtils {
-
+    
     // Util class -- cannot be instantiated
     private GeneralUtils() {}
     
@@ -45,8 +45,8 @@ public final class GeneralUtils {
     
     public static boolean hasOnlyOneNonEmpty(Object... objects) {
         return Arrays.stream(objects)
-                .filter(Objects::nonNull)
-                .count() == 1;
+                     .filter(Objects::nonNull)
+                     .count() == 1;
     }
     
     public static <T> T wrapIncrementValue(T[] values, int currentIndex, int incrementAmount) {
@@ -100,8 +100,8 @@ public final class GeneralUtils {
     
     public static <T extends Enum<T>> List<T> arrayValueOf(Class<T> enumType, String[] contents) {
         return Arrays.stream(contents)
-                .map(value -> Enum.valueOf(enumType, StringUtils.getNamesiesString(value)))
-                .collect(Collectors.toList());
+                     .map(value -> Enum.valueOf(enumType, StringUtils.getNamesiesString(value)))
+                     .collect(Collectors.toList());
     }
     
     public static <T> T getPageValue(Iterable<T> list, int pageNum, int buttonsPerPage, int index) {

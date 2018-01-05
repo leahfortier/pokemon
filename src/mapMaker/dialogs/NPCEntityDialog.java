@@ -51,7 +51,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
         ActionListener spriteActionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                int index = Integer.parseInt(((ImageIcon) spriteComboBox.getSelectedItem()).getDescription());
+                int index = Integer.parseInt(((ImageIcon)spriteComboBox.getSelectedItem()).getDescription());
                 Direction direction = (Direction)directionComboBox.getSelectedItem();
                 
                 BufferedImage image = mapMaker.getTileFromSet(TileType.TRAINER, MovableEntity.getTrainerSpriteIndex(index, direction));
@@ -91,7 +91,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
                         spriteComboBox,
                         directionComboBox
                 );
-                
+
         this.topComponent =
                 GUIUtils.createVerticalLayoutComponent(
                         tippityTopComponent,
@@ -100,7 +100,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
                         GUIUtils.createTextAreaComponent("Condition", conditionTextField),
                         timeOfDayPanel
                 );
-                
+
         this.load(npcMatcher);
     }
     
@@ -124,7 +124,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
                                 }
                             }
                     );
-                    
+
             JButton deleteButton = GUIUtils.createButton(
                     "Delete",
                     event -> {

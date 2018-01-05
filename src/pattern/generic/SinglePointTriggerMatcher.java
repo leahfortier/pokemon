@@ -32,7 +32,7 @@ public abstract class SinglePointTriggerMatcher extends LocationTriggerMatcher {
     @Override
     public void setLocation(LocationTriggerMatcher oldMatcher) {
         if (oldMatcher instanceof SinglePointTriggerMatcher) {
-            this.setLocation(((SinglePointTriggerMatcher) oldMatcher).location);
+            this.setLocation(((SinglePointTriggerMatcher)oldMatcher).location);
         } else {
             Global.error("Cannot convert multi point matcher to single point matcher.");
         }

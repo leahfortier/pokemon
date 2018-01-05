@@ -28,7 +28,7 @@ class Poisoned extends Status implements EndTurnEffect {
         }
         
         if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
-            if  (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+            if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
                 return;
             }
             

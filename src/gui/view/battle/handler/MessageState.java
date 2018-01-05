@@ -17,7 +17,7 @@ import java.awt.Graphics;
 import java.util.EnumSet;
 
 public class MessageState implements VisualStateHandler {
-
+    
     private final DrawPanel statsPanel;
     
     public MessageState() {

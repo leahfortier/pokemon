@@ -21,6 +21,7 @@ import java.util.List;
 
 public class Breeding {
     private static Breeding instance;
+    
     public static Breeding instance() {
         if (instance == null) {
             instance = new Breeding();
@@ -44,11 +45,9 @@ public class Breeding {
     private ActivePokemon getMommy(ActivePokemon aPokes, ActivePokemon bPokes) {
         if (isDitto(aPokes)) {
             return bPokes;
-        }
-        else if (isDitto(bPokes)) {
+        } else if (isDitto(bPokes)) {
             return aPokes;
-        }
-        else {
+        } else {
             return aPokes.getGender() == Gender.FEMALE ? aPokes : bPokes;
         }
     }
@@ -88,11 +87,11 @@ public class Breeding {
         // Inherit 5 stats instead of 3 when a parent holds Destiny Knot
         int remainingIVsToInherit =
                 parentItems.stream()
-                        .filter(item -> item.namesies() == ItemNamesies.DESTINY_KNOT)
-                        .count() > 0
+                           .filter(item -> item.namesies() == ItemNamesies.DESTINY_KNOT)
+                           .count() > 0
                         ? 5
                         : 3;
-                        
+        
         int[] IVs = new int[Stat.NUM_STATS];
         Arrays.fill(IVs, -1);
         
@@ -106,7 +105,7 @@ public class Breeding {
             }
         }
         
-        while (remainingIVsToInherit --> 0) {
+        while (remainingIVsToInherit-- > 0) {
             Stat stat = RandomUtils.getRandomValue(remainingStats);
             remainingStats.remove(stat);
             
@@ -123,7 +122,7 @@ public class Breeding {
     }
     
     public boolean canBreed(ActivePokemon aPokes, ActivePokemon bPokes) {
-    
+        
         // If either pokemon cannot breed, then they can't breed together
         if (!aPokes.canBreed() || !bPokes.canBreed()) {
             return false;
@@ -166,14 +165,11 @@ public class Breeding {
         
         if (daddysItem.namesies() == ItemNamesies.EVERSTONE && mommysItem.namesies() == ItemNamesies.EVERSTONE) {
             return getRandomParent(daddy, mommy).getNature();
-        }
-        else if (daddysItem.namesies() == ItemNamesies.EVERSTONE) {
+        } else if (daddysItem.namesies() == ItemNamesies.EVERSTONE) {
             return daddy.getNature();
-        }
-        else if (mommysItem.namesies() == ItemNamesies.EVERSTONE) {
+        } else if (mommysItem.namesies() == ItemNamesies.EVERSTONE) {
             return mommy.getNature();
-        }
-        else {
+        } else {
             return new Nature();
         }
     }

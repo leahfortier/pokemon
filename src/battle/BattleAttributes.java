@@ -154,8 +154,7 @@ public class BattleAttributes implements Serializable {
     public void count() {
         if (lastMoveUsed == null || selected.getAttack().namesies() != lastMoveUsed.getAttack().namesies()) {
             resetCount();
-        }
-        else {
+        } else {
             counter++;
         }
     }
@@ -179,8 +178,7 @@ public class BattleAttributes implements Serializable {
     public void decay() {
         if (selected.getAttack().isMoveType(MoveType.SUCCESSIVE_DECAY)) {
             successionDecayRate *= .5;
-        }
-        else {
+        } else {
             successionDecayRate = 1;
         }
     }
@@ -264,7 +262,7 @@ public class BattleAttributes implements Serializable {
     
     // Modifies a stat for a Pokemon and prints appropriate messages and stuff
     public boolean modifyStage(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source, String message) {
-    
+        
         // Don't modify the stages of a dead Pokemon
         if (victim.isFainted(b)) {
             return false;
@@ -311,15 +309,12 @@ public class BattleAttributes implements Serializable {
         String victimName = caster == victim ? "its" : victim.getName() + "'s";
         
         if (val >= 2) {
-            change =  "sharply raised";
-        }
-        else if (val == 1) {
+            change = "sharply raised";
+        } else if (val == 1) {
             change = "raised";
-        }
-        else if (val == -1) {
+        } else if (val == -1) {
             change = "lowered";
-        }
-        else if (val <= -2) {
+        } else if (val <= -2) {
             change = "sharply lowered";
         } else {
             // TODO: Make sure this is an appropriate error -- not sure why it wasn't here before
@@ -328,8 +323,8 @@ public class BattleAttributes implements Serializable {
         }
         
         message = message.replace("{statName}", statName)
-                .replace("{change}", change)
-                .replace("{victimName}", victimName);
+                         .replace("{change}", change)
+                         .replace("{victimName}", victimName);
         Messages.add(message);
         
         this.incrementStage(stat, val);

@@ -186,7 +186,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         editTypeComboBox = GUIUtils.createComboBox(
                 EditType.values(),
                 event -> {
-                    this.editType = (EditType) editTypeComboBox.getSelectedItem();
+                    this.editType = (EditType)editTypeComboBox.getSelectedItem();
                     
                     MapMakerModel model = this.getModel();
                     tileList.setModel(model.getListModel());
@@ -224,7 +224,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
                     if (!tileCategoriesComboBox.isEnabled()) {
                         return;
                     }
-                    TileCategory tileCategory = (TileCategory) tileCategoriesComboBox.getSelectedItem();
+                    TileCategory tileCategory = (TileCategory)tileCategoriesComboBox.getSelectedItem();
                     TileModel tileModel = (TileModel)this.getModel();
                     tileModel.setSelectedTileCategory(tileCategory);
                     tileList.setModel(tileModel.getListModel());
@@ -329,11 +329,9 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         if (root != null) {
             if (event.getSource() == newTileButton) {
                 this.getModel().newTileButtonPressed(this);
-            }
-            else if (event.getSource() == saveMenuItem) {
+            } else if (event.getSource() == saveMenuItem) {
                 saveMap();
-            }
-            else if (event.getSource() == newMenuItem || event.getSource() == loadMenuItem) {
+            } else if (event.getSource() == newMenuItem || event.getSource() == loadMenuItem) {
                 boolean exit = checkSaveOnExit();
                 if (!exit) {
                     return;
@@ -345,8 +343,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
                     if (!createNewMapDialog()) {
                         return;
                     }
-                }
-                else {
+                } else {
                     if (!loadPreviousMapDialog()) {
                         return;
                     }
@@ -354,23 +351,18 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
                 
                 mapNameLabel.setText(this.getCurrentMapName().toString());
                 draw();
-            }
-            else if (event.getSource() == cutMenuItem) {
+            } else if (event.getSource() == cutMenuItem) {
                 selectTool.cut();
-            }
-            else if (event.getSource() == copyMenuItem) {
+            } else if (event.getSource() == copyMenuItem) {
                 selectTool.copy();
-            }
-            else if (event.getSource() == pasteMenuItem) {
+            } else if (event.getSource() == pasteMenuItem) {
                 this.setTool(ToolType.SELECT);
                 selectTool.paste();
-            }
-            else if (event.getSource() == undoMenuItem) {
+            } else if (event.getSource() == undoMenuItem) {
                 Tool.undoLastTool();
                 draw();
             }
-        }
-        else if (event.getSource() == setRootMenuItem) {
+        } else if (event.getSource() == setRootMenuItem) {
             JFileChooser directoryChooser = FileIO.getDirectoryChooser();
             
             int response = directoryChooser.showOpenDialog(this);
@@ -382,18 +374,20 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     
     public String[] getAvailableRegions() {
         File mapsFolder = new File(getPathWithRoot(Folder.MAPS));
-        return FileIO.listDirectories(mapsFolder).stream()
-                .map(File::getName)
-                .collect(Collectors.toList())
-                .toArray(new String[0]);
+        return FileIO.listDirectories(mapsFolder)
+                     .stream()
+                     .map(File::getName)
+                     .collect(Collectors.toList())
+                     .toArray(new String[0]);
     }
     
     public MapName[] getAvailableMaps(String region) {
         File regionFolder = new File(FileIO.makeFolderPath(Folder.MAPS, region));
-        return FileIO.listDirectories(regionFolder).stream()
-                .map(file -> new MapName(region, file.getName()))
-                .collect(Collectors.toList())
-                .toArray(new MapName[0]);
+        return FileIO.listDirectories(regionFolder)
+                     .stream()
+                     .map(file -> new MapName(region, file.getName()))
+                     .collect(Collectors.toList())
+                     .toArray(new MapName[0]);
     }
     
     // TODO: I still never figured out what root is doing
@@ -497,6 +491,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
     
     public void mouseEntered(MouseEvent event) {}
+    
     public void mouseExited(MouseEvent event) {}
     
     public void mousePressed(MouseEvent event) {
@@ -540,17 +535,13 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolType == null && !toolList.isSelectionEmpty()) {
             previousToolType = ToolType.values()[toolList.getSelectedIndex()];
             this.setTool(ToolType.MOVE);
-        }
-        else if (event.getKeyCode() == KeyEvent.VK_1) {
+        } else if (event.getKeyCode() == KeyEvent.VK_1) {
             this.setTool(ToolType.MOVE);
-        }
-        else if (event.getKeyCode() == KeyEvent.VK_2) {
+        } else if (event.getKeyCode() == KeyEvent.VK_2) {
             this.setTool(ToolType.SINGLE_CLICK);
-        }
-        else if (event.getKeyCode() == KeyEvent.VK_3) {
+        } else if (event.getKeyCode() == KeyEvent.VK_3) {
             this.setTool(ToolType.RECTANGLE);
-        }
-        else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+        } else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
             if (this.isEditType(EditType.TRIGGERS) && this.hasPlaceableTrigger()) {
                 this.clearPlaceableTrigger();
                 toolList.clearSelection();
@@ -639,18 +630,17 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     
     public void valueChanged(ListSelectionEvent event) {
         if (event.getSource() == tileList) {
-        
+            
             // When a trigger item selected
             if (this.isEditType(EditType.TRIGGERS) && !this.isTileSelectionEmpty() && !event.getValueIsAdjusting()) {
                 if (!this.hasMap()) {
                     tileList.clearSelection();
-                }
-                else {
+                } else {
                     TriggerModelType type = TriggerModelType.getModelTypeFromIndex(this.getSelectedTileIndex());
                     
                     // Already something placeable, ignore trying to create something new.
                     if (!this.hasPlaceableTrigger()) {
-                    
+                        
                         // Trigger was not created, deselect item
                         if (!this.getTriggerData().createTrigger(type)) {
                             tileList.clearSelection();
@@ -669,8 +659,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
                                     break;
                             }
                         }
-                    }
-                    else if (!triggerToolMoveSelected) {
+                    } else if (!triggerToolMoveSelected) {
                         this.clearPlaceableTrigger();
                         tileList.clearSelection();
                     }
@@ -678,15 +667,13 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
                     triggerToolMoveSelected = false;
                 }
             }
-        }
-        else if (event.getSource() == toolList) {
+        } else if (event.getSource() == toolList) {
             if (!toolList.isSelectionEmpty() && !event.getValueIsAdjusting()) {
                 toolList.getSelectedValue().reset();
                 if (toolList.getSelectedValue() != selectTool) {
                     copyMenuItem.setEnabled(false);
                     cutMenuItem.setEnabled(false);
-                }
-                else if (selectTool.hasSelection()) {
+                } else if (selectTool.hasSelection()) {
                     copyMenuItem.setEnabled(true);
                     cutMenuItem.setEnabled(true);
                 }

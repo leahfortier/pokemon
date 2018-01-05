@@ -145,8 +145,8 @@ public class MapData {
     
     private void addEntities(List<? extends EntityMatcher> entityMatchers) {
         this.entities.addAll(entityMatchers.stream()
-                .map(EntityMatcher::createEntity)
-                .collect(Collectors.toList()));
+                                           .map(EntityMatcher::createEntity)
+                                           .collect(Collectors.toList()));
     }
     
     private int getMapIndex(Point point) {
@@ -266,10 +266,10 @@ public class MapData {
     
     public List<ItemEntity> getHiddenItems() {
         return entities.stream()
-                .filter(entity -> entity.isVisible() && entity instanceof ItemEntity)
-                .map(entity -> (ItemEntity)entity)
-                .filter(ItemEntity::isHiddenItem)
-                .collect(Collectors.toList());
+                       .filter(entity -> entity.isVisible() && entity instanceof ItemEntity)
+                       .map(entity -> (ItemEntity)entity)
+                       .filter(ItemEntity::isHiddenItem)
+                       .collect(Collectors.toList());
     }
     
     public Entity getEntity(Point location) {
@@ -278,18 +278,20 @@ public class MapData {
             return player.getEntity();
         }
         
-        List<Entity> presentEntities = entities.stream()
+        List<Entity> presentEntities = entities
+                .stream()
                 .filter(entity -> entity.isVisible() && entity.getLocation().equals(location))
                 .collect(Collectors.toList());
-                
+        
         return validateEntities(presentEntities);
     }
     
     public Entity getEntity(String entityName) {
-        List<Entity> presentEntities = entities.stream()
+        List<Entity> presentEntities = entities
+                .stream()
                 .filter(entity -> entity.isVisible() && entity.getEntityName().equals(entityName))
                 .collect(Collectors.toList());
-                
+        
         return validateEntities(presentEntities);
     }
     
@@ -299,10 +301,11 @@ public class MapData {
         }
         
         if (entities.size() > 1) {
-            List<Entity> highPriority = entities.stream()
+            List<Entity> highPriority = entities
+                    .stream()
                     .filter(Entity::isHighPriorityEntity)
                     .collect(Collectors.toList());
-                    
+            
             if (highPriority.size() != 1) {
                 Global.error("Multiple entities present");
             }

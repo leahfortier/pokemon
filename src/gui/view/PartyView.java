@@ -73,74 +73,83 @@ class PartyView extends View {
         pokemonPanel = new DrawPanel(
                 spacing,
                 spacing + tabHeight,
-                Point.subtract(Global.GAME_SIZE,
+                Point.subtract(
+                        Global.GAME_SIZE,
                         2*spacing,
-                        2*spacing + tabHeight)
+                        2*spacing + tabHeight
                 )
+        )
                 .withTransparentBackground()
                 .withBorderPercentage(0)
                 .withBlackOutline();
-                
+        
         imagePanel = new DrawPanel(
                 pokemonPanel.x + spacing,
                 pokemonPanel.y + spacing,
                 104,
-                104)
+                104
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         basicInformationPanel = new DrawPanel(
                 imagePanel.rightX() + spacing,
                 imagePanel.y,
                 pokemonPanel.width - 3*spacing - imagePanel.width,
-                imagePanel.height)
+                imagePanel.height
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         int barHeight = 15;
         int expBarWidth = basicInformationPanel.width/3;
         expBar = new DrawPanel(
                 basicInformationPanel.rightX() - expBarWidth,
                 basicInformationPanel.bottomY() - DrawUtils.OUTLINE_SIZE,
                 expBarWidth,
-                barHeight)
+                barHeight
+        )
                 .withBlackOutline();
-                
+        
         int buttonHeight = 38;
-        int halfPanelWidth =(pokemonPanel.width - 3*spacing)/2;
+        int halfPanelWidth = (pokemonPanel.width - 3*spacing)/2;
         int statsPanelHeight = 138;
         
         abilityPanel = new DrawPanel(
                 imagePanel.x,
                 imagePanel.y + imagePanel.height + spacing,
                 halfPanelWidth,
-                pokemonPanel.height - 5*spacing - imagePanel.height - buttonHeight - statsPanelHeight)
+                pokemonPanel.height - 5*spacing - imagePanel.height - buttonHeight - statsPanelHeight
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         statsPanel = new DrawPanel(
                 abilityPanel.x,
                 abilityPanel.y + abilityPanel.height + spacing,
                 halfPanelWidth,
-                statsPanelHeight)
+                statsPanelHeight
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         hpBar = new DrawPanel(
                 statsPanel.x,
                 statsPanel.y,
                 statsPanel.width/2,
-                barHeight)
+                barHeight
+        )
                 .withBlackOutline();
-                
+        
         movesPanel = new DrawPanel(
                 abilityPanel.rightX() + spacing,
                 abilityPanel.y,
                 halfPanelWidth,
-                statsPanel.bottomY() - abilityPanel.y)
+                statsPanel.bottomY() - abilityPanel.y
+        )
                 .withFullTransparency()
                 .withBlackOutline();
-                
+        
         int buttonWidth = (basicInformationPanel.rightX() - imagePanel.x - (NUM_BOTTOM_BUTTONS - 1)*spacing)/NUM_BOTTOM_BUTTONS;
         nicknameButton = new Button(
                 imagePanel.x,
@@ -197,11 +206,12 @@ class PartyView extends View {
                 pokemonPanel.x,
                 tabButtons[0].y,
                 pokemonPanel.width,
-                tabButtons[0].height + pokemonPanel.height)
+                tabButtons[0].height + pokemonPanel.height
+        )
                 .withTransparentBackground()
                 .withBorderPercentage(0)
                 .withBlackOutline();
-                
+        
         moveButtons = movesPanel.getButtons(10, Move.MAX_MOVES, 1, MOVES, new int[] { -1, 0, -1, RETURN });
         
         buttons = new Button[NUM_BUTTONS];
@@ -233,8 +243,7 @@ class PartyView extends View {
                 nicknameView = false;
                 updateActiveButtons();
             }
-        }
-        else {
+        } else {
             if (buttons[selectedButton].checkConsumePress()) {
                 updateActiveButtons();
             }
@@ -265,8 +274,7 @@ class PartyView extends View {
             
             String nickname = InputControl.instance().getInputCaptureString(ActivePokemon.MAX_NAME_LENGTH);
             ImageUtils.drawCenteredImageLabel(g, pkmImg, nickname, Global.GAME_SIZE.width/2, Global.GAME_SIZE.height/2);
-        }
-        else {
+        } else {
             // Pokemon info
             drawPokemonInfo(g, pkmImg, selectedPkm);
             
@@ -299,7 +307,7 @@ class PartyView extends View {
             returnButton.label(g, 20, "Return");
         }
         
-        for (Button button: buttons) {
+        for (Button button : buttons) {
             button.draw(g);
         }
     }
@@ -368,12 +376,14 @@ class PartyView extends View {
             FontMetrics.setFont(g, 16);
             
             // Description
-            TextUtils.drawWrappedText(g, selectedPkm.getEggMessage(),
+            TextUtils.drawWrappedText(
+                    g,
+                    selectedPkm.getEggMessage(),
                     basicInformationPanel.x + inset,
                     topLineY + inset + FontMetrics.getTextHeight(g),
-                    basicInformationPanel.width - 2*inset);
-        }
-        else {
+                    basicInformationPanel.width - 2*inset
+            );
+        } else {
             // Number
             int numberX = 378;
             String numberString = String.format("#%03d", selectedPkm.getPokemonInfo().getNumber());
@@ -403,7 +413,7 @@ class PartyView extends View {
             ImageUtils.drawTypeTiles(g, selectedPkm.getActualType(), rightAlignedX, topLineY);
             
             // Nature
-            g.drawString(selectedPkm.getNature().getName() +" Nature", nameX, secondLineY);
+            g.drawString(selectedPkm.getNature().getName() + " Nature", nameX, secondLineY);
             
             // Total EXP
             g.drawString("EXP:", levelX, secondLineY);
@@ -435,8 +445,7 @@ class PartyView extends View {
             // Stats Box or Move description
             if (selectedButton >= MOVES && selectedButton < MOVES + Move.MAX_MOVES) {
                 drawMoveDescriptionPanel(g, statsPanel, moves.get(selectedButton - MOVES).getAttack());
-            }
-            else {
+            } else {
                 drawStatBox(g, selectedPkm);
             }
             
@@ -508,7 +517,7 @@ class PartyView extends View {
         moveDetailsPanel
                 .withTransparentBackground(move.getActualType().getColor())
                 .drawBackground(g);
-                
+        
         FontMetrics.setFont(g, 20);
         int spacing = 15;
         int y = moveDetailsPanel.y + spacing + FontMetrics.getTextHeight(g);
@@ -532,7 +541,8 @@ class PartyView extends View {
         y += FontMetrics.getDistanceBetweenRows(g) + 2;
         
         FontMetrics.setFont(g, 16);
-        TextUtils.drawWrappedText(g,
+        TextUtils.drawWrappedText(
+                g,
                 move.getDescription(),
                 moveDetailsPanel.x + spacing,
                 y,
@@ -545,8 +555,7 @@ class PartyView extends View {
             for (Button button : buttons) {
                 button.setActive(false);
             }
-        }
-        else {
+        } else {
             List<ActivePokemon> team = Game.getPlayer().getTeam();
             for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
                 tabButtons[i].setActive(i < team.size());

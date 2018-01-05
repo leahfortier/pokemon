@@ -83,7 +83,7 @@ public abstract class MovableEntity extends Entity {
         
         // Not transitioning, not waiting, and does not have attention
         if (!this.isTransitioning() && waitTime == 0 && !hasAttention()) {
-        
+            
             String path = this.tempPath;
             if (tempPath == null) {
                 path = this.getPath();
@@ -105,20 +105,18 @@ public abstract class MovableEntity extends Entity {
                 if (direction == PathDirection.WAIT) {
                     waitTime = getTransitionTime();
                     pathIndex++;
-                }
-                else {
+                } else {
                     if (Character.isUpperCase(path.charAt(pathIndex))) {
                         this.setDirection(direction.getDirection());
-                        waitTime = 5 * this.getTimeBetweenTiles() / 4; // TODO: Why 5/4
+                        waitTime = 5*this.getTimeBetweenTiles()/4; // TODO: Why 5/4
                         pathIndex++;
-                    }
-                    else {
+                    } else {
                         Point newLocation = getNewLocation(this.getLocation(), direction.getDirection(), currentMap);
                         if (newLocation != null) {
                             setLocation(newLocation);
                             
                             transitionTime = 1;
-                            waitTime = 5 * this.getTimeBetweenTiles() / 4; // TODO: Why 5/4
+                            waitTime = 5*this.getTimeBetweenTiles()/4; // TODO: Why 5/4
                             pathIndex++;
                         }
                         

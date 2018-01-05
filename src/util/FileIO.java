@@ -72,8 +72,7 @@ public class FileIO {
     public static void writeImage(BufferedImage image, File file) {
         try {
             ImageIO.write(image, "png", file);
-        }
-        catch (IOException exception) {
+        } catch (IOException exception) {
             Global.error("Could not write image to file " + file.getName());
         }
     }
@@ -95,8 +94,7 @@ public class FileIO {
         BufferedImage image = null;
         try {
             image = ImageIO.read(file);
-        }
-        catch (IOException exception) {
+        } catch (IOException exception) {
             Global.error("Could not open image from following path: " + file.getAbsolutePath());
         }
         
@@ -151,8 +149,7 @@ public class FileIO {
                     build.appendLine(line);
                 }
             }
-        }
-        catch (IOException exception) {
+        } catch (IOException exception) {
             Global.error("IO EXCEPTION WHILE READING " + file.getName() + "!!!!");
         }
         
@@ -184,8 +181,7 @@ public class FileIO {
     public static BufferedReader openFileBuffered(File file) {
         try {
             return new BufferedReader(new FileReader(file));
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             Global.error(file.getAbsolutePath() + " not found!");
             return null;
         }
@@ -198,8 +194,7 @@ public class FileIO {
     public static Scanner openFile(File file) {
         try {
             return new Scanner(new FileReader(file));
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             Global.error(file.getName() + " not found.");
             return new Scanner(StringUtils.empty());
         }
@@ -233,8 +228,7 @@ public class FileIO {
             PrintStream printStream = new PrintStream(file);
             printStream.println(out);
             printStream.close();
-        }
-        catch (FileNotFoundException ex) {
+        } catch (FileNotFoundException ex) {
             Global.error("Cannot print to file " + file.getPath() + ".");
         }
     }
@@ -242,8 +236,7 @@ public class FileIO {
     public static PrintStream openOutputFile(String fileName) {
         try {
             return new PrintStream(fileName);
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             Global.error("Could not open output file " + fileName + ".");
             return null;
         }
@@ -276,7 +269,8 @@ public class FileIO {
     }
     
     public static Iterable<File> listSubdirectories(File parentDirectory) {
-        return listDirectories(parentDirectory).stream()
+        return listDirectories(parentDirectory)
+                .stream()
                 .map(FileIO::listDirectories)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
@@ -285,10 +279,10 @@ public class FileIO {
     public static List<File> listDirectories(File parentDirectory) {
         try {
             return Files.walk(Paths.get(parentDirectory.getAbsolutePath()), 1)
-                    .filter(Files::isDirectory)
-                    .map(Path::toFile)
-                    .filter(directory -> !directory.getAbsolutePath().equals(parentDirectory.getAbsolutePath()))
-                    .collect(Collectors.toList());
+                        .filter(Files::isDirectory)
+                        .map(Path::toFile)
+                        .filter(directory -> !directory.getAbsolutePath().equals(parentDirectory.getAbsolutePath()))
+                        .collect(Collectors.toList());
         } catch (IOException e) {
             Global.error("IOException trying to list directories of " + parentDirectory.getAbsolutePath());
             return new ArrayList<>();

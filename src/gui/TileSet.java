@@ -48,8 +48,7 @@ public class TileSet {
                 BufferedImage image = ImageIO.read(file);
                 image = ImageUtils.scaleImage(image, scale);
                 map.put(imageName, image);
-            }
-            catch (IOException exception) {
+            } catch (IOException exception) {
                 return IMAGE_NOT_FOUND;
             }
         }

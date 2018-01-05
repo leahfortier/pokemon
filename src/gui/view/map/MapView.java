@@ -38,7 +38,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class MapView extends View {
-
+    
     private static final PathDirection[] deltaDirections = {
             PathDirection.WAIT,
             PathDirection.LEFT,
@@ -127,7 +127,7 @@ public class MapView extends View {
         // Background
         for (int y = start.y; y < end.y; y++) {
             for (int x = start.x; x < end.x; x++) {
-                int bgTile = currentMap.getRGB(x,y, MapDataType.BACKGROUND);
+                int bgTile = currentMap.getRGB(x, y, MapDataType.BACKGROUND);
                 if (TileSet.isValidMapTile(bgTile)) {
                     BufferedImage img = mapTiles.getTile(bgTile);
                     TileUtils.drawTileImage(g, img, x, y, draw);
@@ -138,7 +138,7 @@ public class MapView extends View {
         // Back-foreground
         for (int y = start.y; y < end.y; y++) {
             for (int x = start.x; x < end.x; x++) {
-            
+                
                 // Draw foreground tiles
                 int fgTile = currentMap.getRGB(x, y, MapDataType.BACK_FOREGROUND);
                 if (TileSet.isValidMapTile(fgTile)) {
@@ -151,7 +151,7 @@ public class MapView extends View {
         // Foreground
         for (int y = start.y; y < end.y; y++) {
             for (int x = start.x; x < end.x; x++) {
-            
+                
                 // Draw foreground tiles
                 int fgTile = currentMap.getRGB(x, y, MapDataType.FOREGROUND);
                 if (TileSet.isValidMapTile(fgTile)) {
@@ -186,8 +186,7 @@ public class MapView extends View {
                     // TODO: Supes Haxorus plz fix
                     if (newPointEntity instanceof NPCEntity && newPointEntity.getEntityName().equals("MaplesLab_NPC_Prof_Mapes_01")) {
                         newPointEntity.draw(g, new Point(draw.x + Global.TILE_SIZE/2, draw.y), !delta.isZero());
-                    }
-                    else {
+                    } else {
                         // TODO: Checking zero logic seems like it can be simplified
                         newPointEntity.draw(g, draw, !delta.isZero());
                     }
@@ -214,8 +213,7 @@ public class MapView extends View {
         
         if (areaDisplayTime > 0) {
             areaDisplayTime -= dt;
-        }
-        else if (medalDisplayTime > 0) {
+        } else if (medalDisplayTime > 0) {
             medalDisplayTime -= dt;
         }
         
@@ -226,8 +224,7 @@ public class MapView extends View {
         // If new area has a new name, display the area name animation
         if (currentArea != null && !StringUtils.isNullOrEmpty(areaName) && !areaName.equals(currentArea.getAreaName())) {
             areaDisplayTime = DrawUtils.AREA_NAME_ANIMATION_LIFESPAN;
-        }
-        else if (areaDisplayTime <= 0 && medalDisplayTime <= 0 && player.getMedalCase().isThereMedalToShow()) {
+        } else if (areaDisplayTime <= 0 && medalDisplayTime <= 0 && player.getMedalCase().isThereMedalToShow()) {
             displayMedal = player.getMedalCase().getNextMedalToShow();
             medalDisplayTime = DrawUtils.AREA_NAME_ANIMATION_LIFESPAN;
         }
@@ -322,8 +319,7 @@ public class MapView extends View {
         final SoundTitle music;
         if (currentMusicTitle != null) {
             music = currentMusicTitle;
-        }
-        else {
+        } else {
             if (currentArea != null) {
                 System.err.println("No music specified for current area " + currentArea.getAreaName() + ".");
             }

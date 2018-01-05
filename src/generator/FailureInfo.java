@@ -81,8 +81,7 @@ class FailureInfo {
                 }
                 
                 fieldValue = fieldInfo.defaultValue;
-            }
-            else if (fieldInfo.not) {
+            } else if (fieldInfo.not) {
                 fields.remove(fieldInfo.fieldName);
                 continue;
             }

@@ -40,9 +40,9 @@ public class BasicPanels {
                 x,
                 y,
                 FontMetrics.getTextWidth(fontSize, label) + 2*spacing,
-                FontMetrics.getTextHeight(fontSize) + 2*spacing)
-                .withFullTransparency()
-                .withBlackOutline();
+                FontMetrics.getTextHeight(fontSize) + 2*spacing
+        ).withFullTransparency()
+         .withBlackOutline();
     }
     
     public static DrawPanel drawLabelPanel(Graphics g, int x, int y, int fontSize, int spacing, String label) {

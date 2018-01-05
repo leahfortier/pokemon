@@ -8,12 +8,12 @@ import java.util.Map;
 
 public class Messages {
     private static final Map<MessageState, ArrayDeque<MessageUpdate>> messageMap =
-        new EnumMap<MessageState, ArrayDeque<MessageUpdate>>(MessageState.class) {{
-            for (MessageState messageState : MessageState.values()) {
-                put(messageState, new ArrayDeque<>());
-            }
-        }};
-        
+            new EnumMap<MessageState, ArrayDeque<MessageUpdate>>(MessageState.class) {{
+                for (MessageState messageState : MessageState.values()) {
+                    put(messageState, new ArrayDeque<>());
+                }
+            }};
+    
     private static MessageState messageState = MessageState.MAPPITY_MAP;
     
     public enum MessageState {

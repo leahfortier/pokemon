@@ -29,6 +29,7 @@ public enum MatchType {
     }
     
     private static final Pattern VARIABLE_DECLARATION = Pattern.compile(VARIABLE_TYPE.group() + " " + WORD.group());
+    
     public static Entry<String, String> getVariableDeclaration(String variableDeclaration) {
         Matcher matcher = VARIABLE_DECLARATION.matcher(variableDeclaration);
         if (!matcher.matches()) {

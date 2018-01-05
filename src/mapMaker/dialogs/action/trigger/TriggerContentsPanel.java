@@ -10,7 +10,7 @@ abstract class TriggerContentsPanel extends JPanel {
     protected abstract String getTriggerContents();
     
     static class EmptyTriggerContentsPanel extends TriggerContentsPanel {
-    
+        
         @Override
         protected void load(String triggerContents) {
             if (!StringUtils.isNullOrEmpty(triggerContents)) {

@@ -11,12 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum ConditionKey {
-    BADGE("badge",
-            value -> Game.getPlayer().hasBadge(Badge.valueOf(value))
-    ),
-    TIME_OF_DAY("time_of_day",
-            value -> DayCycle.getTimeOfDay() == DayCycle.valueOf(value)
-    ),
+    BADGE("badge", value -> Game.getPlayer().hasBadge(Badge.valueOf(value))),
+    TIME_OF_DAY("time_of_day", value -> DayCycle.getTimeOfDay() == DayCycle.valueOf(value)),
     HOUR_OF_DAY("hour_of_day", value -> {
         int index = value.indexOf('-');
         int startHour = Integer.parseInt(value.substring(0, index));
@@ -32,11 +28,9 @@ public enum ConditionKey {
         
         if (!StringUtils.isNullOrEmpty(npcEntityName) && npcEntityName.startsWith("#")) {
             return !Game.getPlayer().isNpcInteraction(npcEntityName.substring(1), interactionName);
-        }
-        else {
+        } else {
             return Game.getPlayer().isNpcInteraction(npcEntityName, interactionName);
         }
-        
     });
     
     private static final Pattern keyValuePattern = Pattern.compile(":([^:]+):([^:]+):");

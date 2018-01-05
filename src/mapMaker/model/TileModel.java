@@ -74,7 +74,7 @@ public class TileModel extends MapMakerModel {
         this.selectedTileCategory = tileCategory;
     }
     
-                                        @Override
+    @Override
     public DefaultListModel<ImageIcon> getListModel() {
         return this.tileListModel.get(selectedTileCategory);
     }
@@ -166,13 +166,13 @@ public class TileModel extends MapMakerModel {
     
     @Override
     public void newTileButtonPressed(MapMaker mapMaker) {
-    
+
         JFileChooser fileChooser = FileIO.getImageFileChooser(mapMaker.getPathWithRoot(Folder.MAP_TILES));
         
         int val = fileChooser.showOpenDialog(mapMaker);
         if (val == JFileChooser.APPROVE_OPTION) {
             File[] files = fileChooser.getSelectedFiles();
-            for (File imageFile: files) {
+            for (File imageFile : files) {
                 Color color = JColorChooser.showDialog(mapMaker, "Choose a preferred color for tile: " + imageFile.getName(), Color.WHITE);
                 if (color == null) {
                     continue;

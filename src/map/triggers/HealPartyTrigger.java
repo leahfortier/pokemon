@@ -6,7 +6,7 @@ import util.StringUtils;
 
 class HealPartyTrigger extends Trigger {
 
-    HealPartyTrigger(String contents, String condition)    {
+    HealPartyTrigger(String contents, String condition) {
         super(TriggerType.HEAL_PARTY, contents, condition);
         
         if (!StringUtils.isNullOrEmpty(contents)) {

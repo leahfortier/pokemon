@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 public final class EffectInterfaces {
-
+    
     // Class to hold interfaces -- should not be instantiated
     private EffectInterfaces() {
         Global.error("EffectInterfaces class cannot be instantiated.");

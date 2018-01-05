@@ -55,7 +55,8 @@ class PokeFinderState implements VisualStateHandler {
             
             Point point = Point.getPointAtIndex(i, NUM_COLUMNS);
             int spacing = (pokeFinderPanel.width - 2*pokeFinderPanel.getBorderSize())/NUM_COLUMNS;
-            ImageUtils.drawCenteredImage(g,
+            ImageUtils.drawCenteredImage(
+                    g,
                     image,
                     pokeFinderPanel.x + pokeFinderPanel.getBorderSize() + spacing*point.x + spacing/2,
                     72 + 124*point.y + pokeFinderPanel.getBorderSize()
@@ -63,7 +64,7 @@ class PokeFinderState implements VisualStateHandler {
         }
         
         FontMetrics.setFont(g, 24);
-        int numCaught = (int) availablePokemon.stream().filter(p -> pokedex.isCaught(p)).count();
+        int numCaught = (int)availablePokemon.stream().filter(p -> pokedex.isCaught(p)).count();
         TextUtils.drawCenteredString(g, numCaught + "/" + availablePokemon.size() + " Caught", pokeFinderPanel.centerX(), pokeFinderPanel.bottomY() - 52);
     }
     

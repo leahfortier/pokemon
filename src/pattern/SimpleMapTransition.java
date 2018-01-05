@@ -46,6 +46,4 @@ public class SimpleMapTransition extends MultiPointTriggerMatcher implements Ser
     public TriggerModelType getTriggerModelType() {
         return TriggerModelType.MAP_TRANSITION;
     }
-    
-    
 }

@@ -8,12 +8,13 @@ import java.util.Random;
 
 // Util class with methods related to RNG
 public final class RandomUtils {
-
+    
     // Util class -- cannot be instantiated
     private RandomUtils() {}
     
     private static final Random RANDOM = new Random();
     private static final long SEED = RANDOM.nextLong();
+    
     static {
         RANDOM.setSeed(SEED);
     }
@@ -49,7 +50,7 @@ public final class RandomUtils {
     public static int getRandomInt(final int lowerBound, final int upperBound) {
         if (upperBound < lowerBound) {
             Global.error("Upper bound should never be lower than the lower bound. " +
-                    "(Lower: " + lowerBound + ", Upper: " + upperBound + ")");
+                                 "(Lower: " + lowerBound + ", Upper: " + upperBound + ")");
         }
         
         return getRandomInt((upperBound - lowerBound + 1)) + lowerBound;

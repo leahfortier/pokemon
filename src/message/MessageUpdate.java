@@ -70,8 +70,7 @@ public class MessageUpdate {
         WIN_BATTLE(battleView -> {
             if (battleView.getCurrentBattle().isWildBattle()) {
                 SoundPlayer.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_DEFEATED);
-            }
-            else {
+            } else {
                 // TODO: Get trainer win music
                 SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_DEFEATED);
             }
@@ -164,9 +163,9 @@ public class MessageUpdate {
         
         boolean isPlayer = pokemon.isPlayer();
         return this.withType(pokemon.getDisplayType(b), isPlayer)
-                .withNameChange(pokemon.getName(), isPlayer)
-                .withGender(pokemon.getGender(), isPlayer)
-                .withFrontPokemon(b, pokemon);
+                   .withNameChange(pokemon.getName(), isPlayer)
+                   .withGender(pokemon.getGender(), isPlayer)
+                   .withFrontPokemon(b, pokemon);
     }
     
     // Pokemon image Update!

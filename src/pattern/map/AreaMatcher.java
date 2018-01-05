@@ -24,8 +24,7 @@ public class AreaMatcher {
                        TerrainType terrain,
                        WeatherState weather,
                        SoundTitle music,
-                       MusicConditionMatcher[] musicConditions
-    ) {
+                       MusicConditionMatcher[] musicConditions) {
         this.displayName = displayName;
         this.flyLocation = flyLocation;
         this.terrain = terrain;

@@ -101,7 +101,7 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
                 .stream()
                 .map(WildPokemonDataPanel::getWildEncounter)
                 .collect(Collectors.toList());
-                
+
         return new FishingMatcher(name, minLevel, maxLevel, wildEncounters);
     }
     

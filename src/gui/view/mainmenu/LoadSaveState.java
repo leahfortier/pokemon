@@ -21,13 +21,15 @@ class LoadSaveState implements VisualStateHandler {
     LoadSaveState() {
         this.buttons = new Button[Save.NUM_SAVES + 2];
         for (int i = 0; i < Save.NUM_SAVES; i++) {
-            this.buttons[i] = MainMenuView.createMenuButton(i,
+            this.buttons[i] = MainMenuView.createMenuButton(
+                    i,
                     new int[] {
                             i, // Right
                             Button.basicTransition(i, buttons.length, 1, Direction.UP), // Up
                             i, // Left
                             i + 1 // Down
-                    });
+                    }
+            );
         }
         
         Button referenceButton = MainMenuView.createMenuButton(MainMenuView.NUM_MAIN_BUTTONS - 1);
@@ -43,8 +45,9 @@ class LoadSaveState implements VisualStateHandler {
                         Save.NUM_SAVES - 1, // Up -- to the last save file
                         Save.NUM_SAVES + 1, // Left -- to the delete button
                         0                   // Down -- to the first save file
-                });
-                
+                }
+        );
+        
         Button returnButton = this.buttons[RETURN];
         
         buttons[DELETE] = new Button(
@@ -58,7 +61,8 @@ class LoadSaveState implements VisualStateHandler {
                         Save.NUM_SAVES - 1, // Up -- to the last save file
                         Save.NUM_SAVES,     // Left -- to the return button
                         0                   // Down -- to the first save file
-                });
+                }
+        );
     }
     
     @Override

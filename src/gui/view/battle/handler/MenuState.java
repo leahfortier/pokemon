@@ -16,7 +16,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class MenuState implements VisualStateHandler {
-
+    
     private enum MenuChoice {
         FIGHT(new Color(220, 20, 20)),
         SWITCH(new Color(35, 120, 220)),
@@ -40,7 +40,7 @@ public class MenuState implements VisualStateHandler {
     public void set(BattleView view) {
         this.menuButtons = view.createPanelButtons();
         
-        for (Button button: menuButtons) {
+        for (Button button : menuButtons) {
             button.setForceHover(false);
         }
     }
@@ -58,7 +58,7 @@ public class MenuState implements VisualStateHandler {
             menuButton.label(g, 30, menuChoice.getButtonLabel());
         }
         
-        for (Button button: menuButtons) {
+        for (Button button : menuButtons) {
             button.draw(g);
         }
     }
@@ -95,8 +95,7 @@ public class MenuState implements VisualStateHandler {
                 view.setVisualState(VisualState.MESSAGE);
                 view.cycleMessage(false);
             }
-        }
-        else if (InputControl.instance().consumeIfDown(ControlKey.LOG)) {
+        } else if (InputControl.instance().consumeIfDown(ControlKey.LOG)) {
             view.setVisualState(VisualState.LOG_VIEW);
         }
     }
