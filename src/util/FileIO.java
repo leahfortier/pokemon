@@ -116,7 +116,7 @@ public class FileIO {
 				folderPath.append(FileIO.FILE_SLASH);
 			}
 		}
-		
+
 		return folderPath.toString();
 	}
 
@@ -155,7 +155,7 @@ public class FileIO {
 		catch (IOException exception) {
 			Global.error("IO EXCEPTION WHILE READING " + file.getName() + "!!!!");
 		}
-		
+
 		return build.toString();
 	}
 
@@ -163,8 +163,12 @@ public class FileIO {
 		return readEntireFile(firstFileName).equals(readEntireFile(secondFileName));
 	}
 
-	public static String readEntireFile(String fileName) {
-		final Scanner in = openFile(fileName);
+    public static String readEntireFile(String fileName) {
+	    return readEntireFile(new File(fileName));
+    }
+
+	public static String readEntireFile(File file) {
+		final Scanner in = openFile(file);
 		final StringAppender out = new StringAppender();
 
 		while (in.hasNextLine()) {
@@ -198,37 +202,45 @@ public class FileIO {
 		}
 	}
 
+    public static boolean overwriteFile(final String fileName, String newFile) {
+	    return overwriteFile(new File(fileName), newFile);
+    }
+
 	// Overwrites the given file name with the content of out only if there is a difference
-	public static boolean overwriteFile(final String fileName, String newFile) {
+	public static boolean overwriteFile(final File file, String newFile) {
 	    // Replace tabs with 4 spaces
 	    newFile = newFile.replaceAll("\t", StringUtils.repeat(" ", 4));
 
-		final String previousFile = readEntireFile(fileName);
+		final String previousFile = readEntireFile(file);
 		if (StringUtils.isNullOrEmpty(previousFile) ||
 				!newFile.equals(previousFile.substring(0, previousFile.length() - 1))) {
-			writeToFile(fileName, newFile);
-			System.out.println(fileName + " overwritten.");
+			writeToFile(file, newFile);
+			System.out.println(file.getPath() + " overwritten.");
 			return true;
 		}
 
 		return false;
 	}
 
-	public static void writeToFile(String fileName, String out) {
+    public static void writeToFile(String fileName, String out) {
+        writeToFile(new File(fileName), out);
+    }
+
+	public static void writeToFile(File file, String out) {
 		try {
-			PrintStream printStream = new PrintStream(new File(fileName));
+			PrintStream printStream = new PrintStream(file);
 			printStream.println(out);
 			printStream.close();
 		}
 		catch (FileNotFoundException ex) {
-			Global.error("Cannot print to file " + fileName + ".");
+			Global.error("Cannot print to file " + file.getPath() + ".");
 		}
 	}
-	
+
 	public static PrintStream openOutputFile(String fileName) {
 		try {
 			return new PrintStream(fileName);
-		} 
+		}
 		catch (FileNotFoundException e) {
 			Global.error("Could not open output file " + fileName + ".");
 			return null;
@@ -281,14 +293,17 @@ public class FileIO {
 		}
 	}
 
-	public static File[] listFiles(String fileName) {
-		File[] files = new File(fileName).listFiles();
-		if (files == null) {
-			return new File[0];
-		}
-
-		return files;
-	}
+	public static List<File> listFiles(String folderName) {
+        try {
+            return Files.walk(Paths.get(folderName), Integer.MAX_VALUE)
+                        .filter(path -> Files.isRegularFile(path))
+                        .map(Path::toFile)
+                        .collect(Collectors.toList());
+        } catch (IOException e) {
+            Global.error("IOException trying to list files of " + folderName);
+            return new ArrayList<>();
+        }
+    }
 
 	public static class NullOutputStream extends OutputStream {
 		@Override
