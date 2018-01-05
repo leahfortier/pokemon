@@ -13,89 +13,89 @@ import java.awt.image.BufferedImage;
 
 public abstract class Entity {
 
-	private final String entityName;
-	private final Condition condition;
+    private final String entityName;
+    private final Condition condition;
 
-	private Point location;
-	private boolean visible;
+    private Point location;
+    private boolean visible;
 
-	protected Entity(Point location, String entityName, String condition) {
-		this.location = location;
+    protected Entity(Point location, String entityName, String condition) {
+        this.location = location;
 
-		this.entityName = entityName;
-		this.condition = new Condition(condition);
-	}
+        this.entityName = entityName;
+        this.condition = new Condition(condition);
+    }
 
-	public boolean isHighPriorityEntity() {
-		return true;
-	}
+    public boolean isHighPriorityEntity() {
+        return true;
+    }
 
-	public Point getLocation() {
-		return this.location;
-	}
+    public Point getLocation() {
+        return this.location;
+    }
 
-	protected void setLocation(Point newLocation) {
-		this.location = newLocation;
-	}
+    protected void setLocation(Point newLocation) {
+        this.location = newLocation;
+    }
 
-	private boolean isPresent() {
-		return this.condition.isTrue();
-	}
+    private boolean isPresent() {
+        return this.condition.isTrue();
+    }
 
-	public boolean isPassable() {
-		return !this.isVisible();
-	}
+    public boolean isPassable() {
+        return !this.isVisible();
+    }
 
-	public boolean isVisible() {
-		return this.visible;
-	}
+    public boolean isVisible() {
+        return this.visible;
+    }
 
-	public boolean setVisible() {
-		this.visible = this.isPresent();
-		return this.visible;
-	}
+    public boolean setVisible() {
+        this.visible = this.isPresent();
+        return this.visible;
+    }
 
-	protected String getConditionString() {
-		return this.condition.getOriginalConditionString();
-	}
+    protected String getConditionString() {
+        return this.condition.getOriginalConditionString();
+    }
 
-	public final void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {
-		if (drawOnlyInTransition && !this.isTransitioning()) {
-			return;
-		}
+    public final void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {
+        if (drawOnlyInTransition && !this.isTransitioning()) {
+            return;
+        }
 
-		BufferedImage image = this.getFrame();
-		if (image != null) {
-			TileUtils.drawTileImage(g, image, this.getCanvasCoordinates(drawLocation));
-		}
-	}
+        BufferedImage image = this.getFrame();
+        if (image != null) {
+            TileUtils.drawTileImage(g, image, this.getCanvasCoordinates(drawLocation));
+        }
+    }
 
-	protected Point getCanvasCoordinates(Point drawLocation) {
-		return TileUtils.getDrawLocation(this.location, drawLocation);
-	}
+    protected Point getCanvasCoordinates(Point drawLocation) {
+        return TileUtils.getDrawLocation(this.location, drawLocation);
+    }
 
-	public void update(int dt, MapData currentMap, MapView view) {}
-	public void getAttention(Direction direction) {}
-	public void reset() {}
-	public void addData() {}
+    public void update(int dt, MapData currentMap, MapView view) {}
+    public void getAttention(Direction direction) {}
+    public void reset() {}
+    public void addData() {}
 
-	protected BufferedImage getFrame() {
-		return null;
-	}
+    protected BufferedImage getFrame() {
+        return null;
+    }
 
-	protected boolean isTransitioning() {
-		return false;
-	}
+    protected boolean isTransitioning() {
+        return false;
+    }
 
-	public String getEntityName() {
-		return this.entityName;
-	}
+    public String getEntityName() {
+        return this.entityName;
+    }
 
-	public String getTriggerSuffix() {
-		return this.getEntityName();
-	}
+    public String getTriggerSuffix() {
+        return this.getEntityName();
+    }
 
-	public String getTriggerName() {
-		return TriggerType.GROUP.getTriggerNameFromSuffix(this.getTriggerSuffix());
-	}
+    public String getTriggerName() {
+        return TriggerType.GROUP.getTriggerNameFromSuffix(this.getTriggerSuffix());
+    }
 }

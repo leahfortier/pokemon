@@ -7,10 +7,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
+import util.FileIO;
 import util.StringAppender;
 import util.StringUtils;
 import util.TimeUtils;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
@@ -204,6 +206,13 @@ public class GeneralTest extends BaseTest {
         Assert.assertEquals(StringUtils.isNullOrEmpty(equals), appender.isEmpty());
         for (int i = 0; i < equals.length(); i++) {
             Assert.assertEquals(equals.charAt(i), appender.charAt(i));
+        }
+    }
+
+    @Test
+    public void tabsTest() {
+        for (File file : FileIO.listFiles("src")) {
+            FileIO.overwriteFile(file, FileIO.readEntireFile(file));
         }
     }
 }

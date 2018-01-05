@@ -1,5 +1,5 @@
 package item.hold;
 
 public interface EVItem extends HoldItem {
-	int[] getEVs(int[] vals);
+    int[] getEVs(int[] vals);
 }

@@ -7,25 +7,25 @@ import pattern.map.EventMatcher;
 import java.util.List;
 
 public class TriggerData {
-	private String name;
-	private String condition;
-	private List<EntityAction> actions;
+    private String name;
+    private String condition;
+    private List<EntityAction> actions;
 
-	public TriggerData(EventMatcher matcher) {
-		this.name = matcher.getTriggerName();
-		this.condition = matcher.getCondition();
-		this.actions = matcher.getActions();
-	}
+    public TriggerData(EventMatcher matcher) {
+        this.name = matcher.getTriggerName();
+        this.condition = matcher.getCondition();
+        this.actions = matcher.getActions();
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public String getCondition() {
-		return this.condition;
-	}
+    public String getCondition() {
+        return this.condition;
+    }
 
-	public List<EntityAction> getActions() {
-		return this.actions;
-	}
+    public List<EntityAction> getActions() {
+        return this.actions;
+    }
 }

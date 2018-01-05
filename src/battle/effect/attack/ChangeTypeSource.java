@@ -7,5 +7,5 @@ import type.Type;
 import java.io.Serializable;
 
 public interface ChangeTypeSource extends Serializable {
-	Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim);
+    Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim);
 }

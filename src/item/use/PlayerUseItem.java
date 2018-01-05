@@ -5,9 +5,9 @@ import battle.attack.Move;
 import pokemon.ActivePokemon;
 
 public interface PlayerUseItem extends UseItem {
-	boolean use();
+    boolean use();
 
-	default boolean use(Battle b, ActivePokemon p, Move m) {
-		return this.use();
-	}
+    default boolean use(Battle b, ActivePokemon p, Move m) {
+        return this.use();
+    }
 }

@@ -23,122 +23,122 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 
 public class GameFrame {
-	private static final boolean DEV_MODE = true;
+    private static final boolean DEV_MODE = true;
 
-	private static final JFrame frame = new JFrame();
+    private static final JFrame frame = new JFrame();
 
-	public static void main(String[] args) throws InterruptedException {
-		frame.setVisible(true);
+    public static void main(String[] args) throws InterruptedException {
+        frame.setVisible(true);
 
-		Canvas gui = new Canvas();
-		gui.setSize(Global.GAME_SIZE);
+        Canvas gui = new Canvas();
+        gui.setSize(Global.GAME_SIZE);
 
-		frame.getContentPane().add(gui);
+        frame.getContentPane().add(gui);
 
-		frame.setTitle(Global.TITLE);
-		frame.setIconImage(Global.FRAME_ICON);
-		Application.getApplication().setDockIconImage(Global.FRAME_ICON);
+        frame.setTitle(Global.TITLE);
+        frame.setIconImage(Global.FRAME_ICON);
+        Application.getApplication().setDockIconImage(Global.FRAME_ICON);
 
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.setResizable(false);
-		frame.pack();
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.pack();
 
-		Thread gameThread = new Thread(new GameLoop(gui));
-		gameThread.start();
+        Thread gameThread = new Thread(new GameLoop(gui));
+        gameThread.start();
 
-		gui.requestFocusInWindow();
-	}
-	
-	private static void loadAllTheThings() {
-		System.out.println("Random Seed: " + RandomUtils.getSeed());
+        gui.requestFocusInWindow();
+    }
+    
+    private static void loadAllTheThings() {
+        System.out.println("Random Seed: " + RandomUtils.getSeed());
 
-		PokemonInfo.loadPokemonInfo();
-		FontMetrics.loadFontMetricsMap();
-	}
+        PokemonInfo.loadPokemonInfo();
+        FontMetrics.loadFontMetricsMap();
+    }
 
-	private static class GameLoop implements Runnable {
-		private final Canvas gui;
-		private final DevConsole console;
+    private static class GameLoop implements Runnable {
+        private final Canvas gui;
+        private final DevConsole console;
 
-		private BufferStrategy strategy;
+        private BufferStrategy strategy;
 
-		private GameLoop(Canvas canvas) {
-			gui = canvas;
-			InputControl control = InputControl.instance();
-			
-			canvas.addKeyListener(control);
-			canvas.addMouseListener(control);
-			canvas.addMouseMotionListener(control);
+        private GameLoop(Canvas canvas) {
+            gui = canvas;
+            InputControl control = InputControl.instance();
+            
+            canvas.addKeyListener(control);
+            canvas.addMouseListener(control);
+            canvas.addMouseMotionListener(control);
 
-			console = new DevConsole();
-		}
+            console = new DevConsole();
+        }
 
-		public void run() {
-			gui.createBufferStrategy(2);
-			strategy = gui.getBufferStrategy();
+        public void run() {
+            gui.createBufferStrategy(2);
+            strategy = gui.getBufferStrategy();
 
-			Graphics g = strategy.getDrawGraphics();
-			DrawUtils.fillCanvas(g, Color.BLACK);
-			
-			g.setColor(Color.WHITE);
-			FontMetrics.setFont(g, 72);
-			g.drawString("LOADING...", 30, 570);
-			g.dispose();
-			strategy.show();
+            Graphics g = strategy.getDrawGraphics();
+            DrawUtils.fillCanvas(g, Color.BLACK);
+            
+            g.setColor(Color.WHITE);
+            FontMetrics.setFont(g, 72);
+            g.drawString("LOADING...", 30, 570);
+            g.dispose();
+            strategy.show();
 
-			Game.instance();
-			loadAllTheThings();
+            Game.instance();
+            loadAllTheThings();
 
-			Timer fpsTimer = new Timer((int) Global.MS_BETWEEN_FRAMES, new ActionListener() {
-				private int frameCount = 0;
-				private long fpsTime = 0;
-				private long prevTime = TimeUtils.getCurrentTimestamp();
+            Timer fpsTimer = new Timer((int) Global.MS_BETWEEN_FRAMES, new ActionListener() {
+                private int frameCount = 0;
+                private long fpsTime = 0;
+                private long prevTime = TimeUtils.getCurrentTimestamp();
 
-				public void actionPerformed(ActionEvent event) {
-					long time = TimeUtils.getCurrentTimestamp();
-					long dt = time - prevTime;
-					
-					fpsTime += dt;
-					prevTime = time;
-					
-					if (fpsTime > 1000) {
-						fpsTime %= 1000;
-						frame.setTitle(PokeString.POKEMON + "++          FPS:" + frameCount);
-						frameCount = 1;
-					}
-					else {
-						frameCount++;
-					}
-					
-					drawFrame((int) dt);
-				}
-			});
-			
-			fpsTimer.setCoalesce(true);
-			fpsTimer.start();
-		}
+                public void actionPerformed(ActionEvent event) {
+                    long time = TimeUtils.getCurrentTimestamp();
+                    long dt = time - prevTime;
+                    
+                    fpsTime += dt;
+                    prevTime = time;
+                    
+                    if (fpsTime > 1000) {
+                        fpsTime %= 1000;
+                        frame.setTitle(PokeString.POKEMON + "++          FPS:" + frameCount);
+                        frameCount = 1;
+                    }
+                    else {
+                        frameCount++;
+                    }
+                    
+                    drawFrame((int) dt);
+                }
+            });
+            
+            fpsTimer.setCoalesce(true);
+            fpsTimer.start();
+        }
 
-		private void drawFrame(int dt) {
-			Game.instance().update(dt);
+        private void drawFrame(int dt) {
+            Game.instance().update(dt);
 
-			Graphics g = strategy.getDrawGraphics();
-			Game.instance().draw(g);
+            Graphics g = strategy.getDrawGraphics();
+            Game.instance().draw(g);
 
-			// This will fail if it can't acquire the lock on control (just won't display or anything)
-			if (DEV_MODE) {
-				if (InputControl.instance().consumeIfDown(ControlKey.CONSOLE)) {
-					console.init();
-				}
+            // This will fail if it can't acquire the lock on control (just won't display or anything)
+            if (DEV_MODE) {
+                if (InputControl.instance().consumeIfDown(ControlKey.CONSOLE)) {
+                    console.init();
+                }
 
-				if (console.isShown()) {
-					console.update();
-					console.draw(g);
-				}
-			}
+                if (console.isShown()) {
+                    console.update();
+                    console.draw(g);
+                }
+            }
 
-			g.dispose();
+            g.dispose();
 
-			strategy.show();
-		}
-	}
+            strategy.show();
+        }
+    }
 }

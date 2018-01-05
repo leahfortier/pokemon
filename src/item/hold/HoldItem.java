@@ -5,9 +5,9 @@ import item.ItemInterface;
 import pokemon.ActivePokemon;
 
 public interface HoldItem extends ItemInterface {
-	default int flingDamage() {
-		return 30;
-	}
+    default int flingDamage() {
+        return 30;
+    }
 
-	default void flingEffect(Battle b, ActivePokemon pelted) {}
+    default void flingEffect(Battle b, ActivePokemon pelted) {}
 }

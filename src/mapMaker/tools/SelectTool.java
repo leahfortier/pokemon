@@ -68,11 +68,11 @@ public class SelectTool extends Tool {
             return;
         }
 
-//			if (controlKeyDown && selected) {
-//				cut();
-//				controlClick = true;
-//				return;
-//			}
+//            if (controlKeyDown && selected) {
+//                cut();
+//                controlClick = true;
+//                return;
+//            }
 
         this.startLocation = TileUtils.getLocation(pressedLocation, mapMaker.getMapLocation());
 
@@ -82,13 +82,13 @@ public class SelectTool extends Tool {
 
     @Override
     public void drag(Point dragLocation) {
-//			if (controlClick) {
-//				controlClick = false;
-//				paste();
-//				//return;
-//			}
+//            if (controlClick) {
+//                controlClick = false;
+//                paste();
+//                //return;
+//            }
 //
-//			click(x, y);
+//            click(x, y);
     }
 
     @Override

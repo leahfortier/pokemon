@@ -105,8 +105,8 @@ public class FontMetrics {
     }
 
     public static int getTextHeight(Graphics g) {
-		return getTextHeight(g.getFont().getSize());
-	}
+        return getTextHeight(g.getFont().getSize());
+    }
 
     public static int getDistanceBetweenRows(Graphics g) {
         int fontSize = g.getFont().getSize();

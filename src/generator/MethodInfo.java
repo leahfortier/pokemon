@@ -196,10 +196,10 @@ class MethodInfo {
                 else if (fieldKey.equals("Field") || fieldKey.equals("UniqueEffects")) {
                     mapField += addFieldValue;
                 }
-//				else {
-//					// Leave the map field as is -- including in the original fields overrides the override file
-//					System.out.println("Map Field (ClassName = " + className + "): " + mapField);
-//				}
+//                else {
+//                    // Leave the map field as is -- including in the original fields overrides the override file
+//                    System.out.println("Map Field (ClassName = " + className + "): " + mapField);
+//                }
 
                 fields.add(fieldKey, mapField);
             }

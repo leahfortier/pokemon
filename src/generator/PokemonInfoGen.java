@@ -143,8 +143,8 @@ public class PokemonInfoGen {
             out.println(in.nextLine()); // Height Weight FlavorText
             out.println(in.nextLine()); // Egg Steps
             out.println(in.nextLine()); // Egg Groups
-            readMoves(in, out);    		// Level Up Moves
-            readMoves(in, out);			// Learnable Moves
+            readMoves(in, out);            // Level Up Moves
+            readMoves(in, out);            // Learnable Moves
             out.println(in.nextLine()); // New Line
         }
 
@@ -285,8 +285,8 @@ public class PokemonInfoGen {
         out.println(in.nextLine()); // Height Weight FlavorText
         out.println(in.nextLine()); // Egg Steps
         out.println(in.nextLine()); // Egg Groups
-        readMoves(in, out);    		// Level Up Moves
-        readMoves(in, out);			// Learnable Moves
+        readMoves(in, out);         // Level Up Moves
+        readMoves(in, out);         // Learnable Moves
         out.println(in.nextLine()); // New Line
     }
 

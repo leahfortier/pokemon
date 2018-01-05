@@ -6,5 +6,5 @@ import item.ItemInterface;
 import pokemon.ActivePokemon;
 
 public interface UseItem extends ItemInterface {
-	boolean use(Battle b, ActivePokemon p, Move m);
+    boolean use(Battle b, ActivePokemon p, Move m);
 }

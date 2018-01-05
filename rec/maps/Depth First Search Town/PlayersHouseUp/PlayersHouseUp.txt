@@ -132,9 +132,9 @@
           "trigger": {
             "triggerType": "GIVE_POKEMON",
             "triggerContents": "{
-				namesies: EXEGGUTOR,
-				level: 4
-			}"
+                namesies: EXEGGUTOR,
+                level: 4
+            }"
           }
         }
       ],

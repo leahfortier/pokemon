@@ -226,9 +226,9 @@
               "trigger": {
                 "triggerType": "MOVE_NPC",
                 "triggerContents": "{
-					npcEntityName: RSATown_NPC_Rival_01,
-					endEntranceName: PokeCenter
-				}"
+                    npcEntityName: RSATown_NPC_Rival_01,
+                    endEntranceName: PokeCenter
+                }"
               }
             },
             {
@@ -287,9 +287,9 @@
           "trigger": {
             "triggerType": "MOVE_NPC",
             "triggerContents": "{
-				npcEntityName: RSATown_NPC_Rival_01,
-				endLocationIsPlayer: true
-			}"
+                npcEntityName: RSATown_NPC_Rival_01,
+                endLocationIsPlayer: true
+            }"
           }
         }
       ],
