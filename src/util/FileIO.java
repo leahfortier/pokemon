@@ -199,7 +199,10 @@ public class FileIO {
 	}
 
 	// Overwrites the given file name with the content of out only if there is a difference
-	public static boolean overwriteFile(final String fileName, final String newFile) {
+	public static boolean overwriteFile(final String fileName, String newFile) {
+	    // Replace tabs with 4 spaces
+	    newFile = newFile.replaceAll("\t", StringUtils.repeat(" ", 4));
+
 		final String previousFile = readEntireFile(fileName);
 		if (StringUtils.isNullOrEmpty(previousFile) ||
 				!newFile.equals(previousFile.substring(0, previousFile.length() - 1))) {

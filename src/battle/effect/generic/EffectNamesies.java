@@ -115,147 +115,147 @@ import util.StringUtils;
 
 public enum EffectNamesies {
     // EVERYTHING BELOW IS GENERATED ###
-	LEECH_SEED("LeechSeed", LeechSeed::new),
-	FLINCH("Flinch", Flinch::new),
-	FIRE_SPIN("FireSpin", FireSpin::new),
-	INFESTATION("Infestation", Infestation::new),
-	MAGMA_STORM("MagmaStorm", MagmaStorm::new),
-	CLAMPED("Clamped", Clamped::new),
-	WHIRLPOOLED("Whirlpooled", Whirlpooled::new),
-	WRAPPED("Wrapped", Wrapped::new),
-	BINDED("Binded", Binded::new),
-	SAND_TOMB("SandTomb", SandTomb::new),
-	KINGS_SHIELD("KingsShield", KingsShield::new),
-	SPIKY_SHIELD("SpikyShield", SpikyShield::new),
-	BANEFUL_BUNKER("BanefulBunker", BanefulBunker::new),
-	PROTECTING("Protecting", Protecting::new),
-	QUICK_GUARD("QuickGuard", QuickGuard::new),
-	CRAFTY_SHIELD("CraftyShield", CraftyShield::new),
-	MAT_BLOCK("MatBlock", MatBlock::new),
-	BRACING("Bracing", Bracing::new),
-	CONFUSION("Confusion", Confusion::new),
-	SELF_CONFUSION("SelfConfusion", SelfConfusion::new),
-	SAFEGUARD("Safeguard", Safeguard::new),
-	GUARD_SPECIAL("GuardSpecial", GuardSpecial::new),
-	ENCORE("Encore", Encore::new),
-	DISABLE("Disable", Disable::new),
-	RAISE_CRITS("RaiseCrits", RaiseCrits::new),
-	CHANGE_ITEM("ChangeItem", ChangeItem::new),
-	CHANGE_ATTACK_TYPE("ChangeAttackType", ChangeAttackType::new),
-	CHANGE_TYPE("ChangeType", ChangeType::new),
-	CHANGE_ABILITY("ChangeAbility", ChangeAbility::new),
-	STOCKPILE("Stockpile", Stockpile::new),
-	USED_DEFENSE_CURL("UsedDefenseCurl", UsedDefenseCurl::new),
-	USED_MINIMIZE("UsedMinimize", UsedMinimize::new),
-	MIMIC("Mimic", Mimic::new),
-	IMPRISON("Imprison", Imprison::new),
-	TRAPPED("Trapped", Trapped::new),
-	FORESIGHT("Foresight", Foresight::new),
-	MIRACLE_EYE("MiracleEye", MiracleEye::new),
-	TORMENT("Torment", Torment::new),
-	SOUND_BLOCK("SoundBlock", SoundBlock::new),
-	TAUNT("Taunt", Taunt::new),
-	LASER_FOCUS("LaserFocus", LaserFocus::new),
-	LOCK_ON("LockOn", LockOn::new),
-	TELEKINESIS("Telekinesis", Telekinesis::new),
-	INGRAIN("Ingrain", Ingrain::new),
-	GROUNDED("Grounded", Grounded::new),
-	CURSE("Curse", Curse::new),
-	YAWN("Yawn", Yawn::new),
-	MAGNET_RISE("MagnetRise", MagnetRise::new),
-	UPROAR("Uproar", Uproar::new),
-	AQUA_RING("AquaRing", AquaRing::new),
-	NIGHTMARE("Nightmare", Nightmare::new),
-	CHARGE("Charge", Charge::new),
-	FOCUSING("Focusing", Focusing::new),
-	SHELL_TRAP("ShellTrap", ShellTrap::new),
-	BEAK_BLAST("BeakBlast", BeakBlast::new),
-	FIDDY_PERCENT_STRONGER("FiddyPercentStronger", FiddyPercentStronger::new),
-	TRANSFORMED("Transformed", Transformed::new),
-	SUBSTITUTE("Substitute", Substitute::new),
-	MIST("Mist", Mist::new),
-	MAGIC_COAT("MagicCoat", MagicCoat::new),
-	BIDE("Bide", Bide::new),
-	HALF_WEIGHT("HalfWeight", HalfWeight::new),
-	POWER_TRICK("PowerTrick", PowerTrick::new),
-	POWER_SPLIT("PowerSplit", PowerSplit::new),
-	GUARD_SPLIT("GuardSplit", GuardSplit::new),
-	HEAL_BLOCK("HealBlock", HealBlock::new),
-	INFATUATED("Infatuated", Infatuated::new),
-	SNATCH("Snatch", Snatch::new),
-	GRUDGE("Grudge", Grudge::new),
-	DESTINY_BOND("DestinyBond", DestinyBond::new),
-	PERISH_SONG("PerishSong", PerishSong::new),
-	EMBARGO("Embargo", Embargo::new),
-	CONSUMED_ITEM("ConsumedItem", ConsumedItem::new),
-	FAIRY_LOCK("FairyLock", FairyLock::new),
-	POWDER("Powder", Powder::new),
-	EATEN_BERRY("EatenBerry", EatenBerry::new),
-	BREAKS_THE_MOLD("BreaksTheMold", BreaksTheMold::new),
-	RAGING("Raging", Raging::new),
-	REFLECT("Reflect", Reflect::new),
-	LIGHT_SCREEN("LightScreen", LightScreen::new),
-	TAILWIND("Tailwind", Tailwind::new),
-	AURORA_VEIL("AuroraVeil", AuroraVeil::new),
-	STICKY_WEB("StickyWeb", StickyWeb::new),
-	STEALTH_ROCK("StealthRock", StealthRock::new),
-	TOXIC_SPIKES("ToxicSpikes", ToxicSpikes::new),
-	SPIKES("Spikes", Spikes::new),
-	WISH("Wish", Wish::new),
-	LUCKY_CHANT("LuckyChant", LuckyChant::new),
-	FUTURE_SIGHT("FutureSight", FutureSight::new),
-	DOOM_DESIRE("DoomDesire", DoomDesire::new),
-	HEAL_SWITCH("HealSwitch", HealSwitch::new),
-	DEAD_ALLY("DeadAlly", DeadAlly::new),
-	PAY_DAY("PayDay", PayDay::new),
-	GET_DAT_CASH_MONEY_TWICE("GetDatCashMoneyTwice", GetDatCashMoneyTwice::new),
-	GRAVITY("Gravity", Gravity::new),
-	WATER_SPORT("WaterSport", WaterSport::new),
-	MUD_SPORT("MudSport", MudSport::new),
-	WONDER_ROOM("WonderRoom", WonderRoom::new),
-	TRICK_ROOM("TrickRoom", TrickRoom::new),
-	MAGIC_ROOM("MagicRoom", MagicRoom::new),
-	MISTY_TERRAIN("MistyTerrain", MistyTerrain::new),
-	GRASSY_TERRAIN("GrassyTerrain", GrassyTerrain::new),
-	ELECTRIC_TERRAIN("ElectricTerrain", ElectricTerrain::new),
-	PSYCHIC_TERRAIN("PsychicTerrain", PsychicTerrain::new),
-	FIELD_UPROAR("FieldUproar", FieldUproar::new),
-	CLEAR_SKIES("ClearSkies", ClearSkies::new),
-	RAINING("Raining", Raining::new),
-	SUNNY("Sunny", Sunny::new),
-	SANDSTORM("Sandstorm", Sandstorm::new),
-	HAILING("Hailing", Hailing::new);
+    LEECH_SEED("LeechSeed", LeechSeed::new),
+    FLINCH("Flinch", Flinch::new),
+    FIRE_SPIN("FireSpin", FireSpin::new),
+    INFESTATION("Infestation", Infestation::new),
+    MAGMA_STORM("MagmaStorm", MagmaStorm::new),
+    CLAMPED("Clamped", Clamped::new),
+    WHIRLPOOLED("Whirlpooled", Whirlpooled::new),
+    WRAPPED("Wrapped", Wrapped::new),
+    BINDED("Binded", Binded::new),
+    SAND_TOMB("SandTomb", SandTomb::new),
+    KINGS_SHIELD("KingsShield", KingsShield::new),
+    SPIKY_SHIELD("SpikyShield", SpikyShield::new),
+    BANEFUL_BUNKER("BanefulBunker", BanefulBunker::new),
+    PROTECTING("Protecting", Protecting::new),
+    QUICK_GUARD("QuickGuard", QuickGuard::new),
+    CRAFTY_SHIELD("CraftyShield", CraftyShield::new),
+    MAT_BLOCK("MatBlock", MatBlock::new),
+    BRACING("Bracing", Bracing::new),
+    CONFUSION("Confusion", Confusion::new),
+    SELF_CONFUSION("SelfConfusion", SelfConfusion::new),
+    SAFEGUARD("Safeguard", Safeguard::new),
+    GUARD_SPECIAL("GuardSpecial", GuardSpecial::new),
+    ENCORE("Encore", Encore::new),
+    DISABLE("Disable", Disable::new),
+    RAISE_CRITS("RaiseCrits", RaiseCrits::new),
+    CHANGE_ITEM("ChangeItem", ChangeItem::new),
+    CHANGE_ATTACK_TYPE("ChangeAttackType", ChangeAttackType::new),
+    CHANGE_TYPE("ChangeType", ChangeType::new),
+    CHANGE_ABILITY("ChangeAbility", ChangeAbility::new),
+    STOCKPILE("Stockpile", Stockpile::new),
+    USED_DEFENSE_CURL("UsedDefenseCurl", UsedDefenseCurl::new),
+    USED_MINIMIZE("UsedMinimize", UsedMinimize::new),
+    MIMIC("Mimic", Mimic::new),
+    IMPRISON("Imprison", Imprison::new),
+    TRAPPED("Trapped", Trapped::new),
+    FORESIGHT("Foresight", Foresight::new),
+    MIRACLE_EYE("MiracleEye", MiracleEye::new),
+    TORMENT("Torment", Torment::new),
+    SOUND_BLOCK("SoundBlock", SoundBlock::new),
+    TAUNT("Taunt", Taunt::new),
+    LASER_FOCUS("LaserFocus", LaserFocus::new),
+    LOCK_ON("LockOn", LockOn::new),
+    TELEKINESIS("Telekinesis", Telekinesis::new),
+    INGRAIN("Ingrain", Ingrain::new),
+    GROUNDED("Grounded", Grounded::new),
+    CURSE("Curse", Curse::new),
+    YAWN("Yawn", Yawn::new),
+    MAGNET_RISE("MagnetRise", MagnetRise::new),
+    UPROAR("Uproar", Uproar::new),
+    AQUA_RING("AquaRing", AquaRing::new),
+    NIGHTMARE("Nightmare", Nightmare::new),
+    CHARGE("Charge", Charge::new),
+    FOCUSING("Focusing", Focusing::new),
+    SHELL_TRAP("ShellTrap", ShellTrap::new),
+    BEAK_BLAST("BeakBlast", BeakBlast::new),
+    FIDDY_PERCENT_STRONGER("FiddyPercentStronger", FiddyPercentStronger::new),
+    TRANSFORMED("Transformed", Transformed::new),
+    SUBSTITUTE("Substitute", Substitute::new),
+    MIST("Mist", Mist::new),
+    MAGIC_COAT("MagicCoat", MagicCoat::new),
+    BIDE("Bide", Bide::new),
+    HALF_WEIGHT("HalfWeight", HalfWeight::new),
+    POWER_TRICK("PowerTrick", PowerTrick::new),
+    POWER_SPLIT("PowerSplit", PowerSplit::new),
+    GUARD_SPLIT("GuardSplit", GuardSplit::new),
+    HEAL_BLOCK("HealBlock", HealBlock::new),
+    INFATUATED("Infatuated", Infatuated::new),
+    SNATCH("Snatch", Snatch::new),
+    GRUDGE("Grudge", Grudge::new),
+    DESTINY_BOND("DestinyBond", DestinyBond::new),
+    PERISH_SONG("PerishSong", PerishSong::new),
+    EMBARGO("Embargo", Embargo::new),
+    CONSUMED_ITEM("ConsumedItem", ConsumedItem::new),
+    FAIRY_LOCK("FairyLock", FairyLock::new),
+    POWDER("Powder", Powder::new),
+    EATEN_BERRY("EatenBerry", EatenBerry::new),
+    BREAKS_THE_MOLD("BreaksTheMold", BreaksTheMold::new),
+    RAGING("Raging", Raging::new),
+    REFLECT("Reflect", Reflect::new),
+    LIGHT_SCREEN("LightScreen", LightScreen::new),
+    TAILWIND("Tailwind", Tailwind::new),
+    AURORA_VEIL("AuroraVeil", AuroraVeil::new),
+    STICKY_WEB("StickyWeb", StickyWeb::new),
+    STEALTH_ROCK("StealthRock", StealthRock::new),
+    TOXIC_SPIKES("ToxicSpikes", ToxicSpikes::new),
+    SPIKES("Spikes", Spikes::new),
+    WISH("Wish", Wish::new),
+    LUCKY_CHANT("LuckyChant", LuckyChant::new),
+    FUTURE_SIGHT("FutureSight", FutureSight::new),
+    DOOM_DESIRE("DoomDesire", DoomDesire::new),
+    HEAL_SWITCH("HealSwitch", HealSwitch::new),
+    DEAD_ALLY("DeadAlly", DeadAlly::new),
+    PAY_DAY("PayDay", PayDay::new),
+    GET_DAT_CASH_MONEY_TWICE("GetDatCashMoneyTwice", GetDatCashMoneyTwice::new),
+    GRAVITY("Gravity", Gravity::new),
+    WATER_SPORT("WaterSport", WaterSport::new),
+    MUD_SPORT("MudSport", MudSport::new),
+    WONDER_ROOM("WonderRoom", WonderRoom::new),
+    TRICK_ROOM("TrickRoom", TrickRoom::new),
+    MAGIC_ROOM("MagicRoom", MagicRoom::new),
+    MISTY_TERRAIN("MistyTerrain", MistyTerrain::new),
+    GRASSY_TERRAIN("GrassyTerrain", GrassyTerrain::new),
+    ELECTRIC_TERRAIN("ElectricTerrain", ElectricTerrain::new),
+    PSYCHIC_TERRAIN("PsychicTerrain", PsychicTerrain::new),
+    FIELD_UPROAR("FieldUproar", FieldUproar::new),
+    CLEAR_SKIES("ClearSkies", ClearSkies::new),
+    RAINING("Raining", Raining::new),
+    SUNNY("Sunny", Sunny::new),
+    SANDSTORM("Sandstorm", Sandstorm::new),
+    HAILING("Hailing", Hailing::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
     private final String name;
-	private final EffectCreator effectCreator;
+    private final EffectCreator effectCreator;
 
     EffectNamesies(String name, EffectCreator effectCreator) {
         this.name = name;
-		this.effectCreator = effectCreator;
+        this.effectCreator = effectCreator;
     }
 
     @FunctionalInterface
     private interface EffectCreator {
-		Effect createEffect();
-	}
+        Effect createEffect();
+    }
 
-	public Effect getEffect() {
-		return this.effectCreator.createEffect();
-	}
+    public Effect getEffect() {
+        return this.effectCreator.createEffect();
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public static EffectNamesies getValueOf(String name) {
-		try {
-			return EffectNamesies.valueOf(StringUtils.getNamesiesString(name));
-		} catch (IllegalArgumentException exception) {
-			Global.error(name + " does not have a valid EffectNamesies value");
-			return null;
-		}
-	}
+    public static EffectNamesies getValueOf(String name) {
+        try {
+            return EffectNamesies.valueOf(StringUtils.getNamesiesString(name));
+        } catch (IllegalArgumentException exception) {
+            Global.error(name + " does not have a valid EffectNamesies value");
+            return null;
+        }
+    }
 }
 
