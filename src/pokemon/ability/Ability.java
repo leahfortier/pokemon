@@ -721,9 +721,9 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
         
         private static final StatusCondition[] statuses = new StatusCondition[] {
-            StatusCondition.PARALYZED,
-            StatusCondition.POISONED,
-            StatusCondition.ASLEEP
+                StatusCondition.PARALYZED,
+                StatusCondition.POISONED,
+                StatusCondition.ASLEEP
         };
         
         EffectSpore() {

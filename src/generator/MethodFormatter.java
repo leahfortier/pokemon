@@ -6,6 +6,7 @@ class MethodFormatter {
     
     private int tabs;
     private int parenthesesBalance;
+    private boolean inArrayDeclaration;
     private boolean inSwitch;
     private boolean inCases;
     
@@ -36,6 +37,10 @@ class MethodFormatter {
         if (line.startsWith("}")) {
             tabs--;
             inSwitch = false;
+            if (inArrayDeclaration) {
+                tabs--;
+                inArrayDeclaration = false;
+            }
         }
         
         int numOpen = (int)line.chars().filter(num -> num == '(').count();
@@ -60,6 +65,10 @@ class MethodFormatter {
         
         if (line.endsWith("{")) {
             tabs++;
+            if (line.endsWith(" = {") || line.endsWith("[] {")) {
+                tabs++;
+                inArrayDeclaration = true;
+            }
         }
         
         if (!previouslyInParentheses && nowInParentheses) {

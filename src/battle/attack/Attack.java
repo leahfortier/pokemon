@@ -3795,9 +3795,9 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
         
         private static final StatusCondition[] statusConditions = {
-            StatusCondition.PARALYZED,
-            StatusCondition.BURNED,
-            StatusCondition.FROZEN
+                StatusCondition.PARALYZED,
+                StatusCondition.BURNED,
+                StatusCondition.FROZEN
         };
         
         TriAttack() {
