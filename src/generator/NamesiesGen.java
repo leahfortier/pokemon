@@ -56,7 +56,7 @@ class NamesiesGen {
                     Global.error("Everything generated line should not be repeated.");
                 }
                 
-                out.appendLine(namesies + ";\n");
+                out.appendLine(namesies + ";\n\t");
                 
                 outputNamesies = true;
                 canPrint = false;

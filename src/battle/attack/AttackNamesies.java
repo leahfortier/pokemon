@@ -1320,7 +1320,7 @@ public enum AttackNamesies {
     PHOTON_GEYSER("Photon Geyser", PhotonGeyser::new),
     MIND_BLOWN("Mind Blown", MindBlown::new),
     PLASMA_FISTS("Plasma Fists", PlasmaFists::new);
-
+    
     // EVERYTHING ABOVE IS GENERATED ###
     
     private static final Map<AttackNamesies, Attack> attackMap = new EnumMap<>(AttackNamesies.class);

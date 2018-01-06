@@ -57,7 +57,7 @@ class MethodFormatter {
         if (inSwitch && (line.equals("break;") || line.startsWith("return ") || line.equals("return;"))) {
             tabs--;
         }
-    
+        
         if (line.endsWith("{")) {
             tabs++;
         }

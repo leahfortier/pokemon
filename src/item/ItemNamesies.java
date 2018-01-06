@@ -871,7 +871,7 @@ public enum ItemNamesies {
     SURF_TM("Surf TM", SurfTM::new),
     STRENGTH_TM("Strength TM", StrengthTM::new),
     WATERFALL_TM("Waterfall TM", WaterfallTM::new);
-
+    
     // EVERYTHING ABOVE IS GENERATED ###
     
     private static final Map<ItemNamesies, Item> itemMap = new EnumMap<>(ItemNamesies.class);

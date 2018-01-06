@@ -225,7 +225,7 @@ public enum EffectNamesies {
     SUNNY("Sunny", Sunny::new),
     SANDSTORM("Sandstorm", Sandstorm::new),
     HAILING("Hailing", Hailing::new);
-
+    
     // EVERYTHING ABOVE IS GENERATED ###
     
     private final String name;

@@ -429,7 +429,7 @@ public enum AbilityNamesies {
     ELECTRIC_SURGE("Electric Surge", ElectricSurge::new),
     MISTY_SURGE("Misty Surge", MistySurge::new),
     GRASSY_SURGE("Grassy Surge", GrassySurge::new);
-
+    
     // EVERYTHING ABOVE IS GENERATED ###
     
     private final String name;

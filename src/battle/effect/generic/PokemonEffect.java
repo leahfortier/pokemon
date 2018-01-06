@@ -935,8 +935,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
         
         public void applyEndTurn(ActivePokemon victim, Battle b) {
+            // If the move runs out of PP, Encore immediately ends
             if (move.getPP() == 0) {
-                active = false; // If the move runs out of PP, Encore immediately ends
+                active = false;
             }
         }
         

@@ -829,7 +829,7 @@ public enum PokemonNamesies {
     JUPETTA("Jupetta"),
     LOUGAROC("Lougaroc"),
     LUGARUGAN("Lugarugan");
-
+    
     // EVERYTHING ABOVE IS GENERATED ###
     
     private final String name;
