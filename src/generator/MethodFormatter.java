@@ -16,7 +16,9 @@ class MethodFormatter {
         this.inCases = false;
     }
     
+    // Appends the trimmed line with the appropriate spaces
     void appendLine(String line, StringAppender method) {
+        line = line.trim();
         
         if (line.startsWith("switch (")) {
             inSwitch = true;
@@ -31,7 +33,7 @@ class MethodFormatter {
             }
         }
         
-        if (line.contains("}") && !line.contains("{")) {
+        if (line.startsWith("}")) {
             tabs--;
             inSwitch = false;
         }
@@ -55,8 +57,8 @@ class MethodFormatter {
         if (inSwitch && (line.equals("break;") || line.startsWith("return ") || line.equals("return;"))) {
             tabs--;
         }
-        
-        if (line.contains("{") && !line.contains("}")) {
+    
+        if (line.endsWith("{")) {
             tabs++;
         }
         

@@ -136,10 +136,15 @@ Poison Point:
 Rivalry:
 	Desc: Raises Attack if the foe is of the same gender.
 	GetMultiplier:
-		if (user.getGender() == Gender.GENDERLESS) return 1;
-		else if (Gender.oppositeGenders(user, victim)) return .75;
-		else if (user.getGender() == victim.getGender()) return 1.25;
-		else return 1;
+		if (user.getGender() == Gender.GENDERLESS) {
+			return 1;
+		} else if (Gender.oppositeGenders(user, victim)) {
+			return .75;
+		} else if (user.getGender() == victim.getGender()) {
+			return 1.25;
+		} else {
+			return 1;
+		}
 		###
 *
 Cute Charm:
@@ -248,8 +253,7 @@ Dry Skin:
 		if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
 			Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
 			victim.reduceHealthFraction(b, 1/8.0);
-		}
-		else if (b.getWeather().namesies() == EffectNamesies.RAINING && !victim.fullHealth()) {
+		} else if (b.getWeather().namesies() == EffectNamesies.RAINING && !victim.fullHealth()) {
 			victim.healHealthFraction(1/8.0);
 			Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
 		}
@@ -463,8 +467,7 @@ Forewarn:
 				highestPower = power;
 				besties = new ArrayList<>();
 				besties.add(move.getAttack().namesies());
-			}
-			else if (power == highestPower) {
+			} else if (power == highestPower) {
 				besties.add(move.getAttack().namesies());
 			}
 		}
@@ -472,8 +475,7 @@ Forewarn:
 		AttackNamesies warn;
 		if (highestPower == -1) {
 			warn = RandomUtils.getRandomValue(otherMoves).getAttack().namesies();
-		}
-		else {
+		} else {
 			warn = RandomUtils.getRandomValue(besties);
 		}
 
@@ -698,11 +700,9 @@ Hustle:
 	ModifyStat:
 		if (s == Stat.ATTACK) {
 			return 1.5;
-		}
-		else if (s == Stat.ACCURACY) {
+		} else if (s == Stat.ACCURACY) {
 			return .8;
-		}
-		else {
+		} else {
 			return 1;
 		}
 		###
@@ -783,8 +783,7 @@ Truant:
 	ApplyEndTurn:
 		if (victim.hasStatus(StatusCondition.ASLEEP)) {
 			lazyface = false;
-		}
-		else {
+		} else {
 			lazyface = !lazyface;
 		}
 		###
@@ -1448,8 +1447,7 @@ Stance Change:
 		if (shieldForm && !p.getAttack().isStatusMove()) {
 			shieldForm = false;
 			Messages.add(p.getName() + " changed into Blade Forme!");
-		}
-		else if (!shieldForm && p.getAttack().namesies() == AttackNamesies.KINGS_SHIELD) {
+		} else if (!shieldForm && p.getAttack().namesies() == AttackNamesies.KINGS_SHIELD) {
 			shieldForm = true;
 			Messages.add(p.getName() + " changed into Shield Forme!");
 		}

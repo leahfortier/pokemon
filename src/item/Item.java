@@ -167,6 +167,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
     }
     
     // EVERYTHING BELOW IS GENERATED ###
+    
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
     
     static class NoItem extends Item implements HoldItem {
@@ -329,8 +330,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
                 
                 victim.healHealthFraction(1/16.0);
                 Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.name + "!").updatePokemon(b, victim));
-            }
-            else if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+            } else if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
                 Messages.add(victim.getName() + " lost some of its HP due to its " + this.name + "!");
                 victim.reduceHealthFraction(b, 1/8.0);
             }
@@ -3863,14 +3863,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             double weight = o.getWeight(b);
             if (weight <= 451.5) {
                 return -20;
-            }
-            else if (weight <= 661.5) {
+            } else if (weight <= 661.5) {
                 return 20;
-            }
-            else if (weight <= 903.0) {
+            } else if (weight <= 903.0) {
                 return 30;
-            }
-            else {
+            } else {
                 return 40;
             }
         }
@@ -3888,14 +3885,11 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             if (me.getLevel()/4 > o.getLevel()) {
                 return 8;
-            }
-            else if (me.getLevel()/2 > o.getLevel()) {
+            } else if (me.getLevel()/2 > o.getLevel()) {
                 return 4;
-            }
-            else if (me.getLevel() > o.getLevel()) {
+            } else if (me.getLevel() > o.getLevel()) {
                 return 2;
-            }
-            else {
+            } else {
                 return 1;
             }
         }
@@ -3980,11 +3974,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             if (o.getLevel() <= 19) {
                 return 3;
-            }
-            else if (o.getLevel() <= 29) {
+            } else if (o.getLevel() <= 29) {
                 return 2;
-            }
-            else {
+            } else {
                 return 1;
             }
         }
@@ -5223,7 +5215,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             }
             
             p.setAbility(other);
-            Messages.add(p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!")    ;
+            Messages.add(p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!");
             return true;
         }
     }

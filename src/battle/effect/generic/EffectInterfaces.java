@@ -36,7 +36,7 @@ public final class EffectInterfaces {
     
     // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
     public interface ApplyDamageEffect {
-
+        
         // b: The current battle
         // user: The user of that attack, the one who is probably implementing this effect
         // victim: The Pokemon that received the attack
@@ -65,7 +65,7 @@ public final class EffectInterfaces {
     
     // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
     public interface OpponentApplyDamageEffect {
-
+        
         // b: The current battle
         // user: The user of that attack
         // victim: The Pokemon that received the attack, the one who is probably implementing this effect
@@ -171,7 +171,7 @@ public final class EffectInterfaces {
     }
     
     public interface PhysicalContactEffect extends OpponentApplyDamageEffect {
-
+        
         // b: The current battle
         // user: The user of the attack that caused the physical contact
         // victim: The Pokemon that received the physical contact attack
@@ -186,7 +186,7 @@ public final class EffectInterfaces {
     }
     
     public interface TakeDamageEffect {
-
+        
         // b: The current battle
         // user: The user of the attack
         // victim: The Pokemon who is taking damage, they are the one's probably implementing this
@@ -213,7 +213,7 @@ public final class EffectInterfaces {
     }
     
     public interface OpponentTakeDamageEffect {
-
+        
         // b: The current battle
         // user: The user of the attack and implementer of the effect
         // victim: The Pokemon who is taking damage
@@ -278,12 +278,10 @@ public final class EffectInterfaces {
             if (this instanceof PokemonEffect) {
                 PokemonEffect effect = (PokemonEffect)this;
                 released.getEffects().remove(effect);
-            }
-            else if (this instanceof TeamEffect) {
+            } else if (this instanceof TeamEffect) {
                 TeamEffect effect = (TeamEffect)this;
                 b.getEffects(released).remove(effect);
-            }
-            else {
+            } else {
                 Global.error("Invalid defog release object " + this.getClass().getSimpleName());
             }
         }
@@ -309,12 +307,10 @@ public final class EffectInterfaces {
             if (this instanceof PokemonEffect) {
                 PokemonEffect effect = (PokemonEffect)this;
                 releaser.getEffects().remove(effect);
-            }
-            else if (this instanceof TeamEffect) {
+            } else if (this instanceof TeamEffect) {
                 TeamEffect effect = (TeamEffect)this;
                 b.getEffects(releaser).remove(effect);
-            }
-            else {
+            } else {
                 Global.error("Invalid rapid spin release object " + this.getClass().getSimpleName());
             }
         }
@@ -332,7 +328,7 @@ public final class EffectInterfaces {
     }
     
     public interface NameChanger {
-
+        
         // TODO: Not a fan that this only operates on the ability but then again I'm not passing the battle in here and also fuck illusion srsly I might just special case it since it's so fucking unique
         String getNameChange();
         void setNameChange(Battle b, ActivePokemon victim);
@@ -379,7 +375,7 @@ public final class EffectInterfaces {
     }
     
     public interface StatLoweredEffect {
-
+        
         // b: The current battle
         // caster: The Pokemon responsible for causing the stat to be lowered
         // victim: The Pokemon who's stat is being lowered
@@ -488,7 +484,7 @@ public final class EffectInterfaces {
     }
     
     public interface AccuracyBypassEffect {
-
+        
         // Attacker is the Pokemon whose accuracy is being evaluated and is the Pokemon on which this effect is attached to
         boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending);
         
@@ -509,7 +505,7 @@ public final class EffectInterfaces {
     }
     
     public interface OpponentAccuracyBypassEffect {
-
+        
         // Attacker is the Pokemon whose accuracy is being evaluated, defender is the Pokemon on which this effect is attached to
         boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending);
         
@@ -550,7 +546,7 @@ public final class EffectInterfaces {
     }
     
     public interface OpponentAttackSelectionEffect extends AttackSelectionEffect {
-
+        
         // Don't need to include this method again since it already extends AttackSelectionEffect, but still need the invoke method
         boolean usable(Battle b, ActivePokemon p, Move m);
         
@@ -637,7 +633,7 @@ public final class EffectInterfaces {
     }
     
     public interface BeforeTurnEffect {
-
+        
         // TODO: Rename these to attacking and defending
         boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b);
         
@@ -818,7 +814,7 @@ public final class EffectInterfaces {
     }
     
     public interface StatusPreventionEffect {
-
+        
         // TODO: Would be nice in the future if I am able to implement multiple invoke methods for the same interface method since this could also use a basic check invoke as well
         boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status);
         String statusPreventionMessage(ActivePokemon victim);
@@ -899,7 +895,7 @@ public final class EffectInterfaces {
     }
     
     public interface ChangeTypeEffect {
-
+        
         // Guarantee the change-type effect to be first
         Type[] getType(Battle b, ActivePokemon p, boolean display);
         
@@ -1124,9 +1120,9 @@ public final class EffectInterfaces {
     }
     
     public interface StageChangingEffect {
-        int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s);
+        int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s);
         
-        static int getModifier(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
+        static int getModifier(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
             int modifier = 0;
             
             ActivePokemon moldBreaker = s.user() ? null : opp;
@@ -1193,7 +1189,7 @@ public final class EffectInterfaces {
     }
     
     public interface StatChangingEffect {
-
+        
         // b: The current battle
         // p: The Pokemon that the stat is being altered on
         // opp: The opposing Pokemon
@@ -1418,7 +1414,7 @@ public final class EffectInterfaces {
     
     public interface AttackBlocker {
         boolean block(Battle b, ActivePokemon user, ActivePokemon victim);
-        default void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {}
+        default void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {}
         
         default String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
             return Effect.DEFAULT_FAIL_MESSAGE;

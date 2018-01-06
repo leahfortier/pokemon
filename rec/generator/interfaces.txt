@@ -172,12 +172,10 @@ DefogRelease:
 		if (this instanceof PokemonEffect) {
 			PokemonEffect effect = (PokemonEffect)this;
 			released.getEffects().remove(effect);
-		}
-		else if (this instanceof TeamEffect) {
+		} else if (this instanceof TeamEffect) {
 			TeamEffect effect = (TeamEffect)this;
 			b.getEffects(released).remove(effect);
-		}
-		else {
+		} else {
 			Global.error("Invalid defog release object " + this.getClass().getSimpleName());
 		}
 			###
@@ -198,12 +196,10 @@ RapidSpinRelease:
 			if (this instanceof PokemonEffect) {
 				PokemonEffect effect = (PokemonEffect)this;
 				releaser.getEffects().remove(effect);
-			}
-			else if (this instanceof TeamEffect) {
+			} else if (this instanceof TeamEffect) {
 				TeamEffect effect = (TeamEffect)this;
 				b.getEffects(releaser).remove(effect);
-			}
-			else {
+			} else {
 				Global.error("Invalid rapid spin release object " + this.getClass().getSimpleName());
 			}
 			###
@@ -599,7 +595,7 @@ HalfWeightEffect:
 ***
 StageChangingEffect:
 	Method:
-		Header: int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s)
+		Header: int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
 		Invoke: Add
 		MoldBreakerNullCheck: s.user() ? null : opp
 		EffectList: p
@@ -751,7 +747,7 @@ AttackBlocker:
 		EffectList: victim
 	*
 	Method:
-		Header: void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim)
+		Header: void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim)
 		Default: Empty
 	*
 	Method:

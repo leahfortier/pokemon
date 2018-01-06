@@ -25,8 +25,7 @@ LeechSeed:
 	FailMessage:
 		if (victim.isType(b, Type.GRASS)) {
 			return "It doesn't affect " + victim.getName() + "!";
-		}
-		else if (victim.hasEffect(this.namesies)) {
+		} else if (victim.hasEffect(this.namesies)) {
 			return victim.getName() + " is already seeded!";
 		}
 		###
@@ -153,8 +152,7 @@ Confusion:
 	FailMessage:
 		if (victim.hasEffect(this.namesies)) {
 			return victim.getName() + " is already confused!";
-		}
-		else if (victim.hasAbility(AbilityNamesies.OWN_TEMPO)) {
+		} else if (victim.hasAbility(AbilityNamesies.OWN_TEMPO)) {
 			return victim.getName() + "'s " + victim.getAbility().getName() + " prevents confusion!";
 		}
 		###
@@ -255,7 +253,10 @@ Encore:
 		super.cast(b, caster, victim, source, printCast);
 		###
 	ApplyEndTurn:
-		if (move.getPP() == 0) active = false; // If the move runs out of PP, Encore immediately ends
+		// If the move runs out of PP, Encore immediately ends
+		if (move.getPP() == 0) {
+			active = false;
+		}
 		###
 *
 Disable:
@@ -290,8 +291,7 @@ Disable:
 	FailMessage:
 		if (victim.hasEffect(this.namesies)) {
 			return victim.getName() + " is already disabled!";
-		}
-		else if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
+		} else if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
 			return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being disabled!";
 		}
 		###
@@ -421,7 +421,7 @@ ChangeType:
 		type = typeSource.getType(b, caster, victim);
 
 		// Remove any other ChangeType effects that the victim may have
-		while (victim.getAttributes().removeEffect(this.namesies));
+		while (victim.getAttributes().removeEffect(this.namesies)) {}
 
 		super.cast(b, caster, victim, source, printCast);
 		###
@@ -449,7 +449,7 @@ ChangeAbility:
 		message = changey.getMessage(b, caster, victim);
 
 		// Remove any other ChangeAbility effects that the victim may have
-		while (victim.getAttributes().removeEffect(this.namesies));
+		while (victim.getAttributes().removeEffect(this.namesies)) {}
 		super.cast(b, caster, victim, source, printCast);
 		###
 	GetAbility:
@@ -508,8 +508,7 @@ Mimic:
 		for (Move move : actualMoves) {
 			if (move.getAttack().namesies() == AttackNamesies.MIMIC) {
 				list.add(mimicMove);
-			}
-			else {
+			} else {
 				list.add(move);
 			}
 		}
@@ -729,7 +728,10 @@ Uproar:
 AquaRing:
 	Int: PassableEffect, EndTurnEffect
 	ApplyEndTurn:
-		if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) return;
+		if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+			return;
+		}
+		
 		int healAmount = victim.healHealthFraction(1/16.0);
 		if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
 			victim.heal((int)(healAmount*.3));
@@ -884,8 +886,7 @@ Substitute:
 		if (this.hp <= 0) {
 			Messages.add(new MessageUpdate("The substitute broke!").withNewPokemon(damageTaker.getPokemonInfo(), damageTaker.isShiny(), true, damageTaker.isPlayer()));
 			damageTaker.getAttributes().removeEffect(this.namesies());
-		}
-		else {
+		} else {
 			Messages.add("The substitute absorbed the hit!");
 		}
 
@@ -951,8 +952,7 @@ Bide:
 		if (bidesies.damage == 0) {
 			// Sucks to suck
 			Messages.add(this.getFailMessage(b, caster, victim));
-		}
-		else {
+		} else {
 			// RETALIATION STATION
 			b.getOtherPokemon(victim).reduceHealth(b, 2*bidesies.damage);
 		}
@@ -972,8 +972,11 @@ HalfWeight:
 	CanHave: True
 	Cast:
 		HalfWeight halfWeight = (HalfWeight)victim.getEffect(this.namesies);
-		if (halfWeight == null) super.cast(b, caster, victim, source, printCast);
-		else halfWeight.layers++;
+		if (halfWeight == null) {
+			super.cast(b, caster, victim, source, printCast);
+		} else {
+			halfWeight.layers++;
+		}
 		###
 	Activate:
 		this.layers = 1;
@@ -984,9 +987,13 @@ HalfWeight:
 PowerTrick:
 	CanHave: True
 	SwitchStat:
-		if (s == Stat.ATTACK) return Stat.DEFENSE;
-		if (s == Stat.DEFENSE) return Stat.ATTACK;
-		return s;
+		if (s == Stat.ATTACK) {
+			return Stat.DEFENSE;
+		} else if (s == Stat.DEFENSE) {
+			return Stat.ATTACK;
+		} else {
+			return s;
+		}
 		###
 	Int: PassableEffect, StatSwitchingEffect
 	CastMessage: user.getName() + "'s attack and defense were swapped!"

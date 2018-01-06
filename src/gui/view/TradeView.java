@@ -63,14 +63,14 @@ public class TradeView extends View {
         this.canvasPanel = DrawPanel.fullGamePanel()
                                     .withTransparentCount(2)
                                     .withBorderPercentage(0);
-
+        
         int panelWidth = 183;
         int spacing = 20;
         
         this.offeringPanel = new DrawPanel(spacing, spacing, panelWidth, 90)
                 .withTransparentCount(2)
                 .withBlackOutline();
-
+        
         this.requestedPanel = new DrawPanel(
                 Global.GAME_SIZE.width - spacing - panelWidth,
                 BasicPanels.getMessagePanelY() - spacing - this.offeringPanel.height,
@@ -79,7 +79,7 @@ public class TradeView extends View {
         )
                 .withTransparentCount(2)
                 .withBlackOutline();
-
+        
         int messagePanelHeight = 80;
         this.messagePanel = new DrawPanel(
                 0,
@@ -88,7 +88,7 @@ public class TradeView extends View {
                 messagePanelHeight
         )
                 .withBlackOutline();
-
+        
         this.buttons = BasicPanels.getFullMessagePanelButtons(panelWidth, 55, 2, NUM_COLS);
         this.cancelButton = buttons[buttons.length - 1];
         
@@ -96,7 +96,7 @@ public class TradeView extends View {
                 .withBackgroundColor(Type.NORMAL.getColor())
                 .withTransparentCount(2)
                 .withBlackOutline();
-
+        
         GameData data = Game.getData();
         this.partyTiles = data.getPartyTiles();
         this.pokemonTiles = data.getPokemonTilesLarge();
@@ -224,7 +224,7 @@ public class TradeView extends View {
                         .withBackgroundColors(Type.getColors(pokemon.getActualType()))
                         .withTransparentCount(2)
                         .withBlackOutline();
-
+                
                 buttonPanel.drawBackground(g);
                 buttonPanel.imageLabel(g, 22, partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getActualName());
             }

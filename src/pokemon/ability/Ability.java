@@ -219,6 +219,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     }
     
     // EVERYTHING BELOW IS GENERATED ###
+    
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
     
     static class NoAbility extends Ability {
@@ -421,7 +422,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             super(AbilityNamesies.TANGLED_FEET, "Raises evasion if the Pok\u00e9mon is confused.");
         }
         
-        public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
+        public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
             return s == Stat.EVASION && p.hasEffect(EffectNamesies.CONFUSION) ? 1 : 0;
         }
     }
@@ -504,7 +505,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             super(AbilityNamesies.SAND_VEIL, "Raises the Pok\u00e9mon's evasion during a sandstorm by one level.");
         }
         
-        public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
+        public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
             return s == Stat.EVASION && b.getWeather().namesies() == EffectNamesies.SANDSTORM ? 1 : 0;
         }
         
@@ -575,10 +576,15 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getGender() == Gender.GENDERLESS) return 1;
-            else if (Gender.oppositeGenders(user, victim)) return .75;
-            else if (user.getGender() == victim.getGender()) return 1.25;
-            else return 1;
+            if (user.getGender() == Gender.GENDERLESS) {
+                return 1;
+            } else if (Gender.oppositeGenders(user, victim)) {
+                return .75;
+            } else if (user.getGender() == victim.getGender()) {
+                return 1.25;
+            } else {
+                return 1;
+            }
         }
     }
     
@@ -747,8 +753,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
                 Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
                 victim.reduceHealthFraction(b, 1/8.0);
-            }
-            else if (b.getWeather().namesies() == EffectNamesies.RAINING && !victim.fullHealth()) {
+            } else if (b.getWeather().namesies() == EffectNamesies.RAINING && !victim.fullHealth()) {
                 victim.healHealthFraction(1/8.0);
                 Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
             }
@@ -813,9 +818,9 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.PARALYZED)) {
-            Status.removeStatus(b, victim, CastSource.ABILITY);
+                Status.removeStatus(b, victim, CastSource.ABILITY);
+            }
         }
-    }
         
         Limber() {
             super(AbilityNamesies.LIMBER, "The Pok\u00e9mon is protected from paralysis.");
@@ -881,9 +886,9 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.ASLEEP)) {
-            Status.removeStatus(b, victim, CastSource.ABILITY);
+                Status.removeStatus(b, victim, CastSource.ABILITY);
+            }
         }
-    }
         
         VitalSpirit() {
             super(AbilityNamesies.VITAL_SPIRIT, "Prevents the Pok\u00e9mon from falling asleep.");
@@ -906,9 +911,9 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.ASLEEP)) {
-            Status.removeStatus(b, victim, CastSource.ABILITY);
+                Status.removeStatus(b, victim, CastSource.ABILITY);
+            }
         }
-    }
         
         Insomnia() {
             super(AbilityNamesies.INSOMNIA, "Prevents the Pok\u00e9mon from falling asleep.");
@@ -1219,8 +1224,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
                     highestPower = power;
                     besties = new ArrayList<>();
                     besties.add(move.getAttack().namesies());
-                }
-                else if (power == highestPower) {
+                } else if (power == highestPower) {
                     besties.add(move.getAttack().namesies());
                 }
             }
@@ -1228,8 +1232,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             AttackNamesies warn;
             if (highestPower == -1) {
                 warn = RandomUtils.getRandomValue(otherMoves).getAttack().namesies();
-            }
-            else {
+            } else {
                 warn = RandomUtils.getRandomValue(besties);
             }
             
@@ -1369,9 +1372,9 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.BURNED)) {
-            Status.removeStatus(b, victim, CastSource.ABILITY);
+                Status.removeStatus(b, victim, CastSource.ABILITY);
+            }
         }
-    }
         
         WaterVeil() {
             super(AbilityNamesies.WATER_VEIL, "Prevents the Pok\u00e9mon from getting a burn.");
@@ -1654,9 +1657,9 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.POISONED)) {
-            Status.removeStatus(b, victim, CastSource.ABILITY);
+                Status.removeStatus(b, victim, CastSource.ABILITY);
+            }
         }
-    }
         
         Immunity() {
             super(AbilityNamesies.IMMUNITY, "Prevents the Pok\u00e9mon from getting poisoned.");
@@ -1682,7 +1685,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             super(AbilityNamesies.SNOW_CLOAK, "Raises the Pok\u00e9mon's evasion during a hailstorm by one level.");
         }
         
-        public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
+        public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
             return s == Stat.EVASION && b.getWeather().namesies() == EffectNamesies.HAILING ? 1 : 0;
         }
         
@@ -1762,11 +1765,9 @@ public abstract class Ability implements Serializable, AbilityHolder {
         public double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
             if (s == Stat.ATTACK) {
                 return 1.5;
-            }
-            else if (s == Stat.ACCURACY) {
+            } else if (s == Stat.ACCURACY) {
                 return .8;
-            }
-            else {
+            } else {
                 return 1;
             }
         }
@@ -1866,9 +1867,9 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.FROZEN)) {
-            Status.removeStatus(b, victim, CastSource.ABILITY);
+                Status.removeStatus(b, victim, CastSource.ABILITY);
+            }
         }
-    }
         
         MagmaArmor() {
             super(AbilityNamesies.MAGMA_ARMOR, "Prevents the Pok\u00e9mon from becoming frozen.");
@@ -1959,8 +1960,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (victim.hasStatus(StatusCondition.ASLEEP)) {
                 lazyface = false;
-            }
-            else {
+            } else {
                 lazyface = !lazyface;
             }
         }
@@ -3125,9 +3125,9 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.ASLEEP)) {
-            Status.removeStatus(b, victim, CastSource.ABILITY);
+                Status.removeStatus(b, victim, CastSource.ABILITY);
+            }
         }
-    }
         
         SweetVeil() {
             super(AbilityNamesies.SWEET_VEIL, "Prevents itself and ally Pok\u00e9mon from falling asleep.");
@@ -3340,8 +3340,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             if (shieldForm && !p.getAttack().isStatusMove()) {
                 shieldForm = false;
                 Messages.add(p.getName() + " changed into Blade Forme!");
-            }
-            else if (!shieldForm && p.getAttack().namesies() == AttackNamesies.KINGS_SHIELD) {
+            } else if (!shieldForm && p.getAttack().namesies() == AttackNamesies.KINGS_SHIELD) {
                 shieldForm = true;
                 Messages.add(p.getName() + " changed into Shield Forme!");
             }
@@ -3522,9 +3521,9 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.BURNED)) {
-            Status.removeStatus(b, victim, CastSource.ABILITY);
+                Status.removeStatus(b, victim, CastSource.ABILITY);
+            }
         }
-    }
         
         WaterBubble() {
             super(AbilityNamesies.WATER_BUBBLE, "Lowers the power of Fire-type moves done to the Pokémon and prevents the Pokémon from getting a burn.");

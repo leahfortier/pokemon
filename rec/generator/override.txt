@@ -60,8 +60,7 @@ StatusFang:
 		// If the effect is being applied, 50/50 chance to give a status condition vs. flinching
 		if (RandomUtils.chanceTest(50)) {
 			super.status = StatusCondition.{00};
-		}
-		else {
+		} else {
 			super.effects.add(EffectNamesies.FLINCH);
 		}
 		###
@@ -253,7 +252,7 @@ StatSplit:
 		###
 *
 StageChange:
-	Header: int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s)
+	Header: int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
 *
 IgnoreStage:
 	Header: boolean ignoreStage(Stat s)
@@ -318,12 +317,19 @@ HPRatioMove:
 Flailing:
 	AddMapField: GetPow:
 		double ratio = me.getHPRatio();
-		if (ratio > .7) return 20;
-		if (ratio > .35) return 40;
-		if (ratio > .2) return 80;
-		if (ratio > .1) return 100;
-		if (ratio > .04) return 150;
-		return 200;
+		if (ratio > .7) {
+			return 20;
+		} else if (ratio > .35) {
+			return 40;
+		} else if (ratio > .2) {
+			return 80;
+		} else if (ratio > .1) {
+			return 100;
+		} else if (ratio > .04) {
+			return 150;
+		} else {
+			return 200;
+		}
 		###
 *
 LightClay:
@@ -528,8 +534,7 @@ UsedProof:
 	AddMapField: Cast:
 		if (!victim.hasEffect(this.namesies)) {
 			super.cast(b, caster, victim, source, printCast);
-		}
-		else {
+		} else {
 			Messages.add(getCastMessage(b, caster, victim, source));
 		}
 		###
@@ -552,31 +557,49 @@ SubsideMessage:
 WeightBased:
 	AddMapField: GetPow:
 		double weight = {0}.getWeight(b);
-		if (weight < 22) return 20;
-		if (weight < 55) return 40;
-		if (weight < 110) return 60;
-		if (weight < 220) return 80;
-		if (weight < 440) return 100;
-		return 120;
+		if (weight < 22) {
+			return 20;
+		} else if (weight < 55) {
+			return 40;
+		} else if (weight < 110) {
+			return 60;
+		} else if (weight < 220) {
+			return 80;
+		} else if (weight < 440) {
+			return 100;
+		} else {
+			return 120;
+		}
 		###
 *
 WeightRatio:
 	AddMapField: GetPow:
 		double ratio = {1}.getWeight(b)/{2}.getWeight(b);
-		if (ratio > .5) return 40;
-		if (ratio > .33) return 60;
-		if (ratio > .25) return 80;
-		if (ratio > .2) return 100;
-		return 120;
+		if (ratio > .5) {
+			return 40;
+		} else if (ratio > .33) {
+			return 60;
+		} else if (ratio > .25) {
+			return 80;
+		} else if (ratio > .2) {
+			return 100;
+		} else {
+			return 120;
+		}
 		###
 *
 StatRatio:
 	AddMapField: GetPow:
 		double ratio = (double)Stat.getStat(Stat.{11}, {2}, {3}, b)/Stat.getStat(Stat.{11}, {3}, {2}, b);
-		if (ratio > .5) return 60;
-		if (ratio > .33) return 80;
-		if (ratio > .25) return 120;
-		return 150;
+		if (ratio > .5) {
+			return 60;
+		} else if (ratio > .33) {
+			return 80;
+		} else if (ratio > .25) {
+			return 120;
+		} else {
+			return 150;
+		}
 		###
 *
 RapidSpin:
@@ -1031,6 +1054,7 @@ WeatherEncounterRateDecreaser:
 BuffetImmune:
 	AddMapField: Field:
 		private static final Type[] immunees = new Type[] { {0} };
+		
 		###
 *
 BuffetMessage:
@@ -1068,12 +1092,10 @@ WeatherStatChange:
 		if (user.isAttackType(Type.{11})) {
 			// {1} is fiddy percent stronger in tha weathz
 			return 1.5;
-		}
-		else if (user.isAttackType(Type.{22})) {
+		} else if (user.isAttackType(Type.{22})) {
 			// {2} is fiddy percent weaker in tha weathz
 			return .5;
-		}
-		else {
+		} else {
 			return 1;
 		}
 		###

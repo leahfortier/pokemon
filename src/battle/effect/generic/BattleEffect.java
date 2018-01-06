@@ -37,6 +37,7 @@ public abstract class BattleEffect extends Effect {
     }
     
     // EVERYTHING BELOW IS GENERATED ###
+    
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
     
     static class Gravity extends BattleEffect implements GroundedEffect, StageChangingEffect {
@@ -50,7 +51,7 @@ public abstract class BattleEffect extends Effect {
             return !(Effect.hasEffect(b.getEffects(), this.namesies));
         }
         
-        public int adjustStage(Battle b,  ActivePokemon p, ActivePokemon opp, Stat s) {
+        public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
             return s == Stat.EVASION ? -2 : 0;
         }
         
@@ -126,9 +127,13 @@ public abstract class BattleEffect extends Effect {
         
         public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
             // Defense and Special Defense are swapped
-            if (s == Stat.DEFENSE) return Stat.SP_DEFENSE;
-            if (s == Stat.SP_DEFENSE) return Stat.DEFENSE;
-            return s;
+            if (s == Stat.DEFENSE) {
+                return Stat.SP_DEFENSE;
+            } else if (s == Stat.SP_DEFENSE) {
+                return Stat.DEFENSE;
+            } else {
+                return s;
+            }
         }
         
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {

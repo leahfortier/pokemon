@@ -1255,11 +1255,9 @@ Swallow:
 		// Heals differently based on number of stockpile turns
 		if (turns == 1) {
 			return .25;
-		}
-		else if (turns == 2) {
+		} else if (turns == 2) {
 			return .5;
-		}
-		else {
+		} else {
 			return 1;
 		}
 		###
@@ -2199,7 +2197,7 @@ Psych Up:
 	Cat: Status
 	Type: Normal
 	UniqueEffects:
-		for (Stat stat : Stat.BATTLE_STATS)  {
+		for (Stat stat : Stat.BATTLE_STATS) {
 			user.getAttributes().setStage(stat, victim.getStage(stat));
 		}
 
@@ -2721,8 +2719,7 @@ Curse:
 		if (attacking.isType(b, Type.GHOST)) {
 			super.effects.add(EffectNamesies.CURSE);
 			super.selfTarget = false;
-		}
-		else {
+		} else {
 			super.statChanges[Stat.ATTACK.index()] = 1;
 			super.statChanges[Stat.DEFENSE.index()] = 1;
 			super.statChanges[Stat.SPEED.index()] = -1;
@@ -4420,11 +4417,9 @@ Present:
 		double random = RandomUtils.getRandomInt(80);
 		if (random < 40) {
 			return 40;
-		}
-		else if (random < 70) {
+		} else if (random < 70) {
 			return 80;
-		}
-		else {
+		} else {
 			return 120;
 		}
 		###
@@ -5411,8 +5406,7 @@ Knock Off:
 			Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
 			if (b.isWildBattle()) {
 				victim.removeItem();
-			}
-			else {
+			} else {
 				user.getAttributes().setCastSource(ItemNamesies.NO_ITEM.getItem());
 				EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
 			}

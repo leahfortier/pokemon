@@ -49,6 +49,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
     }
     
     // EVERYTHING BELOW IS GENERATED ###
+    
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
     
     static class ClearSkies extends Weather {
@@ -89,12 +90,10 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
             if (user.isAttackType(Type.WATER)) {
                 // Water is fiddy percent stronger in tha weathz
                 return 1.5;
-            }
-            else if (user.isAttackType(Type.FIRE)) {
+            } else if (user.isAttackType(Type.FIRE)) {
                 // Fire is fiddy percent weaker in tha weathz
                 return .5;
-            }
-            else {
+            } else {
                 return 1;
             }
         }
@@ -135,12 +134,10 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
             if (user.isAttackType(Type.FIRE)) {
                 // Fire is fiddy percent stronger in tha weathz
                 return 1.5;
-            }
-            else if (user.isAttackType(Type.WATER)) {
+            } else if (user.isAttackType(Type.WATER)) {
                 // Water is fiddy percent weaker in tha weathz
                 return .5;
-            }
-            else {
+            } else {
                 return 1;
             }
         }
@@ -149,6 +146,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
     static class Sandstorm extends Weather implements SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
         private static final Type[] immunees = new Type[] { Type.ROCK, Type.GROUND, Type.STEEL };
+        
         private void buffet(Battle b, ActivePokemon p) {
             // Don't buffet the immune!
             for (Type type : immunees) {
@@ -207,6 +205,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
     static class Hailing extends Weather {
         private static final long serialVersionUID = 1L;
         private static final Type[] immunees = new Type[] { Type.ICE };
+        
         private void buffet(Battle b, ActivePokemon p) {
             // Don't buffet the immune!
             for (Type type : immunees) {

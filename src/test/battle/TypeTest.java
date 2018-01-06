@@ -35,7 +35,7 @@ public class TypeTest extends BaseTest {
             {1, .5,  1,  1,  1,  1,  2, .5,  1,  1,  1,  1,  1,  1,  2,  2, .5,  1, 1}, // Fairy
             {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 1}  // No Type
     };
-            
+    
     @Test
     public void typeAdvantageChartTest() {
         for (Type attacking : Type.values()) {

@@ -482,6 +482,7 @@ public abstract class Attack implements Serializable {
     }
     
     // EVERYTHING BELOW IS GENERATED ###
+    
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
     
     static class Tackle extends Attack {
@@ -818,8 +819,7 @@ public abstract class Attack implements Serializable {
             // If the effect is being applied, 50/50 chance to give a status condition vs. flinching
             if (RandomUtils.chanceTest(50)) {
                 super.status = StatusCondition.BURNED;
-            }
-            else {
+            } else {
                 super.effects.add(EffectNamesies.FLINCH);
             }
         }
@@ -2428,11 +2428,9 @@ public abstract class Attack implements Serializable {
             // Heals differently based on number of stockpile turns
             if (turns == 1) {
                 return .25;
-            }
-            else if (turns == 2) {
+            } else if (turns == 2) {
                 return .5;
-            }
-            else {
+            } else {
                 return 1;
             }
         }
@@ -2532,8 +2530,7 @@ public abstract class Attack implements Serializable {
             // If the effect is being applied, 50/50 chance to give a status condition vs. flinching
             if (RandomUtils.chanceTest(50)) {
                 super.status = StatusCondition.FROZEN;
-            }
-            else {
+            } else {
                 super.effects.add(EffectNamesies.FLINCH);
             }
         }
@@ -2559,8 +2556,7 @@ public abstract class Attack implements Serializable {
             // If the effect is being applied, 50/50 chance to give a status condition vs. flinching
             if (RandomUtils.chanceTest(50)) {
                 super.status = StatusCondition.PARALYZED;
-            }
-            else {
+            } else {
                 super.effects.add(EffectNamesies.FLINCH);
             }
         }
@@ -2577,10 +2573,15 @@ public abstract class Attack implements Serializable {
         
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double ratio = (double)Stat.getStat(Stat.SPEED, o, me, b)/Stat.getStat(Stat.SPEED, me, o, b);
-            if (ratio > .5) return 60;
-            if (ratio > .33) return 80;
-            if (ratio > .25) return 120;
-            return 150;
+            if (ratio > .5) {
+                return 60;
+            } else if (ratio > .33) {
+                return 80;
+            } else if (ratio > .25) {
+                return 120;
+            } else {
+                return 150;
+            }
         }
     }
     
@@ -3935,7 +3936,7 @@ public abstract class Attack implements Serializable {
         }
         
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            for (Stat stat : Stat.BATTLE_STATS)  {
+            for (Stat stat : Stat.BATTLE_STATS) {
                 user.getAttributes().setStage(stat, victim.getStage(stat));
             }
             
@@ -4010,12 +4011,19 @@ public abstract class Attack implements Serializable {
         
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double weight = o.getWeight(b);
-            if (weight < 22) return 20;
-            if (weight < 55) return 40;
-            if (weight < 110) return 60;
-            if (weight < 220) return 80;
-            if (weight < 440) return 100;
-            return 120;
+            if (weight < 22) {
+                return 20;
+            } else if (weight < 55) {
+                return 40;
+            } else if (weight < 110) {
+                return 60;
+            } else if (weight < 220) {
+                return 80;
+            } else if (weight < 440) {
+                return 100;
+            } else {
+                return 120;
+            }
         }
     }
     
@@ -4134,12 +4142,19 @@ public abstract class Attack implements Serializable {
         
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double ratio = me.getHPRatio();
-            if (ratio > .7) return 20;
-            if (ratio > .35) return 40;
-            if (ratio > .2) return 80;
-            if (ratio > .1) return 100;
-            if (ratio > .04) return 150;
-            return 200;
+            if (ratio > .7) {
+                return 20;
+            } else if (ratio > .35) {
+                return 40;
+            } else if (ratio > .2) {
+                return 80;
+            } else if (ratio > .1) {
+                return 100;
+            } else if (ratio > .04) {
+                return 150;
+            } else {
+                return 200;
+            }
         }
     }
     
@@ -4629,11 +4644,17 @@ public abstract class Attack implements Serializable {
         
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double ratio = o.getWeight(b)/me.getWeight(b);
-            if (ratio > .5) return 40;
-            if (ratio > .33) return 60;
-            if (ratio > .25) return 80;
-            if (ratio > .2) return 100;
-            return 120;
+            if (ratio > .5) {
+                return 40;
+            } else if (ratio > .33) {
+                return 60;
+            } else if (ratio > .25) {
+                return 80;
+            } else if (ratio > .2) {
+                return 100;
+            } else {
+                return 120;
+            }
         }
     }
     
@@ -4718,8 +4739,7 @@ public abstract class Attack implements Serializable {
             if (attacking.isType(b, Type.GHOST)) {
                 super.effects.add(EffectNamesies.CURSE);
                 super.selfTarget = false;
-            }
-            else {
+            } else {
                 super.statChanges[Stat.ATTACK.index()] = 1;
                 super.statChanges[Stat.DEFENSE.index()] = 1;
                 super.statChanges[Stat.SPEED.index()] = -1;
@@ -5529,12 +5549,19 @@ public abstract class Attack implements Serializable {
         
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double ratio = me.getHPRatio();
-            if (ratio > .7) return 20;
-            if (ratio > .35) return 40;
-            if (ratio > .2) return 80;
-            if (ratio > .1) return 100;
-            if (ratio > .04) return 150;
-            return 200;
+            if (ratio > .7) {
+                return 20;
+            } else if (ratio > .35) {
+                return 40;
+            } else if (ratio > .2) {
+                return 80;
+            } else if (ratio > .1) {
+                return 100;
+            } else if (ratio > .04) {
+                return 150;
+            } else {
+                return 200;
+            }
         }
     }
     
@@ -7321,11 +7348,9 @@ public abstract class Attack implements Serializable {
             double random = RandomUtils.getRandomInt(80);
             if (random < 40) {
                 return 40;
-            }
-            else if (random < 70) {
+            } else if (random < 70) {
                 return 80;
-            }
-            else {
+            } else {
                 return 120;
             }
         }
@@ -8202,11 +8227,17 @@ public abstract class Attack implements Serializable {
         
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double ratio = o.getWeight(b)/me.getWeight(b);
-            if (ratio > .5) return 40;
-            if (ratio > .33) return 60;
-            if (ratio > .25) return 80;
-            if (ratio > .2) return 100;
-            return 120;
+            if (ratio > .5) {
+                return 40;
+            } else if (ratio > .33) {
+                return 60;
+            } else if (ratio > .25) {
+                return 80;
+            } else if (ratio > .2) {
+                return 100;
+            } else {
+                return 120;
+            }
         }
     }
     
@@ -8221,12 +8252,19 @@ public abstract class Attack implements Serializable {
         
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double weight = o.getWeight(b);
-            if (weight < 22) return 20;
-            if (weight < 55) return 40;
-            if (weight < 110) return 60;
-            if (weight < 220) return 80;
-            if (weight < 440) return 100;
-            return 120;
+            if (weight < 22) {
+                return 20;
+            } else if (weight < 55) {
+                return 40;
+            } else if (weight < 110) {
+                return 60;
+            } else if (weight < 220) {
+                return 80;
+            } else if (weight < 440) {
+                return 100;
+            } else {
+                return 120;
+            }
         }
     }
     
@@ -8895,8 +8933,7 @@ public abstract class Attack implements Serializable {
                 Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
                 if (b.isWildBattle()) {
                     victim.removeItem();
-                }
-                else {
+                } else {
                     user.getAttributes().setCastSource(ItemNamesies.NO_ITEM.getItem());
                     EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
                 }
@@ -9181,10 +9218,15 @@ public abstract class Attack implements Serializable {
         
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double ratio = (double)Stat.getStat(Stat.ATTACK, me, o, b)/Stat.getStat(Stat.ATTACK, o, me, b);
-            if (ratio > .5) return 60;
-            if (ratio > .33) return 80;
-            if (ratio > .25) return 120;
-            return 150;
+            if (ratio > .5) {
+                return 60;
+            } else if (ratio > .33) {
+                return 80;
+            } else if (ratio > .25) {
+                return 120;
+            } else {
+                return 150;
+            }
         }
     }
     

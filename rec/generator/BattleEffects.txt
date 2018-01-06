@@ -40,9 +40,13 @@ WonderRoom:
 	Int: StatSwitchingEffect
 	SwitchStat:
 		// Defense and Special Defense are swapped
-		if (s == Stat.DEFENSE) return Stat.SP_DEFENSE;
-		if (s == Stat.SP_DEFENSE) return Stat.DEFENSE;
-		return s;
+		if (s == Stat.DEFENSE) {
+			return Stat.SP_DEFENSE;
+		} else if (s == Stat.SP_DEFENSE) {
+			return Stat.DEFENSE;
+		} else {
+			return s;
+		}
 		###
 	SpecialRoom: wonder switch defense and special defense
 *

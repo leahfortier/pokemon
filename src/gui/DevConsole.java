@@ -232,7 +232,7 @@ public class DevConsole {
         System.out.println("adding " + namesies.getName() + " "
                                    + (shiny ? " shiny " : "")
                                    + (moves == null ? " " : moves.toString()));
-
+        
         ActivePokemon pokemon = new ActivePokemon(namesies, level, false, true);
         if (moves != null) {
             pokemon.setMoves(moves);

@@ -91,15 +91,14 @@ public class StuffGen {
         return new SimpleEntry<>(key, value);
     }
     
-    static String createClass(
-            String classComments,
-            String className,
-            String superClass,
-            String interfaces,
-            String extraFields,
-            String constructor,
-            String additional,
-            boolean isInterface) {
+    static String createClass(String classComments,
+                              String className,
+                              String superClass,
+                              String interfaces,
+                              String extraFields,
+                              String constructor,
+                              String additional,
+                              boolean isInterface) {
         return new StringAppender("\t\n")
                 .appendLineIf(!StringUtils.isNullOrEmpty(classComments), "\t" + classComments)
                 .append("\t" + defineClass(className, isInterface))
