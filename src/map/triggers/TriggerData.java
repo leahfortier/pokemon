@@ -1,6 +1,5 @@
 package map.triggers;
 
-
 import map.entity.EntityAction;
 import pattern.map.EventMatcher;
 

@@ -100,7 +100,6 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
                 )
         );
         
-        
         pageNumLabel = GUIUtils.createLabel("");
         this.bottomComponent = GUIUtils.createHorizontalLayoutComponent(
                 addPokemonButton,

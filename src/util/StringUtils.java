@@ -1,6 +1,5 @@
 package util;
 
-
 import main.Global;
 
 import java.util.Arrays;

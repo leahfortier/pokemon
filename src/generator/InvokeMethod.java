@@ -53,7 +53,6 @@ abstract class InvokeMethod {
                 .appendDelimiter("\n", getPostLoop(interfaceMethod))
                 .toString();
         
-        
         return new MethodInfo(header, body.trim(), AccessModifier.PACKAGE_PRIVATE).writeFunction();
     }
     

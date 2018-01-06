@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 import java.awt.image.BufferedImage;
 
 public class TriggerModel extends MapMakerModel {
-
+    
     private DefaultListModel<ImageIcon> triggerListModel;
     
     // TODO: I hate everything
@@ -31,7 +31,7 @@ public class TriggerModel extends MapMakerModel {
         
         private final TileType tileType;
         private final int imageIndex;
-
+        
         TriggerModelType(String name, TileType tileType, int imageIndex) {
             this.name = name;
             this.tileType = tileType;

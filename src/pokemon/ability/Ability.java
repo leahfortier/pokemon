@@ -148,7 +148,6 @@ public abstract class Ability implements Serializable, AbilityHolder {
         return true;
     }
     
-    
     // True if Pokemon can steal this ability when it is not their default
     public boolean isStealable() {
         return true;

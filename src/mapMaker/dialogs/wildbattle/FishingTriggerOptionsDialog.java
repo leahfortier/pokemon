@@ -90,7 +90,6 @@ public class FishingTriggerOptionsDialog extends TriggerDialog<FishingMatcher> {
         );
     }
     
-    
     private void addWildBattleTrigger(FishingMatcher newMatcher) {
         fishingTriggers.add(newMatcher);
         render();

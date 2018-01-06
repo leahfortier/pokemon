@@ -88,7 +88,6 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<WildBattleArea
         );
     }
     
-    
     private void addWildBattleArea(WildBattleAreaMatcher newMatcher) {
         wildBattleAreas.add(newMatcher);
         render();

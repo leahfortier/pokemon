@@ -47,7 +47,7 @@ public class TeamPlanner {
 
 //        moveMatching("Surf", "Thunderbolt");
 //        moveMatching("Flamethrower", Type.WATER);
-
+        
         TeamMember.printTeam(team);
     }
     
@@ -343,10 +343,10 @@ public class TeamPlanner {
             Type[] type = pokemonSpecies.getType();
             out.append("\n\tType: " + type[0].getName())
                .appendIf(type[1] != Type.NO_TYPE, "/" + type[1].getName());
-
+            
             out.append("\n\tStats: ")
                .appendJoin(" ", Stat.NUM_STATS, i -> pokemonSpecies.getStat(i) + "");
-
+            
             out.append("\n\tNature: " + nature);
             out.append("\n\tAbility: " + ability);
             out.appendIf(item != null, "\n\tItem: " + item);

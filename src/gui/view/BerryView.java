@@ -162,7 +162,6 @@ public class BerryView extends View {
                 () -> message = berryFarm.harvest(selectedItem)
         );
         
-        
         int arrowHeight = 20;
         Button leftArrow = new Button(
                 itemsPanel.x + itemsPanel.width/4,

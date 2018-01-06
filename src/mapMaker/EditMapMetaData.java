@@ -114,7 +114,7 @@ public class EditMapMetaData {
     // Checks if the current map needs to be resized based on the input location
     // If so, will return the delta to the new current location
     public Point checkNewDimension(Point location) {
-
+        
         // In bounds -- no need to resize
         if (location.inBounds(currentMapSize)) {
             return new Point();
@@ -239,7 +239,6 @@ public class EditMapMetaData {
                 drawTiles(g2d, mapLocation, MapDataType.TALL_GRASS, defaultComposite);
                 break;
         }
-        
         
         if (editType != EditType.TRIGGERS) {
             // Draw all trigger items at half transparency.

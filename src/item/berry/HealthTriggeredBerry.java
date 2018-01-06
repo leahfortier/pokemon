@@ -1,6 +1,5 @@
 package item.berry;
 
-
 import battle.Battle;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.DamageTakenEffect;

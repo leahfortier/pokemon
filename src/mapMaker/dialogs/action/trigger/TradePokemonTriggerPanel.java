@@ -34,7 +34,6 @@ public class TradePokemonTriggerPanel extends TriggerContentsPanel {
         );
     }
     
-    
     @Override
     protected void load(String triggerContents) {
         TradePokemonMatcher matcher = SerializationUtils.deserializeJson(triggerContents, TradePokemonMatcher.class);

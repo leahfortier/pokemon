@@ -31,7 +31,6 @@ public enum SoundTitle {
     TRAINER_BATTLE("115 Battle VS Trainer", true),
     TRAINER_DEFEATED("116 Victory VS Trainer", true),
     
-    
     // Sound effects
     POKE_CENTER_HEAL("dundundundundun", false),
     LEVEL_UP("Pokemon-Level-Up-Notification", false);

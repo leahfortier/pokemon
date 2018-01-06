@@ -91,7 +91,6 @@ public class ItemEntity extends Entity {
             Trigger dialogue = TriggerType.DIALOGUE.createTrigger(itemDialogue, null);
             Trigger giveItem = TriggerType.GIVE_ITEM.createTrigger(this.itemName.getName(), null);
             
-            
             GroupTriggerMatcher groupTriggerMatcher;
             if (this.isHidden) {
                 Trigger medalTrigger = TriggerType.MEDAL_COUNT.createTrigger(MedalTheme.HIDDEN_ITEMS_FOUND.name(), null);

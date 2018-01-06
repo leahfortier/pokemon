@@ -28,7 +28,6 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
         return instance;
     }
     
-    
     public static final int INVALID_LOCK = -1;
     
     // Ignored during text capture (not added to captureText)

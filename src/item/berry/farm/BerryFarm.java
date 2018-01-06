@@ -47,7 +47,6 @@ public class BerryFarm implements Serializable {
             return "Harvested " + harvestAmount + " " + berryKind.getName() + "!";
         }
         
-        
         // No berries to harvest, plant the selected berry
         if (berries.size() >= MAX_BERRIES) {
             return "Berry Farm is full.";

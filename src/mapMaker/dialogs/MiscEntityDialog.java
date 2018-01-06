@@ -10,7 +10,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
-
+    
     private final JPanel topComponent;
     
     private final JTextField nameTextField;

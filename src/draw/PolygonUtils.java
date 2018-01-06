@@ -74,7 +74,6 @@ public final class PolygonUtils {
         
         int smallLength = smallDimension/3;
         
-        
         if (swapDimensions) {
             int temp = smallDimension;
             smallDimension = largeDimension;
