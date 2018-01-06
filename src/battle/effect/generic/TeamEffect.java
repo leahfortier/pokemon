@@ -273,6 +273,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
     
     static class ToxicSpikes extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
         private static final long serialVersionUID = 1L;
+        
         private int layers;
         
         ToxicSpikes() {
@@ -322,6 +323,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
     
     static class Spikes extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
         private static final long serialVersionUID = 1L;
+        
         private int layers;
         
         Spikes() {
@@ -370,6 +372,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
     
     static class Wish extends TeamEffect {
         private static final long serialVersionUID = 1L;
+        
         private String casterName;
         
         Wish() {
@@ -417,6 +420,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
     
     static class FutureSight extends TeamEffect {
         private static final long serialVersionUID = 1L;
+        
         private ActivePokemon theSeeer;
         
         FutureSight() {
@@ -453,6 +457,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
     
     static class DoomDesire extends TeamEffect {
         private static final long serialVersionUID = 1L;
+        
         private ActivePokemon theSeeer;
         
         DoomDesire() {
@@ -489,6 +494,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
     
     static class HealSwitch extends TeamEffect implements EntryEffect {
         private static final long serialVersionUID = 1L;
+        
         private String wish;
         
         HealSwitch() {
@@ -527,6 +533,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
     
     static class PayDay extends TeamEffect implements EndBattleEffect {
         private static final long serialVersionUID = 1L;
+        
         private int coins;
         
         PayDay() {

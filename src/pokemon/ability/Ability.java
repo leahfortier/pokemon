@@ -625,6 +625,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class FlashFire extends Ability implements AttackBlocker, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
+        
         private boolean activated;
         
         FlashFire() {
@@ -719,6 +720,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class EffectSpore extends Ability implements PhysicalContactEffect {
         private static final long serialVersionUID = 1L;
+        
         private static final StatusCondition[] statuses = new StatusCondition[] {
             StatusCondition.PARALYZED,
             StatusCondition.POISONED,
@@ -816,6 +818,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Limber extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.PARALYZED)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
@@ -841,6 +844,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Damp extends Ability implements AttackBlocker, SelfAttackBlocker {
         private static final long serialVersionUID = 1L;
+        
         private boolean checkeroo(ActivePokemon attacking) {
             return attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION;
         }
@@ -884,6 +888,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class VitalSpirit extends Ability implements MaxLevelWildEncounterEffect, StatusPreventionEffect, EntryEndTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.ASLEEP)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
@@ -909,6 +914,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Insomnia extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.ASLEEP)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
@@ -942,6 +948,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Synchronize extends Ability implements StatusReceivedEffect, WildEncounterAlterer {
         private static final long serialVersionUID = 1L;
+        
         private static final Set<StatusCondition> PASSABLE_STATUSES = EnumSet.of(
             StatusCondition.BURNED,
             StatusCondition.PARALYZED,
@@ -1370,6 +1377,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class WaterVeil extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.BURNED)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
@@ -1655,6 +1663,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Immunity extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.POISONED)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
@@ -1865,6 +1874,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class MagmaArmor extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.FROZEN)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
@@ -1950,6 +1960,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Truant extends Ability implements EndTurnEffect, BeforeTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private boolean lazyface;
         
         Truant() {
@@ -2002,6 +2013,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Normalize extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
+        
         private boolean activated;
         
         Normalize() {
@@ -2152,6 +2164,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class ColorChange extends Ability implements TakeDamageEffect, ChangeTypeSource {
         private static final long serialVersionUID = 1L;
+        
         private Type type;
         
         ColorChange() {
@@ -2381,6 +2394,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class SlowStart extends Ability implements EndTurnEffect, EntryEffect, SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
+        
         int count;
         
         SlowStart() {
@@ -2565,6 +2579,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Illusion extends Ability implements EntryEffect, SwitchOutEffect, TakeDamageEffect, ChangeTypeEffect, NameChanger {
         private static final long serialVersionUID = 1L;
+        
         private boolean activated;
         private String illusionName;
         private Type[] illusionType;
@@ -2837,6 +2852,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Pickup extends Ability implements EndBattleEffect {
         private static final long serialVersionUID = 1L;
+        
         private static final List<ItemNamesies> items = new ArrayList<>();
         static {
             addItem(ItemNamesies.POTION, 30);
@@ -3123,6 +3139,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class SweetVeil extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.ASLEEP)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
@@ -3170,6 +3187,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Pixilate extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
+        
         private boolean activated;
         
         Pixilate() {
@@ -3197,6 +3215,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Refrigerate extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
+        
         private boolean activated;
         
         Refrigerate() {
@@ -3224,6 +3243,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Schooling extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect {
         private static final long serialVersionUID = 1L;
+        
         private static final int[] SOLO_STATS = new int[] { 45, 20, 20, 25, 25, 40 };
         private static final int[] SCHOOL_STATS = new int[] { 45, 140, 130, 140, 135, 30 };
         
@@ -3273,6 +3293,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class ShieldsDown extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect {
         private static final long serialVersionUID = 1L;
+        
         private static final int[] METEOR_STATS = new int[] { 60, 60, 100, 60, 100, 60 };
         private static final int[] CORE_STATS = new int[] { 60, 100, 60, 100, 60, 120 };
         
@@ -3322,6 +3343,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class StanceChange extends Ability implements BeforeTurnEffect, EntryEffect, DifferentStatEffect {
         private static final long serialVersionUID = 1L;
+        
         private static final int[] BLADE_STATS = new int[] { 60, 150, 50, 150, 50, 60 };
         private static final int[] SHIELD_STATS = new int[] { 60, 50, 150, 50, 150, 60 };
         
@@ -3458,6 +3480,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Protean extends Ability implements BeforeTurnEffect, ChangeTypeSource {
         private static final long serialVersionUID = 1L;
+        
         private Type type;
         
         Protean() {
@@ -3519,6 +3542,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class WaterBubble extends Ability implements OpponentPowerChangeEffect, PowerChangeEffect, StatusPreventionEffect, EntryEndTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.BURNED)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
@@ -3642,6 +3666,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Galvanize extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
+        
         private boolean activated;
         
         Galvanize() {
@@ -3669,6 +3694,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Disguise extends Ability implements AbsorbDamageEffect {
         private static final long serialVersionUID = 1L;
+        
         private boolean activated;
         
         Disguise() {
@@ -3795,6 +3821,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
     
     static class Dancer extends Ability implements OpponentEndAttackEffect {
         private static final long serialVersionUID = 1L;
+        
         private boolean activated;
         
         Dancer() {

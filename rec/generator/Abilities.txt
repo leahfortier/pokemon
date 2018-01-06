@@ -1623,7 +1623,6 @@ Comatose:
 		return nightyNight(b, p);
 		###
 	Field:
-
 		// NOTE: This does not work exactly the same as in game
 		// New mechanics -- Pokemon with Comatose will:
 		// Become afflicted with a permanent Sleep condition upon entering battle

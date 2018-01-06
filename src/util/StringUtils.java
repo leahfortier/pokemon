@@ -66,14 +66,6 @@ public class StringUtils {
                 .toString();
     }
     
-    // Return true if before appears in s before after
-    // Returns false if before or after is not in s
-    public static boolean isBefore(String s, String before, String after) {
-        int beforeIndex = s.indexOf(before);
-        int afterIndex = s.indexOf(after);
-        return beforeIndex != -1 && afterIndex == -1 && beforeIndex < afterIndex;
-    }
-    
     // Examples:
     //   red -> Red
     //   water stone -> Water Stone

@@ -772,6 +772,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class Confusion extends PokemonEffect implements PassableEffect, BeforeTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private int turns;
         
         Confusion() {
@@ -836,6 +837,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class SelfConfusion extends PokemonEffect implements ForceMoveEffect {
         private static final long serialVersionUID = 1L;
+        
         private Move move;
         
         SelfConfusion() {
@@ -924,6 +926,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class Encore extends PokemonEffect implements ForceMoveEffect, EndTurnEffect, AttackSelectionSelfBlockerEffect {
         private static final long serialVersionUID = 1L;
+        
         private Move move;
         
         Encore() {
@@ -977,6 +980,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class Disable extends PokemonEffect implements AttackSelectionSelfBlockerEffect, BeforeTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private Move disabled;
         private int turns;
         
@@ -1033,6 +1037,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class RaiseCrits extends PokemonEffect implements CritStageEffect, PassableEffect, MessageGetter {
         private static final long serialVersionUID = 1L;
+        
         private boolean focusEnergy;
         private boolean direHit;
         private boolean berrylicious;
@@ -1111,6 +1116,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class ChangeItem extends PokemonEffect implements ItemHolder {
         private static final long serialVersionUID = 1L;
+        
         private Item item;
         
         ChangeItem() {
@@ -1130,6 +1136,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class ChangeAttackType extends PokemonEffect implements ChangeAttackTypeEffect {
         private static final long serialVersionUID = 1L;
+        
         private ChangeAttackTypeSource typeSource;
         
         ChangeAttackType() {
@@ -1152,6 +1159,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class ChangeType extends PokemonEffect implements ChangeTypeEffect {
         private static final long serialVersionUID = 1L;
+        
         private Type[] type;
         private ChangeTypeSource typeSource;
         private CastSource castSource;
@@ -1203,6 +1211,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class ChangeAbility extends PokemonEffect implements AbilityHolder {
         private static final long serialVersionUID = 1L;
+        
         private Ability ability;
         private String message;
         
@@ -1234,6 +1243,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class Stockpile extends PokemonEffect implements StageChangingEffect {
         private static final long serialVersionUID = 1L;
+        
         private int turns;
         
         Stockpile() {
@@ -1304,6 +1314,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class Mimic extends PokemonEffect implements ChangeMoveListEffect {
         private static final long serialVersionUID = 1L;
+        
         private Move mimicMove;
         
         Mimic() {
@@ -1348,6 +1359,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class Imprison extends PokemonEffect implements AttackSelectionSelfBlockerEffect {
         private static final long serialVersionUID = 1L;
+        
         private List<AttackNamesies> unableMoves;
         
         Imprison() {
@@ -1737,6 +1749,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class Uproar extends PokemonEffect implements ForceMoveEffect, AttackSelectionEffect, EndTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private Move uproar;
         
         private static void wakeUp(Battle b, ActivePokemon wakey) {
@@ -1951,6 +1964,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class Transformed extends PokemonEffect implements ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect {
         private static final long serialVersionUID = 1L;
+        
         private Move[] moveList; // TODO: Check if I can change this to a list -- not sure about the activate method in particular
         private int[] stats;
         private Type[] type;
@@ -2014,6 +2028,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class Substitute extends PokemonEffect implements AbsorbDamageEffect, PassableEffect, EffectBlockerEffect {
         private static final long serialVersionUID = 1L;
+        
         private int hp;
         
         Substitute() {
@@ -2129,6 +2144,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class Bide extends PokemonEffect implements ForceMoveEffect, EndTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private Move move;
         private int turns;
         private int damage;
@@ -2189,6 +2205,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class HalfWeight extends PokemonEffect implements HalfWeightEffect {
         private static final long serialVersionUID = 1L;
+        
         private int layers;
         
         HalfWeight() {
@@ -2520,6 +2537,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     
     static class ConsumedItem extends PokemonEffect implements ItemHolder {
         private static final long serialVersionUID = 1L;
+        
         private Item consumed;
         
         ConsumedItem() {

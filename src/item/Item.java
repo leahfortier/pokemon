@@ -923,6 +923,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
     
     static class MentalHerb extends Item implements HoldItem, EndTurnEffect {
         private static final long serialVersionUID = 1L;
+        
         private enum RemovableEffect {
             INFATUATED(EffectNamesies.INFATUATED, "infatuated"),
             DISABLE(EffectNamesies.DISABLE, "disabled"),
@@ -1431,6 +1432,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
     
     static class StickyBarb extends Item implements HoldItem, EndTurnEffect, PhysicalContactEffect, ItemSwapperEffect {
         private static final long serialVersionUID = 1L;
+        
         private void stickyPoke(Battle b, ActivePokemon victim, String possession) {
             if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
                 Messages.add(victim.getName() + " was hurt by " + possession + " " + this.getName() + "!");
@@ -3416,6 +3418,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
     
     static class SacredAsh extends Item implements PlayerUseItem, BattleUseItem, HoldItem {
         private static final long serialVersionUID = 1L;
+        
         public boolean use(Trainer t) {
             boolean healed = false;
             for (ActivePokemon p : t.getTeam()) {
@@ -4260,6 +4263,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
     
     static class PersimBerry extends Item implements BattleUseItem, MessageGetter, GainableEffectBerry {
         private static final long serialVersionUID = 1L;
+        
         private boolean use(ActivePokemon p, CastSource source) {
             if (p.hasEffect(EffectNamesies.CONFUSION)) {
                 p.getAttributes().removeEffect(EffectNamesies.CONFUSION);

@@ -2113,6 +2113,7 @@ public abstract class Attack implements Serializable {
     
     static class MirrorMove extends Attack {
         private static final long serialVersionUID = 1L;
+        
         private Move mirror;
         
         MirrorMove() {
@@ -3125,6 +3126,7 @@ public abstract class Attack implements Serializable {
     
     static class Metronome extends Attack {
         private static final long serialVersionUID = 1L;
+        
         private Attack metronomeMove;
         
         Metronome() {
@@ -3652,6 +3654,7 @@ public abstract class Attack implements Serializable {
     
     static class Magnitude extends Attack implements AccuracyBypassEffect {
         private static final long serialVersionUID = 1L;
+        
         private static final int[] CHANCES = { 5, 10, 20, 30, 20, 10, 5 };
         private static final int[] POWERS = { 10, 30, 50, 70, 90, 110, 150 };
         
@@ -3790,6 +3793,7 @@ public abstract class Attack implements Serializable {
     
     static class TriAttack extends Attack {
         private static final long serialVersionUID = 1L;
+        
         private static final StatusCondition[] statusConditions = {
             StatusCondition.PARALYZED,
             StatusCondition.BURNED,
@@ -6419,6 +6423,7 @@ public abstract class Attack implements Serializable {
     
     static class PowerSwap extends Attack {
         private static final long serialVersionUID = 1L;
+        
         private static final Stat[] swapStats = { Stat.ATTACK, Stat.SP_ATTACK };
         
         PowerSwap() {
@@ -6437,6 +6442,7 @@ public abstract class Attack implements Serializable {
     
     static class GuardSwap extends Attack {
         private static final long serialVersionUID = 1L;
+        
         private static final Stat[] swapStats = { Stat.DEFENSE, Stat.SP_DEFENSE };
         
         GuardSwap() {
@@ -6470,6 +6476,7 @@ public abstract class Attack implements Serializable {
     
     static class Copycat extends Attack {
         private static final long serialVersionUID = 1L;
+        
         private Move mirror;
         
         Copycat() {
@@ -6754,6 +6761,7 @@ public abstract class Attack implements Serializable {
     
     static class Conversion extends Attack implements ChangeTypeSource {
         private static final long serialVersionUID = 1L;
+        
         private List<Type> types;
         
         Conversion() {
@@ -6783,6 +6791,7 @@ public abstract class Attack implements Serializable {
     
     static class Conversion2 extends Attack implements ChangeTypeSource {
         private static final long serialVersionUID = 1L;
+        
         private List<Type> types;
         
         Conversion2() {
@@ -6898,6 +6907,7 @@ public abstract class Attack implements Serializable {
     
     static class SleepTalk extends Attack implements SleepyFightsterEffect {
         private static final long serialVersionUID = 1L;
+        
         private List<Move> moves;
         
         SleepTalk() {
@@ -7322,6 +7332,7 @@ public abstract class Attack implements Serializable {
     
     static class Present extends Attack {
         private static final long serialVersionUID = 1L;
+        
         private boolean applyDamage;
         
         Present() {
@@ -7376,6 +7387,7 @@ public abstract class Attack implements Serializable {
     
     static class Sketch extends Attack {
         private static final long serialVersionUID = 1L;
+        
         private Move copy;
         
         Sketch() {
@@ -7676,6 +7688,7 @@ public abstract class Attack implements Serializable {
     
     static class Assist extends Attack {
         private static final long serialVersionUID = 1L;
+        
         private List<Attack> attacks;
         
         Assist() {
@@ -9338,6 +9351,7 @@ public abstract class Attack implements Serializable {
     
     static class SkillSwap extends Attack implements AbilityChanger {
         private static final long serialVersionUID = 1L;
+        
         private Ability ability;
         
         private static boolean canSkillSwap(ActivePokemon p) {
@@ -10282,6 +10296,7 @@ public abstract class Attack implements Serializable {
     
     static class StrengthSap extends Attack implements SapHealthEffect {
         private static final long serialVersionUID = 1L;
+        
         private int victimAttackStat;
         
         StrengthSap() {

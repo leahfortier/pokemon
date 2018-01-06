@@ -145,6 +145,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
     
     static class Sandstorm extends Weather implements SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
+        
         private static final Type[] immunees = new Type[] { Type.ROCK, Type.GROUND, Type.STEEL };
         
         private void buffet(Battle b, ActivePokemon p) {
@@ -204,6 +205,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
     
     static class Hailing extends Weather {
         private static final long serialVersionUID = 1L;
+        
         private static final Type[] immunees = new Type[] { Type.ICE };
         
         private void buffet(Battle b, ActivePokemon p) {

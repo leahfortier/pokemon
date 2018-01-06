@@ -106,7 +106,7 @@ public class StuffGen {
                 .appendDelimiter(" ", interfaces)
                 .appendLine(" {")
                 .appendLineIf(!isInterface, "\t\tprivate static final long serialVersionUID = 1L;")
-                .append(extraFields)
+                .appendDelimiter(isInterface ? StringUtils.empty() : "\t\t\n", extraFields)
                 .append(constructor)
                 .append(additional)
                 .appendLine("\t}")
