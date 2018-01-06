@@ -2653,8 +2653,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             }
             
             victim.getAttributes().modifyStage(
-                victim, victim, 1, Stat.ATTACK, b, CastSource.EFFECT,
-                victim.getName() + "'s Rage increased its attack!"
+                    victim, victim, 1, Stat.ATTACK, b, CastSource.EFFECT,
+                    victim.getName() + "'s Rage increased its attack!"
             );
         }
     }

@@ -1790,8 +1790,7 @@ EndTurnFormChange:
 	Body:
 		if (this.{1} != {17-}) {
 			this.{1} = !{1};
-			Messages.add(
-					new MessageUpdate(formsie.getName() + " changed into " + ({1} ? "{10}" : "{3}") + " Forme!")
+			Messages.add(new MessageUpdate(formsie.getName() + " changed into " + ({1} ? "{10}" : "{3}") + " Forme!")
 							.withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), {1}), formsie.isPlayer())
 			);
 		}

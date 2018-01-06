@@ -617,8 +617,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             // Badly poisons the holder at the end of the turn
             Status.giveStatus(
-                b, victim, victim, StatusCondition.BADLY_POISONED,
-                victim.getName() + " was badly poisoned by its " + this.name + "!"
+                    b, victim, victim, StatusCondition.BADLY_POISONED,
+                    victim.getName() + " was badly poisoned by its " + this.name + "!"
             );
         }
         

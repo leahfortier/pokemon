@@ -950,10 +950,10 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
         
         private static final Set<StatusCondition> PASSABLE_STATUSES = EnumSet.of(
-            StatusCondition.BURNED,
-            StatusCondition.PARALYZED,
-            StatusCondition.POISONED,
-            StatusCondition.BADLY_POISONED
+                StatusCondition.BURNED,
+                StatusCondition.PARALYZED,
+                StatusCondition.POISONED,
+                StatusCondition.BADLY_POISONED
         );
         
         Synchronize() {
@@ -3261,9 +3261,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private void changeForm(ActivePokemon formsie) {
             if (this.schoolForm != formsie.getHPRatio() >= .25 && formsie.getLevel() >= 20) {
                 this.schoolForm = !schoolForm;
-                Messages.add(
-                    new MessageUpdate(formsie.getName() + " changed into " + (schoolForm ? "School" : "Solo") + " Forme!")
-                    .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), schoolForm), formsie.isPlayer())
+                Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (schoolForm ? "School" : "Solo") + " Forme!")
+                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), schoolForm), formsie.isPlayer())
                 );
             }
         }
@@ -3312,9 +3311,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private void changeForm(ActivePokemon formsie) {
             if (this.coreForm != formsie.getHPRatio() < .5) {
                 this.coreForm = !coreForm;
-                Messages.add(
-                    new MessageUpdate(formsie.getName() + " changed into " + (coreForm ? "Core" : "Meteor") + " Forme!")
-                    .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), coreForm), formsie.isPlayer())
+                Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (coreForm ? "Core" : "Meteor") + " Forme!")
+                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), coreForm), formsie.isPlayer())
                 );
             }
         }
@@ -3712,7 +3710,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
                 boolean front = !isPlayer;
                 
                 Messages.add(new MessageUpdate(damageTaker.getName() + "'s disguise was busted!!")
-                    .withImageName(damageTaker.getPokemonInfo().getImageName(shiny, front, true), isPlayer)
+                        .withImageName(damageTaker.getPokemonInfo().getImageName(shiny, front, true), isPlayer)
                 );
                 
                 activated = true;

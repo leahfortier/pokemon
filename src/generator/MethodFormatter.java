@@ -45,7 +45,7 @@ class MethodFormatter {
         boolean nowInParentheses = parenthesesBalance > 0;
         
         if (previouslyInParentheses && !nowInParentheses) {
-            tabs--;
+            tabs -= 2;
         }
         
         // Add the tabs
@@ -63,7 +63,7 @@ class MethodFormatter {
         }
         
         if (!previouslyInParentheses && nowInParentheses) {
-            tabs++;
+            tabs += 2;
         }
     }
 }
