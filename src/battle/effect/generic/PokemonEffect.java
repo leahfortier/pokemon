@@ -1075,7 +1075,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
                     break;
                 default:
                     Global.error("Unknown source for RaiseCrits effect.");
-                }
+                    break;
+            }
         }
         
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {

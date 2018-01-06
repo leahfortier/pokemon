@@ -10,7 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 public class AreaDialog extends TriggerDialog<AreaMatcher> {
-
+    
     private final JTextField displayNameTextField;
     private final JTextField flyLocationTextField;
     private final JComboBox<TerrainType> terrainComboBox;

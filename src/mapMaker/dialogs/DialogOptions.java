@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DialogOptions extends JDialog implements ActionListener {
-
+    
     private final JPanel panel;
     
     private final JButton saveButton;

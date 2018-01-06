@@ -11,7 +11,8 @@ import java.util.Map;
 public enum WalkType {
     NOT_WALKABLE(0x000000, false),
     WALKABLE(0xFFFFFF, true),
-    WATER(0x0000FF, direction -> Game.getPlayer().hasTool(OverworldTool.SURF)), // TODO: Might break NPCs walking from land to water...
+    // TODO: Might break NPCs walking from land to water...
+    WATER(0x0000FF, direction -> Game.getPlayer().hasTool(OverworldTool.SURF)),
     DOWN_LEDGE(0x00FF00, Direction.DOWN),
     UP_LEDGE(0xFF0000, Direction.UP),
     LEFT_LEDGE(0xFFFF00, Direction.LEFT),

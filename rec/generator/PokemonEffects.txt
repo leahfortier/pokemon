@@ -357,6 +357,7 @@ RaiseCrits:
 				break;
 			default:
 				Global.error("Unknown source for RaiseCrits effect.");
+				break;
 		}
 		###
 *

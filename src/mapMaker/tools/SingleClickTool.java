@@ -67,7 +67,7 @@ class SingleClickTool extends Tool {
         }
         // Show preview image for current trigger
         else if (mapMaker.isEditType(EditType.TRIGGERS)) {
-
+            
             TriggerModelType type = TriggerModelType.getModelTypeFromIndex(mapMaker.getSelectedTileIndex());
             
             BufferedImage image;

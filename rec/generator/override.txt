@@ -849,7 +849,7 @@ Block:
 	Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 AlternateEffect:
-	Header: void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim)
+	Header: void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 BlockMessage:
 	Header: String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1769,6 +1769,7 @@ FormChange:
 		private static final int[] {1010}_STATS = new int[] { {11}, {12}, {13}, {14}, {15}, {16} };
 
 		private boolean {1};
+		
 		private int[] getStats() {
 			return {1} ? {1010}_STATS : {33}_STATS;
 		}

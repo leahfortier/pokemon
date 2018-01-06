@@ -489,7 +489,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             return user.getAttackType() == Type.ELECTRIC;
         }
         
-        public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
+        public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
         }
         
@@ -645,7 +645,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             return user.getAttackType() == Type.FIRE;
         }
         
-        public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
+        public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             activated = true;
         }
         
@@ -769,7 +769,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             return user.getAttackType() == Type.WATER;
         }
         
-        public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
+        public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
             if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
                 return;
@@ -1533,7 +1533,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             return user.getAttackType() == Type.WATER;
         }
         
-        public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
+        public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
             if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
                 return;
@@ -1559,7 +1559,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             return user.getAttackType() == Type.ELECTRIC;
         }
         
-        public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
+        public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
             if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
                 return;
@@ -2153,7 +2153,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             return user.getAttackType() == Type.WATER;
         }
         
-        public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
+        public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
         }
         
@@ -2352,7 +2352,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             return user.getAttackType() == Type.ELECTRIC;
         }
         
-        public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
+        public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
         }
         
@@ -2708,7 +2708,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             return user.getAttackType() == Type.GRASS;
         }
         
-        public void alternateEffect(Battle b,  ActivePokemon user, ActivePokemon victim) {
+        public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
         }
         
@@ -3248,6 +3248,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final int[] SCHOOL_STATS = new int[] { 45, 140, 130, 140, 135, 30 };
         
         private boolean schoolForm;
+        
         private int[] getStats() {
             return schoolForm ? SCHOOL_STATS : SOLO_STATS;
         }
@@ -3298,6 +3299,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final int[] CORE_STATS = new int[] { 60, 100, 60, 100, 60, 120 };
         
         private boolean coreForm;
+        
         private int[] getStats() {
             return coreForm ? CORE_STATS : METEOR_STATS;
         }
@@ -3348,6 +3350,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final int[] SHIELD_STATS = new int[] { 60, 50, 150, 50, 150, 60 };
         
         private boolean shieldForm;
+        
         private int[] getStats() {
             return shieldForm ? SHIELD_STATS : BLADE_STATS;
         }
