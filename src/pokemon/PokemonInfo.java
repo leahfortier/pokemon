@@ -31,13 +31,13 @@ import java.util.stream.Collectors;
 
 public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     private static final long serialVersionUID = 1L;
-    
+
     public static final int NUM_POKEMON = 823;
     public static final int EVOLUTION_LEVEL_LEARNED = -1;
-    
+
     private static Map<Integer, PokemonInfo> map;
     private static Set<PokemonNamesies> incenseBabies;
-    
+
     private final int number;
     private final String name;
     private final PokemonNamesies namesies;
@@ -59,7 +59,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     private final String flavorText;
     private final int eggSteps;
     private final EggGroup[] eggGroups;
-    
+
     public PokemonInfo(int number,
                        String name,
                        int[] baseStats,
@@ -102,31 +102,31 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         this.eggSteps = eggSteps;
         this.eggGroups = eggGroups.toArray(new EggGroup[0]);
     }
-    
+
     public boolean isType(Type type) {
         return this.type[0] == type || this.type[1] == type;
     }
-    
+
     public Type[] getType() {
         return type;
     }
-    
+
     public List<LevelUpMove> getLevelUpMoves() {
         return levelUpMoves;
     }
-    
+
     public int getStat(int index) {
         return baseStats[index];
     }
-    
+
     GrowthRate getGrowthRate() {
         return growthRate;
     }
-    
+
     public int getEggSteps() {
         return eggSteps;
     }
-    
+
     public String getAbilitiesString() {
         return abilities[0].getName() +
                 (abilities[1] == AbilityNamesies.NO_ABILITY
@@ -134,95 +134,95 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
                         : ", " + abilities[1].getName()
                 );
     }
-    
+
     public AbilityNamesies[] getAbilities() {
         return abilities;
     }
-    
+
     public boolean hasAbility(AbilityNamesies s) {
         return abilities[0] == s || abilities[1] == s;
     }
-    
+
     public int getCatchRate() {
         return catchRate;
     }
-    
+
     public int getBaseEXP() {
         return baseExp;
     }
-    
+
     public int getGivenEV(int index) {
         return givenEVs[index];
     }
-    
+
     public int[] getGivenEVs() {
         return givenEVs;
     }
-    
+
     public int getMaleRatio() {
         return maleRatio;
     }
-    
+
     public String getHeightString() {
         return String.format("%d'%02d\"", height/12, height%12);
     }
-    
+
     public double getWeight() {
         return weight;
     }
-    
+
     public String getClassification() {
         return classification;
     }
-    
+
     public String getFlavorText() {
         return flavorText;
     }
-    
+
     public PokemonNamesies namesies() {
         return namesies;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public int getNumber() {
         return number;
     }
-    
+
     public String getBaseImageName() {
         return String.format("%03d", number);
     }
-    
+
     public String getTinyImageName() {
         return this.getBaseImageName() + "-small";
     }
-    
+
     public Evolution getEvolution() {
         return evolution;
     }
-    
+
     public List<WildHoldItem> getWildItems() {
         return wildHoldItems;
     }
-    
+
     public String getImageName() {
         return this.getImageName(false, true);
     }
-    
+
     public String getImageName(boolean shiny) {
         return this.getImageName(shiny, true);
     }
-    
+
     public String getImageName(boolean shiny, boolean front) {
         return getImageName(this, shiny, front, false);
     }
-    
+
     public String getImageName(boolean shiny, boolean front, boolean form) {
         return getImageName(this, shiny, front, form);
     }
-    
+
     private static String getImageName(PokemonInfo pokemonInfo, boolean shiny, boolean front, boolean form) {
         String imageName = pokemonInfo.getBaseImageName();
         if (form) {
@@ -234,30 +234,30 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         if (!front) {
             imageName += "-back";
         }
-        
+
         return imageName;
     }
-    
+
     public static PokemonInfo getPokemonInfo(int index) {
         if (map == null) {
             loadPokemonInfo();
         }
-        
+
         return map.get(index);
     }
-    
+
     public int compareTo(PokemonInfo p) {
         return number - p.number;
     }
-    
+
     // Create and load the Pokemon info map if it doesn't already exist
     public static void loadPokemonInfo() {
         if (map != null) {
             return;
         }
-        
+
         map = new HashMap<>();
-        
+
         Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.POKEMON_INFO, false));
         while (in.hasNext()) {
             PokemonInfo pokemonInfo = new PokemonInfo(
@@ -282,73 +282,73 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
                     createLevelUpMoves(in),                            // Level Up Moves
                     createMovesSet(in)                                // Learnable Moves
             );
-            
+
             map.put(pokemonInfo.getNumber(), pokemonInfo);
         }
-        
+
         in.close();
     }
-    
+
     private static <T extends Enum<T>> List<T> createEnumList(Scanner in, Class<T> enumType) {
         return GeneralUtils.arrayValueOf(enumType, in.nextLine().trim().split(" "));
     }
-    
+
     private static List<LevelUpMove> createLevelUpMoves(Scanner in) {
         List<LevelUpMove> levelUpMoves = new ArrayList<>();
         int numMoves = in.nextInt();
-        
+
         for (int i = 0; i < numMoves; i++) {
             int level = in.nextInt();
             String attackName = in.nextLine().trim();
             AttackNamesies namesies = AttackNamesies.valueOf(attackName);
-            
+
             levelUpMoves.add(new LevelUpMove(level, namesies));
         }
-        
+
         return levelUpMoves;
     }
-    
+
     private static Set<AttackNamesies> createMovesSet(Scanner in) {
         Set<AttackNamesies> learnableMoves = EnumSet.noneOf(AttackNamesies.class);
         int numMoves = in.nextInt();
         in.nextLine();
-        
+
         for (int i = 0; i < numMoves; i++) {
             String attackName = in.nextLine().trim();
             AttackNamesies namesies = AttackNamesies.valueOf(attackName);
             learnableMoves.add(namesies);
         }
-        
+
         return learnableMoves;
     }
-    
+
     public List<AttackNamesies> getMoves(int level) {
         return levelUpMoves.stream()
                            .filter(entry -> entry.getLevel() == level)
                            .map(LevelUpMove::getMove)
                            .collect(Collectors.toList());
     }
-    
+
     public boolean canBreed() {
         return eggGroups[0] != EggGroup.UNDISCOVERED;
     }
-    
+
     public PokemonNamesies getBaseEvolution() {
         return getBaseEvolution(this);
     }
-    
+
     // TODO: Instead of generating this on the fly should just be added to the text file and stored
     private static PokemonNamesies getBaseEvolution(PokemonInfo targetPokes) {
         if (targetPokes.namesies() == PokemonNamesies.MANAPHY) {
             return PokemonNamesies.PHIONE;
         }
-        
+
         if (targetPokes.namesies() == PokemonNamesies.SHEDINJA) {
             return PokemonNamesies.NINCADA;
         }
-        
+
         Set<PokemonNamesies> allPokes = EnumSet.complementOf(EnumSet.of(PokemonNamesies.NONE));
-        
+
         while (true) {
             boolean changed = false;
             for (PokemonNamesies pokesName : allPokes) {
@@ -361,22 +361,22 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
                         break;
                     }
                 }
-                
+
                 if (changed) {
                     break;
                 }
             }
-            
+
             if (!changed) {
                 return targetPokes.namesies();
             }
         }
     }
-    
+
     public EggGroup[] getEggGroups() {
         return eggGroups;
     }
-    
+
     private static void loadIncenseBabies() {
         incenseBabies = new HashSet<>();
         for (ItemNamesies itemNamesies : ItemNamesies.values()) {
@@ -386,15 +386,15 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
             }
         }
     }
-    
+
     public boolean isIncenseBaby() {
         if (incenseBabies == null) {
             loadIncenseBabies();
         }
-        
+
         return incenseBabies.contains(namesies);
     }
-    
+
     // Returns what level the Pokemon will learn the given attack, returns null if they cannot learn it by level up
     public Integer levelLearned(AttackNamesies attack) {
         for (LevelUpMove entry : this.levelUpMoves) {
@@ -402,30 +402,30 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
                 return entry.getLevel();
             }
         }
-        
+
         return null;
     }
-    
+
     public boolean canLearnMove(AttackNamesies attack) {
         return levelLearned(attack) != null || canLearnByBreeding(attack);
     }
-    
+
     public boolean canLearnByBreeding(AttackNamesies attack) {
         return this.learnableMoves.contains(attack);
     }
-    
+
     static PokemonNamesies getRandomStarterPokemon() {
         return RandomUtils.getRandomValue(starterPokemon);
     }
-    
+
     public static int getNumBabyPokemon() {
         return babyPokemon.length;
     }
-    
+
     public static Set<PokemonNamesies> getAllBabyPokemon() {
         return Arrays.stream(babyPokemon).collect(Collectors.toSet());
     }
-    
+
     // All starters
     private static final PokemonNamesies[] starterPokemon = new PokemonNamesies[] {
             PokemonNamesies.BULBASAUR,
@@ -450,7 +450,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
             PokemonNamesies.LITTEN,
             PokemonNamesies.POPPLIO
     };
-    
+
     private static final PokemonNamesies[] babyPokemon = new PokemonNamesies[] {
             PokemonNamesies.PICHU,
             PokemonNamesies.CLEFFA,
@@ -471,14 +471,14 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
             PokemonNamesies.RIOLU,
             PokemonNamesies.MANTYKE
     };
-    
+
     private static final Map<Type, Set<PokemonNamesies>> pokemonTypeMap = new EnumMap<>(Type.class);
-    
+
     static {
         for (Type type : Type.values()) {
             pokemonTypeMap.put(type, EnumSet.noneOf(PokemonNamesies.class));
         }
-        
+
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo pokemon = PokemonInfo.getPokemonInfo(i);
             for (Type type : pokemon.getType()) {
@@ -486,11 +486,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
             }
         }
     }
-    
+
     public static Set<PokemonNamesies> getAllTypedPokemon(Type type) {
         return EnumSet.copyOf(pokemonTypeMap.get(type));
     }
-    
+
     public static int getNumTypedPokemon(Type type) {
         return pokemonTypeMap.get(type).size();
     }

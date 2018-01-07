@@ -8,7 +8,7 @@ import pokemon.ability.AbilityNamesies;
 
 public interface HealthTriggeredBerry extends GainableEffectBerry, DamageTakenEffect {
     double healthTriggerRatio();
-    
+
     default void damageTaken(Battle b, ActivePokemon damageTaker) {
         double healthRatio = damageTaker.getHPRatio();
         if ((healthRatio <= this.healthTriggerRatio() || (healthRatio <= .5 && damageTaker.hasAbility(AbilityNamesies.GLUTTONY)))) {

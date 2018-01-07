@@ -15,30 +15,30 @@ class TestFormatter extends InputFormatter {
                 if (replaceType == ReplaceType.FINISH) {
                     Assert.assertTrue("Don't use {" + parameterIndex + "-}, use {0} instead.", parameterIndex != 0 && parameterIndex != 1);
                 }
-                
+
                 body = newBody;
             }
         }
-        
+
         return body;
     }
-    
+
     @Override
     protected void validate(ClassFields fields) {
         String minTurnsString = fields.get("MinTurns");
         String maxTurnsString = fields.get("MaxTurns");
-        
+
         boolean minNull = StringUtils.isNullOrEmpty(minTurnsString);
         boolean maxNull = StringUtils.isNullOrEmpty(maxTurnsString);
-        
+
         // If one is present, both must be present
         Assert.assertEquals(minNull, maxNull);
-        
+
         if (!minNull) {
             int minTurns = Integer.parseInt(minTurnsString);
             int maxTurns = Integer.parseInt(maxTurnsString);
             Assert.assertTrue(minTurns < maxTurns);
-            
+
             Assert.assertFalse(fields.contains("NumTurns"));
         }
     }

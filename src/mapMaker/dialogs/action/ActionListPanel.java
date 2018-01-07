@@ -12,15 +12,15 @@ import java.util.List;
 
 public class ActionListPanel extends JPanel {
     private final TriggerDialog parent;
-    
+
     private final List<ActionMatcher> actionList;
     private final JButton newActionButton;
-    
+
     public ActionListPanel(TriggerDialog parent) {
         this.parent = parent;
-        
+
         actionList = new ArrayList<>();
-        
+
         newActionButton = GUIUtils.createButton(
                 "New Action",
                 event -> {
@@ -28,24 +28,24 @@ public class ActionListPanel extends JPanel {
                     render();
                 }
         );
-        
+
         render();
     }
-    
+
     public void load(List<ActionMatcher> actions) {
         actionList.addAll(actions);
         render();
     }
-    
+
     private void render() {
         removeAll();
-        
+
         List<JComponent> components = new ArrayList<>();
-        
+
         for (int i = 0; i < actionList.size(); i++) {
             final int index = i;
             final ActionMatcher actionMatcher = actionList.get(index);
-            
+
             JButton actionButton = GUIUtils.createButton(
                     actionMatcher == null ? "EMPTY" : actionMatcher.getActionType().name(),
                     event -> {
@@ -56,7 +56,7 @@ public class ActionListPanel extends JPanel {
                         }
                     }
             );
-            
+
             JButton deleteButton = GUIUtils.createButton(
                     "Delete",
                     event -> {
@@ -64,17 +64,17 @@ public class ActionListPanel extends JPanel {
                         render();
                     }
             );
-            
+
             components.add(GUIUtils.createHorizontalLayoutComponent(actionButton, deleteButton));
         }
-        
+
         components.add(newActionButton);
-        
+
         GUIUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
-        
+
         parent.render();
     }
-    
+
     public ActionMatcher[] getActions() {
         return this.actionList.toArray(new ActionMatcher[0]);
     }

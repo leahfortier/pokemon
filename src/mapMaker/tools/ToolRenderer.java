@@ -7,7 +7,7 @@ import java.awt.Component;
 
 public class ToolRenderer extends JLabel implements ListCellRenderer<Tool> {
     private static final long serialVersionUID = 6750963470094004328L;
-    
+
     public Component getListCellRendererComponent(JList<? extends Tool> list,
                                                   Tool value,
                                                   int index,
@@ -23,11 +23,11 @@ public class ToolRenderer extends JLabel implements ListCellRenderer<Tool> {
             setBackground(list.getBackground());
             setForeground(list.getForeground());
         }
-        
+
         setEnabled(list.isEnabled());
         setFont(list.getFont());
         setOpaque(true);
-        
+
         return this;
     }
 }

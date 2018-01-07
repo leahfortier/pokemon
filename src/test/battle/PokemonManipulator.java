@@ -15,25 +15,25 @@ import test.TestPokemon;
 
 interface PokemonManipulator {
     void manipulate(TestBattle battle, TestPokemon attacking, TestPokemon defending);
-    
+
     static void useAttack(AttackNamesies attackNamesies, TestBattle battle, TestPokemon attacking, TestPokemon defending, boolean attackingTarget) {
         ActivePokemon caster = attackingTarget ? defending : attacking;
         ActivePokemon victim = attackingTarget ? attacking : defending;
-    
+
         caster.callNewMove(battle, victim, new Move(attackNamesies));
     }
-    
+
     static void giveEffect(EffectNamesies effectNamesies, Battle battle, ActivePokemon attacking, ActivePokemon defending, boolean attackingTarget) {
         ActivePokemon caster = attackingTarget ? defending : attacking;
         ActivePokemon victim = attackingTarget ? attacking : defending;
-        
+
         effectNamesies.getEffect().cast(battle, caster, victim, CastSource.ATTACK, false);
     }
-    
+
     static PokemonManipulator empty() {
         return (battle, attacking, defending) -> {};
     }
-    
+
     static PokemonManipulator combine(PokemonManipulator... manipulators) {
         return (battle, attacking, defending) -> {
             for (PokemonManipulator manipulator : manipulators) {
@@ -41,48 +41,48 @@ interface PokemonManipulator {
             }
         };
     }
-    
+
     static PokemonManipulator attackingAttack(AttackNamesies attackNamesies) {
         return (battle, attacking, defending) -> useAttack(attackNamesies, battle, attacking, defending, false);
     }
-    
+
     static PokemonManipulator defendingAttack(AttackNamesies attackNamesies) {
         return (battle, attacking, defending) -> useAttack(attackNamesies, battle, attacking, defending, true);
     }
-    
+
     static PokemonManipulator giveAttackingEffect(EffectNamesies effectNamesies) {
         return (battle, attacking, defending) -> giveEffect(effectNamesies, battle, attacking, defending, true);
     }
-    
+
     static PokemonManipulator giveDefendingEffect(EffectNamesies effectNamesies) {
         return (battle, attacking, defending) -> giveEffect(effectNamesies, battle, attacking, defending, false);
     }
-    
+
     static PokemonManipulator giveAttackingAbility(AbilityNamesies abilityNamesies) {
         return (battle, attacking, defending) -> attacking.withAbility(abilityNamesies);
     }
-    
+
     static PokemonManipulator giveDefendingAbility(AbilityNamesies abilityNamesies) {
         return (battle, attacking, defending) -> defending.withAbility(abilityNamesies);
     }
-    
+
     static PokemonManipulator giveAttackingItem(ItemNamesies itemNamesies) {
         return (battle, attacking, defending) -> attacking.giveItem(itemNamesies);
     }
-    
+
     static PokemonManipulator giveDefendingItem(ItemNamesies itemNamesies) {
         return (battle, attacking, defending) -> defending.giveItem(itemNamesies);
     }
-    
+
     static PokemonManipulator useItem(ItemNamesies itemNamesies) {
         return useItem(itemNamesies, true);
     }
-    
+
     static PokemonManipulator useItem(ItemNamesies itemNamesies, boolean assertion) {
         return (battle, attacking, defending) -> {
             Bag bag = Game.getPlayer().getBag();
             bag.addItem(itemNamesies);
-            
+
             Assert.assertTrue(bag.battleUseItem(itemNamesies, attacking, battle) == assertion);
         };
     }

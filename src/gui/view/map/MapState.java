@@ -17,25 +17,25 @@ import java.util.List;
 
 class MapState implements VisualStateHandler {
     private final DrawPanel itemFinderPanel;
-    
+
     public MapState() {
         int itemFinderLength = 50;
         this.itemFinderPanel = new DrawPanel(Global.GAME_SIZE.width - itemFinderLength, 0, itemFinderLength, itemFinderLength)
                 .withBorderColor(Color.WHITE)
                 .withBlackOutline();
     }
-    
+
     @Override
     public void draw(Graphics g, MapView mapView) {
         if (showItemFinder) {
             Point playerLocation = Game.getPlayer().getLocation();
             List<ItemEntity> hiddenItems = mapView.getCurrentMap().getHiddenItems();
-            
+
             int minDistance = 11;
             for (ItemEntity item : hiddenItems) {
                 minDistance = Math.min(Point.distance(playerLocation, item.getLocation()), minDistance);
             }
-            
+
             final Color finderColor;
             if (minDistance == 0) {
                 finderColor = new Color(255, 113, 166);
@@ -50,18 +50,18 @@ class MapState implements VisualStateHandler {
             } else {
                 finderColor = Color.WHITE;
             }
-            
+
             this.itemFinderPanel.withBackgroundColor(finderColor).drawBackground(g);
         }
     }
-    
+
     private boolean showItemFinder;
-    
+
     @Override
     public void update(int dt, MapView mapView) {
         InputControl input = InputControl.instance();
         Player player = Game.getPlayer();
-        
+
         if (input.consumeIfDown(ControlKey.ESC)) {
             mapView.setState(VisualState.MENU);
         } else if (input.consumeIfDown(ControlKey.FLY) && player.hasTool(OverworldTool.FLY)) {

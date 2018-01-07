@@ -23,18 +23,18 @@ public enum ViewMode {
     START_VIEW(StartView::new),
     TRADE_VIEW(TradeView::new),
     TRAINER_CARD_VIEW(TrainerCardView::new);
-    
+
     private final ViewCreator viewCreator;
-    
+
     ViewMode(ViewCreator viewCreator) {
         this.viewCreator = viewCreator;
     }
-    
+
     @FunctionalInterface
     private interface ViewCreator {
         View createView();
     }
-    
+
     public View createView() {
         return this.viewCreator.createView();
     }

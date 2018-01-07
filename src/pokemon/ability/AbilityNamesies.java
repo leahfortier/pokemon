@@ -429,30 +429,30 @@ public enum AbilityNamesies {
     ELECTRIC_SURGE("Electric Surge", ElectricSurge::new),
     MISTY_SURGE("Misty Surge", MistySurge::new),
     GRASSY_SURGE("Grassy Surge", GrassySurge::new);
-    
+
     // EVERYTHING ABOVE IS GENERATED ###
-    
+
     private final String name;
     private final AbilityCreator abilityCreator;
-    
+
     AbilityNamesies(String name, AbilityCreator abilityCreator) {
         this.name = name;
         this.abilityCreator = abilityCreator;
     }
-    
+
     @FunctionalInterface
     private interface AbilityCreator {
         Ability createAbility();
     }
-    
+
     public String getName() {
         return this.name;
     }
-    
+
     public Ability getNewAbility() {
         return this.abilityCreator.createAbility();
     }
-    
+
     public static AbilityNamesies getValueOf(String name) {
         try {
             return AbilityNamesies.valueOf(StringUtils.getNamesiesString(name));

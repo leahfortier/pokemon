@@ -12,7 +12,7 @@ public class WildBattleMatcher extends TriggerMatcher {
     private WildEncounter[] wildPokemon;
     private int minLevel;
     private int maxLevel;
-    
+
     public WildBattleMatcher(
             String name,
             EncounterRate encounterRate,
@@ -25,27 +25,27 @@ public class WildBattleMatcher extends TriggerMatcher {
         this.maxLevel = maxLevel;
         this.wildPokemon = wildEncounters.toArray(new WildEncounter[0]);
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public String getName() {
         return this.name;
     }
-    
+
     public EncounterRate getEncounterRate() {
         return this.encounterRate;
     }
-    
+
     public WildEncounter[] getWildEncounters() {
         return this.wildPokemon;
     }
-    
+
     public int getMinLevel() {
         return this.minLevel;
     }
-    
+
     public int getMaxLevel() {
         return this.maxLevel;
     }

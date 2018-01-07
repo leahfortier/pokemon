@@ -15,27 +15,27 @@ public enum BagCategory implements Serializable {
     TM("TMs", new Color(168, 232, 72)),
     BERRY("Berries", new Color(64, 192, 64)),
     MISC("Misc", new Color(232, 136, 192));
-    
+
     private final String displayName;
     private final Color color;
     private final BufferedImage icon;
-    
+
     BagCategory(String displayName, Color color) {
         this.displayName = displayName;
         this.color = color;
-        
+
         String imageName = "cat_" + this.displayName.replaceAll("\\s", "").toLowerCase();
         this.icon = FileIO.readImage(Folder.BAG_TILES + imageName);
     }
-    
+
     public String getDisplayName() {
         return displayName;
     }
-    
+
     public Color getColor() {
         return color;
     }
-    
+
     public BufferedImage getIcon() {
         return icon;
     }

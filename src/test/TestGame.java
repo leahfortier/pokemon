@@ -8,7 +8,7 @@ class TestGame extends Game {
         TestGame newGame = new TestGame();
         newGame.setPlayer(player);
         newGame.setGameData(Game.getData());
-        
+
         newInstance(newGame);
     }
 }

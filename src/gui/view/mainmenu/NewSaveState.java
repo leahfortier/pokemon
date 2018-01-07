@@ -10,7 +10,7 @@ import java.awt.Graphics;
 
 class NewSaveState implements VisualStateHandler {
     private final Button[] buttons;
-    
+
     NewSaveState() {
         // Button for each save file plus return
         this.buttons = new Button[Save.NUM_SAVES + 1];
@@ -18,20 +18,20 @@ class NewSaveState implements VisualStateHandler {
             this.buttons[i] = MainMenuView.createMenuButton(i);
         }
     }
-    
+
     @Override
     public void draw(Graphics g, MainMenuView view) {
         for (int i = 0; i < Save.NUM_SAVES; i++) {
             view.drawSaveInformation(g, this.buttons[i], i, "New Save");
         }
-        
+
         this.buttons[Save.NUM_SAVES].label(g, 40, "Return");
     }
-    
+
     @Override
     public void update(MainMenuView view) {
         int pressed = view.getPressed(buttons);
-        
+
         // Load Save File
         if (pressed >= 0 && pressed < Save.NUM_SAVES) {
             // TODO: Ask to delete
@@ -43,7 +43,7 @@ class NewSaveState implements VisualStateHandler {
             view.setVisualState(VisualState.MAIN);
         }
     }
-    
+
     @Override
     public Button[] getButtons() {
         return this.buttons;

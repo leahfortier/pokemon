@@ -13,11 +13,11 @@ public interface StatusBerry extends StatusHealer, GainableEffectBerry, StatusRe
             victim.consumeItem(b);
         }
     }
-    
+
     default boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
         return use(user, source);
     }
-    
+
     default int naturalGiftPower() {
         return 80;
     }

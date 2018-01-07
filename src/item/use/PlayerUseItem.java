@@ -6,7 +6,7 @@ import pokemon.ActivePokemon;
 
 public interface PlayerUseItem extends UseItem {
     boolean use();
-    
+
     default boolean use(Battle b, ActivePokemon p, Move m) {
         return this.use();
     }

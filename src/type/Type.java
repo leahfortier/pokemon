@@ -30,68 +30,68 @@ public enum Type implements Serializable {
     STEEL(16, "Steel", () -> TypeAdvantage.STEEL, new Color(173, 173, 199), 7),
     FAIRY(17, "Fairy", () -> TypeAdvantage.FAIRY, new Color(248, 179, 249), -1),
     NO_TYPE(18, "Unknown", () -> TypeAdvantage.NO_TYPE, new Color(255, 255, 255, 0), -1);
-    
+
     private final int index;
     private final String name;
     private final AdvantageGetter advantageGetter;
     private final Color color;
     private final int hiddenIndex;
     private final BufferedImage image;
-    
+
     Type(int index, String name, AdvantageGetter advantageGetter, Color color, int hiddenIndex) {
         this.index = index;
         this.name = name;
         this.advantageGetter = advantageGetter;
         this.color = color;
         this.hiddenIndex = hiddenIndex;
-        
+
         String imageName = "Type" + name;
         this.image = FileIO.readImage(Folder.TYPE_TILES + imageName);
     }
-    
+
     public int getIndex() {
         return this.index;
     }
-    
+
     public String getName() {
         return this.name;
     }
-    
+
     public TypeAdvantage getAdvantage() {
         return this.advantageGetter.getAdvantage();
     }
-    
+
     public Color getColor() {
         return this.color;
     }
-    
+
     public BufferedImage getImage() {
         return this.image;
     }
-    
+
     public static Color[] getColors(Type[] t) {
         return new Color[] { t[0].getColor(), t[t[1] == Type.NO_TYPE ? 0 : 1].getColor() };
     }
-    
+
     public static Color[] getColors(PokemonInfo p) {
         return getColors(p.getType());
     }
-    
+
     public static Color[] getColors(ActivePokemon p) {
         return getColors(p.isEgg() ? new Type[] { Type.NORMAL, Type.NO_TYPE } : p.getActualType());
     }
-    
+
     public static Type getHiddenType(int hiddenIndex) {
         for (Type type : values()) {
             if (type.hiddenIndex == hiddenIndex) {
                 return type;
             }
         }
-        
+
         Global.error("Invalid hidden type index " + hiddenIndex);
         return null;
     }
-    
+
     @FunctionalInterface
     private interface AdvantageGetter {
         TypeAdvantage getAdvantage();

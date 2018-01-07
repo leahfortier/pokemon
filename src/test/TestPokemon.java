@@ -18,33 +18,33 @@ public class TestPokemon extends ActivePokemon {
     public TestPokemon(final PokemonNamesies pokemon, final boolean isWild, final boolean isPlayer) {
         this(pokemon, 100, isWild, isPlayer);
     }
-    
+
     public TestPokemon(final PokemonNamesies pokemon, final int level, final boolean isWild, final boolean isPlayer) {
         super(pokemon, level, isWild, isPlayer);
     }
-    
+
     public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {
         return new TestPokemon(pokemon, false, true);
     }
-    
+
     public static TestPokemon newWildPokemon(final PokemonNamesies pokemon) {
         return new TestPokemon(pokemon, true, false);
     }
-    
+
     public static TestPokemon newTrainerPokemon(final PokemonNamesies pokemon) {
         return new TestPokemon(pokemon, false, false);
     }
-    
+
     public TestPokemon withGender(Gender gender) {
         super.setGender(gender);
         return this;
     }
-    
+
     public TestPokemon withAbility(AbilityNamesies ability) {
         super.setAbility(ability);
         return this;
     }
-    
+
     public TestPokemon withMoves(AttackNamesies... moves) {
         Assert.assertTrue(moves.length <= Move.MAX_MOVES);
         this.setMoves(
@@ -54,15 +54,15 @@ public class TestPokemon extends ActivePokemon {
         );
         return this;
     }
-    
+
     public void setupMove(AttackNamesies attackNamesies, Battle battle) {
         this.setMove(battle, new Move(attackNamesies));
         this.startAttack(battle);
     }
-    
+
     public void apply(boolean assertion, AttackNamesies attack, TestBattle battle) {
         ActivePokemon other = battle.getOtherPokemon(this);
-        
+
         this.setupMove(attack, battle);
         boolean success = this.getAttack().apply(this, other, battle);
         Assert.assertTrue(
@@ -70,7 +70,7 @@ public class TestPokemon extends ActivePokemon {
                 success == assertion
         );
     }
-    
+
     public void assertHealthRatio(double fraction) {
         Assert.assertEquals((int)(Math.ceil(fraction*this.getMaxHP())), this.getHP());
     }

@@ -25,33 +25,33 @@ enum MenuChoice {
     }),
     EXIT(() -> "Exit", ViewMode.MAIN_MENU_VIEW), // TODO: Confirmation
     RETURN(() -> "Return", mapView -> mapView.setState(VisualState.MAP));
-    
+
     private final DisplayNameGetter displayNameGetter;
     private final StateChanger stateChanger;
-    
+
     MenuChoice(DisplayNameGetter displayNameGetter, ViewMode viewMode) {
         this(displayNameGetter, mapView -> Game.instance().setViewMode(viewMode));
     }
-    
+
     MenuChoice(DisplayNameGetter displayNameGetter, StateChanger stateChanger) {
         this.displayNameGetter = displayNameGetter;
         this.stateChanger = stateChanger;
     }
-    
+
     @FunctionalInterface
     private interface DisplayNameGetter {
         String getDisplayName();
     }
-    
+
     @FunctionalInterface
     private interface StateChanger {
         void execute(MapView mapView);
     }
-    
+
     public String getDisplayName() {
         return this.displayNameGetter.getDisplayName();
     }
-    
+
     public void execute(MapView mapView) {
         this.stateChanger.execute(mapView);
     }

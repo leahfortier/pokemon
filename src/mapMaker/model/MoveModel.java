@@ -10,18 +10,18 @@ import java.awt.image.BufferedImage;
 
 public class MoveModel extends MapMakerModel {
     private final DefaultListModel<ImageIcon> moveListModel;
-    
+
     MoveModel() {
         super(WalkType.NOT_WALKABLE.getRGB());
-        
+
         this.moveListModel = new DefaultListModel<>();
     }
-    
+
     @Override
     public DefaultListModel<ImageIcon> getListModel() {
         return this.moveListModel;
     }
-    
+
     @Override
     public void reload(MapMaker mapMaker) {
         this.moveListModel.clear();
@@ -31,7 +31,7 @@ public class MoveModel extends MapMakerModel {
             this.moveListModel.addElement(icon);
         }
     }
-    
+
     @Override
     public boolean newTileButtonEnabled() {
         return false;

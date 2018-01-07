@@ -1320,36 +1320,36 @@ public enum AttackNamesies {
     PHOTON_GEYSER("Photon Geyser", PhotonGeyser::new),
     MIND_BLOWN("Mind Blown", MindBlown::new),
     PLASMA_FISTS("Plasma Fists", PlasmaFists::new);
-    
+
     // EVERYTHING ABOVE IS GENERATED ###
-    
+
     private static final Map<AttackNamesies, Attack> attackMap = new EnumMap<>(AttackNamesies.class);
-    
+
     private final String name;
     private final AttackCreator attackCreator;
-    
+
     AttackNamesies(String name, AttackCreator attackCreator) {
         this.name = name;
         this.attackCreator = attackCreator;
     }
-    
+
     @FunctionalInterface
     private interface AttackCreator {
         Attack createAttack();
     }
-    
+
     public String getName() {
         return this.name;
     }
-    
+
     public Attack getAttack() {
         if (!attackMap.containsKey(this)) {
             attackMap.put(this, this.attackCreator.createAttack());
         }
-        
+
         return attackMap.get(this);
     }
-    
+
     public static AttackNamesies tryValueOf(String name) {
         try {
             return AttackNamesies.valueOf(StringUtils.getNamesiesString(name));
@@ -1357,13 +1357,13 @@ public enum AttackNamesies {
             return null;
         }
     }
-    
+
     public static AttackNamesies getValueOf(String name) {
         AttackNamesies namesies = tryValueOf(name);
         if (namesies == null) {
             Global.error(name + " does not have a valid AttackNamesies value");
         }
-        
+
         return namesies;
     }
 }

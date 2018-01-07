@@ -13,11 +13,11 @@ import java.awt.Graphics;
 class LoadSaveState implements VisualStateHandler {
     private static final int RETURN = Save.NUM_SAVES;
     private static final int DELETE = RETURN + 1;
-    
+
     private final Button[] buttons;
-    
+
     private boolean deletePressed;
-    
+
     LoadSaveState() {
         this.buttons = new Button[Save.NUM_SAVES + 2];
         for (int i = 0; i < Save.NUM_SAVES; i++) {
@@ -31,9 +31,9 @@ class LoadSaveState implements VisualStateHandler {
                     }
             );
         }
-        
+
         Button referenceButton = MainMenuView.createMenuButton(MainMenuView.NUM_MAIN_BUTTONS - 1);
-        
+
         this.buttons[RETURN] = new Button(
                 referenceButton.x,
                 referenceButton.y,
@@ -47,9 +47,9 @@ class LoadSaveState implements VisualStateHandler {
                         0                   // Down -- to the first save file
                 }
         );
-        
+
         Button returnButton = this.buttons[RETURN];
-        
+
         buttons[DELETE] = new Button(
                 referenceButton.x + referenceButton.width/2 + 5,
                 returnButton.y,
@@ -64,28 +64,28 @@ class LoadSaveState implements VisualStateHandler {
                 }
         );
     }
-    
+
     @Override
     public void set() {
         deletePressed = false;
     }
-    
+
     @Override
     public void draw(Graphics g, MainMenuView view) {
         // Draw each save information button
         for (int i = 0; i < Save.NUM_SAVES; i++) {
             view.drawSaveInformation(g, this.buttons[i], i, "Empty");
         }
-        
+
         // Return and Delete
         buttons[RETURN].label(g, 30, "Return");
         buttons[DELETE].label(g, 30, "Delete");
     }
-    
+
     @Override
     public void update(MainMenuView view) {
         int pressed = view.getPressed(buttons);
-        
+
         // Load Save File
         if (pressed >= 0 && pressed < Save.NUM_SAVES) {
             if (view.hasSavedInfo(pressed)) {
@@ -108,7 +108,7 @@ class LoadSaveState implements VisualStateHandler {
             deletePressed = true;
         }
     }
-    
+
     @Override
     public Button[] getButtons() {
         return this.buttons;

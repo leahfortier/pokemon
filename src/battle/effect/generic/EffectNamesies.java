@@ -225,30 +225,30 @@ public enum EffectNamesies {
     SUNNY("Sunny", Sunny::new),
     SANDSTORM("Sandstorm", Sandstorm::new),
     HAILING("Hailing", Hailing::new);
-    
+
     // EVERYTHING ABOVE IS GENERATED ###
-    
+
     private final String name;
     private final EffectCreator effectCreator;
-    
+
     EffectNamesies(String name, EffectCreator effectCreator) {
         this.name = name;
         this.effectCreator = effectCreator;
     }
-    
+
     @FunctionalInterface
     private interface EffectCreator {
         Effect createEffect();
     }
-    
+
     public Effect getEffect() {
         return this.effectCreator.createEffect();
     }
-    
+
     public String getName() {
         return this.name;
     }
-    
+
     public static EffectNamesies getValueOf(String name) {
         try {
             return EffectNamesies.valueOf(StringUtils.getNamesiesString(name));

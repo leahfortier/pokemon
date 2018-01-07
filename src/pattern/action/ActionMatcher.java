@@ -19,16 +19,16 @@ public class ActionMatcher {
     private String update;
     private String groupTrigger;
     private String global;
-    
+
     private void confirmFormat() {
         if (!GeneralUtils.hasOnlyOneNonEmpty(trigger, battle, choice, update, groupTrigger, global)) {
             Global.error("Can only have one nonempty field for ActionMatcher");
         }
     }
-    
+
     public ActionType getActionType() {
         this.confirmFormat();
-        
+
         if (trigger != null) {
             return ActionType.TRIGGER;
         } else if (battle != null) {
@@ -42,11 +42,11 @@ public class ActionMatcher {
         } else if (global != null) {
             return ActionType.GLOBAL;
         }
-        
+
         Global.error("No action found.");
         return null;
     }
-    
+
     public EntityAction getAction(final String condition) {
         ActionType actionType = this.getActionType();
         switch (actionType) {
@@ -67,27 +67,27 @@ public class ActionMatcher {
                 return null;
         }
     }
-    
+
     public TriggerActionMatcher getTrigger() {
         return this.trigger;
     }
-    
+
     public void setTrigger(TriggerActionMatcher matcher) {
         this.trigger = matcher;
-        
+
         this.confirmFormat();
     }
-    
+
     public BattleMatcher getBattle() {
         return this.battle;
     }
-    
+
     public void setBattle(BattleMatcher matcher) {
         this.battle = matcher;
-        
+
         this.confirmFormat();
     }
-    
+
     public String getActionString() {
         switch (this.getActionType()) {
             case UPDATE:
@@ -101,7 +101,7 @@ public class ActionMatcher {
                 return StringUtils.empty();
         }
     }
-    
+
     public void setActionString(String contents, ActionType actionType) {
         switch (actionType) {
             case UPDATE:
@@ -117,16 +117,16 @@ public class ActionMatcher {
                 Global.error("Invalid string action type " + actionType);
                 break;
         }
-        
+
         this.confirmFormat();
     }
-    
+
     public void setChoice(ChoiceActionMatcher choice) {
         this.choice = choice;
-        
+
         this.confirmFormat();
     }
-    
+
     public ChoiceActionMatcher getChoice() {
         return this.choice;
     }

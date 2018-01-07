@@ -8,13 +8,13 @@ import map.triggers.TriggerType;
 
 public class MovePlayerTrigger extends Trigger {
     private final String path;
-    
+
     public MovePlayerTrigger(String contents, String condition) {
         super(TriggerType.MOVE_PLAYER, contents, condition);
-        
+
         this.path = PathDirection.defaultPath() + contents;
     }
-    
+
     @Override
     protected void executeTrigger() {
         PlayerEntity playerEntity = Game.getPlayer().getEntity();

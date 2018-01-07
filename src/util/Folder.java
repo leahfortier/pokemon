@@ -1,30 +1,30 @@
 package util;
 
 public abstract class Folder {
-    
+
     // Main folder
     public static final String SRC = FileIO.makeFolderPath("src");
     public static final String REC = FileIO.makeFolderPath("rec");
     public static final String SAVES = FileIO.makeFolderPath("saves");
-    
+
     // Code
     public static final String BATTLE = FileIO.makeFolderPath(SRC, "battle");
     public static final String ITEMS = FileIO.makeFolderPath(SRC, "item");
     public static final String POKEMON = FileIO.makeFolderPath(SRC, "pokemon");
-    
+
     // Battle code
     public static final String ATTACK = FileIO.makeFolderPath(BATTLE, "attack");
     public static final String GENERIC_EFFECT = FileIO.makeFolderPath(BATTLE, "effect", "generic");
-    
+
     // Pokemon code
     public static final String ABILITY = FileIO.makeFolderPath(POKEMON, "ability");
-    
+
     // Resources
     public static final String MAPS = FileIO.makeFolderPath(REC, "maps");
     public static final String IMAGES = FileIO.makeFolderPath(REC, "images");
     public static final String GENERATOR = FileIO.makeFolderPath(REC, "generator");
     public static final String SOUND = FileIO.makeFolderPath(REC, "snd");
-    
+
     // Tile set folders
     public static final String TILES = FileIO.makeFolderPath(IMAGES, "tiles");
     public static final String ATTACK_TILES = FileIO.makeFolderPath(TILES, "attackTiles");

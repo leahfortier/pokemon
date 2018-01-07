@@ -9,7 +9,7 @@ public interface VisualStateHandler {
     void set(BattleView view);
     void update(BattleView view);
     void draw(BattleView view, Graphics g);
-    
+
     default void reset() {}
     default void checkMessage(MessageUpdate newMessage) {}
 }

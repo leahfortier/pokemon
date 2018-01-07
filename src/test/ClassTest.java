@@ -131,9 +131,9 @@ public class ClassTest extends BaseTest {
             SelfAttackBlocker.class,
             CritStageEffect.class
     );
-    
+
     private static List<Class<?>> classes;
-    
+
     @BeforeClass
     public static void setClasses() {
         try {
@@ -142,45 +142,45 @@ public class ClassTest extends BaseTest {
             Assert.fail(e.getMessage());
         }
     }
-    
+
     // Scans all classes accessible from the context class loader which belong to the given package and subpackages.
     private static List<Class<?>> getClasses() throws ClassNotFoundException, IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         Assert.assertNotNull(classLoader);
-        
+
         String packageName = "";
         String path = packageName.replace('.', '/');
         Enumeration<URL> resources = classLoader.getResources(path);
-        
+
         List<File> dirs = new ArrayList<>();
         while (resources.hasMoreElements()) {
             URL resource = resources.nextElement();
             dirs.add(new File(resource.getFile()));
         }
-        
+
         List<Class<?>> classes = new ArrayList<>();
         for (File directory : dirs) {
             classes.addAll(findClasses(directory, packageName));
         }
-        
+
         return classes;
     }
-    
+
     // Recursive method used to find all classes in a given directory and subdirs.
     private static List<Class<?>> findClasses(File directory, String packageName) throws ClassNotFoundException {
         List<Class<?>> classes = new ArrayList<>();
         if (!directory.exists()) {
             return classes;
         }
-        
+
         File[] files = directory.listFiles();
         Assert.assertNotNull(files);
-        
+
         String nextPackagePrefix = packageName;
         if (!packageName.isEmpty()) {
             nextPackagePrefix += ".";
         }
-        
+
         for (File file : files) {
             if (file.isDirectory()) {
                 Assert.assertFalse(file.getName().contains("."));
@@ -189,10 +189,10 @@ public class ClassTest extends BaseTest {
                 classes.add(Class.forName(nextPackagePrefix + file.getName().substring(0, file.getName().length() - 6)));
             }
         }
-        
+
         return classes;
     }
-    
+
     @Test
     public void containsTest() {
         List<Class> toCheck = Arrays.asList(
@@ -207,14 +207,14 @@ public class ClassTest extends BaseTest {
                 Type.BUG.getDeclaringClass(),
                 PokemonNamesies.class
         );
-        
+
         for (Class checkeroo : toCheck) {
             Assert.assertTrue(checkeroo.getSimpleName(), classes.contains(checkeroo));
         }
-        
+
         Assert.assertFalse(classes.contains(List.class));
     }
-    
+
     @Test
     public void instanceOfTest() {
         Class<?>[] castSources = { Attack.class, Ability.class, HoldItem.class };
@@ -226,24 +226,24 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, NameChanger.class, Ability.class);
             checkInstance(classy, SwitchOutEffect.class, pokemonEffectList);
             checkInstance(classy, EndBattleEffect.class, GeneralUtils.append(pokemonEffectList, TeamEffect.class));
-            
+
             // Teams and Opponent things
             checkInstance(classy, Team.class, Trainer.class, WildPokemon.class);
             checkInstance(classy, Opponent.class, EnemyTrainer.class, WildPokemon.class);
-            
+
             // Pokemon and team effects only
             checkInstance(classy, RapidSpinRelease.class, PokemonEffect.class, TeamEffect.class);
             checkInstance(classy, DefogRelease.class, PokemonEffect.class, TeamEffect.class);
-            
+
             // Ability and hold item only
             checkInstance(classy, WildEncounterAlterer.class, Ability.class, HoldItem.class);
             checkInstance(classy, WildEncounterSelector.class, Ability.class, HoldItem.class);
             checkInstance(classy, RepellingEffect.class, Ability.class, HoldItem.class);
             checkInstance(classy, EncounterRateMultiplier.class, Ability.class, HoldItem.class);
-            
+
             // MultiTurnMove should not be directly inherited
             checkInstance(classy, MultiTurnMove.class, ChargingMove.class, RechargingMove.class);
-            
+
             // Must be attacks
             checkInstance(classy, MultiStrikeMove.class, Attack.class);
             checkInstance(classy, MultiTurnMove.class, Attack.class);
@@ -253,12 +253,12 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, PowderMove.class, Attack.class);
             checkInstance(classy, PowerCountMove.class, Attack.class);
             checkInstance(classy, SelfHealingMove.class, Attack.class);
-            
+
             // Casted from CastSource.getSource()
             checkInstance(classy, AbilityChanger.class, castSources);
             checkInstance(classy, ChangeAttackTypeSource.class, castSources);
             checkInstance(classy, ChangeTypeSource.class, castSources);
-            
+
             // Invoked from battle.getEffectsList() without attack
             checkInstance(classy, OpponentApplyDamageEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, EndTurnEffect.class, effectListSourcesNoAttack);
@@ -305,19 +305,19 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, ModifyStageValueEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, WeatherEliminatingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, WeatherExtendingEffect.class, effectListSourcesNoAttack);
-            
+
             // Invoked from battle.getEffectsList() with attack
             for (Class<?> effectListWithAttackClass : effectListWithAttackClasses) {
                 checkInstance(classy, effectListWithAttackClass, effectListSourcesWithAttack);
             }
         }
     }
-    
+
     // If toCheck is an instance of assigned (interface), then is MUST be an instance of at least one of implies (classes)
     private void checkInstance(Class<?> toCheck, Class<?> assigned, Class<?>... implies) {
         // assigned must be in interface
         Assert.assertTrue(assigned.isInterface());
-        
+
         // Only check for class implementations
         if (!toCheck.isInterface() && assigned.isAssignableFrom(toCheck)) {
             String message = String.format(
@@ -329,7 +329,7 @@ public class ClassTest extends BaseTest {
             Assert.assertTrue(message, isAnyInstance(toCheck, implies));
         }
     }
-    
+
     @Test
     public void containsInstanceTest() {
         // Invoked from battle.getEffectsList() with attack
@@ -337,12 +337,12 @@ public class ClassTest extends BaseTest {
             containsInstance(effectListWithAttackClass, Attack.class);
         }
     }
-    
+
     // For all classes that implement assigned, at least one must be of type mustContain
     private void containsInstance(Class<?> assigned, Class<?> mustContain) {
         // assigned must be in interface
         Assert.assertTrue(assigned.isInterface());
-        
+
         boolean contains = false;
         for (Class<?> classy : classes) {
             if (assigned.isAssignableFrom(classy) && mustContain.isAssignableFrom(classy)) {
@@ -350,7 +350,7 @@ public class ClassTest extends BaseTest {
                 break;
             }
         }
-        
+
         String message = String.format(
                 "%s does not have required instance of %s.",
                 assigned.getSimpleName(),
@@ -358,18 +358,18 @@ public class ClassTest extends BaseTest {
         );
         Assert.assertTrue(message, contains);
     }
-    
+
     @Test
     public void annotationTest() {
         for (Class<?> classy : classes) {
             // All tests should inherit from BaseTest
             annotationImpliesInstance(classy, Test.class, BaseTest.class);
-            
+
             // Should pretty much always be using @BeforeClass instead
             Assert.assertFalse(hasAnnotation(classy, Before.class));
         }
     }
-    
+
     // If a class has the annotationClass on any method, then it must be an instance of at least one instances
     private void annotationImpliesInstance(Class<?> toCheck, Class<? extends Annotation> annotationClass, Class<?>... instances) {
         if (hasAnnotation(toCheck, annotationClass)) {
@@ -382,7 +382,7 @@ public class ClassTest extends BaseTest {
             Assert.assertTrue(message, isAnyInstance(toCheck, instances));
         }
     }
-    
+
     // Returns true if toCheck has the annotationClass annotation on ANY of its methods
     private boolean hasAnnotation(Class<?> toCheck, Class<? extends Annotation> annotationClass) {
         Method[] methods = toCheck.getMethods();
@@ -396,7 +396,7 @@ public class ClassTest extends BaseTest {
         }
         return false;
     }
-    
+
     // Returns true if toCheck is an instance of at least one of instances
     private boolean isAnyInstance(Class<?> toCheck, Class<?>... instances) {
         for (Class<?> instance : instances) {

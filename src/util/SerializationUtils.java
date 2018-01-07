@@ -29,17 +29,17 @@ public class SerializationUtils {
             .disableHtmlEscaping()
             .setLenient()
             .create();
-    
+
     public static <T> T deserializeJson(String jsonString, Class<T> tClass) {
         return gson.fromJson(jsonString, tClass);
     }
-    
+
     public static String getJson(final Object jsonObject) {
         return gson.toJson(jsonObject)
                    .replaceAll("\\\\n", "\n")
                    .replaceAll("\\\\t", "\t");
     }
-    
+
     public static Object deserializeFromFile(String fileName) {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
             return in.readObject();
@@ -48,7 +48,7 @@ public class SerializationUtils {
             return fileName;
         }
     }
-    
+
     public static void serializeToFile(String fileName, Serializable serializable) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
             out.writeObject(serializable);
@@ -56,7 +56,7 @@ public class SerializationUtils {
             Global.error("IOException occurred while writing object to " + fileName + ": " + exception.getMessage());
         }
     }
-    
+
     public static Object deserialize(String serialized) {
         byte[] data = Base64.getDecoder().decode(serialized);
         try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(data))) {
@@ -66,7 +66,7 @@ public class SerializationUtils {
             return StringUtils.empty();
         }
     }
-    
+
     public static String serialize(Serializable serializable) {
         try (ByteArrayOutputStream sout = new ByteArrayOutputStream();
              ObjectOutputStream out = new ObjectOutputStream(sout)) {
@@ -77,7 +77,7 @@ public class SerializationUtils {
             return StringUtils.empty();
         }
     }
-    
+
     public static Object getSerializedCopy(Serializable serializable) {
         return deserialize(serialize(serializable));
     }

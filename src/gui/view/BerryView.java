@@ -35,39 +35,39 @@ import java.util.Set;
 
 public class BerryView extends View {
     private static final Color BACKGROUND_COLOR = BagCategory.BERRY.getColor();
-    
+
     private static final int ITEMS_PER_PAGE = 10;
-    
+
     private static final int NUM_COLS = 4;
     private static final int NUM_ROWS = BerryFarm.MAX_BERRIES/NUM_COLS;
-    
+
     private static final int NUM_BUTTONS = ITEMS_PER_PAGE + 4;
     private static final int RETURN = NUM_BUTTONS - 1;
     private static final int HARVEST = NUM_BUTTONS - 2;
     private static final int RIGHT_ARROW = NUM_BUTTONS - 3;
     private static final int LEFT_ARROW = NUM_BUTTONS - 4;
-    
+
     private final DrawPanel farmPanel;
     private final DrawPanel tabPanel;
     private final DrawPanel berryPanel;
     private final DrawPanel itemsPanel;
     private final DrawPanel selectedPanel;
     private final DrawPanel[] berryPanels;
-    
+
     private final Button[] buttons;
     private final Button[] itemButtons;
-    
+
     private int pageNum;
     private int selectedButton;
     private String message;
     private ItemNamesies selectedItem;
-    
+
     private BerryFarm berryFarm;
-    
+
     BerryView() {
         int tabHeight = 55;
         int spacing = 28;
-        
+
         farmPanel = new DrawPanel(
                 spacing,
                 spacing + tabHeight,
@@ -81,7 +81,7 @@ public class BerryView extends View {
                 .withBorderPercentage(0)
                 .withBackgroundColor(BACKGROUND_COLOR)
                 .withBlackOutline();
-        
+
         tabPanel = new DrawPanel(
                 farmPanel.x + 2*farmPanel.width/3,
                 farmPanel.y - tabHeight + DrawUtils.OUTLINE_SIZE,
@@ -92,7 +92,7 @@ public class BerryView extends View {
                 .withTransparentBackground()
                 .withBorderPercentage(0)
                 .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.DOWN)));
-        
+
         int buttonHeight = 38;
         int selectedHeight = 82;
         int halfPanelWidth = (farmPanel.width - 3*spacing)/2;
@@ -104,7 +104,7 @@ public class BerryView extends View {
         )
                 .withFullTransparency()
                 .withBlackOutline();
-        
+
         selectedPanel = new DrawPanel(
                 berryPanel.rightX() + spacing,
                 farmPanel.y + spacing,
@@ -113,7 +113,7 @@ public class BerryView extends View {
         )
                 .withFullTransparency()
                 .withBlackOutline();
-        
+
         Button returnButton = Button.createExitButton(
                 selectedPanel.x,
                 farmPanel.bottomY() - spacing - buttonHeight,
@@ -122,7 +122,7 @@ public class BerryView extends View {
                 ButtonHoverAction.BOX,
                 new int[] { -1, RIGHT_ARROW, -1, RIGHT_ARROW }
         );
-        
+
         itemsPanel = new DrawPanel(
                 selectedPanel.x,
                 selectedPanel.bottomY() + buttonHeight + spacing,
@@ -131,16 +131,16 @@ public class BerryView extends View {
         )
                 .withFullTransparency()
                 .withBlackOutline();
-        
+
         Button[] berryButtons = berryPanel.getButtons(10, NUM_ROWS, NUM_COLS);
         berryPanels = new DrawPanel[NUM_ROWS*NUM_COLS];
         for (int i = 0; i < berryPanels.length; i++) {
             berryPanels[i] = new DrawPanel(berryButtons[i]).withBlackOutline().withFullTransparency();
         }
-        
+
         selectedButton = 0;
         selectedItem = ItemNamesies.NO_ITEM;
-        
+
         itemButtons = itemsPanel.getButtons(
                 5,
                 ITEMS_PER_PAGE/2 + 1,
@@ -151,7 +151,7 @@ public class BerryView extends View {
                 new int[] { -1, HARVEST, -1, RIGHT_ARROW },
                 index -> selectedItem = GeneralUtils.getPageValue(Game.getPlayer().getBag().getCategory(BagCategory.BERRY), pageNum, ITEMS_PER_PAGE, index)
         );
-        
+
         Button harvestButton = new Button(
                 selectedPanel.x,
                 selectedPanel.bottomY() - DrawUtils.OUTLINE_SIZE,
@@ -161,7 +161,7 @@ public class BerryView extends View {
                 new int[] { -1, RETURN, -1, 0 },
                 () -> message = berryFarm.harvest(selectedItem)
         );
-        
+
         int arrowHeight = 20;
         Button leftArrow = new Button(
                 itemsPanel.x + itemsPanel.width/4,
@@ -172,7 +172,7 @@ public class BerryView extends View {
                 new int[] { RIGHT_ARROW, ITEMS_PER_PAGE - 2, RIGHT_ARROW, RETURN },
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         );
-        
+
         Button rightArrow = new Button(
                 itemsPanel.rightX() - (leftArrow.x - itemsPanel.x) - leftArrow.width,
                 leftArrow.y,
@@ -182,7 +182,7 @@ public class BerryView extends View {
                 new int[] { LEFT_ARROW, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN },
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
-        
+
         buttons = new Button[NUM_BUTTONS];
         System.arraycopy(itemButtons, 0, buttons, 0, ITEMS_PER_PAGE);
         buttons[HARVEST] = harvestButton;
@@ -190,7 +190,7 @@ public class BerryView extends View {
         buttons[RIGHT_ARROW] = rightArrow;
         buttons[RETURN] = returnButton;
     }
-    
+
     @Override
     public void update(int dt) {
         InputControl input = InputControl.instance();
@@ -198,53 +198,53 @@ public class BerryView extends View {
             message = null;
             return;
         }
-        
+
         selectedButton = Button.update(buttons, selectedButton);
         if (buttons[selectedButton].checkConsumePress()) {
             updateActiveButtons();
         }
-        
+
         input.popViewIfEscaped();
     }
-    
+
     @Override
     public void draw(Graphics g) {
         GameData data = Game.getData();
         Player player = Game.getPlayer();
-        
+
         TileSet itemTiles = data.getItemTiles();
         Bag bag = player.getBag();
-        
+
         // Background
         BasicPanels.drawCanvasPanel(g);
-        
+
         // Info Boxes
         farmPanel.drawBackground(g);
-        
+
         // Selected item Display
         selectedPanel.drawBackground(g);
         if (selectedItem != ItemNamesies.NO_ITEM) {
             int spacing = 8;
-            
+
             Item selectedItemValue = selectedItem.getItem();
-            
+
             g.setColor(Color.BLACK);
             FontMetrics.setFont(g, 20);
-            
+
             int startY = selectedPanel.y + FontMetrics.getDistanceBetweenRows(g);
             int nameX = selectedPanel.x + 2*spacing + Global.TILE_SIZE; // TODO: Why are we using Tile Size in the bag view
-            
+
             // Draw item image
             BufferedImage img = itemTiles.getTile(selectedItemValue.getImageName());
             ImageUtils.drawBottomCenteredImage(g, img, selectedPanel.x + (nameX - selectedPanel.x)/2, startY);
-            
+
             g.drawString(selectedItem.getName(), nameX, startY);
-            
+
             if (selectedItemValue.hasQuantity()) {
                 String quantityString = "x" + bag.getQuantity(selectedItem);
                 TextUtils.drawRightAlignedString(g, quantityString, selectedPanel.rightX() - 2*spacing, startY);
             }
-            
+
             FontMetrics.setFont(g, 14);
             TextUtils.drawWrappedText(
                     g,
@@ -254,52 +254,52 @@ public class BerryView extends View {
                     selectedPanel.width - 2*spacing
             );
         }
-        
+
         FontMetrics.setFont(g, 12);
         g.setColor(Color.BLACK);
-        
+
         // Draw each items in category
         itemsPanel.drawBackground(g);
         Set<ItemNamesies> berries = bag.getCategory(BagCategory.BERRY);
         Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(berries, pageNum, ITEMS_PER_PAGE);
-        
+
         for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
             for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
                 ItemNamesies item = iter.next();
                 Item itemValue = item.getItem();
                 Button itemButton = itemButtons[k];
-                
+
                 itemButton.fill(g, Color.WHITE);
                 itemButton.blackOutline(g);
-                
+
                 g.translate(itemButton.x, itemButton.y);
-                
+
                 ImageUtils.drawCenteredImage(g, itemTiles.getTile(itemValue.getImageName()), 14, 14);
-                
+
                 g.drawString(item.getName(), 29, 18);
-                
+
                 if (itemValue.hasQuantity()) {
                     TextUtils.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
                 }
-                
+
                 g.translate(-itemButton.x, -itemButton.y);
             }
         }
-        
+
         // Draw page numbers
         FontMetrics.setFont(g, 16);
         TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(), itemsPanel.centerX(), buttons[RIGHT_ARROW].centerY());
-        
+
         // Left and Right arrows
         buttons[LEFT_ARROW].drawArrow(g, Direction.LEFT);
         buttons[RIGHT_ARROW].drawArrow(g, Direction.RIGHT);
-        
+
         // Berry Panel
         berryPanel.drawBackground(g);
         for (int i = 0; i < berryPanels.length; i++) {
             DrawPanel panel = berryPanels[i];
             panel.drawBackground(g);
-            
+
             PlantedBerry berry = berryFarm.getBerry(i);
             if (berry != null) {
                 ImageUtils.drawCenteredImage(
@@ -308,7 +308,7 @@ public class BerryView extends View {
                         panel.centerX(),
                         panel.y + panel.height/3
                 );
-                
+
                 TextUtils.drawCenteredString(
                         g,
                         berry.getTimeLeftString(),
@@ -317,22 +317,22 @@ public class BerryView extends View {
                 );
             }
         }
-        
+
         // Welcome to the Hellmouth
         Button harvestButton = buttons[HARVEST];
         harvestButton.fillTransparent(g);
         harvestButton.blackOutline(g);
         harvestButton.label(g, 20, "Harvest!");
-        
+
         Button returnButton = buttons[RETURN];
         returnButton.fillTransparent(g);
         returnButton.blackOutline(g);
         returnButton.label(g, 20, "Return");
-        
+
         // Tab
         tabPanel.drawBackground(g);
         tabPanel.label(g, 16, "Berries!!");
-        
+
         if (!StringUtils.isNullOrWhiteSpace(message)) {
             BasicPanels.drawFullMessagePanel(g, message);
         } else {
@@ -341,37 +341,37 @@ public class BerryView extends View {
             }
         }
     }
-    
+
     private int totalPages() {
         int size = Game.getPlayer().getBag().getCategory(BagCategory.BERRY).size();
         return size/ITEMS_PER_PAGE + (size == 0 || size%ITEMS_PER_PAGE != 0 ? 1 : 0);
     }
-    
+
     @Override
     public ViewMode getViewModel() {
         return ViewMode.BERRY_VIEW;
     }
-    
+
     @Override
     public void movedToFront() {
         this.berryFarm = Game.getPlayer().getBerryFarm();
         this.message = null;
         this.selectedItem = ItemNamesies.NO_ITEM;
-        
+
         updateActiveButtons();
     }
-    
+
     private void updateActiveButtons() {
         Bag bag = Game.getPlayer().getBag();
         if (selectedItem != ItemNamesies.NO_ITEM && !bag.hasItem(selectedItem)) {
             selectedItem = ItemNamesies.NO_ITEM;
         }
-        
+
         Set<ItemNamesies> berries = bag.getCategory(BagCategory.BERRY);
         if (selectedItem == ItemNamesies.NO_ITEM) {
             selectedItem = berries.isEmpty() ? ItemNamesies.NO_ITEM : berries.iterator().next();
         }
-        
+
         int displayed = berries.size();
         for (int i = 0; i < ITEMS_PER_PAGE; i++) {
             itemButtons[i].setActive(i < displayed - pageNum*ITEMS_PER_PAGE);

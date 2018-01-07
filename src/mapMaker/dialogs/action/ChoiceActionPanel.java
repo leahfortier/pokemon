@@ -14,17 +14,17 @@ import java.util.List;
 class ChoiceActionPanel extends ActionPanel {
 
     private final ActionDialog parent;
-    
+
     private final JTextField questionField;
-    
+
     private final List<Choice> choices;
     private final JButton newChoiceButton;
-    
+
     private class Choice {
         private final JTextField textField;
         private final List<ActionMatcher> actions;
         private final JButton newActionButton;
-        
+
         public Choice() {
             this.textField = GUIUtils.createTextField();
             this.actions = new ArrayList<>();
@@ -37,10 +37,10 @@ class ChoiceActionPanel extends ActionPanel {
             );
         }
     }
-    
+
     ChoiceActionPanel(ActionDialog parent) {
         this.parent = parent;
-        
+
         questionField = GUIUtils.createTextField();
         choices = new ArrayList<>();
         newChoiceButton = GUIUtils.createButton(
@@ -50,10 +50,10 @@ class ChoiceActionPanel extends ActionPanel {
                     render();
                 }
         );
-        
+
         render();
     }
-    
+
     @Override
     public ActionMatcher getActionMatcher(ActionType actionType) {
         ChoiceMatcher[] choiceMatchers = new ChoiceMatcher[this.choices.size()];
@@ -63,50 +63,50 @@ class ChoiceActionPanel extends ActionPanel {
                     this.choices.get(i).actions.toArray(new ActionMatcher[0])
             );
         }
-        
+
         ChoiceActionMatcher choiceActionMatcher = new ChoiceActionMatcher(
                 this.questionField.getText(),
                 choiceMatchers
         );
-        
+
         ActionMatcher actionMatcher = new ActionMatcher();
         actionMatcher.setChoice(choiceActionMatcher);
-        
+
         return actionMatcher;
     }
-    
+
     @Override
     protected void load(ActionMatcher matcher) {
         if (matcher == null) {
             return;
         }
-        
+
         ChoiceActionMatcher choiceActionMatcher = matcher.getChoice();
         this.questionField.setText(choiceActionMatcher.getQuestion());
-        
+
         ChoiceMatcher[] choiceMatchers = choiceActionMatcher.getChoices();
         for (ChoiceMatcher choiceMatcher : choiceMatchers) {
             Choice choice = new Choice();
             choice.textField.setText(choiceMatcher.getText());
             choice.actions.addAll(choiceMatcher.getActionMatchers());
-            
+
             choices.add(choice);
         }
-        
+
         render();
     }
-    
+
     public void render() {
         removeAll();
-        
+
         List<JComponent> components = new ArrayList<>();
         components.add(questionField);
-        
+
         for (int i = 0; i < choices.size(); i++) {
             int choiceIndex = i;
             final Choice choice = choices.get(i);
             final JComponent[] actionButtons = new JComponent[choice.actions.size()];
-            
+
             for (int j = 0; j < actionButtons.length; j++) {
                 final int actionIndex = j;
                 ActionMatcher actionMatcher = choice.actions.get(j);
@@ -121,18 +121,18 @@ class ChoiceActionPanel extends ActionPanel {
                         }
                 );
             }
-            
+
             components.add(GUIUtils.createHorizontalLayoutComponent(
                     choice.textField,
                     GUIUtils.createHorizontalLayoutComponent(actionButtons),
                     choice.newActionButton
             ));
         }
-        
+
         components.add(newChoiceButton);
-        
+
         GUIUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
-        
+
         parent.render();
     }
 }

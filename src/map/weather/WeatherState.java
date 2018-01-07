@@ -12,29 +12,29 @@ public enum WeatherState {
     RAIN(EffectNamesies.RAINING, new RainyState()),
     SANDSTORM(EffectNamesies.SANDSTORM), // TODO: These
     SNOW(EffectNamesies.HAILING);
-    
+
     private final EffectNamesies weatherEffect;
     private final WeatherDrawer weatherDrawer;
-    
+
     WeatherState(EffectNamesies weatherEffect) {
         this(weatherEffect, null);
     }
-    
+
     WeatherState(EffectNamesies weatherEffect, WeatherDrawer weatherDrawer) {
         this.weatherEffect = weatherEffect;
         this.weatherDrawer = weatherDrawer;
     }
-    
+
     public EffectNamesies getWeatherEffect() {
         return this.weatherEffect;
     }
-    
+
     public void draw(Graphics g) {
         if (this.weatherDrawer != null) {
             this.weatherDrawer.draw(g);
         }
     }
-    
+
     @FunctionalInterface
     interface WeatherDrawer {
         void draw(Graphics g);

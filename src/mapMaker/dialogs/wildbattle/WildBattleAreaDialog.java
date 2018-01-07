@@ -20,18 +20,18 @@ import java.util.stream.Collectors;
 public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
     private final JComponent panel;
     private final JTextField nameTextField;
-    
+
     private JComboBox<String> encountersComboBox;
     private List<WildBattleMatcher> wildBattleTriggers;
-    
+
     public WildBattleAreaDialog(WildBattleAreaMatcher wildBattleAreaMatcher) {
         super("Edit Wild Battle Area Dialog");
-        
+
         wildBattleTriggers = new ArrayList<>();
-        
+
         nameTextField = GUIUtils.createTextField();
         encountersComboBox = GUIUtils.createComboBox(new String[0]);
-        
+
         JButton createButton = GUIUtils.createButton(
                 "Create New",
                 event -> {
@@ -41,17 +41,17 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
                         oldMatcher.setName("Wild Trigger Matcher " + wildBattleTriggers.size());
                         oldMatcher.setCondition(StringUtils.empty());
                     }
-                    
+
                     WildBattleMatcher matcher = editWildBattleTrigger(oldMatcher);
                     if (matcher == null) {
                         return;
                     }
-                    
+
                     this.addWildBattleTrigger(matcher);
                     encountersComboBox.setSelectedItem(matcher.getName());
                 }
         );
-        
+
         JButton editButton = GUIUtils.createButton(
                 "Edit",
                 event -> {
@@ -60,29 +60,29 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
                     if (newMatcher == null) {
                         return;
                     }
-                    
+
                     if (oldMatcher != null) {
                         wildBattleTriggers.remove(oldMatcher);
                     }
-                    
+
                     addWildBattleTrigger(newMatcher);
                 }
         );
-        
+
         JComponent encountersPanel = GUIUtils.createHorizontalLayoutComponent(
                 GUIUtils.createComboBoxComponent("Encounters", encountersComboBox),
                 editButton
         );
-        
+
         panel = GUIUtils.createVerticalLayoutComponent(
                 GUIUtils.createTextFieldComponent("Name", nameTextField),
                 encountersPanel,
                 createButton
         );
-        
+
         load(wildBattleAreaMatcher);
     }
-    
+
     private WildBattleMatcher getSelectedTriggerMatcher() {
         String wildBattleName = (String)encountersComboBox.getSelectedItem();
         for (WildBattleMatcher matcher : wildBattleTriggers) {
@@ -90,34 +90,34 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
                 return matcher;
             }
         }
-        
+
         Global.error("No wild battle trigger found with name " + wildBattleName);
         return null;
     }
-    
+
     private WildBattleMatcher editWildBattleTrigger(WildBattleMatcher wildBattleMatcher) {
         return new WildBattleTriggerEditDialog(wildBattleMatcher, wildBattleTriggers.size()).getMatcher(this);
     }
-    
+
     private void addWildBattleTrigger(WildBattleMatcher newMatcher) {
         wildBattleTriggers.add(newMatcher);
-        
+
         String[] encounterNames = wildBattleTriggers
                 .stream()
                 .map(WildBattleMatcher::getName)
                 .collect(Collectors.toList())
                 .toArray(new String[0]);
-        
+
         encountersComboBox.setModel(new DefaultComboBoxModel<>(encounterNames));
-        
+
         render();
     }
-    
+
     @Override
     protected void renderDialog() {
         GUIUtils.setVerticalLayout(this, panel);
     }
-    
+
     @Override
     protected WildBattleAreaMatcher getMatcher() {
         return new WildBattleAreaMatcher(
@@ -125,12 +125,12 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
                 wildBattleTriggers
         );
     }
-    
+
     private void load(WildBattleAreaMatcher matcher) {
         if (matcher == null) {
             return;
         }
-        
+
         nameTextField.setText(matcher.getBasicName());
         matcher.getWildBattles().forEach(this::addWildBattleTrigger);
     }

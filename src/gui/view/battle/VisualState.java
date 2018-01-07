@@ -27,41 +27,41 @@ public enum VisualState {
     USE_ITEM(POKEMON.visualStateHandler),
     STAT_GAIN(MESSAGE.visualStateHandler),
     LOG_VIEW(new LogState());
-    
+
     private final VisualStateHandler visualStateHandler;
-    
+
     VisualState(VisualStateHandler visualStateHandler) {
         this.visualStateHandler = visualStateHandler;
     }
-    
+
     public void update(BattleView battleView) {
         this.visualStateHandler.update(battleView);
     }
-    
+
     public void set(BattleView battleView) {
         this.visualStateHandler.set(battleView);
     }
-    
+
     public void draw(BattleView battleView, Graphics g) {
         this.visualStateHandler.draw(battleView, g);
     }
-    
+
     public void reset() {
         this.visualStateHandler.reset();
     }
-    
+
     public void checkMessage(MessageUpdate newMessage) {
         this.visualStateHandler.checkMessage(newMessage);
     }
-    
+
     public static ItemNamesies getSelectedItem() {
         return ((BagState)BAG.visualStateHandler).getSelectedItem();
     }
-    
+
     public static void setSwitchForced() {
         ((PokemonState)POKEMON.visualStateHandler).setSwitchForced();
     }
-    
+
     public static void resetLastMoveUsed() {
         ((FightState)FIGHT.visualStateHandler).resetLastMoveUsed();
     }

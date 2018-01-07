@@ -3,41 +3,41 @@ package generator;
 import util.StringAppender;
 
 class MethodFormatter {
-    
+
     private int tabs;
     private int parenthesesBalance;
     private boolean inArrayDeclaration;
     private boolean inLambda;
     private boolean inSwitch;
     private boolean inCases;
-    
+
     MethodFormatter(int tabs) {
         this.tabs = tabs;
-    
+
         this.parenthesesBalance = 0;
         this.inArrayDeclaration = false;
         this.inSwitch = false;
         this.inCases = false;
     }
-    
+
     // Appends the trimmed line with the appropriate tabs
     // Code inside parentheses and array declaration will have two tabs indented
     void appendLine(String line, StringAppender method) {
         line = line.trim();
-        
+
         if (line.startsWith("switch (")) {
             inSwitch = true;
         }
-        
+
         if (inSwitch) {
             boolean inBefore = inCases;
             inCases = line.startsWith("case ") || line.equals("default:");
-            
+
             if (inBefore && !inCases) {
                 tabs++;
             }
         }
-        
+
         boolean previousLamba = inLambda;
         if (line.startsWith("}")) {
             tabs--;
@@ -48,27 +48,27 @@ class MethodFormatter {
                 inArrayDeclaration = false;
             }
         }
-        
+
         int numOpen = (int)line.chars().filter(num -> num == '(').count();
         int numClosed = (int)line.chars().filter(num -> num == ')').count();
         boolean previouslyInParentheses = parenthesesBalance > 0;
         parenthesesBalance += numOpen - numClosed;
         boolean nowInParentheses = parenthesesBalance > 0;
-        
+
         if (previouslyInParentheses && !nowInParentheses && !previousLamba) {
             tabs -= 2;
         }
-        
+
         // Add the tabs
         method.appendRepeat("\t", tabs);
-        
+
         // Actually write the line
         method.appendLine(line);
-        
+
         if (inSwitch && (line.equals("break;") || line.startsWith("return ") || line.equals("return;"))) {
             tabs--;
         }
-        
+
         if (line.endsWith("{")) {
             tabs++;
             if (line.endsWith(" = {") || line.endsWith("[] {")) {
@@ -78,7 +78,7 @@ class MethodFormatter {
                 inLambda = true;
             }
         }
-        
+
         if (!previouslyInParentheses && nowInParentheses && !inLambda) {
             tabs += 2;
         }

@@ -20,7 +20,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 class StartView extends View {
-    
+
     private static final MessageUpdate[] dialogue = new MessageUpdate[] {
             new MessageUpdate("Welcome to the world of " + PokeString.POKEMON + "!"),
             new MessageUpdate("It's filled with many unique creatures, such as this Ditto.").withUpdate(Update.SHOW_POKEMON),
@@ -29,32 +29,32 @@ class StartView extends View {
             new MessageUpdate("I can see quite clearly that you're a boy, so what's your name, eh?").withUpdate(Update.ENTER_NAME),
             new MessageUpdate(", are you ready to start your epic adventure? Well, off you go! I'll be seeing you soon!").withUpdate(Update.APPEND_TO_NAME)
     };
-    
+
     private State state;
-    
+
     private int dialogueIndex;
     private String message;
-    
+
     private boolean ditto;
-    
+
     private enum State {
         DEFAULT,
         NAME
     }
-    
+
     @Override
     public void update(int dt) {
         if (BasicPanels.isAnimatingMessage()) {
             return;
         }
-        
+
         Player player = Game.getPlayer();
         InputControl input = InputControl.instance();
-        
+
         if (message != null && input.consumeIfMouseDown(ControlKey.SPACE)) {
             message = null;
         }
-        
+
         if (message == null) {
             if (dialogueIndex == dialogue.length - 1) {
                 Game.instance().setViewMode(ViewMode.MAP_VIEW);
@@ -81,36 +81,36 @@ class StartView extends View {
                 }
             }
         }
-        
+
         if (state == State.NAME) {
             if (!input.isCapturingText()) {
                 input.startTextCapture();
             }
-            
+
             if (input.consumeIfDown(ControlKey.ENTER)) {
                 input.stopTextCapture();
-                
+
                 String name = input.getCapturedText(Player.MAX_NAME_LENGTH);
                 player.setName(name.isEmpty() ? Player.DEFAULT_NAME : name);
-                
+
                 state = State.DEFAULT;
                 message = null;
             }
         }
     }
-    
+
     @Override
     public void draw(Graphics g) {
         GameData data = Game.getData();
-        
+
         IndexTileSet trainerTiles = data.getTrainerTiles();
         TileSet pokemonTiles = data.getPokemonTilesSmall();
-        
+
         BasicPanels.drawCanvasPanel(g);
-        
+
         FontMetrics.setFont(g, 30);
         g.setColor(Color.BLACK);
-        
+
         switch (state) {
             case DEFAULT:
                 g.drawImage(trainerTiles.getTile(0x58), 200, 200, null);
@@ -123,26 +123,26 @@ class StartView extends View {
                 g.drawString(InputControl.instance().getInputCaptureString(Player.MAX_NAME_LENGTH), 300, 260);
                 break;
         }
-        
+
         if (message != null) {
             BasicPanels.drawFullMessagePanel(g, message);
         }
     }
-    
+
     @Override
     public ViewMode getViewModel() {
         return ViewMode.START_VIEW;
     }
-    
+
     @Override
     public void movedToFront() {
         state = State.DEFAULT;
-        
+
         dialogueIndex = 0;
         message = dialogue[dialogueIndex].getMessage();
-        
+
         ditto = false;
-        
+
         SoundPlayer.soundPlayer.playMusic(SoundTitle.NEW_GAME);
     }
 }
