@@ -316,7 +316,7 @@ class InterfaceMethod {
         
         final StringAppender interfaceMethod = new StringAppender();
         if (!StringUtils.isNullOrEmpty(this.comments)) {
-            interfaceMethod.appendLine("\t\t\n\t\t" + this.comments);
+            interfaceMethod.appendLine("\n\t\t" + this.comments);
         }
         
         if (!StringUtils.isNullOrEmpty(this.defaultMethod)) {

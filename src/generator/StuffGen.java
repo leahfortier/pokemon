@@ -99,14 +99,14 @@ public class StuffGen {
                               String constructor,
                               String additional,
                               boolean isInterface) {
-        return new StringAppender("\t\n")
+        return new StringAppender("\n")
                 .appendLineIf(!StringUtils.isNullOrEmpty(classComments), "\t" + classComments)
                 .append("\t" + defineClass(className, isInterface))
                 .appendDelimiter(" extends ", superClass)
                 .appendDelimiter(" ", interfaces)
                 .appendLine(" {")
                 .appendLineIf(!isInterface, "\t\tprivate static final long serialVersionUID = 1L;")
-                .appendDelimiter(isInterface ? StringUtils.empty() : "\t\t\n", extraFields)
+                .appendDelimiter(isInterface ? StringUtils.empty() : "\n", extraFields)
                 .append(constructor)
                 .append(additional)
                 .appendLine("\t}")

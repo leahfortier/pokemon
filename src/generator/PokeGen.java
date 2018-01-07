@@ -146,7 +146,7 @@ class PokeGen {
     
     private void superGen() {
         StringAppender out = StuffGen.startGen(this.currentGen.getOutputPath());
-        out.appendLine("\t\n\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/"); // DON'T DO IT
+        out.appendLine("\n\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/"); // DON'T DO IT
         
         Scanner in = FileIO.openFile(this.currentGen.getInputPath());
         readFileFormat(in);
