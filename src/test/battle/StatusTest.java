@@ -1,12 +1,10 @@
 package test.battle;
 
-import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
@@ -33,7 +31,7 @@ TODO:
 public class StatusTest extends BaseTest {
     @Test
     public void testGiveStatus() {
-        ActivePokemon uglyFace = new TestPokemon(PokemonNamesies.RATICATE);
+        // TODO: this
     }
     
     @Test
@@ -45,19 +43,18 @@ public class StatusTest extends BaseTest {
     }
     
     private void testStatChange(StatusCondition statusCondition, Stat stat, double ratio) {
-        TestPokemon mahBoi = new TestPokemon(PokemonNamesies.RAPIDASH);
-        TestPokemon uglyFace = new TestPokemon(PokemonNamesies.WATCHOG);
+        TestBattle battle = TestBattle.create(PokemonNamesies.RAPIDASH, PokemonNamesies.WATCHOG);
+        TestPokemon mahBoi = battle.getAttacking();
+        TestPokemon uglyFace = battle.getDefending();
         
-        Battle b = TestBattle.create(mahBoi, uglyFace);
+        int original = Stat.getStat(stat, uglyFace, mahBoi, battle);
         
-        int original = Stat.getStat(stat, uglyFace, mahBoi, b);
-        
-        Status.giveStatus(b, uglyFace, uglyFace, statusCondition);
-        int afterStatus = Stat.getStat(stat, uglyFace, mahBoi, b);
+        Status.giveStatus(battle, uglyFace, uglyFace, statusCondition);
+        int afterStatus = Stat.getStat(stat, uglyFace, mahBoi, battle);
         Assert.assertTrue((int)(original*ratio) == afterStatus);
         
         uglyFace.removeStatus();
-        int afterRemoved = Stat.getStat(stat, uglyFace, mahBoi, b);
+        int afterRemoved = Stat.getStat(stat, uglyFace, mahBoi, battle);
         Assert.assertTrue(original == afterRemoved);
     }
     

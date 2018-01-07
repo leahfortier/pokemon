@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class AttackTest extends BaseTest {
     @Test
-    public void testPhysicalContact() {
+    public void physicalContactTest() {
         for (AttackNamesies attackNamesies : AttackNamesies.values()) {
             Attack attack = attackNamesies.getAttack();
             Assert.assertFalse(
@@ -112,18 +112,19 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(defending.isFainted(battle));
         
         // Sheer Cold doesn't work against Ice types
-        defending = new TestPokemon(PokemonNamesies.GLACEON);
+        battle.emptyHeal();
+        defending.withAbility(AbilityNamesies.PROTEAN);
+        battle.defendingFight(AttackNamesies.HAZE);
+        Assert.assertTrue(defending.isType(battle, Type.ICE));
         battle.attackingFight(AttackNamesies.SHEER_COLD);
         Assert.assertTrue(defending.fullHealth());
     }
     
     @Test
     public void selfSwitchingMoves() {
-        TestPokemon attacking1 = new TestPokemon(PokemonNamesies.CHANSEY);
-        TestPokemon attacking2 = new TestPokemon(PokemonNamesies.HAPPINY);
-        TestPokemon defending = new TestPokemon(PokemonNamesies.SHUCKLE);
-        
-        TestBattle battle = TestBattle.createTrainerBattle(attacking1, defending);
+        TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.CHANSEY, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking1 = battle.getAttacking();
+        TestPokemon attacking2 = TestPokemon.newPlayerPokemon(PokemonNamesies.HAPPINY);
         battle.getPlayer().addPokemon(attacking2);
         
         Assert.assertTrue(battle.getPlayer().front() == attacking1);
@@ -139,11 +140,9 @@ public class AttackTest extends BaseTest {
     
     @Test
     public void swapOpponentMoves() {
-        TestPokemon attacking1 = new TestPokemon(PokemonNamesies.STEELIX);
-        TestPokemon attacking2 = new TestPokemon(PokemonNamesies.REGIROCK);
-        TestPokemon defending = new TestPokemon(PokemonNamesies.SHUCKLE);
-        
-        TestBattle battle = TestBattle.createTrainerBattle(attacking1, defending);
+        TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.STEELIX, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking1 = battle.getAttacking();
+        TestPokemon attacking2 = TestPokemon.newPlayerPokemon(PokemonNamesies.REGIROCK);
         battle.getPlayer().addPokemon(attacking2);
         
         Assert.assertTrue(battle.getAttacking() == attacking1);
@@ -339,7 +338,7 @@ public class AttackTest extends BaseTest {
         
         // Use the other move and then it should work
         Move tackle = attacking.getMoves(battle).get(0);
-        attacking.setMove(tackle);
+        attacking.setMove(battle, tackle);
         Assert.assertFalse(tackle.used());
         battle.fight();
         Assert.assertTrue(tackle.used());
@@ -754,7 +753,7 @@ public class AttackTest extends BaseTest {
     
     @Test
     public void fellStingerTest() {
-        TestBattle battle = TestBattle.create(new TestPokemon(PokemonNamesies.KARTANA, 100), new TestPokemon(PokemonNamesies.HAPPINY, 1));
+        TestBattle battle = TestBattle.create(PokemonNamesies.KARTANA, PokemonNamesies.HAPPINY);
         TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.NO_ABILITY);
         TestPokemon defending = battle.getDefending();
         

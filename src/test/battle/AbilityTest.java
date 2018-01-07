@@ -127,4 +127,57 @@ public class AbilityTest extends BaseTest {
         Assert.assertTrue(defending.isType(battle, Type.NORMAL));
         Assert.assertFalse(defending.isType(battle, Type.FIRE));
     }
+    
+    @Test
+    public void priorityPreventionTest() {
+        // Queenly Majesty should block priority moves that are not self-target
+        checkPriorityPrevention(0, false, AttackNamesies.TACKLE);
+        checkPriorityPrevention(0, false, AttackNamesies.NASTY_PLOT);
+        checkPriorityPrevention(0, false, AttackNamesies.STRING_SHOT);
+        checkPriorityPrevention(1, true, AttackNamesies.QUICK_ATTACK);
+        checkPriorityPrevention(1, true, AttackNamesies.BABY_DOLL_EYES);
+        checkPriorityPrevention(4, false, AttackNamesies.PROTECT);
+        
+        // Should block moves that have their priority increases via Prankster (+1 for status moves)
+        // Should not block though for the self-target moves (like Nasty Plot and Protect)
+        PokemonManipulator prankster = PokemonManipulator.giveAttackingAbility(AbilityNamesies.PRANKSTER);
+        checkPriorityPrevention(0, 0, false, AttackNamesies.TACKLE, prankster);
+        checkPriorityPrevention(0, 1, false, AttackNamesies.NASTY_PLOT, prankster);
+        checkPriorityPrevention(4, 5, false, AttackNamesies.PROTECT, prankster);
+        checkPriorityPrevention(0, 1, true, AttackNamesies.STRING_SHOT, prankster);
+        checkPriorityPrevention(1, 1, true, AttackNamesies.QUICK_ATTACK, prankster);
+    
+        // Mold breaker doesn't give a fuck (does not block moves in this case)
+        PokemonManipulator moldBreaker = PokemonManipulator.giveAttackingAbility(AbilityNamesies.MOLD_BREAKER);
+        checkPriorityPrevention(0, 0, false, AttackNamesies.TACKLE, moldBreaker);
+        checkPriorityPrevention(0, 0, false, AttackNamesies.NASTY_PLOT, moldBreaker);
+        checkPriorityPrevention(0, 0, false, AttackNamesies.STRING_SHOT, moldBreaker);
+        checkPriorityPrevention(4, 4, false, AttackNamesies.PROTECT, moldBreaker);
+        checkPriorityPrevention(1, 1, false, AttackNamesies.BABY_DOLL_EYES, moldBreaker);
+        checkPriorityPrevention(1, 1, false, AttackNamesies.QUICK_ATTACK, moldBreaker);
+    }
+    
+    private void checkPriorityPrevention(int expectedPriority, boolean prevent, AttackNamesies attack) {
+        checkPriorityPrevention(expectedPriority, expectedPriority, prevent, attack, PokemonManipulator.empty());
+    }
+    
+    private void checkPriorityPrevention(int beforePriority, int afterPriority, boolean prevent, AttackNamesies attack, PokemonManipulator manipulator) {
+        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+    
+        defending.withAbility(AbilityNamesies.QUEENLY_MAJESTY);
+        
+        attacking.setupMove(attack, battle);
+        Assert.assertEquals(beforePriority, battle.getAttackPriority(attacking));
+        attacking.apply(beforePriority <= 0 || attacking.getAttack().isSelfTarget(), attack, battle);
+        
+        battle.emptyHeal();
+        manipulator.manipulate(battle, attacking, defending);
+        
+        attacking.setupMove(attack, battle);
+        Assert.assertEquals(afterPriority, battle.getAttackPriority(attacking));
+        attacking.apply(!prevent, attack, battle);
+        Assert.assertEquals(afterPriority > 0 && !attacking.getAttack().isSelfTarget() && !attacking.breaksTheMold(), prevent);
+    }
 }

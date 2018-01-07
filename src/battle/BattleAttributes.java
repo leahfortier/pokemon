@@ -187,8 +187,9 @@ public class BattleAttributes implements Serializable {
         return selected;
     }
     
-    public void setMove(Move m) {
-        selected = m;
+    public void setMove(Battle b, Move move) {
+        this.selected = move;
+        move.setAttributes(b, this.attributesHolder);
     }
     
     public void addEffect(PokemonEffect e) {

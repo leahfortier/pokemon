@@ -56,6 +56,7 @@ import trainer.player.medal.Medal;
 import trainer.player.medal.MedalCase;
 import trainer.player.medal.MedalTheme;
 import type.Type;
+import util.Action;
 import util.RandomUtils;
 import util.StringUtils;
 
@@ -443,6 +444,7 @@ public class ActivePokemon implements Serializable {
         return this.moves;
     }
     
+    // TODO: This should really be immutable
     public List<Move> getActualMoves() {
         return moves;
     }
@@ -639,12 +641,21 @@ public class ActivePokemon implements Serializable {
     }
     
     public void callNewMove(Battle b, ActivePokemon opp, Move m) {
-        Move temp = getMove();
-        m.setAttributes(b, this);
-        setMove(m);
-        b.printAttacking(this);
-        getAttack().apply(this, opp, b);
-        setMove(temp);
+        this.callTempMove(b, m, () -> {
+            b.printAttacking(this);
+            this.getAttack().apply(this, opp, b);
+        });
+    }
+    
+    public void callTempMove(Battle b, AttackNamesies tempMove, Action moveAction) {
+        this.callTempMove(b, new Move(tempMove), moveAction);
+    }
+    
+    public void callTempMove(Battle b, Move tempMove, Action moveAction) {
+        Move currentMove = getMove();
+        setMove(b, tempMove);
+        moveAction.performAction();
+        setMove(b, currentMove);
     }
     
     // Wild Pokemon if in a wild battle and not the player's pokemon
@@ -819,8 +830,8 @@ public class ActivePokemon implements Serializable {
         attributes.removeEffect(effect);
     }
     
-    public void setMove(Move m) {
-        attributes.setMove(m);
+    public void setMove(Battle b, Move move) {
+        attributes.setMove(b, move);
     }
     
     public Move getMove() {
@@ -837,7 +848,7 @@ public class ActivePokemon implements Serializable {
     }
     
     public boolean isAttackType(Type t) {
-        return getAttackType() == t;
+        return this.getAttackType() == t;
     }
     
     public Type getAttackType() {

@@ -117,7 +117,7 @@ Protecting:
 QuickGuard:
 	ProtectingEffect: True
 	ProtectingCondition:
-		return b.getPriority(attacking, attacking.getAttack()) > 0;
+		return b.getAttackPriority(attacking) > 0;
 		###
 *
 CraftyShield:
@@ -172,13 +172,12 @@ Confusion:
 
 		// 50% chance to hurt yourself in confusion while confused
 		if (RandomUtils.chanceTest(50)) {
-			Messages.add("It hurt itself in confusion!");
-
+		
 			// Perform confusion damage
-			Move temp = p.getMove();
-			p.setMove(new Move(AttackNamesies.CONFUSION_DAMAGE.getAttack()));
-			p.reduceHealth(b, b.calculateDamage(p, p));
-			p.setMove(temp);
+			p.callTempMove(b, AttackNamesies.CONFUSION_DAMAGE, () -> {
+					Messages.add("It hurt itself in confusion!");
+					p.reduceHealth(b, b.calculateDamage(p, p));
+			});
 
 			return false;
 		}
@@ -765,7 +764,7 @@ Nightmare:
 *
 Charge:
 	NumTurns: 2
-	PowerMultiplierCondition: 2 user.getAttackType() == Type.ELECTRIC
+	PowerMultiplierCondition: 2 user.isAttackType(Type.ELECTRIC)
 *
 Focusing:
 	CastMessage: user.getName() + " began tightening its focus!"
@@ -1145,7 +1144,7 @@ Powder:
 	Int: BeforeTurnEffect
 	CanAttack:
 		// Fire-type moves makes the user explode
-		if (p.getAttackType() == Type.FIRE) {
+		if (p.isAttackType(Type.FIRE)) {
 			Messages.add("The powder exploded!");
 			p.reduceHealthFraction(b, 1/4.0);
 			return false;

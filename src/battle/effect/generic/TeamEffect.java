@@ -450,8 +450,9 @@ public abstract class TeamEffect extends Effect implements Serializable {
                 return;
             }
             
-            theSeeer.setMove(new Move(attack));
-            theSeeer.getAttack().applyDamage(theSeeer, p, b);
+            theSeeer.callTempMove(b, attack.namesies(), () -> {
+                theSeeer.getAttack().applyDamage(theSeeer, p, b);
+            });
         }
     }
     
@@ -487,8 +488,9 @@ public abstract class TeamEffect extends Effect implements Serializable {
                 return;
             }
             
-            theSeeer.setMove(new Move(attack));
-            theSeeer.getAttack().applyDamage(theSeeer, p, b);
+            theSeeer.callTempMove(b, attack.namesies(), () -> {
+                theSeeer.getAttack().applyDamage(theSeeer, p, b);
+            });
         }
     }
     

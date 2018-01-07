@@ -5,19 +5,28 @@ import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
+import test.TestPokemon;
 import util.StringUtils;
 
 class TestInfo {
     PokemonNamesies attackingName;
     PokemonNamesies defendingName;
     AttackNamesies attackName;
-    PokemonManipulator manipulator;
+    private PokemonManipulator manipulator;
     
     TestInfo() {
         this.attackingName = PokemonNamesies.BULBASAUR;
         this.defendingName = PokemonNamesies.CHARMANDER;
         this.attackName = AttackNamesies.TACKLE;
         this.manipulator = PokemonManipulator.empty();
+    }
+    
+    public void manipulate(TestBattle battle) {
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+        
+        this.manipulator.manipulate(battle, attacking, defending);
+        attacking.setupMove(attackName, battle);
     }
     
     private void updateManipulator(PokemonManipulator manipulator) {
@@ -104,6 +113,12 @@ class TestInfo {
     TestInfo defending(EffectNamesies effectNamesies) {
         this.updateManipulator(PokemonManipulator.giveDefendingEffect(effectNamesies));
         return this;
+    }
+    
+    public TestBattle createBattle() {
+        TestBattle battle = TestBattle.create(this.attackingName, this.defendingName);
+        battle.getAttacking().setupMove(this.attackName, battle);
+        return battle;
     }
     
     @Override

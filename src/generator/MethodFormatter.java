@@ -7,17 +7,21 @@ class MethodFormatter {
     private int tabs;
     private int parenthesesBalance;
     private boolean inArrayDeclaration;
+    private boolean inLambda;
     private boolean inSwitch;
     private boolean inCases;
     
     MethodFormatter(int tabs) {
         this.tabs = tabs;
-        
+    
+        this.parenthesesBalance = 0;
+        this.inArrayDeclaration = false;
         this.inSwitch = false;
         this.inCases = false;
     }
     
-    // Appends the trimmed line with the appropriate spaces
+    // Appends the trimmed line with the appropriate tabs
+    // Code inside parentheses and array declaration will have two tabs indented
     void appendLine(String line, StringAppender method) {
         line = line.trim();
         
@@ -34,9 +38,11 @@ class MethodFormatter {
             }
         }
         
+        boolean previousLamba = inLambda;
         if (line.startsWith("}")) {
             tabs--;
             inSwitch = false;
+            inLambda = false;
             if (inArrayDeclaration) {
                 tabs--;
                 inArrayDeclaration = false;
@@ -49,7 +55,7 @@ class MethodFormatter {
         parenthesesBalance += numOpen - numClosed;
         boolean nowInParentheses = parenthesesBalance > 0;
         
-        if (previouslyInParentheses && !nowInParentheses) {
+        if (previouslyInParentheses && !nowInParentheses && !previousLamba) {
             tabs -= 2;
         }
         
@@ -68,10 +74,12 @@ class MethodFormatter {
             if (line.endsWith(" = {") || line.endsWith("[] {")) {
                 tabs++;
                 inArrayDeclaration = true;
+            } else if (line.endsWith(" -> {")) {
+                inLambda = true;
             }
         }
         
-        if (!previouslyInParentheses && nowInParentheses) {
+        if (!previouslyInParentheses && nowInParentheses && !inLambda) {
             tabs += 2;
         }
     }

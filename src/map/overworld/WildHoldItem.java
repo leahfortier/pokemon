@@ -9,6 +9,7 @@ import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -73,7 +74,7 @@ public class WildHoldItem implements Serializable {
         int sum = 0;
         
         // Sort with rarest items first
-        list.sort((first, second) -> first.chance.chance - second.chance.chance);
+        list.sort(Comparator.comparingInt(wildHoldItem -> wildHoldItem.chance.chance));
         for (WildHoldItem wildHoldItem : list) {
             Chance chance = wildHoldItem.chance;
             sum += compoundEyes ? chance.increasedChance : chance.chance;

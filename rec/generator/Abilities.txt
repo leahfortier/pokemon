@@ -184,13 +184,13 @@ Flash Fire:
 		###
 	Int: AttackBlocker
 	Block:
-		return user.getAttackType() == Type.FIRE;
+		return user.isAttackType(Type.FIRE);
 		###
 	BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!"
 	AlternateEffect:
 		activated = true;
 		###
-	PowerMultiplierCondition: 1.5 activated && user.getAttackType() == Type.FIRE
+	PowerMultiplierCondition: 1.5 activated && user.isAttackType(Type.FIRE)
 *
 Drought:
 	WeatherStarter: Sunny made the sunlight turn harsh
@@ -260,7 +260,7 @@ Dry Skin:
 		###
 	AbsorbType: Water
 	GetOppMultiplier:
-		return user.getAttackType() == Type.FIRE ? 1.25 : 1;
+		return user.isAttackType(Type.FIRE) ? 1.25 : 1;
 		###
 *
 Arena Trap:
@@ -425,7 +425,7 @@ Thick Fat:
 	Desc: Raises resistance to Fire-and Ice-type moves.
 	Int: OpponentPowerChangeEffect
 	GetOppMultiplier:
-		return user.getAttackType() == Type.FIRE || user.getAttackType() == Type.ICE ? .5 : 1;
+		return user.isAttackType(Type.FIRE) || user.isAttackType(Type.ICE) ? .5 : 1;
 		###
 *
 Hydration:
@@ -955,7 +955,7 @@ Heatproof:
 	Desc: Weakens the power of Fire-type moves.
 	Int: OpponentPowerChangeEffect
 	GetOppMultiplier:
-		return user.getAttackType() == Type.FIRE ? .5 : 1;
+		return user.isAttackType(Type.FIRE) ? .5 : 1;
 		###
 *
 Sand Force:
@@ -980,7 +980,7 @@ Motor Drive:
 Justified:
 	Int: TakeDamageEffect
 	OnTakeDamage:
-		if (user.getAttackType() == Type.DARK) {
+		if (user.isAttackType(Type.DARK)) {
 			victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
 		}
 		###
@@ -1057,7 +1057,7 @@ Poison Touch:
 *
 Prankster:
 	Desc: Gives priority to a status move.
-	ChangePriorityAbility: attack.isStatusMove() && !b.getOtherPokemon(user).isType(b, Type.DARK)
+	ChangePriorityAbility: user.getAttack().isStatusMove() && !b.getOtherPokemon(user).isType(b, Type.DARK)
 *
 Wonder Skin:
 	Desc: Makes status-changing moves more likely to miss.
@@ -1487,7 +1487,7 @@ Flower Veil:
 *
 Gale Wings:
 	Desc: Gives priority to Flying-type moves.
-	ChangePriorityAbility: attack.getActualType() == Type.FLYING
+	ChangePriorityAbility: user.isAttackType(Type.FLYING)
 *
 Protean:
 	Desc: Changes the Pok\u00e9mon's type to the type of the move it's using.
@@ -1519,7 +1519,7 @@ Water Compaction:
 	Desc: Boosts the Pokémon's Defense stat sharply when hit by a Water-type move.
 	Int: TakeDamageEffect
 	OnTakeDamage:
-		if (user.getAttackType() == Type.WATER) {
+		if (user.isAttackType(Type.WATER)) {
 			victim.getAttributes().modifyStage(victim, victim, 2, Stat.DEFENSE, b, CastSource.ABILITY);
 		}
 		###
@@ -1572,7 +1572,7 @@ Liquid Voice:
 *
 Triage:
 	Desc: Gives priority to a healing move.
-	ChangePriorityAbility: attack.isMoveType(MoveType.HEALING)
+	ChangePriorityAbility: user.getAttack().isMoveType(MoveType.HEALING)
 *
 Galvanize:
 	Desc: Normal-type moves become Electric-type moves. The power of those moves is boosted a little.

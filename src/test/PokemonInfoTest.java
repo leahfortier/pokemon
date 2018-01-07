@@ -210,7 +210,7 @@ public class PokemonInfoTest extends BaseTest {
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
             int evTotal = getEvTotal(pokemonInfo);
-            Assert.assertTrue(evTotal >= 1 && evTotal <= 3);
+            Assert.assertTrue(pokemonInfo.getName() + " " + evTotal, evTotal >= 1 && evTotal <= 3);
             
             // Make sure EVs are strictly increasing across evolutions
             PokemonNamesies[] evolutions = pokemonInfo.getEvolution().getEvolutions();
@@ -225,7 +225,6 @@ public class PokemonInfoTest extends BaseTest {
         for (int i = 0; i < Stat.NUM_STATS; i++) {
             total += pokemonInfo.getGivenEV(i);
         }
-        
         return total;
     }
     
@@ -246,6 +245,19 @@ public class PokemonInfoTest extends BaseTest {
             for (AbilityNamesies ability : abilities) {
                 Assert.assertFalse(seen.contains(ability));
                 seen.add(ability);
+                
+                Assert.assertTrue(pokemonInfo.hasAbility(ability));
+            }
+            
+            // Must only return true for hasAbility if in the list
+            for (AbilityNamesies ability : AbilityNamesies.values()) {
+                Assert.assertEquals(seen.contains(ability), pokemonInfo.hasAbility(ability));
+            }
+            
+            // Don't worry about it (but really if this fails change the message in Iron Fist)
+            if (pokemonInfo.namesies() == PokemonNamesies.PANGORO) {
+                Assert.assertTrue(pokemonInfo.hasAbility(AbilityNamesies.MOLD_BREAKER));
+                Assert.assertTrue(pokemonInfo.hasAbility(AbilityNamesies.IRON_FIST));
             }
         }
     }
@@ -276,7 +288,7 @@ public class PokemonInfoTest extends BaseTest {
         boolean[] hasIv = new boolean[Stat.MAX_IV + 1];
         boolean diffIvs = false;
         for (int i = 0; i < 1000; i++) {
-            TestPokemon pokemon = new TestPokemon(PokemonNamesies.BULBASAUR);
+            TestPokemon pokemon = TestPokemon.newWildPokemon(PokemonNamesies.BULBASAUR);
             
             for (int j = 0; j < Stat.NUM_STATS; j++) {
                 Stat stat = Stat.getStat(j, false);

@@ -7308,11 +7308,10 @@ public abstract class Attack implements Serializable {
                     break;
                 }
                 
-                Move temp = p.getMove();
-                p.setMove(new Move(super.namesies.getAttack()));
-                Messages.add(p.getName() + "'s attack!");
-                super.applyDamage(p, o, b);
-                p.setMove(temp);
+                p.callTempMove(b, this.namesies(), () -> {
+                    Messages.add(p.getName() + "'s attack!");
+                    super.applyDamage(p, o, b);
+                });
             }
         }
     }

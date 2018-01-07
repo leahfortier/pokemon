@@ -272,26 +272,19 @@ public class BreedingTest extends BaseTest {
         }
     }
     
-    private static ActivePokemon getParent(final PokemonNamesies pokemon, final Gender gender) {
-        return new TestPokemon(pokemon).withGender(gender);
+    private static TestPokemon getParent(final PokemonNamesies pokemon, final Gender gender) {
+        return TestPokemon.newPlayerPokemon(pokemon).withGender(gender);
     }
     
-    private static ActivePokemon getParentWithItem(final PokemonNamesies pokemon, final Gender gender, final ItemNamesies item) {
-        ActivePokemon parent = getParent(pokemon, gender);
+    private static TestPokemon getParentWithItem(final PokemonNamesies pokemon, final Gender gender, final ItemNamesies item) {
+        TestPokemon parent = getParent(pokemon, gender);
         parent.giveItem(item);
         
         return parent;
     }
     
-    private static ActivePokemon getParentWithMoves(final PokemonNamesies pokemon, final Gender gender, final AttackNamesies... moves) {
-        ActivePokemon parent = getParent(pokemon, gender);
-        parent.setMoves(
-                Arrays.stream(moves)
-                      .map(move -> new Move(move.getAttack()))
-                      .collect(Collectors.toList())
-        );
-        
-        return parent;
+    private static TestPokemon getParentWithMoves(final PokemonNamesies pokemon, final Gender gender, final AttackNamesies... moves) {
+        return getParent(pokemon, gender).withMoves(moves);
     }
     
     private static ActivePokemon getBaby(ActivePokemon mommy, ActivePokemon daddy) {

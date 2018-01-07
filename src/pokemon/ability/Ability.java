@@ -38,7 +38,6 @@ import battle.effect.generic.EffectInterfaces.ModifyStageValueEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
-import battle.effect.generic.EffectInterfaces.OpponentAttackSelectionBlockerEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
@@ -115,6 +114,11 @@ public abstract class Ability implements Serializable, AbilityHolder {
     public Ability(AbilityNamesies namesies, String description) {
         this.namesies = namesies;
         this.description = description;
+    }
+    
+    @Override
+    public String toString() {
+        return this.getName();
     }
     
     @Override
@@ -237,7 +241,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.GRASS ? 1.5 : 1;
+            return user.getHPRatio() < 1/3.0 && user.isAttackType(Type.GRASS) ? 1.5 : 1;
         }
     }
     
@@ -269,7 +273,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.FIRE ? 1.5 : 1;
+            return user.getHPRatio() < 1/3.0 && user.isAttackType(Type.FIRE) ? 1.5 : 1;
         }
     }
     
@@ -300,7 +304,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.WATER ? 1.5 : 1;
+            return user.getHPRatio() < 1/3.0 && user.isAttackType(Type.WATER) ? 1.5 : 1;
         }
     }
     
@@ -386,7 +390,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.BUG ? 1.5 : 1;
+            return user.getHPRatio() < 1/3.0 && user.isAttackType(Type.BUG) ? 1.5 : 1;
         }
     }
     
@@ -485,7 +489,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.ELECTRIC;
+            return user.isAttackType(Type.ELECTRIC);
         }
         
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -637,11 +641,11 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return activated && user.getAttackType() == Type.FIRE ? 1.5 : 1;
+            return activated && user.isAttackType(Type.FIRE) ? 1.5 : 1;
         }
         
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.FIRE;
+            return user.isAttackType(Type.FIRE);
         }
         
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -761,11 +765,11 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.FIRE ? 1.25 : 1;
+            return user.isAttackType(Type.FIRE) ? 1.25 : 1;
         }
         
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.WATER;
+            return user.isAttackType(Type.WATER);
         }
         
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -1156,7 +1160,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.FIRE || user.getAttackType() == Type.ICE ? .5 : 1;
+            return user.isAttackType(Type.FIRE) || user.isAttackType(Type.ICE) ? .5 : 1;
         }
     }
     
@@ -1529,7 +1533,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.WATER;
+            return user.isAttackType(Type.WATER);
         }
         
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -1555,7 +1559,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.ELECTRIC;
+            return user.isAttackType(Type.ELECTRIC);
         }
         
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -2149,7 +2153,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.WATER;
+            return user.isAttackType(Type.WATER);
         }
         
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -2306,7 +2310,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.FIRE ? .5 : 1;
+            return user.isAttackType(Type.FIRE) ? .5 : 1;
         }
     }
     
@@ -2348,7 +2352,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.ELECTRIC;
+            return user.isAttackType(Type.ELECTRIC);
         }
         
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -2368,7 +2372,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getAttackType() == Type.DARK) {
+            if (user.isAttackType(Type.DARK)) {
                 victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
             }
         }
@@ -2499,8 +2503,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
             super(AbilityNamesies.PRANKSTER, "Gives priority to a status move.");
         }
         
-        public int changePriority(Battle b, ActivePokemon user, Attack attack) {
-            return attack.isStatusMove() && !b.getOtherPokemon(user).isType(b, Type.DARK) ? 1 : 0;
+        public int changePriority(Battle b, ActivePokemon user) {
+            return user.getAttack().isStatusMove() && !b.getOtherPokemon(user).isType(b, Type.DARK) ? 1 : 0;
         }
     }
     
@@ -2704,7 +2708,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.GRASS;
+            return user.isAttackType(Type.GRASS);
         }
         
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -3049,7 +3053,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getAttackType() == Type.FAIRY) {
+            if (user.isAttackType(Type.FAIRY)) {
                 return 1 + .33*(victim.hasAbility(AbilityNamesies.AURA_BREAK) ? -1 : 1);
             }
             
@@ -3065,7 +3069,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getAttackType() == Type.DARK) {
+            if (user.isAttackType(Type.DARK)) {
                 return 1 + .33*(victim.hasAbility(AbilityNamesies.AURA_BREAK) ? -1 : 1);
             }
             
@@ -3473,8 +3477,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
             super(AbilityNamesies.GALE_WINGS, "Gives priority to Flying-type moves.");
         }
         
-        public int changePriority(Battle b, ActivePokemon user, Attack attack) {
-            return attack.getActualType() == Type.FLYING ? 1 : 0;
+        public int changePriority(Battle b, ActivePokemon user) {
+            return user.isAttackType(Type.FLYING) ? 1 : 0;
         }
     }
     
@@ -3522,7 +3526,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
         
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getAttackType() == Type.WATER) {
+            if (user.isAttackType(Type.WATER)) {
                 victim.getAttributes().modifyStage(victim, victim, 2, Stat.DEFENSE, b, CastSource.ABILITY);
             }
         }
@@ -3659,8 +3663,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
             super(AbilityNamesies.TRIAGE, "Gives priority to a healing move.");
         }
         
-        public int changePriority(Battle b, ActivePokemon user, Attack attack) {
-            return attack.isMoveType(MoveType.HEALING) ? 1 : 0;
+        public int changePriority(Battle b, ActivePokemon user) {
+            return user.getAttack().isMoveType(MoveType.HEALING) ? 1 : 0;
         }
     }
     
@@ -3787,35 +3791,35 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
     }
     
-    static class Dazzling extends Ability implements OpponentAttackSelectionBlockerEffect {
+    static class Dazzling extends Ability implements AttackBlocker {
         private static final long serialVersionUID = 1L;
         
         Dazzling() {
             super(AbilityNamesies.DAZZLING, "Surprises the opposing Pokémon, making it unable to attack using priority moves.");
         }
         
-        public boolean usable(Battle b, ActivePokemon p, Move m) {
-            return b.getPriority(p, m.getAttack()) <= 0;
+        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.getAttackPriority(user) > 0;
         }
         
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
-            return b.getOtherPokemon(p).getName() + "'s " + this.getName() + " prevents priority moves!!";
+        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.getName() + "'s " + this.getName() + " prevents priority moves!!";
         }
     }
     
-    static class QueenlyMajesty extends Ability implements OpponentAttackSelectionBlockerEffect {
+    static class QueenlyMajesty extends Ability implements AttackBlocker {
         private static final long serialVersionUID = 1L;
         
         QueenlyMajesty() {
             super(AbilityNamesies.QUEENLY_MAJESTY, "Its majesty pressures the opposing Pokémon, making it unable to attack using priority moves.");
         }
         
-        public boolean usable(Battle b, ActivePokemon p, Move m) {
-            return b.getPriority(p, m.getAttack()) <= 0;
+        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.getAttackPriority(user) > 0;
         }
         
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
-            return b.getOtherPokemon(p).getName() + "'s " + this.getName() + " prevents priority moves!!";
+        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.getName() + "'s " + this.getName() + " prevents priority moves!!";
         }
     }
     

@@ -41,6 +41,7 @@ public class EffectTest extends BaseTest {
         
         // Quick guard only protects against increased priority moves
         checkProtect(true, AttackNamesies.QUICK_GUARD, AttackNamesies.QUICK_ATTACK);
+        checkProtect(true, AttackNamesies.QUICK_GUARD, AttackNamesies.BABY_DOLL_EYES);
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.AVALANCHE);
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.THUNDER_WAVE);
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.CONSTRICT);
@@ -48,13 +49,10 @@ public class EffectTest extends BaseTest {
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.FEINT);
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.DRAGON_DANCE);
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.MIST);
-        checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.CONFUSE_RAY,
-                     (battle, attacking, defending) -> {
-                         defending.setAbility(AbilityNamesies.PRANKSTER);
-                         attacking.callNewMove(battle, defending, new Move(AttackNamesies.QUICK_GUARD));
-                         defending.setupMove(AttackNamesies.CONFUSE_RAY, battle);
-                         Assert.assertFalse(defending.getAttack().apply(defending, attacking, battle));
-                     }
+        checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.CONFUSE_RAY);
+        checkProtect(true, AttackNamesies.QUICK_GUARD, AttackNamesies.CONFUSE_RAY,
+                     PokemonManipulator.giveDefendingAbility(AbilityNamesies.PRANKSTER),
+                     PokemonManipulator.empty()
         );
         
         // Baneful Bunker poisons when contact is made
@@ -78,38 +76,48 @@ public class EffectTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
         
         battle.fight(AttackNamesies.PROTECT, AttackNamesies.SCREECH);
-        Assert.assertTrue(attacking.getStage(Stat.DEFENSE) == 0);
-        Assert.assertTrue(defending.getStage(Stat.DEFENSE) == 0);
+        Assert.assertEquals(0, attacking.getStage(Stat.DEFENSE));
+        Assert.assertEquals(0, defending.getStage(Stat.DEFENSE));
         
         // Make sure wears off by the next turn
         battle.defendingFight(AttackNamesies.SCREECH);
         Assert.assertTrue(attacking.getStage(Stat.DEFENSE) < 0);
-        Assert.assertTrue(defending.getStage(Stat.DEFENSE) == 0);
+        Assert.assertEquals(0, defending.getStage(Stat.DEFENSE));
     }
     
     private void checkProtect(boolean shouldProtect, AttackNamesies protectMove, AttackNamesies attack) {
-        checkProtect(shouldProtect, protectMove, attack, PokemonManipulator.empty());
+        checkProtect(shouldProtect, protectMove, attack, PokemonManipulator.empty(), PokemonManipulator.empty());
     }
     
-    private void checkProtect(boolean shouldProtect, AttackNamesies protectMove, AttackNamesies attack, PokemonManipulator manipulator) {
+    private void checkProtect(boolean shouldProtect, AttackNamesies protectMove, AttackNamesies attack, PokemonManipulator additionalChecks) {
+        checkProtect(shouldProtect, protectMove, attack, PokemonManipulator.empty(), additionalChecks);
+    }
+    
+    private void checkProtect(boolean shouldProtect,
+                              AttackNamesies protectMove,
+                              AttackNamesies attack,
+                              PokemonManipulator manipulator,
+                              PokemonManipulator additionalChecks) {
         TestBattle battle = TestBattle.create();
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
+    
+        manipulator.manipulate(battle, attacking, defending);
         
         attacking.callNewMove(battle, defending, new Move(protectMove));
         defending.apply(!shouldProtect, attack, battle);
-        manipulator.manipulate(battle, attacking, defending);
+        
+        additionalChecks.manipulate(battle, attacking, defending);
         
         if (shouldProtect) {
             battle.emptyHeal();
             battle.fight(protectMove, attack);
-            
+    
             Assert.assertTrue(attacking.fullHealth());
             Assert.assertFalse(attacking.hasStatus());
             Assert.assertTrue(attacking.getEffects().isEmpty());
-            
             for (Stat stat : Stat.BATTLE_STATS) {
-                Assert.assertTrue(attacking.getStage(stat) == 0);
+                Assert.assertEquals(0, attacking.getStage(stat));
             }
         }
     }
@@ -279,8 +287,7 @@ public class EffectTest extends BaseTest {
         int beforeStage = battle.getCritStage(attacking);
         Assert.assertEquals(1, beforeStage);
         
-        testInfo.manipulator.manipulate(battle, attacking, defending);
-        attacking.setupMove(testInfo.attackName, battle);
+        testInfo.manipulate(battle);
         
         int afterStage = battle.getCritStage(attacking);
         Assert.assertEquals(expectedStage, afterStage);

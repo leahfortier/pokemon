@@ -23,11 +23,13 @@ public class ItemTest extends BaseTest {
     }
     
     private void swapItemsTest(boolean trainerBattle) {
-        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
-        TestPokemon defending = new TestPokemon(PokemonNamesies.CHARMANDER);
+        PokemonNamesies attackingPokemon = PokemonNamesies.BULBASAUR;
+        PokemonNamesies defendingPokemon = PokemonNamesies.CHARMANDER;
         TestBattle battle = trainerBattle
-                ? TestBattle.createTrainerBattle(attacking, defending)
-                : TestBattle.create(attacking, defending);
+                ? TestBattle.createTrainerBattle(attackingPokemon, defendingPokemon)
+                : TestBattle.create(attackingPokemon, defendingPokemon);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
         
         defending.giveItem(ItemNamesies.WATER_STONE);
         
@@ -87,11 +89,13 @@ public class ItemTest extends BaseTest {
     }
     
     private void stickyBarbTest(boolean trainerBattle) {
-        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
-        TestPokemon defending = new TestPokemon(PokemonNamesies.CHARMANDER);
+        PokemonNamesies attackingPokemon = PokemonNamesies.BULBASAUR;
+        PokemonNamesies defendingPokemon = PokemonNamesies.CHARMANDER;
         TestBattle battle = trainerBattle
-                ? TestBattle.createTrainerBattle(attacking, defending)
-                : TestBattle.create(attacking, defending);
+                ? TestBattle.createTrainerBattle(attackingPokemon, defendingPokemon)
+                : TestBattle.create(attackingPokemon, defendingPokemon);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
         
         // So I don't have to worry about dying from Sticky Barb's end turn effect
         attacking.withAbility(AbilityNamesies.MAGIC_GUARD);

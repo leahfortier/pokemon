@@ -609,7 +609,7 @@ public class Player extends PlayerTrainer implements Serializable {
         
         Opponent opponent = b.getOpponent();
         ActivePokemon opponentPokemon = opponent.front();
-        opponentPokemon.setMove(Move.selectOpponentMove(b, opponentPokemon));
+        opponentPokemon.setMove(b, Move.selectOpponentMove(b, opponentPokemon));
         
         if (opponent instanceof Trainer) {
             ((Trainer)opponent).setAction(TrainerAction.FIGHT);

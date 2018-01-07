@@ -1,7 +1,6 @@
 package item;
 
 import battle.Battle;
-import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
@@ -113,6 +112,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         this.price = -1;
     }
     
+    @Override
+    public String toString() {
+        return this.getName();
+    }
+    
+    @Override
     public int compareTo(Item o) {
         return this.name.compareTo(o.name);
     }
@@ -245,7 +250,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
         
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.HELD_ITEM)) {
+            if (user.isAttackType(Type.WATER) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
             }
         }
@@ -367,7 +372,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
         
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getAttackType() == Type.ELECTRIC && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
+            if (user.isAttackType(Type.ELECTRIC) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
             }
         }
@@ -886,7 +891,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
         
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getAttackType() == Type.WATER && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
+            if (user.isAttackType(Type.WATER) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
             }
         }
@@ -1382,7 +1387,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
         
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getAttackType() == Type.ICE && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
+            if (user.isAttackType(Type.ICE) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
             }
         }
@@ -4921,7 +4926,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             return Type.GHOST;
         }
         
-        public int changePriority(Battle b, ActivePokemon user, Attack attack) {
+        public int changePriority(Battle b, ActivePokemon user) {
             if (user.getHPRatio() < 1/3.0) {
                 user.consumeItem(b);
                 return 1;

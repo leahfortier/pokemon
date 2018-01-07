@@ -968,9 +968,9 @@ public final class EffectInterfaces {
     }
     
     public interface PriorityChangeEffect {
-        int changePriority(Battle b, ActivePokemon user, Attack attack);
+        int changePriority(Battle b, ActivePokemon user);
         
-        static int getModifier(Battle b, ActivePokemon user, Attack attack) {
+        static int getModifier(Battle b, ActivePokemon user) {
             int modifier = 0;
             
             List<Object> invokees = b.getEffectsList(user);
@@ -978,7 +978,7 @@ public final class EffectInterfaces {
                 if (invokee instanceof PriorityChangeEffect && Effect.isActiveEffect(invokee)) {
                     
                     PriorityChangeEffect effect = (PriorityChangeEffect)invokee;
-                    modifier += effect.changePriority(b, user, attack);
+                    modifier += effect.changePriority(b, user);
                 }
             }
             

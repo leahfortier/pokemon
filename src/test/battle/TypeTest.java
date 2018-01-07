@@ -8,6 +8,7 @@ import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import test.BaseTest;
+import test.GeneralTest;
 import test.TestPokemon;
 import type.Type;
 import type.TypeAdvantage;
@@ -83,10 +84,9 @@ public class TypeTest extends BaseTest {
     }
     
     private void changeEffectivenessTest(PokemonNamesies defendingPokemon, AttackNamesies attack, PokemonManipulator manipulator) {
-        TestPokemon attacking = new TestPokemon(PokemonNamesies.BULBASAUR);
-        TestPokemon defending = new TestPokemon(defendingPokemon);
-        
-        TestBattle battle = TestBattle.create(attacking, defending);
+        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, defendingPokemon);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
         
         // Make sure attack is unsuccessful without the effect
         attacking.setupMove(attack, battle);
@@ -248,17 +248,17 @@ public class TypeTest extends BaseTest {
     }
     
     private void advantageChecker(Double beforeExpected, double afterExpected, PokemonNamesies attackingPokemon, AttackNamesies attack, PokemonManipulator manipulator, PokemonNamesies... defendingPokemon) {
-        TestPokemon attacking = new TestPokemon(attackingPokemon);
         for (PokemonNamesies pokemonNamesies : defendingPokemon) {
-            TestPokemon defending = new TestPokemon(pokemonNamesies);
-            TestBattle battle = TestBattle.create(attacking, defending);
+            TestBattle battle = TestBattle.create(attackingPokemon, pokemonNamesies);
+            TestPokemon attacking = battle.getAttacking();
+            TestPokemon defending = battle.getDefending();
             
             if (beforeExpected != null) {
                 attacking.setupMove(attack, battle);
                 double beforeActual = TypeAdvantage.getAdvantage(attacking, defending, battle);
-                Assert.assertTrue(
+                GeneralTest.assertEquals(
                         StringUtils.spaceSeparated(attack, pokemonNamesies, beforeExpected, beforeActual),
-                        beforeActual == beforeExpected
+                        beforeExpected, beforeActual
                 );
             }
             
@@ -266,9 +266,9 @@ public class TypeTest extends BaseTest {
             attacking.setupMove(attack, battle);
             
             double afterActual = TypeAdvantage.getAdvantage(attacking, defending, battle);
-            Assert.assertTrue(
+            GeneralTest.assertEquals(
                     StringUtils.spaceSeparated(attack, pokemonNamesies, afterExpected, afterActual),
-                    afterActual == afterExpected
+                    afterExpected, afterActual
             );
         }
     }

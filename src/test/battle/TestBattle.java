@@ -15,10 +15,13 @@ import trainer.WildPokemon;
 public class TestBattle extends Battle {
     private TestBattle(Opponent opponent) {
         super(opponent);
+    
+        this.getAttacking().setupMove(AttackNamesies.SPLASH, this);
+        this.getDefending().setupMove(AttackNamesies.SPLASH, this);
     }
     
     private TestBattle(ActivePokemon nahMahBoi) {
-        super(new WildPokemon(nahMahBoi));
+        this(new WildPokemon(nahMahBoi));
     }
     
     public double getDamageModifier(ActivePokemon attacking, ActivePokemon defending) {
@@ -78,33 +81,26 @@ public class TestBattle extends Battle {
         return true;
     }
     
-    static TestBattle createTrainerBattle(TestPokemon mahBoiiiiiii, TestPokemon nahMahBoi) {
+    static TestBattle createTrainerBattle(PokemonNamesies attacking, PokemonNamesies defending) {
+        TestPokemon mahBoiiiiiii = TestPokemon.newPlayerPokemon(attacking);
+        TestPokemon nahMahBoi = TestPokemon.newTrainerPokemon(defending);
+        
         new TestCharacter(mahBoiiiiiii);
         
         EnemyTrainer enemy = new EnemyTrainer("MUTANT ENEMY", 93, Trainer.MAX_POKEMON, nahMahBoi);
-        TestBattle testBattle = new TestBattle(enemy);
-        
-        mahBoiiiiiii.setupMove(AttackNamesies.SPLASH, testBattle);
-        nahMahBoi.setupMove(AttackNamesies.SPLASH, testBattle);
-        
-        return testBattle;
+        return new TestBattle(enemy);
     }
     
     static TestBattle create() {
-        return create(new TestPokemon(PokemonNamesies.BULBASAUR), new TestPokemon(PokemonNamesies.CHARMANDER));
+        return create(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
     }
     
     static TestBattle create(PokemonNamesies attacking, PokemonNamesies defending) {
-        return create(new TestPokemon(attacking), new TestPokemon(defending));
+        return create(TestPokemon.newPlayerPokemon(attacking), TestPokemon.newWildPokemon(defending));
     }
     
     static TestBattle create(TestPokemon mahBoiiiiiii, TestPokemon nahMahBoi) {
         new TestCharacter(mahBoiiiiiii);
-        TestBattle testBattle = new TestBattle(nahMahBoi);
-        
-        mahBoiiiiiii.setupMove(AttackNamesies.SPLASH, testBattle);
-        nahMahBoi.setupMove(AttackNamesies.SPLASH, testBattle);
-        
-        return testBattle;
+        return new TestBattle(nahMahBoi);
     }
 }

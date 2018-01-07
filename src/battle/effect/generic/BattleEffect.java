@@ -90,7 +90,7 @@ public abstract class BattleEffect extends Effect {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.FIRE ? .33 : 1;
+            return user.isAttackType(Type.FIRE) ? .33 : 1;
         }
     }
     
@@ -114,7 +114,7 @@ public abstract class BattleEffect extends Effect {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.ELECTRIC ? .33 : 1;
+            return user.isAttackType(Type.ELECTRIC) ? .33 : 1;
         }
     }
     
@@ -243,7 +243,7 @@ public abstract class BattleEffect extends Effect {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.DRAGON && !user.isLevitating(b) ? .5 : 1;
+            return user.isAttackType(Type.DRAGON) && !user.isLevitating(b) ? .5 : 1;
         }
         
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
@@ -288,7 +288,7 @@ public abstract class BattleEffect extends Effect {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.GRASS && !user.isLevitating(b) ? 1.5 : 1;
+            return user.isAttackType(Type.GRASS) && !user.isLevitating(b) ? 1.5 : 1;
         }
         
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
@@ -334,7 +334,7 @@ public abstract class BattleEffect extends Effect {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.ELECTRIC && !user.isLevitating(b) ? 1.5 : 1;
+            return user.isAttackType(Type.ELECTRIC) && !user.isLevitating(b) ? 1.5 : 1;
         }
         
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
@@ -372,12 +372,12 @@ public abstract class BattleEffect extends Effect {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.PSYCHIC && !user.isLevitating(b) ? 1.5 : 1;
+            return user.isAttackType(Type.PSYCHIC) && !user.isLevitating(b) ? 1.5 : 1;
         }
         
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Psychic terrain prevents increased priority moves from hitting
-            return b.getPriority(user, user.getAttack()) > 0 && !victim.isLevitating(b);
+            return b.getAttackPriority(user) > 0 && !victim.isLevitating(b);
         }
         
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {

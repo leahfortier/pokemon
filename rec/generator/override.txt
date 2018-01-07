@@ -720,7 +720,7 @@ StatProtectMessage:
 	Header: String preventionMessage(ActivePokemon p, Stat s)
 *
 Sporty:
-	AddMapField: PowerMultiplierCondition: .33 user.getAttackType() == Type.{11}
+	AddMapField: PowerMultiplierCondition: .33 user.isAttackType(Type.{11})
 	AddMapField: CastMessage: "{2}'s power was weakened!"
 	AddMapField: MinTurns: 5
 	AddMapField: MaxTurns: 5
@@ -860,7 +860,7 @@ BlockMessage:
 BlockType:
 	AddInterface: AttackBlocker
 	AddMapField: Block:
-		return user.getAttackType() == Type.{11};
+		return user.isAttackType(Type.{11});
 		###
 	AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{11}.getName() + " type moves!"
 	AddMapField: AlternateEffect:
@@ -870,7 +870,7 @@ BlockType:
 AbsorbType:
 	AddInterface: AttackBlocker
 	AddMapField: Block:
-		return user.getAttackType() == Type.{00};
+		return user.isAttackType(Type.{00});
 		###
 	AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " moves!"
 	AddMapField: AlternateEffect:
@@ -892,7 +892,7 @@ EndTurnStatusCure:
 		###
 *
 PinchAbility:
-	AddMapField: PowerMultiplierCondition: 1.5 user.getHPRatio() < 1/3.0 && user.getAttackType() == Type.{00}
+	AddMapField: PowerMultiplierCondition: 1.5 user.getHPRatio() < 1/3.0 && user.isAttackType(Type.{00})
 *
 StatusPreventAbility:
 	AddInterface: StatusPreventionEffect
@@ -998,7 +998,7 @@ MoveUse:
 *
 TypeTakeDamageStatIncrease:
 	AddMapField: OnTakeDamage:
-		if (user.getAttackType() == Type.{11} && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
+		if (user.isAttackType(Type.{11}) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
 			victim.consumeItem(b);
 		}
 		###
@@ -1445,8 +1445,9 @@ FutureAttackEffect:
 			return;
 		}
 
-		theSeeer.setMove(new Move(attack));
-		theSeeer.getAttack().applyDamage(theSeeer, p, b);
+		theSeeer.callTempMove(b, attack.namesies(), () -> {
+			theSeeer.getAttack().applyDamage(theSeeer, p, b);
+		});
 		###
 	AddMapField: Cast:
 		theSeeer = caster;
@@ -1555,7 +1556,7 @@ GetAccuracy:
 *
 Aura:
 	AddMapField: GetMultiplier:
-		if (user.getAttackType() == Type.{00}) {
+		if (user.isAttackType(Type.{00})) {
 			return 1 + .33*(victim.hasAbility(AbilityNamesies.AURA_BREAK) ? -1 : 1);
 		}
 
@@ -1654,7 +1655,7 @@ ChangePriorityAbility:
 		###
 *
 ChangePriority:
-	Header: int changePriority(Battle b, ActivePokemon user, Attack attack)
+	Header: int changePriority(Battle b, ActivePokemon user)
 *
 Baby:
 	Header: PokemonNamesies getBaby()
@@ -1699,11 +1700,11 @@ TheVeryEnd:
 	Header: boolean theVeryVeryEnd(Battle b, ActivePokemon p)
 *
 PriorityPrevention:
-	AddInterface: OpponentAttackSelectionBlockerEffect
-	AddMapField: Usable:
-		return b.getPriority(p, m.getAttack()) <= 0;
+	AddInterface: AttackBlocker
+	AddMapField: Block:
+		return b.getAttackPriority(user) > 0;
 		###
-	AddMapField: UnusableMessage: b.getOtherPokemon(p).getName() + "'s " + this.getName() + " prevents priority moves!!"
+	AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " prevents priority moves!!"
 *
 OpponentEndAttack:
 	Header: void endsies(Battle b, ActivePokemon attacking, Attack attack)

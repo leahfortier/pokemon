@@ -1,6 +1,5 @@
 package battle;
 
-import battle.attack.Attack;
 import battle.attack.MoveType;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.Effect;
@@ -23,7 +22,6 @@ import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectNamesies;
-import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
 import item.ItemNamesies;
@@ -51,9 +49,11 @@ import trainer.player.medal.MedalTheme;
 import type.TypeAdvantage;
 import util.PokeString;
 import util.RandomUtils;
+import util.StringAppender;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -231,45 +231,40 @@ public class Battle implements Serializable {
         if (this.isSimulating()) {
             return;
         }
+    
+        System.out.println(getTeamEffectsString("Player:", player));
+        System.out.println(getTeamEffectsString("Opponent:", opponent));
         
-        for (PokemonEffect e : player.front().getEffects()) {
-            System.out.println("P " + e);
-        }
-        
-        for (PokemonEffect e : opponent.front().getEffects()) {
-            System.out.println("O " + e);
-        }
-        
-        for (TeamEffect e : player.getEffects()) {
-            System.out.println("P " + e);
-        }
-        
-        for (TeamEffect e : opponent.getEffects()) {
-            System.out.println("O " + e);
-        }
-        
-        for (BattleEffect e : getEffects()) {
-            System.out.println("B " + e);
+        if (!this.getEffects().isEmpty()) {
+            System.out.println("Battle:");
+            for (BattleEffect effect : getEffects()) {
+                System.out.println("\t" + effect);
+            }
         }
         
         if (weather.namesies() != baseWeather.getWeatherEffect()) {
-            System.out.println("W " + weather);
+            System.out.println("Weather: " + weather);
         }
-        
-        System.out.print(player.front().getActualName() + " ");
-        for (Stat stat : Stat.BATTLE_STATS) {
-            System.out.print(player.front().getStage(stat) + " ");
-        }
+    
         System.out.println();
-        
-        System.out.print(opponent.front().getActualName() + " ");
-        for (Stat stat : Stat.BATTLE_STATS) {
-            System.out.print(opponent.front().getStage(stat) + " ");
-        }
-        System.out.println();
-        
-        System.out.println(player.front().getActualName() + " " + player.front().getAbility().getName() + " " + player.front().getHeldItem(this).getName());
-        System.out.println(opponent.front().getActualName() + " " + opponent.front().getAbility().getName() + " " + opponent.front().getHeldItem(this).getName());
+    }
+    
+    private String getTeamEffectsString(String prefix, Team team) {
+        ActivePokemon p = team.front();
+        return new StringAppender(prefix)
+                .appendLine()
+                .append(p.getActualName() + " ")
+                .appendJoin(" ", Arrays.asList(Stat.BATTLE_STATS), stat -> String.valueOf(p.getStage(stat)))
+                .append(" " + p.getAbility().getName())
+                .append(" " + p.getHeldItem(this).getName() + " ")
+                .appendJoin(" ", Arrays.asList(Stat.STATS), stat -> String.valueOf(p.getStat(this, stat)))
+                .appendLine()
+                .appendJoin("\n", p.getEffects())
+                .appendIf(!p.getEffects().isEmpty(), "\n")
+                .appendJoin("\n", team.getEffects())
+                .toString()
+                .replaceAll("\n", "\n\t")
+                .trim();
     }
     
     // Handles events that occur at the beginning of each turn. Returns the two Pokemon currently in battle
@@ -296,7 +291,7 @@ public class Battle implements Serializable {
     }
     
     // If the trainer selected an attack, this will return true - Wild Pokemon will always return true
-    // It will return false if the trainer tried to run, switched Pokemon, or used an item
+    // It will return false if the trainer tried to run, switch Pokemon, or used an item
     private boolean isFighting(boolean team) {
         Team trainer = getTrainer(team);
         return trainer instanceof WildPokemon || ((Trainer)trainer).getAction() == TrainerAction.FIGHT;
@@ -329,7 +324,7 @@ public class Battle implements Serializable {
                 || SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, opponent.front())) {}
     }
     
-    public boolean deadUser() {
+    private boolean deadUser() {
         // Front Pokemon is still functioning
         if (!player.front().isFainted(this)) {
             return false;
@@ -360,7 +355,7 @@ public class Battle implements Serializable {
         return true;
     }
     
-    public boolean deadOpponent() {
+    private boolean deadOpponent() {
         ActivePokemon dead = opponent.front();
         Player player = (Player)this.player;
         
@@ -388,7 +383,7 @@ public class Battle implements Serializable {
         return false;
     }
     
-    public void enterBattle(ActivePokemon enterer) {
+    private void enterBattle(ActivePokemon enterer) {
         NameChanger.setNameChanges(this, enterer);
         
         String enterMessage = "";
@@ -730,38 +725,33 @@ public class Battle implements Serializable {
         if (p.isFainted(this) || opp.isFainted(this)) {
             return false;
         }
-        
+    
         // Loop through all tha effects and do them checks
         if (BeforeTurnEffect.checkCannotAttack(p, opp, this)) {
             return false;
         }
-        
+    
         // Opponents effects that prevent you from attacking
         if (OpponentBeforeTurnEffect.checkCannotAttack(p, opp, this)) {
             return false;
         }
-        
+    
         // WOOOOOOOOOO
         return true;
     }
     
-    public int getPriority(ActivePokemon p, Attack attack) {
-        int priority = attack.getPriority(this, p);
-        priority += PriorityChangeEffect.getModifier(this, p, attack);
-
-//        System.out.println(attack.getName() + " Priority: " + priority);
-        
-        return priority;
+    public int getAttackPriority(ActivePokemon p) {
+        return p.getAttack().getPriority(this, p) + PriorityChangeEffect.getModifier(this, p);
     }
     
     // Returns the priority of the current action the player is performing
     private int getPriority(ActivePokemon p) {
         // They are attacking -- return the priority of the attack
         if (isFighting(p.isPlayer())) {
-            return getPriority(p, p.getAttack());
+            return this.getAttackPriority(p);
         }
         
-        return ((Trainer)getTrainer(p.isPlayer())).getAction().getPriority();
+        return ((Trainer)getTrainer(p)).getAction().getPriority();
     }
     
     // Returns true if the player will be attacking first, and false if the opponent will be

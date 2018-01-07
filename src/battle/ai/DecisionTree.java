@@ -76,7 +76,7 @@ public class DecisionTree {
         return points;
     }
     
-    private void setupTrainer(Trainer trainer, Move move) {
+    private void setupTrainer(Battle battle, Trainer trainer, Move move) {
         ActivePokemon front = (ActivePokemon)SerializationUtils.getSerializedCopy(trainer.front());
         trainer.replaceFront(front);
         
@@ -84,7 +84,7 @@ public class DecisionTree {
         front.getAttributes().setAttributesHolder(front);
         
         trainer.setAction(TrainerAction.FIGHT);
-        front.setMove(new Move(move.getAttack()));
+        front.setMove(battle, new Move(move.getAttack()));
     }
     
     private Battle simulateTurn(Battle b, Move opponentMove, Move playerMove) {
@@ -94,8 +94,8 @@ public class DecisionTree {
         Battle simulated = (Battle)SerializationUtils.getSerializedCopy(b);
         b.setPlayer(playerTrainer);
         
-        setupTrainer(simulated.getPlayer(), playerMove);
-        setupTrainer((Trainer)simulated.getOpponent(), opponentMove);
+        setupTrainer(simulated, simulated.getPlayer(), playerMove);
+        setupTrainer(simulated, (Trainer)simulated.getOpponent(), opponentMove);
         
         simulated.fight();
         

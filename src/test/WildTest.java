@@ -26,7 +26,7 @@ public class WildTest extends BaseTest {
     private void compoundEyesTest(PokemonNamesies pokemonNamesies, boolean alwaysItem, boolean compoundEyesAlwaysItem) {
         WildEncounter wildEncounter = new WildEncounter(pokemonNamesies, 5);
         
-        Player player = new TestCharacter(new TestPokemon(PokemonNamesies.BULBASAUR));
+        Player player = new TestCharacter(TestPokemon.newPlayerPokemon(PokemonNamesies.BULBASAUR));
         Assert.assertTrue(Game.getPlayer() == player);
         
         Set<ItemNamesies> wildHoldItems = pokemonNamesies

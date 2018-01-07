@@ -11,7 +11,7 @@ public interface SuperEffectivePowerReduceBerry extends Berry, OpponentPowerChan
     Type getType();
     
     default double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-        if (user.getAttackType() == this.getType() && TypeAdvantage.isSuperEffective(user, victim, b)) {
+        if (user.isAttackType(this.getType()) && TypeAdvantage.isSuperEffective(user, victim, b)) {
             Messages.add(victim.getName() + "'s " + this.getName() + " decreased " + user.getName() + "'s attack!");
             victim.consumeItem(b);
             return .5;

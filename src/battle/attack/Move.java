@@ -74,7 +74,7 @@ public class Move implements Serializable {
     }
     
     public void setAttributes(Battle b, ActivePokemon user) {
-        type = this.getAttack().getBattleType(b, user);
+        this.type = this.getAttack().getBattleType(b, user);
     }
     
     public Attack getAttack() {
@@ -102,7 +102,7 @@ public class Move implements Serializable {
     }
     
     public boolean increasePP(int n) {
-        if (maxPP == pp) {
+        if (pp == maxPP) {
             return false;
         }
         
@@ -147,7 +147,7 @@ public class Move implements Serializable {
         // Forced moves
         Move forcedMove = ForceMoveEffect.getForcedMove(b, p);
         if (forcedMove != null) {
-            p.setMove(forcedMove);
+            p.setMove(b, forcedMove);
             return true;
         }
         
@@ -160,7 +160,7 @@ public class Move implements Serializable {
         }
         
         if (p.isPlayer() && getUsableMoves(b, p).size() == 0) {
-            p.setMove(new Move(AttackNamesies.STRUGGLE.getAttack()));
+            p.setMove(b, new Move(AttackNamesies.STRUGGLE));
             return true;
         }
         
@@ -203,7 +203,7 @@ public class Move implements Serializable {
         
         // Set the move if selecting
         if (selecting) {
-            p.setMove(m);
+            p.setMove(b, m);
         }
         
         return true;

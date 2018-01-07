@@ -14,7 +14,6 @@ import util.TimeUtils;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class GeneralTest extends BaseTest {
@@ -88,7 +87,7 @@ public class GeneralTest extends BaseTest {
     }
     
     private TestPokemon genderTestPokemon(PokemonNamesies name, Gender gender) {
-        TestPokemon pokemon = new TestPokemon(name);
+        TestPokemon pokemon = TestPokemon.newPlayerPokemon(name);
         Assert.assertEquals(gender, pokemon.getGender());
         return pokemon;
     }
@@ -217,42 +216,5 @@ public class GeneralTest extends BaseTest {
             FileIO.overwriteFile(file, FileIO.readEntireFile(file));
             Assert.assertFalse(FileIO.readEntireFile(file).contains("\t"));
         }
-    }
-    
-    @Test
-    public void alignTabsTest() {
-        for (File file : FileIO.listFiles("src")) {
-            alignTabs(file);
-        }
-    }
-    
-    private void alignTabs(File file) {
-        final Scanner in = FileIO.openFile(file);
-        final StringAppender out = new StringAppender();
-        
-        // Keep track of the number of spaces of the most recent nonempty line
-        int numSpaces = 0;
-        while (in.hasNextLine()) {
-            String line = in.nextLine();
-            
-            // If line is not empty, reset the number of spaces
-            if (!line.trim().isEmpty()) {
-                numSpaces = 0;
-                for (char c : line.toCharArray()) {
-                    Assert.assertNotEquals('\t', c);
-                    if (c != ' ') {
-                        break;
-                    }
-                    numSpaces++;
-                }
-            }
-            
-            // Append the trimmed string with the number of spaces of the most recent nonempty line (could be the current line)
-            out.appendIf(!out.isEmpty(), "\n")
-               .appendRepeat(" ", numSpaces)
-               .append(line.trim());
-        }
-        
-        FileIO.overwriteFile(file, out.toString());
     }
 }

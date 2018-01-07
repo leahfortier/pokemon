@@ -666,7 +666,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
         
         public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-            return b.getPriority(attacking, attacking.getAttack()) > 0;
+            return b.getAttackPriority(attacking) > 0;
         }
         
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
@@ -797,13 +797,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             
             // 50% chance to hurt yourself in confusion while confused
             if (RandomUtils.chanceTest(50)) {
-                Messages.add("It hurt itself in confusion!");
                 
                 // Perform confusion damage
-                Move temp = p.getMove();
-                p.setMove(new Move(AttackNamesies.CONFUSION_DAMAGE.getAttack()));
-                p.reduceHealth(b, b.calculateDamage(p, p));
-                p.setMove(temp);
+                p.callTempMove(b, AttackNamesies.CONFUSION_DAMAGE, () -> {
+                    Messages.add("It hurt itself in confusion!");
+                    p.reduceHealth(b, b.calculateDamage(p, p));
+                });
                 
                 return false;
             }
@@ -1880,7 +1879,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
         
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttackType() == Type.ELECTRIC ? 2 : 1;
+            return user.isAttackType(Type.ELECTRIC) ? 2 : 1;
         }
     }
     
@@ -2591,7 +2590,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         
         public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
             // Fire-type moves makes the user explode
-            if (p.getAttackType() == Type.FIRE) {
+            if (p.isAttackType(Type.FIRE)) {
                 Messages.add("The powder exploded!");
                 p.reduceHealthFraction(b, 1/4.0);
                 return false;

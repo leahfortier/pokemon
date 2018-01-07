@@ -134,7 +134,8 @@ public abstract class Effect implements Serializable {
         numTurns = turns;
     }
     
+    @Override
     public String toString() {
-        return getName() + " " + getTurns();
+        return this.getName() + " " + this.getTurns();
     }
 }

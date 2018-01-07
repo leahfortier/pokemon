@@ -11,13 +11,28 @@ import pokemon.ability.AbilityNamesies;
 import test.battle.TestBattle;
 import util.StringUtils;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class TestPokemon extends ActivePokemon {
-    public TestPokemon(final PokemonNamesies pokemon) {
-        this(pokemon, 100);
+    public TestPokemon(final PokemonNamesies pokemon, final boolean isWild, final boolean isPlayer) {
+        this(pokemon, 100, isWild, isPlayer);
     }
     
-    public TestPokemon(final PokemonNamesies pokemon, final int level) {
-        super(pokemon, level, false, false);
+    public TestPokemon(final PokemonNamesies pokemon, final int level, final boolean isWild, final boolean isPlayer) {
+        super(pokemon, level, isWild, isPlayer);
+    }
+    
+    public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {
+        return new TestPokemon(pokemon, false, true);
+    }
+    
+    public static TestPokemon newWildPokemon(final PokemonNamesies pokemon) {
+        return new TestPokemon(pokemon, true, false);
+    }
+    
+    public static TestPokemon newTrainerPokemon(final PokemonNamesies pokemon) {
+        return new TestPokemon(pokemon, false, false);
     }
     
     public TestPokemon withGender(Gender gender) {
@@ -31,19 +46,17 @@ public class TestPokemon extends ActivePokemon {
     }
     
     public TestPokemon withMoves(AttackNamesies... moves) {
-        // TODO: This shouldn't work I hate this it should be immutable
-        this.getActualMoves().clear();
-        
         Assert.assertTrue(moves.length <= Move.MAX_MOVES);
-        for (AttackNamesies move : moves) {
-            this.getActualMoves().add(new Move(move));
-        }
-        
+        this.setMoves(
+                Arrays.stream(moves)
+                      .map(move -> new Move(move.getAttack()))
+                      .collect(Collectors.toList())
+        );
         return this;
     }
     
     public void setupMove(AttackNamesies attackNamesies, Battle battle) {
-        this.setMove(new Move(attackNamesies));
+        this.setMove(battle, new Move(attackNamesies));
         this.startAttack(battle);
     }
     
