@@ -60,7 +60,9 @@ class MethodFormatter {
         }
 
         // Add the tabs
-        method.appendRepeat("\t", tabs);
+        if (!line.isEmpty()) {
+            method.appendRepeat("\t", tabs);
+        }
 
         // Actually write the line
         method.appendLine(line);
