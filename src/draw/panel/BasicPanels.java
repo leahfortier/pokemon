@@ -8,11 +8,6 @@ import util.Point;
 import java.awt.Graphics;
 
 public class BasicPanels {
-    public static final Point canvasMessageCenter = new Point(
-            Global.GAME_SIZE.width/2,
-            BasicPanels.getMessagePanelY()/2
-    );
-
     private static final DrawPanel fullMessagePanel = new DrawPanel(0, 440, Global.GAME_SIZE.width, 161)
             .withBlackOutline()
             .withTextAnimation();
@@ -20,6 +15,11 @@ public class BasicPanels {
     private static final DrawPanel fullCanvasPanel = newFullGamePanel()
             .withBorderPercentage(2)
             .withBlackOutline();
+
+    public static final Point canvasMessageCenter = new Point(
+            Global.GAME_SIZE.width/2,
+            BasicPanels.getMessagePanelY()/2
+    );
 
     private BasicPanels() { Global.error("BasicPanels cannot be instantiated"); }
 
