@@ -13,15 +13,6 @@ import java.util.List;
 class GroupTrigger extends Trigger {
     public final List<String> triggers;
 
-    static String getTriggerSuffix(String contents) {
-        GroupTriggerMatcher matcher = SerializationUtils.deserializeJson(contents, GroupTriggerMatcher.class);
-        if (!StringUtils.isNullOrEmpty(matcher.getSuffix())) {
-            return matcher.getSuffix();
-        }
-
-        return contents;
-    }
-
     GroupTrigger(String contents, String condition) {
         this(contents, condition, SerializationUtils.deserializeJson(contents, GroupTriggerMatcher.class));
     }
@@ -41,5 +32,14 @@ class GroupTrigger extends Trigger {
                 Messages.addToFront(new MessageUpdate().withTrigger(triggerName));
             }
         }
+    }
+
+    static String getTriggerSuffix(String contents) {
+        GroupTriggerMatcher matcher = SerializationUtils.deserializeJson(contents, GroupTriggerMatcher.class);
+        if (!StringUtils.isNullOrEmpty(matcher.getSuffix())) {
+            return matcher.getSuffix();
+        }
+
+        return contents;
     }
 }

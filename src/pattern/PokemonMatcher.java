@@ -47,14 +47,6 @@ public class PokemonMatcher {
 
     private PokemonMatcher() {}
 
-    public static PokemonMatcher createEggMatcher(PokemonNamesies eggy) {
-        PokemonMatcher matcher = new PokemonMatcher();
-        matcher.namesies = eggy;
-        matcher.isEgg = true;
-
-        return matcher;
-    }
-
     public PokemonNamesies getNamesies() {
         return this.namesies;
     }
@@ -102,5 +94,13 @@ public class PokemonMatcher {
 
     public ItemNamesies getHoldItem() {
         return this.holdItem;
+    }
+
+    public static PokemonMatcher createEggMatcher(PokemonNamesies eggy) {
+        PokemonMatcher matcher = new PokemonMatcher();
+        matcher.namesies = eggy;
+        matcher.isEgg = true;
+
+        return matcher;
     }
 }

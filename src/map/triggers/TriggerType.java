@@ -38,7 +38,7 @@ public enum TriggerType {
     WALKING_WILD_BATTLE(WalkingWildBattleTrigger.class, WalkingWildBattleTrigger::new),
     WILD_BATTLE(WildBattleTrigger.class, WildBattleTrigger::new);
 
-    private final TriggerPrefixGetter triggerPrefixGetter;
+    private final String triggerPrefix;
     private final TriggerSuffixGetter triggerSuffixGetter;
     private final TriggerCreator triggerCreator;
 
@@ -47,24 +47,9 @@ public enum TriggerType {
     }
 
     TriggerType(Class<? extends Trigger> triggerClass, TriggerCreator triggerCreator, TriggerSuffixGetter triggerSuffixGetter) {
-        this.triggerPrefixGetter = triggerClass::getSimpleName; // TODO: Can't this just be a string?
+        this.triggerPrefix = triggerClass.getSimpleName();
         this.triggerSuffixGetter = triggerSuffixGetter;
         this.triggerCreator = triggerCreator;
-    }
-
-    @FunctionalInterface
-    private interface TriggerSuffixGetter {
-        String getTriggerSuffix(final String contents);
-    }
-
-    @FunctionalInterface
-    private interface TriggerPrefixGetter {
-        String getTriggerPrefix();
-    }
-
-    @FunctionalInterface
-    private interface TriggerCreator {
-        Trigger createTrigger(final String contents, final String condition);
     }
 
     public String getTriggerName(String contents) {
@@ -72,8 +57,7 @@ public enum TriggerType {
     }
 
     public String getTriggerNameFromSuffix(String suffix) {
-        final String prefix = this.triggerPrefixGetter.getTriggerPrefix();
-        return prefix + (StringUtils.isNullOrEmpty(suffix) ? StringUtils.empty() : "_" + suffix);
+        return this.triggerPrefix + (StringUtils.isNullOrEmpty(suffix) ? StringUtils.empty() : "_" + suffix);
     }
 
     public Trigger createTrigger(final String contents) {
@@ -90,10 +74,17 @@ public enum TriggerType {
 
         Trigger trigger = this.triggerCreator.createTrigger(contents, condition);
         data.addTrigger(trigger);
+
         return trigger;
     }
 
-    public static TriggerType getTriggerType(final String type) {
-        return TriggerType.valueOf(StringUtils.getNamesiesString(type));
+    @FunctionalInterface
+    private interface TriggerSuffixGetter {
+        String getTriggerSuffix(final String contents);
+    }
+
+    @FunctionalInterface
+    private interface TriggerCreator {
+        Trigger createTrigger(final String contents, final String condition);
     }
 }

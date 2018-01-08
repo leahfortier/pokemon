@@ -30,15 +30,6 @@ public class BattleView extends View {
     private static final int BUTTON_WIDTH = 183;
     private static final int BUTTON_HEIGHT = 55;
 
-    // The current battle in view, the current message being displayed, and the current selected button
-    private Battle currentBattle;
-    private String message;
-    private int selectedButton;
-
-    // The current state that the battle is in and current update type
-    private VisualState state;
-    private Update update;
-
     // Holds the animation for the player and the opponent
     private final PokemonAnimationState playerAnimation;
     private final PokemonAnimationState enemyAnimation;
@@ -50,6 +41,15 @@ public class BattleView extends View {
 
     // All the different buttons!!
     private final Button backButton;
+
+    // The current battle in view, the current message being displayed, and the current selected button
+    private Battle currentBattle;
+    private String message;
+    private int selectedButton;
+
+    // The current state that the battle is in and current update type
+    private VisualState state;
+    private Update update;
 
     // Displayable current weather and terrain
     private Weather weather;
@@ -239,7 +239,7 @@ public class BattleView extends View {
             }
 
             MessageUpdate newMessage = Messages.getNextMessage();
-            currentBattle.getDaRealPlayer().addLogMessage(newMessage);
+            Game.getPlayer().addLogMessage(newMessage);
 
             PokemonAnimationState state = newMessage.isPlayer() ? playerAnimation : enemyAnimation;
             state.checkMessage(newMessage);

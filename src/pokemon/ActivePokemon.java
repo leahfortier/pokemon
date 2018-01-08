@@ -153,71 +153,6 @@ public class ActivePokemon implements Serializable {
         this.setIVs(breeding.getBabyIVs(daddy, mommy));
     }
 
-    /*
-     * Format: Name Level Parameters
-     * Possible parameters:
-     *         Moves: Move1, Move2, Move3, Move4*
-     *         Shiny
-     *         Egg
-     *         Item: item name*
-     */
-    // Constructor for triggers
-    public static ActivePokemon createActivePokemon(PokemonMatcher pokemonMatcher, boolean user) {
-
-        // Random Starter Egg
-        if (pokemonMatcher.isStarterEgg()) {
-            if (!user) {
-                Global.error("Trainers cannot have eggs.");
-            }
-
-            return new ActivePokemon(PokemonInfo.getRandomStarterPokemon());
-        }
-
-        final PokemonNamesies namesies = pokemonMatcher.getNamesies();
-
-        ActivePokemon pokemon;
-        if (pokemonMatcher.isEgg()) {
-            if (!user) {
-                Global.error("Trainers cannot have eggs.");
-            }
-
-            pokemon = new ActivePokemon(namesies);
-        } else {
-            pokemon = new ActivePokemon(namesies, pokemonMatcher.getLevel(), false, user);
-            String nickname = pokemonMatcher.getNickname();
-            if (!StringUtils.isNullOrEmpty(nickname)) {
-                pokemon.setNickname(nickname);
-            }
-        }
-
-        if (pokemonMatcher.isShiny()) {
-            pokemon.setShiny();
-        }
-
-        if (pokemonMatcher.hasMoves()) {
-            pokemon.setMoves(pokemonMatcher.getMoves());
-        }
-
-        if (pokemonMatcher.hasHoldItem()) {
-            pokemon.giveItem(pokemonMatcher.getHoldItem());
-        }
-
-        return pokemon;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public void setAbility(AbilityNamesies ability) {
-        this.ability = ability.getNewAbility();
-    }
-
-    public void setNature(Nature nature) {
-        this.nature = nature;
-        this.setStats();
-    }
-
     // Does not include shiny -- this is for the small party tiles
     public String getTinyImageName() {
         return this.isEgg ? TINY_EGG_IMAGE_NAME : this.getPokemonInfo().getTinyImageName();
@@ -319,10 +254,6 @@ public class ActivePokemon implements Serializable {
         shiny = true;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
     // Random value between 0 and 31
     private void setIVs() {
         int[] IVs = new int[Stat.NUM_STATS];
@@ -331,21 +262,6 @@ public class ActivePokemon implements Serializable {
         }
 
         this.setIVs(IVs);
-    }
-
-    // Values between 0 and 31
-    private void setIVs(int[] IVs) {
-        this.IVs = IVs;
-
-        int maxIndex = 0;
-        for (int i = 0; i < this.IVs.length; i++) {
-            if (this.IVs[i] > this.IVs[maxIndex]) {
-                maxIndex = i;
-            }
-        }
-
-        this.characteristic = characteristics[this.IVs[maxIndex]%5][maxIndex];
-        this.setStats();
     }
 
     private void setStats() {
@@ -383,6 +299,21 @@ public class ActivePokemon implements Serializable {
         return IVs;
     }
 
+    // Values between 0 and 31
+    private void setIVs(int[] IVs) {
+        this.IVs = IVs;
+
+        int maxIndex = 0;
+        for (int i = 0; i < this.IVs.length; i++) {
+            if (this.IVs[i] > this.IVs[maxIndex]) {
+                maxIndex = i;
+            }
+        }
+
+        this.characteristic = characteristics[this.IVs[maxIndex]%5][maxIndex];
+        this.setStats();
+    }
+
     public int[] getEVs() {
         return EVs;
     }
@@ -399,6 +330,11 @@ public class ActivePokemon implements Serializable {
         return nature;
     }
 
+    public void setNature(Nature nature) {
+        this.nature = nature;
+        this.setStats();
+    }
+
     public Ability getActualAbility() {
         return ability;
     }
@@ -412,6 +348,10 @@ public class ActivePokemon implements Serializable {
         }
 
         return this.ability;
+    }
+
+    public void setAbility(AbilityNamesies ability) {
+        this.ability = ability.getNewAbility();
     }
 
     public int getStage(Stat stat) {
@@ -640,6 +580,10 @@ public class ActivePokemon implements Serializable {
         return level;
     }
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     public void callNewMove(Battle b, ActivePokemon opp, Move m) {
         this.callTempMove(b, m, () -> {
             b.printAttacking(this);
@@ -818,10 +762,6 @@ public class ActivePokemon implements Serializable {
         return getAbility().namesies() == a;
     }
 
-    public void setStatus(Status s) {
-        status = s;
-    }
-
     public void addEffect(PokemonEffect e) {
         attributes.addEffect(e);
     }
@@ -884,6 +824,10 @@ public class ActivePokemon implements Serializable {
 
     public Gender getGender() {
         return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public boolean isSemiInvulnerable() {
@@ -1128,6 +1072,10 @@ public class ActivePokemon implements Serializable {
 
     public Status getStatus() {
         return status;
+    }
+
+    public void setStatus(Status s) {
+        status = s;
     }
 
     // Returns whether or not the Pokemon is afflicted with a status condition
@@ -1401,5 +1349,57 @@ public class ActivePokemon implements Serializable {
 
     public boolean canBreed() {
         return !isEgg && this.getPokemonInfo().canBreed();
+    }
+
+    /*
+     * Format: Name Level Parameters
+     * Possible parameters:
+     *         Moves: Move1, Move2, Move3, Move4*
+     *         Shiny
+     *         Egg
+     *         Item: item name*
+     */
+    // Constructor for triggers
+    public static ActivePokemon createActivePokemon(PokemonMatcher pokemonMatcher, boolean user) {
+
+        // Random Starter Egg
+        if (pokemonMatcher.isStarterEgg()) {
+            if (!user) {
+                Global.error("Trainers cannot have eggs.");
+            }
+
+            return new ActivePokemon(PokemonInfo.getRandomStarterPokemon());
+        }
+
+        final PokemonNamesies namesies = pokemonMatcher.getNamesies();
+
+        ActivePokemon pokemon;
+        if (pokemonMatcher.isEgg()) {
+            if (!user) {
+                Global.error("Trainers cannot have eggs.");
+            }
+
+            pokemon = new ActivePokemon(namesies);
+        } else {
+            pokemon = new ActivePokemon(namesies, pokemonMatcher.getLevel(), false, user);
+            String nickname = pokemonMatcher.getNickname();
+            if (!StringUtils.isNullOrEmpty(nickname)) {
+                pokemon.setNickname(nickname);
+            }
+        }
+
+        if (pokemonMatcher.isShiny()) {
+            pokemon.setShiny();
+        }
+
+        if (pokemonMatcher.hasMoves()) {
+            pokemon.setMoves(pokemonMatcher.getMoves());
+        }
+
+        if (pokemonMatcher.hasHoldItem()) {
+            pokemon.giveItem(pokemonMatcher.getHoldItem());
+        }
+
+        return pokemon;
     }
 }

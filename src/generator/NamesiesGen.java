@@ -3,8 +3,8 @@ package generator;
 import main.Global;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
-import util.StringAppender;
 import util.FileIO;
+import util.StringAppender;
 import util.StringUtils;
 
 import java.util.Scanner;

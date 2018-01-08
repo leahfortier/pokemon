@@ -7,52 +7,57 @@ import message.Messages.MessageState;
 import util.PokeString;
 import util.save.Save;
 
+import java.util.function.Supplier;
+
 enum MenuChoice {
-    POKEDEX(() -> PokeString.POKEDEX, ViewMode.POKEDEX_VIEW),
-    POKEMON(() -> PokeString.POKEMON, ViewMode.PARTY_VIEW),
-    BAG(() -> "Bag", mapView -> {
+    POKEDEX(PokeString.POKEDEX, ViewMode.POKEDEX_VIEW),
+    POKEMON(PokeString.POKEMON, ViewMode.PARTY_VIEW),
+    BAG("Bag", mapView -> {
         Game.instance().setViewMode(ViewMode.BAG_VIEW);
         Messages.clearMessages(MessageState.BAGGIN_IT_UP);
         Messages.setMessageState(MessageState.BAGGIN_IT_UP);
     }),
     TRAINER_CARD(() -> Game.getPlayer().getName(), ViewMode.TRAINER_CARD_VIEW),
-    OPTIONS(() -> "Options", ViewMode.OPTIONS_VIEW),
-    SAVE(() -> "Save", mapView -> {
+    OPTIONS("Options", ViewMode.OPTIONS_VIEW),
+    SAVE("Save", mapView -> {
         // TODO: Question user if they would like to save first.
         Save.save();
         Messages.add("Your game has now been saved!");
         mapView.setState(VisualState.MESSAGE);
     }),
-    EXIT(() -> "Exit", ViewMode.MAIN_MENU_VIEW), // TODO: Confirmation
-    RETURN(() -> "Return", mapView -> mapView.setState(VisualState.MAP));
+    EXIT("Exit", ViewMode.MAIN_MENU_VIEW), // TODO: Confirmation
+    RETURN("Return", mapView -> mapView.setState(VisualState.MAP));
 
-    private final DisplayNameGetter displayNameGetter;
+    private final Supplier<String> displayNameGetter;
     private final StateChanger stateChanger;
 
-    MenuChoice(DisplayNameGetter displayNameGetter, ViewMode viewMode) {
+    MenuChoice(String displayName, ViewMode viewMode) {
+        this(() -> displayName, viewMode);
+    }
+
+    MenuChoice(Supplier<String> displayNameGetter, ViewMode viewMode) {
         this(displayNameGetter, mapView -> Game.instance().setViewMode(viewMode));
     }
 
-    MenuChoice(DisplayNameGetter displayNameGetter, StateChanger stateChanger) {
+    MenuChoice(String displayName, StateChanger stateChanger) {
+        this(() -> displayName, stateChanger);
+    }
+
+    MenuChoice(Supplier<String> displayNameGetter, StateChanger stateChanger) {
         this.displayNameGetter = displayNameGetter;
         this.stateChanger = stateChanger;
     }
 
-    @FunctionalInterface
-    private interface DisplayNameGetter {
-        String getDisplayName();
+    public String getDisplayName() {
+        return this.displayNameGetter.get();
+    }
+
+    public void execute(MapView mapView) {
+        this.stateChanger.execute(mapView);
     }
 
     @FunctionalInterface
     private interface StateChanger {
         void execute(MapView mapView);
-    }
-
-    public String getDisplayName() {
-        return this.displayNameGetter.getDisplayName();
-    }
-
-    public void execute(MapView mapView) {
-        this.stateChanger.execute(mapView);
     }
 }

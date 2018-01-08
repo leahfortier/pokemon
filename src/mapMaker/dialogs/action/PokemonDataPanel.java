@@ -24,13 +24,14 @@ class PokemonDataPanel extends JPanel {
     private final JTextField nicknameTextField;
     private final JTextField moveTextField;
     private final JCheckBox shinyCheckBox;
-    private JComboBox<String> moveComboBox;
     private final JCheckBox moveCheckBox;
     private final JFormattedTextField levelFormattedTextField;
-
     private final JCheckBox selectedCheckBox;
 
     private final AttackNamesies[] customMoves = new AttackNamesies[Move.MAX_MOVES];
+
+    // Fucking Java won't let this be final
+    private JComboBox<String> moveComboBox;
 
     PokemonDataPanel(PokemonMatcher pokemonMatcher) {
 

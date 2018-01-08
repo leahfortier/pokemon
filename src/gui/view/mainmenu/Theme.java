@@ -1,6 +1,6 @@
 package gui.view.mainmenu;
 
-import draw.panel.DrawPanel;
+import draw.panel.BasicPanels;
 import util.FileIO;
 import util.Folder;
 
@@ -25,11 +25,6 @@ public enum Theme {
         this.draw = draw;
     }
 
-    @FunctionalInterface
-    private interface ThemeDrawer {
-        void draw(Graphics g, int bgTime, int bgIndex);
-    }
-
     public Color getButtonColor() {
         return this.buttonColor;
     }
@@ -39,11 +34,11 @@ public enum Theme {
     }
 
     private static void drawBasicTheme(Graphics g) {
-        DrawPanel.fullGamePanel()
-                 .withTransparentBackground(new Color(68, 123, 184))
-                 .withTransparentCount(2)
-                 .withBorderPercentage(3)
-                 .drawBackground(g);
+        BasicPanels.newFullGamePanel()
+                   .withTransparentBackground(new Color(68, 123, 184))
+                   .withTransparentCount(2)
+                   .withBorderPercentage(3)
+                   .drawBackground(g);
     }
 
     private static void drawScenicTheme(Graphics g, int bgTime, int bgIndex) {
@@ -53,10 +48,15 @@ public enum Theme {
 
         g.drawImage(DFS_TOWN_BG, xLoc, yLoc, null);
 
-        DrawPanel.fullGamePanel()
-                 .withBackgroundColor(null)
-                 .withBorderColor(new Color(255, 255, 255, 200))
-                 .withBorderPercentage(3)
-                 .drawBackground(g);
+        BasicPanels.newFullGamePanel()
+                   .withBackgroundColor(null)
+                   .withBorderColor(new Color(255, 255, 255, 200))
+                   .withBorderPercentage(3)
+                   .drawBackground(g);
+    }
+
+    @FunctionalInterface
+    private interface ThemeDrawer {
+        void draw(Graphics g, int bgTime, int bgIndex);
     }
 }

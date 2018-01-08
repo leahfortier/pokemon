@@ -26,12 +26,12 @@ public class WildBattleMatcher extends TriggerMatcher {
         this.wildPokemon = wildEncounters.toArray(new WildEncounter[0]);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public EncounterRate getEncounterRate() {

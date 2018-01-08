@@ -249,6 +249,18 @@ public class PC implements Serializable {
         this.currBox = GeneralUtils.wrapIncrement(this.currBox, delta, boxes.size());
     }
 
+    private static class Box implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        private final ActivePokemon[][] pokemon;
+        private final Color color;
+
+        public Box() {
+            pokemon = new ActivePokemon[BOX_HEIGHT][BOX_WIDTH];
+            color = new Color(RandomUtils.getRandomInt(255), RandomUtils.getRandomInt(255), RandomUtils.getRandomInt(255));
+        }
+    }
+
     private class BoxCoordinate {
         private int boxNum;
         private int x;
@@ -272,18 +284,6 @@ public class PC implements Serializable {
         private void removePokemon() {
             this.setPokemon(null);
             numPokemon--;
-        }
-    }
-
-    private static class Box implements Serializable {
-        private static final long serialVersionUID = 1L;
-
-        private final ActivePokemon[][] pokemon;
-        private final Color color;
-
-        public Box() {
-            pokemon = new ActivePokemon[BOX_HEIGHT][BOX_WIDTH];
-            color = new Color(RandomUtils.getRandomInt(255), RandomUtils.getRandomInt(255), RandomUtils.getRandomInt(255));
         }
     }
 }

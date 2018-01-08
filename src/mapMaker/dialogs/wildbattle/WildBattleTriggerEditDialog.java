@@ -41,8 +41,9 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
     private final List<WildPokemonDataPanel> wildPokemonPanels;
 
     private final JLabel pageNumLabel;
-    private int pageNum;
     private final int index;
+
+    private int pageNum;
     private int probabilitySum;
 
     public WildBattleTriggerEditDialog(WildBattleMatcher wildBattleMatcher, int index) {

@@ -11,15 +11,15 @@ import java.io.Serializable;
 import java.util.List;
 
 public abstract class Effect implements Serializable {
-    public static final String DEFAULT_FAIL_MESSAGE = "...but it failed!";
-
     private static final long serialVersionUID = 1L;
 
-    protected final EffectNamesies namesies;
-    protected boolean active;
+    public static final String DEFAULT_FAIL_MESSAGE = "...but it failed!";
 
-    protected int numTurns;
+    protected final EffectNamesies namesies;
     private final boolean nextTurnSubside;
+
+    protected boolean active;
+    protected int numTurns;
 
     public Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
         this.namesies = name;
@@ -31,29 +31,6 @@ public abstract class Effect implements Serializable {
 
     public boolean nextTurnSubside() {
         return nextTurnSubside;
-    }
-
-    // Returns the effect if it is in the list, otherwise returns null
-    public static Effect getEffect(List<? extends Effect> effects, EffectNamesies effectNamesies) {
-        for (Effect effect : effects) {
-            if (effect.namesies() == effectNamesies) {
-                return effect;
-            }
-        }
-
-        return null;
-    }
-
-    public static boolean hasEffect(List<? extends Effect> effects, EffectNamesies effect) {
-        return getEffect(effects, effect) != null;
-    }
-
-    public static boolean removeEffect(List<? extends Effect> effects, EffectNamesies effectToRemove) {
-        return effects.removeIf(effect -> effect.namesies() == effectToRemove);
-    }
-
-    public static boolean isActiveEffect(Object object) {
-        return !(object instanceof Effect) || ((Effect)object).isActive();
     }
 
     public void deactivate() {
@@ -137,5 +114,28 @@ public abstract class Effect implements Serializable {
     @Override
     public String toString() {
         return this.getName() + " " + this.getTurns();
+    }
+
+    // Returns the effect if it is in the list, otherwise returns null
+    public static Effect getEffect(List<? extends Effect> effects, EffectNamesies effectNamesies) {
+        for (Effect effect : effects) {
+            if (effect.namesies() == effectNamesies) {
+                return effect;
+            }
+        }
+
+        return null;
+    }
+
+    public static boolean hasEffect(List<? extends Effect> effects, EffectNamesies effect) {
+        return getEffect(effects, effect) != null;
+    }
+
+    public static boolean removeEffect(List<? extends Effect> effects, EffectNamesies effectToRemove) {
+        return effects.removeIf(effect -> effect.namesies() == effectToRemove);
+    }
+
+    public static boolean isActiveEffect(Object object) {
+        return !(object instanceof Effect) || ((Effect)object).isActive();
     }
 }

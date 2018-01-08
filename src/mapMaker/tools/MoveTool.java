@@ -30,8 +30,6 @@ class MoveTool extends Tool {
     }
 
     @Override
-    public void undo() {}
-
     public String toString() {
         return "Move";
     }

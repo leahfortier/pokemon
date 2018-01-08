@@ -47,11 +47,6 @@ public enum ConditionKey {
         return String.format(":%s:%s:", this.keyName, value);
     }
 
-    @FunctionalInterface
-    private interface ConditionParser {
-        boolean parseCondition(String value);
-    }
-
     static boolean matches(String keyValueString) {
         return keyValuePattern.matcher(keyValueString).matches();
     }
@@ -73,5 +68,10 @@ public enum ConditionKey {
 
         Global.error("No condition key with key name " + key + " found.");
         return false;
+    }
+
+    @FunctionalInterface
+    private interface ConditionParser {
+        boolean parseCondition(String value);
     }
 }

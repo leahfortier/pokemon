@@ -13,6 +13,9 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 
 public final class ImageUtils {
+    private static final float[] SILHOUETTE_SCALE = new float[] { 0, 0, 0, 255 };
+    private static final float[] SILHOUETTE_OFFSET = new float[] { 0, 0, 0, 0 };
+
     public static void drawTypeTiles(Graphics g, Type[] type, int rightX, int textY) {
         BufferedImage firstType = type[0].getImage();
 
@@ -103,9 +106,6 @@ public final class ImageUtils {
 
         return buffer;
     }
-
-    private static final float[] SILHOUETTE_SCALE = new float[] { 0, 0, 0, 255 };
-    private static final float[] SILHOUETTE_OFFSET = new float[] { 0, 0, 0, 0 };
 
     public static BufferedImage silhouette(BufferedImage image) {
         return colorImage(image, SILHOUETTE_SCALE, SILHOUETTE_OFFSET);

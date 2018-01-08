@@ -19,12 +19,6 @@ public enum VisualState {
         this.handler = handler;
     }
 
-    interface VisualStateHandler {
-        void draw(Graphics g, MapView mapView);
-        void update(int dt, MapView mapView);
-        default void set(MapView mapView) {}
-    }
-
     public void draw(Graphics g, MapView mapView) {
         this.handler.draw(g, mapView);
     }
@@ -43,5 +37,11 @@ public enum VisualState {
 
     public static boolean hasBattle() {
         return ((BattleState)BATTLE.handler).hasBattle();
+    }
+
+    interface VisualStateHandler {
+        void draw(Graphics g, MapView mapView);
+        void update(int dt, MapView mapView);
+        default void set(MapView mapView) {}
     }
 }

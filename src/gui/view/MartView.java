@@ -35,12 +35,9 @@ import java.util.Iterator;
 import java.util.List;
 
 class MartView extends View {
-    private List<ItemNamesies> forSaleItems;
-
     private static final Color BACKGROUND_COLOR = new Color(68, 123, 184);
 
     private static final int ITEMS_PER_PAGE = 10;
-
     private static final int NUM_BUTTONS = ITEMS_PER_PAGE + 6;
     private static final int RETURN = NUM_BUTTONS - 1;
     private static final int BUY = NUM_BUTTONS - 2;
@@ -72,6 +69,7 @@ class MartView extends View {
     private int selectedButton;
     private int itemAmount;
 
+    private List<ItemNamesies> forSaleItems;
     private ItemNamesies selectedItem;
 
     MartView() {

@@ -35,8 +35,69 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     public static final int NUM_POKEMON = 823;
     public static final int EVOLUTION_LEVEL_LEARNED = -1;
 
+    // All starters
+    private static final PokemonNamesies[] starterPokemon = new PokemonNamesies[] {
+            PokemonNamesies.BULBASAUR,
+            PokemonNamesies.CHARMANDER,
+            PokemonNamesies.SQUIRTLE,
+            PokemonNamesies.CHIKORITA,
+            PokemonNamesies.CYNDAQUIL,
+            PokemonNamesies.TOTODILE,
+            PokemonNamesies.TREECKO,
+            PokemonNamesies.TORCHIC,
+            PokemonNamesies.MUDKIP,
+            PokemonNamesies.TURTWIG,
+            PokemonNamesies.CHIMCHAR,
+            PokemonNamesies.PIPLUP,
+            PokemonNamesies.SNIVY,
+            PokemonNamesies.TEPIG,
+            PokemonNamesies.OSHAWOTT,
+            PokemonNamesies.CHESPIN,
+            PokemonNamesies.FENNEKIN,
+            PokemonNamesies.FROAKIE,
+            PokemonNamesies.ROWLET,
+            PokemonNamesies.LITTEN,
+            PokemonNamesies.POPPLIO
+    };
+
+    private static final PokemonNamesies[] babyPokemon = new PokemonNamesies[] {
+            PokemonNamesies.PICHU,
+            PokemonNamesies.CLEFFA,
+            PokemonNamesies.IGGLYBUFF,
+            PokemonNamesies.TOGEPI,
+            PokemonNamesies.TYROGUE,
+            PokemonNamesies.SMOOCHUM,
+            PokemonNamesies.ELEKID,
+            PokemonNamesies.MAGBY,
+            PokemonNamesies.AZURILL,
+            PokemonNamesies.WYNAUT,
+            PokemonNamesies.BUDEW,
+            PokemonNamesies.CHINGLING,
+            PokemonNamesies.BONSLY,
+            PokemonNamesies.MIME_JR,
+            PokemonNamesies.HAPPINY,
+            PokemonNamesies.MUNCHLAX,
+            PokemonNamesies.RIOLU,
+            PokemonNamesies.MANTYKE
+    };
+
+    private static final Map<Type, Set<PokemonNamesies>> pokemonTypeMap = new EnumMap<>(Type.class);
+
     private static Map<Integer, PokemonInfo> map;
     private static Set<PokemonNamesies> incenseBabies;
+
+    static {
+        for (Type type : Type.values()) {
+            pokemonTypeMap.put(type, EnumSet.noneOf(PokemonNamesies.class));
+        }
+
+        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
+            PokemonInfo pokemon = PokemonInfo.getPokemonInfo(i);
+            for (Type type : pokemon.getType()) {
+                pokemonTypeMap.get(type).add(pokemon.namesies());
+            }
+        }
+    }
 
     private final int number;
     private final String name;
@@ -223,6 +284,57 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         return getImageName(this, shiny, front, form);
     }
 
+    @Override
+    public int compareTo(PokemonInfo p) {
+        return number - p.number;
+    }
+
+    public List<AttackNamesies> getMoves(int level) {
+        return levelUpMoves.stream()
+                           .filter(entry -> entry.getLevel() == level)
+                           .map(LevelUpMove::getMove)
+                           .collect(Collectors.toList());
+    }
+
+    public boolean canBreed() {
+        return eggGroups[0] != EggGroup.UNDISCOVERED;
+    }
+
+    public PokemonNamesies getBaseEvolution() {
+        return getBaseEvolution(this);
+    }
+
+    public EggGroup[] getEggGroups() {
+        return eggGroups;
+    }
+
+    public boolean isIncenseBaby() {
+        if (incenseBabies == null) {
+            loadIncenseBabies();
+        }
+
+        return incenseBabies.contains(namesies);
+    }
+
+    // Returns what level the Pokemon will learn the given attack, returns null if they cannot learn it by level up
+    public Integer levelLearned(AttackNamesies attack) {
+        for (LevelUpMove entry : this.levelUpMoves) {
+            if (entry.getMove() == attack) {
+                return entry.getLevel();
+            }
+        }
+
+        return null;
+    }
+
+    public boolean canLearnMove(AttackNamesies attack) {
+        return levelLearned(attack) != null || canLearnByBreeding(attack);
+    }
+
+    public boolean canLearnByBreeding(AttackNamesies attack) {
+        return this.learnableMoves.contains(attack);
+    }
+
     private static String getImageName(PokemonInfo pokemonInfo, boolean shiny, boolean front, boolean form) {
         String imageName = pokemonInfo.getBaseImageName();
         if (form) {
@@ -244,10 +356,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         }
 
         return map.get(index);
-    }
-
-    public int compareTo(PokemonInfo p) {
-        return number - p.number;
     }
 
     // Create and load the Pokemon info map if it doesn't already exist
@@ -322,21 +430,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         return learnableMoves;
     }
 
-    public List<AttackNamesies> getMoves(int level) {
-        return levelUpMoves.stream()
-                           .filter(entry -> entry.getLevel() == level)
-                           .map(LevelUpMove::getMove)
-                           .collect(Collectors.toList());
-    }
-
-    public boolean canBreed() {
-        return eggGroups[0] != EggGroup.UNDISCOVERED;
-    }
-
-    public PokemonNamesies getBaseEvolution() {
-        return getBaseEvolution(this);
-    }
-
     // TODO: Instead of generating this on the fly should just be added to the text file and stored
     private static PokemonNamesies getBaseEvolution(PokemonInfo targetPokes) {
         if (targetPokes.namesies() == PokemonNamesies.MANAPHY) {
@@ -373,10 +466,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         }
     }
 
-    public EggGroup[] getEggGroups() {
-        return eggGroups;
-    }
-
     private static void loadIncenseBabies() {
         incenseBabies = new HashSet<>();
         for (ItemNamesies itemNamesies : ItemNamesies.values()) {
@@ -385,33 +474,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
                 incenseBabies.add(((IncenseItem)item).getBaby());
             }
         }
-    }
-
-    public boolean isIncenseBaby() {
-        if (incenseBabies == null) {
-            loadIncenseBabies();
-        }
-
-        return incenseBabies.contains(namesies);
-    }
-
-    // Returns what level the Pokemon will learn the given attack, returns null if they cannot learn it by level up
-    public Integer levelLearned(AttackNamesies attack) {
-        for (LevelUpMove entry : this.levelUpMoves) {
-            if (entry.getMove() == attack) {
-                return entry.getLevel();
-            }
-        }
-
-        return null;
-    }
-
-    public boolean canLearnMove(AttackNamesies attack) {
-        return levelLearned(attack) != null || canLearnByBreeding(attack);
-    }
-
-    public boolean canLearnByBreeding(AttackNamesies attack) {
-        return this.learnableMoves.contains(attack);
     }
 
     static PokemonNamesies getRandomStarterPokemon() {
@@ -424,67 +486,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 
     public static Set<PokemonNamesies> getAllBabyPokemon() {
         return Arrays.stream(babyPokemon).collect(Collectors.toSet());
-    }
-
-    // All starters
-    private static final PokemonNamesies[] starterPokemon = new PokemonNamesies[] {
-            PokemonNamesies.BULBASAUR,
-            PokemonNamesies.CHARMANDER,
-            PokemonNamesies.SQUIRTLE,
-            PokemonNamesies.CHIKORITA,
-            PokemonNamesies.CYNDAQUIL,
-            PokemonNamesies.TOTODILE,
-            PokemonNamesies.TREECKO,
-            PokemonNamesies.TORCHIC,
-            PokemonNamesies.MUDKIP,
-            PokemonNamesies.TURTWIG,
-            PokemonNamesies.CHIMCHAR,
-            PokemonNamesies.PIPLUP,
-            PokemonNamesies.SNIVY,
-            PokemonNamesies.TEPIG,
-            PokemonNamesies.OSHAWOTT,
-            PokemonNamesies.CHESPIN,
-            PokemonNamesies.FENNEKIN,
-            PokemonNamesies.FROAKIE,
-            PokemonNamesies.ROWLET,
-            PokemonNamesies.LITTEN,
-            PokemonNamesies.POPPLIO
-    };
-
-    private static final PokemonNamesies[] babyPokemon = new PokemonNamesies[] {
-            PokemonNamesies.PICHU,
-            PokemonNamesies.CLEFFA,
-            PokemonNamesies.IGGLYBUFF,
-            PokemonNamesies.TOGEPI,
-            PokemonNamesies.TYROGUE,
-            PokemonNamesies.SMOOCHUM,
-            PokemonNamesies.ELEKID,
-            PokemonNamesies.MAGBY,
-            PokemonNamesies.AZURILL,
-            PokemonNamesies.WYNAUT,
-            PokemonNamesies.BUDEW,
-            PokemonNamesies.CHINGLING,
-            PokemonNamesies.BONSLY,
-            PokemonNamesies.MIME_JR,
-            PokemonNamesies.HAPPINY,
-            PokemonNamesies.MUNCHLAX,
-            PokemonNamesies.RIOLU,
-            PokemonNamesies.MANTYKE
-    };
-
-    private static final Map<Type, Set<PokemonNamesies>> pokemonTypeMap = new EnumMap<>(Type.class);
-
-    static {
-        for (Type type : Type.values()) {
-            pokemonTypeMap.put(type, EnumSet.noneOf(PokemonNamesies.class));
-        }
-
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemon = PokemonInfo.getPokemonInfo(i);
-            for (Type type : pokemon.getType()) {
-                pokemonTypeMap.get(type).add(pokemon.namesies());
-            }
-        }
     }
 
     public static Set<PokemonNamesies> getAllTypedPokemon(Type type) {

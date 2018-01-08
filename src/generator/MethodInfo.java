@@ -11,18 +11,16 @@ import java.util.Map;
 import java.util.Scanner;
 
 class MethodInfo {
-
     private String header;
     private AccessModifier accessModifier;
-
+    
     private String begin;
     private String body;
     private String end;
-
     private String fullBody;
 
-    private final List<String> addInterfaces;
-    private final List<Map.Entry<String, String>> addMapFields;
+    private List<String> addInterfaces;
+    private List<Map.Entry<String, String>> addMapFields;
 
     private MethodInfo() {
         this.header = null;

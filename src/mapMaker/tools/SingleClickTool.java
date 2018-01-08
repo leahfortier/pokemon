@@ -98,6 +98,7 @@ class SingleClickTool extends Tool {
         }
     }
 
+    @Override
     public String toString() {
         return "Single";
     }

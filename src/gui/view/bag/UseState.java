@@ -28,8 +28,8 @@ enum UseState {
         state.deactivate(bagView);
     });
 
-    private final String displayName;
     final int buttonIndex;
+    private final String displayName;
     private final UseButton useButton;
 
     private boolean clicked;
@@ -50,11 +50,6 @@ enum UseState {
         }
 
         bagView.updateActiveButtons();
-    }
-
-    @FunctionalInterface
-    private interface UseButton {
-        void useButton(UseState state, BagView bagView, ActivePokemon p);
     }
 
     void draw(Graphics g, Button button) {
@@ -102,5 +97,10 @@ enum UseState {
         }
 
         view.updateActiveButtons();
+    }
+
+    @FunctionalInterface
+    private interface UseButton {
+        void useButton(UseState state, BagView bagView, ActivePokemon p);
     }
 }

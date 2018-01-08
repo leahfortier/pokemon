@@ -20,6 +20,37 @@ public enum Stat {
     ACCURACY(0, "Accuracy", "Accuracy", "Acc", 3, InBattle.ONLY, true),
     EVASION(6, "Evasion", "Evasion", "Eva", 3, InBattle.ONLY, false);
 
+    public static final int NUM_STATS = 6;
+    public static final int NUM_BATTLE_STATS = 7;
+    public static final int MAX_STAT_CHANGES = 6;
+    public static final int MAX_EVS = 510;
+    public static final int MAX_STAT_EVS = 255;
+    public static final int MAX_IV = 31;
+
+    public static final Stat[] STATS;
+    public static final Stat[] BATTLE_STATS;
+    static {
+        STATS = new Stat[NUM_STATS];
+        BATTLE_STATS = new Stat[NUM_BATTLE_STATS];
+        int statIndex = 0;
+        int battleStatIndex = 0;
+
+        for (Stat stat : Stat.values()) {
+            switch (stat.onlyBattle) {
+                case BOTH:
+                    STATS[statIndex++] = stat;
+                    BATTLE_STATS[battleStatIndex++] = stat;
+                    break;
+                case ONLY:
+                    BATTLE_STATS[battleStatIndex++] = stat;
+                    break;
+                case NEVER:
+                    STATS[statIndex++] = stat;
+                    break;
+            }
+        }
+    }
+
     private final int index;
     private final String name;
     private final String shortName;
@@ -27,15 +58,6 @@ public enum Stat {
     private final double modifier;
     private final InBattle onlyBattle;
     private final boolean user;
-
-    // Never -- The stat is not used in battle (HP)
-    // Both -- used in and out of battle
-    // Only -- only used in battle (Accuracy/Evasion)
-    private enum InBattle {
-        NEVER,
-        BOTH,
-        ONLY,
-    }
 
     Stat(int index, String name, String shortName, String shortestName, int modifier, InBattle onlyBattle, boolean user) {
         this.index = index;
@@ -65,38 +87,6 @@ public enum Stat {
 
     public boolean user() {
         return user;
-    }
-
-    public static final int NUM_STATS = 6;
-    public static final int NUM_BATTLE_STATS = 7;
-    public static final int MAX_STAT_CHANGES = 6;
-    public static final int MAX_EVS = 510;
-    public static final int MAX_STAT_EVS = 255;
-    public static final int MAX_IV = 31;
-
-    public static final Stat[] STATS;
-    public static final Stat[] BATTLE_STATS;
-
-    static {
-        STATS = new Stat[NUM_STATS];
-        BATTLE_STATS = new Stat[NUM_BATTLE_STATS];
-        int statIndex = 0;
-        int battleStatIndex = 0;
-
-        for (Stat stat : Stat.values()) {
-            switch (stat.onlyBattle) {
-                case BOTH:
-                    STATS[statIndex++] = stat;
-                    BATTLE_STATS[battleStatIndex++] = stat;
-                    break;
-                case ONLY:
-                    BATTLE_STATS[battleStatIndex++] = stat;
-                    break;
-                case NEVER:
-                    STATS[statIndex++] = stat;
-                    break;
-            }
-        }
     }
 
     // Generates a new stat
@@ -174,5 +164,14 @@ public enum Stat {
 
     public static int getRandomIv() {
         return RandomUtils.getRandomInt(MAX_IV + 1);
+    }
+
+    // Never -- The stat is not used in battle (HP)
+    // Both -- used in and out of battle
+    // Only -- only used in battle (Accuracy/Evasion)
+    private enum InBattle {
+        NEVER,
+        BOTH,
+        ONLY,
     }
 }

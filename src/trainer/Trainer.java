@@ -20,26 +20,26 @@ public abstract class Trainer implements Team, Serializable {
     public static final int MAX_POKEMON = 6;
 
     protected String name;
-    protected TrainerAction action;
     protected int cashMoney;
-
     protected List<ActivePokemon> team;
-    protected List<TeamEffect> effects;
+
+    private TrainerAction action;
+    private List<TeamEffect> effects;
+    private Bag bag;
+
     private int frontIndex;
     private int switchIndex;
 
 //    protected boolean isBeTryingToSwitchRunOrUseItem;
 //    protected boolean isBTTSROUI;
 
-    protected Bag bag;
-
     public Trainer(String name, int cashMoney) {
+        this.name = name;
+        this.cashMoney = cashMoney;
+
         team = new ArrayList<>();
         effects = new ArrayList<>();
         frontIndex = 0;
-
-        this.name = name;
-        this.cashMoney = cashMoney;
 
         bag = new Bag();
     }
@@ -248,12 +248,12 @@ public abstract class Trainer implements Team, Serializable {
         return false;
     }
 
-    public void setAction(TrainerAction a) {
-        action = a;
-    }
-
     public TrainerAction getAction() {
         return action;
+    }
+
+    public void setAction(TrainerAction a) {
+        action = a;
     }
 
     public void swapPokemon(int i, int j) {

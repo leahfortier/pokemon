@@ -13,13 +13,13 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 class WildPokemonDataPanel extends JPanel {
-    private PokemonProbabilityListener probabilityListener;
-
     private static final long serialVersionUID = -7408589859784929623L;
 
     private final JTextField pokemonTextField;
     private final JFormattedTextField probabilityFormattedTextField;
     private final JCheckBox selectedCheckBox;
+
+    private PokemonProbabilityListener probabilityListener;
 
     private int minLevel;
     private int maxLevel;

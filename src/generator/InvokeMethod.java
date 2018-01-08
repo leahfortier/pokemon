@@ -6,17 +6,15 @@ import util.StringUtils;
 import java.util.Scanner;
 
 abstract class InvokeMethod {
-
     private String methodName;
+
+    private InvokeMethod() {}
 
     protected abstract String getReturnType(InterfaceMethod interfaceMethod);
     protected abstract String getDefaultMethodName(InterfaceMethod interfaceMethod);
     protected abstract String getInnerLoop(InterfaceMethod interfaceMethod);
     protected abstract String getPostLoop(InterfaceMethod interfaceMethod);
-
     protected String getPreLoop() { return StringUtils.empty(); }
-
-    private InvokeMethod() {}
 
     private String getMethodName(final InterfaceMethod interfaceMethod) {
         if (StringUtils.isNullOrEmpty(this.methodName)) {

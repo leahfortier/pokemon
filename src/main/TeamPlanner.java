@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TeamPlanner {
-    private static Type[] types = Type.values();
-    private static double[] coverageValues = { 4, 2, .5, 0 };
+    private static final Type[] types = Type.values();
+    private static final double[] coverageValues = { 4, 2, .5, 0 };
 
     public static void main(String[] args) {
         new TeamPlanner();
@@ -188,66 +188,6 @@ public class TeamPlanner {
         }
     }
 
-    private class OffensiveCoverage {
-        int maxCoverage;
-        String[] coverageFrequencyList;
-        int[][] coverageCount;
-
-        OffensiveCoverage() {
-            coverageCount = new int[types.length][types.length];
-            maxCoverage = 0;
-        }
-
-        void printTableAndList() {
-            System.out.printf("%10s ", "");
-            for (Type type : types) {
-                System.out.printf("%-10s ", type.getName());
-            }
-            System.out.println();
-
-            for (int i = 0; i < coverageCount.length; i++) {
-                System.out.printf("%10s ", types[i].getName());
-                for (int j = 0; j < coverageCount[i].length; j++) {
-                    System.out.printf("%5d%5s ", coverageCount[i][j], "");
-                    this.addFrequency(coverageCount[i][j], types[i], types[j]);
-                }
-                System.out.println();
-            }
-
-            for (int i = 0; i < coverageFrequencyList.length; i++) {
-                System.out.println(i + ": " + coverageFrequencyList[i]);
-            }
-        }
-
-        void countCoverage(TeamMember member) {
-            for (int i = 0; i < coverageCount.length; i++) {
-                for (int j = 0; j < coverageCount[i].length; j++) {
-                    coverageCount[i][j] += member.coverageCount[i][j];
-                    maxCoverage = Math.max(maxCoverage, coverageCount[i][j]);
-                }
-            }
-        }
-
-        void addFrequency(int frequency, Type firstType, Type secondType) {
-            if (firstType == Type.NO_TYPE || secondType.getIndex() <= firstType.getIndex()) {
-                return;
-            }
-
-            if (coverageFrequencyList == null) {
-                coverageFrequencyList = new String[maxCoverage + 1];
-                for (int i = 0; i < coverageFrequencyList.length; i++) {
-                    coverageFrequencyList[i] = StringUtils.empty();
-                }
-            }
-
-            if (coverageFrequencyList[frequency].length() > 0) {
-                coverageFrequencyList[frequency] += ", ";
-            }
-
-            coverageFrequencyList[frequency] += firstType.getName() + (secondType == Type.NO_TYPE ? "" : "/" + secondType.getName());
-        }
-    }
-
     private static class AttackTypeCoverage {
         Type attackType;
         List<String> moves;
@@ -328,13 +268,6 @@ public class TeamPlanner {
             System.out.println();
         }
 
-        static void printTeam(List<TeamMember> team) {
-            StringAppender out = new StringAppender();
-            out.appendJoin(StringUtils.empty(), team);
-
-            FileIO.overwriteFile("teamPlanner.out", out.toString());
-        }
-
         public String toString() {
             StringAppender out = new StringAppender();
 
@@ -383,6 +316,73 @@ public class TeamPlanner {
             out.append("\n\n");
 
             return out.toString();
+        }
+
+        static void printTeam(List<TeamMember> team) {
+            StringAppender out = new StringAppender();
+            out.appendJoin(StringUtils.empty(), team);
+
+            FileIO.overwriteFile("teamPlanner.out", out.toString());
+        }
+    }
+
+    private class OffensiveCoverage {
+        int maxCoverage;
+        String[] coverageFrequencyList;
+        int[][] coverageCount;
+
+        OffensiveCoverage() {
+            coverageCount = new int[types.length][types.length];
+            maxCoverage = 0;
+        }
+
+        void printTableAndList() {
+            System.out.printf("%10s ", "");
+            for (Type type : types) {
+                System.out.printf("%-10s ", type.getName());
+            }
+            System.out.println();
+
+            for (int i = 0; i < coverageCount.length; i++) {
+                System.out.printf("%10s ", types[i].getName());
+                for (int j = 0; j < coverageCount[i].length; j++) {
+                    System.out.printf("%5d%5s ", coverageCount[i][j], "");
+                    this.addFrequency(coverageCount[i][j], types[i], types[j]);
+                }
+                System.out.println();
+            }
+
+            for (int i = 0; i < coverageFrequencyList.length; i++) {
+                System.out.println(i + ": " + coverageFrequencyList[i]);
+            }
+        }
+
+        void countCoverage(TeamMember member) {
+            for (int i = 0; i < coverageCount.length; i++) {
+                for (int j = 0; j < coverageCount[i].length; j++) {
+                    coverageCount[i][j] += member.coverageCount[i][j];
+                    maxCoverage = Math.max(maxCoverage, coverageCount[i][j]);
+                }
+            }
+        }
+
+        void addFrequency(int frequency, Type firstType, Type secondType) {
+            if (firstType == Type.NO_TYPE || secondType.getIndex() <= firstType.getIndex()) {
+                return;
+            }
+
+            if (coverageFrequencyList == null) {
+                coverageFrequencyList = new String[maxCoverage + 1];
+                for (int i = 0; i < coverageFrequencyList.length; i++) {
+                    coverageFrequencyList[i] = StringUtils.empty();
+                }
+            }
+
+            if (coverageFrequencyList[frequency].length() > 0) {
+                coverageFrequencyList[frequency] += ", ";
+            }
+
+            coverageFrequencyList[frequency] += firstType.getName() + (secondType == Type.NO_TYPE ? "" : "/" + secondType.getName());
         }
     }
 }

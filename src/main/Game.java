@@ -35,18 +35,11 @@ public class Game {
         return instance;
     }
 
-    public static GameData getData() {
-        return instance().data;
-    }
-
-    public static Player getPlayer() {
-        return instance().player;
-    }
-
-    private GameData data;
     private final Map<ViewMode, View> viewMap;
 
+    private GameData data;
     private Player player;
+
     private ViewMode currentViewMode;
     private ArrayDeque<View> currentView;
 
@@ -58,6 +51,10 @@ public class Game {
         currentView.push(viewMap.get(ViewMode.MAIN_MENU_VIEW));
 
         currentViewMode = ViewMode.MAIN_MENU_VIEW;
+    }
+
+    protected void setPlayer(Player player) {
+        this.player = player;
     }
 
     private void setupCharacter() {
@@ -158,15 +155,19 @@ public class Game {
         }
     }
 
-    protected static void newInstance(Game newGame) {
-        instance = newGame;
-    }
-
-    protected void setPlayer(Player player) {
-        this.player = player;
-    }
-
     protected void setGameData(GameData data) {
         this.data = data;
+    }
+
+    public static GameData getData() {
+        return instance().data;
+    }
+
+    public static Player getPlayer() {
+        return instance().player;
+    }
+
+    protected static void newInstance(Game newGame) {
+        instance = newGame;
     }
 }

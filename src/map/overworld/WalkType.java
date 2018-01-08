@@ -7,6 +7,7 @@ import map.PathDirection;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public enum WalkType {
     NOT_WALKABLE(0x000000, false),
@@ -27,7 +28,7 @@ public enum WalkType {
     }};
 
     private final int rgb;
-    private final PassableChecker passableChecker;
+    private final Predicate<Direction> passableChecker;
 
     WalkType(int rgb, boolean passable) {
         this(rgb, direction -> passable);
@@ -37,7 +38,7 @@ public enum WalkType {
         this(rgb, direction -> direction == passDirection);
     }
 
-    WalkType(int rgb, PassableChecker passableChecker) {
+    WalkType(int rgb, Predicate<Direction> passableChecker) {
         this.rgb = rgb;
         this.passableChecker = passableChecker;
     }
@@ -51,12 +52,7 @@ public enum WalkType {
     }
 
     public boolean isPassable(Direction direction) {
-        return this.passableChecker.isPassable(direction);
-    }
-
-    @FunctionalInterface
-    private interface PassableChecker {
-        boolean isPassable(Direction direction);
+        return this.passableChecker.test(direction);
     }
 
     // TODO: I don't think the stairs are even being used in the move map -- figure out how to do this better

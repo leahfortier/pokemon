@@ -6,6 +6,7 @@ import mapMaker.MapMaker;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import util.GUIUtils;
+import util.StringUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -19,23 +20,13 @@ import java.util.stream.Collectors;
 public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
     private static final long serialVersionUID = 6937677302812347311L;
 
-    private static final MapName EMPTY_MAP = new MapName("No Destination", "");
+    private static final MapName EMPTY_MAP = new MapName("No Destination", StringUtils.empty());
 
-    private JComboBox<MapName> destinationComboBox;
     private final JComboBox<String> entranceComboBox;
     private final JComboBox<PathDirection> directionComboBox;
     private final JCheckBox deathPortalCheckBox;
     private final JTextField entranceNameTextField;
-
-    private static Set<String> getMapEntrancesForMap(MapMaker mapMaker, MapName mapName) {
-        String mapFileName = mapMaker.getMapTextFileName(mapName);
-        MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapFileName);
-
-        return mapDataMatcher.getMapTransitions()
-                             .stream()
-                             .map(MapTransitionMatcher::getExitName)
-                             .collect(Collectors.toSet());
-    }
+    private JComboBox<MapName> destinationComboBox;
 
     public MapTransitionDialog(MapTransitionMatcher mapTransitionMatcher, MapMaker givenMapMaker) {
         super("Map Transition Editor");
@@ -123,5 +114,15 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
         entranceComboBox.setSelectedItem(matcher.getNextEntranceName());
         directionComboBox.setSelectedIndex(matcher.getDirection().ordinal());
         deathPortalCheckBox.setSelected(matcher.isDeathPortal());
+    }
+
+    private static Set<String> getMapEntrancesForMap(MapMaker mapMaker, MapName mapName) {
+        String mapFileName = mapMaker.getMapTextFileName(mapName);
+        MapDataMatcher mapDataMatcher = MapDataMatcher.matchArea(mapFileName);
+
+        return mapDataMatcher.getMapTransitions()
+                             .stream()
+                             .map(MapTransitionMatcher::getExitName)
+                             .collect(Collectors.toSet());
     }
 }

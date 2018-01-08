@@ -20,16 +20,16 @@ public class MessageState implements VisualStateHandler {
 
     private final DrawPanel statsPanel;
 
+    // Stat gains and corresponding new stat upgrades for leveling up/evolving
+    private int[] statGains;
+    private int[] newStats;
+
     public MessageState() {
         int height = 161;
         int y = BasicPanels.getMessagePanelY() - height;
         this.statsPanel = new DrawPanel(0, y, 273, height)
                 .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.DOWN)));
     }
-
-    // Stat gains and corresponding new stat upgrades for leveling up/evolving
-    private int[] statGains;
-    private int[] newStats;
 
     @Override
     public void set(BattleView view) {}

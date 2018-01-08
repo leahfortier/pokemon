@@ -23,7 +23,6 @@ import java.util.Set;
  */
 public class InputControl implements MouseListener, KeyListener, MouseMotionListener {
     private static final InputControl instance = new InputControl();
-
     public static InputControl instance() {
         return instance;
     }
@@ -31,11 +30,11 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
     public static final int INVALID_LOCK = -1;
 
     // Ignored during text capture (not added to captureText)
-    private static final Set<ControlKey> IGNORED_INPUT_KEYS = new HashSet<>(Arrays.asList(new ControlKey[] {
+    private static final Set<ControlKey> IGNORED_INPUT_KEYS = new HashSet<>(Arrays.asList(
             ControlKey.BACK,
             ControlKey.ENTER,
             ControlKey.ESC
-    }));
+    ));
 
     private Point mouseLocation;
     private boolean mouseDown;

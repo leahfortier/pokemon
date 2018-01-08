@@ -113,6 +113,8 @@ import battle.effect.generic.Weather.Sunny;
 import main.Global;
 import util.StringUtils;
 
+import java.util.function.Supplier;
+
 public enum EffectNamesies {
     // EVERYTHING BELOW IS GENERATED ###
     LEECH_SEED("LeechSeed", LeechSeed::new),
@@ -229,20 +231,15 @@ public enum EffectNamesies {
     // EVERYTHING ABOVE IS GENERATED ###
 
     private final String name;
-    private final EffectCreator effectCreator;
+    private final Supplier<Effect> effectCreator;
 
-    EffectNamesies(String name, EffectCreator effectCreator) {
+    EffectNamesies(String name, Supplier<Effect> effectCreator) {
         this.name = name;
         this.effectCreator = effectCreator;
     }
 
-    @FunctionalInterface
-    private interface EffectCreator {
-        Effect createEffect();
-    }
-
     public Effect getEffect() {
-        return this.effectCreator.createEffect();
+        return this.effectCreator.get();
     }
 
     public String getName() {

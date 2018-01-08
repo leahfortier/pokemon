@@ -42,16 +42,6 @@ public class DecisionTree {
         return best.move;
     }
 
-    private static class BestMove {
-        private final Move move;
-        private final long value;
-
-        BestMove(Move move, long value) {
-            this.move = move;
-            this.value = value;
-        }
-    }
-
     private boolean isBattleDone(Battle b) {
         return b.getOpponent().front().isFainted(b) || b.getPlayer().front().isFainted(b);
     }
@@ -125,5 +115,15 @@ public class DecisionTree {
         }
 
         return bestMove;
+    }
+
+    private static class BestMove {
+        private final Move move;
+        private final long value;
+
+        BestMove(Move move, long value) {
+            this.move = move;
+            this.value = value;
+        }
     }
 }

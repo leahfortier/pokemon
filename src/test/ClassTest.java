@@ -135,62 +135,12 @@ public class ClassTest extends BaseTest {
     private static List<Class<?>> classes;
 
     @BeforeClass
-    public static void setClasses() {
+    public static void setup() {
         try {
             classes = getClasses();
         } catch (ClassNotFoundException | IOException e) {
             Assert.fail(e.getMessage());
         }
-    }
-
-    // Scans all classes accessible from the context class loader which belong to the given package and subpackages.
-    private static List<Class<?>> getClasses() throws ClassNotFoundException, IOException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        Assert.assertNotNull(classLoader);
-
-        String packageName = "";
-        String path = packageName.replace('.', '/');
-        Enumeration<URL> resources = classLoader.getResources(path);
-
-        List<File> dirs = new ArrayList<>();
-        while (resources.hasMoreElements()) {
-            URL resource = resources.nextElement();
-            dirs.add(new File(resource.getFile()));
-        }
-
-        List<Class<?>> classes = new ArrayList<>();
-        for (File directory : dirs) {
-            classes.addAll(findClasses(directory, packageName));
-        }
-
-        return classes;
-    }
-
-    // Recursive method used to find all classes in a given directory and subdirs.
-    private static List<Class<?>> findClasses(File directory, String packageName) throws ClassNotFoundException {
-        List<Class<?>> classes = new ArrayList<>();
-        if (!directory.exists()) {
-            return classes;
-        }
-
-        File[] files = directory.listFiles();
-        Assert.assertNotNull(files);
-
-        String nextPackagePrefix = packageName;
-        if (!packageName.isEmpty()) {
-            nextPackagePrefix += ".";
-        }
-
-        for (File file : files) {
-            if (file.isDirectory()) {
-                Assert.assertFalse(file.getName().contains("."));
-                classes.addAll(findClasses(file, nextPackagePrefix + file.getName()));
-            } else if (file.getName().endsWith(".class")) {
-                classes.add(Class.forName(nextPackagePrefix + file.getName().substring(0, file.getName().length() - 6)));
-            }
-        }
-
-        return classes;
     }
 
     @Test
@@ -405,5 +355,55 @@ public class ClassTest extends BaseTest {
             }
         }
         return false;
+    }
+
+    // Scans all classes accessible from the context class loader which belong to the given package and subpackages.
+    private static List<Class<?>> getClasses() throws ClassNotFoundException, IOException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        Assert.assertNotNull(classLoader);
+
+        String packageName = "";
+        String path = packageName.replace('.', '/');
+        Enumeration<URL> resources = classLoader.getResources(path);
+
+        List<File> dirs = new ArrayList<>();
+        while (resources.hasMoreElements()) {
+            URL resource = resources.nextElement();
+            dirs.add(new File(resource.getFile()));
+        }
+
+        List<Class<?>> classes = new ArrayList<>();
+        for (File directory : dirs) {
+            classes.addAll(findClasses(directory, packageName));
+        }
+
+        return classes;
+    }
+
+    // Recursive method used to find all classes in a given directory and subdirs.
+    private static List<Class<?>> findClasses(File directory, String packageName) throws ClassNotFoundException {
+        List<Class<?>> classes = new ArrayList<>();
+        if (!directory.exists()) {
+            return classes;
+        }
+
+        File[] files = directory.listFiles();
+        Assert.assertNotNull(files);
+
+        String nextPackagePrefix = packageName;
+        if (!packageName.isEmpty()) {
+            nextPackagePrefix += ".";
+        }
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                Assert.assertFalse(file.getName().contains("."));
+                classes.addAll(findClasses(file, nextPackagePrefix + file.getName()));
+            } else if (file.getName().endsWith(".class")) {
+                classes.add(Class.forName(nextPackagePrefix + file.getName().substring(0, file.getName().length() - 6)));
+            }
+        }
+
+        return classes;
     }
 }

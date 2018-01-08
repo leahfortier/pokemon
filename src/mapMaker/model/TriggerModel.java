@@ -9,8 +9,31 @@ import javax.swing.ImageIcon;
 import java.awt.image.BufferedImage;
 
 public class TriggerModel extends MapMakerModel {
+    private final DefaultListModel<ImageIcon> triggerListModel;
 
-    private DefaultListModel<ImageIcon> triggerListModel;
+    public TriggerModel() {
+        super(-1);
+
+        this.triggerListModel = new DefaultListModel<>();
+    }
+
+    @Override
+    public void reload(MapMaker mapMaker) {
+        this.triggerListModel.clear();
+        for (TriggerModelType type : TriggerModelType.values()) {
+            this.triggerListModel.addElement(type.getImageIcon(mapMaker));
+        }
+    }
+
+    @Override
+    public DefaultListModel<ImageIcon> getListModel() {
+        return this.triggerListModel;
+    }
+
+    @Override
+    public boolean newTileButtonEnabled() {
+        return false;
+    }
 
     // TODO: I hate everything
     public static BufferedImage getMapExitImage(final MapMaker mapMaker) {
@@ -47,37 +70,11 @@ public class TriggerModel extends MapMakerModel {
         }
 
         public ImageIcon getImageIcon(final MapMaker mapMaker) {
-            return new ImageIcon(TileUtils.imageWithText(this.getImage(mapMaker), name), this.ordinal() + "");
+            return new ImageIcon(TileUtils.imageWithText(this.getImage(mapMaker), name), String.valueOf(this.ordinal()));
         }
 
         public static TriggerModelType getModelTypeFromIndex(int selectedIndex) {
             return TriggerModelType.values()[selectedIndex];
         }
-
-    }
-
-    public TriggerModel() {
-        super(-1);
-
-        this.triggerListModel = new DefaultListModel<>();
-    }
-
-    @Override
-    public void reload(MapMaker mapMaker) {
-        this.triggerListModel.clear();
-
-        for (TriggerModelType type : TriggerModelType.values()) {
-            this.triggerListModel.addElement(type.getImageIcon(mapMaker));
-        }
-    }
-
-    @Override
-    public DefaultListModel<ImageIcon> getListModel() {
-        return this.triggerListModel;
-    }
-
-    @Override
-    public boolean newTileButtonEnabled() {
-        return false;
     }
 }

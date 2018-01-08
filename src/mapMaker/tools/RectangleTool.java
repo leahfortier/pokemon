@@ -96,6 +96,7 @@ class RectangleTool extends Tool {
         }
     }
 
+    @Override
     public String toString() {
         return "Rectangle";
     }

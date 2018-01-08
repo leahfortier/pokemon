@@ -66,22 +66,22 @@ public class BagView extends View {
     private final DrawPanel itemsPanel;
     private final DrawPanel selectedPanel;
 
-    private int pageNum;
-    private int selectedButton;
-    private BagCategory selectedTab;
-    private MessageUpdate message;
-    private LearnMovePanel learnMovePanel;
+    private final Button[] buttons;
+    private final Button[] tabButtons;
+    private final Button[] partyButtons;
+    private final Button[] moveButtons;
+    private final Button[] itemButtons;
 
     BagState state;
     ItemNamesies selectedItem;
     ActivePokemon selectedPokemon;
 
-    private final Button[] buttons;
+    private int pageNum;
+    private int selectedButton;
 
-    private final Button[] tabButtons;
-    private final Button[] partyButtons;
-    private final Button[] moveButtons;
-    private final Button[] itemButtons;
+    private BagCategory selectedTab;
+    private MessageUpdate message;
+    private LearnMovePanel learnMovePanel;
 
     public BagView() {
         int tabHeight = 55;

@@ -215,6 +215,8 @@ import pokemon.ability.Ability.WonderGuard;
 import pokemon.ability.Ability.WonderSkin;
 import util.StringUtils;
 
+import java.util.function.Supplier;
+
 public enum AbilityNamesies {
     // EVERYTHING BELOW IS GENERATED ###
     NO_ABILITY("No Ability", NoAbility::new),
@@ -433,16 +435,11 @@ public enum AbilityNamesies {
     // EVERYTHING ABOVE IS GENERATED ###
 
     private final String name;
-    private final AbilityCreator abilityCreator;
+    private final Supplier<Ability> abilityCreator;
 
-    AbilityNamesies(String name, AbilityCreator abilityCreator) {
+    AbilityNamesies(String name, Supplier<Ability> abilityCreator) {
         this.name = name;
         this.abilityCreator = abilityCreator;
-    }
-
-    @FunctionalInterface
-    private interface AbilityCreator {
-        Ability createAbility();
     }
 
     public String getName() {
@@ -450,7 +447,7 @@ public enum AbilityNamesies {
     }
 
     public Ability getNewAbility() {
-        return this.abilityCreator.createAbility();
+        return this.abilityCreator.get();
     }
 
     public static AbilityNamesies getValueOf(String name) {

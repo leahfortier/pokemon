@@ -13,6 +13,10 @@ public class NewPokemonInfo implements Serializable {
         return this.newPokemon;
     }
 
+    public void setNewPokemon(ActivePokemon p) {
+        this.newPokemon = p;
+    }
+
     public Integer getNewPokemonBox() {
         return this.newPokemonBox;
     }
@@ -21,8 +25,8 @@ public class NewPokemonInfo implements Serializable {
         return this.isFirstNewPokemon;
     }
 
-    public void setNewPokemon(ActivePokemon p) {
-        this.newPokemon = p;
+    public void setFirstNewPokemon(boolean isFirstNewPokemon) {
+        this.isFirstNewPokemon = isFirstNewPokemon;
     }
 
     public void inTeam() {
@@ -31,9 +35,5 @@ public class NewPokemonInfo implements Serializable {
 
     public void inBox(int boxNum) {
         this.newPokemonBox = boxNum;
-    }
-
-    public void setFirstNewPokemon(boolean isFirstNewPokemon) {
-        this.isFirstNewPokemon = isFirstNewPokemon;
     }
 }

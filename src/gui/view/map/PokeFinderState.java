@@ -2,6 +2,7 @@ package gui.view.map;
 
 import draw.ImageUtils;
 import draw.TextUtils;
+import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.TileSet;
 import gui.view.map.VisualState.VisualStateHandler;
@@ -36,7 +37,7 @@ class PokeFinderState implements VisualStateHandler {
     private Set<PokemonNamesies> toRender;
 
     PokeFinderState() {
-        pokeFinderPanel = DrawPanel.fullGamePanel().withBorderColor(new Color(219, 9, 46)).withBorderPercentage(5);
+        pokeFinderPanel = BasicPanels.newFullGamePanel().withBorderColor(new Color(219, 9, 46)).withBorderPercentage(5);
     }
 
     @Override

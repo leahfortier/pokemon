@@ -43,6 +43,22 @@ public class Point implements Serializable {
         return inBounds(x, y, dimension);
     }
 
+    public int getIndex(int width) {
+        return getIndex(this.x, this.y, width);
+    }
+
+    public Dimension maximizeDimension(Dimension previousDimension) {
+        return new Dimension(
+                GeneralUtils.max(previousDimension.width, x + 1, previousDimension.width - x),
+                GeneralUtils.max(previousDimension.height, y + 1, previousDimension.height - y)
+        );
+    }
+
+    @Override
+    public String toString() {
+        return this.x + " " + this.y;
+    }
+
     public static boolean inBounds(int x, int y, Dimension dimension) {
         return inBounds(x, y, dimension.width, dimension.height);
     }
@@ -165,10 +181,6 @@ public class Point implements Serializable {
         return Math.abs(difference.x) + Math.abs(difference.y);
     }
 
-    public int getIndex(int width) {
-        return getIndex(this.x, this.y, width);
-    }
-
     public static int getIndex(int x, int y, int width) {
         return x + y*width;
     }
@@ -178,16 +190,5 @@ public class Point implements Serializable {
         int x = locationIndex - y*mapWidth;
 
         return new Point(x, y);
-    }
-
-    public Dimension maximizeDimension(Dimension previousDimension) {
-        return new Dimension(
-                GeneralUtils.max(previousDimension.width, x + 1, previousDimension.width - x),
-                GeneralUtils.max(previousDimension.height, y + 1, previousDimension.height - y)
-        );
-    }
-
-    public String toString() {
-        return this.x + " " + this.y;
     }
 }

@@ -167,23 +167,23 @@ public class MonteCarlo {
     }
 
     private static class Node {
+        private final boolean isOpp;
         private List<Move> path;
-        private boolean isOpp;
+
+        private int visitedCount;
+        private double totalWins;
 
         private double ucb;
         private double lcb;
 
-        int visitedCount;
-        double totalWins;
-
-        List<Node> children;
+        private List<Node> children;
 
         Node(List<Move> path, boolean isOpp) {
             this.path = path;
             this.isOpp = isOpp;
 
-            this.totalWins = 0;
             this.visitedCount = 0;
+            this.totalWins = 0;
 
             this.ucb = 1;
             this.lcb = 0;

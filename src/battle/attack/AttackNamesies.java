@@ -661,6 +661,7 @@ import util.StringUtils;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public enum AttackNamesies {
     // EVERYTHING BELOW IS GENERATED ###
@@ -1326,16 +1327,11 @@ public enum AttackNamesies {
     private static final Map<AttackNamesies, Attack> attackMap = new EnumMap<>(AttackNamesies.class);
 
     private final String name;
-    private final AttackCreator attackCreator;
+    private final Supplier<Attack> attackCreator;
 
-    AttackNamesies(String name, AttackCreator attackCreator) {
+    AttackNamesies(String name, Supplier<Attack> attackCreator) {
         this.name = name;
         this.attackCreator = attackCreator;
-    }
-
-    @FunctionalInterface
-    private interface AttackCreator {
-        Attack createAttack();
     }
 
     public String getName() {
@@ -1344,7 +1340,7 @@ public enum AttackNamesies {
 
     public Attack getAttack() {
         if (!attackMap.containsKey(this)) {
-            attackMap.put(this, this.attackCreator.createAttack());
+            attackMap.put(this, this.attackCreator.get());
         }
 
         return attackMap.get(this);

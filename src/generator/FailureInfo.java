@@ -1,5 +1,6 @@
 package generator;
 
+import main.Global;
 import util.StringAppender;
 import util.StringUtils;
 
@@ -8,51 +9,13 @@ import java.util.List;
 import java.util.Scanner;
 
 class FailureInfo {
-    private String header;
-    private List<FieldInfo> failureInfo;
-
-    private static class FieldInfo {
-        private final String fieldName;
-        private final boolean not;
-        private final boolean list;
-        private final String defaultValue;
-        private final String fieldType;
-        private final SplitScanner split;
-
-        public FieldInfo(SplitScanner split, String fieldName) {
-            this.split = split;
-            this.fieldName = fieldName;
-
-            boolean not = false;
-            boolean list = false;
-
-            String fieldType = split.next();
-            if (fieldType.equals("List")) {
-                list = true;
-                fieldType = split.next();
-            }
-
-            if (fieldType.equals("Not")) {
-                not = true;
-                fieldType = split.next();
-            }
-
-            String defaultValue = StringUtils.empty();
-            if (fieldType.equals("Default")) {
-                defaultValue = split.next();
-                fieldType = split.next();
-            }
-
-            this.not = not;
-            this.list = list;
-            this.defaultValue = defaultValue;
-            this.fieldType = fieldType;
-        }
-    }
+    private final String header;
+    private final List<FieldInfo> failureInfo;
 
     FailureInfo(Scanner in) {
-        failureInfo = new ArrayList<>();
+        this.failureInfo = new ArrayList<>();
 
+        String header = null;
         while (in.hasNext()) {
             String line = in.nextLine().trim();
             if (line.equals("*")) {
@@ -63,11 +26,20 @@ class FailureInfo {
             String fieldName = split.next();
 
             if (fieldName.equals("Header")) {
-                this.header = split.getRemaining();
+                if (header != null) {
+                    Global.error("Multiple headers found for failure info (" + header + ", " + line + ")");
+                }
+                header = split.getRemaining();
             } else {
                 this.failureInfo.add(new FieldInfo(split, fieldName));
             }
         }
+
+        if (header == null) {
+            Global.error("No header found for failure info.");
+        }
+
+        this.header = header;
     }
 
     String writeFailure(ClassFields fields, String superClass, InputFormatter inputFormatter) {
@@ -115,5 +87,44 @@ class FailureInfo {
         failure.appendPrefix("return !(").append(");");
 
         return new MethodInfo(this.header, failure.toString()).writeFunction();
+    }
+
+    private static class FieldInfo {
+        private final String fieldName;
+        private final boolean not;
+        private final boolean list;
+        private final String defaultValue;
+        private final String fieldType;
+        private final SplitScanner split;
+
+        public FieldInfo(SplitScanner split, String fieldName) {
+            this.split = split;
+            this.fieldName = fieldName;
+
+            boolean not = false;
+            boolean list = false;
+
+            String fieldType = split.next();
+            if (fieldType.equals("List")) {
+                list = true;
+                fieldType = split.next();
+            }
+
+            if (fieldType.equals("Not")) {
+                not = true;
+                fieldType = split.next();
+            }
+
+            String defaultValue = StringUtils.empty();
+            if (fieldType.equals("Default")) {
+                defaultValue = split.next();
+                fieldType = split.next();
+            }
+
+            this.not = not;
+            this.list = list;
+            this.defaultValue = defaultValue;
+            this.fieldType = fieldType;
+        }
     }
 }

@@ -26,11 +26,6 @@ public enum CastSource {
         this.sourceGetter = sourceGetter;
     }
 
-    @FunctionalInterface
-    private interface SourceGetter {
-        Object getSource(Battle b, ActivePokemon caster);
-    }
-
     public Object getSource(Battle b, ActivePokemon caster) {
         if (this.sourceGetter == null) {
             Global.error("Cannot get source for CastSource." + this.name() + ".");
@@ -57,5 +52,10 @@ public enum CastSource {
         } else {
             return null;
         }
+    }
+
+    @FunctionalInterface
+    private interface SourceGetter {
+        Object getSource(Battle b, ActivePokemon caster);
     }
 }

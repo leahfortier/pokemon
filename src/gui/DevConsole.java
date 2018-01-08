@@ -1,6 +1,5 @@
 package gui;
 
-import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import input.ControlKey;
@@ -214,11 +213,12 @@ public class DevConsole {
                     in.useDelimiter(",");
                     for (int i = 0; i < Move.MAX_MOVES; ++i) {
                         String s = in.next().trim();
-                        if (!Attack.isAttack(s)) {
+                        AttackNamesies attack = AttackNamesies.tryValueOf(s);
+                        if (attack == null) {
                             Global.info("Invalid move: " + s);
                             return;
                         } else {
-                            moves.add(new Move(AttackNamesies.getValueOf(s).getAttack()));
+                            moves.add(new Move(attack.getAttack()));
                         }
                     }
                     in.useDelimiter(oldDelimiter);

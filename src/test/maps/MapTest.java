@@ -32,7 +32,7 @@ public class MapTest extends BaseTest {
     private static List<TestMap> maps;
 
     @BeforeClass
-    public static void loadMaps() {
+    public static void setup() {
         maps = new ArrayList<>();
 
         File mapsDirectory = new File(Folder.MAPS);

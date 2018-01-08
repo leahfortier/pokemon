@@ -121,13 +121,13 @@ public class ActionMatcher {
         this.confirmFormat();
     }
 
+    public ChoiceActionMatcher getChoice() {
+        return this.choice;
+    }
+
     public void setChoice(ChoiceActionMatcher choice) {
         this.choice = choice;
 
         this.confirmFormat();
-    }
-
-    public ChoiceActionMatcher getChoice() {
-        return this.choice;
     }
 }

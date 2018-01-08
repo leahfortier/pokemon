@@ -10,6 +10,19 @@ public class ChoiceActionMatcher {
     private String question;
     private ChoiceMatcher[] choices;
 
+    public ChoiceActionMatcher(String question, ChoiceMatcher[] choices) {
+        this.question = question;
+        this.choices = choices;
+    }
+
+    public String getQuestion() {
+        return this.question;
+    }
+
+    public ChoiceMatcher[] getChoices() {
+        return this.choices;
+    }
+
     public static class ChoiceMatcher {
         private String text;
         private ActionMatcher[] actions;
@@ -35,18 +48,5 @@ public class ChoiceActionMatcher {
 
             return actions;
         }
-    }
-
-    public ChoiceActionMatcher(String question, ChoiceMatcher[] choices) {
-        this.question = question;
-        this.choices = choices;
-    }
-
-    public String getQuestion() {
-        return this.question;
-    }
-
-    public ChoiceMatcher[] getChoices() {
-        return this.choices;
     }
 }

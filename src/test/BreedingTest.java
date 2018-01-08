@@ -247,31 +247,6 @@ public class BreedingTest extends BaseTest {
         rules.verifyEnd(hasParent);
     }
 
-    private interface InheritanceRules {
-        default void updateParents(ActivePokemon mommy, ActivePokemon daddy) {}
-
-        default int numStatsToInherit() {
-            return 3;
-        }
-
-        default boolean assertTrueCondition(ActivePokemon mommy, ActivePokemon daddy, ActivePokemon baby) {
-            return true;
-        }
-
-        default void verifyEnd(boolean[][] hasParent) {
-            for (int i = 0; i < hasParent.length; i++) {
-                for (int j = 0; j < hasParent[i].length; j++) {
-                    final MatchType matchType = MatchType.values()[i];
-                    final String failMessage = matchType.frequency +
-                            " inherits " + matchType.source +
-                            " for stat " + Stat.getStat(j, false);
-
-                    Assert.assertTrue(failMessage, hasParent[i][j]);
-                }
-            }
-        }
-    }
-
     private static TestPokemon getParent(final PokemonNamesies pokemon, final Gender gender) {
         return TestPokemon.newPlayerPokemon(pokemon).withGender(gender);
     }
@@ -365,6 +340,31 @@ public class BreedingTest extends BaseTest {
         MatchType(final String frequency, final String source) {
             this.frequency = frequency;
             this.source = source;
+        }
+    }
+
+    private interface InheritanceRules {
+        default void updateParents(ActivePokemon mommy, ActivePokemon daddy) {}
+
+        default int numStatsToInherit() {
+            return 3;
+        }
+
+        default boolean assertTrueCondition(ActivePokemon mommy, ActivePokemon daddy, ActivePokemon baby) {
+            return true;
+        }
+
+        default void verifyEnd(boolean[][] hasParent) {
+            for (int i = 0; i < hasParent.length; i++) {
+                for (int j = 0; j < hasParent[i].length; j++) {
+                    final MatchType matchType = MatchType.values()[i];
+                    final String failMessage = matchType.frequency +
+                            " inherits " + matchType.source +
+                            " for stat " + Stat.getStat(j, false);
+
+                    Assert.assertTrue(failMessage, hasParent[i][j]);
+                }
+            }
         }
     }
 }

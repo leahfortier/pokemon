@@ -16,13 +16,6 @@ public class Messages {
 
     private static MessageState messageState = MessageState.MAPPITY_MAP;
 
-    public enum MessageState {
-        FIGHTY_FIGHT,       // Battle View
-        MAPPITY_MAP,        // Map View
-        BAGGIN_IT_UP,       // Bag View
-        SIMULATION_STATION  // AI Simulation
-    }
-
     private static ArrayDeque<MessageUpdate> getQueue() {
         return messageMap.get(messageState);
     }
@@ -73,5 +66,12 @@ public class Messages {
 
     public static void addToFront(MessageUpdate messageUpdate) {
         getQueue().addFirst(messageUpdate);
+    }
+
+    public enum MessageState {
+        FIGHTY_FIGHT,       // Battle View
+        MAPPITY_MAP,        // Map View
+        BAGGIN_IT_UP,       // Bag View
+        SIMULATION_STATION  // AI Simulation
     }
 }

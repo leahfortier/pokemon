@@ -8,16 +8,15 @@ import java.util.Random;
 
 // Util class with methods related to RNG
 public final class RandomUtils {
-
-    // Util class -- cannot be instantiated
-    private RandomUtils() {}
-
     private static final Random RANDOM = new Random();
     private static final long SEED = RANDOM.nextLong();
 
     static {
         RANDOM.setSeed(SEED);
     }
+
+    // Util class -- cannot be instantiated
+    private RandomUtils() {}
 
     public static long getSeed() {
         return SEED;

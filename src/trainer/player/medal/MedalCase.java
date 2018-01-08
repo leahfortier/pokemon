@@ -26,13 +26,13 @@ import java.util.Set;
  */
 public class MedalCase implements Serializable {
     private final Set<Medal> medalsEarned;
-    private ArrayDeque<Medal> medalsToShow;
-
     private final Map<MedalTheme, Integer> themeCounters;
+    private final Map<Type, Set<PokemonNamesies>> uncaughtPokemonTypeMap;
 
     // Start with all baby Pokemon and remove as we go, earn medal when empty
     private final Set<PokemonNamesies> babyPokemonUnhatched;
-    private Map<Type, Set<PokemonNamesies>> uncaughtPokemonTypeMap;
+
+    private final ArrayDeque<Medal> medalsToShow;
 
     public MedalCase() {
         this.medalsEarned = EnumSet.noneOf(Medal.class);
@@ -55,6 +55,7 @@ public class MedalCase implements Serializable {
         }
 
         this.babyPokemonUnhatched = PokemonInfo.getAllBabyPokemon();
+
         this.medalsToShow = new ArrayDeque<>();
     }
 

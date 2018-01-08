@@ -103,8 +103,6 @@ class TriggerTool extends Tool {
     }
 
     @Override
-    public void undo() {}
-
     public String toString() {
         return "Trigger";
     }

@@ -5,6 +5,8 @@ import gui.view.battle.BattleView;
 import gui.view.mainmenu.MainMenuView;
 import gui.view.map.MapView;
 
+import java.util.function.Supplier;
+
 public enum ViewMode {
     BAG_VIEW(BagView::new),
     BATTLE_VIEW(BattleView::new),
@@ -24,18 +26,13 @@ public enum ViewMode {
     TRADE_VIEW(TradeView::new),
     TRAINER_CARD_VIEW(TrainerCardView::new);
 
-    private final ViewCreator viewCreator;
+    private final Supplier<View> viewCreator;
 
-    ViewMode(ViewCreator viewCreator) {
+    ViewMode(Supplier<View> viewCreator) {
         this.viewCreator = viewCreator;
     }
 
-    @FunctionalInterface
-    private interface ViewCreator {
-        View createView();
-    }
-
     public View createView() {
-        return this.viewCreator.createView();
+        return this.viewCreator.get();
     }
 }

@@ -62,48 +62,27 @@ class PokedexView extends View {
     private final DrawPanel basicInfoPanel;
     private final DrawPanel moveDescriptionPanel;
 
-    private final Pokedex pokedex;
-
-    private PokemonInfo selected;
-    private int selectedButton;
-    private int pageNum;
-    private int movePageNum;
-    private TabInfo selectedTab;
-
-    private int numSeen;
-    private int numCaught;
-
     private final Button[] buttons;
-
     private final Button[][] pokemonButtons;
     private final Button leftButton;
     private final Button rightButton;
-
     private final Button[] tabButtons;
-
     private final Button[] moveButtons;
     private final Button movesLeftButton;
     private final Button movesRightButton;
-
     private final Button returnButton;
 
-    private enum TabInfo {
-        MAIN,
-        STATS,
-        LOCATION,
-        EVOLUTION,
-        MOVES;
+    private final Pokedex pokedex;
 
-        private final String label;
+    private int selectedButton;
+    private PokemonInfo selected;
+    private TabInfo selectedTab;
 
-        TabInfo() {
-            this.label = StringUtils.properCase(this.name().toLowerCase());
-        }
+    private int pageNum;
+    private int movePageNum;
 
-        public boolean shouldDrawInformationPanel(boolean caught) {
-            return this != MOVES || !caught;
-        }
-    }
+    private int numSeen;
+    private int numCaught;
 
     PokedexView() {
         pokedexPanel = new DrawPanel(40, 40, 350, 418)
@@ -648,5 +627,23 @@ class PokedexView extends View {
         numSeen = pokedex.numSeen();
         numCaught = pokedex.numCaught();
         changeTab(TabInfo.MAIN);
+    }
+
+    private enum TabInfo {
+        MAIN,
+        STATS,
+        LOCATION,
+        EVOLUTION,
+        MOVES;
+
+        private final String label;
+
+        TabInfo() {
+            this.label = StringUtils.properCase(this.name().toLowerCase());
+        }
+
+        public boolean shouldDrawInformationPanel(boolean caught) {
+            return this != MOVES || !caught;
+        }
     }
 }

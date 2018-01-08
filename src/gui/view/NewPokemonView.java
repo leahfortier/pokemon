@@ -51,19 +51,10 @@ class NewPokemonView extends View {
     private int selectedButton;
     private boolean displayInfo;
 
-    private enum State {
-        POKEDEX,
-        NICKNAME_QUESTION,
-        NICKNAME,
-        LOCATION,
-        PARTY_SELECTION,
-        END
-    }
-
     NewPokemonView() {
-        this.canvasPanel = DrawPanel.fullGamePanel()
-                                    .withTransparentCount(2)
-                                    .withBorderPercentage(0);
+        this.canvasPanel = BasicPanels.newFullGamePanel()
+                                      .withTransparentCount(2)
+                                      .withBorderPercentage(0);
 
         this.imagePanel = new DrawPanel(
                 Global.GAME_SIZE.width - BOX_SPACING - IMAGE_PANEL_LENGTH,
@@ -385,5 +376,14 @@ class NewPokemonView extends View {
         if (state == State.END) {
             Game.instance().popView();
         }
+    }
+
+    private enum State {
+        POKEDEX,
+        NICKNAME_QUESTION,
+        NICKNAME,
+        LOCATION,
+        PARTY_SELECTION,
+        END
     }
 }

@@ -15,6 +15,10 @@ public enum SpecialCharacter {
         this.replaceCharacter = replaceCharacter;
     }
 
+    public String getSpecialCharacter() {
+        return this.specialCharacter;
+    }
+
     // Converts special characters to a simple version (example: poke e -> e)
     public static String removeSpecialCharacters(String input) {
         for (SpecialCharacter specialCharacter : values()) {
@@ -46,9 +50,5 @@ public enum SpecialCharacter {
         }
 
         return input;
-    }
-
-    public String getSpecialCharacter() {
-        return this.specialCharacter;
     }
 }

@@ -23,18 +23,6 @@ public class TestPokemon extends ActivePokemon {
         super(pokemon, level, isWild, isPlayer);
     }
 
-    public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {
-        return new TestPokemon(pokemon, false, true);
-    }
-
-    public static TestPokemon newWildPokemon(final PokemonNamesies pokemon) {
-        return new TestPokemon(pokemon, true, false);
-    }
-
-    public static TestPokemon newTrainerPokemon(final PokemonNamesies pokemon) {
-        return new TestPokemon(pokemon, false, false);
-    }
-
     public TestPokemon withGender(Gender gender) {
         super.setGender(gender);
         return this;
@@ -73,5 +61,17 @@ public class TestPokemon extends ActivePokemon {
 
     public void assertHealthRatio(double fraction) {
         Assert.assertEquals((int)(Math.ceil(fraction*this.getMaxHP())), this.getHP());
+    }
+
+    public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {
+        return new TestPokemon(pokemon, false, true);
+    }
+
+    public static TestPokemon newWildPokemon(final PokemonNamesies pokemon) {
+        return new TestPokemon(pokemon, true, false);
+    }
+
+    public static TestPokemon newTrainerPokemon(final PokemonNamesies pokemon) {
+        return new TestPokemon(pokemon, false, false);
     }
 }

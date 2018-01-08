@@ -20,15 +20,15 @@ public class TradePokemonMatcher {
         return this.tradePokemon;
     }
 
-    public void setTeamIndex(int teamIndex) {
-        this.teamIndex = teamIndex;
-    }
-
     public boolean isCancelled() {
         return teamIndex == null;
     }
 
     public int getTeamIndex() {
         return this.teamIndex;
+    }
+
+    public void setTeamIndex(int teamIndex) {
+        this.teamIndex = teamIndex;
     }
 }

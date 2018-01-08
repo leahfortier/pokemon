@@ -65,126 +65,10 @@ public class Button {
         this.active = true;
     }
 
-    public static Button createExitButton(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition) {
-        return new Button(x, y, width, height, hoverAction, transition, () -> Game.instance().popView());
-    }
-
-    public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, int[] transitions) {
-        return createTabButton(tabIndex, panelX, panelY, panelWidth, tabHeight, numButtons, transitions, null);
-    }
-
-    public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, int[] transitions, ButtonPressAction buttonPressAction) {
-        int tabWidth = panelWidth/numButtons;
-        int remainder = panelWidth%numButtons;
-
-        return new Button(
-                panelX + tabIndex*tabWidth + Math.min(tabIndex, remainder),
-                panelY - tabHeight + DrawUtils.OUTLINE_SIZE,
-                tabWidth + (tabIndex < remainder ? 1 : 0),
-                tabHeight,
-                ButtonHoverAction.BOX,
-                transitions,
-                buttonPressAction
-        );
-    }
-
     public void draw(Graphics g) {
         if ((hover || forceHover) && active && hoverAction != null) {
             hoverAction.draw(g, this);
         }
-    }
-
-    // Works for all grid buttons
-    public static int[] getBasicTransitions(int currentIndex, int numRows, int numCols) {
-        int[] transitions = new int[Direction.values().length];
-        for (int i = 0; i < transitions.length; i++) {
-            Direction direction = Direction.values()[i];
-            transitions[i] = basicTransition(currentIndex, numRows, numCols, direction);
-        }
-
-        return transitions;
-    }
-
-    // Works for all grid buttons
-    public static int[] getBasicTransitions(int currentIndex, int numRows, int numCols, int startValue, int[] defaultTransitions) {
-        // Get the corresponding grid index
-        Point location = Point.getPointAtIndex(currentIndex, numCols);
-
-        int[] transitions = new int[Direction.values().length];
-        for (int i = 0; i < transitions.length; i++) {
-            Direction direction = Direction.values()[i];
-            Point newLocation = Point.add(location, direction.getDeltaPoint());
-            boolean inBounds = newLocation.inBounds(numCols, numRows);
-
-            // Default value specified and out of bounds -- use default value instead of wrapping
-            if (defaultTransitions != null
-                    && i < defaultTransitions.length
-                    && defaultTransitions[i] != -1
-                    && !inBounds) {
-                transitions[i] = defaultTransitions[i];
-            } else {
-                transitions[i] = basicTransition(currentIndex, numRows, numCols, direction) + startValue;
-            }
-        }
-
-        return transitions;
-    }
-
-    public static int basicTransition(int currentIndex, int numRows, int numCols, Direction direction) {
-        // Get the corresponding grid index
-        Point location = Point.getPointAtIndex(currentIndex, numCols);
-
-        // Move in the given direction
-        location = Point.move(location, direction);
-
-        // Keep in bounds of the grid
-        location = Point.modInBounds(location, numRows, numCols);
-
-        // Convert back to single dimension index
-        return location.getIndex(numCols);
-    }
-
-    public static int update(Button[] buttons, int selected) {
-        if (!buttons[selected].forceHover) {
-            setForceHover(buttons, selected);
-        }
-
-        Direction inputDirection = Direction.consumeInputDirection();
-        if (inputDirection != null) {
-            selected = Button.transition(buttons, selected, inputDirection);
-        }
-
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].update(i == selected);
-
-            if (buttons[i].hover) {
-                selected = i;
-                setForceHover(buttons, selected);
-            }
-        }
-
-        return selected;
-    }
-
-    private static void setForceHover(Button[] buttons, int selected) {
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].setForceHover(selected == i && buttons[i].isActive());
-        }
-    }
-
-    private static int transition(Button[] buttons, int index, Direction direction) {
-        int next = index;
-        do {
-            next = buttons[next].transition[direction.ordinal()];
-        } while (next != NO_TRANSITION && !buttons[next].isActive());
-
-        if (next == NO_TRANSITION) {
-            return index;
-        }
-
-        setForceHover(buttons, next);
-
-        return next;
     }
 
     public void update(boolean isSelected, ControlKey... optionalKeys) {
@@ -239,15 +123,15 @@ public class Button {
         return active;
     }
 
-    public void setForceHover(boolean set) {
-        forceHover = set;
-    }
-
     public void setActive(boolean set) {
         active = set;
         if (!active) {
             setForceHover(false);
         }
+    }
+
+    public void setForceHover(boolean set) {
+        forceHover = set;
     }
 
     public void greyOut(Graphics g, boolean totesBlacks) {
@@ -370,5 +254,121 @@ public class Button {
         g.translate(-x, -y);
 
         this.draw(g);
+    }
+
+    public static Button createExitButton(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition) {
+        return new Button(x, y, width, height, hoverAction, transition, () -> Game.instance().popView());
+    }
+
+    public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, int[] transitions) {
+        return createTabButton(tabIndex, panelX, panelY, panelWidth, tabHeight, numButtons, transitions, null);
+    }
+
+    public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, int[] transitions, ButtonPressAction buttonPressAction) {
+        int tabWidth = panelWidth/numButtons;
+        int remainder = panelWidth%numButtons;
+
+        return new Button(
+                panelX + tabIndex*tabWidth + Math.min(tabIndex, remainder),
+                panelY - tabHeight + DrawUtils.OUTLINE_SIZE,
+                tabWidth + (tabIndex < remainder ? 1 : 0),
+                tabHeight,
+                ButtonHoverAction.BOX,
+                transitions,
+                buttonPressAction
+        );
+    }
+
+    // Works for all grid buttons
+    public static int[] getBasicTransitions(int currentIndex, int numRows, int numCols) {
+        int[] transitions = new int[Direction.values().length];
+        for (int i = 0; i < transitions.length; i++) {
+            Direction direction = Direction.values()[i];
+            transitions[i] = basicTransition(currentIndex, numRows, numCols, direction);
+        }
+
+        return transitions;
+    }
+
+    // Works for all grid buttons
+    public static int[] getBasicTransitions(int currentIndex, int numRows, int numCols, int startValue, int[] defaultTransitions) {
+        // Get the corresponding grid index
+        Point location = Point.getPointAtIndex(currentIndex, numCols);
+
+        int[] transitions = new int[Direction.values().length];
+        for (int i = 0; i < transitions.length; i++) {
+            Direction direction = Direction.values()[i];
+            Point newLocation = Point.add(location, direction.getDeltaPoint());
+            boolean inBounds = newLocation.inBounds(numCols, numRows);
+
+            // Default value specified and out of bounds -- use default value instead of wrapping
+            if (defaultTransitions != null
+                    && i < defaultTransitions.length
+                    && defaultTransitions[i] != -1
+                    && !inBounds) {
+                transitions[i] = defaultTransitions[i];
+            } else {
+                transitions[i] = basicTransition(currentIndex, numRows, numCols, direction) + startValue;
+            }
+        }
+
+        return transitions;
+    }
+
+    public static int basicTransition(int currentIndex, int numRows, int numCols, Direction direction) {
+        // Get the corresponding grid index
+        Point location = Point.getPointAtIndex(currentIndex, numCols);
+
+        // Move in the given direction
+        location = Point.move(location, direction);
+
+        // Keep in bounds of the grid
+        location = Point.modInBounds(location, numRows, numCols);
+
+        // Convert back to single dimension index
+        return location.getIndex(numCols);
+    }
+
+    public static int update(Button[] buttons, int selected) {
+        if (!buttons[selected].forceHover) {
+            setForceHover(buttons, selected);
+        }
+
+        Direction inputDirection = Direction.consumeInputDirection();
+        if (inputDirection != null) {
+            selected = Button.transition(buttons, selected, inputDirection);
+        }
+
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].update(i == selected);
+
+            if (buttons[i].hover) {
+                selected = i;
+                setForceHover(buttons, selected);
+            }
+        }
+
+        return selected;
+    }
+
+    private static void setForceHover(Button[] buttons, int selected) {
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].setForceHover(selected == i && buttons[i].isActive());
+        }
+    }
+
+    private static int transition(Button[] buttons, int index, Direction direction) {
+        int next = index;
+        do {
+            next = buttons[next].transition[direction.ordinal()];
+        } while (next != NO_TRANSITION && !buttons[next].isActive());
+
+        if (next == NO_TRANSITION) {
+            return index;
+        }
+
+        setForceHover(buttons, next);
+
+        return next;
     }
 }

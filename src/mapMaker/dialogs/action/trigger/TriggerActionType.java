@@ -8,6 +8,8 @@ import sound.SoundTitle;
 import trainer.player.Badge;
 import trainer.player.medal.MedalTheme;
 
+import java.util.function.Supplier;
+
 public enum TriggerActionType {
     BADGE(TriggerType.BADGE, () -> new EnumTriggerPanel<>("Badge", Badge.values())),
     CHANGE_VIEW(TriggerType.CHANGE_VIEW, () -> new EnumTriggerPanel<>("View Mode", ViewMode.values())),
@@ -27,20 +29,15 @@ public enum TriggerActionType {
     USE_ITEM(TriggerType.USE_ITEM, ItemTriggerPanel::new);
 
     private final TriggerType triggerType;
-    private final TriggerPanelCreator panelCreator;
+    private final Supplier<TriggerContentsPanel> panelCreator;
 
-    TriggerActionType(TriggerType triggerType, TriggerPanelCreator panelCreator) {
+    TriggerActionType(TriggerType triggerType, Supplier<TriggerContentsPanel> panelCreator) {
         this.triggerType = triggerType;
         this.panelCreator = panelCreator;
     }
 
-    @FunctionalInterface
-    private interface TriggerPanelCreator {
-        TriggerContentsPanel createPanel();
-    }
-
     public TriggerContentsPanel createPanel() {
-        return this.panelCreator.createPanel();
+        return this.panelCreator.get();
     }
 
     public TriggerType getTriggerType() {

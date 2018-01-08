@@ -31,49 +31,9 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 class PokeGen {
-    private enum Generator {
-        ATTACK_GEN("Moves.txt", Folder.ATTACK, Attack.class, AttackNamesies.class),
-        POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.GENERIC_EFFECT, PokemonEffect.class, EffectNamesies.class),
-        TEAM_EFFECT_GEN("TeamEffects.txt", Folder.GENERIC_EFFECT, TeamEffect.class, EffectNamesies.class),
-        BATTLE_EFFECT_GEN("BattleEffects.txt", Folder.GENERIC_EFFECT, BattleEffect.class, EffectNamesies.class),
-        WEATHER_GEN("Weather.txt", Folder.GENERIC_EFFECT, Weather.class, EffectNamesies.class),
-        ABILITY_GEN("Abilities.txt", Folder.ABILITY, Ability.class, AbilityNamesies.class),
-        ITEM_GEN("Items.txt", Folder.ITEMS, Item.class, ItemNamesies.class);
-
-        private final String inputPath;
-        private final String outputPath;
-        private final String outputFolder;
-        private final String superClassName;
-        private final Class namesiesClass;
-
-        Generator(String inputFileName, String outputFolder, Class superClass, Class namesiesClass) {
-            this.inputPath = Folder.GENERATOR + inputFileName;
-            this.outputPath = outputFolder + superClass.getSimpleName() + ".java";
-            this.outputFolder = outputFolder;
-            this.superClassName = superClass.getSimpleName();
-            this.namesiesClass = namesiesClass;
-        }
-
-        public String getInputPath() {
-            return this.inputPath;
-        }
-
-        public String getOutputPath() {
-            return this.outputPath;
-        }
-
-        public String getOutputFolder() {
-            return this.outputFolder;
-        }
-
-        public String getSuperClassName() {
-            return this.superClassName;
-        }
-
-        public Class getNamesiesClass() {
-            return this.namesiesClass;
-        }
-    }
+    private static List<Entry<String, String>> constructorKeys;
+    private static List<Entry<String, String>> fieldKeys;
+    private static FailureInfo failureInfo;
 
     private final InputFormatter inputFormatter;
     private NamesiesGen namesiesGen;
@@ -182,59 +142,6 @@ class PokeGen {
 
         FileIO.overwriteFile(this.currentGen.getOutputPath(), out.toString());
     }
-
-    private static void readFileFormat(Scanner in) {
-        constructorKeys = new ArrayList<>();
-        fieldKeys = new ArrayList<>();
-        failureInfo = null;
-
-        while (in.hasNext()) {
-            String line = in.nextLine().trim();
-
-            // Ignore comments and white space
-            if (line.isEmpty() || line.startsWith("#")) {
-                continue;
-            }
-
-            if (line.equals("***")) {
-                return;
-            }
-
-            String formatType = line.replace(":", "");
-            if (formatType.equals("Failure")) {
-                failureInfo = new FailureInfo(in);
-                continue;
-            }
-
-            while (in.hasNextLine()) {
-                line = in.nextLine().trim();
-                if (line.equals("*")) {
-                    break;
-                }
-
-                String[] split = line.split(" ", 2);
-                String key = split[0].trim();
-                String value = split[1].trim();
-
-                Entry<String, String> entry = new SimpleEntry<>(key, value);
-
-                switch (formatType) {
-                    case "Constructor":
-                        constructorKeys.add(entry);
-                        break;
-                    case "Fields":
-                        fieldKeys.add(entry);
-                        break;
-                    default:
-                        Global.error("Invalid format type " + formatType);
-                }
-            }
-        }
-    }
-
-    private static List<Entry<String, String>> constructorKeys;
-    private static List<Entry<String, String>> fieldKeys;
-    private static FailureInfo failureInfo;
 
     private String getAdditionalMethods(ClassFields fields, List<String> interfaces) {
 
@@ -368,5 +275,98 @@ class PokeGen {
                 constructor.toString(),
                 AccessModifier.PACKAGE_PRIVATE
         ).writeFunction();
+    }
+
+    private static void readFileFormat(Scanner in) {
+        constructorKeys = new ArrayList<>();
+        fieldKeys = new ArrayList<>();
+        failureInfo = null;
+
+        while (in.hasNext()) {
+            String line = in.nextLine().trim();
+
+            // Ignore comments and white space
+            if (line.isEmpty() || line.startsWith("#")) {
+                continue;
+            }
+
+            if (line.equals("***")) {
+                return;
+            }
+
+            String formatType = line.replace(":", "");
+            if (formatType.equals("Failure")) {
+                failureInfo = new FailureInfo(in);
+                continue;
+            }
+
+            while (in.hasNextLine()) {
+                line = in.nextLine().trim();
+                if (line.equals("*")) {
+                    break;
+                }
+
+                String[] split = line.split(" ", 2);
+                String key = split[0].trim();
+                String value = split[1].trim();
+
+                Entry<String, String> entry = new SimpleEntry<>(key, value);
+
+                switch (formatType) {
+                    case "Constructor":
+                        constructorKeys.add(entry);
+                        break;
+                    case "Fields":
+                        fieldKeys.add(entry);
+                        break;
+                    default:
+                        Global.error("Invalid format type " + formatType);
+                }
+            }
+        }
+    }
+
+    private enum Generator {
+        ATTACK_GEN("Moves.txt", Folder.ATTACK, Attack.class, AttackNamesies.class),
+        POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.GENERIC_EFFECT, PokemonEffect.class, EffectNamesies.class),
+        TEAM_EFFECT_GEN("TeamEffects.txt", Folder.GENERIC_EFFECT, TeamEffect.class, EffectNamesies.class),
+        BATTLE_EFFECT_GEN("BattleEffects.txt", Folder.GENERIC_EFFECT, BattleEffect.class, EffectNamesies.class),
+        WEATHER_GEN("Weather.txt", Folder.GENERIC_EFFECT, Weather.class, EffectNamesies.class),
+        ABILITY_GEN("Abilities.txt", Folder.ABILITY, Ability.class, AbilityNamesies.class),
+        ITEM_GEN("Items.txt", Folder.ITEMS, Item.class, ItemNamesies.class);
+
+        private final String inputPath;
+        private final String outputPath;
+        private final String outputFolder;
+        private final String superClassName;
+        private final Class namesiesClass;
+
+        Generator(String inputFileName, String outputFolder, Class superClass, Class namesiesClass) {
+            this.inputPath = Folder.GENERATOR + inputFileName;
+            this.outputPath = outputFolder + superClass.getSimpleName() + ".java";
+            this.outputFolder = outputFolder;
+            this.superClassName = superClass.getSimpleName();
+            this.namesiesClass = namesiesClass;
+        }
+
+        public String getInputPath() {
+            return this.inputPath;
+        }
+
+        public String getOutputPath() {
+            return this.outputPath;
+        }
+
+        public String getOutputFolder() {
+            return this.outputFolder;
+        }
+
+        public String getSuperClassName() {
+            return this.superClassName;
+        }
+
+        public Class getNamesiesClass() {
+            return this.namesiesClass;
+        }
     }
 }

@@ -176,8 +176,6 @@ public class SelectTool extends Tool {
     }
 
     @Override
-    public void undo() {}
-
     public String toString() {
         return "Select";
     }

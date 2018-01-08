@@ -17,23 +17,6 @@ import java.awt.Graphics;
 
 public class MenuState implements VisualStateHandler {
 
-    private enum MenuChoice {
-        FIGHT(new Color(220, 20, 20)),
-        SWITCH(new Color(35, 120, 220)),
-        BAG(new Color(120, 200, 80)),
-        RUN(new Color(255, 215, 0));
-
-        private final Color buttonColor;
-
-        MenuChoice(Color buttonColor) {
-            this.buttonColor = buttonColor;
-        }
-
-        public String getButtonLabel() {
-            return this.name();
-        }
-    }
-
     private Button[] menuButtons;
 
     @Override
@@ -102,5 +85,22 @@ public class MenuState implements VisualStateHandler {
 
     private Button getButton(MenuChoice menuChoice) {
         return this.menuButtons[menuChoice.ordinal()];
+    }
+
+    private enum MenuChoice {
+        FIGHT(new Color(220, 20, 20)),
+        SWITCH(new Color(35, 120, 220)),
+        BAG(new Color(120, 200, 80)),
+        RUN(new Color(255, 215, 0));
+
+        private final Color buttonColor;
+
+        MenuChoice(Color buttonColor) {
+            this.buttonColor = buttonColor;
+        }
+
+        public String getButtonLabel() {
+            return this.name();
+        }
     }
 }

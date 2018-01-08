@@ -18,18 +18,6 @@ enum VisualState {
         this.visualStateHandler = visualStateHandler;
     }
 
-    interface VisualStateHandler {
-        void draw(Graphics g, MainMenuView view);
-        void update(MainMenuView view);
-        Button[] getButtons();
-
-        default void set() {}
-
-        default SoundTitle getTunes() {
-            return SoundTitle.MAIN_MENU_TUNE;
-        }
-    }
-
     public void set() {
         this.visualStateHandler.set();
     }
@@ -48,5 +36,17 @@ enum VisualState {
 
     public SoundTitle getTunes() {
         return this.visualStateHandler.getTunes();
+    }
+
+    interface VisualStateHandler {
+        void draw(Graphics g, MainMenuView view);
+        void update(MainMenuView view);
+        Button[] getButtons();
+
+        default void set() {}
+
+        default SoundTitle getTunes() {
+            return SoundTitle.MAIN_MENU_TUNE;
+        }
     }
 }

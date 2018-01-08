@@ -7,8 +7,9 @@ import javax.swing.DefaultListModel;
 import java.awt.Graphics;
 
 public abstract class Tool {
-    final MapMaker mapMaker;
     public static Tool lastUsedTool;
+
+    final MapMaker mapMaker;
 
     Tool(final MapMaker mapMaker) {
         this.mapMaker = mapMaker;
@@ -16,24 +17,18 @@ public abstract class Tool {
 
     // Can be overridden as necessary by subclasses
     public void click(Point clickLocation) {}
-
     public void released(Point releasedLocation) {}
-
     public void pressed(Point pressedLocation) {}
-
     public void drag(Point dragLocation) {}
-
     public void draw(Graphics g) {}
-
     public void reset() {}
+    public void undo() {}
 
     public static void undoLastTool() {
         if (lastUsedTool != null) {
             lastUsedTool.undo();
         }
     }
-
-    public abstract void undo();
 
     public static DefaultListModel<Tool> getToolListModel(MapMaker mapMaker) {
         DefaultListModel<Tool> toolListModel = new DefaultListModel<>();

@@ -16,12 +16,12 @@ public enum ActionType {
         this.actionDataCreator = actionDataCreator;
     }
 
+    public ActionPanel createActionData(ActionDialog actionDialog) {
+        return this.actionDataCreator.createData(actionDialog);
+    }
+
     @FunctionalInterface
     private interface ActionDataCreator {
         ActionPanel createData(ActionDialog actionDialog);
-    }
-
-    public ActionPanel createActionData(ActionDialog actionDialog) {
-        return this.actionDataCreator.createData(actionDialog);
     }
 }

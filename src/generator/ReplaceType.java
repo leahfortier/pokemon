@@ -18,6 +18,13 @@ public enum ReplaceType {
         this.inputReplacer = inputReplacer;
     }
 
+    public String replaceBody(String body, String original, String remaining, int parameterIndex, int numParameters) {
+        String suffix = this.suffixGetter.getSuffix(parameterIndex, numParameters);
+        String newValue = this.inputReplacer.replaceInput(original, remaining);
+
+        return body.replace(String.format("{%d%s}", parameterIndex, suffix), newValue);
+    }
+
     @FunctionalInterface
     private interface SuffixGetter {
         String getSuffix(int index, int size);
@@ -26,12 +33,5 @@ public enum ReplaceType {
     @FunctionalInterface
     private interface InputReplacer {
         String replaceInput(String original, String remaining);
-    }
-
-    public String replaceBody(String body, String original, String remaining, int parameterIndex, int numParameters) {
-        String suffix = this.suffixGetter.getSuffix(parameterIndex, numParameters);
-        String newValue = this.inputReplacer.replaceInput(original, remaining);
-
-        return body.replace(String.format("{%d%s}", parameterIndex, suffix), newValue);
     }
 }

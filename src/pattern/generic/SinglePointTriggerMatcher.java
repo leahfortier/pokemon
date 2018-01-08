@@ -15,6 +15,15 @@ public abstract class SinglePointTriggerMatcher extends LocationTriggerMatcher {
     }
 
     @Override
+    public void setLocation(LocationTriggerMatcher oldMatcher) {
+        if (oldMatcher instanceof SinglePointTriggerMatcher) {
+            this.setLocation(((SinglePointTriggerMatcher)oldMatcher).location);
+        } else {
+            Global.error("Cannot convert multi point matcher to single point matcher.");
+        }
+    }
+
+    @Override
     public void addPoint(Point point) {
         this.setLocation(point);
     }
@@ -27,15 +36,6 @@ public abstract class SinglePointTriggerMatcher extends LocationTriggerMatcher {
     @Override
     public void addDelta(Point delta) {
         this.location = Point.add(this.location, delta);
-    }
-
-    @Override
-    public void setLocation(LocationTriggerMatcher oldMatcher) {
-        if (oldMatcher instanceof SinglePointTriggerMatcher) {
-            this.setLocation(((SinglePointTriggerMatcher)oldMatcher).location);
-        } else {
-            Global.error("Cannot convert multi point matcher to single point matcher.");
-        }
     }
 
     @Override

@@ -61,26 +61,6 @@ public class PokemonInfoTest extends BaseTest {
         }
     }
 
-    private static class PokemonMovePair {
-        private final PokemonNamesies pokemon;
-        private final AttackNamesies attack;
-
-        PokemonMovePair(PokemonNamesies pokemon, AttackNamesies attack) {
-            this.pokemon = pokemon;
-            this.attack = attack;
-        }
-
-        @Override
-        public boolean equals(Object other) {
-            if (other instanceof PokemonMovePair) {
-                PokemonMovePair otherPair = (PokemonMovePair)other;
-                return this.pokemon == otherPair.pokemon && this.attack == otherPair.attack;
-            } else {
-                return false;
-            }
-        }
-    }
-
     @Test
     public void duplicateLevelUpTest() {
         List<PokemonMovePair> defaultLevelExceptions = Arrays.asList(
@@ -309,6 +289,26 @@ public class PokemonInfoTest extends BaseTest {
         Assert.assertTrue(diffIvs);
         for (int i = 0; i < hasIv.length; i++) {
             Assert.assertTrue(i + "", hasIv[i]);
+        }
+    }
+
+    private static class PokemonMovePair {
+        private final PokemonNamesies pokemon;
+        private final AttackNamesies attack;
+
+        PokemonMovePair(PokemonNamesies pokemon, AttackNamesies attack) {
+            this.pokemon = pokemon;
+            this.attack = attack;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other instanceof PokemonMovePair) {
+                PokemonMovePair otherPair = (PokemonMovePair)other;
+                return this.pokemon == otherPair.pokemon && this.attack == otherPair.attack;
+            } else {
+                return false;
+            }
         }
     }
 }

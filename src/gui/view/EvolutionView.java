@@ -48,18 +48,10 @@ class EvolutionView extends View {
     private State state;
     private ArrayDeque<MessageUpdate> messages;
 
-    private enum State {
-        START,
-        EVOLVE,
-        CANCELED,
-        LEARN_MOVE,
-        END
-    }
-
     EvolutionView() {
-        this.canvasPanel = DrawPanel.fullGamePanel()
-                                    .withTransparentCount(2)
-                                    .withBorderPercentage(0);
+        this.canvasPanel = BasicPanels.newFullGamePanel()
+                                      .withTransparentCount(2)
+                                      .withBorderPercentage(0);
 
         this.statsPanel = new DrawPanel(0, 280, 273, 161).withBlackOutline();
     }
@@ -272,5 +264,13 @@ class EvolutionView extends View {
 
         // TODO: Save current sound for when transitioning to the bag view.
         //Global.soundPlayer.playMusic(SoundTitle.EVOLUTION_VIEW);
+    }
+
+    private enum State {
+        START,
+        EVOLVE,
+        CANCELED,
+        LEARN_MOVE,
+        END
     }
 }

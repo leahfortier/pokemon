@@ -19,24 +19,6 @@ import java.util.concurrent.TimeUnit;
 public class GeneralTest extends BaseTest {
     private static final double DELTA = 1e-15;
 
-    public static void assertEquals(String message, double expected, double actual) {
-        Assert.assertEquals(message, expected, actual, DELTA);
-    }
-
-    public static void assertEquals(double expected, double actual) {
-        Assert.assertEquals(expected, actual, DELTA);
-    }
-
-    public static void semiAssertTrue(String message, boolean fullAssert, boolean assertion) {
-        if (!assertion) {
-            if (fullAssert) {
-                Assert.fail(message);
-            } else {
-                System.err.println(message);
-            }
-        }
-    }
-
     @Test
     public void properCaseTest() {
         Assert.assertEquals(StringUtils.properCase("red"), "Red");
@@ -215,6 +197,24 @@ public class GeneralTest extends BaseTest {
             // Overwrite file should handle tab replacement
             FileIO.overwriteFile(file, FileIO.readEntireFile(file));
             Assert.assertFalse(FileIO.readEntireFile(file).contains("\t"));
+        }
+    }
+
+    public static void assertEquals(String message, double expected, double actual) {
+        Assert.assertEquals(message, expected, actual, DELTA);
+    }
+
+    public static void assertEquals(double expected, double actual) {
+        Assert.assertEquals(expected, actual, DELTA);
+    }
+
+    public static void semiAssertTrue(String message, boolean fullAssert, boolean assertion) {
+        if (!assertion) {
+            if (fullAssert) {
+                Assert.fail(message);
+            } else {
+                System.err.println(message);
+            }
         }
     }
 }

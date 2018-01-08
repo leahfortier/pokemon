@@ -18,12 +18,11 @@ public class TileSet {
     public static final BufferedImage ITEM_POKEBALL = FileIO.readImage(Folder.IMAGES + "ItemPokeball.png");
     public static final BufferedImage TM_ITEM_POKEBALL = FileIO.readImage(Folder.IMAGES + "TMItemPokeball.png");
     public static final BufferedImage STAR_SPRITE = FileIO.readImage(Folder.IMAGES + "starsies.png");
-
     protected static final BufferedImage IMAGE_NOT_FOUND = FileIO.readImage(Folder.IMAGES + "imageNotFound.png");
 
+    protected String folderPath;
     private Map<String, BufferedImage> map;
     private float scale;
-    protected String folderPath;
 
     public TileSet(String folderPath) {
         this(folderPath, 1.0f);
@@ -34,11 +33,6 @@ public class TileSet {
         this.scale = scale;
 
         this.map = new HashMap<>();
-    }
-
-    // TODO: I still have no idea what the >> 24 shit means
-    public static boolean isValidMapTile(int val) {
-        return val != INVALID_RGB && (val >> 24) != 0;
     }
 
     public BufferedImage getTile(String imageName) {
@@ -54,5 +48,10 @@ public class TileSet {
         }
 
         return map.get(imageName);
+    }
+
+    // TODO: I still have no idea what the >> 24 shit means
+    public static boolean isValidMapTile(int val) {
+        return val != INVALID_RGB && (val >> 24) != 0;
     }
 }

@@ -16,6 +16,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class InputFormatter {
+    private List<Entry<String, MethodInfo>> overrideMethods;
 
     protected void validate(ClassFields fields) {}
 
@@ -47,8 +48,6 @@ public class InputFormatter {
 
         return body;
     }
-
-    private List<Entry<String, MethodInfo>> overrideMethods;
 
     List<Entry<String, MethodInfo>> getOverrideMethods() {
         if (this.overrideMethods == null) {

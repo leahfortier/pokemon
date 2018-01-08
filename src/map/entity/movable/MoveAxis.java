@@ -29,12 +29,12 @@ public enum MoveAxis {
         this.checker = checker;
     }
 
+    public boolean checkAxis(Point thisLocation, Direction thisDirection, Point otherLocation) {
+        return this.checker.checkAxis(thisLocation, thisDirection, otherLocation);
+    }
+
     @FunctionalInterface
     private interface AxisChecker {
         boolean checkAxis(Point thisLocation, Direction thisDirection, Point otherLocation);
-    }
-
-    public boolean checkAxis(Point thisLocation, Direction thisDirection, Point otherLocation) {
-        return this.checker.checkAxis(thisLocation, thisDirection, otherLocation);
     }
 }

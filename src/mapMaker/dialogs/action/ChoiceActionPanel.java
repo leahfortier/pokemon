@@ -20,24 +20,6 @@ class ChoiceActionPanel extends ActionPanel {
     private final List<Choice> choices;
     private final JButton newChoiceButton;
 
-    private class Choice {
-        private final JTextField textField;
-        private final List<ActionMatcher> actions;
-        private final JButton newActionButton;
-
-        public Choice() {
-            this.textField = GUIUtils.createTextField();
-            this.actions = new ArrayList<>();
-            this.newActionButton = GUIUtils.createButton(
-                    "New Action",
-                    event -> {
-                        this.actions.add(null);
-                        render();
-                    }
-            );
-        }
-    }
-
     ChoiceActionPanel(ActionDialog parent) {
         this.parent = parent;
 
@@ -134,5 +116,23 @@ class ChoiceActionPanel extends ActionPanel {
         GUIUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
 
         parent.render();
+    }
+
+    private class Choice {
+        private final JTextField textField;
+        private final List<ActionMatcher> actions;
+        private final JButton newActionButton;
+
+        public Choice() {
+            this.textField = GUIUtils.createTextField();
+            this.actions = new ArrayList<>();
+            this.newActionButton = GUIUtils.createButton(
+                    "New Action",
+                    event -> {
+                        this.actions.add(null);
+                        render();
+                    }
+            );
+        }
     }
 }

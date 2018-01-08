@@ -1740,7 +1740,7 @@ Quick Ball:
 Repeat Ball:
 	Desc: A somewhat different Pok\u00e9 Ball that works especially well on Pok\u00e9mon species that were previously caught.
 	Price: 1000
-	CatchRateCondition: 3 b.getDaRealPlayer().getPokedex().isCaught(o)
+	CatchRateCondition: 3 Game.getPlayer().getPokedex().isCaught(o)
 *
 Safari Ball:
 	Desc: A special Pok\u00e9 Ball that is used only in the Safari Zone. It is decorated in a camouflage pattern.

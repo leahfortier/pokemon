@@ -20,12 +20,12 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class MainMenuView extends View {
-    private static final BufferedImage MAIN_LOGO = FileIO.readImage(Folder.IMAGES + "MainLogo.png");
-
-    private static final int BUTTON_WIDTH = 400;
-    static final int NUM_MAIN_BUTTONS = 4;
-
     static final int[] bgt = new int[] { 800, 1800, 1000, 2400, 1000 };
+
+    static final int NUM_MAIN_BUTTONS = 4;
+    private static final int BUTTON_WIDTH = 400;
+
+    private static final BufferedImage MAIN_LOGO = FileIO.readImage(Folder.IMAGES + "MainLogo.png");
 
     private VisualState state;
     private Theme theme;
@@ -48,21 +48,6 @@ public class MainMenuView extends View {
         saveInfo = Save.updateSaveData();
 
         state = VisualState.MAIN;
-    }
-
-    static Button createMenuButton(int index) {
-        return createMenuButton(index, Button.getBasicTransitions(index, NUM_MAIN_BUTTONS, 1));
-    }
-
-    static Button createMenuButton(int index, int[] transitions) {
-        return new Button(
-                200,
-                240 + index*85,
-                BUTTON_WIDTH,
-                75,
-                ButtonHoverAction.BOX,
-                transitions
-        );
     }
 
     void toggleTheme() {
@@ -176,5 +161,20 @@ public class MainMenuView extends View {
     public void movedToFront() {
         setVisualState(VisualState.MAIN);
         saveInfo = Save.updateSaveData();
+    }
+
+    static Button createMenuButton(int index) {
+        return createMenuButton(index, Button.getBasicTransitions(index, NUM_MAIN_BUTTONS, 1));
+    }
+
+    static Button createMenuButton(int index, int[] transitions) {
+        return new Button(
+                200,
+                240 + index*85,
+                BUTTON_WIDTH,
+                75,
+                ButtonHoverAction.BOX,
+                transitions
+        );
     }
 }

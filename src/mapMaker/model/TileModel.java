@@ -36,20 +36,6 @@ public class TileModel extends MapMakerModel {
     private boolean saved;
     private TileCategory selectedTileCategory;
 
-    public enum TileType {
-        MAP(Folder.MAP_TILES, FileName.MAP_TILES_INDEX),
-        MAP_MAKER(Folder.MAP_MAKER_TILES, FileName.MAP_MAKER_TILES_INDEX),
-        TRAINER(Folder.TRAINER_TILES, FileName.TRAINER_TILES_INDEX);
-
-        private final String tileFolderPath;
-        private final String indexFileName;
-
-        TileType(String folderPath, String fileName) {
-            this.tileFolderPath = folderPath;
-            this.indexFileName = fileName;
-        }
-    }
-
     TileModel() {
         super(BLANK_TILE_INDEX);
 
@@ -208,5 +194,19 @@ public class TileModel extends MapMakerModel {
         }
 
         FileIO.writeToFile(mapMaker.getPathWithRoot(FileName.MAP_TILES_INDEX), indexFile.toString());
+    }
+
+    public enum TileType {
+        MAP(Folder.MAP_TILES, FileName.MAP_TILES_INDEX),
+        MAP_MAKER(Folder.MAP_MAKER_TILES, FileName.MAP_MAKER_TILES_INDEX),
+        TRAINER(Folder.TRAINER_TILES, FileName.TRAINER_TILES_INDEX);
+
+        private final String tileFolderPath;
+        private final String indexFileName;
+
+        TileType(String folderPath, String fileName) {
+            this.tileFolderPath = folderPath;
+            this.indexFileName = fileName;
+        }
     }
 }

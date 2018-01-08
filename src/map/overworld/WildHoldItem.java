@@ -15,35 +15,6 @@ import java.util.Scanner;
 
 public class WildHoldItem implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    private enum Chance {
-        ONE(1, 5),
-        FIVE(5, 20),
-        TEN(10, 30),
-        FIFTY(50, 60),
-        NINETY_FIVE(95, 100),
-        HUNDRED(100, 100);
-
-        private final int chance;
-        private final int increasedChance;
-
-        Chance(int chance, int increasedChance) {
-            this.chance = chance;
-            this.increasedChance = increasedChance;
-        }
-
-        static Chance getChance(int chance) {
-            for (Chance chanceValue : Chance.values()) {
-                if (chanceValue.chance == chance) {
-                    return chanceValue;
-                }
-            }
-
-            Global.error("Invalid wild hold item chance " + chance);
-            return ONE;
-        }
-    }
-
     private final HoldItem item;
     private final Chance chance;
 
@@ -84,5 +55,33 @@ public class WildHoldItem implements Serializable {
         }
 
         return (HoldItem)ItemNamesies.NO_ITEM.getItem();
+    }
+
+    private enum Chance {
+        ONE(1, 5),
+        FIVE(5, 20),
+        TEN(10, 30),
+        FIFTY(50, 60),
+        NINETY_FIVE(95, 100),
+        HUNDRED(100, 100);
+
+        private final int chance;
+        private final int increasedChance;
+
+        Chance(int chance, int increasedChance) {
+            this.chance = chance;
+            this.increasedChance = increasedChance;
+        }
+
+        static Chance getChance(int chance) {
+            for (Chance chanceValue : Chance.values()) {
+                if (chanceValue.chance == chance) {
+                    return chanceValue;
+                }
+            }
+
+            Global.error("Invalid wild hold item chance " + chance);
+            return ONE;
+        }
     }
 }

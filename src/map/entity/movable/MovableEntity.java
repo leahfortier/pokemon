@@ -13,8 +13,8 @@ import util.StringUtils;
 import java.awt.image.BufferedImage;
 
 public abstract class MovableEntity extends Entity {
-    private int runFrame;
     protected int transitionTime;
+    private int runFrame;
     private int waitTime;
 
     private int pathIndex;
@@ -29,15 +29,12 @@ public abstract class MovableEntity extends Entity {
         this.runFrame = 0;
     }
 
-    protected abstract int getSpriteIndex();
-
     public abstract int getTransitionTime();
-
+    public abstract Direction getDirection();
+    protected abstract int getSpriteIndex();
     protected abstract boolean hasAttention();
     protected abstract String getPath();
     protected abstract void endPath();
-
-    public abstract Direction getDirection();
     protected abstract void setDirection(Direction direction);
 
     public void setTempPath(String path, EndPathListener listener) {
@@ -154,10 +151,6 @@ public abstract class MovableEntity extends Entity {
         tempPath = null;
     }
 
-    public static int getTrainerSpriteIndex(int spriteIndex, Direction direction) {
-        return 12*spriteIndex + 1 + direction.ordinal();
-    }
-
     public Point getNewLocation(Point location, Direction direction, MapData currentMap) {
         Point newLocation = Point.add(location, direction.getDeltaPoint());
         if (currentMap.isPassable(newLocation, direction)) {
@@ -170,5 +163,9 @@ public abstract class MovableEntity extends Entity {
     // The time(ms) it takes for the character to move from one tile on the map to another
     protected int getTimeBetweenTiles() {
         return 128;
+    }
+
+    public static int getTrainerSpriteIndex(int spriteIndex, Direction direction) {
+        return 12*spriteIndex + 1 + direction.ordinal();
     }
 }

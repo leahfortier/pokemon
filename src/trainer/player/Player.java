@@ -88,6 +88,7 @@ public class Player extends PlayerTrainer implements Serializable {
     private EvolutionInfo evolutionInfo;
     private NewPokemonInfo newPokemonInfo;
     private RepelInfo repelInfo;
+    private BallItem pokeball;
 
     private transient List<String> logMessages;
 
@@ -511,8 +512,6 @@ public class Player extends PlayerTrainer implements Serializable {
                         .filter(ActivePokemon::isEgg)
                         .count();
     }
-
-    private BallItem pokeball;
 
     public BallItem getPokeball() {
         return this.pokeball;

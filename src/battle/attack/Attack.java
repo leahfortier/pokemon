@@ -276,12 +276,10 @@ public abstract class Attack implements Serializable {
         return true;
     }
 
+    // To be overridden as necessary
     protected void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
-
     protected void afterApplyCheck(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
-
     protected void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {}
-
     protected void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {}
 
     public final boolean apply(ActivePokemon me, ActivePokemon o, Battle b) {
@@ -476,10 +474,6 @@ public abstract class Attack implements Serializable {
 
     // To be overridden if necessary
     public void startTurn(Battle b, ActivePokemon me) {}
-
-    public static boolean isAttack(String name) {
-        return AttackNamesies.tryValueOf(name) != null;
-    }
 
     // EVERYTHING BELOW IS GENERATED ###
 

@@ -61,21 +61,12 @@ import java.util.stream.Collectors;
 public class MapMaker extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener, ListSelectionListener {
     private static final long serialVersionUID = -1323397946555510794L;
 
-    public static void main(String[] args) {
-        MapMaker mapMaker = new MapMaker();
-
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.getContentPane().add(mapMaker);
-        frame.setSize(Global.GAME_SIZE);
-        frame.setVisible(true);
-    }
+    public final Canvas canvas;
 
     private JButton newTileButton;
     private JComboBox<TileCategory> tileCategoriesComboBox;
     private JList<ImageIcon> tileList;
     private JList<Tool> toolList;
-    public Canvas canvas;
     private JMenuItem newMenuItem, loadMenuItem, setRootMenuItem;
     public JMenuItem cutMenuItem, copyMenuItem, pasteMenuItem, undoMenuItem;
     private JLabel mapNameLabel;
@@ -98,6 +89,16 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     public boolean triggerToolMoveSelected;
 
     private boolean controlKeyDown;
+
+    public static void main(String[] args) {
+        MapMaker mapMaker = new MapMaker();
+
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.getContentPane().add(mapMaker);
+        frame.setSize(Global.GAME_SIZE);
+        frame.setVisible(true);
+    }
 
     public MapMaker() {
         this.root = null;
@@ -245,10 +246,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         tilePanel.add(listScroller, BorderLayout.CENTER);
 
         return tilePanel;
-    }
-
-    public void setEditType(EditType editType) {
-        this.editTypeComboBox.setSelectedIndex(editType.ordinal());
     }
 
     public void setTool(ToolType toolType) {
@@ -478,10 +475,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         g.dispose();
     }
 
-    private static Point getMouseLocation(MouseEvent event) {
-        return new Point(event.getX(), event.getY());
-    }
-
     public void mouseClicked(MouseEvent event) {
         if (!toolList.isSelectionEmpty()) {
             toolList.getSelectedValue().click(getMouseLocation(event));
@@ -600,6 +593,10 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return this.editType;
     }
 
+    public void setEditType(EditType editType) {
+        this.editTypeComboBox.setSelectedIndex(editType.ordinal());
+    }
+
     public boolean isEditType(EditType editType) {
         return this.getEditType() == editType;
     }
@@ -616,12 +613,12 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return this.placeableTrigger;
     }
 
-    public boolean hasPlaceableTrigger() {
-        return this.placeableTrigger != null;
-    }
-
     public void setPlaceableTrigger(LocationTriggerMatcher trigger) {
         this.placeableTrigger = trigger;
+    }
+
+    public boolean hasPlaceableTrigger() {
+        return this.placeableTrigger != null;
     }
 
     public void clearPlaceableTrigger() {
@@ -679,5 +676,9 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
                 }
             }
         }
+    }
+
+    private static Point getMouseLocation(MouseEvent event) {
+        return new Point(event.getX(), event.getY());
     }
 }

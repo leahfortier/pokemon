@@ -32,13 +32,6 @@ public class LearnMovePanel {
     private State state;
     private int selectedButton;
 
-    private enum State {
-        MESSAGE,
-        QUESTION,
-        DELETE,
-        END
-    }
-
     public LearnMovePanel(ActivePokemon learning, Move toLearn) {
         this.learning = learning;
         this.toLearn = toLearn;
@@ -205,5 +198,12 @@ public class LearnMovePanel {
 
     private Button newMoveButton() {
         return this.buttons[buttons.length - 2];
+    }
+
+    private enum State {
+        MESSAGE,
+        QUESTION,
+        DELETE,
+        END
     }
 }

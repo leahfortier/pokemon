@@ -45,10 +45,9 @@ public class DrawPanel {
     private int transparentCount;
 
     private boolean animateMessage;
-
-    public static DrawPanel fullGamePanel() {
-        return new DrawPanel(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
-    }
+    private int messageTimeElapsed;
+    private String drawingText;
+    private boolean finishedAnimating;
 
     public DrawPanel(Button button) {
         this(button.x, button.y, button.width, button.height);
@@ -72,6 +71,9 @@ public class DrawPanel {
         this.outlineDirections = new Direction[0];
 
         this.transparentCount = 1;
+
+        this.messageTimeElapsed = 0;
+        this.finishedAnimating = true;
     }
 
     public DrawPanel withBorderColor(Color borderColor) {
@@ -226,11 +228,6 @@ public class DrawPanel {
         return this.getButtons(buttonWidth, buttonHeight, numRows, numCols, numRows, numCols, 0, null, null);
     }
 
-    @FunctionalInterface
-    public interface ButtonIndexAction {
-        void pressButton(int index);
-    }
-
     public Button[] getButtons(
             int buttonWidth, int buttonHeight,
             int numSpaceRows, int numSpaceCols,
@@ -269,10 +266,6 @@ public class DrawPanel {
     public int getTextSpace(Graphics g) {
         return this.getBorderSize() + FontMetrics.getDistanceBetweenRows(g) - FontMetrics.getTextHeight(g);
     }
-
-    private int messageTimeElapsed = 0;
-    private String drawingText;
-    private boolean finishedAnimating = true;
 
     public int drawMessage(Graphics g, int fontSize, String text) {
         FontMetrics.setFont(g, fontSize);
@@ -417,5 +410,10 @@ public class DrawPanel {
                 y,
                 this.width - 2*spacing
         );
+    }
+
+    @FunctionalInterface
+    public interface ButtonIndexAction {
+        void pressButton(int index);
     }
 }

@@ -26,6 +26,23 @@ public class FontMetrics {
         this.letterHeight = letterHeight;
     }
 
+    public int getTextLength(String s) {
+        return s.length()*this.getHorizontalSpacing();
+    }
+
+    public int getHorizontalSpacing() {
+        return this.horizontalSpacing;
+    }
+
+    public int getLetterHeight() {
+        return this.letterHeight;
+    }
+
+    @Override
+    public String toString() {
+        return fontSize + " " + horizontalSpacing + " " + letterHeight;
+    }
+
     public static int getTextWidth(Graphics g, String text) {
         return getTextWidth(g.getFont().getSize(), text);
     }
@@ -112,21 +129,5 @@ public class FontMetrics {
         int fontSize = g.getFont().getSize();
         FontMetrics fontMetrics = getFontMetrics(fontSize);
         return (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR);
-    }
-
-    public int getTextLength(String s) {
-        return s.length()*this.getHorizontalSpacing();
-    }
-
-    public int getHorizontalSpacing() {
-        return this.horizontalSpacing;
-    }
-
-    public int getLetterHeight() {
-        return this.letterHeight;
-    }
-
-    public String toString() {
-        return fontSize + " " + horizontalSpacing + " " + letterHeight;
     }
 }

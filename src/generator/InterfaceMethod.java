@@ -24,38 +24,6 @@ import java.util.regex.Pattern;
 
 class InterfaceMethod {
 
-    private enum InvokeType {
-        VOID(input -> new VoidInvoke()),
-        CONTAINS(input -> new ContainsInvoke()),
-        CHECK(CheckInvoke::new),
-        CHECKGET(CheckGetInvoke::new),
-        CHECKMESSAGE(CheckMessageInvoke::new),
-        GET(input -> new GetInvoke()),
-        UPDATE(input -> new UpdateInvoke()),
-        MULTIPLY(input -> new MultiplyInvoke()),
-        ADD(input -> new AddInvoke());
-
-        private final GetInvokeMethod getInvokeMethod;
-
-        InvokeType(final GetInvokeMethod getInvokeMethod) {
-            this.getInvokeMethod = getInvokeMethod;
-        }
-
-        @FunctionalInterface
-        private interface GetInvokeMethod {
-            InvokeMethod getInvokeMethod(Scanner invokeInput);
-        }
-
-        public InvokeMethod getInvokeMethod(final Scanner invokeInput) {
-            InvokeMethod invokeMethod = this.getInvokeMethod.getInvokeMethod(invokeInput);
-            if (invokeInput.hasNext()) {
-                Global.error("Too much input for " + this.getClass().getSimpleName() + ": " + invokeInput);
-            }
-
-            return invokeMethod;
-        }
-    }
-
     private static final String COMMENTS = "Comments";
     private static final String RETURN_TYPE = "ReturnType";
     private static final String METHOD_NAME = "MethodName";
@@ -76,7 +44,11 @@ class InterfaceMethod {
     private static final String MOLD_BREAKER_NULL_CHECK = "MoldBreakerNullCheck";
     private static final String DEFAULT = "Default";
     private static final String DEADSIES = "Deadsies";
-
+    private static final Pattern HEADER_PATTERN = Pattern.compile(
+            MatchType.VARIABLE_TYPE.group() + " " + // Group 1: return type
+                    MatchType.WORD.group() +        // Group 2: method name
+                    "\\((.*)\\)"                    // Group 3: method parameters
+    );
     private final String interfaceName;
 
     private String returnType;
@@ -110,12 +82,6 @@ class InterfaceMethod {
 
         this.readFields(fields);
     }
-
-    private static final Pattern HEADER_PATTERN = Pattern.compile(
-            MatchType.VARIABLE_TYPE.group() + " " + // Group 1: return type
-                    MatchType.WORD.group() +        // Group 2: method name
-                    "\\((.*)\\)"                    // Group 3: method parameters
-    );
 
     private void readFields(ClassFields fields) {
 
@@ -301,14 +267,6 @@ class InterfaceMethod {
         }
     }
 
-    private void setInvokeeDeclaration(String invokeeDeclaration) {
-        if (!StringUtils.isNullOrEmpty(this.invokeeDeclaration)) {
-            Global.error("Can not define multiple ways to set the effects list. Interface: " + this.interfaceName);
-        }
-
-        this.invokeeDeclaration = invokeeDeclaration;
-    }
-
     String writeInterfaceMethod() {
         if (StringUtils.isNullOrEmpty(this.returnType) || StringUtils.isNullOrEmpty(this.methodName)) {
             return StringUtils.empty();
@@ -368,6 +326,14 @@ class InterfaceMethod {
         return this.invokeeDeclaration;
     }
 
+    private void setInvokeeDeclaration(String invokeeDeclaration) {
+        if (!StringUtils.isNullOrEmpty(this.invokeeDeclaration)) {
+            Global.error("Can not define multiple ways to set the effects list. Interface: " + this.interfaceName);
+        }
+
+        this.invokeeDeclaration = invokeeDeclaration;
+    }
+
     String getUpdateField() {
         return this.updateField;
     }
@@ -386,5 +352,37 @@ class InterfaceMethod {
 
     Iterable<String> getDeadsies() {
         return this.deadsies;
+    }
+
+    private enum InvokeType {
+        VOID(input -> new VoidInvoke()),
+        CONTAINS(input -> new ContainsInvoke()),
+        CHECK(CheckInvoke::new),
+        CHECKGET(CheckGetInvoke::new),
+        CHECKMESSAGE(CheckMessageInvoke::new),
+        GET(input -> new GetInvoke()),
+        UPDATE(input -> new UpdateInvoke()),
+        MULTIPLY(input -> new MultiplyInvoke()),
+        ADD(input -> new AddInvoke());
+
+        private final GetInvokeMethod getInvokeMethod;
+
+        InvokeType(final GetInvokeMethod getInvokeMethod) {
+            this.getInvokeMethod = getInvokeMethod;
+        }
+
+        public InvokeMethod getInvokeMethod(final Scanner invokeInput) {
+            InvokeMethod invokeMethod = this.getInvokeMethod.getInvokeMethod(invokeInput);
+            if (invokeInput.hasNext()) {
+                Global.error("Too much input for " + this.getClass().getSimpleName() + ": " + invokeInput);
+            }
+
+            return invokeMethod;
+        }
+
+        @FunctionalInterface
+        private interface GetInvokeMethod {
+            InvokeMethod getInvokeMethod(Scanner invokeInput);
+        }
     }
 }

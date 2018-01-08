@@ -60,9 +60,9 @@ public class TradeView extends View {
     private List<ActivePokemon> team;
 
     public TradeView() {
-        this.canvasPanel = DrawPanel.fullGamePanel()
-                                    .withTransparentCount(2)
-                                    .withBorderPercentage(0);
+        this.canvasPanel = BasicPanels.newFullGamePanel()
+                                      .withTransparentCount(2)
+                                      .withBorderPercentage(0);
 
         int panelWidth = 183;
         int spacing = 20;

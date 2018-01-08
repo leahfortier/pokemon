@@ -37,11 +37,6 @@ class StartView extends View {
 
     private boolean ditto;
 
-    private enum State {
-        DEFAULT,
-        NAME
-    }
-
     @Override
     public void update(int dt) {
         if (BasicPanels.isAnimatingMessage()) {
@@ -144,5 +139,10 @@ class StartView extends View {
         ditto = false;
 
         SoundPlayer.soundPlayer.playMusic(SoundTitle.NEW_GAME);
+    }
+
+    private enum State {
+        DEFAULT,
+        NAME
     }
 }

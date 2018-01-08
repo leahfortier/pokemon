@@ -31,16 +31,16 @@ public enum EvolutionType {
         return this.evolutionReader.readEvolution(in);
     }
 
-    @FunctionalInterface
-    private interface EvolutionReader {
-        Evolution readEvolution(Scanner in);
-    }
-
     private static BaseEvolution getBaseEvolution(Scanner in) {
         return (BaseEvolution)getEvolution(in);
     }
 
     public static Evolution getEvolution(Scanner in) {
         return valueOf(in.next().toUpperCase()).readEvolution(in);
+    }
+
+    @FunctionalInterface
+    private interface EvolutionReader {
+        Evolution readEvolution(Scanner in);
     }
 }

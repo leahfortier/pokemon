@@ -436,6 +436,7 @@ import util.StringUtils;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public enum ItemNamesies {
     // EVERYTHING BELOW IS GENERATED ###
@@ -876,16 +877,11 @@ public enum ItemNamesies {
     private static final Map<ItemNamesies, Item> itemMap = new EnumMap<>(ItemNamesies.class);
 
     private final String name;
-    private final ItemCreator itemCreator;
+    private final Supplier<Item> itemCreator;
 
-    ItemNamesies(String name, ItemCreator itemCreator) {
+    ItemNamesies(String name, Supplier<Item> itemCreator) {
         this.name = name;
         this.itemCreator = itemCreator;
-    }
-
-    @FunctionalInterface
-    private interface ItemCreator {
-        Item createItem();
     }
 
     public String getName() {
@@ -894,7 +890,7 @@ public enum ItemNamesies {
 
     public Item getItem() {
         if (!itemMap.containsKey(this)) {
-            itemMap.put(this, this.itemCreator.createItem());
+            itemMap.put(this, this.itemCreator.get());
         }
         return itemMap.get(this);
     }

@@ -17,6 +17,7 @@ import java.util.List;
 
 class MapState implements VisualStateHandler {
     private final DrawPanel itemFinderPanel;
+    private boolean showItemFinder;
 
     public MapState() {
         int itemFinderLength = 50;
@@ -54,8 +55,6 @@ class MapState implements VisualStateHandler {
             this.itemFinderPanel.withBackgroundColor(finderColor).drawBackground(g);
         }
     }
-
-    private boolean showItemFinder;
 
     @Override
     public void update(int dt, MapView mapView) {

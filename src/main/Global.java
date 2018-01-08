@@ -29,6 +29,9 @@ public final class Global {
 
     public static final String MONEY_SYMBOL = "\u00A5";
 
+    // Cannot be instantiated
+    private Global() {}
+
     public static void info(String infoMessage) {
         JOptionPane.showMessageDialog(null, infoMessage, "INFO", JOptionPane.INFORMATION_MESSAGE);
         System.err.println(infoMessage);
@@ -40,7 +43,4 @@ public final class Global {
         System.err.println(errorMessage);
         System.exit(1);
     }
-
-    // Cannot be instantiated
-    private Global() {}
 }

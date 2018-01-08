@@ -58,8 +58,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class Battle implements Serializable {
-    private PlayerTrainer player;
+    // Crit yo pants
+    private static final int[] CRITSICLES = { 16, 8, 4, 3, 2 };
+
     private final Opponent opponent; // SO OBJECT-ORIENTED
+    private PlayerTrainer player;
 
     private List<BattleEffect> effects;
 
@@ -74,6 +77,11 @@ public class Battle implements Serializable {
     private int escapeAttempts;
 
     private transient UpdateMatcher npcUpdateInteraction;
+
+    public Battle(EnemyTrainer npcTrainer, UpdateMatcher npcUpdateInteraction) {
+        this(npcTrainer);
+        this.npcUpdateInteraction = npcUpdateInteraction;
+    }
 
     public Battle(Opponent opponent) {
         Messages.clearMessages(MessageState.FIGHTY_FIGHT);
@@ -125,25 +133,12 @@ public class Battle implements Serializable {
         enterBattle(this.player.front());
     }
 
-    public Battle(EnemyTrainer npcTrainer, UpdateMatcher npcUpdateInteraction) {
-        this(npcTrainer);
-        this.npcUpdateInteraction = npcUpdateInteraction;
+    public PlayerTrainer getPlayer() {
+        return player;
     }
 
     public void setPlayer(PlayerTrainer player) {
         this.player = player;
-    }
-
-    public Player getDaRealPlayer() {
-        if (this.isSimulating()) {
-            return Game.getPlayer();
-        }
-
-        return (Player)player;
-    }
-
-    public PlayerTrainer getPlayer() {
-        return player;
     }
 
     public Opponent getOpponent() {
@@ -166,7 +161,7 @@ public class Battle implements Serializable {
         return currentTerrain;
     }
 
-    public void setBaseWeather(WeatherState weatherState) {
+    private void setBaseWeather(WeatherState weatherState) {
         this.baseWeather = weatherState;
         this.addEffect((Weather)weatherState.getWeatherEffect().getEffect());
     }
@@ -661,9 +656,6 @@ public class Battle implements Serializable {
         return PowerChangeEffect.getModifier(this, me, o)*OpponentPowerChangeEffect.getModifier(this, me, o);
     }
 
-    // Crit yo pants
-    private static final int[] CRITSICLES = { 16, 8, 4, 3, 2 };
-
     public boolean criticalHit(ActivePokemon me, ActivePokemon o) {
         if (CritBlockerEffect.checkBlocked(this, me, o)) {
             return false;
@@ -720,7 +712,7 @@ public class Battle implements Serializable {
 
     // Returns true if the Pokemon is able to execute their turn by checking effects that have been casted upon them
     // This is where BeforeTurnEffects are handled
-    protected boolean ableToAttack(ActivePokemon p, ActivePokemon opp) {
+    private boolean ableToAttack(ActivePokemon p, ActivePokemon opp) {
         // Dead Pokemon can't attack and it's not nice to attack a deady
         if (p.isFainted(this) || opp.isFainted(this)) {
             return false;

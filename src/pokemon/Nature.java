@@ -21,10 +21,6 @@ public class Nature implements Serializable {
     private final int hindering;
     private final String name;
 
-    private static int getRandomNatureStatIndex() {
-        return RandomUtils.getRandomInt(1, Stat.NUM_STATS - 1);
-    }
-
     public Nature() {
         this(getRandomNatureStatIndex(), getRandomNatureStatIndex());
     }
@@ -72,5 +68,9 @@ public class Nature implements Serializable {
 
         Nature that = (Nature)other;
         return this.getName().equals(that.getName());
+    }
+
+    private static int getRandomNatureStatIndex() {
+        return RandomUtils.getRandomInt(1, Stat.NUM_STATS - 1);
     }
 }
