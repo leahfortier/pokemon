@@ -1,67 +1,67 @@
 Weavile:
-	Type: Dark/Ice
-	Stats: 70 120 65 45 85 125
-	Nature: Adamant, Impish, Careful, Jolly
-	Ability: Pressure/Pickpocket
-	Moves:
-		Throat Chop -- Egg Move/TM move/Move Tutor
-		Ice Punch -- Egg Move/TM move/Move Tutor
-		Brick Break -- Egg Move/TM move/Move Tutor
-		Poison Jab -- Egg Move/TM move/Move Tutor
+    Type: Dark/Ice
+    Stats: 70 120 65 45 85 125
+    Nature: Adamant, Impish, Careful, Jolly
+    Ability: Pressure/Pickpocket
+    Moves:
+        Throat Chop -- Egg Move/TM move/Move Tutor
+        Ice Punch -- Egg Move/TM move/Move Tutor
+        Brick Break -- Egg Move/TM move/Move Tutor
+        Poison Jab -- Egg Move/TM move/Move Tutor
 
 Torterra:
-	Type: Grass/Ground
-	Stats: 95 109 105 75 85 56
-	Nature: Jolly
-	Ability: Overgrow/Shell Armor
-	Moves:
-		Earthquake -- Evolve or Egg Move/TM move/Move Tutor
-		Seed Bomb -- Egg Move/TM move/Move Tutor
-		Crunch -- Level 45
-		Stone Edge -- Egg Move/TM move/Move Tutor
+    Type: Grass/Ground
+    Stats: 95 109 105 75 85 56
+    Nature: Jolly
+    Ability: Overgrow/Shell Armor
+    Moves:
+        Earthquake -- Evolve or Egg Move/TM move/Move Tutor
+        Seed Bomb -- Egg Move/TM move/Move Tutor
+        Crunch -- Level 45
+        Stone Edge -- Egg Move/TM move/Move Tutor
 
 Mimikyu:
-	Type: Ghost/Fairy
-	Stats: 55 90 80 50 105 96
-	Nature: Adamant
-	Ability: Disguise
-	Moves:
-		Play Rough -- Level 46
-		Shadow Claw -- Level 37 or Egg Move/TM move/Move Tutor
-		Leech Life -- Egg Move/TM move/Move Tutor
-		Wood Hammer -- Heart Scale
+    Type: Ghost/Fairy
+    Stats: 55 90 80 50 105 96
+    Nature: Adamant
+    Ability: Disguise
+    Moves:
+        Play Rough -- Level 46
+        Shadow Claw -- Level 37 or Egg Move/TM move/Move Tutor
+        Leech Life -- Egg Move/TM move/Move Tutor
+        Wood Hammer -- Heart Scale
 
 Cloyster:
-	Type: Water/Ice
-	Stats: 50 95 180 85 45 70
-	Nature: Adamant, Impish, Careful, Jolly
-	Ability: Skill Link
-	Moves:
-		Clamp -- ???
-		Rock Blast -- Egg Move/TM move/Move Tutor
-		Icicle Spear -- Egg Move/TM move/Move Tutor
-		Smart Strike -- Egg Move/TM move/Move Tutor
+    Type: Water/Ice
+    Stats: 50 95 180 85 45 70
+    Nature: Adamant, Impish, Careful, Jolly
+    Ability: Skill Link
+    Moves:
+        Clamp -- ???
+        Rock Blast -- Egg Move/TM move/Move Tutor
+        Icicle Spear -- Egg Move/TM move/Move Tutor
+        Smart Strike -- Egg Move/TM move/Move Tutor
 
 Sigilyph:
-	Type: Psychic/Flying
-	Stats: 72 58 80 103 80 97
-	Nature: Bold, Modest, Calm, Timid
-	Ability: Wonder Skin/Magic Guard
-	Moves:
-		Psychic -- Level 44 or Egg Move/TM move/Move Tutor
-		Air Slash -- Level 41
-		Flash Cannon -- Egg Move/TM move/Move Tutor
-		Dazzling Gleam -- Egg Move/TM move/Move Tutor
+    Type: Psychic/Flying
+    Stats: 72 58 80 103 80 97
+    Nature: Bold, Modest, Calm, Timid
+    Ability: Wonder Skin/Magic Guard
+    Moves:
+        Psychic -- Level 44 or Egg Move/TM move/Move Tutor
+        Air Slash -- Level 41
+        Flash Cannon -- Egg Move/TM move/Move Tutor
+        Dazzling Gleam -- Egg Move/TM move/Move Tutor
 
 Electivire:
-	Type: Electric
-	Stats: 75 123 67 95 85 95
-	Nature: Adamant, Impish, Careful, Jolly
-	Ability: Motor Drive/Vital Spirit
-	Moves:
-		Thunder Punch -- Level 29 or Egg Move/TM move/Move Tutor
-		Fire Punch -- Heart Scale or Egg Move/TM move/Move Tutor
-		Earthquake -- Egg Move/TM move/Move Tutor
-		Brick Break -- Egg Move/TM move/Move Tutor
+    Type: Electric
+    Stats: 75 123 67 95 85 95
+    Nature: Adamant, Impish, Careful, Jolly
+    Ability: Motor Drive/Vital Spirit
+    Moves:
+        Thunder Punch -- Level 29 or Egg Move/TM move/Move Tutor
+        Fire Punch -- Heart Scale or Egg Move/TM move/Move Tutor
+        Earthquake -- Egg Move/TM move/Move Tutor
+        Brick Break -- Egg Move/TM move/Move Tutor
 
 
