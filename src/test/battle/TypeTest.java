@@ -8,8 +8,8 @@ import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import test.BaseTest;
-import test.GeneralTest;
 import test.TestPokemon;
+import test.TestUtils;
 import type.Type;
 import type.TypeAdvantage;
 import util.StringUtils;
@@ -256,7 +256,7 @@ public class TypeTest extends BaseTest {
             if (beforeExpected != null) {
                 attacking.setupMove(attack, battle);
                 double beforeActual = TypeAdvantage.getAdvantage(attacking, defending, battle);
-                GeneralTest.assertEquals(
+                TestUtils.assertEquals(
                         StringUtils.spaceSeparated(attack, pokemonNamesies, beforeExpected, beforeActual),
                         beforeExpected, beforeActual
                 );
@@ -266,7 +266,7 @@ public class TypeTest extends BaseTest {
             attacking.setupMove(attack, battle);
 
             double afterActual = TypeAdvantage.getAdvantage(attacking, defending, battle);
-            GeneralTest.assertEquals(
+            TestUtils.assertEquals(
                     StringUtils.spaceSeparated(attack, pokemonNamesies, afterExpected, afterActual),
                     afterExpected, afterActual
             );

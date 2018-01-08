@@ -92,7 +92,7 @@ public class ImageTest extends BaseTest {
     }
 
     private void checkExists(File imageFile, boolean required) {
-        GeneralTest.semiAssertTrue(imageFile.getPath() + " does not exist.", required, imageFile.exists());
+        TestUtils.semiAssertTrue(imageFile.getPath() + " does not exist.", required, imageFile.exists());
     }
 
     @Test

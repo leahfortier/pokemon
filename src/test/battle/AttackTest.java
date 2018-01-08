@@ -14,8 +14,8 @@ import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import test.BaseTest;
-import test.GeneralTest;
 import test.TestPokemon;
+import test.TestUtils;
 import trainer.Team;
 import type.Type;
 
@@ -523,16 +523,16 @@ public class AttackTest extends BaseTest {
 
         // Acrobatics has double power when not holding an item
         attacking.setupMove(AttackNamesies.ACROBATICS, battle);
-        GeneralTest.assertEquals(2, battle.getDamageModifier(attacking, defending));
+        TestUtils.assertEquals(2, battle.getDamageModifier(attacking, defending));
         attacking.giveItem(ItemNamesies.POTION);
-        GeneralTest.assertEquals(1, battle.getDamageModifier(attacking, defending));
+        TestUtils.assertEquals(1, battle.getDamageModifier(attacking, defending));
 
         // Body Slam -- doubles when the opponent uses Minimize
         attacking.setupMove(AttackNamesies.BODY_SLAM, battle);
-        GeneralTest.assertEquals(1, battle.getDamageModifier(attacking, defending));
+        TestUtils.assertEquals(1, battle.getDamageModifier(attacking, defending));
         defending.apply(true, AttackNamesies.MINIMIZE, battle);
         Assert.assertTrue(defending.hasEffect(EffectNamesies.USED_MINIMIZE));
-        GeneralTest.assertEquals(2, battle.getDamageModifier(attacking, defending));
+        TestUtils.assertEquals(2, battle.getDamageModifier(attacking, defending));
     }
 
     @Test

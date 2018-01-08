@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 public class GeneralTest extends BaseTest {
-    private static final double DELTA = 1e-15;
 
     @Test
     public void properCaseTest() {
@@ -77,22 +76,22 @@ public class GeneralTest extends BaseTest {
     @Test
     public void timeTest() {
         long millsecondsInHour = TimeUnit.HOURS.toMillis(1);
-        assertEquals(1000*60*60, millsecondsInHour);
-        assertEquals(1, TimeUtils.hoursSince(TimeUtils.getCurrentTimestamp() - millsecondsInHour));
-        assertEquals(1, TimeUtils.hoursSince(TimeUtils.getCurrentTimestamp() - (long)(1.5*millsecondsInHour)));
-        assertEquals(15, TimeUtils.hoursSince(TimeUtils.getCurrentTimestamp() - 15*millsecondsInHour));
+        TestUtils.assertEquals(1000*60*60, millsecondsInHour);
+        TestUtils.assertEquals(1, TimeUtils.hoursSince(TimeUtils.getCurrentTimestamp() - millsecondsInHour));
+        TestUtils.assertEquals(1, TimeUtils.hoursSince(TimeUtils.getCurrentTimestamp() - (long)(1.5*millsecondsInHour)));
+        TestUtils.assertEquals(15, TimeUtils.hoursSince(TimeUtils.getCurrentTimestamp() - 15*millsecondsInHour));
 
         long millsecondsInMinute = TimeUnit.MINUTES.toMillis(1);
-        assertEquals(1000*60, millsecondsInMinute);
-        assertEquals(1, TimeUtils.minutesSince(TimeUtils.getCurrentTimestamp() - millsecondsInMinute));
-        assertEquals(1, TimeUtils.minutesSince(TimeUtils.getCurrentTimestamp() - (long)(1.5*millsecondsInMinute)));
-        assertEquals(15, TimeUtils.minutesSince(TimeUtils.getCurrentTimestamp() - 15*millsecondsInMinute));
+        TestUtils.assertEquals(1000*60, millsecondsInMinute);
+        TestUtils.assertEquals(1, TimeUtils.minutesSince(TimeUtils.getCurrentTimestamp() - millsecondsInMinute));
+        TestUtils.assertEquals(1, TimeUtils.minutesSince(TimeUtils.getCurrentTimestamp() - (long)(1.5*millsecondsInMinute)));
+        TestUtils.assertEquals(15, TimeUtils.minutesSince(TimeUtils.getCurrentTimestamp() - 15*millsecondsInMinute));
 
         long millsecondsInSecond = TimeUnit.SECONDS.toMillis(1);
-        assertEquals(1000, millsecondsInSecond);
-        assertEquals(1, TimeUtils.secondsSince(TimeUtils.getCurrentTimestamp() - millsecondsInSecond));
-        assertEquals(1, TimeUtils.secondsSince(TimeUtils.getCurrentTimestamp() - (long)(1.5*millsecondsInSecond)));
-        assertEquals(15, TimeUtils.secondsSince(TimeUtils.getCurrentTimestamp() - 15*millsecondsInSecond));
+        TestUtils.assertEquals(1000, millsecondsInSecond);
+        TestUtils.assertEquals(1, TimeUtils.secondsSince(TimeUtils.getCurrentTimestamp() - millsecondsInSecond));
+        TestUtils.assertEquals(1, TimeUtils.secondsSince(TimeUtils.getCurrentTimestamp() - (long)(1.5*millsecondsInSecond)));
+        TestUtils.assertEquals(15, TimeUtils.secondsSince(TimeUtils.getCurrentTimestamp() - 15*millsecondsInSecond));
 
         Assert.assertEquals("0:59", TimeUtils.formatMinutes(59));
         Assert.assertEquals("1:00", TimeUtils.formatMinutes(60));
@@ -197,24 +196,6 @@ public class GeneralTest extends BaseTest {
             // Overwrite file should handle tab replacement
             FileIO.overwriteFile(file, FileIO.readEntireFile(file));
             Assert.assertFalse(FileIO.readEntireFile(file).contains("\t"));
-        }
-    }
-
-    public static void assertEquals(String message, double expected, double actual) {
-        Assert.assertEquals(message, expected, actual, DELTA);
-    }
-
-    public static void assertEquals(double expected, double actual) {
-        Assert.assertEquals(expected, actual, DELTA);
-    }
-
-    public static void semiAssertTrue(String message, boolean fullAssert, boolean assertion) {
-        if (!assertion) {
-            if (fullAssert) {
-                Assert.fail(message);
-            } else {
-                System.err.println(message);
-            }
         }
     }
 }

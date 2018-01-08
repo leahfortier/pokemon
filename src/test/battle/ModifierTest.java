@@ -11,8 +11,8 @@ import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import test.BaseTest;
-import test.GeneralTest;
 import test.TestPokemon;
+import test.TestUtils;
 import type.Type;
 import util.StringUtils;
 
@@ -75,13 +75,13 @@ public class ModifierTest extends BaseTest {
         int afterStat = Stat.getStat(stat, statPokemon, otherPokemon, battle);
         int otherAfterStat = Stat.getStat(stat, otherPokemon, statPokemon, battle);
 
-        GeneralTest.assertEquals(
+        TestUtils.assertEquals(
                 StringUtils.spaceSeparated(beforeStat, afterStat, expectedChange, testInfo),
                 (int)(beforeStat*expectedChange),
                 afterStat
         );
 
-        GeneralTest.assertEquals((int)(otherBeforeStat*otherExpectedChange), otherAfterStat);
+        TestUtils.assertEquals((int)(otherBeforeStat*otherExpectedChange), otherAfterStat);
     }
 
     @Test
@@ -217,7 +217,7 @@ public class ModifierTest extends BaseTest {
         testInfo.manipulate(battle);
         double afterModifier = battle.getDamageModifier(attacking, defending);
 
-        GeneralTest.assertEquals(
+        TestUtils.assertEquals(
                 StringUtils.spaceSeparated(beforeModifier, afterModifier, expectedChange, testInfo),
                 expectedChange*beforeModifier,
                 afterModifier
@@ -352,16 +352,16 @@ public class ModifierTest extends BaseTest {
 
         attacking.setupMove(AttackNamesies.EMBER, battle);
         double unactivatedFire = battle.getDamageModifier(attacking, defending);
-        GeneralTest.assertEquals(1, unactivatedFire);
+        TestUtils.assertEquals(1, unactivatedFire);
 
         battle.defendingFight(AttackNamesies.EMBER);
         attacking.setupMove(AttackNamesies.SURF, battle);
         double activatedNonFire = battle.getDamageModifier(attacking, defending);
-        GeneralTest.assertEquals(1, activatedNonFire);
+        TestUtils.assertEquals(1, activatedNonFire);
 
         attacking.setupMove(AttackNamesies.EMBER, battle);
         double activatedFire = battle.getDamageModifier(attacking, defending);
-        GeneralTest.assertEquals(1.5, activatedFire);
+        TestUtils.assertEquals(1.5, activatedFire);
     }
 
     @Test

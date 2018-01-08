@@ -4,7 +4,6 @@ import map.entity.EntityAction;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionMatcher;
 import pattern.generic.MultiPointTriggerMatcher;
-import util.Point;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +12,6 @@ import java.util.List;
 public class MiscEntityMatcher extends MultiPointTriggerMatcher {
     private String name;
     private ActionMatcher[] actions;
-    public List<Point> location2;
 
     public MiscEntityMatcher(String name, String condition, ActionMatcher[] actions) {
         this.name = name;
