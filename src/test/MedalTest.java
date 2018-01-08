@@ -8,9 +8,29 @@ import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import trainer.player.Player;
 import trainer.player.medal.Medal;
+import trainer.player.medal.MedalCase;
 import util.save.Save;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public class MedalTest extends BaseTest {
+    @Test
+    public void lastMedalTest() {
+        MedalCase medalCase = Game.getPlayer().getMedalCase();
+
+        Set<Medal> otherMedals = EnumSet.complementOf(EnumSet.of(Medal.TOP_MEDALIST));
+        Assert.assertEquals(Medal.values().length - 1, otherMedals.size());
+
+        for (Medal medal : otherMedals) {
+            Assert.assertFalse(medalCase.hasMedal(Medal.TOP_MEDALIST));
+            medalCase.earnMedal(medal);
+        }
+
+        // Awarded when the player has every medal other than this one
+        Assert.assertTrue(medalCase.hasMedal(Medal.TOP_MEDALIST));
+    }
+
     @Test
     public void evsTest() {
         Player player = Game.getPlayer();

@@ -12,7 +12,7 @@ import input.InputControl;
 import main.Game;
 import main.Global;
 import message.MessageUpdate;
-import message.MessageUpdate.Update;
+import message.MessageUpdateType;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.PokemonInfo;
@@ -113,7 +113,7 @@ class EvolutionView extends View {
                     while (Messages.peek().learnMove()) {
                         MessageUpdate message = Messages.getNextMessage();
                         messages.add(new MessageUpdate()
-                                             .withUpdate(Update.LEARN_MOVE)
+                                             .withUpdate(MessageUpdateType.LEARN_MOVE)
                                              .withLearnMove(evolvingPokemon, message.getMove())
                         );
                     }

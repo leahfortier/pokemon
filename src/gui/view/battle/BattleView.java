@@ -17,7 +17,7 @@ import map.Direction;
 import map.daynight.DayCycle;
 import map.overworld.TerrainType;
 import message.MessageUpdate;
-import message.MessageUpdate.Update;
+import message.MessageUpdateType;
 import message.Messages;
 import pokemon.ActivePokemon;
 import util.StringUtils;
@@ -49,7 +49,7 @@ public class BattleView extends View {
 
     // The current state that the battle is in and current update type
     private VisualState state;
-    private Update update;
+    private MessageUpdateType updateType;
 
     // Displayable current weather and terrain
     private Weather weather;
@@ -118,7 +118,7 @@ public class BattleView extends View {
         }
 
         setVisualState(VisualState.MESSAGE);
-        update = Update.NO_UPDATE;
+        updateType = MessageUpdateType.NO_UPDATE;
 
         Game.getPlayer().clearLogMessages();
     }
@@ -130,7 +130,7 @@ public class BattleView extends View {
         }
 
         state.update(this);
-        update.performUpdate(this);
+        updateType.performUpdate(this);
     }
 
     public Battle getCurrentBattle() {
@@ -209,7 +209,7 @@ public class BattleView extends View {
     }
 
     public void clearUpdate() {
-        this.update = Update.NO_UPDATE;
+        this.updateType = MessageUpdateType.NO_UPDATE;
     }
 
     // Just for updates and whatnot
@@ -245,7 +245,7 @@ public class BattleView extends View {
             state.checkMessage(newMessage);
             if (!newMessage.switchUpdate()) {
                 if (newMessage.hasUpdateType()) {
-                    update = newMessage.getUpdateType();
+                    updateType = newMessage.getUpdateType();
                 }
 
                 if (newMessage.learnMove()) {

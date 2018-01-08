@@ -754,17 +754,18 @@ public class AttackTest extends BaseTest {
     @Test
     public void fellStingerTest() {
         TestBattle battle = TestBattle.create(PokemonNamesies.KARTANA, PokemonNamesies.HAPPINY);
-        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.NO_ABILITY);
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.STURDY);
         TestPokemon defending = battle.getDefending();
 
         // Stage should not change without MURDER
         Assert.assertEquals(0, defending.getStage(Stat.ATTACK));
-        battle.defendingFight(AttackNamesies.FELL_STINGER);
+        battle.fight(AttackNamesies.ENDURE, AttackNamesies.FELL_STINGER);
         Assert.assertFalse(attacking.isFainted(battle));
         Assert.assertEquals(0, defending.getStage(Stat.ATTACK));
 
         // Kill kill kill MURDER MURDER MURDER
         Assert.assertEquals(0, attacking.getStage(Stat.ATTACK));
+        battle.falseSwipePalooza(true);
         battle.attackingFight(AttackNamesies.FELL_STINGER);
         Assert.assertTrue(defending.isFainted(battle));
         Assert.assertEquals(2, attacking.getStage(Stat.ATTACK));

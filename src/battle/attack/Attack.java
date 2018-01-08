@@ -61,7 +61,7 @@ import main.Game;
 import main.Global;
 import map.overworld.TerrainType;
 import message.MessageUpdate;
-import message.MessageUpdate.Update;
+import message.MessageUpdateType;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
@@ -8889,7 +8889,7 @@ public abstract class Attack implements Serializable {
 
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add(user.getName() + " teleported out of battle!");
-            Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+            Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
         }
 
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {

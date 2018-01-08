@@ -38,7 +38,7 @@ public final class RandomUtils {
 
     // Returns a random int with exclusive upper bound from range [0, upperBound)
     public static int getRandomInt(final int upperBound) {
-        if (upperBound == 0) {
+        if (upperBound <= 0) {
             return 0;
         }
 

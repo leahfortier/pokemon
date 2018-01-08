@@ -4,23 +4,19 @@ import battle.Battle;
 import battle.attack.Move;
 import battle.effect.generic.Weather;
 import gui.view.ViewMode;
-import gui.view.battle.BattleView;
-import gui.view.battle.VisualState;
 import main.Game;
 import map.overworld.TerrainType;
-import message.Messages.MessageState;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
-import sound.SoundPlayer;
 import sound.SoundTitle;
 import type.Type;
 import util.SerializationUtils;
 import util.StringUtils;
 
 public class MessageUpdate {
-    public static final String PLAYER_NAME = "{playerName}";
+    private static final String PLAYER_NAME = "{playerName}";
 
     private final String message;
     private int[] statGains;
@@ -32,7 +28,7 @@ public class MessageUpdate {
     private boolean isPlayer; // SO YOU KNOW WHO TO GIVE THE HP/STATUS UPDATE TO
     private boolean switchPokemon;
     private Float expRatio;
-    private Update updateType;
+    private MessageUpdateType updateType;
     private boolean levelUp;
     private String name;
     private Gender gender;
@@ -51,7 +47,7 @@ public class MessageUpdate {
 
     public MessageUpdate(String message) {
         this.message = message.replace(PLAYER_NAME, Game.getPlayer().getName());
-        this.updateType = Update.NO_UPDATE;
+        this.updateType = MessageUpdateType.NO_UPDATE;
     }
 
     public MessageUpdate() {
@@ -62,7 +58,7 @@ public class MessageUpdate {
     public MessageUpdate withStatGains(int[] gains, int[] stats) {
         statGains = gains;
         newStats = stats;
-        updateType = Update.STAT_GAIN;
+        updateType = MessageUpdateType.STAT_GAIN;
         isPlayer = true;
         return this;
     }
@@ -104,7 +100,7 @@ public class MessageUpdate {
                    .withFrontPokemon(b, pokemon);
     }
 
-    // Pokemon image Update!
+    // Pokemon Image Update!
     public MessageUpdate withNewPokemon(PokemonInfo pokemon, boolean shiny, boolean animation, boolean isPlayer) {
         this.pokemon = pokemon;
         this.isPlayer = isPlayer;
@@ -143,14 +139,14 @@ public class MessageUpdate {
     }
 
     // Special type of update
-    public MessageUpdate withUpdate(Update update) {
+    public MessageUpdate withUpdate(MessageUpdateType update) {
         this.updateType = update;
         return this;
     }
 
     public MessageUpdate withTrigger(String triggerName) {
         this.triggerName = triggerName;
-        this.updateType = Update.TRIGGER;
+        this.updateType = MessageUpdateType.TRIGGER;
 
         return this;
     }
@@ -191,7 +187,7 @@ public class MessageUpdate {
     public MessageUpdate withLearnMove(ActivePokemon active, Move newMove) {
         this.moveLearner = active;
         this.move = newMove;
-        this.updateType = Update.LEARN_MOVE;
+        this.updateType = MessageUpdateType.LEARN_MOVE;
 
         return this;
     }
@@ -308,23 +304,23 @@ public class MessageUpdate {
     }
 
     public boolean hasUpdateType() {
-        return updateType != Update.NO_UPDATE;
+        return updateType != MessageUpdateType.NO_UPDATE;
     }
 
-    public Update getUpdateType() {
+    public MessageUpdateType getUpdateType() {
         return updateType;
     }
 
     public boolean learnMove() {
-        return updateType == Update.LEARN_MOVE;
+        return updateType == MessageUpdateType.LEARN_MOVE;
     }
 
     public boolean trigger() {
-        return updateType == Update.TRIGGER;
+        return updateType == MessageUpdateType.TRIGGER;
     }
 
     public boolean resetState() {
-        return updateType == Update.RESET_STATE;
+        return updateType == MessageUpdateType.RESET_STATE;
     }
 
     public String getTriggerName() {
@@ -381,69 +377,5 @@ public class MessageUpdate {
 
     public String getImageName() {
         return this.imageName;
-    }
-
-    public enum Update {
-        NO_UPDATE,
-        TRIGGER,
-        RESET_STATE,
-        ENTER_BATTLE,
-        ENTER_NAME,
-        APPEND_TO_NAME,
-        SHOW_POKEMON,
-        PROMPT_SWITCH(VisualState.POKEMON),
-        LEARN_MOVE(VisualState.LEARN_MOVE),
-        STAT_GAIN(VisualState.STAT_GAIN),
-        EXIT_BATTLE(battleView -> exitBattle(battleView, ViewMode.MAP_VIEW)),
-        CATCH_POKEMON(battleView -> exitBattle(battleView, ViewMode.NEW_POKEMON_VIEW)),
-        FORCE_SWITCH(battleView -> {
-            battleView.setVisualState(VisualState.POKEMON);
-            battleView.setSwitchForced();
-            battleView.clearUpdate();
-        }),
-        WIN_BATTLE(battleView -> {
-            if (battleView.getCurrentBattle().isWildBattle()) {
-                SoundPlayer.soundPlayer.playMusic(SoundTitle.WILD_POKEMON_DEFEATED);
-            } else {
-                // TODO: Get trainer win music
-                SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_DEFEATED);
-            }
-        });
-
-        private final PerformUpdate performUpdate;
-
-        Update() {
-            this(battleView -> {});
-        }
-
-        Update(final VisualState visualState) {
-            this(battleView -> {
-                battleView.setVisualState(visualState);
-                battleView.clearUpdate();
-            });
-        }
-
-        Update(PerformUpdate performUpdate) {
-            this.performUpdate = performUpdate;
-        }
-
-        public void performUpdate(BattleView battleView) {
-            this.performUpdate.performUpdate(battleView);
-        }
-
-        private static void exitBattle(BattleView battleView, ViewMode viewMode) {
-            Game.instance().setViewMode(viewMode);
-            battleView.clearUpdate();
-            Messages.clearMessages(MessageState.FIGHTY_FIGHT);
-            Messages.setMessageState(MessageState.MAPPITY_MAP);
-            Game.getPlayer().getEntity().resetCurrentInteractionEntity();
-
-            Game.getPlayer().checkEvolution();
-        }
-
-        @FunctionalInterface
-        private interface PerformUpdate {
-            void performUpdate(BattleView battleView);
-        }
     }
 }

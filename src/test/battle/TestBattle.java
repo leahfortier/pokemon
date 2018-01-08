@@ -54,9 +54,13 @@ public class TestBattle extends Battle {
     void fight(AttackNamesies attackingMove, AttackNamesies defendingMove) {
         getPlayer().setAction(TrainerAction.FIGHT);
 
-        getAttacking().setupMove(attackingMove, this);
-        getDefending().setupMove(defendingMove, this);
-        super.fight(getAttacking(), getDefending());
+        TestPokemon attacking = this.getAttacking();
+        TestPokemon defending = this.getDefending();
+
+        attacking.setupMove(attackingMove, this);
+        defending.setupMove(defendingMove, this);
+
+        super.fight(attacking, defending);
     }
 
     void attackingFight(AttackNamesies attackNamesies) {
@@ -67,11 +71,11 @@ public class TestBattle extends Battle {
         fight(AttackNamesies.SPLASH, attackNamesies);
     }
 
-    void falseSwipePalooza() {
-        TestPokemon attacking = getAttacking();
-        TestPokemon defending = getDefending();
-        while (attacking.getHP() > 1) {
-            defending.apply(true, AttackNamesies.FALSE_SWIPE, this);
+    void falseSwipePalooza(boolean playerAttacking) {
+        TestPokemon attacking = playerAttacking ? this.getAttacking() : this.getDefending();
+        TestPokemon defending = this.getOtherPokemon(attacking);
+        while (defending.getHP() > 1) {
+            attacking.apply(true, AttackNamesies.FALSE_SWIPE, this);
         }
     }
 

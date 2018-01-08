@@ -6,7 +6,7 @@ import draw.button.Button;
 import input.ControlKey;
 import input.InputControl;
 import message.MessageUpdate;
-import message.MessageUpdate.Update;
+import message.MessageUpdateType;
 import pokemon.ActivePokemon;
 import util.Point;
 import util.StringUtils;
@@ -45,7 +45,7 @@ public class LearnMovePanel {
         state = State.MESSAGE;
 
         messages = new ArrayDeque<>();
-        messages.add(new MessageUpdate(learning.getName() + " is trying to learn " + toLearn.getAttack().getName() + "...").withUpdate(Update.LEARN_MOVE));
+        messages.add(new MessageUpdate(learning.getName() + " is trying to learn " + toLearn.getAttack().getName() + "...").withUpdate(MessageUpdateType.LEARN_MOVE));
         messages.add(new MessageUpdate("Delete a move in order to learn " + toLearn.getAttack().getName() + "?"));
 
         updateActiveButtons();

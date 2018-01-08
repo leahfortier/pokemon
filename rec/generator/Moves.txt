@@ -5370,7 +5370,7 @@ Teleport:
 	Applies: b.isWildBattle()
 	UniqueEffects:
 		Messages.add(user.getName() + " teleported out of battle!");
-		Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+		Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
 		###
 *
 Role Play:

@@ -24,7 +24,7 @@ import map.entity.movable.PlayerEntity;
 import map.overworld.TerrainType;
 import map.triggers.Trigger;
 import message.MessageUpdate;
-import message.MessageUpdate.Update;
+import message.MessageUpdateType;
 import message.Messages;
 import sound.SoundPlayer;
 import sound.SoundTitle;
@@ -256,7 +256,7 @@ public class MapView extends View {
 
         if (showMessage && emptyMessage() && Messages.hasMessages()) {
             cycleMessage();
-            if (this.currentMessage != null && this.currentMessage.getUpdateType() != Update.ENTER_BATTLE) {
+            if (this.currentMessage != null && this.currentMessage.getUpdateType() != MessageUpdateType.ENTER_BATTLE) {
                 setState(VisualState.MESSAGE);
             }
         }

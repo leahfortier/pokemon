@@ -2,7 +2,7 @@ package map.triggers;
 
 import main.Global;
 import message.MessageUpdate;
-import message.MessageUpdate.Update;
+import message.MessageUpdateType;
 import message.Messages;
 import util.StringUtils;
 
@@ -22,7 +22,7 @@ public class HaltTrigger extends Trigger {
         if (halted) {
             addHaltTrigger();
         } else {
-            Messages.addToFront(new MessageUpdate().withUpdate(Update.RESET_STATE));
+            Messages.addToFront(new MessageUpdate().withUpdate(MessageUpdateType.RESET_STATE));
         }
     }
 

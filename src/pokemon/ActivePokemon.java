@@ -40,7 +40,7 @@ import item.hold.HoldItem;
 import main.Game;
 import main.Global;
 import message.MessageUpdate;
-import message.MessageUpdate.Update;
+import message.MessageUpdateType;
 import message.Messages;
 import pattern.PokemonMatcher;
 import pokemon.ability.Ability;
@@ -676,7 +676,7 @@ public class ActivePokemon implements Serializable {
         Team opponent = b.getTrainer(victim);
         if (opponent instanceof WildPokemon) {
             // End the battle against a wild Pokemon
-            Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+            Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
         } else {
             Trainer trainer = (Trainer)opponent;
 
@@ -706,7 +706,7 @@ public class ActivePokemon implements Serializable {
             }
 
             Messages.add(message);
-            Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+            Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
             return true;
         }
 

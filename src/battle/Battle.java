@@ -31,7 +31,7 @@ import map.area.AreaData;
 import map.overworld.TerrainType;
 import map.weather.WeatherState;
 import message.MessageUpdate;
-import message.MessageUpdate.Update;
+import message.MessageUpdateType;
 import message.Messages;
 import message.Messages.MessageState;
 import pattern.action.UpdateMatcher;
@@ -86,7 +86,7 @@ public class Battle implements Serializable {
     public Battle(Opponent opponent) {
         Messages.clearMessages(MessageState.FIGHTY_FIGHT);
         Messages.setMessageState(MessageState.FIGHTY_FIGHT);
-        Messages.add(new MessageUpdate().withUpdate(Update.ENTER_BATTLE));
+        Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.ENTER_BATTLE));
 
         Player player = Game.getPlayer();
         player.getMedalCase().increase(MedalTheme.BATTLES_BATTLED);
@@ -327,7 +327,7 @@ public class Battle implements Serializable {
 
         // Dead Front Pokemon, but you still have others to spare -- force a switch
         if (!player.blackout(this)) {
-            Messages.add(new MessageUpdate("What Pokemon would you like to switch to?").withUpdate(Update.FORCE_SWITCH));
+            Messages.add(new MessageUpdate("What Pokemon would you like to switch to?").withUpdate(MessageUpdateType.FORCE_SWITCH));
             return false;
         }
 
@@ -345,7 +345,7 @@ public class Battle implements Serializable {
         ((Player)player).teleportToPokeCenter();
 
         Messages.clearMessages(MessageState.MAPPITY_MAP);
-        Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+        Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
 
         return true;
     }
@@ -435,7 +435,7 @@ public class Battle implements Serializable {
                 plyr.getAbility() instanceof DefiniteEscape || // TODO: This is wrong and should be able to escape even with mean look and such
                 plyr.getHeldItem(this) instanceof DefiniteEscape) { // TODO: Why is this only checking ability and hold item
             Messages.add("Got away safely!");
-            Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+            Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
             return true;
         }
 

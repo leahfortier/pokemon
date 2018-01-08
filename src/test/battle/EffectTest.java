@@ -231,7 +231,7 @@ public class EffectTest extends BaseTest {
         );
         checkCritStage(2, new TestInfo()
                 .attacking(PokemonNamesies.BULBASAUR, ItemNamesies.LANSAT_BERRY)
-                .with((battle, attacking, defending) -> battle.falseSwipePalooza())
+                .with((battle, attacking, defending) -> battle.falseSwipePalooza(false))
         );
 
         // Razor Claw and Scope Lens increase by 1
@@ -266,7 +266,7 @@ public class EffectTest extends BaseTest {
         checkCritStage(4, new TestInfo()
                 .attackingFight(AttackNamesies.FOCUS_ENERGY)
                 .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT))
-                .attacking(ItemNamesies.LANSAT_BERRY).with((battle, attacking, defending) -> battle.falseSwipePalooza())
+                .attacking(ItemNamesies.LANSAT_BERRY).with((battle, attacking, defending) -> battle.falseSwipePalooza(false))
         );
 
         // Can't go over the max

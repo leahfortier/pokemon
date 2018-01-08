@@ -18,7 +18,7 @@ import map.overworld.OverworldTool;
 import map.triggers.TriggerType;
 import map.triggers.battle.FishingTrigger;
 import message.MessageUpdate;
-import message.MessageUpdate.Update;
+import message.MessageUpdateType;
 import message.Messages;
 import pattern.SimpleMapTransition;
 import pattern.action.UpdateMatcher;
@@ -404,7 +404,7 @@ public class Player extends PlayerTrainer implements Serializable {
         // Trainers pay up!
         if (opponent instanceof Trainer) {
             Trainer opp = (Trainer)opponent;
-            Messages.add(new MessageUpdate(getName() + " defeated " + opp.getName() + "!").withUpdate(Update.WIN_BATTLE));
+            Messages.add(new MessageUpdate(getName() + " defeated " + opp.getName() + "!").withUpdate(MessageUpdateType.WIN_BATTLE));
             this.setNpcInteraction(b.getNpcUpdateInteraction());
 
             // I've decided that the next line of code is the best line in this entire codebase
@@ -412,7 +412,7 @@ public class Player extends PlayerTrainer implements Serializable {
             Messages.add(getName() + " received " + datCash + " pokedollars for winning! Woo!");
             getDatCashMoney(datCash);
         } else {
-            Messages.add(new MessageUpdate().withUpdate(Update.WIN_BATTLE));
+            Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.WIN_BATTLE));
         }
 
         EndBattleEffect.invokeEndBattleEffect(this.getEffects(), this, b, front());
@@ -423,7 +423,7 @@ public class Player extends PlayerTrainer implements Serializable {
         setFront();
 
         // WE'RE DONE HERE
-        Messages.add(new MessageUpdate().withUpdate(Update.EXIT_BATTLE));
+        Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
     }
 
     public void checkEvolution() {
@@ -582,7 +582,7 @@ public class Player extends PlayerTrainer implements Serializable {
         addPokemon(catchPokemon);
         ball.afterCaught(catchPokemon);
 
-        Messages.add(new MessageUpdate().withUpdate(Update.CATCH_POKEMON));
+        Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.CATCH_POKEMON));
         return true;
     }
 
