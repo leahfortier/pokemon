@@ -14,6 +14,7 @@ import message.MessageUpdate;
 import message.Messages;
 import pokemon.ActivePokemon;
 import pokemon.Stat;
+import pokemon.ability.AbilityNamesies;
 import util.StringUtils;
 
 import java.io.Serializable;
@@ -43,19 +44,20 @@ public class BattleAttributes implements Serializable {
     public BattleAttributes(ActivePokemon attributesHolder) {
         this.attributesHolder = attributesHolder;
 
-        resetStages();
         used = false;
         battleUsed = false;
         effects = new ArrayList<>();
         successionDecayRate = 1;
         lastMoveUsed = null;
-        counter = 1;
         damageTaken = 0;
         firstTurn = true;
         attacking = false;
         lastMoveSucceeded = true;
         castSource = null;
         reducePP = false;
+
+        resetStages();
+        resetCount();
     }
 
     public void setAttributesHolder(ActivePokemon attributesHolder) {
@@ -64,10 +66,6 @@ public class BattleAttributes implements Serializable {
 
     public void setReducePP(boolean reduce) {
         reducePP = reduce;
-    }
-
-    public boolean shouldReducePP() {
-        return reducePP;
     }
 
     public Object getCastSource() {
@@ -159,7 +157,7 @@ public class BattleAttributes implements Serializable {
         }
     }
 
-    public void resetCount() {
+    private void resetCount() {
         counter = 1;
     }
 
@@ -356,5 +354,26 @@ public class BattleAttributes implements Serializable {
 
         this.setStage(stat, victimStat);
         other.getAttributes().setStage(stat, userStat);
+    }
+
+    public void startAttack(Battle b) {
+        this.setAttacking(true);
+        this.getMove().switchReady(b, this.attributesHolder); // TODO: I don't think this works right because this is happening before you check if they're able to attack and honestly they shouldn't really switch until the end of the turn
+        this.getMove().setAttributes(b, this.attributesHolder);
+    }
+
+    public void endAttack(ActivePokemon opp, boolean success) {
+        if (!success) {
+            this.removeEffect(EffectNamesies.SELF_CONFUSION);
+            this.resetCount();
+        }
+
+        this.setLastMoveUsed();
+
+        if (this.reducePP) {
+            this.getMove().reducePP(opp.hasAbility(AbilityNamesies.PRESSURE) ? 2 : 1);
+        }
+
+        this.setAttacking(false);
     }
 }

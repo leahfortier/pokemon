@@ -85,7 +85,6 @@ public abstract class Attack implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private AttackNamesies namesies;
-    private String name;
     private String description;
     private int power;
     private int accuracy;
@@ -103,7 +102,6 @@ public abstract class Attack implements Serializable {
 
     public Attack(AttackNamesies namesies, Type type, MoveCategory category, int pp, String description) {
         this.namesies = namesies;
-        this.name = namesies.getName();
         this.description = description;
         this.pp = pp;
         this.type = type;
@@ -201,7 +199,7 @@ public abstract class Attack implements Serializable {
     }
 
     public String getName() {
-        return this.name;
+        return this.namesies.getName();
     }
 
     public String getDescription() {
@@ -474,6 +472,11 @@ public abstract class Attack implements Serializable {
 
     // To be overridden if necessary
     public void startTurn(Battle b, ActivePokemon me) {}
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 
     // EVERYTHING BELOW IS GENERATED ###
 

@@ -505,7 +505,7 @@ public class Battle implements Serializable {
 
         boolean success = false;
 
-        me.startAttack(this);
+        me.getAttributes().startAttack(this);
 
         // HOLD IT RIGHT THERE! YOU MAY NOT BE ABLE TO ATTACK!
         if (ableToAttack(me, o)) {
@@ -522,7 +522,7 @@ public class Battle implements Serializable {
             }
         }
 
-        me.endAttack(o, success);
+        me.getAttributes().endAttack(o, success);
 
         // Can't use me and o in case there was a switch mid-turn
         Messages.add(new MessageUpdate().updatePokemon(this, player.front()));

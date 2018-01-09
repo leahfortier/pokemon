@@ -2,17 +2,22 @@ package test.battle;
 
 import battle.Battle;
 import battle.attack.AttackNamesies;
+import org.junit.Assert;
 import pokemon.ActivePokemon;
 import pokemon.PokemonNamesies;
 import test.TestCharacter;
 import test.TestPokemon;
+import test.TestUtils;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.WildPokemon;
+import util.StringUtils;
 
 public class TestBattle extends Battle {
+    private Double expectedDamageModifier;
+
     private TestBattle(Opponent opponent) {
         super(opponent);
 
@@ -25,7 +30,21 @@ public class TestBattle extends Battle {
     }
 
     public double getDamageModifier(ActivePokemon attacking, ActivePokemon defending) {
-        return super.getDamageModifier(attacking, defending);
+        double modifier = super.getDamageModifier(attacking, defending);
+
+        Assert.assertTrue(modifier > 0);
+        if (expectedDamageModifier != null) {
+            TestUtils.assertEquals(
+                    StringUtils.spaceSeparated(attacking.getAttack(), attacking.getAttributes().getCount()),
+                    expectedDamageModifier, modifier
+            );
+        }
+
+        return modifier;
+    }
+
+    void setExpectedDamageModifier(Double damageModifier) {
+        this.expectedDamageModifier = damageModifier;
     }
 
     TestPokemon getAttacking() {

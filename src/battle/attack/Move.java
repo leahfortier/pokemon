@@ -127,6 +127,11 @@ public class Move implements Serializable {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return this.getAttack().getName() + " " + this.getPP();
+    }
+
     public static Move selectOpponentMove(Battle b, ActivePokemon p) {
         if (forceMove(b, p)) {
             return p.getMove();

@@ -536,6 +536,56 @@ public class AttackTest extends BaseTest {
     }
 
     @Test
+    public void counterTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.HAPPINY, PokemonNamesies.SHUCKLE);
+
+        assertModifier(1, AttackNamesies.ROLLOUT, battle);
+        assertModifier(2, AttackNamesies.ROLLOUT, battle);
+        assertModifier(3, AttackNamesies.ROLLOUT, battle);
+        assertModifier(4, AttackNamesies.ROLLOUT, battle);
+        assertModifier(5, AttackNamesies.ROLLOUT, battle);
+
+        // Max is 5
+        assertModifier(5, AttackNamesies.ROLLOUT, battle);
+        assertModifier(5, AttackNamesies.ROLLOUT, battle);
+
+        // Other count-based moves (obviously) do not stack
+        assertModifier(1, AttackNamesies.FURY_CUTTER, battle);
+        assertModifier(1, AttackNamesies.ICE_BALL, battle);
+        assertModifier(1, AttackNamesies.ROLLOUT, battle);
+
+        // Defense Curl increases multiplier by 2 for Rollout and Ice Ball (but not for Fury Cutter)
+        assertModifier(1, AttackNamesies.DEFENSE_CURL, battle);
+        assertModifier(2, AttackNamesies.ROLLOUT, battle);
+        assertModifier(4, AttackNamesies.ROLLOUT, battle);
+        assertModifier(6, AttackNamesies.ROLLOUT, battle);
+        assertModifier(8, AttackNamesies.ROLLOUT, battle);
+        assertModifier(10, AttackNamesies.ROLLOUT, battle);
+        assertModifier(10, AttackNamesies.ROLLOUT, battle);
+        assertModifier(1, AttackNamesies.FURY_CUTTER, battle);
+        assertModifier(2, AttackNamesies.FURY_CUTTER, battle);
+        assertModifier(3, AttackNamesies.FURY_CUTTER, battle);
+
+        // Minimize does nothing (not sure why I included it)
+        assertModifier(2, AttackNamesies.ROLLOUT, battle);
+        assertModifier(1, AttackNamesies.MINIMIZE, battle);
+        assertModifier(1, AttackNamesies.FURY_CUTTER, battle);
+        assertModifier(2, AttackNamesies.ROLLOUT, battle);
+        assertModifier(2, AttackNamesies.ICE_BALL, battle);
+        assertModifier(4, AttackNamesies.ICE_BALL, battle);
+    }
+
+    private void assertModifier(double expectedModifier, AttackNamesies attack, TestBattle battle) {
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        defending.fullyHeal();
+        battle.setExpectedDamageModifier(expectedModifier);
+        battle.attackingFight(attack);
+        TestUtils.assertEquals(expectedModifier, battle.getDamageModifier(attacking, defending));
+    }
+
+    @Test
     public void evasionRemovalTest() {
         TestBattle battle = TestBattle.create();
         TestPokemon attacking = battle.getAttacking();

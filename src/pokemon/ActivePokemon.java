@@ -1326,27 +1326,6 @@ public class ActivePokemon implements Serializable {
         return this.getPokemonInfo().getWeight()/Math.pow(2, halfAmount);
     }
 
-    public void startAttack(Battle b) {
-        this.getAttributes().setAttacking(true);
-        this.getMove().switchReady(b, this); // TODO: I don't think this works right because this is happening before you check if they're able to attack and honestly they shouldn't really switch until the end of the turn
-        this.getMove().setAttributes(b, this);
-    }
-
-    public void endAttack(ActivePokemon opp, boolean success) {
-        if (!success) {
-            this.getAttributes().removeEffect(EffectNamesies.SELF_CONFUSION);
-            this.getAttributes().resetCount();
-        }
-
-        this.getAttributes().setLastMoveUsed();
-
-        if (this.getAttributes().shouldReducePP()) {
-            this.getMove().reducePP(opp.hasAbility(AbilityNamesies.PRESSURE) ? 2 : 1);
-        }
-
-        this.getAttributes().setAttacking(false);
-    }
-
     public boolean canBreed() {
         return !isEgg && this.getPokemonInfo().canBreed();
     }
