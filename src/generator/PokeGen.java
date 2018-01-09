@@ -9,6 +9,8 @@ import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
+import generator.format.InputFormatter;
+import generator.format.MethodInfo;
 import item.Item;
 import item.ItemNamesies;
 import item.use.TechnicalMachine;

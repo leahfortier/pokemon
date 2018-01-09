@@ -2,7 +2,7 @@ package generator;
 
 import main.Global;
 
-enum AccessModifier {
+public enum AccessModifier {
     PUBLIC("public"),
     PRIVATE("private"),
     PROTECTED("protected"),
@@ -15,11 +15,11 @@ enum AccessModifier {
         this.modifierName = modifierName;
     }
 
-    String getModifierName() {
+    public String getModifierName() {
         return this.modifierName;
     }
 
-    static AccessModifier getAccessModifier(final String modifierName) {
+    public static AccessModifier getAccessModifier(final String modifierName) {
         switch (modifierName.toLowerCase()) {
             case "public":
                 return PUBLIC;

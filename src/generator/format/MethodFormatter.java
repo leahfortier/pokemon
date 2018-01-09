@@ -1,8 +1,8 @@
-package generator;
+package generator.format;
 
 import util.StringAppender;
 
-class MethodFormatter {
+public class MethodFormatter {
 
     private int tabs;
     private int parenthesesBalance;
@@ -11,7 +11,7 @@ class MethodFormatter {
     private boolean inSwitch;
     private boolean inCases;
 
-    MethodFormatter(int tabs) {
+    public MethodFormatter(int tabs) {
         this.tabs = tabs;
 
         this.parenthesesBalance = 0;
@@ -22,7 +22,7 @@ class MethodFormatter {
 
     // Appends the trimmed line with the appropriate tabs
     // Code inside parentheses and array declaration will have two tabs indented
-    void appendLine(String line, StringAppender method) {
+    public void appendLine(String line, StringAppender method) {
         line = line.trim();
 
         if (line.startsWith("switch (")) {

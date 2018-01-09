@@ -1,5 +1,6 @@
-package generator;
+package generator.format;
 
+import generator.ClassFields;
 import main.Global;
 import util.FileIO;
 import util.FileName;
@@ -18,7 +19,7 @@ import java.util.Set;
 public class InputFormatter {
     private List<Entry<String, MethodInfo>> overrideMethods;
 
-    protected void validate(ClassFields fields) {}
+    public void validate(ClassFields fields) {}
 
     protected String replaceBody(String body, String original, String remaining, int parameterIndex, int numParameters) {
         for (ReplaceType replaceType : ReplaceType.values()) {
@@ -28,7 +29,7 @@ public class InputFormatter {
         return body;
     }
 
-    String replaceBody(String body, String fieldValue, String className, String superClass) {
+    public String replaceBody(String body, String fieldValue, String className, String superClass) {
         body = body.replace("@ClassName", className);
         body = body.replace("@SuperClass", superClass.toUpperCase());
 
@@ -49,7 +50,7 @@ public class InputFormatter {
         return body;
     }
 
-    List<Entry<String, MethodInfo>> getOverrideMethods() {
+    public List<Entry<String, MethodInfo>> getOverrideMethods() {
         if (this.overrideMethods == null) {
             this.readFormat();
         }
@@ -87,7 +88,7 @@ public class InputFormatter {
         }
     }
 
-    String getValue(SplitScanner split, String fieldValue, String fieldType) {
+    public String getValue(SplitScanner split, String fieldValue, String fieldType) {
         switch (fieldType) {
             case "StraightUp":
                 return fieldValue;
@@ -116,7 +117,7 @@ public class InputFormatter {
         }
     }
 
-    String getAssignment(String assignmentInfo, String fieldValue) {
+    public String getAssignment(String assignmentInfo, String fieldValue) {
         SplitScanner split = new SplitScanner(assignmentInfo);
 
         String type = split.next();
@@ -152,7 +153,7 @@ public class InputFormatter {
         return assignment;
     }
 
-    String getImplementsString(List<String> interfaces) {
+    public String getImplementsString(List<String> interfaces) {
         if (interfaces.isEmpty()) {
             return StringUtils.empty();
         }
@@ -160,7 +161,7 @@ public class InputFormatter {
         return "implements " + String.join(", ", interfaces);
     }
 
-    String getConstructorValue(Entry<String, String> pair, ClassFields fields) {
+    public String getConstructorValue(Entry<String, String> pair, ClassFields fields) {
         SplitScanner split = new SplitScanner(pair.getValue());
 
         String type = split.next();

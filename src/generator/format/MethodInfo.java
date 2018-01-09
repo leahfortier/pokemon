@@ -1,5 +1,8 @@
-package generator;
+package generator.format;
 
+import generator.AccessModifier;
+import generator.ClassFields;
+import generator.StuffGen;
 import main.Global;
 import util.StringAppender;
 import util.StringUtils;
@@ -10,10 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-class MethodInfo {
+public class MethodInfo {
     private String header;
     private AccessModifier accessModifier;
-    
+
     private String begin;
     private String body;
     private String end;
@@ -36,14 +39,14 @@ class MethodInfo {
         this.addMapFields = new ArrayList<>();
     }
 
-    MethodInfo(final String header, final String body) {
+    public MethodInfo(final String header, final String body) {
         this();
 
         this.header = header;
         this.body = body;
     }
 
-    MethodInfo(final String header, final String body, final AccessModifier accessModifier) {
+    public MethodInfo(final String header, final String body, final AccessModifier accessModifier) {
         this();
 
         this.header = header;
@@ -122,7 +125,7 @@ class MethodInfo {
         return this.writeFunction();
     }
 
-    String writeFunction() {
+    public String writeFunction() {
         final String body = StringUtils.isNullOrEmpty(this.fullBody) ? this.body : this.fullBody;
 
         StringAppender method = new StringAppender();
@@ -145,14 +148,13 @@ class MethodInfo {
     }
 
     // Interface name should be empty if it is an override
-    static boolean addMethodInfo(StringAppender methods,
+    public static boolean addMethodInfo(StringAppender methods,
                                  List<Map.Entry<String, MethodInfo>> methodList,
                                  ClassFields fields,
                                  List<String> interfaces,
                                  String interfaceName,
                                  String superClass,
-                                 InputFormatter inputFormatter
-    ) {
+                                 InputFormatter inputFormatter) {
         boolean added = false;
         String className = fields.getClassName();
 
@@ -205,11 +207,11 @@ class MethodInfo {
         return added;
     }
 
-    static String createHeader(final String returnType, final String methodName, final String parameters) {
+    public static String createHeader(final String returnType, final String methodName, final String parameters) {
         return createHeader(returnType + " " + methodName, parameters);
     }
 
-    static String createHeader(final String returnTypeAndName, final String parameters) {
+    public static String createHeader(final String returnTypeAndName, final String parameters) {
         return String.format("%s(%s)", returnTypeAndName, parameters);
     }
 }

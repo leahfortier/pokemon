@@ -1,5 +1,7 @@
-package generator;
+package generator.interfaces;
 
+import generator.AccessModifier;
+import generator.format.MethodInfo;
 import util.StringAppender;
 import util.StringUtils;
 

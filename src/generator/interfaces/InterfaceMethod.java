@@ -1,15 +1,9 @@
-package generator;
+package generator.interfaces;
 
 import battle.Battle;
-import generator.InvokeMethod.AddInvoke;
-import generator.InvokeMethod.CheckGetInvoke;
-import generator.InvokeMethod.CheckInvoke;
-import generator.InvokeMethod.CheckMessageInvoke;
-import generator.InvokeMethod.ContainsInvoke;
-import generator.InvokeMethod.GetInvoke;
-import generator.InvokeMethod.MultiplyInvoke;
-import generator.InvokeMethod.UpdateInvoke;
-import generator.InvokeMethod.VoidInvoke;
+import generator.AccessModifier;
+import generator.ClassFields;
+import generator.format.MethodInfo;
 import main.Global;
 import pattern.MatchType;
 import util.StringAppender;
@@ -23,7 +17,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class InterfaceMethod {
-
     private static final String COMMENTS = "Comments";
     private static final String RETURN_TYPE = "ReturnType";
     private static final String METHOD_NAME = "MethodName";
@@ -44,11 +37,13 @@ class InterfaceMethod {
     private static final String MOLD_BREAKER_NULL_CHECK = "MoldBreakerNullCheck";
     private static final String DEFAULT = "Default";
     private static final String DEADSIES = "Deadsies";
+
     private static final Pattern HEADER_PATTERN = Pattern.compile(
-            MatchType.VARIABLE_TYPE.group() + " " + // Group 1: return type
-                    MatchType.WORD.group() +        // Group 2: method name
-                    "\\((.*)\\)"                    // Group 3: method parameters
+            "^" + MatchType.VARIABLE_TYPE.group() + // Group 1: return type
+                    " " + MatchType.WORD.group() +  // Group 2: method name
+                    "\\((.*)\\)$"                   // Group 3: method parameters
     );
+
     private final String interfaceName;
 
     private String returnType;
@@ -84,7 +79,6 @@ class InterfaceMethod {
     }
 
     private void readFields(ClassFields fields) {
-
         final String header = fields.getAndRemoveTrimmed(HEADER);
         if (header != null) {
             Matcher matcher = HEADER_PATTERN.matcher(header);
@@ -352,37 +346,5 @@ class InterfaceMethod {
 
     Iterable<String> getDeadsies() {
         return this.deadsies;
-    }
-
-    private enum InvokeType {
-        VOID(input -> new VoidInvoke()),
-        CONTAINS(input -> new ContainsInvoke()),
-        CHECK(CheckInvoke::new),
-        CHECKGET(CheckGetInvoke::new),
-        CHECKMESSAGE(CheckMessageInvoke::new),
-        GET(input -> new GetInvoke()),
-        UPDATE(input -> new UpdateInvoke()),
-        MULTIPLY(input -> new MultiplyInvoke()),
-        ADD(input -> new AddInvoke());
-
-        private final GetInvokeMethod getInvokeMethod;
-
-        InvokeType(final GetInvokeMethod getInvokeMethod) {
-            this.getInvokeMethod = getInvokeMethod;
-        }
-
-        public InvokeMethod getInvokeMethod(final Scanner invokeInput) {
-            InvokeMethod invokeMethod = this.getInvokeMethod.getInvokeMethod(invokeInput);
-            if (invokeInput.hasNext()) {
-                Global.error("Too much input for " + this.getClass().getSimpleName() + ": " + invokeInput);
-            }
-
-            return invokeMethod;
-        }
-
-        @FunctionalInterface
-        private interface GetInvokeMethod {
-            InvokeMethod getInvokeMethod(Scanner invokeInput);
-        }
     }
 }

@@ -1,6 +1,6 @@
 package test;
 
-import generator.SplitScanner;
+import generator.format.SplitScanner;
 import item.ItemNamesies;
 import item.berry.farm.PlantedBerry;
 import org.junit.Assert;

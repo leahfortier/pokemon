@@ -1,5 +1,8 @@
 package generator;
 
+import generator.format.InputFormatter;
+import generator.format.MethodFormatter;
+import generator.interfaces.InterfaceGen;
 import main.Global;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
@@ -40,7 +43,7 @@ public class StuffGen {
     }
 
     // Opens the original file and appends the beginning until the key to generate
-    static StringAppender startGen(final String fileName) {
+    public static StringAppender startGen(final String fileName) {
         Scanner original = FileIO.openFile(fileName);
         StringAppender out = new StringAppender();
 
@@ -57,7 +60,7 @@ public class StuffGen {
         return out;
     }
 
-    static ClassFields readFields(Scanner in) {
+    public static ClassFields readFields(Scanner in) {
         ClassFields fields = new ClassFields();
         while (in.hasNextLine()) {
             String line = in.nextLine().trim();
@@ -75,7 +78,7 @@ public class StuffGen {
         return fields;
     }
 
-    static Entry<String, String> getFieldPair(Scanner in, String line) {
+    public static Entry<String, String> getFieldPair(Scanner in, String line) {
         String[] split = line.split(":", 2);
         if (split.length != 2) {
             Global.error("Field key and value must be separated by a colon " + line);
@@ -91,7 +94,7 @@ public class StuffGen {
         return new SimpleEntry<>(key, value);
     }
 
-    static String createClass(String classComments,
+    public static String createClass(String classComments,
                               String className,
                               String superClass,
                               String interfaces,
@@ -173,10 +176,9 @@ public class StuffGen {
                 .sorted()
                 .collect(Collectors.toList());
 
-        StringAppender out = new StringAppender();
-        for (PokemonInfo info : baseEvolutions) {
-            out.appendLine(info.getName());
-        }
+        StringAppender out = new StringAppender()
+                .appendJoin("\n", baseEvolutions, PokemonInfo::getName)
+                .appendLine();
 
         FileIO.overwriteFile(FileName.BASE_EVOLUTIONS, out.toString());
     }

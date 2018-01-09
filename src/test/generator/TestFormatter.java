@@ -1,8 +1,8 @@
 package test.generator;
 
 import generator.ClassFields;
-import generator.InputFormatter;
-import generator.ReplaceType;
+import generator.format.InputFormatter;
+import generator.format.ReplaceType;
 import org.junit.Assert;
 import util.StringUtils;
 
@@ -24,7 +24,7 @@ class TestFormatter extends InputFormatter {
     }
 
     @Override
-    protected void validate(ClassFields fields) {
+    public void validate(ClassFields fields) {
         String minTurnsString = fields.get("MinTurns");
         String maxTurnsString = fields.get("MaxTurns");
 

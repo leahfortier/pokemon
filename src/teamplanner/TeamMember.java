@@ -84,7 +84,7 @@ class TeamMember {
 
                 if (coverage[first][second] == coverageVal) {
                     types.appendDelimiter(", ", firstType.getName())
-                       .appendIf(secondType != Type.NO_TYPE, "/" + secondType.getName());
+                         .appendIf(secondType != Type.NO_TYPE, "/" + secondType.getName());
                 }
             }
         }

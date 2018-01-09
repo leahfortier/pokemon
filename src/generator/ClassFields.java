@@ -14,7 +14,7 @@ public class ClassFields {
         this.fields = new HashMap<>();
     }
 
-    String getClassName() {
+    public String getClassName() {
         if (StringUtils.isNullOrEmpty(this.className)) {
             Global.error("Class name not set yet -- cannot retrieve.");
         }
@@ -30,7 +30,7 @@ public class ClassFields {
         this.className = className;
     }
 
-    void add(String fieldName, String value) {
+    public void add(String fieldName, String value) {
         fields.put(fieldName, value);
     }
 
@@ -46,7 +46,7 @@ public class ClassFields {
         return null;
     }
 
-    String remove(String fieldName) {
+    public String remove(String fieldName) {
         return fields.remove(fieldName);
     }
 
@@ -66,7 +66,7 @@ public class ClassFields {
         return this.get(fieldName);
     }
 
-    String getAndRemove(String fieldName) {
+    public String getAndRemove(String fieldName) {
         if (this.contains(fieldName)) {
             String value = fields.get(fieldName);
             fields.remove(fieldName);
@@ -76,7 +76,7 @@ public class ClassFields {
         }
     }
 
-    String getAndRemoveTrimmed(String fieldName) {
+    public String getAndRemoveTrimmed(String fieldName) {
         String value = getAndRemove(fieldName);
         if (value == null) {
             return null;
@@ -96,7 +96,7 @@ public class ClassFields {
         return false;
     }
 
-    void confirmEmpty() {
+    public void confirmEmpty() {
         for (String field : fields.keySet()) {
             Global.error("Unused field " + field + " for class " + this.className);
         }

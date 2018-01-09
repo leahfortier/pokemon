@@ -11,6 +11,7 @@ import sound.SoundPlayer;
 import util.FileIO;
 import util.Folder;
 import util.FontMetrics;
+import util.GeneralUtils;
 import util.TimeUtils;
 import util.save.Save;
 import util.save.SavePreviewInfo;
@@ -51,7 +52,7 @@ public class MainMenuView extends View {
     }
 
     void toggleTheme() {
-        theme = Theme.values()[(theme.ordinal() + 1)%Theme.values().length];
+        theme = GeneralUtils.wrapIncrementValue(Theme.values(), theme.ordinal(), 1);
     }
 
     void saveSettings() {

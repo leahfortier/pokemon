@@ -1,4 +1,4 @@
-package generator;
+package generator.format;
 
 public enum ReplaceType {
     BASIC("", (original, remaining) -> original),

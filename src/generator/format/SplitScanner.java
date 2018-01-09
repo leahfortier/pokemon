@@ -1,4 +1,4 @@
-package generator;
+package generator.format;
 
 import main.Global;
 import util.StringUtils;
