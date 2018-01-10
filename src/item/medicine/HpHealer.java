@@ -11,14 +11,17 @@ import pokemon.ActivePokemon;
 public interface HpHealer extends MessageGetter, PokemonUseItem, HoldItem {
     int getAmountHealed(ActivePokemon p);
 
+    @Override
     default String getGenericMessage(ActivePokemon p) {
         return p.getName() + "'s health was restored!";
     }
 
+    @Override
     default String getSourceMessage(ActivePokemon p, String sourceName) {
         return p.getName() + " was healed by its " + this.getName() + "!";
     }
 
+    @Override
     default boolean use(ActivePokemon p) {
         return this.use(p, CastSource.USE_ITEM);
     }

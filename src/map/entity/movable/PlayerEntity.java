@@ -300,6 +300,7 @@ public class PlayerEntity extends MovableEntity {
     }
 
     // Double speed while biking
+    @Override
     protected int getTimeBetweenTiles() {
         return super.getTimeBetweenTiles()/(Game.getPlayer().isBiking() ? 2 : 1);
     }

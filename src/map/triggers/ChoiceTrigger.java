@@ -18,6 +18,7 @@ class ChoiceTrigger extends Trigger {
         this.choices = matcher.getChoices();
     }
 
+    @Override
     protected void executeTrigger() {
         Messages.addToFront(new MessageUpdate(this.question).withChoices(this.choices));
     }

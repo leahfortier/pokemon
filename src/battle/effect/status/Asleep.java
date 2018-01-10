@@ -18,6 +18,7 @@ class Asleep extends Status implements BeforeTurnEffect {
         this.numTurns = RandomUtils.getRandomInt(1, 3);
     }
 
+    @Override
     protected void postCreateEffect(ActivePokemon victim) {
         if (victim.hasAbility(AbilityNamesies.EARLY_BIRD)) {
             this.numTurns /= 2;
@@ -30,6 +31,7 @@ class Asleep extends Status implements BeforeTurnEffect {
         return true;
     }
 
+    @Override
     public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
         if (numTurns == 0) {
             Status.removeStatus(b, p, CastSource.EFFECT);
@@ -44,22 +46,27 @@ class Asleep extends Status implements BeforeTurnEffect {
         return SleepyFightsterEffect.containsSleepyFightsterEffect(b, p);
     }
 
+    @Override
     public String getCastMessage(ActivePokemon p) {
         return p.getName() + " fell asleep!";
     }
 
+    @Override
     public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
         return abilify.getName() + "'s " + abilify.getAbility().getName() + " caused " + victim.getName() + " to fall asleep!";
     }
 
+    @Override
     public void setTurns(int turns) {
         this.numTurns = turns;
     }
 
+    @Override
     public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " woke up!";
     }
 
+    @Override
     public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
         return victim.getName() + "'s " + sourceName + " caused it to wake up!";
     }

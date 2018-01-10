@@ -38,6 +38,7 @@ public class TrainerBattleTrigger extends Trigger {
         this.npcUpdateInteraction = new UpdateMatcher(battleAction.getEntityName(), battleMatcher.getUpdateInteraction());
     }
 
+    @Override
     protected void executeTrigger() {
         trainer.healAll();
 

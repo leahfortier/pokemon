@@ -11,6 +11,7 @@ public enum ButtonHoverAction {
         private final Stroke lineStroke = new BasicStroke(5f);
         private int time = 0;
 
+        @Override
         public void draw(Graphics g, Button button) {
             time = (time + 1)%80;
 
@@ -27,6 +28,7 @@ public enum ButtonHoverAction {
         private final int[] ty = { 0, 12, 23 };
         private int time = 0;
 
+        @Override
         public void draw(Graphics g, Button button) {
             time = (time + 1)%80;
 

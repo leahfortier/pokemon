@@ -19,6 +19,7 @@ public interface StatusHealer extends HoldItem, PokemonUseItem {
         return true;
     }
 
+    @Override
     default boolean use(ActivePokemon p) {
         return use(p, CastSource.USE_ITEM);
     }

@@ -5,6 +5,7 @@ import pokemon.ActivePokemon;
 public interface FixedHpHealer extends HpHealer {
     int getFixedHealAmount(ActivePokemon p);
 
+    @Override
     default int getAmountHealed(ActivePokemon p) {
         return p.heal(this.getFixedHealAmount(p));
     }

@@ -322,6 +322,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return true;
     }
 
+    @Override
     public void actionPerformed(ActionEvent event) {
         if (root != null) {
             if (event.getSource() == newTileButton) {
@@ -475,6 +476,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         g.dispose();
     }
 
+    @Override
     public void mouseClicked(MouseEvent event) {
         if (!toolList.isSelectionEmpty()) {
             toolList.getSelectedValue().click(getMouseLocation(event));
@@ -483,10 +485,13 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         draw();
     }
 
+    @Override
     public void mouseEntered(MouseEvent event) {}
 
+    @Override
     public void mouseExited(MouseEvent event) {}
 
+    @Override
     public void mousePressed(MouseEvent event) {
         if (!toolList.isSelectionEmpty()) {
             toolList.getSelectedValue().pressed(getMouseLocation(event));
@@ -496,6 +501,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
     // TODO: Do we not want to be saving the mouse hover location here? as well as above?
+    @Override
     public void mouseReleased(MouseEvent event) {
         if (!toolList.isSelectionEmpty()) {
             toolList.getSelectedValue().released(getMouseLocation(event));
@@ -504,6 +510,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         draw();
     }
 
+    @Override
     public void mouseDragged(MouseEvent event) {
         this.mouseHoverLocation = getMouseLocation(event);
 
@@ -514,14 +521,17 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         draw();
     }
 
+    @Override
     public void mouseMoved(MouseEvent event) {
         this.mouseHoverLocation = getMouseLocation(event);
 
         draw();
     }
 
+    @Override
     public void keyTyped(KeyEvent event) {}
 
+    @Override
     public void keyPressed(KeyEvent event) {
         // TODO: This should be stored in the tool
         // TODO: e for eraser, s for single, r for rect, t for trigger, ? for select?
@@ -546,6 +556,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         }
     }
 
+    @Override
     public void keyReleased(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolType != null) {
             this.setTool(previousToolType);
@@ -625,6 +636,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         this.placeableTrigger = null;
     }
 
+    @Override
     public void valueChanged(ListSelectionEvent event) {
         if (event.getSource() == tileList) {
 

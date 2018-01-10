@@ -8,6 +8,7 @@ import java.awt.Component;
 public class ToolRenderer extends JLabel implements ListCellRenderer<Tool> {
     private static final long serialVersionUID = 6750963470094004328L;
 
+    @Override
     public Component getListCellRendererComponent(JList<? extends Tool> list,
                                                   Tool value,
                                                   int index,

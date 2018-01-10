@@ -249,10 +249,12 @@ public class FileIO {
         fileChooser.setMultiSelectionEnabled(true);
 
         fileChooser.setFileFilter(new FileFilter() {
+            @Override
             public boolean accept(File file) {
                 return file.getName().toLowerCase().endsWith("png");
             }
 
+            @Override
             public String getDescription() {
                 return "PNG";
             }

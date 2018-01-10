@@ -118,10 +118,12 @@ class FontMetricsGen extends JPanel {
         g.drawString(s, x, y);
     }
 
+    @Override
     public Dimension getPreferredSize() {
         return new Dimension(canvas.getWidth(), canvas.getHeight());
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 

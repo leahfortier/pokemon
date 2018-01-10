@@ -26,14 +26,17 @@ public interface AllPPHealer extends PokemonUseItem, BattleUseItem, HoldItem {
         return changed;
     }
 
+    @Override
     default boolean use(ActivePokemon p) {
         return use(p, p.getActualMoves());
     }
 
+    @Override
     default boolean use(ActivePokemon p, Battle b) {
         return use(p, p.getMoves(b));
     }
 
+    @Override
     default boolean use(Battle b, ActivePokemon p, Move m) {
         return b == null ? use(p) : use(p, b);
     }

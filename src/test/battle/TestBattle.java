@@ -29,6 +29,7 @@ public class TestBattle extends Battle {
         this(new WildPokemon(nahMahBoi));
     }
 
+    @Override
     public double getDamageModifier(ActivePokemon attacking, ActivePokemon defending) {
         double modifier = super.getDamageModifier(attacking, defending);
 

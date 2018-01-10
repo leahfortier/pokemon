@@ -22,18 +22,22 @@ class Fainted extends Status {
         return victim.getHP() == 0;
     }
 
+    @Override
     public String getCastMessage(ActivePokemon p) {
         return p.getName() + " fainted!";
     }
 
+    @Override
     public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
         return abilify.getName() + "'s " + abilify.getAbility().getName() + " caused " + victim.getName() + " to faint!";
     }
 
+    @Override
     public String getGenericRemoveMessage(ActivePokemon victim) {
         return StringUtils.empty();
     }
 
+    @Override
     public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
         return StringUtils.empty();
     }

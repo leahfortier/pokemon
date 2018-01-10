@@ -73,6 +73,7 @@ public class GameFrame {
             console = new DevConsole();
         }
 
+        @Override
         public void run() {
             gui.createBufferStrategy(2);
             strategy = gui.getBufferStrategy();
@@ -94,6 +95,7 @@ public class GameFrame {
                 private long fpsTime = 0;
                 private long prevTime = TimeUtils.getCurrentTimestamp();
 
+                @Override
                 public void actionPerformed(ActionEvent event) {
                     long time = TimeUtils.getCurrentTimestamp();
                     long dt = time - prevTime;

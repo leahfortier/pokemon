@@ -12,6 +12,7 @@ public interface PPHealer extends MoveUseItem, HoldItem {
     int restoreAmount(Move toRestore);
 
     // TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
+    @Override
     default boolean use(ActivePokemon p, Move m) {
         return this.use(p, m, CastSource.USE_ITEM);
     }

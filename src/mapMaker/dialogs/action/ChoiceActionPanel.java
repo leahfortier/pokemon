@@ -78,6 +78,7 @@ class ChoiceActionPanel extends ActionPanel {
         render();
     }
 
+    @Override
     public void render() {
         removeAll();
 

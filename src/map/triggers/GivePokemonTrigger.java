@@ -14,6 +14,7 @@ class GivePokemonTrigger extends Trigger {
         this.pokemonMatcher = SerializationUtils.deserializeJson(pokemonDescription, PokemonMatcher.class);
     }
 
+    @Override
     protected void executeTrigger() {
         Game.getPlayer().addPokemon(ActivePokemon.createActivePokemon(this.pokemonMatcher, true));
     }

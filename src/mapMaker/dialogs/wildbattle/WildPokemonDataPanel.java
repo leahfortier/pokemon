@@ -40,14 +40,17 @@ class WildPokemonDataPanel extends JPanel {
                 100
         );
         probabilityFormattedTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
             public void changedUpdate(DocumentEvent e) {
                 updateProbability();
             }
 
+            @Override
             public void removeUpdate(DocumentEvent e) {
                 updateProbability();
             }
 
+            @Override
             public void insertUpdate(DocumentEvent e) {
                 updateProbability();
             }

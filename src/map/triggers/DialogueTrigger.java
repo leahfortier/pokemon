@@ -12,6 +12,7 @@ class DialogueTrigger extends Trigger {
         this.dialogue = dialogue;
     }
 
+    @Override
     protected void executeTrigger() {
         Messages.addToFront(this.dialogue);
     }

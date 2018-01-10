@@ -10,6 +10,7 @@ public interface EvIncreaser extends HoldItem, PokemonUseItem {
     Stat toIncrease();
     int increaseAmount();
 
+    @Override
     default boolean use(ActivePokemon p) {
         int[] toAdd = new int[Stat.NUM_STATS];
         toAdd[this.toIncrease().index()] += this.increaseAmount();
@@ -23,6 +24,7 @@ public interface EvIncreaser extends HoldItem, PokemonUseItem {
     }
 
     interface Vitamin extends EvIncreaser {
+        @Override
         default int increaseAmount() {
             return 10;
         }
@@ -34,6 +36,7 @@ public interface EvIncreaser extends HoldItem, PokemonUseItem {
     }
 
     interface Wing extends EvIncreaser {
+        @Override
         default int increaseAmount() {
             return 1;
         }

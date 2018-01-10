@@ -36,6 +36,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
         return weatherElement;
     }
 
+    @Override
     public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
         super.cast(b, caster, victim, source, printCast);
         b.getWeather().setTurns(getTurns(b, caster));

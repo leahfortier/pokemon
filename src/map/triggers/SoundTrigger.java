@@ -12,6 +12,7 @@ class SoundTrigger extends Trigger {
         this.soundTitle = SoundTitle.valueOf(contents);
     }
 
+    @Override
     protected void executeTrigger() {
         SoundPlayer.instance().playSound(soundTitle);
     }

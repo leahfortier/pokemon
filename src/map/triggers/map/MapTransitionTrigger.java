@@ -17,6 +17,7 @@ public class MapTransitionTrigger extends Trigger {
         this.mapTransitionMatcher = SerializationUtils.deserializeJson(contents, MapTransitionMatcher.class);
     }
 
+    @Override
     protected void executeTrigger() {
         Player player = Game.getPlayer();
         player.setMap(mapTransitionMatcher);

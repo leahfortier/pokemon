@@ -134,10 +134,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         return bagCategory != BagCategory.TM && bagCategory != BagCategory.KEY_ITEM;
     }
 
+    @Override
     public ItemNamesies namesies() {
         return this.namesies;
     }
 
+    @Override
     public String getName() {
         return this.name;
     }
@@ -158,6 +160,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         return this.battleBagCategories;
     }
 
+    @Override
     public int hashCode() {
         return name.hashCode();
     }

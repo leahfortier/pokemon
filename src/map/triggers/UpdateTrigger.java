@@ -17,6 +17,7 @@ class UpdateTrigger extends Trigger {
         this.newInteractionName = matcher.getInteractionName();
     }
 
+    @Override
     protected void executeTrigger() {
         Game.getPlayer().setNpcInteraction(npcEntityName, newInteractionName);
     }

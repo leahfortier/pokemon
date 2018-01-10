@@ -19,6 +19,7 @@ public class WildBattleTrigger extends Trigger {
         this.wildEncounter = SerializationUtils.deserializeJson(matcherJson, WildEncounter.class);
     }
 
+    @Override
     protected void executeTrigger() {
         WildPokemon wildPokemon = this.wildEncounter.getWildPokemon();
 

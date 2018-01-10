@@ -17,6 +17,7 @@ class Burned extends Status implements EndTurnEffect, StatModifyingEffect {
         super(StatusCondition.BURNED);
     }
 
+    @Override
     public void applyEndTurn(ActivePokemon victim, Battle b) {
         if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
             return;
@@ -32,18 +33,22 @@ class Burned extends Status implements EndTurnEffect, StatModifyingEffect {
         return !victim.isType(b, Type.FIRE);
     }
 
+    @Override
     public String getCastMessage(ActivePokemon p) {
         return p.getName() + " was burned!";
     }
 
+    @Override
     public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
         return abilify.getName() + "'s " + abilify.getAbility().getName() + " burned " + victim.getName() + "!";
     }
 
+    @Override
     public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " is no longer burned!";
     }
 
+    @Override
     public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
         return victim.getName() + "'s " + sourceName + " cured it of its burn!";
     }

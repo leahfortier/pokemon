@@ -10,6 +10,7 @@ import type.TypeAdvantage;
 public interface SuperEffectivePowerReduceBerry extends Berry, OpponentPowerChangeEffect {
     Type getType();
 
+    @Override
     default double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
         if (user.isAttackType(this.getType()) && TypeAdvantage.isSuperEffective(user, victim, b)) {
             Messages.add(victim.getName() + "'s " + this.getName() + " decreased " + user.getName() + "'s attack!");
@@ -20,10 +21,12 @@ public interface SuperEffectivePowerReduceBerry extends Berry, OpponentPowerChan
         return 1;
     }
 
+    @Override
     default int naturalGiftPower() {
         return 80;
     }
 
+    @Override
     default Type naturalGiftType() {
         return this.getType();
     }

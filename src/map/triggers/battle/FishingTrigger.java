@@ -29,6 +29,7 @@ public class FishingTrigger extends Trigger {
         this.wildEncounters = matcher.getWildEncounters();
     }
 
+    @Override
     protected void executeTrigger() {
         Player player = Game.getPlayer();
 

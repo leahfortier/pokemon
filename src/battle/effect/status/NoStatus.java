@@ -16,18 +16,22 @@ class NoStatus extends Status {
         return victim.getHP() > 0;
     }
 
+    @Override
     public String getCastMessage(ActivePokemon p) {
         return StringUtils.empty();
     }
 
+    @Override
     public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
         return StringUtils.empty();
     }
 
+    @Override
     public String getGenericRemoveMessage(ActivePokemon victim) {
         return StringUtils.empty();
     }
 
+    @Override
     public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
         return StringUtils.empty();
     }

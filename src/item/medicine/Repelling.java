@@ -9,6 +9,7 @@ import trainer.player.RepelInfo;
 public interface Repelling extends HoldItem, PlayerUseItem {
     int repelSteps();
 
+    @Override
     default boolean use() {
         RepelInfo repelInfo = Game.getPlayer().getRepelInfo();
         if (repelInfo.isUsingRepel()) {

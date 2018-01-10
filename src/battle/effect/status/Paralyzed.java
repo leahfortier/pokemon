@@ -23,6 +23,7 @@ class Paralyzed extends Status implements BeforeTurnEffect, StatModifyingEffect 
         return !victim.isType(b, Type.ELECTRIC);
     }
 
+    @Override
     public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
         if (RandomUtils.chanceTest(25)) {
             Messages.add(p.getName() + " is fully paralyzed!");
@@ -32,18 +33,22 @@ class Paralyzed extends Status implements BeforeTurnEffect, StatModifyingEffect 
         return true;
     }
 
+    @Override
     public String getCastMessage(ActivePokemon p) {
         return p.getName() + " was paralyzed!";
     }
 
+    @Override
     public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
         return abilify.getName() + "'s " + abilify.getAbility().getName() + " paralyzed " + victim.getName() + "!";
     }
 
+    @Override
     public String getGenericRemoveMessage(ActivePokemon victim) {
         return victim.getName() + " is no longer paralyzed!";
     }
 
+    @Override
     public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
         return victim.getName() + "'s " + sourceName + " cured it of its paralysis!";
     }

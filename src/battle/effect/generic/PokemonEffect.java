@@ -79,6 +79,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         super(name, minTurns, maxTurns, nextTurnSubside);
     }
 
+    @Override
     public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
         if (printCast) {
             Messages.add(getCastMessage(b, caster, victim, source));

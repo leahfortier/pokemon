@@ -8,6 +8,7 @@ import pokemon.Stat;
 public interface EvDecreaseBerry extends Berry, PokemonUseItem {
     Stat toDecrease();
 
+    @Override
     default boolean use(ActivePokemon p) {
         int decreaseIndex = this.toDecrease().index();
         int[] vals = new int[Stat.NUM_STATS];
@@ -29,6 +30,7 @@ public interface EvDecreaseBerry extends Berry, PokemonUseItem {
         return true;
     }
 
+    @Override
     default int naturalGiftPower() {
         return 90;
     }

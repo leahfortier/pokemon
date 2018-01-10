@@ -28,6 +28,7 @@ public class WalkingWildBattleTrigger extends Trigger {
         this.encounterRate = matcher.getEncounterRate();
     }
 
+    @Override
     protected void executeTrigger() {
         Player player = Game.getPlayer();
         ActivePokemon front = player.front();

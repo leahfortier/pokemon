@@ -24,8 +24,6 @@ public interface SpecialTypeItem extends HoldItem {
     }
 
     interface GemItem extends SpecialTypeItem, ConsumableItem, PowerChangeEffect {
-        String getName();
-
         @Override
         default double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(getType())) {

@@ -14,6 +14,7 @@ class BadgeTrigger extends Trigger {
         this.badge = Badge.valueOf(badgeName);
     }
 
+    @Override
     protected void executeTrigger() {
         Game.getPlayer().giveBadge(this.badge);
     }

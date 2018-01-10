@@ -10,6 +10,7 @@ import java.util.List;
 public interface TechnicalMachine extends MoveUseItem {
     AttackNamesies getAttack();
 
+    @Override
     default boolean use(ActivePokemon p, Move m) {
         AttackNamesies attack = getAttack();
 
@@ -45,6 +46,7 @@ public interface TechnicalMachine extends MoveUseItem {
         return false;
     }
 
+    @Override
     default String getImageName() {
         return this.getAttack().getAttack().getActualType().getName().toLowerCase() + "tm";
     }

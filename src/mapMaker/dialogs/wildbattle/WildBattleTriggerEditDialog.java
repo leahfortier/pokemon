@@ -208,6 +208,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
         }
     }
 
+    @Override
     public void updatePokemonProbability(int oldProbability, int newProbability) {
         probabilitySum += (newProbability - oldProbability);
         this.pokemonProbabilitySumLabel.setText(String.valueOf(probabilitySum));
