@@ -124,7 +124,7 @@ public class MethodInfo {
 
         return this.writeFunction();
     }
-    
+
     public String writeFunction() {
         final String body = StringUtils.isNullOrEmpty(this.fullBody) ? this.body : this.fullBody;
 

@@ -57,6 +57,7 @@ RecoilMove:
 	*
 	Extends: ApplyDamageEffect
 	Method:
+		Override: True
 		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
 		Default:
 			this.applyRecoil(b, user, damage);
@@ -69,6 +70,7 @@ RecoilPercentageMove:
 		Header: int getDamagePercentageDenominator()
 	*
 	Method:
+		Override: True
 		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
 		Default:
 			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
@@ -106,6 +108,7 @@ PhysicalContactEffect:
 	*
 	Extends: OpponentApplyDamageEffect
 	Method:
+		Override: True
 		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
 		Default:
 			// Only apply if physical contact is made
@@ -279,6 +282,7 @@ GroundedEffect:
 	*
 	Extends: SelfAttackBlocker
 	Method:
+		Override: True
 		Header: boolean block(Battle b, ActivePokemon user)
 		Default:
 			return user.getAttack().isMoveType(MoveType.AIRBORNE);
@@ -325,16 +329,6 @@ AttackSelectionEffect:
 	Method:
 		Header: String getUnusableMessage(Battle b, ActivePokemon p)
 	*
-***
-OpponentAttackSelectionEffect:
-	Method:
-		Header: boolean usable(Battle b, ActivePokemon p, Move m)
-		Invoke: CheckGet false
-		InvokeName: getUnusableEffect
-		EffectList: b.getOtherPokemon(p)
-		Comments: // Don't need to include this method again since it already extends AttackSelectionEffect, but still need the invoke method
-	*
-	Extends: AttackSelectionEffect
 ***
 WeatherBlockerEffect:
 	Method:
@@ -624,6 +618,7 @@ SimpleStatModifyingEffect:
 			###
 	*
 	Method:
+		Override: True
 		Header: double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
 		Default:
 			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
@@ -795,6 +790,7 @@ ProtectingEffect:
 			###
 	*
 	Method:
+		Override: True
 		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
 		Default:
 			Attack attack = user.getAttack();
@@ -802,6 +798,7 @@ ProtectingEffect:
 			###
 	*
 	Method:
+		Override: True
 		Header: void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim)
 		Default:
 			CrashDamageMove.invokeCrashDamageMove(b, user);
@@ -809,6 +806,7 @@ ProtectingEffect:
 			###
 	*
 	Method:
+		Override: True
 		Header: String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim)
 		Default:
 			return victim.getName() + " is protecting itself!";
@@ -818,16 +816,8 @@ ProtectingEffect:
 AttackSelectionSelfBlockerEffect:
 	Extends: AttackSelectionEffect, SelfAttackBlocker
 	Method:
+		Override: True
 		Header: boolean block(Battle b, ActivePokemon user)
-		Default:
-			return !this.usable(b, user, user.getMove());
-			###
-	*
-***
-OpponentAttackSelectionBlockerEffect:
-	Extends: OpponentAttackSelectionEffect, AttackBlocker
-	Method:
-		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
 		Default:
 			return !this.usable(b, user, user.getMove());
 			###
@@ -836,6 +826,7 @@ OpponentAttackSelectionBlockerEffect:
 PowderMove:
 	Extends: SelfAttackBlocker
 	Method:
+		Override: True
 		Header: boolean block(Battle b, ActivePokemon user)
 		Default:
 			// Powder moves don't work against Grass-type Pokemon
@@ -853,6 +844,7 @@ WildEncounterAlterer:
 MaxLevelWildEncounterEffect:
 	Extends: WildEncounterAlterer
 	Method:
+		Override: True
 		Header: void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData)
 		Default:
 			if (RandomUtils.chanceTest(50)) {
@@ -871,6 +863,7 @@ RepellingEffect:
 RepelLowLevelEncounterEffect:
 	Extends: RepellingEffect
 	Method:
+		Override: True
 		Header: boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon)
 		Default:
 			return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= attacking.getLevel();
@@ -891,6 +884,7 @@ TypedWildEncounterSelector:
 		Header: Type getType()
 	*
 	Method:
+		Override: True
 		Header: WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters)
 		Default:
 			if (RandomUtils.chanceTest(50)) {
@@ -945,6 +939,7 @@ WeatherEliminatingEffect:
 	*
 	Extends: EntryEndTurnEffect
 	Method:
+		Override: True
 		Header: void applyEffect(Battle b, ActivePokemon p)
 		Default:
 			b.addEffect(b.getWeather());
@@ -957,12 +952,14 @@ EntryEndTurnEffect:
 		Header: void applyEffect(Battle b, ActivePokemon p)
 	*
 	Method:
+		Override: True
 		Header: void applyEndTurn(ActivePokemon victim, Battle b)
 		Default:
 			applyEffect(b, victim);
 			###
 	*
 	Method:
+		Override: True
 		Header: void enter(Battle b, ActivePokemon enterer)
 		Default:
 			applyEffect(b, enterer);
@@ -1031,6 +1028,7 @@ SapHealthEffect:
 			###
 	*
 	Method:
+		Override: True
 		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
 		Default:
 			this.sapHealth(b, user, victim, damage, true);
@@ -1043,6 +1041,7 @@ PowerCountMove:
 		Header: boolean doubleDefenseCurled()
 	*
 	Method:
+		Override: True
 		Header: double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		Default:
 			return Math.min(user.getAttributes().getCount(), 5)*(this.doubleDefenseCurled() && user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);

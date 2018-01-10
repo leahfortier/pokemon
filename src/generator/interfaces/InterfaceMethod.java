@@ -37,6 +37,7 @@ class InterfaceMethod {
     private static final String MOLD_BREAKER_NULL_CHECK = "MoldBreakerNullCheck";
     private static final String DEFAULT = "Default";
     private static final String DEADSIES = "Deadsies";
+    private static final String OVERRIDE = "Override";
 
     private static final Pattern HEADER_PATTERN = Pattern.compile(
             "^" + MatchType.VARIABLE_TYPE.group() + // Group 1: return type
@@ -64,6 +65,8 @@ class InterfaceMethod {
     private String defaultMethod;
 
     private List<String> deadsies;
+
+    private boolean isOverride;
 
     private String comments;
     private InvokeMethod invokeMethod;
@@ -227,10 +230,22 @@ class InterfaceMethod {
             }
         }
 
+        final String isOverride = fields.getAndRemoveTrimmed(OVERRIDE);
+        if (isOverride != null) {
+            if (!isOverride.equals("True")) {
+                Global.error("Invalid value for " + OVERRIDE + ": " + isOverride);
+            }
+            this.isOverride = true;
+        }
+
         fields.confirmEmpty();
 
         if ((this.returnType == null || this.methodName == null) && this.invokeMethod == null) {
             Global.error("Interface method and invoke method are both missing for interface " + this.interfaceName);
+        }
+
+        if (this.isOverride && StringUtils.isNullOrEmpty(this.defaultMethod)) {
+            Global.error("Can only override default methods.");
         }
     }
 
@@ -272,6 +287,10 @@ class InterfaceMethod {
         }
 
         if (!StringUtils.isNullOrEmpty(this.defaultMethod)) {
+            if (this.isOverride) {
+                interfaceMethod.append("\n\t\t@Override");
+            }
+
             if (this.defaultMethod.equals("Empty")) {
                 interfaceMethod.appendFormat("\t\tdefault %s {}\n", this.getHeader());
             } else {

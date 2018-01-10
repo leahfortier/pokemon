@@ -43,7 +43,6 @@ import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentApplyDamageEffect;
-import battle.effect.generic.EffectInterfaces.OpponentAttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
@@ -221,7 +220,6 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, GroundedEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, OpponentAccuracyBypassEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, AttackSelectionEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, OpponentAttackSelectionEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, WeatherBlockerEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, TrappingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, OpponentTrappingEffect.class, effectListSourcesNoAttack);

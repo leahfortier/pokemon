@@ -140,6 +140,7 @@ public final class EffectInterfaces {
     public interface RecoilMove extends ApplyDamageEffect {
         void applyRecoil(Battle b, ActivePokemon user, int damage);
 
+        @Override
         default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             this.applyRecoil(b, user, damage);
         }
@@ -148,6 +149,7 @@ public final class EffectInterfaces {
     public interface RecoilPercentageMove extends RecoilMove {
         int getDamagePercentageDenominator();
 
+        @Override
         default void applyRecoil(Battle b, ActivePokemon user, int damage) {
             if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
                 return;
@@ -177,6 +179,7 @@ public final class EffectInterfaces {
         // victim: The Pokemon that received the physical contact attack
         void contact(Battle b, ActivePokemon user, ActivePokemon victim);
 
+        @Override
         default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             // Only apply if physical contact is made
             if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && !user.hasAbility(AbilityNamesies.LONG_REACH)) {
@@ -457,6 +460,7 @@ public final class EffectInterfaces {
 
     public interface GroundedEffect extends SelfAttackBlocker {
 
+        @Override
         default boolean block(Battle b, ActivePokemon user) {
             return user.getAttack().isMoveType(MoveType.AIRBORNE);
         }
@@ -535,27 +539,6 @@ public final class EffectInterfaces {
                 if (invokee instanceof AttackSelectionEffect && Effect.isActiveEffect(invokee)) {
 
                     AttackSelectionEffect effect = (AttackSelectionEffect)invokee;
-                    if (!effect.usable(b, p, m)) {
-                        return effect;
-                    }
-                }
-            }
-
-            return null;
-        }
-    }
-
-    public interface OpponentAttackSelectionEffect extends AttackSelectionEffect {
-
-        // Don't need to include this method again since it already extends AttackSelectionEffect, but still need the invoke method
-        boolean usable(Battle b, ActivePokemon p, Move m);
-
-        static OpponentAttackSelectionEffect getUnusableEffect(Battle b, ActivePokemon p, Move m) {
-            List<Object> invokees = b.getEffectsList(b.getOtherPokemon(p));
-            for (Object invokee : invokees) {
-                if (invokee instanceof OpponentAttackSelectionEffect && Effect.isActiveEffect(invokee)) {
-
-                    OpponentAttackSelectionEffect effect = (OpponentAttackSelectionEffect)invokee;
                     if (!effect.usable(b, p, m)) {
                         return effect;
                     }
@@ -1179,6 +1162,7 @@ public final class EffectInterfaces {
             return true;
         }
 
+        @Override
         default double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
             if (isModifyStat(s) && canModifyStat(b, p, opp)) {
                 return getModifier();
@@ -1479,16 +1463,19 @@ public final class EffectInterfaces {
             return true;
         }
 
+        @Override
         default boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
             Attack attack = user.getAttack();
             return protectingCondition(b, user) && !attack.isSelfTarget() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.PROTECT_PIERCING);
         }
 
+        @Override
         default void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             CrashDamageMove.invokeCrashDamageMove(b, user);
             this.protectingEffects(b, user, victim);
         }
 
+        @Override
         default String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + " is protecting itself!";
         }
@@ -1496,20 +1483,15 @@ public final class EffectInterfaces {
 
     public interface AttackSelectionSelfBlockerEffect extends AttackSelectionEffect, SelfAttackBlocker {
 
+        @Override
         default boolean block(Battle b, ActivePokemon user) {
-            return !this.usable(b, user, user.getMove());
-        }
-    }
-
-    public interface OpponentAttackSelectionBlockerEffect extends OpponentAttackSelectionEffect, AttackBlocker {
-
-        default boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !this.usable(b, user, user.getMove());
         }
     }
 
     public interface PowderMove extends SelfAttackBlocker {
 
+        @Override
         default boolean block(Battle b, ActivePokemon user) {
             // Powder moves don't work against Grass-type Pokemon
             return b.getOtherPokemon(user).isType(b, Type.GRASS);
@@ -1536,6 +1518,7 @@ public final class EffectInterfaces {
 
     public interface MaxLevelWildEncounterEffect extends WildEncounterAlterer {
 
+        @Override
         default void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
             if (RandomUtils.chanceTest(50)) {
                 wildPokemon.setLevel(encounterData.getMaxLevel());
@@ -1567,6 +1550,7 @@ public final class EffectInterfaces {
 
     public interface RepelLowLevelEncounterEffect extends RepellingEffect {
 
+        @Override
         default boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon) {
             return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= attacking.getLevel();
         }
@@ -1595,6 +1579,7 @@ public final class EffectInterfaces {
     public interface TypedWildEncounterSelector extends WildEncounterSelector {
         Type getType();
 
+        @Override
         default WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters) {
             if (RandomUtils.chanceTest(50)) {
                 List<WildEncounter> typedList = new ArrayList<>();
@@ -1667,6 +1652,7 @@ public final class EffectInterfaces {
             return weather.namesies() != EffectNamesies.CLEAR_SKIES;
         }
 
+        @Override
         default void applyEffect(Battle b, ActivePokemon p) {
             b.addEffect(b.getWeather());
         }
@@ -1691,10 +1677,12 @@ public final class EffectInterfaces {
     public interface EntryEndTurnEffect extends EntryEffect, EndTurnEffect {
         void applyEffect(Battle b, ActivePokemon p);
 
+        @Override
         default void applyEndTurn(ActivePokemon victim, Battle b) {
             applyEffect(b, victim);
         }
 
+        @Override
         default void enter(Battle b, ActivePokemon enterer) {
             applyEffect(b, enterer);
         }
@@ -1773,6 +1761,7 @@ public final class EffectInterfaces {
             Messages.add(new MessageUpdate().updatePokemon(b, user));
         }
 
+        @Override
         default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             this.sapHealth(b, user, victim, damage, true);
         }
@@ -1781,6 +1770,7 @@ public final class EffectInterfaces {
     public interface PowerCountMove extends PowerChangeEffect {
         boolean doubleDefenseCurled();
 
+        @Override
         default double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return Math.min(user.getAttributes().getCount(), 5)*(this.doubleDefenseCurled() && user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
         }
