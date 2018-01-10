@@ -358,10 +358,6 @@ public class ActivePokemon implements Serializable {
         return attributes.getStage(stat);
     }
 
-    public Move getMove(Battle b, int index) {
-        return getMoves(b).get(index);
-    }
-
     public int getMaxHP() {
         return stats[Stat.HP.index()];
     }

@@ -121,26 +121,26 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     private final int eggSteps;
     private final EggGroup[] eggGroups;
 
-    public PokemonInfo(int number,
-                       String name,
-                       int[] baseStats,
-                       int baseExp,
-                       String growthRate,
-                       List<Type> type,
-                       int catchRate,
-                       int[] givenEVs,
-                       Evolution evolution,
-                       List<WildHoldItem> wildHoldItems,
-                       int genderRatio,
-                       List<AbilityNamesies> abilities,
-                       String classification,
-                       int height,
-                       double weight,
-                       String flavorText,
-                       int eggSteps,
-                       List<EggGroup> eggGroups,
-                       List<LevelUpMove> levelUpMoves,
-                       Set<AttackNamesies> learnableMoves) {
+    private PokemonInfo(int number,
+                        String name,
+                        int[] baseStats,
+                        int baseExp,
+                        String growthRate,
+                        List<Type> type,
+                        int catchRate,
+                        int[] givenEVs,
+                        Evolution evolution,
+                        List<WildHoldItem> wildHoldItems,
+                        int genderRatio,
+                        List<AbilityNamesies> abilities,
+                        String classification,
+                        int height,
+                        double weight,
+                        String flavorText,
+                        int eggSteps,
+                        List<EggGroup> eggGroups,
+                        List<LevelUpMove> levelUpMoves,
+                        Set<AttackNamesies> learnableMoves) {
         this.number = number;
         this.name = name;
         this.namesies = PokemonNamesies.getValueOf(this.name);

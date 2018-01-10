@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Button {
-    public static final int NO_TRANSITION = -1;
+    private static final int NO_TRANSITION = -1;
 
     public final int x;
     public final int y;

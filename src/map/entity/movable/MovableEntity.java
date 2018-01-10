@@ -29,15 +29,15 @@ public abstract class MovableEntity extends Entity {
         this.runFrame = 0;
     }
 
-    public abstract int getTransitionTime();
     public abstract Direction getDirection();
+    protected abstract int getTransitionTime();
     protected abstract int getSpriteIndex();
     protected abstract boolean hasAttention();
     protected abstract String getPath();
     protected abstract void endPath();
     protected abstract void setDirection(Direction direction);
 
-    public void setTempPath(String path, EndPathListener listener) {
+    protected void setTempPath(String path, EndPathListener listener) {
         this.tempPath = path;
         this.pathIndex = 0;
         this.endPathListener = listener;

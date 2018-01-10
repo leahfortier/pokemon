@@ -80,7 +80,7 @@ public class BattleAttributes implements Serializable {
         return attacking;
     }
 
-    public void setAttacking(boolean isAttacking) {
+    private void setAttacking(boolean isAttacking) {
         attacking = isAttacking;
     }
 

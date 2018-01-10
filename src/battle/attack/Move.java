@@ -20,7 +20,7 @@ public class Move implements Serializable {
 
     public static final int MAX_MOVES = 4;
 
-    private AttackNamesies attack;
+    private final AttackNamesies attack;
     private int maxPP;
     private int pp;
 

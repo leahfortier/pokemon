@@ -12,6 +12,7 @@ import util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class PokemonMatcher {
@@ -39,7 +40,7 @@ public class PokemonMatcher {
         this.isShiny = isShiny;
         this.holdItem = holdItem;
 
-        this.moves = Arrays.stream(moves).filter(move -> move != null).collect(Collectors.toList());
+        this.moves = Arrays.stream(moves).filter(Objects::nonNull).collect(Collectors.toList());
         if (this.moves.isEmpty()) {
             this.moves = null;
         }

@@ -100,7 +100,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         frame.setVisible(true);
     }
 
-    public MapMaker() {
+    private MapMaker() {
         this.root = null;
 
         this.location = new Point();
@@ -446,7 +446,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return this.mapData.getTile(location, dataType);
     }
 
-    public void draw() {
+    private void draw() {
         if (!this.hasMap()) {
             return;
         }

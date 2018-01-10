@@ -13,6 +13,6 @@ class SoundTrigger extends Trigger {
     }
 
     protected void executeTrigger() {
-        SoundPlayer.soundPlayer.playSound(soundTitle);
+        SoundPlayer.instance().playSound(soundTitle);
     }
 }

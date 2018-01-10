@@ -262,9 +262,9 @@ public class PC implements Serializable {
     }
 
     private class BoxCoordinate {
-        private int boxNum;
-        private int x;
-        private int y;
+        private final int boxNum;
+        private final int x;
+        private final int y;
 
         BoxCoordinate(int boxNum, int x, int y) {
             this.boxNum = boxNum;

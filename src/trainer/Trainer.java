@@ -20,8 +20,8 @@ public abstract class Trainer implements Team, Serializable {
     public static final int MAX_POKEMON = 6;
 
     protected String name;
-    protected int cashMoney;
     protected List<ActivePokemon> team;
+    private int cashMoney;
 
     private TrainerAction action;
     private List<TeamEffect> effects;
@@ -81,7 +81,7 @@ public abstract class Trainer implements Team, Serializable {
         return name;
     }
 
-    public int getFrontIndex() {
+    protected int getFrontIndex() {
         return this.frontIndex;
     }
 

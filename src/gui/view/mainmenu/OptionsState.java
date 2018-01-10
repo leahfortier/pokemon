@@ -35,7 +35,7 @@ class OptionsState implements VisualStateHandler {
                 view.saveSettings();
                 break;
             case 1: // mute
-                SoundPlayer.soundPlayer.toggleMusic();
+                SoundPlayer.instance().toggleMusic();
                 view.saveSettings();
                 break;
             case 2: // credits

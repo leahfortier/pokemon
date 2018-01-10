@@ -17,7 +17,7 @@ class OptionsView extends View {
     private Color color;
 
     OptionsView() {
-        musicOn = SoundPlayer.soundPlayer.isMuted();
+        musicOn = SoundPlayer.instance().isMuted();
         color = new Color(0, 0, 0);
     }
 
@@ -26,7 +26,7 @@ class OptionsView extends View {
         InputControl input = InputControl.instance();
         if (input.consumeIfMouseDown(ControlKey.SPACE)) {
             musicOn = !musicOn;
-            SoundPlayer.soundPlayer.toggleMusic();
+            SoundPlayer.instance().toggleMusic();
         }
 
         if (input.consumeIfDown(ControlKey.ESC)) {

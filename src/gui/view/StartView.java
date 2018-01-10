@@ -138,7 +138,7 @@ class StartView extends View {
 
         ditto = false;
 
-        SoundPlayer.soundPlayer.playMusic(SoundTitle.NEW_GAME);
+        SoundPlayer.instance().playMusic(SoundTitle.NEW_GAME);
     }
 
     private enum State {

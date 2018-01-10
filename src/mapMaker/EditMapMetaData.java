@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 // Metadata for the current map being edited
-public class EditMapMetaData {
+class EditMapMetaData {
     private static final Dimension DEFAULT_MAP_SIZE = new Dimension(10, 10);
 
     private MapName currentMapName;

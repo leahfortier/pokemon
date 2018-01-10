@@ -8,7 +8,7 @@ import util.FileIO;
 import java.io.File;
 
 public class TestMap extends MapData {
-    private MapDataMatcher matcher;
+    private final MapDataMatcher matcher;
 
     public TestMap(File mapFile) {
         super(mapFile);

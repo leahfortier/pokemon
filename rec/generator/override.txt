@@ -1445,9 +1445,7 @@ FutureAttackEffect:
 			return;
 		}
 
-		theSeeer.callTempMove(b, attack.namesies(), () -> {
-			theSeeer.getAttack().applyDamage(theSeeer, p, b);
-		});
+		theSeeer.callTempMove(b, attack.namesies(), () -> theSeeer.getAttack().applyDamage(theSeeer, p, b));
 		###
 	AddMapField: Cast:
 		theSeeer = caster;

@@ -123,7 +123,7 @@ public final class GeneralUtils {
     }
 
     public static <T> List<T> combine(List<T> firstList, List<T> secondList) {
-        List<T> list = new ArrayList<T>();
+        List<T> list = new ArrayList<>();
         list.addAll(firstList);
         list.addAll(secondList);
 

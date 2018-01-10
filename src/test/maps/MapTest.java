@@ -95,7 +95,7 @@ public class MapTest extends BaseTest {
 
     @Test
     public void wildBattleProbabilityTest() {
-        for (TestMap map : this.maps) {
+        for (TestMap map : maps) {
             for (WildBattleAreaMatcher areaMatcher : map.getMatcher().getWildBattles()) {
                 for (WildBattleMatcher wildBattleMatcher : areaMatcher.getWildBattles()) {
                     WildEncounter[] wildEncounters = wildBattleMatcher.getWildEncounters();
@@ -128,7 +128,7 @@ public class MapTest extends BaseTest {
     @Test
     public void dialogueTest() {
         // Make sure all input dialogue triggers don't include the string 'Poke' instead of 'Poké'
-        for (TestMap map : this.maps) {
+        for (TestMap map : maps) {
             for (NPCMatcher npc : map.getMatcher().getNPCs()) {
                 for (NPCInteractionMatcher interaction : npc.getInteractionMatcherList()) {
                     testDialogue(map, interaction.getActionMatcherList());

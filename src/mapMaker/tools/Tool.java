@@ -7,7 +7,7 @@ import javax.swing.DefaultListModel;
 import java.awt.Graphics;
 
 public abstract class Tool {
-    public static Tool lastUsedTool;
+    protected static Tool lastUsedTool;
 
     final MapMaker mapMaker;
 
@@ -22,7 +22,7 @@ public abstract class Tool {
     public void drag(Point dragLocation) {}
     public void draw(Graphics g) {}
     public void reset() {}
-    public void undo() {}
+    protected void undo() {}
 
     public static void undoLastTool() {
         if (lastUsedTool != null) {

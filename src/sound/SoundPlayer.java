@@ -1,14 +1,21 @@
 package sound;
 
 public class SoundPlayer {
-    public static final SoundPlayer soundPlayer = new SoundPlayer();
+    private static SoundPlayer soundPlayer;
+    public static SoundPlayer instance() {
+        if (soundPlayer == null) {
+            soundPlayer = new SoundPlayer();
+        }
+
+        return soundPlayer;
+    }
 
     private boolean muted;
     private SoundTitle music;
     private MP3Player musicPlayer;
     private MP3Player soundEffectPlayer;
 
-    public SoundPlayer() {
+    private SoundPlayer() {
         music = null;
         musicPlayer = null;
         soundEffectPlayer = null;

@@ -77,11 +77,7 @@ public class BattleView extends View {
     }
 
     public void drawFullMessagePanel(Graphics g) {
-        drawFullMessagePanel(g, message);
-    }
-
-    public void drawFullMessagePanel(Graphics g, String text) {
-        BasicPanels.drawFullMessagePanel(g, text);
+        BasicPanels.drawFullMessagePanel(g, this.message);
     }
 
     public void drawMenuMessagePanel(Graphics g, String text) {

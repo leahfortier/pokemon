@@ -70,7 +70,7 @@ public final class Save {
     }
 
     public static void saveSettings(Theme theme) {
-        String settings = theme.ordinal() + " " + (SoundPlayer.soundPlayer.isMuted() ? 1 : 0);
+        String settings = theme.ordinal() + " " + (SoundPlayer.instance().isMuted() ? 1 : 0);
         FileIO.writeToFile(FileName.SAVE_SETTINGS, settings);
     }
 
@@ -86,7 +86,7 @@ public final class Save {
 
             // Is muted
             if (in.nextInt() == 1) {
-                SoundPlayer.soundPlayer.setMuted(true);
+                SoundPlayer.instance().setMuted(true);
             }
         } else {
             // Set to basic if no settings are currently saved

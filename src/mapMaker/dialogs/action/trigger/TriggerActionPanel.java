@@ -54,7 +54,7 @@ public class TriggerActionPanel extends ActionPanel {
         return actionMatcher;
     }
 
-    protected void renderDialog() {
+    private void renderDialog() {
         removeAll();
 
         TriggerActionType selectedAction = (TriggerActionType)triggerTypeCombobBox.getSelectedItem();

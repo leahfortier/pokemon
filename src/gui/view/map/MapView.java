@@ -327,7 +327,7 @@ public class MapView extends View {
             music = SoundTitle.DEFAULT_TUNE;
         }
 
-        SoundPlayer.soundPlayer.playMusic(music);
+        SoundPlayer.instance().playMusic(music);
     }
 
     public void setBattle(Battle battle, boolean seenWild) {

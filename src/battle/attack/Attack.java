@@ -247,7 +247,7 @@ public abstract class Attack implements Serializable {
         return this.power == 0 ? "--" : this.power + "";
     }
 
-    public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+    protected boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
         return true;
     }
 

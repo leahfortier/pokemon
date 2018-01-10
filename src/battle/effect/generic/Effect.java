@@ -21,7 +21,7 @@ public abstract class Effect implements Serializable {
     protected boolean active;
     protected int numTurns;
 
-    public Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
+    protected Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
         this.namesies = name;
         this.nextTurnSubside = nextTurnSubside;
 
@@ -65,11 +65,11 @@ public abstract class Effect implements Serializable {
     }
 
     // Should be overriden by subclasses as deemed appropriate
-    public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+    protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
         return true;
     }
 
-    public boolean shouldSubside(Battle b, ActivePokemon victim) {
+    protected boolean shouldSubside(Battle b, ActivePokemon victim) {
         return numTurns == 0;
     }
 
@@ -78,7 +78,7 @@ public abstract class Effect implements Serializable {
         active = false; // Unnecessary, but just to be safe
     }
 
-    public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+    protected String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
         return StringUtils.empty();
     }
 

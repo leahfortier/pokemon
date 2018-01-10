@@ -141,13 +141,13 @@ public class SelectTool extends Tool {
         return mapMaker.isEditType(copiedEditType) && copiedTiles != null;
     }
 
-    public void select() {
+    private void select() {
         selected = true;
         mapMaker.copyMenuItem.setEnabled(true);
         mapMaker.cutMenuItem.setEnabled(true);
     }
 
-    public void deselect() {
+    private void deselect() {
         selected = false;
         mapMaker.copyMenuItem.setEnabled(false);
         mapMaker.cutMenuItem.setEnabled(false);

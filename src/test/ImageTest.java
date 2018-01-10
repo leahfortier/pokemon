@@ -112,14 +112,6 @@ public class ImageTest extends BaseTest {
         checkMaxSize(FileIO.getImageFile(num, suffix, folderPath), dimensionChecker);
     }
 
-    private void checkMaxSize(String folderPath, String imageName, DimensionChecker dimensionChecker) {
-        if (!imageName.endsWith(".png")) {
-            imageName += ".png";
-        }
-
-        checkMaxSize(new File(folderPath + imageName), dimensionChecker);
-    }
-
     private void checkMaxSize(File imageFile, DimensionChecker dimensionChecker) {
         dimensionChecker.assertMatch(imageFile);
     }

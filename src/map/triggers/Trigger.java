@@ -13,9 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Trigger {
-
-    protected final String name;
-    protected final Condition condition;
+    private final String name;
+    private final Condition condition;
     private final List<String> globals;
 
     protected Trigger(TriggerType type, String contents, String condition) {

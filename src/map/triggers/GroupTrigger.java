@@ -11,7 +11,7 @@ import util.StringUtils;
 import java.util.List;
 
 class GroupTrigger extends Trigger {
-    public final List<String> triggers;
+    private final List<String> triggers;
 
     GroupTrigger(String contents, String condition) {
         this(contents, condition, SerializationUtils.deserializeJson(contents, GroupTriggerMatcher.class));

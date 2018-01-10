@@ -97,7 +97,7 @@ public class DayCareCenter implements Serializable {
         }
     }
 
-    public String withdraw(boolean isFirstPokemon) {
+    private String withdraw(boolean isFirstPokemon) {
         final ActivePokemon withdrawPokemon;
         if (isFirstPokemon) {
             withdrawPokemon = first;

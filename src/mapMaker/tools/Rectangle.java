@@ -10,7 +10,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public class Rectangle {
+class Rectangle {
     private final boolean inBoundsRequired;
 
     private Point upperLeftRectangleCoordinate;

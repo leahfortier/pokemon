@@ -4,7 +4,7 @@ import main.Global;
 import util.Point;
 
 public abstract class SinglePointTriggerMatcher extends LocationTriggerMatcher {
-    protected Point location;
+    private Point location;
 
     private void setLocation(Point location) {
         this.location = location;

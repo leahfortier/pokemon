@@ -80,7 +80,7 @@ public class MainMenuView extends View {
 
         state.set();
 
-        SoundPlayer.soundPlayer.playMusic(state.getTunes());
+        SoundPlayer.instance().playMusic(state.getTunes());
     }
 
     boolean hasSavedInfo(int saveNum) {
@@ -95,7 +95,7 @@ public class MainMenuView extends View {
     public void update(int dt) {
         if (!musicStarted) {
             musicStarted = true;
-            SoundPlayer.soundPlayer.playMusic(state.getTunes());
+            SoundPlayer.instance().playMusic(state.getTunes());
         }
 
         this.state.update(this);

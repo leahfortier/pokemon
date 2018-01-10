@@ -140,7 +140,7 @@ public class MonteCarlo {
 //                }
                 curr.totalWins += utility;
 
-                double expectedUtility = (double)curr.totalWins/curr.visitedCount;
+                double expectedUtility = curr.totalWins/curr.visitedCount;
                 double confidenceIntervalSize = Math.sqrt(CONFIDENCE_BOUND_SIZE*Math.log(prev.visitedCount)/curr.visitedCount);
                 if (confidenceIntervalSize > 0) {
                     curr.ucb = expectedUtility + confidenceIntervalSize;

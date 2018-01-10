@@ -129,7 +129,7 @@ public class PlayerEntity extends MovableEntity {
                         npc.walkTowards(dist - 1, direction.getOpposite().getPathDirection());
 
                         if (npc.isTrainer()) {
-                            SoundPlayer.soundPlayer.playMusic(SoundTitle.TRAINER_SPOTTED);
+                            SoundPlayer.instance().playMusic(SoundTitle.TRAINER_SPOTTED);
                         }
                     }
                 }

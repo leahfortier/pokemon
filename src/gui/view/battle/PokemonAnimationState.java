@@ -508,7 +508,7 @@ class PokemonAnimationState {
             }
 
             if (newMessage.soundEffectUpdate()) {
-                SoundPlayer.soundPlayer.playSoundEffect(newMessage.getSoundEffect());
+                SoundPlayer.instance().playSoundEffect(newMessage.getSoundEffect());
             }
 
             if (newMessage.nameUpdate()) {

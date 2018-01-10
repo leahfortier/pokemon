@@ -1,10 +1,10 @@
 package util;
 
 public class FloatPoint {
-    final float x;
-    final float y;
+    private final float x;
+    private final float y;
 
-    public FloatPoint(float x, float y) {
+    private FloatPoint(float x, float y) {
         this.x = x;
         this.y = y;
     }

@@ -20,9 +20,9 @@ public class TileSet {
     public static final BufferedImage STAR_SPRITE = FileIO.readImage(Folder.IMAGES + "starsies.png");
     protected static final BufferedImage IMAGE_NOT_FOUND = FileIO.readImage(Folder.IMAGES + "imageNotFound.png");
 
-    protected String folderPath;
-    private Map<String, BufferedImage> map;
-    private float scale;
+    protected final String folderPath;
+    private final float scale;
+    private final Map<String, BufferedImage> map;
 
     public TileSet(String folderPath) {
         this(folderPath, 1.0f);
