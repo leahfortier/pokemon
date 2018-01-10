@@ -54,35 +54,43 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.REFLECT, 5, 5, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
         }
 
+        @Override
         public void breakBarrier(Battle b, ActivePokemon breaker) {
             Messages.add(breaker.getName() + " broke the reflect barrier!");
             b.getEffects(!breaker.isPlayer()).remove(this);
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " raised the " + Stat.DEFENSE.getName().toLowerCase() + " of its team!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The effects of reflect faded.";
         }
 
+        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.DEFENSE;
         }
 
+        @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
             return "The effects of reflect faded.";
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
@@ -90,6 +98,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             }
         }
 
+        @Override
         public double getModifier() {
             return 2;
         }
@@ -102,35 +111,43 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.LIGHT_SCREEN, 5, 5, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
         }
 
+        @Override
         public void breakBarrier(Battle b, ActivePokemon breaker) {
             Messages.add(breaker.getName() + " broke the light screen barrier!");
             b.getEffects(!breaker.isPlayer()).remove(this);
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " raised the " + Stat.SP_DEFENSE.getName().toLowerCase() + " of its team!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The effects of light screen faded.";
         }
 
+        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SP_DEFENSE;
         }
 
+        @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
             return "The effects of light screen faded.";
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
@@ -138,6 +155,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             }
         }
 
+        @Override
         public double getModifier() {
             return 2;
         }
@@ -150,22 +168,27 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.TAILWIND, 4, 4, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " raised the speed of its team!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The effects of tailwind faded.";
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
 
+        @Override
         public double getModifier() {
             return 2;
         }
@@ -178,10 +201,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.AURORA_VEIL, 5, 5, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
@@ -189,18 +214,22 @@ public abstract class TeamEffect extends Effect implements Serializable {
             }
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " is covered by an aurora veil!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The effects of aurora veil faded.";
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
         }
 
+        @Override
         public double getModifier() {
             return 2;
         }
@@ -213,18 +242,22 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.STICKY_WEB, -1, -1, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Sticky web covers everything!";
         }
 
+        @Override
         public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
             return "The sticky web spun away!";
         }
 
+        @Override
         public void enter(Battle b, ActivePokemon enterer) {
             if (enterer.isLevitating(b)) {
                 return;
@@ -233,6 +266,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             enterer.getAttributes().modifyStage(b.getOtherPokemon(enterer), enterer, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + enterer.getName() + "'s {statName}!");
         }
 
+        @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
             return "The sticky web dispersed!";
         }
@@ -245,18 +279,22 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.STEALTH_ROCK, -1, -1, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Floating rocks were scattered all around!";
         }
 
+        @Override
         public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
             return "The floating rocks spun away!";
         }
 
+        @Override
         public void enter(Battle b, ActivePokemon enterer) {
             if (enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
                 return;
@@ -266,6 +304,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             enterer.reduceHealthFraction(b, Type.ROCK.getAdvantage().getAdvantage(enterer, b)/8.0);
         }
 
+        @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
             return "The floating rocks dispersed!";
         }
@@ -281,6 +320,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             this.layers = 1;
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             Effect spikesies = Effect.getEffect(b.getEffects(victim), this.namesies);
             if (spikesies == null) {
@@ -292,14 +332,17 @@ public abstract class TeamEffect extends Effect implements Serializable {
             Messages.add(getCastMessage(b, caster, victim, source));
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Toxic spikes were scattered all around!";
         }
 
+        @Override
         public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
             return "The toxic spikes dispersed!";
         }
 
+        @Override
         public void enter(Battle b, ActivePokemon enterer) {
             if (enterer.isLevitating(b)) {
                 return;
@@ -316,6 +359,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             Status.giveStatus(b, theOtherPokemon, enterer, poisonCondition);
         }
 
+        @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
             return "The toxic spikes dispersed!";
         }
@@ -331,6 +375,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             this.layers = 1;
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             Effect spikesies = Effect.getEffect(b.getEffects(victim), this.namesies);
             if (spikesies == null) {
@@ -342,14 +387,17 @@ public abstract class TeamEffect extends Effect implements Serializable {
             Messages.add(getCastMessage(b, caster, victim, source));
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Spikes were scattered all around!";
         }
 
+        @Override
         public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
             return "The spikes dispersed!";
         }
 
+        @Override
         public void enter(Battle b, ActivePokemon enterer) {
             if (enterer.isLevitating(b) || enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
                 return;
@@ -365,6 +413,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             }
         }
 
+        @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
             return "The spikes dispersed!";
         }
@@ -379,15 +428,18 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.WISH, 1, 1, true);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             casterName = caster.getName();
             super.cast(b, caster, victim, source, printCast);
         }
 
+        @Override
         public void subside(Battle b, ActivePokemon p) {
             if (p.hasEffect(EffectNamesies.HEAL_BLOCK)) {
                 return;
@@ -405,14 +457,17 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.LUCKY_CHANT, 5, 5, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "The lucky chant shielded " + victim.getName() + "'s team from critical hits!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The effects of lucky chant wore off.";
         }
@@ -427,19 +482,23 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.FUTURE_SIGHT, 2, 2, true);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             theSeeer = caster;
             super.cast(b, caster, victim, source, printCast);
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return theSeeer.getName() + " foresaw an attack!";
         }
 
+        @Override
         public void subside(Battle b, ActivePokemon p) {
             Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 
@@ -463,19 +522,23 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.DOOM_DESIRE, 2, 2, true);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             theSeeer = caster;
             super.cast(b, caster, victim, source, printCast);
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return theSeeer.getName() + " foresaw an attack!";
         }
 
+        @Override
         public void subside(Battle b, ActivePokemon p) {
             Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 
@@ -499,15 +562,18 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.HEAL_SWITCH, -1, -1, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             wish = caster.getAttack().namesies() == AttackNamesies.LUNAR_DANCE ? "lunar dance" : "healing wish";
             super.cast(b, caster, victim, source, printCast);
         }
 
+        @Override
         public void enter(Battle b, ActivePokemon enterer) {
             enterer.healHealthFraction(1);
             enterer.removeStatus();
@@ -524,6 +590,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.DEAD_ALLY, 2, 2, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
         }
@@ -538,6 +605,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.PAY_DAY, -1, -1, false);
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             PayDay payday = (PayDay)Effect.getEffect(b.getEffects(true), this.namesies);
             Messages.add(getCastMessage(b, caster, victim, source));
@@ -549,10 +617,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
             }
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Coins scattered everywhere!";
         }
 
+        @Override
         public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
             Messages.add(player.getName() + " picked up " + coins + " pokedollars!");
             player.getDatCashMoney(coins);
@@ -566,6 +636,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             super(EffectNamesies.GET_DAT_CASH_MONEY_TWICE, -1, -1, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
         }

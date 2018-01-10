@@ -186,6 +186,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = -1;
         }
 
+        @Override
         public int flingDamage() {
             return 9001;
         }
@@ -198,6 +199,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SYRUP, "A mysterious bottle of syrup. Maybe it will be useful some day.", BagCategory.KEY_ITEM);
         }
 
+        @Override
         public boolean use() {
             return false;
         }
@@ -210,6 +212,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.BICYCLE, "A folding Bicycle that enables much faster movement than the Running Shoes.", BagCategory.KEY_ITEM);
         }
 
+        @Override
         public boolean use() {
             // TODO: if (Can ride bike) Set the bike as a 'currentlyUsing' item
             // May need to make this take in info on the route
@@ -224,6 +227,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SURFBOARD, "A fancy shmancy surfboard that lets you be RADICAL DUDE!", BagCategory.KEY_ITEM);
         }
 
+        @Override
         public boolean use() {
             // TODO: DOESN'T DO SHIT
             return false;
@@ -237,6 +241,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.FISHING_ROD, "A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.", BagCategory.KEY_ITEM);
         }
 
+        @Override
         public boolean use() {
             // TODO: if (spot in front of player is a fishing spot) Set as 'currentlyUsing'
             // May need to make this take in info on the route
@@ -252,6 +257,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.WATER) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
@@ -267,15 +273,18 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + " floats with its " + this.name + "!");
         }
 
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add(victim.getName() + "'s " + this.name + " popped!");
             victim.consumeItem(b);
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
@@ -293,6 +302,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
         }
 
+        @Override
         public void applyEffect(Battle b, ActivePokemon p) {
             // This is named too fantastically to just be applyEffect
             getDatCashMoneyGetDatCashMoneyCast(b, p);
@@ -307,6 +317,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
@@ -329,6 +340,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (victim.isType(b, Type.POISON)) {
                 // Don't heal if at full health
@@ -353,14 +365,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.EVASION;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public double getModifier() {
             return 1.1;
         }
@@ -374,6 +389,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.ELECTRIC) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
@@ -389,23 +405,28 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.ATTACK;
         }
 
+        @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
             Move last = p.getAttributes().getLastMoveUsed();
             return last == null || m == last;
         }
 
+        @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
             return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public double getModifier() {
             return 1.5;
         }
@@ -419,23 +440,28 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
 
+        @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
             Move last = p.getAttributes().getLastMoveUsed();
             return last == null || m == last;
         }
 
+        @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
             return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public double getModifier() {
             return 1.5;
         }
@@ -449,23 +475,28 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SP_ATTACK;
         }
 
+        @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
             Move last = p.getAttributes().getLastMoveUsed();
             return last == null || m == last;
         }
 
+        @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
             return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public double getModifier() {
             return 1.5;
         }
@@ -479,6 +510,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon) {
             return RandomUtils.chanceTest(1, 3) && wildPokemon.getLevel() <= attacking.getLevel();
         }
@@ -492,10 +524,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public int flingDamage() {
             return 60;
         }
 
+        @Override
         public int getExtensionTurns(EffectNamesies weatherType) {
             return weatherType == EffectNamesies.RAINING ? 3 : 0;
         }
@@ -509,10 +543,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public int flingDamage() {
             return 60;
         }
 
+        @Override
         public int getExtensionTurns(EffectNamesies weatherType) {
             return weatherType == EffectNamesies.SUNNY ? 3 : 0;
         }
@@ -526,10 +562,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public int flingDamage() {
             return 40;
         }
 
+        @Override
         public int getExtensionTurns(EffectNamesies weatherType) {
             return weatherType == EffectNamesies.HAILING ? 3 : 0;
         }
@@ -543,10 +581,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public int getExtensionTurns(EffectNamesies weatherType) {
             return weatherType == EffectNamesies.SANDSTORM ? 3 : 0;
         }
@@ -560,6 +600,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
                 victim.consumeItem(b);
@@ -575,6 +616,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
@@ -588,10 +630,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return TypeAdvantage.isSuperEffective(user, victim, b) ? 1.2 : 1;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
@@ -605,10 +649,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             Status.giveStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.name + "!");
         }
 
+        @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             Status.giveStatus(b, pelted, pelted, StatusCondition.BURNED, pelted.getName() + " was burned by the " + this.name + "!");
         }
@@ -622,6 +668,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             // Badly poisons the holder at the end of the turn
             Status.giveStatus(
@@ -630,6 +677,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             );
         }
 
+        @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             // Badly poisons the pelted
             applyEndTurn(pelted, b);
@@ -644,6 +692,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public int getHalfAmount(int halfAmount) {
             return halfAmount + 1;
         }
@@ -657,14 +706,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth) {
             return RandomUtils.chanceTest(10);
         }
 
+        @Override
         public String braceMessage(ActivePokemon bracer) {
             return bracer.getName() + " held on with its " + this.name + "!";
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
@@ -678,6 +730,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth) {
             if (fullHealth) {
                 bracer.consumeItem(b);
@@ -687,10 +740,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             return false;
         }
 
+        @Override
         public String braceMessage(ActivePokemon bracer) {
             return bracer.getName() + " held on with its " + this.name + "!";
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
@@ -704,6 +759,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public int flingDamage() {
             return 90;
         }
@@ -717,10 +773,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 10000;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isPokemon(PokemonNamesies.DIALGA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.STEEL)) ? 1.2 : 1;
         }
 
+        @Override
         public int flingDamage() {
             return 60;
         }
@@ -734,10 +792,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 10000;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isPokemon(PokemonNamesies.PALKIA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.WATER)) ? 1.2 : 1;
         }
 
+        @Override
         public int flingDamage() {
             return 60;
         }
@@ -751,10 +811,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 10000;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isPokemon(PokemonNamesies.GIRATINA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.GHOST)) ? 1.2 : 1;
         }
 
+        @Override
         public int flingDamage() {
             return 60;
         }
@@ -768,19 +830,23 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
 
+        @Override
         public int flingDamage() {
             return 130;
         }
 
+        @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             // Technically the Iron Ball doesn't do this as a fling effect, but it almost makes sense so I'm doing it
             removeLevitation(b, pelted);
         }
 
+        @Override
         public double getModifier() {
             return .5;
         }
@@ -794,6 +860,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
@@ -807,10 +874,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return 5324.0/4096.0;
         }
 
+        @Override
         public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             if (user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
                 return;
@@ -829,18 +898,22 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return p.isPokemon(PokemonNamesies.PIKACHU);
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.ATTACK || s == Stat.SP_ATTACK;
         }
 
+        @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             Status.giveStatus(b, pelted, pelted, StatusCondition.PARALYZED, pelted.getName() + " was paralyzed by the " + this.name + "!");
         }
 
+        @Override
         public double getModifier() {
             return 2;
         }
@@ -872,6 +945,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 10;
         }
 
+        @Override
         public int increaseCritStage(int stage, ActivePokemon p) {
             if (p.isPokemon(PokemonNamesies.CHANSEY)) {
                 return stage + 2;
@@ -880,6 +954,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             return stage;
         }
 
+        @Override
         public int flingDamage() {
             return 40;
         }
@@ -893,6 +968,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.WATER) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
@@ -908,14 +984,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 3000;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
 
+        @Override
         public int flingDamage() {
             return 60;
         }
 
+        @Override
         public int[] getEVs(int[] vals) {
             for (int i = 0; i < vals.length; i++) {
                 vals[i] *= 2;
@@ -924,6 +1003,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             return vals;
         }
 
+        @Override
         public double getModifier() {
             return .5;
         }
@@ -969,16 +1049,19 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (usesies(b, victim)) {
                 victim.consumeItem(b);
             }
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             usesies(b, pelted);
         }
@@ -992,18 +1075,22 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 10;
         }
 
+        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return p.isPokemon(PokemonNamesies.DITTO);
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public double getModifier() {
             return 1.5;
         }
@@ -1017,6 +1104,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return Math.min(2, 1 + .2*(user.getAttributes().getCount() - 1));
         }
@@ -1030,10 +1118,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttack().getCategory() == MoveCategory.PHYSICAL ? 1.1 : 1;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
@@ -1047,23 +1137,28 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 3000;
         }
 
+        @Override
         public Stat powerStat() {
             return Stat.SPEED;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
 
+        @Override
         public int flingDamage() {
             return 70;
         }
 
+        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
         }
 
+        @Override
         public double getModifier() {
             return .5;
         }
@@ -1077,23 +1172,28 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 3000;
         }
 
+        @Override
         public Stat powerStat() {
             return Stat.SP_DEFENSE;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
 
+        @Override
         public int flingDamage() {
             return 70;
         }
 
+        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
         }
 
+        @Override
         public double getModifier() {
             return .5;
         }
@@ -1107,23 +1207,28 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 3000;
         }
 
+        @Override
         public Stat powerStat() {
             return Stat.DEFENSE;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
 
+        @Override
         public int flingDamage() {
             return 70;
         }
 
+        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
         }
 
+        @Override
         public double getModifier() {
             return .5;
         }
@@ -1137,23 +1242,28 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 3000;
         }
 
+        @Override
         public Stat powerStat() {
             return Stat.ATTACK;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
 
+        @Override
         public int flingDamage() {
             return 70;
         }
 
+        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
         }
 
+        @Override
         public double getModifier() {
             return .5;
         }
@@ -1167,23 +1277,28 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 3000;
         }
 
+        @Override
         public Stat powerStat() {
             return Stat.SP_ATTACK;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
 
+        @Override
         public int flingDamage() {
             return 70;
         }
 
+        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
         }
 
+        @Override
         public double getModifier() {
             return .5;
         }
@@ -1197,23 +1312,28 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 3000;
         }
 
+        @Override
         public Stat powerStat() {
             return Stat.HP;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
 
+        @Override
         public int flingDamage() {
             return 70;
         }
 
+        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
         }
 
+        @Override
         public double getModifier() {
             return .5;
         }
@@ -1227,6 +1347,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public int flingDamage() {
             return 80;
         }
@@ -1240,18 +1361,22 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 10;
         }
 
+        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return p.isPokemon(PokemonNamesies.DITTO);
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public double getModifier() {
             return 1.5;
         }
@@ -1265,12 +1390,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             if (user.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
                 victim.consumeItem(b);
             }
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
@@ -1284,10 +1411,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public boolean negateNoAdvantage(Type attacking, Type defending) {
             return true;
         }
@@ -1301,11 +1430,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
             user.reduceHealthFraction(b, 1/8.0);
         }
 
+        @Override
         public int flingDamage() {
             return 60;
         }
@@ -1319,14 +1450,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean block(EffectNamesies weather) {
             return true;
         }
 
+        @Override
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttack() instanceof PowderMove;
         }
 
+        @Override
         public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
         }
@@ -1349,6 +1483,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
@@ -1362,6 +1497,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             if (user.fullHealth() || user.getAttack().isMoveType(MoveType.USER_FAINTS)) {
                 return;
@@ -1389,6 +1525,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.ICE) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
@@ -1404,14 +1541,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 10;
         }
 
+        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS);
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE;
         }
 
+        @Override
         public double getModifier() {
             return 1.5;
         }
@@ -1425,6 +1565,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public int increaseCritStage(int stage, ActivePokemon p) {
             if (p.isPokemon(PokemonNamesies.FARFETCHD)) {
                 return stage + 2;
@@ -1433,6 +1574,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             return stage;
         }
 
+        @Override
         public int flingDamage() {
             return 60;
         }
@@ -1453,14 +1595,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
             return victim.getName() + "s " + this.getName() + " latched onto " + user.getName() + "!";
         }
 
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             stickyPoke(b, victim, "its");
         }
 
+        @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             stickyPoke(b, user, victim.getName() + "'s");
             if (user.isFainted(b) || !victim.canGiftItem(b, user)) {
@@ -1470,6 +1615,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             victim.swapItems(b, user, this);
         }
 
+        @Override
         public int flingDamage() {
             return 80;
         }
@@ -1483,18 +1629,22 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 500;
         }
 
+        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return p.isPokemon(PokemonNamesies.CUBONE) || p.isPokemon(PokemonNamesies.MAROWAK);
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.ATTACK;
         }
 
+        @Override
         public int flingDamage() {
             return 90;
         }
 
+        @Override
         public double getModifier() {
             return 2;
         }
@@ -1508,6 +1658,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (TypeAdvantage.isSuperEffective(user, victim, b)) {
                 victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
@@ -1524,15 +1675,18 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
             // NOTE: Works like Clear Body, since ain't nobody want to keep track of stats.
             return true;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             // Restores negative stat changes to the pelted
             for (Stat stat : Stat.BATTLE_STATS) {
@@ -1553,14 +1707,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.ACCURACY;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public double getModifier() {
             return 1.1;
         }
@@ -1574,14 +1731,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SP_ATTACK;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public double getModifier() {
             return 1.1;
         }
@@ -1595,18 +1755,22 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return !b.isFirstAttack();
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.ACCURACY;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public double getModifier() {
             return 1.2;
         }
@@ -1620,6 +1784,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9600;
         }
 
+        @Override
         public PokemonNamesies getBaby() {
             return PokemonNamesies.MUNCHLAX;
         }
@@ -1633,14 +1798,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9600;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.EVASION;
         }
 
+        @Override
         public PokemonNamesies getBaby() {
             return PokemonNamesies.WYNAUT;
         }
 
+        @Override
         public double getModifier() {
             return 1.1;
         }
@@ -1654,6 +1822,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9600;
         }
 
+        @Override
         public PokemonNamesies getBaby() {
             return PokemonNamesies.HAPPINY;
         }
@@ -1662,6 +1831,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
         }
 
+        @Override
         public void applyEffect(Battle b, ActivePokemon p) {
             // This is named too fantastically to just be applyEffect
             getDatCashMoneyGetDatCashMoneyCast(b, p);
@@ -1676,10 +1846,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9600;
         }
 
+        @Override
         public PokemonNamesies getBaby() {
             return PokemonNamesies.MIME_JR;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.PSYCHIC) ? 1.2 : 1;
         }
@@ -1693,10 +1865,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9600;
         }
 
+        @Override
         public boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon) {
             return RandomUtils.chanceTest(1, 3) && wildPokemon.getLevel() <= attacking.getLevel();
         }
 
+        @Override
         public PokemonNamesies getBaby() {
             return PokemonNamesies.CHINGLING;
         }
@@ -1710,10 +1884,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9600;
         }
 
+        @Override
         public PokemonNamesies getBaby() {
             return PokemonNamesies.BONSLY;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.ROCK) ? 1.2 : 1;
         }
@@ -1727,10 +1903,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9600;
         }
 
+        @Override
         public PokemonNamesies getBaby() {
             return PokemonNamesies.BUDEW;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.GRASS) ? 1.2 : 1;
         }
@@ -1744,10 +1922,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9600;
         }
 
+        @Override
         public PokemonNamesies getBaby() {
             return PokemonNamesies.AZURILL;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.WATER) ? 1.2 : 1;
         }
@@ -1761,10 +1941,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9600;
         }
 
+        @Override
         public PokemonNamesies getBaby() {
             return PokemonNamesies.MANTYKE;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.WATER) ? 1.2 : 1;
         }
@@ -1778,6 +1960,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.DRAGON;
         }
@@ -1791,6 +1974,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.DARK;
         }
@@ -1804,6 +1988,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.GROUND;
         }
@@ -1817,6 +2002,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.FIGHTING;
         }
@@ -1830,6 +2016,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.FIRE;
         }
@@ -1843,6 +2030,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.ICE;
         }
@@ -1856,6 +2044,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.BUG;
         }
@@ -1869,6 +2058,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.STEEL;
         }
@@ -1882,6 +2072,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.GRASS;
         }
@@ -1895,6 +2086,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.PSYCHIC;
         }
@@ -1908,6 +2100,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.FAIRY;
         }
@@ -1921,6 +2114,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.FLYING;
         }
@@ -1934,6 +2128,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.WATER;
         }
@@ -1947,6 +2142,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.GHOST;
         }
@@ -1960,6 +2156,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.ROCK;
         }
@@ -1973,6 +2170,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.POISON;
         }
@@ -1986,6 +2184,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.ELECTRIC;
         }
@@ -1999,6 +2198,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.FIRE;
         }
@@ -2012,6 +2212,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.ICE;
         }
@@ -2025,6 +2226,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.WATER;
         }
@@ -2038,6 +2240,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.ELECTRIC;
         }
@@ -2051,6 +2254,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.FIRE;
         }
@@ -2064,6 +2268,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.WATER;
         }
@@ -2077,6 +2282,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.ELECTRIC;
         }
@@ -2090,6 +2296,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.GRASS;
         }
@@ -2103,6 +2310,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.ICE;
         }
@@ -2116,6 +2324,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.FIGHTING;
         }
@@ -2129,6 +2338,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.POISON;
         }
@@ -2142,6 +2352,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.GROUND;
         }
@@ -2155,6 +2366,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.FLYING;
         }
@@ -2168,6 +2380,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.PSYCHIC;
         }
@@ -2181,6 +2394,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.BUG;
         }
@@ -2194,6 +2408,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.ROCK;
         }
@@ -2207,6 +2422,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.GHOST;
         }
@@ -2220,6 +2436,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.DRAGON;
         }
@@ -2233,6 +2450,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.DARK;
         }
@@ -2246,6 +2464,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.STEEL;
         }
@@ -2259,6 +2478,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.NORMAL;
         }
@@ -2272,6 +2492,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public Type getType() {
             return Type.FAIRY;
         }
@@ -2285,6 +2506,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
                 return;
@@ -2294,6 +2516,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.name + "!").updatePokemon(b, victim));
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
@@ -2307,6 +2530,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.FIGHTING) ? 1.2 : 1;
         }
@@ -2320,6 +2544,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.DARK) ? 1.2 : 1;
         }
@@ -2333,6 +2558,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.FIRE) ? 1.2 : 1;
         }
@@ -2346,10 +2572,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public int flingDamage() {
             return 70;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.DRAGON) ? 1.2 : 1;
         }
@@ -2363,10 +2591,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public int flingDamage() {
             return 100;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.ROCK) ? 1.2 : 1;
         }
@@ -2380,6 +2610,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.ELECTRIC) ? 1.2 : 1;
         }
@@ -2393,10 +2624,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.STEEL) ? 1.2 : 1;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2410,6 +2643,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.GRASS) ? 1.2 : 1;
         }
@@ -2423,6 +2657,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.WATER) ? 1.2 : 1;
         }
@@ -2436,6 +2671,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.ICE) ? 1.2 : 1;
         }
@@ -2449,14 +2685,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public int flingDamage() {
             return 70;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.POISON) ? 1.2 : 1;
         }
 
+        @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             Status.giveStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was poisoned by the " + this.name + "!");
         }
@@ -2470,10 +2709,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public int flingDamage() {
             return 50;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.FLYING) ? 1.2 : 1;
         }
@@ -2487,10 +2728,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.NORMAL) ? 1.2 : 1;
         }
@@ -2504,10 +2747,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.BUG) ? 1.2 : 1;
         }
@@ -2521,10 +2766,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.GROUND) ? 1.2 : 1;
         }
@@ -2538,6 +2785,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.GHOST) ? 1.2 : 1;
         }
@@ -2551,6 +2799,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.PSYCHIC) ? 1.2 : 1;
         }
@@ -2564,10 +2813,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public int flingDamage() {
             return 80;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2581,18 +2832,22 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return p.isPokemon(PokemonNamesies.CLAMPERL) || p.isPokemon(PokemonNamesies.CHINCHOU) || p.isPokemon(PokemonNamesies.LANTURN);
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SP_DEFENSE;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
 
+        @Override
         public double getModifier() {
             return 2;
         }
@@ -2606,22 +2861,27 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return p.isPokemon(PokemonNamesies.CLAMPERL);
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SP_ATTACK;
         }
 
+        @Override
         public int flingDamage() {
             return 90;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
 
+        @Override
         public double getModifier() {
             return 2;
         }
@@ -2635,6 +2895,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2648,10 +2909,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public int flingDamage() {
             return 50;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2665,10 +2928,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public int flingDamage() {
             return 80;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2682,10 +2947,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public int flingDamage() {
             return 80;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2699,6 +2966,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2712,6 +2980,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
                 if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
@@ -2720,12 +2989,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             }
         }
 
+        @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
                 Messages.add("The " + this.name + " caused " + pelted.getName() + " to flinch!");
             }
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2739,6 +3010,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2752,10 +3024,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public int flingDamage() {
             return 80;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2769,6 +3043,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2782,10 +3057,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public int flingDamage() {
             return 80;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2808,6 +3085,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 500;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2821,10 +3099,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public int flingDamage() {
             return 80;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2838,10 +3118,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public int flingDamage() {
             return 80;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2855,6 +3137,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
                 if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
@@ -2863,12 +3146,14 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             }
         }
 
+        @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
                 Messages.add("The " + this.name + " caused " + pelted.getName() + " to flinch!");
             }
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2882,10 +3167,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2899,6 +3186,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2912,10 +3200,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public int flingDamage() {
             return 80;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2929,6 +3219,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2942,6 +3233,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2955,6 +3247,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2968,6 +3261,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2981,6 +3275,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -2994,6 +3289,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -3007,6 +3303,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -3020,6 +3317,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 2100;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.checkEvolution(this.namesies);
         }
@@ -3034,6 +3332,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public boolean shouldHeal(StatusCondition statusCondition) {
             return statusCondition == StatusCondition.POISONED;
         }
@@ -3048,6 +3347,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public boolean shouldHeal(StatusCondition statusCondition) {
             return statusCondition == StatusCondition.ASLEEP;
         }
@@ -3062,6 +3362,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public boolean shouldHeal(StatusCondition statusCondition) {
             return statusCondition == StatusCondition.BURNED;
         }
@@ -3076,6 +3377,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public boolean shouldHeal(StatusCondition statusCondition) {
             return statusCondition == StatusCondition.FROZEN;
         }
@@ -3090,6 +3392,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public boolean shouldHeal(StatusCondition statusCondition) {
             return statusCondition == StatusCondition.PARALYZED;
         }
@@ -3104,6 +3407,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public boolean shouldHeal(StatusCondition statusCondition) {
             // Does not apply to the healthy and the dead
             return statusCondition != StatusCondition.NO_STATUS && statusCondition != StatusCondition.FAINTED;
@@ -3120,6 +3424,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             // Essentially Full Restore is just a combined Max Potion and Full Heal
             boolean maxPotion = new MaxPotion().use(p);
@@ -3137,6 +3442,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int restoreAmount(Move toRestore) {
             return 10;
         }
@@ -3151,6 +3457,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int restoreAmount(Move toRestore) {
             return toRestore.getMaxPP();
         }
@@ -3165,6 +3472,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int restoreAmount(Move toRestore) {
             return 10;
         }
@@ -3179,6 +3487,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int restoreAmount(Move toRestore) {
             return toRestore.getMaxPP();
         }
@@ -3193,6 +3502,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getFixedHealAmount(ActivePokemon p) {
             return 20;
         }
@@ -3207,6 +3517,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getFixedHealAmount(ActivePokemon p) {
             return 20;
         }
@@ -3221,6 +3532,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getFixedHealAmount(ActivePokemon p) {
             return 20;
         }
@@ -3235,6 +3547,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getFixedHealAmount(ActivePokemon p) {
             return 50;
         }
@@ -3249,6 +3562,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getFixedHealAmount(ActivePokemon p) {
             return 50;
         }
@@ -3263,6 +3577,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getFixedHealAmount(ActivePokemon p) {
             return 50;
         }
@@ -3277,6 +3592,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getFixedHealAmount(ActivePokemon p) {
             return 60;
         }
@@ -3291,6 +3607,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getFixedHealAmount(ActivePokemon p) {
             return 80;
         }
@@ -3305,6 +3622,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getFixedHealAmount(ActivePokemon p) {
             return 100;
         }
@@ -3319,6 +3637,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getFixedHealAmount(ActivePokemon p) {
             return 200;
         }
@@ -3333,6 +3652,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getFixedHealAmount(ActivePokemon p) {
             return 200;
         }
@@ -3347,6 +3667,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getAmountHealed(ActivePokemon p) {
             return p.healHealthFraction(1);
         }
@@ -3361,6 +3682,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             // Only applies to the dead
             if (!p.isActuallyDead()) {
@@ -3385,6 +3707,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             // Only applies to the dead
             if (!p.isActuallyDead()) {
@@ -3409,6 +3732,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             // Only applies to the dead
             if (!p.isActuallyDead()) {
@@ -3450,14 +3774,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public boolean use(Battle b, ActivePokemon p, Move m) {
             return b == null ? use() : use(p, b);
         }
 
+        @Override
         public boolean use() {
             return this.use(Game.getPlayer());
         }
 
+        @Override
         public boolean use(ActivePokemon p, Battle b) {
             return use((Trainer)b.getTrainer(p));
         }
@@ -3472,6 +3799,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
 
+        @Override
         public boolean use(ActivePokemon p, Battle b) {
             return EffectNamesies.RAISE_CRITS.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
         }
@@ -3486,6 +3814,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
 
+        @Override
         public boolean use(ActivePokemon p, Battle b) {
             return EffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
         }
@@ -3500,6 +3829,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
 
+        @Override
         public boolean use(ActivePokemon p, Battle b) {
             return p.getAttributes().modifyStage(p, p, 1, Stat.ACCURACY, b, CastSource.USE_ITEM);
         }
@@ -3514,6 +3844,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
 
+        @Override
         public boolean use(ActivePokemon p, Battle b) {
             return p.getAttributes().modifyStage(p, p, 1, Stat.ATTACK, b, CastSource.USE_ITEM);
         }
@@ -3528,6 +3859,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
 
+        @Override
         public boolean use(ActivePokemon p, Battle b) {
             return p.getAttributes().modifyStage(p, p, 1, Stat.DEFENSE, b, CastSource.USE_ITEM);
         }
@@ -3542,6 +3874,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
 
+        @Override
         public boolean use(ActivePokemon p, Battle b) {
             return p.getAttributes().modifyStage(p, p, 1, Stat.SP_ATTACK, b, CastSource.USE_ITEM);
         }
@@ -3556,6 +3889,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
 
+        @Override
         public boolean use(ActivePokemon p, Battle b) {
             return p.getAttributes().modifyStage(p, p, 1, Stat.SP_DEFENSE, b, CastSource.USE_ITEM);
         }
@@ -3570,6 +3904,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
 
+        @Override
         public boolean use(ActivePokemon p, Battle b) {
             return p.getAttributes().modifyStage(p, p, 1, Stat.SPEED, b, CastSource.USE_ITEM);
         }
@@ -3583,6 +3918,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public Stat toIncrease() {
             return Stat.HP;
         }
@@ -3596,6 +3932,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public Stat toIncrease() {
             return Stat.ATTACK;
         }
@@ -3609,6 +3946,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public Stat toIncrease() {
             return Stat.DEFENSE;
         }
@@ -3622,6 +3960,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public Stat toIncrease() {
             return Stat.SP_ATTACK;
         }
@@ -3635,6 +3974,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public Stat toIncrease() {
             return Stat.SP_DEFENSE;
         }
@@ -3648,6 +3988,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public Stat toIncrease() {
             return Stat.SPEED;
         }
@@ -3661,6 +4002,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 3000;
         }
 
+        @Override
         public Stat toIncrease() {
             return Stat.HP;
         }
@@ -3674,6 +4016,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 3000;
         }
 
+        @Override
         public Stat toIncrease() {
             return Stat.ATTACK;
         }
@@ -3687,6 +4030,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 3000;
         }
 
+        @Override
         public Stat toIncrease() {
             return Stat.DEFENSE;
         }
@@ -3700,6 +4044,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 3000;
         }
 
+        @Override
         public Stat toIncrease() {
             return Stat.SP_ATTACK;
         }
@@ -3713,6 +4058,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 3000;
         }
 
+        @Override
         public Stat toIncrease() {
             return Stat.SP_DEFENSE;
         }
@@ -3726,6 +4072,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 3000;
         }
 
+        @Override
         public Stat toIncrease() {
             return Stat.SPEED;
         }
@@ -3739,6 +4086,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public boolean use(ActivePokemon p, Move m) {
             if (m.increaseMaxPP(3)) {
                 Messages.add(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!");
@@ -3757,6 +4105,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 9800;
         }
 
+        @Override
         public boolean use(ActivePokemon p, Move m) {
             if (m.increaseMaxPP(1)) {
                 Messages.add(p.getName() + "'s " + m.getAttack().getName() + "'s Max PP was increased!");
@@ -3775,6 +4124,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 4800;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             return p.levelUp(null);
         }
@@ -3799,6 +4149,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return b.getTerrainType() == TerrainType.WATER ? 3.5 : 1;
         }
@@ -3813,6 +4164,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return b.getTerrainType() == TerrainType.CAVE ? 3.5 : 1;
         }
@@ -3828,6 +4180,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100 ? 4 : 1;
         }
@@ -3842,6 +4195,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return 1.5;
         }
@@ -3856,6 +4210,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public void afterCaught(ActivePokemon p) {
             p.fullyHeal();
         }
@@ -3870,6 +4225,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public int getAdditive(ActivePokemon me, ActivePokemon o, Battle b) {
             double weight = o.getWeight(b);
             if (weight <= 451.5) {
@@ -3893,6 +4249,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             if (me.getLevel()/4 > o.getLevel()) {
                 return 8;
@@ -3915,6 +4272,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return Gender.oppositeGenders(me, o) ? 8 : 1;
         }
@@ -3929,6 +4287,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return Game.getPlayer().isFishing() ? 3 : 1;
         }
@@ -3954,6 +4313,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return 255;
         }
@@ -3968,6 +4328,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return o.getPokemonInfo().getEvolution().getEvolution(EvolutionMethod.ITEM, o, ItemNamesies.MOON_STONE) != null ? 4 : 1;
         }
@@ -3982,6 +4343,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             if (o.getLevel() <= 19) {
                 return 3;
@@ -4002,6 +4364,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return o.isType(b, Type.WATER) || o.isType(b, Type.BUG) ? 3 : 1;
         }
@@ -4036,6 +4399,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return b.getTurn() == 1 ? 3 : 1;
         }
@@ -4050,6 +4414,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return Game.getPlayer().getPokedex().isCaught(o) ? 3 : 1;
         }
@@ -4063,6 +4428,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return 1.5;
         }
@@ -4077,6 +4443,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return Math.min(b.getTurn()/10 + 1, 4);
         }
@@ -4091,6 +4458,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
+        @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
             return 2;
         }
@@ -4105,10 +4473,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.FIRE;
         }
 
+        @Override
         public boolean shouldHeal(StatusCondition statusCondition) {
             return statusCondition == StatusCondition.PARALYZED;
         }
@@ -4123,10 +4493,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.WATER;
         }
 
+        @Override
         public boolean shouldHeal(StatusCondition statusCondition) {
             return statusCondition == StatusCondition.ASLEEP;
         }
@@ -4141,10 +4513,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.ELECTRIC;
         }
 
+        @Override
         public boolean shouldHeal(StatusCondition statusCondition) {
             return statusCondition == StatusCondition.POISONED;
         }
@@ -4159,10 +4533,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.GRASS;
         }
 
+        @Override
         public boolean shouldHeal(StatusCondition statusCondition) {
             return statusCondition == StatusCondition.BURNED;
         }
@@ -4177,10 +4553,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.ICE;
         }
 
+        @Override
         public boolean shouldHeal(StatusCondition statusCondition) {
             return statusCondition == StatusCondition.FROZEN;
         }
@@ -4195,6 +4573,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             for (Move m : victim.getMoves(b)) {
                 if (m.getPP() == 0) {
@@ -4205,10 +4584,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             }
         }
 
+        @Override
         public int restoreAmount(Move toRestore) {
             return 10;
         }
 
+        @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
             Move lowestPPMove = null;
             double lowestPPRatio = 1;
@@ -4230,10 +4611,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             return true;
         }
 
+        @Override
         public int naturalGiftPower() {
             return 80;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.FIGHTING;
         }
@@ -4248,22 +4631,27 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getFixedHealAmount(ActivePokemon p) {
             return 10;
         }
 
+        @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
             return use(user, source);
         }
 
+        @Override
         public double healthTriggerRatio() {
             return 1/3.0;
         }
 
+        @Override
         public int naturalGiftPower() {
             return 80;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.POISON;
         }
@@ -4288,26 +4676,32 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public boolean use(ActivePokemon p, Battle b) {
             return use(p, CastSource.USE_ITEM);
         }
 
+        @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
             return use(user, source);
         }
 
+        @Override
         public int naturalGiftPower() {
             return 80;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.GROUND;
         }
 
+        @Override
         public String getGenericMessage(ActivePokemon p) {
             return p.getName() + " snapped out of its confusion!";
         }
 
+        @Override
         public String getSourceMessage(ActivePokemon p, String sourceName) {
             return p.getName() + "'s " + this.getName() + " snapped it out of confusion!";
         }
@@ -4322,11 +4716,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
+        @Override
         public boolean shouldHeal(StatusCondition statusCondition) {
             // Does not apply to the healthy and the dead
             return statusCondition != StatusCondition.NO_STATUS && statusCondition != StatusCondition.FAINTED;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.FLYING;
         }
@@ -4341,22 +4737,27 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
+        @Override
         public int getAmountHealed(ActivePokemon p) {
             return p.healHealthFraction(1/4.0);
         }
 
+        @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
             return use(user, source);
         }
 
+        @Override
         public double healthTriggerRatio() {
             return 1/2.0;
         }
 
+        @Override
         public int naturalGiftPower() {
             return 80;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.PSYCHIC;
         }
@@ -4370,10 +4771,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 60000;
         }
 
+        @Override
         public int naturalGiftPower() {
             return 80;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.STEEL;
         }
@@ -4387,10 +4790,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Stat toDecrease() {
             return Stat.HP;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.ICE;
         }
@@ -4404,10 +4809,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Stat toDecrease() {
             return Stat.ATTACK;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.FIGHTING;
         }
@@ -4421,10 +4828,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Stat toDecrease() {
             return Stat.DEFENSE;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.POISON;
         }
@@ -4438,10 +4847,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Stat toDecrease() {
             return Stat.SP_ATTACK;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.GROUND;
         }
@@ -4455,10 +4866,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Stat toDecrease() {
             return Stat.SP_DEFENSE;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.FLYING;
         }
@@ -4472,10 +4885,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Stat toDecrease() {
             return Stat.SPEED;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.PSYCHIC;
         }
@@ -4489,6 +4904,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.FIRE;
         }
@@ -4502,6 +4918,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.WATER;
         }
@@ -4515,6 +4932,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.ELECTRIC;
         }
@@ -4528,6 +4946,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.GRASS;
         }
@@ -4541,6 +4960,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.ICE;
         }
@@ -4554,6 +4974,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.FIGHTING;
         }
@@ -4567,6 +4988,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.POISON;
         }
@@ -4580,6 +5002,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.GROUND;
         }
@@ -4593,6 +5016,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.FLYING;
         }
@@ -4606,6 +5030,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.PSYCHIC;
         }
@@ -4619,6 +5044,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.BUG;
         }
@@ -4632,6 +5058,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.ROCK;
         }
@@ -4645,6 +5072,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.GHOST;
         }
@@ -4658,6 +5086,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.DRAGON;
         }
@@ -4671,6 +5100,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.DARK;
         }
@@ -4684,6 +5114,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.STEEL;
         }
@@ -4697,6 +5128,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.NORMAL;
         }
@@ -4710,6 +5142,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type getType() {
             return Type.FAIRY;
         }
@@ -4723,10 +5156,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.GRASS;
         }
 
+        @Override
         public Stat getStat() {
             return Stat.ATTACK;
         }
@@ -4740,10 +5175,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.ICE;
         }
 
+        @Override
         public Stat getStat() {
             return Stat.DEFENSE;
         }
@@ -4757,10 +5194,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.FIGHTING;
         }
 
+        @Override
         public Stat getStat() {
             return Stat.SPEED;
         }
@@ -4774,10 +5213,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.POISON;
         }
 
+        @Override
         public Stat getStat() {
             return Stat.SP_ATTACK;
         }
@@ -4791,10 +5232,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.GROUND;
         }
 
+        @Override
         public Stat getStat() {
             return Stat.SP_DEFENSE;
         }
@@ -4808,10 +5251,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.ROCK;
         }
 
+        @Override
         public Stat getStat() {
             return Stat.ACCURACY;
         }
@@ -4825,14 +5270,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public int naturalGiftPower() {
             return 100;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.FAIRY;
         }
 
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.getAttack().getCategory() == MoveCategory.PHYSICAL && victim.getAttributes().modifyStage(victim, victim, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
@@ -4848,14 +5296,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public int naturalGiftPower() {
             return 100;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.DARK;
         }
 
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.getAttack().getCategory() == MoveCategory.SPECIAL && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
@@ -4871,14 +5322,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public int naturalGiftPower() {
             return 100;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.DRAGON;
         }
 
+        @Override
         public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
                 Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
@@ -4896,14 +5350,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public int naturalGiftPower() {
             return 100;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.DARK;
         }
 
+        @Override
         public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             if (user.getAttack().getCategory() == MoveCategory.SPECIAL) {
                 Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
@@ -4921,14 +5378,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public int naturalGiftPower() {
             return 100;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.GHOST;
         }
 
+        @Override
         public int changePriority(Battle b, ActivePokemon user) {
             if (user.getHPRatio() < 1/3.0) {
                 user.consumeItem(b);
@@ -4947,6 +5407,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (!victim.fullHealth() && TypeAdvantage.isSuperEffective(user, victim, b)) {
                 Messages.add(victim.getName() + "'s " + this.name + " restored its health!");
@@ -4956,10 +5417,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             }
         }
 
+        @Override
         public int naturalGiftPower() {
             return 100;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.BUG;
         }
@@ -4973,19 +5436,23 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
             EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
             return true;
         }
 
+        @Override
         public double healthTriggerRatio() {
             return 1/4.0;
         }
 
+        @Override
         public int naturalGiftPower() {
             return 100;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.FLYING;
         }
@@ -4999,6 +5466,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 20;
         }
 
+        @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
             int rand = RandomUtils.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
 
@@ -5013,14 +5481,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             return user.getAttributes().modifyStage(user, user, 1, stat, b, source);
         }
 
+        @Override
         public double healthTriggerRatio() {
             return 1/4.0;
         }
 
+        @Override
         public int naturalGiftPower() {
             return 100;
         }
 
+        @Override
         public Type naturalGiftType() {
             return Type.PSYCHIC;
         }
@@ -5124,6 +5595,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 10000;
         }
 
+        @Override
         public int flingDamage() {
             return 100;
         }
@@ -5147,18 +5619,22 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 200;
         }
 
+        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return p.getPokemonInfo().getEvolution().canEvolve();
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
         }
 
+        @Override
         public int flingDamage() {
             return 40;
         }
 
+        @Override
         public double getModifier() {
             return 1.5;
         }
@@ -5181,6 +5657,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 350;
         }
 
+        @Override
         public int repelSteps() {
             return 100;
         }
@@ -5194,6 +5671,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 500;
         }
 
+        @Override
         public int repelSteps() {
             return 200;
         }
@@ -5207,6 +5685,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 700;
         }
 
+        @Override
         public int repelSteps() {
             return 250;
         }
@@ -5220,6 +5699,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public boolean use(ActivePokemon p) {
             AbilityNamesies other = Ability.getOtherAbility(p);
             if (other == AbilityNamesies.NO_ABILITY) {
@@ -5240,22 +5720,27 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SP_DEFENSE;
         }
 
+        @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
             return !m.getAttack().isStatusMove();
         }
 
+        @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
             return p.getName() + "'s " + this.name + " prevents the use of status moves!";
         }
 
+        @Override
         public int flingDamage() {
             return 80;
         }
 
+        @Override
         public double getModifier() {
             return 1.5;
         }
@@ -5269,6 +5754,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 100;
         }
 
+        @Override
         public int flingDamage() {
             return 10;
         }
@@ -5282,6 +5768,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.FIRE;
         }
@@ -5295,6 +5782,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.WATER;
         }
@@ -5308,6 +5796,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.ELECTRIC;
         }
@@ -5321,6 +5810,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.GRASS;
         }
@@ -5334,6 +5824,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.ICE;
         }
@@ -5347,6 +5838,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.FIGHTING;
         }
@@ -5360,6 +5852,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.POISON;
         }
@@ -5373,6 +5866,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.GROUND;
         }
@@ -5386,6 +5880,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.FLYING;
         }
@@ -5399,6 +5894,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.PSYCHIC;
         }
@@ -5412,6 +5908,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.BUG;
         }
@@ -5425,6 +5922,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.ROCK;
         }
@@ -5438,6 +5936,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.GHOST;
         }
@@ -5451,6 +5950,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.DRAGON;
         }
@@ -5464,6 +5964,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.DARK;
         }
@@ -5477,6 +5978,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.STEEL;
         }
@@ -5490,6 +5992,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 1000;
         }
 
+        @Override
         public Type getType() {
             return Type.FAIRY;
         }
@@ -5504,6 +6007,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 4000;
         }
 
+        @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
             if (newTerrain == TerrainType.ELECTRIC && p.getAttributes().modifyStage(p, p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
                 p.consumeItem(b);
@@ -5520,6 +6024,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 4000;
         }
 
+        @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
             if (newTerrain == TerrainType.GRASS && p.getAttributes().modifyStage(p, p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
                 p.consumeItem(b);
@@ -5536,6 +6041,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 4000;
         }
 
+        @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
             if (newTerrain == TerrainType.MISTY && p.getAttributes().modifyStage(p, p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
                 p.consumeItem(b);
@@ -5552,6 +6058,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super.price = 4000;
         }
 
+        @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
             if (newTerrain == TerrainType.PSYCHIC && p.getAttributes().modifyStage(p, p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
                 p.consumeItem(b);
@@ -5566,6 +6073,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.HONE_CLAWS_TM, "The user sharpens its claws to boost its Attack stat and accuracy.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.HONE_CLAWS;
         }
@@ -5578,6 +6086,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.DRAGON_CLAW_TM, "The user slashes the target with huge, sharp claws.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.DRAGON_CLAW;
         }
@@ -5590,6 +6099,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.PSYSHOCK_TM, "The user materializes an odd psychic wave to attack the target. This attack does physical damage.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.PSYSHOCK;
         }
@@ -5602,6 +6112,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.CALM_MIND_TM, "The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.CALM_MIND;
         }
@@ -5614,6 +6125,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.ROAR_TM, "The target is scared off and replaced by another Pokémon in its party. In the wild, the battle ends.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.ROAR;
         }
@@ -5626,6 +6138,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.TOXIC_TM, "A move that leaves the target badly poisoned. Its poison damage worsens every turn.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.TOXIC;
         }
@@ -5638,6 +6151,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.HAIL_TM, "The user summons a hailstorm lasting five turns. It damages all Pokémon except the Ice type.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.HAIL;
         }
@@ -5650,6 +6164,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.BULK_UP_TM, "The user tenses its muscles to bulk up its body, boosting both its Attack and Defense stats.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.BULK_UP;
         }
@@ -5662,6 +6177,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.VENOSHOCK_TM, "The user drenches the target in a special poisonous liquid. Its power is doubled if the target is poisoned.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.VENOSHOCK;
         }
@@ -5674,6 +6190,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.HIDDEN_POWER_TM, "A unique attack that varies in type and intensity depending on the Pokémon using it.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.HIDDEN_POWER;
         }
@@ -5686,6 +6203,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SUNNY_DAY_TM, "The user intensifies the sun for five turns, powering up Fire-type moves.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SUNNY_DAY;
         }
@@ -5698,6 +6216,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.TAUNT_TM, "The target is taunted into a rage that allows it to use only attack moves for three turns.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.TAUNT;
         }
@@ -5710,6 +6229,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.ICE_BEAM_TM, "The target is struck with an icy-cold beam of energy. It may also freeze the target solid.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.ICE_BEAM;
         }
@@ -5722,6 +6242,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.BLIZZARD_TM, "A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.BLIZZARD;
         }
@@ -5734,6 +6255,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.HYPER_BEAM_TM, "The target is attacked with a powerful beam. The user must rest on the next turn to regain its energy.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.HYPER_BEAM;
         }
@@ -5746,6 +6268,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.LIGHT_SCREEN_TM, "A wondrous wall of light is put up to suppress damage from special attacks for five turns.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.LIGHT_SCREEN;
         }
@@ -5758,6 +6281,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.PROTECT_TM, "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.PROTECT;
         }
@@ -5770,6 +6294,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.RAIN_DANCE_TM, "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.RAIN_DANCE;
         }
@@ -5782,6 +6307,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.ROOST_TM, "The user lands and rests its body. It restores the user's HP by up to half of its max HP.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.ROOST;
         }
@@ -5794,6 +6320,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SAFEGUARD_TM, "The user creates a protective field that prevents status problems for five turns.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SAFEGUARD;
         }
@@ -5806,6 +6333,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SOLAR_BEAM_TM, "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SOLAR_BEAM;
         }
@@ -5818,6 +6346,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SMACK_DOWN_TM, "The user throws a stone or projectile to attack an opponent. A flying Pokémon will fall to the ground when hit.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SMACK_DOWN;
         }
@@ -5830,6 +6359,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.THUNDERBOLT_TM, "A strong electric blast is loosed at the target. It may also leave the target with paralysis.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.THUNDERBOLT;
         }
@@ -5842,6 +6372,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.THUNDER_TM, "A wicked thunderbolt is dropped on the target to inflict damage. It may also leave the target with paralysis.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.THUNDER;
         }
@@ -5854,6 +6385,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.EARTHQUAKE_TM, "The user sets off an earthquake that strikes those around it.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.EARTHQUAKE;
         }
@@ -5866,6 +6398,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.DIG_TM, "The user burrows, then attacks on the second turn. It can also be used to exit dungeons.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.DIG;
         }
@@ -5878,6 +6411,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.PSYCHIC_TM, "The target is hit by a strong telekinetic force. It may also reduce the target's Sp. Def stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.PSYCHIC;
         }
@@ -5890,6 +6424,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SHADOW_BALL_TM, "The user hurls a shadowy blob at the target. It may also lower the target's Sp. Def stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SHADOW_BALL;
         }
@@ -5902,6 +6437,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.BRICK_BREAK_TM, "The user attacks with a swift chop. It can also break any barrier such as Light Screen and Reflect.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.BRICK_BREAK;
         }
@@ -5914,6 +6450,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.DOUBLE_TEAM_TM, "By moving rapidly, the user makes illusory copies of itself to raise its evasiveness.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.DOUBLE_TEAM;
         }
@@ -5926,6 +6463,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.REFLECT_TM, "A wondrous wall of light is put up to suppress damage from physical attacks for five turns.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.REFLECT;
         }
@@ -5938,6 +6476,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SLUDGE_WAVE_TM, "It swamps the area around the user with a giant sludge wave. It may also poison those hit.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SLUDGE_WAVE;
         }
@@ -5950,6 +6489,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.FLAMETHROWER_TM, "The target is scorched with an intense blast of fire. It may also leave the target with a burn.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.FLAMETHROWER;
         }
@@ -5962,6 +6502,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SLUDGE_BOMB_TM, "Unsanitary sludge is hurled at the target. It may also poison the target.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SLUDGE_BOMB;
         }
@@ -5974,6 +6515,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SANDSTORM_TM, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SANDSTORM;
         }
@@ -5986,6 +6528,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.FIRE_BLAST_TM, "The target is attacked with an intense blast of all-consuming fire. It may also leave the target with a burn.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.FIRE_BLAST;
         }
@@ -5998,6 +6541,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.ROCK_TOMB_TM, "Boulders are hurled at the target. It also lowers the target's Speed by preventing its movement.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.ROCK_TOMB;
         }
@@ -6010,6 +6554,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.AERIAL_ACE_TM, "The user confounds the foe with speed, then slashes. The attack lands without fail.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.AERIAL_ACE;
         }
@@ -6022,6 +6567,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.TORMENT_TM, "The user torments and enrages the target, making it incapable of using the same move twice in a row.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.TORMENT;
         }
@@ -6034,6 +6580,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.FACADE_TM, "An attack move that doubles its power if the user is poisoned, burned, or has paralysis.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.FACADE;
         }
@@ -6046,6 +6593,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.FLAME_CHARGE_TM, "The user cloaks itself with flame and attacks. Building up more power, it raises the user's Speed stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.FLAME_CHARGE;
         }
@@ -6058,6 +6606,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.REST_TM, "The user goes to sleep for two turns. It fully restores the user's HP and heals any status problem.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.REST;
         }
@@ -6070,6 +6619,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.ATTRACT_TM, "If it is the opposite gender of the user, the target becomes infatuated and less likely to attack.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.ATTRACT;
         }
@@ -6082,6 +6632,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.THIEF_TM, "The user attacks and steals the target's held item simultaneously. It can't steal if the user holds an item.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.THIEF;
         }
@@ -6094,6 +6645,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.LOW_SWEEP_TM, "The user attacks the target's legs swiftly, reducing the target's Speed stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.LOW_SWEEP;
         }
@@ -6106,6 +6658,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.ROUND_TM, "The user attacks the target with a song.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.ROUND;
         }
@@ -6118,6 +6671,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.ECHOED_VOICE_TM, "The user attacks the target with an echoing voice. If this move is used every turn, it does greater damage.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.ECHOED_VOICE;
         }
@@ -6130,6 +6684,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.OVERHEAT_TM, "The user attacks the target at full power. The attack's recoil harshly reduces the user's Sp. Atk stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.OVERHEAT;
         }
@@ -6142,6 +6697,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.STEEL_WING_TM, "The target is hit with wings of steel. It may also raise the user's Defense stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.STEEL_WING;
         }
@@ -6154,6 +6710,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.FOCUS_BLAST_TM, "The user heightens its mental focus and unleashes its power. It may also lower the target's Sp. Def.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.FOCUS_BLAST;
         }
@@ -6166,6 +6723,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.ENERGY_BALL_TM, "The user draws power from nature and fires it at the target. It may also lower the target's Sp. Def.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.ENERGY_BALL;
         }
@@ -6178,6 +6736,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.FALSE_SWIPE_TM, "A restrained attack that prevents the target from fainting. The target is left with at least 1 HP.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.FALSE_SWIPE;
         }
@@ -6190,6 +6749,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SCALD_TM, "The user shoots boiling hot water at its target. It may also leave the target with a burn.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SCALD;
         }
@@ -6202,6 +6762,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.FLING_TM, "The user flings its held item at the target to attack. Its power and effects depend on the item.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.FLING;
         }
@@ -6214,6 +6775,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.CHARGE_BEAM_TM, "The user attacks with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.CHARGE_BEAM;
         }
@@ -6226,6 +6788,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SKY_DROP_TM, "The user takes the target into the sky, then slams it into the ground.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SKY_DROP;
         }
@@ -6238,6 +6801,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.INCINERATE_TM, "The user attacks the target with fire. If the target is holding a Berry, the Berry becomes burnt up and unusable.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.INCINERATE;
         }
@@ -6250,6 +6814,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.WILL_O_WISP_TM, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.WILL_O_WISP;
         }
@@ -6262,6 +6827,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.ACROBATICS_TM, "The user nimbly strikes the target. If the user is not holding an item, this attack inflicts massive damage.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.ACROBATICS;
         }
@@ -6274,6 +6840,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.EMBARGO_TM, "It prevents the target from using its held item. Its Trainer is also prevented from using items on it.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.EMBARGO;
         }
@@ -6286,6 +6853,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.EXPLOSION_TM, "The user explodes to inflict damage on those around it. The user faints upon using this move.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.EXPLOSION;
         }
@@ -6298,6 +6866,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SHADOW_CLAW_TM, "The user slashes with a sharp claw made from shadows. Critical hits land more easily.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SHADOW_CLAW;
         }
@@ -6310,6 +6879,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.PAYBACK_TM, "If the user moves after the target, this attack's power will be doubled.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.PAYBACK;
         }
@@ -6322,6 +6892,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.RETALIATE_TM, "The user gets revenge for a fainted ally. If an ally fainted in the previous turn, this attack's damage increases.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.RETALIATE;
         }
@@ -6334,6 +6905,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.GIGA_IMPACT_TM, "The user charges at the target using every bit of its power. The user must rest on the next turn.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.GIGA_IMPACT;
         }
@@ -6346,6 +6918,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.ROCK_POLISH_TM, "The user polishes its body to reduce drag. It can sharply raise the Speed stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.ROCK_POLISH;
         }
@@ -6358,6 +6931,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.FLASH_TM, "The user flashes a bright light that cuts the target's accuracy. It can also be used to illuminate caves.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.FLASH;
         }
@@ -6370,6 +6944,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.STONE_EDGE_TM, "The user stabs the foe with sharpened stones from below. It has a high critical-hit ratio.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.STONE_EDGE;
         }
@@ -6382,6 +6957,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.VOLT_SWITCH_TM, "After making its attack, the user rushes back to switch places with a party Pokémon in waiting.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.VOLT_SWITCH;
         }
@@ -6394,6 +6970,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.THUNDER_WAVE_TM, "A weak electric charge is launched at the target. It causes paralysis if it hits.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.THUNDER_WAVE;
         }
@@ -6406,6 +6983,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.GYRO_BALL_TM, "The user tackles the target with a high-speed spin. The slower the user, the greater the damage.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.GYRO_BALL;
         }
@@ -6418,6 +6996,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SWORDS_DANCE_TM, "A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SWORDS_DANCE;
         }
@@ -6430,6 +7009,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.STRUGGLE_BUG_TM, "While resisting, the user attacks the opposing Pokémon. The targets' Sp. Atk stat is reduced.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.STRUGGLE_BUG;
         }
@@ -6442,6 +7022,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.PSYCH_UP_TM, "The user hypnotizes itself into copying any stat change made by the target.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.PSYCH_UP;
         }
@@ -6454,6 +7035,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.BULLDOZE_TM, "The user stomps down on the ground and attacks everything in the area. Hit Pokémon's Speed stat is reduced.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.BULLDOZE;
         }
@@ -6466,6 +7048,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.FROST_BREATH_TM, "The user blows a cold breath on the target. This attack always results in a critical hit.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.FROST_BREATH;
         }
@@ -6478,6 +7061,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.ROCK_SLIDE_TM, "Large boulders are hurled at the opposing team to inflict damage. It may also make the targets flinch.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.ROCK_SLIDE;
         }
@@ -6490,6 +7074,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.X_SCISSOR_TM, "The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.X_SCISSOR;
         }
@@ -6502,6 +7087,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.DRAGON_TAIL_TM, "The user knocks away the target and drags out another Pokémon in its party. In the wild, the battle ends.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.DRAGON_TAIL;
         }
@@ -6514,6 +7100,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.INFESTATION_TM, "The target is infested and attacked for four to five turns. The target can't flee during this time.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.INFESTATION;
         }
@@ -6526,6 +7113,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.POISON_JAB_TM, "The target is stabbed with a tentacle or arm steeped in poison. It may also poison the target.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.POISON_JAB;
         }
@@ -6538,6 +7126,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.DREAM_EATER_TM, "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal the user's HP.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.DREAM_EATER;
         }
@@ -6550,6 +7139,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.GRASS_KNOT_TM, "The user snares the target with grass and trips it. The heavier the target, the greater the damage.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.GRASS_KNOT;
         }
@@ -6562,6 +7152,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SWAGGER_TM, "The user enrages and confuses the target. However, it also sharply raises the target's Attack stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SWAGGER;
         }
@@ -6574,6 +7165,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SLEEP_TALK_TM, "While it is asleep, the user randomly uses one of the moves it knows.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SLEEP_TALK;
         }
@@ -6586,6 +7178,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.U_TURN_TM, "After making its attack, the user rushes back to switch places with a party Pokémon in waiting.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.U_TURN;
         }
@@ -6598,6 +7191,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SUBSTITUTE_TM, "The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SUBSTITUTE;
         }
@@ -6610,6 +7204,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.FLASH_CANNON_TM, "The user gathers all its light energy and releases it at once. It may also lower the target's Sp. Def stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.FLASH_CANNON;
         }
@@ -6622,6 +7217,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.TRICK_ROOM_TM, "The user creates a bizarre area in which slower Pokémon get to move first for five turns.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.TRICK_ROOM;
         }
@@ -6634,6 +7230,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.WILD_CHARGE_TM, "The user shrouds itself in electricity and smashes into its target. It also damages the user a little.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.WILD_CHARGE;
         }
@@ -6646,6 +7243,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.ROCK_SMASH_TM, "The user attacks with a punch that can shatter a rock. It may also lower the target's Defense stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.ROCK_SMASH;
         }
@@ -6658,6 +7256,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SNARL_TM, "The user yells as if it is ranting about something, making the target's Sp. Atk stat decrease.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SNARL;
         }
@@ -6670,6 +7269,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.NATURE_POWER_TM, "An attack that makes use of nature's power. Its effects vary depending on the user's environment.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.NATURE_POWER;
         }
@@ -6682,6 +7282,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.DARK_PULSE_TM, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.DARK_PULSE;
         }
@@ -6694,6 +7295,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.POWER_UP_PUNCH_TM, "Striking opponents over and over makes the user's fists harder. Hitting a target raises the Attack stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.POWER_UP_PUNCH;
         }
@@ -6706,6 +7308,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.DAZZLING_GLEAM_TM, "The user damages opposing Pokémon by emitting a powerful flash.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.DAZZLING_GLEAM;
         }
@@ -6718,6 +7321,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.CONFIDE_TM, "The user tells the target a secret, and the target loses its ability to concentrate. This lowers the target's Sp. Atk stat.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.CONFIDE;
         }
@@ -6730,6 +7334,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.CUT_TM, "The target is cut with a scythe or a claw. It can also be used to cut down thin trees.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.CUT;
         }
@@ -6742,6 +7347,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.FLY_TM, "The user soars, then strikes its target on the second turn. It can also be used for flying to any familiar town.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.FLY;
         }
@@ -6754,6 +7360,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.SURF_TM, "It swamps the area around the user with a giant wave. It can also be used for crossing water.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.SURF;
         }
@@ -6766,6 +7373,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.STRENGTH_TM, "The target is slugged with a punch thrown at maximum power. It can also be used to move heavy boulders.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.STRENGTH;
         }
@@ -6778,6 +7386,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             super(ItemNamesies.WATERFALL_TM, "The user charges at the target and may make it flinch. It can also be used to climb a waterfall.", BagCategory.TM);
         }
 
+        @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.WATERFALL;
         }

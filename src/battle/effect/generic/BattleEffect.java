@@ -48,24 +48,29 @@ public abstract class BattleEffect extends Effect {
             super(EffectNamesies.GRAVITY, 5, 5, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(), this.namesies));
         }
 
+        @Override
         public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
             return s == Stat.EVASION ? -2 : 0;
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             removeLevitation(b, caster);
             removeLevitation(b, victim);
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Gravity intensified!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The gravity returned to normal.";
         }
@@ -78,18 +83,22 @@ public abstract class BattleEffect extends Effect {
             super(EffectNamesies.WATER_SPORT, 5, 5, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(), this.namesies));
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Fire's power was weakened!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The effects of Water Sport wore off.";
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.FIRE) ? .33 : 1;
         }
@@ -102,18 +111,22 @@ public abstract class BattleEffect extends Effect {
             super(EffectNamesies.MUD_SPORT, 5, 5, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(), this.namesies));
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Electricity's power was weakened!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The effects of Mud Sport wore off.";
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.ELECTRIC) ? .33 : 1;
         }
@@ -126,6 +139,7 @@ public abstract class BattleEffect extends Effect {
             super(EffectNamesies.WONDER_ROOM, 5, 5, false);
         }
 
+        @Override
         public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
             // Defense and Special Defense are swapped
             if (s == Stat.DEFENSE) {
@@ -137,6 +151,7 @@ public abstract class BattleEffect extends Effect {
             }
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
             if (roomsies == null) {
@@ -149,10 +164,12 @@ public abstract class BattleEffect extends Effect {
             Effect.removeEffect(b.getEffects(), this.namesies);
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " twisted the dimensions to switch defense and special defense!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The dimensions of the wonder room returned to normal.";
         }
@@ -165,6 +182,7 @@ public abstract class BattleEffect extends Effect {
             super(EffectNamesies.TRICK_ROOM, 5, 5, false);
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
             if (roomsies == null) {
@@ -177,10 +195,12 @@ public abstract class BattleEffect extends Effect {
             Effect.removeEffect(b.getEffects(), this.namesies);
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " twisted the dimensions to switch speeds!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The dimensions of the trick room returned to normal.";
         }
@@ -193,6 +213,7 @@ public abstract class BattleEffect extends Effect {
             super(EffectNamesies.MAGIC_ROOM, 5, 5, false);
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
             if (roomsies == null) {
@@ -205,10 +226,12 @@ public abstract class BattleEffect extends Effect {
             Effect.removeEffect(b.getEffects(), this.namesies);
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " twisted the dimensions to prevent using items!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The dimensions of the magic room returned to normal.";
         }
@@ -222,31 +245,38 @@ public abstract class BattleEffect extends Effect {
             super(EffectNamesies.MISTY_TERRAIN, 5, 5, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(), this.namesies));
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Mist swirled around the battlefield!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The mist disappeared from the battlefield.";
         }
 
+        @Override
         public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
             // Levitating Pokemon are immune to the mist
             return !victim.isLevitating(b);
         }
 
+        @Override
         public String statusPreventionMessage(ActivePokemon victim) {
             return "The protective mist prevents status conditions!";
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.DRAGON) && !user.isLevitating(b) ? .5 : 1;
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove all other Terrain Effects
             b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
@@ -255,6 +285,7 @@ public abstract class BattleEffect extends Effect {
             b.setTerrainType(TerrainType.MISTY, false);
         }
 
+        @Override
         public void subside(Battle b, ActivePokemon p) {
             super.subside(b, p);
             b.resetTerrain();
@@ -269,10 +300,12 @@ public abstract class BattleEffect extends Effect {
             super(EffectNamesies.GRASSY_TERRAIN, 5, 5, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(), this.namesies));
         }
 
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (!victim.fullHealth() && !victim.isLevitating(b)) {
                 victim.healHealthFraction(1/16.0);
@@ -280,18 +313,22 @@ public abstract class BattleEffect extends Effect {
             }
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Grass sprouted around the battlefield!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The grass withered and died.";
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.GRASS) && !user.isLevitating(b) ? 1.5 : 1;
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove all other Terrain Effects
             b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
@@ -300,6 +337,7 @@ public abstract class BattleEffect extends Effect {
             b.setTerrainType(TerrainType.GRASS, false);
         }
 
+        @Override
         public void subside(Battle b, ActivePokemon p) {
             super.subside(b, p);
             b.resetTerrain();
@@ -314,30 +352,37 @@ public abstract class BattleEffect extends Effect {
             super(EffectNamesies.ELECTRIC_TERRAIN, 5, 5, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(), this.namesies));
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Electricity crackled around the battlefield!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The electricity dissipated.";
         }
 
+        @Override
         public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
             return status == StatusCondition.ASLEEP && !victim.isLevitating(b);
         }
 
+        @Override
         public String statusPreventionMessage(ActivePokemon victim) {
             return "The electric terrain prevents sleep!";
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.ELECTRIC) && !user.isLevitating(b) ? 1.5 : 1;
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove all other Terrain Effects
             b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
@@ -346,6 +391,7 @@ public abstract class BattleEffect extends Effect {
             b.setTerrainType(TerrainType.ELECTRIC, false);
         }
 
+        @Override
         public void subside(Battle b, ActivePokemon p) {
             super.subside(b, p);
             b.resetTerrain();
@@ -360,27 +406,33 @@ public abstract class BattleEffect extends Effect {
             super(EffectNamesies.PSYCHIC_TERRAIN, 5, 5, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(), this.namesies));
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Psychic energy envelops the battlefield!!!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The psychic energy disappeared.";
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.PSYCHIC) && !user.isLevitating(b) ? 1.5 : 1;
         }
 
+        @Override
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Psychic terrain prevents increased priority moves from hitting
             return b.getAttackPriority(user) > 0 && !victim.isLevitating(b);
         }
 
+        @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove all other Terrain Effects
             b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
@@ -389,6 +441,7 @@ public abstract class BattleEffect extends Effect {
             b.setTerrainType(TerrainType.PSYCHIC, false);
         }
 
+        @Override
         public void subside(Battle b, ActivePokemon p) {
             super.subside(b, p);
             b.resetTerrain();
@@ -402,18 +455,22 @@ public abstract class BattleEffect extends Effect {
             super(EffectNamesies.FIELD_UPROAR, -1, -1, false);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(Effect.hasEffect(b.getEffects(), this.namesies));
         }
 
+        @Override
         public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
             return status == StatusCondition.ASLEEP;
         }
 
+        @Override
         public String statusPreventionMessage(ActivePokemon victim) {
             return "The uproar prevents sleep!!";
         }
 
+        @Override
         public boolean theVeryVeryEnd(Battle b, ActivePokemon p) {
             if (b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR)) {
                 return false;

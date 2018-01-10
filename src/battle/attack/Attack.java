@@ -542,6 +542,7 @@ public abstract class Attack implements Serializable {
             super.status = StatusCondition.BADLY_POISONED;
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Poison-type Pokemon bypass accuracy
             return attacking.isType(b, Type.POISON);
@@ -601,6 +602,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 90;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             o.reduceHealth(b, 20);
         }
@@ -626,6 +628,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getDamagePercentageDenominator() {
             return 4;
         }
@@ -644,6 +647,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void applyRecoil(Battle b, ActivePokemon user, int damage) {
             Messages.add(user.getName() + " was hurt by recoil!");
             user.reduceHealth(b, user.getMaxHP()/4, false);
@@ -680,6 +684,7 @@ public abstract class Attack implements Serializable {
             super.statChanges[Stat.SP_ATTACK.index()] = 1;
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             super.statChanges = new int[Stat.NUM_BATTLE_STATS];
             super.statChanges[Stat.ATTACK.index()] = 1;
@@ -704,6 +709,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getDamagePercentageDenominator() {
             return 3;
         }
@@ -729,6 +735,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             switch (b.getWeather().namesies()) {
                 case SUNNY:
@@ -742,10 +749,12 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -760,14 +769,17 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             return 2;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -781,6 +793,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             o.reduceHealth(b, 40);
         }
@@ -809,6 +822,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             super.status = StatusCondition.NO_STATUS;
             super.effects.clear();
@@ -877,14 +891,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " began taking in sunlight!";
         }
 
+        @Override
         public boolean isMultiTurn(Battle b, ActivePokemon user) {
             return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             switch (b.getWeather().namesies()) {
                 case HAILING:
@@ -896,6 +913,7 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -914,14 +932,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " began taking in sunlight!";
         }
 
+        @Override
         public boolean isMultiTurn(Battle b, ActivePokemon user) {
             return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -953,14 +974,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " flew up high!";
         }
 
+        @Override
         public boolean semiInvulnerability() {
             return true;
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -1060,6 +1084,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getDamagePercentageDenominator() {
             return 3;
         }
@@ -1120,6 +1145,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             RapidSpinRelease.release(b, victim);
         }
@@ -1144,6 +1170,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return b.getWeather().namesies() == EffectNamesies.HAILING;
         }
@@ -1310,14 +1337,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
             return this.isCharging(user);
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " lowered its head!";
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -1425,6 +1455,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -1442,6 +1473,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -1459,6 +1491,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -1476,6 +1509,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -1493,6 +1527,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -1520,6 +1555,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.stealBerry(b, victim);
         }
@@ -1567,11 +1603,13 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is flying
             return defending.isSemiInvulnerableFlying();
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.isSemiInvulnerableFlying() ? 2 : 1;
         }
@@ -1638,6 +1676,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             switch (b.getWeather().namesies()) {
                 case SUNNY:
@@ -1651,10 +1690,12 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -1679,6 +1720,7 @@ public abstract class Attack implements Serializable {
             super.statChanges[Stat.SP_ATTACK.index()] = -2;
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return Gender.oppositeGenders(user, victim);
         }
@@ -1743,14 +1785,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -1782,6 +1827,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             o.addEffect((PokemonEffect)EffectNamesies.BRACING.getEffect());
             super.applyDamage(me, o, b);
@@ -1821,14 +1867,17 @@ public abstract class Attack implements Serializable {
             super.status = StatusCondition.POISONED;
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 2;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -1862,6 +1911,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttributes().getCount();
         }
@@ -1877,6 +1927,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getPriority(Battle b, ActivePokemon me) {
             Team trainer = b.getTrainer(!me.isPlayer());
             if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
@@ -1886,6 +1937,7 @@ public abstract class Attack implements Serializable {
             return super.priority;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             Team trainer = b.getTrainer(victim);
             if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
@@ -1915,14 +1967,17 @@ public abstract class Attack implements Serializable {
             super.accuracy = 95;
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -1964,6 +2019,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttributes().hasTakenDamage() ? 2 : 1;
         }
@@ -1992,10 +2048,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             o.reduceHealth(b, o.getHP() - me.getHP());
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getHP() < victim.getHP();
         }
@@ -2035,11 +2093,13 @@ public abstract class Attack implements Serializable {
             super.effectChance = 20;
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is flying
             return defending.isSemiInvulnerableFlying();
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.isSemiInvulnerableFlying() ? 2 : 1;
         }
@@ -2065,6 +2125,7 @@ public abstract class Attack implements Serializable {
             super.printCast = false;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
 
@@ -2074,10 +2135,12 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             return .5;
         }
 
+        @Override
         public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             Type[] type = victim.getType(b);
             if (type[0] == Type.FLYING) {
@@ -2091,6 +2154,7 @@ public abstract class Attack implements Serializable {
             return null;
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -2123,14 +2187,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.MIRRORLESS);
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             this.mirror = defending.getAttributes().getLastMoveUsed();
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.callNewMove(b, victim, new Move(mirror.getAttack()));
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return mirror != null && !mirror.getAttack().isMoveType(MoveType.MIRRORLESS);
         }
@@ -2148,15 +2215,18 @@ public abstract class Attack implements Serializable {
             super.effectChance = 30;
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hits when the opponent is flying or it is raining (unless they're non-flying semi-invulnerable)
             return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == EffectNamesies.RAINING && defending.isSemiInvulnerable());
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.isSemiInvulnerableFlying() ? 2 : 1;
         }
 
+        @Override
         public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
             // Accuracy is only 50% when sunny
             if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
@@ -2192,6 +2262,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !victim.getMove().getAttack().isStatusMove();
         }
@@ -2221,6 +2292,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             o.reduceHealth(b, (int)Math.ceil(o.getHP()/2.0));
         }
@@ -2234,6 +2306,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 90;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             o.reduceHealth(b, (int)Math.ceil(o.getHP()/2.0));
         }
@@ -2301,6 +2374,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.stealBerry(b, victim);
         }
@@ -2381,11 +2455,13 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Stockpile ends after Spit up is used
             user.getEffect(EffectNamesies.STOCKPILE).deactivate();
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             PokemonEffect stockpile = user.getEffect(EffectNamesies.STOCKPILE);
             int turns = stockpile.getTurns();
@@ -2397,6 +2473,7 @@ public abstract class Attack implements Serializable {
             return Math.min(turns, 3);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.hasEffect(EffectNamesies.STOCKPILE);
         }
@@ -2411,11 +2488,13 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Stockpile ends after Swallow is used
             user.getEffect(EffectNamesies.STOCKPILE).deactivate();
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             PokemonEffect stockpile = victim.getEffect(EffectNamesies.STOCKPILE);
             int turns = stockpile.getTurns();
@@ -2433,10 +2512,12 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.hasEffect(EffectNamesies.STOCKPILE) && !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -2477,6 +2558,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.FIELD);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.getAttributes().resetStages();
             victim.getAttributes().resetStages();
@@ -2521,6 +2603,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             super.status = StatusCondition.NO_STATUS;
             super.effects.clear();
@@ -2547,6 +2630,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             super.status = StatusCondition.NO_STATUS;
             super.effects.clear();
@@ -2569,6 +2653,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.BOMB_BALL);
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double ratio = (double)Stat.getStat(Stat.SPEED, o, me, b)/Stat.getStat(Stat.SPEED, me, o, b);
             if (ratio > .5) {
@@ -2664,15 +2749,18 @@ public abstract class Attack implements Serializable {
             super.status = StatusCondition.PARALYZED;
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hits when the opponent is flying or it is raining (unless they're non-flying semi-invulnerable)
             return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == EffectNamesies.RAINING && defending.isSemiInvulnerable());
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.isSemiInvulnerableFlying() ? 2 : 1;
         }
 
+        @Override
         public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
             // Accuracy is only 50% when sunny
             if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
@@ -2713,14 +2801,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -2752,6 +2843,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean doubleDefenseCurled() {
             return true;
         }
@@ -2767,6 +2859,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean doubleDefenseCurled() {
             return false;
         }
@@ -2793,6 +2886,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             return (int)Math.min(150, 25.0*Stat.getStat(Stat.SPEED, o, me, b)/Stat.getStat(Stat.SPEED, me, o, b));
         }
@@ -2821,14 +2915,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 2;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -2898,6 +2995,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean ignoreStage(Stat s) {
             return !s.user();
         }
@@ -2915,10 +3013,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1;
         }
@@ -2971,16 +3071,19 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             // Certain death
             o.reduceHealth(b, o.getHP());
             Messages.add("It's a One-Hit KO!");
         }
 
+        @Override
         public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
             return super.accuracy + (me.getLevel() - o.getLevel());
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getLevel() >= victim.getLevel();
         }
@@ -3029,14 +3132,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -3089,10 +3195,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.hasStatus(StatusCondition.ASLEEP) ? 2 : 1;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.ASLEEP)) {
                 Status.removeStatus(b, victim, CastSource.ATTACK);
@@ -3135,6 +3243,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             AttackNamesies[] attackNames = AttackNamesies.values();
 
@@ -3145,6 +3254,7 @@ public abstract class Attack implements Serializable {
             } while (metronomeMove.isMoveType(MoveType.METRONOMELESS));
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.callNewMove(b, victim, new Move(metronomeMove));
         }
@@ -3170,6 +3280,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             switch (b.getWeather().namesies()) {
                 case SUNNY:
@@ -3183,10 +3294,12 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -3201,6 +3314,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttributes().totalStatIncreases();
         }
@@ -3216,6 +3330,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttributes().totalStatIncreases();
         }
@@ -3282,6 +3397,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !b.isFirstAttack() ? 2 : 1;
         }
@@ -3342,22 +3458,27 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.getStatus().setTurns(2);
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.removeStatus();
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             return 1;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, user, user) && !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -3427,6 +3548,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.isHoldingItem(b) ? 2 : 1;
         }
@@ -3460,6 +3582,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // This is so fucking stupid that it consumes the Berry upon use, like srsly what the fuck is the fucking point of this move
             if (user.getHeldItem(b) instanceof Berry) {
@@ -3467,6 +3590,7 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public Type getType(Battle b, ActivePokemon user) {
             Item i = user.getHeldItem(b);
             if (i instanceof Berry) {
@@ -3476,10 +3600,12 @@ public abstract class Attack implements Serializable {
             return super.type;
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             return ((Berry)me.getHeldItem(b)).naturalGiftPower();
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getHeldItem(b) instanceof Berry;
         }
@@ -3504,6 +3630,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             for (ActivePokemon p : b.getTrainer(user).getTeam()) {
                 if (!p.isActuallyDead()) {
@@ -3558,6 +3685,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.getAttributes().resetStage(Stat.EVASION);
         }
@@ -3572,6 +3700,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.getAttributes().resetStage(Stat.EVASION);
         }
@@ -3586,6 +3715,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.getAttributes().resetStage(Stat.EVASION);
         }
@@ -3662,19 +3792,23 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             index = GeneralUtils.getPercentageIndex(CHANCES);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add("Magnitude " + (index + 4) + "!");
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is underground
             return defending.isSemiInvulnerableDigging();
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             return POWERS[index];
         }
@@ -3691,6 +3825,7 @@ public abstract class Attack implements Serializable {
             super.statChanges[Stat.SPEED.index()] = -1;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return b.hasEffect(EffectNamesies.GRASSY_TERRAIN) ? .5 : 1;
         }
@@ -3707,14 +3842,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " went underground!";
         }
 
+        @Override
         public boolean semiInvulnerability() {
             return true;
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -3731,11 +3869,13 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is underground
             return defending.isSemiInvulnerableDigging();
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             int power = 1;
 
@@ -3762,16 +3902,19 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.ONE_HIT_KO);
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             // Certain death
             o.reduceHealth(b, o.getHP());
             Messages.add("It's a One-Hit KO!");
         }
 
+        @Override
         public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
             return super.accuracy + (me.getLevel() - o.getLevel());
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getLevel() >= victim.getLevel();
         }
@@ -3804,6 +3947,7 @@ public abstract class Attack implements Serializable {
             super.effectChance = 20;
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             super.status = RandomUtils.getRandomValue(statusConditions);
         }
@@ -3821,6 +3965,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttributes().isFirstTurn();
         }
@@ -3889,6 +4034,7 @@ public abstract class Attack implements Serializable {
             super.effects.add(EffectNamesies.CHANGE_TYPE);
         }
 
+        @Override
         public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return new Type[] { Type.WATER, Type.NO_TYPE };
         }
@@ -3903,6 +4049,7 @@ public abstract class Attack implements Serializable {
             super.effects.add(EffectNamesies.CHANGE_TYPE);
         }
 
+        @Override
         public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             Type primary = victim.getType(b)[0];
 
@@ -3919,6 +4066,7 @@ public abstract class Attack implements Serializable {
             super.effects.add(EffectNamesies.CHANGE_TYPE);
         }
 
+        @Override
         public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             Type primary = victim.getType(b)[0];
 
@@ -3936,6 +4084,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             for (Stat stat : Stat.BATTLE_STATS) {
                 user.getAttributes().setStage(stat, victim.getStage(stat));
@@ -3990,12 +4139,14 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canStealItem(b, victim)) {
                 user.swapItems(b, victim, this);
             }
         }
 
+        @Override
         public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
             return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
         }
@@ -4010,6 +4161,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double weight = o.getWeight(b);
             if (weight < 22) {
@@ -4048,6 +4200,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             o.reduceHealth(b, me.getLevel());
         }
@@ -4085,6 +4238,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             return Math.min(super.power + 20*o.getAttributes().totalStatIncreases(), 200);
         }
@@ -4141,6 +4295,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double ratio = me.getHPRatio();
             if (ratio > .7) {
@@ -4212,6 +4367,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Maximization station
             Messages.add(user.getName() + " cut its own HP and maximized its attack!");
@@ -4219,6 +4375,7 @@ public abstract class Attack implements Serializable {
             user.getAttributes().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fails if attack is already maxed or if you have less than half your health to give up
             return user.getStage(Stat.ATTACK) < Stat.MAX_STAT_CHANGES && user.getHPRatio() > .5;
@@ -4235,6 +4392,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getDamagePercentageDenominator() {
             return 4;
         }
@@ -4335,11 +4493,13 @@ public abstract class Attack implements Serializable {
             super.effects.add(EffectNamesies.FUTURE_SIGHT);
         }
 
+        @Override
         public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
             // Don't apply damage just yet!!
             return false;
         }
 
+        @Override
         public boolean canPrintFail() {
             return true;
         }
@@ -4355,11 +4515,13 @@ public abstract class Attack implements Serializable {
             super.effects.add(EffectNamesies.DOOM_DESIRE);
         }
 
+        @Override
         public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
             // Don't apply damage just yet!!
             return false;
         }
 
+        @Override
         public boolean canPrintFail() {
             return true;
         }
@@ -4399,6 +4561,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttributes().hasTakenDamage() ? 2 : 1;
         }
@@ -4424,6 +4587,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             return (int)Math.min(1, (120*o.getHPRatio()));
         }
@@ -4486,6 +4650,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.hasStatus() ? 2 : 1;
         }
@@ -4543,14 +4708,17 @@ public abstract class Attack implements Serializable {
             super.accuracy = 90;
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -4583,11 +4751,13 @@ public abstract class Attack implements Serializable {
             super.effects.add(EffectNamesies.GROUNDED);
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is flying
             return defending.isSemiInvulnerableFlying();
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.isSemiInvulnerableFlying() ? 2 : 1;
         }
@@ -4625,10 +4795,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1;
         }
@@ -4643,6 +4815,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double ratio = o.getWeight(b)/me.getWeight(b);
             if (ratio > .5) {
@@ -4671,10 +4844,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1;
         }
@@ -4707,14 +4882,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " sprang up!";
         }
 
+        @Override
         public boolean semiInvulnerability() {
             return true;
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -4732,6 +4910,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             super.statChanges = new int[Stat.NUM_BATTLE_STATS];
             super.effects.clear();
@@ -4780,14 +4959,17 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             return 2;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -4802,6 +4984,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.HEALING);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Heal by 50% unless the user has Mega Launcher -- then heal by 75%
             double fraction = user.hasAbility(AbilityNamesies.MEGA_LAUNCHER) ? .75 : .5;
@@ -4810,6 +4993,7 @@ public abstract class Attack implements Serializable {
             Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -4893,6 +5077,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getDamagePercentageDenominator() {
             return 3;
         }
@@ -4920,6 +5105,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             super.statChanges = new int[Stat.NUM_BATTLE_STATS];
             super.statChanges[RandomUtils.getRandomInt(super.statChanges.length)] = 2;
@@ -4936,14 +5122,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 2;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -5018,6 +5207,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getHPRatio() < .5 ? 2 : 1;
         }
@@ -5034,14 +5224,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " hid underwater!";
         }
 
+        @Override
         public boolean semiInvulnerability() {
             return true;
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -5070,16 +5263,19 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.ONE_HIT_KO);
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             // Certain death
             o.reduceHealth(b, o.getHP());
             Messages.add("It's a One-Hit KO!");
         }
 
+        @Override
         public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
             return super.accuracy + (me.getLevel() - o.getLevel());
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !victim.isType(b, Type.ICE) && user.getLevel() >= victim.getLevel();
         }
@@ -5139,14 +5335,17 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -5227,14 +5426,17 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -5300,11 +5502,13 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Move last = victim.getAttributes().getLastMoveUsed();
             Messages.add(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!");
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
             Move last = victim.getAttributes().getLastMoveUsed();
@@ -5320,6 +5524,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             o.reduceHealth(b, me.getLevel());
         }
@@ -5347,10 +5552,12 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public String getSapMessage(ActivePokemon victim) {
             return victim.getName() + "'s dream was eaten!";
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.hasStatus(StatusCondition.ASLEEP);
         }
@@ -5458,6 +5665,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Like this is literally the stupidest move ever like srsly what is wrong with the creators
             Type[] type = user.getType(b);
@@ -5474,6 +5682,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public Stat getSwitchStat(Stat s) {
             return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
         }
@@ -5513,16 +5722,19 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             // Certain death
             o.reduceHealth(b, o.getHP());
             Messages.add("It's a One-Hit KO!");
         }
 
+        @Override
         public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
             return super.accuracy + (me.getLevel() - o.getLevel());
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getLevel() >= victim.getLevel();
         }
@@ -5548,6 +5760,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double ratio = me.getHPRatio();
             if (ratio > .7) {
@@ -5601,12 +5814,14 @@ public abstract class Attack implements Serializable {
             super.priority = -5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
             int damageTaken = me.getAttributes().getDamageTaken();
             o.reduceHealth(b, damageTaken*2);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttributes().getDamageTaken() > 0 && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.SPECIAL && !b.isFirstAttack();
         }
@@ -5624,12 +5839,14 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
             int damageTaken = me.getAttributes().getDamageTaken();
             o.reduceHealth(b, damageTaken*2);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttributes().getDamageTaken() > 0 && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.PHYSICAL && !b.isFirstAttack();
         }
@@ -5645,14 +5862,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.BOMB_BALL);
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -5684,14 +5904,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.BOMB_BALL);
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -5734,6 +5957,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getDamagePercentageDenominator() {
             return 3;
         }
@@ -5760,14 +5984,17 @@ public abstract class Attack implements Serializable {
             super.accuracy = 90;
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 2;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -5798,14 +6025,17 @@ public abstract class Attack implements Serializable {
             super.accuracy = 90;
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -5851,6 +6081,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void crash(Battle b, ActivePokemon user) {
             Messages.add(user.getName() + " kept going and crashed!");
             user.reduceHealth(b, user.getMaxHP()/3);
@@ -5867,6 +6098,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             BarrierEffect.breakBarriers(b, user);
         }
@@ -5882,6 +6114,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             BarrierEffect.breakBarriers(b, user);
         }
@@ -5898,6 +6131,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void crash(Battle b, ActivePokemon user) {
             Messages.add(user.getName() + " kept going and crashed!");
             user.reduceHealth(b, user.getMaxHP()/2);
@@ -5939,14 +6173,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -6059,11 +6296,13 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is flying
             return defending.isSemiInvulnerableFlying();
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Does not deal double damage when opponent is flying
             return 1;
@@ -6099,15 +6338,18 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
             return false;
         }
 
+        @Override
         public void startTurn(Battle b, ActivePokemon me) {
             super.applyBasicEffects(b, me, me);
             me.getAttributes().setReducePP(true);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.hasEffect(EffectNamesies.FOCUSING);
         }
@@ -6125,14 +6367,17 @@ public abstract class Attack implements Serializable {
             super.priority = -3;
         }
 
+        @Override
         public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
             return false;
         }
 
+        @Override
         public void startTurn(Battle b, ActivePokemon me) {
             super.applyBasicEffects(b, me, me);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.hasEffect(EffectNamesies.SHELL_TRAP);
         }
@@ -6149,6 +6394,7 @@ public abstract class Attack implements Serializable {
             super.priority = -3;
         }
 
+        @Override
         public void startTurn(Battle b, ActivePokemon me) {
             super.applyBasicEffects(b, me, me);
         }
@@ -6165,20 +6411,24 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.METRONOMELESS);
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // TODO: Test
             attacking.addEffect((PokemonEffect)EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect());
         }
 
+        @Override
         public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.getAttributes().removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fails if it is the second turn or the opponent is using a status move
             return b.isFirstAttack() && victim.getMove() != null && !victim.getAttack().isStatusMove();
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.callNewMove(b, victim, new Move(victim.getAttack()));
         }
@@ -6193,10 +6443,12 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Status.removeStatus(b, user, CastSource.ATTACK);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.hasStatus();
         }
@@ -6233,6 +6485,7 @@ public abstract class Attack implements Serializable {
             super.power = 50;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.getAttributes().resetStages();
             victim.getAttributes().resetStages();
@@ -6277,14 +6530,17 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             return 2;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -6404,6 +6660,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return b.getOtherPokemon(caster).getType(b).clone();
         }
@@ -6428,6 +6685,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             for (Stat s : swapStats) {
                 user.getAttributes().swapStages(s, victim);
@@ -6447,6 +6705,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             for (Stat s : swapStats) {
                 user.getAttributes().swapStages(s, victim);
@@ -6464,6 +6723,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // NOTE: Looks like this is supposed to actually swap the stats and not just the stages but I don't really care it should do the same thing as power and guard swap because that makes more sense sue me
             user.getAttributes().swapStages(Stat.SPEED, victim);
@@ -6486,14 +6746,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.MIRRORLESS);
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             this.mirror = defending.getAttributes().getLastMoveUsed();
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.callNewMove(b, victim, new Move(mirror.getAttack()));
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return mirror != null && !mirror.getAttack().isMoveType(MoveType.MIRRORLESS);
         }
@@ -6534,10 +6797,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " whipped up a whirlwind!";
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -6601,6 +6866,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttributes().hasTakenDamage() ? 2 : 1;
         }
@@ -6617,6 +6883,7 @@ public abstract class Attack implements Serializable {
             super.status = StatusCondition.FROZEN;
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hits when it's hailing unless the opponent is hiding (I think -- the hiding part is not specified on Bulbapedia)
             return b.getWeather().namesies() == EffectNamesies.HAILING && !defending.isSemiInvulnerable();
@@ -6666,6 +6933,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -6682,6 +6950,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add("But nothing happened...");
         }
@@ -6707,6 +6976,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             for (Move move : user.getMoves(b)) {
                 if (move.getAttack().namesies() != super.namesies && !move.used()) {
@@ -6726,6 +6996,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             int pp = me.getMove().getPP();
 
@@ -6767,6 +7038,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             this.types = new ArrayList<>();
             for (Move move : attacking.getMoves(b)) {
@@ -6777,10 +7049,12 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return new Type[] { RandomUtils.getRandomValue(this.types), Type.NO_TYPE };
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return this.types.size() > 0;
         }
@@ -6798,6 +7072,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             this.types = new ArrayList<>();
 
@@ -6812,10 +7087,12 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return new Type[] { RandomUtils.getRandomValue(this.types), Type.NO_TYPE };
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return this.types.size() > 0;
         }
@@ -6854,6 +7131,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getWeight(b) < 441;
         }
@@ -6897,6 +7175,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.METRONOMELESS);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.hasStatus(StatusCondition.ASLEEP);
         }
@@ -6915,15 +7194,18 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.METRONOMELESS);
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // TODO: Test
             this.moves = attacking.getMoves(b).stream().filter(move -> !move.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL)).collect(Collectors.toList());
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.callNewMove(b, victim, RandomUtils.getRandomValue(this.moves));
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.hasStatus(StatusCondition.ASLEEP) && this.moves.size() > 0;
         }
@@ -6950,10 +7232,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " started glowing!";
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -6973,10 +7257,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1;
         }
@@ -7002,6 +7288,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public Stat getSwitchStat(Stat s) {
             return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
         }
@@ -7015,6 +7302,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             return (int)Math.min(1, (150*me.getHPRatio()));
         }
@@ -7040,6 +7328,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SOUND_BASED);
         }
 
+        @Override
         public boolean doubleDefenseCurled() {
             return false;
         }
@@ -7054,12 +7343,14 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Status.giveStatus(b, user, victim, user.getStatus().getType(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
             user.removeStatus();
             Messages.add(new MessageUpdate().updatePokemon(b, user));
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.hasStatus() && Status.applies(user.getStatus().getType(), b, user, victim);
         }
@@ -7166,6 +7457,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public Type getType(Battle b, ActivePokemon user) {
             return user.computeHiddenPowerType();
         }
@@ -7179,6 +7471,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             o.reduceHealth(b, (int)Math.max(1, (RandomUtils.getRandomInt(11) + 5)*me.getLevel()/10.0));
         }
@@ -7192,6 +7485,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             int share = (user.getHP() + victim.getHP())/2;
             user.setHP(share);
@@ -7214,6 +7508,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
             return false;
         }
@@ -7293,6 +7588,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             for (ActivePokemon p : b.getTrainer(me).getTeam()) {
                 // Only healthy Pokemon get to attack
@@ -7336,10 +7632,12 @@ public abstract class Attack implements Serializable {
             super.accuracy = 90;
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             this.applyDamage = RandomUtils.chanceTest(80);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (!applyDamage) {
                 victim.healHealthFraction(1/4.0);
@@ -7347,10 +7645,12 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
             return this.applyDamage;
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double random = RandomUtils.getRandomInt(80);
             if (random < 40) {
@@ -7362,6 +7662,7 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return this.applyDamage || (!victim.fullHealth() && !victim.hasEffect(EffectNamesies.HEAL_BLOCK));
         }
@@ -7397,10 +7698,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             this.copy = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             List<Move> moves = user.getMoves(b);
             for (int i = 0; i < moves.size(); i++) {
@@ -7412,6 +7715,7 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return copy != null && copy.getAttack().namesies() != AttackNamesies.STRUGGLE && user.hasActualMove(this.namesies()) && !user.hasEffect(EffectNamesies.TRANSFORMED);
         }
@@ -7427,14 +7731,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getMinHits() {
             return 3;
         }
 
+        @Override
         public int getMaxHits() {
             return 3;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -7465,14 +7772,17 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             return 2;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -7488,6 +7798,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             for (ActivePokemon p : b.getTrainer(user).getTeam()) {
                 if (!p.isActuallyDead()) {
@@ -7509,10 +7820,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.BOMB_BALL);
         }
 
+        @Override
         public Type getType(Battle b, ActivePokemon user) {
             return b.getWeather().getElement();
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return b.getWeather().namesies() != EffectNamesies.CLEAR_SKIES ? 2 : 1;
         }
@@ -7587,12 +7900,14 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canStealItem(b, victim)) {
                 user.swapItems(b, victim, this);
             }
         }
 
+        @Override
         public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
             return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
         }
@@ -7632,14 +7947,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -7671,10 +7989,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.hasStatus(StatusCondition.PARALYZED) ? 2 : 1;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.PARALYZED)) {
                 Status.removeStatus(b, victim, CastSource.ATTACK);
@@ -7695,6 +8015,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.ASSISTLESS);
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // TODO: Test
             this.attacks = new ArrayList<>();
@@ -7709,10 +8030,12 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.callNewMove(b, victim, new Move(RandomUtils.getRandomValue(attacks)));
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !this.attacks.isEmpty();
         }
@@ -7726,10 +8049,12 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             o.reduceHealth(b, (int)(me.getAttributes().getDamageTaken()*1.5));
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttributes().getDamageTaken() > 0 && !b.isFirstAttack();
         }
@@ -7745,6 +8070,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getDamagePercentageDenominator() {
             return 4;
         }
@@ -7778,6 +8104,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             return (int)Math.min(1, (150*me.getHPRatio()));
         }
@@ -7815,6 +8142,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.hasStatus(StatusCondition.POISONED) ? 2 : 1;
         }
@@ -7845,6 +8173,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean doubleDefenseCurled() {
             return true;
         }
@@ -7860,6 +8189,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getDamagePercentageDenominator() {
             return 2;
         }
@@ -7912,6 +8242,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.hasStatus() ? 2 : 1;
         }
@@ -7937,14 +8268,17 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             return 2;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -7982,14 +8316,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 2;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -8022,6 +8359,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -8051,6 +8389,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -8088,6 +8427,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             return (int)Math.min(1, (120*o.getHPRatio()));
         }
@@ -8105,14 +8445,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " disappeared!";
         }
 
+        @Override
         public boolean semiInvulnerability() {
             return true;
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -8129,6 +8472,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             for (Stat stat : Stat.BATTLE_STATS) {
                 int temp = user.getAttributes().getStage(stat);
@@ -8172,6 +8516,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.METRONOMELESS);
         }
 
+        @Override
         public Type getType(Battle b, ActivePokemon user) {
             Item item = user.getHeldItem(b);
             if (item instanceof PlateItem) {
@@ -8204,6 +8549,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Item heldItem = victim.getHeldItem(b);
             if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
@@ -8234,6 +8580,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double ratio = o.getWeight(b)/me.getWeight(b);
             if (ratio > .5) {
@@ -8259,6 +8606,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double weight = o.getWeight(b);
             if (weight < 22) {
@@ -8371,14 +8719,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -8408,6 +8759,7 @@ public abstract class Attack implements Serializable {
             super.statChanges[Stat.EVASION.index()] = -1;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             DefogRelease.release(b, victim);
         }
@@ -8444,14 +8796,17 @@ public abstract class Attack implements Serializable {
             super.accuracy = 85;
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 2;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -8494,6 +8849,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getDamagePercentageDenominator() {
             return 4;
         }
@@ -8522,6 +8878,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean ignoreStage(Stat s) {
             return !s.user();
         }
@@ -8537,6 +8894,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.METRONOMELESS);
         }
 
+        @Override
         public Stat getSwitchStat(Stat s) {
             return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
         }
@@ -8552,6 +8910,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.DEFROST);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !b.isFirstAttack() && victim.getAttack().namesies() == AttackNamesies.FUSION_BOLT ? 2 : 1;
         }
@@ -8566,6 +8925,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !b.isFirstAttack() && victim.getAttack().namesies() == AttackNamesies.FUSION_FLARE ? 2 : 1;
         }
@@ -8617,6 +8977,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.METRONOMELESS);
         }
 
+        @Override
         public Type getType(Battle b, ActivePokemon user) {
             Item item = user.getHeldItem(b);
             if (item instanceof DriveItem) {
@@ -8638,6 +8999,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public Type getType(Battle b, ActivePokemon user) {
             Item item = user.getHeldItem(b);
             if (item instanceof MemoryItem) {
@@ -8678,22 +9040,27 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             ((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
         }
 
+        @Override
         public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.consumeItem(b);
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add(user.getName() + " flung its " + user.getHeldItem(b).getName() + "!");
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             return ((HoldItem)me.getHeldItem(b)).flingDamage();
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isHoldingItem(b);
         }
@@ -8712,10 +9079,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " is charging!";
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -8733,6 +9102,7 @@ public abstract class Attack implements Serializable {
             super.effectChance = 30;
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // TODO: Test
             TerrainType terrain = b.getTerrainType();
@@ -8753,6 +9123,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             o.reduceHealth(b, me.getHP());
         }
@@ -8767,14 +9138,17 @@ public abstract class Attack implements Serializable {
             super.effects.add(EffectNamesies.CHANGE_ABILITY);
         }
 
+        @Override
         public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return AbilityNamesies.NO_ABILITY.getNewAbility();
         }
 
+        @Override
         public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return caster.getName() + " suppressed " + victim.getName() + "'s ability!";
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getAbility().isReplaceable();
         }
@@ -8816,14 +9190,17 @@ public abstract class Attack implements Serializable {
             super.priority = -6;
         }
 
+        @Override
         public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + " fled in fear!";
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.swapOpponent(b, victim, this);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.canSwapOpponent(b, victim);
         }
@@ -8851,6 +9228,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return Effect.hasEffect(b.getEffects(user), EffectNamesies.DEAD_ALLY) ? 2 : 1;
         }
@@ -8868,14 +9246,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + " was thrown away!";
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.swapOpponent(b, victim, this);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.canSwapOpponent(b, victim);
         }
@@ -8890,11 +9271,13 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add(user.getName() + " teleported out of battle!");
             Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return b.isWildBattle();
         }
@@ -8912,16 +9295,19 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
             Ability otherAbility = b.getOtherPokemon(victim).getAbility();
             return otherAbility.namesies().getNewAbility();
         }
 
+        @Override
         public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
             ActivePokemon other = b.getOtherPokemon(victim);
             return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getAbility().isStealable();
         }
@@ -8937,6 +9323,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canRemoveItem(b, victim)) {
                 Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
@@ -8949,6 +9336,7 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.isHoldingItem(b) ? 1.5 : 1;
         }
@@ -8965,14 +9353,17 @@ public abstract class Attack implements Serializable {
             super.priority = -6;
         }
 
+        @Override
         public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + " blew away!";
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.swapOpponent(b, victim, this);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.canSwapOpponent(b, victim);
         }
@@ -8987,14 +9378,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.swapItems(b, victim, this);
         }
 
+        @Override
         public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
             return user.getName() + " gave " + victim.getName() + " its " + userItem.getName() + "!";
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.canGiftItem(b, victim);
         }
@@ -9011,14 +9405,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.swapItems(b, victim, this);
         }
 
+        @Override
         public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
             return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.canSwapItems(b, victim);
         }
@@ -9035,14 +9432,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.swapItems(b, victim, this);
         }
 
+        @Override
         public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
             return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.canSwapItems(b, victim);
         }
@@ -9084,6 +9484,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return new Type[] { b.getTerrainType().getType(), Type.NO_TYPE };
         }
@@ -9097,12 +9498,14 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Item restored = ((ItemHolder)victim.getEffect(EffectNamesies.CONSUMED_ITEM)).getItem();
             victim.giveItem((HoldItem)restored);
             Messages.add(victim.getName() + "'s " + restored.getName() + " was restored!");
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.hasEffect(EffectNamesies.CONSUMED_ITEM) && !user.isHoldingItem(b);
         }
@@ -9119,10 +9522,12 @@ public abstract class Attack implements Serializable {
             super.statChanges[Stat.SP_ATTACK.index()] = -1;
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add(user.getName() + " called " + victim.getName() + " a chump!!");
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.switcheroo(b, user, CastSource.ATTACK, true);
         }
@@ -9138,6 +9543,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.switcheroo(b, user, CastSource.ATTACK, true);
         }
@@ -9152,6 +9558,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // TODO: Hardcore test this shit not in the mood right now but this is one of the most complicated moves so lots of tests tests tests
             user.switcheroo(b, user, CastSource.ATTACK, true);
@@ -9165,6 +9572,7 @@ public abstract class Attack implements Serializable {
             user.getEffects().stream().filter(effect -> effect instanceof PassableEffect).forEach(next::addEffect);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             Team team = b.getTrainer(user);
             return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon(b);
@@ -9182,6 +9590,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add("All Pokemon hearing this song will faint in three turns!");
 
@@ -9203,14 +9612,17 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + " was slapped away!";
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.swapOpponent(b, victim, this);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.canSwapOpponent(b, victim);
         }
@@ -9225,6 +9637,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double ratio = (double)Stat.getStat(Stat.ATTACK, me, o, b)/Stat.getStat(Stat.ATTACK, o, me, b);
             if (ratio > .5) {
@@ -9259,10 +9672,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
             return b.getTerrainType().getAttack().getAccuracy(b, me, o);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.callNewMove(b, victim, new Move(b.getTerrainType().getAttack()));
         }
@@ -9277,14 +9692,17 @@ public abstract class Attack implements Serializable {
             super.effects.add(EffectNamesies.CHANGE_ABILITY);
         }
 
+        @Override
         public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return caster.getAbility().namesies().getNewAbility();
         }
 
+        @Override
         public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return victim.getName() + " copied " + caster.getName() + "'s " + caster.getAbility().getName() + "!";
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getAbility().isReplaceable() && user.getAbility().isStealable();
         }
@@ -9310,14 +9728,17 @@ public abstract class Attack implements Serializable {
             super.effects.add(EffectNamesies.CHANGE_ABILITY);
         }
 
+        @Override
         public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return AbilityNamesies.INSOMNIA.getNewAbility();
         }
 
+        @Override
         public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return victim.getName() + "'s ability was changed to " + AbilityNamesies.INSOMNIA.getName() + "!";
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getAbility().isReplaceable();
         }
@@ -9332,14 +9753,17 @@ public abstract class Attack implements Serializable {
             super.effects.add(EffectNamesies.CHANGE_ABILITY);
         }
 
+        @Override
         public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return AbilityNamesies.SIMPLE.getNewAbility();
         }
 
+        @Override
         public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return victim.getName() + "'s ability was changed to " + AbilityNamesies.SIMPLE.getName() + "!";
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getAbility().isReplaceable();
         }
@@ -9360,6 +9784,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Ability userAbility = user.getAbility();
             Ability victimAbility = victim.getAbility();
@@ -9371,14 +9796,17 @@ public abstract class Attack implements Serializable {
             EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, user, CastSource.ATTACK, super.printCast);
         }
 
+        @Override
         public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return ability;
         }
 
+        @Override
         public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return victim.getName() + "'s ability was changed to " + ability.getName() + "!";
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return canSkillSwap(user) && canSkillSwap(victim);
         }
@@ -9393,6 +9821,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.switcheroo(b, user, CastSource.ATTACK, true);
         }
@@ -9438,10 +9867,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " is charging!";
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -9487,6 +9918,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public int getDamagePercentageDenominator() {
             return 3;
         }
@@ -9556,22 +9988,27 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " vanished suddenly!";
         }
 
+        @Override
         public boolean semiInvulnerability() {
             return true;
         }
 
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1;
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -9588,6 +10025,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public double sapPercentage() {
             return .75;
         }
@@ -9605,10 +10043,12 @@ public abstract class Attack implements Serializable {
             super.statChanges[Stat.SPEED.index()] = 2;
         }
 
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " is absorbing power!";
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (this.isCharging(user)) {
                 Messages.add(this.getChargeMessage(user));
@@ -9677,6 +10117,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double sapPercentage() {
             return .75;
         }
@@ -9723,6 +10164,7 @@ public abstract class Attack implements Serializable {
             super.status = StatusCondition.FROZEN;
         }
 
+        @Override
         public double multiplyAdvantage(Type attackingType, Type[] defendingTypes) {
             double multiplier = 1;
             for (Type defendingType : defendingTypes) {
@@ -9745,6 +10187,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double multiplyAdvantage(Type attackingType, Type[] defendingTypes) {
             return TypeAdvantage.FLYING.getAdvantage(defendingTypes);
         }
@@ -9757,6 +10200,7 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.TOPSY_TURVY, Type.DARK, MoveCategory.STATUS, 20, "All stat changes affecting the target turn topsy-turvy and become the opposite of what they were.");
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             for (Stat stat : Stat.BATTLE_STATS) {
                 victim.getAttributes().setStage(stat, -victim.getStage(stat));
@@ -9905,14 +10349,17 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public int getMinHits() {
             return 2;
         }
 
+        @Override
         public int getMaxHits() {
             return 5;
         }
 
+        @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             int hits = this.getNumHits(me);
 
@@ -9944,6 +10391,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttributes().isFirstTurn();
         }
@@ -9982,10 +10430,12 @@ public abstract class Attack implements Serializable {
             super.priority = 1;
         }
 
+        @Override
         public Type getAttackType(Type original) {
             return Type.ELECTRIC;
         }
 
+        @Override
         public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return caster.getName() + " electrified " + victim.getName() + "!";
         }
@@ -10001,6 +10451,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
             murderer.getAttributes().modifyStage(murderer, murderer, 2, Stat.ATTACK, b, CastSource.ATTACK);
         }
@@ -10037,6 +10488,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.ASSISTLESS);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.hasEffect(EffectNamesies.EATEN_BERRY);
         }
@@ -10053,6 +10505,7 @@ public abstract class Attack implements Serializable {
             super.statChanges[Stat.SPEED.index()] = -1;
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.hasStatus(StatusCondition.POISONED);
         }
@@ -10167,15 +10620,18 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             // Fully heals in a sandstorm
             return b.getWeather().namesies() == EffectNamesies.SANDSTORM ? 1 : .5;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -10190,15 +10646,18 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             // Fully heals in Grassy Terrain
             return b.hasEffect(EffectNamesies.GRASSY_TERRAIN) ? 1 : .5;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
@@ -10215,6 +10674,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttributes().isFirstTurn();
         }
@@ -10254,6 +10714,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public boolean ignoreStage(Stat s) {
             return !s.user();
         }
@@ -10268,10 +10729,12 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.hasStatus(StatusCondition.ASLEEP) ? 2 : 1;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusCondition.ASLEEP)) {
                 Status.removeStatus(b, victim, CastSource.ATTACK);
@@ -10301,15 +10764,18 @@ public abstract class Attack implements Serializable {
             super.statChanges[Stat.ATTACK.index()] = -1;
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // TODO: Test
             this.victimAttackStat = Stat.getStat(Stat.ATTACK, defending, attacking, b);
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.sapHealth(b, user, victim, victimAttackStat, true);
         }
 
+        @Override
         public double sapPercentage() {
             return 1;
         }
@@ -10416,10 +10882,12 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isType(b, Type.FIRE);
         }
 
+        @Override
         public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             Type[] type = victim.getType(b);
             if (type[0] == Type.FIRE) {
@@ -10453,6 +10921,7 @@ public abstract class Attack implements Serializable {
             super.selfTarget = true;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Status.removeStatus(b, user, CastSource.ATTACK);
             if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {
@@ -10460,10 +10929,12 @@ public abstract class Attack implements Serializable {
             }
         }
 
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             return .5;
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.hasStatus();
         }
@@ -10478,6 +10949,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public Type getType(Battle b, ActivePokemon user) {
             return user.getType(b)[0];
         }
@@ -10492,6 +10964,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // TODO: Test
             if (!b.isFirstAttack()) {
@@ -10607,6 +11080,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             for (Stat stat : Stat.BATTLE_STATS) {
                 int stage = victim.getAttributes().getStage(stat);
@@ -10628,10 +11102,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
         }
 
+        @Override
         public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.getAttributes().removeEffect(EffectNamesies.BREAKS_THE_MOLD);
         }
@@ -10646,10 +11122,12 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
         }
 
+        @Override
         public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.getAttributes().removeEffect(EffectNamesies.BREAKS_THE_MOLD);
         }
@@ -10719,6 +11197,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttributes().lastMoveSucceeded() ? 2 : 1;
         }
@@ -10755,6 +11234,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
             // If attack stat is higher, use that instead
             if (s == Stat.SP_ATTACK && statPokemon.getStat(b, Stat.ATTACK) > statPokemon.getStat(b, Stat.SP_ATTACK)) {
@@ -10773,6 +11253,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
         }
 
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add(user.getName() + " blew its mind!!!");
             if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
@@ -10792,6 +11273,7 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
+        @Override
         public Type getAttackType(Type original) {
             if (original == Type.NORMAL) {
                 return Type.ELECTRIC;
@@ -10800,6 +11282,7 @@ public abstract class Attack implements Serializable {
             return original;
         }
 
+        @Override
         public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return caster.getName() + " electrified " + victim.getName() + "!";
         }

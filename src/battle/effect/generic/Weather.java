@@ -60,6 +60,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
             super(EffectNamesies.CLEAR_SKIES, Type.NORMAL);
         }
 
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
         }
     }
@@ -71,22 +72,27 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
             super(EffectNamesies.RAINING, Type.WATER);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(b.getWeather().namesies() == this.namesies);
         }
 
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             Messages.add("The rain continues to pour.");
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "It started to rain!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The rain stopped.";
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.WATER)) {
                 // Water is fiddy percent stronger in tha weathz
@@ -107,30 +113,37 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
             super(EffectNamesies.SUNNY, Type.FIRE);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(b.getWeather().namesies() == this.namesies);
         }
 
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             Messages.add("The sunlight is strong.");
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "The sunlight turned harsh!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The sunlight faded.";
         }
 
+        @Override
         public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
             return status == StatusCondition.FROZEN;
         }
 
+        @Override
         public String statusPreventionMessage(ActivePokemon victim) {
             return "Too sunny to freeze!!";
         }
 
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.FIRE)) {
                 // Fire is fiddy percent stronger in tha weathz
@@ -171,26 +184,32 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
             super(EffectNamesies.SANDSTORM, Type.ROCK);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(b.getWeather().namesies() == this.namesies);
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "A sandstorm kicked up!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The sandstorm subsided.";
         }
 
+        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return p.isType(b, Type.ROCK);
         }
 
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SP_DEFENSE;
         }
 
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             Messages.add("The sandstorm rages.");
 
@@ -199,6 +218,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
             buffet(b, other);
         }
 
+        @Override
         public double getModifier() {
             return 1.5;
         }
@@ -231,18 +251,22 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
             super(EffectNamesies.HAILING, Type.ICE);
         }
 
+        @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(b.getWeather().namesies() == this.namesies);
         }
 
+        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "It started to hail!";
         }
 
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The hail stopped.";
         }
 
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             Messages.add("The hail continues to fall.");
 

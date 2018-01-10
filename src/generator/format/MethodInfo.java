@@ -124,12 +124,13 @@ public class MethodInfo {
 
         return this.writeFunction();
     }
-
+    
     public String writeFunction() {
         final String body = StringUtils.isNullOrEmpty(this.fullBody) ? this.body : this.fullBody;
 
         StringAppender method = new StringAppender();
         method.append("\n\t\t")
+              .appendIf(this.accessModifier == AccessModifier.PUBLIC, "@Override\n\t\t")
               .appendPostDelimiter(" ", this.accessModifier.getModifierName())
               .appendLine(this.header.trim() + " {");
 
