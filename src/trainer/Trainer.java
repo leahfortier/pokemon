@@ -44,6 +44,8 @@ public abstract class Trainer implements Team, Serializable {
         bag = new Bag();
     }
 
+    public abstract void addPokemon(ActivePokemon p);
+
     @Override
     public ActivePokemon front() {
         return team.get(frontIndex);
@@ -118,8 +120,6 @@ public abstract class Trainer implements Team, Serializable {
             team.get(i).getAttributes().setUsed(i == frontIndex);
         }
     }
-
-    public abstract void addPokemon(ActivePokemon p);
 
     public Bag getBag() {
         return bag;

@@ -29,6 +29,8 @@ public abstract class Effect implements Serializable {
         this.active = true;
     }
 
+    public abstract void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast);
+
     public boolean nextTurnSubside() {
         return nextTurnSubside;
     }
@@ -75,8 +77,6 @@ public abstract class Effect implements Serializable {
         Messages.add(getSubsideMessage(p));
         active = false; // Unnecessary, but just to be safe
     }
-
-    public abstract void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast);
 
     public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
         return StringUtils.empty();

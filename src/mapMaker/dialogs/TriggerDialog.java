@@ -16,6 +16,7 @@ public abstract class TriggerDialog<T> extends JPanel {
         this.dialogTitle = dialogTitle;
     }
 
+    protected abstract T getMatcher();
     protected void renderDialog() {}
 
     public final void render() {
@@ -37,8 +38,6 @@ public abstract class TriggerDialog<T> extends JPanel {
 
         return isSaved ? this.getMatcher() : null;
     }
-
-    protected abstract T getMatcher();
 
     protected String getNameField(JTextField nameField) {
         return getNameField(nameField, DEFAULT_NAME);

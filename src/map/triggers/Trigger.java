@@ -33,6 +33,8 @@ public abstract class Trigger {
         }
     }
 
+    protected abstract void executeTrigger();
+
     // Evaluate the function, Should only be triggered when a player moves
     // into a map square that is defined to trigger this event
     public boolean isTriggered() {
@@ -54,8 +56,6 @@ public abstract class Trigger {
 
         this.executeTrigger();
     }
-
-    protected abstract void executeTrigger();
 
     public static void createCommonTriggers() {
 

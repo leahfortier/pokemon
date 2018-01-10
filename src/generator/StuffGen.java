@@ -95,13 +95,13 @@ public class StuffGen {
     }
 
     public static String createClass(String classComments,
-                              String className,
-                              String superClass,
-                              String interfaces,
-                              String extraFields,
-                              String constructor,
-                              String additional,
-                              boolean isInterface) {
+                                     String className,
+                                     String superClass,
+                                     String interfaces,
+                                     String extraFields,
+                                     String constructor,
+                                     String additional,
+                                     boolean isInterface) {
         return new StringAppender("\n")
                 .appendLineIf(!StringUtils.isNullOrEmpty(classComments), "\t" + classComments)
                 .append("\t" + defineClass(className, isInterface))

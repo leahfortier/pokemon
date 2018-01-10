@@ -13,6 +13,10 @@ import java.util.List;
 
 public abstract class EntityAction {
 
+    protected abstract TriggerType getTriggerType();
+    protected abstract String getTriggerContents(String entityName);
+    protected String getCondition() { return null; }
+
     private Trigger getTrigger(String entityName) {
         return this.getTriggerType()
                    .createTrigger(
@@ -20,10 +24,6 @@ public abstract class EntityAction {
                            this.getCondition()
                    );
     }
-
-    protected abstract TriggerType getTriggerType();
-    protected abstract String getTriggerContents(String entityName);
-    protected String getCondition() { return null; }
 
     public static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, String condition, List<EntityAction> actions) {
         final String[] actionTriggerNames = new String[actions.size()];

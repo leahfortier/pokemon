@@ -149,12 +149,12 @@ public class MethodInfo {
 
     // Interface name should be empty if it is an override
     public static boolean addMethodInfo(StringAppender methods,
-                                 List<Map.Entry<String, MethodInfo>> methodList,
-                                 ClassFields fields,
-                                 List<String> interfaces,
-                                 String interfaceName,
-                                 String superClass,
-                                 InputFormatter inputFormatter) {
+                                        List<Map.Entry<String, MethodInfo>> methodList,
+                                        ClassFields fields,
+                                        List<String> interfaces,
+                                        String interfaceName,
+                                        String superClass,
+                                        InputFormatter inputFormatter) {
         boolean added = false;
         String className = fields.getClassName();
 

@@ -12,6 +12,8 @@ public abstract class ColorDocumentListener implements DocumentListener {
         this.colorCondition = colorCondition;
     }
 
+    protected abstract JComponent colorComponent();
+
     @Override
     public final void insertUpdate(DocumentEvent event) {
         valueChanged();
@@ -26,8 +28,6 @@ public abstract class ColorDocumentListener implements DocumentListener {
     public final void changedUpdate(DocumentEvent event) {
         valueChanged();
     }
-
-    protected abstract JComponent colorComponent();
 
     private void valueChanged() {
         colorCondition.additionalValueChanged();

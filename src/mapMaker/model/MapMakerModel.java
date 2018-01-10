@@ -17,13 +17,13 @@ public abstract class MapMakerModel {
         this.blankTileIndex = blankTileIndex;
     }
 
-    public int getBlankTileIndex() {
-        return this.blankTileIndex;
-    }
-
     public abstract DefaultListModel<ImageIcon> getListModel();
     public abstract void reload(MapMaker mapMaker);
     public abstract boolean newTileButtonEnabled();
+
+    public int getBlankTileIndex() {
+        return this.blankTileIndex;
+    }
 
     // Should be overridden by subclasses which return true to newTileButtonEnabled
     public void newTileButtonPressed(MapMaker mapMaker) {}
