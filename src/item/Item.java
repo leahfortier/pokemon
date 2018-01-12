@@ -1030,13 +1030,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             }
         }
 
-        private boolean usesies(Battle b, ActivePokemon user) {
+        private boolean usesies(ActivePokemon user) {
             boolean used = false;
             for (RemovableEffect removableEffect : RemovableEffect.values()) {
-                EffectNamesies effect = removableEffect.effect;
-                if (user.hasEffect(effect)) {
+                if (user.hasEffect(removableEffect.effect)) {
                     used = true;
-                    user.getAttributes().removeEffect(effect);
+                    user.getAttributes().removeEffect(removableEffect.effect);
                     Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.name + "!");
                 }
             }
@@ -1051,7 +1050,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (usesies(b, victim)) {
+            if (usesies(victim)) {
                 victim.consumeItem(b);
             }
         }
@@ -1063,7 +1062,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            usesies(b, pelted);
+            usesies(pelted);
         }
     }
 

@@ -18,4 +18,8 @@ public interface Team {
     boolean blackout(Battle b);
     void resetEffects();
     void resetUsed();
+
+    default boolean removeEffect(TeamEffect effect) {
+        return this.getEffects().remove(effect);
+    }
 }

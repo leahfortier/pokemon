@@ -413,13 +413,12 @@ Mental Herb:
 			}
 		}
 
-		private boolean usesies(Battle b, ActivePokemon user) {
+		private boolean usesies(ActivePokemon user) {
 			boolean used = false;
 			for (RemovableEffect removableEffect : RemovableEffect.values()) {
-				EffectNamesies effect = removableEffect.effect;
-				if (user.hasEffect(effect)) {
+				if (user.hasEffect(removableEffect.effect)) {
 					used = true;
-					user.getAttributes().removeEffect(effect);
+					user.getAttributes().removeEffect(removableEffect.effect);
 					Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.name + "!");
 				}
 			}
@@ -428,12 +427,12 @@ Mental Herb:
 		}
 		###
 	ApplyEndTurn:
-		if (usesies(b, victim)) {
+		if (usesies(victim)) {
 			victim.consumeItem(b);
 		}
 		###
 	FlingEffect:
-		usesies(b, pelted);
+		usesies(pelted);
 		###
 *
 Metal Powder:

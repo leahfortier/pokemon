@@ -1810,7 +1810,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void fall(Battle b, ActivePokemon fallen) {
             Messages.add("The effects of telekinesis were cancelled!");
 
-            Effect.removeEffect(fallen.getEffects(), this.namesies());
+            fallen.getAttributes().removeEffect(this.namesies());
         }
     }
 
@@ -1964,7 +1964,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void fall(Battle b, ActivePokemon fallen) {
             Messages.add("The effects of " + fallen.getName() + "'s magnet rise were cancelled!");
 
-            Effect.removeEffect(fallen.getEffects(), this.namesies());
+            fallen.getAttributes().removeEffect(this.namesies());
         }
     }
 

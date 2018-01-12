@@ -280,10 +280,10 @@ public final class EffectInterfaces {
 
             if (this instanceof PokemonEffect) {
                 PokemonEffect effect = (PokemonEffect)this;
-                released.getEffects().remove(effect);
+                released.removeEffect(effect);
             } else if (this instanceof TeamEffect) {
                 TeamEffect effect = (TeamEffect)this;
-                b.getEffects(released).remove(effect);
+                b.getTrainer(released).removeEffect(effect);
             } else {
                 Global.error("Invalid defog release object " + this.getClass().getSimpleName());
             }
@@ -309,10 +309,10 @@ public final class EffectInterfaces {
 
             if (this instanceof PokemonEffect) {
                 PokemonEffect effect = (PokemonEffect)this;
-                releaser.getEffects().remove(effect);
+                releaser.removeEffect(effect);
             } else if (this instanceof TeamEffect) {
                 TeamEffect effect = (TeamEffect)this;
-                b.getEffects(releaser).remove(effect);
+                b.getTrainer(releaser).removeEffect(effect);
             } else {
                 Global.error("Invalid rapid spin release object " + this.getClass().getSimpleName());
             }

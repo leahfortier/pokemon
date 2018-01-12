@@ -812,7 +812,7 @@ FallMessage:
 	Body:
 		Messages.add({0});
 
-		Effect.removeEffect(fallen.getEffects(), this.namesies());
+		fallen.getAttributes().removeEffect(this.namesies());
 		###
 *
 Terrain:
