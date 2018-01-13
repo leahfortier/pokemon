@@ -30,7 +30,6 @@ import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
-import draw.DrawUtils;
 import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
@@ -42,9 +41,6 @@ import main.Global;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import pokemon.Gender;
-import pokemon.LevelUpMove;
-import pokemon.Nature;
 import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
@@ -58,41 +54,17 @@ import sound.SoundTitle;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.WildPokemon;
-import trainer.player.medal.Medal;
-import trainer.player.medal.MedalCase;
 import trainer.player.medal.MedalTheme;
 import type.Type;
 import util.Action;
-import util.RandomUtils;
 import util.StringUtils;
 
-import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ActivePokemon extends PartyPokemon {
     private static final long serialVersionUID = 1L;
-
-    private PokemonNamesies pokemon;
-    private String nickname;
-    private int[] stats;
-    private int[] IVs;
-    private List<Move> moves;
-    private int hp;
-    private int level;
-    private boolean isPlayer;
-    private Status status;
-    private int totalEXP;
-    private int[] EVs;
-    private HoldItem heldItem;
-    private Ability ability;
-    private Gender gender;
-    private Nature nature;
-    private String characteristic;
-    private boolean shiny;
-    private boolean isEgg;
-    private int eggSteps;
 
     private List<PokemonEffect> effects;
     private Stages stages;
@@ -111,34 +83,7 @@ public class ActivePokemon extends PartyPokemon {
 
     // General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
     public ActivePokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer) {
-        this.pokemon = pokemonNamesies;
-        PokemonInfo pokemon = this.getPokemonInfo();
-
-        this.nickname = this.pokemon.getName();
-        this.level = level;
-
-        this.nature = new Nature();
-        this.EVs = new int[Stat.NUM_STATS];
-        this.stats = new int[Stat.NUM_STATS];
-        this.setIVs();
-
-        this.isPlayer = isPlayer;
-        this.shiny = (isPlayer || isWild) && RandomUtils.chanceTest(1, 8192);
-
-        this.setMoves();
-        this.setGender(Gender.getGender(pokemon.getMaleRatio()));
-        this.setAbility(Ability.assign(pokemon));
-
-        this.heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();
-
-        this.isEgg = false;
-        this.eggSteps = 0;
-
-        this.totalEXP = pokemon.getGrowthRate().getEXP(this.level);
-        this.totalEXP += RandomUtils.getRandomInt(expToNextLevel());
-
-        this.fullyHeal();
-        this.resetAttributes();
+        super(pokemonNamesies, level, isWild, isPlayer);
     }
 
     // Constructor for Eggs
@@ -159,129 +104,6 @@ public class ActivePokemon extends PartyPokemon {
         this.setIVs(breeding.getBabyIVs(daddy, mommy));
     }
 
-    // Does not include shiny -- this is for the small party tiles
-    public String getTinyImageName() {
-        return this.isEgg ? TINY_EGG_IMAGE_NAME : this.getPokemonInfo().getTinyImageName();
-    }
-
-    // Does not include shiny -- this is for the small party tiles
-    public String getBaseImageName() {
-        return this.isEgg ? BASE_EGG_IMAGE_NAME : this.getPokemonInfo().getBaseImageName();
-    }
-
-    public String getImageName() {
-        return this.getImageName(true);
-    }
-
-    // Larger image index
-    public String getImageName(boolean front) {
-        return this.isEgg() ? SPRITE_EGG_IMAGE_NAME : this.getPokemonInfo().getImageName(this.isShiny(), front);
-    }
-
-    public boolean isEgg() {
-        return isEgg;
-    }
-
-    public boolean hatch() {
-        if (!isEgg()) {
-            Global.error("Only eggs can hatch!");
-        }
-
-        eggSteps--;
-
-        if (eggSteps > 0) {
-            return false;
-        }
-
-        this.isEgg = false;
-        this.nickname = pokemon.getName();
-
-        return true;
-    }
-
-    public String getEggMessage() {
-        if (!isEgg()) {
-            Global.error("Only Eggs can have egg messages.");
-        }
-
-        if (eggSteps > 10*255) {
-            return "Wonder what's inside? It needs more time though.";
-        } else if (eggSteps > 5*255) {
-            return "It moves around inside sometimes. It must be close to hatching.";
-        } else {
-            return "It's making sounds inside! It's going to hatch soon!";
-        }
-    }
-
-    // Returns the moves this Pokemon could have learned up to its current level
-    public List<AttackNamesies> getLearnableMoves() {
-        List<AttackNamesies> moves = new ArrayList<>();
-        List<LevelUpMove> levelUpMoves = this.getPokemonInfo().getLevelUpMoves();
-        for (LevelUpMove levelUpMove : levelUpMoves) {
-            if (levelUpMove.getLevel() > level) {
-                break;
-            }
-
-            if (!this.hasActualMove(levelUpMove.getMove())) {
-                moves.add(levelUpMove.getMove());
-            }
-        }
-
-        return moves;
-    }
-
-    private void setMoves() {
-        moves = new ArrayList<>();
-        List<LevelUpMove> levelUpMoves = this.getPokemonInfo().getLevelUpMoves();
-        for (LevelUpMove levelUpMove : levelUpMoves) {
-            AttackNamesies attackNamesies = levelUpMove.getMove();
-            if (levelUpMove.getLevel() > level) {
-                break;
-            }
-
-            if (this.hasActualMove(attackNamesies)) {
-                continue;
-            }
-
-            moves.add(new Move(attackNamesies));
-
-            // This can be an 'if' statement, but just to be safe...
-            while (moves.size() > Move.MAX_MOVES) {
-                moves.remove(0);
-            }
-        }
-    }
-
-    public void setMoves(List<Move> list) {
-        moves = list;
-    }
-
-    public void setShiny() {
-        shiny = true;
-    }
-
-    // Random value between 0 and 31
-    private void setIVs() {
-        int[] IVs = new int[Stat.NUM_STATS];
-        for (int i = 0; i < IVs.length; i++) {
-            IVs[i] = Stat.getRandomIv();
-        }
-
-        this.setIVs(IVs);
-    }
-
-    private void setStats() {
-        int prevHP = stats[Stat.HP.index()];
-        PokemonInfo pokemon = this.getPokemonInfo();
-
-        stats = new int[Stat.NUM_STATS];
-        for (int i = 0; i < stats.length; i++) {
-            stats[i] = Stat.getStat(i, level, pokemon.getStat(i), IVs[i], EVs[i], nature.getNatureVal(i));
-        }
-
-        setHP(hp + stats[Stat.HP.index()] - prevHP);
-    }
-
     public Type computeHiddenPowerType() {
         return Type.getHiddenType(((
                 IVs[Stat.HP.index()]%2 +
@@ -291,58 +113,6 @@ public class ActivePokemon extends PartyPokemon {
                         16*(IVs[Stat.SP_ATTACK.index()]%2) +
                         32*(IVs[Stat.SP_DEFENSE.index()]%2)
         )*15)/63);
-    }
-
-    public String getCharacteristic() {
-        return characteristic;
-    }
-
-    public int[] getStats() {
-        return stats;
-    }
-
-    public int[] getIVs() {
-        return IVs;
-    }
-
-    // Values between 0 and 31
-    private void setIVs(int[] IVs) {
-        this.IVs = IVs;
-
-        int maxIndex = 0;
-        for (int i = 0; i < this.IVs.length; i++) {
-            if (this.IVs[i] > this.IVs[maxIndex]) {
-                maxIndex = i;
-            }
-        }
-
-        this.characteristic = characteristics[this.IVs[maxIndex]%5][maxIndex];
-        this.setStats();
-    }
-
-    public int[] getEVs() {
-        return EVs;
-    }
-
-    public int getIV(int index) {
-        return IVs[index];
-    }
-
-    public int getEV(int index) {
-        return EVs[index];
-    }
-
-    public Nature getNature() {
-        return nature;
-    }
-
-    public void setNature(Nature nature) {
-        this.nature = nature;
-        this.setStats();
-    }
-
-    public Ability getActualAbility() {
-        return ability;
     }
 
     public Ability getAbility() {
@@ -356,16 +126,8 @@ public class ActivePokemon extends PartyPokemon {
         return this.ability;
     }
 
-    public void setAbility(AbilityNamesies ability) {
-        this.ability = ability.getNewAbility();
-    }
-
     public int getStage(Stat stat) {
         return this.getStages().getStage(stat);
-    }
-
-    public int getMaxHP() {
-        return stats[Stat.HP.index()];
     }
 
     public int getStat(Battle b, Stat s) {
@@ -384,39 +146,6 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         return this.moves;
-    }
-
-    // TODO: This should really be immutable
-    public List<Move> getActualMoves() {
-        return moves;
-    }
-
-    public int getTotalEXP() {
-        return totalEXP;
-    }
-
-    public int expToNextLevel() {
-        if (level == MAX_LEVEL) {
-            return 0;
-        }
-
-        return this.getPokemonInfo().getGrowthRate().getEXP(level + 1) - totalEXP;
-    }
-
-    public float expRatio() {
-        if (level == MAX_LEVEL) {
-            return 0;
-        }
-
-        PokemonInfo pokemon = this.getPokemonInfo();
-
-        int totalNextLevel = pokemon.getGrowthRate().getEXP(level + 1);
-        int totalCurrentLevel = pokemon.getGrowthRate().getEXP(level);
-
-        int currentToNextLevel = expToNextLevel();
-        int totalToNextLevel = totalNextLevel - totalCurrentLevel;
-
-        return 1.0f - (float)currentToNextLevel/totalToNextLevel;
     }
 
     public void gainEXP(Battle b, int gain, ActivePokemon dead) {
@@ -576,14 +305,6 @@ public class ActivePokemon extends PartyPokemon {
         if (!inBattle) {
             checkEvolution(EvolutionMethod.MOVE);
         }
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
     }
 
     public void callNewMove(Battle b, ActivePokemon opp, Move m) {
@@ -750,6 +471,7 @@ public class ActivePokemon extends PartyPokemon {
         return this.hasEffect(EffectNamesies.BREAKS_THE_MOLD);
     }
 
+    // TODO: Remove isEgg once that's a thing
     public boolean canFight() {
         return !hasStatus(StatusCondition.FAINTED) && !isEgg();
     }
@@ -781,39 +503,8 @@ public class ActivePokemon extends PartyPokemon {
         return getMove().getType();
     }
 
-    // Returns whether or not this Pokemon knows this move already
-    public boolean hasActualMove(AttackNamesies name) {
-        return hasMove(getActualMoves(), name);
-    }
-
     public boolean hasMove(Battle b, AttackNamesies name) {
         return hasMove(getMoves(b), name);
-    }
-
-    private boolean hasMove(List<Move> moveList, AttackNamesies name) {
-        for (Move m : moveList) {
-            if (m.getAttack().namesies() == name) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public String getGenderString() {
-        if (this.isEgg()) {
-            return StringUtils.empty();
-        }
-
-        return this.getGender().getCharacter();
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
     }
 
     public boolean isSemiInvulnerable() {
@@ -827,57 +518,6 @@ public class ActivePokemon extends PartyPokemon {
 
     public boolean isSemiInvulnerableDigging() {
         return isSemiInvulnerable() && getAttack().namesies() == AttackNamesies.DIG;
-    }
-
-    private int totalEVs() {
-        int sum = 0;
-        for (int EV : EVs) {
-            sum += EV;
-        }
-
-        return sum;
-    }
-
-    // Adds Effort Values to a Pokemon, returns true if they were successfully added
-    public boolean addEVs(int[] vals) {
-        if (totalEVs() == Stat.MAX_EVS) {
-            return false;
-        }
-
-        boolean added = false;
-        for (int i = 0; i < EVs.length; i++) {
-            if (vals[i] > 0 && EVs[i] < Stat.MAX_STAT_EVS) {
-                added = true;
-                EVs[i] = Math.min(Stat.MAX_STAT_EVS, EVs[i] + vals[i]); // Don't exceed stat EV amount
-
-                // Don't exceed total EV amount
-                if (totalEVs() > Stat.MAX_EVS) {
-                    EVs[i] -= (totalEVs() - Stat.MAX_EVS);
-                    break;
-                }
-            } else if (vals[i] < 0 && EVs[i] > 0) {
-                added = true;
-                EVs[i] = Math.max(0, EVs[i] + vals[i]); // Don't drop below zero
-            }
-        }
-
-        if (added) {
-            setStats();
-            if (totalEVs() == Stat.MAX_EVS) {
-                MedalCase medalCase = Game.getPlayer().getMedalCase();
-                medalCase.earnMedal(Medal.TRAINED_TO_MAX_POTENTIAL);
-            }
-        }
-
-        return added;
-    }
-
-    public boolean isDualTyped() {
-        return this.getActualType()[1] != Type.NO_TYPE;
-    }
-
-    public Type[] getActualType() {
-        return this.getPokemonInfo().getType();
     }
 
     public Type[] getDisplayType(Battle b) {
@@ -902,39 +542,6 @@ public class ActivePokemon extends PartyPokemon {
         return types[0] == type || types[1] == type;
     }
 
-    public int getHP() {
-        return hp;
-    }
-
-    public void setHP(int amount) {
-        hp = Math.min(getMaxHP(), Math.max(0, amount));
-    }
-
-    public boolean fullHealth() {
-        return hp == getMaxHP();
-    }
-
-    public double getHPRatio() {
-        return (double)hp/getMaxHP();
-    }
-
-    public Color getHPColor() {
-        return DrawUtils.getHPColor(getHPRatio());
-    }
-
-    public String getActualName() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        if (!StringUtils.isNullOrEmpty(nickname) && !nickname.equals(this.nickname)) {
-            this.nickname = nickname;
-            if (this.isPlayer()) {
-                Game.getPlayer().getMedalCase().increase(MedalTheme.NICKNAMES_GIVEN);
-            }
-        }
-    }
-
     public String getName() {
         String changedName = NameChanger.getChangedName(this);
         if (changedName != null) {
@@ -942,10 +549,6 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         return getActualName();
-    }
-
-    public boolean isPlayer() {
-        return isPlayer;
     }
 
     public void resetAttributes() {
@@ -969,10 +572,6 @@ public class ActivePokemon extends PartyPokemon {
         attacking = false;
         reducePP = false;
         lastMoveSucceeded = true;
-    }
-
-    public void setCaught() {
-        isPlayer = true;
     }
 
     public boolean isActuallyDead() {
@@ -1188,21 +787,6 @@ public class ActivePokemon extends PartyPokemon {
         return !isGrounded(b) && LevitationEffect.containsLevitationEffect(b, this, moldBreaker);
     }
 
-    public void giveItem(ItemNamesies itemName) {
-        Item item = itemName.getItem();
-        if (item.isHoldable()) {
-            this.giveItem((HoldItem)item);
-        }
-    }
-
-    public void giveItem(HoldItem item) {
-        heldItem = item;
-    }
-
-    public void removeItem() {
-        heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();
-    }
-
     public void stealBerry(Battle b, ActivePokemon victim) {
         Item item = victim.getHeldItem(b);
         if (item instanceof Berry && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
@@ -1250,10 +834,6 @@ public class ActivePokemon extends PartyPokemon {
         }
     }
 
-    public Item getActualHeldItem() {
-        return (Item)heldItem;
-    }
-
     public Item getHeldItem(Battle b) {
         if (b == null) {
             return getActualHeldItem();
@@ -1283,27 +863,11 @@ public class ActivePokemon extends PartyPokemon {
         return getHeldItem(b).namesies() != ItemNamesies.NO_ITEM;
     }
 
-    public boolean isShiny() {
-        return shiny;
-    }
-
-    public PokemonInfo getPokemonInfo() {
-        return pokemon.getInfo();
-    }
-
-    public boolean isPokemon(PokemonNamesies name) {
-        return pokemon == name;
-    }
-
     public double getWeight(Battle b) {
         int halfAmount = 0;
         halfAmount = HalfWeightEffect.updateHalfAmount(b, this, halfAmount);
 
         return this.getPokemonInfo().getWeight()/Math.pow(2, halfAmount);
-    }
-
-    public boolean canBreed() {
-        return !isEgg && this.getPokemonInfo().canBreed();
     }
 
     public void setReducePP(boolean reduce) {
