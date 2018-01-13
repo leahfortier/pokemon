@@ -14,6 +14,7 @@ import main.Global;
 import message.MessageUpdate;
 import message.Messages;
 import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import trainer.player.Player;
 
 import java.io.Serializable;
@@ -49,14 +50,13 @@ public class Bag implements Serializable {
         }
     }
 
-    public boolean giveItem(ActivePokemon p, ItemNamesies hold) {
+    public boolean giveItem(PartyPokemon p, ItemNamesies hold) {
         if (p.isEgg()) {
             Messages.add("You can't give an item to an egg!");
             return false;
         }
 
         ItemNamesies item = p.getActualHeldItem().namesies();
-        System.out.println("Holding item: " + item.getName());
         if (item != ItemNamesies.NO_ITEM) {
             addItem(item);
             p.removeItem();
@@ -70,7 +70,7 @@ public class Bag implements Serializable {
         return true;
     }
 
-    public boolean takeItem(ActivePokemon p) {
+    public boolean takeItem(PartyPokemon p) {
         if (p.isEgg()) {
             Messages.add("Eggs can't hold anything. They're eggs.");
             return false;
@@ -157,7 +157,7 @@ public class Bag implements Serializable {
 
     // Checks conditions, add messages, and executes the UseItem
     // Move should be null for PokemonUseItem and nonnull for MoveUseItem
-    private boolean useItem(ItemNamesies item, ActivePokemon p, Move move) {
+    private boolean useItem(ItemNamesies item, PartyPokemon p, Move move) {
 
         // Eggs can't do shit
         if (p.isEgg()) {
@@ -175,7 +175,7 @@ public class Bag implements Serializable {
 
         // Try to use the item
         UseItem useItem = (UseItem)itemValue;
-        final boolean success = useItem.use(null, p, move);
+        final boolean success = useItem.use(null, (ActivePokemon)p, move);
 
         // :(
         if (!success) {
@@ -189,22 +189,23 @@ public class Bag implements Serializable {
         return true;
     }
 
-    public boolean useItem(ItemNamesies item, ActivePokemon p) {
+    public boolean useItem(ItemNamesies item, PartyPokemon p) {
         return this.useItem(item, p, null);
     }
 
-    public boolean useMoveItem(ItemNamesies item, ActivePokemon p, Move move) {
+    public boolean useMoveItem(ItemNamesies item, PartyPokemon p, Move move) {
         return this.useItem(item, p, move);
     }
 
-    public boolean battleUseItem(ItemNamesies item, ActivePokemon activePokemon, Battle battle) {
+    public boolean battleUseItem(ItemNamesies item, PartyPokemon p, Battle battle) {
         Player player = Game.getPlayer();
 
         Item useItem = item.getItem();
         boolean used = false;
         if (useItem instanceof BallItem) {
             used = player.catchPokemon(battle, (BallItem)useItem);
-        } else if (useItem.isUsable()) {
+        } else if (useItem.isUsable() && !p.isEgg()) {
+            ActivePokemon activePokemon = (ActivePokemon)p;
             used = ((UseItem)useItem).use(battle, activePokemon, null);
             if (used && player.front() == activePokemon) {
                 Messages.add(new MessageUpdate().updatePokemon(battle, activePokemon));

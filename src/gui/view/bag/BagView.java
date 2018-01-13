@@ -1,6 +1,5 @@
 package gui.view.bag;
 
-import battle.ActivePokemon;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -74,7 +73,7 @@ public class BagView extends View {
 
     BagState state;
     ItemNamesies selectedItem;
-    ActivePokemon selectedPokemon;
+    PartyPokemon selectedPokemon;
 
     private int pageNum;
     private int selectedButton;
@@ -173,8 +172,7 @@ public class BagView extends View {
                 new int[] { GIVE, 0, MOVES, 0 },
                 index -> {
                     for (UseState useState : UseState.values()) {
-                        // TODO: FIX THIS CAST IT IS A PLACEHOLDER!!!!
-                        useState.use(this, (ActivePokemon)Game.getPlayer().getTeam().get(index));
+                        useState.use(this, Game.getPlayer().getTeam().get(index));
                     }
                 }
         );
@@ -596,7 +594,7 @@ public class BagView extends View {
             buttons[USE].setActive(false);
         } else {
             Item selectedItemValue = selectedItem.getItem();
-            buttons[GIVE].setActive(selectedItemValue.isUsable());
+            buttons[GIVE].setActive(selectedItemValue.isHoldable());
             buttons[USE].setActive(selectedItemValue.isUsable());
         }
     }

@@ -12,7 +12,6 @@ import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
 import map.Direction;
-import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import pokemon.Stat;
 import pokemon.breeding.Eggy;
@@ -334,8 +333,7 @@ public class PokemonState implements VisualStateHandler {
             // Use an item on this Pokemon instead of switching
             if (view.isState(VisualState.USE_ITEM)) {
                 // Valid item
-                // TODO: CAST IS A PLACEHOLDER!!! MUST FIX!!!
-                if (player.getBag().battleUseItem(VisualState.getSelectedItem(), (ActivePokemon)selectedPkm, currentBattle)) {
+                if (player.getBag().battleUseItem(VisualState.getSelectedItem(), selectedPkm, currentBattle)) {
                     player.performAction(currentBattle, TrainerAction.ITEM);
                     view.setVisualState(VisualState.MENU);
                     view.cycleMessage(false);

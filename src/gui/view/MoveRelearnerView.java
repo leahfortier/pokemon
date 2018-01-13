@@ -133,6 +133,7 @@ public class MoveRelearnerView extends View {
                 buttonHeight,
                 ButtonHoverAction.BOX,
                 new int[] { RETURN, MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1, RETURN, MOVES_PER_PAGE },
+                // TODO: TEST THIS CAST
                 () -> learnMovePanel = new LearnMovePanel((ActivePokemon)team.get(selectedPokemon), new Move(selectedMove))
         );
 

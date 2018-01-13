@@ -25,6 +25,8 @@ public interface Team {
         return this.getEffects().remove(effect);
     }
 
+    // Returns ONLY the active pokemon on the team (AKA NOT EGGS)
+    // Note: Still returns fainted Pokemon
     default List<ActivePokemon> getActiveTeam() {
         return this.getTeam()
                    .stream()

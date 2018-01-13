@@ -4,7 +4,7 @@ import draw.button.Button;
 import item.use.MoveUseItem;
 import item.use.PlayerUseItem;
 import main.Game;
-import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 
 import java.awt.Graphics;
 
@@ -68,7 +68,7 @@ enum UseState {
         button.label(g, 20, displayName);
     }
 
-    void use(BagView bagView, ActivePokemon p) {
+    void use(BagView bagView, PartyPokemon p) {
         if (this.clicked) {
             this.useButton.useButton(this, bagView, p);
             bagView.updateActiveButtons();
@@ -101,6 +101,6 @@ enum UseState {
 
     @FunctionalInterface
     private interface UseButton {
-        void useButton(UseState state, BagView bagView, ActivePokemon p);
+        void useButton(UseState state, BagView bagView, PartyPokemon p);
     }
 }
