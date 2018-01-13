@@ -3,7 +3,7 @@ package mapMaker.dialogs.action.trigger;
 import battle.attack.AttackNamesies;
 import item.ItemNamesies;
 import pattern.PokemonMatcher;
-import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GUIUtils;
@@ -29,7 +29,7 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
             }
         });
 
-        this.levelField = GUIUtils.createIntegerTextField(1, 1, ActivePokemon.MAX_LEVEL);
+        this.levelField = GUIUtils.createIntegerTextField(1, 1, PartyPokemon.MAX_LEVEL);
         this.isEggCheckBox = GUIUtils.createCheckBox("Is Egg", action -> setEnabled());
         this.shinyCheckBox = GUIUtils.createCheckBox("Shiny");
 

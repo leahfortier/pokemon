@@ -11,6 +11,7 @@ import main.Global;
 import map.area.AreaData;
 import map.overworld.OverworldTool;
 import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import test.maps.TestMap;
 import trainer.player.Player;
@@ -188,7 +189,7 @@ public class DevConsole {
         PokemonNamesies namesies = PokemonNamesies.getValueOf(in.next());
 
         // Default values
-        int level = ActivePokemon.MAX_LEVEL;
+        int level = PartyPokemon.MAX_LEVEL;
         List<Move> moves = null;
         boolean shiny = false;
 

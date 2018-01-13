@@ -10,6 +10,7 @@ import input.InputControl;
 import main.Game;
 import main.Global;
 import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
 import trainer.Trainer;
 import trainer.player.NewPokemonInfo;
@@ -246,7 +247,7 @@ class NewPokemonView extends View {
                 break;
             case NICKNAME:
                 BufferedImage spriteImage = Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageName());
-                String nickname = InputControl.instance().getInputCaptureString(ActivePokemon.MAX_NAME_LENGTH);
+                String nickname = InputControl.instance().getInputCaptureString(PartyPokemon.MAX_NAME_LENGTH);
 
                 ImageUtils.drawCenteredImageLabel(g, spriteImage, nickname, BasicPanels.canvasMessageCenter);
                 break;

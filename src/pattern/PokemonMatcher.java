@@ -4,7 +4,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import item.ItemNamesies;
 import main.Global;
-import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import util.GeneralUtils;
 import util.StringUtils;
@@ -30,7 +30,7 @@ public class PokemonMatcher {
             Global.error("Pokemon namesies cannot be null for a Pokemon Matcher");
         }
 
-        if (level < 1 || level > ActivePokemon.MAX_LEVEL) {
+        if (level < 1 || level > PartyPokemon.MAX_LEVEL) {
             Global.error("Invalid level " + level + " for pokemon " + namesies);
         }
 

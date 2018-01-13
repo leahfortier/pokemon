@@ -23,6 +23,7 @@ import message.Messages;
 import pattern.SimpleMapTransition;
 import pattern.action.UpdateMatcher;
 import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.DayCareCenter;
 import trainer.Opponent;
@@ -370,7 +371,7 @@ public class Player extends PlayerTrainer implements Serializable {
                 continue;
             }
 
-            if (p.getLevel() == ActivePokemon.MAX_LEVEL) {
+            if (p.getLevel() == PartyPokemon.MAX_LEVEL) {
                 continue;
             }
 

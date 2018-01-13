@@ -4,7 +4,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import main.Global;
 import pattern.PokemonMatcher;
-import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GUIUtils;
@@ -43,7 +43,7 @@ class PokemonDataPanel extends JPanel {
             }
         });
         nicknameTextField = GUIUtils.createTextField(); // Restrict to max length characters
-        levelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, ActivePokemon.MAX_LEVEL);
+        levelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, PartyPokemon.MAX_LEVEL);
         shinyCheckBox = GUIUtils.createCheckBox();
         moveCheckBox = GUIUtils.createCheckBox();
         moveTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {

@@ -6,7 +6,7 @@ import map.overworld.WildEncounter;
 import mapMaker.dialogs.TimeOfDayPanel;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleMatcher;
-import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import util.GUIUtils;
 import util.GeneralUtils;
 
@@ -57,8 +57,8 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
         nameTextField = GUIUtils.createTextField(this.getDefaultName());
         encounterRateComboBox = GUIUtils.createComboBox(EncounterRate.values());
 
-        lowLevelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, ActivePokemon.MAX_LEVEL);
-        highLevelFormattedTextField = GUIUtils.createIntegerTextField(ActivePokemon.MAX_LEVEL, 1, ActivePokemon.MAX_LEVEL);
+        lowLevelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, PartyPokemon.MAX_LEVEL);
+        highLevelFormattedTextField = GUIUtils.createIntegerTextField(PartyPokemon.MAX_LEVEL, 1, PartyPokemon.MAX_LEVEL);
 
         timeOfDayPanel = new TimeOfDayPanel();
         conditionTextField = GUIUtils.createTextField();

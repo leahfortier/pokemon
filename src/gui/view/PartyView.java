@@ -17,6 +17,7 @@ import input.InputControl;
 import main.Game;
 import main.Global;
 import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import trainer.Trainer;
@@ -272,7 +273,7 @@ class PartyView extends View {
 
             FontMetrics.setFont(g, 30);
 
-            String nickname = InputControl.instance().getInputCaptureString(ActivePokemon.MAX_NAME_LENGTH);
+            String nickname = InputControl.instance().getInputCaptureString(PartyPokemon.MAX_NAME_LENGTH);
             ImageUtils.drawCenteredImageLabel(g, pkmImg, nickname, Global.GAME_SIZE.width/2, Global.GAME_SIZE.height/2);
         } else {
             // Pokemon info

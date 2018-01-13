@@ -3,8 +3,8 @@ package test;
 import battle.attack.AttackNamesies;
 import org.junit.Assert;
 import org.junit.Test;
-import battle.ActivePokemon;
 import pokemon.LevelUpMove;
+import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
@@ -51,7 +51,7 @@ public class PokemonInfoTest extends BaseTest {
                 int level = levelUpMove.getLevel();
                 String message = StringUtils.spaceSeparated(pokemonInfo.getName(), level, levelUpMove.getMove().getName());
 
-                boolean inRange = level >= 0 && level <= ActivePokemon.MAX_LEVEL;
+                boolean inRange = level >= 0 && level <= PartyPokemon.MAX_LEVEL;
                 Assert.assertTrue(message, inRange || level == PokemonInfo.EVOLUTION_LEVEL_LEARNED);
 
                 // Make sure level up moves are in ascending order
@@ -126,7 +126,7 @@ public class PokemonInfoTest extends BaseTest {
         // Default level tests
         Assert.assertTrue(LevelUpMove.isDefaultLevel(0));
         Assert.assertTrue(LevelUpMove.isDefaultLevel(PokemonInfo.EVOLUTION_LEVEL_LEARNED));
-        for (int level = 1; level <= ActivePokemon.MAX_LEVEL; level++) {
+        for (int level = 1; level <= PartyPokemon.MAX_LEVEL; level++) {
             Assert.assertFalse(LevelUpMove.isDefaultLevel(level));
         }
     }
