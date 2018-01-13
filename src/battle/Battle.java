@@ -286,14 +286,26 @@ public class Battle implements Serializable {
 
     // If the trainer selected an attack, this will return true - Wild Pokemon will always return true
     // It will return false if the trainer tried to run, switch Pokemon, or used an item
-    private boolean isFighting(boolean team) {
-        Team trainer = getTrainer(team);
-        return trainer instanceof WildPokemon || ((Trainer)trainer).getAction() == TrainerAction.FIGHT;
+    private boolean isFighting(boolean isPlayer) {
+        Team team = getTrainer(isPlayer);
+        if (team instanceof WildPokemon) {
+            return true;
+        }
+
+        Trainer trainer = (Trainer)team;
+        return trainer.getAction() == TrainerAction.FIGHT;
     }
 
-    private boolean isSwitching(boolean team) {
-        Team trainer = getTrainer(team);
-        return !(trainer instanceof WildPokemon) && ((Trainer)trainer).getAction() == TrainerAction.SWITCH;
+    // If the trainer selected Switch, this will return true -- Wild Pokemon will always return false
+    // It will return false if the trainer tried to run, use an attack, or use an item
+    public boolean isSwitching(boolean isPlayer) {
+        Team team = getTrainer(isPlayer);
+        if (team instanceof WildPokemon) {
+            return false;
+        }
+
+        Trainer trainer = (Trainer)team;
+        return trainer.getAction() == TrainerAction.SWITCH;
     }
 
     private void endTurn() {
@@ -377,7 +389,7 @@ public class Battle implements Serializable {
         return false;
     }
 
-    private void enterBattle(ActivePokemon enterer) {
+    public void enterBattle(ActivePokemon enterer) {
         NameChanger.setNameChanges(this, enterer);
 
         String enterMessage = "";
@@ -492,8 +504,7 @@ public class Battle implements Serializable {
     private void executionSolution(ActivePokemon me, ActivePokemon o) {
         if (isSwitching(me.isPlayer())) {
             Trainer trainer = (Trainer)getTrainer(me);
-            trainer.setFront(trainer.getSwitchIndex());
-            this.enterBattle(trainer.front());
+            trainer.performSwitch(this);
             return;
         }
 

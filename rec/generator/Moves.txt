@@ -913,16 +913,14 @@ Pursuit:
 	Acc: 100
 	Cat: Physical
 	GetMultiplier:
-		Team trainer = b.getTrainer(victim);
-		if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
+		if (b.isSwitching(victim.isPlayer())) {
 			return 2;
 		}
 
 		return 1;
 		###
 	GetPriority:
-		Team trainer = b.getTrainer(!me.isPlayer());
-		if (trainer instanceof Trainer && ((Trainer)trainer).getAction() == TrainerAction.SWITCH) {
+		if (b.isSwitching(!me.isPlayer())) {
 			return 7;
 		}
 
