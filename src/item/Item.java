@@ -412,13 +412,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
-            Move last = p.getAttributes().getLastMoveUsed();
+            Move last = p.getLastMoveUsed();
             return last == null || m == last;
         }
 
         @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
-            return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
+            return p.getName() + "'s " + super.name + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
         }
 
         @Override
@@ -447,13 +447,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
-            Move last = p.getAttributes().getLastMoveUsed();
+            Move last = p.getLastMoveUsed();
             return last == null || m == last;
         }
 
         @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
-            return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
+            return p.getName() + "'s " + super.name + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
         }
 
         @Override
@@ -482,13 +482,13 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
-            Move last = p.getAttributes().getLastMoveUsed();
+            Move last = p.getLastMoveUsed();
             return last == null || m == last;
         }
 
         @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
-            return p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!";
+            return p.getName() + "'s " + super.name + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
         }
 
         @Override
@@ -1035,7 +1035,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             for (RemovableEffect removableEffect : RemovableEffect.values()) {
                 if (user.hasEffect(removableEffect.effect)) {
                     used = true;
-                    user.getAttributes().removeEffect(removableEffect.effect);
+                    user.removeEffect(removableEffect.effect);
                     Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.name + "!");
                 }
             }
@@ -1105,7 +1105,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return Math.min(2, 1 + .2*(user.getAttributes().getCount() - 1));
+            return Math.min(2, 1 + .2*(user.getCount() - 1));
         }
     }
 
@@ -4661,7 +4661,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         private boolean use(ActivePokemon p, CastSource source) {
             if (p.hasEffect(EffectNamesies.CONFUSION)) {
-                p.getAttributes().removeEffect(EffectNamesies.CONFUSION);
+                p.removeEffect(EffectNamesies.CONFUSION);
                 this.addMessage(p, source);
                 return true;
             }

@@ -3,8 +3,10 @@ package battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.attack.MoveType;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.CastSource;
+import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
@@ -103,9 +105,23 @@ public class ActivePokemon implements Serializable {
     private Nature nature;
     private String characteristic;
     private boolean shiny;
-    private BattleAttributes attributes;
     private boolean isEgg;
     private int eggSteps;
+
+    private List<PokemonEffect> effects;
+    private Stages stages;
+    private Move selected;
+    private Move lastMoveUsed;
+    private Serializable castSource;
+    private int counter;
+    private int damageTaken;
+    private double successionDecayRate;
+    private boolean firstTurn;
+    private boolean attacking;
+    private boolean reducePP;
+    private boolean used;
+    private boolean battleUsed;
+    private boolean lastMoveSucceeded;
 
     // General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
     public ActivePokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer) {
@@ -121,7 +137,6 @@ public class ActivePokemon implements Serializable {
         this.setIVs();
 
         this.isPlayer = isPlayer;
-        this.attributes = new BattleAttributes(this);
         this.shiny = (isPlayer || isWild) && RandomUtils.chanceTest(1, 8192);
 
         this.setMoves();
@@ -137,6 +152,7 @@ public class ActivePokemon implements Serializable {
         this.totalEXP += RandomUtils.getRandomInt(expToNextLevel());
 
         this.fullyHeal();
+        this.resetAttributes();
     }
 
     // Constructor for Eggs
@@ -638,10 +654,10 @@ public class ActivePokemon implements Serializable {
             this.giveItem((HoldItem)victimItem);
             swapster.giveItem((HoldItem)userItem);
         } else {
-            this.getAttributes().setCastSource(victimItem);
+            this.setCastSource(victimItem);
             EffectNamesies.CHANGE_ITEM.getEffect().apply(b, this, this, CastSource.CAST_SOURCE, false);
 
-            this.getAttributes().setCastSource(userItem);
+            this.setCastSource(userItem);
             EffectNamesies.CHANGE_ITEM.getEffect().apply(b, this, swapster, CastSource.CAST_SOURCE, false);
         }
     }
@@ -762,24 +778,8 @@ public class ActivePokemon implements Serializable {
         return getAbility().namesies() == a;
     }
 
-    public void addEffect(PokemonEffect e) {
-        attributes.addEffect(e);
-    }
-
-    public void removeEffect(PokemonEffect effect) {
-        attributes.removeEffect(effect);
-    }
-
-    public void setMove(Battle b, Move move) {
-        attributes.setMove(b, move);
-    }
-
-    public Move getMove() {
-        return attributes.getMove();
-    }
-
     public Attack getAttack() {
-        Move m = attributes.getMove();
+        Move m = this.getMove();
         if (m == null) {
             return null;
         }
@@ -958,22 +958,31 @@ public class ActivePokemon implements Serializable {
         return getActualName();
     }
 
-    public BattleAttributes getAttributes() {
-        return attributes;
-    }
-
-    public Stages getStages() {
-        return attributes.getStages();
-    }
-
     public boolean isPlayer() {
         return isPlayer;
     }
 
     public void resetAttributes() {
-        attributes = new BattleAttributes(this);
         moves.forEach(Move::resetReady);
         ability = ability.namesies().getNewAbility();
+
+        effects = new ArrayList<>();
+        stages = new Stages(this);
+
+        selected = null;
+        lastMoveUsed = null;
+        castSource = null;
+
+        this.resetCount();
+        this.resetDamageTaken();
+        this.resetDecay();
+
+        used = false;
+        battleUsed = false;
+        firstTurn = true;
+        attacking = false;
+        reducePP = false;
+        lastMoveSucceeded = true;
     }
 
     public void setCaught() {
@@ -1002,7 +1011,7 @@ public class ActivePokemon implements Serializable {
             Status.die(b, murderer, this);
 
             // If the pokemon fainted via murder (by direct result of an attack) -- apply kill wishes
-            if (murderer.getAttributes().isAttacking()) {
+            if (murderer.isAttacking()) {
                 MurderEffect.killKillKillMurderMurderMurder(b, this, murderer);
             }
 
@@ -1039,19 +1048,6 @@ public class ActivePokemon implements Serializable {
 
         // Safe and sound
         return true;
-    }
-
-    public boolean hasEffect(EffectNamesies effect) {
-        return attributes.hasEffect(effect);
-    }
-
-    // Returns null if the Pokemon is not under the effects of the input effect, otherwise returns the Condition
-    public PokemonEffect getEffect(EffectNamesies effect) {
-        return attributes.getEffect(effect);
-    }
-
-    public List<PokemonEffect> getEffects() {
-        return attributes.getEffects();
     }
 
     public List<Object> getAllEffects(final Battle b) {
@@ -1114,7 +1110,7 @@ public class ActivePokemon implements Serializable {
         int prev = hp;
         setHP(hp - amount);
         int taken = prev - hp;
-        attributes.takeDamage(taken);
+        this.takeDamage(taken);
 
         // Enduring the hit
         if (hp == 0 && checkEffects) {
@@ -1322,6 +1318,178 @@ public class ActivePokemon implements Serializable {
 
     public boolean canBreed() {
         return !isEgg && this.getPokemonInfo().canBreed();
+    }
+
+    public void setReducePP(boolean reduce) {
+        reducePP = reduce;
+    }
+
+    public Object getCastSource() {
+        return this.castSource;
+    }
+
+    public void setCastSource(Serializable castSource) {
+        this.castSource = castSource;
+    }
+
+    public boolean isAttacking() {
+        return attacking;
+    }
+
+    private void setAttacking(boolean isAttacking) {
+        attacking = isAttacking;
+    }
+
+    void setLastMoveSucceeded(boolean lastMoveSucceeded) {
+        this.lastMoveSucceeded = lastMoveSucceeded;
+    }
+
+    public boolean lastMoveSucceeded() {
+        return this.lastMoveSucceeded;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean u) {
+        used = u;
+        if (used) {
+            battleUsed = true;
+        }
+    }
+
+    public boolean isBattleUsed() {
+        return this.battleUsed;
+    }
+
+    public boolean isFirstTurn() {
+        return firstTurn;
+    }
+
+    void setFirstTurn(boolean isFirstTurn) {
+        firstTurn = isFirstTurn;
+    }
+
+    public void takeDamage(int damage) {
+        damageTaken = damage;
+    }
+
+    public int getDamageTaken() {
+        return damageTaken;
+    }
+
+    public boolean hasTakenDamage() {
+        return damageTaken > 0;
+    }
+
+    public void resetTurn() {
+        resetDamageTaken();
+        setReducePP(false);
+    }
+
+    private void resetDamageTaken() {
+        damageTaken = 0;
+    }
+
+    public void setLastMoveUsed() {
+        lastMoveUsed = selected;
+    }
+
+    public Move getLastMoveUsed() {
+        return lastMoveUsed;
+    }
+
+    // Increment count if the pokemon uses the same move twice in a row
+    public void count() {
+        if (lastMoveUsed == null || selected.getAttack().namesies() != lastMoveUsed.getAttack().namesies()) {
+            resetCount();
+        } else {
+            counter++;
+        }
+    }
+
+    private void resetCount() {
+        counter = 1;
+    }
+
+    public int getCount() {
+        return counter;
+    }
+
+    public List<PokemonEffect> getEffects() {
+        return effects;
+    }
+
+    public double getSuccessionDecayRate() {
+        return successionDecayRate;
+    }
+
+    public void decay() {
+        if (selected.getAttack().isMoveType(MoveType.SUCCESSIVE_DECAY)) {
+            successionDecayRate *= .5;
+        } else {
+            this.resetDecay();
+        }
+    }
+
+    private void resetDecay() {
+        successionDecayRate = 1;
+    }
+
+    public Move getMove() {
+        return selected;
+    }
+
+    public void setMove(Battle b, Move move) {
+        this.selected = move;
+        move.setAttributes(b, this);
+    }
+
+    public void addEffect(PokemonEffect e) {
+        effects.add(e);
+    }
+
+    public boolean removeEffect(PokemonEffect effect) {
+        return effects.remove(effect);
+    }
+
+    public boolean removeEffect(EffectNamesies effect) {
+        return Effect.removeEffect(effects, effect);
+    }
+
+    // Returns null if the Pokemon is not under the effects of the input effect, otherwise returns the Effect
+    public PokemonEffect getEffect(EffectNamesies effect) {
+        return (PokemonEffect)(Effect.getEffect(effects, effect));
+    }
+
+    public boolean hasEffect(EffectNamesies effect) {
+        return Effect.hasEffect(effects, effect);
+    }
+
+    public Stages getStages() {
+        return this.stages;
+    }
+
+    public void startAttack(Battle b) {
+        this.setAttacking(true);
+        this.getMove().switchReady(b, this); // TODO: I don't think this works right because this is happening before you check if they're able to attack and honestly they shouldn't really switch until the end of the turn
+        this.getMove().setAttributes(b, this);
+    }
+
+    public void endAttack(ActivePokemon opp, boolean success) {
+        if (!success) {
+            this.removeEffect(EffectNamesies.SELF_CONFUSION);
+            this.resetCount();
+        }
+
+        this.setLastMoveUsed();
+
+        if (this.reducePP) {
+            this.getMove().reducePP(opp.hasAbility(AbilityNamesies.PRESSURE) ? 2 : 1);
+        }
+
+        this.setAttacking(false);
     }
 
     /*

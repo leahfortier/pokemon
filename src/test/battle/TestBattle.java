@@ -36,7 +36,7 @@ public class TestBattle extends Battle {
         Assert.assertTrue(modifier > 0);
         if (expectedDamageModifier != null) {
             TestUtils.assertEquals(
-                    StringUtils.spaceSeparated(attacking.getAttack(), attacking.getAttributes().getCount()),
+                    StringUtils.spaceSeparated(attacking.getAttack(), attacking.getCount()),
                     expectedDamageModifier, modifier
             );
         }

@@ -45,7 +45,7 @@ public class TestPokemon extends ActivePokemon {
 
     public void setupMove(AttackNamesies attackNamesies, Battle battle) {
         this.setMove(battle, new Move(attackNamesies));
-        this.getAttributes().startAttack(battle);
+        this.startAttack(battle);
     }
 
     public void apply(boolean assertion, AttackNamesies attack, TestBattle battle) {

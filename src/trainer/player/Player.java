@@ -374,7 +374,7 @@ public class Player extends PlayerTrainer implements Serializable {
                 continue;
             }
 
-            if (p.getAttributes().isUsed()) {
+            if (p.isUsed()) {
                 numUsed++;
             }
         }
@@ -388,7 +388,7 @@ public class Player extends PlayerTrainer implements Serializable {
         int lev = dead.getLevel();
         int base = dead.getPokemonInfo().getBaseEXP();
         for (ActivePokemon p : team) {
-            if (p.canFight() && p.getAttributes().isUsed()) {
+            if (p.canFight() && p.isUsed()) {
                 double gain = wild*base*lev*Math.pow(2*lev + 10, 2.5);
                 gain /= 5*Math.pow(lev + p.getLevel() + 10, 2.5);
                 gain++;

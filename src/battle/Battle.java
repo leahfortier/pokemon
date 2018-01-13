@@ -267,8 +267,8 @@ public class Battle implements Serializable {
         ActivePokemon opp = opponent.front();
 
         turn++;
-        plyr.getAttributes().resetTurn();
-        opp.getAttributes().resetTurn();
+        plyr.resetTurn();
+        opp.resetTurn();
 
         // Fucking focus punch
         if (isFighting(true)) {
@@ -405,7 +405,7 @@ public class Battle implements Serializable {
 
         Messages.add(new MessageUpdate(enterMessage).withSwitch(this, enterer));
 
-        enterer.getAttributes().setUsed(true);
+        enterer.setUsed(true);
         EntryEffect.invokeEntryEffect(this, enterer);
 
         getTrainer(!enterer.isPlayer()).resetUsed();
@@ -482,7 +482,7 @@ public class Battle implements Serializable {
         me.isFainted(this);
 
         // No longer the first turn anymore
-        me.getAttributes().setFirstTurn(false);
+        me.setFirstTurn(false);
     }
 
     private boolean isFront(ActivePokemon p) {
@@ -504,7 +504,7 @@ public class Battle implements Serializable {
 
         boolean success = false;
 
-        me.getAttributes().startAttack(this);
+        me.startAttack(this);
 
         // HOLD IT RIGHT THERE! YOU MAY NOT BE ABLE TO ATTACK!
         if (ableToAttack(me, o)) {
@@ -521,7 +521,7 @@ public class Battle implements Serializable {
             }
         }
 
-        me.getAttributes().endAttack(o, success);
+        me.endAttack(o, success);
 
         // Can't use me and o in case there was a switch mid-turn
         Messages.add(new MessageUpdate().updatePokemon(this, player.front()));
@@ -530,7 +530,7 @@ public class Battle implements Serializable {
 
     public void printAttacking(ActivePokemon p) {
         Messages.add((p.isPlayer() ? "" : "Enemy ") + p.getName() + " used " + p.getAttack().getName() + "!");
-        p.getAttributes().setReducePP(true);
+        p.setReducePP(true);
     }
 
     private void executeAttack(ActivePokemon me, ActivePokemon o) {
@@ -538,13 +538,13 @@ public class Battle implements Serializable {
             Game.getPlayer().getMedalCase().useMove(me.getAttack().namesies());
         }
 
-        me.getAttributes().count();
+        me.count();
 
         boolean success = me.getAttack().apply(me, o, this);
-        me.getAttributes().setLastMoveSucceeded(success);
+        me.setLastMoveSucceeded(success);
 
         me.getMove().setUsed();
-        me.getAttributes().decay();
+        me.decay();
     }
 
     public void addEffect(BattleEffect effect) {

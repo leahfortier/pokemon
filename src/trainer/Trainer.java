@@ -117,7 +117,7 @@ public abstract class Trainer implements Team, Serializable {
     @Override
     public void resetUsed() {
         for (int i = 0; i < team.size(); i++) {
-            team.get(i).getAttributes().setUsed(i == frontIndex);
+            team.get(i).setUsed(i == frontIndex);
         }
     }
 
@@ -155,7 +155,7 @@ public abstract class Trainer implements Team, Serializable {
     public boolean blackout(Battle b) {
         boolean maxUsed = maxPokemonUsed(b);
         for (ActivePokemon p : team) {
-            if (p.canFight() && (!maxUsed || p.getAttributes().isBattleUsed())) {
+            if (p.canFight() && (!maxUsed || p.isBattleUsed())) {
                 return false;
             }
         }
@@ -173,7 +173,7 @@ public abstract class Trainer implements Team, Serializable {
         List<Integer> valid = new ArrayList<>();
         for (int i = 0; i < team.size(); i++) {
             ActivePokemon p = team.get(i);
-            if (i == frontIndex || !p.canFight() || (maxUsed && !p.getAttributes().isBattleUsed())) {
+            if (i == frontIndex || !p.canFight() || (maxUsed && !p.isBattleUsed())) {
                 continue;
             }
 
@@ -203,7 +203,7 @@ public abstract class Trainer implements Team, Serializable {
         }
 
         // Cannot switch to an unused Pokemon if you have already used the maximum number of Pokemon
-        if (maxPokemonUsed(b) && !toSwitch.getAttributes().isBattleUsed()) {
+        if (maxPokemonUsed(b) && !toSwitch.isBattleUsed()) {
             return false;
         }
 
@@ -229,7 +229,7 @@ public abstract class Trainer implements Team, Serializable {
     }
 
     private int numPokemonUsed() {
-        return (int)team.stream().filter(p -> p.getAttributes().isBattleUsed()).count();
+        return (int)team.stream().filter(p -> p.isBattleUsed()).count();
     }
 
     // Returns true if the trainer has Pokemon (other than the one that is currently fighting) that is able to fight
@@ -240,7 +240,7 @@ public abstract class Trainer implements Team, Serializable {
                 continue;
             }
 
-            if (team.get(i).canFight() && (!maxUsed || team.get(i).getAttributes().isBattleUsed())) {
+            if (team.get(i).canFight() && (!maxUsed || team.get(i).isBattleUsed())) {
                 return true;
             }
         }

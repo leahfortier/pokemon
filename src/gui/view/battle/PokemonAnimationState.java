@@ -450,7 +450,7 @@ class PokemonAnimationState {
 
             boolean silhouette = index == state.teamIndex
                     ? state.getStatus() == StatusCondition.FAINTED
-                    : !pokemon.canFight() || (usedMaxPokemon && !pokemon.getAttributes().isBattleUsed());
+                    : !pokemon.canFight() || (usedMaxPokemon && !pokemon.isBattleUsed());
 
             BufferedImage pokeball = TileSet.TINY_POKEBALL;
             if (silhouette) {

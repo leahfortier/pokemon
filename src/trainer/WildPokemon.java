@@ -46,7 +46,7 @@ public class WildPokemon implements Opponent, Serializable {
 
     @Override
     public void resetUsed() {
-        wildPokemon.getAttributes().setUsed(true);
+        wildPokemon.setUsed(true);
     }
 
     @Override
