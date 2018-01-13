@@ -645,10 +645,6 @@ public class ActivePokemon extends PartyPokemon {
         return list;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
     public void setStatus(Status s) {
         status = s;
     }

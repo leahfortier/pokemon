@@ -19,7 +19,7 @@ public class TypePartyEvolution extends Evolution {
 
     @Override
     public BaseEvolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
-        List<ActivePokemon> team = Game.getPlayer().getTeam();
+        List<ActivePokemon> team = Game.getPlayer().getActiveTeam();
         for (ActivePokemon pokemon : team) {
             if (pokemon.getPokemonInfo().isType(this.type)) {
                 return this.evolution.getEvolution(type, p, use);

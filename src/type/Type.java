@@ -1,7 +1,7 @@
 package type;
 
 import main.Global;
-import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
 import util.FileIO;
 import util.Folder;
@@ -77,7 +77,7 @@ public enum Type implements Serializable {
         return getColors(p.getType());
     }
 
-    public static Color[] getColors(ActivePokemon p) {
+    public static Color[] getColors(PartyPokemon p) {
         return getColors(p.isEgg() ? new Type[] { Type.NORMAL, Type.NO_TYPE } : p.getActualType());
     }
 

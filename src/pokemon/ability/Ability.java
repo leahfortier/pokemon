@@ -2866,7 +2866,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void setNameChange(Battle b, ActivePokemon victim) {
-            List<ActivePokemon> team = b.getTrainer(victim).getTeam();
+            List<ActivePokemon> team = b.getTrainer(victim).getActiveTeam();
             ActivePokemon illusion = null;
 
             // Starting from the back of the party, locate the first conscious Pokemon that is of a different species to be the illusion
@@ -2879,7 +2879,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
                 }
 
                 // If the Pokemon in back is the same species at the current Pokemon -- do nothing
-                if (temp.getPokemonInfo().getNumber() == victim.getPokemonInfo().getNumber()) {
+                if (temp.getPokemonInfo().namesies() == victim.getPokemonInfo().namesies()) {
                     continue;
                 }
 

@@ -3629,7 +3629,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            for (ActivePokemon p : b.getTrainer(user).getTeam()) {
+            for (ActivePokemon p : b.getTrainer(user).getActiveTeam()) {
                 if (!p.isActuallyDead()) {
                     p.removeStatus();
                 }
@@ -7587,7 +7587,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            for (ActivePokemon p : b.getTrainer(me).getTeam()) {
+            for (ActivePokemon p : b.getTrainer(me).getActiveTeam()) {
                 // Only healthy Pokemon get to attack
                 if (!p.canFight() || p.hasStatus()) {
                     continue;
@@ -7797,7 +7797,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            for (ActivePokemon p : b.getTrainer(user).getTeam()) {
+            for (ActivePokemon p : b.getTrainer(user).getActiveTeam()) {
                 if (!p.isActuallyDead()) {
                     p.removeStatus();
                 }
@@ -8016,7 +8016,7 @@ public abstract class Attack implements Serializable {
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // TODO: Test
             this.attacks = new ArrayList<>();
-            for (ActivePokemon p : b.getTrainer(attacking).getTeam()) {
+            for (ActivePokemon p : b.getTrainer(attacking).getActiveTeam()) {
                 if (p != attacking) {
                     for (Move move : p.getMoves(b)) {
                         if (!move.getAttack().isMoveType(MoveType.ASSISTLESS)) {

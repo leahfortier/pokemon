@@ -3752,7 +3752,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         public boolean use(Trainer t) {
             boolean healed = false;
-            for (ActivePokemon p : t.getTeam()) {
+            for (ActivePokemon p : t.getActiveTeam()) {
                 if (p.isActuallyDead()) {
                     healed = true;
                     p.removeStatus();

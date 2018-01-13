@@ -248,9 +248,10 @@ public class Player extends PlayerTrainer implements Serializable {
 
         // Hatch eggs
         boolean doubleHatch = front().hasAbility(AbilityNamesies.FLAME_BODY) || front().hasAbility(AbilityNamesies.MAGMA_ARMOR);
-        for (ActivePokemon p : team) {
+        for (PartyPokemon p : team) {
             if (p.isEgg() && (p.hatch() || (doubleHatch && p.hatch()))) {
-                this.evolutionInfo.setEgg(p);
+                // TODO: Fix this cast later!!!
+                this.evolutionInfo.setEgg((ActivePokemon)p);
                 Messages.add(new MessageUpdate().withTrigger(TriggerType.GROUP.getTriggerNameFromSuffix("EggHatching")));
 
                 // Only one hatch per step
@@ -366,7 +367,7 @@ public class Player extends PlayerTrainer implements Serializable {
     // Gives EXP to all Pokemon who participated in battle
     public void gainEXP(ActivePokemon dead, Battle b) {
         int numUsed = 0;
-        for (ActivePokemon p : team) {
+        for (PartyPokemon p : team) {
             if (!p.canFight()) {
                 continue;
             }
@@ -388,14 +389,16 @@ public class Player extends PlayerTrainer implements Serializable {
         double wild = b.isWildBattle() ? 1 : 1.5;
         int lev = dead.getLevel();
         int base = dead.getPokemonInfo().getBaseEXP();
-        for (ActivePokemon p : team) {
+        for (PartyPokemon p : team) {
             if (p.canFight() && p.isUsed()) {
-                double gain = wild*base*lev*Math.pow(2*lev + 10, 2.5);
-                gain /= 5*Math.pow(lev + p.getLevel() + 10, 2.5);
-                gain++;
-                gain *= p.isHoldingItem(b, ItemNamesies.LUCKY_EGG) ? 1.5 : 1;
+                ActivePokemon a = (ActivePokemon)p;
 
-                p.gainEXP(b, (int)Math.max(1, gain/numUsed), dead);
+                double gain = wild*base*lev*Math.pow(2*lev + 10, 2.5);
+                gain /= 5*Math.pow(lev + a.getLevel() + 10, 2.5);
+                gain++;
+                gain *= a.isHoldingItem(b, ItemNamesies.LUCKY_EGG) ? 1.5 : 1;
+
+                a.gainEXP(b, (int)Math.max(1, gain/numUsed), dead);
             }
         }
     }
@@ -417,7 +420,7 @@ public class Player extends PlayerTrainer implements Serializable {
         }
 
         EndBattleEffect.invokeEndBattleEffect(this.getEffects(), this, b, front());
-        for (ActivePokemon p : team) {
+        for (ActivePokemon p : this.getActiveTeam()) {
             EndBattleEffect.invokeEndBattleEffect(p.getAllEffects(b), this, b, p);
         }
 
@@ -428,7 +431,7 @@ public class Player extends PlayerTrainer implements Serializable {
     }
 
     public void checkEvolution() {
-        for (ActivePokemon p : team) {
+        for (PartyPokemon p : team) {
             if (p.canFight() && p.checkEvolution()) {
                 break;
             }
@@ -440,11 +443,11 @@ public class Player extends PlayerTrainer implements Serializable {
     }
 
     @Override
-    public void addPokemon(ActivePokemon p) {
+    public void addPokemon(PartyPokemon p) {
         this.addPokemon(p, true);
     }
 
-    public void addPokemon(ActivePokemon p, boolean viewChange) {
+    public void addPokemon(PartyPokemon p, boolean viewChange) {
         this.newPokemonInfo.setNewPokemon(p);
         if (viewChange) {
             Messages.add(new MessageUpdate().withViewChange(ViewMode.NEW_POKEMON_VIEW));
@@ -460,7 +463,7 @@ public class Player extends PlayerTrainer implements Serializable {
             newPokemonInfo.inBox(pc.getBoxNum() + 1);
         }
 
-        boolean addToPokedex = !p.isEgg() && !pokedex.isCaught(p);
+        boolean addToPokedex = !p.isEgg() && !pokedex.isCaught((ActivePokemon)p);
         if (addToPokedex) {
             pokedex.setCaught(p.getPokemonInfo());
         }
@@ -486,7 +489,7 @@ public class Player extends PlayerTrainer implements Serializable {
     }
 
     // Determines whether or not a Pokemon can be deposited
-    public boolean canDeposit(ActivePokemon p) {
+    public boolean canDeposit(PartyPokemon p) {
 
         // You can't deposit a Pokemon that you don't have
         if (!team.contains(p)) {
@@ -499,7 +502,7 @@ public class Player extends PlayerTrainer implements Serializable {
         }
 
         // Otherwise you can if you have at least one other Pokemon that is not dead or an egg
-        for (ActivePokemon pokemon : team) {
+        for (PartyPokemon pokemon : team) {
             if (pokemon != p && pokemon.canFight()) {
                 return true;
             }
@@ -510,7 +513,7 @@ public class Player extends PlayerTrainer implements Serializable {
 
     public int totalEggs() {
         return (int)team.stream()
-                        .filter(ActivePokemon::isEgg)
+                        .filter(PartyPokemon::isEgg)
                         .count();
     }
 

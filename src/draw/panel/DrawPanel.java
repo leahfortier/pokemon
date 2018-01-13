@@ -12,7 +12,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Global;
 import map.Direction;
-import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import type.Type;
 import util.FontMetrics;
 import util.Point;
@@ -97,7 +97,7 @@ public class DrawPanel {
         return this;
     }
 
-    public DrawPanel withTypeColors(ActivePokemon pokemon) {
+    public DrawPanel withTypeColors(PartyPokemon pokemon) {
         return this.withBackgroundColors(Type.getColors(pokemon));
     }
 

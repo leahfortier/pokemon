@@ -2,6 +2,7 @@ package trainer;
 
 import main.Global;
 import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 
 public class EnemyTrainer extends Trainer implements Opponent {
     private static final long serialVersionUID = 1L;
@@ -17,7 +18,7 @@ public class EnemyTrainer extends Trainer implements Opponent {
     }
 
     @Override
-    public void addPokemon(ActivePokemon p) {
+    public void addPokemon(PartyPokemon p) {
         if (p.isPlayer()) {
             Global.error("Enemy trainer pokemon cannot be player's...");
         }

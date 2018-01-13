@@ -4,6 +4,7 @@ import main.Game;
 import main.Global;
 import message.Messages;
 import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import trainer.player.Player;
 import trainer.player.medal.MedalTheme;
 import util.PokeString;
@@ -116,7 +117,7 @@ public class DayCareCenter implements Serializable {
         return "Took back " + withdrawPokemon.getName() + " back for 500 " + PokeString.POKEDOLLARS + ".";
     }
 
-    public boolean canDeposit(ActivePokemon pokemon) {
+    public boolean canDeposit(PartyPokemon pokemon) {
         return (first == null || second == null) && !pokemon.isEgg() && Game.getPlayer().canDeposit(pokemon);
     }
 

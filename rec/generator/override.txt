@@ -1379,7 +1379,7 @@ CategoryDamagerBerry:
 *
 HealPartyStatus:
 	AddMapField: UniqueEffects:
-		for (ActivePokemon p : b.getTrainer(user).getTeam()) {
+		for (ActivePokemon p : b.getTrainer(user).getActiveTeam()) {
 			if (!p.isActuallyDead()) {
 				p.removeStatus();
 			}

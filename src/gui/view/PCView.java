@@ -13,7 +13,7 @@ import gui.TileSet;
 import input.InputControl;
 import main.Game;
 import map.Direction;
-import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.Stat;
 import trainer.Trainer;
 import trainer.player.PC;
@@ -57,7 +57,7 @@ class PCView extends View {
 
     private final PC pc;
 
-    private ActivePokemon selected;
+    private PartyPokemon selected;
     private boolean party;
     private int selectedButton;
     private boolean depositClicked;
@@ -262,7 +262,7 @@ class PCView extends View {
         InputControl.instance().popViewIfEscaped();
     }
 
-    private void drawPokemonButton(Graphics g, Button button, ActivePokemon pokemon) {
+    private void drawPokemonButton(Graphics g, Button button, PartyPokemon pokemon) {
         if (pokemon == null) {
             return;
         }
@@ -279,7 +279,7 @@ class PCView extends View {
         GameData data = Game.getData();
         TileSet pokemonTiles = data.getPokemonTilesSmall();
 
-        ActivePokemon[][] box = pc.getBoxPokemon();
+        PartyPokemon[][] box = pc.getBoxPokemon();
 
         // Box
         BasicPanels.drawCanvasPanel(g);
@@ -306,7 +306,7 @@ class PCView extends View {
         // Party
         partyPanel.drawBackground(g);
 
-        List<ActivePokemon> team = Game.getPlayer().getTeam();
+        List<PartyPokemon> team = Game.getPlayer().getTeam();
         for (int i = 0; i < team.size(); i++) {
             drawPokemonButton(g, partyButtons[i], team.get(i));
         }
@@ -368,7 +368,7 @@ class PCView extends View {
             TextUtils.drawRightAlignedString(g, selected.expToNextLevel() + "", 740, 156);
 
             // Ability
-            g.drawString(selected.getAbility().getName(), 427, 179);
+            g.drawString(selected.getActualAbility().getName(), 427, 179);
 
             // Held Item
             TextUtils.drawRightAlignedString(g, selected.getActualHeldItem().getName(), 740, 179);
@@ -452,7 +452,7 @@ class PCView extends View {
     }
 
     private void updateActiveButtons() {
-        ActivePokemon[][] box = pc.getBoxPokemon();
+        PartyPokemon[][] box = pc.getBoxPokemon();
         for (int i = 0; i < PC.BOX_HEIGHT; i++) {
             for (int j = 0; j < PC.BOX_WIDTH; j++) {
                 boxButtons[i][j].setActive((party && depositClicked) || switchClicked || box[i][j] != null);
@@ -460,7 +460,7 @@ class PCView extends View {
         }
 
         Player player = Game.getPlayer();
-        List<ActivePokemon> team = player.getTeam();
+        List<PartyPokemon> team = player.getTeam();
 
         party = false;
         for (int i = 0; i < Trainer.MAX_POKEMON; i++) {

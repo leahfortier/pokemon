@@ -1,7 +1,7 @@
 package trainer.player;
 
 import main.Game;
-import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import trainer.Trainer;
 import util.GeneralUtils;
 import util.RandomUtils;
@@ -55,12 +55,12 @@ public class PC implements Serializable {
     }
 
     // Returns the list of Pokemon for the current box
-    public ActivePokemon[][] getBoxPokemon() {
+    public PartyPokemon[][] getBoxPokemon() {
         return getBoxPokemon(currBox);
     }
 
     // Returns the list of Pokemon for the specified box
-    private ActivePokemon[][] getBoxPokemon(int box) {
+    private PartyPokemon[][] getBoxPokemon(int box) {
         return boxes.get(box).pokemon;
     }
 
@@ -73,7 +73,7 @@ public class PC implements Serializable {
     }
 
     // Adds a Pokemon to the next open box
-    private void addPokemon(ActivePokemon p) {
+    private void addPokemon(PartyPokemon p) {
         // Get the location of the next open spot
         BoxCoordinate loc = findPokemon(null);
 
@@ -86,14 +86,14 @@ public class PC implements Serializable {
         }
     }
 
-    public void depositPokemon(ActivePokemon p) {
+    public void depositPokemon(PartyPokemon p) {
         addPokemon(p);
     }
 
     // Returns the coordinates of the Pokemon in the pc as {boxNum, x, y}, returns null if the Pokemon is not in the box
-    private BoxCoordinate findPokemon(ActivePokemon p) {
+    private BoxCoordinate findPokemon(PartyPokemon p) {
         for (int boxNum = currBox, n = 0; n < boxes.size(); boxNum++, n++) {
-            ActivePokemon[][] box = getBoxPokemon(boxNum);
+            PartyPokemon[][] box = getBoxPokemon(boxNum);
             for (int i = 0; i < BOX_HEIGHT; i++) {
                 for (int j = 0; j < BOX_WIDTH; j++) {
                     if (box[i][j] == p) {
@@ -106,7 +106,7 @@ public class PC implements Serializable {
         return null;
     }
 
-    public void withdrawPokemon(ActivePokemon p) {
+    public void withdrawPokemon(PartyPokemon p) {
         BoxCoordinate coordinate = findPokemon(p);
         if (coordinate == null) {
             return;
@@ -121,7 +121,7 @@ public class PC implements Serializable {
     }
 
     // Removes the Pokemon from the trainer and adds it to the box
-    public void depositPokemonFromPlayer(ActivePokemon p) {
+    public void depositPokemonFromPlayer(PartyPokemon p) {
         Player player = Game.getPlayer();
         if (!player.canDeposit(p)) {
             return;
@@ -132,7 +132,7 @@ public class PC implements Serializable {
     }
 
     // Removes the Pokemon from the trainer and adds it to the box at a specific location, fails if another Pokemon is already in this location
-    private void depositPokemonFromPlayer(ActivePokemon p, BoxCoordinate coordinate) {
+    private void depositPokemonFromPlayer(PartyPokemon p, BoxCoordinate coordinate) {
         Player player = Game.getPlayer();
         if (!player.canDeposit(p) || coordinate == null || coordinate.getPokemon() != null) {
             return;
@@ -142,12 +142,12 @@ public class PC implements Serializable {
         player.getTeam().remove(p);
     }
 
-    public void depositPokemonFromPlayer(ActivePokemon p, int x, int y) {
+    public void depositPokemonFromPlayer(PartyPokemon p, int x, int y) {
         depositPokemonFromPlayer(p, new BoxCoordinate(currBox, x, y));
     }
 
     // Switching two Pokemon, where the second Pokemon is inside the box
-    public void switchPokemon(ActivePokemon p, int i, int j) {
+    public void switchPokemon(PartyPokemon p, int i, int j) {
         Player player = Game.getPlayer();
         int index = player.getTeam().indexOf(p);
 
@@ -162,8 +162,8 @@ public class PC implements Serializable {
                 return;
             }
 
-            ActivePokemon[][] box = getBoxPokemon();
-            ActivePokemon switchee = box[i][j];
+            PartyPokemon[][] box = getBoxPokemon();
+            PartyPokemon switchee = box[i][j];
 
             box[i][j] = p;
             coordinate.setPokemon(switchee);
@@ -171,7 +171,7 @@ public class PC implements Serializable {
     }
 
     // Switching two Pokemon, where the second Pokemon is in the player's party
-    public void switchPokemon(ActivePokemon p, int i) {
+    public void switchPokemon(PartyPokemon p, int i) {
         Player player = Game.getPlayer();
         int index = player.getTeam().indexOf(p);
 
@@ -192,8 +192,8 @@ public class PC implements Serializable {
 
         Player player = Game.getPlayer();
 
-        ActivePokemon boxPokemon = coordinate.getPokemon();
-        ActivePokemon partyPokemon = player.getTeam().get(partyIndex);
+        PartyPokemon boxPokemon = coordinate.getPokemon();
+        PartyPokemon partyPokemon = player.getTeam().get(partyIndex);
 
         // Swapping with an empty space -- same as depositing
         if (boxPokemon == null) {
@@ -221,7 +221,7 @@ public class PC implements Serializable {
 
     // If you're adding a Pokemon to the PC, this should be called internally. All the error checking and such
     // should be handled by the publicly accessible versions.
-    private void insertIntoBox(BoxCoordinate coordinate, ActivePokemon p) {
+    private void insertIntoBox(BoxCoordinate coordinate, PartyPokemon p) {
         if (coordinate == null) {
             return;
         }
@@ -234,7 +234,7 @@ public class PC implements Serializable {
     }
 
     // Release a Pokemon forevers
-    public void releasePokemon(ActivePokemon p) {
+    public void releasePokemon(PartyPokemon p) {
         Player player = Game.getPlayer();
         if (player.getTeam().contains(p)) {
             player.getTeam().remove(p);
@@ -252,11 +252,11 @@ public class PC implements Serializable {
     private static class Box implements Serializable {
         private static final long serialVersionUID = 1L;
 
-        private final ActivePokemon[][] pokemon;
+        private final PartyPokemon[][] pokemon;
         private final Color color;
 
         public Box() {
-            pokemon = new ActivePokemon[BOX_HEIGHT][BOX_WIDTH];
+            pokemon = new PartyPokemon[BOX_HEIGHT][BOX_WIDTH];
             color = new Color(RandomUtils.getRandomInt(255), RandomUtils.getRandomInt(255), RandomUtils.getRandomInt(255));
         }
     }
@@ -272,11 +272,11 @@ public class PC implements Serializable {
             this.y = y;
         }
 
-        private ActivePokemon getPokemon() {
+        private PartyPokemon getPokemon() {
             return getBoxPokemon(boxNum)[x][y];
         }
 
-        private void setPokemon(ActivePokemon pokemon) {
+        private void setPokemon(PartyPokemon pokemon) {
             boxes.get(boxNum).pokemon[x][y] = pokemon;
         }
 

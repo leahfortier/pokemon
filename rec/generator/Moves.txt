@@ -4372,7 +4372,7 @@ Beat Up:
 	Cat: Physical
 	Type: Dark
 	ApplyDamage:
-		for (ActivePokemon p : b.getTrainer(me).getTeam()) {
+		for (ActivePokemon p : b.getTrainer(me).getActiveTeam()) {
 			// Only healthy Pokemon get to attack
 			if (!p.canFight() || p.hasStatus()) {
 				continue;
@@ -4619,7 +4619,7 @@ Assist:
 	BeginAttack:
 		// TODO: Test
 		this.attacks = new ArrayList<>();
-		for (ActivePokemon p : b.getTrainer(attacking).getTeam()) {
+		for (ActivePokemon p : b.getTrainer(attacking).getActiveTeam()) {
 			if (p != attacking) {
 				for (Move move : p.getMoves(b)) {
 					if (!move.getAttack().isMoveType(MoveType.ASSISTLESS)) {

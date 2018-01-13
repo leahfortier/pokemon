@@ -16,6 +16,7 @@ import input.InputControl;
 import main.Game;
 import main.Global;
 import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.Stat;
 import pokemon.breeding.DayCareCenter;
 import trainer.Trainer;
@@ -52,9 +53,9 @@ class DayCareView extends View {
     private final Button returnButton;
 
     private DayCareCenter dayCareCenter;
-    private List<ActivePokemon> team;
+    private List<PartyPokemon> team;
 
-    private ActivePokemon selected;
+    private PartyPokemon selected;
     private boolean party;
     private int selectedButton;
     private String message;
@@ -204,10 +205,11 @@ class DayCareView extends View {
                 ButtonHoverAction.BOX,
                 new int[] { RETURN, -1, 0, -1 },
                 () -> {
+                    // TODO: I think these casts should be okay but should test
                     if (party) {
-                        message = dayCareCenter.deposit(selected);
+                        message = dayCareCenter.deposit((ActivePokemon)selected);
                     } else {
-                        message = dayCareCenter.withdraw(selected);
+                        message = dayCareCenter.withdraw((ActivePokemon)selected);
                     }
                 }
         );
@@ -245,7 +247,7 @@ class DayCareView extends View {
         input.popViewIfEscaped();
     }
 
-    private void drawPokemonButton(Graphics g, Button button, ActivePokemon pokemon) {
+    private void drawPokemonButton(Graphics g, Button button, PartyPokemon pokemon) {
         if (pokemon != null) {
             button.fillTransparent(g);
             button.blackOutline(g);
@@ -256,7 +258,7 @@ class DayCareView extends View {
             ImageUtils.drawCenteredImageLabel(
                     g,
                     image,
-                    pokemon.getName() + " " + pokemon.getGenderString(),
+                    pokemon.getActualName() + " " + pokemon.getGenderString(),
                     button.centerX(),
                     button.centerY()
             );
@@ -328,7 +330,7 @@ class DayCareView extends View {
             TextUtils.drawRightAlignedString(g, selected.expToNextLevel() + "", 740, 156);
 
             // Ability
-            g.drawString(selected.getAbility().getName(), 427, 179);
+            g.drawString(selected.getActualAbility().getName(), 427, 179);
 
             // Held Item
             TextUtils.drawRightAlignedString(g, selected.getActualHeldItem().getName(), 740, 179);

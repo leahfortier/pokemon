@@ -1,13 +1,14 @@
 package trainer;
 
 import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import util.SerializationUtils;
 
 public class SimulatedPlayer extends PlayerTrainer {
     public SimulatedPlayer(PlayerTrainer player) {
         super(player.getName(), player.getDatCashMoney());
 
-        for (ActivePokemon poke : player.getTeam()) {
+        for (PartyPokemon poke : player.getTeam()) {
             this.addPokemon((ActivePokemon)SerializationUtils.getSerializedCopy(poke));
         }
 
@@ -15,7 +16,7 @@ public class SimulatedPlayer extends PlayerTrainer {
     }
 
     @Override
-    public void addPokemon(ActivePokemon p) {
+    public void addPokemon(PartyPokemon p) {
         team.add(p);
     }
 }

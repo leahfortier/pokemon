@@ -15,6 +15,7 @@ import main.Global;
 import message.Messages;
 import pattern.TradePokemonMatcher;
 import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
 import trainer.Trainer;
 import trainer.player.Player;
@@ -57,7 +58,7 @@ public class TradeView extends View {
     private BufferedImage myPokesBackImage;
     private BufferedImage myPokesFrontImage;
 
-    private List<ActivePokemon> team;
+    private List<PartyPokemon> team;
 
     public TradeView() {
         this.canvasPanel = BasicPanels.newFullGamePanel()
@@ -117,7 +118,7 @@ public class TradeView extends View {
             for (int i = 0; i < team.size(); i++) {
                 Button button = getTeamButton(i);
                 if (button.checkConsumePress()) {
-                    ActivePokemon myPokes = team.get(i);
+                    PartyPokemon myPokes = team.get(i);
                     if (myPokes.getPokemonInfo().namesies() == requested.namesies()) {
                         ActivePokemon theirPokes = new ActivePokemon(
                                 offering.namesies(),
@@ -134,7 +135,7 @@ public class TradeView extends View {
 
                         tradeAnimationTime = TRADE_ANIMATION_LIFESPAN;
 
-                        Messages.add("Traded " + myPokes.getName() + " for " + theirPokes.getName() + "!");
+                        Messages.add("Traded " + myPokes.getActualName() + " for " + theirPokes.getName() + "!");
                     } else {
                         Messages.add("Hm... Not exactly what I was hoping for... but thanks anyways?");
                         exit = true;
@@ -218,7 +219,7 @@ public class TradeView extends View {
             BasicPanels.drawFullMessagePanel(g, StringUtils.empty());
             for (int i = 0; i < team.size(); i++) {
                 Button button = getTeamButton(i);
-                ActivePokemon pokemon = team.get(i);
+                PartyPokemon pokemon = team.get(i);
 
                 DrawPanel buttonPanel = new DrawPanel(button)
                         .withBackgroundColors(Type.getColors(pokemon.getActualType()))

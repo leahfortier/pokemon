@@ -95,8 +95,14 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public abstract boolean canFight();
+
+    // TODO: Deal with this later
     public abstract void fullyHeal();
     public abstract void resetAttributes();
+    public abstract void setUsed(boolean used);
+    public abstract boolean isUsed();
+    public abstract boolean isBattleUsed();
+    public abstract boolean checkEvolution();
 
     public PokemonInfo getPokemonInfo() {
         return pokemon.getInfo();
@@ -232,6 +238,10 @@ public abstract class PartyPokemon implements Serializable {
     public void setNature(Nature nature) {
         this.nature = nature;
         this.setStats();
+    }
+
+    public Status getStatus() {
+        return status;
     }
 
     public Ability getActualAbility() {
