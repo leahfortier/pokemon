@@ -2,6 +2,7 @@ package pokemon;
 
 import battle.Battle;
 import battle.BattleAttributes;
+import battle.Stages;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -355,7 +356,7 @@ public class ActivePokemon implements Serializable {
     }
 
     public int getStage(Stat stat) {
-        return attributes.getStage(stat);
+        return this.getStages().getStage(stat);
     }
 
     public int getMaxHP() {
@@ -958,6 +959,10 @@ public class ActivePokemon implements Serializable {
         return attributes;
     }
 
+    public Stages getStages() {
+        return attributes.getStages();
+    }
+
     public boolean isPlayer() {
         return isPlayer;
     }
@@ -1054,16 +1059,6 @@ public class ActivePokemon implements Serializable {
         list.addAll(this.getEffects());
 
         return list;
-    }
-
-    public void modifyStages(Battle b, ActivePokemon modifier, int[] mod, CastSource source) {
-        for (int i = 0; i < mod.length; i++) {
-            if (mod[i] == 0) {
-                continue;
-            }
-
-            attributes.modifyStage(modifier, this, mod[i], Stat.getStat(i, true), b, source);
-        }
     }
 
     public Status getStatus() {

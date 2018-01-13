@@ -259,7 +259,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.isAttackType(Type.WATER) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.HELD_ITEM)) {
+            if (user.isAttackType(Type.WATER) && victim.getStages().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
             }
         }
@@ -391,7 +391,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.isAttackType(Type.ELECTRIC) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
+            if (user.isAttackType(Type.ELECTRIC) && victim.getStages().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
             }
         }
@@ -970,7 +970,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.isAttackType(Type.WATER) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
+            if (user.isAttackType(Type.WATER) && victim.getStages().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
             }
         }
@@ -1526,7 +1526,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.isAttackType(Type.ICE) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
+            if (user.isAttackType(Type.ICE) && victim.getStages().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
             }
         }
@@ -1660,8 +1660,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (TypeAdvantage.isSuperEffective(user, victim, b)) {
-                victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
-                victim.getAttributes().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
+                victim.getStages().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
+                victim.getStages().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
             }
         }
     }
@@ -1690,7 +1690,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             // Restores negative stat changes to the pelted
             for (Stat stat : Stat.BATTLE_STATS) {
                 if (pelted.getStage(stat) < 0) {
-                    pelted.getAttributes().setStage(stat, 0);
+                    pelted.getStages().setStage(stat, 0);
                 }
             }
 
@@ -3830,7 +3830,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return p.getAttributes().modifyStage(p, p, 1, Stat.ACCURACY, b, CastSource.USE_ITEM);
+            return p.getStages().modifyStage(p, p, 1, Stat.ACCURACY, b, CastSource.USE_ITEM);
         }
     }
 
@@ -3845,7 +3845,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return p.getAttributes().modifyStage(p, p, 1, Stat.ATTACK, b, CastSource.USE_ITEM);
+            return p.getStages().modifyStage(p, p, 1, Stat.ATTACK, b, CastSource.USE_ITEM);
         }
     }
 
@@ -3860,7 +3860,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return p.getAttributes().modifyStage(p, p, 1, Stat.DEFENSE, b, CastSource.USE_ITEM);
+            return p.getStages().modifyStage(p, p, 1, Stat.DEFENSE, b, CastSource.USE_ITEM);
         }
     }
 
@@ -3875,7 +3875,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return p.getAttributes().modifyStage(p, p, 1, Stat.SP_ATTACK, b, CastSource.USE_ITEM);
+            return p.getStages().modifyStage(p, p, 1, Stat.SP_ATTACK, b, CastSource.USE_ITEM);
         }
     }
 
@@ -3890,7 +3890,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return p.getAttributes().modifyStage(p, p, 1, Stat.SP_DEFENSE, b, CastSource.USE_ITEM);
+            return p.getStages().modifyStage(p, p, 1, Stat.SP_DEFENSE, b, CastSource.USE_ITEM);
         }
     }
 
@@ -3905,7 +3905,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return p.getAttributes().modifyStage(p, p, 1, Stat.SPEED, b, CastSource.USE_ITEM);
+            return p.getStages().modifyStage(p, p, 1, Stat.SPEED, b, CastSource.USE_ITEM);
         }
     }
 
@@ -5281,7 +5281,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getAttack().getCategory() == MoveCategory.PHYSICAL && victim.getAttributes().modifyStage(victim, victim, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
+            if (user.getAttack().getCategory() == MoveCategory.PHYSICAL && victim.getStages().modifyStage(victim, victim, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
             }
         }
@@ -5307,7 +5307,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getAttack().getCategory() == MoveCategory.SPECIAL && victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
+            if (user.getAttack().getCategory() == MoveCategory.SPECIAL && victim.getStages().modifyStage(victim, victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
                 victim.consumeItem(b);
             }
         }
@@ -5477,7 +5477,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
             // Raise random battle stat
             Stat stat = Stat.getStat(rand, true);
-            return user.getAttributes().modifyStage(user, user, 1, stat, b, source);
+            return user.getStages().modifyStage(user, user, 1, stat, b, source);
         }
 
         @Override
@@ -6008,7 +6008,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
-            if (newTerrain == TerrainType.ELECTRIC && p.getAttributes().modifyStage(p, p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
+            if (newTerrain == TerrainType.ELECTRIC && p.getStages().modifyStage(p, p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
                 p.consumeItem(b);
             }
         }
@@ -6025,7 +6025,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
-            if (newTerrain == TerrainType.GRASS && p.getAttributes().modifyStage(p, p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
+            if (newTerrain == TerrainType.GRASS && p.getStages().modifyStage(p, p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
                 p.consumeItem(b);
             }
         }
@@ -6042,7 +6042,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
-            if (newTerrain == TerrainType.MISTY && p.getAttributes().modifyStage(p, p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
+            if (newTerrain == TerrainType.MISTY && p.getStages().modifyStage(p, p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
                 p.consumeItem(b);
             }
         }
@@ -6059,7 +6059,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
-            if (newTerrain == TerrainType.PSYCHIC && p.getAttributes().modifyStage(p, p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
+            if (newTerrain == TerrainType.PSYCHIC && p.getStages().modifyStage(p, p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
                 p.consumeItem(b);
             }
         }

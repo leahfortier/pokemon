@@ -1696,7 +1696,7 @@ Stored Power:
 	Acc: 100
 	PP: 10
 	GetMultiplier:
-		return user.getAttributes().totalStatIncreases();
+		return user.getStages().totalStatIncreases();
 		###
 *
 Power Trip:
@@ -1707,7 +1707,7 @@ Power Trip:
 	Acc: 100
 	PP: 10
 	GetMultiplier:
-		return user.getAttributes().totalStatIncreases();
+		return user.getStages().totalStatIncreases();
 		###
 *
 Mimic:
@@ -2198,7 +2198,7 @@ Psych Up:
 	Type: Normal
 	UniqueEffects:
 		for (Stat stat : Stat.BATTLE_STATS) {
-			user.getAttributes().setStage(stat, victim.getStage(stat));
+			user.getStages().setStage(stat, victim.getStage(stat));
 		}
 
 		Messages.add(user.getName() + " copied " + victim.getName() + "'s stat changes!");
@@ -2293,7 +2293,7 @@ Punishment:
 	PP: 5
 	Pow: 60
 	GetPow:
-		return Math.min(super.power + 20*o.getAttributes().totalStatIncreases(), 200);
+		return Math.min(super.power + 20*o.getStages().totalStatIncreases(), 200);
 		###
 	Type: Dark
 	Cat: Physical
@@ -2388,7 +2388,7 @@ Belly Drum:
 		// Maximization station
 		Messages.add(user.getName() + " cut its own HP and maximized its attack!");
 		user.reduceHealthFraction(b, 1/2.0);
-		user.getAttributes().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
+		user.getStages().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
 		###
 *
 Submission:
@@ -3778,7 +3778,7 @@ Speed Swap:
 	MoveType: No_Magic_Coat
 	UniqueEffects:
 		// NOTE: Looks like this is supposed to actually swap the stats and not just the stages but I don't really care it should do the same thing as power and guard swap because that makes more sense sue me
-		user.getAttributes().swapStages(Stat.SPEED, victim);
+		user.getStages().swapStages(Stat.SPEED, victim);
 		Messages.add(user.getName() + " swapped its stats with " + victim.getName() + "!");
 		###
 *
@@ -4893,9 +4893,9 @@ Heart Swap:
 	MoveType: Substitute_Piercing, No_Magic_Coat
 	UniqueEffects:
 		for (Stat stat : Stat.BATTLE_STATS) {
-			int temp = user.getAttributes().getStage(stat);
-			user.getAttributes().setStage(stat, victim.getAttributes().getStage(stat));
-			victim.getAttributes().setStage(stat, temp);
+			int temp = user.getStages().getStage(stat);
+			user.getStages().setStage(stat, victim.getStages().getStage(stat));
+			victim.getStages().setStage(stat, temp);
 		}
 
 		Messages.add(user.getName() + " swapped its stats with " + victim.getName() + "!");
@@ -5542,7 +5542,7 @@ Baton Pass:
 		ActivePokemon next = b.getTrainer(user).front();
 		next.resetAttributes();
 		for (Stat stat : Stat.BATTLE_STATS) {
-			next.getAttributes().setStage(stat, user.getStage(stat));
+			next.getStages().setStage(stat, user.getStage(stat));
 		}
 
 		user.getEffects().stream().filter(effect -> effect instanceof PassableEffect).forEach(next::addEffect);
@@ -5916,7 +5916,7 @@ Topsy-Turvy:
 	Desc: All stat changes affecting the target turn topsy-turvy and become the opposite of what they were.
 	UniqueEffects:
 		for (Stat stat : Stat.BATTLE_STATS) {
-			victim.getAttributes().setStage(stat, -victim.getStage(stat));
+			victim.getStages().setStage(stat, -victim.getStage(stat));
 		}
 
 		Messages.add(victim.getName() + "'s stat changes were all reversed!");
@@ -6084,7 +6084,7 @@ Fell Stinger:
 	Pow: 50
 	Int: MurderEffect
 	KillWish:
-		murderer.getAttributes().modifyStage(murderer, murderer, 2, Stat.ATTACK, b, CastSource.ATTACK);
+		murderer.getStages().modifyStage(murderer, murderer, 2, Stat.ATTACK, b, CastSource.ATTACK);
 		###
 *
 Magnetic Flux:
@@ -6502,10 +6502,10 @@ Spectral Thief:
 	PP: 10
 	AfterApplyCheck:
 		for (Stat stat : Stat.BATTLE_STATS) {
-			int stage = victim.getAttributes().getStage(stat);
+			int stage = victim.getStages().getStage(stat);
 			if (stage > 0) {
-				victim.getAttributes().resetStage(stat);
-				user.getAttributes().incrementStage(stat, stage);
+				victim.getStages().resetStage(stat);
+				user.getStages().incrementStage(stat, stage);
 			}
 		}
 		###

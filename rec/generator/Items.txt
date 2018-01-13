@@ -652,8 +652,8 @@ Weakness Policy:
 	Price: 200
 	OnTakeDamage:
 		if (TypeAdvantage.isSuperEffective(user, victim, b)) {
-			victim.getAttributes().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
-			victim.getAttributes().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
+			victim.getStages().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
+			victim.getStages().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
 		}
 		###
 *
@@ -671,7 +671,7 @@ White Herb:
 		// Restores negative stat changes to the pelted
 		for (Stat stat : Stat.BATTLE_STATS) {
 			if (pelted.getStage(stat) < 0) {
-				pelted.getAttributes().setStage(stat, 0);
+				pelted.getStages().setStage(stat, 0);
 			}
 		}
 
@@ -2094,7 +2094,7 @@ Starf Berry:
 
 		// Raise random battle stat
 		Stat stat = Stat.getStat(rand, true);
-		return user.getAttributes().modifyStage(user, user, 1, stat, b, source);
+		return user.getStages().modifyStage(user, user, 1, stat, b, source);
 		###
 *
 # Other Items

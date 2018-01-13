@@ -104,7 +104,7 @@ Intimidate:
 	Int: EntryEffect, RepelLowLevelEncounterEffect
 	Enter:
 		ActivePokemon other = b.getOtherPokemon(enterer);
-		other.getAttributes().modifyStage(enterer, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
+		other.getStages().modifyStage(enterer, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
 		###
 *
 Static:
@@ -565,7 +565,7 @@ Rattled:
 	OnTakeDamage:
 		Type type = user.getAttackType();
 		if (type == Type.BUG || type == Type.DARK || type == Type.GHOST) {
-			victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+			victim.getStages().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
 		}
 		###
 *
@@ -573,14 +573,14 @@ Moxie:
 	Desc: Attack rises when you knock out an opponent.
 	Int: MurderEffect
 	KillWish:
-		murderer.getAttributes().modifyStage(murderer, murderer, 1, Stat.ATTACK, b, CastSource.ABILITY);
+		murderer.getStages().modifyStage(murderer, murderer, 1, Stat.ATTACK, b, CastSource.ABILITY);
 		###
 *
 Beast Boost:
 	Desc: The Pokémon boosts its most proficient stat each time it knocks out a Pokémon.
 	Int: MurderEffect
 	KillWish:
-		murderer.getAttributes().modifyStage(murderer, murderer, 1, murderer.getBestBattleStat(), b, CastSource.ABILITY);
+		murderer.getStages().modifyStage(murderer, murderer, 1, murderer.getBestBattleStat(), b, CastSource.ABILITY);
 		###
 *
 Soul-Heart:
@@ -589,7 +589,7 @@ Soul-Heart:
 	OppStatusReceived:
 		if (statusType == StatusCondition.FAINTED) {
 			ActivePokemon abilify = this.getOtherPokemon(b, victim);
-			abilify.getAttributes().modifyStage(abilify, abilify, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+			abilify.getStages().modifyStage(abilify, abilify, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
 		}
 		###
 *
@@ -651,7 +651,7 @@ Download:
 
 		Stat toRaise = baseDefense < baseSpecialDefense ? Stat.ATTACK : Stat.SP_ATTACK;
 
-		enterer.getAttributes().modifyStage(enterer, enterer, 1, toRaise, b, CastSource.ABILITY);
+		enterer.getStages().modifyStage(enterer, enterer, 1, toRaise, b, CastSource.ABILITY);
 		###
 *
 Pressure:
@@ -716,7 +716,7 @@ Speed Boost:
 	Desc: The Pok\u00e9mon's Speed stat is gradually boosted.
 	Int: EndTurnEffect
 	ApplyEndTurn:
-		victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+		victim.getStages().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
 		###
 *
 Magic Bounce:
@@ -981,7 +981,7 @@ Justified:
 	Int: TakeDamageEffect
 	OnTakeDamage:
 		if (user.isAttackType(Type.DARK)) {
-			victim.getAttributes().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
+			victim.getStages().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
 		}
 		###
 	Desc: Raises Attack when hit by a Dark-type move.
@@ -1091,8 +1091,8 @@ Weak Armor:
 	Int: TakeDamageEffect
 	OnTakeDamage:
 		if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
-			victim.getAttributes().modifyStage(victim, victim, -1, Stat.DEFENSE, b, CastSource.ABILITY);
-			victim.getAttributes().modifyStage(victim, victim, 2, Stat.SPEED, b, CastSource.ABILITY);
+			victim.getStages().modifyStage(victim, victim, -1, Stat.DEFENSE, b, CastSource.ABILITY);
+			victim.getStages().modifyStage(victim, victim, 2, Stat.SPEED, b, CastSource.ABILITY);
 		}
 		###
 *
@@ -1512,7 +1512,7 @@ Stamina:
 	Desc: Boosts the Defense stat when hit by an attack.
 	Int: TakeDamageEffect
 	OnTakeDamage:
-		victim.getAttributes().modifyStage(victim, victim, 1, Stat.DEFENSE, b, CastSource.ABILITY);
+		victim.getStages().modifyStage(victim, victim, 1, Stat.DEFENSE, b, CastSource.ABILITY);
 		###
 *
 Water Compaction:
@@ -1520,7 +1520,7 @@ Water Compaction:
 	Int: TakeDamageEffect
 	OnTakeDamage:
 		if (user.isAttackType(Type.WATER)) {
-			victim.getAttributes().modifyStage(victim, victim, 2, Stat.DEFENSE, b, CastSource.ABILITY);
+			victim.getStages().modifyStage(victim, victim, 2, Stat.DEFENSE, b, CastSource.ABILITY);
 		}
 		###
 *
@@ -1546,7 +1546,7 @@ Steelworker:
 *
 Berserk:
 	Desc: Boosts the Pokémon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.
-	DropBelowHalfHealth: victim.getAttributes().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+	DropBelowHalfHealth: victim.getStages().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
 *
 Wimp Out:
 	Desc: The Pokémon cowardly switches out when its HP becomes half or less.
@@ -1703,7 +1703,7 @@ Tangling Hair:
 	Desc: Contact with the Pokémon lowers the attacker's Speed stat.
 	Int: PhysicalContactEffect
 	Contact:
-		user.getAttributes().modifyStage(victim, user, -1, Stat.SPEED, b, CastSource.ABILITY);
+		user.getStages().modifyStage(victim, user, -1, Stat.SPEED, b, CastSource.ABILITY);
 		###
 *
 Psychic Surge:

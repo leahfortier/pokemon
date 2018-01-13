@@ -542,7 +542,7 @@ class PokemonAnimationState {
         }
 
         public int getStage(int index) {
-            return this.frontPokemon == null ? 0 : this.frontPokemon.getAttributes().getStage(Stat.getStat(index, true));
+            return this.frontPokemon == null ? 0 : this.frontPokemon.getStages().getStage(Stat.getStat(index, true));
         }
 
         public int getLevel() {

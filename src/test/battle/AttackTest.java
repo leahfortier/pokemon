@@ -177,9 +177,9 @@ public class AttackTest extends BaseTest {
         // Non-Ghost type curse -- apply stat changes
         battle.attackingFight(AttackNamesies.CURSE);
         Assert.assertFalse(attacking.isType(battle, Type.GHOST));
-        Assert.assertTrue(attacking.getAttributes().getStage(Stat.ATTACK) == 1);
-        Assert.assertTrue(attacking.getAttributes().getStage(Stat.DEFENSE) == 1);
-        Assert.assertTrue(attacking.getAttributes().getStage(Stat.SPEED) == -1);
+        Assert.assertTrue(attacking.getStages().getStage(Stat.ATTACK) == 1);
+        Assert.assertTrue(attacking.getStages().getStage(Stat.DEFENSE) == 1);
+        Assert.assertTrue(attacking.getStages().getStage(Stat.SPEED) == -1);
         Assert.assertFalse(attacking.hasEffect(EffectNamesies.CURSE));
         Assert.assertFalse(defending.hasEffect(EffectNamesies.CURSE));
 
@@ -191,9 +191,9 @@ public class AttackTest extends BaseTest {
 
         // Make sure stat changes remain the same and target gets curse effect
         battle.attackingFight(AttackNamesies.CURSE);
-        Assert.assertTrue(attacking.getAttributes().getStage(Stat.ATTACK) == 1);
-        Assert.assertTrue(attacking.getAttributes().getStage(Stat.DEFENSE) == 1);
-        Assert.assertTrue(attacking.getAttributes().getStage(Stat.SPEED) == -1);
+        Assert.assertTrue(attacking.getStages().getStage(Stat.ATTACK) == 1);
+        Assert.assertTrue(attacking.getStages().getStage(Stat.DEFENSE) == 1);
+        Assert.assertTrue(attacking.getStages().getStage(Stat.SPEED) == -1);
         Assert.assertFalse(attacking.hasEffect(EffectNamesies.CURSE));
         Assert.assertTrue(defending.hasEffect(EffectNamesies.CURSE));
         attacking.assertHealthRatio(.5);

@@ -864,7 +864,7 @@ BlockType:
 		###
 	AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{11}.getName() + " type moves!"
 	AddMapField: AlternateEffect:
-		victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.ABILITY);
+		victim.getStages().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.ABILITY);
 		###
 *
 AbsorbType:
@@ -998,7 +998,7 @@ MoveUse:
 *
 TypeTakeDamageStatIncrease:
 	AddMapField: OnTakeDamage:
-		if (user.isAttackType(Type.{11}) && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
+		if (user.isAttackType(Type.{11}) && victim.getStages().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
 			victim.consumeItem(b);
 		}
 		###
@@ -1290,7 +1290,7 @@ XStageIncrease:
 	AddInterface: HoldItem
 	AddInterface: BattleUseItem
 	AddMapField: BattleUse:
-		return p.getAttributes().modifyStage(p, p, 1, Stat.{00}, b, CastSource.USE_ITEM);
+		return p.getStages().modifyStage(p, p, 1, Stat.{00}, b, CastSource.USE_ITEM);
 		###
 *
 EVIncrease:
@@ -1360,7 +1360,7 @@ CategoryIncreaseBerry:
 	AddInterface: Berry
 	AddInterface: TakeDamageEffect
 	AddMapField: OnTakeDamage:
-		if (user.getAttack().getCategory() == MoveCategory.{11} && victim.getAttributes().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
+		if (user.getAttack().getCategory() == MoveCategory.{11} && victim.getStages().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
 			victim.consumeItem(b);
 		}
 		###
@@ -1402,7 +1402,7 @@ ForesightEffect:
 ForesightMove:
 	AddMapField: Effect: {0}
 	AddMapField: UniqueEffects:
-		victim.getAttributes().resetStage(Stat.EVASION);
+		victim.getStages().resetStage(Stat.EVASION);
 		###
 	AddMapField: MoveType: Substitute_Piercing
 *
@@ -1455,8 +1455,8 @@ FutureAttackEffect:
 *
 EliminateStatChanges:
 	AddMapField: UniqueEffects:
-		user.getAttributes().resetStages();
-		victim.getAttributes().resetStages();
+		user.getStages().reset();
+		victim.getStages().reset();
 		Messages.add("All stat changes were eliminated!");
 		###
 *
@@ -1466,7 +1466,7 @@ StatSwapMove:
 		###
 	AddMapField: UniqueEffects:
 		for (Stat s : swapStats) {
-			user.getAttributes().swapStages(s, victim);
+			user.getStages().swapStages(s, victim);
 		}
 
 		Messages.add(user.getName() + " swapped its stats with " + victim.getName() + "!");
@@ -1615,7 +1615,7 @@ NormalTypeChanger:
 NextLevel:
 	Header: void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)
 	Body:
-		victim.getAttributes().modifyStage(victim, victim, 2, Stat.{00}, b, CastSource.@SuperClass);
+		victim.getStages().modifyStage(victim, victim, 2, Stat.{00}, b, CastSource.@SuperClass);
 		###
 *
 FlinchItem:
@@ -1752,7 +1752,7 @@ TerrainSeed:
 	AddInterface: ConsumableItem
 	AddInterface: TerrainCastEffect
 	AddMapField: NewTerrain:
-		if (newTerrain == TerrainType.{11} && p.getAttributes().modifyStage(p, p, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
+		if (newTerrain == TerrainType.{11} && p.getStages().modifyStage(p, p, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
 			p.consumeItem(b);
 		}
 		###

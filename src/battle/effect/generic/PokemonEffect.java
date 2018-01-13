@@ -165,7 +165,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (victim.hasAbility(AbilityNamesies.STEADFAST)) {
-                victim.getAttributes().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+                victim.getStages().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
             }
         }
 
@@ -615,7 +615,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
             // Pokemon that make contact with the king's shield have their attack reduced
             if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
-                p.getAttributes().modifyStage(opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT, "The King's Shield {change} " + p.getName() + "'s attack!");
+                p.getStages().modifyStage(opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT, "The King's Shield {change} " + p.getName() + "'s attack!");
             }
         }
 
@@ -2248,7 +2248,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
             // Copy all stages
             for (Stat stat : Stat.BATTLE_STATS) {
-                victim.getAttributes().setStage(stat, transformee.getStage(stat));
+                victim.getStages().setStage(stat, transformee.getStage(stat));
             }
 
             // Copy the type
@@ -2974,7 +2974,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
                 return;
             }
 
-            victim.getAttributes().modifyStage(
+            victim.getStages().modifyStage(
                     victim, victim, 1, Stat.ATTACK, b, CastSource.EFFECT,
                     victim.getName() + "'s Rage increased its attack!"
             );

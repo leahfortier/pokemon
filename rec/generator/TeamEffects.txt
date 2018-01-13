@@ -45,7 +45,7 @@ StickyWeb:
 			return;
 		}
 		
-		enterer.getAttributes().modifyStage(b.getOtherPokemon(enterer), enterer, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + enterer.getName() + "'s {statName}!");
+		enterer.getStages().modifyStage(b.getOtherPokemon(enterer), enterer, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + enterer.getName() + "'s {statName}!");
 		###
 	CastMessage: "Sticky web covers everything!"
 	RapidSpin: "The sticky web spun away!"
