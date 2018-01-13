@@ -330,10 +330,6 @@ public class Button {
     }
 
     public static int update(Button[] buttons, int selected) {
-        if (!buttons[selected].forceHover) {
-            setForceHover(buttons, selected);
-        }
-
         Direction inputDirection = Direction.consumeInputDirection();
         if (inputDirection != null) {
             selected = Button.transition(buttons, selected, inputDirection);
@@ -344,8 +340,18 @@ public class Button {
 
             if (buttons[i].hover) {
                 selected = i;
-                setForceHover(buttons, selected);
             }
+        }
+
+        // Press overrides hover
+        for (int i = 0; i < buttons.length; i++) {
+            if (buttons[i].press) {
+                selected = i;
+            }
+        }
+
+        if (!buttons[selected].forceHover) {
+            setForceHover(buttons, selected);
         }
 
         return selected;
