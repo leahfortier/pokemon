@@ -216,8 +216,9 @@ public abstract class Trainer implements Team, Serializable {
         return curr.canEscape(b);
     }
 
-    public int getSwitchIndex() {
-        return this.switchIndex;
+    public void performSwitch(Battle b) {
+        this.setFront(this.switchIndex);
+        b.enterBattle(this.front());
     }
 
     public void setSwitchIndex(int switchIndex) {
