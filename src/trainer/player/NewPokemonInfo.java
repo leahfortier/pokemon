@@ -1,6 +1,6 @@
 package trainer.player;
 
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 import java.io.Serializable;
 

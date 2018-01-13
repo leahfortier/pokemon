@@ -5,7 +5,7 @@ import battle.effect.generic.Effect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import main.Global;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 import java.io.Serializable;
 import java.util.ArrayList;

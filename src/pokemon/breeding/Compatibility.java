@@ -1,6 +1,6 @@
 package pokemon.breeding;
 
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import util.PokeString;
 import util.RandomUtils;
 import util.StringUtils;

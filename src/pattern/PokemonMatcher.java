@@ -4,7 +4,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import item.ItemNamesies;
 import main.Global;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import util.GeneralUtils;
 import util.StringUtils;

@@ -1,6 +1,6 @@
 package trainer;
 
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import util.SerializationUtils;
 
 public class SimulatedPlayer extends PlayerTrainer {

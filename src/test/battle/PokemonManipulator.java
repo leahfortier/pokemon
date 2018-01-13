@@ -9,7 +9,7 @@ import item.ItemNamesies;
 import item.bag.Bag;
 import main.Game;
 import org.junit.Assert;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 import test.TestPokemon;
 

@@ -3,7 +3,7 @@ package test;
 import battle.attack.AttackNamesies;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.LevelUpMove;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;

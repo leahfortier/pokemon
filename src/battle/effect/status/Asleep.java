@@ -5,7 +5,7 @@ import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 import util.RandomUtils;
 

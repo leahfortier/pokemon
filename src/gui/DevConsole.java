@@ -10,7 +10,7 @@ import main.Game;
 import main.Global;
 import map.area.AreaData;
 import map.overworld.OverworldTool;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import test.maps.TestMap;
 import trainer.player.Player;

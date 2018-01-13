@@ -1,7 +1,7 @@
 package trainer.player;
 
 import main.Game;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import trainer.Trainer;
 import util.GeneralUtils;
 import util.RandomUtils;

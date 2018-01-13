@@ -1,7 +1,7 @@
 package trainer;
 
 import main.Global;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 public class EnemyTrainer extends Trainer implements Opponent {
     private static final long serialVersionUID = 1L;

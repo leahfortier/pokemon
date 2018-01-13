@@ -14,7 +14,7 @@ import main.Game;
 import main.Global;
 import message.Messages;
 import pattern.TradePokemonMatcher;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonInfo;
 import trainer.Trainer;
 import trainer.player.Player;

@@ -1,6 +1,6 @@
 package battle.effect.status;
 
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 public class BadlyPoisoned extends Poisoned {
     private int turns;

@@ -6,7 +6,7 @@ import map.overworld.WildEncounter;
 import mapMaker.dialogs.TimeOfDayPanel;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleMatcher;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import util.GUIUtils;
 import util.GeneralUtils;
 

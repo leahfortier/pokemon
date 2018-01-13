@@ -6,7 +6,7 @@ import item.hold.HoldItem;
 import item.use.PokemonUseItem;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 public interface HpHealer extends MessageGetter, PokemonUseItem, HoldItem {
     int getAmountHealed(ActivePokemon p);

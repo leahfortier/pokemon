@@ -35,7 +35,6 @@ import message.MessageUpdateType;
 import message.Messages;
 import message.Messages.MessageState;
 import pattern.action.UpdateMatcher;
-import pokemon.ActivePokemon;
 import pokemon.Stat;
 import trainer.EnemyTrainer;
 import trainer.Opponent;

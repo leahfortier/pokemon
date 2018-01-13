@@ -6,7 +6,7 @@ import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;

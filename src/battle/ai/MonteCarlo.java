@@ -5,7 +5,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import message.Messages;
 import message.Messages.MessageState;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import trainer.Opponent;
 import trainer.Trainer;
 import trainer.TrainerAction;

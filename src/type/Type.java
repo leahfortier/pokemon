@@ -1,7 +1,7 @@
 package type;
 
 import main.Global;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonInfo;
 import util.FileIO;
 import util.Folder;

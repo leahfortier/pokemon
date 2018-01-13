@@ -2,7 +2,7 @@ package item.use;
 
 import battle.Battle;
 import battle.attack.Move;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 public interface PlayerUseItem extends UseItem {
     boolean use();

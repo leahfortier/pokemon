@@ -3,7 +3,7 @@ package mapMaker.dialogs.action.trigger;
 import battle.attack.AttackNamesies;
 import item.ItemNamesies;
 import pattern.PokemonMatcher;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GUIUtils;

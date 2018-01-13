@@ -1,6 +1,6 @@
 package battle.effect.attack;
 
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 import util.RandomUtils;
 

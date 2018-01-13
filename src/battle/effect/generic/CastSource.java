@@ -3,7 +3,7 @@ package battle.effect.generic;
 import battle.Battle;
 import item.Item;
 import main.Global;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.ability.Ability;
 
 public enum CastSource {

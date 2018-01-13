@@ -3,7 +3,7 @@ package item.use;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import main.Global;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 import java.util.List;
 

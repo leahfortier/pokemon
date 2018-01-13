@@ -3,7 +3,7 @@ package trainer.player;
 import gui.view.ViewMode;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.evolution.BaseEvolution;
 
 import java.io.Serializable;

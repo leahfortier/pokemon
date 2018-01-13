@@ -13,7 +13,7 @@ import main.Game;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import trainer.player.Player;
 
 import java.io.Serializable;

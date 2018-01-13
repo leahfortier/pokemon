@@ -3,7 +3,7 @@ package map.overworld;
 import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
 import battle.effect.generic.EffectInterfaces.WildEncounterSelector;
 import main.Game;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import trainer.WildPokemon;
 import util.GeneralUtils;

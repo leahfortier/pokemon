@@ -3,7 +3,7 @@ package item.berry;
 import battle.Battle;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 
 public interface HealthTriggeredBerry extends GainableEffectBerry, DamageTakenEffect {

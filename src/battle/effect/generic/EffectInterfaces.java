@@ -12,7 +12,7 @@ import map.overworld.TerrainType;
 import map.overworld.WildEncounter;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import pokemon.ability.Ability;

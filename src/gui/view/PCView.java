@@ -13,7 +13,7 @@ import gui.TileSet;
 import input.InputControl;
 import main.Game;
 import map.Direction;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Stat;
 import trainer.Trainer;
 import trainer.player.PC;

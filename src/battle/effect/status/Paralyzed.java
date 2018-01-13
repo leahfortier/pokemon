@@ -4,7 +4,7 @@ import battle.Battle;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.StatModifyingEffect;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import type.Type;

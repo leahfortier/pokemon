@@ -16,7 +16,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import trainer.Trainer;

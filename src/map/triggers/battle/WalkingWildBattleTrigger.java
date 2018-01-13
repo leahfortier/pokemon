@@ -10,7 +10,7 @@ import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.map.WildBattleMatcher;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import trainer.player.Player;
 import util.RandomUtils;

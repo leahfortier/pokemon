@@ -3,7 +3,7 @@ package pokemon.evolution;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import item.ItemNamesies;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 class MoveEvolution extends BaseEvolution {
     private static final long serialVersionUID = 1L;

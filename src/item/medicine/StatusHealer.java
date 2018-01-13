@@ -5,7 +5,7 @@ import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.hold.HoldItem;
 import item.use.PokemonUseItem;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 public interface StatusHealer extends HoldItem, PokemonUseItem {
     boolean shouldHeal(StatusCondition statusCondition);

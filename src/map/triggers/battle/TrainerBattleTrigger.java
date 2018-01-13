@@ -8,7 +8,7 @@ import map.triggers.TriggerType;
 import pattern.PokemonMatcher;
 import pattern.action.BattleMatcher;
 import pattern.action.UpdateMatcher;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import trainer.EnemyTrainer;
 import util.RandomUtils;
 import util.SerializationUtils;

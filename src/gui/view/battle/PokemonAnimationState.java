@@ -12,7 +12,7 @@ import gui.TileSet;
 import main.Game;
 import main.Global;
 import message.MessageUpdate;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.Stat;

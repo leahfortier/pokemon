@@ -180,7 +180,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         return baseStats[index];
     }
 
-    GrowthRate getGrowthRate() {
+    public GrowthRate getGrowthRate() {
         return growthRate;
     }
 
@@ -476,7 +476,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         }
     }
 
-    static PokemonNamesies getRandomStarterPokemon() {
+    public static PokemonNamesies getRandomStarterPokemon() {
         return RandomUtils.getRandomValue(starterPokemon);
     }
 

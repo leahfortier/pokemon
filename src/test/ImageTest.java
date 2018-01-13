@@ -11,7 +11,7 @@ import item.bag.BagCategory;
 import map.overworld.TerrainType;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonInfo;
 import trainer.player.medal.Medal;
 import type.Type;

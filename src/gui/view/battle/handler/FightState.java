@@ -7,7 +7,7 @@ import draw.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import trainer.TrainerAction;
 import trainer.player.Player;
 import util.StringUtils;

@@ -19,7 +19,7 @@ import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import util.StringUtils;
 
 import java.awt.Color;

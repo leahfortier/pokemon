@@ -2,7 +2,7 @@ package pokemon.evolution;
 
 import item.ItemNamesies;
 import main.Game;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import type.Type;
 

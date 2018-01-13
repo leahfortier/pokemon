@@ -6,7 +6,7 @@ import item.hold.HoldItem;
 import item.use.BattleUseItem;
 import item.use.PokemonUseItem;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 import java.util.List;
 

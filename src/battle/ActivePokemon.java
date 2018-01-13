@@ -1,8 +1,5 @@
-package pokemon;
+package battle;
 
-import battle.Battle;
-import battle.BattleAttributes;
-import battle.Stages;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -44,6 +41,12 @@ import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
 import pattern.PokemonMatcher;
+import pokemon.Gender;
+import pokemon.LevelUpMove;
+import pokemon.Nature;
+import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
+import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.Breeding;

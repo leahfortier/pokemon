@@ -12,7 +12,7 @@ import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
 import map.Direction;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Stat;
 import trainer.Trainer;
 import trainer.TrainerAction;

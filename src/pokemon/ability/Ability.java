@@ -88,7 +88,7 @@ import map.overworld.WildEncounter;
 import map.weather.WeatherState;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;

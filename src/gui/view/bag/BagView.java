@@ -29,7 +29,7 @@ import map.Direction;
 import message.MessageUpdate;
 import message.Messages;
 import message.Messages.MessageState;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import trainer.Trainer;
 import trainer.player.Player;
 import type.Type;

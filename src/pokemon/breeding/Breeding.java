@@ -6,7 +6,7 @@ import item.Item;
 import item.ItemNamesies;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.Nature;
 import pokemon.PokemonInfo;

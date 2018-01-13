@@ -1,7 +1,7 @@
 package battle.effect.status;
 
 import battle.Battle;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import util.StringUtils;
 
 class NoStatus extends Status {

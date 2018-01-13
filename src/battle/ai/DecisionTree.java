@@ -4,7 +4,7 @@ import battle.Battle;
 import battle.attack.Move;
 import message.Messages;
 import message.Messages.MessageState;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import trainer.PlayerTrainer;
 import trainer.SimulatedPlayer;
 import trainer.Trainer;

@@ -3,7 +3,7 @@ package pokemon.breeding;
 import main.Game;
 import main.Global;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import trainer.player.Player;
 import trainer.player.medal.MedalTheme;
 import util.PokeString;

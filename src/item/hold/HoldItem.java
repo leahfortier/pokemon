@@ -2,7 +2,7 @@ package item.hold;
 
 import battle.Battle;
 import item.ItemInterface;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 public interface HoldItem extends ItemInterface {
     default int flingDamage() {

@@ -58,7 +58,7 @@ import item.ItemNamesies;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.Stat;
 import pokemon.ability.Ability;

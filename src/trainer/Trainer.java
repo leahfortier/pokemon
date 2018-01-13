@@ -7,7 +7,7 @@ import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import item.bag.Bag;
 import main.Global;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import util.RandomUtils;
 
 import java.io.Serializable;

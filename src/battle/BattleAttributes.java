@@ -5,7 +5,6 @@ import battle.attack.MoveType;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
-import pokemon.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 
 import java.io.Serializable;
