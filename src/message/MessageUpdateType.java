@@ -62,6 +62,7 @@ public enum MessageUpdateType {
         Game.getPlayer().getEntity().resetCurrentInteractionEntity();
 
         Game.getPlayer().checkEvolution();
+        Game.getPlayer().exitBattle();
     }
 
     @FunctionalInterface

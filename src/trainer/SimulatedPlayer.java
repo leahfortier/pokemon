@@ -12,6 +12,7 @@ public class SimulatedPlayer extends PlayerTrainer {
         }
 
         this.setFront(player.getFrontIndex());
+        this.setInBattle();
     }
 
     @Override

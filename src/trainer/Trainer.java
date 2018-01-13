@@ -31,6 +31,8 @@ public abstract class Trainer implements Team, Serializable {
     private int frontIndex;
     private int switchIndex;
 
+    private boolean inBattle;
+
 //    protected boolean isBeTryingToSwitchRunOrUseItem;
 //    protected boolean isBTTSROUI;
 
@@ -49,6 +51,10 @@ public abstract class Trainer implements Team, Serializable {
 
     @Override
     public ActivePokemon front() {
+        if (!inBattle) {
+            this.setFront();
+        }
+
         return (ActivePokemon)team.get(frontIndex);
     }
 
@@ -92,7 +98,9 @@ public abstract class Trainer implements Team, Serializable {
         }
 
         // Apply any effects that take place when switching out
-        SwitchOutEffect.invokeSwitchOutEffect(front());
+        if (inBattle) {
+            SwitchOutEffect.invokeSwitchOutEffect(front());
+        }
 
         frontIndex = index;
     }
@@ -113,6 +121,15 @@ public abstract class Trainer implements Team, Serializable {
     public void enterBattle() {
         team.forEach(PartyPokemon::resetAttributes);
         setFront();
+        inBattle = true;
+    }
+
+    public void exitBattle() {
+        inBattle = false;
+    }
+
+    protected void setInBattle() {
+        inBattle = true;
     }
 
     @Override

@@ -78,6 +78,7 @@ public class DecisionTree {
     }
 
     private Battle simulateTurn(Battle b, Move opponentMove, Move playerMove) {
+        // TODO: Why can't we just do simulated.setPlayer(new SimulatedPlayer(b.getPlayer())??
         // Mock the player object for serialization and set back afterwards
         PlayerTrainer playerTrainer = b.getPlayer();
         b.setPlayer(new SimulatedPlayer(b.getPlayer()));

@@ -163,6 +163,7 @@ public class Move implements Serializable {
             }
         }
 
+        // TODO: Why just the player
         if (p.isPlayer() && getUsableMoves(b, p).size() == 0) {
             p.setMove(b, new Move(AttackNamesies.STRUGGLE));
             return true;
