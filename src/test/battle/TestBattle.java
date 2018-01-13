@@ -80,7 +80,8 @@ public class TestBattle extends Battle {
         attacking.setupMove(attackingMove, this);
         defending.setupMove(defendingMove, this);
 
-        super.fight(attacking, defending);
+        // Player always goes first in tests
+        super.fight(true);
     }
 
     void attackingFight(AttackNamesies attackNamesies) {

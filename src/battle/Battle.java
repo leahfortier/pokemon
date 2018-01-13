@@ -191,22 +191,16 @@ public class Battle implements Serializable {
     public void fight() {
         startTurn();
 
-        boolean playerFirst = speedPriority(player.front(), opponent.front());
-        if (playerFirst) {
-            fight(player.front(), opponent.front());
-        } else {
-            fight(opponent.front(), player.front());
-        }
+        boolean playerFirst = speedPriority();
+        fight(playerFirst);
     }
 
-    protected void fight(ActivePokemon attackFirst, ActivePokemon attackSecond) {
+    protected void fight(boolean playerFirst) {
         // First turn
-        firstAttacking = true;
-        executionSolution(attackFirst, attackSecond);
+        executionSolution(true, playerFirst);
 
         // Second turn
-        firstAttacking = false;
-        executionSolution(attackSecond, attackFirst);
+        executionSolution(false, playerFirst);
 
         endTurn();
 
@@ -502,7 +496,12 @@ public class Battle implements Serializable {
         return p == getTrainer(p).front();
     }
 
-    private void executionSolution(ActivePokemon me, ActivePokemon o) {
+    private void executionSolution(boolean firstAttacking, boolean playerFirst) {
+        this.firstAttacking = firstAttacking;
+
+        ActivePokemon me = firstAttacking == playerFirst ? player.front() : opponent.front();
+        ActivePokemon o = this.getOtherPokemon(me);
+
         if (isSwitching(me.isPlayer())) {
             Trainer trainer = (Trainer)getTrainer(me);
             trainer.performSwitch(this);
@@ -758,7 +757,9 @@ public class Battle implements Serializable {
     }
 
     // Returns true if the player will be attacking first, and false if the opponent will be
-    private boolean speedPriority(ActivePokemon plyr, ActivePokemon opp) {
+    private boolean speedPriority() {
+        ActivePokemon plyr = player.front();
+        ActivePokemon opp = opponent.front();
 
         // Higher priority always goes first
         int pPriority = getPriority(plyr);
