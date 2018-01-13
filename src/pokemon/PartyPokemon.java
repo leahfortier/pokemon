@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.status.Status;
+import battle.effect.status.StatusCondition;
 import draw.DrawUtils;
 import item.Item;
 import item.ItemNamesies;
@@ -13,6 +14,7 @@ import main.Global;
 import pattern.PokemonMatcher;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import pokemon.breeding.Eggy;
 import trainer.player.medal.Medal;
 import trainer.player.medal.MedalCase;
 import trainer.player.medal.MedalTheme;
@@ -30,10 +32,6 @@ public abstract class PartyPokemon implements Serializable {
 
     public static final int MAX_LEVEL = 100;
     public static final int MAX_NAME_LENGTH = 10;
-
-    public static final String TINY_EGG_IMAGE_NAME = "egg-small";
-    public static final String BASE_EGG_IMAGE_NAME = "egg";
-    public static final String SPRITE_EGG_IMAGE_NAME = "EggSprite";
 
     private static final String[][] characteristics =
         {{"Loves to eat",            "Proud of its power",      "Sturdy body",            "Highly curious",        "Strong willed",     "Likes to run"},
@@ -59,8 +57,6 @@ public abstract class PartyPokemon implements Serializable {
     protected Nature nature;
     protected String characteristic;
     protected boolean shiny;
-    protected boolean isEgg;
-    protected int eggSteps;
 
     // General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
     protected PartyPokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer) {
@@ -84,9 +80,6 @@ public abstract class PartyPokemon implements Serializable {
 
         this.heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();
 
-        this.isEgg = false;
-        this.eggSteps = 0;
-
         this.totalEXP = pokemon.getGrowthRate().getEXP(this.level);
         this.totalEXP += RandomUtils.getRandomInt(expToNextLevel());
 
@@ -94,15 +87,26 @@ public abstract class PartyPokemon implements Serializable {
         this.resetAttributes();
     }
 
+    // TODO: FILL THIS IN!!
+    protected PartyPokemon(Eggy eggy) {
+
+    }
+
     public abstract boolean canFight();
 
     // TODO: Deal with this later
-    public abstract void fullyHeal();
     public abstract void resetAttributes();
     public abstract void setUsed(boolean used);
     public abstract boolean isUsed();
     public abstract boolean isBattleUsed();
     public abstract boolean checkEvolution();
+
+    // Removes status, restores PP for all moves, restores to full health
+    public void fullyHeal() {
+        removeStatus();
+        getActualMoves().forEach(Move::resetPP);
+        healHealthFraction(1);
+    }
 
     public PokemonInfo getPokemonInfo() {
         return pokemon.getInfo();
@@ -190,12 +194,7 @@ public abstract class PartyPokemon implements Serializable {
         shiny = true;
     }
 
-    // TODO: Override for Eggy
     public String getGenderString() {
-        if (this.isEgg()) {
-            return StringUtils.empty();
-        }
-
         return this.getGender().getCharacter();
     }
 
@@ -240,8 +239,26 @@ public abstract class PartyPokemon implements Serializable {
         this.setStats();
     }
 
+    // Returns whether or not the Pokemon is afflicted with a status condition
+    public boolean hasStatus() {
+        return !this.hasStatus(StatusCondition.NO_STATUS);
+    }
+
+    public boolean hasStatus(StatusCondition type) {
+        return status.isType(type);
+    }
+
     public Status getStatus() {
         return status;
+    }
+
+    public void setStatus(Status s) {
+        status = s;
+    }
+
+    // Sets the Pokemon's status condition to be None
+    public void removeStatus() {
+        Status.removeStatus(this);
     }
 
     public Ability getActualAbility() {
@@ -252,9 +269,8 @@ public abstract class PartyPokemon implements Serializable {
         this.ability = ability.getNewAbility();
     }
 
-    // TODO: Abstract
     public boolean canBreed() {
-        return !isEgg && this.getPokemonInfo().canBreed();
+        return this.getPokemonInfo().canBreed();
     }
 
     public int getMaxHP() {
@@ -279,6 +295,24 @@ public abstract class PartyPokemon implements Serializable {
 
     public Color getHPColor() {
         return DrawUtils.getHPColor(getHPRatio());
+    }
+
+    // Restores hp by amount, returns the actual amount of hp that was restored
+    public int heal(int amount) {
+
+        // Dead Pokemon can't heal
+        if (hasStatus(StatusCondition.FAINTED)) {
+            return 0;
+        }
+
+        int prev = hp;
+        setHP(hp + amount);
+        return hp - prev;
+    }
+
+    // Restores the amount of health that corresponds to fraction of the pokemon's total health and returns this amount
+    public int healHealthFraction(double fraction) {
+        return heal((int)Math.max(getMaxHP()*fraction, 1));
     }
 
     public String getActualName() {
@@ -341,12 +375,12 @@ public abstract class PartyPokemon implements Serializable {
 
     // Does not include shiny -- this is for the small party tiles
     public String getTinyImageName() {
-        return this.isEgg ? TINY_EGG_IMAGE_NAME : this.getPokemonInfo().getTinyImageName();
+        return this.getPokemonInfo().getTinyImageName();
     }
 
-    // Does not include shiny -- this is for the small party tiles
+    // Does not include shiny -- this is for the pokedex tiles (in new pokemon view)
     public String getBaseImageName() {
-        return this.isEgg ? BASE_EGG_IMAGE_NAME : this.getPokemonInfo().getBaseImageName();
+        return this.getPokemonInfo().getBaseImageName();
     }
 
     public String getImageName() {
@@ -355,42 +389,11 @@ public abstract class PartyPokemon implements Serializable {
 
     // Larger image index
     public String getImageName(boolean front) {
-        return this.isEgg() ? SPRITE_EGG_IMAGE_NAME : this.getPokemonInfo().getImageName(this.isShiny(), front);
+        return this.getPokemonInfo().getImageName(this.isShiny(), front);
     }
 
     public boolean isEgg() {
-        return isEgg;
-    }
-
-    public boolean hatch() {
-        if (!isEgg()) {
-            Global.error("Only eggs can hatch!");
-        }
-
-        eggSteps--;
-
-        if (eggSteps > 0) {
-            return false;
-        }
-
-        this.isEgg = false;
-        this.nickname = pokemon.getName();
-
-        return true;
-    }
-
-    public String getEggMessage() {
-        if (!isEgg()) {
-            Global.error("Only Eggs can have egg messages.");
-        }
-
-        if (eggSteps > 10*255) {
-            return "Wonder what's inside? It needs more time though.";
-        } else if (eggSteps > 5*255) {
-            return "It moves around inside sometimes. It must be close to hatching.";
-        } else {
-            return "It's making sounds inside! It's going to hatch soon!";
-        }
+        return false;
     }
 
     // Returns the moves this Pokemon could have learned up to its current level
@@ -488,16 +491,8 @@ public abstract class PartyPokemon implements Serializable {
         return (Item)heldItem;
     }
 
-    /*
-         * Format: Name Level Parameters
-         * Possible parameters:
-         *         Moves: Move1, Move2, Move3, Move4*
-         *         Shiny
-         *         Egg
-         *         Item: item name*
-         */
     // Constructor for triggers
-    public static ActivePokemon createActivePokemon(PokemonMatcher pokemonMatcher, boolean user) {
+    public static PartyPokemon createActivePokemon(PokemonMatcher pokemonMatcher, boolean user) {
 
         // Random Starter Egg
         if (pokemonMatcher.isStarterEgg()) {
@@ -505,18 +500,18 @@ public abstract class PartyPokemon implements Serializable {
                 Global.error("Trainers cannot have eggs.");
             }
 
-            return new ActivePokemon(PokemonInfo.getRandomStarterPokemon());
+            return new Eggy(PokemonInfo.getRandomStarterPokemon());
         }
 
         final PokemonNamesies namesies = pokemonMatcher.getNamesies();
 
-        ActivePokemon pokemon;
+        PartyPokemon pokemon;
         if (pokemonMatcher.isEgg()) {
             if (!user) {
                 Global.error("Trainers cannot have eggs.");
             }
 
-            pokemon = new ActivePokemon(namesies);
+            pokemon = new Eggy(namesies);
         } else {
             pokemon = new ActivePokemon(namesies, pokemonMatcher.getLevel(), false, user);
             String nickname = pokemonMatcher.getNickname();

@@ -31,14 +31,14 @@ public class Breeding {
 
     private Breeding() {}
 
-    public ActivePokemon breed(ActivePokemon aPokes, ActivePokemon bPokes) {
+    public Eggy breed(ActivePokemon aPokes, ActivePokemon bPokes) {
         if (!canBreed(aPokes, bPokes)) {
             return null;
         }
 
         ActivePokemon mommy = getMommy(aPokes, bPokes);
         ActivePokemon daddy = aPokes == mommy ? bPokes : aPokes;
-        ActivePokemon baby = new ActivePokemon(daddy, mommy, getBabyInfo(daddy, mommy).namesies());
+        Eggy baby = new Eggy(daddy, mommy, getBabyInfo(daddy, mommy).namesies());
         return baby;
     }
 

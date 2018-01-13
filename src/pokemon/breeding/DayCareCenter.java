@@ -17,7 +17,7 @@ public class DayCareCenter implements Serializable {
     private ActivePokemon second;
 
     private Compatibility compatibility;
-    private ActivePokemon eggy;
+    private Eggy eggy;
     private int steps;
 
     public DayCareCenter() {

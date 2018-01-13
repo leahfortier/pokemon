@@ -1,5 +1,6 @@
 package trainer.player;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
@@ -22,10 +23,10 @@ import message.MessageUpdateType;
 import message.Messages;
 import pattern.SimpleMapTransition;
 import pattern.action.UpdateMatcher;
-import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.DayCareCenter;
+import pokemon.breeding.Eggy;
 import trainer.Opponent;
 import trainer.PlayerTrainer;
 import trainer.Trainer;
@@ -249,13 +250,16 @@ public class Player extends PlayerTrainer implements Serializable {
         // Hatch eggs
         boolean doubleHatch = front().hasAbility(AbilityNamesies.FLAME_BODY) || front().hasAbility(AbilityNamesies.MAGMA_ARMOR);
         for (PartyPokemon p : team) {
-            if (p.isEgg() && (p.hatch() || (doubleHatch && p.hatch()))) {
-                // TODO: Fix this cast later!!!
-                this.evolutionInfo.setEgg((ActivePokemon)p);
-                Messages.add(new MessageUpdate().withTrigger(TriggerType.GROUP.getTriggerNameFromSuffix("EggHatching")));
+            if (p.isEgg()) {
+                Eggy eggy = (Eggy)p;
+                ActivePokemon hatched = eggy.hatch(doubleHatch);
+                if (hatched != null) {
+                    this.evolutionInfo.setEgg(hatched);
+                    Messages.add(new MessageUpdate().withTrigger(TriggerType.GROUP.getTriggerNameFromSuffix("EggHatching")));
 
-                // Only one hatch per step
-                break;
+                    // Only one hatch per step
+                    break;
+                }
             }
         }
     }

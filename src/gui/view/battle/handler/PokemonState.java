@@ -15,6 +15,7 @@ import map.Direction;
 import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import pokemon.Stat;
+import pokemon.breeding.Eggy;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.player.Player;
@@ -212,7 +213,7 @@ public class PokemonState implements VisualStateHandler {
         if (selectedPkm.isEgg()) {
             // Description
             FontMetrics.setFont(g, 14);
-            TextUtils.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
+            TextUtils.drawWrappedText(g, ((Eggy)selectedPkm).getEggMessage(), 62, 288, 306);
         } else {
             // Status Condition
             String statusStr = selectedPkm.getStatus().getType().getName();

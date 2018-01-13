@@ -47,7 +47,7 @@ import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
-import pokemon.breeding.Breeding;
+import pokemon.breeding.Eggy;
 import pokemon.evolution.BaseEvolution;
 import pokemon.evolution.EvolutionMethod;
 import sound.SoundTitle;
@@ -86,22 +86,8 @@ public class ActivePokemon extends PartyPokemon {
         super(pokemonNamesies, level, isWild, isPlayer);
     }
 
-    // Constructor for Eggs
-    public ActivePokemon(PokemonNamesies pokemonNamesies) {
-        this(pokemonNamesies, 1, false, true);
-
-        this.isEgg = true;
-        this.eggSteps = this.getPokemonInfo().getEggSteps();
-        this.nickname = "Egg";
-    }
-
-    public ActivePokemon(ActivePokemon daddy, ActivePokemon mommy, PokemonNamesies pokemonNamesies) {
-        this(pokemonNamesies);
-
-        Breeding breeding = Breeding.instance();
-        moves = breeding.getBabyMoves(daddy, mommy, pokemonNamesies);
-        this.setNature(breeding.getBabyNature(daddy, mommy));
-        this.setIVs(breeding.getBabyIVs(daddy, mommy));
+    public ActivePokemon(Eggy eggy) {
+        super(eggy);
     }
 
     public Type computeHiddenPowerType() {
@@ -219,6 +205,7 @@ public class ActivePokemon extends PartyPokemon {
         return true;
     }
 
+    @Override
     public boolean checkEvolution() {
         return this.checkEvolution(EvolutionMethod.LEVEL) || this.checkEvolution(EvolutionMethod.MOVE);
     }
@@ -471,9 +458,9 @@ public class ActivePokemon extends PartyPokemon {
         return this.hasEffect(EffectNamesies.BREAKS_THE_MOLD);
     }
 
-    // TODO: Remove isEgg once that's a thing
+    @Override
     public boolean canFight() {
-        return !hasStatus(StatusCondition.FAINTED) && !isEgg();
+        return !hasStatus(StatusCondition.FAINTED);
     }
 
     // Returns if the Pokemon is stalling -- that is that it will move last within its priority bracket
@@ -551,6 +538,7 @@ public class ActivePokemon extends PartyPokemon {
         return getActualName();
     }
 
+    @Override
     public void resetAttributes() {
         moves.forEach(Move::resetReady);
         ability = ability.namesies().getNewAbility();
@@ -645,24 +633,6 @@ public class ActivePokemon extends PartyPokemon {
         return list;
     }
 
-    public void setStatus(Status s) {
-        status = s;
-    }
-
-    // Returns whether or not the Pokemon is afflicted with a status condition
-    public boolean hasStatus() {
-        return !this.hasStatus(StatusCondition.NO_STATUS);
-    }
-
-    public boolean hasStatus(StatusCondition type) {
-        return status.isType(type);
-    }
-
-    // Sets the Pokemon's status condition to be None
-    public void removeStatus() {
-        Status.removeStatus(this);
-    }
-
     // Don't think you'll make it out alive
     public void killKillKillMurderMurderMurder(Battle b) {
         reduceHealth(b, this.hp, false);
@@ -715,31 +685,6 @@ public class ActivePokemon extends PartyPokemon {
     // Reduces the amount of health that corresponds to fraction of the pokemon's total health and returns this amount
     public int reduceHealthFraction(Battle b, double fraction) {
         return reduceHealth(b, (int)Math.max(stats[Stat.HP.index()]*fraction, 1));
-    }
-
-    // Restores hp by amount, returns the actual amount of hp that was restored
-    public int heal(int amount) {
-
-        // Dead Pokemon can't heal
-        if (hasStatus(StatusCondition.FAINTED)) {
-            return 0;
-        }
-
-        int prev = hp;
-        setHP(hp + amount);
-        return hp - prev;
-    }
-
-    // Restores the amount of health that corresponds to fraction of the pokemon's total health and returns this amount
-    public int healHealthFraction(double fraction) {
-        return heal((int)Math.max(getMaxHP()*fraction, 1));
-    }
-
-    // Removes status, restores PP for all moves, restores to full health
-    public void fullyHeal() {
-        removeStatus();
-        getActualMoves().forEach(Move::resetPP);
-        healHealthFraction(1);
     }
 
     public Stat getBestBattleStat() {
@@ -894,10 +839,12 @@ public class ActivePokemon extends PartyPokemon {
         return this.lastMoveSucceeded;
     }
 
+    @Override
     public boolean isUsed() {
         return used;
     }
 
+    @Override
     public void setUsed(boolean u) {
         used = u;
         if (used) {
@@ -905,6 +852,7 @@ public class ActivePokemon extends PartyPokemon {
         }
     }
 
+    @Override
     public boolean isBattleUsed() {
         return this.battleUsed;
     }

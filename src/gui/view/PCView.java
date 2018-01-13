@@ -15,6 +15,7 @@ import main.Game;
 import map.Direction;
 import pokemon.PartyPokemon;
 import pokemon.Stat;
+import pokemon.breeding.Eggy;
 import trainer.Trainer;
 import trainer.player.PC;
 import trainer.player.Player;
@@ -344,7 +345,7 @@ class PCView extends View {
 
         if (selected.isEgg()) {
             FontMetrics.setFont(g, 16);
-            TextUtils.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
+            TextUtils.drawWrappedText(g, ((Eggy)selected).getEggMessage(), 427, 179, 740 - 427);
         } else {
             TextUtils.drawRightAlignedString(g, "Lv" + selected.getLevel(), 740, 82);
             g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 541, 110);

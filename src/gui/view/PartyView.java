@@ -19,6 +19,7 @@ import main.Global;
 import pokemon.PartyPokemon;
 import pokemon.Stat;
 import pokemon.ability.Ability;
+import pokemon.breeding.Eggy;
 import trainer.Trainer;
 import trainer.player.Player;
 import type.Type;
@@ -378,7 +379,7 @@ class PartyView extends View {
             // Description
             TextUtils.drawWrappedText(
                     g,
-                    selectedPkm.getEggMessage(),
+                    ((Eggy)selectedPkm).getEggMessage(),
                     basicInformationPanel.x + inset,
                     topLineY + inset + FontMetrics.getTextHeight(g),
                     basicInformationPanel.width - 2*inset

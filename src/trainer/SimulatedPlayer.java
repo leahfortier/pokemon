@@ -1,6 +1,5 @@
 package trainer;
 
-import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import util.SerializationUtils;
 
@@ -9,7 +8,7 @@ public class SimulatedPlayer extends PlayerTrainer {
         super(player.getName(), player.getDatCashMoney());
 
         for (PartyPokemon poke : player.getTeam()) {
-            this.addPokemon((ActivePokemon)SerializationUtils.getSerializedCopy(poke));
+            this.addPokemon((PartyPokemon)SerializationUtils.getSerializedCopy(poke));
         }
 
         this.setFront(player.getFrontIndex());

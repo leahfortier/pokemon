@@ -19,6 +19,7 @@ import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import pokemon.Stat;
 import pokemon.breeding.DayCareCenter;
+import pokemon.breeding.Eggy;
 import trainer.Trainer;
 import trainer.player.Player;
 import type.Type;
@@ -306,7 +307,7 @@ class DayCareView extends View {
 
         if (selected.isEgg()) {
             FontMetrics.setFont(g, 16);
-            TextUtils.drawWrappedText(g, selected.getEggMessage(), 427, 179, 740 - 427);
+            TextUtils.drawWrappedText(g, ((Eggy)selected).getEggMessage(), 427, 179, 740 - 427);
         } else {
             TextUtils.drawRightAlignedString(g, "Lv" + selected.getLevel(), 740, 82);
             g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 541, 110);

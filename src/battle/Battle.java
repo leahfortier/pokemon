@@ -403,8 +403,8 @@ public class Battle implements Serializable {
     }
 
     public void enterBattle(ActivePokemon enterer, String enterMessage) {
-        if (enterer.isEgg()) {
-            Global.error("Eggs can't battle!!!");
+        if (!enterer.canFight()) {
+            Global.error(enterer.getName() + " cannot fight!!!!");
         }
 
         // Document sighting in the Pokedex

@@ -11,8 +11,8 @@ import item.bag.BagCategory;
 import map.overworld.TerrainType;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
+import pokemon.breeding.Eggy;
 import trainer.player.medal.Medal;
 import type.Type;
 import util.FileIO;
@@ -34,9 +34,9 @@ public class ImageTest extends BaseTest {
             checkExists(num, "-shiny-back", Folder.POKEMON_TILES, false);
         }
 
-        checkExists(Folder.PARTY_TILES, PartyPokemon.TINY_EGG_IMAGE_NAME, true);
-        checkExists(Folder.POKEDEX_TILES, PartyPokemon.BASE_EGG_IMAGE_NAME, true);
-        checkExists(Folder.POKEMON_TILES, PartyPokemon.SPRITE_EGG_IMAGE_NAME, true);
+        checkExists(Folder.PARTY_TILES, Eggy.TINY_EGG_IMAGE_NAME, true);
+        checkExists(Folder.POKEDEX_TILES, Eggy.BASE_EGG_IMAGE_NAME, true);
+        checkExists(Folder.POKEMON_TILES, Eggy.SPRITE_EGG_IMAGE_NAME, true);
         checkExists(Folder.POKEMON_TILES, "substitute", true);
         checkExists(Folder.POKEMON_TILES, "substitute-back", true);
 
