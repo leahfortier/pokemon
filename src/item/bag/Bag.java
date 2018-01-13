@@ -56,7 +56,6 @@ public class Bag implements Serializable {
         }
 
         ItemNamesies item = p.getActualHeldItem().namesies();
-        System.out.println("Holding item: " + item.getName());
         if (item != ItemNamesies.NO_ITEM) {
             addItem(item);
             p.removeItem();

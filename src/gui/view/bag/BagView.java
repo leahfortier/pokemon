@@ -595,7 +595,7 @@ public class BagView extends View {
             buttons[USE].setActive(false);
         } else {
             Item selectedItemValue = selectedItem.getItem();
-            buttons[GIVE].setActive(selectedItemValue.isUsable());
+            buttons[GIVE].setActive(selectedItemValue.isHoldable());
             buttons[USE].setActive(selectedItemValue.isUsable());
         }
     }
