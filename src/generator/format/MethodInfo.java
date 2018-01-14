@@ -148,31 +148,21 @@ public class MethodInfo {
         return method.toString();
     }
 
-    // Interface name should be empty if it is an override
     public static boolean addMethodInfo(StringAppender methods,
-                                        List<Map.Entry<String, MethodInfo>> methodList,
                                         ClassFields fields,
                                         List<String> interfaces,
-                                        String interfaceName,
                                         String superClass,
                                         InputFormatter inputFormatter) {
         boolean added = false;
         String className = fields.getClassName();
 
-        for (Map.Entry<String, MethodInfo> pair : methodList) {
-            String fieldName = pair.getKey();
+        for (String fieldName : inputFormatter.getOverrideFields()) {
             String fieldValue = fields.get(fieldName);
-
-            MethodInfo methodInfo = pair.getValue();
-
             if (fieldValue == null) {
-                // Overrides are not required to contain the field value
-                if (interfaceName.isEmpty()) {
-                    continue;
-                }
-
-                fieldValue = "";
+                continue;
             }
+
+            MethodInfo methodInfo = inputFormatter.getOverrideMethod(fieldName);
 
             String implementation = methodInfo.writeFunction(fieldValue, className, superClass, inputFormatter);
             methods.append(implementation);
@@ -193,15 +183,12 @@ public class MethodInfo {
                 } else if (fieldKey.equals("Field") || fieldKey.equals("UniqueEffects")) {
                     mapField += addFieldValue;
                 }
-//                else {
-//                    // Leave the map field as is -- including in the original fields overrides the override file
-//                    System.out.println("Map Field (ClassName = " + className + "): " + mapField);
-//                }
 
                 fields.add(fieldKey, mapField);
             }
 
             fields.remove(fieldName);
+            inputFormatter.useOverride(fieldName);
             added = true;
         }
 

@@ -59,6 +59,8 @@ class PokeGen {
             this.superGen();
         }
 
+        this.inputFormatter.close();
+
         namesiesMap.values().forEach(NamesiesGen::writeNamesies);
     }
 
@@ -160,10 +162,8 @@ class PokeGen {
         while (moreFields) {
             moreFields = MethodInfo.addMethodInfo(
                     methods,
-                    inputFormatter.getOverrideMethods(),
                     fields,
                     currentInterfaces,
-                    StringUtils.empty(),
                     this.currentGen.getSuperClassName(),
                     inputFormatter
             );

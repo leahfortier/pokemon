@@ -14,7 +14,6 @@ import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
-import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
@@ -729,11 +728,6 @@ public class Battle implements Serializable {
 
         // Loop through all tha effects and do them checks
         if (BeforeTurnEffect.checkCannotAttack(p, opp, this)) {
-            return false;
-        }
-
-        // Opponents effects that prevent you from attacking
-        if (OpponentBeforeTurnEffect.checkCannotAttack(p, opp, this)) {
             return false;
         }
 

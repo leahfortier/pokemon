@@ -7,19 +7,20 @@ import util.FileName;
 import util.StringAppender;
 import util.StringUtils;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.Set;
 
 public class InputFormatter {
-    private List<Entry<String, MethodInfo>> overrideMethods;
+    private Map<String, MethodInfo> overrideMethods;
 
+    public void close() {}
     public void validate(ClassFields fields) {}
+    public void useOverride(String overrideName) {}
 
     protected String replaceBody(String body, String original, String remaining, int parameterIndex, int numParameters) {
         for (ReplaceType replaceType : ReplaceType.values()) {
@@ -50,20 +51,23 @@ public class InputFormatter {
         return body;
     }
 
-    public List<Entry<String, MethodInfo>> getOverrideMethods() {
+    public Iterable<String> getOverrideFields() {
         if (this.overrideMethods == null) {
             this.readFormat();
         }
 
-        return overrideMethods;
+        return new ArrayList<>(overrideMethods.keySet());
+    }
+
+    public MethodInfo getOverrideMethod(String fieldName) {
+        return this.overrideMethods.get(fieldName);
     }
 
     private void readFormat() {
         Scanner in = FileIO.openFile(FileName.OVERRIDE);
 
-        overrideMethods = new ArrayList<>();
-
-        Set<String> fieldNames = new HashSet<>();
+        // Want to preserve the input order
+        overrideMethods = new LinkedHashMap<>();
 
         while (in.hasNext()) {
             String line = in.nextLine().trim();
@@ -73,19 +77,12 @@ public class InputFormatter {
                 continue;
             }
 
-            if (line.equals("*")) {
-                continue;
-            }
-
-            String fieldName = line.replace(":", "");
-            if (fieldNames.contains(fieldName)) {
-                Global.error("Duplicate field name " + fieldName + " in override.txt");
-            }
-
-            fieldNames.add(fieldName);
-
-            overrideMethods.add(new SimpleEntry<>(fieldName, new MethodInfo(in)));
+            this.addMethod(line.replace(":", ""), new MethodInfo(in));
         }
+    }
+
+    protected void addMethod(String fieldName, MethodInfo methodInfo) {
+        this.overrideMethods.put(fieldName, methodInfo);
     }
 
     public String getValue(SplitScanner split, String fieldValue, String fieldType) {

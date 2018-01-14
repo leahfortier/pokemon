@@ -440,9 +440,6 @@ ApplyEndTurn:
 CanAttack:
 	Header: boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 *
-OpponentCanAttack:
-	Header: boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-*
 ProtectingEffect:
 	AddInterface: ProtectingEffect
 	AddMapField: MinTurns: 1
@@ -657,8 +654,6 @@ UnusableMessage:
 		return {0};
 		###
 *
-OpponentUsable:
-*
 ShouldSubside:
 	Header: boolean shouldSubside(Battle b, ActivePokemon victim)
 *
@@ -676,9 +671,6 @@ SetNameChange:
 *
 AbilityIsActive:
 	Header: boolean isActive()
-*
-EffectIsActive:
-	Header: boolean isActive(Battle b)
 *
 Deactivate:
 	Header: void deactivate(Battle b, ActivePokemon victim)
@@ -838,9 +830,6 @@ Contact:
 *
 SelfBlock:
 	Header: boolean block(Battle b, ActivePokemon user)
-*
-SelfAlternateEffect:
-	Header: void alternateEffect(Battle b, ActivePokemon user)
 *
 SelfBlockMessage:
 	Header: String getBlockMessage(Battle b, ActivePokemon user)
@@ -1505,9 +1494,6 @@ RepelSteps:
 	Body: return {0};
 	AddMapField: Cat: Misc
 *
-BlockCrits:
-	Header: boolean blockCrits()
-*
 PowderResist:
 	AddInterface: AttackBlocker
 	AddMapField: Block:
@@ -1670,9 +1656,6 @@ SapPercentage:
 	Body:
 		return {0};
 		###
-*
-SapAmount:
-	Header: int getSapAmount(ActivePokemon victim, int damageAmount)
 *
 SapMessage:
 	Header: String getSapMessage(ActivePokemon victim)

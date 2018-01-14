@@ -376,16 +376,6 @@ BeforeTurnEffect:
 		EffectList: p
 	*
 ***
-OpponentBeforeTurnEffect:
-	Method:
-		Header: boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b)
-		Invoke: Check false
-		InvokeName: checkCannotAttack
-		Deadsies: p opp
-		MoldBreaker: p
-		EffectList: opp
-	*
-***
 EffectBlockerEffect:
 	Method:
 		Header: boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)

@@ -652,46 +652,6 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface OpponentBeforeTurnEffect {
-        boolean opposingCanAttack(ActivePokemon p, ActivePokemon opp, Battle b);
-
-        static boolean checkCannotAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-            if (p.isFainted(b)) {
-                return false;
-            }
-
-            if (opp.isFainted(b)) {
-                return false;
-            }
-
-            List<Object> invokees = b.getEffectsList(opp);
-            for (Object invokee : invokees) {
-                if (invokee instanceof OpponentBeforeTurnEffect && Effect.isActiveEffect(invokee)) {
-
-                    // If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && p.breaksTheMold()) {
-                        continue;
-                    }
-
-                    OpponentBeforeTurnEffect effect = (OpponentBeforeTurnEffect)invokee;
-                    if (!effect.opposingCanAttack(p, opp, b)) {
-                        return true;
-                    }
-
-                    if (p.isFainted(b)) {
-                        return false;
-                    }
-
-                    if (opp.isFainted(b)) {
-                        return false;
-                    }
-                }
-            }
-
-            return false;
-        }
-    }
-
     public interface EffectBlockerEffect {
         boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim);
 

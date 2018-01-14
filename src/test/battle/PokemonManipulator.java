@@ -13,6 +13,7 @@ import battle.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 import test.TestPokemon;
 
+@FunctionalInterface
 interface PokemonManipulator {
     void manipulate(TestBattle battle, TestPokemon attacking, TestPokemon defending);
 

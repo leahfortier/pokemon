@@ -43,7 +43,6 @@ import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentApplyDamageEffect;
-import battle.effect.generic.EffectInterfaces.OpponentBeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
@@ -227,7 +226,6 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, TrappingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, OpponentTrappingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, BeforeTurnEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, OpponentBeforeTurnEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, EffectBlockerEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, TargetSwapperEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, StatProtectingEffect.class, effectListSourcesNoAttack);
@@ -264,6 +262,36 @@ public class ClassTest extends BaseTest {
         }
     }
 
+    @Test
+    public void containsInstanceTest() {
+        // Invoked from battle.getEffectsList() with attack
+        for (Class<?> effectListWithAttackClass : effectListWithAttackClasses) {
+            containsInstance(effectListWithAttackClass, Attack.class);
+        }
+    }
+
+    @Test
+    public void annotationTest() {
+        for (Class<?> classy : classes) {
+            // All tests should inherit from BaseTest
+            annotationImpliesInstance(classy, Test.class, BaseTest.class);
+
+            // Should pretty much always be using @BeforeClass instead
+            Assert.assertFalse(hasMethodAnnotation(classy, Before.class));
+        }
+    }
+
+    @Test
+    public void usedInterfaceTest() {
+        for (Class<?> classy : classes) {
+            // For all non-functional interfaces, make sure it has a least one object inheriting it
+            // Otherwise it is unused and should be deleted
+            if (classy.isInterface() && !hasAnnotation(classy, FunctionalInterface.class)) {
+                containsInstance(classy, Object.class);
+            }
+        }
+    }
+
     // If toCheck is an instance of assigned (interface), then is MUST be an instance of at least one of implies (classes)
     private void checkInstance(Class<?> toCheck, Class<?> assigned, Class<?>... implies) {
         // assigned must be in interface
@@ -281,14 +309,6 @@ public class ClassTest extends BaseTest {
         }
     }
 
-    @Test
-    public void containsInstanceTest() {
-        // Invoked from battle.getEffectsList() with attack
-        for (Class<?> effectListWithAttackClass : effectListWithAttackClasses) {
-            containsInstance(effectListWithAttackClass, Attack.class);
-        }
-    }
-
     // For all classes that implement assigned, at least one must be of type mustContain
     private void containsInstance(Class<?> assigned, Class<?> mustContain) {
         // assigned must be in interface
@@ -296,6 +316,10 @@ public class ClassTest extends BaseTest {
 
         boolean contains = false;
         for (Class<?> classy : classes) {
+            if (classy.equals(assigned)) {
+                continue;
+            }
+
             if (assigned.isAssignableFrom(classy) && mustContain.isAssignableFrom(classy)) {
                 contains = true;
                 break;
@@ -310,20 +334,9 @@ public class ClassTest extends BaseTest {
         Assert.assertTrue(message, contains);
     }
 
-    @Test
-    public void annotationTest() {
-        for (Class<?> classy : classes) {
-            // All tests should inherit from BaseTest
-            annotationImpliesInstance(classy, Test.class, BaseTest.class);
-
-            // Should pretty much always be using @BeforeClass instead
-            Assert.assertFalse(hasAnnotation(classy, Before.class));
-        }
-    }
-
     // If a class has the annotationClass on any method, then it must be an instance of at least one instances
     private void annotationImpliesInstance(Class<?> toCheck, Class<? extends Annotation> annotationClass, Class<?>... instances) {
-        if (hasAnnotation(toCheck, annotationClass)) {
+        if (hasMethodAnnotation(toCheck, annotationClass)) {
             String message = String.format(
                     "%s has %s annotation but is not in %s.",
                     toCheck.getSimpleName(),
@@ -334,8 +347,19 @@ public class ClassTest extends BaseTest {
         }
     }
 
-    // Returns true if toCheck has the annotationClass annotation on ANY of its methods
+    // Returns true if toCheck has the annotationClass annotation on itself
     private boolean hasAnnotation(Class<?> toCheck, Class<? extends Annotation> annotationClass) {
+        Annotation[] annotations = toCheck.getAnnotations();
+        for (Annotation annotation : annotations) {
+            if (annotation.annotationType().equals(annotationClass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Returns true if toCheck has the annotationClass annotation on ANY of its methods
+    private boolean hasMethodAnnotation(Class<?> toCheck, Class<? extends Annotation> annotationClass) {
         Method[] methods = toCheck.getMethods();
         for (Method method : methods) {
             Annotation[] annotations = method.getAnnotations();
