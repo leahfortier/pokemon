@@ -87,9 +87,31 @@ public abstract class PartyPokemon implements Serializable {
         this.resetAttributes();
     }
 
-    // TODO: FILL THIS IN!!
     protected PartyPokemon(Eggy eggy) {
+        this.pokemon = eggy.pokemon;
 
+        this.nickname = pokemon.getName();
+        this.level = 1;
+
+        this.nature = eggy.nature;
+        this.EVs = new int[Stat.NUM_STATS];
+        this.stats = new int[Stat.NUM_STATS];
+        this.setIVs(eggy.getIVs());
+
+        this.isPlayer = true;
+        this.shiny = eggy.isShiny();
+
+        this.setMoves(eggy.getActualMoves());
+        this.setGender(eggy.getGender());
+        this.setAbility(eggy.getActualAbility().namesies());
+
+        this.heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();
+
+        // Don't add randomness for eggs
+        this.totalEXP = this.getPokemonInfo().getGrowthRate().getEXP(this.level);
+
+        this.fullyHeal();
+        this.resetAttributes();
     }
 
     public abstract boolean canFight();
@@ -282,7 +304,7 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public void setHP(int amount) {
-        hp = Math.min(getMaxHP(), Math.max(0, amount));
+        hp = Math.min(this.getMaxHP(), Math.max(0, amount));
     }
 
     public boolean fullHealth() {
@@ -312,7 +334,7 @@ public abstract class PartyPokemon implements Serializable {
 
     // Restores the amount of health that corresponds to fraction of the pokemon's total health and returns this amount
     public int healHealthFraction(double fraction) {
-        return heal((int)Math.max(getMaxHP()*fraction, 1));
+        return heal((int)Math.max(this.getMaxHP()*fraction, 1));
     }
 
     public String getActualName() {

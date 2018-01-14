@@ -99,8 +99,8 @@ public class BreedingTest extends BaseTest {
                                                  AttackNamesies.SOLAR_BEAM,
                                                  AttackNamesies.FLAMETHROWER
         );
-        Eggy baby = getBaby(mommy, daddy);
 
+        Eggy baby = getBaby(mommy, daddy);
         Assert.assertTrue(
                 getFailMessage(mommy, daddy, baby),
                 baby.hasActualMove(AttackNamesies.MORNING_SUN) &&
@@ -271,8 +271,20 @@ public class BreedingTest extends BaseTest {
         Assert.assertNotNull(getFailMessage(mommy, daddy, baby), baby);
         Assert.assertEquals(getFailMessage(mommy, daddy, baby), 1, baby.getLevel());
 
-        for (int iv : baby.getIVs()) {
+        Assert.assertEquals("Egg", baby.getActualName());
+
+        // Make sure IVs are all in range
+        int[] babyIVs = baby.getIVs();
+        Assert.assertEquals(Stat.NUM_STATS, babyIVs.length);
+        for (int iv : babyIVs) {
             Assert.assertTrue(getFailMessage(mommy, daddy, baby), iv >= 0 && iv <= Stat.MAX_IV);
+        }
+
+        // EVs should all be zero
+        int[] babyEVs = baby.getEVs();
+        Assert.assertEquals(Stat.NUM_STATS, babyEVs.length);
+        for (int ev : babyEVs) {
+            Assert.assertEquals(0, ev);
         }
 
         final List<Move> babyMoves = baby.getActualMoves();
@@ -293,6 +305,37 @@ public class BreedingTest extends BaseTest {
                 );
             }
         }
+
+        ActivePokemon hatched = null;
+        while (hatched == null) {
+            hatched = baby.hatch(true);
+        }
+
+        PokemonInfo pokemonInfo = baby.getPokemonInfo();
+
+        // Make sure everything is the same upon hatch
+        Assert.assertEquals(pokemonInfo.namesies(), hatched.getPokemonInfo().namesies());
+        Assert.assertEquals(1, hatched.getLevel());
+        Assert.assertArrayEquals(babyIVs, hatched.getIVs());
+        Assert.assertArrayEquals(babyEVs, hatched.getEVs());
+        Assert.assertEquals(baby.getActualAbility().namesies(), hatched.getActualAbility().namesies());
+        Assert.assertEquals(baby.getGender(), hatched.getGender());
+        Assert.assertEquals(baby.getNature(), hatched.getNature());
+        Assert.assertEquals(baby.getCharacteristic(), hatched.getCharacteristic());
+        Assert.assertEquals(baby.isShiny(), hatched.isShiny());
+        List<Move> hatchedMoves = hatched.getActualMoves();
+        Assert.assertEquals(babyMoves.size(), hatchedMoves.size());
+        for (int i = 0; i < babyMoves.size(); i++) {
+            Assert.assertEquals(babyMoves.get(i).getAttack().namesies(), hatchedMoves.get(i).getAttack().namesies());
+        }
+
+        // Hatched should actually have the Pokemon name
+        Assert.assertEquals(pokemonInfo.getName(), hatched.getActualName());
+        Assert.assertEquals(pokemonInfo.getGrowthRate().getEXP(1), hatched.getTotalEXP());
+        Assert.assertEquals(ItemNamesies.NO_ITEM, hatched.getActualHeldItem().namesies());
+        Assert.assertTrue(hatched.isPlayer());
+        Assert.assertTrue(hatched.fullHealth());
+        Assert.assertFalse(hatched.hasStatus());
 
         return baby;
     }

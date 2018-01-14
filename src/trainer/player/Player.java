@@ -249,12 +249,14 @@ public class Player extends PlayerTrainer implements Serializable {
 
         // Hatch eggs
         boolean doubleHatch = front().hasAbility(AbilityNamesies.FLAME_BODY) || front().hasAbility(AbilityNamesies.MAGMA_ARMOR);
-        for (PartyPokemon p : team) {
+        for (int i = 0; i < team.size(); i++) {
+            PartyPokemon p = team.get(i);
             if (p.isEgg()) {
                 Eggy eggy = (Eggy)p;
                 ActivePokemon hatched = eggy.hatch(doubleHatch);
                 if (hatched != null) {
                     this.evolutionInfo.setEgg(hatched);
+                    this.team.set(i, hatched);
                     Messages.add(new MessageUpdate().withTrigger(TriggerType.GROUP.getTriggerNameFromSuffix("EggHatching")));
 
                     // Only one hatch per step
