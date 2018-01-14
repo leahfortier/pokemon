@@ -14,7 +14,7 @@ enum UseState {
         state.deactivate(bagView);
     }),
     USE("Use", BagView.USE, (state, bagView, p) -> {
-        if (bagView.selectedItem.getItem() instanceof MoveUseItem) {
+        if (!p.isEgg() && bagView.selectedItem.getItem() instanceof MoveUseItem) {
             bagView.selectedPokemon = p;
             bagView.state = BagState.MOVE_SELECT;
         } else {

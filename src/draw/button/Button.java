@@ -126,6 +126,7 @@ public class Button {
     public void setActive(boolean set) {
         active = set;
         if (!active) {
+            hover = false;
             setForceHover(false);
         }
     }
