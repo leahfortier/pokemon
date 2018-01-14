@@ -27,6 +27,7 @@ import util.GeneralUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -133,7 +134,6 @@ public class MoveRelearnerView extends View {
                 buttonHeight,
                 ButtonHoverAction.BOX,
                 new int[] { RETURN, MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1, RETURN, MOVES_PER_PAGE },
-                // TODO: TEST THIS CAST
                 () -> learnMovePanel = new LearnMovePanel((ActivePokemon)team.get(selectedPokemon), new Move(selectedMove))
         );
 
@@ -250,7 +250,7 @@ public class MoveRelearnerView extends View {
             buttonPanel.imageLabel(g, 22, partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getActualName());
         }
 
-        Iterator<AttackNamesies> iterator = GeneralUtils.pageIterator(this.learnableMoves, pageNum, MOVES_PER_PAGE);
+        Iterator<AttackNamesies> iterator = this.getIterator();
         for (int i = 0; i < MOVES_PER_PAGE && iterator.hasNext(); i++) {
             Attack attack = iterator.next().getAttack();
             Button moveButton = moveButtons[i];
@@ -351,8 +351,12 @@ public class MoveRelearnerView extends View {
 
     private void setSelectedPokemon(int index) {
         this.selectedPokemon = index;
-        this.learnableMoves = this.team.get(index).getLearnableMoves();
+
+        PartyPokemon selected = this.team.get(index);
+        this.learnableMoves = selected.isEgg() ? new ArrayList<>() : selected.getLearnableMoves();
         this.selectedMove = this.learnableMoves.isEmpty() ? null : this.learnableMoves.get(0).getAttack();
         this.pageNum = 0;
+
+        this.updateActiveButtons();
     }
 }

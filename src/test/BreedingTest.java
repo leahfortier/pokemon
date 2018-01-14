@@ -90,7 +90,7 @@ public class BreedingTest extends BaseTest {
         Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.PHIONE));
     }
 
-    // TODO: Add more cases
+    // TODO: Add more cases -- make sure TM that is in level up moves is not learned
     @Test
     public void testEggMoves() {
         ActivePokemon mommy = getParentWithMoves(PokemonNamesies.RAPIDASH, Gender.FEMALE, AttackNamesies.MORNING_SUN);

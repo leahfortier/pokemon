@@ -206,7 +206,6 @@ class DayCareView extends View {
                 ButtonHoverAction.BOX,
                 new int[] { RETURN, -1, 0, -1 },
                 () -> {
-                    // TODO: I think these casts should be okay but should test
                     if (party) {
                         message = dayCareCenter.deposit((ActivePokemon)selected);
                     } else {

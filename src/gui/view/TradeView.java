@@ -119,13 +119,15 @@ public class TradeView extends View {
                 Button button = getTeamButton(i);
                 if (button.checkConsumePress()) {
                     PartyPokemon myPokes = team.get(i);
-                    if (myPokes.getPokemonInfo().namesies() == requested.namesies()) {
+                    if (!myPokes.isEgg() && myPokes.getPokemonInfo().namesies() == requested.namesies()) {
                         ActivePokemon theirPokes = new ActivePokemon(
                                 offering.namesies(),
                                 myPokes.getLevel(),
                                 false,
                                 true
                         );
+
+                        team.set(i, theirPokes);
 
                         this.myPokesFrontImage = pokemonTiles.getTile(myPokes.getImageName());
                         this.theirPokesFrontImage = pokemonTiles.getTile(theirPokes.getImageName());
@@ -222,7 +224,7 @@ public class TradeView extends View {
                 PartyPokemon pokemon = team.get(i);
 
                 DrawPanel buttonPanel = new DrawPanel(button)
-                        .withBackgroundColors(Type.getColors(pokemon.getActualType()))
+                        .withBackgroundColors(Type.getColors(pokemon))
                         .withTransparentCount(2)
                         .withBlackOutline();
 
