@@ -1036,7 +1036,7 @@ Contrary:
 	Desc: Makes stat changes have an opposite effect.
 	Int: ModifyStageValueEffect
 	ModifyStageValue:
-		return modVal*(modVal < 0 ? -1 : 1);
+		return -1*modVal;
 		###
 *
 Big Pecks:

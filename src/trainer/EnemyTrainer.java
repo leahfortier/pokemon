@@ -1,7 +1,7 @@
 package trainer;
 
-import main.Global;
 import battle.ActivePokemon;
+import main.Global;
 import pokemon.PartyPokemon;
 
 public class EnemyTrainer extends Trainer implements Opponent {

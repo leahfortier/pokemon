@@ -1,10 +1,12 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
+import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.PokemonNamesies;
+import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import test.BaseTest;
 import test.TestPokemon;
@@ -179,5 +181,120 @@ public class AbilityTest extends BaseTest {
         Assert.assertEquals(afterPriority, battle.getAttackPriority(attacking));
         attacking.apply(!prevent, attack, battle);
         Assert.assertEquals(afterPriority > 0 && !attacking.getAttack().isSelfTarget() && !attacking.breaksTheMold(), prevent);
+    }
+
+    @Test
+    public void contraryTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.CONTRARY);
+
+        // Contrary Pokemon will have their stat increased when it should be decreased
+        battle.fight(AttackNamesies.STRING_SHOT, AttackNamesies.STRING_SHOT);
+        new TestStages().set(Stat.SPEED, -2).test(attacking);
+        new TestStages().set(Stat.SPEED, 2).test(defending);
+
+        // Will also decrease their stat when it should be increased
+        battle.fight(AttackNamesies.AGILITY, AttackNamesies.AGILITY);
+        new TestStages().test(attacking);
+        new TestStages().test(defending);
+
+        battle.fight(AttackNamesies.SHELL_SMASH, AttackNamesies.SHELL_SMASH);
+        new TestStages().set(Stat.ATTACK, 2)
+                        .set(Stat.SP_ATTACK, 2)
+                        .set(Stat.SPEED, 2)
+                        .set(Stat.DEFENSE, -1)
+                        .set(Stat.SP_DEFENSE, -1)
+                        .test(attacking);
+        new TestStages().set(Stat.ATTACK, -2)
+                        .set(Stat.SP_ATTACK, -2)
+                        .set(Stat.SPEED, -2)
+                        .set(Stat.DEFENSE, 1)
+                        .set(Stat.SP_DEFENSE, 1)
+                        .test(defending);
+
+        battle.attackingFight(AttackNamesies.HAZE);
+        new TestStages().test(attacking);
+        new TestStages().test(defending);
+
+        // Contrary is affected by Mold Breaker
+        attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
+        battle.fight(AttackNamesies.STRING_SHOT, AttackNamesies.STRING_SHOT);
+        new TestStages().set(Stat.SPEED, -2).test(attacking);
+        new TestStages().set(Stat.SPEED, -2).test(defending);
+
+        // Reset stages and remove Mold Breaker
+        battle.fight(AttackNamesies.HAZE, AttackNamesies.GASTRO_ACID);
+        new TestStages().test(attacking);
+        new TestStages().test(defending);
+
+        // Mist prevents stat reductions
+        battle.defendingFight(AttackNamesies.MIST);
+
+        // String shot is no longer a reduction, so it works
+        battle.attackingFight(AttackNamesies.STRING_SHOT);
+        new TestStages().test(attacking);
+        new TestStages().set(Stat.SPEED, 2).test(defending);
+
+        // Swagger is now a reduction, so it fails to raise/lower attack, but still confuses
+        // Persim Berry heals confusion -- it should be consumed (since I don't wanna deal with confusion in tests)
+        defending.giveItem(ItemNamesies.PERSIM_BERRY);
+        battle.attackingFight(AttackNamesies.SWAGGER);
+        new TestStages().test(attacking);
+        new TestStages().set(Stat.SPEED, 2).test(defending);
+        Assert.assertFalse(defending.hasEffect(EffectNamesies.CONFUSION));
+        Assert.assertFalse(defending.isHoldingItem(battle));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.CONSUMED_ITEM));
+
+        // Simple doubles stat modifications to itself -- shouldn't affect contrary pokemon
+        battle.fight(AttackNamesies.HAZE, AttackNamesies.SIMPLE_BEAM);
+        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.SIMPLE));
+        new TestStages().test(attacking);
+        new TestStages().test(defending);
+
+        battle.fight(AttackNamesies.STRING_SHOT, AttackNamesies.STRING_SHOT);
+        new TestStages().set(Stat.SPEED, -4).test(attacking);
+        new TestStages().set(Stat.SPEED, 2).test(defending);
+
+        battle.attackingFight(AttackNamesies.HAZE);
+        new TestStages().test(attacking);
+        new TestStages().test(defending);
+
+        // Belly Drum sets attack stage to -6 instead of +6
+        battle.fight(AttackNamesies.BELLY_DRUM, AttackNamesies.BELLY_DRUM);
+        new TestStages().set(Stat.ATTACK, 6).test(attacking);
+        new TestStages().set(Stat.ATTACK, -6).test(defending);
+        attacking.assertHealthRatio(.5);
+        defending.assertHealthRatio(.5);
+
+        // Will still succeed and cut health when at -6 instead of +6 for Contrary :(
+        battle.emptyHeal();
+        battle.fight(AttackNamesies.BELLY_DRUM, AttackNamesies.BELLY_DRUM);
+        Assert.assertFalse(attacking.lastMoveSucceeded());
+        Assert.assertTrue(defending.lastMoveSucceeded());
+        attacking.assertHealthRatio(1);
+        defending.assertHealthRatio(.5);
+        new TestStages().set(Stat.ATTACK, 6).test(attacking);
+        new TestStages().set(Stat.ATTACK, -6).test(defending);
+
+        battle.clearAllEffects();
+        attacking.withAbility(AbilityNamesies.STURDY);
+        defending.giveItem(ItemNamesies.FOCUS_SASH);
+
+        // Leaf Storm is a damage dealing move that also decreases the user's Sp. Attack UNLESS YOU HAVE CONTRARY
+        battle.fight(AttackNamesies.LEAF_STORM, AttackNamesies.LEAF_STORM);
+        new TestStages().set(Stat.SP_ATTACK, -2).test(attacking);
+        new TestStages().set(Stat.SP_ATTACK, 2).test(defending);
+
+        battle.fight(AttackNamesies.SWORDS_DANCE, AttackNamesies.SWORDS_DANCE);
+        new TestStages().set(Stat.ATTACK, 2).set(Stat.SP_ATTACK, -2).test(attacking);
+        new TestStages().set(Stat.ATTACK, -2).set(Stat.SP_ATTACK, 2).test(defending);
+
+        // Gaining/Losing Contrary does not affect your current stages
+        battle.defendingFight(AttackNamesies.SKILL_SWAP);
+        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.CONTRARY));
+        Assert.assertFalse(defending.hasAbility(AbilityNamesies.CONTRARY));
+        new TestStages().set(Stat.ATTACK, 2).set(Stat.SP_ATTACK, -2).test(attacking);
+        new TestStages().set(Stat.ATTACK, -2).set(Stat.SP_ATTACK, 2).test(defending);
     }
 }

@@ -99,7 +99,6 @@ public class Stages implements Serializable {
                 if (print) {
                     Messages.add(prevent.preventionMessage(victim, stat));
                 }
-
                 return false;
             }
         }
@@ -109,7 +108,6 @@ public class Stages implements Serializable {
             if (print) {
                 Messages.add(victim.getName() + "'s " + statName + " cannot be raised any higher!");
             }
-
             return false;
         }
 
@@ -119,7 +117,6 @@ public class Stages implements Serializable {
             if (print) {
                 Messages.add(victim.getName() + "'s " + statName + " cannot be lowered any further!");
             }
-
             return false;
         }
 
@@ -135,7 +132,6 @@ public class Stages implements Serializable {
         } else if (val <= -2) {
             change = "sharply lowered";
         } else {
-            // TODO: Make sure this is an appropriate error -- not sure why it wasn't here before
             Global.error("Cannot modify a stage by zero.");
             return false;
         }

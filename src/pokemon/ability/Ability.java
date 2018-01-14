@@ -2686,7 +2686,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public int modifyStageValue(int modVal) {
-            return modVal*(modVal < 0 ? -1 : 1);
+            return -1*modVal;
         }
     }
 

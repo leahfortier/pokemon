@@ -4367,9 +4367,11 @@ public abstract class Attack implements Serializable {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Maximization station
-            Messages.add(user.getName() + " cut its own HP and maximized its attack!");
+            user.getStages().modifyStage(
+                    user, user, Stat.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK,
+                    user.getName() + " cut its own HP and maximized its attack!"
+            );
             user.reduceHealthFraction(b, 1/2.0);
-            user.getStages().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
         }
 
         @Override
@@ -8472,9 +8474,7 @@ public abstract class Attack implements Serializable {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             for (Stat stat : Stat.BATTLE_STATS) {
-                int temp = user.getStages().getStage(stat);
-                user.getStages().setStage(stat, victim.getStages().getStage(stat));
-                victim.getStages().setStage(stat, temp);
+                user.getStages().swapStages(stat, victim);
             }
 
             Messages.add(user.getName() + " swapped its stats with " + victim.getName() + "!");
@@ -11083,7 +11083,7 @@ public abstract class Attack implements Serializable {
                 int stage = victim.getStages().getStage(stat);
                 if (stage > 0) {
                     victim.getStages().resetStage(stat);
-                    user.getStages().incrementStage(stat, stage);
+                    user.getStages().modifyStage(user, user, stage, stat, b, CastSource.ATTACK);
                 }
             }
         }

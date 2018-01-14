@@ -2,6 +2,8 @@ package test.battle;
 
 import battle.Battle;
 import battle.attack.AttackNamesies;
+import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.Weather;
 import org.junit.Assert;
 import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
@@ -62,6 +64,18 @@ public class TestBattle extends Battle {
     @Override
     public TestPokemon getOtherPokemon(ActivePokemon pokemon) {
         return (TestPokemon)super.getOtherPokemon(pokemon);
+    }
+
+    // Should be everything?
+    void clearAllEffects() {
+        this.getAttacking().resetAttributes();
+        this.getDefending().resetAttributes();
+
+        this.getTrainer(true).resetEffects();
+        this.getTrainer(false).resetEffects();
+
+        this.getEffects().clear();
+        this.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
     }
 
     void emptyHeal() {
