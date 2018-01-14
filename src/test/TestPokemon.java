@@ -4,7 +4,7 @@ import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import org.junit.Assert;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
@@ -45,7 +45,7 @@ public class TestPokemon extends ActivePokemon {
 
     public void setupMove(AttackNamesies attackNamesies, Battle battle) {
         this.setMove(battle, new Move(attackNamesies));
-        this.getAttributes().startAttack(battle);
+        this.startAttack(battle);
     }
 
     public void apply(boolean assertion, AttackNamesies attack, TestBattle battle) {

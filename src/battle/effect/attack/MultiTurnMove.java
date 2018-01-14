@@ -1,6 +1,6 @@
 package battle.effect.attack;
 
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 public interface MultiTurnMove {
     boolean chargesFirst();

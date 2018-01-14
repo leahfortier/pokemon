@@ -12,8 +12,9 @@ import gui.TileSet;
 import main.Game;
 import main.Global;
 import message.MessageUpdate;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Gender;
+import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import sound.SoundPlayer;
@@ -441,16 +442,16 @@ class PokemonAnimationState {
     private void drawTrainerPokeballs(Graphics g, int cornerX, int cornerY, int direction) {
         Battle battle = battleView.getCurrentBattle();
         Trainer trainer = (Trainer)battle.getTrainer(isPlayer);
-        List<ActivePokemon> team = trainer.getTeam();
+        List<PartyPokemon> team = trainer.getTeam();
         boolean usedMaxPokemon = trainer.maxPokemonUsed(battle);
 
         for (int i = 0; i < team.size(); i++) {
             int index = isPlayer ? team.size() - i - 1 : i;
-            ActivePokemon pokemon = team.get(index);
+            PartyPokemon pokemon = team.get(index);
 
             boolean silhouette = index == state.teamIndex
                     ? state.getStatus() == StatusCondition.FAINTED
-                    : !pokemon.canFight() || (usedMaxPokemon && !pokemon.getAttributes().isBattleUsed());
+                    : !pokemon.canFight() || (usedMaxPokemon && !pokemon.isBattleUsed());
 
             BufferedImage pokeball = TileSet.TINY_POKEBALL;
             if (silhouette) {

@@ -860,7 +860,7 @@ False Swipe:
 	ApplyDamage:
 		o.addEffect((PokemonEffect)EffectNamesies.BRACING.getEffect());
 		super.applyDamage(me, o, b);
-		o.getAttributes().removeEffect(EffectNamesies.BRACING);
+		o.removeEffect(EffectNamesies.BRACING);
 		###
 *
 Disable:
@@ -902,7 +902,7 @@ Rage:
 	Effect: Raging
 	SelfTarget: True
 	GetMultiplier:
-		return user.getAttributes().getCount();
+		return user.getCount();
 		###
 *
 Pursuit:
@@ -960,7 +960,7 @@ Assurance:
 	Cat: Physical
 	Pow: 60
 	Acc: 100
-	PowerMultiplierCondition: 2 user.getAttributes().hasTakenDamage()
+	PowerMultiplierCondition: 2 user.hasTakenDamage()
 *
 Poison Jab:
 	Desc: The target is stabbed with a tentacle or arm steeped in poison. It may also poison the target.
@@ -2118,7 +2118,7 @@ Fake Out:
 	Priority: 3
 	Pow: 40
 	Effect: Flinch
-	Applies: user.getAttributes().isFirstTurn()
+	Applies: user.isFirstTurn()
 *
 Feint Attack:
 	Desc: The user approaches the target disarmingly, then throws a sucker punch. It hits without fail.
@@ -2507,7 +2507,7 @@ Revenge:
 	Desc: An attack move that inflicts double the damage if the user has been hurt by the opponent in the same turn.
 	PP: 10
 	Type: Fighting
-	PowerMultiplierCondition: 2 user.getAttributes().hasTakenDamage()
+	PowerMultiplierCondition: 2 user.hasTakenDamage()
 	Pow: 60
 	Acc: 100
 	Cat: Physical
@@ -3067,11 +3067,11 @@ Spite:
 	Type: Ghost
 	FullApplies:
 		// Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
-		Move last = victim.getAttributes().getLastMoveUsed();
+		Move last = victim.getLastMoveUsed();
 		return last != null && last.getPP() > 0 && victim.hasMove(b, last.getAttack().namesies());
 		###
 	UniqueEffects:
-		Move last = victim.getAttributes().getLastMoveUsed();
+		Move last = victim.getLastMoveUsed();
 		Messages.add(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!");
 		###
 *
@@ -3533,7 +3533,7 @@ Focus Punch:
 	SelfTarget: True
 	StartTurn:
 		super.applyBasicEffects(b, me, me);
-		me.getAttributes().setReducePP(true);
+		me.setReducePP(true);
 		###
 	Applies: user.hasEffect(EffectNamesies.FOCUSING)
 	ShouldApplyEffects:
@@ -3588,7 +3588,7 @@ Me First:
 		###
 	CallNewMove: new Move(victim.getAttack())
 	EndAttack:
-		user.getAttributes().removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
+		user.removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
 		###
 *
 Refresh:
@@ -3858,7 +3858,7 @@ Avalanche:
 	Acc: 100
 	Cat: Physical
 	Priority: -4
-	PowerMultiplierCondition: 2 user.getAttributes().hasTakenDamage()
+	PowerMultiplierCondition: 2 user.hasTakenDamage()
 *
 Blizzard:
 	Desc: A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.
@@ -4014,7 +4014,7 @@ Conversion 2:
 	BeginAttack:
 		this.types = new ArrayList<>();
 
-		Move lastMoveUsed = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
+		Move lastMoveUsed = b.getOtherPokemon(attacking).getLastMoveUsed();
 		if (lastMoveUsed != null) {
 			Type attackingType = lastMoveUsed.getType();
 			for (Type type : Type.values()) {
@@ -4372,7 +4372,7 @@ Beat Up:
 	Cat: Physical
 	Type: Dark
 	ApplyDamage:
-		for (ActivePokemon p : b.getTrainer(me).getTeam()) {
+		for (ActivePokemon p : b.getTrainer(me).getActiveTeam()) {
 			// Only healthy Pokemon get to attack
 			if (!p.canFight() || p.hasStatus()) {
 				continue;
@@ -4458,7 +4458,7 @@ Sketch:
 		private Move copy;
 		###
 	BeginAttack:
-		this.copy = b.getOtherPokemon(attacking).getAttributes().getLastMoveUsed();
+		this.copy = b.getOtherPokemon(attacking).getLastMoveUsed();
 		###
 	Applies: copy != null && copy.getAttack().namesies() != AttackNamesies.STRUGGLE && user.hasActualMove(this.namesies()) && !user.hasEffect(EffectNamesies.TRANSFORMED)
 	UniqueEffects:
@@ -4619,7 +4619,7 @@ Assist:
 	BeginAttack:
 		// TODO: Test
 		this.attacks = new ArrayList<>();
-		for (ActivePokemon p : b.getTrainer(attacking).getTeam()) {
+		for (ActivePokemon p : b.getTrainer(attacking).getActiveTeam()) {
 			if (p != attacking) {
 				for (Move move : p.getMoves(b)) {
 					if (!move.getAttack().isMoveType(MoveType.ASSISTLESS)) {
@@ -4642,8 +4642,8 @@ Metal Burst:
 	Cat: Physical
 	Acc: 100
 	PhysicalContact: False
-	Applies: user.getAttributes().getDamageTaken() > 0 && !b.isFirstAttack()
-	FixedDamage: (int)(me.getAttributes().getDamageTaken()*1.5)
+	Applies: user.getDamageTaken() > 0 && !b.isFirstAttack()
+	FixedDamage: (int)(me.getDamageTaken()*1.5)
 *
 Wild Charge:
 	Desc: The user shrouds itself in electricity and smashes into its target. It also damages the user a little.
@@ -5404,7 +5404,7 @@ Knock Off:
 			if (b.isWildBattle()) {
 				victim.removeItem();
 			} else {
-				user.getAttributes().setCastSource(ItemNamesies.NO_ITEM.getItem());
+				user.setCastSource(ItemNamesies.NO_ITEM.getItem());
 				EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
 			}
 		}
@@ -6029,7 +6029,7 @@ Water Shuriken:
 	MultiStrike: 2 5
 *
 Mat Block:
-	Applies: user.getAttributes().isFirstTurn()
+	Applies: user.isFirstTurn()
 	Desc: Using a pulled-up mat as a shield, the user protects itself and its allies from damaging moves. This does not stop status moves.
 	PP: 15
 	Type: Fighting
@@ -6221,7 +6221,7 @@ First Impression:
 	PP: 10
 	Acc: 100
 	Priority: 2
-	Applies: user.getAttributes().isFirstTurn()
+	Applies: user.isFirstTurn()
 *
 Anchor Shot:
 	Desc: The user entangles the target with its anchor chain while attacking. The target becomes unable to flee.
@@ -6575,7 +6575,7 @@ Stomping Tantrum:
 	Acc: 100
 	PP: 10
 	Comments: // TODO: Test
-	PowerMultiplierCondition: 2 user.getAttributes().lastMoveSucceeded()
+	PowerMultiplierCondition: 2 user.lastMoveSucceeded()
 *
 Hyperspace Hole:
 	Desc: Using a hyperspace hole, the user appears right next to the target and strikes. This also hits a target using a move such as Protect or Detect.

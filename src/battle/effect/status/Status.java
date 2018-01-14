@@ -10,7 +10,8 @@ import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 
 import java.io.Serializable;
 
@@ -127,7 +128,7 @@ public abstract class Status implements Serializable {
         return false;
     }
 
-    public static void removeStatus(ActivePokemon p) {
+    public static void removeStatus(PartyPokemon p) {
         p.setStatus(new NoStatus());
     }
 

@@ -395,7 +395,7 @@ MirrorMove:
 		private Move mirror;
 		###
 	AddMapField: BeginAttack:
-		this.mirror = defending.getAttributes().getLastMoveUsed();
+		this.mirror = defending.getLastMoveUsed();
 		###
 	AddMapField: Applies: mirror != null && !mirror.getAttack().isMoveType(MoveType.MIRRORLESS)
 	AddMapField: CallNewMove: new Move(mirror.getAttack())
@@ -405,10 +405,10 @@ Countering:
 	AddMapField: MoveType: Assistless, Metronomeless
 	AddMapField: PP: 20
 	AddMapField: Acc: 100
-	AddMapField: Applies: user.getAttributes().getDamageTaken() > 0 && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.{00} && !b.isFirstAttack()
+	AddMapField: Applies: user.getDamageTaken() > 0 && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.{00} && !b.isFirstAttack()
 	AddMapField: ApplyDamage:
 		// Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
-		int damageTaken = me.getAttributes().getDamageTaken();
+		int damageTaken = me.getDamageTaken();
 		o.reduceHealth(b, damageTaken*2);
 		###
 *
@@ -458,7 +458,7 @@ OnProtectingSuccess:
 *
 SuccessiveDecay:
 	AddMapField: Cast:
-		if (!RandomUtils.chanceTest((int)(100*caster.getAttributes().getSuccessionDecayRate()))) {
+		if (!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))) {
 			Messages.add(this.getFailMessage(b, caster, victim));
 			return;
 		}
@@ -760,7 +760,7 @@ DeathWish:
 			ActivePokemon murderer = b.getOtherPokemon(victim);
 
 			// Only grant death wish if murdered through direct damage
-			if (murderer.getAttributes().isAttacking()) {
+			if (murderer.isAttacking()) {
 				// DEATH WISH GRANTED
 				deathWish(b, victim, murderer);
 			}
@@ -812,7 +812,7 @@ FallMessage:
 	Body:
 		Messages.add({0});
 
-		fallen.getAttributes().removeEffect(this.namesies());
+		fallen.removeEffect(this.namesies());
 		###
 *
 Terrain:
@@ -1010,10 +1010,10 @@ ChoiceItem:
 	AddMapField: SimpleModifier: 1.5
 	AddInterface: AttackSelectionEffect
 	AddMapField: Usable:
-		Move last = p.getAttributes().getLastMoveUsed();
+		Move last = p.getLastMoveUsed();
 		return last == null || m == last;
 		###
-	AddMapField: UnusableMessage: p.getName() + "'s " + super.name + " only allows " + p.getAttributes().getLastMoveUsed().getAttack().getName() + " to be used!"
+	AddMapField: UnusableMessage: p.getName() + "'s " + super.name + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!"
 	AddInterface: HoldItem
 	AddMapField: Fling: 10
 *
@@ -1379,7 +1379,7 @@ CategoryDamagerBerry:
 *
 HealPartyStatus:
 	AddMapField: UniqueEffects:
-		for (ActivePokemon p : b.getTrainer(user).getTeam()) {
+		for (ActivePokemon p : b.getTrainer(user).getActiveTeam()) {
 			if (!p.isActuallyDead()) {
 				p.removeStatus();
 			}
@@ -1684,7 +1684,7 @@ IgnoreAbilityMove:
 		EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
 		###
 	AddMapField: EndAttack:
-		user.getAttributes().removeEffect(EffectNamesies.BREAKS_THE_MOLD);
+		user.removeEffect(EffectNamesies.BREAKS_THE_MOLD);
 		###
 *
 StatusReceived:
@@ -1736,7 +1736,7 @@ Irrestealable:
 DropBelowHalfHealth:
 	AddInterface: TakeDamageEffect
 	AddMapField: OnTakeDamage:
-		if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getAttributes().getDamageTaken())/(double)victim.getMaxHP() >= .5) {
+		if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
 			{0}
 		}
 		###

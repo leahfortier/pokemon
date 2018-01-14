@@ -3,7 +3,7 @@ package test;
 import main.Game;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import trainer.player.Player;

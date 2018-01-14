@@ -7,7 +7,7 @@ import gui.view.ViewMode;
 import main.Game;
 import map.overworld.TerrainType;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import sound.SoundTitle;

@@ -7,7 +7,7 @@ import input.ControlKey;
 import input.InputControl;
 import message.MessageUpdate;
 import message.MessageUpdateType;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import util.Point;
 import util.StringUtils;
 

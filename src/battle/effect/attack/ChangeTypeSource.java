@@ -1,7 +1,7 @@
 package battle.effect.attack;
 
 import battle.Battle;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import type.Type;
 
 import java.io.Serializable;

@@ -16,9 +16,10 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
-import pokemon.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.Stat;
 import pokemon.ability.Ability;
+import pokemon.breeding.Eggy;
 import trainer.Trainer;
 import trainer.player.Player;
 import type.Type;
@@ -260,8 +261,8 @@ class PartyView extends View {
         // Background
         BasicPanels.drawCanvasPanel(g);
 
-        List<ActivePokemon> list = player.getTeam();
-        ActivePokemon selectedPkm = list.get(selectedTab);
+        List<PartyPokemon> list = player.getTeam();
+        PartyPokemon selectedPkm = list.get(selectedTab);
 
         TileSet pkmTiles = data.getPokemonTilesSmall();
         BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageName());
@@ -272,7 +273,7 @@ class PartyView extends View {
 
             FontMetrics.setFont(g, 30);
 
-            String nickname = InputControl.instance().getInputCaptureString(ActivePokemon.MAX_NAME_LENGTH);
+            String nickname = InputControl.instance().getInputCaptureString(PartyPokemon.MAX_NAME_LENGTH);
             ImageUtils.drawCenteredImageLabel(g, pkmImg, nickname, Global.GAME_SIZE.width/2, Global.GAME_SIZE.height/2);
         } else {
             // Pokemon info
@@ -312,12 +313,12 @@ class PartyView extends View {
         }
     }
 
-    private void drawTabs(Graphics g, GameData data, List<ActivePokemon> list) {
+    private void drawTabs(Graphics g, GameData data, List<PartyPokemon> list) {
         TileSet partyTiles = data.getPartyTiles();
         FontMetrics.setFont(g, 14);
 
         for (int i = 0; i < list.size(); i++) {
-            ActivePokemon pkm = list.get(i);
+            PartyPokemon pkm = list.get(i);
             Button tabButton = tabButtons[i];
 
             // Color tab
@@ -346,7 +347,7 @@ class PartyView extends View {
         }
     }
 
-    private void drawPokemonInfo(Graphics g, BufferedImage pkmImg, ActivePokemon selectedPkm) {
+    private void drawPokemonInfo(Graphics g, BufferedImage pkmImg, PartyPokemon selectedPkm) {
         // Draw type color polygons
         pokemonPanel.withBackgroundColors(Type.getColors(selectedPkm), true);
         if (!selectedPkm.canFight()) {
@@ -378,7 +379,7 @@ class PartyView extends View {
             // Description
             TextUtils.drawWrappedText(
                     g,
-                    selectedPkm.getEggMessage(),
+                    ((Eggy)selectedPkm).getEggMessage(),
                     basicInformationPanel.x + inset,
                     topLineY + inset + FontMetrics.getTextHeight(g),
                     basicInformationPanel.width - 2*inset
@@ -473,7 +474,7 @@ class PartyView extends View {
         }
     }
 
-    private void drawStatBox(Graphics g, ActivePokemon selectedPkm) {
+    private void drawStatBox(Graphics g, PartyPokemon selectedPkm) {
         statsPanel.drawBackground(g);
 
         int spacing = statsPanel.height/(Stat.NUM_STATS + 1);
@@ -556,12 +557,12 @@ class PartyView extends View {
                 button.setActive(false);
             }
         } else {
-            List<ActivePokemon> team = Game.getPlayer().getTeam();
+            List<PartyPokemon> team = Game.getPlayer().getTeam();
             for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
                 tabButtons[i].setActive(i < team.size());
             }
 
-            ActivePokemon pkm = team.get(selectedTab);
+            PartyPokemon pkm = team.get(selectedTab);
             List<Move> moves = pkm.getActualMoves();
             for (int i = 0; i < Move.MAX_MOVES; i++) {
                 moveButtons[i].setActive(!pkm.isEgg() && i < moves.size());

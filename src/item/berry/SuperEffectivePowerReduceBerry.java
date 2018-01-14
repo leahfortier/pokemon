@@ -3,7 +3,7 @@ package item.berry;
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import type.Type;
 import type.TypeAdvantage;
 

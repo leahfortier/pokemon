@@ -9,7 +9,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
-import pokemon.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
 import trainer.Trainer;
 import trainer.player.NewPokemonInfo;
@@ -43,7 +43,7 @@ class NewPokemonView extends View {
 
     private final Button[] buttons;
 
-    private ActivePokemon newPokemon;
+    private PartyPokemon newPokemon;
     private Integer boxNum;
 
     private State state;
@@ -140,7 +140,7 @@ class NewPokemonView extends View {
                 }
 
                 Player player = Game.getPlayer();
-                List<ActivePokemon> party = player.getTeam();
+                List<PartyPokemon> party = player.getTeam();
                 for (int row = 0; row < 2; row++) {
                     for (int col = 0; col < Trainer.MAX_POKEMON/2; col++) {
                         int buttonIndex = Point.getIndex(col, row, NUM_COLS);
@@ -148,7 +148,7 @@ class NewPokemonView extends View {
 
                         Button pokemonButton = buttons[buttonIndex];
                         if (pokemonButton.checkConsumePress()) {
-                            ActivePokemon newPokemon = this.newPokemon;
+                            PartyPokemon newPokemon = this.newPokemon;
                             this.newPokemon = party.get(partyIndex);
 
                             player.getPC().switchPokemon(newPokemon, partyIndex);
@@ -246,7 +246,7 @@ class NewPokemonView extends View {
                 break;
             case NICKNAME:
                 BufferedImage spriteImage = Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageName());
-                String nickname = InputControl.instance().getInputCaptureString(ActivePokemon.MAX_NAME_LENGTH);
+                String nickname = InputControl.instance().getInputCaptureString(PartyPokemon.MAX_NAME_LENGTH);
 
                 ImageUtils.drawCenteredImageLabel(g, spriteImage, nickname, BasicPanels.canvasMessageCenter);
                 break;
@@ -257,7 +257,7 @@ class NewPokemonView extends View {
             case PARTY_SELECTION:
                 BasicPanels.drawFullMessagePanel(g, StringUtils.empty());
 
-                List<ActivePokemon> party = Game.getPlayer().getTeam();
+                List<PartyPokemon> party = Game.getPlayer().getTeam();
                 TileSet partyTiles = Game.getData().getPartyTiles();
 
                 for (int row = 0; row < 2; row++) {
@@ -266,7 +266,7 @@ class NewPokemonView extends View {
                         int partyIndex = Point.getIndex(col, row, Trainer.MAX_POKEMON/2);
 
                         Button pokemonButton = buttons[buttonIndex];
-                        ActivePokemon partyPokemon = party.get(partyIndex);
+                        PartyPokemon partyPokemon = party.get(partyIndex);
                         BufferedImage partyPokemonImage = partyTiles.getTile(partyPokemon.getTinyImageName());
 
                         DrawPanel pokemonPanel = new DrawPanel(pokemonButton)

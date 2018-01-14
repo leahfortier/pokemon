@@ -3,7 +3,6 @@ package gui.view.bag;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import battle.effect.status.StatusCondition;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
@@ -29,7 +28,7 @@ import map.Direction;
 import message.MessageUpdate;
 import message.Messages;
 import message.Messages.MessageState;
-import pokemon.ActivePokemon;
+import pokemon.PartyPokemon;
 import trainer.Trainer;
 import trainer.player.Player;
 import type.Type;
@@ -74,7 +73,7 @@ public class BagView extends View {
 
     BagState state;
     ItemNamesies selectedItem;
-    ActivePokemon selectedPokemon;
+    PartyPokemon selectedPokemon;
 
     private int pageNum;
     private int selectedButton;
@@ -312,7 +311,7 @@ public class BagView extends View {
         TileSet partyTiles = data.getPartyTiles();
 
         Bag bag = player.getBag();
-        List<ActivePokemon> team = player.getTeam();
+        List<PartyPokemon> team = player.getTeam();
 
         // Background
         BasicPanels.drawCanvasPanel(g);
@@ -434,7 +433,7 @@ public class BagView extends View {
         // Draw Pokemon Info
         else {
             for (int i = 0; i < team.size(); i++) {
-                ActivePokemon p = team.get(i);
+                PartyPokemon p = team.get(i);
                 Button pokemonButton = partyButtons[i];
 
                 g.translate(pokemonButton.x, pokemonButton.y);
@@ -489,7 +488,7 @@ public class BagView extends View {
                         g.drawString(p.getActualHeldItem().getName(), 50, 47);
                         TextUtils.drawRightAlignedString(g, p.getHP() + "/" + p.getMaxHP(), 293, 47);
 
-                        if (p.hasStatus(StatusCondition.FAINTED)) {
+                        if (!p.canFight()) {
                             // TODO: Look if this color appears in multiple place and see if it should be a constant
                             pokemonButton.fillTranslated(g, new Color(0, 0, 0, 128));
                         }
@@ -572,7 +571,7 @@ public class BagView extends View {
     void updateActiveButtons() {
         Player player = Game.getPlayer();
 
-        List<ActivePokemon> team = player.getTeam();
+        List<PartyPokemon> team = player.getTeam();
         for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
             partyButtons[i].setActive(state == BagState.POKEMON_SELECT && i < team.size());
         }

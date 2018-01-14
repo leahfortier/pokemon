@@ -1,19 +1,19 @@
 package trainer.player;
 
-import pokemon.ActivePokemon;
+import pokemon.PartyPokemon;
 
 import java.io.Serializable;
 
 public class NewPokemonInfo implements Serializable {
-    private ActivePokemon newPokemon;
+    private PartyPokemon newPokemon;
     private Integer newPokemonBox;
     private boolean isFirstNewPokemon;
 
-    public ActivePokemon getNewPokemon() {
+    public PartyPokemon getNewPokemon() {
         return this.newPokemon;
     }
 
-    public void setNewPokemon(ActivePokemon p) {
+    public void setNewPokemon(PartyPokemon p) {
         this.newPokemon = p;
     }
 

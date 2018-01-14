@@ -8,7 +8,7 @@ import map.triggers.TriggerType;
 import pattern.PokemonMatcher;
 import pattern.action.BattleMatcher;
 import pattern.action.UpdateMatcher;
-import pokemon.ActivePokemon;
+import pokemon.PartyPokemon;
 import trainer.EnemyTrainer;
 import util.RandomUtils;
 import util.SerializationUtils;
@@ -31,7 +31,7 @@ public class TrainerBattleTrigger extends Trigger {
 
         RandomUtils.setTempRandomSeed(contents.hashCode());
         for (PokemonMatcher matcher : battleMatcher.getPokemon()) {
-            trainer.addPokemon(ActivePokemon.createActivePokemon(matcher, false));
+            trainer.addPokemon(PartyPokemon.createActivePokemon(matcher, false));
         }
         RandomUtils.resetRandomSeedToInitial();
 

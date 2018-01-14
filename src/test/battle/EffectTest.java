@@ -300,7 +300,7 @@ public class EffectTest extends BaseTest {
         attacking.withAbility(AbilityNamesies.OVERGROW);
         attacking.giveItem(ItemNamesies.ORAN_BERRY);
         attacking.setupMove(AttackNamesies.SWITCHEROO, battle);
-        attacking.getAttributes().setCastSource(ItemNamesies.NO_ITEM.getItem());
+        attacking.setCastSource(ItemNamesies.NO_ITEM.getItem());
 
         for (CastSource source : CastSource.values()) {
             String sourceName = source.getSourceName(battle, attacking);
@@ -319,6 +319,6 @@ public class EffectTest extends BaseTest {
         Assert.assertTrue(attacking.getAbility() == CastSource.ABILITY.getSource(battle, attacking));
         Assert.assertTrue(attacking.getHeldItem(battle) == CastSource.HELD_ITEM.getSource(battle, attacking));
         Assert.assertTrue(attacking.getAttack() == CastSource.ATTACK.getSource(battle, attacking));
-        Assert.assertTrue(attacking.getAttributes().getCastSource() == CastSource.CAST_SOURCE.getSource(battle, attacking));
+        Assert.assertTrue(attacking.getCastSource() == CastSource.CAST_SOURCE.getSource(battle, attacking));
     }
 }

@@ -6,7 +6,7 @@ import item.hold.HoldItem;
 import item.use.MoveUseItem;
 import main.Global;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 public interface PPHealer extends MoveUseItem, HoldItem {
     int restoreAmount(Move toRestore);

@@ -1,7 +1,7 @@
 package trainer.player.medal;
 
 import battle.attack.AttackNamesies;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;

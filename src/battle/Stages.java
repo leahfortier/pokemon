@@ -7,7 +7,6 @@ import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.ActivePokemon;
 import pokemon.Stat;
 import util.StringUtils;
 

@@ -991,7 +991,7 @@ Cursed Body:
 	Int: PhysicalContactEffect
 	Contact:
 		if (RandomUtils.chanceTest(30)) {
-			user.getAttributes().setLastMoveUsed();
+			user.setLastMoveUsed();
 			if (EffectNamesies.DISABLE.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
 				Messages.add(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
 			}
@@ -1140,7 +1140,7 @@ Illusion:
 		return activated ? illusionName : null;
 		###
 	SetNameChange:
-		List<ActivePokemon> team = b.getTrainer(victim).getTeam();
+		List<ActivePokemon> team = b.getTrainer(victim).getActiveTeam();
 		ActivePokemon illusion = null;
 
 		// Starting from the back of the party, locate the first conscious Pokemon that is of a different species to be the illusion
@@ -1153,7 +1153,7 @@ Illusion:
 			}
 
 			// If the Pokemon in back is the same species at the current Pokemon -- do nothing
-			if (temp.getPokemonInfo().getNumber() == victim.getPokemonInfo().getNumber()) {
+			if (temp.getPokemonInfo().namesies() == victim.getPokemonInfo().namesies()) {
 				continue;
 			}
 
@@ -1590,7 +1590,7 @@ Disguise:
 		###
 	Int: AbsorbDamageEffect
 	AbsorbDamage:
-		if (!activated && b.getOtherPokemon(damageTaker).getAttributes().isAttacking()) {
+		if (!activated && b.getOtherPokemon(damageTaker).isAttacking()) {
 			boolean isPlayer = damageTaker.isPlayer();
 			boolean shiny = damageTaker.isShiny();
 			boolean front = !isPlayer;
@@ -1608,7 +1608,7 @@ Disguise:
 *
 Stakeout:
 	Desc: Doubles the damage dealt to the target's replacement if the target switches out.
-	PowerMultiplierCondition: 2 !user.getAttributes().isFirstTurn() && victim.getAttributes().isFirstTurn()
+	PowerMultiplierCondition: 2 !user.isFirstTurn() && victim.isFirstTurn()
 *
 Corrosion:
 	Desc: The Pokémon can poison the target even if it's a Steel or Poison type.
@@ -1681,7 +1681,7 @@ Innards Out:
 	Desc: Damages the attacker landing the finishing hit by the amount equal to its last HP.
 	DeathWish:
 		Messages.add(murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!");
-		murderer.reduceHealth(b, dead.getAttributes().getDamageTaken());
+		murderer.reduceHealth(b, dead.getDamageTaken());
 		###
 *
 Fluffy:

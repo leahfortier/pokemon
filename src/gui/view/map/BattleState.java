@@ -8,7 +8,7 @@ import gui.view.ViewMode;
 import gui.view.map.VisualState.VisualStateHandler;
 import main.Game;
 import main.Global;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import util.FileIO;

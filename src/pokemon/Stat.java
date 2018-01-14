@@ -1,5 +1,6 @@
 package pokemon;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;

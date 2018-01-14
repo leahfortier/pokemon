@@ -2,7 +2,7 @@ package pokemon.evolution;
 
 import item.ItemNamesies;
 import map.daynight.DayCycle;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import util.StringUtils;
 

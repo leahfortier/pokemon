@@ -12,8 +12,9 @@ import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
 import map.Direction;
-import pokemon.ActivePokemon;
+import pokemon.PartyPokemon;
 import pokemon.Stat;
+import pokemon.breeding.Eggy;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.player.Player;
@@ -136,7 +137,7 @@ public class PokemonState implements VisualStateHandler {
 
     @Override
     public void set(BattleView view) {
-        List<ActivePokemon> list = Game.getPlayer().getTeam();
+        List<PartyPokemon> list = Game.getPlayer().getTeam();
         for (int i = 0; i < pokemonTabButtons.length; i++) {
             pokemonTabButtons[i].setActive(i < list.size());
         }
@@ -162,8 +163,8 @@ public class PokemonState implements VisualStateHandler {
         view.drawMenuMessagePanel(g, message);
 
         // Get current Pokemon
-        List<ActivePokemon> list = Game.getPlayer().getTeam();
-        ActivePokemon selectedPkm = list.get(selectedPokemonTab);
+        List<PartyPokemon> list = Game.getPlayer().getTeam();
+        PartyPokemon selectedPkm = list.get(selectedPokemonTab);
 
         // Draw type color polygons
         pokemonPanel.withBackgroundColors(Type.getColors(selectedPkm), true);
@@ -177,7 +178,7 @@ public class PokemonState implements VisualStateHandler {
         // Draw tabs
         TileSet partyTiles = Game.getData().getPartyTiles();
         for (int i = 0; i < list.size(); i++) {
-            ActivePokemon pkm = list.get(i);
+            PartyPokemon pkm = list.get(i);
             Button tabButton = pokemonTabButtons[i];
 
             // Color tab
@@ -211,7 +212,7 @@ public class PokemonState implements VisualStateHandler {
         if (selectedPkm.isEgg()) {
             // Description
             FontMetrics.setFont(g, 14);
-            TextUtils.drawWrappedText(g, selectedPkm.getEggMessage(), 62, 288, 306);
+            TextUtils.drawWrappedText(g, ((Eggy)selectedPkm).getEggMessage(), 62, 288, 306);
         } else {
             // Status Condition
             String statusStr = selectedPkm.getStatus().getType().getName();
@@ -317,7 +318,7 @@ public class PokemonState implements VisualStateHandler {
 
         Battle currentBattle = view.getCurrentBattle();
         Player player = Game.getPlayer();
-        List<ActivePokemon> list = player.getTeam();
+        List<PartyPokemon> list = player.getTeam();
         for (int i = 0; i < list.size(); i++) {
             if (pokemonTabButtons[i].checkConsumePress()) {
                 selectedPokemonTab = i;
@@ -327,7 +328,7 @@ public class PokemonState implements VisualStateHandler {
 
         // Switch Switch Switcheroo
         if (pokemonSwitchButton.checkConsumePress()) {
-            ActivePokemon selectedPkm = list.get(selectedPokemonTab);
+            PartyPokemon selectedPkm = list.get(selectedPokemonTab);
 
             // Use an item on this Pokemon instead of switching
             if (view.isState(VisualState.USE_ITEM)) {

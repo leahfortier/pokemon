@@ -7,6 +7,7 @@ import main.Game;
 import message.Messages.MessageState;
 import sound.SoundPlayer;
 import sound.SoundTitle;
+import trainer.player.Player;
 
 public enum MessageUpdateType {
     NO_UPDATE,
@@ -59,9 +60,11 @@ public enum MessageUpdateType {
         battleView.clearUpdate();
         Messages.clearMessages(MessageState.FIGHTY_FIGHT);
         Messages.setMessageState(MessageState.MAPPITY_MAP);
-        Game.getPlayer().getEntity().resetCurrentInteractionEntity();
 
-        Game.getPlayer().checkEvolution();
+        Player player = Game.getPlayer();
+        player.getEntity().resetCurrentInteractionEntity();
+        player.checkEvolution();
+        player.exitBattle();
     }
 
     @FunctionalInterface

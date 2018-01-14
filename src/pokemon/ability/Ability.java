@@ -88,7 +88,7 @@ import map.overworld.WildEncounter;
 import map.weather.WeatherState;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
@@ -2598,7 +2598,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
-                user.getAttributes().setLastMoveUsed();
+                user.setLastMoveUsed();
                 if (EffectNamesies.DISABLE.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
                     Messages.add(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
                 }
@@ -2866,7 +2866,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void setNameChange(Battle b, ActivePokemon victim) {
-            List<ActivePokemon> team = b.getTrainer(victim).getTeam();
+            List<ActivePokemon> team = b.getTrainer(victim).getActiveTeam();
             ActivePokemon illusion = null;
 
             // Starting from the back of the party, locate the first conscious Pokemon that is of a different species to be the illusion
@@ -2879,7 +2879,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
                 }
 
                 // If the Pokemon in back is the same species at the current Pokemon -- do nothing
-                if (temp.getPokemonInfo().getNumber() == victim.getPokemonInfo().getNumber()) {
+                if (temp.getPokemonInfo().namesies() == victim.getPokemonInfo().namesies()) {
                     continue;
                 }
 
@@ -3921,7 +3921,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getAttributes().getDamageTaken())/(double)victim.getMaxHP() >= .5) {
+            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
                 victim.getStages().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
             }
         }
@@ -3936,7 +3936,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getAttributes().getDamageTaken())/(double)victim.getMaxHP() >= .5) {
+            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
                 victim.switcheroo(b, victim, CastSource.ABILITY, true);
             }
         }
@@ -3951,7 +3951,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getAttributes().getDamageTaken())/(double)victim.getMaxHP() >= .5) {
+            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
                 victim.switcheroo(b, victim, CastSource.ABILITY, true);
             }
         }
@@ -4038,7 +4038,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
-            if (!activated && b.getOtherPokemon(damageTaker).getAttributes().isAttacking()) {
+            if (!activated && b.getOtherPokemon(damageTaker).isAttacking()) {
                 boolean isPlayer = damageTaker.isPlayer();
                 boolean shiny = damageTaker.isShiny();
                 boolean front = !isPlayer;
@@ -4074,7 +4074,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.getAttributes().isFirstTurn() && victim.getAttributes().isFirstTurn() ? 2 : 1;
+            return !user.isFirstTurn() && victim.isFirstTurn() ? 2 : 1;
         }
     }
 
@@ -4199,7 +4199,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
             Messages.add(murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!");
-            murderer.reduceHealth(b, dead.getAttributes().getDamageTaken());
+            murderer.reduceHealth(b, dead.getDamageTaken());
         }
 
         @Override
@@ -4208,7 +4208,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
                 ActivePokemon murderer = b.getOtherPokemon(victim);
 
                 // Only grant death wish if murdered through direct damage
-                if (murderer.getAttributes().isAttacking()) {
+                if (murderer.isAttacking()) {
                     // DEATH WISH GRANTED
                     deathWish(b, victim, murderer);
                 }

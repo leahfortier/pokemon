@@ -418,7 +418,7 @@ Mental Herb:
 			for (RemovableEffect removableEffect : RemovableEffect.values()) {
 				if (user.hasEffect(removableEffect.effect)) {
 					used = true;
-					user.getAttributes().removeEffect(removableEffect.effect);
+					user.removeEffect(removableEffect.effect);
 					Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.name + "!");
 				}
 			}
@@ -450,7 +450,7 @@ Metronome:
 	Desc: A Pok\u00e9mon held item that boosts a move used consecutively. Its effect is reset if another move is used.
 	Price: 200
 	GetMultiplier:
-		return Math.min(2, 1 + .2*(user.getAttributes().getCount() - 1));
+		return Math.min(2, 1 + .2*(user.getCount() - 1));
 		###
 *
 Muscle Band:
@@ -1469,7 +1469,7 @@ Sacred Ash:
 	Field:
 		public boolean use(Trainer t) {
 			boolean healed = false;
-			for (ActivePokemon p : t.getTeam()) {
+			for (ActivePokemon p : t.getActiveTeam()) {
 				if (p.isActuallyDead()) {
 					healed = true;
 					p.removeStatus();
@@ -1850,7 +1850,7 @@ Persim Berry:
 	Field:
 		private boolean use(ActivePokemon p, CastSource source) {
 			if (p.hasEffect(EffectNamesies.CONFUSION)) {
-				p.getAttributes().removeEffect(EffectNamesies.CONFUSION);
+				p.removeEffect(EffectNamesies.CONFUSION);
 				this.addMessage(p, source);
 				return true;
 			}

@@ -2,7 +2,7 @@ package test;
 
 import map.MapName;
 import pattern.SimpleMapTransition;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import trainer.player.Player;
 
 public class TestCharacter extends Player {

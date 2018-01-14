@@ -192,7 +192,7 @@ Confusion:
 		super.cast(b, caster, victim, source, printCast);
 		if (victim.isHoldingItem(b, ItemNamesies.PERSIM_BERRY)) {
 			Messages.add(victim.getName() + "'s " + ItemNamesies.PERSIM_BERRY.getName() + " snapped it out of confusion!");
-			victim.getAttributes().removeEffect(this.namesies);
+			victim.removeEffect(this.namesies);
 			victim.consumeItem(b);
 		}
 		###
@@ -245,10 +245,10 @@ Encore:
 		return move.getAttack().namesies() == m.getAttack().namesies();
 		###
 	UnusableMessage: "Only " + move.getAttack().getName() + " can be used right now!"
-	FailCondition: victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0 || victim.getAttributes().getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS)
+	FailCondition: victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS)
 	CastMessage: victim.getName() + " got an encore!"
 	Cast:
-		move = victim.getAttributes().getLastMoveUsed();
+		move = victim.getLastMoveUsed();
 		super.cast(b, caster, victim, source, printCast);
 		###
 	ApplyEndTurn:
@@ -272,7 +272,7 @@ Disable:
 		return disabled.getAttack().namesies() != m.getAttack().namesies();
 		###
 	UnusableMessage: disabled.getAttack().getName() + " is disabled!"
-	FailCondition: victim.getAttributes().getLastMoveUsed() == null || victim.getAttributes().getLastMoveUsed().getPP() == 0
+	FailCondition: victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0
 	CanAttack:
 		// TODO: What is happening here?
 		turns--;
@@ -284,7 +284,7 @@ Disable:
 	SubsideMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " is no longer disabled!"
 	CastMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " was disabled!"
 	Cast:
-		disabled = victim.getAttributes().getLastMoveUsed();
+		disabled = victim.getLastMoveUsed();
 		super.cast(b, caster, victim, source, printCast);
 		###
 	FailMessage:
@@ -364,7 +364,7 @@ ChangeItem:
 	Int: ItemHolder
 	Cast:
 		item = ((ItemHolder)source.getSource(b, caster)).getItem();
-		victim.getAttributes().removeEffect(this.namesies);
+		victim.removeEffect(this.namesies);
 		super.cast(b, caster, victim, source, printCast);
 		###
 	Field:
@@ -421,7 +421,7 @@ ChangeType:
 		type = typeSource.getType(b, caster, victim);
 
 		// Remove any other ChangeType effects that the victim may have
-		while (victim.getAttributes().removeEffect(this.namesies)) {}
+		while (victim.removeEffect(this.namesies)) {}
 
 		super.cast(b, caster, victim, source, printCast);
 		###
@@ -449,7 +449,7 @@ ChangeAbility:
 		message = changey.getMessage(b, caster, victim);
 
 		// Remove any other ChangeAbility effects that the victim may have
-		while (victim.getAttributes().removeEffect(this.namesies)) {}
+		while (victim.removeEffect(this.namesies)) {}
 		super.cast(b, caster, victim, source, printCast);
 		###
 	GetAbility:
@@ -517,7 +517,7 @@ Mimic:
 		###
 	Cast:
 		ActivePokemon other = b.getOtherPokemon(victim);
-		final Move lastMoveUsed = other.getAttributes().getLastMoveUsed();
+		final Move lastMoveUsed = other.getLastMoveUsed();
 		Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
 
 		if (lastAttack == null || victim.hasMove(b, lastAttack.namesies()) || lastAttack.isMoveType(MoveType.MIMICLESS)) {
@@ -569,7 +569,7 @@ Torment:
 		###
 	Int: AttackSelectionSelfBlockerEffect
 	Usable:
-		Move lastMoveUsed = p.getAttributes().getLastMoveUsed();
+		Move lastMoveUsed = p.getLastMoveUsed();
 		return (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != m.getAttack().namesies());
 		###
 	UnusableMessage: p.getName() + " cannot use the same move twice in a row!"
@@ -772,7 +772,7 @@ Focusing:
 	Int: DamageTakenEffect
 	DamageTaken:
 		Messages.add(damageTaker.getName() + " lost its focus and couldn't move!");
-		damageTaker.getAttributes().removeEffect(this.namesies);
+		damageTaker.removeEffect(this.namesies);
 		damageTaker.addEffect((PokemonEffect)EffectNamesies.FLINCH.getEffect());
 		###
 *
@@ -782,7 +782,7 @@ ShellTrap:
 	Int: PhysicalContactEffect
 	Contact:
 		Messages.add(user.getName() + " set off " + victim.getName() + "'s trap!!");
-		victim.getAttributes().removeEffect(this.namesies);
+		victim.removeEffect(this.namesies);
 		###
 *
 BeakBlast:
@@ -885,7 +885,7 @@ Substitute:
 		this.hp -= damageAmount;
 		if (this.hp <= 0) {
 			Messages.add(new MessageUpdate("The substitute broke!").withNewPokemon(damageTaker.getPokemonInfo(), damageTaker.isShiny(), true, damageTaker.isPlayer()));
-			damageTaker.getAttributes().removeEffect(this.namesies());
+			damageTaker.removeEffect(this.namesies());
 		} else {
 			Messages.add("The substitute absorbed the hit!");
 		}
@@ -958,11 +958,11 @@ Bide:
 		}
 
 		// Bye Bye Bidesies
-		victim.getAttributes().removeEffect(this.namesies);
+		victim.removeEffect(this.namesies);
 		###
 	CanHave: True
 	ApplyEndTurn:
-		damage += victim.getAttributes().getDamageTaken();
+		damage += victim.getDamageTaken();
 		###
 *
 HalfWeight:
@@ -1005,7 +1005,7 @@ PowerTrick:
 		}
 
 		Messages.add(getCastMessage(b, caster, victim, source));
-		victim.getAttributes().removeEffect(this.namesies);
+		victim.removeEffect(this.namesies);
 		###
 *
 PowerSplit:
@@ -1120,7 +1120,7 @@ ConsumedItem:
 	Cast:
 		consumed = victim.getHeldItem(b);
 		victim.removeItem();
-		victim.getAttributes().removeEffect(this.namesies);
+		victim.removeEffect(this.namesies);
 		super.cast(b, caster, victim, source, printCast);
 		###
 	Int: ItemHolder
@@ -1163,7 +1163,7 @@ BreaksTheMold:
 Raging:
 	Int: TakeDamageEffect
 	OnTakeDamage:
-		Move lastMoveUsed = victim.getAttributes().getLastMoveUsed();
+		Move lastMoveUsed = victim.getLastMoveUsed();
 		if (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != AttackNamesies.RAGE) {
 			victim.removeEffect(this);
 			return;

@@ -3,7 +3,7 @@ package mapMaker.dialogs.wildbattle;
 import map.overworld.WildEncounter;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.FishingMatcher;
-import pokemon.ActivePokemon;
+import pokemon.PartyPokemon;
 import util.GUIUtils;
 
 import javax.swing.JButton;
@@ -37,8 +37,8 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
 
         nameTextField = GUIUtils.createTextField(this.getDefaultName());
 
-        lowLevelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, ActivePokemon.MAX_LEVEL);
-        highLevelFormattedTextField = GUIUtils.createIntegerTextField(ActivePokemon.MAX_LEVEL, 1, ActivePokemon.MAX_LEVEL);
+        lowLevelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, PartyPokemon.MAX_LEVEL);
+        highLevelFormattedTextField = GUIUtils.createIntegerTextField(PartyPokemon.MAX_LEVEL, 1, PartyPokemon.MAX_LEVEL);
 
         JButton addPokemonButton = GUIUtils.createButton("Add Pokemon", event -> addPokemonPanel(null));
         JButton removeSelectedButton = GUIUtils.createButton(

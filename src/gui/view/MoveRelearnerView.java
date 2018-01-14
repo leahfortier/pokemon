@@ -17,7 +17,8 @@ import item.bag.Bag;
 import main.Game;
 import main.Global;
 import map.Direction;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 import trainer.Trainer;
 import trainer.player.Player;
 import type.Type;
@@ -26,6 +27,7 @@ import util.GeneralUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -52,7 +54,7 @@ public class MoveRelearnerView extends View {
 
     private TileSet partyTiles;
 
-    private List<ActivePokemon> team;
+    private List<PartyPokemon> team;
     private List<AttackNamesies> learnableMoves;
     private Bag bag;
 
@@ -132,7 +134,7 @@ public class MoveRelearnerView extends View {
                 buttonHeight,
                 ButtonHoverAction.BOX,
                 new int[] { RETURN, MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1, RETURN, MOVES_PER_PAGE },
-                () -> learnMovePanel = new LearnMovePanel(team.get(selectedPokemon), new Move(selectedMove))
+                () -> learnMovePanel = new LearnMovePanel((ActivePokemon)team.get(selectedPokemon), new Move(selectedMove))
         );
 
         returnButton = Button.createExitButton(
@@ -221,7 +223,7 @@ public class MoveRelearnerView extends View {
         partyPanel.withTypeColors(team.get(selectedPokemon)).drawBackground(g);
 
         for (int i = 0; i < team.size(); i++) {
-            ActivePokemon pokemon = team.get(i);
+            PartyPokemon pokemon = team.get(i);
             Button pokemonButton = pokemonButtons[i];
 
             DrawPanel buttonPanel = new DrawPanel(pokemonButton)
@@ -245,10 +247,10 @@ public class MoveRelearnerView extends View {
             }
 
             buttonPanel.drawBackground(g);
-            buttonPanel.imageLabel(g, 22, partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getName());
+            buttonPanel.imageLabel(g, 22, partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getActualName());
         }
 
-        Iterator<AttackNamesies> iterator = GeneralUtils.pageIterator(this.learnableMoves, pageNum, MOVES_PER_PAGE);
+        Iterator<AttackNamesies> iterator = this.getIterator();
         for (int i = 0; i < MOVES_PER_PAGE && iterator.hasNext(); i++) {
             Attack attack = iterator.next().getAttack();
             Button moveButton = moveButtons[i];
@@ -349,8 +351,12 @@ public class MoveRelearnerView extends View {
 
     private void setSelectedPokemon(int index) {
         this.selectedPokemon = index;
-        this.learnableMoves = this.team.get(index).getLearnableMoves();
+
+        PartyPokemon selected = this.team.get(index);
+        this.learnableMoves = selected.isEgg() ? new ArrayList<>() : selected.getLearnableMoves();
         this.selectedMove = this.learnableMoves.isEmpty() ? null : this.learnableMoves.get(0).getAttack();
         this.pageNum = 0;
+
+        this.updateActiveButtons();
     }
 }

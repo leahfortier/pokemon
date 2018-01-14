@@ -3,14 +3,14 @@ package battle.effect.generic;
 import battle.Battle;
 import item.Item;
 import main.Global;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.ability.Ability;
 
 public enum CastSource {
     ATTACK(false, (b, caster) -> caster.getAttack()),
     ABILITY(true, (b, caster) -> caster.getAbility()),
     HELD_ITEM(true, (b, caster) -> caster.getHeldItem(b)),
-    CAST_SOURCE(false, (b, caster) -> caster.getAttributes().getCastSource()),
+    CAST_SOURCE(false, (b, caster) -> caster.getCastSource()),
     USE_ITEM,
     EFFECT;
 

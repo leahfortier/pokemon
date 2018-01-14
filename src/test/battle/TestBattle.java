@@ -3,7 +3,7 @@ package test.battle;
 import battle.Battle;
 import battle.attack.AttackNamesies;
 import org.junit.Assert;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import test.TestCharacter;
 import test.TestPokemon;
@@ -36,7 +36,7 @@ public class TestBattle extends Battle {
         Assert.assertTrue(modifier > 0);
         if (expectedDamageModifier != null) {
             TestUtils.assertEquals(
-                    StringUtils.spaceSeparated(attacking.getAttack(), attacking.getAttributes().getCount()),
+                    StringUtils.spaceSeparated(attacking.getAttack(), attacking.getCount()),
                     expectedDamageModifier, modifier
             );
         }

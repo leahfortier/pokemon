@@ -8,7 +8,7 @@ import gui.view.battle.VisualState;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import trainer.TrainerAction;
 import trainer.player.Player;
 

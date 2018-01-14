@@ -3,7 +3,7 @@ package item.medicine;
 import item.hold.HoldItem;
 import item.use.PokemonUseItem;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Stat;
 
 public interface EvIncreaser extends HoldItem, PokemonUseItem {

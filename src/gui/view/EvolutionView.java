@@ -14,9 +14,10 @@ import main.Global;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
+import pokemon.breeding.Eggy;
 import pokemon.evolution.BaseEvolution;
 import trainer.player.EvolutionInfo;
 import type.Type;
@@ -146,11 +147,11 @@ class EvolutionView extends View {
             if (isEgg) {
                 canvasPanel.withBackgroundColors(new Color[] { Type.NORMAL.getColor(), Type.NORMAL.getColor() });
             } else {
-                canvasPanel.withBackgroundColors(Type.getColors(preEvolution.getType()));
+                canvasPanel.withBackgroundColors(Type.getColors(preEvolution));
             }
         } else {
             if (isEgg) {
-                canvasPanel.withBackgroundColors(Type.getColors(preEvolution.getType()));
+                canvasPanel.withBackgroundColors(Type.getColors(preEvolution));
             } else {
                 canvasPanel.withBackgroundColors(Type.getColors(evolvingPokemon));
             }
@@ -186,7 +187,7 @@ class EvolutionView extends View {
         FontMetrics.setFont(g, 30);
         g.setColor(Color.BLACK);
 
-        String preIndex = isEgg ? ActivePokemon.SPRITE_EGG_IMAGE_NAME : preEvolution.getImageName(evolvingPokemon.isShiny());
+        String preIndex = isEgg ? Eggy.SPRITE_EGG_IMAGE_NAME : preEvolution.getImageName(evolvingPokemon.isShiny());
         String postIndex = isEgg ? preEvolution.getImageName(evolvingPokemon.isShiny()) : postEvolution.getImageName(evolvingPokemon.isShiny());
 
         BufferedImage currEvolution = pokemonTiles.getTile(preIndex);

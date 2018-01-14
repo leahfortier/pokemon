@@ -12,7 +12,7 @@ import item.ItemNamesies;
 import map.MapName;
 import message.Messages;
 import pattern.map.MapTransitionMatcher;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import trainer.player.Player;
 import util.save.Save;

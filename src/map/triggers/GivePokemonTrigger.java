@@ -2,7 +2,7 @@ package map.triggers;
 
 import main.Game;
 import pattern.PokemonMatcher;
-import pokemon.ActivePokemon;
+import pokemon.PartyPokemon;
 import util.SerializationUtils;
 
 class GivePokemonTrigger extends Trigger {
@@ -16,6 +16,6 @@ class GivePokemonTrigger extends Trigger {
 
     @Override
     protected void executeTrigger() {
-        Game.getPlayer().addPokemon(ActivePokemon.createActivePokemon(this.pokemonMatcher, true));
+        Game.getPlayer().addPokemon(PartyPokemon.createActivePokemon(this.pokemonMatcher, true));
     }
 }

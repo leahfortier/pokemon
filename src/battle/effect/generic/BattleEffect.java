@@ -14,7 +14,7 @@ import battle.effect.status.StatusCondition;
 import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import pokemon.Stat;
 import type.Type;
 

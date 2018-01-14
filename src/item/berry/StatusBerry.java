@@ -5,7 +5,7 @@ import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
 import battle.effect.status.StatusCondition;
 import item.medicine.StatusHealer;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 public interface StatusBerry extends StatusHealer, GainableEffectBerry, StatusReceivedEffect {
     @Override

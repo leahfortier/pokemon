@@ -5,10 +5,12 @@ import battle.effect.generic.Effect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import main.Global;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
+import pokemon.PartyPokemon;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class WildPokemon implements Opponent, Serializable {
@@ -46,7 +48,7 @@ public class WildPokemon implements Opponent, Serializable {
 
     @Override
     public void resetUsed() {
-        wildPokemon.getAttributes().setUsed(true);
+        wildPokemon.setUsed(true);
     }
 
     @Override
@@ -60,10 +62,8 @@ public class WildPokemon implements Opponent, Serializable {
     }
 
     @Override
-    public List<ActivePokemon> getTeam() {
-        List<ActivePokemon> list = new ArrayList<>();
-        list.add(wildPokemon);
-        return list;
+    public List<PartyPokemon> getTeam() {
+        return Collections.singletonList(wildPokemon);
     }
 
     @Override

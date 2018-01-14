@@ -3,7 +3,7 @@ package battle.effect.generic;
 import battle.Battle;
 import main.Global;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import util.RandomUtils;
 import util.StringUtils;
 

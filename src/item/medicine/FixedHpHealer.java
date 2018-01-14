@@ -1,6 +1,6 @@
 package item.medicine;
 
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 
 public interface FixedHpHealer extends HpHealer {
     int getFixedHealAmount(ActivePokemon p);

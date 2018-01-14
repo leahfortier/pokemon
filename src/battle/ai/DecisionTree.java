@@ -4,7 +4,7 @@ import battle.Battle;
 import battle.attack.Move;
 import message.Messages;
 import message.Messages.MessageState;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import trainer.PlayerTrainer;
 import trainer.SimulatedPlayer;
 import trainer.Trainer;
@@ -71,13 +71,14 @@ public class DecisionTree {
         trainer.replaceFront(front);
 
         // Need to set these manually since this field has to be transient because ActivePokemon and BattleAttributes store each other
-        front.getAttributes().setAttributesHolder(front);
+        front.getStages().setAttributesHolder(front);
 
         trainer.setAction(TrainerAction.FIGHT);
         front.setMove(battle, new Move(move.getAttack()));
     }
 
     private Battle simulateTurn(Battle b, Move opponentMove, Move playerMove) {
+        // TODO: Why can't we just do simulated.setPlayer(new SimulatedPlayer(b.getPlayer())??
         // Mock the player object for serialization and set back afterwards
         PlayerTrainer playerTrainer = b.getPlayer();
         b.setPlayer(new SimulatedPlayer(b.getPlayer()));

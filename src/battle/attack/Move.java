@@ -6,7 +6,7 @@ import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import message.Messages;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import type.Type;
 import util.RandomUtils;
 
@@ -163,6 +163,7 @@ public class Move implements Serializable {
             }
         }
 
+        // TODO: Why just the player
         if (p.isPlayer() && getUsableMoves(b, p).size() == 0) {
             p.setMove(b, new Move(AttackNamesies.STRUGGLE));
             return true;

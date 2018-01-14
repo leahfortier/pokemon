@@ -5,7 +5,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import message.Messages;
 import message.Messages.MessageState;
-import pokemon.ActivePokemon;
+import battle.ActivePokemon;
 import trainer.Opponent;
 import trainer.Trainer;
 import trainer.TrainerAction;
@@ -69,8 +69,8 @@ public class MonteCarlo {
             ActivePokemon opponentPokemon = opponent.front();
 
             // Need to set these manually since this field has to be transient because ActivePokemon and BattleAttributes store each other
-            playerPokemon.getAttributes().setAttributesHolder(playerPokemon);
-            opponentPokemon.getAttributes().setAttributesHolder(opponentPokemon);
+            playerPokemon.getStages().setAttributesHolder(playerPokemon);
+            opponentPokemon.getStages().setAttributesHolder(opponentPokemon);
 
             for (Move move : simulated.getTrainer(!current.isOpp).front().getMoves(simulated)) {
                 Node childNode = new Node(new ArrayList<>(current.path), !current.isOpp);
