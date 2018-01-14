@@ -51,11 +51,6 @@ public class Eggy extends PartyPokemon {
     }
 
     @Override
-    public boolean checkEvolution() {
-        return false;
-    }
-
-    @Override
     public boolean canBreed() {
         // Eggs can't breed!!!
         return false;

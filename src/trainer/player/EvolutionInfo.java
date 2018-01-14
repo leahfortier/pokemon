@@ -1,6 +1,7 @@
 package trainer.player;
 
 import gui.view.ViewMode;
+import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import battle.ActivePokemon;
@@ -20,9 +21,11 @@ public class EvolutionInfo implements Serializable {
         return evolution;
     }
 
-    void setEgg(ActivePokemon eggy) {
-        evolvingPokemon = eggy;
+    void setEgg(ActivePokemon hatched) {
+        evolvingPokemon = hatched;
         evolution = null;
+
+        Messages.add(new MessageUpdate().withTrigger(TriggerType.GROUP.getTriggerNameFromSuffix("EggHatching")));
     }
 
     public void setEvolution(ActivePokemon pokemon, BaseEvolution evolution) {

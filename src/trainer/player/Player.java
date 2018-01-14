@@ -16,7 +16,6 @@ import map.area.AreaData;
 import map.area.FlyLocation;
 import map.entity.movable.PlayerEntity;
 import map.overworld.OverworldTool;
-import map.triggers.TriggerType;
 import map.triggers.battle.FishingTrigger;
 import message.MessageUpdate;
 import message.MessageUpdateType;
@@ -27,6 +26,7 @@ import pokemon.PartyPokemon;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.DayCareCenter;
 import pokemon.breeding.Eggy;
+import pokemon.evolution.EvolutionMethod;
 import trainer.Opponent;
 import trainer.PlayerTrainer;
 import trainer.Trainer;
@@ -257,7 +257,6 @@ public class Player extends PlayerTrainer implements Serializable {
                 if (hatched != null) {
                     this.evolutionInfo.setEgg(hatched);
                     this.team.set(i, hatched);
-                    Messages.add(new MessageUpdate().withTrigger(TriggerType.GROUP.getTriggerNameFromSuffix("EggHatching")));
 
                     // Only one hatch per step
                     break;
@@ -438,8 +437,13 @@ public class Player extends PlayerTrainer implements Serializable {
 
     public void checkEvolution() {
         for (PartyPokemon p : team) {
-            if (p.canFight() && p.checkEvolution()) {
-                break;
+            if (p.canFight() && p.isBattleUsed()) {
+                // Evolution information will be set in this method
+                boolean canEvolve = EvolutionMethod.LEVEL.checkEvolution(p) || EvolutionMethod.MOVE.checkEvolution(p);
+                if (canEvolve) {
+                    // Only one evolution per battle
+                    break;
+                }
             }
         }
     }

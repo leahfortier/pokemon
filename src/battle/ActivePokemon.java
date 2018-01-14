@@ -199,37 +199,10 @@ public class ActivePokemon extends PartyPokemon {
         // Maybe you'll evolve?!
         // Can only evolve outside of battle
         if (!inBattle) {
-            checkEvolution(EvolutionMethod.LEVEL);
+            EvolutionMethod.LEVEL.checkEvolution(this);
         }
 
         return true;
-    }
-
-    @Override
-    public boolean checkEvolution() {
-        return this.checkEvolution(EvolutionMethod.LEVEL) || this.checkEvolution(EvolutionMethod.MOVE);
-    }
-
-    public boolean checkEvolution(ItemNamesies itemNamesies) {
-        return checkEvolution(EvolutionMethod.ITEM, itemNamesies);
-    }
-
-    private boolean checkEvolution(EvolutionMethod method) {
-        return checkEvolution(method, null);
-    }
-
-    private boolean checkEvolution(EvolutionMethod method, ItemNamesies itemNamesies) {
-        if (getActualHeldItem().namesies() == ItemNamesies.EVERSTONE) {
-            return false;
-        }
-
-        BaseEvolution evolution = this.getPokemonInfo().getEvolution().getEvolution(method, this, itemNamesies);
-        if (evolution != null) {
-            Game.getPlayer().getEvolutionInfo().setEvolution(this, evolution);
-            return true;
-        }
-
-        return false;
     }
 
     // Returns stat gains
@@ -290,7 +263,7 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         if (!inBattle) {
-            checkEvolution(EvolutionMethod.MOVE);
+            EvolutionMethod.MOVE.checkEvolution(this);
         }
     }
 

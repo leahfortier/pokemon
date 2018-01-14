@@ -121,7 +121,6 @@ public abstract class PartyPokemon implements Serializable {
     public abstract void setUsed(boolean used);
     public abstract boolean isUsed();
     public abstract boolean isBattleUsed();
-    public abstract boolean checkEvolution();
 
     // Removes status, restores PP for all moves, restores to full health
     public void fullyHeal() {

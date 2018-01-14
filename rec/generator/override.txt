@@ -1231,7 +1231,7 @@ MemoryType:
 EvolutionItem:
 	AddInterface: PokemonUseItem
 	AddMapField: PokemonUse:
-		return p.checkEvolution(this.namesies);
+		return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
 		###
 *
 StatusHealAll:

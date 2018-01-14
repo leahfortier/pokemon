@@ -2630,7 +2630,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -2819,7 +2819,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -2843,7 +2843,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
 
         @Override
@@ -2877,7 +2877,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
 
         @Override
@@ -2896,7 +2896,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -2915,7 +2915,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -2934,7 +2934,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -2953,7 +2953,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -2967,7 +2967,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -2997,7 +2997,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3011,7 +3011,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3030,7 +3030,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3044,7 +3044,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3063,7 +3063,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3086,7 +3086,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3105,7 +3105,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3124,7 +3124,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3154,7 +3154,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3173,7 +3173,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3187,7 +3187,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3206,7 +3206,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3220,7 +3220,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3234,7 +3234,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3248,7 +3248,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3262,7 +3262,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3276,7 +3276,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3290,7 +3290,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3304,7 +3304,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3318,7 +3318,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         @Override
         public boolean use(ActivePokemon p) {
-            return p.checkEvolution(this.namesies);
+            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
