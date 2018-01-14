@@ -151,7 +151,7 @@ public class Move implements Serializable {
         // Forced moves
         Move forcedMove = ForceMoveEffect.getForcedMove(b, p);
         if (forcedMove != null) {
-            p.setMove(b, forcedMove);
+            p.setMove(forcedMove);
             return true;
         }
 
@@ -165,7 +165,7 @@ public class Move implements Serializable {
 
         // TODO: Why just the player
         if (p.isPlayer() && getUsableMoves(b, p).size() == 0) {
-            p.setMove(b, new Move(AttackNamesies.STRUGGLE));
+            p.setMove(new Move(AttackNamesies.STRUGGLE));
             return true;
         }
 
@@ -204,7 +204,7 @@ public class Move implements Serializable {
 
         // Set the move if selecting
         if (selecting) {
-            p.setMove(b, m);
+            p.setMove(m);
         }
 
         return true;

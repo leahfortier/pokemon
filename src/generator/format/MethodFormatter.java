@@ -16,6 +16,7 @@ public class MethodFormatter {
 
         this.parenthesesBalance = 0;
         this.inArrayDeclaration = false;
+        this.inLambda = false;
         this.inSwitch = false;
         this.inCases = false;
     }

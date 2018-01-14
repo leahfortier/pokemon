@@ -1,5 +1,6 @@
 package pokemon.ability;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
@@ -50,6 +51,7 @@ import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.RepelLowLevelEncounterEffect;
+import battle.effect.generic.EffectInterfaces.SapHealthEffect;
 import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
 import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
@@ -88,7 +90,6 @@ import map.overworld.WildEncounter;
 import map.weather.WeatherState;
 import message.MessageUpdate;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
@@ -3784,12 +3785,12 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         GaleWings() {
-            super(AbilityNamesies.GALE_WINGS, "Gives priority to Flying-type moves.");
+            super(AbilityNamesies.GALE_WINGS, "Gives priority to Flying-type moves when the Pok\u00e9mon's HP is full.");
         }
 
         @Override
         public int changePriority(Battle b, ActivePokemon user) {
-            return user.isAttackType(Type.FLYING) ? 1 : 0;
+            return user.fullHealth() && user.isAttackType(Type.FLYING) ? 1 : 0;
         }
     }
 
@@ -3991,7 +3992,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public int changePriority(Battle b, ActivePokemon user) {
-            return user.getAttack().isMoveType(MoveType.HEALING) ? 1 : 0;
+            return user.getAttack().isMoveType(MoveType.HEALING) ? 3 : 0;
         }
     }
 

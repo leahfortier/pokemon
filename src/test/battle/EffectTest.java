@@ -81,7 +81,7 @@ public class EffectTest extends BaseTest {
 
         // Make sure wears off by the next turn
         battle.defendingFight(AttackNamesies.SCREECH);
-        Assert.assertTrue(attacking.getStage(Stat.DEFENSE) < 0);
+        Assert.assertEquals(-2, attacking.getStage(Stat.DEFENSE));
         Assert.assertEquals(0, defending.getStage(Stat.DEFENSE));
     }
 

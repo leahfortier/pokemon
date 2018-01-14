@@ -3167,6 +3167,7 @@ public abstract class Attack implements Serializable {
         Wish() {
             super(AttackNamesies.WISH, Type.NORMAL, MoveCategory.STATUS, 10, "One turn after this move is used, the target's HP is restored by half the user's maximum HP.");
             super.effects.add(EffectNamesies.WISH);
+            super.moveTypes.add(MoveType.HEALING);
             super.selfTarget = true;
         }
     }
@@ -3499,6 +3500,7 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.LEECH_LIFE, Type.BUG, MoveCategory.PHYSICAL, 10, "The user drains the target's blood. The user's HP is restored by half the damage taken by the target.");
             super.power = 80;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.HEALING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -3558,6 +3560,7 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.ABSORB, Type.GRASS, MoveCategory.SPECIAL, 25, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.");
             super.power = 20;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.HEALING);
         }
     }
 
@@ -3568,6 +3571,7 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.MEGA_DRAIN, Type.GRASS, MoveCategory.SPECIAL, 15, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.");
             super.power = 40;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.HEALING);
         }
     }
 
@@ -3615,6 +3619,7 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.GIGA_DRAIN, Type.GRASS, MoveCategory.SPECIAL, 10, "A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.");
             super.power = 75;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.HEALING);
         }
     }
 
@@ -5549,6 +5554,7 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.DREAM_EATER, Type.PSYCHIC, MoveCategory.SPECIAL, 15, "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal the user's HP.");
             super.power = 100;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.HEALING);
         }
 
         @Override
@@ -7600,7 +7606,7 @@ public abstract class Attack implements Serializable {
                     break;
                 }
 
-                p.callTempMove(b, this.namesies(), () -> {
+                p.callTempMove(this.namesies(), () -> {
                     Messages.add(p.getName() + "'s attack!");
                     super.applyDamage(p, o, b);
                 });
@@ -8643,6 +8649,7 @@ public abstract class Attack implements Serializable {
             super.power = 75;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PUNCHING);
+            super.moveTypes.add(MoveType.HEALING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -8769,6 +8776,7 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.HORN_LEECH, Type.GRASS, MoveCategory.PHYSICAL, 10, "The user drains the target's energy with its horns. The user's HP is restored by half the damage taken by the target.");
             super.power = 75;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.HEALING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -9159,6 +9167,7 @@ public abstract class Attack implements Serializable {
             super.effects.add(EffectNamesies.HEAL_SWITCH);
             super.moveTypes.add(MoveType.USER_FAINTS);
             super.moveTypes.add(MoveType.NON_SNATCHABLE);
+            super.moveTypes.add(MoveType.HEALING);
             super.selfTarget = true;
         }
     }
@@ -9171,6 +9180,7 @@ public abstract class Attack implements Serializable {
             super.effects.add(EffectNamesies.HEAL_SWITCH);
             super.moveTypes.add(MoveType.USER_FAINTS);
             super.moveTypes.add(MoveType.NON_SNATCHABLE);
+            super.moveTypes.add(MoveType.HEALING);
             super.selfTarget = true;
         }
     }
@@ -10020,6 +10030,7 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.OBLIVION_WING, Type.FLYING, MoveCategory.SPECIAL, 10, "The user absorbs its target's HP. The user's HP is restored by over half of the damage taken by the target.");
             super.power = 80;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.HEALING);
         }
 
         @Override
@@ -10111,6 +10122,7 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.DRAINING_KISS, Type.FAIRY, MoveCategory.SPECIAL, 10, "The user steals the target's energy with a kiss. The user's HP is restored by over half of the damage taken by the target.");
             super.power = 50;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.HEALING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
@@ -10137,6 +10149,7 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.PARABOLIC_CHARGE, Type.ELECTRIC, MoveCategory.SPECIAL, 20, "The user attacks everything around it. The user's HP is restored by half the damage taken by those hit.");
             super.power = 65;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.HEALING);
         }
     }
 
@@ -10758,6 +10771,7 @@ public abstract class Attack implements Serializable {
         StrengthSap() {
             super(AttackNamesies.STRENGTH_SAP, Type.GRASS, MoveCategory.STATUS, 10, "The user restores its HP by the same amount as the target's Attack stat. It also lowers the target's Attack stat.");
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.HEALING);
             super.statChanges[Stat.ATTACK.index()] = -1;
         }
 

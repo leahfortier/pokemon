@@ -1617,6 +1617,7 @@ Wish:
 	PP: 10
 	Cat: Status
 	Type: Normal
+	MoveType: Healing
 *
 Minimize:
 	Desc: The user compresses its body to make itself look smaller, which sharply raises its evasiveness.
@@ -1816,7 +1817,7 @@ Hyper Voice:
 	MoveType: Sound_Based
 *
 Leech Life:
-	Int: SapHealthEffect
+	SapHealthMove: True
 	Cat: Physical
 	Acc: 100
 	Pow: 80
@@ -1866,12 +1867,12 @@ Absorb:
 	Cat: Special
 	Acc: 100
 	Type: Grass
-	Int: SapHealthEffect
+	SapHealthMove: True
 *
 Mega Drain:
 	PP: 15
 	Desc: A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.
-	Int: SapHealthEffect
+	SapHealthMove: True
 	Type: Grass
 	Pow: 40
 	Acc: 100
@@ -1905,7 +1906,7 @@ Natural Gift:
 *
 Giga Drain:
 	Desc: A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.
-	Int: SapHealthEffect
+	SapHealthMove: True
 	Type: Grass
 	Pow: 75
 	Acc: 100
@@ -3103,7 +3104,7 @@ Dream Eater:
 	Acc: 100
 	Cat: Special
 	Type: Psychic
-	Int: SapHealthEffect
+	SapHealthMove: True
 	SapMessage: return victim.getName() + "'s dream was eaten!";
 	Applies: victim.hasStatus(StatusCondition.ASLEEP)
 *
@@ -4385,7 +4386,7 @@ Beat Up:
 				break;
 			}
 
-			p.callTempMove(b, this.namesies(), () -> {
+			p.callTempMove(this.namesies(), () -> {
 				Messages.add(p.getName() + "'s attack!");
 				super.applyDamage(p, o, b);
 			});
@@ -4995,7 +4996,7 @@ Drain Punch:
 	Type: Fighting
 	Pow: 75
 	MoveType: Punching
-	Int: SapHealthEffect
+	SapHealthMove: True
 	Acc: 100
 	Cat: Physical
 *
@@ -5073,7 +5074,7 @@ Horn Leech:
 	Cat: Physical
 	Acc: 100
 	Pow: 75
-	Int: SapHealthEffect
+	SapHealthMove: True
 *
 Electroweb:
 	Desc: The user captures and attacks opposing Pok\u00e9mon by using an electric net. It reduces the targets' Speed stat.
@@ -5307,19 +5308,13 @@ Healing Wish:
 	Desc: The user faints. In return, the Pok\u00e9mon taking its place will have its HP restored and status cured.
 	PP: 10
 	Type: Psychic
-	Cat: Status
-	Effect: HealSwitch
-	SelfTarget: True
-	MoveType: User_Faints, Non_Snatchable
+	HealSwitcher: True
 *
 Lunar Dance:
 	Desc: The user faints. In return, the Pok\u00e9mon taking its place will have its status and HP fully restored.
 	PP: 10
 	Type: Psychic
-	Cat: Status
-	Effect: HealSwitch
-	SelfTarget: True
-	MoveType: User_Faints, Non_Snatchable
+	HealSwitcher: True
 *
 Roar:
 	Desc: The target is scared off and replaced by another Pok\u00e9mon in its party. In the wild, the battle ends.
@@ -5801,8 +5796,8 @@ Oblivion Wing:
 	Acc: 100
 	Pow: 80
 	Type: Flying
-	Int: SapHealthEffect
-	SapPercentage: return .75;
+	SapHealthMove: True
+	SapPercentage: .75
 *
 Geomancy:
 	Desc: The user absorbs energy and sharply raises its Sp. Atk, Sp. Def, and Speed stats on the next turn.
@@ -5849,8 +5844,8 @@ Nuzzle:
 	Status: Paralyzed
 *
 Draining Kiss:
-	Int: SapHealthEffect
-	SapPercentage: return .75;
+	SapHealthMove: True
+	SapPercentage: .75
 	Desc: The user steals the target's energy with a kiss. The user's HP is restored by over half of the damage taken by the target.
 	PP: 10
 	Type: Fairy
@@ -5874,7 +5869,7 @@ Parabolic Charge:
 	Pow: 65
 	Acc: 100
 	Cat: Special
-	Int: SapHealthEffect
+	SapHealthMove: True
 *
 Disarming Voice:
 	Desc: Letting out a charming cry, the user does emotional damage to opposing Pok\u00e9mon. This attack never misses.
@@ -6273,7 +6268,7 @@ Strength Sap:
 	Cat: Status
 	Acc: 100
 	PP: 10
-	Int: SapHealthEffect
+	SapHealthMove: True
 	Field:
 		private int victimAttackStat;
 		###
@@ -6285,7 +6280,7 @@ Strength Sap:
 		this.sapHealth(b, user, victim, victimAttackStat, true);
 		###
 	StatChange: 1 Attack -1
-	SapPercentage: return 1;
+	SapPercentage: 1
 *
 Leafage:
 	Desc: The user attacks by pelting the target with leaves.

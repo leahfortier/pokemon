@@ -113,6 +113,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
                 return;
             }
 
+            // Message needs to be added first instead of in sapHealth so that it is before the victim's reduce health message
             Messages.add(this.getSapMessage(victim));
             this.sapHealth(b, b.getOtherPokemon(victim), victim, victim.reduceHealthFraction(b, 1/8.0), false);
         }
@@ -900,7 +901,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             if (RandomUtils.chanceTest(50)) {
 
                 // Perform confusion damage
-                p.callTempMove(b, AttackNamesies.CONFUSION_DAMAGE, () -> {
+                p.callTempMove(AttackNamesies.CONFUSION_DAMAGE, () -> {
                     Messages.add("It hurt itself in confusion!");
                     p.reduceHealth(b, b.calculateDamage(p, p));
                 });

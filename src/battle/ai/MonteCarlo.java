@@ -98,8 +98,8 @@ public class MonteCarlo {
                     ((Trainer)opponent).setAction(TrainerAction.FIGHT);
                 }
 
-                simulated.getTrainer(false).front().setMove(simulated, rolloutMoves.get(j));
-                simulated.getTrainer(true).front().setMove(simulated, rolloutMoves.get(j + 1));
+                simulated.getTrainer(false).front().setMove(rolloutMoves.get(j));
+                simulated.getTrainer(true).front().setMove(rolloutMoves.get(j + 1));
 
                 simulated.fight();
 

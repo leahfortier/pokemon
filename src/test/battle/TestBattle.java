@@ -23,6 +23,8 @@ public class TestBattle extends Battle {
     private TestBattle(Opponent opponent) {
         super(opponent);
 
+        this.getPlayer().setAction(TrainerAction.FIGHT);
+
         this.getAttacking().setupMove(AttackNamesies.SPLASH, this);
         this.getDefending().setupMove(AttackNamesies.SPLASH, this);
     }
@@ -127,6 +129,8 @@ public class TestBattle extends Battle {
         new TestCharacter(mahBoiiiiiii);
 
         EnemyTrainer enemy = new EnemyTrainer("MUTANT ENEMY", 93, Trainer.MAX_POKEMON, nahMahBoi);
+        enemy.setAction(TrainerAction.FIGHT);
+
         return new TestBattle(enemy);
     }
 

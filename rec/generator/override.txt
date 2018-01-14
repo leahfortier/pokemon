@@ -1439,7 +1439,7 @@ FutureAttackEffect:
 			return;
 		}
 
-		theSeeer.callTempMove(b, attack.namesies(), () -> theSeeer.getAttack().applyDamage(theSeeer, p, b));
+		theSeeer.callTempMove(attack.namesies(), () -> theSeeer.getAttack().applyDamage(theSeeer, p, b));
 		###
 	AddMapField: Cast:
 		theSeeer = caster;
@@ -1643,7 +1643,7 @@ TM:
 ChangePriorityAbility:
 	AddInterface: PriorityChangeEffect
 	AddMapField: ChangePriority:
-		return {0} ? 1 : 0;
+		return {2-} ? {1} : 0;
 		###
 *
 ChangePriority:
@@ -1661,8 +1661,15 @@ AbsorbDamage:
 DamageTaken:
 	Header: void damageTaken(Battle b, ActivePokemon damageTaker)
 *
+SapHealthMove:
+	AddInterface: SapHealthEffect
+	AddMapField: MoveType: Healing
+*
 SapPercentage:
 	Header: double sapPercentage()
+	Body:
+		return {0};
+		###
 *
 SapAmount:
 	Header: int getSapAmount(ActivePokemon victim, int damageAmount)
@@ -1821,6 +1828,13 @@ PowerCountMove:
 	Body:
 		return {0};
 		###
+*
+# Heal Switch and Lunar Dance
+HealSwitcher:
+	AddMapField: Cat: Status
+	AddMapField: Effect: HealSwitch
+	AddMapField: SelfTarget: True
+	AddMapField: MoveType: User_Faints, Non_Snatchable, Healing
 *
 GET_DAT_CASH_MONEY_TWICE_ITEM:
 	Header: void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice)

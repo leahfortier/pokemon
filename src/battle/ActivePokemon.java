@@ -268,21 +268,21 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public void callNewMove(Battle b, ActivePokemon opp, Move m) {
-        this.callTempMove(b, m, () -> {
+        this.callTempMove(m, () -> {
             b.printAttacking(this);
             this.getAttack().apply(this, opp, b);
         });
     }
 
-    public void callTempMove(Battle b, AttackNamesies tempMove, Action moveAction) {
-        this.callTempMove(b, new Move(tempMove), moveAction);
+    public void callTempMove(AttackNamesies tempMove, Action moveAction) {
+        this.callTempMove(new Move(tempMove), moveAction);
     }
 
-    public void callTempMove(Battle b, Move tempMove, Action moveAction) {
+    public void callTempMove(Move tempMove, Action moveAction) {
         Move currentMove = getMove();
-        setMove(b, tempMove);
+        setMove(tempMove);
         moveAction.performAction();
-        setMove(b, currentMove);
+        setMove(currentMove);
     }
 
     // Wild Pokemon if in a wild battle and not the player's pokemon
@@ -908,9 +908,8 @@ public class ActivePokemon extends PartyPokemon {
         return selected;
     }
 
-    public void setMove(Battle b, Move move) {
+    public void setMove(Move move) {
         this.selected = move;
-        move.setAttributes(b, this);
     }
 
     public void addEffect(PokemonEffect e) {

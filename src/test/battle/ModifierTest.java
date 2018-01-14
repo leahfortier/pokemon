@@ -1,6 +1,7 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
+import battle.attack.Move;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectNamesies;
@@ -377,6 +378,7 @@ public class ModifierTest extends BaseTest {
         checkPriority(0, battle, AttackNamesies.NASTY_PLOT);
         checkPriority(0, battle, AttackNamesies.PECK);
         checkPriority(0, battle, AttackNamesies.RECOVER);
+        checkPriority(0, battle, AttackNamesies.ABSORB);
 
         // Prankster increases priority of status moves
         attacking.withAbility(AbilityNamesies.PRANKSTER);
@@ -388,13 +390,13 @@ public class ModifierTest extends BaseTest {
 
         // Unless the opponent is dark type
         Assert.assertFalse(defending.isType(battle, Type.DARK));
-        defending.setCastSource(
-                (ChangeTypeSource)(b, caster, victim) -> new Type[] { Type.DARK, Type.NO_TYPE }
-        );
+        defending.setCastSource((ChangeTypeSource)(b, caster, victim) -> new Type[] { Type.DARK, Type.NO_TYPE });
         Assert.assertFalse(defending.isType(battle, Type.DARK));
         EffectNamesies.CHANGE_TYPE.getEffect().cast(battle, defending, defending, CastSource.CAST_SOURCE, false);
         Assert.assertTrue(defending.isType(battle, Type.DARK));
         checkPriority(0, battle, AttackNamesies.NASTY_PLOT);
+        checkPriority(0, battle, AttackNamesies.THUNDER_WAVE);
+        checkPriority(1, battle, AttackNamesies.BABY_DOLL_EYES);
 
         // Gale Wings increases the priority of Flying type moves
         attacking.withAbility(AbilityNamesies.GALE_WINGS);
@@ -404,21 +406,46 @@ public class ModifierTest extends BaseTest {
         checkPriority(1, battle, AttackNamesies.PECK);
         checkPriority(0, battle, AttackNamesies.JUDGEMENT);
 
+        // Even though this will be a Flying-type move, it is not decided at priority check time
         attacking.giveItem(ItemNamesies.SKY_PLATE);
-        checkPriority(1, battle, AttackNamesies.JUDGEMENT);
+        checkPriority(0, battle, AttackNamesies.JUDGEMENT);
 
-        // Triage increases the priority of healing moves
+        // Gale Wings only works when the user has full health
+        battle.attackingFight(AttackNamesies.BELLY_DRUM);
+        Assert.assertFalse(attacking.fullHealth());
+        checkPriority(0, battle, AttackNamesies.PECK);
+
+        // Triage increases the priority of healing moves by 3
         attacking.withAbility(AbilityNamesies.TRIAGE);
         checkPriority(0, battle, AttackNamesies.TACKLE);
         checkPriority(1, battle, AttackNamesies.QUICK_ATTACK);
         checkPriority(0, battle, AttackNamesies.NASTY_PLOT);
-        checkPriority(1, battle, AttackNamesies.RECOVER);
+        checkPriority(3, battle, AttackNamesies.RECOVER);
+        checkPriority(3, battle, AttackNamesies.ABSORB);
+        checkPriority(3, battle, AttackNamesies.LUNAR_DANCE);
+        checkPriority(3, battle, AttackNamesies.PURIFY);
+        checkPriority(3, battle, AttackNamesies.WISH);
+
+        // Does not count as healing moves:
+        checkPriority(0, battle, AttackNamesies.AQUA_RING);
+        checkPriority(0, battle, AttackNamesies.GRASSY_TERRAIN);
+        checkPriority(0, battle, AttackNamesies.INGRAIN);
+        checkPriority(0, battle, AttackNamesies.LEECH_SEED);
+        checkPriority(0, battle, AttackNamesies.PAIN_SPLIT);
+        checkPriority(0, battle, AttackNamesies.PRESENT);
     }
 
     private void checkPriority(int expected, TestBattle battle, AttackNamesies attack) {
         TestPokemon attacking = battle.getAttacking();
 
-        attacking.setupMove(attack, battle);
+        attacking.setMove(new Move(attack));
         Assert.assertEquals(expected, battle.getAttackPriority(attacking));
+
+        boolean playerFirst = battle.speedPriority();
+        if (expected > 0) {
+            Assert.assertTrue(playerFirst);
+        } else if (expected < 0) {
+            Assert.assertFalse(playerFirst);
+        }
     }
 }

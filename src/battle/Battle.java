@@ -756,7 +756,7 @@ public class Battle implements Serializable {
     }
 
     // Returns true if the player will be attacking first, and false if the opponent will be
-    private boolean speedPriority() {
+    public boolean speedPriority() {
         ActivePokemon plyr = player.front();
         ActivePokemon opp = opponent.front();
 

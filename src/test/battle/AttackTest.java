@@ -4,6 +4,8 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
+import battle.effect.generic.EffectInterfaces.SapHealthEffect;
+import battle.effect.generic.EffectInterfaces.SelfHealingMove;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
@@ -25,13 +27,17 @@ import java.util.Map;
 
 public class AttackTest extends BaseTest {
     @Test
-    public void physicalContactTest() {
+    public void moveTypeTest() {
         for (AttackNamesies attackNamesies : AttackNamesies.values()) {
             Attack attack = attackNamesies.getAttack();
-            Assert.assertFalse(
-                    "Status moves cannot have physical contact. Move: " + attack.getName(),
-                    attack.isStatusMove() && attack.isMoveType(MoveType.PHYSICAL_CONTACT)
-            );
+
+            // Status moves cannot be physical contact moves
+            Assert.assertFalse(attack.getName(), attack.isStatusMove() && attack.isMoveType(MoveType.PHYSICAL_CONTACT));
+
+            // All SelfHealingMoves and SapHealthEffects should be Healing move type
+            if (attack instanceof SelfHealingMove || attack instanceof SapHealthEffect) {
+                Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.HEALING));
+            }
         }
     }
 
@@ -338,7 +344,7 @@ public class AttackTest extends BaseTest {
 
         // Use the other move and then it should work
         Move tackle = attacking.getMoves(battle).get(0);
-        attacking.setMove(battle, tackle);
+        attacking.setMove(tackle);
         Assert.assertFalse(tackle.used());
         battle.fight();
         Assert.assertTrue(tackle.used());

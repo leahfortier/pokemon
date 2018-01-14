@@ -1741,15 +1741,15 @@ public final class EffectInterfaces {
                 Messages.add(this.getSapMessage(victim));
             }
 
-            if (victim.hasAbility(AbilityNamesies.LIQUID_OOZE)) {
-                Messages.add(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + user.getName() + " to lose health instead!");
-                user.reduceHealth(b, damageAmount);
-                return;
-            }
-
             // Big Root heals an additional 30%
             if (user.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
                 sapAmount *= 1.3;
+            }
+
+            if (victim.hasAbility(AbilityNamesies.LIQUID_OOZE)) {
+                Messages.add(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + user.getName() + " to lose health instead!");
+                user.reduceHealth(b, sapAmount);
+                return;
             }
 
             // Healers gon' heal
