@@ -555,6 +555,11 @@ public class BagView extends View {
         Set<ItemNamesies> list = Game.getPlayer().getBag().getCategory(selectedTab);
         selectedItem = list.size() > 0 ? list.iterator().next() : ItemNamesies.NO_ITEM;
 
+        // No more items on the current page
+        if (list.size() < (pageNum + 1)*ITEMS_PER_PAGE) {
+            pageNum = 0;
+        }
+
         updateActiveButtons();
     }
 
