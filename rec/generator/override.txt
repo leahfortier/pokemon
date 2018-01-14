@@ -1228,12 +1228,6 @@ MemoryType:
 	AddMapField: SpecialTypeItem: {0}
 	AddMapField: Price: 1000
 *
-EvolutionItem:
-	AddInterface: PokemonUseItem
-	AddMapField: PokemonUse:
-		return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-		###
-*
 StatusHealAll:
 	AddMapField: BattleCat: Status
 	AddInterface: StatusHealer

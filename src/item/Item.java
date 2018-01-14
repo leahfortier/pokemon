@@ -66,6 +66,7 @@ import item.medicine.Repelling;
 import item.medicine.StatusHealer;
 import item.use.BallItem;
 import item.use.BattleUseItem;
+import item.use.EvolutionItem;
 import item.use.MoveUseItem;
 import item.use.PlayerUseItem;
 import item.use.PokemonUseItem;
@@ -2615,7 +2616,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    static class MetalCoat extends Item implements HoldItem, PokemonUseItem, PowerChangeEffect {
+    static class MetalCoat extends Item implements EvolutionItem, HoldItem, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         MetalCoat() {
@@ -2626,11 +2627,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.STEEL) ? 1.2 : 1;
-        }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -2804,7 +2800,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    static class DawnStone extends Item implements HoldItem, PokemonUseItem {
+    static class DawnStone extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         DawnStone() {
@@ -2816,14 +2812,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         public int flingDamage() {
             return 80;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class DeepSeaScale extends Item implements HoldItem, PokemonUseItem, SimpleStatModifyingEffect {
+    static class DeepSeaScale extends Item implements HoldItem, EvolutionItem, SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
         DeepSeaScale() {
@@ -2842,17 +2833,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
 
         @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
-
-        @Override
         public double getModifier() {
             return 2;
         }
     }
 
-    static class DeepSeaTooth extends Item implements HoldItem, PokemonUseItem, SimpleStatModifyingEffect {
+    static class DeepSeaTooth extends Item implements HoldItem, EvolutionItem, SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
         DeepSeaTooth() {
@@ -2876,31 +2862,21 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
 
         @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
-
-        @Override
         public double getModifier() {
             return 2;
         }
     }
 
-    static class DragonScale extends Item implements HoldItem, PokemonUseItem {
+    static class DragonScale extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         DragonScale() {
             super(ItemNamesies.DRAGON_SCALE, "A thick and tough scale. Dragon-type Pok\u00e9mon may be holding this item when caught.", BagCategory.MISC);
             super.price = 2100;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class DubiousDisc extends Item implements HoldItem, PokemonUseItem {
+    static class DubiousDisc extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         DubiousDisc() {
@@ -2912,14 +2888,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         public int flingDamage() {
             return 50;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class DuskStone extends Item implements HoldItem, PokemonUseItem {
+    static class DuskStone extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         DuskStone() {
@@ -2931,14 +2902,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         public int flingDamage() {
             return 80;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class Electirizer extends Item implements HoldItem, PokemonUseItem {
+    static class Electirizer extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         Electirizer() {
@@ -2950,28 +2916,18 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         public int flingDamage() {
             return 80;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class FireStone extends Item implements HoldItem, PokemonUseItem {
+    static class FireStone extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         FireStone() {
             super(ItemNamesies.FIRE_STONE, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is colored orange.", BagCategory.MISC);
             super.price = 2100;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class KingsRock extends Item implements PokemonUseItem, OpponentTakeDamageEffect, HoldItem {
+    static class KingsRock extends Item implements EvolutionItem, OpponentTakeDamageEffect, HoldItem {
         private static final long serialVersionUID = 1L;
 
         KingsRock() {
@@ -2994,28 +2950,18 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
                 Messages.add("The " + this.name + " caused " + pelted.getName() + " to flinch!");
             }
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class LeafStone extends Item implements HoldItem, PokemonUseItem {
+    static class LeafStone extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         LeafStone() {
             super(ItemNamesies.LEAF_STONE, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a leaf pattern.", BagCategory.MISC);
             super.price = 2100;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class Magmarizer extends Item implements HoldItem, PokemonUseItem {
+    static class Magmarizer extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         Magmarizer() {
@@ -3027,28 +2973,18 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         public int flingDamage() {
             return 80;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class MoonStone extends Item implements HoldItem, PokemonUseItem {
+    static class MoonStone extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         MoonStone() {
             super(ItemNamesies.MOON_STONE, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as black as the night sky.", BagCategory.MISC);
             super.price = 2100;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class OvalStone extends Item implements HoldItem, PokemonUseItem {
+    static class OvalStone extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         OvalStone() {
@@ -3059,11 +2995,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         @Override
         public int flingDamage() {
             return 80;
-        }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 
@@ -3076,21 +3007,16 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    static class PrismScale extends Item implements HoldItem, PokemonUseItem {
+    static class PrismScale extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         PrismScale() {
             super(ItemNamesies.PRISM_SCALE, "A mysterious scale that evolves certain Pok\u00e9mon. It shines in rainbow colors.", BagCategory.MISC);
             super.price = 500;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class Protector extends Item implements HoldItem, PokemonUseItem {
+    static class Protector extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         Protector() {
@@ -3102,14 +3028,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         public int flingDamage() {
             return 80;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class RazorClaw extends Item implements HoldItem, CritStageEffect, PokemonUseItem {
+    static class RazorClaw extends Item implements HoldItem, CritStageEffect, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         RazorClaw() {
@@ -3121,14 +3042,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         public int flingDamage() {
             return 80;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class RazorFang extends Item implements PokemonUseItem, OpponentTakeDamageEffect, HoldItem {
+    static class RazorFang extends Item implements EvolutionItem, OpponentTakeDamageEffect, HoldItem {
         private static final long serialVersionUID = 1L;
 
         RazorFang() {
@@ -3151,14 +3067,9 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
                 Messages.add("The " + this.name + " caused " + pelted.getName() + " to flinch!");
             }
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class ReaperCloth extends Item implements HoldItem, PokemonUseItem {
+    static class ReaperCloth extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         ReaperCloth() {
@@ -3170,28 +3081,18 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         public int flingDamage() {
             return 10;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class Sachet extends Item implements HoldItem, PokemonUseItem {
+    static class Sachet extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         Sachet() {
             super(ItemNamesies.SACHET, "A sachet filled with fragrant perfumes that are just slightly too overwhelming. Yet it's loved by a certain Pok\u00e9mon.", BagCategory.MISC);
             super.price = 2100;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class ShinyStone extends Item implements HoldItem, PokemonUseItem {
+    static class ShinyStone extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         ShinyStone() {
@@ -3203,122 +3104,77 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         public int flingDamage() {
             return 80;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class SunStone extends Item implements HoldItem, PokemonUseItem {
+    static class SunStone extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         SunStone() {
             super(ItemNamesies.SUN_STONE, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as red as the sun.", BagCategory.MISC);
             super.price = 2100;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class ThunderStone extends Item implements HoldItem, PokemonUseItem {
+    static class ThunderStone extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         ThunderStone() {
             super(ItemNamesies.THUNDER_STONE, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a thunderbolt pattern.", BagCategory.MISC);
             super.price = 2100;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class IceStone extends Item implements HoldItem, PokemonUseItem {
+    static class IceStone extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         IceStone() {
             super(ItemNamesies.ICE_STONE, "A peculiar stone that can make certain species of Pokémon evolve. It has an unmistakable snowflake pattern.", BagCategory.MISC);
             super.price = 2100;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class UpGrade extends Item implements HoldItem, PokemonUseItem {
+    static class UpGrade extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         UpGrade() {
             super(ItemNamesies.UP_GRADE, "A transparent device filled with all sorts of data. It was produced by Silph Co.", BagCategory.MISC);
             super.price = 2100;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class PrettyWing extends Item implements HoldItem, PokemonUseItem {
+    static class PrettyWing extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         PrettyWing() {
             super(ItemNamesies.PRETTY_WING, "Though this feather is beautiful, it's just a regular feather and has no effect on Pok\u00e9mon.", BagCategory.MISC);
             super.price = 200;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class Ruby extends Item implements HoldItem, PokemonUseItem {
+    static class Ruby extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         Ruby() {
             super(ItemNamesies.RUBY, "A peculiar jewel that makes certain species of Pok\u00e9mon evolve.", BagCategory.MISC);
             super.price = 2100;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class WaterStone extends Item implements HoldItem, PokemonUseItem {
+    static class WaterStone extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         WaterStone() {
             super(ItemNamesies.WATER_STONE, "A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is a clear, light blue.", BagCategory.MISC);
             super.price = 2100;
         }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
-        }
     }
 
-    static class WhippedDream extends Item implements HoldItem, PokemonUseItem {
+    static class WhippedDream extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         WhippedDream() {
             super(ItemNamesies.WHIPPED_DREAM, "A soft and sweet treat made of fluffy, puffy, whipped and whirled cream. It is loved by a certain Pok\u00e9mon.", BagCategory.MISC);
             super.price = 2100;
-        }
-
-        @Override
-        public boolean use(ActivePokemon p) {
-            return EvolutionMethod.ITEM.checkEvolution(p, this.namesies);
         }
     }
 

@@ -1016,7 +1016,7 @@ Magnet:
 	TypeEnhance: Electric
 *
 Metal Coat:
-	EvolutionItem: True
+	Int: EvolutionItem
 	Desc: A mysterious substance full of a special filmy metal. It allows certain kinds of Pok\u00e9mon to evolve.
 	Price: 9800
 	TypeEnhance: Steel
@@ -1078,16 +1078,14 @@ Twisted Spoon:
 	TypeEnhance: Psychic
 *
 Dawn Stone:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It sparkles like eyes.
 	Price: 2100
 	Fling: 80
 *
 Deep Sea Scale:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: An item to be held by Clamperl, Chinchou, or Lanturn. A scale that shines a faint pink, it raises the Sp. Def stat.
 	Price: 200
@@ -1095,8 +1093,7 @@ Deep Sea Scale:
 	ModifyMultiplier: 2 p.isPokemon(PokemonNamesies.CLAMPERL) || p.isPokemon(PokemonNamesies.CHINCHOU) || p.isPokemon(PokemonNamesies.LANTURN)
 *
 Deep Sea Tooth:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: An item to be held by Clamperl. A fang that gleams a sharp silver, it raises the Sp. Atk stat.
 	Price: 200
@@ -1105,75 +1102,66 @@ Deep Sea Tooth:
 	ModifyMultiplier: 2 p.isPokemon(PokemonNamesies.CLAMPERL)
 *
 Dragon Scale:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A thick and tough scale. Dragon-type Pok\u00e9mon may be holding this item when caught.
 	Price: 2100
 *
 Dubious Disc:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A transparent device overflowing with dubious data. Its producer is unknown.
 	Price: 2100
 	Fling: 50
 *
 Dusk Stone:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as dark as dark can be.
 	Price: 2100
 	Fling: 80
 *
 Electirizer:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A box packed with a tremendous amount of electric energy. It is loved by a certain Pok\u00e9mon.
 	Price: 2100
 	Fling: 80
 *
 Fire Stone:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is colored orange.
 	Price: 2100
 *
 King's Rock:
-	EvolutionItem: True
+	Int: EvolutionItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. When the holder inflicts damage, the target may flinch.
 	Price: 100
 	FlinchItem: True
 *
 Leaf Stone:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a leaf pattern.
 	Price: 2100
 *
 Magmarizer:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A box packed with a tremendous amount of magma energy. It is loved by a certain Pok\u00e9mon.
 	Price: 2100
 	Fling: 80
 *
 Moon Stone:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as black as the night sky.
 	Price: 2100
 *
 Oval Stone:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is shaped like an egg.
 	Price: 2100
@@ -1186,110 +1174,96 @@ Everstone:
 	Price: 200
 *
 Prism Scale:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A mysterious scale that evolves certain Pok\u00e9mon. It shines in rainbow colors.
 	Price: 500
 *
 Protector:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A protective item of some sort. It is extremely stiff and heavy. It is loved by a certain Pok\u00e9mon.
 	Price: 2100
 	Fling: 80
 *
 Razor Claw:
-	Int: HoldItem, CritStageEffect
-	EvolutionItem: True
+	Int: HoldItem, CritStageEffect, EvolutionItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It is a sharply hooked claw that ups the holder's critical-hit ratio.
 	Price: 2100
 	Fling: 80
 *
 Razor Fang:
-	EvolutionItem: True
+	Int: EvolutionItem
 	Cat: Misc
 	Desc: An item to be held by a Pok\u00e9mon. It may make foes and allies flinch when the holder inflicts damage.`
 	Price: 2100
 	FlinchItem: True
 *
 Reaper Cloth:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A cloth imbued with horrifyingly strong spiritual energy. It is loved by a certain Pok\u00e9mon.
 	Price: 2100
 	Fling: 10
 *
 Sachet:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A sachet filled with fragrant perfumes that are just slightly too overwhelming. Yet it's loved by a certain Pok\u00e9mon.
 	Price: 2100
 *
 Shiny Stone:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It shines with a dazzling light.
 	Price: 2100
 	Fling: 80
 *
 Sun Stone:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is as red as the sun.
 	Price: 2100
 *
 Thunder Stone:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It has a thunderbolt pattern.
 	Price: 2100
 *
 Ice Stone:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A peculiar stone that can make certain species of Pokémon evolve. It has an unmistakable snowflake pattern.
 	Price: 2100
 *
 Up-Grade:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A transparent device filled with all sorts of data. It was produced by Silph Co.
 	Price: 2100
 *
 Pretty Wing:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: Though this feather is beautiful, it's just a regular feather and has no effect on Pok\u00e9mon.
 	Price: 200
 *
 Ruby:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A peculiar jewel that makes certain species of Pok\u00e9mon evolve.
 	Price: 2100
 *
 Water Stone:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A peculiar stone that makes certain species of Pok\u00e9mon evolve. It is a clear, light blue.
 	Price: 2100
 *
 Whipped Dream:
-	Int: HoldItem
-	EvolutionItem: True
+	Int: HoldItem, EvolutionItem
 	Cat: Misc
 	Desc: A soft and sweet treat made of fluffy, puffy, whipped and whirled cream. It is loved by a certain Pok\u00e9mon.
 	Price: 2100

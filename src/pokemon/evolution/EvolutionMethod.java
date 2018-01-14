@@ -20,6 +20,10 @@ public enum EvolutionMethod {
             Global.error("Item can be specified if and only if Item Evolution: " + this + ", " + itemNamesies);
         }
 
+        if (!p.isPlayer()) {
+            Global.error("Only player Pokemon can evolve.");
+        }
+
         // Eggs don't evolve, they hatch
         if (p.isEgg()) {
             return false;
