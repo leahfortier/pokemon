@@ -75,6 +75,7 @@ class EvolutionView extends View {
         }
 
         if (state == State.EVOLVE) {
+            // Eggs can't be cancelled
             if (input.consumeIfDown(ControlKey.BACK) && !isEgg) {
                 state = State.CANCELED;
                 setCancelledMessage();

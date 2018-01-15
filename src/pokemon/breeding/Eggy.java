@@ -23,7 +23,7 @@ public class Eggy extends PartyPokemon {
         this(pokemonNamesies);
 
         Breeding breeding = Breeding.instance();
-        moves = breeding.getBabyMoves(daddy, mommy, pokemonNamesies);
+        this.setMoves(breeding.getBabyMoves(daddy, mommy, pokemonNamesies));
         this.setNature(breeding.getBabyNature(daddy, mommy));
         this.setIVs(breeding.getBabyIVs(daddy, mommy));
     }

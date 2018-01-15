@@ -51,7 +51,6 @@ import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.RepelLowLevelEncounterEffect;
-import battle.effect.generic.EffectInterfaces.SapHealthEffect;
 import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
 import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
@@ -91,6 +90,7 @@ import map.weather.WeatherState;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.Gender;
+import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
@@ -186,12 +186,12 @@ public abstract class Ability implements Serializable, AbilityHolder {
         return RandomUtils.getRandomValue(abilities);
     }
 
-    public static AbilityNamesies evolutionAssign(ActivePokemon p, PokemonInfo ev) {
-        AbilityNamesies prev = p.getAbility().namesies();
+    public static AbilityNamesies evolutionAssign(PartyPokemon p, PokemonInfo ev) {
+        AbilityNamesies prev = p.getActualAbility().namesies();
 
         // Evolution has current ability
         if (ev.hasAbility(prev)) {
-            return p.getAbility().namesies();
+            return prev;
         }
 
         // Evolution only has a single ability

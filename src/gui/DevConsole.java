@@ -219,7 +219,7 @@ public class DevConsole {
                             Global.info("Invalid move: " + s);
                             return;
                         } else {
-                            moves.add(new Move(attack.getAttack()));
+                            moves.add(new Move(attack));
                         }
                     }
                     in.useDelimiter(oldDelimiter);

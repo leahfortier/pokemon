@@ -92,12 +92,12 @@ public class ActivePokemon extends PartyPokemon {
 
     public Type computeHiddenPowerType() {
         return Type.getHiddenType(((
-                IVs[Stat.HP.index()]%2 +
-                        2*(IVs[Stat.ATTACK.index()]%2) +
-                        4*(IVs[Stat.DEFENSE.index()]%2) +
-                        8*(IVs[Stat.SPEED.index()]%2) +
-                        16*(IVs[Stat.SP_ATTACK.index()]%2) +
-                        32*(IVs[Stat.SP_DEFENSE.index()]%2)
+                this.getIV(Stat.HP)%2 +
+                        2*(this.getIV(Stat.ATTACK)%2) +
+                        4*(this.getIV(Stat.DEFENSE)%2) +
+                        8*(this.getIV(Stat.SPEED)%2) +
+                        16*(this.getIV(Stat.SP_ATTACK)%2) +
+                        32*(this.getIV(Stat.SP_DEFENSE)%2)
         )*15)/63);
     }
 
@@ -109,7 +109,7 @@ public class ActivePokemon extends PartyPokemon {
             return ((AbilityHolder)effect).getAbility();
         }
 
-        return this.ability;
+        return this.getActualAbility();
     }
 
     public int getStage(Stat stat) {
@@ -122,45 +122,44 @@ public class ActivePokemon extends PartyPokemon {
             return stat;
         }
 
-        return stats[s.index()];
+        return this.getStat(s);
     }
 
     public List<Move> getMoves(Battle b) {
-        List<Move> changedMoveList = ChangeMoveListEffect.getMoveList(b, this, this.moves);
+        List<Move> changedMoveList = ChangeMoveListEffect.getMoveList(b, this, this.getActualMoves());
         if (changedMoveList != null) {
             return changedMoveList;
         }
 
-        return this.moves;
+        return this.getActualMoves();
     }
 
-    public void gainEXP(Battle b, int gain, ActivePokemon dead) {
+    public void gainEXP(Battle b, int gain, PartyPokemon dead) {
         boolean front = b.getPlayer().front() == this;
 
         // Add EXP
-        totalEXP += gain;
+        super.gainEXP(gain);
         Messages.add(getActualName() + " gained " + gain + " EXP points!");
         if (front) {
             Messages.add(new MessageUpdate().withExpGain(b, this, Math.min(1, expRatio()), false));
         }
 
         // Add EVs
-        Item item = getHeldItem(b);
+        Item item = this.getHeldItem(b);
         int[] vals = dead.getPokemonInfo().getGivenEVs();
         if (item instanceof EVItem) {
             vals = ((EVItem)item).getEVs(vals);
         }
-
-        addEVs(vals);
+        this.addEVs(vals);
 
         // Level up if applicable
-        while (totalEXP >= this.getPokemonInfo().getGrowthRate().getEXP(level + 1)) {
+        while (this.getTotalEXP() >= this.getPokemonInfo().getGrowthRate().getEXP(this.getLevel() + 1)) {
             levelUp(b);
         }
     }
 
     public boolean levelUp(Battle b) {
-        if (level == MAX_LEVEL) {
+        if (this.getLevel() == MAX_LEVEL) {
             return false;
         }
 
@@ -168,33 +167,18 @@ public class ActivePokemon extends PartyPokemon {
         boolean front = inBattle && b.getPlayer().front() == this;
 
         // Grow to the next level
-        level++;
-        Messages.add(new MessageUpdate(getActualName() + " grew to level " + level + "!").withSoundEffect(SoundTitle.LEVEL_UP));
+        int[] gain = super.levelUp();
+        Messages.add(new MessageUpdate(this.getActualName() + " grew to level " + this.getLevel() + "!").withSoundEffect(SoundTitle.LEVEL_UP));
 
         if (front) {
             Messages.add(new MessageUpdate().withExpGain(b, this, Math.min(1, expRatio()), true));
-        }
-
-        if (level == MAX_LEVEL) {
-            Game.getPlayer().getMedalCase().increase(MedalTheme.LEVEL_100_POKEMON);
-        }
-
-        // Change stats -- keep track of the gains
-        int[] prevStats = stats.clone();
-        int[] gain = new int[Stat.NUM_STATS];
-        setStats();
-        for (int i = 0; i < Stat.NUM_STATS; i++) {
-            gain[i] = stats[i] - prevStats[i];
-        }
-
-        if (front) {
             Messages.add(new MessageUpdate().updatePokemon(b, this));
         }
 
-        Messages.add(new MessageUpdate().withStatGains(gain, stats));
+        Messages.add(new MessageUpdate().withStatGains(gain, this.getClonedStats()));
 
         // Learn new moves
-        this.getPokemonInfo().getMoves(level).forEach(attackNamesies -> learnMove(attackNamesies, inBattle));
+        this.getPokemonInfo().getMoves(this.getLevel()).forEach(attackNamesies -> learnMove(attackNamesies, inBattle));
 
         // Maybe you'll evolve?!
         // Can only evolve outside of battle
@@ -206,34 +190,15 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     // Returns stat gains
+    @Override
     public int[] evolve(BaseEvolution evolution) {
-        Game.getPlayer().getMedalCase().increase(MedalTheme.POKEMON_EVOLVED);
-
-        boolean sameName = nickname.equals(pokemon.getName());
-        PokemonInfo evolutionInfo = evolution.getEvolution();
-
-        this.setAbility(Ability.evolutionAssign(this, evolutionInfo));
-        pokemon = evolutionInfo.namesies();
-
-        // Set name if it was not given a nickname
-        if (sameName) {
-            nickname = pokemon.getName();
-        }
-
-        // Change stats
-        int[] prevStats = stats.clone();
-        setStats();
-
-        int[] gain = new int[Stat.NUM_STATS];
-        for (int i = 0; i < Stat.NUM_STATS; i++) {
-            gain[i] = stats[i] - prevStats[i];
-        }
+        int[] gain = super.evolve(evolution);
 
         // Learn new moves
         List<AttackNamesies> levelMoves = this.getPokemonInfo().getMoves(PokemonInfo.EVOLUTION_LEVEL_LEARNED);
         levelMoves.forEach(attack -> learnMove(attack, false));
 
-        levelMoves = this.getPokemonInfo().getMoves(level);
+        levelMoves = this.getPokemonInfo().getMoves(this.getLevel());
         levelMoves.forEach(attack -> learnMove(attack, false));
 
         return gain;
@@ -245,9 +210,9 @@ public class ActivePokemon extends PartyPokemon {
             return;
         }
 
-        Move move = new Move(attackName.getAttack());
-        if (moves.size() < Move.MAX_MOVES) {
-            addMove(move, moves.size() - 1, inBattle);
+        Move move = new Move(attackName);
+        if (this.numMoves() < Move.MAX_MOVES) {
+            addMove(move, this.numMoves() - 1, inBattle);
         } else {
             // Need a non-empty message so that it doesn't get absorbed
             Messages.add(new MessageUpdate(" ").withLearnMove(this, move));
@@ -256,11 +221,7 @@ public class ActivePokemon extends PartyPokemon {
 
     public void addMove(Move m, int index, boolean inBattle) {
         Messages.add(getActualName() + " learned " + m.getAttack().getName() + "!");
-        if (moves.size() < Move.MAX_MOVES) {
-            moves.add(m);
-        } else {
-            moves.set(index, m);
-        }
+        super.addMove(m, index);
 
         if (!inBattle) {
             EvolutionMethod.MOVE.checkEvolution(this);
@@ -433,7 +394,7 @@ public class ActivePokemon extends PartyPokemon {
 
     @Override
     public boolean canFight() {
-        return !hasStatus(StatusCondition.FAINTED);
+        return !this.isActuallyDead();
     }
 
     // Returns if the Pokemon is stalling -- that is that it will move last within its priority bracket
@@ -513,8 +474,9 @@ public class ActivePokemon extends PartyPokemon {
 
     @Override
     public void resetAttributes() {
-        moves.forEach(Move::resetReady);
-        ability = ability.namesies().getNewAbility();
+        // Reset ability and each move
+        this.setAbility(this.getActualAbility().namesies());
+        this.getActualMoves().forEach(Move::resetReady);
 
         effects = new ArrayList<>();
         stages = new Stages(this);
@@ -542,7 +504,7 @@ public class ActivePokemon extends PartyPokemon {
     public boolean isFainted(Battle b) {
         // We have already checked that this Pokemon is fainted -- don't print/apply effects more than once
         if (isActuallyDead()) {
-            if (hp == 0) {
+            if (this.getHP() == 0) {
                 return true;
             }
 
@@ -550,7 +512,7 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         // Deady
-        if (hp == 0) {
+        if (this.getHP() == 0) {
             Messages.add(new MessageUpdate().updatePokemon(b, this));
 
             ActivePokemon murderer = b.getOtherPokemon(this);
@@ -561,7 +523,7 @@ public class ActivePokemon extends PartyPokemon {
                 MurderEffect.killKillKillMurderMurderMurder(b, this, murderer);
             }
 
-            b.getEffects(isPlayer).add((TeamEffect)EffectNamesies.DEAD_ALLY.getEffect());
+            b.getEffects(this.isPlayer()).add((TeamEffect)EffectNamesies.DEAD_ALLY.getEffect());
 
             // If the player slayed a Dark or Ghost type Pokemon, then they are on their way to becoming the Chosen One
             if (!isPlayer() && (isType(b, Type.DARK) || isType(b, Type.GHOST))) {
@@ -608,7 +570,7 @@ public class ActivePokemon extends PartyPokemon {
 
     // Don't think you'll make it out alive
     public void killKillKillMurderMurderMurder(Battle b) {
-        reduceHealth(b, this.hp, false);
+        reduceHealth(b, this.getHP(), false);
     }
 
     public int reduceHealth(Battle b, int amount) {
@@ -631,13 +593,13 @@ public class ActivePokemon extends PartyPokemon {
         boolean fullHealth = fullHealth();
 
         // Reduce HP and record damage
-        int prev = hp;
-        setHP(hp - amount);
-        int taken = prev - hp;
+        int prev = this.getHP();
+        this.setHP(prev - amount);
+        int taken = prev - this.getHP();
         this.takeDamage(taken);
 
         // Enduring the hit
-        if (hp == 0 && checkEffects) {
+        if (this.getHP() == 0 && checkEffects) {
             BracingEffect brace = BracingEffect.getBracingEffect(b, this, fullHealth);
             if (brace != null) {
                 taken -= heal(1);
@@ -657,7 +619,7 @@ public class ActivePokemon extends PartyPokemon {
 
     // Reduces the amount of health that corresponds to fraction of the pokemon's total health and returns this amount
     public int reduceHealthFraction(Battle b, double fraction) {
-        return reduceHealth(b, (int)Math.max(stats[Stat.HP.index()]*fraction, 1));
+        return reduceHealth(b, (int)Math.max(this.getMaxHP()*fraction, 1));
     }
 
     public Stat getBestBattleStat() {
@@ -667,7 +629,7 @@ public class ActivePokemon extends PartyPokemon {
                 continue;
             }
 
-            if (this.stats[stat.index()] > this.stats[bestStat.index()]) {
+            if (this.getStat(stat) > this.getStat(bestStat)) {
                 bestStat = stat;
             }
         }

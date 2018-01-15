@@ -15,6 +15,7 @@ import pattern.PokemonMatcher;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.Eggy;
+import pokemon.evolution.BaseEvolution;
 import trainer.player.medal.Medal;
 import trainer.player.medal.MedalCase;
 import trainer.player.medal.MedalTheme;
@@ -40,23 +41,23 @@ public abstract class PartyPokemon implements Serializable {
          {"Scatters things often",   "Likes to fight",          "Good endurance",         "Often lost in thought", "Hates to lose",     "Somewhat of a clown"},
          {"Likes to relax",          "Quick tempered",          "Good perseverance",      "Very finicky",          "Somewhat stubborn", "Quick to flee"}};
 
-    protected PokemonNamesies pokemon;
-    protected String nickname;
-    protected int[] stats;
-    protected int[] IVs;
-    protected List<Move> moves;
-    protected int hp;
-    protected int level;
-    protected boolean isPlayer;
-    protected Status status;
-    protected int totalEXP;
-    protected int[] EVs;
-    protected HoldItem heldItem;
-    protected Ability ability;
-    protected Gender gender;
-    protected Nature nature;
-    protected String characteristic;
-    protected boolean shiny;
+    private PokemonNamesies pokemon;
+    private String nickname;
+    private int[] stats;
+    private int[] IVs;
+    private List<Move> moves;
+    private int hp;
+    private int level;
+    private boolean isPlayer;
+    private Status status;
+    private int totalEXP;
+    private int[] EVs;
+    private HoldItem heldItem;
+    private Ability ability;
+    private Gender gender;
+    private Nature nature;
+    private String characteristic;
+    private boolean shiny;
 
     // General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
     protected PartyPokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer) {
@@ -88,12 +89,13 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     protected PartyPokemon(Eggy eggy) {
-        this.pokemon = eggy.pokemon;
+        PokemonInfo pokemonInfo = eggy.getPokemonInfo();
+        this.pokemon = pokemonInfo.namesies();
 
         this.nickname = pokemon.getName();
         this.level = 1;
 
-        this.nature = eggy.nature;
+        this.nature = eggy.getNature();
         this.EVs = new int[Stat.NUM_STATS];
         this.stats = new int[Stat.NUM_STATS];
         this.setIVs(eggy.getIVs());
@@ -108,7 +110,7 @@ public abstract class PartyPokemon implements Serializable {
         this.heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();
 
         // Don't add randomness for eggs
-        this.totalEXP = this.getPokemonInfo().getGrowthRate().getEXP(this.level);
+        this.totalEXP = pokemonInfo.getGrowthRate().getEXP(this.level);
 
         this.fullyHeal();
         this.resetAttributes();
@@ -158,16 +160,21 @@ public abstract class PartyPokemon implements Serializable {
         this.setStats();
     }
 
-    protected void setStats() {
-        int prevHP = stats[Stat.HP.index()];
+    private int[] setStats() {
+        int[] prevStats = stats.clone();
+
         PokemonInfo pokemon = this.getPokemonInfo();
 
         stats = new int[Stat.NUM_STATS];
+        int[] gain = new int[Stat.NUM_STATS];
         for (int i = 0; i < stats.length; i++) {
             stats[i] = Stat.getStat(i, level, pokemon.getStat(i), IVs[i], EVs[i], nature.getNatureVal(i));
+            gain[i] = stats[i] - prevStats[i];
         }
 
-        setHP(hp + stats[Stat.HP.index()] - prevHP);
+        setHP(hp + stats[Stat.HP.index()] - prevStats[Stat.HP.index()]);
+
+        return gain;
     }
 
     private void setMoves() {
@@ -208,7 +215,58 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public void setMoves(List<Move> list) {
+        if (list.isEmpty() || list.size() > Move.MAX_MOVES) {
+            Global.error("Invalid move list: " + list);
+        }
+
         moves = list;
+    }
+
+    // Handles actual level up, but does not handle messages or evolution or anything else like that
+    // Everything else should be handled in the subclass
+    protected int[] levelUp() {
+        level = Math.min(level + 1, MAX_LEVEL);
+        if (level == MAX_LEVEL) {
+            Game.getPlayer().getMedalCase().increase(MedalTheme.LEVEL_100_POKEMON);
+        }
+
+        // Update stats and return gain
+        return this.setStats();
+    }
+
+    // Handles actual evolution, but doesn't set any messages or anything or try to learn new moves or shit like that
+    // Everything else should be handles in the subclass
+    // Returns stats gains
+    protected int[] evolve(BaseEvolution evolution) {
+        Game.getPlayer().getMedalCase().increase(MedalTheme.POKEMON_EVOLVED);
+
+        boolean sameName = nickname.equals(pokemon.getName());
+        PokemonInfo evolutionInfo = evolution.getEvolution();
+
+        this.setAbility(Ability.evolutionAssign(this, evolutionInfo));
+        pokemon = evolutionInfo.namesies();
+
+        // Set name if it was not given a nickname
+        if (sameName) {
+            nickname = pokemon.getName();
+        }
+
+        // Update stats and return gain
+        return this.setStats();
+    }
+
+    // Adds the move at the specified index if full and to the end othwerwise
+    // Does not handle evolution or anything else like that -- should be handled in subclasses
+    protected void addMove(Move m, int index) {
+        if (moves.size() < Move.MAX_MOVES) {
+            moves.add(m);
+        } else {
+            moves.set(index, m);
+        }
+    }
+
+    public int numMoves() {
+        return this.moves.size();
     }
 
     public void setShiny() {
@@ -231,24 +289,44 @@ public abstract class PartyPokemon implements Serializable {
         return characteristic;
     }
 
+    public int[] getClonedStats() {
+        return this.stats.clone();
+    }
+
+    public int getStat(int index) {
+        return stats[index];
+    }
+
+    public int getStat(Stat stat) {
+        return this.getStat(stat.index());
+    }
+
     public int[] getStats() {
         return stats;
-    }
-
-    public int[] getIVs() {
-        return IVs;
-    }
-
-    public int[] getEVs() {
-        return EVs;
     }
 
     public int getIV(int index) {
         return IVs[index];
     }
 
+    public int getIV(Stat stat) {
+        return this.getIV(stat.index());
+    }
+
+    public int[] getIVs() {
+        return IVs;
+    }
+
     public int getEV(int index) {
         return EVs[index];
+    }
+
+    public int getEV(Stat stat) {
+        return this.getEV(stat.index());
+    }
+
+    public int[] getEVs() {
+        return EVs;
     }
 
     public Nature getNature() {
@@ -331,7 +409,7 @@ public abstract class PartyPokemon implements Serializable {
         return hp - prev;
     }
 
-    // Restores the amount of health that corresponds to fraction of the pokemon's total health and returns this amount
+    // Restores the amount of health that corresponds to the fraction of the pokemon's total health and returns this amount
     public int healHealthFraction(double fraction) {
         return heal((int)Math.max(this.getMaxHP()*fraction, 1));
     }
@@ -356,6 +434,11 @@ public abstract class PartyPokemon implements Serializable {
     // TODO: This should really be immutable
     public List<Move> getActualMoves() {
         return moves;
+    }
+
+    // Only handles adding EXP, but MUST be called in unison with a level upper
+    protected void gainEXP(int gain) {
+        this.totalEXP += gain;
     }
 
     public int getTotalEXP() {
@@ -438,8 +521,13 @@ public abstract class PartyPokemon implements Serializable {
         return level;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
+    // TODO: Deprecate this -- total EXP and god knows what else are FUCKED
+    @Deprecated
+    public int[] setLevel(int level) {
+        this.level = Math.min(MAX_LEVEL, Math.max(level, 1));
+
+        // Update stats and return gain
+        return this.setStats();
     }
 
     private int totalEVs() {
@@ -475,7 +563,7 @@ public abstract class PartyPokemon implements Serializable {
         }
 
         if (added) {
-            setStats();
+            this.setStats();
             if (totalEVs() == Stat.MAX_EVS) {
                 MedalCase medalCase = Game.getPlayer().getMedalCase();
                 medalCase.earnMedal(Medal.TRAINED_TO_MAX_POTENTIAL);
