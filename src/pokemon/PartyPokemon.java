@@ -98,7 +98,7 @@ public abstract class PartyPokemon implements Serializable {
         this.nature = eggy.getNature();
         this.EVs = new int[Stat.NUM_STATS];
         this.stats = new int[Stat.NUM_STATS];
-        this.setIVs(eggy.getIVs());
+        this.setIVs(((PartyPokemon)eggy).IVs);
 
         this.isPlayer = true;
         this.shiny = eggy.isShiny();
@@ -265,7 +265,7 @@ public abstract class PartyPokemon implements Serializable {
         }
     }
 
-    public int numMoves() {
+    protected int numMoves() {
         return this.moves.size();
     }
 
@@ -301,10 +301,6 @@ public abstract class PartyPokemon implements Serializable {
         return this.getStat(stat.index());
     }
 
-    public int[] getStats() {
-        return stats;
-    }
-
     public int getIV(int index) {
         return IVs[index];
     }
@@ -313,20 +309,12 @@ public abstract class PartyPokemon implements Serializable {
         return this.getIV(stat.index());
     }
 
-    public int[] getIVs() {
-        return IVs;
-    }
-
     public int getEV(int index) {
         return EVs[index];
     }
 
     public int getEV(Stat stat) {
         return this.getEV(stat.index());
-    }
-
-    public int[] getEVs() {
-        return EVs;
     }
 
     public Nature getNature() {

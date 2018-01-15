@@ -489,25 +489,21 @@ class PartyView extends View {
             g.drawString(Stat.getStat(i, false).getName(), statsPanel.x + 10, firstRowY + (i + 1)*spacing);
         }
 
-        int[] stats = selectedPkm.getStats();
-        int[] ivs = selectedPkm.getIVs();
-        int[] evs = selectedPkm.getEVs();
-
         FontMetrics.setFont(g, 14);
         g.setColor(Color.BLACK);
 
         for (int i = 0; i < Stat.NUM_STATS; i++) {
             final String statString;
             if (i == Stat.HP.index()) {
-                statString = selectedPkm.getHP() + "/" + stats[i];
+                statString = selectedPkm.getHP() + "/" + selectedPkm.getStat(i);
             } else {
-                statString = "" + stats[i];
+                statString = "" + selectedPkm.getStat(i);
             }
 
             int drawY = firstRowY + (i + 1)*spacing;
             TextUtils.drawRightAlignedString(g, statString, 285, drawY);
-            TextUtils.drawRightAlignedString(g, "" + ivs[i], 327, drawY);
-            TextUtils.drawRightAlignedString(g, "" + evs[i], 371, drawY);
+            TextUtils.drawRightAlignedString(g, "" + selectedPkm.getIV(i), 327, drawY);
+            TextUtils.drawRightAlignedString(g, "" + selectedPkm.getEV(i), 371, drawY);
         }
 
         // HP Bar

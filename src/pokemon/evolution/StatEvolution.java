@@ -23,9 +23,8 @@ class StatEvolution extends Evolution {
 
     @Override
     public BaseEvolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
-        int[] stats = p.getStats();
-        int high = stats[higher.index()];
-        int low = stats[lower.index()];
+        int high = p.getStat(higher);
+        int low = p.getStat(lower);
 
         if (equals && high == low) {
             return evolution.getEvolution(type, p, use);

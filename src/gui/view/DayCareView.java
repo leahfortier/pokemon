@@ -357,10 +357,6 @@ class DayCareView extends View {
             TextUtils.drawRightAlignedString(g, "IV", 681, statsY);
             TextUtils.drawRightAlignedString(g, "EV", 735, statsY);
 
-            int[] stats = selected.getStats();
-            int[] ivs = selected.getIVs();
-            int[] evs = selected.getEVs();
-
             for (int i = 0; i < Stat.NUM_STATS; i++) {
                 statsY += FontMetrics.getTextHeight(g) + 11;
 
@@ -371,9 +367,9 @@ class DayCareView extends View {
                 g.setColor(Color.BLACK);
                 FontMetrics.setFont(g, 14);
 
-                TextUtils.drawRightAlignedString(g, stats[i] + "", 635, statsY);
-                TextUtils.drawRightAlignedString(g, ivs[i] + "", 681, statsY);
-                TextUtils.drawRightAlignedString(g, evs[i] + "", 735, statsY);
+                TextUtils.drawRightAlignedString(g, selected.getStat(i) + "", 635, statsY);
+                TextUtils.drawRightAlignedString(g, selected.getIV(i) + "", 681, statsY);
+                TextUtils.drawRightAlignedString(g, selected.getEV(i) + "", 735, statsY);
             }
         }
 

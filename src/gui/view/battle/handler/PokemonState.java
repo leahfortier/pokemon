@@ -255,13 +255,13 @@ public class PokemonState implements VisualStateHandler {
             // Write stat names and values
             statsPanel.drawBackground(g);
             FontMetrics.setFont(g, 16);
-            int[] statsVal = selectedPkm.getStats();
             for (int i = 0; i < Stat.NUM_STATS; i++) {
                 g.setColor(selectedPkm.getNature().getColor(i));
                 g.drawString(Stat.getStat(i, false).getShortName(), 62, 21*i + 372);
 
                 g.setColor(Color.BLACK);
-                String valStr = i == Stat.HP.index() ? selectedPkm.getHP() + "/" + statsVal[i] : "" + statsVal[i];
+                int statVal = selectedPkm.getStat(i);
+                String valStr = i == Stat.HP.index() ? selectedPkm.getHP() + "/" + statVal : "" + statVal;
                 TextUtils.drawRightAlignedString(g, valStr, 188, 21*i + 372);
             }
 

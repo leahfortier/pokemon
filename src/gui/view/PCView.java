@@ -401,10 +401,6 @@ class PCView extends View {
             TextUtils.drawRightAlignedString(g, "IV", 681, 340);
             TextUtils.drawRightAlignedString(g, "EV", 735, 340);
 
-            int[] stats = selected.getStats();
-            int[] ivs = selected.getIVs();
-            int[] evs = selected.getEVs();
-
             for (int i = 0; i < Stat.NUM_STATS; i++) {
                 FontMetrics.setFont(g, 16);
                 g.setColor(selected.getNature().getColor(i));
@@ -414,9 +410,9 @@ class PCView extends View {
                 FontMetrics.setFont(g, 14);
 
                 // TODO: What's up with the + i/2 in the y????
-                TextUtils.drawRightAlignedString(g, stats[i] + "", 635, 360 + i*18 + i/2);
-                TextUtils.drawRightAlignedString(g, ivs[i] + "", 681, 360 + i*18 + i/2);
-                TextUtils.drawRightAlignedString(g, evs[i] + "", 735, 360 + i*18 + i/2);
+                TextUtils.drawRightAlignedString(g, selected.getStat(i) + "", 635, 360 + i*18 + i/2);
+                TextUtils.drawRightAlignedString(g, selected.getIV(i) + "", 681, 360 + i*18 + i/2);
+                TextUtils.drawRightAlignedString(g, selected.getEV(i) + "", 735, 360 + i*18 + i/2);
             }
         }
 
