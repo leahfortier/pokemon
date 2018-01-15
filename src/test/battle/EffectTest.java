@@ -24,6 +24,10 @@ public class EffectTest extends BaseTest {
         checkProtect(true, AttackNamesies.PROTECT, AttackNamesies.SURF);
         checkProtect(true, AttackNamesies.PROTECT, AttackNamesies.FORESIGHT);
 
+        // Should Protect against non-status 'self target' moves
+        checkProtect(true, AttackNamesies.PROTECT, AttackNamesies.RAGE);
+        checkProtect(true, AttackNamesies.PROTECT, AttackNamesies.FLAME_CHARGE);
+
         // Protect-piercing, Field moves, and Self Target moves
         checkProtect(false, AttackNamesies.PROTECT, AttackNamesies.FEINT);
         checkProtect(false, AttackNamesies.PROTECT, AttackNamesies.PSYCHIC_TERRAIN);

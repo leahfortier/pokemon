@@ -138,6 +138,7 @@ public class AbilityTest extends BaseTest {
         checkPriorityPrevention(0, false, AttackNamesies.STRING_SHOT);
         checkPriorityPrevention(1, true, AttackNamesies.QUICK_ATTACK);
         checkPriorityPrevention(1, true, AttackNamesies.BABY_DOLL_EYES);
+        checkPriorityPrevention(1, true, AttackNamesies.BIDE);
         checkPriorityPrevention(4, false, AttackNamesies.PROTECT);
 
         // Should block moves that have their priority increases via Prankster (+1 for status moves)
@@ -172,7 +173,7 @@ public class AbilityTest extends BaseTest {
 
         attacking.setupMove(attack, battle);
         Assert.assertEquals(beforePriority, battle.getAttackPriority(attacking));
-        attacking.apply(beforePriority <= 0 || attacking.getAttack().isSelfTarget(), attack, battle);
+        attacking.apply(beforePriority <= 0 || attacking.getAttack().isSelfTargetStatusMove(), attack, battle);
 
         battle.emptyHeal();
         manipulator.manipulate(battle, attacking, defending);
@@ -180,7 +181,7 @@ public class AbilityTest extends BaseTest {
         attacking.setupMove(attack, battle);
         Assert.assertEquals(afterPriority, battle.getAttackPriority(attacking));
         attacking.apply(!prevent, attack, battle);
-        Assert.assertEquals(afterPriority > 0 && !attacking.getAttack().isSelfTarget() && !attacking.breaksTheMold(), prevent);
+        Assert.assertEquals(afterPriority > 0 && !attacking.getAttack().isSelfTargetStatusMove() && !attacking.breaksTheMold(), prevent);
     }
 
     @Test

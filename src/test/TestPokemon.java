@@ -53,9 +53,9 @@ public class TestPokemon extends ActivePokemon {
 
         this.setupMove(attack, battle);
         boolean success = this.getAttack().apply(this, other, battle);
-        Assert.assertTrue(
+        Assert.assertEquals(
                 StringUtils.spaceSeparated("Attacking:", this.getName(), "Defending:", other.getName(), attack, assertion, success),
-                success == assertion
+                assertion, success
         );
     }
 

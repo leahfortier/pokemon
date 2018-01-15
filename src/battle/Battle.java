@@ -688,7 +688,7 @@ public class Battle implements Serializable {
 
     protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
         // Self-Target moves don't miss
-        if (me.getAttack().isSelfTarget() && me.getAttack().isStatusMove()) {
+        if (me.getAttack().isSelfTargetStatusMove()) {
             return true;
         }
 

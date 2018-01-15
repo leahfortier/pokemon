@@ -1,5 +1,6 @@
 package battle.effect.generic;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
@@ -58,7 +59,6 @@ import item.ItemNamesies;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.Stat;
 import pokemon.ability.Ability;
@@ -616,7 +616,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
             // Pokemon that make contact with the king's shield have their attack reduced
             if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
-                p.getStages().modifyStage(opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT, "The King's Shield {change} " + p.getName() + "'s attack!");
+                p.getStages().modifyStage(
+                        opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT,
+                        (victimName, statName, changed) -> "The King's Shield " + changed + " " + p.getName() + "'s " + statName + "!"
+                );
             }
         }
 
@@ -2697,7 +2700,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         @Override
         public boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
             Attack attack = user.getAttack();
-            if (attack.isSelfTarget() && attack.isStatusMove() && !attack.isMoveType(MoveType.NON_SNATCHABLE)) {
+            if (attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.NON_SNATCHABLE)) {
                 Messages.add(opponent.getName() + " snatched " + user.getName() + "'s move!");
                 return true;
             }
@@ -2975,9 +2978,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
                 return;
             }
 
+            // Bulbasaur's Rage increased its Attack!
             victim.getStages().modifyStage(
                     victim, victim, 1, Stat.ATTACK, b, CastSource.EFFECT,
-                    victim.getName() + "'s Rage increased its attack!"
+                    (victimName, statName, changed) -> String.format("%s's Rage %s %s %s!", victim.getName(), changed, victimName, statName)
             );
         }
     }

@@ -1426,7 +1426,7 @@ public final class EffectInterfaces {
         @Override
         default boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
             Attack attack = user.getAttack();
-            return protectingCondition(b, user) && !attack.isSelfTarget() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.PROTECT_PIERCING);
+            return protectingCondition(b, user) && !attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.PROTECT_PIERCING);
         }
 
         @Override

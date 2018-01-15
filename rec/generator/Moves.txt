@@ -2387,7 +2387,7 @@ Belly Drum:
 		// Maximization station
 		user.getStages().modifyStage(
 			user, user, Stat.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK, 
-			user.getName() + " cut its own HP and maximized its attack!"
+			(victimName, statName, changed) -> user.getName() + " cut its own HP and maximized " + victimName + " " + statName + "!"
 		);
 		user.reduceHealthFraction(b, 1/2.0);
 		###

@@ -1,5 +1,6 @@
 package battle.effect.generic;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
@@ -15,7 +16,6 @@ import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
 import message.MessageUpdate;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import trainer.Trainer;
@@ -263,7 +263,11 @@ public abstract class TeamEffect extends Effect implements Serializable {
                 return;
             }
 
-            enterer.getStages().modifyStage(b.getOtherPokemon(enterer), enterer, -1, Stat.SPEED, b, CastSource.EFFECT, "The sticky web {change} " + enterer.getName() + "'s {statName}!");
+            // The sticky web lowered Charmander's Speed!
+            enterer.getStages().modifyStage(
+                    b.getOtherPokemon(enterer), enterer, -1, Stat.SPEED, b, CastSource.EFFECT,
+                    (victimName, statName, changed) -> "The sticky web " + changed + " " + enterer.getName() + "'s " + statName + "!"
+            );
         }
 
         @Override

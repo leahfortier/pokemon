@@ -1,5 +1,6 @@
 package battle.attack;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.attack.AbilityChanger;
 import battle.effect.attack.ChangeAttackTypeSource;
@@ -63,7 +64,6 @@ import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.Stat;
 import pokemon.ability.Ability;
@@ -119,6 +119,10 @@ public abstract class Attack implements Serializable {
 
     public int getPriority(Battle b, ActivePokemon me) {
         return this.priority;
+    }
+
+    public boolean isSelfTargetStatusMove() {
+        return this.isSelfTarget() && this.isStatusMove();
     }
 
     public boolean isSelfTarget() {
@@ -285,7 +289,7 @@ public abstract class Attack implements Serializable {
         ActivePokemon target = getTarget(b, me, o);
 
         // Don't do anything for moves that are uneffective
-        if (!effective(b, me, target)) {
+        if (!effective(b, me, this.isStatusMove() ? target : o)) {
             return false;
         }
 
@@ -353,7 +357,7 @@ public abstract class Attack implements Serializable {
     // Takes type advantage, victim ability, and victim type into account to determine if the attack is effective
     public boolean effective(Battle b, ActivePokemon me, ActivePokemon o) {
         // Self-target moves and field moves don't need to take type advantage always work
-        if (this.isSelfTarget() || this.isMoveType(MoveType.FIELD)) {
+        if (this.isSelfTargetStatusMove() || this.isMoveType(MoveType.FIELD)) {
             return true;
         }
 
@@ -4374,7 +4378,7 @@ public abstract class Attack implements Serializable {
             // Maximization station
             user.getStages().modifyStage(
                     user, user, Stat.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK,
-                    user.getName() + " cut its own HP and maximized its attack!"
+                    (victimName, statName, changed) -> user.getName() + " cut its own HP and maximized " + victimName + " " + statName + "!"
             );
             user.reduceHealthFraction(b, 1/2.0);
         }
