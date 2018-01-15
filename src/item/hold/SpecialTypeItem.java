@@ -1,9 +1,9 @@
 package item.hold;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import message.Messages;
-import battle.ActivePokemon;
 import type.Type;
 
 public interface SpecialTypeItem extends HoldItem {

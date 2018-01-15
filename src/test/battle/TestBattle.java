@@ -1,11 +1,11 @@
 package test.battle;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.Weather;
 import org.junit.Assert;
-import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import test.TestCharacter;
 import test.TestPokemon;

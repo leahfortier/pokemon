@@ -1,5 +1,6 @@
 package gui.view.battle;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
 import battle.effect.generic.Weather;
@@ -19,7 +20,6 @@ import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import battle.ActivePokemon;
 import util.StringUtils;
 
 import java.awt.Color;

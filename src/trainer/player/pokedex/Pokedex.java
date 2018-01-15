@@ -1,7 +1,7 @@
 package trainer.player.pokedex;
 
-import main.Game;
 import battle.ActivePokemon;
+import main.Game;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import util.StringUtils;

@@ -1,5 +1,6 @@
 package map.triggers.battle;
 
+import battle.ActivePokemon;
 import main.Game;
 import map.condition.Condition;
 import map.overworld.OverworldTool;
@@ -10,7 +11,6 @@ import message.MessageUpdate;
 import message.Messages;
 import pattern.GroupTriggerMatcher;
 import pattern.map.FishingMatcher;
-import battle.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 import trainer.player.Player;
 import trainer.player.medal.MedalTheme;

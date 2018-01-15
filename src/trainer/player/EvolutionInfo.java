@@ -1,10 +1,10 @@
 package trainer.player;
 
+import battle.ActivePokemon;
 import gui.view.ViewMode;
 import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.evolution.BaseEvolution;
 
 import java.io.Serializable;

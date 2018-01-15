@@ -1,5 +1,6 @@
 package map.triggers.battle;
 
+import battle.ActivePokemon;
 import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
 import battle.effect.generic.EffectInterfaces.RepellingEffect;
 import main.Game;
@@ -10,7 +11,6 @@ import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.map.WildBattleMatcher;
-import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import trainer.player.Player;
 import util.RandomUtils;

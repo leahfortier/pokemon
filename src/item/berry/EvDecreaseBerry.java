@@ -1,8 +1,8 @@
 package item.berry;
 
+import battle.ActivePokemon;
 import item.use.PokemonUseItem;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.Stat;
 
 public interface EvDecreaseBerry extends Berry, PokemonUseItem {

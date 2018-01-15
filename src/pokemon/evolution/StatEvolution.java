@@ -1,7 +1,7 @@
 package pokemon.evolution;
 
-import item.ItemNamesies;
 import battle.ActivePokemon;
+import item.ItemNamesies;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 

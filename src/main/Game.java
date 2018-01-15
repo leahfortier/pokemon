@@ -1,5 +1,6 @@
 package main;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import gui.GameData;
 import gui.view.TradeView;
@@ -12,7 +13,6 @@ import item.ItemNamesies;
 import map.MapName;
 import message.Messages;
 import pattern.map.MapTransitionMatcher;
-import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import trainer.player.Player;
 import util.save.Save;

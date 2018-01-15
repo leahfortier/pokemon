@@ -1,5 +1,6 @@
 package gui.view.battle.handler;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
 import draw.button.Button;
@@ -8,7 +9,6 @@ import gui.view.battle.VisualState;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
-import battle.ActivePokemon;
 import trainer.TrainerAction;
 import trainer.player.Player;
 

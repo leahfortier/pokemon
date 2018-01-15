@@ -1,5 +1,6 @@
 package message;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
 import battle.effect.generic.Weather;
@@ -7,7 +8,6 @@ import gui.view.ViewMode;
 import main.Game;
 import map.overworld.TerrainType;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
-import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonInfo;
 import sound.SoundTitle;

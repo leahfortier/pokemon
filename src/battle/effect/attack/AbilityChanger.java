@@ -1,7 +1,7 @@
 package battle.effect.attack;
 
-import battle.Battle;
 import battle.ActivePokemon;
+import battle.Battle;
 import pokemon.ability.Ability;
 
 public interface AbilityChanger {

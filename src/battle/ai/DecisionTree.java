@@ -1,10 +1,10 @@
 package battle.ai;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
 import message.Messages;
 import message.Messages.MessageState;
-import battle.ActivePokemon;
 import trainer.PlayerTrainer;
 import trainer.SimulatedPlayer;
 import trainer.Trainer;

@@ -1,5 +1,6 @@
 package gui.view.battle;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.status.StatusCondition;
 import draw.Alignment;
@@ -12,7 +13,6 @@ import gui.TileSet;
 import main.Game;
 import main.Global;
 import message.MessageUpdate;
-import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;

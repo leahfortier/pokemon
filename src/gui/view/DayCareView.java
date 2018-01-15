@@ -1,5 +1,6 @@
 package gui.view;
 
+import battle.ActivePokemon;
 import battle.attack.Attack;
 import battle.attack.Move;
 import draw.DrawUtils;
@@ -15,7 +16,6 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
-import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import pokemon.Stat;
 import pokemon.breeding.DayCareCenter;

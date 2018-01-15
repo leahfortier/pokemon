@@ -1,5 +1,6 @@
 package gui;
 
+import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import input.ControlKey;
@@ -10,7 +11,6 @@ import main.Game;
 import main.Global;
 import map.area.AreaData;
 import map.overworld.OverworldTool;
-import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import test.maps.TestMap;

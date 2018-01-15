@@ -1,5 +1,6 @@
 package item.bag;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
 import item.Item;
@@ -13,7 +14,6 @@ import main.Game;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import trainer.player.Player;
 

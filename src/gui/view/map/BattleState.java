@@ -1,5 +1,6 @@
 package gui.view.map;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import draw.DrawUtils;
 import draw.ImageUtils;
@@ -8,7 +9,6 @@ import gui.view.ViewMode;
 import gui.view.map.VisualState.VisualStateHandler;
 import main.Game;
 import main.Global;
-import battle.ActivePokemon;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import util.FileIO;

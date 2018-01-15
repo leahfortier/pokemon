@@ -1,9 +1,9 @@
 package map.overworld;
 
+import battle.ActivePokemon;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import main.Global;
-import battle.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 import util.RandomUtils;
 

@@ -1,5 +1,6 @@
 package battle.effect.status;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.MessageGetter;
 import battle.effect.generic.CastSource;
@@ -10,7 +11,6 @@ import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 
 import java.io.Serializable;

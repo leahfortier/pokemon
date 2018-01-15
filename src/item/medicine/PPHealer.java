@@ -1,12 +1,12 @@
 package item.medicine;
 
+import battle.ActivePokemon;
 import battle.attack.Move;
 import battle.effect.generic.CastSource;
 import item.hold.HoldItem;
 import item.use.MoveUseItem;
 import main.Global;
 import message.Messages;
-import battle.ActivePokemon;
 
 public interface PPHealer extends MoveUseItem, HoldItem {
     int restoreAmount(Move toRestore);

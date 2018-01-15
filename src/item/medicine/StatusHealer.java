@@ -1,11 +1,11 @@
 package item.medicine;
 
+import battle.ActivePokemon;
 import battle.effect.generic.CastSource;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.hold.HoldItem;
 import item.use.PokemonUseItem;
-import battle.ActivePokemon;
 
 public interface StatusHealer extends HoldItem, PokemonUseItem {
     boolean shouldHeal(StatusCondition statusCondition);

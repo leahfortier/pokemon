@@ -1,5 +1,6 @@
 package test.battle;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -9,7 +10,6 @@ import item.ItemNamesies;
 import item.bag.Bag;
 import main.Game;
 import org.junit.Assert;
-import battle.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 import test.TestPokemon;
 

@@ -1,5 +1,6 @@
 package gui.view;
 
+import battle.ActivePokemon;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -17,7 +18,6 @@ import item.bag.Bag;
 import main.Game;
 import main.Global;
 import map.Direction;
-import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import trainer.Trainer;
 import trainer.player.Player;

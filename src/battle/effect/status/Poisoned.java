@@ -1,11 +1,11 @@
 package battle.effect.status;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectNamesies;
 import message.MessageUpdate;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.ability.AbilityNamesies;
 import type.Type;
 

@@ -1,12 +1,12 @@
 package pokemon.breeding;
 
+import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import item.Item;
 import item.ItemNamesies;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
-import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.Nature;
 import pokemon.PokemonInfo;

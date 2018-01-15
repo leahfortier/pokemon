@@ -1,5 +1,6 @@
 package trainer;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.SwitchOutEffect;
@@ -7,7 +8,6 @@ import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import item.bag.Bag;
 import main.Global;
-import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import util.RandomUtils;
 

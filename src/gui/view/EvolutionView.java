@@ -1,5 +1,6 @@
 package gui.view;
 
+import battle.ActivePokemon;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.panel.BasicPanels;
@@ -14,7 +15,6 @@ import main.Global;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import pokemon.breeding.Eggy;

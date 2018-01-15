@@ -1,9 +1,9 @@
 package pokemon.breeding;
 
+import battle.ActivePokemon;
 import main.Game;
 import main.Global;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import trainer.player.Player;
 import trainer.player.medal.MedalTheme;

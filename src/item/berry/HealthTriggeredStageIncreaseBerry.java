@@ -1,8 +1,8 @@
 package item.berry;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.generic.CastSource;
-import battle.ActivePokemon;
 import pokemon.Stat;
 
 public interface HealthTriggeredStageIncreaseBerry extends HealthTriggeredBerry {

@@ -1,5 +1,6 @@
 package battle.effect.generic;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
@@ -10,7 +11,6 @@ import battle.effect.generic.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.status.StatusCondition;
 import message.MessageUpdate;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.Stat;
 import type.Type;
 

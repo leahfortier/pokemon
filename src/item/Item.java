@@ -1,5 +1,6 @@
 package item;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -77,7 +78,6 @@ import map.overworld.TerrainType;
 import map.overworld.WildEncounter;
 import message.MessageUpdate;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;

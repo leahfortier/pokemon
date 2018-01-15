@@ -1,5 +1,6 @@
 package gui.view;
 
+import battle.ActivePokemon;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
@@ -14,7 +15,6 @@ import main.Game;
 import main.Global;
 import message.Messages;
 import pattern.TradePokemonMatcher;
-import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
 import trainer.Trainer;

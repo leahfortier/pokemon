@@ -1,7 +1,7 @@
 package pokemon.evolution;
 
-import item.ItemNamesies;
 import battle.ActivePokemon;
+import item.ItemNamesies;
 
 class ItemEvolution extends BaseEvolution {
     private static final long serialVersionUID = 1L;

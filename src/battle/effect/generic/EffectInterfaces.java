@@ -1,5 +1,6 @@
 package battle.effect.generic;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.Move;
@@ -12,7 +13,6 @@ import map.overworld.TerrainType;
 import map.overworld.WildEncounter;
 import message.MessageUpdate;
 import message.Messages;
-import battle.ActivePokemon;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import pokemon.ability.Ability;

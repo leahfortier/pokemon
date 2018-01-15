@@ -1,9 +1,9 @@
 package test;
 
+import battle.ActivePokemon;
 import main.Game;
 import org.junit.Assert;
 import org.junit.Test;
-import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import trainer.player.Player;

@@ -1,10 +1,10 @@
 package test;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import org.junit.Assert;
-import battle.ActivePokemon;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;

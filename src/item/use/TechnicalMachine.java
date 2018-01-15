@@ -1,9 +1,9 @@
 package item.use;
 
+import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import main.Global;
-import battle.ActivePokemon;
 
 import java.util.List;
 

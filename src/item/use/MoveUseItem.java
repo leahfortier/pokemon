@@ -1,8 +1,8 @@
 package item.use;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
-import battle.ActivePokemon;
 
 public interface MoveUseItem extends UseItem {
     boolean use(ActivePokemon p, Move m);

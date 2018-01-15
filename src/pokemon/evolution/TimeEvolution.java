@@ -1,8 +1,8 @@
 package pokemon.evolution;
 
+import battle.ActivePokemon;
 import item.ItemNamesies;
 import map.daynight.DayCycle;
-import battle.ActivePokemon;
 import pokemon.PokemonNamesies;
 import util.StringUtils;
 

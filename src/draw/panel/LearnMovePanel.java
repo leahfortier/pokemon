@@ -1,5 +1,6 @@
 package draw.panel;
 
+import battle.ActivePokemon;
 import battle.attack.Attack;
 import battle.attack.Move;
 import draw.button.Button;
@@ -7,7 +8,6 @@ import input.ControlKey;
 import input.InputControl;
 import message.MessageUpdate;
 import message.MessageUpdateType;
-import battle.ActivePokemon;
 import util.Point;
 import util.StringUtils;
 

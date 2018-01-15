@@ -1,8 +1,8 @@
 package test;
 
+import battle.ActivePokemon;
 import map.MapName;
 import pattern.SimpleMapTransition;
-import battle.ActivePokemon;
 import trainer.player.Player;
 
 public class TestCharacter extends Player {

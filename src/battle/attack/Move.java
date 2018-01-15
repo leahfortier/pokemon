@@ -1,12 +1,12 @@
 package battle.attack;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.ai.DecisionTree;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import message.Messages;
-import battle.ActivePokemon;
 import type.Type;
 import util.RandomUtils;
 

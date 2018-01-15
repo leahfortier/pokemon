@@ -1,8 +1,8 @@
 package item.use;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import item.ItemInterface;
-import battle.ActivePokemon;
 
 public interface BallItem extends ItemInterface {
     default double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {

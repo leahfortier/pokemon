@@ -1,9 +1,9 @@
 package battle.effect.generic;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import item.Item;
 import main.Global;
-import battle.ActivePokemon;
 import pokemon.ability.Ability;
 
 public enum CastSource {

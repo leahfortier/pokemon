@@ -1,9 +1,9 @@
 package trainer;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
-import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 
 import java.util.List;

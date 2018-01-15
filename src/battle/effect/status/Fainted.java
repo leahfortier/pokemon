@@ -1,7 +1,7 @@
 package battle.effect.status;
 
-import battle.Battle;
 import battle.ActivePokemon;
+import battle.Battle;
 import util.StringUtils;
 
 class Fainted extends Status {

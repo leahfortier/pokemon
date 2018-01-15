@@ -1,11 +1,11 @@
 package item.berry;
 
+import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
 import battle.effect.status.StatusCondition;
 import item.medicine.StatusHealer;
-import battle.ActivePokemon;
 
 public interface StatusBerry extends StatusHealer, GainableEffectBerry, StatusReceivedEffect {
     @Override
