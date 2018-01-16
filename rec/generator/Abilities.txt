@@ -1659,11 +1659,12 @@ Dancer:
 	Desc: When another Pokémon uses a dance move, it can use a dance move following it regardless of its Speed.
 	Int: OpponentEndAttackEffect
 	OpponentEndAttack:
-		if (attack.getName().contains("Dance") && (!attacking.hasAbility(this.namesies) || !attacking.getAbility().isActive())) {
+		Attack attack = attacking.getAttack();
+		if (attack.isMoveType(MoveType.DANCE) && (!attacking.hasAbility(this.namesies()) || !attacking.getAbility().isActive())) {
 			activated = true;
 			ActivePokemon abilify = this.getOtherPokemon(b, attacking);
 			Messages.add(abilify.getName() + "'s " + this.getName() + " allowed it to join in the dance!");
-			abilify.callNewMove(b, attacking, new Move(attack));
+			abilify.callFullNewMove(b, attacking, attack.namesies());
 			activated = false;
 		}
 		###

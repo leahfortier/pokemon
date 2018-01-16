@@ -1327,15 +1327,15 @@ public final class EffectInterfaces {
     }
 
     public interface OpponentEndAttackEffect {
-        void endsies(Battle b, ActivePokemon attacking, Attack attack);
+        void endsies(Battle b, ActivePokemon attacking);
 
-        static void invokeOpponentEndAttackEffect(Battle b, ActivePokemon attacking, Attack attack) {
+        static void invokeOpponentEndAttackEffect(Battle b, ActivePokemon attacking) {
             List<Object> invokees = b.getEffectsList(b.getOtherPokemon(attacking));
             for (Object invokee : invokees) {
                 if (invokee instanceof OpponentEndAttackEffect && Effect.isActiveEffect(invokee)) {
 
                     OpponentEndAttackEffect effect = (OpponentEndAttackEffect)invokee;
-                    effect.endsies(b, attacking, attack);
+                    effect.endsies(b, attacking);
                 }
             }
         }

@@ -387,6 +387,7 @@ public class ModifierTest extends BaseTest {
         checkPriority(2, battle, AttackNamesies.BABY_DOLL_EYES);
         checkPriority(1, battle, AttackNamesies.NASTY_PLOT);
         checkPriority(1, battle, AttackNamesies.THUNDER_WAVE);
+        checkPriority(1, battle, AttackNamesies.NATURE_POWER);
 
         // Unless the opponent is dark type
         Assert.assertFalse(defending.isType(battle, Type.DARK));

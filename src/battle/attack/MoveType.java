@@ -6,6 +6,7 @@ public enum MoveType {
     AURA_PULSE,
     BITING,
     BOMB_BALL,
+    DANCE,
     DEFROST,
     ENCORELESS,
     FIELD,

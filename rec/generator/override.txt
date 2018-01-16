@@ -398,7 +398,7 @@ MirrorMove:
 		this.mirror = defending.getLastMoveUsed();
 		###
 	AddMapField: Applies: mirror != null && !mirror.getAttack().isMoveType(MoveType.MIRRORLESS)
-	AddMapField: CallNewMove: new Move(mirror.getAttack())
+	AddMapField: CallNewMove: mirror.getAttack().namesies()
 *
 Countering:
 	AddMapField: Priority: -5
@@ -415,6 +415,11 @@ Countering:
 CallNewMove:
 	AddMapField: UniqueEffects:
 		user.callNewMove(b, victim, {0});
+		###
+*
+CallFullNewMove:
+	AddMapField: UniqueEffects:
+		user.callFullNewMove(b, victim, {0});
 		###
 *
 SwapOpponent:
@@ -1689,7 +1694,7 @@ PriorityPrevention:
 	AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " prevents priority moves!!"
 *
 OpponentEndAttack:
-	Header: void endsies(Battle b, ActivePokemon attacking, Attack attack)
+	Header: void endsies(Battle b, ActivePokemon attacking)
 *
 TerrainStarter:
 	AddInterface: EntryEffect

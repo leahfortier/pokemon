@@ -4180,12 +4180,13 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public void endsies(Battle b, ActivePokemon attacking, Attack attack) {
-            if (attack.getName().contains("Dance") && (!attacking.hasAbility(this.namesies) || !attacking.getAbility().isActive())) {
+        public void endsies(Battle b, ActivePokemon attacking) {
+            Attack attack = attacking.getAttack();
+            if (attack.isMoveType(MoveType.DANCE) && (!attacking.hasAbility(this.namesies()) || !attacking.getAbility().isActive())) {
                 activated = true;
                 ActivePokemon abilify = this.getOtherPokemon(b, attacking);
                 Messages.add(abilify.getName() + "'s " + this.getName() + " allowed it to join in the dance!");
-                abilify.callNewMove(b, attacking, new Move(attack));
+                abilify.callFullNewMove(b, attacking, attack.namesies());
                 activated = false;
             }
         }

@@ -3,7 +3,6 @@ package test.battle;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
-import battle.attack.Move;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
@@ -21,7 +20,7 @@ interface PokemonManipulator {
         ActivePokemon caster = attackingTarget ? defending : attacking;
         ActivePokemon victim = attackingTarget ? attacking : defending;
 
-        caster.callNewMove(battle, victim, new Move(attackNamesies));
+        caster.callFullNewMove(battle, victim, attackNamesies);
     }
 
     static void giveEffect(EffectNamesies effectNamesies, Battle battle, ActivePokemon attacking, ActivePokemon defending, boolean attackingTarget) {

@@ -518,16 +518,7 @@ public class Battle implements Serializable {
         // HOLD IT RIGHT THERE! YOU MAY NOT BE ABLE TO ATTACK!
         if (ableToAttack(me, o)) {
             // Made it, suckah!
-            printAttacking(me);
-
-            // Check if the move actually hits!
-            if (accuracyCheck(me, o)) {
-                executeAttack(me, o);
-                success = true;
-            } else {
-                Messages.add(me.getName() + "'s attack missed!");
-                CrashDamageMove.invokeCrashDamageMove(this, me);
-            }
+            success = executeAttack(me, o);
         }
 
         me.endAttack(o, success);
@@ -542,18 +533,31 @@ public class Battle implements Serializable {
         p.setReducePP(true);
     }
 
-    private void executeAttack(ActivePokemon me, ActivePokemon o) {
-        if (me.isPlayer() && !this.isSimulating()) {
-            Game.getPlayer().getMedalCase().useMove(me.getAttack().namesies());
+    // Executes the attack including accuracy checks
+    public boolean executeAttack(ActivePokemon me, ActivePokemon o) {
+        printAttacking(me);
+
+        // Check if the move actually hits!
+        if (accuracyCheck(me, o)) {
+            if (me.isPlayer() && !this.isSimulating()) {
+                Game.getPlayer().getMedalCase().useMove(me.getAttack().namesies());
+            }
+
+            me.count();
+
+            boolean success = me.getAttack().apply(me, o, this);
+            me.setLastMoveSucceeded(success);
+
+            me.getMove().setUsed();
+            me.decay();
+
+            return true;
+        } else {
+            Messages.add(me.getName() + "'s attack missed!");
+            CrashDamageMove.invokeCrashDamageMove(this, me);
+
+            return false;
         }
-
-        me.count();
-
-        boolean success = me.getAttack().apply(me, o, this);
-        me.setLastMoveSucceeded(success);
-
-        me.getMove().setUsed();
-        me.decay();
     }
 
     public void addEffect(BattleEffect effect) {

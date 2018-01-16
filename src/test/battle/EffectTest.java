@@ -1,7 +1,6 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
-import battle.attack.Move;
 import battle.effect.generic.CastSource;
 import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
@@ -108,7 +107,7 @@ public class EffectTest extends BaseTest {
 
         manipulator.manipulate(battle, attacking, defending);
 
-        attacking.callNewMove(battle, defending, new Move(protectMove));
+        attacking.callFullNewMove(battle, defending, protectMove);
         defending.apply(!shouldProtect, attack, battle);
 
         additionalChecks.manipulate(battle, attacking, defending);

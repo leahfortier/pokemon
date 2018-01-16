@@ -435,7 +435,7 @@ public abstract class Attack implements Serializable {
 
         this.uniqueEffects(b, user, victim);
 
-        OpponentEndAttackEffect.invokeOpponentEndAttackEffect(b, user, this);
+        OpponentEndAttackEffect.invokeOpponentEndAttackEffect(b, user);
     }
 
     private void applyBasicEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -1384,6 +1384,7 @@ public abstract class Attack implements Serializable {
         RainDance() {
             super(AttackNamesies.RAIN_DANCE, Type.WATER, MoveCategory.STATUS, 5, "The user summons a heavy rain that falls for five turns, powering up Water-type moves.");
             super.effects.add(EffectNamesies.RAINING);
+            super.moveTypes.add(MoveType.DANCE);
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
             super.moveTypes.add(MoveType.FIELD);
         }
@@ -1430,6 +1431,7 @@ public abstract class Attack implements Serializable {
             super.power = 120;
             super.accuracy = 100;
             super.effects.add(EffectNamesies.SELF_CONFUSION);
+            super.moveTypes.add(MoveType.DANCE);
             super.selfTarget = true;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
@@ -1747,6 +1749,7 @@ public abstract class Attack implements Serializable {
 
         QuiverDance() {
             super(AttackNamesies.QUIVER_DANCE, Type.BUG, MoveCategory.STATUS, 20, "The user lightly performs a beautiful, mystic dance. It boosts the user's Sp. Atk, Sp. Def, and Speed stats.");
+            super.moveTypes.add(MoveType.DANCE);
             super.selfTarget = true;
             super.statChanges[Stat.SP_ATTACK.index()] = 1;
             super.statChanges[Stat.SP_DEFENSE.index()] = 1;
@@ -2112,6 +2115,7 @@ public abstract class Attack implements Serializable {
         FeatherDance() {
             super(AttackNamesies.FEATHER_DANCE, Type.FLYING, MoveCategory.STATUS, 15, "The user covers the target's body with a mass of down that harshly lowers its Attack stat.");
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.DANCE);
             super.statChanges[Stat.ATTACK.index()] = -2;
         }
     }
@@ -2195,7 +2199,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callNewMove(b, victim, new Move(mirror.getAttack()));
+            user.callNewMove(b, victim, mirror.getAttack().namesies());
         }
 
         @Override
@@ -2318,6 +2322,7 @@ public abstract class Attack implements Serializable {
 
         SwordsDance() {
             super(AttackNamesies.SWORDS_DANCE, Type.NORMAL, MoveCategory.STATUS, 30, "A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat.");
+            super.moveTypes.add(MoveType.DANCE);
             super.selfTarget = true;
             super.statChanges[Stat.ATTACK.index()] = 2;
         }
@@ -3258,7 +3263,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callNewMove(b, victim, new Move(metronomeMove));
+            user.callFullNewMove(b, victim, metronomeMove.namesies());
         }
     }
 
@@ -6439,7 +6444,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callNewMove(b, victim, new Move(victim.getAttack()));
+            user.callNewMove(b, victim, victim.getAttack().namesies());
         }
     }
 
@@ -6617,6 +6622,7 @@ public abstract class Attack implements Serializable {
 
         DragonDance() {
             super(AttackNamesies.DRAGON_DANCE, Type.DRAGON, MoveCategory.STATUS, 20, "The user vigorously performs a mystic, powerful dance that boosts its Attack and Speed stats.");
+            super.moveTypes.add(MoveType.DANCE);
             super.selfTarget = true;
             super.statChanges[Stat.ATTACK.index()] = 1;
             super.statChanges[Stat.SPEED.index()] = 1;
@@ -6762,7 +6768,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callNewMove(b, victim, new Move(mirror.getAttack()));
+            user.callNewMove(b, victim, mirror.getAttack().namesies());
         }
 
         @Override
@@ -7211,12 +7217,12 @@ public abstract class Attack implements Serializable {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callNewMove(b, victim, RandomUtils.getRandomValue(this.moves));
+            user.callFullNewMove(b, victim, RandomUtils.getRandomValue(this.moves));
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasStatus(StatusCondition.ASLEEP) && this.moves.size() > 0;
+            return user.hasStatus(StatusCondition.ASLEEP) && !this.moves.isEmpty();
         }
     }
 
@@ -8014,7 +8020,7 @@ public abstract class Attack implements Serializable {
     static class Assist extends Attack {
         private static final long serialVersionUID = 1L;
 
-        private List<Attack> attacks;
+        private List<AttackNamesies> attacks;
 
         Assist() {
             super(AttackNamesies.ASSIST, Type.NORMAL, MoveCategory.STATUS, 20, "The user hurriedly and randomly uses a move among those known by other Pok\u00e9mon in the party.");
@@ -8031,8 +8037,9 @@ public abstract class Attack implements Serializable {
             for (ActivePokemon p : b.getTrainer(attacking).getActiveTeam()) {
                 if (p != attacking) {
                     for (Move move : p.getMoves(b)) {
-                        if (!move.getAttack().isMoveType(MoveType.ASSISTLESS)) {
-                            attacks.add(move.getAttack());
+                        Attack attack = move.getAttack();
+                        if (!attack.isMoveType(MoveType.ASSISTLESS)) {
+                            attacks.add(attack.namesies());
                         }
                     }
                 }
@@ -8041,7 +8048,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callNewMove(b, victim, new Move(RandomUtils.getRandomValue(attacks)));
+            user.callFullNewMove(b, victim, RandomUtils.getRandomValue(attacks));
         }
 
         @Override
@@ -8126,6 +8133,7 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.TEETER_DANCE, Type.NORMAL, MoveCategory.STATUS, 20, "The user performs a wobbly dance that confuses the Pok\u00e9mon around it.");
             super.accuracy = 100;
             super.effects.add(EffectNamesies.CONFUSION);
+            super.moveTypes.add(MoveType.DANCE);
         }
     }
 
@@ -8872,6 +8880,7 @@ public abstract class Attack implements Serializable {
             super.power = 80;
             super.accuracy = 100;
             super.effectChance = 50;
+            super.moveTypes.add(MoveType.DANCE);
             super.selfTarget = true;
             super.statChanges[Stat.SP_ATTACK.index()] = 1;
         }
@@ -9182,6 +9191,7 @@ public abstract class Attack implements Serializable {
         LunarDance() {
             super(AttackNamesies.LUNAR_DANCE, Type.PSYCHIC, MoveCategory.STATUS, 10, "The user faints. In return, the Pok\u00e9mon taking its place will have its status and HP fully restored.");
             super.effects.add(EffectNamesies.HEAL_SWITCH);
+            super.moveTypes.add(MoveType.DANCE);
             super.moveTypes.add(MoveType.USER_FAINTS);
             super.moveTypes.add(MoveType.NON_SNATCHABLE);
             super.moveTypes.add(MoveType.HEALING);
@@ -9684,13 +9694,8 @@ public abstract class Attack implements Serializable {
         }
 
         @Override
-        public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
-            return b.getTerrainType().getAttack().getAccuracy(b, me, o);
-        }
-
-        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callNewMove(b, victim, new Move(b.getTerrainType().getAttack()));
+            user.callFullNewMove(b, victim, b.getTerrainType().getAttack());
         }
     }
 
@@ -10962,6 +10967,7 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.REVELATION_DANCE, Type.NORMAL, MoveCategory.SPECIAL, 15, "The user attacks the target by dancing very hard. The user's type determines the type of this move.");
             super.power = 90;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.DANCE);
         }
 
         @Override

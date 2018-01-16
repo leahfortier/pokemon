@@ -711,7 +711,7 @@ SleepyFightsterEffect:
 ***
 OpponentEndAttackEffect:
 	Method:
-		Header: void endsies(Battle b, ActivePokemon attacking, Attack attack)
+		Header: void endsies(Battle b, ActivePokemon attacking)
 		Invoke: Void
 		EffectList: b.getOtherPokemon(attacking)
 	*

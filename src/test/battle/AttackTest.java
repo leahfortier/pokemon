@@ -38,6 +38,10 @@ public class AttackTest extends BaseTest {
             if (attack instanceof SelfHealingMove || attack instanceof SapHealthEffect) {
                 Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.HEALING));
             }
+
+            if (attack.getName().contains("Dance")) {
+                Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.DANCE));
+            }
         }
     }
 

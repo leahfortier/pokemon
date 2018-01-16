@@ -228,9 +228,23 @@ public class ActivePokemon extends PartyPokemon {
         }
     }
 
-    public void callNewMove(Battle b, ActivePokemon opp, Move m) {
-        this.callTempMove(m, () -> {
+    public void callFullNewMove(Battle b, ActivePokemon opp, AttackNamesies attack) {
+        this.callFullNewMove(b, opp, new Move(attack));
+    }
+
+    // Calls a new move -- wil reperform the accuracy check for this method and print attacking
+    public void callFullNewMove(Battle b, ActivePokemon opp, Move newMove) {
+        this.callTempMove(newMove, () -> {
+            this.startAttack(b);
+            b.executeAttack(this, opp);
+        });
+    }
+
+    // Calls a new move -- prints attacking but does not reperform accuracy check
+    public void callNewMove(Battle b, ActivePokemon opp, AttackNamesies attack) {
+        this.callTempMove(attack, () -> {
             b.printAttacking(this);
+            this.startAttack(b);
             this.getAttack().apply(this, opp, b);
         });
     }
@@ -239,7 +253,8 @@ public class ActivePokemon extends PartyPokemon {
         this.callTempMove(new Move(tempMove), moveAction);
     }
 
-    public void callTempMove(Move tempMove, Action moveAction) {
+    // Sets the temporary move and performs the action with that move, then resets back to the original move
+    private void callTempMove(Move tempMove, Action moveAction) {
         Move currentMove = getMove();
         setMove(tempMove);
         moveAction.performAction();
@@ -909,9 +924,9 @@ public class ActivePokemon extends PartyPokemon {
         if (!success) {
             this.removeEffect(EffectNamesies.SELF_CONFUSION);
             this.resetCount();
+        } else {
+            this.setLastMoveUsed();
         }
-
-        this.setLastMoveUsed();
 
         if (this.reducePP) {
             this.getMove().reducePP(opp.hasAbility(AbilityNamesies.PRESSURE) ? 2 : 1);

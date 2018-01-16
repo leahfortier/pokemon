@@ -21,7 +21,6 @@ import map.entity.Entity;
 import map.entity.movable.MovableEntity;
 import map.entity.movable.NPCEntity;
 import map.entity.movable.PlayerEntity;
-import map.overworld.TerrainType;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.MessageUpdateType;
@@ -103,7 +102,7 @@ public class MapView extends View {
         if (currentArea != null) {
             currentArea.getWeather().draw(g);
 
-            if (currentArea.getTerrain() != TerrainType.BUILDING) {
+            if (!currentArea.getTerrain().isInterior()) {
                 DayCycle.getTimeOfDay().draw(g);
             }
 

@@ -1,6 +1,5 @@
 package map.overworld;
 
-import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.status.StatusCondition;
@@ -15,13 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum TerrainType {
-    GRASS(Type.GRASS, new Color(224, 247, 224), AttackNamesies.ENERGY_BALL, StatusCondition.ASLEEP),
     BUILDING(Type.NORMAL, new Color(232, 243, 248), AttackNamesies.TRI_ATTACK, StatusCondition.PARALYZED),
     CAVE(Type.ROCK, new Color(192, 169, 104), AttackNamesies.POWER_GEM, EffectNamesies.FLINCH),
     SAND(Type.GROUND, new Color(248, 234, 204), AttackNamesies.EARTH_POWER, Stat.ACCURACY),
     WATER(Type.WATER, new Color(221, 240, 248), AttackNamesies.HYDRO_PUMP, Stat.ATTACK),
     SNOW(Type.ICE, new Color(245, 239, 246), AttackNamesies.FROST_BREATH, StatusCondition.FROZEN),
     ICE(Type.ICE, new Color(228, 249, 240), AttackNamesies.ICE_BEAM, StatusCondition.FROZEN),
+    GRASS(Type.GRASS, new Color(224, 247, 224), AttackNamesies.ENERGY_BALL, StatusCondition.ASLEEP),
     MISTY(Type.FAIRY, new Color(255, 231, 233), AttackNamesies.MOONBLAST, Stat.SP_ATTACK),
     ELECTRIC(Type.ELECTRIC, new Color(250, 250, 210), AttackNamesies.THUNDERBOLT, StatusCondition.PARALYZED),
     PSYCHIC(Type.PSYCHIC, new Color(216, 191, 216), AttackNamesies.PSYCHIC, Stat.SPEED);
@@ -30,7 +29,7 @@ public enum TerrainType {
     private final Color color;
     private final String imageName;
 
-    private final Attack attack;
+    private final AttackNamesies attack;
     private final StatusCondition status;
     private final int[] statChanges;
     private final List<EffectNamesies> effects;
@@ -52,7 +51,7 @@ public enum TerrainType {
         this.color = color;
         this.imageName = StringUtils.properCase(this.name().toLowerCase()) + "Circle";
 
-        this.attack = attack.getAttack();
+        this.attack = attack;
 
         this.status = statusCondition;
         this.statChanges = new int[Stat.NUM_BATTLE_STATS];
@@ -75,7 +74,7 @@ public enum TerrainType {
         return color;
     }
 
-    public Attack getAttack() {
+    public AttackNamesies getAttack() {
         return attack;
     }
 
