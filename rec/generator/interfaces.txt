@@ -300,9 +300,26 @@ GroundedEffect:
 			###
 	*
 ***
-AccuracyBypassEffect
+SemiInvulnerableBypasser:
 	Method:
-		Comments: // Attacker is the Pokemon whose accuracy is being evaluated and is the Pokemon on which this effect is attached to
+		Comments:
+			// Attacker is the Pokemon whose accuracy is being evaluated and is the Pokemon on which this effect is attached to
+			// This is evaluated BEFORE the semi-invulnerable checks, so if this returns true, the move will hit even if the defending is semi-invulnerable
+			###
+		Header: boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending)
+		Invoke: Check true
+		InvokeName: bypassAccuracyCheck
+		EffectList: attacking
+		InvokeAttack: attacking
+	*
+***
+BasicAccuracyBypassEffect:
+	Method:
+		Comments: 
+			// Attacker is the Pokemon whose accuracy is being evaluated and is the Pokemon on which this effect is attached to
+			// This is evaluated AFTER the semi-invulnerable checks
+			// Should use SemiInvulnerableBypasser for moves that hit fly, dig, etc.
+			###
 		Header: boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
 		Invoke: Check true
 		InvokeName: bypassAccuracyCheck
@@ -312,7 +329,10 @@ AccuracyBypassEffect
 ***
 OpponentAccuracyBypassEffect:
 	Method:
-		Comments: // Attacker is the Pokemon whose accuracy is being evaluated, defender is the Pokemon on which this effect is attached to
+		Comments: 
+			// Attacker is the Pokemon whose accuracy is being evaluated, defender is the Pokemon on which this effect is attached to
+			// This is evaluated BEFORE the semi-invulnerable checks, so if this returns true, the move will hit even if the defending is semi-invulnerable
+			###
 		Header: boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
 		Invoke: Check true
 		InvokeName: bypassAccuracyCheck

@@ -281,7 +281,7 @@ Damp:
 	Int: AttackBlocker, SelfAttackBlocker
 	Field:
 		private boolean checkeroo(ActivePokemon attacking) {
-			return attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION;
+			return attacking.getAttack().isMoveType(MoveType.EXPLODING);
 		}
 
 		private String blockityMessage(ActivePokemon attacking, ActivePokemon abilify) {
@@ -348,13 +348,13 @@ Synchronize:
 *
 No Guard:
 	Desc: Ensures the Pok\u00e9mon and its foe's attacks land.
-	BypassAccuracy:
-		// Moves always hit unless they are OHKO moves
-		return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO);
+	SemiInvulnerableBypass:
+		// Moves always hit
+		return true;
 		###
 	OpponentBypassAccuracy:
-		// Moves always hit unless they are OHKO moves
-		return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO);
+		// Moves always hit
+		return true;
 		###
 	EncounterRateMultiplier: 1.5
 *

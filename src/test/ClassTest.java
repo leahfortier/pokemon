@@ -10,13 +10,13 @@ import battle.effect.attack.MultiTurnMove.ChargingMove;
 import battle.effect.attack.MultiTurnMove.RechargingMove;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
-import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.AttackingNoAdvantageChanger;
+import battle.effect.generic.EffectInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
@@ -60,6 +60,7 @@ import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.RepellingEffect;
 import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
 import battle.effect.generic.EffectInterfaces.SelfHealingMove;
+import battle.effect.generic.EffectInterfaces.SemiInvulnerableBypasser;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
@@ -119,7 +120,8 @@ public class ClassTest extends BaseTest {
     private static final List<Class<?>> effectListWithAttackClasses = Arrays.asList(
             ApplyDamageEffect.class,
             MurderEffect.class,
-            AccuracyBypassEffect.class,
+            SemiInvulnerableBypasser.class,
+            BasicAccuracyBypassEffect.class,
             CritBlockerEffect.class,
             OpponentIgnoreStageEffect.class,
             StatSwitchingEffect.class,

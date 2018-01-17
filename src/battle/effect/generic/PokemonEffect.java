@@ -12,7 +12,6 @@ import battle.effect.attack.ChangeAttackTypeSource;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.BattleEffect.FieldUproar;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
-import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.AttackSelectionSelfBlockerEffect;
@@ -41,6 +40,7 @@ import battle.effect.generic.EffectInterfaces.ProtectingEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.SapHealthEffect;
 import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
+import battle.effect.generic.EffectInterfaces.SemiInvulnerableBypasser;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
@@ -806,6 +806,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
     }
 
+    // No successive decay for this move
     static class MatBlock extends PokemonEffect implements ProtectingEffect {
         private static final long serialVersionUID = 1L;
 
@@ -821,12 +822,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         @Override
         public boolean protectingCondition(Battle b, ActivePokemon attacking) {
             return !attacking.getAttack().isStatusMove();
-        }
-
-        @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            // No successive decay for this move
-            super.cast(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -1759,7 +1754,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
     }
 
-    static class LockOn extends PokemonEffect implements PassableEffect, AccuracyBypassEffect {
+    static class LockOn extends PokemonEffect implements PassableEffect, SemiInvulnerableBypasser {
         private static final long serialVersionUID = 1L;
 
         LockOn() {
@@ -1772,7 +1767,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // I think this technically is not supposed to hit semi-invulnerable, but I think it should if No Guard can
             return true;
         }
 
@@ -2635,7 +2631,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         @Override
         public boolean block(Battle b, ActivePokemon user) {
             // TODO: Test
-            return user.getAttack() instanceof SapHealthEffect;
+            return user.getAttack().isMoveType(MoveType.HEALING);
         }
     }
 

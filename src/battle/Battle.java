@@ -3,8 +3,8 @@ package battle;
 import battle.attack.MoveType;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.Effect;
-import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
+import battle.effect.generic.EffectInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
@@ -17,6 +17,7 @@ import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
+import battle.effect.generic.EffectInterfaces.SemiInvulnerableBypasser;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
@@ -700,8 +701,8 @@ public class Battle implements Serializable {
             return true;
         }
 
-        // Effects that allow the user to bypass the accuracy check
-        if (AccuracyBypassEffect.bypassAccuracyCheck(this, me, o)) {
+        // Effects that allow the user to bypass the accuracy check before the semi-invulnerable check
+        if (SemiInvulnerableBypasser.bypassAccuracyCheck(this, me, o)) {
             return true;
         }
 
@@ -713,6 +714,11 @@ public class Battle implements Serializable {
         // Semi-invulnerable target -- automatic miss (unless a previous condition was triggered)
         if (o.isSemiInvulnerable()) {
             return false;
+        }
+
+        // Effects that allow the user to bypass the accuracy check after the semi-invulnerable check
+        if (BasicAccuracyBypassEffect.bypassAccuracyCheck(this, me, o)) {
+            return true;
         }
 
         int moveAccuracy = me.getAttack().getAccuracy(this, me, o);

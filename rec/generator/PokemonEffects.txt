@@ -131,14 +131,11 @@ CraftyShield:
 		###
 *
 MatBlock:
-	ProtectingEffect: True
+	ProtectingEffectNoDecay: True
 	ProtectingCondition:
 		return !attacking.getAttack().isStatusMove();
 		###
-	Cast:
-		// No successive decay for this move
-		super.cast(b, caster, victim, source, printCast);
-		###
+	Comments: // No successive decay for this move
 *
 Bracing:
 	NumTurns: 1
@@ -613,7 +610,8 @@ LockOn:
 	NumTurns: 2
 	CastMessage: user.getName() + " took aim!"
 	Int: PassableEffect
-	BypassAccuracy:
+	SemiInvulnerableBypass:
+		// I think this technically is not supposed to hit semi-invulnerable, but I think it should if No Guard can
 		return true;
 		###
 *
@@ -1033,7 +1031,7 @@ HealBlock:
 	Int: SelfAttackBlocker
 	SelfBlock:
 		// TODO: Test
-		return user.getAttack() instanceof SapHealthEffect;
+		return user.getAttack().isMoveType(MoveType.HEALING);
 		###
 *
 Infatuated:

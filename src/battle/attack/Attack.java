@@ -11,12 +11,12 @@ import battle.effect.attack.MultiTurnMove.ChargingMove;
 import battle.effect.attack.MultiTurnMove.RechargingMove;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
-import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
+import battle.effect.generic.EffectInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
 import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
@@ -40,6 +40,7 @@ import battle.effect.generic.EffectInterfaces.RecoilPercentageMove;
 import battle.effect.generic.EffectInterfaces.SapHealthEffect;
 import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
 import battle.effect.generic.EffectInterfaces.SelfHealingMove;
+import battle.effect.generic.EffectInterfaces.SemiInvulnerableBypasser;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
@@ -536,7 +537,7 @@ public abstract class Attack implements Serializable {
         }
     }
 
-    static class Toxic extends Attack implements AccuracyBypassEffect {
+    static class Toxic extends Attack implements SemiInvulnerableBypasser {
         private static final long serialVersionUID = 1L;
 
         Toxic() {
@@ -546,8 +547,8 @@ public abstract class Attack implements Serializable {
         }
 
         @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Poison-type Pokemon bypass accuracy
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Poison-type Pokemon bypass accuracy -- even if target is semi-invulnerable
             return attacking.isType(b, Type.POISON);
         }
     }
@@ -1599,7 +1600,7 @@ public abstract class Attack implements Serializable {
     }
 
     // Twice as strong when the opponent is flying
-    static class Gust extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
+    static class Gust extends Attack implements SemiInvulnerableBypasser, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         Gust() {
@@ -1609,7 +1610,7 @@ public abstract class Attack implements Serializable {
         }
 
         @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is flying
             return defending.isSemiInvulnerableFlying();
         }
@@ -2086,7 +2087,7 @@ public abstract class Attack implements Serializable {
     }
 
     // Twice as strong when the opponent is flying
-    static class Twister extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
+    static class Twister extends Attack implements SemiInvulnerableBypasser, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         Twister() {
@@ -2098,7 +2099,7 @@ public abstract class Attack implements Serializable {
         }
 
         @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is flying
             return defending.isSemiInvulnerableFlying();
         }
@@ -2209,7 +2210,7 @@ public abstract class Attack implements Serializable {
     }
 
     // Twice as strong when the opponent is flying
-    static class Hurricane extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
+    static class Hurricane extends Attack implements SemiInvulnerableBypasser, BasicAccuracyBypassEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         Hurricane() {
@@ -2221,9 +2222,15 @@ public abstract class Attack implements Serializable {
         }
 
         @Override
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Always hit when the opponent is flying
+            return defending.isSemiInvulnerableFlying();
+        }
+
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hits when the opponent is flying or it is raining (unless they're non-flying semi-invulnerable)
-            return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == EffectNamesies.RAINING && defending.isSemiInvulnerable());
+            // Always hits in the rain
+            return b.getWeather().namesies() == EffectNamesies.RAINING;
         }
 
         @Override
@@ -2744,7 +2751,7 @@ public abstract class Attack implements Serializable {
     }
 
     // Twice as strong when the opponent is flying
-    static class Thunder extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
+    static class Thunder extends Attack implements SemiInvulnerableBypasser, BasicAccuracyBypassEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         Thunder() {
@@ -2756,9 +2763,15 @@ public abstract class Attack implements Serializable {
         }
 
         @Override
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Always hit when the opponent is flying
+            return defending.isSemiInvulnerableFlying();
+        }
+
+        @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hits when the opponent is flying or it is raining (unless they're non-flying semi-invulnerable)
-            return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == EffectNamesies.RAINING && defending.isSemiInvulnerable());
+            // Always hits in the rain
+            return b.getWeather().namesies() == EffectNamesies.RAINING;
         }
 
         @Override
@@ -3007,7 +3020,7 @@ public abstract class Attack implements Serializable {
         }
     }
 
-    static class BodySlam extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
+    static class BodySlam extends Attack implements BasicAccuracyBypassEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         BodySlam() {
@@ -3021,7 +3034,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
+            return defending.hasEffect(EffectNamesies.USED_MINIMIZE);
         }
 
         @Override
@@ -3790,7 +3803,7 @@ public abstract class Attack implements Serializable {
         }
     }
 
-    static class Magnitude extends Attack implements AccuracyBypassEffect {
+    static class Magnitude extends Attack implements SemiInvulnerableBypasser, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         private static final int[] CHANCES = { 5, 10, 20, 30, 20, 10, 5 };
@@ -3814,9 +3827,26 @@ public abstract class Attack implements Serializable {
         }
 
         @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is underground
             return defending.isSemiInvulnerableDigging();
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            double multiplier = 1;
+
+            // Power is halved during Grassy Terrain
+            if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
+                multiplier *= .5;
+            }
+
+            // Power is doubled when the opponent is underground
+            if (victim.isSemiInvulnerableDigging()) {
+                multiplier *= 2;
+            }
+
+            return multiplier;
         }
 
         @Override
@@ -3871,7 +3901,7 @@ public abstract class Attack implements Serializable {
         }
     }
 
-    static class Earthquake extends Attack implements AccuracyBypassEffect {
+    static class Earthquake extends Attack implements SemiInvulnerableBypasser, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         Earthquake() {
@@ -3881,26 +3911,26 @@ public abstract class Attack implements Serializable {
         }
 
         @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is underground
             return defending.isSemiInvulnerableDigging();
         }
 
         @Override
-        public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            int power = 1;
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            double multiplier = 1;
 
             // Power is halved during Grassy Terrain
             if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
-                power *= .5;
+                multiplier *= .5;
             }
 
             // Power is doubled when the opponent is underground
-            if (o.isSemiInvulnerableDigging()) {
-                power *= 2;
+            if (victim.isSemiInvulnerableDigging()) {
+                multiplier *= 2;
             }
 
-            return power;
+            return multiplier;
         }
     }
 
@@ -4754,7 +4784,7 @@ public abstract class Attack implements Serializable {
     }
 
     // Twice as strong when the opponent is flying
-    static class SmackDown extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
+    static class SmackDown extends Attack implements SemiInvulnerableBypasser, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         SmackDown() {
@@ -4765,7 +4795,7 @@ public abstract class Attack implements Serializable {
         }
 
         @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is flying
             return defending.isSemiInvulnerableFlying();
         }
@@ -4796,7 +4826,7 @@ public abstract class Attack implements Serializable {
         }
     }
 
-    static class Steamroller extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
+    static class Steamroller extends Attack implements BasicAccuracyBypassEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         Steamroller() {
@@ -4810,7 +4840,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
+            return defending.hasEffect(EffectNamesies.USED_MINIMIZE);
         }
 
         @Override
@@ -4845,7 +4875,7 @@ public abstract class Attack implements Serializable {
         }
     }
 
-    static class Stomp extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
+    static class Stomp extends Attack implements BasicAccuracyBypassEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         Stomp() {
@@ -4859,7 +4889,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
+            return defending.hasEffect(EffectNamesies.USED_MINIMIZE);
         }
 
         @Override
@@ -5674,7 +5704,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Synchronoise() {
-            super(AttackNamesies.SYNCHRONOISE, Type.PSYCHIC, MoveCategory.SPECIAL, 15, "Using an odd shock wave, the user inflicts damage on any Pok\u00e9mon of the same type in the area around it.");
+            super(AttackNamesies.SYNCHRONOISE, Type.PSYCHIC, MoveCategory.SPECIAL, 10, "Using an odd shock wave, the user inflicts damage on any Pok\u00e9mon of the same type in the area around it.");
             super.power = 120;
             super.accuracy = 100;
         }
@@ -6298,8 +6328,7 @@ public abstract class Attack implements Serializable {
         }
     }
 
-    // Twice as strong when the opponent is flying
-    static class SkyUppercut extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
+    static class SkyUppercut extends Attack implements SemiInvulnerableBypasser {
         private static final long serialVersionUID = 1L;
 
         SkyUppercut() {
@@ -6311,15 +6340,9 @@ public abstract class Attack implements Serializable {
         }
 
         @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is flying
             return defending.isSemiInvulnerableFlying();
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // Does not deal double damage when opponent is flying
-            return 1;
         }
     }
 
@@ -6887,7 +6910,7 @@ public abstract class Attack implements Serializable {
         }
     }
 
-    static class Blizzard extends Attack implements AccuracyBypassEffect {
+    static class Blizzard extends Attack implements BasicAccuracyBypassEffect {
         private static final long serialVersionUID = 1L;
 
         Blizzard() {
@@ -6900,8 +6923,8 @@ public abstract class Attack implements Serializable {
 
         @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hits when it's hailing unless the opponent is hiding (I think -- the hiding part is not specified on Bulbapedia)
-            return b.getWeather().namesies() == EffectNamesies.HAILING && !defending.isSemiInvulnerable();
+            // Always hits when it's hailing unless the opponent is hiding
+            return b.getWeather().namesies() == EffectNamesies.HAILING;
         }
     }
 
@@ -7260,7 +7283,7 @@ public abstract class Attack implements Serializable {
         }
     }
 
-    static class DragonRush extends Attack implements AccuracyBypassEffect, PowerChangeEffect {
+    static class DragonRush extends Attack implements BasicAccuracyBypassEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         DragonRush() {
@@ -7274,7 +7297,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
+            return defending.hasEffect(EffectNamesies.USED_MINIMIZE);
         }
 
         @Override
@@ -9036,6 +9059,7 @@ public abstract class Attack implements Serializable {
             super.power = 250;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.USER_FAINTS);
+            super.moveTypes.add(MoveType.EXPLODING);
         }
     }
 
@@ -9047,6 +9071,7 @@ public abstract class Attack implements Serializable {
             super.power = 200;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.USER_FAINTS);
+            super.moveTypes.add(MoveType.EXPLODING);
         }
     }
 
@@ -9991,7 +10016,7 @@ public abstract class Attack implements Serializable {
         }
     }
 
-    static class PhantomForce extends Attack implements ChargingMove, AccuracyBypassEffect, PowerChangeEffect {
+    static class PhantomForce extends Attack implements ChargingMove {
         private static final long serialVersionUID = 1L;
 
         PhantomForce() {
@@ -10012,16 +10037,6 @@ public abstract class Attack implements Serializable {
         @Override
         public boolean semiInvulnerability() {
             return true;
-        }
-
-        @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasEffect(EffectNamesies.USED_MINIMIZE) ? 2 : 1;
         }
 
         @Override
@@ -11272,6 +11287,7 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.MIND_BLOWN, Type.FIRE, MoveCategory.SPECIAL, 5, "The user attacks everything around it by causing its own head to explode. This also damages the user.");
             super.power = 150;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.EXPLODING);
         }
 
         @Override

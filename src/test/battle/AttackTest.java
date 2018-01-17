@@ -468,6 +468,7 @@ public class AttackTest extends BaseTest {
         defending.withAbility(AbilityNamesies.NO_ABILITY);
         defending.giveItem(ItemNamesies.SAFETY_GOGGLES);
         attacking.apply(false, AttackNamesies.SPORE, battle);
+        battle.emptyHeal();
         attacking.apply(false, AttackNamesies.POISON_POWDER, battle);
         attacking.apply(true, AttackNamesies.VINE_WHIP, battle);
     }
@@ -743,6 +744,7 @@ public class AttackTest extends BaseTest {
     public void restTest() {
         TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
         TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
 
         battle.defendingFight(AttackNamesies.FALSE_SWIPE);
         battle.defendingFight(AttackNamesies.TOXIC);
@@ -754,15 +756,20 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(attacking.fullHealth());
         Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
 
-        battle.attackingFight(AttackNamesies.SPLASH);
+        // Resting Pokemon should be asleep for exactly two turns -- False Swipe should fail here and the next turn
+        battle.attackingFight(AttackNamesies.FALSE_SWIPE);
+        Assert.assertTrue(defending.fullHealth());
         Assert.assertTrue(attacking.fullHealth());
         Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
 
-        battle.attackingFight(AttackNamesies.SPLASH);
+        battle.attackingFight(AttackNamesies.FALSE_SWIPE);
+        Assert.assertTrue(defending.fullHealth());
         Assert.assertTrue(attacking.fullHealth());
         Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
 
-        battle.attackingFight(AttackNamesies.SPLASH);
+        // Should wake up on this turn
+        battle.attackingFight(AttackNamesies.FALSE_SWIPE);
+        Assert.assertFalse(defending.fullHealth());
         Assert.assertTrue(attacking.fullHealth());
         Assert.assertFalse(attacking.hasStatus());
     }

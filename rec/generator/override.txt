@@ -274,39 +274,42 @@ StormyMove:
 
 		return super.accuracy;
 		###
-	AddMapField: BypassAccuracy:
-		// Always hits when the opponent is flying or it is raining (unless they're non-flying semi-invulnerable)
-		return defending.isSemiInvulnerableFlying() || (b.getWeather().namesies() == EffectNamesies.RAINING && defending.isSemiInvulnerable());
+	AddMapField: BasicBypassAccuracy:
+		// Always hits in the rain
+		return b.getWeather().namesies() == EffectNamesies.RAINING;
 		###
-	AddMapField: HitFly: True
+	AddMapField: DoubleFly: True
 *
-HitFly:
-	AddMapField: BypassAccuracy:
-		// Always hit when the opponent is flying
-		return defending.isSemiInvulnerableFlying();
-		###
+DoubleFly:
+	AddMapField: HitFly: True
 	AddMapField: Comments: // Twice as strong when the opponent is flying
 	AddMapField: PowerMultiplierCondition: 2 victim.isSemiInvulnerableFlying()
 *
+HitFly:
+	AddMapField: SemiInvulnerableBypass:
+		// Always hit when the opponent is flying
+		return defending.isSemiInvulnerableFlying();
+		###
+*
 HitDig:
-	AddMapField: BypassAccuracy:
+	AddMapField: SemiInvulnerableBypass:
 		// Always hit when the opponent is underground
 		return defending.isSemiInvulnerableDigging();
 		###
-	AddMapField: GetPow:
-		int power = 1;
+	AddMapField: GetMultiplier:
+		double multiplier = 1;
 
 		// Power is halved during Grassy Terrain
 		if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
-			power *= .5;
+			multiplier *= .5;
 		}
 
 		// Power is doubled when the opponent is underground
-		if (o.isSemiInvulnerableDigging()) {
-			power *= 2;
+		if (victim.isSemiInvulnerableDigging()) {
+			multiplier *= 2;
 		}
 
-		return power;
+		return multiplier;
 		###
 *
 HPRatioMove:
@@ -370,13 +373,17 @@ SpecificAbilityChange:
 		###
 *
 HitMinimize:
-	AddMapField: BypassAccuracy:
-		return !defending.isSemiInvulnerable() && defending.hasEffect(EffectNamesies.USED_MINIMIZE);
+	AddMapField: BasicBypassAccuracy:
+		return defending.hasEffect(EffectNamesies.USED_MINIMIZE);
 		###
 	AddMapField: PowerMultiplierCondition: 2 victim.hasEffect(EffectNamesies.USED_MINIMIZE)
 *
-BypassAccuracy:
-	AddInterface: AccuracyBypassEffect
+SemiInvulnerableBypass:
+	AddInterface: SemiInvulnerableBypasser
+	Header: boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending)
+*
+BasicBypassAccuracy:
+	AddInterface: BasicAccuracyBypassEffect
 	Header: boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
 *
 OpponentBypassAccuracy:
@@ -446,11 +453,14 @@ CanAttack:
 	Header: boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 *
 ProtectingEffect:
+	AddMapField: ProtectingEffectNoDecay: True
+	AddMapField: SuccessiveDecay: True
+*
+ProtectingEffectNoDecay:
 	AddInterface: ProtectingEffect
 	AddMapField: MinTurns: 1
 	AddMapField: MaxTurns: 1
 	AddMapField: CastMessage: victim.getName() + " protected itself!"
-	AddMapField: SuccessiveDecay: True
 *
 ProtectingCondition:
 	Header: boolean protectingCondition(Battle b, ActivePokemon attacking)
@@ -1331,7 +1341,7 @@ SuperEffectivePowerReduceBerry:
 	Body:
 		return Type.{00};
 		###
-	AddMapField: HiddenBerry: True
+	AddMapField: Berry: True
 	AddInterface: SuperEffectivePowerReduceBerry
 *
 HealthTriggeredStageIncreaseBerryField:
@@ -1382,7 +1392,6 @@ RemoveAdvantageType:
 *
 ForesightEffect:
 	AddMapField: CastMessage: user.getName() + " identified " + victim.getName() + "!"
-	AddMapField: CanHave: True
 	AddMapField: UsedProof: True
 	AddInterface: DefendingNoAdvantageChanger
 	AddMapField: RemoveAdvantageType: {0}
@@ -1479,12 +1488,12 @@ NGPow:
 		###
 *
 NGType:
-	AddMapField: HiddenBerry: True
+	AddMapField: Berry: True
 	AddMapField: NaturalGiftType:
 		return Type.{00};
 		###
 *
-HiddenBerry:
+Berry:
 	AddMapField: Cat: Berry
 	AddMapField: Price: 20
 *

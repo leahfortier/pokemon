@@ -11,7 +11,6 @@ import battle.effect.attack.AbilityChanger;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
-import battle.effect.generic.EffectInterfaces.AccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
@@ -52,6 +51,7 @@ import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.RepelLowLevelEncounterEffect;
 import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
+import battle.effect.generic.EffectInterfaces.SemiInvulnerableBypasser;
 import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
@@ -913,7 +913,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         private boolean checkeroo(ActivePokemon attacking) {
-            return attacking.getAttack().namesies() == AttackNamesies.SELF_DESTRUCT || attacking.getAttack().namesies() == AttackNamesies.EXPLOSION;
+            return attacking.getAttack().isMoveType(MoveType.EXPLODING);
         }
 
         private String blockityMessage(ActivePokemon attacking, ActivePokemon abilify) {
@@ -1062,7 +1062,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
     }
 
-    static class NoGuard extends Ability implements AccuracyBypassEffect, OpponentAccuracyBypassEffect, EncounterRateMultiplier {
+    static class NoGuard extends Ability implements SemiInvulnerableBypasser, OpponentAccuracyBypassEffect, EncounterRateMultiplier {
         private static final long serialVersionUID = 1L;
 
         NoGuard() {
@@ -1070,15 +1070,15 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Moves always hit unless they are OHKO moves
-            return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO);
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Moves always hit
+            return true;
         }
 
         @Override
         public boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Moves always hit unless they are OHKO moves
-            return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO);
+            // Moves always hit
+            return true;
         }
 
         @Override

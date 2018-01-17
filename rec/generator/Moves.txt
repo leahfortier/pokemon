@@ -71,8 +71,8 @@ Toxic:
 	Cat: Status
 	Acc: 90
 	Status: Badly_Poisoned
-	BypassAccuracy:
-		// Poison-type Pokemon bypass accuracy
+	SemiInvulnerableBypass:
+		// Poison-type Pokemon bypass accuracy -- even if target is semi-invulnerable
 		return attacking.isType(b, Type.POISON);
 		###
 *
@@ -740,7 +740,7 @@ Gust:
 	Pow: 40
 	Acc: 100
 	PP: 35
-	HitFly: True
+	DoubleFly: True
 *
 Supersonic:
 	Desc: The user generates odd sound waves from its body. It may confuse the target.
@@ -1011,7 +1011,7 @@ Twister:
 	Acc: 100
 	Effect: Flinch
 	EffChance: 20
-	HitFly: True
+	DoubleFly: True
 *
 Feather Dance:
 	Desc: The user covers the target's body with a mass of down that harshly lowers its Attack stat.
@@ -2632,7 +2632,7 @@ Rock Blast:
 *
 Smack Down:
 	Effect: Grounded
-	HitFly: True
+	DoubleFly: True
 	Pow: 50
 	Desc: The user throws a stone or projectile to attack an opponent. A flying Pok\u00e9mon will fall to the ground when hit.
 	PP: 15
@@ -3191,7 +3191,7 @@ Meditate:
 Synchronoise:
 	Type: Psychic
 	Desc: Using an odd shock wave, the user inflicts damage on any Pok\u00e9mon of the same type in the area around it.
-	PP: 15
+	PP: 10
 	Cat: Special
 	Acc: 100
 	Pow: 120
@@ -3514,10 +3514,6 @@ Sky Uppercut:
 	Acc: 90
 	Type: Fighting
 	HitFly: True
-	GetMultiplier:
-		// Does not deal double damage when opponent is flying
-		return 1;
-		###
 *
 Mega Punch:
 	Desc: The target is slugged by a punch thrown with muscle-packed power.
@@ -3878,9 +3874,9 @@ Blizzard:
 	Cat: Special
 	Status: Frozen
 	EffChance: 10
-	BypassAccuracy:
-		// Always hits when it's hailing unless the opponent is hiding (I think -- the hiding part is not specified on Bulbapedia)
-		return b.getWeather().namesies() == EffectNamesies.HAILING && !defending.isSemiInvulnerable();
+	BasicBypassAccuracy:
+		// Always hits when it's hailing unless the opponent is hiding
+		return b.getWeather().namesies() == EffectNamesies.HAILING;
 		###
 *
 Shock Wave:
@@ -5223,7 +5219,7 @@ Explosion:
 	Type: Normal
 	Acc: 100
 	Pow: 250
-	MoveType: User_Faints
+	MoveType: User_Faints, Exploding
 *
 Self-Destruct:
 	Desc: The user attacks everything around it by causing an explosion. The user faints upon using this move.
@@ -5232,7 +5228,7 @@ Self-Destruct:
 	Pow: 200
 	Cat: Physical
 	Acc: 100
-	MoveType: User_Faints
+	MoveType: User_Faints, Exploding
 	PhysicalContact: False
 *
 Fling:
@@ -5791,7 +5787,6 @@ Phantom Force:
 	Pow: 90
 	PP: 10
 	Acc: 100
-	HitMinimize: True
 	MoveType: Protect_Piercing, Assistless
 	ChargingMove: user.getName() + " vanished suddenly!"
 	SemiInv: true
@@ -6621,6 +6616,7 @@ Mind Blown:
 	Pow: 150
 	Acc: 100
 	Cat: Special
+	MoveType: Exploding
 	UniqueEffects:
 		Messages.add(user.getName() + " blew its mind!!!");
 		if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {

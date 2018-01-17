@@ -487,17 +487,41 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface AccuracyBypassEffect {
+    public interface SemiInvulnerableBypasser {
 
         // Attacker is the Pokemon whose accuracy is being evaluated and is the Pokemon on which this effect is attached to
+        // This is evaluated BEFORE the semi-invulnerable checks, so if this returns true, the move will hit even if the defending is semi-invulnerable
+        boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending);
+
+        static boolean bypassAccuracyCheck(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            List<Object> invokees = b.getEffectsList(attacking, attacking.getAttack());
+            for (Object invokee : invokees) {
+                if (invokee instanceof SemiInvulnerableBypasser && Effect.isActiveEffect(invokee)) {
+
+                    SemiInvulnerableBypasser effect = (SemiInvulnerableBypasser)invokee;
+                    if (effect.semiInvulnerableBypass(b, attacking, defending)) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
+
+    public interface BasicAccuracyBypassEffect {
+
+        // Attacker is the Pokemon whose accuracy is being evaluated and is the Pokemon on which this effect is attached to
+        // This is evaluated AFTER the semi-invulnerable checks
+        // Should use SemiInvulnerableBypasser for moves that hit fly, dig, etc.
         boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending);
 
         static boolean bypassAccuracyCheck(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             List<Object> invokees = b.getEffectsList(attacking, attacking.getAttack());
             for (Object invokee : invokees) {
-                if (invokee instanceof AccuracyBypassEffect && Effect.isActiveEffect(invokee)) {
+                if (invokee instanceof BasicAccuracyBypassEffect && Effect.isActiveEffect(invokee)) {
 
-                    AccuracyBypassEffect effect = (AccuracyBypassEffect)invokee;
+                    BasicAccuracyBypassEffect effect = (BasicAccuracyBypassEffect)invokee;
                     if (effect.bypassAccuracy(b, attacking, defending)) {
                         return true;
                     }
@@ -511,6 +535,7 @@ public final class EffectInterfaces {
     public interface OpponentAccuracyBypassEffect {
 
         // Attacker is the Pokemon whose accuracy is being evaluated, defender is the Pokemon on which this effect is attached to
+        // This is evaluated BEFORE the semi-invulnerable checks, so if this returns true, the move will hit even if the defending is semi-invulnerable
         boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending);
 
         static boolean bypassAccuracyCheck(Battle b, ActivePokemon attacking, ActivePokemon defending) {

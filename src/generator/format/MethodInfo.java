@@ -182,6 +182,10 @@ public class MethodInfo {
                     mapField += " && " + addFieldValue;
                 } else if (fieldKey.equals("Field") || fieldKey.equals("UniqueEffects")) {
                     mapField += addFieldValue;
+                } else if (!fieldKey.equals("Price") && className.equals("RazzBerry")) {
+                    // Don't worry about the special case here ^^
+                    Global.error("Unauthorized duplicate field " + fieldKey + " in class " + className + ".\n" +
+                                         "Prev:\n" + mapField + "\nNew:\n" + addFieldValue);
                 }
 
                 fields.add(fieldKey, mapField);

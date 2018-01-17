@@ -9,6 +9,7 @@ public enum MoveType {
     DANCE,
     DEFROST,
     ENCORELESS,
+    EXPLODING,
     FIELD,
     HEALING,
     METRONOMELESS,
