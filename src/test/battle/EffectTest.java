@@ -1,6 +1,7 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
+import battle.attack.Move;
 import battle.effect.generic.CastSource;
 import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
@@ -323,5 +324,63 @@ public class EffectTest extends BaseTest {
         Assert.assertTrue(attacking.getHeldItem(battle) == CastSource.HELD_ITEM.getSource(battle, attacking));
         Assert.assertTrue(attacking.getAttack() == CastSource.ATTACK.getSource(battle, attacking));
         Assert.assertTrue(attacking.getCastSource() == CastSource.CAST_SOURCE.getSource(battle, attacking));
+    }
+
+    @Test
+    public void bypassAccuracyTest() {
+        // Attacker will fly in the air, making it semi-invulverable to Tackle which should be a forced miss
+        testSemiInvulnerable(false, AttackNamesies.FLY, AttackNamesies.TACKLE, new TestInfo());
+        testSemiInvulnerable(false, AttackNamesies.FLY, AttackNamesies.ROAR, new TestInfo());
+
+        // No Guard will allow Tackle to Hit, regardless of which Pokemon has it
+        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, new TestInfo().attacking(AbilityNamesies.NO_GUARD));
+        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, new TestInfo().defending(AbilityNamesies.NO_GUARD));
+
+        // All of these moves will hit a Flying Pokemon
+        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.GUST, new TestInfo());
+        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.HURRICANE, new TestInfo());
+        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.WHIRLWIND, new TestInfo());
+
+        // TODO: Multi-turn moves are fucked why am I even testing this shit it's so fucked everything I do is trash
+        // Smack Down will disrupt Fly, Grounding the Pokemon in the process
+//        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.SMACK_DOWN, new TestInfo());
+
+        // If holding a Power Herb, will execute immediately in the first turn and be semi-invulnerable in the second
+//        testSemiInvulnerable(null, false, AttackNamesies.FLY, AttackNamesies.TACKLE, new TestInfo().attacking(ItemNamesies.POWER_HERB));
+//        testSemiInvulnerable(null, true, AttackNamesies.FLY, AttackNamesies.GUST, new TestInfo().attacking(ItemNamesies.POWER_HERB));
+    }
+
+    private void testSemiInvulnerable(Boolean expected, AttackNamesies multiTurnMove, AttackNamesies defendingMove, TestInfo testInfo) {
+        testSemiInvulnerable(expected, null, multiTurnMove, defendingMove, testInfo);
+    }
+
+    private void testSemiInvulnerable(Boolean firstExpected, Boolean secondExpected, AttackNamesies multiTurnMove, AttackNamesies defendingMove, TestInfo testInfo) {
+        testInfo.attacking(PokemonNamesies.SHUCKLE).defending(PokemonNamesies.SHUCKLE);
+
+        TestBattle battle = testInfo.createBattle();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        testInfo.with((AttackNamesies)null);
+        testInfo.manipulate(battle);
+
+        // Can't use setup move since it fucks with multi-turn moves
+        attacking.setMove(new Move(multiTurnMove));
+        defending.setMove(new Move(defendingMove));
+
+        int attackingPP = attacking.getMove().getPP();
+        int defendingPP = defending.getMove().getPP();
+
+        // Attacker will disappear or whatever, making it semi-invulverable to defending
+        battle.setExpectedDefendingAccuracyBypass(firstExpected);
+        battle.fight();
+
+        // Attacker will be finished with its move and the defending move should hit this time
+        battle.setExpectedDefendingAccuracyBypass(secondExpected);
+        battle.fight();
+
+        // TODO: Fix this -- should only reduce once per multi-turn move
+//        Assert.assertEquals(attackingPP - 1, attacking.getMove().getPP());
+        Assert.assertEquals(defendingPP - 2, defending.getMove().getPP());
     }
 }

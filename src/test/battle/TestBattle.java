@@ -3,6 +3,7 @@ package test.battle;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
+import battle.attack.MoveType;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.Weather;
 import org.junit.Assert;
@@ -19,6 +20,7 @@ import util.StringUtils;
 
 public class TestBattle extends Battle {
     private Double expectedDamageModifier;
+    private Boolean expectedDefendingAccuracyBypass;
 
     private TestBattle(Opponent opponent) {
         super(opponent);
@@ -97,7 +99,7 @@ public class TestBattle extends Battle {
         defending.setupMove(defendingMove, this);
 
         // Player always goes first in tests
-        super.fight(true);
+        super.fight();
     }
 
     void attackingFight(AttackNamesies attackNamesies) {
@@ -116,10 +118,37 @@ public class TestBattle extends Battle {
         }
     }
 
-    // Moves always hit in tests
+    @Override
+    protected int getSpeedStat(ActivePokemon statPokemon, ActivePokemon otherPokemon) {
+        // Player always strikes first in its priority bracket in tests
+        // Note: THESE VALUES DO NOT REFLECT STAT VALUES AT ALL I JUST WANT THE PLAYER'S TO BE HIGHER
+        return statPokemon.isPlayer() ? 1 : 0;
+    }
+
     @Override
     protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
+        Boolean bypass = bypassAccuracy(me, o);
+        if (bypass != null) {
+            // Self-Target moves don't miss
+            if (me.getAttack().isSelfTargetStatusMove() || me.getAttack().isMoveType(MoveType.FIELD)) {
+                Assert.assertTrue(bypass);
+            } else if (!me.isPlayer()) {
+                Assert.assertNotNull(this.expectedDefendingAccuracyBypass);
+                Assert.assertEquals(this.expectedDefendingAccuracyBypass, bypass);
+            }
+            return bypass;
+        }
+
+        if (!me.isPlayer()) {
+            Assert.assertNull(this.expectedDefendingAccuracyBypass);
+        }
+
+        // No missing by chance in tests
         return true;
+    }
+
+    void setExpectedDefendingAccuracyBypass(Boolean accuracyBypass) {
+        this.expectedDefendingAccuracyBypass = accuracyBypass;
     }
 
     static TestBattle createTrainerBattle(PokemonNamesies attacking, PokemonNamesies defending) {

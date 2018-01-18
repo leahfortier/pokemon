@@ -26,7 +26,11 @@ class TestInfo {
         TestPokemon defending = battle.getDefending();
 
         this.manipulator.manipulate(battle, attacking, defending);
-        attacking.setupMove(attackName, battle);
+
+        // Setup the move, unless explicitly set to null to avoid this
+        if (attackName != null) {
+            attacking.setupMove(attackName, battle);
+        }
     }
 
     private void updateManipulator(PokemonManipulator manipulator) {

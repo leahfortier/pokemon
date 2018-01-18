@@ -2041,7 +2041,7 @@ Magnitude:
 	GetPow:
 		return POWERS[index];
 		###
-	HitDig: True
+	DoubleDig: True
 	UniqueEffects:
 		Messages.add("Magnitude " + (index + 4) + "!");
 		###
@@ -2076,7 +2076,7 @@ Earthquake:
 	Cat: Physical
 	Type: Ground
 	PhysicalContact: False
-	HitDig: True
+	DoubleDig: True
 *
 Fissure:
 	Desc: The user opens up a fissure in the ground and drops the target in. The target instantly faints if it hits.
@@ -2086,6 +2086,7 @@ Fissure:
 	Cat: Physical
 	Type: Ground
 	PhysicalContact: False
+	HitDig: True
 *
 Night Slash:
 	Desc: The user slashes the target the instant an opportunity arises. Critical hits land more easily.
@@ -5419,6 +5420,8 @@ Whirlwind:
 	SwapOpponent: victim.getName() + " blew away!"
 	Int: SwapOpponentEffect
 	MoveType: Substitute_Piercing, Protect_Piercing
+	HitFly: True
+	Comments: // Apparently this isn't supposed to hit fly anymore, but that's stupid
 *
 Bestow:
 	Desc: The user passes its held item to the target when the target isn't holding an item.

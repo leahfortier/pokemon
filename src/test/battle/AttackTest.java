@@ -39,8 +39,44 @@ public class AttackTest extends BaseTest {
                 Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.HEALING));
             }
 
+            // DANCE DANCE REVOLUTION
             if (attack.getName().contains("Dance")) {
                 Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.DANCE));
+            }
+        }
+    }
+
+    @Test
+    public void baseAccuracyTest() {
+        for (AttackNamesies attackNamesies : AttackNamesies.values()) {
+            Attack attack = attackNamesies.getAttack();
+
+            try {
+                // If the accuracy string is "--", then the move should ALWAYS hit
+                Integer.parseInt(attack.getAccuracyString());
+
+                // Self-target status moves and field moves should always have "--" accuracy string
+                Assert.assertFalse(attack.getName(), attack.isSelfTargetStatusMove());
+                Assert.assertFalse(attack.getName(), attack.isMoveType(MoveType.FIELD));
+            } catch (NumberFormatException ex) {
+                // Super perfect always hit moves -- test with -6 accuracy and +6 evasion, move should still hit
+                TestBattle battle = TestBattle.create();
+                TestPokemon attacking = battle.getAttacking();
+                TestPokemon defending = battle.getDefending();
+
+                attacking.getStages().setStage(Stat.ACCURACY, -Stat.MAX_STAT_CHANGES);
+                defending.getStages().setStage(Stat.EVASION, Stat.MAX_STAT_CHANGES);
+
+                attacking.setupMove(attackNamesies, battle);
+
+                int moveAccuracy = attacking.getAttack().getAccuracy(battle, attacking, defending);
+                int accuracy = Stat.getStat(Stat.ACCURACY, attacking, defending, battle);
+                int evasion = Stat.getStat(Stat.EVASION, defending, attacking, battle);
+
+                int totalAccuracy = (int)(moveAccuracy*((double)accuracy/(double)evasion));
+                Assert.assertTrue(attack.getName(), accuracy < 100);
+                Assert.assertTrue(attack.getName(), evasion > 100);
+                Assert.assertTrue(attack.getName(), totalAccuracy > 100);
             }
         }
     }
@@ -144,7 +180,6 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(battle.getPlayer().front() == attacking2);
 
         // TODO: Baton Pass
-
         // TODO: No more remaining Pokemon, wild battles, wimp out, red card, eject button
     }
 

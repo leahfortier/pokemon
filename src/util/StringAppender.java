@@ -105,7 +105,7 @@ public class StringAppender {
 
     // Joins the objects by the delimiter and appends
     public StringAppender appendJoin(String delimiter, List<?> joinees) {
-        return this.appendJoin(delimiter, joinees, Object::toString);
+        return this.appendJoin(delimiter, joinees, o -> o == null ? "null" : o.toString());
     }
 
     // Applies the mapper to the joinees, joins by the delimiter, and appends

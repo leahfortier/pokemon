@@ -3934,13 +3934,19 @@ public abstract class Attack implements Serializable {
         }
     }
 
-    static class Fissure extends Attack {
+    static class Fissure extends Attack implements SemiInvulnerableBypasser {
         private static final long serialVersionUID = 1L;
 
         Fissure() {
             super(AttackNamesies.FISSURE, Type.GROUND, MoveCategory.PHYSICAL, 5, "The user opens up a fissure in the ground and drops the target in. The target instantly faints if it hits.");
             super.accuracy = 30;
             super.moveTypes.add(MoveType.ONE_HIT_KO);
+        }
+
+        @Override
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Always hit when the opponent is underground
+            return defending.isSemiInvulnerableDigging();
         }
 
         @Override
@@ -9388,7 +9394,8 @@ public abstract class Attack implements Serializable {
         }
     }
 
-    static class Whirlwind extends Attack implements SwapOpponentEffect {
+    // Apparently this isn't supposed to hit fly anymore, but that's stupid
+    static class Whirlwind extends Attack implements SwapOpponentEffect, SemiInvulnerableBypasser {
         private static final long serialVersionUID = 1L;
 
         Whirlwind() {
@@ -9397,6 +9404,12 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.PROTECT_PIERCING);
             super.moveTypes.add(MoveType.ASSISTLESS);
             super.priority = -6;
+        }
+
+        @Override
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Always hit when the opponent is flying
+            return defending.isSemiInvulnerableFlying();
         }
 
         @Override

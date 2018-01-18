@@ -291,11 +291,8 @@ HitFly:
 		return defending.isSemiInvulnerableFlying();
 		###
 *
-HitDig:
-	AddMapField: SemiInvulnerableBypass:
-		// Always hit when the opponent is underground
-		return defending.isSemiInvulnerableDigging();
-		###
+DoubleDig:
+	AddMapField: HitDig: True
 	AddMapField: GetMultiplier:
 		double multiplier = 1;
 
@@ -310,6 +307,12 @@ HitDig:
 		}
 
 		return multiplier;
+		###
+*
+HitDig:
+	AddMapField: SemiInvulnerableBypass:
+		// Always hit when the opponent is underground
+		return defending.isSemiInvulnerableDigging();
 		###
 *
 HPRatioMove:

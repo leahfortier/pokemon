@@ -194,7 +194,7 @@ public class Battle implements Serializable {
         fight(playerFirst);
     }
 
-    protected void fight(boolean playerFirst) {
+    private void fight(boolean playerFirst) {
         // First turn
         executionSolution(true, playerFirst);
 
@@ -255,7 +255,7 @@ public class Battle implements Serializable {
                 .trim();
     }
 
-    // Handles events that occur at the beginning of each turn. Returns the two Pokemon currently in battle
+    // Handles events that occur at the beginning of each turn
     private void startTurn() {
         ActivePokemon plyr = player.front();
         ActivePokemon opp = opponent.front();
@@ -650,7 +650,7 @@ public class Battle implements Serializable {
         double stab = TypeAdvantage.getSTAB(this, me);
         double adv = TypeAdvantage.getAdvantage(me, o, this);
 
-        //        System.out.printf("%s %s %d %d %d %d %d %f %f %d%n",
+//                System.out.printf("%s %s %d %d %d %d %d %f %f %d%n",
 //                me.getActualName(),
 //                me.getAttack().getName(),
 //                level,
@@ -691,12 +691,13 @@ public class Battle implements Serializable {
         return stage;
     }
 
-    protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
+    protected Boolean bypassAccuracy(ActivePokemon me, ActivePokemon o) {
         // Self-Target moves don't miss
         if (me.getAttack().isSelfTargetStatusMove()) {
             return true;
         }
 
+        // Neither do field moves
         if (me.getAttack().isMoveType(MoveType.FIELD)) {
             return true;
         }
@@ -719,6 +720,16 @@ public class Battle implements Serializable {
         // Effects that allow the user to bypass the accuracy check after the semi-invulnerable check
         if (BasicAccuracyBypassEffect.bypassAccuracyCheck(this, me, o)) {
             return true;
+        }
+
+        // Just use plain old random numbers
+        return null;
+    }
+
+    protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
+        Boolean bypass = bypassAccuracy(me, o);
+        if (bypass != null) {
+            return bypass;
         }
 
         int moveAccuracy = me.getAttack().getAccuracy(this, me, o);
@@ -801,8 +812,8 @@ public class Battle implements Serializable {
         }
 
         // Get the speeds of the Pokemon
-        int pSpeed = Stat.getStat(Stat.SPEED, plyr, opp, this);
-        int oSpeed = Stat.getStat(Stat.SPEED, opp, plyr, this);
+        int pSpeed = getSpeedStat(plyr, opp);
+        int oSpeed = getSpeedStat(opp, plyr);
 
         // Speeds are equal -- alternate
         if (pSpeed == oSpeed) {
@@ -811,5 +822,9 @@ public class Battle implements Serializable {
 
         // Return the faster Pokemon (or slower if reversed)
         return reverse ? oSpeed > pSpeed : oSpeed < pSpeed;
+    }
+
+    protected int getSpeedStat(ActivePokemon statPokemon, ActivePokemon otherPokemon) {
+        return Stat.getStat(Stat.SPEED, statPokemon, otherPokemon, this);
     }
 }

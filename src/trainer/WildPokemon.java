@@ -18,6 +18,10 @@ public class WildPokemon implements Opponent, Serializable {
     private List<TeamEffect> effects;
 
     public WildPokemon(ActivePokemon wildPokemon) {
+        if (wildPokemon.isPlayer()) {
+            Global.error("Wild pokemon cannot be a player Pokemon.");
+        }
+
         this.wildPokemon = wildPokemon;
         this.effects = new ArrayList<>();
     }
