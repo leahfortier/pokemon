@@ -51,6 +51,11 @@ public class WildPokemon implements Opponent, Serializable {
     }
 
     @Override
+    public TrainerAction getAction() {
+        return TrainerAction.FIGHT;
+    }
+
+    @Override
     public void resetUsed() {
         wildPokemon.setUsed(true);
     }
@@ -73,6 +78,24 @@ public class WildPokemon implements Opponent, Serializable {
     @Override
     public boolean blackout(Battle b) {
         return !wildPokemon.canFight();
+    }
+
+    @Override
+    public String getStartBattleMessage() {
+        return "Wild " + wildPokemon.getName() + " appeared!";
+    }
+
+    @Override
+    public String getEnterBattleMessage(ActivePokemon enterer) {
+        // No additional message when the Pokemon 'enters' battle, it's just the start when they appear
+        return "";
+    }
+
+    @Override
+    public void enterBattle() {
+        // Just in case
+        this.wildPokemon.resetAttributes();
+        this.resetEffects();
     }
 
     @Override

@@ -1936,20 +1936,12 @@ public abstract class Attack implements Serializable {
 
         @Override
         public int getPriority(Battle b, ActivePokemon me) {
-            if (b.isSwitching(!me.isPlayer())) {
-                return 7;
-            }
-
-            return super.priority;
+            return b.isSwitching(!me.isPlayer()) ? 7 : super.priority;
         }
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (b.isSwitching(victim.isPlayer())) {
-                return 2;
-            }
-
-            return 1;
+            return b.isSwitching(victim.isPlayer()) ? 2 : 1;
         }
     }
 

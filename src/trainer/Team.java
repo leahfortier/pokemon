@@ -11,14 +11,20 @@ import java.util.stream.Collectors;
 
 // THIS IS A DUMB NAME SOMEONE HELP ME RENAME IT
 public interface Team {
+    List<PartyPokemon> getTeam();
     ActivePokemon front();
     int getTeamIndex(ActivePokemon teamMember);
+
     List<TeamEffect> getEffects();
-    boolean hasEffect(EffectNamesies effect);
     void addEffect(TeamEffect e);
-    List<PartyPokemon> getTeam();
-    boolean blackout(Battle b);
+    boolean hasEffect(EffectNamesies effect);
     void resetEffects();
+
+    String getEnterBattleMessage(ActivePokemon enterer);
+    void enterBattle();
+
+    TrainerAction getAction();
+    boolean blackout(Battle b);
     void resetUsed();
 
     default boolean removeEffect(TeamEffect effect) {

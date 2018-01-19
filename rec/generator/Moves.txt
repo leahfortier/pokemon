@@ -915,19 +915,9 @@ Pursuit:
 	Type: Dark
 	Acc: 100
 	Cat: Physical
-	GetMultiplier:
-		if (b.isSwitching(victim.isPlayer())) {
-			return 2;
-		}
-
-		return 1;
-		###
+    PowerMultiplierCondition: 2 b.isSwitching(victim.isPlayer())
 	GetPriority:
-		if (b.isSwitching(!me.isPlayer())) {
-			return 7;
-		}
-
-		return super.priority;
+		return b.isSwitching(!me.isPlayer()) ? 7 : super.priority;
 		###
 *
 Toxic Spikes:

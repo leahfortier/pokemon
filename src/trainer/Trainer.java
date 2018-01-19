@@ -118,9 +118,12 @@ public abstract class Trainer implements Team, Serializable {
     }
 
     // Should be called when the trainer enters a new battle -- Sets all Pokemon to not be used yet and sets the front Pokemon
+    @Override
     public void enterBattle() {
         team.forEach(PartyPokemon::resetAttributes);
-        setFront();
+        this.setAction(TrainerAction.FIGHT);
+        this.setFront();
+        this.resetEffects();
         inBattle = true;
     }
 
@@ -171,7 +174,7 @@ public abstract class Trainer implements Team, Serializable {
 
     @Override
     public boolean blackout(Battle b) {
-        boolean maxUsed = maxPokemonUsed(b);
+        boolean maxUsed = usedMaxPokemon(b);
         for (PartyPokemon p : team) {
             if (p.canFight() && (!maxUsed || p.isBattleUsed())) {
                 return false;
@@ -186,8 +189,7 @@ public abstract class Trainer implements Team, Serializable {
     }
 
     public void switchToRandom(Battle b) {
-
-        boolean maxUsed = maxPokemonUsed(b);
+        boolean maxUsed = usedMaxPokemon(b);
         List<Integer> valid = new ArrayList<>();
         for (int i = 0; i < team.size(); i++) {
             PartyPokemon p = team.get(i);
@@ -221,7 +223,7 @@ public abstract class Trainer implements Team, Serializable {
         }
 
         // Cannot switch to an unused Pokemon if you have already used the maximum number of Pokemon
-        if (maxPokemonUsed(b) && !toSwitch.isBattleUsed()) {
+        if (usedMaxPokemon(b) && !toSwitch.isBattleUsed()) {
             return false;
         }
 
@@ -243,7 +245,7 @@ public abstract class Trainer implements Team, Serializable {
         this.switchIndex = switchIndex;
     }
 
-    public boolean maxPokemonUsed(Battle b) {
+    public boolean usedMaxPokemon(Battle b) {
         return numPokemonUsed() == b.getOpponent().maxPokemonAllowed();
     }
 
@@ -253,7 +255,7 @@ public abstract class Trainer implements Team, Serializable {
 
     // Returns true if the trainer has Pokemon (other than the one that is currently fighting) that is able to fight
     public boolean hasRemainingPokemon(Battle b) {
-        boolean maxUsed = maxPokemonUsed(b);
+        boolean maxUsed = usedMaxPokemon(b);
         for (int i = 0; i < team.size(); i++) {
             if (i == frontIndex) {
                 continue;
@@ -267,6 +269,7 @@ public abstract class Trainer implements Team, Serializable {
         return false;
     }
 
+    @Override
     public TrainerAction getAction() {
         return action;
     }

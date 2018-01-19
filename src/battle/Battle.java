@@ -93,9 +93,10 @@ public class Battle implements Serializable {
         this.player = player;
         this.opponent = opponent;
 
+        this.player.enterBattle();
+        this.opponent.enterBattle();
+
         this.effects = new ArrayList<>();
-        this.player.resetEffects();
-        this.opponent.resetEffects();
 
         turn = 0;
         escapeAttempts = 0;
@@ -117,18 +118,8 @@ public class Battle implements Serializable {
             ));
         }
 
-        this.player.enterBattle();
-        if (this.opponent instanceof Trainer) {
-            Trainer opponentTrainer = (Trainer)this.opponent;
-            opponentTrainer.enterBattle();
-            Messages.add(opponentTrainer.getName() + " wants to fight!");
-            opponentTrainer.setAction(TrainerAction.FIGHT);
-            enterBattle(this.opponent.front());
-        } else {
-            ActivePokemon wildPokemon = this.opponent.front();
-            enterBattle(wildPokemon, "Wild " + wildPokemon.getName() + " appeared!");
-        }
-
+        Messages.add(this.opponent.getStartBattleMessage());
+        enterBattle(this.opponent.front());
         enterBattle(this.player.front());
     }
 
@@ -281,25 +272,13 @@ public class Battle implements Serializable {
     // If the trainer selected an attack, this will return true - Wild Pokemon will always return true
     // It will return false if the trainer tried to run, switch Pokemon, or used an item
     private boolean isFighting(boolean isPlayer) {
-        Team team = getTrainer(isPlayer);
-        if (team instanceof WildPokemon) {
-            return true;
-        }
-
-        Trainer trainer = (Trainer)team;
-        return trainer.getAction() == TrainerAction.FIGHT;
+        return this.getTrainer(isPlayer).getAction() == TrainerAction.FIGHT;
     }
 
     // If the trainer selected Switch, this will return true -- Wild Pokemon will always return false
     // It will return false if the trainer tried to run, use an attack, or use an item
     public boolean isSwitching(boolean isPlayer) {
-        Team team = getTrainer(isPlayer);
-        if (team instanceof WildPokemon) {
-            return false;
-        }
-
-        Trainer trainer = (Trainer)team;
-        return trainer.getAction() == TrainerAction.SWITCH;
+        return this.getTrainer(isPlayer).getAction() == TrainerAction.SWITCH;
     }
 
     private void endTurn() {
@@ -385,15 +364,7 @@ public class Battle implements Serializable {
 
     public void enterBattle(ActivePokemon enterer) {
         NameChanger.setNameChanges(this, enterer);
-
-        String enterMessage = "";
-        if (enterer.isPlayer()) {
-            enterMessage = "Go! " + enterer.getName() + "!";
-        } else if (opponent instanceof Trainer) {
-            enterMessage = ((Trainer)opponent).getName() + " sent out " + enterer.getName() + "!";
-        }
-
-        enterBattle(enterer, enterMessage);
+        enterBattle(enterer, this.getTrainer(enterer).getEnterBattleMessage(enterer));
     }
 
     public void enterBattle(ActivePokemon enterer, String enterMessage) {
@@ -760,14 +731,9 @@ public class Battle implements Serializable {
         return p.getAttack().getPriority(this, p) + PriorityChangeEffect.getModifier(this, p);
     }
 
-    // Returns the priority of the current action the player is performing
+    // Returns the priority of the current action the trainer of the pokemon is performing
     private int getPriority(ActivePokemon p) {
-        // They are attacking -- return the priority of the attack
-        if (isFighting(p.isPlayer())) {
-            return this.getAttackPriority(p);
-        }
-
-        return ((Trainer)getTrainer(p)).getAction().getPriority();
+        return this.getTrainer(p).getAction().getPriority(this, p);
     }
 
     // Returns true if the player will be attacking first, and false if the opponent will be

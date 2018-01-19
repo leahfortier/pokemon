@@ -443,7 +443,7 @@ class PokemonAnimationState {
         Battle battle = battleView.getCurrentBattle();
         Trainer trainer = (Trainer)battle.getTrainer(isPlayer);
         List<PartyPokemon> team = trainer.getTeam();
-        boolean usedMaxPokemon = trainer.maxPokemonUsed(battle);
+        boolean usedMaxPokemon = trainer.usedMaxPokemon(battle);
 
         for (int i = 0; i < team.size(); i++) {
             int index = isPlayer ? team.size() - i - 1 : i;

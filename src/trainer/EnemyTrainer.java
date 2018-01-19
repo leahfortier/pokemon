@@ -31,6 +31,16 @@ public class EnemyTrainer extends Trainer implements Opponent {
     }
 
     @Override
+    public String getStartBattleMessage() {
+        return this.getName() + " wants to fight!";
+    }
+
+    @Override
+    public String getEnterBattleMessage(ActivePokemon enterer) {
+        return this.getName() + " sent out " + enterer.getName() + "!";
+    }
+
+    @Override
     public int maxPokemonAllowed() {
         return this.maxPokemonAllowed;
     }
