@@ -265,7 +265,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
             // The sticky web lowered Charmander's Speed!
             enterer.getStages().modifyStage(
-                    b.getOtherPokemon(enterer), enterer, -1, Stat.SPEED, b, CastSource.EFFECT,
+                    b.getOtherPokemon(enterer), -1, Stat.SPEED, b, CastSource.EFFECT,
                     (victimName, statName, changed) -> "The sticky web " + changed + " " + enterer.getName() + "'s " + statName + "!"
             );
         }

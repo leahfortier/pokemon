@@ -483,7 +483,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             ActivePokemon other = b.getOtherPokemon(enterer);
-            other.getStages().modifyStage(enterer, other, -1, Stat.ATTACK, b, CastSource.ABILITY);
+            other.getStages().modifyStage(enterer, -1, Stat.ATTACK, b, CastSource.ABILITY);
         }
     }
 
@@ -521,7 +521,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+            victim.getStages().modifyStage(victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
         }
 
         @Override
@@ -1575,7 +1575,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             Type type = user.getAttackType();
             if (type == Type.BUG || type == Type.DARK || type == Type.GHOST) {
-                victim.getStages().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+                victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
             }
         }
     }
@@ -1589,7 +1589,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-            murderer.getStages().modifyStage(murderer, murderer, 1, Stat.ATTACK, b, CastSource.ABILITY);
+            murderer.getStages().modifyStage(murderer, 1, Stat.ATTACK, b, CastSource.ABILITY);
         }
     }
 
@@ -1602,7 +1602,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-            murderer.getStages().modifyStage(murderer, murderer, 1, murderer.getBestBattleStat(), b, CastSource.ABILITY);
+            murderer.getStages().modifyStage(murderer, 1, murderer.getBestBattleStat(), b, CastSource.ABILITY);
         }
     }
 
@@ -1617,7 +1617,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         public void receiveStatus(Battle b, ActivePokemon victim, StatusCondition statusType) {
             if (statusType == StatusCondition.FAINTED) {
                 ActivePokemon abilify = this.getOtherPokemon(b, victim);
-                abilify.getStages().modifyStage(abilify, abilify, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+                abilify.getStages().modifyStage(abilify, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
             }
         }
     }
@@ -1786,7 +1786,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
             Stat toRaise = baseDefense < baseSpecialDefense ? Stat.ATTACK : Stat.SP_ATTACK;
 
-            enterer.getStages().modifyStage(enterer, enterer, 1, toRaise, b, CastSource.ABILITY);
+            enterer.getStages().modifyStage(enterer, 1, toRaise, b, CastSource.ABILITY);
         }
     }
 
@@ -1964,7 +1964,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            victim.getStages().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+            victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
         }
     }
 
@@ -2346,7 +2346,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+            victim.getStages().modifyStage(victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
         }
 
         @Override
@@ -2449,7 +2449,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, victim, 2, Stat.ATTACK, b, CastSource.ABILITY);
+            victim.getStages().modifyStage(victim, 2, Stat.ATTACK, b, CastSource.ABILITY);
         }
     }
 
@@ -2462,7 +2462,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, victim, 2, Stat.SP_ATTACK, b, CastSource.ABILITY);
+            victim.getStages().modifyStage(victim, 2, Stat.SP_ATTACK, b, CastSource.ABILITY);
         }
     }
 
@@ -2565,7 +2565,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+            victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
         }
 
         @Override
@@ -2584,7 +2584,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.DARK)) {
-                victim.getStages().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
+                victim.getStages().modifyStage(victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
             }
         }
     }
@@ -2806,8 +2806,8 @@ public abstract class Ability implements Serializable, AbilityHolder {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
-                victim.getStages().modifyStage(victim, victim, -1, Stat.DEFENSE, b, CastSource.ABILITY);
-                victim.getStages().modifyStage(victim, victim, 2, Stat.SPEED, b, CastSource.ABILITY);
+                victim.getStages().modifyStage(victim, -1, Stat.DEFENSE, b, CastSource.ABILITY);
+                victim.getStages().modifyStage(victim, 2, Stat.SPEED, b, CastSource.ABILITY);
             }
         }
     }
@@ -2956,7 +2956,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
+            victim.getStages().modifyStage(victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
         }
 
         @Override
@@ -3829,7 +3829,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, victim, 1, Stat.DEFENSE, b, CastSource.ABILITY);
+            victim.getStages().modifyStage(victim, 1, Stat.DEFENSE, b, CastSource.ABILITY);
         }
     }
 
@@ -3843,7 +3843,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.WATER)) {
-                victim.getStages().modifyStage(victim, victim, 2, Stat.DEFENSE, b, CastSource.ABILITY);
+                victim.getStages().modifyStage(victim, 2, Stat.DEFENSE, b, CastSource.ABILITY);
             }
         }
     }
@@ -3923,7 +3923,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
-                victim.getStages().modifyStage(victim, victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+                victim.getStages().modifyStage(victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
             }
         }
     }
@@ -4248,7 +4248,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.getStages().modifyStage(victim, user, -1, Stat.SPEED, b, CastSource.ABILITY);
+            user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
         }
     }
 

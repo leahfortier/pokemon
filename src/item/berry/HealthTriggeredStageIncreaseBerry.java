@@ -15,7 +15,7 @@ public interface HealthTriggeredStageIncreaseBerry extends HealthTriggeredBerry 
 
     @Override
     default boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-        return user.getStages().modifyStage(user, user, 1, this.getStat(), b, source);
+        return user.getStages().modifyStage(user, 1, this.getStat(), b, source);
     }
 
     @Override

@@ -45,7 +45,7 @@ public class Stages implements Serializable {
         Messages.add(new MessageUpdate().withPokemon(attributesHolder));
     }
 
-    public void incrementStage(Stat stat, int val) {
+    private void incrementStage(Stat stat, int val) {
         setStage(stat, getStage(stat) + val);
     }
 
@@ -53,13 +53,14 @@ public class Stages implements Serializable {
         setStage(stat, 0);
     }
 
-    public boolean modifyStage(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source) {
-        ModifyStageMessageGetter messageGetter = ModifyStageMessageGetter.createGetter(b, caster, victim, source);
-        return modifyStage(caster, victim, val, stat, b, source, messageGetter);
+    public boolean modifyStage(ActivePokemon caster, int val, Stat stat, Battle b, CastSource source) {
+        ModifyStageMessageGetter messageGetter = createGetter(b, caster, source);
+        return modifyStage(caster, val, stat, b, source, messageGetter);
     }
 
     // Modifies a stat for a Pokemon and prints appropriate messages and stuff
-    public boolean modifyStage(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source, ModifyStageMessageGetter messageGetter) {
+    public boolean modifyStage(ActivePokemon caster, int val, Stat stat, Battle b, CastSource source, ModifyStageMessageGetter messageGetter) {
+        ActivePokemon victim = this.attributesHolder;
 
         // Don't modify the stages of a dead Pokemon
         if (victim.isFainted(b)) {
@@ -92,7 +93,7 @@ public class Stages implements Serializable {
         }
 
         // HOW LOW CAN YOU GO?!
-        if (getStage(stat) == -1*Stat.MAX_STAT_CHANGES && val < 0) {
+        if (getStage(stat) == -Stat.MAX_STAT_CHANGES && val < 0) {
             // THIS LOW
             if (print) {
                 Messages.add(victim.getName() + "'s " + statName + " cannot be lowered any further!");
@@ -135,7 +136,7 @@ public class Stages implements Serializable {
                 continue;
             }
 
-            this.modifyStage(modifier, this.attributesHolder, mod[i], Stat.getStat(i, true), b, source);
+            this.modifyStage(modifier, mod[i], Stat.getStat(i, true), b, source);
         }
     }
 
@@ -159,35 +160,35 @@ public class Stages implements Serializable {
         other.getStages().setStage(stat, userStat);
     }
 
+    private ModifyStageMessageGetter createGetter(Battle b, ActivePokemon caster, CastSource source) {
+        switch (source) {
+            case ATTACK:
+            case USE_ITEM:
+                // Bulbasaur's Attack was sharply raised!
+                return (victimName, statName, changed) -> String.format(
+                        "%s's %s was %s!", this.attributesHolder.getName(), statName, changed
+                );
+            case ABILITY:
+            case HELD_ITEM:
+                // Gyarados's Intimidate lowered Charmander's Attack!
+                // Bulbasaur's Absorb Bulb raised its Special Attack!
+                return (victimName, statName, changed) -> String.format(
+                        "%s's %s %s %s %s!",
+                        caster.getName(), source.getSourceName(b, caster), changed, victimName, statName
+                );
+            case EFFECT:
+                Global.error("Effect message should be handled manually using the other modifyStage method.");
+                break;
+            default:
+                Global.error("Unknown source for stage modifier.");
+                break;
+        }
+
+        return (victimName, statName, changed) -> StringUtils.empty();
+    }
+
     @FunctionalInterface
     public interface ModifyStageMessageGetter {
         String getMessage(String victimName, String statName, String changed);
-
-        static ModifyStageMessageGetter createGetter(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            switch (source) {
-                case ATTACK:
-                case USE_ITEM:
-                    // Bulbasaur's Attack was sharply raised!
-                    return (victimName, statName, changed) -> String.format(
-                            "%s's %s was %s!", victim.getName(), statName, changed
-                    );
-                case ABILITY:
-                case HELD_ITEM:
-                    // Gyarados's Intimidate lowered Charmander's Attack!
-                    // Bulbasaur's Absorb Bulb raised its Special Attack!
-                    return (victimName, statName, changed) -> String.format(
-                            "%s's %s %s %s %s!",
-                            caster.getName(), source.getSourceName(b, caster), changed, victimName, statName
-                    );
-                case EFFECT:
-                    Global.error("Effect message should be handled manually using the other modifyStage method.");
-                    break;
-                default:
-                    Global.error("Unknown source for stage modifier.");
-                    break;
-            }
-
-            return (victimName, statName, changed) -> StringUtils.empty();
-        }
     }
 }

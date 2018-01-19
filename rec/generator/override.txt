@@ -871,7 +871,7 @@ BlockType:
 		###
 	AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{11}.getName() + " type moves!"
 	AddMapField: AlternateEffect:
-		victim.getStages().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.ABILITY);
+		victim.getStages().modifyStage(victim, 1, Stat.{22}, b, CastSource.ABILITY);
 		###
 *
 AbsorbType:
@@ -1005,7 +1005,7 @@ MoveUse:
 *
 TypeTakeDamageStatIncrease:
 	AddMapField: OnTakeDamage:
-		if (user.isAttackType(Type.{11}) && victim.getStages().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
+		if (user.isAttackType(Type.{11}) && victim.getStages().modifyStage(victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
 			victim.consumeItem(b);
 		}
 		###
@@ -1291,7 +1291,7 @@ XStageIncrease:
 	AddInterface: HoldItem
 	AddInterface: BattleUseItem
 	AddMapField: BattleUse:
-		return p.getStages().modifyStage(p, p, 1, Stat.{00}, b, CastSource.USE_ITEM);
+		return p.getStages().modifyStage(p, 1, Stat.{00}, b, CastSource.USE_ITEM);
 		###
 *
 EVIncrease:
@@ -1361,7 +1361,7 @@ CategoryIncreaseBerry:
 	AddInterface: Berry
 	AddInterface: TakeDamageEffect
 	AddMapField: OnTakeDamage:
-		if (user.getAttack().getCategory() == MoveCategory.{11} && victim.getStages().modifyStage(victim, victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
+		if (user.getAttack().getCategory() == MoveCategory.{11} && victim.getStages().modifyStage(victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
 			victim.consumeItem(b);
 		}
 		###
@@ -1612,7 +1612,7 @@ NormalTypeChanger:
 NextLevel:
 	Header: void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)
 	Body:
-		victim.getStages().modifyStage(victim, victim, 2, Stat.{00}, b, CastSource.@SuperClass);
+		victim.getStages().modifyStage(victim, 2, Stat.{00}, b, CastSource.@SuperClass);
 		###
 *
 FlinchItem:
@@ -1753,7 +1753,7 @@ TerrainSeed:
 	AddInterface: ConsumableItem
 	AddInterface: TerrainCastEffect
 	AddMapField: NewTerrain:
-		if (newTerrain == TerrainType.{11} && p.getStages().modifyStage(p, p, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
+		if (newTerrain == TerrainType.{11} && p.getStages().modifyStage(p, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
 			p.consumeItem(b);
 		}
 		###

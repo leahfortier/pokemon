@@ -166,7 +166,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (victim.hasAbility(AbilityNamesies.STEADFAST)) {
-                victim.getStages().modifyStage(victim, victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+                victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
             }
         }
 
@@ -617,7 +617,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             // Pokemon that make contact with the king's shield have their attack reduced
             if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
                 p.getStages().modifyStage(
-                        opp, p, -2, Stat.ATTACK, b, CastSource.EFFECT,
+                        opp, -2, Stat.ATTACK, b, CastSource.EFFECT,
                         (victimName, statName, changed) -> "The King's Shield " + changed + " " + p.getName() + "'s " + statName + "!"
                 );
             }
@@ -2976,7 +2976,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
             // Bulbasaur's Rage increased its Attack!
             victim.getStages().modifyStage(
-                    victim, victim, 1, Stat.ATTACK, b, CastSource.EFFECT,
+                    victim, 1, Stat.ATTACK, b, CastSource.EFFECT,
                     (victimName, statName, changed) -> String.format("%s's Rage %s %s %s!", victim.getName(), changed, victimName, statName)
             );
         }
