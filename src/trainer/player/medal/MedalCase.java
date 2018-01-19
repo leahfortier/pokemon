@@ -92,7 +92,7 @@ public class MedalCase implements Serializable {
     public void hatch(ActivePokemon hatched) {
         this.increase(MedalTheme.EGGS_HATCHED);
 
-        this.babyPokemonUnhatched.remove(hatched.getPokemonInfo().namesies());
+        this.babyPokemonUnhatched.remove(hatched.namesies());
         this.update(MedalTheme.BABIES_HATCHED, PokemonInfo.getNumBabyPokemon() - this.babyPokemonUnhatched.size());
 
         int perfectIVs = 0;

@@ -363,11 +363,16 @@ public class Battle implements Serializable {
     }
 
     public void enterBattle(ActivePokemon enterer) {
-        NameChanger.setNameChanges(this, enterer);
-        enterBattle(enterer, this.getTrainer(enterer).getEnterBattleMessage(enterer));
+        enterBattle(enterer, this.getTrainer(enterer).getEnterBattleMessage());
     }
 
-    public void enterBattle(ActivePokemon enterer, String enterMessage) {
+    @FunctionalInterface
+    public interface EnterBattleMessageGetter {
+        String enterBattleMessage(ActivePokemon enterer);
+    }
+
+    // Need to use EnterBattleMessageGetter instead of String in case of NameChanger effect
+    public void enterBattle(ActivePokemon enterer, EnterBattleMessageGetter enterMessage) {
         if (!enterer.canFight()) {
             Global.error(enterer.getName() + " cannot fight!!!!");
         }
@@ -380,12 +385,12 @@ public class Battle implements Serializable {
         enterer.resetAttributes();
         NameChanger.setNameChanges(this, enterer);
 
-        Messages.add(new MessageUpdate(enterMessage).withSwitch(this, enterer));
+        Messages.add(new MessageUpdate(enterMessage.enterBattleMessage(enterer)).withSwitch(this, enterer));
 
-        enterer.setUsed(true);
         EntryEffect.invokeEntryEffect(this, enterer);
 
         getTrainer(!enterer.isPlayer()).resetUsed();
+        enterer.setUsed(true);
     }
 
     public boolean runAway() {

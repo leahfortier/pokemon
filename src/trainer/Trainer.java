@@ -137,8 +137,8 @@ public abstract class Trainer implements Team, Serializable {
 
     @Override
     public void resetUsed() {
-        for (int i = 0; i < team.size(); i++) {
-            team.get(i).setUsed(i == frontIndex);
+        for (PartyPokemon p : team) {
+            p.setUsed(false);
         }
     }
 

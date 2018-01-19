@@ -57,7 +57,7 @@ public class Pokedex implements Serializable {
 
     public void setSeen(ActivePokemon pokemon, boolean isWildBattle) {
         this.setStatus(
-                pokemon.getPokemonInfo().namesies(),
+                pokemon.namesies(),
                 PokedexStatus.SEEN,
                 isWildBattle ? Game.getPlayer().getAreaName() : StringUtils.empty()
         );

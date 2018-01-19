@@ -1400,7 +1400,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            if (enterer.getPokemonInfo().namesies() == PokemonNamesies.PANGORO) {
+            if (enterer.namesies() == PokemonNamesies.PANGORO) {
                 Messages.add(enterer.getName() + " does not break the mold!!!!!!!");
             }
         }
@@ -2818,7 +2818,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private boolean activated;
         private String illusionName;
         private Type[] illusionType;
-        private PokemonInfo illusionSpecies;
+        private PokemonNamesies illusionSpecies;
         private boolean illusionShiny;
 
         private void breakIllusion(Battle b, ActivePokemon victim) {
@@ -2830,7 +2830,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
             activated = false;
             Messages.add(victim.getName() + "'s Illusion was broken!");
 
-            Messages.add(new MessageUpdate().withNewPokemon(victim.getPokemonInfo(), victim.isShiny(), true, victim.isPlayer()));
+            Messages.add(new MessageUpdate().withNewPokemon(victim.namesies(), victim.isShiny(), true, victim.isPlayer()));
             Messages.add(new MessageUpdate().updatePokemon(b, victim));
         }
 
@@ -2880,7 +2880,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
                 }
 
                 // If the Pokemon in back is the same species at the current Pokemon -- do nothing
-                if (temp.getPokemonInfo().namesies() == victim.getPokemonInfo().namesies()) {
+                if (temp.namesies() == victim.namesies()) {
                     continue;
                 }
 
@@ -2899,7 +2899,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
 
             illusionName = illusion.getName();
             illusionType = illusion.getActualType();
-            illusionSpecies = illusion.getPokemonInfo();
+            illusionSpecies = illusion.namesies();
             illusionShiny = illusion.isShiny();
         }
 

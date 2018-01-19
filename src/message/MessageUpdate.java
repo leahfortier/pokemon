@@ -9,7 +9,7 @@ import main.Game;
 import map.overworld.TerrainType;
 import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
 import pokemon.Gender;
-import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import sound.SoundTitle;
 import type.Type;
 import util.SerializationUtils;
@@ -21,7 +21,7 @@ public class MessageUpdate {
     private final String message;
     private int[] statGains;
     private int[] newStats;
-    private PokemonInfo pokemon;
+    private PokemonNamesies pokemon;
     private boolean shiny;
     private boolean animation;
     private Type[] type;
@@ -101,7 +101,7 @@ public class MessageUpdate {
     }
 
     // Pokemon Image Update!
-    public MessageUpdate withNewPokemon(PokemonInfo pokemon, boolean shiny, boolean animation, boolean isPlayer) {
+    public MessageUpdate withNewPokemon(PokemonNamesies pokemon, boolean shiny, boolean animation, boolean isPlayer) {
         this.pokemon = pokemon;
         this.isPlayer = isPlayer;
         this.shiny = shiny;
@@ -121,7 +121,7 @@ public class MessageUpdate {
         this.switchPokemon = true;
         this.type = active.getDisplayType(battle);
         this.shiny = active.isShiny();
-        this.pokemon = active.getPokemonInfo();
+        this.pokemon = active.namesies();
         this.name = active.getName();
         this.gender = active.getGender();
         this.animation = false;
@@ -235,7 +235,7 @@ public class MessageUpdate {
         return pokemon != null;
     }
 
-    public PokemonInfo getPokemon() {
+    public PokemonNamesies getPokemon() {
         return pokemon;
     }
 

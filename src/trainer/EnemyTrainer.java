@@ -1,6 +1,7 @@
 package trainer;
 
 import battle.ActivePokemon;
+import battle.Battle.EnterBattleMessageGetter;
 import main.Global;
 import pokemon.PartyPokemon;
 
@@ -36,8 +37,8 @@ public class EnemyTrainer extends Trainer implements Opponent {
     }
 
     @Override
-    public String getEnterBattleMessage(ActivePokemon enterer) {
-        return this.getName() + " sent out " + enterer.getName() + "!";
+    public EnterBattleMessageGetter getEnterBattleMessage() {
+        return enterer -> this.getName() + " sent out " + enterer.getName() + "!";
     }
 
     @Override

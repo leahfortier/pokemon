@@ -5532,7 +5532,6 @@ Baton Pass:
 		user.switcheroo(b, user, CastSource.ATTACK, true);
 
 		ActivePokemon next = b.getTrainer(user).front();
-		next.resetAttributes();
 		for (Stat stat : Stat.BATTLE_STATS) {
 			next.getStages().setStage(stat, user.getStage(stat));
 		}
@@ -6247,7 +6246,8 @@ Sparkling Aria:
 	Cat: Special
 	Acc: 100
 	PP: 10
-	StatusCureMove: Asleep
+	StatusCureMove: Burned
+    MoveType: Sound_Based
 *
 High Horsepower:
 	Desc: The user fiercely attacks the target using its entire body.

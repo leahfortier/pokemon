@@ -2,6 +2,7 @@ package trainer;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.Battle.EnterBattleMessageGetter;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import pokemon.PartyPokemon;
@@ -20,7 +21,7 @@ public interface Team {
     boolean hasEffect(EffectNamesies effect);
     void resetEffects();
 
-    String getEnterBattleMessage(ActivePokemon enterer);
+    EnterBattleMessageGetter getEnterBattleMessage();
     void enterBattle();
 
     TrainerAction getAction();

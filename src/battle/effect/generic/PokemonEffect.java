@@ -2256,13 +2256,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
             // Castaway
             super.cast(b, caster, victim, source, printCast);
-            Messages.add(new MessageUpdate().withNewPokemon(transformee.getPokemonInfo(), transformee.isShiny(), true, victim.isPlayer()));
+            Messages.add(new MessageUpdate().withNewPokemon(transformee.namesies(), transformee.isShiny(), true, victim.isPlayer()));
             Messages.add(new MessageUpdate().updatePokemon(b, victim));
         }
 
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return victim.getName() + " transformed into " + b.getOtherPokemon(victim).getPokemonInfo().getName() + "!";
+            return victim.getName() + " transformed into " + b.getOtherPokemon(victim).namesies().getName() + "!";
         }
 
         @Override
@@ -2333,7 +2333,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
             this.hp -= damageAmount;
             if (this.hp <= 0) {
-                Messages.add(new MessageUpdate("The substitute broke!").withNewPokemon(damageTaker.getPokemonInfo(), damageTaker.isShiny(), true, damageTaker.isPlayer()));
+                Messages.add(new MessageUpdate("The substitute broke!").withNewPokemon(damageTaker.namesies(), damageTaker.isShiny(), true, damageTaker.isPlayer()));
                 damageTaker.removeEffect(this.namesies());
             } else {
                 Messages.add("The substitute absorbed the hit!");

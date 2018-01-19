@@ -307,7 +307,7 @@ public class BreedingTest extends BaseTest {
         PokemonInfo pokemonInfo = baby.getPokemonInfo();
 
         // Make sure everything is the same upon hatch
-        Assert.assertEquals(pokemonInfo.namesies(), hatched.getPokemonInfo().namesies());
+        Assert.assertEquals(pokemonInfo.namesies(), hatched.namesies());
         Assert.assertEquals(1, hatched.getLevel());
         Assert.assertEquals(baby.getActualAbility().namesies(), hatched.getActualAbility().namesies());
         Assert.assertEquals(baby.getGender(), hatched.getGender());

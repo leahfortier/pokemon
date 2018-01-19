@@ -36,7 +36,7 @@ enum Compatibility {
             return Compatibility.NO_DICE;
         }
 
-        if (first.getPokemonInfo().namesies() == second.getPokemonInfo().namesies()) {
+        if (first.namesies() == second.namesies()) {
             return Compatibility.HOUSE_ON_FIRE;
         }
 

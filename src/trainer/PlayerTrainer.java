@@ -1,6 +1,6 @@
 package trainer;
 
-import battle.ActivePokemon;
+import battle.Battle.EnterBattleMessageGetter;
 
 public abstract class PlayerTrainer extends Trainer {
     protected PlayerTrainer(String name, int cashMoney) {
@@ -8,7 +8,7 @@ public abstract class PlayerTrainer extends Trainer {
     }
 
     @Override
-    public String getEnterBattleMessage(ActivePokemon enterer) {
-        return "Go! " + enterer.getName() + "!";
+    public EnterBattleMessageGetter getEnterBattleMessage() {
+        return enterer -> "Go! " + enterer.getName() + "!";
     }
 }

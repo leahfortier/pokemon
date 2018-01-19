@@ -304,7 +304,7 @@ class NewPokemonView extends View {
         switch (state) {
             case POKEDEX:
                 if (newPokemonInfo.isFirstNewPokemon()) {
-                    message = newPokemon.getPokemonInfo().getName() + " was registered in the " + PokeString.POKEDEX + "!";
+                    message = newPokemon.namesies().getName() + " was registered in the " + PokeString.POKEDEX + "!";
                 } else {
                     setState(State.NICKNAME_QUESTION);
                 }

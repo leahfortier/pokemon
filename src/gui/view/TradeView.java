@@ -119,7 +119,7 @@ public class TradeView extends View {
                 Button button = getTeamButton(i);
                 if (button.checkConsumePress()) {
                     PartyPokemon myPokes = team.get(i);
-                    if (!myPokes.isEgg() && myPokes.getPokemonInfo().namesies() == requested.namesies()) {
+                    if (!myPokes.isEgg() && myPokes.namesies() == requested.namesies()) {
                         ActivePokemon theirPokes = new ActivePokemon(
                                 offering.namesies(),
                                 myPokes.getLevel(),

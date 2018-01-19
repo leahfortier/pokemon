@@ -131,6 +131,10 @@ public abstract class PartyPokemon implements Serializable {
         healHealthFraction(1);
     }
 
+    public PokemonNamesies namesies() {
+        return this.pokemon;
+    }
+
     public PokemonInfo getPokemonInfo() {
         return pokemon.getInfo();
     }

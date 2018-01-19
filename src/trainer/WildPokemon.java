@@ -2,6 +2,7 @@ package trainer;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.Battle.EnterBattleMessageGetter;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
@@ -86,9 +87,9 @@ public class WildPokemon implements Opponent, Serializable {
     }
 
     @Override
-    public String getEnterBattleMessage(ActivePokemon enterer) {
+    public EnterBattleMessageGetter getEnterBattleMessage() {
         // No additional message when the Pokemon 'enters' battle, it's just the start when they appear
-        return "";
+        return enterer -> "";
     }
 
     @Override

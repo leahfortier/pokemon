@@ -15,7 +15,7 @@ import main.Global;
 import message.MessageUpdate;
 import pokemon.Gender;
 import pokemon.PartyPokemon;
-import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import sound.SoundPlayer;
 import trainer.Trainer;
@@ -111,7 +111,7 @@ class PokemonAnimationState {
                 p.getHP(),
                 p.getDisplayType(b),
                 p.isShiny(),
-                p.getPokemonInfo(),
+                p.namesies(),
                 p.getName(),
                 p.getGender(),
                 p.expRatio(),
@@ -125,7 +125,7 @@ class PokemonAnimationState {
             int hp,
             Type[] type,
             boolean shiny,
-            PokemonInfo pokemon,
+            PokemonNamesies pokemon,
             String name,
             Gender gender,
             float expRatio,
@@ -137,7 +137,7 @@ class PokemonAnimationState {
 
         state.hp = oldState.hp = hp;
         state.type = type;
-        state.imageName = pokemon.getImageName(shiny, !isPlayer);
+        state.imageName = pokemon.getInfo().getImageName(shiny, !isPlayer);
         state.caught = battleView.getCurrentBattle().isWildBattle() && Game.getPlayer().getPokedex().isCaught(pokemon);
         state.name = name;
         state.gender = gender;
@@ -172,8 +172,8 @@ class PokemonAnimationState {
         animationCatchDuration = 0;
     }
 
-    private void startPokemonUpdateAnimation(PokemonInfo newPokemon, boolean newShiny, boolean animate) {
-        startPokemonUpdateAnimation(newPokemon.getImageName(newShiny, !isPlayer), animate);
+    private void startPokemonUpdateAnimation(PokemonNamesies newPokemon, boolean newShiny, boolean animate) {
+        startPokemonUpdateAnimation(newPokemon.getInfo().getImageName(newShiny, !isPlayer), animate);
     }
 
     private void startCatchAnimation(int duration) {

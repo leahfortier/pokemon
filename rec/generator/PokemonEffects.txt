@@ -807,7 +807,7 @@ Transformed:
 		private int[] stats;
 		private Type[] type;
 		###
-	CastMessage: victim.getName() + " transformed into " + b.getOtherPokemon(victim).getPokemonInfo().getName() + "!"
+	CastMessage: victim.getName() + " transformed into " + b.getOtherPokemon(victim).namesies().getName() + "!"
 	Cast:
 		// Pokemon to transform into
 		ActivePokemon transformee = b.getOtherPokemon(victim);
@@ -836,7 +836,7 @@ Transformed:
 
 		// Castaway
 		super.cast(b, caster, victim, source, printCast);
-		Messages.add(new MessageUpdate().withNewPokemon(transformee.getPokemonInfo(), transformee.isShiny(), true, victim.isPlayer()));
+		Messages.add(new MessageUpdate().withNewPokemon(transformee.namesies(), transformee.isShiny(), true, victim.isPlayer()));
 		Messages.add(new MessageUpdate().updatePokemon(b, victim));
 		###
 	FailCondition: b.getOtherPokemon(victim).hasEffect(this.namesies) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive()))
@@ -886,7 +886,7 @@ Substitute:
 	AbsorbDamage:
 		this.hp -= damageAmount;
 		if (this.hp <= 0) {
-			Messages.add(new MessageUpdate("The substitute broke!").withNewPokemon(damageTaker.getPokemonInfo(), damageTaker.isShiny(), true, damageTaker.isPlayer()));
+			Messages.add(new MessageUpdate("The substitute broke!").withNewPokemon(damageTaker.namesies(), damageTaker.isShiny(), true, damageTaker.isPlayer()));
 			damageTaker.removeEffect(this.namesies());
 		} else {
 			Messages.add("The substitute absorbed the hit!");

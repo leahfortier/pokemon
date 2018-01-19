@@ -341,8 +341,7 @@ public class ActivePokemon extends PartyPokemon {
 
             // Swap to a random Pokemon!
             trainer.switchToRandom(b);
-            victim = trainer.front();
-            b.enterBattle(victim, "...and " + victim.getName() + " was dragged out!");
+            b.enterBattle(trainer.front(), enterer -> "...and " + enterer.getName() + " was dragged out!");
         }
     }
 
@@ -389,8 +388,7 @@ public class ActivePokemon extends PartyPokemon {
         // TODO: Once this happens, this should take in a random parameter since this is still correct for Red Card, I believe and should have the message "name was sent out!"
         // TODO: Check if trainer action needs to be set to Switch
         trainer.switchToRandom(b);
-        ActivePokemon front = trainer.front();
-        b.enterBattle(front, trainer.getName() + " sent out " + front.getName() + "!");
+        b.enterBattle(trainer.front(), enterer -> trainer.getName() + " sent out " + enterer.getName() + "!");
 
         return true;
     }

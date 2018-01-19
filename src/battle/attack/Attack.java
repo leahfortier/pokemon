@@ -9615,7 +9615,6 @@ public abstract class Attack implements Serializable {
             user.switcheroo(b, user, CastSource.ATTACK, true);
 
             ActivePokemon next = b.getTrainer(user).front();
-            next.resetAttributes();
             for (Stat stat : Stat.BATTLE_STATS) {
                 next.getStages().setStage(stat, user.getStage(stat));
             }
@@ -10766,16 +10765,17 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.SPARKLING_ARIA, Type.WATER, MoveCategory.SPECIAL, 10, "The user bursts into song, emitting many bubbles. Any Pokémon suffering from a burn will be healed by the touch of these bubbles.");
             super.power = 90;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.SOUND_BASED);
         }
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasStatus(StatusCondition.ASLEEP) ? 2 : 1;
+            return victim.hasStatus(StatusCondition.BURNED) ? 2 : 1;
         }
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.hasStatus(StatusCondition.ASLEEP)) {
+            if (victim.hasStatus(StatusCondition.BURNED)) {
                 Status.removeStatus(b, victim, CastSource.ATTACK);
             }
         }
