@@ -1,7 +1,6 @@
 package map.overworld;
 
 import battle.ActivePokemon;
-import item.ItemNamesies;
 import main.Game;
 import pattern.PokemonMatcher;
 import pokemon.Gender;
@@ -25,16 +24,16 @@ public class WildEncounter {
         this.pokemonMatcher = new PokemonMatcher(pokemon, level);
     }
 
+    public PokemonNamesies getPokemon() {
+        return this.pokemonMatcher.getNamesies();
+    }
+
     public int getLevel() {
         return this.pokemonMatcher.getLevel();
     }
 
     public void setLevel(int level) {
         this.pokemonMatcher.setLevel(level);
-    }
-
-    public void setHoldItem(ItemNamesies holdItem) {
-        this.pokemonMatcher.setHoldItem(holdItem);
     }
 
     public void setGender(Gender gender) {
@@ -48,9 +47,7 @@ public class WildEncounter {
     public WildPokemon getWildPokemon() {
         ActivePokemon attacking = Game.getPlayer().front();
 
-        if (!this.pokemonMatcher.hasHoldItem()) {
-            this.pokemonMatcher.setHoldItem(WildHoldItem.getWildHoldItem(pokemonMatcher.getNamesies(), attacking));
-        }
+        this.pokemonMatcher.setHoldItem(WildHoldItem.getWildHoldItem(pokemonMatcher.getNamesies(), attacking));
 
         ActivePokemon wildPokemon = (ActivePokemon)PartyPokemon.createActivePokemon(this.pokemonMatcher, false);
         return new WildPokemon(wildPokemon);

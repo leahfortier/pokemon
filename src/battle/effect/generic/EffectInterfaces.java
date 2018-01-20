@@ -1513,9 +1513,9 @@ public final class EffectInterfaces {
     }
 
     public interface RepellingEffect {
-        boolean shouldRepel(ActivePokemon playerPokemon, WildEncounter wildPokemon);
+        boolean shouldRepel(ActivePokemon playerFront, WildEncounter wildPokemon);
 
-        static boolean checkRepellingEffect(ActivePokemon playerPokemon, WildEncounter wildPokemon) {
+        static boolean checkRepellingEffect(ActivePokemon playerFront, WildEncounter wildPokemon) {
             List<Object> invokees = new ArrayList<>();
             invokees.add(playerFront.getAbility());
             invokees.add(playerFront.getActualHeldItem());
@@ -1524,7 +1524,7 @@ public final class EffectInterfaces {
                 if (invokee instanceof RepellingEffect && Effect.isActiveEffect(invokee)) {
 
                     RepellingEffect effect = (RepellingEffect)invokee;
-                    if (effect.shouldRepel(playerPokemon, wildPokemon)) {
+                    if (effect.shouldRepel(playerFront, wildPokemon)) {
                         return true;
                     }
                 }
@@ -1537,24 +1537,24 @@ public final class EffectInterfaces {
     public interface RepelLowLevelEncounterEffect extends RepellingEffect {
 
         @Override
-        default boolean shouldRepel(ActivePokemon playerPokemon, WildEncounter wildPokemon) {
-            return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= attacking.getLevel();
+        default boolean shouldRepel(ActivePokemon playerFront, WildEncounter wildPokemon) {
+            return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= playerFront.getLevel();
         }
     }
 
     public interface WildEncounterSelector {
-        WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters);
+        WildEncounterInfo getWildEncounter(ActivePokemon playerFront, WildEncounterInfo[] wildEncounters);
 
-        static WildEncounter getForcedWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters) {
+        static WildEncounterInfo getForcedWildEncounter(ActivePokemon playerFront, WildEncounterInfo[] wildEncounters) {
             List<Object> invokees = new ArrayList<>();
-            invokees.add(front.getAbility());
-            invokees.add(front.getActualHeldItem());
+            invokees.add(playerFront.getAbility());
+            invokees.add(playerFront.getActualHeldItem());
 
             for (Object invokee : invokees) {
                 if (invokee instanceof WildEncounterSelector && Effect.isActiveEffect(invokee)) {
 
                     WildEncounterSelector effect = (WildEncounterSelector)invokee;
-                    return effect.getWildEncounter(front, wildEncounters);
+                    return effect.getWildEncounter(playerFront, wildEncounters);
                 }
             }
 
@@ -1563,15 +1563,15 @@ public final class EffectInterfaces {
     }
 
     public interface TypedWildEncounterSelector extends WildEncounterSelector {
-        Type getType();
+        Type getEncounterType();
 
         @Override
-        default WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters) {
+        default WildEncounterInfo getWildEncounter(ActivePokemon playerFront, WildEncounterInfo[] wildEncounters) {
             if (RandomUtils.chanceTest(50)) {
-                List<WildEncounter> typedList = new ArrayList<>();
-                for (WildEncounter wildEncounter : wildEncounters) {
+                List<WildEncounterInfo> typedList = new ArrayList<>();
+                for (WildEncounterInfo wildEncounter : wildEncounters) {
                     PokemonInfo pokemon = wildEncounter.getPokemonName().getInfo();
-                    if (pokemon.isType(this.getType())) {
+                    if (pokemon.isType(this.getEncounterType())) {
                         typedList.add(wildEncounter);
                     }
                 }
@@ -1586,20 +1586,20 @@ public final class EffectInterfaces {
     }
 
     public interface EncounterRateMultiplier {
-        double getMultiplier();
+        double getEncounterRateMultiplier();
 
-        static double getModifier(ActivePokemon front) {
+        static double getModifier(ActivePokemon playerFront) {
             double modifier = 1;
 
             List<Object> invokees = new ArrayList<>();
-            invokees.add(front.getAbility());
-            invokees.add(front.getActualHeldItem());
+            invokees.add(playerFront.getAbility());
+            invokees.add(playerFront.getActualHeldItem());
 
             for (Object invokee : invokees) {
                 if (invokee instanceof EncounterRateMultiplier && Effect.isActiveEffect(invokee)) {
 
                     EncounterRateMultiplier effect = (EncounterRateMultiplier)invokee;
-                    modifier *= effect.getMultiplier();
+                    modifier *= effect.getEncounterRateMultiplier();
                 }
             }
 

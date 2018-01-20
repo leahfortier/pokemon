@@ -865,7 +865,7 @@ MaxLevelWildEncounterEffect:
 ***
 RepellingEffect:
 	Method:
-		Header: boolean shouldRepel(ActivePokemon playerPokemon, WildEncounter wildPokemon)
+		Header: boolean shouldRepel(ActivePokemon playerFront, WildEncounter wildPokemon)
 		Invoke: Check true
 		NonBattleEffects: playerFront
 	*
@@ -874,34 +874,34 @@ RepelLowLevelEncounterEffect:
 	Extends: RepellingEffect
 	Method:
 		Override: True
-		Header: boolean shouldRepel(ActivePokemon playerPokemon, WildEncounter wildPokemon)
+		Header: boolean shouldRepel(ActivePokemon playerFront, WildEncounter wildPokemon)
 		Default:
-			return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= attacking.getLevel();
+			return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= playerFront.getLevel();
 			###
 	*
 ***
 WildEncounterSelector:
 	Method:
-		Header: WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters)
+		Header: WildEncounterInfo getWildEncounter(ActivePokemon playerFront, WildEncounterInfo[] wildEncounters)
 		Invoke: Get
-		NonBattleEffects: front
+		NonBattleEffects: playerFront
 		InvokeName: getForcedWildEncounter
 	*
 ***
 TypedWildEncounterSelector:
 	Extends: WildEncounterSelector
 	Method:
-		Header: Type getType()
+		Header: Type getEncounterType()
 	*
 	Method:
 		Override: True
-		Header: WildEncounter getWildEncounter(ActivePokemon front, WildEncounter[] wildEncounters)
+		Header: WildEncounterInfo getWildEncounter(ActivePokemon playerFront, WildEncounterInfo[] wildEncounters)
 		Default:
 			if (RandomUtils.chanceTest(50)) {
-				List<WildEncounter> typedList = new ArrayList<>();
-				for (WildEncounter wildEncounter : wildEncounters) {
+				List<WildEncounterInfo> typedList = new ArrayList<>();
+				for (WildEncounterInfo wildEncounter : wildEncounters) {
 					PokemonInfo pokemon = wildEncounter.getPokemonName().getInfo();
-					if (pokemon.isType(this.getType())) {
+					if (pokemon.isType(this.getEncounterType())) {
 						typedList.add(wildEncounter);
 					}
 				}
@@ -917,10 +917,10 @@ TypedWildEncounterSelector:
 ***
 EncounterRateMultiplier:
 	Method:
-		Header: double getMultiplier()
+		Header: double getEncounterRateMultiplier()
 		Invoke: Multiply
-		InvokeParameters: ActivePokemon front
-		NonBattleEffects: front
+		InvokeParameters: ActivePokemon playerFront
+		NonBattleEffects: playerFront
 	*
 ***
 ModifyStageValueEffect:

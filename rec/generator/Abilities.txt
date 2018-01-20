@@ -158,7 +158,7 @@ Cute Charm:
 	WildPokemonAlterer:
 		if (RandomUtils.chanceTest(2, 3)) {
 			Gender opposite = playerFront.getGender().getOppositeGender();
-			if (opposite.genderApplies(encounter.getPokemonName().getInfo())) {
+			if (opposite.genderApplies(encounter.getPokemon().getInfo())) {
 				encounter.setGender(opposite);
 			}
 		}

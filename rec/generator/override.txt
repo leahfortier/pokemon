@@ -1036,21 +1036,21 @@ Vitamin:
 *
 RepelEffectItem:
 	AddInterface: RepellingEffect
-	Header: boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon)
+	Header: boolean shouldRepel(ActivePokemon playerFront, WildEncounter wildPokemon)
 	Body:
-		return RandomUtils.chanceTest(1, 3) && wildPokemon.getLevel() <= attacking.getLevel();
+		return RandomUtils.chanceTest(1, 3) && wildPokemon.getLevel() <= playerFront.getLevel();
 		###
 *
 TypedWildEncounterSelector:
 	AddInterface: TypedWildEncounterSelector
-	Header: Type getType()
+	Header: Type getEncounterType()
 	Body:
 		return Type.{00};
 		###
 *
 EncounterRateMultiplier:
 	AddInterface: EncounterRateMultiplier
-	Header: double getMultiplier()
+	Header: double getEncounterRateMultiplier()
 	Body:
 		return {0};
 		###
@@ -1743,7 +1743,7 @@ DropBelowHalfHealth:
 		###
 *
 WildPokemonAlterer:
-	Header: void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData)
+	Header: void alterWildPokemon(ActivePokemon playerFront, WildEncounterInfo encounterData, WildEncounter encounter)
 	AddInterface: WildEncounterAlterer
 *
 NewTerrain:

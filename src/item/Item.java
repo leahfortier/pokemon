@@ -512,8 +512,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
 
         @Override
-        public boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon) {
-            return RandomUtils.chanceTest(1, 3) && wildPokemon.getLevel() <= attacking.getLevel();
+        public boolean shouldRepel(ActivePokemon playerFront, WildEncounter wildPokemon) {
+            return RandomUtils.chanceTest(1, 3) && wildPokemon.getLevel() <= playerFront.getLevel();
         }
     }
 
@@ -1866,8 +1866,8 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
 
         @Override
-        public boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon) {
-            return RandomUtils.chanceTest(1, 3) && wildPokemon.getLevel() <= attacking.getLevel();
+        public boolean shouldRepel(ActivePokemon playerFront, WildEncounter wildPokemon) {
+            return RandomUtils.chanceTest(1, 3) && wildPokemon.getLevel() <= playerFront.getLevel();
         }
 
         @Override

@@ -402,7 +402,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public double getMultiplier() {
+        public double getEncounterRateMultiplier() {
             return 1.5;
         }
 
@@ -496,7 +496,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public Type getType() {
+        public Type getEncounterType() {
             return Type.ELECTRIC;
         }
 
@@ -544,7 +544,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public double getMultiplier() {
+        public double getEncounterRateMultiplier() {
             return Game.getPlayer().getArea().getWeather() == WeatherState.SANDSTORM ? .5 : 1;
         }
     }
@@ -646,10 +646,10 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
+        public void alterWildPokemon(ActivePokemon playerFront, WildEncounterInfo encounterData, WildEncounter encounter) {
             if (RandomUtils.chanceTest(2, 3)) {
                 Gender opposite = playerFront.getGender().getOppositeGender();
-                if (opposite.genderApplies(encounter.getPokemonName().getInfo())) {
+                if (opposite.genderApplies(encounter.getPokemon().getInfo())) {
                     encounter.setGender(opposite);
                 }
             }
@@ -768,7 +768,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public double getMultiplier() {
+        public double getEncounterRateMultiplier() {
             return .5;
         }
     }
@@ -863,7 +863,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public double getMultiplier() {
+        public double getEncounterRateMultiplier() {
             return 2;
         }
     }
@@ -1056,7 +1056,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
+        public void alterWildPokemon(ActivePokemon playerFront, WildEncounterInfo encounterData, WildEncounter encounter) {
             if (RandomUtils.chanceTest(50)) {
                 encounter.setNature(playerFront.getNature());
             }
@@ -1083,7 +1083,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public double getMultiplier() {
+        public double getEncounterRateMultiplier() {
             return 1.5;
         }
     }
@@ -1208,7 +1208,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public Type getType() {
+        public Type getEncounterType() {
             return Type.STEEL;
         }
     }
@@ -1725,7 +1725,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public double getMultiplier() {
+        public double getEncounterRateMultiplier() {
             return .5;
         }
 
@@ -1846,7 +1846,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public double getMultiplier() {
+        public double getEncounterRateMultiplier() {
             return Game.getPlayer().getArea().getWeather() == WeatherState.SNOW ? .5 : 1;
         }
     }
@@ -2285,7 +2285,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public double getMultiplier() {
+        public double getEncounterRateMultiplier() {
             return .5;
         }
     }
