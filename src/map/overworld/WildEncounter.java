@@ -1,96 +1,58 @@
 package map.overworld;
 
 import battle.ActivePokemon;
-import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
-import battle.effect.generic.EffectInterfaces.WildEncounterSelector;
+import item.ItemNamesies;
 import main.Game;
+import pattern.PokemonMatcher;
+import pokemon.Gender;
+import pokemon.Nature;
+import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import trainer.WildPokemon;
-import util.GeneralUtils;
 import util.RandomUtils;
 
-import java.util.Arrays;
-
 public class WildEncounter {
-    private PokemonNamesies pokemon;
+    private PokemonMatcher pokemonMatcher;
 
-    private int minLevel;
-    private int maxLevel;
-
-    private int probability;
-
-    private Integer level;
-
-    public WildEncounter(String pokemon, int minLevel, int maxLevel, String probability) {
+    public WildEncounter(WildEncounterInfo wildEncounterInfo) {
         this(
-                PokemonNamesies.getValueOf(pokemon),
-                minLevel,
-                maxLevel,
-                Integer.parseInt(probability)
+                wildEncounterInfo.getPokemonName(),
+                RandomUtils.getRandomInt(wildEncounterInfo.getMinLevel(), wildEncounterInfo.getMaxLevel())
         );
     }
 
     public WildEncounter(PokemonNamesies pokemon, int level) {
-        this(pokemon, level, level, 100);
-    }
-
-    public WildEncounter(PokemonNamesies pokemon, int minLevel, int maxLevel, int probability) {
-        this.pokemon = pokemon;
-        this.minLevel = minLevel;
-        this.maxLevel = maxLevel;
-        this.probability = probability;
-    }
-
-    public PokemonNamesies getPokemonName() {
-        return this.pokemon;
-    }
-
-    public int getMinLevel() {
-        return this.minLevel;
-    }
-
-    public int getMaxLevel() {
-        return this.maxLevel;
-    }
-
-    public int getProbability() {
-        return this.probability;
+        this.pokemonMatcher = new PokemonMatcher(pokemon, level);
     }
 
     public int getLevel() {
-        if (this.level == null) {
-            this.level = RandomUtils.getRandomInt(this.minLevel, this.maxLevel);
-        }
+        return this.pokemonMatcher.getLevel();
+    }
 
-        return this.level;
+    public void setLevel(int level) {
+        this.pokemonMatcher.setLevel(level);
+    }
+
+    public void setHoldItem(ItemNamesies holdItem) {
+        this.pokemonMatcher.setHoldItem(holdItem);
+    }
+
+    public void setGender(Gender gender) {
+        this.pokemonMatcher.setGender(gender);
+    }
+
+    public void setNature(Nature nature) {
+        this.pokemonMatcher.setNature(nature);
     }
 
     public WildPokemon getWildPokemon() {
         ActivePokemon attacking = Game.getPlayer().front();
-        ActivePokemon wildPokemon = new ActivePokemon(this.pokemon, this.getLevel(), true, false);
 
-        wildPokemon.giveItem(WildHoldItem.getWildHoldItem(attacking, pokemon.getInfo().getWildItems()));
-        WildEncounterAlterer.invokeWildEncounterAlterer(attacking, wildPokemon, this);
-
-        return new WildPokemon(wildPokemon);
-    }
-
-    public static WildEncounter getWildEncounter(WildEncounter[] wildEncounters) {
-        ActivePokemon front = Game.getPlayer().front();
-        WildEncounter forcedEncounter = WildEncounterSelector.getForcedWildEncounter(front, wildEncounters);
-        if (forcedEncounter != null) {
-            return forcedEncounter;
+        if (!this.pokemonMatcher.hasHoldItem()) {
+            this.pokemonMatcher.setHoldItem(WildHoldItem.getWildHoldItem(pokemonMatcher.getNamesies(), attacking));
         }
 
-        return wildEncounters[getRandomEncounterIndex(wildEncounters)];
-    }
-
-    private static int getRandomEncounterIndex(WildEncounter[] wildEncounters) {
-        return GeneralUtils.getPercentageIndex(
-                Arrays.stream(wildEncounters)
-                      .map(WildEncounter::getProbability)
-                      .mapToInt(Integer::intValue)
-                      .toArray()
-        );
+        ActivePokemon wildPokemon = (ActivePokemon)PartyPokemon.createActivePokemon(this.pokemonMatcher, false);
+        return new WildPokemon(wildPokemon);
     }
 }

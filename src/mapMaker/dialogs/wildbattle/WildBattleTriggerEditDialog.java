@@ -2,7 +2,7 @@ package mapMaker.dialogs.wildbattle;
 
 import map.condition.Condition;
 import map.overworld.EncounterRate;
-import map.overworld.WildEncounter;
+import map.overworld.WildEncounterInfo;
 import mapMaker.dialogs.TimeOfDayPanel;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleMatcher;
@@ -117,7 +117,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
         return (int)(Math.ceil(this.wildPokemonPanels.size()/(double)POKES_PER_PAGE));
     }
 
-    private void addPokemonPanel(WildEncounter wildEncounter) {
+    private void addPokemonPanel(WildEncounterInfo wildEncounter) {
         WildPokemonDataPanel panel = new WildPokemonDataPanel(wildEncounter);
         panel.setProbabilityListener(this);
         wildPokemonPanels.add(panel);
@@ -165,7 +165,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
         int minLevel = Integer.parseInt(lowLevelFormattedTextField.getText());
         int maxLevel = Integer.parseInt(highLevelFormattedTextField.getText());
         this.updatePokemonPanelsWithLevels(minLevel, maxLevel);
-        List<WildEncounter> wildEncounters = wildPokemonPanels
+        List<WildEncounterInfo> wildEncounters = wildPokemonPanels
                 .stream()
                 .map(WildPokemonDataPanel::getWildEncounter)
                 .collect(Collectors.toList());
@@ -194,7 +194,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
         lowLevelFormattedTextField.setValue(matcher.getMinLevel());
         highLevelFormattedTextField.setValue(matcher.getMaxLevel());
 
-        for (WildEncounter wildEncounter : matcher.getWildEncounters()) {
+        for (WildEncounterInfo wildEncounter : matcher.getWildEncounters()) {
             probabilitySum += wildEncounter.getProbability();
             addPokemonPanel(wildEncounter);
         }

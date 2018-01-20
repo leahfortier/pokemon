@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import main.Game;
 import map.condition.Condition;
 import map.overworld.OverworldTool;
-import map.overworld.WildEncounter;
+import map.overworld.WildEncounterInfo;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import message.MessageUpdate;
@@ -20,7 +20,7 @@ import util.SerializationUtils;
 public class FishingTrigger extends Trigger {
     public static final String FISHING_GLOBAL = "isFishing";
 
-    private final WildEncounter[] wildEncounters;
+    private final WildEncounterInfo[] wildEncounters;
 
     public FishingTrigger(String matcherJson, String condition) {
         super(TriggerType.FISHING, matcherJson, Condition.and(condition, OverworldTool.FISH.getGlobalName()));
@@ -39,7 +39,7 @@ public class FishingTrigger extends Trigger {
                 : 50;
 
         if (RandomUtils.chanceTest(chance)) {
-            WildEncounter wildPokemon = WildEncounter.getWildEncounter(this.wildEncounters);
+            WildEncounterInfo wildPokemon = WildEncounterInfo.getWildEncounterInfo(this.wildEncounters);
             String pokemonJson = SerializationUtils.getJson(wildPokemon);
 
             GroupTriggerMatcher matcher = new GroupTriggerMatcher(

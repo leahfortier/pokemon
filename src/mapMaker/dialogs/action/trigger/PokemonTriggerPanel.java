@@ -1,6 +1,5 @@
 package mapMaker.dialogs.action.trigger;
 
-import battle.attack.AttackNamesies;
 import item.ItemNamesies;
 import pattern.PokemonMatcher;
 import pokemon.PartyPokemon;
@@ -85,7 +84,7 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
 
     @Override
     protected String getTriggerContents() {
-        PokemonMatcher matcher;
+        final PokemonMatcher matcher;
         if (isEggCheckBox.isSelected()) {
             matcher = PokemonMatcher.createEggMatcher(PokemonNamesies.getValueOf(pokemonNameField.getText()));
         } else {
@@ -94,7 +93,7 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
                     null,
                     Integer.parseInt(levelField.getText().trim()),
                     shinyCheckBox.isSelected(),
-                    new AttackNamesies[0],
+                    null,
                     itemNameField.getText().trim().isEmpty() ? null : ItemNamesies.getValueOf(itemNameField.getText())
             );
         }

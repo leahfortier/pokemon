@@ -1,6 +1,6 @@
 package mapMaker.dialogs.wildbattle;
 
-import map.overworld.WildEncounter;
+import map.overworld.WildEncounterInfo;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GUIUtils;
@@ -25,7 +25,7 @@ class WildPokemonDataPanel extends JPanel {
     private int maxLevel;
     private int probability;
 
-    WildPokemonDataPanel(WildEncounter wildEncounter) {
+    WildPokemonDataPanel(WildEncounterInfo wildEncounter) {
         selectedCheckBox = GUIUtils.createCheckBox();
         pokemonTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
             @Override
@@ -87,14 +87,14 @@ class WildPokemonDataPanel extends JPanel {
         return this.selectedCheckBox.isSelected();
     }
 
-    WildEncounter getWildEncounter() {
+    WildEncounterInfo getWildEncounter() {
         String pokemon = pokemonTextField.getText();
         String probability = probabilityFormattedTextField.getText();
 
-        return new WildEncounter(pokemon, minLevel, maxLevel, probability);
+        return new WildEncounterInfo(pokemon, minLevel, maxLevel, probability);
     }
 
-    private void load(WildEncounter wildEncounter) {
+    private void load(WildEncounterInfo wildEncounter) {
         if (wildEncounter == null) {
             return;
         }

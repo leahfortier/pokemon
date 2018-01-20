@@ -3,9 +3,11 @@ package map.triggers.battle;
 import battle.ActivePokemon;
 import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
 import battle.effect.generic.EffectInterfaces.RepellingEffect;
+import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
 import main.Game;
 import map.overworld.EncounterRate;
 import map.overworld.WildEncounter;
+import map.overworld.WildEncounterInfo;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import message.MessageUpdate;
@@ -17,7 +19,7 @@ import util.RandomUtils;
 import util.SerializationUtils;
 
 public class WalkingWildBattleTrigger extends Trigger {
-    private final WildEncounter[] wildEncounters;
+    private final WildEncounterInfo[] wildEncounters;
     private final EncounterRate encounterRate;
 
     public WalkingWildBattleTrigger(String matcherJson, String condition) {
@@ -36,7 +38,7 @@ public class WalkingWildBattleTrigger extends Trigger {
         // TODO: What's going on with this random stuff also maybe this formula should be in the EncounterRate class
         double rand = Math.random()*187.5/encounterRate.getRate()*EncounterRateMultiplier.getModifier(front);
         if (rand < 1) {
-            WildEncounter wildPokemon = getWildEncounter();
+            WildEncounter wildPokemon = getWildEncounter(front);
 
             // Maybe you won't actually fight this Pokemon after all (due to repel, cleanse tag, etc.)
             if ((wildPokemon.getLevel() <= front.getLevel() && player.getRepelInfo().isUsingRepel())
@@ -49,13 +51,17 @@ public class WalkingWildBattleTrigger extends Trigger {
         }
     }
 
-    private WildEncounter getWildEncounter() {
+    private WildEncounter getWildEncounter(ActivePokemon playerFront) {
         final WildEncounter legendaryEncounter = this.getLegendaryEncounter();
         if (legendaryEncounter != null) {
             return legendaryEncounter;
         }
 
-        return WildEncounter.getWildEncounter(this.wildEncounters);
+        WildEncounterInfo encounterInfo = WildEncounterInfo.getWildEncounterInfo(this.wildEncounters);
+        WildEncounter encounter = new WildEncounter(encounterInfo);
+        WildEncounterAlterer.invokeWildEncounterAlterer(playerFront, encounterInfo, encounter);
+
+        return encounter;
     }
 
     // Returns a legendary encounter if applicable and null otherwise

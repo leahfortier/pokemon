@@ -1,7 +1,7 @@
 package map.entity;
 
 import map.entity.EntityAction.TriggerAction;
-import map.overworld.WildEncounter;
+import map.overworld.WildEncounterInfo;
 import map.triggers.TriggerType;
 import pattern.map.FishingMatcher;
 import util.Point;
@@ -11,10 +11,10 @@ import java.util.Collections;
 
 public class FishingSpotEntity extends Entity {
 
-    private final WildEncounter[] wildEncounters;
+    private final WildEncounterInfo[] wildEncounters;
     private boolean dataCreated;
 
-    public FishingSpotEntity(Point location, String entityName, String condition, WildEncounter[] wildEncounters) {
+    public FishingSpotEntity(Point location, String entityName, String condition, WildEncounterInfo[] wildEncounters) {
         super(location, entityName, condition);
 
         this.wildEncounters = wildEncounters;

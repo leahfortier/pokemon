@@ -846,35 +846,35 @@ PowderMove:
 ***
 WildEncounterAlterer:
 	Method:
-		Header: void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData)
+		Header: void alterWildPokemon(ActivePokemon playerFront, WildEncounterInfo encounterData, WildEncounter encounter)
 		Invoke: Void
-		NonBattleEffects: attacking
+		NonBattleEffects: playerFront
 	*
 ***
 MaxLevelWildEncounterEffect:
 	Extends: WildEncounterAlterer
 	Method:
 		Override: True
-		Header: void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData)
+		Header: void alterWildPokemon(ActivePokemon playerFront, WildEncounterInfo encounterData, WildEncounter encounter)
 		Default:
 			if (RandomUtils.chanceTest(50)) {
-				wildPokemon.setLevel(encounterData.getMaxLevel());
+				encounter.setLevel(encounterData.getMaxLevel());
 			}
 			###
 	*
 ***
 RepellingEffect:
 	Method:
-		Header: boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon)
+		Header: boolean shouldRepel(ActivePokemon playerPokemon, WildEncounter wildPokemon)
 		Invoke: Check true
-		NonBattleEffects: attacking
+		NonBattleEffects: playerFront
 	*
 ***
 RepelLowLevelEncounterEffect:
 	Extends: RepellingEffect
 	Method:
 		Override: True
-		Header: boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon)
+		Header: boolean shouldRepel(ActivePokemon playerPokemon, WildEncounter wildPokemon)
 		Default:
 			return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= attacking.getLevel();
 			###

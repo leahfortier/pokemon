@@ -68,6 +68,6 @@ public final class RandomUtils {
     }
 
     public static <T> int getRandomIndex(List<T> list) {
-        return RANDOM.nextInt(list.size());
+        return getRandomInt(list.size());
     }
 }

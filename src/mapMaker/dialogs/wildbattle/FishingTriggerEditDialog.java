@@ -1,6 +1,6 @@
 package mapMaker.dialogs.wildbattle;
 
-import map.overworld.WildEncounter;
+import map.overworld.WildEncounterInfo;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.FishingMatcher;
 import pokemon.PartyPokemon;
@@ -63,7 +63,7 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
         this.load(fishingMatcher);
     }
 
-    private void addPokemonPanel(WildEncounter wildEncounter) {
+    private void addPokemonPanel(WildEncounterInfo wildEncounter) {
         wildPokemonPanels.add(new WildPokemonDataPanel(wildEncounter));
         render();
     }
@@ -97,7 +97,7 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
         int minLevel = Integer.parseInt(lowLevelFormattedTextField.getText());
         int maxLevel = Integer.parseInt(highLevelFormattedTextField.getText());
         this.updatePokemonPanelsWithLevels(minLevel, maxLevel);
-        List<WildEncounter> wildEncounters = wildPokemonPanels
+        List<WildEncounterInfo> wildEncounters = wildPokemonPanels
                 .stream()
                 .map(WildPokemonDataPanel::getWildEncounter)
                 .collect(Collectors.toList());
@@ -113,7 +113,7 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
         nameTextField.setText(matcher.getBasicName());
         lowLevelFormattedTextField.setValue(matcher.getMinLevel());
         highLevelFormattedTextField.setValue(matcher.getMaxLevel());
-        for (WildEncounter wildEncounter : matcher.getWildEncounters()) {
+        for (WildEncounterInfo wildEncounter : matcher.getWildEncounters()) {
             addPokemonPanel(wildEncounter);
         }
     }

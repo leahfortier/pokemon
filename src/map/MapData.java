@@ -11,7 +11,7 @@ import map.entity.FishingSpotEntity;
 import map.entity.ItemEntity;
 import map.entity.MiscEntity;
 import map.overworld.WalkType;
-import map.overworld.WildEncounter;
+import map.overworld.WildEncounterInfo;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
 import map.triggers.TriggerType;
@@ -122,7 +122,7 @@ public class MapData {
                 for (WildBattleMatcher wildBattleMatcher : matcher.getWildBattles()) {
                     Trigger trigger = TriggerType.WALKING_WILD_BATTLE.createTrigger(SerializationUtils.getJson(wildBattleMatcher), wildBattleMatcher.getCondition());
                     triggers.put(getMapIndex(point), trigger.getName());
-                    for (WildEncounter wildEncounter : wildBattleMatcher.getWildEncounters()) {
+                    for (WildEncounterInfo wildEncounter : wildBattleMatcher.getWildEncounters()) {
                         this.getArea(point).addPokemon(wildEncounter.getPokemonName());
                     }
                 }

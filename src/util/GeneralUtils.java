@@ -8,12 +8,28 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class GeneralUtils {
 
     // Util class -- cannot be instantiated
     private GeneralUtils() {}
+
+    public static <T> T getPercentageValue(List<T> values, Function<T, Integer> chanceMapper) {
+        int[] chances = new int[values.size()];
+        int sum = 0;
+        for (int i = 0; i < values.size(); i++) {
+            chances[i] = chanceMapper.apply(values.get(i));
+            sum += chances[i];
+        }
+
+        if (sum != 100) {
+            Global.error("Chances array is improperly formatted.");
+        }
+
+        return values.get(getPercentageIndex(chances));
+    }
 
     public static int getPercentageIndex(int[] chances) {
         int sum = 0;

@@ -1,7 +1,7 @@
 package pattern.map;
 
 import map.overworld.EncounterRate;
-import map.overworld.WildEncounter;
+import map.overworld.WildEncounterInfo;
 import pattern.generic.TriggerMatcher;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 public class WildBattleMatcher extends TriggerMatcher {
     private String name;
     private EncounterRate encounterRate;
-    private WildEncounter[] wildPokemon;
+    private WildEncounterInfo[] wildPokemon;
     private int minLevel;
     private int maxLevel;
 
@@ -18,12 +18,12 @@ public class WildBattleMatcher extends TriggerMatcher {
             EncounterRate encounterRate,
             int minLevel,
             int maxLevel,
-            List<WildEncounter> wildEncounters) {
+            List<WildEncounterInfo> wildEncounters) {
         this.name = name;
         this.encounterRate = encounterRate;
         this.minLevel = minLevel;
         this.maxLevel = maxLevel;
-        this.wildPokemon = wildEncounters.toArray(new WildEncounter[0]);
+        this.wildPokemon = wildEncounters.toArray(new WildEncounterInfo[0]);
     }
 
     public String getName() {
@@ -38,7 +38,7 @@ public class WildBattleMatcher extends TriggerMatcher {
         return this.encounterRate;
     }
 
-    public WildEncounter[] getWildEncounters() {
+    public WildEncounterInfo[] getWildEncounters() {
         return this.wildPokemon;
     }
 

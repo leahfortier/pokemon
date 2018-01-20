@@ -2,8 +2,8 @@ package map.overworld;
 
 import battle.ActivePokemon;
 import item.ItemNamesies;
-import item.hold.HoldItem;
 import main.Global;
+import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import util.RandomUtils;
 
@@ -15,11 +15,16 @@ import java.util.Scanner;
 
 public class WildHoldItem implements Serializable {
     private static final long serialVersionUID = 1L;
-    private final HoldItem item;
+
+    private final ItemNamesies item;
     private final Chance chance;
 
     private WildHoldItem(int chance, ItemNamesies itemName) {
-        this.item = (HoldItem)itemName.getItem();
+        if (!itemName.getItem().isHoldable()) {
+            Global.error("Cannot have a wild hold item that is not holdable: " + itemName.getName());
+        }
+
+        this.item = itemName;
         this.chance = Chance.getChance(chance);
     }
 
@@ -39,13 +44,15 @@ public class WildHoldItem implements Serializable {
         return list;
     }
 
-    static HoldItem getWildHoldItem(ActivePokemon attacking, List<WildHoldItem> list) {
-        boolean compoundEyes = attacking.hasAbility(AbilityNamesies.COMPOUNDEYES);
+    static ItemNamesies getWildHoldItem(PokemonNamesies pokemon, ActivePokemon playerFront) {
+        boolean compoundEyes = playerFront.hasAbility(AbilityNamesies.COMPOUNDEYES);
         int random = RandomUtils.getRandomInt(100);
         int sum = 0;
 
         // Sort with rarest items first
+        List<WildHoldItem> list = pokemon.getInfo().getWildItems();
         list.sort(Comparator.comparingInt(wildHoldItem -> wildHoldItem.chance.chance));
+
         for (WildHoldItem wildHoldItem : list) {
             Chance chance = wildHoldItem.chance;
             sum += compoundEyes ? chance.increasedChance : chance.chance;
@@ -54,7 +61,12 @@ public class WildHoldItem implements Serializable {
             }
         }
 
-        return (HoldItem)ItemNamesies.NO_ITEM.getItem();
+        return ItemNamesies.NO_ITEM;
+    }
+
+    @Override
+    public String toString() {
+        return this.item.getName() + " " + this.chance;
     }
 
     private enum Chance {
@@ -71,6 +83,11 @@ public class WildHoldItem implements Serializable {
         Chance(int chance, int increasedChance) {
             this.chance = chance;
             this.increasedChance = increasedChance;
+        }
+
+        @Override
+        public String toString() {
+            return this.chance + "% (" + this.increasedChance + "%)";
         }
 
         static Chance getChance(int chance) {

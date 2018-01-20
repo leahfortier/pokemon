@@ -4,6 +4,8 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import item.ItemNamesies;
 import main.Global;
+import pokemon.Gender;
+import pokemon.Nature;
 import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import util.GeneralUtils;
@@ -24,6 +26,12 @@ public class PokemonMatcher {
     private List<AttackNamesies> moves;
     private Boolean isEgg;
     private ItemNamesies holdItem;
+    private Gender gender;
+    private Nature nature;
+
+    public PokemonMatcher(PokemonNamesies namesies, int level) {
+        this(namesies, null, level, false, null, null);
+    }
 
     public PokemonMatcher(PokemonNamesies namesies, String nickname, int level, boolean isShiny, AttackNamesies[] moves, ItemNamesies holdItem) {
         if (namesies == null) {
@@ -40,9 +48,11 @@ public class PokemonMatcher {
         this.isShiny = isShiny;
         this.holdItem = holdItem;
 
-        this.moves = Arrays.stream(moves).filter(Objects::nonNull).collect(Collectors.toList());
-        if (this.moves.isEmpty()) {
-            this.moves = null;
+        if (moves != null) {
+            this.moves = Arrays.stream(moves).filter(Objects::nonNull).collect(Collectors.toList());
+            if (this.moves.isEmpty()) {
+                this.moves = null;
+            }
         }
     }
 
@@ -56,8 +66,16 @@ public class PokemonMatcher {
         return this.nickname == null ? StringUtils.empty() : this.nickname;
     }
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     public int getLevel() {
         return GeneralUtils.getIntegerValue(this.level);
+    }
+
+    public boolean isEgg() {
+        return GeneralUtils.getBooleanValue(this.isEgg);
     }
 
     public boolean isStarterEgg() {
@@ -85,8 +103,8 @@ public class PokemonMatcher {
         return this.moves;
     }
 
-    public boolean isEgg() {
-        return GeneralUtils.getBooleanValue(this.isEgg);
+    public void setHoldItem(ItemNamesies holdItem) {
+        this.holdItem = holdItem;
     }
 
     public boolean hasHoldItem() {
@@ -95,6 +113,30 @@ public class PokemonMatcher {
 
     public ItemNamesies getHoldItem() {
         return this.holdItem;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public boolean hasGender() {
+        return this.gender != null;
+    }
+
+    public Gender getGender() {
+        return this.gender;
+    }
+
+    public void setNature(Nature nature) {
+        this.nature = nature;
+    }
+
+    public boolean hasNature() {
+        return this.nature != null;
+    }
+
+    public Nature getNature() {
+        return this.nature;
     }
 
     public static PokemonMatcher createEggMatcher(PokemonNamesies eggy) {

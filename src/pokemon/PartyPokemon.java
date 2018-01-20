@@ -285,7 +285,7 @@ public abstract class PartyPokemon implements Serializable {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    protected void setGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -325,7 +325,7 @@ public abstract class PartyPokemon implements Serializable {
         return nature;
     }
 
-    public void setNature(Nature nature) {
+    protected void setNature(Nature nature) {
         this.nature = nature;
         this.setStats();
     }
@@ -513,15 +513,6 @@ public abstract class PartyPokemon implements Serializable {
         return level;
     }
 
-    // TODO: Deprecate this -- total EXP and god knows what else are FUCKED
-    @Deprecated
-    public int[] setLevel(int level) {
-        this.level = Math.min(MAX_LEVEL, Math.max(level, 1));
-
-        // Update stats and return gain
-        return this.setStats();
-    }
-
     private int totalEVs() {
         int sum = 0;
         for (int EV : EVs) {
@@ -631,6 +622,14 @@ public abstract class PartyPokemon implements Serializable {
 
         if (pokemonMatcher.hasHoldItem()) {
             pokemon.giveItem(pokemonMatcher.getHoldItem());
+        }
+
+        if (pokemonMatcher.hasGender()) {
+            pokemon.setGender(pokemonMatcher.getGender());
+        }
+
+        if (pokemonMatcher.hasNature()) {
+            pokemon.setNature(pokemonMatcher.getNature());
         }
 
         return pokemon;

@@ -23,13 +23,11 @@ public class WildTest extends BaseTest {
         compoundEyesTest(PokemonNamesies.CLEFAIRY, false, false);
     }
 
-    private void compoundEyesTest(PokemonNamesies pokemonNamesies, boolean alwaysItem, boolean compoundEyesAlwaysItem) {
-        WildEncounter wildEncounter = new WildEncounter(pokemonNamesies, 5);
-
+    private void compoundEyesTest(PokemonNamesies pokemon, boolean alwaysItem, boolean compoundEyesAlwaysItem) {
         Player player = new TestCharacter(TestPokemon.newPlayerPokemon(PokemonNamesies.BULBASAUR));
         Assert.assertTrue(Game.getPlayer() == player);
 
-        Set<ItemNamesies> wildHoldItems = pokemonNamesies
+        Set<ItemNamesies> wildHoldItems = pokemon
                 .getInfo()
                 .getWildItems()
                 .stream()
@@ -47,26 +45,30 @@ public class WildTest extends BaseTest {
         }
 
         for (int i = 0; i < 1000; i++) {
-            player.front().setAbility(AbilityNamesies.NO_ABILITY);
-            ActivePokemon wildPokemon = wildEncounter.getWildPokemon().front();
-            ItemNamesies holdItem = wildPokemon.getActualHeldItem().namesies();
-            noAbilitySet.remove(holdItem);
-            Assert.assertTrue(
-                    holdItem.name(),
-                    wildHoldItems.contains(holdItem) || (!alwaysItem && holdItem == ItemNamesies.NO_ITEM)
-            );
-
-            player.front().setAbility(AbilityNamesies.COMPOUNDEYES);
-            wildPokemon = wildEncounter.getWildPokemon().front();
-            holdItem = wildPokemon.getActualHeldItem().namesies();
-            compoundEyesSet.remove(holdItem);
-            Assert.assertTrue(
-                    holdItem.name(),
-                    wildHoldItems.contains(holdItem) || (!compoundEyesAlwaysItem && holdItem == ItemNamesies.NO_ITEM)
-            );
+            checkItem(player, pokemon, AbilityNamesies.NO_ABILITY, wildHoldItems, noAbilitySet, alwaysItem);
+            checkItem(player, pokemon, AbilityNamesies.COMPOUNDEYES, wildHoldItems, compoundEyesSet, compoundEyesAlwaysItem);
         }
 
         Assert.assertTrue(noAbilitySet.toString(), noAbilitySet.isEmpty());
         Assert.assertTrue(compoundEyesSet.toString(), compoundEyesSet.isEmpty());
+    }
+
+    private void checkItem(Player player,
+                           PokemonNamesies pokemon,
+                           AbilityNamesies ability,
+                           Set<ItemNamesies> allItems,
+                           Set<ItemNamesies> unseen,
+                           boolean alwaysItem) {
+        player.front().setAbility(ability);
+
+        WildEncounter wildEncounter = new WildEncounter(pokemon, 5);
+        ActivePokemon wildPokemon = wildEncounter.getWildPokemon().front();
+
+        ItemNamesies holdItem = wildPokemon.getActualHeldItem().namesies();
+        unseen.remove(holdItem);
+        Assert.assertTrue(
+                holdItem.name(),
+                allItems.contains(holdItem) || (!alwaysItem && holdItem == ItemNamesies.NO_ITEM)
+        );
     }
 }

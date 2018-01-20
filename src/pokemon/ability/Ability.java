@@ -86,6 +86,7 @@ import item.hold.SpecialTypeItem.PlateItem;
 import main.Game;
 import main.Global;
 import map.overworld.WildEncounter;
+import map.overworld.WildEncounterInfo;
 import map.weather.WeatherState;
 import message.MessageUpdate;
 import message.Messages;
@@ -647,9 +648,9 @@ public abstract class Ability implements Serializable, AbilityHolder {
         @Override
         public void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
             if (RandomUtils.chanceTest(2, 3)) {
-                Gender opposite = attacking.getGender().getOppositeGender();
-                if (opposite.genderApplies(wildPokemon.getPokemonInfo())) {
-                    wildPokemon.setGender(opposite);
+                Gender opposite = playerFront.getGender().getOppositeGender();
+                if (opposite.genderApplies(encounter.getPokemonName().getInfo())) {
+                    encounter.setGender(opposite);
                 }
             }
         }
@@ -1057,7 +1058,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         @Override
         public void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
             if (RandomUtils.chanceTest(50)) {
-                wildPokemon.setNature(attacking.getNature());
+                encounter.setNature(playerFront.getNature());
             }
         }
     }

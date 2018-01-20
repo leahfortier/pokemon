@@ -11,6 +11,7 @@ import item.ItemNamesies;
 import main.Global;
 import map.overworld.TerrainType;
 import map.overworld.WildEncounter;
+import map.overworld.WildEncounterInfo;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.PokemonInfo;
@@ -1484,18 +1485,18 @@ public final class EffectInterfaces {
     }
 
     public interface WildEncounterAlterer {
-        void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData);
+        void alterWildPokemon(ActivePokemon playerFront, WildEncounterInfo encounterData, WildEncounter encounter);
 
-        static void invokeWildEncounterAlterer(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
+        static void invokeWildEncounterAlterer(ActivePokemon playerFront, WildEncounterInfo encounterData, WildEncounter encounter) {
             List<Object> invokees = new ArrayList<>();
-            invokees.add(attacking.getAbility());
-            invokees.add(attacking.getActualHeldItem());
+            invokees.add(playerFront.getAbility());
+            invokees.add(playerFront.getActualHeldItem());
 
             for (Object invokee : invokees) {
                 if (invokee instanceof WildEncounterAlterer && Effect.isActiveEffect(invokee)) {
 
                     WildEncounterAlterer effect = (WildEncounterAlterer)invokee;
-                    effect.alterWildPokemon(attacking, wildPokemon, encounterData);
+                    effect.alterWildPokemon(playerFront, encounterData, encounter);
                 }
             }
         }
@@ -1504,26 +1505,26 @@ public final class EffectInterfaces {
     public interface MaxLevelWildEncounterEffect extends WildEncounterAlterer {
 
         @Override
-        default void alterWildPokemon(ActivePokemon attacking, ActivePokemon wildPokemon, WildEncounter encounterData) {
+        default void alterWildPokemon(ActivePokemon playerFront, WildEncounterInfo encounterData, WildEncounter encounter) {
             if (RandomUtils.chanceTest(50)) {
-                wildPokemon.setLevel(encounterData.getMaxLevel());
+                encounter.setLevel(encounterData.getMaxLevel());
             }
         }
     }
 
     public interface RepellingEffect {
-        boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon);
+        boolean shouldRepel(ActivePokemon playerPokemon, WildEncounter wildPokemon);
 
-        static boolean checkRepellingEffect(ActivePokemon attacking, WildEncounter wildPokemon) {
+        static boolean checkRepellingEffect(ActivePokemon playerPokemon, WildEncounter wildPokemon) {
             List<Object> invokees = new ArrayList<>();
-            invokees.add(attacking.getAbility());
-            invokees.add(attacking.getActualHeldItem());
+            invokees.add(playerFront.getAbility());
+            invokees.add(playerFront.getActualHeldItem());
 
             for (Object invokee : invokees) {
                 if (invokee instanceof RepellingEffect && Effect.isActiveEffect(invokee)) {
 
                     RepellingEffect effect = (RepellingEffect)invokee;
-                    if (effect.shouldRepel(attacking, wildPokemon)) {
+                    if (effect.shouldRepel(playerPokemon, wildPokemon)) {
                         return true;
                     }
                 }
@@ -1536,7 +1537,7 @@ public final class EffectInterfaces {
     public interface RepelLowLevelEncounterEffect extends RepellingEffect {
 
         @Override
-        default boolean shouldRepel(ActivePokemon attacking, WildEncounter wildPokemon) {
+        default boolean shouldRepel(ActivePokemon playerPokemon, WildEncounter wildPokemon) {
             return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= attacking.getLevel();
         }
     }

@@ -10,7 +10,6 @@ import trainer.player.Player;
 import util.SerializationUtils;
 
 public class WildBattleTrigger extends Trigger {
-
     private final WildEncounter wildEncounter;
 
     public WildBattleTrigger(String matcherJson, String condition) {

@@ -3,7 +3,7 @@ package test.maps;
 import map.MapDataType;
 import map.area.AreaData;
 import map.overworld.WalkType;
-import map.overworld.WildEncounter;
+import map.overworld.WildEncounterInfo;
 import mapMaker.dialogs.action.ActionType;
 import mapMaker.dialogs.action.trigger.TriggerActionType;
 import org.junit.Assert;
@@ -98,10 +98,10 @@ public class MapTest extends BaseTest {
         for (TestMap map : maps) {
             for (WildBattleAreaMatcher areaMatcher : map.getMatcher().getWildBattles()) {
                 for (WildBattleMatcher wildBattleMatcher : areaMatcher.getWildBattles()) {
-                    WildEncounter[] wildEncounters = wildBattleMatcher.getWildEncounters();
+                    WildEncounterInfo[] wildEncounters = wildBattleMatcher.getWildEncounters();
 
                     int totalProbability = 0;
-                    for (WildEncounter wildEncounter : wildEncounters) {
+                    for (WildEncounterInfo wildEncounter : wildEncounters) {
                         totalProbability += wildEncounter.getProbability();
                     }
 
@@ -113,10 +113,10 @@ public class MapTest extends BaseTest {
             }
 
             for (FishingMatcher fishingMatcher : map.getMatcher().getFishingSpots()) {
-                WildEncounter[] wildEncounters = fishingMatcher.getWildEncounters();
+                WildEncounterInfo[] wildEncounters = fishingMatcher.getWildEncounters();
 
                 int totalProbability = 0;
-                for (WildEncounter wildEncounter : wildEncounters) {
+                for (WildEncounterInfo wildEncounter : wildEncounters) {
                     totalProbability += wildEncounter.getProbability();
                 }
 
