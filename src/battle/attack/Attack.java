@@ -6142,7 +6142,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            BarrierEffect.breakBarriers(b, user);
+            BarrierEffect.breakBarriers(b, user, victim);
         }
     }
 
@@ -6158,7 +6158,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            BarrierEffect.breakBarriers(b, user);
+            BarrierEffect.breakBarriers(b, user, victim);
         }
     }
 

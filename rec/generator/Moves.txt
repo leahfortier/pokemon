@@ -3379,9 +3379,7 @@ Brick Break:
 	Pow: 75
 	Acc: 100
 	Cat: Physical
-	UniqueEffects:
-		BarrierEffect.breakBarriers(b, user);
-		###
+	BarrierBreaker: True
 *
 Psychic Fangs:
 	Desc: The user bites the target with its psychic capabilities. This can also destroy Light Screen and Reflect.
@@ -3390,9 +3388,7 @@ Psychic Fangs:
 	Cat: Physical
 	Acc: 100
 	Pow: 85
-	UniqueEffects:
-		BarrierEffect.breakBarriers(b, user);
-		###
+	BarrierBreaker: True
 *
 High Jump Kick:
 	Desc: The target is attacked with a knee kick from a jump. If it misses, the user is hurt instead.

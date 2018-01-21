@@ -16,6 +16,7 @@ import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.AttackingNoAdvantageChanger;
+import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
@@ -30,6 +31,7 @@ import battle.effect.generic.EffectInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
+import battle.effect.generic.EffectInterfaces.EffectReleaser;
 import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
@@ -184,9 +186,9 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, Team.class, Trainer.class, WildPokemon.class);
             checkInstance(classy, Opponent.class, EnemyTrainer.class, WildPokemon.class);
 
-            // Pokemon and team effects only
-            checkInstance(classy, RapidSpinRelease.class, PokemonEffect.class, TeamEffect.class);
-            checkInstance(classy, DefogRelease.class, PokemonEffect.class, TeamEffect.class);
+            // Effect Releaser -- Pokemon and team effects only and not directly inherited
+            checkInstance(classy, EffectReleaser.class, PokemonEffect.class, TeamEffect.class);
+            checkInstance(classy, EffectReleaser.class, DefogRelease.class, RapidSpinRelease.class, BarrierEffect.class);
 
             // MultiTurnMove should not be directly inherited
             checkInstance(classy, MultiTurnMove.class, ChargingMove.class, RechargingMove.class);

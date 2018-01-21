@@ -47,7 +47,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-    static class Reflect extends TeamEffect implements BarrierEffect, SimpleStatModifyingEffect {
+    static class Reflect extends TeamEffect implements BarrierEffect, DefogRelease, SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
         Reflect() {
@@ -60,9 +60,8 @@ public abstract class TeamEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void breakBarrier(Battle b, ActivePokemon breaker) {
-            Messages.add(breaker.getName() + " broke the reflect barrier!");
-            b.getEffects(!breaker.isPlayer()).remove(this);
+        public String getBreakMessage(ActivePokemon breaker) {
+            return breaker.getName() + " broke the reflect barrier!";
         }
 
         @Override
@@ -104,7 +103,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         }
     }
 
-    static class LightScreen extends TeamEffect implements BarrierEffect, SimpleStatModifyingEffect {
+    static class LightScreen extends TeamEffect implements BarrierEffect, DefogRelease, SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
         LightScreen() {
@@ -117,9 +116,8 @@ public abstract class TeamEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void breakBarrier(Battle b, ActivePokemon breaker) {
-            Messages.add(breaker.getName() + " broke the light screen barrier!");
-            b.getEffects(!breaker.isPlayer()).remove(this);
+        public String getBreakMessage(ActivePokemon breaker) {
+            return breaker.getName() + " broke the light screen barrier!";
         }
 
         @Override
@@ -194,7 +192,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         }
     }
 
-    static class AuroraVeil extends TeamEffect implements SimpleStatModifyingEffect {
+    static class AuroraVeil extends TeamEffect implements BarrierEffect, DefogRelease, SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
         AuroraVeil() {
@@ -207,11 +205,8 @@ public abstract class TeamEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
-            if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-                Effect.getEffect(b.getEffects(victim), this.namesies).setTurns(8);
-            }
+        public String getBreakMessage(ActivePokemon breaker) {
+            return breaker.getName() + " broke the aurora veil barrier!";
         }
 
         @Override
@@ -225,8 +220,26 @@ public abstract class TeamEffect extends Effect implements Serializable {
         }
 
         @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
+        }
+
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
+        }
+
+        @Override
+        public String getDefogReleaseMessage(ActivePokemon released) {
+            return "The effects of aurora veil faded.";
+        }
+
+        @Override
+        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            super.cast(b, caster, victim, source, printCast);
+            if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
+                Effect.getEffect(b.getEffects(victim), this.namesies).setTurns(8);
+            }
         }
 
         @Override
@@ -253,7 +266,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
             return "The sticky web spun away!";
         }
 
@@ -294,7 +307,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
             return "The floating rocks spun away!";
         }
 
@@ -342,7 +355,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
             return "The toxic spikes dispersed!";
         }
 
@@ -397,7 +410,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
             return "The spikes dispersed!";
         }
 

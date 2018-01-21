@@ -258,36 +258,45 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface BarrierEffect extends DefogRelease {
-        void breakBarrier(Battle b, ActivePokemon breaker);
+    public interface EffectReleaser {
 
-        static void breakBarriers(Battle b, ActivePokemon breaker) {
-            List<Object> invokees = b.getEffectsList(b.getOtherPokemon(breaker));
+        default void release(Battle b, ActivePokemon released, String releaseMessage) {
+            Messages.add(releaseMessage);
+
+            if (this instanceof PokemonEffect) {
+                released.removeEffect((PokemonEffect)this);
+            } else if (this instanceof TeamEffect) {
+                b.getTrainer(released).removeEffect((TeamEffect)this);
+            } else {
+                Global.error("Invalid release object " + this.getClass().getSimpleName());
+            }
+        }
+    }
+
+    public interface BarrierEffect extends EffectReleaser {
+        String getBreakMessage(ActivePokemon breaker);
+
+        default void breakBarrier(Battle b, ActivePokemon breaker, ActivePokemon broken) {
+            this.release(b, broken, this.getBreakMessage(breaker));
+        }
+
+        static void breakBarriers(Battle b, ActivePokemon breaker, ActivePokemon broken) {
+            List<Object> invokees = b.getEffectsList(broken);
             for (Object invokee : invokees) {
                 if (invokee instanceof BarrierEffect && Effect.isActiveEffect(invokee)) {
 
                     BarrierEffect effect = (BarrierEffect)invokee;
-                    effect.breakBarrier(b, breaker);
+                    effect.breakBarrier(b, breaker, broken);
                 }
             }
         }
     }
 
-    public interface DefogRelease {
+    public interface DefogRelease extends EffectReleaser {
         String getDefogReleaseMessage(ActivePokemon released);
 
         default void releaseDefog(Battle b, ActivePokemon released) {
-            Messages.add(this.getDefogReleaseMessage(released));
-
-            if (this instanceof PokemonEffect) {
-                PokemonEffect effect = (PokemonEffect)this;
-                released.removeEffect(effect);
-            } else if (this instanceof TeamEffect) {
-                TeamEffect effect = (TeamEffect)this;
-                b.getTrainer(released).removeEffect(effect);
-            } else {
-                Global.error("Invalid defog release object " + this.getClass().getSimpleName());
-            }
+            this.release(b, released, this.getDefogReleaseMessage(released));
         }
 
         static void release(Battle b, ActivePokemon released) {
@@ -302,30 +311,20 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface RapidSpinRelease {
-        String getRapidSpinReleaseMessage(ActivePokemon releaser);
+    public interface RapidSpinRelease extends EffectReleaser {
+        String getRapidSpinReleaseMessage(ActivePokemon released);
 
-        default void releaseRapidSpin(Battle b, ActivePokemon releaser) {
-            Messages.add(this.getRapidSpinReleaseMessage(releaser));
-
-            if (this instanceof PokemonEffect) {
-                PokemonEffect effect = (PokemonEffect)this;
-                releaser.removeEffect(effect);
-            } else if (this instanceof TeamEffect) {
-                TeamEffect effect = (TeamEffect)this;
-                b.getTrainer(releaser).removeEffect(effect);
-            } else {
-                Global.error("Invalid rapid spin release object " + this.getClass().getSimpleName());
-            }
+        default void releaseRapidSpin(Battle b, ActivePokemon released) {
+            this.release(b, released, this.getRapidSpinReleaseMessage(released));
         }
 
-        static void release(Battle b, ActivePokemon releaser) {
-            List<Object> invokees = b.getEffectsList(releaser);
+        static void release(Battle b, ActivePokemon released) {
+            List<Object> invokees = b.getEffectsList(released);
             for (Object invokee : invokees) {
                 if (invokee instanceof RapidSpinRelease && Effect.isActiveEffect(invokee)) {
 
                     RapidSpinRelease effect = (RapidSpinRelease)invokee;
-                    effect.releaseRapidSpin(b, releaser);
+                    effect.releaseRapidSpin(b, released);
                 }
             }
         }

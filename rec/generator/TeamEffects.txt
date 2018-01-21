@@ -17,12 +17,10 @@ Failure:
 ***
 
 Reflect:
-	Int: BarrierEffect
-	Barrier: Defense reflect
+	SimpleBarrier: Defense reflect
 *
 LightScreen:
-	Int: BarrierEffect
-	Barrier: Sp_Defense light screen
+	SimpleBarrier: Sp_Defense light screen
 *
 Tailwind:
 	ToModify: Speed
@@ -33,13 +31,11 @@ Tailwind:
 *
 AuroraVeil:
 	TwoModify: Defense Sp_Defense
-	SimpleModifier: 2 
-	SubsideMessage: "The effects of aurora veil faded."
 	CastMessage: user.getName() + " is covered by an aurora veil!"
-	LightClay: True
+    Barrier: aurora veil
 *
 StickyWeb:
-	Int: EntryEffect, RapidSpinRelease, DefogRelease
+	Int: EntryEffect
 	Enter:
 		if (enterer.isLevitating(b)) {
 			return;
@@ -56,7 +52,7 @@ StickyWeb:
 	Defog: "The sticky web dispersed!"
 *
 StealthRock:
-	Int: EntryEffect, RapidSpinRelease, DefogRelease
+	Int: EntryEffect
 	Enter: 
 		if (enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
 			return;
@@ -70,7 +66,7 @@ StealthRock:
 	Defog: "The floating rocks dispersed!"
 *
 ToxicSpikes:
-	Int: EntryEffect, RapidSpinRelease, DefogRelease
+	Int: EntryEffect
 	Field: 
 		private int layers;
 		###
@@ -108,7 +104,7 @@ ToxicSpikes:
 	Defog: "The toxic spikes dispersed!"
 *
 Spikes:
-	Int: EntryEffect, RapidSpinRelease, DefogRelease
+	Int: EntryEffect
 	Field: 
 		private int layers;
 		###

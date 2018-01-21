@@ -20,7 +20,7 @@ Failure:
 ***
 
 LeechSeed:
-	Int: EndTurnEffect, RapidSpinRelease, PassableEffect, SapHealthEffect
+	Int: EndTurnEffect, PassableEffect, SapHealthEffect
 	FailType: Grass
 	FailMessage:
 		if (victim.isType(b, Type.GRASS)) {
@@ -39,7 +39,7 @@ LeechSeed:
 		Messages.add(this.getSapMessage(victim));
 		this.sapHealth(b, b.getOtherPokemon(victim), victim, victim.reduceHealthFraction(b, 1/8.0), false);
 		###
-	RapidSpin: releaser.getName() + " was released from leech seed!"
+	RapidSpin: released.getName() + " was released from leech seed!"
 	OnApplyDamage:
 		// Need to override this to not sap health when applying damage
 		###
@@ -220,7 +220,6 @@ SelfConfusion:
 *
 Safeguard:
 	Defog: "The effects of " + released.getName() + "'s Safeguard faded."
-	Int: DefogRelease
 	SafeguardEffect: Safeguard
 *
 GuardSpecial:
@@ -901,7 +900,7 @@ Mist:
 	CastMessage: user.getName() + " shrouded itself in mist!"
 	SubsideMessage: "The mist faded."
 	Defog: "The mist faded."
-	Int: StatProtectingEffect, DefogRelease
+	Int: StatProtectingEffect
 	StatProtectingEffect:
 		return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
 		###

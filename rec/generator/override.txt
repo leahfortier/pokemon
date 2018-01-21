@@ -348,20 +348,25 @@ LightClay:
 	AddMapField: MinTurns: 5
 	AddMapField: MaxTurns: 5
 *
+BarrierBreaker:
+    AddMapField: UniqueEffects:
+		BarrierEffect.breakBarriers(b, user, victim);
+		###
+*
+SimpleBarrier:
+    AddMapField: ToModify: {1}
+    AddMapField: CastMessage: user.getName() + " raised the " + Stat.{11}.getName().toLowerCase() + " of its team!"
+    AddMapField: Barrier: {2-}
+*
 Barrier:
 	AddMapField: LightClay: True
-	AddMapField: ToModify: {1}
 	AddMapField: ModifyMultiplier: 2 !opp.hasAbility(AbilityNamesies.INFILTRATOR)
-	AddMapField: CastMessage: user.getName() + " raised the " + Stat.{11}.getName().toLowerCase() + " of its team!"
-	AddMapField: SubsideMessage: "The effects of {2-} faded."
-	AddMapField: Defog: "The effects of {2-} faded."
-	AddMapField: BreakBarrier: {2-}
-*
-BreakBarrier:
-	Header: void breakBarrier(Battle b, ActivePokemon breaker)
+	AddMapField: SubsideMessage: "The effects of {0} faded."
+	AddMapField: Defog: "The effects of {0} faded."
+    AddInterface: BarrierEffect
+    Header: String getBreakMessage(ActivePokemon breaker)
 	Body:
-		Messages.add(breaker.getName() + " broke the {0} barrier!");
-		b.getEffects(!breaker.isPlayer()).remove(this);
+		return breaker.getName() + " broke the {0} barrier!";
 		###
 *
 SpecificAbilityChange:
@@ -514,13 +519,12 @@ PartialTrap:
 		###
 	AddInterface: EndTurnEffect
 	AddInterface: TrappingEffect
-	AddInterface: RapidSpinRelease
 	AddMapField: MinTurns: 4
 	AddMapField: MaxTurns: 5
 	AddMapField: NextTurnSubside: True
 	AddMapField: CastMessage: {2-}
 	AddMapField: SubsideMessage: victim.getName() + " is no longer trapped by {1_}."
-	AddMapField: RapidSpin: releaser.getName() + " was released from {1_}!"
+	AddMapField: RapidSpin: released.getName() + " was released from {1_}!"
 	AddMapField: TrappingMessage: trapped.getName() + " cannot be recalled due to {1_}!"
 	AddMapField: ApplyEndTurn:
 		if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
@@ -530,7 +534,8 @@ PartialTrap:
 		Messages.add(victim.getName() + " is hurt by {1_}!");
 
 		// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-		victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+        double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
+		victim.reduceHealthFraction(b, fraction);
 		###
 *
 SafeguardEffect:
@@ -618,7 +623,8 @@ StatRatio:
 		###
 *
 RapidSpin:
-	Header: String getRapidSpinReleaseMessage(ActivePokemon releaser)
+    AddInterface: RapidSpinRelease
+	Header: String getRapidSpinReleaseMessage(ActivePokemon released)
 	Body:
 		return {0};
 		###
@@ -788,6 +794,7 @@ FailMessage:
 		###
 *
 Defog:
+    AddInterface: DefogRelease
 	Header: String getDefogReleaseMessage(ActivePokemon released)
 	Body:
 		return {0};

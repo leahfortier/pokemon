@@ -95,7 +95,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-    static class LeechSeed extends PokemonEffect implements EndTurnEffect, RapidSpinRelease, PassableEffect, SapHealthEffect {
+    static class LeechSeed extends PokemonEffect implements EndTurnEffect, PassableEffect, SapHealthEffect, RapidSpinRelease {
         private static final long serialVersionUID = 1L;
 
         LeechSeed() {
@@ -124,8 +124,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
-            return releaser.getName() + " was released from leech seed!";
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+            return released.getName() + " was released from leech seed!";
         }
 
         @Override
@@ -207,8 +207,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
-            return releaser.getName() + " was released from fire spin!";
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+            return released.getName() + " was released from fire spin!";
         }
 
         @Override
@@ -220,7 +220,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             Messages.add(victim.getName() + " is hurt by fire spin!");
 
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
+            victim.reduceHealthFraction(b, fraction);
         }
 
         @Override
@@ -260,8 +261,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
-            return releaser.getName() + " was released from infestation!";
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+            return released.getName() + " was released from infestation!";
         }
 
         @Override
@@ -273,7 +274,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             Messages.add(victim.getName() + " is hurt by infestation!");
 
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
+            victim.reduceHealthFraction(b, fraction);
         }
 
         @Override
@@ -313,8 +315,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
-            return releaser.getName() + " was released from magma storm!";
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+            return released.getName() + " was released from magma storm!";
         }
 
         @Override
@@ -326,7 +328,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             Messages.add(victim.getName() + " is hurt by magma storm!");
 
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
+            victim.reduceHealthFraction(b, fraction);
         }
 
         @Override
@@ -366,8 +369,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
-            return releaser.getName() + " was released from clamp!";
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+            return released.getName() + " was released from clamp!";
         }
 
         @Override
@@ -379,7 +382,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             Messages.add(victim.getName() + " is hurt by clamp!");
 
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
+            victim.reduceHealthFraction(b, fraction);
         }
 
         @Override
@@ -419,8 +423,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
-            return releaser.getName() + " was released from whirlpool!";
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+            return released.getName() + " was released from whirlpool!";
         }
 
         @Override
@@ -432,7 +436,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             Messages.add(victim.getName() + " is hurt by whirlpool!");
 
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
+            victim.reduceHealthFraction(b, fraction);
         }
 
         @Override
@@ -472,8 +477,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
-            return releaser.getName() + " was released from wrap!";
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+            return released.getName() + " was released from wrap!";
         }
 
         @Override
@@ -485,7 +490,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             Messages.add(victim.getName() + " is hurt by wrap!");
 
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
+            victim.reduceHealthFraction(b, fraction);
         }
 
         @Override
@@ -525,8 +531,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
-            return releaser.getName() + " was released from bind!";
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+            return released.getName() + " was released from bind!";
         }
 
         @Override
@@ -538,7 +544,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             Messages.add(victim.getName() + " is hurt by bind!");
 
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
+            victim.reduceHealthFraction(b, fraction);
         }
 
         @Override
@@ -578,8 +585,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon releaser) {
-            return releaser.getName() + " was released from sand tomb!";
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+            return released.getName() + " was released from sand tomb!";
         }
 
         @Override
@@ -591,7 +598,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             Messages.add(victim.getName() + " is hurt by sand tomb!");
 
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            victim.reduceHealthFraction(b, b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0);
+            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
+            victim.reduceHealthFraction(b, fraction);
         }
 
         @Override
@@ -970,7 +978,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
     }
 
-    static class Safeguard extends PokemonEffect implements DefogRelease, StatusPreventionEffect {
+    static class Safeguard extends PokemonEffect implements StatusPreventionEffect, DefogRelease {
         private static final long serialVersionUID = 1L;
 
         Safeguard() {
