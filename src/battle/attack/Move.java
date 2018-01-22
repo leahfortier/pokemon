@@ -19,7 +19,7 @@ public class Move implements Serializable {
 
     public static final int MAX_MOVES = 4;
 
-    private final AttackNamesies attack;
+    private Attack attack;
     private int maxPP;
     private int pp;
 
@@ -29,16 +29,16 @@ public class Move implements Serializable {
     private Type type;
 
     public Move(AttackNamesies attackNamesies) {
-        this(attackNamesies.getAttack());
+        this(attackNamesies.getNewAttack());
     }
 
     public Move(Attack attack) {
-        this.attack = attack.namesies();
+        this.attack = attack;
 
         maxPP = attack.getPP();
         pp = maxPP;
 
-        resetReady();
+        resetAttack();
         used = false;
 
         type = attack.getActualType();
@@ -53,8 +53,8 @@ public class Move implements Serializable {
         pp = maxPP;
     }
 
-    public void resetReady() {
-        Attack attack = this.getAttack();
+    public void resetAttack() {
+        this.attack = this.getAttack().namesies().getNewAttack();
         ready = !(attack instanceof MultiTurnMove) || ((MultiTurnMove)attack).chargesFirst();
     }
 
@@ -77,7 +77,7 @@ public class Move implements Serializable {
     }
 
     public Attack getAttack() {
-        return attack.getAttack();
+        return attack;
     }
 
     public void setUsed() {
@@ -138,7 +138,7 @@ public class Move implements Serializable {
 
         List<Move> usable = getUsableMoves(b, p);
         if (usable.size() == 0) {
-            return new Move(AttackNamesies.STRUGGLE.getAttack());
+            return new Move(AttackNamesies.STRUGGLE);
         }
 
         return chooseMove(b, usable);

@@ -469,7 +469,7 @@ class PokedexView extends View {
                     LevelUpMove levelUpMove = movesIterator.next();
 
                     int level = levelUpMove.getLevel();
-                    Attack attack = levelUpMove.getMove().getAttack();
+                    Attack attack = levelUpMove.getMove().getNewAttack();
 
                     final String levelString;
                     if (level == PokemonInfo.EVOLUTION_LEVEL_LEARNED) {

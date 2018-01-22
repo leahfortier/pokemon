@@ -202,7 +202,7 @@ public class Breeding {
 
         for (int i = 0; i < numMoves; i++) {
             final AttackNamesies namesies = babyMovesNamesies.get(startingIndex + i);
-            babyMoves.add(new Move(namesies.getAttack()));
+            babyMoves.add(new Move(namesies));
         }
 
         return babyMoves;

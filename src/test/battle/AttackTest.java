@@ -29,7 +29,7 @@ public class AttackTest extends BaseTest {
     @Test
     public void moveTypeTest() {
         for (AttackNamesies attackNamesies : AttackNamesies.values()) {
-            Attack attack = attackNamesies.getAttack();
+            Attack attack = attackNamesies.getNewAttack();
 
             // Status moves cannot be physical contact moves
             Assert.assertFalse(attack.getName(), attack.isStatusMove() && attack.isMoveType(MoveType.PHYSICAL_CONTACT));
@@ -49,7 +49,7 @@ public class AttackTest extends BaseTest {
     @Test
     public void baseAccuracyTest() {
         for (AttackNamesies attackNamesies : AttackNamesies.values()) {
-            Attack attack = attackNamesies.getAttack();
+            Attack attack = attackNamesies.getNewAttack();
 
             try {
                 // If the accuracy string is "--", then the move should ALWAYS hit

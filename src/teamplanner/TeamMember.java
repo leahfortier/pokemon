@@ -19,7 +19,7 @@ class TeamMember {
     private static final List<Double> coverageValues = Arrays.asList(4.0, 2.0, 0.5, 0.0);
 
     final PokemonInfo pokemonSpecies;
-    final List<Attack> moveList;
+    final List<AttackNamesies> moveList;
     final int[][] coverageCount;
 
     private final String nature;
@@ -38,8 +38,8 @@ class TeamMember {
         this.coverageCount = new int[types.length][types.length];
 
         for (String moveName : moves) {
-            Attack attack = AttackNamesies.getValueOf(moveName).getAttack();
-            this.moveList.add(attack);
+            Attack attack = AttackNamesies.getValueOf(moveName).getNewAttack();
+            this.moveList.add(attack.namesies());
 
             Type attackType = attack.getActualType();
             for (Type firstType : types) {
@@ -110,13 +110,12 @@ class TeamMember {
         out.appendIf(item != null, "\n\tItem: " + item);
 
         out.append("\n\tMoves:");
-        for (Attack attack : moveList) {
+        for (AttackNamesies attack : moveList) {
             out.append("\n\t\t" + attack.getName() + " -- ");
 
             List<String> learnMethods = new ArrayList<>();
-            AttackNamesies namesies = attack.namesies();
 
-            Integer levelLearned = pokemonSpecies.levelLearned(namesies);
+            Integer levelLearned = pokemonSpecies.levelLearned(attack);
             if (levelLearned != null) {
                 if (levelLearned == 0) {
                     learnMethods.add("Heart Scale");
@@ -127,7 +126,7 @@ class TeamMember {
                 }
             }
 
-            if (pokemonSpecies.canLearnByBreeding(namesies)) {
+            if (pokemonSpecies.canLearnByBreeding(attack)) {
                 learnMethods.add("Egg Move/TM move/Move Tutor");
             }
 

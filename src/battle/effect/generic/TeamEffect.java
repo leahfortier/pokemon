@@ -519,7 +519,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         public void subside(Battle b, ActivePokemon p) {
             Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 
-            Attack attack = AttackNamesies.FUTURE_SIGHT.getAttack();
+            Attack attack = AttackNamesies.FUTURE_SIGHT.getNewAttack();
 
             // Don't do anything for moves that are uneffective
             if (!attack.effective(b, theSeeer, p)) {
@@ -559,7 +559,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         public void subside(Battle b, ActivePokemon p) {
             Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 
-            Attack attack = AttackNamesies.DOOM_DESIRE.getAttack();
+            Attack attack = AttackNamesies.DOOM_DESIRE.getNewAttack();
 
             // Don't do anything for moves that are uneffective
             if (!attack.effective(b, theSeeer, p)) {

@@ -48,6 +48,6 @@ public interface TechnicalMachine extends MoveUseItem {
 
     @Override
     default String getImageName() {
-        return this.getAttack().getAttack().getActualType().getName().toLowerCase() + "tm";
+        return this.getAttack().getNewAttack().getActualType().getName().toLowerCase() + "tm";
     }
 }

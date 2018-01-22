@@ -659,8 +659,6 @@ import battle.attack.Attack.ZingZap;
 import main.Global;
 import util.StringUtils;
 
-import java.util.EnumMap;
-import java.util.Map;
 import java.util.function.Supplier;
 
 public enum AttackNamesies {
@@ -1324,8 +1322,6 @@ public enum AttackNamesies {
 
     // EVERYTHING ABOVE IS GENERATED ###
 
-    private static final Map<AttackNamesies, Attack> attackMap = new EnumMap<>(AttackNamesies.class);
-
     private final String name;
     private final Supplier<Attack> attackCreator;
 
@@ -1338,12 +1334,8 @@ public enum AttackNamesies {
         return this.name;
     }
 
-    public Attack getAttack() {
-        if (!attackMap.containsKey(this)) {
-            attackMap.put(this, this.attackCreator.get());
-        }
-
-        return attackMap.get(this);
+    public Attack getNewAttack() {
+        return this.attackCreator.get();
     }
 
     public static AttackNamesies tryValueOf(String name) {

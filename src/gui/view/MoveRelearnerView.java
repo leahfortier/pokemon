@@ -115,7 +115,7 @@ public class MoveRelearnerView extends View {
                 MOVES_PER_PAGE, 1,
                 0,
                 new int[] { MOVES_PER_PAGE, MOVES_LEFT_ARROW, MOVES_PER_PAGE, MOVES_RIGHT_ARROW },
-                index -> selectedMove = learnableMoves.isEmpty() ? null : GeneralUtils.getPageValue(learnableMoves, pageNum, MOVES_PER_PAGE, index).getAttack()
+                index -> selectedMove = learnableMoves.isEmpty() ? null : GeneralUtils.getPageValue(learnableMoves, pageNum, MOVES_PER_PAGE, index).getNewAttack()
         );
 
         pokemonButtons = partyPanel.getButtons(
@@ -252,7 +252,7 @@ public class MoveRelearnerView extends View {
 
         Iterator<AttackNamesies> iterator = this.getIterator();
         for (int i = 0; i < MOVES_PER_PAGE && iterator.hasNext(); i++) {
-            Attack attack = iterator.next().getAttack();
+            Attack attack = iterator.next().getNewAttack();
             Button moveButton = moveButtons[i];
             moveButton.blackOutline(g);
             new DrawPanel(moveButton).drawLeftLabel(g, 18, attack.getName());
@@ -354,7 +354,7 @@ public class MoveRelearnerView extends View {
 
         PartyPokemon selected = this.team.get(index);
         this.learnableMoves = selected.isEgg() ? new ArrayList<>() : selected.getLearnableMoves();
-        this.selectedMove = this.learnableMoves.isEmpty() ? null : this.learnableMoves.get(0).getAttack();
+        this.selectedMove = this.learnableMoves.isEmpty() ? null : this.learnableMoves.get(0).getNewAttack();
         this.pageNum = 0;
 
         this.updateActiveButtons();

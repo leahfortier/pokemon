@@ -489,7 +489,7 @@ public class ActivePokemon extends PartyPokemon {
     public void resetAttributes() {
         // Reset ability and each move
         this.setAbility(this.getActualAbility().namesies());
-        this.getActualMoves().forEach(Move::resetReady);
+        this.getActualMoves().forEach(Move::resetAttack);
 
         effects = new ArrayList<>();
         stages = new Stages(this);

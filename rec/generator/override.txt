@@ -1445,7 +1445,7 @@ FutureAttackEffect:
 	AddMapField: Subside:
 		Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 
-		Attack attack = AttackNamesies.{00}.getAttack();
+		Attack attack = AttackNamesies.{00}.getNewAttack();
 
 		// Don't do anything for moves that are uneffective
 		if (!attack.effective(b, theSeeer, p)) {

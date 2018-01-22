@@ -192,7 +192,7 @@ class PokeGen {
             String className = StringUtils.getClassName(attackName);
 
             AttackNamesies namesies = AttackNamesies.getValueOf(attackName);
-            Attack attack = namesies.getAttack();
+            Attack attack = namesies.getNewAttack();
 
             String itemName = attackName + " TM";
             className += "TM";

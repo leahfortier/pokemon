@@ -3262,7 +3262,7 @@ public abstract class Attack implements Serializable {
             int index;
             do {
                 index = RandomUtils.getRandomIndex(attackNames);
-                metronomeMove = attackNames[index].getAttack();
+                metronomeMove = attackNames[index].getNewAttack();
             } while (metronomeMove.isMoveType(MoveType.METRONOMELESS));
         }
 
