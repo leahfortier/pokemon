@@ -30,10 +30,6 @@ public class ClassFields {
         this.className = className;
     }
 
-    public void add(String fieldName, String value) {
-        fields.put(fieldName, value);
-    }
-
     public boolean contains(String fieldName) {
         return fields.containsKey(fieldName);
     }
@@ -50,17 +46,28 @@ public class ClassFields {
         return fields.remove(fieldName);
     }
 
-    void addNew(String fieldName, String value) {
-        if (this.contains(fieldName)) {
-            Global.error("Repeated field " + fieldName + " for " + this.className);
+    public void addNew(String fieldKey, String addFieldValue) {
+        String mapField = fields.get(fieldKey);
+        if (mapField == null) {
+            mapField = addFieldValue;
+        } else if (fieldKey.equals("MoveType")) {
+            mapField += ", " + addFieldValue;
+        } else if (fieldKey.equals("Applies")) {
+            mapField += " && " + addFieldValue;
+        } else if (fieldKey.equals("Field") || fieldKey.equals("UniqueEffects")) {
+            mapField += addFieldValue;
+        } else if (!fieldKey.equals("Price") && className.equals("RazzBerry")) {
+            // Don't worry about the special case here ^^
+            Global.error("Unauthorized duplicate field " + fieldKey + " in class " + className + ".\n" +
+                                 "Prev:\n" + mapField + "\nNew:\n" + addFieldValue);
         }
 
-        this.add(fieldName, value);
+        fields.put(fieldKey, mapField);
     }
 
     String getRequired(String fieldName) {
         if (!this.contains(fieldName)) {
-            Global.error("Missing required field " + fieldName);
+            Global.error("Missing required field " + fieldName + " for class " + className);
         }
 
         return this.get(fieldName);

@@ -71,8 +71,8 @@ class PokeGen {
 
         fields.setClassName(className);
 
-        fields.add("Namesies", name);
-        fields.add("Index", index + "");
+        fields.addNew("Namesies", name);
+        fields.addNew("Index", index + "");
 
         // NumTurns matches to both MinTurns and MaxTurns
         fields.getPerformAndRemove("NumTurns", numTurns -> {
@@ -175,6 +175,10 @@ class PokeGen {
             nextInterfaces = new ArrayList<>();
         }
 
+        if (this.getPhysicalContact(fields)) {
+            fields.addNew("MoveType", MoveType.PHYSICAL_CONTACT.name());
+        }
+
         if (failureInfo != null) {
             methods.appendPrefix(failureInfo.writeFailure(fields, this.currentGen.getSuperClassName(), inputFormatter));
         }
@@ -182,7 +186,7 @@ class PokeGen {
         return methods.toString();
     }
 
-    private void addTMs(StringAppender classes) {
+    private void addTMs(StringAppender tmClasses) {
         if (this.currentGen != Generator.ITEM_GEN) {
             Global.error("Can only add TMs for the Item class");
         }
@@ -200,13 +204,13 @@ class PokeGen {
 
             ClassFields fields = new ClassFields();
             fields.setClassName(className);
-            fields.add("Namesies", attackName + "_TM");
-            fields.add("Desc", attack.getDescription());
+            fields.addNew("Namesies", attackName + "_TM");
+            fields.addNew("Desc", attack.getDescription());
 
-            fields.add("Int", TechnicalMachine.class.getSimpleName());
-            fields.add("TM", namesies.name());
+            fields.addNew("Int", TechnicalMachine.class.getSimpleName());
+            fields.addNew("TM", namesies.name());
 
-            classes.append(createClass(itemName, className, fields));
+            tmClasses.append(createClass(itemName, className, fields));
         }
     }
 
@@ -239,8 +243,6 @@ class PokeGen {
     }
 
     private String getConstructor(ClassFields fields) {
-        boolean physicalContact = getPhysicalContact(fields);
-
         StringAppender constructor = new StringAppender();
         constructor.appendLine("super(" + getInternalConstructorValues(fields) + ");");
 
@@ -262,14 +264,6 @@ class PokeGen {
                            .append(";\n");
             }
         });
-
-        if (physicalContact) {
-            constructor.appendFormat(
-                    "super.moveTypes.add(%s.%s);\n",
-                    MoveType.class.getSimpleName(),
-                    MoveType.PHYSICAL_CONTACT
-            );
-        }
 
         fields.getPerformAndRemove("Activate", constructor::append);
 

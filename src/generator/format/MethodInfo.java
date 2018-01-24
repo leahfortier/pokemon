@@ -172,23 +172,7 @@ public class MethodInfo {
             for (Map.Entry<String, String> addField : methodInfo.addMapFields) {
                 String fieldKey = addField.getKey();
                 String addFieldValue = inputFormatter.replaceBody(addField.getValue(), fieldValue, className, superClass);
-
-                String mapField = fields.get(fieldKey);
-                if (mapField == null) {
-                    mapField = addFieldValue;
-                } else if (fieldKey.equals("MoveType")) {
-                    mapField += ", " + addFieldValue;
-                } else if (fieldKey.equals("Applies")) {
-                    mapField += " && " + addFieldValue;
-                } else if (fieldKey.equals("Field") || fieldKey.equals("UniqueEffects")) {
-                    mapField += addFieldValue;
-                } else if (!fieldKey.equals("Price") && className.equals("RazzBerry")) {
-                    // Don't worry about the special case here ^^
-                    Global.error("Unauthorized duplicate field " + fieldKey + " in class " + className + ".\n" +
-                                         "Prev:\n" + mapField + "\nNew:\n" + addFieldValue);
-                }
-
-                fields.add(fieldKey, mapField);
+                fields.addNew(fieldKey, addFieldValue);
             }
 
             fields.remove(fieldName);

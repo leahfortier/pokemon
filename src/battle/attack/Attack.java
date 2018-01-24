@@ -1145,8 +1145,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.RAPID_SPIN, Type.NORMAL, MoveCategory.PHYSICAL, 40, "A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.");
             super.power = 20;
             super.accuracy = 100;
-            super.selfTarget = true;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.selfTarget = true;
         }
 
         @Override
@@ -1336,9 +1336,9 @@ public abstract class Attack implements Serializable {
             super.power = 130;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
         @Override
@@ -1433,8 +1433,8 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
             super.effects.add(EffectNamesies.SELF_CONFUSION);
             super.moveTypes.add(MoveType.DANCE);
-            super.selfTarget = true;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.selfTarget = true;
         }
     }
 
@@ -1446,8 +1446,8 @@ public abstract class Attack implements Serializable {
             super.power = 120;
             super.accuracy = 100;
             super.effects.add(EffectNamesies.SELF_CONFUSION);
-            super.selfTarget = true;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.selfTarget = true;
         }
     }
 
@@ -1914,8 +1914,8 @@ public abstract class Attack implements Serializable {
             super.power = 20;
             super.accuracy = 100;
             super.effects.add(EffectNamesies.RAGING);
-            super.selfTarget = true;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.selfTarget = true;
         }
 
         @Override
@@ -2073,8 +2073,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.QUICK_ATTACK, Type.NORMAL, MoveCategory.PHYSICAL, 30, "The user lunges at the target at a speed that makes it almost invisible. It is sure to strike first.");
             super.power = 40;
             super.accuracy = 100;
-            super.priority = 1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = 1;
         }
     }
 
@@ -2262,8 +2262,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.SUCKER_PUNCH, Type.DARK, MoveCategory.PHYSICAL, 5, "This move enables the user to attack first. It fails if the foe is not readying an attack, however.");
             super.power = 70;
             super.accuracy = 100;
-            super.priority = 1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = 1;
         }
 
         @Override
@@ -2281,8 +2281,8 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
             super.effectChance = 20;
             super.moveTypes.add(MoveType.BITING);
-            super.statChanges[Stat.DEFENSE.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.DEFENSE.index()] = -1;
         }
     }
 
@@ -2911,8 +2911,8 @@ public abstract class Attack implements Serializable {
             super.power = 75;
             super.accuracy = 95;
             super.effectChance = 50;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.DEFENSE.index()] = -1;
         }
     }
 
@@ -3054,10 +3054,10 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.SUPERPOWER, Type.FIGHTING, MoveCategory.PHYSICAL, 5, "The user attacks the target with great power. However, it also lowers the user's Attack and Defense.");
             super.power = 120;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.ATTACK.index()] = -1;
             super.statChanges[Stat.DEFENSE.index()] = -1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 
@@ -3371,9 +3371,9 @@ public abstract class Attack implements Serializable {
             super.accuracy = 90;
             super.effectChance = 20;
             super.moveTypes.add(MoveType.PUNCHING);
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.ATTACK.index()] = 1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 
@@ -4000,8 +4000,8 @@ public abstract class Attack implements Serializable {
             super.power = 40;
             super.accuracy = 100;
             super.effects.add(EffectNamesies.FLINCH);
-            super.priority = 3;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = 3;
         }
 
         @Override
@@ -4161,8 +4161,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.AQUA_JET, Type.WATER, MoveCategory.PHYSICAL, 20, "The user lunges at the target at a speed that makes it almost invisible. It is sure to strike first.");
             super.power = 40;
             super.accuracy = 100;
-            super.priority = 1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = 1;
         }
     }
 
@@ -4290,10 +4290,10 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.CLOSE_COMBAT, Type.FIGHTING, MoveCategory.PHYSICAL, 5, "The user fights the target up close without guarding itself. It also cuts the user's Defense and Sp. Def.");
             super.power = 120;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.DEFENSE.index()] = -1;
             super.statChanges[Stat.SP_DEFENSE.index()] = -1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 
@@ -4304,10 +4304,10 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.DRAGON_ASCENT, Type.FLYING, MoveCategory.PHYSICAL, 5, "After soaring upward, the user attacks its target by dropping out of the sky at high speeds, although it lowers its own Defense and Sp. Def in the process.");
             super.power = 120;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.DEFENSE.index()] = -1;
             super.statChanges[Stat.SP_DEFENSE.index()] = -1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 
@@ -4360,8 +4360,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.EXTREME_SPEED, Type.NORMAL, MoveCategory.PHYSICAL, 5, "The user charges the target at blinding speed. This attack always goes before any other move.");
             super.power = 80;
             super.accuracy = 100;
-            super.priority = 2;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = 2;
         }
     }
 
@@ -4586,8 +4586,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.LOW_SWEEP, Type.FIGHTING, MoveCategory.PHYSICAL, 20, "The user attacks the target's legs swiftly, reducing the target's Speed stat.");
             super.power = 65;
             super.accuracy = 100;
-            super.statChanges[Stat.SPEED.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.SPEED.index()] = -1;
         }
     }
 
@@ -4598,8 +4598,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.REVENGE, Type.FIGHTING, MoveCategory.PHYSICAL, 10, "An attack move that inflicts double the damage if the user has been hurt by the opponent in the same turn.");
             super.power = 60;
             super.accuracy = 100;
-            super.priority = -4;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = -4;
         }
 
         @Override
@@ -4614,8 +4614,8 @@ public abstract class Attack implements Serializable {
         VitalThrow() {
             super(AttackNamesies.VITAL_THROW, Type.FIGHTING, MoveCategory.PHYSICAL, 10, "The user attacks last. In return, this throw move is guaranteed not to miss.");
             super.power = 70;
-            super.priority = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = -1;
         }
     }
 
@@ -4677,8 +4677,8 @@ public abstract class Attack implements Serializable {
             super.power = 10;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.statChanges[Stat.SPEED.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.SPEED.index()] = -1;
         }
     }
 
@@ -4903,9 +4903,9 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.FLAME_CHARGE, Type.FIRE, MoveCategory.PHYSICAL, 20, "The user cloaks itself with flame and attacks. Building up more power, it raises the user's Speed stat.");
             super.power = 50;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.SPEED.index()] = 1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 
@@ -5428,8 +5428,8 @@ public abstract class Attack implements Serializable {
             super.power = 75;
             super.accuracy = 95;
             super.effectChance = 50;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.DEFENSE.index()] = -1;
         }
     }
 
@@ -5683,8 +5683,8 @@ public abstract class Attack implements Serializable {
             super.power = 100;
             super.accuracy = 75;
             super.effectChance = 30;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.DEFENSE.index()] = -1;
         }
     }
 
@@ -5748,9 +5748,9 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.METAL_CLAW, Type.STEEL, MoveCategory.PHYSICAL, 35, "The target is raked with steel claws. It may also raise the user's Attack stat.");
             super.power = 50;
             super.accuracy = 95;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.ATTACK.index()] = 1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 
@@ -5877,8 +5877,8 @@ public abstract class Attack implements Serializable {
             super.accuracy = 100;
             super.moveTypes.add(MoveType.ASSISTLESS);
             super.moveTypes.add(MoveType.METRONOMELESS);
-            super.priority = -5;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = -5;
         }
 
         @Override
@@ -6255,8 +6255,8 @@ public abstract class Attack implements Serializable {
             super.power = 40;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PUNCHING);
-            super.priority = 1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = 1;
         }
     }
 
@@ -6268,8 +6268,8 @@ public abstract class Attack implements Serializable {
             super.power = 40;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PUNCHING);
-            super.priority = 1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = 1;
         }
     }
 
@@ -6368,9 +6368,9 @@ public abstract class Attack implements Serializable {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.PUNCHING);
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.priority = -3;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
         @Override
@@ -6536,9 +6536,9 @@ public abstract class Attack implements Serializable {
             super.power = 100;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.PUNCHING);
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.SPEED.index()] = -1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 
@@ -6550,9 +6550,9 @@ public abstract class Attack implements Serializable {
             super.power = 100;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.PUNCHING);
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.SPEED.index()] = -1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 
@@ -6633,8 +6633,8 @@ public abstract class Attack implements Serializable {
             super.power = 120;
             super.accuracy = 100;
             super.effects.add(EffectNamesies.SELF_CONFUSION);
-            super.selfTarget = true;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.selfTarget = true;
         }
     }
 
@@ -6898,8 +6898,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.AVALANCHE, Type.ICE, MoveCategory.PHYSICAL, 10, "An attack move that inflicts double the damage if the user has been hurt by the target in the same turn.");
             super.power = 60;
             super.accuracy = 100;
-            super.priority = -4;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = -4;
         }
 
         @Override
@@ -7399,8 +7399,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.SHADOW_SNEAK, Type.GHOST, MoveCategory.PHYSICAL, 30, "The user extends its shadow and attacks the target from behind. This move always goes first.");
             super.power = 40;
             super.accuracy = 100;
-            super.priority = 1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = 1;
         }
     }
 
@@ -7539,9 +7539,9 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.BIDE, Type.NORMAL, MoveCategory.PHYSICAL, 10, "The user endures attacks for two turns, then strikes back to cause double the damage taken.");
             super.effects.add(EffectNamesies.BIDE);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.priority = 1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
         @Override
@@ -7712,9 +7712,9 @@ public abstract class Attack implements Serializable {
             super.power = 70;
             super.accuracy = 90;
             super.effectChance = 10;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 
@@ -8716,8 +8716,8 @@ public abstract class Attack implements Serializable {
             super.power = 40;
             super.accuracy = 100;
             super.effectChance = 50;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.DEFENSE.index()] = -1;
         }
     }
 
@@ -9286,8 +9286,8 @@ public abstract class Attack implements Serializable {
             super.power = 60;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.ASSISTLESS);
-            super.priority = -6;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = -6;
         }
 
         @Override
@@ -9658,8 +9658,8 @@ public abstract class Attack implements Serializable {
             super.power = 60;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.ASSISTLESS);
-            super.priority = -6;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = -6;
         }
 
         @Override
@@ -9933,11 +9933,11 @@ public abstract class Attack implements Serializable {
             super.power = 180;
             super.accuracy = 95;
             super.moveTypes.add(MoveType.METRONOMELESS);
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.DEFENSE.index()] = -1;
             super.statChanges[Stat.SP_DEFENSE.index()] = -1;
             super.statChanges[Stat.SPEED.index()] = -1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 
@@ -9990,9 +9990,9 @@ public abstract class Attack implements Serializable {
             super.power = 100;
             super.accuracy = 95;
             super.effectChance = 50;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 
@@ -10004,8 +10004,8 @@ public abstract class Attack implements Serializable {
             super.power = 95;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.statChanges[Stat.SP_ATTACK.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.SP_ATTACK.index()] = -1;
         }
     }
 
@@ -10111,8 +10111,8 @@ public abstract class Attack implements Serializable {
             super.power = 90;
             super.accuracy = 90;
             super.effectChance = 10;
-            super.statChanges[Stat.ATTACK.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.ATTACK.index()] = -1;
         }
     }
 
@@ -10579,9 +10579,9 @@ public abstract class Attack implements Serializable {
             super.power = 40;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PUNCHING);
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.ATTACK.index()] = 1;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 
@@ -10708,8 +10708,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.FIRST_IMPRESSION, Type.BUG, MoveCategory.PHYSICAL, 10, "Although this move has great power, it only works the first turn the user is in battle.");
             super.power = 90;
             super.accuracy = 100;
-            super.priority = 2;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = 2;
         }
 
         @Override
@@ -10894,8 +10894,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.LUNGE, Type.BUG, MoveCategory.PHYSICAL, 15, "The user makes a lunge at the target, attacking with full force. This also lowers the target's Attack stat.");
             super.power = 80;
             super.accuracy = 100;
-            super.statChanges[Stat.ATTACK.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.ATTACK.index()] = -1;
         }
     }
 
@@ -10906,8 +10906,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.FIRE_LASH, Type.FIRE, MoveCategory.PHYSICAL, 15, "The user strikes the target with a burning lash. This also lowers the target's Defense stat.");
             super.power = 80;
             super.accuracy = 100;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.DEFENSE.index()] = -1;
         }
     }
 
@@ -11021,8 +11021,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.TROP_KICK, Type.GRASS, MoveCategory.PHYSICAL, 15, "The user lands an intense kick of tropical origins on the target. This also lowers the target's Attack stat.");
             super.power = 70;
             super.accuracy = 100;
-            super.statChanges[Stat.ATTACK.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.ATTACK.index()] = -1;
         }
     }
 
@@ -11081,8 +11081,8 @@ public abstract class Attack implements Serializable {
             super.power = 85;
             super.accuracy = 100;
             super.effectChance = 20;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.DEFENSE.index()] = -1;
         }
     }
 
@@ -11093,8 +11093,8 @@ public abstract class Attack implements Serializable {
             super(AttackNamesies.ACCELEROCK, Type.ROCK, MoveCategory.PHYSICAL, 20, "The user smashes into the target at high speed. This move always goes first.");
             super.power = 40;
             super.accuracy = 100;
-            super.priority = 1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.priority = 1;
         }
     }
 
@@ -11106,8 +11106,8 @@ public abstract class Attack implements Serializable {
             super.power = 85;
             super.accuracy = 100;
             super.effectChance = 20;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.DEFENSE.index()] = -1;
         }
     }
 
