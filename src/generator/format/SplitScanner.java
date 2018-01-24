@@ -45,4 +45,8 @@ public class SplitScanner {
     public void restoreTempIndex() {
         this.index = tempIndex;
     }
+
+    public void reset() {
+        this.index = 0;
+    }
 }

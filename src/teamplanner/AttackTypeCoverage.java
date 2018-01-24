@@ -1,6 +1,7 @@
 package teamplanner;
 
 import battle.attack.Attack;
+import battle.attack.AttackNamesies;
 import type.Type;
 import util.StringAppender;
 
@@ -32,7 +33,8 @@ class AttackTypeCoverage {
     }
 
     static void addCoverage(AttackTypeCoverage[] coverage, TeamMember member) {
-        for (Attack attack : member.moveList) {
+        for (AttackNamesies attackNamesies : member.moveList) {
+            Attack attack = attackNamesies.getNewAttack();
             if (!attack.isStatusMove()) {
                 Type attackType = attack.getActualType();
                 coverage[attackType.getIndex()].moves.add(member.pokemonSpecies.getName() + " - " + attack.getName());

@@ -100,7 +100,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     }
 
     private final int number;
-    private final String name;
     private final PokemonNamesies namesies;
     private final int[] baseStats;
     private final int baseExp;
@@ -142,8 +141,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
                         List<LevelUpMove> levelUpMoves,
                         Set<AttackNamesies> learnableMoves) {
         this.number = number;
-        this.name = name;
-        this.namesies = PokemonNamesies.getValueOf(this.name);
+        this.namesies = PokemonNamesies.getValueOf(name);
         this.baseStats = baseStats;
         this.baseExp = baseExp;
         this.growthRate = GrowthRate.valueOf(growthRate);
@@ -245,7 +243,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     }
 
     public String getName() {
-        return name;
+        return namesies.getName();
     }
 
     public int getNumber() {
