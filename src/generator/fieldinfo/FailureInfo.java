@@ -55,22 +55,19 @@ public class FailureInfo extends InfoList {
             }
 
             final String[] fieldValues;
-            if (fieldInfo.list) {
+            if (fieldInfo.multiple) {
                 fieldValues = fieldValue.split(",");
             } else {
                 fieldValues = new String[] { fieldValue };
             }
 
-            fieldInfo.split.setTempIndex();
             for (String value : fieldValues) {
-                String pairValue = inputFormatter.getValue(fieldInfo.split, value, fieldInfo.fieldType);
+                String pairValue = fieldInfo.getValue(value);
 
-                String body = fieldInfo.split.getRemaining();
+                String body = fieldInfo.remaining;
                 body = inputFormatter.replaceBody(body, pairValue, fields.getClassName(), superClass);
 
                 failure.appendDelimiter(" || ", body);
-
-                fieldInfo.split.restoreTempIndex();
             }
 
             fields.remove(fieldInfo.fieldName);

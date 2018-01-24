@@ -9,7 +9,9 @@ import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
+import generator.fieldinfo.ConstructorInfo;
 import generator.fieldinfo.FailureInfo;
+import generator.fieldinfo.InfoList;
 import generator.format.InputFormatter;
 import generator.format.MethodInfo;
 import item.Item;
@@ -21,21 +23,19 @@ import pokemon.ability.AbilityNamesies;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
+import util.GeneralUtils;
 import util.StringAppender;
 import util.StringUtils;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
 
 class PokeGen {
-    private static List<Entry<String, String>> constructorKeys;
-    private static List<Entry<String, String>> fieldKeys;
+    private static ConstructorInfo constructorInfo;
     private static FailureInfo failureInfo;
 
     private final InputFormatter inputFormatter;
@@ -88,7 +88,7 @@ class PokeGen {
 
         List<String> interfaces = new ArrayList<>();
         String additionalMethods = getAdditionalMethods(fields, interfaces);
-        String constructor = getConstructor(fields);
+        String constructor = constructorInfo.getConstructor(fields);
         String implementsString = inputFormatter.getImplementsString(interfaces);
         String extraFields = fields.getAndRemove("Field");
         String headerComments = fields.getAndRemove("Comments");
@@ -222,63 +222,18 @@ class PokeGen {
 
             String physicalContactField = fields.getAndRemove("PhysicalContact");
             if (physicalContactField != null) {
-                physicalContact = Boolean.parseBoolean(physicalContactField);
+                physicalContact = GeneralUtils.parseBoolean(physicalContactField);
             }
         }
 
         return physicalContact;
     }
 
-    // For the super call inside the class constructor, returns the comma-separated field values
-    // (It's what's inside the super parentheses)
-    // Example: 'AttackNamesies.ATTACK_NAME, "Attack Description", 35, Type.NORMAL, MoveCategory.PHYSICAL'
-    private String getInternalConstructorValues(ClassFields fields) {
-        StringAppender superValues = new StringAppender();
-        for (Entry<String, String> pair : constructorKeys) {
-            String value = inputFormatter.getConstructorValue(pair, fields);
-            superValues.appendDelimiter(", ", value);
-        }
-
-        return superValues.toString();
-    }
-
-    private String getConstructor(ClassFields fields) {
-        StringAppender constructor = new StringAppender();
-        constructor.appendLine("super(" + getInternalConstructorValues(fields) + ");");
-
-        for (Entry<String, String> pair : fieldKeys) {
-            String fieldKey = pair.getKey();
-            fields.getPerformAndRemove(
-                    fieldKey,
-                    value -> constructor.appendLine(inputFormatter.getAssignment(pair.getValue(), value))
-            );
-        }
-
-        fields.getPerformAndRemove("StatChange", value -> {
-            String[] mcSplit = value.split(" ");
-            for (int i = 0, index = 1; i < Integer.parseInt(mcSplit[0]); i++) {
-                constructor.append("super.statChanges[Stat.")
-                           .append(mcSplit[index++].toUpperCase())
-                           .append(".index()] = ")
-                           .append(mcSplit[index++])
-                           .append(";\n");
-            }
-        });
-
-        fields.getPerformAndRemove("Activate", constructor::append);
-
-        return new MethodInfo(
-                fields.getClassName() + "()",
-                constructor.toString(),
-                AccessModifier.PACKAGE_PRIVATE
-        ).writeFunction();
-    }
-
     private static void readFileFormat(Scanner in) {
-        constructorKeys = new ArrayList<>();
-        fieldKeys = new ArrayList<>();
         failureInfo = null;
 
+        InfoList superInfo = new InfoList(null);
+        InfoList fieldKeys = new InfoList(null);
         while (in.hasNext()) {
             String line = in.nextLine().trim();
 
@@ -288,39 +243,27 @@ class PokeGen {
             }
 
             if (line.equals("***")) {
-                return;
+                break;
             }
 
             String formatType = line.replace(":", "");
-            if (formatType.equals("Failure")) {
-                failureInfo = new FailureInfo(in);
-                continue;
-            }
-
-            while (in.hasNextLine()) {
-                line = in.nextLine().trim();
-                if (line.equals("*")) {
+            switch (formatType) {
+                case "Constructor":
+                    superInfo = new InfoList(in);
                     break;
-                }
-
-                String[] split = line.split(" ", 2);
-                String key = split[0].trim();
-                String value = split[1].trim();
-
-                Entry<String, String> entry = new SimpleEntry<>(key, value);
-
-                switch (formatType) {
-                    case "Constructor":
-                        constructorKeys.add(entry);
-                        break;
-                    case "Fields":
-                        fieldKeys.add(entry);
-                        break;
-                    default:
-                        Global.error("Invalid format type " + formatType);
-                }
+                case "Fields":
+                    fieldKeys = new InfoList(in);
+                    break;
+                case "Failure":
+                    failureInfo = new FailureInfo(in);
+                    break;
+                default:
+                    Global.error("Invalid format type " + formatType);
+                    break;
             }
         }
+
+        constructorInfo = new ConstructorInfo(superInfo, fieldKeys);
     }
 
     private enum Generator {

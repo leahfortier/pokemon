@@ -11,10 +11,10 @@ Constructor:
 Fields:
 	Pow Int power
 	Acc Int accuracy
-	Effect Multiple Enum EffectNamesies effects List
+	Effect Multiple Enum EffectNamesies effects
 	EffChance Int effectChance
 	Status Enum StatusCondition status
-	MoveType Multiple Enum MoveType moveTypes List
+	MoveType Multiple Enum MoveType moveTypes
 	SelfTarget Boolean selfTarget
 	Priority Int priority
 	PrintCast Boolean printCast

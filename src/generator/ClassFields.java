@@ -92,7 +92,7 @@ public class ClassFields {
         return value.trim();
     }
 
-    boolean getPerformAndRemove(String fieldName, ActionPerformer action) {
+    public boolean getPerformAndRemove(String fieldName, ActionPerformer action) {
         if (this.contains(fieldName)) {
             action.performAction(fields.get(fieldName));
 
@@ -110,7 +110,7 @@ public class ClassFields {
     }
 
     @FunctionalInterface
-    interface ActionPerformer {
+    public interface ActionPerformer {
         void performAction(String value);
     }
 }

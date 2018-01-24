@@ -6,11 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public abstract class InfoList {
+public class InfoList {
     protected final List<FieldInfo> infoList;
 
-    protected InfoList(Scanner in) {
+    public InfoList(Scanner in) {
         this.infoList = new ArrayList<>();
+
+        if (in == null) {
+            return;
+        }
 
         while (in.hasNext()) {
             String line = in.nextLine().trim();

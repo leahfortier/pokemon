@@ -94,6 +94,13 @@ public final class GeneralUtils {
         return value == null ? false : value;
     }
 
+    public static boolean parseBoolean(String booleanString) {
+        if (!Arrays.asList("true", "false").contains(booleanString.toLowerCase())) {
+            Global.error("Invalid boolean type " + booleanString);
+        }
+        return Boolean.parseBoolean(booleanString);
+    }
+
     public static int max(double... values) {
         double max = values[0];
         for (double value : values) {

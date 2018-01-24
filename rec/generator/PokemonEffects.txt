@@ -11,8 +11,8 @@ Constructor:
 *
 Failure:
 	Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-	FailType List Enum Type victim.isType(b, {0})
-	FailAbility List Enum AbilityNamesies (victim.hasAbility({0}) && !caster.breaksTheMold())
+	FailType Multiple Enum Type victim.isType(b, {0})
+	FailAbility Multiple Enum AbilityNamesies (victim.hasAbility({0}) && !caster.breaksTheMold())
 	FailCondition StraightUp {0}
 	CanHave Not Default True Boolean victim.hasEffect(this.namesies)
 *

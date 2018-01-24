@@ -19,7 +19,7 @@ Constructor:
 *
 Fields:
 	Price Int price
-	BattleCat Multiple Enum BattleBagCategory battleBagCategories List
+	BattleCat Multiple Enum BattleBagCategory battleBagCategories
 *
 
 ***
