@@ -65,14 +65,13 @@ class PokeGen {
         namesiesMap.values().forEach(NamesiesGen::writeNamesies);
     }
 
-    private ClassFields readFields(Scanner in, String name, String className, int index) {
+    private ClassFields readFields(Scanner in, String name, String className) {
         ClassFields fields = StuffGen.readFields(in);
         inputFormatter.validate(fields);
 
         fields.setClassName(className);
 
         fields.addNew("Namesies", name);
-        fields.addNew("Index", index + "");
 
         // NumTurns matches to both MinTurns and MaxTurns
         fields.getPerformAndRemove("NumTurns", numTurns -> {
@@ -92,8 +91,6 @@ class PokeGen {
         String implementsString = inputFormatter.getImplementsString(interfaces);
         String extraFields = fields.getAndRemove("Field");
         String headerComments = fields.getAndRemove("Comments");
-
-        fields.remove("Index");
 
         fields.confirmEmpty();
 
@@ -116,10 +113,6 @@ class PokeGen {
         Scanner in = FileIO.openFile(this.currentGen.getInputPath());
         readFileFormat(in);
 
-        // TODO: Do we still use this?
-        // The image index file for the item generator
-        int index = 0;
-
         while (in.hasNext()) {
             String line = in.nextLine().trim();
 
@@ -133,7 +126,7 @@ class PokeGen {
             String className = StringUtils.getClassName(name);
 
             // Read in all of the fields
-            ClassFields fields = readFields(in, name, className, index);
+            ClassFields fields = readFields(in, name, className);
 
             // Create class and append
             out.append(createClass(name, className, fields));
