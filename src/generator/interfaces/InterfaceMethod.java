@@ -267,7 +267,7 @@ class InterfaceMethod {
 
                 if (parameterType.equals(Battle.class.getSimpleName())) {
                     if (!StringUtils.isNullOrEmpty(this.battleParameter)) {
-                        Global.error("Can only have one battle parameter.  Interface: " + this.interfaceName);
+                        Global.error("Can only have one battle parameter. Interface: " + this.interfaceName);
                     }
 
                     this.battleParameter = parameterName;

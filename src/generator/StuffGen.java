@@ -1,9 +1,8 @@
 package generator;
 
+import generator.fieldinfo.MapField;
 import generator.format.InputFormatter;
-import generator.format.MethodFormatter;
 import generator.interfaces.InterfaceGen;
-import main.Global;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import util.FileIO;
@@ -12,10 +11,8 @@ import util.Folder;
 import util.StringAppender;
 import util.StringUtils;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -68,30 +65,10 @@ public class StuffGen {
                 break;
             }
 
-            Entry<String, String> pair = getFieldPair(in, line);
-
-            String key = pair.getKey();
-            String value = pair.getValue();
-            fields.addNew(key, value);
+            fields.addNew(new MapField(in, line));
         }
 
         return fields;
-    }
-
-    public static Entry<String, String> getFieldPair(Scanner in, String line) {
-        String[] split = line.split(":", 2);
-        if (split.length != 2) {
-            Global.error("Field key and value must be separated by a colon " + line);
-        }
-
-        String key = split[0].trim();
-        String value = split[1].trim();
-
-        if (value.isEmpty()) {
-            value = readMethod(in);
-        }
-
-        return new SimpleEntry<>(key, value);
     }
 
     public static String createClass(String classComments,
@@ -129,22 +106,6 @@ public class StuffGen {
         }
 
         return accessModifier + " " + classType + " " + className;
-    }
-
-    private static String readMethod(Scanner in) {
-        StringAppender method = new StringAppender();
-        MethodFormatter formatter = new MethodFormatter(2);
-
-        while (in.hasNext()) {
-            String line = in.nextLine().trim();
-            if (line.equals("###")) {
-                break;
-            }
-
-            formatter.appendLine(line, method);
-        }
-
-        return method.toString();
     }
 
     private static void baseEvolutionGenerator() {

@@ -1,5 +1,6 @@
 package generator;
 
+import generator.fieldinfo.MapField;
 import main.Global;
 import util.StringUtils;
 
@@ -44,6 +45,10 @@ public class ClassFields {
 
     public String remove(String fieldName) {
         return fields.remove(fieldName);
+    }
+
+    public void addNew(MapField mapField) {
+        this.addNew(mapField.fieldName, mapField.fieldValue);
     }
 
     public void addNew(String fieldKey, String addFieldValue) {

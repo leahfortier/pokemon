@@ -2,15 +2,13 @@ package generator.format;
 
 import generator.AccessModifier;
 import generator.ClassFields;
-import generator.StuffGen;
+import generator.fieldinfo.MapField;
 import main.Global;
 import util.StringAppender;
 import util.StringUtils;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class MethodInfo {
@@ -23,7 +21,7 @@ public class MethodInfo {
     private String fullBody;
 
     private List<String> addInterfaces;
-    private List<Map.Entry<String, String>> addMapFields;
+    private List<MapField> addMapFields;
 
     private MethodInfo() {
         this.header = null;
@@ -70,10 +68,10 @@ public class MethodInfo {
                 break;
             }
 
-            Map.Entry<String, String> pair = StuffGen.getFieldPair(in, line);
+            MapField mapField = new MapField(in, line);
 
-            String key = pair.getKey();
-            String value = pair.getValue();
+            String key = mapField.fieldName;
+            String value = mapField.fieldValue;
 
             switch (key) {
                 case "Header":
@@ -89,8 +87,7 @@ public class MethodInfo {
                     this.end = value;
                     break;
                 case "AddMapField":
-                    Map.Entry<String, String> fieldPair = StuffGen.getFieldPair(in, value);
-                    addMapFields.add(new AbstractMap.SimpleEntry<>(fieldPair.getKey(), fieldPair.getValue()));
+                    addMapFields.add(new MapField(in, value));
                     break;
                 case "AddInterface":
                     addInterfaces.add(value);
@@ -103,7 +100,7 @@ public class MethodInfo {
             }
         }
 
-        if (this.header == null && (this.body.length() > 0 || this.begin.length() > 0 || this.end.length() > 0)) {
+        if (this.header == null && (!this.body.isEmpty() || !this.begin.isEmpty() || !this.end.isEmpty())) {
             Global.error("Cannot have a body without a header.");
         }
     }
@@ -169,10 +166,9 @@ public class MethodInfo {
 
             interfaces.addAll(methodInfo.addInterfaces);
 
-            for (Map.Entry<String, String> addField : methodInfo.addMapFields) {
-                String fieldKey = addField.getKey();
-                String addFieldValue = inputFormatter.replaceBody(addField.getValue(), fieldValue, className, superClass);
-                fields.addNew(fieldKey, addFieldValue);
+            for (MapField addField : methodInfo.addMapFields) {
+                String addFieldValue = inputFormatter.replaceBody(addField.fieldValue, fieldValue, className, superClass);
+                fields.addNew(addField.fieldName, addFieldValue);
             }
 
             fields.remove(fieldName);
