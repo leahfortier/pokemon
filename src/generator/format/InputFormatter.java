@@ -1,6 +1,10 @@
 package generator.format;
 
 import generator.ClassFields;
+import generator.fieldinfo.ConstructorInfo;
+import generator.fieldinfo.FailureInfo;
+import generator.fieldinfo.InfoList;
+import main.Global;
 import util.FileIO;
 import util.FileName;
 import util.StringUtils;
@@ -13,6 +17,8 @@ import java.util.Scanner;
 
 public class InputFormatter {
     private Map<String, MethodInfo> overrideMethods;
+    private ConstructorInfo constructorInfo;
+    private FailureInfo failureInfo;
 
     public void close() {}
     public void validate(ClassFields fields) {}
@@ -49,7 +55,7 @@ public class InputFormatter {
 
     public Iterable<String> getOverrideFields() {
         if (this.overrideMethods == null) {
-            this.readFormat();
+            this.readOverrideFormat();
         }
 
         return new ArrayList<>(overrideMethods.keySet());
@@ -59,7 +65,7 @@ public class InputFormatter {
         return this.overrideMethods.get(fieldName);
     }
 
-    private void readFormat() {
+    private void readOverrideFormat() {
         Scanner in = FileIO.openFile(FileName.OVERRIDE);
 
         // Want to preserve the input order
@@ -87,5 +93,54 @@ public class InputFormatter {
         }
 
         return "implements " + String.join(", ", interfaces);
+    }
+
+    public String getConstructor(ClassFields fields) {
+        return constructorInfo.getConstructor(fields);
+    }
+
+    public String getFailure(ClassFields fields, String superClass) {
+        if (failureInfo == null) {
+            return StringUtils.empty();
+        }
+
+        return failureInfo.writeFailure(fields, superClass, this);
+    }
+
+    public void readFileFormat(Scanner in) {
+        failureInfo = null;
+
+        InfoList superInfo = new InfoList(null);
+        InfoList fieldKeys = new InfoList(null);
+        while (in.hasNext()) {
+            String line = in.nextLine().trim();
+
+            // Ignore comments and white space
+            if (line.isEmpty() || line.startsWith("#")) {
+                continue;
+            }
+
+            if (line.equals("***")) {
+                break;
+            }
+
+            String formatType = line.replace(":", "");
+            switch (formatType) {
+                case "Constructor":
+                    superInfo = new InfoList(in);
+                    break;
+                case "Fields":
+                    fieldKeys = new InfoList(in);
+                    break;
+                case "Failure":
+                    failureInfo = new FailureInfo(in);
+                    break;
+                default:
+                    Global.error("Invalid format type " + formatType);
+                    break;
+            }
+        }
+
+        constructorInfo = new ConstructorInfo(superInfo, fieldKeys);
     }
 }

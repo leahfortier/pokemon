@@ -4,9 +4,6 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
-import generator.fieldinfo.ConstructorInfo;
-import generator.fieldinfo.FailureInfo;
-import generator.fieldinfo.InfoList;
 import generator.format.InputFormatter;
 import generator.format.MethodInfo;
 import item.use.TechnicalMachine;
@@ -25,9 +22,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 class PokeGen {
-    private static ConstructorInfo constructorInfo;
-    private static FailureInfo failureInfo;
-
     private final InputFormatter inputFormatter;
     private NamesiesGen namesiesGen;
     private GeneratorType currentGen;
@@ -77,7 +71,7 @@ class PokeGen {
 
         List<String> interfaces = new ArrayList<>();
         String additionalMethods = getAdditionalMethods(fields, interfaces);
-        String constructor = constructorInfo.getConstructor(fields);
+        String constructor = inputFormatter.getConstructor(fields);
         String implementsString = inputFormatter.getImplementsString(interfaces);
         String extraFields = fields.getAndRemove("Field");
         String headerComments = fields.getAndRemove("Comments");
@@ -101,7 +95,7 @@ class PokeGen {
         out.appendLine("\n\t/**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/"); // DON'T DO IT
 
         Scanner in = FileIO.openFile(this.currentGen.getInputPath());
-        readFileFormat(in);
+        inputFormatter.readFileFormat(in);
 
         while (in.hasNext()) {
             String line = in.nextLine().trim();
@@ -132,7 +126,6 @@ class PokeGen {
     }
 
     private String getAdditionalMethods(ClassFields fields, List<String> interfaces) {
-
         StringAppender methods = new StringAppender();
 
         // Add all the interfaces to the interface list
@@ -162,9 +155,7 @@ class PokeGen {
             fields.addNew("MoveType", MoveType.PHYSICAL_CONTACT.name());
         }
 
-        if (failureInfo != null) {
-            methods.appendPrefix(failureInfo.writeFailure(fields, this.currentGen.getSuperClassName(), inputFormatter));
-        }
+        methods.appendPrefix(inputFormatter.getFailure(fields, this.currentGen.getSuperClassName()));
 
         return methods.toString();
     }
@@ -210,42 +201,5 @@ class PokeGen {
         }
 
         return physicalContact;
-    }
-
-    private static void readFileFormat(Scanner in) {
-        failureInfo = null;
-
-        InfoList superInfo = new InfoList(null);
-        InfoList fieldKeys = new InfoList(null);
-        while (in.hasNext()) {
-            String line = in.nextLine().trim();
-
-            // Ignore comments and white space
-            if (line.isEmpty() || line.startsWith("#")) {
-                continue;
-            }
-
-            if (line.equals("***")) {
-                break;
-            }
-
-            String formatType = line.replace(":", "");
-            switch (formatType) {
-                case "Constructor":
-                    superInfo = new InfoList(in);
-                    break;
-                case "Fields":
-                    fieldKeys = new InfoList(in);
-                    break;
-                case "Failure":
-                    failureInfo = new FailureInfo(in);
-                    break;
-                default:
-                    Global.error("Invalid format type " + formatType);
-                    break;
-            }
-        }
-
-        constructorInfo = new ConstructorInfo(superInfo, fieldKeys);
     }
 }
