@@ -11,6 +11,7 @@ import battle.effect.generic.EffectInterfaces.SapHealthEffect;
 import battle.effect.generic.EffectInterfaces.SelfHealingMove;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.status.StatusCondition;
+import generator.update.MoveParser;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,17 +24,11 @@ import test.TestPokemon;
 import test.TestUtils;
 import trainer.Team;
 import type.Type;
-import util.FileIO;
-import util.Folder;
-import util.GeneralUtils;
-import util.StringAppender;
-import util.StringUtils;
 
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 
 public class AttackTest extends BaseTest {
@@ -77,34 +72,27 @@ public class AttackTest extends BaseTest {
         Set<AttackNamesies> toParse = EnumSet.allOf(AttackNamesies.class);
         toParse.remove(AttackNamesies.CONFUSION_DAMAGE);
 
-        String out = new StringAppender()
-                .appendJoin("\n", toParse, AttackNamesies::getName)
-                .toString();
-        FileIO.overwriteFile(Folder.SCRIPTS + "moves.in", out);
+        for (MoveParser moveParser : MoveParser.getParseMoves()) {
+            AttackNamesies attackNamesies = moveParser.attackNamesies;
+            Type type = moveParser.type;
+            MoveCategory category = moveParser.category;
 
-        Scanner in = FileIO.openFile(Folder.SCRIPTS + "moves.out");
-        while (in.hasNext()) {
-            AttackNamesies attackNamesies = AttackNamesies.getValueOf(in.nextLine().trim());
-            Type type = Type.valueOf(in.nextLine().trim().toUpperCase());
-            MoveCategory category = MoveCategory.valueOf(in.nextLine().trim().toUpperCase());
+            int pp = moveParser.pp;
+            int power = moveParser.power;
+            int accuracy = moveParser.accuracy;
 
-            int pp = Integer.parseInt(in.nextLine().trim());
-            int power = Integer.parseInt(in.nextLine().trim());
-            int accuracy = Integer.parseInt(in.nextLine().trim());
+            String chance = moveParser.chance;
+            String crit = moveParser.crit;
+            int priority = moveParser.priority;
 
-            String description = in.nextLine().trim();
-            String chance = StringUtils.trimSuffix(in.nextLine().trim(), "%").trim();
-            String crit = in.nextLine().trim();
-            int priority = Integer.parseInt(in.nextLine().trim());
-
-            boolean physicalContact = GeneralUtils.parseBoolean(in.nextLine().trim());
-            boolean soundMove = GeneralUtils.parseBoolean(in.nextLine().trim());
-            boolean punchMove = GeneralUtils.parseBoolean(in.nextLine().trim());
-            boolean snatchable = GeneralUtils.parseBoolean(in.nextLine().trim());
-            boolean defrosty = GeneralUtils.parseBoolean(in.nextLine().trim());
-            boolean magicBouncy = GeneralUtils.parseBoolean(in.nextLine().trim());
-            boolean protecty = GeneralUtils.parseBoolean(in.nextLine().trim());
-            boolean mirrorMovey = GeneralUtils.parseBoolean(in.nextLine().trim());
+            boolean physicalContact = moveParser.physicalContact;
+            boolean soundMove = moveParser.soundMove;
+            boolean punchMove = moveParser.punchMove;
+            boolean snatchable = moveParser.snatchable;
+            boolean defrosty = moveParser.defrosty;
+            boolean magicBouncy = moveParser.magicBouncy;
+            boolean protecty = moveParser.protecty;
+            boolean mirrorMovey = moveParser.mirrorMovey;
 
             // A few special cases
             switch (attackNamesies) {

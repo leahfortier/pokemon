@@ -4,7 +4,7 @@ import battle.attack.MoveCategory;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.Weather;
-import generator.PokemonInfoGen;
+import generator.update.PokemonInfoGen;
 import item.Item;
 import item.ItemNamesies;
 import item.bag.BagCategory;

@@ -1,4 +1,4 @@
-package generator;
+package generator.update;
 
 import draw.ImageUtils;
 import pokemon.PokemonInfo;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-// For when pokemoninfo.txt needs to be edited
+// Mostly for when pokemoninfo.txt needs to be edited
 public class PokemonInfoGen {
     public static void main(String[] args) {
         new PokemonInfoGen();
@@ -29,6 +29,7 @@ public class PokemonInfoGen {
 
     private PokemonInfoGen() {
         newPokemonInfoCompare();
+        MoveParser.writeMovesList();
 //        pokemonInfoStuff();
 //        updateNum();
 //        resizeImages();
