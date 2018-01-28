@@ -13,7 +13,7 @@ public class MapField {
     public MapField(Scanner in, String line) {
         String[] split = line.split(":", 2);
         if (split.length != 2) {
-            Global.error("Field key and value must be separated by a colon " + line);
+            Global.error("Field key and value must be separated by a colon: " + line);
         }
 
         String key = split[0].trim();

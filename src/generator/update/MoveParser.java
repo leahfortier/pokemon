@@ -18,8 +18,8 @@ import java.util.Set;
 // Contains the raw information about a move as parsed from serebii
 // Does not include any updates that I may have made to the rules (those are updated in the move parser test)
 public class MoveParser {
-    private static final String scriptsInputFileName = Folder.SCRIPTS + "moves.in";
-    private static final String scriptsOutputFileName = Folder.SCRIPTS + "moves.out";
+    private static final String SCRIPTS_INPUT_FILE_NAME = Folder.SCRIPTS + "moves.in";
+    private static final String SCRIPTS_OUTPUT_FILE_NAME = Folder.SCRIPTS + "moves.out";
 
     private static Map<AttackNamesies, MoveParser> parseMoves;
 
@@ -76,7 +76,15 @@ public class MoveParser {
         String out = new StringAppender()
                 .appendJoin("\n", toParse, AttackNamesies::getName)
                 .toString();
-        FileIO.overwriteFile(scriptsInputFileName, out);
+        FileIO.overwriteFile(SCRIPTS_INPUT_FILE_NAME, out);
+    }
+
+    public static MoveParser getParseMove(AttackNamesies attackNamesies) {
+        if (parseMoves == null) {
+            readMoves();
+        }
+
+        return parseMoves.get(attackNamesies);
     }
 
     public static Iterable<MoveParser> getParseMoves() {
@@ -94,7 +102,7 @@ public class MoveParser {
 
         parseMoves = new EnumMap<>(AttackNamesies.class);
 
-        Scanner in = FileIO.openFile(scriptsOutputFileName);
+        Scanner in = FileIO.openFile(SCRIPTS_OUTPUT_FILE_NAME);
         while (in.hasNext()) {
             MoveParser moveParser = new MoveParser(in);
             parseMoves.put(moveParser.attackNamesies, moveParser);

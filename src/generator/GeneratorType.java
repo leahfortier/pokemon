@@ -13,7 +13,7 @@ import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import util.Folder;
 
-enum GeneratorType {
+public enum GeneratorType {
     ATTACK_GEN("Moves.txt", Folder.ATTACK, Attack.class, AttackNamesies.class),
     POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.GENERIC_EFFECT, PokemonEffect.class, EffectNamesies.class),
     TEAM_EFFECT_GEN("TeamEffects.txt", Folder.GENERIC_EFFECT, TeamEffect.class, EffectNamesies.class),

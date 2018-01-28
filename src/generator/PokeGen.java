@@ -50,7 +50,7 @@ class PokeGen {
     }
 
     private ClassFields readFields(Scanner in, String name, String className) {
-        ClassFields fields = StuffGen.readFields(in);
+        ClassFields fields = new ClassFields(in);
         inputFormatter.validate(fields);
 
         fields.setClassName(className);
@@ -105,7 +105,7 @@ class PokeGen {
                 continue;
             }
 
-            // Get the name
+            // Get the class name
             String name = line.replace(":", "");
             String className = StringUtils.getClassName(name);
 

@@ -6,6 +6,7 @@ import util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class ClassFields {
     private final Map<String, String> fields;
@@ -13,6 +14,18 @@ public class ClassFields {
 
     ClassFields() {
         this.fields = new HashMap<>();
+    }
+
+    public ClassFields(Scanner in) {
+        this();
+        while (in.hasNextLine()) {
+            String line = in.nextLine().trim();
+            if (line.equals("*")) {
+                break;
+            }
+
+            this.addNew(new MapField(in, line));
+        }
     }
 
     public String getClassName() {

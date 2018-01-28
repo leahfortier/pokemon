@@ -1,6 +1,5 @@
 package generator;
 
-import generator.fieldinfo.MapField;
 import generator.format.InputFormatter;
 import generator.interfaces.InterfaceGen;
 import pokemon.PokemonInfo;
@@ -55,20 +54,6 @@ public class StuffGen {
 
         original.close();
         return out;
-    }
-
-    public static ClassFields readFields(Scanner in) {
-        ClassFields fields = new ClassFields();
-        while (in.hasNextLine()) {
-            String line = in.nextLine().trim();
-            if (line.equals("*")) {
-                break;
-            }
-
-            fields.addNew(new MapField(in, line));
-        }
-
-        return fields;
     }
 
     public static String createClass(String classComments,
