@@ -20,14 +20,14 @@ import java.util.List;
 import java.util.Scanner;
 
 // Mostly for when pokemoninfo.txt needs to be edited
-public class PokemonInfoGen {
+public class UpdateGen {
     public static void main(String[] args) {
-        new PokemonInfoGen();
+        new UpdateGen();
 
         System.out.println("GEN GEN GEN");
     }
 
-    private PokemonInfoGen() {
+    private UpdateGen() {
         newPokemonInfoCompare();
         MoveParser.writeMovesList();
 //        pokemonInfoStuff();

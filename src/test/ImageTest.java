@@ -4,7 +4,7 @@ import battle.attack.MoveCategory;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.Weather;
-import generator.update.PokemonInfoGen;
+import generator.update.UpdateGen;
 import item.Item;
 import item.ItemNamesies;
 import item.bag.BagCategory;
@@ -208,9 +208,9 @@ public class ImageTest extends BaseTest {
 
         private String getFailMessage(File imageFile, BufferedImage image, String operator) {
             return imageFile.getPath() + ": "
-                    + PokemonInfoGen.getCoordinatesString(image)
+                    + UpdateGen.getCoordinatesString(image)
                     + " " + operator + " "
-                    + PokemonInfoGen.getCoordinatesString(maxWidth, maxHeight)
+                    + UpdateGen.getCoordinatesString(maxWidth, maxHeight)
                     + (delta == 0 ? "" : ", Delta: " + delta);
         }
     }
