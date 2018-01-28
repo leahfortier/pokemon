@@ -315,9 +315,15 @@ HitDig:
 		return defending.isSemiInvulnerableDigging();
 		###
 *
-HPRatioMove:
+SelfHPRatioMove:
+    AddMapField: Pow: {1}
 	AddMapField: GetPow:
-		return (int)Math.min(1, ({1}*{2}.getHPRatio()));
+		return (int)Math.min(1, (super.power*me.getHPRatio()));
+		###
+*
+TargetHPRatioMove:
+    AddMapField: GetPow:
+		return (int)Math.min(1, ({1}*o.getHPRatio()));
 		###
 *
 Flailing:
@@ -405,7 +411,7 @@ AbilityMessage:
 	Header: String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
 *
 MirrorMove:
-	AddMapField: MoveType: Sleep_Talk_Fail, Encoreless, Metronomeless, Assistless, No_Magic_Coat, Mirrorless
+	AddMapField: MoveType: Sleep_Talk_Fail, Encoreless, Metronomeless, Assistless, No_Magic_Coat, Mirrorless, Protect_Piercing
 	AddMapField: Field:
 		private Move mirror;
 		###
@@ -417,7 +423,7 @@ MirrorMove:
 *
 Countering:
 	AddMapField: Priority: -5
-	AddMapField: MoveType: Assistless, Metronomeless
+	AddMapField: MoveType: Assistless, Metronomeless, Mirrorless
 	AddMapField: PP: 20
 	AddMapField: Acc: 100
 	AddMapField: Applies: user.getDamageTaken() > 0 && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.{00} && !b.isFirstAttack()
@@ -1434,6 +1440,7 @@ FutureAttackMove:
 		return false;
 		###
 	AddMapField: PrintFail: true
+    AddMapField: MoveType: Protect_Piercing, Mirrorless
 *
 FutureAttackEffect:
 	AddMapField: MinTurns: 2
@@ -1549,6 +1556,12 @@ SuperEffectiveAdvantageType:
 *
 GetPow:
 	Header: int getPower(Battle b, ActivePokemon me, ActivePokemon o)
+*
+EmptyPowerString:
+    Header: String getPowerString()
+    Body:
+        return "--";
+        ###
 *
 ApplyDamage:
 	Header: void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
@@ -1841,7 +1854,7 @@ HealSwitcher:
 	AddMapField: Cat: Status
 	AddMapField: Effect: HealSwitch
 	AddMapField: SelfTarget: True
-	AddMapField: MoveType: User_Faints, Non_Snatchable, Healing
+	AddMapField: MoveType: User_Faints, Healing
 *
 GET_DAT_CASH_MONEY_TWICE_ITEM:
 	Header: void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice)

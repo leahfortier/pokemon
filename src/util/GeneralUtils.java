@@ -95,10 +95,17 @@ public final class GeneralUtils {
     }
 
     public static boolean parseBoolean(String booleanString) {
-        if (!Arrays.asList("true", "false").contains(booleanString.toLowerCase())) {
-            Global.error("Invalid boolean type " + booleanString);
+        switch (booleanString.toLowerCase()) {
+            case "true":
+            case "yes":
+                return true;
+            case "false":
+            case "no":
+                return false;
+            default:
+                Global.error("Invalid boolean type: " + booleanString);
+                return false;
         }
-        return Boolean.parseBoolean(booleanString);
     }
 
     public static int max(double... values) {

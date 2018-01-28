@@ -1,6 +1,7 @@
 package util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -104,12 +105,12 @@ public class StringAppender {
     }
 
     // Joins the objects by the delimiter and appends
-    public StringAppender appendJoin(String delimiter, List<?> joinees) {
+    public StringAppender appendJoin(String delimiter, Collection<?> joinees) {
         return this.appendJoin(delimiter, joinees, o -> o == null ? "null" : o.toString());
     }
 
     // Applies the mapper to the joinees, joins by the delimiter, and appends
-    public <T> StringAppender appendJoin(String delimiter, List<T> joinees, Function<T, String> mapper) {
+    public <T> StringAppender appendJoin(String delimiter, Collection<T> joinees, Function<T, String> mapper) {
         if (delimiter == null) {
             delimiter = StringUtils.empty();
         }

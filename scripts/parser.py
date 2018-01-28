@@ -130,3 +130,8 @@ class Parser:
     def restoreBackup(self):
         self.infoTable = self.backupTable
         self.index = self.backupIndex
+        
+# I don't know why this works for category as well as type but it does
+def getImageName(imageElement):
+    imageName = imageElement.attrib["src"]
+    return imageName[imageName.find("type") + 5 : -4].capitalize()

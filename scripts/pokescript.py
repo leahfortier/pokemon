@@ -7,7 +7,7 @@ import re
 import time
 from substitutions import attackSubstitution, abilitySubstitution, typeSubstitution
 from forms import Stat, AddedPokes, FormConfig
-from parser import Parser
+from parser import Parser, getImageName
 
 def namesies(stringsies):
     stringsies = stringsies.strip().replace(' ', '_').replace('-', '_').replace('\'', '').upper()
@@ -43,8 +43,7 @@ def getTypes(typeImages):
     types = ["No_Type"]*2
     for i, typeImage in enumerate(typeImages):
         # imageName is of the form "...type/<typeName>.gif"
-        imageName = typeImage.attrib["src"]
-        types[i] = imageName[imageName.find("type") + 5 : -4].capitalize()
+        types[i] = getImageName(typeImage)
         
     return types
     

@@ -146,7 +146,7 @@ Struggle:
 		Messages.add(user.getName() + " was hurt by recoil!");
 		user.reduceHealth(b, user.getMaxHP()/4, false);
 		###
-	MoveType: Encoreless, Mimicless, Assistless, Metronomeless
+	MoveType: Encoreless, Mimicless, Assistless, Metronomeless, Mirrorless
 *
 Razor Leaf:
 	Desc: Sharp-edged leaves are launched to slash at the opposing team. Critical hits land more easily.
@@ -778,7 +778,7 @@ Tailwind:
 	SelfTarget: True
 	Type: Flying
 	Cat: Status
-	PP: 30
+	PP: 15
 *
 Morning Sun:
 	Desc: The user restores its own HP. The amount of HP regained varies with the weather.
@@ -1110,7 +1110,7 @@ Nature's Madness:
 *
 Swords Dance:
 	Desc: A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat.
-	PP: 30
+	PP: 20
 	Type: Normal
 	Cat: Status
 	SelfTarget: True
@@ -1217,6 +1217,8 @@ Spit Up:
 	Cat: Special
 	Acc: 100
 	Pow: 100
+    EmptyPowerString: True
+    MoveType: Mirrorless
 	Applies: user.hasEffect(EffectNamesies.STOCKPILE)
 	EndAttack:
 		// Stockpile ends after Spit up is used
@@ -1354,7 +1356,7 @@ Slam:
 Thunderbolt:
 	Desc: A strong electric blast is loosed at the target. It may also leave the target with paralysis.
 	PP: 15
-	Pow: 95
+	Pow: 90
 	Acc: 100
 	Cat: Special
 	Type: Electric
@@ -1618,7 +1620,7 @@ Minimize:
 	Desc: The user compresses its body to make itself look smaller, which sharply raises its evasiveness.
 	StatChange: 1 Evasion 2
 	SelfTarget: True
-	PP: 20
+	PP: 10
 	Cat: Status
 	Type: Normal
 	Effect: UsedMinimize
@@ -1649,7 +1651,7 @@ Lucky Chant:
 	SelfTarget: True
 *
 Metronome:
-	MoveType: Sleep_Talk_Fail, Mimicless, Assistless, Metronomeless, No_Magic_Coat
+	MoveType: Sleep_Talk_Fail, Mimicless, Assistless, Metronomeless, No_Magic_Coat, Protect_Piercing, Mirrorless
 	Field:
 		private Attack metronomeMove;
 		###
@@ -1731,7 +1733,7 @@ Imprison:
 	Type: Psychic
 	Cat: Status
 	Effect: Imprison
-	MoveType: No_Magic_Coat, Protect_Piercing, Substitute_Piercing
+	MoveType: Protect_Piercing, Substitute_Piercing
 *
 Will-O-Wisp:
 	Desc: The user shoots a sinister, bluish-white flame at the target to inflict a burn.
@@ -2287,6 +2289,7 @@ Punishment:
 	Desc: This attack's power increases the more the target has powered up with stat changes.
 	PP: 5
 	Pow: 60
+    EmptyPowerString: True
 	GetPow:
 		return Math.min(super.power + 20*o.getStages().totalStatIncreases(), 200);
 		###
@@ -2526,7 +2529,7 @@ Wring Out:
 	Acc: 100
 	Cat: Special
 	Type: Normal
-	HPRatioMove: 120 o
+	TargetHPRatioMove: 120
 	PhysicalContact: True
 *
 Leaf Tornado:
@@ -2537,7 +2540,7 @@ Leaf Tornado:
 	Acc: 90
 	Pow: 65
 	StatChange: 1 Accuracy -1
-	EffChance: 30
+	EffChance: 50
 *
 Leaf Storm:
 	Desc: The user whips up a storm of leaves around the target. The attack's recoil harshly reduces the user's Sp. Atk stat.
@@ -2723,7 +2726,7 @@ Curse:
 			super.selfTarget = true;
 		}
 		###
-	MoveType: Protect_Piercing, Substitute_Piercing, No_Magic_Coat
+	MoveType: Protect_Piercing, Substitute_Piercing, No_Magic_Coat, Mirrorless
 *
 Yawn:
 	Desc: The user lets loose a huge yawn that lulls the target into falling asleep on the next turn.
@@ -2800,6 +2803,7 @@ Mirror Shot:
 	Pow: 65
 	Acc: 85
 	StatChange: 1 Accuracy -1
+    EffChance: 30
 *
 Magnet Rise:
 	Desc: The user levitates using electrically generated magnetism for five turns.
@@ -3143,7 +3147,7 @@ Bind:
 *
 Rock Tomb:
 	Desc: Boulders are hurled at the target. It also lowers the target's Speed by preventing its movement.
-	PP: 10
+	PP: 15
 	Type: Rock
 	Cat: Physical
 	Acc: 95
@@ -3221,6 +3225,7 @@ Metal Claw:
 	Type: Steel
 	StatChange: 1 Attack 1
 	SelfTarget: True
+    EffChance: 10
 *
 Guillotine:
 	Desc: A vicious, tearing attack with big pincers. The target will faint instantly if this attack hits.
@@ -3516,7 +3521,7 @@ Focus Punch:
 	Pow: 150
 	Acc: 100
 	Cat: Physical
-	MoveType: Assistless, Sleep_Talk_Fail, Metronomeless, Punching
+	MoveType: Assistless, Sleep_Talk_Fail, Metronomeless, Punching, Mirrorless
 	Priority: -3
 	PP: 20
 	Type: Fighting
@@ -3541,6 +3546,7 @@ Shell Trap:
 	PP: 5
 	Effect: ShellTrap
 	SelfTarget: True
+    MoveType: Mirrorless
 	StartTurn:
 		super.applyBasicEffects(b, me, me);
 		###
@@ -3558,6 +3564,8 @@ Beak Blast:
 	PhysicalContact: False
 	Priority: -3
 	Effect: BeakBlast
+    MoveType: Mirrorless
+    Acc: 100
 	SelfTarget: True
 	StartTurn:
 		super.applyBasicEffects(b, me, me);
@@ -3568,7 +3576,7 @@ Me First:
 	PP: 20
 	Cat: Status
 	Type: Normal
-	MoveType: Sleep_Talk_Fail, Assistless, No_Magic_Coat, Metronomeless
+	MoveType: Sleep_Talk_Fail, Assistless, No_Magic_Coat, Metronomeless, Mirrorless
 	FullApplies:
 		// Fails if it is the second turn or the opponent is using a status move
 		return b.isFirstAttack() && victim.getMove() != null && !victim.getAttack().isStatusMove();
@@ -3786,7 +3794,7 @@ Transform:
 	Type: Normal
 	Effect: Transformed
 	SelfTarget: True
-	MoveType: Non_Snatchable, Protect_Piercing, Encoreless, Assistless, Metronomeless
+	MoveType: Non_Snatchable, Encoreless, Assistless, Metronomeless
 *
 Substitute:
 	Desc: The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.
@@ -3909,7 +3917,7 @@ Splash:
 	UniqueEffects:
 		Messages.add("But nothing happened...");
 		###
-	MoveType: Airborne
+	MoveType: Airborne, Non_Snatchable
 *
 Mist:
 	Desc: The user cloaks its body with a white mist that prevents any of its stats from being cut for five turns.
@@ -4090,7 +4098,7 @@ Sleep Talk:
 	Type: Normal
 	Cat: Status
 	Int: SleepyFightsterEffect
-	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Assistless, Metronomeless
+	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Assistless, Metronomeless, Protect_Piercing, Mirrorless
 	Field:
 		private List<Move> moves;
 		###
@@ -4154,7 +4162,7 @@ Eruption:
 	Acc: 100
 	Cat: Special
 	Type: Fire
-	HPRatioMove: 150 me
+	SelfHPRatioMove: 150
 *
 Charm:
 	Desc: The user gazes at the target rather charmingly, making it less wary. The target's Attack is harshly lowered.
@@ -4303,7 +4311,7 @@ Bide:
 	ShouldApplyDamage:
 		return false;
 		###
-	MoveType: Sleep_Talk_Fail
+	MoveType: Sleep_Talk_Fail, Mirrorless
 *
 Autotomize:
 	Desc: The user sheds part of its body to make itself lighter and sharply raise its Speed stat.
@@ -4363,6 +4371,7 @@ Beat Up:
 	Acc: 100
 	Cat: Physical
 	Type: Dark
+    EmptyPowerString: True
 	ApplyDamage:
 		for (ActivePokemon p : b.getTrainer(me).getActiveTeam()) {
 			// Only healthy Pokemon get to attack
@@ -4444,7 +4453,7 @@ Sketch:
 	PP: 1
 	Desc: It enables the user to permanently learn the move last used by the target. Once used, Sketch disappears.
 	Type: Normal
-	MoveType: Sleep_Talk_Fail, Encoreless, Mimicless, Assistless, Metronomeless, Protect_Piercing, No_Magic_Coat
+	MoveType: Sleep_Talk_Fail, Encoreless, Mimicless, Assistless, Metronomeless, Protect_Piercing, No_Magic_Coat, Mirrorless
 	Cat: Status
 	Field:
 		private Move copy;
@@ -4607,7 +4616,7 @@ Assist:
 	PP: 20
 	Type: Normal
 	Cat: Status
-	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Metronomeless, Assistless
+	MoveType: No_Magic_Coat, Sleep_Talk_Fail, Metronomeless, Assistless, Protect_Piercing, Mirrorless
 	BeginAttack:
 		// TODO: Test
 		this.attacks = new ArrayList<>();
@@ -4669,7 +4678,7 @@ Water Spout:
 	Acc: 100
 	Cat: Special
 	Type: Water
-	HPRatioMove: 150 me
+	SelfHPRatioMove: 150
 *
 Teeter Dance:
 	Desc: The user performs a wobbly dance that confuses the Pok\u00e9mon around it.
@@ -4864,7 +4873,7 @@ Crush Grip:
 	Type: Normal
 	Acc: 100
 	Cat: Physical
-	HPRatioMove: 120 o
+	TargetHPRatioMove: 120
 *
 Shadow Force:
 	Desc: The user disappears, then strikes the target on the second turn. It hits even if the target protects itself.
@@ -4897,7 +4906,7 @@ Dark Void:
 	Type: Dark
 	Cat: Status
 	Status: Asleep
-	Acc: 80
+	Acc: 50
 *
 Seed Flare:
 	Desc: The user emits a shock wave from its body to attack its target. It may harshly lower the target's Sp. Def.
@@ -5081,7 +5090,6 @@ Gear Grind:
 	PP: 15
 	Type: Steel
 	Acc: 85
-	PhysicalContact: False
 	Cat: Physical
 	Pow: 50
 	MultiStrike: 2 2
@@ -5117,7 +5125,7 @@ Fiery Dance:
 *
 Sacred Sword:
 	Desc: The user attacks by slicing with its long horns. The target's stat changes don't affect this attack's damage.
-	PP: 20
+	PP: 15
 	Pow: 90
 	Acc: 100
 	Cat: Physical
@@ -5271,13 +5279,12 @@ Secret Power:
 	EffChance: 30
 *
 Final Gambit:
-	PhysicalContact: True
 	Cat: Special
 	Desc: The user risks everything to attack its target. The user faints but does damage equal to the user's HP.
 	PP: 5
 	Acc: 100
 	FixedDamage: me.getHP()
-	MoveType: User_Faints
+	MoveType: User_Faints, Mirrorless
 	Type: Fighting
 *
 Gastro Acid:
@@ -5362,7 +5369,7 @@ Teleport:
 Role Play:
 	Desc: The user mimics the target completely, copying the target's natural Ability.
 	PP: 10
-	MoveType: Substitute_Piercing, Protect_Piercing, Non_Snatchable
+	MoveType: Substitute_Piercing, Non_Snatchable
 	Type: Psychic
 	Cat: Status
 	SelfTarget: True
@@ -5538,7 +5545,7 @@ Baton Pass:
 	MoveType: Non_Snatchable
 *
 Perish Song:
-	MoveType: Protect_Piercing, Substitute_Piercing, Sound_Based, No_Magic_Coat
+	MoveType: Protect_Piercing, Substitute_Piercing, Sound_Based, No_Magic_Coat, Mirrorless
 	Desc: Any Pok\u00e9mon that hears this song faints in three turns, unless it switches out of battle.
 	PP: 5
 	Type: Normal
@@ -5582,7 +5589,7 @@ Nature Power:
 	PP: 20
 	Cat: Status
 	Type: Normal
-	MoveType: Assistless, Metronomeless, No_Magic_Coat
+	MoveType: Assistless, Metronomeless, No_Magic_Coat, Protect_Piercing, Mirrorless
 	CallFullNewMove: b.getTerrainType().getAttack()
 *
 Entrainment:
@@ -5749,12 +5756,13 @@ Diamond Storm:
 	EffChance: 50
 	StatChange: 1 Defense 1
 	SelfTarget: True
+    PhysicalContact: False
 *
 Moonblast:
 	Desc: Borrowing the power of the moon, the user attacks the target. This may also lower the target's Sp. Atk stat.
 	Type: Fairy
 	Pow: 95
-	Cat: Physical
+	Cat: Special
 	Acc: 100
 	PP: 15
 	EffChance: 30
@@ -5767,6 +5775,7 @@ Land's Wrath:
 	Acc: 100
 	PP: 10
 	Cat: Physical
+    PhysicalContact: False
 *
 Phantom Force:
 	Desc: The user vanishes somewhere, then strikes the target on the next turn. This move hits even if the target protects itself.
@@ -5794,6 +5803,7 @@ Geomancy:
 	PP: 10
 	Type: Fairy
 	Cat: Status
+    MoveType: Non_Snatchable
 	SelfTarget: True
 	StatChange: 3 Sp_Attack 2 Sp_Defense 2 Speed 2
 	ChargingMove: user.getName() + " is absorbing power!"
@@ -5939,7 +5949,7 @@ Fairy Lock:
 *
 Aromatic Mist:
 	Type: Fairy
-	Desc: The user its Sp. Def stat with a mysterious aroma.
+	Desc: The user raises its Sp. Def stat with a mysterious aroma.
 	PP: 20
 	SelfTarget: True
 	Cat: Status
@@ -5961,6 +5971,7 @@ Petal Blizzard:
 	Pow: 90
 	Cat: Physical
 	Acc: 100
+    PhysicalContact: False
 *
 Grassy Terrain:
 	Type: Grass
@@ -6012,11 +6023,12 @@ Water Shuriken:
 	Cat: Special
 	Type: Water
 	MultiStrike: 2 5
+    Priority: 1
 *
 Mat Block:
 	Applies: user.isFirstTurn()
 	Desc: Using a pulled-up mat as a shield, the user protects itself and its allies from damaging moves. This does not stop status moves.
-	PP: 15
+	PP: 10
 	Type: Fighting
 	Cat: Status
 	SelfTarget: True
@@ -6090,7 +6102,7 @@ Belch:
 	Desc: The user lets out a damaging belch on the target. The user must eat a Berry to use this move.
 	Type: Poison
 	PP: 10
-	MoveType: Assistless
+	MoveType: Assistless, Mirrorless
 	Pow: 120
 	Cat: Special
 	Acc: 90
@@ -6177,6 +6189,7 @@ Precipice Blades:
 	Cat: Physical
 	Pow: 120
 	Acc: 85
+    PhysicalContact: False
 *
 Shore Up:
 	Desc: The user regains up to half of its max HP. It restores more HP in a sandstorm.
@@ -6225,6 +6238,7 @@ Spirit Shackle:
 	Pow: 80
 	Cat: Physical
 	Effect: Trapped
+    PhysicalContact: False
 *
 Darkest Lariat:
 	Desc: The user swings both arms and hits the target. The target's stat changes don't affect this attack's damage.
@@ -6280,6 +6294,7 @@ Leafage:
 	Pow: 40
 	PP: 40
 	Acc: 100
+    PhysicalContact: False
 *
 Toxic Thread:
 	Desc: The user shoots poisonous threads to poison the target and lower the target's Speed stat.
@@ -6353,6 +6368,7 @@ Burn Up:
 	Effect: ChangeType
 	Applies: user.isType(b, Type.FIRE)
 	RemoveType: Fire
+    MoveType: Defrost
 *
 Smart Strike:
 	Desc: The user stabs the target with a sharp horn. This attack never misses.
@@ -6458,6 +6474,7 @@ Shadow Bone:
 	PP: 10
 	EffChance: 20
 	StatChange: 1 Defense -1
+    PhysicalContact: False
 *
 Accelerock:
 	Desc: The user smashes into the target at high speed. This move always goes first.
@@ -6519,6 +6536,7 @@ Tearful Look:
 	Cat: Status
 	PP: 20
 	StatChange: 2 Attack -1 Sp_Attack -1
+    MoveType: Protect_Piercing
 *
 Zing Zap:
 	Desc: A strong electric blast crashes down on the target, giving it an electric shock. This may also make the target flinch.
@@ -6581,6 +6599,7 @@ Steam Eruption:
 	Status: Burned
 	EffChance: 30
 	Cat: Special
+    MoveType: Defrost
 *
 Photon Geyser:
 	Desc: The user attacks a target with a pillar of light. This move inflicts Attack or Sp. Atk damage -- whichever stat is higher for the user.
@@ -6620,6 +6639,8 @@ Plasma Fists:
 	Cat: Physical
 	Pow: 100
 	Acc: 100
+    PhysicalContact: False
+    MoveType: Punching
 	Effect: ChangeAttackType
 	Int: ChangeAttackTypeSource
 	GetAttackType:

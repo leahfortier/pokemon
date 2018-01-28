@@ -43,6 +43,14 @@ public class StringUtils {
         return c >= '0' && c <= '9';
     }
 
+    public static String trimSuffix(String s, String suffix) {
+        if (s.endsWith(suffix)) {
+            return s.substring(0, s.length() - suffix.length());
+        }
+
+        return s;
+    }
+
     public static String articleString(final String s) {
         if (isNullOrEmpty(s)) {
             return empty();

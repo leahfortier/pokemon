@@ -6,6 +6,7 @@ public abstract class Folder {
     public static final String SRC = FileIO.makeFolderPath("src");
     public static final String REC = FileIO.makeFolderPath("rec");
     public static final String SAVES = FileIO.makeFolderPath("saves");
+    public static final String SCRIPTS = FileIO.makeFolderPath("scripts");
 
     // Code
     public static final String BATTLE = FileIO.makeFolderPath(SRC, "battle");
