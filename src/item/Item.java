@@ -5938,7 +5938,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         DragonClawTM() {
-            super(ItemNamesies.DRAGON_CLAW_TM, "The user slashes the target with huge, sharp claws.", BagCategory.TM);
+            super(ItemNamesies.DRAGON_CLAW_TM, "The user slashes the target with huge sharp claws.", BagCategory.TM);
         }
 
         @Override
@@ -5977,7 +5977,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         RoarTM() {
-            super(ItemNamesies.ROAR_TM, "The target is scared off and replaced by another Pokémon in its party. In the wild, the battle ends.", BagCategory.TM);
+            super(ItemNamesies.ROAR_TM, "The target is scared off, and a different Pokémon is dragged out. In the wild, this ends a battle against a single Pokémon.", BagCategory.TM);
         }
 
         @Override
@@ -6016,7 +6016,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         BulkUpTM() {
-            super(ItemNamesies.BULK_UP_TM, "The user tenses its muscles to bulk up its body, boosting both its Attack and Defense stats.", BagCategory.TM);
+            super(ItemNamesies.BULK_UP_TM, "The user tenses its muscles to bulk up its body, raising both its Attack and Defense stats.", BagCategory.TM);
         }
 
         @Override
@@ -6029,7 +6029,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         VenoshockTM() {
-            super(ItemNamesies.VENOSHOCK_TM, "The user drenches the target in a special poisonous liquid. Its power is doubled if the target is poisoned.", BagCategory.TM);
+            super(ItemNamesies.VENOSHOCK_TM, "The user drenches the target in a special poisonous liquid. This move's power is doubled if the target is poisoned.", BagCategory.TM);
         }
 
         @Override
@@ -6042,7 +6042,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         HiddenPowerTM() {
-            super(ItemNamesies.HIDDEN_POWER_TM, "A unique attack that varies in type and intensity depending on the Pokémon using it.", BagCategory.TM);
+            super(ItemNamesies.HIDDEN_POWER_TM, "A unique attack that varies in type depending on the Pokémon using it.", BagCategory.TM);
         }
 
         @Override
@@ -6055,7 +6055,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SunnyDayTM() {
-            super(ItemNamesies.SUNNY_DAY_TM, "The user intensifies the sun for five turns, powering up Fire-type moves.", BagCategory.TM);
+            super(ItemNamesies.SUNNY_DAY_TM, "The user intensifies the sun for five turns, powering up Fire-type moves. It lowers the power of Water-type moves.", BagCategory.TM);
         }
 
         @Override
@@ -6081,7 +6081,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         IceBeamTM() {
-            super(ItemNamesies.ICE_BEAM_TM, "The target is struck with an icy-cold beam of energy. It may also freeze the target solid.", BagCategory.TM);
+            super(ItemNamesies.ICE_BEAM_TM, "The target is struck with an icy-cold beam of energy. This may also leave the target frozen.", BagCategory.TM);
         }
 
         @Override
@@ -6094,7 +6094,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         BlizzardTM() {
-            super(ItemNamesies.BLIZZARD_TM, "A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.", BagCategory.TM);
+            super(ItemNamesies.BLIZZARD_TM, "A howling blizzard is summoned to strike opposing Pokémon. This may also leave the opposing Pokémon frozen.", BagCategory.TM);
         }
 
         @Override
@@ -6107,7 +6107,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         HyperBeamTM() {
-            super(ItemNamesies.HYPER_BEAM_TM, "The target is attacked with a powerful beam. The user must rest on the next turn to regain its energy.", BagCategory.TM);
+            super(ItemNamesies.HYPER_BEAM_TM, "The target is attacked with a powerful beam. The user can't move on the next turn.", BagCategory.TM);
         }
 
         @Override
@@ -6120,7 +6120,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         LightScreenTM() {
-            super(ItemNamesies.LIGHT_SCREEN_TM, "A wondrous wall of light is put up to suppress damage from special attacks for five turns.", BagCategory.TM);
+            super(ItemNamesies.LIGHT_SCREEN_TM, "A wondrous wall of light is put up to reduce damage from special attacks for five turns.", BagCategory.TM);
         }
 
         @Override
@@ -6133,7 +6133,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         ProtectTM() {
-            super(ItemNamesies.PROTECT_TM, "It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", BagCategory.TM);
+            super(ItemNamesies.PROTECT_TM, "Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", BagCategory.TM);
         }
 
         @Override
@@ -6146,7 +6146,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         RainDanceTM() {
-            super(ItemNamesies.RAIN_DANCE_TM, "The user summons a heavy rain that falls for five turns, powering up Water-type moves.", BagCategory.TM);
+            super(ItemNamesies.RAIN_DANCE_TM, "The user summons a heavy rain that falls for five turns, powering up Water-type moves. It lowers the power of Fire-type moves.", BagCategory.TM);
         }
 
         @Override
@@ -6172,7 +6172,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SafeguardTM() {
-            super(ItemNamesies.SAFEGUARD_TM, "The user creates a protective field that prevents status problems for five turns.", BagCategory.TM);
+            super(ItemNamesies.SAFEGUARD_TM, "The user creates a protective field that prevents status conditions for five turns.", BagCategory.TM);
         }
 
         @Override
@@ -6185,7 +6185,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SolarBeamTM() {
-            super(ItemNamesies.SOLAR_BEAM_TM, "A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn.", BagCategory.TM);
+            super(ItemNamesies.SOLAR_BEAM_TM, "In this two-turn attack, the user gathers light, then blasts a bundled beam on the next turn.", BagCategory.TM);
         }
 
         @Override
@@ -6198,7 +6198,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SmackDownTM() {
-            super(ItemNamesies.SMACK_DOWN_TM, "The user throws a stone or projectile to attack an opponent. A flying Pokémon will fall to the ground when hit.", BagCategory.TM);
+            super(ItemNamesies.SMACK_DOWN_TM, "The user throws a stone or similar projectile to attack an opponent. A flying Pokémon will fall to the ground when it's hit.", BagCategory.TM);
         }
 
         @Override
@@ -6211,7 +6211,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         ThunderboltTM() {
-            super(ItemNamesies.THUNDERBOLT_TM, "A strong electric blast is loosed at the target. It may also leave the target with paralysis.", BagCategory.TM);
+            super(ItemNamesies.THUNDERBOLT_TM, "A strong electric blast crashes down on the target. This may also leave the target with paralysis.", BagCategory.TM);
         }
 
         @Override
@@ -6224,7 +6224,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         ThunderTM() {
-            super(ItemNamesies.THUNDER_TM, "A wicked thunderbolt is dropped on the target to inflict damage. It may also leave the target with paralysis.", BagCategory.TM);
+            super(ItemNamesies.THUNDER_TM, "A wicked thunderbolt is dropped on the target to inflict damage. This may also leave the target with paralysis.", BagCategory.TM);
         }
 
         @Override
@@ -6237,7 +6237,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         EarthquakeTM() {
-            super(ItemNamesies.EARTHQUAKE_TM, "The user sets off an earthquake that strikes those around it.", BagCategory.TM);
+            super(ItemNamesies.EARTHQUAKE_TM, "The user sets off an earthquake that strikes every Pokémon around it.", BagCategory.TM);
         }
 
         @Override
@@ -6250,7 +6250,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         DigTM() {
-            super(ItemNamesies.DIG_TM, "The user burrows, then attacks on the second turn. It can also be used to exit dungeons.", BagCategory.TM);
+            super(ItemNamesies.DIG_TM, "The user burrows, then attacks on the next turn.", BagCategory.TM);
         }
 
         @Override
@@ -6263,7 +6263,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         PsychicTM() {
-            super(ItemNamesies.PSYCHIC_TM, "The target is hit by a strong telekinetic force. It may also reduce the target's Sp. Def stat.", BagCategory.TM);
+            super(ItemNamesies.PSYCHIC_TM, "The target is hit by a strong telekinetic force. This may also lower the target's Sp. Def stat.", BagCategory.TM);
         }
 
         @Override
@@ -6276,7 +6276,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         ShadowBallTM() {
-            super(ItemNamesies.SHADOW_BALL_TM, "The user hurls a shadowy blob at the target. It may also lower the target's Sp. Def stat.", BagCategory.TM);
+            super(ItemNamesies.SHADOW_BALL_TM, "The user hurls a shadowy blob at the target. This may also lower the target's Sp. Def stat.", BagCategory.TM);
         }
 
         @Override
@@ -6289,7 +6289,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         BrickBreakTM() {
-            super(ItemNamesies.BRICK_BREAK_TM, "The user attacks with a swift chop. It can also break any barrier such as Light Screen and Reflect.", BagCategory.TM);
+            super(ItemNamesies.BRICK_BREAK_TM, "The user attacks with a swift chop. It can also break barriers, such as Light Screen and Reflect.", BagCategory.TM);
         }
 
         @Override
@@ -6315,7 +6315,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         ReflectTM() {
-            super(ItemNamesies.REFLECT_TM, "A wondrous wall of light is put up to suppress damage from physical attacks for five turns.", BagCategory.TM);
+            super(ItemNamesies.REFLECT_TM, "A wondrous wall of light is put up to reduce damage from physical attacks for five turns.", BagCategory.TM);
         }
 
         @Override
@@ -6328,7 +6328,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SludgeWaveTM() {
-            super(ItemNamesies.SLUDGE_WAVE_TM, "It swamps the area around the user with a giant sludge wave. It may also poison those hit.", BagCategory.TM);
+            super(ItemNamesies.SLUDGE_WAVE_TM, "The user strikes everything around it by swamping the area with a giant sludge wave. This may also poison those hit.", BagCategory.TM);
         }
 
         @Override
@@ -6341,7 +6341,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         FlamethrowerTM() {
-            super(ItemNamesies.FLAMETHROWER_TM, "The target is scorched with an intense blast of fire. It may also leave the target with a burn.", BagCategory.TM);
+            super(ItemNamesies.FLAMETHROWER_TM, "The target is scorched with an intense blast of fire. This may also leave the target with a burn.", BagCategory.TM);
         }
 
         @Override
@@ -6354,7 +6354,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SludgeBombTM() {
-            super(ItemNamesies.SLUDGE_BOMB_TM, "Unsanitary sludge is hurled at the target. It may also poison the target.", BagCategory.TM);
+            super(ItemNamesies.SLUDGE_BOMB_TM, "Unsanitary sludge is hurled at the target. This may also poison the target.", BagCategory.TM);
         }
 
         @Override
@@ -6367,7 +6367,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SandstormTM() {
-            super(ItemNamesies.SANDSTORM_TM, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.", BagCategory.TM);
+            super(ItemNamesies.SANDSTORM_TM, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.", BagCategory.TM);
         }
 
         @Override
@@ -6380,7 +6380,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         FireBlastTM() {
-            super(ItemNamesies.FIRE_BLAST_TM, "The target is attacked with an intense blast of all-consuming fire. It may also leave the target with a burn.", BagCategory.TM);
+            super(ItemNamesies.FIRE_BLAST_TM, "The target is attacked with an intense blast of all-consuming fire. This may also leave the target with a burn.", BagCategory.TM);
         }
 
         @Override
@@ -6393,7 +6393,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         RockTombTM() {
-            super(ItemNamesies.ROCK_TOMB_TM, "Boulders are hurled at the target. It also lowers the target's Speed by preventing its movement.", BagCategory.TM);
+            super(ItemNamesies.ROCK_TOMB_TM, "Boulders are hurled at the target. This also lowers the target's Speed stat by preventing its movement.", BagCategory.TM);
         }
 
         @Override
@@ -6406,7 +6406,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         AerialAceTM() {
-            super(ItemNamesies.AERIAL_ACE_TM, "The user confounds the foe with speed, then slashes. The attack lands without fail.", BagCategory.TM);
+            super(ItemNamesies.AERIAL_ACE_TM, "The user confounds the target with speed, then slashes. This attack never misses.", BagCategory.TM);
         }
 
         @Override
@@ -6432,7 +6432,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         FacadeTM() {
-            super(ItemNamesies.FACADE_TM, "An attack move that doubles its power if the user is poisoned, burned, or has paralysis.", BagCategory.TM);
+            super(ItemNamesies.FACADE_TM, "This attack move doubles its power if the user is poisoned, burned, or paralyzed.", BagCategory.TM);
         }
 
         @Override
@@ -6445,7 +6445,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         FlameChargeTM() {
-            super(ItemNamesies.FLAME_CHARGE_TM, "The user cloaks itself with flame and attacks. Building up more power, it raises the user's Speed stat.", BagCategory.TM);
+            super(ItemNamesies.FLAME_CHARGE_TM, "Cloaking itself in flame, the user attacks. Then, building up more power, the user raises its Speed stat.", BagCategory.TM);
         }
 
         @Override
@@ -6458,7 +6458,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         RestTM() {
-            super(ItemNamesies.REST_TM, "The user goes to sleep for two turns. It fully restores the user's HP and heals any status problem.", BagCategory.TM);
+            super(ItemNamesies.REST_TM, "The user goes to sleep for two turns. This fully restores the user's HP and heals any status conditions.", BagCategory.TM);
         }
 
         @Override
@@ -6484,7 +6484,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         ThiefTM() {
-            super(ItemNamesies.THIEF_TM, "The user attacks and steals the target's held item simultaneously. It can't steal if the user holds an item.", BagCategory.TM);
+            super(ItemNamesies.THIEF_TM, "The user attacks and steals the target's held item simultaneously. The user can't steal anything if it already holds an item.", BagCategory.TM);
         }
 
         @Override
@@ -6497,7 +6497,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         LowSweepTM() {
-            super(ItemNamesies.LOW_SWEEP_TM, "The user attacks the target's legs swiftly, reducing the target's Speed stat.", BagCategory.TM);
+            super(ItemNamesies.LOW_SWEEP_TM, "The user makes a swift attack on the target's legs, which lowers the target's Speed stat.", BagCategory.TM);
         }
 
         @Override
@@ -6510,7 +6510,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         RoundTM() {
-            super(ItemNamesies.ROUND_TM, "The user attacks the target with a song.", BagCategory.TM);
+            super(ItemNamesies.ROUND_TM, "The user attacks the target with a song. Others can join in the Round to increase the power of the attack.", BagCategory.TM);
         }
 
         @Override
@@ -6523,7 +6523,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         EchoedVoiceTM() {
-            super(ItemNamesies.ECHOED_VOICE_TM, "The user attacks the target with an echoing voice. If this move is used every turn, it does greater damage.", BagCategory.TM);
+            super(ItemNamesies.ECHOED_VOICE_TM, "The user attacks the target with an echoing voice. If this move is used every turn, its power is increased.", BagCategory.TM);
         }
 
         @Override
@@ -6536,7 +6536,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         OverheatTM() {
-            super(ItemNamesies.OVERHEAT_TM, "The user attacks the target at full power. The attack's recoil harshly reduces the user's Sp. Atk stat.", BagCategory.TM);
+            super(ItemNamesies.OVERHEAT_TM, "The user attacks the target at full power. The attack's recoil harshly lowers the user's Sp. Atk stat.", BagCategory.TM);
         }
 
         @Override
@@ -6549,7 +6549,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SteelWingTM() {
-            super(ItemNamesies.STEEL_WING_TM, "The target is hit with wings of steel. It may also raise the user's Defense stat.", BagCategory.TM);
+            super(ItemNamesies.STEEL_WING_TM, "The target is hit with wings of steel. This may also raise the user's Defense stat.", BagCategory.TM);
         }
 
         @Override
@@ -6562,7 +6562,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         FocusBlastTM() {
-            super(ItemNamesies.FOCUS_BLAST_TM, "The user heightens its mental focus and unleashes its power. It may also lower the target's Sp. Def.", BagCategory.TM);
+            super(ItemNamesies.FOCUS_BLAST_TM, "The user heightens its mental focus and unleashes its power. This may also lower the target's  Sp. Def stat.", BagCategory.TM);
         }
 
         @Override
@@ -6575,7 +6575,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         EnergyBallTM() {
-            super(ItemNamesies.ENERGY_BALL_TM, "The user draws power from nature and fires it at the target. It may also lower the target's Sp. Def.", BagCategory.TM);
+            super(ItemNamesies.ENERGY_BALL_TM, "The user draws power from nature and fires it at the target. This may also lower the target's Sp. Def stat.", BagCategory.TM);
         }
 
         @Override
@@ -6601,7 +6601,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         ScaldTM() {
-            super(ItemNamesies.SCALD_TM, "The user shoots boiling hot water at its target. It may also leave the target with a burn.", BagCategory.TM);
+            super(ItemNamesies.SCALD_TM, "The user shoots boiling hot water at its target. This may also leave the target with a burn.", BagCategory.TM);
         }
 
         @Override
@@ -6614,7 +6614,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         FlingTM() {
-            super(ItemNamesies.FLING_TM, "The user flings its held item at the target to attack. Its power and effects depend on the item.", BagCategory.TM);
+            super(ItemNamesies.FLING_TM, "The user flings its held item at the target to attack. This move's power and effects depend on the item.", BagCategory.TM);
         }
 
         @Override
@@ -6640,7 +6640,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SkyDropTM() {
-            super(ItemNamesies.SKY_DROP_TM, "The user takes the target into the sky, then slams it into the ground.", BagCategory.TM);
+            super(ItemNamesies.SKY_DROP_TM, "The user takes the target into the sky, then drops it during the next turn. The target cannot attack while in the sky.", BagCategory.TM);
         }
 
         @Override
@@ -6653,7 +6653,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         IncinerateTM() {
-            super(ItemNamesies.INCINERATE_TM, "The user attacks the target with fire. If the target is holding a Berry, the Berry becomes burnt up and unusable.", BagCategory.TM);
+            super(ItemNamesies.INCINERATE_TM, "The user attacks opposing Pokémon with fire. If a Pokémon is holding a certain item, such as a Berry, the item becomes burned up and unusable.", BagCategory.TM);
         }
 
         @Override
@@ -6692,7 +6692,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         EmbargoTM() {
-            super(ItemNamesies.EMBARGO_TM, "It prevents the target from using its held item. Its Trainer is also prevented from using items on it.", BagCategory.TM);
+            super(ItemNamesies.EMBARGO_TM, "This move prevents the target from using its held item for five turns. Its Trainer is also prevented from using items on it.", BagCategory.TM);
         }
 
         @Override
@@ -6705,7 +6705,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         ExplosionTM() {
-            super(ItemNamesies.EXPLOSION_TM, "The user explodes to inflict damage on those around it. The user faints upon using this move.", BagCategory.TM);
+            super(ItemNamesies.EXPLOSION_TM, "The user attacks everything around it by causing a tremendous explosion. The user faints upon using this move.", BagCategory.TM);
         }
 
         @Override
@@ -6731,7 +6731,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         PaybackTM() {
-            super(ItemNamesies.PAYBACK_TM, "If the user moves after the target, this attack's power will be doubled.", BagCategory.TM);
+            super(ItemNamesies.PAYBACK_TM, "The user stores power, then attacks. If the user moves after the target, this attack's power will be doubled.", BagCategory.TM);
         }
 
         @Override
@@ -6744,7 +6744,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         RetaliateTM() {
-            super(ItemNamesies.RETALIATE_TM, "The user gets revenge for a fainted ally. If an ally fainted in the previous turn, this attack's damage increases.", BagCategory.TM);
+            super(ItemNamesies.RETALIATE_TM, "The user gets revenge for a fainted ally. If an ally fainted in the previous turn, this move's power is increased.", BagCategory.TM);
         }
 
         @Override
@@ -6757,7 +6757,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         GigaImpactTM() {
-            super(ItemNamesies.GIGA_IMPACT_TM, "The user charges at the target using every bit of its power. The user must rest on the next turn.", BagCategory.TM);
+            super(ItemNamesies.GIGA_IMPACT_TM, "The user charges at the target using every bit of its power. The user can't move on the next turn.", BagCategory.TM);
         }
 
         @Override
@@ -6770,7 +6770,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         RockPolishTM() {
-            super(ItemNamesies.ROCK_POLISH_TM, "The user polishes its body to reduce drag. It can sharply raise the Speed stat.", BagCategory.TM);
+            super(ItemNamesies.ROCK_POLISH_TM, "The user polishes its body to reduce drag. This can sharply raise the Speed stat.", BagCategory.TM);
         }
 
         @Override
@@ -6783,7 +6783,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         FlashTM() {
-            super(ItemNamesies.FLASH_TM, "The user flashes a bright light that cuts the target's accuracy. It can also be used to illuminate caves.", BagCategory.TM);
+            super(ItemNamesies.FLASH_TM, "The user flashes a bright light that cuts the target's accuracy.", BagCategory.TM);
         }
 
         @Override
@@ -6796,7 +6796,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         StoneEdgeTM() {
-            super(ItemNamesies.STONE_EDGE_TM, "The user stabs the foe with sharpened stones from below. It has a high critical-hit ratio.", BagCategory.TM);
+            super(ItemNamesies.STONE_EDGE_TM, "The user stabs the target from below with sharpened stones. Critical hits land more easily.", BagCategory.TM);
         }
 
         @Override
@@ -6822,7 +6822,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         ThunderWaveTM() {
-            super(ItemNamesies.THUNDER_WAVE_TM, "A weak electric charge is launched at the target. It causes paralysis if it hits.", BagCategory.TM);
+            super(ItemNamesies.THUNDER_WAVE_TM, "The user launches a weak jolt of electricity that paralyzes the target.", BagCategory.TM);
         }
 
         @Override
@@ -6835,7 +6835,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         GyroBallTM() {
-            super(ItemNamesies.GYRO_BALL_TM, "The user tackles the target with a high-speed spin. The slower the user, the greater the damage.", BagCategory.TM);
+            super(ItemNamesies.GYRO_BALL_TM, "The user tackles the target with a high-speed spin. The slower the user compared to the target, the greater the move's power.", BagCategory.TM);
         }
 
         @Override
@@ -6848,7 +6848,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SwordsDanceTM() {
-            super(ItemNamesies.SWORDS_DANCE_TM, "A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat.", BagCategory.TM);
+            super(ItemNamesies.SWORDS_DANCE_TM, "A frenetic dance to uplift the fighting spirit. This sharply raises the user's Attack stat.", BagCategory.TM);
         }
 
         @Override
@@ -6861,7 +6861,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         StruggleBugTM() {
-            super(ItemNamesies.STRUGGLE_BUG_TM, "While resisting, the user attacks the opposing Pokémon. The targets' Sp. Atk stat is reduced.", BagCategory.TM);
+            super(ItemNamesies.STRUGGLE_BUG_TM, "While resisting, the user attacks the opposing Pokémon. This lowers the Sp. Atk stat of those hit.", BagCategory.TM);
         }
 
         @Override
@@ -6887,7 +6887,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         BulldozeTM() {
-            super(ItemNamesies.BULLDOZE_TM, "The user stomps down on the ground and attacks everything in the area. Hit Pokémon's Speed stat is reduced.", BagCategory.TM);
+            super(ItemNamesies.BULLDOZE_TM, "The user strikes everything around it by stomping down on the ground. This lowers the Speed stat of those hit.", BagCategory.TM);
         }
 
         @Override
@@ -6900,7 +6900,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         FrostBreathTM() {
-            super(ItemNamesies.FROST_BREATH_TM, "The user blows a cold breath on the target. This attack always results in a critical hit.", BagCategory.TM);
+            super(ItemNamesies.FROST_BREATH_TM, "The user blows its cold breath on the target. This attack always results in a critical hit.", BagCategory.TM);
         }
 
         @Override
@@ -6913,7 +6913,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         RockSlideTM() {
-            super(ItemNamesies.ROCK_SLIDE_TM, "Large boulders are hurled at the opposing team to inflict damage. It may also make the targets flinch.", BagCategory.TM);
+            super(ItemNamesies.ROCK_SLIDE_TM, "Large boulders are hurled at the opposing Pokémon to inflict damage. This may also make the opposing Pokémon flinch.", BagCategory.TM);
         }
 
         @Override
@@ -6939,7 +6939,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         DragonTailTM() {
-            super(ItemNamesies.DRAGON_TAIL_TM, "The user knocks away the target and drags out another Pokémon in its party. In the wild, the battle ends.", BagCategory.TM);
+            super(ItemNamesies.DRAGON_TAIL_TM, "The target is knocked away, and a different Pokémon is dragged out. In the wild, this ends a battle against a single Pokémon.", BagCategory.TM);
         }
 
         @Override
@@ -6965,7 +6965,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         PoisonJabTM() {
-            super(ItemNamesies.POISON_JAB_TM, "The target is stabbed with a tentacle or arm steeped in poison. It may also poison the target.", BagCategory.TM);
+            super(ItemNamesies.POISON_JAB_TM, "The target is stabbed with a tentacle or arm steeped in poison. This may also poison the target.", BagCategory.TM);
         }
 
         @Override
@@ -6978,7 +6978,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         DreamEaterTM() {
-            super(ItemNamesies.DREAM_EATER_TM, "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal the user's HP.", BagCategory.TM);
+            super(ItemNamesies.DREAM_EATER_TM, "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal its own HP.", BagCategory.TM);
         }
 
         @Override
@@ -6991,7 +6991,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         GrassKnotTM() {
-            super(ItemNamesies.GRASS_KNOT_TM, "The user snares the target with grass and trips it. The heavier the target, the greater the damage.", BagCategory.TM);
+            super(ItemNamesies.GRASS_KNOT_TM, "The user snares the target with grass and trips it. The heavier the target, the greater the move's power.", BagCategory.TM);
         }
 
         @Override
@@ -7004,7 +7004,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SwaggerTM() {
-            super(ItemNamesies.SWAGGER_TM, "The user enrages and confuses the target. However, it also sharply raises the target's Attack stat.", BagCategory.TM);
+            super(ItemNamesies.SWAGGER_TM, "The user enrages and confuses the target. However, this also sharply raises the target's Attack stat.", BagCategory.TM);
         }
 
         @Override
@@ -7056,7 +7056,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         FlashCannonTM() {
-            super(ItemNamesies.FLASH_CANNON_TM, "The user gathers all its light energy and releases it at once. It may also lower the target's Sp. Def stat.", BagCategory.TM);
+            super(ItemNamesies.FLASH_CANNON_TM, "The user gathers all its light energy and releases it all at once. This may also lower the target's Sp. Def stat.", BagCategory.TM);
         }
 
         @Override
@@ -7082,7 +7082,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         WildChargeTM() {
-            super(ItemNamesies.WILD_CHARGE_TM, "The user shrouds itself in electricity and smashes into its target. It also damages the user a little.", BagCategory.TM);
+            super(ItemNamesies.WILD_CHARGE_TM, "The user shrouds itself in electricity and smashes into its target. This also damages the user a little.", BagCategory.TM);
         }
 
         @Override
@@ -7095,7 +7095,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         RockSmashTM() {
-            super(ItemNamesies.ROCK_SMASH_TM, "The user attacks with a punch that can shatter a rock. It may also lower the target's Defense stat.", BagCategory.TM);
+            super(ItemNamesies.ROCK_SMASH_TM, "The user attacks with a punch. This may also lower the target's Defense stat.", BagCategory.TM);
         }
 
         @Override
@@ -7108,7 +7108,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SnarlTM() {
-            super(ItemNamesies.SNARL_TM, "The user yells as if it is ranting about something, making the target's Sp. Atk stat decrease.", BagCategory.TM);
+            super(ItemNamesies.SNARL_TM, "The user yells as if it's ranting about something, which lowers the Sp. Atk stat of opposing Pokémon.", BagCategory.TM);
         }
 
         @Override
@@ -7121,7 +7121,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         NaturePowerTM() {
-            super(ItemNamesies.NATURE_POWER_TM, "An attack that makes use of nature's power. Its effects vary depending on the user's environment.", BagCategory.TM);
+            super(ItemNamesies.NATURE_POWER_TM, "This attack makes use of nature's power. Its effects vary depending on the user's environment.", BagCategory.TM);
         }
 
         @Override
@@ -7134,7 +7134,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         DarkPulseTM() {
-            super(ItemNamesies.DARK_PULSE_TM, "The user releases a horrible aura imbued with dark thoughts. It may also make the target flinch.", BagCategory.TM);
+            super(ItemNamesies.DARK_PULSE_TM, "The user releases a horrible aura imbued with dark thoughts. This may also make the target flinch.", BagCategory.TM);
         }
 
         @Override
@@ -7186,7 +7186,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         CutTM() {
-            super(ItemNamesies.CUT_TM, "The target is cut with a scythe or a claw. It can also be used to cut down thin trees.", BagCategory.TM);
+            super(ItemNamesies.CUT_TM, "The target is cut with a scythe or claw.", BagCategory.TM);
         }
 
         @Override
@@ -7199,7 +7199,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         FlyTM() {
-            super(ItemNamesies.FLY_TM, "The user soars, then strikes its target on the second turn. It can also be used for flying to any familiar town.", BagCategory.TM);
+            super(ItemNamesies.FLY_TM, "The user soars and then strikes its target on the next turn.", BagCategory.TM);
         }
 
         @Override
@@ -7212,7 +7212,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SurfTM() {
-            super(ItemNamesies.SURF_TM, "It swamps the area around the user with a giant wave. It can also be used for crossing water.", BagCategory.TM);
+            super(ItemNamesies.SURF_TM, "The user attacks everything around it by swamping its surroundings with a giant wave.", BagCategory.TM);
         }
 
         @Override
@@ -7225,7 +7225,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         StrengthTM() {
-            super(ItemNamesies.STRENGTH_TM, "The target is slugged with a punch thrown at maximum power. It can also be used to move heavy boulders.", BagCategory.TM);
+            super(ItemNamesies.STRENGTH_TM, "The target is slugged with a punch thrown at maximum power.", BagCategory.TM);
         }
 
         @Override
@@ -7238,7 +7238,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         WaterfallTM() {
-            super(ItemNamesies.WATERFALL_TM, "The user charges at the target and may make it flinch. It can also be used to climb a waterfall.", BagCategory.TM);
+            super(ItemNamesies.WATERFALL_TM, "The user charges at the target and may make it flinch.", BagCategory.TM);
         }
 
         @Override

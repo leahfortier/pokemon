@@ -398,10 +398,9 @@ public class UpdateGen {
             // Read in all of the fields
             while (in.hasNextLine()) {
                 line = in.nextLine();
-                out.appendLine(line);
 
-                line = line.trim();
-                if (line.equals("*")) {
+                if (line.trim().equals("*")) {
+                    out.appendLine(line);
                     break;
                 }
 
@@ -411,6 +410,12 @@ public class UpdateGen {
                 }
 
                 String key = split[0].trim();
+                if (key.equals("Desc")) {
+                    out.appendLine("\t" + key + ": " + newDescription);
+                } else {
+                    out.appendLine(line);
+                }
+
                 String value = split[1].trim();
                 if (value.isEmpty()) {
                     while (in.hasNext()) {
