@@ -3521,20 +3521,11 @@ Focus Punch:
     Pow: 150
     Acc: 100
     Cat: Physical
-    MoveType: Assistless, Sleep_Talk_Fail, Metronomeless, Punching, Mirrorless
-    Priority: -3
+    MoveType: Punching
+    FocusMove: Focusing
     PP: 20
     Type: Fighting
-    Effect: Focusing
-    SelfTarget: True
-    StartTurn:
-        super.applyBasicEffects(b, me, me);
-        me.setReducePP(true);
-        ###
     Applies: user.hasEffect(EffectNamesies.FOCUSING)
-    ShouldApplyEffects:
-        return false;
-        ###
 *
 Shell Trap:
     Desc: The user sets a shell trap. If the user is hit by a physical move, the trap will explode and inflict damage on the opposing Pok\u00e9mon.
@@ -3542,18 +3533,9 @@ Shell Trap:
     Acc: 100
     Cat: Special
     Type: Fire
-    Priority: -3
     PP: 5
-    Effect: ShellTrap
-    SelfTarget: True
-    MoveType: Mirrorless
-    StartTurn:
-        super.applyBasicEffects(b, me, me);
-        ###
+    FocusMove: ShellTrap
     Applies: !user.hasEffect(EffectNamesies.SHELL_TRAP)
-    ShouldApplyEffects:
-        return false;
-        ###
 *
 Beak Blast:
     Desc: The user first heats up its beak, and then it attacks the target. Making direct contact with the Pok\u00e9mon while it's heating up its beak results in a burn.
@@ -3562,14 +3544,8 @@ Beak Blast:
     Cat: Physical
     Pow: 100
     PhysicalContact: False
-    Priority: -3
-    Effect: BeakBlast
-    MoveType: Mirrorless
+    FocusMove: Beak_Blast
     Acc: 100
-    SelfTarget: True
-    StartTurn:
-        super.applyBasicEffects(b, me, me);
-        ###
 *
 Me First:
     Desc: The user cuts ahead of the target to copy and use the target's intended move with greater power. This move fails if it isn't used first.

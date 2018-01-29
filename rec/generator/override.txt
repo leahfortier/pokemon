@@ -1856,6 +1856,19 @@ HealSwitcher:
 	AddMapField: SelfTarget: True
 	AddMapField: MoveType: User_Faints, Healing
 *
+FocusMove:
+    AddMapField: MoveType: Assistless, Sleep_Talk_Fail, Metronomeless, Mirrorless
+    AddMapField: Priority: -3
+    AddMapField: Effect: {0}
+    AddMapField: SelfTarget: True
+    AddMapField: StartTurn:
+        super.applyBasicEffects(b, me, me);
+        me.setReducePP(true);
+        ###
+    AddMapField: ShouldApplyEffects:
+        return false;
+        ###
+*
 GET_DAT_CASH_MONEY_TWICE_ITEM:
 	Header: void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice)
 	AccessModifier: Private

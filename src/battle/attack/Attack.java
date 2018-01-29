@@ -6395,12 +6395,78 @@ public abstract class Attack implements Serializable {
             super.power = 150;
             super.accuracy = 100;
             super.effects.add(EffectNamesies.FOCUSING);
+            super.moveTypes.add(MoveType.PUNCHING);
             super.moveTypes.add(MoveType.ASSISTLESS);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.moveTypes.add(MoveType.METRONOMELESS);
-            super.moveTypes.add(MoveType.PUNCHING);
             super.moveTypes.add(MoveType.MIRRORLESS);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.selfTarget = true;
+            super.priority = -3;
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            return false;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.hasEffect(EffectNamesies.FOCUSING);
+        }
+
+        @Override
+        public void startTurn(Battle b, ActivePokemon me) {
+            super.applyBasicEffects(b, me, me);
+            me.setReducePP(true);
+        }
+    }
+
+    static class ShellTrap extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        ShellTrap() {
+            super(AttackNamesies.SHELL_TRAP, Type.FIRE, MoveCategory.SPECIAL, 5, "The user sets a shell trap. If the user is hit by a physical move, the trap will explode and inflict damage on the opposing Pok\u00e9mon.");
+            super.power = 150;
+            super.accuracy = 100;
+            super.effects.add(EffectNamesies.SHELL_TRAP);
+            super.moveTypes.add(MoveType.ASSISTLESS);
+            super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            super.moveTypes.add(MoveType.METRONOMELESS);
+            super.moveTypes.add(MoveType.MIRRORLESS);
+            super.selfTarget = true;
+            super.priority = -3;
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            return false;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return !user.hasEffect(EffectNamesies.SHELL_TRAP);
+        }
+
+        @Override
+        public void startTurn(Battle b, ActivePokemon me) {
+            super.applyBasicEffects(b, me, me);
+            me.setReducePP(true);
+        }
+    }
+
+    static class BeakBlast extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        BeakBlast() {
+            super(AttackNamesies.BEAK_BLAST, Type.FLYING, MoveCategory.PHYSICAL, 15, "The user first heats up its beak, and then it attacks the target. Making direct contact with the Pok\u00e9mon while it's heating up its beak results in a burn.");
+            super.power = 100;
+            super.accuracy = 100;
+            super.effects.add(EffectNamesies.BEAK_BLAST);
+            super.moveTypes.add(MoveType.ASSISTLESS);
+            super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            super.moveTypes.add(MoveType.METRONOMELESS);
+            super.moveTypes.add(MoveType.MIRRORLESS);
             super.selfTarget = true;
             super.priority = -3;
         }
@@ -6414,59 +6480,6 @@ public abstract class Attack implements Serializable {
         public void startTurn(Battle b, ActivePokemon me) {
             super.applyBasicEffects(b, me, me);
             me.setReducePP(true);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasEffect(EffectNamesies.FOCUSING);
-        }
-    }
-
-    static class ShellTrap extends Attack {
-        private static final long serialVersionUID = 1L;
-
-        ShellTrap() {
-            super(AttackNamesies.SHELL_TRAP, Type.FIRE, MoveCategory.SPECIAL, 5, "The user sets a shell trap. If the user is hit by a physical move, the trap will explode and inflict damage on the opposing Pok\u00e9mon.");
-            super.power = 150;
-            super.accuracy = 100;
-            super.effects.add(EffectNamesies.SHELL_TRAP);
-            super.moveTypes.add(MoveType.MIRRORLESS);
-            super.selfTarget = true;
-            super.priority = -3;
-        }
-
-        @Override
-        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
-            return false;
-        }
-
-        @Override
-        public void startTurn(Battle b, ActivePokemon me) {
-            super.applyBasicEffects(b, me, me);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.hasEffect(EffectNamesies.SHELL_TRAP);
-        }
-    }
-
-    static class BeakBlast extends Attack {
-        private static final long serialVersionUID = 1L;
-
-        BeakBlast() {
-            super(AttackNamesies.BEAK_BLAST, Type.FLYING, MoveCategory.PHYSICAL, 15, "The user first heats up its beak, and then it attacks the target. Making direct contact with the Pok\u00e9mon while it's heating up its beak results in a burn.");
-            super.power = 100;
-            super.accuracy = 100;
-            super.effects.add(EffectNamesies.BEAK_BLAST);
-            super.moveTypes.add(MoveType.MIRRORLESS);
-            super.selfTarget = true;
-            super.priority = -3;
-        }
-
-        @Override
-        public void startTurn(Battle b, ActivePokemon me) {
-            super.applyBasicEffects(b, me, me);
         }
     }
 
