@@ -384,7 +384,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         TintedLens() {
-            super(AbilityNamesies.TINTED_LENS, "The Pok\u00e9mon can use ânot very effectiveâ moves to deal regular damage.");
+            super(AbilityNamesies.TINTED_LENS, "The Pok\u00e9mon can use \"not very effective\" moves to deal regular damage.");
         }
 
         @Override
@@ -1774,7 +1774,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Download() {
-            super(AbilityNamesies.DOWNLOAD, "Compares an opposing Pok\u00e9mon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk statâwhichever will be more effective.");
+            super(AbilityNamesies.DOWNLOAD, "Compares an opposing Pok\u00e9mon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat -- whichever will be more effective.");
         }
 
         @Override
@@ -3218,7 +3218,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Multitype() {
-            super(AbilityNamesies.MULTITYPE, "Changes the Pok\u00e9mon's type to match the Plate or Z-Crystal it holds.");
+            super(AbilityNamesies.MULTITYPE, "Changes the Pok\u00e9mon's type to match the Plate it holds.");
         }
 
         @Override
@@ -3310,7 +3310,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         AuraBreak() {
-            super(AbilityNamesies.AURA_BREAK, "The effects of âAuraâ Abilities are reversed to lower the power of affected moves.");
+            super(AbilityNamesies.AURA_BREAK, "The effects of \"Aura\" Abilities are reversed to lower the power of affected moves.");
         }
     }
 
@@ -3457,7 +3457,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Healer() {
-            super(AbilityNamesies.HEALER, "Sometimes heals an ally's status condition.");
+            super(AbilityNamesies.HEALER, "Sometimes heals its status condition.");
         }
 
         @Override
@@ -3763,7 +3763,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         FlowerVeil() {
-            super(AbilityNamesies.FLOWER_VEIL, "Ally Grass-type Pok\u00e9mon are protected from status conditions and the lowering of their stats.");
+            super(AbilityNamesies.FLOWER_VEIL, "Grass-type Pok\u00e9mon are protected from status conditions and the lowering of their stats.");
         }
 
         @Override

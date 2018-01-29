@@ -65,7 +65,7 @@ Compoundeyes:
     ToModify: Accuracy
 *
 Tinted Lens:
-    Desc: The Pok\u00e9mon can use ânot very effectiveâ moves to deal regular damage.
+    Desc: The Pok\u00e9mon can use \"not very effective\" moves to deal regular damage.
     PowerMultiplierCondition: 2 TypeAdvantage.isNotVeryEffective(user, victim, b)
 *
 Swarm:
@@ -640,7 +640,7 @@ Trace:
         ###
 *
 Download:
-    Desc: Compares an opposing Pok\u00e9mon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk statâwhichever will be more effective.
+    Desc: Compares an opposing Pok\u00e9mon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat -- whichever will be more effective.
     Int: EntryEffect
     Enter:
         ActivePokemon other = b.getOtherPokemon(enterer);
@@ -1355,7 +1355,7 @@ Gluttony:
     Desc: Makes the Pok\u00e9mon eat a held Berry when its HP drops to half or less, which is sooner than usual.
 *
 Multitype:
-    Desc: Changes the Pok\u00e9mon's type to match the Plate or Z-Crystal it holds.
+    Desc: Changes the Pok\u00e9mon's type to match the Plate it holds.
     SpecialItemAbility: PlateItem
 *
 RKS System:
@@ -1375,7 +1375,7 @@ Bulletproof:
     MoveTypePrevent: Bomb_Ball bomb/ball moves
 *
 Aura Break:
-    Desc: The effects of âAuraâ Abilities are reversed to lower the power of affected moves.
+    Desc: The effects of \"Aura\" Abilities are reversed to lower the power of affected moves.
 *
 Fairy Aura:
     Desc: Powers up each Pok\u00e9mon's Fairy-type moves.
@@ -1419,7 +1419,7 @@ Aroma Veil:
     Desc: Protects itself and its allies from attacks that limit their move choices.
 *
 Healer:
-    Desc: Sometimes heals an ally's status condition.
+    Desc: Sometimes heals its status condition.
     EndTurnStatusCure: RandomUtils.chanceTest(1, 3)
 *
 Pixilate:
@@ -1475,7 +1475,7 @@ Surge Surfer:
     ModifyMultiplier: 2 b.hasEffect(EffectNamesies.ELECTRIC_TERRAIN)
 *
 Flower Veil:
-    Desc: Ally Grass-type Pok\u00e9mon are protected from status conditions and the lowering of their stats.
+    Desc: Grass-type Pok\u00e9mon are protected from status conditions and the lowering of their stats.
     Int: StatusPreventionEffect, StatProtectingEffect
     StatusPrevent:
         return victim.isType(b, Type.GRASS);
