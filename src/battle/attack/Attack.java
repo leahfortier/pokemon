@@ -2410,7 +2410,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Wrap() {
-            super(AttackNamesies.WRAP, Type.NORMAL, MoveCategory.PHYSICAL, 20, "A long body, vines, or the like are used to wrap and  squeeze the target for four to five turns.");
+            super(AttackNamesies.WRAP, Type.NORMAL, MoveCategory.PHYSICAL, 20, "A long body, vines, or the like are used to wrap and squeeze the target for four to five turns.");
             super.power = 15;
             super.accuracy = 90;
             super.effects.add(EffectNamesies.WRAPPED);
@@ -3055,7 +3055,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         EarthPower() {
-            super(AttackNamesies.EARTH_POWER, Type.GROUND, MoveCategory.SPECIAL, 10, "The user makes the ground under the target erupt with power. This may also lower the target's  Sp. Def stat.");
+            super(AttackNamesies.EARTH_POWER, Type.GROUND, MoveCategory.SPECIAL, 10, "The user makes the ground under the target erupt with power. This may also lower the target's Sp. Def stat.");
             super.power = 90;
             super.accuracy = 100;
             super.effectChance = 10;
@@ -4699,7 +4699,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Constrict() {
-            super(AttackNamesies.CONSTRICT, Type.NORMAL, MoveCategory.PHYSICAL, 35, "The target is attacked with long, creeping tentacles, vines, or the like. This may also lower the target's  Speed stat.");
+            super(AttackNamesies.CONSTRICT, Type.NORMAL, MoveCategory.PHYSICAL, 35, "The target is attacked with long, creeping tentacles, vines, or the like. This may also lower the target's Speed stat.");
             super.power = 10;
             super.accuracy = 100;
             super.effectChance = 10;
@@ -6052,7 +6052,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Bonemerang() {
-            super(AttackNamesies.BONEMERANG, Type.GROUND, MoveCategory.PHYSICAL, 10, "The user throws the bone it holds. The bone loops around to hit the target twiceâcoming and going.");
+            super(AttackNamesies.BONEMERANG, Type.GROUND, MoveCategory.PHYSICAL, 10, "The user throws the bone it holds. The bone loops around to hit the target twice -- coming and going.");
             super.power = 50;
             super.accuracy = 90;
         }
@@ -6529,7 +6529,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         PowerWhip() {
-            super(AttackNamesies.POWER_WHIP, Type.GRASS, MoveCategory.PHYSICAL, 10, "The user violently whirls its vines, tentacles, or the  like to harshly lash the target.");
+            super(AttackNamesies.POWER_WHIP, Type.GRASS, MoveCategory.PHYSICAL, 10, "The user violently whirls its vines, tentacles, or the like to harshly lash the target.");
             super.power = 120;
             super.accuracy = 85;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -7175,7 +7175,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Sharpen() {
-            super(AttackNamesies.SHARPEN, Type.NORMAL, MoveCategory.STATUS, 30, "The user makes its edges more jagged,  which raises its Attack stat.");
+            super(AttackNamesies.SHARPEN, Type.NORMAL, MoveCategory.STATUS, 30, "The user makes its edges more jagged, which raises its Attack stat.");
             super.selfTarget = true;
             super.statChanges[Stat.ATTACK.index()] = 1;
         }
@@ -7197,7 +7197,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         SkyDrop() {
-            super(AttackNamesies.SKY_DROP, Type.FLYING, MoveCategory.PHYSICAL, 10, "The user takes the target into the sky, then drops it during the next turn. The target cannot attack while in the sky.");
+            super(AttackNamesies.SKY_DROP, Type.FLYING, MoveCategory.PHYSICAL, 10, "The user takes the target into the sky, then slams it into the ground.");
             super.power = 60;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.AIRBORNE);
@@ -10024,7 +10024,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         FocusBlast() {
-            super(AttackNamesies.FOCUS_BLAST, Type.FIGHTING, MoveCategory.SPECIAL, 5, "The user heightens its mental focus and unleashes its power. This may also lower the target's  Sp. Def stat.");
+            super(AttackNamesies.FOCUS_BLAST, Type.FIGHTING, MoveCategory.SPECIAL, 5, "The user heightens its mental focus and unleashes its power. This may also lower the target's Sp. Def stat.");
             super.power = 120;
             super.accuracy = 70;
             super.effectChance = 10;
@@ -10042,7 +10042,7 @@ public abstract class Attack implements Serializable {
             super.accuracy = 95;
             super.effectChance = 50;
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
+            super.statChanges[Stat.DEFENSE.index()] = 2;
         }
     }
 
@@ -10386,7 +10386,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         FlowerShield() {
-            super(AttackNamesies.FLOWER_SHIELD, Type.FAIRY, MoveCategory.STATUS, 10, "The user raises the Defense stat of all Grass-type Pok\u00e9mon in battle with a mysterious power.");
+            super(AttackNamesies.FLOWER_SHIELD, Type.FAIRY, MoveCategory.STATUS, 10, "The user raises its Defense stat with a mysterious power.");
             super.selfTarget = true;
             super.statChanges[Stat.DEFENSE.index()] = 1;
         }
@@ -10419,7 +10419,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Rototiller() {
-            super(AttackNamesies.ROTOTILLER, Type.GROUND, MoveCategory.STATUS, 10, "Tilling the soil, the user makes it easier for plants to grow. This raises the Attack and Sp. Atk stats of Grass-type Pok\u00e9mon.");
+            super(AttackNamesies.ROTOTILLER, Type.GROUND, MoveCategory.STATUS, 10, "Tilling the soil, the user makes it easier for plants to grow. This raises its Attack and Sp. Atk stats.");
             super.selfTarget = true;
             super.statChanges[Stat.ATTACK.index()] = 1;
             super.statChanges[Stat.SP_ATTACK.index()] = 1;
@@ -10540,7 +10540,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-            murderer.getStages().modifyStage(murderer, 2, Stat.ATTACK, b, CastSource.ATTACK);
+            murderer.getStages().modifyStage(murderer, 3, Stat.ATTACK, b, CastSource.ATTACK);
         }
     }
 
@@ -10548,7 +10548,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         MagneticFlux() {
-            super(AttackNamesies.MAGNETIC_FLUX, Type.ELECTRIC, MoveCategory.STATUS, 20, "The user manipulates magnetic fields, which raises the Defense and Sp. Def stats of ally Pok\u00e9mon with the Plus or Minus Ability.");
+            super(AttackNamesies.MAGNETIC_FLUX, Type.ELECTRIC, MoveCategory.STATUS, 20, "The user manipulates magnetic fields, which raises its Defense and Sp. Def stats.");
             super.selfTarget = true;
             super.statChanges[Stat.DEFENSE.index()] = 1;
             super.statChanges[Stat.SP_DEFENSE.index()] = 1;
@@ -10904,10 +10904,10 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         GearUp() {
-            super(AttackNamesies.GEAR_UP, Type.STEEL, MoveCategory.STATUS, 20, "The user engages its gears to raise the Attack and Sp. Atk stats of ally Pok\u00e9mon with the Plus or Minus Ability.");
+            super(AttackNamesies.GEAR_UP, Type.STEEL, MoveCategory.STATUS, 20, "The user engages its gears to raise its Attack and Sp. Atk stats.");
             super.selfTarget = true;
             super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1/2;
+            super.statChanges[Stat.SP_ATTACK.index()] = 1;
         }
     }
 
@@ -11184,7 +11184,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         SunsteelStrike() {
-            super(AttackNamesies.SUNSTEEL_STRIKE, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user slams into the target with the force of a meteor. This move can be used on the target  regardless of its Abilities.");
+            super(AttackNamesies.SUNSTEEL_STRIKE, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user slams into the target with the force of a meteor. This move can be used on the target regardless of its Abilities.");
             super.power = 100;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -11205,7 +11205,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         MoongeistBeam() {
-            super(AttackNamesies.MOONGEIST_BEAM, Type.GHOST, MoveCategory.SPECIAL, 5, "The user emits a sinister ray to attack the target. This move can be used on the target regardless of  its Abilities.");
+            super(AttackNamesies.MOONGEIST_BEAM, Type.GHOST, MoveCategory.SPECIAL, 5, "The user emits a sinister ray to attack the target. This move can be used on the target regardless of its Abilities.");
             super.power = 100;
             super.accuracy = 100;
         }
@@ -11319,7 +11319,7 @@ public abstract class Attack implements Serializable {
         private static final long serialVersionUID = 1L;
 
         PhotonGeyser() {
-            super(AttackNamesies.PHOTON_GEYSER, Type.PSYCHIC, MoveCategory.SPECIAL, 5, "The user attacks a target with a pillar of light. This move inflicts Attack or Sp. Atk damageâwhichever stat is higher for the user.");
+            super(AttackNamesies.PHOTON_GEYSER, Type.PSYCHIC, MoveCategory.SPECIAL, 5, "The user attacks a target with a pillar of light. This move inflicts Attack or Sp. Atk damage -- whichever stat is higher for the user.");
             super.power = 100;
             super.accuracy = 100;
         }

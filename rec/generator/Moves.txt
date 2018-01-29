@@ -1167,7 +1167,7 @@ Drill Run:
     Int: CritStageEffect
 *
 Wrap:
-    Desc: A long body, vines, or the like are used to wrap and  squeeze the target for four to five turns.
+    Desc: A long body, vines, or the like are used to wrap and squeeze the target for four to five turns.
     PP: 20
     Pow: 15
     Acc: 90
@@ -1538,7 +1538,7 @@ Body Slam:
     HitMinimize: True
 *
 Earth Power:
-    Desc: The user makes the ground under the target erupt with power. This may also lower the target's  Sp. Def stat.
+    Desc: The user makes the ground under the target erupt with power. This may also lower the target's Sp. Def stat.
     PP: 10
     Pow: 90
     Cat: Special
@@ -2562,7 +2562,7 @@ Leaf Blade:
     Int: CritStageEffect
 *
 Constrict:
-    Desc: The target is attacked with long, creeping tentacles, vines, or the like. This may also lower the target's  Speed stat.
+    Desc: The target is attacked with long, creeping tentacles, vines, or the like. This may also lower the target's Speed stat.
     PP: 35
     Pow: 10
     Acc: 100
@@ -3337,7 +3337,7 @@ Bone Club:
     PhysicalContact: False
 *
 Bonemerang:
-    Desc: The user throws the bone it holds. The bone loops around to hit the target twiceâcoming and going.
+    Desc: The user throws the bone it holds. The bone loops around to hit the target twice -- coming and going.
     PP: 10
     Type: Ground
     Cat: Physical
@@ -3603,7 +3603,7 @@ Refresh:
         ###
 *
 Power Whip:
-    Desc: The user violently whirls its vines, tentacles, or the  like to harshly lash the target.
+    Desc: The user violently whirls its vines, tentacles, or the like to harshly lash the target.
     PP: 10
     Type: Grass
     Pow: 120
@@ -4031,7 +4031,7 @@ Conversion 2:
         ###
 *
 Sharpen:
-    Desc: The user makes its edges more jagged,  which raises its Attack stat.
+    Desc: The user makes its edges more jagged, which raises its Attack stat.
     Type: Normal
     Cat: Status
     SelfTarget: True
@@ -4049,7 +4049,7 @@ Magic Coat:
     MoveType: Non_Snatchable
 *
 Sky Drop:
-    Desc: The user takes the target into the sky, then drops it during the next turn. The target cannot attack while in the sky.
+    Desc: The user takes the target into the sky, then slams it into the ground.
     PP: 10
     Pow: 60
     Type: Flying
@@ -5736,7 +5736,7 @@ Volt Tackle:
     RecoilPercentage: 3
 *
 Focus Blast:
-    Desc: The user heightens its mental focus and unleashes its power. This may also lower the target's  Sp. Def stat.
+    Desc: The user heightens its mental focus and unleashes its power. This may also lower the target's Sp. Def stat.
     PP: 5
     Pow: 120
     Acc: 70
@@ -5754,7 +5754,7 @@ Diamond Storm:
     Pow: 100
     PP: 5
     EffChance: 50
-    StatChange: 1 Defense 1
+    StatChange: 1 Defense 2
     SelfTarget: True
     PhysicalContact: False
 *
@@ -5981,7 +5981,7 @@ Grassy Terrain:
     BattleEffect: GrassyTerrain
 *
 Flower Shield:
-    Desc: The user raises the Defense stat of all Grass-type Pok\u00e9mon in battle with a mysterious power.
+    Desc: The user raises its Defense stat with a mysterious power.
     PP: 10
     Type: Fairy
     Cat: Status
@@ -6008,7 +6008,7 @@ Powder:
     Priority: 1
 *
 Rototiller:
-    Desc: Tilling the soil, the user makes it easier for plants to grow. This raises the Attack and Sp. Atk stats of Grass-type Pok\u00e9mon.
+    Desc: Tilling the soil, the user makes it easier for plants to grow. This raises its Attack and Sp. Atk stats.
     PP: 10
     Type: Ground
     SelfTarget: True
@@ -6079,11 +6079,11 @@ Fell Stinger:
     Pow: 50
     Int: MurderEffect
     KillWish:
-        murderer.getStages().modifyStage(murderer, 2, Stat.ATTACK, b, CastSource.ATTACK);
+        murderer.getStages().modifyStage(murderer, 3, Stat.ATTACK, b, CastSource.ATTACK);
         ###
 *
 Magnetic Flux:
-    Desc: The user manipulates magnetic fields, which raises the Defense and Sp. Def stats of ally Pok\u00e9mon with the Plus or Minus Ability.
+    Desc: The user manipulates magnetic fields, which raises its Defense and Sp. Def stats.
     PP: 20
     Type: Electric
     Cat: Status
@@ -6314,12 +6314,12 @@ Laser Focus:
     Effect: LaserFocus
 *
 Gear Up:
-    Desc: The user engages its gears to raise the Attack and Sp. Atk stats of ally Pok\u00e9mon with the Plus or Minus Ability.
+    Desc: The user engages its gears to raise its Attack and Sp. Atk stats.
     Type: Steel
     PP: 20
     SelfTarget: True
     Cat: Status
-    StatChange: 2 Attack 1 Sp_Attack 1/2
+    StatChange: 2 Attack 1 Sp_Attack 1
 *
 Throat Chop:
     Desc: The user attacks the target's throat, and the resultant suffering prevents the target from using moves that emit sound for two turns.
@@ -6513,7 +6513,7 @@ Spectral Thief:
         ###
 *
 Sunsteel Strike:
-    Desc: The user slams into the target with the force of a meteor. This move can be used on the target  regardless of its Abilities.
+    Desc: The user slams into the target with the force of a meteor. This move can be used on the target regardless of its Abilities.
     Type: Steel
     Cat: Physical
     PP: 5
@@ -6522,7 +6522,7 @@ Sunsteel Strike:
     IgnoreAbilityMove: True
 *
 Moongeist Beam:
-    Desc: The user emits a sinister ray to attack the target. This move can be used on the target regardless of  its Abilities.
+    Desc: The user emits a sinister ray to attack the target. This move can be used on the target regardless of its Abilities.
     Type: Ghost
     Cat: Special
     PP: 5
@@ -6602,7 +6602,7 @@ Steam Eruption:
     MoveType: Defrost
 *
 Photon Geyser:
-    Desc: The user attacks a target with a pillar of light. This move inflicts Attack or Sp. Atk damageâwhichever stat is higher for the user.
+    Desc: The user attacks a target with a pillar of light. This move inflicts Attack or Sp. Atk damage -- whichever stat is higher for the user.
     Type: Psychic
     PP: 5
     Pow: 100

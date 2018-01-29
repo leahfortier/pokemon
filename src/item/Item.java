@@ -6562,7 +6562,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         FocusBlastTM() {
-            super(ItemNamesies.FOCUS_BLAST_TM, "The user heightens its mental focus and unleashes its power. This may also lower the target's  Sp. Def stat.", BagCategory.TM);
+            super(ItemNamesies.FOCUS_BLAST_TM, "The user heightens its mental focus and unleashes its power. This may also lower the target's Sp. Def stat.", BagCategory.TM);
         }
 
         @Override
@@ -6640,7 +6640,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         private static final long serialVersionUID = 1L;
 
         SkyDropTM() {
-            super(ItemNamesies.SKY_DROP_TM, "The user takes the target into the sky, then drops it during the next turn. The target cannot attack while in the sky.", BagCategory.TM);
+            super(ItemNamesies.SKY_DROP_TM, "The user takes the target into the sky, then slams it into the ground.", BagCategory.TM);
         }
 
         @Override
