@@ -1,9 +1,7 @@
 package generator.update;
 
-import battle.attack.AttackNamesies;
 import draw.ImageUtils;
 import generator.GeneratorType;
-import main.Global;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.evolution.EvolutionType;
@@ -31,10 +29,12 @@ public class UpdateGen {
     }
 
     private UpdateGen() {
-//        newPokemonInfoCompare();
-//        MoveParser.writeMovesList();
+        newPokemonInfoCompare();
+        MoveParser.writeMovesList();
+        AbilityParser.writeAbilitiesList();
+//        new MoveUpdater().updateDescription();
+//        new AbilityUpdater().updateDescription();
 //        pokemonInfoStuff();
-        moveDescriptionUpdate();
 //        updateNum();
 //        resizeImages();
 //        trimImages();
@@ -340,97 +340,5 @@ public class UpdateGen {
         return new StringAppender(num + "\n")
                 .appendJoin(StringUtils.empty(), num, index -> in.nextLine().trim() + "\n")
                 .toString();
-    }
-
-    private void moveDescriptionUpdate() {
-        final String moveGenFilePath = GeneratorType.ATTACK_GEN.getInputPath();
-
-        Scanner in = FileIO.openFile(moveGenFilePath);
-        StringAppender out = new StringAppender();
-
-        // Format stuff at the top of the file
-        while (in.hasNext()) {
-            String line = in.nextLine();
-            out.appendLine(line);
-
-            line = line.trim();
-
-            // Ignore comments and white space
-            if (line.isEmpty() || line.startsWith("#")) {
-                continue;
-            }
-
-            if (line.equals("***")) {
-                break;
-            }
-
-            while (in.hasNext()) {
-                line = in.nextLine();
-                out.appendLine(line);
-
-                line = line.trim();
-                if (line.equals("*")) {
-                    break;
-                }
-            }
-        }
-
-        // Read the moves
-        while (in.hasNext()) {
-            String line = in.nextLine();
-            out.appendLine(line);
-            line = line.trim();
-
-            // Ignore comments and white space
-            if (line.isEmpty() || line.startsWith("#")) {
-                continue;
-            }
-
-            // Get the class name
-            String name = line.replace(":", "");
-            AttackNamesies attackNamesies = AttackNamesies.getValueOf(name);
-            MoveParser moveParser = MoveParser.getParseMove(attackNamesies);
-            String newDescription = attackNamesies.getNewAttack().getDescription();
-            if (moveParser != null) {
-                newDescription = moveParser.description;
-            }
-
-            // Read in all of the fields
-            while (in.hasNextLine()) {
-                line = in.nextLine();
-
-                if (line.trim().equals("*")) {
-                    out.appendLine(line);
-                    break;
-                }
-
-                String[] split = line.split(":", 2);
-                if (split.length != 2) {
-                    Global.error("Field key and value must be separated by a colon: " + line);
-                }
-
-                String key = split[0].trim();
-                if (key.equals("Desc")) {
-                    out.appendLine("\t" + key + ": " + newDescription);
-                } else {
-                    out.appendLine(line);
-                }
-
-                String value = split[1].trim();
-                if (value.isEmpty()) {
-                    while (in.hasNext()) {
-                        line = in.nextLine();
-                        out.appendLine(line);
-
-                        line = line.trim();
-                        if (line.equals("###")) {
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        FileIO.overwriteFile(moveGenFilePath, out.toString());
     }
 }

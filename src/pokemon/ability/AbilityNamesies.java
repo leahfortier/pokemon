@@ -455,7 +455,7 @@ public enum AbilityNamesies {
             return AbilityNamesies.valueOf(StringUtils.getNamesiesString(name));
         } catch (IllegalArgumentException exception) {
             Global.error(name + " does not have a valid AbilityNamesies value");
-            return null;
+            return NO_ABILITY;
         }
     }
 }

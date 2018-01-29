@@ -7,49 +7,8 @@ import re
 import time
 from substitutions import attackSubstitution, abilitySubstitution, typeSubstitution
 from forms import Stat, AddedPokes, FormConfig
-from parser import Parser, getImageName
-
-def namesies(stringsies):
-    stringsies = stringsies.strip().replace(' ', '_').replace('-', '_').replace('\'', '').upper()
-    if stringsies == 'CONVERSION_2':
-        stringsies = 'CONVERSION2'
-    elif stringsies == 'RKS_SYSTEM':
-        stringsies = 'RKSSYSTEM'
-    return stringsies
-
-def removePrefix(string, prefix):
-    assert string.startswith(prefix)
-    return string[len(prefix):]
-
-# Listsies should be a list of strings 
-# This will remove all empty and whitespace characters from the list and return it
-def removeEmpty(listsies):
-    temp = []
-    for string in listsies:
-        if string.strip() == "":
-            temp.append(string)
-    for empty in temp:
-        listsies.remove(empty)
-    
-def indexSwap(arr, i, j):
-    temp = arr[i]
-    arr[i] = arr[j]
-    arr[j] = temp
-
-# types should be an array that points to img elements
-def getTypes(typeImages):
-    assert len(typeImages) == 1 or len(typeImages) == 2
-    
-    types = ["No_Type"]*2
-    for i, typeImage in enumerate(typeImages):
-        # imageName is of the form "...type/<typeName>.gif"
-        types[i] = getImageName(typeImage)
-        
-    return types
-    
-# Removes the form/forme suffix from the end
-def normalizeForm(form):
-    return re.sub(" Forme?$", "", form).strip()
+from parser import Parser
+from util import namesies, removePrefix, removeEmpty, indexSwap, getTypes, normalizeForm, replaceSpecial, dashy
 
 def getBaseExpMap():
     page = requests.get('https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield')
@@ -348,12 +307,7 @@ with open ("../temp.txt", "w") as f:
             flavorText = 'None'
         
         # Replace the special e character in the flavor text
-        poke = u'é'
-        rightTick = u'\u2019'
-        dashy = u'\u2014'
-        leftQuote = u'\u201c'
-        rightQuote = u'\u201d'
-        flavorText = flavorText.replace(poke, "\u00e9").replace('  ', ' ').replace(rightTick, "'").replace(dashy, "--").replace(leftQuote, "\"").replace(rightQuote, "\"")
+        flavorText = replaceSpecial(flavorText)
         print("Flavor Text: " + flavorText)
 
         print("Attacks:")

@@ -3,15 +3,7 @@
 
 from lxml import html
 import requests
-from parser import getImageName
-
-# Column indices should be specified as 1-indexed
-def addRowValues(mainTable, rowIndex, values, *columnIndices):
-    row = mainTable[rowIndex]
-    for columnIndex in columnIndices:
-        value = row.xpath('td')[columnIndex - 1].text.strip()
-        values.append(value)
-        print(value)
+from util import getImageName, addRowValues
 
 f = open("moves.in", "r")
 out = open("moves.out", "w")
