@@ -4,58 +4,58 @@
 # Fields can be specified in any order
 
 Constructor:
-	Namesies Enum EffectNamesies
-	WeatherElement Enum Type
+    Namesies Enum EffectNamesies
+    WeatherElement Enum Type
 *
 Failure:
-	Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-	CanHave Not Default True Boolean b.getWeather().namesies() == this.namesies
+    Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
+    CanHave Not Default True Boolean b.getWeather().namesies() == this.namesies
 *
 
 ***
 
 ClearSkies:
-	WeatherElement: Normal
-	CanHave: True
-	ApplyEndTurn:
-		###
+    WeatherElement: Normal
+    CanHave: True
+    ApplyEndTurn:
+        ###
 *
 Raining:
-	WeatherElement: Water
-	ApplyEndTurn:
-		Messages.add("The rain continues to pour.");
-		###
-	CastMessage: "It started to rain!"
-	SubsideMessage: "The rain stopped."
-	WeatherStatChange: Water Fire
+    WeatherElement: Water
+    ApplyEndTurn:
+        Messages.add("The rain continues to pour.");
+        ###
+    CastMessage: "It started to rain!"
+    SubsideMessage: "The rain stopped."
+    WeatherStatChange: Water Fire
 *
 Sunny:
-	WeatherElement: Fire
-	Int: StatusPreventionEffect
-	ApplyEndTurn:
-		Messages.add("The sunlight is strong.");
-		###
-	CastMessage: "The sunlight turned harsh!"
-	SubsideMessage: "The sunlight faded."
-	WeatherStatChange: Fire Water
-	StatusPrevent: return status == StatusCondition.FROZEN;
-	StatusPreventMessage: "Too sunny to freeze!!"
+    WeatherElement: Fire
+    Int: StatusPreventionEffect
+    ApplyEndTurn:
+        Messages.add("The sunlight is strong.");
+        ###
+    CastMessage: "The sunlight turned harsh!"
+    SubsideMessage: "The sunlight faded."
+    WeatherStatChange: Fire Water
+    StatusPrevent: return status == StatusCondition.FROZEN;
+    StatusPreventMessage: "Too sunny to freeze!!"
 *
 Sandstorm:
-	WeatherElement: Rock
-	BuffetImmune: Type.ROCK, Type.GROUND, Type.STEEL
-	BuffetMessage: p.getName() + " is buffeted by the sandstorm!"
-	PreBuffetMessage: "The sandstorm rages."
-	CastMessage: "A sandstorm kicked up!"
-	SubsideMessage: "The sandstorm subsided."
-	ToModify: Sp_Defense
-	ModifyMultiplier: 1.5 p.isType(b, Type.ROCK)
+    WeatherElement: Rock
+    BuffetImmune: Type.ROCK, Type.GROUND, Type.STEEL
+    BuffetMessage: p.getName() + " is buffeted by the sandstorm!"
+    PreBuffetMessage: "The sandstorm rages."
+    CastMessage: "A sandstorm kicked up!"
+    SubsideMessage: "The sandstorm subsided."
+    ToModify: Sp_Defense
+    ModifyMultiplier: 1.5 p.isType(b, Type.ROCK)
 *
 Hailing:
-	WeatherElement: Ice
-	CastMessage: "It started to hail!"
-	SubsideMessage: "The hail stopped."
-	BuffetImmune: Type.ICE
-	BuffetMessage: p.getName() + " is buffeted by the hail!"
-	PreBuffetMessage: "The hail continues to fall."
+    WeatherElement: Ice
+    CastMessage: "It started to hail!"
+    SubsideMessage: "The hail stopped."
+    BuffetImmune: Type.ICE
+    BuffetMessage: p.getName() + " is buffeted by the hail!"
+    PreBuffetMessage: "The hail continues to fall."
 *

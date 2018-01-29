@@ -4,214 +4,214 @@
 # Fields can be specified in any order
 
 Constructor:
-	Namesies Enum EffectNamesies
-	MinTurns Default -1 Int
-	MaxTurns Default -1 Int
-	NextTurnSubside Default False Boolean
+    Namesies Enum EffectNamesies
+    MinTurns Default -1 Int
+    MaxTurns Default -1 Int
+    NextTurnSubside Default False Boolean
 *
 Failure:
-	Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-	CanHave Not Default True Boolean Effect.hasEffect(b.getEffects(victim), this.namesies)
+    Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
+    CanHave Not Default True Boolean Effect.hasEffect(b.getEffects(victim), this.namesies)
 *
 
 ***
 
 Reflect:
-	SimpleBarrier: Defense reflect
+    SimpleBarrier: Defense reflect
 *
 LightScreen:
-	SimpleBarrier: Sp_Defense light screen
+    SimpleBarrier: Sp_Defense light screen
 *
 Tailwind:
-	ToModify: Speed
-	SimpleModifier: 2 
-	NumTurns: 4
-	SubsideMessage: "The effects of tailwind faded."
-	CastMessage: user.getName() + " raised the speed of its team!"
+    ToModify: Speed
+    SimpleModifier: 2 
+    NumTurns: 4
+    SubsideMessage: "The effects of tailwind faded."
+    CastMessage: user.getName() + " raised the speed of its team!"
 *
 AuroraVeil:
-	TwoModify: Defense Sp_Defense
-	CastMessage: user.getName() + " is covered by an aurora veil!"
+    TwoModify: Defense Sp_Defense
+    CastMessage: user.getName() + " is covered by an aurora veil!"
     Barrier: aurora veil
 *
 StickyWeb:
-	Int: EntryEffect
-	Enter:
-		if (enterer.isLevitating(b)) {
-			return;
-		}
+    Int: EntryEffect
+    Enter:
+        if (enterer.isLevitating(b)) {
+            return;
+        }
 
-		// The sticky web lowered Charmander's Speed!
-		enterer.getStages().modifyStage(
-			b.getOtherPokemon(enterer), -1, Stat.SPEED, b, CastSource.EFFECT,
-			(victimName, statName, changed) -> "The sticky web " + changed + " " + enterer.getName() + "'s " + statName + "!"
-		);
-		###
-	CastMessage: "Sticky web covers everything!"
-	RapidSpin: "The sticky web spun away!"
-	Defog: "The sticky web dispersed!"
+        // The sticky web lowered Charmander's Speed!
+        enterer.getStages().modifyStage(
+            b.getOtherPokemon(enterer), -1, Stat.SPEED, b, CastSource.EFFECT,
+            (victimName, statName, changed) -> "The sticky web " + changed + " " + enterer.getName() + "'s " + statName + "!"
+        );
+        ###
+    CastMessage: "Sticky web covers everything!"
+    RapidSpin: "The sticky web spun away!"
+    Defog: "The sticky web dispersed!"
 *
 StealthRock:
-	Int: EntryEffect
-	Enter: 
-		if (enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-			return;
-		}
-		
-		Messages.add(enterer.getName() + " was hurt by stealth rock!");
-		enterer.reduceHealthFraction(b, Type.ROCK.getAdvantage().getAdvantage(enterer, b)/8.0);
-		###
-	CastMessage: "Floating rocks were scattered all around!"
-	RapidSpin: "The floating rocks spun away!"
-	Defog: "The floating rocks dispersed!"
+    Int: EntryEffect
+    Enter: 
+        if (enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+            return;
+        }
+        
+        Messages.add(enterer.getName() + " was hurt by stealth rock!");
+        enterer.reduceHealthFraction(b, Type.ROCK.getAdvantage().getAdvantage(enterer, b)/8.0);
+        ###
+    CastMessage: "Floating rocks were scattered all around!"
+    RapidSpin: "The floating rocks spun away!"
+    Defog: "The floating rocks dispersed!"
 *
 ToxicSpikes:
-	Int: EntryEffect
-	Field: 
-		private int layers;
-		###
-	Activate: 
-		this.layers = 1;
-		###
-	Enter: 
-		if (enterer.isLevitating(b)) {
-			return;
-		}
-		
-		if (enterer.isType(b, Type.POISON)) {
-			Messages.add(enterer.getName() + " absorbed the Toxic Spikes!");
-			super.active = false;
-			return;
-		}
-		
-		ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer);
-		StatusCondition poisonCondition = layers >= 2 ? StatusCondition.BADLY_POISONED : StatusCondition.POISONED;
-		Status.giveStatus(b, theOtherPokemon, enterer, poisonCondition);
-		###
-	CastMessage: "Toxic spikes were scattered all around!"
-	CanHave: True
-	Cast: 
-		Effect spikesies = Effect.getEffect(b.getEffects(victim), this.namesies);
-		if (spikesies == null) {
-			super.cast(b, caster, victim, source, printCast);
-			return;
-		}
-		
-		((ToxicSpikes)spikesies).layers++;
-		Messages.add(getCastMessage(b, caster, victim, source));
-		###
-	RapidSpin: "The toxic spikes dispersed!"
-	Defog: "The toxic spikes dispersed!"
+    Int: EntryEffect
+    Field: 
+        private int layers;
+        ###
+    Activate: 
+        this.layers = 1;
+        ###
+    Enter: 
+        if (enterer.isLevitating(b)) {
+            return;
+        }
+        
+        if (enterer.isType(b, Type.POISON)) {
+            Messages.add(enterer.getName() + " absorbed the Toxic Spikes!");
+            super.active = false;
+            return;
+        }
+        
+        ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer);
+        StatusCondition poisonCondition = layers >= 2 ? StatusCondition.BADLY_POISONED : StatusCondition.POISONED;
+        Status.giveStatus(b, theOtherPokemon, enterer, poisonCondition);
+        ###
+    CastMessage: "Toxic spikes were scattered all around!"
+    CanHave: True
+    Cast: 
+        Effect spikesies = Effect.getEffect(b.getEffects(victim), this.namesies);
+        if (spikesies == null) {
+            super.cast(b, caster, victim, source, printCast);
+            return;
+        }
+        
+        ((ToxicSpikes)spikesies).layers++;
+        Messages.add(getCastMessage(b, caster, victim, source));
+        ###
+    RapidSpin: "The toxic spikes dispersed!"
+    Defog: "The toxic spikes dispersed!"
 *
 Spikes:
-	Int: EntryEffect
-	Field: 
-		private int layers;
-		###
-	Activate: 
-		this.layers = 1;
-		###
-	Enter: 
-		if (enterer.isLevitating(b) || enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-			return;
-		}
-		
-		Messages.add(enterer.getName() + " was hurt by spikes!");
-		if (layers == 1) {
-			enterer.reduceHealthFraction(b, 1/8.0);
-		} else if (layers == 2) {
-			enterer.reduceHealthFraction(b, 1/6.0);
-		} else {
-			enterer.reduceHealthFraction(b, 1/4.0);
-		}
-		###
-	CastMessage: "Spikes were scattered all around!"
-	CanHave: True
-	Cast: 
-		Effect spikesies = Effect.getEffect(b.getEffects(victim), this.namesies);
-		if (spikesies == null) {
-			super.cast(b, caster, victim, source, printCast);
-			return;
-		}
-		
-		((Spikes)spikesies).layers++;
-		Messages.add(getCastMessage(b, caster, victim, source));
-		###
-	RapidSpin: "The spikes dispersed!"
-	Defog: "The spikes dispersed!"
+    Int: EntryEffect
+    Field: 
+        private int layers;
+        ###
+    Activate: 
+        this.layers = 1;
+        ###
+    Enter: 
+        if (enterer.isLevitating(b) || enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+            return;
+        }
+        
+        Messages.add(enterer.getName() + " was hurt by spikes!");
+        if (layers == 1) {
+            enterer.reduceHealthFraction(b, 1/8.0);
+        } else if (layers == 2) {
+            enterer.reduceHealthFraction(b, 1/6.0);
+        } else {
+            enterer.reduceHealthFraction(b, 1/4.0);
+        }
+        ###
+    CastMessage: "Spikes were scattered all around!"
+    CanHave: True
+    Cast: 
+        Effect spikesies = Effect.getEffect(b.getEffects(victim), this.namesies);
+        if (spikesies == null) {
+            super.cast(b, caster, victim, source, printCast);
+            return;
+        }
+        
+        ((Spikes)spikesies).layers++;
+        Messages.add(getCastMessage(b, caster, victim, source));
+        ###
+    RapidSpin: "The spikes dispersed!"
+    Defog: "The spikes dispersed!"
 *
 Wish:
-	NumTurns: 1
-	NextTurnSubside: True
-	Field: 
-		private String casterName;
-		###
-	Subside: 
-		if (p.hasEffect(EffectNamesies.HEAL_BLOCK)) {
-			return;
-		}
-		
-		p.healHealthFraction(1/2.0);
-		Messages.add(new MessageUpdate(casterName + "'s wish came true!").updatePokemon(b, p));
-		###
-	Cast: 
-		casterName = caster.getName();
-		super.cast(b, caster, victim, source, printCast);
-		###
+    NumTurns: 1
+    NextTurnSubside: True
+    Field: 
+        private String casterName;
+        ###
+    Subside: 
+        if (p.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+            return;
+        }
+        
+        p.healHealthFraction(1/2.0);
+        Messages.add(new MessageUpdate(casterName + "'s wish came true!").updatePokemon(b, p));
+        ###
+    Cast: 
+        casterName = caster.getName();
+        super.cast(b, caster, victim, source, printCast);
+        ###
 *
 LuckyChant:
-	NumTurns: 5
-	CastMessage: "The lucky chant shielded " + victim.getName() + "'s team from critical hits!"
-	SubsideMessage: "The effects of lucky chant wore off."
-	Int: CritBlockerEffect
+    NumTurns: 5
+    CastMessage: "The lucky chant shielded " + victim.getName() + "'s team from critical hits!"
+    SubsideMessage: "The effects of lucky chant wore off."
+    Int: CritBlockerEffect
 *
 FutureSight:
-	FutureAttackEffect: Future_Sight
+    FutureAttackEffect: Future_Sight
 *
 DoomDesire:
-	FutureAttackEffect: Doom_Desire
+    FutureAttackEffect: Doom_Desire
 *
 HealSwitch:
-	Field: 
-		private String wish;
-		###
-	Int: EntryEffect
-	Enter: 
-		enterer.healHealthFraction(1);
-		enterer.removeStatus();
-		
-		Messages.add(new MessageUpdate(enterer.getName() + " health was restored due to the " + wish + "!").updatePokemon(b, enterer));
-		super.active = false;
-		###
-	Cast: 
-		wish = caster.getAttack().namesies() == AttackNamesies.LUNAR_DANCE ? "lunar dance" : "healing wish";
-		super.cast(b, caster, victim, source, printCast);
-		###
+    Field: 
+        private String wish;
+        ###
+    Int: EntryEffect
+    Enter: 
+        enterer.healHealthFraction(1);
+        enterer.removeStatus();
+        
+        Messages.add(new MessageUpdate(enterer.getName() + " health was restored due to the " + wish + "!").updatePokemon(b, enterer));
+        super.active = false;
+        ###
+    Cast: 
+        wish = caster.getAttack().namesies() == AttackNamesies.LUNAR_DANCE ? "lunar dance" : "healing wish";
+        super.cast(b, caster, victim, source, printCast);
+        ###
 *
 DeadAlly:
-	NumTurns: 2
+    NumTurns: 2
 *
 PayDay:
-	Int: EndBattleEffect
-	Field: 
-		private int coins;
-		###
-	Cast: 
-		PayDay payday = (PayDay)Effect.getEffect(b.getEffects(true), this.namesies);
-		Messages.add(getCastMessage(b, caster, victim, source));
-		coins = 5*caster.getLevel();
-		if (payday == null) {
-			b.getPlayer().addEffect(this);
-		} else {
-			payday.coins += coins;
-		}
-		###
-	CastMessage: "Coins scattered everywhere!"
-	CanHave: True
-	EndBattle: 
-		Messages.add(player.getName() + " picked up " + coins + " pokedollars!");
-		player.getDatCashMoney(coins);
-		###
+    Int: EndBattleEffect
+    Field: 
+        private int coins;
+        ###
+    Cast: 
+        PayDay payday = (PayDay)Effect.getEffect(b.getEffects(true), this.namesies);
+        Messages.add(getCastMessage(b, caster, victim, source));
+        coins = 5*caster.getLevel();
+        if (payday == null) {
+            b.getPlayer().addEffect(this);
+        } else {
+            payday.coins += coins;
+        }
+        ###
+    CastMessage: "Coins scattered everywhere!"
+    CanHave: True
+    EndBattle: 
+        Messages.add(player.getName() + " picked up " + coins + " pokedollars!");
+        player.getDatCashMoney(coins);
+        ###
 *
 GetDatCashMoneyTwice:
 *

@@ -4,119 +4,119 @@
 # Fields can be specified in any order
 
 Constructor:
-	Namesies Enum EffectNamesies
-	MinTurns Default -1 Int
-	MaxTurns Default -1 Int
-	NextTurnSubside Default False Boolean
+    Namesies Enum EffectNamesies
+    MinTurns Default -1 Int
+    MaxTurns Default -1 Int
+    NextTurnSubside Default False Boolean
 *
 Failure:
-	Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-	CanHave Not Default True Boolean Effect.hasEffect(b.getEffects(), this.namesies)
+    Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
+    CanHave Not Default True Boolean Effect.hasEffect(b.getEffects(), this.namesies)
 *
 
 ***
 
 Gravity:
-	NumTurns: 5
-	Int: GroundedEffect, StageChangingEffect
-	StageChange:
-		return s == Stat.EVASION ? -2 : 0;
-		###
-	CastMessage: "Gravity intensified!"
-	Cast:
-		super.cast(b, caster, victim, source, printCast);
-		removeLevitation(b, caster);
-		removeLevitation(b, victim);
-		###
-	SubsideMessage: "The gravity returned to normal."
+    NumTurns: 5
+    Int: GroundedEffect, StageChangingEffect
+    StageChange:
+        return s == Stat.EVASION ? -2 : 0;
+        ###
+    CastMessage: "Gravity intensified!"
+    Cast:
+        super.cast(b, caster, victim, source, printCast);
+        removeLevitation(b, caster);
+        removeLevitation(b, victim);
+        ###
+    SubsideMessage: "The gravity returned to normal."
 *
 WaterSport:
-	Sporty: Fire Fire Water
+    Sporty: Fire Fire Water
 *
 MudSport:
-	Sporty: Electric Electricity Mud
+    Sporty: Electric Electricity Mud
 *
 WonderRoom:
-	Int: StatSwitchingEffect
-	SwitchStat:
-		// Defense and Special Defense are swapped
-		if (s == Stat.DEFENSE) {
-			return Stat.SP_DEFENSE;
-		} else if (s == Stat.SP_DEFENSE) {
-			return Stat.DEFENSE;
-		} else {
-			return s;
-		}
-		###
-	SpecialRoom: wonder switch defense and special defense
+    Int: StatSwitchingEffect
+    SwitchStat:
+        // Defense and Special Defense are swapped
+        if (s == Stat.DEFENSE) {
+            return Stat.SP_DEFENSE;
+        } else if (s == Stat.SP_DEFENSE) {
+            return Stat.DEFENSE;
+        } else {
+            return s;
+        }
+        ###
+    SpecialRoom: wonder switch defense and special defense
 *
 TrickRoom:
-	SpecialRoom: trick switch speeds
+    SpecialRoom: trick switch speeds
 *
 MagicRoom:
-	SpecialRoom: magic prevent using items
+    SpecialRoom: magic prevent using items
 *
 MistyTerrain:
-	CastMessage: "Mist swirled around the battlefield!"
-	SubsideMessage: "The mist disappeared from the battlefield."
-	Terrain: Misty
-	Int: StatusPreventionEffect, TerrainEffect
-	StatusPrevent:
-		// Levitating Pokemon are immune to the mist
-		return !victim.isLevitating(b);
-		###
-	StatusPreventMessage: "The protective mist prevents status conditions!"
-	Comments: // Dragon type moves have halved power during the misty terrain
-	PowerMultiplierCondition: .5 user.isAttackType(Type.DRAGON) && !user.isLevitating(b)
+    CastMessage: "Mist swirled around the battlefield!"
+    SubsideMessage: "The mist disappeared from the battlefield."
+    Terrain: Misty
+    Int: StatusPreventionEffect, TerrainEffect
+    StatusPrevent:
+        // Levitating Pokemon are immune to the mist
+        return !victim.isLevitating(b);
+        ###
+    StatusPreventMessage: "The protective mist prevents status conditions!"
+    Comments: // Dragon type moves have halved power during the misty terrain
+    PowerMultiplierCondition: .5 user.isAttackType(Type.DRAGON) && !user.isLevitating(b)
 *
 GrassyTerrain:
-	CastMessage: "Grass sprouted around the battlefield!"
-	SubsideMessage: "The grass withered and died."
-	Terrain: Grass
-	Int: EndTurnEffect, TerrainEffect
-	ApplyEndTurn:
-		if (!victim.fullHealth() && !victim.isLevitating(b)) {
-			victim.healHealthFraction(1/16.0);
-			Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to the Grassy Terrain!").updatePokemon(b, victim));
-		}
-		###
-	Comments: // Grass-type moves are 50% stronger with the grassy terrain
-	PowerMultiplierCondition: 1.5 user.isAttackType(Type.GRASS) && !user.isLevitating(b)
+    CastMessage: "Grass sprouted around the battlefield!"
+    SubsideMessage: "The grass withered and died."
+    Terrain: Grass
+    Int: EndTurnEffect, TerrainEffect
+    ApplyEndTurn:
+        if (!victim.fullHealth() && !victim.isLevitating(b)) {
+            victim.healHealthFraction(1/16.0);
+            Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to the Grassy Terrain!").updatePokemon(b, victim));
+        }
+        ###
+    Comments: // Grass-type moves are 50% stronger with the grassy terrain
+    PowerMultiplierCondition: 1.5 user.isAttackType(Type.GRASS) && !user.isLevitating(b)
 *
 ElectricTerrain:
-	CastMessage: "Electricity crackled around the battlefield!"
-	SubsideMessage: "The electricity dissipated."
-	Terrain: Electric
-	Int: StatusPreventionEffect, TerrainEffect
-	StatusPrevent:
-		return status == StatusCondition.ASLEEP && !victim.isLevitating(b);
-		###
-	StatusPreventMessage: "The electric terrain prevents sleep!"
-	Comments: // Electric-type moves are 50% stronger with the electric terrain
-	PowerMultiplierCondition: 1.5 user.isAttackType(Type.ELECTRIC) && !user.isLevitating(b)
+    CastMessage: "Electricity crackled around the battlefield!"
+    SubsideMessage: "The electricity dissipated."
+    Terrain: Electric
+    Int: StatusPreventionEffect, TerrainEffect
+    StatusPrevent:
+        return status == StatusCondition.ASLEEP && !victim.isLevitating(b);
+        ###
+    StatusPreventMessage: "The electric terrain prevents sleep!"
+    Comments: // Electric-type moves are 50% stronger with the electric terrain
+    PowerMultiplierCondition: 1.5 user.isAttackType(Type.ELECTRIC) && !user.isLevitating(b)
 *
 PsychicTerrain:
-	CastMessage: "Psychic energy envelops the battlefield!!!"
-	SubsideMessage: "The psychic energy disappeared."
-	Terrain: Psychic
-	Int: AttackBlocker, TerrainEffect
-	Block:
-		// Psychic terrain prevents increased priority moves from hitting
-		return b.getAttackPriority(user) > 0 && !victim.isLevitating(b);
-		###
-	Comments: // Psychic-type moves are 50% stronger with the psychic terrain
-	PowerMultiplierCondition: 1.5 user.isAttackType(Type.PSYCHIC) && !user.isLevitating(b)
+    CastMessage: "Psychic energy envelops the battlefield!!!"
+    SubsideMessage: "The psychic energy disappeared."
+    Terrain: Psychic
+    Int: AttackBlocker, TerrainEffect
+    Block:
+        // Psychic terrain prevents increased priority moves from hitting
+        return b.getAttackPriority(user) > 0 && !victim.isLevitating(b);
+        ###
+    Comments: // Psychic-type moves are 50% stronger with the psychic terrain
+    PowerMultiplierCondition: 1.5 user.isAttackType(Type.PSYCHIC) && !user.isLevitating(b)
 *
 FieldUproar:
-	Int: StatusPreventionEffect
-	StatusPrevent: return status == StatusCondition.ASLEEP;
-	StatusPreventMessage: "The uproar prevents sleep!!"
-	TheVeryEnd:
-		if (b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR)) {
-			return false;
-		}
+    Int: StatusPreventionEffect
+    StatusPrevent: return status == StatusCondition.ASLEEP;
+    StatusPreventMessage: "The uproar prevents sleep!!"
+    TheVeryEnd:
+        if (b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR)) {
+            return false;
+        }
 
-		this.active = false;
-		return true;
-		###
+        this.active = false;
+        return true;
+        ###
 *
